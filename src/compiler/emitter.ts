@@ -2279,10 +2279,10 @@ namespace ts {
         function emitPropertyAccessExpression(node: PropertyAccessExpression) {
             const expression = cast(emitExpression(node.expression), isExpression);
             const token = getDotOrQuestionDotToken(node);
-            const indentBeforeDot = needsIndentation(node, node.expression, token);
-            const indentAfterDot = needsIndentation(node, token, node.name);
+            const linesBeforeDot = getLinesBetweenNodes(node, node.expression, token);
+            const linesAfterDot = getLinesBetweenNodes(node, token, node.name);
 
-            increaseIndentIf(indentBeforeDot, /*writeSpaceIfNotIndenting*/ false);
+            writeLinesAndIndent(linesBeforeDot, /*writeSpaceIfNotIndenting*/ false);
 
             const shouldEmitDotDot =
                 token.kind !== SyntaxKind.QuestionDotToken &&
@@ -2295,9 +2295,9 @@ namespace ts {
             }
 
             emitTokenWithComment(token.kind, node.expression.end, writePunctuation, node);
-            increaseIndentIf(indentAfterDot, /*writeSpaceIfNotIndenting*/ false);
+            writeLinesAndIndent(linesAfterDot, /*writeSpaceIfNotIndenting*/ false);
             emit(node.name);
-            decreaseIndentIf(indentBeforeDot, indentAfterDot);
+            decreaseIndentIf(linesBeforeDot, linesAfterDot);
         }
 
         // 1..toString is a valid property access, emit a dot after the literal
@@ -2462,20 +2462,20 @@ namespace ts {
                     }
                     case EmitBinaryExpressionState.EmitRight: {
                         const isCommaOperator = node.operatorToken.kind !== SyntaxKind.CommaToken;
-                        const indentBeforeOperator = needsIndentation(node, node.left, node.operatorToken);
-                        const indentAfterOperator = needsIndentation(node, node.operatorToken, node.right);
-                        increaseIndentIf(indentBeforeOperator, isCommaOperator);
+                        const linesBeforeOperator = getLinesBetweenNodes(node, node.left, node.operatorToken);
+                        const linesAfterOperator = getLinesBetweenNodes(node, node.operatorToken, node.right);
+                        writeLinesAndIndent(linesBeforeOperator, isCommaOperator);
                         emitLeadingCommentsOfPosition(node.operatorToken.pos);
                         writeTokenNode(node.operatorToken, node.operatorToken.kind === SyntaxKind.InKeyword ? writeKeyword : writeOperator);
                         emitTrailingCommentsOfPosition(node.operatorToken.end, /*prefixSpace*/ true); // Binary operators should have a space before the comment starts
-                        increaseIndentIf(indentAfterOperator, /*writeSpaceIfNotIndenting*/ true);
+                        writeLinesAndIndent(linesAfterOperator, /*writeSpaceIfNotIndenting*/ true);
                         maybePipelineEmitExpression(node.right);
                         break;
                     }
                     case EmitBinaryExpressionState.FinishEmit: {
-                        const indentBeforeOperator = needsIndentation(node, node.left, node.operatorToken);
-                        const indentAfterOperator = needsIndentation(node, node.operatorToken, node.right);
-                        decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
+                        const linesBeforeOperator = getLinesBetweenNodes(node, node.left, node.operatorToken);
+                        const linesAfterOperator = getLinesBetweenNodes(node, node.operatorToken, node.right);
+                        decreaseIndentIf(linesBeforeOperator, linesAfterOperator);
                         stackIndex--;
                         break;
                     }
@@ -2519,23 +2519,23 @@ namespace ts {
         }
 
         function emitConditionalExpression(node: ConditionalExpression) {
-            const indentBeforeQuestion = needsIndentation(node, node.condition, node.questionToken);
-            const indentAfterQuestion = needsIndentation(node, node.questionToken, node.whenTrue);
-            const indentBeforeColon = needsIndentation(node, node.whenTrue, node.colonToken);
-            const indentAfterColon = needsIndentation(node, node.colonToken, node.whenFalse);
+            const linesBeforeQuestion = getLinesBetweenNodes(node, node.condition, node.questionToken);
+            const linesAfterQuestion = getLinesBetweenNodes(node, node.questionToken, node.whenTrue);
+            const linesBeforeColon = getLinesBetweenNodes(node, node.whenTrue, node.colonToken);
+            const linesAfterColon = getLinesBetweenNodes(node, node.colonToken, node.whenFalse);
 
             emitExpression(node.condition);
-            increaseIndentIf(indentBeforeQuestion, /*writeSpaceIfNotIndenting*/ true);
+            writeLinesAndIndent(linesBeforeQuestion, /*writeSpaceIfNotIndenting*/ true);
             emit(node.questionToken);
-            increaseIndentIf(indentAfterQuestion, /*writeSpaceIfNotIndenting*/ true);
+            writeLinesAndIndent(linesAfterQuestion, /*writeSpaceIfNotIndenting*/ true);
             emitExpression(node.whenTrue);
-            decreaseIndentIf(indentBeforeQuestion, indentAfterQuestion);
+            decreaseIndentIf(linesBeforeQuestion, linesAfterQuestion);
 
-            increaseIndentIf(indentBeforeColon, /*writeSpaceIfNotIndenting*/ true);
+            writeLinesAndIndent(linesBeforeColon, /*writeSpaceIfNotIndenting*/ true);
             emit(node.colonToken);
-            increaseIndentIf(indentAfterColon, /*writeSpaceIfNotIndenting*/ true);
+            writeLinesAndIndent(linesAfterColon, /*writeSpaceIfNotIndenting*/ true);
             emitExpression(node.whenFalse);
-            decreaseIndentIf(indentBeforeColon, indentAfterColon);
+            decreaseIndentIf(linesBeforeColon, linesAfterColon);
         }
 
         function emitTemplateExpression(node: TemplateExpression) {
@@ -4025,7 +4025,7 @@ namespace ts {
                 // Emit each child.
                 let previousSibling: Node | undefined;
                 let previousSourceFileTextKind: ReturnType<typeof recordBundleFileInternalSectionStart>;
-                let shouldDecreaseIndentAfterEmit = false;
+                let shouldDecreaselinesAfterEmit = false;
                 for (let i = 0; i < count; i++) {
                     const child = children![start + i];
 
@@ -4055,7 +4055,7 @@ namespace ts {
                             // line, we should increase the indent.
                             if ((format & (ListFormat.LinesMask | ListFormat.Indented)) === ListFormat.SingleLine) {
                                 increaseIndent();
-                                shouldDecreaseIndentAfterEmit = true;
+                                shouldDecreaselinesAfterEmit = true;
                             }
 
                             writeLine(separatingLineTerminatorCount);
@@ -4080,9 +4080,9 @@ namespace ts {
 
                     emit(child);
 
-                    if (shouldDecreaseIndentAfterEmit) {
+                    if (shouldDecreaselinesAfterEmit) {
                         decreaseIndent();
-                        shouldDecreaseIndentAfterEmit = false;
+                        shouldDecreaselinesAfterEmit = false;
                     }
 
                     previousSibling = child;
@@ -4244,10 +4244,10 @@ namespace ts {
             }
         }
 
-        function increaseIndentIf(value: boolean, writeSpaceIfNotIndenting: boolean) {
-            if (value) {
+        function writeLinesAndIndent(lineCount: number, writeSpaceIfNotIndenting: boolean) {
+            if (lineCount) {
                 increaseIndent();
-                writeLine();
+                writeLine(lineCount);
             }
             else if (writeSpaceIfNotIndenting) {
                 writeSpace();
@@ -4258,7 +4258,7 @@ namespace ts {
         // previous indent values to be considered at a time.  This also allows caller to just
         // call this once, passing in all their appropriate indent values, instead of needing
         // to call this helper function multiple times.
-        function decreaseIndentIf(value1: boolean, value2: boolean) {
+        function decreaseIndentIf(value1: boolean | number, value2: boolean | number) {
             if (value1) {
                 decreaseIndent();
             }
@@ -4278,7 +4278,10 @@ namespace ts {
                     return rangeIsOnSingleLine(parentNode, currentSourceFile!) ? 0 : 1;
                 }
                 else if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(firstChild) && firstChild.parent === parentNode) {
-                    const lines = getEffectiveLinesBetweenRanges(parentNode, firstChild, getLinesBetweenRangeStartPositions);
+                    let lines = getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(firstChild.pos, currentSourceFile!, /*includeComments*/ true);
+                    if (lines === 0) {
+                        lines = getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(firstChild.pos, currentSourceFile!, /*includeComments*/ false);
+                    }
                     return printerOptions.preserveNewlines ? lines : Math.min(lines, 1);
                 }
                 else if (synthesizedNodeStartsOnNewLine(firstChild, format)) {
@@ -4339,15 +4342,15 @@ namespace ts {
             // We start by measuring the line difference from parentNode's start to node2's comments start,
             // so that this is counted as a one line difference, not two:
             //
-            //   function node1() {
-            //     // NODE2 COMMENT
-            //     node2;
+            //   node1;
+            //   // NODE2 COMMENT
+            //   node2;
             const lines = getLinesBetweenPositions(node1, node2, currentSourceFile!, /*includeComments*/ true);
             if (lines === 0) {
                 // However, if the line difference considering node2's comments was 0, we might have this:
                 //
-                //   function node1() { // NODE2 COMMENT
-                //     node2;
+                //   node1; // NODE2 COMMENT
+                //   node2;
                 //
                 // in which case we should be ignoring node2's comment.
                 return getLinesBetweenPositions(node1, node2, currentSourceFile!, /*includeComments*/ false);
@@ -4368,9 +4371,9 @@ namespace ts {
             return (format & ListFormat.PreferNewLine) !== 0;
         }
 
-        function needsIndentation(parent: Node, node1: Node, node2: Node): boolean {
+        function getLinesBetweenNodes(parent: Node, node1: Node, node2: Node): number {
             if (getEmitFlags(parent) & EmitFlags.NoIndentation) {
-                return false;
+                return 0;
             }
 
             parent = skipSynthesizedParentheses(parent);
@@ -4379,13 +4382,15 @@ namespace ts {
 
             // Always use a newline for synthesized code if the synthesizer desires it.
             if (getStartsOnNewLine(node2)) {
-                return true;
+                return 1;
             }
 
-            return !nodeIsSynthesized(parent)
-                && !nodeIsSynthesized(node1)
-                && !nodeIsSynthesized(node2)
-                && !rangeEndIsOnSameLineAsRangeStart(node1, node2, currentSourceFile!);
+            if (!nodeIsSynthesized(parent) && !nodeIsSynthesized(node1) && !nodeIsSynthesized(node2)) {
+                const lines = getEffectiveLinesBetweenRanges(node1, node2, getLinesBetweenRangeEndAndRangeStart);
+                return preserveNewlines ? lines : Math.min(lines, 1);
+            }
+
+            return 0;
         }
 
         function isEmptyBlock(block: BlockLike) {

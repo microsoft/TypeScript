@@ -4701,6 +4701,20 @@ namespace ts {
         return positionIsSynthesized(range.pos) ? -1 : skipTrivia(sourceFile.text, range.pos, /*stopAfterLineBreak*/ false, includeComments);
     }
 
+    export function getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(pos: number, sourceFile: SourceFile, includeComments?: boolean) {
+        const startPos = skipTrivia(sourceFile.text, pos, /*stopAfterLineBreak*/ false, includeComments);
+        const prevPos = getPreviousNonWhitespacePosition(pos, sourceFile);
+        return getLineOfLocalPosition(sourceFile, startPos) - getLineOfLocalPosition(sourceFile, prevPos || 0);
+    }
+
+    function getPreviousNonWhitespacePosition(pos: number, sourceFile: SourceFile) {
+        while (pos-- > 0) {
+            if (!isWhiteSpaceLike(sourceFile.text.charCodeAt(pos))) {
+                return pos;
+            }
+        }
+    }
+
     /**
      * Determines whether a name was originally the declaration name of an enum or namespace
      * declaration.
