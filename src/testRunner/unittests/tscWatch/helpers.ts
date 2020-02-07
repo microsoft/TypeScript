@@ -37,9 +37,8 @@ namespace ts.tscWatch {
         close(): void;
     }
 
-    export function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, optionsToExtend?: CompilerOptions, watchOptionsToExtend?: WatchOptions, maxNumberOfFilesToIterateForInvalidation?: number) {
+    export function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, optionsToExtend?: CompilerOptions, watchOptionsToExtend?: WatchOptions) {
         const compilerHost = createWatchCompilerHostOfConfigFile(configFileName, optionsToExtend || {}, watchOptionsToExtend, host);
-        compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
         const watch = createWatchProgram(compilerHost);
         const result = (() => watch.getCurrentProgram().getProgram()) as Watch;
         result.getBuilderProgram = () => watch.getCurrentProgram();
@@ -47,9 +46,8 @@ namespace ts.tscWatch {
         return result;
     }
 
-    export function createWatchOfFilesAndCompilerOptions(rootFiles: string[], host: WatchedSystem, options: CompilerOptions = {}, watchOptions?: WatchOptions, maxNumberOfFilesToIterateForInvalidation?: number) {
+    export function createWatchOfFilesAndCompilerOptions(rootFiles: string[], host: WatchedSystem, options: CompilerOptions = {}, watchOptions?: WatchOptions) {
         const compilerHost = createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, watchOptions, host);
-        compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
         const watch = createWatchProgram(compilerHost);
         return () => watch.getCurrentProgram().getProgram();
     }
@@ -293,7 +291,6 @@ namespace ts.tscWatch {
     }
     export interface TscWatchCompile extends TscWatchCompileBase {
         sys: () => WatchedSystem;
-        maxNumberOfFilesToIterateForInvalidation?: number;
     }
 
     export type SystemSnap = ReturnType<WatchedSystem["snap"]>;
@@ -313,7 +310,6 @@ namespace ts.tscWatch {
                 sys,
                 cb,
                 commandLineArgs,
-                input.maxNumberOfFilesToIterateForInvalidation
             );
             runWatchBaseline({
                 scenario,

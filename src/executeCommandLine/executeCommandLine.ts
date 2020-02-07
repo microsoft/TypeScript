@@ -156,7 +156,6 @@ namespace ts {
         sys: System,
         cb: ExecuteCommandLineCallbacks,
         commandLine: ParsedCommandLine,
-        maxNumberOfFilesToIterateForInvalidation: number | undefined
     ) {
         let reportDiagnostic = createDiagnosticReporter(sys);
         if (commandLine.options.build) {
@@ -271,7 +270,6 @@ namespace ts {
                     configParseResult,
                     commandLineOptions,
                     commandLine.watchOptions,
-                    maxNumberOfFilesToIterateForInvalidation
                 );
             }
             else if (isIncrementalCompilation(configParseResult.options)) {
@@ -311,7 +309,6 @@ namespace ts {
                     commandLine.fileNames,
                     commandLineOptions,
                     commandLine.watchOptions,
-                    maxNumberOfFilesToIterateForInvalidation
                 );
             }
             else if (isIncrementalCompilation(commandLineOptions)) {
@@ -346,7 +343,6 @@ namespace ts {
         system: System,
         cb: ExecuteCommandLineCallbacks,
         commandLineArgs: readonly string[],
-        maxNumberOfFilesToIterateForInvalidation?: number
     ) {
         if (isBuild(commandLineArgs)) {
             const { buildOptions, watchOptions, projects, errors } = parseBuildCommand(commandLineArgs.slice(1));
@@ -378,11 +374,10 @@ namespace ts {
                 system,
                 cb,
                 commandLine,
-                maxNumberOfFilesToIterateForInvalidation
             ));
         }
         else {
-            return executeCommandLineWorker(system, cb, commandLine, maxNumberOfFilesToIterateForInvalidation);
+            return executeCommandLineWorker(system, cb, commandLine);
         }
     }
 
@@ -556,10 +551,8 @@ namespace ts {
         sys: System,
         cb: ExecuteCommandLineCallbacks,
         watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>,
-        maxNumberOfFilesToIterateForInvalidation: number | undefined
     ) {
         updateCreateProgram(sys, watchCompilerHost);
-        watchCompilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
         const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
         watchCompilerHost.afterProgramCreate = builderProgram => {
             emitFilesUsingBuilder(builderProgram);
@@ -579,7 +572,6 @@ namespace ts {
         configParseResult: ParsedCommandLine,
         optionsToExtend: CompilerOptions,
         watchOptionsToExtend: WatchOptions | undefined,
-        maxNumberOfFilesToIterateForInvalidation: number | undefined
     ) {
         const watchCompilerHost = createWatchCompilerHostOfConfigFile(
             configParseResult.options.configFilePath!,
@@ -590,7 +582,7 @@ namespace ts {
             reportDiagnostic,
             createWatchStatusReporter(sys, configParseResult.options)
         ); // TODO: GH#18217
-        updateWatchCompilationHost(sys, cb, watchCompilerHost, maxNumberOfFilesToIterateForInvalidation);
+        updateWatchCompilationHost(sys, cb, watchCompilerHost);
         watchCompilerHost.configFileParsingResult = configParseResult;
         return createWatchProgram(watchCompilerHost);
     }
@@ -602,7 +594,6 @@ namespace ts {
         rootFiles: string[],
         options: CompilerOptions,
         watchOptions: WatchOptions | undefined,
-        maxNumberOfFilesToIterateForInvalidation: number | undefined
     ) {
         const watchCompilerHost = createWatchCompilerHostOfFilesAndCompilerOptions(
             rootFiles,
@@ -613,7 +604,7 @@ namespace ts {
             reportDiagnostic,
             createWatchStatusReporter(sys, options)
         );
-        updateWatchCompilationHost(sys, cb, watchCompilerHost, maxNumberOfFilesToIterateForInvalidation);
+        updateWatchCompilationHost(sys, cb, watchCompilerHost);
         return createWatchProgram(watchCompilerHost);
     }
 

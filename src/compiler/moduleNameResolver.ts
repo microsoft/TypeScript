@@ -84,7 +84,11 @@ namespace ts {
         return { fileName: resolved.path, packageId: resolved.packageId };
     }
 
-    function createResolvedModuleWithFailedLookupLocations(resolved: Resolved | undefined, isExternalLibraryImport: boolean, failedLookupLocations: string[]): ResolvedModuleWithFailedLookupLocations {
+    function createResolvedModuleWithFailedLookupLocations(resolved: Resolved | undefined, isExternalLibraryImport: boolean | undefined, failedLookupLocations: string[], resultFromCache: ResolvedModuleWithFailedLookupLocations | undefined): ResolvedModuleWithFailedLookupLocations {
+        if (resultFromCache) {
+            resultFromCache.failedLookupLocations.push(...failedLookupLocations);
+            return resultFromCache;
+        }
         return {
             resolvedModule: resolved && { resolvedFileName: resolved.path, originalPath: resolved.originalPath === true ? undefined : resolved.originalPath, extension: resolved.extension, isExternalLibraryImport, packageId: resolved.packageId },
             failedLookupLocations
@@ -96,6 +100,7 @@ namespace ts {
         compilerOptions: CompilerOptions;
         traceEnabled: boolean;
         failedLookupLocations: Push<string>;
+        resultFromCache?: ResolvedModuleWithFailedLookupLocations;
     }
 
     /** Just the fields that we use for module resolution. */
@@ -926,11 +931,7 @@ namespace ts {
         const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations };
 
         const result = forEach(extensions, ext => tryResolve(ext));
-        if (result && result.value) {
-            const { resolved, isExternalLibraryImport } = result.value;
-            return createResolvedModuleWithFailedLookupLocations(resolved, isExternalLibraryImport, failedLookupLocations);
-        }
-        return { resolvedModule: undefined, failedLookupLocations };
+        return createResolvedModuleWithFailedLookupLocations(result?.value?.resolved, result?.value?.isExternalLibraryImport, failedLookupLocations, state.resultFromCache);
 
         function tryResolve(extensions: Extensions): SearchResult<{ resolved: Resolved, isExternalLibraryImport: boolean }> {
             const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => nodeLoadModuleByRelativeName(extensions, candidate, onlyRecordFailures, state, /*considerPackageJson*/ true);
@@ -1435,7 +1436,7 @@ namespace ts {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.Resolution_for_module_0_was_found_in_cache_from_location_1, moduleName, containingDirectory);
             }
-            state.failedLookupLocations.push(...result.failedLookupLocations);
+            state.resultFromCache = result;
             return { value: result.resolvedModule && { path: result.resolvedModule.resolvedFileName, originalPath: result.resolvedModule.originalPath || true, extension: result.resolvedModule.extension, packageId: result.resolvedModule.packageId } };
         }
     }
@@ -1448,7 +1449,7 @@ namespace ts {
 
         const resolved = tryResolve(Extensions.TypeScript) || tryResolve(Extensions.JavaScript);
         // No originalPath because classic resolution doesn't resolve realPath
-        return createResolvedModuleWithFailedLookupLocations(resolved && resolved.value, /*isExternalLibraryImport*/ false, failedLookupLocations);
+        return createResolvedModuleWithFailedLookupLocations(resolved && resolved.value, /*isExternalLibraryImport*/ false, failedLookupLocations, state.resultFromCache);
 
         function tryResolve(extensions: Extensions): SearchResult<Resolved> {
             const resolvedUsingSettings = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, loadModuleFromFileNoPackageId, state);
@@ -1495,7 +1496,7 @@ namespace ts {
         const failedLookupLocations: string[] = [];
         const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations };
         const resolved = loadModuleFromImmediateNodeModulesDirectory(Extensions.DtsOnly, moduleName, globalCache, state, /*typesScopeOnly*/ false);
-        return createResolvedModuleWithFailedLookupLocations(resolved, /*isExternalLibraryImport*/ true, failedLookupLocations);
+        return createResolvedModuleWithFailedLookupLocations(resolved, /*isExternalLibraryImport*/ true, failedLookupLocations, state.resultFromCache);
     }
 
     /**
