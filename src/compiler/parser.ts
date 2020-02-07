@@ -904,28 +904,31 @@ namespace ts {
             // overhead.  This functions allows us to set all the parents, without all the expense of
             // binding.
 
-            let parent: Node = rootNode;
-            forEachChild(rootNode, visitNode);
+            const stack: Node[] = [rootNode];
+            while (stack.length) {
+                const parent = stack.pop()!;
+                bindParentToChildren(parent, gatherChildren(parent));
+            }
+
             return;
 
-            function visitNode(n: Node): void {
-                // walk down setting parents that differ from the parent we think it should be.  This
-                // allows us to quickly bail out of setting parents for subtrees during incremental
-                // parsing
-                if (n.parent !== parent) {
-                    n.parent = parent;
+            function gatherChildren(node: Node) {
+                const children: Node[] = [];
+                forEachChild(node, n => { children.unshift(n); }); // By using a stack above and `unshift` here, we emulate a depth-first preorder traversal
+                return children;
+            }
 
-                    const saveParent = parent;
-                    parent = n;
-                    forEachChild(n, visitNode);
-                    if (hasJSDocNodes(n)) {
-                        for (const jsDoc of n.jsDoc!) {
-                            jsDoc.parent = n;
-                            parent = jsDoc;
-                            forEachChild(jsDoc, visitNode);
+            function bindParentToChildren(parent: Node, children: readonly Node[]) {
+                for (const child of children) {
+                    if (child.parent === parent) continue; // already bound, assume subtree is bound
+                    child.parent = parent;
+                    stack.push(child);
+                    if (hasJSDocNodes(child)) {
+                        for (const jsDoc of child.jsDoc!) {
+                            jsDoc.parent = child;
+                            stack.push(jsDoc);
                         }
                     }
-                    parent = saveParent;
                 }
             }
         }
@@ -1134,8 +1137,12 @@ namespace ts {
             return currentToken = scanner.reScanSlashToken();
         }
 
-        function reScanTemplateToken(): SyntaxKind {
-            return currentToken = scanner.reScanTemplateToken();
+        function reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind {
+            return currentToken = scanner.reScanTemplateToken(isTaggedTemplate);
+        }
+
+        function reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind {
+            return currentToken = scanner.reScanTemplateHeadOrNoSubstitutionTemplate();
         }
 
         function reScanLessThanToken(): SyntaxKind {
@@ -2326,17 +2333,17 @@ namespace ts {
             return allowIdentifierNames ? parseIdentifierName() : parseIdentifier();
         }
 
-        function parseTemplateExpression(): TemplateExpression {
+        function parseTemplateExpression(isTaggedTemplate: boolean): TemplateExpression {
             const template = <TemplateExpression>createNode(SyntaxKind.TemplateExpression);
 
-            template.head = parseTemplateHead();
+            template.head = parseTemplateHead(isTaggedTemplate);
             Debug.assert(template.head.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
 
             const list = [];
             const listPos = getNodePos();
 
             do {
-                list.push(parseTemplateSpan());
+                list.push(parseTemplateSpan(isTaggedTemplate));
             }
             while (last(list).literal.kind === SyntaxKind.TemplateMiddle);
 
@@ -2345,13 +2352,13 @@ namespace ts {
             return finishNode(template);
         }
 
-        function parseTemplateSpan(): TemplateSpan {
+        function parseTemplateSpan(isTaggedTemplate: boolean): TemplateSpan {
             const span = <TemplateSpan>createNode(SyntaxKind.TemplateSpan);
             span.expression = allowInAnd(parseExpression);
 
             let literal: TemplateMiddle | TemplateTail;
             if (token() === SyntaxKind.CloseBraceToken) {
-                reScanTemplateToken();
+                reScanTemplateToken(isTaggedTemplate);
                 literal = parseTemplateMiddleOrTemplateTail();
             }
             else {
@@ -2366,7 +2373,10 @@ namespace ts {
             return <LiteralExpression>parseLiteralLikeNode(token());
         }
 
-        function parseTemplateHead(): TemplateHead {
+        function parseTemplateHead(isTaggedTemplate: boolean): TemplateHead {
+            if (isTaggedTemplate) {
+                reScanTemplateHeadOrNoSubstitutionTemplate();
+            }
             const fragment = parseLiteralLikeNode(token());
             Debug.assert(fragment.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
             return <TemplateHead>fragment;
@@ -2408,6 +2418,10 @@ namespace ts {
             // parent unary expression.
             if (node.kind === SyntaxKind.NumericLiteral) {
                 (<NumericLiteral>node).numericLiteralFlags = scanner.getTokenFlags() & TokenFlags.NumericLiteralFlags;
+            }
+
+            if (isTemplateLiteralKind(node.kind)) {
+                (<TemplateHead | TemplateMiddle | TemplateTail | NoSubstitutionTemplateLiteral>node).templateFlags = scanner.getTokenFlags() & TokenFlags.ContainsInvalidEscape;
             }
 
             nextToken();
@@ -4769,8 +4783,8 @@ namespace ts {
             tagExpression.questionDotToken = questionDotToken;
             tagExpression.typeArguments = typeArguments;
             tagExpression.template = token() === SyntaxKind.NoSubstitutionTemplateLiteral
-                ? <NoSubstitutionTemplateLiteral>parseLiteralNode()
-                : parseTemplateExpression();
+                ? (reScanTemplateHeadOrNoSubstitutionTemplate(), <NoSubstitutionTemplateLiteral>parseLiteralNode())
+                : parseTemplateExpression(/*isTaggedTemplate*/ true);
             if (questionDotToken || tag.flags & NodeFlags.OptionalChain) {
                 tagExpression.flags |= NodeFlags.OptionalChain;
             }
@@ -4942,7 +4956,7 @@ namespace ts {
                     }
                     break;
                 case SyntaxKind.TemplateHead:
-                    return parseTemplateExpression();
+                    return parseTemplateExpression(/* isTaggedTemplate */ false);
             }
 
             return parseIdentifier(Diagnostics.Expression_expected);
@@ -7142,7 +7156,7 @@ namespace ts {
                         case SyntaxKind.ArrayType:
                             return isObjectOrObjectArrayTypeReference((node as ArrayTypeNode).elementType);
                         default:
-                            return isTypeReferenceNode(node) && ts.isIdentifier(node.typeName) && node.typeName.escapedText === "Object";
+                            return isTypeReferenceNode(node) && ts.isIdentifier(node.typeName) && node.typeName.escapedText === "Object" && !node.typeArguments;
                     }
                 }
 

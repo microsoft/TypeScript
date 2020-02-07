@@ -382,7 +382,7 @@ namespace ts.projectSystem {
                 }
             });
 
-            host.runQueuedImmediateCallbacks();
+            host.checkTimeoutQueueLengthAndRun(1);
             assert.isFalse(hasError());
             checkCompleteEvent(session, 1, expectedSequenceId);
             session.clearMessages();
@@ -944,6 +944,11 @@ console.log(blabla);`
                 path: `${tscWatch.projectRoot}/tsconfig.json`,
                 content: "{}"
             };
+            // Move things from staging to node_modules without triggering watch
+            const moduleFile: File = {
+                path: `${tscWatch.projectRoot}/node_modules/@angular/core/index.d.ts`,
+                content: `export const y = 10;`
+            };
             const projectFiles = [main, libFile, config];
             const host = createServerHost(projectFiles);
             const session = createSession(host, { canUseEvents: true });
@@ -983,11 +988,6 @@ console.log(blabla);`
             verifyWhileNpmInstall({ timeouts: 0, semantic: moduleNotFoundErr });
 
             filesAndFoldersToAdd = [];
-            // Move things from staging to node_modules without triggering watch
-            const moduleFile: File = {
-                path: `${tscWatch.projectRoot}/node_modules/@angular/core/index.d.ts`,
-                content: `export const y = 10;`
-            };
             host.ensureFileOrFolder(moduleFile, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true, /*ignoreParentWatch*/ true);
             // Since we added/removed in .staging no timeout
             verifyWhileNpmInstall({ timeouts: 0, semantic: moduleNotFoundErr });

@@ -1046,7 +1046,7 @@ declare function appfile4Spread(...b: number[]): void;
         "declarationMap": true,
         "outFile": "module.js"
     },
-    "exclude": ["module.d.ts"]
+    "exclude": ["module.d.ts"],
     "references": [
         { "path": "../lib", "prepend": true }
     ]

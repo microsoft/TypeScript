@@ -218,6 +218,9 @@ namespace ts {
 
     // Private Identifiers
     export function createPrivateIdentifier(text: string): PrivateIdentifier {
+        if (text[0] !== "#") {
+            Debug.fail("First character of private identifier must be #: " + text);
+        }
         const node = createSynthesizedNode(SyntaxKind.PrivateIdentifier) as PrivateIdentifier;
         node.escapedText = escapeLeadingUnderscores(text);
         return node;
@@ -1483,7 +1486,7 @@ namespace ts {
 
         let token = rawTextScanner.scan();
         if (token === SyntaxKind.CloseBracketToken) {
-            token = rawTextScanner.reScanTemplateToken();
+            token = rawTextScanner.reScanTemplateToken(/* isTaggedTemplate */ false);
         }
 
         if (rawTextScanner.isUnterminated()) {

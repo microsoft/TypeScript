@@ -251,7 +251,6 @@ namespace ts.JsDoc {
      * @param position The (character-indexed) position in the file where the check should
      * be performed.
      */
-
     export function getDocCommentTemplateAtPosition(newLine: string, sourceFile: SourceFile, position: number): TextInsertion | undefined {
         const tokenAtPos = getTokenAtPosition(sourceFile, position);
         const existingDocComment = findAncestor(tokenAtPos, isJSDoc);
@@ -370,6 +369,11 @@ namespace ts.JsDoc {
                 const parameters = isFunctionLike(be.right) ? be.right.parameters : emptyArray;
                 return { commentOwner, parameters };
             }
+            case SyntaxKind.PropertyDeclaration:
+                const init = (commentOwner as PropertyDeclaration).initializer;
+                if (init && (isFunctionExpression(init) || isArrowFunction(init))) {
+                    return { commentOwner, parameters: init.parameters };
+                }
         }
     }
 

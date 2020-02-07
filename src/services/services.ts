@@ -1608,7 +1608,7 @@ namespace ts {
         function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): RenameLocation[] | undefined {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
-            const node = getTouchingPropertyName(sourceFile, position);
+            const node = getAdjustedRenameLocation(getTouchingPropertyName(sourceFile, position));
             if (isIdentifier(node) && (isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) && isIntrinsicJsxName(node.escapedText)) {
                 const { openingElement, closingElement } = node.parent.parent;
                 return [openingElement, closingElement].map((node): RenameLocation => {
@@ -1621,21 +1621,21 @@ namespace ts {
                 });
             }
             else {
-                return getReferencesWorker(node, position, { findInStrings, findInComments, providePrefixAndSuffixTextForRename, isForRename: true },
+                return getReferencesWorker(node, position, { findInStrings, findInComments, providePrefixAndSuffixTextForRename, use: FindAllReferences.FindReferencesUse.Rename },
                     (entry, originalNode, checker) => FindAllReferences.toRenameLocation(entry, originalNode, checker, providePrefixAndSuffixTextForRename || false));
             }
         }
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined {
             synchronizeHostData();
-            return getReferencesWorker(getTouchingPropertyName(getValidSourceFile(fileName), position), position, {}, FindAllReferences.toReferenceEntry);
+            return getReferencesWorker(getTouchingPropertyName(getValidSourceFile(fileName), position), position, { use: FindAllReferences.FindReferencesUse.References }, FindAllReferences.toReferenceEntry);
         }
 
         function getReferencesWorker<T>(node: Node, position: number, options: FindAllReferences.Options, cb: FindAllReferences.ToReferenceOrRenameEntry<T>): T[] | undefined {
             synchronizeHostData();
 
             // Exclude default library when renaming as commonly user don't want to change that file.
-            const sourceFiles = options && options.isForRename
+            const sourceFiles = options && options.use === FindAllReferences.FindReferencesUse.Rename
                 ? program.getSourceFiles().filter(sourceFile => !program.isSourceFileDefaultLibrary(sourceFile))
                 : program.getSourceFiles();
 
