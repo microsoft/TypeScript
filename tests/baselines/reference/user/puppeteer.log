@@ -53,6 +53,8 @@ lib/Page.js(93,33): error TS2345: Argument of type 'CDPSession' is not assignabl
               Type 'T' is not assignable to type 'symbol'.
                 Type 'string | number | symbol' is not assignable to type 'symbol'.
                   Type 'string' is not assignable to type 'symbol'.
+lib/Page.js(94,42): error TS2345: Argument of type 'Worker' is not assignable to parameter of type 'Worker'.
+  Type 'Worker' is missing the following properties from type 'Worker': onmessage, postMessage, terminate, addEventListener, and 3 more.
 lib/Page.js(142,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(217,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(385,20): error TS2503: Cannot find namespace 'Protocol'.
@@ -70,7 +72,7 @@ lib/Page.js(1352,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Target.js(23,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Target.js(87,7): error TS2322: Type 'Promise<Worker | Worker>' is not assignable to type 'Promise<Worker>'.
   Type 'Worker | Worker' is not assignable to type 'Worker'.
-    Type 'Worker' is missing the following properties from type 'Worker': onmessage, postMessage, terminate, addEventListener, and 3 more.
+    Type 'Worker' is not assignable to type 'Worker'. Two different types with this name exist, but they are unrelated.
 lib/Target.js(135,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/WebSocketTransport.js(32,72): error TS2345: Argument of type 'import("/puppeteer/puppeteer/node_modules/@types/ws/index")' is not assignable to parameter of type 'WebSocket'.
   Property 'dispatchEvent' is missing in type 'import("/puppeteer/puppeteer/node_modules/@types/ws/index")' but required in type 'WebSocket'.
