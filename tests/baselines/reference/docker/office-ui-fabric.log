@@ -171,6 +171,15 @@ office-ui-fabric-react:                                 ~~~~~~~~~~~~~~~~~
 office-ui-fabric-react: src/components/ChoiceGroup/ChoiceGroupOption/ChoiceGroupOption.base.tsx:70:38 - error TS2554: Expected 1 arguments, but got 2.
 office-ui-fabric-react: 70           {onRenderField(this.props, this._onRenderField)}
 office-ui-fabric-react:                                         ~~~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/ComboBox/ComboBox.tsx:329:7 - error TS6133: 'onRenderList' is declared but its value is never read.
+office-ui-fabric-react: 329       onRenderList = this._onRenderList,
+office-ui-fabric-react:           ~~~~~~~~~~~~
+office-ui-fabric-react: src/components/ComboBox/ComboBox.tsx:330:7 - error TS6133: 'onRenderItem' is declared but its value is never read.
+office-ui-fabric-react: 330       onRenderItem = this._onRenderItem,
+office-ui-fabric-react:           ~~~~~~~~~~~~
+office-ui-fabric-react: src/components/ComboBox/ComboBox.tsx:331:7 - error TS6133: 'onRenderOption' is declared but its value is never read.
+office-ui-fabric-react: 331       onRenderOption = this._onRenderOptionContent,
+office-ui-fabric-react:           ~~~~~~~~~~~~~~
 office-ui-fabric-react: src/components/ComboBox/ComboBox.tsx:457:13 - error TS2554: Expected 1 arguments, but got 2.
 office-ui-fabric-react: 457             this._onRenderContainer
 office-ui-fabric-react:                 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -222,7 +231,7 @@ office-ui-fabric-react:                                  ~~~~~~~~~~~~~~~~~~~~
 office-ui-fabric-react: src/components/pickers/Suggestions/SuggestionsItem.tsx:8:31 - error TS2307: Cannot find module './Suggestions.scss'.
 office-ui-fabric-react: 8 import * as stylesImport from './Suggestions.scss';
 office-ui-fabric-react:                                 ~~~~~~~~~~~~~~~~~~~~
-office-ui-fabric-react: Found 22 errors.
+office-ui-fabric-react: Found 25 errors.
 office-ui-fabric-react: [XX:XX:XX XM] x ------------------------------------
 office-ui-fabric-react: [XX:XX:XX XM] x Error previously detected. See above for error messages.
 office-ui-fabric-react: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
