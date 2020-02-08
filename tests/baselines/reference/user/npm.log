@@ -387,6 +387,8 @@ node_modules/npm/lib/install.js(948,8): error TS2454: Variable 'previousPath' is
 node_modules/npm/lib/install.js(985,53): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(1007,53): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/access-error.js(4,60): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/npm/lib/install/access-error.js(5,12): error TS2339: Property 'code' does not exist on type 'Error'.
+node_modules/npm/lib/install/access-error.js(6,12): error TS2339: Property 'path' does not exist on type 'Error'.
 node_modules/npm/lib/install/action/build.js(10,50): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/action/extract.js(39,40): error TS2339: Property 'limit' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/action/extract.js(81,9): error TS2322: Type 'string' is not assignable to type 'any[]'.
