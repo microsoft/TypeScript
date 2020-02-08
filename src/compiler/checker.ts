@@ -12978,7 +12978,7 @@ namespace ts {
          * this function should be called in a left folding style, with left = previous result of getSpreadType
          * and right = the new element to be spread.
          */
-        function getSpreadType(left: Type, right: Type, symbol: Symbol | undefined, objectFlags: ObjectFlags, readonly: boolean): Type {
+        function getSpreadType(left: Type, right: Type, symbol: Symbol | undefined, objectFlags: ObjectFlags, readonly: boolean, isUnion?: boolean): Type {
             if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
                 return anyType;
             }
@@ -12994,16 +12994,16 @@ namespace ts {
             if (left.flags & TypeFlags.Union) {
                 const merged = tryMergeUnionOfObjectTypeAndEmptyObject(left as UnionType, readonly);
                 if (merged) {
-                    return getSpreadType(merged, right, symbol, objectFlags, readonly);
+                    return getSpreadType(merged, right, symbol, objectFlags, readonly, isUnion);
                 }
-                return mapType(left, t => getSpreadType(t, right, symbol, objectFlags, readonly));
+                return mapType(left, t => getSpreadType(t, right, symbol, objectFlags, readonly, isUnion));
             }
             if (right.flags & TypeFlags.Union) {
                 const merged = tryMergeUnionOfObjectTypeAndEmptyObject(right as UnionType, readonly);
                 if (merged) {
-                    return getSpreadType(left, merged, symbol, objectFlags, readonly);
+                    return getSpreadType(left, merged, symbol, objectFlags, readonly, isUnion);
                 }
-                return mapType(right, t => getSpreadType(left, t, symbol, objectFlags, readonly));
+                return mapType(right, t => getSpreadType(left, t, symbol, objectFlags, readonly, /*isUnion*/ true));
             }
             if (right.flags & (TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.BigIntLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive | TypeFlags.Index)) {
                 return left;
@@ -13066,6 +13066,14 @@ namespace ts {
                         result.declarations = declarations;
                         result.nameType = getSymbolLinks(leftProp).nameType;
                         members.set(leftProp.escapedName, result);
+                    }
+                    else if (strictNullChecks &&
+                             !isUnion &&
+                             symbol &&
+                             !isFromSpreadAssignment(leftProp, symbol) &&
+                             isFromSpreadAssignment(rightProp, symbol) &&
+                             !(getFalsyFlags(rightType) & TypeFlags.Nullable)) {
+                        error(leftProp.valueDeclaration, Diagnostics.0_is_unused_because_a_subsequent_spread_overwrites_it);
                     }
                 }
                 else {
@@ -16559,6 +16567,10 @@ namespace ts {
             const match = discriminable.indexOf(/*searchElement*/ true);
             // make sure exactly 1 matches before returning it
             return match === -1 || discriminable.indexOf(/*searchElement*/ true, match + 1) !== -1 ? defaultValue : target.types[match];
+        }
+
+        function isFromSpreadAssignment(prop: Symbol, container: Symbol) {
+            return !(prop.valueDeclaration && container.valueDeclaration && prop.valueDeclaration.parent === container.valueDeclaration);
         }
 
         /**
@@ -22605,7 +22617,6 @@ namespace ts {
             let spread: Type = emptyJsxObjectType;
             let hasSpreadAnyType = false;
             let typeToIntersect: Type | undefined;
-            let explicitlySpecifyChildrenAttribute = false;
             let objectFlags: ObjectFlags = ObjectFlags.JsxAttributes;
             const jsxChildrenPropertyName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(openingLikeElement));
 
@@ -22624,9 +22635,6 @@ namespace ts {
                     attributeSymbol.type = exprType;
                     attributeSymbol.target = member;
                     attributesTable.set(attributeSymbol.escapedName, attributeSymbol);
-                    if (attributeDecl.name.escapedText === jsxChildrenPropertyName) {
-                        explicitlySpecifyChildrenAttribute = true;
-                    }
                 }
                 else {
                     Debug.assert(attributeDecl.kind === SyntaxKind.JsxSpreadAttribute);
@@ -22660,13 +22668,6 @@ namespace ts {
                 const childrenTypes: Type[] = checkJsxChildren(parent, checkMode);
 
                 if (!hasSpreadAnyType && jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
-                    // Error if there is a attribute named "children" explicitly specified and children element.
-                    // This is because children element will overwrite the value from attributes.
-                    // Note: we will not warn "children" attribute overwritten if "children" attribute is specified in object spread.
-                    if (explicitlySpecifyChildrenAttribute) {
-                        error(attributes, Diagnostics._0_are_specified_twice_The_attribute_named_0_will_be_overwritten, unescapeLeadingUnderscores(jsxChildrenPropertyName));
-                    }
-
                     const contextualType = getApparentTypeOfContextualType(openingLikeElement.attributes);
                     const childrenContextualType = contextualType && getTypeOfPropertyOfContextualType(contextualType, jsxChildrenPropertyName);
                     // If there are children in the body of JSX element, create dummy attribute "children" with the union of children types so that it will pass the attribute checking process
@@ -25119,7 +25120,7 @@ namespace ts {
                     if (node.arguments.length === 1) {
                         const text = getSourceFileOfNode(node).text;
                         if (isLineBreak(text.charCodeAt(skipTrivia(text, node.expression.end, /* stopAfterLineBreak */ true) - 1))) {
-                            relatedInformation = createDiagnosticForNode(node.expression, Diagnostics.It_is_highly_likely_that_you_are_missing_a_semicolon);
+                            relatedInformation = createDiagnosticForNode(node.expression, Diagnostics.Are_you_missing_a_semicolon_here);
                         }
                     }
                     invocationError(node.expression, apparentType, SignatureKind.Call, relatedInformation);
