@@ -22,7 +22,7 @@ if (!(result instanceof RegExp)) {
 
 } else if (!result.global) {
 >!result.global : boolean
->result.global : never
+>result.global : any
 >result : I & RegExp
->global : never
+>global : any
 }
