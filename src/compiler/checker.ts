@@ -10125,7 +10125,7 @@ namespace ts {
             let checkFlags = 0;
             for (const current of containingType.types) {
                 const type = getApparentType(current);
-                if (type !== errorType) {
+                if (type !== errorType && !isNeverLikeType(type)) {
                     const prop = getPropertyOfType(type, name);
                     const modifiers = prop ? getDeclarationModifierFlagsFromSymbol(prop) : 0;
                     if (prop && !(modifiers & excludeModifiers)) {
@@ -10196,6 +10196,9 @@ namespace ts {
                 if (isLiteralType(type)) {
                     checkFlags |= CheckFlags.HasLiteralType;
                 }
+                if (type.flags & TypeFlags.Never) {
+                    checkFlags |= CheckFlags.HasNeverType;
+                }
                 propTypes.push(type);
             }
             addRange(propTypes, indexTypes);
@@ -10247,6 +10250,22 @@ namespace ts {
             return property && !(getCheckFlags(property) & CheckFlags.ReadPartial) ? property : undefined;
         }
 
+        function isNeverLikeIntersection(type: IntersectionType) {
+            if (!(type.objectFlags & ObjectFlags.IsNeverIntersectionComputed)) {
+                type.objectFlags |= ObjectFlags.IsNeverIntersectionComputed |
+                    (some(getPropertiesOfUnionOrIntersectionType(type), isDiscriminantWithNeverType) ? ObjectFlags.IsNeverIntersection : 0);
+            }
+            return !!(type.objectFlags & ObjectFlags.IsNeverIntersection);
+        }
+
+        function isDiscriminantWithNeverType(prop: Symbol) {
+            return (getCheckFlags(prop) & (CheckFlags.Discriminant | CheckFlags.HasNeverType)) === CheckFlags.Discriminant && !!(getTypeOfSymbol(prop).flags & TypeFlags.Never);
+        }
+
+        function isNeverLikeType(type: Type) {
+            return !!(type.flags & TypeFlags.Never || type.flags & TypeFlags.Intersection && isNeverLikeIntersection(<IntersectionType>type));
+        }
+
         /**
          * Return the symbol for the property with the given name in the given type. Creates synthetic union properties when
          * necessary, maps primitive types and type parameters are to their apparent types, and augments with properties from
@@ -10275,7 +10294,7 @@ namespace ts {
                 }
                 return getPropertyOfObjectType(globalObjectType, name);
             }
-            if (type.flags & TypeFlags.UnionOrIntersection) {
+            if (type.flags & TypeFlags.Union || type.flags & TypeFlags.Intersection && !isNeverLikeIntersection(<IntersectionType>type)) {
                 return getPropertyOfUnionOrIntersectionType(<UnionOrIntersectionType>type, name);
             }
             return undefined;
@@ -12383,8 +12402,11 @@ namespace ts {
                 }
             }
             if (!(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike)) {
-                if (objectType.flags & (TypeFlags.Any | TypeFlags.Never)) {
+                if (objectType.flags & TypeFlags.Any) {
                     return objectType;
+                }
+                if (isNeverLikeType(objectType)) {
+                    return neverType;
                 }
                 const stringIndexInfo = getIndexInfoOfType(objectType, IndexKind.String);
                 const indexInfo = isTypeAssignableToKind(indexType, TypeFlags.NumberLike) && getIndexInfoOfType(objectType, IndexKind.Number) || stringIndexInfo;
@@ -15181,6 +15203,9 @@ namespace ts {
                         result = typeRelatedToSomeType(getRegularTypeOfObjectLiteral(source), <UnionType>target, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive));
                     }
                     else if (target.flags & TypeFlags.Intersection) {
+                        if (isNeverLikeIntersection(<IntersectionType>target)) {
+                            return Ternary.False;
+                        }
                         result = typeRelatedToEachType(getRegularTypeOfObjectLiteral(source), target as IntersectionType, reportErrors, IntersectionState.Target);
                         if (result && (isPerformingExcessPropertyChecks || isPerformingCommonPropertyChecks)) {
                             // Validate against excess props using the original `source`
@@ -15190,6 +15215,9 @@ namespace ts {
                         }
                     }
                     else if (source.flags & TypeFlags.Intersection) {
+                        if (isNeverLikeIntersection(<IntersectionType>source)) {
+                            return Ternary.True;
+                        }
                         // Check to see if any constituents of the intersection are immediately related to the target.
                         //
                         // Don't report errors though. Checking whether a constituent is related to the source is not actually

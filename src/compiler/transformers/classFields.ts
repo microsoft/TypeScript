@@ -976,7 +976,7 @@ namespace ts {
             );
         }
 
-        function visitArrayAssignmentTarget(node: AssignmentPattern) {
+        function visitArrayAssignmentTarget(node: BindingOrAssignmentElement) {
             const target = getTargetOfBindingOrAssignmentElement(node);
             if (target && isPrivateIdentifierPropertyAccessExpression(target)) {
                 const wrapped = wrapPrivateIdentifierForDestructuringTarget(target);
