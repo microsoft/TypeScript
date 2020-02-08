@@ -12176,12 +12176,82 @@ namespace ts {
                             UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
                     }
                 }
+                else if (includes & TypeFlags.Object && hasPropertiesWithDisjointTypes(typeSet)) {
+                    result = neverType;
+                }
                 else {
                     result = createIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
                 }
                 intersectionTypes.set(id, result);
             }
             return result;
+        }
+
+        function hasPropertiesWithDisjointTypes(typeSet: Type[]) {
+            const members = createMap<Symbol | Symbol[]>();
+            for (const type of typeSet) {
+                if (type.flags & TypeFlags.Object && !isGenericMappedType(type) && !isArrayType(type) && !isTupleType(type)) {
+                    for (const prop of getPropertiesOfObjectType(type)) {
+                        if (prop.flags & SymbolFlags.Property) {
+                            const name = <string>prop.escapedName;
+                            const cached = members.get(name);
+                            if (!cached) {
+                                members.set(name, prop);
+                            }
+                            else if (!isArray(cached)) {
+                                members.set(name, [cached, prop]);
+                            }
+                            else {
+                                cached.push(prop);
+                            }
+                        }
+                    }
+                }
+            }
+            for (const props of arrayFrom(members.values())) {
+                if (isArray(props)) {
+                    if (every(props, hasLiteralLikeTypeAnnotation) && getIntersectionType(map(props, getTypeOfSymbol)).flags & TypeFlags.Never) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function hasLiteralLikeTypeAnnotation(prop: Symbol) {
+            if (prop.valueDeclaration) {
+                const node = getEffectiveTypeAnnotationNode(prop.valueDeclaration);
+                return !!node && isLiteralLikeType(node);
+            }
+            return false;
+        }
+
+        function isLiteralLikeType(node: TypeNode): boolean {
+            switch (node.kind) {
+                case SyntaxKind.LiteralType:
+                    return true;
+                case SyntaxKind.ParenthesizedType:
+                    return isLiteralLikeType((<ParenthesizedTypeNode>node).type);
+                case SyntaxKind.UnionType:
+                    return every((<UnionTypeNode>node).types, isLiteralLikeType);
+                case SyntaxKind.TypeReference:
+                    return isReferenceToLiteralLikeType(<TypeReferenceNode>node);
+            }
+            return false;
+        }
+
+        function isReferenceToLiteralLikeType(node: TypeReferenceNode): boolean {
+            const symbol = resolveTypeReferenceName(node.typeName, SymbolFlags.Type);
+            if (symbol.flags & (SymbolFlags.Enum | SymbolFlags.EnumMember)) {
+                return true;
+            }
+            if (symbol.flags & SymbolFlags.TypeAlias) {
+                const declaration = find(symbol.declarations, isTypeAliasDeclaration);
+                if (declaration) {
+                    return isLiteralLikeType(declaration.type);
+                }
+            }
+            return false;
         }
 
         function getTypeFromIntersectionTypeNode(node: IntersectionTypeNode): Type {
@@ -16256,7 +16326,6 @@ namespace ts {
             }
 
             function propertiesRelatedTo(source: Type, target: Type, reportErrors: boolean, excludedProperties: UnderscoreEscapedMap<true> | undefined, intersectionState: IntersectionState): Ternary {
-
                 if (relation === identityRelation) {
                     return propertiesIdenticalTo(source, target, excludedProperties);
                 }
