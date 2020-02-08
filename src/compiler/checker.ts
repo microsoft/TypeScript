@@ -12210,10 +12210,45 @@ namespace ts {
             }
             for (const props of arrayFrom(members.values())) {
                 if (isArray(props)) {
-                    const types = map(props, getTypeOfSymbol);
-                    if (every(types, isLiteralType) && getIntersectionType(types).flags & TypeFlags.Never) {
+                    if (every(props, hasLiteralLikeTypeAnnotation) && getIntersectionType(map(props, getTypeOfSymbol)).flags & TypeFlags.Never) {
                         return true;
                     }
+                }
+            }
+            return false;
+        }
+
+        function hasLiteralLikeTypeAnnotation(prop: Symbol) {
+            if (prop.valueDeclaration) {
+                const node = getEffectiveTypeAnnotationNode(prop.valueDeclaration);
+                return !!node && isLiteralLikeType(node);
+            }
+            return false;
+        }
+
+        function isLiteralLikeType(node: TypeNode): boolean {
+            switch (node.kind) {
+                case SyntaxKind.LiteralType:
+                    return true;
+                case SyntaxKind.ParenthesizedType:
+                    return isLiteralLikeType((<ParenthesizedTypeNode>node).type);
+                case SyntaxKind.UnionType:
+                    return every((<UnionTypeNode>node).types, isLiteralLikeType);
+                case SyntaxKind.TypeReference:
+                    return isReferenceToLiteralLikeType(<TypeReferenceNode>node);
+            }
+            return false;
+        }
+
+        function isReferenceToLiteralLikeType(node: TypeReferenceNode): boolean {
+            const symbol = resolveTypeReferenceName(node.typeName, SymbolFlags.Type);
+            if (symbol.flags & (SymbolFlags.Enum | SymbolFlags.EnumMember)) {
+                return true;
+            }
+            if (symbol.flags & SymbolFlags.TypeAlias) {
+                const declaration = find(symbol.declarations, isTypeAliasDeclaration);
+                if (declaration) {
+                    return isLiteralLikeType(declaration.type);
                 }
             }
             return false;
