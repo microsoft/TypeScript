@@ -13073,7 +13073,7 @@ namespace ts {
                              !isFromSpreadAssignment(leftProp, symbol) &&
                              isFromSpreadAssignment(rightProp, symbol) &&
                              !(getFalsyFlags(rightType) & TypeFlags.Nullable)) {
-                        error(leftProp.valueDeclaration, Diagnostics.0_is_unused_because_a_subsequent_spread_overwrites_it);
+                        error(leftProp.valueDeclaration, Diagnostics._0_is_unused_because_a_subsequent_spread_overwrites_it);
                     }
                 }
                 else {
