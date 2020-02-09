@@ -14812,6 +14812,7 @@ namespace ts {
         function getNormalizedType(type: Type, writing: boolean): Type {
             return isFreshLiteralType(type) ? (<FreshableType>type).regularType :
                 getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? createTypeReference((<TypeReference>type).target, getTypeArguments(<TypeReference>type)) :
+                type.flags & TypeFlags.Intersection && isNeverLikeIntersection(<IntersectionType>type) ? neverType :
                 type.flags & TypeFlags.Substitution ? writing ? (<SubstitutionType>type).typeVariable : (<SubstitutionType>type).substitute :
                 type.flags & TypeFlags.Simplifiable ? getSimplifiedType(type, writing) :
                 type;
@@ -15203,9 +15204,6 @@ namespace ts {
                         result = typeRelatedToSomeType(getRegularTypeOfObjectLiteral(source), <UnionType>target, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive));
                     }
                     else if (target.flags & TypeFlags.Intersection) {
-                        if (isNeverLikeIntersection(<IntersectionType>target)) {
-                            return Ternary.False;
-                        }
                         result = typeRelatedToEachType(getRegularTypeOfObjectLiteral(source), target as IntersectionType, reportErrors, IntersectionState.Target);
                         if (result && (isPerformingExcessPropertyChecks || isPerformingCommonPropertyChecks)) {
                             // Validate against excess props using the original `source`
@@ -15215,9 +15213,6 @@ namespace ts {
                         }
                     }
                     else if (source.flags & TypeFlags.Intersection) {
-                        if (isNeverLikeIntersection(<IntersectionType>source)) {
-                            return Ternary.True;
-                        }
                         // Check to see if any constituents of the intersection are immediately related to the target.
                         //
                         // Don't report errors though. Checking whether a constituent is related to the source is not actually
