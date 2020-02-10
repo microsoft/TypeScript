@@ -1157,6 +1157,10 @@ namespace ts {
             return pipelineEmit(EmitHint.Expression, node);
         }
 
+        function emitJsxAttributeValue(node: StringLiteral | JsxExpression): Node {
+            return pipelineEmit(isStringLiteral(node) ? EmitHint.JsxAttributeValue : EmitHint.Unspecified, node);
+        }
+
         function pipelineEmit(emitHint: EmitHint, node: Node) {
             const savedLastNode = lastNode;
             const savedLastSubstitution = lastSubstitution;
@@ -1224,6 +1228,7 @@ namespace ts {
             Debug.assert(lastNode === node || lastSubstitution === node);
             if (hint === EmitHint.SourceFile) return emitSourceFile(cast(node, isSourceFile));
             if (hint === EmitHint.IdentifierName) return emitIdentifier(cast(node, isIdentifier));
+            if (hint === EmitHint.JsxAttributeValue) return emitLiteral(cast(node, isStringLiteral), /*jsxAttributeEscape*/ true);
             if (hint === EmitHint.MappedTypeParameter) return emitMappedTypeParameter(cast(node, isTypeParameterDeclaration));
             if (hint === EmitHint.EmbeddedStatement) {
                 Debug.assertNode(node, isEmptyStatement);
@@ -1237,7 +1242,7 @@ namespace ts {
                     case SyntaxKind.TemplateHead:
                     case SyntaxKind.TemplateMiddle:
                     case SyntaxKind.TemplateTail:
-                        return emitLiteral(<LiteralExpression>node);
+                        return emitLiteral(<LiteralExpression>node, /*jsxAttributeEscape*/ false);
 
                     case SyntaxKind.UnparsedSource:
                     case SyntaxKind.UnparsedPrepend:
@@ -1556,7 +1561,7 @@ namespace ts {
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.RegularExpressionLiteral:
                     case SyntaxKind.NoSubstitutionTemplateLiteral:
-                        return emitLiteral(<LiteralExpression>node);
+                        return emitLiteral(<LiteralExpression>node, /*jsxAttributeEscape*/ false);
 
                     // Identifiers
                     case SyntaxKind.Identifier:
@@ -1746,7 +1751,7 @@ namespace ts {
         // SyntaxKind.NumericLiteral
         // SyntaxKind.BigIntLiteral
         function emitNumericOrBigIntLiteral(node: NumericLiteral | BigIntLiteral) {
-            emitLiteral(node);
+            emitLiteral(node, /*jsxAttributeEscape*/ false);
         }
 
         // SyntaxKind.StringLiteral
@@ -1755,8 +1760,8 @@ namespace ts {
         // SyntaxKind.TemplateHead
         // SyntaxKind.TemplateMiddle
         // SyntaxKind.TemplateTail
-        function emitLiteral(node: LiteralLikeNode) {
-            const text = getLiteralTextOfNode(node, printerOptions.neverAsciiEscape);
+        function emitLiteral(node: LiteralLikeNode, jsxAttributeEscape: boolean) {
+            const text = getLiteralTextOfNode(node, printerOptions.neverAsciiEscape, jsxAttributeEscape);
             if ((printerOptions.sourceMap || printerOptions.inlineSourceMap)
                 && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                 writeLiteral(text);
@@ -2295,7 +2300,7 @@ namespace ts {
             expression = skipPartiallyEmittedExpressions(expression);
             if (isNumericLiteral(expression)) {
                 // check if numeric literal is a decimal literal that was originally written with a dot
-                const text = getLiteralTextOfNode(<LiteralExpression>expression, /*neverAsciiEscape*/ true);
+                const text = getLiteralTextOfNode(<LiteralExpression>expression, /*neverAsciiEscape*/ true, /*jsxAttributeEscape*/ false);
                 // If he number will be printed verbatim and it doesn't already contain a dot, add one
                 // if the expression doesn't have any comments that will be emitted.
                 return !expression.numericLiteralFlags && !stringContains(text, tokenToString(SyntaxKind.DotToken)!);
@@ -2739,11 +2744,11 @@ namespace ts {
             const node = getParseTreeNode(contextNode);
             const isSimilarNode = node && node.kind === contextNode.kind;
             const startPos = pos;
-            if (isSimilarNode) {
-                pos = skipTrivia(currentSourceFile!.text, pos);
+            if (isSimilarNode && currentSourceFile) {
+                pos = skipTrivia(currentSourceFile.text, pos);
             }
             if (emitLeadingCommentsOfPosition && isSimilarNode && contextNode.pos !== startPos) {
-                const needsIndent = indentLeading && !positionsAreOnSameLine(startPos, pos, currentSourceFile!);
+                const needsIndent = indentLeading && currentSourceFile && !positionsAreOnSameLine(startPos, pos, currentSourceFile);
                 if (needsIndent) {
                     increaseIndent();
                 }
@@ -3295,7 +3300,7 @@ namespace ts {
 
         function emitJsxAttribute(node: JsxAttribute) {
             emit(node.name);
-            emitNodeWithPrefix("=", writePunctuation, node.initializer!, emit); // TODO: GH#18217
+            emitNodeWithPrefix("=", writePunctuation, node.initializer, emitJsxAttributeValue);
         }
 
         function emitJsxSpreadAttribute(node: JsxSpreadAttribute) {
@@ -3828,7 +3833,7 @@ namespace ts {
             }
         }
 
-        function emitNodeWithPrefix(prefix: string, prefixWriter: (s: string) => void, node: Node, emit: (node: Node) => void) {
+        function emitNodeWithPrefix<T extends Node>(prefix: string, prefixWriter: (s: string) => void, node: T | undefined, emit: (node: T) => void) {
             if (node) {
                 prefixWriter(prefix);
                 emit(node);
@@ -4385,20 +4390,20 @@ namespace ts {
             return getSourceTextOfNodeFromSourceFile(currentSourceFile!, node, includeTrivia);
         }
 
-        function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined): string {
+        function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean): string {
             if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
                 const textSourceNode = (<StringLiteral>node).textSourceNode!;
                 if (isIdentifier(textSourceNode)) {
-                    return neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ?
-                        `"${escapeString(getTextOfNode(textSourceNode))}"` :
+                    return jsxAttributeEscape ? `"${escapeJsxAttributeString(getTextOfNode(textSourceNode))}"` :
+                        neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? `"${escapeString(getTextOfNode(textSourceNode))}"` :
                         `"${escapeNonAsciiString(getTextOfNode(textSourceNode))}"`;
                 }
                 else {
-                    return getLiteralTextOfNode(textSourceNode, neverAsciiEscape);
+                    return getLiteralTextOfNode(textSourceNode, neverAsciiEscape, jsxAttributeEscape);
                 }
             }
 
-            return getLiteralText(node, currentSourceFile!, neverAsciiEscape);
+            return getLiteralText(node, currentSourceFile!, neverAsciiEscape, jsxAttributeEscape);
         }
 
         /**

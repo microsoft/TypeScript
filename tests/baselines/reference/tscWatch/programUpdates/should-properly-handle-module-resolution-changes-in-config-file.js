@@ -58,21 +58,21 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
 /a/b/file1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/file1.ts","pollingInterval":250}
 /a/b/node_modules/module1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/node_modules/module1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b/node_modules:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -115,20 +115,20 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
 /a/b/file1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/file1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /a/module1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/module1.ts","pollingInterval":250}
 
 FsWatches::
 /a/b:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 FsWatchesRecursive::
 /a/b/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

@@ -237,11 +237,12 @@ namespace ts.server.protocol {
          */
         metadata?: unknown;
 
-        /* @internal */
+        /**
+         * Exposes information about the performance of this request-response pair.
+         */
         performanceData?: PerformanceData;
     }
 
-    /* @internal */
     export interface PerformanceData {
         /**
          * Time spent updating the program graph, in milliseconds.

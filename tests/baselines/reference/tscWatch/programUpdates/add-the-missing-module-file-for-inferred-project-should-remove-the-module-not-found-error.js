@@ -46,15 +46,15 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/file1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/file1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -94,11 +94,11 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/file1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/file1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /a/b/modulefile.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/moduleFile.ts","pollingInterval":250}
 
 FsWatches::
 

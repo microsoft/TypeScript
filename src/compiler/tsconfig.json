@@ -38,6 +38,7 @@
         "sourcemap.ts",
         "transformers/utilities.ts",
         "transformers/destructuring.ts",
+        "transformers/taggedTemplate.ts",
         "transformers/ts.ts",
         "transformers/classFields.ts",
         "transformers/es2017.ts",

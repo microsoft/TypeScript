@@ -92,7 +92,7 @@ namespace ts.codefix {
         return flags;
     }
 
-    function getResolvedSourceFileFromImportDeclaration (sourceFile: SourceFile, context: CodeFixContextBase, importDeclaration: ImportDeclaration): SourceFile | undefined {
+    function getResolvedSourceFileFromImportDeclaration(sourceFile: SourceFile, context: CodeFixContextBase, importDeclaration: ImportDeclaration): SourceFile | undefined {
         if (!importDeclaration || !isStringLiteralLike(importDeclaration.moduleSpecifier)) return undefined;
 
         const resolvedModule = getResolvedModule(sourceFile, importDeclaration.moduleSpecifier.text);

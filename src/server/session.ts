@@ -2164,15 +2164,18 @@ namespace ts.server {
             return result;
         }
 
-        private toProtocolCallHierarchyItem(item: CallHierarchyItem, scriptInfo?: ScriptInfo): protocol.CallHierarchyItem {
+        private getScriptInfoFromProjectService(file: string) {
+            const normalizedFile = toNormalizedPath(file);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(normalizedFile);
             if (!scriptInfo) {
-                const file = toNormalizedPath(item.file);
-                scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
-                if (!scriptInfo) {
-                    this.projectService.logErrorForScriptInfoNotFound(file);
-                    return Errors.ThrowNoProject();
-                }
+                this.projectService.logErrorForScriptInfoNotFound(normalizedFile);
+                return Errors.ThrowNoProject();
             }
+            return scriptInfo;
+        }
+
+        private toProtocolCallHierarchyItem(item: CallHierarchyItem): protocol.CallHierarchyItem {
+            const scriptInfo = this.getScriptInfoFromProjectService(item.file);
             return {
                 name: item.name,
                 kind: item.kind,
@@ -2182,7 +2185,8 @@ namespace ts.server {
             };
         }
 
-        private toProtocolCallHierarchyIncomingCall(incomingCall: CallHierarchyIncomingCall, scriptInfo: ScriptInfo): protocol.CallHierarchyIncomingCall {
+        private toProtocolCallHierarchyIncomingCall(incomingCall: CallHierarchyIncomingCall): protocol.CallHierarchyIncomingCall {
+            const scriptInfo = this.getScriptInfoFromProjectService(incomingCall.from.file);
             return {
                 from: this.toProtocolCallHierarchyItem(incomingCall.from),
                 fromSpans: incomingCall.fromSpans.map(fromSpan => toProtocolTextSpan(fromSpan, scriptInfo))
@@ -2202,35 +2206,27 @@ namespace ts.server {
             if (scriptInfo) {
                 const position = this.getPosition(args, scriptInfo);
                 const result = project.getLanguageService().prepareCallHierarchy(file, position);
-                return result && mapOneOrMany(result, item => this.toProtocolCallHierarchyItem(item, scriptInfo));
+                return result && mapOneOrMany(result, item => this.toProtocolCallHierarchyItem(item));
             }
             return undefined;
         }
 
         private provideCallHierarchyIncomingCalls(args: protocol.FileLocationRequestArgs): protocol.CallHierarchyIncomingCall[] {
             const { file, project } = this.getFileAndProject(args);
-            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
-            if (!scriptInfo) {
-                this.projectService.logErrorForScriptInfoNotFound(file);
-                return Errors.ThrowNoProject();
-            }
+            const scriptInfo = this.getScriptInfoFromProjectService(file);
             const incomingCalls = project.getLanguageService().provideCallHierarchyIncomingCalls(file, this.getPosition(args, scriptInfo));
-            return incomingCalls.map(call => this.toProtocolCallHierarchyIncomingCall(call, scriptInfo));
+            return incomingCalls.map(call => this.toProtocolCallHierarchyIncomingCall(call));
         }
 
         private provideCallHierarchyOutgoingCalls(args: protocol.FileLocationRequestArgs): protocol.CallHierarchyOutgoingCall[] {
             const { file, project } = this.getFileAndProject(args);
-            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
-            if (!scriptInfo) {
-                this.projectService.logErrorForScriptInfoNotFound(file);
-                return Errors.ThrowNoProject();
-            }
+            const scriptInfo = this.getScriptInfoFromProjectService(file);
             const outgoingCalls = project.getLanguageService().provideCallHierarchyOutgoingCalls(file, this.getPosition(args, scriptInfo));
             return outgoingCalls.map(call => this.toProtocolCallHierarchyOutgoingCall(call, scriptInfo));
         }
 
         getCanonicalFileName(fileName: string) {
-            const name = this.host.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
+            const name = this.host.useCaseSensitiveFileNames ? fileName : toFileNameLowerCase(fileName);
             return normalizePath(name);
         }
 

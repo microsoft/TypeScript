@@ -22,6 +22,7 @@ lib/Coverage.js(208,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/EmulationManager.js(36,16): error TS2503: Cannot find namespace 'Protocol'.
 lib/ExecutionContext.js(26,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/ExecutionContext.js(158,18): error TS2503: Cannot find namespace 'Protocol'.
+lib/ExecutionContext.js(186,14): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(151,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(173,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(230,15): error TS2503: Cannot find namespace 'Protocol'.
@@ -42,7 +43,7 @@ lib/NetworkManager.js(295,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(319,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(529,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(668,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(94,33): error TS2345: Argument of type 'CDPSession' is not assignable to parameter of type 'Puppeteer.CDPSession'.
+lib/Page.js(93,33): error TS2345: Argument of type 'CDPSession' is not assignable to parameter of type 'Puppeteer.CDPSession'.
   Types of property 'on' are incompatible.
     Type '(event: string | symbol, listener: (...args: any[]) => void) => CDPSession' is not assignable to type '<T extends string | number | symbol>(event: T, listener: (arg: any) => void) => CDPSession'.
       Types of parameters 'event' and 'event' are incompatible.
@@ -52,20 +53,20 @@ lib/Page.js(94,33): error TS2345: Argument of type 'CDPSession' is not assignabl
               Type 'T' is not assignable to type 'symbol'.
                 Type 'string | number | symbol' is not assignable to type 'symbol'.
                   Type 'string' is not assignable to type 'symbol'.
-lib/Page.js(147,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(220,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(388,20): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(451,7): error TS2740: Type '(...args: any[]) => Promise<any>' is missing the following properties from type 'Window': applicationCache, clientInformation, closed, customElements, and 222 more.
-lib/Page.js(461,9): error TS2349: This expression is not callable.
+lib/Page.js(142,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(217,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(385,20): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(448,7): error TS2740: Type '(...args: any[]) => Promise<any>' is missing the following properties from type 'Window': applicationCache, clientInformation, closed, customElements, and 222 more.
+lib/Page.js(458,9): error TS2349: This expression is not callable.
   Type 'Window' has no call signatures.
-lib/Page.js(497,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(507,22): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(520,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(530,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(555,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(608,14): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(944,19): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(1354,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(494,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(504,22): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(517,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(527,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(552,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(605,14): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(941,19): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(1352,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Target.js(23,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Target.js(87,7): error TS2322: Type 'Promise<Worker | Worker>' is not assignable to type 'Promise<Worker>'.
   Type 'Worker | Worker' is not assignable to type 'Worker'.

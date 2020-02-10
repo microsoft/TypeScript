@@ -1735,6 +1735,8 @@ namespace ts {
 
     export interface NoSubstitutionTemplateLiteral extends LiteralExpression, TemplateLiteralLikeNode, Declaration {
         kind: SyntaxKind.NoSubstitutionTemplateLiteral;
+        /* @internal */
+        templateFlags?: TokenFlags;
     }
 
     export const enum TokenFlags {
@@ -1757,6 +1759,8 @@ namespace ts {
         /* @internal */
         UnicodeEscape = 1 << 10,
         /* @internal */
+        ContainsInvalidEscape = 1 << 11,    // e.g. `\uhello`
+        /* @internal */
         BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,
         /* @internal */
         NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinaryOrOctalSpecifier | ContainsSeparator
@@ -1775,16 +1779,22 @@ namespace ts {
     export interface TemplateHead extends TemplateLiteralLikeNode {
         kind: SyntaxKind.TemplateHead;
         parent: TemplateExpression;
+        /* @internal */
+        templateFlags?: TokenFlags;
     }
 
     export interface TemplateMiddle extends TemplateLiteralLikeNode {
         kind: SyntaxKind.TemplateMiddle;
         parent: TemplateSpan;
+        /* @internal */
+        templateFlags?: TokenFlags;
     }
 
     export interface TemplateTail extends TemplateLiteralLikeNode {
         kind: SyntaxKind.TemplateTail;
         parent: TemplateSpan;
+        /* @internal */
+        templateFlags?: TokenFlags;
     }
 
     export type TemplateLiteral = TemplateExpression | NoSubstitutionTemplateLiteral;
@@ -3611,7 +3621,8 @@ namespace ts {
         None           = 0,
         Signature      = 1 << 0, // Obtaining contextual signature
         NoConstraints  = 1 << 1, // Don't obtain type variable constraints
-        BaseConstraint = 1 << 2, // Use base constraint type for completions
+        Completions    = 1 << 2, // Ignore inference to current node and parent nodes out to the containing call for completions
+
     }
 
     // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
@@ -4063,7 +4074,6 @@ namespace ts {
         nameType?: Type;                            // Type associated with a late-bound symbol
         uniqueESSymbolType?: Type;                  // UniqueESSymbol type for a symbol
         declaredType?: Type;                        // Type of class, interface, enum, type alias, or type parameter
-        resolvedJSDocType?: Type;                   // Resolved type of a JSDoc type reference
         typeParameters?: TypeParameter[];           // Type parameters of type alias (undefined if non-generic)
         outerTypeParameters?: TypeParameter[];      // Outer type parameters of anonymous object type
         instantiations?: Map<Type>;                 // Instantiations of generic type alias (undefined if non-generic)
@@ -4239,6 +4249,7 @@ namespace ts {
         jsxFlags: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
         resolvedJsxElementAttributesType?: Type;  // resolved element attributes type of a JSX openinglike element
         resolvedJsxElementAllAttributesType?: Type;  // resolved all element attributes type of a JSX openinglike element
+        resolvedJSDocType?: Type;                   // Resolved type of a JSDoc type reference
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
         superCall?: SuperCall;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
         switchTypes?: Type[];             // Cached array of switch case expression types
@@ -4249,6 +4260,7 @@ namespace ts {
         outerTypeParameters?: TypeParameter[];  // Outer type parameters of anonymous object type
         instantiations?: Map<Type>;         // Instantiations of generic type alias (undefined if non-generic)
         isExhaustive?: boolean;           // Is node an exhaustive switch statement
+        skipDirectInference?: true;         // Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type
     }
 
     export const enum TypeFlags {
@@ -4316,6 +4328,8 @@ namespace ts {
         ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection,
         /* @internal */
         Simplifiable = IndexedAccess | Conditional,
+        /* @internal */
+        Substructure = Object | Union | Intersection | Index | IndexedAccess | Conditional | Substitution,
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
@@ -4334,9 +4348,6 @@ namespace ts {
         IncludesWildcard = Index,
         /* @internal */
         IncludesEmptyObject = IndexedAccess,
-        // The following flag is used for different purposes by maybeTypeOfKind
-        /* @internal */
-        GenericMappedType = Never,
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -4440,6 +4451,14 @@ namespace ts {
         ContainsObjectOrArrayLiteral = 1 << 20, // Type is or contains object literal type
         /* @internal */
         NonInferrableType = 1 << 21, // Type is or contains anyFunctionType or silentNeverType
+        /* @internal */
+        IsGenericObjectTypeComputed = 1 << 22, // IsGenericObjectType flag has been computed
+        /* @internal */
+        IsGenericObjectType = 1 << 23, // Union or intersection contains generic object type
+        /* @internal */
+        IsGenericIndexTypeComputed = 1 << 24, // IsGenericIndexType flag has been computed
+        /* @internal */
+        IsGenericIndexType = 1 << 25, // Union or intersection contains generic index type
         ClassOrInterface = Class | Interface,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
@@ -5842,6 +5861,7 @@ namespace ts {
         MappedTypeParameter, // Emitting a TypeParameterDeclaration inside of a MappedTypeNode
         Unspecified,         // Emitting an otherwise unspecified node
         EmbeddedStatement,   // Emitting an embedded statement
+        JsxAttributeValue,   // Emitting a JSX attribute value
     }
 
     /* @internal */

@@ -4,27 +4,11 @@ lib/ContextModule.js(436,34): error TS2341: Property 'moduleGraph' is private an
 lib/ContextModule.js(465,34): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
 lib/ContextModule.js(767,34): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
 lib/Dependency.js(139,29): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/ExternalModule.js(284,54): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
+lib/ExternalModule.js(285,54): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
+lib/FileSystemInfo.js(373,4): error TS2345: Argument of type '({ type, context, path, expected }: { type: any; context: any; path: any; expected: any; }, callback: any) => void' is not assignable to parameter of type 'AsyncFunction<{ type: number; path: string; context?: string; expected?: string; }, Error>'.
+  Types of parameters '__0' and 'callback' are incompatible.
+    Type '(err?: Error, result?: { type: number; path: string; context?: string; expected?: string; }) => void' is missing the following properties from type '{ type: any; context: any; path: any; expected: any; }': type, context, path, expected
 lib/Module.js(625,34): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/MultiCompiler.js(15,65): error TS2300: Duplicate identifier 'AsyncSeriesHook'.
-lib/MultiCompiler.js(16,77): error TS2300: Duplicate identifier 'SyncBailHook'.
-lib/MultiCompiler.js(17,70): error TS2300: Duplicate identifier 'WatchOptions'.
-lib/MultiCompiler.js(18,37): error TS2300: Duplicate identifier 'Compiler'.
-lib/MultiCompiler.js(19,34): error TS2300: Duplicate identifier 'Stats'.
-lib/MultiCompiler.js(20,37): error TS2300: Duplicate identifier 'Watching'.
-lib/MultiCompiler.js(21,52): error TS2300: Duplicate identifier 'InputFileSystem'.
-lib/MultiCompiler.js(22,59): error TS2300: Duplicate identifier 'IntermediateFileSystem'.
-lib/MultiCompiler.js(23,53): error TS2300: Duplicate identifier 'OutputFileSystem'.
-lib/MultiCompiler.js(25,23): error TS2300: Duplicate identifier 'CompilerStatus'.
-lib/MultiCompiler.js(33,14): error TS2300: Duplicate identifier 'Callback'.
-lib/MultiCompiler.js(39,14): error TS2300: Duplicate identifier 'RunWithDependenciesHandler'.
-lib/MultiCompiler.js(105,6): error TS2300: Duplicate identifier 'outputPath'.
-lib/MultiCompiler.js(120,6): error TS2300: Duplicate identifier 'inputFileSystem'.
-lib/MultiCompiler.js(124,6): error TS2300: Duplicate identifier 'outputFileSystem'.
-lib/MultiCompiler.js(128,6): error TS2300: Duplicate identifier 'intermediateFileSystem'.
-lib/MultiCompiler.js(135,6): error TS2300: Duplicate identifier 'inputFileSystem'.
-lib/MultiCompiler.js(144,6): error TS2300: Duplicate identifier 'outputFileSystem'.
-lib/MultiCompiler.js(153,6): error TS2300: Duplicate identifier 'intermediateFileSystem'.
 lib/dependencies/ExportsInfoDependency.js(81,9): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
 lib/dependencies/HarmonyExportImportedSpecifierDependency.js(567,40): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
 lib/dependencies/HarmonyImportDependency.js(195,37): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.

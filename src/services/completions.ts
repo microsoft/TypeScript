@@ -403,8 +403,8 @@ namespace ts.Completions {
             kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
             sortText,
             source: getSourceFromOrigin(origin),
-            hasAction: trueOrUndefined(!!origin && originIsExport(origin)),
-            isRecommended: trueOrUndefined(isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker)),
+            hasAction: origin && originIsExport(origin) || undefined,
+            isRecommended: isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker) || undefined,
             insertText,
             replacementSpan,
         };
@@ -413,10 +413,6 @@ namespace ts.Completions {
     function isRecommendedCompletionMatch(localSymbol: Symbol, recommendedCompletion: Symbol | undefined, checker: TypeChecker): boolean {
         return localSymbol === recommendedCompletion ||
             !!(localSymbol.flags & SymbolFlags.ExportValue) && checker.getExportSymbolOfSymbol(localSymbol) === recommendedCompletion;
-    }
-
-    function trueOrUndefined(b: boolean): true | undefined {
-        return b ? true : undefined;
     }
 
     function getSourceFromOrigin(origin: SymbolOriginInfo | undefined): string | undefined {
@@ -1284,8 +1280,8 @@ namespace ts.Completions {
             // Cursor is inside a JSX self-closing element or opening element
             const attrsType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes);
             if (!attrsType) return GlobalsSearch.Continue;
-            const baseType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes, ContextFlags.BaseConstraint);
-            symbols = filterJsxAttributes(getPropertiesForObjectExpression(attrsType, baseType, jsxContainer!.attributes, typeChecker), jsxContainer!.attributes.properties);
+            const completionsType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes, ContextFlags.Completions);
+            symbols = filterJsxAttributes(getPropertiesForObjectExpression(attrsType, completionsType, jsxContainer!.attributes, typeChecker), jsxContainer!.attributes.properties);
             setSortTextToOptionalMember();
             completionKind = CompletionKind.MemberLike;
             isNewIdentifierLocation = false;
@@ -1804,10 +1800,10 @@ namespace ts.Completions {
 
             if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
                 const instantiatedType = typeChecker.getContextualType(objectLikeContainer);
-                const baseType = instantiatedType && typeChecker.getContextualType(objectLikeContainer, ContextFlags.BaseConstraint);
-                if (!instantiatedType || !baseType) return GlobalsSearch.Fail;
-                isNewIdentifierLocation = hasIndexSignature(instantiatedType || baseType);
-                typeMembers = getPropertiesForObjectExpression(instantiatedType, baseType, objectLikeContainer, typeChecker);
+                const completionsType = instantiatedType && typeChecker.getContextualType(objectLikeContainer, ContextFlags.Completions);
+                if (!instantiatedType || !completionsType) return GlobalsSearch.Fail;
+                isNewIdentifierLocation = hasIndexSignature(instantiatedType || completionsType);
+                typeMembers = getPropertiesForObjectExpression(instantiatedType, completionsType, objectLikeContainer, typeChecker);
                 existingMembers = objectLikeContainer.properties;
             }
             else {
@@ -2553,10 +2549,10 @@ namespace ts.Completions {
         return jsdoc && jsdoc.tags && (rangeContainsPosition(jsdoc, position) ? findLast(jsdoc.tags, tag => tag.pos < position) : undefined);
     }
 
-    function getPropertiesForObjectExpression(contextualType: Type, baseConstrainedType: Type | undefined, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
-        const hasBaseType = baseConstrainedType && baseConstrainedType !== contextualType;
-        const type = hasBaseType && !(baseConstrainedType!.flags & TypeFlags.AnyOrUnknown)
-            ? checker.getUnionType([contextualType, baseConstrainedType!])
+    function getPropertiesForObjectExpression(contextualType: Type, completionsType: Type | undefined, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
+        const hasCompletionsType = completionsType && completionsType !== contextualType;
+        const type = hasCompletionsType && !(completionsType!.flags & TypeFlags.AnyOrUnknown)
+            ? checker.getUnionType([contextualType, completionsType!])
             : contextualType;
 
         const properties = type.isUnion()
@@ -2568,7 +2564,7 @@ namespace ts.Completions {
                     checker.isTypeInvalidDueToUnionDiscriminant(memberType, obj))))
             : type.getApparentProperties();
 
-        return hasBaseType ? properties.filter(hasDeclarationOtherThanSelf) : properties;
+        return hasCompletionsType ? properties.filter(hasDeclarationOtherThanSelf) : properties;
 
         // Filter out members whose only declaration is the object literal itself to avoid
         // self-fulfilling completions like:

@@ -649,6 +649,11 @@ namespace ts.formatting {
                 if (tokenInfo.token.end > node.end) {
                     break;
                 }
+                if (node.kind === SyntaxKind.JsxText) {
+                    // Intentation rules for jsx text are handled by `indentMultilineCommentOrJsxText` inside `processChildNode`; just fastforward past it here
+                    formattingScanner.advance();
+                    continue;
+                }
                 consumeTokenAndAdvanceScanner(tokenInfo, node, nodeDynamicIndentation, node);
             }
 
@@ -736,10 +741,21 @@ namespace ts.formatting {
                 const childIndentation = computeIndentation(child, childStartLine, childIndentationAmount, node, parentDynamicIndentation, effectiveParentStartLine);
 
                 processNode(child, childContextNode, childStartLine, undecoratedChildStartLine, childIndentation.indentation, childIndentation.delta);
-
                 if (child.kind === SyntaxKind.JsxText) {
                     const range: TextRange = { pos: child.getStart(), end: child.getEnd() };
-                    indentMultilineCommentOrJsxText(range, childIndentation.indentation, /*firstLineIsIndented*/ true, /*indentFinalLine*/ false);
+                    if (range.pos !== range.end) { // don't indent zero-width jsx text
+                        const siblings = parent.getChildren(sourceFile);
+                        const currentIndex = findIndex(siblings, arg => arg.pos === child.pos);
+                        const previousNode = siblings[currentIndex - 1];
+                        if (previousNode) {
+                            // The jsx text needs no indentation whatsoever if it ends on the same line the previous sibling ends on
+                            if (sourceFile.getLineAndCharacterOfPosition(range.end).line !== sourceFile.getLineAndCharacterOfPosition(previousNode.end).line) {
+                                // The first line is (already) "indented" if the text starts on the same line as the previous sibling element ends on
+                                const firstLineIsIndented = sourceFile.getLineAndCharacterOfPosition(range.pos).line === sourceFile.getLineAndCharacterOfPosition(previousNode.end).line;
+                                indentMultilineCommentOrJsxText(range, childIndentation.indentation, firstLineIsIndented, /*indentFinalLine*/ false, /*jsxStyle*/ true);
+                            }
+                        }
+                    }
                 }
 
                 childContextNode = node;
@@ -1039,7 +1055,7 @@ namespace ts.formatting {
             return indentationString !== sourceFile.text.substr(startLinePosition, indentationString.length);
         }
 
-        function indentMultilineCommentOrJsxText(commentRange: TextRange, indentation: number, firstLineIsIndented: boolean, indentFinalLine = true) {
+        function indentMultilineCommentOrJsxText(commentRange: TextRange, indentation: number, firstLineIsIndented: boolean, indentFinalLine = true, jsxTextStyleIndent?: boolean) {
             // split comment in lines
             let startLine = sourceFile.getLineAndCharacterOfPosition(commentRange.pos).line;
             const endLine = sourceFile.getLineAndCharacterOfPosition(commentRange.end).line;
@@ -1070,7 +1086,7 @@ namespace ts.formatting {
             const nonWhitespaceColumnInFirstPart =
                 SmartIndenter.findFirstNonWhitespaceCharacterAndColumn(startLinePos, parts[0].pos, sourceFile, options);
 
-            if (indentation === nonWhitespaceColumnInFirstPart.column) {
+            if (indentation === nonWhitespaceColumnInFirstPart.column && !jsxTextStyleIndent) {
                 return;
             }
 
@@ -1081,14 +1097,19 @@ namespace ts.formatting {
             }
 
             // shift all parts on the delta size
-            const delta = indentation - nonWhitespaceColumnInFirstPart.column;
+            let delta = indentation - nonWhitespaceColumnInFirstPart.column;
             for (let i = startIndex; i < parts.length; i++ , startLine++) {
                 const startLinePos = getStartPositionOfLine(startLine, sourceFile);
                 const nonWhitespaceCharacterAndColumn =
                     i === 0
                         ? nonWhitespaceColumnInFirstPart
                         : SmartIndenter.findFirstNonWhitespaceCharacterAndColumn(parts[i].pos, parts[i].end, sourceFile, options);
-
+                if (jsxTextStyleIndent) {
+                    // skip adding indentation to blank lines
+                    if (isLineBreak(sourceFile.text.charCodeAt(getStartPositionOfLine(startLine, sourceFile)))) continue;
+                    // reset delta on every line
+                    delta = indentation - nonWhitespaceCharacterAndColumn.column;
+                }
                 const newIndentation = nonWhitespaceCharacterAndColumn.column + delta;
                 if (newIndentation > 0) {
                     const indentationString = getIndentationString(newIndentation, options);

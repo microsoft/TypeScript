@@ -44,17 +44,17 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/tsconfig.json","pollingInterval":250}
 /a.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -87,17 +87,17 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/tsconfig.json","pollingInterval":250}
 /a.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -128,16 +128,16 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/tsconfig.json","pollingInterval":250}
 /a.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
