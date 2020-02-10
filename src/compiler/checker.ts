@@ -8333,8 +8333,8 @@ namespace ts {
             }
             // TODO: Given that we allow type parmeters here now, is this `!isGenericMappedType(type)` check really needed?
             // There's no reason a `T` should be allowed while a `Readonly<T>` should not.
-            return !!(type.flags & (TypeFlags.Object | TypeFlags.NonPrimitive | TypeFlags.Any)) && !isGenericMappedType(type) ||
-                !!(type.flags & TypeFlags.Intersection) && every((<IntersectionType>type).types, isValidBaseType);
+            return !!(type.flags & (TypeFlags.Object | TypeFlags.NonPrimitive | TypeFlags.Any) && !isGenericMappedType(type) ||
+                type.flags & TypeFlags.Intersection && !isNeverLikeType(type) && every((<IntersectionType>type).types, isValidBaseType));
         }
 
         function resolveBaseTypesOfInterface(type: InterfaceType): void {
