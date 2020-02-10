@@ -4,6 +4,24 @@ namespace ts.projectSystem {
         assert.isTrue(info.isDynamic);
     }
 
+    function verifyPathRecognizedAsDynamic(path: string) {
+        const file: File = {
+            path,
+            content: `/// <reference path="../../../../../../typings/@epic/Core.d.ts" />
+/// <reference path="../../../../../../typings/@epic/Shell.d.ts" />
+var x = 10;`
+        };
+        const host = createServerHost([libFile]);
+        const projectService = createProjectService(host);
+        projectService.openClientFile(file.path, file.content);
+        verifyDynamic(projectService, projectService.toPath(file.path));
+
+        projectService.checkNumberOfProjects({ inferredProjects: 1 });
+        const project = projectService.inferredProjects[0];
+        checkProjectRootFiles(project, [file.path]);
+        checkProjectActualFiles(project, [file.path, libFile.path]);
+    }
+
     describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
         const untitledFile = "untitled:^Untitled-1";
         it("Can convert positions to locations", () => {
@@ -123,21 +141,7 @@ namespace ts.projectSystem {
         });
 
         it("dynamic file with reference paths without external project", () => {
-            const file: File = {
-                path: "^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js",
-                content: `/// <reference path="../../../../../../typings/@epic/Core.d.ts" />
-/// <reference path="../../../../../../typings/@epic/Shell.d.ts" />
-var x = 10;`
-            };
-            const host = createServerHost([libFile]);
-            const projectService = createProjectService(host);
-            projectService.openClientFile(file.path, file.content);
-            verifyDynamic(projectService, projectService.toPath(file.path));
-
-            projectService.checkNumberOfProjects({ inferredProjects: 1 });
-            const project = projectService.inferredProjects[0];
-            checkProjectRootFiles(project, [file.path]);
-            checkProjectActualFiles(project, [file.path, libFile.path]);
+            verifyPathRecognizedAsDynamic("^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js");
         });
 
         describe("dynamic file with projectRootPath", () => {
@@ -194,6 +198,16 @@ var x = 10;`
                 projectService.openClientFile(file2Path, file.content);
                 projectService.checkNumberOfProjects({ inferredProjects: 1 });
                 checkProjectActualFiles(projectService.inferredProjects[0], [file2Path, libFile.path]);
+            });
+        });
+
+        describe("verify accepts known schemas as dynamic file", () => {
+            it("walkThroughSnippet", () => {
+                verifyPathRecognizedAsDynamic("walkThroughSnippet:/usr/share/code/resources/app/out/vs/workbench/contrib/welcome/walkThrough/browser/editor/^vs_code_editor_walkthrough.md#1.ts");
+            });
+
+            it("untitled", () => {
+                verifyPathRecognizedAsDynamic("untitled:/Users/matb/projects/san/^newFile.ts");
             });
         });
     });
