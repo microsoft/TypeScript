@@ -15106,12 +15106,15 @@ namespace ts {
                 // conditional types, and resolve substitution types to either the substitution (on the source
                 // side) or the type variable (on the target side).
                 let source = originalSource;
-                let target = originalTarget;
                 do {
                     const s = getNormalizedType(source, /*writing*/ false);
-                    const t = getNormalizedType(target, /*writing*/ true);
-                    if (s === source && t === target) break;
+                    if (s === source) break;
                     source = s;
+                } while (true);
+                let target = originalTarget;
+                do {
+                    const t = getNormalizedType(target, /*writing*/ true);
+                    if (t === target) break;
                     target = t;
                 } while (true);
 
