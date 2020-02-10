@@ -13032,7 +13032,7 @@ namespace ts {
          * this function should be called in a left folding style, with left = previous result of getSpreadType
          * and right = the new element to be spread.
          */
-        function getSpreadType(left: Type, right: Type, symbol: Symbol | undefined, objectFlags: ObjectFlags, readonly: boolean, isUnion?: boolean): Type {
+        function getSpreadType(left: Type, right: Type, symbol: Symbol | undefined, objectFlags: ObjectFlags, readonly: boolean, isParentTypeNullable?: boolean): Type {
             if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
                 return anyType;
             }
@@ -13048,19 +13048,16 @@ namespace ts {
             if (left.flags & TypeFlags.Union) {
                 const merged = tryMergeUnionOfObjectTypeAndEmptyObject(left as UnionType, readonly);
                 if (merged) {
-                    return getSpreadType(merged, right, symbol, objectFlags, readonly, isUnion);
+                    return getSpreadType(merged, right, symbol, objectFlags, readonly, isParentTypeNullable);
                 }
-                return mapType(left, t => getSpreadType(t, right, symbol, objectFlags, readonly, isUnion));
+                return mapType(left, t => getSpreadType(t, right, symbol, objectFlags, readonly, isParentTypeNullable));
             }
             if (right.flags & TypeFlags.Union) {
                 const merged = tryMergeUnionOfObjectTypeAndEmptyObject(right as UnionType, readonly);
                 if (merged) {
-                    // TODO: I don't really think this needs to be recursive but maybe???
-                    return getSpreadType(left, merged, symbol, objectFlags, readonly, isUnion);
+                    return getSpreadType(left, merged, symbol, objectFlags, readonly, !!(right.flags & TypeFlags.Nullable));
                 }
-                // TODO: Only isUnion if one element is undefined! (it should be easy to construct a failing test case for this)
-                // (isUnion is a bad name btw)
-                return mapType(right, t => getSpreadType(left, t, symbol, objectFlags, readonly, /*isUnion*/ true));
+                return mapType(right, t => getSpreadType(left, t, symbol, objectFlags, readonly, !!(right.flags & TypeFlags.Nullable)));
             }
             if (right.flags & (TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.BigIntLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive | TypeFlags.Index)) {
                 return left;
@@ -13125,12 +13122,12 @@ namespace ts {
                         members.set(leftProp.escapedName, result);
                     }
                     else if (strictNullChecks &&
-                             !isUnion &&
+                             !isParentTypeNullable &&
                              symbol &&
                              !isFromSpreadAssignment(leftProp, symbol) &&
                              isFromSpreadAssignment(rightProp, symbol) &&
                              !(getFalsyFlags(rightType) & TypeFlags.Nullable)) {
-                        error(leftProp.valueDeclaration, Diagnostics._0_is_unused_because_a_subsequent_spread_overwrites_it);
+                        error(leftProp.valueDeclaration, Diagnostics._0_is_specified_more_than_once_so_this_usage_will_be_overwritten, unescapeLeadingUnderscores(leftProp.escapedName));
                     }
                 }
                 else {
@@ -16632,6 +16629,7 @@ namespace ts {
         }
 
         function isFromSpreadAssignment(prop: Symbol, container: Symbol) {
+            // TODO: Should use ?. now
             return !(prop.valueDeclaration && container.valueDeclaration && prop.valueDeclaration.parent === container.valueDeclaration);
         }
 
@@ -25182,7 +25180,7 @@ namespace ts {
                     if (node.arguments.length === 1) {
                         const text = getSourceFileOfNode(node).text;
                         if (isLineBreak(text.charCodeAt(skipTrivia(text, node.expression.end, /* stopAfterLineBreak */ true) - 1))) {
-                            relatedInformation = createDiagnosticForNode(node.expression, Diagnostics.Are_you_missing_a_semicolon_here);
+                            relatedInformation = createDiagnosticForNode(node.expression, Diagnostics.Are_you_missing_a_semicolon);
                         }
                     }
                     invocationError(node.expression, apparentType, SignatureKind.Call, relatedInformation);

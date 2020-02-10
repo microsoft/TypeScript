@@ -1,4 +1,5 @@
 // @target: es5
+// @strictNullChecks: true
 let o = { a: 1, b: 'no' }
 
 /// private propagates
@@ -8,12 +9,12 @@ class PrivateOptionalX {
 class PublicX {
     public x: number;
 }
-let publicX: PublicX;
-let privateOptionalX: PrivateOptionalX;
+declare let publicX: PublicX;
+declare let privateOptionalX: PrivateOptionalX;
 let o2 = { ...publicX, ...privateOptionalX };
 let sn: number = o2.x; // error, x is private
-let optionalString: { sn?: string };
-let optionalNumber: { sn?: number };
+declare let optionalString: { sn?: string };
+declare let optionalNumber: { sn?: number };
 let allOptional: { sn: string | number } = { ...optionalString, ...optionalNumber };
 // error, 'sn' is optional in source, required in target
 

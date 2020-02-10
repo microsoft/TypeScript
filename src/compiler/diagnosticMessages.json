@@ -2683,7 +2683,7 @@
         "category": "Error",
         "code": 2733
     },
-    "Are you missing a semicolon here?": {
+    "Are you missing a semicolon?": {
         "category": "Error",
         "code": 2734
     },
@@ -2879,7 +2879,7 @@
         "category": "Message",
         "code": 2782
     },
-    "'{0}' is unused because a subsequent spread overwrites it.": {
+    "'{0}' is specified more than once, so this usage will be overwritten.": {
         "category": "Error",
         "code": 2783
     },
