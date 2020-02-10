@@ -1490,9 +1490,9 @@ namespace ts {
             );
         }
 
-        function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol | undefined {
+        function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string, preferences: UserPreferences = emptyOptions): Symbol | undefined {
             synchronizeHostData();
-            return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host);
+            return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host, preferences);
         }
 
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined {

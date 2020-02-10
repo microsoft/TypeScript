@@ -2343,9 +2343,6 @@ namespace ts {
     }
 
     export function quote(text: string, preferences: UserPreferences): string {
-        if (/^\d+$/.test(text)) {
-            return text;
-        }
         // Editors can pass in undefined or empty string - we want to infer the preference in those cases.
         const quotePreference = preferences.quotePreference || "auto";
         const quoted = JSON.stringify(text);
