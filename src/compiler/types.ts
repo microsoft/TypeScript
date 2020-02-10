@@ -4461,9 +4461,9 @@ namespace ts {
         /* @internal */
         IsGenericIndexType = 1 << 25, // Union or intersection contains generic index type
         /* @internal */
-        IsNeverIntersectionComputed = 1 << 26,
+        IsNeverTypeComputed = 1 << 26,
         /* @internal */
-        IsNeverIntersection = 1 << 27,
+        IsNeverType = 1 << 27,
         ClassOrInterface = Class | Interface,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,

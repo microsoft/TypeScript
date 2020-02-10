@@ -7121,6 +7121,7 @@ namespace ts {
             let type: Type | undefined;
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                 if (declaration.dotDotDotToken) {
+                    parentType = eraseNeverLikeTypes(parentType);
                     if (parentType.flags & TypeFlags.Unknown || !isValidSpreadType(parentType)) {
                         error(declaration, Diagnostics.Rest_types_may_only_be_created_from_object_types);
                         return errorType;
@@ -10250,20 +10251,28 @@ namespace ts {
             return property && !(getCheckFlags(property) & CheckFlags.ReadPartial) ? property : undefined;
         }
 
-        function isNeverLikeIntersection(type: IntersectionType) {
-            if (!(type.objectFlags & ObjectFlags.IsNeverIntersectionComputed)) {
-                type.objectFlags |= ObjectFlags.IsNeverIntersectionComputed |
-                    (some(getPropertiesOfUnionOrIntersectionType(type), isDiscriminantWithNeverType) ? ObjectFlags.IsNeverIntersection : 0);
+        function eraseNeverLikeTypes(type: Type) {
+            return mapType(type, t => isNeverLikeType(t) ? neverType : t);
+        }
+
+        function isNeverLikeType(type: Type) {
+            if (type.flags & TypeFlags.Never) {
+                return true;
             }
-            return !!(type.objectFlags & ObjectFlags.IsNeverIntersection);
+            if (type.flags & TypeFlags.UnionOrIntersection) {
+                if (!((<UnionOrIntersectionType>type).objectFlags & ObjectFlags.IsNeverTypeComputed)) {
+                    const isNeverLike = type.flags & TypeFlags.Union ?
+                        !((<UnionType>type).objectFlags & ObjectFlags.PrimitiveUnion) && every((<UnionType>type).types, isNeverLikeType) :
+                        some(getPropertiesOfUnionOrIntersectionType(<IntersectionType>type), isDiscriminantWithNeverType);
+                    (<UnionOrIntersectionType>type).objectFlags |= ObjectFlags.IsNeverTypeComputed | (isNeverLike ? ObjectFlags.IsNeverType : 0);
+                }
+                return !!((<UnionOrIntersectionType>type).objectFlags & ObjectFlags.IsNeverType);
+            }
+            return false;
         }
 
         function isDiscriminantWithNeverType(prop: Symbol) {
             return (getCheckFlags(prop) & (CheckFlags.Discriminant | CheckFlags.HasNeverType)) === CheckFlags.Discriminant && !!(getTypeOfSymbol(prop).flags & TypeFlags.Never);
-        }
-
-        function isNeverLikeType(type: Type) {
-            return !!(type.flags & TypeFlags.Never || type.flags & TypeFlags.Intersection && isNeverLikeIntersection(<IntersectionType>type));
         }
 
         /**
@@ -10294,7 +10303,7 @@ namespace ts {
                 }
                 return getPropertyOfObjectType(globalObjectType, name);
             }
-            if (type.flags & TypeFlags.Union || type.flags & TypeFlags.Intersection && !isNeverLikeIntersection(<IntersectionType>type)) {
+            if (type.flags & TypeFlags.UnionOrIntersection && !isNeverLikeType(type)) {
                 return getPropertyOfUnionOrIntersectionType(<UnionOrIntersectionType>type, name);
             }
             return undefined;
@@ -12270,13 +12279,13 @@ namespace ts {
         }
 
         function getIndexType(type: Type, stringsOnly = keyofStringsOnly, noIndexSignatures?: boolean): Type {
-            return type.flags & TypeFlags.Union ? getIntersectionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
+            return type.flags & TypeFlags.Any || isNeverLikeType(type) ? keyofConstraintType :
+                type.flags & TypeFlags.Union ? getIntersectionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, stringsOnly) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? filterType(getConstraintTypeFromMappedType(<MappedType>type), t => !(noIndexSignatures && t.flags & (TypeFlags.Any | TypeFlags.String))) :
                 type === wildcardType ? wildcardType :
                 type.flags & TypeFlags.Unknown ? neverType :
-                type.flags & (TypeFlags.Any | TypeFlags.Never) ? keyofConstraintType :
                 stringsOnly ? !noIndexSignatures && getIndexInfoOfType(type, IndexKind.String) ? stringType : getLiteralTypeFromProperties(type, TypeFlags.StringLiteral) :
                 !noIndexSignatures && getIndexInfoOfType(type, IndexKind.String) ? getUnionType([stringType, numberType, getLiteralTypeFromProperties(type, TypeFlags.UniqueESSymbol)]) :
                 getNonEnumNumberIndexInfo(type) ? getUnionType([numberType, getLiteralTypeFromProperties(type, TypeFlags.StringLiteral | TypeFlags.UniqueESSymbol)]) :
@@ -13077,6 +13086,7 @@ namespace ts {
             if (right.flags & TypeFlags.Union) {
                 const merged = tryMergeUnionOfObjectTypeAndEmptyObject(right as UnionType, readonly);
                 if (merged) {
+
                     return getSpreadType(left, merged, symbol, objectFlags, readonly);
                 }
                 return mapType(right, t => getSpreadType(left, t, symbol, objectFlags, readonly));
@@ -13663,6 +13673,9 @@ namespace ts {
                 const mappedTypeVariable = instantiateType(typeVariable, mapper);
                 if (typeVariable !== mappedTypeVariable) {
                     return mapType(mappedTypeVariable, t => {
+                        if (isNeverLikeType(t)) {
+                            return neverType;
+                        }
                         if (t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object | TypeFlags.Intersection) && t !== wildcardType && t !== errorType) {
                             const replacementMapper = createReplacementMapper(typeVariable, t, mapper);
                             return isArrayType(t) ? instantiateMappedArrayType(t, type, replacementMapper) :
@@ -14812,7 +14825,7 @@ namespace ts {
         function getNormalizedType(type: Type, writing: boolean): Type {
             return isFreshLiteralType(type) ? (<FreshableType>type).regularType :
                 getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? createTypeReference((<TypeReference>type).target, getTypeArguments(<TypeReference>type)) :
-                type.flags & TypeFlags.Intersection && isNeverLikeIntersection(<IntersectionType>type) ? neverType :
+                type.flags & TypeFlags.UnionOrIntersection && isNeverLikeType(type) ? neverType :
                 type.flags & TypeFlags.Substitution ? writing ? (<SubstitutionType>type).typeVariable : (<SubstitutionType>type).substitute :
                 type.flags & TypeFlags.Simplifiable ? getSimplifiedType(type, writing) :
                 type;
@@ -22511,7 +22524,7 @@ namespace ts {
                         hasComputedStringProperty = false;
                         hasComputedNumberProperty = false;
                     }
-                    const type = checkExpression(memberDecl.expression);
+                    const type = eraseNeverLikeTypes(checkExpression(memberDecl.expression));
                     if (!isValidSpreadType(type)) {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return errorType;
@@ -22716,7 +22729,7 @@ namespace ts {
                         spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, objectFlags, /*readonly*/ false);
                         attributesTable = createSymbolTable();
                     }
-                    const exprType = checkExpressionCached(attributeDecl.expression, checkMode);
+                    const exprType = eraseNeverLikeTypes(checkExpressionCached(attributeDecl.expression, checkMode));
                     if (isTypeAny(exprType)) {
                         hasSpreadAnyType = true;
                     }
