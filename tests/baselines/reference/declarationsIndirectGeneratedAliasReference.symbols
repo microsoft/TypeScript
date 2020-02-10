@@ -1,0 +1,54 @@
+=== tests/cases/compiler/node_modules/mod/ctor.d.ts ===
+export interface Ctor {
+>Ctor : Symbol(Ctor, Decl(ctor.d.ts, 0, 0), Decl(ctor.d.ts, 7, 12))
+
+    x: number;
+>x : Symbol(Ctor.x, Decl(ctor.d.ts, 0, 23))
+}
+export type ExtendedCtor<T> = {x: number, ext: T};
+>ExtendedCtor : Symbol(ExtendedCtor, Decl(ctor.d.ts, 2, 1))
+>T : Symbol(T, Decl(ctor.d.ts, 3, 25))
+>x : Symbol(x, Decl(ctor.d.ts, 3, 31))
+>ext : Symbol(ext, Decl(ctor.d.ts, 3, 41))
+>T : Symbol(T, Decl(ctor.d.ts, 3, 25))
+
+export interface CtorConstructor {
+>CtorConstructor : Symbol(CtorConstructor, Decl(ctor.d.ts, 3, 50))
+
+    extends<T>(x: T): ExtendedCtor<T extends unknown ? Ctor : undefined>;
+>extends : Symbol(CtorConstructor.extends, Decl(ctor.d.ts, 4, 34))
+>T : Symbol(T, Decl(ctor.d.ts, 5, 12))
+>x : Symbol(x, Decl(ctor.d.ts, 5, 15))
+>T : Symbol(T, Decl(ctor.d.ts, 5, 12))
+>ExtendedCtor : Symbol(ExtendedCtor, Decl(ctor.d.ts, 2, 1))
+>T : Symbol(T, Decl(ctor.d.ts, 5, 12))
+>Ctor : Symbol(Ctor, Decl(ctor.d.ts, 0, 0), Decl(ctor.d.ts, 7, 12))
+}
+export const Ctor: CtorConstructor;
+>Ctor : Symbol(Ctor, Decl(ctor.d.ts, 0, 0), Decl(ctor.d.ts, 7, 12))
+>CtorConstructor : Symbol(CtorConstructor, Decl(ctor.d.ts, 3, 50))
+
+=== tests/cases/compiler/node_modules/mod/index.d.ts ===
+import { Ctor } from "./ctor";
+>Ctor : Symbol(Ctor, Decl(index.d.ts, 0, 8))
+
+export default Ctor;
+>Ctor : Symbol(Ctor, Decl(index.d.ts, 0, 8))
+
+=== tests/cases/compiler/index.ts ===
+import * as ns from "mod";
+>ns : Symbol(ns, Decl(index.ts, 0, 6))
+
+const Ctor = ns.default;
+>Ctor : Symbol(Ctor, Decl(index.ts, 1, 5))
+>ns.default : Symbol(ns.default, Decl(index.d.ts, 0, 30))
+>ns : Symbol(ns, Decl(index.ts, 0, 6))
+>default : Symbol(ns.default, Decl(index.d.ts, 0, 30))
+
+export const MyComp = Ctor.extends({foo: "bar"});
+>MyComp : Symbol(MyComp, Decl(index.ts, 2, 12))
+>Ctor.extends : Symbol(CtorConstructor.extends, Decl(ctor.d.ts, 4, 34))
+>Ctor : Symbol(Ctor, Decl(index.ts, 1, 5))
+>extends : Symbol(CtorConstructor.extends, Decl(ctor.d.ts, 4, 34))
+>foo : Symbol(foo, Decl(index.ts, 2, 36))
+

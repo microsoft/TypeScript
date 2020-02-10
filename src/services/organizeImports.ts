@@ -12,10 +12,10 @@ namespace ts.OrganizeImports {
         formatContext: formatting.FormatContext,
         host: LanguageServiceHost,
         program: Program,
-        _preferences: UserPreferences,
+        preferences: UserPreferences,
     ) {
 
-        const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext });
+        const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext, preferences });
 
         const coalesceAndOrganizeImports = (importGroup: readonly ImportDeclaration[]) => coalesceImports(removeUnusedImports(importGroup, sourceFile, program));
 
@@ -307,7 +307,7 @@ namespace ts.OrganizeImports {
         }
 
         const newExportSpecifiers: ExportSpecifier[] = [];
-        newExportSpecifiers.push(...flatMap(namedExports, i => (i.exportClause!).elements));
+        newExportSpecifiers.push(...flatMap(namedExports, i => i.exportClause && isNamedExports(i.exportClause) ? i.exportClause.elements : emptyArray));
 
         const sortedExportSpecifiers = sortSpecifiers(newExportSpecifiers);
 
@@ -317,8 +317,13 @@ namespace ts.OrganizeImports {
                 exportDecl,
                 exportDecl.decorators,
                 exportDecl.modifiers,
-                updateNamedExports(exportDecl.exportClause!, sortedExportSpecifiers),
-                exportDecl.moduleSpecifier));
+                exportDecl.exportClause && (
+                    isNamedExports(exportDecl.exportClause) ?
+                        updateNamedExports(exportDecl.exportClause, sortedExportSpecifiers) :
+                        updateNamespaceExport(exportDecl.exportClause, exportDecl.exportClause.name)
+                ),
+                exportDecl.moduleSpecifier,
+                exportDecl.isTypeOnly));
 
         return coalescedExports;
 
@@ -358,7 +363,7 @@ namespace ts.OrganizeImports {
             importDeclaration,
             importDeclaration.decorators,
             importDeclaration.modifiers,
-            updateImportClause(importDeclaration.importClause!, name, namedBindings), // TODO: GH#18217
+            updateImportClause(importDeclaration.importClause!, name, namedBindings, importDeclaration.importClause!.isTypeOnly), // TODO: GH#18217
             importDeclaration.moduleSpecifier);
     }
 

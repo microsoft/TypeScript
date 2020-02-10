@@ -47,12 +47,12 @@ namespace ts.codefix {
         },
     });
 
-    function getPropertyDeclaration (sourceFile: SourceFile, pos: number): PropertyDeclaration | undefined {
+    function getPropertyDeclaration(sourceFile: SourceFile, pos: number): PropertyDeclaration | undefined {
         const token = getTokenAtPosition(sourceFile, pos);
         return isIdentifier(token) ? cast(token.parent, isPropertyDeclaration) : undefined;
     }
 
-    function getActionForAddMissingDefiniteAssignmentAssertion (context: CodeFixContext, propertyDeclaration: PropertyDeclaration): CodeFixAction {
+    function getActionForAddMissingDefiniteAssignmentAssertion(context: CodeFixContext, propertyDeclaration: PropertyDeclaration): CodeFixAction {
         const changes = textChanges.ChangeTracker.with(context, t => addDefiniteAssignmentAssertion(t, context.sourceFile, propertyDeclaration));
         return createCodeFixAction(fixName, changes, [Diagnostics.Add_definite_assignment_assertion_to_property_0, propertyDeclaration.getText()], fixIdAddDefiniteAssignmentAssertions, Diagnostics.Add_definite_assignment_assertions_to_all_uninitialized_properties);
     }
@@ -70,7 +70,7 @@ namespace ts.codefix {
         changeTracker.replaceNode(propertyDeclarationSourceFile, propertyDeclaration, property);
     }
 
-    function getActionForAddMissingUndefinedType (context: CodeFixContext, propertyDeclaration: PropertyDeclaration): CodeFixAction {
+    function getActionForAddMissingUndefinedType(context: CodeFixContext, propertyDeclaration: PropertyDeclaration): CodeFixAction {
         const changes = textChanges.ChangeTracker.with(context, t => addUndefinedType(t, context.sourceFile, propertyDeclaration));
         return createCodeFixAction(fixName, changes, [Diagnostics.Add_undefined_type_to_property_0, propertyDeclaration.name.getText()], fixIdAddUndefinedType, Diagnostics.Add_undefined_type_to_all_uninitialized_properties);
     }
@@ -91,7 +91,7 @@ namespace ts.codefix {
         return createCodeFixAction(fixName, changes, [Diagnostics.Add_initializer_to_property_0, propertyDeclaration.name.getText()], fixIdAddInitializer, Diagnostics.Add_initializers_to_all_uninitialized_properties);
     }
 
-    function addInitializer (changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration, initializer: Expression): void {
+    function addInitializer(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration, initializer: Expression): void {
         const property = updateProperty(
             propertyDeclaration,
             propertyDeclaration.decorators,
@@ -108,7 +108,7 @@ namespace ts.codefix {
         return getDefaultValueFromType(checker, checker.getTypeFromTypeNode(propertyDeclaration.type!)); // TODO: GH#18217
     }
 
-    function getDefaultValueFromType (checker: TypeChecker, type: Type): Expression | undefined {
+    function getDefaultValueFromType(checker: TypeChecker, type: Type): Expression | undefined {
         if (type.flags & TypeFlags.BooleanLiteral) {
             return (type === checker.getFalseType() || type === checker.getFalseType(/*fresh*/ true)) ? createFalse() : createTrue();
         }

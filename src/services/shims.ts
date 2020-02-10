@@ -271,6 +271,10 @@ namespace ts {
          */
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): string;
 
+        prepareCallHierarchy(fileName: string, position: number): string;
+        provideCallHierarchyIncomingCalls(fileName: string, position: number): string;
+        provideCallHierarchyOutgoingCalls(fileName: string, position: number): string;
+
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
     }
@@ -918,8 +922,8 @@ namespace ts {
                 () => {
                     const results = this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
                     // workaround for VS document highlighting issue - keep only items from the initial file
-                    const normalizedName = normalizeSlashes(fileName).toLowerCase();
-                    return filter(results, r => normalizeSlashes(r.fileName).toLowerCase() === normalizedName);
+                    const normalizedName = toFileNameLowerCase(normalizeSlashes(fileName));
+                    return filter(results, r => toFileNameLowerCase(normalizeSlashes(r.fileName)) === normalizedName);
                 });
         }
 
@@ -1017,6 +1021,29 @@ namespace ts {
             return this.forwardJSONCall(
                 `getTodoComments('${fileName}')`,
                 () => this.languageService.getTodoComments(fileName, JSON.parse(descriptors))
+            );
+        }
+
+        /// CALL HIERARCHY
+
+        public prepareCallHierarchy(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `prepareCallHierarchy('${fileName}', ${position})`,
+                () => this.languageService.prepareCallHierarchy(fileName, position)
+            );
+        }
+
+        public provideCallHierarchyIncomingCalls(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `provideCallHierarchyIncomingCalls('${fileName}', ${position})`,
+                () => this.languageService.provideCallHierarchyIncomingCalls(fileName, position)
+            );
+        }
+
+        public provideCallHierarchyOutgoingCalls(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `provideCallHierarchyOutgoingCalls('${fileName}', ${position})`,
+                () => this.languageService.provideCallHierarchyOutgoingCalls(fileName, position)
             );
         }
 
@@ -1266,25 +1293,6 @@ namespace ts {
             throw new Error("Invalid operation");
         }
     }
-
-    // Here we expose the TypeScript services as an external module
-    // so that it may be consumed easily like a node module.
-    declare const module: { exports: {} };
-    if (typeof module !== "undefined" && module.exports) {
-        module.exports = ts;
-    }
 }
 
 /* eslint-enable no-in-operator */
-
-/// TODO: this is used by VS, clean this up on both sides of the interface
-/* @internal */
-namespace TypeScript.Services {
-    export const TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
-}
-
-// 'toolsVersion' gets consumed by the managed side, so it's not unused.
-// TODO: it should be moved into a namespace though.
-
-/* @internal */
-const toolsVersion = ts.versionMajorMinor;
