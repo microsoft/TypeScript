@@ -69,7 +69,7 @@ a1(...array2);            // Error parameter type is (number|string)[]
 a5([1, 2, "string", false, true]);       // Error, parameter type is [any, any, [[any]]]
 >a5([1, 2, "string", false, true]) : void
 >a5 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
->[1, 2, "string", false, true] : (string | number | boolean)[]
+>[1, 2, "string", false, true] : [number, number, string, boolean, boolean]
 >1 : 1
 >2 : 2
 >"string" : "string"
@@ -79,7 +79,7 @@ a5([1, 2, "string", false, true]);       // Error, parameter type is [any, any, 
 a5([1, 2]);                              // Error, parameter type is [any, any, [[any]]]
 >a5([1, 2]) : void
 >a5 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
->[1, 2] : number[]
+>[1, 2] : [number, number]
 >1 : 1
 >2 : 2
 

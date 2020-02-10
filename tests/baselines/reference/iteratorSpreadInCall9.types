@@ -70,7 +70,7 @@ class _StringIterator {
 }
 
 new Foo(...new SymbolIterator, ...[...new _StringIterator]);
->new Foo(...new SymbolIterator, ...[...new _StringIterator]) : any
+>new Foo(...new SymbolIterator, ...[...new _StringIterator]) : Foo<symbol>
 >Foo : typeof Foo
 >...new SymbolIterator : symbol
 >new SymbolIterator : SymbolIterator

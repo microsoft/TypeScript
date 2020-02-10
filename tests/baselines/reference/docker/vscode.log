@@ -22,7 +22,7 @@ Standard error:
     at Stream.emit (events.js:203:15)
     at Stream.EventEmitter.emit (domain.js:466:23)
     at drain (/vscode/node_modules/through/index.js:34:23)
-    at Stream.stream.resume (/vscode/node_modules/through/index.js:99:5)
-    at Stream.ondrain (internal/streams/legacy.js:24:14)
-    at Stream.emit (events.js:198:13)
+    at Stream.stream.queue.stream.push (/vscode/node_modules/through/index.js:45:5)
+    at Stream.end (/vscode/node_modules/through/index.js:15:35)
+    at _end (/vscode/node_modules/through/index.js:65:9)
 error Command failed with exit code 1.

@@ -55,10 +55,10 @@ class C1 {
 }
 
 var a = new C1([{ x1: 10, x2: "", x3: true }, "", false]);
->a : any
->new C1([{ x1: 10, x2: "", x3: true }, "", false]) : any
+>a : C1
+>new C1([{ x1: 10, x2: "", x3: true }, "", false]) : C1
 >C1 : typeof C1
->[{ x1: 10, x2: "", x3: true }, "", false] : (string | boolean | { x1: number; x2: string; x3: boolean; })[]
+>[{ x1: 10, x2: "", x3: true }, "", false] : [{ x1: number; x2: string; x3: boolean; }, string, boolean]
 >{ x1: 10, x2: "", x3: true } : { x1: number; x2: string; x3: boolean; }
 >x1 : number
 >10 : 10
@@ -77,18 +77,18 @@ var [a_x1, a_x2, a_x3, a_y, a_z] = [a.x1, a.x2, a.x3, a.y, a.z];
 >a_z : any
 >[a.x1, a.x2, a.x3, a.y, a.z] : [any, any, any, any, any]
 >a.x1 : any
->a : any
+>a : C1
 >x1 : any
 >a.x2 : any
->a : any
+>a : C1
 >x2 : any
 >a.x3 : any
->a : any
+>a : C1
 >x3 : any
 >a.y : any
->a : any
+>a : C1
 >y : any
 >a.z : any
->a : any
+>a : C1
 >z : any
 
