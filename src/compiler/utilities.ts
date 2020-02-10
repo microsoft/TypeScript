@@ -4703,7 +4703,7 @@ namespace ts {
 
     export function getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(pos: number, sourceFile: SourceFile, includeComments?: boolean) {
         const startPos = skipTrivia(sourceFile.text, pos, /*stopAfterLineBreak*/ false, includeComments);
-        const prevPos = getPreviousNonWhitespacePosition(pos, sourceFile);
+        const prevPos = getPreviousNonWhitespacePosition(startPos, sourceFile);
         return getLineOfLocalPosition(sourceFile, startPos) - getLineOfLocalPosition(sourceFile, prevPos || 0);
     }
 
