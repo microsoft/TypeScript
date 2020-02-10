@@ -310,13 +310,21 @@ namespace ts.codefix {
                 const typeTag = isGetAccessorDeclaration(declaration) ? createJSDocReturnTag(typeExpression, "") : createJSDocTypeTag(typeExpression, "");
                 addJSDocTags(changes, sourceFile, parent, [typeTag]);
             }
-            else if (!tryReplaceImportTypeNodeWithAutoImport(typeNode, changes, importAdder, sourceFile, declaration, type, getEmitScriptTarget(program.getCompilerOptions()))) {
+            else if (!tryReplaceImportTypeNodeWithAutoImport(typeNode, declaration, type, sourceFile, changes, importAdder, getEmitScriptTarget(program.getCompilerOptions()))) {
                 changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
             }
         }
     }
 
-    function tryReplaceImportTypeNodeWithAutoImport(typeNode: TypeNode, changes: textChanges.ChangeTracker, importAdder: ImportAdder, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type, scriptTarget: ScriptTarget): boolean {
+    function tryReplaceImportTypeNodeWithAutoImport(
+        typeNode: TypeNode,
+        declaration: textChanges.TypeAnnotatable,
+        type: Type,
+        sourceFile: SourceFile,
+        changes: textChanges.ChangeTracker,
+        importAdder: ImportAdder,
+        scriptTarget: ScriptTarget
+    ): boolean {
         const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeNode, type, scriptTarget);
         if (importableReference && changes.tryInsertTypeAnnotation(sourceFile, declaration, importableReference.typeReference)) {
             forEach(importableReference.symbols, s => importAdder.addImportFromExportedSymbol(s, /*usageIsTypeOnly*/ true));

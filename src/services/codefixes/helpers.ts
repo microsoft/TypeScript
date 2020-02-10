@@ -415,9 +415,13 @@ namespace ts.codefix {
         return find(obj.properties, (p): p is PropertyAssignment => isPropertyAssignment(p) && !!p.name && isStringLiteral(p.name) && p.name.text === name);
     }
 
+    /**
+     * Given an ImportTypeNode 'import("./a").SomeType<import("./b").OtherType<...>>',
+     * returns an equivalent type reference node with any nested ImportTypeNodes also replaced
+     * with type references, and a list of symbols that must be imported to use the type reference.
+     */
     export function tryGetAutoImportableReferenceFromImportTypeNode(importTypeNode: TypeNode | undefined, type: Type | undefined, scriptTarget: ScriptTarget) {
         if (importTypeNode && isLiteralImportTypeNode(importTypeNode) && importTypeNode.qualifier && (!type || type.symbol)) {
-            // Replace 'import("./a").SomeType' with 'SomeType' and an actual import if possible
             // Symbol for the left-most thing after the dot
             const firstIdentifier = getFirstIdentifier(importTypeNode.qualifier);
             const name = getNameForExportedSymbol(firstIdentifier.symbol, scriptTarget);
