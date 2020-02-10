@@ -10251,10 +10251,18 @@ namespace ts {
             return property && !(getCheckFlags(property) & CheckFlags.ReadPartial) ? property : undefined;
         }
 
+        /**
+         * Turn never-like types into actual 'never' types and remove all never-like types from union types.
+         */
         function eraseNeverLikeTypes(type: Type) {
             return mapType(type, t => isNeverLikeType(t) ? neverType : t);
         }
 
+        /**
+         * Return true if the given type is a never-like intersection or a union of all never-like intersections. An intersection
+         * is considered never-like if it contains a least one discriminant property for which (a) no constituent property has
+         * type 'never', but (b) intersecting the types of its constituent properties produces 'never'.
+         */
         function isNeverLikeType(type: Type) {
             if (type.flags & TypeFlags.Never) {
                 return true;
