@@ -13001,8 +13001,11 @@ namespace ts {
             if (right.flags & TypeFlags.Union) {
                 const merged = tryMergeUnionOfObjectTypeAndEmptyObject(right as UnionType, readonly);
                 if (merged) {
+                    // TODO: I don't really think this needs to be recursive but maybe???
                     return getSpreadType(left, merged, symbol, objectFlags, readonly, isUnion);
                 }
+                // TODO: Only isUnion if one element is undefined! (it should be easy to construct a failing test case for this)
+                // (isUnion is a bad name btw)
                 return mapType(right, t => getSpreadType(left, t, symbol, objectFlags, readonly, /*isUnion*/ true));
             }
             if (right.flags & (TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.BigIntLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive | TypeFlags.Index)) {
