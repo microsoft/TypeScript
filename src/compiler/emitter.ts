@@ -23,7 +23,7 @@ namespace ts {
         forceDtsEmit = false,
         onlyBuildInfo?: boolean,
         includeBuildInfo?: boolean) {
-        const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile);
+        const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile, forceDtsEmit);
         const options = host.getCompilerOptions();
         if (options.outFile || options.out) {
             const prepends = host.getPrependNodes();
@@ -91,14 +91,13 @@ namespace ts {
         }
         else {
             const ownOutputFilePath = getOwnEmitOutputFilePath(sourceFile.fileName, host, getOutputExtension(sourceFile, options));
+            const isJsonFile = isJsonSourceFile(sourceFile);
             // If json file emits to the same location skip writing it, if emitDeclarationOnly skip writing it
-            const isJsonEmittedToSameLocation = isJsonSourceFile(sourceFile) &&
+            const isJsonEmittedToSameLocation = isJsonFile &&
                 comparePaths(sourceFile.fileName, ownOutputFilePath, host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
             const jsFilePath = options.emitDeclarationOnly || isJsonEmittedToSameLocation ? undefined : ownOutputFilePath;
             const sourceMapFilePath = !jsFilePath || isJsonSourceFile(sourceFile) ? undefined : getSourceMapFilePath(jsFilePath, options);
-            // For legacy reasons (ie, we have baselines capturing the behavior), js files don't report a .d.ts output path - this would only matter if `declaration` and `allowJs` were both on, which is currently an error
-            const isJs = isSourceFileJS(sourceFile);
-            const declarationFilePath = ((forceDtsPaths || getEmitDeclarations(options)) && !isJs) ? getDeclarationEmitOutputFilePath(sourceFile.fileName, host) : undefined;
+            const declarationFilePath = (forceDtsPaths || (getEmitDeclarations(options) && !isJsonFile)) ? getDeclarationEmitOutputFilePath(sourceFile.fileName, host) : undefined;
             const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
             return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath: undefined };
         }
@@ -146,7 +145,7 @@ namespace ts {
 
     /* @internal */
     export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean) {
-        Debug.assert(!fileExtensionIs(inputFileName, Extension.Dts) && hasTSFileExtension(inputFileName));
+        Debug.assert(!fileExtensionIs(inputFileName, Extension.Dts) && !fileExtensionIs(inputFileName, Extension.Json));
         return changeExtension(
             getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.declarationDir || configFile.options.outDir),
             Extension.Dts
@@ -199,7 +198,7 @@ namespace ts {
         if (js && configFile.options.sourceMap) {
             addOutput(`${js}.map`);
         }
-        if (getEmitDeclarations(configFile.options) && hasTSFileExtension(inputFileName)) {
+        if (getEmitDeclarations(configFile.options)) {
             const dts = getOutputDeclarationFileName(inputFileName, configFile, ignoreCase);
             addOutput(dts);
             if (configFile.options.declarationMap) {
@@ -248,7 +247,7 @@ namespace ts {
             const jsFilePath = getOutputJSFileName(inputFileName, configFile, ignoreCase);
             if (jsFilePath) return jsFilePath;
             if (fileExtensionIs(inputFileName, Extension.Json)) continue;
-            if (getEmitDeclarations(configFile.options) && hasTSFileExtension(inputFileName)) {
+            if (getEmitDeclarations(configFile.options)) {
                 return getOutputDeclarationFileName(inputFileName, configFile, ignoreCase);
             }
         }
@@ -276,7 +275,7 @@ namespace ts {
         forEachEmittedFile(
             host,
             emitSourceFileOrBundle,
-            getSourceFilesToEmit(host, targetSourceFile),
+            getSourceFilesToEmit(host, targetSourceFile, forceDtsEmit),
             forceDtsEmit,
             onlyBuildInfo,
             !targetSourceFile
@@ -338,6 +337,7 @@ namespace ts {
                 emitSkipped = true;
                 return;
             }
+            const version = ts.version; // Extracted into a const so the form is stable between namespace and module
             writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText({ bundle, program, version }), /*writeByteOrderMark*/ false);
         }
 
@@ -379,6 +379,7 @@ namespace ts {
 
                 // transform hooks
                 onEmitNode: transform.emitNodeWithNotification,
+                isEmitNotificationEnabled: transform.isEmitNotificationEnabled,
                 substituteNode: transform.substituteNode,
             });
 
@@ -395,17 +396,19 @@ namespace ts {
             declarationFilePath: string | undefined,
             declarationMapPath: string | undefined,
             relativeToBuildInfo: (path: string) => string) {
-            if (!sourceFileOrBundle || !(declarationFilePath && !isInJSFile(sourceFileOrBundle))) {
+            if (!sourceFileOrBundle) return;
+            if (!declarationFilePath) {
+                if (emitOnlyDtsFiles || compilerOptions.emitDeclarationOnly) emitSkipped = true;
                 return;
             }
             const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;
+            const filesForEmit = forceDtsEmit ? sourceFiles : filter(sourceFiles, isSourceFileNotJson);
             // Setup and perform the transformation to retrieve declarations from the input files
-            const nonJsFiles = filter(sourceFiles, isSourceFileNotJS);
-            const inputListOrBundle = (compilerOptions.outFile || compilerOptions.out) ? [createBundle(nonJsFiles, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : nonJsFiles;
+            const inputListOrBundle = (compilerOptions.outFile || compilerOptions.out) ? [createBundle(filesForEmit, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : filesForEmit;
             if (emitOnlyDtsFiles && !getEmitDeclarations(compilerOptions)) {
                 // Checker wont collect the linked aliases since thats only done when declaration is enabled.
                 // Do that here when emitting only dts files
-                nonJsFiles.forEach(collectLinkedAliases);
+                filesForEmit.forEach(collectLinkedAliases);
             }
             const declarationTransform = transformNodes(resolver, host, compilerOptions, inputListOrBundle, declarationTransformers, /*allowDtsFiles*/ false);
             if (length(declarationTransform.diagnostics)) {
@@ -435,6 +438,7 @@ namespace ts {
 
                 // transform hooks
                 onEmitNode: declarationTransform.emitNodeWithNotification,
+                isEmitNotificationEnabled: declarationTransform.isEmitNotificationEnabled,
                 substituteNode: declarationTransform.substituteNode,
             });
             const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
@@ -659,6 +663,7 @@ namespace ts {
         getAllAccessorDeclarations: notImplemented,
         getSymbolOfExternalModuleSpecifier: notImplemented,
         isBindingCapturedByNode: notImplemented,
+        getDeclarationStatementsForSourceFile: notImplemented,
     };
 
     /*@internal*/
@@ -754,6 +759,7 @@ namespace ts {
             getLibFileFromReference: notImplemented,
             isSourceFileFromExternalLibrary: returnFalse,
             getResolvedProjectReferenceToRedirect: returnUndefined,
+            isSourceOfProjectReferenceRedirect: returnFalse,
             writeFile: (name, text, writeByteOrderMark) => {
                 switch (name) {
                     case jsFilePath:
@@ -815,6 +821,7 @@ namespace ts {
         const {
             hasGlobalName,
             onEmitNode = noEmitNotification,
+            isEmitNotificationEnabled,
             substituteNode = noEmitSubstitution,
             onBeforeEmitNodeArray,
             onAfterEmitNodeArray,
@@ -860,6 +867,8 @@ namespace ts {
         let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number}[] | undefined;
         let hasWrittenComment = false;
         let commentsDisabled = !!printerOptions.removeComments;
+        let lastNode: Node | undefined;
+        let lastSubstitution: Node | undefined;
         const { enter: enterComment, exit: exitComment } = performance.createTimerIf(extendedDiagnostics, "commentTime", "beforeComment", "afterComment");
 
         reset();
@@ -1082,8 +1091,7 @@ namespace ts {
                 setSourceFile(sourceFile);
             }
 
-            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, node);
-            pipelinePhase(hint, node);
+            pipelineEmit(hint, node);
         }
 
         function setSourceFile(sourceFile: SourceFile | undefined) {
@@ -1115,6 +1123,8 @@ namespace ts {
             currentSourceFile = undefined!;
             currentLineMap = undefined!;
             detachedCommentsInfo = undefined;
+            lastNode = undefined;
+            lastSubstitution = undefined;
             setWriter(/*output*/ undefined, /*_sourceMapGenerator*/ undefined);
         }
 
@@ -1122,36 +1132,63 @@ namespace ts {
             return currentLineMap || (currentLineMap = getLineStarts(currentSourceFile!));
         }
 
+        function emit(node: Node): Node;
+        function emit(node: Node | undefined): Node | undefined;
         function emit(node: Node | undefined) {
             if (node === undefined) return;
+
             const prevSourceFileTextKind = recordBundleFileInternalSectionStart(node);
-            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, node);
-            pipelinePhase(EmitHint.Unspecified, node);
+            const substitute = pipelineEmit(EmitHint.Unspecified, node);
             recordBundleFileInternalSectionEnd(prevSourceFileTextKind);
+            return substitute;
         }
 
-        function emitIdentifierName(node: Identifier | undefined) {
+        function emitIdentifierName(node: Identifier): Node;
+        function emitIdentifierName(node: Identifier | undefined): Node | undefined;
+        function emitIdentifierName(node: Identifier | undefined): Node | undefined {
             if (node === undefined) return;
-            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, node);
-            pipelinePhase(EmitHint.IdentifierName, node);
+            return pipelineEmit(EmitHint.IdentifierName, node);
         }
 
-        function emitExpression(node: Expression | undefined) {
+        function emitExpression(node: Expression): Node;
+        function emitExpression(node: Expression | undefined): Node | undefined;
+        function emitExpression(node: Expression | undefined): Node | undefined {
             if (node === undefined) return;
-            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, node);
-            pipelinePhase(EmitHint.Expression, node);
+            return pipelineEmit(EmitHint.Expression, node);
         }
 
-        function getPipelinePhase(phase: PipelinePhase, node: Node) {
+        function emitJsxAttributeValue(node: StringLiteral | JsxExpression): Node {
+            return pipelineEmit(isStringLiteral(node) ? EmitHint.JsxAttributeValue : EmitHint.Unspecified, node);
+        }
+
+        function pipelineEmit(emitHint: EmitHint, node: Node) {
+            const savedLastNode = lastNode;
+            const savedLastSubstitution = lastSubstitution;
+            lastNode = node;
+            lastSubstitution = undefined;
+
+            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, emitHint, node);
+            pipelinePhase(emitHint, node);
+
+            Debug.assert(lastNode === node);
+
+            const substitute = lastSubstitution;
+            lastNode = savedLastNode;
+            lastSubstitution = savedLastSubstitution;
+
+            return substitute || node;
+        }
+
+        function getPipelinePhase(phase: PipelinePhase, emitHint: EmitHint, node: Node) {
             switch (phase) {
                 case PipelinePhase.Notification:
-                    if (onEmitNode !== noEmitNotification) {
+                    if (onEmitNode !== noEmitNotification && (!isEmitNotificationEnabled || isEmitNotificationEnabled(node))) {
                         return pipelineEmitWithNotification;
                     }
                     // falls through
 
                 case PipelinePhase.Substitution:
-                    if (substituteNode !== noEmitSubstitution) {
+                    if (substituteNode !== noEmitSubstitution && (lastSubstitution = substituteNode(emitHint, node)) !== node) {
                         return pipelineEmitWithSubstitution;
                     }
                     // falls through
@@ -1176,18 +1213,22 @@ namespace ts {
             }
         }
 
-        function getNextPipelinePhase(currentPhase: PipelinePhase, node: Node) {
-            return getPipelinePhase(currentPhase + 1, node);
+        function getNextPipelinePhase(currentPhase: PipelinePhase, emitHint: EmitHint, node: Node) {
+            return getPipelinePhase(currentPhase + 1, emitHint, node);
         }
 
         function pipelineEmitWithNotification(hint: EmitHint, node: Node) {
-            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Notification, node);
+            Debug.assert(lastNode === node);
+            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Notification, hint, node);
             onEmitNode(hint, node, pipelinePhase);
+            Debug.assert(lastNode === node);
         }
 
         function pipelineEmitWithHint(hint: EmitHint, node: Node): void {
+            Debug.assert(lastNode === node || lastSubstitution === node);
             if (hint === EmitHint.SourceFile) return emitSourceFile(cast(node, isSourceFile));
             if (hint === EmitHint.IdentifierName) return emitIdentifier(cast(node, isIdentifier));
+            if (hint === EmitHint.JsxAttributeValue) return emitLiteral(cast(node, isStringLiteral), /*jsxAttributeEscape*/ true);
             if (hint === EmitHint.MappedTypeParameter) return emitMappedTypeParameter(cast(node, isTypeParameterDeclaration));
             if (hint === EmitHint.EmbeddedStatement) {
                 Debug.assertNode(node, isEmptyStatement);
@@ -1201,7 +1242,7 @@ namespace ts {
                     case SyntaxKind.TemplateHead:
                     case SyntaxKind.TemplateMiddle:
                     case SyntaxKind.TemplateTail:
-                        return emitLiteral(<LiteralExpression>node);
+                        return emitLiteral(<LiteralExpression>node, /*jsxAttributeEscape*/ false);
 
                     case SyntaxKind.UnparsedSource:
                     case SyntaxKind.UnparsedPrepend:
@@ -1221,6 +1262,10 @@ namespace ts {
                     // Identifiers
                     case SyntaxKind.Identifier:
                         return emitIdentifier(<Identifier>node);
+
+                    // PrivateIdentifiers
+                    case SyntaxKind.PrivateIdentifier:
+                        return emitPrivateIdentifier(node as PrivateIdentifier);
 
                     // Parse tree nodes
                     // Names
@@ -1404,6 +1449,8 @@ namespace ts {
                         return emitImportClause(<ImportClause>node);
                     case SyntaxKind.NamespaceImport:
                         return emitNamespaceImport(<NamespaceImport>node);
+                    case SyntaxKind.NamespaceExport:
+                        return emitNamespaceExport(<NamespaceExport>node);
                     case SyntaxKind.NamedImports:
                         return emitNamedImports(<NamedImports>node);
                     case SyntaxKind.ImportSpecifier:
@@ -1497,7 +1544,7 @@ namespace ts {
                 if (isExpression(node)) {
                     hint = EmitHint.Expression;
                     if (substituteNode !== noEmitSubstitution) {
-                        node = substituteNode(hint, node);
+                        lastSubstitution = node = substituteNode(hint, node);
                     }
                 }
                 else if (isToken(node)) {
@@ -1514,7 +1561,7 @@ namespace ts {
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.RegularExpressionLiteral:
                     case SyntaxKind.NoSubstitutionTemplateLiteral:
-                        return emitLiteral(<LiteralExpression>node);
+                        return emitLiteral(<LiteralExpression>node, /*jsxAttributeEscape*/ false);
 
                     // Identifiers
                     case SyntaxKind.Identifier:
@@ -1613,8 +1660,10 @@ namespace ts {
         }
 
         function pipelineEmitWithSubstitution(hint: EmitHint, node: Node) {
-            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Substitution, node);
-            pipelinePhase(hint, substituteNode(hint, node));
+            Debug.assert(lastNode === node || lastSubstitution === node);
+            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Substitution, hint, node);
+            pipelinePhase(hint, lastSubstitution!);
+            Debug.assert(lastNode === node || lastSubstitution === node);
         }
 
         function getHelpersFromBundledSourceFiles(bundle: Bundle): string[] | undefined {
@@ -1702,7 +1751,7 @@ namespace ts {
         // SyntaxKind.NumericLiteral
         // SyntaxKind.BigIntLiteral
         function emitNumericOrBigIntLiteral(node: NumericLiteral | BigIntLiteral) {
-            emitLiteral(node);
+            emitLiteral(node, /*jsxAttributeEscape*/ false);
         }
 
         // SyntaxKind.StringLiteral
@@ -1711,8 +1760,8 @@ namespace ts {
         // SyntaxKind.TemplateHead
         // SyntaxKind.TemplateMiddle
         // SyntaxKind.TemplateTail
-        function emitLiteral(node: LiteralLikeNode) {
-            const text = getLiteralTextOfNode(node, printerOptions.neverAsciiEscape);
+        function emitLiteral(node: LiteralLikeNode, jsxAttributeEscape: boolean) {
+            const text = getLiteralTextOfNode(node, printerOptions.neverAsciiEscape, jsxAttributeEscape);
             if ((printerOptions.sourceMap || printerOptions.inlineSourceMap)
                 && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                 writeLiteral(text);
@@ -1781,6 +1830,12 @@ namespace ts {
         //
         // Names
         //
+
+        function emitPrivateIdentifier(node: PrivateIdentifier) {
+            const writeText = node.symbol ? writeSymbol : write;
+            writeText(getTextOfNode(node, /*includeTrivia*/ false), node.symbol);
+        }
+
 
         function emitQualifiedName(node: QualifiedName) {
             emitEntityName(node.left);
@@ -2118,8 +2173,7 @@ namespace ts {
             }
             writePunctuation("[");
 
-            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, node.typeParameter);
-            pipelinePhase(EmitHint.MappedTypeParameter, node.typeParameter);
+            pipelineEmit(EmitHint.MappedTypeParameter, node.typeParameter);
 
             writePunctuation("]");
             if (node.questionToken) {
@@ -2217,34 +2271,24 @@ namespace ts {
         }
 
         function emitPropertyAccessExpression(node: PropertyAccessExpression) {
-            let indentBeforeDot = false;
-            let indentAfterDot = false;
-            const dotRangeFirstCommentStart = skipTrivia(
-                currentSourceFile!.text,
-                node.expression.end,
-                /*stopAfterLineBreak*/ false,
-                /*stopAtComments*/ true
-            );
-            const dotRangeStart = skipTrivia(currentSourceFile!.text, dotRangeFirstCommentStart);
-            const dotRangeEnd = dotRangeStart + 1;
-            if (!(getEmitFlags(node) & EmitFlags.NoIndentation)) {
-                const dotToken = createToken(SyntaxKind.DotToken);
-                dotToken.pos = node.expression.end;
-                dotToken.end = dotRangeEnd;
-                indentBeforeDot = needsIndentation(node, node.expression, dotToken);
-                indentAfterDot = needsIndentation(node, dotToken, node.name);
-            }
+            const expression = cast(emitExpression(node.expression), isExpression);
+            const token = getDotOrQuestionDotToken(node);
+            const indentBeforeDot = needsIndentation(node, node.expression, token);
+            const indentAfterDot = needsIndentation(node, token, node.name);
 
-            emitExpression(node.expression);
             increaseIndentIf(indentBeforeDot, /*writeSpaceIfNotIndenting*/ false);
 
-            const dotHasCommentTrivia = dotRangeFirstCommentStart !== dotRangeStart;
-            const shouldEmitDotDot = !indentBeforeDot && needsDotDotForPropertyAccess(node.expression, dotHasCommentTrivia);
+            const shouldEmitDotDot =
+                token.kind !== SyntaxKind.QuestionDotToken &&
+                mayNeedDotDotForPropertyAccess(expression) &&
+                !writer.hasTrailingComment() &&
+                !writer.hasTrailingWhitespace();
+
             if (shouldEmitDotDot) {
                 writePunctuation(".");
             }
-            emitTokenWithComment(SyntaxKind.DotToken, node.expression.end, writePunctuation, node);
 
+            emitTokenWithComment(token.kind, node.expression.end, writePunctuation, node);
             increaseIndentIf(indentAfterDot, /*writeSpaceIfNotIndenting*/ false);
             emit(node.name);
             decreaseIndentIf(indentBeforeDot, indentAfterDot);
@@ -2252,28 +2296,27 @@ namespace ts {
 
         // 1..toString is a valid property access, emit a dot after the literal
         // Also emit a dot if expression is a integer const enum value - it will appear in generated code as numeric literal
-        function needsDotDotForPropertyAccess(expression: Expression, dotHasTrivia: boolean) {
+        function mayNeedDotDotForPropertyAccess(expression: Expression) {
             expression = skipPartiallyEmittedExpressions(expression);
             if (isNumericLiteral(expression)) {
                 // check if numeric literal is a decimal literal that was originally written with a dot
-                const text = getLiteralTextOfNode(<LiteralExpression>expression, /*neverAsciiEscape*/ true);
+                const text = getLiteralTextOfNode(<LiteralExpression>expression, /*neverAsciiEscape*/ true, /*jsxAttributeEscape*/ false);
                 // If he number will be printed verbatim and it doesn't already contain a dot, add one
                 // if the expression doesn't have any comments that will be emitted.
-                return !expression.numericLiteralFlags && !stringContains(text, tokenToString(SyntaxKind.DotToken)!) &&
-                    (!dotHasTrivia || printerOptions.removeComments);
+                return !expression.numericLiteralFlags && !stringContains(text, tokenToString(SyntaxKind.DotToken)!);
             }
-            else if (isPropertyAccessExpression(expression) || isElementAccessExpression(expression)) {
+            else if (isAccessExpression(expression)) {
                 // check if constant enum value is integer
                 const constantValue = getConstantValue(expression);
                 // isFinite handles cases when constantValue is undefined
                 return typeof constantValue === "number" && isFinite(constantValue)
-                    && Math.floor(constantValue) === constantValue
-                    && printerOptions.removeComments;
+                    && Math.floor(constantValue) === constantValue;
             }
         }
 
         function emitElementAccessExpression(node: ElementAccessExpression) {
             emitExpression(node.expression);
+            emit(node.questionDotToken);
             emitTokenWithComment(SyntaxKind.OpenBracketToken, node.expression.end, writePunctuation, node);
             emitExpression(node.argumentExpression);
             emitTokenWithComment(SyntaxKind.CloseBracketToken, node.argumentExpression.end, writePunctuation, node);
@@ -2281,6 +2324,7 @@ namespace ts {
 
         function emitCallExpression(node: CallExpression) {
             emitExpression(node.expression);
+            emit(node.questionDotToken);
             emitTypeArguments(node, node.typeArguments);
             emitExpressionList(node, node.arguments, ListFormat.CallExpressionArguments);
         }
@@ -2388,19 +2432,84 @@ namespace ts {
             writeTokenText(node.operator, writeOperator);
         }
 
-        function emitBinaryExpression(node: BinaryExpression) {
-            const isCommaOperator = node.operatorToken.kind !== SyntaxKind.CommaToken;
-            const indentBeforeOperator = needsIndentation(node, node.left, node.operatorToken);
-            const indentAfterOperator = needsIndentation(node, node.operatorToken, node.right);
+        const enum EmitBinaryExpressionState {
+            EmitLeft,
+            EmitRight,
+            FinishEmit
+        }
 
-            emitExpression(node.left);
-            increaseIndentIf(indentBeforeOperator, isCommaOperator);
-            emitLeadingCommentsOfPosition(node.operatorToken.pos);
-            writeTokenNode(node.operatorToken, node.operatorToken.kind === SyntaxKind.InKeyword ? writeKeyword : writeOperator);
-            emitTrailingCommentsOfPosition(node.operatorToken.end, /*prefixSpace*/ true); // Binary operators should have a space before the comment starts
-            increaseIndentIf(indentAfterOperator, /*writeSpaceIfNotIndenting*/ true);
-            emitExpression(node.right);
-            decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
+        /**
+         * emitBinaryExpression includes an embedded work stack to attempt to handle as many nested binary expressions
+         * as possible without creating any additional stack frames. This can only be done when the emit pipeline does
+         * not require notification/substitution/comment/sourcemap decorations.
+         */
+        function emitBinaryExpression(node: BinaryExpression) {
+            const nodeStack = [node];
+            const stateStack = [EmitBinaryExpressionState.EmitLeft];
+            let stackIndex = 0;
+            while (stackIndex >= 0) {
+                node = nodeStack[stackIndex];
+                switch (stateStack[stackIndex]) {
+                    case EmitBinaryExpressionState.EmitLeft: {
+                        maybePipelineEmitExpression(node.left);
+                        break;
+                    }
+                    case EmitBinaryExpressionState.EmitRight: {
+                        const isCommaOperator = node.operatorToken.kind !== SyntaxKind.CommaToken;
+                        const indentBeforeOperator = needsIndentation(node, node.left, node.operatorToken);
+                        const indentAfterOperator = needsIndentation(node, node.operatorToken, node.right);
+                        increaseIndentIf(indentBeforeOperator, isCommaOperator);
+                        emitLeadingCommentsOfPosition(node.operatorToken.pos);
+                        writeTokenNode(node.operatorToken, node.operatorToken.kind === SyntaxKind.InKeyword ? writeKeyword : writeOperator);
+                        emitTrailingCommentsOfPosition(node.operatorToken.end, /*prefixSpace*/ true); // Binary operators should have a space before the comment starts
+                        increaseIndentIf(indentAfterOperator, /*writeSpaceIfNotIndenting*/ true);
+                        maybePipelineEmitExpression(node.right);
+                        break;
+                    }
+                    case EmitBinaryExpressionState.FinishEmit: {
+                        const indentBeforeOperator = needsIndentation(node, node.left, node.operatorToken);
+                        const indentAfterOperator = needsIndentation(node, node.operatorToken, node.right);
+                        decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
+                        stackIndex--;
+                        break;
+                    }
+                    default: return Debug.fail(`Invalid state ${stateStack[stackIndex]} for emitBinaryExpressionWorker`);
+                }
+            }
+
+            function maybePipelineEmitExpression(next: Expression) {
+                // Advance the state of this unit of work,
+                stateStack[stackIndex]++;
+
+                // Then actually do the work of emitting the node `next` returned by the prior state
+
+                // The following section should be identical to `pipelineEmit` save it assumes EmitHint.Expression and offloads
+                // binary expression handling, where possible, to the contained work queue
+
+                // #region trampolinePipelineEmit
+                const savedLastNode = lastNode;
+                const savedLastSubstitution = lastSubstitution;
+                lastNode = next;
+                lastSubstitution = undefined;
+
+                const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, EmitHint.Expression, next);
+                if (pipelinePhase === pipelineEmitWithHint && isBinaryExpression(next)) {
+                    // If the target pipeline phase is emit directly, and the next node's also a binary expression,
+                    // skip all the intermediate indirection and push the expression directly onto the work stack
+                    stackIndex++;
+                    stateStack[stackIndex] = EmitBinaryExpressionState.EmitLeft;
+                    nodeStack[stackIndex] = next;
+                }
+                else {
+                    pipelinePhase(EmitHint.Expression, next);
+                }
+
+                Debug.assert(lastNode === next);
+
+                lastNode = savedLastNode;
+                lastSubstitution = savedLastSubstitution;
+                // #endregion trampolinePipelineEmit
+            }
         }
 
         function emitConditionalExpression(node: ConditionalExpression) {
@@ -2635,11 +2744,11 @@ namespace ts {
             const node = getParseTreeNode(contextNode);
             const isSimilarNode = node && node.kind === contextNode.kind;
             const startPos = pos;
-            if (isSimilarNode) {
-                pos = skipTrivia(currentSourceFile!.text, pos);
+            if (isSimilarNode && currentSourceFile) {
+                pos = skipTrivia(currentSourceFile.text, pos);
             }
             if (emitLeadingCommentsOfPosition && isSimilarNode && contextNode.pos !== startPos) {
-                const needsIndent = indentLeading && !positionsAreOnSameLine(startPos, pos, currentSourceFile!);
+                const needsIndent = indentLeading && currentSourceFile && !positionsAreOnSameLine(startPos, pos, currentSourceFile);
                 if (needsIndent) {
                     increaseIndent();
                 }
@@ -2720,6 +2829,7 @@ namespace ts {
 
         function emitVariableDeclaration(node: VariableDeclaration) {
             emit(node.name);
+            emit(node.exclamationToken);
             emitTypeAnnotation(node.type);
             emitInitializer(node.initializer, node.type ? node.type.end : node.name.end, node);
         }
@@ -3012,6 +3122,10 @@ namespace ts {
         }
 
         function emitImportClause(node: ImportClause) {
+            if (node.isTypeOnly) {
+                emitTokenWithComment(SyntaxKind.TypeKeyword, node.pos, writeKeyword, node);
+                writeSpace();
+            }
             emit(node.name);
             if (node.name && node.namedBindings) {
                 emitTokenWithComment(SyntaxKind.CommaToken, node.name.end, writePunctuation, node);
@@ -3053,6 +3167,10 @@ namespace ts {
         function emitExportDeclaration(node: ExportDeclaration) {
             let nextPos = emitTokenWithComment(SyntaxKind.ExportKeyword, node.pos, writeKeyword, node);
             writeSpace();
+            if (node.isTypeOnly) {
+                nextPos = emitTokenWithComment(SyntaxKind.TypeKeyword, nextPos, writeKeyword, node);
+                writeSpace();
+            }
             if (node.exportClause) {
                 emit(node.exportClause);
             }
@@ -3078,6 +3196,14 @@ namespace ts {
             writeSpace();
             emit(node.name);
             writeTrailingSemicolon();
+        }
+
+        function emitNamespaceExport(node: NamespaceExport) {
+            const asPos = emitTokenWithComment(SyntaxKind.AsteriskToken, node.pos, writePunctuation, node);
+            writeSpace();
+            emitTokenWithComment(SyntaxKind.AsKeyword, asPos, writeKeyword, node);
+            writeSpace();
+            emit(node.name);
         }
 
         function emitNamedExports(node: NamedExports) {
@@ -3174,7 +3300,7 @@ namespace ts {
 
         function emitJsxAttribute(node: JsxAttribute) {
             emit(node.name);
-            emitNodeWithPrefix("=", writePunctuation, node.initializer!, emit); // TODO: GH#18217
+            emitNodeWithPrefix("=", writePunctuation, node.initializer, emitJsxAttributeValue);
         }
 
         function emitJsxSpreadAttribute(node: JsxSpreadAttribute) {
@@ -3707,7 +3833,7 @@ namespace ts {
             }
         }
 
-        function emitNodeWithPrefix(prefix: string, prefixWriter: (s: string) => void, node: Node, emit: (node: Node) => void) {
+        function emitNodeWithPrefix<T extends Node>(prefix: string, prefixWriter: (s: string) => void, node: T | undefined, emit: (node: T) => void) {
             if (node) {
                 prefixWriter(prefix);
                 emit(node);
@@ -3744,8 +3870,7 @@ namespace ts {
                 writeLine();
                 increaseIndent();
                 if (isEmptyStatement(node)) {
-                    const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, node);
-                    pipelinePhase(EmitHint.EmbeddedStatement, node);
+                    pipelineEmit(EmitHint.EmbeddedStatement, node);
                 }
                 else {
                     emit(node);
@@ -4216,6 +4341,10 @@ namespace ts {
         }
 
         function needsIndentation(parent: Node, node1: Node, node2: Node): boolean {
+            if (getEmitFlags(parent) & EmitFlags.NoIndentation) {
+                return false;
+            }
+
             parent = skipSynthesizedParentheses(parent);
             node1 = skipSynthesizedParentheses(node1);
             node2 = skipSynthesizedParentheses(node2);
@@ -4248,7 +4377,7 @@ namespace ts {
             if (isGeneratedIdentifier(node)) {
                 return generateName(node);
             }
-            else if (isIdentifier(node) && (nodeIsSynthesized(node) || !node.parent || !currentSourceFile || (node.parent && currentSourceFile && getSourceFileOfNode(node) !== getOriginalNode(currentSourceFile)))) {
+            else if ((isIdentifier(node) || isPrivateIdentifier(node)) && (nodeIsSynthesized(node) || !node.parent || !currentSourceFile || (node.parent && currentSourceFile && getSourceFileOfNode(node) !== getOriginalNode(currentSourceFile)))) {
                 return idText(node);
             }
             else if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
@@ -4261,20 +4390,20 @@ namespace ts {
             return getSourceTextOfNodeFromSourceFile(currentSourceFile!, node, includeTrivia);
         }
 
-        function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined): string {
+        function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean): string {
             if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
                 const textSourceNode = (<StringLiteral>node).textSourceNode!;
                 if (isIdentifier(textSourceNode)) {
-                    return neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ?
-                        `"${escapeString(getTextOfNode(textSourceNode))}"` :
+                    return jsxAttributeEscape ? `"${escapeJsxAttributeString(getTextOfNode(textSourceNode))}"` :
+                        neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? `"${escapeString(getTextOfNode(textSourceNode))}"` :
                         `"${escapeNonAsciiString(getTextOfNode(textSourceNode))}"`;
                 }
                 else {
-                    return getLiteralTextOfNode(textSourceNode, neverAsciiEscape);
+                    return getLiteralTextOfNode(textSourceNode, neverAsciiEscape, jsxAttributeEscape);
                 }
             }
 
-            return getLiteralText(node, currentSourceFile!, neverAsciiEscape);
+            return getLiteralText(node, currentSourceFile!, neverAsciiEscape, jsxAttributeEscape);
         }
 
         /**
@@ -4380,6 +4509,9 @@ namespace ts {
                     break;
                 case SyntaxKind.NamespaceImport:
                     generateNameIfNeeded((<NamespaceImport>node).name);
+                    break;
+                case SyntaxKind.NamespaceExport:
+                    generateNameIfNeeded((<NamespaceExport>node).name);
                     break;
                 case SyntaxKind.NamedImports:
                     forEach((<NamedImports>node).elements, generateNames);
@@ -4671,6 +4803,7 @@ namespace ts {
         // Comments
 
         function pipelineEmitWithComments(hint: EmitHint, node: Node) {
+            Debug.assert(lastNode === node || lastSubstitution === node);
             enterComment();
             hasWrittenComment = false;
             const emitFlags = getEmitFlags(node);
@@ -4712,7 +4845,7 @@ namespace ts {
             forEach(getSyntheticLeadingComments(node), emitLeadingSynthesizedComment);
             exitComment();
 
-            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Comments, node);
+            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Comments, hint, node);
             if (emitFlags & EmitFlags.NoNestedComments) {
                 commentsDisabled = true;
                 pipelinePhase(hint, node);
@@ -4737,6 +4870,7 @@ namespace ts {
                 }
             }
             exitComment();
+            Debug.assert(lastNode === node || lastSubstitution === node);
         }
 
         function emitLeadingSynthesizedComment(comment: SynthesizedComment) {
@@ -4983,7 +5117,8 @@ namespace ts {
         }
 
         function pipelineEmitWithSourceMap(hint: EmitHint, node: Node) {
-            const pipelinePhase = getNextPipelinePhase(PipelinePhase.SourceMaps, node);
+            Debug.assert(lastNode === node || lastSubstitution === node);
+            const pipelinePhase = getNextPipelinePhase(PipelinePhase.SourceMaps, hint, node);
             if (isUnparsedSource(node) || isUnparsedPrepend(node)) {
                 pipelinePhase(hint, node);
             }
@@ -5025,6 +5160,7 @@ namespace ts {
                     emitSourcePos(source, end);
                 }
             }
+            Debug.assert(lastNode === node || lastSubstitution === node);
         }
 
         /**

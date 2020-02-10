@@ -24,6 +24,6 @@ declare const Foo: {
     BANANA: "banana";
 };
 export declare const Baa: {
-    [Foo.BANANA]: number;
+    banana: number;
 };
 export {};

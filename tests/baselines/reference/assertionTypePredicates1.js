@@ -35,6 +35,14 @@ function f01(x: unknown) {
         assertDefined(x);
         x;  // string
     }
+    if (!!true) {
+        assert(false);
+        x;  // Unreachable
+    }
+    if (!!true) {
+        assert(false && x === undefined);
+        x;  // Unreachable
+    }
 }
 
 function f02(x: string | undefined) {
@@ -75,6 +83,10 @@ function f10(x: string | undefined) {
         Debug.assertDefined(x);
         x.length;
     }
+    if (!!true) {
+        Debug.assert(false);
+        x;  // Unreachable
+    }
 }
 
 class Test {
@@ -106,10 +118,25 @@ class Test {
         this.assertIsTest2();
         this.z;
     }
+    baz(x: number) {
+        this.assert(false);
+        x;  // Unreachable
+    }
 }
 
 class Test2 extends Test {
     z = 0;
+}
+
+class Derived extends Test {
+    foo(x: unknown) {
+        super.assert(typeof x === "string");
+        x.length;
+    }
+    baz(x: number) {
+        super.assert(false);
+        x;  // Unreachable
+    }
 }
 
 // Invalid constructs
@@ -123,6 +150,17 @@ declare class Wat {
     set p1(x: this is string);
     get p2(): asserts this is string;
     set p2(x: asserts this is string);
+}
+
+function f20(x: unknown) {
+    const assert = (value: unknown): asserts value => {}
+    assert(typeof x === "string");  // Error
+    const a = [assert];
+    a[0](typeof x === "string");  // Error
+    const t1 = new Test();
+    t1.assert(typeof x === "string");  // Error
+    const t2: Test = new Test();
+    t2.assert(typeof x === "string");
 }
 
 
@@ -169,6 +207,14 @@ function f01(x) {
         assertDefined(x);
         x; // string
     }
+    if (!!true) {
+        assert(false);
+        x; // Unreachable
+    }
+    if (!!true) {
+        assert(false && x === undefined);
+        x; // Unreachable
+    }
 }
 function f02(x) {
     if (!!true) {
@@ -203,6 +249,10 @@ function f10(x) {
     if (!!true) {
         Debug.assertDefined(x);
         x.length;
+    }
+    if (!!true) {
+        Debug.assert(false);
+        x; // Unreachable
     }
 }
 var Test = /** @class */ (function () {
@@ -239,6 +289,10 @@ var Test = /** @class */ (function () {
         this.assertIsTest2();
         this.z;
     };
+    Test.prototype.baz = function (x) {
+        this.assert(false);
+        x; // Unreachable
+    };
     return Test;
 }());
 var Test2 = /** @class */ (function (_super) {
@@ -250,6 +304,31 @@ var Test2 = /** @class */ (function (_super) {
     }
     return Test2;
 }(Test));
+var Derived = /** @class */ (function (_super) {
+    __extends(Derived, _super);
+    function Derived() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Derived.prototype.foo = function (x) {
+        _super.prototype.assert.call(this, typeof x === "string");
+        x.length;
+    };
+    Derived.prototype.baz = function (x) {
+        _super.prototype.assert.call(this, false);
+        x; // Unreachable
+    };
+    return Derived;
+}(Test));
+function f20(x) {
+    var assert = function (value) { };
+    assert(typeof x === "string"); // Error
+    var a = [assert];
+    a[0](typeof x === "string"); // Error
+    var t1 = new Test();
+    t1.assert(typeof x === "string"); // Error
+    var t2 = new Test();
+    t2.assert(typeof x === "string");
+}
 
 
 //// [assertionTypePredicates1.d.ts]
@@ -274,9 +353,14 @@ declare class Test {
     assertThis(): asserts this;
     bar(): void;
     foo(x: unknown): void;
+    baz(x: number): void;
 }
 declare class Test2 extends Test {
     z: number;
+}
+declare class Derived extends Test {
+    foo(x: unknown): void;
+    baz(x: number): void;
 }
 declare let Q1: new (x: unknown) => x is string;
 declare let Q2: new (x: boolean) => asserts x;
@@ -287,3 +371,4 @@ declare class Wat {
     get p2(): asserts this is string;
     set p2(x: asserts this is string);
 }
+declare function f20(x: unknown): void;

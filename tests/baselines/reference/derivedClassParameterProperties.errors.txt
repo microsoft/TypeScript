@@ -1,10 +1,10 @@
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassParameterProperties.ts(15,5): error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassParameterProperties.ts(30,5): error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassParameterProperties.ts(15,5): error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassParameterProperties.ts(30,5): error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassParameterProperties.ts(47,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassParameterProperties.ts(56,5): error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassParameterProperties.ts(56,5): error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassParameterProperties.ts(57,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassParameterProperties.ts(58,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassParameterProperties.ts(79,5): error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassParameterProperties.ts(79,5): error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassParameterProperties.ts(80,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassParameterProperties.ts(81,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 
@@ -32,7 +32,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassP
     ~~~~~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+!!! error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.
     }
     
     class Derived3 extends Base {
@@ -52,7 +52,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassP
     ~~~~~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+!!! error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.
     }
     
     class Derived5 extends Base {
@@ -91,7 +91,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassP
     ~~~~~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+!!! error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.
     }
     
     class Derived8 extends Base {
@@ -124,7 +124,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassP
     ~~~~~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+!!! error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.
     }
     
     class Derived10<T> extends Base2<T> {

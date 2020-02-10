@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 ////class C {
-////
+////    p = 2
 ////}
 ////var c = new C()
 ////function f([|x, y |]) {

@@ -1,0 +1,22 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameDeclaration.ts ===
+class A {
+>A : Symbol(A, Decl(privateNameDeclaration.ts, 0, 0))
+
+    #foo: string;
+>#foo : Symbol(A.#foo, Decl(privateNameDeclaration.ts, 0, 9))
+
+    #bar = 6;
+>#bar : Symbol(A.#bar, Decl(privateNameDeclaration.ts, 1, 17))
+
+    baz: string;
+>baz : Symbol(A.baz, Decl(privateNameDeclaration.ts, 2, 13))
+
+    qux = 6;
+>qux : Symbol(A.qux, Decl(privateNameDeclaration.ts, 3, 16))
+
+    quux(): void {
+>quux : Symbol(A.quux, Decl(privateNameDeclaration.ts, 4, 12))
+
+    }
+}
+

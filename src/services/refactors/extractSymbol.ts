@@ -66,19 +66,19 @@ namespace ts.refactor.extractSymbol {
 
         const infos: ApplicableRefactorInfo[] = [];
 
-        if (functionActions.length) {
-            infos.push({
-                name: refactorName,
-                description: getLocaleSpecificMessage(Diagnostics.Extract_function),
-                actions: functionActions
-            });
-        }
-
         if (constantActions.length) {
             infos.push({
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
                 actions: constantActions
+            });
+        }
+
+        if (functionActions.length) {
+            infos.push({
+                name: refactorName,
+                description: getLocaleSpecificMessage(Diagnostics.Extract_function),
+                actions: functionActions
             });
         }
 
@@ -437,6 +437,7 @@ namespace ts.refactor.extractSymbol {
                             permittedJumps = PermittedJumps.Return;
                         }
                         break;
+                    case SyntaxKind.DefaultClause:
                     case SyntaxKind.CaseClause:
                         // allow unlabeled break inside case clauses
                         permittedJumps |= PermittedJumps.Break;

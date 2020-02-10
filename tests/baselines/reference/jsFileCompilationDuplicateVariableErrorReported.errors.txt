@@ -1,13 +1,11 @@
-error TS5053: Option 'allowJs' cannot be specified with option 'declaration'.
 tests/cases/compiler/a.ts(1,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'number'.
 
 
-!!! error TS5053: Option 'allowJs' cannot be specified with option 'declaration'.
 ==== tests/cases/compiler/b.js (0 errors) ====
     var x = "hello";
     
 ==== tests/cases/compiler/a.ts (1 errors) ====
-    var x = 10; // Error reported so no declaration file generated?
+    var x = 10; // Error reported
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'number'.
 !!! related TS6203 tests/cases/compiler/b.js:1:5: 'x' was also declared here.

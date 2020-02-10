@@ -5,8 +5,8 @@ function makeArrayG<T>(...items: T[]): T[] { return items; }
 >items : T[]
 
 var a1Ga = makeArrayG(1, ""); // no error
->a1Ga : any
->makeArrayG(1, "") : any
+>a1Ga : number[]
+>makeArrayG(1, "") : number[]
 >makeArrayG : <T>(...items: T[]) => T[]
 >1 : 1
 >"" : ""
@@ -26,8 +26,8 @@ var a1Gc = makeArrayG<Object>(1, "");
 >"" : ""
 
 var a1Gd = makeArrayG<number>(1, ""); // error
->a1Gd : any
->makeArrayG<number>(1, "") : any
+>a1Gd : number[]
+>makeArrayG<number>(1, "") : number[]
 >makeArrayG : <T>(...items: T[]) => T[]
 >1 : 1
 >"" : ""
@@ -45,8 +45,8 @@ function makeArrayGOpt<T>(item1?: T, item2?: T, item3?: T) {
 >item3 : T
 }
 var a2Ga = makeArrayGOpt(1, ""); 
->a2Ga : any
->makeArrayGOpt(1, "") : any
+>a2Ga : number[]
+>makeArrayGOpt(1, "") : number[]
 >makeArrayGOpt : <T>(item1?: T, item2?: T, item3?: T) => T[]
 >1 : 1
 >"" : ""
@@ -59,8 +59,8 @@ var a2Gb = makeArrayG<any>(1, "");
 >"" : ""
 
 var a2Gc = makeArrayG<any[]>(1, ""); // error
->a2Gc : any
->makeArrayG<any[]>(1, "") : any
+>a2Gc : any[][]
+>makeArrayG<any[]>(1, "") : any[][]
 >makeArrayG : <T>(...items: T[]) => T[]
 >1 : 1
 >"" : ""
