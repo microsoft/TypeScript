@@ -803,7 +803,7 @@ interface Context {
 >s : unique symbol
 
     method3(): AsyncIterableIterator<typeof s>;
->method3 : () => AsyncIterableIterator<unique symbol>
+>method3 : () => AsyncIterableIterator<unique symbol, any, undefined>
 >s : unique symbol
 
     method4(): IterableIterator<typeof s>;
