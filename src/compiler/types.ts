@@ -4461,7 +4461,11 @@ namespace ts {
         /* @internal */
         IsGenericIndexType = 1 << 25, // Union or intersection contains generic index type
         /* @internal */
-        ContainsIntersections = 1 << 26, // Union containing one or more intersections
+        ContainsIntersections = 1 << 26, // Union contains intersections
+        /* @internal */
+        IsNeverIntersectionComputed = 1 << 26, // IsNeverLike flag has been computed
+        /* @internal */
+        IsNeverIntersection = 1 << 27, // Intersection reduces to never
         ClassOrInterface = Class | Interface,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
@@ -4571,8 +4575,6 @@ namespace ts {
         /* @internal */
         objectFlags: ObjectFlags;
         /* @internal */
-        reducedType?: Type;
-        /* @internal */
         propertyCache: SymbolTable;       // Cache of resolved properties
         /* @internal */
         resolvedProperties: Symbol[];
@@ -4587,6 +4589,8 @@ namespace ts {
     }
 
     export interface UnionType extends UnionOrIntersectionType {
+        /* @internal */
+        resolvedReducedType: Type;
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {

@@ -9757,7 +9757,7 @@ namespace ts {
         }
 
         function getPropertiesOfType(type: Type): Symbol[] {
-            type = getApparentType(type);
+            type = getApparentType(getReducedType(type));
             return type.flags & TypeFlags.UnionOrIntersection ?
                 getPropertiesOfUnionOrIntersectionType(<UnionType>type) :
                 getPropertiesOfObjectType(type);
@@ -10101,8 +10101,7 @@ namespace ts {
          * type itself.
          */
         function getApparentType(type: Type): Type {
-            const reduced = getReducedType(type);
-            const t = reduced.flags & TypeFlags.Instantiable ? getBaseConstraintOfType(reduced) || unknownType : reduced;
+            const t = type.flags & TypeFlags.Instantiable ? getBaseConstraintOfType(type) || unknownType : type;
             return getObjectFlags(t) & ObjectFlags.Mapped ? getApparentTypeOfMappedType(<MappedType>t) :
                 t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(<IntersectionType>t) :
                 t.flags & TypeFlags.StringLike ? globalStringType :
@@ -10259,10 +10258,17 @@ namespace ts {
          * no constituent property has type 'never', but the intersection of the constituent property types is 'never'.
          */
         function getReducedType(type: Type): Type {
-            return !(type.flags & TypeFlags.UnionOrIntersection) ? type : (<UnionOrIntersectionType>type).reducedType || (
-                (<UnionOrIntersectionType>type).reducedType = type.flags & TypeFlags.Union ?
-                    getReducedUnionType(<UnionType>type) :
-                    some(getPropertiesOfUnionOrIntersectionType(<IntersectionType>type), isDiscriminantWithNeverType) ? neverType : type);
+            if (type.flags & TypeFlags.Union && (<UnionType>type).objectFlags & ObjectFlags.ContainsIntersections) {
+                return (<UnionType>type).resolvedReducedType || ((<UnionType>type).resolvedReducedType = getReducedUnionType(<UnionType>type));
+            }
+            else if (type.flags & TypeFlags.Intersection) {
+                if (!((<IntersectionType>type).objectFlags & ObjectFlags.IsNeverIntersectionComputed)) {
+                    (<IntersectionType>type).objectFlags |= ObjectFlags.IsNeverIntersectionComputed |
+                        (some(getPropertiesOfUnionOrIntersectionType(<IntersectionType>type), isDiscriminantWithNeverType) ? ObjectFlags.IsNeverIntersection : 0);
+                }
+                return (<IntersectionType>type).objectFlags & ObjectFlags.IsNeverIntersection ? neverType : type;
+            }
+            return type;
         }
 
         function getReducedUnionType(unionType: UnionType) {
@@ -10272,7 +10278,7 @@ namespace ts {
             }
             const reduced = getUnionType(reducedTypes);
             if (reduced.flags & TypeFlags.Union) {
-                (<UnionType>reduced).reducedType = reduced;
+                (<UnionType>reduced).resolvedReducedType = reduced;
             }
             return reduced;
         }
@@ -10290,7 +10296,7 @@ namespace ts {
          * @param name a name of property to look up in a given type
          */
         function getPropertyOfType(type: Type, name: __String): Symbol | undefined {
-            type = getApparentType(type);
+            type = getApparentType(getReducedType(type));
             if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
                 const symbol = resolved.members.get(name);
@@ -10328,7 +10334,7 @@ namespace ts {
          * maps primitive types and type parameters are to their apparent types.
          */
         function getSignaturesOfType(type: Type, kind: SignatureKind): readonly Signature[] {
-            return getSignaturesOfStructuredType(getApparentType(type), kind);
+            return getSignaturesOfStructuredType(getApparentType(getReducedType(type)), kind);
         }
 
         function getIndexInfoOfStructuredType(type: Type, kind: IndexKind): IndexInfo | undefined {
@@ -10346,13 +10352,13 @@ namespace ts {
         // Return the indexing info of the given kind in the given type. Creates synthetic union index types when necessary and
         // maps primitive types and type parameters are to their apparent types.
         function getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined {
-            return getIndexInfoOfStructuredType(getApparentType(type), kind);
+            return getIndexInfoOfStructuredType(getApparentType(getReducedType(type)), kind);
         }
 
         // Return the index type of the given kind in the given type. Creates synthetic union index types when necessary and
         // maps primitive types and type parameters are to their apparent types.
         function getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined {
-            return getIndexTypeOfStructuredType(getApparentType(type), kind);
+            return getIndexTypeOfStructuredType(getApparentType(getReducedType(type)), kind);
         }
 
         function getImplicitIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined {
@@ -11969,7 +11975,6 @@ namespace ts {
                 unionTypes.set(id, type);
                 type.objectFlags = objectFlags | getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
                 type.types = types;
-                type.reducedType = objectFlags & ObjectFlags.ContainsIntersections ? undefined : type;
                 /*
                 Note: This is the alias symbol (or lack thereof) that we see when we first encounter this union type.
                 For aliases of identical unions, eg `type T = A | B; type U = A | B`, the symbol of the first alias encountered is the aliasSymbol.
@@ -12123,7 +12128,6 @@ namespace ts {
             const result = <IntersectionType>createType(TypeFlags.Intersection);
             result.objectFlags = getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
             result.types = types;
-            result.reducedType = undefined;
             result.aliasSymbol = aliasSymbol; // See comment in `getUnionTypeFromSortedList`.
             result.aliasTypeArguments = aliasTypeArguments;
             return result;
@@ -12289,6 +12293,7 @@ namespace ts {
         }
 
         function getIndexType(type: Type, stringsOnly = keyofStringsOnly, noIndexSignatures?: boolean): Type {
+            type = getReducedType(type);
             return type.flags & TypeFlags.Union ? getIntersectionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, stringsOnly) :
@@ -12705,7 +12710,7 @@ namespace ts {
             // In the following we resolve T[K] to the type of the property in T selected by K.
             // We treat boolean as different from other unions to improve errors;
             // skipping straight to getPropertyTypeForIndexType gives errors with 'boolean' instead of 'true'.
-            const apparentObjectType = getApparentType(objectType);
+            const apparentObjectType = getApparentType(getReducedType(objectType));
             if (indexType.flags & TypeFlags.Union && !(indexType.flags & TypeFlags.Boolean)) {
                 const propTypes: Type[] = [];
                 let wasMissingProp = false;
