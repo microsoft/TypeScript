@@ -16629,8 +16629,7 @@ namespace ts {
         }
 
         function isFromSpreadAssignment(prop: Symbol, container: Symbol) {
-            // TODO: Should use ?. now
-            return !(prop.valueDeclaration && container.valueDeclaration && prop.valueDeclaration.parent === container.valueDeclaration);
+            return prop.valueDeclaration?.parent !== container.valueDeclaration;
         }
 
         /**
