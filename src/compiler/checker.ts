@@ -11337,7 +11337,7 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 // handle LS queries on the `const` in `x as const` by resolving to the type of `x`
-                if (isTypeReferenceNode(node) && isIdentifier(node.typeName) && idText(node.typeName) === "const" && isAssertionExpression(node.parent)) {
+                if (isConstTypeReference(node) && isAssertionExpression(node.parent)) {
                     links.resolvedSymbol = unknownSymbol;
                     return links.resolvedType = checkExpressionCached(node.parent.expression);
                 }
