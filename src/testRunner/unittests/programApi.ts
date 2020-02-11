@@ -178,4 +178,19 @@ namespace ts {
             assert.isNotNaN(program.getIdentifierCount());
         });
     });
+
+
+    describe("unittests:: programApi:: Program.getDiagnosticsProducingTypeChecker / Program.getSemanticDiagnostics", () => {
+        it("does not produce errors on `as const` it would not normally produce on the command line", () => {
+            const main = new documents.TextDocument("/main.ts", '0 as const');
+
+            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main], cwd: "/" });
+            const program = createProgram(["/main.ts"], {}, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
+            const typeChecker = program.getDiagnosticsProducingTypeChecker();
+            const sourceFile = program.getSourceFile("main.ts")!;
+            typeChecker.getTypeAtLocation(((sourceFile.statements[0] as ExpressionStatement).expression as AsExpression).type);
+            const diag = program.getSemanticDiagnostics();
+            assert.isEmpty(diag);
+        });
+    });
 }
