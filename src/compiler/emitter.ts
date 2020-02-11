@@ -4025,7 +4025,7 @@ namespace ts {
                 // Emit each child.
                 let previousSibling: Node | undefined;
                 let previousSourceFileTextKind: ReturnType<typeof recordBundleFileInternalSectionStart>;
-                let shouldDecreaselinesAfterEmit = false;
+                let shouldDecreaseIndentAfterEmit = false;
                 for (let i = 0; i < count; i++) {
                     const child = children![start + i];
 
@@ -4055,7 +4055,7 @@ namespace ts {
                             // line, we should increase the indent.
                             if ((format & (ListFormat.LinesMask | ListFormat.Indented)) === ListFormat.SingleLine) {
                                 increaseIndent();
-                                shouldDecreaselinesAfterEmit = true;
+                                shouldDecreaseIndentAfterEmit = true;
                             }
 
                             writeLine(separatingLineTerminatorCount);
@@ -4080,9 +4080,9 @@ namespace ts {
 
                     emit(child);
 
-                    if (shouldDecreaselinesAfterEmit) {
+                    if (shouldDecreaseIndentAfterEmit) {
                         decreaseIndent();
-                        shouldDecreaselinesAfterEmit = false;
+                        shouldDecreaseIndentAfterEmit = false;
                     }
 
                     previousSibling = child;
