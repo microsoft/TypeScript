@@ -359,8 +359,7 @@ namespace ts {
                 }
                 let result: Resolved | undefined;
                 if (!isExternalModuleNameRelative(typeReferenceDirectiveName)) {
-                    const searchResult = loadModuleFromNearestNodeModulesDirectory(Extensions.DtsOnly, typeReferenceDirectiveName, initialLocationForSecondaryLookup, moduleResolutionState, /*cache*/ undefined, /*redirectedReference*/ undefined);
-                    result = searchResult && searchResult.value;
+                    result = loadModuleFromNearestNodeModulesDirectory(Extensions.DtsOnly, typeReferenceDirectiveName, initialLocationForSecondaryLookup, moduleResolutionState, /*cache*/ undefined, /*redirectedReference*/ undefined) || undefined;
                 }
                 else {
                     const { path: candidate } = normalizePathAndParts(combinePaths(initialLocationForSecondaryLookup, typeReferenceDirectiveName));
@@ -765,7 +764,7 @@ namespace ts {
         state: ModuleResolutionState): Resolved | undefined {
 
         const resolved = tryLoadModuleUsingPathsIfEligible(extensions, moduleName, loader, state);
-        if (resolved) return resolved.value;
+        if (resolved !== undefined) return resolved || undefined;
 
         if (!isExternalModuleNameRelative(moduleName)) {
             return tryLoadModuleUsingBaseUrl(extensions, moduleName, loader, state);
@@ -918,9 +917,9 @@ namespace ts {
         const failedLookupLocations: string[] = [];
         const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations };
 
-        const result = forEach(extensions, ext => tryResolve(ext));
-        if (result && result.value) {
-            const { resolved, isExternalLibraryImport } = result.value;
+        const result = firstDefined(extensions, ext => tryResolve(ext));
+        if (result) {
+            const { resolved, isExternalLibraryImport } = result;
             return createResolvedModuleWithFailedLookupLocations(resolved, isExternalLibraryImport, failedLookupLocations);
         }
         return { resolvedModule: undefined, failedLookupLocations };
@@ -929,7 +928,7 @@ namespace ts {
             const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => nodeLoadModuleByRelativeName(extensions, candidate, onlyRecordFailures, state, /*considerPackageJson*/ true);
             const resolved = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, loader, state);
             if (resolved) {
-                return toSearchResult({ resolved, isExternalLibraryImport: pathContainsNodeModules(resolved.path) });
+                return { resolved, isExternalLibraryImport: pathContainsNodeModules(resolved.path) };
             }
 
             if (!isExternalModuleNameRelative(moduleName)) {
@@ -937,22 +936,22 @@ namespace ts {
                     trace(host, Diagnostics.Loading_module_0_from_node_modules_folder_target_file_type_1, moduleName, Extensions[extensions]);
                 }
                 const resolved = loadModuleFromNearestNodeModulesDirectory(extensions, moduleName, containingDirectory, state, cache, redirectedReference);
-                if (!resolved) return undefined;
+                if (!resolved) return resolved;
 
-                let resolvedValue = resolved.value;
+                let resolvedValue = resolved;
                 if (!compilerOptions.preserveSymlinks && resolvedValue && !resolvedValue.originalPath) {
                     const path = realPath(resolvedValue.path, host, traceEnabled);
                     const originalPath = path === resolvedValue.path ? undefined : resolvedValue.path;
                     resolvedValue = { ...resolvedValue, path, originalPath };
                 }
                 // For node_modules lookups, get the real path so that multiple accesses to an `npm link`-ed module do not create duplicate files.
-                return { value: resolvedValue && { resolved: resolvedValue, isExternalLibraryImport: true } };
+                return { resolved: resolvedValue, isExternalLibraryImport: true };
             }
             else {
                 const { path: candidate, parts } = normalizePathAndParts(combinePaths(containingDirectory, moduleName));
                 const resolved = nodeLoadModuleByRelativeName(extensions, candidate, /*onlyRecordFailures*/ false, state, /*considerPackageJson*/ true);
                 // Treat explicit "node_modules" import as an external library import.
-                return resolved && toSearchResult({ resolved, isExternalLibraryImport: contains(parts, "node_modules") });
+                return resolved && { resolved, isExternalLibraryImport: contains(parts, "node_modules") };
             }
         }
     }
@@ -1205,8 +1204,8 @@ namespace ts {
                 trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, versionPaths.version, version, moduleName);
             }
             const result = tryLoadModuleUsingPaths(extensions, moduleName, candidate, versionPaths.paths, loader, onlyRecordFailuresForPackageFile || onlyRecordFailuresForIndex, state);
-            if (result) {
-                return removeIgnoredPackageId(result.value);
+            if (result !== undefined) {
+                return removeIgnoredPackageId(result || undefined);
             }
         }
 
@@ -1261,10 +1260,10 @@ namespace ts {
         return forEachAncestorDirectory(normalizeSlashes(directory), ancestorDirectory => {
             if (getBaseFileName(ancestorDirectory) !== "node_modules") {
                 const resolutionFromCache = tryFindNonRelativeModuleNameInCache(perModuleNameCache, moduleName, ancestorDirectory, state);
-                if (resolutionFromCache) {
+                if (resolutionFromCache !== undefined) {
                     return resolutionFromCache;
                 }
-                return toSearchResult(loadModuleFromImmediateNodeModulesDirectory(extensions, moduleName, ancestorDirectory, state, typesScopeOnly));
+                return loadModuleFromImmediateNodeModulesDirectory(extensions, moduleName, ancestorDirectory, state, typesScopeOnly);
             }
         });
     }
@@ -1341,8 +1340,8 @@ namespace ts {
                 }
                 const packageDirectoryExists = nodeModulesDirectoryExists && directoryProbablyExists(packageDirectory, state.host);
                 const fromPaths = tryLoadModuleUsingPaths(extensions, rest, packageDirectory, packageInfo.versionPaths.paths, loader, !packageDirectoryExists, state);
-                if (fromPaths) {
-                    return fromPaths.value;
+                if (fromPaths !== undefined) {
+                    return fromPaths || undefined;
                 }
             }
         }
@@ -1374,7 +1373,7 @@ namespace ts {
                 }
                 return loader(extensions, candidate, onlyRecordFailures || !directoryProbablyExists(getDirectoryPath(candidate), state.host), state);
             });
-            return { value: resolved };
+            return resolved || false;
         }
     }
 
@@ -1429,7 +1428,9 @@ namespace ts {
                 trace(state.host, Diagnostics.Resolution_for_module_0_was_found_in_cache_from_location_1, moduleName, containingDirectory);
             }
             state.failedLookupLocations.push(...result.failedLookupLocations);
-            return { value: result.resolvedModule && { path: result.resolvedModule.resolvedFileName, originalPath: result.resolvedModule.originalPath || true, extension: result.resolvedModule.extension, packageId: result.resolvedModule.packageId } };
+            return result.resolvedModule ?
+                { path: result.resolvedModule.resolvedFileName, originalPath: result.resolvedModule.originalPath || true, extension: result.resolvedModule.extension, packageId: result.resolvedModule.packageId } :
+                false;
         }
     }
 
@@ -1439,14 +1440,14 @@ namespace ts {
         const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations };
         const containingDirectory = getDirectoryPath(containingFile);
 
-        const resolved = tryResolve(Extensions.TypeScript) || tryResolve(Extensions.JavaScript);
+        const resolved = firstDefined(tsExtensions, tryResolve);
         // No originalPath because classic resolution doesn't resolve realPath
-        return createResolvedModuleWithFailedLookupLocations(resolved && resolved.value, /*isExternalLibraryImport*/ false, failedLookupLocations);
+        return createResolvedModuleWithFailedLookupLocations(resolved || undefined, /*isExternalLibraryImport*/ false, failedLookupLocations);
 
         function tryResolve(extensions: Extensions): SearchResult<Resolved> {
             const resolvedUsingSettings = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, loadModuleFromFileNoPackageId, state);
             if (resolvedUsingSettings) {
-                return { value: resolvedUsingSettings };
+                return resolvedUsingSettings;
             }
 
             if (!isExternalModuleNameRelative(moduleName)) {
@@ -1454,13 +1455,13 @@ namespace ts {
                 // Climb up parent directories looking for a module.
                 const resolved = forEachAncestorDirectory(containingDirectory, directory => {
                     const resolutionFromCache = tryFindNonRelativeModuleNameInCache(perModuleNameCache, moduleName, directory, state);
-                    if (resolutionFromCache) {
+                    if (resolutionFromCache !== undefined) {
                         return resolutionFromCache;
                     }
                     const searchName = normalizePath(combinePaths(directory, moduleName));
-                    return toSearchResult(loadModuleFromFileNoPackageId(extensions, searchName, /*onlyRecordFailures*/ false, state));
+                    return loadModuleFromFileNoPackageId(extensions, searchName, /*onlyRecordFailures*/ false, state);
                 });
-                if (resolved) {
+                if (resolved !== undefined) {
                     return resolved;
                 }
                 if (extensions === Extensions.TypeScript) {
@@ -1470,7 +1471,7 @@ namespace ts {
             }
             else {
                 const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
-                return toSearchResult(loadModuleFromFileNoPackageId(extensions, candidate, /*onlyRecordFailures*/ false, state));
+                return loadModuleFromFileNoPackageId(extensions, candidate, /*onlyRecordFailures*/ false, state);
             }
         }
     }
@@ -1497,16 +1498,8 @@ namespace ts {
      * However this does not allow us to represent final result that should be used instead of further searching (i.e. a final result that was found in cache).
      * SearchResult is used to deal with this issue, its values represents following outcomes:
      * - undefined - not found, continue searching
-     * - { value: undefined } - not found - stop searching
-     * - { value: <some-value> } - found - stop searching
+     * - false - not found - stop searching
+     * - <some-value> - found - stop searching
      */
-    type SearchResult<T> = { value: T | undefined } | undefined;
-
-    /**
-     * Wraps value to SearchResult.
-     * @returns undefined if value is undefined or { value } otherwise
-     */
-    function toSearchResult<T>(value: T | undefined): SearchResult<T> {
-        return value !== undefined ? { value } : undefined;
-    }
+    type SearchResult<T> = T | false | undefined;
 }
