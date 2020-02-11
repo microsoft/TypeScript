@@ -13055,9 +13055,9 @@ namespace ts {
             if (right.flags & TypeFlags.Union) {
                 const merged = tryMergeUnionOfObjectTypeAndEmptyObject(right as UnionType, readonly);
                 if (merged) {
-                    return getSpreadType(left, merged, symbol, objectFlags, readonly, !!(right.flags & TypeFlags.Nullable));
+                    return getSpreadType(left, merged, symbol, objectFlags, readonly, maybeTypeOfKind(right, TypeFlags.Nullable));
                 }
-                return mapType(right, t => getSpreadType(left, t, symbol, objectFlags, readonly, !!(right.flags & TypeFlags.Nullable)));
+                return mapType(right, t => getSpreadType(left, t, symbol, objectFlags, readonly, maybeTypeOfKind(right, TypeFlags.Nullable)));
             }
             if (right.flags & (TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.BigIntLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive | TypeFlags.Index)) {
                 return left;
@@ -13126,7 +13126,7 @@ namespace ts {
                              symbol &&
                              !isFromSpreadAssignment(leftProp, symbol) &&
                              isFromSpreadAssignment(rightProp, symbol) &&
-                             !(getFalsyFlags(rightType) & TypeFlags.Nullable)) {
+                             !maybeTypeOfKind(rightType, TypeFlags.Nullable)) {
                         error(leftProp.valueDeclaration, Diagnostics._0_is_specified_more_than_once_so_this_usage_will_be_overwritten, unescapeLeadingUnderscores(leftProp.escapedName));
                     }
                 }
