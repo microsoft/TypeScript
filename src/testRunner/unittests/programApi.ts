@@ -182,7 +182,7 @@ namespace ts {
 
     describe("unittests:: programApi:: Program.getDiagnosticsProducingTypeChecker / Program.getSemanticDiagnostics", () => {
         it("does not produce errors on `as const` it would not normally produce on the command line", () => {
-            const main = new documents.TextDocument("/main.ts", '0 as const');
+            const main = new documents.TextDocument("/main.ts", "0 as const");
 
             const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main], cwd: "/" });
             const program = createProgram(["/main.ts"], {}, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
