@@ -7121,7 +7121,7 @@ namespace ts {
             let type: Type | undefined;
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                 if (declaration.dotDotDotToken) {
-                    parentType = eraseNeverLikeTypes(parentType);
+                    parentType = getReducedType(parentType);
                     if (parentType.flags & TypeFlags.Unknown || !isValidSpreadType(parentType)) {
                         error(declaration, Diagnostics.Rest_types_may_only_be_created_from_object_types);
                         return errorType;
@@ -8286,7 +8286,7 @@ namespace ts {
                     error(baseTypeNode.expression, Diagnostics.No_base_constructor_has_the_specified_number_of_type_arguments);
                     return type.resolvedBaseTypes = emptyArray;
                 }
-                baseType = getReturnTypeOfSignature(constructors[0]);
+                baseType = getReducedType(getReturnTypeOfSignature(constructors[0]));
             }
 
             if (baseType === errorType) {
@@ -8334,7 +8334,7 @@ namespace ts {
             // TODO: Given that we allow type parmeters here now, is this `!isGenericMappedType(type)` check really needed?
             // There's no reason a `T` should be allowed while a `Readonly<T>` should not.
             return !!(type.flags & (TypeFlags.Object | TypeFlags.NonPrimitive | TypeFlags.Any) && !isGenericMappedType(type) ||
-                type.flags & TypeFlags.Intersection && !isNeverLikeType(type) && every((<IntersectionType>type).types, isValidBaseType));
+                type.flags & TypeFlags.Intersection && every((<IntersectionType>type).types, isValidBaseType));
         }
 
         function resolveBaseTypesOfInterface(type: InterfaceType): void {
@@ -8342,7 +8342,7 @@ namespace ts {
             for (const declaration of type.symbol.declarations) {
                 if (declaration.kind === SyntaxKind.InterfaceDeclaration && getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
                     for (const node of getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)!) {
-                        const baseType = getTypeFromTypeNode(node);
+                        const baseType = getReducedType(getTypeFromTypeNode(node));
                         if (baseType !== errorType) {
                             if (isValidBaseType(baseType)) {
                                 if (type !== baseType && !hasBaseType(baseType, type)) {
@@ -10098,10 +10098,11 @@ namespace ts {
         /**
          * For a type parameter, return the base constraint of the type parameter. For the string, number,
          * boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
-         * type itself. Note that the apparent type of a union type is the union type itself.
+         * type itself.
          */
         function getApparentType(type: Type): Type {
-            const t = type.flags & TypeFlags.Instantiable ? getBaseConstraintOfType(type) || unknownType : type;
+            const reduced = getReducedType(type);
+            const t = reduced.flags & TypeFlags.Instantiable ? getBaseConstraintOfType(reduced) || unknownType : reduced;
             return getObjectFlags(t) & ObjectFlags.Mapped ? getApparentTypeOfMappedType(<MappedType>t) :
                 t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(<IntersectionType>t) :
                 t.flags & TypeFlags.StringLike ? globalStringType :
@@ -10126,7 +10127,7 @@ namespace ts {
             let checkFlags = 0;
             for (const current of containingType.types) {
                 const type = getApparentType(current);
-                if (type !== errorType && !isNeverLikeType(type)) {
+                if (!(type === errorType || type.flags & TypeFlags.Never)) {
                     const prop = getPropertyOfType(type, name);
                     const modifiers = prop ? getDeclarationModifierFlagsFromSymbol(prop) : 0;
                     if (prop && !(modifiers & excludeModifiers)) {
@@ -10252,31 +10253,28 @@ namespace ts {
         }
 
         /**
-         * Turn never-like types into actual 'never' types and remove all never-like types from union types.
+         * Return the reduced form of the given type. For a union type, it is a union of the normalized constituent types.
+         * For an intersection of types containing one or more mututally exclusive discriminant properties, it is 'never'.
+         * For all other types, it is simply the type itself. Discriminant properties are considered mutually exclusive when
+         * no constituent property has type 'never', but the intersection of the constituent property types is 'never'.
          */
-        function eraseNeverLikeTypes(type: Type) {
-            return mapType(type, t => isNeverLikeType(t) ? neverType : t);
+        function getReducedType(type: Type): Type {
+            return !(type.flags & TypeFlags.UnionOrIntersection) ? type : (<UnionOrIntersectionType>type).reducedType || (
+                (<UnionOrIntersectionType>type).reducedType = type.flags & TypeFlags.Union ?
+                    getReducedUnionType(<UnionType>type) :
+                    some(getPropertiesOfUnionOrIntersectionType(<IntersectionType>type), isDiscriminantWithNeverType) ? neverType : type);
         }
 
-        /**
-         * Return true if the given type is a never-like intersection or a union of all never-like intersections. An intersection
-         * is considered never-like if it contains a least one discriminant property for which (a) no constituent property has
-         * type 'never', but (b) intersecting the types of its constituent properties produces 'never'.
-         */
-        function isNeverLikeType(type: Type) {
-            if (type.flags & TypeFlags.Never) {
-                return true;
+        function getReducedUnionType(unionType: UnionType) {
+            const reducedTypes = sameMap(unionType.types, getReducedType);
+            if (reducedTypes === unionType.types) {
+                return unionType;
             }
-            if (type.flags & TypeFlags.UnionOrIntersection) {
-                if (!((<UnionOrIntersectionType>type).objectFlags & ObjectFlags.IsNeverTypeComputed)) {
-                    const isNeverLike = type.flags & TypeFlags.Union ?
-                        !((<UnionType>type).objectFlags & ObjectFlags.PrimitiveUnion) && every((<UnionType>type).types, isNeverLikeType) :
-                        some(getPropertiesOfUnionOrIntersectionType(<IntersectionType>type), isDiscriminantWithNeverType);
-                    (<UnionOrIntersectionType>type).objectFlags |= ObjectFlags.IsNeverTypeComputed | (isNeverLike ? ObjectFlags.IsNeverType : 0);
-                }
-                return !!((<UnionOrIntersectionType>type).objectFlags & ObjectFlags.IsNeverType);
+            const reduced = getUnionType(reducedTypes);
+            if (reduced.flags & TypeFlags.Union) {
+                (<UnionType>reduced).reducedType = reduced;
             }
-            return false;
+            return reduced;
         }
 
         function isDiscriminantWithNeverType(prop: Symbol) {
@@ -10311,7 +10309,7 @@ namespace ts {
                 }
                 return getPropertyOfObjectType(globalObjectType, name);
             }
-            if (type.flags & TypeFlags.UnionOrIntersection && !isNeverLikeType(type)) {
+            if (type.flags & TypeFlags.UnionOrIntersection) {
                 return getPropertyOfUnionOrIntersectionType(<UnionOrIntersectionType>type, name);
             }
             return undefined;
@@ -11919,7 +11917,9 @@ namespace ts {
                         neverType;
                 }
             }
-            return getUnionTypeFromSortedList(typeSet, includes & TypeFlags.NotPrimitiveUnion ? 0 : ObjectFlags.PrimitiveUnion, aliasSymbol, aliasTypeArguments);
+            const objectFlags = (includes & TypeFlags.NotPrimitiveUnion ? 0 : ObjectFlags.PrimitiveUnion) |
+                (includes & TypeFlags.Intersection ? ObjectFlags.ContainsIntersections : 0);
+            return getUnionTypeFromSortedList(typeSet, objectFlags, aliasSymbol, aliasTypeArguments);
         }
 
         function getUnionTypePredicate(signatures: readonly Signature[]): TypePredicate | undefined {
@@ -11969,6 +11969,7 @@ namespace ts {
                 unionTypes.set(id, type);
                 type.objectFlags = objectFlags | getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
                 type.types = types;
+                type.reducedType = objectFlags & ObjectFlags.ContainsIntersections ? undefined : type;
                 /*
                 Note: This is the alias symbol (or lack thereof) that we see when we first encounter this union type.
                 For aliases of identical unions, eg `type T = A | B; type U = A | B`, the symbol of the first alias encountered is the aliasSymbol.
@@ -12122,6 +12123,7 @@ namespace ts {
             const result = <IntersectionType>createType(TypeFlags.Intersection);
             result.objectFlags = getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
             result.types = types;
+            result.reducedType = undefined;
             result.aliasSymbol = aliasSymbol; // See comment in `getUnionTypeFromSortedList`.
             result.aliasTypeArguments = aliasTypeArguments;
             return result;
@@ -12419,11 +12421,8 @@ namespace ts {
                 }
             }
             if (!(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike)) {
-                if (objectType.flags & TypeFlags.Any) {
+                if (objectType.flags & (TypeFlags.Any | TypeFlags.Never)) {
                     return objectType;
-                }
-                if (isNeverLikeType(objectType)) {
-                    return neverType;
                 }
                 const stringIndexInfo = getIndexInfoOfType(objectType, IndexKind.String);
                 const indexInfo = isTypeAssignableToKind(indexType, TypeFlags.NumberLike) && getIndexInfoOfType(objectType, IndexKind.Number) || stringIndexInfo;
@@ -13680,10 +13679,7 @@ namespace ts {
             if (typeVariable) {
                 const mappedTypeVariable = instantiateType(typeVariable, mapper);
                 if (typeVariable !== mappedTypeVariable) {
-                    return mapType(mappedTypeVariable, t => {
-                        if (isNeverLikeType(t)) {
-                            return neverType;
-                        }
+                    return mapType(getReducedType(mappedTypeVariable), t => {
                         if (t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object | TypeFlags.Intersection) && t !== wildcardType && t !== errorType) {
                             const replacementMapper = createReplacementMapper(typeVariable, t, mapper);
                             return isArrayType(t) ? instantiateMappedArrayType(t, type, replacementMapper) :
@@ -14833,7 +14829,7 @@ namespace ts {
         function getNormalizedType(type: Type, writing: boolean): Type {
             return isFreshLiteralType(type) ? (<FreshableType>type).regularType :
                 getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? createTypeReference((<TypeReference>type).target, getTypeArguments(<TypeReference>type)) :
-                type.flags & TypeFlags.UnionOrIntersection && isNeverLikeType(type) ? neverType :
+                type.flags & TypeFlags.UnionOrIntersection ? getReducedType(type) :
                 type.flags & TypeFlags.Substitution ? writing ? (<SubstitutionType>type).typeVariable : (<SubstitutionType>type).substitute :
                 type.flags & TypeFlags.Simplifiable ? getSimplifiedType(type, writing) :
                 type;
@@ -22532,7 +22528,7 @@ namespace ts {
                         hasComputedStringProperty = false;
                         hasComputedNumberProperty = false;
                     }
-                    const type = eraseNeverLikeTypes(checkExpression(memberDecl.expression));
+                    const type = getReducedType(checkExpression(memberDecl.expression));
                     if (!isValidSpreadType(type)) {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return errorType;
@@ -22737,7 +22733,7 @@ namespace ts {
                         spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, objectFlags, /*readonly*/ false);
                         attributesTable = createSymbolTable();
                     }
-                    const exprType = eraseNeverLikeTypes(checkExpressionCached(attributeDecl.expression, checkMode));
+                    const exprType = getReducedType(checkExpressionCached(attributeDecl.expression, checkMode));
                     if (isTypeAny(exprType)) {
                         hasSpreadAnyType = true;
                     }
@@ -32538,7 +32534,7 @@ namespace ts {
                     }
                     checkTypeReferenceNode(typeRefNode);
                     if (produceDiagnostics) {
-                        const t = getTypeFromTypeNode(typeRefNode);
+                        const t = getReducedType(getTypeFromTypeNode(typeRefNode));
                         if (t !== errorType) {
                             if (isValidBaseType(t)) {
                                 const genericDiag = t.symbol && t.symbol.flags & SymbolFlags.Class ?

@@ -4339,16 +4339,16 @@ namespace ts {
         NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | StructuredOrInstantiable,
         // The following flags are aggregated during union and intersection type construction
         /* @internal */
-        IncludesMask = Any | Unknown | Primitive | Never | Object | Union | NonPrimitive,
+        IncludesMask = Any | Unknown | Primitive | Never | Object | Union | Intersection | NonPrimitive,
         // The following flags are used for different purposes during union and intersection type construction
         /* @internal */
         IncludesStructuredOrInstantiable = TypeParameter,
         /* @internal */
-        IncludesNonWideningType = Intersection,
+        IncludesNonWideningType = Index,
         /* @internal */
-        IncludesWildcard = Index,
+        IncludesWildcard = IndexedAccess,
         /* @internal */
-        IncludesEmptyObject = IndexedAccess,
+        IncludesEmptyObject = Conditional,
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -4461,9 +4461,7 @@ namespace ts {
         /* @internal */
         IsGenericIndexType = 1 << 25, // Union or intersection contains generic index type
         /* @internal */
-        IsNeverTypeComputed = 1 << 26,
-        /* @internal */
-        IsNeverType = 1 << 27,
+        ContainsIntersections = 1 << 26, // Union containing one or more intersections
         ClassOrInterface = Class | Interface,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
@@ -4572,6 +4570,8 @@ namespace ts {
         types: Type[];                    // Constituent types
         /* @internal */
         objectFlags: ObjectFlags;
+        /* @internal */
+        reducedType?: Type;
         /* @internal */
         propertyCache: SymbolTable;       // Cache of resolved properties
         /* @internal */
