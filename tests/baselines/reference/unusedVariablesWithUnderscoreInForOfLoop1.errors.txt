@@ -1,0 +1,23 @@
+tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop1.ts(2,21): error TS6133: 'b' is declared but its value is never read.
+tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop1.ts(4,17): error TS6133: 'a' is declared but its value is never read.
+tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop1.ts(6,17): error TS6133: 'a' is declared but its value is never read.
+tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop1.ts(6,20): error TS6133: 'b' is declared but its value is never read.
+
+
+==== tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop1.ts (4 errors) ====
+    function f() {
+        for (const [_a, b] of [['key', 1]]) {}
+                        ~
+!!! error TS6133: 'b' is declared but its value is never read.
+    
+        for (const [a, _b] of [['key', 1]]) {}
+                    ~
+!!! error TS6133: 'a' is declared but its value is never read.
+    
+        for (const [a, b] of [['key', 1]]) {}
+                    ~
+!!! error TS6133: 'a' is declared but its value is never read.
+                       ~
+!!! error TS6133: 'b' is declared but its value is never read.
+    }
+    
