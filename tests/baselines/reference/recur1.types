@@ -15,7 +15,7 @@ salt.pepper = function() {}
 
 var cobalt = new cobalt.pitch();   
 >cobalt : any
->new cobalt.pitch() : error
+>new cobalt.pitch() : any
 >cobalt.pitch : any
 >cobalt : any
 >pitch : any

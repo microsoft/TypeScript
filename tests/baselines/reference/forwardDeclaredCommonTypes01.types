@@ -1,0 +1,40 @@
+=== tests/cases/compiler/forwardDeclaredCommonTypes01.ts ===
+interface Promise<T> {}
+interface Symbol {}
+interface Map<K, V> {}
+interface WeakMap<K extends object, V> {}
+interface Set<T> {}
+interface WeakSet<T extends object> {}
+
+(function() {
+>(function() {    new Promise;    new Symbol; Symbol();    new Map;    new WeakMap;    new Set;    new WeakSet;}) : () => void
+>function() {    new Promise;    new Symbol; Symbol();    new Map;    new WeakMap;    new Set;    new WeakSet;} : () => void
+
+    new Promise;
+>new Promise : any
+>Promise : any
+
+    new Symbol; Symbol();
+>new Symbol : any
+>Symbol : any
+>Symbol() : any
+>Symbol : any
+
+    new Map;
+>new Map : any
+>Map : any
+
+    new WeakMap;
+>new WeakMap : any
+>WeakMap : any
+
+    new Set;
+>new Set : any
+>Set : any
+
+    new WeakSet;
+>new WeakSet : any
+>WeakSet : any
+
+});
+

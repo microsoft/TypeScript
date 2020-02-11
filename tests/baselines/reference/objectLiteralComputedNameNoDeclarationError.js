@@ -9,8 +9,8 @@ export const Baa = {
 
 //// [objectLiteralComputedNameNoDeclarationError.js]
 "use strict";
-exports.__esModule = true;
 var _a;
+exports.__esModule = true;
 var Foo = {
     BANANA: 'banana'
 };
@@ -24,6 +24,6 @@ declare const Foo: {
     BANANA: "banana";
 };
 export declare const Baa: {
-    [Foo.BANANA]: number;
+    banana: number;
 };
 export {};

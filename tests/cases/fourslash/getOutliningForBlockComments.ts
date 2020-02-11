@@ -99,6 +99,17 @@
 ////    return 1;
 ////  }|]
 ////}|]
+////
+////// Over a function expression assigned to a variable
+//// [|/**
+////  * Return a sum
+////  * @param {Number} y
+////  * @param {Number} z
+////  * @returns {Number} the sum of y and z
+////  */|]
+//// const sum2 = (y, z) =>[| {
+////     return y + z;
+//// }|];
 
 verify.outliningSpansInCurrentFile(test.ranges());
 

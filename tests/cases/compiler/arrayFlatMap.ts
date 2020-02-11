@@ -1,4 +1,4 @@
-// @lib: esnext
+// @lib: es2019
 
 const array: number[] = [];
 const readonlyArray: ReadonlyArray<number> = [];

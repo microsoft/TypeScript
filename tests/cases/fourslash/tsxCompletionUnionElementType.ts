@@ -19,4 +19,4 @@
 //// var SFCComp = SFC1 || SFC2;
 //// <SFCComp /**/ />
 
-verify.completions({ marker: "", exact: undefined });
+verify.completions({ marker: "", exact: ["x"] });

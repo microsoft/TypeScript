@@ -68,6 +68,28 @@ function foo<T>(t: T) {
 >t : T
 }
 
+function unionCase<T, U>(t: T | U) {
+>unionCase : <T, U>(t: T | U) => void
+>t : T | U
+
+    var rb4 = x in t;
+>rb4 : boolean
+>x in t : boolean
+>x : any
+>t : T | U
+}
+
+function unionCase2<T>(t: T | object) {
+>unionCase2 : <T>(t: object | T) => void
+>t : object | T
+
+    var rb5 = x in t;
+>rb5 : boolean
+>x in t : boolean
+>x : any
+>t : object | T
+}
+
 interface X { x: number }
 >x : number
 

@@ -48,7 +48,7 @@ var p2 = shouldBeIdentity(p1);
 >shouldBeIdentity : Symbol(shouldBeIdentity, Decl(jqueryInference.ts, 6, 58))
 >p1 : Symbol(p1, Decl(jqueryInference.ts, 10, 13))
 
-var p2: MyPromise<boolean, {}>;
+var p2: MyPromise<boolean, any>;
 >p2 : Symbol(p2, Decl(jqueryInference.ts, 11, 3), Decl(jqueryInference.ts, 12, 3))
 >MyPromise : Symbol(MyPromise, Decl(jqueryInference.ts, 0, 0))
 

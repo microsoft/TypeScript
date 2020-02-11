@@ -177,29 +177,29 @@ someGenerics6 `${ n => n }${ n => n}${ n => n}`;
 >someGenerics6 `${ n => n }${ n => n}${ n => n}` : void
 >someGenerics6 : <A>(strs: TemplateStringsArray, a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
 >`${ n => n }${ n => n}${ n => n}` : string
->n => n : (n: {}) => {}
->n : {}
->n : {}
->n => n : (n: {}) => {}
->n : {}
->n : {}
->n => n : (n: {}) => {}
->n : {}
->n : {}
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
 
 someGenerics6 `${ n => n }${ n => n}${ n => n}`;
 >someGenerics6 `${ n => n }${ n => n}${ n => n}` : void
 >someGenerics6 : <A>(strs: TemplateStringsArray, a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
 >`${ n => n }${ n => n}${ n => n}` : string
->n => n : (n: {}) => {}
->n : {}
->n : {}
->n => n : (n: {}) => {}
->n : {}
->n : {}
->n => n : (n: {}) => {}
->n : {}
->n : {}
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
 
 someGenerics6 `${ (n: number) => n }${ (n: number) => n }${ (n: number) => n }`;
 >someGenerics6 `${ (n: number) => n }${ (n: number) => n }${ (n: number) => n }` : void
@@ -230,29 +230,29 @@ someGenerics7 `${ n => n }${ n => n }${ n => n }`;
 >someGenerics7 `${ n => n }${ n => n }${ n => n }` : void
 >someGenerics7 : <A, B, C>(strs: TemplateStringsArray, a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
 >`${ n => n }${ n => n }${ n => n }` : string
->n => n : (n: {}) => {}
->n : {}
->n : {}
->n => n : (n: {}) => {}
->n : {}
->n : {}
->n => n : (n: {}) => {}
->n : {}
->n : {}
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
 
 someGenerics7 `${ n => n }${ n => n }${ n => n }`;
 >someGenerics7 `${ n => n }${ n => n }${ n => n }` : void
 >someGenerics7 : <A, B, C>(strs: TemplateStringsArray, a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
 >`${ n => n }${ n => n }${ n => n }` : string
->n => n : (n: {}) => {}
->n : {}
->n : {}
->n => n : (n: {}) => {}
->n : {}
->n : {}
->n => n : (n: {}) => {}
->n : {}
->n : {}
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
 
 someGenerics7 `${(n: number) => n}${ (n: string) => n}${ (n: number) => n}`;
 >someGenerics7 `${(n: number) => n}${ (n: string) => n}${ (n: number) => n}` : void
@@ -302,8 +302,8 @@ function someGenerics9<T>(strs: TemplateStringsArray, a: T, b: T, c: T): T {
 >null : null
 }
 var a9a = someGenerics9 `${ '' }${ 0 }${ [] }`;
->a9a : any
->someGenerics9 `${ '' }${ 0 }${ [] }` : any
+>a9a : string
+>someGenerics9 `${ '' }${ 0 }${ [] }` : ""
 >someGenerics9 : <T>(strs: TemplateStringsArray, a: T, b: T, c: T) => T
 >`${ '' }${ 0 }${ [] }` : string
 >'' : ""
@@ -311,7 +311,7 @@ var a9a = someGenerics9 `${ '' }${ 0 }${ [] }`;
 >[] : undefined[]
 
 var a9a: {};
->a9a : any
+>a9a : string
 
 // Generic tag with multiple parameters of generic type passed arguments with multiple best common types
 interface A91 {

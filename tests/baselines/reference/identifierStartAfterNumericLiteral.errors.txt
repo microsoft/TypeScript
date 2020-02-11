@@ -1,0 +1,141 @@
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(1,16): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(3,2): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(3,2): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(4,4): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(4,4): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(5,3): error TS1124: Digit expected.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(5,4): error TS2538: Type 'null' cannot be used as an index type.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(6,5): error TS1124: Digit expected.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(6,6): error TS2538: Type 'null' cannot be used as an index type.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(7,2): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(8,4): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(9,1): error TS1352: A bigint literal cannot use exponential notation.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(9,3): error TS1124: Digit expected.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(9,5): error TS2538: Type 'null' cannot be used as an index type.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(10,1): error TS1352: A bigint literal cannot use exponential notation.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(10,5): error TS1124: Digit expected.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(10,7): error TS2538: Type 'null' cannot be used as an index type.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(11,2): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(11,2): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(12,4): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(12,4): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(13,4): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(13,4): error TS2304: Cannot find name 'abc'.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(14,3): error TS1124: Digit expected.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(15,5): error TS1124: Digit expected.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(18,3): error TS1124: Digit expected.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(18,3): error TS2304: Cannot find name 'e'.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(19,5): error TS1124: Digit expected.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(19,5): error TS2304: Cannot find name 'e'.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(22,3): error TS1005: ';' expected.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(23,5): error TS1005: ';' expected.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(24,3): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(24,3): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(25,5): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(25,5): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(26,5): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+tests/cases/compiler/identifierStartAfterNumericLiteral.ts(26,5): error TS2304: Cannot find name 'abc'.
+
+
+==== tests/cases/compiler/identifierStartAfterNumericLiteral.ts (37 errors) ====
+    let valueIn = 3in[null];
+                   ~~
+!!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+    
+    3a[null]
+     ~
+!!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+     ~
+!!! error TS2304: Cannot find name 'a'.
+    123a[null]
+       ~
+!!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+       ~
+!!! error TS2304: Cannot find name 'a'.
+    3e[null]
+      
+!!! error TS1124: Digit expected.
+       ~~~~
+!!! error TS2538: Type 'null' cannot be used as an index type.
+    123e[null]
+        
+!!! error TS1124: Digit expected.
+         ~~~~
+!!! error TS2538: Type 'null' cannot be used as an index type.
+    3in[null]
+     ~~
+!!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+    123in[null]
+       ~~
+!!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+    3en[null]
+    ~~~
+!!! error TS1352: A bigint literal cannot use exponential notation.
+      
+!!! error TS1124: Digit expected.
+        ~~~~
+!!! error TS2538: Type 'null' cannot be used as an index type.
+    123en[null]
+    ~~~~~
+!!! error TS1352: A bigint literal cannot use exponential notation.
+        
+!!! error TS1124: Digit expected.
+          ~~~~
+!!! error TS2538: Type 'null' cannot be used as an index type.
+    1a
+     ~
+!!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+     ~
+!!! error TS2304: Cannot find name 'a'.
+    123a
+       ~
+!!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+       ~
+!!! error TS2304: Cannot find name 'a'.
+    123abc
+       ~~~
+!!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+       ~~~
+!!! error TS2304: Cannot find name 'abc'.
+    1e
+      
+!!! error TS1124: Digit expected.
+    123e
+        
+!!! error TS1124: Digit expected.
+    1e9
+    123e9
+    1ee
+      
+!!! error TS1124: Digit expected.
+      ~
+!!! error TS2304: Cannot find name 'e'.
+    123ee
+        
+!!! error TS1124: Digit expected.
+        ~
+!!! error TS2304: Cannot find name 'e'.
+    1n
+    123n
+    2n2
+      ~
+!!! error TS1005: ';' expected.
+    123n2
+        ~
+!!! error TS1005: ';' expected.
+    2na
+      ~
+!!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+      ~
+!!! error TS2304: Cannot find name 'a'.
+    123na
+        ~
+!!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+        ~
+!!! error TS2304: Cannot find name 'a'.
+    123nabc
+        ~~~
+!!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+        ~~~
+!!! error TS2304: Cannot find name 'abc'.
+    

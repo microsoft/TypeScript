@@ -23,7 +23,7 @@ type T00 = keyof K0;  // Error
 >T00 : string | number | symbol
 
 type T01 = keyof Object;
->T01 : "toString" | "constructor" | "toLocaleString" | "valueOf" | "hasOwnProperty" | "isPrototypeOf" | "propertyIsEnumerable"
+>T01 : "toString" | "valueOf" | "toLocaleString" | "constructor" | "hasOwnProperty" | "isPrototypeOf" | "propertyIsEnumerable"
 
 type T02 = keyof keyof Object;
 >T02 : number | "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
@@ -74,8 +74,8 @@ type T19 = Shape[{ x: string }];  // Error
 type T20 = Shape[string | number];  // Error
 >T20 : any
 
-type T21 = Shape[string & number];  // Error
->T21 : any
+type T21 = Shape[string & number];
+>T21 : never
 
 type T22 = Shape[string | boolean];  // Error
 >T22 : any
@@ -162,15 +162,15 @@ function f10(shape: Shape) {
 >"name" : "name"
 
     let x2 = getProperty(shape, "size");  // Error
->x2 : any
->getProperty(shape, "size") : any
+>x2 : string | number | boolean
+>getProperty(shape, "size") : string | number | boolean
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >shape : Shape
 >"size" : "size"
 
     let x3 = getProperty(shape, cond ? "name" : "size");  // Error
->x3 : any
->getProperty(shape, cond ? "name" : "size") : any
+>x3 : string | number | boolean
+>getProperty(shape, cond ? "name" : "size") : string | number | boolean
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >shape : Shape
 >cond ? "name" : "size" : "name" | "size"
@@ -186,14 +186,14 @@ function f10(shape: Shape) {
 >"rectangle" : "rectangle"
 
     setProperty(shape, "size", 10);  // Error
->setProperty(shape, "size", 10) : any
+>setProperty(shape, "size", 10) : void
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
 >shape : Shape
 >"size" : "size"
 >10 : 10
 
     setProperty(shape, cond ? "name" : "size", 10);  // Error
->setProperty(shape, cond ? "name" : "size", 10) : any
+>setProperty(shape, cond ? "name" : "size", 10) : void
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
 >shape : Shape
 >cond ? "name" : "size" : "name" | "size"
@@ -223,12 +223,12 @@ function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U,
 >k2 : keyof T & keyof U
 
     x[k3];  // Error
->x[k3] : (T | U)[keyof T | keyof U]
+>x[k3] : any
 >x : T | U
 >k3 : keyof T | keyof U
 
     x[k4];  // Error
->x[k4] : (T | U)[keyof T | keyof U]
+>x[k4] : any
 >x : T | U
 >k4 : keyof T | keyof U
 
@@ -463,5 +463,23 @@ function test1<T extends Record<string, any>, K extends keyof T>(t: T, k: K) {
 >[10, 20] : number[]
 >10 : 10
 >20 : 20
+}
+
+// Repro from #28839
+
+function f30<T, K extends keyof T>() {
+>f30 : <T, K extends keyof T>() => void
+
+    let x: Partial<Record<keyof T, string>>[K] = "hello";
+>x : Partial<Record<keyof T, string>>[K]
+>"hello" : "hello"
+}
+
+function f31<T, K extends keyof T>() {
+>f31 : <T, K extends keyof T>() => void
+
+    let x: Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K] = "hello";
+>x : Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K]
+>"hello" : "hello"
 }
 

@@ -3,7 +3,7 @@
 
 type T00 = unknown & null;  // null
 type T01 = unknown & undefined;  // undefined
-type T02 = unknown & null & undefined;  // null & undefined (which becomes never in union)
+type T02 = unknown & null & undefined;  // never
 type T03 = unknown & string;  // string
 type T04 = unknown & string[];  // string[]
 type T05 = unknown & unknown;  // unknown
@@ -121,12 +121,12 @@ function f23<T extends unknown>(x: T) {
     let y: object = x;  // Error
 }
 
-// Anything but primitive assignable to { [x: string]: unknown }
+// Anything fresh but primitive assignable to { [x: string]: unknown }
 
 function f24(x: { [x: string]: unknown }) {
     x = {};
     x = { a: 5 };
-    x = [1, 2, 3];
+    x = [1, 2, 3]; // Error
     x = 123;  // Error
 }
 
@@ -143,6 +143,7 @@ function f26(x: {}, y: unknown, z: any) {
     let o1 = { a: 42, ...x };  // { a: number }
     let o2 = { a: 42, ...x, ...y };  // unknown
     let o3 = { a: 42, ...x, ...y, ...z };  // any
+    let o4 = { a: 42, ...z }; // any
 }
 
 // Functions with unknown return type don't need return expressions
@@ -162,6 +163,23 @@ class C1 {
     a: string;  // Error
     b: unknown;
     c: any;
+}
+
+// Type parameter with explicit 'unknown' constraint not assignable to '{}'
+
+function f30<T, U extends unknown>(t: T, u: U) {
+    let x: {} = t;
+    let y: {} = u;
+}
+
+// Repro from #26796
+
+type Test1 = [unknown] extends [{}] ? true : false;  // false
+type IsDefinitelyDefined<T extends unknown> = [T] extends [{}] ? true : false;
+type Test2 = IsDefinitelyDefined<unknown>;  // false
+
+function oops<T extends unknown>(arg: T): {} {
+    return arg;  // Error
 }
 
 
@@ -184,8 +202,10 @@ var __rest = (this && this.__rest) || function (s, e) {
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
-            t[p[i]] = s[p[i]];
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
     return t;
 };
 // Only equality operators are allowed with unknown
@@ -245,11 +265,11 @@ function f22(x) {
 function f23(x) {
     var y = x; // Error
 }
-// Anything but primitive assignable to { [x: string]: unknown }
+// Anything fresh but primitive assignable to { [x: string]: unknown }
 function f24(x) {
     x = {};
     x = { a: 5 };
-    x = [1, 2, 3];
+    x = [1, 2, 3]; // Error
     x = 123; // Error
 }
 // Locals of type unknown always considered initialized
@@ -260,8 +280,9 @@ function f25() {
 // Spread of unknown causes result to be unknown
 function f26(x, y, z) {
     var o1 = __assign({ a: 42 }, x); // { a: number }
-    var o2 = __assign({ a: 42 }, x, y); // unknown
-    var o3 = __assign({ a: 42 }, x, y, z); // any
+    var o2 = __assign(__assign({ a: 42 }, x), y); // unknown
+    var o3 = __assign(__assign(__assign({ a: 42 }, x), y), z); // any
+    var o4 = __assign({ a: 42 }, z); // any
 }
 // Functions with unknown return type don't need return expressions
 function f27() {
@@ -276,3 +297,11 @@ var C1 = /** @class */ (function () {
     }
     return C1;
 }());
+// Type parameter with explicit 'unknown' constraint not assignable to '{}'
+function f30(t, u) {
+    var x = t;
+    var y = u;
+}
+function oops(arg) {
+    return arg; // Error
+}

@@ -12,7 +12,7 @@ interface StatelessComponent<P> {
 
 const MyComponent: StatelessComponent<MyComponentProps> = () => null as any;
 >MyComponent : StatelessComponent<MyComponentProps>
->() => null as any : { (): any; defaultProps: { color: "red"; }; }
+>() => null as any : { (): any; defaultProps: Partial<MyComponentProps>; }
 >null as any : any
 >null : null
 

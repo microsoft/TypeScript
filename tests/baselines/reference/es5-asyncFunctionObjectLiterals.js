@@ -105,17 +105,18 @@ function objectLiteral2() {
 }
 function objectLiteral3() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b;
+        var _a;
+        var _b;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
-                    _a = {};
-                    _b = a;
+                    _b = {};
+                    _a = a;
                     return [4 /*yield*/, y];
                 case 1:
-                    x = (_a[_b] = _c.sent(),
-                        _a.b = z,
-                        _a);
+                    x = (_b[_a] = _c.sent(),
+                        _b.b = z,
+                        _b);
                     return [2 /*return*/];
             }
         });
@@ -158,18 +159,19 @@ function objectLiteral5() {
 }
 function objectLiteral6() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b;
+        var _a;
+        var _b;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
-                    _a = {
+                    _b = {
                             a: y
                         };
-                    _b = b;
+                    _a = b;
                     return [4 /*yield*/, z];
                 case 1:
-                    x = (_a[_b] = _c.sent(),
-                        _a);
+                    x = (_b[_a] = _c.sent(),
+                        _b);
                     return [2 /*return*/];
             }
         });

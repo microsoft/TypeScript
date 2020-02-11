@@ -46,3 +46,5 @@ const myStoreConnect: Connect = function(
         options,
     );
 };
+
+export {};

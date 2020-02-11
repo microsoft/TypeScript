@@ -1,0 +1,131 @@
+tests/cases/compiler/index.tsx(14,9): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/index.tsx(18,15): error TS2747: 'Blah' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is '(x: number) => string'.
+tests/cases/compiler/index.tsx(23,10): error TS2746: This JSX tag's 'children' prop expects a single child of type '(x: number) => string', but multiple children were provided.
+tests/cases/compiler/index.tsx(37,10): error TS2745: This JSX tag's 'children' prop expects type '((x: number) => string)[]' which requires multiple children, but only a single child was provided.
+tests/cases/compiler/index.tsx(38,4): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/index.tsx(42,10): error TS2745: This JSX tag's 'children' prop expects type '((x: number) => string)[]' which requires multiple children, but only a single child was provided.
+tests/cases/compiler/index.tsx(48,9): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/index.tsx(49,9): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/index.tsx(63,3): error TS2322: Type '(x: number) => number' is not assignable to type 'Cb | Cb[]'.
+  Type '(x: number) => number' is not assignable to type 'Cb'.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/index.tsx(67,16): error TS2747: 'Blah3' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Cb | Cb[]'.
+tests/cases/compiler/index.tsx(73,9): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/index.tsx(74,9): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/index.tsx (12 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    import * as React from "react";
+    
+    interface Props {
+      children: (x: number) => string;
+    }
+    
+    export function Blah(props: Props) {
+      return <></>;
+    }
+    
+    // Incompatible child.
+    var a = <Blah>
+      {x => x}
+            ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6502 tests/cases/compiler/index.tsx:5:13: The expected type comes from the return type of this signature.
+    </Blah>
+    
+    // Blah components don't accept text as child elements
+    var a = <Blah>
+                  
+      Hello unexpected text!
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+    </Blah>
+    
+!!! error TS2747: 'Blah' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is '(x: number) => string'.
+!!! related TS6500 tests/cases/compiler/index.tsx:5:3: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & Props'
+    
+    // Blah components don't accept multiple children.
+    var a = <Blah>
+             ~~~~
+!!! error TS2746: This JSX tag's 'children' prop expects a single child of type '(x: number) => string', but multiple children were provided.
+      {x => "" + x}
+      {x => "" + x}
+    </Blah>
+    
+    interface PropsArr {
+      children: ((x: number) => string)[];
+    }
+    
+    export function Blah2(props: PropsArr) {
+      return <></>;
+    }
+    
+    // Incompatible child.
+    var a = <Blah2>
+             ~~~~~
+!!! error TS2745: This JSX tag's 'children' prop expects type '((x: number) => string)[]' which requires multiple children, but only a single child was provided.
+      {x => x}
+       ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+    </Blah2>
+    
+    // Blah2 components don't accept text as child elements
+    var a = <Blah2>
+             ~~~~~
+!!! error TS2745: This JSX tag's 'children' prop expects type '((x: number) => string)[]' which requires multiple children, but only a single child was provided.
+      Hello unexpected text!
+    </Blah2>
+    
+    // Blah2 components don't accept multiple children of the wrong type.
+    var a = <Blah2>
+      {x => x}
+            ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6502 tests/cases/compiler/index.tsx:29:14: The expected type comes from the return type of this signature.
+      {x => x}
+            ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6502 tests/cases/compiler/index.tsx:29:14: The expected type comes from the return type of this signature.
+    </Blah2>
+    
+    type Cb = (x: number) => string;
+    interface PropsMixed {
+      children: Cb | Cb[];
+    }
+    
+    export function Blah3(props: PropsMixed) {
+      return <></>;
+    }
+    
+    // Incompatible child.
+    var a = <Blah3>
+      {x => x}
+      ~~~~~~~~
+!!! error TS2322: Type '(x: number) => number' is not assignable to type 'Cb | Cb[]'.
+!!! error TS2322:   Type '(x: number) => number' is not assignable to type 'Cb'.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/compiler/index.tsx:54:3: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & PropsMixed'
+    </Blah3>
+    
+    // Blah3 components don't accept text as child elements
+    var a = <Blah3>
+                   
+      Hello unexpected text!
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+    </Blah3>
+    
+!!! error TS2747: 'Blah3' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Cb | Cb[]'.
+!!! related TS6500 tests/cases/compiler/index.tsx:54:3: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & PropsMixed'
+    
+    // Blah3 components don't accept multiple children of the wrong type.
+    var a = <Blah3>
+      {x => x}
+            ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6502 tests/cases/compiler/index.tsx:52:11: The expected type comes from the return type of this signature.
+      {x => x}
+            ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6502 tests/cases/compiler/index.tsx:52:11: The expected type comes from the return type of this signature.
+    </Blah3>
+    

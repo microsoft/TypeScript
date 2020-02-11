@@ -12,12 +12,12 @@ namespace ts.OrganizeImports {
         formatContext: formatting.FormatContext,
         host: LanguageServiceHost,
         program: Program,
-        _preferences: UserPreferences,
+        preferences: UserPreferences,
     ) {
 
-        const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext });
+        const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext, preferences });
 
-        const coalesceAndOrganizeImports = (importGroup: ReadonlyArray<ImportDeclaration>) => coalesceImports(removeUnusedImports(importGroup, sourceFile, program));
+        const coalesceAndOrganizeImports = (importGroup: readonly ImportDeclaration[]) => coalesceImports(removeUnusedImports(importGroup, sourceFile, program));
 
         // All of the old ImportDeclarations in the file, in syntactic order.
         const topLevelImportDecls = sourceFile.statements.filter(isImportDeclaration);
@@ -28,20 +28,20 @@ namespace ts.OrganizeImports {
         organizeImportsWorker(topLevelExportDecls, coalesceExports);
 
         for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
-            const ambientModuleBody = getModuleBlock(ambientModule as ModuleDeclaration)!; // TODO: GH#18217
+            if (!ambientModule.body) { continue; }
 
-            const ambientModuleImportDecls = ambientModuleBody.statements.filter(isImportDeclaration);
+            const ambientModuleImportDecls = ambientModule.body.statements.filter(isImportDeclaration);
             organizeImportsWorker(ambientModuleImportDecls, coalesceAndOrganizeImports);
 
-            const ambientModuleExportDecls = ambientModuleBody.statements.filter(isExportDeclaration);
+            const ambientModuleExportDecls = ambientModule.body.statements.filter(isExportDeclaration);
             organizeImportsWorker(ambientModuleExportDecls, coalesceExports);
         }
 
         return changeTracker.getChanges();
 
         function organizeImportsWorker<T extends ImportDeclaration | ExportDeclaration>(
-            oldImportDecls: ReadonlyArray<T>,
-            coalesce: (group: ReadonlyArray<T>) => ReadonlyArray<T>) {
+            oldImportDecls: readonly T[],
+            coalesce: (group: readonly T[]) => readonly T[]) {
 
             if (length(oldImportDecls) === 0) {
                 return;
@@ -68,8 +68,8 @@ namespace ts.OrganizeImports {
             else {
                 // Note: Delete the surrounding trivia because it will have been retained in newImportDecls.
                 changeTracker.replaceNodeWithNodes(sourceFile, oldImportDecls[0], newImportDecls, {
-                    useNonAdjustedStartPosition: true, // Leave header comment in place
-                    useNonAdjustedEndPosition: false,
+                    leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, // Leave header comment in place
+                    trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
                     suffix: getNewLineOrDefaultFromHost(host, formatContext.options),
                 });
             }
@@ -81,20 +81,15 @@ namespace ts.OrganizeImports {
         }
     }
 
-    function getModuleBlock(moduleDecl: ModuleDeclaration): ModuleBlock | undefined {
-        const body = moduleDecl.body;
-        return body && !isIdentifier(body) ? (isModuleBlock(body) ? body : getModuleBlock(body)) : undefined;
-    }
-
-    function removeUnusedImports(oldImports: ReadonlyArray<ImportDeclaration>, sourceFile: SourceFile, program: Program) {
+    function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFile: SourceFile, program: Program) {
         const typeChecker = program.getTypeChecker();
-        const jsxNamespace = typeChecker.getJsxNamespace();
+        const jsxNamespace = typeChecker.getJsxNamespace(sourceFile);
         const jsxElementsPresent = !!(sourceFile.transformFlags & TransformFlags.ContainsJsx);
 
         const usedImports: ImportDeclaration[] = [];
 
         for (const importDecl of oldImports) {
-            const {importClause} = importDecl;
+            const { importClause, moduleSpecifier } = importDecl;
 
             if (!importClause) {
                 // Imports without import clauses are assumed to be included for their side effects and are not removed.
@@ -130,6 +125,23 @@ namespace ts.OrganizeImports {
             if (name || namedBindings) {
                 usedImports.push(updateImportDeclarationAndClause(importDecl, name, namedBindings));
             }
+            // If a module is imported to be augmented, it’s used
+            else if (hasModuleDeclarationMatchingSpecifier(sourceFile, moduleSpecifier)) {
+                // If we’re in a declaration file, it’s safe to remove the import clause from it
+                if (sourceFile.isDeclarationFile) {
+                    usedImports.push(createImportDeclaration(
+                        importDecl.decorators,
+                        importDecl.modifiers,
+                        /*importClause*/ undefined,
+                        moduleSpecifier));
+                }
+                // If we’re not in a declaration file, we can’t remove the import clause even though
+                // the imported symbols are unused, because removing them makes it look like the import
+                // declaration has side effects, which will cause it to be preserved in the JS emit.
+                else {
+                    usedImports.push(importDecl);
+                }
+            }
         }
 
         return usedImports;
@@ -138,6 +150,13 @@ namespace ts.OrganizeImports {
             // The JSX factory symbol is always used if JSX elements are present - even if they are not allowed.
             return jsxElementsPresent && (identifier.text === jsxNamespace) || FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
         }
+    }
+
+    function hasModuleDeclarationMatchingSpecifier(sourceFile: SourceFile, moduleSpecifier: Expression) {
+        const moduleSpecifierText = isStringLiteral(moduleSpecifier) && moduleSpecifier.text;
+        return isString(moduleSpecifierText) && some(sourceFile.moduleAugmentations, moduleName =>
+            isStringLiteral(moduleName)
+            && moduleName.text === moduleSpecifierText);
     }
 
     function getExternalModuleName(specifier: Expression) {
@@ -150,7 +169,7 @@ namespace ts.OrganizeImports {
     /**
      * @param importGroup a list of ImportDeclarations, all with the same module name.
      */
-    export function coalesceImports(importGroup: ReadonlyArray<ImportDeclaration>) {
+    export function coalesceImports(importGroup: readonly ImportDeclaration[]) {
         if (importGroup.length === 0) {
             return importGroup;
         }
@@ -227,7 +246,7 @@ namespace ts.OrganizeImports {
          *
          * NB: There may be overlap between `defaultImports` and `namespaceImports`/`namedImports`.
          */
-        function getCategorizedImports(importGroup: ReadonlyArray<ImportDeclaration>) {
+        function getCategorizedImports(importGroup: readonly ImportDeclaration[]) {
             let importWithoutClause: ImportDeclaration | undefined;
             const defaultImports: ImportDeclaration[] = [];
             const namespaceImports: ImportDeclaration[] = [];
@@ -270,7 +289,7 @@ namespace ts.OrganizeImports {
     /**
      * @param exportGroup a list of ExportDeclarations, all with the same module name.
      */
-    export function coalesceExports(exportGroup: ReadonlyArray<ExportDeclaration>) {
+    export function coalesceExports(exportGroup: readonly ExportDeclaration[]) {
         if (exportGroup.length === 0) {
             return exportGroup;
         }
@@ -288,7 +307,7 @@ namespace ts.OrganizeImports {
         }
 
         const newExportSpecifiers: ExportSpecifier[] = [];
-        newExportSpecifiers.push(...flatMap(namedExports, i => (i.exportClause!).elements));
+        newExportSpecifiers.push(...flatMap(namedExports, i => i.exportClause && isNamedExports(i.exportClause) ? i.exportClause.elements : emptyArray));
 
         const sortedExportSpecifiers = sortSpecifiers(newExportSpecifiers);
 
@@ -298,8 +317,13 @@ namespace ts.OrganizeImports {
                 exportDecl,
                 exportDecl.decorators,
                 exportDecl.modifiers,
-                updateNamedExports(exportDecl.exportClause!, sortedExportSpecifiers),
-                exportDecl.moduleSpecifier));
+                exportDecl.exportClause && (
+                    isNamedExports(exportDecl.exportClause) ?
+                        updateNamedExports(exportDecl.exportClause, sortedExportSpecifiers) :
+                        updateNamespaceExport(exportDecl.exportClause, exportDecl.exportClause.name)
+                ),
+                exportDecl.moduleSpecifier,
+                exportDecl.isTypeOnly));
 
         return coalescedExports;
 
@@ -308,7 +332,7 @@ namespace ts.OrganizeImports {
          * may lack parent pointers.  The desired parts can easily be recovered based on the
          * categorization.
          */
-        function getCategorizedExports(exportGroup: ReadonlyArray<ExportDeclaration>) {
+        function getCategorizedExports(exportGroup: readonly ExportDeclaration[]) {
             let exportWithoutClause: ExportDeclaration | undefined;
             const namedExports: ExportDeclaration[] = [];
 
@@ -339,11 +363,11 @@ namespace ts.OrganizeImports {
             importDeclaration,
             importDeclaration.decorators,
             importDeclaration.modifiers,
-            updateImportClause(importDeclaration.importClause!, name, namedBindings), // TODO: GH#18217
+            updateImportClause(importDeclaration.importClause!, name, namedBindings, importDeclaration.importClause!.isTypeOnly), // TODO: GH#18217
             importDeclaration.moduleSpecifier);
     }
 
-    function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: ReadonlyArray<T>) {
+    function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: readonly T[]) {
         return stableSort(specifiers, (s1, s2) =>
             compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name) ||
             compareIdentifiers(s1.name, s2.name));

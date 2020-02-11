@@ -13,13 +13,13 @@ wrapper((array: [any]) => {
 >[this.test, this.test1, this.test2] = array : [any]
 >[this.test, this.test1, this.test2] : [any, any, any]
 >this.test : any
->this : any
+>this : typeof globalThis
 >test : any
 >this.test1 : any
->this : any
+>this : typeof globalThis
 >test1 : any
 >this.test2 : any
->this : any
+>this : typeof globalThis
 >test2 : any
 >array : [any]
 

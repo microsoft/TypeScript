@@ -1,0 +1,79 @@
+=== tests/cases/compiler/substitutionTypeNoMergeOfAssignableType.ts ===
+interface Entry {
+>Entry : Symbol(Entry, Decl(substitutionTypeNoMergeOfAssignableType.ts, 0, 0))
+
+    comment?: string;
+>comment : Symbol(Entry.comment, Decl(substitutionTypeNoMergeOfAssignableType.ts, 0, 17))
+ }
+ 
+ interface Entity {
+>Entity : Symbol(Entity, Decl(substitutionTypeNoMergeOfAssignableType.ts, 2, 2))
+
+     fields: {[key: string]: Entry};
+>fields : Symbol(Entity.fields, Decl(substitutionTypeNoMergeOfAssignableType.ts, 4, 19))
+>key : Symbol(key, Decl(substitutionTypeNoMergeOfAssignableType.ts, 5, 15))
+>Entry : Symbol(Entry, Decl(substitutionTypeNoMergeOfAssignableType.ts, 0, 0))
+ }
+ 
+ type Fields<E extends Entity> = {
+>Fields : Symbol(Fields, Decl(substitutionTypeNoMergeOfAssignableType.ts, 6, 2))
+>E : Symbol(E, Decl(substitutionTypeNoMergeOfAssignableType.ts, 8, 13))
+>Entity : Symbol(Entity, Decl(substitutionTypeNoMergeOfAssignableType.ts, 2, 2))
+
+     [P in keyof E["fields"]]: E["fields"][P]
+>P : Symbol(P, Decl(substitutionTypeNoMergeOfAssignableType.ts, 9, 6))
+>E : Symbol(E, Decl(substitutionTypeNoMergeOfAssignableType.ts, 8, 13))
+>E : Symbol(E, Decl(substitutionTypeNoMergeOfAssignableType.ts, 8, 13))
+>P : Symbol(P, Decl(substitutionTypeNoMergeOfAssignableType.ts, 9, 6))
+
+ };
+ 
+ type Nodes<T = any> = {
+>Nodes : Symbol(Nodes, Decl(substitutionTypeNoMergeOfAssignableType.ts, 10, 3))
+>T : Symbol(T, Decl(substitutionTypeNoMergeOfAssignableType.ts, 12, 12))
+
+     [P in keyof T]: T[P] extends Entity
+>P : Symbol(P, Decl(substitutionTypeNoMergeOfAssignableType.ts, 13, 6))
+>T : Symbol(T, Decl(substitutionTypeNoMergeOfAssignableType.ts, 12, 12))
+>T : Symbol(T, Decl(substitutionTypeNoMergeOfAssignableType.ts, 12, 12))
+>P : Symbol(P, Decl(substitutionTypeNoMergeOfAssignableType.ts, 13, 6))
+>Entity : Symbol(Entity, Decl(substitutionTypeNoMergeOfAssignableType.ts, 2, 2))
+
+         ? Fields<T[P]>
+>Fields : Symbol(Fields, Decl(substitutionTypeNoMergeOfAssignableType.ts, 6, 2))
+>T : Symbol(T, Decl(substitutionTypeNoMergeOfAssignableType.ts, 12, 12))
+>P : Symbol(P, Decl(substitutionTypeNoMergeOfAssignableType.ts, 13, 6))
+
+         : T[P]
+>T : Symbol(T, Decl(substitutionTypeNoMergeOfAssignableType.ts, 12, 12))
+>P : Symbol(P, Decl(substitutionTypeNoMergeOfAssignableType.ts, 13, 6))
+
+ };
+ 
+ function makeEntityStore<T extends Record<string, Entity>>(config: T): Nodes<T> {
+>makeEntityStore : Symbol(makeEntityStore, Decl(substitutionTypeNoMergeOfAssignableType.ts, 16, 3))
+>T : Symbol(T, Decl(substitutionTypeNoMergeOfAssignableType.ts, 18, 26))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Entity : Symbol(Entity, Decl(substitutionTypeNoMergeOfAssignableType.ts, 2, 2))
+>config : Symbol(config, Decl(substitutionTypeNoMergeOfAssignableType.ts, 18, 60))
+>T : Symbol(T, Decl(substitutionTypeNoMergeOfAssignableType.ts, 18, 26))
+>Nodes : Symbol(Nodes, Decl(substitutionTypeNoMergeOfAssignableType.ts, 10, 3))
+>T : Symbol(T, Decl(substitutionTypeNoMergeOfAssignableType.ts, 18, 26))
+
+     return {} as Nodes<T>
+>Nodes : Symbol(Nodes, Decl(substitutionTypeNoMergeOfAssignableType.ts, 10, 3))
+>T : Symbol(T, Decl(substitutionTypeNoMergeOfAssignableType.ts, 18, 26))
+ }
+ 
+ const myTest = makeEntityStore({ test: { fields: { id: {} } } });
+>myTest : Symbol(myTest, Decl(substitutionTypeNoMergeOfAssignableType.ts, 22, 6))
+>makeEntityStore : Symbol(makeEntityStore, Decl(substitutionTypeNoMergeOfAssignableType.ts, 16, 3))
+>test : Symbol(test, Decl(substitutionTypeNoMergeOfAssignableType.ts, 22, 33))
+>fields : Symbol(fields, Decl(substitutionTypeNoMergeOfAssignableType.ts, 22, 41))
+>id : Symbol(id, Decl(substitutionTypeNoMergeOfAssignableType.ts, 22, 51))
+
+ myTest.test
+>myTest.test : Symbol(test, Decl(substitutionTypeNoMergeOfAssignableType.ts, 22, 33))
+>myTest : Symbol(myTest, Decl(substitutionTypeNoMergeOfAssignableType.ts, 22, 6))
+>test : Symbol(test, Decl(substitutionTypeNoMergeOfAssignableType.ts, 22, 33))
+ 

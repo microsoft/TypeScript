@@ -2,6 +2,8 @@ tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(3,5): error TS232
   Types of property 'length' are incompatible.
     Type '3' is not assignable to type '2'.
 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(15,1): error TS2322: Type '[number, string, boolean]' is not assignable to type '[number, string]'.
+  Types of property 'length' are incompatible.
+    Type '3' is not assignable to type '2'.
 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(18,17): error TS2741: Property 'a' is missing in type '{}' but required in type '{ a: string; }'.
 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(19,1): error TS2741: Property '2' is missing in type '[number, string]' but required in type '[number, string, boolean]'.
 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(20,5): error TS2322: Type '[string, string, number]' is not assignable to type '[string, string]'.
@@ -38,6 +40,8 @@ tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(25,1): error TS23
     numStrTuple = numStrBoolTuple;
     ~~~~~~~~~~~
 !!! error TS2322: Type '[number, string, boolean]' is not assignable to type '[number, string]'.
+!!! error TS2322:   Types of property 'length' are incompatible.
+!!! error TS2322:     Type '3' is not assignable to type '2'.
     
     // error
     objNumTuple = [ {}, 5];

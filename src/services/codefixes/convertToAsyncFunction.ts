@@ -14,7 +14,22 @@ namespace ts.codefix {
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => convertToAsyncFunction(changes, err.file, err.start, context.program.getTypeChecker(), context)),
     });
 
+    const enum SynthBindingNameKind {
+        Identifier,
+        BindingPattern,
+    }
+
+    type SynthBindingName = SynthBindingPattern | SynthIdentifier;
+
+    interface SynthBindingPattern {
+        readonly kind: SynthBindingNameKind.BindingPattern;
+        readonly elements: readonly SynthBindingName[];
+        readonly bindingPattern: BindingPattern;
+        readonly types: Type[];
+    }
+
     interface SynthIdentifier {
+        readonly kind: SynthBindingNameKind.Identifier;
         readonly identifier: Identifier;
         readonly types: Type[];
         numberOfAssignmentsOriginal: number; // number of times the variable should be assigned in the refactor
@@ -28,7 +43,7 @@ namespace ts.codefix {
     interface Transformer {
         readonly checker: TypeChecker;
         readonly synthNamesMap: Map<SynthIdentifier>; // keys are the symbol id of the identifier
-        readonly allVarNames: ReadonlyArray<SymbolAndIdentifier>;
+        readonly allVarNames: readonly SymbolAndIdentifier[];
         readonly setOfExpressionsToReturn: ReadonlyMap<true>; // keys are the node ids of the expressions
         readonly constIdentifiers: Identifier[];
         readonly originalTypeMap: ReadonlyMap<Type>; // keys are the node id of the identifier
@@ -87,7 +102,7 @@ namespace ts.codefix {
         }
     }
 
-    function getReturnStatementsWithPromiseHandlers(body: Block): ReadonlyArray<ReturnStatement> {
+    function getReturnStatementsWithPromiseHandlers(body: Block): readonly ReturnStatement[] {
         const res: ReturnStatement[] = [];
         forEachReturnStatement(body, ret => {
             if (isReturnStatementWithFixablePromiseHandler(ret)) res.push(ret);
@@ -188,8 +203,8 @@ namespace ts.codefix {
                     allVarNames.push({ identifier: synthName.identifier, symbol });
                     addNameToFrequencyMap(collidingSymbolMap, ident.text, symbol);
                 }
-                // we only care about identifiers that are parameters and declarations (don't care about other uses)
-                else if (node.parent && (isParameter(node.parent) || isVariableDeclaration(node.parent))) {
+                // we only care about identifiers that are parameters, declarations, or binding elements (don't care about other uses)
+                else if (node.parent && (isParameter(node.parent) || isVariableDeclaration(node.parent) || isBindingElement(node.parent))) {
                     const originalName = node.text;
                     const collidingSymbols = collidingSymbolMap.get(originalName);
 
@@ -204,7 +219,7 @@ namespace ts.codefix {
                     else {
                         const identifier = getSynthesizedDeepClone(node);
                         identsToRenameMap.set(symbolIdString, identifier);
-                        synthNamesMap.set(symbolIdString, { identifier, types: [], numberOfAssignmentsOriginal: allVarNames.filter(elem => elem.identifier.text === node.text).length/*, numberOfAssignmentsSynthesized: 0*/ });
+                        synthNamesMap.set(symbolIdString, createSynthIdentifier(identifier, [], allVarNames.filter(elem => elem.identifier.text === node.text).length/*, numberOfAssignmentsSynthesized: 0*/));
                         if ((isParameter(node.parent) && isExpressionOrCallOnTypePromise(node.parent.parent)) || isVariableDeclaration(node.parent)) {
                             allVarNames.push({ identifier, symbol });
                             addNameToFrequencyMap(collidingSymbolMap, originalName, symbol);
@@ -261,12 +276,12 @@ namespace ts.codefix {
         const numVarsSameName = (originalNames.get(name.text) || emptyArray).length;
         const numberOfAssignmentsOriginal = 0;
         const identifier = numVarsSameName === 0 ? name : createIdentifier(name.text + "_" + numVarsSameName);
-        return { identifier, types: [], numberOfAssignmentsOriginal };
+        return createSynthIdentifier(identifier, [], numberOfAssignmentsOriginal);
     }
 
     // dispatch function to recursively build the refactoring
     // should be kept up to date with isFixablePromiseHandler in suggestionDiagnostics.ts
-    function transformExpression(node: Expression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthIdentifier): ReadonlyArray<Statement> {
+    function transformExpression(node: Expression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthBindingName): readonly Statement[] {
         if (!node) {
             return emptyArray;
         }
@@ -291,10 +306,11 @@ namespace ts.codefix {
         return emptyArray;
     }
 
-    function transformCatch(node: CallExpression, transformer: Transformer, prevArgName?: SynthIdentifier): ReadonlyArray<Statement> {
+    function transformCatch(node: CallExpression, transformer: Transformer, prevArgName?: SynthBindingName): readonly Statement[] {
         const func = node.arguments[0];
-        const argName = getArgName(func, transformer);
+        const argName = getArgBindingName(func, transformer);
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(node).toString());
+        let possibleNameForVarDecl: SynthIdentifier | undefined;
 
         /*
             If there is another call in the chain after the .catch() we are transforming, we will need to save the result of both paths (try block and catch block)
@@ -302,67 +318,86 @@ namespace ts.codefix {
             We will use the prevArgName and then update the synthNamesMap with a new variable name for the next transformation step
         */
         if (prevArgName && !shouldReturn) {
-            prevArgName.numberOfAssignmentsOriginal = 2; // Try block and catch block
-            transformer.synthNamesMap.forEach((val, key) => {
-                if (val.identifier.text === prevArgName.identifier.text) {
-                    const newSynthName = createUniqueSynthName(prevArgName);
-                    transformer.synthNamesMap.set(key, newSynthName);
-                }
-            });
+            if (isSynthIdentifier(prevArgName)) {
+                possibleNameForVarDecl = prevArgName;
+                transformer.synthNamesMap.forEach((val, key) => {
+                    if (val.identifier.text === prevArgName.identifier.text) {
+                        const newSynthName = createUniqueSynthName(prevArgName);
+                        transformer.synthNamesMap.set(key, newSynthName);
+                    }
+                });
+            }
+            else {
+                possibleNameForVarDecl = createSynthIdentifier(createOptimisticUniqueName("result"), prevArgName.types);
+            }
 
+            possibleNameForVarDecl.numberOfAssignmentsOriginal = 2; // Try block and catch block
             // update the constIdentifiers list
-            if (transformer.constIdentifiers.some(elem => elem.text === prevArgName.identifier.text)) {
-                transformer.constIdentifiers.push(createUniqueSynthName(prevArgName).identifier);
+            if (transformer.constIdentifiers.some(elem => elem.text === possibleNameForVarDecl!.identifier.text)) {
+                transformer.constIdentifiers.push(createUniqueSynthName(possibleNameForVarDecl).identifier);
             }
         }
 
-        const tryBlock = createBlock(transformExpression(node.expression, transformer, node, prevArgName));
+        const tryBlock = createBlock(transformExpression(node.expression, transformer, node, possibleNameForVarDecl));
 
-        const transformationBody = getTransformationBody(func, prevArgName, argName, node, transformer);
-        const catchArg = argName ? argName.identifier.text : "e";
-        const catchClause = createCatchClause(catchArg, createBlock(transformationBody));
+        const transformationBody = getTransformationBody(func, possibleNameForVarDecl, argName, node, transformer);
+        const catchArg = argName ? isSynthIdentifier(argName) ? argName.identifier.text : argName.bindingPattern : "e";
+        const catchVariableDeclaration = createVariableDeclaration(catchArg);
+        const catchClause = createCatchClause(catchVariableDeclaration, createBlock(transformationBody));
 
         /*
             In order to avoid an implicit any, we will synthesize a type for the declaration using the unions of the types of both paths (try block and catch block)
         */
-        let varDeclList;
-        if (prevArgName && !shouldReturn) {
-            const typeArray: Type[] = prevArgName.types;
+        let varDeclList: VariableStatement | undefined;
+        let varDeclIdentifier: Identifier | undefined;
+        if (possibleNameForVarDecl && !shouldReturn) {
+            varDeclIdentifier = getSynthesizedDeepClone(possibleNameForVarDecl.identifier);
+            const typeArray: Type[] = possibleNameForVarDecl.types;
             const unionType = transformer.checker.getUnionType(typeArray, UnionReduction.Subtype);
             const unionTypeNode = transformer.isInJSFile ? undefined : transformer.checker.typeToTypeNode(unionType);
-            const varDecl = [createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier), unionTypeNode)];
+            const varDecl = [createVariableDeclaration(varDeclIdentifier, unionTypeNode)];
             varDeclList = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList(varDecl, NodeFlags.Let));
         }
 
         const tryStatement = createTry(tryBlock, catchClause, /*finallyBlock*/ undefined);
-        return varDeclList ? [varDeclList, tryStatement] : [tryStatement];
+        const destructuredResult = prevArgName && varDeclIdentifier && isSynthBindingPattern(prevArgName)
+            && createVariableStatement(/* modifiers */ undefined, createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepCloneWithRenames(prevArgName.bindingPattern), /* type */ undefined, varDeclIdentifier)], NodeFlags.Const));
+        return compact([varDeclList, tryStatement, destructuredResult]);
     }
 
-    function createUniqueSynthName(prevArgName: SynthIdentifier) {
+    function getIdentifierTextsFromBindingName(bindingName: BindingName): readonly string[] {
+        if (isIdentifier(bindingName)) return [bindingName.text];
+        return flatMap(bindingName.elements, element => {
+            if (isOmittedExpression(element)) return [];
+            return getIdentifierTextsFromBindingName(element.name);
+        });
+    }
+
+    function createUniqueSynthName(prevArgName: SynthIdentifier): SynthIdentifier {
         const renamedPrevArg = createOptimisticUniqueName(prevArgName.identifier.text);
-        const newSynthName = { identifier: renamedPrevArg, types: [], numberOfAssignmentsOriginal: 0 };
-        return newSynthName;
+        return createSynthIdentifier(renamedPrevArg);
     }
 
-    function transformThen(node: CallExpression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthIdentifier): ReadonlyArray<Statement> {
+    function transformThen(node: CallExpression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthBindingName): readonly Statement[] {
         const [res, rej] = node.arguments;
 
         if (!res) {
             return transformExpression(node.expression, transformer, outermostParent);
         }
 
-        const argNameRes = getArgName(res, transformer);
+        const argNameRes = getArgBindingName(res, transformer);
         const transformationBody = getTransformationBody(res, prevArgName, argNameRes, node, transformer);
 
         if (rej) {
-            const argNameRej = getArgName(rej, transformer);
+            const argNameRej = getArgBindingName(rej, transformer);
 
             const tryBlock = createBlock(transformExpression(node.expression, transformer, node, argNameRes).concat(transformationBody));
 
             const transformationBody2 = getTransformationBody(rej, prevArgName, argNameRej, node, transformer);
 
-            const catchArg = argNameRej ? argNameRej.identifier.text : "e";
-            const catchClause = createCatchClause(catchArg, createBlock(transformationBody2));
+            const catchArg = argNameRej ? isSynthIdentifier(argNameRej) ? argNameRej.identifier.text : argNameRej.bindingPattern : "e";
+            const catchVariableDeclaration = createVariableDeclaration(catchArg);
+            const catchClause = createCatchClause(catchVariableDeclaration, createBlock(transformationBody2));
 
             return [createTry(tryBlock, catchClause, /* finallyBlock */ undefined)];
         }
@@ -370,12 +405,13 @@ namespace ts.codefix {
         return transformExpression(node.expression, transformer, node, argNameRes).concat(transformationBody);
     }
 
-    function getFlagOfIdentifier(node: Identifier, constIdentifiers: ReadonlyArray<Identifier>): NodeFlags {
-        const inArr: boolean = constIdentifiers.some(elem => elem.text === node.text);
+    function getFlagOfBindingName(bindingName: SynthBindingName, constIdentifiers: readonly Identifier[]): NodeFlags {
+        const identifiers = getIdentifierTextsFromBindingName(getNode(bindingName));
+        const inArr: boolean = constIdentifiers.some(elem => contains(identifiers, elem.text));
         return inArr ? NodeFlags.Const : NodeFlags.Let;
     }
 
-    function transformPromiseCall(node: Expression, transformer: Transformer, prevArgName?: SynthIdentifier): ReadonlyArray<Statement> {
+    function transformPromiseCall(node: Expression, transformer: Transformer, prevArgName?: SynthBindingName): readonly Statement[] {
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(node).toString());
         // the identifier is empty when the handler (.then()) ignores the argument - In this situation we do not need to save the result of the promise returning call
         const originalNodeParent = node.original ? node.original.parent : node.parent;
@@ -389,23 +425,23 @@ namespace ts.codefix {
         return [createReturn(getSynthesizedDeepClone(node))];
     }
 
-    function createTransformedStatement(prevArgName: SynthIdentifier | undefined, rightHandSide: Expression, transformer: Transformer): ReadonlyArray<Statement> {
-        if (!prevArgName || prevArgName.identifier.text.length === 0) {
+    function createTransformedStatement(prevArgName: SynthBindingName | undefined, rightHandSide: Expression, transformer: Transformer): readonly Statement[] {
+        if (!prevArgName || isEmpty(prevArgName)) {
             // if there's no argName to assign to, there still might be side effects
             return [createStatement(rightHandSide)];
         }
 
-        if (prevArgName.types.length < prevArgName.numberOfAssignmentsOriginal) {
+        if (isSynthIdentifier(prevArgName) && prevArgName.types.length < prevArgName.numberOfAssignmentsOriginal) {
             // if the variable has already been declared, we don't need "let" or "const"
             return [createStatement(createAssignment(getSynthesizedDeepClone(prevArgName.identifier), rightHandSide))];
         }
 
         return [createVariableStatement(/*modifiers*/ undefined,
-            (createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier), /*type*/ undefined, rightHandSide)], getFlagOfIdentifier(prevArgName.identifier, transformer.constIdentifiers))))];
+            (createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(getNode(prevArgName)), /*type*/ undefined, rightHandSide)], getFlagOfBindingName(prevArgName, transformer.constIdentifiers))))];
     }
 
     // should be kept up to date with isFixablePromiseArgument in suggestionDiagnostics.ts
-    function getTransformationBody(func: Expression, prevArgName: SynthIdentifier | undefined, argName: SynthIdentifier | undefined, parent: CallExpression, transformer: Transformer): ReadonlyArray<Statement> {
+    function getTransformationBody(func: Expression, prevArgName: SynthBindingName | undefined, argName: SynthBindingName | undefined, parent: CallExpression, transformer: Transformer): readonly Statement[] {
 
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(parent).toString());
         switch (func.kind) {
@@ -418,7 +454,7 @@ namespace ts.codefix {
                     break;
                 }
 
-                const synthCall = createCall(getSynthesizedDeepClone(func as Identifier), /*typeArguments*/ undefined, [argName.identifier]);
+                const synthCall = createCall(getSynthesizedDeepClone(func as Identifier), /*typeArguments*/ undefined, isSynthIdentifier(argName) ? [argName.identifier] : []);
                 if (shouldReturn) {
                     return [createReturn(synthCall)];
                 }
@@ -461,7 +497,7 @@ namespace ts.codefix {
                     return shouldReturn ? refactoredStmts.map(s => getSynthesizedDeepClone(s)) :
                         removeReturns(
                             refactoredStmts,
-                            prevArgName === undefined ? undefined : prevArgName.identifier,
+                            prevArgName,
                             transformer,
                             seenReturnStatement);
                 }
@@ -503,7 +539,7 @@ namespace ts.codefix {
     }
 
 
-    function removeReturns(stmts: ReadonlyArray<Statement>, prevArgName: Identifier | undefined, transformer: Transformer, seenReturnStatement: boolean): ReadonlyArray<Statement> {
+    function removeReturns(stmts: readonly Statement[], prevArgName: SynthBindingName | undefined, transformer: Transformer, seenReturnStatement: boolean): readonly Statement[] {
         const ret: Statement[] = [];
         for (const stmt of stmts) {
             if (isReturnStatement(stmt)) {
@@ -514,7 +550,7 @@ namespace ts.codefix {
                     }
                     else {
                         ret.push(createVariableStatement(/*modifiers*/ undefined,
-                            (createVariableDeclarationList([createVariableDeclaration(prevArgName, /*type*/ undefined, possiblyAwaitedExpression)], getFlagOfIdentifier(prevArgName, transformer.constIdentifiers)))));
+                            (createVariableDeclarationList([createVariableDeclaration(getNode(prevArgName), /*type*/ undefined, possiblyAwaitedExpression)], getFlagOfBindingName(prevArgName, transformer.constIdentifiers)))));
                     }
                 }
             }
@@ -526,14 +562,14 @@ namespace ts.codefix {
         // if block has no return statement, need to define prevArgName as undefined to prevent undeclared variables
         if (!seenReturnStatement && prevArgName !== undefined) {
             ret.push(createVariableStatement(/*modifiers*/ undefined,
-                (createVariableDeclarationList([createVariableDeclaration(prevArgName, /*type*/ undefined, createIdentifier("undefined"))], getFlagOfIdentifier(prevArgName, transformer.constIdentifiers)))));
+                (createVariableDeclarationList([createVariableDeclaration(getNode(prevArgName), /*type*/ undefined, createIdentifier("undefined"))], getFlagOfBindingName(prevArgName, transformer.constIdentifiers)))));
         }
 
         return ret;
     }
 
 
-    function getInnerTransformationBody(transformer: Transformer, innerRetStmts: ReadonlyArray<Node>, prevArgName?: SynthIdentifier) {
+    function getInnerTransformationBody(transformer: Transformer, innerRetStmts: readonly Node[], prevArgName?: SynthBindingName) {
 
         let innerCbBody: Statement[] = [];
         for (const stmt of innerRetStmts) {
@@ -553,17 +589,17 @@ namespace ts.codefix {
         return innerCbBody;
     }
 
-    function getArgName(funcNode: Expression, transformer: Transformer): SynthIdentifier | undefined {
+    function getArgBindingName(funcNode: Expression, transformer: Transformer): SynthBindingName | undefined {
 
         const numberOfAssignmentsOriginal = 0;
         const types: Type[] = [];
 
-        let name: SynthIdentifier | undefined;
+        let name: SynthBindingName | undefined;
 
         if (isFunctionLikeDeclaration(funcNode)) {
             if (funcNode.parameters.length > 0) {
-                const param = funcNode.parameters[0].name as Identifier;
-                name = getMapEntryOrDefault(param);
+                const param = funcNode.parameters[0].name;
+                name = getMappedBindingNameOrDefault(param);
             }
         }
         else if (isIdentifier(funcNode)) {
@@ -571,22 +607,33 @@ namespace ts.codefix {
         }
 
         // return undefined argName when arg is null or undefined
-        if (!name || name.identifier.text === "undefined") {
+        // eslint-disable-next-line no-in-operator
+        if (!name || "identifier" in name && name.identifier.text === "undefined") {
             return undefined;
         }
 
         return name;
+
+        function getMappedBindingNameOrDefault(bindingName: BindingName): SynthBindingName {
+            if (isIdentifier(bindingName)) return getMapEntryOrDefault(bindingName);
+            const elements = flatMap(bindingName.elements, element => {
+                if (isOmittedExpression(element)) return [];
+                return [getMappedBindingNameOrDefault(element.name)];
+            });
+
+            return createSynthBindingPattern(bindingName, elements);
+        }
 
         function getMapEntryOrDefault(identifier: Identifier): SynthIdentifier {
             const originalNode = getOriginalNode(identifier);
             const symbol = getSymbol(originalNode);
 
             if (!symbol) {
-                return { identifier, types, numberOfAssignmentsOriginal };
+                return createSynthIdentifier(identifier, types, numberOfAssignmentsOriginal);
             }
 
             const mapEntry = transformer.synthNamesMap.get(getSymbolId(symbol).toString());
-            return mapEntry || { identifier, types, numberOfAssignmentsOriginal };
+            return mapEntry || createSynthIdentifier(identifier, types, numberOfAssignmentsOriginal);
         }
 
         function getSymbol(node: Node): Symbol | undefined {
@@ -596,5 +643,35 @@ namespace ts.codefix {
         function getOriginalNode(node: Node): Node {
             return node.original ? node.original : node;
         }
+    }
+
+    function isEmpty(bindingName: SynthBindingName | undefined): boolean {
+        if (!bindingName) {
+            return true;
+        }
+        if (isSynthIdentifier(bindingName)) {
+            return !bindingName.identifier.text;
+        }
+        return every(bindingName.elements, isEmpty);
+    }
+
+    function getNode(bindingName: SynthBindingName) {
+        return isSynthIdentifier(bindingName) ? bindingName.identifier : bindingName.bindingPattern;
+    }
+
+    function createSynthIdentifier(identifier: Identifier, types: Type[] = [], numberOfAssignmentsOriginal = 0): SynthIdentifier {
+        return { kind: SynthBindingNameKind.Identifier, identifier, types, numberOfAssignmentsOriginal };
+    }
+
+    function createSynthBindingPattern(bindingPattern: BindingPattern, elements: readonly SynthBindingName[] = emptyArray, types: Type[] = []): SynthBindingPattern {
+        return { kind: SynthBindingNameKind.BindingPattern, bindingPattern, elements, types };
+    }
+
+    function isSynthIdentifier(bindingName: SynthBindingName): bindingName is SynthIdentifier {
+        return bindingName.kind === SynthBindingNameKind.Identifier;
+    }
+
+    function isSynthBindingPattern(bindingName: SynthBindingName): bindingName is SynthBindingPattern {
+        return bindingName.kind === SynthBindingNameKind.BindingPattern;
     }
 }

@@ -134,6 +134,7 @@ let impl: I = {
     },
     explicitVoid2: () => this.a, // ok, `this:any` because it refers to an outer object
 >explicitVoid2 : Symbol(explicitVoid2, Decl(thisTypeInFunctionsNegative.ts, 39, 6))
+>this : Symbol(globalThis)
 
     explicitStructural: () => 12,
 >explicitStructural : Symbol(explicitStructural, Decl(thisTypeInFunctionsNegative.ts, 40, 32))
@@ -655,6 +656,7 @@ function initializer(this: C = new C()): number { return this.n; }
 >C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
 > : Symbol((Missing), Decl(thisTypeInFunctionsNegative.ts, 171, 30))
 >C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 171, 34))
+>this : Symbol(globalThis)
 
 // can't name parameters 'this' in a lambda.
 c.explicitProperty = (this, m) => m + this.n;
@@ -664,6 +666,7 @@ c.explicitProperty = (this, m) => m + this.n;
 >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 174, 22))
 >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 174, 27))
 >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 174, 27))
+>this : Symbol(globalThis)
 
 const f2 = <T>(this: {n: number}, m: number) => m + this.n;
 >f2 : Symbol(f2, Decl(thisTypeInFunctionsNegative.ts, 175, 5))
@@ -672,6 +675,7 @@ const f2 = <T>(this: {n: number}, m: number) => m + this.n;
 >n : Symbol(n, Decl(thisTypeInFunctionsNegative.ts, 175, 22))
 >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 175, 33))
 >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 175, 33))
+>this : Symbol(globalThis)
 
 const f3 = async (this: {n: number}, m: number) => m + this.n;
 >f3 : Symbol(f3, Decl(thisTypeInFunctionsNegative.ts, 176, 5))
@@ -679,6 +683,7 @@ const f3 = async (this: {n: number}, m: number) => m + this.n;
 >n : Symbol(n, Decl(thisTypeInFunctionsNegative.ts, 176, 25))
 >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 176, 36))
 >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 176, 36))
+>this : Symbol(globalThis)
 
 const f4 = async <T>(this: {n: number}, m: number) => m + this.n;
 >f4 : Symbol(f4, Decl(thisTypeInFunctionsNegative.ts, 177, 5))
@@ -687,4 +692,5 @@ const f4 = async <T>(this: {n: number}, m: number) => m + this.n;
 >n : Symbol(n, Decl(thisTypeInFunctionsNegative.ts, 177, 28))
 >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 177, 39))
 >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 177, 39))
+>this : Symbol(globalThis)
 

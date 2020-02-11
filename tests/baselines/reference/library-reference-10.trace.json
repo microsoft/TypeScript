@@ -1,8 +1,6 @@
 [
     "======== Resolving type reference directive 'jquery', containing file '/foo/consumer.ts', root directory './types'. ========",
     "Resolving with primary search path './types'.",
-    "'package.json' has 'typings' field 'jquery.d.ts' that references 'types/jquery/jquery.d.ts'.",
-    "'package.json' does not have a 'typesVersions' field.",
     "Found 'package.json' at './types/jquery/package.json'.",
     "'package.json' does not have a 'typesVersions' field.",
     "'package.json' has 'typings' field 'jquery.d.ts' that references 'types/jquery/jquery.d.ts'.",
@@ -11,8 +9,6 @@
     "======== Type reference directive 'jquery' was successfully resolved to '/foo/types/jquery/jquery.d.ts', primary: true. ========",
     "======== Resolving type reference directive 'jquery', containing file '/foo/__inferred type names__.ts', root directory './types'. ========",
     "Resolving with primary search path './types'.",
-    "'package.json' has 'typings' field 'jquery.d.ts' that references 'types/jquery/jquery.d.ts'.",
-    "'package.json' does not have a 'typesVersions' field.",
     "Found 'package.json' at './types/jquery/package.json'.",
     "'package.json' does not have a 'typesVersions' field.",
     "'package.json' has 'typings' field 'jquery.d.ts' that references 'types/jquery/jquery.d.ts'.",

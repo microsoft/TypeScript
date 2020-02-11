@@ -1,16 +1,16 @@
 /// <reference path='fourslash.ts'/>
 
 // @Filename: a.ts
-////export function [|{| "isWriteAccess": true, "isDefinition": true |}f|]() {}
+////[|export function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}f|]() {}|]
 
 // @Filename: b.ts
-////export { [|f|] as [|{| "isWriteAccess": true, "isDefinition": true |}g|] } from "./a";
-////import { [|{| "isWriteAccess": true, "isDefinition": true |}f|] } from "./a";
-////import { [|{| "isWriteAccess": true, "isDefinition": true |}g|] } from "./b";
+////[|export { [|{| "contextRangeIndex": 2 |}f|] as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}g|] } from "./a";|]
+////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 5 |}f|] } from "./a";|]
+////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 7 |}g|] } from "./b";|]
 
 verify.noErrors();
 
-const [f0, f1, g0, f2, g1] = test.ranges();
+const [f0Def, f0, f1Def, f1, g0, f2Def, f2, g1Def, g1] = test.ranges();
 
 const af = { definition: "function f(): void", ranges: [f0, f1] };
 const g0Group = { definition: "(alias) function g(): void\nexport g", ranges: [g0] };

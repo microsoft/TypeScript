@@ -1,5 +1,5 @@
 namespace ts {
-    describe("convertToBase64", () => {
+    describe("unittests:: convertToBase64", () => {
         function runTest(input: string): void {
             const actual = convertToBase64(input);
             const expected = sys.base64encode!(input);

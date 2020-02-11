@@ -9,9 +9,11 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts
       Type 'string' is not assignable to type 'undefined'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(18,1): error TS2322: Type '{ a: number; }' is not assignable to type '{ a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }'.
   Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(48,20): error TS2322: Type '2' is not assignable to type '1'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(49,14): error TS2322: Type '2' is not assignable to type '1'.
 
 
-==== tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts (5 errors) ====
+==== tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts (7 errors) ====
     // Object literals in unions are normalized upon widening
     let a1 = [{ a: 0 }, { a: 1, b: "x" }, { a: 2, b: "y", c: true }][0];
     a1.a;  // number
@@ -78,5 +80,11 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts
     let e1 = f({ a: 1, b: 2 }, { a: "abc" }, {});
     let e2 = f({}, { a: "abc" }, { a: 1, b: 2 });
     let e3 = f(data, { a: 2 });
+                       ~
+!!! error TS2322: Type '2' is not assignable to type '1'.
+!!! related TS6500 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:43:21: The expected type comes from property 'a' which is declared here on type '{ a: 1; b: "abc"; c: true; }'
     let e4 = f({ a: 2 }, data);
+                 ~
+!!! error TS2322: Type '2' is not assignable to type '1'.
+!!! related TS6500 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:43:21: The expected type comes from property 'a' which is declared here on type '{ a: 1; b: "abc"; c: true; }'
     

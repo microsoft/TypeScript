@@ -21,7 +21,6 @@ class Foo {
 }
 
 //// [thisInOuterClassBody.js]
-var _this = this;
 var Foo = /** @class */ (function () {
     function Foo() {
         this.x = this;

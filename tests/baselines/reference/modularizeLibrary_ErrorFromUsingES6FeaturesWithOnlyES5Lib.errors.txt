@@ -41,7 +41,7 @@ tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.t
     Math.sign(1);
          ~~~~
 !!! error TS2551: Property 'sign' does not exist on type 'Math'. Did you mean 'sin'?
-!!! related TS2728 /.ts/lib.es5.d.ts:703:5: 'sin' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:713:5: 'sin' is declared here.
     
     // Using ES6 object
     var o = {

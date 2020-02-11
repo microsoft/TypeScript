@@ -1,0 +1,32 @@
+=== tests/cases/conformance/externalModules/typeOnly/types.ts ===
+export interface Component {}
+>Component : Symbol(Component, Decl(types.ts, 0, 0))
+
+=== tests/cases/conformance/externalModules/typeOnly/ns.ts ===
+import type * as types from './types';
+>types : Symbol(types, Decl(ns.ts, 0, 11))
+
+export { types };
+>types : Symbol(types, Decl(ns.ts, 1, 8))
+
+=== tests/cases/conformance/externalModules/typeOnly/index.ts ===
+import type * as types from './types';
+>types : Symbol(types, Decl(index.ts, 0, 11))
+
+import * as nestedNamespace from './ns';
+>nestedNamespace : Symbol(nestedNamespace, Decl(index.ts, 1, 6))
+
+class C implements types.Component {}
+>C : Symbol(C, Decl(index.ts, 1, 40))
+>types.Component : Symbol(types.Component, Decl(types.ts, 0, 0))
+>types : Symbol(types, Decl(index.ts, 0, 11))
+>Component : Symbol(types.Component, Decl(types.ts, 0, 0))
+
+class D implements nestedNamespace.types.Component {}
+>D : Symbol(D, Decl(index.ts, 3, 37))
+>nestedNamespace.types.Component : Symbol(types.Component, Decl(types.ts, 0, 0))
+>nestedNamespace.types : Symbol(nestedNamespace.types, Decl(ns.ts, 1, 8))
+>nestedNamespace : Symbol(nestedNamespace, Decl(index.ts, 1, 6))
+>types : Symbol(nestedNamespace.types, Decl(ns.ts, 1, 8))
+>Component : Symbol(types.Component, Decl(types.ts, 0, 0))
+

@@ -1,0 +1,27 @@
+=== tests/cases/compiler/declarationEmitLocalClassHasRequiredDeclare.ts ===
+export declare namespace A {
+>A : Symbol(A, Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 0, 0), Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 4, 11))
+
+    namespace X { }
+>X : Symbol(X, Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 0, 28), Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 6, 16))
+}
+
+class X { }
+>X : Symbol(X, Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 2, 1))
+
+export class A {
+>A : Symbol(A, Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 0, 0), Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 4, 11))
+
+    static X = X;
+>X : Symbol(A.X, Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 0, 28), Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 6, 16))
+>X : Symbol(X, Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 2, 1))
+}
+
+export declare namespace Y {
+>Y : Symbol(Y, Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 8, 1), Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 12, 1))
+
+}
+
+export class Y { }
+>Y : Symbol(Y, Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 8, 1), Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 12, 1))
+

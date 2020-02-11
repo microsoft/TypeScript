@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts"/>
 
 ////var x = [1, 2, 3];
-////var /*y*/y = /*1*/x.pop(5)/*2*/;
+////var /*y*/y = x.pop(/*1*/5/*2*/);
 ////
 
 verify.errorExistsBetweenMarkers("1", "2");

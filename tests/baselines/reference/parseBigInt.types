@@ -180,18 +180,15 @@ const unaryPlusHex = +0x123n;
 
 { const scientific = 1e2n; }
 >scientific : 100
->1e2 : 100
->n : any
+>1e2n : 100
 
 { const decimal = 4.1n; }
 >decimal : 4.1
->4.1 : 4.1
->n : any
+>4.1n : 4.1
 
 { const leadingDecimal = .1n; }
 >leadingDecimal : 0.1
->.1 : 0.1
->n : any
+>.1n : 0.1
 
 const emptyBinary = 0bn; // should error but infer 0n
 >emptyBinary : 0n

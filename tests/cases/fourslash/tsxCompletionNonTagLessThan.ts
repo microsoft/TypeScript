@@ -6,6 +6,19 @@
 ////1 < Infini/*c*/;
 
 verify.completions(
-    { marker: ["a", "b"], includes: "number", excludes: "SVGNumber" },
-    { marker: "c", includes: "Infinity" },
+    {
+    marker: ["a", "b"],
+    includes: {
+        name: "number",
+        sortText: completion.SortText.GlobalsOrKeywords
+    },
+    excludes: "SVGNumber"
+    },
+    {
+        marker: "c",
+        includes: {
+            name: "Infinity",
+            sortText: completion.SortText.GlobalsOrKeywords
+        }
+    },
 );

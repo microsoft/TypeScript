@@ -12,6 +12,7 @@ declare var React: any;
 
     } dataSource={this.state.ds} renderRow={}>
 >dataSource : Symbol(dataSource, Decl(jsxAttributeWithoutExpressionReact.tsx, 4, 5))
+>this : Symbol(globalThis)
 >renderRow : Symbol(renderRow, Decl(jsxAttributeWithoutExpressionReact.tsx, 4, 32))
 
     </ListView>

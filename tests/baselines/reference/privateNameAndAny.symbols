@@ -1,0 +1,19 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts ===
+class A {
+>A : Symbol(A, Decl(privateNameAndAny.ts, 0, 0))
+
+    #foo = true; 
+>#foo : Symbol(A.#foo, Decl(privateNameAndAny.ts, 0, 9))
+
+    method(thing: any) {
+>method : Symbol(A.method, Decl(privateNameAndAny.ts, 1, 16))
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 2, 11))
+
+        thing.#foo; // OK
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 2, 11))
+
+        thing.#bar; // Error
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 2, 11))
+    }
+};
+

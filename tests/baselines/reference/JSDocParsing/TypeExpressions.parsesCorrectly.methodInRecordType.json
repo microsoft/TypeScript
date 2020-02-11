@@ -3,17 +3,23 @@
     "pos": 1,
     "end": 16,
     "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "members": {
         "0": {
             "kind": "MethodSignature",
             "pos": 2,
             "end": 15,
             "flags": "JSDoc",
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "name": {
                 "kind": "Identifier",
                 "pos": 2,
                 "end": 5,
                 "flags": "JSDoc",
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "escapedText": "foo"
             },
             "parameters": {
@@ -25,7 +31,9 @@
                 "kind": "NumberKeyword",
                 "pos": 8,
                 "end": 15,
-                "flags": "JSDoc"
+                "flags": "JSDoc",
+                "modifierFlagsCache": 0,
+                "transformFlags": 0
             }
         },
         "length": 1,

@@ -1,0 +1,63 @@
+=== tests/cases/compiler/inferenceAndSelfReferentialConstraint.ts ===
+// @strict
+
+// Repro from #29520
+
+type Test<K extends keyof any> = {
+>Test : Symbol(Test, Decl(inferenceAndSelfReferentialConstraint.ts, 0, 0))
+>K : Symbol(K, Decl(inferenceAndSelfReferentialConstraint.ts, 4, 10))
+
+  [P in K | "foo"]: P extends "foo" ? true : () => any
+>P : Symbol(P, Decl(inferenceAndSelfReferentialConstraint.ts, 5, 3))
+>K : Symbol(K, Decl(inferenceAndSelfReferentialConstraint.ts, 4, 10))
+>P : Symbol(P, Decl(inferenceAndSelfReferentialConstraint.ts, 5, 3))
+}
+
+function test<T extends Test<keyof T>>(arg: T) {
+>test : Symbol(test, Decl(inferenceAndSelfReferentialConstraint.ts, 6, 1))
+>T : Symbol(T, Decl(inferenceAndSelfReferentialConstraint.ts, 8, 14))
+>Test : Symbol(Test, Decl(inferenceAndSelfReferentialConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(inferenceAndSelfReferentialConstraint.ts, 8, 14))
+>arg : Symbol(arg, Decl(inferenceAndSelfReferentialConstraint.ts, 8, 39))
+>T : Symbol(T, Decl(inferenceAndSelfReferentialConstraint.ts, 8, 14))
+
+  return arg;
+>arg : Symbol(arg, Decl(inferenceAndSelfReferentialConstraint.ts, 8, 39))
+}
+
+const res1 = test({
+>res1 : Symbol(res1, Decl(inferenceAndSelfReferentialConstraint.ts, 12, 5))
+>test : Symbol(test, Decl(inferenceAndSelfReferentialConstraint.ts, 6, 1))
+
+  foo: true,
+>foo : Symbol(foo, Decl(inferenceAndSelfReferentialConstraint.ts, 12, 19))
+
+  bar() {
+>bar : Symbol(bar, Decl(inferenceAndSelfReferentialConstraint.ts, 13, 12))
+  }
+});
+
+const res2 = test({
+>res2 : Symbol(res2, Decl(inferenceAndSelfReferentialConstraint.ts, 18, 5))
+>test : Symbol(test, Decl(inferenceAndSelfReferentialConstraint.ts, 6, 1))
+
+  foo: true,
+>foo : Symbol(foo, Decl(inferenceAndSelfReferentialConstraint.ts, 18, 19))
+
+  bar: function () {
+>bar : Symbol(bar, Decl(inferenceAndSelfReferentialConstraint.ts, 19, 12))
+  }
+});
+
+const res3 = test({
+>res3 : Symbol(res3, Decl(inferenceAndSelfReferentialConstraint.ts, 24, 5))
+>test : Symbol(test, Decl(inferenceAndSelfReferentialConstraint.ts, 6, 1))
+
+  foo: true,
+>foo : Symbol(foo, Decl(inferenceAndSelfReferentialConstraint.ts, 24, 19))
+
+  bar: () => {
+>bar : Symbol(bar, Decl(inferenceAndSelfReferentialConstraint.ts, 25, 12))
+  }
+});
+

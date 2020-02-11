@@ -41,11 +41,11 @@ namespace ts.server {
         // path to start of range
         private readonly startPath: LineCollection[];
         private readonly endBranch: LineCollection[] = [];
-        private branchNode: LineNode;
+        private branchNode: LineNode | undefined;
         // path to current node
         private readonly stack: LineNode[];
         private state = CharRangeSection.Entire;
-        private lineCollectionAtBranch: LineCollection;
+        private lineCollectionAtBranch: LineCollection | undefined;
         private initialText = "";
         private trailingText = "";
 
@@ -308,8 +308,8 @@ namespace ts.server {
             return this._getSnapshot().version;
         }
 
-        getLineInfo(line: number): AbsolutePositionAndLineText {
-            return this._getSnapshot().index.lineNumberToInfo(line);
+        getAbsolutePositionAndLineText(oneBasedLine: number): AbsolutePositionAndLineText {
+            return this._getSnapshot().index.lineNumberToInfo(oneBasedLine);
         }
 
         lineOffsetToPosition(line: number, column: number): number {
@@ -348,6 +348,10 @@ namespace ts.server {
             }
         }
 
+        getLineCount() {
+            return this._getSnapshot().index.getLineCount();
+        }
+
         static fromString(script: string) {
             const svc = new ScriptVersionCache();
             const snap = new LineIndexSnapshot(0, svc, new LineIndex());
@@ -359,7 +363,7 @@ namespace ts.server {
     }
 
     class LineIndexSnapshot implements IScriptSnapshot {
-        constructor(readonly version: number, readonly cache: ScriptVersionCache, readonly index: LineIndex, readonly changesSincePreviousVersion: ReadonlyArray<TextChange> = emptyArray) {
+        constructor(readonly version: number, readonly cache: ScriptVersionCache, readonly index: LineIndex, readonly changesSincePreviousVersion: readonly TextChange[] = emptyArray) {
         }
 
         getText(rangeStart: number, rangeEnd: number) {
@@ -383,7 +387,7 @@ namespace ts.server {
     }
 
     export class LineIndex {
-        root: LineNode;
+        root!: LineNode;
         // set this to true to check each edit for accuracy
         checkEdits = false;
 
@@ -400,8 +404,12 @@ namespace ts.server {
             return this.root.charOffsetToLineInfo(1, position);
         }
 
+        getLineCount() {
+            return this.root.lineCount();
+        }
+
         lineNumberToInfo(oneBasedLine: number): AbsolutePositionAndLineText {
-            const lineCount = this.root.lineCount();
+            const lineCount = this.getLineCount();
             if (oneBasedLine <= lineCount) {
                 const { position, leaf } = this.root.lineNumberToInfo(oneBasedLine, 0);
                 return { absolutePosition: position, lineText: leaf && leaf.text };

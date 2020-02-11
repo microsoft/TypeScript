@@ -30,7 +30,6 @@ c.dynamic();
         }
         C.prototype.dynamic = function () {
             var _a;
-            var _this = this;
             return _a = this._path, __syncRequire ? Promise.resolve().then(function () { return require(_a); }) : new Promise(function (resolve_1, reject_1) { require([_a], resolve_1, reject_1); });
         };
         return C;

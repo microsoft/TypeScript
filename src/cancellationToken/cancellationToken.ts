@@ -9,13 +9,14 @@ interface ServerCancellationToken {
 }
 
 function pipeExists(name: string): boolean {
-    try {
-        fs.statSync(name);
-        return true;
-    }
-    catch (e) {
-        return false;
-    }
+    // Unlike statSync, existsSync doesn't throw an exception if the target doesn't exist.
+    // A comment in the node code suggests they're stuck with that decision for back compat
+    // (https://github.com/nodejs/node/blob/9da241b600182a9ff400f6efc24f11a6303c27f7/lib/fs.js#L222).
+    // Caveat: If a named pipe does exist, the first call to existsSync will return true, as for
+    // statSync.  Subsequent calls will return false, whereas statSync would throw an exception
+    // indicating that the pipe was busy.  The difference is immaterial, since our statSync
+    // implementation returned false from its catch block.
+    return fs.existsSync(name);
 }
 
 function createCancellationToken(args: string[]): ServerCancellationToken {
@@ -35,8 +36,8 @@ function createCancellationToken(args: string[]): ServerCancellationToken {
     }
     // cancellationPipeName is a string without '*' inside that can optionally end with '*'
     // when client wants to signal cancellation it should create a named pipe with name=<cancellationPipeName>
-    // server will synchronously check the presence of the pipe and treat its existance as indicator that current request should be canceled.
-    // in case if client prefers to use more fine-grained schema than one name for all request it can add '*' to the end of cancelellationPipeName.
+    // server will synchronously check the presence of the pipe and treat its existence as indicator that current request should be canceled.
+    // in case if client prefers to use more fine-grained schema than one name for all request it can add '*' to the end of cancellationPipeName.
     // in this case pipe name will be build dynamically as <cancellationPipeName><request_seq>.
     if (cancellationPipeName.charAt(cancellationPipeName.length - 1) === "*") {
         const namePrefix = cancellationPipeName.slice(0, -1);

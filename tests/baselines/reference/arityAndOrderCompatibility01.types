@@ -32,18 +32,18 @@ var z: {
 var [a, b, c] = x;
 >a : string
 >b : number
->c : any
+>c : undefined
 >x : [string, number]
 
 var [d, e, f] = y;
 >d : string
 >e : number
->f : any
+>f : string | number
 >y : StrNum
 
 var [g, h, i] = z;
->g : string
->h : number
+>g : any
+>h : any
 >i : any
 >z : { 0: string; 1: number; length: 2; }
 

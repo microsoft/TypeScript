@@ -1,0 +1,5 @@
+{
+    "compilerOptions": {
+        "noImplicitUseStrict": true
+    }
+}

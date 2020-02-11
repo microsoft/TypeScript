@@ -1,0 +1,42 @@
+tests/cases/compiler/unusedSwitchStatement.ts(2,10): error TS2678: Type '0' is not comparable to type '1'.
+tests/cases/compiler/unusedSwitchStatement.ts(3,13): error TS6133: 'x' is declared but its value is never read.
+tests/cases/compiler/unusedSwitchStatement.ts(6,15): error TS6133: 'c' is declared but its value is never read.
+tests/cases/compiler/unusedSwitchStatement.ts(9,13): error TS6133: 'z' is declared but its value is never read.
+tests/cases/compiler/unusedSwitchStatement.ts(14,10): error TS2678: Type '0' is not comparable to type '2'.
+tests/cases/compiler/unusedSwitchStatement.ts(15,13): error TS6133: 'x' is declared but its value is never read.
+tests/cases/compiler/unusedSwitchStatement.ts(16,10): error TS2678: Type '1' is not comparable to type '2'.
+
+
+==== tests/cases/compiler/unusedSwitchStatement.ts (7 errors) ====
+    switch (1) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '1'.
+            let x;
+                ~
+!!! error TS6133: 'x' is declared but its value is never read.
+            break;
+        case 1:
+            const c = 1;
+                  ~
+!!! error TS6133: 'c' is declared but its value is never read.
+            break;
+        default:
+            let z = 2;
+                ~
+!!! error TS6133: 'z' is declared but its value is never read.
+    }
+    
+    
+    switch (2) {
+        case 0:
+             ~
+!!! error TS2678: Type '0' is not comparable to type '2'.
+            let x;
+                ~
+!!! error TS6133: 'x' is declared but its value is never read.
+        case 1:
+             ~
+!!! error TS2678: Type '1' is not comparable to type '2'.
+            x++;
+    }

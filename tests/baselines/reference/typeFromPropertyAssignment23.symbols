@@ -38,6 +38,8 @@ D.prototype.foo = () =>  {
 >foo : Symbol(D.foo, Decl(a.js, 14, 21))
 
     this.n = 'not checked, so no error'
+>this : Symbol(globalThis)
+>n : Symbol(n, Decl(a.js, 15, 26))
 }
 
 // post-class prototype assignments are trying to show that these properties are abstract

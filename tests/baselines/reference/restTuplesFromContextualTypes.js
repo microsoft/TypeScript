@@ -57,6 +57,21 @@ function f4<T extends any[]>(t: T) {
     f((a, b, ...x) => {});
 }
 
+declare function f5<T extends any[], U>(f: (...args: T) => U): (...args: T) => U;
+
+let g0 = f5(() => "hello");
+let g1 = f5((x, y) => 42);
+let g2 = f5((x: number, y) => 42);
+let g3 = f5((x: number, y: number) => x + y);
+let g4 = f5((...args) => true);
+
+declare function pipe<A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C): (...args: A) => C;
+
+let g5 = pipe(() => true, b => 42);
+let g6 = pipe(x => "hello", s => s.length);
+let g7 = pipe((x, y) => 42, x => "" + x);
+let g8 = pipe((x: number, y: string) => 42, x => "" + x);
+
 // Repro from #25288
 
 declare var tuple: [number, string];
@@ -69,9 +84,30 @@ declare function take(cb: (a: number, b: string) => void): void;
 (function foo(...rest){}(1, ''));
 take(function(...rest){});
 
+// Repro from #29833
+
+type ArgsUnion = [number, string] | [number, Error];
+type TupleUnionFunc = (...params: ArgsUnion) => number;
+
+const funcUnionTupleNoRest: TupleUnionFunc = (num, strOrErr) => {
+  return num;
+};
+
+const funcUnionTupleRest: TupleUnionFunc = (...params) => {
+  const [num, strOrErr] = params;
+  return num;
+};
+
 
 //// [restTuplesFromContextualTypes.js]
 "use strict";
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 (function (a, b, c) { }).apply(void 0, t1);
 (function () {
     var x = [];
@@ -172,31 +208,31 @@ f2(function (a, b, c) {
         x[_i - 3] = arguments[_i];
     }
 });
-(function (a, b, c) { }).apply(void 0, [1].concat(t3));
+(function (a, b, c) { }).apply(void 0, __spreadArrays([1], t3));
 (function () {
     var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
     }
-}).apply(void 0, [1].concat(t3));
+}).apply(void 0, __spreadArrays([1], t3));
 (function (a) {
     var x = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         x[_i - 1] = arguments[_i];
     }
-}).apply(void 0, [1].concat(t3));
+}).apply(void 0, __spreadArrays([1], t3));
 (function (a, b) {
     var x = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         x[_i - 2] = arguments[_i];
     }
-}).apply(void 0, [1].concat(t3));
+}).apply(void 0, __spreadArrays([1], t3));
 (function (a, b, c) {
     var x = [];
     for (var _i = 3; _i < arguments.length; _i++) {
         x[_i - 3] = arguments[_i];
     }
-}).apply(void 0, [1].concat(t3));
+}).apply(void 0, __spreadArrays([1], t3));
 f3(function (a, b, c) { });
 f3(function () {
     var x = [];
@@ -234,13 +270,13 @@ function f4(t) {
         for (var _i = 1; _i < arguments.length; _i++) {
             x[_i - 1] = arguments[_i];
         }
-    }).apply(void 0, [1].concat(t));
+    }).apply(void 0, __spreadArrays([1], t));
     (function (a) {
         var x = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             x[_i - 1] = arguments[_i];
         }
-    }).apply(void 0, [1, 2].concat(t));
+    }).apply(void 0, __spreadArrays([1, 2], t));
     function f(cb) { }
     f(function () {
         var x = [];
@@ -261,6 +297,21 @@ function f4(t) {
         }
     });
 }
+var g0 = f5(function () { return "hello"; });
+var g1 = f5(function (x, y) { return 42; });
+var g2 = f5(function (x, y) { return 42; });
+var g3 = f5(function (x, y) { return x + y; });
+var g4 = f5(function () {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    return true;
+});
+var g5 = pipe(function () { return true; }, function (b) { return 42; });
+var g6 = pipe(function (x) { return "hello"; }, function (s) { return s.length; });
+var g7 = pipe(function (x, y) { return 42; }, function (x) { return "" + x; });
+var g8 = pipe(function (x, y) { return 42; }, function (x) { return "" + x; });
 (function foo(a, b) { }.apply(void 0, tuple));
 (function foo() {
     var rest = [];
@@ -274,6 +325,17 @@ take(function () {
         rest[_i] = arguments[_i];
     }
 });
+var funcUnionTupleNoRest = function (num, strOrErr) {
+    return num;
+};
+var funcUnionTupleRest = function () {
+    var params = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        params[_i] = arguments[_i];
+    }
+    var num = params[0], strOrErr = params[1];
+    return num;
+};
 
 
 //// [restTuplesFromContextualTypes.d.ts]
@@ -284,5 +346,20 @@ declare function f2(cb: (...args: typeof t2) => void): void;
 declare const t3: [boolean, ...string[]];
 declare function f3(cb: (x: number, ...args: typeof t3) => void): void;
 declare function f4<T extends any[]>(t: T): void;
+declare function f5<T extends any[], U>(f: (...args: T) => U): (...args: T) => U;
+declare let g0: () => string;
+declare let g1: (x: any, y: any) => number;
+declare let g2: (x: number, y: any) => number;
+declare let g3: (x: number, y: number) => number;
+declare let g4: (...args: any[]) => boolean;
+declare function pipe<A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C): (...args: A) => C;
+declare let g5: () => number;
+declare let g6: (x: any) => number;
+declare let g7: (x: any, y: any) => string;
+declare let g8: (x: number, y: string) => string;
 declare var tuple: [number, string];
 declare function take(cb: (a: number, b: string) => void): void;
+declare type ArgsUnion = [number, string] | [number, Error];
+declare type TupleUnionFunc = (...params: ArgsUnion) => number;
+declare const funcUnionTupleNoRest: TupleUnionFunc;
+declare const funcUnionTupleRest: TupleUnionFunc;

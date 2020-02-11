@@ -1,0 +1,86 @@
+=== tests/cases/compiler/paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts ===
+// Using a homomorphic mapped type over `T`
+// Produces a lower-priority inference for `T` than other
+// positions, allowing one to override the priority the argument
+// order would usually imply
+type Lower<T> = { [K in keyof T]: T[K] };
+>Lower : Lower<T>
+
+export function appendToOptionalArray<
+>appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[] | undefined; }, key: K, value: T) => void
+
+  K extends string | number | symbol,
+  T
+>(
+  object: { [x in K]?: Lower<T>[] },
+>object : { [x in K]?: Lower<T>[] | undefined; }
+
+  key: K,
+>key : K
+
+  value: T
+>value : T
+
+) {
+  const array = object[key];
+>array : { [x in K]?: Lower<T>[] | undefined; }[K]
+>object[key] : { [x in K]?: Lower<T>[] | undefined; }[K]
+>object : { [x in K]?: Lower<T>[] | undefined; }
+>key : K
+
+  if (array) {
+>array : { [x in K]?: Lower<T>[] | undefined; }[K]
+
+    array.push(value);
+>array.push(value) : number
+>array.push : (...items: Lower<T>[]) => number
+>array : Lower<T>[]
+>push : (...items: Lower<T>[]) => number
+>value : T
+
+  } else {
+    object[key] = [value];
+>object[key] = [value] : T[]
+>object[key] : { [x in K]?: Lower<T>[] | undefined; }[K]
+>object : { [x in K]?: Lower<T>[] | undefined; }
+>key : K
+>[value] : T[]
+>value : T
+  }
+}
+
+// e.g.
+const foo: {x?: number[]; y?: string[]; } = {};
+>foo : { x?: number[] | undefined; y?: string[] | undefined; }
+>x : number[] | undefined
+>y : string[] | undefined
+>{} : {}
+
+appendToOptionalArray(foo, 'x', 123);   // ok
+>appendToOptionalArray(foo, 'x', 123) : void
+>appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[] | undefined; }, key: K, value: T) => void
+>foo : { x?: number[] | undefined; y?: string[] | undefined; }
+>'x' : "x"
+>123 : 123
+
+appendToOptionalArray(foo, 'y', 'bar'); // ok
+>appendToOptionalArray(foo, 'y', 'bar') : void
+>appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[] | undefined; }, key: K, value: T) => void
+>foo : { x?: number[] | undefined; y?: string[] | undefined; }
+>'y' : "y"
+>'bar' : "bar"
+
+appendToOptionalArray(foo, 'y', 12);    // should fail
+>appendToOptionalArray(foo, 'y', 12) : void
+>appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[] | undefined; }, key: K, value: T) => void
+>foo : { x?: number[] | undefined; y?: string[] | undefined; }
+>'y' : "y"
+>12 : 12
+
+appendToOptionalArray(foo, 'x', "no");  // should fail
+>appendToOptionalArray(foo, 'x', "no") : void
+>appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[] | undefined; }, key: K, value: T) => void
+>foo : { x?: number[] | undefined; y?: string[] | undefined; }
+>'x' : "x"
+>"no" : "no"
+

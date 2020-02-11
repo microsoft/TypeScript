@@ -1,0 +1,12 @@
+tests/cases/compiler/noImplicitAnyLoopCrash.ts(4,16): error TS2556: Expected 0 arguments, but got 1 or more.
+
+
+==== tests/cases/compiler/noImplicitAnyLoopCrash.ts (1 errors) ====
+    let foo = () => {};
+    let bar;
+    while (1) {
+        bar = ~foo(...bar);
+                   ~~~~~~
+!!! error TS2556: Expected 0 arguments, but got 1 or more.
+    }
+    

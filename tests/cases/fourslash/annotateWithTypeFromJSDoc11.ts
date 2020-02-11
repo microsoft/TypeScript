@@ -7,6 +7,7 @@
 ////var f = (x) => x
 
 verify.codeFix({
+    index: 0,
     description: "Annotate with type from JSDoc",
     newFileContent:
 `/**

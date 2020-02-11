@@ -28,6 +28,10 @@ var varInitToConstDeclAmbient = constType;
 const constInitToConstCallWithTypeQuery: typeof constCall = constCall;
 const constInitToConstDeclAmbientWithTypeQuery: typeof constType = constType;
 
+// assignment from any
+// https://github.com/Microsoft/TypeScript/issues/29108
+const fromAny: unique symbol = {} as any;
+
 // function return inference
 function funcReturnConstCall() { return constCall; }
 function funcReturnLetCall() { return letCall; }
@@ -286,6 +290,9 @@ var varInitToConstDeclAmbient = constType;
 // declaration from initializer with type query
 const constInitToConstCallWithTypeQuery = constCall;
 const constInitToConstDeclAmbientWithTypeQuery = constType;
+// assignment from any
+// https://github.com/Microsoft/TypeScript/issues/29108
+const fromAny = {};
 // function return inference
 function funcReturnConstCall() { return constCall; }
 function funcReturnLetCall() { return letCall; }

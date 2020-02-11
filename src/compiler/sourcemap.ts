@@ -68,18 +68,19 @@ namespace ts {
             return sourceIndex;
         }
 
+        /* eslint-disable boolean-trivia, no-null/no-null */
         function setSourceContent(sourceIndex: number, content: string | null) {
             enter();
             if (content !== null) {
                 if (!sourcesContent) sourcesContent = [];
                 while (sourcesContent.length < sourceIndex) {
-                    // tslint:disable-next-line:no-null-keyword boolean-trivia
                     sourcesContent.push(null);
                 }
                 sourcesContent[sourceIndex] = content;
             }
             exit();
         }
+        /* eslint-enable boolean-trivia, no-null/no-null */
 
         function addName(name: string) {
             enter();
@@ -140,7 +141,7 @@ namespace ts {
             exit();
         }
 
-        function appendSourceMap(generatedLine: number, generatedCharacter: number, map: RawSourceMap, sourceMapPath: string) {
+        function appendSourceMap(generatedLine: number, generatedCharacter: number, map: RawSourceMap, sourceMapPath: string, start?: LineAndCharacter, end?: LineAndCharacter) {
             Debug.assert(generatedLine >= pendingGeneratedLine, "generatedLine cannot backtrack");
             Debug.assert(generatedCharacter >= 0, "generatedCharacter cannot be negative");
             enter();
@@ -148,7 +149,19 @@ namespace ts {
             const sourceIndexToNewSourceIndexMap: number[] = [];
             let nameIndexToNewNameIndexMap: number[] | undefined;
             const mappingIterator = decodeMappings(map.mappings);
-            for (let { value: raw, done } = mappingIterator.next(); !done; { value: raw, done } = mappingIterator.next()) {
+            for (let iterResult = mappingIterator.next(); !iterResult.done; iterResult = mappingIterator.next()) {
+                const raw = iterResult.value;
+                if (end && (
+                    raw.generatedLine > end.line ||
+                    (raw.generatedLine === end.line && raw.generatedCharacter > end.character))) {
+                    break;
+                }
+
+                if (start && (
+                    raw.generatedLine < start.line ||
+                    (start.line === raw.generatedLine && raw.generatedCharacter < start.character))) {
+                    continue;
+                }
                 // Then reencode all the updated mappings into the overall map
                 let newSourceIndex: number | undefined;
                 let newSourceLine: number | undefined;
@@ -178,8 +191,10 @@ namespace ts {
                     }
                 }
 
-                const newGeneratedLine = raw.generatedLine + generatedLine;
-                const newGeneratedCharacter = raw.generatedLine === 0 ? raw.generatedCharacter + generatedCharacter : raw.generatedCharacter;
+                const rawGeneratedLine = raw.generatedLine - (start ? start.line : 0);
+                const newGeneratedLine = rawGeneratedLine + generatedLine;
+                const rawGeneratedCharacter = start && start.line === raw.generatedLine ? raw.generatedCharacter - start.character : raw.generatedCharacter;
+                const newGeneratedCharacter = rawGeneratedLine === 0 ? rawGeneratedCharacter + generatedCharacter : rawGeneratedCharacter;
                 addMapping(newGeneratedLine, newGeneratedCharacter, newSourceIndex, newSourceLine, newSourceCharacter, newNameIndex);
             }
             exit();
@@ -266,14 +281,24 @@ namespace ts {
     const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)\s*$/;
     const whitespaceOrMapCommentRegExp = /^\s*(\/\/[@#] .*)?$/;
 
+    export interface LineInfo {
+        getLineCount(): number;
+        getLineText(line: number): string;
+    }
+
+    export function getLineInfo(text: string, lineStarts: readonly number[]): LineInfo {
+        return {
+            getLineCount: () => lineStarts.length,
+            getLineText: line => text.substring(lineStarts[line], lineStarts[line + 1])
+        };
+    }
+
     /**
      * Tries to find the sourceMappingURL comment at the end of a file.
-     * @param text The source text of the file.
-     * @param lineStarts The line starts of the file.
      */
-    export function tryGetSourceMappingURL(text: string, lineStarts: ReadonlyArray<number> = computeLineStarts(text)) {
-        for (let index = lineStarts.length - 1; index >= 0; index--) {
-            const line = text.substring(lineStarts[index], lineStarts[index + 1]);
+    export function tryGetSourceMappingURL(lineInfo: LineInfo) {
+        for (let index = lineInfo.getLineCount() - 1; index >= 0; index--) {
+            const line = lineInfo.getLineText(index);
             const comment = sourceMapCommentRegExp.exec(line);
             if (comment) {
                 return comment[1];
@@ -285,13 +310,12 @@ namespace ts {
         }
     }
 
+    /* eslint-disable no-null/no-null */
     function isStringOrNull(x: any) {
-        // tslint:disable-next-line:no-null-keyword
         return typeof x === "string" || x === null;
     }
 
     export function isRawSourceMap(x: any): x is RawSourceMap {
-        // tslint:disable-next-line:no-null-keyword
         return x !== null
             && typeof x === "object"
             && x.version === 3
@@ -302,6 +326,7 @@ namespace ts {
             && (x.sourcesContent === undefined || x.sourcesContent === null || isArray(x.sourcesContent) && every(x.sourcesContent, isStringOrNull))
             && (x.names === undefined || x.names === null || isArray(x.names) && every(x.names, isString));
     }
+    /* eslint-enable no-null/no-null */
 
     export function tryParseRawSourceMap(text: string) {
         try {
@@ -573,7 +598,10 @@ namespace ts {
     }
 
     function compareSourcePositions(left: SourceMappedPosition, right: SourceMappedPosition) {
-        return compareValues(left.sourceIndex, right.sourceIndex);
+        // Compares sourcePosition without comparing sourceIndex
+        // since the mappings are grouped by sourceIndex
+        Debug.assert(left.sourceIndex === right.sourceIndex);
+        return compareValues(left.sourcePosition, right.sourcePosition);
     }
 
     function compareGeneratedPositions(left: MappedPosition, right: MappedPosition) {
@@ -592,14 +620,12 @@ namespace ts {
         const mapDirectory = getDirectoryPath(mapPath);
         const sourceRoot = map.sourceRoot ? getNormalizedAbsolutePath(map.sourceRoot, mapDirectory) : mapDirectory;
         const generatedAbsoluteFilePath = getNormalizedAbsolutePath(map.file, mapDirectory);
-        const generatedCanonicalFilePath = host.getCanonicalFileName(generatedAbsoluteFilePath) as Path;
-        const generatedFile = host.getSourceFileLike(generatedCanonicalFilePath);
+        const generatedFile = host.getSourceFileLike(generatedAbsoluteFilePath);
         const sourceFileAbsolutePaths = map.sources.map(source => getNormalizedAbsolutePath(source, sourceRoot));
-        const sourceFileCanonicalPaths = sourceFileAbsolutePaths.map(source => host.getCanonicalFileName(source) as Path);
-        const sourceToSourceIndexMap = createMapFromEntries(sourceFileCanonicalPaths.map((source, i) => [source, i] as [string, number]));
-        let decodedMappings: ReadonlyArray<MappedPosition> | undefined;
+        const sourceToSourceIndexMap = createMapFromEntries(sourceFileAbsolutePaths.map((source, i) => [host.getCanonicalFileName(source), i] as [string, number]));
+        let decodedMappings: readonly MappedPosition[] | undefined;
         let generatedMappings: SortedReadonlyArray<MappedPosition> | undefined;
-        let sourceMappings: ReadonlyArray<SortedReadonlyArray<SourceMappedPosition>> | undefined;
+        let sourceMappings: readonly SortedReadonlyArray<SourceMappedPosition>[] | undefined;
 
         return {
             getSourcePosition,
@@ -608,16 +634,15 @@ namespace ts {
 
         function processMapping(mapping: Mapping): MappedPosition {
             const generatedPosition = generatedFile !== undefined
-                ? getPositionOfLineAndCharacter(generatedFile, mapping.generatedLine, mapping.generatedCharacter)
+                ? getPositionOfLineAndCharacter(generatedFile, mapping.generatedLine, mapping.generatedCharacter, /*allowEdits*/ true)
                 : -1;
             let source: string | undefined;
             let sourcePosition: number | undefined;
             if (isSourceMapping(mapping)) {
-                const sourceFilePath = sourceFileCanonicalPaths[mapping.sourceIndex];
-                const sourceFile = host.getSourceFileLike(sourceFilePath);
+                const sourceFile = host.getSourceFileLike(sourceFileAbsolutePaths[mapping.sourceIndex]);
                 source = map.sources[mapping.sourceIndex];
                 sourcePosition = sourceFile !== undefined
-                    ? getPositionOfLineAndCharacter(sourceFile, mapping.sourceLine, mapping.sourceCharacter)
+                    ? getPositionOfLineAndCharacter(sourceFile, mapping.sourceLine, mapping.sourceCharacter, /*allowEdits*/ true)
                     : -1;
             }
             return {

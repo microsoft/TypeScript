@@ -178,8 +178,9 @@ declare namespace Test {
     class FileSystemObject {
         path: string;
         isFSO: this is FileSystemObject;
-        isFile: this is File;
-        readonly isDirectory: this is Directory;
+        get isFile(): this is File;
+        set isFile(param: this is File);
+        get isDirectory(): this is Directory;
         isNetworked: this is (Networked & this);
         constructor(path: string);
     }

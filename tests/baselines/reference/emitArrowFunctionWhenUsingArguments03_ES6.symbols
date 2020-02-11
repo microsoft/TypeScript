@@ -4,5 +4,5 @@ var arguments;
 
 var a = () => arguments;
 >a : Symbol(a, Decl(emitArrowFunctionWhenUsingArguments03_ES6.ts, 1, 3))
->arguments : Symbol(arguments)
+>arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments03_ES6.ts, 0, 3))
 

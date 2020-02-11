@@ -1,4 +1,5 @@
-tests/cases/compiler/staticMemberExportAccess.ts(14,35): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/staticMemberExportAccess.ts(14,39): error TS2351: This expression is not constructable.
+  Type 'Sammy' has no construct signatures.
 tests/cases/compiler/staticMemberExportAccess.ts(17,18): error TS2576: Property 'bar' is a static member of type 'Sammy'
 tests/cases/compiler/staticMemberExportAccess.ts(18,18): error TS2339: Property 'x' does not exist on type 'Sammy'.
 
@@ -18,8 +19,9 @@ tests/cases/compiler/staticMemberExportAccess.ts(18,18): error TS2339: Property 
     }
     var $: JQueryStatic;
     var instanceOfClassSammy: Sammy = new $.sammy(); // should be error
-                                      ~~~~~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+                                          ~~~~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'Sammy' has no construct signatures.
     var r1 = instanceOfClassSammy.foo(); // r1 is string
     var r2 = $.sammy.foo();
     var r3 = $.sammy.bar(); // error

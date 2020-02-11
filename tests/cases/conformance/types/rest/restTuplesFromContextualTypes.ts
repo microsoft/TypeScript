@@ -59,6 +59,21 @@ function f4<T extends any[]>(t: T) {
     f((a, b, ...x) => {});
 }
 
+declare function f5<T extends any[], U>(f: (...args: T) => U): (...args: T) => U;
+
+let g0 = f5(() => "hello");
+let g1 = f5((x, y) => 42);
+let g2 = f5((x: number, y) => 42);
+let g3 = f5((x: number, y: number) => x + y);
+let g4 = f5((...args) => true);
+
+declare function pipe<A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C): (...args: A) => C;
+
+let g5 = pipe(() => true, b => 42);
+let g6 = pipe(x => "hello", s => s.length);
+let g7 = pipe((x, y) => 42, x => "" + x);
+let g8 = pipe((x: number, y: string) => 42, x => "" + x);
+
 // Repro from #25288
 
 declare var tuple: [number, string];
@@ -70,3 +85,17 @@ declare function take(cb: (a: number, b: string) => void): void;
 
 (function foo(...rest){}(1, ''));
 take(function(...rest){});
+
+// Repro from #29833
+
+type ArgsUnion = [number, string] | [number, Error];
+type TupleUnionFunc = (...params: ArgsUnion) => number;
+
+const funcUnionTupleNoRest: TupleUnionFunc = (num, strOrErr) => {
+  return num;
+};
+
+const funcUnionTupleRest: TupleUnionFunc = (...params) => {
+  const [num, strOrErr] = params;
+  return num;
+};

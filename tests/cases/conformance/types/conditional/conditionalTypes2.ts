@@ -147,3 +147,95 @@ type B2<T, V> =
 
 type C2<T, V, E> =
     T extends object ? { [Q in keyof T]: C2<T[Q], V, E>; } : T;
+
+// Repro from #28654
+
+type MaybeTrue<T extends { b: boolean }> = true extends T["b"] ? "yes" : "no";
+
+type T0 = MaybeTrue<{ b: never }>     // "no"
+type T1 = MaybeTrue<{ b: false }>;    // "no"
+type T2 = MaybeTrue<{ b: true }>;     // "yes"
+type T3 = MaybeTrue<{ b: boolean }>;  // "yes"
+
+// Repro from #28824
+
+type Union = 'a' | 'b';
+type Product<A extends Union, B> = { f1: A, f2: B};
+type ProductUnion = Product<'a', 0> | Product<'b', 1>;
+
+// {a: "b"; b: "a"}
+type UnionComplement = {
+  [K in Union]: Exclude<Union, K>
+};
+type UCA = UnionComplement['a'];
+type UCB = UnionComplement['b'];
+
+// {a: "a"; b: "b"}
+type UnionComplementComplement = {
+  [K in Union]: Exclude<Union, Exclude<Union, K>>
+};
+type UCCA = UnionComplementComplement['a'];
+type UCCB = UnionComplementComplement['b'];
+
+// {a: Product<'b', 1>; b: Product<'a', 0>}
+type ProductComplement = {
+  [K in Union]: Exclude<ProductUnion, { f1: K }>
+};
+type PCA = ProductComplement['a'];
+type PCB = ProductComplement['b'];
+
+// {a: Product<'a', 0>; b: Product<'b', 1>}
+type ProductComplementComplement = {
+  [K in Union]: Exclude<ProductUnion, Exclude<ProductUnion, { f1: K }>>
+};
+type PCCA = ProductComplementComplement['a'];
+type PCCB = ProductComplementComplement['b'];
+
+// Repro from #31326
+
+type Hmm<T, U extends T> = U extends T ? { [K in keyof U]: number } : never;
+type What = Hmm<{}, { a: string }>
+const w: What = { a: 4 };
+
+// Repro from #33568
+
+declare function save(_response: IRootResponse<string>): void;
+
+exportCommand(save);
+
+declare function exportCommand<TResponse>(functionToCall: IExportCallback<TResponse>): void;
+
+interface IExportCallback<TResponse> {
+	(response: IRootResponse<TResponse>): void;
+}
+
+type IRootResponse<TResponse> =
+	TResponse extends IRecord ? IRecordResponse<TResponse> : IResponse<TResponse>;
+
+interface IRecord {
+	readonly Id: string;
+}
+
+declare type IRecordResponse<T extends IRecord> = IResponse<T> & {
+	sendRecord(): void;
+};
+
+declare type IResponse<T> = {
+	sendValue(name: keyof GetAllPropertiesOfType<T, string>): void;
+};
+
+declare type GetPropertyNamesOfType<T, RestrictToType> = {
+	[PropertyName in Extract<keyof T, string>]: T[PropertyName] extends RestrictToType ? PropertyName : never
+}[Extract<keyof T, string>];
+
+declare type GetAllPropertiesOfType<T, RestrictToType> = Pick<
+	T,
+	GetPropertyNamesOfType<Required<T>, RestrictToType>
+>;
+
+// Repro from #33568
+
+declare function ff(x: Foo3<string>): void;
+declare function gg<T>(f: (x: Foo3<T>) => void): void;
+type Foo3<T> = T extends number ? { n: T } : { x: T };
+gg(ff);

@@ -1,5 +1,7 @@
 /* @internal */
 namespace ts {
+    const visitedNestedConvertibleFunctions = createMap<true>();
+
     export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): DiagnosticWithLocation[] {
         program.getSemanticDiagnostics(sourceFile, cancellationToken);
         const diags: DiagnosticWithLocation[] = [];
@@ -13,6 +15,7 @@ namespace ts {
 
         const isJsFile = isSourceFileJS(sourceFile);
 
+        visitedNestedConvertibleFunctions.clear();
         check(sourceFile);
 
         if (getAllowSyntheticDefaultImports(program.getCompilerOptions())) {
@@ -34,23 +37,8 @@ namespace ts {
 
         function check(node: Node) {
             if (isJsFile) {
-                switch (node.kind) {
-                    case SyntaxKind.FunctionExpression:
-                        const decl = getDeclarationOfExpando(node);
-                        if (decl) {
-                            const symbol = decl.symbol;
-                            if (symbol && (symbol.exports && symbol.exports.size || symbol.members && symbol.members.size)) {
-                                diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
-                                break;
-                            }
-                        }
-                    // falls through if no diagnostic was created
-                    case SyntaxKind.FunctionDeclaration:
-                        const symbol = node.symbol;
-                        if (symbol.members && (symbol.members.size > 0)) {
-                            diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
-                        }
-                        break;
+                if (canBeConvertedToClass(node)) {
+                    diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
                 }
             }
             else {
@@ -114,15 +102,20 @@ namespace ts {
     }
 
     function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: Push<DiagnosticWithLocation>): void {
-        if (!isAsyncFunction(node) &&
-            node.body &&
-            isBlock(node.body) &&
-            hasReturnStatementWithPromiseHandler(node.body) &&
-            returnsPromise(node, checker)) {
+        // need to check function before checking map so that deeper levels of nested callbacks are checked
+        if (isConvertibleFunction(node, checker) && !visitedNestedConvertibleFunctions.has(getKeyFromNode(node))) {
             diags.push(createDiagnosticForNode(
                 !node.name && isVariableDeclaration(node.parent) && isIdentifier(node.parent.name) ? node.parent.name : node,
                 Diagnostics.This_may_be_converted_to_an_async_function));
         }
+    }
+
+    function isConvertibleFunction(node: FunctionLikeDeclaration, checker: TypeChecker) {
+        return !isAsyncFunction(node) &&
+            node.body &&
+            isBlock(node.body) &&
+            hasReturnStatementWithPromiseHandler(node.body) &&
+            returnsPromise(node, checker);
     }
 
     function returnsPromise(node: FunctionLikeDeclaration, checker: TypeChecker): boolean {
@@ -169,14 +162,38 @@ namespace ts {
     // should be kept up to date with getTransformationBody in convertToAsyncFunction.ts
     function isFixablePromiseArgument(arg: Expression): boolean {
         switch (arg.kind) {
-            case SyntaxKind.NullKeyword:
-            case SyntaxKind.Identifier: // identifier includes undefined
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
+                visitedNestedConvertibleFunctions.set(getKeyFromNode(arg as FunctionLikeDeclaration), true);
+                // falls through
+            case SyntaxKind.NullKeyword:
+            case SyntaxKind.Identifier: // identifier includes undefined
                 return true;
             default:
                 return false;
         }
+    }
+
+    function getKeyFromNode(exp: FunctionLikeDeclaration) {
+        return `${exp.pos.toString()}:${exp.end.toString()}`;
+    }
+
+    function canBeConvertedToClass(node: Node): boolean {
+        if (node.kind === SyntaxKind.FunctionExpression) {
+            if (isVariableDeclaration(node.parent) && node.symbol.members?.size) {
+                return true;
+            }
+
+            const decl = getDeclarationOfExpando(node);
+            const symbol = decl?.symbol;
+            return !!(symbol && (symbol.exports?.size || symbol.members?.size));
+        }
+
+        if (node.kind === SyntaxKind.FunctionDeclaration) {
+            return !!node.symbol.members?.size;
+        }
+
+        return false;
     }
 }

@@ -1,0 +1,4 @@
+=== tests/cases/compiler/optionsTsBuildInfoFileWithoutIncrementalAndComposite.ts ===
+const x = "Hello World";
+>x : Symbol(x, Decl(optionsTsBuildInfoFileWithoutIncrementalAndComposite.ts, 0, 5))
+

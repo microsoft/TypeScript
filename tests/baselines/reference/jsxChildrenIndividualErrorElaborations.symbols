@@ -1,0 +1,169 @@
+=== tests/cases/compiler/index.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : Symbol(React, Decl(index.tsx, 1, 6))
+
+interface Props {
+>Props : Symbol(Props, Decl(index.tsx, 1, 31))
+
+  children: (x: number) => string;
+>children : Symbol(Props.children, Decl(index.tsx, 3, 17))
+>x : Symbol(x, Decl(index.tsx, 4, 13))
+}
+
+export function Blah(props: Props) {
+>Blah : Symbol(Blah, Decl(index.tsx, 5, 1))
+>props : Symbol(props, Decl(index.tsx, 7, 21))
+>Props : Symbol(Props, Decl(index.tsx, 1, 31))
+
+  return <></>;
+}
+
+// Incompatible child.
+var a = <Blah>
+>a : Symbol(a, Decl(index.tsx, 12, 3), Decl(index.tsx, 17, 3), Decl(index.tsx, 22, 3), Decl(index.tsx, 36, 3), Decl(index.tsx, 41, 3) ... and 4 more)
+>Blah : Symbol(Blah, Decl(index.tsx, 5, 1))
+
+  {x => x}
+>x : Symbol(x, Decl(index.tsx, 13, 3))
+>x : Symbol(x, Decl(index.tsx, 13, 3))
+
+</Blah>
+>Blah : Symbol(Blah, Decl(index.tsx, 5, 1))
+
+// Blah components don't accept text as child elements
+var a = <Blah>
+>a : Symbol(a, Decl(index.tsx, 12, 3), Decl(index.tsx, 17, 3), Decl(index.tsx, 22, 3), Decl(index.tsx, 36, 3), Decl(index.tsx, 41, 3) ... and 4 more)
+>Blah : Symbol(Blah, Decl(index.tsx, 5, 1))
+
+  Hello unexpected text!
+</Blah>
+>Blah : Symbol(Blah, Decl(index.tsx, 5, 1))
+
+// Blah components don't accept multiple children.
+var a = <Blah>
+>a : Symbol(a, Decl(index.tsx, 12, 3), Decl(index.tsx, 17, 3), Decl(index.tsx, 22, 3), Decl(index.tsx, 36, 3), Decl(index.tsx, 41, 3) ... and 4 more)
+>Blah : Symbol(Blah, Decl(index.tsx, 5, 1))
+
+  {x => "" + x}
+>x : Symbol(x, Decl(index.tsx, 23, 3))
+>x : Symbol(x, Decl(index.tsx, 23, 3))
+
+  {x => "" + x}
+>x : Symbol(x, Decl(index.tsx, 24, 3))
+>x : Symbol(x, Decl(index.tsx, 24, 3))
+
+</Blah>
+>Blah : Symbol(Blah, Decl(index.tsx, 5, 1))
+
+interface PropsArr {
+>PropsArr : Symbol(PropsArr, Decl(index.tsx, 25, 7))
+
+  children: ((x: number) => string)[];
+>children : Symbol(PropsArr.children, Decl(index.tsx, 27, 20))
+>x : Symbol(x, Decl(index.tsx, 28, 14))
+}
+
+export function Blah2(props: PropsArr) {
+>Blah2 : Symbol(Blah2, Decl(index.tsx, 29, 1))
+>props : Symbol(props, Decl(index.tsx, 31, 22))
+>PropsArr : Symbol(PropsArr, Decl(index.tsx, 25, 7))
+
+  return <></>;
+}
+
+// Incompatible child.
+var a = <Blah2>
+>a : Symbol(a, Decl(index.tsx, 12, 3), Decl(index.tsx, 17, 3), Decl(index.tsx, 22, 3), Decl(index.tsx, 36, 3), Decl(index.tsx, 41, 3) ... and 4 more)
+>Blah2 : Symbol(Blah2, Decl(index.tsx, 29, 1))
+
+  {x => x}
+>x : Symbol(x, Decl(index.tsx, 37, 3))
+>x : Symbol(x, Decl(index.tsx, 37, 3))
+
+</Blah2>
+>Blah2 : Symbol(Blah2, Decl(index.tsx, 29, 1))
+
+// Blah2 components don't accept text as child elements
+var a = <Blah2>
+>a : Symbol(a, Decl(index.tsx, 12, 3), Decl(index.tsx, 17, 3), Decl(index.tsx, 22, 3), Decl(index.tsx, 36, 3), Decl(index.tsx, 41, 3) ... and 4 more)
+>Blah2 : Symbol(Blah2, Decl(index.tsx, 29, 1))
+
+  Hello unexpected text!
+</Blah2>
+>Blah2 : Symbol(Blah2, Decl(index.tsx, 29, 1))
+
+// Blah2 components don't accept multiple children of the wrong type.
+var a = <Blah2>
+>a : Symbol(a, Decl(index.tsx, 12, 3), Decl(index.tsx, 17, 3), Decl(index.tsx, 22, 3), Decl(index.tsx, 36, 3), Decl(index.tsx, 41, 3) ... and 4 more)
+>Blah2 : Symbol(Blah2, Decl(index.tsx, 29, 1))
+
+  {x => x}
+>x : Symbol(x, Decl(index.tsx, 47, 3))
+>x : Symbol(x, Decl(index.tsx, 47, 3))
+
+  {x => x}
+>x : Symbol(x, Decl(index.tsx, 48, 3))
+>x : Symbol(x, Decl(index.tsx, 48, 3))
+
+</Blah2>
+>Blah2 : Symbol(Blah2, Decl(index.tsx, 29, 1))
+
+type Cb = (x: number) => string;
+>Cb : Symbol(Cb, Decl(index.tsx, 49, 8))
+>x : Symbol(x, Decl(index.tsx, 51, 11))
+
+interface PropsMixed {
+>PropsMixed : Symbol(PropsMixed, Decl(index.tsx, 51, 32))
+
+  children: Cb | Cb[];
+>children : Symbol(PropsMixed.children, Decl(index.tsx, 52, 22))
+>Cb : Symbol(Cb, Decl(index.tsx, 49, 8))
+>Cb : Symbol(Cb, Decl(index.tsx, 49, 8))
+}
+
+export function Blah3(props: PropsMixed) {
+>Blah3 : Symbol(Blah3, Decl(index.tsx, 54, 1))
+>props : Symbol(props, Decl(index.tsx, 56, 22))
+>PropsMixed : Symbol(PropsMixed, Decl(index.tsx, 51, 32))
+
+  return <></>;
+}
+
+// Incompatible child.
+var a = <Blah3>
+>a : Symbol(a, Decl(index.tsx, 12, 3), Decl(index.tsx, 17, 3), Decl(index.tsx, 22, 3), Decl(index.tsx, 36, 3), Decl(index.tsx, 41, 3) ... and 4 more)
+>Blah3 : Symbol(Blah3, Decl(index.tsx, 54, 1))
+
+  {x => x}
+>x : Symbol(x, Decl(index.tsx, 62, 3))
+>x : Symbol(x, Decl(index.tsx, 62, 3))
+
+</Blah3>
+>Blah3 : Symbol(Blah3, Decl(index.tsx, 54, 1))
+
+// Blah3 components don't accept text as child elements
+var a = <Blah3>
+>a : Symbol(a, Decl(index.tsx, 12, 3), Decl(index.tsx, 17, 3), Decl(index.tsx, 22, 3), Decl(index.tsx, 36, 3), Decl(index.tsx, 41, 3) ... and 4 more)
+>Blah3 : Symbol(Blah3, Decl(index.tsx, 54, 1))
+
+  Hello unexpected text!
+</Blah3>
+>Blah3 : Symbol(Blah3, Decl(index.tsx, 54, 1))
+
+// Blah3 components don't accept multiple children of the wrong type.
+var a = <Blah3>
+>a : Symbol(a, Decl(index.tsx, 12, 3), Decl(index.tsx, 17, 3), Decl(index.tsx, 22, 3), Decl(index.tsx, 36, 3), Decl(index.tsx, 41, 3) ... and 4 more)
+>Blah3 : Symbol(Blah3, Decl(index.tsx, 54, 1))
+
+  {x => x}
+>x : Symbol(x, Decl(index.tsx, 72, 3))
+>x : Symbol(x, Decl(index.tsx, 72, 3))
+
+  {x => x}
+>x : Symbol(x, Decl(index.tsx, 73, 3))
+>x : Symbol(x, Decl(index.tsx, 73, 3))
+
+</Blah3>
+>Blah3 : Symbol(Blah3, Decl(index.tsx, 54, 1))
+

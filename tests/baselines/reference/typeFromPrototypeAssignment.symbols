@@ -7,22 +7,27 @@ var Multimap = function() {
 
     this._map = {};
 >this._map : Symbol(Multimap._map, Decl(a.js, 3, 27))
+>this : Symbol(Multimap, Decl(a.js, 3, 14))
 >_map : Symbol(Multimap._map, Decl(a.js, 3, 27))
 
     this._map
 >this._map : Symbol(Multimap._map, Decl(a.js, 3, 27))
+>this : Symbol(Multimap, Decl(a.js, 3, 14))
 >_map : Symbol(Multimap._map, Decl(a.js, 3, 27))
 
     this.set
 >this.set : Symbol(set, Decl(a.js, 11, 22))
+>this : Symbol(Multimap, Decl(a.js, 3, 14))
 >set : Symbol(set, Decl(a.js, 11, 22))
 
     this.get
 >this.get : Symbol(get, Decl(a.js, 17, 6))
+>this : Symbol(Multimap, Decl(a.js, 3, 14))
 >get : Symbol(get, Decl(a.js, 17, 6))
 
     this.addon
 >this.addon : Symbol(Multimap.addon, Decl(a.js, 24, 1))
+>this : Symbol(Multimap, Decl(a.js, 3, 14))
 >addon : Symbol(Multimap.addon, Decl(a.js, 24, 1))
 
 };
@@ -37,18 +42,22 @@ Multimap.prototype = {
 
         this._map
 >this._map : Symbol(Multimap._map, Decl(a.js, 3, 27))
+>this : Symbol(Multimap, Decl(a.js, 3, 14))
 >_map : Symbol(Multimap._map, Decl(a.js, 3, 27))
 
         this.set
 >this.set : Symbol(set, Decl(a.js, 11, 22))
+>this : Symbol(Multimap, Decl(a.js, 3, 14))
 >set : Symbol(set, Decl(a.js, 11, 22))
 
         this.get
 >this.get : Symbol(get, Decl(a.js, 17, 6))
+>this : Symbol(Multimap, Decl(a.js, 3, 14))
 >get : Symbol(get, Decl(a.js, 17, 6))
 
         this.addon
 >this.addon : Symbol(Multimap.addon, Decl(a.js, 24, 1))
+>this : Symbol(Multimap, Decl(a.js, 3, 14))
 >addon : Symbol(Multimap.addon, Decl(a.js, 24, 1))
 
     },
@@ -57,18 +66,22 @@ Multimap.prototype = {
 
         this._map
 >this._map : Symbol(Multimap._map, Decl(a.js, 3, 27))
+>this : Symbol(Multimap, Decl(a.js, 3, 14))
 >_map : Symbol(Multimap._map, Decl(a.js, 3, 27))
 
         this.set
 >this.set : Symbol(set, Decl(a.js, 11, 22))
+>this : Symbol(Multimap, Decl(a.js, 3, 14))
 >set : Symbol(set, Decl(a.js, 11, 22))
 
         this.get
 >this.get : Symbol(get, Decl(a.js, 17, 6))
+>this : Symbol(Multimap, Decl(a.js, 3, 14))
 >get : Symbol(get, Decl(a.js, 17, 6))
 
         this.addon
 >this.addon : Symbol(Multimap.addon, Decl(a.js, 24, 1))
+>this : Symbol(Multimap, Decl(a.js, 3, 14))
 >addon : Symbol(Multimap.addon, Decl(a.js, 24, 1))
     }
 }
@@ -81,18 +94,22 @@ Multimap.prototype.addon = function () {
 
     this._map
 >this._map : Symbol(Multimap._map, Decl(a.js, 3, 27))
+>this : Symbol(Multimap, Decl(a.js, 3, 14))
 >_map : Symbol(Multimap._map, Decl(a.js, 3, 27))
 
     this.set
 >this.set : Symbol(set, Decl(a.js, 11, 22))
+>this : Symbol(Multimap, Decl(a.js, 3, 14))
 >set : Symbol(set, Decl(a.js, 11, 22))
 
     this.get
 >this.get : Symbol(get, Decl(a.js, 17, 6))
+>this : Symbol(Multimap, Decl(a.js, 3, 14))
 >get : Symbol(get, Decl(a.js, 17, 6))
 
     this.addon
 >this.addon : Symbol(Multimap.addon, Decl(a.js, 24, 1))
+>this : Symbol(Multimap, Decl(a.js, 3, 14))
 >addon : Symbol(Multimap.addon, Decl(a.js, 24, 1))
 }
 

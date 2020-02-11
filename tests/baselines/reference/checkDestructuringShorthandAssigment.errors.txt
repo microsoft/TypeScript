@@ -1,4 +1,4 @@
-tests/cases/compiler/bug25434.js(4,9): error TS2304: Cannot find name 'b'.
+tests/cases/compiler/bug25434.js(4,9): error TS18004: No value exists in scope for the shorthand property 'b'. Either declare one or provide an initializer.
 
 
 ==== tests/cases/compiler/bug25434.js (1 errors) ====
@@ -7,5 +7,5 @@ tests/cases/compiler/bug25434.js(4,9): error TS2304: Cannot find name 'b'.
     
     Test(({ b = '5' } = {}));
             ~
-!!! error TS2304: Cannot find name 'b'.
+!!! error TS18004: No value exists in scope for the shorthand property 'b'. Either declare one or provide an initializer.
     

@@ -23,6 +23,14 @@ function foo<T>(t: T) {
     var rb3 = x in t;
 }
 
+function unionCase<T, U>(t: T | U) {
+    var rb4 = x in t;
+}
+
+function unionCase2<T>(t: T | object) {
+    var rb5 = x in t;
+}
+
 interface X { x: number }
 interface Y { y: number }
 
@@ -52,6 +60,12 @@ var rb1 = x in b1;
 var rb2 = x in {};
 function foo(t) {
     var rb3 = x in t;
+}
+function unionCase(t) {
+    var rb4 = x in t;
+}
+function unionCase2(t) {
+    var rb5 = x in t;
 }
 var c1;
 var c2;

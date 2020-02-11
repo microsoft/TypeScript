@@ -1,0 +1,143 @@
+=== tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts ===
+interface Foo {
+    a: string;
+>a : string
+
+    b: number;
+>b : number
+
+};
+
+interface Bar {
+    b: string;
+>b : string
+}
+
+interface Other {
+    totallyUnrelatedProperty: number;
+>totallyUnrelatedProperty : number
+}
+
+export let x = { a: '', b: '' };
+>x : { a: string; b: string; }
+>{ a: '', b: '' } : { a: string; b: string; }
+>a : string
+>'' : ""
+>b : string
+>'' : ""
+
+declare function f(x: Foo | Other): any;
+>f : (x: Foo | Other) => any
+>x : Foo | Other
+
+f(x);
+>f(x) : any
+>f : (x: Foo | Other) => any
+>x : { a: string; b: string; }
+
+f({ a: '', b: '' })
+>f({ a: '', b: '' }) : any
+>f : (x: Foo | Other) => any
+>{ a: '', b: '' } : { a: string; b: string; }
+>a : string
+>'' : ""
+>b : string
+>'' : ""
+
+declare function g(x: Bar | Other): any;
+>g : (x: Bar | Other) => any
+>x : Bar | Other
+
+g(x);
+>g(x) : any
+>g : (x: Bar | Other) => any
+>x : { a: string; b: string; }
+
+g({ a: '', b: '' })
+>g({ a: '', b: '' }) : any
+>g : (x: Bar | Other) => any
+>{ a: '', b: '' } : { a: string; b: string; }
+>a : string
+>'' : ""
+>b : string
+>'' : ""
+
+declare function h(x: Foo | Bar | Other): any;
+>h : (x: Foo | Bar | Other) => any
+>x : Foo | Bar | Other
+
+h(x);
+>h(x) : any
+>h : (x: Foo | Bar | Other) => any
+>x : { a: string; b: string; }
+
+h({ a: '', b: '' })
+>h({ a: '', b: '' }) : any
+>h : (x: Foo | Bar | Other) => any
+>{ a: '', b: '' } : { a: string; b: string; }
+>a : string
+>'' : ""
+>b : string
+>'' : ""
+
+interface CatDog { cat: any, dog: any }
+>cat : any
+>dog : any
+
+interface ManBearPig { man: any, bear: any, pig: any }
+>man : any
+>bear : any
+>pig : any
+
+interface Platypus { platypus: any }
+>platypus : any
+
+type ExoticAnimal =
+>ExoticAnimal : ExoticAnimal
+
+    | CatDog
+    | ManBearPig
+    | Platypus;
+
+declare function addToZoo(animal: ExoticAnimal): void;
+>addToZoo : (animal: ExoticAnimal) => void
+>animal : ExoticAnimal
+
+addToZoo({ dog: "Barky McBarkface" });
+>addToZoo({ dog: "Barky McBarkface" }) : void
+>addToZoo : (animal: ExoticAnimal) => void
+>{ dog: "Barky McBarkface" } : { dog: string; }
+>dog : string
+>"Barky McBarkface" : "Barky McBarkface"
+
+addToZoo({ man: "Manny", bear: "Coffee" });
+>addToZoo({ man: "Manny", bear: "Coffee" }) : void
+>addToZoo : (animal: ExoticAnimal) => void
+>{ man: "Manny", bear: "Coffee" } : { man: string; bear: string; }
+>man : string
+>"Manny" : "Manny"
+>bear : string
+>"Coffee" : "Coffee"
+
+const manBeer = { man: "Manny", beer: "Coffee" };
+>manBeer : { man: string; beer: string; }
+>{ man: "Manny", beer: "Coffee" } : { man: string; beer: string; }
+>man : string
+>"Manny" : "Manny"
+>beer : string
+>"Coffee" : "Coffee"
+
+addToZoo({ man: "Manny", beer: "Coffee" });
+>addToZoo({ man: "Manny", beer: "Coffee" }) : void
+>addToZoo : (animal: ExoticAnimal) => void
+>{ man: "Manny", beer: "Coffee" } : { man: string; beer: string; }
+>man : string
+>"Manny" : "Manny"
+>beer : string
+>"Coffee" : "Coffee"
+
+addToZoo(manBeer);
+>addToZoo(manBeer) : void
+>addToZoo : (animal: ExoticAnimal) => void
+>manBeer : { man: string; beer: string; }
+
