@@ -71,17 +71,10 @@ namespace ts {
         DtsOnly /** Only '.d.ts' */
     }
 
-    interface PathAndPackageId {
-        readonly fileName: string;
-        readonly packageId: PackageId | undefined;
-    }
     /** Used with `Extensions.DtsOnly` to extract the path from TypeScript results. */
-    function resolvedTypeScriptOnly(resolved: Resolved | undefined): PathAndPackageId | undefined {
-        if (!resolved) {
-            return undefined;
-        }
-        Debug.assert(extensionIsTS(resolved.extension));
-        return { fileName: resolved.path, packageId: resolved.packageId };
+    function resolvedTypeScriptOnly(resolved: Resolved | undefined): Resolved | undefined {
+        Debug.assert(!resolved || extensionIsTS(resolved.extension));
+        return resolved;
     }
 
     function createResolvedModuleWithFailedLookupLocations(resolved: Resolved | undefined, isExternalLibraryImport: boolean, failedLookupLocations: string[]): ResolvedModuleWithFailedLookupLocations {
@@ -316,8 +309,8 @@ namespace ts {
 
         let resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
         if (resolved) {
-            const { fileName, packageId } = resolved;
-            const resolvedFileName = options.preserveSymlinks ? fileName : realPath(fileName, host, traceEnabled);
+            const { path, packageId } = resolved;
+            const resolvedFileName = options.preserveSymlinks ? path : realPath(path, host, traceEnabled);
             if (traceEnabled) {
                 if (packageId) {
                     trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_with_Package_ID_2_primary_Colon_3, typeReferenceDirectiveName, resolvedFileName, packageIdToString(packageId), primary);
@@ -326,12 +319,12 @@ namespace ts {
                     trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolvedFileName, primary);
                 }
             }
-            resolvedTypeReferenceDirective = { primary, resolvedFileName, packageId, isExternalLibraryImport: pathContainsNodeModules(fileName) };
+            resolvedTypeReferenceDirective = { primary, resolvedFileName, packageId, isExternalLibraryImport: pathContainsNodeModules(path) };
         }
 
         return { resolvedTypeReferenceDirective, failedLookupLocations };
 
-        function primaryLookup(): PathAndPackageId | undefined {
+        function primaryLookup(): Resolved | undefined {
             // Check primary library paths
             if (typeRoots && typeRoots.length) {
                 if (traceEnabled) {
@@ -356,7 +349,7 @@ namespace ts {
             }
         }
 
-        function secondaryLookup(): PathAndPackageId | undefined {
+        function secondaryLookup(): Resolved | undefined {
             const initialLocationForSecondaryLookup = containingFile && getDirectoryPath(containingFile);
 
             if (initialLocationForSecondaryLookup !== undefined) {
