@@ -3089,6 +3089,7 @@ namespace ts.server.protocol {
         newLineCharacter?: string;
         convertTabsToSpaces?: boolean;
         indentStyle?: IndentStyle | ts.IndentStyle;
+        trimTrailingWhitespace?: boolean;
     }
 
     export interface FormatCodeSettings extends EditorSettings {

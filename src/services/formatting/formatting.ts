@@ -427,7 +427,9 @@ namespace ts.formatting {
             if (leadingTrivia) {
                 indentTriviaItems(leadingTrivia, initialIndentation, /*indentNextTokenOrTrivia*/ false,
                     item => processRange(item, sourceFile.getLineAndCharacterOfPosition(item.pos), enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!));
-                trimTrailingWhitespacesForRemainingRange();
+                if(options.trimTrailingWhitespace!){
+                    trimTrailingWhitespacesForRemainingRange();
+                }
             }
         }
 
@@ -978,6 +980,7 @@ namespace ts.formatting {
             formattingContext.updateContext(previousItem, previousParent, currentItem, currentParent, contextNode);
 
             const rules = getRules(formattingContext);
+            const trimTrailingWhitespace = formattingContext.options.trimTrailingWhitespace!;
 
             let trimTrailingWhitespaces = false;
             let lineAction = LineAction.None;
@@ -1007,11 +1010,11 @@ namespace ts.formatting {
                     }
 
                     // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
-                    trimTrailingWhitespaces = !(rule.action & RuleAction.DeleteSpace) && rule.flags !== RuleFlags.CanDeleteNewLines;
+                    trimTrailingWhitespaces = trimTrailingWhitespace && !(rule.action & RuleAction.DeleteSpace) && rule.flags !== RuleFlags.CanDeleteNewLines;
                 });
             }
             else {
-                trimTrailingWhitespaces = currentItem.kind !== SyntaxKind.EndOfFileToken;
+                trimTrailingWhitespaces = trimTrailingWhitespace && currentItem.kind !== SyntaxKind.EndOfFileToken;
             }
 
             if (currentStartLine !== previousStartLine && trimTrailingWhitespaces) {
