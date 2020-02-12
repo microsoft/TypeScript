@@ -1135,6 +1135,14 @@
         "category": "Error",
         "code": 1380
     },
+    "Unexpected token. Did you mean `{'}'}` or `&rbrace;`?": {
+        "category": "Error",
+        "code": 1381
+    },
+    "Unexpected token. Did you mean `{'>'}` or `&gt;`?": {
+        "category": "Error",
+        "code": 1382
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -2683,7 +2691,7 @@
         "category": "Error",
         "code": 2733
     },
-    "It is highly likely that you are missing a semicolon.": {
+    "Are you missing a semicolon?": {
         "category": "Error",
         "code": 2734
     },
@@ -2878,6 +2886,10 @@
     "'{0}' needs an explicit type annotation.": {
         "category": "Message",
         "code": 2782
+    },
+    "'{0}' is specified more than once, so this usage will be overwritten.": {
+        "category": "Error",
+        "code": 2783
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -5456,6 +5468,14 @@
     "Set the 'module' option in your configuration file to '{0}'": {
         "category": "Message",
         "code": 95099
+    },
+    "Convert invalid character to its html entity code": {
+        "category": "Message",
+        "code": 95100
+    },
+    "Wrap invalid character in an expression container": {
+        "category": "Message",
+        "code": 95101
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

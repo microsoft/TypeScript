@@ -178,4 +178,19 @@ namespace ts {
             assert.isNotNaN(program.getIdentifierCount());
         });
     });
+
+    describe("unittests:: programApi:: Program.getDiagnosticsProducingTypeChecker / Program.getSemanticDiagnostics", () => {
+        it("getSymbolAtLocation does not cause additional error to be added on module resolution failure", () => {
+            const main = new documents.TextDocument("/main.ts", "import \"./module\";");
+            const mod = new documents.TextDocument("/module.d.ts", "declare const foo: any;");
+
+            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main, mod], cwd: "/" });
+            const program = createProgram(["/main.ts"], {}, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
+
+            const sourceFile = program.getSourceFile("main.ts")!;
+            const typeChecker = program.getDiagnosticsProducingTypeChecker();
+            typeChecker.getSymbolAtLocation((sourceFile.statements[0] as ImportDeclaration).moduleSpecifier);
+            assert.isEmpty(program.getSemanticDiagnostics());
+        });
+    });
 }

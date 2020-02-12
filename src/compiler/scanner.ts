@@ -2156,6 +2156,12 @@ namespace ts {
                     }
                     break;
                 }
+                if (char === CharacterCodes.greaterThan) {
+                    error(Diagnostics.Unexpected_token_Did_you_mean_or_gt, pos, 1);
+                }
+                if (char === CharacterCodes.closeBrace) {
+                    error(Diagnostics.Unexpected_token_Did_you_mean_or_rbrace, pos, 1);
+                }
 
                 if (lastNonWhitespace > 0) lastNonWhitespace++;
 

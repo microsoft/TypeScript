@@ -40,8 +40,8 @@ namespace ts.Completions {
         return !!(origin.kind & SymbolOriginInfoKind.SymbolMember);
     }
 
-    function originIsExport(origin: SymbolOriginInfo): origin is SymbolOriginInfoExport {
-        return !!(origin.kind & SymbolOriginInfoKind.Export);
+    function originIsExport(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoExport {
+        return !!(origin && origin.kind & SymbolOriginInfoKind.Export);
     }
 
     function originIsPromise(origin: SymbolOriginInfo): boolean {
@@ -559,16 +559,6 @@ namespace ts.Completions {
         }) || { type: "none" };
     }
 
-    function getSymbolName(symbol: Symbol, origin: SymbolOriginInfo | undefined, target: ScriptTarget): string {
-        return origin && originIsExport(origin) && (
-            (origin.isDefaultExport && symbol.escapedName === InternalSymbolName.Default) ||
-            (symbol.escapedName === InternalSymbolName.ExportEquals))
-            // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
-            ? firstDefined(symbol.declarations, d => isExportAssignment(d) && isIdentifier(d.expression) ? d.expression.text : undefined)
-            || codefix.moduleSymbolToValidIdentifier(origin.moduleSymbol, target)
-            : symbol.name;
-    }
-
     export interface CompletionEntryIdentifier {
         name: string;
         source?: string;
@@ -671,7 +661,7 @@ namespace ts.Completions {
             exportedSymbol,
             moduleSymbol,
             sourceFile,
-            getSymbolName(symbol, symbolOriginInfo, compilerOptions.target!),
+            getNameForExportedSymbol(symbol, compilerOptions.target!),
             host,
             program,
             formatContext,
@@ -1632,7 +1622,7 @@ namespace ts.Completions {
                 const origin: SymbolOriginInfoExport = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport };
                 results.push({
                     symbol,
-                    symbolName: getSymbolName(symbol, origin, target),
+                    symbolName: getNameForExportedSymbol(symbol, target),
                     origin,
                     skipFilter,
                 });
@@ -2392,7 +2382,7 @@ namespace ts.Completions {
         origin: SymbolOriginInfo | undefined,
         kind: CompletionKind,
     ): CompletionEntryDisplayNameForSymbol | undefined {
-        const name = getSymbolName(symbol, origin, target);
+        const name = originIsExport(origin) ? getNameForExportedSymbol(symbol, target) : symbol.name;
         if (name === undefined
             // If the symbol is external module, don't show it in the completion list
             // (i.e declare module "http" { const x; } | // <= request completion here, "http" should not be there)
