@@ -24899,7 +24899,9 @@ namespace ts {
                 }
             }
 
-            return getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray);
+            const resultSignature = getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray);
+            resolveErrorCall(node); // Ensure that even if there's an arity error, subexpressions are checked
+            return resultSignature;
 
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
                 candidatesForArgumentError = undefined;
