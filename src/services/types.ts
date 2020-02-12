@@ -826,7 +826,7 @@ namespace ts {
             placeOpenBraceOnNewLineForFunctions: false,
             placeOpenBraceOnNewLineForControlBlocks: false,
             semicolons: SemicolonPreference.Ignore,
-            trimTrailingWhitespace: false
+            trimTrailingWhitespace: true
         };
     }
 
