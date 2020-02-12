@@ -14074,8 +14074,8 @@ namespace ts {
             source: Type,
             target: Type,
             relation: Map<RelationComparisonResult>,
-            headMessage: DiagnosticMessage | undefined,
-            containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
+            _headMessage: DiagnosticMessage | undefined,
+            _containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
             errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
         ): boolean {
             const callSignatures = getSignaturesOfType(source, SignatureKind.Call);
@@ -14085,13 +14085,15 @@ namespace ts {
                     const returnType = getReturnTypeOfSignature(s);
                     return !(returnType.flags & (TypeFlags.Any | TypeFlags.Never)) && checkTypeRelatedTo(returnType, target, relation, /*errorNode*/ undefined);
                 })) {
-                    const resultObj: { errors?: Diagnostic[] } = errorOutputContainer || {};
-                    checkTypeAssignableTo(source, target, node, headMessage, containingMessageChain, resultObj);
-                    const diagnostic = resultObj.errors![resultObj.errors!.length - 1];
+                    const [sourceType, targetType] = getTypeNamesForErrorDisplay(source, target);
+                    const diagnostic = error(node, Diagnostics.Type_0_is_not_assignable_to_type_1, sourceType, targetType);
                     addRelatedInfo(diagnostic, createDiagnosticForNode(
                         node,
                         signatures === constructSignatures ? Diagnostics.Did_you_mean_to_use_new_with_this_expression : Diagnostics.Did_you_mean_to_call_this_expression
                     ));
+                    if (errorOutputContainer && errorOutputContainer.skipLogging) {
+                        (errorOutputContainer.errors || (errorOutputContainer.errors = [])).push(diagnostic);
+                    }
                     return true;
                 }
             }

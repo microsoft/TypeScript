@@ -1,6 +1,6 @@
 tests/cases/conformance/jsx/file.tsx(20,10): error TS2741: Property 'children' is missing in type '{ a: number; b: string; }' but required in type 'Prop'.
 tests/cases/conformance/jsx/file.tsx(25,9): error TS2740: Type 'Element' is missing the following properties from type 'Button': render, setState, forceUpdate, state, and 2 more.
-tests/cases/conformance/jsx/file.tsx(29,10): error TS2740: Type 'typeof Button' is missing the following properties from type 'Button': render, setState, forceUpdate, props, and 3 more.
+tests/cases/conformance/jsx/file.tsx(29,10): error TS2322: Type 'typeof Button' is not assignable to type 'Button'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
@@ -40,6 +40,6 @@ tests/cases/conformance/jsx/file.tsx(29,10): error TS2740: Type 'typeof Button' 
         <Comp a={10} b="hi">
             {Button}
              ~~~~~~
-!!! error TS2740: Type 'typeof Button' is missing the following properties from type 'Button': render, setState, forceUpdate, props, and 3 more.
+!!! error TS2322: Type 'typeof Button' is not assignable to type 'Button'.
 !!! related TS6213 tests/cases/conformance/jsx/file.tsx:29:10: Did you mean to use 'new' with this expression?
         </Comp>;
