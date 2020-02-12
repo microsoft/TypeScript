@@ -792,7 +792,7 @@ namespace ts.server {
             // //server/location
             //         ^ <- from 0 to this position
             const firstSlash = path.indexOf(directorySeparator, 2);
-            return firstSlash !== -1 ? path.substring(0, firstSlash).toLowerCase() : path;
+            return firstSlash !== -1 ? toFileNameLowerCase(path.substring(0, firstSlash)) : path;
         }
         const rootLength = getRootLength(path);
         if (rootLength === 0) {
@@ -801,7 +801,7 @@ namespace ts.server {
         }
         if (path.charCodeAt(1) === CharacterCodes.colon && path.charCodeAt(2) === CharacterCodes.slash) {
             // rooted path that starts with c:/... - extract drive letter
-            return path.charAt(0).toLowerCase();
+            return toFileNameLowerCase(path.charAt(0));
         }
         if (path.charCodeAt(0) === CharacterCodes.slash && path.charCodeAt(1) !== CharacterCodes.slash) {
             // rooted path that starts with slash - /somename - use key for current drive
@@ -825,9 +825,9 @@ namespace ts.server {
     const noopWatcher: FileWatcher = { close: noop };
     // This is the function that catches the exceptions when watching directory, and yet lets project service continue to function
     // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
-    function watchDirectorySwallowingException(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher {
+    function watchDirectorySwallowingException(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher {
         try {
-            return originalWatchDirectory(path, callback, recursive);
+            return originalWatchDirectory(path, callback, recursive, options);
         }
         catch (e) {
             logger.info(`Exception when creating directory watcher: ${e.message}`);
@@ -838,7 +838,7 @@ namespace ts.server {
     if (useWatchGuard) {
         const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
         const statusCache = createMap<boolean>();
-        sys.watchDirectory = (path, callback, recursive) => {
+        sys.watchDirectory = (path, callback, recursive, options) => {
             const cacheKey = extractWatchDirectoryCacheKey(path, currentDrive);
             let status = cacheKey && statusCache.get(cacheKey);
             if (status === undefined) {
@@ -871,7 +871,7 @@ namespace ts.server {
             }
             if (status) {
                 // this drive is safe to use - call real 'watchDirectory'
-                return watchDirectorySwallowingException(path, callback, recursive);
+                return watchDirectorySwallowingException(path, callback, recursive, options);
             }
             else {
                 // this drive is unsafe - return no-op watcher

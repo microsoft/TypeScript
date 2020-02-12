@@ -1,8 +1,7 @@
 tests/cases/compiler/generics4.ts(7,1): error TS2322: Type 'C<Y>' is not assignable to type 'C<X>'.
   Type 'Y' is not assignable to type 'X'.
-    Types of property 'f' are incompatible.
-      Type '() => boolean' is not assignable to type '() => string'.
-        Type 'boolean' is not assignable to type 'string'.
+    The types returned by 'f()' are incompatible between these types.
+      Type 'boolean' is not assignable to type 'string'.
 
 
 ==== tests/cases/compiler/generics4.ts (1 errors) ====
@@ -16,6 +15,5 @@ tests/cases/compiler/generics4.ts(7,1): error TS2322: Type 'C<Y>' is not assigna
     ~
 !!! error TS2322: Type 'C<Y>' is not assignable to type 'C<X>'.
 !!! error TS2322:   Type 'Y' is not assignable to type 'X'.
-!!! error TS2322:     Types of property 'f' are incompatible.
-!!! error TS2322:       Type '() => boolean' is not assignable to type '() => string'.
-!!! error TS2322:         Type 'boolean' is not assignable to type 'string'.
+!!! error TS2322:     The types returned by 'f()' are incompatible between these types.
+!!! error TS2322:       Type 'boolean' is not assignable to type 'string'.

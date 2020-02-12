@@ -66,19 +66,19 @@ namespace ts.refactor.extractSymbol {
 
         const infos: ApplicableRefactorInfo[] = [];
 
-        if (functionActions.length) {
-            infos.push({
-                name: refactorName,
-                description: getLocaleSpecificMessage(Diagnostics.Extract_function),
-                actions: functionActions
-            });
-        }
-
         if (constantActions.length) {
             infos.push({
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
                 actions: constantActions
+            });
+        }
+
+        if (functionActions.length) {
+            infos.push({
+                name: refactorName,
+                description: getLocaleSpecificMessage(Diagnostics.Extract_function),
+                actions: functionActions
             });
         }
 
@@ -116,6 +116,7 @@ namespace ts.refactor.extractSymbol {
         export const cannotExtractRange: DiagnosticMessage = createMessage("Cannot extract range.");
         export const cannotExtractImport: DiagnosticMessage = createMessage("Cannot extract import statement.");
         export const cannotExtractSuper: DiagnosticMessage = createMessage("Cannot extract super call.");
+        export const cannotExtractJSDoc: DiagnosticMessage = createMessage("Cannot extract JSDoc.");
         export const cannotExtractEmpty: DiagnosticMessage = createMessage("Cannot extract empty range.");
         export const expressionExpected: DiagnosticMessage = createMessage("expression expected.");
         export const uselessConstantType: DiagnosticMessage = createMessage("No reason to extract constant of type.");
@@ -244,6 +245,10 @@ namespace ts.refactor.extractSymbol {
             }
 
             return { targetRange: { range: statements, facts: rangeFacts, declarations } };
+        }
+
+        if (isJSDoc(start)) {
+            return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractJSDoc)] };
         }
 
         if (isReturnStatement(start) && !start.expression) {
@@ -432,6 +437,7 @@ namespace ts.refactor.extractSymbol {
                             permittedJumps = PermittedJumps.Return;
                         }
                         break;
+                    case SyntaxKind.DefaultClause:
                     case SyntaxKind.CaseClause:
                         // allow unlabeled break inside case clauses
                         permittedJumps |= PermittedJumps.Break;

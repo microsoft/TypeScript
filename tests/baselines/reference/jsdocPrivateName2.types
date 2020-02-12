@@ -1,0 +1,10 @@
+=== tests/cases/conformance/jsdoc/jsdocPrivateName1.js ===
+// Expecting parse error for private field
+No type information for this code.
+No type information for this code./**
+No type information for this code. * @typedef A
+No type information for this code. * @type {object}
+No type information for this code. * @property {string} #id
+No type information for this code. */
+No type information for this code.
+No type information for this code.

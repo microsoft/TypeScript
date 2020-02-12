@@ -227,5 +227,13 @@ declare let e2: {
     a: number;
     b: number;
 };
-declare let e3: any;
-declare let e4: any;
+declare let e3: {
+    a: 1;
+    b: "abc";
+    c: true;
+};
+declare let e4: {
+    a: 1;
+    b: "abc";
+    c: true;
+};

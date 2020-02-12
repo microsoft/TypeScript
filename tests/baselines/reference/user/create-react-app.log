@@ -1,6 +1,6 @@
 Exit Code: 1
 Standard output:
-test/fixtures/issue-5176-flow-class-properties/src/App.js(5,8): error TS8010: 'types' can only be used in a .ts file.
+test/fixtures/issue-5176-flow-class-properties/src/App.js(5,8): error TS8010: Type annotations can only be used in TypeScript files.
 test/fixtures/issue-5176-flow-class-properties/src/App.js(5,13): error TS1005: ';' expected.
 test/fixtures/webpack-message-formatting/src/AppBabel.js(6,8): error TS17008: JSX element 'div' has no corresponding closing tag.
 test/fixtures/webpack-message-formatting/src/AppBabel.js(8,7): error TS17002: Expected corresponding JSX closing tag for 'span'.

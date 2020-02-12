@@ -203,6 +203,12 @@ namespace Harness.LanguageService {
             return ts.computeLineAndCharacterOfPosition(script.getLineMap(), position);
         }
 
+        public lineAndCharacterToPosition(fileName: string, lineAndCharacter: ts.LineAndCharacter): number {
+            const script: ScriptInfo = this.getScriptInfo(fileName)!;
+            assert.isOk(script);
+            return ts.computePositionOfLineAndCharacter(script.getLineMap(), lineAndCharacter.line, lineAndCharacter.character);
+        }
+
         useCaseSensitiveFileNames() {
             return !this.vfs.ignoreCase;
         }
@@ -212,6 +218,10 @@ namespace Harness.LanguageService {
     class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost, LanguageServiceAdapterHost {
         isKnownTypesPackageName(name: string): boolean {
             return !!this.typesRegistry && this.typesRegistry.has(name);
+        }
+
+        getGlobalTypingsCacheLocation() {
+            return "/Library/Caches/typescript";
         }
 
         installPackage = ts.notImplemented;
@@ -564,6 +574,15 @@ namespace Harness.LanguageService {
         getEditsForFileRename(): readonly ts.FileTextChanges[] {
             throw new Error("Not supported on the shim.");
         }
+        prepareCallHierarchy(fileName: string, position: number) {
+            return unwrapJSONCallResult(this.shim.prepareCallHierarchy(fileName, position));
+        }
+        provideCallHierarchyIncomingCalls(fileName: string, position: number) {
+            return unwrapJSONCallResult(this.shim.provideCallHierarchyIncomingCalls(fileName, position));
+        }
+        provideCallHierarchyOutgoingCalls(fileName: string, position: number) {
+            return unwrapJSONCallResult(this.shim.provideCallHierarchyOutgoingCalls(fileName, position));
+        }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
         }
@@ -587,7 +606,7 @@ namespace Harness.LanguageService {
         private factory: ts.TypeScriptServicesFactory;
         constructor(preprocessToResolve: boolean, cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
             this.host = new ShimLanguageServiceHost(preprocessToResolve, cancellationToken, options);
-            this.factory = new TypeScript.Services.TypeScriptServicesFactory();
+            this.factory = new ts.TypeScriptServicesFactory();
         }
         getHost() { return this.host; }
         getLanguageService(): ts.LanguageService { return new LanguageServiceShimProxy(this.factory.createLanguageServiceShim(this.host)); }
@@ -790,7 +809,7 @@ namespace Harness.LanguageService {
             return mockHash(s);
         }
 
-        require(_initialDir: string, _moduleName: string): ts.server.RequireResult {
+        require(_initialDir: string, _moduleName: string): ts.RequireResult {
             switch (_moduleName) {
                 // Adds to the Quick Info a fixed string and a string from the config file
                 // and replaces the first display part

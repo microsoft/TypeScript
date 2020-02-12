@@ -28,11 +28,14 @@ namespace ts {
         getTokenFlags(): TokenFlags;
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
-        reScanTemplateToken(): SyntaxKind;
+        reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
+        reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
+        reScanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(): JsxTokenSyntaxKind;
         reScanLessThanToken(): SyntaxKind;
+        reScanQuestionToken(): SyntaxKind;
         scanJsxToken(): JsxTokenSyntaxKind;
         scanJsDocToken(): JSDocSyntaxKind;
         scan(): SyntaxKind;
@@ -66,6 +69,7 @@ namespace ts {
         abstract: SyntaxKind.AbstractKeyword,
         any: SyntaxKind.AnyKeyword,
         as: SyntaxKind.AsKeyword,
+        asserts: SyntaxKind.AssertsKeyword,
         bigint: SyntaxKind.BigIntKeyword,
         boolean: SyntaxKind.BooleanKeyword,
         break: SyntaxKind.BreakKeyword,
@@ -183,6 +187,8 @@ namespace ts {
         "&&": SyntaxKind.AmpersandAmpersandToken,
         "||": SyntaxKind.BarBarToken,
         "?": SyntaxKind.QuestionToken,
+        "??": SyntaxKind.QuestionQuestionToken,
+        "?.": SyntaxKind.QuestionDotToken,
         ":": SyntaxKind.ColonToken,
         "=": SyntaxKind.EqualsToken,
         "+=": SyntaxKind.PlusEqualsToken,
@@ -461,6 +467,14 @@ namespace ts {
 
     function isDigit(ch: number): boolean {
         return ch >= CharacterCodes._0 && ch <= CharacterCodes._9;
+    }
+
+    function isHexDigit(ch: number): boolean {
+        return isDigit(ch) || ch >= CharacterCodes.A && ch <= CharacterCodes.F || ch >= CharacterCodes.a && ch <= CharacterCodes.f;
+    }
+
+    function isCodePoint(code: number): boolean {
+        return code <= 0x10FFFF;
     }
 
     /* @internal */
@@ -896,10 +910,13 @@ namespace ts {
             reScanGreaterToken,
             reScanSlashToken,
             reScanTemplateToken,
+            reScanTemplateHeadOrNoSubstitutionTemplate,
             scanJsxIdentifier,
             scanJsxAttributeValue,
+            reScanJsxAttributeValue,
             reScanJsxToken,
             reScanLessThanToken,
+            reScanQuestionToken,
             scanJsxToken,
             scanJsDocToken,
             scan,
@@ -1157,7 +1174,7 @@ namespace ts {
          * Sets the current 'tokenValue' and returns a NoSubstitutionTemplateLiteral or
          * a literal component of a TemplateExpression.
          */
-        function scanTemplateAndSetTokenValue(): SyntaxKind {
+        function scanTemplateAndSetTokenValue(isTaggedTemplate: boolean): SyntaxKind {
             const startedWithBacktick = text.charCodeAt(pos) === CharacterCodes.backtick;
 
             pos++;
@@ -1195,7 +1212,7 @@ namespace ts {
                 // Escape character
                 if (currChar === CharacterCodes.backslash) {
                     contents += text.substring(start, pos);
-                    contents += scanEscapeSequence();
+                    contents += scanEscapeSequence(isTaggedTemplate);
                     start = pos;
                     continue;
                 }
@@ -1224,7 +1241,8 @@ namespace ts {
             return resultingToken;
         }
 
-        function scanEscapeSequence(): string {
+        function scanEscapeSequence(isTaggedTemplate?: boolean): string {
+            const start = pos;
             pos++;
             if (pos >= end) {
                 error(Diagnostics.Unexpected_end_of_text);
@@ -1234,6 +1252,12 @@ namespace ts {
             pos++;
             switch (ch) {
                 case CharacterCodes._0:
+                    // '\01'
+                    if (isTaggedTemplate && pos < end && isDigit(text.charCodeAt(pos))) {
+                        pos++;
+                        tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                        return text.substring(start, pos);
+                    }
                     return "\0";
                 case CharacterCodes.b:
                     return "\b";
@@ -1252,10 +1276,41 @@ namespace ts {
                 case CharacterCodes.doubleQuote:
                     return "\"";
                 case CharacterCodes.u:
+                    if (isTaggedTemplate) {
+                        // '\u' or '\u0' or '\u00' or '\u000'
+                        for (let escapePos = pos; escapePos < pos + 4; escapePos++) {
+                            if (escapePos < end && !isHexDigit(text.charCodeAt(escapePos)) && text.charCodeAt(escapePos) !== CharacterCodes.openBrace) {
+                                pos = escapePos;
+                                tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                                return text.substring(start, pos);
+                            }
+                        }
+                    }
                     // '\u{DDDDDDDD}'
                     if (pos < end && text.charCodeAt(pos) === CharacterCodes.openBrace) {
-                        tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
                         pos++;
+
+                        // '\u{'
+                        if (isTaggedTemplate && !isHexDigit(text.charCodeAt(pos))) {
+                            tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                            return text.substring(start, pos);
+                        }
+
+                        if (isTaggedTemplate) {
+                            const savePos = pos;
+                            const escapedValueString = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
+                            const escapedValue = escapedValueString ? parseInt(escapedValueString, 16) : -1;
+
+                            // '\u{Not Code Point' or '\u{CodePoint'
+                            if (!isCodePoint(escapedValue) || text.charCodeAt(pos) !== CharacterCodes.closeBrace) {
+                                tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                                return text.substring(start, pos);
+                            }
+                            else {
+                                pos = savePos;
+                            }
+                        }
+                        tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
                         return scanExtendedUnicodeEscape();
                     }
 
@@ -1264,6 +1319,17 @@ namespace ts {
                     return scanHexadecimalEscape(/*numDigits*/ 4);
 
                 case CharacterCodes.x:
+                    if (isTaggedTemplate) {
+                        if (!isHexDigit(text.charCodeAt(pos))) {
+                            tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                            return text.substring(start, pos);
+                        }
+                        else if (!isHexDigit(text.charCodeAt(pos + 1))) {
+                            pos++;
+                            tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                            return text.substring(start, pos);
+                        }
+                    }
                     // '\xDD'
                     return scanHexadecimalEscape(/*numDigits*/ 2);
 
@@ -1328,20 +1394,6 @@ namespace ts {
             }
 
             return utf16EncodeAsString(escapedValue);
-        }
-
-        // Derived from the 10.1.1 UTF16Encoding of the ES6 Spec.
-        function utf16EncodeAsString(codePoint: number): string {
-            Debug.assert(0x0 <= codePoint && codePoint <= 0x10FFFF);
-
-            if (codePoint <= 65535) {
-                return String.fromCharCode(codePoint);
-            }
-
-            const codeUnit1 = Math.floor((codePoint - 65536) / 1024) + 0xD800;
-            const codeUnit2 = ((codePoint - 65536) % 1024) + 0xDC00;
-
-            return String.fromCharCode(codeUnit1, codeUnit2);
         }
 
         // Current character is known to be a backslash. Check for Unicode escape of the form '\uXXXX'
@@ -1568,7 +1620,7 @@ namespace ts {
                         tokenValue = scanString();
                         return token = SyntaxKind.StringLiteral;
                     case CharacterCodes.backtick:
-                        return token = scanTemplateAndSetTokenValue();
+                        return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ false);
                     case CharacterCodes.percent:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.PercentEqualsToken;
@@ -1828,6 +1880,14 @@ namespace ts {
                         return token = SyntaxKind.GreaterThanToken;
                     case CharacterCodes.question:
                         pos++;
+                        if (text.charCodeAt(pos) === CharacterCodes.dot && !isDigit(text.charCodeAt(pos + 1))) {
+                            pos++;
+                            return token = SyntaxKind.QuestionDotToken;
+                        }
+                        if (text.charCodeAt(pos) === CharacterCodes.question) {
+                            pos++;
+                            return token = SyntaxKind.QuestionQuestionToken;
+                        }
                         return token = SyntaxKind.QuestionToken;
                     case CharacterCodes.openBracket:
                         pos++;
@@ -1892,6 +1952,26 @@ namespace ts {
                         error(Diagnostics.Invalid_character);
                         pos++;
                         return token = SyntaxKind.Unknown;
+                    case CharacterCodes.hash:
+                        if (pos !== 0 && text[pos + 1] === "!") {
+                            error(Diagnostics.can_only_be_used_at_the_start_of_a_file);
+                            pos++;
+                            return token = SyntaxKind.Unknown;
+                        }
+                        pos++;
+                        if (isIdentifierStart(ch = text.charCodeAt(pos), languageVersion)) {
+                            pos++;
+                            while (pos < end && isIdentifierPart(ch = text.charCodeAt(pos), languageVersion)) pos++;
+                            tokenValue = text.substring(tokenPos, pos);
+                            if (ch === CharacterCodes.backslash) {
+                                tokenValue += scanIdentifierParts();
+                            }
+                        }
+                        else {
+                            tokenValue = "#";
+                            error(Diagnostics.Invalid_character);
+                        }
+                        return token = SyntaxKind.PrivateIdentifier;
                     default:
                         if (isIdentifierStart(ch, languageVersion)) {
                             pos += charSize(ch);
@@ -1998,10 +2078,15 @@ namespace ts {
         /**
          * Unconditionally back up and scan a template expression portion.
          */
-        function reScanTemplateToken(): SyntaxKind {
+        function reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind {
             Debug.assert(token === SyntaxKind.CloseBraceToken, "'reScanTemplateToken' should only be called on a '}'");
             pos = tokenPos;
-            return token = scanTemplateAndSetTokenValue();
+            return token = scanTemplateAndSetTokenValue(isTaggedTemplate);
+        }
+
+        function reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind {
+            pos = tokenPos;
+            return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ true);
         }
 
         function reScanJsxToken(): JsxTokenSyntaxKind {
@@ -2015,6 +2100,12 @@ namespace ts {
                 return token = SyntaxKind.LessThanToken;
             }
             return token;
+        }
+
+        function reScanQuestionToken(): SyntaxKind {
+            Debug.assert(token === SyntaxKind.QuestionQuestionToken, "'reScanQuestionToken' should only be called on a '??'");
+            pos = tokenPos + 1;
+            return token = SyntaxKind.QuestionToken;
         }
 
         function scanJsxToken(): JsxTokenSyntaxKind {
@@ -2041,10 +2132,19 @@ namespace ts {
 
             // First non-whitespace character on this line.
             let firstNonWhitespace = 0;
+            let lastNonWhitespace = -1;
+
             // These initial values are special because the first line is:
             // firstNonWhitespace = 0 to indicate that we want leading whitespace,
 
             while (pos < end) {
+
+                // We want to keep track of the last non-whitespace (but including
+                // newlines character for hitting the end of the JSX Text region)
+                if (!isWhiteSpaceSingleLine(char)) {
+                    lastNonWhitespace = pos;
+                }
+
                 char = text.charCodeAt(pos);
                 if (char === CharacterCodes.openBrace) {
                     break;
@@ -2056,6 +2156,14 @@ namespace ts {
                     }
                     break;
                 }
+                if (char === CharacterCodes.greaterThan) {
+                    error(Diagnostics.Unexpected_token_Did_you_mean_or_gt, pos, 1);
+                }
+                if (char === CharacterCodes.closeBrace) {
+                    error(Diagnostics.Unexpected_token_Did_you_mean_or_rbrace, pos, 1);
+                }
+
+                if (lastNonWhitespace > 0) lastNonWhitespace++;
 
                 // FirstNonWhitespace is 0, then we only see whitespaces so far. If we see a linebreak, we want to ignore that whitespaces.
                 // i.e (- : whitespace)
@@ -2069,10 +2177,13 @@ namespace ts {
                 else if (!isWhiteSpaceLike(char)) {
                     firstNonWhitespace = pos;
                 }
+
                 pos++;
             }
 
-            tokenValue = text.substring(startPos, pos);
+            const endPosition = lastNonWhitespace === -1 ? pos : lastNonWhitespace;
+            tokenValue = text.substring(startPos, endPosition);
+
             return firstNonWhitespace === -1 ? SyntaxKind.JsxTextAllWhiteSpaces : SyntaxKind.JsxText;
         }
 
@@ -2112,6 +2223,11 @@ namespace ts {
                     // If this scans anything other than `{`, it's a parse error.
                     return scan();
             }
+        }
+
+        function reScanJsxAttributeValue(): SyntaxKind {
+            pos = tokenPos = startPos;
+            return scanJsxAttributeValue();
         }
 
         function scanJsDocToken(): JSDocSyntaxKind {
@@ -2312,5 +2428,26 @@ namespace ts {
             return 2;
         }
         return 1;
+    }
+
+    // Derived from the 10.1.1 UTF16Encoding of the ES6 Spec.
+    function utf16EncodeAsStringFallback(codePoint: number) {
+        Debug.assert(0x0 <= codePoint && codePoint <= 0x10FFFF);
+
+        if (codePoint <= 65535) {
+            return String.fromCharCode(codePoint);
+        }
+
+        const codeUnit1 = Math.floor((codePoint - 65536) / 1024) + 0xD800;
+        const codeUnit2 = ((codePoint - 65536) % 1024) + 0xDC00;
+
+        return String.fromCharCode(codeUnit1, codeUnit2);
+    }
+
+    const utf16EncodeAsStringWorker: (codePoint: number) => string = (String as any).fromCodePoint ? codePoint => String.fromCodePoint(codePoint) : utf16EncodeAsStringFallback;
+
+    /* @internal */
+    export function utf16EncodeAsString(codePoint: number) {
+        return utf16EncodeAsStringWorker(codePoint);
     }
 }

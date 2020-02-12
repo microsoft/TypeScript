@@ -276,7 +276,7 @@ namespace ts.projectSystem {
                 configFileName: "tsconfig.json",
                 projectType: "configured",
                 languageServiceEnabled: true,
-                version,
+                version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                 ...partial,
             });
         }
@@ -292,7 +292,7 @@ namespace ts.projectSystem {
     export class TestSession extends server.Session {
         private seq = 0;
         public events: protocol.Event[] = [];
-        public host!: TestServerHost;
+        public testhost: TestServerHost = this.host as TestServerHost;
 
         getProjectService() {
             return this.projectService;
@@ -320,7 +320,7 @@ namespace ts.projectSystem {
 
         public clearMessages() {
             clear(this.events);
-            this.host.clearOutput();
+            this.testhost.clearOutput();
         }
     }
 
@@ -491,17 +491,17 @@ namespace ts.projectSystem {
         checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path)!.fileName), expectedFiles.map(file => file.path));
     }
 
-    export function checkScriptInfos(projectService: server.ProjectService, expectedFiles: readonly string[]) {
-        checkArray("ScriptInfos files", arrayFrom(projectService.filenameToScriptInfo.values(), info => info.fileName), expectedFiles);
+    export function checkScriptInfos(projectService: server.ProjectService, expectedFiles: readonly string[], additionInfo?: string) {
+        checkArray(`ScriptInfos files: ${additionInfo || ""}`, arrayFrom(projectService.filenameToScriptInfo.values(), info => info.fileName), expectedFiles);
     }
 
-    export function protocolLocationFromSubstring(str: string, substring: string): protocol.Location {
-        const start = str.indexOf(substring);
+    export function protocolLocationFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): protocol.Location {
+        const start = nthIndexOf(str, substring, options ? options.index : 0);
         Debug.assert(start !== -1);
         return protocolToLocation(str)(start);
     }
 
-    function protocolToLocation(text: string): (pos: number) => protocol.Location {
+    export function protocolToLocation(text: string): (pos: number) => protocol.Location {
         const lineStarts = computeLineStarts(text);
         return pos => {
             const x = computeLineAndCharacterOfPosition(lineStarts, pos);
@@ -587,8 +587,8 @@ namespace ts.projectSystem {
         return createTextSpan(start, substring.length);
     }
 
-    export function protocolFileLocationFromSubstring(file: File, substring: string): protocol.FileLocationRequestArgs {
-        return { file: file.path, ...protocolLocationFromSubstring(file.content, substring) };
+    export function protocolFileLocationFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): protocol.FileLocationRequestArgs {
+        return { file: file.path, ...protocolLocationFromSubstring(file.content, substring, options) };
     }
 
     export interface SpanFromSubstringOptions {
@@ -664,7 +664,7 @@ namespace ts.projectSystem {
         session.executeCommand(makeSessionRequest(command, args));
     }
 
-    export function openFilesForSession(files: readonly (File | { readonly file: File | string, readonly projectRootPath: string })[], session: server.Session): void {
+    export function openFilesForSession(files: readonly (File | { readonly file: File | string, readonly projectRootPath: string, content?: string })[], session: server.Session): void {
         for (const file of files) {
             session.executeCommand(makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open,
                 "projectRootPath" in file ? { file: typeof file.file === "string" ? file.file : file.file.path, projectRootPath: file.projectRootPath } : { file: file.path })); // eslint-disable-line no-in-operator
@@ -721,8 +721,8 @@ namespace ts.projectSystem {
         const events = session.events;
         assert.deepEqual(events[index], expectedEvent, `Expected ${JSON.stringify(expectedEvent)} at ${index} in ${JSON.stringify(events)}`);
 
-        const outputs = session.host.getOutput();
-        assert.equal(outputs[index], server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, session.host.newLine));
+        const outputs = session.testhost.getOutput();
+        assert.equal(outputs[index], server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, session.testhost.newLine));
 
         if (isMostRecent) {
             assert.strictEqual(events.length, index + 1, JSON.stringify(events));
@@ -732,14 +732,15 @@ namespace ts.projectSystem {
 
     export interface MakeReferenceItem extends DocumentSpanFromSubstring {
         isDefinition: boolean;
+        isWriteAccess?: boolean;
         lineText: string;
     }
 
-    export function makeReferenceItem({ isDefinition, lineText, ...rest }: MakeReferenceItem): protocol.ReferencesResponseItem {
+    export function makeReferenceItem({ isDefinition, isWriteAccess, lineText, ...rest }: MakeReferenceItem): protocol.ReferencesResponseItem {
         return {
             ...protocolFileSpanWithContextFromSubstring(rest),
             isDefinition,
-            isWriteAccess: isDefinition,
+            isWriteAccess: isWriteAccess === undefined ? isDefinition : isWriteAccess,
             lineText,
         };
     }

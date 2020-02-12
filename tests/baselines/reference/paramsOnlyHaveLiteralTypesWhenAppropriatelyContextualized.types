@@ -71,14 +71,14 @@ appendToOptionalArray(foo, 'y', 'bar'); // ok
 >'bar' : "bar"
 
 appendToOptionalArray(foo, 'y', 12);    // should fail
->appendToOptionalArray(foo, 'y', 12) : any
+>appendToOptionalArray(foo, 'y', 12) : void
 >appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[] | undefined; }, key: K, value: T) => void
 >foo : { x?: number[] | undefined; y?: string[] | undefined; }
 >'y' : "y"
 >12 : 12
 
 appendToOptionalArray(foo, 'x', "no");  // should fail
->appendToOptionalArray(foo, 'x', "no") : any
+>appendToOptionalArray(foo, 'x', "no") : void
 >appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[] | undefined; }, key: K, value: T) => void
 >foo : { x?: number[] | undefined; y?: string[] | undefined; }
 >'x' : "x"

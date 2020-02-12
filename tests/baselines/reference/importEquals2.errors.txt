@@ -1,0 +1,17 @@
+/c.ts(2,7): error TS2339: Property 'A' does not exist on type 'typeof import("/a")'.
+
+
+==== /c.ts (1 errors) ====
+    import a = require('./b');
+    new a.A(); // Error
+          ~
+!!! error TS2339: Property 'A' does not exist on type 'typeof import("/a")'.
+    
+==== /a.ts (0 errors) ====
+    class A {}
+    export type { A }
+    
+==== /b.ts (0 errors) ====
+    import * as a from './a';
+    export = a;
+    
