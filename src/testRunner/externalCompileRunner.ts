@@ -81,7 +81,9 @@ namespace Harness {
                     if (types) {
                         args.push("--types", types.join(","));
                         // Also actually install those types (for, eg, the js projects which need node)
-                        exec("npm", ["i", ...types.map(t => `@types/${t}`), "--no-save", "--ignore-scripts"], { cwd: originalCwd, timeout: timeout / 2 }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
+                        if (types.length) {
+                            exec("npm", ["i", ...types.map(t => `@types/${t}`), "--no-save", "--ignore-scripts"], { cwd: originalCwd, timeout: timeout / 2 }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
+                        }
                     }
                     args.push("--noEmit");
                     Baseline.runBaseline(`${cls.kind()}/${directoryName}.log`, cls.report(cp.spawnSync(`node`, args, { cwd, timeout, shell: true }), cwd));
