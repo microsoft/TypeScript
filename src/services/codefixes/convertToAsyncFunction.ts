@@ -85,15 +85,11 @@ namespace ts.codefix {
         // add the async keyword
         changes.insertLastModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, functionToConvert);
 
-        function startTransformation(node: CallExpression, nodeToReplace: Node) {
-            const newNodes = transformExpression(node, transformer, node);
-            changes.replaceNodeWithNodes(sourceFile, nodeToReplace, newNodes);
-        }
-
-        for (const statement of returnStatements) {
-            forEachChild(statement, function visit(node) {
+        for (const returnStatement of returnStatements) {
+            forEachChild(returnStatement, function visit(node) {
                 if (isCallExpression(node)) {
-                    startTransformation(node, statement);
+                    const newNodes = transformExpression(node, transformer, node);
+                    changes.replaceNodeWithNodes(sourceFile, returnStatement, newNodes);
                 }
                 else if (!isFunctionLike(node)) {
                     forEachChild(node, visit);
@@ -159,6 +155,8 @@ namespace ts.codefix {
         Returns true if node is a promise returning expression
         If name is not undefined, node is a promise returning call of name
     */
+    function isPromiseReturningExpression(node: Node, checker: TypeChecker, name: string): node is CallExpression
+    function isPromiseReturningExpression(node: Node, checker: TypeChecker, name?: string): boolean
     function isPromiseReturningExpression(node: Node, checker: TypeChecker, name?: string): boolean {
         const isNodeExpression = name ? isCallExpression(node) : isExpression(node);
         const isExpressionOfName = isNodeExpression && (!name || hasPropertyAccessExpressionWithName(node as CallExpression, name));
@@ -289,10 +287,10 @@ namespace ts.codefix {
         const originalType = isIdentifier(node) && transformer.originalTypeMap.get(getNodeId(node).toString());
         const nodeType = originalType || transformer.checker.getTypeAtLocation(node);
 
-        if (isCallExpression(node) && hasPropertyAccessExpressionWithName(node, "then") && nodeType && !!transformer.checker.getPromisedTypeOfPromise(nodeType)) {
+        if (isPromiseReturningExpression(node, transformer.checker, "then")) {
             return transformThen(node, transformer, outermostParent, prevArgName);
         }
-        else if (isCallExpression(node) && hasPropertyAccessExpressionWithName(node, "catch") && nodeType && !!transformer.checker.getPromisedTypeOfPromise(nodeType)) {
+        else if (isPromiseReturningExpression(node, transformer.checker, "catch")) {
             return transformCatch(node, transformer, prevArgName);
         }
         else if (isPropertyAccessExpression(node)) {
@@ -415,6 +413,8 @@ namespace ts.codefix {
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(node).toString());
         // the identifier is empty when the handler (.then()) ignores the argument - In this situation we do not need to save the result of the promise returning call
         const originalNodeParent = node.original ? node.original.parent : node.parent;
+        Debug.assertDefined(originalNodeParent);
+        Debug.assertNode(originalNodeParent, isPropertyAccessExpression);
         if (prevArgName && !shouldReturn && (!originalNodeParent || isPropertyAccessExpression(originalNodeParent))) {
             return createTransformedStatement(prevArgName, createAwait(node), transformer);
         }
@@ -436,8 +436,15 @@ namespace ts.codefix {
             return [createStatement(createAssignment(getSynthesizedDeepClone(prevArgName.identifier), rightHandSide))];
         }
 
-        return [createVariableStatement(/*modifiers*/ undefined,
-            (createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(getNode(prevArgName)), /*type*/ undefined, rightHandSide)], getFlagOfBindingName(prevArgName, transformer.constIdentifiers))))];
+        return [
+            createVariableStatement(
+                /*modifiers*/ undefined,
+                createVariableDeclarationList([
+                    createVariableDeclaration(
+                        getSynthesizedDeepClone(getNode(prevArgName)),
+                        /*type*/ undefined,
+                        rightHandSide)],
+                    getFlagOfBindingName(prevArgName, transformer.constIdentifiers)))];
     }
 
     // should be kept up to date with isFixablePromiseArgument in suggestionDiagnostics.ts
