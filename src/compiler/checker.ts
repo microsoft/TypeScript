@@ -265,7 +265,7 @@ namespace ts {
             (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
     }
 
-    export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
+    export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const getPackagesSet: () => Map<true> = memoize(() => {
             const set = createMap<true>();
             host.getSourceFiles().forEach(sf => {
@@ -277,6 +277,12 @@ namespace ts {
             });
             return set;
         });
+
+        let deferredDiagnosticsCallbacks: (() => void)[] = [];
+
+        let addLazyDiagnostic = (arg: () => void) => {
+            deferredDiagnosticsCallbacks.push(arg);
+        };
 
         // Cancellation that controls whether or not we can cancel in the middle of type checking.
         // In general cancelling is *not* safe for the type checker.  We might be in the middle of
@@ -628,8 +634,8 @@ namespace ts {
                     // this call is done.
                     cancellationToken = ct;
 
-                    // Ensure file is type checked
-                    checkSourceFile(file);
+                    // Ensure file is type checked, with _eager_ diagnostic production, so identifiers are registered as potentially unused
+                    checkSourceFileWithEagerDiagnostics(file);
                     Debug.assert(!!(getNodeLinks(file).flags & NodeCheckFlags.TypeChecked));
 
                     diagnostics = addRange(diagnostics, suggestionDiagnostics.getDiagnostics(file.fileName));
@@ -17611,12 +17617,14 @@ namespace ts {
         }
 
         function reportErrorsFromWidening(declaration: Declaration, type: Type, wideningKind?: WideningKind) {
-            if (produceDiagnostics && noImplicitAny && getObjectFlags(type) & ObjectFlags.ContainsWideningType) {
-                // Report implicit any error within type if possible, otherwise report error on declaration
-                if (!reportWideningErrorsInType(type)) {
-                    reportImplicitAny(declaration, type, wideningKind);
+            addLazyDiagnostic(() => {
+                if (noImplicitAny && getObjectFlags(type) & ObjectFlags.ContainsWideningType) {
+                    // Report implicit any error within type if possible, otherwise report error on declaration
+                    if (!reportWideningErrorsInType(type)) {
+                        reportImplicitAny(declaration, type, wideningKind);
+                    }
                 }
-            }
+            });
         }
 
         function applyToParameterTypes(source: Signature, target: Signature, callback: (s: Type, t: Type) => void) {
@@ -25991,12 +25999,14 @@ namespace ts {
             checkSourceElement(type);
             exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(exprType));
             const targetType = getTypeFromTypeNode(type);
-            if (produceDiagnostics && targetType !== errorType) {
-                const widenedType = getWidenedType(exprType);
-                if (!isTypeComparableTo(targetType, widenedType)) {
-                    checkTypeComparableTo(exprType, targetType, errNode,
-                        Diagnostics.Conversion_of_type_0_to_type_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_the_expression_to_unknown_first);
-                }
+            if (targetType !== errorType) {
+                addLazyDiagnostic(() => {
+                    const widenedType = getWidenedType(exprType);
+                    if (!isTypeComparableTo(targetType, widenedType)) {
+                        checkTypeComparableTo(exprType, targetType, errNode,
+                            Diagnostics.Conversion_of_type_0_to_type_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_the_expression_to_unknown_first);
+                    }
+                });
             }
             return targetType;
         }
@@ -26595,53 +26605,54 @@ namespace ts {
          *
          * @param returnType - return type of the function, can be undefined if return type is not explicitly specified
          */
-        function checkAllCodePathsInNonVoidFunctionReturnOrThrow(func: FunctionLikeDeclaration | MethodSignature, returnType: Type | undefined): void {
-            if (!produceDiagnostics) {
-                return;
-            }
+        function checkAllCodePathsInNonVoidFunctionReturnOrThrow(func: FunctionLikeDeclaration | MethodSignature, returnType: Type | undefined) {
+            addLazyDiagnostic(checkAllCodePathsInNonVoidFunctionReturnOrThrowDiagnostics);
+            return;
 
-            const functionFlags = getFunctionFlags(func);
-            const type = returnType && getReturnOrPromisedType(returnType, functionFlags);
+            function checkAllCodePathsInNonVoidFunctionReturnOrThrowDiagnostics(): void {
+                const functionFlags = getFunctionFlags(func);
+                const type = returnType && getReturnOrPromisedType(returnType, functionFlags);
 
-            // Functions with with an explicitly specified 'void' or 'any' return type don't need any return expressions.
-            if (type && maybeTypeOfKind(type, TypeFlags.Any | TypeFlags.Void)) {
-                return;
-            }
-
-            // If all we have is a function signature, or an arrow function with an expression body, then there is nothing to check.
-            // also if HasImplicitReturn flag is not set this means that all codepaths in function body end with return or throw
-            if (func.kind === SyntaxKind.MethodSignature || nodeIsMissing(func.body) || func.body!.kind !== SyntaxKind.Block || !functionHasImplicitReturn(func)) {
-                return;
-            }
-
-            const hasExplicitReturn = func.flags & NodeFlags.HasExplicitReturn;
-
-            if (type && type.flags & TypeFlags.Never) {
-                error(getEffectiveReturnTypeNode(func), Diagnostics.A_function_returning_never_cannot_have_a_reachable_end_point);
-            }
-            else if (type && !hasExplicitReturn) {
-                // minimal check: function has syntactic return type annotation and no explicit return statements in the body
-                // this function does not conform to the specification.
-                // NOTE: having returnType !== undefined is a precondition for entering this branch so func.type will always be present
-                error(getEffectiveReturnTypeNode(func), Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
-            }
-            else if (type && strictNullChecks && !isTypeAssignableTo(undefinedType, type)) {
-                error(getEffectiveReturnTypeNode(func) || func, Diagnostics.Function_lacks_ending_return_statement_and_return_type_does_not_include_undefined);
-            }
-            else if (compilerOptions.noImplicitReturns) {
-                if (!type) {
-                    // If return type annotation is omitted check if function has any explicit return statements.
-                    // If it does not have any - its inferred return type is void - don't do any checks.
-                    // Otherwise get inferred return type from function body and report error only if it is not void / anytype
-                    if (!hasExplicitReturn) {
-                        return;
-                    }
-                    const inferredReturnType = getReturnTypeOfSignature(getSignatureFromDeclaration(func));
-                    if (isUnwrappedReturnTypeVoidOrAny(func, inferredReturnType)) {
-                        return;
-                    }
+                // Functions with with an explicitly specified 'void' or 'any' return type don't need any return expressions.
+                if (type && maybeTypeOfKind(type, TypeFlags.Any | TypeFlags.Void)) {
+                    return;
                 }
-                error(getEffectiveReturnTypeNode(func) || func, Diagnostics.Not_all_code_paths_return_a_value);
+
+                // If all we have is a function signature, or an arrow function with an expression body, then there is nothing to check.
+                // also if HasImplicitReturn flag is not set this means that all codepaths in function body end with return or throw
+                if (func.kind === SyntaxKind.MethodSignature || nodeIsMissing(func.body) || func.body!.kind !== SyntaxKind.Block || !functionHasImplicitReturn(func)) {
+                    return;
+                }
+
+                const hasExplicitReturn = func.flags & NodeFlags.HasExplicitReturn;
+
+                if (type && type.flags & TypeFlags.Never) {
+                    error(getEffectiveReturnTypeNode(func), Diagnostics.A_function_returning_never_cannot_have_a_reachable_end_point);
+                }
+                else if (type && !hasExplicitReturn) {
+                    // minimal check: function has syntactic return type annotation and no explicit return statements in the body
+                    // this function does not conform to the specification.
+                    // NOTE: having returnType !== undefined is a precondition for entering this branch so func.type will always be present
+                    error(getEffectiveReturnTypeNode(func), Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
+                }
+                else if (type && strictNullChecks && !isTypeAssignableTo(undefinedType, type)) {
+                    error(getEffectiveReturnTypeNode(func) || func, Diagnostics.Function_lacks_ending_return_statement_and_return_type_does_not_include_undefined);
+                }
+                else if (compilerOptions.noImplicitReturns) {
+                    if (!type) {
+                        // If return type annotation is omitted check if function has any explicit return statements.
+                        // If it does not have any - its inferred return type is void - don't do any checks.
+                        // Otherwise get inferred return type from function body and report error only if it is not void / anytype
+                        if (!hasExplicitReturn) {
+                            return;
+                        }
+                        const inferredReturnType = getReturnTypeOfSignature(getSignatureFromDeclaration(func));
+                        if (isUnwrappedReturnTypeVoidOrAny(func, inferredReturnType)) {
+                            return;
+                        }
+                    }
+                    error(getEffectiveReturnTypeNode(func) || func, Diagnostics.Not_all_code_paths_return_a_value);
+                }
             }
         }
 
@@ -26922,48 +26933,49 @@ namespace ts {
             return isSourceFile(container);
         }
 
-        function checkAwaitExpression(node: AwaitExpression): Type {
-            // Grammar checking
-            if (produceDiagnostics) {
-                if (!(node.flags & NodeFlags.AwaitContext)) {
-                    if (isTopLevelAwait(node)) {
-                        const sourceFile = getSourceFileOfNode(node);
-                        if (!hasParseDiagnostics(sourceFile)) {
-                            let span: TextSpan | undefined;
-                            if (!isEffectiveExternalModule(sourceFile, compilerOptions)) {
-                                if (!span) span = getSpanOfTokenAtPosition(sourceFile, node.pos);
-                                const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length,
-                                    Diagnostics.await_expressions_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module);
-                                diagnostics.add(diagnostic);
-                            }
-                            if ((moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System) || languageVersion < ScriptTarget.ES2017) {
-                                span = getSpanOfTokenAtPosition(sourceFile, node.pos);
-                                const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length,
-                                    Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_esnext_or_system_and_the_target_option_is_set_to_es2017_or_higher);
-                                diagnostics.add(diagnostic);
-                            }
+        function checkAwaitExpressionGrammar(node: AwaitExpression) {
+            if (!(node.flags & NodeFlags.AwaitContext)) {
+                if (isTopLevelAwait(node)) {
+                    const sourceFile = getSourceFileOfNode(node);
+                    if (!hasParseDiagnostics(sourceFile)) {
+                        let span: TextSpan | undefined;
+                        if (!isEffectiveExternalModule(sourceFile, compilerOptions)) {
+                            if (!span) span = getSpanOfTokenAtPosition(sourceFile, node.pos);
+                            const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length,
+                                Diagnostics.await_expressions_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module);
+                            diagnostics.add(diagnostic);
                         }
-                    }
-                    else {
-                        // use of 'await' in non-async function
-                        const sourceFile = getSourceFileOfNode(node);
-                        if (!hasParseDiagnostics(sourceFile)) {
-                            const span = getSpanOfTokenAtPosition(sourceFile, node.pos);
-                            const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.await_expressions_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules);
-                            const func = getContainingFunction(node);
-                            if (func && func.kind !== SyntaxKind.Constructor && (getFunctionFlags(func) & FunctionFlags.Async) === 0) {
-                                const relatedInfo = createDiagnosticForNode(func, Diagnostics.Did_you_mean_to_mark_this_function_as_async);
-                                addRelatedInfo(diagnostic, relatedInfo);
-                            }
+                        if ((moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System) || languageVersion < ScriptTarget.ES2017) {
+                            span = getSpanOfTokenAtPosition(sourceFile, node.pos);
+                            const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length,
+                                Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_esnext_or_system_and_the_target_option_is_set_to_es2017_or_higher);
                             diagnostics.add(diagnostic);
                         }
                     }
                 }
-
-                if (isInParameterInitializerBeforeContainingFunction(node)) {
-                    error(node, Diagnostics.await_expressions_cannot_be_used_in_a_parameter_initializer);
+                else {
+                    // use of 'await' in non-async function
+                    const sourceFile = getSourceFileOfNode(node);
+                    if (!hasParseDiagnostics(sourceFile)) {
+                        const span = getSpanOfTokenAtPosition(sourceFile, node.pos);
+                        const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.await_expressions_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules);
+                        const func = getContainingFunction(node);
+                        if (func && func.kind !== SyntaxKind.Constructor && (getFunctionFlags(func) & FunctionFlags.Async) === 0) {
+                            const relatedInfo = createDiagnosticForNode(func, Diagnostics.Did_you_mean_to_mark_this_function_as_async);
+                            addRelatedInfo(diagnostic, relatedInfo);
+                        }
+                        diagnostics.add(diagnostic);
+                    }
                 }
             }
+
+            if (isInParameterInitializerBeforeContainingFunction(node)) {
+                error(node, Diagnostics.await_expressions_cannot_be_used_in_a_parameter_initializer);
+            }
+        }
+
+        function checkAwaitExpression(node: AwaitExpression): Type {
+            addLazyDiagnostic(() => checkAwaitExpressionGrammar(node));
 
             const operandType = checkExpression(node.expression);
             const awaitedType = checkAwaitedType(operandType, node, Diagnostics.Type_of_await_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
@@ -27746,7 +27758,11 @@ namespace ts {
             }
 
             function checkAssignmentOperator(valueType: Type): void {
-                if (produceDiagnostics && isAssignmentOperator(operator)) {
+                if (isAssignmentOperator(operator)) {
+                    addLazyDiagnostic(checkAssignmentOperatorWorker);
+                }
+
+                function checkAssignmentOperatorWorker() {
                     // TypeScript 1.0 spec (April 2014): 4.17
                     // An assignment of the form
                     //    VarExpr = ValueExpr
@@ -27859,16 +27875,7 @@ namespace ts {
         }
 
         function checkYieldExpression(node: YieldExpression): Type {
-            // Grammar checking
-            if (produceDiagnostics) {
-                if (!(node.flags & NodeFlags.YieldContext)) {
-                    grammarErrorOnFirstToken(node, Diagnostics.A_yield_expression_is_only_allowed_in_a_generator_body);
-                }
-
-                if (isInParameterInitializerBeforeContainingFunction(node)) {
-                    error(node, Diagnostics.yield_expressions_cannot_be_used_in_a_parameter_initializer);
-                }
-            }
+            addLazyDiagnostic(checkYieldExpressionGrammar);
 
             const func = getContainingFunction(node);
             if (!func) return anyType;
@@ -27918,6 +27925,16 @@ namespace ts {
             }
 
             return getContextualIterationType(IterationTypeKind.Next, func) || anyType;
+
+            function checkYieldExpressionGrammar() {
+                if (!(node.flags & NodeFlags.YieldContext)) {
+                    grammarErrorOnFirstToken(node, Diagnostics.A_yield_expression_is_only_allowed_in_a_generator_body);
+                }
+
+                if (isInParameterInitializerBeforeContainingFunction(node)) {
+                    error(node, Diagnostics.yield_expressions_cannot_be_used_in_a_parameter_initializer);
+                }
+            }
         }
 
         function checkConditionalExpression(node: ConditionalExpression, checkMode?: CheckMode): Type {
@@ -28505,9 +28522,7 @@ namespace ts {
             if (constraintType && defaultType) {
                 checkTypeAssignableTo(defaultType, getTypeWithThisArgument(instantiateType(constraintType, makeUnaryTypeMapper(typeParameter, defaultType)), defaultType), node.default, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
             }
-            if (produceDiagnostics) {
-                checkTypeNameIsReserved(node.name, Diagnostics.Type_parameter_name_cannot_be_0);
-            }
+            addLazyDiagnostic(() => checkTypeNameIsReserved(node.name, Diagnostics.Type_parameter_name_cannot_be_0));
         }
 
         function checkParameter(node: ParameterDeclaration) {
@@ -28681,7 +28696,9 @@ namespace ts {
                 checkSourceElement(node.type);
             }
 
-            if (produceDiagnostics) {
+            addLazyDiagnostic(checkSignatureDeclarationDiagnostics);
+
+            function checkSignatureDeclarationDiagnostics() {
                 checkCollisionWithArgumentsInGeneratedCode(node);
                 const returnTypeNode = getEffectiveReturnTypeNode(node);
                 if (noImplicitAny && !returnTypeNode) {
@@ -28956,9 +28973,9 @@ namespace ts {
                 return;
             }
 
-            if (!produceDiagnostics) {
-                return;
-            }
+            addLazyDiagnostic(checkConstructorDeclarationDiagnostics);
+
+            return;
 
             function isInstancePropertyWithInitializerOrPrivateIdentifierProperty(n: Node): boolean {
                 if (isPrivateIdentifierPropertyDeclaration(n)) {
@@ -28969,56 +28986,61 @@ namespace ts {
                     !!(<PropertyDeclaration>n).initializer;
             }
 
-            // TS 1.0 spec (April 2014): 8.3.2
-            // Constructors of classes with no extends clause may not contain super calls, whereas
-            // constructors of derived classes must contain at least one super call somewhere in their function body.
-            const containingClassDecl = <ClassDeclaration>node.parent;
-            if (getClassExtendsHeritageElement(containingClassDecl)) {
-                captureLexicalThis(node.parent, containingClassDecl);
-                const classExtendsNull = classDeclarationExtendsNull(containingClassDecl);
-                const superCall = getSuperCallInConstructor(node);
-                if (superCall) {
-                    if (classExtendsNull) {
-                        error(superCall, Diagnostics.A_constructor_cannot_contain_a_super_call_when_its_class_extends_null);
-                    }
+            function checkConstructorDeclarationDiagnostics() {
+                // TS 1.0 spec (April 2014): 8.3.2
+                // Constructors of classes with no extends clause may not contain super calls, whereas
+                // constructors of derived classes must contain at least one super call somewhere in their function body.
+                const containingClassDecl = <ClassDeclaration>node.parent;
+                if (getClassExtendsHeritageElement(containingClassDecl)) {
+                    captureLexicalThis(node.parent, containingClassDecl);
+                    const classExtendsNull = classDeclarationExtendsNull(containingClassDecl);
+                    const superCall = getSuperCallInConstructor(node);
+                    if (superCall) {
+                        if (classExtendsNull) {
+                            error(superCall, Diagnostics.A_constructor_cannot_contain_a_super_call_when_its_class_extends_null);
+                        }
 
-                    // The first statement in the body of a constructor (excluding prologue directives) must be a super call
-                    // if both of the following are true:
-                    // - The containing class is a derived class.
-                    // - The constructor declares parameter properties
-                    //   or the containing class declares instance member variables with initializers.
-                    const superCallShouldBeFirst =
-                        some((<ClassDeclaration>node.parent).members, isInstancePropertyWithInitializerOrPrivateIdentifierProperty) ||
-                        some(node.parameters, p => hasModifier(p, ModifierFlags.ParameterPropertyModifier));
+                        // The first statement in the body of a constructor (excluding prologue directives) must be a super call
+                        // if both of the following are true:
+                        // - The containing class is a derived class.
+                        // - The constructor declares parameter properties
+                        //   or the containing class declares instance member variables with initializers.
+                        const superCallShouldBeFirst =
+                            some((<ClassDeclaration>node.parent).members, isInstancePropertyWithInitializerOrPrivateIdentifierProperty) ||
+                            some(node.parameters, p => hasModifier(p, ModifierFlags.ParameterPropertyModifier));
 
-                    // Skip past any prologue directives to find the first statement
-                    // to ensure that it was a super call.
-                    if (superCallShouldBeFirst) {
-                        const statements = node.body!.statements;
-                        let superCallStatement: ExpressionStatement | undefined;
+                        // Skip past any prologue directives to find the first statement
+                        // to ensure that it was a super call.
+                        if (superCallShouldBeFirst) {
+                            const statements = node.body!.statements;
+                            let superCallStatement: ExpressionStatement | undefined;
 
-                        for (const statement of statements) {
-                            if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCall((<ExpressionStatement>statement).expression)) {
-                                superCallStatement = <ExpressionStatement>statement;
-                                break;
+                            for (const statement of statements) {
+                                if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCall((<ExpressionStatement>statement).expression)) {
+                                    superCallStatement = <ExpressionStatement>statement;
+                                    break;
+                                }
+                                if (!isPrologueDirective(statement)) {
+                                    break;
+                                }
                             }
-                            if (!isPrologueDirective(statement)) {
-                                break;
+                            if (!superCallStatement) {
+                                error(node, Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_when_a_class_contains_initialized_properties_parameter_properties_or_private_identifiers);
                             }
                         }
-                        if (!superCallStatement) {
-                            error(node, Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_when_a_class_contains_initialized_properties_parameter_properties_or_private_identifiers);
-                        }
                     }
-                }
-                else if (!classExtendsNull) {
-                    error(node, Diagnostics.Constructors_for_derived_classes_must_contain_a_super_call);
+                    else if (!classExtendsNull) {
+                        error(node, Diagnostics.Constructors_for_derived_classes_must_contain_a_super_call);
+                    }
                 }
             }
         }
 
         function checkAccessorDeclaration(node: AccessorDeclaration) {
-            if (produceDiagnostics) {
+            addLazyDiagnostic(checkAccessorDeclarationDiagnostics);
+            checkSourceElement(node.body);
+
+            function checkAccessorDeclarationDiagnostics() {
                 // Grammar checking accessors
                 if (!checkGrammarFunctionLikeDeclaration(node) && !checkGrammarAccessor(node)) checkGrammarComputedPropertyName(node.name);
 
@@ -29066,7 +29088,6 @@ namespace ts {
                     checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnType);
                 }
             }
-            checkSourceElement(node.body);
         }
 
         function checkAccessorDeclarationTypesIdentical(first: AccessorDeclaration, second: AccessorDeclaration, getAnnotatedType: (a: AccessorDeclaration) => Type | undefined, message: DiagnosticMessage) {
@@ -29127,11 +29148,13 @@ namespace ts {
             forEach(node.typeArguments, checkSourceElement);
             const type = getTypeFromTypeReference(node);
             if (type !== errorType) {
-                if (node.typeArguments && produceDiagnostics) {
-                    const typeParameters = getTypeParametersForTypeReference(node);
-                    if (typeParameters) {
-                        checkTypeArgumentConstraints(node, typeParameters);
-                    }
+                if (node.typeArguments) {
+                    addLazyDiagnostic(() => {
+                        const typeParameters = getTypeParametersForTypeReference(node);
+                        if (typeParameters) {
+                            checkTypeArgumentConstraints(node, typeParameters);
+                        }
+                    });
                 }
                 if (type.flags & TypeFlags.Enum && getNodeLinks(node).resolvedSymbol!.flags & SymbolFlags.EnumMember) {
                     error(node, Diagnostics.Enum_type_0_has_members_with_initializers_that_are_not_literals, typeToString(type));
@@ -29153,7 +29176,9 @@ namespace ts {
 
         function checkTypeLiteral(node: TypeLiteralNode) {
             forEach(node.members, checkSourceElement);
-            if (produceDiagnostics) {
+            addLazyDiagnostic(checkTypeLiteralDiagnostics);
+
+            function checkTypeLiteralDiagnostics() {
                 const type = getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
                 checkIndexConstraints(type);
                 checkTypeForDuplicateIndexSignatures(node);
@@ -29297,235 +29322,236 @@ namespace ts {
         }
 
         function checkFunctionOrConstructorSymbol(symbol: Symbol): void {
-            if (!produceDiagnostics) {
-                return;
-            }
+            addLazyDiagnostic(checkFunctionOrConstructorSymbolDiagnostics);
+            return;
 
-            function getCanonicalOverload(overloads: Declaration[], implementation: FunctionLikeDeclaration | undefined): Declaration {
-                // Consider the canonical set of flags to be the flags of the bodyDeclaration or the first declaration
-                // Error on all deviations from this canonical set of flags
-                // The caveat is that if some overloads are defined in lib.d.ts, we don't want to
-                // report the errors on those. To achieve this, we will say that the implementation is
-                // the canonical signature only if it is in the same container as the first overload
-                const implementationSharesContainerWithFirstOverload = implementation !== undefined && implementation.parent === overloads[0].parent;
-                return implementationSharesContainerWithFirstOverload ? implementation! : overloads[0];
-            }
-
-            function checkFlagAgreementBetweenOverloads(overloads: Declaration[], implementation: FunctionLikeDeclaration | undefined, flagsToCheck: ModifierFlags, someOverloadFlags: ModifierFlags, allOverloadFlags: ModifierFlags): void {
-                // Error if some overloads have a flag that is not shared by all overloads. To find the
-                // deviations, we XOR someOverloadFlags with allOverloadFlags
-                const someButNotAllOverloadFlags = someOverloadFlags ^ allOverloadFlags;
-                if (someButNotAllOverloadFlags !== 0) {
-                    const canonicalFlags = getEffectiveDeclarationFlags(getCanonicalOverload(overloads, implementation), flagsToCheck);
-
-                    forEach(overloads, o => {
-                        const deviation = getEffectiveDeclarationFlags(o, flagsToCheck) ^ canonicalFlags;
-                        if (deviation & ModifierFlags.Export) {
-                            error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_exported_or_non_exported);
-                        }
-                        else if (deviation & ModifierFlags.Ambient) {
-                            error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_ambient_or_non_ambient);
-                        }
-                        else if (deviation & (ModifierFlags.Private | ModifierFlags.Protected)) {
-                            error(getNameOfDeclaration(o) || o, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
-                        }
-                        else if (deviation & ModifierFlags.Abstract) {
-                            error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_abstract_or_non_abstract);
-                        }
-                    });
-                }
-            }
-
-            function checkQuestionTokenAgreementBetweenOverloads(overloads: Declaration[], implementation: FunctionLikeDeclaration | undefined, someHaveQuestionToken: boolean, allHaveQuestionToken: boolean): void {
-                if (someHaveQuestionToken !== allHaveQuestionToken) {
-                    const canonicalHasQuestionToken = hasQuestionToken(getCanonicalOverload(overloads, implementation));
-                    forEach(overloads, o => {
-                        const deviation = hasQuestionToken(o) !== canonicalHasQuestionToken;
-                        if (deviation) {
-                            error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_optional_or_required);
-                        }
-                    });
-                }
-            }
-
-            const flagsToCheck: ModifierFlags = ModifierFlags.Export | ModifierFlags.Ambient | ModifierFlags.Private | ModifierFlags.Protected | ModifierFlags.Abstract;
-            let someNodeFlags: ModifierFlags = ModifierFlags.None;
-            let allNodeFlags = flagsToCheck;
-            let someHaveQuestionToken = false;
-            let allHaveQuestionToken = true;
-            let hasOverloads = false;
-            let bodyDeclaration: FunctionLikeDeclaration | undefined;
-            let lastSeenNonAmbientDeclaration: FunctionLikeDeclaration | undefined;
-            let previousDeclaration: SignatureDeclaration | undefined;
-
-            const declarations = symbol.declarations;
-            const isConstructor = (symbol.flags & SymbolFlags.Constructor) !== 0;
-
-            function reportImplementationExpectedError(node: SignatureDeclaration): void {
-                if (node.name && nodeIsMissing(node.name)) {
-                    return;
+            function checkFunctionOrConstructorSymbolDiagnostics(): void {
+                function getCanonicalOverload(overloads: Declaration[], implementation: FunctionLikeDeclaration | undefined): Declaration {
+                    // Consider the canonical set of flags to be the flags of the bodyDeclaration or the first declaration
+                    // Error on all deviations from this canonical set of flags
+                    // The caveat is that if some overloads are defined in lib.d.ts, we don't want to
+                    // report the errors on those. To achieve this, we will say that the implementation is
+                    // the canonical signature only if it is in the same container as the first overload
+                    const implementationSharesContainerWithFirstOverload = implementation !== undefined && implementation.parent === overloads[0].parent;
+                    return implementationSharesContainerWithFirstOverload ? implementation! : overloads[0];
                 }
 
-                let seen = false;
-                const subsequentNode = forEachChild(node.parent, c => {
-                    if (seen) {
-                        return c;
-                    }
-                    else {
-                        seen = c === node;
-                    }
-                });
-                // We may be here because of some extra nodes between overloads that could not be parsed into a valid node.
-                // In this case the subsequent node is not really consecutive (.pos !== node.end), and we must ignore it here.
-                if (subsequentNode && subsequentNode.pos === node.end) {
-                    if (subsequentNode.kind === node.kind) {
-                        const errorNode: Node = (<FunctionLikeDeclaration>subsequentNode).name || subsequentNode;
-                        const subsequentName = (<FunctionLikeDeclaration>subsequentNode).name;
-                        if (node.name && subsequentName && (
-                            // both are private identifiers
-                            isPrivateIdentifier(node.name) && isPrivateIdentifier(subsequentName) && node.name.escapedText === subsequentName.escapedText ||
-                            // Both are computed property names
-                            // TODO: GH#17345: These are methods, so handle computed name case. (`Always allowing computed property names is *not* the correct behavior!)
-                            isComputedPropertyName(node.name) && isComputedPropertyName(subsequentName) ||
-                            // Both are literal property names that are the same.
-                            isPropertyNameLiteral(node.name) && isPropertyNameLiteral(subsequentName) &&
-                            getEscapedTextOfIdentifierOrLiteral(node.name) === getEscapedTextOfIdentifierOrLiteral(subsequentName)
-                        )) {
-                            const reportError =
-                                (node.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) &&
-                                hasModifier(node, ModifierFlags.Static) !== hasModifier(subsequentNode, ModifierFlags.Static);
-                            // we can get here in two cases
-                            // 1. mixed static and instance class members
-                            // 2. something with the same name was defined before the set of overloads that prevents them from merging
-                            // here we'll report error only for the first case since for second we should already report error in binder
-                            if (reportError) {
-                                const diagnostic = hasModifier(node, ModifierFlags.Static) ? Diagnostics.Function_overload_must_be_static : Diagnostics.Function_overload_must_not_be_static;
-                                error(errorNode, diagnostic);
+                function checkFlagAgreementBetweenOverloads(overloads: Declaration[], implementation: FunctionLikeDeclaration | undefined, flagsToCheck: ModifierFlags, someOverloadFlags: ModifierFlags, allOverloadFlags: ModifierFlags): void {
+                    // Error if some overloads have a flag that is not shared by all overloads. To find the
+                    // deviations, we XOR someOverloadFlags with allOverloadFlags
+                    const someButNotAllOverloadFlags = someOverloadFlags ^ allOverloadFlags;
+                    if (someButNotAllOverloadFlags !== 0) {
+                        const canonicalFlags = getEffectiveDeclarationFlags(getCanonicalOverload(overloads, implementation), flagsToCheck);
+
+                        forEach(overloads, o => {
+                            const deviation = getEffectiveDeclarationFlags(o, flagsToCheck) ^ canonicalFlags;
+                            if (deviation & ModifierFlags.Export) {
+                                error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_exported_or_non_exported);
                             }
-                            return;
-                        }
-                        if (nodeIsPresent((<FunctionLikeDeclaration>subsequentNode).body)) {
-                            error(errorNode, Diagnostics.Function_implementation_name_must_be_0, declarationNameToString(node.name));
-                            return;
-                        }
+                            else if (deviation & ModifierFlags.Ambient) {
+                                error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_ambient_or_non_ambient);
+                            }
+                            else if (deviation & (ModifierFlags.Private | ModifierFlags.Protected)) {
+                                error(getNameOfDeclaration(o) || o, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
+                            }
+                            else if (deviation & ModifierFlags.Abstract) {
+                                error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_abstract_or_non_abstract);
+                            }
+                        });
                     }
                 }
-                const errorNode: Node = node.name || node;
-                if (isConstructor) {
-                    error(errorNode, Diagnostics.Constructor_implementation_is_missing);
-                }
-                else {
-                    // Report different errors regarding non-consecutive blocks of declarations depending on whether
-                    // the node in question is abstract.
-                    if (hasModifier(node, ModifierFlags.Abstract)) {
-                        error(errorNode, Diagnostics.All_declarations_of_an_abstract_method_must_be_consecutive);
-                    }
-                    else {
-                        error(errorNode, Diagnostics.Function_implementation_is_missing_or_not_immediately_following_the_declaration);
+
+                function checkQuestionTokenAgreementBetweenOverloads(overloads: Declaration[], implementation: FunctionLikeDeclaration | undefined, someHaveQuestionToken: boolean, allHaveQuestionToken: boolean): void {
+                    if (someHaveQuestionToken !== allHaveQuestionToken) {
+                        const canonicalHasQuestionToken = hasQuestionToken(getCanonicalOverload(overloads, implementation));
+                        forEach(overloads, o => {
+                            const deviation = hasQuestionToken(o) !== canonicalHasQuestionToken;
+                            if (deviation) {
+                                error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_optional_or_required);
+                            }
+                        });
                     }
                 }
-            }
 
-            let duplicateFunctionDeclaration = false;
-            let multipleConstructorImplementation = false;
-            let hasNonAmbientClass = false;
-            for (const current of declarations) {
-                const node = <SignatureDeclaration | ClassDeclaration | ClassExpression>current;
-                const inAmbientContext = node.flags & NodeFlags.Ambient;
-                const inAmbientContextOrInterface = node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.TypeLiteral || inAmbientContext;
-                if (inAmbientContextOrInterface) {
-                    // check if declarations are consecutive only if they are non-ambient
-                    // 1. ambient declarations can be interleaved
-                    // i.e. this is legal
-                    //     declare function foo();
-                    //     declare function bar();
-                    //     declare function foo();
-                    // 2. mixing ambient and non-ambient declarations is a separate error that will be reported - do not want to report an extra one
-                    previousDeclaration = undefined;
-                }
+                const flagsToCheck: ModifierFlags = ModifierFlags.Export | ModifierFlags.Ambient | ModifierFlags.Private | ModifierFlags.Protected | ModifierFlags.Abstract;
+                let someNodeFlags: ModifierFlags = ModifierFlags.None;
+                let allNodeFlags = flagsToCheck;
+                let someHaveQuestionToken = false;
+                let allHaveQuestionToken = true;
+                let hasOverloads = false;
+                let bodyDeclaration: FunctionLikeDeclaration | undefined;
+                let lastSeenNonAmbientDeclaration: FunctionLikeDeclaration | undefined;
+                let previousDeclaration: SignatureDeclaration | undefined;
 
-                if ((node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression) && !inAmbientContext) {
-                    hasNonAmbientClass = true;
-                }
+                const declarations = symbol.declarations;
+                const isConstructor = (symbol.flags & SymbolFlags.Constructor) !== 0;
 
-                if (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature || node.kind === SyntaxKind.Constructor) {
-                    const currentNodeFlags = getEffectiveDeclarationFlags(node, flagsToCheck);
-                    someNodeFlags |= currentNodeFlags;
-                    allNodeFlags &= currentNodeFlags;
-                    someHaveQuestionToken = someHaveQuestionToken || hasQuestionToken(node);
-                    allHaveQuestionToken = allHaveQuestionToken && hasQuestionToken(node);
+                function reportImplementationExpectedError(node: SignatureDeclaration): void {
+                    if (node.name && nodeIsMissing(node.name)) {
+                        return;
+                    }
 
-                    if (nodeIsPresent((node as FunctionLikeDeclaration).body) && bodyDeclaration) {
-                        if (isConstructor) {
-                            multipleConstructorImplementation = true;
+                    let seen = false;
+                    const subsequentNode = forEachChild(node.parent, c => {
+                        if (seen) {
+                            return c;
                         }
                         else {
-                            duplicateFunctionDeclaration = true;
+                            seen = c === node;
+                        }
+                    });
+                    // We may be here because of some extra nodes between overloads that could not be parsed into a valid node.
+                    // In this case the subsequent node is not really consecutive (.pos !== node.end), and we must ignore it here.
+                    if (subsequentNode && subsequentNode.pos === node.end) {
+                        if (subsequentNode.kind === node.kind) {
+                            const errorNode: Node = (<FunctionLikeDeclaration>subsequentNode).name || subsequentNode;
+                            const subsequentName = (<FunctionLikeDeclaration>subsequentNode).name;
+                            if (node.name && subsequentName && (
+                                // both are private identifiers
+                                isPrivateIdentifier(node.name) && isPrivateIdentifier(subsequentName) && node.name.escapedText === subsequentName.escapedText ||
+                                // Both are computed property names
+                                // TODO: GH#17345: These are methods, so handle computed name case. (`Always allowing computed property names is *not* the correct behavior!)
+                                isComputedPropertyName(node.name) && isComputedPropertyName(subsequentName) ||
+                                // Both are literal property names that are the same.
+                                isPropertyNameLiteral(node.name) && isPropertyNameLiteral(subsequentName) &&
+                                getEscapedTextOfIdentifierOrLiteral(node.name) === getEscapedTextOfIdentifierOrLiteral(subsequentName)
+                            )) {
+                                const reportError =
+                                    (node.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) &&
+                                    hasModifier(node, ModifierFlags.Static) !== hasModifier(subsequentNode, ModifierFlags.Static);
+                                // we can get here in two cases
+                                // 1. mixed static and instance class members
+                                // 2. something with the same name was defined before the set of overloads that prevents them from merging
+                                // here we'll report error only for the first case since for second we should already report error in binder
+                                if (reportError) {
+                                    const diagnostic = hasModifier(node, ModifierFlags.Static) ? Diagnostics.Function_overload_must_be_static : Diagnostics.Function_overload_must_not_be_static;
+                                    error(errorNode, diagnostic);
+                                }
+                                return;
+                            }
+                            if (nodeIsPresent((<FunctionLikeDeclaration>subsequentNode).body)) {
+                                error(errorNode, Diagnostics.Function_implementation_name_must_be_0, declarationNameToString(node.name));
+                                return;
+                            }
                         }
                     }
-                    else if (previousDeclaration && previousDeclaration.parent === node.parent && previousDeclaration.end !== node.pos) {
-                        reportImplementationExpectedError(previousDeclaration);
-                    }
-
-                    if (nodeIsPresent((node as FunctionLikeDeclaration).body)) {
-                        if (!bodyDeclaration) {
-                            bodyDeclaration = node as FunctionLikeDeclaration;
-                        }
+                    const errorNode: Node = node.name || node;
+                    if (isConstructor) {
+                        error(errorNode, Diagnostics.Constructor_implementation_is_missing);
                     }
                     else {
-                        hasOverloads = true;
-                    }
-
-                    previousDeclaration = node;
-
-                    if (!inAmbientContextOrInterface) {
-                        lastSeenNonAmbientDeclaration = node as FunctionLikeDeclaration;
+                        // Report different errors regarding non-consecutive blocks of declarations depending on whether
+                        // the node in question is abstract.
+                        if (hasModifier(node, ModifierFlags.Abstract)) {
+                            error(errorNode, Diagnostics.All_declarations_of_an_abstract_method_must_be_consecutive);
+                        }
+                        else {
+                            error(errorNode, Diagnostics.Function_implementation_is_missing_or_not_immediately_following_the_declaration);
+                        }
                     }
                 }
-            }
 
-            if (multipleConstructorImplementation) {
-                forEach(declarations, declaration => {
-                    error(declaration, Diagnostics.Multiple_constructor_implementations_are_not_allowed);
-                });
-            }
+                let duplicateFunctionDeclaration = false;
+                let multipleConstructorImplementation = false;
+                let hasNonAmbientClass = false;
+                for (const current of declarations) {
+                    const node = <SignatureDeclaration | ClassDeclaration | ClassExpression>current;
+                    const inAmbientContext = node.flags & NodeFlags.Ambient;
+                    const inAmbientContextOrInterface = node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.TypeLiteral || inAmbientContext;
+                    if (inAmbientContextOrInterface) {
+                        // check if declarations are consecutive only if they are non-ambient
+                        // 1. ambient declarations can be interleaved
+                        // i.e. this is legal
+                        //     declare function foo();
+                        //     declare function bar();
+                        //     declare function foo();
+                        // 2. mixing ambient and non-ambient declarations is a separate error that will be reported - do not want to report an extra one
+                        previousDeclaration = undefined;
+                    }
 
-            if (duplicateFunctionDeclaration) {
-                forEach(declarations, declaration => {
-                    error(getNameOfDeclaration(declaration), Diagnostics.Duplicate_function_implementation);
-                });
-            }
+                    if ((node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression) && !inAmbientContext) {
+                        hasNonAmbientClass = true;
+                    }
 
-            if (hasNonAmbientClass && !isConstructor && symbol.flags & SymbolFlags.Function) {
-                // A non-ambient class cannot be an implementation for a non-constructor function/class merge
-                // TODO: The below just replicates our older error from when classes and functions were
-                // entirely unable to merge - a more helpful message like "Class declaration cannot implement overload list"
-                // might be warranted. :shrug:
-                forEach(declarations, declaration => {
-                    addDuplicateDeclarationError(getNameOfDeclaration(declaration) || declaration, Diagnostics.Duplicate_identifier_0, symbolName(symbol), filter(declarations, d => d !== declaration));
-                });
-            }
+                    if (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature || node.kind === SyntaxKind.Constructor) {
+                        const currentNodeFlags = getEffectiveDeclarationFlags(node, flagsToCheck);
+                        someNodeFlags |= currentNodeFlags;
+                        allNodeFlags &= currentNodeFlags;
+                        someHaveQuestionToken = someHaveQuestionToken || hasQuestionToken(node);
+                        allHaveQuestionToken = allHaveQuestionToken && hasQuestionToken(node);
 
-            // Abstract methods can't have an implementation -- in particular, they don't need one.
-            if (lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body &&
-                !hasModifier(lastSeenNonAmbientDeclaration, ModifierFlags.Abstract) && !lastSeenNonAmbientDeclaration.questionToken) {
-                reportImplementationExpectedError(lastSeenNonAmbientDeclaration);
-            }
+                        if (nodeIsPresent((node as FunctionLikeDeclaration).body) && bodyDeclaration) {
+                            if (isConstructor) {
+                                multipleConstructorImplementation = true;
+                            }
+                            else {
+                                duplicateFunctionDeclaration = true;
+                            }
+                        }
+                        else if (previousDeclaration && previousDeclaration.parent === node.parent && previousDeclaration.end !== node.pos) {
+                            reportImplementationExpectedError(previousDeclaration);
+                        }
 
-            if (hasOverloads) {
-                checkFlagAgreementBetweenOverloads(declarations, bodyDeclaration, flagsToCheck, someNodeFlags, allNodeFlags);
-                checkQuestionTokenAgreementBetweenOverloads(declarations, bodyDeclaration, someHaveQuestionToken, allHaveQuestionToken);
+                        if (nodeIsPresent((node as FunctionLikeDeclaration).body)) {
+                            if (!bodyDeclaration) {
+                                bodyDeclaration = node as FunctionLikeDeclaration;
+                            }
+                        }
+                        else {
+                            hasOverloads = true;
+                        }
 
-                if (bodyDeclaration) {
-                    const signatures = getSignaturesOfSymbol(symbol);
-                    const bodySignature = getSignatureFromDeclaration(bodyDeclaration);
-                    for (const signature of signatures) {
-                        if (!isImplementationCompatibleWithOverload(bodySignature, signature)) {
-                            addRelatedInfo(
-                                error(signature.declaration, Diagnostics.This_overload_signature_is_not_compatible_with_its_implementation_signature),
-                                createDiagnosticForNode(bodyDeclaration, Diagnostics.The_implementation_signature_is_declared_here)
-                            );
-                            break;
+                        previousDeclaration = node;
+
+                        if (!inAmbientContextOrInterface) {
+                            lastSeenNonAmbientDeclaration = node as FunctionLikeDeclaration;
+                        }
+                    }
+                }
+
+                if (multipleConstructorImplementation) {
+                    forEach(declarations, declaration => {
+                        error(declaration, Diagnostics.Multiple_constructor_implementations_are_not_allowed);
+                    });
+                }
+
+                if (duplicateFunctionDeclaration) {
+                    forEach(declarations, declaration => {
+                        error(getNameOfDeclaration(declaration), Diagnostics.Duplicate_function_implementation);
+                    });
+                }
+
+                if (hasNonAmbientClass && !isConstructor && symbol.flags & SymbolFlags.Function) {
+                    // A non-ambient class cannot be an implementation for a non-constructor function/class merge
+                    // TODO: The below just replicates our older error from when classes and functions were
+                    // entirely unable to merge - a more helpful message like "Class declaration cannot implement overload list"
+                    // might be warranted. :shrug:
+                    forEach(declarations, declaration => {
+                        addDuplicateDeclarationError(getNameOfDeclaration(declaration) || declaration, Diagnostics.Duplicate_identifier_0, symbolName(symbol), filter(declarations, d => d !== declaration));
+                    });
+                }
+
+                // Abstract methods can't have an implementation -- in particular, they don't need one.
+                if (lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body &&
+                    !hasModifier(lastSeenNonAmbientDeclaration, ModifierFlags.Abstract) && !lastSeenNonAmbientDeclaration.questionToken) {
+                    reportImplementationExpectedError(lastSeenNonAmbientDeclaration);
+                }
+
+                if (hasOverloads) {
+                    checkFlagAgreementBetweenOverloads(declarations, bodyDeclaration, flagsToCheck, someNodeFlags, allNodeFlags);
+                    checkQuestionTokenAgreementBetweenOverloads(declarations, bodyDeclaration, someHaveQuestionToken, allHaveQuestionToken);
+
+                    if (bodyDeclaration) {
+                        const signatures = getSignaturesOfSymbol(symbol);
+                        const bodySignature = getSignatureFromDeclaration(bodyDeclaration);
+                        for (const signature of signatures) {
+                            if (!isImplementationCompatibleWithOverload(bodySignature, signature)) {
+                                addRelatedInfo(
+                                    error(signature.declaration, Diagnostics.This_overload_signature_is_not_compatible_with_its_implementation_signature),
+                                    createDiagnosticForNode(bodyDeclaration, Diagnostics.The_implementation_signature_is_declared_here)
+                                );
+                                break;
+                            }
                         }
                     }
                 }
@@ -29533,121 +29559,122 @@ namespace ts {
         }
 
         function checkExportsOnMergedDeclarations(node: Declaration): void {
-            if (!produceDiagnostics) {
-                return;
-            }
+            addLazyDiagnostic(checkExportsOnMergedDeclarations);
+            return;
 
-            // if localSymbol is defined on node then node itself is exported - check is required
-            let symbol = node.localSymbol;
-            if (!symbol) {
-                // local symbol is undefined => this declaration is non-exported.
-                // however symbol might contain other declarations that are exported
-                symbol = getSymbolOfNode(node)!;
-                if (!symbol.exportSymbol) {
-                    // this is a pure local symbol (all declarations are non-exported) - no need to check anything
+            function checkExportsOnMergedDeclarations(): void {
+                // if localSymbol is defined on node then node itself is exported - check is required
+                let symbol = node.localSymbol;
+                if (!symbol) {
+                    // local symbol is undefined => this declaration is non-exported.
+                    // however symbol might contain other declarations that are exported
+                    symbol = getSymbolOfNode(node)!;
+                    if (!symbol.exportSymbol) {
+                        // this is a pure local symbol (all declarations are non-exported) - no need to check anything
+                        return;
+                    }
+                }
+
+                // run the check only for the first declaration in the list
+                if (getDeclarationOfKind(symbol, node.kind) !== node) {
                     return;
                 }
-            }
 
-            // run the check only for the first declaration in the list
-            if (getDeclarationOfKind(symbol, node.kind) !== node) {
-                return;
-            }
-
-            let exportedDeclarationSpaces = DeclarationSpaces.None;
-            let nonExportedDeclarationSpaces = DeclarationSpaces.None;
-            let defaultExportedDeclarationSpaces = DeclarationSpaces.None;
-            for (const d of symbol.declarations) {
-                const declarationSpaces = getDeclarationSpaces(d);
-                const effectiveDeclarationFlags = getEffectiveDeclarationFlags(d, ModifierFlags.Export | ModifierFlags.Default);
-
-                if (effectiveDeclarationFlags & ModifierFlags.Export) {
-                    if (effectiveDeclarationFlags & ModifierFlags.Default) {
-                        defaultExportedDeclarationSpaces |= declarationSpaces;
-                    }
-                    else {
-                        exportedDeclarationSpaces |= declarationSpaces;
-                    }
-                }
-                else {
-                    nonExportedDeclarationSpaces |= declarationSpaces;
-                }
-            }
-
-            // Spaces for anything not declared a 'default export'.
-            const nonDefaultExportedDeclarationSpaces = exportedDeclarationSpaces | nonExportedDeclarationSpaces;
-
-            const commonDeclarationSpacesForExportsAndLocals = exportedDeclarationSpaces & nonExportedDeclarationSpaces;
-            const commonDeclarationSpacesForDefaultAndNonDefault = defaultExportedDeclarationSpaces & nonDefaultExportedDeclarationSpaces;
-
-            if (commonDeclarationSpacesForExportsAndLocals || commonDeclarationSpacesForDefaultAndNonDefault) {
-                // declaration spaces for exported and non-exported declarations intersect
+                let exportedDeclarationSpaces = DeclarationSpaces.None;
+                let nonExportedDeclarationSpaces = DeclarationSpaces.None;
+                let defaultExportedDeclarationSpaces = DeclarationSpaces.None;
                 for (const d of symbol.declarations) {
                     const declarationSpaces = getDeclarationSpaces(d);
+                    const effectiveDeclarationFlags = getEffectiveDeclarationFlags(d, ModifierFlags.Export | ModifierFlags.Default);
 
-                    const name = getNameOfDeclaration(d);
-                    // Only error on the declarations that contributed to the intersecting spaces.
-                    if (declarationSpaces & commonDeclarationSpacesForDefaultAndNonDefault) {
-                        error(name, Diagnostics.Merged_declaration_0_cannot_include_a_default_export_declaration_Consider_adding_a_separate_export_default_0_declaration_instead, declarationNameToString(name));
+                    if (effectiveDeclarationFlags & ModifierFlags.Export) {
+                        if (effectiveDeclarationFlags & ModifierFlags.Default) {
+                            defaultExportedDeclarationSpaces |= declarationSpaces;
+                        }
+                        else {
+                            exportedDeclarationSpaces |= declarationSpaces;
+                        }
                     }
-                    else if (declarationSpaces & commonDeclarationSpacesForExportsAndLocals) {
-                        error(name, Diagnostics.Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local, declarationNameToString(name));
+                    else {
+                        nonExportedDeclarationSpaces |= declarationSpaces;
                     }
                 }
-            }
 
-            function getDeclarationSpaces(decl: Declaration): DeclarationSpaces {
-                let d = decl as Node;
-                switch (d.kind) {
-                    case SyntaxKind.InterfaceDeclaration:
-                    case SyntaxKind.TypeAliasDeclaration:
+                // Spaces for anything not declared a 'default export'.
+                const nonDefaultExportedDeclarationSpaces = exportedDeclarationSpaces | nonExportedDeclarationSpaces;
 
-                    // A jsdoc typedef and callback are, by definition, type aliases.
-                    // falls through
-                    case SyntaxKind.JSDocTypedefTag:
-                    case SyntaxKind.JSDocCallbackTag:
-                    case SyntaxKind.JSDocEnumTag:
-                        return DeclarationSpaces.ExportType;
-                    case SyntaxKind.ModuleDeclaration:
-                        return isAmbientModule(d as ModuleDeclaration) || getModuleInstanceState(d as ModuleDeclaration) !== ModuleInstanceState.NonInstantiated
-                            ? DeclarationSpaces.ExportNamespace | DeclarationSpaces.ExportValue
-                            : DeclarationSpaces.ExportNamespace;
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.EnumDeclaration:
-                    case SyntaxKind.EnumMember:
-                        return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue;
-                    case SyntaxKind.SourceFile:
-                        return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue | DeclarationSpaces.ExportNamespace;
-                    case SyntaxKind.ExportAssignment:
-                        // Export assigned entity name expressions act as aliases and should fall through, otherwise they export values
-                        if (!isEntityNameExpression((d as ExportAssignment).expression)) {
-                            return DeclarationSpaces.ExportValue;
+                const commonDeclarationSpacesForExportsAndLocals = exportedDeclarationSpaces & nonExportedDeclarationSpaces;
+                const commonDeclarationSpacesForDefaultAndNonDefault = defaultExportedDeclarationSpaces & nonDefaultExportedDeclarationSpaces;
+
+                if (commonDeclarationSpacesForExportsAndLocals || commonDeclarationSpacesForDefaultAndNonDefault) {
+                    // declaration spaces for exported and non-exported declarations intersect
+                    for (const d of symbol.declarations) {
+                        const declarationSpaces = getDeclarationSpaces(d);
+
+                        const name = getNameOfDeclaration(d);
+                        // Only error on the declarations that contributed to the intersecting spaces.
+                        if (declarationSpaces & commonDeclarationSpacesForDefaultAndNonDefault) {
+                            error(name, Diagnostics.Merged_declaration_0_cannot_include_a_default_export_declaration_Consider_adding_a_separate_export_default_0_declaration_instead, declarationNameToString(name));
                         }
-                        d = (d as ExportAssignment).expression;
+                        else if (declarationSpaces & commonDeclarationSpacesForExportsAndLocals) {
+                            error(name, Diagnostics.Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local, declarationNameToString(name));
+                        }
+                    }
+                }
 
-                    // The below options all declare an Alias, which is allowed to merge with other values within the importing module.
-                    // falls through
-                    case SyntaxKind.ImportEqualsDeclaration:
-                    case SyntaxKind.NamespaceImport:
-                    case SyntaxKind.ImportClause:
-                        let result = DeclarationSpaces.None;
-                        const target = resolveAlias(getSymbolOfNode(d)!);
-                        forEach(target.declarations, d => { result |= getDeclarationSpaces(d); });
-                        return result;
-                    case SyntaxKind.VariableDeclaration:
-                    case SyntaxKind.BindingElement:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.ImportSpecifier: // https://github.com/Microsoft/TypeScript/pull/7591
-                    case SyntaxKind.Identifier: // https://github.com/microsoft/TypeScript/issues/36098
-                    // Identifiers are used as declarations of assignment declarations whose parents may be
-                    // SyntaxKind.CallExpression - `Object.defineProperty(thing, "aField", {value: 42});`
-                    // SyntaxKind.ElementAccessExpression - `thing["aField"] = 42;` or `thing["aField"];` (with a doc comment on it)
-                    // or SyntaxKind.PropertyAccessExpression - `thing.aField = 42;`
-                    // all of which are pretty much always values, or at least imply a value meaning.
-                    // It may be apprpriate to treat these as aliases in the future.
-                        return DeclarationSpaces.ExportValue;
-                    default:
-                        return Debug.failBadSyntaxKind(d);
+                function getDeclarationSpaces(decl: Declaration): DeclarationSpaces {
+                    let d = decl as Node;
+                    switch (d.kind) {
+                        case SyntaxKind.InterfaceDeclaration:
+                        case SyntaxKind.TypeAliasDeclaration:
+
+                        // A jsdoc typedef and callback are, by definition, type aliases.
+                        // falls through
+                        case SyntaxKind.JSDocTypedefTag:
+                        case SyntaxKind.JSDocCallbackTag:
+                        case SyntaxKind.JSDocEnumTag:
+                            return DeclarationSpaces.ExportType;
+                        case SyntaxKind.ModuleDeclaration:
+                            return isAmbientModule(d as ModuleDeclaration) || getModuleInstanceState(d as ModuleDeclaration) !== ModuleInstanceState.NonInstantiated
+                                ? DeclarationSpaces.ExportNamespace | DeclarationSpaces.ExportValue
+                                : DeclarationSpaces.ExportNamespace;
+                        case SyntaxKind.ClassDeclaration:
+                        case SyntaxKind.EnumDeclaration:
+                        case SyntaxKind.EnumMember:
+                            return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue;
+                        case SyntaxKind.SourceFile:
+                            return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue | DeclarationSpaces.ExportNamespace;
+                        case SyntaxKind.ExportAssignment:
+                            // Export assigned entity name expressions act as aliases and should fall through, otherwise they export values
+                            if (!isEntityNameExpression((d as ExportAssignment).expression)) {
+                                return DeclarationSpaces.ExportValue;
+                            }
+                            d = (d as ExportAssignment).expression;
+
+                        // The below options all declare an Alias, which is allowed to merge with other values within the importing module.
+                        // falls through
+                        case SyntaxKind.ImportEqualsDeclaration:
+                        case SyntaxKind.NamespaceImport:
+                        case SyntaxKind.ImportClause:
+                            let result = DeclarationSpaces.None;
+                            const target = resolveAlias(getSymbolOfNode(d)!);
+                            forEach(target.declarations, d => { result |= getDeclarationSpaces(d); });
+                            return result;
+                        case SyntaxKind.VariableDeclaration:
+                        case SyntaxKind.BindingElement:
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.ImportSpecifier: // https://github.com/Microsoft/TypeScript/pull/7591
+                        case SyntaxKind.Identifier: // https://github.com/microsoft/TypeScript/issues/36098
+                        // Identifiers are used as declarations of assignment declarations whose parents may be
+                        // SyntaxKind.CallExpression - `Object.defineProperty(thing, "aField", {value: 42});`
+                        // SyntaxKind.ElementAccessExpression - `thing["aField"] = 42;` or `thing["aField"];` (with a doc comment on it)
+                        // or SyntaxKind.PropertyAccessExpression - `thing.aField = 42;`
+                        // all of which are pretty much always values, or at least imply a value meaning.
+                        // It may be apprpriate to treat these as aliases in the future.
+                            return DeclarationSpaces.ExportValue;
+                        default:
+                            return Debug.failBadSyntaxKind(d);
+                    }
                 }
             }
         }
@@ -30154,7 +30181,9 @@ namespace ts {
         }
 
         function checkFunctionDeclaration(node: FunctionDeclaration): void {
-            if (produceDiagnostics) {
+            addLazyDiagnostic(checkFunctionDeclarationDiagnostics);
+
+            function checkFunctionDeclarationDiagnostics() {
                 checkFunctionOrMethodDeclaration(node);
                 checkGrammarForGenerator(node);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name!);
@@ -30222,10 +30251,14 @@ namespace ts {
         }
 
         function checkJSDocFunctionType(node: JSDocFunctionType): void {
-            if (produceDiagnostics && !node.type && !isJSDocConstructSignature(node)) {
-                reportImplicitAny(node, anyType);
-            }
+            addLazyDiagnostic(checkJSDocFunctionTypeImplicitAny);
             checkSignatureDeclaration(node);
+
+            function checkJSDocFunctionTypeImplicitAny() {
+                if (!node.type && !isJSDocConstructSignature(node)) {
+                    reportImplicitAny(node, anyType);
+                }
+            }
         }
 
         function checkJSDocAugmentsTag(node: JSDocAugmentsTag): void {
@@ -30310,20 +30343,7 @@ namespace ts {
             checkSourceElement(body);
             checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, getReturnTypeFromAnnotation(node));
 
-            if (produceDiagnostics && !getEffectiveReturnTypeNode(node)) {
-                // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
-                // in an ambient context
-                if (nodeIsMissing(body) && !isPrivateWithinAmbient(node)) {
-                    reportImplicitAny(node, anyType);
-                }
-
-                if (functionFlags & FunctionFlags.Generator && nodeIsPresent(body)) {
-                    // A generator with a body and no type annotation can still cause errors. It can error if the
-                    // yielded values have no common supertype, or it can give an implicit any error if it has no
-                    // yielded values. The only way to trigger these errors is to try checking its return type.
-                    getReturnTypeOfSignature(getSignatureFromDeclaration(node));
-                }
-            }
+            addLazyDiagnostic(checkFunctionOrMethodDeclarationDiagnostics);
 
             // A js function declaration can have a @type tag instead of a return type node, but that type must have a call signature
             if (isInJSFile(node)) {
@@ -30332,11 +30352,30 @@ namespace ts {
                     error(typeTag, Diagnostics.The_type_of_a_function_declaration_must_match_the_function_s_signature);
                 }
             }
+
+            function checkFunctionOrMethodDeclarationDiagnostics() {
+                if (!getEffectiveReturnTypeNode(node)) {
+                    // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
+                    // in an ambient context
+                    if (nodeIsMissing(body) && !isPrivateWithinAmbient(node)) {
+                        reportImplicitAny(node, anyType);
+                    }
+
+                    if (functionFlags & FunctionFlags.Generator && nodeIsPresent(body)) {
+                        // A generator with a body and no type annotation can still cause errors. It can error if the
+                        // yielded values have no common supertype, or it can give an implicit any error if it has no
+                        // yielded values. The only way to trigger these errors is to try checking its return type.
+                        getReturnTypeOfSignature(getSignatureFromDeclaration(node));
+                    }
+                }
+            }
         }
 
         function registerForUnusedIdentifiersCheck(node: PotentiallyUnusedIdentifier): void {
-            // May be in a call such as getTypeOfNode that happened to call this. But potentiallyUnusedIdentifiers is only defined in the scope of `checkSourceFile`.
-            if (produceDiagnostics) {
+            addLazyDiagnostic(registerForUnusedIdentifiersCheckDiagnostics);
+
+            function registerForUnusedIdentifiersCheckDiagnostics() {
+                // May be in a call such as getTypeOfNode that happened to call this. But potentiallyUnusedIdentifiers is only defined in the scope of `checkSourceFile`.
                 const sourceFile = getSourceFileOfNode(node);
                 let potentiallyUnusedIdentifiers = allPotentiallyUnusedIdentifiers.get(sourceFile.path);
                 if (!potentiallyUnusedIdentifiers) {
@@ -32067,25 +32106,31 @@ namespace ts {
                     }
                 }
 
-                if (produceDiagnostics && clause.kind === SyntaxKind.CaseClause) {
-                    // TypeScript 1.0 spec (April 2014): 5.9
-                    // In a 'switch' statement, each 'case' expression must be of a type that is comparable
-                    // to or from the type of the 'switch' expression.
-                    let caseType = checkExpression(clause.expression);
-                    const caseIsLiteral = isLiteralType(caseType);
-                    let comparedExpressionType = expressionType;
-                    if (!caseIsLiteral || !expressionIsLiteral) {
-                        caseType = caseIsLiteral ? getBaseTypeOfLiteralType(caseType) : caseType;
-                        comparedExpressionType = getBaseTypeOfLiteralType(expressionType);
-                    }
-                    if (!isTypeEqualityComparableTo(comparedExpressionType, caseType)) {
-                        // expressionType is not comparable to caseType, try the reversed check and report errors if it fails
-                        checkTypeComparableTo(caseType, comparedExpressionType, clause.expression, /*headMessage*/ undefined);
-                    }
+                if (clause.kind === SyntaxKind.CaseClause) {
+                    addLazyDiagnostic(createLazyCaseClauseDiagnostics(clause));
                 }
                 forEach(clause.statements, checkSourceElement);
                 if (compilerOptions.noFallthroughCasesInSwitch && clause.fallthroughFlowNode && isReachableFlowNode(clause.fallthroughFlowNode)) {
                     error(clause, Diagnostics.Fallthrough_case_in_switch);
+                }
+
+                function createLazyCaseClauseDiagnostics(clause: CaseClause) {
+                    return () => {
+                        // TypeScript 1.0 spec (April 2014): 5.9
+                        // In a 'switch' statement, each 'case' expression must be of a type that is comparable
+                        // to or from the type of the 'switch' expression.
+                        let caseType = checkExpression(clause.expression);
+                        const caseIsLiteral = isLiteralType(caseType);
+                        let comparedExpressionType = expressionType;
+                        if (!caseIsLiteral || !expressionIsLiteral) {
+                            caseType = caseIsLiteral ? getBaseTypeOfLiteralType(caseType) : caseType;
+                            comparedExpressionType = getBaseTypeOfLiteralType(expressionType);
+                        }
+                        if (!isTypeEqualityComparableTo(comparedExpressionType, caseType)) {
+                            // expressionType is not comparable to caseType, try the reversed check and report errors if it fails
+                            checkTypeComparableTo(caseType, comparedExpressionType, clause.expression, /*headMessage*/ undefined);
+                        }
+                    };
                 }
             });
             if (node.caseBlock.locals) {
@@ -32288,27 +32333,31 @@ namespace ts {
          * Check each type parameter and check that type parameters have no duplicate type parameter declarations
          */
         function checkTypeParameters(typeParameterDeclarations: readonly TypeParameterDeclaration[] | undefined) {
+            let seenDefault = false;
             if (typeParameterDeclarations) {
-                let seenDefault = false;
                 for (let i = 0; i < typeParameterDeclarations.length; i++) {
                     const node = typeParameterDeclarations[i];
                     checkTypeParameter(node);
 
-                    if (produceDiagnostics) {
-                        if (node.default) {
-                            seenDefault = true;
-                            checkTypeParametersNotReferenced(node.default, typeParameterDeclarations, i);
-                        }
-                        else if (seenDefault) {
-                            error(node, Diagnostics.Required_type_parameters_may_not_follow_optional_type_parameters);
-                        }
-                        for (let j = 0; j < i; j++) {
-                            if (typeParameterDeclarations[j].symbol === node.symbol) {
-                                error(node.name, Diagnostics.Duplicate_identifier_0, declarationNameToString(node.name));
-                            }
+                    addLazyDiagnostic(createCheckTypeParameterDiagnostic(node, i));
+                }
+            }
+
+            function createCheckTypeParameterDiagnostic(node: TypeParameterDeclaration, i: number) {
+                return () => {
+                    if (node.default) {
+                        seenDefault = true;
+                        checkTypeParametersNotReferenced(node.default, typeParameterDeclarations!, i);
+                    }
+                    else if (seenDefault) {
+                        error(node, Diagnostics.Required_type_parameters_may_not_follow_optional_type_parameters);
+                    }
+                    for (let j = 0; j < i; j++) {
+                        if (typeParameterDeclarations![j].symbol === node.symbol) {
+                            error(node.name, Diagnostics.Duplicate_identifier_0, declarationNameToString(node.name));
                         }
                     }
-                }
+                };
             }
         }
 
@@ -32460,42 +32509,44 @@ namespace ts {
                 }
 
                 const baseTypes = getBaseTypes(type);
-                if (baseTypes.length && produceDiagnostics) {
-                    const baseType = baseTypes[0];
-                    const baseConstructorType = getBaseConstructorTypeOfClass(type);
-                    const staticBaseType = getApparentType(baseConstructorType);
-                    checkBaseTypeAccessibility(staticBaseType, baseTypeNode);
-                    checkSourceElement(baseTypeNode.expression);
-                    if (some(baseTypeNode.typeArguments)) {
-                        forEach(baseTypeNode.typeArguments, checkSourceElement);
-                        for (const constructor of getConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments, baseTypeNode)) {
-                            if (!checkTypeArgumentConstraints(baseTypeNode, constructor.typeParameters!)) {
-                                break;
+                if (baseTypes.length) {
+                    addLazyDiagnostic(() => {
+                        const baseType = baseTypes[0];
+                        const baseConstructorType = getBaseConstructorTypeOfClass(type);
+                        const staticBaseType = getApparentType(baseConstructorType);
+                        checkBaseTypeAccessibility(staticBaseType, baseTypeNode);
+                        checkSourceElement(baseTypeNode.expression);
+                        if (some(baseTypeNode.typeArguments)) {
+                            forEach(baseTypeNode.typeArguments, checkSourceElement);
+                            for (const constructor of getConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments, baseTypeNode)) {
+                                if (!checkTypeArgumentConstraints(baseTypeNode, constructor.typeParameters!)) {
+                                    break;
+                                }
                             }
                         }
-                    }
-                    const baseWithThis = getTypeWithThisArgument(baseType, type.thisType);
-                    if (!checkTypeAssignableTo(typeWithThis, baseWithThis, /*errorNode*/ undefined)) {
-                        issueMemberSpecificError(node, typeWithThis, baseWithThis, Diagnostics.Class_0_incorrectly_extends_base_class_1);
-                    }
-                    else {
-                        // Report static side error only when instance type is assignable
-                        checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
-                            Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
-                    }
-                    if (baseConstructorType.flags & TypeFlags.TypeVariable && !isMixinConstructorType(staticType)) {
-                        error(node.name || node, Diagnostics.A_mixin_class_must_have_a_constructor_with_a_single_rest_parameter_of_type_any);
-                    }
-
-                    if (!(staticBaseType.symbol && staticBaseType.symbol.flags & SymbolFlags.Class) && !(baseConstructorType.flags & TypeFlags.TypeVariable)) {
-                        // When the static base type is a "class-like" constructor function (but not actually a class), we verify
-                        // that all instantiated base constructor signatures return the same type.
-                        const constructors = getInstantiatedConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments, baseTypeNode);
-                        if (forEach(constructors, sig => !isJSConstructor(sig.declaration) && !isTypeIdenticalTo(getReturnTypeOfSignature(sig), baseType))) {
-                            error(baseTypeNode.expression, Diagnostics.Base_constructors_must_all_have_the_same_return_type);
+                        const baseWithThis = getTypeWithThisArgument(baseType, type.thisType);
+                        if (!checkTypeAssignableTo(typeWithThis, baseWithThis, /*errorNode*/ undefined)) {
+                            issueMemberSpecificError(node, typeWithThis, baseWithThis, Diagnostics.Class_0_incorrectly_extends_base_class_1);
                         }
-                    }
-                    checkKindsOfPropertyMemberOverrides(type, baseType);
+                        else {
+                            // Report static side error only when instance type is assignable
+                            checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
+                                Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
+                        }
+                        if (baseConstructorType.flags & TypeFlags.TypeVariable && !isMixinConstructorType(staticType)) {
+                            error(node.name || node, Diagnostics.A_mixin_class_must_have_a_constructor_with_a_single_rest_parameter_of_type_any);
+                        }
+
+                        if (!(staticBaseType.symbol && staticBaseType.symbol.flags & SymbolFlags.Class) && !(baseConstructorType.flags & TypeFlags.TypeVariable)) {
+                            // When the static base type is a "class-like" constructor function (but not actually a class), we verify
+                            // that all instantiated base constructor signatures return the same type.
+                            const constructors = getInstantiatedConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments, baseTypeNode);
+                            if (forEach(constructors, sig => !isJSConstructor(sig.declaration) && !isTypeIdenticalTo(getReturnTypeOfSignature(sig), baseType))) {
+                                error(baseTypeNode.expression, Diagnostics.Base_constructors_must_all_have_the_same_return_type);
+                            }
+                        }
+                        checkKindsOfPropertyMemberOverrides(type, baseType);
+                    });
                 }
             }
 
@@ -32506,30 +32557,34 @@ namespace ts {
                         error(typeRefNode.expression, Diagnostics.A_class_can_only_implement_an_identifier_Slashqualified_name_with_optional_type_arguments);
                     }
                     checkTypeReferenceNode(typeRefNode);
-                    if (produceDiagnostics) {
-                        const t = getTypeFromTypeNode(typeRefNode);
-                        if (t !== errorType) {
-                            if (isValidBaseType(t)) {
-                                const genericDiag = t.symbol && t.symbol.flags & SymbolFlags.Class ?
-                                    Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass :
-                                    Diagnostics.Class_0_incorrectly_implements_interface_1;
-                                const baseWithThis = getTypeWithThisArgument(t, type.thisType);
-                                if (!checkTypeAssignableTo(typeWithThis, baseWithThis, /*errorNode*/ undefined)) {
-                                    issueMemberSpecificError(node, typeWithThis, baseWithThis, genericDiag);
-                                }
-                            }
-                            else {
-                                error(typeRefNode, Diagnostics.A_class_can_only_implement_an_object_type_or_intersection_of_object_types_with_statically_known_members);
-                            }
-                        }
-                    }
+                    addLazyDiagnostic(createImplementsDiagnostics(typeRefNode));
                 }
             }
 
-            if (produceDiagnostics) {
+            addLazyDiagnostic(() => {
                 checkIndexConstraints(type);
                 checkTypeForDuplicateIndexSignatures(node);
                 checkPropertyInitialization(node);
+            });
+
+            function createImplementsDiagnostics(typeRefNode: ExpressionWithTypeArguments) {
+                return () => {
+                    const t = getTypeFromTypeNode(typeRefNode);
+                    if (t !== errorType) {
+                        if (isValidBaseType(t)) {
+                            const genericDiag = t.symbol && t.symbol.flags & SymbolFlags.Class ?
+                                Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass :
+                                Diagnostics.Class_0_incorrectly_implements_interface_1;
+                            const baseWithThis = getTypeWithThisArgument(t, type.thisType);
+                            if (!checkTypeAssignableTo(typeWithThis, baseWithThis, /*errorNode*/ undefined)) {
+                                issueMemberSpecificError(node, typeWithThis, baseWithThis, genericDiag);
+                            }
+                        }
+                        else {
+                            error(typeRefNode, Diagnostics.A_class_can_only_implement_an_object_type_or_intersection_of_object_types_with_statically_known_members);
+                        }
+                    }
+                };
             }
         }
 
@@ -32809,7 +32864,18 @@ namespace ts {
             if (!checkGrammarDecoratorsAndModifiers(node)) checkGrammarInterfaceDeclaration(node);
 
             checkTypeParameters(node.typeParameters);
-            if (produceDiagnostics) {
+            forEach(getInterfaceBaseTypeNodes(node), heritageElement => {
+                if (!isEntityNameExpression(heritageElement.expression)) {
+                    error(heritageElement.expression, Diagnostics.An_interface_can_only_extend_an_identifier_Slashqualified_name_with_optional_type_arguments);
+                }
+                checkTypeReferenceNode(heritageElement);
+            });
+
+            forEach(node.members, checkSourceElement);
+            addLazyDiagnostic(checkInterfaceDeclarationDiagnostics);
+
+
+            function checkInterfaceDeclarationDiagnostics() {
                 checkTypeNameIsReserved(node.name, Diagnostics.Interface_name_cannot_be_0);
 
                 checkExportsOnMergedDeclarations(node);
@@ -32830,17 +32896,6 @@ namespace ts {
                     }
                 }
                 checkObjectTypeForDuplicateDeclarations(node);
-            }
-            forEach(getInterfaceBaseTypeNodes(node), heritageElement => {
-                if (!isEntityNameExpression(heritageElement.expression)) {
-                    error(heritageElement.expression, Diagnostics.An_interface_can_only_extend_an_identifier_Slashqualified_name_with_optional_type_arguments);
-                }
-                checkTypeReferenceNode(heritageElement);
-            });
-
-            forEach(node.members, checkSourceElement);
-
-            if (produceDiagnostics) {
                 checkTypeForDuplicateIndexSignatures(node);
                 registerForUnusedIdentifiersCheck(node);
             }
@@ -33021,62 +33076,63 @@ namespace ts {
         }
 
         function checkEnumDeclaration(node: EnumDeclaration) {
-            if (!produceDiagnostics) {
-                return;
-            }
+            addLazyDiagnostic(checkEnumDeclarationDiagnostics);
+            return;
 
-            // Grammar checking
-            checkGrammarDecoratorsAndModifiers(node);
+            function checkEnumDeclarationDiagnostics() {
+                // Grammar checking
+                checkGrammarDecoratorsAndModifiers(node);
 
-            checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
-            checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
-            checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
-            checkExportsOnMergedDeclarations(node);
-            node.members.forEach(checkEnumMember);
+                checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
+                checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+                checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
+                checkExportsOnMergedDeclarations(node);
+                node.members.forEach(checkEnumMember);
 
-            computeEnumMemberValues(node);
+                computeEnumMemberValues(node);
 
-            // Spec 2014 - Section 9.3:
-            // It isn't possible for one enum declaration to continue the automatic numbering sequence of another,
-            // and when an enum type has multiple declarations, only one declaration is permitted to omit a value
-            // for the first member.
-            //
-            // Only perform this check once per symbol
-            const enumSymbol = getSymbolOfNode(node);
-            const firstDeclaration = getDeclarationOfKind(enumSymbol, node.kind);
-            if (node === firstDeclaration) {
-                if (enumSymbol.declarations.length > 1) {
-                    const enumIsConst = isEnumConst(node);
-                    // check that const is placed\omitted on all enum declarations
-                    forEach(enumSymbol.declarations, decl => {
-                        if (isEnumDeclaration(decl) && isEnumConst(decl) !== enumIsConst) {
-                            error(getNameOfDeclaration(decl), Diagnostics.Enum_declarations_must_all_be_const_or_non_const);
+                // Spec 2014 - Section 9.3:
+                // It isn't possible for one enum declaration to continue the automatic numbering sequence of another,
+                // and when an enum type has multiple declarations, only one declaration is permitted to omit a value
+                // for the first member.
+                //
+                // Only perform this check once per symbol
+                const enumSymbol = getSymbolOfNode(node);
+                const firstDeclaration = getDeclarationOfKind(enumSymbol, node.kind);
+                if (node === firstDeclaration) {
+                    if (enumSymbol.declarations.length > 1) {
+                        const enumIsConst = isEnumConst(node);
+                        // check that const is placed\omitted on all enum declarations
+                        forEach(enumSymbol.declarations, decl => {
+                            if (isEnumDeclaration(decl) && isEnumConst(decl) !== enumIsConst) {
+                                error(getNameOfDeclaration(decl), Diagnostics.Enum_declarations_must_all_be_const_or_non_const);
+                            }
+                        });
+                    }
+
+                    let seenEnumMissingInitialInitializer = false;
+                    forEach(enumSymbol.declarations, declaration => {
+                        // return true if we hit a violation of the rule, false otherwise
+                        if (declaration.kind !== SyntaxKind.EnumDeclaration) {
+                            return false;
+                        }
+
+                        const enumDeclaration = <EnumDeclaration>declaration;
+                        if (!enumDeclaration.members.length) {
+                            return false;
+                        }
+
+                        const firstEnumMember = enumDeclaration.members[0];
+                        if (!firstEnumMember.initializer) {
+                            if (seenEnumMissingInitialInitializer) {
+                                error(firstEnumMember.name, Diagnostics.In_an_enum_with_multiple_declarations_only_one_declaration_can_omit_an_initializer_for_its_first_enum_element);
+                            }
+                            else {
+                                seenEnumMissingInitialInitializer = true;
+                            }
                         }
                     });
                 }
-
-                let seenEnumMissingInitialInitializer = false;
-                forEach(enumSymbol.declarations, declaration => {
-                    // return true if we hit a violation of the rule, false otherwise
-                    if (declaration.kind !== SyntaxKind.EnumDeclaration) {
-                        return false;
-                    }
-
-                    const enumDeclaration = <EnumDeclaration>declaration;
-                    if (!enumDeclaration.members.length) {
-                        return false;
-                    }
-
-                    const firstEnumMember = enumDeclaration.members[0];
-                    if (!firstEnumMember.initializer) {
-                        if (seenEnumMissingInitialInitializer) {
-                            error(firstEnumMember.name, Diagnostics.In_an_enum_with_multiple_declarations_only_one_declaration_can_omit_an_initializer_for_its_first_enum_element);
-                        }
-                        else {
-                            seenEnumMissingInitialInitializer = true;
-                        }
-                    }
-                });
             }
         }
 
@@ -33113,7 +33169,16 @@ namespace ts {
         }
 
         function checkModuleDeclaration(node: ModuleDeclaration) {
-            if (produceDiagnostics) {
+            if (node.body) {
+                checkSourceElement(node.body);
+                if (!isGlobalScopeAugmentation(node)) {
+                    registerForUnusedIdentifiersCheck(node);
+                }
+            }
+
+            addLazyDiagnostic(checkModuleDeclarationDiagnostics);
+
+            function checkModuleDeclarationDiagnostics() {
                 // Grammar checking
                 const isGlobalAugmentation = isGlobalScopeAugmentation(node);
                 const inAmbientContext = node.flags & NodeFlags.Ambient;
@@ -33200,13 +33265,6 @@ namespace ts {
                             error(node.name, Diagnostics.Ambient_modules_cannot_be_nested_in_other_modules_or_namespaces);
                         }
                     }
-                }
-            }
-
-            if (node.body) {
-                checkSourceElement(node.body);
-                if (!isGlobalScopeAugmentation(node)) {
-                    registerForUnusedIdentifiersCheck(node);
                 }
             }
         }
@@ -33985,13 +34043,16 @@ namespace ts {
                     registerForUnusedIdentifiersCheck(node);
                 }
 
-                if (!node.isDeclarationFile && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters)) {
-                    checkUnusedIdentifiers(getPotentiallyUnusedIdentifiers(node), (containingNode, kind, diag) => {
-                        if (!containsParseError(containingNode) && unusedIsError(kind, !!(containingNode.flags & NodeFlags.Ambient))) {
-                            diagnostics.add(diag);
-                        }
-                    });
-                }
+                addLazyDiagnostic(() => {
+                    // This relies on the results of other lazy diagnostics, so must be computed after them
+                    if (!node.isDeclarationFile && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters)) {
+                        checkUnusedIdentifiers(getPotentiallyUnusedIdentifiers(node), (containingNode, kind, diag) => {
+                            if (!containsParseError(containingNode) && unusedIsError(kind, !!(containingNode.flags & NodeFlags.Ambient))) {
+                                diagnostics.add(diag);
+                            }
+                        });
+                    }
+                });
 
                 if (compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error &&
                     !node.isDeclarationFile &&
@@ -34036,8 +34097,24 @@ namespace ts {
             }
         }
 
+        function checkSourceFileWithEagerDiagnostics(sourceFile: SourceFile) {
+            // Invoke any existing lazy diagnostics to add them, clear the backlog of diagnostics
+            // then setup diagnostics for immediate invocation (as we are about to collect them, and
+            // this avoids the overhead of longer-lived callbacks we don't need to allocate)
+            // This also serves to make the shift to possibly lazy diagnostics transparent to serial command-line scenarios
+            // (as in those cases, all the diagnostics will still be computed as the appropriate place in the tree,
+            // thus much more likely retaining the same union ordering as before we had lazy diagnostics)
+            for (const cb of deferredDiagnosticsCallbacks) {
+                cb();
+            }
+            deferredDiagnosticsCallbacks = [];
+            const oldAddLazyDiagnostics = addLazyDiagnostic;
+            addLazyDiagnostic = cb => cb();
+            checkSourceFile(sourceFile);
+            addLazyDiagnostic = oldAddLazyDiagnostics;
+        }
+
         function getDiagnosticsWorker(sourceFile: SourceFile): Diagnostic[] {
-            throwIfNonDiagnosticsProducing();
             if (sourceFile) {
                 // Some global diagnostics are deferred until they are needed and
                 // may not be reported in the first call to getGlobalDiagnostics.
@@ -34045,7 +34122,7 @@ namespace ts {
                 const previousGlobalDiagnostics = diagnostics.getGlobalDiagnostics();
                 const previousGlobalDiagnosticsSize = previousGlobalDiagnostics.length;
 
-                checkSourceFile(sourceFile);
+                checkSourceFileWithEagerDiagnostics(sourceFile);
 
                 const semanticDiagnostics = diagnostics.getDiagnostics(sourceFile.fileName);
                 const currentGlobalDiagnostics = diagnostics.getGlobalDiagnostics();
@@ -34066,19 +34143,12 @@ namespace ts {
 
             // Global diagnostics are always added when a file is not provided to
             // getDiagnostics
-            forEach(host.getSourceFiles(), checkSourceFile);
+            forEach(host.getSourceFiles(), checkSourceFileWithEagerDiagnostics);
             return diagnostics.getDiagnostics();
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
-            throwIfNonDiagnosticsProducing();
             return diagnostics.getGlobalDiagnostics();
-        }
-
-        function throwIfNonDiagnosticsProducing() {
-            if (!produceDiagnostics) {
-                throw new Error("Trying to get diagnostics from a type checker that does not produce them.");
-            }
         }
 
         // Language service support

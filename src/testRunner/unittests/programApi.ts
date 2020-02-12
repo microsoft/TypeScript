@@ -179,7 +179,7 @@ namespace ts {
         });
     });
 
-    describe("unittests:: programApi:: Program.getDiagnosticsProducingTypeChecker / Program.getSemanticDiagnostics", () => {
+    describe("unittests:: programApi:: Program.getTypeChecker / Program.getSemanticDiagnostics", () => {
         it("getSymbolAtLocation does not cause additional error to be added on module resolution failure", () => {
             const main = new documents.TextDocument("/main.ts", "import \"./module\";");
             const mod = new documents.TextDocument("/module.d.ts", "declare const foo: any;");
@@ -188,7 +188,7 @@ namespace ts {
             const program = createProgram(["/main.ts"], {}, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
 
             const sourceFile = program.getSourceFile("main.ts")!;
-            const typeChecker = program.getDiagnosticsProducingTypeChecker();
+            const typeChecker = program.getTypeChecker();
             typeChecker.getSymbolAtLocation((sourceFile.statements[0] as ImportDeclaration).moduleSpecifier);
             assert.isEmpty(program.getSemanticDiagnostics());
         });
