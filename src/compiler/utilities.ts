@@ -4225,6 +4225,9 @@ namespace ts {
     }
 
     export function getModifierFlags(node: Node): ModifierFlags {
+        if (node.kind >= SyntaxKind.FirstToken && node.kind <= SyntaxKind.LastToken) {
+            return ModifierFlags.None;
+        }
         if (node.modifierFlagsCache & ModifierFlags.HasComputedFlags) {
             return node.modifierFlagsCache & ~ModifierFlags.HasComputedFlags;
         }
@@ -5072,6 +5075,28 @@ namespace ts {
         this.original = undefined;
     }
 
+    function Token(this: Node, kind: SyntaxKind, pos: number, end: number) {
+        this.pos = pos;
+        this.end = end;
+        this.kind = kind;
+        this.id = 0;
+        this.flags = NodeFlags.None;
+        this.transformFlags = TransformFlags.None;
+        this.parent = undefined!;
+    }
+
+    function Identifier(this: Node, kind: SyntaxKind, pos: number, end: number) {
+        this.pos = pos;
+        this.end = end;
+        this.kind = kind;
+        this.id = 0;
+        this.flags = NodeFlags.None;
+        this.transformFlags = TransformFlags.None;
+        this.parent = undefined!;
+        this.original = undefined;
+        this.flowNode = undefined;
+    }
+
     function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
         this.fileName = fileName;
         this.text = text;
@@ -5081,8 +5106,8 @@ namespace ts {
     // eslint-disable-next-line prefer-const
     export let objectAllocator: ObjectAllocator = {
         getNodeConstructor: () => <any>Node,
-        getTokenConstructor: () => <any>Node,
-        getIdentifierConstructor: () => <any>Node,
+        getTokenConstructor: () => <any>Token,
+        getIdentifierConstructor: () => <any>Identifier,
         getPrivateIdentifierConstructor: () => <any>Node,
         getSourceFileConstructor: () => <any>Node,
         getSymbolConstructor: () => <any>Symbol,
