@@ -22600,6 +22600,7 @@ namespace ts {
 
         function checkJsxSelfClosingElementDeferred(node: JsxSelfClosingElement) {
             checkJsxOpeningLikeElementOrOpeningFragment(node);
+            resolveUntypedCall(node); // ensure type arguments and parameters are typechecked, even if there is an arity error
         }
 
         function checkJsxSelfClosingElement(node: JsxSelfClosingElement, _checkMode: CheckMode | undefined): Type {
@@ -24994,7 +24995,7 @@ namespace ts {
             hasCandidatesOutArray: boolean,
         ): Signature {
             Debug.assert(candidates.length > 0); // Else should not have called this.
-            resolveUntypedCall(node);
+            checkNodeDeferred(node);
             // Normally we will combine overloads. Skip this if they have type parameters since that's hard to combine.
             // Don't do this if there is a `candidatesOutArray`,
             // because then we want the chosen best candidate to be one of the overloads, not a combination.
@@ -33913,6 +33914,16 @@ namespace ts {
             currentNode = node;
             instantiationCount = 0;
             switch (node.kind) {
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.Decorator:
+                case SyntaxKind.JsxOpeningElement:
+                    // These node kinds are deferred checked when overload resolution fails
+                    // To save on work, we ensure the arguments are checked just once, in
+                    // a deferred way
+                    resolveUntypedCall(node as CallLikeExpression);
+                    break;
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.MethodDeclaration:

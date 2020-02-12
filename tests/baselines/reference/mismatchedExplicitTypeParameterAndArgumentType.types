@@ -77,12 +77,12 @@ var r7 = map<number, string>([1, ""], (x) => x.toString()); // error
 >[1, ""] : (string | number)[]
 >1 : 1
 >"" : ""
->(x) => x.toString() : (x: any) => any
->x : any
->x.toString() : any
->x.toString : any
->x : any
->toString : any
+>(x) => x.toString() : (x: number) => string
+>x : number
+>x.toString() : string
+>x.toString : (radix?: number) => string
+>x : number
+>toString : (radix?: number) => string
 
 var r7b = map<number>([1, ""], (x) => x.toString()); // error
 >r7b : unknown[]
@@ -91,12 +91,12 @@ var r7b = map<number>([1, ""], (x) => x.toString()); // error
 >[1, ""] : (string | number)[]
 >1 : 1
 >"" : ""
->(x) => x.toString() : (x: any) => any
->x : any
->x.toString() : any
->x.toString : any
->x : any
->toString : any
+>(x) => x.toString() : (x: number) => string
+>x : number
+>x.toString() : string
+>x.toString : (radix?: number) => string
+>x : number
+>toString : (radix?: number) => string
 
 var r8 = map<any, string>([1, ""], (x) => x.toString());
 >r8 : string[]
