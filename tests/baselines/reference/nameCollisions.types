@@ -62,10 +62,10 @@ module T {
 >C : C
 
     function C() { } // error
->C : () => void
+>C : typeof C
 
     function C2() { }
->C2 : () => void
+>C2 : typeof C2
 
     class C2 { } // error
 >C2 : C2

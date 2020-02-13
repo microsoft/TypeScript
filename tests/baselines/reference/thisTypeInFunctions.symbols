@@ -497,9 +497,7 @@ c.explicitC = m => m + this.n;
 >explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctions.ts, 8, 5))
 >m : Symbol(m, Decl(thisTypeInFunctions.ts, 117, 13))
 >m : Symbol(m, Decl(thisTypeInFunctions.ts, 117, 13))
->this.n : Symbol(n, Decl(thisTypeInFunctions.ts, 190, 3))
 >this : Symbol(globalThis)
->n : Symbol(n, Decl(thisTypeInFunctions.ts, 190, 3))
 
 c.explicitThis = m => m + this.n;
 >c.explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctions.ts, 5, 14))
@@ -507,9 +505,7 @@ c.explicitThis = m => m + this.n;
 >explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctions.ts, 5, 14))
 >m : Symbol(m, Decl(thisTypeInFunctions.ts, 118, 16))
 >m : Symbol(m, Decl(thisTypeInFunctions.ts, 118, 16))
->this.n : Symbol(n, Decl(thisTypeInFunctions.ts, 190, 3))
 >this : Symbol(globalThis)
->n : Symbol(n, Decl(thisTypeInFunctions.ts, 190, 3))
 
 c.explicitProperty = m => m + this.n;
 >c.explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctions.ts, 11, 5))
@@ -517,9 +513,7 @@ c.explicitProperty = m => m + this.n;
 >explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctions.ts, 11, 5))
 >m : Symbol(m, Decl(thisTypeInFunctions.ts, 119, 20))
 >m : Symbol(m, Decl(thisTypeInFunctions.ts, 119, 20))
->this.n : Symbol(n, Decl(thisTypeInFunctions.ts, 190, 3))
 >this : Symbol(globalThis)
->n : Symbol(n, Decl(thisTypeInFunctions.ts, 190, 3))
 
 //NOTE: this=C here, I guess?
 c.explicitThis = explicitCFunction;

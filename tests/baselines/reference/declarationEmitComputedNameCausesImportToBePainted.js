@@ -20,8 +20,8 @@ exports.__esModule = true;
 exports.Key = Symbol();
 //// [index.js]
 "use strict";
-exports.__esModule = true;
 var _a;
+exports.__esModule = true;
 var context_1 = require("./context");
 exports.context = (_a = {},
     _a[context_1.Key] = 'bar',

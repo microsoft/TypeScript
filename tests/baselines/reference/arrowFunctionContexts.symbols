@@ -27,9 +27,9 @@ class Derived extends Base {
 
 // Arrow function as function argument
 window.setTimeout(() => null, 100);
->window.setTimeout : Symbol(WindowOrWorkerGlobalScope.setTimeout, Decl(lib.dom.d.ts, --, --))
+>window.setTimeout : Symbol(setTimeout, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
->setTimeout : Symbol(WindowOrWorkerGlobalScope.setTimeout, Decl(lib.dom.d.ts, --, --))
+>setTimeout : Symbol(setTimeout, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 
 // Arrow function as value in array literal
 
@@ -108,9 +108,9 @@ module M2 {
 
     // Arrow function as function argument
     window.setTimeout(() => null, 100);
->window.setTimeout : Symbol(WindowOrWorkerGlobalScope.setTimeout, Decl(lib.dom.d.ts, --, --))
+>window.setTimeout : Symbol(setTimeout, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
->setTimeout : Symbol(WindowOrWorkerGlobalScope.setTimeout, Decl(lib.dom.d.ts, --, --))
+>setTimeout : Symbol(setTimeout, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 
     // Arrow function as value in array literal
 

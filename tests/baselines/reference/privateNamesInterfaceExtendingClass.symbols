@@ -1,0 +1,31 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesInterfaceExtendingClass.ts ===
+class C {
+>C : Symbol(C, Decl(privateNamesInterfaceExtendingClass.ts, 0, 0))
+
+    #prop;
+>#prop : Symbol(C.#prop, Decl(privateNamesInterfaceExtendingClass.ts, 0, 9))
+
+    func(x: I) {
+>func : Symbol(C.func, Decl(privateNamesInterfaceExtendingClass.ts, 1, 10))
+>x : Symbol(x, Decl(privateNamesInterfaceExtendingClass.ts, 2, 9))
+>I : Symbol(I, Decl(privateNamesInterfaceExtendingClass.ts, 5, 1))
+
+        x.#prop = 123;
+>x.#prop : Symbol(C.#prop, Decl(privateNamesInterfaceExtendingClass.ts, 0, 9))
+>x : Symbol(x, Decl(privateNamesInterfaceExtendingClass.ts, 2, 9))
+    }
+}
+interface I extends C {}
+>I : Symbol(I, Decl(privateNamesInterfaceExtendingClass.ts, 5, 1))
+>C : Symbol(C, Decl(privateNamesInterfaceExtendingClass.ts, 0, 0))
+
+function func(x: I) {
+>func : Symbol(func, Decl(privateNamesInterfaceExtendingClass.ts, 6, 24))
+>x : Symbol(x, Decl(privateNamesInterfaceExtendingClass.ts, 8, 14))
+>I : Symbol(I, Decl(privateNamesInterfaceExtendingClass.ts, 5, 1))
+
+    x.#prop = 123;
+>x : Symbol(x, Decl(privateNamesInterfaceExtendingClass.ts, 8, 14))
+}
+
+

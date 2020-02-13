@@ -15,6 +15,6 @@ verify.signatureHelp({ marker: "", overloadsCount: 2 });
 edit.insert('a');
 verify.signatureHelp({ overloadsCount: 2, text: "B(v: A<number>): A<number>" });
 edit.insert('); A.B(');
-verify.signatureHelp({ overloadsCount: 2, text: "B(v: A<{}>): A<{}>" });
+verify.signatureHelp({ overloadsCount: 2, text: "B(v: A<unknown>): A<unknown>" });
 edit.insert('a');
 verify.signatureHelp({ overloadsCount: 2, text: "B(v: A<number>): A<number>" });

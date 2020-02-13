@@ -403,9 +403,9 @@ export enum PubSubRecordIsStoredInRedisAsA {
       fields: () => new Set(Object.keys(soFar) as (keyof SO_FAR)[]),
 >fields : Symbol(fields, Decl(conditionalTypeDoesntSpinForever.ts, 94, 18))
 >Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 92, 29))
 >SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 92, 21))
 

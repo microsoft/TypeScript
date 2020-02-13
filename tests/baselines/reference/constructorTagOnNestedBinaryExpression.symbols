@@ -1,0 +1,14 @@
+=== tests/cases/conformance/jsdoc/constructorTagOnNestedBinaryExpression.js ===
+// Fixes #35021
+/** @constructor */
+a = b = function c () {
+>c : Symbol(c, Decl(constructorTagOnNestedBinaryExpression.js, 2, 7))
+
+    console.log(this)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this : Symbol(c, Decl(constructorTagOnNestedBinaryExpression.js, 2, 7))
+
+};
+

@@ -580,43 +580,43 @@ c.explicitProperty = m => m;
 // this inside lambdas refer to outer scope
 // the outer-scoped lambda at top-level is still just `any`
 c.explicitC = m => m + this.n;
->c.explicitC = m => m + this.n : (this: C, m: number) => number
+>c.explicitC = m => m + this.n : (this: C, m: number) => any
 >c.explicitC : (this: C, m: number) => number
 >c : C
 >explicitC : (this: C, m: number) => number
->m => m + this.n : (this: C, m: number) => number
+>m => m + this.n : (this: C, m: number) => any
 >m : number
->m + this.n : number
+>m + this.n : any
 >m : number
->this.n : number
+>this.n : any
 >this : typeof globalThis
->n : number
+>n : any
 
 c.explicitThis = m => m + this.n;
->c.explicitThis = m => m + this.n : (this: C, m: number) => number
+>c.explicitThis = m => m + this.n : (this: C, m: number) => any
 >c.explicitThis : (this: C, m: number) => number
 >c : C
 >explicitThis : (this: C, m: number) => number
->m => m + this.n : (this: C, m: number) => number
+>m => m + this.n : (this: C, m: number) => any
 >m : number
->m + this.n : number
+>m + this.n : any
 >m : number
->this.n : number
+>this.n : any
 >this : typeof globalThis
->n : number
+>n : any
 
 c.explicitProperty = m => m + this.n;
->c.explicitProperty = m => m + this.n : (this: { n: number; }, m: number) => number
+>c.explicitProperty = m => m + this.n : (this: { n: number; }, m: number) => any
 >c.explicitProperty : (this: { n: number; }, m: number) => number
 >c : C
 >explicitProperty : (this: { n: number; }, m: number) => number
->m => m + this.n : (this: { n: number; }, m: number) => number
+>m => m + this.n : (this: { n: number; }, m: number) => any
 >m : number
->m + this.n : number
+>m + this.n : any
 >m : number
->this.n : number
+>this.n : any
 >this : typeof globalThis
->n : number
+>n : any
 
 //NOTE: this=C here, I guess?
 c.explicitThis = explicitCFunction;

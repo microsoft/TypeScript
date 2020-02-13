@@ -38,12 +38,34 @@ namespace ts {
             verifyNewLines(content, { newLine: NewLineKind.LineFeed });
         }
 
+        function verifyOutliningSpanNewLines(content: string, options: CompilerOptions) {
+            const ls = testLSWithFiles(options, [{
+                content,
+                fileOptions: {},
+                unitName: "input.ts"
+            }]);
+            const span = ls.getOutliningSpans("input.ts")[0];
+            const textAfterSpanCollapse = content.substring(span.textSpan.start + span.textSpan.length);
+            assert(textAfterSpanCollapse.match(options.newLine === NewLineKind.CarriageReturnLineFeed ? /\r\n/ : /[^\r]\n/), "expected to find appropriate newlines");
+            assert(!textAfterSpanCollapse.match(options.newLine === NewLineKind.CarriageReturnLineFeed ? /[^\r]\n/ : /\r\n/), "expected not to find inappropriate newlines");
+        }
+
         it("should exist and respect provided compiler options", () => {
             verifyBothNewLines(`
                 function foo() {
                     return 2 + 2;
                 }
             `);
+        });
+
+        it("should respect CRLF line endings around outlining spans", () => {
+            verifyOutliningSpanNewLines("// comment not included\r\n// #region name\r\nlet x: string = \"x\";\r\n// #endregion name\r\n",
+                { newLine: NewLineKind.CarriageReturnLineFeed });
+        });
+
+        it("should respect LF line endings around outlining spans", () => {
+            verifyOutliningSpanNewLines("// comment not included\n// #region name\nlet x: string = \"x\";\n// #endregion name\n\n",
+                { newLine: NewLineKind.LineFeed });
         });
     });
 }

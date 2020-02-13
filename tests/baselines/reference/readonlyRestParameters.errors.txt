@@ -1,5 +1,5 @@
-tests/cases/conformance/es6/restParameters/readonlyRestParameters.ts(8,5): error TS2556: Expected 2 arguments, but got 0 or more.
-tests/cases/conformance/es6/restParameters/readonlyRestParameters.ts(20,5): error TS2554: Expected 2 arguments, but got 3.
+tests/cases/conformance/es6/restParameters/readonlyRestParameters.ts(8,8): error TS2556: Expected 2 arguments, but got 0 or more.
+tests/cases/conformance/es6/restParameters/readonlyRestParameters.ts(20,15): error TS2554: Expected 2 arguments, but got 3.
 tests/cases/conformance/es6/restParameters/readonlyRestParameters.ts(25,5): error TS2542: Index signature in type 'readonly string[]' only permits reading.
 
 
@@ -12,7 +12,7 @@ tests/cases/conformance/es6/restParameters/readonlyRestParameters.ts(25,5): erro
     
     function f1(...args: readonly string[]) {
         f0(...args);  // Error
-        ~~~~~~~~~~~
+           ~~~~~~~
 !!! error TS2556: Expected 2 arguments, but got 0 or more.
 !!! related TS6210 tests/cases/conformance/es6/restParameters/readonlyRestParameters.ts:1:13: An argument for 'a' was not provided.
         f1('abc', 'def');
@@ -27,7 +27,7 @@ tests/cases/conformance/es6/restParameters/readonlyRestParameters.ts(25,5): erro
         f1(...args);
         f2('abc', 'def');
         f2('abc', ...args);  // Error
-        ~~~~~~~~~~~~~~~~~~
+                  ~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 3.
         f2(...args);
     }

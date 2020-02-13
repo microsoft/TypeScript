@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+      - release-*
+  pull_request:
+    branches:
+      - master
+      - release-*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 12.x]
+
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        fetch-depth: 5
+    - name: Use node version ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Remove existing TypeScript
+      run: |
+        npm uninstall typescript --no-save
+        npm uninstall tslint --no-save
+    - name: npm install and test
+      run: |
+        npm install
+        npm update
+        npm test

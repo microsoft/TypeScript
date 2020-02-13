@@ -2,9 +2,10 @@ tests/cases/conformance/types/union/discriminatedUnionTypes2.ts(27,30): error TS
   Object literal may only specify known properties, and 'c' does not exist in type '{ a: null; b: string; }'.
 tests/cases/conformance/types/union/discriminatedUnionTypes2.ts(32,11): error TS2339: Property 'b' does not exist on type '{ a: 0; b: string; } | { a: T; c: number; }'.
   Property 'b' does not exist on type '{ a: T; c: number; }'.
+tests/cases/conformance/types/union/discriminatedUnionTypes2.ts(132,11): error TS2339: Property 'value' does not exist on type 'never'.
 
 
-==== tests/cases/conformance/types/union/discriminatedUnionTypes2.ts (2 errors) ====
+==== tests/cases/conformance/types/union/discriminatedUnionTypes2.ts (3 errors) ====
     function f10(x : { kind: false, a: string } | { kind: true, b: string } | { kind: string, c: string }) {
         if (x.kind === false) {
             x.a;
@@ -103,6 +104,57 @@ tests/cases/conformance/types/union/discriminatedUnionTypes2.ts(32,11): error TS
         }
         else {
             foo;
+        }
+    }
+    
+    // Repro from #33448
+    
+    type a = {
+        type: 'a',
+        data: string
+    }
+    type b = {
+        type: 'b',
+        name: string
+    }
+    type c = {
+        type: 'c',
+        other: string
+    }
+    
+    type abc = a | b | c;
+    
+    function f(problem: abc & (b | c)) {
+        if (problem.type === 'b') {
+            problem.name;
+        }
+        else {
+            problem.other;
+        }
+    }
+    
+    type RuntimeValue =
+        | { type: 'number', value: number }
+        | { type: 'string', value: string }
+        | { type: 'boolean', value: boolean };
+    
+    function foo1(x: RuntimeValue & { type: 'number' }) {
+        if (x.type === 'number') {
+            x.value;  // number
+        }
+        else {
+            x.value;  // Error, x is never
+              ~~~~~
+!!! error TS2339: Property 'value' does not exist on type 'never'.
+        }
+    }
+    
+    function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
+        if (x.type === 'number') {
+            x.value;  // number
+        }
+        else {
+            x.value;  // string
         }
     }
     

@@ -1,0 +1,124 @@
+=== tests/cases/compiler/mappedTypeContextualTypesApplied.ts ===
+type TakeString = (s: string) => any;
+>TakeString : TakeString
+>s : string
+
+// Various functions accepting an object whose properties are TakeString functions.
+// Note these all use mapped types.
+declare function mapped1<T extends {[P in string]: TakeString}>(obj: T): void;
+>mapped1 : <T extends { [x: string]: TakeString; }>(obj: T) => void
+>obj : T
+
+declare function mapped2<T extends {[P in keyof T]: TakeString}>(obj: T): void;
+>mapped2 : <T extends { [P in keyof T]: TakeString; }>(obj: T) => void
+>obj : T
+
+declare function mapped3<T extends {[P in keyof any]: TakeString}>(obj: T): void;
+>mapped3 : <T extends { [x: string]: TakeString; }>(obj: T) => void
+>obj : T
+
+declare function mapped4<T>(obj: T & {[P in keyof T]: TakeString}): void;
+>mapped4 : <T>(obj: T & { [P in keyof T]: TakeString; }) => void
+>obj : T & { [P in keyof T]: TakeString; }
+
+declare function mapped5<T, K extends keyof T>(obj: T & {[P in K]: TakeString}): void;
+>mapped5 : <T, K extends keyof T>(obj: T & { [P in K]: TakeString; }) => void
+>obj : T & { [P in K]: TakeString; }
+
+declare function mapped6<K extends string>(obj: {[P in K]: TakeString}): void;
+>mapped6 : <K extends string>(obj: { [P in K]: TakeString; }) => void
+>obj : { [P in K]: TakeString; }
+
+declare function mapped7<K extends keyof any>(obj: {[P in K]: TakeString}): void;
+>mapped7 : <K extends string | number | symbol>(obj: { [P in K]: TakeString; }) => void
+>obj : { [P in K]: TakeString; }
+
+declare function mapped8<K extends 'foo'>(obj: {[P in K]: TakeString}): void;
+>mapped8 : <K extends "foo">(obj: { [P in K]: TakeString; }) => void
+>obj : { [P in K]: TakeString; }
+
+declare function mapped9<K extends 'foo'|'bar'>(obj: {[P in K]: TakeString}): void;
+>mapped9 : <K extends "foo" | "bar">(obj: { [P in K]: TakeString; }) => void
+>obj : { [P in K]: TakeString; }
+
+mapped1({foo: s => 42});
+>mapped1({foo: s => 42}) : void
+>mapped1 : <T extends { [x: string]: TakeString; }>(obj: T) => void
+>{foo: s => 42} : { foo: (s: string) => number; }
+>foo : (s: string) => number
+>s => 42 : (s: string) => number
+>s : string
+>42 : 42
+
+mapped2({foo: s => 42});
+>mapped2({foo: s => 42}) : void
+>mapped2 : <T extends { [P in keyof T]: TakeString; }>(obj: T) => void
+>{foo: s => 42} : { foo: (s: string) => number; }
+>foo : (s: string) => number
+>s => 42 : (s: string) => number
+>s : string
+>42 : 42
+
+mapped3({foo: s => 42});
+>mapped3({foo: s => 42}) : void
+>mapped3 : <T extends { [x: string]: TakeString; }>(obj: T) => void
+>{foo: s => 42} : { foo: (s: string) => number; }
+>foo : (s: string) => number
+>s => 42 : (s: string) => number
+>s : string
+>42 : 42
+
+mapped4({foo: s => 42});
+>mapped4({foo: s => 42}) : void
+>mapped4 : <T>(obj: T & { [P in keyof T]: TakeString; }) => void
+>{foo: s => 42} : { foo: (s: string) => number; }
+>foo : (s: string) => number
+>s => 42 : (s: string) => number
+>s : string
+>42 : 42
+
+mapped5({foo: s => 42});
+>mapped5({foo: s => 42}) : void
+>mapped5 : <T, K extends keyof T>(obj: T & { [P in K]: TakeString; }) => void
+>{foo: s => 42} : { foo: (s: string) => number; }
+>foo : (s: string) => number
+>s => 42 : (s: string) => number
+>s : string
+>42 : 42
+
+mapped6({foo: s => 42});
+>mapped6({foo: s => 42}) : void
+>mapped6 : <K extends string>(obj: { [P in K]: TakeString; }) => void
+>{foo: s => 42} : { foo: (s: string) => number; }
+>foo : (s: string) => number
+>s => 42 : (s: string) => number
+>s : string
+>42 : 42
+
+mapped7({foo: s => 42});
+>mapped7({foo: s => 42}) : void
+>mapped7 : <K extends string | number | symbol>(obj: { [P in K]: TakeString; }) => void
+>{foo: s => 42} : { foo: (s: string) => number; }
+>foo : (s: string) => number
+>s => 42 : (s: string) => number
+>s : string
+>42 : 42
+
+mapped8({foo: s => 42});
+>mapped8({foo: s => 42}) : void
+>mapped8 : <K extends "foo">(obj: { [P in K]: TakeString; }) => void
+>{foo: s => 42} : { foo: (s: string) => number; }
+>foo : (s: string) => number
+>s => 42 : (s: string) => number
+>s : string
+>42 : 42
+
+mapped9({foo: s => 42});
+>mapped9({foo: s => 42}) : void
+>mapped9 : <K extends "foo" | "bar">(obj: { [P in K]: TakeString; }) => void
+>{foo: s => 42} : { foo: (s: string) => number; }
+>foo : (s: string) => number
+>s => 42 : (s: string) => number
+>s : string
+>42 : 42
+

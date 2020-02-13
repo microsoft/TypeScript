@@ -140,8 +140,7 @@ var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     //super call with type arguments 
     function Derived() {
-        var _this = this;
-        _super.prototype..call(_this);
+        var _this = _super.call(this) || this;
         _this = _super.call(this) || this;
         return _this;
     }

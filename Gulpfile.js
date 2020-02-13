@@ -13,7 +13,7 @@ const mkdirp = require("mkdirp");
 const { src, dest, task, parallel, series, watch } = require("gulp");
 const { append, transform } = require("gulp-insert");
 const { prependFile } = require("./scripts/build/prepend");
-const { exec, readJson, needsUpdate, getDiffTool, getDirSize, flatten, rm } = require("./scripts/build/utils");
+const { exec, readJson, needsUpdate, getDiffTool, getDirSize, rm } = require("./scripts/build/utils");
 const { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
 const { buildProject, cleanProject, watchProject } = require("./scripts/build/projects");
 const cmdLineOptions = require("./scripts/build/options");
@@ -41,7 +41,7 @@ const generateLibs = () => {
             .pipe(concat(relativeTarget, { newLine: "\n\n" }))
             .pipe(dest("built/local"))));
 };
-task("lib", generateLibs)
+task("lib", generateLibs);
 task("lib").description = "Builds the library targets";
 
 const cleanLib = () => del(libs.map(lib => lib.target));
@@ -90,8 +90,18 @@ const localize = async () => {
     }
 };
 
+const buildShims = () => buildProject("src/shims");
+const cleanShims = () => cleanProject("src/shims");
+cleanTasks.push(cleanShims);
+
+const buildDebugTools = () => buildProject("src/debug");
+const cleanDebugTools = () => cleanProject("src/debug");
+cleanTasks.push(cleanDebugTools);
+
+const buildShimsAndTools = parallel(buildShims, buildDebugTools);
+
 // Pre-build steps when targeting the LKG compiler
-const lkgPreBuild = parallel(generateLibs, series(buildScripts, generateDiagnostics));
+const lkgPreBuild = parallel(generateLibs, series(buildScripts, generateDiagnostics, buildShimsAndTools));
 
 const buildTsc = () => buildProject("src/tsc");
 task("tsc", series(lkgPreBuild, buildTsc));
@@ -107,24 +117,14 @@ task("watch-tsc", series(lkgPreBuild, parallel(watchLib, watchDiagnostics, watch
 task("watch-tsc").description = "Watch for changes and rebuild the command-line compiler only.";
 
 // Pre-build steps when targeting the built/local compiler.
-const localPreBuild = parallel(generateLibs, series(buildScripts, generateDiagnostics, buildTsc));
+const localPreBuild = parallel(generateLibs, series(buildScripts, generateDiagnostics, buildShimsAndTools, buildTsc));
 
 // Pre-build steps to use based on supplied options.
 const preBuild = cmdLineOptions.lkg ? lkgPreBuild : localPreBuild;
 
 const buildServices = (() => {
-    // flatten the services project
-    const flattenServicesConfig = async () => flatten("src/services/tsconfig.json", "built/local/typescriptServices.tsconfig.json", {
-        compilerOptions: {
-            "removeComments": false,
-            "stripInternal": true,
-            "declarationMap": false,
-            "outFile": "typescriptServices.out.js"
-        }
-    });
-
     // build typescriptServices.out.js
-    const buildTypescriptServicesOut = () => buildProject("built/local/typescriptServices.tsconfig.json", cmdLineOptions);
+    const buildTypescriptServicesOut = () => buildProject("src/typescriptServices/tsconfig.json", cmdLineOptions);
 
     // create typescriptServices.js
     const createTypescriptServicesJs = () => src("built/local/typescriptServices.out.js")
@@ -166,32 +166,32 @@ const buildServices = (() => {
         .pipe(dest("built/local"));
 
     return series(
-        flattenServicesConfig,
         buildTypescriptServicesOut,
         createTypescriptServicesJs,
         createTypescriptServicesDts,
         createTypescriptJs,
         createTypescriptDts,
-        createTypescriptStandaloneDts);
+        createTypescriptStandaloneDts,
+    );
 })();
 task("services", series(preBuild, buildServices));
 task("services").description = "Builds the language service";
 task("services").flags = {
     "   --built": "Compile using the built version of the compiler."
-}
+};
 
 const cleanServices = async () => {
     if (fs.existsSync("built/local/typescriptServices.tsconfig.json")) {
         await cleanProject("built/local/typescriptServices.tsconfig.json");
     }
     await del([
-        "built/local/typescriptServices.tsconfig.json",
         "built/local/typescriptServices.out.js",
         "built/local/typescriptServices.out.d.ts",
+        "built/local/typescriptServices.out.tsbuildinfo",
         "built/local/typescriptServices.js",
         "built/local/typescript.js",
         "built/local/typescript.d.ts",
-        "built/local/typescript_standalone.d.ts",
+        "built/local/typescript_standalone.d.ts"
     ]);
 };
 cleanTasks.push(cleanServices);
@@ -210,14 +210,14 @@ task("watch-services", series(preBuild, parallel(watchLib, watchDiagnostics, wat
 task("watch-services").description = "Watches for changes and rebuild language service only";
 task("watch-services").flags = {
     "   --built": "Compile using the built version of the compiler."
-}
+};
 
 const buildServer = () => buildProject("src/tsserver", cmdLineOptions);
 task("tsserver", series(preBuild, buildServer));
 task("tsserver").description = "Builds the language server";
 task("tsserver").flags = {
     "   --built": "Compile using the built version of the compiler."
-}
+};
 
 const cleanServer = () => cleanProject("src/tsserver");
 cleanTasks.push(cleanServer);
@@ -229,13 +229,13 @@ task("watch-tsserver", series(preBuild, parallel(watchLib, watchDiagnostics, wat
 task("watch-tsserver").description = "Watch for changes and rebuild the language server only";
 task("watch-tsserver").flags = {
     "   --built": "Compile using the built version of the compiler."
-}
+};
 
 task("min", series(preBuild, parallel(buildTsc, buildServer)));
 task("min").description = "Builds only tsc and tsserver";
 task("min").flags = {
     "   --built": "Compile using the built version of the compiler."
-}
+};
 
 task("clean-min", series(cleanTsc, cleanServer));
 task("clean-min").description = "Cleans outputs for tsc and tsserver";
@@ -244,23 +244,11 @@ task("watch-min", series(preBuild, parallel(watchLib, watchDiagnostics, watchTsc
 task("watch-min").description = "Watches for changes to a tsc and tsserver only";
 task("watch-min").flags = {
     "   --built": "Compile using the built version of the compiler."
-}
+};
 
 const buildLssl = (() => {
-    // flatten the server project
-    const flattenTsServerProject = async () => flatten("src/tsserver/tsconfig.json", "built/local/tsserverlibrary.tsconfig.json", {
-        exclude: ["src/tsserver/server.ts"],
-        compilerOptions: {
-            "removeComments": false,
-            "stripInternal": true,
-            "declaration": true,
-            "declarationMap": false,
-            "outFile": "tsserverlibrary.out.js"
-        }
-    });
-
     // build tsserverlibrary.out.js
-    const buildServerLibraryOut = () => buildProject("built/local/tsserverlibrary.tsconfig.json", cmdLineOptions);
+    const buildServerLibraryOut = () => buildProject("src/tsserverlibrary/tsconfig.json", cmdLineOptions);
 
     // create tsserverlibrary.js
     const createServerLibraryJs = () => src("built/local/tsserverlibrary.out.js")
@@ -281,25 +269,25 @@ const buildLssl = (() => {
         .pipe(dest("built/local"));
 
     return series(
-        flattenTsServerProject,
         buildServerLibraryOut,
         createServerLibraryJs,
-        createServerLibraryDts);
+        createServerLibraryDts,
+    );
 })();
 task("lssl", series(preBuild, buildLssl));
 task("lssl").description = "Builds language service server library";
 task("lssl").flags = {
     "   --built": "Compile using the built version of the compiler."
-}
+};
 
 const cleanLssl = async () => {
     if (fs.existsSync("built/local/tsserverlibrary.tsconfig.json")) {
         await cleanProject("built/local/tsserverlibrary.tsconfig.json");
     }
     await del([
-        "built/local/tsserverlibrary.tsconfig.json",
         "built/local/tsserverlibrary.out.js",
         "built/local/tsserverlibrary.out.d.ts",
+        "built/local/tsserverlibrary.out.tsbuildinfo",
         "built/local/tsserverlibrary.js",
         "built/local/tsserverlibrary.d.ts",
     ]);
@@ -324,14 +312,14 @@ task("watch-lssl", series(preBuild, parallel(watchLib, watchDiagnostics, watchLs
 task("watch-lssl").description = "Watch for changes and rebuild tsserverlibrary only";
 task("watch-lssl").flags = {
     "   --built": "Compile using the built version of the compiler."
-}
+};
 
 const buildTests = () => buildProject("src/testRunner");
 task("tests", series(preBuild, parallel(buildLssl, buildTests)));
 task("tests").description = "Builds the test infrastructure";
 task("tests").flags = {
     "   --built": "Compile using the built version of the compiler."
-}
+};
 
 const cleanTests = () => cleanProject("src/testRunner");
 cleanTasks.push(cleanTests);
@@ -340,36 +328,63 @@ task("clean-tests").description = "Cleans the outputs for the test infrastructur
 
 const watchTests = () => watchProject("src/testRunner", cmdLineOptions);
 
-const buildRules = () => buildProject("scripts/tslint");
-task("build-rules", buildRules);
-task("build-rules").description = "Compiles tslint rules to js";
+const buildEslintRules = () => buildProject("scripts/eslint");
+task("build-eslint-rules", buildEslintRules);
+task("build-eslint-rules").description = "Compiles eslint rules to js";
 
-const cleanRules = () => cleanProject("scripts/tslint");
-cleanTasks.push(cleanRules);
-task("clean-rules", cleanRules);
-task("clean-rules").description = "Cleans the outputs for the lint rules";
+const cleanEslintRules = () => cleanProject("scripts/eslint");
+cleanTasks.push(cleanEslintRules);
+task("clean-eslint-rules", cleanEslintRules);
+task("clean-eslint-rules").description = "Cleans the outputs for the eslint rules";
+
+const runEslintRulesTests = () => runConsoleTests("scripts/eslint/built/tests", "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
+task("run-eslint-rules-tests", series(buildEslintRules, runEslintRulesTests));
+task("run-eslint-rules-tests").description = "Runs the eslint rule tests";
 
 const lintFoldStart = async () => { if (fold.isTravis()) console.log(fold.start("lint")); };
 const lintFoldEnd = async () => { if (fold.isTravis()) console.log(fold.end("lint")); };
-const lint = series([
-    lintFoldStart,
-    ...["scripts/tslint/tsconfig.json", "src/tsconfig-base.json"].map(project => {
-        const lintOne = () => {
-            const args = ["node_modules/tslint/bin/tslint", "--project", project, "--formatters-dir", "./built/local/tslint/formatters", "--format", "autolinkableStylish"];
-            if (cmdLineOptions.fix) args.push("--fix");
-            log(`Linting: node ${args.join(" ")}`);
-            return exec(process.execPath, args);
-        };
-        lintOne.dispayName = `lint(${project})`;
-        return lintOne;
-    }),
-    lintFoldEnd
-]);
+
+/** @type { (folder: string) => { (): Promise<any>; displayName?: string } } */
+const eslint = (folder) => async () => {
+
+    const args = [
+        "node_modules/eslint/bin/eslint",
+        "--cache",
+        "--cache-location", `${folder}/.eslintcache`,
+        "--format", "autolinkable-stylish",
+        "--rulesdir", "scripts/eslint/built/rules",
+        "--ext", ".ts",
+    ];
+
+    if (cmdLineOptions.fix) {
+        args.push("--fix");
+    }
+
+    args.push(folder);
+
+    log(`Linting: ${args.join(" ")}`);
+    return exec(process.execPath, args);
+}
+
+const lintScripts = eslint("scripts");
+lintScripts.displayName = "lint-scripts";
+task("lint-scripts", series([buildEslintRules, lintFoldStart, lintScripts, lintFoldEnd]));
+task("lint-scripts").description = "Runs eslint on the scripts sources.";
+
+const lintCompiler = eslint("src");
+lintCompiler.displayName = "lint-compiler";
+task("lint-compiler", series([buildEslintRules, lintFoldStart, lintCompiler, lintFoldEnd]));
+task("lint-compiler").description = "Runs eslint on the compiler sources.";
+task("lint-compiler").flags = {
+    "   --ci": "Runs eslint additional rules",
+};
+
+const lint = series([buildEslintRules, lintFoldStart, lintScripts, lintCompiler, lintFoldEnd]);
 lint.displayName = "lint";
-task("lint", series(buildRules, lint));
-task("lint").description = "Runs tslint on the compiler sources.";
+task("lint", series([buildEslintRules, lintFoldStart, lint, lintFoldEnd]));
+task("lint").description = "Runs eslint on the compiler and scripts sources.";
 task("lint").flags = {
-    "   --f[iles]=<regex>": "pattern to match files to lint",
+    "   --ci": "Runs eslint additional rules",
 };
 
 const buildCancellationToken = () => buildProject("src/cancellationToken");
@@ -403,19 +418,19 @@ task("local", series(buildFoldStart, preBuild, parallel(localize, buildTsc, buil
 task("local").description = "Builds the full compiler and services";
 task("local").flags = {
     "   --built": "Compile using the built version of the compiler."
-}
+};
 
 task("watch-local", series(preBuild, parallel(watchLib, watchDiagnostics, watchTsc, watchServices, watchServer, watchLssl)));
 task("watch-local").description = "Watches for changes to projects in src/ (but does not execute tests).";
 task("watch-local").flags = {
     "   --built": "Compile using the built version of the compiler."
-}
+};
 
 const generateCodeCoverage = () => exec("istanbul", ["cover", "node_modules/mocha/bin/_mocha", "--", "-R", "min", "-t", "" + cmdLineOptions.testTimeout, "built/local/run.js"]);
 task("generate-code-coverage", series(preBuild, buildTests, generateCodeCoverage));
 task("generate-code-coverage").description = "Generates code coverage data via istanbul";
 
-const preTest = parallel(buildRules, buildTests, buildServices, buildLssl);
+const preTest = parallel(buildTests, buildServices, buildLssl);
 preTest.displayName = "preTest";
 
 const postTest = (done) => cmdLineOptions.lint ? lint(done) : done();
@@ -437,7 +452,9 @@ task("runtests").flags = {
     "   --no-lint": "Disables lint",
     "   --timeout=<ms>": "Overrides the default test timeout.",
     "   --built": "Compile using the built version of the compiler.",
-}
+    "   --shards": "Total number of shards running tests (default: 1)",
+    "   --shardId": "1-based ID of this shard (default: 1)",
+};
 
 const runTestsParallel = () => runConsoleTests("built/local/run.js", "min", /*runInParallel*/ true, /*watchMode*/ false);
 task("runtests-parallel", series(preBuild, preTest, runTestsParallel, postTest));
@@ -451,12 +468,14 @@ task("runtests-parallel").flags = {
     "   --workers=<number>": "The number of parallel workers to use.",
     "   --timeout=<ms>": "Overrides the default test timeout.",
     "   --built": "Compile using the built version of the compiler.",
+    "   --shards": "Total number of shards running tests (default: 1)",
+    "   --shardId": "1-based ID of this shard (default: 1)",
 };
 
-task("diff", () => exec(getDiffTool(), [refBaseline, localBaseline], { ignoreExitCode: true }));
+task("diff", () => exec(getDiffTool(), [refBaseline, localBaseline], { ignoreExitCode: true, waitForExit: false }));
 task("diff").description = "Diffs the compiler baselines using the diff tool specified by the 'DIFF' environment variable";
 
-task("diff-rwc", () => exec(getDiffTool(), [refRwcBaseline, localRwcBaseline], { ignoreExitCode: true }));
+task("diff-rwc", () => exec(getDiffTool(), [refRwcBaseline, localRwcBaseline], { ignoreExitCode: true, waitForExit: false }));
 task("diff-rwc").description = "Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment variable";
 
 /**
@@ -475,16 +494,6 @@ task("baseline-accept").description = "Makes the most recent test results the ne
 
 task("baseline-accept-rwc", () => baselineAccept(localRwcBaseline, refRwcBaseline));
 task("baseline-accept-rwc").description = "Makes the most recent rwc test results the new baseline, overwriting the old baseline";
-
-// TODO(rbuckton): Determine if 'webhost' is still in use.
-const buildWebHost = () => buildProject("tests/webhost/webtsc.tsconfig.json");
-task("webhost", series(lkgPreBuild, buildWebHost));
-task("webhost").description = "Builds the tsc web host";
-
-const cleanWebHost = () => cleanProject("tests/webhost/webtsc.tsconfig.json");
-cleanTasks.push(cleanWebHost);
-task("clean-webhost", cleanWebHost);
-task("clean-webhost").description = "Cleans the outputs of the tsc web host";
 
 const buildLoggedIO = async () => {
     mkdirp.sync("built/local/temp");
@@ -505,7 +514,7 @@ task("tsc-instrumented", series(lkgPreBuild, parallel(localize, buildTsc, buildS
 task("tsc-instrumented").description = "Builds an instrumented tsc.js";
 task("tsc-instrumented").flags = {
     "-t --tests=<testname>": "The test to run."
-}
+};
 
 // TODO(rbuckton): Determine if we still need this task. Depending on a relative
 //                 path here seems like a bad idea.
@@ -560,7 +569,7 @@ task("LKG", series(lkgPreBuild, parallel(localize, buildTsc, buildServer, buildS
 task("LKG").description = "Makes a new LKG out of the built js files";
 task("LKG").flags = {
     "   --built": "Compile using the built version of the compiler.",
-}
+};
 
 const generateSpec = () => exec("cscript", ["//nologo", "scripts/word2md.js", path.resolve("doc/TypeScript Language Specification.docx"), path.resolve("doc/spec.md")]);
 task("generate-spec", series(buildScripts, generateSpec));
@@ -569,13 +578,21 @@ task("generate-spec").description = "Generates a Markdown version of the Languag
 task("clean", series(parallel(cleanTasks), cleanBuilt));
 task("clean").description = "Cleans build outputs";
 
-const configureNightly = () => exec(process.execPath, ["scripts/configurePrerelease.js", "dev", "package.json", "src/compiler/core.ts"])
+const configureNightly = () => exec(process.execPath, ["scripts/configurePrerelease.js", "dev", "package.json", "src/compiler/corePublic.ts"]);
 task("configure-nightly", series(buildScripts, configureNightly));
 task("configure-nightly").description = "Runs scripts/configurePrerelease.ts to prepare a build for nightly publishing";
 
-const configureInsiders = () => exec(process.execPath, ["scripts/configurePrerelease.js", "insiders", "package.json", "src/compiler/core.ts"])
+const configureInsiders = () => exec(process.execPath, ["scripts/configurePrerelease.js", "insiders", "package.json", "src/compiler/corePublic.ts"]);
 task("configure-insiders", series(buildScripts, configureInsiders));
 task("configure-insiders").description = "Runs scripts/configurePrerelease.ts to prepare a build for insiders publishing";
+
+const configureExperimental = () => exec(process.execPath, ["scripts/configurePrerelease.js", "experimental", "package.json", "src/compiler/corePublic.ts"]);
+task("configure-experimental", series(buildScripts, configureExperimental));
+task("configure-experimental").description = "Runs scripts/configurePrerelease.ts to prepare a build for experimental publishing";
+
+const createLanguageServicesBuild = () => exec(process.execPath, ["scripts/createLanguageServicesBuild.js"]);
+task("create-language-services-build", series(buildScripts, createLanguageServicesBuild));
+task("create-language-services-build").description = "Runs scripts/createLanguageServicesBuild.ts to prepare a build which only has the require('typescript') JS.";
 
 const publishNightly = () => exec("npm", ["publish", "--tag", "next"]);
 task("publish-nightly", series(task("clean"), task("LKG"), task("clean"), task("runtests-parallel"), publishNightly));

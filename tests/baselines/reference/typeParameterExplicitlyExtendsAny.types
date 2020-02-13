@@ -28,9 +28,9 @@ function fee2<T extends any>() {
 >blah : any
 
     t.toString; // ok
->t.toString : any
+>t.toString : () => string
 >t : T
->toString : any
+>toString : () => string
 }
 
 function f<T extends any>(x: T) {

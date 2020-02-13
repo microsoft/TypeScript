@@ -3,6 +3,7 @@
     "compilerOptions": {
         "declaration": false,
         "declarationMap": false,
-        "composite":  false
+        "composite": false,
+        "incremental": true
     }
 }

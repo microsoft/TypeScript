@@ -3931,9 +3931,9 @@ module Harness {
                                 if (!matchingIdentifiers.some(value => (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type))) {
 >!matchingIdentifiers.some(value => (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type)) : boolean
 >matchingIdentifiers.some(value => (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type)) : boolean
->matchingIdentifiers.some : (callbackfn: (value: Type, index: number, array: Type[]) => boolean, thisArg?: any) => boolean
+>matchingIdentifiers.some : (callbackfn: (value: Type, index: number, array: Type[]) => unknown, thisArg?: any) => boolean
 >matchingIdentifiers : Type[]
->some : (callbackfn: (value: Type, index: number, array: Type[]) => boolean, thisArg?: any) => boolean
+>some : (callbackfn: (value: Type, index: number, array: Type[]) => unknown, thisArg?: any) => boolean
 >value => (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type) : (value: Type) => boolean
 >value : Type
 >(value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type) : boolean
@@ -4020,9 +4020,9 @@ module Harness {
                                         if (!matchingIdentifiers.some(value => (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type))) {
 >!matchingIdentifiers.some(value => (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type)) : boolean
 >matchingIdentifiers.some(value => (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type)) : boolean
->matchingIdentifiers.some : (callbackfn: (value: Type, index: number, array: Type[]) => boolean, thisArg?: any) => boolean
+>matchingIdentifiers.some : (callbackfn: (value: Type, index: number, array: Type[]) => unknown, thisArg?: any) => boolean
 >matchingIdentifiers : Type[]
->some : (callbackfn: (value: Type, index: number, array: Type[]) => boolean, thisArg?: any) => boolean
+>some : (callbackfn: (value: Type, index: number, array: Type[]) => unknown, thisArg?: any) => boolean
 >value => (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type) : (value: Type) => boolean
 >value : Type
 >(value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type) : boolean

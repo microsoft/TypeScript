@@ -6,6 +6,7 @@ tests/cases/conformance/externalModules/multipleExportDefault1.ts(5,1): error TS
     export default function Foo (){
                             ~~~
 !!! error TS2528: A module cannot have multiple default exports.
+!!! related TS2753 tests/cases/conformance/externalModules/multipleExportDefault1.ts:5:1: Another export default is here.
         
     }
     
@@ -16,4 +17,5 @@ tests/cases/conformance/externalModules/multipleExportDefault1.ts(5,1): error TS
     };
     ~~
 !!! error TS2528: A module cannot have multiple default exports.
+!!! related TS2752 tests/cases/conformance/externalModules/multipleExportDefault1.ts:1:25: The first export default is here.
     

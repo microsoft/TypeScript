@@ -7,6 +7,7 @@
         "declaration": false,
         "declarationMap": false,
         "removeComments": true,
+        "incremental": false,
         "module": "commonjs",
         "types": [
             "node"
