@@ -482,8 +482,8 @@ task("runtests-parallel").flags = {
 };
 
 
-task("test-browser-integration", () => exec(process.execPath, ["scripts/puppeteerIntegrationTest.js"]));
-task("test-browser-integration").description = "Runs scripts/configurePrerelease.ts to prepare a build for insiders publishing";
+task("test-browser-integration", () => exec(process.execPath, ["scripts/browserIntegrationTest.js"]));
+task("test-browser-integration").description = "Runs scripts/browserIntegrationTest.ts which tests that typescript.js loads in a browser";
 
 
 task("diff", () => exec(getDiffTool(), [refBaseline, localBaseline], { ignoreExitCode: true, waitForExit: false }));

@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+const playwright = require("playwright");
 const chalk = require("chalk");
 const { join } = require("path");
 const { readFileSync } = require("fs");
@@ -8,11 +8,13 @@ const { readFileSync } = require("fs");
 const debugging = false;
 
 (async () => {
-    const browser = await puppeteer.launch({ headless: !debugging });
-    const page = await browser.newPage();
+  for (const browserType of ["chromium", "firefox", "webkit"]) {
+    const browser = await playwright[browserType].launch({ headless: !debugging });
+    const context = await browser.newContext();
+    const page = await context.newPage();
 
     const errorCaught = err => {
-        console.error(chalk.red("There was an error running built/typescript.js in a browser"));
+        console.error(chalk.red("There was an error running built/typescript.js in " + browserType));
         console.log(err.toString());
         process.exitCode = 1;
     };
@@ -33,4 +35,5 @@ const debugging = false;
     else {
         console.log("Not closing the browser, you'll need to exit the process in your terminal manually");
     }
+  }
 })();
