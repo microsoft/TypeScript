@@ -322,11 +322,13 @@ namespace ts {
         IntersectionType,
         ConditionalType,
         InferType,
+        InverseOffsetType,
         ParenthesizedType,
         ThisType,
         TypeOperator,
         IndexedAccessType,
         MappedType,
+        RangeType,
         LiteralType,
         ImportType,
         // Binding patterns
@@ -1310,6 +1312,11 @@ namespace ts {
         typeParameter: TypeParameterDeclaration;
     }
 
+    export interface InverseOffsetTypeNode extends TypeNode {
+        kind: SyntaxKind.InverseOffsetType;
+        indexType: TypeNode;
+    }
+
     export interface ParenthesizedTypeNode extends TypeNode {
         kind: SyntaxKind.ParenthesizedType;
         type: TypeNode;
@@ -1338,6 +1345,13 @@ namespace ts {
         typeParameter: TypeParameterDeclaration;
         questionToken?: QuestionToken | PlusToken | MinusToken;
         type?: TypeNode;
+    }
+
+    export interface RangeTypeNode extends TypeNode {
+        kind: SyntaxKind.RangeType;
+        objectType: TypeNode;
+        startType: TypeNode | undefined;
+        endType: TypeNode | undefined;
     }
 
     export interface LiteralTypeNode extends TypeNode {
@@ -4153,6 +4167,7 @@ namespace ts {
         Function = "__function", // Unnamed function expression
         Computed = "__computed", // Computed property name declaration with dynamic name
         Resolving = "__resolving__", // Indicator symbol used to mark partially resolved type aliases
+        Boundary = "__boundary", // Indicator symbol for the unspecified upper or lower bound in a range type (i.e., `T[:]`)
         ExportEquals = "export=", // Export assignment symbol
         Default = "default", // Default export symbol (technically not wholly internal, but included here for usability)
         This = "this",
@@ -4281,6 +4296,8 @@ namespace ts {
         Conditional     = 1 << 24,  // T extends U ? X : Y
         Substitution    = 1 << 25,  // Type parameter substitution
         NonPrimitive    = 1 << 26,  // intrinsic object type
+        Range           = 1 << 27,  // T[X:Y]
+        InverseOffset   = 1 << 28,  // ^T
 
         /* @internal */
         AnyOrUnknown = Any | Unknown,
@@ -4299,7 +4316,7 @@ namespace ts {
         /* @internal */
         Primitive = String | Number | BigInt | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol,
         StringLike = String | StringLiteral,
-        NumberLike = Number | NumberLiteral | Enum,
+        NumberLike = Number | NumberLiteral | Enum | InverseOffset,
         BigIntLike = BigInt | BigIntLiteral,
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
@@ -4309,15 +4326,15 @@ namespace ts {
         DisjointDomains = NonPrimitive | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbolLike | VoidLike | Null,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
-        TypeVariable = TypeParameter | IndexedAccess,
-        InstantiableNonPrimitive = TypeVariable | Conditional | Substitution,
-        InstantiablePrimitive = Index,
+        TypeVariable = TypeParameter | IndexedAccess | Range,
+        InstantiableNonPrimitive = TypeVariable | Conditional | Substitution | Range,
+        InstantiablePrimitive = Index | InverseOffset,
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
         /* @internal */
         ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection,
         /* @internal */
-        Simplifiable = IndexedAccess | Conditional,
+        Simplifiable = IndexedAccess | Range | Conditional,
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
@@ -4687,7 +4704,7 @@ namespace ts {
         simplifiedForWriting?: Type;
     }
 
-    export type TypeVariable = TypeParameter | IndexedAccessType;
+    export type TypeVariable = TypeParameter | IndexedAccessType | RangeType;
 
     // keyof T types (TypeFlags.Index)
     export interface IndexType extends InstantiableType {
@@ -4736,6 +4753,20 @@ namespace ts {
     export interface SubstitutionType extends InstantiableType {
         typeVariable: TypeVariable;  // Target type variable
         substitute: Type;            // Type to substitute for type parameter
+    }
+
+    // ^T (TypeFlags.Offset)
+    export interface InverseOffsetType extends InstantiableType {
+        indexType: Type;
+    }
+
+    // T[X:Y] (TypeFlags.Range)
+    export interface RangeType extends InstantiableType {
+        objectType: Type;
+        startType: Type;
+        endType: Type;
+        simplifiedForReading?: Type;
+        simplifiedForWriting?: Type;
     }
 
     /* @internal */

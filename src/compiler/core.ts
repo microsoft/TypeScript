@@ -1351,11 +1351,21 @@ namespace ts {
         }
     }
 
+    let lazyIsArray = (value: any): boolean => {
+        if (typeof Array.isArray === "function") {
+            lazyIsArray = Array.isArray;
+        }
+        else {
+            lazyIsArray = value => value instanceof Array;
+        }
+        return lazyIsArray(value);
+    }
+
     /**
      * Tests whether a value is an array.
      */
     export function isArray(value: any): value is readonly {}[] {
-        return Array.isArray ? Array.isArray(value) : value instanceof Array;
+        return lazyIsArray(value);
     }
 
     export function toArray<T>(value: T | T[]): T[];
@@ -1367,11 +1377,61 @@ namespace ts {
     /**
      * Tests whether a value is string
      */
-    export function isString(text: unknown): text is string {
-        return typeof text === "string";
+    export function isString(x: unknown): x is string {
+        return typeof x === "string";
     }
+
     export function isNumber(x: unknown): x is number {
         return typeof x === "number";
+    }
+
+    let lazyIsInteger = (x: number): boolean => {
+        if (typeof Number.isInteger === "function") {
+            lazyIsInteger = Number.isInteger;
+        }
+        else {
+            // https://tc39.es/ecma262/#sec-isinteger
+            lazyIsInteger = x =>
+                typeof x === "number" &&
+                !isNaN(x) &&
+                isFinite(x) &&
+                Math.floor(Math.abs(x)) === Math.abs(x);
+        }
+        return lazyIsInteger(x);
+    }
+
+    /**
+     * Tests whether the provided value is an integer.
+     *
+     * This emulates the behavior of [IsInteger (ECMA-262)](https://tc39.es/ecma262/#sec-isinteger).
+     */
+    export function isInteger(x: number): boolean {
+        return lazyIsInteger(x);
+    }
+
+    /**
+     * Returns the numeric value of a string, if that numeric value's string representation is equal
+     * to the source string; otherwise, returns `undefined`.
+     *
+     * This determines whether a numeric string is a valid numeric index (e.g., the string representation
+     * can be round-tripped through `ToString(ToNumber(x))`).
+     *
+     * For example:
+     *
+     * - `"1"` returns `1`, because:
+     *   - `ToNumber("1") === 1`
+     *   - `ToString(1) === "1"`
+     * - `"1.0"` returns `undefined`, because:
+     *   - `ToNumber("1.0") === 1`
+     *   - `ToString(1) !== "1.0"`.
+     *
+     * This emulates the behavior of [CanonicalNumericIndexString (ECMA-262)](https://tc39.es/ecma262/#sec-canonicalnumericindexstring).
+     */
+    export function canonicalNumericIndex(x: string | __String): number | undefined {
+        if (x === "-0") return -0;
+        const n = +x;
+        if (x !== n + "") return undefined;
+        return n;
     }
 
     export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined;

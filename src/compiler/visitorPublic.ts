@@ -398,6 +398,10 @@ namespace ts {
                 return updateInferTypeNode(<InferTypeNode>node,
                     visitNode((<InferTypeNode>node).typeParameter, visitor, isTypeParameterDeclaration));
 
+            case SyntaxKind.InverseOffsetType:
+                return updateInverseOffsetTypeNode(<InverseOffsetTypeNode>node,
+                    visitNode((<InverseOffsetTypeNode>node).indexType, visitor, isTypeNode));
+
             case SyntaxKind.ImportType:
                 return updateImportTypeNode(<ImportTypeNode>node,
                     visitNode((<ImportTypeNode>node).argument, visitor, isTypeNode),
@@ -425,6 +429,12 @@ namespace ts {
                     visitNode((<MappedTypeNode>node).typeParameter, visitor, isTypeParameterDeclaration),
                     visitNode((<MappedTypeNode>node).questionToken, tokenVisitor, isToken),
                     visitNode((<MappedTypeNode>node).type, visitor, isTypeNode));
+
+            case SyntaxKind.RangeType:
+                return updateRangeTypeNode((<RangeTypeNode>node),
+                    visitNode((<RangeTypeNode>node).objectType, visitor, isTypeNode),
+                    visitNode((<RangeTypeNode>node).startType, visitor, isTypeNode),
+                    visitNode((<RangeTypeNode>node).endType, visitor, isTypeNode));
 
             case SyntaxKind.LiteralType:
                 return updateLiteralTypeNode(<LiteralTypeNode>node,

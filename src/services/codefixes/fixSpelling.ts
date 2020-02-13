@@ -35,16 +35,17 @@ namespace ts.codefix {
         const checker = context.program.getTypeChecker();
 
         let suggestedSymbol: Symbol | undefined;
-        if (isPropertyAccessExpression(node.parent) && node.parent.name === node) {
+        const { parent } = node;
+        if (isPropertyAccessExpression(parent) && parent.name === node) {
             Debug.assert(isIdentifierOrPrivateIdentifier(node), "Expected an identifier for spelling (property access)");
-            let containingType = checker.getTypeAtLocation(node.parent.expression);
+            let containingType = checker.getTypeAtLocation(parent.expression);
             if (node.parent.flags & NodeFlags.OptionalChain) {
                 containingType = checker.getNonNullableType(containingType);
             }
             const name = node as Identifier | PrivateIdentifier;
             suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(name, containingType);
         }
-        else if (isImportSpecifier(node.parent) && node.parent.name === node) {
+        else if (isImportSpecifier(parent) && parent.name === node) {
             Debug.assert(node.kind === SyntaxKind.Identifier, "Expected an identifier for spelling (import)");
             const importDeclaration = findAncestor(node, isImportDeclaration)!;
             const resolvedSourceFile = getResolvedSourceFileFromImportDeclaration(sourceFile, context, importDeclaration);

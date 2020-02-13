@@ -1,0 +1,326 @@
+=== tests/cases/conformance/types/range/semantics.ts ===
+// Rules (from https://gist.github.com/rbuckton/5fd81582fdf86a34b45bae82d842304c)
+
+// Semantic Rules
+{
+    // - The result of a *Range Type* has the same mutability as its *object type*.
+    type T1 = [1, 2, 3][0:2];
+>T1 : Symbol(T1, Decl(semantics.ts, 3, 1))
+
+    type T2 = (readonly [1, 2, 3])[0:2];
+>T2 : Symbol(T2, Decl(semantics.ts, 5, 29))
+}
+
+{
+    // - The *object type* of a *Range Type* is constrained to be an *Array Type* or a *Tuple Type*.
+    type T1 = [1, 2, 3][0:2];
+>T1 : Symbol(T1, Decl(semantics.ts, 9, 1))
+
+    type T2 = number[][0:2];
+>T2 : Symbol(T2, Decl(semantics.ts, 11, 29))
+
+    type T3 = {}[0:2]; // error
+>T3 : Symbol(T3, Decl(semantics.ts, 12, 28))
+}
+
+{
+    // - The *start type* and *end type* of a *Range Type* are constrained to `string | number`.
+    type T1 = [1, 2, 3][0:2];
+>T1 : Symbol(T1, Decl(semantics.ts, 16, 1))
+
+    type T2 = [1, 2, 3]["0":"2"];
+>T2 : Symbol(T2, Decl(semantics.ts, 18, 29))
+
+    type T3 = [1, 2, 3][true:false]; // error
+>T3 : Symbol(T3, Decl(semantics.ts, 19, 33))
+}
+
+{
+    // - The *start type* of a *Range Type* is optional. If not present, the *lower bound type* (`0`) is used.
+    type T2 = [1, 2, 3][:1];
+>T2 : Symbol(T2, Decl(semantics.ts, 23, 1))
+
+    // - The *end type* of a *Range Type* is optional. If not present, the *upper bound type* (`^0`) is used.
+    type T3 = [1, 2, 3][1:];
+>T3 : Symbol(T3, Decl(semantics.ts, 25, 28))
+
+    type T1 = [1, 2, 3][:];
+>T1 : Symbol(T1, Decl(semantics.ts, 28, 28))
+}
+
+{
+    // - If the *start type* or *end type* of a *Range Type* are negative-valued *Numeric Literal Types* (or numeric index-valued *String Literal Types*), they are treated
+    //   as an *Inverse Offset Type* for the absolute value of the numeric index value of the respective type.
+    //     - NOTE: This does not work for `-0` as JavaScript generally treats `-0` and `0` as the same value except for a few small corner cases and we must 
+    //       align with this behavior.
+    type T1 = [1, 2, 3, 4][1:-1];
+>T1 : Symbol(T1, Decl(semantics.ts, 32, 1))
+
+    type T2 = [1, 2, 3, 4][1:-0];
+>T2 : Symbol(T2, Decl(semantics.ts, 37, 33))
+}
+
+{
+    // - If the *object type* is a "generic object type", or if either of the *start type* or *end type* are
+    //   "generic index types", then the operation is deferred until it they can be instantiated.
+    type T1<A extends any[]> = A[0:2];
+>T1 : Symbol(T1, Decl(semantics.ts, 41, 1))
+>A : Symbol(A, Decl(semantics.ts, 44, 12))
+>A : Symbol(A, Decl(semantics.ts, 44, 12))
+
+    type T2 = T1<[1, 2, 3]>;
+>T2 : Symbol(T2, Decl(semantics.ts, 44, 38))
+>T1 : Symbol(T1, Decl(semantics.ts, 41, 1))
+
+    type T3 = T1<number[]>;
+>T3 : Symbol(T3, Decl(semantics.ts, 45, 28))
+>T1 : Symbol(T1, Decl(semantics.ts, 41, 1))
+
+    type T4<X extends number> = [1, 2, 3][X:];
+>T4 : Symbol(T4, Decl(semantics.ts, 46, 27))
+>X : Symbol(X, Decl(semantics.ts, 48, 12))
+>X : Symbol(X, Decl(semantics.ts, 48, 12))
+
+    type T5 = T4<1>;
+>T5 : Symbol(T5, Decl(semantics.ts, 48, 46))
+>T4 : Symbol(T4, Decl(semantics.ts, 46, 27))
+
+    type T6<Y extends number> = [1, 2, 3][:Y];
+>T6 : Symbol(T6, Decl(semantics.ts, 49, 20))
+>Y : Symbol(Y, Decl(semantics.ts, 51, 12))
+>Y : Symbol(Y, Decl(semantics.ts, 51, 12))
+
+    type T7 = T6<^1>;
+>T7 : Symbol(T7, Decl(semantics.ts, 51, 46))
+>T6 : Symbol(T6, Decl(semantics.ts, 49, 20))
+}
+
+{
+    // - If either the *object type*, *start type*, or *end type* are *Union Types*, the result is distributed over
+    //   each constituent in the following manner:
+    //   - The *object type* is distributed over any *Inverse Offset Type* constituent of *start type* or *end type*.
+    //     This is necessary as an *Inverse Offset Type* can have a different outcome depending on the *object type*
+    //     it is resolved against.
+    //   - The *start type* and *end type* are distributed over each constituent of the *object type*.
+    //   - The *object type* is distributed over each constituent of the *start type* and *end type*.
+    //   - The results of the distribution are either an *Intersection Type* (if the *Range Type* was a "write"
+    //     location), or a *Union Type* (if the *Range Type* was a "read" location).
+    type T1 = ([1, 2, 3] | [2, 3, 4])[0:2];
+>T1 : Symbol(T1, Decl(semantics.ts, 55, 1))
+
+    type T2 = [1, 2, 3][0|1:2];
+>T2 : Symbol(T2, Decl(semantics.ts, 65, 43))
+
+    type T3 = [1, 2, 3][0:1|2];
+>T3 : Symbol(T3, Decl(semantics.ts, 66, 31))
+
+    type T4 = ([1, 2, 3] | [2, 3, 4])[0|1:2|3];
+>T4 : Symbol(T4, Decl(semantics.ts, 67, 31))
+
+    type T5 = ([1, 2, 3] | [9, 8])[0:^1];
+>T5 : Symbol(T5, Decl(semantics.ts, 68, 47))
+}
+
+{
+    // - Otherwise (or for each constituent of the distribution),
+    {
+        // - If neither the *start type* nor the *end type* are *String Literal Types* or a *Numeric Literal Types*, then
+        //   - Return an *Array Type* for the union of each element of the *object type*: `T[any:any] -> T[number][]`.
+        type T1 = [1, 2, 3][number:number];
+>T1 : Symbol(T1, Decl(semantics.ts, 74, 5))
+
+        type T2 = [1, 2, 3][string:string];
+>T2 : Symbol(T2, Decl(semantics.ts, 77, 43))
+
+        type T3 = [1, 2, 3][any:any];
+>T3 : Symbol(T3, Decl(semantics.ts, 78, 43))
+
+        type T4 = [1, 2, 3][never:never];
+>T4 : Symbol(T4, Decl(semantics.ts, 79, 37))
+    }
+    {
+        // - If the *start type* is neither a *String Literal Type* nor a *Numeric Literal Type*, then
+        //   - Return an *Array Type* for the union of each element of the *Range Type* for the same *object type* and
+        //     *end type*, but with a *start type* of `0`: `T[any:Y] -> T[:Y][number][]`.
+        type T1 = [1, 2, 3][number:2];
+>T1 : Symbol(T1, Decl(semantics.ts, 82, 5))
+
+        type T2 = [1, 2, 3][string:2];
+>T2 : Symbol(T2, Decl(semantics.ts, 86, 38))
+
+        type T3 = [1, 2, 3][any:2];
+>T3 : Symbol(T3, Decl(semantics.ts, 87, 38))
+
+        type T4 = [1, 2, 3][never:2];
+>T4 : Symbol(T4, Decl(semantics.ts, 88, 35))
+    }
+    {
+        // - If the *end type* is neither a *String Literal Type* nor a *Numeric Literal Type*, then
+        //   - Return an *Array Type* for the union of each element of the *Range Type* for the same *object type* and
+        //     *start type*, but with an *end type* of `^0`: `T[X:any] -> T[X:][number][]`.
+        type T1 = [1, 2, 3][1:number];
+>T1 : Symbol(T1, Decl(semantics.ts, 91, 5))
+
+        type T2 = [1, 2, 3][1:string];
+>T2 : Symbol(T2, Decl(semantics.ts, 95, 38))
+
+        type T3 = [1, 2, 3][1:any];
+>T3 : Symbol(T3, Decl(semantics.ts, 96, 38))
+
+        type T4 = [1, 2, 3][1:never];
+>T4 : Symbol(T4, Decl(semantics.ts, 97, 35))
+    }
+    {
+        // - If the *start type* is the *lower bound type* (`0`) and the *end type* is the *upper bound type* (`^0`),
+        //   then we are including all elements: return the *object type* of the *Range Type*.
+        type T1 = [1, 2, 3][0:^0];
+>T1 : Symbol(T1, Decl(semantics.ts, 100, 5))
+    }
+    {
+        // - If the *start type* is the *upper bound type* (`^0`) or the *end type* is the *lower bound type* (`0`),
+        //   then we are including no elements: return the empty *Tuple Type* (`[]`).
+        type T1 = [1, 2, 3][^0:^0];
+>T1 : Symbol(T1, Decl(semantics.ts, 105, 5))
+
+        type T2 = [1, 2, 3][0:0];
+>T2 : Symbol(T2, Decl(semantics.ts, 108, 35))
+    }
+    {
+        // - If the *object type* is an *Array Type*, then
+        {
+            // - If the signs of both the *start type* and *end type* agree, then return
+            //   a fixed-length *Tuple Type* with a minimum length of `0` for the difference between the *end type* and
+            //   the *start type* whose elements are the element type of the *object type*: `T[][0:1] -> [T?]`.
+            type T1 = number[][0:2];
+>T1 : Symbol(T1, Decl(semantics.ts, 113, 9))
+
+            type T2 = number[][^2:^0];
+>T2 : Symbol(T2, Decl(semantics.ts, 117, 36))
+        }
+        {
+            // - If the *start type* is an *Inverse Offset Type* and the *end type* is not, we can create a tuple of
+            //   `min(abs(start), end)` optional elements.
+            type T1 = number[][^2:4];
+>T1 : Symbol(T1, Decl(semantics.ts, 120, 9))
+        }
+        {
+            // - Otherwise, we cannot derive a fixed length: return the *object type* of the *Range Type*.
+            type T1 = number[][0:^2];
+>T1 : Symbol(T1, Decl(semantics.ts, 125, 9))
+        }
+    }
+    {
+        // - Otherwise, the *object type* is a *Tuple Type*:
+        {
+            // - If the *object type* has a rest element, then
+            {
+                // - If the *start type* is an *Inverse Offset Type*, return an *Array Type* for the union of each
+                //   *optional type* and the *rest element type*, along with the set of `n` right-most required
+                //   elements of the *object type* where `n` is the absolute value of the *start type*.
+                type T1 = [1, 2, 3, ...4[]][^1:];
+>T1 : Symbol(T1, Decl(semantics.ts, 134, 13))
+
+                type T2 = [1, 2, 3, ...4[]][^2:];
+>T2 : Symbol(T2, Decl(semantics.ts, 138, 49))
+
+                type T3 = [1, 2, 3, ...4[]][^3:];
+>T3 : Symbol(T3, Decl(semantics.ts, 139, 49))
+
+                type T4 = [1, 2, 3?, ...4[]][^1:];
+>T4 : Symbol(T4, Decl(semantics.ts, 140, 49))
+
+                type T5 = [1, 2, 3?, ...4[]][^2:];
+>T5 : Symbol(T5, Decl(semantics.ts, 141, 50))
+
+                type T6 = [1, 2, 3?, ...4[]][^3:];
+>T6 : Symbol(T6, Decl(semantics.ts, 142, 50))
+            }
+            {
+                // - If the *end type* is an *Inverse Offset Type*, return a *Tuple Type* of the elements of the
+                //   *object type* starting from the index at *start type*, but whose minimum length is reduced by the
+                //   absolute value of the *end type*.
+                type T1 = [1, 2, 3, ...4[]][1:^1];
+>T1 : Symbol(T1, Decl(semantics.ts, 145, 13))
+
+                type T2 = [1, 2, 3, ...4[]][1:^2];
+>T2 : Symbol(T2, Decl(semantics.ts, 149, 50))
+
+                type T3 = [1, 2, 3, ...4[]][1:^3];
+>T3 : Symbol(T3, Decl(semantics.ts, 150, 50))
+
+                type T4 = [1, 2, 3?, ...4[]][1:^1];
+>T4 : Symbol(T4, Decl(semantics.ts, 151, 50))
+
+                type T5 = [1, 2, 3?, ...4[]][1:^2];
+>T5 : Symbol(T5, Decl(semantics.ts, 152, 51))
+
+                type T6 = [1, 2, 3?, ...4[]][1:^3];
+>T6 : Symbol(T6, Decl(semantics.ts, 153, 51))
+            }
+        }
+        {
+            // - Otherwise,
+            {
+                // - Clamp the *start type* and *end type* to values between `0` and the length of *object type*.
+                type T1 = [1, 2, 3][^5:10];
+>T1 : Symbol(T1, Decl(semantics.ts, 159, 13))
+            }
+            {
+                // - Return a *Tuple Type* for the elements of *object type* starting at *start type* and ending at
+                //   *end type*.
+                type T1 = [1, 2, 3][1: 2];
+>T1 : Symbol(T1, Decl(semantics.ts, 163, 13))
+            }
+        }
+    }
+}
+
+=== tests/cases/conformance/types/range/assignability.ts ===
+// - `S` is assignable to `T[X:Y]` if `S` is assignable to `C`, where `C` is the base constraint of `T[X:Y]` for writing.
+function f1<T extends [1, 2, 3, 4], U extends 1 | 2>(t: T[U:^1], s: [3] & [2, 3]) {
+>f1 : Symbol(f1, Decl(assignability.ts, 0, 0))
+>T : Symbol(T, Decl(assignability.ts, 1, 12))
+>U : Symbol(U, Decl(assignability.ts, 1, 35))
+>t : Symbol(t, Decl(assignability.ts, 1, 53))
+>T : Symbol(T, Decl(assignability.ts, 1, 12))
+>U : Symbol(U, Decl(assignability.ts, 1, 35))
+>s : Symbol(s, Decl(assignability.ts, 1, 64))
+
+    t = s;
+>t : Symbol(t, Decl(assignability.ts, 1, 53))
+>s : Symbol(s, Decl(assignability.ts, 1, 64))
+}
+
+// - `S[X:Y]` is assignable to `T[]` if `S[number]` is assignable to `T`.
+function f2<T, S extends [T, T, T]>(t: T[], s: S[0:2]) {
+>f2 : Symbol(f2, Decl(assignability.ts, 3, 1))
+>T : Symbol(T, Decl(assignability.ts, 6, 12))
+>S : Symbol(S, Decl(assignability.ts, 6, 14))
+>T : Symbol(T, Decl(assignability.ts, 6, 12))
+>T : Symbol(T, Decl(assignability.ts, 6, 12))
+>T : Symbol(T, Decl(assignability.ts, 6, 12))
+>t : Symbol(t, Decl(assignability.ts, 6, 36))
+>T : Symbol(T, Decl(assignability.ts, 6, 12))
+>s : Symbol(s, Decl(assignability.ts, 6, 43))
+>S : Symbol(S, Decl(assignability.ts, 6, 14))
+
+    t = s;
+>t : Symbol(t, Decl(assignability.ts, 6, 36))
+>s : Symbol(s, Decl(assignability.ts, 6, 43))
+}
+
+// - `S[XS:YS]` is assignable to `T[XT:YT]` if `S` is assignable to `T`, `XS` is assignable to `XT`, and `YS` is assignable to `YT`.
+function f3<T extends [1 | 9, 2 | 8, 3 | 7, 4 | 6], S extends T>(t: T[1 | 2:3], s: S[1:3]) {
+>f3 : Symbol(f3, Decl(assignability.ts, 8, 1))
+>T : Symbol(T, Decl(assignability.ts, 11, 12))
+>S : Symbol(S, Decl(assignability.ts, 11, 51))
+>T : Symbol(T, Decl(assignability.ts, 11, 12))
+>t : Symbol(t, Decl(assignability.ts, 11, 65))
+>T : Symbol(T, Decl(assignability.ts, 11, 12))
+>s : Symbol(s, Decl(assignability.ts, 11, 79))
+>S : Symbol(S, Decl(assignability.ts, 11, 51))
+
+    t = s;
+>t : Symbol(t, Decl(assignability.ts, 11, 65))
+>s : Symbol(s, Decl(assignability.ts, 11, 79))
+}

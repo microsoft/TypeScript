@@ -1000,6 +1000,10 @@ namespace ts {
         return node.kind === SyntaxKind.InferType;
     }
 
+    export function isOffsetTypeNode(node: Node): node is InverseOffsetTypeNode {
+        return node.kind === SyntaxKind.InverseOffsetType;
+    }
+
     export function isParenthesizedTypeNode(node: Node): node is ParenthesizedTypeNode {
         return node.kind === SyntaxKind.ParenthesizedType;
     }

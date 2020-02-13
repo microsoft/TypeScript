@@ -2879,6 +2879,10 @@
         "category": "Message",
         "code": 2782
     },
+    "Type '{0}' cannot be used as an index type in an offset or range type.": {
+        "category": "Error",
+        "code": 2783
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

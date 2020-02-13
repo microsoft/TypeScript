@@ -1332,6 +1332,8 @@ namespace ts {
                         return emitConditionalType(<ConditionalTypeNode>node);
                     case SyntaxKind.InferType:
                         return emitInferType(<InferTypeNode>node);
+                    case SyntaxKind.InverseOffsetType:
+                        return emitOffsetType(<InverseOffsetTypeNode>node);
                     case SyntaxKind.ParenthesizedType:
                         return emitParenthesizedType(<ParenthesizedTypeNode>node);
                     case SyntaxKind.ExpressionWithTypeArguments:
@@ -1344,6 +1346,8 @@ namespace ts {
                         return emitIndexedAccessType(<IndexedAccessTypeNode>node);
                     case SyntaxKind.MappedType:
                         return emitMappedType(<MappedTypeNode>node);
+                    case SyntaxKind.RangeType:
+                        return emitRangeType(<RangeTypeNode>node);
                     case SyntaxKind.LiteralType:
                         return emitLiteralType(<LiteralTypeNode>node);
                     case SyntaxKind.ImportType:
@@ -2131,6 +2135,11 @@ namespace ts {
             emit(node.typeParameter);
         }
 
+        function emitOffsetType(node: InverseOffsetTypeNode) {
+            writePunctuation("^");
+            emit(node.indexType);
+        }
+
         function emitParenthesizedType(node: ParenthesizedTypeNode) {
             writePunctuation("(");
             emit(node.type);
@@ -2194,6 +2203,15 @@ namespace ts {
                 decreaseIndent();
             }
             writePunctuation("}");
+        }
+
+        function emitRangeType(node: RangeTypeNode) {
+            emit(node.objectType);
+            writePunctuation("[");
+            emit(node.startType);
+            writePunctuation(":");
+            emit(node.endType);
+            writePunctuation("]");
         }
 
         function emitLiteralType(node: LiteralTypeNode) {

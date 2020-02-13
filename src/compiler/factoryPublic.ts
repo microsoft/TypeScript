@@ -904,6 +904,18 @@ namespace ts {
             : node;
     }
 
+    export function createInverseOffsetTypeNode(indexType: TypeNode) {
+        const node = <InverseOffsetTypeNode>createSynthesizedNode(SyntaxKind.InverseOffsetType);
+        node.indexType = parenthesizeElementTypeMember(indexType);
+        return node;
+    }
+
+    export function updateInverseOffsetTypeNode(node: InverseOffsetTypeNode, indexType: TypeNode) {
+        return node.indexType !== indexType
+            ? updateNode(createInverseOffsetTypeNode(indexType), node)
+            : node;
+    }
+
     export function createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean) {
         const node = <ImportTypeNode>createSynthesizedNode(SyntaxKind.ImportType);
         node.argument = argument;
@@ -958,7 +970,7 @@ namespace ts {
         return node;
     }
 
-    export function updateIndexedAccessTypeNode(node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode) {
+    export function updateIndexedAccessTypeNode(node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode {
         return node.objectType !== objectType
             || node.indexType !== indexType
             ? updateNode(createIndexedAccessTypeNode(objectType, indexType), node)
@@ -980,6 +992,22 @@ namespace ts {
             || node.questionToken !== questionToken
             || node.type !== type
             ? updateNode(createMappedTypeNode(readonlyToken, typeParameter, questionToken, type), node)
+            : node;
+    }
+
+    export function createRangeTypeNode(objectType: TypeNode, startType: TypeNode | undefined, endType: TypeNode | undefined) {
+        const node = createSynthesizedNode(SyntaxKind.RangeType) as RangeTypeNode;
+        node.objectType = objectType;
+        node.startType = startType;
+        node.endType = endType;
+        return node;
+    }
+    
+    export function updateRangeTypeNode(node: RangeTypeNode, objectType: TypeNode, startType: TypeNode | undefined, endType: TypeNode | undefined) {
+        return node.objectType !== objectType
+            || node.startType !== startType
+            || node.endType !== endType
+            ? updateNode(createRangeTypeNode(objectType, startType, endType), node)
             : node;
     }
 

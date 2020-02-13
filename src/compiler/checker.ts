@@ -673,6 +673,8 @@ namespace ts {
         const literalTypes = createMap<LiteralType>();
         const indexedAccessTypes = createMap<IndexedAccessType>();
         const substitutionTypes = createMap<SubstitutionType>();
+        const rangeTypes = createMap<RangeType>();
+        const inverseOffsetTypes = createMap<InverseOffsetType>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties = createMap<Symbol>() as UnderscoreEscapedMap<Symbol>;
 
@@ -721,6 +723,7 @@ namespace ts {
         const nonPrimitiveType = createIntrinsicType(TypeFlags.NonPrimitive, "object");
         const stringNumberSymbolType = getUnionType([stringType, numberType, esSymbolType]);
         const keyofConstraintType = keyofStringsOnly ? stringType : stringNumberSymbolType;
+        const offsetConstraintType = getUnionType([stringType, numberType]);
         const numberOrBigIntType = getUnionType([numberType, bigintType]);
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -876,6 +879,10 @@ namespace ts {
         const zeroType = getLiteralType(0);
         const zeroBigIntType = getLiteralType({ negative: false, base10Value: "0" });
 
+        const boundarySymbol = createSymbol(SymbolFlags.None, InternalSymbolName.Boundary);
+        const lowerBoundType = createLiteralType(TypeFlags.NumberLiteral, 0, boundarySymbol);
+        const upperBoundType = getInverseOffsetType(lowerBoundType);
+
         const resolutionTargets: TypeSystemEntity[] = [];
         const resolutionResults: boolean[] = [];
         const resolutionPropertyNames: TypeSystemPropertyName[] = [];
@@ -982,6 +989,7 @@ namespace ts {
         }
 
         function error(location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
+            if (message === Diagnostics.Type_0_cannot_be_used_to_index_type_1) debugger;
             const diagnostic = location
                 ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3)
                 : createCompilerDiagnostic(message, arg0, arg1, arg2, arg3);
@@ -4218,6 +4226,12 @@ namespace ts {
                     const indexTypeNode = typeToTypeNodeHelper(indexedType, context);
                     return createTypeOperatorNode(indexTypeNode);
                 }
+                if (type.flags & TypeFlags.InverseOffset) {
+                    const indexType = (<InverseOffsetType>type).indexType;
+                    context.approximateLength += 1;
+                    const indexTypeNode = typeToTypeNodeHelper(indexType, context);
+                    return createInverseOffsetTypeNode(indexTypeNode);
+                }
                 if (type.flags & TypeFlags.IndexedAccess) {
                     const objectTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).objectType, context);
                     const indexTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).indexType, context);
@@ -4234,6 +4248,12 @@ namespace ts {
                     const falseTypeNode = typeToTypeNodeHelper(getFalseTypeFromConditionalType(<ConditionalType>type), context);
                     context.approximateLength += 15;
                     return createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
+                }
+                if (type.flags & TypeFlags.Range) {
+                    const objectTypeNode = typeToTypeNodeHelper((<RangeType>type).objectType, context);
+                    const startTypeNode = (<RangeType>type).startType !== lowerBoundType ? typeToTypeNodeHelper((<RangeType>type).startType, context) : undefined;
+                    const endTypeNode = (<RangeType>type).endType !== upperBoundType ? typeToTypeNodeHelper((<RangeType>type).endType, context) : undefined;
+                    return createRangeTypeNode(objectTypeNode, startTypeNode, endTypeNode);
                 }
                 if (type.flags & TypeFlags.Substitution) {
                     return typeToTypeNodeHelper((<SubstitutionType>type).typeVariable, context);
@@ -9691,13 +9711,13 @@ namespace ts {
                     else if ((<ObjectType>type).objectFlags & ObjectFlags.ClassOrInterface) {
                         resolveClassOrInterfaceMembers(<InterfaceType>type);
                     }
-                    else if ((<ReverseMappedType>type).objectFlags & ObjectFlags.ReverseMapped) {
+                    else if ((<ObjectType>type).objectFlags & ObjectFlags.ReverseMapped) {
                         resolveReverseMappedTypeMembers(type as ReverseMappedType);
                     }
                     else if ((<ObjectType>type).objectFlags & ObjectFlags.Anonymous) {
                         resolveAnonymousTypeMembers(<AnonymousType>type);
                     }
-                    else if ((<MappedType>type).objectFlags & ObjectFlags.Mapped) {
+                    else if ((<ObjectType>type).objectFlags & ObjectFlags.Mapped) {
                         resolveMappedTypeMembers(<MappedType>type);
                     }
                 }
@@ -10007,6 +10027,9 @@ namespace ts {
                 if (t.flags & TypeFlags.Index) {
                     return keyofConstraintType;
                 }
+                if (t.flags & TypeFlags.InverseOffset) {
+                    return offsetConstraintType;
+                }
                 if (t.flags & TypeFlags.IndexedAccess) {
                     const baseObjectType = getBaseConstraint((<IndexedAccessType>t).objectType);
                     const baseIndexType = getBaseConstraint((<IndexedAccessType>t).indexType);
@@ -10019,6 +10042,13 @@ namespace ts {
                     const result = constraint && getBaseConstraint(constraint);
                     constraintDepth--;
                     return result;
+                }
+                if (t.flags & TypeFlags.Range) {
+                    const baseObjectType = getBaseConstraint((<RangeType>t).objectType);
+                    const baseStartType = getBaseConstraint((<RangeType>t).startType);
+                    const baseEndType = getBaseConstraint((<RangeType>t).endType);
+                    const baseRangeType = baseObjectType && baseStartType && baseEndType && getRangeTypeOrUndefined(baseObjectType, baseStartType, baseEndType);
+                    return baseRangeType && getBaseConstraint(baseRangeType);
                 }
                 if (t.flags & TypeFlags.Substitution) {
                     return getBaseConstraint((<SubstitutionType>t).substitute);
@@ -12218,6 +12248,7 @@ namespace ts {
                 type === wildcardType ? wildcardType :
                 type.flags & TypeFlags.Unknown ? neverType :
                 type.flags & (TypeFlags.Any | TypeFlags.Never) ? keyofConstraintType :
+                type.flags & TypeFlags.InverseOffset ? getIndexType(offsetConstraintType, stringsOnly, noIndexSignatures) :
                 stringsOnly ? !noIndexSignatures && getIndexInfoOfType(type, IndexKind.String) ? stringType : getLiteralTypeFromProperties(type, TypeFlags.StringLiteral) :
                 !noIndexSignatures && getIndexInfoOfType(type, IndexKind.String) ? getUnionType([stringType, numberType, getLiteralTypeFromProperties(type, TypeFlags.UniqueESSymbol)]) :
                 getNonEnumNumberIndexInfo(type) ? getUnionType([numberType, getLiteralTypeFromProperties(type, TypeFlags.StringLiteral | TypeFlags.UniqueESSymbol)]) :
@@ -12346,6 +12377,7 @@ namespace ts {
                 if (objectType.flags & (TypeFlags.Any | TypeFlags.Never)) {
                     return objectType;
                 }
+
                 const stringIndexInfo = getIndexInfoOfType(objectType, IndexKind.String);
                 const indexInfo = isTypeAssignableToKind(indexType, TypeFlags.NumberLike) && getIndexInfoOfType(objectType, IndexKind.Number) || stringIndexInfo;
                 if (indexInfo) {
@@ -12462,7 +12494,18 @@ namespace ts {
         }
 
         function isGenericIndexType(type: Type): boolean {
-            return maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive | TypeFlags.Index);
+            if (maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive | TypeFlags.Index)) {
+                return true;
+            }
+            if (type.flags & TypeFlags.UnionOrIntersection) {
+                for (const t of (type as UnionOrIntersectionType).types) {
+                    if (t.flags & TypeFlags.InverseOffset && isGenericIndexType((t as InverseOffsetType).indexType)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return !!(type.flags & TypeFlags.InverseOffset) && isGenericIndexType((type as InverseOffsetType).indexType);
         }
 
         function isThisTypeParameter(type: Type): boolean {
@@ -12471,6 +12514,7 @@ namespace ts {
 
         function getSimplifiedType(type: Type, writing: boolean): Type {
             return type.flags & TypeFlags.IndexedAccess ? getSimplifiedIndexedAccessType(<IndexedAccessType>type, writing) :
+                type.flags & TypeFlags.Range ? getSimplifiedRangeType(<RangeType>type, writing) :
                 type.flags & TypeFlags.Conditional ? getSimplifiedConditionalType(<ConditionalType>type, writing) :
                 type;
         }
@@ -12542,6 +12586,65 @@ namespace ts {
             return type[cache] = type;
         }
 
+        function distributeRangeOverObjectType(objectType: Type, startType: Type, endType: Type, writing: boolean) {
+            // (T | U)[X:Y] -> T[X:Y] | U[X:Y]
+            // (T & U)[X:Y] -> T[X:Y] & U[X:Y]
+            if (objectType.flags & TypeFlags.UnionOrIntersection) {
+                const types = map((objectType as UnionOrIntersectionType).types, t => getSimplifiedType(getRangeType(t, startType, endType), writing));
+                return objectType.flags & TypeFlags.Intersection ? getIntersectionType(types) : getUnionType(types);
+            }
+        }
+
+        function distributeObjectOverRangeTypes(objectType: Type, startType: Type, endType: Type, writing: boolean) {
+            // T[A|B:C|D] -> T[A:C] | T[A:D] | T[B:C] | T[B:D]
+            if (startType.flags & TypeFlags.Union || endType.flags & TypeFlags.Union) {
+                const types: Type[] = [];
+                for (const start of getConstituents(startType)) {
+                    for (const end of getConstituents(endType)) {
+                        types.push(getSimplifiedType(getRangeType(objectType, start, end), writing));
+                    }
+                }
+                return getUnionType(types);
+            }
+        }
+
+        function getSimplifiedRangeType(type: RangeType, writing: boolean) {
+            const cache = writing ? "simplifiedForWriting" : "simplifiedForReading";
+            if (type[cache]) {
+                return type[cache] === circularConstraintType ? type : type[cache]!;
+            }
+            type[cache] = circularConstraintType;
+            // We recursively simplify the object type as it may in turn be a range type. For example, with
+            // '{ [P in T]: { [Q in U]: number } }[T:][U:]' we want to first simplify the inner range type.
+            const objectType = unwrapSubstitution(getSimplifiedType(type.objectType, writing));
+            const startType = getSimplifiedType(type.startType, writing);
+            const endType = getSimplifiedType(type.endType, writing);
+
+            // T[A|B:C|D] -> T[A:C] | T[A:D] | T[B:C] | T[B:D]
+            const distributedOverStartEnd = distributeObjectOverRangeTypes(objectType, startType, endType, writing);
+            if (distributedOverStartEnd) {
+                return type[cache] = distributedOverStartEnd;
+            }
+
+            // Only do the inner distribution if the start/end offsets can no longer be instantiated to cause distribution again
+            if (!(startType.flags & TypeFlags.Instantiable) && !(endType.flags & TypeFlags.Instantiable)) {
+                // (T | U)[A:B] -> T[A:B] | U[A:B]
+                // (T & U)[A:B] -> T[A:B] & U[A:B]
+                const distributedOverObject = distributeRangeOverObjectType(objectType, startType, endType, writing);
+                if (distributedOverObject) {
+                    return type[cache] = distributedOverObject;
+                }
+            }
+
+            // So ultimately:
+            //    ((A & B) | C)[K1 | K2:K3 | K4]
+            // -> ((A & B) | C)[K1:K3 | K4] | ((A & B) | C)[K2:K3 | K4]
+            // -> ((A & B) | C)[K1:K3] | ((A & B) | C)[K1:K4] | ((A & B) | C)[K2:K4] | ((A & B) | C)[K2:K4]
+            // -> (A & B)[K1:K3] | C[K1:K3] | (A & B)[K1:K4] | C[K1:K4] | (A & B)[K2:K3] | C[K2:K3] | (A & B)[K2:K4] | C[K2:K4]
+            // -> (A[K1:K3] & B[K1:K3]) | C[K1:K3] | (A[K1:K4] & B[K1:K4]) | C[K1:K4] | (A[K2:K3] & B[K2:K3]) | C[K2:K3] | (A[K2:K4] & B[K2:K4]) | C[K2:K4]
+            return type[cache] = type;
+        }
+
         function getSimplifiedConditionalType(type: ConditionalType, writing: boolean) {
             const checkType = type.checkType;
             const extendsType = type.extendsType;
@@ -12580,6 +12683,71 @@ namespace ts {
             return instantiateType(getTemplateTypeFromMappedType(objectType), templateMapper);
         }
 
+        function getInvertedIndexType(indexType: Type, objectType: Type, errorNode: Node | undefined) {
+            if (indexType.flags & (TypeFlags.Any | TypeFlags.Never | TypeFlags.Number | TypeFlags.String)) {
+                return indexType;
+            }
+            let index = getNumericIndexFromIndexType(indexType);
+            if (index !== undefined) {
+                if (isArrayType(objectType)) {
+                    return numberType;
+                }
+                if (isTupleType(objectType)) {
+                    if (index < 0) {
+                        return getLiteralType(-index);
+                    }
+                    const length = getLengthOfTupleType(objectType);
+                    index = length - index;
+                    if (index < 0) index = 0;
+                    if (objectType.target.hasRestElement) {
+                        if (index < length) {
+                            const indexTypes: Type[] = [];
+                            for (let i = index; i <= length; i++) {
+                                indexTypes.push(getLiteralType(i));
+                            }
+                            return getUnionType(indexTypes);
+                        }
+                    }
+                    return getLiteralType(index);
+                }
+            }
+            if (errorNode) {
+                error(errorNode, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(objectType));
+            }
+        }
+
+        function resolveInverseOffsets(indexType: Type, objectType: Type, errorNode: Node | undefined) {
+            if (indexType.flags & TypeFlags.Union) {
+                let indexTypes: Type[] | undefined;
+                let hasErrors = false;
+                const types = (<UnionType>indexType).types;
+                for (let i = 0; i < types.length; i++) {
+                    const t = types[i];
+                    if (t.flags & TypeFlags.InverseOffset) {
+                        if (!indexTypes) indexTypes = types.slice(0, i);
+                        const inverted = getInvertedIndexType((<InverseOffsetType>t).indexType, objectType, errorNode);
+                        if (inverted) {
+                            indexTypes.push(inverted);
+                        }
+                        else if (!errorNode) {
+                            return undefined;
+                        }
+                        else {
+                            hasErrors = true;
+                        }
+                    }
+                    else if (indexTypes) {
+                        indexTypes.push(t);
+                    }
+                }
+                return hasErrors ? undefined : indexTypes ? getUnionType(indexTypes) : indexType;
+            }
+            if (indexType.flags & TypeFlags.InverseOffset) {
+                return getInvertedIndexType((<InverseOffsetType>indexType).indexType, objectType, errorNode);
+            }
+            return indexType;
+        }
+
         function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression): Type {
             return getIndexedAccessTypeOrUndefined(objectType, indexType, accessNode, AccessFlags.None) || (accessNode ? errorType : unknownType);
         }
@@ -12603,13 +12771,18 @@ namespace ts {
                     return objectType;
                 }
                 // Defer the operation by creating an indexed access type.
-                const id = objectType.id + "," + indexType.id;
+                const id = `${objectType.id},${indexType.id}`;
                 let type = indexedAccessTypes.get(id);
                 if (!type) {
                     indexedAccessTypes.set(id, type = createIndexedAccessType(objectType, indexType));
                 }
                 return type;
             }
+            const resolvedIndexType = resolveInverseOffsets(indexType, objectType, accessNode);
+            if (!resolvedIndexType) {
+                return undefined;
+            }
+            indexType = resolvedIndexType;
             // In the following we resolve T[K] to the type of the property in T selected by K.
             // We treat boolean as different from other unions to improve errors;
             // skipping straight to getPropertyTypeForIndexType gives errors with 'boolean' instead of 'true'.
@@ -12668,6 +12841,315 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getRangeType(objectType: Type, startType: Type, endType: Type, rangeNode?: RangeTypeNode, accessFlags?: AccessFlags): Type {
+            return getRangeTypeOrUndefined(objectType, startType, endType, rangeNode, accessFlags) ?? (rangeNode ? errorType : unknownType);
+        }
+
+        function getRangeTypeOrUndefined(objectType: Type, startType: Type, endType: Type, rangeNode?: RangeTypeNode, accessFlags = AccessFlags.None): Type | undefined {
+            if (objectType === wildcardType || startType === wildcardType || endType === wildcardType) {
+                return wildcardType;
+            }
+            // The object type is constrained to be an array or tuple type
+            if (!isTypeAssignableTo(objectType, anyReadonlyArrayType)) {
+                if (rangeNode) {
+                    error(rangeNode, Diagnostics.Type_0_is_not_an_array_type, typeToString(objectType));
+                }
+                return undefined;
+            }
+            // The start type is constrained to be a string- or number-like type
+            if (!isTypeAssignableTo(startType, offsetConstraintType)) {
+                if (rangeNode?.startType) {
+                    error(rangeNode.startType, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(startType), typeToString(objectType));
+                }
+                return undefined;
+            }
+            // The end type is constrained to be a string- or number-like type
+            if (!isTypeAssignableTo(endType, offsetConstraintType)) {
+                if (rangeNode?.endType) {
+                    error(rangeNode.endType, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(endType), typeToString(objectType));
+                }
+                return undefined;
+            }
+            // If the object, start, or end type is generic, we are performing a higher-order slice, and the operation
+            // is deferred until it can be instantiated.
+            if (isGenericObjectType(objectType) || isGenericIndexType(startType) || isGenericIndexType(endType)) {
+                // A generic start or end on 'any' or 'unkown' is 'any' or 'unknown' (respectively).
+                if (objectType.flags & TypeFlags.AnyOrUnknown) {
+                    return objectType;
+                }
+
+                // If we can eagerly resolve start and end and they indicate the range is either
+                // all inclusive or empty, we return the object type or an empty tuple (respectively).
+                let start = getNumericIndexFromIndexType(startType);
+                let end = getNumericIndexFromIndexType(endType);
+                if (start !== undefined && end !== undefined) {
+                    // A range consisting of the entire array is just the array:
+                    //   T[:]     -> T
+                    //   T[0:^0]  -> T
+                    if (start === 0 && end === ~0) {
+                        return objectType;
+                    }
+                    // A range that starts at the upper bound (^0), or ends at the lower bound (0), is just an empty tuple:
+                    //   T[^0:]   -> []
+                    //   T[:0]    -> []
+                    // A range that starts at or after it ends is just an empty tuple:
+                    //   T[2:1]   -> []
+                    //   T[1:1]   -> []
+                    //   T[^1:^2] -> []
+                    //   T[^1:^1] -> []
+                    if (start === ~0 || end === 0 ||
+                        (start < 0 === end < 0) && start >= end) {
+                        return createTupleType(emptyArray, 0, /*hasRestElement*/ false, !isMutableArrayOrTuple(objectType));
+                    }
+                }
+
+                // Defer the operation until it can be fully instantiated.
+                const id = `${objectType.id},${startType.id},${endType.id}`;
+                let type = rangeTypes.get(id);
+                if (!type) {
+                    type = <RangeType>createType(TypeFlags.Range);
+                    type.objectType = objectType;
+                    type.startType = startType;
+                    type.endType = endType;
+                    rangeTypes.set(id, type);
+                }
+                return type;
+            }
+            if (objectType.flags & TypeFlags.Union || startType.flags & TypeFlags.Union || endType.flags & TypeFlags.Union) {
+                const results: Type[] = [];
+                let hasErrors = false;
+                for (const object of getConstituents(objectType)) {
+                    for (const start of getConstituents(startType)) {
+                        for (const end of getConstituents(endType)) {
+                            const type = getTupleSliceFromRangeType(object, objectType, start, end, rangeNode);
+                            if (type) {
+                                results.push(type);
+                            }
+                            else if (!rangeNode) {
+                                // If there's no error node, we can immediately stop, since error reporting is off
+                                return undefined;
+                            }
+                            else {
+                                // Otherwise we set a flag and return at the end of the loop so we still mark all errors
+                                hasErrors = true;
+                            }
+                        }
+                    }
+                }
+                if (hasErrors) {
+                    return undefined;
+                }
+                return accessFlags & AccessFlags.Writing ? getIntersectionType(results) : getUnionType(results);
+            }
+            return getTupleSliceFromRangeType(objectType, objectType, startType, endType, rangeNode);
+        }
+
+        function getTupleSliceFromRangeType(objectType: Type, fullObjectType: Type, startType: Type, endType: Type, rangeNode: RangeTypeNode | undefined): Type | undefined {
+            Debug.assert(!(objectType.flags & TypeFlags.Union));
+            Debug.assert(!(startType.flags & TypeFlags.Union));
+            Debug.assert(!(endType.flags & TypeFlags.Union));
+
+            // If the start type is `string`, `number`, `any`, or `never`, the result is an array
+            // of a union of all element types from the lower bound (0) to end.
+            //
+            // If the end type is `string`, `number`, `any`, or `never`, the result is an array
+            // of a union of all element types from start to the upper bound (^0).
+            //
+            //   T[number:number]   -> T[number][]
+            //   T[number:Y]        -> T[0:Y][number][]
+            //   T[X:number]        -> T[X:^0][number][]
+            const startIndexType = startType.flags & TypeFlags.InverseOffset ? (<InverseOffsetType>startType).indexType : startType;
+            const endIndexType = endType.flags & TypeFlags.InverseOffset ? (<InverseOffsetType>endType).indexType : endType;
+            const hasNonLiteralStart = startIndexType.flags & (TypeFlags.Any | TypeFlags.Never | TypeFlags.Number | TypeFlags.String);
+            const hasNonLiteralEnd = endIndexType.flags & (TypeFlags.Any | TypeFlags.Never | TypeFlags.Number | TypeFlags.String);
+            if (hasNonLiteralStart && hasNonLiteralEnd) {
+                const accessType = getIndexedAccessType(objectType, numberType);
+                return createArrayType(accessType, !isMutableArrayOrTuple(objectType));
+            }
+            if (hasNonLiteralStart) {
+                const limitedRange = getTupleSliceFromRangeType(objectType, fullObjectType, lowerBoundType, endType, rangeNode);
+                if (!limitedRange) {
+                    return undefined;
+                }
+                const accessType = getIndexedAccessType(limitedRange, numberType);
+                return createArrayType(accessType, !isMutableArrayOrTuple(objectType));
+            }
+            if (hasNonLiteralEnd) {
+                const limitedRange = getTupleSliceFromRangeType(objectType, fullObjectType, startType, upperBoundType, rangeNode);
+                if (!limitedRange) {
+                    return undefined;
+                }
+                const accessType = getIndexedAccessType(limitedRange, numberType);
+                return createArrayType(accessType, !isMutableArrayOrTuple(objectType));
+            }
+
+            let start = getNumericIndexFromIndexType(startType);
+            if (start === undefined) {
+                if (rangeNode) {
+                    error(rangeNode.startType ?? rangeNode, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(startType), typeToString(fullObjectType));
+                }
+                return undefined;
+            }
+
+            let end = getNumericIndexFromIndexType(endType);
+            if (end === undefined) {
+                if (rangeNode) {
+                    error(rangeNode.endType ?? rangeNode, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(endType), typeToString(fullObjectType));
+                }
+                return undefined;
+            }
+
+            // A range consisting of the entire array is just the array:
+            //   T[:]     -> T
+            //   T[0:^0]  -> T
+            if (start === 0 && end === ~0) {
+                return objectType;
+            }
+
+            // A range that starts at the upper bound (`^0`) or ends at the lower bound (`0`) is just an empty tuple:
+            //   T[^0:]   -> []
+            //   T[:0]    -> []
+            // A range that starts at or after it ends is just an empty tuple:
+            //   T[2:1]   -> []
+            //   T[1:1]   -> []
+            //   T[^1:^2] -> []
+            //   T[^1:^1] -> []
+            if (start === ~0 || end === 0 ||
+                (start < 0 === end < 0) && start >= end) {
+                return createTupleType(emptyArray, 0, /*hasRestElement*/ false, !isMutableArrayOrTuple(objectType));
+            }
+
+            const elementTypes: Type[] = [];
+            let minLength = 0;
+            let hasRestElement = false;
+            let associatedNames: __String[] | undefined;
+            if (!isTupleType(objectType)) {
+                if (start < 0 === end < 0) {
+                    // If both signs agree, we can collect a tuple of a fixed length:
+                    //   T[][0:1]     -> [T?]
+                    //   T[][^1:^0]   -> [T?]
+                    const elementType = getElementTypeOfArrayType(objectType);
+                    Debug.assert(elementType !== undefined);
+                    const length = end - start;
+                    for (let i = 0; i < length; i++) {
+                        elementTypes.push(elementType);
+                    }
+                }
+                else if (start < 0 && end > 0) {
+                    // If start is inverse and end is not, we can create a tuple of min(abs(start), end) optional elements.
+                    const elementType = getElementTypeOfArrayType(objectType);
+                    Debug.assert(elementType !== undefined);
+                    const length = Math.min(end, ~start);
+                    for (let i = 0; i < length; i++) {
+                        elementTypes.push(elementType);
+                    }
+                }
+                else {
+                    // If the signs disagree, we cannot determine the lower and upper bound, thus we should return the entire array:
+                    //   T[][0:^1]    -> T[]
+                    //   T[][^1:10]   -> T[]
+                    return objectType;
+                }
+            }
+            else {
+                const length = getLengthOfTupleType(objectType);
+                if (objectType.target.hasRestElement) {
+                    if (start < 0) {
+                        // If our start position is inverted, the result is an array of all of the optional or rest element types
+                        // along with the set of required element types starting from the right equal to start:
+                        //   [A, B, ...C[]][^0:] -> C[]
+                        //   [A, B, ...C[]][^1:] -> (B | C)[]
+                        //   [A, B, ...C[]][^2:] -> (A | B | C)[]
+                        const types: Type[] = [];
+                        for (let i = objectType.target.minLength; i <= length; i++) {
+                            const elementType = getTupleElementType(objectType, i);
+                            Debug.assert(elementType !== undefined);
+                            types.push(elementType);
+                        }
+                        for (let i = 0; i < ~start && i < objectType.target.minLength; i++) {
+                            const elementType = getTupleElementType(objectType, objectType.target.minLength - i);
+                            Debug.assert(elementType !== undefined);
+                            types.push(elementType);
+                        }
+                        return createArrayType(getUnionType(types), !isMutableArrayOrTuple(objectType));
+                    }
+                    if (end < 0) {
+                        // If our end position is inverted, the result is a tuple whose minimum length
+                        // is reduced by the inverted amount:
+                        //   [A, B, C, ...D[]][1:^0] -> [B, C, ...D[]]
+                        //   [A, B, C, ...D[]][1:^1] -> [B, C?, ...D[]]
+                        //   [A, B, C, ...D[]][1:^2] -> [B?, C?, ...D[]]
+                        hasRestElement = true;
+                        minLength = -Math.min(~end, length);
+                        end = length;
+                    }
+                }
+                else {
+                    // If we do not have a rest element, then we can explicitly adjust inverted offsets
+                    // relative to the length of the tuple:
+                    //   [A, B, C][:^2] -> [A, B, C][:1] -> [A]
+                    //   [A, B, C][^2:] -> [A, B, C][1:] -> [B, C]
+                    if (start < 0) start = Math.max(0, length - ~start);
+                    if (end < 0) end = Math.max(0, length - ~end);
+                    // We also clamp start and end to the length of the fixed tuple:
+                    //   [A, B][1:3] -> [A, B][1:2] -> [B]
+                    if (start > length) start = length;
+                    if (end > length) end = length;
+                }
+
+                // At this point our offsets should no longer be inverted.
+                Debug.assert(start >= 0 && end >= 0);
+
+                if (objectType.target.associatedNames) {
+                    associatedNames = [];
+                }
+
+                for (let i = start; i < end; i++) {
+                    if (i < objectType.target.minLength) minLength++;
+                    const elementType = getTupleElementType(objectType, i);
+                    Debug.assert(elementType !== undefined);
+                    elementTypes.push(elementType);
+                    if (objectType.target.associatedNames && associatedNames && i < objectType.target.associatedNames.length) {
+                        associatedNames.push(objectType.target.associatedNames[i]);
+                    }
+                }
+
+                if (minLength < 0) minLength = 0;
+
+                if (hasRestElement) {
+                    const restType = getTupleElementType(objectType, end);
+                    Debug.assert(restType !== undefined);
+                    if (objectType.target.associatedNames && associatedNames && end < objectType.target.associatedNames.length) {
+                        associatedNames.push(objectType.target.associatedNames[end]);
+                    }
+                    elementTypes.push(restType);
+                }
+            }
+
+            return createTupleType(elementTypes, minLength, hasRestElement, !isMutableArrayOrTuple(objectType), associatedNames);
+        }
+
+        function getTypeFromRangeTypeNode(node: RangeTypeNode): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                const objectType = getTypeFromTypeNode(node.objectType);
+                // A missing start is the lower bound (0):
+                //   T[:Y]  -> T[0:Y]
+                const startType = node.startType ? getTypeFromTypeNode(node.startType) : lowerBoundType;
+                // A missing end is the upper bound (^0):
+                //   T[X:]  -> T[X:^0]
+                const endOffset = node.endType ? getTypeFromTypeNode(node.endType) : upperBoundType;
+                const resolved = getRangeType(objectType, startType, endOffset, node);
+                links.resolvedType = resolved.flags & TypeFlags.Range &&
+                    (<RangeType>resolved).objectType === objectType &&
+                    (<RangeType>resolved).startType === startType &&
+                    (<RangeType>resolved).endType === endOffset ?
+                    getConstrainedTypeVariable(<RangeType>resolved, node) :
+                    resolved;
+            }
+            return links.resolvedType;
+        }
+
         function getActualTypeVariable(type: Type): Type {
             if (type.flags & TypeFlags.Substitution) {
                 return (<SubstitutionType>type).typeVariable;
@@ -12676,6 +13158,15 @@ namespace ts {
                 (<IndexedAccessType>type).objectType.flags & TypeFlags.Substitution ||
                 (<IndexedAccessType>type).indexType.flags & TypeFlags.Substitution)) {
                 return getIndexedAccessType(getActualTypeVariable((<IndexedAccessType>type).objectType), getActualTypeVariable((<IndexedAccessType>type).indexType));
+            }
+            if (type.flags & TypeFlags.Range && (
+                (<RangeType>type).objectType.flags & TypeFlags.Substitution ||
+                (<RangeType>type).startType.flags & TypeFlags.Substitution ||
+                (<RangeType>type).endType.flags & TypeFlags.Substitution)) {
+                return getRangeType(
+                    getActualTypeVariable((<RangeType>type).objectType),
+                    getActualTypeVariable((<RangeType>type).startType),
+                    getActualTypeVariable((<RangeType>type).endType));
             }
             return type;
         }
@@ -12800,6 +13291,71 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 links.resolvedType = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node.typeParameter));
+            }
+            return links.resolvedType;
+        }
+
+        /**
+         * Determines if `type` is a string or numeric literal type for an numeric index. If `type` was
+         * an inverted offset, the twos-complement of the index is returned.
+         * @param invertNegativeOffsets Indicates whether negative offsets from a non-inverted offset type
+         * should be treated as an inverted offset (default `true`). For an indexed access type, negative offsets should not
+         * be inverted:
+         * ```
+         * // indexed access
+         * T[-1] -> T["-1"]
+         *
+         * // range
+         * T[-1:] -> T[^1]
+         * ```
+         */
+        function getNumericIndexFromIndexType(type: Type, invertNegativeOffsets = true) {
+            const indexType = type.flags & TypeFlags.InverseOffset ? (type as InverseOffsetType).indexType : type;
+            let index =
+                isNumericLiteralType(indexType) ? indexType.value :
+                isStringLiteralType(indexType) ? canonicalNumericIndex(indexType.value) :
+                undefined;
+            if (index === undefined) {
+                return undefined;
+            }
+            if (!isInteger(index)) {
+                return undefined;
+            }
+            let inverted = indexType !== type;
+            if (index < 0 && (inverted || invertNegativeOffsets)) {
+                index = -index;
+                inverted = !inverted;
+            }
+            return inverted ? ~index : index;
+        }
+
+        function getInverseOffsetType(indexType: Type): Type {
+            if (indexType.flags & (TypeFlags.Any | TypeFlags.Never | TypeFlags.Number | TypeFlags.String)) {
+                return indexType;
+            }
+            // The inverse offset of an inverse offset is the normal offset.
+            if (indexType.flags & TypeFlags.InverseOffset) {
+                return (<InverseOffsetType>indexType).indexType;
+            }
+            if (indexType.flags & TypeFlags.Union) {
+                return mapType(indexType, getInverseOffsetType);
+            }
+            // An inverse offset cannot be otherwise resolved without some context object from which to derive
+            // the length.
+            const id = "" + indexType.id;
+            let type = inverseOffsetTypes.get(id);
+            if (!type) {
+                type = <InverseOffsetType>createType(TypeFlags.InverseOffset);
+                type.indexType = indexType;
+                inverseOffsetTypes.set(id, type);
+            }
+            return type;
+        }
+
+        function getTypeFromInverseOffsetTypeNode(node: InverseOffsetTypeNode): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = getInverseOffsetType(getTypeFromTypeNode(node.indexType));
             }
             return links.resolvedType;
         }
@@ -13292,10 +13848,14 @@ namespace ts {
                     return getTypeFromIndexedAccessTypeNode(<IndexedAccessTypeNode>node);
                 case SyntaxKind.MappedType:
                     return getTypeFromMappedTypeNode(<MappedTypeNode>node);
+                case SyntaxKind.RangeType:
+                    return getTypeFromRangeTypeNode(<RangeTypeNode>node);
                 case SyntaxKind.ConditionalType:
                     return getTypeFromConditionalTypeNode(<ConditionalTypeNode>node);
                 case SyntaxKind.InferType:
                     return getTypeFromInferTypeNode(<InferTypeNode>node);
+                case SyntaxKind.InverseOffsetType:
+                    return getTypeFromInverseOffsetTypeNode(<InverseOffsetTypeNode>node);
                 case SyntaxKind.ImportType:
                     return getTypeFromImportTypeNode(<ImportTypeNode>node);
                 // This function assumes that an identifier or qualified name is a type expression
@@ -13748,6 +14308,15 @@ namespace ts {
             }
             if (flags & TypeFlags.Conditional) {
                 return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers((<ConditionalType>type).mapper, mapper));
+            }
+            if (flags & TypeFlags.InverseOffset) {
+                return getInverseOffsetType(instantiateType((<InverseOffsetType>type).indexType, mapper));
+            }
+            if (flags & TypeFlags.Range) {
+                return getRangeType(
+                    instantiateType((<RangeType>type).objectType, mapper),
+                    instantiateType((<RangeType>type).startType, mapper),
+                    instantiateType((<RangeType>type).endType, mapper));
             }
             if (flags & TypeFlags.Substitution) {
                 const maybeVariable = instantiateType((<SubstitutionType>type).typeVariable, mapper);
@@ -15545,6 +16114,9 @@ namespace ts {
                     if (flags & TypeFlags.Index) {
                         return isRelatedTo((<IndexType>source).type, (<IndexType>target).type, /*reportErrors*/ false);
                     }
+                    if (flags & TypeFlags.InverseOffset) {
+                        return isRelatedTo((<InverseOffsetType>source).indexType, (<InverseOffsetType>target).indexType, /*reportErrors*/ false);
+                    }
                     let result = Ternary.False;
                     if (flags & TypeFlags.IndexedAccess) {
                         if (result = isRelatedTo((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType, /*reportErrors*/ false)) {
@@ -15642,6 +16214,39 @@ namespace ts {
                         }
                     }
                 }
+                else if (target.flags & TypeFlags.InverseOffset) {
+                    // A ^S is related to a ^T if S is related to T
+                    if (source.flags & TypeFlags.InverseOffset) {
+                        if (result = isRelatedTo((<InverseOffsetType>source).indexType, (<InverseOffsetType>target).indexType, /*reportErrors*/ false)) {
+                            return result;
+                        }
+                    }
+                    // TODO(rbuckton): Are they any other possible assignability relations?
+                }
+                else if (target.flags & TypeFlags.Range) {
+                    // A type S is related to a type T[X:Y] if S is related to C, where C is the base
+                    // constraint of T[X:Y] for writing.
+                    if (relation !== identityRelation) {
+                        const objectType = (<RangeType>target).objectType;
+                        const startType = (<RangeType>target).startType;
+                        const endType = (<RangeType>target).endType;
+                        const baseObjectType = getBaseConstraintOfType(objectType) ?? objectType;
+                        const baseStartType = getBaseConstraintOfType(startType) ?? startType;
+                        const baseEndType = getBaseConstraintOfType(endType) ?? endType;
+                        if (!isGenericObjectType(baseObjectType) && !isGenericIndexType(baseStartType) && !isGenericIndexType(baseEndType)) {
+                            const accessFlags = AccessFlags.Writing | (baseObjectType !== objectType ? AccessFlags.NoIndexSignatures : 0);
+                            const constraint = getRangeTypeOrUndefined(
+                                baseObjectType,
+                                baseStartType,
+                                baseEndType,
+                                /*rangeNode*/ undefined,
+                                accessFlags);
+                            if (constraint && (result = isRelatedTo(source, constraint, reportErrors))) {
+                                return result;
+                            }
+                        }
+                    }
+                }
                 else if (isGenericMappedType(target)) {
                     // A source type T is related to a target type { [P in X]: T[P] }
                     const template = getTemplateTypeFromMappedType(target);
@@ -15686,6 +16291,18 @@ namespace ts {
                             return result;
                         }
                     }
+                    if (source.flags & TypeFlags.Range && target.flags & TypeFlags.Range) {
+                        // A type S[XS:YS] is related to a type T[XT:YT] if S is related to T, XS is related to XT, and YX is related to YT.
+                        if (result = isRelatedTo((<RangeType>source).objectType, (<RangeType>target).objectType, reportErrors)) {
+                            if (result &= isRelatedTo((<RangeType>source).startType, (<RangeType>target).startType, reportErrors)) {
+                                result &= isRelatedTo((<RangeType>source).endType, (<RangeType>target).endType, reportErrors);
+                            }
+                        }
+                        if (result) {
+                            resetErrorInfo(saveErrorInfo);
+                            return result;
+                        }
+                    }
                     else {
                         const constraint = getConstraintOfType(<TypeVariable>source);
                         if (!constraint || (source.flags & TypeFlags.TypeParameter && constraint.flags & TypeFlags.Any)) {
@@ -15709,6 +16326,12 @@ namespace ts {
                 }
                 else if (source.flags & TypeFlags.Index) {
                     if (result = isRelatedTo(keyofConstraintType, target, reportErrors)) {
+                        resetErrorInfo(saveErrorInfo);
+                        return result;
+                    }
+                }
+                else if (source.flags & TypeFlags.InverseOffset) {
+                    if (result = isRelatedTo(numberType, target, reportErrors)) {
                         resetErrorInfo(saveErrorInfo);
                         return result;
                     }
@@ -17036,6 +17659,14 @@ namespace ts {
             return type.flags & TypeFlags.Boolean ? true :
                 type.flags & TypeFlags.Union ? type.flags & TypeFlags.EnumLiteral ? true : every((<UnionType>type).types, isUnitType) :
                 isUnitType(type);
+        }
+
+        function isNumericLiteralType(type: Type): type is LiteralType & { value: number } {
+            return !!(type.flags & TypeFlags.NumberLiteral);
+        }
+
+        function isStringLiteralType(type: Type): type is LiteralType & { value: string } {
+            return !!(type.flags & TypeFlags.StringLiteral);
         }
 
         function getBaseTypeOfLiteralType(type: Type): Type {
@@ -19069,6 +19700,10 @@ namespace ts {
 
         function countTypes(type: Type) {
             return type.flags & TypeFlags.Union ? (type as UnionType).types.length : 1;
+        }
+
+        function getConstituents(type: Type) {
+            return type.flags & TypeFlags.Union ? (type as UnionType).types : [type];
         }
 
         // Apply a mapping function to a type and return the resulting type. If the source type
@@ -22285,7 +22920,7 @@ namespace ts {
             // Note that this accepts the values 'Infinity', '-Infinity', and 'NaN', and that this is intentional.
             // This is desired behavior, because when indexing with them as numeric entities, you are indexing
             // with the strings '"Infinity"', '"-Infinity"', and '"NaN"' respectively.
-            return (+name).toString() === name;
+            return canonicalNumericIndex(name) !== undefined;
         }
 
         function checkComputedPropertyName(node: ComputedPropertyName): Type {
@@ -29162,6 +29797,43 @@ namespace ts {
             checkIndexedAccessIndexType(getTypeFromIndexedAccessTypeNode(node), node);
         }
 
+        function checkOffsetIndexType(offsetType: Type, offsetNode: InverseOffsetTypeNode) {
+            if (!(offsetType.flags & TypeFlags.InverseOffset)) {
+                return offsetType;
+            }
+            if (!checkTypeAssignableTo((<InverseOffsetType>offsetType).indexType, offsetConstraintType, offsetNode.indexType, Diagnostics.Type_0_does_not_satisfy_the_constraint_1)) {
+                return errorType;
+            }
+            let hasErrors = false;
+            forEachType((<InverseOffsetType>offsetType).indexType, t => {
+                if (isLiteralType(t) && getNumericIndexFromIndexType(t) === undefined) {
+                    hasErrors = true;
+                    if (offsetNode) {
+                        error(offsetNode.indexType, Diagnostics.Type_0_cannot_be_used_as_an_index_type_in_an_offset_or_range_type, typeToString(t));
+                    }
+                    else {
+                        return true;
+                    }
+                }
+            });
+            if (hasErrors) {
+                return errorType;
+            }
+            return offsetType;
+        }
+
+        function checkOffsetType(node: InverseOffsetTypeNode) {
+            checkSourceElement(node.indexType);
+            checkOffsetIndexType(getTypeFromInverseOffsetTypeNode(node), node);
+        }
+
+        function checkRangeType(node: RangeTypeNode) {
+            checkSourceElement(node.objectType);
+            checkSourceElement(node.startType);
+            checkSourceElement(node.endType);
+            getTypeFromRangeTypeNode(node);
+        }
+
         function checkMappedType(node: MappedTypeNode) {
             checkSourceElement(node.typeParameter);
             checkSourceElement(node.type);
@@ -33671,6 +34343,10 @@ namespace ts {
                     return checkSourceElement((node as JSDocTypeExpression).type);
                 case SyntaxKind.IndexedAccessType:
                     return checkIndexedAccessType(<IndexedAccessTypeNode>node);
+                case SyntaxKind.InverseOffsetType:
+                    return checkOffsetType(<InverseOffsetTypeNode>node);
+                case SyntaxKind.RangeType:
+                    return checkRangeType(<RangeTypeNode>node);
                 case SyntaxKind.MappedType:
                     return checkMappedType(<MappedTypeNode>node);
                 case SyntaxKind.FunctionDeclaration:

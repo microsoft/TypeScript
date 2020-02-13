@@ -190,6 +190,8 @@ namespace ts {
                     visitNode(cbNode, (<ConditionalTypeNode>node).falseType);
             case SyntaxKind.InferType:
                 return visitNode(cbNode, (<InferTypeNode>node).typeParameter);
+            case SyntaxKind.InverseOffsetType:
+                return visitNode(cbNode, (<InverseOffsetTypeNode>node).indexType);
             case SyntaxKind.ImportType:
                 return visitNode(cbNode, (<ImportTypeNode>node).argument) ||
                     visitNode(cbNode, (<ImportTypeNode>node).qualifier) ||
@@ -205,6 +207,10 @@ namespace ts {
                     visitNode(cbNode, (<MappedTypeNode>node).typeParameter) ||
                     visitNode(cbNode, (<MappedTypeNode>node).questionToken) ||
                     visitNode(cbNode, (<MappedTypeNode>node).type);
+            case SyntaxKind.RangeType:
+                return visitNode(cbNode, (<RangeTypeNode>node).objectType) ||
+                    visitNode(cbNode, (<RangeTypeNode>node).startType) ||
+                    visitNode(cbNode, (<RangeTypeNode>node).endType);
             case SyntaxKind.LiteralType:
                 return visitNode(cbNode, (<LiteralTypeNode>node).literal);
             case SyntaxKind.ObjectBindingPattern:
@@ -3165,6 +3171,7 @@ namespace ts {
                 case SyntaxKind.InferKeyword:
                 case SyntaxKind.ImportKeyword:
                 case SyntaxKind.AssertsKeyword:
+                case SyntaxKind.CaretToken:
                     return true;
                 case SyntaxKind.FunctionKeyword:
                     return !inStartOfParameter;
@@ -3200,10 +3207,19 @@ namespace ts {
                         break;
                     case SyntaxKind.OpenBracketToken:
                         parseExpected(SyntaxKind.OpenBracketToken);
-                        if (isStartOfType()) {
+                        const indexType = isStartOfType() ? parseType() : undefined;
+                        if (parseOptionalToken(SyntaxKind.ColonToken)) {
+                            const node = createNode(SyntaxKind.RangeType, type.pos) as RangeTypeNode;
+                            node.objectType = type;
+                            node.startType = indexType;
+                            node.endType = isStartOfType() ? parseType() : undefined;
+                            parseExpected(SyntaxKind.CloseBracketToken);
+                            type = finishNode(node);
+                        }
+                        else if (indexType) {
                             const node = createNode(SyntaxKind.IndexedAccessType, type.pos) as IndexedAccessTypeNode;
                             node.objectType = type;
-                            node.indexType = parseType();
+                            node.indexType = indexType;
                             parseExpected(SyntaxKind.CloseBracketToken);
                             type = finishNode(node);
                         }
@@ -3245,6 +3261,13 @@ namespace ts {
             return finishNode(node);
         }
 
+        function parseOffsetType(): InverseOffsetTypeNode {
+            const node = <InverseOffsetTypeNode>createNode(SyntaxKind.InverseOffsetType);
+            parseExpected(SyntaxKind.CaretToken);
+            node.indexType = parseType();
+            return finishNode(node);
+        }
+
         function parseTypeOperatorOrHigher(): TypeNode {
             const operator = token();
             switch (operator) {
@@ -3254,6 +3277,8 @@ namespace ts {
                     return parseTypeOperator(operator);
                 case SyntaxKind.InferKeyword:
                     return parseInferType();
+                case SyntaxKind.CaretToken:
+                    return parseOffsetType();
             }
             return parsePostfixTypeOrHigher();
         }
