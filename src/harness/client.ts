@@ -392,6 +392,10 @@ namespace ts.server {
             });
         }
 
+        getProgramDiagnostics(): Diagnostic[] {
+            return this.getCompilerOptionsDiagnostics();
+        }
+
         getCompilerOptionsDiagnostics(): Diagnostic[] {
             return notImplemented();
         }

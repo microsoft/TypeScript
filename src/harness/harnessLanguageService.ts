@@ -445,6 +445,9 @@ namespace Harness.LanguageService {
         getCompilerOptionsDiagnostics(): ts.Diagnostic[] {
             return unwrapJSONCallResult(this.shim.getCompilerOptionsDiagnostics());
         }
+        getProgramDiagnostics(): ts.Diagnostic[] {
+            return this.getCompilerOptionsDiagnostics();
+        }
         getSyntacticClassifications(fileName: string, span: ts.TextSpan): ts.ClassifiedSpan[] {
             return unwrapJSONCallResult(this.shim.getSyntacticClassifications(fileName, span.start, span.length));
         }
@@ -520,7 +523,6 @@ namespace Harness.LanguageService {
         getNavigationTree(fileName: string): ts.NavigationTree {
             return unwrapJSONCallResult(this.shim.getNavigationTree(fileName));
         }
-
         getOutliningSpans(fileName: string): ts.OutliningSpan[] {
             return unwrapJSONCallResult(this.shim.getOutliningSpans(fileName));
         }
