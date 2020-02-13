@@ -32140,7 +32140,7 @@ namespace ts {
             if (catchClause) {
                 // Grammar checking
                 if (catchClause.variableDeclaration) {
-                    if (catchClause.variableDeclaration.type) {
+                    if (catchClause.variableDeclaration.type && catchClause.variableDeclaration.type.kind !== SyntaxKind.UnknownKeyword) {
                         grammarErrorOnFirstToken(catchClause.variableDeclaration.type, Diagnostics.Catch_clause_variable_cannot_have_a_type_annotation);
                     }
                     else if (catchClause.variableDeclaration.initializer) {

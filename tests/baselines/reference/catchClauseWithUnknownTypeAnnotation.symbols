@@ -1,0 +1,6 @@
+=== tests/cases/compiler/catchClauseWithUnknownTypeAnnotation.ts ===
+try {
+} catch (e: unknown) {
+>e : Symbol(e, Decl(catchClauseWithUnknownTypeAnnotation.ts, 1, 9))
+}
+
