@@ -574,6 +574,15 @@ namespace Harness.LanguageService {
         getEditsForFileRename(): readonly ts.FileTextChanges[] {
             throw new Error("Not supported on the shim.");
         }
+        prepareCallHierarchy(fileName: string, position: number) {
+            return unwrapJSONCallResult(this.shim.prepareCallHierarchy(fileName, position));
+        }
+        provideCallHierarchyIncomingCalls(fileName: string, position: number) {
+            return unwrapJSONCallResult(this.shim.provideCallHierarchyIncomingCalls(fileName, position));
+        }
+        provideCallHierarchyOutgoingCalls(fileName: string, position: number) {
+            return unwrapJSONCallResult(this.shim.provideCallHierarchyOutgoingCalls(fileName, position));
+        }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
         }
@@ -597,7 +606,7 @@ namespace Harness.LanguageService {
         private factory: ts.TypeScriptServicesFactory;
         constructor(preprocessToResolve: boolean, cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
             this.host = new ShimLanguageServiceHost(preprocessToResolve, cancellationToken, options);
-            this.factory = new TypeScript.Services.TypeScriptServicesFactory();
+            this.factory = new ts.TypeScriptServicesFactory();
         }
         getHost() { return this.host; }
         getLanguageService(): ts.LanguageService { return new LanguageServiceShimProxy(this.factory.createLanguageServiceShim(this.host)); }

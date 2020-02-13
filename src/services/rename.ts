@@ -1,11 +1,14 @@
 /* @internal */
 namespace ts.Rename {
     export function getRenameInfo(program: Program, sourceFile: SourceFile, position: number, options?: RenameInfoOptions): RenameInfo {
-        const node = getTouchingPropertyName(sourceFile, position);
-        const renameInfo = node && nodeIsEligibleForRename(node)
-            ? getRenameInfoForNode(node, program.getTypeChecker(), sourceFile, declaration => program.isSourceFileDefaultLibrary(declaration.getSourceFile()), options)
-            : undefined;
-        return renameInfo || getRenameInfoError(Diagnostics.You_cannot_rename_this_element);
+        const node = getAdjustedRenameLocation(getTouchingPropertyName(sourceFile, position));
+        if (nodeIsEligibleForRename(node)) {
+            const renameInfo = getRenameInfoForNode(node, program.getTypeChecker(), sourceFile, declaration => program.isSourceFileDefaultLibrary(declaration.getSourceFile()), options);
+            if (renameInfo) {
+                return renameInfo;
+            }
+        }
+        return getRenameInfoError(Diagnostics.You_cannot_rename_this_element);
     }
 
     function getRenameInfoForNode(node: Node, typeChecker: TypeChecker, sourceFile: SourceFile, isDefinedInLibraryFile: (declaration: Node) => boolean, options?: RenameInfoOptions): RenameInfo | undefined {
@@ -92,6 +95,7 @@ namespace ts.Rename {
     function nodeIsEligibleForRename(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.Identifier:
+            case SyntaxKind.PrivateIdentifier:
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.ThisKeyword:

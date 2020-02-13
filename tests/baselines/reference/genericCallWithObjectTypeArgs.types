@@ -43,8 +43,8 @@ var d1 = new X<D>();
 >X : typeof X
 
 var r = foo(c1, d1); // error
->r : any
->foo(c1, d1) : any
+>r : C
+>foo(c1, d1) : C
 >foo : <T>(t: X<T>, t2: X<T>) => T
 >c1 : X<C>
 >d1 : X<D>

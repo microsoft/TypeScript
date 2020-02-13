@@ -1,0 +1,20 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesUnique-1.ts ===
+class A {
+>A : A
+
+    #foo: number;
+>#foo : number
+}
+
+class B {
+>B : B
+
+    #foo: number;
+>#foo : number
+}
+
+const b: A = new B();     // Error: Property #foo is missing
+>b : A
+>new B() : B
+>B : typeof B
+

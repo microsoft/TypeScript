@@ -3,11 +3,15 @@ tests/cases/conformance/jsx/file.tsx(11,2): error TS2769: No overload matches th
     Type '{}' is not assignable to type 'string'.
   Overload 2 of 2, '(n: number): { y: string; }', gave the following error.
     Type '{}' is not assignable to type 'number'.
+tests/cases/conformance/jsx/file.tsx(18,1): error TS2605: JSX element type '{ x: number; } & { y: string; }' is not a constructor function for JSX elements.
+  Property 'something' is missing in type '{ x: number; } & { y: string; }' but required in type 'Element'.
 tests/cases/conformance/jsx/file.tsx(18,2): error TS2769: No overload matches this call.
   Overload 1 of 2, '(n: string): { x: number; }', gave the following error.
     Type '{}' is not assignable to type 'string'.
   Overload 2 of 2, '(n: number): { y: string; }', gave the following error.
     Type '{}' is not assignable to type 'number'.
+tests/cases/conformance/jsx/file.tsx(25,1): error TS2605: JSX element type '{ x: number; } & { x: number; y: string; }' is not a constructor function for JSX elements.
+  Property 'something' is missing in type '{ x: number; } & { x: number; y: string; }' but required in type 'Element'.
 tests/cases/conformance/jsx/file.tsx(25,2): error TS2769: No overload matches this call.
   Overload 1 of 2, '(n: string): { x: number; }', gave the following error.
     Type '{ x: number; }' is not assignable to type 'string'.
@@ -15,7 +19,7 @@ tests/cases/conformance/jsx/file.tsx(25,2): error TS2769: No overload matches th
     Type '{ x: number; }' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (5 errors) ====
     declare module JSX {
     	interface Element { something; }
     	interface IntrinsicElements { }
@@ -40,6 +44,10 @@ tests/cases/conformance/jsx/file.tsx(25,2): error TS2769: No overload matches th
     }
     var Obj2: Obj2;
     <Obj2 />; // Error, return type is not an object type
+    ~~~~~~~~
+!!! error TS2605: JSX element type '{ x: number; } & { y: string; }' is not a constructor function for JSX elements.
+!!! error TS2605:   Property 'something' is missing in type '{ x: number; } & { y: string; }' but required in type 'Element'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:2:22: 'something' is declared here.
      ~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(n: string): { x: number; }', gave the following error.
@@ -53,6 +61,10 @@ tests/cases/conformance/jsx/file.tsx(25,2): error TS2769: No overload matches th
     }
     var Obj3: Obj3;
     <Obj3 x={42} />; // OK
+    ~~~~~~~~~~~~~~~
+!!! error TS2605: JSX element type '{ x: number; } & { x: number; y: string; }' is not a constructor function for JSX elements.
+!!! error TS2605:   Property 'something' is missing in type '{ x: number; } & { x: number; y: string; }' but required in type 'Element'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:2:22: 'something' is declared here.
      ~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(n: string): { x: number; }', gave the following error.

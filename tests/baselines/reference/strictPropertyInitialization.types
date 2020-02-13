@@ -16,6 +16,19 @@ class C1 {
 
     d?: number;
 >d : number | undefined
+
+    #f: number; //Error
+>#f : number
+
+    #g: number | undefined;
+>#g : number | undefined
+
+    #h: number | null; //Error
+>#h : number | null
+>null : null
+
+    #i?: number;
+>#i : number | undefined
 }
 
 // No strict initialization checks in ambient contexts
@@ -35,6 +48,19 @@ declare class C2 {
 
     d?: number;
 >d : number | undefined
+    
+    #f: number;
+>#f : number
+
+    #g: number | undefined;
+>#g : number | undefined
+
+    #h: number | null;
+>#h : number | null
+>null : null
+
+    #i?: number;
+>#i : number | undefined
 }
 
 // No strict initialization checks for static members
@@ -72,6 +98,18 @@ class C4 {
     c: string = "abc";
 >c : string
 >"abc" : "abc"
+
+    #d = 0
+>#d : number
+>0 : 0
+
+    #e: number = 0
+>#e : number
+>0 : 0
+
+    #f: string= "abc"
+>#f : string
+>"abc" : "abc"
 }
 
 // Assignment in constructor satisfies strict initialization check
@@ -82,12 +120,21 @@ class C5 {
     a: number;
 >a : number
 
+    #b: number;
+>#b : number
+
     constructor() {
         this.a = 0;
 >this.a = 0 : 0
 >this.a : number
 >this : this
 >a : number
+>0 : 0
+
+        this.#b = 0;
+>this.#b = 0 : 0
+>this.#b : number
+>this : this
 >0 : 0
     }
 }
@@ -99,6 +146,9 @@ class C6 {
 
     a: number;  // Error
 >a : number
+
+    #b: number
+>#b : number
 
     constructor(cond: boolean) {
 >cond : boolean
@@ -114,6 +164,12 @@ class C6 {
 >this : this
 >a : number
 >0 : 0
+
+        this.#b = 0;
+>this.#b = 0 : 0
+>this.#b : number
+>this : this
+>0 : 0
     }
 }
 
@@ -122,6 +178,9 @@ class C7 {
 
     a: number;
 >a : number
+
+    #b: number;
+>#b : number
 
     constructor(cond: boolean) {
 >cond : boolean
@@ -136,6 +195,12 @@ class C7 {
 >a : number
 >1 : 1
 
+            this.#b = 1;
+>this.#b = 1 : 1
+>this.#b : number
+>this : this
+>1 : 1
+
             return;
         }
         this.a = 0;
@@ -144,6 +209,12 @@ class C7 {
 >this : this
 >a : number
 >0 : 0
+
+        this.#b = 1;
+>this.#b = 1 : 1
+>this.#b : number
+>this : this
+>1 : 1
     }
 }
 
@@ -196,6 +267,9 @@ class C10 {
     c?: number;
 >c : number | undefined
 
+    #d: number;
+>#d : number
+
     constructor() {
         let x = this.a;  // Error
 >x : number
@@ -212,11 +286,25 @@ class C10 {
 >this : this
 >b : number
 
+        this.b = this.#d //Error
+>this.b = this.#d : number
+>this.b : number
+>this : this
+>b : number
+>this.#d : number
+>this : this
+
         this.b = x;
 >this.b = x : number
 >this.b : number
 >this : this
 >b : number
+>x : number
+
+        this.#d = x;
+>this.#d = x : number
+>this.#d : number
+>this : this
 >x : number
 
         let y = this.c;
@@ -238,12 +326,22 @@ class C11 {
     a: number;
 >a : number
 
+    #b: number;
+>#b : number
+
     constructor() {
         this.a = someValue();
 >this.a = someValue() : any
 >this.a : number
 >this : this
 >a : number
+>someValue() : any
+>someValue : () => any
+
+        this.#b = someValue();
+>this.#b = someValue() : any
+>this.#b : number
+>this : this
 >someValue() : any
 >someValue : () => any
     }
