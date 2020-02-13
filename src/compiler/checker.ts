@@ -17226,7 +17226,7 @@ namespace ts {
 
         /**
          * Check if a Type was written as a tuple type literal.
-         * Prefer using isTupleLikeType() unless the use of `elementTypes` is required.
+         * Prefer using isTupleLikeType() unless the use of `elementTypes`/`getTypeArguments` is required.
          */
         function isTupleType(type: Type): type is TupleTypeReference {
             return !!(getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).target.objectFlags & ObjectFlags.Tuple);
@@ -22290,58 +22290,69 @@ namespace ts {
         function checkArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined, forceTuple: boolean | undefined): Type {
             const elements = node.elements;
             const elementCount = elements.length;
-            let hasNonEndingSpreadElement = false;
             const elementTypes: Type[] = [];
-            const inDestructuringPattern = isAssignmentTarget(node);
+            let hasEndingSpreadElement = false;
+            let hasNonEndingSpreadElement = false;
             const contextualType = getApparentTypeOfContextualType(node);
+            const inDestructuringPattern = isAssignmentTarget(node);
             const inConstContext = isConstContext(node);
-            for (let index = 0; index < elementCount; index++) {
-                const e = elements[index];
-                if (inDestructuringPattern && e.kind === SyntaxKind.SpreadElement) {
-                    // Given the following situation:
-                    //    var c: {};
-                    //    [...c] = ["", 0];
-                    //
-                    // c is represented in the tree as a spread element in an array literal.
-                    // But c really functions as a rest element, and its purpose is to provide
-                    // a contextual type for the right hand side of the assignment. Therefore,
-                    // instead of calling checkExpression on "...c", which will give an error
-                    // if c is not iterable/array-like, we need to act as if we are trying to
-                    // get the contextual element type from it. So we do something similar to
-                    // getContextualTypeForElementExpression, which will crucially not error
-                    // if there is no index type / iterated type.
-                    const restArrayType = checkExpression((<SpreadElement>e).expression, checkMode, forceTuple);
-                    const restElementType = getIndexTypeOfType(restArrayType, IndexKind.Number) ||
-                        getIteratedTypeOrElementType(IterationUse.Destructuring, restArrayType, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false);
-                    if (restElementType) {
-                        elementTypes.push(restElementType);
+            for (let i = 0; i < elementCount; i++) {
+                const e = elements[i];
+                const spread = e.kind === SyntaxKind.SpreadElement && (<SpreadElement>e).expression;
+                const spreadType = spread && checkExpression(spread, checkMode, forceTuple);
+                if (spreadType && isTupleType(spreadType)) {
+                    elementTypes.push(...getTypeArguments(spreadType));
+                    if (spreadType.target.hasRestElement) {
+                        if (i === elementCount - 1) hasEndingSpreadElement = true;
+                        else hasNonEndingSpreadElement = true;
                     }
                 }
                 else {
-                    const elementContextualType = getContextualTypeForElementExpression(contextualType, index);
-                    const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType, forceTuple);
-                    elementTypes.push(type);
-                }
-                if (index < elementCount - 1 && e.kind === SyntaxKind.SpreadElement) {
-                    hasNonEndingSpreadElement = true;
+                    if (inDestructuringPattern && spreadType) {
+                        // Given the following situation:
+                        //    var c: {};
+                        //    [...c] = ["", 0];
+                        //
+                        // c is represented in the tree as a spread element in an array literal.
+                        // But c really functions as a rest element, and its purpose is to provide
+                        // a contextual type for the right hand side of the assignment. Therefore,
+                        // instead of calling checkExpression on "...c", which will give an error
+                        // if c is not iterable/array-like, we need to act as if we are trying to
+                        // get the contextual element type from it. So we do something similar to
+                        // getContextualTypeForElementExpression, which will crucially not error
+                        // if there is no index type / iterated type.
+                        const restElementType = getIndexTypeOfType(spreadType, IndexKind.Number) ||
+                            getIteratedTypeOrElementType(IterationUse.Destructuring, spreadType, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false);
+                        if (restElementType) {
+                            elementTypes.push(restElementType);
+                        }
+                    }
+                    else {
+                        const elementContextualType = getContextualTypeForElementExpression(contextualType, elementTypes.length);
+                        const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType, forceTuple);
+                        elementTypes.push(type);
+                    }
+                    if (spread) { // tuples are done above, so these are only arrays
+                        if (i === elementCount - 1) hasEndingSpreadElement = true;
+                        else hasNonEndingSpreadElement = true;
+                    }
                 }
             }
             if (!hasNonEndingSpreadElement) {
-                const hasRestElement = elementCount > 0 && elements[elementCount - 1].kind === SyntaxKind.SpreadElement;
-                const minLength = elementCount - (hasRestElement ? 1 : 0);
+                const minLength = elementTypes.length - (hasEndingSpreadElement ? 1 : 0);
                 // If array literal is actually a destructuring pattern, mark it as an implied type. We do this such
                 // that we get the same behavior for "var [x, y] = []" and "[x, y] = []".
                 let tupleResult;
                 if (inDestructuringPattern && minLength > 0) {
-                    const type = cloneTypeReference(<TypeReference>createTupleType(elementTypes, minLength, hasRestElement));
+                    const type = cloneTypeReference(<TypeReference>createTupleType(elementTypes, minLength, hasEndingSpreadElement));
                     type.pattern = node;
                     return type;
                 }
-                else if (tupleResult = getArrayLiteralTupleTypeIfApplicable(elementTypes, contextualType, hasRestElement, elementCount, inConstContext)) {
+                else if (tupleResult = getArrayLiteralTupleTypeIfApplicable(elementTypes, contextualType, hasEndingSpreadElement, elementTypes.length, inConstContext)) {
                     return createArrayLiteralType(tupleResult);
                 }
                 else if (forceTuple) {
-                    return createArrayLiteralType(createTupleType(elementTypes, minLength, hasRestElement));
+                    return createArrayLiteralType(createTupleType(elementTypes, minLength, hasEndingSpreadElement));
                 }
             }
             return createArrayLiteralType(createArrayType(elementTypes.length ?
