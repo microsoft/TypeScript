@@ -9556,14 +9556,16 @@ namespace ts {
             const templateModifiers = getMappedTypeModifiers(type);
             const include = keyofStringsOnly ? TypeFlags.StringLiteral : TypeFlags.StringOrNumberLiteralOrUnique;
             if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
-                // We have a { [P in keyof T]: X }
-                for (const prop of getPropertiesOfType(modifiersType)) {
+                // We have a { [P in keyof T]: X }. We specifically avoid calling getReducedType on the modifierType, since we
+                // want to be consistent with keyof (X & Y) being equivalent to keyof X | keyof Y.
+                const props = modifiersType.flags & TypeFlags.UnionOrIntersection ? getPropertiesOfUnionOrIntersectionType(<UnionType>modifiersType) : getPropertiesOfObjectType(modifiersType);
+                for (const prop of props) {
                     addMemberForKeyType(getLiteralTypeFromProperty(prop, include));
                 }
-                if (modifiersType.flags & TypeFlags.Any || getIndexInfoOfType(modifiersType, IndexKind.String)) {
+                if (modifiersType.flags & TypeFlags.Any || getIndexInfoOfStructuredType(modifiersType, IndexKind.String)) {
                     addMemberForKeyType(stringType);
                 }
-                if (!keyofStringsOnly && getIndexInfoOfType(modifiersType, IndexKind.Number)) {
+                if (!keyofStringsOnly && getIndexInfoOfStructuredType(modifiersType, IndexKind.Number)) {
                     addMemberForKeyType(numberType);
                 }
             }
@@ -12294,7 +12296,6 @@ namespace ts {
         }
 
         function getIndexType(type: Type, stringsOnly = keyofStringsOnly, noIndexSignatures?: boolean): Type {
-            type = getReducedType(type);
             return type.flags & TypeFlags.Union ? getIntersectionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, stringsOnly) :
