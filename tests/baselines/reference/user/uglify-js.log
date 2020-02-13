@@ -12,6 +12,11 @@ node_modules/uglify-js/lib/ast.js(988,29): error TS2339: Property 'parent' does 
 node_modules/uglify-js/lib/compress.js(188,42): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(536,41): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(876,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(881,12): error TS2339: Property 'defun_ids' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(882,12): error TS2339: Property 'defun_visited' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(884,12): error TS2339: Property 'in_loop' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(885,12): error TS2339: Property 'loop_ids' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(890,12): error TS2339: Property 'safe_ids' does not exist on type 'TreeWalker'.
 node_modules/uglify-js/lib/compress.js(1141,38): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
 node_modules/uglify-js/lib/compress.js(1156,51): error TS2349: This expression is not callable.
   Not all constituents of type 'true | ((node: any, tw: any) => any)' are callable.
@@ -46,6 +51,7 @@ node_modules/uglify-js/lib/compress.js(3355,33): error TS2532: Object is possibl
 node_modules/uglify-js/lib/compress.js(3762,38): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(3788,29): error TS2322: Type '"f"' is not assignable to type 'boolean'.
 node_modules/uglify-js/lib/compress.js(3921,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(3922,74): error TS2339: Property 'has_directive' does not exist on type 'TreeWalker'.
 node_modules/uglify-js/lib/compress.js(3974,29): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(3992,29): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
 node_modules/uglify-js/lib/compress.js(4107,63): error TS2554: Expected 0 arguments, but got 1.
@@ -57,9 +63,13 @@ node_modules/uglify-js/lib/compress.js(4449,32): error TS2554: Expected 0 argume
 node_modules/uglify-js/lib/compress.js(4688,17): error TS2447: The '|=' operator is not allowed for boolean types. Consider using '||' instead.
 node_modules/uglify-js/lib/compress.js(4756,45): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(4867,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(4869,55): error TS2339: Property 'loopcontrol_target' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(4873,56): error TS2339: Property 'push' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(4874,12): error TS2339: Property 'push' does not exist on type 'TreeWalker'.
 node_modules/uglify-js/lib/compress.js(4959,21): error TS2403: Subsequent variable declarations must have the same type.  Variable 'body' must be of type 'any[]', but here has type 'any'.
 node_modules/uglify-js/lib/compress.js(4974,21): error TS2403: Subsequent variable declarations must have the same type.  Variable 'body' must be of type 'any[]', but here has type 'any'.
 node_modules/uglify-js/lib/compress.js(5085,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(5087,33): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
 node_modules/uglify-js/lib/compress.js(5235,17): error TS2403: Subsequent variable declarations must have the same type.  Variable 'body' must be of type 'any[]', but here has type 'any'.
 node_modules/uglify-js/lib/compress.js(5328,37): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(5584,57): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[string | RegExp, (string | undefined)?]'.
@@ -74,6 +84,7 @@ node_modules/uglify-js/lib/compress.js(6945,47): error TS2554: Expected 0 argume
 node_modules/uglify-js/lib/compress.js(7026,39): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(7098,39): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(7104,41): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(7107,41): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
 node_modules/uglify-js/lib/compress.js(7665,43): error TS2454: Variable 'property' is used before being assigned.
 node_modules/uglify-js/lib/compress.js(7680,25): error TS2403: Subsequent variable declarations must have the same type.  Variable 'value' must be of type 'number', but here has type 'any'.
 node_modules/uglify-js/lib/compress.js(7683,46): error TS2339: Property 'has_side_effects' does not exist on type 'number'.
@@ -82,6 +93,8 @@ node_modules/uglify-js/lib/compress.js(7722,34): error TS2554: Expected 0 argume
 node_modules/uglify-js/lib/minify.js(186,75): error TS2339: Property 'compress' does not exist on type 'Compressor'.
 node_modules/uglify-js/lib/mozilla-ast.js(566,33): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/output.js(459,37): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/output.js(460,33): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/output.js(475,16): error TS2339: Property 'push' does not exist on type 'TreeWalker'.
 node_modules/uglify-js/lib/output.js(749,38): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/output.js(1151,44): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/output.js(1433,58): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -120,8 +133,10 @@ node_modules/uglify-js/lib/scope.js(89,21): error TS2339: Property 'defun' does 
 node_modules/uglify-js/lib/scope.js(89,35): error TS2339: Property 'defun' does not exist on type 'SymbolDef'.
 node_modules/uglify-js/lib/scope.js(103,29): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/scope.js(158,29): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/scope.js(165,38): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
 node_modules/uglify-js/lib/scope.js(193,47): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/scope.js(418,29): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/scope.js(431,49): error TS2339: Property 'has_directive' does not exist on type 'TreeWalker'.
 node_modules/uglify-js/lib/scope.js(486,30): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/scope.js(511,30): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/sourcemap.js(55,25): error TS2304: Cannot find name 'MOZ_SourceMap'.
