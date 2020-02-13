@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-//// const foo = "/*x*/w/*y*/ith back`tick"
+////import { x } from /*x*/"foo"/*y*/;
 
 goTo.select("x", "y");
 verify.not.refactorAvailable(ts.Diagnostics.Convert_to_template_string.message);
