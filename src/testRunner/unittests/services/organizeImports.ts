@@ -186,6 +186,8 @@ namespace ts {
                     `import type { x } from "lib";`,
                     `import type * as y from "lib";`,
                     `import type z from "lib";`);
+                // Default import could be rewritten as a named import to combine with `x`,
+                // but seems of debatable merit.
                 const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = actualCoalescedImports;
                 assertListEqual(actualCoalescedImports, expectedCoalescedImports);
