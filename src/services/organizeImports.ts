@@ -237,7 +237,9 @@ namespace ts.OrganizeImports {
                     ? createNamedImports(sortedImportSpecifiers)
                     : updateNamedImports(namedImports[0].importClause!.namedBindings as NamedImports, sortedImportSpecifiers); // TODO: GH#18217
 
-            // Type-only imports are not allowed to combine
+            // Type-only imports are not allowed to mix default, namespace, and named imports in any combination.
+            // We could rewrite a default import as a named import (`import { default as name }`), but we currently
+            // choose not to as a stylistic preference.
             if (isTypeOnly && newDefaultImport && newNamedImports) {
                 coalescedImports.push(
                     updateImportDeclarationAndClause(importDecl, newDefaultImport, /*namedBindings*/ undefined));
