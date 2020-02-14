@@ -189,13 +189,17 @@ namespace ts {
                 assertNode)
             : noop;
 
-        export const assertNotNode = shouldAssert(AssertionLevel.Normal)
-            ? (node: Node | undefined, test: ((node: Node | undefined) => boolean) | undefined, message?: string): void => assert(
-                test === undefined || !test(node),
-                message || "Unexpected node.",
-                () => `Node ${formatSyntaxKind(node!.kind)} should not have passed test '${getFunctionName(test!)}'.`,
-                assertNode)
-            : noop;
+        export function assertNotNode<T extends Node, U extends T>(node: T | undefined, test: (node: Node) => node is U, message?: string): asserts node is Exclude<T, U>;
+        export function assertNotNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string): void;
+        export function assertNotNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string): void {
+            if (shouldAssert(AssertionLevel.Normal)) {
+                assert(
+                    test === undefined || node === undefined || !test(node),
+                    message || "Unexpected node.",
+                    () => `Node ${formatSyntaxKind(node!.kind)} should not have passed test '${getFunctionName(test!)}'.`,
+                    assertNotNode);
+            }
+        }
 
         export const assertOptionalNode = shouldAssert(AssertionLevel.Normal)
             ? (node: Node, test: (node: Node) => boolean, message?: string): void => assert(

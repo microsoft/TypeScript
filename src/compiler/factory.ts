@@ -1335,9 +1335,11 @@ namespace ts {
 
     export const enum OuterExpressionKinds {
         Parentheses = 1 << 0,
-        Assertions = 1 << 1,
-        PartiallyEmittedExpressions = 1 << 2,
+        TypeAssertions = 1 << 1,
+        NonNullAssertions = 1 << 2,
+        PartiallyEmittedExpressions = 1 << 3,
 
+        Assertions = TypeAssertions | NonNullAssertions,
         All = Parentheses | Assertions | PartiallyEmittedExpressions
     }
 
@@ -1349,8 +1351,9 @@ namespace ts {
                 return (kinds & OuterExpressionKinds.Parentheses) !== 0;
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
+                return (kinds & OuterExpressionKinds.TypeAssertions) !== 0;
             case SyntaxKind.NonNullExpression:
-                return (kinds & OuterExpressionKinds.Assertions) !== 0;
+                return (kinds & OuterExpressionKinds.NonNullAssertions) !== 0;
             case SyntaxKind.PartiallyEmittedExpression:
                 return (kinds & OuterExpressionKinds.PartiallyEmittedExpressions) !== 0;
         }
@@ -1360,34 +1363,16 @@ namespace ts {
     export function skipOuterExpressions(node: Expression, kinds?: OuterExpressionKinds): Expression;
     export function skipOuterExpressions(node: Node, kinds?: OuterExpressionKinds): Node;
     export function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.All) {
-        let previousNode: Node;
-        do {
-            previousNode = node;
-            if (kinds & OuterExpressionKinds.Parentheses) {
-                node = skipParentheses(node);
-            }
-
-            if (kinds & OuterExpressionKinds.Assertions) {
-                node = skipAssertions(node);
-            }
-
-            if (kinds & OuterExpressionKinds.PartiallyEmittedExpressions) {
-                node = skipPartiallyEmittedExpressions(node);
-            }
+        while (isOuterExpression(node, kinds)) {
+            node = node.expression;
         }
-        while (previousNode !== node);
-
         return node;
     }
 
     export function skipAssertions(node: Expression): Expression;
     export function skipAssertions(node: Node): Node;
     export function skipAssertions(node: Node): Node {
-        while (isAssertionExpression(node) || node.kind === SyntaxKind.NonNullExpression) {
-            node = (<AssertionExpression | NonNullExpression>node).expression;
-        }
-
-        return node;
+        return skipOuterExpressions(node, OuterExpressionKinds.Assertions);
     }
 
     function updateOuterExpression(outerExpression: OuterExpression, expression: Expression) {

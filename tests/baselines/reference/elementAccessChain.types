@@ -142,17 +142,35 @@ o6<number>()?.["x"];
 >"x" : "x"
 
 // GH#36031
-o2?.["b"]!.c
->o2?.["b"]!.c : string
->o2?.["b"]! : { c: string; }
+o2?.["b"]!.c;
+>o2?.["b"]!.c : string | undefined
+>o2?.["b"]! : { c: string; } | undefined
 >o2?.["b"] : { c: string; } | undefined
 >o2 : { b: { c: string; }; } | undefined
 >"b" : "b"
->c : string
+>c : string | undefined
 
-o2?.["b"]!["c"]
->o2?.["b"]!["c"] : string
->o2?.["b"]! : { c: string; }
+o2?.["b"]!["c"];
+>o2?.["b"]!["c"] : string | undefined
+>o2?.["b"]! : { c: string; } | undefined
+>o2?.["b"] : { c: string; } | undefined
+>o2 : { b: { c: string; }; } | undefined
+>"b" : "b"
+>"c" : "c"
+
+o2?.["b"]!.c!;
+>o2?.["b"]!.c! : string
+>o2?.["b"]!.c : string | undefined
+>o2?.["b"]! : { c: string; } | undefined
+>o2?.["b"] : { c: string; } | undefined
+>o2 : { b: { c: string; }; } | undefined
+>"b" : "b"
+>c : string | undefined
+
+o2?.["b"]!["c"]!;
+>o2?.["b"]!["c"]! : string
+>o2?.["b"]!["c"] : string | undefined
+>o2?.["b"]! : { c: string; } | undefined
 >o2?.["b"] : { c: string; } | undefined
 >o2 : { b: { c: string; }; } | undefined
 >"b" : "b"

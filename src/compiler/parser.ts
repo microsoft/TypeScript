@@ -4685,12 +4685,26 @@ namespace ts {
                 && lookAhead(nextTokenIsIdentifierOrKeywordOrOpenBracketOrTemplate);
         }
 
-        function hasOptionalChain(node: Node) {
-            while (true) {
-                if (node.flags & NodeFlags.OptionalChain) return true;
-                if (!isNonNullExpression(node)) return false;
-                node = node.expression;
+        function tryReparseOptionalChain(node: Expression) {
+            if (node.flags & NodeFlags.OptionalChain) {
+                return true;
             }
+            // check for an optional chain in a non-null expression
+            if (isNonNullExpression(node)) {
+                let expr = node.expression;
+                while (isNonNullExpression(expr) && !(expr.flags & NodeFlags.OptionalChain)) {
+                    expr = expr.expression;
+                }
+                if (expr.flags & NodeFlags.OptionalChain) {
+                    // this is part of an optional chain. Walk down from `node` to `expression` and set the flag.
+                    while (isNonNullExpression(node)) {
+                        node.flags |= NodeFlags.OptionalChain;
+                        node = node.expression;
+                    }
+                    return true;
+                }
+            }
+            return false;
         }
 
         function parsePropertyAccessExpressionRest(expression: LeftHandSideExpression, questionDotToken: QuestionDotToken | undefined) {
@@ -4698,7 +4712,7 @@ namespace ts {
             propertyAccess.expression = expression;
             propertyAccess.questionDotToken = questionDotToken;
             propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true);
-            if (questionDotToken || hasOptionalChain(expression)) {
+            if (questionDotToken || tryReparseOptionalChain(expression)) {
                 propertyAccess.flags |= NodeFlags.OptionalChain;
                 if (isPrivateIdentifier(propertyAccess.name)) {
                     parseErrorAtRange(propertyAccess.name, Diagnostics.An_optional_chain_cannot_contain_private_identifiers);
@@ -4724,7 +4738,7 @@ namespace ts {
             }
 
             parseExpected(SyntaxKind.CloseBracketToken);
-            if (questionDotToken || hasOptionalChain(expression)) {
+            if (questionDotToken || tryReparseOptionalChain(expression)) {
                 indexedAccess.flags |= NodeFlags.OptionalChain;
             }
             return finishNode(indexedAccess);
@@ -4811,7 +4825,7 @@ namespace ts {
                         callExpr.questionDotToken = questionDotToken;
                         callExpr.typeArguments = typeArguments;
                         callExpr.arguments = parseArgumentList();
-                        if (questionDotToken || hasOptionalChain(expression)) {
+                        if (questionDotToken || tryReparseOptionalChain(expression)) {
                             callExpr.flags |= NodeFlags.OptionalChain;
                         }
                         expression = finishNode(callExpr);
@@ -4823,7 +4837,7 @@ namespace ts {
                     callExpr.expression = expression;
                     callExpr.questionDotToken = questionDotToken;
                     callExpr.arguments = parseArgumentList();
-                    if (questionDotToken || hasOptionalChain(expression)) {
+                    if (questionDotToken || tryReparseOptionalChain(expression)) {
                         callExpr.flags |= NodeFlags.OptionalChain;
                     }
                     expression = finishNode(callExpr);

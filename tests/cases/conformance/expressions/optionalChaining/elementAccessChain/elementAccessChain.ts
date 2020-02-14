@@ -26,5 +26,7 @@ declare const o6: <T>() => undefined | ({ x: number });
 o6<number>()?.["x"];
 
 // GH#36031
-o2?.["b"]!.c
-o2?.["b"]!["c"]
+o2?.["b"]!.c;
+o2?.["b"]!["c"];
+o2?.["b"]!.c!;
+o2?.["b"]!["c"]!;

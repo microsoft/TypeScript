@@ -22,7 +22,8 @@ o6<number>()?.x;
 o1?.b ? 1 : 0;
 
 // GH#36031
-o2?.b!.c
+o2?.b!.c;
+o2?.b!.c!;
 
 //// [propertyAccessChain.js]
 "use strict";
@@ -36,4 +37,5 @@ o2 === null || o2 === void 0 ? void 0 : o2.b.c;
 // GH#34109
 (o1 === null || o1 === void 0 ? void 0 : o1.b) ? 1 : 0;
 // GH#36031
+o2 === null || o2 === void 0 ? void 0 : o2.b.c;
 o2 === null || o2 === void 0 ? void 0 : o2.b.c;
