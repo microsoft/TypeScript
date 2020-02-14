@@ -14822,7 +14822,8 @@ namespace ts {
                 }
             }
             else {
-                if (!(source.flags === target.flags && source.flags & TypeFlags.Substructure)) return false;
+                if (!(source.flags & TypeFlags.UnionOrIntersection) && !(target.flags & TypeFlags.UnionOrIntersection) &&
+                    source.flags !== target.flags && !(source.flags & TypeFlags.Substructure)) return false;
             }
             if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
                 const related = relation.get(getRelationKey(source, target, IntersectionState.None, relation));
