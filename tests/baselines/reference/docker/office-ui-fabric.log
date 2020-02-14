@@ -270,7 +270,7 @@ Standard error:
 info cli using local version of lerna
 lerna notice cli vX.X.X
 lerna info Executing command in 61 packages: "yarn run build"
-@fluentui/ability-attributes: npm WARN lifecycle The node binary used for scripts is /tmp/yarn--1581626329112-0.7489191189872038/node but npm is using /usr/local/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
+@fluentui/ability-attributes: npm WARN lifecycle The node binary used for scripts is /tmp/yarn--1581653955558-0.4109492855586112/node but npm is using /usr/local/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
 @uifabric/example-data: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/set-version: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/merge-styles: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
