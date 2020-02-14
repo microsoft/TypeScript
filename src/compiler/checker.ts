@@ -29280,7 +29280,7 @@ namespace ts {
         }
 
         function isPrivateWithinAmbient(node: Node): boolean {
-            return hasModifier(node, ModifierFlags.Private) && !!(node.flags & NodeFlags.Ambient);
+            return (hasModifier(node, ModifierFlags.Private) || isPrivateIdentifierPropertyDeclaration(node)) && !!(node.flags & NodeFlags.Ambient);
         }
 
         function getEffectiveDeclarationFlags(n: Declaration, flagsToCheck: ModifierFlags): ModifierFlags {
