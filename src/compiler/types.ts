@@ -3525,7 +3525,7 @@ namespace ts {
         /* @internal */ createPromiseType(type: Type): Type;
 
         /* @internal */ isTypeAssignableTo(source: Type, target: Type): boolean;
-        /* @internal */ createAnonymousType(symbol: Symbol, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo | undefined, numberIndexInfo: IndexInfo | undefined): Type;
+        /* @internal */ createAnonymousType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo | undefined, numberIndexInfo: IndexInfo | undefined): Type;
         /* @internal */ createSignature(
             declaration: SignatureDeclaration,
             typeParameters: TypeParameter[] | undefined,
