@@ -7688,7 +7688,7 @@ namespace ts {
             // Handle catch clause variables
             const declaration = symbol.valueDeclaration;
             if (isCatchClauseVariableDeclarationOrBindingElement(declaration)) {
-                return anyType;
+                return tryGetTypeFromEffectiveTypeNode(declaration) === unknownType ? unknownType : anyType;
             }
             // Handle export default expressions
             if (isSourceFile(declaration) && isJsonSourceFile(declaration)) {
