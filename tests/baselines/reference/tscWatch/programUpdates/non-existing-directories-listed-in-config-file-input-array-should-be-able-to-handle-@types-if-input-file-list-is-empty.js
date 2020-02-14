@@ -44,12 +44,12 @@ No cached semantic diagnostics in the builder::
 
 WatchedFiles::
 /a/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/tsconfig.json","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

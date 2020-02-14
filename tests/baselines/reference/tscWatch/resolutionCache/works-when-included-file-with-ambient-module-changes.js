@@ -58,19 +58,19 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/foo.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/foo.ts","pollingInterval":250}
 /a/b/bar.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/bar.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b/node_modules:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -115,18 +115,18 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/foo.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/foo.ts","pollingInterval":250}
 /a/b/bar.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/bar.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b/node_modules:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

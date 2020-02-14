@@ -170,33 +170,33 @@ error TS6202: Project references may not form a circular graph. Cycle detected: 
 
 WatchedFiles::
 /user/username/projects/demo/animals/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/animals/animal.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/animal.ts","pollingInterval":250}
 /user/username/projects/demo/animals/dog.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/dog.ts","pollingInterval":250}
 /user/username/projects/demo/animals/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/index.ts","pollingInterval":250}
 /user/username/projects/demo/zoo/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/zoo/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/zoo/zoo.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/zoo/zoo.ts","pollingInterval":250}
 /user/username/projects/demo/core/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/core/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/core/utilities.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/core/utilities.ts","pollingInterval":250}
 /user/username/projects/demo/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/tsconfig.json","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/demo/animals:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/animals","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/demo/zoo:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/zoo","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/demo/core:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -555,32 +555,32 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/demo/animals/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/animals/animal.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/animal.ts","pollingInterval":250}
 /user/username/projects/demo/animals/dog.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/dog.ts","pollingInterval":250}
 /user/username/projects/demo/animals/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/index.ts","pollingInterval":250}
 /user/username/projects/demo/zoo/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/zoo/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/zoo/zoo.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/zoo/zoo.ts","pollingInterval":250}
 /user/username/projects/demo/core/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/core/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/core/utilities.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/core/utilities.ts","pollingInterval":250}
 /user/username/projects/demo/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/tsconfig.json","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/demo/animals:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/animals","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/demo/zoo:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/zoo","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/demo/core:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

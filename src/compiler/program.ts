@@ -571,14 +571,14 @@ namespace ts {
             return false;
         }
 
-        // If number of files in the program do not match, it is not up-to-date
-        if (program.getRootFileNames().length !== rootFileNames.length) {
+        // If root file names don't match
+        if (!arrayIsEqualTo(program.getRootFileNames(), rootFileNames)) {
             return false;
         }
 
         let seenResolvedRefs: ResolvedProjectReference[] | undefined;
 
-        // If project references dont match
+        // If project references don't match
         if (!arrayIsEqualTo(program.getProjectReferences(), projectReferences, projectReferenceUptoDate)) {
             return false;
         }
@@ -853,7 +853,7 @@ namespace ts {
                             }
                             else if (getEmitModuleKind(parsedRef.commandLine.options) === ModuleKind.None) {
                                 for (const fileName of parsedRef.commandLine.fileNames) {
-                                    if (!fileExtensionIs(fileName, Extension.Dts)) {
+                                    if (!fileExtensionIs(fileName, Extension.Dts) && !fileExtensionIs(fileName, Extension.Json)) {
                                         processSourceFile(getOutputDeclarationFileName(fileName, parsedRef.commandLine, !host.useCaseSensitiveFileNames()), /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
                                     }
                                 }
@@ -1397,7 +1397,7 @@ namespace ts {
                 }
                 if (resolveTypeReferenceDirectiveNamesWorker) {
                     // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-                    const typesReferenceDirectives = map(newSourceFile.typeReferenceDirectives, ref => ref.fileName.toLocaleLowerCase());
+                    const typesReferenceDirectives = map(newSourceFile.typeReferenceDirectives, ref => toFileNameLowerCase(ref.fileName));
                     const resolutions = resolveTypeReferenceDirectiveNamesWorker(typesReferenceDirectives, newSourceFilePath, getResolvedProjectReferenceToRedirect(newSourceFile.originalFileName));
                     // ensure that types resolutions are still correct
                     const resolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, resolutions, oldSourceFile.resolvedTypeReferenceDirectiveNames, typeDirectiveIsEqualTo);
@@ -2190,7 +2190,7 @@ namespace ts {
         }
 
         function getLibFileFromReference(ref: FileReference) {
-            const libName = ref.fileName.toLocaleLowerCase();
+            const libName = toFileNameLowerCase(ref.fileName);
             const libFileName = libMap.get(libName);
             if (libFileName) {
                 return getSourceFile(combinePaths(defaultLibraryPath, libFileName));
@@ -2438,7 +2438,7 @@ namespace ts {
                 addFileToRefFileMap(fileName, file, refFile);
 
                 if (host.useCaseSensitiveFileNames()) {
-                    const pathLowerCase = path.toLowerCase();
+                    const pathLowerCase = toFileNameLowerCase(path);
                     // for case-sensitive file systems check if we've already seen some file with similar filename ignoring case
                     const existingFile = filesByNameIgnoreCase!.get(pathLowerCase);
                     if (existingFile) {
@@ -2500,8 +2500,8 @@ namespace ts {
         }
 
         function getProjectReferenceRedirectProject(fileName: string) {
-            // Ignore dts
-            if (!resolvedProjectReferences || !resolvedProjectReferences.length || fileExtensionIs(fileName, Extension.Dts)) {
+            // Ignore dts or any json files
+            if (!resolvedProjectReferences || !resolvedProjectReferences.length || fileExtensionIs(fileName, Extension.Dts) || fileExtensionIs(fileName, Extension.Json)) {
                 return undefined;
             }
 
@@ -2562,7 +2562,7 @@ namespace ts {
                         }
                         else {
                             forEach(resolvedRef.commandLine.fileNames, fileName => {
-                                if (!fileExtensionIs(fileName, Extension.Dts)) {
+                                if (!fileExtensionIs(fileName, Extension.Dts) && !fileExtensionIs(fileName, Extension.Json)) {
                                     const outputDts = getOutputDeclarationFileName(fileName, resolvedRef.commandLine, host.useCaseSensitiveFileNames());
                                     mapFromToProjectReferenceRedirectSource!.set(toPath(outputDts), fileName);
                                 }
@@ -2650,7 +2650,7 @@ namespace ts {
 
         function processTypeReferenceDirectives(file: SourceFile) {
             // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-            const typeDirectives = map(file.typeReferenceDirectives, ref => ref.fileName.toLocaleLowerCase());
+            const typeDirectives = map(file.typeReferenceDirectives, ref => toFileNameLowerCase(ref.fileName));
             if (!typeDirectives) {
                 return;
             }
@@ -2661,7 +2661,7 @@ namespace ts {
                 const ref = file.typeReferenceDirectives[i];
                 const resolvedTypeReferenceDirective = resolutions[i];
                 // store resolved type directive on the file
-                const fileName = ref.fileName.toLocaleLowerCase();
+                const fileName = toFileNameLowerCase(ref.fileName);
                 setResolvedTypeReferenceDirective(file, fileName, resolvedTypeReferenceDirective);
                 processTypeReferenceDirective(
                     fileName,
@@ -2753,7 +2753,7 @@ namespace ts {
 
         function processLibReferenceDirectives(file: SourceFile) {
             forEach(file.libReferenceDirectives, libReference => {
-                const libName = libReference.fileName.toLocaleLowerCase();
+                const libName = toFileNameLowerCase(libReference.fileName);
                 const libFileName = libMap.get(libName);
                 if (libFileName) {
                     // we ignore any 'no-default-lib' reference set on this file.
@@ -2987,6 +2987,10 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified));
             }
 
+            if (!options.listFilesOnly && options.noEmit && isIncrementalCompilation(options)) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmit", options.incremental ? "incremental" : "composite");
+            }
+
             verifyProjectReferences();
 
             // List of collected files is complete; validate exhautiveness if this is a project with a file list
@@ -3196,7 +3200,7 @@ namespace ts {
                         blockEmittingOfFile(emitFileName, createCompilerDiagnosticFromMessageChain(chain));
                     }
 
-                    const emitFileKey = !host.useCaseSensitiveFileNames() ? emitFilePath.toLocaleLowerCase() : emitFilePath;
+                    const emitFileKey = !host.useCaseSensitiveFileNames() ? toFileNameLowerCase(emitFilePath) : emitFilePath;
                     // Report error if multiple files write into same file
                     if (emitFilesSeen.has(emitFileKey)) {
                         // Already seen the same emit file - report error

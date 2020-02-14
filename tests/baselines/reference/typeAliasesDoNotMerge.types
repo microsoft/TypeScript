@@ -1,0 +1,7 @@
+=== tests/cases/conformance/types/typeAliases/typeAliasesDoNotMerge.ts ===
+export type A = {}
+>A : import("tests/cases/conformance/types/typeAliases/typeAliasesDoNotMerge").A
+
+type A = {}
+>A : import("tests/cases/conformance/types/typeAliases/typeAliasesDoNotMerge").A
+

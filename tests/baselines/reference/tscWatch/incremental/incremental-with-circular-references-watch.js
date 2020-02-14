@@ -174,25 +174,25 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /users/username/projects/project/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
 /users/username/projects/project/a.ts:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/a.ts","pollingInterval":250}
 /users/username/projects/project/b.ts:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/b.ts","pollingInterval":250}
 /users/username/projects/project/c.ts:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/c.ts","pollingInterval":250}
 /users/username/projects/project/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/index.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /users/username/projects/project/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/users/username/projects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /users/username/projects/project:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -321,24 +321,24 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /users/username/projects/project/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
 /users/username/projects/project/a.ts:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/a.ts","pollingInterval":250}
 /users/username/projects/project/b.ts:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/b.ts","pollingInterval":250}
 /users/username/projects/project/c.ts:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/c.ts","pollingInterval":250}
 /users/username/projects/project/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/index.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /users/username/projects/project/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/users/username/projects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /users/username/projects/project:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

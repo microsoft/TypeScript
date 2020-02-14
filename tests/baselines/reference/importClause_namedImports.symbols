@@ -16,6 +16,8 @@ import type { A, B, C } from './abc';
 >C : Symbol(C, Decl(d.ts, 0, 19))
 
 new A();
+>A : Symbol(A, Decl(d.ts, 0, 13))
+
 declare let a: A;
 >a : Symbol(a, Decl(d.ts, 2, 11))
 >A : Symbol(A, Decl(d.ts, 0, 13))

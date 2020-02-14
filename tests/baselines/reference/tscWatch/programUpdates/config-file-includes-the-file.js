@@ -67,20 +67,20 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/c/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/c/tsconfig.json","pollingInterval":250}
 /a/c/f2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/c/f2.ts","pollingInterval":250}
 /a/b/f1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/f1.ts","pollingInterval":250}
 /a/c/f3.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/c/f3.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/c/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/c/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
