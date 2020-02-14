@@ -16,6 +16,7 @@ x.foo();
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.x = undefined;
     exports.x.foo();
 });
 

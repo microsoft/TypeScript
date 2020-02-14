@@ -13,6 +13,7 @@ export module myModule {
 "use strict";
 exports.__esModule = true;
 var myModule;
+exports.myModule = undefined;
 (function (myModule) {
     var a = foo.x;
 })(myModule = exports.myModule || (exports.myModule = {}));

@@ -29,6 +29,7 @@ export { exportedFoo as foo, nonexportedFoo as nfoo };
 "use strict";
 var _a, _b, _c, _d, _e;
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.exportedFoo = undefined;
 exports.foo = exports.exportedFoo;
 let nonexportedFoo;
 exports.nonexportedFoo = nonexportedFoo;

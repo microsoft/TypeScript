@@ -40,11 +40,17 @@ define(["require", "exports"], function (require, exports) {
     var ;
     let;
     var ;
+    exports.a = undefined;
+    exports.b = undefined;
+    exports.c = undefined;
+    exports.d = undefined;
     var A = /** @class */ (function () {
         function A() {
         }
         return A;
     }());
+    exports.e = undefined;
+    exports.f = undefined;
     var B;
     (function (B) {
         B.a = 1, B.c = 2;

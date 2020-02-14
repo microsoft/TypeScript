@@ -16,6 +16,7 @@ export module c {
 "use strict";
 exports.__esModule = true;
 var a;
+exports.a = undefined;
 (function (a) {
     function foo(x) {
         return x;
@@ -23,6 +24,7 @@ var a;
     a.foo = foo;
 })(a = exports.a || (exports.a = {}));
 var c;
+exports.c = undefined;
 (function (c) {
     var b = a.foo;
     var bVal = b(10);

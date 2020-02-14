@@ -237,6 +237,7 @@ var privateClassWithTypeParametersFromPrivateModule = /** @class */ (function ()
     return privateClassWithTypeParametersFromPrivateModule;
 }());
 var publicModule;
+exports.publicModule = undefined;
 (function (publicModule) {
     var privateClassInPublicModule = /** @class */ (function () {
         function privateClassInPublicModule() {

@@ -360,6 +360,7 @@ export module m3 {
 "use strict";
 exports.__esModule = true;
 var m1;
+exports.m1 = undefined;
 (function (m1) {
     var m1_M1_public;
     (function (m1_M1_public) {
@@ -531,6 +532,7 @@ var m2;
     //export import m1_im4_public = require("m2_M4_private");
 })(m2 || (m2 = {}));
 var glo_M1_public;
+exports.glo_M1_public = undefined;
 (function (glo_M1_public) {
     var c1 = /** @class */ (function () {
         function c1() {
@@ -552,6 +554,14 @@ var glo_M1_public;
 //    export var v2: c1;
 //}
 var glo_M3_private;
+//export declare module "glo_M2_public" {
+//    export function f1();
+//    export class c1 {
+//    }
+//    export var v1: { new (): c1; };
+//    export var v2: c1;
+//}
+exports.glo_M3_private = undefined;
 (function (glo_M3_private) {
     var c1 = /** @class */ (function () {
         function c1() {
@@ -694,6 +704,7 @@ exports.glo_im2_public = glo_M3_private;
     })(m4 || (m4 = {}));
 })(m2 || (m2 = {}));
 var m3;
+exports.m3 = undefined;
 (function (m3) {
     //import m3 = require("use_glo_M1_public");
     var m4;

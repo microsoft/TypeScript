@@ -17,6 +17,7 @@ export type EnumA = [string] | [string, number];
 "use strict";
 exports.__esModule = true;
 var Enum;
+exports.Enum = undefined;
 (function (Enum) {
     Enum[Enum["A"] = 0] = "A";
     Enum[Enum["B"] = 1] = "B";

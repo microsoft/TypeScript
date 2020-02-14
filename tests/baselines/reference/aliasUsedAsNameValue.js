@@ -21,6 +21,7 @@ export var a = function () {
 //// [aliasUsedAsNameValue_0.js]
 "use strict";
 exports.__esModule = true;
+exports.id = undefined;
 //// [aliasUsedAsNameValue_1.js]
 "use strict";
 exports.__esModule = true;

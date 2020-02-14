@@ -18,6 +18,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var TypeScript;
+    exports.TypeScript = undefined;
     (function (TypeScript) {
         var Strasse;
         (function (Strasse) {

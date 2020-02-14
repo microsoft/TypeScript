@@ -38,6 +38,7 @@ export module M1 {
 exports.__esModule = true;
 var foo2 = require("./foo2");
 var M1;
+exports.M1 = undefined;
 (function (M1) {
     var C1 = /** @class */ (function () {
         function C1() {
@@ -54,6 +55,7 @@ var M1;
 exports.__esModule = true;
 var foo1 = require("./foo1");
 var M1;
+exports.M1 = undefined;
 (function (M1) {
     var C1 = /** @class */ (function () {
         function C1() {

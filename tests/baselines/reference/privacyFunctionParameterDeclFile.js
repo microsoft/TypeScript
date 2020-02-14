@@ -800,6 +800,7 @@ var privateClassWithPrivateModuleParameterTypes = /** @class */ (function () {
 function privateFunctionWithPrivateModuleParameterTypes(param) {
 }
 var publicModule;
+exports.publicModule = undefined;
 (function (publicModule) {
     var privateClass = /** @class */ (function () {
         function privateClass() {

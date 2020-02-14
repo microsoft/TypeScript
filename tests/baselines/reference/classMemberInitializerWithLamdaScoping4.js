@@ -18,6 +18,7 @@ export class Test1 {
 //// [classMemberInitializerWithLamdaScoping3_0.js]
 "use strict";
 exports.__esModule = true;
+exports.field1 = undefined;
 //// [classMemberInitializerWithLamdaScoping3_1.js]
 "use strict";
 exports.__esModule = true;

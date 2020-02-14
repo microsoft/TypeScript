@@ -34,6 +34,7 @@ var MyComponent = /** @class */ (function () {
 }());
 exports["default"] = MyComponent;
 var Something;
+exports.Something = undefined;
 (function (Something) {
     var MyComponent = 2; // Shadow declaration, so symbol is only usable via the self-import
     Something.create = make(me["default"]);

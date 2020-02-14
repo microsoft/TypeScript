@@ -96,6 +96,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var require;
+    exports.require = undefined;
     (function (require) {
         var C = /** @class */ (function () {
             function C() {
@@ -109,6 +110,7 @@ define(["require", "exports"], function (require, exports) {
     }
     exports.foo = foo;
     var exports;
+    exports.exports = undefined;
     (function (exports) {
         var C = /** @class */ (function () {
             function C() {

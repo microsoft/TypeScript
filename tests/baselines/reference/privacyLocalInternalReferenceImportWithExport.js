@@ -186,6 +186,8 @@ var m_private;
 })(m_private || (m_private = {}));
 // Public elements
 var m_public;
+// Public elements
+exports.m_public = undefined;
 (function (m_public) {
     var c_public = /** @class */ (function () {
         function c_public() {
@@ -214,6 +216,7 @@ var m_public;
     })(mi_public = m_public.mi_public || (m_public.mi_public = {}));
 })(m_public = exports.m_public || (exports.m_public = {}));
 var import_public;
+exports.import_public = undefined;
 (function (import_public) {
     // Privacy errors - importing private elements
     import_public.im_public_c_private = m_private.c_private;

@@ -19,6 +19,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var CharCode;
+    exports.CharCode = undefined;
     (function (CharCode) {
         CharCode[CharCode["A"] = 0] = "A";
         CharCode[CharCode["B"] = 1] = "B";

@@ -14,6 +14,7 @@ var x = f.Mode.Open;
 "use strict";
 exports.__esModule = true;
 var Mode;
+exports.Mode = undefined;
 (function (Mode) {
     Mode[Mode["Open"] = 0] = "Open";
 })(Mode = exports.Mode || (exports.Mode = {}));

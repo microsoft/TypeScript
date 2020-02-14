@@ -21,6 +21,7 @@ export var d = new m2.m3.c();
 "use strict";
 exports.__esModule = true;
 var x;
+exports.x = undefined;
 (function (x) {
     var c = /** @class */ (function () {
         function c() {
@@ -33,6 +34,7 @@ var x;
     x.c = c;
 })(x = exports.x || (exports.x = {}));
 var m2;
+exports.m2 = undefined;
 (function (m2) {
     var m3;
     (function (m3) {

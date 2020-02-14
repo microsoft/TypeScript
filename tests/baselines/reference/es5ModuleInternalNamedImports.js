@@ -40,6 +40,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var M;
+    exports.M = undefined;
     (function (M) {
         // variable
         M.M_V = 0;

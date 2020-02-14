@@ -97,6 +97,7 @@ class publicClassImplementingPublicInterfaceInGlobal implements publicInterfaceI
 "use strict";
 exports.__esModule = true;
 var publicModule;
+exports.publicModule = undefined;
 (function (publicModule) {
     var privateClassImplementingPublicInterfaceInModule = /** @class */ (function () {
         function privateClassImplementingPublicInterfaceInModule() {

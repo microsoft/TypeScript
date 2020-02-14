@@ -14,6 +14,7 @@ export const value = provider.Enum.Value1;
 "use strict";
 exports.__esModule = true;
 var Enum;
+exports.Enum = undefined;
 (function (Enum) {
     Enum[Enum["Value1"] = 0] = "Value1";
     Enum[Enum["Value2"] = 1] = "Value2";

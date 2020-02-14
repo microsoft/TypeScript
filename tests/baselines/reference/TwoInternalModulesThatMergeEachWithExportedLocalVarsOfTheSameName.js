@@ -33,6 +33,7 @@ export module A {
 "use strict";
 exports.__esModule = true;
 var A;
+exports.A = undefined;
 (function (A) {
     var Utils;
     (function (Utils) {
@@ -47,6 +48,7 @@ var A;
 "use strict";
 exports.__esModule = true;
 var A;
+exports.A = undefined;
 (function (A) {
     // collision with 'Origin' var in other part of merged module
     A.Origin = { x: 0, y: 0 };

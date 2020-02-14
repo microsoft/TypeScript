@@ -12,6 +12,7 @@ var y = new b();
 "use strict";
 exports.__esModule = true;
 var m;
+exports.m = undefined;
 (function (m) {
     var c = /** @class */ (function () {
         function c() {

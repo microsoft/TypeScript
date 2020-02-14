@@ -10,6 +10,7 @@ export var b = foo;
 exports.__esModule = true;
 function foo() {
 }
+exports.x = undefined;
 exports.b = foo;
 
 

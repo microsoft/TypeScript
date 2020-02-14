@@ -56,6 +56,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var C;
+exports.C = undefined;
 (function (C) {
     var A = /** @class */ (function () {
         function A() {
@@ -89,6 +90,7 @@ var C;
     }());
     C.D = D;
 })(C = exports.C || (exports.C = {}));
+exports.a = undefined;
 exports.b = C.F;
 exports.c = C.F2;
 exports.d = C.F3;

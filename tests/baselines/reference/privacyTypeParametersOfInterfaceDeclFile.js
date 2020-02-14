@@ -216,6 +216,7 @@ var publicClassT = /** @class */ (function () {
 }());
 exports.publicClassT = publicClassT;
 var publicModule;
+exports.publicModule = undefined;
 (function (publicModule) {
     var privateClassInPublicModule = /** @class */ (function () {
         function privateClassInPublicModule() {

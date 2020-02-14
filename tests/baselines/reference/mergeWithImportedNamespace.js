@@ -13,6 +13,7 @@ export namespace N {
 "use strict";
 exports.__esModule = true;
 var N;
+exports.N = undefined;
 (function (N) {
     N.x = 1;
 })(N = exports.N || (exports.N = {}));

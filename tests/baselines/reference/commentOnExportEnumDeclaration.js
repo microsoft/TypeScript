@@ -13,6 +13,10 @@ exports.__esModule = true;
  * comment
  */
 var Color;
+/**
+ * comment
+ */
+exports.Color = undefined;
 (function (Color) {
     Color[Color["r"] = 0] = "r";
     Color[Color["g"] = 1] = "g";

@@ -22,6 +22,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var App;
+    exports.App = undefined;
     (function (App) {
         var Services;
         (function (Services) {

@@ -177,6 +177,7 @@ function createWidget1() {
 }
 exports.createWidget1 = createWidget1;
 var SpecializedWidget;
+exports.SpecializedWidget = undefined;
 (function (SpecializedWidget) {
     var Widget2 = /** @class */ (function () {
         function Widget2() {

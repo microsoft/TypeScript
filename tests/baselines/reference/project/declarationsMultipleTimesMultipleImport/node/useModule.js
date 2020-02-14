@@ -5,6 +5,7 @@ exports.x4 = m4.x;
 exports.d4 = m4.d;
 exports.f4 = m4.foo();
 var m1;
+exports.m1 = undefined;
 (function (m1) {
     m1.x2 = m4.x;
     m1.d2 = m4.d;

@@ -1402,6 +1402,7 @@ function privateFunctionWithPrivateModuleParameterTypes1() {
     return new privateModule.publicClass();
 }
 var publicModule;
+exports.publicModule = undefined;
 (function (publicModule) {
     var privateClass = /** @class */ (function () {
         function privateClass() {

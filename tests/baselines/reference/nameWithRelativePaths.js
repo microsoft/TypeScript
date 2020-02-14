@@ -38,6 +38,7 @@ exports.f = f;
 "use strict";
 exports.__esModule = true;
 var M2;
+exports.M2 = undefined;
 (function (M2) {
     M2.x = true;
 })(M2 = exports.M2 || (exports.M2 = {}));

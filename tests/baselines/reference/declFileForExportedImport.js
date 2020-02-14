@@ -14,6 +14,7 @@ var z = b.x;
 //// [declFileForExportedImport_0.js]
 "use strict";
 exports.__esModule = true;
+exports.x = undefined;
 //// [declFileForExportedImport_1.js]
 "use strict";
 exports.__esModule = true;

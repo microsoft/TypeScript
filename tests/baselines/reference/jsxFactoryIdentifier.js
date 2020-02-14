@@ -54,6 +54,7 @@ class A {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Element;
+exports.Element = undefined;
 (function (Element) {
     function isElement(el) {
         return el.markAsChildOfRootElement !== undefined;

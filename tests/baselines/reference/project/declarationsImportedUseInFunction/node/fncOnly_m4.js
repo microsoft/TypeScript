@@ -7,6 +7,7 @@ var d = /** @class */ (function () {
 }());
 exports.d = d;
 ;
+exports.x = undefined;
 function foo() {
     return new d();
 }

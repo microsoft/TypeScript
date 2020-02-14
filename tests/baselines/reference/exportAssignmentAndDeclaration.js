@@ -14,6 +14,7 @@ export = C1;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var E1;
+    exports.E1 = undefined;
     (function (E1) {
         E1[E1["A"] = 0] = "A";
         E1[E1["B"] = 1] = "B";

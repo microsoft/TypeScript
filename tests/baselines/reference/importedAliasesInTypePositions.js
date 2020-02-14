@@ -23,6 +23,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var elaborate;
+    exports.elaborate = undefined;
     (function (elaborate) {
         var nested;
         (function (nested) {
@@ -48,6 +49,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var ImportingModule;
+    exports.ImportingModule = undefined;
     (function (ImportingModule) {
         var UsesReferredType = /** @class */ (function () {
             function UsesReferredType(referred) {

@@ -15,6 +15,7 @@ y.m.foo();
 "use strict";
 exports.__esModule = true;
 var m;
+exports.m = undefined;
 (function (m) {
     function foo() { }
     m.foo = foo;

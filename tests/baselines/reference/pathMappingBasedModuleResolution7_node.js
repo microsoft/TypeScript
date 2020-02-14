@@ -31,6 +31,7 @@ export let y: number;
 //// [module2.js]
 "use strict";
 exports.__esModule = true;
+exports.b = undefined;
 //// [file2.js]
 "use strict";
 exports.__esModule = true;

@@ -115,6 +115,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var TopLevelModule1;
+    exports.TopLevelModule1 = undefined;
     (function (TopLevelModule1) {
         var SubModule1;
         (function (SubModule1) {
