@@ -3,4 +3,11 @@ try {
 } catch (e: unknown) {
 >e : unknown
 }
+type UnknownAlias = unknown;
+>UnknownAlias : unknown
+
+try {
+} catch (e: UnknownAlias) {
+>e : unknown
+}
 

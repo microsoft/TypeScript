@@ -3,4 +3,12 @@ try {
 } catch (e: unknown) {
 >e : Symbol(e, Decl(catchClauseWithUnknownTypeAnnotation.ts, 1, 9))
 }
+type UnknownAlias = unknown;
+>UnknownAlias : Symbol(UnknownAlias, Decl(catchClauseWithUnknownTypeAnnotation.ts, 2, 1))
+
+try {
+} catch (e: UnknownAlias) {
+>e : Symbol(e, Decl(catchClauseWithUnknownTypeAnnotation.ts, 5, 9))
+>UnknownAlias : Symbol(UnknownAlias, Decl(catchClauseWithUnknownTypeAnnotation.ts, 2, 1))
+}
 
