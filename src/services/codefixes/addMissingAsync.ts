@@ -42,7 +42,7 @@ namespace ts.codefix {
     type FixableDeclaration = ArrowFunction | FunctionDeclaration | FunctionExpression | MethodDeclaration;
     function getFix(context: CodeFixContext | CodeFixAllContext, decl: FixableDeclaration, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Map<true>) {
         const changes = trackChanges(t => makeChange(t, context.sourceFile, decl, fixedDeclarations));
-        return createCodeFixAction(fixId, changes, Diagnostics.Add_async, fixId, Diagnostics.Fix_all_functions_possibly_missing_async);
+        return createCodeFixAction(fixId, changes, Diagnostics.Add_async_modifier_to_containing_function, fixId, Diagnostics.Add_all_missing_async_modifiers);
     }
 
     function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, insertionSite: FixableDeclaration, fixedDeclarations?: Map<true>) {

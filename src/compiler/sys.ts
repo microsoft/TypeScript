@@ -1107,31 +1107,6 @@ namespace ts {
         return parseInt(version.substring(1, dot));
     }
 
-    declare const ChakraHost: {
-        args: string[];
-        currentDirectory: string;
-        executingFile: string;
-        newLine?: string;
-        useCaseSensitiveFileNames?: boolean;
-        echo(s: string): void;
-        quit(exitCode?: number): void;
-        fileExists(path: string): boolean;
-        deleteFile(path: string): boolean;
-        getModifiedTime(path: string): Date;
-        setModifiedTime(path: string, time: Date): void;
-        directoryExists(path: string): boolean;
-        createDirectory(path: string): void;
-        resolvePath(path: string): string;
-        readFile(path: string): string | undefined;
-        writeFile(path: string, contents: string): void;
-        getDirectories(path: string): string[];
-        readDirectory(path: string, extensions?: readonly string[], basePaths?: readonly string[], excludeEx?: string, includeFileEx?: string, includeDirEx?: string): string[];
-        watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
-        watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
-        realpath(path: string): string;
-        getEnvironmentVariable?(name: string): string;
-    };
-
     // TODO: GH#18217 this is used as if it's certainly defined in many places.
     // eslint-disable-next-line prefer-const
     export let sys: System = (() => {
@@ -1737,50 +1712,8 @@ namespace ts {
             }
         }
 
-        function getChakraSystem(): System {
-            const realpath = ChakraHost.realpath && ((path: string) => ChakraHost.realpath(path));
-            return {
-                newLine: ChakraHost.newLine || "\r\n",
-                args: ChakraHost.args,
-                useCaseSensitiveFileNames: !!ChakraHost.useCaseSensitiveFileNames,
-                write: ChakraHost.echo,
-                readFile(path: string, _encoding?: string) {
-                    // encoding is automatically handled by the implementation in ChakraHost
-                    return ChakraHost.readFile(path);
-                },
-                writeFile(path: string, data: string, writeByteOrderMark?: boolean) {
-                    // If a BOM is required, emit one
-                    if (writeByteOrderMark) {
-                        data = byteOrderMarkIndicator + data;
-                    }
-
-                    ChakraHost.writeFile(path, data);
-                },
-                resolvePath: ChakraHost.resolvePath,
-                fileExists: ChakraHost.fileExists,
-                deleteFile: ChakraHost.deleteFile,
-                getModifiedTime: ChakraHost.getModifiedTime,
-                setModifiedTime: ChakraHost.setModifiedTime,
-                directoryExists: ChakraHost.directoryExists,
-                createDirectory: ChakraHost.createDirectory,
-                getExecutingFilePath: () => ChakraHost.executingFile,
-                getCurrentDirectory: () => ChakraHost.currentDirectory,
-                getDirectories: ChakraHost.getDirectories,
-                getEnvironmentVariable: ChakraHost.getEnvironmentVariable || (() => ""),
-                readDirectory(path, extensions, excludes, includes, _depth) {
-                    const pattern = getFileMatcherPatterns(path, excludes, includes, !!ChakraHost.useCaseSensitiveFileNames, ChakraHost.currentDirectory);
-                    return ChakraHost.readDirectory(path, extensions, pattern.basePaths, pattern.excludePattern, pattern.includeFilePattern, pattern.includeDirectoryPattern);
-                },
-                exit: ChakraHost.quit,
-                realpath
-            };
-        }
-
         let sys: System | undefined;
-        if (typeof ChakraHost !== "undefined") {
-            sys = getChakraSystem();
-        }
-        else if (typeof process !== "undefined" && process.nextTick && !process.browser && typeof require !== "undefined") {
+        if (typeof process !== "undefined" && process.nextTick && !process.browser && typeof require !== "undefined") {
             // process and process.nextTick checks if current environment is node-like
             // process.browser check excludes webpack and browserify
             sys = getNodeSystem();

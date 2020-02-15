@@ -28,6 +28,9 @@ namespace ts {
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
         let hasLexicalThis: boolean;
 
+        let currentSourceFile: SourceFile;
+        let taggedTemplateStringDeclarations: VariableDeclaration[];
+
         /** Keeps track of property names accessed on super (`super.x`) within async functions. */
         let capturedSuperProperties: UnderscoreEscapedMap<true>;
         /** Whether the async function contains an element access on super (`super[x]`). */
@@ -37,15 +40,23 @@ namespace ts {
 
         return chainBundle(transformSourceFile);
 
+        function recordTaggedTemplateString(temp: Identifier) {
+            taggedTemplateStringDeclarations = append(
+                taggedTemplateStringDeclarations,
+                createVariableDeclaration(temp));
+        }
+
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
                 return node;
             }
 
-            exportedVariableStatement = false;
-            hasLexicalThis = !isEffectiveStrictModeSourceFile(node, compilerOptions);
-            const visited = visitEachChild(node, visitor, context);
+            currentSourceFile = node;
+            const visited = visitSourceFile(node);
             addEmitHelpers(visited, context.readEmitHelpers());
+
+            currentSourceFile = undefined!;
+            taggedTemplateStringDeclarations = undefined!;
             return visited;
         }
 
@@ -127,6 +138,8 @@ namespace ts {
                     return visitExpressionStatement(node as ExpressionStatement);
                 case SyntaxKind.ParenthesizedExpression:
                     return visitParenthesizedExpression(node as ParenthesizedExpression, noDestructuringValue);
+                case SyntaxKind.TaggedTemplateExpression:
+                    return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
                 case SyntaxKind.PropertyAccessExpression:
                     if (capturedSuperProperties && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.SuperKeyword) {
                         capturedSuperProperties.set(node.name.escapedText, true);
@@ -295,6 +308,28 @@ namespace ts {
 
         function visitParenthesizedExpression(node: ParenthesizedExpression, noDestructuringValue: boolean): ParenthesizedExpression {
             return visitEachChild(node, noDestructuringValue ? visitorNoDestructuringValue : visitor, context);
+        }
+
+        function visitSourceFile(node: SourceFile): SourceFile {
+            exportedVariableStatement = false;
+            hasLexicalThis = !isEffectiveStrictModeSourceFile(node, compilerOptions);
+            const visited = visitEachChild(node, visitor, context);
+            const statement = concatenate(visited.statements, taggedTemplateStringDeclarations && [
+                createVariableStatement(/*modifiers*/ undefined,
+                    createVariableDeclarationList(taggedTemplateStringDeclarations))
+            ]);
+            return updateSourceFileNode(visited, setTextRange(createNodeArray(statement), node.statements));
+        }
+
+        function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
+            return processTaggedTemplateExpression(
+                context,
+                node,
+                visitor,
+                currentSourceFile,
+                recordTaggedTemplateString,
+                ProcessLevel.LiftRestriction
+            );
         }
 
         /**

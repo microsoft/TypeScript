@@ -1086,8 +1086,7 @@ export function two() {
         });
 
         function changeParameterTypeOfBFile(sys: WatchedSystem, parameterName: string, toType: string) {
-            const oldContent = sys.readFile(`${projectRoot}/b.ts`)!;
-            sys.writeFile(`${projectRoot}/b.ts`, oldContent.replace(new RegExp(`${parameterName}\: [a-z]*`), `${parameterName}: ${toType}`));
+            replaceFileText(sys, `${projectRoot}/b.ts`, new RegExp(`${parameterName}\: [a-z]*`), `${parameterName}: ${toType}`);
             sys.runQueuedTimeoutCallbacks();
             return `Changed ${parameterName} type to ${toType}`;
         }
@@ -1160,6 +1159,39 @@ foo().hello`
                     sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: {} }));
                     sys.runQueuedTimeoutCallbacks();
                     return "Disable strict";
+                },
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "updates errors when noErrorTruncation changes",
+            commandLineArgs: ["-w"],
+            sys: () => {
+                const aFile: File = {
+                    path: `${projectRoot}/a.ts`,
+                    content: `declare var v: {
+    reallyLongPropertyName1: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName2: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName3: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName4: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName5: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName6: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName7: string | number | boolean | object | symbol | bigint;
+};
+v === 'foo';`
+                };
+                const config: File = {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({ compilerOptions: {} })
+                };
+                return createWatchedSystem([aFile, config, libFile], { currentDirectory: projectRoot });
+            },
+            changes: [
+                sys => {
+                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { noErrorTruncation: true } }));
+                    sys.runQueuedTimeoutCallbacks();
+                    return "Enable noErrorTruncation";
                 },
             ]
         });

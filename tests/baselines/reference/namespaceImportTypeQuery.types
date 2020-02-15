@@ -1,0 +1,26 @@
+=== /a.ts ===
+class A {}
+>A : A
+
+export type { A };
+>A : A
+
+export class B {};
+>B : B
+
+=== /b.ts ===
+import * as types from './a';
+>types : typeof types
+
+let A: typeof types.A;
+>A : any
+>types.A : any
+>types : typeof types
+>A : any
+
+let B: typeof types.B;
+>B : typeof types.B
+>types.B : typeof types.B
+>types : typeof types
+>B : typeof types.B
+

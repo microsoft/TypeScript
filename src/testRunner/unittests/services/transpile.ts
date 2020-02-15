@@ -474,5 +474,12 @@ var x = 0;`, {
         transpilesCorrectly("Infer correct file extension", `const fn = <T>(a: T) => a`, {
             noSetFileName: true
         });
+
+        transpilesCorrectly("Export star as ns conflict does not crash", `
+var a;
+export { a as alias };
+export * as alias from './file';`, {
+            noSetFileName: true
+        });
     });
 }

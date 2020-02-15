@@ -10,7 +10,7 @@
 ////}
 
 verify.codeFix({
-    description: ts.Diagnostics.Add_async.message,
+    description: ts.Diagnostics.Add_async_modifier_to_containing_function.message,
     index: 0,
     newFileContent:
 `interface Stuff {

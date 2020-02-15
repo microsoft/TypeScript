@@ -302,8 +302,8 @@ function someGenerics9<T>(strs: TemplateStringsArray, a: T, b: T, c: T): T {
 >null : null
 }
 var a9a = someGenerics9 `${ '' }${ 0 }${ [] }`;
->a9a : any
->someGenerics9 `${ '' }${ 0 }${ [] }` : any
+>a9a : string
+>someGenerics9 `${ '' }${ 0 }${ [] }` : ""
 >someGenerics9 : <T>(strs: TemplateStringsArray, a: T, b: T, c: T) => T
 >`${ '' }${ 0 }${ [] }` : string
 >'' : ""
@@ -311,7 +311,7 @@ var a9a = someGenerics9 `${ '' }${ 0 }${ [] }`;
 >[] : undefined[]
 
 var a9a: {};
->a9a : any
+>a9a : string
 
 // Generic tag with multiple parameters of generic type passed arguments with multiple best common types
 interface A91 {

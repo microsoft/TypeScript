@@ -38,12 +38,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import './b';
-let A = class A {
-    constructor(p) { }
-};
-A = __decorate([
-    ((_) => { })
-], A);
+let A = /** @class */ (() => {
+    let A = class A {
+        constructor(p) { }
+    };
+    A = __decorate([
+        ((_) => { })
+    ], A);
+    return A;
+})();
 export { A };
 
 
@@ -75,19 +78,19 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/tsconfig.json","pollingInterval":250}
 /a.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a.ts","pollingInterval":250}
 /b.ts:
-  {"pollingInterval":250}
+  {"fileName":"/b.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -122,19 +125,19 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/tsconfig.json","pollingInterval":250}
 /a.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a.ts","pollingInterval":250}
 /b.ts:
-  {"pollingInterval":250}
+  {"fileName":"/b.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -155,13 +158,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { B } from './b';
-let A = class A {
-    constructor(p) { }
-};
-A = __decorate([
-    ((_) => { }),
-    __metadata("design:paramtypes", [B])
-], A);
+let A = /** @class */ (() => {
+    let A = class A {
+        constructor(p) { }
+    };
+    A = __decorate([
+        ((_) => { }),
+        __metadata("design:paramtypes", [B])
+    ], A);
+    return A;
+})();
 export { A };
 
 
@@ -189,18 +195,18 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/tsconfig.json","pollingInterval":250}
 /a.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a.ts","pollingInterval":250}
 /b.ts:
-  {"pollingInterval":250}
+  {"fileName":"/b.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

@@ -131,6 +131,17 @@ class Test2 extends Test {
     z = 0;
 }
 
+class Derived extends Test {
+    foo(x: unknown) {
+        super.assert(typeof x === "string");
+        x.length;
+    }
+    baz(x: number) {
+        super.assert(false);
+        x;  // Unreachable
+    }
+}
+
 // Invalid constructs
 
 declare let Q1: new (x: unknown) => x is string;

@@ -1,0 +1,143 @@
+=== tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts ===
+function tag (str: any, ...args: any[]): any {
+>tag : (str: any, ...args: any[]) => any
+>str : any
+>args : any[]
+
+  return str
+>str : any
+}
+
+const a = tag`123`
+>a : any
+>tag`123` : any
+>tag : (str: any, ...args: any[]) => any
+>`123` : "123"
+
+const b = tag`123 ${100}`
+>b : any
+>tag`123 ${100}` : any
+>tag : (str: any, ...args: any[]) => any
+>`123 ${100}` : string
+>100 : 100
+
+const x = tag`\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld`;
+>x : any
+>tag`\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld` : any
+>tag : (str: any, ...args: any[]) => any
+>`\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld` : string
+>100 : 100
+>200 : 200
+>300 : 300
+
+const y = `\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld`; // should error with NoSubstitutionTemplate
+>y : string
+>`\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld` : string
+>100 : 100
+>200 : 200
+>300 : 300
+
+const z = tag`\u{hello} \xtraordinary wonderful \uworld` // should work with Tagged NoSubstitutionTemplate
+>z : any
+>tag`\u{hello} \xtraordinary wonderful \uworld` : any
+>tag : (str: any, ...args: any[]) => any
+>`\u{hello} \xtraordinary wonderful \uworld` : "\\u{hello} \\xtraordinary wonderful \\uworld"
+
+const a1 = tag`${ 100 }\0` // \0
+>a1 : any
+>tag`${ 100 }\0` : any
+>tag : (str: any, ...args: any[]) => any
+>`${ 100 }\0` : string
+>100 : 100
+
+const a2 = tag`${ 100 }\00` // \\00
+>a2 : any
+>tag`${ 100 }\00` : any
+>tag : (str: any, ...args: any[]) => any
+>`${ 100 }\00` : string
+>100 : 100
+
+const a3 = tag`${ 100 }\u` // \\u
+>a3 : any
+>tag`${ 100 }\u` : any
+>tag : (str: any, ...args: any[]) => any
+>`${ 100 }\u` : string
+>100 : 100
+
+const a4 = tag`${ 100 }\u0` // \\u0
+>a4 : any
+>tag`${ 100 }\u0` : any
+>tag : (str: any, ...args: any[]) => any
+>`${ 100 }\u0` : string
+>100 : 100
+
+const a5 = tag`${ 100 }\u00` // \\u00
+>a5 : any
+>tag`${ 100 }\u00` : any
+>tag : (str: any, ...args: any[]) => any
+>`${ 100 }\u00` : string
+>100 : 100
+
+const a6 = tag`${ 100 }\u000` // \\u000
+>a6 : any
+>tag`${ 100 }\u000` : any
+>tag : (str: any, ...args: any[]) => any
+>`${ 100 }\u000` : string
+>100 : 100
+
+const a7 = tag`${ 100 }\u0000` // \u0000
+>a7 : any
+>tag`${ 100 }\u0000` : any
+>tag : (str: any, ...args: any[]) => any
+>`${ 100 }\u0000` : string
+>100 : 100
+
+const a8 = tag`${ 100 }\u{` // \\u{
+>a8 : any
+>tag`${ 100 }\u{` : any
+>tag : (str: any, ...args: any[]) => any
+>`${ 100 }\u{` : string
+>100 : 100
+
+const a9 = tag`${ 100 }\u{10FFFF}` // \\u{10FFFF
+>a9 : any
+>tag`${ 100 }\u{10FFFF}` : any
+>tag : (str: any, ...args: any[]) => any
+>`${ 100 }\u{10FFFF}` : string
+>100 : 100
+
+const a10 = tag`${ 100 }\u{1f622` // \\u{1f622
+>a10 : any
+>tag`${ 100 }\u{1f622` : any
+>tag : (str: any, ...args: any[]) => any
+>`${ 100 }\u{1f622` : string
+>100 : 100
+
+const a11 = tag`${ 100 }\u{1f622}` // \u{1f622}
+>a11 : any
+>tag`${ 100 }\u{1f622}` : any
+>tag : (str: any, ...args: any[]) => any
+>`${ 100 }\u{1f622}` : string
+>100 : 100
+
+const a12 = tag`${ 100 }\x` // \\x
+>a12 : any
+>tag`${ 100 }\x` : any
+>tag : (str: any, ...args: any[]) => any
+>`${ 100 }\x` : string
+>100 : 100
+
+const a13 = tag`${ 100 }\x0` // \\x0
+>a13 : any
+>tag`${ 100 }\x0` : any
+>tag : (str: any, ...args: any[]) => any
+>`${ 100 }\x0` : string
+>100 : 100
+
+const a14 = tag`${ 100 }\x00` // \x00
+>a14 : any
+>tag`${ 100 }\x00` : any
+>tag : (str: any, ...args: any[]) => any
+>`${ 100 }\x00` : string
+>100 : 100
+
