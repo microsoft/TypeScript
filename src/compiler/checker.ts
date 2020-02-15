@@ -4058,6 +4058,8 @@ namespace ts {
                     return undefined!; // TODO: GH#18217
                 }
 
+                type = getReducedType(type);
+
                 if (type.flags & TypeFlags.Any) {
                     context.approximateLength += 3;
                     return createKeywordTypeNode(SyntaxKind.AnyKeyword);
