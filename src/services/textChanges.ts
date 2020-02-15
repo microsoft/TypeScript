@@ -1238,9 +1238,10 @@ namespace ts.textChanges {
                 }
 
                 case SyntaxKind.ImportDeclaration:
+                    const isFirstImport = sourceFile.imports.length && node === first(sourceFile.imports).parent || node === find(sourceFile.statements, isImportDeclaration);
                     deleteNode(changes, sourceFile, node,
                         // For first import, leave header comment in place
-                        node === sourceFile.imports[0].parent ? { leadingTriviaOption: LeadingTriviaOption.Exclude } : undefined);
+                        isFirstImport ? { leadingTriviaOption: LeadingTriviaOption.Exclude } : undefined);
                     break;
 
                 case SyntaxKind.BindingElement:

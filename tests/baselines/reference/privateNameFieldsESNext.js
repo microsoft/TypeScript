@@ -21,26 +21,29 @@ class C {
 
 
 //// [privateNameFieldsESNext.js]
-class C {
-    constructor() {
-        this.a = 123;
-        this.#a = 10;
-        this.c = "hello";
-        this.#something = () => 1234;
+let C = /** @class */ (() => {
+    class C {
+        constructor() {
+            this.a = 123;
+            this.#a = 10;
+            this.c = "hello";
+            this.#something = () => 1234;
+        }
+        #a;
+        #b;
+        method() {
+            console.log(this.#a);
+            this.#a = "hello";
+            console.log(this.#b);
+        }
+        static #m;
+        static #x;
+        static test() {
+            console.log(this.#m);
+            console.log(this.#x = "test");
+        }
+        #something;
     }
-    #a;
-    #b;
-    method() {
-        console.log(this.#a);
-        this.#a = "hello";
-        console.log(this.#b);
-    }
-    static #m;
-    static #x;
-    static test() {
-        console.log(this.#m);
-        console.log(this.#x = "test");
-    }
-    #something;
-}
-C.#m = "test";
+    C.#m = "test";
+    return C;
+})();

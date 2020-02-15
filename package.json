@@ -96,6 +96,7 @@
         "through2": "latest",
         "travis-fold": "latest",
         "typescript": "next",
+        "playwright": "latest",
         "vinyl": "latest",
         "vinyl-sourcemaps-apply": "latest",
         "xml2js": "^0.4.19"
