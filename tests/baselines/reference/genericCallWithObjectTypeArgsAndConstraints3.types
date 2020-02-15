@@ -36,8 +36,8 @@ function f<T extends Base>(a: { x: T; y: T }) {
 }
 
 var r1 = f({ x: new Derived(), y: new Derived2() }); // error because neither is supertype of the other
->r1 : any
->f({ x: new Derived(), y: new Derived2() }) : any
+>r1 : Derived
+>f({ x: new Derived(), y: new Derived2() }) : Derived
 >f : <T extends Base>(a: { x: T; y: T; }) => T
 >{ x: new Derived(), y: new Derived2() } : { x: Derived; y: Derived2; }
 >x : Derived

@@ -1,0 +1,23 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameUnused.ts ===
+export class A {
+>A : A
+
+    #used = "used";
+>#used : string
+>"used" : "used"
+
+    #unused = "unused";
+>#unused : string
+>"unused" : "unused"
+
+    constructor () {
+        console.log(this.#used);
+>console.log(this.#used) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>this.#used : string
+>this : this
+    }
+}
+

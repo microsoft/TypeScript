@@ -36,8 +36,7 @@ console.log(foo_json_1.foo);
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
       },
       "../strings/foo.json": {
-        "version": "-1457151099-export declare const foo: string;\r\n",
-        "signature": "-1457151099-export declare const foo: string;\r\n"
+        "version": "4395333385-{\n    \"foo\": \"bar baz\"\n}"
       },
       "./index.ts": {
         "version": "-4651661680-import { foo } from '../strings/foo.json';\n\nconsole.log(foo);",
@@ -56,7 +55,7 @@ console.log(foo_json_1.foo);
     },
     "referencedMap": {
       "./index.ts": [
-        "../strings/foo.d.ts"
+        "../strings/foo.json"
       ]
     },
     "exportedModulesMap": {},
@@ -68,10 +67,6 @@ console.log(foo_json_1.foo);
   },
   "version": "FakeTSVersion"
 }
-
-//// [/src/strings/foo.d.ts]
-export declare const foo: string;
-
 
 //// [/src/strings/tsconfig.tsbuildinfo]
 {

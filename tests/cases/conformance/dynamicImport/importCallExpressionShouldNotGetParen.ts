@@ -1,4 +1,4 @@
-// @module: esnext
+// @module: es2020
 // @target: es6
 // @noImplicitAny: true
 const localeName = "zh-CN";

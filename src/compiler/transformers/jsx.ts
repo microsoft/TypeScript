@@ -253,15 +253,15 @@ namespace ts {
         function decodeEntities(text: string): string {
             return text.replace(/&((#((\d+)|x([\da-fA-F]+)))|(\w+));/g, (match, _all, _number, _digits, decimal, hex, word) => {
                 if (decimal) {
-                    return String.fromCharCode(parseInt(decimal, 10));
+                    return utf16EncodeAsString(parseInt(decimal, 10));
                 }
                 else if (hex) {
-                    return String.fromCharCode(parseInt(hex, 16));
+                    return utf16EncodeAsString(parseInt(hex, 16));
                 }
                 else {
                     const ch = entities.get(word);
                     // If this is not a valid entity, then just use `match` (replace it with itself, i.e. don't replace)
-                    return ch ? String.fromCharCode(ch) : match;
+                    return ch ? utf16EncodeAsString(ch) : match;
                 }
             });
         }

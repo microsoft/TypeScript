@@ -1,0 +1,8 @@
+Syntactic Diagnostics for file '/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics8.ts':
+/tests/cases/fourslash/a.js(1,6): error TS8008: Type aliases can only be used in TypeScript files.
+
+
+==== /tests/cases/fourslash/a.js (1 errors) ====
+    type a = b;
+         ~
+!!! error TS8008: Type aliases can only be used in TypeScript files.

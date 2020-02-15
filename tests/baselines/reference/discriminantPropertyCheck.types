@@ -82,9 +82,9 @@ function goo2(x: Item) {
 
         x.foo.length;  // Error, intervening discriminant guard
 >x.foo.length : number
->x.foo : string | undefined
+>x.foo : string
 >x : Item1
->foo : string | undefined
+>foo : string
 >length : number
     }
 }
@@ -226,9 +226,9 @@ function foo6(x: Item) {
 
         x.foo.length;  // Error, intervening discriminant guard
 >x.foo.length : number
->x.foo : string | undefined
+>x.foo : string
 >x : Item1
->foo : string | undefined
+>foo : string
 >length : number
     }
 }

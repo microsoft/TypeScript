@@ -100,7 +100,7 @@ module M {
 >Green : Color.Green
 
         x=x.sort(CompareYeux); // parameter mismatch
->x=x.sort(CompareYeux) : any
+>x=x.sort(CompareYeux) : IEye[]
 >x : IEye[]
 >x.sort(CompareYeux) : IEye[]
 >x.sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]

@@ -35,7 +35,7 @@ function hof(ctor: function(new: number, string)) {
 >'hi' : "hi"
 }
 function hof2(f: function(this: number, string): string) {
->hof2 : (f: (this: number, arg1: string) => string) => any
+>hof2 : (f: (this: number, arg1: string) => string) => string
 >f : (this: number, arg1: string) => string
 >this : number
 

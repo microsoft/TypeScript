@@ -1,6 +1,9 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
+name: Feature Request
+about: Suggest an idea
+title: ''
+labels: ''
+assignees: ''
 
 ---
 
@@ -42,4 +45,3 @@ My suggestion meets these guidelines:
 * [ ] This could be implemented without emitting different JS based on the types of the expressions
 * [ ] This isn't a runtime feature (e.g. library functionality, non-ECMAScript syntax with JavaScript output, etc.)
 * [ ] This feature would agree with the rest of [TypeScript's Design Goals](https://github.com/Microsoft/TypeScript/wiki/TypeScript-Design-Goals).
-
