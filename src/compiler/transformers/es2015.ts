@@ -981,7 +981,7 @@ namespace ts {
                 hierarchyFacts |= HierarchyFacts.ConstructorWithCapturedSuper;
             }
 
-            // Visit the remaining statements
+            // visit the remaining statements
             addRange(statements, visitNodes(bodyStatements, visitor, isStatement, /*start*/ statementOffset));
 
             mergeLexicalEnvironment(prologue, endLexicalEnvironment());

@@ -684,7 +684,7 @@ namespace ts {
                         parameterPropertyDeclarationCount++;
                     }
                 }
-                if (parameterPropertyDeclarationCount > 0) {
+                if (parameterPropertyDeclarationCount > 0 && !useDefineForClassFields) {
                     // If there was a super() call found, add parameter properties immediately after it
                     if (foundSuperStatement) {
                         addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatementAfterSuper, parameterPropertyDeclarationCount));
@@ -845,7 +845,7 @@ namespace ts {
             const propertyOriginalNode = getOriginalNode(property);
             const initializer = property.initializer || emitAssignment ? visitNode(property.initializer, visitor, isExpression)
                 : isParameterPropertyDeclaration(propertyOriginalNode, propertyOriginalNode.parent) && isIdentifier(propertyName) ? propertyName
-                    : createVoidZero();
+                : createVoidZero();
 
             if (emitAssignment || isPrivateIdentifier(propertyName)) {
                 const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
@@ -854,7 +854,7 @@ namespace ts {
             else {
                 const name = isComputedPropertyName(propertyName) ? propertyName.expression
                     : isIdentifier(propertyName) ? createStringLiteral(unescapeLeadingUnderscores(propertyName.escapedText))
-                        : propertyName;
+                    : propertyName;
                 const descriptor = createPropertyDescriptor({ value: initializer, configurable: true, writable: true, enumerable: true });
                 return createObjectDefinePropertyCall(receiver, name, descriptor);
             }

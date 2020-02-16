@@ -29,7 +29,6 @@ class Sub extends Base {
     constructor(p) {
         console.log('hi');
         super();
-        this.p = p;
         Object.defineProperty(this, "p", {
             enumerable: true,
             configurable: true,
@@ -42,6 +41,7 @@ class Sub extends Base {
             writable: true,
             value: 0
         });
+        this.p = p;
     }
 }
 class Test extends Base {
@@ -49,7 +49,6 @@ class Test extends Base {
     constructor(p) {
         1;
         super();
-        this.p = p;
         Object.defineProperty(this, "p", {
             enumerable: true,
             configurable: true,
@@ -62,6 +61,7 @@ class Test extends Base {
             writable: true,
             value: void 0
         });
+        this.p = p;
         this.prop = 1;
     }
 }

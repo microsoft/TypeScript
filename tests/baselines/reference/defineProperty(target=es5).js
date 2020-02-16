@@ -110,7 +110,6 @@ var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C(ka) {
         var _this = _super.call(this) || this;
-        _this.ka = ka;
         Object.defineProperty(_this, "ka", {
             enumerable: true,
             configurable: true,
@@ -129,6 +128,7 @@ var C = /** @class */ (function (_super) {
             writable: true,
             value: _this.ka
         });
+        _this.ka = ka;
         return _this;
     }
     return C;

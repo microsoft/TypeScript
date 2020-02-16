@@ -1935,7 +1935,7 @@ namespace ts {
                 ...statements,
             ];
 
-            // Transform parameters int property assignments. Transforms this:
+            // Transform parameters into property assignments. Transforms this:
             //
             //  constructor (public x, public y) {
             //  }
