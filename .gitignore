@@ -53,6 +53,7 @@ scripts/processDiagnosticMessages.js
 scripts/produceLKG.js
 scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js
 scripts/generateLocalizedDiagnosticMessages.js
+scripts/request-pr-review.js
 scripts/*.js.map
 scripts/typings/
 coverage/
