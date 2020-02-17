@@ -153,8 +153,8 @@ Standard output:
 @fluentui/local-sandbox: Time: ?s
 @fluentui/local-sandbox: Built at: XX/XX/XX XX:XX:XX XM
 @fluentui/local-sandbox:      Asset      Size  Chunks                    Chunk Names
-@fluentui/local-sandbox:     app.js  4.79 MiB     app  [emitted]  [big]  app
-@fluentui/local-sandbox: app.js.map  3.86 MiB     app  [emitted]         app
+@fluentui/local-sandbox:     app.js  4.82 MiB     app  [emitted]  [big]  app
+@fluentui/local-sandbox: app.js.map  3.89 MiB     app  [emitted]         app
 @fluentui/local-sandbox: index.html  X KiB          [emitted]         
 @fluentui/local-sandbox: Entrypoint app [big] = app.js app.js.map
 @fluentui/local-sandbox: [../accessibility/dist/es/index.js] X KiB {app} [built]
@@ -172,7 +172,7 @@ Standard output:
 @fluentui/local-sandbox: [../react/dist/es/utils/positioner/types.js] X KiB {app} [built]
 @fluentui/local-sandbox: [../styles/dist/es/index.js] X KiB {app} [built]
 @fluentui/local-sandbox: [./src/index.tsx] X KiB {app} [built]
-@fluentui/local-sandbox:     + 1208 hidden modules
+@fluentui/local-sandbox:     + 1220 hidden modules
 @fluentui/local-sandbox: Done in ?s.
 @uifabric/utilities: yarn run vX.X.X
 @uifabric/utilities: $ just-scripts build
@@ -270,7 +270,7 @@ Standard error:
 info cli using local version of lerna
 lerna notice cli vX.X.X
 lerna info Executing command in 61 packages: "yarn run build"
-@fluentui/ability-attributes: npm WARN lifecycle The node binary used for scripts is /tmp/yarn--1581721799113-0.08545685427418936/node but npm is using /usr/local/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
+@fluentui/ability-attributes: npm WARN lifecycle The node binary used for scripts is /tmp/yarn--1581913262783-0.351747291726332/node but npm is using /usr/local/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
 @uifabric/example-data: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/set-version: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/merge-styles: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
@@ -286,9 +286,9 @@ lerna info Executing command in 61 packages: "yarn run build"
 @uifabric/icons: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @fluentui/playground: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 office-ui-fabric-react: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
-office-ui-fabric-react: [XX:XX:XX XM] x Error detected while running 'ts:esm'
+office-ui-fabric-react: [XX:XX:XX XM] x Error detected while running 'ts:commonjs'
 office-ui-fabric-react: [XX:XX:XX XM] x ------------------------------------
-office-ui-fabric-react: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/office-ui-fabric-react/tsconfig.json"
+office-ui-fabric-react: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/office-ui-fabric-react/tsconfig.json"
 office-ui-fabric-react:     at ChildProcess.exithandler (child_process.js:303:12)
 office-ui-fabric-react:     at ChildProcess.emit (events.js:321:20)
 office-ui-fabric-react:     at ChildProcess.EventEmitter.emit (domain.js:505:15)
@@ -319,8 +319,8 @@ office-ui-fabric-react:                 ~~~~~~~~~~~~~~~~~~~~~~~
 office-ui-fabric-react: src/components/ContextualMenu/examples/ContextualMenu.Icon.Example.tsx:12:31 - error TS2307: Cannot find module './ContextualMenuExample.scss'.
 office-ui-fabric-react: 12 import * as stylesImport from './ContextualMenuExample.scss';
 office-ui-fabric-react:                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-office-ui-fabric-react: src/components/DetailsList/DetailsList.base.tsx:479:19 - error TS2783: 'selection' is specified more than once, so this usage will be overwritten.
-office-ui-fabric-react: 479                   selection={selection}
+office-ui-fabric-react: src/components/DetailsList/DetailsList.base.tsx:480:19 - error TS2783: 'selection' is specified more than once, so this usage will be overwritten.
+office-ui-fabric-react: 480                   selection={selection}
 office-ui-fabric-react:                       ~~~~~~~~~~~~~~~~~~~~~
 office-ui-fabric-react: src/components/ExtendedPicker/BaseExtendedPicker.tsx:5:31 - error TS2307: Cannot find module './BaseExtendedPicker.scss'.
 office-ui-fabric-react: 5 import * as stylesImport from './BaseExtendedPicker.scss';
@@ -370,6 +370,6 @@ office-ui-fabric-react:                                 ~~~~~~~~~~~~~~~~~~~~
 office-ui-fabric-react: Found 24 errors.
 office-ui-fabric-react: [XX:XX:XX XM] x ------------------------------------
 office-ui-fabric-react: [XX:XX:XX XM] x Error previously detected. See above for error messages.
-office-ui-fabric-react: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
+office-ui-fabric-react: [XX:XX:XX XM] x Other tasks that did not complete: [ts:esm]
 office-ui-fabric-react: error Command failed with exit code 1.
 lerna ERR! yarn run build exited 1 in 'office-ui-fabric-react'
