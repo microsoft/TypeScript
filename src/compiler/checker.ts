@@ -242,6 +242,13 @@ namespace ts {
         ExportNamespace = 1 << 2,
     }
 
+    function SymbolLinks(this: SymbolLinks) {
+    }
+
+    function NodeLinks(this: NodeLinks) {
+        this.flags = 0;
+    }
+
     export function getNodeId(node: Node): number {
         if (!node.id) {
             node.id = nextNodeId;
@@ -1255,12 +1262,12 @@ namespace ts {
         function getSymbolLinks(symbol: Symbol): SymbolLinks {
             if (symbol.flags & SymbolFlags.Transient) return <TransientSymbol>symbol;
             const id = getSymbolId(symbol);
-            return symbolLinks[id] || (symbolLinks[id] = {});
+            return symbolLinks[id] || (symbolLinks[id] = new (<any>SymbolLinks)());
         }
 
         function getNodeLinks(node: Node): NodeLinks {
             const nodeId = getNodeId(node);
-            return nodeLinks[nodeId] || (nodeLinks[nodeId] = { flags: 0 } as NodeLinks);
+            return nodeLinks[nodeId] || (nodeLinks[nodeId] = new (<any>NodeLinks)());
         }
 
         function isGlobalSourceFile(node: Node) {
