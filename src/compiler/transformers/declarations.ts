@@ -1,8 +1,11 @@
 /*@internal*/
 namespace ts {
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {
+        if (file && isJsonSourceFile(file)) {
+            return []; // No declaration diagnostics for json for now
+        }
         const compilerOptions = host.getCompilerOptions();
-        const result = transformNodes(resolver, host, compilerOptions, file ? [file] : host.getSourceFiles(), [transformDeclarations], /*allowDtsFiles*/ false);
+        const result = transformNodes(resolver, host, compilerOptions, file ? [file] : filter(host.getSourceFiles(), isSourceFileNotJson), [transformDeclarations], /*allowDtsFiles*/ false);
         return result.diagnostics;
     }
 
@@ -398,7 +401,7 @@ namespace ts {
             forEach(sourceFile.libReferenceDirectives, ref => {
                 const lib = host.getLibFileFromReference(ref);
                 if (lib) {
-                    ret.set(ref.fileName.toLocaleLowerCase(), true);
+                    ret.set(toFileNameLowerCase(ref.fileName), true);
                 }
             });
             return ret;
@@ -686,7 +689,8 @@ namespace ts {
                 return visibleDefaultBinding && updateImportDeclaration(decl, /*decorators*/ undefined, decl.modifiers, updateImportClause(
                     decl.importClause,
                     visibleDefaultBinding,
-                    /*namedBindings*/ undefined
+                    /*namedBindings*/ undefined,
+                    decl.importClause.isTypeOnly,
                 ), rewriteModuleSpecifier(decl, decl.moduleSpecifier));
             }
             if (decl.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
@@ -695,7 +699,8 @@ namespace ts {
                 return visibleDefaultBinding || namedBindings ? updateImportDeclaration(decl, /*decorators*/ undefined, decl.modifiers, updateImportClause(
                     decl.importClause,
                     visibleDefaultBinding,
-                    namedBindings
+                    namedBindings,
+                    decl.importClause.isTypeOnly,
                 ), rewriteModuleSpecifier(decl, decl.moduleSpecifier)) : undefined;
             }
             // Named imports (optionally with visible default)
@@ -708,7 +713,8 @@ namespace ts {
                     updateImportClause(
                         decl.importClause,
                         visibleDefaultBinding,
-                        bindingList && bindingList.length ? updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined
+                        bindingList && bindingList.length ? updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined,
+                        decl.importClause.isTypeOnly,
                     ),
                     rewriteModuleSpecifier(decl, decl.moduleSpecifier)
                 );
@@ -1033,7 +1039,13 @@ namespace ts {
                     resultHasScopeMarker = true;
                     // Always visible if the parent node isn't dropped for being not visible
                     // Rewrite external module names if necessary
-                    return updateExportDeclaration(input, /*decorators*/ undefined, input.modifiers, input.exportClause, rewriteModuleSpecifier(input, input.moduleSpecifier));
+                    return updateExportDeclaration(
+                        input,
+                        /*decorators*/ undefined,
+                        input.modifiers,
+                        input.exportClause,
+                        rewriteModuleSpecifier(input, input.moduleSpecifier),
+                        input.isTypeOnly);
                 }
                 case SyntaxKind.ExportAssignment: {
                     // Always visible if the parent node isn't dropped for being not visible

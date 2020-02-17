@@ -1721,6 +1721,20 @@ namespace ts {
         return isImportSpecifier(node) || isExportSpecifier(node);
     }
 
+    export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyCompatibleAliasDeclaration {
+        switch (node.kind) {
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.ExportSpecifier:
+                return (node as ImportOrExportSpecifier).parent.parent.isTypeOnly;
+            case SyntaxKind.NamespaceImport:
+                return (node as NamespaceImport).parent.isTypeOnly;
+            case SyntaxKind.ImportClause:
+                return (node as ImportClause).isTypeOnly;
+            default:
+                return false;
+        }
+    }
+
     export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
         return node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind);
     }
@@ -2493,9 +2507,19 @@ namespace ts {
     }
 
     /** True if has initializer node attached to it. */
-    /* @internal */
     export function hasOnlyExpressionInitializer(node: Node): node is HasExpressionInitializer {
-        return hasInitializer(node) && !isForStatement(node) && !isForInStatement(node) && !isForOfStatement(node) && !isJsxAttribute(node);
+        switch (node.kind) {
+            case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.Parameter:
+            case SyntaxKind.BindingElement:
+            case SyntaxKind.PropertySignature:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.EnumMember:
+                return true;
+            default:
+                return false;
+        }
     }
 
     export function isObjectLiteralElement(node: Node): node is ObjectLiteralElement {

@@ -46,3 +46,8 @@ describe("Public APIs:: token to string", () => {
         assertDefinedTokenToString(ts.SyntaxKind.FirstKeyword, ts.SyntaxKind.LastKeyword);
     });
 });
+describe("Public APIs:: createPrivateIdentifier", () => {
+    it("throws when name doesn't start with #", () => {
+            assert.throw(() => ts.createPrivateIdentifier("not"), "Debug Failure. First character of private identifier must be #: not");
+    });
+});

@@ -1107,31 +1107,6 @@ namespace ts {
         return parseInt(version.substring(1, dot));
     }
 
-    declare const ChakraHost: {
-        args: string[];
-        currentDirectory: string;
-        executingFile: string;
-        newLine?: string;
-        useCaseSensitiveFileNames?: boolean;
-        echo(s: string): void;
-        quit(exitCode?: number): void;
-        fileExists(path: string): boolean;
-        deleteFile(path: string): boolean;
-        getModifiedTime(path: string): Date;
-        setModifiedTime(path: string, time: Date): void;
-        directoryExists(path: string): boolean;
-        createDirectory(path: string): void;
-        resolvePath(path: string): string;
-        readFile(path: string): string | undefined;
-        writeFile(path: string, contents: string): void;
-        getDirectories(path: string): string[];
-        readDirectory(path: string, extensions?: readonly string[], basePaths?: readonly string[], excludeEx?: string, includeFileEx?: string, includeDirEx?: string): string[];
-        watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
-        watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
-        realpath(path: string): string;
-        getEnvironmentVariable?(name: string): string;
-    };
-
     // TODO: GH#18217 this is used as if it's certainly defined in many places.
     // eslint-disable-next-line prefer-const
     export let sys: System = (() => {
@@ -1559,10 +1534,13 @@ namespace ts {
             }
 
             function readFileWorker(fileName: string, _encoding?: string): string | undefined {
-                if (!fileExists(fileName)) {
+                let buffer: Buffer;
+                try {
+                    buffer = _fs.readFileSync(fileName);
+                }
+                catch (e) {
                     return undefined;
                 }
-                const buffer = _fs.readFileSync(fileName);
                 let len = buffer.length;
                 if (len >= 2 && buffer[0] === 0xFE && buffer[1] === 0xFF) {
                     // Big endian UTF-16 byte order mark detected. Since big endian is not supported by node.js,
@@ -1617,23 +1595,32 @@ namespace ts {
             function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
                 perfLogger.logEvent("ReadDir: " + (path || "."));
                 try {
-                    const entries = _fs.readdirSync(path || ".").sort();
+                    const entries = _fs.readdirSync(path || ".", { withFileTypes: true });
                     const files: string[] = [];
                     const directories: string[] = [];
-                    for (const entry of entries) {
+                    for (const dirent of entries) {
+                        // withFileTypes is not supported before Node 10.10.
+                        const entry = typeof dirent === "string" ? dirent : dirent.name;
+
                         // This is necessary because on some file system node fails to exclude
                         // "." and "..". See https://github.com/nodejs/node/issues/4002
                         if (entry === "." || entry === "..") {
                             continue;
                         }
-                        const name = combinePaths(path, entry);
 
                         let stat: any;
-                        try {
-                            stat = _fs.statSync(name);
+                        if (typeof dirent === "string" || dirent.isSymbolicLink()) {
+                            const name = combinePaths(path, entry);
+
+                            try {
+                                stat = _fs.statSync(name);
+                            }
+                            catch (e) {
+                                continue;
+                            }
                         }
-                        catch (e) {
-                            continue;
+                        else {
+                            stat = dirent;
                         }
 
                         if (stat.isFile()) {
@@ -1643,6 +1630,8 @@ namespace ts {
                             directories.push(entry);
                         }
                     }
+                    files.sort();
+                    directories.sort();
                     return { files, directories };
                 }
                 catch (e) {
@@ -1677,8 +1666,7 @@ namespace ts {
             }
 
             function getDirectories(path: string): string[] {
-                perfLogger.logEvent("ReadDir: " + path);
-                return filter<string>(_fs.readdirSync(path), dir => fileSystemEntryExists(combinePaths(path, dir), FileSystemEntryKind.Directory));
+                return getAccessibleFileSystemEntries(path).directories.slice();
             }
 
             function realpath(path: string): string {
@@ -1724,50 +1712,8 @@ namespace ts {
             }
         }
 
-        function getChakraSystem(): System {
-            const realpath = ChakraHost.realpath && ((path: string) => ChakraHost.realpath(path));
-            return {
-                newLine: ChakraHost.newLine || "\r\n",
-                args: ChakraHost.args,
-                useCaseSensitiveFileNames: !!ChakraHost.useCaseSensitiveFileNames,
-                write: ChakraHost.echo,
-                readFile(path: string, _encoding?: string) {
-                    // encoding is automatically handled by the implementation in ChakraHost
-                    return ChakraHost.readFile(path);
-                },
-                writeFile(path: string, data: string, writeByteOrderMark?: boolean) {
-                    // If a BOM is required, emit one
-                    if (writeByteOrderMark) {
-                        data = byteOrderMarkIndicator + data;
-                    }
-
-                    ChakraHost.writeFile(path, data);
-                },
-                resolvePath: ChakraHost.resolvePath,
-                fileExists: ChakraHost.fileExists,
-                deleteFile: ChakraHost.deleteFile,
-                getModifiedTime: ChakraHost.getModifiedTime,
-                setModifiedTime: ChakraHost.setModifiedTime,
-                directoryExists: ChakraHost.directoryExists,
-                createDirectory: ChakraHost.createDirectory,
-                getExecutingFilePath: () => ChakraHost.executingFile,
-                getCurrentDirectory: () => ChakraHost.currentDirectory,
-                getDirectories: ChakraHost.getDirectories,
-                getEnvironmentVariable: ChakraHost.getEnvironmentVariable || (() => ""),
-                readDirectory(path, extensions, excludes, includes, _depth) {
-                    const pattern = getFileMatcherPatterns(path, excludes, includes, !!ChakraHost.useCaseSensitiveFileNames, ChakraHost.currentDirectory);
-                    return ChakraHost.readDirectory(path, extensions, pattern.basePaths, pattern.excludePattern, pattern.includeFilePattern, pattern.includeDirectoryPattern);
-                },
-                exit: ChakraHost.quit,
-                realpath
-            };
-        }
-
         let sys: System | undefined;
-        if (typeof ChakraHost !== "undefined") {
-            sys = getChakraSystem();
-        }
-        else if (typeof process !== "undefined" && process.nextTick && !process.browser && typeof require !== "undefined") {
+        if (typeof process !== "undefined" && process.nextTick && !process.browser && typeof require !== "undefined") {
             // process and process.nextTick checks if current environment is node-like
             // process.browser check excludes webpack and browserify
             sys = getNodeSystem();

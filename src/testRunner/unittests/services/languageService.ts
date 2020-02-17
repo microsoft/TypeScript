@@ -46,7 +46,7 @@ export function Component(x: Config): any;`
         it("should be able to create a language service which can respond to deinition requests without throwing", () => {
             const languageService = createLanguageService();
             const definitions = languageService.getDefinitionAtPosition("foo.ts", 160); // 160 is the latter `vueTemplateHtml` position
-            expect(definitions).to.exist; // eslint-disable-line no-unused-expressions
+            expect(definitions).to.exist; // eslint-disable-line @typescript-eslint/no-unused-expressions
         });
 
         it("getEmitOutput on language service has way to force dts emit", () => {

@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "3.8";
+    const versionMajorMinor = "3.9";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -1497,6 +1497,7 @@ declare namespace ts {
     export interface ImportClause extends NamedDeclaration {
         kind: SyntaxKind.ImportClause;
         parent: ImportDeclaration;
+        isTypeOnly: boolean;
         name?: Identifier;
         namedBindings?: NamedImportBindings;
     }
@@ -1517,6 +1518,7 @@ declare namespace ts {
     export interface ExportDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.ExportDeclaration;
         parent: SourceFile | ModuleBlock;
+        isTypeOnly: boolean;
         /** Will not be assigned in the case of `export * from "foo";` */
         exportClause?: NamedExportBindings;
         /** If this is not a StringLiteral it will be a grammar error. */
@@ -1546,6 +1548,7 @@ declare namespace ts {
         name: Identifier;
     }
     export type ImportOrExportSpecifier = ImportSpecifier | ExportSpecifier;
+    export type TypeOnlyCompatibleAliasDeclaration = ImportClause | NamespaceImport | ImportOrExportSpecifier;
     /**
      * This is either an `export =` or an `export default` declaration.
      * Unless `isExportEquals` is set, this node was parsed as an `export default`.
@@ -2116,6 +2119,7 @@ declare namespace ts {
         UseTypeOfFunction = 4096,
         OmitParameterModifiers = 8192,
         UseAliasDefinedOutsideCurrentScope = 16384,
+        UseSingleQuotesForStringLiteralType = 268435456,
         AllowThisInObjectLiteral = 32768,
         AllowQualifedNameInPlaceOfIdentifier = 65536,
         AllowAnonymousIdentifier = 131072,
@@ -2143,6 +2147,7 @@ declare namespace ts {
         UseTypeOfFunction = 4096,
         OmitParameterModifiers = 8192,
         UseAliasDefinedOutsideCurrentScope = 16384,
+        UseSingleQuotesForStringLiteralType = 268435456,
         AllowUniqueESSymbolType = 1048576,
         AddUndefined = 131072,
         WriteArrowStyleSignature = 262144,
@@ -2151,7 +2156,7 @@ declare namespace ts {
         InFirstTypeArgument = 4194304,
         InTypeAlias = 8388608,
         /** @deprecated */ WriteOwnNameForAnyLike = 0,
-        NodeBuilderFlagsMask = 9469291
+        NodeBuilderFlagsMask = 277904747
     }
     export enum SymbolFormatFlags {
         None = 0,
@@ -2511,7 +2516,7 @@ declare namespace ts {
         substitute: Type;
     }
     export interface AwaitedType extends InstantiableType {
-        typeVariable: TypeVariable;
+        awaitedType: Type;
     }
     export enum SignatureKind {
         Call = 0,
@@ -2654,6 +2659,7 @@ declare namespace ts {
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         importHelpers?: boolean;
+        importsNotUsedAsValues?: ImportsNotUsedAsValues;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         isolatedModules?: boolean;
@@ -2678,6 +2684,7 @@ declare namespace ts {
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
         noImplicitUseStrict?: boolean;
+        assumeChangesOnlyAffectDirectDependencies?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
         out?: string;
@@ -2750,6 +2757,11 @@ declare namespace ts {
         Preserve = 1,
         React = 2,
         ReactNative = 3
+    }
+    export enum ImportsNotUsedAsValues {
+        Remove = 0,
+        Preserve = 1,
+        Error = 2
     }
     export enum NewLineKind {
         CarriageReturnLineFeed = 0,
@@ -2977,7 +2989,8 @@ declare namespace ts {
         IdentifierName = 2,
         MappedTypeParameter = 3,
         Unspecified = 4,
-        EmbeddedStatement = 5
+        EmbeddedStatement = 5,
+        JsxAttributeValue = 6
     }
     export interface TransformationContext {
         /** Gets the compiler options supplied to the transformer. */
@@ -3050,6 +3063,12 @@ declare namespace ts {
          */
         emitNodeWithNotification(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
         /**
+         * Indicates if a given node needs an emit notification
+         *
+         * @param node The node to emit.
+         */
+        isEmitNotificationEnabled?(node: Node): boolean;
+        /**
          * Clean up EmitNode entries on any parse-tree nodes.
          */
         dispose(): void;
@@ -3121,6 +3140,11 @@ declare namespace ts {
          * ```
          */
         onEmitNode?(hint: EmitHint, node: Node | undefined, emitCallback: (hint: EmitHint, node: Node | undefined) => void): void;
+        /**
+         * A hook used to check if an emit notification is required for a node.
+         * @param node The node to emit.
+         */
+        isEmitNotificationEnabled?(node: Node | undefined): boolean;
         /**
          * A hook used by the Printer to perform just-in-time substitution of a node. This is
          * primarily used by node transformations that need to substitute one node for another,
@@ -3326,7 +3350,8 @@ declare namespace ts {
         isUnterminated(): boolean;
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
-        reScanTemplateToken(): SyntaxKind;
+        reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
+        reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxAttributeValue(): SyntaxKind;
@@ -3735,6 +3760,7 @@ declare namespace ts {
     function isTemplateLiteralToken(node: Node): node is TemplateLiteralToken;
     function isTemplateMiddleOrTemplateTail(node: Node): node is TemplateMiddle | TemplateTail;
     function isImportOrExportSpecifier(node: Node): node is ImportSpecifier | ExportSpecifier;
+    function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyCompatibleAliasDeclaration;
     function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken;
     function isModifier(node: Node): node is Modifier;
     function isEntityName(node: Node): node is EntityName;
@@ -3767,6 +3793,8 @@ declare namespace ts {
     function isJSDocCommentContainingNode(node: Node): boolean;
     function isSetAccessor(node: Node): node is SetAccessorDeclaration;
     function isGetAccessor(node: Node): node is GetAccessorDeclaration;
+    /** True if has initializer node attached to it. */
+    function hasOnlyExpressionInitializer(node: Node): node is HasExpressionInitializer;
     function isObjectLiteralElement(node: Node): node is ObjectLiteralElement;
     function isStringLiteralLike(node: Node): node is StringLiteralLike;
 }
@@ -4181,8 +4209,8 @@ declare namespace ts {
     function updateImportEqualsDeclaration(node: ImportEqualsDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
     function createImportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression): ImportDeclaration;
     function updateImportDeclaration(node: ImportDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression): ImportDeclaration;
-    function createImportClause(name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
-    function updateImportClause(node: ImportClause, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
+    function createImportClause(name: Identifier | undefined, namedBindings: NamedImportBindings | undefined, isTypeOnly?: boolean): ImportClause;
+    function updateImportClause(node: ImportClause, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined, isTypeOnly: boolean): ImportClause;
     function createNamespaceImport(name: Identifier): NamespaceImport;
     function createNamespaceExport(name: Identifier): NamespaceExport;
     function updateNamespaceImport(node: NamespaceImport, name: Identifier): NamespaceImport;
@@ -4193,8 +4221,8 @@ declare namespace ts {
     function updateImportSpecifier(node: ImportSpecifier, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
     function createExportAssignment(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
     function updateExportAssignment(node: ExportAssignment, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, expression: Expression): ExportAssignment;
-    function createExportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression): ExportDeclaration;
-    function updateExportDeclaration(node: ExportDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined): ExportDeclaration;
+    function createExportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, isTypeOnly?: boolean): ExportDeclaration;
+    function updateExportDeclaration(node: ExportDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, isTypeOnly: boolean): ExportDeclaration;
     function createNamedExports(elements: readonly ExportSpecifier[]): NamedExports;
     function updateNamedExports(node: NamedExports, elements: readonly ExportSpecifier[]): NamedExports;
     function createExportSpecifier(propertyName: string | Identifier | undefined, name: string | Identifier): ExportSpecifier;
@@ -4784,6 +4812,7 @@ declare namespace ts {
         force?: boolean;
         verbose?: boolean;
         incremental?: boolean;
+        assumeChangesOnlyAffectDirectDependencies?: boolean;
         traceResolution?: boolean;
         [option: string]: CompilerOptionsValue | undefined;
     }
@@ -5178,7 +5207,7 @@ declare namespace ts {
         fileName: string;
     }
     type OrganizeImportsScope = CombinedCodeFixScope;
-    type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<";
+    type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#";
     interface GetCompletionsAtPositionOptions extends UserPreferences {
         /**
          * If the editor is asking for completions because a certain character was typed
@@ -5646,6 +5675,7 @@ declare namespace ts {
         hasAction?: true;
         source?: string;
         isRecommended?: true;
+        isFromUncheckedFile?: true;
     }
     interface CompletionEntryDetails {
         name: string;
@@ -6231,6 +6261,16 @@ declare namespace ts.server.protocol {
          * Contains extra information that plugin can include to be passed on
          */
         metadata?: unknown;
+        /**
+         * Exposes information about the performance of this request-response pair.
+         */
+        performanceData?: PerformanceData;
+    }
+    interface PerformanceData {
+        /**
+         * Time spent updating the program graph, in milliseconds.
+         */
+        updateGraphDurationMs?: number;
     }
     /**
      * Arguments for FileRequest messages.
@@ -7046,6 +7086,16 @@ declare namespace ts.server.protocol {
      * compiler settings.
      */
     type ExternalProjectCompilerOptions = CompilerOptions & CompileOnSaveMixin & WatchOptions;
+    interface FileWithProjectReferenceRedirectInfo {
+        /**
+         * Name of file
+         */
+        fileName: string;
+        /**
+         * True if the file is primarily included in a referenced project
+         */
+        isSourceOfProjectReferenceRedirect: boolean;
+    }
     /**
      * Represents a set of changes that happen in project
      */
@@ -7053,15 +7103,20 @@ declare namespace ts.server.protocol {
         /**
          * List of added files
          */
-        added: string[];
+        added: string[] | FileWithProjectReferenceRedirectInfo[];
         /**
          * List of removed files
          */
-        removed: string[];
+        removed: string[] | FileWithProjectReferenceRedirectInfo[];
         /**
          * List of updated files
          */
-        updated: string[];
+        updated: string[] | FileWithProjectReferenceRedirectInfo[];
+        /**
+         * List of files that have had their project reference redirect status updated
+         * Only provided when the synchronizeProjectList request has includeProjectReferenceRedirectInfo set to true
+         */
+        updatedRedirects?: FileWithProjectReferenceRedirectInfo[];
     }
     /**
      * Information found in a configure request.
@@ -7521,7 +7576,7 @@ declare namespace ts.server.protocol {
         command: CommandTypes.Formatonkey;
         arguments: FormatOnKeyRequestArgs;
     }
-    type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<";
+    type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#";
     /**
      * Arguments for completions messages.
      */
@@ -7638,6 +7693,11 @@ declare namespace ts.server.protocol {
          * Then either that enum/class or a namespace containing it will be the recommended symbol.
          */
         isRecommended?: true;
+        /**
+         * If true, this completion was generated from traversing the name table of an unchecked JS file,
+         * and therefore may not be accurate.
+         */
+        isFromUncheckedFile?: true;
     }
     /**
      * Additional completion entry details, available on demand
@@ -8839,7 +8899,7 @@ declare namespace ts.server {
     }
     /**
      * If a file is opened, the server will look for a tsconfig (or jsconfig)
-     * and if successfull create a ConfiguredProject for it.
+     * and if successful create a ConfiguredProject for it.
      * Otherwise it will create an InferredProject.
      */
     class ConfiguredProject extends Project {
@@ -9116,7 +9176,7 @@ declare namespace ts.server {
          */
         private readonly projectToSizeMap;
         /**
-         * This is a map of config file paths existance that doesnt need query to disk
+         * This is a map of config file paths existence that doesnt need query to disk
          * - The entry can be present because there is inferred project that needs to watch addition of config file to directory
          *   In this case the exists could be true/false based on config file is present or not
          * - Or it is present if we have configured project open with config file at that location
@@ -9148,6 +9208,7 @@ declare namespace ts.server {
         readonly syntaxOnly?: boolean;
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects;
+        private performanceEventHandler?;
         constructor(opts: ProjectServiceOptions);
         toPath(fileName: string): Path;
         private loadTypesMap;
@@ -9377,6 +9438,7 @@ declare namespace ts.server {
         private readonly gcTimer;
         protected projectService: ProjectService;
         private changeSeq;
+        private updateGraphDurationMs;
         private currentRequestId;
         private errorCheck;
         protected host: ServerHost;
@@ -9391,6 +9453,7 @@ declare namespace ts.server {
         private readonly noGetErrOnBackgroundUpdate?;
         constructor(opts: SessionOptions);
         private sendRequestCompletedEvent;
+        private performanceEventHandler;
         private defaultEventHandler;
         private projectsUpdatedInBackgroundEvent;
         logError(err: Error, cmd: string): void;
@@ -9473,7 +9536,7 @@ declare namespace ts.server {
         private getCompileOnSaveAffectedFileList;
         private emitFile;
         private getSignatureHelpItems;
-        private createCheckList;
+        private toPendingErrorCheck;
         private getDiagnostics;
         private change;
         private reload;
@@ -9506,6 +9569,7 @@ declare namespace ts.server {
         private configurePlugin;
         private getSmartSelectionRange;
         private mapSelectionRange;
+        private getScriptInfoFromProjectService;
         private toProtocolCallHierarchyItem;
         private toProtocolCallHierarchyIncomingCall;
         private toProtocolCallHierarchyOutgoingCall;

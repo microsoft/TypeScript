@@ -218,6 +218,9 @@ namespace ts {
 
     // Private Identifiers
     export function createPrivateIdentifier(text: string): PrivateIdentifier {
+        if (text[0] !== "#") {
+            Debug.fail("First character of private identifier must be #: " + text);
+        }
         const node = createSynthesizedNode(SyntaxKind.PrivateIdentifier) as PrivateIdentifier;
         node.escapedText = escapeLeadingUnderscores(text);
         return node;
@@ -1483,7 +1486,7 @@ namespace ts {
 
         let token = rawTextScanner.scan();
         if (token === SyntaxKind.CloseBracketToken) {
-            token = rawTextScanner.reScanTemplateToken();
+            token = rawTextScanner.reScanTemplateToken(/* isTaggedTemplate */ false);
         }
 
         if (rawTextScanner.isUnterminated()) {
@@ -2267,17 +2270,19 @@ namespace ts {
             : node;
     }
 
-    export function createImportClause(name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause {
+    export function createImportClause(name: Identifier | undefined, namedBindings: NamedImportBindings | undefined, isTypeOnly = false): ImportClause {
         const node = <ImportClause>createSynthesizedNode(SyntaxKind.ImportClause);
         node.name = name;
         node.namedBindings = namedBindings;
+        node.isTypeOnly = isTypeOnly;
         return node;
     }
 
-    export function updateImportClause(node: ImportClause, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined) {
+    export function updateImportClause(node: ImportClause, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined, isTypeOnly: boolean) {
         return node.name !== name
             || node.namedBindings !== namedBindings
-            ? updateNode(createImportClause(name, namedBindings), node)
+            || node.isTypeOnly !== isTypeOnly
+            ? updateNode(createImportClause(name, namedBindings, isTypeOnly), node)
             : node;
     }
 
@@ -2348,10 +2353,11 @@ namespace ts {
             : node;
     }
 
-    export function createExportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression) {
+    export function createExportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, isTypeOnly = false) {
         const node = <ExportDeclaration>createSynthesizedNode(SyntaxKind.ExportDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
+        node.isTypeOnly = isTypeOnly;
         node.exportClause = exportClause;
         node.moduleSpecifier = moduleSpecifier;
         return node;
@@ -2362,12 +2368,14 @@ namespace ts {
         decorators: readonly Decorator[] | undefined,
         modifiers: readonly Modifier[] | undefined,
         exportClause: NamedExportBindings | undefined,
-        moduleSpecifier: Expression | undefined) {
+        moduleSpecifier: Expression | undefined,
+        isTypeOnly: boolean) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
+            || node.isTypeOnly !== isTypeOnly
             || node.exportClause !== exportClause
             || node.moduleSpecifier !== moduleSpecifier
-            ? updateNode(createExportDeclaration(decorators, modifiers, exportClause, moduleSpecifier), node)
+            ? updateNode(createExportDeclaration(decorators, modifiers, exportClause, moduleSpecifier, isTypeOnly), node)
             : node;
     }
 

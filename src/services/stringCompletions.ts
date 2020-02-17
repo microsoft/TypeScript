@@ -6,9 +6,9 @@ namespace ts.Completions.StringCompletions {
             return entries && convertPathCompletions(entries);
         }
         if (isInString(sourceFile, position, contextToken)) {
-            return !contextToken || !isStringLiteralLike(contextToken)
-                ? undefined
-                : convertStringLiteralCompletions(getStringLiteralCompletionEntries(sourceFile, contextToken, position, checker, options, host), sourceFile, checker, log, preferences);
+            if (!contextToken || !isStringLiteralLike(contextToken)) return undefined;
+            const entries = getStringLiteralCompletionEntries(sourceFile, contextToken, position, checker, options, host);
+            return convertStringLiteralCompletions(entries, sourceFile, checker, log, preferences);
         }
     }
 
@@ -214,7 +214,11 @@ namespace ts.Completions.StringCompletions {
     }
 
     function stringLiteralCompletionsFromProperties(type: Type | undefined): StringLiteralCompletionsFromProperties | undefined {
-        return type && { kind: StringLiteralCompletionKind.Properties, symbols: type.getApparentProperties(), hasIndexSignature: hasIndexSignature(type) };
+        return type && {
+            kind: StringLiteralCompletionKind.Properties,
+            symbols: type.getApparentProperties().filter(prop => !isPrivateIdentifierPropertyDeclaration(prop.valueDeclaration)),
+            hasIndexSignature: hasIndexSignature(type)
+        };
     }
 
     function getStringLiteralTypes(type: Type | undefined, uniques = createMap<true>()): readonly StringLiteralType[] {

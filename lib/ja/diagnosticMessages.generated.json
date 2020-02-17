@@ -454,7 +454,7 @@
   "Generic_type_0_requires_1_type_argument_s_2314": "ジェネリック型 '{0}' には {1} 個の型引数が必要です。",
   "Generic_type_0_requires_between_1_and_2_type_arguments_2707": "ジェネリック型 '{0}' には、{1} 個から {2} 個までの型引数が必要です。",
   "Generic_type_instantiation_is_excessively_deep_and_possibly_infinite_2550": "ジェネリック型のインスタンス化は非常に深く、無限である可能性があります。",
-  "Getter_and_setter_accessors_do_not_agree_in_visibility_2379": "ゲッターおよびセッターで表示が許可されていません。",
+  "Getter_and_setter_accessors_do_not_agree_in_visibility_2379": "ゲッターおよびセッターでの表示が許可されていません。",
   "Global_module_exports_may_only_appear_at_top_level_1316": "グローバル モジュールのエクスポートは最上位レベルにのみ出現可能です。",
   "Global_module_exports_may_only_appear_in_declaration_files_1315": "グローバル モジュールのエクスポートは宣言ファイルにのみ出現可能です。",
   "Global_module_exports_may_only_appear_in_module_files_1314": "グローバル モジュールのエクスポートはモジュール ファイルにのみ出現可能です。",

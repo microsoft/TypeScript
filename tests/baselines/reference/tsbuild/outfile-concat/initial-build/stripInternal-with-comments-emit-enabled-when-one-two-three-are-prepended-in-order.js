@@ -5805,7 +5805,7 @@ declare var c: C;
     "sourceMap": true,
     "declarationMap": true,
     "declaration": true,
-"stripInternal": true
+    "stripInternal": true,
     "outFile": "./thirdjs/output/third-output.js",
     "skipDefaultLibCheck": true
   },
