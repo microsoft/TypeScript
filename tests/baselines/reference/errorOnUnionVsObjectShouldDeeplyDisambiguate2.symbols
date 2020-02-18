@@ -1,0 +1,89 @@
+=== tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts ===
+interface Stuff {
+>Stuff : Symbol(Stuff, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 0, 0))
+
+  a?: () => Promise<number[]>;
+>a : Symbol(Stuff.a, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 0, 17))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+  b: () => Promise<string>;
+>b : Symbol(Stuff.b, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 1, 30))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+  c: () => Promise<string>;
+>c : Symbol(Stuff.c, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 2, 27))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+  d: () => Promise<string>;
+>d : Symbol(Stuff.d, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 3, 27))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+  e: () => Promise<string>;
+>e : Symbol(Stuff.e, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 4, 27))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+  f: () => Promise<string>;
+>f : Symbol(Stuff.f, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 5, 27))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+  g: () => Promise<string>;
+>g : Symbol(Stuff.g, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 6, 27))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+  h: () => Promise<string>;
+>h : Symbol(Stuff.h, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 7, 27))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+  i: () => Promise<string>;
+>i : Symbol(Stuff.i, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 8, 27))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+  j: () => Promise<string>;
+>j : Symbol(Stuff.j, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 9, 27))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+  k: () => Promise<number>;
+>k : Symbol(Stuff.k, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 10, 27))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+}
+
+function foo(): Stuff | Date {
+>foo : Symbol(foo, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 12, 1))
+>Stuff : Symbol(Stuff, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 0, 0))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+  return {
+    a() { return [123] },
+>a : Symbol(a, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 15, 10))
+
+    b: () => "hello",
+>b : Symbol(b, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 16, 25))
+
+    c: () => "hello",
+>c : Symbol(c, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 17, 21))
+
+    d: () => "hello",
+>d : Symbol(d, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 18, 21))
+
+    e: () => "hello",
+>e : Symbol(e, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 19, 21))
+
+    f: () => "hello",
+>f : Symbol(f, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 20, 21))
+
+    g: () => "hello",
+>g : Symbol(g, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 21, 21))
+
+    h: () => "hello",
+>h : Symbol(h, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 22, 21))
+
+    i: () => "hello",
+>i : Symbol(i, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 23, 21))
+
+    j: () => "hello",
+>j : Symbol(j, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 24, 21))
+
+    k: () => 123
+>k : Symbol(k, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 25, 21))
+  }
+}

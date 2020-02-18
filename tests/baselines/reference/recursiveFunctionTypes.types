@@ -88,13 +88,13 @@ function f6(a?: any) { return f6; }
 >f6 : { (): typeof f6; (a: typeof f6): () => number; }
 
 f6("", 3); // error (arity mismatch)
->f6("", 3) : any
+>f6("", 3) : { (): typeof f6; (a: typeof f6): () => number; } & (() => number)
 >f6 : { (): typeof f6; (a: typeof f6): () => number; }
 >"" : ""
 >3 : 3
 
 f6(""); // ok (function takes an any param)
->f6("") : any
+>f6("") : { (): typeof f6; (a: typeof f6): () => number; } & (() => number)
 >f6 : { (): typeof f6; (a: typeof f6): () => number; }
 >"" : ""
 
@@ -122,13 +122,13 @@ declare function f7(a?: typeof f7): typeof f7;
 >f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
 
 f7("", 3); // error (arity mismatch)
->f7("", 3) : any
+>f7("", 3) : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; } & (() => number) & number
 >f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
 >"" : ""
 >3 : 3
 
 f7(""); // ok (function takes an any param)
->f7("") : any
+>f7("") : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; } & (() => number) & number
 >f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
 >"" : ""
 

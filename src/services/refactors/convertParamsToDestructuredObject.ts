@@ -5,7 +5,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
 
-    function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
+    function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition } = context;
         const isJSFile = isSourceFileJS(file);
         if (isJSFile) return emptyArray; // TODO: GH#30113
@@ -24,7 +24,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
-        Debug.assert(actionName === refactorName);
+        Debug.assert(actionName === refactorName, "Unexpected action name");
         const { file, startPosition, program, cancellationToken, host } = context;
         const functionDeclaration = getFunctionDeclarationAtPosition(file, startPosition, program.getTypeChecker());
         if (!functionDeclaration || !cancellationToken) return undefined;
@@ -87,7 +87,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
 
         return groupedReferences;
 
-        function groupReferences(referenceEntries: ReadonlyArray<FindAllReferences.Entry>): GroupedReferences {
+        function groupReferences(referenceEntries: readonly FindAllReferences.Entry[]): GroupedReferences {
             const classReferences: ClassReferences = { accessExpressions: [], typeUsages: [] };
             const groupedReferences: GroupedReferences = { functionCalls: [], declarations: [], classReferences, valid: true };
             const functionSymbols = map(functionNames, getSymbolTargetAtLocation);
@@ -266,7 +266,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         const node = getTouchingToken(file, startPosition);
         const functionDeclaration = getContainingFunctionDeclaration(node);
 
-         // don't offer refactor on top-level JSDoc
+        // don't offer refactor on top-level JSDoc
         if (isTopLevelJSDoc(node)) return undefined;
 
         if (functionDeclaration
@@ -563,7 +563,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                 if (functionDeclaration.name) return [functionDeclaration.name, functionDeclaration.parent.name];
                 return [functionDeclaration.parent.name];
             default:
-                return Debug.assertNever(functionDeclaration);
+                return Debug.assertNever(functionDeclaration, `Unexpected function declaration kind ${(functionDeclaration as ValidFunctionDeclaration).kind}`);
         }
     }
 

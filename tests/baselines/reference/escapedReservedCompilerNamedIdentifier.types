@@ -5,8 +5,8 @@ var __proto__ = 10;
 >10 : 10
 
 var o = {
->o : { "__proto__": number; }
->{    "__proto__": 0} : { "__proto__": number; }
+>o : { __proto__: number; }
+>{    "__proto__": 0} : { __proto__: number; }
 
     "__proto__": 0
 >"__proto__" : number
@@ -16,7 +16,7 @@ var o = {
 var b = o["__proto__"];
 >b : number
 >o["__proto__"] : number
->o : { "__proto__": number; }
+>o : { __proto__: number; }
 >"__proto__" : "__proto__"
 
 var o1 = {
@@ -40,8 +40,8 @@ var ___proto__ = 10;
 >10 : 10
 
 var o2 = {
->o2 : { "___proto__": number; }
->{    "___proto__": 0} : { "___proto__": number; }
+>o2 : { ___proto__: number; }
+>{    "___proto__": 0} : { ___proto__: number; }
 
     "___proto__": 0
 >"___proto__" : number
@@ -51,7 +51,7 @@ var o2 = {
 var b2 = o2["___proto__"];
 >b2 : number
 >o2["___proto__"] : number
->o2 : { "___proto__": number; }
+>o2 : { ___proto__: number; }
 >"___proto__" : "___proto__"
 
 var o3 = {
@@ -75,8 +75,8 @@ var _proto__ = 10;
 >10 : 10
 
 var o4 = {
->o4 : { "_proto__": number; }
->{    "_proto__": 0} : { "_proto__": number; }
+>o4 : { _proto__: number; }
+>{    "_proto__": 0} : { _proto__: number; }
 
     "_proto__": 0
 >"_proto__" : number
@@ -86,7 +86,7 @@ var o4 = {
 var b4 = o4["_proto__"];
 >b4 : number
 >o4["_proto__"] : number
->o4 : { "_proto__": number; }
+>o4 : { _proto__: number; }
 >"_proto__" : "_proto__"
 
 var o5 = {

@@ -74,3 +74,42 @@ const abac: AB = {
         c: "c", // ok -- kind: "A", an: { a: string } | { c: string }
     }
 }
+
+// Excess property checks must match all discriminable properties
+type Button = { tag: 'button'; type?: 'submit'; };
+type Anchor = { tag: 'a'; type?: string; href: string };
+
+type Union = Button | Anchor;
+const obj: Union = {
+    tag: 'button',
+    type: 'submit',
+
+    // should have error here
+    href: 'foo',
+};
+
+// Repro from #34611
+
+interface IValue {
+  value: string
+}
+
+interface StringKeys { 
+    [propertyName: string]: IValue;
+};
+
+interface NumberKeys {
+    [propertyName: number]: IValue;
+}
+
+type ObjectDataSpecification = StringKeys | NumberKeys;
+
+
+const dataSpecification: ObjectDataSpecification = {  // Error
+    foo: "asdfsadffsd"
+};
+
+// Repro from #34611
+
+const obj1: { [x: string]: number } | { [x: number]: number } = { a: 'abc' };  // Error
+const obj2: { [x: string]: number } | { a: number } = { a: 5, c: 'abc' };  // Error

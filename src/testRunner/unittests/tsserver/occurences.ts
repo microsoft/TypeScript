@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("unittests:: tsserver:: occurence highlight on string", () => {
+    describe("unittests:: tsserver:: occurrence highlight on string", () => {
         it("should be marked if only on string values", () => {
             const file1: File = {
                 path: "/a/b/file1.ts",

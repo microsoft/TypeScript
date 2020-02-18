@@ -1,13 +1,13 @@
 tests/cases/compiler/callOverloads1.ts(1,7): error TS2300: Duplicate identifier 'Foo'.
 tests/cases/compiler/callOverloads1.ts(9,10): error TS2300: Duplicate identifier 'Foo'.
 tests/cases/compiler/callOverloads1.ts(9,10): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/callOverloads1.ts(13,18): error TS2554: Expected 0 arguments, but got 1.
 
 
-==== tests/cases/compiler/callOverloads1.ts (4 errors) ====
+==== tests/cases/compiler/callOverloads1.ts (3 errors) ====
     class Foo { // error
           ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
+!!! related TS6203 tests/cases/compiler/callOverloads1.ts:9:10: 'Foo' was also declared here.
         bar1() { /*WScript.Echo("bar1");*/ }
     
         constructor(x: any) {
@@ -18,14 +18,13 @@ tests/cases/compiler/callOverloads1.ts(13,18): error TS2554: Expected 0 argument
     function Foo(); // error
              ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
+!!! related TS6203 tests/cases/compiler/callOverloads1.ts:1:7: 'Foo' was also declared here.
              ~~~
 !!! error TS2391: Function implementation is missing or not immediately following the declaration.
     function F1(s:string);
     function F1(a:any) { return a;}
     
     var f1 = new Foo("hey");
-                     ~~~~~
-!!! error TS2554: Expected 0 arguments, but got 1.
     
     
     f1.bar1();

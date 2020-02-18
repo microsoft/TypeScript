@@ -221,9 +221,31 @@ namespace ts.projectSystem {
 
             checkNumberOfExternalProjects(projectService, 1);
             checkNumberOfInferredProjects(projectService, 0);
+            verifyDynamic(projectService, "/^scriptdocument1 file1.ts");
 
             externalFiles[0].content = "let x =1;";
             projectService.applyChangesInOpenFiles(arrayIterator(externalFiles));
+        });
+
+        it("when file name starts with ^", () => {
+            const file: File = {
+                path: `${tscWatch.projectRoot}/file.ts`,
+                content: "const x = 10;"
+            };
+            const app: File = {
+                path: `${tscWatch.projectRoot}/^app.ts`,
+                content: "const y = 10;"
+            };
+            const host = createServerHost([file, app, libFile]);
+            const service = createProjectService(host);
+            service.openExternalProjects([{
+                projectFileName: `${tscWatch.projectRoot}/myproject.njsproj`,
+                rootFiles: [
+                    toExternalFile(file.path),
+                    toExternalFile(app.path)
+                ],
+                options: { },
+            }]);
         });
 
         it("external project that included config files", () => {
@@ -824,10 +846,9 @@ namespace ts.projectSystem {
         });
 
         it("handles creation of external project with jsconfig before jsconfig creation watcher is invoked", () => {
-            const projectLocation = `/user/username/projects/WebApplication36/WebApplication36`;
-            const projectFileName = `${projectLocation}/WebApplication36.csproj`;
+            const projectFileName = `${tscWatch.projectRoot}/WebApplication36.csproj`;
             const tsconfig: File = {
-                path: `${projectLocation}/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
                 content: "{}"
             };
             const files = [libFile, tsconfig];
@@ -845,7 +866,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(configProject, [tsconfig.path]);
 
             // write js file, open external project and open it for edit
-            const jsFilePath = `${projectLocation}/javascript.js`;
+            const jsFilePath = `${tscWatch.projectRoot}/javascript.js`;
             host.writeFile(jsFilePath, "");
             service.openExternalProjects([{
                 projectFileName,
@@ -860,7 +881,7 @@ namespace ts.projectSystem {
 
             // write jsconfig file
             const jsConfig: File = {
-                path: `${projectLocation}/jsconfig.json`,
+                path: `${tscWatch.projectRoot}/jsconfig.json`,
                 content: "{}"
             };
             // Dont invoke file creation watchers as the repro suggests

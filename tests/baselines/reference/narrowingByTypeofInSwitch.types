@@ -869,3 +869,176 @@ function narrowingNarrows(x: {} | undefined) {
     }
 }
 
+/* Template literals */
+
+function testUnionWithTempalte(x: Basic) {
+>testUnionWithTempalte : (x: Basic) => void
+>x : Basic
+
+    switch (typeof x) {
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : Basic
+
+        case `number`: assertNumber(x); return;
+>`number` : "number"
+>assertNumber(x) : number
+>assertNumber : (x: number) => number
+>x : number
+
+        case `boolean`: assertBoolean(x); return;
+>`boolean` : "boolean"
+>assertBoolean(x) : boolean
+>assertBoolean : (x: boolean) => boolean
+>x : boolean
+
+        case `function`: assertFunction(x); return;
+>`function` : "function"
+>assertFunction(x) : Function
+>assertFunction : (x: Function) => Function
+>x : Function
+
+        case `symbol`: assertSymbol(x); return;
+>`symbol` : "symbol"
+>assertSymbol(x) : symbol
+>assertSymbol : (x: symbol) => symbol
+>x : symbol
+
+        case `object`: assertObject(x); return;
+>`object` : "object"
+>assertObject(x) : object
+>assertObject : (x: object) => object
+>x : object
+
+        case `string`: assertString(x); return;
+>`string` : "string"
+>assertString(x) : string
+>assertString : (x: string) => string
+>x : string
+
+        case `undefined`: assertUndefined(x); return;
+>`undefined` : "undefined"
+>assertUndefined(x) : undefined
+>assertUndefined : (x: undefined) => undefined
+>x : undefined
+    }
+    assertNever(x);
+>assertNever(x) : never
+>assertNever : (x: never) => never
+>x : never
+}
+
+function fallThroughTestWithTempalte(x: string | number | boolean | object) {
+>fallThroughTestWithTempalte : (x: string | number | boolean | object) => void
+>x : string | number | boolean | object
+
+    switch (typeof x) {
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number | boolean | object
+
+        case `number`:
+>`number` : "number"
+
+            assertNumber(x)
+>assertNumber(x) : number
+>assertNumber : (x: number) => number
+>x : number
+
+        case `string`:
+>`string` : "string"
+
+            assertStringOrNumber(x)
+>assertStringOrNumber(x) : string | number
+>assertStringOrNumber : (x: string | number) => string | number
+>x : string | number
+
+            break;
+        default:
+            assertObject(x);
+>assertObject(x) : object
+>assertObject : (x: object) => object
+>x : object
+
+        case `number`:
+>`number` : "number"
+
+        case `boolean`:
+>`boolean` : "boolean"
+
+            assertBooleanOrObject(x);
+>assertBooleanOrObject(x) : boolean | object
+>assertBooleanOrObject : (x: boolean | object) => boolean | object
+>x : boolean | object
+
+            break;
+    }
+}
+
+function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: keyof S) {
+>keyofNarrowingWithTemplate : <S extends { [K in keyof S]: string; }>(k: keyof S) => void
+>k : keyof S
+
+    function assertKeyofS(k1: keyof S) { }
+>assertKeyofS : (k1: keyof S) => void
+>k1 : keyof S
+
+    switch (typeof k) {
+>typeof k : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>k : keyof S
+
+        case `number`: assertNumber(k); assertKeyofS(k); return;
+>`number` : "number"
+>assertNumber(k) : number
+>assertNumber : (x: number) => number
+>k : keyof S & number
+>assertKeyofS(k) : void
+>assertKeyofS : (k1: keyof S) => void
+>k : keyof S & number
+
+        case `symbol`: assertSymbol(k); assertKeyofS(k); return;
+>`symbol` : "symbol"
+>assertSymbol(k) : symbol
+>assertSymbol : (x: symbol) => symbol
+>k : keyof S & symbol
+>assertKeyofS(k) : void
+>assertKeyofS : (k1: keyof S) => void
+>k : keyof S & symbol
+
+        case `string`: assertString(k); assertKeyofS(k); return;
+>`string` : "string"
+>assertString(k) : string
+>assertString : (x: string) => string
+>k : keyof S & string
+>assertKeyofS(k) : void
+>assertKeyofS : (k1: keyof S) => void
+>k : keyof S & string
+    }
+}
+
+/* Both string literals and template literals */
+
+function multipleGenericFuseWithBoth<X extends L | number, Y extends R | number>(xy: X | Y): [X, number] | [Y, string] | [(X | Y)] {
+>multipleGenericFuseWithBoth : <X extends number | L, Y extends number | R>(xy: X | Y) => [X, number] | [Y, string] | [X | Y]
+>xy : X | Y
+
+    switch (typeof xy) {
+>typeof xy : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>xy : X | Y
+
+        case `function`: return [xy, 1];
+>`function` : "function"
+>[xy, 1] : [X, 1]
+>xy : X
+>1 : 1
+
+        case 'object': return [xy, 'two'];
+>'object' : "object"
+>[xy, 'two'] : [Y, string]
+>xy : Y
+>'two' : "two"
+
+        case `number`: return [xy]
+>`number` : "number"
+>[xy] : [(X & number) | (Y & number)]
+>xy : (X & number) | (Y & number)
+    }
+}

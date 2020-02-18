@@ -56,7 +56,7 @@ define(["require", "exports"], function (require, exports) {
     }
     exports.cl1 = cl1;
     exports.obj = {
-        m: () => __awaiter(this, void 0, void 0, function* () {
+        m: () => __awaiter(void 0, void 0, void 0, function* () {
             const req = yield new Promise((resolve_3, reject_3) => { require(['./test'], resolve_3, reject_3); }); // THREE
         })
     };
@@ -70,7 +70,7 @@ define(["require", "exports"], function (require, exports) {
         }
     }
     exports.cl2 = cl2;
-    exports.l = () => __awaiter(this, void 0, void 0, function* () {
+    exports.l = () => __awaiter(void 0, void 0, void 0, function* () {
         const req = yield new Promise((resolve_5, reject_5) => { require(['./test'], resolve_5, reject_5); }); // FIVE
     });
 });

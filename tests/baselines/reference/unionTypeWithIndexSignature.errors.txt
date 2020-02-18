@@ -1,5 +1,5 @@
 tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(11,3): error TS2339: Property 'bar' does not exist on type 'Missing'.
-  Property 'bar' does not exist on type '{ [s: string]: string; }'.
+  Property 'bar' does not exist on type '{ foo: boolean; }'.
 tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(14,4): error TS2540: Cannot assign to 'foo' because it is a read-only property.
 tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(24,1): error TS7053: Element implicitly has an 'any' type because expression of type '1' can't be used to index type 'Both'.
   Property '1' does not exist on type 'Both'.
@@ -22,7 +22,7 @@ tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(26,1): error 
     m.bar
       ~~~
 !!! error TS2339: Property 'bar' does not exist on type 'Missing'.
-!!! error TS2339:   Property 'bar' does not exist on type '{ [s: string]: string; }'.
+!!! error TS2339:   Property 'bar' does not exist on type '{ foo: boolean; }'.
     type RO = { foo: number } | { readonly [s: string]: string }
     declare var ro: RO
     ro.foo = 'not allowed'

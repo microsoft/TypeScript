@@ -10,10 +10,10 @@ export { };
 
 === tests/cases/compiler/module.d.ts ===
 export = React;
->React : typeof React
+>React : typeof import("tests/cases/compiler/module")
 
 export as namespace React;
->React : typeof React
+>React : typeof import("tests/cases/compiler/module")
 
 declare namespace React {
 >React : typeof React

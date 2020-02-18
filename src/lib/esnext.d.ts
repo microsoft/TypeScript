@@ -1,3 +1,2 @@
-/// <reference lib="es2019" />
-/// <reference lib="esnext.bigint" />
+/// <reference lib="es2020" />
 /// <reference lib="esnext.intl" />
