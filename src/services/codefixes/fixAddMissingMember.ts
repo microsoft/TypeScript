@@ -129,23 +129,26 @@ namespace ts.codefix {
         const { symbol } = leftExpressionType;
         if (!symbol || !symbol.declarations) return undefined;
 
-        const isClass = find(symbol.declarations, isClassLike);
+        const classDeclaration = find(symbol.declarations, isClassLike);
         // Don't suggest adding private identifiers to anything other than a class.
-        if (!isClass && isPrivateIdentifier(token)) {
+        if (!classDeclaration && isPrivateIdentifier(token)) {
             return undefined;
         }
 
         // Prefer to change the class instead of the interface if they are merged
-        const classOrInterface = isClass || find(symbol.declarations, isInterfaceDeclaration);
+        const classOrInterface = classDeclaration || find(symbol.declarations, isInterfaceDeclaration);
         if (classOrInterface && !program.isSourceFileFromExternalLibrary(classOrInterface.getSourceFile())) {
             const makeStatic = ((leftExpressionType as TypeReference).target || leftExpressionType) !== checker.getDeclaredTypeOfSymbol(symbol);
-            // Static private identifier properties are not supported yet.
-            if (makeStatic && isPrivateIdentifier(token)) return undefined;
+            if (makeStatic && (isPrivateIdentifier(token) || isInterfaceDeclaration(classOrInterface))) {
+                return undefined;
+            }
+
             const declSourceFile = classOrInterface.getSourceFile();
             const inJs = isSourceFileJS(declSourceFile);
             const call = tryCast(parent.parent, isCallExpression);
             return { kind: InfoKind.ClassOrInterface, token, parentDeclaration: classOrInterface, makeStatic, declSourceFile, inJs, call };
         }
+
         const enumDeclaration = find(symbol.declarations, isEnumDeclaration);
         if (enumDeclaration && !isPrivateIdentifier(token) && !program.isSourceFileFromExternalLibrary(enumDeclaration.getSourceFile())) {
             return { kind: InfoKind.Enum, token, parentDeclaration: enumDeclaration };
