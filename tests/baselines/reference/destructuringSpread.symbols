@@ -31,11 +31,12 @@ const { z, a, b } = {
 
 };
 
-const { c, d, e, f } = {
+const { c, d, e, f, g } = {
 >c : Symbol(c, Decl(destructuringSpread.ts, 15, 7))
 >d : Symbol(d, Decl(destructuringSpread.ts, 15, 10))
 >e : Symbol(e, Decl(destructuringSpread.ts, 15, 13))
 >f : Symbol(f, Decl(destructuringSpread.ts, 15, 16))
+>g : Symbol(g, Decl(destructuringSpread.ts, 15, 19))
 
   ...{
     ...{

@@ -44,12 +44,13 @@ const { z, a, b } = {
 
 };
 
-const { c, d, e, f } = {
+const { c, d, e, f, g } = {
 >c : number
 >d : number
 >e : number
 >f : number
->{  ...{    ...{      ...{        c: 0,      },      d: 0    },    e: 0  },  f: 0} : { f: number; e: number; d: number; c: number; }
+>g : any
+>{  ...{    ...{      ...{        c: 0,      },      d: 0    },    e: 0  },  f: 0} : { f: number; g: any; e: number; d: number; c: number; }
 
   ...{
 >{    ...{      ...{        c: 0,      },      d: 0    },    e: 0  } : { e: number; d: number; c: number; }
