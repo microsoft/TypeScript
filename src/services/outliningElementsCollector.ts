@@ -4,6 +4,7 @@ namespace ts.OutliningElementsCollector {
         const res: OutliningSpan[] = [];
         addNodeOutliningSpans(sourceFile, cancellationToken, res);
         addRegionOutliningSpans(sourceFile, res);
+        addTopLevelUnattachedCommentSpans(sourceFile, res);
         return res.sort((span1, span2) => span1.textSpan.start - span2.textSpan.start);
     }
 
@@ -104,6 +105,23 @@ namespace ts.OutliningElementsCollector {
     const regionDelimiterRegExp = /^\s*\/\/\s*#(end)?region(?:\s+(.*))?(?:\r)?$/;
     function isRegionDelimiter(lineText: string) {
         return regionDelimiterRegExp.exec(lineText);
+    }
+
+    function addTopLevelUnattachedCommentSpans(sourceFile: SourceFile, out: Push<OutliningSpan>): void {
+        // Comments which are attached to statements would be included in addNodeOutliningSpans
+        if (sourceFile.statements.length > 0) return;
+
+        // This will instead set up spans for the missing ones
+        forEach(getLeadingCommentRangesOfNode(sourceFile, sourceFile), (range) => {
+            // To not mess with // #region support
+            const isMultiline = sourceFile.text.substring(range.pos, 2) === "/*";
+            if (!isMultiline) return;
+
+            const span = createTextSpanFromBounds(range.pos, range.end);
+            const comment = sourceFile.text.substring(range.pos, range.end);
+            const outline = createOutliningSpan(span, OutliningSpanKind.Comment, span, /*autoCollapse*/ false, comment);
+            out.push(outline);
+        });
     }
 
     function addOutliningForLeadingCommentsForNode(n: Node, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
