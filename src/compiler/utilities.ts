@@ -3569,13 +3569,17 @@ namespace ts {
             }
         }
 
-        function writeLine(force?: boolean) {
-            if (!lineStart || force) {
-                output += newLine;
-                lineCount++;
-                linePos = output.length;
-                lineStart = true;
-                hasTrailingComment = false;
+        function forceWriteLine() {
+            output += newLine;
+            lineCount++;
+            linePos = output.length;
+            lineStart = true;
+            hasTrailingComment = false;
+        }
+
+        function writeLine() {
+            if (!lineStart) {
+                forceWriteLine();
             }
         }
 
@@ -3590,6 +3594,7 @@ namespace ts {
             rawWrite,
             writeLiteral,
             writeLine,
+            forceWriteLine,
             increaseIndent: () => { indent++; },
             decreaseIndent: () => { indent--; },
             getIndent: () => indent,
