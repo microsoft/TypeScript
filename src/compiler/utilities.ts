@@ -4664,7 +4664,10 @@ namespace ts {
     }
 
     export function rangeStartPositionsAreOnSameLine(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
-        return positionsAreOnSameLine(getStartPositionOfRange(range1, sourceFile), getStartPositionOfRange(range2, sourceFile), sourceFile);
+        return positionsAreOnSameLine(
+            getStartPositionOfRange(range1, sourceFile, /*includeComments*/ false),
+            getStartPositionOfRange(range2, sourceFile, /*includeComments*/ false),
+            sourceFile);
     }
 
     export function rangeEndPositionsAreOnSameLine(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
@@ -4672,23 +4675,20 @@ namespace ts {
     }
 
     export function rangeStartIsOnSameLineAsRangeEnd(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
-        return positionsAreOnSameLine(getStartPositionOfRange(range1, sourceFile), range2.end, sourceFile);
+        return positionsAreOnSameLine(getStartPositionOfRange(range1, sourceFile, /*includeComments*/ false), range2.end, sourceFile);
     }
 
     export function rangeEndIsOnSameLineAsRangeStart(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
-        return positionsAreOnSameLine(range1.end, getStartPositionOfRange(range2, sourceFile), sourceFile);
+        return positionsAreOnSameLine(range1.end, getStartPositionOfRange(range2, sourceFile, /*includeComments*/ false), sourceFile);
     }
 
     export function getLinesBetweenRangeEndAndRangeStart(range1: TextRange, range2: TextRange, sourceFile: SourceFile, includeSecondRangeComments: boolean) {
-        return getLineOfLocalPosition(sourceFile, getStartPositionOfRange(range2, sourceFile, includeSecondRangeComments)) - getLineOfLocalPosition(sourceFile, range1.end);
-    }
-
-    export function getLinesBetweenRangeStartPositions(range1: TextRange, range2: TextRange, sourceFile: SourceFile, includeSecondRangeComments: boolean) {
-        return getLineOfLocalPosition(sourceFile, getStartPositionOfRange(range2, sourceFile, includeSecondRangeComments)) - getLineOfLocalPosition(sourceFile, getStartPositionOfRange(range1, sourceFile));
+        const range2Start = getStartPositionOfRange(range2, sourceFile, includeSecondRangeComments);
+        return range2Start === range1.end ? 0 : getLineOfLocalPosition(sourceFile, range2Start) - getLineOfLocalPosition(sourceFile, range1.end);
     }
 
     export function getLinesBetweenRangeEndPositions(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
-        return getLineOfLocalPosition(sourceFile, range2.end) - getLineOfLocalPosition(sourceFile, range1.end);
+        return range1.end === range2.end ? 0 : getLineOfLocalPosition(sourceFile, range2.end) - getLineOfLocalPosition(sourceFile, range1.end);
     }
 
     export function isNodeArrayMultiLine(list: NodeArray<Node>, sourceFile: SourceFile): boolean {
@@ -4700,7 +4700,7 @@ namespace ts {
             getLineOfLocalPosition(sourceFile, pos1) === getLineOfLocalPosition(sourceFile, pos2);
     }
 
-    export function getStartPositionOfRange(range: TextRange, sourceFile: SourceFile, includeComments?: boolean) {
+    export function getStartPositionOfRange(range: TextRange, sourceFile: SourceFile, includeComments: boolean) {
         return positionIsSynthesized(range.pos) ? -1 : skipTrivia(sourceFile.text, range.pos, /*stopAfterLineBreak*/ false, includeComments);
     }
 
