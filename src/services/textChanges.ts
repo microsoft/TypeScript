@@ -1053,8 +1053,11 @@ namespace ts.textChanges {
             writer.writeSymbol(s, sym);
             setLastNonTriviaPosition(s, /*force*/ false);
         }
-        function writeLine(force?: boolean): void {
-            writer.writeLine(force);
+        function writeLine(): void {
+            writer.writeLine();
+        }
+        function forceWriteLine() {
+            writer.forceWriteLine();
         }
         function increaseIndent(): void {
             writer.increaseIndent();
@@ -1111,6 +1114,7 @@ namespace ts.textChanges {
             writeStringLiteral,
             writeSymbol,
             writeLine,
+            forceWriteLine,
             increaseIndent,
             decreaseIndent,
             getText,

@@ -1912,6 +1912,7 @@ namespace ts {
             writeLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
             writeSymbol,
             writeLine,
+            forceWriteLine: writeLine,
             write: unknownWrite,
             writeComment: unknownWrite,
             getText: () => "",
