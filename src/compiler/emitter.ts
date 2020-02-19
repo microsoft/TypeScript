@@ -2297,7 +2297,7 @@ namespace ts {
             emitTokenWithComment(token.kind, node.expression.end, writePunctuation, node);
             writeLinesAndIndent(linesAfterDot, /*writeSpaceIfNotIndenting*/ false);
             emit(node.name);
-            decreaseIndentIf(linesBeforeDot > 0, linesAfterDot > 0);
+            decreaseIndentIf(linesBeforeDot, linesAfterDot);
         }
 
         // 1..toString is a valid property access, emit a dot after the literal
@@ -2475,7 +2475,7 @@ namespace ts {
                     case EmitBinaryExpressionState.FinishEmit: {
                         const linesBeforeOperator = getLinesBetweenNodes(node, node.left, node.operatorToken);
                         const linesAfterOperator = getLinesBetweenNodes(node, node.operatorToken, node.right);
-                        decreaseIndentIf(linesBeforeOperator > 0, linesAfterOperator > 0);
+                        decreaseIndentIf(linesBeforeOperator, linesAfterOperator);
                         stackIndex--;
                         break;
                     }
@@ -2529,13 +2529,13 @@ namespace ts {
             emit(node.questionToken);
             writeLinesAndIndent(linesAfterQuestion, /*writeSpaceIfNotIndenting*/ true);
             emitExpression(node.whenTrue);
-            decreaseIndentIf(linesBeforeQuestion > 0, linesAfterQuestion > 0);
+            decreaseIndentIf(linesBeforeQuestion, linesAfterQuestion);
 
             writeLinesAndIndent(linesBeforeColon, /*writeSpaceIfNotIndenting*/ true);
             emit(node.colonToken);
             writeLinesAndIndent(linesAfterColon, /*writeSpaceIfNotIndenting*/ true);
             emitExpression(node.whenFalse);
-            decreaseIndentIf(linesBeforeColon > 0, linesAfterColon > 0);
+            decreaseIndentIf(linesBeforeColon, linesAfterColon);
         }
 
         function emitTemplateExpression(node: TemplateExpression) {
@@ -4010,7 +4010,7 @@ namespace ts {
                 let shouldEmitInterveningComments = mayEmitInterveningComments;
                 const leadingLineTerminatorCount = getLeadingLineTerminatorCount(parentNode, children!, format); // TODO: GH#18217
                 if (leadingLineTerminatorCount) {
-                    writeBlankLines(leadingLineTerminatorCount);
+                    writeLine(leadingLineTerminatorCount);
                     shouldEmitInterveningComments = false;
                 }
                 else if (format & ListFormat.SpaceBetweenBraces) {
@@ -4058,7 +4058,7 @@ namespace ts {
                                 shouldDecreaseIndentAfterEmit = true;
                             }
 
-                            writeBlankLines(separatingLineTerminatorCount);
+                            writeLine(separatingLineTerminatorCount);
                             shouldEmitInterveningComments = false;
                         }
                         else if (previousSibling && format & ListFormat.SpaceBetweenSiblings) {
@@ -4115,7 +4115,7 @@ namespace ts {
                 // Write the closing line terminator or closing whitespace.
                 const closingLineTerminatorCount = getClosingLineTerminatorCount(parentNode, children!, format);
                 if (closingLineTerminatorCount) {
-                    writeBlankLines(closingLineTerminatorCount);
+                    writeLine(closingLineTerminatorCount);
                 }
                 else if (format & ListFormat.SpaceBetweenBraces) {
                     writeSpace();
@@ -4185,8 +4185,10 @@ namespace ts {
             writer.writeProperty(s);
         }
 
-        function writeLine() {
-            writer.writeLine();
+        function writeLine(count = 1) {
+            for (let i = 0; i < count; i++) {
+                writer.writeLine(i > 0);
+            }
         }
 
         function increaseIndent() {
@@ -4242,21 +4244,10 @@ namespace ts {
             }
         }
 
-        function writeBlankLines(lineCount: number) {
-            for (let i = 0; i < lineCount; i++) {
-                if (i === 0) {
-                    writer.writeLine();
-                }
-                else {
-                    writer.forceWriteLine();
-                }
-            }
-        }
-
         function writeLinesAndIndent(lineCount: number, writeSpaceIfNotIndenting: boolean) {
             if (lineCount) {
                 increaseIndent();
-                writeBlankLines(lineCount);
+                writeLine(lineCount);
             }
             else if (writeSpaceIfNotIndenting) {
                 writeSpace();
@@ -4267,7 +4258,7 @@ namespace ts {
         // previous indent values to be considered at a time.  This also allows caller to just
         // call this once, passing in all their appropriate indent values, instead of needing
         // to call this helper function multiple times.
-        function decreaseIndentIf(value1: boolean, value2: boolean) {
+        function decreaseIndentIf(value1: boolean | number, value2: boolean | number) {
             if (value1) {
                 decreaseIndent();
             }

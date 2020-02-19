@@ -3753,7 +3753,7 @@ namespace ts {
         writeParameter(text: string): void;
         writeProperty(text: string): void;
         writeSymbol(text: string, symbol: Symbol): void;
-        writeLine(): void;
+        writeLine(force?: boolean): void;
         increaseIndent(): void;
         decreaseIndent(): void;
         clear(): void;
@@ -6335,7 +6335,6 @@ namespace ts {
         getText(): string;
         rawWrite(s: string): void;
         writeLiteral(s: string): void;
-        forceWriteLine(): void;
         getTextPos(): number;
         getLine(): number;
         getColumn(): number;
