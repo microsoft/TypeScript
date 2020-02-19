@@ -75,6 +75,7 @@ namespace ts {
             // Completely ignore indentation for string writers.  And map newlines to
             // a single space.
             writeLine: () => str += " ",
+            forceWriteLine: () => str += " ",
             increaseIndent: noop,
             decreaseIndent: noop,
             clear: () => str = "",
