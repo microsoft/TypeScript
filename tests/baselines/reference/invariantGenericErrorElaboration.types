@@ -6,8 +6,8 @@ const wat: Runtype<any> = Num;
 >Num : Num
 
 const Foo = Obj({ foo: Num })
->Foo : any
->Obj({ foo: Num }) : any
+>Foo : Obj<{ [_: string]: Runtype<any>; }>
+>Obj({ foo: Num }) : Obj<{ [_: string]: Runtype<any>; }>
 >Obj : <O extends { [_: string]: Runtype<any>; }>(fields: O) => Obj<O>
 >{ foo: Num } : { foo: Num; }
 >foo : Num

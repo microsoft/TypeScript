@@ -1,5 +1,25 @@
 Exit Code: 1
 Standard output:
+@fluentui/ability-attributes: yarn run vX.X.X
+@fluentui/ability-attributes: $ npm run schema && gulp bundle:package:no-umd
+@fluentui/ability-attributes: > @fluentui/ability-attributes@X.X.X schema /office-ui-fabric-react/packages/fluentui/ability-attributes
+@fluentui/ability-attributes: > allyschema -c "process.env.NODE_ENV !== 'production'" schema.json > ./src/schema.ts
+@fluentui/ability-attributes: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/ability-attributes: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/ability-attributes/gulpfile.ts
+@fluentui/ability-attributes: Done in ?s.
+@fluentui/digest: yarn run vX.X.X
+@fluentui/digest: $ just-scripts build
+@fluentui/digest: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/fluentui/digest/tsconfig.json
+@fluentui/digest: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --module esnext --outDir lib --project "/office-ui-fabric-react/packages/fluentui/digest/tsconfig.json"
+@fluentui/digest: [XX:XX:XX XM] ■ Running Webpack
+@fluentui/digest: [XX:XX:XX XM] ■ Webpack Config Path: null
+@fluentui/digest: [XX:XX:XX XM] ■ webpack.config.js not found, skipping webpack
+@fluentui/digest: Done in ?s.
+@fluentui/docs-components: yarn run vX.X.X
+@fluentui/docs-components: $ gulp bundle:package:no-umd
+@fluentui/docs-components: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/docs-components: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/docs-components/gulpfile.ts
+@fluentui/docs-components: Done in ?s.
 @uifabric/build: yarn run vX.X.X
 @uifabric/build: $ node ./just-scripts.js no-op
 @uifabric/build: Done in ?s.
@@ -40,6 +60,46 @@ Standard output:
 @uifabric/webpack-utils: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/webpack-utils/tsconfig.json
 @uifabric/webpack-utils: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module commonjs --project "/office-ui-fabric-react/packages/webpack-utils/tsconfig.json"
 @uifabric/webpack-utils: Done in ?s.
+@fluentui/accessibility: yarn run vX.X.X
+@fluentui/accessibility: $ gulp bundle:package:no-umd
+@fluentui/accessibility: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/accessibility: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/accessibility/gulpfile.ts
+@fluentui/accessibility: Done in ?s.
+@fluentui/react-component-event-listener: yarn run vX.X.X
+@fluentui/react-component-event-listener: $ gulp bundle:package:no-umd
+@fluentui/react-component-event-listener: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/react-component-event-listener: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/react-component-event-listener/gulpfile.ts
+@fluentui/react-component-event-listener: Done in ?s.
+@fluentui/react-component-nesting-registry: yarn run vX.X.X
+@fluentui/react-component-nesting-registry: $ gulp bundle:package:no-umd
+@fluentui/react-component-nesting-registry: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/react-component-nesting-registry: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/react-component-nesting-registry/gulpfile.ts
+@fluentui/react-component-nesting-registry: Done in ?s.
+@fluentui/react-component-ref: yarn run vX.X.X
+@fluentui/react-component-ref: $ gulp bundle:package:no-umd
+@fluentui/react-component-ref: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/react-component-ref: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/react-component-ref/gulpfile.ts
+@fluentui/react-component-ref: Done in ?s.
+@fluentui/react-context-selector: yarn run vX.X.X
+@fluentui/react-context-selector: $ gulp bundle:package:no-umd
+@fluentui/react-context-selector: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/react-context-selector: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/react-context-selector/gulpfile.ts
+@fluentui/react-context-selector: Done in ?s.
+@fluentui/react-proptypes: yarn run vX.X.X
+@fluentui/react-proptypes: $ gulp bundle:package:no-umd
+@fluentui/react-proptypes: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/react-proptypes: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/react-proptypes/gulpfile.ts
+@fluentui/react-proptypes: Done in ?s.
+@fluentui/state: yarn run vX.X.X
+@fluentui/state: $ gulp bundle:package:no-umd
+@fluentui/state: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/state: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/state/gulpfile.ts
+@fluentui/state: Done in ?s.
+@fluentui/styles: yarn run vX.X.X
+@fluentui/styles: $ gulp bundle:package:no-umd
+@fluentui/styles: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/styles: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/styles/gulpfile.ts
+@fluentui/styles: Done in ?s.
 @uifabric/merge-styles: yarn run vX.X.X
 @uifabric/merge-styles: $ just-scripts build
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
@@ -49,6 +109,11 @@ Standard output:
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/merge-styles/lib/index.d.ts'
 @uifabric/merge-styles: Done in ?s.
+@fluentui/react-bindings: yarn run vX.X.X
+@fluentui/react-bindings: $ gulp bundle:package:no-umd
+@fluentui/react-bindings: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/react-bindings: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/react-bindings/gulpfile.ts
+@fluentui/react-bindings: Done in ?s.
 @uifabric/jest-serializer-merge-styles: yarn run vX.X.X
 @uifabric/jest-serializer-merge-styles: $ just-scripts build
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
@@ -57,6 +122,14 @@ Standard output:
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json"
 @uifabric/jest-serializer-merge-styles: Done in ?s.
+@fluentui/react: yarn run vX.X.X
+@fluentui/react: $ gulp bundle:package
+@fluentui/react: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/react: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/react/gulpfile.ts
+@fluentui/react: [XX:XX:XX] Time: ?s
+@fluentui/react: Built at: XX/XX/XX XX:XX:XX XM
+@fluentui/react: Entrypoint @fluentui/react [big] = fluent-ui-react.min.js
+@fluentui/react: Done in ?s.
 @uifabric/test-utilities: yarn run vX.X.X
 @uifabric/test-utilities: $ just-scripts build
 @uifabric/test-utilities: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
@@ -65,6 +138,42 @@ Standard output:
 @uifabric/test-utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/test-utilities/tsconfig.json
 @uifabric/test-utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/test-utilities/tsconfig.json"
 @uifabric/test-utilities: Done in ?s.
+@fluentui/code-sandbox: yarn run vX.X.X
+@fluentui/code-sandbox: $ gulp bundle:package:no-umd
+@fluentui/code-sandbox: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/code-sandbox: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/code-sandbox/gulpfile.ts
+@fluentui/code-sandbox: Done in ?s.
+@fluentui/local-sandbox: yarn run vX.X.X
+@fluentui/local-sandbox: $ webpack
+@fluentui/local-sandbox: Starting type checking service...
+@fluentui/local-sandbox: Using 1 worker with 2048MB memory limit
+@fluentui/local-sandbox: Webpack Bundle Analyzer saved report to /office-ui-fabric-react/packages/fluentui/local-sandbox/dist/report.html
+@fluentui/local-sandbox: Hash: [redacted]
+@fluentui/local-sandbox: Version: webpack 4.X.X
+@fluentui/local-sandbox: Time: ?s
+@fluentui/local-sandbox: Built at: XX/XX/XX XX:XX:XX XM
+@fluentui/local-sandbox:      Asset      Size  Chunks                    Chunk Names
+@fluentui/local-sandbox:     app.js  4.79 MiB     app  [emitted]  [big]  app
+@fluentui/local-sandbox: app.js.map  3.86 MiB     app  [emitted]         app
+@fluentui/local-sandbox: index.html  X KiB          [emitted]         
+@fluentui/local-sandbox: Entrypoint app [big] = app.js app.js.map
+@fluentui/local-sandbox: [../accessibility/dist/es/index.js] X KiB {app} [built]
+@fluentui/local-sandbox: [../react-bindings/dist/es/index.js] X KiB {app} [built]
+@fluentui/local-sandbox: [../react-component-ref/dist/es/index.js] X KiB {app} [built]
+@fluentui/local-sandbox: [../react/dist/es/index.js] X KiB {app} [built]
+@fluentui/local-sandbox: [../react/dist/es/themes/colorUtils.js] X KiB {app} [built]
+@fluentui/local-sandbox: [../react/dist/es/themes/index.js] X KiB {app} [built]
+@fluentui/local-sandbox: [../react/dist/es/themes/teams/types.js] X KiB {app} [built]
+@fluentui/local-sandbox: [../react/dist/es/themes/types.js] X KiB {app} [built]
+@fluentui/local-sandbox: [../react/dist/es/types.js] X KiB {app} [built]
+@fluentui/local-sandbox: [../react/dist/es/utils/createComponent.js] X KiB {app} [built]
+@fluentui/local-sandbox: [../react/dist/es/utils/index.js] X KiB {app} [built]
+@fluentui/local-sandbox: [../react/dist/es/utils/positioner/index.js] X KiB {app} [built]
+@fluentui/local-sandbox: [../react/dist/es/utils/positioner/types.js] X KiB {app} [built]
+@fluentui/local-sandbox: [../styles/dist/es/index.js] X KiB {app} [built]
+@fluentui/local-sandbox: [./src/index.tsx] X KiB {app} [built]
+@fluentui/local-sandbox:     + 1208 hidden modules
+@fluentui/local-sandbox: Done in ?s.
 @uifabric/utilities: yarn run vX.X.X
 @uifabric/utilities: $ just-scripts build
 @uifabric/utilities: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
@@ -74,6 +183,15 @@ Standard output:
 @uifabric/utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/utilities/tsconfig.json"
 @uifabric/utilities: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/utilities/lib/index.d.ts'
 @uifabric/utilities: Done in ?s.
+@fluentui/react-focus: yarn run vX.X.X
+@fluentui/react-focus: $ just-scripts build
+@fluentui/react-focus: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@fluentui/react-focus: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-focus/tsconfig.json
+@fluentui/react-focus: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/react-focus/tsconfig.json"
+@fluentui/react-focus: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-focus/tsconfig.json
+@fluentui/react-focus: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/react-focus/tsconfig.json"
+@fluentui/react-focus: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/react-focus/lib/index.d.ts'
+@fluentui/react-focus: Done in ?s.
 @uifabric/react-hooks: yarn run vX.X.X
 @uifabric/react-hooks: $ just-scripts build
 @uifabric/react-hooks: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
@@ -92,6 +210,14 @@ Standard output:
 @uifabric/styling: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/styling/tsconfig.json"
 @uifabric/styling: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/styling/lib/index.d.ts'
 @uifabric/styling: Done in ?s.
+@fluentui/react-theming: yarn run vX.X.X
+@fluentui/react-theming: $ just-scripts build
+@fluentui/react-theming: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@fluentui/react-theming: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/fluentui/react-theming/tsconfig.json
+@fluentui/react-theming: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/fluentui/react-theming/tsconfig.json"
+@fluentui/react-theming: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/fluentui/react-theming/tsconfig.json
+@fluentui/react-theming: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/fluentui/react-theming/tsconfig.json"
+@fluentui/react-theming: Done in ?s.
 @uifabric/file-type-icons: yarn run vX.X.X
 @uifabric/file-type-icons: $ just-scripts build
 @uifabric/file-type-icons: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
@@ -119,6 +245,14 @@ Standard output:
 @uifabric/icons: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/icons/tsconfig.json"
 @uifabric/icons: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/icons/lib/index.d.ts'
 @uifabric/icons: Done in ?s.
+@fluentui/playground: yarn run vX.X.X
+@fluentui/playground: $ just-scripts build
+@fluentui/playground: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@fluentui/playground: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/fluentui/playground/tsconfig.json
+@fluentui/playground: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/fluentui/playground/tsconfig.json"
+@fluentui/playground: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/fluentui/playground/tsconfig.json
+@fluentui/playground: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/fluentui/playground/tsconfig.json"
+@fluentui/playground: Done in ?s.
 office-ui-fabric-react: yarn run vX.X.X
 office-ui-fabric-react: $ just-scripts build
 office-ui-fabric-react: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
@@ -135,26 +269,31 @@ office-ui-fabric-react: info Visit https://yarnpkg.com/en/docs/cli/run for docum
 Standard error:
 info cli using local version of lerna
 lerna notice cli vX.X.X
-lerna info Executing command in 42 packages: "yarn run build"
+lerna info Executing command in 61 packages: "yarn run build"
+@fluentui/ability-attributes: npm WARN lifecycle The node binary used for scripts is /tmp/yarn--1581721799113-0.08545685427418936/node but npm is using /usr/local/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
 @uifabric/example-data: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/set-version: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/merge-styles: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@fluentui/react: (node:1020) [DEP0097] DeprecationWarning: Using a domain property in MakeCallback is deprecated. Use the async_context variant of MakeCallback or the AsyncResource class instead.
 @uifabric/utilities: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@fluentui/react-focus: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/react-hooks: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/styling: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@fluentui/react-theming: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/file-type-icons: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/foundation: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/icons: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@fluentui/playground: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 office-ui-fabric-react: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 office-ui-fabric-react: [XX:XX:XX XM] x Error detected while running 'ts:esm'
 office-ui-fabric-react: [XX:XX:XX XM] x ------------------------------------
 office-ui-fabric-react: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/office-ui-fabric-react/tsconfig.json"
-office-ui-fabric-react:     at ChildProcess.exithandler (child_process.js:295:12)
-office-ui-fabric-react:     at ChildProcess.emit (events.js:223:5)
-office-ui-fabric-react:     at ChildProcess.EventEmitter.emit (domain.js:498:23)
+office-ui-fabric-react:     at ChildProcess.exithandler (child_process.js:303:12)
+office-ui-fabric-react:     at ChildProcess.emit (events.js:321:20)
+office-ui-fabric-react:     at ChildProcess.EventEmitter.emit (domain.js:505:15)
 office-ui-fabric-react:     at maybeClose (internal/child_process.js:1021:16)
-office-ui-fabric-react:     at Process.ChildProcess._handle.onexit (internal/child_process.js:283:5)
+office-ui-fabric-react:     at Process.ChildProcess._handle.onexit (internal/child_process.js:286:5)
 office-ui-fabric-react: [XX:XX:XX XM] x stdout:
 office-ui-fabric-react: [XX:XX:XX XM] x src/components/Calendar/Calendar.tsx:8:31 - error TS2307: Cannot find module './Calendar.scss'.
 office-ui-fabric-react: 8 import * as stylesImport from './Calendar.scss';
@@ -168,6 +307,9 @@ office-ui-fabric-react:                                  ~~~~~~~~~~~~~~~~~
 office-ui-fabric-react: src/components/Calendar/CalendarYear.tsx:5:31 - error TS2307: Cannot find module './Calendar.scss'.
 office-ui-fabric-react: 5 import * as stylesImport from './Calendar.scss';
 office-ui-fabric-react:                                 ~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/ChoiceGroup/ChoiceGroup.base.tsx:130:19 - error TS2783: 'key' is specified more than once, so this usage will be overwritten.
+office-ui-fabric-react: 130                   key={option.key}
+office-ui-fabric-react:                       ~~~~~~~~~~~~~~~~
 office-ui-fabric-react: src/components/ChoiceGroup/ChoiceGroupOption/ChoiceGroupOption.base.tsx:70:38 - error TS2554: Expected 1 arguments, but got 2.
 office-ui-fabric-react: 70           {onRenderField(this.props, this._onRenderField)}
 office-ui-fabric-react:                                         ~~~~~~~~~~~~~~~~~~~
@@ -177,6 +319,9 @@ office-ui-fabric-react:                 ~~~~~~~~~~~~~~~~~~~~~~~
 office-ui-fabric-react: src/components/ContextualMenu/examples/ContextualMenu.Icon.Example.tsx:12:31 - error TS2307: Cannot find module './ContextualMenuExample.scss'.
 office-ui-fabric-react: 12 import * as stylesImport from './ContextualMenuExample.scss';
 office-ui-fabric-react:                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/DetailsList/DetailsList.base.tsx:479:19 - error TS2783: 'selection' is specified more than once, so this usage will be overwritten.
+office-ui-fabric-react: 479                   selection={selection}
+office-ui-fabric-react:                       ~~~~~~~~~~~~~~~~~~~~~
 office-ui-fabric-react: src/components/ExtendedPicker/BaseExtendedPicker.tsx:5:31 - error TS2307: Cannot find module './BaseExtendedPicker.scss'.
 office-ui-fabric-react: 5 import * as stylesImport from './BaseExtendedPicker.scss';
 office-ui-fabric-react:                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -222,7 +367,7 @@ office-ui-fabric-react:                                  ~~~~~~~~~~~~~~~~~~~~
 office-ui-fabric-react: src/components/pickers/Suggestions/SuggestionsItem.tsx:8:31 - error TS2307: Cannot find module './Suggestions.scss'.
 office-ui-fabric-react: 8 import * as stylesImport from './Suggestions.scss';
 office-ui-fabric-react:                                 ~~~~~~~~~~~~~~~~~~~~
-office-ui-fabric-react: Found 22 errors.
+office-ui-fabric-react: Found 24 errors.
 office-ui-fabric-react: [XX:XX:XX XM] x ------------------------------------
 office-ui-fabric-react: [XX:XX:XX XM] x Error previously detected. See above for error messages.
 office-ui-fabric-react: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]

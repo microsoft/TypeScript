@@ -2,7 +2,7 @@
 // Must reference esnext.asynciterable lib, since octokit uses AsyncIterable internally
 /// <reference types="node" />
 
-import Octokit = require("@octokit/rest");
+import { Octokit } from "@octokit/rest";
 const {runSequence} = require("./run-sequence");
 import fs = require("fs");
 import path = require("path");
@@ -26,18 +26,34 @@ async function main() {
     const currentAuthor = runSequence([
         ["git", ["log", "-1", `--pretty="%aN <%aE>"`]]
     ]);
+
+    const gh = new Octokit();
+    gh.authenticate({
+        type: "token",
+        token: process.argv[2]
+    });
+
+    const inputPR = (await gh.pulls.get({ pull_number: +process.env.SOURCE_ISSUE, owner: "microsoft", repo: "TypeScript" })).data;
+    let remoteName = "origin";
+    if (inputPR.base.repo.git_url !== `git:github.com/microsoft/TypeScript`) {
+        runSequence([
+            ["git", ["remote", "add", "nonlocal", inputPR.base.repo.git_url]]
+        ]);
+        remoteName = "nonlocal";
+    }
+    const baseBranchName = inputPR.base.ref;
     runSequence([
-        ["git", ["fetch", "origin", "master"]]
+        ["git", ["fetch", remoteName, baseBranchName]]
     ]);
     let logText = runSequence([
-        ["git", ["log", `origin/master..${currentSha.trim()}`, `--pretty="%h %s%n%b"`, "--reverse"]]
+        ["git", ["log", `${remoteName}/${baseBranchName}..${currentSha.trim()}`, `--pretty="%h %s%n%b"`, "--reverse"]]
     ]);
     logText = `Cherry-pick PR #${process.env.SOURCE_ISSUE} into ${process.env.TARGET_BRANCH}
 
 Component commits:
 ${logText.trim()}`;
     const logpath = path.join(__dirname, "../", "logmessage.txt");
-    const mergebase = runSequence([["git", ["merge-base", "origin/master", currentSha]]]).trim();
+    const mergebase = runSequence([["git", ["merge-base", `${remoteName}/${baseBranchName}`, currentSha]]]).trim();
     runSequence([
         ["git", ["checkout", "-b", "temp-branch"]],
         ["git", ["reset", mergebase, "--soft"]]
@@ -67,11 +83,6 @@ ${logText.trim()}`;
         ["git", ["push", "--set-upstream", "fork", branchName, "-f"]] // push the branch
     ]);
 
-    const gh = new Octokit();
-    gh.authenticate({
-        type: "token",
-        token: process.argv[2]
-    });
     const r = await gh.pulls.create({
         owner: "Microsoft",
         repo: "TypeScript",

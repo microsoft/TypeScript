@@ -122,7 +122,7 @@ baz(array);                          // Error
 baz(["string", 1, true, ...array]);  // Error
 >baz(["string", 1, true, ...array]) : void
 >baz : (x: [string, number, boolean]) => void
->["string", 1, true, ...array] : (string | number | boolean)[]
+>["string", 1, true, ...array] : [string, number, true, ...(string | number | boolean)[]]
 >"string" : "string"
 >1 : 1
 >true : true
