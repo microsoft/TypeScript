@@ -430,7 +430,7 @@ const generateCodeCoverage = () => exec("istanbul", ["cover", "node_modules/moch
 task("generate-code-coverage", series(preBuild, buildTests, generateCodeCoverage));
 task("generate-code-coverage").description = "Generates code coverage data via istanbul";
 
-const preTest = parallel(buildTests, buildServices, buildLssl);
+const preTest = parallel(buildTsc, buildTests, buildServices, buildLssl);
 preTest.displayName = "preTest";
 
 const postTest = (done) => cmdLineOptions.lint ? lint(done) : done();
