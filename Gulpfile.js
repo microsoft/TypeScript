@@ -417,7 +417,15 @@ task("generate-types-map", generateTypesMap);
 const cleanTypesMap = () => del("built/local/typesMap.json");
 cleanTasks.push(cleanTypesMap);
 
-const buildOtherOutputs = parallel(buildCancellationToken, buildTypingsInstaller, buildWatchGuard, generateTypesMap);
+const builtLocalDiagnosticMessagesGeneratedJson = "built/local/diagnosticMessages.generated.json";
+const copyBuiltLocalDiagnosticMessages = () => src(diagnosticMessagesGeneratedJson)
+    .pipe(newer(builtLocalDiagnosticMessagesGeneratedJson))
+    .pipe(dest("built/local"));
+
+const cleanBuiltLocalDiagnosticMessages = () => del(builtLocalDiagnosticMessagesGeneratedJson);
+cleanTasks.push(cleanBuiltLocalDiagnosticMessages);
+
+const buildOtherOutputs = parallel(buildCancellationToken, buildTypingsInstaller, buildWatchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages);
 task("other-outputs", series(preBuild, buildOtherOutputs));
 task("other-outputs").description = "Builds miscelaneous scripts and documents distributed with the LKG";
 
