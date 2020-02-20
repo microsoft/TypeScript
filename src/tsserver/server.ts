@@ -884,7 +884,7 @@ namespace ts.server {
     }
 
     // Override sys.write because fs.writeSync is not reliable on Node 4
-    sys.write = (s: string) => writeMessage(sys.bufferFrom!(s, "utf8")  as globalThis.Buffer);
+    sys.write = (s: string) => writeMessage(sys.bufferFrom!(s, "utf8") as globalThis.Buffer);
     sys.watchFile = (fileName, callback) => {
         const watchedFile = pollingWatchedFileSet.addFile(fileName, callback);
         return {
