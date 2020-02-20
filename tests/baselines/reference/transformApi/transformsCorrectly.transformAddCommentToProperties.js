@@ -1,5 +1,5 @@
 /*comment*/
-let Clazz = /** @class */ (() => {
+const Clazz = /** @class */ (() => {
     /*comment*/
     class Clazz {
         /*comment*/
