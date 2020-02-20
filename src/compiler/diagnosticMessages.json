@@ -2891,6 +2891,10 @@
         "category": "Error",
         "code": 2783
     },
+    "'get' and 'set' accessors cannot declare 'this' parameters.": {
+        "category": "Error",
+        "code": 2784
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

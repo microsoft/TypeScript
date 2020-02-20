@@ -28545,6 +28545,9 @@ namespace ts {
                 if (func.kind === SyntaxKind.ArrowFunction) {
                     error(node, Diagnostics.An_arrow_function_cannot_have_a_this_parameter);
                 }
+                if (func.kind === SyntaxKind.GetAccessor || func.kind === SyntaxKind.SetAccessor) {
+                    error(node, Diagnostics.get_and_set_accessors_cannot_declare_this_parameters);
+                }
             }
 
             // Only check rest parameter type if it's not a binding pattern. Since binding patterns are
