@@ -16,7 +16,7 @@ class C {
 
 
 //// [useBeforeDeclaration_jsx.jsx]
-let C = /** @class */ (() => {
+const C = /** @class */ (() => {
     class C {
     }
     C.a = <C.z></C.z>;

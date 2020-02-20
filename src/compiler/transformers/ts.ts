@@ -673,7 +673,7 @@ namespace ts {
                             /*type*/ undefined,
                             iife
                         )
-                    ], languageVersion > ScriptTarget.ES5 ? NodeFlags.Let : undefined)
+                    ], languageVersion > ScriptTarget.ES5 ? NodeFlags.Const : undefined)
                 );
 
                 setOriginalNode(varStatement, node);

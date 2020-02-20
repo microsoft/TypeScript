@@ -1,4 +1,4 @@
-let C = /** @class */ (() => {
+const C = /** @class */ (() => {
     class C {
         constructor() {
             this.foo = 10;
