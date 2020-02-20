@@ -12,7 +12,7 @@ function padNum(num: number) {
 const userName = process.env.GH_USERNAME;
 const reviewers = process.env.REQUESTING_USER ? [process.env.REQUESTING_USER] : ["weswigham", "sandersn", "RyanCavanaugh"];
 const now = new Date();
-const branchName = `user-update-${process.env.TARGET_FORK}-${now.getFullYear()}${padNum(now.getMonth())}${padNum(now.getDay())}${process.env.TARGET_BRANCH ? "-" + process.env.TARGET_BRANCH : ""}`;
+const branchName = `user-update-${process.env.TARGET_FORK}-${now.getFullYear()}${padNum(now.getMonth() + 1)}${padNum(now.getDate())}${process.env.TARGET_BRANCH ? "-" + process.env.TARGET_BRANCH : ""}`;
 const remoteUrl = `https://${process.argv[2]}@github.com/${userName}/TypeScript.git`;
 runSequence([
     ["git", ["checkout", "."]], // reset any changes

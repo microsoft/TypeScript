@@ -2051,4 +2051,19 @@ namespace ts {
             }
         }
     }
+
+    export function padLeft(s: string, length: number) {
+        while (s.length < length) {
+            s = " " + s;
+        }
+        return s;
+    }
+
+    export function padRight(s: string, length: number) {
+        while (s.length < length) {
+            s = s + " ";
+        }
+
+        return s;
+    }
 }

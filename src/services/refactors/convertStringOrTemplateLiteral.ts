@@ -11,7 +11,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         const maybeBinary = getParentBinaryExpression(node);
         const refactorInfo: ApplicableRefactorInfo = { name: refactorName, description: refactorDescription, actions: [] };
 
-        if ((isBinaryExpression(maybeBinary) || isStringLiteral(maybeBinary)) && isStringConcatenationValid(maybeBinary)) {
+        if (isBinaryExpression(maybeBinary) && isStringConcatenationValid(maybeBinary)) {
             refactorInfo.actions.push({ name: refactorName, description: refactorDescription });
             return [refactorInfo];
         }

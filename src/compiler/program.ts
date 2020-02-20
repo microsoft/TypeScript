@@ -383,13 +383,6 @@ namespace ts {
         return formatStyle + text + resetEscapeSequence;
     }
 
-    function padLeft(s: string, length: number) {
-        while (s.length < length) {
-            s = " " + s;
-        }
-        return s;
-    }
-
     function formatCodeSpan(file: SourceFile, start: number, length: number, indent: string, squiggleColor: ForegroundColorEscapeSequences, host: FormatDiagnosticsHost) {
         const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
         const { line: lastLine, character: lastLineChar } = getLineAndCharacterOfPosition(file, start + length);

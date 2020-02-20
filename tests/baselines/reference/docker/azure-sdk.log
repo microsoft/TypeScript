@@ -2,7 +2,7 @@ Exit Code: 1
 Standard output:
 
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
-Node.js version is 12.15.0 (LTS)
+Node.js version is 12.16.0 (LTS)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
@@ -44,10 +44,10 @@ npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/storage-file-datalake@X.X.X-preview.8 build:es6: `tsc -p tsconfig.json`
+npm ERR! @azure/storage-file-datalake@X.X.X-preview.9 build:es6: `tsc -p tsconfig.json && npm run build:types`
 npm ERR! Exit status 2
 npm ERR! 
-npm ERR! Failed at the @azure/storage-file-datalake@X.X.X-preview.8 build:es?script.
+npm ERR! Failed at the @azure/storage-file-datalake@X.X.X-preview.9 build:es?script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
@@ -105,10 +105,10 @@ FAILURE (4)
 @azure/app-configuration ( ? seconds)
 >>> @azure/app-configuration
 tsc -p . && rollup -c 2>&1 && npm run extract-api
-test/testHelpers.ts(74,31): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
+test/testHelpers.ts(74,31): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage, PageSettings>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
   Types of property '[Symbol.asyncIterator]' are incompatible.
-    Type '() => PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage>' is not assignable to type '() => AsyncIterator<ConfigurationSetting>'.
-      Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage>' is not assignable to type 'AsyncIterator<ConfigurationSetting>'.
+    Type '() => PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage, PageSettings>' is not assignable to type '() => AsyncIterator<ConfigurationSetting>'.
+      Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage, PageSettings>' is not assignable to type 'AsyncIterator<ConfigurationSetting>'.
         Types of property 'next' are incompatible.
           Type '() => Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type '(value?: any) => Promise<IteratorResult<ConfigurationSetting>>'.
             Type 'Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type 'Promise<IteratorResult<ConfigurationSetting>>'.
@@ -116,20 +116,20 @@ test/testHelpers.ts(74,31): error TS2322: Type 'PagedAsyncIterableIterator<Confi
                 Types of property 'done' are incompatible.
                   Type 'boolean | undefined' is not assignable to type 'boolean'.
                     Type 'undefined' is not assignable to type 'boolean'.
-test/testHelpers.ts(92,31): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
+test/testHelpers.ts(92,31): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage, PageSettings>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
   Types of property '[Symbol.asyncIterator]' are incompatible.
-    Type '() => PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage>' is not assignable to type '() => AsyncIterator<ConfigurationSetting>'.
-      Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage>' is not assignable to type 'AsyncIterator<ConfigurationSetting>'.
+    Type '() => PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage, PageSettings>' is not assignable to type '() => AsyncIterator<ConfigurationSetting>'.
+      Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage, PageSettings>' is not assignable to type 'AsyncIterator<ConfigurationSetting>'.
         Types of property 'next' are incompatible.
           Type '() => Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type '(value?: any) => Promise<IteratorResult<ConfigurationSetting>>'.
             Type 'Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type 'Promise<IteratorResult<ConfigurationSetting>>'.
 @azure/eventhubs-checkpointstore-blob ( ? seconds)
 >>> @azure/eventhubs-checkpointstore-blob
 tsc -p . && rollup -c 2>&1 && npm run extract-api
-src/blobCheckpointStore.ts(50,32): error TS2322: Type 'PagedAsyncIterableIterator<BlobItem, ContainerListBlobFlatSegmentResponse>' is not assignable to type 'AsyncIterable<BlobItem>'.
+src/blobCheckpointStore.ts(50,32): error TS2322: Type 'PagedAsyncIterableIterator<BlobItem, ContainerListBlobFlatSegmentResponse, PageSettings>' is not assignable to type 'AsyncIterable<BlobItem>'.
   Types of property '[Symbol.asyncIterator]' are incompatible.
-    Type '() => PagedAsyncIterableIterator<BlobItem, ContainerListBlobFlatSegmentResponse>' is not assignable to type '() => AsyncIterator<BlobItem>'.
-      Type 'PagedAsyncIterableIterator<BlobItem, ContainerListBlobFlatSegmentResponse>' is not assignable to type 'AsyncIterator<BlobItem>'.
+    Type '() => PagedAsyncIterableIterator<BlobItem, ContainerListBlobFlatSegmentResponse, PageSettings>' is not assignable to type '() => AsyncIterator<BlobItem>'.
+      Type 'PagedAsyncIterableIterator<BlobItem, ContainerListBlobFlatSegmentResponse, PageSettings>' is not assignable to type 'AsyncIterator<BlobItem>'.
         Types of property 'next' are incompatible.
           Type '() => Promise<{ done?: boolean | undefined; value: BlobItem; }>' is not assignable to type '(value?: any) => Promise<IteratorResult<BlobItem>>'.
             Type 'Promise<{ done?: boolean | undefined; value: BlobItem; }>' is not assignable to type 'Promise<IteratorResult<BlobItem>>'.
@@ -150,10 +150,10 @@ npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 @azure/storage-file-datalake (? seconds)
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/storage-file-datalake@X.X.X-preview.8 build:es6: `tsc -p tsconfig.json`
+npm ERR! @azure/storage-file-datalake@X.X.X-preview.9 build:es6: `tsc -p tsconfig.json && npm run build:types`
 npm ERR! Exit status 2
 npm ERR!
-npm ERR! Failed at the @azure/storage-file-datalake@X.X.X-preview.8 build:es?script.
+npm ERR! Failed at the @azure/storage-file-datalake@X.X.X-preview.9 build:es?script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log

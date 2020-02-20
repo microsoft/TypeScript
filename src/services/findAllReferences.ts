@@ -1927,10 +1927,12 @@ namespace ts.FindAllReferences {
             }
 
             const exportSpecifier = getDeclarationOfKind<ExportSpecifier>(symbol, SyntaxKind.ExportSpecifier);
-            const localSymbol = exportSpecifier && checker.getExportSpecifierLocalTargetSymbol(exportSpecifier);
-            if (localSymbol) {
-                const res = cbSymbol(localSymbol, /*rootSymbol*/ undefined, /*baseSymbol*/ undefined, EntryKind.Node);
-                if (res) return res;
+            if (!isForRenamePopulateSearchSymbolSet || exportSpecifier && !exportSpecifier.propertyName) {
+                const localSymbol = exportSpecifier && checker.getExportSpecifierLocalTargetSymbol(exportSpecifier);
+                if (localSymbol) {
+                    const res = cbSymbol(localSymbol, /*rootSymbol*/ undefined, /*baseSymbol*/ undefined, EntryKind.Node);
+                    if (res) return res;
+                }
             }
 
             // symbolAtLocation for a binding element is the local symbol. See if the search symbol is the property.
