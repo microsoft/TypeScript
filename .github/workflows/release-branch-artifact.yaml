@@ -1,4 +1,4 @@
-name: CI
+name: Create Releasable Package Drop
 
 on:
   push:
