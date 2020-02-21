@@ -1,7 +1,7 @@
 // @ts-check
 /// <reference lib="esnext.asynciterable" />
 // Must reference esnext.asynciterable lib, since octokit uses AsyncIterable internally
-const Octokit = require("@octokit/rest");
+const { Octokit } = require("@octokit/rest");
 const ado = require("azure-devops-node-api");
 const { default: fetch } = require("node-fetch");
 
@@ -63,7 +63,7 @@ main().catch(async e => {
             token: process.argv[2]
         });
         await gh.issues.createComment({
-            number: +process.env.SOURCE_ISSUE,
+            issue_number: +process.env.SOURCE_ISSUE,
             owner: "Microsoft",
             repo: "TypeScript",
             body: `Hey @${process.env.REQUESTING_USER}, something went wrong when looking for the build artifact. ([You can check the log here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary)).`
