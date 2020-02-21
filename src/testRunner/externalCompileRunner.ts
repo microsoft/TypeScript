@@ -208,7 +208,8 @@ ${sanitizeDockerfileOutput(result.stderr.toString())}`;
         return result.replace(/^.*(\] (Starting)|(Finished)).*$/gm, "") // "gulp" task start/end messages (nondeterministic order)
             .replace(/^.*(\] . (finished)|(started)).*$/gm, "") // "just" task start/end messages (nondeterministic order)
             .replace(/^.*\] Respawned to PID: \d+.*$/gm, "") // PID of child is OS and system-load dependent (likely stableish in a container but still dangerous)
-            .replace(/\n+/g, "\n");
+            .replace(/\n+/g, "\n")
+            .replace(/\/tmp\/yarn--.*?\/node/g, "");
     }
 
     function sanitizeTimestamps(result: string): string {
