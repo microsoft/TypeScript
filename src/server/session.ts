@@ -1892,7 +1892,7 @@ namespace ts.server {
                     a.fileName === b.fileName &&
                     a.isCaseSensitive === b.isCaseSensitive &&
                     a.kind === b.kind &&
-                    a.kindModifiers === b.containerName &&
+                    a.kindModifiers === b.kindModifiers &&
                     a.matchKind === b.matchKind &&
                     a.name === b.name &&
                     a.textSpan.start === b.textSpan.start &&
