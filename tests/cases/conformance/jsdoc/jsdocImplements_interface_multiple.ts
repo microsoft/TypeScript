@@ -1,6 +1,8 @@
 // @allowJs: true
 // @checkJs: true
-// @noEmit: true
+// @declaration: true
+// @emitDeclarationOnly: true
+// @outDir: ./out
 
 // @Filename: /defs.d.ts
 interface Drawable {
@@ -11,7 +13,7 @@ interface Sizable {
 }
 // @Filename: /a.js
 /** 
- * @implements Drawable 
+ * @implements {Drawable} 
  * @implements Sizable 
  **/
 class Square {
@@ -24,7 +26,7 @@ class Square {
 }
 /**
  * @implements Drawable
- * @implements Sizable
+ * @implements {Sizable}
  **/
 class BadSquare {
     size() {

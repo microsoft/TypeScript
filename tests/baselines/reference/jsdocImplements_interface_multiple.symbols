@@ -13,7 +13,7 @@ interface Sizable {
 }
 === /a.js ===
 /** 
- * @implements Drawable 
+ * @implements {Drawable} 
  * @implements Sizable 
  **/
 class Square {
@@ -32,7 +32,7 @@ class Square {
 }
 /**
  * @implements Drawable
- * @implements Sizable
+ * @implements {Sizable}
  **/
 class BadSquare {
 >BadSquare : Symbol(BadSquare, Decl(a.js, 11, 1))

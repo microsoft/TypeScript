@@ -2775,7 +2775,7 @@ namespace ts {
         }
         else {
             const heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ImplementsKeyword);
-            return heritageClause ? heritageClause.types : undefined;
+            return heritageClause?.types;
         }
     }
 

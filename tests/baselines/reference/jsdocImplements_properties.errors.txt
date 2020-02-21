@@ -16,7 +16,7 @@
         x = 10
     }
     
-    /** @implements A*/
+    /** @implements {A}*/
     class B3 {
         constructor() { this.x = 10 }
     }

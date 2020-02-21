@@ -1,6 +1,8 @@
 // @allowJs: true
 // @checkJs: true
-// @noEmit: true
+// @declaration: true
+// @emitDeclarationOnly: true
+// @outDir: ./out
 
 // @Filename: /defs.d.ts
 interface A {
@@ -13,7 +15,7 @@ class B {
         return 0;
     }
 }
-/** @implements A */
+/** @implements {A} */
 class B2 {
     mNumber() {
         return "";

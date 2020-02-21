@@ -10,7 +10,7 @@
         /** @return {number} */
         method() { throw new Error(); }
     }
-    /** @implements A */
+    /** @implements {A} */
     class B  {
         method() { return 0 }
     }
@@ -25,7 +25,7 @@
 !!! error TS2416:     Type 'string' is not assignable to type 'number'.
     }
     
-    /** @implements A */
+    /** @implements {A} */
     class B3  {
           ~~
 !!! error TS2720: Class 'B3' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?

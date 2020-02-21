@@ -1,12 +1,14 @@
 // @allowJs: true
 // @checkJs: true
-// @noEmit: true
+// @declaration: true
+// @emitDeclarationOnly: true
+// @outDir: ./out
 
 // @Filename: /defs.d.ts
 interface Sig {
     [index: string]: string
 }
 // @Filename: /a.js
-/** @implements Sig */
+/** @implements {Sig} */
 class B  {
 }

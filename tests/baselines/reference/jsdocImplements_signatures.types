@@ -4,7 +4,7 @@ interface Sig {
 >index : string
 }
 === /a.js ===
-/** @implements Sig */
+/** @implements {Sig} */
 class B  {
 >B : B
 }

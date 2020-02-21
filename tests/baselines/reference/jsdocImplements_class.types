@@ -8,7 +8,7 @@ class A {
 >new Error() : Error
 >Error : ErrorConstructor
 }
-/** @implements A */
+/** @implements {A} */
 class B  {
 >B : B
 
@@ -27,7 +27,7 @@ class B2  {
 >"" : ""
 }
 
-/** @implements A */
+/** @implements {A} */
 class B3  {
 >B3 : B3
 }

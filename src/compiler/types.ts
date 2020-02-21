@@ -4468,6 +4468,8 @@ namespace ts {
         resolvedBaseConstructorType?: Type;               // Resolved base constructor type of class
         /* @internal */
         resolvedBaseTypes: BaseType[];                    // Resolved base types
+        /* @internal */
+        resolvedImplementsTypes: BaseType[];              // Resolved implements types
     }
 
     // Object type or intersection of object types

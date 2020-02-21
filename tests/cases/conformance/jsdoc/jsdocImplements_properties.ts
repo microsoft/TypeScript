@@ -1,6 +1,8 @@
 // @allowJs: true
 // @checkJs: true
-// @noEmit: true
+// @declaration: true
+// @emitDeclarationOnly: true
+// @outDir: ./out
 
 // @Filename: /a.js
 class A { constructor() { this.x = 0; } }
@@ -12,7 +14,7 @@ class B2 {
     x = 10
 }
 
-/** @implements A*/
+/** @implements {A}*/
 class B3 {
     constructor() { this.x = 10 }
 }

@@ -16,7 +16,7 @@ class B {
         return 0;
     }
 }
-/** @implements A */
+/** @implements {A} */
 class B2 {
 >B2 : Symbol(B2, Decl(a.js, 5, 1))
 

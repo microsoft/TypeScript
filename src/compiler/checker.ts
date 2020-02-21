@@ -5696,9 +5696,13 @@ namespace ts {
                     const typeParamDecls = map(localParams, p => typeParameterToDeclaration(p, context));
                     const classType = getDeclaredTypeOfClassOrInterface(symbol);
                     const baseTypes = getBaseTypes(classType);
+                    const implementsTypes = getImplementsTypes(classType);
                     const staticType = getTypeOfSymbol(symbol);
                     const staticBaseType = getBaseConstructorTypeOfClass(staticType as InterfaceType);
-                    const heritageClauses = !length(baseTypes) ? undefined : [createHeritageClause(SyntaxKind.ExtendsKeyword, map(baseTypes, b => serializeBaseType(b, staticBaseType, localName)))];
+                    const heritageClauses = [
+                        ...!length(baseTypes) ? [] : [createHeritageClause(SyntaxKind.ExtendsKeyword, map(baseTypes, b => serializeBaseType(b, staticBaseType, localName)))],
+                        ...!length(implementsTypes) ? [] : [createHeritageClause(SyntaxKind.ImplementsKeyword, map(implementsTypes, b => serializeBaseType(b, staticBaseType, localName)))]
+                    ];
                     const symbolProps = getPropertiesOfType(classType);
                     const publicSymbolProps = filter(symbolProps, s => {
                         const valueDecl = s.valueDeclaration;
@@ -8063,6 +8067,17 @@ namespace ts {
             return type.resolvedBaseConstructorType;
         }
 
+        function getImplementsTypes(type: InterfaceType): BaseType[] {
+            if (!type.resolvedImplementsTypes) {
+                if (type.symbol.flags & SymbolFlags.Class) {
+                    resolveImplementsTypesOfClass(type);
+                }
+                else {
+                    Debug.fail("type must be an interface");
+                }
+            }
+            return type.resolvedImplementsTypes;
+        }
         function getBaseTypes(type: InterfaceType): BaseType[] {
             if (!type.resolvedBaseTypes) {
                 if (type.objectFlags & ObjectFlags.Tuple) {
@@ -8162,6 +8177,29 @@ namespace ts {
                 !!(type.flags & TypeFlags.Intersection) && every((<IntersectionType>type).types, isValidBaseType);
         }
 
+        function resolveImplementsTypesOfClass(type: InterfaceType) {
+            type.resolvedImplementsTypes = type.resolvedImplementsTypes || emptyArray;
+            for (const declaration of type.symbol.declarations) {
+
+                if (!isClassLike(declaration)) continue;
+
+                const implementsTypeNodes = getEffectiveImplementsTypeNodes(declaration);
+
+                if (!implementsTypeNodes) continue;
+
+                for (const node of implementsTypeNodes) {
+                    const implementsType = getTypeFromTypeNode(node);
+                    if (implementsType !== errorType) {
+                        if (type.resolvedImplementsTypes === emptyArray) {
+                            type.resolvedImplementsTypes = [<ObjectType>implementsType];
+                        }
+                        else {
+                            type.resolvedImplementsTypes.push(implementsType);
+                        }
+                    }
+                }
+            }
+        }
         function resolveBaseTypesOfInterface(type: InterfaceType): void {
             type.resolvedBaseTypes = type.resolvedBaseTypes || emptyArray;
             for (const declaration of type.symbol.declarations) {

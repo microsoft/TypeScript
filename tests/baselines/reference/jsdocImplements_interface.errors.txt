@@ -16,7 +16,7 @@
             return 0;
         }
     }
-    /** @implements A */
+    /** @implements {A} */
     class B2 {
         mNumber() {
         ~~~~~~~

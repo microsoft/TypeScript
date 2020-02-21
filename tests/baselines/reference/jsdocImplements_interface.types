@@ -15,7 +15,7 @@ class B {
 >0 : 0
     }
 }
-/** @implements A */
+/** @implements {A} */
 class B2 {
 >B2 : B2
 

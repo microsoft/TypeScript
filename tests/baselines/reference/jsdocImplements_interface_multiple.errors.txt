@@ -11,7 +11,7 @@
     }
 ==== /a.js (1 errors) ====
     /** 
-     * @implements Drawable 
+     * @implements {Drawable} 
      * @implements Sizable 
      **/
     class Square {
@@ -24,7 +24,7 @@
     }
     /**
      * @implements Drawable
-     * @implements Sizable
+     * @implements {Sizable}
      **/
     class BadSquare {
           ~~~~~~~~~

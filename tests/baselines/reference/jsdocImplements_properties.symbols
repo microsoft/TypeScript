@@ -17,7 +17,7 @@ class B2 {
 >x : Symbol(B2.x, Decl(a.js, 5, 10))
 }
 
-/** @implements A*/
+/** @implements {A}*/
 class B3 {
 >B3 : Symbol(B3, Decl(a.js, 7, 1))
 

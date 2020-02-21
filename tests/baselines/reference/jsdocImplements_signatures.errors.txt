@@ -7,7 +7,7 @@
         [index: string]: string
     }
 ==== /a.js (1 errors) ====
-    /** @implements Sig */
+    /** @implements {Sig} */
     class B  {
           ~
 !!! error TS2420: Class 'B' incorrectly implements interface 'Sig'.
