@@ -210,6 +210,14 @@ namespace FourSlashInterface {
         public refactorAvailable(name: string, actionName?: string) {
             this.state.verifyRefactorAvailable(this.negative, name, actionName);
         }
+
+        public toggleLineComment(newFileContent: string) {
+            this.state.toggleLineComment(newFileContent);
+        }
+
+        public toggleMultilineComment(newFileContent: string) {
+            this.state.toggleMultilineComment(newFileContent);
+        }
     }
 
     export class Verify extends VerifyNegatable {

@@ -812,6 +812,14 @@ namespace ts.server {
             return notImplemented();
         }
 
+        toggleLineComment(): ts.TextChange[] {
+            throw new Error("Method not implemented.");
+        }
+
+        toggleMultilineComment(): ts.TextChange[] {
+            throw new Error("Method not implemented.");
+        }
+
         dispose(): void {
             throw new Error("dispose is not available through the server layer.");
         }

@@ -600,6 +600,12 @@ namespace Harness.LanguageService {
         clearSourceMapperCache(): never {
             return ts.notImplemented();
         }
+        toggleLineComment(fileName: string, textRanges: ts.TextRange[]): ts.TextChange[] {
+            return unwrapJSONCallResult(this.shim.toggleLineComment(fileName, textRanges));
+        }
+        toggleMultilineComment(fileName: string, textRanges: ts.TextRange[]): ts.TextChange[] {
+            return unwrapJSONCallResult(this.shim.toggleMultilineComment(fileName, textRanges));
+        }
         dispose(): void { this.shim.dispose({}); }
     }
 

@@ -394,7 +394,7 @@ namespace ts {
             case SyntaxKind.MethodSignature:
                 return ScriptElementKind.memberFunctionElement;
             case SyntaxKind.PropertyAssignment:
-                const {initializer} = node as PropertyAssignment;
+                const { initializer } = node as PropertyAssignment;
                 return isFunctionLike(initializer) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
@@ -557,7 +557,7 @@ namespace ts {
                 if (!(<NewExpression>n).arguments) {
                     return true;
                 }
-                // falls through
+            // falls through
 
             case SyntaxKind.CallExpression:
             case SyntaxKind.ParenthesizedExpression:
@@ -1320,6 +1320,25 @@ namespace ts {
         return false;
     }
 
+    export function isInsideJsxTags(sourceFile: SourceFile, position: number) {
+        const token = getTokenAtPosition(sourceFile, position);
+
+        switch (token.kind) {
+            case SyntaxKind.JsxText:
+                return true;
+            case SyntaxKind.LessThanToken:
+            case SyntaxKind.Identifier:
+                return token.parent.kind === SyntaxKind.JsxText // <div>Hello |</div>
+                    || token.parent.kind === SyntaxKind.JsxClosingElement // <div>|</div>
+                    || isJsxOpeningLikeElement(token.parent) && isJsxElement(token.parent.parent) // <div>|<component /></div> or <div><comp|onent /></div>
+            case SyntaxKind.CloseBraceToken:
+            case SyntaxKind.OpenBraceToken:
+                return isJsxExpression(token.parent) && isJsxElement(token.parent.parent); // <div>{|}</div> or <div>|{}</div>
+        }
+
+        return false;
+    }
+
     export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind, sourceFile: SourceFile) {
         const tokenKind = token.kind;
         let remainingMatchingTokens = 0;
@@ -1346,7 +1365,7 @@ namespace ts {
     export function removeOptionality(type: Type, isOptionalExpression: boolean, isOptionalChain: boolean) {
         return isOptionalExpression ? type.getNonNullableType() :
             isOptionalChain ? type.getNonOptionalType() :
-            type;
+                type;
     }
 
     export function isPossiblyTypeArgumentPosition(token: Node, sourceFile: SourceFile, checker: TypeChecker): boolean {
@@ -1439,7 +1458,7 @@ namespace ts {
                     break;
 
                 case SyntaxKind.EqualsGreaterThanToken:
-                    // falls through
+                // falls through
 
                 case SyntaxKind.Identifier:
                 case SyntaxKind.StringLiteral:
@@ -1447,7 +1466,7 @@ namespace ts {
                 case SyntaxKind.BigIntLiteral:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
-                    // falls through
+                // falls through
 
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.ExtendsKeyword:

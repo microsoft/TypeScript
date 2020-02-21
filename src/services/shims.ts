@@ -277,6 +277,9 @@ namespace ts {
 
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
+
+        toggleLineComment(fileName: string, textChanges: ts.TextRange[]): string;
+        toggleMultilineComment(fileName: string, textChanges: ts.TextRange[]): string;
     }
 
     export interface ClassifierShim extends Shim {
@@ -1065,6 +1068,20 @@ namespace ts {
                 /*returnJson*/ false,
                 () => this.languageService.getEmitOutput(fileName),
                 this.logPerformance) as EmitOutput;
+        }
+
+        public toggleLineComment(fileName: string, textRanges: ts.TextRange[]): string {
+            return this.forwardJSONCall(
+                `toggleLineComment('${fileName}', '${JSON.stringify(textRanges)}')`,
+                () => this.languageService.toggleLineComment(fileName, textRanges)
+            );
+        }
+
+        public toggleMultilineComment(fileName: string, textRanges: ts.TextRange[]): string {
+            return this.forwardJSONCall(
+                `toggleMultilineComment('${fileName}', '${JSON.stringify(textRanges)}')`,
+                () => this.languageService.toggleMultilineComment(fileName, textRanges)
+            );
         }
     }
 

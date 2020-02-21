@@ -2196,6 +2196,22 @@ namespace ts.server {
             });
         }
 
+        private toggleLineComment(args: protocol.ToggleLineCommentRequestArgs, simplifiedResult: boolean) {
+            const { file, project } = this.getFileAndProject(args);
+
+            const result = project.getLanguageService().toggleLineComment(file, args.textRanges);
+
+            return simplifiedResult ? [] : result;
+        }
+
+        private toggleMultilineComment(args: protocol.ToggleMultilineCommentRequestArgs, simplifiedResult: boolean) {
+            const { file, project } = this.getFileAndProject(args);
+
+            const result = project.getLanguageService().toggleMultilineComment(file, args.textRanges);
+
+            return simplifiedResult ? [] : result;
+        }
+
         private mapSelectionRange(selectionRange: SelectionRange, scriptInfo: ScriptInfo): protocol.SelectionRange {
             const result: protocol.SelectionRange = {
                 textSpan: toProtocolTextSpan(selectionRange.textSpan, scriptInfo),
@@ -2640,6 +2656,18 @@ namespace ts.server {
             },
             [CommandNames.ProvideCallHierarchyOutgoingCalls]: (request: protocol.ProvideCallHierarchyOutgoingCallsRequest) => {
                 return this.requiredResponse(this.provideCallHierarchyOutgoingCalls(request.arguments));
+            },
+            [CommandNames.ToggleLineComment]: (request: protocol.ToggleLineCommentRequest) => {
+                return this.requiredResponse(this.toggleLineComment(request.arguments, /*simplifiedResult*/true));
+            },
+            [CommandNames.ToggleLineCommentFull]: (request: protocol.ToggleLineCommentRequest) => {
+                return this.requiredResponse(this.toggleLineComment(request.arguments, /*simplifiedResult*/false));
+            },
+            [CommandNames.ToggleMultilineComment]: (request: protocol.ToggleMultilineCommentRequest) => {
+                return this.requiredResponse(this.toggleMultilineComment(request.arguments, /*simplifiedResult*/true));
+            },
+            [CommandNames.ToggleMultilineComment]: (request: protocol.ToggleMultilineCommentRequest) => {
+                return this.requiredResponse(this.toggleMultilineComment(request.arguments, /*simplifiedResult*/false));
             },
         });
 

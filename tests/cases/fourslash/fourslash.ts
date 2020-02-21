@@ -396,6 +396,9 @@ declare namespace FourSlashInterface {
         generateTypes(...options: GenerateTypesOptions[]): void;
 
         organizeImports(newContent: string): void;
+
+        toggleLineComment(newFileContent: string): void;
+        toggleBlockComment(newFileContent: string): void;
     }
     class edit {
         backspace(count?: number): void;

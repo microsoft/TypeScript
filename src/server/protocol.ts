@@ -136,6 +136,10 @@ namespace ts.server.protocol {
         SelectionRange = "selectionRange",
         /* @internal */
         SelectionRangeFull = "selectionRange-full",
+        ToggleLineComment = "toggleLineComment",
+        ToggleLineCommentFull = "toggleLineComment-full",
+        ToggleMultilineComment = "toggleMultilineComment",
+        ToggleMultilineCommentFull = "toggleMultilineComment-full",
 
         PrepareCallHierarchy = "prepareCallHierarchy",
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
@@ -919,6 +923,18 @@ namespace ts.server.protocol {
         end: Location;
     }
 
+    export interface TextRange {
+        /**
+         * Position of the first character.
+         */
+        pos: number;
+
+        /**
+         * Position of the last character.
+         */
+        end: number;
+    }
+
     /**
      * Object found in response messages defining a span of text in a specific source file.
      */
@@ -1531,6 +1547,24 @@ namespace ts.server.protocol {
     export interface SelectionRange {
         textSpan: TextSpan;
         parent?: SelectionRange;
+    }
+
+    export interface ToggleLineCommentRequest extends FileRequest {
+        command: CommandTypes.ToggleLineComment;
+        arguments: ToggleLineCommentRequestArgs;
+    }
+
+    export interface ToggleLineCommentRequestArgs extends FileRequestArgs {
+        textRanges: TextRange[];
+    }
+
+    export interface ToggleMultilineCommentRequest extends FileRequest {
+        command: CommandTypes.ToggleMultilineComment;
+        arguments: ToggleMultilineCommentRequestArgs;
+    }
+
+    export interface ToggleMultilineCommentRequestArgs extends FileRequestArgs {
+        textRanges: TextRange[];
     }
 
     /**

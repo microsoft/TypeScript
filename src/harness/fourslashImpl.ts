@@ -3657,6 +3657,26 @@ namespace FourSlash {
         public configurePlugin(pluginName: string, configuration: any): void {
             (<ts.server.SessionClient>this.languageService).configurePlugin(pluginName, configuration);
         }
+
+        public toggleLineComment(newFileContent: string): void {
+            const ranges = this.getRanges();
+            assert(ranges.length);
+            const changes = this.languageService.toggleLineComment(this.activeFile.fileName, ranges);
+            
+            this.applyEdits(this.activeFile.fileName, changes);
+
+            this.verifyCurrentFileContent(newFileContent);
+        }
+
+        public toggleMultilineComment(newFileContent: string): void {
+            const ranges = this.getRanges();
+            assert(ranges.length);
+            const changes = this.languageService.toggleMultilineComment(this.activeFile.fileName, ranges);
+            
+            this.applyEdits(this.activeFile.fileName, changes);
+
+            this.verifyCurrentFileContent(newFileContent);
+        }
     }
 
     function prefixMessage(message: string | undefined) {
