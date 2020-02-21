@@ -27,10 +27,8 @@ async function main() {
         ["git", ["log", "-1", `--pretty="%aN <%aE>"`]]
     ]);
 
-    const gh = new Octokit();
-    gh.authenticate({
-        type: "token",
-        token: process.argv[2]
+    const gh = new Octokit({
+        auth: process.argv[2]
     });
 
     const inputPR = (await gh.pulls.get({ pull_number: +process.env.SOURCE_ISSUE, owner: "microsoft", repo: "TypeScript" })).data;
@@ -112,10 +110,8 @@ main().catch(async e => {
     console.error(e);
     process.exitCode = 1;
     if (process.env.SOURCE_ISSUE) {
-        const gh = new Octokit();
-        gh.authenticate({
-            type: "token",
-            token: process.argv[2]
+        const gh = new Octokit({
+            auth: process.argv[2]
         });
         await gh.issues.createComment({
             issue_number: +process.env.SOURCE_ISSUE,

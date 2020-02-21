@@ -12,10 +12,8 @@ const outputTableText = fs.readFileSync(process.argv[3], { encoding: "utf8" });
 console.log(`Fragment contents:
 ${outputTableText}`);
 
-const gh = new Octokit();
-gh.authenticate({
-    type: "token",
-    token: process.argv[2]
+const gh = new Octokit({
+    auth: process.argv[2]
 });
 gh.issues.createComment({
     issue_number: +source,

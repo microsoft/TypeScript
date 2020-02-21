@@ -24,10 +24,8 @@ runSequence([
     ["git", ["push", "--set-upstream", "fork", branchName, "-f"]] // push the branch
 ]);
 
-const gh = new Octokit();
-gh.authenticate({
-    type: "token",
-    token: process.argv[2]
+const gh = new Octokit({
+    auth: process.argv[2]
 });
 gh.pulls.create({
     owner: process.env.TARGET_FORK!,

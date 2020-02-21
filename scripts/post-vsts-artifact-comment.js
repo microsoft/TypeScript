@@ -23,10 +23,8 @@ async function main() {
     const tgzUrl = new URL(artifact.resource.url);
     tgzUrl.search = `artifactName=tgz&fileId=${file.blob.id}&fileName=${file.path}`;
     const link = "" + tgzUrl;
-    const gh = new Octokit();
-    gh.authenticate({
-        type: "token",
-        token: process.argv[2]
+    const gh = new Octokit({
+        auth: process.argv[2]
     });
 
     // Please keep the strings "an installable tgz" and "packed" in this message, as well as the devDependencies section,
@@ -57,10 +55,8 @@ main().catch(async e => {
     console.error(e);
     process.exitCode = 1;
     if (process.env.SOURCE_ISSUE) {
-        const gh = new Octokit();
-        gh.authenticate({
-            type: "token",
-            token: process.argv[2]
+        const gh = new Octokit({
+            auth: process.argv[2]
         });
         await gh.issues.createComment({
             issue_number: +process.env.SOURCE_ISSUE,
