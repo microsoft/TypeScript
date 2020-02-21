@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts">
 
-// If range is inside a single line comment, just add the block comment.
+// If range is inside a single line comment, just add the multiline comment.
 
 //// // let va[|r1 = 1;
 //// let var2 = 2;
@@ -14,7 +14,7 @@
 //// let var8 = 2;
 //// // let var9|] = 3;
 
-verify.toggleBlockComment(
+verify.toggleMultilineComment(
     `/*// let var1 = 1;
 let var2 = 2;
 // let var3*/ = 3;

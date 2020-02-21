@@ -15,7 +15,7 @@
 //// </MyContainer>;
 //// const e = <MyComponent>[|{'foo'}|]</MyComponent>;
 
-verify.toggleBlockComment(
+verify.toggleMultilineComment(
     `const a = <div tabIndex="0">{/*</div>;*/}
 const b = <div>This is {/*valid HTML &amp;*/} JSX at the same time.</div>;
 const c = <MyContainer>

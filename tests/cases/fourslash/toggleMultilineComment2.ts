@@ -17,7 +17,7 @@
 //// let var11 = 2;
 //// /*let var12|] = 3;*/
 
-verify.toggleBlockComment(
+verify.toggleMultilineComment(
     `let var1/* = 1;
 let var2 *//*= 2;
 let var3 *//*= 3;*/

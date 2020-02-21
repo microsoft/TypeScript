@@ -1,6 +1,6 @@
 // Jsx uses multiline comments for each line commented.
 
-// Selection is outside of a block comments inserts block comments instead of removing.
+// Selection is outside of a multiline comments inserts multiline comments instead of removing.
 // There's some variations between jsx and js comments depending on the position.
 
 //@Filename: file.tsx

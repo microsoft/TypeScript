@@ -1,4 +1,4 @@
-// Simple block comment and uncomment.
+// Simple multiline comment and uncomment.
 
 //// let var1[| = 1;
 //// let var2 = 2;
@@ -12,7 +12,7 @@
 //// let var8 = 2;
 //// let var9 = 3;*/|]
 
-verify.toggleBlockComment(
+verify.toggleMultilineComment(
     `let var1/* = 1;
 let var2 = 2;
 let var3 */= 3;
