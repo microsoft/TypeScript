@@ -679,7 +679,7 @@ declare const myVar = 30;
         "declarationMap": true,
         "outFile": "module.js"
     },
-    "exclude": ["module.d.ts"]
+    "exclude": ["module.d.ts"],
     "references": [
         { "path": "../lib", "prepend": true }
     ]

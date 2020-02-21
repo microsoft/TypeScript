@@ -828,7 +828,7 @@ namespace ts {
             if (state.options.verbose) reportStatus(state, Diagnostics.Building_project_0, project);
 
             if (config.fileNames.length === 0) {
-                reportAndStoreErrors(state, projectPath, config.errors);
+                reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
                 // Nothing to build - must be a solution file, basically
                 buildResult = BuildResultFlags.None;
                 step = Step.QueueReferencingProjects;
@@ -846,7 +846,7 @@ namespace ts {
                 config.options,
                 compilerHost,
                 getOldProgram(state, projectPath, config),
-                config.errors,
+                getConfigFileParsingDiagnostics(config),
                 config.projectReferences
             );
             step++;
@@ -1118,7 +1118,7 @@ namespace ts {
     function needsBuild({ options }: SolutionBuilderState, status: UpToDateStatus, config: ParsedCommandLine) {
         if (status.type !== UpToDateStatusType.OutOfDateWithPrepend || options.force) return true;
         return config.fileNames.length === 0 ||
-            !!config.errors.length ||
+            !!getConfigFileParsingDiagnostics(config).length ||
             !isIncrementalCompilation(config.options);
     }
 
@@ -1172,7 +1172,7 @@ namespace ts {
             verboseReportProjectStatus(state, project, status);
             if (!options.force) {
                 if (status.type === UpToDateStatusType.UpToDate) {
-                    reportAndStoreErrors(state, projectPath, config.errors);
+                    reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
                     projectPendingBuild.delete(projectPath);
                     // Up to date, skip
                     if (options.dry) {
@@ -1183,7 +1183,7 @@ namespace ts {
                 }
 
                 if (status.type === UpToDateStatusType.UpToDateWithUpstreamTypes) {
-                    reportAndStoreErrors(state, projectPath, config.errors);
+                    reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
                     return createUpdateOutputFileStampsProject(
                         state,
                         project,
@@ -1195,7 +1195,7 @@ namespace ts {
             }
 
             if (status.type === UpToDateStatusType.UpstreamBlocked) {
-                reportAndStoreErrors(state, projectPath, config.errors);
+                reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
                 projectPendingBuild.delete(projectPath);
                 if (options.verbose) {
                     reportStatus(
@@ -1211,7 +1211,7 @@ namespace ts {
             }
 
             if (status.type === UpToDateStatusType.ContainerOnly) {
-                reportAndStoreErrors(state, projectPath, config.errors);
+                reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
                 projectPendingBuild.delete(projectPath);
                 // Do nothing
                 continue;

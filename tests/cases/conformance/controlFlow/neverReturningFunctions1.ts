@@ -233,3 +233,20 @@ const Component = registerComponent('test-component', {
 		return f * this.data.num * this.system!.data.counter;
 	}
 });
+
+// Repro from #36147
+
+class MyThrowable {
+    throw(): never {
+        throw new Error();
+    }
+}
+
+class SuperThrowable extends MyThrowable {
+    err(msg: string): never {
+        super.throw()
+    }
+    ok(): never {
+        this.throw()
+    }
+}

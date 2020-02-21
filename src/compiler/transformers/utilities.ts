@@ -294,10 +294,12 @@ namespace ts {
                 return index;
             }
 
-            const statement = statements[index];
-            if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCall((<ExpressionStatement>statement).expression)) {
-                result.push(visitNode(statement, visitor, isStatement));
-                return index + 1;
+            const superIndex = findIndex(statements, s => isExpressionStatement(s) && isSuperCall(s.expression), index);
+            if (superIndex > -1) {
+                for (let i = index; i <= superIndex; i++) {
+                    result.push(visitNode(statements[i], visitor, isStatement));
+                }
+                return superIndex + 1;
             }
 
             return index;

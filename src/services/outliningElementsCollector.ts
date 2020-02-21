@@ -182,7 +182,8 @@ namespace ts.OutliningElementsCollector {
                             return spanForNode(n.parent);
                         }
                         else if (tryStatement.finallyBlock === n) {
-                            return spanForNode(findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile)!);
+                            const node = findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile);
+                            if (node) return spanForNode(node);
                         }
                         // falls through
                     default:

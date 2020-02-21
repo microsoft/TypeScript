@@ -47,7 +47,7 @@ namespace RWC {
                 caseSensitive = false;
             });
 
-            it("can compile", function(this: Mocha.ITestCallbackContext) {
+            it("can compile", function (this: Mocha.ITestCallbackContext) {
                 this.timeout(800_000); // Allow long timeouts for RWC compilations
                 let opts!: ts.ParsedCommandLine;
 
@@ -145,7 +145,7 @@ namespace RWC {
             });
 
 
-            it("has the expected emitted code", function(this: Mocha.ITestCallbackContext) {
+            it("has the expected emitted code", function (this: Mocha.ITestCallbackContext) {
                 this.timeout(100_000); // Allow longer timeouts for RWC js verification
                 Harness.Baseline.runMultifileBaseline(baseName, "", () => {
                     return Harness.Compiler.iterateOutputs(compilerResult.js.values());

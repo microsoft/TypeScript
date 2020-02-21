@@ -43,7 +43,7 @@ verify.applyCodeActionFromCompletion("1", {
     source: "/a",
     description: `Import 'b' from module "./a"`,
     newFileContent:
-`import type { b } from "./a";
+`import { b } from "./a";
 
 a;
 let x: b;`,
@@ -54,7 +54,7 @@ verify.applyCodeActionFromCompletion("0", {
     source: "/a",
     description: `Import 'a' from module "./a"`,
     newFileContent:
-`import type { b } from "./a";
+`import { b } from "./a";
 import a = require("./a");
 
 a;

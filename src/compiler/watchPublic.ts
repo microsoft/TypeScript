@@ -689,7 +689,7 @@ namespace ts {
 
                     let fileOrDirectoryPath: Path | undefined = toPath(fileOrDirectory);
 
-                    // Since the file existance changed, update the sourceFiles cache
+                    // Since the file existence changed, update the sourceFiles cache
                     if (cachedDirectoryStructureHost) {
                         cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
                     }
