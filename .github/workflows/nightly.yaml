@@ -3,6 +3,8 @@ name: Publish Nightly
 on:
   schedule:
     - cron:  '0 23 * * *'
+  repository_dispatch:
+    types: publish-nightly
 
 jobs:
   build:
