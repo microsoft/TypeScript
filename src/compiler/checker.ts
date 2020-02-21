@@ -14153,6 +14153,17 @@ namespace ts {
                             Diagnostics.The_expected_type_comes_from_the_return_type_of_this_signature,
                         ));
                     }
+                    if ((getFunctionFlags(node) & FunctionFlags.Async) === 0
+                        // exclude cases where source itself is promisy - this way we don't make a suggestion when relating
+                        // an IPromise and a Promise that are slightly different
+                        && !getTypeOfPropertyOfType(sourceReturn, "then" as __String)
+                        && checkTypeRelatedTo(createPromiseType(sourceReturn), targetReturn, relation, /*errorNode*/ undefined)
+                    ) {
+                        addRelatedInfo(resultObj.errors[resultObj.errors.length - 1], createDiagnosticForNode(
+                            node,
+                            Diagnostics.Did_you_mean_to_mark_this_function_as_async
+                        ));
+                    }
                     return true;
                 }
             }
