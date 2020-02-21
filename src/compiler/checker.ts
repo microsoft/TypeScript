@@ -23485,8 +23485,10 @@ namespace ts {
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
         }
 
-        function isInsideFunction(node: Node, threshold: Node): boolean {
-            return !!findAncestor(node, n => n === threshold ? "quit" : isFunctionLike(n));
+        function isInsideFunctionOrInstancePropertyInitializer(node: Node, threshold: Node): boolean {
+            return !!findAncestor(node, n => n === threshold ? "quit" : isFunctionLike(n) || (
+                n.parent && isPropertyDeclaration(n.parent) && !hasStaticModifier(n.parent) && n.parent.initializer === n
+            ));
         }
 
         function getPartOfForStatementContainingNode(node: Node, container: ForStatement) {
@@ -23511,11 +23513,11 @@ namespace ts {
             // if there is an iteration statement in between declaration and boundary (is binding/class declared inside iteration statement)
 
             const container = getEnclosingBlockScopeContainer(symbol.valueDeclaration);
-            const usedInFunction = isInsideFunction(node.parent, container);
+            const isCaptured = isInsideFunctionOrInstancePropertyInitializer(node, container);
 
             const enclosingIterationStatement = getEnclosingIterationStatement(container);
             if (enclosingIterationStatement) {
-                if (usedInFunction) {
+                if (isCaptured) {
                     // mark iteration statement as containing block-scoped binding captured in some function
                     let capturesBlockScopeBindingInLoopBody = true;
                     if (isForStatement(container)) {
@@ -23553,7 +23555,7 @@ namespace ts {
                 getNodeLinks(symbol.valueDeclaration).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
             }
 
-            if (usedInFunction) {
+            if (isCaptured) {
                 getNodeLinks(symbol.valueDeclaration).flags |= NodeCheckFlags.CapturedBlockScopedBinding;
             }
         }
