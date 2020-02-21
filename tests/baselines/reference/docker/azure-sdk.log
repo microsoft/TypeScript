@@ -2,7 +2,7 @@ Exit Code: 1
 Standard output:
 
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
-Node.js version is 12.16.0 (LTS)
+Node.js version is 12.16.1 (LTS)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
@@ -15,15 +15,32 @@ XX of XX: [@azure/core-amqp] completed successfully in ? seconds
 XX of XX: [@azure/core-lro] completed successfully in ? seconds
 XX of XX: [@azure/core-paging] completed successfully in ? seconds
 XX of XX: [@azure/test-utils-recorder] completed successfully in ? seconds
-Warning: You have changed the public API signature for this project. Updating review/event-hubs.api.md
-Warning: You have changed the public API signature for this project. Updating review/event-processor-host.api.md
-XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
-XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
-Warning: You have changed the public API signature for this project. Updating review/storage-blob.api.md
+XX of XX: [@azure/eslint-plugin-azure-sdk] completed successfully in ? seconds
+XX of XX: [@azure/event-hubs] completed successfully in ? seconds
+XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/keyvault-keys@X.X.X extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! Exit status 2
+npm ERR! 
+npm ERR! Failed at the @azure/keyvault-keys@X.X.X extract-api script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/keyvault-secrets@X.X.X extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! Exit status 2
+npm ERR! 
+npm ERR! Failed at the @azure/keyvault-secrets@X.X.X extract-api script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
+XX of XX: [@azure/storage-blob] completed successfully in ? seconds
 XX of XX: [@azure/ai-text-analytics] completed successfully in ? seconds
+XX of XX: [@azure/app-configuration] completed successfully in ? seconds
 XX of XX: [@azure/core-arm] completed successfully in ? seconds
 XX of XX: [@azure/core-tracing] completed successfully in ? seconds
-Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
 https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
@@ -32,30 +49,14 @@ os-name (imported by dist-esm/utils/user-agent.js)
 Use output.globals to specify browser global variable names corresponding to external modules
 os-name (guessing 'osName')
 created dist/index.js in ?s
-npm ERR! code ELIFECYCLE
-npm ERR! errno 2
-npm ERR! @azure/keyvault-certificates@X.X.X extract-api: `tsc -p . && api-extractor run --local`
-npm ERR! Exit status 2
-npm ERR! 
-npm ERR! Failed at the @azure/keyvault-certificates@X.X.X extract-api script.
-npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
-npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
-Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
-npm ERR! code ELIFECYCLE
-npm ERR! errno 2
-npm ERR! @azure/storage-file-datalake@X.X.X-preview.9 build:es6: `tsc -p tsconfig.json && npm run build:types`
-npm ERR! Exit status 2
-npm ERR! 
-npm ERR! Failed at the @azure/storage-file-datalake@X.X.X-preview.9 build:es?script.
-npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
-npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
-Warning: You have changed the public API signature for this project. Updating review/storage-file-share.api.md
-Warning: You have changed the public API signature for this project. Updating review/storage-queue.api.md
+XX of XX: [@azure/eventhubs-checkpointstore-blob] completed successfully in ? seconds
+XX of XX: [@azure/service-bus] completed successfully in ? seconds
+XX of XX: [@azure/storage-file-datalake] completed successfully in ? seconds
+XX of XX: [@azure/storage-file-share] completed successfully in ? seconds
+XX of XX: [@azure/storage-queue] completed successfully in ? seconds
 XX of XX: [@azure/template] completed successfully in ? seconds
 XX of XX: [testhub] completed successfully in ? seconds
-SUCCESS (17)
+SUCCESS (25)
 ================================
 @azure/abort-controller (? seconds)
 @azure/core-auth (? seconds)
@@ -67,24 +68,25 @@ SUCCESS (17)
 @azure/core-lro (? seconds)
 @azure/core-paging (? seconds)
 @azure/test-utils-recorder (? seconds)
-@azure/keyvault-keys (? seconds)
-@azure/keyvault-secrets (? seconds)
+@azure/eslint-plugin-azure-sdk (? seconds)
+@azure/event-hubs (? seconds)
+@azure/event-processor-host (? seconds)
+@azure/storage-blob (? seconds)
 @azure/ai-text-analytics (? seconds)
+@azure/app-configuration (? seconds)
 @azure/core-arm (? seconds)
 @azure/core-tracing (? seconds)
+@azure/eventhubs-checkpointstore-blob (? seconds)
+@azure/service-bus (? seconds)
+@azure/storage-file-datalake (? seconds)
+@azure/storage-file-share (? seconds)
+@azure/storage-queue (? seconds)
 @azure/template (? seconds)
 testhub (? seconds)
 ================================
-SUCCESS WITH WARNINGS (7)
+SUCCESS WITH WARNINGS (1)
 ================================
-@azure/event-hubs (? seconds)
-Warning: You have changed the public API signature for this project. Updating review/event-hubs.api.md
-@azure/event-processor-host (? seconds)
-Warning: You have changed the public API signature for this project. Updating review/event-processor-host.api.md
-@azure/storage-blob (? seconds)
-Warning: You have changed the public API signature for this project. Updating review/storage-blob.api.md
 @azure/cosmos (? seconds)
-Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
 https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
@@ -93,67 +95,30 @@ os-name (imported by dist-esm/utils/user-agent.js)
 Use output.globals to specify browser global variable names corresponding to external modules
 os-name (guessing 'osName')
 created dist/index.js in ?s
-@azure/service-bus (? seconds)
-Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
-@azure/storage-file-share (? seconds)
-Warning: You have changed the public API signature for this project. Updating review/storage-file-share.api.md
-@azure/storage-queue (? seconds)
-Warning: You have changed the public API signature for this project. Updating review/storage-queue.api.md
 ================================
-FAILURE (4)
+BLOCKED (1)
 ================================
-@azure/app-configuration ( ? seconds)
->>> @azure/app-configuration
-tsc -p . && rollup -c 2>&1 && npm run extract-api
-test/testHelpers.ts(74,31): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage, PageSettings>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
-  Types of property '[Symbol.asyncIterator]' are incompatible.
-    Type '() => PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage, PageSettings>' is not assignable to type '() => AsyncIterator<ConfigurationSetting>'.
-      Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage, PageSettings>' is not assignable to type 'AsyncIterator<ConfigurationSetting>'.
-        Types of property 'next' are incompatible.
-          Type '() => Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type '(value?: any) => Promise<IteratorResult<ConfigurationSetting>>'.
-            Type 'Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type 'Promise<IteratorResult<ConfigurationSetting>>'.
-              Type '{ done?: boolean | undefined; value: ConfigurationSetting; }' is not assignable to type 'IteratorResult<ConfigurationSetting>'.
-                Types of property 'done' are incompatible.
-                  Type 'boolean | undefined' is not assignable to type 'boolean'.
-                    Type 'undefined' is not assignable to type 'boolean'.
-test/testHelpers.ts(92,31): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage, PageSettings>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
-  Types of property '[Symbol.asyncIterator]' are incompatible.
-    Type '() => PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage, PageSettings>' is not assignable to type '() => AsyncIterator<ConfigurationSetting>'.
-      Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage, PageSettings>' is not assignable to type 'AsyncIterator<ConfigurationSetting>'.
-        Types of property 'next' are incompatible.
-          Type '() => Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type '(value?: any) => Promise<IteratorResult<ConfigurationSetting>>'.
-            Type 'Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type 'Promise<IteratorResult<ConfigurationSetting>>'.
-@azure/eventhubs-checkpointstore-blob ( ? seconds)
->>> @azure/eventhubs-checkpointstore-blob
-tsc -p . && rollup -c 2>&1 && npm run extract-api
-src/blobCheckpointStore.ts(50,32): error TS2322: Type 'PagedAsyncIterableIterator<BlobItem, ContainerListBlobFlatSegmentResponse, PageSettings>' is not assignable to type 'AsyncIterable<BlobItem>'.
-  Types of property '[Symbol.asyncIterator]' are incompatible.
-    Type '() => PagedAsyncIterableIterator<BlobItem, ContainerListBlobFlatSegmentResponse, PageSettings>' is not assignable to type '() => AsyncIterator<BlobItem>'.
-      Type 'PagedAsyncIterableIterator<BlobItem, ContainerListBlobFlatSegmentResponse, PageSettings>' is not assignable to type 'AsyncIterator<BlobItem>'.
-        Types of property 'next' are incompatible.
-          Type '() => Promise<{ done?: boolean | undefined; value: BlobItem; }>' is not assignable to type '(value?: any) => Promise<IteratorResult<BlobItem>>'.
-            Type 'Promise<{ done?: boolean | undefined; value: BlobItem; }>' is not assignable to type 'Promise<IteratorResult<BlobItem>>'.
-              Type '{ done?: boolean | undefined; value: BlobItem; }' is not assignable to type 'IteratorResult<BlobItem>'.
-                Types of property 'done' are incompatible.
-                  Type 'boolean | undefined' is not assignable to type 'boolean'.
-                    Type 'undefined' is not assignable to type 'boolean'.
-@azure/keyvault-certificates ( ? seconds)
+@azure/keyvault-certificates
+================================
+FAILURE (2)
+================================
+@azure/keyvault-keys ( ? seconds)
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/keyvault-certificates@X.X.X extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! @azure/keyvault-keys@X.X.X extract-api: `tsc -p . && api-extractor run --local`
 npm ERR! Exit status 2
 npm ERR!
-npm ERR! Failed at the @azure/keyvault-certificates@X.X.X extract-api script.
+npm ERR! Failed at the @azure/keyvault-keys@X.X.X extract-api script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
-@azure/storage-file-datalake (? seconds)
+@azure/keyvault-secrets ( ? seconds)
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/storage-file-datalake@X.X.X-preview.9 build:es6: `tsc -p tsconfig.json && npm run build:types`
+npm ERR! @azure/keyvault-secrets@X.X.X extract-api: `tsc -p . && api-extractor run --local`
 npm ERR! Exit status 2
 npm ERR!
-npm ERR! Failed at the @azure/storage-file-datalake@X.X.X-preview.9 build:es?script.
+npm ERR! Failed at the @azure/keyvault-secrets@X.X.X extract-api script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
@@ -164,18 +129,10 @@ rush rebuild - Errors! ( ? seconds)
 
 
 Standard error:
-XX of XX: [@azure/event-hubs] completed with warnings in ? seconds
-XX of XX: [@azure/event-processor-host] completed with warnings in ? seconds
-XX of XX: [@azure/storage-blob] completed with warnings in ? seconds
-XX of XX: [@azure/app-configuration] failed!
+
+XX of XX: [@azure/keyvault-keys] failed!
+XX of XX: [@azure/keyvault-certificates] blocked by [@azure/keyvault-keys]!
+XX of XX: [@azure/keyvault-secrets] failed!
 XX of XX: [@azure/cosmos] completed with warnings in ? seconds
-XX of XX: [@azure/eventhubs-checkpointstore-blob] failed!
-XX of XX: [@azure/keyvault-certificates] failed!
-XX of XX: [@azure/service-bus] completed with warnings in ? seconds
-XX of XX: [@azure/storage-file-datalake] failed!
-XX of XX: [@azure/storage-file-share] completed with warnings in ? seconds
-XX of XX: [@azure/storage-queue] completed with warnings in ? seconds
-[@azure/app-configuration] Returned error code: 2
-[@azure/eventhubs-checkpointstore-blob] Returned error code: 2
-[@azure/keyvault-certificates] Returned error code: 2
-[@azure/storage-file-datalake] Returned error code: 2
+[@azure/keyvault-keys] Returned error code: 2
+[@azure/keyvault-secrets] Returned error code: 2
