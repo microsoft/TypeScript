@@ -230,107 +230,146 @@ type M3 = Merge2<{ a: 1, b: 2 }, { a: 2, c: 3 }>;  // { a: 1, b: 2, c: 3 }
 >a : Symbol(a, Decl(intersectionReduction.ts, 59, 34))
 >c : Symbol(c, Decl(intersectionReduction.ts, 59, 40))
 
+type D = { kind: 'd', foo: unknown };
+>D : Symbol(D, Decl(intersectionReduction.ts, 59, 49))
+>kind : Symbol(kind, Decl(intersectionReduction.ts, 61, 10))
+>foo : Symbol(foo, Decl(intersectionReduction.ts, 61, 21))
+
+type E = { kind: 'e', foo: unknown };
+>E : Symbol(E, Decl(intersectionReduction.ts, 61, 37))
+>kind : Symbol(kind, Decl(intersectionReduction.ts, 62, 10))
+>foo : Symbol(foo, Decl(intersectionReduction.ts, 62, 21))
+
+declare function f10<T>(x: { foo: T }): T;
+>f10 : Symbol(f10, Decl(intersectionReduction.ts, 62, 37))
+>T : Symbol(T, Decl(intersectionReduction.ts, 64, 21))
+>x : Symbol(x, Decl(intersectionReduction.ts, 64, 24))
+>foo : Symbol(foo, Decl(intersectionReduction.ts, 64, 28))
+>T : Symbol(T, Decl(intersectionReduction.ts, 64, 21))
+>T : Symbol(T, Decl(intersectionReduction.ts, 64, 21))
+
+declare let a1: A | D;
+>a1 : Symbol(a1, Decl(intersectionReduction.ts, 66, 11))
+>A : Symbol(A, Decl(intersectionReduction.ts, 30, 28))
+>D : Symbol(D, Decl(intersectionReduction.ts, 59, 49))
+
+declare let a2: A | D & E;
+>a2 : Symbol(a2, Decl(intersectionReduction.ts, 67, 11))
+>A : Symbol(A, Decl(intersectionReduction.ts, 30, 28))
+>D : Symbol(D, Decl(intersectionReduction.ts, 59, 49))
+>E : Symbol(E, Decl(intersectionReduction.ts, 61, 37))
+
+let r1 = f10(a1);  // unknown
+>r1 : Symbol(r1, Decl(intersectionReduction.ts, 69, 3))
+>f10 : Symbol(f10, Decl(intersectionReduction.ts, 62, 37))
+>a1 : Symbol(a1, Decl(intersectionReduction.ts, 66, 11))
+
+let r2 = f10(a2);  // string
+>r2 : Symbol(r2, Decl(intersectionReduction.ts, 70, 3))
+>f10 : Symbol(f10, Decl(intersectionReduction.ts, 62, 37))
+>a2 : Symbol(a2, Decl(intersectionReduction.ts, 67, 11))
+
 // Repro from #31663
 
 const x1 = { a: 'foo', b: 42 };
->x1 : Symbol(x1, Decl(intersectionReduction.ts, 63, 5))
->a : Symbol(a, Decl(intersectionReduction.ts, 63, 12))
->b : Symbol(b, Decl(intersectionReduction.ts, 63, 22))
+>x1 : Symbol(x1, Decl(intersectionReduction.ts, 74, 5))
+>a : Symbol(a, Decl(intersectionReduction.ts, 74, 12))
+>b : Symbol(b, Decl(intersectionReduction.ts, 74, 22))
 
 const x2 = { a: 'foo', b: true };
->x2 : Symbol(x2, Decl(intersectionReduction.ts, 64, 5))
->a : Symbol(a, Decl(intersectionReduction.ts, 64, 12))
->b : Symbol(b, Decl(intersectionReduction.ts, 64, 22))
+>x2 : Symbol(x2, Decl(intersectionReduction.ts, 75, 5))
+>a : Symbol(a, Decl(intersectionReduction.ts, 75, 12))
+>b : Symbol(b, Decl(intersectionReduction.ts, 75, 22))
 
 declare let k: 'a' | 'b';
->k : Symbol(k, Decl(intersectionReduction.ts, 66, 11))
+>k : Symbol(k, Decl(intersectionReduction.ts, 77, 11))
 
 x1[k] = 'bar' as any;  // Error
->x1 : Symbol(x1, Decl(intersectionReduction.ts, 63, 5))
->k : Symbol(k, Decl(intersectionReduction.ts, 66, 11))
+>x1 : Symbol(x1, Decl(intersectionReduction.ts, 74, 5))
+>k : Symbol(k, Decl(intersectionReduction.ts, 77, 11))
 
 x2[k] = 'bar' as any;  // Error
->x2 : Symbol(x2, Decl(intersectionReduction.ts, 64, 5))
->k : Symbol(k, Decl(intersectionReduction.ts, 66, 11))
+>x2 : Symbol(x2, Decl(intersectionReduction.ts, 75, 5))
+>k : Symbol(k, Decl(intersectionReduction.ts, 77, 11))
 
 const enum Tag1 {}
->Tag1 : Symbol(Tag1, Decl(intersectionReduction.ts, 69, 21))
+>Tag1 : Symbol(Tag1, Decl(intersectionReduction.ts, 80, 21))
 
 const enum Tag2 {}
->Tag2 : Symbol(Tag2, Decl(intersectionReduction.ts, 71, 18))
+>Tag2 : Symbol(Tag2, Decl(intersectionReduction.ts, 82, 18))
 
 declare let s1: string & Tag1;
->s1 : Symbol(s1, Decl(intersectionReduction.ts, 74, 11))
->Tag1 : Symbol(Tag1, Decl(intersectionReduction.ts, 69, 21))
+>s1 : Symbol(s1, Decl(intersectionReduction.ts, 85, 11))
+>Tag1 : Symbol(Tag1, Decl(intersectionReduction.ts, 80, 21))
 
 declare let s2: string & Tag2;
->s2 : Symbol(s2, Decl(intersectionReduction.ts, 75, 11))
->Tag2 : Symbol(Tag2, Decl(intersectionReduction.ts, 71, 18))
+>s2 : Symbol(s2, Decl(intersectionReduction.ts, 86, 11))
+>Tag2 : Symbol(Tag2, Decl(intersectionReduction.ts, 82, 18))
 
 declare let t1: string & Tag1 | undefined;
->t1 : Symbol(t1, Decl(intersectionReduction.ts, 77, 11))
->Tag1 : Symbol(Tag1, Decl(intersectionReduction.ts, 69, 21))
+>t1 : Symbol(t1, Decl(intersectionReduction.ts, 88, 11))
+>Tag1 : Symbol(Tag1, Decl(intersectionReduction.ts, 80, 21))
 
 declare let t2: string & Tag2 | undefined;
->t2 : Symbol(t2, Decl(intersectionReduction.ts, 78, 11))
->Tag2 : Symbol(Tag2, Decl(intersectionReduction.ts, 71, 18))
+>t2 : Symbol(t2, Decl(intersectionReduction.ts, 89, 11))
+>Tag2 : Symbol(Tag2, Decl(intersectionReduction.ts, 82, 18))
 
 s1 = s2;
->s1 : Symbol(s1, Decl(intersectionReduction.ts, 74, 11))
->s2 : Symbol(s2, Decl(intersectionReduction.ts, 75, 11))
+>s1 : Symbol(s1, Decl(intersectionReduction.ts, 85, 11))
+>s2 : Symbol(s2, Decl(intersectionReduction.ts, 86, 11))
 
 s2 = s1;
->s2 : Symbol(s2, Decl(intersectionReduction.ts, 75, 11))
->s1 : Symbol(s1, Decl(intersectionReduction.ts, 74, 11))
+>s2 : Symbol(s2, Decl(intersectionReduction.ts, 86, 11))
+>s1 : Symbol(s1, Decl(intersectionReduction.ts, 85, 11))
 
 t1 = t2;
->t1 : Symbol(t1, Decl(intersectionReduction.ts, 77, 11))
->t2 : Symbol(t2, Decl(intersectionReduction.ts, 78, 11))
+>t1 : Symbol(t1, Decl(intersectionReduction.ts, 88, 11))
+>t2 : Symbol(t2, Decl(intersectionReduction.ts, 89, 11))
 
 t2 = t1;
->t2 : Symbol(t2, Decl(intersectionReduction.ts, 78, 11))
->t1 : Symbol(t1, Decl(intersectionReduction.ts, 77, 11))
+>t2 : Symbol(t2, Decl(intersectionReduction.ts, 89, 11))
+>t1 : Symbol(t1, Decl(intersectionReduction.ts, 88, 11))
 
 // Repro from #36736
 
 const f1 = (t: "a" | ("b" & "c")): "a" => t;
->f1 : Symbol(f1, Decl(intersectionReduction.ts, 88, 5))
->t : Symbol(t, Decl(intersectionReduction.ts, 88, 12))
->t : Symbol(t, Decl(intersectionReduction.ts, 88, 12))
+>f1 : Symbol(f1, Decl(intersectionReduction.ts, 99, 5))
+>t : Symbol(t, Decl(intersectionReduction.ts, 99, 12))
+>t : Symbol(t, Decl(intersectionReduction.ts, 99, 12))
 
 type Container<Type extends string> = {
->Container : Symbol(Container, Decl(intersectionReduction.ts, 88, 44))
->Type : Symbol(Type, Decl(intersectionReduction.ts, 90, 15))
+>Container : Symbol(Container, Decl(intersectionReduction.ts, 99, 44))
+>Type : Symbol(Type, Decl(intersectionReduction.ts, 101, 15))
 
     type: Type;
->type : Symbol(type, Decl(intersectionReduction.ts, 90, 39))
->Type : Symbol(Type, Decl(intersectionReduction.ts, 90, 15))
+>type : Symbol(type, Decl(intersectionReduction.ts, 101, 39))
+>Type : Symbol(Type, Decl(intersectionReduction.ts, 101, 15))
 }
 
 const f2 = (t: Container<"a"> | (Container<"b"> & Container<"c">)): Container<"a"> => t;
->f2 : Symbol(f2, Decl(intersectionReduction.ts, 94, 5))
->t : Symbol(t, Decl(intersectionReduction.ts, 94, 12))
->Container : Symbol(Container, Decl(intersectionReduction.ts, 88, 44))
->Container : Symbol(Container, Decl(intersectionReduction.ts, 88, 44))
->Container : Symbol(Container, Decl(intersectionReduction.ts, 88, 44))
->Container : Symbol(Container, Decl(intersectionReduction.ts, 88, 44))
->t : Symbol(t, Decl(intersectionReduction.ts, 94, 12))
+>f2 : Symbol(f2, Decl(intersectionReduction.ts, 105, 5))
+>t : Symbol(t, Decl(intersectionReduction.ts, 105, 12))
+>Container : Symbol(Container, Decl(intersectionReduction.ts, 99, 44))
+>Container : Symbol(Container, Decl(intersectionReduction.ts, 99, 44))
+>Container : Symbol(Container, Decl(intersectionReduction.ts, 99, 44))
+>Container : Symbol(Container, Decl(intersectionReduction.ts, 99, 44))
+>t : Symbol(t, Decl(intersectionReduction.ts, 105, 12))
 
 const f3 = (t: Container<"a"> | (Container<"b"> & { dataB: boolean } & Container<"a">)): Container<"a"> => t;
->f3 : Symbol(f3, Decl(intersectionReduction.ts, 95, 5))
->t : Symbol(t, Decl(intersectionReduction.ts, 95, 12))
->Container : Symbol(Container, Decl(intersectionReduction.ts, 88, 44))
->Container : Symbol(Container, Decl(intersectionReduction.ts, 88, 44))
->dataB : Symbol(dataB, Decl(intersectionReduction.ts, 95, 51))
->Container : Symbol(Container, Decl(intersectionReduction.ts, 88, 44))
->Container : Symbol(Container, Decl(intersectionReduction.ts, 88, 44))
->t : Symbol(t, Decl(intersectionReduction.ts, 95, 12))
+>f3 : Symbol(f3, Decl(intersectionReduction.ts, 106, 5))
+>t : Symbol(t, Decl(intersectionReduction.ts, 106, 12))
+>Container : Symbol(Container, Decl(intersectionReduction.ts, 99, 44))
+>Container : Symbol(Container, Decl(intersectionReduction.ts, 99, 44))
+>dataB : Symbol(dataB, Decl(intersectionReduction.ts, 106, 51))
+>Container : Symbol(Container, Decl(intersectionReduction.ts, 99, 44))
+>Container : Symbol(Container, Decl(intersectionReduction.ts, 99, 44))
+>t : Symbol(t, Decl(intersectionReduction.ts, 106, 12))
 
 const f4 = (t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)): number => t;
->f4 : Symbol(f4, Decl(intersectionReduction.ts, 96, 5))
->t : Symbol(t, Decl(intersectionReduction.ts, 96, 12))
->Container : Symbol(Container, Decl(intersectionReduction.ts, 88, 44))
->dataB : Symbol(dataB, Decl(intersectionReduction.ts, 96, 43))
->Container : Symbol(Container, Decl(intersectionReduction.ts, 88, 44))
->t : Symbol(t, Decl(intersectionReduction.ts, 96, 12))
+>f4 : Symbol(f4, Decl(intersectionReduction.ts, 107, 5))
+>t : Symbol(t, Decl(intersectionReduction.ts, 107, 12))
+>Container : Symbol(Container, Decl(intersectionReduction.ts, 99, 44))
+>dataB : Symbol(dataB, Decl(intersectionReduction.ts, 107, 43))
+>Container : Symbol(Container, Decl(intersectionReduction.ts, 99, 44))
+>t : Symbol(t, Decl(intersectionReduction.ts, 107, 12))
 
