@@ -61,6 +61,17 @@ type M1 = { a: 1, b: 2 } & { a: 2, c: 3 };  // never
 type M2 = Merge1<{ a: 1, b: 2 }, { a: 2, c: 3 }>;  // {}
 type M3 = Merge2<{ a: 1, b: 2 }, { a: 2, c: 3 }>;  // { a: 1, b: 2, c: 3 }
 
+type D = { kind: 'd', foo: unknown };
+type E = { kind: 'e', foo: unknown };
+
+declare function f10<T>(x: { foo: T }): T;
+
+declare let a1: A | D;
+declare let a2: A | D & E;
+
+let r1 = f10(a1);  // unknown
+let r2 = f10(a2);  // string
+
 // Repro from #31663
 
 const x1 = { a: 'foo', b: 42 };
