@@ -18134,6 +18134,7 @@ namespace ts {
                     }
                 }
                 else {
+                    source = getReducedType(source);
                     if (!(priority & InferencePriority.NoConstraints && source.flags & (TypeFlags.Intersection | TypeFlags.Instantiable))) {
                         const apparentSource = getApparentType(source);
                         // getApparentType can return _any_ type, since an indexed access or conditional may simplify to any other type.
