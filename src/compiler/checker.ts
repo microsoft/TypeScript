@@ -9557,8 +9557,7 @@ namespace ts {
             // and T as the template type.
             const typeParameter = getTypeParameterFromMappedType(type);
             const constraintType = getConstraintTypeFromMappedType(type);
-            const mappedType = <MappedType>type.target || type;
-            const templateType = getTemplateTypeFromMappedType(mappedType);
+            const templateType = getTemplateTypeFromMappedType(<MappedType>type.target || type);
             const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
             const templateModifiers = getMappedTypeModifiers(type);
             const include = keyofStringsOnly ? TypeFlags.StringLiteral : TypeFlags.StringOrNumberLiteralOrUnique;
@@ -9596,7 +9595,7 @@ namespace ts {
                     const stripOptional = strictNullChecks && !isOptional && modifiersProp && modifiersProp.flags & SymbolFlags.Optional;
                     const prop = <MappedSymbol>createSymbol(SymbolFlags.Property | (isOptional ? SymbolFlags.Optional : 0), propName,
                         CheckFlags.Mapped | (isReadonly ? CheckFlags.Readonly : 0) | (stripOptional ? CheckFlags.StripOptional : 0));
-                    prop.mappedType = mappedType;
+                    prop.mappedType = type;
                     prop.mapper = templateMapper;
                     if (modifiersProp) {
                         prop.syntheticOrigin = modifiersProp;
@@ -9624,7 +9623,8 @@ namespace ts {
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                     return errorType;
                 }
-                const propType = instantiateType(getTemplateTypeFromMappedType(symbol.mappedType), symbol.mapper);
+                const templateType = getTemplateTypeFromMappedType(<MappedType>symbol.mappedType.target || symbol.mappedType);
+                const propType = instantiateType(templateType, symbol.mapper);
                 // When creating an optional property in strictNullChecks mode, if 'undefined' isn't assignable to the
                 // type, we include 'undefined' in the type. Similarly, when creating a non-optional property in strictNullChecks
                 // mode, if the underlying property is optional we remove 'undefined' from the type.
