@@ -1,0 +1,25 @@
+=== tests/cases/compiler/classInConvertedLoopES5.ts ===
+const classesByRow: Record<string, object> = {};
+>classesByRow : Symbol(classesByRow, Decl(classInConvertedLoopES5.ts, 0, 5))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+for (const row of ['1', '2', '3', '4', '5']) {
+>row : Symbol(row, Decl(classInConvertedLoopES5.ts, 1, 10))
+
+  class RowClass {
+>RowClass : Symbol(RowClass, Decl(classInConvertedLoopES5.ts, 1, 46))
+
+    row = row;
+>row : Symbol(RowClass.row, Decl(classInConvertedLoopES5.ts, 2, 18))
+>row : Symbol(row, Decl(classInConvertedLoopES5.ts, 1, 10))
+
+    static factory = () => new RowClass();
+>factory : Symbol(RowClass.factory, Decl(classInConvertedLoopES5.ts, 3, 14))
+>RowClass : Symbol(RowClass, Decl(classInConvertedLoopES5.ts, 1, 46))
+  }
+
+  classesByRow[row] = RowClass;
+>classesByRow : Symbol(classesByRow, Decl(classInConvertedLoopES5.ts, 0, 5))
+>row : Symbol(row, Decl(classInConvertedLoopES5.ts, 1, 10))
+>RowClass : Symbol(RowClass, Decl(classInConvertedLoopES5.ts, 1, 46))
+}
