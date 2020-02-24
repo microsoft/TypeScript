@@ -873,7 +873,7 @@ namespace ts.server {
             this.delayEnsureProjectForOpenFiles();
         }
 
-        private delayUpdateProjectGraphs(projects: readonly Project[], clearSourceMapperCache?: boolean) {
+        private delayUpdateProjectGraphs(projects: readonly Project[], clearSourceMapperCache: boolean) {
             if (projects.length) {
                 for (const project of projects) {
                     // Even if program doesnt change, clear the source mapper cache
@@ -1035,7 +1035,7 @@ namespace ts.server {
                     // file has been changed which might affect the set of referenced files in projects that include
                     // this file and set of inferred projects
                     info.delayReloadNonMixedContentFile();
-                    this.delayUpdateProjectGraphs(info.containingProjects);
+                    this.delayUpdateProjectGraphs(info.containingProjects, /*clearSourceMapperCache*/ false);
                     this.handleSourceMapProjects(info);
                 }
             }
@@ -1084,7 +1084,7 @@ namespace ts.server {
                 info.detachAllProjects();
 
                 // update projects to make sure that set of referenced files is correct
-                this.delayUpdateProjectGraphs(containingProjects);
+                this.delayUpdateProjectGraphs(containingProjects, /*clearSourceMapperCache*/ false);
                 this.handleSourceMapProjects(info);
                 info.closeSourceMapFileWatcher();
                 // need to recalculate source map from declaration file
