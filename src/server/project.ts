@@ -384,7 +384,8 @@ namespace ts.server {
         }
 
         getScriptVersion(filename: string) {
-            // Dont attache to the project if version is asked
+            // Don't attach to the project if version is asked
+
             const info = this.projectService.getOrCreateScriptInfoNotOpenedByClient(filename, this.currentDirectory, this.directoryStructureHost);
             return (info && info.getLatestVersion())!; // TODO: GH#18217
         }
