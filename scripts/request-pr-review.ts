@@ -7,7 +7,7 @@ import minimist = require("minimist");
 const options = minimist(process.argv.slice(2), {
     string: ["token", "pull", "reviewer", "owner", "repo"],
     alias: {
-        "pr": "pull",
+        pr: "pull",
     },
     default: {
         token: process.env.GH_TOKEN,
