@@ -434,6 +434,7 @@ namespace ts {
             type: "boolean",
             affectsEmit: true,
             isTSConfigOnly: true,
+            isTsConfigOnlyButAllowsCommandLineFalsy: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Enable_project_compilation,
             transpileOptionValue: undefined
@@ -1279,7 +1280,22 @@ namespace ts {
         errors: Diagnostic[]
     ) {
         if (opt.isTSConfigOnly) {
-            errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file, opt.name));
+            if (opt.isTsConfigOnlyButAllowsCommandLineFalsy) {
+                Debug.assert(opt.type === "boolean", "Currently tsconfig only option with only boolean types are allowed to specify falsy value on command line");
+                const optValue = args[i];
+                if (!optValue || optValue !== "false") {
+                    errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_on_command_line, opt.name));
+                }
+                else {
+                    options[opt.name] = false;
+                }
+                if (optValue === "false" || optValue === "true") {
+                    i++;
+                }
+            }
+            else {
+                errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file, opt.name));
+            }
         }
         else {
             // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).

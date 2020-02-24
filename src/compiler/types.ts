@@ -5314,6 +5314,7 @@ namespace ts {
         description?: DiagnosticMessage;                        // The message describing what the command line switch does
         paramType?: DiagnosticMessage;                          // The name to be used for a non-boolean option's parameter
         isTSConfigOnly?: boolean;                               // True if option can only be specified via tsconfig.json file
+        isTsConfigOnlyButAllowsCommandLineFalsy?: boolean;                      // True if option can only be specified via tsconfig.json file but on command line can set false values
         isCommandLineOnly?: boolean;
         showInSimplifiedHelpView?: boolean;
         category?: DiagnosticMessage;

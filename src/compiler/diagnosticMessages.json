@@ -4292,6 +4292,10 @@
         "category": "Message",
         "code": 6228
     },
+    "Option '{0}' can only be specified in 'tsconfig.json' file or set to false on command line.": {
+        "category": "Error",
+        "code": 6229
+    },
 
     "Projects to reference": {
         "category": "Message",
