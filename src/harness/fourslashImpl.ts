@@ -2469,18 +2469,35 @@ namespace FourSlash {
 
         public printOutliningSpans() {
             const spans = this.languageService.getOutliningSpans(this.activeFile.fileName);
-            Harness.IO.log(`Outlining spans (${spans.length} items)`);
+            Harness.IO.log(`Outlining spans (${spans.length} items)\nResults:`);
             Harness.IO.log(stringify(spans));
+            this.printOutliningSpansInline(spans);
+        }
+
+        private printOutliningSpansInline(spans: ts.OutliningSpan[]) {
+            const allSpanInsets = [] as { text: string, pos: number }[];
+            let annotated = this.activeFile.content;
+            ts.forEach(spans, span => {
+                allSpanInsets.push({ text: "[|", pos: span.textSpan.start });
+                allSpanInsets.push({ text: "|]", pos: span.textSpan.start + span.textSpan.length });
+            });
+
+            const reverseSpans = allSpanInsets.sort((l, r) => r.pos - l.pos);
+            ts.forEach(reverseSpans, span => {
+               annotated = annotated.slice(0, span.pos) + span.text + annotated.slice(span.pos);
+            });
+            Harness.IO.log(`\nMockup:\n${annotated}`);
         }
 
         public verifyOutliningSpans(spans: Range[], kind?: "comment" | "region" | "code" | "imports") {
             const actual = this.languageService.getOutliningSpans(this.activeFile.fileName);
 
-            if (actual.length !== spans.length) {
-                this.raiseError(`verifyOutliningSpans failed - expected total spans to be ${spans.length}, but was ${actual.length}`);
+            const filterActual = ts.filter(actual, f => kind === undefined ? true : f.kind === kind);
+            if (filterActual.length !== spans.length) {
+                this.raiseError(`verifyOutliningSpans failed - expected total spans to be ${spans.length}, but was ${actual.length}\n\nFound Spans:\n\n${this.printOutliningSpansInline(actual)}`);
             }
 
-            ts.zipWith(spans, actual, (expectedSpan, actualSpan, i) => {
+            ts.zipWith(spans, filterActual, (expectedSpan, actualSpan, i) => {
                 if (expectedSpan.pos !== actualSpan.textSpan.start || expectedSpan.end !== ts.textSpanEnd(actualSpan.textSpan)) {
                     return this.raiseError(`verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.pos},${expectedSpan.end}),  actual: (${actualSpan.textSpan.start},${ts.textSpanEnd(actualSpan.textSpan)})`);
                 }
