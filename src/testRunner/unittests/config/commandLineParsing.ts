@@ -414,6 +414,83 @@ namespace ts {
                 });
         });
 
+        describe("parse --composite", () => {
+            it("allows setting it to false", () => {
+                assertParseResult(["--composite", "false", "0.ts"],
+                    {
+                        errors: [
+                            {
+                                messageText: "Option 'composite' can only be specified in 'tsconfig.json' file.",
+                                category: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file.category,
+                                code: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            }
+                        ],
+                        fileNames: ["false", "0.ts"],
+                        options: { } // Currently failing
+                    });
+            });
+
+            it("Errors if set to true", () => {
+                // --lib es6 0.ts
+                assertParseResult(["--composite", "true", "0.ts"],
+                    {
+                        errors: [
+                            {
+                                messageText: "Option 'composite' can only be specified in 'tsconfig.json' file.",
+                                category: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file.category,
+                                code: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            }
+                        ],
+                        fileNames: ["true", "0.ts"],
+                        options: { }
+                    });
+            });
+
+            it("Errors if its last parameter", () => {
+                // --lib es6 0.ts
+                assertParseResult(["0.ts", "--composite"],
+                    {
+                        errors: [
+                            {
+                                messageText: "Option 'composite' can only be specified in 'tsconfig.json' file.",
+                                category: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file.category,
+                                code: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            }
+                        ],
+                        fileNames: ["0.ts"],
+                        options: { }
+                    });
+            });
+
+            it("Errors if its followed by other option", () => {
+                // --lib es6 0.ts
+                assertParseResult(["0.ts", "--composite", "--strictNullChecks"],
+                    {
+                        errors: [
+                            {
+                                messageText: "Option 'composite' can only be specified in 'tsconfig.json' file.",
+                                category: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file.category,
+                                code: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            }
+                        ],
+                        fileNames: ["0.ts"],
+                        options: { strictNullChecks: true }
+                    });
+            });
+        });
+
         describe("Watch options", () => {
             it("parse --watchFile", () => {
                 assertParseResult(["--watchFile", "UseFsEvents", "0.ts"],
