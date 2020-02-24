@@ -6,7 +6,7 @@ tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(11,6): error TS2456
 tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(12,11): error TS2313: Type parameter 'K' has a circular constraint.
 tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(20,19): error TS2589: Type instantiation is excessively deep and possibly infinite.
 tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(66,25): error TS2313: Type parameter 'P' has a circular constraint.
-tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(79,1): error TS2615: Property '"each"' in mapped type '{ [P in keyof T]: undefined extends T[P] ? never : P; }' circularly references itself.
+tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(79,1): error TS2615: Property '"each"' in mapped type '{ type: never; minimum_count: never; maximum_count: never; collapsable?: never; each: never; }' circularly references itself.
 
 
 ==== tests/cases/conformance/types/mapped/recursiveMappedTypes.ts (9 errors) ====
@@ -108,5 +108,5 @@ tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(79,1): error TS2615
     declare let x: ListChild;
     x.type;
     ~~~~~~
-!!! error TS2615: Property '"each"' in mapped type '{ [P in keyof T]: undefined extends T[P] ? never : P; }' circularly references itself.
+!!! error TS2615: Property '"each"' in mapped type '{ type: never; minimum_count: never; maximum_count: never; collapsable?: never; each: never; }' circularly references itself.
     
