@@ -424,22 +424,31 @@ namespace ts {
                     });
             });
 
+            it("allows setting it to undefined and tsbuild info to undefined", () => {
+                assertParseResult(["--composite", "undefined", "-tsBuildInfoFile", "undefined", "0.ts"],
+                    {
+                        errors: [],
+                        fileNames: ["0.ts"],
+                        options: { composite: undefined, tsBuildInfoFile: undefined }
+                    });
+            });
+
             it("Errors if set to true", () => {
                 // --lib es6 0.ts
                 assertParseResult(["--composite", "true", "0.ts"],
                     {
                         errors: [
                             {
-                                messageText: "Option 'composite' can only be specified in 'tsconfig.json' file or set to false on command line.",
-                                category: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_on_command_line.category,
-                                code: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_on_command_line.code,
+                                messageText: formatStringFromArgs(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_undefined_on_command_line.message, ["composite"]),
+                                category: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_undefined_on_command_line.category,
+                                code: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_undefined_on_command_line.code,
                                 file: undefined,
                                 start: undefined,
                                 length: undefined
                             }
                         ],
                         fileNames: ["0.ts"],
-                        options: { }
+                        options: {}
                     });
             });
 
@@ -449,16 +458,16 @@ namespace ts {
                     {
                         errors: [
                             {
-                                messageText: "Option 'composite' can only be specified in 'tsconfig.json' file or set to false on command line.",
-                                category: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_on_command_line.category,
-                                code: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_on_command_line.code,
+                                messageText: formatStringFromArgs(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_undefined_on_command_line.message, ["composite"]),
+                                category: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_undefined_on_command_line.category,
+                                code: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_undefined_on_command_line.code,
                                 file: undefined,
                                 start: undefined,
                                 length: undefined
                             }
                         ],
                         fileNames: ["0.ts"],
-                        options: { }
+                        options: {}
                     });
             });
 
@@ -468,9 +477,9 @@ namespace ts {
                     {
                         errors: [
                             {
-                                messageText: "Option 'composite' can only be specified in 'tsconfig.json' file or set to false on command line.",
-                                category: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_on_command_line.category,
-                                code: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_on_command_line.code,
+                                messageText: formatStringFromArgs(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_undefined_on_command_line.message, ["composite"]),
+                                category: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_undefined_on_command_line.category,
+                                code: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_undefined_on_command_line.code,
                                 file: undefined,
                                 start: undefined,
                                 length: undefined

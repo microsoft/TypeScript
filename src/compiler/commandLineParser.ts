@@ -1283,14 +1283,18 @@ namespace ts {
             if (opt.isTsConfigOnlyButAllowsCommandLineFalsy) {
                 Debug.assert(opt.type === "boolean", "Currently tsconfig only option with only boolean types are allowed to specify falsy value on command line");
                 const optValue = args[i];
-                if (!optValue || optValue !== "false") {
-                    errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_on_command_line, opt.name));
-                }
-                else {
-                    options[opt.name] = false;
-                }
-                if (optValue === "false" || optValue === "true") {
-                    i++;
+                switch (optValue) {
+                    case "false":
+                        options[opt.name] = false;
+                        i++;
+                        break;
+                    case "undefined":
+                        options[opt.name] = undefined;
+                        i++;
+                        break;
+                    default:
+                        if (optValue === "true") i++;
+                        errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_undefined_on_command_line, opt.name));
                 }
             }
             else {
@@ -1303,36 +1307,43 @@ namespace ts {
                 errors.push(createCompilerDiagnostic(diagnostics.optionTypeMismatchDiagnostic, opt.name, getCompilerOptionValueTypeString(opt)));
             }
 
-            switch (opt.type) {
-                case "number":
-                    options[opt.name] = parseInt(args[i]);
-                    i++;
-                    break;
-                case "boolean":
-                    // boolean flag has optional value true, false, others
-                    const optValue = args[i];
-                    options[opt.name] = optValue !== "false";
-                    // consume next argument as boolean flag value
-                    if (optValue === "false" || optValue === "true") {
+            if (args[i] !== "undefined") {
+                switch (opt.type) {
+                    case "number":
+                        options[opt.name] = parseInt(args[i]);
                         i++;
-                    }
-                    break;
-                case "string":
-                    options[opt.name] = args[i] || "";
-                    i++;
-                    break;
-                case "list":
-                    const result = parseListTypeOption(opt, args[i], errors);
-                    options[opt.name] = result || [];
-                    if (result) {
+                        break;
+                    case "boolean":
+                        // boolean flag has optional value true, false, others
+                        const optValue = args[i];
+                        options[opt.name] = optValue !== "false";
+                        // consume next argument as boolean flag value
+                        if (optValue === "false" || optValue === "true") {
+                            i++;
+                        }
+                        break;
+                    case "string":
+                        options[opt.name] = args[i] || "";
                         i++;
-                    }
-                    break;
-                // If not a primitive, the possible types are specified in what is effectively a map of options.
-                default:
-                    options[opt.name] = parseCustomTypeOption(<CommandLineOptionOfCustomType>opt, args[i], errors);
-                    i++;
-                    break;
+                        break;
+                    case "list":
+                        const result = parseListTypeOption(opt, args[i], errors);
+                        options[opt.name] = result || [];
+                        if (result) {
+                            i++;
+                        }
+                        break;
+                    // If not a primitive, the possible types are specified in what is effectively a map of options.
+                    default:
+                        options[opt.name] = parseCustomTypeOption(<CommandLineOptionOfCustomType>opt, args[i], errors);
+                        i++;
+                        break;
+                }
+            }
+            else {
+                options[opt.name] = undefined;
+                // undefined means the option is set to undefined
+                i++;
             }
         }
         return i;
@@ -2186,7 +2197,7 @@ namespace ts {
     }
 
     function convertToOptionValueWithAbsolutePaths(option: CommandLineOption | undefined, value: CompilerOptionsValue, toAbsolutePath: (path: string) => string) {
-        if (option) {
+        if (option && value !== undefined) {
             if (option.type === "list") {
                 const values = value as readonly (string | number)[];
                 if (option.element.isFilePath && values.length) {

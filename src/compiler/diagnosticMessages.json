@@ -4292,7 +4292,7 @@
         "category": "Message",
         "code": 6228
     },
-    "Option '{0}' can only be specified in 'tsconfig.json' file or set to false on command line.": {
+    "Option '{0}' can only be specified in 'tsconfig.json' file or set to 'false' or 'undefined' on command line.": {
         "category": "Error",
         "code": 6229
     },

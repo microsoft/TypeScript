@@ -1,5 +1,5 @@
 //// [/lib/initial-buildOutput.txt]
-/lib/tsc --composite false --p src/project --tsBuildInfoFile undefined
+/lib/tsc --composite undefined --p src/project
 exitCode:: ExitStatus.Success
 
 
