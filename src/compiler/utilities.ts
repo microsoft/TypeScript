@@ -5009,6 +5009,14 @@ namespace ts {
         return node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression;
     }
 
+    export function getNameOfAccessExpression(node: AccessExpression) {
+        if (node.kind === SyntaxKind.PropertyAccessExpression) {
+            return node.name;
+        }
+        Debug.assert(node.kind === SyntaxKind.ElementAccessExpression);
+        return node.argumentExpression;
+    }
+
     export function isBundleFileTextLike(section: BundleFileSection): section is BundleFileTextLike {
         switch (section.kind) {
             case BundleFileSectionKind.Text:
