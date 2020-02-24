@@ -33450,6 +33450,10 @@ namespace ts {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_declaration_cannot_have_modifiers);
             }
 
+            if (node.moduleSpecifier && node.exportClause && isNamedExports(node.exportClause) && length(node.exportClause.elements) && languageVersion === ScriptTarget.ES3) {
+                checkExternalEmitHelpers(node, ExternalEmitHelpers.CreateBinding);
+            }
+
             if (!node.moduleSpecifier || checkExternalImportOrExportDeclaration(node)) {
                 if (node.exportClause) {
                     // export { x, y }
@@ -35661,6 +35665,8 @@ namespace ts {
                 case ExternalEmitHelpers.MakeTemplateObject: return "__makeTemplateObject";
                 case ExternalEmitHelpers.ClassPrivateFieldGet: return "__classPrivateFieldGet";
                 case ExternalEmitHelpers.ClassPrivateFieldSet: return "__classPrivateFieldSet";
+                case ExternalEmitHelpers.CreateBinding: return "__createBinding";
+                case ExternalEmitHelpers.SetModuleDefault: return "__setModuleDefault";
                 default: return Debug.fail("Unrecognized helper");
             }
         }

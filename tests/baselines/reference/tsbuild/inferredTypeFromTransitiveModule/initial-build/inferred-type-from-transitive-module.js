@@ -73,7 +73,7 @@ export { default as bar } from './bar';
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var bar_1 = require("./bar");
-exports.bar = bar_1.default;
+Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return bar_1.default; } });
 
 
 //// [/src/obj/tsconfig.tsbuildinfo]
