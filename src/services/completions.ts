@@ -1020,7 +1020,8 @@ namespace ts.Completions {
             getTypeScriptMemberSymbols();
         }
         else if (isRightOfOpenTag) {
-            const tagSymbols = Debug.assertEachDefined(typeChecker.getJsxIntrinsicTagNamesAt(location), "getJsxIntrinsicTagNames() should all be defined");
+            const tagSymbols = typeChecker.getJsxIntrinsicTagNamesAt(location);
+            Debug.assertEachIsDefined(tagSymbols, "getJsxIntrinsicTagNames() should all be defined");
             tryGetGlobalSymbols();
             symbols = tagSymbols.concat(symbols);
             completionKind = CompletionKind.MemberLike;
@@ -1103,7 +1104,8 @@ namespace ts.Completions {
 
                     if (symbol.flags & (SymbolFlags.Module | SymbolFlags.Enum)) {
                         // Extract module or enum members
-                        const exportedSymbols = Debug.assertEachDefined(typeChecker.getExportsOfModule(symbol), "getExportsOfModule() should all be defined");
+                        const exportedSymbols = typeChecker.getExportsOfModule(symbol);
+                        Debug.assertEachIsDefined(exportedSymbols, "getExportsOfModule() should all be defined");
                         const isValidValueAccess = (symbol: Symbol) => typeChecker.isValidPropertyAccess(isImportType ? <ImportTypeNode>node : <PropertyAccessExpression>(node.parent), symbol.name);
                         const isValidTypeAccess = (symbol: Symbol) => symbolCanBeReferencedAtTypeLocation(symbol);
                         const isValidAccess: (symbol: Symbol) => boolean =
@@ -1335,7 +1337,8 @@ namespace ts.Completions {
 
             const symbolMeanings = (isTypeOnly ? SymbolFlags.None : SymbolFlags.Value) | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias;
 
-            symbols = Debug.assertEachDefined(typeChecker.getSymbolsInScope(scopeNode, symbolMeanings), "getSymbolsInScope() should all be defined");
+            symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
+            Debug.assertEachIsDefined(symbols, "getSymbolsInScope() should all be defined");
             for (const symbol of symbols) {
                 if (!typeChecker.isArgumentsSymbol(symbol) &&
                     !some(symbol.declarations, d => d.getSourceFile() === sourceFile)) {
@@ -1848,7 +1851,7 @@ namespace ts.Completions {
 
             if (typeMembers && typeMembers.length > 0) {
                 // Add filtered items to the completion list
-                symbols = filterObjectMembersList(typeMembers, Debug.assertDefined(existingMembers));
+                symbols = filterObjectMembersList(typeMembers, Debug.checkDefined(existingMembers));
             }
             setSortTextToOptionalMember();
 
@@ -2585,8 +2588,8 @@ namespace ts.Completions {
      */
     function getPropertiesForCompletion(type: Type, checker: TypeChecker): Symbol[] {
         return type.isUnion()
-            ? Debug.assertEachDefined(checker.getAllPossiblePropertiesOfTypes(type.types), "getAllPossiblePropertiesOfTypes() should all be defined")
-            : Debug.assertEachDefined(type.getApparentProperties(), "getApparentProperties() should all be defined");
+            ? Debug.checkEachDefined(checker.getAllPossiblePropertiesOfTypes(type.types), "getAllPossiblePropertiesOfTypes() should all be defined")
+            : Debug.checkEachDefined(type.getApparentProperties(), "getApparentProperties() should all be defined");
     }
 
     /**

@@ -2463,7 +2463,7 @@ namespace ts {
     }
 
     export function getJSDocHost(node: Node): HasJSDoc {
-        return Debug.assertDefined(findAncestor(node.parent, isJSDoc)).parent;
+        return Debug.checkDefined(findAncestor(node.parent, isJSDoc)).parent;
     }
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
@@ -5121,7 +5121,7 @@ namespace ts {
     }
 
     export function formatStringFromArgs(text: string, args: ArrayLike<string | number>, baseIndex = 0): string {
-        return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.assertDefined(args[+index + baseIndex]));
+        return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.checkDefined(args[+index + baseIndex]));
     }
 
     export let localizedDiagnosticMessages: MapLike<string> | undefined;

@@ -897,7 +897,7 @@ namespace FourSlashInterface {
         const res: ExpectedCompletionEntryObject[] = [];
         for (let i = ts.SyntaxKind.FirstKeyword; i <= ts.SyntaxKind.LastKeyword; i++) {
             res.push({
-                name: ts.Debug.assertDefined(ts.tokenToString(i)),
+                name: ts.Debug.checkDefined(ts.tokenToString(i)),
                 kind: "keyword",
                 sortText: SortText.GlobalsOrKeywords
             });
