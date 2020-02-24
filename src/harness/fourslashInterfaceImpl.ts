@@ -516,6 +516,10 @@ namespace FourSlashInterface {
             this.state.verifyRenameLocations(startRanges, options);
         }
 
+        public baselineRename(marker: string, options: RenameOptions) {
+            this.state.baselineRename(marker, options);
+        }
+
         public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: FourSlash.TextSpan,
             displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: ts.JSDocTagInfo[]) {
             this.state.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation, tags);
@@ -1623,4 +1627,9 @@ namespace FourSlashInterface {
         template: string
     };
     export type RenameLocationOptions = FourSlash.Range | { readonly range: FourSlash.Range, readonly prefixText?: string, readonly suffixText?: string };
+    export interface RenameOptions {
+        readonly findInStrings?: boolean;
+        readonly findInComments?: boolean;
+        readonly providePrefixAndSuffixTextForRename?: boolean;
+    };
 }

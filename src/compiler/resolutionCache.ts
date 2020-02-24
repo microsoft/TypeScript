@@ -687,7 +687,7 @@ namespace ts {
                         (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = createMap<true>())).set(containingFilePath, true);
 
                         // When its a file with inferred types resolution, invalidate type reference directive resolution
-                        if (containingFilePath.endsWith(inferredTypesContainingFile)) {
+                        if (endsWith(containingFilePath, inferredTypesContainingFile)) {
                             resolutionHost.onChangedAutomaticTypeDirectiveNames();
                         }
                     }

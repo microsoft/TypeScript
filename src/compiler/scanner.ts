@@ -2444,7 +2444,7 @@ namespace ts {
         return String.fromCharCode(codeUnit1, codeUnit2);
     }
 
-    const utf16EncodeAsStringWorker: (codePoint: number) => string = (String as any).fromCodePoint ? codePoint => String.fromCodePoint(codePoint) : utf16EncodeAsStringFallback;
+    const utf16EncodeAsStringWorker: (codePoint: number) => string = (String as any).fromCodePoint ? codePoint => (String as any).fromCodePoint(codePoint) : utf16EncodeAsStringFallback;
 
     /* @internal */
     export function utf16EncodeAsString(codePoint: number) {

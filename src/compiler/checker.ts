@@ -11406,6 +11406,11 @@ namespace ts {
         function getTypeFromTypeReference(node: TypeReferenceType): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
+                // handle LS queries on the `const` in `x as const` by resolving to the type of `x`
+                if (isConstTypeReference(node) && isAssertionExpression(node.parent)) {
+                    links.resolvedSymbol = unknownSymbol;
+                    return links.resolvedType = checkExpressionCached(node.parent.expression);
+                }
                 let symbol: Symbol | undefined;
                 let type: Type | undefined;
                 const meaning = SymbolFlags.Type;
@@ -14218,6 +14223,17 @@ namespace ts {
                         addRelatedInfo(resultObj.errors[resultObj.errors.length - 1], createDiagnosticForNode(
                             target.symbol.declarations[0],
                             Diagnostics.The_expected_type_comes_from_the_return_type_of_this_signature,
+                        ));
+                    }
+                    if ((getFunctionFlags(node) & FunctionFlags.Async) === 0
+                        // exclude cases where source itself is promisy - this way we don't make a suggestion when relating
+                        // an IPromise and a Promise that are slightly different
+                        && !getTypeOfPropertyOfType(sourceReturn, "then" as __String)
+                        && checkTypeRelatedTo(createPromiseType(sourceReturn), targetReturn, relation, /*errorNode*/ undefined)
+                    ) {
+                        addRelatedInfo(resultObj.errors[resultObj.errors.length - 1], createDiagnosticForNode(
+                            node,
+                            Diagnostics.Did_you_mean_to_mark_this_function_as_async
                         ));
                     }
                     return true;
@@ -22616,9 +22632,11 @@ namespace ts {
 
             // If object literal is contextually typed by the implied type of a binding pattern, augment the result
             // type with those properties for which the binding pattern specifies a default value.
-            if (contextualTypeHasPattern) {
+            // If the object literal is spread into another object literal, skip this step and let the top-level object
+            // literal handle it instead.
+            if (contextualTypeHasPattern && node.parent.kind !== SyntaxKind.SpreadAssignment) {
                 for (const prop of getPropertiesOfType(contextualType!)) {
-                    if (!propertiesTable.get(prop.escapedName) && !(spread && getPropertyOfType(spread, prop.escapedName))) {
+                    if (!propertiesTable.get(prop.escapedName) && !getPropertyOfType(spread, prop.escapedName)) {
                         if (!(prop.flags & SymbolFlags.Optional)) {
                             error(prop.valueDeclaration || (<TransientSymbol>prop).bindingElement,
                                 Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
@@ -23347,7 +23365,7 @@ namespace ts {
                 }
 
                 const thisType = getTypeFromTypeNode(thisParameter.type);
-                enclosingClass = ((thisType.flags & TypeFlags.TypeParameter) ? getConstraintOfTypeParameter(<TypeParameter>thisType) : thisType) as InterfaceType;
+                enclosingClass = (((thisType.flags & TypeFlags.TypeParameter) ? getConstraintOfTypeParameter(<TypeParameter>thisType) : thisType) as TypeReference).target;
             }
             // No further restrictions for static properties
             if (flags & ModifierFlags.Static) {
@@ -27997,7 +28015,8 @@ namespace ts {
         }
 
         function checkConditionalExpression(node: ConditionalExpression, checkMode?: CheckMode): Type {
-            checkTruthinessExpression(node.condition);
+            const type = checkTruthinessExpression(node.condition);
+            checkTestingKnownTruthyCallableType(node.condition, node.whenTrue, type);
             const type1 = checkExpression(node.whenTrue, checkMode);
             const type2 = checkExpression(node.whenFalse, checkMode);
             return getUnionType([type1, type2], UnionReduction.Subtype);
@@ -29350,7 +29369,7 @@ namespace ts {
         }
 
         function isPrivateWithinAmbient(node: Node): boolean {
-            return hasModifier(node, ModifierFlags.Private) && !!(node.flags & NodeFlags.Ambient);
+            return (hasModifier(node, ModifierFlags.Private) || isPrivateIdentifierPropertyDeclaration(node)) && !!(node.flags & NodeFlags.Ambient);
         }
 
         function getEffectiveDeclarationFlags(n: Declaration, flagsToCheck: ModifierFlags): ModifierFlags {
@@ -31119,9 +31138,8 @@ namespace ts {
         function checkIfStatement(node: IfStatement) {
             // Grammar checking
             checkGrammarStatementInAmbientContext(node);
-
             const type = checkTruthinessExpression(node.expression);
-            checkTestingKnownTruthyCallableType(node, type);
+            checkTestingKnownTruthyCallableType(node.expression, node.thenStatement, type);
             checkSourceElement(node.thenStatement);
 
             if (node.thenStatement.kind === SyntaxKind.EmptyStatement) {
@@ -31131,15 +31149,15 @@ namespace ts {
             checkSourceElement(node.elseStatement);
         }
 
-        function checkTestingKnownTruthyCallableType(ifStatement: IfStatement, type: Type) {
+        function checkTestingKnownTruthyCallableType(condExpr: Expression, body: Statement | Expression, type: Type) {
             if (!strictNullChecks) {
                 return;
             }
 
-            const testedNode = isIdentifier(ifStatement.expression)
-                ? ifStatement.expression
-                : isPropertyAccessExpression(ifStatement.expression)
-                    ? ifStatement.expression.name
+            const testedNode = isIdentifier(condExpr)
+                ? condExpr
+                : isPropertyAccessExpression(condExpr)
+                    ? condExpr.name
                     : undefined;
 
             if (!testedNode) {
@@ -31166,7 +31184,7 @@ namespace ts {
                 return;
             }
 
-            const functionIsUsedInBody = forEachChild(ifStatement.thenStatement, function check(childNode): boolean | undefined {
+            const functionIsUsedInBody = forEachChild(body, function check(childNode): boolean | undefined {
                 if (isIdentifier(childNode)) {
                     const childSymbol = getSymbolAtLocation(childNode);
                     if (childSymbol && childSymbol.id === testedFunctionSymbol.id) {
@@ -31178,7 +31196,7 @@ namespace ts {
             });
 
             if (!functionIsUsedInBody) {
-                error(ifStatement.expression, Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
+                error(condExpr, Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
             }
         }
 

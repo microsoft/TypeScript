@@ -272,7 +272,7 @@ namespace ts.Completions {
         }
 
         for (const literal of literals) {
-            entries.push(createCompletionEntryForLiteral(literal));
+            entries.push(createCompletionEntryForLiteral(literal, preferences));
         }
 
         return { isGlobalCompletion: isInSnippetScope, isMemberCompletion: isMemberCompletionKind(completionKind), isNewIdentifierLocation, entries };
@@ -317,10 +317,13 @@ namespace ts.Completions {
         });
     }
 
-    const completionNameForLiteral = (literal: string | number | PseudoBigInt) =>
-        typeof literal === "object" ? pseudoBigIntToString(literal) + "n" : JSON.stringify(literal);
-    function createCompletionEntryForLiteral(literal: string | number | PseudoBigInt): CompletionEntry {
-        return { name: completionNameForLiteral(literal), kind: ScriptElementKind.string, kindModifiers: ScriptElementKindModifier.none, sortText: SortText.LocationPriority };
+    function completionNameForLiteral(literal: string | number | PseudoBigInt, preferences: UserPreferences): string {
+        return typeof literal === "object" ? pseudoBigIntToString(literal) + "n" :
+            isString(literal) ? quote(literal, preferences) : JSON.stringify(literal);
+    }
+
+    function createCompletionEntryForLiteral(literal: string | number | PseudoBigInt, preferences: UserPreferences): CompletionEntry {
+        return { name: completionNameForLiteral(literal, preferences), kind: ScriptElementKind.string, kindModifiers: ScriptElementKindModifier.none, sortText: SortText.LocationPriority };
     }
 
     function createCompletionEntry(
@@ -344,13 +347,13 @@ namespace ts.Completions {
         const useBraces = origin && originIsSymbolMember(origin) || needsConvertPropertyAccess;
         if (origin && originIsThisType(origin)) {
             insertText = needsConvertPropertyAccess
-                ? `this${insertQuestionDot ? "?." : ""}[${quote(name, preferences)}]`
+                ? `this${insertQuestionDot ? "?." : ""}[${quotePropertyName(name, preferences)}]`
                 : `this${insertQuestionDot ? "?." : "."}${name}`;
         }
         // We should only have needsConvertPropertyAccess if there's a property access to convert. But see #21790.
         // Somehow there was a global with a non-identifier name. Hopefully someone will complain about getting a "foo bar" global completion and provide a repro.
         else if ((useBraces || insertQuestionDot) && propertyAccessToConvert) {
-            insertText = useBraces ? needsConvertPropertyAccess ? `[${quote(name, preferences)}]` : `[${name}]` : name;
+            insertText = useBraces ? needsConvertPropertyAccess ? `[${quotePropertyName(name, preferences)}]` : `[${name}]` : name;
             if (insertQuestionDot || propertyAccessToConvert.questionDotToken) {
                 insertText = `?.${insertText}`;
             }
@@ -408,6 +411,14 @@ namespace ts.Completions {
             insertText,
             replacementSpan,
         };
+    }
+
+    function quotePropertyName(name: string, preferences: UserPreferences): string {
+        if (/^\d+$/.test(name)) {
+            return name;
+        }
+
+        return quote(name, preferences);
     }
 
     function isRecommendedCompletionMatch(localSymbol: Symbol, recommendedCompletion: Symbol | undefined, checker: TypeChecker): boolean {
@@ -531,6 +542,7 @@ namespace ts.Completions {
         position: number,
         entryId: CompletionEntryIdentifier,
         host: LanguageServiceHost,
+        preferences: UserPreferences,
     ): SymbolCompletion | { type: "request", request: Request } | { type: "literal", literal: string | number | PseudoBigInt } | { type: "none" } {
         const compilerOptions = program.getCompilerOptions();
         const completionData = getCompletionData(program, log, sourceFile, isUncheckedFile(sourceFile, compilerOptions), position, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true }, entryId, host);
@@ -543,7 +555,7 @@ namespace ts.Completions {
 
         const { symbols, literals, location, completionKind, symbolToOriginInfoMap, previousToken, isJsxInitializer, isTypeOnlyLocation } = completionData;
 
-        const literal = find(literals, l => completionNameForLiteral(l) === entryId.name);
+        const literal = find(literals, l => completionNameForLiteral(l, preferences) === entryId.name);
         if (literal !== undefined) return { type: "literal", literal };
 
         // Find the symbol with the matching entry name.
@@ -585,7 +597,7 @@ namespace ts.Completions {
         }
 
         // Compute all the completion symbols again.
-        const symbolCompletion = getSymbolCompletionFromEntryId(program, log, sourceFile, position, entryId, host);
+        const symbolCompletion = getSymbolCompletionFromEntryId(program, log, sourceFile, position, entryId, host, preferences);
         switch (symbolCompletion.type) {
             case "request": {
                 const { request } = symbolCompletion;
@@ -607,7 +619,7 @@ namespace ts.Completions {
             }
             case "literal": {
                 const { literal } = symbolCompletion;
-                return createSimpleDetails(completionNameForLiteral(literal), ScriptElementKind.string, typeof literal === "string" ? SymbolDisplayPartKind.stringLiteral : SymbolDisplayPartKind.numericLiteral);
+                return createSimpleDetails(completionNameForLiteral(literal, preferences), ScriptElementKind.string, typeof literal === "string" ? SymbolDisplayPartKind.stringLiteral : SymbolDisplayPartKind.numericLiteral);
             }
             case "none":
                 // Didn't find a symbol with this name.  See if we can find a keyword instead.
@@ -677,8 +689,9 @@ namespace ts.Completions {
         position: number,
         entryId: CompletionEntryIdentifier,
         host: LanguageServiceHost,
+        preferences: UserPreferences,
     ): Symbol | undefined {
-        const completion = getSymbolCompletionFromEntryId(program, log, sourceFile, position, entryId, host);
+        const completion = getSymbolCompletionFromEntryId(program, log, sourceFile, position, entryId, host, preferences);
         return completion.type === "symbol" ? completion.symbol : undefined;
     }
 
