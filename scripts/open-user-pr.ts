@@ -1,7 +1,7 @@
 /// <reference lib="esnext.asynciterable" />
 /// <reference lib="es2015.promise" />
 // Must reference esnext.asynciterable lib, since octokit uses AsyncIterable internally
-import Octokit = require("@octokit/rest");
+import { Octokit } from "@octokit/rest";
 import {runSequence} from "./run-sequence";
 
 function padNum(num: number) {
@@ -12,7 +12,7 @@ function padNum(num: number) {
 const userName = process.env.GH_USERNAME;
 const reviewers = process.env.REQUESTING_USER ? [process.env.REQUESTING_USER] : ["weswigham", "sandersn", "RyanCavanaugh"];
 const now = new Date();
-const branchName = `user-update-${process.env.TARGET_FORK}-${now.getFullYear()}${padNum(now.getMonth())}${padNum(now.getDay())}${process.env.TARGET_BRANCH ? "-" + process.env.TARGET_BRANCH : ""}`;
+const branchName = `user-update-${process.env.TARGET_FORK}-${now.getFullYear()}${padNum(now.getMonth() + 1)}${padNum(now.getDate())}${process.env.TARGET_BRANCH ? "-" + process.env.TARGET_BRANCH : ""}`;
 const remoteUrl = `https://${process.argv[2]}@github.com/${userName}/TypeScript.git`;
 runSequence([
     ["git", ["checkout", "."]], // reset any changes
@@ -24,10 +24,8 @@ runSequence([
     ["git", ["push", "--set-upstream", "fork", branchName, "-f"]] // push the branch
 ]);
 
-const gh = new Octokit();
-gh.authenticate({
-    type: "token",
-    token: process.argv[2]
+const gh = new Octokit({
+    auth: process.argv[2]
 });
 gh.pulls.create({
     owner: process.env.TARGET_FORK!,
@@ -54,7 +52,7 @@ cc ${reviewers.map(r => "@" + r).join(" ")}`,
     }
     else {
         await gh.issues.createComment({
-            number: +process.env.SOURCE_ISSUE,
+            issue_number: +process.env.SOURCE_ISSUE,
             owner: "Microsoft",
             repo: "TypeScript",
             body: `The user suite test run you requested has finished and _failed_. I've opened a [PR with the baseline diff from master](${r.data.html_url}).`

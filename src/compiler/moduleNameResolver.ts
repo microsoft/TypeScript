@@ -10,12 +10,6 @@ namespace ts {
         return !!compilerOptions.traceResolution && host.trace !== undefined;
     }
 
-    /** Array that is only intended to be pushed to, never read. */
-    /* @internal */
-    export interface Push<T> {
-        push(value: T): void;
-    }
-
     function withPackageId(packageInfo: PackageJsonInfo | undefined, r: PathAndExtension | undefined): Resolved | undefined {
         let packageId: PackageId | undefined;
         if (r && packageInfo) {
@@ -117,8 +111,6 @@ namespace ts {
         name?: string;
         version?: string;
     }
-
-    type MatchingKeys<TRecord, TMatch, K extends keyof TRecord = keyof TRecord> = K extends (TRecord[K] extends TMatch ? K : never) ? K : never;
 
     function readPackageJsonField<TMatch, K extends MatchingKeys<PackageJson, string | undefined>>(jsonContent: PackageJson, fieldName: K, typeOfTag: "string", state: ModuleResolutionState): PackageJson[K] | undefined;
     function readPackageJsonField<K extends MatchingKeys<PackageJson, object | undefined>>(jsonContent: PackageJson, fieldName: K, typeOfTag: "object", state: ModuleResolutionState): PackageJson[K] | undefined;

@@ -2,7 +2,7 @@
 module M {
 >M : typeof M
 
-   #
+   ¬
    class C {
 >C : C
    }
@@ -11,4 +11,4 @@ module M {
 > : any
 >E : E
 
-   #
+   ¬

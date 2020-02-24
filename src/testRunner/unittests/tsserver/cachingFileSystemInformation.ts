@@ -14,8 +14,9 @@ namespace ts.projectSystem {
             readDirectory = "readDirectory"
         }
         type CalledMaps = CalledMapsWithSingleArg | CalledMapsWithFiveArgs;
+        type CalledWithFiveArgs = [readonly string[], readonly string[], readonly string[], number];
         function createCallsTrackingHost(host: TestServerHost) {
-            const calledMaps: Record<CalledMapsWithSingleArg, MultiMap<true>> & Record<CalledMapsWithFiveArgs, MultiMap<[readonly string[], readonly string[], readonly string[], number]>> = {
+            const calledMaps: Record<CalledMapsWithSingleArg, MultiMap<true>> & Record<CalledMapsWithFiveArgs, MultiMap<CalledWithFiveArgs>> = {
                 fileExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.fileExists),
                 directoryExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.directoryExists),
                 getDirectories: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.getDirectories),
@@ -65,11 +66,11 @@ namespace ts.projectSystem {
             }
 
             function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: Map<number>) {
-                TestFSWithWatch.checkMultiMapKeyCount(callback, calledMaps[callback], expectedKeys);
+                TestFSWithWatch.checkMap<true | CalledWithFiveArgs>(callback, calledMaps[callback], expectedKeys);
             }
 
             function verifyCalledOnEachEntryNTimes(callback: CalledMaps, expectedKeys: readonly string[], nTimes: number) {
-                TestFSWithWatch.checkMultiMapKeyCount(callback, calledMaps[callback], expectedKeys, nTimes);
+                TestFSWithWatch.checkMap<true | CalledWithFiveArgs>(callback, calledMaps[callback], expectedKeys, nTimes);
             }
 
             function verifyNoHostCalls() {
@@ -689,10 +690,10 @@ namespace ts.projectSystem {
             };
             files.push(debugTypesFile);
             // Do not invoke recursive directory watcher for anything other than node_module/@types
-            const invoker = host.invokeWatchedDirectoriesRecursiveCallback;
-            host.invokeWatchedDirectoriesRecursiveCallback = (fullPath, relativePath) => {
+            const invoker = host.invokeFsWatchesRecursiveCallbacks;
+            host.invokeFsWatchesRecursiveCallbacks = (fullPath, eventName, entryFullPath) => {
                 if (fullPath.endsWith("@types")) {
-                    invoker.call(host, fullPath, relativePath);
+                    invoker.call(host, fullPath, eventName, entryFullPath);
                 }
             };
             host.reloadFS(files);

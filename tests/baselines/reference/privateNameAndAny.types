@@ -1,0 +1,22 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts ===
+class A {
+>A : A
+
+    #foo = true; 
+>#foo : boolean
+>true : true
+
+    method(thing: any) {
+>method : (thing: any) => void
+>thing : any
+
+        thing.#foo; // OK
+>thing.#foo : any
+>thing : any
+
+        thing.#bar; // Error
+>thing.#bar : any
+>thing : any
+    }
+};
+

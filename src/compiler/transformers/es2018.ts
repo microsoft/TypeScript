@@ -26,7 +26,10 @@ namespace ts {
         let enabledSubstitutions: ESNextSubstitutionFlags;
         let enclosingFunctionFlags: FunctionFlags;
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
-        let topLevel: boolean;
+        let hasLexicalThis: boolean;
+
+        let currentSourceFile: SourceFile;
+        let taggedTemplateStringDeclarations: VariableDeclaration[];
 
         /** Keeps track of property names accessed on super (`super.x`) within async functions. */
         let capturedSuperProperties: UnderscoreEscapedMap<true>;
@@ -37,15 +40,23 @@ namespace ts {
 
         return chainBundle(transformSourceFile);
 
+        function recordTaggedTemplateString(temp: Identifier) {
+            taggedTemplateStringDeclarations = append(
+                taggedTemplateStringDeclarations,
+                createVariableDeclaration(temp));
+        }
+
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
                 return node;
             }
 
-            exportedVariableStatement = false;
-            topLevel = isEffectiveStrictModeSourceFile(node, compilerOptions);
-            const visited = visitEachChild(node, visitor, context);
+            currentSourceFile = node;
+            const visited = visitSourceFile(node);
             addEmitHelpers(visited, context.readEmitHelpers());
+
+            currentSourceFile = undefined!;
+            taggedTemplateStringDeclarations = undefined!;
             return visited;
         }
 
@@ -64,11 +75,11 @@ namespace ts {
             return node;
         }
 
-        function doOutsideOfTopLevel<T, U>(cb: (value: T) => U, value: T) {
-            if (topLevel) {
-                topLevel = false;
+        function doWithLexicalThis<T, U>(cb: (value: T) => U, value: T) {
+            if (!hasLexicalThis) {
+                hasLexicalThis = true;
                 const result = cb(value);
-                topLevel = true;
+                hasLexicalThis = false;
                 return result;
             }
             return cb(value);
@@ -108,17 +119,17 @@ namespace ts {
                 case SyntaxKind.VoidExpression:
                     return visitVoidExpression(node as VoidExpression);
                 case SyntaxKind.Constructor:
-                    return doOutsideOfTopLevel(visitConstructorDeclaration, node as ConstructorDeclaration);
+                    return doWithLexicalThis(visitConstructorDeclaration, node as ConstructorDeclaration);
                 case SyntaxKind.MethodDeclaration:
-                    return doOutsideOfTopLevel(visitMethodDeclaration, node as MethodDeclaration);
+                    return doWithLexicalThis(visitMethodDeclaration, node as MethodDeclaration);
                 case SyntaxKind.GetAccessor:
-                    return doOutsideOfTopLevel(visitGetAccessorDeclaration, node as GetAccessorDeclaration);
+                    return doWithLexicalThis(visitGetAccessorDeclaration, node as GetAccessorDeclaration);
                 case SyntaxKind.SetAccessor:
-                    return doOutsideOfTopLevel(visitSetAccessorDeclaration, node as SetAccessorDeclaration);
+                    return doWithLexicalThis(visitSetAccessorDeclaration, node as SetAccessorDeclaration);
                 case SyntaxKind.FunctionDeclaration:
-                    return doOutsideOfTopLevel(visitFunctionDeclaration, node as FunctionDeclaration);
+                    return doWithLexicalThis(visitFunctionDeclaration, node as FunctionDeclaration);
                 case SyntaxKind.FunctionExpression:
-                    return doOutsideOfTopLevel(visitFunctionExpression, node as FunctionExpression);
+                    return doWithLexicalThis(visitFunctionExpression, node as FunctionExpression);
                 case SyntaxKind.ArrowFunction:
                     return visitArrowFunction(node as ArrowFunction);
                 case SyntaxKind.Parameter:
@@ -127,6 +138,8 @@ namespace ts {
                     return visitExpressionStatement(node as ExpressionStatement);
                 case SyntaxKind.ParenthesizedExpression:
                     return visitParenthesizedExpression(node as ParenthesizedExpression, noDestructuringValue);
+                case SyntaxKind.TaggedTemplateExpression:
+                    return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
                 case SyntaxKind.PropertyAccessExpression:
                     if (capturedSuperProperties && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.SuperKeyword) {
                         capturedSuperProperties.set(node.name.escapedText, true);
@@ -139,7 +152,7 @@ namespace ts {
                     return visitEachChild(node, visitor, context);
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
-                    return doOutsideOfTopLevel(visitDefault, node);
+                    return doWithLexicalThis(visitDefault, node);
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -295,6 +308,28 @@ namespace ts {
 
         function visitParenthesizedExpression(node: ParenthesizedExpression, noDestructuringValue: boolean): ParenthesizedExpression {
             return visitEachChild(node, noDestructuringValue ? visitorNoDestructuringValue : visitor, context);
+        }
+
+        function visitSourceFile(node: SourceFile): SourceFile {
+            exportedVariableStatement = false;
+            hasLexicalThis = !isEffectiveStrictModeSourceFile(node, compilerOptions);
+            const visited = visitEachChild(node, visitor, context);
+            const statement = concatenate(visited.statements, taggedTemplateStringDeclarations && [
+                createVariableStatement(/*modifiers*/ undefined,
+                    createVariableDeclarationList(taggedTemplateStringDeclarations))
+            ]);
+            return updateSourceFileNode(visited, setTextRange(createNodeArray(statement), node.statements));
+        }
+
+        function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
+            return processTaggedTemplateExpression(
+                context,
+                node,
+                visitor,
+                currentSourceFile,
+                recordTaggedTemplateString,
+                ProcessLevel.LiftRestriction
+            );
         }
 
         /**
@@ -774,7 +809,7 @@ namespace ts {
                             visitLexicalEnvironment(node.body!.statements, visitor, context, statementOffset)
                         )
                     ),
-                    !topLevel
+                    hasLexicalThis
                 )
             );
 
