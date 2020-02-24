@@ -149,6 +149,7 @@
         "unittests/tsserver/declarationFileMaps.ts",
         "unittests/tsserver/documentRegistry.ts",
         "unittests/tsserver/duplicatePackages.ts",
+        "unittests/tsserver/dynamicFiles.ts",
         "unittests/tsserver/events/largeFileReferenced.ts",
         "unittests/tsserver/events/projectLanguageServiceState.ts",
         "unittests/tsserver/events/projectLoading.ts",
@@ -189,7 +190,6 @@
         "unittests/tsserver/typeOnlyImportChains.ts",
         "unittests/tsserver/typeReferenceDirectives.ts",
         "unittests/tsserver/typingsInstaller.ts",
-        "unittests/tsserver/untitledFiles.ts",
         "unittests/tsserver/versionCache.ts",
         "unittests/tsserver/watchEnvironment.ts"
     ]

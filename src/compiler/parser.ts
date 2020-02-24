@@ -6629,8 +6629,8 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseNamespaceExport(): NamespaceExport {
-            const node = <NamespaceExport>createNode(SyntaxKind.NamespaceExport);
+        function parseNamespaceExport(pos: number): NamespaceExport {
+            const node = <NamespaceExport>createNode(SyntaxKind.NamespaceExport, pos);
             node.name = parseIdentifier();
             return finishNode(node);
         }
@@ -6638,9 +6638,10 @@ namespace ts {
         function parseExportDeclaration(node: ExportDeclaration): ExportDeclaration {
             node.kind = SyntaxKind.ExportDeclaration;
             node.isTypeOnly = parseOptional(SyntaxKind.TypeKeyword);
+            const namespaceExportPos = scanner.getStartPos();
             if (parseOptional(SyntaxKind.AsteriskToken)) {
                 if (parseOptional(SyntaxKind.AsKeyword)) {
-                    node.exportClause = parseNamespaceExport();
+                    node.exportClause = parseNamespaceExport(namespaceExportPos);
                 }
                 parseExpected(SyntaxKind.FromKeyword);
                 node.moduleSpecifier = parseModuleSpecifier();

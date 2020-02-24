@@ -1379,7 +1379,7 @@ namespace ts.server {
                     changes: {
                         added: includeProjectReferenceRedirectInfoIfRequested(added),
                         removed: includeProjectReferenceRedirectInfoIfRequested(removed),
-                        updated: includeProjectReferenceRedirectInfoIfRequested
+                        updated: includeProjectReferenceRedirectInfo
                             ? updated.map((fileName): protocol.FileWithProjectReferenceRedirectInfo => ({
                                 fileName,
                                 isSourceOfProjectReferenceRedirect: this.isSourceOfProjectReferenceRedirect(fileName)

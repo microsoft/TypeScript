@@ -33,21 +33,6 @@ namespace ts {
         return options.pretty;
     }
 
-    function padLeft(s: string, length: number) {
-        while (s.length < length) {
-            s = " " + s;
-        }
-        return s;
-    }
-
-    function padRight(s: string, length: number) {
-        while (s.length < length) {
-            s = s + " ";
-        }
-
-        return s;
-    }
-
     function getOptionsForHelp(commandLine: ParsedCommandLine) {
         // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
         return !!commandLine.options.all ?
