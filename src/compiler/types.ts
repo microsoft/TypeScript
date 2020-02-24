@@ -4132,6 +4132,8 @@ namespace ts {
         RestParameter     = 1 << 15,        // Rest parameter
         DeferredType      = 1 << 16,        // Calculation of the type of this symbol is deferred due to processing costs, should be fetched with `getTypeOfSymbolWithDeferredType`
         HasNeverType      = 1 << 17,        // Synthetic property with at least one never type in constituents
+        Mapped            = 1 << 18,        // Property of mapped type
+        StripOptional     = 1 << 19,        // Strip optionality in mapped property
         Synthetic = SyntheticProperty | SyntheticMethod,
         Discriminant = HasNonUniformType | HasLiteralType,
         Partial = ReadPartial | WritePartial
@@ -4140,6 +4142,12 @@ namespace ts {
     /* @internal */
     export interface TransientSymbol extends Symbol, SymbolLinks {
         checkFlags: CheckFlags;
+    }
+
+    /* @internal */
+    export interface MappedSymbol extends TransientSymbol {
+        mappedType: MappedType;
+        mapper: TypeMapper;
     }
 
     /* @internal */

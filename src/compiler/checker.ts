@@ -8002,13 +8002,17 @@ namespace ts {
         }
 
         function getTypeOfSymbol(symbol: Symbol): Type {
-            if (getCheckFlags(symbol) & CheckFlags.DeferredType) {
+            const checkFlags = getCheckFlags(symbol);
+            if (checkFlags & CheckFlags.DeferredType) {
                 return getTypeOfSymbolWithDeferredType(symbol);
             }
-            if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
+            if (checkFlags & CheckFlags.Instantiated) {
                 return getTypeOfInstantiatedSymbol(symbol);
             }
-            if (getCheckFlags(symbol) & CheckFlags.ReverseMapped) {
+            if (checkFlags & CheckFlags.Mapped) {
+                return getTypeOfMappedSymbol(symbol as MappedSymbol);
+            }
+            if (checkFlags & CheckFlags.ReverseMapped) {
                 return getTypeOfReverseMappedSymbol(symbol as ReverseMappedSymbol);
             }
             if (symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property)) {
@@ -9553,7 +9557,8 @@ namespace ts {
             // and T as the template type.
             const typeParameter = getTypeParameterFromMappedType(type);
             const constraintType = getConstraintTypeFromMappedType(type);
-            const templateType = getTemplateTypeFromMappedType(<MappedType>type.target || type);
+            const mappedType = <MappedType>type.target || type;
+            const templateType = getTemplateTypeFromMappedType(mappedType);
             const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
             const templateModifiers = getMappedTypeModifiers(type);
             const include = keyofStringsOnly ? TypeFlags.StringLiteral : TypeFlags.StringOrNumberLiteralOrUnique;
@@ -9579,7 +9584,6 @@ namespace ts {
                 // mapped type is itself an instantiated type, combine the iteration mapper with the
                 // instantiation mapper.
                 const templateMapper = combineTypeMappers(type.mapper, createTypeMapper([typeParameter], [t]));
-                const propType = instantiateType(templateType, templateMapper);
                 // If the current iteration type constituent is a string literal type, create a property.
                 // Otherwise, for type string create a string index signature.
                 if (isTypeUsableAsPropertyName(t)) {
@@ -9589,13 +9593,11 @@ namespace ts {
                         !(templateModifiers & MappedTypeModifiers.ExcludeOptional) && modifiersProp && modifiersProp.flags & SymbolFlags.Optional);
                     const isReadonly = !!(templateModifiers & MappedTypeModifiers.IncludeReadonly ||
                         !(templateModifiers & MappedTypeModifiers.ExcludeReadonly) && modifiersProp && isReadonlySymbol(modifiersProp));
-                    const prop = createSymbol(SymbolFlags.Property | (isOptional ? SymbolFlags.Optional : 0), propName, isReadonly ? CheckFlags.Readonly : 0);
-                    // When creating an optional property in strictNullChecks mode, if 'undefined' isn't assignable to the
-                    // type, we include 'undefined' in the type. Similarly, when creating a non-optional property in strictNullChecks
-                    // mode, if the underlying property is optional we remove 'undefined' from the type.
-                    prop.type = strictNullChecks && isOptional && !maybeTypeOfKind(propType, TypeFlags.Undefined | TypeFlags.Void) ? getOptionalType(propType) :
-                        strictNullChecks && !isOptional && modifiersProp && modifiersProp.flags & SymbolFlags.Optional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) :
-                        propType;
+                    const stripOptional = strictNullChecks && !isOptional && modifiersProp && modifiersProp.flags & SymbolFlags.Optional;
+                    const prop = <MappedSymbol>createSymbol(SymbolFlags.Property | (isOptional ? SymbolFlags.Optional : 0), propName,
+                        CheckFlags.Mapped | (isReadonly ? CheckFlags.Readonly : 0) | (stripOptional ? CheckFlags.StripOptional : 0));
+                    prop.mappedType = mappedType;
+                    prop.mapper = templateMapper;
                     if (modifiersProp) {
                         prop.syntheticOrigin = modifiersProp;
                         prop.declarations = modifiersProp.declarations;
@@ -9603,14 +9605,39 @@ namespace ts {
                     prop.nameType = t;
                     members.set(propName, prop);
                 }
-                else if (t.flags & (TypeFlags.Any | TypeFlags.String)) {
-                    stringIndexInfo = createIndexInfo(propType, !!(templateModifiers & MappedTypeModifiers.IncludeReadonly));
-                }
-                else if (t.flags & (TypeFlags.Number | TypeFlags.Enum)) {
-                    numberIndexInfo = createIndexInfo(numberIndexInfo ? getUnionType([numberIndexInfo.type, propType]) : propType,
-                        !!(templateModifiers & MappedTypeModifiers.IncludeReadonly));
+                else if (t.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.Enum)) {
+                    const propType = instantiateType(templateType, templateMapper);
+                    if (t.flags & (TypeFlags.Any | TypeFlags.String)) {
+                        stringIndexInfo = createIndexInfo(propType, !!(templateModifiers & MappedTypeModifiers.IncludeReadonly));
+                    }
+                    else {
+                        numberIndexInfo = createIndexInfo(numberIndexInfo ? getUnionType([numberIndexInfo.type, propType]) : propType,
+                            !!(templateModifiers & MappedTypeModifiers.IncludeReadonly));
+                    }
                 }
             }
+        }
+
+        function getTypeOfMappedSymbol(symbol: MappedSymbol) {
+            const links = getSymbolLinks(symbol);
+            if (!links.type) {
+                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                    return errorType;
+                }
+                const propType = instantiateType(getTemplateTypeFromMappedType(symbol.mappedType), symbol.mapper);
+                // When creating an optional property in strictNullChecks mode, if 'undefined' isn't assignable to the
+                // type, we include 'undefined' in the type. Similarly, when creating a non-optional property in strictNullChecks
+                // mode, if the underlying property is optional we remove 'undefined' from the type.
+                let type = strictNullChecks && symbol.flags & SymbolFlags.Optional && !maybeTypeOfKind(propType, TypeFlags.Undefined | TypeFlags.Void) ? getOptionalType(propType) :
+                    symbol.checkFlags & CheckFlags.StripOptional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) :
+                    propType;
+                if (!popTypeResolution()) {
+                    error(currentNode, Diagnostics.Property_0_in_mapped_type_1_circularly_references_itself, symbolToString(symbol), typeToString(symbol.mappedType));
+                    type = errorType;
+                }
+                links.type = type;
+            }
+            return links.type;
         }
 
         function getTypeParameterFromMappedType(type: MappedType) {
