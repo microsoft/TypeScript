@@ -5835,8 +5835,10 @@ namespace ts {
         MakeTemplateObject = 1 << 17,   // __makeTemplateObject (used for constructing template string array objects)
         ClassPrivateFieldGet = 1 << 18, // __classPrivateFieldGet (used by the class private field transformation)
         ClassPrivateFieldSet = 1 << 19, // __classPrivateFieldSet (used by the class private field transformation)
+        CreateBinding = 1 << 20,        // __createBinding (use by the module transform for exports and namespace imports)
+        SetModuleDefault = 1 << 21,     // __setModuleDefault (use by the module transform for default exports)
         FirstEmitHelper = Extends,
-        LastEmitHelper = ClassPrivateFieldSet,
+        LastEmitHelper = SetModuleDefault,
 
         // Helpers included by ES2015 for..of
         ForOfIncludes = Values,
