@@ -607,6 +607,9 @@ namespace ts {
             getJsxNamespace: n => unescapeLeadingUnderscores(getJsxNamespace(n)),
             getAccessibleSymbolChain,
             getTypePredicateOfSignature,
+            resolveExternalModuleName: moduleSpecifier => {
+                return resolveExternalModuleName(moduleSpecifier, moduleSpecifier, /*ignoreErrors*/ true);
+            },
             resolveExternalModuleSymbol,
             tryGetThisTypeAt: (node, includeGlobalThis) => {
                 node = getParseTreeNode(node);
@@ -2560,7 +2563,7 @@ namespace ts {
         }
 
         function getTargetOfExportAssignment(node: ExportAssignment | BinaryExpression, dontResolveAlias: boolean): Symbol | undefined {
-            const expression = (isExportAssignment(node) ? node.expression : node.right) as EntityNameExpression | ClassExpression;
+            const expression = isExportAssignment(node) ? node.expression : node.right;
             const resolved = getTargetOfAliasLikeExpression(expression, dontResolveAlias);
             markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false);
             return resolved;
@@ -3272,6 +3275,10 @@ namespace ts {
                         }
                     });
                     extendExportSymbols(symbols, nestedSymbols);
+                }
+                if (symbol.escapedName === InternalSymbolName.ExportEquals && isInJSFile(symbol.valueDeclaration) && isObjectLiteralExpression((symbol.valueDeclaration as BinaryExpression).right)) {
+                    const objectLiteralSymbol = (symbol.valueDeclaration as BinaryExpression).right.symbol;
+                    extendExportSymbols(symbols, objectLiteralSymbol.members);
                 }
                 return symbols;
             }
