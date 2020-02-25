@@ -32,7 +32,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // blah 
 // blah 
 var _0_1 = require("./0");
-exports.subject = _0_1.subject;
+Object.defineProperty(exports, "subject", { enumerable: true, get: function () { return _0_1.subject; } });
 /* blah1 */
 var _1_1 = require("./1");
-exports.subject1 = _1_1.subject1;
+Object.defineProperty(exports, "subject1", { enumerable: true, get: function () { return _1_1.subject1; } });

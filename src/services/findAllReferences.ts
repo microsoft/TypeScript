@@ -723,7 +723,7 @@ namespace ts.FindAllReferences {
                     if (sourceFilesSet.has(sourceFile.fileName)) {
                         // At `module.exports = ...`, reference node is `module`
                         const node = isBinaryExpression(decl) && isPropertyAccessExpression(decl.left) ? decl.left.expression :
-                            isExportAssignment(decl) ? Debug.assertDefined(findChildOfKind(decl, SyntaxKind.ExportKeyword, sourceFile)) :
+                            isExportAssignment(decl) ? Debug.checkDefined(findChildOfKind(decl, SyntaxKind.ExportKeyword, sourceFile)) :
                             getNameOfDeclaration(decl) || decl;
                         references.push(nodeEntry(node));
                     }
@@ -801,7 +801,7 @@ namespace ts.FindAllReferences {
             }
             else if (node && node.kind === SyntaxKind.DefaultKeyword) {
                 addReference(node, symbol, state);
-                searchForImportsOfExport(node, symbol, { exportingModuleSymbol: Debug.assertDefined(symbol.parent, "Expected export symbol to have a parent"), exportKind: ExportKind.Default }, state);
+                searchForImportsOfExport(node, symbol, { exportingModuleSymbol: Debug.checkDefined(symbol.parent, "Expected export symbol to have a parent"), exportKind: ExportKind.Default }, state);
             }
             else {
                 const search = state.createSearch(node, symbol, /*comingFrom*/ undefined, { allSearchSymbols: node ? populateSearchSymbolSet(symbol, node, checker, options.use === FindReferencesUse.Rename, !!options.providePrefixAndSuffixTextForRename, !!options.implementations) : [symbol] });
@@ -1194,7 +1194,7 @@ namespace ts.FindAllReferences {
         export function eachSignatureCall(signature: SignatureDeclaration, sourceFiles: readonly SourceFile[], checker: TypeChecker, cb: (call: CallExpression) => void): void {
             if (!signature.name || !isIdentifier(signature.name)) return;
 
-            const symbol = Debug.assertDefined(checker.getSymbolAtLocation(signature.name));
+            const symbol = Debug.checkDefined(checker.getSymbolAtLocation(signature.name));
 
             for (const sourceFile of sourceFiles) {
                 for (const name of getPossibleSymbolReferenceNodes(sourceFile, symbol.name)) {
@@ -1410,7 +1410,7 @@ namespace ts.FindAllReferences {
                 }
 
                 if (addReferencesHere && state.options.use !== FindReferencesUse.Rename && state.markSeenReExportRHS(name)) {
-                    addReference(name, Debug.assertDefined(exportSpecifier.symbol), state);
+                    addReference(name, Debug.checkDefined(exportSpecifier.symbol), state);
                 }
             }
             else {
@@ -1424,7 +1424,7 @@ namespace ts.FindAllReferences {
                 const isDefaultExport = referenceLocation.originalKeywordKind === SyntaxKind.DefaultKeyword
                     || exportSpecifier.name.originalKeywordKind === SyntaxKind.DefaultKeyword;
                 const exportKind = isDefaultExport ? ExportKind.Default : ExportKind.Named;
-                const exportSymbol = Debug.assertDefined(exportSpecifier.symbol);
+                const exportSymbol = Debug.checkDefined(exportSpecifier.symbol);
                 const exportInfo = getExportInfo(exportSymbol, exportKind, state.checker);
                 if (exportInfo) {
                     searchForImportsOfExport(referenceLocation, exportSymbol, exportInfo, state);

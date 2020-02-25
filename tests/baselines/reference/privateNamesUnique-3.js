@@ -21,7 +21,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-let A = /** @class */ (() => {
+const A = /** @class */ (() => {
     var _foo, _foo_1;
     class A {
         constructor() {
@@ -35,7 +35,7 @@ let A = /** @class */ (() => {
     _foo_1.set(A, true); // error (duplicate)
     return A;
 })();
-let B = /** @class */ (() => {
+const B = /** @class */ (() => {
     var _foo;
     class B {
         test(x) {

@@ -691,7 +691,7 @@ namespace ts.server {
 
         /*@internal*/
         setDocument(key: DocumentRegistryBucketKey, path: Path, sourceFile: SourceFile) {
-            const info = Debug.assertDefined(this.getScriptInfoForPath(path));
+            const info = Debug.checkDefined(this.getScriptInfoForPath(path));
             info.cacheSourceFile = { key, sourceFile };
         }
 
@@ -1110,7 +1110,7 @@ namespace ts.server {
                     // don't trigger callback on open, existing files
                     if (project.fileIsOpen(fileOrDirectoryPath)) {
                         if (project.pendingReload !== ConfigFileProgramReloadLevel.Full) {
-                            const info = Debug.assertDefined(this.getScriptInfoForPath(fileOrDirectoryPath));
+                            const info = Debug.checkDefined(this.getScriptInfoForPath(fileOrDirectoryPath));
                             if (info.isAttached(project)) {
                                 project.openFileWatchTriggered.set(fileOrDirectoryPath, true);
                             }
@@ -1642,7 +1642,7 @@ namespace ts.server {
 
             Debug.assert(!isOpenScriptInfo(info) || this.openFiles.has(info.path));
             const projectRootPath = this.openFiles.get(info.path);
-            const scriptInfo = Debug.assertDefined(this.getScriptInfo(info.path));
+            const scriptInfo = Debug.checkDefined(this.getScriptInfo(info.path));
             if (scriptInfo.isDynamic) return undefined;
 
             let searchPath = asNormalizedPath(getDirectoryPath(info.fileName));
@@ -1996,7 +1996,7 @@ namespace ts.server {
                 else {
                     const scriptKind = propertyReader.getScriptKind(f, this.hostConfiguration.extraFileExtensions);
                     const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
-                    const scriptInfo = Debug.assertDefined(this.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(
+                    const scriptInfo = Debug.checkDefined(this.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(
                         fileName,
                         project.currentDirectory,
                         scriptKind,
@@ -3117,8 +3117,9 @@ namespace ts.server {
                 return;
             }
 
-            const info: OpenFileInfo = { checkJs: !!project.getSourceFile(scriptInfo.path)!.checkJsDirective };
-            this.eventHandler({ eventName: OpenFileInfoTelemetryEvent, data: { info } });
+            const sourceFile = project.getSourceFile(scriptInfo.path);
+            const checkJs = !!sourceFile && !!sourceFile.checkJsDirective;
+            this.eventHandler({ eventName: OpenFileInfoTelemetryEvent, data: { info: { checkJs } } });
         }
 
         /**

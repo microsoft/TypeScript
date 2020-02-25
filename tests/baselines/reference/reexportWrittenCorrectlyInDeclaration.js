@@ -39,11 +39,18 @@ var ThingB = /** @class */ (function () {
 exports.ThingB = ThingB;
 //// [Things.js]
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
 exports.__esModule = true;
 var ThingA_1 = require("./ThingA");
-exports.ThingA = ThingA_1.ThingA;
+__createBinding(exports, ThingA_1, "ThingA");
 var ThingB_1 = require("./ThingB");
-exports.ThingB = ThingB_1.ThingB;
+__createBinding(exports, ThingB_1, "ThingB");
 //// [Test.js]
 "use strict";
 exports.__esModule = true;

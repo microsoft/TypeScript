@@ -41,5 +41,5 @@ var C = /** @class */ (function (_super) {
 var x = new module_1.c();
 var y = ns.value;
 var module_3 = require("module");
-exports.c1 = module_3.c1;
+Object.defineProperty(exports, "c1", { enumerable: true, get: function () { return module_3.c1; } });
 exports.z = x;
