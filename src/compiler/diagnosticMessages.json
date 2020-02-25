@@ -2361,7 +2361,7 @@
         "category": "Error",
         "code": 2614
     },
-    "Property '{0}' in mapped type '{1}' circularly references itself.": {
+    "Type of property '{0}' circularly references itself in mapped type '{1}'.": {
         "category": "Error",
         "code": 2615
     },
