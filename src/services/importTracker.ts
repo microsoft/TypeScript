@@ -499,7 +499,7 @@ namespace ts.FindAllReferences {
 
             function getExportAssignmentExport(ex: ExportAssignment): ExportedSymbol {
                 // Get the symbol for the `export =` node; its parent is the module it's the export of.
-                const exportingModuleSymbol = Debug.assertDefined(ex.symbol.parent, "Expected export symbol to have a parent");
+                const exportingModuleSymbol = Debug.checkDefined(ex.symbol.parent, "Expected export symbol to have a parent");
                 const exportKind = ex.isExportEquals ? ExportKind.ExportEquals : ExportKind.Default;
                 return { kind: ImportExport.Export, symbol, exportInfo: { exportingModuleSymbol, exportKind } };
             }
@@ -563,18 +563,18 @@ namespace ts.FindAllReferences {
 
     function getExportEqualsLocalSymbol(importedSymbol: Symbol, checker: TypeChecker): Symbol {
         if (importedSymbol.flags & SymbolFlags.Alias) {
-            return Debug.assertDefined(checker.getImmediateAliasedSymbol(importedSymbol));
+            return Debug.checkDefined(checker.getImmediateAliasedSymbol(importedSymbol));
         }
 
         const decl = importedSymbol.valueDeclaration;
         if (isExportAssignment(decl)) { // `export = class {}`
-            return Debug.assertDefined(decl.expression.symbol);
+            return Debug.checkDefined(decl.expression.symbol);
         }
         else if (isBinaryExpression(decl)) { // `module.exports = class {}`
-            return Debug.assertDefined(decl.right.symbol);
+            return Debug.checkDefined(decl.right.symbol);
         }
         else if (isSourceFile(decl)) { // json module
-            return Debug.assertDefined(decl.symbol);
+            return Debug.checkDefined(decl.symbol);
         }
         return Debug.fail();
     }

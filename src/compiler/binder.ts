@@ -409,7 +409,7 @@ namespace ts {
         }
 
         function getDisplayName(node: Declaration): string {
-            return isNamedDeclaration(node) ? declarationNameToString(node.name) : unescapeLeadingUnderscores(Debug.assertDefined(getDeclarationName(node)));
+            return isNamedDeclaration(node) ? declarationNameToString(node.name) : unescapeLeadingUnderscores(Debug.checkDefined(getDeclarationName(node)));
         }
 
         /**

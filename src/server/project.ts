@@ -758,7 +758,7 @@ namespace ts.server {
             return map(this.program!.getSourceFiles(), sourceFile => {
                 const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.resolvedPath);
                 Debug.assert(!!scriptInfo, "getScriptInfo", () => `scriptInfo for a file '${sourceFile.fileName}' Path: '${sourceFile.path}' / '${sourceFile.resolvedPath}' is missing.`);
-                return scriptInfo!;
+                return scriptInfo;
             });
         }
 
@@ -2011,7 +2011,7 @@ namespace ts.server {
                     break;
                 case ConfigFileProgramReloadLevel.Full:
                     this.openFileWatchTriggered.clear();
-                    const reason = Debug.assertDefined(this.pendingReloadReason);
+                    const reason = Debug.checkDefined(this.pendingReloadReason);
                     this.pendingReloadReason = undefined;
                     this.projectService.reloadConfiguredProject(this, reason);
                     result = true;

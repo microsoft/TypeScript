@@ -381,7 +381,7 @@ namespace FourSlash {
         }
 
         private getFileContent(fileName: string): string {
-            return ts.Debug.assertDefined(this.tryGetFileContent(fileName));
+            return ts.Debug.checkDefined(this.tryGetFileContent(fileName));
         }
         private tryGetFileContent(fileName: string): string | undefined {
             const script = this.languageServiceAdapterHost.getScriptInfo(fileName);
@@ -1716,7 +1716,7 @@ namespace FourSlash {
                 resultString += Harness.IO.newLine();
             }
 
-            Harness.Baseline.runBaseline(ts.Debug.assertDefined(this.testData.globalOptions[MetadataOptionNames.baselineFile]), resultString);
+            Harness.Baseline.runBaseline(ts.Debug.checkDefined(this.testData.globalOptions[MetadataOptionNames.baselineFile]), resultString);
         }
 
         private flattenChainedMessage(diag: ts.DiagnosticMessageChain, indent = " ") {
@@ -2630,7 +2630,7 @@ namespace FourSlash {
             const fixWithId = ts.find(this.getCodeFixes(this.activeFile.fileName), a => a.fixId === fixId);
             ts.Debug.assert(fixWithId !== undefined, "No available code fix has the expected id. Fix All is not available if there is only one potentially fixable diagnostic present.", () =>
                 `Expected '${fixId}'. Available actions:\n${ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => `${a.fixName} (${a.fixId || "no fix id"})`).join("\n")}`);
-            ts.Debug.assertEqual(fixWithId!.fixAllDescription, fixAllDescription);
+            ts.Debug.assertEqual(fixWithId.fixAllDescription, fixAllDescription);
 
             const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings, ts.emptyOptions);
             assert.deepEqual<readonly {}[] | undefined>(commands, expectedCommands);

@@ -1261,7 +1261,7 @@ namespace ts {
                     return host.getDirectories ? host.getDirectories(path) : [];
                 },
                 readDirectory(path, extensions, exclude, include, depth) {
-                    Debug.assertDefined(host.readDirectory, "'LanguageServiceHost.readDirectory' must be implemented to correctly process 'projectReferences'");
+                    Debug.checkDefined(host.readDirectory, "'LanguageServiceHost.readDirectory' must be implemented to correctly process 'projectReferences'");
                     return host.readDirectory!(path, extensions, exclude, include, depth);
                 },
                 onReleaseOldSourceFile,
