@@ -2196,20 +2196,32 @@ namespace ts.server {
             });
         }
 
-        private toggleLineComment(args: protocol.ToggleLineCommentRequestArgs, simplifiedResult: boolean) {
+        private toggleLineComment(args: protocol.ToggleLineCommentRequestArgs, simplifiedResult: boolean): TextChange[] | protocol.CodeEdit[] {
             const { file, project } = this.getFileAndProject(args);
 
-            const result = project.getLanguageService().toggleLineComment(file, args.textRanges);
+            const textChanges = project.getLanguageService().toggleLineComment(file, args.textRanges);
 
-            return simplifiedResult ? [] : result;
+            if (simplifiedResult) {
+                const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+
+                return textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo));
+            }
+
+            return textChanges;
         }
 
-        private toggleMultilineComment(args: protocol.ToggleMultilineCommentRequestArgs, simplifiedResult: boolean) {
+        private toggleMultilineComment(args: protocol.ToggleMultilineCommentRequestArgs, simplifiedResult: boolean): TextChange[] | protocol.CodeEdit[] {
             const { file, project } = this.getFileAndProject(args);
 
-            const result = project.getLanguageService().toggleMultilineComment(file, args.textRanges);
+            const textChanges = project.getLanguageService().toggleMultilineComment(file, args.textRanges);
 
-            return simplifiedResult ? [] : result;
+            if (simplifiedResult) {
+                const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+
+                return textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo));
+            }
+
+            return textChanges;
         }
 
         private mapSelectionRange(selectionRange: SelectionRange, scriptInfo: ScriptInfo): protocol.SelectionRange {
