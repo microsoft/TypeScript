@@ -16273,6 +16273,7 @@ namespace ts {
                 if (unmatchedProperty.valueDeclaration
                     && isNamedDeclaration(unmatchedProperty.valueDeclaration)
                     && isPrivateIdentifier(unmatchedProperty.valueDeclaration.name)
+                    && source.symbol
                     && source.symbol.flags & SymbolFlags.Class) {
                     const privateIdentifierDescription = unmatchedProperty.valueDeclaration.name.escapedText;
                     const symbolTableKey = getSymbolNameForPrivateIdentifier(source.symbol, privateIdentifierDescription);
