@@ -517,7 +517,7 @@ namespace ts.FindAllReferences {
                         return undefined;
                 }
 
-                const sym = useLhsSymbol ? checker.getSymbolAtLocation(cast(node.left, isPropertyAccessExpression).name) : symbol;
+                const sym = useLhsSymbol ? checker.getSymbolAtLocation(getNameOfAccessExpression(cast(node.left, isAccessExpression))) : symbol;
                 // Better detection for GH#20803
                 if (sym && !(checker.getMergedSymbol(sym.parent!).flags & SymbolFlags.Module)) {
                     Debug.fail(`Special property assignment kind does not have a module as its parent. Assignment is ${Debug.formatSymbol(sym)}, parent is ${Debug.formatSymbol(sym.parent!)}`);
