@@ -535,7 +535,6 @@ namespace ts {
      *
      * @remarks Unlike `forEachChild`, `forEachChildRecursively` handles recursively invoking the traversal on each child node found,
      * and while doing so, handles traversing the structure without relying on the callstack to encode the tree structure.
-
      */
     export function forEachChildRecursively<T>(rootNode: Node, cbNode: (node: Node, parent: Node) => T | "skip" | undefined, cbNodes?: (nodes: NodeArray<Node>, parent: Node) => T | "skip" | undefined): T | undefined {
 
