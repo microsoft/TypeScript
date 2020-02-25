@@ -409,7 +409,7 @@ namespace ts {
         }
 
         function getDisplayName(node: Declaration): string {
-            return isNamedDeclaration(node) ? declarationNameToString(node.name) : unescapeLeadingUnderscores(Debug.assertDefined(getDeclarationName(node)));
+            return isNamedDeclaration(node) ? declarationNameToString(node.name) : unescapeLeadingUnderscores(Debug.checkDefined(getDeclarationName(node)));
         }
 
         /**
@@ -2113,7 +2113,9 @@ namespace ts {
                                 container = (declName.parent.expression as PropertyAccessExpression).name;
                                 break;
                             case AssignmentDeclarationKind.Property:
-                                container = isPropertyAccessExpression(declName.parent.expression) ? declName.parent.expression.name : declName.parent.expression;
+                                container = isExportsOrModuleExportsOrAlias(file, declName.parent.expression) ? file
+                                    : isPropertyAccessExpression(declName.parent.expression) ? declName.parent.expression.name
+                                    : declName.parent.expression;
                                 break;
                             case AssignmentDeclarationKind.None:
                                 return Debug.fail("Shouldn't have detected typedef or enum on non-assignment declaration");

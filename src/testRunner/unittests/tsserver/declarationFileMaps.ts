@@ -26,9 +26,9 @@ namespace ts.projectSystem {
 
     function checkDeclarationFiles(file: File, session: TestSession, expectedFiles: readonly File[]): void {
         openFilesForSession([file], session);
-        const project = Debug.assertDefined(session.getProjectService().getDefaultProjectForFile(file.path as server.NormalizedPath, /*ensureProject*/ false));
+        const project = Debug.checkDefined(session.getProjectService().getDefaultProjectForFile(file.path as server.NormalizedPath, /*ensureProject*/ false));
         const program = project.getCurrentProgram()!;
-        const output = getFileEmitOutput(program, Debug.assertDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
+        const output = getFileEmitOutput(program, Debug.checkDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
         closeFilesForSession([file], session);
 
         Debug.assert(!output.emitSkipped);

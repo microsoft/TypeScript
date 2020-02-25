@@ -518,7 +518,7 @@ namespace ts {
 
             if (some(staticProperties) || some(pendingExpressions)) {
                 if (isDecoratedClassDeclaration) {
-                    Debug.assertDefined(pendingStatements, "Decorated classes transformed by TypeScript are expected to be within a variable declaration.");
+                    Debug.assertIsDefined(pendingStatements, "Decorated classes transformed by TypeScript are expected to be within a variable declaration.");
 
                     // Write any pending expressions from elided or moved computed property names
                     if (pendingStatements && pendingExpressions && some(pendingExpressions)) {
