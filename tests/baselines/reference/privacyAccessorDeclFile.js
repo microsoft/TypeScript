@@ -1539,7 +1539,6 @@ var privateClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
     return privateClassWithPrivateModuleSetAccessorTypes;
 }());
 var publicModule;
-exports.publicModule = undefined;
 (function (publicModule) {
     var privateClass = /** @class */ (function () {
         function privateClass() {

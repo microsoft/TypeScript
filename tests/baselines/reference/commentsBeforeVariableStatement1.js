@@ -8,5 +8,5 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     /** b's comment*/
-    exports.b = undefined;
+    exports.b = void 0;
 });

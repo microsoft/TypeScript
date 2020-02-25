@@ -178,7 +178,6 @@ export var glo_v24_public: glo_C2_private = new glo_C2_private(); // error
 "use strict";
 exports.__esModule = true;
 var m1;
-exports.m1 = undefined;
 (function (m1) {
     var C1_public = /** @class */ (function () {
         function C1_public() {
@@ -325,9 +324,9 @@ var glo_C4_public = /** @class */ (function () {
     return glo_C4_public;
 }());
 var glo_v1_private;
-exports.glo_v2_public = undefined;
+exports.glo_v2_public = void 0;
 var glo_v3_private;
-exports.glo_v4_public = undefined; // error
+exports.glo_v4_public = void 0; // error
 var glo_v11_private = new glo_C1_public();
 exports.glo_v12_public = new glo_C1_public();
 var glo_v13_private = new glo_C2_private();

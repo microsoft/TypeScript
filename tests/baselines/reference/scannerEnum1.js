@@ -8,7 +8,6 @@
 "use strict";
 exports.__esModule = true;
 var CodeGenTarget;
-exports.CodeGenTarget = undefined;
 (function (CodeGenTarget) {
     CodeGenTarget[CodeGenTarget["ES3"] = 0] = "ES3";
     CodeGenTarget[CodeGenTarget["ES5"] = 1] = "ES5";

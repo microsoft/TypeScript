@@ -14,7 +14,6 @@ export var bVal2 = b;
 "use strict";
 exports.__esModule = true;
 var a;
-exports.a = undefined;
 (function (a) {
     function foo(x) {
         return x;

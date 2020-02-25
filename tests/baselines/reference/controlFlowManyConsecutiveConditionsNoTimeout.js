@@ -136,7 +136,6 @@ while (true) {
 "use strict";
 exports.__esModule = true;
 var Choice;
-exports.Choice = undefined;
 (function (Choice) {
     Choice[Choice["One"] = 0] = "One";
     Choice[Choice["Two"] = 1] = "Two";

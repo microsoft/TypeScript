@@ -22,7 +22,7 @@ b = {
 exports.__esModule = true;
 exports.a.___foo;
 // @filename def.ts
-exports.b = undefined;
+exports.b = void 0;
 exports.b = {
     ___foo: 100
 };

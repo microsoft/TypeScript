@@ -6,6 +6,6 @@ import("./a");
 
 //// [a.js]
 "use strict";
-exports.x = undefined;
+exports.x = void 0;
 Promise.resolve().then(function () { return require("./a"); });
 module.exports = exports.x;

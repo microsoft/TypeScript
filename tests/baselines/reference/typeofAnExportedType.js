@@ -55,26 +55,25 @@ export var r13: typeof foo;
 "use strict";
 exports.__esModule = true;
 exports.x = 1;
-exports.r1 = undefined;
+exports.r1 = void 0;
 exports.y = { foo: '' };
-exports.r2 = undefined;
+exports.r2 = void 0;
 var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
 exports.C = C;
-exports.c = undefined;
+exports.c = void 0;
 var c2;
-exports.r3 = undefined;
-exports.r4 = undefined;
-exports.r4b = undefined;
-exports.i = undefined;
+exports.r3 = void 0;
+exports.r4 = void 0;
+exports.r4b = void 0;
+exports.i = void 0;
 var i2;
-exports.r5 = undefined;
-exports.r5 = undefined;
+exports.r5 = void 0;
+exports.r5 = void 0;
 var M;
-exports.M = undefined;
 (function (M) {
     M.foo = '';
     var C = /** @class */ (function () {
@@ -84,19 +83,18 @@ exports.M = undefined;
     }());
     M.C = C;
 })(M = exports.M || (exports.M = {}));
-exports.r6 = undefined;
-exports.r7 = undefined;
+exports.r6 = void 0;
+exports.r7 = void 0;
 exports.Z = M;
-exports.r8 = undefined;
-exports.r9 = undefined;
+exports.r8 = void 0;
+exports.r9 = void 0;
 var E;
-exports.E = undefined;
 (function (E) {
     E[E["A"] = 0] = "A";
 })(E = exports.E || (exports.E = {}));
-exports.r10 = undefined;
-exports.r11 = undefined;
-exports.r12 = undefined;
+exports.r10 = void 0;
+exports.r11 = void 0;
+exports.r12 = void 0;
 function foo() { }
 exports.foo = foo;
 (function (foo) {
@@ -108,4 +106,4 @@ exports.foo = foo;
     }());
     foo.C = C;
 })(foo = exports.foo || (exports.foo = {}));
-exports.r13 = undefined;
+exports.r13 = void 0;

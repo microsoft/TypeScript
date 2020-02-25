@@ -573,7 +573,6 @@ var privateClassWithWithPrivateModuleTypeParameters = /** @class */ (function ()
 function privateFunctionWithPrivateMopduleTypeParameters() {
 }
 var publicModule;
-exports.publicModule = undefined;
 (function (publicModule) {
     var privateClass = /** @class */ (function () {
         function privateClass() {

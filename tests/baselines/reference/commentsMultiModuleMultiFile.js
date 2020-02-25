@@ -41,8 +41,6 @@ define(["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
     /** this is multi declare module*/
     var multiM;
-    /** this is multi declare module*/
-    exports.multiM = undefined;
     (function (multiM) {
         /// class b comment
         var b = /** @class */ (function () {
@@ -78,8 +76,6 @@ define(["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
     /** this is multi module 3 comment*/
     var multiM;
-    /** this is multi module 3 comment*/
-    exports.multiM = undefined;
     (function (multiM) {
         /** class d comment*/
         var d = /** @class */ (function () {

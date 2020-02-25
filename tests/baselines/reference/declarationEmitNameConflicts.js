@@ -66,7 +66,6 @@ module.exports = f;
 exports.__esModule = true;
 var im = require("./declarationEmit_nameConflicts_1");
 var M;
-exports.M = undefined;
 (function (M) {
     function f() { }
     M.f = f;

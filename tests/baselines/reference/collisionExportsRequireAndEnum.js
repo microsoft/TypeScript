@@ -65,13 +65,11 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var require;
-    exports.require = undefined;
     (function (require) {
         require[require["_thisVal1"] = 0] = "_thisVal1";
         require[require["_thisVal2"] = 1] = "_thisVal2";
     })(require = exports.require || (exports.require = {}));
     var exports;
-    exports.exports = undefined;
     (function (exports) {
         exports[exports["_thisVal1"] = 0] = "_thisVal1";
         exports[exports["_thisVal2"] = 1] = "_thisVal2";

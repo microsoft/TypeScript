@@ -10,7 +10,6 @@
 "use strict";
 exports.__esModule = true;
 var SignatureFlags;
-exports.SignatureFlags = undefined;
 (function (SignatureFlags) {
     SignatureFlags[SignatureFlags["None"] = 0] = "None";
     SignatureFlags[SignatureFlags["IsIndexer"] = 1] = "IsIndexer";

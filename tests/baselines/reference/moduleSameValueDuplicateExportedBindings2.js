@@ -17,7 +17,6 @@ export enum Animals {
 "use strict";
 exports.__esModule = true;
 var Animals;
-exports.Animals = undefined;
 (function (Animals) {
     Animals[Animals["Cat"] = 0] = "Cat";
     Animals[Animals["Dog"] = 1] = "Dog";

@@ -2,7 +2,6 @@ define(["require", "exports", "private_m4"], function (require, exports, private
     "use strict";
     exports.__esModule = true;
     var usePrivate_m4_m1;
-    exports.usePrivate_m4_m1 = undefined;
     (function (usePrivate_m4_m1) {
         var x3 = private_m4.x;
         var d3 = private_m4.d;

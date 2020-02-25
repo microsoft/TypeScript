@@ -15,7 +15,6 @@ var cReturnVal = cProp.foo(10);
 "use strict";
 exports.__esModule = true;
 var x;
-exports.x = undefined;
 (function (x) {
     var c = /** @class */ (function () {
         function c() {

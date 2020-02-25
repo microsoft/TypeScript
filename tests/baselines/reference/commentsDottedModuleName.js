@@ -12,8 +12,6 @@ define(["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
     /** this is multi declare module*/
     var outerModule;
-    /** this is multi declare module*/
-    exports.outerModule = undefined;
     (function (outerModule) {
         var InnerModule;
         (function (InnerModule) {

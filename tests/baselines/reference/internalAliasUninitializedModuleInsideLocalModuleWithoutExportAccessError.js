@@ -21,9 +21,8 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var c;
-    exports.c = undefined;
     (function (c) {
         c.x.foo();
     })(c = exports.c || (exports.c = {}));
-    exports.z = undefined;
+    exports.z = void 0;
 });

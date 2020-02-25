@@ -16,7 +16,7 @@ var x = 1;
 "use strict";
 exports.__esModule = true;
 /// <reference path="ref.ts"/>
-exports.y = undefined;
+exports.y = void 0;
 //// [b.js]
 "use strict";
 exports.__esModule = true;

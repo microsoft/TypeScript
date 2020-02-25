@@ -68,13 +68,9 @@ export const enum L {
 // but we should be able to synthesize declarations from the symbols regardless
 Object.defineProperty(exports, "__esModule", { value: true });
 var A;
-// Pretty much all of this should be an error, (since enums are forbidden in js),
-// but we should be able to synthesize declarations from the symbols regardless
-exports.A = undefined;
 (function (A) {
 })(A = exports.A || (exports.A = {}));
 var B;
-exports.B = undefined;
 (function (B) {
     B[B["Member"] = 0] = "Member";
 })(B = exports.B || (exports.B = {}));
@@ -87,37 +83,31 @@ var DD;
 })(DD || (DD = {}));
 exports.D = DD;
 var E;
-exports.E = undefined;
 (function (E) {
 })(E = exports.E || (exports.E = {}));
 exports.EE = E;
 var F;
-exports.F = undefined;
 (function (F) {
 })(F = exports.F || (exports.F = {}));
 exports.FF = F;
 var G;
-exports.G = undefined;
 (function (G) {
     G[G["A"] = 1] = "A";
     G[G["B"] = 2] = "B";
     G[G["C"] = 3] = "C";
 })(G = exports.G || (exports.G = {}));
 var H;
-exports.H = undefined;
 (function (H) {
     H["A"] = "a";
     H["B"] = "b";
 })(H = exports.H || (exports.H = {}));
 var I;
-exports.I = undefined;
 (function (I) {
     I["A"] = "a";
     I[I["B"] = 0] = "B";
     I[I["C"] = 1] = "C";
 })(I = exports.I || (exports.I = {}));
 var K;
-exports.K = undefined;
 (function (K) {
     K[K["None"] = 0] = "None";
     K[K["A"] = 1] = "A";

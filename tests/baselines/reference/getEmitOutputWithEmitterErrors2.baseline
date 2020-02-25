@@ -10,7 +10,6 @@ define(["require", "exports"], function (require, exports) {
         return C;
     }());
     var M;
-    exports.M = undefined;
     (function (M) {
         M.foo = new C();
     })(M = exports.M || (exports.M = {}));

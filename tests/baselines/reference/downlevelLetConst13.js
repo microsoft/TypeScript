@@ -29,7 +29,6 @@ exports.bar2 = [2][0];
 exports.bar3 = { a: 1 }.a;
 exports.bar4 = { a: 1 }.a;
 var M;
-exports.M = undefined;
 (function (M) {
     M.baz = 100;
     M.baz2 = true;

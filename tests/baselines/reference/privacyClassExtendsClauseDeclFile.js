@@ -113,7 +113,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var publicModule;
-exports.publicModule = undefined;
 (function (publicModule) {
     var publicClassInPublicModule = /** @class */ (function () {
         function publicClassInPublicModule() {

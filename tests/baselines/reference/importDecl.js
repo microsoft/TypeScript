@@ -90,7 +90,7 @@ var d = /** @class */ (function () {
     return d;
 }());
 exports.d = d;
-exports.x = undefined;
+exports.x = void 0;
 function foo() { return null; }
 exports.foo = foo;
 //// [importDecl_require1.js]
@@ -114,7 +114,7 @@ var d = /** @class */ (function () {
     return d;
 }());
 exports.d = d;
-exports.x = undefined;
+exports.x = void 0;
 function foo() { return null; }
 exports.foo = foo;
 //// [importDecl_require3.js]
@@ -126,7 +126,7 @@ var d = /** @class */ (function () {
     return d;
 }());
 exports.d = d;
-exports.x = undefined;
+exports.x = void 0;
 function foo() { return null; }
 exports.foo = foo;
 //// [importDecl_require4.js]
@@ -147,7 +147,6 @@ exports.x4 = m4.x;
 exports.d4 = m4.d;
 exports.f4 = m4.foo();
 var m1;
-exports.m1 = undefined;
 (function (m1) {
     m1.x2 = m4.x;
     m1.d2 = m4.d;
@@ -166,7 +165,6 @@ exports.useFncOnly_m4_f4 = fncOnly_m4.foo();
 // only used privately no need to emit
 var private_m4 = require("./importDecl_require3");
 var usePrivate_m4_m1;
-exports.usePrivate_m4_m1 = undefined;
 (function (usePrivate_m4_m1) {
     var x3 = private_m4.x;
     var d3 = private_m4.d;

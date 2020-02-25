@@ -10,7 +10,6 @@ export module M {
 "use strict";
 exports.__esModule = true;
 var M;
-exports.M = undefined;
 (function (M) {
 })(M = exports.M || (exports.M = {}));
 

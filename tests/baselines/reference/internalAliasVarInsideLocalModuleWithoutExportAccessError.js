@@ -14,12 +14,10 @@ export var z = c.b;
 "use strict";
 exports.__esModule = true;
 var a;
-exports.a = undefined;
 (function (a) {
     a.x = 10;
 })(a = exports.a || (exports.a = {}));
 var c;
-exports.c = undefined;
 (function (c) {
     var b = a.x;
     c.bVal = b;

@@ -535,7 +535,6 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var m1;
-    exports.m1 = undefined;
     (function (m1) {
         var C1_public = /** @class */ (function () {
             function C1_public() {

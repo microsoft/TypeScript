@@ -66,8 +66,6 @@ define(["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
     /** Module comment*/
     var m1;
-    /** Module comment*/
-    exports.m1 = undefined;
     (function (m1) {
         /** foo's comment*/
         function foo() {
@@ -97,8 +95,6 @@ define(["require", "exports"], function (require, exports) {
     var myvar = new m1.m2.c();
     /** Module comment */
     var m4;
-    /** Module comment */
-    exports.m4 = undefined;
     (function (m4) {
         /** foo's comment
         */

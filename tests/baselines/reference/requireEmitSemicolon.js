@@ -24,7 +24,6 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var Models;
-    exports.Models = undefined;
     (function (Models) {
         var Person = /** @class */ (function () {
             function Person(name) {
@@ -39,7 +38,6 @@ define(["require", "exports", "requireEmitSemicolon_0"], function (require, expo
     "use strict";
     exports.__esModule = true;
     var Database;
-    exports.Database = undefined;
     (function (Database) {
         var DB = /** @class */ (function () {
             function DB() {

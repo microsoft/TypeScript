@@ -4,4 +4,4 @@ export var x;
 //// [file1.js]
 "use strict";
 exports.__esModule = true;
-exports.x = undefined;
+exports.x = void 0;

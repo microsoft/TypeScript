@@ -35,7 +35,6 @@
 "use strict";
 exports.__esModule = true;
 var CompilerDiagnostics;
-exports.CompilerDiagnostics = undefined;
 (function (CompilerDiagnostics) {
     CompilerDiagnostics.debug = false;
     CompilerDiagnostics.diagnosticWriter = null;

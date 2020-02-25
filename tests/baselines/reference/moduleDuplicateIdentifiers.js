@@ -46,7 +46,6 @@ exports.__esModule = true;
 exports.Foo = 2;
 exports.Foo = 42; // Should error
 var FooBar;
-exports.FooBar = undefined;
 (function (FooBar) {
     FooBar.member1 = 2;
 })(FooBar = exports.FooBar || (exports.FooBar = {}));
@@ -70,7 +69,6 @@ exports.Kettle = Kettle;
 exports.Pot = 2;
 exports.Pot = 42; // Shouldn't error
 var Utensils;
-exports.Utensils = undefined;
 (function (Utensils) {
     Utensils[Utensils["Spoon"] = 0] = "Spoon";
     Utensils[Utensils["Fork"] = 1] = "Fork";

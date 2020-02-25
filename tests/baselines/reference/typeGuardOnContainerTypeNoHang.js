@@ -10,7 +10,6 @@ export namespace TypeGuards {
 "use strict";
 exports.__esModule = true;
 var TypeGuards;
-exports.TypeGuards = undefined;
 (function (TypeGuards) {
     function IsObject(value) {
         return typeof (value) === 'object';

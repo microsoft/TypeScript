@@ -35,4 +35,4 @@ export as namespace C2;
 "use strict";
 exports.__esModule = true;
 // Illegal, may not appear in implementation files
-exports.v = undefined;
+exports.v = void 0;

@@ -134,7 +134,7 @@ import {Foo} from "./moduleFile1"; export var y = 10;export var T: number;
 "use strict";
 exports.__esModule = true;
 exports.y = 10;
-exports.T = undefined;
+exports.T = void 0;
 
 
 //// [/a/b/file1Consumer1Consumer1.js] file written with same contents
@@ -199,7 +199,7 @@ export var T: number;export function Foo() { };
 //// [/a/b/moduleFile1.js]
 "use strict";
 exports.__esModule = true;
-exports.T = undefined;
+exports.T = void 0;
 function Foo() { }
 exports.Foo = Foo;
 ;
@@ -272,7 +272,7 @@ import {Foo} from "./moduleFile1"; export var y = 10;export var T: number;export
 //// [/a/b/moduleFile1.js]
 "use strict";
 exports.__esModule = true;
-exports.T2 = undefined;
+exports.T2 = void 0;
 function Foo() { }
 exports.Foo = Foo;
 ;
@@ -282,8 +282,8 @@ exports.Foo = Foo;
 "use strict";
 exports.__esModule = true;
 exports.y = 10;
-exports.T = undefined;
-exports.T2 = undefined;
+exports.T = void 0;
+exports.T2 = void 0;
 
 
 //// [/a/b/file1Consumer1Consumer1.js] file written with same contents

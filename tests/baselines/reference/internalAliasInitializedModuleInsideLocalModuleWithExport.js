@@ -16,7 +16,6 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var a;
-    exports.a = undefined;
     (function (a) {
         var b;
         (function (b) {
@@ -29,7 +28,6 @@ define(["require", "exports"], function (require, exports) {
         })(b = a.b || (a.b = {}));
     })(a = exports.a || (exports.a = {}));
     var c;
-    exports.c = undefined;
     (function (c) {
         c.b = a.b;
         c.x = new c.b.c();

@@ -15,7 +15,7 @@ var z = foo.x + fum.y;
 //// [foo_0.js]
 "use strict";
 exports.__esModule = true;
-exports.x = undefined;
+exports.x = void 0;
 //// [foo_1.js]
 "use strict";
 exports.__esModule = true;

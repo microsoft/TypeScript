@@ -18,7 +18,6 @@ module m_private {
 "use strict";
 exports.__esModule = true;
 var m;
-exports.m = undefined;
 (function (m) {
     function foo() { }
     m.foo = foo;

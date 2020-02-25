@@ -1188,7 +1188,10 @@ namespace ts {
 
                         variables = append(variables, variable);
                     }
-                    expressions = append(expressions, transformInitializedVariable(variable));
+                    const originalParentKind = getOriginalNode(variable.name).parent?.kind;
+                    if (originalParentKind !== SyntaxKind.ModuleDeclaration && originalParentKind !== SyntaxKind.EnumDeclaration) {
+                        expressions = append(expressions, transformInitializedVariable(variable));
+                    }
                 }
 
                 if (variables) {
@@ -1256,7 +1259,7 @@ namespace ts {
                         ),
                         /*location*/ node.name
                     ),
-                    node.initializer ? visitNode(node.initializer, moduleExpressionElementVisitor) : createIdentifier("undefined")
+                    node.initializer ? visitNode(node.initializer, moduleExpressionElementVisitor) : createVoidZero()
                 );
             }
         }

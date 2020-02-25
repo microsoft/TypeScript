@@ -8,7 +8,6 @@ void 0;
 "use strict";
 exports.__esModule = true;
 var Baz;
-exports.Baz = undefined;
 (function (Baz) {
     Baz.x = "hello";
 })(Baz = exports.Baz || (exports.Baz = {}));

@@ -19,7 +19,7 @@ export let y = () => x
 /// <reference types="lib"/>
 exports.__esModule = true;
 exports.$ = 1;
-exports.x = undefined;
+exports.x = void 0;
 exports.y = function () { return exports.x; };
 
 

@@ -88,7 +88,6 @@ define(["require", "exports"], function (require, exports) {
         }());
     })(M1 || (M1 = {}));
     var M2;
-    exports.M2 = undefined;
     (function (M2) {
         var C1 = /** @class */ (function () {
             function C1() {

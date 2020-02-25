@@ -37,7 +37,6 @@ let z2 = Observable.someAnotherValue.toLowerCase();
 "use strict";
 exports.__esModule = true;
 var Observable;
-exports.Observable = undefined;
 (function (Observable) {
 })(Observable = exports.Observable || (exports.Observable = {}));
 //// [map.js]

@@ -15,7 +15,6 @@ export = x;
 "use strict";
 exports.__esModule = true;
 var a;
-exports.a = undefined;
 (function (a) {
     var c = /** @class */ (function () {
         function c() {

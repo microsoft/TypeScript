@@ -123,7 +123,7 @@ export var T: number;export function Foo() { };
 //// [/a/b/moduleFile1.js]
 "use strict";
 exports.__esModule = true;
-exports.T = undefined;
+exports.T = void 0;
 function Foo() { }
 exports.Foo = Foo;
 ;

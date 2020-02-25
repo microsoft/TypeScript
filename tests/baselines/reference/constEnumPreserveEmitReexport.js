@@ -15,7 +15,6 @@ export { MyConstEnum as default } from './ConstEnum';
 "use strict";
 exports.__esModule = true;
 var MyConstEnum;
-exports.MyConstEnum = undefined;
 (function (MyConstEnum) {
     MyConstEnum[MyConstEnum["Foo"] = 0] = "Foo";
     MyConstEnum[MyConstEnum["Bar"] = 1] = "Bar";

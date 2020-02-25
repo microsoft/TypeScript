@@ -44,7 +44,6 @@ define(["require", "exports"], function (require, exports) {
     }());
     exports.C1 = C1;
     var E1;
-    exports.E1 = undefined;
     (function (E1) {
         E1[E1["A"] = 0] = "A";
         E1[E1["B"] = 1] = "B";

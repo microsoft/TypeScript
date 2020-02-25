@@ -187,8 +187,6 @@ define(["require", "exports"], function (require, exports) {
     })(m_private || (m_private = {}));
     // Public elements
     var m_public;
-    // Public elements
-    exports.m_public = undefined;
     (function (m_public) {
         var c_public = /** @class */ (function () {
             function c_public() {
@@ -217,7 +215,6 @@ define(["require", "exports"], function (require, exports) {
         })(mi_public = m_public.mi_public || (m_public.mi_public = {}));
     })(m_public = exports.m_public || (exports.m_public = {}));
     var import_public;
-    exports.import_public = undefined;
     (function (import_public) {
         // No Privacy errors - importing private elements
         var im_private_c_private = m_private.c_private;

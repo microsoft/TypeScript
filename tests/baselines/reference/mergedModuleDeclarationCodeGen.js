@@ -19,7 +19,6 @@ export module X {
 "use strict";
 exports.__esModule = true;
 var X;
-exports.X = undefined;
 (function (X) {
     var Y;
     (function (Y_1) {

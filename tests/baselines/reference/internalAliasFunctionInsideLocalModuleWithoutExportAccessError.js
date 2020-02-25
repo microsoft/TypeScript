@@ -16,7 +16,6 @@ var d = c.b(11);
 "use strict";
 exports.__esModule = true;
 var a;
-exports.a = undefined;
 (function (a) {
     function foo(x) {
         return x;
@@ -24,7 +23,6 @@ exports.a = undefined;
     a.foo = foo;
 })(a = exports.a || (exports.a = {}));
 var c;
-exports.c = undefined;
 (function (c) {
     var b = a.foo;
     var bVal = b(10);

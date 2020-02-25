@@ -10,7 +10,7 @@ export var b = foo;
 exports.__esModule = true;
 function foo() {
 }
-exports.x = undefined;
+exports.x = void 0;
 exports.b = foo;
 
 

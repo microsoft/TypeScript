@@ -11,7 +11,6 @@ export type E = E;
 "use strict";
 exports.__esModule = true;
 var E;
-exports.E = undefined;
 (function (E) {
     E[E["X"] = 0] = "X";
 })(E = exports.E || (exports.E = {}));

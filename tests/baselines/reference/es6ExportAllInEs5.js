@@ -25,7 +25,6 @@ var c = /** @class */ (function () {
 }());
 exports.c = c;
 var m;
-exports.m = undefined;
 (function (m) {
     m.x = 10;
 })(m = exports.m || (exports.m = {}));
