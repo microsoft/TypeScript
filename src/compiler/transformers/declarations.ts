@@ -1157,13 +1157,20 @@ namespace ts {
                         fakespace.locals = createSymbolTable(props);
                         fakespace.symbol = props[0].parent!;
                         const declarations = mapDefined(props, p => {
-                            if (!isPropertyAccessExpression(p.valueDeclaration)) {
-                                return undefined; // TODO GH#33569: Handle element access expressions that created late bound names (rather than silently omitting them)
+                            if (!isPropertyAccessExpression(p.valueDeclaration) && !isElementAccessExpression(p.valueDeclaration) && !isBinaryExpression(p.valueDeclaration)) {
+                                return undefined;
+                            }
+                            if (hasDynamicName(p.valueDeclaration) && !resolver.isLateBound(getParseTreeNode(p.valueDeclaration) as Declaration)) {
+                                return undefined;
+                            }
+                            const name = unescapeLeadingUnderscores(p.escapedName);
+                            if (!isIdentifierText(name, ScriptTarget.ES3)) {
+                                return undefined; // TODO: Rather than quietly eliding (as is current behavior), maybe we should issue errors?
                             }
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.valueDeclaration);
                             const type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, symbolTracker);
                             getSymbolAccessibilityDiagnostic = oldDiag;
-                            const varDecl = createVariableDeclaration(unescapeLeadingUnderscores(p.escapedName), type, /*initializer*/ undefined);
+                            const varDecl = createVariableDeclaration(name, type, /*initializer*/ undefined);
                             return createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([varDecl]));
                         });
                         const namespaceDecl = createModuleDeclaration(/*decorators*/ undefined, ensureModifiers(input), input.name!, createModuleBlock(declarations), NodeFlags.Namespace);
