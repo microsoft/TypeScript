@@ -35668,7 +35668,6 @@ namespace ts {
                 case ExternalEmitHelpers.ClassPrivateFieldGet: return "__classPrivateFieldGet";
                 case ExternalEmitHelpers.ClassPrivateFieldSet: return "__classPrivateFieldSet";
                 case ExternalEmitHelpers.CreateBinding: return "__createBinding";
-                case ExternalEmitHelpers.SetModuleDefault: return "__setModuleDefault";
                 default: return Debug.fail("Unrecognized helper");
             }
         }
