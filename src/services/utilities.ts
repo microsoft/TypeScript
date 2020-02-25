@@ -1320,23 +1320,29 @@ namespace ts {
         return false;
     }
 
-    export function isInsideJsxTags(sourceFile: SourceFile, position: number) {
-        const token = getTokenAtPosition(sourceFile, position);
+    export function isInsideJsxElement(sourceFile: SourceFile, position: number): boolean {
+        function isInsideJsxElementRecursion(node: Node): boolean {
+            while (node) {
+                if (node.kind >= SyntaxKind.JsxSelfClosingElement && node.kind <= SyntaxKind.JsxExpression
+                    || node.kind === SyntaxKind.JsxText
+                    || node.kind === SyntaxKind.LessThanToken
+                    || node.kind === SyntaxKind.GreaterThanToken
+                    || node.kind === SyntaxKind.Identifier
+                    || node.kind === SyntaxKind.CloseBraceToken
+                    || node.kind === SyntaxKind.OpenBraceToken
+                    || node.kind === SyntaxKind.SlashToken) {
+                    node = node.parent;
+                } else if (node.kind === SyntaxKind.JsxElement) {
+                    return position > node.getStart(sourceFile) || isInsideJsxElementRecursion(node.parent);
+                } else {
+                    return false;
+                }
+            }
 
-        switch (token.kind) {
-            case SyntaxKind.JsxText:
-                return true;
-            case SyntaxKind.LessThanToken:
-            case SyntaxKind.Identifier:
-                return token.parent.kind === SyntaxKind.JsxText // <div>Hello |</div>
-                    || token.parent.kind === SyntaxKind.JsxClosingElement // <div>|</div>
-                    || isJsxOpeningLikeElement(token.parent) && isJsxElement(token.parent.parent) // <div>|<component /></div> or <div><comp|onent /></div>
-            case SyntaxKind.CloseBraceToken:
-            case SyntaxKind.OpenBraceToken:
-                return isJsxExpression(token.parent) && isJsxElement(token.parent.parent); // <div>{|}</div> or <div>|{}</div>
+            return false;
         }
 
-        return false;
+        return isInsideJsxElementRecursion(getTokenAtPosition(sourceFile, position));
     }
 
     export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind, sourceFile: SourceFile) {

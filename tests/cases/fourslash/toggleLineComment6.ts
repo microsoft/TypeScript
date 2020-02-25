@@ -1,20 +1,15 @@
-// Selection is at the start of jsx it's still considered js.
+// Selection is at the start of jsx its still js.
 
-//// function a() {
-////     let foo = "bar";
-////     return (
-////         [|<div>
-////             {foo}|]
-////         </div>
-////     );
-//// }
+//@Filename: file.tsx
+//// let a = (
+////     [|<div>
+////         some text|]
+////     </div>
+//// );
 
 verify.toggleLineComment(
-    `function a() {
-    let foo = "bar";
-    return (
-        // <div>
-        //     {foo}
-        </div>
-    );
-}`);
+    `let a = (
+    //<div>
+    //    some text
+    </div>
+);`);

@@ -1997,43 +1997,67 @@ namespace ts {
                 let leftMostPosition = Number.MAX_VALUE;
                 let lineTextStarts = new Map<number>();
                 const whiteSpaceRegex = new RegExp(/\S/);
+                const isJsx = isInsideJsxElement(sourceFile, lineStarts[firstLine])
+                const openComment = isJsx ? "{/*" : "//";
+                const closeComment = "*/}";
 
                 // First check the lines before any text changes.
                 for (let i = firstLine; i <= lastLine; i++) {
-                    const lineText = sourceFile.text.substring(lineStarts[i], lineStarts[i + 1]); // TODO: Validate the end of line it might go outside of range.
+                    const lineText = sourceFile.text.substring(lineStarts[i], sourceFile.getLineEndOfPosition(lineStarts[i]));
 
                     // Find the start of text and the left-most character. No-op on empty lines.
                     const regExec = whiteSpaceRegex.exec(lineText);
                     if (regExec) {
                         leftMostPosition = Math.min(leftMostPosition, regExec.index);
                         lineTextStarts.set(i.toString(), regExec.index);
-                        // let sourceFilePosition = lineStarts[i] + leftMostPosition;
-                        if (lineText.substr(regExec.index, 3) !== "// ") { // TODO: Validate when it is inside a comment. It can only uncomment if it's inside a comment. // TODO: Check when not finishing on empty space.
+
+                        if (lineText.substr(regExec.index, openComment.length) !== openComment) { // TODO: Validate when it is inside a comment. It can only uncomment if it's inside a comment. // TODO: Check when not finishing on empty space.
                             isCommenting = true;
                         }
                     }
                 }
 
+                // Push all text changes.
                 for (let i = firstLine; i <= lastLine; i++) {
                     const lineTextStart = lineTextStarts.get(i.toString());
                     // If the line is not an empty line; otherwise no-op;
                     if (lineTextStart !== undefined) {
                         if (isCommenting) {
                             textChanges.push({
-                                newText: "// ",
+                                newText: openComment,
                                 span: {
                                     length: 0,
                                     start: lineStarts[i] + leftMostPosition
                                 }
                             });
+
+                            if (isJsx) {
+                                textChanges.push({
+                                    newText: closeComment,
+                                    span: {
+                                        length: 0,
+                                        start: sourceFile.getLineEndOfPosition(lineStarts[i])
+                                    }
+                                });
+                            }
                         } else {
                             textChanges.push({
                                 newText: "",
                                 span: {
-                                    length: 3,
+                                    length: openComment.length,
                                     start: lineStarts[i] + lineTextStart
                                 }
                             });
+
+                            if (isJsx) {
+                                textChanges.push({
+                                    newText: "",
+                                    span: {
+                                        length: closeComment.length,
+                                        start: sourceFile.getLineEndOfPosition(lineStarts[i]) - closeComment.length
+                                    }
+                                });
+                            }
                         }
                     }
                 }
@@ -2052,7 +2076,7 @@ namespace ts {
                 const positions = [] as number[] as SortedArray<number>;
 
                 let pos = textRange.pos;
-                const isJsx = isInsideJsxTags(sourceFile, pos);
+                const isJsx = isInsideJsxElement(sourceFile, pos);
 
                 const openMultiline = isJsx ? "{/*" : "/*";
                 const closeMultiline = isJsx ? "*/}" : "*/";
