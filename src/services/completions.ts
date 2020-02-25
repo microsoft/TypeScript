@@ -1381,14 +1381,14 @@ namespace ts.Completions {
         }
 
         function shouldOfferImportCompletions(): boolean {
-            // If not already a module, must have modules enabled and not currently be in a commonjs module. (TODO: import completions for commonjs)
+            // If not already a module, must have modules enabled.
             if (!preferences.includeCompletionsForModuleExports) return false;
             // If already using ES6 modules, OK to continue using them.
-            if (sourceFile.externalModuleIndicator) return true;
+            if (sourceFile.externalModuleIndicator || sourceFile.commonJsModuleIndicator) return true;
             // If module transpilation is enabled or we're targeting es6 or above, or not emitting, OK.
             if (compilerOptionsIndicateEs6Modules(program.getCompilerOptions())) return true;
             // If some file is using ES6 modules, assume that it's OK to add more.
-            return programContainsEs6Modules(program);
+            return programContainsModules(program);
         }
 
         function isSnippetScope(scopeNode: Node): boolean {

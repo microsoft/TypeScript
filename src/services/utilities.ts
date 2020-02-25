@@ -1691,6 +1691,9 @@ namespace ts {
             : isPrivateIdentifier(name) ? idText(name) : getTextOfIdentifierOrLiteral(name);
     }
 
+    export function programContainsModules(program: Program): boolean {
+        return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!(s.externalModuleIndicator || s.commonJsModuleIndicator));
+    }
     export function programContainsEs6Modules(program: Program): boolean {
         return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
     }
