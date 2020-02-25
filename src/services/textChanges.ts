@@ -966,7 +966,6 @@ namespace ts.textChanges {
     function createWriter(newLine: string): TextChangesWriter {
         let lastNonTriviaPosition = 0;
 
-
         const writer = createTextWriter(newLine);
         const onEmitNode: PrintHandlers["onEmitNode"] = (hint, node, printCallback) => {
             if (node) {
