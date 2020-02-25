@@ -9618,8 +9618,7 @@ namespace ts {
         }
 
         function getTypeOfMappedSymbol(symbol: MappedSymbol) {
-            const links = getSymbolLinks(symbol);
-            if (!links.type) {
+            if (!symbol.type) {
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                     return errorType;
                 }
@@ -9635,9 +9634,9 @@ namespace ts {
                     error(currentNode, Diagnostics.Property_0_in_mapped_type_1_circularly_references_itself, symbolToString(symbol), typeToString(symbol.mappedType));
                     type = errorType;
                 }
-                links.type = type;
+                symbol.type = type;
             }
-            return links.type;
+            return symbol.type;
         }
 
         function getTypeParameterFromMappedType(type: MappedType) {
