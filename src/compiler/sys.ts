@@ -1727,9 +1727,9 @@ namespace ts {
 
     if (sys && sys.getEnvironmentVariable) {
         setCustomPollingValues(sys);
-        Debug.currentAssertionLevel = /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))
+        Debug.setAssertionLevel(/^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))
             ? AssertionLevel.Normal
-            : AssertionLevel.None;
+            : AssertionLevel.None);
     }
     if (sys && sys.debugMode) {
         Debug.isDebugging = true;

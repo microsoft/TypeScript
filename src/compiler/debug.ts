@@ -1,13 +1,52 @@
 /* @internal */
 namespace ts {
     export namespace Debug {
-        /* eslint-disable prefer-const */
-        export let currentAssertionLevel = AssertionLevel.None;
+        let currentAssertionLevel = AssertionLevel.None;
+
+        // eslint-disable-next-line prefer-const
         export let isDebugging = false;
-        /* eslint-enable prefer-const */
+
+        type AssertionKeys = MatchingKeys<typeof Debug, AnyFunction>;
+
+        const assertionCache: Partial<Record<AssertionKeys, { level: AssertionLevel, assertion: AnyFunction }>> = {};
+
+        export function getAssertionLevel() {
+            return currentAssertionLevel;
+        }
+
+        export function setAssertionLevel(level: AssertionLevel) {
+            const prevAssertionLevel = currentAssertionLevel;
+            currentAssertionLevel = level;
+
+            if (level > prevAssertionLevel) {
+                // restore assertion functions for the current assertion level (see `shouldAssertFunction`).
+                for (const key of getOwnKeys(assertionCache) as AssertionKeys[]) {
+                    const cachedFunc = assertionCache[key];
+                    if (cachedFunc !== undefined && Debug[key] !== cachedFunc.assertion && level >= cachedFunc.level) {
+                        (Debug as any)[key] = cachedFunc;
+                        assertionCache[key] = undefined;
+                    }
+                }
+            }
+        }
 
         export function shouldAssert(level: AssertionLevel): boolean {
             return currentAssertionLevel >= level;
+        }
+
+        /**
+         * Tests whether an assertion function should be executed. If it shouldn't, it is cached and replaced with `ts.noop`.
+         * Replaced assertion functions are restored when `Debug.setAssertionLevel` is set to a high enough level.
+         * @param level The minimum assertion level required.
+         * @param name The name of the current assertion function.
+         */
+        function shouldAssertFunction<K extends AssertionKeys>(level: AssertionLevel, name: K): boolean {
+            if (!shouldAssert(level)) {
+                assertionCache[name] = { level, assertion: Debug[name] };
+                (Debug as any)[name] = noop;
+                return false;
+            }
+            return true;
         }
 
         export function fail(message?: string, stackCrawlMark?: AnyFunction): never {
@@ -106,7 +145,7 @@ namespace ts {
         export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[], test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[];
         export function assertEachNode(nodes: readonly Node[], test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction): void;
         export function assertEachNode(nodes: readonly Node[], test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction) {
-            if (shouldAssert(AssertionLevel.Normal)) {
+            if (shouldAssertFunction(AssertionLevel.Normal, "assertEachNode")) {
                 assert(
                     test === undefined || every(nodes, test),
                     message || "Unexpected node.",
@@ -118,7 +157,7 @@ namespace ts {
         export function assertNode<T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U;
         export function assertNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
         export function assertNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
-            if (shouldAssert(AssertionLevel.Normal)) {
+            if (shouldAssertFunction(AssertionLevel.Normal, "assertNode")) {
                 assert(
                     node !== undefined && (test === undefined || test(node)),
                     message || "Unexpected node.",
@@ -130,7 +169,7 @@ namespace ts {
         export function assertNotNode<T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is Exclude<T, U>;
         export function assertNotNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
         export function assertNotNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
-            if (shouldAssert(AssertionLevel.Normal)) {
+            if (shouldAssertFunction(AssertionLevel.Normal, "assertNotNode")) {
                 assert(
                     node === undefined || test === undefined || !test(node),
                     message || "Unexpected node.",
@@ -143,7 +182,7 @@ namespace ts {
         export function assertOptionalNode<T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U | undefined;
         export function assertOptionalNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
         export function assertOptionalNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
-            if (shouldAssert(AssertionLevel.Normal)) {
+            if (shouldAssertFunction(AssertionLevel.Normal, "assertOptionalNode")) {
                 assert(
                     test === undefined || node === undefined || test(node),
                     message || "Unexpected node.",
@@ -156,7 +195,7 @@ namespace ts {
         export function assertOptionalToken<T extends Node, K extends SyntaxKind>(node: T | undefined, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K }> | undefined;
         export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
         export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction) {
-            if (shouldAssert(AssertionLevel.Normal)) {
+            if (shouldAssertFunction(AssertionLevel.Normal, "assertOptionalToken")) {
                 assert(
                     kind === undefined || node === undefined || node.kind === kind,
                     message || "Unexpected node.",
@@ -167,7 +206,7 @@ namespace ts {
 
         export function assertMissingNode(node: Node | undefined, message?: string, stackCrawlMark?: AnyFunction): asserts node is undefined;
         export function assertMissingNode(node: Node | undefined, message?: string, stackCrawlMark?: AnyFunction) {
-            if (shouldAssert(AssertionLevel.Normal)) {
+            if (shouldAssertFunction(AssertionLevel.Normal, "assertMissingNode")) {
                 assert(
                     node === undefined,
                     message || "Unexpected node.",
