@@ -13798,15 +13798,17 @@ namespace ts {
                 }
                 return type;
             }
-            if (flags & TypeFlags.Union && !(flags & TypeFlags.Primitive)) {
-                const types = (<UnionType>type).types;
+            if ((flags & TypeFlags.Intersection) || (flags & TypeFlags.Union && !(flags & TypeFlags.Primitive))) {
+                if (!couldContainTypeVariables(type)) {
+                    return type;
+                }
+                const types = (<UnionOrIntersectionType>type).types;
                 const newTypes = instantiateTypes(types, mapper);
-                return newTypes !== types ? getUnionType(newTypes, UnionReduction.Literal, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper)) : type;
-            }
-            if (flags & TypeFlags.Intersection) {
-                const types = (<IntersectionType>type).types;
-                const newTypes = instantiateTypes(types, mapper);
-                return newTypes !== types ? getIntersectionType(newTypes, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper)) : type;
+                return newTypes === types
+                    ? type
+                    : (flags & TypeFlags.Intersection)
+                        ? getIntersectionType(newTypes, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper))
+                        : getUnionType(newTypes, UnionReduction.Literal, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
             }
             if (flags & TypeFlags.Index) {
                 return getIndexType(instantiateType((<IndexType>type).type, mapper));
