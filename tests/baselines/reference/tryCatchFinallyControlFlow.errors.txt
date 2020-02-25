@@ -1,9 +1,11 @@
 tests/cases/compiler/tryCatchFinallyControlFlow.ts(105,5): error TS7027: Unreachable code detected.
 tests/cases/compiler/tryCatchFinallyControlFlow.ts(118,9): error TS7027: Unreachable code detected.
-tests/cases/compiler/tryCatchFinallyControlFlow.ts(218,9): error TS7027: Unreachable code detected.
+tests/cases/compiler/tryCatchFinallyControlFlow.ts(218,13): error TS7027: Unreachable code detected.
+tests/cases/compiler/tryCatchFinallyControlFlow.ts(220,9): error TS7027: Unreachable code detected.
+tests/cases/compiler/tryCatchFinallyControlFlow.ts(255,9): error TS7027: Unreachable code detected.
 
 
-==== tests/cases/compiler/tryCatchFinallyControlFlow.ts (3 errors) ====
+==== tests/cases/compiler/tryCatchFinallyControlFlow.ts (5 errors) ====
     // Repro from #34797
     
     function f1() {
@@ -194,6 +196,48 @@ tests/cases/compiler/tryCatchFinallyControlFlow.ts(218,9): error TS7027: Unreach
             x = 5;
         })();
         x;  // 1 | 4 | 5
+    }
+    
+    function f12() {
+        let x: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 = 0;
+        (() => {
+            try {
+                if (!!true) {
+                    x = 1;
+                    return;
+                }
+                if (!!true) {
+                    x = 2;
+                    throw 0;
+                }
+            }
+            catch (e) {
+                x;  // 0 | 1 | 2
+                x = 3;
+            }
+            finally {
+                x;  // 0 | 1 | 2 | 3
+                if (!!true) {
+                    x = 4;
+                    return;
+                }
+                if (!!true) {
+                    x = 5;
+                    return;
+                }
+                x = 6;
+                return;
+                x; // unreachable
+                ~~
+!!! error TS7027: Unreachable code detected.
+            }
+            x; // unreachable
+            ~~~~~~~~~~~~~~~~~
+            x = 7; // no effect
+    ~~~~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+        })();
+        x;  // 4 | 5 | 6
     }
     
     // Repro from #35644

@@ -187,6 +187,43 @@ function f11() {
     x;  // 1 | 4 | 5
 }
 
+function f12() {
+    let x: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 = 0;
+    (() => {
+        try {
+            if (!!true) {
+                x = 1;
+                return;
+            }
+            if (!!true) {
+                x = 2;
+                throw 0;
+            }
+        }
+        catch (e) {
+            x;  // 0 | 1 | 2
+            x = 3;
+        }
+        finally {
+            x;  // 0 | 1 | 2 | 3
+            if (!!true) {
+                x = 4;
+                return;
+            }
+            if (!!true) {
+                x = 5;
+                return;
+            }
+            x = 6;
+            return;
+            x; // unreachable
+        }
+        x; // unreachable
+        x = 7; // no effect
+    })();
+    x;  // 4 | 5 | 6
+}
+
 // Repro from #35644
 
 const main = () => {
@@ -399,6 +436,42 @@ function f11() {
         x = 5;
     })();
     x; // 1 | 4 | 5
+}
+function f12() {
+    var x = 0;
+    (function () {
+        try {
+            if (!!true) {
+                x = 1;
+                return;
+            }
+            if (!!true) {
+                x = 2;
+                throw 0;
+            }
+        }
+        catch (e) {
+            x; // 0 | 1 | 2
+            x = 3;
+        }
+        finally {
+            x; // 0 | 1 | 2 | 3
+            if (!!true) {
+                x = 4;
+                return;
+            }
+            if (!!true) {
+                x = 5;
+                return;
+            }
+            x = 6;
+            return;
+            x; // unreachable
+        }
+        x; // unreachable
+        x = 7; // no effect
+    })();
+    x; // 4 | 5 | 6
 }
 // Repro from #35644
 var main = function () {
