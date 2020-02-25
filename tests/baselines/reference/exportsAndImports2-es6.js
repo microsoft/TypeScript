@@ -21,11 +21,11 @@ exports.y = "y";
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var t1_1 = require("./t1");
-exports.y = t1_1.x;
-exports.x = t1_1.y;
+Object.defineProperty(exports, "y", { enumerable: true, get: function () { return t1_1.x; } });
+Object.defineProperty(exports, "x", { enumerable: true, get: function () { return t1_1.y; } });
 //// [t3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const t1_1 = require("./t1");
-exports.y = t1_1.x;
-exports.x = t1_1.y;
+Object.defineProperty(exports, "y", { enumerable: true, get: function () { return t1_1.x; } });
+Object.defineProperty(exports, "x", { enumerable: true, get: function () { return t1_1.y; } });
