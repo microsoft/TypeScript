@@ -1999,9 +1999,8 @@ namespace ts {
                 const whiteSpaceRegex = new RegExp(/\S/);
                 const isJsx = isInsideJsxElement(sourceFile, lineStarts[firstLine])
                 const openComment = isJsx ? "{/*" : "//";
-                const closeComment = "*/}";
 
-                // First check the lines before any text changes.
+                // Check each line before any text changes.
                 for (let i = firstLine; i <= lastLine; i++) {
                     const lineText = sourceFile.text.substring(lineStarts[i], sourceFile.getLineEndOfPosition(lineStarts[i]));
 
@@ -2011,7 +2010,7 @@ namespace ts {
                         leftMostPosition = Math.min(leftMostPosition, regExec.index);
                         lineTextStarts.set(i.toString(), regExec.index);
 
-                        if (lineText.substr(regExec.index, openComment.length) !== openComment) { // TODO: Validate when it is inside a comment. It can only uncomment if it's inside a comment. // TODO: Check when not finishing on empty space.
+                        if (lineText.substr(regExec.index, openComment.length) !== openComment) {
                             isCommenting = true;
                         }
                     }
@@ -2020,9 +2019,12 @@ namespace ts {
                 // Push all text changes.
                 for (let i = firstLine; i <= lastLine; i++) {
                     const lineTextStart = lineTextStarts.get(i.toString());
-                    // If the line is not an empty line; otherwise no-op;
+                    
+                    // If the line is not an empty line; otherwise no-op.
                     if (lineTextStart !== undefined) {
-                        if (isCommenting) {
+                        if (isJsx) {
+                            textChanges.push(...toggleMultilineComment(fileName, [{ pos: lineStarts[i] + leftMostPosition, end: sourceFile.getLineEndOfPosition(lineStarts[i]) }], isCommenting, isJsx));
+                        } else if (isCommenting) {
                             textChanges.push({
                                 newText: openComment,
                                 span: {
@@ -2030,16 +2032,6 @@ namespace ts {
                                     start: lineStarts[i] + leftMostPosition
                                 }
                             });
-
-                            if (isJsx) {
-                                textChanges.push({
-                                    newText: closeComment,
-                                    span: {
-                                        length: 0,
-                                        start: sourceFile.getLineEndOfPosition(lineStarts[i])
-                                    }
-                                });
-                            }
                         } else {
                             textChanges.push({
                                 newText: "",
@@ -2048,16 +2040,6 @@ namespace ts {
                                     start: lineStarts[i] + lineTextStart
                                 }
                             });
-
-                            if (isJsx) {
-                                textChanges.push({
-                                    newText: "",
-                                    span: {
-                                        length: closeComment.length,
-                                        start: sourceFile.getLineEndOfPosition(lineStarts[i]) - closeComment.length
-                                    }
-                                });
-                            }
                         }
                     }
                 }
@@ -2066,17 +2048,17 @@ namespace ts {
             return textChanges;
         }
 
-        function toggleMultilineComment(fileName: string, textRanges: TextRange[]): TextChange[] {
+        function toggleMultilineComment(fileName: string, textRanges: TextRange[], insertComment?: boolean, isInsideJsx?: boolean): TextChange[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             const textChanges: TextChange[] = [];
             const { text } = sourceFile;
 
             for (const textRange of textRanges) {
-                let isCommenting = false;
+                let isCommenting = insertComment !== undefined ? insertComment : false;
                 const positions = [] as number[] as SortedArray<number>;
 
                 let pos = textRange.pos;
-                const isJsx = isInsideJsxElement(sourceFile, pos);
+                const isJsx = isInsideJsx !== undefined ? isInsideJsx : isInsideJsxElement(sourceFile, pos);
 
                 const openMultiline = isJsx ? "{/*" : "/*";
                 const closeMultiline = isJsx ? "*/}" : "*/";
@@ -2091,7 +2073,7 @@ namespace ts {
 
                     // If position is in a comment add it to the positions array.
                     if (commentRange) {
-                        // Include brace positions.
+                        // Comment range doesn't include the brace character. Increase it to include them.
                         if (isJsx) {
                             commentRange.pos--;
                             commentRange.end++;
@@ -2103,7 +2085,7 @@ namespace ts {
                         }
 
                         pos = commentRange.end + 1;
-                    } else {
+                    } else { // If it's not in a comment range, then we need to comment the uncommented portions.
                         isCommenting = true;
 
                         const newPos = text.substring(pos, textRange.end).search(`(${openMultilineRegex})|(${closeMultilineRegex})`);
@@ -2164,12 +2146,13 @@ namespace ts {
                         });
                     }
                 } else {
+                    // If is not commenting then remove all comments found.
                     for (let i = 0; i < positions.length; i++) {
                         const offset = text.substr(positions[i] - closeMultiline.length, closeMultiline.length) === closeMultiline ? closeMultiline.length : 0;
                         textChanges.push({
                             newText: "",
                             span: {
-                                length: 2,
+                                length: openMultiline.length,
                                 start: positions[i] - offset
                             }
                         });
