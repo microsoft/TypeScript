@@ -1264,7 +1264,11 @@ namespace ts {
                 finallyLabel.antecedents = concatenate(concatenate(normalExitLabel.antecedents, exceptionLabel.antecedents), returnLabel.antecedents);
                 currentFlow = finallyLabel;
                 bind(node.finallyBlock);
-                if (!(currentFlow.flags & FlowFlags.Unreachable)) {
+                if (currentFlow.flags & FlowFlags.Unreachable) {
+                    // If the end of the finally block is unreachable, the end of the entire try statement is unreachable.
+                    currentFlow = unreachableFlow;
+                }
+                else {
                     // If we have an IIFE return target and return statements in the try or catch blocks, add a control
                     // flow that goes back through the finally block and back through only the return statements.
                     if (currentReturnTarget && returnLabel.antecedents) {
