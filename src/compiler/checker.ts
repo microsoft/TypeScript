@@ -940,6 +940,7 @@ namespace ts {
                     if (jsxPragma) {
                         const chosenpragma = isArray(jsxPragma) ? jsxPragma[0] : jsxPragma;
                         file.localJsxFactory = parseIsolatedEntityName(chosenpragma.arguments.factory, languageVersion);
+                        visitNode(file.localJsxFactory, markAsSynthetic);
                         if (file.localJsxFactory) {
                             return file.localJsxNamespace = getFirstIdentifier(file.localJsxFactory).escapedText;
                         }
@@ -950,6 +951,7 @@ namespace ts {
                 _jsxNamespace = "React" as __String;
                 if (compilerOptions.jsxFactory) {
                     _jsxFactoryEntity = parseIsolatedEntityName(compilerOptions.jsxFactory, languageVersion);
+                    visitNode(_jsxFactoryEntity, markAsSynthetic);
                     if (_jsxFactoryEntity) {
                         _jsxNamespace = getFirstIdentifier(_jsxFactoryEntity).escapedText;
                     }
@@ -958,7 +960,16 @@ namespace ts {
                     _jsxNamespace = escapeLeadingUnderscores(compilerOptions.reactNamespace);
                 }
             }
+            if (!_jsxFactoryEntity) {
+                _jsxFactoryEntity = createQualifiedName(createIdentifier(unescapeLeadingUnderscores(_jsxNamespace)), "createElement");
+            }
             return _jsxNamespace;
+
+            function markAsSynthetic(node: Node): VisitResult<Node> {
+                node.pos = -1;
+                node.end = -1;
+                return visitEachChild(node, markAsSynthetic, nullTransformationContext);
+            }
         }
 
         function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationToken) {
@@ -2802,8 +2813,8 @@ namespace ts {
             const namespaceMeaning = SymbolFlags.Namespace | (isInJSFile(name) ? meaning & SymbolFlags.Value : 0);
             let symbol: Symbol | undefined;
             if (name.kind === SyntaxKind.Identifier) {
-                const message = meaning === namespaceMeaning ? Diagnostics.Cannot_find_namespace_0 : getCannotFindNameDiagnosticForName(getFirstIdentifier(name));
-                const symbolFromJSPrototype = isInJSFile(name) ? resolveEntityNameFromAssignmentDeclaration(name, meaning) : undefined;
+                const message = meaning === namespaceMeaning || nodeIsSynthesized(name) ? Diagnostics.Cannot_find_namespace_0 : getCannotFindNameDiagnosticForName(getFirstIdentifier(name));
+                const symbolFromJSPrototype = isInJSFile(name) && !nodeIsSynthesized(name) ? resolveEntityNameFromAssignmentDeclaration(name, meaning) : undefined;
                 symbol = resolveName(location || name, name.escapedText, meaning, ignoreErrors || symbolFromJSPrototype ? undefined : message, name, /*isUse*/ true);
                 if (!symbol) {
                     return symbolFromJSPrototype;
@@ -2846,7 +2857,7 @@ namespace ts {
                 throw Debug.assertNever(name, "Unknown entity name kind.");
             }
             Debug.assert((getCheckFlags(symbol) & CheckFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
-            if (isEntityName(name) && (symbol.flags & SymbolFlags.Alias || name.parent.kind === SyntaxKind.ExportAssignment)) {
+            if (!nodeIsSynthesized(name) && isEntityName(name) && (symbol.flags & SymbolFlags.Alias || name.parent.kind === SyntaxKind.ExportAssignment)) {
                 markSymbolOfAliasDeclarationIfTypeOnly(getAliasDeclarationFromName(name), symbol, /*finalTarget*/ undefined, /*overwriteEmpty*/ true);
             }
             return (symbol.flags & meaning) || dontResolveAlias ? symbol : resolveAlias(symbol);
@@ -24391,7 +24402,7 @@ namespace ts {
             // can be specified by users through attributes property.
             const paramType = getEffectiveFirstArgumentForJsxSignature(signature, node);
             const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /*inferenceContext*/ undefined, checkMode);
-            return checkTypeRelatedToAndOptionallyElaborate(
+            return checkTagNameDoesNotExpectTooManyArguments() && checkTypeRelatedToAndOptionallyElaborate(
                 attributesType,
                 paramType,
                 relation,
@@ -24400,6 +24411,80 @@ namespace ts {
                 /*headMessage*/ undefined,
                 containingMessageChain,
                 errorOutputContainer);
+
+            function checkTagNameDoesNotExpectTooManyArguments(): boolean {
+                const tagType = isJsxOpeningElement(node) || isJsxSelfClosingElement(node) && !isJsxIntrinsicIdentifier(node.tagName) ? checkExpression(node.tagName) : undefined;
+                if (!tagType) {
+                    return true;
+                }
+                const tagCallSignatures = getSignaturesOfType(tagType, SignatureKind.Call);
+                if (!length(tagCallSignatures)) {
+                    return true;
+                }
+                const factory = getJsxFactoryEntity(node);
+                if (!factory) {
+                    return true;
+                }
+                const factorySymbol = resolveEntityName(factory, SymbolFlags.Value, /*ignoreErrors*/ true, /*dontResolveAlias*/ false, node);
+                if (!factorySymbol) {
+                    return true;
+                }
+
+                const factoryType = getTypeOfSymbol(factorySymbol);
+                const callSignatures = getSignaturesOfType(factoryType, SignatureKind.Call);
+                if (!length(callSignatures)) {
+                    return true;
+                }
+
+                let hasFirstParamSignatures = false;
+                let maxParamCount = 0;
+                // Check that _some_ first parameter expects a FC-like thing, and that some overload of the SFC expects an acceptable number of arguments
+                for (const sig of callSignatures) {
+                    const firstparam = getTypeAtPosition(sig, 0);
+                    const signaturesOfParam = getSignaturesOfType(firstparam, SignatureKind.Call);
+                    if (!length(signaturesOfParam)) continue;
+                    for (const paramSig of signaturesOfParam) {
+                        hasFirstParamSignatures = true;
+                        if (hasEffectiveRestParameter(paramSig)) {
+                            return true; // some signature has a rest param, so function components can have an arbitrary number of arguments
+                        }
+                        const paramCount = getParameterCount(paramSig);
+                        if (paramCount > maxParamCount) {
+                            maxParamCount = paramCount;
+                        }
+                    }
+                }
+                if (!hasFirstParamSignatures) {
+                    // Not a single signature had a first parameter which expected a signature - for back compat, and
+                    // to guard against generic factories which won't have signatures directly, do not error
+                    return true;
+                }
+                let absoluteMinArgCount = Infinity;
+                for (const tagSig of tagCallSignatures) {
+                    const tagRequiredArgCount = getMinArgumentCount(tagSig);
+                    if (tagRequiredArgCount < absoluteMinArgCount) {
+                        absoluteMinArgCount = tagRequiredArgCount;
+                    }
+                }
+                if (absoluteMinArgCount <= maxParamCount) {
+                    return true; // some signature accepts the number of arguments the function component provides
+                }
+
+                if (reportErrors) {
+                    const diag = createDiagnosticForNode(node.tagName, Diagnostics.Tag_0_expects_at_least_1_arguments_but_the_JSX_factory_2_provides_at_most_3, entityNameToString(node.tagName), absoluteMinArgCount, entityNameToString(factory), maxParamCount);
+                    const tagNameDeclaration = getSymbolAtLocation(node.tagName)?.valueDeclaration;
+                    if (tagNameDeclaration) {
+                        addRelatedInfo(diag, createDiagnosticForNode(tagNameDeclaration, Diagnostics._0_is_declared_here, entityNameToString(node.tagName)));
+                    }
+                    if (errorOutputContainer && errorOutputContainer.skipLogging) {
+                        (errorOutputContainer.errors || (errorOutputContainer.errors = [])).push(diag);
+                    }
+                    if (!errorOutputContainer.skipLogging) {
+                        diagnostics.add(diag);
+                    }
+                }
+                return false;
+            }
         }
 
         function getSignatureApplicabilityError(
@@ -35282,6 +35367,10 @@ namespace ts {
             return literalTypeToNode(<FreshableType>type, node, tracker);
         }
 
+        function getJsxFactoryEntity(location: Node) {
+            return location ? (getJsxNamespace(location), (getSourceFileOfNode(location).localJsxFactory || _jsxFactoryEntity)) : _jsxFactoryEntity;
+        }
+
         function createResolver(): EmitResolver {
             // this variable and functions that use it are deliberately moved here from the outer scope
             // to avoid scope pollution
@@ -35353,7 +35442,7 @@ namespace ts {
                     const symbol = node && getSymbolOfNode(node);
                     return !!(symbol && getCheckFlags(symbol) & CheckFlags.Late);
                 },
-                getJsxFactoryEntity: location => location ? (getJsxNamespace(location), (getSourceFileOfNode(location).localJsxFactory || _jsxFactoryEntity)) : _jsxFactoryEntity,
+                getJsxFactoryEntity,
                 getAllAccessorDeclarations(accessor: AccessorDeclaration): AllAccessorDeclarations {
                     accessor = getParseTreeNode(accessor, isGetOrSetAccessorDeclaration)!; // TODO: GH#18217
                     const otherKind = accessor.kind === SyntaxKind.SetAccessor ? SyntaxKind.GetAccessor : SyntaxKind.SetAccessor;
