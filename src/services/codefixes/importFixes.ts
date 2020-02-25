@@ -327,7 +327,7 @@ namespace ts.codefix {
         return firstDefined(existingImports, ({ declaration, importKind }): FixAddToExistingImport | undefined => {
             if (declaration.kind === SyntaxKind.ImportEqualsDeclaration) return undefined;
             if (declaration.kind === SyntaxKind.VariableDeclaration) {
-                return importKind === ImportKind.Named && declaration.name.kind === SyntaxKind.ObjectBindingPattern
+                return (importKind === ImportKind.Named || importKind === ImportKind.Default) && declaration.name.kind === SyntaxKind.ObjectBindingPattern
                     ? { kind: ImportFixKind.AddToExisting, importClauseOrBindingPattern: declaration.name, importKind, moduleSpecifier: declaration.initializer.arguments[0].text, canUseTypeOnlyImport: false }
                     : undefined;
             }
@@ -645,14 +645,11 @@ namespace ts.codefix {
 
     function doAddExistingFix(changes: textChanges.ChangeTracker, sourceFile: SourceFile, clause: ImportClause | ObjectBindingPattern, defaultImport: string | undefined, namedImports: readonly string[], canUseTypeOnlyImport: boolean): void {
         if (clause.kind === SyntaxKind.ObjectBindingPattern) {
+            if (defaultImport) {
+                addElementToBindingPattern(clause, defaultImport, "default");
+            }
             for (const specifier of namedImports) {
-                const element = createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, specifier);
-                if (clause.elements.length) {
-                    changes.insertNodeInListAfter(sourceFile, last(clause.elements), element);
-                }
-                else {
-                    changes.replaceNode(sourceFile, clause, createObjectBindingPattern([element]));
-                }
+                addElementToBindingPattern(clause, specifier, /*propertyName*/ undefined);
             }
             return;
         }
@@ -685,6 +682,16 @@ namespace ts.codefix {
 
         if (convertTypeOnlyToRegular) {
             changes.delete(sourceFile, getTypeKeywordOfTypeOnlyImport(clause, sourceFile));
+        }
+
+        function addElementToBindingPattern(bindingPattern: ObjectBindingPattern, name: string, propertyName: string | undefined) {
+            const element = createBindingElement(/*dotDotDotToken*/ undefined, propertyName, name);
+            if (bindingPattern.elements.length) {
+                changes.insertNodeInListAfter(sourceFile, last(bindingPattern.elements), element);
+            }
+            else {
+                changes.replaceNode(sourceFile, bindingPattern, createObjectBindingPattern([element]));
+            }
         }
     }
 
@@ -740,36 +747,30 @@ namespace ts.codefix {
 
     function addNewRequires(changes: textChanges.ChangeTracker, sourceFile: SourceFile, moduleSpecifier: string, quotePreference: QuotePreference, imports: ImportsCollection, blankLineBetween: boolean) {
         const quotedModuleSpecifier = makeStringLiteral(moduleSpecifier, quotePreference);
-        // const foo = require('./mod').default;
-        if (imports.defaultImport && !imports.namedImports) {
-            const declaration = createConstEqualsRequireDeclaration(imports.defaultImport, quotedModuleSpecifier, /*dotDefault*/ true);
-            insertImport(changes, sourceFile, declaration, blankLineBetween);
-        }
         // const { default: foo, bar, etc } = require('./mod');
-        else if (imports.namedImports) {
-            const bindingElements = imports.namedImports.map(name => createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, name));
+        if (imports.defaultImport || imports.namedImports?.length) {
+            const bindingElements = imports.namedImports?.map(name => createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, name)) || [];
             if (imports.defaultImport) {
-                bindingElements.unshift(createBindingElement(/*dotDotDotToken*/ undefined, imports.defaultImport, "default"));
+                bindingElements.unshift(createBindingElement(/*dotDotDotToken*/ undefined, "default", imports.defaultImport));
             }
-            const declaration = createConstEqualsRequireDeclaration(createObjectBindingPattern(bindingElements), quotedModuleSpecifier, /*dotDefault*/ false);
+            const declaration = createConstEqualsRequireDeclaration(createObjectBindingPattern(bindingElements), quotedModuleSpecifier);
             insertImport(changes, sourceFile, declaration, blankLineBetween);
         }
         // const foo = require('./mod');
         if (imports.namespaceLikeImport) {
-            const declaration = createConstEqualsRequireDeclaration(imports.namespaceLikeImport.name, quotedModuleSpecifier, /*dotDefault*/ false);
+            const declaration = createConstEqualsRequireDeclaration(imports.namespaceLikeImport.name, quotedModuleSpecifier);
             insertImport(changes, sourceFile, declaration, blankLineBetween);
         }
     }
 
-    function createConstEqualsRequireDeclaration(name: string | ObjectBindingPattern, quotedModuleSpecifier: StringLiteral, dotDefault: boolean): VariableStatement {
-        const call = createCall(createIdentifier("require"), /*typeArguments*/ undefined, [quotedModuleSpecifier]);
+    function createConstEqualsRequireDeclaration(name: string | ObjectBindingPattern, quotedModuleSpecifier: StringLiteral): VariableStatement {
         return createVariableStatement(
             /*modifiers*/ undefined,
             createVariableDeclarationList([
                 createVariableDeclaration(
                     typeof name === "string" ? createIdentifier(name) : name,
                     /*type*/ undefined,
-                    dotDefault ? createPropertyAccess(call, "default") : call)],
+                    createCall(createIdentifier("require"), /*typeArguments*/ undefined, [quotedModuleSpecifier]))],
                 NodeFlags.Const));
     }
 
