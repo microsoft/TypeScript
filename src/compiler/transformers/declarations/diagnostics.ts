@@ -27,7 +27,9 @@ namespace ts {
         | TypeAliasDeclaration
         | ConstructorDeclaration
         | IndexSignatureDeclaration
-        | PropertyAccessExpression;
+        | PropertyAccessExpression
+        | ElementAccessExpression
+        | BinaryExpression;
 
     export function canProduceDiagnostics(node: Node): node is DeclarationDiagnosticProducing {
         return isVariableDeclaration(node) ||
@@ -48,7 +50,9 @@ namespace ts {
             isTypeAliasDeclaration(node) ||
             isConstructorDeclaration(node) ||
             isIndexSignatureDeclaration(node) ||
-            isPropertyAccessExpression(node);
+            isPropertyAccessExpression(node) ||
+            isElementAccessExpression(node) ||
+            isBinaryExpression(node);
     }
 
     export function createGetSymbolAccessibilityDiagnosticForNodeName(node: DeclarationDiagnosticProducing) {
@@ -125,7 +129,7 @@ namespace ts {
     }
 
     export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationDiagnosticProducing): (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic | undefined {
-        if (isVariableDeclaration(node) || isPropertyDeclaration(node) || isPropertySignature(node) || isPropertyAccessExpression(node) || isBindingElement(node) || isConstructorDeclaration(node)) {
+        if (isVariableDeclaration(node) || isPropertyDeclaration(node) || isPropertySignature(node) || isPropertyAccessExpression(node) || isElementAccessExpression(node) || isBinaryExpression(node) || isBindingElement(node) || isConstructorDeclaration(node)) {
             return getVariableDeclarationTypeVisibilityError;
         }
         else if (isSetAccessor(node) || isGetAccessor(node)) {
@@ -166,7 +170,7 @@ namespace ts {
             }
             // This check is to ensure we don't report error on constructor parameter property as that error would be reported during parameter emit
             // The only exception here is if the constructor was marked as private. we are not emitting the constructor parameters at all.
-            else if (node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.PropertySignature ||
+            else if (node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression || node.kind === SyntaxKind.BinaryExpression || node.kind === SyntaxKind.PropertySignature ||
                 (node.kind === SyntaxKind.Parameter && hasModifier(node.parent, ModifierFlags.Private))) {
                 // TODO(jfreeman): Deal with computed properties in error reporting.
                 if (hasModifier(node, ModifierFlags.Static)) {

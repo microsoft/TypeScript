@@ -2943,6 +2943,8 @@ namespace ts {
             importDefaultHelper,
             classPrivateFieldGetHelper,
             classPrivateFieldSetHelper,
+            createBindingHelper,
+            setModuleDefaultHelper
         ], helper => helper.name));
     }
 

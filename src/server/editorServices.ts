@@ -3117,8 +3117,9 @@ namespace ts.server {
                 return;
             }
 
-            const info: OpenFileInfo = { checkJs: !!project.getSourceFile(scriptInfo.path)!.checkJsDirective };
-            this.eventHandler({ eventName: OpenFileInfoTelemetryEvent, data: { info } });
+            const sourceFile = project.getSourceFile(scriptInfo.path);
+            const checkJs = !!sourceFile && !!sourceFile.checkJsDirective;
+            this.eventHandler({ eventName: OpenFileInfoTelemetryEvent, data: { info: { checkJs } } });
         }
 
         /**
