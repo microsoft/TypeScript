@@ -1,20 +1,20 @@
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved. 
+Copyright (c) Microsoft Corporation. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0  
- 
+License at http://www.apache.org/licenses/LICENSE-2.0
+
 THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE, 
-MERCHANTABLITY OR NON-INFRINGEMENT. 
- 
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "3.8";
+    const versionMajorMinor = "3.9";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -1547,6 +1547,7 @@ declare namespace ts {
         name: Identifier;
     }
     export type ImportOrExportSpecifier = ImportSpecifier | ExportSpecifier;
+    export type TypeOnlyCompatibleAliasDeclaration = ImportClause | NamespaceImport | ImportOrExportSpecifier;
     /**
      * This is either an `export =` or an `export default` declaration.
      * Unless `isExportEquals` is set, this node was parsed as an `export default`.
@@ -2117,6 +2118,7 @@ declare namespace ts {
         UseTypeOfFunction = 4096,
         OmitParameterModifiers = 8192,
         UseAliasDefinedOutsideCurrentScope = 16384,
+        UseSingleQuotesForStringLiteralType = 268435456,
         AllowThisInObjectLiteral = 32768,
         AllowQualifedNameInPlaceOfIdentifier = 65536,
         AllowAnonymousIdentifier = 131072,
@@ -2144,6 +2146,7 @@ declare namespace ts {
         UseTypeOfFunction = 4096,
         OmitParameterModifiers = 8192,
         UseAliasDefinedOutsideCurrentScope = 16384,
+        UseSingleQuotesForStringLiteralType = 268435456,
         AllowUniqueESSymbolType = 1048576,
         AddUndefined = 131072,
         WriteArrowStyleSignature = 262144,
@@ -2152,7 +2155,7 @@ declare namespace ts {
         InFirstTypeArgument = 4194304,
         InTypeAlias = 8388608,
         /** @deprecated */ WriteOwnNameForAnyLike = 0,
-        NodeBuilderFlagsMask = 9469291
+        NodeBuilderFlagsMask = 277904747
     }
     export enum SymbolFormatFlags {
         None = 0,
@@ -2651,7 +2654,7 @@ declare namespace ts {
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         importHelpers?: boolean;
-        importsNotUsedAsValues?: importsNotUsedAsValues;
+        importsNotUsedAsValues?: ImportsNotUsedAsValues;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         isolatedModules?: boolean;
@@ -2750,7 +2753,7 @@ declare namespace ts {
         React = 2,
         ReactNative = 3
     }
-    export enum importsNotUsedAsValues {
+    export enum ImportsNotUsedAsValues {
         Remove = 0,
         Preserve = 1,
         Error = 2
@@ -2969,6 +2972,7 @@ declare namespace ts {
         readonly scoped: boolean;
         readonly text: string | ((node: EmitHelperUniqueNameCallback) => string);
         readonly priority?: number;
+        readonly dependencies?: EmitHelper[];
     }
     export interface UnscopedEmitHelper extends EmitHelper {
         readonly scoped: false;
@@ -2981,7 +2985,8 @@ declare namespace ts {
         IdentifierName = 2,
         MappedTypeParameter = 3,
         Unspecified = 4,
-        EmbeddedStatement = 5
+        EmbeddedStatement = 5,
+        JsxAttributeValue = 6
     }
     export interface TransformationContext {
         /** Gets the compiler options supplied to the transformer. */
@@ -3054,6 +3059,12 @@ declare namespace ts {
          */
         emitNodeWithNotification(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
         /**
+         * Indicates if a given node needs an emit notification
+         *
+         * @param node The node to emit.
+         */
+        isEmitNotificationEnabled?(node: Node): boolean;
+        /**
          * Clean up EmitNode entries on any parse-tree nodes.
          */
         dispose(): void;
@@ -3125,6 +3136,11 @@ declare namespace ts {
          * ```
          */
         onEmitNode?(hint: EmitHint, node: Node | undefined, emitCallback: (hint: EmitHint, node: Node | undefined) => void): void;
+        /**
+         * A hook used to check if an emit notification is required for a node.
+         * @param node The node to emit.
+         */
+        isEmitNotificationEnabled?(node: Node | undefined): boolean;
         /**
          * A hook used by the Printer to perform just-in-time substitution of a node. This is
          * primarily used by node transformations that need to substitute one node for another,
@@ -3244,7 +3260,7 @@ declare namespace ts {
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
-        readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
+        readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
     }
@@ -3330,7 +3346,8 @@ declare namespace ts {
         isUnterminated(): boolean;
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
-        reScanTemplateToken(): SyntaxKind;
+        reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
+        reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxAttributeValue(): SyntaxKind;
@@ -3739,7 +3756,7 @@ declare namespace ts {
     function isTemplateLiteralToken(node: Node): node is TemplateLiteralToken;
     function isTemplateMiddleOrTemplateTail(node: Node): node is TemplateMiddle | TemplateTail;
     function isImportOrExportSpecifier(node: Node): node is ImportSpecifier | ExportSpecifier;
-    function isTypeOnlyImportOrExportName(node: Node): boolean;
+    function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyCompatibleAliasDeclaration;
     function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken;
     function isModifier(node: Node): node is Modifier;
     function isEntityName(node: Node): node is EntityName;
@@ -3772,6 +3789,8 @@ declare namespace ts {
     function isJSDocCommentContainingNode(node: Node): boolean;
     function isSetAccessor(node: Node): node is SetAccessorDeclaration;
     function isGetAccessor(node: Node): node is GetAccessorDeclaration;
+    /** True if has initializer node attached to it. */
+    function hasOnlyExpressionInitializer(node: Node): node is HasExpressionInitializer;
     function isObjectLiteralElement(node: Node): node is ObjectLiteralElement;
     function isStringLiteralLike(node: Node): node is StringLiteralLike;
 }
@@ -5184,7 +5203,7 @@ declare namespace ts {
         fileName: string;
     }
     type OrganizeImportsScope = CombinedCodeFixScope;
-    type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<";
+    type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#";
     interface GetCompletionsAtPositionOptions extends UserPreferences {
         /**
          * If the editor is asking for completions because a certain character was typed
@@ -5652,6 +5671,7 @@ declare namespace ts {
         hasAction?: true;
         source?: string;
         isRecommended?: true;
+        isFromUncheckedFile?: true;
     }
     interface CompletionEntryDetails {
         name: string;

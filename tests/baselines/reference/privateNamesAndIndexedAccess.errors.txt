@@ -1,14 +1,12 @@
 tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(7,28): error TS1005: ']' expected.
-tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(7,28): error TS2300: Duplicate identifier '#bar'.
-tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(7,28): error TS2717: Subsequent property declarations must have the same type.  Property '#bar' must be of type 'number', but here has type 'any'.
-tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(7,32): error TS1005: ';' expected.
-tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(7,34): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(7,36): error TS7008: Member '3' implicitly has an 'any' type.
+tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(7,28): error TS7005: Variable '#bar' implicitly has an 'any' type.
+tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(7,32): error TS1005: ',' expected.
+tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(7,34): error TS1134: Variable declaration expected.
+tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(7,36): error TS1134: Variable declaration expected.
 tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(9,28): error TS2339: Property '#bar' does not exist on type 'C'.
-tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(11,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts (8 errors) ====
+==== tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts (6 errors) ====
     class C {
         foo = 3;
         #bar = 3;
@@ -18,24 +16,18 @@ tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAcces
             const badForNow: C[#bar] = 3;   // Error
                                ~~~~
 !!! error TS1005: ']' expected.
-!!! related TS1007 tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts:4:20: The parser expected to find a '}' to match the '{' token here.
                                ~~~~
-!!! error TS2300: Duplicate identifier '#bar'.
-                               ~~~~
-!!! error TS2717: Subsequent property declarations must have the same type.  Property '#bar' must be of type 'number', but here has type 'any'.
-!!! related TS6203 tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts:3:5: '#bar' was also declared here.
+!!! error TS7005: Variable '#bar' implicitly has an 'any' type.
                                    ~
-!!! error TS1005: ';' expected.
+!!! error TS1005: ',' expected.
                                      ~
-!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+!!! error TS1134: Variable declaration expected.
                                        ~
-!!! error TS7008: Member '3' implicitly has an 'any' type.
+!!! error TS1134: Variable declaration expected.
             // will never use this syntax, already taken:
             const badAlways: C["#bar"] = 3; // Error
                                ~~~~~~
 !!! error TS2339: Property '#bar' does not exist on type 'C'.
         }
     }
-    ~
-!!! error TS1128: Declaration or statement expected.
     

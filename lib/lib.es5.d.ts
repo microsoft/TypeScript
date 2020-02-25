@@ -318,7 +318,7 @@ declare var Function: FunctionConstructor;
 /**
  * Extracts the type of the 'this' parameter of a function type, or 'unknown' if the function type has no 'this' parameter.
  */
-type ThisParameterType<T> = T extends (this: unknown, ...args: any[]) => any ? unknown : T extends (this: infer U, ...args: any[]) => any ? U : unknown;
+type ThisParameterType<T> = T extends (this: infer U, ...args: any[]) => any ? U : unknown;
 
 /**
  * Removes the 'this' parameter from a function type.

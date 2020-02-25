@@ -53,21 +53,21 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/rootfolder/project/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/rootFolder/project/tsconfig.json","pollingInterval":250}
 /a/rootfolder/project/scripts/javascript.js:
-  {"pollingInterval":250}
+  {"fileName":"/a/rootFolder/project/Scripts/Javascript.js","pollingInterval":250}
 /a/rootfolder/project/scripts/typescript.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/rootFolder/project/Scripts/TypeScript.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/rootfolder/project/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/rootFolder/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/rootfolder/project/scripts:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/rootfolder/project/scripts","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -105,20 +105,20 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/rootfolder/project/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/rootFolder/project/tsconfig.json","pollingInterval":250}
 /a/rootfolder/project/scripts/javascript.js:
-  {"pollingInterval":250}
+  {"fileName":"/a/rootFolder/project/Scripts/Javascript.js","pollingInterval":250}
 /a/rootfolder/project/scripts/typescript.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/rootFolder/project/Scripts/TypeScript.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/rootfolder/project/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/rootFolder/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/rootfolder/project/scripts:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/rootfolder/project/scripts","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

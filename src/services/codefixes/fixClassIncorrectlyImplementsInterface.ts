@@ -30,10 +30,10 @@ namespace ts.codefix {
     });
 
     function getClass(sourceFile: SourceFile, pos: number): ClassLikeDeclaration {
-        return Debug.assertDefined(getContainingClass(getTokenAtPosition(sourceFile, pos)), "There should be a containing class");
+        return Debug.checkDefined(getContainingClass(getTokenAtPosition(sourceFile, pos)), "There should be a containing class");
     }
 
-    function symbolPointsToNonPrivateMember (symbol: Symbol) {
+    function symbolPointsToNonPrivateMember(symbol: Symbol) {
         return !symbol.valueDeclaration || !(getModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private);
     }
 
@@ -63,7 +63,9 @@ namespace ts.codefix {
             createMissingIndexSignatureDeclaration(implementedType, IndexKind.String);
         }
 
-        createMissingMemberNodes(classDeclaration, nonPrivateAndNotExistedInHeritageClauseMembers, context, preferences, member => insertInterfaceMemberNode(sourceFile, classDeclaration, member));
+        const importAdder = createImportAdder(sourceFile, context.program, preferences, context.host);
+        createMissingMemberNodes(classDeclaration, nonPrivateAndNotExistedInHeritageClauseMembers, context, preferences, importAdder, member => insertInterfaceMemberNode(sourceFile, classDeclaration, member));
+        importAdder.writeFixes(changeTracker);
 
         function createMissingIndexSignatureDeclaration(type: InterfaceType, kind: IndexKind): void {
             const indexInfoOfKind = checker.getIndexInfoOfType(type, kind);
@@ -83,7 +85,7 @@ namespace ts.codefix {
         }
     }
 
-    function getHeritageClauseSymbolTable (classDeclaration: ClassLikeDeclaration, checker: TypeChecker): SymbolTable {
+    function getHeritageClauseSymbolTable(classDeclaration: ClassLikeDeclaration, checker: TypeChecker): SymbolTable {
         const heritageClauseNode = getEffectiveBaseTypeNode(classDeclaration);
         if (!heritageClauseNode) return createSymbolTable();
         const heritageClauseType = checker.getTypeAtLocation(heritageClauseNode) as InterfaceType;

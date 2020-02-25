@@ -44,19 +44,19 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /home/username/project/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/home/username/project/tsconfig.json","pollingInterval":250}
 /home/username/project/app/file.ts:
-  {"pollingInterval":250}
+  {"fileName":"/home/username/project/app/file.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /home/username/project/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/home/username/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /home/username/project/app:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/home/username/project/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -93,18 +93,18 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /home/username/project/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/home/username/project/tsconfig.json","pollingInterval":250}
 /home/username/project/app/file.ts:
-  {"pollingInterval":250}
+  {"fileName":"/home/username/project/app/file.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /home/username/project/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/home/username/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /home/username/project/app:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/home/username/project/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

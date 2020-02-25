@@ -1,4 +1,4 @@
-tests/cases/compiler/awaitInClassInAsyncFunction.ts(9,15): error TS1308: 'await' expression is only allowed within an async function.
+tests/cases/compiler/awaitInClassInAsyncFunction.ts(9,15): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 
 
 ==== tests/cases/compiler/awaitInClassInAsyncFunction.ts (1 errors) ====
@@ -12,7 +12,7 @@ tests/cases/compiler/awaitInClassInAsyncFunction.ts(9,15): error TS1308: 'await'
         return new class {
             baz = await bar();
                   ~~~~~
-!!! error TS1308: 'await' expression is only allowed within an async function.
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
         };
     }
     

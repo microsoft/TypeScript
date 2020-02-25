@@ -56,7 +56,7 @@ namespace ts.codefix {
                     tryDeleteDeclaration(sourceFile, token, t, checker, sourceFiles, /*isFixAll*/ false));
                 if (deletion.length) {
                     const name = isComputedPropertyName(token.parent) ? token.parent : token;
-                    result.push(createDeleteFix(deletion, [Diagnostics.Remove_declaration_for_Colon_0, name.getText(sourceFile)]));
+                    result.push(createDeleteFix(deletion, [Diagnostics.Remove_unused_declaration_for_Colon_0, name.getText(sourceFile)]));
                 }
             }
 
@@ -117,7 +117,7 @@ namespace ts.codefix {
     }
 
     function deleteTypeParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node): void {
-        changes.delete(sourceFile, Debug.assertDefined(cast(token.parent, isDeclarationWithTypeParameterChildren).typeParameters, "The type parameter to delete should exist"));
+        changes.delete(sourceFile, Debug.checkDefined(cast(token.parent, isDeclarationWithTypeParameterChildren).typeParameters, "The type parameter to delete should exist"));
     }
 
     // Sometimes the diagnostic span is an entire ImportDeclaration, so we should remove the whole thing.

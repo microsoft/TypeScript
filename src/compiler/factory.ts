@@ -1829,7 +1829,7 @@ namespace ts {
         if (isBindingElement(element)) {
             if (element.dotDotDotToken) {
                 Debug.assertNode(element.name, isIdentifier);
-                return setOriginalNode(setTextRange(createSpread(<Identifier>element.name), element), element);
+                return setOriginalNode(setTextRange(createSpread(element.name), element), element);
             }
             const expression = convertToAssignmentElementTarget(element.name);
             return element.initializer
@@ -1850,14 +1850,14 @@ namespace ts {
         if (isBindingElement(element)) {
             if (element.dotDotDotToken) {
                 Debug.assertNode(element.name, isIdentifier);
-                return setOriginalNode(setTextRange(createSpreadAssignment(<Identifier>element.name), element), element);
+                return setOriginalNode(setTextRange(createSpreadAssignment(element.name), element), element);
             }
             if (element.propertyName) {
                 const expression = convertToAssignmentElementTarget(element.name);
                 return setOriginalNode(setTextRange(createPropertyAssignment(element.propertyName, element.initializer ? createAssignment(expression, element.initializer) : expression), element), element);
             }
             Debug.assertNode(element.name, isIdentifier);
-            return setOriginalNode(setTextRange(createShorthandPropertyAssignment(<Identifier>element.name, element.initializer), element), element);
+            return setOriginalNode(setTextRange(createShorthandPropertyAssignment(element.name, element.initializer), element), element);
         }
         Debug.assertNode(element, isObjectLiteralElementLike);
         return <ObjectLiteralElementLike>element;

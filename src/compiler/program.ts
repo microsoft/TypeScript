@@ -383,13 +383,6 @@ namespace ts {
         return formatStyle + text + resetEscapeSequence;
     }
 
-    function padLeft(s: string, length: number) {
-        while (s.length < length) {
-            s = " " + s;
-        }
-        return s;
-    }
-
     function formatCodeSpan(file: SourceFile, start: number, length: number, indent: string, squiggleColor: ForegroundColorEscapeSequences, host: FormatDiagnosticsHost) {
         const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
         const { line: lastLine, character: lastLineChar } = getLineAndCharacterOfPosition(file, start + length);
@@ -571,14 +564,14 @@ namespace ts {
             return false;
         }
 
-        // If number of files in the program do not match, it is not up-to-date
-        if (program.getRootFileNames().length !== rootFileNames.length) {
+        // If root file names don't match
+        if (!arrayIsEqualTo(program.getRootFileNames(), rootFileNames)) {
             return false;
         }
 
         let seenResolvedRefs: ResolvedProjectReference[] | undefined;
 
-        // If project references dont match
+        // If project references don't match
         if (!arrayIsEqualTo(program.getProjectReferences(), projectReferences, projectReferenceUptoDate)) {
             return false;
         }
@@ -764,7 +757,7 @@ namespace ts {
         let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference) => ResolvedModuleFull[];
         const hasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
         if (host.resolveModuleNames) {
-            resolveModuleNamesWorker = (moduleNames, containingFile, reusedNames, redirectedReference) => host.resolveModuleNames!(Debug.assertEachDefined(moduleNames), containingFile, reusedNames, redirectedReference, options).map(resolved => {
+            resolveModuleNamesWorker = (moduleNames, containingFile, reusedNames, redirectedReference) => host.resolveModuleNames!(Debug.checkEachDefined(moduleNames), containingFile, reusedNames, redirectedReference, options).map(resolved => {
                 // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
                 if (!resolved || (resolved as ResolvedModuleFull).extension !== undefined) {
                     return resolved as ResolvedModuleFull;
@@ -777,16 +770,16 @@ namespace ts {
         else {
             moduleResolutionCache = createModuleResolutionCache(currentDirectory, x => host.getCanonicalFileName(x), options);
             const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveModuleName(moduleName, containingFile, options, host, moduleResolutionCache, redirectedReference).resolvedModule!; // TODO: GH#18217
-            resolveModuleNamesWorker = (moduleNames, containingFile, _reusedNames, redirectedReference) => loadWithLocalCache<ResolvedModuleFull>(Debug.assertEachDefined(moduleNames), containingFile, redirectedReference, loader);
+            resolveModuleNamesWorker = (moduleNames, containingFile, _reusedNames, redirectedReference) => loadWithLocalCache<ResolvedModuleFull>(Debug.checkEachDefined(moduleNames), containingFile, redirectedReference, loader);
         }
 
         let resolveTypeReferenceDirectiveNamesWorker: (typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference) => (ResolvedTypeReferenceDirective | undefined)[];
         if (host.resolveTypeReferenceDirectives) {
-            resolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile, redirectedReference) => host.resolveTypeReferenceDirectives!(Debug.assertEachDefined(typeDirectiveNames), containingFile, redirectedReference, options);
+            resolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile, redirectedReference) => host.resolveTypeReferenceDirectives!(Debug.checkEachDefined(typeDirectiveNames), containingFile, redirectedReference, options);
         }
         else {
             const loader = (typesRef: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveTypeReferenceDirective(typesRef, containingFile, options, host, redirectedReference).resolvedTypeReferenceDirective!; // TODO: GH#18217
-            resolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile, redirectedReference) => loadWithLocalCache<ResolvedTypeReferenceDirective>(Debug.assertEachDefined(typeReferenceDirectiveNames), containingFile, redirectedReference, loader);
+            resolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile, redirectedReference) => loadWithLocalCache<ResolvedTypeReferenceDirective>(Debug.checkEachDefined(typeReferenceDirectiveNames), containingFile, redirectedReference, loader);
         }
 
         // Map from a stringified PackageId to the source file with that id.
@@ -1397,7 +1390,7 @@ namespace ts {
                 }
                 if (resolveTypeReferenceDirectiveNamesWorker) {
                     // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-                    const typesReferenceDirectives = map(newSourceFile.typeReferenceDirectives, ref => ref.fileName.toLocaleLowerCase());
+                    const typesReferenceDirectives = map(newSourceFile.typeReferenceDirectives, ref => toFileNameLowerCase(ref.fileName));
                     const resolutions = resolveTypeReferenceDirectiveNamesWorker(typesReferenceDirectives, newSourceFilePath, getResolvedProjectReferenceToRedirect(newSourceFile.originalFileName));
                     // ensure that types resolutions are still correct
                     const resolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, resolutions, oldSourceFile.resolvedTypeReferenceDirectiveNames, typeDirectiveIsEqualTo);
@@ -1850,19 +1843,19 @@ namespace ts {
                             break;
                         case SyntaxKind.InterfaceDeclaration:
                             const interfaceKeyword = tokenToString(SyntaxKind.InterfaceKeyword);
-                            Debug.assertDefined(interfaceKeyword);
+                            Debug.assertIsDefined(interfaceKeyword);
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, interfaceKeyword));
                             return;
                         case SyntaxKind.ModuleDeclaration:
                             const moduleKeyword = node.flags & NodeFlags.Namespace ? tokenToString(SyntaxKind.NamespaceKeyword) : tokenToString(SyntaxKind.ModuleKeyword);
-                            Debug.assertDefined(moduleKeyword);
+                            Debug.assertIsDefined(moduleKeyword);
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, moduleKeyword));
                             return;
                         case SyntaxKind.TypeAliasDeclaration:
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.Type_aliases_can_only_be_used_in_TypeScript_files));
                             return;
                         case SyntaxKind.EnumDeclaration:
-                            const enumKeyword = Debug.assertDefined(tokenToString(SyntaxKind.EnumKeyword));
+                            const enumKeyword = Debug.checkDefined(tokenToString(SyntaxKind.EnumKeyword));
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, enumKeyword));
                             return;
                         case SyntaxKind.NonNullExpression:
@@ -2190,7 +2183,7 @@ namespace ts {
         }
 
         function getLibFileFromReference(ref: FileReference) {
-            const libName = ref.fileName.toLocaleLowerCase();
+            const libName = toFileNameLowerCase(ref.fileName);
             const libFileName = libMap.get(libName);
             if (libFileName) {
                 return getSourceFile(combinePaths(defaultLibraryPath, libFileName));
@@ -2438,7 +2431,7 @@ namespace ts {
                 addFileToRefFileMap(fileName, file, refFile);
 
                 if (host.useCaseSensitiveFileNames()) {
-                    const pathLowerCase = path.toLowerCase();
+                    const pathLowerCase = toFileNameLowerCase(path);
                     // for case-sensitive file systems check if we've already seen some file with similar filename ignoring case
                     const existingFile = filesByNameIgnoreCase!.get(pathLowerCase);
                     if (existingFile) {
@@ -2650,7 +2643,7 @@ namespace ts {
 
         function processTypeReferenceDirectives(file: SourceFile) {
             // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-            const typeDirectives = map(file.typeReferenceDirectives, ref => ref.fileName.toLocaleLowerCase());
+            const typeDirectives = map(file.typeReferenceDirectives, ref => toFileNameLowerCase(ref.fileName));
             if (!typeDirectives) {
                 return;
             }
@@ -2661,7 +2654,7 @@ namespace ts {
                 const ref = file.typeReferenceDirectives[i];
                 const resolvedTypeReferenceDirective = resolutions[i];
                 // store resolved type directive on the file
-                const fileName = ref.fileName.toLocaleLowerCase();
+                const fileName = toFileNameLowerCase(ref.fileName);
                 setResolvedTypeReferenceDirective(file, fileName, resolvedTypeReferenceDirective);
                 processTypeReferenceDirective(
                     fileName,
@@ -2753,7 +2746,7 @@ namespace ts {
 
         function processLibReferenceDirectives(file: SourceFile) {
             forEach(file.libReferenceDirectives, libReference => {
-                const libName = libReference.fileName.toLocaleLowerCase();
+                const libName = toFileNameLowerCase(libReference.fileName);
                 const libFileName = libMap.get(libName);
                 if (libFileName) {
                     // we ignore any 'no-default-lib' reference set on this file.
@@ -2913,7 +2906,7 @@ namespace ts {
                     projectReferenceRedirects.set(sourceFilePath, false);
                     return undefined;
                 }
-                sourceFile = Debug.assertDefined(commandLine.options.configFile);
+                sourceFile = Debug.checkDefined(commandLine.options.configFile);
                 Debug.assert(!sourceFile.path || sourceFile.path === sourceFilePath);
                 addFileToFilesByName(sourceFile, sourceFilePath, /*redirectedPath*/ undefined);
             }
@@ -2985,6 +2978,10 @@ namespace ts {
             }
             else if (options.incremental && !options.outFile && !options.out && !options.configFilePath) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified));
+            }
+
+            if (!options.listFilesOnly && options.noEmit && isIncrementalCompilation(options)) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmit", options.incremental ? "incremental" : "composite");
             }
 
             verifyProjectReferences();
@@ -3196,7 +3193,7 @@ namespace ts {
                         blockEmittingOfFile(emitFileName, createCompilerDiagnosticFromMessageChain(chain));
                     }
 
-                    const emitFileKey = !host.useCaseSensitiveFileNames() ? emitFilePath.toLocaleLowerCase() : emitFilePath;
+                    const emitFileKey = !host.useCaseSensitiveFileNames() ? toFileNameLowerCase(emitFilePath) : emitFilePath;
                     // Report error if multiple files write into same file
                     if (emitFilesSeen.has(emitFileKey)) {
                         // Already seen the same emit file - report error
@@ -3210,7 +3207,7 @@ namespace ts {
         }
 
         function createFileDiagnosticAtReference(refPathToReportErrorOn: ts.RefFile, message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
-            const refFile = Debug.assertDefined(getSourceFileByPath(refPathToReportErrorOn.file));
+            const refFile = Debug.checkDefined(getSourceFileByPath(refPathToReportErrorOn.file));
             const { kind, index } = refPathToReportErrorOn;
             let pos: number, end: number;
             switch (kind) {
@@ -3476,8 +3473,8 @@ namespace ts {
         return {
             fileExists: f => directoryStructureHost.fileExists(f),
             readDirectory(root, extensions, excludes, includes, depth) {
-                Debug.assertDefined(directoryStructureHost.readDirectory, "'CompilerHost.readDirectory' must be implemented to correctly process 'projectReferences'");
-                return directoryStructureHost.readDirectory!(root, extensions, excludes, includes, depth);
+                Debug.assertIsDefined(directoryStructureHost.readDirectory, "'CompilerHost.readDirectory' must be implemented to correctly process 'projectReferences'");
+                return directoryStructureHost.readDirectory(root, extensions, excludes, includes, depth);
             },
             readFile: f => directoryStructureHost.readFile(f),
             useCaseSensitiveFileNames: host.useCaseSensitiveFileNames(),

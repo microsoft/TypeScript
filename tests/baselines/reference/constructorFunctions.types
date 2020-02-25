@@ -178,7 +178,7 @@ function C7(num) {}
 >num : number
 
 var c7_v1 = new C7();
->c7_v1 : any
->new C7() : any
+>c7_v1 : C7
+>new C7() : C7
 >C7 : typeof C7
 

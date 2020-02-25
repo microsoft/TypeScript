@@ -687,15 +687,16 @@ namespace ts {
                 fileOrDirectory => {
                     Debug.assert(!!configFileName);
 
-                    const fileOrDirectoryPath = toPath(fileOrDirectory);
+                    let fileOrDirectoryPath: Path | undefined = toPath(fileOrDirectory);
 
-                    // Since the file existance changed, update the sourceFiles cache
+                    // Since the file existence changed, update the sourceFiles cache
                     if (cachedDirectoryStructureHost) {
                         cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
                     }
                     nextSourceFileVersion(fileOrDirectoryPath);
 
-                    if (isPathIgnored(fileOrDirectoryPath)) return;
+                    fileOrDirectoryPath = removeIgnoredPath(fileOrDirectoryPath);
+                    if (!fileOrDirectoryPath) return;
 
                     // If the the added or created file or directory is not supported file name, ignore the file
                     // But when watched directory is added/removed, we need to reload the file list

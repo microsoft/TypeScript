@@ -207,6 +207,15 @@ namespace ts.GoToDefinition {
                 return aliased;
             }
         }
+        if (symbol && isInJSFile(node)) {
+            const requireCall = forEach(symbol.declarations, d => isVariableDeclaration(d) && !!d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ true) ? d.initializer : undefined);
+            if (requireCall) {
+                const moduleSymbol = checker.getSymbolAtLocation(requireCall.arguments[0]);
+                if (moduleSymbol) {
+                    return checker.resolveExternalModuleSymbol(moduleSymbol);
+                }
+            }
+        }
         return symbol;
     }
 

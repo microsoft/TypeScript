@@ -1721,16 +1721,15 @@ namespace ts {
         return isImportSpecifier(node) || isExportSpecifier(node);
     }
 
-    export function isTypeOnlyImportOrExportName(node: Node): boolean {
-        if (node.kind !== SyntaxKind.Identifier) {
-            return false;
-        }
-        switch (node.parent.kind) {
+    export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyCompatibleAliasDeclaration {
+        switch (node.kind) {
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
-                return (node.parent as ImportSpecifier | ExportSpecifier).parent.parent.isTypeOnly;
+                return (node as ImportOrExportSpecifier).parent.parent.isTypeOnly;
+            case SyntaxKind.NamespaceImport:
+                return (node as NamespaceImport).parent.isTypeOnly;
             case SyntaxKind.ImportClause:
-                return (node.parent as ImportClause).isTypeOnly;
+                return (node as ImportClause).isTypeOnly;
             default:
                 return false;
         }
@@ -2470,7 +2469,7 @@ namespace ts {
 
     /** True if node is of a kind that may contain comment text. */
     export function isJSDocCommentContainingNode(node: Node): boolean {
-        return node.kind === SyntaxKind.JSDocComment || isJSDocTag(node) || isJSDocTypeLiteral(node) || isJSDocSignature(node);
+        return node.kind === SyntaxKind.JSDocComment || node.kind === SyntaxKind.JSDocNamepathType || isJSDocTag(node) || isJSDocTypeLiteral(node) || isJSDocSignature(node);
     }
 
     // TODO: determine what this does before making it public.
@@ -2508,9 +2507,19 @@ namespace ts {
     }
 
     /** True if has initializer node attached to it. */
-    /* @internal */
     export function hasOnlyExpressionInitializer(node: Node): node is HasExpressionInitializer {
-        return hasInitializer(node) && !isForStatement(node) && !isForInStatement(node) && !isForOfStatement(node) && !isJsxAttribute(node);
+        switch (node.kind) {
+            case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.Parameter:
+            case SyntaxKind.BindingElement:
+            case SyntaxKind.PropertySignature:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.EnumMember:
+                return true;
+            default:
+                return false;
+        }
     }
 
     export function isObjectLiteralElement(node: Node): node is ObjectLiteralElement {
