@@ -241,7 +241,7 @@ namespace ts.formatting {
             rule("SpaceAfterConstructor", SyntaxKind.ConstructorKeyword, SyntaxKind.OpenParenToken, [isOptionEnabled("insertSpaceAfterConstructor"), isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
             rule("NoSpaceAfterConstructor", SyntaxKind.ConstructorKeyword, SyntaxKind.OpenParenToken, [isOptionDisabledOrUndefined("insertSpaceAfterConstructor"), isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
-            rule("SpaceAfterComma", SyntaxKind.CommaToken, anyToken, [isOptionEnabled("insertSpaceAfterCommaDelimiter"), isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext, isNextTokenNotCloseBracket], RuleAction.InsertSpace),
+            rule("SpaceAfterComma", SyntaxKind.CommaToken, anyToken, [isOptionEnabled("insertSpaceAfterCommaDelimiter"), isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext, isNextTokenNotCloseBracket, isNextTokenNotCloseParen], RuleAction.InsertSpace),
             rule("NoSpaceAfterComma", SyntaxKind.CommaToken, anyToken, [isOptionDisabledOrUndefined("insertSpaceAfterCommaDelimiter"), isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext], RuleAction.DeleteSpace),
 
             // Insert space after function keyword for anonymous functions
@@ -668,6 +668,10 @@ namespace ts.formatting {
 
     function isNextTokenNotCloseBracket(context: FormattingContext): boolean {
         return context.nextTokenSpan.kind !== SyntaxKind.CloseBracketToken;
+    }
+
+    function isNextTokenNotCloseParen(context: FormattingContext): boolean {
+        return context.nextTokenSpan.kind !== SyntaxKind.CloseParenToken;
     }
 
     function isArrowFunctionContext(context: FormattingContext): boolean {

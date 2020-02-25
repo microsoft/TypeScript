@@ -2,11 +2,12 @@ tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,1): error TS2695: Left 
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,17): error TS1005: '{' expected.
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,23): error TS2304: Cannot find name 'right'.
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,23): error TS2657: JSX expressions must have one parent element.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,41): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,57): error TS1109: Expression expected.
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,58): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx (6 errors) ====
+==== tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx (7 errors) ====
     declare var React: any;
     declare var 日本語;
     declare var AbC_def;
@@ -54,6 +55,8 @@ tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,58): error TS1109: Expr
 !!! error TS2304: Cannot find name 'right'.
                           ~~~~~
 !!! error TS2657: JSX expressions must have one parent element.
+                                            ~
+!!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
                                                             ~
 !!! error TS1109: Expression expected.
                                                              ~

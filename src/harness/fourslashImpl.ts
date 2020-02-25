@@ -1319,6 +1319,37 @@ namespace FourSlash {
             }
         }
 
+        public baselineRename(marker: string, options: FourSlashInterface.RenameOptions) {
+            const position = this.getMarkerByName(marker).position;
+            const locations = this.languageService.findRenameLocations(
+                this.activeFile.fileName,
+                position,
+                options.findInStrings ?? false,
+                options.findInComments ?? false,
+                options.providePrefixAndSuffixTextForRename);
+
+            if (!locations) {
+                this.raiseError(`baselineRename failed. Could not rename at the provided position.`);
+            }
+
+            const renamesByFile = ts.group(locations, l => l.fileName);
+            const baselineContent = renamesByFile.map(renames => {
+                const { fileName } = renames[0];
+                const sortedRenames = ts.sort(renames, (a, b) => b.textSpan.start - a.textSpan.start);
+                let baselineFileContent = this.getFileContent(fileName);
+                for (const { textSpan } of sortedRenames) {
+                    const isOriginalSpan = fileName === this.activeFile.fileName && ts.textSpanIntersectsWithPosition(textSpan, position);
+                    baselineFileContent =
+                        baselineFileContent.slice(0, textSpan.start) +
+                        (isOriginalSpan ? "[|RENAME|]" : "RENAME") +
+                        baselineFileContent.slice(textSpan.start + textSpan.length);
+                }
+                return `/*====== ${fileName} ======*/\n\n${baselineFileContent}`;
+            }).join("\n\n") + "\n";
+
+            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(), baselineContent);
+        }
+
         public verifyQuickInfoExists(negative: boolean) {
             const actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             if (negative) {
@@ -1532,7 +1563,7 @@ namespace FourSlash {
             const output: string[] = [];
             for (let lineNumber = contextStart.line; lineNumber <= contextEnd.line; lineNumber++) {
                 const spanLine = contextString.substring(contextLineMap[lineNumber], contextLineMap[lineNumber + 1]);
-                output.push(lineNumbers ? `${`${lineNumber + 1}: `.padStart(lineNumberPrefixLength, " ")}${spanLine}` : spanLine);
+                output.push(lineNumbers ? `${ts.padLeft(`${lineNumber + 1}: `, lineNumberPrefixLength)}${spanLine}` : spanLine);
                 if (selection) {
                     if (lineNumber < selectionStart.line || lineNumber > selectionEnd.line) {
                         continue;

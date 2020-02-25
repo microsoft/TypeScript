@@ -2113,7 +2113,9 @@ namespace ts {
                                 container = (declName.parent.expression as PropertyAccessExpression).name;
                                 break;
                             case AssignmentDeclarationKind.Property:
-                                container = isPropertyAccessExpression(declName.parent.expression) ? declName.parent.expression.name : declName.parent.expression;
+                                container = isExportsOrModuleExportsOrAlias(file, declName.parent.expression) ? file
+                                    : isPropertyAccessExpression(declName.parent.expression) ? declName.parent.expression.name
+                                    : declName.parent.expression;
                                 break;
                             case AssignmentDeclarationKind.None:
                                 return Debug.fail("Shouldn't have detected typedef or enum on non-assignment declaration");
@@ -4124,8 +4126,18 @@ namespace ts {
             case SyntaxKind.TemplateHead:
             case SyntaxKind.TemplateMiddle:
             case SyntaxKind.TemplateTail:
-            case SyntaxKind.TemplateExpression:
+                if ((<NoSubstitutionTemplateLiteral | TemplateHead | TemplateMiddle | TemplateTail>node).templateFlags) {
+                    transformFlags |= TransformFlags.AssertES2018;
+                    break;
+                }
+                // falls through
             case SyntaxKind.TaggedTemplateExpression:
+                if (hasInvalidEscape((<TaggedTemplateExpression>node).template)) {
+                    transformFlags |= TransformFlags.AssertES2018;
+                    break;
+                }
+                // falls through
+            case SyntaxKind.TemplateExpression:
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.StaticKeyword:
             case SyntaxKind.MetaProperty:

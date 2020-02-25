@@ -3,6 +3,7 @@
 // @noLib: true
 // @skipLibCheck: true
 // @libFiles: react.d.ts,lib.d.ts
+// @strictNullChecks: true
 
 import React = require('react');
 

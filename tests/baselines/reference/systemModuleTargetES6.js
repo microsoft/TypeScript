@@ -32,11 +32,14 @@ System.register([], function (exports_1, context_1) {
             MyClass = class MyClass {
             };
             exports_1("MyClass", MyClass);
-            MyClass2 = class MyClass2 {
-                static getInstance() { return MyClass2.value; }
-            };
+            MyClass2 = /** @class */ (() => {
+                class MyClass2 {
+                    static getInstance() { return MyClass2.value; }
+                }
+                MyClass2.value = 42;
+                return MyClass2;
+            })();
             exports_1("MyClass2", MyClass2);
-            MyClass2.value = 42;
         }
     };
 });

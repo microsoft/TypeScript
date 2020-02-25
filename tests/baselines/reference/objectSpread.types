@@ -48,18 +48,6 @@ let addBefore: { a: number, b: string, c: boolean } =
 >false : false
 >o : { a: number; b: string; }
 
-// Note: ignore still changes the order that properties are printed
-let ignore: { a: number, b: string } =
->ignore : { a: number; b: string; }
->a : number
->b : string
-
-    { b: 'ignored', ...o }
->{ b: 'ignored', ...o } : { a: number; b: string; }
->b : string
->'ignored' : "ignored"
->o : { a: number; b: string; }
-
 let override: { a: number, b: string } =
 >override : { a: number; b: string; }
 >a : number
@@ -101,32 +89,6 @@ let combined: { a: number, b: string, c: boolean } =
 >o : { a: number; b: string; }
 >o2 : { b: string; c: boolean; }
 
-let combinedBefore: { a: number, b: string, c: boolean } =
->combinedBefore : { a: number; b: string; c: boolean; }
->a : number
->b : string
->c : boolean
-
-    { b: 'ok', ...o, ...o2 }
->{ b: 'ok', ...o, ...o2 } : { b: string; c: boolean; a: number; }
->b : string
->'ok' : "ok"
->o : { a: number; b: string; }
->o2 : { b: string; c: boolean; }
-
-let combinedMid: { a: number, b: string, c: boolean } =
->combinedMid : { a: number; b: string; c: boolean; }
->a : number
->b : string
->c : boolean
-
-    { ...o, b: 'ok', ...o2 }
->{ ...o, b: 'ok', ...o2 } : { b: string; c: boolean; a: number; }
->o : { a: number; b: string; }
->b : string
->'ok' : "ok"
->o2 : { b: string; c: boolean; }
-
 let combinedAfter: { a: number, b: string, c: boolean } =
 >combinedAfter : { a: number; b: string; c: boolean; }
 >a : number
@@ -139,31 +101,6 @@ let combinedAfter: { a: number, b: string, c: boolean } =
 >o2 : { b: string; c: boolean; }
 >b : string
 >'ok' : "ok"
-
-let combinedNested: { a: number, b: boolean, c: string, d: string } =
->combinedNested : { a: number; b: boolean; c: string; d: string; }
->a : number
->b : boolean
->c : string
->d : string
-
-    { ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } }
->{ ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } } : { a: number; d: string; b: false; c: string; }
->{ a: 4, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
->a : number
->4 : 4
->{ b: false, c: 'overriden' } : { b: false; c: string; }
->b : false
->false : false
->c : string
->'overriden' : "overriden"
->d : string
->'actually new' : "actually new"
->{ a: 5, d: 'maybe new' } : { a: number; d: string; }
->a : number
->5 : 5
->d : string
->'maybe new' : "maybe new"
 
 let combinedNestedChangeType: { a: number, b: boolean, c: number } =
 >combinedNestedChangeType : { a: number; b: boolean; c: number; }
@@ -445,17 +382,6 @@ let changeTypeAfter: { a: string, b: string } =
 >a : string
 >'wrong type?' : "wrong type?"
 
-let changeTypeBefore: { a: number, b: string } =
->changeTypeBefore : { a: number; b: string; }
->a : number
->b : string
-
-    { a: 'wrong type?', ...o };
->{ a: 'wrong type?', ...o } : { a: number; b: string; }
->a : string
->'wrong type?' : "wrong type?"
->o : { a: number; b: string; }
-
 let changeTypeBoth: { a: string, b: number } =
 >changeTypeBoth : { a: string; b: number; }
 >a : string
@@ -525,23 +451,6 @@ function container(
 >o : { a: number; b: string; }
 >b : string
 >'yes' : "yes"
-
-    let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number } =
->computedMiddle : { a: number; b: string; c: boolean; "in the middle": number; }
->a : number
->b : string
->c : boolean
->"in the middle" : number
-
-        { ...o, ['in the middle']: 13, b: 'maybe?', ...o2 }
->{ ...o, ['in the middle']: 13, b: 'maybe?', ...o2 } : { b: string; c: boolean; "in the middle": number; a: number; }
->o : { a: number; b: string; }
->['in the middle'] : number
->'in the middle' : "in the middle"
->13 : 13
->b : string
->'maybe?' : "maybe?"
->o2 : { b: string; c: boolean; }
 
     let computedAfter: { a: number, b: string, "at the end": number } =
 >computedAfter : { a: number; b: string; "at the end": number; }

@@ -1,0 +1,32 @@
+name: Publish Nightly
+
+on:
+  schedule:
+    - cron:  '0 23 * * *'
+  repository_dispatch:
+    types: publish-nightly
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use node version 12
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+        registry-url: https://registry.npmjs.org/
+    - name: Setup and publish nightly
+      run: |
+        npm whoami
+        npm i
+        gulp configure-nightly
+        gulp LKG
+        gulp runtests-parallel
+        gulp clean
+        npm publish --tag next
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+        CI: true
+    

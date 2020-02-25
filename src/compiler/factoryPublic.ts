@@ -1486,7 +1486,7 @@ namespace ts {
 
         let token = rawTextScanner.scan();
         if (token === SyntaxKind.CloseBracketToken) {
-            token = rawTextScanner.reScanTemplateToken();
+            token = rawTextScanner.reScanTemplateToken(/* isTaggedTemplate */ false);
         }
 
         if (rawTextScanner.isUnterminated()) {

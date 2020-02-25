@@ -67,21 +67,21 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.v = t1_1.v1;
-    exports.f = t1_1.f1;
-    exports.C = t1_1.C1;
-    exports.E = t1_1.E1;
-    exports.M = t1_1.M1;
-    exports.a = t1_1.a1;
+    Object.defineProperty(exports, "v", { enumerable: true, get: function () { return t1_1.v1; } });
+    Object.defineProperty(exports, "f", { enumerable: true, get: function () { return t1_1.f1; } });
+    Object.defineProperty(exports, "C", { enumerable: true, get: function () { return t1_1.C1; } });
+    Object.defineProperty(exports, "E", { enumerable: true, get: function () { return t1_1.E1; } });
+    Object.defineProperty(exports, "M", { enumerable: true, get: function () { return t1_1.M1; } });
+    Object.defineProperty(exports, "a", { enumerable: true, get: function () { return t1_1.a1; } });
 });
 //// [t3.js]
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.v = t1_1.v1;
-    exports.f = t1_1.f1;
-    exports.C = t1_1.C1;
-    exports.E = t1_1.E1;
-    exports.M = t1_1.M1;
-    exports.a = t1_1.a1;
+    Object.defineProperty(exports, "v", { enumerable: true, get: function () { return t1_1.v1; } });
+    Object.defineProperty(exports, "f", { enumerable: true, get: function () { return t1_1.f1; } });
+    Object.defineProperty(exports, "C", { enumerable: true, get: function () { return t1_1.C1; } });
+    Object.defineProperty(exports, "E", { enumerable: true, get: function () { return t1_1.E1; } });
+    Object.defineProperty(exports, "M", { enumerable: true, get: function () { return t1_1.M1; } });
+    Object.defineProperty(exports, "a", { enumerable: true, get: function () { return t1_1.a1; } });
 });
