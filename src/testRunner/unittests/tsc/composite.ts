@@ -60,7 +60,7 @@ namespace ts {
 
         verifyTsc({
             scenario: "composite",
-            subScenario: "when setting composite false and tsbuildinfo empty string on command line but has tsbuild info in config",
+            subScenario: "when setting composite false and tsbuildinfo as undefined on command line but has tsbuild info in config",
             fs: () => loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
                 "/src/project/tsconfig.json": Utils.dedent`
@@ -76,6 +76,26 @@ namespace ts {
                     }`,
             }),
             commandLineArgs: ["--composite", "false", "--p", "src/project", "--tsBuildInfoFile", "undefined"],
+        });
+
+        verifyTsc({
+            scenario: "composite",
+            subScenario: "when setting composite false and tsbuildinfo as null on command line but has tsbuild info in config",
+            fs: () => loadProjectFromFiles({
+                "/src/project/src/main.ts": "export const x = 10;",
+                "/src/project/tsconfig.json": Utils.dedent`
+                    {
+                        "compilerOptions": {
+                            "target": "es5",
+                            "module": "commonjs",
+                            "tsBuildInfoFile": "tsconfig.json.tsbuildinfo"
+                        },
+                        "include": [
+                            "src/**/*.ts"
+                        ]
+                    }`,
+            }),
+            commandLineArgs: ["--composite", "false", "--p", "src/project", "--tsBuildInfoFile", "null"],
         });
     });
 }

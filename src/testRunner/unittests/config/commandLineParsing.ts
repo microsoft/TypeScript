@@ -433,6 +433,15 @@ namespace ts {
                     });
             });
 
+            it("allows setting it to null and tsbuild info to null", () => {
+                assertParseResult(["--composite", "null", "-tsBuildInfoFile", "null", "0.ts"],
+                    {
+                        errors: [],
+                        fileNames: ["0.ts"],
+                        options: { composite: undefined, tsBuildInfoFile: undefined }
+                    });
+            });
+
             it("Errors if set to true", () => {
                 // --lib es6 0.ts
                 assertParseResult(["--composite", "true", "0.ts"],

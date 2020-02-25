@@ -1289,6 +1289,7 @@ namespace ts {
                         i++;
                         break;
                     case "undefined":
+                    case "null":
                         options[opt.name] = undefined;
                         i++;
                         break;
@@ -1307,7 +1308,7 @@ namespace ts {
                 errors.push(createCompilerDiagnostic(diagnostics.optionTypeMismatchDiagnostic, opt.name, getCompilerOptionValueTypeString(opt)));
             }
 
-            if (args[i] !== "undefined") {
+            if (args[i] !== "undefined" && args[i] !== "null") {
                 switch (opt.type) {
                     case "number":
                         options[opt.name] = parseInt(args[i]);
@@ -1342,7 +1343,6 @@ namespace ts {
             }
             else {
                 options[opt.name] = undefined;
-                // undefined means the option is set to undefined
                 i++;
             }
         }
@@ -2197,7 +2197,7 @@ namespace ts {
     }
 
     function convertToOptionValueWithAbsolutePaths(option: CommandLineOption | undefined, value: CompilerOptionsValue, toAbsolutePath: (path: string) => string) {
-        if (option && value !== undefined) {
+        if (option && !isNullOrUndefined(value)) {
             if (option.type === "list") {
                 const values = value as readonly (string | number)[];
                 if (option.element.isFilePath && values.length) {
