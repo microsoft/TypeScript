@@ -20522,12 +20522,20 @@ namespace ts {
 
         /** remove undefined from the annotated type of a parameter when there is an initializer (that doesn't include undefined) */
         function removeOptionalityFromDeclaredType(declaredType: Type, declaration: VariableLikeDeclaration): Type {
-            const annotationIncludesUndefined = strictNullChecks &&
-                declaration.kind === SyntaxKind.Parameter &&
-                declaration.initializer &&
-                getFalsyFlags(declaredType) & TypeFlags.Undefined &&
-                !(getFalsyFlags(checkExpression(declaration.initializer)) & TypeFlags.Undefined);
-            return annotationIncludesUndefined ? getTypeWithFacts(declaredType, TypeFacts.NEUndefined) : declaredType;
+            if (pushTypeResolution(declaration.symbol, TypeSystemPropertyName.DeclaredType)) {
+                const annotationIncludesUndefined = strictNullChecks &&
+                    declaration.kind === SyntaxKind.Parameter &&
+                    declaration.initializer &&
+                    getFalsyFlags(declaredType) & TypeFlags.Undefined &&
+                    !(getFalsyFlags(checkExpression(declaration.initializer)) & TypeFlags.Undefined);
+                popTypeResolution();
+
+                return annotationIncludesUndefined ? getTypeWithFacts(declaredType, TypeFacts.NEUndefined) : declaredType;
+            }
+            else {
+                reportCircularityError(declaration.symbol);
+                return declaredType;
+            }
         }
 
         function isConstraintPosition(node: Node) {
