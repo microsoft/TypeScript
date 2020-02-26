@@ -5315,6 +5315,8 @@ declare namespace ts {
         getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
         getProgram(): Program | undefined;
+        toggleLineComment(fileName: string, textRanges: TextRange[]): TextChange[];
+        toggleMultilineComment(fileName: string, textRanges: TextRange[]): TextChange[];
         dispose(): void;
     }
     interface JsxClosingTagInfo {
@@ -6300,6 +6302,10 @@ declare namespace ts.server.protocol {
         GetEditsForFileRename = "getEditsForFileRename",
         ConfigurePlugin = "configurePlugin",
         SelectionRange = "selectionRange",
+        ToggleLineComment = "toggleLineComment",
+        ToggleLineCommentFull = "toggleLineComment-full",
+        ToggleMultilineComment = "toggleMultilineComment",
+        ToggleMultilineCommentFull = "toggleMultilineComment-full",
         PrepareCallHierarchy = "prepareCallHierarchy",
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
         ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls"
@@ -6875,6 +6881,16 @@ declare namespace ts.server.protocol {
          */
         end: Location;
     }
+    interface TextRange {
+        /**
+         * Position of the first character.
+         */
+        pos: number;
+        /**
+         * Position of the last character.
+         */
+        end: number;
+    }
     /**
      * Object found in response messages defining a span of text in a specific source file.
      */
@@ -7323,6 +7339,20 @@ declare namespace ts.server.protocol {
     interface SelectionRange {
         textSpan: TextSpan;
         parent?: SelectionRange;
+    }
+    interface ToggleLineCommentRequest extends FileRequest {
+        command: CommandTypes.ToggleLineComment;
+        arguments: ToggleLineCommentRequestArgs;
+    }
+    interface ToggleLineCommentRequestArgs extends FileRequestArgs {
+        textRanges: TextRange[];
+    }
+    interface ToggleMultilineCommentRequest extends FileRequest {
+        command: CommandTypes.ToggleMultilineComment;
+        arguments: ToggleMultilineCommentRequestArgs;
+    }
+    interface ToggleMultilineCommentRequestArgs extends FileRequestArgs {
+        textRanges: TextRange[];
     }
     /**
      *  Information found in an "open" request.
@@ -9677,6 +9707,8 @@ declare namespace ts.server {
         private getDiagnosticsForProject;
         private configurePlugin;
         private getSmartSelectionRange;
+        private toggleLineComment;
+        private toggleMultilineComment;
         private mapSelectionRange;
         private getScriptInfoFromProjectService;
         private toProtocolCallHierarchyItem;
