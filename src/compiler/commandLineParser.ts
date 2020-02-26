@@ -1164,7 +1164,8 @@ namespace ts {
         }
     }
 
-    interface OptionsBase {
+    /*@internal*/
+    export interface OptionsBase {
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
 
