@@ -14826,6 +14826,15 @@ namespace ts {
         }
 
         function getNormalizedType(type: Type, writing: boolean): Type {
+            do {
+                const t = getNormalizedTypeWorker(type, writing);
+                if (t === type) break;
+                type = t;
+            } while (true);
+            return type;
+        }
+
+        function getNormalizedTypeWorker(type: Type, writing: boolean): Type {
             return isFreshLiteralType(type) ? (<FreshableType>type).regularType :
                 getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? createTypeReference((<TypeReference>type).target, getTypeArguments(<TypeReference>type)) :
                 type.flags & TypeFlags.Substitution ? writing ? (<SubstitutionType>type).typeVariable : (<SubstitutionType>type).substitute :
@@ -15143,18 +15152,8 @@ namespace ts {
                 // turn deferred type references into regular type references, simplify indexed access and
                 // conditional types, and resolve substitution types to either the substitution (on the source
                 // side) or the type variable (on the target side).
-                let source = originalSource;
-                do {
-                    const s = getNormalizedType(source, /*writing*/ false);
-                    if (s === source) break;
-                    source = s;
-                } while (true);
-                let target = originalTarget;
-                do {
-                    const t = getNormalizedType(target, /*writing*/ true);
-                    if (t === target) break;
-                    target = t;
-                } while (true);
+                let source = getNormalizedType(originalSource, /*writing*/ false);
+                let target = getNormalizedType(originalTarget, /*writing*/ true);
 
                 if (source === target) return Ternary.True;
 
