@@ -434,7 +434,6 @@ namespace ts {
             type: "boolean",
             affectsEmit: true,
             isTSConfigOnly: true,
-            isTsConfigOnlyButAllowsCommandLineFalsy: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Enable_project_compilation,
             transpileOptionValue: undefined
@@ -1169,7 +1168,8 @@ namespace ts {
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
 
-    interface ParseCommandLineWorkerDiagnostics extends DidYouMeanOptionsDiagnostics {
+    /*@internal*/
+    export interface ParseCommandLineWorkerDiagnostics extends DidYouMeanOptionsDiagnostics {
         getOptionsNameMap: () => OptionsNameMap;
         optionTypeMismatchDiagnostic: DiagnosticMessage;
     }
@@ -1190,7 +1190,8 @@ namespace ts {
             createDiagnostics(diagnostics.unknownOptionDiagnostic, unknownOptionErrorText || unknownOption);
     }
 
-    function parseCommandLineWorker(
+    /*@internal*/
+    export function parseCommandLineWorker(
         diagnostics: ParseCommandLineWorkerDiagnostics,
         commandLine: readonly string[],
         readFile?: (path: string) => string | undefined) {
@@ -1280,26 +1281,24 @@ namespace ts {
         errors: Diagnostic[]
     ) {
         if (opt.isTSConfigOnly) {
-            if (opt.isTsConfigOnlyButAllowsCommandLineFalsy) {
-                Debug.assert(opt.type === "boolean", "Currently tsconfig only option with only boolean types are allowed to specify falsy value on command line");
-                const optValue = args[i];
-                switch (optValue) {
-                    case "false":
-                        options[opt.name] = false;
-                        i++;
-                        break;
-                    case "undefined":
-                    case "null":
-                        options[opt.name] = undefined;
-                        i++;
-                        break;
-                    default:
-                        if (optValue === "true") i++;
-                        errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_undefined_on_command_line, opt.name));
+            const optValue = args[i];
+            if (optValue === "null") {
+                options[opt.name] = undefined;
+                i++;
+            }
+            else if (opt.type === "boolean") {
+                if (optValue === "false") {
+                    options[opt.name] = false;
+                    i++;
+                }
+                else {
+                    if (optValue === "true") i++;
+                    errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_null_on_command_line, opt.name));
                 }
             }
             else {
-                errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file, opt.name));
+                errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line, opt.name));
+                if (optValue && !startsWith(optValue, "-")) i++;
             }
         }
         else {
@@ -1308,7 +1307,7 @@ namespace ts {
                 errors.push(createCompilerDiagnostic(diagnostics.optionTypeMismatchDiagnostic, opt.name, getCompilerOptionValueTypeString(opt)));
             }
 
-            if (args[i] !== "undefined" && args[i] !== "null") {
+            if (args[i] !== "null") {
                 switch (opt.type) {
                     case "number":
                         options[opt.name] = parseInt(args[i]);
@@ -1349,7 +1348,8 @@ namespace ts {
         return i;
     }
 
-    const compilerOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
+    /*@internal*/
+    export const compilerOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
         getOptionsNameMap,
         optionDeclarations,
         unknownOptionDiagnostic: Diagnostics.Unknown_compiler_option_0,
