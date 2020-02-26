@@ -2414,7 +2414,7 @@ namespace ts.server {
                     this.openFilesWithNonRootedDiskPath.set(this.toCanonicalFileName(fileName), info);
                 }
             }
-            if (openedByClient && !info.isScriptOpen()) {
+            if (openedByClient) {
                 // Opening closed script info
                 // either it was created just now, or was part of projects but was closed
                 this.stopWatchingScriptInfo(info);
@@ -2422,9 +2422,6 @@ namespace ts.server {
                 if (hasMixedContent) {
                     info.registerFileUpdate();
                 }
-            }
-            else {
-                Debug.assert(fileContent === undefined);
             }
             return info;
         }
@@ -3170,11 +3167,9 @@ namespace ts.server {
                     const iterResult = openFiles.next();
                     if (iterResult.done) break;
                     const file = iterResult.value;
-                    const scriptInfo = this.getScriptInfo(file.fileName);
-                    Debug.assert(!scriptInfo || !scriptInfo.isScriptOpen(), "Script should not exist and not be open already");
                     // Create script infos so we have the new content for all the open files before we do any updates to projects
                     const info = this.getOrCreateOpenScriptInfo(
-                        scriptInfo ? scriptInfo.fileName : toNormalizedPath(file.fileName),
+                        toNormalizedPath(file.fileName),
                         file.content,
                         tryConvertScriptKindName(file.scriptKind!),
                         file.hasMixedContent,
