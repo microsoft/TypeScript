@@ -427,7 +427,7 @@ namespace ts.formatting {
             if (leadingTrivia) {
                 indentTriviaItems(leadingTrivia, initialIndentation, /*indentNextTokenOrTrivia*/ false,
                     item => processRange(item, sourceFile.getLineAndCharacterOfPosition(item.pos), enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!));
-                if(options.trimTrailingWhitespace !== false){
+                if (options.trimTrailingWhitespace !== false) {
                     trimTrailingWhitespacesForRemainingRange();
                 }
             }
