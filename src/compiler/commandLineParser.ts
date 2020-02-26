@@ -1164,11 +1164,13 @@ namespace ts {
         }
     }
 
-    interface OptionsBase {
+    /*@internal*/
+    export interface OptionsBase {
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
 
-    interface ParseCommandLineWorkerDiagnostics extends DidYouMeanOptionsDiagnostics {
+    /*@internal*/
+    export interface ParseCommandLineWorkerDiagnostics extends DidYouMeanOptionsDiagnostics {
         getOptionsNameMap: () => OptionsNameMap;
         optionTypeMismatchDiagnostic: DiagnosticMessage;
     }
@@ -1189,7 +1191,8 @@ namespace ts {
             createDiagnostics(diagnostics.unknownOptionDiagnostic, unknownOptionErrorText || unknownOption);
     }
 
-    function parseCommandLineWorker(
+    /*@internal*/
+    export function parseCommandLineWorker(
         diagnostics: ParseCommandLineWorkerDiagnostics,
         commandLine: readonly string[],
         readFile?: (path: string) => string | undefined) {
@@ -1279,7 +1282,25 @@ namespace ts {
         errors: Diagnostic[]
     ) {
         if (opt.isTSConfigOnly) {
-            errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file, opt.name));
+            const optValue = args[i];
+            if (optValue === "null") {
+                options[opt.name] = undefined;
+                i++;
+            }
+            else if (opt.type === "boolean") {
+                if (optValue === "false") {
+                    options[opt.name] = false;
+                    i++;
+                }
+                else {
+                    if (optValue === "true") i++;
+                    errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_null_on_command_line, opt.name));
+                }
+            }
+            else {
+                errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line, opt.name));
+                if (optValue && !startsWith(optValue, "-")) i++;
+            }
         }
         else {
             // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
@@ -1287,42 +1308,49 @@ namespace ts {
                 errors.push(createCompilerDiagnostic(diagnostics.optionTypeMismatchDiagnostic, opt.name, getCompilerOptionValueTypeString(opt)));
             }
 
-            switch (opt.type) {
-                case "number":
-                    options[opt.name] = parseInt(args[i]);
-                    i++;
-                    break;
-                case "boolean":
-                    // boolean flag has optional value true, false, others
-                    const optValue = args[i];
-                    options[opt.name] = optValue !== "false";
-                    // consume next argument as boolean flag value
-                    if (optValue === "false" || optValue === "true") {
+            if (args[i] !== "null") {
+                switch (opt.type) {
+                    case "number":
+                        options[opt.name] = parseInt(args[i]);
                         i++;
-                    }
-                    break;
-                case "string":
-                    options[opt.name] = args[i] || "";
-                    i++;
-                    break;
-                case "list":
-                    const result = parseListTypeOption(opt, args[i], errors);
-                    options[opt.name] = result || [];
-                    if (result) {
+                        break;
+                    case "boolean":
+                        // boolean flag has optional value true, false, others
+                        const optValue = args[i];
+                        options[opt.name] = optValue !== "false";
+                        // consume next argument as boolean flag value
+                        if (optValue === "false" || optValue === "true") {
+                            i++;
+                        }
+                        break;
+                    case "string":
+                        options[opt.name] = args[i] || "";
                         i++;
-                    }
-                    break;
-                // If not a primitive, the possible types are specified in what is effectively a map of options.
-                default:
-                    options[opt.name] = parseCustomTypeOption(<CommandLineOptionOfCustomType>opt, args[i], errors);
-                    i++;
-                    break;
+                        break;
+                    case "list":
+                        const result = parseListTypeOption(opt, args[i], errors);
+                        options[opt.name] = result || [];
+                        if (result) {
+                            i++;
+                        }
+                        break;
+                    // If not a primitive, the possible types are specified in what is effectively a map of options.
+                    default:
+                        options[opt.name] = parseCustomTypeOption(<CommandLineOptionOfCustomType>opt, args[i], errors);
+                        i++;
+                        break;
+                }
+            }
+            else {
+                options[opt.name] = undefined;
+                i++;
             }
         }
         return i;
     }
 
-    const compilerOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
+    /*@internal*/
+    export const compilerOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
         getOptionsNameMap,
         optionDeclarations,
         unknownOptionDiagnostic: Diagnostics.Unknown_compiler_option_0,
@@ -2170,7 +2198,7 @@ namespace ts {
     }
 
     function convertToOptionValueWithAbsolutePaths(option: CommandLineOption | undefined, value: CompilerOptionsValue, toAbsolutePath: (path: string) => string) {
-        if (option) {
+        if (option && !isNullOrUndefined(value)) {
             if (option.type === "list") {
                 const values = value as readonly (string | number)[];
                 if (option.element.isFilePath && values.length) {
