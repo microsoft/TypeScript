@@ -63,14 +63,21 @@ exports.a = M.x;
 exports.a1 = exports.a;
 //// [t2.js]
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
 exports.__esModule = true;
 var t1_1 = require("./t1");
-exports.v = t1_1.v1;
-exports.f = t1_1.f1;
-exports.C = t1_1.C1;
-exports.E = t1_1.E1;
-exports.M = t1_1.M1;
-exports.a = t1_1.a1;
+__createBinding(exports, t1_1, "v1", "v");
+__createBinding(exports, t1_1, "f1", "f");
+__createBinding(exports, t1_1, "C1", "C");
+__createBinding(exports, t1_1, "E1", "E");
+__createBinding(exports, t1_1, "M1", "M");
+__createBinding(exports, t1_1, "a1", "a");
 //// [t3.js]
 "use strict";
 exports.__esModule = true;

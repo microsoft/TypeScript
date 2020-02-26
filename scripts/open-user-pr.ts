@@ -1,7 +1,7 @@
 /// <reference lib="esnext.asynciterable" />
 /// <reference lib="es2015.promise" />
 // Must reference esnext.asynciterable lib, since octokit uses AsyncIterable internally
-import Octokit = require("@octokit/rest");
+import { Octokit } from "@octokit/rest";
 import {runSequence} from "./run-sequence";
 
 function padNum(num: number) {
@@ -24,10 +24,8 @@ runSequence([
     ["git", ["push", "--set-upstream", "fork", branchName, "-f"]] // push the branch
 ]);
 
-const gh = new Octokit();
-gh.authenticate({
-    type: "token",
-    token: process.argv[2]
+const gh = new Octokit({
+    auth: process.argv[2]
 });
 gh.pulls.create({
     owner: process.env.TARGET_FORK!,
@@ -54,7 +52,7 @@ cc ${reviewers.map(r => "@" + r).join(" ")}`,
     }
     else {
         await gh.issues.createComment({
-            number: +process.env.SOURCE_ISSUE,
+            issue_number: +process.env.SOURCE_ISSUE,
             owner: "Microsoft",
             repo: "TypeScript",
             body: `The user suite test run you requested has finished and _failed_. I've opened a [PR with the baseline diff from master](${r.data.html_url}).`

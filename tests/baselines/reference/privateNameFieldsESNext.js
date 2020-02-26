@@ -21,7 +21,7 @@ class C {
 
 
 //// [privateNameFieldsESNext.js]
-let C = /** @class */ (() => {
+const C = /** @class */ (() => {
     class C {
         constructor() {
             this.a = 123;

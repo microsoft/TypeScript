@@ -85,7 +85,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-let FooComponent = /** @class */ (() => {
+const FooComponent = /** @class */ (() => {
     class FooComponent {
     }
     __decorate([
@@ -93,7 +93,7 @@ let FooComponent = /** @class */ (() => {
     ], FooComponent.prototype, "foo", void 0);
     return FooComponent;
 })();
-let Person = /** @class */ (() => {
+const Person = /** @class */ (() => {
     class Person {
     }
     __decorate([
@@ -101,7 +101,7 @@ let Person = /** @class */ (() => {
     ], Person.prototype, "person", void 0);
     return Person;
 })();
-let MultiplyByTwo = /** @class */ (() => {
+const MultiplyByTwo = /** @class */ (() => {
     class MultiplyByTwo {
         get multiplied() {
             return this.args.number * 2;
@@ -112,7 +112,7 @@ let MultiplyByTwo = /** @class */ (() => {
     ], MultiplyByTwo.prototype, "multiplied", null);
     return MultiplyByTwo;
 })();
-let A = /** @class */ (() => {
+const A = /** @class */ (() => {
     let A = class A {
         bar() { }
     };
@@ -127,7 +127,7 @@ let A = /** @class */ (() => {
     ], A);
     return A;
 })();
-let B = /** @class */ (() => {
+const B = /** @class */ (() => {
     let B = class B {
         bar() { }
     };
@@ -142,7 +142,7 @@ let B = /** @class */ (() => {
     ], B);
     return B;
 })();
-let C = /** @class */ (() => {
+const C = /** @class */ (() => {
     let C = class C {
         bar() { }
     };
@@ -157,7 +157,7 @@ let C = /** @class */ (() => {
     ], C);
     return C;
 })();
-let D = /** @class */ (() => {
+const D = /** @class */ (() => {
     let D = class D {
         bar() { }
     };
@@ -172,7 +172,7 @@ let D = /** @class */ (() => {
     ], D);
     return D;
 })();
-let E = /** @class */ (() => {
+const E = /** @class */ (() => {
     let E = class E {
         bar() { }
     };
@@ -187,7 +187,7 @@ let E = /** @class */ (() => {
     ], E);
     return E;
 })();
-let F = /** @class */ (() => {
+const F = /** @class */ (() => {
     let F = class F {
         bar() { }
     };
@@ -202,7 +202,7 @@ let F = /** @class */ (() => {
     ], F);
     return F;
 })();
-let G = /** @class */ (() => {
+const G = /** @class */ (() => {
     let G = class G {
         bar() { }
     };

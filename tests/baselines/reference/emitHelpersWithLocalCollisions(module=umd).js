@@ -25,7 +25,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    let A = /** @class */ (() => {
+    const A = /** @class */ (() => {
         let A = class A {
         };
         A = __decorate([

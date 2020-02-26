@@ -7,7 +7,7 @@ function* g() {
 
 //// [generatorTypeCheck58.js]
 function* g() {
-    let C = /** @class */ (() => {
+    const C = /** @class */ (() => {
         class C {
         }
         C.x = yield 0;

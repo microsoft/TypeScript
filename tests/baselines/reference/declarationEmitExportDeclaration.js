@@ -23,7 +23,7 @@ exports.bar = bar;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = require("./utils");
-exports.bar = utils_1.bar;
+Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return utils_1.bar; } });
 utils_1.foo();
 var obj;
 

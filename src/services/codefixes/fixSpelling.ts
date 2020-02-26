@@ -32,24 +32,24 @@ namespace ts.codefix {
         // this.speling = 1;
         //      ^^^^^^^
         const node = getTokenAtPosition(sourceFile, pos);
+        const parent = node.parent;
         const checker = context.program.getTypeChecker();
 
         let suggestedSymbol: Symbol | undefined;
-        if (isPropertyAccessExpression(node.parent) && node.parent.name === node) {
+        if (isPropertyAccessExpression(parent) && parent.name === node) {
             Debug.assert(isIdentifierOrPrivateIdentifier(node), "Expected an identifier for spelling (property access)");
-            let containingType = checker.getTypeAtLocation(node.parent.expression);
-            if (node.parent.flags & NodeFlags.OptionalChain) {
+            let containingType = checker.getTypeAtLocation(parent.expression);
+            if (parent.flags & NodeFlags.OptionalChain) {
                 containingType = checker.getNonNullableType(containingType);
             }
-            const name = node as Identifier | PrivateIdentifier;
-            suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(name, containingType);
+            suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(node, containingType);
         }
-        else if (isImportSpecifier(node.parent) && node.parent.name === node) {
-            Debug.assert(node.kind === SyntaxKind.Identifier, "Expected an identifier for spelling (import)");
+        else if (isImportSpecifier(parent) && parent.name === node) {
+            Debug.assertNode(node, isIdentifier, "Expected an identifier for spelling (import)");
             const importDeclaration = findAncestor(node, isImportDeclaration)!;
             const resolvedSourceFile = getResolvedSourceFileFromImportDeclaration(sourceFile, context, importDeclaration);
             if (resolvedSourceFile && resolvedSourceFile.symbol) {
-                suggestedSymbol = checker.getSuggestedSymbolForNonexistentModule(node as Identifier, resolvedSourceFile.symbol);
+                suggestedSymbol = checker.getSuggestedSymbolForNonexistentModule(node, resolvedSourceFile.symbol);
             }
         }
         else {

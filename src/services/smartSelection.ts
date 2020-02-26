@@ -144,7 +144,7 @@ namespace ts.SmartSelectionRange {
         // few keystrokes.
         if (isMappedTypeNode(node)) {
             const [openBraceToken, ...children] = node.getChildren();
-            const closeBraceToken = Debug.assertDefined(children.pop());
+            const closeBraceToken = Debug.checkDefined(children.pop());
             Debug.assertEqual(openBraceToken.kind, SyntaxKind.OpenBraceToken);
             Debug.assertEqual(closeBraceToken.kind, SyntaxKind.CloseBraceToken);
             // Group `-/+readonly` and `-/+?`
