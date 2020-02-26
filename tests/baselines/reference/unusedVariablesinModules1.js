@@ -9,3 +9,4 @@ export var y: string;
 "use strict";
 exports.__esModule = true;
 var x;
+exports.y = void 0;

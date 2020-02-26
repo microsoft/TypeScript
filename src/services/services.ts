@@ -980,11 +980,6 @@ namespace ts {
             return names;
         }
 
-        public getVersion(path: Path): string {
-            const file = this.getHostFileInformation(path);
-            return (file && file.version)!; // TODO: GH#18217
-        }
-
         public getScriptSnapshot(path: Path): IScriptSnapshot {
             const file = this.getHostFileInformation(path);
             return (file && file.scriptSnapshot)!; // TODO: GH#18217
@@ -1228,7 +1223,7 @@ namespace ts {
             const projectReferences = hostCache.getProjectReferences();
 
             // If the program is already up-to-date, we can reuse it
-            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), path => hostCache!.getVersion(path), fileExists, hasInvalidatedResolution, !!host.hasChangedAutomaticTypeDirectiveNames, projectReferences)) {
+            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), (_path, fileName) => host.getScriptVersion(fileName), fileExists, hasInvalidatedResolution, !!host.hasChangedAutomaticTypeDirectiveNames, projectReferences)) {
                 return;
             }
 
@@ -2227,6 +2222,7 @@ namespace ts {
             getEditsForRefactor,
             toLineColumnOffset: sourceMapper.toLineColumnOffset,
             getSourceMapper: () => sourceMapper,
+            clearSourceMapperCache: () => sourceMapper.clearCache(),
             prepareCallHierarchy,
             provideCallHierarchyIncomingCalls,
             provideCallHierarchyOutgoingCalls

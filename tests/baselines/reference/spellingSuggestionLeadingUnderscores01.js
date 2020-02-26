@@ -21,6 +21,8 @@ b = {
 "use strict";
 exports.__esModule = true;
 exports.a.___foo;
+// @filename def.ts
+exports.b = void 0;
 exports.b = {
     ___foo: 100
 };

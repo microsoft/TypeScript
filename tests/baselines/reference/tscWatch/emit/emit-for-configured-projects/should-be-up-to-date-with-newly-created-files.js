@@ -118,7 +118,15 @@ Change:: change moduleFile1 shape and create file1Consumer3
 //// [/a/b/moduleFile1.ts]
 export var T: number;export function Foo() { };
 
-//// [/a/b/moduleFile1.js] file written with same contents
+//// [/a/b/moduleFile1.js]
+"use strict";
+exports.__esModule = true;
+exports.T = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
+
+
 //// [/a/b/file1Consumer1.js] file written with same contents
 //// [/a/b/file1Consumer2.js] file written with same contents
 //// [/a/b/file1Consumer3.ts]

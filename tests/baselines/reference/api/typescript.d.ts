@@ -1726,10 +1726,9 @@ declare namespace ts {
         SwitchClause = 128,
         ArrayMutation = 256,
         Call = 512,
-        Referenced = 1024,
-        Shared = 2048,
-        PreFinally = 4096,
-        AfterFinally = 8192,
+        ReduceLabel = 1024,
+        Referenced = 2048,
+        Shared = 4096,
         Label = 12,
         Condition = 96
     }
@@ -1774,6 +1773,11 @@ declare namespace ts {
     }
     export interface FlowArrayMutation extends FlowNodeBase {
         node: CallExpression | BinaryExpression;
+        antecedent: FlowNode;
+    }
+    export interface FlowReduceLabel extends FlowNodeBase {
+        target: FlowLabel;
+        antecedents: FlowNode[];
         antecedent: FlowNode;
     }
     export type FlowType = Type | IncompleteType;
