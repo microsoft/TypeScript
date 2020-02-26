@@ -14827,19 +14827,15 @@ namespace ts {
 
         function getNormalizedType(type: Type, writing: boolean): Type {
             do {
-                const t = getNormalizedTypeWorker(type, writing);
+                const t = isFreshLiteralType(type) ? (<FreshableType>type).regularType :
+                    getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? createTypeReference((<TypeReference>type).target, getTypeArguments(<TypeReference>type)) :
+                    type.flags & TypeFlags.Substitution ? writing ? (<SubstitutionType>type).typeVariable : (<SubstitutionType>type).substitute :
+                    type.flags & TypeFlags.Simplifiable ? getSimplifiedType(type, writing) :
+                    type;
                 if (t === type) break;
                 type = t;
             } while (true);
             return type;
-        }
-
-        function getNormalizedTypeWorker(type: Type, writing: boolean): Type {
-            return isFreshLiteralType(type) ? (<FreshableType>type).regularType :
-                getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? createTypeReference((<TypeReference>type).target, getTypeArguments(<TypeReference>type)) :
-                type.flags & TypeFlags.Substitution ? writing ? (<SubstitutionType>type).typeVariable : (<SubstitutionType>type).substitute :
-                type.flags & TypeFlags.Simplifiable ? getSimplifiedType(type, writing) :
-                type;
         }
 
         /**
