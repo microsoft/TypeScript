@@ -637,7 +637,7 @@ namespace ts {
         }
 
         function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
-            Debug.assertDefined(node);
+            Debug.assertIsDefined(node);
             return undefined;
         }
 

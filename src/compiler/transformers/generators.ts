@@ -1989,7 +1989,7 @@ namespace ts {
          */
         function markLabel(label: Label): void {
             Debug.assert(labelOffsets !== undefined, "No labels were defined.");
-            labelOffsets![label] = operations ? operations.length : 0;
+            labelOffsets[label] = operations ? operations.length : 0;
         }
 
         /**

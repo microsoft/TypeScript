@@ -286,7 +286,7 @@ export default interface Animal {
 Object.defineProperty(exports, "__esModule", { value: true });
 var animal_1 = require("./animal");
 var dog_1 = require("./dog");
-exports.createDog = dog_1.createDog;
+Object.defineProperty(exports, "createDog", { enumerable: true, get: function () { return dog_1.createDog; } });
 
 
 //// [/user/username/projects/demo/lib/animals/index.d.ts]

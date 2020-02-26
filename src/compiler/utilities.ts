@@ -864,14 +864,17 @@ namespace ts {
         }
     }
 
-    export function entityNameToString(name: EntityNameOrEntityNameExpression): string {
+    export function entityNameToString(name: EntityNameOrEntityNameExpression | JsxTagNameExpression | PrivateIdentifier): string {
         switch (name.kind) {
+            case SyntaxKind.ThisKeyword:
+                return "this";
+            case SyntaxKind.PrivateIdentifier:
             case SyntaxKind.Identifier:
                 return getFullWidth(name) === 0 ? idText(name) : getTextOfNode(name);
             case SyntaxKind.QualifiedName:
                 return entityNameToString(name.left) + "." + entityNameToString(name.right);
             case SyntaxKind.PropertyAccessExpression:
-                if (isIdentifier(name.name)) {
+                if (isIdentifier(name.name) || isPrivateIdentifier(name.name)) {
                     return entityNameToString(name.expression) + "." + entityNameToString(name.name);
                 }
                 else {
@@ -1294,6 +1297,10 @@ namespace ts {
 
     export function isVariableLikeOrAccessor(node: Node): node is AccessorDeclaration | VariableLikeDeclaration {
         return isVariableLike(node) || isAccessor(node);
+    }
+
+    export function isPossiblyPropertyLikeDeclaration(node: Node): node is AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression | ElementAccessExpression {
+        return isVariableLikeOrAccessor(node) || isPropertyAccessExpression(node) || isElementAccessExpression(node) || isBinaryExpression(node);
     }
 
     export function isVariableDeclarationInVariableStatement(node: VariableDeclaration) {
@@ -2463,7 +2470,7 @@ namespace ts {
     }
 
     export function getJSDocHost(node: Node): HasJSDoc {
-        return Debug.assertDefined(findAncestor(node.parent, isJSDoc)).parent;
+        return Debug.checkDefined(findAncestor(node.parent, isJSDoc)).parent;
     }
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
@@ -5129,7 +5136,7 @@ namespace ts {
     }
 
     export function formatStringFromArgs(text: string, args: ArrayLike<string | number>, baseIndex = 0): string {
-        return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.assertDefined(args[+index + baseIndex]));
+        return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.checkDefined(args[+index + baseIndex]));
     }
 
     export let localizedDiagnosticMessages: MapLike<string> | undefined;

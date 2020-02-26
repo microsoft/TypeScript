@@ -381,7 +381,7 @@ namespace FourSlash {
         }
 
         private getFileContent(fileName: string): string {
-            return ts.Debug.assertDefined(this.tryGetFileContent(fileName));
+            return ts.Debug.checkDefined(this.tryGetFileContent(fileName));
         }
         private tryGetFileContent(fileName: string): string | undefined {
             const script = this.languageServiceAdapterHost.getScriptInfo(fileName);
@@ -1716,7 +1716,7 @@ namespace FourSlash {
                 resultString += Harness.IO.newLine();
             }
 
-            Harness.Baseline.runBaseline(ts.Debug.assertDefined(this.testData.globalOptions[MetadataOptionNames.baselineFile]), resultString);
+            Harness.Baseline.runBaseline(ts.Debug.checkDefined(this.testData.globalOptions[MetadataOptionNames.baselineFile]), resultString);
         }
 
         private flattenChainedMessage(diag: ts.DiagnosticMessageChain, indent = " ") {
@@ -2500,18 +2500,35 @@ namespace FourSlash {
 
         public printOutliningSpans() {
             const spans = this.languageService.getOutliningSpans(this.activeFile.fileName);
-            Harness.IO.log(`Outlining spans (${spans.length} items)`);
+            Harness.IO.log(`Outlining spans (${spans.length} items)\nResults:`);
             Harness.IO.log(stringify(spans));
+            this.printOutliningSpansInline(spans);
+        }
+
+        private printOutliningSpansInline(spans: ts.OutliningSpan[]) {
+            const allSpanInsets = [] as { text: string, pos: number }[];
+            let annotated = this.activeFile.content;
+            ts.forEach(spans, span => {
+                allSpanInsets.push({ text: "[|", pos: span.textSpan.start });
+                allSpanInsets.push({ text: "|]", pos: span.textSpan.start + span.textSpan.length });
+            });
+
+            const reverseSpans = allSpanInsets.sort((l, r) => r.pos - l.pos);
+            ts.forEach(reverseSpans, span => {
+               annotated = annotated.slice(0, span.pos) + span.text + annotated.slice(span.pos);
+            });
+            Harness.IO.log(`\nMockup:\n${annotated}`);
         }
 
         public verifyOutliningSpans(spans: Range[], kind?: "comment" | "region" | "code" | "imports") {
             const actual = this.languageService.getOutliningSpans(this.activeFile.fileName);
 
-            if (actual.length !== spans.length) {
-                this.raiseError(`verifyOutliningSpans failed - expected total spans to be ${spans.length}, but was ${actual.length}`);
+            const filterActual = ts.filter(actual, f => kind === undefined ? true : f.kind === kind);
+            if (filterActual.length !== spans.length) {
+                this.raiseError(`verifyOutliningSpans failed - expected total spans to be ${spans.length}, but was ${actual.length}\n\nFound Spans:\n\n${this.printOutliningSpansInline(actual)}`);
             }
 
-            ts.zipWith(spans, actual, (expectedSpan, actualSpan, i) => {
+            ts.zipWith(spans, filterActual, (expectedSpan, actualSpan, i) => {
                 if (expectedSpan.pos !== actualSpan.textSpan.start || expectedSpan.end !== ts.textSpanEnd(actualSpan.textSpan)) {
                     return this.raiseError(`verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.pos},${expectedSpan.end}),  actual: (${actualSpan.textSpan.start},${ts.textSpanEnd(actualSpan.textSpan)})`);
                 }
@@ -2630,7 +2647,7 @@ namespace FourSlash {
             const fixWithId = ts.find(this.getCodeFixes(this.activeFile.fileName), a => a.fixId === fixId);
             ts.Debug.assert(fixWithId !== undefined, "No available code fix has the expected id. Fix All is not available if there is only one potentially fixable diagnostic present.", () =>
                 `Expected '${fixId}'. Available actions:\n${ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => `${a.fixName} (${a.fixId || "no fix id"})`).join("\n")}`);
-            ts.Debug.assertEqual(fixWithId!.fixAllDescription, fixAllDescription);
+            ts.Debug.assertEqual(fixWithId.fixAllDescription, fixAllDescription);
 
             const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings, ts.emptyOptions);
             assert.deepEqual<readonly {}[] | undefined>(commands, expectedCommands);

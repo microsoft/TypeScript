@@ -30,7 +30,7 @@ namespace ts.codefix {
     });
 
     function getClass(sourceFile: SourceFile, pos: number): ClassLikeDeclaration {
-        return Debug.assertDefined(getContainingClass(getTokenAtPosition(sourceFile, pos)), "There should be a containing class");
+        return Debug.checkDefined(getContainingClass(getTokenAtPosition(sourceFile, pos)), "There should be a containing class");
     }
 
     function symbolPointsToNonPrivateMember(symbol: Symbol) {

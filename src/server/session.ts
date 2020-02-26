@@ -443,7 +443,7 @@ namespace ts.server {
         }
 
         while (toDo && toDo.length) {
-            toDo = callbackProjectAndLocation(Debug.assertDefined(toDo.pop()), projectService, toDo, seenProjects, cb);
+            toDo = callbackProjectAndLocation(Debug.checkDefined(toDo.pop()), projectService, toDo, seenProjects, cb);
         }
     }
 
@@ -1071,7 +1071,7 @@ namespace ts.server {
         private getDefinitionAndBoundSpan(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
-            const scriptInfo = Debug.assertDefined(project.getScriptInfo(file));
+            const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
 
             const unmappedDefinitionAndBoundSpan = project.getLanguageService().getDefinitionAndBoundSpan(file, position);
 
@@ -1335,7 +1335,7 @@ namespace ts.server {
             if (!simplifiedResult) return locations;
 
             const defaultProject = this.getDefaultProject(args);
-            const renameInfo: protocol.RenameInfo = this.mapRenameInfo(defaultProject.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: this.getPreferences(file).allowRenameOfImportPath }), Debug.assertDefined(this.projectService.getScriptInfo(file)));
+            const renameInfo: protocol.RenameInfo = this.mapRenameInfo(defaultProject.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: this.getPreferences(file).allowRenameOfImportPath }), Debug.checkDefined(this.projectService.getScriptInfo(file)));
             return { info: renameInfo, locs: this.toSpanGroups(locations) };
         }
 
@@ -1355,7 +1355,7 @@ namespace ts.server {
             for (const { fileName, textSpan, contextSpan, originalContextSpan: _2, originalTextSpan: _, originalFileName: _1, ...prefixSuffixText } of locations) {
                 let group = map.get(fileName);
                 if (!group) map.set(fileName, group = { file: fileName, locs: [] });
-                const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(fileName));
+                const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(fileName));
                 group.locs.push({ ...toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo), ...prefixSuffixText });
             }
             return arrayFrom(map.values());
@@ -1382,7 +1382,7 @@ namespace ts.server {
             const symbolName = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
             const refs: readonly protocol.ReferencesResponseItem[] = flatMap(references, referencedSymbol =>
                 referencedSymbol.references.map(({ fileName, textSpan, contextSpan, isWriteAccess, isDefinition }): protocol.ReferencesResponseItem => {
-                    const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(fileName));
+                    const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(fileName));
                     const span = toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo);
                     const lineSpan = scriptInfo.lineToTextSpan(span.start.line - 1);
                     const lineText = scriptInfo.getSnapshot().getText(lineSpan.start, textSpanEnd(lineSpan)).replace(/\r|\n/g, "");
@@ -1918,7 +1918,7 @@ namespace ts.server {
                 const { startPosition, endPosition } = this.getStartAndEndPosition(args, scriptInfo);
                 textRange = { pos: startPosition, end: endPosition };
             }
-            return Debug.assertDefined(position === undefined ? textRange : position);
+            return Debug.checkDefined(position === undefined ? textRange : position);
 
             function getPosition(loc: protocol.FileLocationRequestArgs) {
                 return loc.position !== undefined ? loc.position : scriptInfo.lineOffsetToPosition(loc.line, loc.offset);
@@ -2145,7 +2145,7 @@ namespace ts.server {
         private getSmartSelectionRange(args: protocol.SelectionRangeRequestArgs, simplifiedResult: boolean) {
             const { locations } = args;
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
-            const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(file));
+            const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(file));
 
             return map(locations, location => {
                 const pos = this.getPosition(location, scriptInfo);
@@ -2290,7 +2290,7 @@ namespace ts.server {
                     request.arguments.changedFiles && mapIterator(arrayIterator(request.arguments.changedFiles), file => ({
                         fileName: file.fileName,
                         changes: mapDefinedIterator(arrayReverseIterator(file.textChanges), change => {
-                            const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(file.fileName));
+                            const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(file.fileName));
                             const start = scriptInfo.lineOffsetToPosition(change.start.line, change.start.offset);
                             const end = scriptInfo.lineOffsetToPosition(change.end.line, change.end.offset);
                             return start >= 0 ? { span: { start, length: end - start }, newText: change.newText } : undefined;

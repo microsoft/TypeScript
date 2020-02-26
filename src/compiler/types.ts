@@ -3930,7 +3930,7 @@ namespace ts {
         isOptionalUninitializedParameterProperty(node: ParameterDeclaration): boolean;
         isExpandoFunctionDeclaration(node: FunctionDeclaration): boolean;
         getPropertiesOfContainerFunction(node: Declaration): Symbol[];
-        createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean): TypeNode | undefined;
+        createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression | ElementAccessExpression | BinaryExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean): TypeNode | undefined;
         createReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
         createTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
         createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker): Expression;
@@ -4104,6 +4104,7 @@ namespace ts {
         deferralParent?: Type;              // Source union/intersection of a deferred type
         cjsExportMerged?: Symbol;           // Version of the symbol with all non export= exports merged with the export= target
         typeOnlyDeclaration?: TypeOnlyCompatibleAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
+        resolvedExternalModuleSymbol?: Symbol | "circular";  // Cached result of `resolveExternalModuleSymbol`
     }
 
     /* @internal */
@@ -4459,6 +4460,10 @@ namespace ts {
         IsGenericIndexTypeComputed = 1 << 24, // IsGenericIndexType flag has been computed
         /* @internal */
         IsGenericIndexType = 1 << 25, // Union or intersection contains generic index type
+        /* @internal */
+        CouldContainTypeVariablesComputed = 1 << 26, // CouldContainTypeVariables flag has been computed
+        /* @internal */
+        CouldContainTypeVariables = 1 << 27, // Type could contain a type variable
         ClassOrInterface = Class | Interface,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
@@ -4577,8 +4582,6 @@ namespace ts {
         resolvedStringIndexType: IndexType;
         /* @internal */
         resolvedBaseConstraint: Type;
-        /* @internal */
-        couldContainTypeVariables: boolean;
     }
 
     export interface UnionType extends UnionOrIntersectionType {
@@ -5794,6 +5797,7 @@ namespace ts {
         readonly scoped: boolean;                                       // Indicates whether the helper MUST be emitted in the current scope.
         readonly text: string | ((node: EmitHelperUniqueNameCallback) => string);  // ES3-compatible raw script text, or a function yielding such a string
         readonly priority?: number;                                     // Helpers with a higher priority are emitted earlier than other helpers on the node.
+        readonly dependencies?: EmitHelper[]
     }
 
     export interface UnscopedEmitHelper extends EmitHelper {
@@ -5834,8 +5838,9 @@ namespace ts {
         MakeTemplateObject = 1 << 17,   // __makeTemplateObject (used for constructing template string array objects)
         ClassPrivateFieldGet = 1 << 18, // __classPrivateFieldGet (used by the class private field transformation)
         ClassPrivateFieldSet = 1 << 19, // __classPrivateFieldSet (used by the class private field transformation)
+        CreateBinding = 1 << 20,        // __createBinding (use by the module transform for (re)exports and namespace imports)
         FirstEmitHelper = Extends,
-        LastEmitHelper = ClassPrivateFieldSet,
+        LastEmitHelper = CreateBinding,
 
         // Helpers included by ES2015 for..of
         ForOfIncludes = Values,

@@ -61,20 +61,34 @@ exports.__esModule = true;
 
 //// [/user/username/projects/myproject/lib1/tools/public.js]
 "use strict";
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
 }
 exports.__esModule = true;
-__export(require("./tools.interface"));
+__exportStar(require("./tools.interface"), exports);
 
 
 //// [/user/username/projects/myproject/lib1/public.js]
 "use strict";
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
 }
 exports.__esModule = true;
-__export(require("./tools/public"));
+__exportStar(require("./tools/public"), exports);
 
 
 //// [/user/username/projects/myproject/lib2/data2.js]
@@ -107,11 +121,18 @@ exports.Data = Data;
 
 //// [/user/username/projects/myproject/lib2/public.js]
 "use strict";
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
 }
 exports.__esModule = true;
-__export(require("./data"));
+__exportStar(require("./data"), exports);
 
 
 //// [/user/username/projects/myproject/app.js]

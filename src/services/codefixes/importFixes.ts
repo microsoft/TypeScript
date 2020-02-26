@@ -55,7 +55,7 @@ namespace ts.codefix {
         }
 
         function addImportFromExportedSymbol(exportedSymbol: Symbol, usageIsTypeOnly?: boolean) {
-            const moduleSymbol = Debug.assertDefined(exportedSymbol.parent);
+            const moduleSymbol = Debug.checkDefined(exportedSymbol.parent);
             const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
             const checker = program.getTypeChecker();
             const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
@@ -339,7 +339,7 @@ namespace ts.codefix {
                 .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
                     // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
                     exportedSymbolIsTypeOnly && isJs
-                        ? { kind: ImportFixKind.ImportType, moduleSpecifier, position: Debug.assertDefined(position, "position should be defined") }
+                        ? { kind: ImportFixKind.ImportType, moduleSpecifier, position: Debug.checkDefined(position, "position should be defined") }
                         : { kind: ImportFixKind.AddNew, moduleSpecifier, importKind, typeOnly: preferTypeOnlyImport }));
 
         // Sort by presence in package.json, then shortest paths first
@@ -542,7 +542,7 @@ namespace ts.codefix {
 
         if (defaultExport.flags & SymbolFlags.Alias) {
             const aliased = checker.getImmediateAliasedSymbol(defaultExport);
-            return aliased && getDefaultExportInfoWorker(aliased, Debug.assertDefined(aliased.parent, "Alias targets of default exports must have a parent"), checker, compilerOptions);
+            return aliased && getDefaultExportInfoWorker(aliased, Debug.checkDefined(aliased.parent, "Alias targets of default exports must have a parent"), checker, compilerOptions);
         }
 
         if (defaultExport.escapedName !== InternalSymbolName.Default &&
@@ -620,7 +620,7 @@ namespace ts.codefix {
                         changes.replaceNode(sourceFile, clause.namedBindings, namedImports);
                     }
                     else {
-                        changes.insertNodeAfter(sourceFile, Debug.assertDefined(clause.name, "Import clause must have either named imports or a default import"), namedImports);
+                        changes.insertNodeAfter(sourceFile, Debug.checkDefined(clause.name, "Import clause must have either named imports or a default import"), namedImports);
                     }
                 }
             }

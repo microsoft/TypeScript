@@ -62,13 +62,20 @@ var renderer_1 = require("./renderer");
 exports.prerendered3 = renderer_1["default"].createElement("h", null);
 //// [index.js]
 "use strict";
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
 }
 exports.__esModule = true;
 /** @jsx dom */
 var renderer_1 = require("./renderer");
 renderer_1.dom("h", null);
-__export(require("./other"));
-__export(require("./othernoalias"));
-__export(require("./reacty"));
+__exportStar(require("./other"), exports);
+__exportStar(require("./othernoalias"), exports);
+__exportStar(require("./reacty"), exports);
