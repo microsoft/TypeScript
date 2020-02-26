@@ -3069,9 +3069,20 @@ namespace ts {
         function resolveExternalModuleSymbol(moduleSymbol: Symbol | undefined, dontResolveAlias?: boolean): Symbol | undefined;
         function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol {
             if (moduleSymbol) {
+                const links = getSymbolLinks(moduleSymbol);
+                if (!dontResolveAlias) {
+                    links.resolvedExternalModuleSymbol = "circular";
+                }
                 const exportEquals = resolveSymbol(moduleSymbol.exports!.get(InternalSymbolName.ExportEquals), dontResolveAlias);
                 const exported = getCommonJsExportEquals(getMergedSymbol(exportEquals), getMergedSymbol(moduleSymbol));
-                return getMergedSymbol(exported) || moduleSymbol;
+                const result = getMergedSymbol(exported) || moduleSymbol;
+                if (!dontResolveAlias) {
+                    // we "cache" this result, but because both the input _and_ the output are mergeable, literally every call could need
+                    // a different result, assuming the inputs and outputs get merged with. So instead we just use this as a flag that
+                    // export assignment resolution has occured on this symbol at least once. (because it might happen many times!)
+                    links.resolvedExternalModuleSymbol = result;
+                }
+                return result;
             }
             return undefined!;
         }
@@ -5543,7 +5554,7 @@ namespace ts {
                 function serializeSymbolWorker(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean) {
                     const symbolName = unescapeLeadingUnderscores(symbol.escapedName);
                     const isDefault = symbol.escapedName === InternalSymbolName.Default;
-                    if (isStringANonContextualKeyword(symbolName) && !isDefault) {
+                    if ((isStringANonContextualKeyword(symbolName) || !isIdentifierText(symbolName, languageVersion)) && !isDefault && symbol.escapedName !== InternalSymbolName.ExportEquals) {
                         // Oh no. We cannot use this symbol's name as it's name... It's likely some jsdoc had an invalid name like `export` or `default` :(
                         context.encounteredError = true;
                         // TODO: Issue error via symbol tracker?
@@ -5694,7 +5705,8 @@ namespace ts {
                 }
 
                 function getNamespaceMembersForSerialization(symbol: Symbol) {
-                    return !symbol.exports ? [] : filter(arrayFrom((symbol.exports).values()), p => !((p.flags & SymbolFlags.Prototype) || (p.escapedName === "prototype")));
+                    const exports = getExportsOfSymbol(symbol);
+                    return !exports ? [] : filter(arrayFrom((exports).values()), p => !((p.flags & SymbolFlags.Prototype) || (p.escapedName === "prototype")));
                 }
 
                 function isTypeOnlyNamespace(symbol: Symbol) {
@@ -8896,6 +8908,17 @@ namespace ts {
         function getResolvedMembersOrExportsOfSymbol(symbol: Symbol, resolutionKind: MembersOrExportsResolutionKind): UnderscoreEscapedMap<Symbol> {
             const links = getSymbolLinks(symbol);
             if (!links[resolutionKind]) {
+                // We _must_ resolve any possible commonjs export assignments _before_ merging in late bound members, as cjs export assignments may cause
+                // things to be merged (?!?) into this symbol; moreover, we _can't_ resolve those export assignments if we're already resolving the containing
+                // module (as then we'll issue a circularity error)
+                const p = symbol.valueDeclaration?.parent;
+                if (p && isSourceFile(p) && p.symbol && !getSymbolLinks(p.symbol).resolvedExternalModuleSymbol) {
+                    const exported = resolveExternalModuleSymbol(p.symbol);
+                    const targetLinks = exported && getSymbolLinks(exported);
+                    if (targetLinks && targetLinks[resolutionKind]) {
+                        return links[resolutionKind] = targetLinks[resolutionKind]!;
+                    }
+                }
                 const isStatic = resolutionKind === MembersOrExportsResolutionKind.resolvedExports;
                 const earlySymbols = !isStatic ? symbol.members :
                     symbol.flags & SymbolFlags.Module ? getExportsOfModuleWorker(symbol) :
@@ -35262,8 +35285,8 @@ namespace ts {
             }
         }
 
-        function createTypeOfDeclaration(declarationIn: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean) {
-            const declaration = getParseTreeNode(declarationIn, isVariableLikeOrAccessor);
+        function createTypeOfDeclaration(declarationIn: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression | ElementAccessExpression | BinaryExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean) {
+            const declaration = getParseTreeNode(declarationIn, isPossiblyPropertyLikeDeclaration);
             if (!declaration) {
                 return createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
             }
