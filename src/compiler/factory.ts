@@ -278,6 +278,7 @@ namespace ts {
         name: "typescript:spread",
         importName: "__spread",
         scoped: false,
+        dependencies: [readHelper],
         text: `
             var __spread = (this && this.__spread) || function () {
                 for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
@@ -286,7 +287,6 @@ namespace ts {
     };
 
     export function createSpreadHelper(context: TransformationContext, argumentList: readonly Expression[], location?: TextRange) {
-        context.requestEmitHelper(readHelper);
         context.requestEmitHelper(spreadHelper);
         return setTextRange(
             createCall(

@@ -46,10 +46,9 @@ namespace Debug {
             readonly SwitchClause: number,
             readonly ArrayMutation: number,
             readonly Call: number,
+            readonly ReduceLabel: number,
             readonly Referenced: number,
             readonly Shared: number,
-            readonly PreFinally: number,
-            readonly AfterFinally: number,
             readonly Label: number,
             readonly Condition: number,
         };
@@ -69,6 +68,7 @@ namespace Debug {
         | FlowCondition
         | FlowSwitchClause
         | FlowArrayMutation
+        | FlowReduceLabel
         ;
 
     interface FlowNodeBase {
@@ -116,6 +116,12 @@ namespace Debug {
 
     interface FlowArrayMutation extends FlowNodeBase {
         node: Expression;
+        antecedent: FlowNode;
+    }
+
+    export interface FlowReduceLabel extends FlowNodeBase {
+        target: FlowLabel;
+        antecedents: FlowNode[];
         antecedent: FlowNode;
     }
 
@@ -199,8 +205,7 @@ namespace Debug {
             FlowFlags.SwitchClause |
             FlowFlags.ArrayMutation |
             FlowFlags.Call |
-            FlowFlags.PreFinally |
-            FlowFlags.AfterFinally;
+            FlowFlags.ReduceLabel;
 
         const hasNodeFlags =
             FlowFlags.Start |
@@ -264,16 +269,13 @@ namespace Debug {
             if (!graphNode) {
                 links[id] = graphNode = { id, flowNode, edges: [], text: renderFlowNode(flowNode), lane: -1, endLane: -1, level: -1 };
                 nodes.push(graphNode);
-                if (!(flowNode.flags & FlowFlags.PreFinally)) {
-                    if (hasAntecedents(flowNode)) {
-
-                        for (const antecedent of flowNode.antecedents) {
-                            buildGraphEdge(graphNode, antecedent);
-                        }
+                if (hasAntecedents(flowNode)) {
+                    for (const antecedent of flowNode.antecedents) {
+                        buildGraphEdge(graphNode, antecedent);
                     }
-                    else if (hasAntecedent(flowNode)) {
-                        buildGraphEdge(graphNode, flowNode.antecedent);
-                    }
+                }
+                else if (hasAntecedent(flowNode)) {
+                    buildGraphEdge(graphNode, flowNode.antecedent);
                 }
             }
             return graphNode;
@@ -341,8 +343,7 @@ namespace Debug {
             if (flags & FlowFlags.SwitchClause) return "SwitchClause";
             if (flags & FlowFlags.ArrayMutation) return "ArrayMutation";
             if (flags & FlowFlags.Call) return "Call";
-            if (flags & FlowFlags.PreFinally) return "PreFinally";
-            if (flags & FlowFlags.AfterFinally) return "AfterFinally";
+            if (flags & FlowFlags.ReduceLabel) return "ReduceLabel";
             if (flags & FlowFlags.Unreachable) return "Unreachable";
             throw new Error();
         }

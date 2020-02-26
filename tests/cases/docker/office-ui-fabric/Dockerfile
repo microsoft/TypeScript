@@ -19,4 +19,4 @@ RUN yarn add typescript@../../typescript.tgz --exact --ignore-scripts
 WORKDIR /office-ui-fabric-react
 RUN yarn
 ENTRYPOINT [ "lerna" ]
-CMD [ "run", "build", "--stream", "--concurrency", "1", "--", "--production", "--lint" ]
+CMD [ "run", "build", "--stream", "--concurrency", "1", "--loglevel", "error", "--", "--production", "--lint", "--silent" ]
