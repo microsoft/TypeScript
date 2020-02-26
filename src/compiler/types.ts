@@ -2770,10 +2770,9 @@ namespace ts {
         SwitchClause   = 1 << 7,  // Switch statement clause
         ArrayMutation  = 1 << 8,  // Potential array mutation
         Call           = 1 << 9,  // Potential assertion call
-        Referenced     = 1 << 10, // Referenced as antecedent once
-        Shared         = 1 << 11, // Referenced as antecedent more than once
-        PreFinally     = 1 << 12, // Injected edge that links pre-finally label and pre-try flow
-        AfterFinally   = 1 << 13, // Injected edge that links post-finally flow with the rest of the graph
+        ReduceLabel    = 1 << 10, // Temporarily reduce antecedents of label
+        Referenced     = 1 << 11, // Referenced as antecedent once
+        Shared         = 1 << 12, // Referenced as antecedent more than once
 
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition,
@@ -2850,6 +2849,12 @@ namespace ts {
     // operation of the form 'x.push(value)', 'x.unshift(value)' or 'x[n] = value'.
     export interface FlowArrayMutation extends FlowNodeBase {
         node: CallExpression | BinaryExpression;
+        antecedent: FlowNode;
+    }
+
+    export interface FlowReduceLabel extends FlowNodeBase {
+        target: FlowLabel;
+        antecedents: FlowNode[];
         antecedent: FlowNode;
     }
 
@@ -4459,6 +4464,10 @@ namespace ts {
         IsGenericIndexTypeComputed = 1 << 24, // IsGenericIndexType flag has been computed
         /* @internal */
         IsGenericIndexType = 1 << 25, // Union or intersection contains generic index type
+        /* @internal */
+        CouldContainTypeVariablesComputed = 1 << 26, // CouldContainTypeVariables flag has been computed
+        /* @internal */
+        CouldContainTypeVariables = 1 << 27, // Type could contain a type variable
         ClassOrInterface = Class | Interface,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
@@ -4577,8 +4586,6 @@ namespace ts {
         resolvedStringIndexType: IndexType;
         /* @internal */
         resolvedBaseConstraint: Type;
-        /* @internal */
-        couldContainTypeVariables: boolean;
     }
 
     export interface UnionType extends UnionOrIntersectionType {
@@ -5835,10 +5842,9 @@ namespace ts {
         MakeTemplateObject = 1 << 17,   // __makeTemplateObject (used for constructing template string array objects)
         ClassPrivateFieldGet = 1 << 18, // __classPrivateFieldGet (used by the class private field transformation)
         ClassPrivateFieldSet = 1 << 19, // __classPrivateFieldSet (used by the class private field transformation)
-        CreateBinding = 1 << 20,        // __createBinding (use by the module transform for exports and namespace imports)
-        SetModuleDefault = 1 << 21,     // __setModuleDefault (use by the module transform for default exports)
+        CreateBinding = 1 << 20,        // __createBinding (use by the module transform for (re)exports and namespace imports)
         FirstEmitHelper = Extends,
-        LastEmitHelper = SetModuleDefault,
+        LastEmitHelper = CreateBinding,
 
         // Helpers included by ES2015 for..of
         ForOfIncludes = Values,

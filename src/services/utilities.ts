@@ -2749,7 +2749,7 @@ namespace ts {
         if (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default) {
             // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
             return firstDefined(symbol.declarations, d => isExportAssignment(d) && isIdentifier(d.expression) ? d.expression.text : undefined)
-                || codefix.moduleSymbolToValidIdentifier(Debug.assertDefined(symbol.parent), scriptTarget);
+                || codefix.moduleSymbolToValidIdentifier(Debug.checkDefined(symbol.parent), scriptTarget);
         }
         return symbol.name;
     }

@@ -4292,6 +4292,10 @@
         "category": "Message",
         "code": 6228
     },
+    "Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.": {
+        "category": "Error",
+        "code": 6229
+    },
 
     "Projects to reference": {
         "category": "Message",

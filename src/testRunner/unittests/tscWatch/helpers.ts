@@ -419,7 +419,7 @@ namespace ts.tscWatch {
     }
 
     export function replaceFileText(sys: WatchedSystem, file: string, searchValue: string | RegExp, replaceValue: string) {
-        const content = Debug.assertDefined(sys.readFile(file));
+        const content = Debug.checkDefined(sys.readFile(file));
         sys.writeFile(file, content.replace(searchValue, replaceValue));
     }
 }
