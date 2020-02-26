@@ -3723,40 +3723,6 @@ interface ConcatParams extends Algorithm {
     publicInfo?: Uint8Array;
 }
 
-/** Provides access to the browser's debugging console (e.g. the Web Console in Firefox). The specifics of how it works varies from browser to browser, but there is a de facto set of features that are typically provided. */
-interface Console {
-    memory: any;
-    assert(condition?: boolean, message?: string, ...data: any[]): void;
-    clear(): void;
-    count(label?: string): void;
-    debug(message?: any, ...optionalParams: any[]): void;
-    dir(value?: any, ...optionalParams: any[]): void;
-    dirxml(value: any): void;
-    error(message?: any, ...optionalParams: any[]): void;
-    exception(message?: string, ...optionalParams: any[]): void;
-    group(groupTitle?: string, ...optionalParams: any[]): void;
-    groupCollapsed(groupTitle?: string, ...optionalParams: any[]): void;
-    groupEnd(): void;
-    info(message?: any, ...optionalParams: any[]): void;
-    log(message?: any, ...optionalParams: any[]): void;
-    markTimeline(label?: string): void;
-    profile(reportName?: string): void;
-    profileEnd(reportName?: string): void;
-    table(...tabularData: any[]): void;
-    time(label?: string): void;
-    timeEnd(label?: string): void;
-    timeStamp(label?: string): void;
-    timeline(label?: string): void;
-    timelineEnd(label?: string): void;
-    trace(message?: any, ...optionalParams: any[]): void;
-    warn(message?: any, ...optionalParams: any[]): void;
-}
-
-declare var Console: {
-    prototype: Console;
-    new(): Console;
-};
-
 interface ConstantSourceNode extends AudioScheduledSourceNode {
     readonly offset: AudioParam;
     addEventListener<K extends keyof AudioScheduledSourceNodeEventMap>(type: K, listener: (this: ConstantSourceNode, ev: AudioScheduledSourceNodeEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -18590,7 +18556,7 @@ interface WindowEventMap extends GlobalEventHandlersEventMap, WindowEventHandler
 }
 
 /** A window containing a DOM document; the document property points to the DOM document loaded in that window. */
-interface Window extends EventTarget, AnimationFrameProvider, GlobalEventHandlers, WindowConsole, WindowEventHandlers, WindowLocalStorage, WindowOrWorkerGlobalScope, WindowSessionStorage {
+interface Window extends EventTarget, AnimationFrameProvider, GlobalEventHandlers, WindowEventHandlers, WindowLocalStorage, WindowOrWorkerGlobalScope, WindowSessionStorage {
     readonly applicationCache: ApplicationCache;
     readonly clientInformation: Navigator;
     readonly closed: boolean;
@@ -18720,10 +18686,6 @@ declare var Window: {
     prototype: Window;
     new(): Window;
 };
-
-interface WindowConsole {
-    readonly console: Console;
-}
 
 interface WindowEventHandlersEventMap {
     "afterprint": Event;
@@ -19124,6 +19086,31 @@ declare var webkitRTCPeerConnection: {
 };
 
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
+
+declare namespace console {
+    var memory: any;
+    function assert(condition?: boolean, ...data: any[]): void;
+    function clear(): void;
+    function count(label?: string): void;
+    function countReset(label?: string): void;
+    function debug(...data: any[]): void;
+    function dir(item?: any, options?: any): void;
+    function dirxml(...data: any[]): void;
+    function error(...data: any[]): void;
+    function exception(message?: string, ...optionalParams: any[]): void;
+    function group(...data: any[]): void;
+    function groupCollapsed(...data: any[]): void;
+    function groupEnd(): void;
+    function info(...data: any[]): void;
+    function log(...data: any[]): void;
+    function table(tabularData?: any, properties?: string[]): void;
+    function time(label?: string): void;
+    function timeEnd(label?: string): void;
+    function timeLog(label?: string, ...data: any[]): void;
+    function timeStamp(label?: string): void;
+    function trace(...data: any[]): void;
+    function warn(...data: any[]): void;
+}
 
 declare namespace WebAssembly {
     interface CompileError {
@@ -19706,7 +19693,6 @@ declare function toString(): string;
 declare function dispatchEvent(event: Event): boolean;
 declare var sessionStorage: Storage;
 declare var localStorage: Storage;
-declare var console: Console;
 /**
  * Fires when the user aborts the download.
  * @param ev The event.
