@@ -19437,14 +19437,10 @@ namespace ts {
         }
 
         function isReachableFlowNode(flow: FlowNode) {
-            const result = isReachableFlowNodeWorker(flow, /*skipCacheCheck*/ false);
+            const result = isReachableFlowNodeWorker(flow, /*noCacheCheck*/ false);
             lastFlowNode = flow;
             lastFlowNodeReachable = result;
             return result;
-        }
-
-        function isUnlockedReachableFlowNode(flow: FlowNode) {
-            return !(flow.flags & FlowFlags.PreFinally && (<PreFinallyFlow>flow).lock.locked) && isReachableFlowNodeWorker(flow, /*skipCacheCheck*/ false);
         }
 
         function isFalseExpression(expr: Expression): boolean {
@@ -19464,11 +19460,11 @@ namespace ts {
                     if (!noCacheCheck) {
                         const id = getFlowNodeId(flow);
                         const reachable = flowNodeReachable[id];
-                        return reachable !== undefined ? reachable : (flowNodeReachable[id] = isReachableFlowNodeWorker(flow, /*skipCacheCheck*/ true));
+                        return reachable !== undefined ? reachable : (flowNodeReachable[id] = isReachableFlowNodeWorker(flow, /*noCacheCheck*/ true));
                     }
                     noCacheCheck = false;
                 }
-                if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.ArrayMutation | FlowFlags.PreFinally)) {
+                if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.ArrayMutation)) {
                     flow = (<FlowAssignment | FlowCondition | FlowArrayMutation | PreFinallyFlow>flow).antecedent;
                 }
                 else if (flags & FlowFlags.Call) {
@@ -19489,7 +19485,7 @@ namespace ts {
                 }
                 else if (flags & FlowFlags.BranchLabel) {
                     // A branching point is reachable if any branch is reachable.
-                    return some((<FlowLabel>flow).antecedents, isUnlockedReachableFlowNode);
+                    return some((<FlowLabel>flow).antecedents, f => isReachableFlowNodeWorker(f, /*noCacheCheck*/ false));
                 }
                 else if (flags & FlowFlags.LoopLabel) {
                     // A loop is reachable if the control flow path that leads to the top is reachable.
@@ -19503,12 +19499,14 @@ namespace ts {
                     }
                     flow = (<FlowSwitchClause>flow).antecedent;
                 }
-                else if (flags & FlowFlags.AfterFinally) {
-                    // Cache is unreliable once we start locking nodes
+                else if (flags & FlowFlags.ReduceLabel) {
+                    // Cache is unreliable once we start adjusting labels
                     lastFlowNode = undefined;
-                    (<AfterFinallyFlow>flow).locked = true;
-                    const result = isReachableFlowNodeWorker((<AfterFinallyFlow>flow).antecedent, /*skipCacheCheck*/ false);
-                    (<AfterFinallyFlow>flow).locked = false;
+                    const target = (<FlowReduceLabel>flow).target;
+                    const saveAntecedents = target.antecedents;
+                    target.antecedents = (<FlowReduceLabel>flow).antecedents;
+                    const result = isReachableFlowNodeWorker((<FlowReduceLabel>flow).antecedent, /*noCacheCheck*/ false);
+                    target.antecedents = saveAntecedents;
                     return result;
                 }
                 else {
@@ -19572,19 +19570,7 @@ namespace ts {
                         }
                     }
                     let type: FlowType | undefined;
-                    if (flags & FlowFlags.AfterFinally) {
-                        // block flow edge: finally -> pre-try (for larger explanation check comment in binder.ts - bindTryStatement
-                        (<AfterFinallyFlow>flow).locked = true;
-                        type = getTypeAtFlowNode((<AfterFinallyFlow>flow).antecedent);
-                        (<AfterFinallyFlow>flow).locked = false;
-                    }
-                    else if (flags & FlowFlags.PreFinally) {
-                        // locked pre-finally flows are filtered out in getTypeAtFlowBranchLabel
-                        // so here just redirect to antecedent
-                        flow = (<PreFinallyFlow>flow).antecedent;
-                        continue;
-                    }
-                    else if (flags & FlowFlags.Assignment) {
+                    if (flags & FlowFlags.Assignment) {
                         type = getTypeAtFlowAssignment(<FlowAssignment>flow);
                         if (!type) {
                             flow = (<FlowAssignment>flow).antecedent;
@@ -19619,6 +19605,13 @@ namespace ts {
                             flow = (<FlowArrayMutation>flow).antecedent;
                             continue;
                         }
+                    }
+                    else if (flags & FlowFlags.ReduceLabel) {
+                        const target = (<FlowReduceLabel>flow).target;
+                        const saveAntecedents = target.antecedents;
+                        target.antecedents = (<FlowReduceLabel>flow).antecedents;
+                        type = getTypeAtFlowNode((<FlowReduceLabel>flow).antecedent);
+                        target.antecedents = saveAntecedents;
                     }
                     else if (flags & FlowFlags.Start) {
                         // Check if we should continue with the control flow of the containing function.
@@ -19831,12 +19824,6 @@ namespace ts {
                 let seenIncomplete = false;
                 let bypassFlow: FlowSwitchClause | undefined;
                 for (const antecedent of flow.antecedents!) {
-                    if (antecedent.flags & FlowFlags.PreFinally && (<PreFinallyFlow>antecedent).lock.locked) {
-                        // if flow correspond to branch from pre-try to finally and this branch is locked - this means that
-                        // we initially have started following the flow outside the finally block.
-                        // in this case we should ignore this branch.
-                        continue;
-                    }
                     if (!bypassFlow && antecedent.flags & FlowFlags.SwitchClause && (<FlowSwitchClause>antecedent).clauseStart === (<FlowSwitchClause>antecedent).clauseEnd) {
                         // The antecedent is the bypass branch of a potentially exhaustive switch statement.
                         bypassFlow = <FlowSwitchClause>antecedent;
