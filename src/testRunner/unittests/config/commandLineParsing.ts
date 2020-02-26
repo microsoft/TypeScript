@@ -3,9 +3,7 @@ namespace ts {
 
         function assertParseResult(commandLine: string[], expectedParsedCommandLine: ParsedCommandLine, workerDiagnostic?: () => ParseCommandLineWorkerDiagnostics) {
             const parsed = parseCommandLineWorker(workerDiagnostic?.() || compilerOptionsDidYouMeanDiagnostics, commandLine);
-            const parsedCompilerOptions = JSON.stringify(parsed.options);
-            const expectedCompilerOptions = JSON.stringify(expectedParsedCommandLine.options);
-            assert.equal(parsedCompilerOptions, expectedCompilerOptions);
+            assert.deepEqual(parsed.options, expectedParsedCommandLine.options);
             assert.deepEqual(parsed.watchOptions, expectedParsedCommandLine.watchOptions);
 
             const parsedErrors = parsed.errors;
@@ -120,7 +118,7 @@ namespace ts {
                         length: undefined,
                     }],
                     fileNames: ["0.ts"],
-                    options: {}
+                    options: { jsx: undefined }
                 });
         });
 
@@ -146,7 +144,7 @@ namespace ts {
                         length: undefined,
                     }],
                     fileNames: ["0.ts"],
-                    options: {}
+                    options: { module: undefined }
                 });
         });
 
@@ -172,7 +170,7 @@ namespace ts {
                         length: undefined,
                     }],
                     fileNames: ["0.ts"],
-                    options: {}
+                    options: { newLine: undefined }
                 });
         });
 
@@ -198,7 +196,7 @@ namespace ts {
                         length: undefined,
                     }],
                     fileNames: ["0.ts"],
-                    options: {}
+                    options: { target: undefined }
                 });
         });
 
@@ -224,7 +222,7 @@ namespace ts {
                         length: undefined,
                     }],
                     fileNames: ["0.ts"],
-                    options: {}
+                    options: { moduleResolution: undefined }
                 });
         });
 
@@ -428,7 +426,7 @@ namespace ts {
                         {
                             errors: [],
                             fileNames: ["0.ts"],
-                            options: { optionName: undefined }
+                            options: { [optionName]: undefined }
                         },
                         workerDiagnostic
                     );
@@ -664,9 +662,7 @@ namespace ts {
     describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
         function assertParseResult(commandLine: string[], expectedParsedBuildCommand: ParsedBuildCommand) {
             const parsed = parseBuildCommand(commandLine);
-            const parsedBuildOptions = JSON.stringify(parsed.buildOptions);
-            const expectedBuildOptions = JSON.stringify(expectedParsedBuildCommand.buildOptions);
-            assert.equal(parsedBuildOptions, expectedBuildOptions);
+            assert.deepEqual(parsed.buildOptions, expectedParsedBuildCommand.buildOptions);
             assert.deepEqual(parsed.watchOptions, expectedParsedBuildCommand.watchOptions);
 
             const parsedErrors = parsed.errors;
