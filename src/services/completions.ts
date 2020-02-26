@@ -1555,6 +1555,7 @@ namespace ts.Completions {
             const startTime = timestamp();
             log(`getSymbolsFromOtherSourceFileExports: Recomputing list${detailsEntryId ? " for details entry" : ""}`);
             const seenResolvedModules = createMap<true>();
+            const seenExports = createMap<true>();
             /** Bucket B */
             const aliasesToAlreadyIncludedSymbols = createMap<true>();
             /** Bucket C */
@@ -1582,13 +1583,17 @@ namespace ts.Completions {
                     pushSymbol(resolvedModuleSymbol, moduleSymbol, /*skipFilter*/ true);
                 }
 
-                for (const symbol of typeChecker.getExportsOfModule(moduleSymbol)) {
+                for (const symbol of typeChecker.getExportsAndPropertiesOfModule(moduleSymbol)) {
+                    const symbolId = getSymbolId(symbol).toString();
+                    // `getExportsAndPropertiesOfModule` can include duplicates
+                    if (!addToSeen(seenExports, symbolId)) {
+                        continue;
+                    }
                     // If this is `export { _break as break };` (a keyword) -- skip this and prefer the keyword completion.
                     if (some(symbol.declarations, d => isExportSpecifier(d) && !!d.propertyName && isIdentifierANonContextualKeyword(d.name))) {
                         continue;
                     }
 
-                    const symbolId = getSymbolId(symbol).toString();
                     // If `symbol.parent !== moduleSymbol`, this is an `export * from "foo"` re-export. Those don't create new symbols.
                     const isExportStarFromReExport = typeChecker.getMergedSymbol(symbol.parent!) !== resolvedModuleSymbol;
                     // If `!!d.parent.parent.moduleSpecifier`, this is `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).

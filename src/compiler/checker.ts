@@ -3276,10 +3276,6 @@ namespace ts {
                     });
                     extendExportSymbols(symbols, nestedSymbols);
                 }
-                if (symbol.escapedName === InternalSymbolName.ExportEquals && isInJSFile(symbol.valueDeclaration) && isObjectLiteralExpression((symbol.valueDeclaration as BinaryExpression).right)) {
-                    const objectLiteralSymbol = (symbol.valueDeclaration as BinaryExpression).right.symbol;
-                    extendExportSymbols(symbols, objectLiteralSymbol.members);
-                }
                 return symbols;
             }
         }
