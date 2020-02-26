@@ -15258,7 +15258,7 @@ namespace ts {
                     checkTypes = reducedTarget.flags & TypeFlags.Union ? (<UnionType>reducedTarget).types : [reducedTarget];
                 }
                 for (const prop of getPropertiesOfType(source)) {
-                    if (shouldCheckAsExcessProperty(prop, source.symbol)) {
+                    if (shouldCheckAsExcessProperty(prop, source.symbol) && !isIgnoredJsxProperty(source, prop)) {
                         if (!isKnownProperty(reducedTarget, prop.escapedName, isComparingJsxAttributes)) {
                             if (reportErrors) {
                                 // Report error in terms of object types in the target as those are the only ones
