@@ -145,50 +145,78 @@ declare const console: { log(msg: any): void; };
 
 Output::
 >> Screen clear
-12:00:46 AM - Starting compilation in watch mode...
+[[90m12:00:46 AM[0m] Starting compilation in watch mode...
 
 
-12:00:47 AM - Projects in this build: 
+[[90m12:00:47 AM[0m] Projects in this build: 
     * core/tsconfig.json
     * animals/tsconfig.json
     * zoo/tsconfig.json
     * tsconfig.json
 
 
-12:00:48 AM - Project 'core/tsconfig.json' is out of date because output file 'lib/core/utilities.js' does not exist
+[[90m12:00:48 AM[0m] Project 'core/tsconfig.json' is out of date because output file 'lib/core/utilities.js' does not exist
 
 
-12:00:49 AM - Building project '/user/username/projects/demo/core/tsconfig.json'...
+[[90m12:00:49 AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
 
 
-animals/index.ts(1,20): error TS6059: File '/user/username/projects/demo/animals/animal.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
+[96manimals/index.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/demo/animals/animal.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
 
-animals/index.ts(1,20): error TS6307: File '/user/username/projects/demo/animals/animal.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
-
-animals/index.ts(4,32): error TS6059: File '/user/username/projects/demo/animals/dog.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
-
-animals/index.ts(4,32): error TS6307: File '/user/username/projects/demo/animals/dog.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
-
-core/utilities.ts(1,1): error TS6133: 'A' is declared but its value is never read.
-
-core/utilities.ts(1,20): error TS6059: File '/user/username/projects/demo/animals/index.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
-
-core/utilities.ts(1,20): error TS6307: File '/user/username/projects/demo/animals/index.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
-
-12:00:50 AM - Project 'animals/tsconfig.json' can't be built because its dependency 'core' has errors
+[7m1[0m import Animal from './animal';
+[7m [0m [91m                   ~~~~~~~~~~[0m
 
 
-12:00:51 AM - Skipping build of project '/user/username/projects/demo/animals/tsconfig.json' because its dependency '/user/username/projects/demo/core' has errors
+[96manimals/index.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6307: [0mFile '/user/username/projects/demo/animals/animal.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+
+[7m1[0m import Animal from './animal';
+[7m [0m [91m                   ~~~~~~~~~~[0m
 
 
-12:00:52 AM - Project 'zoo/tsconfig.json' can't be built because its dependency 'animals' was not built
+[96manimals/index.ts[0m:[93m4[0m:[93m32[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/demo/animals/dog.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
+
+[7m4[0m import { createDog, Dog } from './dog';
+[7m [0m [91m                               ~~~~~~~[0m
 
 
-12:00:53 AM - Skipping build of project '/user/username/projects/demo/zoo/tsconfig.json' because its dependency '/user/username/projects/demo/animals' was not built
+[96manimals/index.ts[0m:[93m4[0m:[93m32[0m - [91merror[0m[90m TS6307: [0mFile '/user/username/projects/demo/animals/dog.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+
+[7m4[0m import { createDog, Dog } from './dog';
+[7m [0m [91m                               ~~~~~~~[0m
 
 
+[96mcore/utilities.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS6133: [0m'A' is declared but its value is never read.
 
-12:00:54 AM - Found 7 errors. Watching for file changes.
+[7m1[0m import * as A from '../animals';
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[96mcore/utilities.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/demo/animals/index.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
+
+[7m1[0m import * as A from '../animals';
+[7m [0m [91m                   ~~~~~~~~~~~~[0m
+
+
+[96mcore/utilities.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6307: [0mFile '/user/username/projects/demo/animals/index.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+
+[7m1[0m import * as A from '../animals';
+[7m [0m [91m                   ~~~~~~~~~~~~[0m
+
+
+[[90m12:00:50 AM[0m] Project 'animals/tsconfig.json' can't be built because its dependency 'core' has errors
+
+
+[[90m12:00:51 AM[0m] Skipping build of project '/user/username/projects/demo/animals/tsconfig.json' because its dependency '/user/username/projects/demo/core' has errors
+
+
+[[90m12:00:52 AM[0m] Project 'zoo/tsconfig.json' can't be built because its dependency 'animals' was not built
+
+
+[[90m12:00:53 AM[0m] Skipping build of project '/user/username/projects/demo/zoo/tsconfig.json' because its dependency '/user/username/projects/demo/animals' was not built
+
+
+[[90m12:00:54 AM[0m] Found 7 errors. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/demo/core/utilities.ts"]
@@ -259,31 +287,59 @@ export function lastElementOf<T>(arr: T[]): T | undefined {
 
 Output::
 >> Screen clear
-12:00:58 AM - File change detected. Starting incremental compilation...
+[[90m12:00:58 AM[0m] File change detected. Starting incremental compilation...
 
 
-12:00:59 AM - Project 'core/tsconfig.json' is out of date because output file 'lib/core/utilities.js' does not exist
+[[90m12:00:59 AM[0m] Project 'core/tsconfig.json' is out of date because output file 'lib/core/utilities.js' does not exist
 
 
-12:01:00 AM - Building project '/user/username/projects/demo/core/tsconfig.json'...
+[[90m12:01:00 AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
 
 
-animals/index.ts(1,20): error TS6059: File '/user/username/projects/demo/animals/animal.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
+[96manimals/index.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/demo/animals/animal.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
 
-animals/index.ts(1,20): error TS6307: File '/user/username/projects/demo/animals/animal.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
-
-animals/index.ts(4,32): error TS6059: File '/user/username/projects/demo/animals/dog.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
-
-animals/index.ts(4,32): error TS6307: File '/user/username/projects/demo/animals/dog.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
-
-core/utilities.ts(2,1): error TS6133: 'A' is declared but its value is never read.
-
-core/utilities.ts(2,20): error TS6059: File '/user/username/projects/demo/animals/index.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
-
-core/utilities.ts(2,20): error TS6307: File '/user/username/projects/demo/animals/index.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+[7m1[0m import Animal from './animal';
+[7m [0m [91m                   ~~~~~~~~~~[0m
 
 
-12:01:01 AM - Found 7 errors. Watching for file changes.
+[96manimals/index.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6307: [0mFile '/user/username/projects/demo/animals/animal.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+
+[7m1[0m import Animal from './animal';
+[7m [0m [91m                   ~~~~~~~~~~[0m
+
+
+[96manimals/index.ts[0m:[93m4[0m:[93m32[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/demo/animals/dog.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
+
+[7m4[0m import { createDog, Dog } from './dog';
+[7m [0m [91m                               ~~~~~~~[0m
+
+
+[96manimals/index.ts[0m:[93m4[0m:[93m32[0m - [91merror[0m[90m TS6307: [0mFile '/user/username/projects/demo/animals/dog.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+
+[7m4[0m import { createDog, Dog } from './dog';
+[7m [0m [91m                               ~~~~~~~[0m
+
+
+[96mcore/utilities.ts[0m:[93m2[0m:[93m1[0m - [91merror[0m[90m TS6133: [0m'A' is declared but its value is never read.
+
+[7m2[0m import * as A from '../animals';
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[96mcore/utilities.ts[0m:[93m2[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/demo/animals/index.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
+
+[7m2[0m import * as A from '../animals';
+[7m [0m [91m                   ~~~~~~~~~~~~[0m
+
+
+[96mcore/utilities.ts[0m:[93m2[0m:[93m20[0m - [91merror[0m[90m TS6307: [0mFile '/user/username/projects/demo/animals/index.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+
+[7m2[0m import * as A from '../animals';
+[7m [0m [91m                   ~~~~~~~~~~~~[0m
+
+
+[[90m12:01:01 AM[0m] Found 7 errors. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/demo/core/utilities.ts"]

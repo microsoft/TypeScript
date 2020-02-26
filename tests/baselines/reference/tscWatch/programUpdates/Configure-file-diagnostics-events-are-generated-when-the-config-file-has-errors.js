@@ -30,15 +30,23 @@ var x = 10;
 
 Output::
 >> Screen clear
-12:00:15 AM - Starting compilation in watch mode...
+[[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
 
-a/b/tsconfig.json(3,29): error TS5023: Unknown compiler option 'foo'.
+[96ma/b/tsconfig.json[0m:[93m3[0m:[93m29[0m - [91merror[0m[90m TS5023: [0mUnknown compiler option 'foo'.
 
-a/b/tsconfig.json(4,29): error TS5025: Unknown compiler option 'allowJS'. Did you mean 'allowJs'?
+[7m3[0m                             "foo": "bar",
+[7m [0m [91m                            ~~~~~[0m
 
 
-12:00:18 AM - Found 2 errors. Watching for file changes.
+[96ma/b/tsconfig.json[0m:[93m4[0m:[93m29[0m - [91merror[0m[90m TS5025: [0mUnknown compiler option 'allowJS'. Did you mean 'allowJs'?
+
+[7m4[0m                             "allowJS": true
+[7m [0m [91m                            ~~~~~~~~~[0m
+
+
+[[90m12:00:18 AM[0m] Found 2 errors. Watching for file changes.
+
 
 
 Program root files: ["/a/b/app.ts"]

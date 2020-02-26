@@ -32,11 +32,11 @@ function two() {
 
 Output::
 >> Screen clear
-12:00:13 AM - Starting compilation in watch mode...
+[[90m12:00:13 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:16 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:16 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/file.ts"]
@@ -87,11 +87,11 @@ exports.two = two;
 
 Output::
 >> Screen clear
-12:00:20 AM - File change detected. Starting incremental compilation...
+[[90m12:00:20 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:24 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:24 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/file.ts"]

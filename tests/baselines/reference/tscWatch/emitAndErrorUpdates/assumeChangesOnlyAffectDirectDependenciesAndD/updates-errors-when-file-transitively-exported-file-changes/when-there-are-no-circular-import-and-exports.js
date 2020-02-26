@@ -167,11 +167,11 @@ export declare class App {
 
 Output::
 >> Screen clear
-12:00:37 AM - Starting compilation in watch mode...
+[[90m12:00:37 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:01:02 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:02 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
@@ -239,11 +239,11 @@ export interface ITest {
 
 Output::
 >> Screen clear
-12:01:06 AM - File change detected. Starting incremental compilation...
+[[90m12:01:06 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:01:19 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:19 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]

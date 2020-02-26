@@ -149,23 +149,24 @@ declare const console: { log(msg: any): void; };
 
 Output::
 >> Screen clear
-12:00:46 AM - Starting compilation in watch mode...
+[[90m12:00:46 AM[0m] Starting compilation in watch mode...
 
 
-12:00:47 AM - Projects in this build: 
+[[90m12:00:47 AM[0m] Projects in this build: 
     * animals/tsconfig.json
     * zoo/tsconfig.json
     * core/tsconfig.json
     * tsconfig.json
 
 
-error TS6202: Project references may not form a circular graph. Cycle detected: /user/username/projects/demo/tsconfig.json
+[91merror[0m[90m TS6202: [0mProject references may not form a circular graph. Cycle detected: /user/username/projects/demo/tsconfig.json
 /user/username/projects/demo/core/tsconfig.json
 /user/username/projects/demo/zoo/tsconfig.json
 /user/username/projects/demo/animals/tsconfig.json
 
 
-12:00:48 AM - Found 1 error. Watching for file changes.
+[[90m12:00:48 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 WatchedFiles::
@@ -490,29 +491,29 @@ export declare function createZoo(): Array<Dog>;
 
 Output::
 >> Screen clear
-12:00:52 AM - File change detected. Starting incremental compilation...
+[[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
 
 
-12:00:53 AM - Project 'core/tsconfig.json' is out of date because output file 'lib/core/utilities.js' does not exist
+[[90m12:00:53 AM[0m] Project 'core/tsconfig.json' is out of date because output file 'lib/core/utilities.js' does not exist
 
 
-12:00:54 AM - Building project '/user/username/projects/demo/core/tsconfig.json'...
+[[90m12:00:54 AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
 
 
-12:01:06 AM - Project 'animals/tsconfig.json' is out of date because output file 'lib/animals/animal.js' does not exist
+[[90m12:01:06 AM[0m] Project 'animals/tsconfig.json' is out of date because output file 'lib/animals/animal.js' does not exist
 
 
-12:01:07 AM - Building project '/user/username/projects/demo/animals/tsconfig.json'...
+[[90m12:01:07 AM[0m] Building project '/user/username/projects/demo/animals/tsconfig.json'...
 
 
-12:01:25 AM - Project 'zoo/tsconfig.json' is out of date because output file 'lib/zoo/zoo.js' does not exist
+[[90m12:01:25 AM[0m] Project 'zoo/tsconfig.json' is out of date because output file 'lib/zoo/zoo.js' does not exist
 
 
-12:01:26 AM - Building project '/user/username/projects/demo/zoo/tsconfig.json'...
+[[90m12:01:26 AM[0m] Building project '/user/username/projects/demo/zoo/tsconfig.json'...
 
 
+[[90m12:01:36 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:36 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/demo/core/utilities.ts"]

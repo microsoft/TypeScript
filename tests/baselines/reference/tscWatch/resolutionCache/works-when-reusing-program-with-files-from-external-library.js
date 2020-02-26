@@ -43,11 +43,11 @@ module11("hello");
 
 Output::
 >> Screen clear
-12:00:29 AM - Starting compilation in watch mode...
+[[90m12:00:29 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:37 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:37 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/projects/myProject/src/file1.ts","/a/b/projects/myProject/src/file2.ts"]
@@ -110,11 +110,11 @@ module1("hello");
 
 Output::
 >> Screen clear
-12:00:40 AM - File change detected. Starting incremental compilation...
+[[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:44 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:44 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/projects/myProject/src/file1.ts","/a/b/projects/myProject/src/file2.ts"]
