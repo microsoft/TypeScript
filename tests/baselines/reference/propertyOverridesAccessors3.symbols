@@ -28,9 +28,9 @@ class Animal {
 >makeSound : Symbol(Animal.makeSound, Decl(propertyOverridesAccessors3.ts, 7, 5))
 
         console.log(this._sound)
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >this._sound : Symbol(Animal._sound, Decl(propertyOverridesAccessors3.ts, 0, 14))
 >this : Symbol(Animal, Decl(propertyOverridesAccessors3.ts, 0, 0))
 >_sound : Symbol(Animal._sound, Decl(propertyOverridesAccessors3.ts, 0, 14))

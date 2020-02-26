@@ -243,8 +243,8 @@ const comp = ctor({ common: "ok", ref: x => console.log(x) });
 >common : Symbol(common, Decl(normalizedIntersectionTooComplex.ts, 35, 19))
 >ref : Symbol(ref, Decl(normalizedIntersectionTooComplex.ts, 35, 33))
 >x : Symbol(x, Decl(normalizedIntersectionTooComplex.ts, 35, 38))
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >x : Symbol(x, Decl(normalizedIntersectionTooComplex.ts, 35, 38))
 

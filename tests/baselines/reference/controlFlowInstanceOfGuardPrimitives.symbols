@@ -9,9 +9,9 @@ function distinguish(thing: string | number | Date) {
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
         console.log("Aha!! It's a Date in " + thing.getFullYear());
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >thing.getFullYear : Symbol(Date.getFullYear, Decl(lib.es5.d.ts, --, --))
 >thing : Symbol(thing, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 21))
 >getFullYear : Symbol(Date.getFullYear, Decl(lib.es5.d.ts, --, --))
@@ -20,18 +20,18 @@ function distinguish(thing: string | number | Date) {
 >thing : Symbol(thing, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 21))
 
         console.log("Aha!! It's a string of length " + thing.length);
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >thing.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >thing : Symbol(thing, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 21))
 >length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
     } else {
         console.log("Aha!! It's the number " + thing.toPrecision(3));
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >thing.toPrecision : Symbol(Number.toPrecision, Decl(lib.es5.d.ts, --, --))
 >thing : Symbol(thing, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 21))
 >toPrecision : Symbol(Number.toPrecision, Decl(lib.es5.d.ts, --, --))

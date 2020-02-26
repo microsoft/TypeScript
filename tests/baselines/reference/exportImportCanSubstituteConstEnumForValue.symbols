@@ -108,9 +108,9 @@ module MsPortalFx.ViewModels {
 >Cancel : Symbol(ReExportedEnum.Cancel, Decl(exportImportCanSubstituteConstEnumForValue.ts, 3, 14))
 
             console.log(value1);
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >value1 : Symbol(value1, Decl(exportImportCanSubstituteConstEnumForValue.ts, 50, 17))
 
             const value2 = DialogButtons.OKCancel;
@@ -120,9 +120,9 @@ module MsPortalFx.ViewModels {
 >OKCancel : Symbol(DialogButtons.OKCancel, Decl(exportImportCanSubstituteConstEnumForValue.ts, 21, 11))
 
             console.log(value2);
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >value2 : Symbol(value2, Decl(exportImportCanSubstituteConstEnumForValue.ts, 52, 17))
         }
     }

@@ -60,9 +60,9 @@ export function HereIsTheError() {
             onChange={val => console.log(val)} // <- this throws an error
 >onChange : Symbol(onChange, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 25, 23))
 >val : Symbol(val, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 26, 22))
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >val : Symbol(val, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 26, 22))
 
         />
@@ -82,9 +82,9 @@ ComponentWithUnion({
     onChange: val => console.log(val) // <- this works fine
 >onChange : Symbol(onChange, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 34, 15))
 >val : Symbol(val, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 35, 13))
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >val : Symbol(val, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 35, 13))
 
 });

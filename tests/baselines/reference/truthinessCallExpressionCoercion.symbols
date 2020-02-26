@@ -34,18 +34,18 @@ function onlyErrorsWhenUnusedInBody() {
 >test : Symbol(test, Decl(truthinessCallExpressionCoercion.ts, 14, 39))
 
         console.log('test');
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
     }
     
     if (test) { // ok
 >test : Symbol(test, Decl(truthinessCallExpressionCoercion.ts, 14, 39))
 
         console.log(test);
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >test : Symbol(test, Decl(truthinessCallExpressionCoercion.ts, 14, 39))
     }
 

@@ -1763,15 +1763,15 @@ function someFunction(someOptionalObject: SomeObject | undefined): void {
 >lastSomeProperty : Symbol(lastSomeProperty, Decl(controlFlowOptionalChain.ts, 561, 3))
 
         console.log(someOptionalObject);
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 563, 22))
 
         console.log(someOptionalObject.someProperty);  // Error
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >someOptionalObject.someProperty : Symbol(SomeObject.someProperty, Decl(controlFlowOptionalChain.ts, 557, 22))
 >someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 563, 22))
 >someProperty : Symbol(SomeObject.someProperty, Decl(controlFlowOptionalChain.ts, 557, 22))
@@ -1826,9 +1826,9 @@ while (arr[i]?.tag === "left") {
 >tag : Symbol(tag, Decl(controlFlowOptionalChain.ts, 581, 20))
 
         console.log("I should ALSO be reachable");
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
     }
 }
 

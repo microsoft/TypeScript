@@ -61,9 +61,9 @@ const Test2 = () => <FieldFeedback when={value => console.log(value)} />;
 >FieldFeedback : Symbol(FieldFeedback, Decl(reactDefaultPropsInferenceSuccess.tsx, 10, 1))
 >when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 26, 34))
 >value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 26, 41))
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 26, 41))
 
 class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> {
@@ -110,9 +110,9 @@ const Test2a = () => <FieldFeedbackBeta when={value => console.log(value)} error
 >FieldFeedbackBeta : Symbol(FieldFeedbackBeta, Decl(reactDefaultPropsInferenceSuccess.tsx, 26, 73))
 >when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 42, 39))
 >value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 42, 46))
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 42, 46))
 >error : Symbol(error, Decl(reactDefaultPropsInferenceSuccess.tsx, 42, 74))
 >FieldFeedbackBeta : Symbol(FieldFeedbackBeta, Decl(reactDefaultPropsInferenceSuccess.tsx, 26, 73))
@@ -172,9 +172,9 @@ const Test4 = () => <FieldFeedback2 when={value => console.log(value)} />;
 >FieldFeedback2 : Symbol(FieldFeedback2, Decl(reactDefaultPropsInferenceSuccess.tsx, 46, 1))
 >when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 63, 35))
 >value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 63, 42))
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 63, 42))
 
 // OK

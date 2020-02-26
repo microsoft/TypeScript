@@ -7,33 +7,33 @@ function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, o
     // error
     required ? console.log('required') : undefined;
 >required : Symbol(required, Decl(truthinessCallExpressionCoercion1.ts, 0, 54))
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >undefined : Symbol(undefined)
 
     // ok
     optional ? console.log('optional') : undefined;
 >optional : Symbol(optional, Decl(truthinessCallExpressionCoercion1.ts, 0, 78))
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >undefined : Symbol(undefined)
 
     // ok
     !!required ? console.log('not required') : undefined;
 >required : Symbol(required, Decl(truthinessCallExpressionCoercion1.ts, 0, 54))
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >undefined : Symbol(undefined)
 
     // ok
     required() ? console.log('required call') : undefined;
 >required : Symbol(required, Decl(truthinessCallExpressionCoercion1.ts, 0, 54))
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >undefined : Symbol(undefined)
 }
 
@@ -49,17 +49,17 @@ function onlyErrorsWhenUnusedInBody() {
     // error
     test ? console.log('test') : undefined;
 >test : Symbol(test, Decl(truthinessCallExpressionCoercion1.ts, 14, 39))
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >undefined : Symbol(undefined)
 
     // ok
     test ? console.log(test) : undefined;
 >test : Symbol(test, Decl(truthinessCallExpressionCoercion1.ts, 14, 39))
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >test : Symbol(test, Decl(truthinessCallExpressionCoercion1.ts, 14, 39))
 >undefined : Symbol(undefined)
 
@@ -116,9 +116,9 @@ function checksPropertyAccess() {
 >x : Symbol(x, Decl(truthinessCallExpressionCoercion1.ts, 38, 9))
 >foo : Symbol(foo, Decl(truthinessCallExpressionCoercion1.ts, 38, 15))
 >bar : Symbol(bar, Decl(truthinessCallExpressionCoercion1.ts, 39, 14))
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >undefined : Symbol(undefined)
 
     // ok
@@ -156,9 +156,9 @@ class Foo {
 >this.isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion1.ts, 52, 32))
 >this : Symbol(Foo, Decl(truthinessCallExpressionCoercion1.ts, 49, 1))
 >isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion1.ts, 52, 32))
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >undefined : Symbol(undefined)
 
         // ok
@@ -166,9 +166,9 @@ class Foo {
 >this.maybeIsUser : Symbol(Foo.maybeIsUser, Decl(truthinessCallExpressionCoercion1.ts, 51, 11))
 >this : Symbol(Foo, Decl(truthinessCallExpressionCoercion1.ts, 49, 1))
 >maybeIsUser : Symbol(Foo.maybeIsUser, Decl(truthinessCallExpressionCoercion1.ts, 51, 11))
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >undefined : Symbol(undefined)
     }
 }

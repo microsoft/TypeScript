@@ -7,9 +7,9 @@ class B {
 
         constructor() {
             console.log("hello");
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
         }
         static test = 123;
 >test : Symbol((Anonymous class).test, Decl(privateNameFieldClassExpression.ts, 4, 9))

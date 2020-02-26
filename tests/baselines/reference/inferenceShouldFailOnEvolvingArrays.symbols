@@ -13,9 +13,9 @@ function logLength<T extends string, U extends string>(arg: { [K in U]: T }[U]):
 >T : Symbol(T, Decl(inferenceShouldFailOnEvolvingArrays.ts, 2, 19))
 
     console.log(arg.length);
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >arg.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >arg : Symbol(arg, Decl(inferenceShouldFailOnEvolvingArrays.ts, 2, 55))
 >length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
@@ -45,9 +45,9 @@ function logFirstLength<T extends string[], U extends string>(arg: { [K in U]: T
 >T : Symbol(T, Decl(inferenceShouldFailOnEvolvingArrays.ts, 10, 24))
 
     console.log(arg[0].length);
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >arg[0].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >arg : Symbol(arg, Decl(inferenceShouldFailOnEvolvingArrays.ts, 10, 62))
 >length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))

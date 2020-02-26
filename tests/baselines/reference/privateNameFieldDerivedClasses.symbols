@@ -11,9 +11,9 @@ class Base {
 >Derived : Symbol(Derived, Decl(privateNameFieldDerivedClasses.ts, 5, 1))
 
         console.log(x.#prop);
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >x.#prop : Symbol(Base.#prop, Decl(privateNameFieldDerivedClasses.ts, 0, 12))
 >x : Symbol(x, Decl(privateNameFieldDerivedClasses.ts, 2, 18))
     }
@@ -28,9 +28,9 @@ class Derived extends Base {
 >Derived : Symbol(Derived, Decl(privateNameFieldDerivedClasses.ts, 5, 1))
 
         console.log(x.#prop);
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >x : Symbol(x, Decl(privateNameFieldDerivedClasses.ts, 7, 18))
     }
 }

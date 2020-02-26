@@ -179,9 +179,9 @@ class M extends L {
 >arg : Symbol(arg, Decl(derivedUninitializedPropertyDeclaration.ts, 76, 16))
 
         console.log(this.a);  // should be OK, M.a is ambient
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >this.a : Symbol(M.a, Decl(derivedUninitializedPropertyDeclaration.ts, 74, 19))
 >this : Symbol(M, Decl(derivedUninitializedPropertyDeclaration.ts, 73, 1))
 >a : Symbol(M.a, Decl(derivedUninitializedPropertyDeclaration.ts, 74, 19))

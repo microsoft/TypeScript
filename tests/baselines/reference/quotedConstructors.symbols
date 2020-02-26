@@ -4,9 +4,9 @@ class C {
 
     "constructor"() {
         console.log(this);
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >this : Symbol(C, Decl(quotedConstructors.ts, 0, 0))
     }
 }
@@ -16,9 +16,9 @@ class D {
 
     'constructor'() {
         console.log(this);
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >this : Symbol(D, Decl(quotedConstructors.ts, 4, 1))
     }
 }
@@ -31,9 +31,9 @@ class E {
 >'constructor' : Symbol(E['constructor'], Decl(quotedConstructors.ts, 12, 9))
 
         console.log(this);
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >this : Symbol(E, Decl(quotedConstructors.ts, 10, 1))
     }
 }
@@ -41,9 +41,9 @@ class E {
 new class {
     "constructor"() {
         console.log(this);
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >this : Symbol((Anonymous class), Decl(quotedConstructors.ts, 18, 3))
     }
 };
@@ -57,9 +57,9 @@ class F {
 
     "\x63onstructor"() {
         console.log(this);
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console.log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(console.log, Decl(lib.dom.d.ts, --, --))
 >this : Symbol(F, Decl(quotedConstructors.ts, 24, 31))
     }
 }
