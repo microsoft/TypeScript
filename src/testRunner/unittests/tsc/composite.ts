@@ -10,6 +10,7 @@ namespace ts {
                         "compilerOptions": {
                             "target": "es5",
                             "module": "commonjs",
+                            "composite": true,
                         },
                         "include": [
                             "src/**/*.ts"
@@ -29,6 +30,7 @@ namespace ts {
                         "compilerOptions": {
                             "target": "es5",
                             "module": "commonjs",
+                            "composite": true,
                         },
                         "include": [
                             "src/**/*.ts"
@@ -48,6 +50,7 @@ namespace ts {
                         "compilerOptions": {
                             "target": "es5",
                             "module": "commonjs",
+                            "composite": true,
                             "tsBuildInfoFile": "tsconfig.json.tsbuildinfo"
                         },
                         "include": [
@@ -68,6 +71,7 @@ namespace ts {
                         "compilerOptions": {
                             "target": "es5",
                             "module": "commonjs",
+                            "composite": true,
                             "tsBuildInfoFile": "tsconfig.json.tsbuildinfo"
                         },
                         "include": [
