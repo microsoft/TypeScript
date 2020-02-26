@@ -1188,8 +1188,7 @@ namespace ts {
 
                         variables = append(variables, variable);
                     }
-                    const originalParentKind = getOriginalNode(variable.name).parent?.kind;
-                    if (originalParentKind !== SyntaxKind.ModuleDeclaration && originalParentKind !== SyntaxKind.EnumDeclaration) {
+                    else {
                         expressions = append(expressions, transformInitializedVariable(variable));
                     }
                 }
