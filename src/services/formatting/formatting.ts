@@ -427,7 +427,7 @@ namespace ts.formatting {
             if (leadingTrivia) {
                 indentTriviaItems(leadingTrivia, initialIndentation, /*indentNextTokenOrTrivia*/ false,
                     item => processRange(item, sourceFile.getLineAndCharacterOfPosition(item.pos), enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!));
-                if(options.trimTrailingWhitespace!){
+                if(options.trimTrailingWhitespace !== false){
                     trimTrailingWhitespacesForRemainingRange();
                 }
             }
@@ -980,9 +980,8 @@ namespace ts.formatting {
             formattingContext.updateContext(previousItem, previousParent, currentItem, currentParent, contextNode);
 
             const rules = getRules(formattingContext);
-            const trimTrailingWhitespace = formattingContext.options.trimTrailingWhitespace!;
 
-            let trimTrailingWhitespaces = false;
+            let trimTrailingWhitespaces = formattingContext.options.trimTrailingWhitespace !== false;
             let lineAction = LineAction.None;
             if (rules) {
                 // Apply rules in reverse order so that higher priority rules (which are first in the array)
@@ -1010,11 +1009,11 @@ namespace ts.formatting {
                     }
 
                     // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
-                    trimTrailingWhitespaces = trimTrailingWhitespace && !(rule.action & RuleAction.DeleteSpace) && rule.flags !== RuleFlags.CanDeleteNewLines;
+                    trimTrailingWhitespaces = trimTrailingWhitespaces && !(rule.action & RuleAction.DeleteSpace) && rule.flags !== RuleFlags.CanDeleteNewLines;
                 });
             }
             else {
-                trimTrailingWhitespaces = trimTrailingWhitespace && currentItem.kind !== SyntaxKind.EndOfFileToken;
+                trimTrailingWhitespaces = trimTrailingWhitespaces && currentItem.kind !== SyntaxKind.EndOfFileToken;
             }
 
             if (currentStartLine !== previousStartLine && trimTrailingWhitespaces) {
