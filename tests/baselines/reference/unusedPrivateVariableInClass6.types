@@ -1,0 +1,11 @@
+=== tests/cases/compiler/unusedPrivateVariableInClass6.ts ===
+export declare class C {
+>C : C
+
+    #private;
+>#private : any
+
+    private x;
+>x : any
+}
+
