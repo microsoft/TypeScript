@@ -1795,9 +1795,7 @@ namespace ts {
 
         const target = getTargetOfBindingOrAssignmentElement(bindingElement);
         if (target && isPropertyName(target)) {
-            return isComputedPropertyName(target) && isStringOrNumericLiteral(target.expression)
-                ? target.expression
-                : target;
+            return target;
         }
     }
 
