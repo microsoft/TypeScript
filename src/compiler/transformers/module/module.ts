@@ -1180,7 +1180,6 @@ namespace ts {
                 let modifiers: NodeArray<Modifier> | undefined;
 
                 // If we're exporting these variables, then these just become assignments to 'exports.x'.
-                // We only want to emit assignments for variables with initializers.
                 for (const variable of node.declarationList.declarations) {
                     if (isIdentifier(variable.name) && isLocalName(variable.name)) {
                         if (!modifiers) {
@@ -1189,7 +1188,7 @@ namespace ts {
 
                         variables = append(variables, variable);
                     }
-                    else if (variable.initializer) {
+                    else {
                         expressions = append(expressions, transformInitializedVariable(variable));
                     }
                 }
@@ -1259,7 +1258,7 @@ namespace ts {
                         ),
                         /*location*/ node.name
                     ),
-                    visitNode(node.initializer, moduleExpressionElementVisitor)
+                    node.initializer ? visitNode(node.initializer, moduleExpressionElementVisitor) : createVoidZero()
                 );
             }
         }

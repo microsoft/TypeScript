@@ -32,6 +32,7 @@ export let y: number;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.b = void 0;
 });
 //// [file2.js]
 define(["require", "exports", "module1", "templates/module2", "../file3"], function (require, exports, module1_1, module2_1, file3_1) {
