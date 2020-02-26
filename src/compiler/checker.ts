@@ -298,6 +298,7 @@ namespace ts {
         let typeCount = 0;
         let symbolCount = 0;
         let enumCount = 0;
+        let totalInstantiationCount = 0;
         let instantiationCount = 0;
         let instantiationDepth = 0;
         let constraintDepth = 0;
@@ -348,6 +349,7 @@ namespace ts {
             getIdentifierCount: () => sum(host.getSourceFiles(), "identifierCount"),
             getSymbolCount: () => sum(host.getSourceFiles(), "symbolCount") + symbolCount,
             getTypeCount: () => typeCount,
+            getInstantiationCount: () => totalInstantiationCount,
             getRelationCacheSizes: () => ({
                 assignable: assignableRelation.size,
                 identity: identityRelation.size,
@@ -13775,6 +13777,7 @@ namespace ts {
                 error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
                 return errorType;
             }
+            totalInstantiationCount++;
             instantiationCount++;
             instantiationDepth++;
             const result = instantiateTypeWorker(type, mapper);
