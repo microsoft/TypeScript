@@ -72,6 +72,26 @@ Standard output:
 @fluentui/docs: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/gulpfile.ts
 @fluentui/docs: > @fluentui/ability-attributes@X.X.X schema /office-ui-fabric-react/packages/fluentui/ability-attributes
 @fluentui/docs: > allyschema -c "process.env.NODE_ENV !== 'production'" schema.json > ./src/schema.ts
+@fluentui/docs: DocToccing single file "/office-ui-fabric-react/.github/CONTRIBUTING.md" for github.com.
+@fluentui/docs: ==================
+@fluentui/docs: "/office-ui-fabric-react/.github/CONTRIBUTING.md" will be updated
+@fluentui/docs: Everything is OK.
+@fluentui/docs: DocToccing single file "/office-ui-fabric-react/.github/setup-local-development.md" for github.com.
+@fluentui/docs: ==================
+@fluentui/docs: "/office-ui-fabric-react/.github/setup-local-development.md" will be updated
+@fluentui/docs: Everything is OK.
+@fluentui/docs: DocToccing single file "/office-ui-fabric-react/.github/add-a-feature.md" for github.com.
+@fluentui/docs: ==================
+@fluentui/docs: "/office-ui-fabric-react/.github/add-a-feature.md" will be updated
+@fluentui/docs: Everything is OK.
+@fluentui/docs: DocToccing single file "/office-ui-fabric-react/.github/document-a-feature.md" for github.com.
+@fluentui/docs: ==================
+@fluentui/docs: "/office-ui-fabric-react/.github/document-a-feature.md" will be updated
+@fluentui/docs: Everything is OK.
+@fluentui/docs: DocToccing single file "/office-ui-fabric-react/.github/test-a-feature.md" for github.com.
+@fluentui/docs: ==================
+@fluentui/docs: "/office-ui-fabric-react/.github/test-a-feature.md" will be updated
+@fluentui/docs: Everything is OK.
 @fluentui/docs: Starting type checking service...
 @fluentui/docs: Using 1 worker with 2048MB memory limit
 @fluentui/docs: [XX:XX:XX] Time: ?s
@@ -86,6 +106,27 @@ Standard output:
 @fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx
 @fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx(64,31):
 @fluentui/docs: TS2538: Type 'undefined' cannot be used as an index type.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/Alert/Alert.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/Alert/Alert.tsx(234,8):
+@fluentui/docs: TS2745: This JSX tag's 'children' prop expects type 'never' which requires multiple children, but only a single child was provided.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/Alert/Alert.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/Alert/Alert.tsx(235,9):
+@fluentui/docs: TS2322: Type 'string' is not assignable to type 'never'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/Alert/Alert.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/Alert/Alert.tsx(236,9):
+@fluentui/docs: TS2322: Type '(e: React.SyntheticEvent<Element, Event>) => void' is not assignable to type 'never'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/TextArea/TextArea.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/TextArea/TextArea.tsx(78,9):
+@fluentui/docs: TS2322: Type 'string' is not assignable to type 'never'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/TextArea/TextArea.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/TextArea/TextArea.tsx(79,9):
+@fluentui/docs: TS2322: Type 'string' is not assignable to type 'never'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/TextArea/TextArea.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/TextArea/TextArea.tsx(80,9):
+@fluentui/docs: TS2322: Type '(e: React.ChangeEvent<Element> | React.FormEvent<Element>) => void' is not assignable to type 'never'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/TextArea/TextArea.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/TextArea/TextArea.tsx(81,9):
+@fluentui/docs: TS2322: Type 'boolean' is not assignable to type 'never'.
 @fluentui/docs: Child HtmlWebpackCompiler:
 @fluentui/docs:     Entrypoint HtmlWebpackPlugin_0 = __child-HtmlWebpackPlugin_0
 @fluentui/docs: [XX:XX:XX] Webpack compiler encountered errors.
@@ -95,9 +136,6 @@ Standard output:
 
 Standard error:
 info cli using local version of lerna
-lerna notice cli vX.X.X
-lerna info ci enabled
-lerna info Executing command in 62 packages: "yarn run build"
 @fluentui/ability-attributes: npm WARN lifecycle The node binary used for scripts is  but npm is using /usr/local/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
 @uifabric/example-data: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/set-version: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
@@ -112,10 +150,23 @@ lerna info Executing command in 62 packages: "yarn run build"
 @fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx(34,22):
 @fluentui/docs: TS2345: Argument of type 'number' is not assignable to parameter of type '(prevState: undefined) => undefined'.,/office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx
 @fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx(64,31):
-@fluentui/docs: TS2538: Type 'undefined' cannot be used as an index type.
+@fluentui/docs: TS2538: Type 'undefined' cannot be used as an index type.,/office-ui-fabric-react/packages/fluentui/react/src/components/Alert/Alert.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/Alert/Alert.tsx(234,8):
+@fluentui/docs: TS2745: This JSX tag's 'children' prop expects type 'never' which requires multiple children, but only a single child was provided.,/office-ui-fabric-react/packages/fluentui/react/src/components/Alert/Alert.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/Alert/Alert.tsx(235,9):
+@fluentui/docs: TS2322: Type 'string' is not assignable to type 'never'.,/office-ui-fabric-react/packages/fluentui/react/src/components/Alert/Alert.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/Alert/Alert.tsx(236,9):
+@fluentui/docs: TS2322: Type '(e: React.SyntheticEvent<Element, Event>) => void' is not assignable to type 'never'.,/office-ui-fabric-react/packages/fluentui/react/src/components/TextArea/TextArea.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/TextArea/TextArea.tsx(78,9):
+@fluentui/docs: TS2322: Type 'string' is not assignable to type 'never'.,/office-ui-fabric-react/packages/fluentui/react/src/components/TextArea/TextArea.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/TextArea/TextArea.tsx(79,9):
+@fluentui/docs: TS2322: Type 'string' is not assignable to type 'never'.,/office-ui-fabric-react/packages/fluentui/react/src/components/TextArea/TextArea.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/TextArea/TextArea.tsx(80,9):
+@fluentui/docs: TS2322: Type '(e: React.ChangeEvent<Element> | React.FormEvent<Element>) => void' is not assignable to type 'never'.,/office-ui-fabric-react/packages/fluentui/react/src/components/TextArea/TextArea.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react/src/components/TextArea/TextArea.tsx(81,9):
+@fluentui/docs: TS2322: Type 'boolean' is not assignable to type 'never'.
 @fluentui/docs: Details:
 @fluentui/docs:     domainThrown: true
 @fluentui/docs: [XX:XX:XX] 'build:docs' errored after 
 @fluentui/docs: error Command failed with exit code 1.
 lerna ERR! yarn run build exited 1 in '@fluentui/docs'
-lerna WARN complete Waiting for 1 child process to exit. CTRL-C to exit immediately.
