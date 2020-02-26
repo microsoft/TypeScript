@@ -126,6 +126,7 @@
         "unittests/tsbuild/transitiveReferences.ts",
         "unittests/tsbuild/watchEnvironment.ts",
         "unittests/tsbuild/watchMode.ts",
+        "unittests/tsc/composite.ts",
         "unittests/tsc/declarationEmit.ts",
         "unittests/tsc/incremental.ts",
         "unittests/tsc/listFilesOnly.ts",
