@@ -1299,10 +1299,6 @@ namespace ts {
         return isVariableLike(node) || isAccessor(node);
     }
 
-    export function isPossiblyPropertyLikeDeclaration(node: Node): node is AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression | ElementAccessExpression {
-        return isVariableLikeOrAccessor(node) || isPropertyAccessExpression(node) || isElementAccessExpression(node) || isBinaryExpression(node);
-    }
-
     export function isVariableDeclarationInVariableStatement(node: VariableDeclaration) {
         return node.parent.kind === SyntaxKind.VariableDeclarationList
             && node.parent.parent.kind === SyntaxKind.VariableStatement;
