@@ -470,7 +470,7 @@ fn5();
             interface VerifierAndWithRefs {
                 withRefs: boolean;
                 disableSourceOfProjectReferenceRedirect?: true;
-                verifier: (withRefs: boolean) => readonly DocumentPositionMapperVerifier[];
+                verifier: (withRefs: boolean, disableSourceOfProjectReferenceRedirect?: true) => readonly DocumentPositionMapperVerifier[];
             }
 
             function openFiles(verifiers: readonly DocumentPositionMapperVerifier[]) {
@@ -502,7 +502,7 @@ fn5();
                     onHostCreate(host);
                 }
                 const session = createSession(host);
-                const verifiers = verifier(withRefs && !disableSourceOfProjectReferenceRedirect);
+                const verifiers = verifier(withRefs && !disableSourceOfProjectReferenceRedirect, disableSourceOfProjectReferenceRedirect);
                 openFilesForSession([...openFiles(verifiers), randomFile], session);
                 return { host, session, verifiers };
             }
@@ -724,13 +724,14 @@ fn5();
                     scenarioName,
                     verifier,
                     withRefs,
+                    disableSourceOfProjectReferenceRedirect,
                     change,
                     afterChangeActionKey
                 }: VerifyScenarioWithChanges,
                 timeoutBeforeAction: boolean,
             ) {
                 it(scenarioName, () => {
-                    const { host, session, verifiers } = openTsFile({ verifier, withRefs });
+                    const { host, session, verifiers } = openTsFile({ verifier, withRefs, disableSourceOfProjectReferenceRedirect });
 
                     // Create DocumentPositionMapper
                     firstAction(session, verifiers);
@@ -790,6 +791,7 @@ fn5();
                 scenarioName,
                 verifier,
                 withRefs,
+                disableSourceOfProjectReferenceRedirect,
                 fileLocation,
                 fileNotPresentKey,
                 fileCreatedKey,
@@ -801,6 +803,7 @@ fn5();
                         const { host, session, verifiers } = openTsFile({
                             verifier,
                             withRefs,
+                            disableSourceOfProjectReferenceRedirect,
                             onHostCreate: host => host.deleteFile(fileLocation)
                         });
                         checkProject(session, verifiers, noDts);
@@ -813,6 +816,7 @@ fn5();
                         const { host, session, verifiers } = openTsFile({
                             verifier,
                             withRefs,
+                            disableSourceOfProjectReferenceRedirect,
                             onHostCreate: host => {
                                 fileContents = host.readFile(fileLocation);
                                 host.deleteFile(fileLocation);
@@ -825,7 +829,7 @@ fn5();
                     });
 
                     it("when file is deleted after actions on the projects", () => {
-                        const { host, session, verifiers } = openTsFile({ verifier, withRefs });
+                        const { host, session, verifiers } = openTsFile({ verifier, disableSourceOfProjectReferenceRedirect, withRefs });
                         firstAction(session, verifiers);
 
                         // The dependency file is deleted when orphan files are collected
@@ -967,31 +971,35 @@ ${dependencyTs.content}`);
 
             interface VerifyScenario {
                 mainScenario: string;
-                verifier: (withRefs: boolean) => readonly DocumentPositionMapperVerifier[];
+                verifier: (withRefs: boolean, disableSourceOfProjectReferenceRedirect?: true) => readonly DocumentPositionMapperVerifier[];
             }
             function verifyScenario(scenario: VerifyScenario) {
-                describe("when main tsconfig doesnt have project reference", () => {
-                    verifyScenarioWorker(scenario, /*withRefs*/ false);
-                });
-                describe("when main tsconfig has project reference", () => {
-                    verifyScenarioWorker(scenario, /*withRefs*/ true);
-                });
-                describe("when main tsconfig has but has disableSourceOfProjectReferenceRedirect", () => {
-                    verifyScenarioWorker(scenario, /*withRefs*/ true);
+                describe(scenario.mainScenario, () => {
+                    describe("when main tsconfig doesnt have project reference", () => {
+                        verifyScenarioWorker(scenario, /*withRefs*/ false);
+                    });
+                    describe("when main tsconfig has project reference", () => {
+                        verifyScenarioWorker(scenario, /*withRefs*/ true);
+                    });
+                    describe("when main tsconfig has disableSourceOfProjectReferenceRedirect along with project reference", () => {
+                        verifyScenarioWorker(scenario, /*withRefs*/ true, /*disableSourceOfProjectReferenceRedirect*/ true);
+                    });
                 });
             }
 
             describe("from project that uses dependency", () => {
                 verifyScenario({
                     mainScenario: "can go to definition correctly",
-                    verifier: withRefs => [
+                    verifier: (withRefs, disableSourceOfProjectReferenceRedirect) => [
                         {
                             ...goToDefFromMainTsProjectInfoVerifier(withRefs),
                             main: () => ({
                                 action: goToDefFromMainTs,
                                 closedInfos: withRefs ?
                                     [dependencyTs.path, dependencyConfig.path, libFile.path] :
-                                    [dependencyTs.path, libFile.path, dtsPath, dtsMapLocation],
+                                    disableSourceOfProjectReferenceRedirect ?
+                                        [dependencyTs.path, libFile.path, dtsPath, dtsMapLocation, dependencyConfig.path] :
+                                        [dependencyTs.path, libFile.path, dtsPath, dtsMapLocation],
                                 otherWatchedFiles: [mainConfig.path],
                                 expectsDts: !withRefs, // Dts script info present only if no project reference
                                 expectsMap: !withRefs // Map script info present only if no project reference
@@ -1097,7 +1105,7 @@ ${dependencyTs.content}`);
             describe("when opening depedency and usage project", () => {
                 verifyScenario({
                     mainScenario: "goto Definition in usage and rename locations from defining project",
-                    verifier: withRefs => [
+                    verifier: (withRefs, disableSourceOfProjectReferenceRedirect) => [
                         {
                             ...goToDefFromMainTsProjectInfoVerifier(withRefs),
                             main: () => ({
@@ -1105,9 +1113,11 @@ ${dependencyTs.content}`);
                                 // DependencyTs is open, so omit it from closed infos
                                 closedInfos: withRefs ?
                                     [dependencyConfig.path, libFile.path] :
-                                    [libFile.path, dtsPath, dtsMapLocation],
-                                otherWatchedFiles: withRefs ?
-                                    [mainConfig.path] : // Its in closed info
+                                    disableSourceOfProjectReferenceRedirect ?
+                                        [libFile.path, dtsPath, dtsMapLocation, dependencyConfig.path] :
+                                        [libFile.path, dtsPath, dtsMapLocation],
+                                otherWatchedFiles: withRefs || disableSourceOfProjectReferenceRedirect ?
+                                    [mainConfig.path] : // dependencyConfig is in closed info
                                     [mainConfig.path, dependencyConfig.path],
                                 expectsDts: !withRefs, // Dts script info present only if no project reference
                                 expectsMap: !withRefs // Map script info present only if no project reference
@@ -1179,9 +1189,11 @@ ${dependencyTs.content}`);
                                 // DependencyTs is open, so omit it from closed infos
                                 closedInfos: withRefs ?
                                     [dependencyConfig.path, libFile.path, dtsLocation, dtsMapLocation] :
-                                    [libFile.path, dtsPath, dtsMapLocation],
-                                otherWatchedFiles: withRefs ?
-                                    [mainConfig.path] : // Its in closed info
+                                    disableSourceOfProjectReferenceRedirect ?
+                                        [libFile.path, dtsPath, dtsMapLocation, dependencyConfig.path] :
+                                        [libFile.path, dtsPath, dtsMapLocation],
+                                otherWatchedFiles: withRefs || disableSourceOfProjectReferenceRedirect ?
+                                    [mainConfig.path] : // dependencyConfig is in closed info
                                     [mainConfig.path, dependencyConfig.path],
                                 expectsDts: true,
                                 expectsMap: true,

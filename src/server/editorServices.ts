@@ -873,9 +873,11 @@ namespace ts.server {
             this.delayEnsureProjectForOpenFiles();
         }
 
-        private delayUpdateProjectGraphs(projects: readonly Project[]) {
+        private delayUpdateProjectGraphs(projects: readonly Project[], clearSourceMapperCache: boolean) {
             if (projects.length) {
                 for (const project of projects) {
+                    // Even if program doesnt change, clear the source mapper cache
+                    if (clearSourceMapperCache) project.clearSourceMapperCache();
                     this.delayUpdateProjectGraph(project);
                 }
                 this.delayEnsureProjectForOpenFiles();
@@ -1033,7 +1035,7 @@ namespace ts.server {
                     // file has been changed which might affect the set of referenced files in projects that include
                     // this file and set of inferred projects
                     info.delayReloadNonMixedContentFile();
-                    this.delayUpdateProjectGraphs(info.containingProjects);
+                    this.delayUpdateProjectGraphs(info.containingProjects, /*clearSourceMapperCache*/ false);
                     this.handleSourceMapProjects(info);
                 }
             }
@@ -1066,7 +1068,7 @@ namespace ts.server {
         private delayUpdateProjectsOfScriptInfoPath(path: Path) {
             const info = this.getScriptInfoForPath(path);
             if (info) {
-                this.delayUpdateProjectGraphs(info.containingProjects);
+                this.delayUpdateProjectGraphs(info.containingProjects, /*clearSourceMapperCache*/ true);
             }
         }
 
@@ -1082,7 +1084,7 @@ namespace ts.server {
                 info.detachAllProjects();
 
                 // update projects to make sure that set of referenced files is correct
-                this.delayUpdateProjectGraphs(containingProjects);
+                this.delayUpdateProjectGraphs(containingProjects, /*clearSourceMapperCache*/ false);
                 this.handleSourceMapProjects(info);
                 info.closeSourceMapFileWatcher();
                 // need to recalculate source map from declaration file
@@ -2537,7 +2539,7 @@ namespace ts.server {
                     const declarationInfo = this.getScriptInfoForPath(declarationInfoPath);
                     if (declarationInfo && declarationInfo.sourceMapFilePath && !isString(declarationInfo.sourceMapFilePath)) {
                         // Update declaration and source projects
-                        this.delayUpdateProjectGraphs(declarationInfo.containingProjects);
+                        this.delayUpdateProjectGraphs(declarationInfo.containingProjects, /*clearSourceMapperCache*/ true);
                         this.delayUpdateSourceInfoProjects(declarationInfo.sourceMapFilePath.sourceInfos);
                         declarationInfo.closeSourceMapFileWatcher();
                     }

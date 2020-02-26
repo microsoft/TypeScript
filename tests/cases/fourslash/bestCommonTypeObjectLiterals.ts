@@ -21,13 +21,10 @@
 ////var /*4*/c3 = [i, a];
 
 verify.quickInfos({
-    4: "var c3: I[]"
-});
-verify.quickInfos({
     1: "var c: {\n    name: string;\n    age: number;\n}[]",
     2: "var c1: {\n    name: string;\n    age: number;\n}[]",
     3:
-`var c2: ({
+        `var c2: ({
     name: string;
     age: number;
     address: string;
@@ -36,5 +33,5 @@ verify.quickInfos({
     age: number;
     dob: Date;
 })[]`,
-    4: "var c3: I[]"
+    4: "var c3: {\n    name: string;\n    age: number;\n}[]"
 });

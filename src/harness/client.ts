@@ -808,6 +808,10 @@ namespace ts.server {
             return notImplemented();
         }
 
+        clearSourceMapperCache(): never {
+            return notImplemented();
+        }
+
         dispose(): void {
             throw new Error("dispose is not available through the server layer.");
         }

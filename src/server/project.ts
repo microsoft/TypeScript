@@ -384,7 +384,9 @@ namespace ts.server {
         }
 
         getScriptVersion(filename: string) {
-            const info = this.getOrCreateScriptInfoAndAttachToProject(filename);
+            // Don't attach to the project if version is asked
+
+            const info = this.projectService.getOrCreateScriptInfoNotOpenedByClient(filename, this.currentDirectory, this.directoryStructureHost);
             return (info && info.getLatestVersion())!; // TODO: GH#18217
         }
 
@@ -556,6 +558,11 @@ namespace ts.server {
         /** @internal */
         getSourceMapper(): SourceMapper {
             return this.getLanguageService().getSourceMapper();
+        }
+
+        /** @internal */
+        clearSourceMapperCache() {
+            this.languageService.clearSourceMapperCache();
         }
 
         /*@internal*/
@@ -1224,7 +1231,10 @@ namespace ts.server {
                 watcher: this.projectService.watchFactory.watchFile(
                     this.projectService.host,
                     generatedFile,
-                    () => this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this),
+                    () => {
+                        this.clearSourceMapperCache();
+                        this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
+                    },
                     PollingInterval.High,
                     this.projectService.getWatchOptions(this),
                     WatchType.MissingGeneratedFile,
