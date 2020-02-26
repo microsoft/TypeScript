@@ -1298,6 +1298,9 @@
       <Item ItemId=";All_type_parameters_are_unused_6205" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[All type parameters are unused]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tüm tür parametreleri kullanılmıyor]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1712,6 +1715,9 @@
       <Item ItemId=";An_index_signature_parameter_type_must_be_either_string_or_number_1023" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[An index signature parameter type must be either 'string' or 'number'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Dizin imzası parametresi, 'string' veya 'number' türünde olmalıdır.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2876,6 +2882,9 @@
       <Item ItemId=";Composite_projects_may_not_disable_incremental_compilation_6379" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Composite projects may not disable incremental compilation.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bileşik projeler artımlı derlemeyi devre dışı bırakamayabilir.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3476,6 +3485,9 @@
       <Item ItemId=";Disable_solution_searching_for_this_project_6224" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Disable solution searching for this project.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bu proje için çözüm aramayı devre dışı bırakın.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3491,6 +3503,9 @@
       <Item ItemId=";Disable_use_of_source_files_instead_of_declaration_files_from_referenced_projects_6221" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Disable use of source files instead of declaration files from referenced projects.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Başvurulan projelerdeki bildirim dosyaları yerine kaynak dosyalarının kullanımını devre dışı bırakın.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4745,6 +4760,9 @@
       <Item ItemId=";Generates_a_CPU_profile_6223" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Generates a CPU profile.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bir CPU profili oluşturur.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5687,6 +5705,9 @@
       <Item ItemId=";Keywords_cannot_contain_escape_characters_1260" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Keywords cannot contain escape characters.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Anahtar sözcükler kaçış karakterleri içeremez.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6272,6 +6293,9 @@
       <Item ItemId=";Non_simple_parameter_declared_here_1348" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Non-simple parameter declared here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Basit olmayan parametre burada bildirildi.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7103,6 +7127,9 @@
       <Item ItemId=";Print_names_of_files_that_are_part_of_the_compilation_and_then_stop_processing_6503" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Print names of files that are part of the compilation and then stop processing.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Derlemenin parçası olan dosyaların adlarını yazdırın ve sonra işlemeyi durdurun.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7160,6 +7187,9 @@
       <Item ItemId=";Private_identifiers_cannot_be_used_as_parameters_18009" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Private identifiers cannot be used as parameters]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özel tanımlayıcılar parametre olarak kullanılamaz]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8528,6 +8558,9 @@
       <Item ItemId=";Specify_file_to_store_incremental_compilation_information_6380" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify file to store incremental compilation information]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Artımlı derleme bilgilerinin depolanacağı dosyayı belirtin]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8843,6 +8876,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Tag_0_expects_at_least_1_arguments_but_the_JSX_factory_2_provides_at_most_3_6229" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Tagged_template_expressions_are_not_permitted_in_an_optional_chain_1358" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Tagged template expressions are not permitted in an optional chain.]]></Val>
@@ -8969,6 +9008,9 @@
       <Item ItemId=";The_expected_type_comes_from_the_return_type_of_this_signature_6502" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The expected type comes from the return type of this signature.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Beklenen tür bu imzanın dönüş türünden geliyor.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -9026,6 +9068,9 @@
       <Item ItemId=";The_implementation_signature_is_declared_here_2750" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The implementation signature is declared here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Uygulama imzası burada bildirilir.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -9053,12 +9098,18 @@
       <Item ItemId=";The_last_overload_gave_the_following_error_2770" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The last overload gave the following error.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Son aşırı yükleme aşağıdaki hatayı verdi.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";The_last_overload_is_declared_here_2771" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The last overload is declared here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Son aşırı yükleme burada bildirilir.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -9404,6 +9455,9 @@
       <Item ItemId=";The_type_of_a_function_declaration_must_match_the_function_s_signature_8030" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The type of a function declaration must match the function's signature.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[İşlev bildiriminin türü işlevin imzasıyla eşleşmelidir.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -9494,6 +9548,9 @@
       <Item ItemId=";This_expression_is_not_callable_2349" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This expression is not callable.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bu ifade çağrılabilir değil.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -9530,6 +9587,9 @@
       <Item ItemId=";This_overload_signature_is_not_compatible_with_its_implementation_signature_2394" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This overload signature is not compatible with its implementation signature.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bu aşırı yükleme imzası, uygulama imzasıyla uyumlu değil.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -9854,6 +9914,9 @@
       <Item ItemId=";Type_aliases_can_only_be_used_in_TypeScript_files_8008" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type aliases can only be used in TypeScript files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tür diğer adları, yalnızca TypeScript dosyalarında kullanılabilir.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -9869,6 +9932,9 @@
       <Item ItemId=";Type_annotations_can_only_be_used_in_TypeScript_files_8010" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type annotations can only be used in TypeScript files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tür ek açıklamaları yalnızca TypeScript dosyalarında kullanılabilir.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -9902,6 +9968,9 @@
       <Item ItemId=";Type_arguments_can_only_be_used_in_TypeScript_files_8011" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type arguments can only be used in TypeScript files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tür bağımsız değişkenleri yalnızca TypeScript dosyalarında kullanılabilir.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -9923,6 +9992,9 @@
       <Item ItemId=";Type_assertion_expressions_can_only_be_used_in_TypeScript_files_8016" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type assertion expressions can only be used in TypeScript files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tür onaylama ifadeleri, yalnızca TypeScript dosyalarında kullanılabilir.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
