@@ -34013,7 +34013,20 @@ namespace ts {
                 const saveCurrentNode = currentNode;
                 currentNode = node;
                 instantiationCount = 0;
+
+                const oldTypeCount = typeCount;
+                const oldSymbolCount = symbolCount;
+
                 checkSourceElementWorker(node);
+
+                if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement) {
+                    const sourceFile = getSourceFileOfNode(node);
+                    const startLC = getLineAndCharacterOfPosition(sourceFile, skipTrivia(sourceFile.text, node.pos));
+                    const endLC = getLineAndCharacterOfPosition(sourceFile, node.end);
+
+                    sys.write(`"${sourceFile.path}",${startLC.line + 1},${startLC.character + 1},${endLC.line + 1},${endLC.character + 1},${typeCount - oldTypeCount},${symbolCount - oldSymbolCount}` + sys.newLine);
+                }
+
                 currentNode = saveCurrentNode;
             }
         }
@@ -34035,6 +34048,7 @@ namespace ts {
                         cancellationToken.throwIfCancellationRequested();
                 }
             }
+
             if (kind >= SyntaxKind.FirstStatement && kind <= SyntaxKind.LastStatement && node.flowNode && !isReachableFlowNode(node.flowNode)) {
                 errorOrSuggestion(compilerOptions.allowUnreachableCode === false, node, Diagnostics.Unreachable_code_detected);
             }

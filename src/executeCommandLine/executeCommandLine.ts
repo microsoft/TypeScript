@@ -344,6 +344,8 @@ namespace ts {
         cb: ExecuteCommandLineCallbacks,
         commandLineArgs: readonly string[],
     ) {
+        system.write(`"Path","Start Line","Start Character","End Line","End Character","Type Delta","Symbol Delta"` + system.newLine);
+
         if (isBuild(commandLineArgs)) {
             const { buildOptions, watchOptions, projects, errors } = parseBuildCommand(commandLineArgs.slice(1));
             if (buildOptions.generateCpuProfile && system.enableCPUProfiler) {
