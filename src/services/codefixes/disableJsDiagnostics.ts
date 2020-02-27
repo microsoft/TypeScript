@@ -2,7 +2,7 @@
 namespace ts.codefix {
     const fixName = "disableJsDiagnostics";
     const fixId = "disableJsDiagnostics";
-    const errorCodes = mapDefined(Object.keys(Diagnostics) as ReadonlyArray<keyof typeof Diagnostics>, key => {
+    const errorCodes = mapDefined(Object.keys(Diagnostics) as readonly (keyof typeof Diagnostics)[], key => {
         const diag = Diagnostics[key];
         return diag.category === DiagnosticCategory.Error ? diag.code : undefined;
     });
@@ -18,7 +18,7 @@ namespace ts.codefix {
 
             const fixes: CodeFixAction[] = [
                 // fixId unnecessary because adding `// @ts-nocheck` even once will ignore every error in the file.
-                createCodeFixActionNoFixId(
+                createCodeFixActionWithoutFixAll(
                     fixName,
                     [createFileTextChanges(sourceFile.fileName, [
                         createTextChange(sourceFile.checkJsDirective

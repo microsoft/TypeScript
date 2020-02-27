@@ -5,15 +5,25 @@ tests/cases/conformance/enums/enumErrors.ts(5,6): error TS2431: Enum name cannot
 tests/cases/conformance/enums/enumErrors.ts(9,9): error TS2322: Type 'Number' is not assignable to type 'E5'.
 tests/cases/conformance/enums/enumErrors.ts(26,9): error TS2322: Type 'true' is not assignable to type 'E11'.
 tests/cases/conformance/enums/enumErrors.ts(27,9): error TS2322: Type 'Date' is not assignable to type 'E11'.
-tests/cases/conformance/enums/enumErrors.ts(28,9): error TS2322: Type 'Window' is not assignable to type 'E11'.
+tests/cases/conformance/enums/enumErrors.ts(28,9): error TS2322: Type 'Window & typeof globalThis' is not assignable to type 'E11'.
 tests/cases/conformance/enums/enumErrors.ts(29,9): error TS2322: Type '{}' is not assignable to type 'E11'.
 tests/cases/conformance/enums/enumErrors.ts(35,9): error TS2553: Computed values are not permitted in an enum with string valued members.
 tests/cases/conformance/enums/enumErrors.ts(36,9): error TS2553: Computed values are not permitted in an enum with string valued members.
 tests/cases/conformance/enums/enumErrors.ts(37,9): error TS2553: Computed values are not permitted in an enum with string valued members.
 tests/cases/conformance/enums/enumErrors.ts(38,9): error TS2553: Computed values are not permitted in an enum with string valued members.
+tests/cases/conformance/enums/enumErrors.ts(46,18): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+tests/cases/conformance/enums/enumErrors.ts(47,24): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+tests/cases/conformance/enums/enumErrors.ts(47,26): error TS2452: An enum member cannot have a numeric name.
+tests/cases/conformance/enums/enumErrors.ts(48,28): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+tests/cases/conformance/enums/enumErrors.ts(48,30): error TS2452: An enum member cannot have a numeric name.
+tests/cases/conformance/enums/enumErrors.ts(48,31): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+tests/cases/conformance/enums/enumErrors.ts(51,16): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+tests/cases/conformance/enums/enumErrors.ts(51,22): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+tests/cases/conformance/enums/enumErrors.ts(51,30): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+tests/cases/conformance/enums/enumErrors.ts(51,33): error TS2452: An enum member cannot have a numeric name.
 
 
-==== tests/cases/conformance/enums/enumErrors.ts (13 errors) ====
+==== tests/cases/conformance/enums/enumErrors.ts (23 errors) ====
     // Enum named with PredefinedTypes
     enum any { }
          ~~~
@@ -57,7 +67,7 @@ tests/cases/conformance/enums/enumErrors.ts(38,9): error TS2553: Computed values
 !!! error TS2322: Type 'Date' is not assignable to type 'E11'.
         C = window,
             ~~~~~~
-!!! error TS2322: Type 'Window' is not assignable to type 'E11'.
+!!! error TS2322: Type 'Window & typeof globalThis' is not assignable to type 'E11'.
         D = {}
             ~~
 !!! error TS2322: Type '{}' is not assignable to type 'E11'.
@@ -79,4 +89,36 @@ tests/cases/conformance/enums/enumErrors.ts(38,9): error TS2553: Computed values
             ~~~~~
 !!! error TS2553: Computed values are not permitted in an enum with string valued members.
     }
+    
+    // Enum with incorrect syntax
+    enum E13 {
+        postComma,
+        postValueComma = 1,
+    
+        postSemicolon;
+                     ~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+        postColonValueComma: 2,
+                           ~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+                             ~
+!!! error TS2452: An enum member cannot have a numeric name.
+        postColonValueSemicolon: 3;
+                               ~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+                                 ~
+!!! error TS2452: An enum member cannot have a numeric name.
+                                  ~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+    };
+    
+    enum E14 { a, b: any "hello" += 1, c, d}
+                   ~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+                         ~~~~~~~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+                                 ~~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+                                    ~
+!!! error TS2452: An enum member cannot have a numeric name.
     

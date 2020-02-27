@@ -324,7 +324,9 @@ var glo_C4_public = /** @class */ (function () {
     return glo_C4_public;
 }());
 var glo_v1_private;
+exports.glo_v2_public = void 0;
 var glo_v3_private;
+exports.glo_v4_public = void 0; // error
 var glo_v11_private = new glo_C1_public();
 exports.glo_v12_public = new glo_C1_public();
 var glo_v13_private = new glo_C2_private();

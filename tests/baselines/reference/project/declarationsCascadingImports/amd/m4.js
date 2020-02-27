@@ -8,6 +8,7 @@ define(["require", "exports"], function (require, exports) {
     }());
     exports.d = d;
     ;
+    exports.x = void 0;
     function foo() {
         return new d();
     }

@@ -25,7 +25,7 @@ enum Compass {
 var numIndex: { [n: number]: string } = { 3: 'three', 'three': 'three' };
 >numIndex : { [n: number]: string; }
 >n : number
->{ 3: 'three', 'three': 'three' } : { 3: string; 'three': string; }
+>{ 3: 'three', 'three': 'three' } : { 3: string; three: string; }
 >3 : string
 >'three' : "three"
 >'three' : string
@@ -34,7 +34,7 @@ var numIndex: { [n: number]: string } = { 3: 'three', 'three': 'three' };
 var strIndex: { [n: string]: Compass } = { 'N': Compass.North, 'E': Compass.East };
 >strIndex : { [n: string]: Compass; }
 >n : string
->{ 'N': Compass.North, 'E': Compass.East } : { 'N': Compass.North; 'E': Compass.East; }
+>{ 'N': Compass.North, 'E': Compass.East } : { N: Compass.North; E: Compass.East; }
 >'N' : Compass.North
 >Compass.North : Compass.North
 >Compass : typeof Compass

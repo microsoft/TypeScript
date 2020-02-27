@@ -1,0 +1,492 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LCX SchemaVersion="6.0" Name="E:\A\_work\326\s\VS\TypeScriptTasks\bin\Release\Targets\TypeScriptProjectProperties.xaml" PsrId="22" FileType="1" SrcCul="en-US" TgtCul="zh-TW" xmlns="http://schemas.microsoft.com/locstudio/2006/6/lcx">
+  <OwnedComments>
+    <Cmt Name="Dev" />
+    <Cmt Name="LcxAdmin" />
+    <Cmt Name="Rccx" />
+  </OwnedComments>
+  <Settings Name="@vsLocTools@\default.lss" Type="Lss" />
+  <Item ItemId=";&lt;Category&gt;" ItemType="0" PsrId="210" Leaf="false">
+    <Disp Icon="Str" Disp="true" LocTbl="false" />
+    <Item ItemId="0;typescriptbuild@Category@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[TypeScript Build]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[TypeScript 建置]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+  </Item>
+  <Item ItemId=";&lt;EnumProperty&gt;" ItemType="0" PsrId="210" Leaf="false">
+    <Disp Icon="Str" Disp="true" LocTbl="false" />
+    <Item ItemId="0;typescriptcompileonsaveenabled@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Recompile sources on save]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[儲存時重新編譯來源]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptgeneratesdeclarations@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Generate corresponding d.ts file]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[產生對應的 d.ts 檔案]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptjsxemit@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Specify JSX code compilation mode for .tsx files, this doesn't affect .ts files]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[為 .tsx 檔指定 JSX 程式碼編譯模式，這不會影響 .ts 檔]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptmodulekind@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[External module code generation target]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[外部模組程式碼產生目標]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptnoemitonerror@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Emit outputs if any errors were reported]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[如果回報任何錯誤，則發出輸出]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptnoimplicitany@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Suppress warnings on expressions and declarations with an implied Any type]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[不顯示對具有隱含 Any 類型之運算式與宣告的警告]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptremovecomments@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Emit comments to output]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[將註解發至輸出]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptsourcemap@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Generates corresponding .map file]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[產生對應的 .map 檔案]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescripttarget@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[ECMAScript version to use for generated JavaScript]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[產生之 JavaScript 所要使用的 ECMAScript 版本]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptcompileonsaveenabled@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Compile on save]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[儲存時編譯]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptgeneratesdeclarations@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Generate declaration files]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[產生宣告檔案]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptjsxemit@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Compilation mode for .tsx files]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[.tsx 檔的編譯模式]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptmodulekind@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Module system]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[模組系統]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptnoemitonerror@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Emit on error]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[錯誤時發出]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptnoimplicitany@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Allow implicit 'any' types]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[允許隱含的 'any' 類型]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptremovecomments@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Keep comments in JavaScript output]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[在 JavaScript 輸出中保留註解]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptsourcemap@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Generate source maps]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[產生來源對應]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescripttarget@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[ECMAScript version]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[ECMAScript 版本]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+  </Item>
+  <Item ItemId=";&lt;EnumValue&gt;" ItemType="0" PsrId="210" Leaf="false">
+    <Disp Icon="Str" Disp="true" LocTbl="false" />
+    <Item ItemId="0;amd@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[AMD]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[AMD]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;commonjs@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[CommonJS]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[CommonJS]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;es3@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[ECMAScript 3]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[ECMAScript 3]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;es5@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[ECMAScript 5]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[ECMAScript 5]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;es6@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[ECMAScript 6]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[ECMAScript 6]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;false@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[No]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[否]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;none@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[None]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[無]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;preserve@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Preserve JSX elements]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[保留 JSX 項目]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;react@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Emit React call for JSX elements]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[針對 JSX 項目發出 React 呼叫]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;system@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[System]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[系統]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;true@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Yes]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[是]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;umd@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[UMD]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[UMD]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="1;false@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Yes]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[是]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="1;none@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[None]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[無]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="1;true@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[No]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[否]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="2;false@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Yes]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[是]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="2;true@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[No]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[否]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="3;false@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[No]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[否]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="3;true@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Yes]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[是]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="4;false@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[No]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[否]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="4;true@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Yes]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[是]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="5;false@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Yes]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[是]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="5;true@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[No]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[否]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+  </Item>
+  <Item ItemId=";&lt;Rule&gt;" ItemType="0" PsrId="210" Leaf="false">
+    <Disp Icon="Str" Disp="true" LocTbl="false" />
+    <Item ItemId="0;typescriptbuild@Rule@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[TypeScript Build]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[TypeScript 建置]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptbuild@Rule@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[TypeScript Build]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[TypeScript 建置]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+  </Item>
+  <Item ItemId=";&lt;StringProperty&gt;" ItemType="0" PsrId="210" Leaf="false">
+    <Disp Icon="Str" Disp="true" LocTbl="false" />
+    <Item ItemId="0;typescriptmaproot@StringProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Emits the sourcemaps such that soucemaps while debugging will be located in the sourcemap root]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[發出 sourcemap，以便偵錯時，可以在 sourcemap 根目錄中找到 sourcemap。]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptoutdir@StringProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Redirect output to a different directory than sources]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[將輸出重新導向至不同於來源的目錄]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptoutfile@StringProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Redirect output to a file]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[將輸出重新導向至檔案]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptsourceroot@StringProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Emits the sourcemaps such that sources while debugging will be located in the source root]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[發出 sourcemap，以便偵錯時，可以在來源根目錄中找到來源。]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptmaproot@StringProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Specify root directory of source maps]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[指定來源對應的根目錄]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptoutdir@StringProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Redirect JavaScript output to directory]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[將 JavaScript 輸出重新導向至目錄]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptoutfile@StringProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Combine JavaScript output into file]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[將 JavaScript 輸出合併至檔案]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptsourceroot@StringProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Specify root directory of TypeScript files]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[指定 TypeScript 檔案的根目錄]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+  </Item>
+</LCX>

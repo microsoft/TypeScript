@@ -246,8 +246,8 @@ module TypeScriptAllInOne {
 >/\w*/ : RegExp
 
             var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; },  instanceof : () => 'objLit{42}' };
->objLit : { "var": number; equals: (x: any) => boolean; instanceof: () => string; }
->{ "var": number = 42, equals: function (x) { return x["var"] === 42; },  instanceof : () => 'objLit{42}' } : { "var": number; equals: (x: any) => boolean; instanceof: () => string; }
+>objLit : { var: number; equals: (x: any) => boolean; instanceof: () => string; }
+>{ "var": number = 42, equals: function (x) { return x["var"] === 42; },  instanceof : () => 'objLit{42}' } : { var: number; equals: (x: any) => boolean; instanceof: () => string; }
 >"var" : number
 >number = 42 : 42
 >number : number
@@ -294,7 +294,7 @@ module TypeScriptAllInOne {
 >reg.toString : () => string
 >reg : RegExp
 >toString : () => string
->objLit : { "var": number; equals: (x: any) => boolean; instanceof: () => string; }
+>objLit : { var: number; equals: (x: any) => boolean; instanceof: () => string; }
 >weekday : Weekdays.Monday
 
             //

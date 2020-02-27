@@ -80,7 +80,7 @@ a2 = { a: "def" };
 a2 = {};
 a2 = { a: "def", b: 20 }; // Error
 a2 = { a: 1 }; // Error
-var b2 = __assign({}, b1, { z: 55 });
+var b2 = __assign(__assign({}, b1), { z: 55 });
 var b3 = __assign({}, b2);
 var c1 = !true ? {} : opts;
 var c2 = !true ? opts : {};
@@ -227,5 +227,13 @@ declare let e2: {
     a: number;
     b: number;
 };
-declare let e3: any;
-declare let e4: any;
+declare let e3: {
+    a: 1;
+    b: "abc";
+    c: true;
+};
+declare let e4: {
+    a: 1;
+    b: "abc";
+    c: true;
+};

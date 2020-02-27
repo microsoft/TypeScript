@@ -1,3 +1,22 @@
+//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+/lib/tsc --b /src/app --verbose
+12:04:00 AM - Projects in this build: 
+    * src/lib/tsconfig.json
+    * src/app/tsconfig.json
+
+12:04:00 AM - Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.js' is older than newest input 'src/lib/file1.ts'
+
+12:04:00 AM - Building project '/src/lib/tsconfig.json'...
+
+12:04:00 AM - Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+
+12:04:00 AM - Updating output of project '/src/app/tsconfig.json'...
+
+12:04:00 AM - Updating unchanged output timestamps of project '/src/app/tsconfig.json'...
+
+exitCode:: ExitStatus.Success
+
+
 //// [/src/app/module.js]
 "use strict";
 "myPrologue";
@@ -305,10 +324,10 @@ sourceFile:file4.ts
 //// [/src/app/module.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/app/",
+    "commonSourceDirectory": "./",
     "sourceFiles": [
-      "/src/app/file3.ts",
-      "/src/app/file4.ts"
+      "./file3.ts",
+      "./file4.ts"
     ],
     "js": {
       "sections": [
@@ -340,7 +359,7 @@ sourceFile:file4.ts
           "pos": 62,
           "end": 523,
           "kind": "prepend",
-          "data": "/src/lib/module.js",
+          "data": "../lib/module.js",
           "texts": [
             {
               "pos": 62,
@@ -390,7 +409,7 @@ sourceFile:file4.ts
           "pos": 0,
           "end": 171,
           "kind": "prepend",
-          "data": "/src/lib/module.d.ts",
+          "data": "../lib/module.d.ts",
           "texts": [
             {
               "pos": 0,
@@ -426,7 +445,7 @@ prologue: (30-44):: myPrologue3
 prologue: (46-60):: myPrologue2
 "myPrologue2";
 ----------------------------------------------------------------------
-prepend: (62-523):: /src/lib/module.js texts:: 1
+prepend: (62-523):: ../lib/module.js texts:: 1
 >>--------------------------------------------------------------------
 text: (62-523)
 var myGlob = 20;
@@ -458,7 +477,7 @@ var myVar = 30;
 ======================================================================
 File:: /src/app/module.d.ts
 ----------------------------------------------------------------------
-prepend: (0-171):: /src/lib/module.d.ts texts:: 1
+prepend: (0-171):: ../lib/module.d.ts texts:: 1
 >>--------------------------------------------------------------------
 text: (0-171)
 declare const myGlob = 20;
@@ -482,6 +501,9 @@ declare const myVar = 30;
 //// [/src/lib/file1.ts]
 export const x = 10;console.log(x);
 
+//// [/src/lib/module.d.ts] file written with same contents
+//// [/src/lib/module.d.ts.map] file written with same contents
+//// [/src/lib/module.d.ts.map.baseline.txt] file written with same contents
 //// [/src/lib/module.js]
 "use strict";
 "myPrologue";
@@ -698,12 +720,12 @@ sourceFile:global.ts
 //// [/src/lib/module.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/lib/",
+    "commonSourceDirectory": "./",
     "sourceFiles": [
-      "/src/lib/file0.ts",
-      "/src/lib/file1.ts",
-      "/src/lib/file2.ts",
-      "/src/lib/global.ts"
+      "./file0.ts",
+      "./file1.ts",
+      "./file2.ts",
+      "./global.ts"
     ],
     "js": {
       "sections": [

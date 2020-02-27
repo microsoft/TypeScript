@@ -1,10 +1,10 @@
-tests/cases/compiler/export.js(1,13): error TS8008: 'type aliases' can only be used in a .ts file.
+tests/cases/compiler/export.js(1,13): error TS8008: Type aliases can only be used in TypeScript files.
 
 
 ==== tests/cases/compiler/export.js (1 errors) ====
     export type foo = 5;
                 ~~~
-!!! error TS8008: 'type aliases' can only be used in a .ts file.
+!!! error TS8008: Type aliases can only be used in TypeScript files.
     /**
      * @typedef {{
      * }}

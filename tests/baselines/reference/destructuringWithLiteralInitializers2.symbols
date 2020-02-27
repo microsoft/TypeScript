@@ -1,0 +1,113 @@
+=== tests/cases/conformance/es6/destructuring/destructuringWithLiteralInitializers2.ts ===
+function f00([x, y]) {}
+>f00 : Symbol(f00, Decl(destructuringWithLiteralInitializers2.ts, 0, 0))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 0, 14))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers2.ts, 0, 16))
+
+function f01([x, y] = []) {}
+>f01 : Symbol(f01, Decl(destructuringWithLiteralInitializers2.ts, 0, 23))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 1, 14))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers2.ts, 1, 16))
+
+function f02([x, y] = [1]) {}
+>f02 : Symbol(f02, Decl(destructuringWithLiteralInitializers2.ts, 1, 28))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 2, 14))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers2.ts, 2, 16))
+
+function f03([x, y] = [1, 'foo']) {}
+>f03 : Symbol(f03, Decl(destructuringWithLiteralInitializers2.ts, 2, 29))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 3, 14))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers2.ts, 3, 16))
+
+function f10([x = 0, y]) {}
+>f10 : Symbol(f10, Decl(destructuringWithLiteralInitializers2.ts, 3, 36))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 5, 14))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers2.ts, 5, 20))
+
+function f11([x = 0, y] = []) {}
+>f11 : Symbol(f11, Decl(destructuringWithLiteralInitializers2.ts, 5, 27))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 6, 14))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers2.ts, 6, 20))
+
+function f12([x = 0, y] = [1]) {}
+>f12 : Symbol(f12, Decl(destructuringWithLiteralInitializers2.ts, 6, 32))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 7, 14))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers2.ts, 7, 20))
+
+function f13([x = 0, y] = [1, 'foo']) {}
+>f13 : Symbol(f13, Decl(destructuringWithLiteralInitializers2.ts, 7, 33))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 8, 14))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers2.ts, 8, 20))
+
+function f20([x = 0, y = 'bar']) {}
+>f20 : Symbol(f20, Decl(destructuringWithLiteralInitializers2.ts, 8, 40))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 10, 14))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers2.ts, 10, 20))
+
+function f21([x = 0, y = 'bar'] = []) {}
+>f21 : Symbol(f21, Decl(destructuringWithLiteralInitializers2.ts, 10, 35))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 11, 14))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers2.ts, 11, 20))
+
+function f22([x = 0, y = 'bar'] = [1]) {}
+>f22 : Symbol(f22, Decl(destructuringWithLiteralInitializers2.ts, 11, 40))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 12, 14))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers2.ts, 12, 20))
+
+function f23([x = 0, y = 'bar'] = [1, 'foo']) {}
+>f23 : Symbol(f23, Decl(destructuringWithLiteralInitializers2.ts, 12, 41))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 13, 14))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers2.ts, 13, 20))
+
+declare const nx: number | undefined;
+>nx : Symbol(nx, Decl(destructuringWithLiteralInitializers2.ts, 15, 13))
+
+declare const sx: string | undefined;
+>sx : Symbol(sx, Decl(destructuringWithLiteralInitializers2.ts, 16, 13))
+
+function f30([x = 0, y = 'bar']) {}
+>f30 : Symbol(f30, Decl(destructuringWithLiteralInitializers2.ts, 16, 37))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 18, 14))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers2.ts, 18, 20))
+
+function f31([x = 0, y = 'bar'] = []) {}
+>f31 : Symbol(f31, Decl(destructuringWithLiteralInitializers2.ts, 18, 35))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 19, 14))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers2.ts, 19, 20))
+
+function f32([x = 0, y = 'bar'] = [nx]) {}
+>f32 : Symbol(f32, Decl(destructuringWithLiteralInitializers2.ts, 19, 40))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 20, 14))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers2.ts, 20, 20))
+>nx : Symbol(nx, Decl(destructuringWithLiteralInitializers2.ts, 15, 13))
+
+function f33([x = 0, y = 'bar'] = [nx, sx]) {}
+>f33 : Symbol(f33, Decl(destructuringWithLiteralInitializers2.ts, 20, 42))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 21, 14))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers2.ts, 21, 20))
+>nx : Symbol(nx, Decl(destructuringWithLiteralInitializers2.ts, 15, 13))
+>sx : Symbol(sx, Decl(destructuringWithLiteralInitializers2.ts, 16, 13))
+
+function f40([x = 0, y = 'bar']) {}
+>f40 : Symbol(f40, Decl(destructuringWithLiteralInitializers2.ts, 21, 46))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 23, 14))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers2.ts, 23, 20))
+
+function f41([x = 0, y = 'bar'] = []) {}
+>f41 : Symbol(f41, Decl(destructuringWithLiteralInitializers2.ts, 23, 35))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 24, 14))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers2.ts, 24, 20))
+
+function f42([x = 0, y = 'bar'] = [sx]) {}
+>f42 : Symbol(f42, Decl(destructuringWithLiteralInitializers2.ts, 24, 40))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 25, 14))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers2.ts, 25, 20))
+>sx : Symbol(sx, Decl(destructuringWithLiteralInitializers2.ts, 16, 13))
+
+function f43([x = 0, y = 'bar'] = [sx, nx]) {}
+>f43 : Symbol(f43, Decl(destructuringWithLiteralInitializers2.ts, 25, 42))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers2.ts, 26, 14))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers2.ts, 26, 20))
+>sx : Symbol(sx, Decl(destructuringWithLiteralInitializers2.ts, 16, 13))
+>nx : Symbol(nx, Decl(destructuringWithLiteralInitializers2.ts, 15, 13))
+

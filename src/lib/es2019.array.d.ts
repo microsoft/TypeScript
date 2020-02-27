@@ -18,7 +18,7 @@ interface ReadonlyArray<T> {
      * thisArg is omitted, undefined is used as the this value.
      */
     flatMap<U, This = undefined> (
-        callback: (this: This, value: T, index: number, array: T[]) => U|ReadonlyArray<U>,
+        callback: (this: This, value: T, index: number, array: T[]) => U | ReadonlyArray<U>,
         thisArg?: This
     ): U[]
 
@@ -48,7 +48,7 @@ interface Array<T> {
      * thisArg is omitted, undefined is used as the this value.
      */
     flatMap<U, This = undefined> (
-        callback: (this: This, value: T, index: number, array: T[]) => U|ReadonlyArray<U>,
+        callback: (this: This, value: T, index: number, array: T[]) => U | ReadonlyArray<U>,
         thisArg?: This
     ): U[]
 

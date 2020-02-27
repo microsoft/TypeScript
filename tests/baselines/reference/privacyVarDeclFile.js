@@ -460,6 +460,8 @@ var privateClassWithWithPublicPropertyTypes = /** @class */ (function () {
     }
     return privateClassWithWithPublicPropertyTypes;
 }());
+exports.publicVarWithPrivatePropertyTypes = void 0; // Error
+exports.publicVarWithPublicPropertyTypes = void 0;
 var privateVarWithPrivatePropertyTypes;
 var privateVarWithPublicPropertyTypes;
 var publicClassWithPrivateModulePropertyTypes = /** @class */ (function () {
@@ -468,6 +470,7 @@ var publicClassWithPrivateModulePropertyTypes = /** @class */ (function () {
     return publicClassWithPrivateModulePropertyTypes;
 }());
 exports.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
+exports.publicVarWithPrivateModulePropertyTypes = void 0; // Error
 var privateClassWithPrivateModulePropertyTypes = /** @class */ (function () {
     function privateClassWithPrivateModulePropertyTypes() {
     }
@@ -727,76 +730,78 @@ export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule
 export declare module publicModule {
     class privateClass {
     }
-    class publicClass {
+    export class publicClass {
     }
-    interface publicInterfaceWithPrivatePropertyTypes {
+    export interface publicInterfaceWithPrivatePropertyTypes {
         myProperty: privateClass;
     }
-    interface publicInterfaceWithPublicPropertyTypes {
+    export interface publicInterfaceWithPublicPropertyTypes {
         myProperty: publicClass;
     }
-    class publicClassWithWithPrivatePropertyTypes {
+    export class publicClassWithWithPrivatePropertyTypes {
         static myPublicStaticProperty: privateClass;
         private static myPrivateStaticProperty;
         myPublicProperty: privateClass;
         private myPrivateProperty;
     }
-    class publicClassWithWithPublicPropertyTypes {
+    export class publicClassWithWithPublicPropertyTypes {
         static myPublicStaticProperty: publicClass;
         private static myPrivateStaticProperty;
         myPublicProperty: publicClass;
         private myPrivateProperty;
     }
-    var publicVarWithPrivatePropertyTypes: privateClass;
-    var publicVarWithPublicPropertyTypes: publicClass;
-    var publicAmbientVarWithPrivatePropertyTypes: privateClass;
-    var publicAmbientVarWithPublicPropertyTypes: publicClass;
-    interface publicInterfaceWithPrivateModulePropertyTypes {
+    export var publicVarWithPrivatePropertyTypes: privateClass;
+    export var publicVarWithPublicPropertyTypes: publicClass;
+    export var publicAmbientVarWithPrivatePropertyTypes: privateClass;
+    export var publicAmbientVarWithPublicPropertyTypes: publicClass;
+    export interface publicInterfaceWithPrivateModulePropertyTypes {
         myProperty: privateModule.publicClass;
     }
-    class publicClassWithPrivateModulePropertyTypes {
+    export class publicClassWithPrivateModulePropertyTypes {
         static myPublicStaticProperty: privateModule.publicClass;
         myPublicProperty: privateModule.publicClass;
     }
-    var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass;
-    var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+    export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+    export var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+    export {};
 }
 declare module privateModule {
     class privateClass {
     }
-    class publicClass {
+    export class publicClass {
     }
-    interface publicInterfaceWithPrivatePropertyTypes {
+    export interface publicInterfaceWithPrivatePropertyTypes {
         myProperty: privateClass;
     }
-    interface publicInterfaceWithPublicPropertyTypes {
+    export interface publicInterfaceWithPublicPropertyTypes {
         myProperty: publicClass;
     }
-    class publicClassWithWithPrivatePropertyTypes {
+    export class publicClassWithWithPrivatePropertyTypes {
         static myPublicStaticProperty: privateClass;
         private static myPrivateStaticProperty;
         myPublicProperty: privateClass;
         private myPrivateProperty;
     }
-    class publicClassWithWithPublicPropertyTypes {
+    export class publicClassWithWithPublicPropertyTypes {
         static myPublicStaticProperty: publicClass;
         private static myPrivateStaticProperty;
         myPublicProperty: publicClass;
         private myPrivateProperty;
     }
-    var publicVarWithPrivatePropertyTypes: privateClass;
-    var publicVarWithPublicPropertyTypes: publicClass;
-    var publicAmbientVarWithPrivatePropertyTypes: privateClass;
-    var publicAmbientVarWithPublicPropertyTypes: publicClass;
-    interface publicInterfaceWithPrivateModulePropertyTypes {
+    export var publicVarWithPrivatePropertyTypes: privateClass;
+    export var publicVarWithPublicPropertyTypes: publicClass;
+    export var publicAmbientVarWithPrivatePropertyTypes: privateClass;
+    export var publicAmbientVarWithPublicPropertyTypes: publicClass;
+    export interface publicInterfaceWithPrivateModulePropertyTypes {
         myProperty: privateModule.publicClass;
     }
-    class publicClassWithPrivateModulePropertyTypes {
+    export class publicClassWithPrivateModulePropertyTypes {
         static myPublicStaticProperty: privateModule.publicClass;
         myPublicProperty: privateModule.publicClass;
     }
-    var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass;
-    var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+    export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+    export var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+    export {};
 }
 export {};
 //// [privacyVarDeclFile_GlobalFile.d.ts]
@@ -816,74 +821,76 @@ declare var publicAmbientVarWithPublicPropertyTypesInGlobal: publicClassInGlobal
 declare module publicModuleInGlobal {
     class privateClass {
     }
-    class publicClass {
+    export class publicClass {
     }
     module privateModule {
         class privateClass {
         }
-        class publicClass {
+        export class publicClass {
         }
-        interface publicInterfaceWithPrivatePropertyTypes {
+        export interface publicInterfaceWithPrivatePropertyTypes {
             myProperty: privateClass;
         }
-        interface publicInterfaceWithPublicPropertyTypes {
+        export interface publicInterfaceWithPublicPropertyTypes {
             myProperty: publicClass;
         }
-        class publicClassWithWithPrivatePropertyTypes {
+        export class publicClassWithWithPrivatePropertyTypes {
             static myPublicStaticProperty: privateClass;
             private static myPrivateStaticProperty;
             myPublicProperty: privateClass;
             private myPrivateProperty;
         }
-        class publicClassWithWithPublicPropertyTypes {
+        export class publicClassWithWithPublicPropertyTypes {
             static myPublicStaticProperty: publicClass;
             private static myPrivateStaticProperty;
             myPublicProperty: publicClass;
             private myPrivateProperty;
         }
-        var publicVarWithPrivatePropertyTypes: privateClass;
-        var publicVarWithPublicPropertyTypes: publicClass;
-        var publicAmbientVarWithPrivatePropertyTypes: privateClass;
-        var publicAmbientVarWithPublicPropertyTypes: publicClass;
-        interface publicInterfaceWithPrivateModulePropertyTypes {
+        export var publicVarWithPrivatePropertyTypes: privateClass;
+        export var publicVarWithPublicPropertyTypes: publicClass;
+        export var publicAmbientVarWithPrivatePropertyTypes: privateClass;
+        export var publicAmbientVarWithPublicPropertyTypes: publicClass;
+        export interface publicInterfaceWithPrivateModulePropertyTypes {
             myProperty: privateModule.publicClass;
         }
-        class publicClassWithPrivateModulePropertyTypes {
+        export class publicClassWithPrivateModulePropertyTypes {
             static myPublicStaticProperty: privateModule.publicClass;
             myPublicProperty: privateModule.publicClass;
         }
-        var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass;
-        var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+        export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+        export var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+        export {};
     }
-    interface publicInterfaceWithPrivatePropertyTypes {
+    export interface publicInterfaceWithPrivatePropertyTypes {
         myProperty: privateClass;
     }
-    interface publicInterfaceWithPublicPropertyTypes {
+    export interface publicInterfaceWithPublicPropertyTypes {
         myProperty: publicClass;
     }
-    class publicClassWithWithPrivatePropertyTypes {
+    export class publicClassWithWithPrivatePropertyTypes {
         static myPublicStaticProperty: privateClass;
         private static myPrivateStaticProperty;
         myPublicProperty: privateClass;
         private myPrivateProperty;
     }
-    class publicClassWithWithPublicPropertyTypes {
+    export class publicClassWithWithPublicPropertyTypes {
         static myPublicStaticProperty: publicClass;
         private static myPrivateStaticProperty;
         myPublicProperty: publicClass;
         private myPrivateProperty;
     }
-    var publicVarWithPrivatePropertyTypes: privateClass;
-    var publicVarWithPublicPropertyTypes: publicClass;
-    var publicAmbientVarWithPrivatePropertyTypes: privateClass;
-    var publicAmbientVarWithPublicPropertyTypes: publicClass;
-    interface publicInterfaceWithPrivateModulePropertyTypes {
+    export var publicVarWithPrivatePropertyTypes: privateClass;
+    export var publicVarWithPublicPropertyTypes: publicClass;
+    export var publicAmbientVarWithPrivatePropertyTypes: privateClass;
+    export var publicAmbientVarWithPublicPropertyTypes: publicClass;
+    export interface publicInterfaceWithPrivateModulePropertyTypes {
         myProperty: privateModule.publicClass;
     }
-    class publicClassWithPrivateModulePropertyTypes {
+    export class publicClassWithPrivateModulePropertyTypes {
         static myPublicStaticProperty: privateModule.publicClass;
         myPublicProperty: privateModule.publicClass;
     }
-    var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass;
-    var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+    export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+    export var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+    export {};
 }

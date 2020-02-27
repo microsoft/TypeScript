@@ -5,7 +5,7 @@
 ////}
 ////
 ////class Bar extends Foo {
-////    public /*1*/x/*2*/: string;
+////    public /*1*/x/*2*/: string = 'hi';
 ////}
 
 verify.errorExistsBetweenMarkers("1", "2");

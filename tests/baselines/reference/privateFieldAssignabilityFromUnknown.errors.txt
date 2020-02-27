@@ -1,0 +1,16 @@
+tests/cases/compiler/privateFieldAssignabilityFromUnknown.ts(2,3): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+tests/cases/compiler/privateFieldAssignabilityFromUnknown.ts(5,7): error TS2741: Property '#field' is missing in type '{}' but required in type 'Class'.
+
+
+==== tests/cases/compiler/privateFieldAssignabilityFromUnknown.ts (2 errors) ====
+    export class Class {
+      #field: any
+      ~~~~~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+    }
+    
+    const task: Class = {} as unknown;
+          ~~~~
+!!! error TS2741: Property '#field' is missing in type '{}' but required in type 'Class'.
+!!! related TS2728 tests/cases/compiler/privateFieldAssignabilityFromUnknown.ts:2:3: '#field' is declared here.
+    

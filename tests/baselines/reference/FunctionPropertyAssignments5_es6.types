@@ -1,8 +1,8 @@
 === tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments5_es6.ts ===
 var v = { *[foo()]() { } }
->v : { [x: number]: () => IterableIterator<any>; }
->{ *[foo()]() { } } : { [x: number]: () => IterableIterator<any>; }
->[foo()] : () => IterableIterator<any>
+>v : { [x: number]: () => Generator<never, void, unknown>; }
+>{ *[foo()]() { } } : { [x: number]: () => Generator<never, void, unknown>; }
+>[foo()] : () => Generator<never, void, unknown>
 >foo() : any
 >foo : any
 

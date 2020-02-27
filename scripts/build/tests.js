@@ -31,11 +31,12 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
     const inspect = cmdLineOptions.inspect;
     const runners = cmdLineOptions.runners;
     const light = cmdLineOptions.light;
-    const skipPercent = process.env.CI === "true" ? 0 : cmdLineOptions.skipPercent;
     const stackTraceLimit = cmdLineOptions.stackTraceLimit;
     const testConfigFile = "test.config";
     const failed = cmdLineOptions.failed;
     const keepFailed = cmdLineOptions.keepFailed;
+    const shards = +cmdLineOptions.shards || undefined;
+    const shardId = +cmdLineOptions.shardId || undefined;
     if (!cmdLineOptions.dirty) {
         await cleanTestDirs();
         cancelToken.throwIfCancellationRequested();
@@ -63,8 +64,8 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
         testTimeout = 400000;
     }
 
-    if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed || skipPercent !== undefined) {
-        writeTestConfigFile(tests, runners, light, skipPercent, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout, keepFailed);
+    if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed || shards || shardId) {
+        writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout, keepFailed, shards, shardId);
     }
 
     const colors = cmdLineOptions.colors;
@@ -88,11 +89,13 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
         else {
             args.push("--no-colors");
         }
-        if (inspect) {
-            args.unshift("--inspect-brk");
+        if (inspect !== undefined) {
+            args.unshift(inspect == "" ? "--inspect-brk" : "--inspect-brk="+inspect);
+            args.push("-t", "0");
         }
         else if (debug) {
             args.unshift("--debug-brk");
+            args.push("-t", "0");
         }
         else {
             args.push("-t", "" + testTimeout);
@@ -159,25 +162,27 @@ exports.cleanTestDirs = cleanTestDirs;
  * @param {string} tests
  * @param {string} runners
  * @param {boolean} light
- * @param {string} skipPercent
  * @param {string} [taskConfigsFolder]
  * @param {string | number} [workerCount]
  * @param {string} [stackTraceLimit]
  * @param {string | number} [timeout]
  * @param {boolean} [keepFailed]
+ * @param {number | undefined} [shards]
+ * @param {number | undefined} [shardId]
  */
-function writeTestConfigFile(tests, runners, light, skipPercent, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed) {
+function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed, shards, shardId) {
     const testConfigContents = JSON.stringify({
         test: tests ? [tests] : undefined,
         runners: runners ? runners.split(",") : undefined,
         light,
-        skipPercent,
         workerCount,
         stackTraceLimit,
         taskConfigsFolder,
         noColor: !cmdLineOptions.colors,
         timeout,
-        keepFailed
+        keepFailed,
+        shards,
+        shardId
     });
     log.info("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);

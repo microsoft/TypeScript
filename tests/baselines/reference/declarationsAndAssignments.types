@@ -23,8 +23,8 @@ function f0() {
     var [x, y, z] = [1, "hello"];
 >x : number
 >y : string
->z : any
->[1, "hello"] : [number, string, undefined?]
+>z : undefined
+>[1, "hello"] : [number, string]
 >1 : 1
 >"hello" : "hello"
 
@@ -255,16 +255,16 @@ function f8() {
 >f8 : () => void
 
     var [a, b, c] = [];   // Error, [] is an empty tuple
->a : any
->b : any
->c : any
->[] : [undefined?, undefined?, undefined?]
+>a : undefined
+>b : undefined
+>c : undefined
+>[] : []
 
     var [d, e, f] = [1];  // Error, [1] is a tuple
 >d : number
->e : any
->f : any
->[1] : [number, undefined?, undefined?]
+>e : undefined
+>f : undefined
+>[1] : [number]
 >1 : 1
 }
 
@@ -463,12 +463,12 @@ f14([2, ["abc", { x: 0 }]]);
 f14([2, ["abc", { y: false }]]);  // Error, no x
 >f14([2, ["abc", { y: false }]]) : void
 >f14 : ([a, [b, { x, y: c }]]: [number, [string, { x: any; y?: boolean; }]]) => void
->[2, ["abc", { y: false }]] : (number | (string | { y: boolean; })[])[]
+>[2, ["abc", { y: false }]] : [number, [string, { y: false; }]]
 >2 : 2
->["abc", { y: false }] : (string | { y: boolean; })[]
+>["abc", { y: false }] : [string, { y: false; }]
 >"abc" : "abc"
->{ y: false } : { y: boolean; }
->y : boolean
+>{ y: false } : { y: false; }
+>y : false
 >false : false
 
 module M {

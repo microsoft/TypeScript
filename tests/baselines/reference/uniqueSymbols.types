@@ -113,17 +113,17 @@ function funcReturnConstCallWithTypeQuery(): typeof constCall { return constCall
 
 // generator function yield inference
 function* genFuncYieldConstCall() { yield constCall; }
->genFuncYieldConstCall : () => IterableIterator<symbol>
+>genFuncYieldConstCall : () => Generator<symbol, void, unknown>
 >yield constCall : any
 >constCall : unique symbol
 
 function* genFuncYieldLetCall() { yield letCall; }
->genFuncYieldLetCall : () => IterableIterator<symbol>
+>genFuncYieldLetCall : () => Generator<symbol, void, unknown>
 >yield letCall : any
 >letCall : symbol
 
 function* genFuncYieldVarCall() { yield varCall; }
->genFuncYieldVarCall : () => IterableIterator<symbol>
+>genFuncYieldVarCall : () => Generator<symbol, void, unknown>
 >yield varCall : any
 >varCall : symbol
 
@@ -131,7 +131,7 @@ function* genFuncYieldVarCall() { yield varCall; }
 function* genFuncYieldConstCallWithTypeQuery(): IterableIterator<typeof constCall> { yield constCall; }
 >genFuncYieldConstCallWithTypeQuery : () => IterableIterator<unique symbol>
 >constCall : unique symbol
->yield constCall : any
+>yield constCall : undefined
 >constCall : unique symbol
 
 // async function return inference
@@ -149,17 +149,17 @@ async function asyncFuncReturnVarCall() { return varCall; }
 
 // async generator function yield inference
 async function* asyncGenFuncYieldConstCall() { yield constCall; }
->asyncGenFuncYieldConstCall : () => AsyncIterableIterator<symbol>
+>asyncGenFuncYieldConstCall : () => AsyncGenerator<symbol, void, unknown>
 >yield constCall : any
 >constCall : unique symbol
 
 async function* asyncGenFuncYieldLetCall() { yield letCall; }
->asyncGenFuncYieldLetCall : () => AsyncIterableIterator<symbol>
+>asyncGenFuncYieldLetCall : () => AsyncGenerator<symbol, void, unknown>
 >yield letCall : any
 >letCall : symbol
 
 async function* asyncGenFuncYieldVarCall() { yield varCall; }
->asyncGenFuncYieldVarCall : () => AsyncIterableIterator<symbol>
+>asyncGenFuncYieldVarCall : () => AsyncGenerator<symbol, void, unknown>
 >yield varCall : any
 >varCall : symbol
 
@@ -484,8 +484,8 @@ f(N["s"]);
 
 // property assignments/methods
 const o2 = {
->o2 : { a: symbol; b: symbol; c: symbol; method1(): symbol; method2(): Promise<symbol>; method3(): AsyncIterableIterator<symbol>; method4(): IterableIterator<symbol>; method5(p?: symbol): symbol; }
->{    a: s,    b: N.s,    c: N["s"],    method1() { return s; },    async method2() { return s; },    async * method3() { yield s; },    * method4() { yield s; },    method5(p = s) { return p; },} : { a: symbol; b: symbol; c: symbol; method1(): symbol; method2(): Promise<symbol>; method3(): AsyncIterableIterator<symbol>; method4(): IterableIterator<symbol>; method5(p?: symbol): symbol; }
+>o2 : { a: symbol; b: symbol; c: symbol; method1(): symbol; method2(): Promise<symbol>; method3(): AsyncGenerator<symbol, void, unknown>; method4(): Generator<symbol, void, unknown>; method5(p?: symbol): symbol; }
+>{    a: s,    b: N.s,    c: N["s"],    method1() { return s; },    async method2() { return s; },    async * method3() { yield s; },    * method4() { yield s; },    method5(p = s) { return p; },} : { a: symbol; b: symbol; c: symbol; method1(): symbol; method2(): Promise<symbol>; method3(): AsyncGenerator<symbol, void, unknown>; method4(): Generator<symbol, void, unknown>; method5(p?: symbol): symbol; }
 
     a: s,
 >a : symbol
@@ -512,12 +512,12 @@ const o2 = {
 >s : unique symbol
 
     async * method3() { yield s; },
->method3 : () => AsyncIterableIterator<symbol>
+>method3 : () => AsyncGenerator<symbol, void, unknown>
 >yield s : any
 >s : unique symbol
 
     * method4() { yield s; },
->method4 : () => IterableIterator<symbol>
+>method4 : () => Generator<symbol, void, unknown>
 >yield s : any
 >s : unique symbol
 
@@ -606,12 +606,12 @@ class C0 {
 >s : unique symbol
 
     async * method3() { yield s; }
->method3 : () => AsyncIterableIterator<symbol>
+>method3 : () => AsyncGenerator<symbol, void, unknown>
 >yield s : any
 >s : unique symbol
 
     * method4() { yield s; }
->method4 : () => IterableIterator<symbol>
+>method4 : () => Generator<symbol, void, unknown>
 >yield s : any
 >s : unique symbol
 
@@ -819,7 +819,7 @@ interface Context {
 
 const o3: Context = {
 >o3 : Context
->{    method1() {        return s; // return type should not widen due to contextual type    },    async method2() {        return s; // return type should not widen due to contextual type    },    async * method3() {        yield s; // yield type should not widen due to contextual type    },    * method4() {        yield s; // yield type should not widen due to contextual type    },    method5(p = s) { // parameter should not widen due to contextual type        return p;    },} : { method1(): unique symbol; method2(): Promise<unique symbol>; method3(): AsyncIterableIterator<unique symbol>; method4(): IterableIterator<unique symbol>; method5(p?: unique symbol): unique symbol; }
+>{    method1() {        return s; // return type should not widen due to contextual type    },    async method2() {        return s; // return type should not widen due to contextual type    },    async * method3() {        yield s; // yield type should not widen due to contextual type    },    * method4() {        yield s; // yield type should not widen due to contextual type    },    method5(p = s) { // parameter should not widen due to contextual type        return p;    },} : { method1(): unique symbol; method2(): Promise<unique symbol>; method3(): AsyncGenerator<unique symbol, void, undefined>; method4(): Generator<unique symbol, void, undefined>; method5(p?: unique symbol): unique symbol; }
 
     method1() {
 >method1 : () => unique symbol
@@ -836,18 +836,18 @@ const o3: Context = {
 
     },
     async * method3() {
->method3 : () => AsyncIterableIterator<unique symbol>
+>method3 : () => AsyncGenerator<unique symbol, void, undefined>
 
         yield s; // yield type should not widen due to contextual type
->yield s : any
+>yield s : undefined
 >s : unique symbol
 
     },
     * method4() {
->method4 : () => IterableIterator<unique symbol>
+>method4 : () => Generator<unique symbol, void, undefined>
 
         yield s; // yield type should not widen due to contextual type
->yield s : any
+>yield s : undefined
 >s : unique symbol
 
     },

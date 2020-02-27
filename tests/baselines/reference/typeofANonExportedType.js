@@ -55,14 +55,23 @@ export var r13: typeof foo;
 "use strict";
 exports.__esModule = true;
 var x = 1;
+exports.r1 = void 0;
 var y = { foo: '' };
+exports.r2 = void 0;
 var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
+exports.c = void 0;
 var c2;
+exports.r3 = void 0;
+exports.r4 = void 0;
+exports.r4b = void 0;
+exports.i = void 0;
 var i2;
+exports.r5 = void 0;
+exports.r5 = void 0;
 var M;
 (function (M) {
     M.foo = '';
@@ -73,10 +82,17 @@ var M;
     }());
     M.C = C;
 })(M || (M = {}));
+exports.r6 = void 0;
+exports.r7 = void 0;
+exports.r8 = void 0;
+exports.r9 = void 0;
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
+exports.r10 = void 0;
+exports.r11 = void 0;
+exports.r12 = void 0;
 function foo() { }
 (function (foo) {
     foo.y = 1;
@@ -87,3 +103,4 @@ function foo() { }
     }());
     foo.C = C;
 })(foo || (foo = {}));
+exports.r13 = void 0;
