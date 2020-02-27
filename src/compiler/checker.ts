@@ -26107,6 +26107,9 @@ namespace ts {
                     checkTypeComparableTo(exprType, targetType, errNode,
                         Diagnostics.Conversion_of_type_0_to_type_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_the_expression_to_unknown_first);
                 }
+                else if (targetType.flags & TypeFlags.StringLiteral && isStringLiteral(expression) && expression.text !== (targetType as StringLiteralType).value) {
+                    error(errNode, Diagnostics.Conversion_of_type_0_to_type_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_the_expression_to_unknown_first, expression.text, typeToString(targetType));
+                }
             }
             return targetType;
         }
