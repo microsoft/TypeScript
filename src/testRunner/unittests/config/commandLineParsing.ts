@@ -1,11 +1,9 @@
 namespace ts {
     describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
-        function assertParseResult(commandLine: string[], expectedParsedCommandLine: ParsedCommandLine) {
-            const parsed = parseCommandLine(commandLine);
-            const parsedCompilerOptions = JSON.stringify(parsed.options);
-            const expectedCompilerOptions = JSON.stringify(expectedParsedCommandLine.options);
-            assert.equal(parsedCompilerOptions, expectedCompilerOptions);
+        function assertParseResult(commandLine: string[], expectedParsedCommandLine: ParsedCommandLine, workerDiagnostic?: () => ParseCommandLineWorkerDiagnostics) {
+            const parsed = parseCommandLineWorker(workerDiagnostic?.() || compilerOptionsDidYouMeanDiagnostics, commandLine);
+            assert.deepEqual(parsed.options, expectedParsedCommandLine.options);
             assert.deepEqual(parsed.watchOptions, expectedParsedCommandLine.watchOptions);
 
             const parsedErrors = parsed.errors;
@@ -120,7 +118,7 @@ namespace ts {
                         length: undefined,
                     }],
                     fileNames: ["0.ts"],
-                    options: {}
+                    options: { jsx: undefined }
                 });
         });
 
@@ -146,7 +144,7 @@ namespace ts {
                         length: undefined,
                     }],
                     fileNames: ["0.ts"],
-                    options: {}
+                    options: { module: undefined }
                 });
         });
 
@@ -172,7 +170,7 @@ namespace ts {
                         length: undefined,
                     }],
                     fileNames: ["0.ts"],
-                    options: {}
+                    options: { newLine: undefined }
                 });
         });
 
@@ -198,7 +196,7 @@ namespace ts {
                         length: undefined,
                     }],
                     fileNames: ["0.ts"],
-                    options: {}
+                    options: { target: undefined }
                 });
         });
 
@@ -224,7 +222,7 @@ namespace ts {
                         length: undefined,
                     }],
                     fileNames: ["0.ts"],
-                    options: {}
+                    options: { moduleResolution: undefined }
                 });
         });
 
@@ -414,6 +412,183 @@ namespace ts {
                 });
         });
 
+        describe("parses command line null for tsconfig only option", () => {
+            interface VerifyNull {
+                optionName: string;
+                nonNullValue?: string;
+                workerDiagnostic?: () => ParseCommandLineWorkerDiagnostics;
+                diagnosticMessage: DiagnosticMessage;
+            }
+            function verifyNull({ optionName, nonNullValue, workerDiagnostic, diagnosticMessage }: VerifyNull) {
+                it("allows setting it to null", () => {
+                    assertParseResult(
+                        [`--${optionName}`, "null", "0.ts"],
+                        {
+                            errors: [],
+                            fileNames: ["0.ts"],
+                            options: { [optionName]: undefined }
+                        },
+                        workerDiagnostic
+                    );
+                });
+
+                if (nonNullValue) {
+                    it("errors if non null value is passed", () => {
+                        assertParseResult(
+                            [`--${optionName}`, nonNullValue, "0.ts"],
+                            {
+                                errors: [{
+                                    messageText: formatStringFromArgs(diagnosticMessage.message, [optionName]),
+                                    category: diagnosticMessage.category,
+                                    code: diagnosticMessage.code,
+                                    file: undefined,
+                                    start: undefined,
+                                    length: undefined
+                                }],
+                                fileNames: ["0.ts"],
+                                options: {}
+                            },
+                            workerDiagnostic
+                        );
+                    });
+                }
+
+                it("errors if its followed by another option", () => {
+                    assertParseResult(
+                        ["0.ts", "--strictNullChecks", `--${optionName}`],
+                        {
+                            errors: [{
+                                messageText: formatStringFromArgs(diagnosticMessage.message, [optionName]),
+                                category: diagnosticMessage.category,
+                                code: diagnosticMessage.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            }],
+                            fileNames: ["0.ts"],
+                            options: { strictNullChecks: true }
+                        },
+                        workerDiagnostic
+                    );
+                });
+
+                it("errors if its last option", () => {
+                    assertParseResult(
+                        ["0.ts", `--${optionName}`],
+                        {
+                            errors: [{
+                                messageText: formatStringFromArgs(diagnosticMessage.message, [optionName]),
+                                category: diagnosticMessage.category,
+                                code: diagnosticMessage.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            }],
+                            fileNames: ["0.ts"],
+                            options: {}
+                        },
+                        workerDiagnostic
+                    );
+                });
+            }
+
+            interface VerifyNullNonIncludedOption {
+                type: () => "string" | "number" | Map<number | string>;
+                nonNullValue?: string;
+            }
+            function verifyNullNonIncludedOption({ type, nonNullValue }: VerifyNullNonIncludedOption) {
+                verifyNull({
+                    optionName: "optionName",
+                    nonNullValue,
+                    diagnosticMessage: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line,
+                    workerDiagnostic: () => {
+                        const optionDeclarations = [
+                            ...compilerOptionsDidYouMeanDiagnostics.optionDeclarations,
+                            {
+                                name: "optionName",
+                                type: type(),
+                                isTSConfigOnly: true,
+                                category: Diagnostics.Basic_Options,
+                                description: Diagnostics.Enable_project_compilation,
+                            }
+                        ];
+                        return {
+                            ...compilerOptionsDidYouMeanDiagnostics,
+                            optionDeclarations,
+                            getOptionsNameMap: () => createOptionNameMap(optionDeclarations)
+                        };
+                    }
+                });
+            }
+
+            describe("option of type boolean", () => {
+                it("allows setting it to false", () => {
+                    assertParseResult(
+                        ["--composite", "false", "0.ts"],
+                        {
+                            errors: [],
+                            fileNames: ["0.ts"],
+                            options: { composite: false }
+                        }
+                    );
+                });
+
+                verifyNull({
+                    optionName: "composite",
+                    nonNullValue: "true",
+                    diagnosticMessage: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_null_on_command_line
+                });
+            });
+
+            describe("option of type object", () => {
+                verifyNull({
+                    optionName: "paths",
+                    diagnosticMessage: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line
+                });
+            });
+
+            describe("option of type list", () => {
+                verifyNull({
+                    optionName: "rootDirs",
+                    nonNullValue: "abc,xyz",
+                    diagnosticMessage: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line
+                });
+            });
+
+            describe("option of type string", () => {
+                verifyNullNonIncludedOption({
+                    type: () => "string",
+                    nonNullValue: "hello"
+                });
+            });
+
+            describe("option of type number", () => {
+                verifyNullNonIncludedOption({
+                    type: () => "number",
+                    nonNullValue: "10"
+                });
+            });
+
+            describe("option of type Map<number | string>", () => {
+                verifyNullNonIncludedOption({
+                    type: () => createMapFromTemplate({
+                        node: ModuleResolutionKind.NodeJs,
+                        classic: ModuleResolutionKind.Classic,
+                    }),
+                    nonNullValue: "node"
+                });
+            });
+        });
+
+        it("allows tsconfig only option to be set to null", () => {
+            assertParseResult(["--composite", "null", "-tsBuildInfoFile", "null", "0.ts"],
+                {
+                    errors: [],
+                    fileNames: ["0.ts"],
+                    options: { composite: undefined, tsBuildInfoFile: undefined }
+                });
+        });
+
         describe("Watch options", () => {
             it("parse --watchFile", () => {
                 assertParseResult(["--watchFile", "UseFsEvents", "0.ts"],
@@ -487,9 +662,7 @@ namespace ts {
     describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
         function assertParseResult(commandLine: string[], expectedParsedBuildCommand: ParsedBuildCommand) {
             const parsed = parseBuildCommand(commandLine);
-            const parsedBuildOptions = JSON.stringify(parsed.buildOptions);
-            const expectedBuildOptions = JSON.stringify(expectedParsedBuildCommand.buildOptions);
-            assert.equal(parsedBuildOptions, expectedBuildOptions);
+            assert.deepEqual(parsed.buildOptions, expectedParsedBuildCommand.buildOptions);
             assert.deepEqual(parsed.watchOptions, expectedParsedBuildCommand.watchOptions);
 
             const parsedErrors = parsed.errors;
