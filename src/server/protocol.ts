@@ -923,18 +923,6 @@ namespace ts.server.protocol {
         end: Location;
     }
 
-    export interface TextRange {
-        /**
-         * Position of the first character.
-         */
-        pos: number;
-
-        /**
-         * Position of the last character.
-         */
-        end: number;
-    }
-
     /**
      * Object found in response messages defining a span of text in a specific source file.
      */
@@ -1551,20 +1539,12 @@ namespace ts.server.protocol {
 
     export interface ToggleLineCommentRequest extends FileRequest {
         command: CommandTypes.ToggleLineComment;
-        arguments: ToggleLineCommentRequestArgs;
-    }
-
-    export interface ToggleLineCommentRequestArgs extends FileRequestArgs {
-        textRanges: TextRange[];
+        arguments: FileRangeRequestArgs;
     }
 
     export interface ToggleMultilineCommentRequest extends FileRequest {
         command: CommandTypes.ToggleMultilineComment;
-        arguments: ToggleMultilineCommentRequestArgs;
-    }
-
-    export interface ToggleMultilineCommentRequestArgs extends FileRequestArgs {
-        textRanges: TextRange[];
+        arguments: FileRangeRequestArgs;
     }
 
     /**

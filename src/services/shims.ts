@@ -278,8 +278,8 @@ namespace ts {
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
 
-        toggleLineComment(fileName: string, textChanges: ts.TextRange[]): string;
-        toggleMultilineComment(fileName: string, textChanges: ts.TextRange[]): string;
+        toggleLineComment(fileName: string, textChange: ts.TextRange): string;
+        toggleMultilineComment(fileName: string, textChange: ts.TextRange): string;
     }
 
     export interface ClassifierShim extends Shim {
@@ -1070,17 +1070,17 @@ namespace ts {
                 this.logPerformance) as EmitOutput;
         }
 
-        public toggleLineComment(fileName: string, textRanges: ts.TextRange[]): string {
+        public toggleLineComment(fileName: string, textRange: ts.TextRange): string {
             return this.forwardJSONCall(
-                `toggleLineComment('${fileName}', '${JSON.stringify(textRanges)}')`,
-                () => this.languageService.toggleLineComment(fileName, textRanges)
+                `toggleLineComment('${fileName}', '${JSON.stringify(textRange)}')`,
+                () => this.languageService.toggleLineComment(fileName, textRange)
             );
         }
 
-        public toggleMultilineComment(fileName: string, textRanges: ts.TextRange[]): string {
+        public toggleMultilineComment(fileName: string, textRange: ts.TextRange): string {
             return this.forwardJSONCall(
-                `toggleMultilineComment('${fileName}', '${JSON.stringify(textRanges)}')`,
-                () => this.languageService.toggleMultilineComment(fileName, textRanges)
+                `toggleMultilineComment('${fileName}', '${JSON.stringify(textRange)}')`,
+                () => this.languageService.toggleMultilineComment(fileName, textRange)
             );
         }
     }

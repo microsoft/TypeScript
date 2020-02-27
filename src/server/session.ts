@@ -1957,14 +1957,19 @@ namespace ts.server {
                 position = getPosition(args);
             }
             else {
-                const { startPosition, endPosition } = this.getStartAndEndPosition(args, scriptInfo);
-                textRange = { pos: startPosition, end: endPosition };
+                textRange = this.getRange(args, scriptInfo);
             }
             return Debug.checkDefined(position === undefined ? textRange : position);
 
             function getPosition(loc: protocol.FileLocationRequestArgs) {
                 return loc.position !== undefined ? loc.position : scriptInfo.lineOffsetToPosition(loc.line, loc.offset);
             }
+        }
+
+        private getRange(args: protocol.FileRangeRequestArgs, scriptInfo: ScriptInfo): TextRange {
+            const { startPosition, endPosition } = this.getStartAndEndPosition(args, scriptInfo);
+
+            return { pos: startPosition, end: endPosition };
         }
 
         private getApplicableRefactors(args: protocol.GetApplicableRefactorsRequestArgs): protocol.ApplicableRefactorInfo[] {
@@ -2196,10 +2201,12 @@ namespace ts.server {
             });
         }
 
-        private toggleLineComment(args: protocol.ToggleLineCommentRequestArgs, simplifiedResult: boolean): TextChange[] | protocol.CodeEdit[] {
+        private toggleLineComment(args: protocol.FileRangeRequestArgs, simplifiedResult: boolean): TextChange[] | protocol.CodeEdit[] {
             const { file, project } = this.getFileAndProject(args);
+            const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
+            const textRange = this.getRange(args, scriptInfo);
 
-            const textChanges = project.getLanguageService().toggleLineComment(file, args.textRanges);
+            const textChanges = project.getLanguageService().toggleLineComment(file, textRange);
 
             if (simplifiedResult) {
                 const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
@@ -2210,10 +2217,12 @@ namespace ts.server {
             return textChanges;
         }
 
-        private toggleMultilineComment(args: protocol.ToggleMultilineCommentRequestArgs, simplifiedResult: boolean): TextChange[] | protocol.CodeEdit[] {
+        private toggleMultilineComment(args: protocol.FileRangeRequestArgs, simplifiedResult: boolean): TextChange[] | protocol.CodeEdit[] {
             const { file, project } = this.getFileAndProject(args);
+            const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
+            const textRange = this.getRange(args, scriptInfo);
 
-            const textChanges = project.getLanguageService().toggleMultilineComment(file, args.textRanges);
+            const textChanges = project.getLanguageService().toggleMultilineComment(file, textRange);
 
             if (simplifiedResult) {
                 const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
@@ -2678,7 +2687,7 @@ namespace ts.server {
             [CommandNames.ToggleMultilineComment]: (request: protocol.ToggleMultilineCommentRequest) => {
                 return this.requiredResponse(this.toggleMultilineComment(request.arguments, /*simplifiedResult*/true));
             },
-            [CommandNames.ToggleMultilineComment]: (request: protocol.ToggleMultilineCommentRequest) => {
+            [CommandNames.ToggleMultilineCommentFull]: (request: protocol.ToggleMultilineCommentRequest) => {
                 return this.requiredResponse(this.toggleMultilineComment(request.arguments, /*simplifiedResult*/false));
             },
         });

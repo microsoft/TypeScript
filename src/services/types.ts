@@ -486,8 +486,8 @@ namespace ts {
 
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
 
-        toggleLineComment(fileName: string, textRanges: TextRange[]): TextChange[];
-        toggleMultilineComment(fileName: string, textRanges: TextRange[]): TextChange[];
+        toggleLineComment(fileName: string, textRanges: TextRange): TextChange[];
+        toggleMultilineComment(fileName: string, textRanges: TextRange): TextChange[];
 
         dispose(): void;
     }
