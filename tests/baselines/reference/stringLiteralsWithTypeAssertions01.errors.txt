@@ -1,0 +1,17 @@
+tests/cases/conformance/types/literal/stringLiteralsWithTypeAssertions01.ts(3,9): error TS2352: Conversion of type 'foo' to type '"bar"' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+tests/cases/conformance/types/literal/stringLiteralsWithTypeAssertions01.ts(4,9): error TS2352: Conversion of type 'bar' to type '"foo"' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+
+
+==== tests/cases/conformance/types/literal/stringLiteralsWithTypeAssertions01.ts (2 errors) ====
+    let fooOrBar: "foo" | "bar";
+    
+    let a = "foo" as "bar";
+            ~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'foo' to type '"bar"' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    let b = "bar" as "foo";
+            ~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'bar' to type '"foo"' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    let c = fooOrBar as "foo";
+    let d = fooOrBar as "bar";
+    let e = fooOrBar as "baz";
+    let f = "baz" as typeof fooOrBar;
