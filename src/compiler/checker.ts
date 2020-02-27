@@ -8243,13 +8243,9 @@ namespace ts {
         }
 
         function getImplementsTypes(type: InterfaceType): BaseType[] {
-            if (!(type.symbol.flags & SymbolFlags.Class)) {
-                Debug.fail("type must be an interface");
-            }
             let resolvedImplementsTypes: BaseType[] = emptyArray;
             for (const declaration of type.symbol.declarations) {
-                if (!isClassLike(declaration)) continue;
-                const implementsTypeNodes = getEffectiveImplementsTypeNodes(declaration);
+                const implementsTypeNodes = getEffectiveImplementsTypeNodes(declaration as ClassLikeDeclaration);
                 if (!implementsTypeNodes) continue;
                 for (const node of implementsTypeNodes) {
                     const implementsType = getTypeFromTypeNode(node);
