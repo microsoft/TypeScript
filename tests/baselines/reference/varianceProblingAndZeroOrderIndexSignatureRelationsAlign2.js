@@ -82,6 +82,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.MyServer = void 0;
 var Left = /** @class */ (function () {
     function Left(value) {
         this.value = value;

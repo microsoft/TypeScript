@@ -39,6 +39,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 exports.__esModule = true;
+exports.m = void 0;
 var c = __importStar(require("../core/index"));
 var logic = __importStar(require("../logic/index"));
 c.leftPad("", 10);

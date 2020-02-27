@@ -319,6 +319,7 @@ libfile0Spread.apply(void 0, __spread([10, 20, 30]));
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.x = void 0;
     exports.x = 10;
     function forlibfile1Rest() {
         var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
@@ -327,12 +328,14 @@ define("file1", ["require", "exports"], function (require, exports) {
 define("file2", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.y = void 0;
     exports.y = 20;
 });
 var globalConst = 10;
 define("file3", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.z = void 0;
     exports.z = 30;
     function forappfile3Rest() {
         var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
@@ -349,7 +352,7 @@ appfile4Spread.apply(void 0, __spread([10, 20, 30]));
 //# sourceMappingURL=module.js.map
 
 //// [/src/app/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;;;;ICFnB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,6BAAyC,EAAvC,QAAC,EAAE,wBAAoC,CAAC;IAChD,CAAC;;;;;ICFY,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,6BAAyC,EAAvC,QAAC,EAAE,wBAAoC,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;;;;YCFnB,CAAC;IAAD,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,6BAAyC,EAAvC,QAAC,EAAE,wBAAoC,CAAC;IAChD,CAAC;;;;;YCFY,CAAC;IAAD,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;YCAV,CAAC;IAAD,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,6BAAyC,EAAvC,QAAC,EAAE,wBAAoC,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE"}
 
 //// [/src/app/module.js.map.baseline.txt]
 ===================================================================
@@ -517,6 +520,15 @@ sourceFile:../lib/file1.ts
 >>>define("file1", ["require", "exports"], function (require, exports) {
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
+>>>    exports.x = void 0;
+1->^^^^^^^^^^^^
+2 >            ^
+3 >             ^^^^^^^->
+1->export const 
+2 >            x
+1->Emitted(43, 13) Source(1, 14) + SourceIndex(1)
+2 >Emitted(43, 14) Source(1, 15) + SourceIndex(1)
+---
 >>>    exports.x = 10;
 1->^^^^
 2 >    ^^^^^^^^
@@ -525,18 +537,18 @@ sourceFile:../lib/file1.ts
 5 >                ^^
 6 >                  ^
 7 >                   ^^^^^^^^^^^^^^->
-1->export const 
+1->
 2 >    
 3 >            x
 4 >              = 
 5 >                10
 6 >                  ;
-1->Emitted(43, 5) Source(1, 14) + SourceIndex(1)
-2 >Emitted(43, 13) Source(1, 14) + SourceIndex(1)
-3 >Emitted(43, 14) Source(1, 15) + SourceIndex(1)
-4 >Emitted(43, 17) Source(1, 18) + SourceIndex(1)
-5 >Emitted(43, 19) Source(1, 20) + SourceIndex(1)
-6 >Emitted(43, 20) Source(1, 21) + SourceIndex(1)
+1->Emitted(44, 5) Source(1, 14) + SourceIndex(1)
+2 >Emitted(44, 13) Source(1, 14) + SourceIndex(1)
+3 >Emitted(44, 14) Source(1, 15) + SourceIndex(1)
+4 >Emitted(44, 17) Source(1, 18) + SourceIndex(1)
+5 >Emitted(44, 19) Source(1, 20) + SourceIndex(1)
+6 >Emitted(44, 20) Source(1, 21) + SourceIndex(1)
 ---
 >>>    function forlibfile1Rest() {
 1->^^^^
@@ -546,9 +558,9 @@ sourceFile:../lib/file1.ts
 1->
 2 >    function 
 3 >             forlibfile1Rest
-1->Emitted(44, 5) Source(1, 21) + SourceIndex(1)
-2 >Emitted(44, 14) Source(1, 30) + SourceIndex(1)
-3 >Emitted(44, 29) Source(1, 45) + SourceIndex(1)
+1->Emitted(45, 5) Source(1, 21) + SourceIndex(1)
+2 >Emitted(45, 14) Source(1, 30) + SourceIndex(1)
+3 >Emitted(45, 29) Source(1, 45) + SourceIndex(1)
 ---
 >>>        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
 1->^^^^^^^^
@@ -568,14 +580,14 @@ sourceFile:../lib/file1.ts
 6 >                                                   , 
 7 >                                                     ...rest } = { a: 10, b: 30, yy: 30 }
 8 >                                                                             ;
-1->Emitted(45, 9) Source(2, 1) + SourceIndex(1)
-2 >Emitted(45, 13) Source(2, 7) + SourceIndex(1)
-3 >Emitted(45, 42) Source(2, 48) + SourceIndex(1)
-4 >Emitted(45, 44) Source(2, 9) + SourceIndex(1)
-5 >Emitted(45, 52) Source(2, 10) + SourceIndex(1)
-6 >Emitted(45, 54) Source(2, 12) + SourceIndex(1)
-7 >Emitted(45, 78) Source(2, 48) + SourceIndex(1)
-8 >Emitted(45, 79) Source(2, 49) + SourceIndex(1)
+1->Emitted(46, 9) Source(2, 1) + SourceIndex(1)
+2 >Emitted(46, 13) Source(2, 7) + SourceIndex(1)
+3 >Emitted(46, 42) Source(2, 48) + SourceIndex(1)
+4 >Emitted(46, 44) Source(2, 9) + SourceIndex(1)
+5 >Emitted(46, 52) Source(2, 10) + SourceIndex(1)
+6 >Emitted(46, 54) Source(2, 12) + SourceIndex(1)
+7 >Emitted(46, 78) Source(2, 48) + SourceIndex(1)
+8 >Emitted(46, 79) Source(2, 49) + SourceIndex(1)
 ---
 >>>    }
 1 >^^^^
@@ -583,8 +595,8 @@ sourceFile:../lib/file1.ts
 1 >
   >
 2 >    }
-1 >Emitted(46, 5) Source(3, 1) + SourceIndex(1)
-2 >Emitted(46, 6) Source(3, 2) + SourceIndex(1)
+1 >Emitted(47, 5) Source(3, 1) + SourceIndex(1)
+2 >Emitted(47, 6) Source(3, 2) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -594,25 +606,34 @@ sourceFile:../lib/file2.ts
 >>>define("file2", ["require", "exports"], function (require, exports) {
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
+>>>    exports.y = void 0;
+1 >^^^^^^^^^^^^
+2 >            ^
+3 >             ^^^^^^^->
+1 >export const 
+2 >            y
+1 >Emitted(52, 13) Source(1, 14) + SourceIndex(2)
+2 >Emitted(52, 14) Source(1, 15) + SourceIndex(2)
+---
 >>>    exports.y = 20;
-1 >^^^^
+1->^^^^
 2 >    ^^^^^^^^
 3 >            ^
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-1 >export const 
+1->
 2 >    
 3 >            y
 4 >              = 
 5 >                20
 6 >                  ;
-1 >Emitted(51, 5) Source(1, 14) + SourceIndex(2)
-2 >Emitted(51, 13) Source(1, 14) + SourceIndex(2)
-3 >Emitted(51, 14) Source(1, 15) + SourceIndex(2)
-4 >Emitted(51, 17) Source(1, 18) + SourceIndex(2)
-5 >Emitted(51, 19) Source(1, 20) + SourceIndex(2)
-6 >Emitted(51, 20) Source(1, 21) + SourceIndex(2)
+1->Emitted(53, 5) Source(1, 14) + SourceIndex(2)
+2 >Emitted(53, 13) Source(1, 14) + SourceIndex(2)
+3 >Emitted(53, 14) Source(1, 15) + SourceIndex(2)
+4 >Emitted(53, 17) Source(1, 18) + SourceIndex(2)
+5 >Emitted(53, 19) Source(1, 20) + SourceIndex(2)
+6 >Emitted(53, 20) Source(1, 21) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -633,12 +654,12 @@ sourceFile:../lib/global.ts
 4 >                = 
 5 >                  10
 6 >                    ;
-1 >Emitted(53, 1) Source(1, 1) + SourceIndex(3)
-2 >Emitted(53, 5) Source(1, 7) + SourceIndex(3)
-3 >Emitted(53, 16) Source(1, 18) + SourceIndex(3)
-4 >Emitted(53, 19) Source(1, 21) + SourceIndex(3)
-5 >Emitted(53, 21) Source(1, 23) + SourceIndex(3)
-6 >Emitted(53, 22) Source(1, 24) + SourceIndex(3)
+1 >Emitted(55, 1) Source(1, 1) + SourceIndex(3)
+2 >Emitted(55, 5) Source(1, 7) + SourceIndex(3)
+3 >Emitted(55, 16) Source(1, 18) + SourceIndex(3)
+4 >Emitted(55, 19) Source(1, 21) + SourceIndex(3)
+5 >Emitted(55, 21) Source(1, 23) + SourceIndex(3)
+6 >Emitted(55, 22) Source(1, 24) + SourceIndex(3)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -647,6 +668,15 @@ sourceFile:file3.ts
 >>>define("file3", ["require", "exports"], function (require, exports) {
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
+>>>    exports.z = void 0;
+1->^^^^^^^^^^^^
+2 >            ^
+3 >             ^^^^^^^->
+1->export const 
+2 >            z
+1->Emitted(59, 13) Source(1, 14) + SourceIndex(4)
+2 >Emitted(59, 14) Source(1, 15) + SourceIndex(4)
+---
 >>>    exports.z = 30;
 1->^^^^
 2 >    ^^^^^^^^
@@ -655,18 +685,18 @@ sourceFile:file3.ts
 5 >                ^^
 6 >                  ^
 7 >                   ^^^^^^^^^^^^^^->
-1->export const 
+1->
 2 >    
 3 >            z
 4 >              = 
 5 >                30
 6 >                  ;
-1->Emitted(57, 5) Source(1, 14) + SourceIndex(4)
-2 >Emitted(57, 13) Source(1, 14) + SourceIndex(4)
-3 >Emitted(57, 14) Source(1, 15) + SourceIndex(4)
-4 >Emitted(57, 17) Source(1, 18) + SourceIndex(4)
-5 >Emitted(57, 19) Source(1, 20) + SourceIndex(4)
-6 >Emitted(57, 20) Source(1, 21) + SourceIndex(4)
+1->Emitted(60, 5) Source(1, 14) + SourceIndex(4)
+2 >Emitted(60, 13) Source(1, 14) + SourceIndex(4)
+3 >Emitted(60, 14) Source(1, 15) + SourceIndex(4)
+4 >Emitted(60, 17) Source(1, 18) + SourceIndex(4)
+5 >Emitted(60, 19) Source(1, 20) + SourceIndex(4)
+6 >Emitted(60, 20) Source(1, 21) + SourceIndex(4)
 ---
 >>>    function forappfile3Rest() {
 1->^^^^
@@ -677,9 +707,9 @@ sourceFile:file3.ts
   >import { x } from "file1";
 2 >    function 
 3 >             forappfile3Rest
-1->Emitted(58, 5) Source(2, 27) + SourceIndex(4)
-2 >Emitted(58, 14) Source(2, 36) + SourceIndex(4)
-3 >Emitted(58, 29) Source(2, 51) + SourceIndex(4)
+1->Emitted(61, 5) Source(2, 27) + SourceIndex(4)
+2 >Emitted(61, 14) Source(2, 36) + SourceIndex(4)
+3 >Emitted(61, 29) Source(2, 51) + SourceIndex(4)
 ---
 >>>        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
 1->^^^^^^^^
@@ -699,14 +729,14 @@ sourceFile:file3.ts
 6 >                                                   , 
 7 >                                                     ...rest } = { a: 10, b: 30, yy: 30 }
 8 >                                                                             ;
-1->Emitted(59, 9) Source(3, 1) + SourceIndex(4)
-2 >Emitted(59, 13) Source(3, 7) + SourceIndex(4)
-3 >Emitted(59, 42) Source(3, 48) + SourceIndex(4)
-4 >Emitted(59, 44) Source(3, 9) + SourceIndex(4)
-5 >Emitted(59, 52) Source(3, 10) + SourceIndex(4)
-6 >Emitted(59, 54) Source(3, 12) + SourceIndex(4)
-7 >Emitted(59, 78) Source(3, 48) + SourceIndex(4)
-8 >Emitted(59, 79) Source(3, 49) + SourceIndex(4)
+1->Emitted(62, 9) Source(3, 1) + SourceIndex(4)
+2 >Emitted(62, 13) Source(3, 7) + SourceIndex(4)
+3 >Emitted(62, 42) Source(3, 48) + SourceIndex(4)
+4 >Emitted(62, 44) Source(3, 9) + SourceIndex(4)
+5 >Emitted(62, 52) Source(3, 10) + SourceIndex(4)
+6 >Emitted(62, 54) Source(3, 12) + SourceIndex(4)
+7 >Emitted(62, 78) Source(3, 48) + SourceIndex(4)
+8 >Emitted(62, 79) Source(3, 49) + SourceIndex(4)
 ---
 >>>    }
 1 >^^^^
@@ -714,8 +744,8 @@ sourceFile:file3.ts
 1 >
   >
 2 >    }
-1 >Emitted(60, 5) Source(4, 1) + SourceIndex(4)
-2 >Emitted(60, 6) Source(4, 2) + SourceIndex(4)
+1 >Emitted(63, 5) Source(4, 1) + SourceIndex(4)
+2 >Emitted(63, 6) Source(4, 2) + SourceIndex(4)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -736,12 +766,12 @@ sourceFile:file4.ts
 4 >          = 
 5 >            30
 6 >              ;
-1 >Emitted(62, 1) Source(1, 1) + SourceIndex(5)
-2 >Emitted(62, 5) Source(1, 7) + SourceIndex(5)
-3 >Emitted(62, 10) Source(1, 12) + SourceIndex(5)
-4 >Emitted(62, 13) Source(1, 15) + SourceIndex(5)
-5 >Emitted(62, 15) Source(1, 17) + SourceIndex(5)
-6 >Emitted(62, 16) Source(1, 18) + SourceIndex(5)
+1 >Emitted(65, 1) Source(1, 1) + SourceIndex(5)
+2 >Emitted(65, 5) Source(1, 7) + SourceIndex(5)
+3 >Emitted(65, 10) Source(1, 12) + SourceIndex(5)
+4 >Emitted(65, 13) Source(1, 15) + SourceIndex(5)
+5 >Emitted(65, 15) Source(1, 17) + SourceIndex(5)
+6 >Emitted(65, 16) Source(1, 18) + SourceIndex(5)
 ---
 >>>function appfile4Spread() {
 1->
@@ -751,9 +781,9 @@ sourceFile:file4.ts
   >
 2 >function 
 3 >         appfile4Spread
-1->Emitted(63, 1) Source(2, 1) + SourceIndex(5)
-2 >Emitted(63, 10) Source(2, 10) + SourceIndex(5)
-3 >Emitted(63, 24) Source(2, 24) + SourceIndex(5)
+1->Emitted(66, 1) Source(2, 1) + SourceIndex(5)
+2 >Emitted(66, 10) Source(2, 10) + SourceIndex(5)
+3 >Emitted(66, 24) Source(2, 24) + SourceIndex(5)
 ---
 >>>    var b = [];
 1 >^^^^
@@ -761,8 +791,8 @@ sourceFile:file4.ts
 3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
-1 >Emitted(64, 5) Source(2, 25) + SourceIndex(5)
-2 >Emitted(64, 16) Source(2, 39) + SourceIndex(5)
+1 >Emitted(67, 5) Source(2, 25) + SourceIndex(5)
+2 >Emitted(67, 16) Source(2, 39) + SourceIndex(5)
 ---
 >>>    for (var _i = 0; _i < arguments.length; _i++) {
 1->^^^^^^^^^
@@ -777,20 +807,20 @@ sourceFile:file4.ts
 4 >                     ...b: number[]
 5 >                                          
 6 >                                            ...b: number[]
-1->Emitted(65, 10) Source(2, 25) + SourceIndex(5)
-2 >Emitted(65, 20) Source(2, 39) + SourceIndex(5)
-3 >Emitted(65, 22) Source(2, 25) + SourceIndex(5)
-4 >Emitted(65, 43) Source(2, 39) + SourceIndex(5)
-5 >Emitted(65, 45) Source(2, 25) + SourceIndex(5)
-6 >Emitted(65, 49) Source(2, 39) + SourceIndex(5)
+1->Emitted(68, 10) Source(2, 25) + SourceIndex(5)
+2 >Emitted(68, 20) Source(2, 39) + SourceIndex(5)
+3 >Emitted(68, 22) Source(2, 25) + SourceIndex(5)
+4 >Emitted(68, 43) Source(2, 39) + SourceIndex(5)
+5 >Emitted(68, 45) Source(2, 25) + SourceIndex(5)
+6 >Emitted(68, 49) Source(2, 39) + SourceIndex(5)
 ---
 >>>        b[_i] = arguments[_i];
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^
 1 >
 2 >        ...b: number[]
-1 >Emitted(66, 9) Source(2, 25) + SourceIndex(5)
-2 >Emitted(66, 31) Source(2, 39) + SourceIndex(5)
+1 >Emitted(69, 9) Source(2, 25) + SourceIndex(5)
+2 >Emitted(69, 31) Source(2, 39) + SourceIndex(5)
 ---
 >>>    }
 >>>}
@@ -799,8 +829,8 @@ sourceFile:file4.ts
 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
-1 >Emitted(68, 1) Source(2, 43) + SourceIndex(5)
-2 >Emitted(68, 2) Source(2, 44) + SourceIndex(5)
+1 >Emitted(71, 1) Source(2, 43) + SourceIndex(5)
+2 >Emitted(71, 2) Source(2, 44) + SourceIndex(5)
 ---
 >>>appfile4Spread.apply(void 0, __spread([10, 20, 30]));
 1->
@@ -826,17 +856,17 @@ sourceFile:file4.ts
 9 >                                               30
 10>                                                 ]
 11>                                                  );
-1->Emitted(69, 1) Source(3, 1) + SourceIndex(5)
-2 >Emitted(69, 15) Source(3, 15) + SourceIndex(5)
-3 >Emitted(69, 39) Source(3, 19) + SourceIndex(5)
-4 >Emitted(69, 40) Source(3, 20) + SourceIndex(5)
-5 >Emitted(69, 42) Source(3, 22) + SourceIndex(5)
-6 >Emitted(69, 44) Source(3, 24) + SourceIndex(5)
-7 >Emitted(69, 46) Source(3, 26) + SourceIndex(5)
-8 >Emitted(69, 48) Source(3, 28) + SourceIndex(5)
-9 >Emitted(69, 50) Source(3, 30) + SourceIndex(5)
-10>Emitted(69, 51) Source(3, 31) + SourceIndex(5)
-11>Emitted(69, 54) Source(3, 33) + SourceIndex(5)
+1->Emitted(72, 1) Source(3, 1) + SourceIndex(5)
+2 >Emitted(72, 15) Source(3, 15) + SourceIndex(5)
+3 >Emitted(72, 39) Source(3, 19) + SourceIndex(5)
+4 >Emitted(72, 40) Source(3, 20) + SourceIndex(5)
+5 >Emitted(72, 42) Source(3, 22) + SourceIndex(5)
+6 >Emitted(72, 44) Source(3, 24) + SourceIndex(5)
+7 >Emitted(72, 46) Source(3, 26) + SourceIndex(5)
+8 >Emitted(72, 48) Source(3, 28) + SourceIndex(5)
+9 >Emitted(72, 50) Source(3, 30) + SourceIndex(5)
+10>Emitted(72, 51) Source(3, 31) + SourceIndex(5)
+11>Emitted(72, 54) Source(3, 33) + SourceIndex(5)
 ---
 >>>//# sourceMappingURL=module.js.map
 
@@ -870,20 +900,20 @@ sourceFile:file4.ts
         },
         {
           "pos": 1180,
-          "end": 1906,
+          "end": 1956,
           "kind": "prepend",
           "data": "../lib/module.js",
           "texts": [
             {
               "pos": 1180,
-              "end": 1906,
+              "end": 1956,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 1906,
-          "end": 2424,
+          "pos": 1956,
+          "end": 2499,
           "kind": "text"
         }
       ],
@@ -962,9 +992,9 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-prepend: (1180-1906):: ../lib/module.js texts:: 1
+prepend: (1180-1956):: ../lib/module.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1180-1906)
+text: (1180-1956)
 var myGlob = 20;
 function libfile0Spread() {
     var b = [];
@@ -976,6 +1006,7 @@ libfile0Spread.apply(void 0, __spread([10, 20, 30]));
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.x = void 0;
     exports.x = 10;
     function forlibfile1Rest() {
         var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
@@ -984,15 +1015,17 @@ define("file1", ["require", "exports"], function (require, exports) {
 define("file2", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.y = void 0;
     exports.y = 20;
 });
 var globalConst = 10;
 
 ----------------------------------------------------------------------
-text: (1906-2424)
+text: (1956-2499)
 define("file3", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.z = void 0;
     exports.z = 30;
     function forappfile3Rest() {
         var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
@@ -1267,6 +1300,7 @@ libfile0Spread.apply(void 0, __spread([10, 20, 30]));
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.x = void 0;
     exports.x = 10;
     function forlibfile1Rest() {
         var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
@@ -1275,13 +1309,14 @@ define("file1", ["require", "exports"], function (require, exports) {
 define("file2", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.y = void 0;
     exports.y = 20;
 });
 var globalConst = 10;
 //# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;;;;ICFnB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,6BAAyC,EAAvC,QAAC,EAAE,wBAAoC,CAAC;IAChD,CAAC;;;;;ICFY,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;;;;YCFnB,CAAC;IAAD,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,6BAAyC,EAAvC,QAAC,EAAE,wBAAoC,CAAC;IAChD,CAAC;;;;;YCFY,CAAC;IAAD,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
 
 //// [/src/lib/module.js.map.baseline.txt]
 ===================================================================
@@ -1449,6 +1484,15 @@ sourceFile:file1.ts
 >>>define("file1", ["require", "exports"], function (require, exports) {
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
+>>>    exports.x = void 0;
+1->^^^^^^^^^^^^
+2 >            ^
+3 >             ^^^^^^^->
+1->export const 
+2 >            x
+1->Emitted(43, 13) Source(1, 14) + SourceIndex(1)
+2 >Emitted(43, 14) Source(1, 15) + SourceIndex(1)
+---
 >>>    exports.x = 10;
 1->^^^^
 2 >    ^^^^^^^^
@@ -1457,18 +1501,18 @@ sourceFile:file1.ts
 5 >                ^^
 6 >                  ^
 7 >                   ^^^^^^^^^^^^^^->
-1->export const 
+1->
 2 >    
 3 >            x
 4 >              = 
 5 >                10
 6 >                  ;
-1->Emitted(43, 5) Source(1, 14) + SourceIndex(1)
-2 >Emitted(43, 13) Source(1, 14) + SourceIndex(1)
-3 >Emitted(43, 14) Source(1, 15) + SourceIndex(1)
-4 >Emitted(43, 17) Source(1, 18) + SourceIndex(1)
-5 >Emitted(43, 19) Source(1, 20) + SourceIndex(1)
-6 >Emitted(43, 20) Source(1, 21) + SourceIndex(1)
+1->Emitted(44, 5) Source(1, 14) + SourceIndex(1)
+2 >Emitted(44, 13) Source(1, 14) + SourceIndex(1)
+3 >Emitted(44, 14) Source(1, 15) + SourceIndex(1)
+4 >Emitted(44, 17) Source(1, 18) + SourceIndex(1)
+5 >Emitted(44, 19) Source(1, 20) + SourceIndex(1)
+6 >Emitted(44, 20) Source(1, 21) + SourceIndex(1)
 ---
 >>>    function forlibfile1Rest() {
 1->^^^^
@@ -1478,9 +1522,9 @@ sourceFile:file1.ts
 1->
 2 >    function 
 3 >             forlibfile1Rest
-1->Emitted(44, 5) Source(1, 21) + SourceIndex(1)
-2 >Emitted(44, 14) Source(1, 30) + SourceIndex(1)
-3 >Emitted(44, 29) Source(1, 45) + SourceIndex(1)
+1->Emitted(45, 5) Source(1, 21) + SourceIndex(1)
+2 >Emitted(45, 14) Source(1, 30) + SourceIndex(1)
+3 >Emitted(45, 29) Source(1, 45) + SourceIndex(1)
 ---
 >>>        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
 1->^^^^^^^^
@@ -1500,14 +1544,14 @@ sourceFile:file1.ts
 6 >                                                   , 
 7 >                                                     ...rest } = { a: 10, b: 30, yy: 30 }
 8 >                                                                             ;
-1->Emitted(45, 9) Source(2, 1) + SourceIndex(1)
-2 >Emitted(45, 13) Source(2, 7) + SourceIndex(1)
-3 >Emitted(45, 42) Source(2, 48) + SourceIndex(1)
-4 >Emitted(45, 44) Source(2, 9) + SourceIndex(1)
-5 >Emitted(45, 52) Source(2, 10) + SourceIndex(1)
-6 >Emitted(45, 54) Source(2, 12) + SourceIndex(1)
-7 >Emitted(45, 78) Source(2, 48) + SourceIndex(1)
-8 >Emitted(45, 79) Source(2, 49) + SourceIndex(1)
+1->Emitted(46, 9) Source(2, 1) + SourceIndex(1)
+2 >Emitted(46, 13) Source(2, 7) + SourceIndex(1)
+3 >Emitted(46, 42) Source(2, 48) + SourceIndex(1)
+4 >Emitted(46, 44) Source(2, 9) + SourceIndex(1)
+5 >Emitted(46, 52) Source(2, 10) + SourceIndex(1)
+6 >Emitted(46, 54) Source(2, 12) + SourceIndex(1)
+7 >Emitted(46, 78) Source(2, 48) + SourceIndex(1)
+8 >Emitted(46, 79) Source(2, 49) + SourceIndex(1)
 ---
 >>>    }
 1 >^^^^
@@ -1515,8 +1559,8 @@ sourceFile:file1.ts
 1 >
   >
 2 >    }
-1 >Emitted(46, 5) Source(3, 1) + SourceIndex(1)
-2 >Emitted(46, 6) Source(3, 2) + SourceIndex(1)
+1 >Emitted(47, 5) Source(3, 1) + SourceIndex(1)
+2 >Emitted(47, 6) Source(3, 2) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/lib/module.js
@@ -1526,25 +1570,34 @@ sourceFile:file2.ts
 >>>define("file2", ["require", "exports"], function (require, exports) {
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
+>>>    exports.y = void 0;
+1 >^^^^^^^^^^^^
+2 >            ^
+3 >             ^^^^^^^->
+1 >export const 
+2 >            y
+1 >Emitted(52, 13) Source(1, 14) + SourceIndex(2)
+2 >Emitted(52, 14) Source(1, 15) + SourceIndex(2)
+---
 >>>    exports.y = 20;
-1 >^^^^
+1->^^^^
 2 >    ^^^^^^^^
 3 >            ^
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-1 >export const 
+1->
 2 >    
 3 >            y
 4 >              = 
 5 >                20
 6 >                  ;
-1 >Emitted(51, 5) Source(1, 14) + SourceIndex(2)
-2 >Emitted(51, 13) Source(1, 14) + SourceIndex(2)
-3 >Emitted(51, 14) Source(1, 15) + SourceIndex(2)
-4 >Emitted(51, 17) Source(1, 18) + SourceIndex(2)
-5 >Emitted(51, 19) Source(1, 20) + SourceIndex(2)
-6 >Emitted(51, 20) Source(1, 21) + SourceIndex(2)
+1->Emitted(53, 5) Source(1, 14) + SourceIndex(2)
+2 >Emitted(53, 13) Source(1, 14) + SourceIndex(2)
+3 >Emitted(53, 14) Source(1, 15) + SourceIndex(2)
+4 >Emitted(53, 17) Source(1, 18) + SourceIndex(2)
+5 >Emitted(53, 19) Source(1, 20) + SourceIndex(2)
+6 >Emitted(53, 20) Source(1, 21) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/lib/module.js
@@ -1565,12 +1618,12 @@ sourceFile:global.ts
 4 >                = 
 5 >                  10
 6 >                    ;
-1 >Emitted(53, 1) Source(1, 1) + SourceIndex(3)
-2 >Emitted(53, 5) Source(1, 7) + SourceIndex(3)
-3 >Emitted(53, 16) Source(1, 18) + SourceIndex(3)
-4 >Emitted(53, 19) Source(1, 21) + SourceIndex(3)
-5 >Emitted(53, 21) Source(1, 23) + SourceIndex(3)
-6 >Emitted(53, 22) Source(1, 24) + SourceIndex(3)
+1 >Emitted(55, 1) Source(1, 1) + SourceIndex(3)
+2 >Emitted(55, 5) Source(1, 7) + SourceIndex(3)
+3 >Emitted(55, 16) Source(1, 18) + SourceIndex(3)
+4 >Emitted(55, 19) Source(1, 21) + SourceIndex(3)
+5 >Emitted(55, 21) Source(1, 23) + SourceIndex(3)
+6 >Emitted(55, 22) Source(1, 24) + SourceIndex(3)
 ---
 >>>//# sourceMappingURL=module.js.map
 
@@ -1606,7 +1659,7 @@ sourceFile:global.ts
         },
         {
           "pos": 1180,
-          "end": 1906,
+          "end": 1956,
           "kind": "text"
         }
       ],
@@ -1672,7 +1725,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-text: (1180-1906)
+text: (1180-1956)
 var myGlob = 20;
 function libfile0Spread() {
     var b = [];
@@ -1684,6 +1737,7 @@ libfile0Spread.apply(void 0, __spread([10, 20, 30]));
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.x = void 0;
     exports.x = 10;
     function forlibfile1Rest() {
         var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
@@ -1692,6 +1746,7 @@ define("file1", ["require", "exports"], function (require, exports) {
 define("file2", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.y = void 0;
     exports.y = 20;
 });
 var globalConst = 10;

@@ -24,6 +24,7 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/a/c/f3.js]
 "use strict";
 exports.__esModule = true;
+exports.y = void 0;
 exports.y = 1;
 
 

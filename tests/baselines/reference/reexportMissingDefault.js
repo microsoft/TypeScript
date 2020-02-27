@@ -10,6 +10,7 @@ export { default } from "./b";
 //// [b.js]
 "use strict";
 exports.__esModule = true;
+exports.b = void 0;
 exports.b = null;
 //// [a.js]
 "use strict";

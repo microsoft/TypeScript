@@ -10,6 +10,7 @@ export function f(x: any): x is I {
 //// [declarationEmitIdentifierPredicatesWithPrivateName01.js]
 "use strict";
 exports.__esModule = true;
+exports.f = void 0;
 function f(x) {
     return typeof x.a === "number";
 }

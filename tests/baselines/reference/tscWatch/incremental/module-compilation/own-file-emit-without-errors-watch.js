@@ -25,6 +25,7 @@ export const y = 20;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.x = void 0;
     exports.x = 10;
 });
 
@@ -33,6 +34,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.y = void 0;
     exports.y = 20;
 });
 
@@ -122,6 +124,7 @@ export const z = 10;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.z = void 0;
     exports.z = 10;
 });
 

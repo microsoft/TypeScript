@@ -129,6 +129,7 @@ export * from "./session";
 //// [/user/username/projects/reexport/out/main/index.js]
 "use strict";
 exports.__esModule = true;
+exports.session = void 0;
 exports.session = {
     foo: 1
 };

@@ -62,6 +62,7 @@ exports.__esModule = true;
 //// [/user/username/projects/myproject/c.js]
 "use strict";
 exports.__esModule = true;
+exports.getPoint = void 0;
 function getPoint() {
     return {
         name: "test",

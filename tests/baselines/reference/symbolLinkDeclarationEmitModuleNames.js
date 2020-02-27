@@ -30,6 +30,7 @@ exports.__esModule = true;
 //// [bindingkey.js]
 "use strict";
 exports.__esModule = true;
+exports.BindingKey = void 0;
 var BindingKey = /** @class */ (function () {
     function BindingKey() {
     }
@@ -59,6 +60,7 @@ exports.__esModule = true;
 //// [usage.js]
 "use strict";
 exports.__esModule = true;
+exports.CONTROLLER_CLASS = void 0;
 var context_1 = require("@loopback/context");
 exports.CONTROLLER_CLASS = context_1.BindingKey.create(null); // line in question
 

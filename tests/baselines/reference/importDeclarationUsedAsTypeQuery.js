@@ -14,6 +14,7 @@ export var x: typeof a;
 //// [importDeclarationUsedAsTypeQuery_require.js]
 "use strict";
 exports.__esModule = true;
+exports.B = void 0;
 var B = /** @class */ (function () {
     function B() {
     }

@@ -236,7 +236,7 @@ exports.fn3 = fn3;`;
                 expectedFiles: [{
                     path: `${usageLocation}/usage.js`,
                     content: `"use strict";
-exports.__esModule = true;
+exports.__esModule = true;${appendJsText === changeJs ? "\nexports.fn3 = void 0;" : ""}
 var fns_1 = require("../decls/fns");
 fns_1.fn1();
 fns_1.fn2();
@@ -286,6 +286,7 @@ ${appendJs}`
                         path: `${dependecyLocation}/fns.js`,
                         content: `"use strict";
 exports.__esModule = true;
+${appendJsText === changeJs ? "exports.fn3 = " : ""}exports.fn2 = exports.fn1 = void 0;
 function fn1() { }
 exports.fn1 = fn1;
 function fn2() { }

@@ -20,6 +20,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.x = void 0;
     exports.x = 1;
 });
 //// [file3.js]
@@ -36,6 +37,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 define(["require", "exports", "file2"], function (require, exports, file2_1) {
     "use strict";
     exports.__esModule = true;
+    exports.x = void 0;
     __exportStar(file2_1, exports);
     exports.x = 1;
 });

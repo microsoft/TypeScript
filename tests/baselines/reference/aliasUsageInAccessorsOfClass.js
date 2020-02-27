@@ -30,6 +30,7 @@ class C2 {
 //// [aliasUsage1_backbone.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Model = void 0;
 var Model = /** @class */ (function () {
     function Model() {
     }
@@ -52,6 +53,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.VisualizationModel = void 0;
 var Backbone = require("./aliasUsage1_backbone");
 var VisualizationModel = /** @class */ (function (_super) {
     __extends(VisualizationModel, _super);

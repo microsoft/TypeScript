@@ -34,6 +34,7 @@ __exportStar(require("./keys"), exports);
 //// [/src/pkg3/dist/keys.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ADMIN = void 0;
 var pkg2_1 = require("@raymondfeng/pkg2");
 exports.ADMIN = pkg2_1.MetadataAccessor.create('1');
 

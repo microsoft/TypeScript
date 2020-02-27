@@ -39,6 +39,7 @@ import M3 from "M3";
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.M = void 0;
     var M;
     (function (M) {
         // variable
