@@ -2,10 +2,10 @@
 export class A {}
 
 // @Filename: b.ts
-export type * from './a';
+export type * from './a'; // Grammar error
 
 // @Filename: c.ts
-export type * as ns from './a';
+export type * as ns from './a'; // Grammar error
 
 // @Filename: d.ts
 import { A } from './b';

@@ -3,10 +3,10 @@ export class A {}
 >A : A
 
 === tests/cases/conformance/externalModules/typeOnly/b.ts ===
-export type * from './a';
+export type * from './a'; // Grammar error
 No type information for this code.
 No type information for this code.=== tests/cases/conformance/externalModules/typeOnly/c.ts ===
-export type * as ns from './a';
+export type * as ns from './a'; // Grammar error
 >ns : typeof ns
 
 === tests/cases/conformance/externalModules/typeOnly/d.ts ===

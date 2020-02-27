@@ -4,10 +4,10 @@
 export class A {}
 
 //// [b.ts]
-export type * from './a';
+export type * from './a'; // Grammar error
 
 //// [c.ts]
-export type * as ns from './a';
+export type * as ns from './a'; // Grammar error
 
 //// [d.ts]
 import { A } from './b';

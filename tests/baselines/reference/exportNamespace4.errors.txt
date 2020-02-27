@@ -8,12 +8,12 @@ tests/cases/conformance/externalModules/typeOnly/e.ts(2,1): error TS1362: 'ns' c
     export class A {}
     
 ==== tests/cases/conformance/externalModules/typeOnly/b.ts (1 errors) ====
-    export type * from './a';
+    export type * from './a'; // Grammar error
     ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1383: Only named exports may use 'export type'.
     
 ==== tests/cases/conformance/externalModules/typeOnly/c.ts (1 errors) ====
-    export type * as ns from './a';
+    export type * as ns from './a'; // Grammar error
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1383: Only named exports may use 'export type'.
     
