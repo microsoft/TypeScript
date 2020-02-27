@@ -1,0 +1,10 @@
+Exit Code: 1
+Standard output:
+src/IOEither.ts(152,5): error TS2783: 'URI' is specified more than once, so this usage will be overwritten.
+src/ReaderEither.ts(145,5): error TS2783: 'URI' is specified more than once, so this usage will be overwritten.
+src/ReaderTaskEither.ts(254,5): error TS2783: 'URI' is specified more than once, so this usage will be overwritten.
+src/TaskEither.ts(245,5): error TS2783: 'URI' is specified more than once, so this usage will be overwritten.
+
+
+
+Standard error:
