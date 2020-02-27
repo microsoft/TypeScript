@@ -2457,12 +2457,7 @@ namespace ts {
                 const name = (specifier.propertyName ?? specifier.name).escapedText;
                 const exportSymbol = getExportsOfSymbol(symbol).get(name);
                 const resolved = resolveSymbol(exportSymbol, dontResolveAlias);
-                if (!markSymbolOfAliasDeclarationIfTypeOnly(specifier, exportSymbol, resolved, /*overwriteEmpty*/ false)) {
-                    if (resolved && symbol.exports && !symbol.exports.has(name)) {
-                        // `resolved` must have come from a namespace export, which could be `export type *`
-                        markSymbolOfAliasDeclarationIfTypeOnly(specifier, symbol.exports.get(InternalSymbolName.ExportStar), /*finalTarget*/ undefined, /*overwriteEmpty*/ true);
-                    }
-                }
+                markSymbolOfAliasDeclarationIfTypeOnly(specifier, exportSymbol, resolved, /*overwriteEmpty*/ false);
                 return resolved;
             }
         }
@@ -3272,7 +3267,6 @@ namespace ts {
                     const lookupTable = createMap<ExportCollisionTracker>() as ExportCollisionTrackerTable;
                     for (const node of exportStars.declarations) {
                         const resolvedModule = resolveExternalModuleName(node, (node as ExportDeclaration).moduleSpecifier!);
-                        markSymbolOfAliasDeclarationIfTypeOnly(node, resolvedModule, /*finalTarget*/ undefined, /*overwriteEmpty*/ false);
                         const exportedSymbols = visit(resolvedModule);
                         extendExportSymbols(
                             nestedSymbols,

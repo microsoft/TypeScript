@@ -11,11 +11,11 @@ export type * as ns from './a'; // Grammar error
 
 //// [d.ts]
 import { A } from './b';
-A; // Error
+A;
 
 //// [e.ts]
 import { ns } from './c';
-ns.A; // Error
+ns.A;
 
 
 //// [a.js]
@@ -36,8 +36,10 @@ exports.__esModule = true;
 //// [d.js]
 "use strict";
 exports.__esModule = true;
-A; // Error
+var b_1 = require("./b");
+b_1.A;
 //// [e.js]
 "use strict";
 exports.__esModule = true;
-ns.A; // Error
+var c_1 = require("./c");
+c_1.ns.A;

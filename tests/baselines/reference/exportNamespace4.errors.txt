@@ -1,7 +1,5 @@
 tests/cases/conformance/externalModules/typeOnly/b.ts(1,1): error TS1383: Only named exports may use 'export type'.
 tests/cases/conformance/externalModules/typeOnly/c.ts(1,1): error TS1383: Only named exports may use 'export type'.
-tests/cases/conformance/externalModules/typeOnly/d.ts(2,1): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
-tests/cases/conformance/externalModules/typeOnly/e.ts(2,1): error TS1362: 'ns' cannot be used as a value because it was exported using 'export type'.
 
 
 ==== tests/cases/conformance/externalModules/typeOnly/a.ts (0 errors) ====
@@ -17,17 +15,11 @@ tests/cases/conformance/externalModules/typeOnly/e.ts(2,1): error TS1362: 'ns' c
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1383: Only named exports may use 'export type'.
     
-==== tests/cases/conformance/externalModules/typeOnly/d.ts (1 errors) ====
+==== tests/cases/conformance/externalModules/typeOnly/d.ts (0 errors) ====
     import { A } from './b';
-    A; // Error
-    ~
-!!! error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
-!!! related TS1377 tests/cases/conformance/externalModules/typeOnly/b.ts:1:1: 'A' was exported here.
+    A;
     
-==== tests/cases/conformance/externalModules/typeOnly/e.ts (1 errors) ====
+==== tests/cases/conformance/externalModules/typeOnly/e.ts (0 errors) ====
     import { ns } from './c';
-    ns.A; // Error
-    ~~
-!!! error TS1362: 'ns' cannot be used as a value because it was exported using 'export type'.
-!!! related TS1377 tests/cases/conformance/externalModules/typeOnly/c.ts:1:13: 'ns' was exported here.
+    ns.A;
     

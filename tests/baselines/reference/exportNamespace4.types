@@ -13,14 +13,14 @@ export type * as ns from './a'; // Grammar error
 import { A } from './b';
 >A : typeof A
 
-A; // Error
+A;
 >A : typeof A
 
 === tests/cases/conformance/externalModules/typeOnly/e.ts ===
 import { ns } from './c';
 >ns : typeof ns
 
-ns.A; // Error
+ns.A;
 >ns.A : typeof ns.A
 >ns : typeof ns
 >A : typeof ns.A
