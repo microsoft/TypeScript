@@ -10324,7 +10324,9 @@ namespace ts {
         }
 
         function isDiscriminantWithNeverType(prop: Symbol) {
-            return (getCheckFlags(prop) & (CheckFlags.Discriminant | CheckFlags.HasNeverType)) === CheckFlags.Discriminant && !!(getTypeOfSymbol(prop).flags & TypeFlags.Never);
+            return !(prop.flags & SymbolFlags.Optional) &&
+                (getCheckFlags(prop) & (CheckFlags.Discriminant | CheckFlags.HasNeverType)) === CheckFlags.Discriminant &&
+                !!(getTypeOfSymbol(prop).flags & TypeFlags.Never);
         }
 
         /**
