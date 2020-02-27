@@ -1936,10 +1936,11 @@ namespace ts {
             if (!isValidTypeOnlyAliasUseSite(useSite)) {
                 const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(symbol);
                 if (typeOnlyDeclaration) {
-                    const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
+                    const isExport = typeOnlyDeclarationIsExport(typeOnlyDeclaration);
+                    const message = isExport
                         ? Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type
                         : Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type;
-                    const relatedMessage = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
+                    const relatedMessage = isExport
                         ? Diagnostics._0_was_exported_here
                         : Diagnostics._0_was_imported_here;
                     const unescapedName = unescapeLeadingUnderscores(name);
@@ -2286,15 +2287,19 @@ namespace ts {
         function checkAndReportErrorForResolvingImportAliasToTypeOnlySymbol(node: ImportEqualsDeclaration, resolved: Symbol | undefined) {
             if (markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false)) {
                 const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(getSymbolOfNode(node))!;
-                const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
+                const isExport = typeOnlyDeclarationIsExport(typeOnlyDeclaration);
+                const message = isExport
                     ? Diagnostics.An_import_alias_cannot_reference_a_declaration_that_was_exported_using_export_type
                     : Diagnostics.An_import_alias_cannot_reference_a_declaration_that_was_imported_using_import_type;
-                const relatedMessage = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
+                const relatedMessage = isExport
                     ? Diagnostics._0_was_exported_here
                     : Diagnostics._0_was_imported_here;
-                // Non-null assertion is safe because the optionality comes from ImportClause,
-                // but if an ImportClause was the typeOnlyDeclaration, it had to have a `name`.
-                const name = unescapeLeadingUnderscores(typeOnlyDeclaration.name!.escapedText);
+
+                // Non-null assertion is safe because `markSymbolOfAliasDeclarationIfTypeOnly` cannot return true
+                // for an ImportEqualsDeclaration without also being passed a defined symbol.
+                // `typeOnlyDeclaration.name` will be an Identifier for all valid cases, but may be undefined for
+                // invalid `export type * ...` syntax.
+                const name = unescapeLeadingUnderscores(tryCast(typeOnlyDeclaration.name, isIdentifier)?.escapedText ?? resolved!.escapedName);
                 addRelatedInfo(error(node.moduleReference, message), createDiagnosticForNode(typeOnlyDeclaration, relatedMessage, name));
             }
         }
@@ -2452,7 +2457,12 @@ namespace ts {
                 const name = (specifier.propertyName ?? specifier.name).escapedText;
                 const exportSymbol = getExportsOfSymbol(symbol).get(name);
                 const resolved = resolveSymbol(exportSymbol, dontResolveAlias);
-                markSymbolOfAliasDeclarationIfTypeOnly(specifier, exportSymbol, resolved, /*overwriteEmpty*/ false);
+                if (!markSymbolOfAliasDeclarationIfTypeOnly(specifier, exportSymbol, resolved, /*overwriteEmpty*/ false)) {
+                    if (resolved && symbol.exports && !symbol.exports.has(name)) {
+                        // `resolved` must have come from a namespace export, which could be `export type *`
+                        markSymbolOfAliasDeclarationIfTypeOnly(specifier, symbol.exports.get(InternalSymbolName.ExportStar), /*finalTarget*/ undefined, /*overwriteEmpty*/ true);
+                    }
+                }
                 return resolved;
             }
         }
@@ -2725,7 +2735,7 @@ namespace ts {
         }
 
         /** Indicates that a symbol directly or indirectly resolves to a type-only import or export. */
-        function getTypeOnlyAliasDeclaration(symbol: Symbol): TypeOnlyCompatibleAliasDeclaration | undefined {
+        function getTypeOnlyAliasDeclaration(symbol: Symbol): TypeOnlyCompatibleAliasDeclaration | NamespaceExport | ExportDeclaration | undefined {
             if (!(symbol.flags & SymbolFlags.Alias)) {
                 return undefined;
             }
@@ -3262,6 +3272,7 @@ namespace ts {
                     const lookupTable = createMap<ExportCollisionTracker>() as ExportCollisionTrackerTable;
                     for (const node of exportStars.declarations) {
                         const resolvedModule = resolveExternalModuleName(node, (node as ExportDeclaration).moduleSpecifier!);
+                        markSymbolOfAliasDeclarationIfTypeOnly(node, resolvedModule, /*finalTarget*/ undefined, /*overwriteEmpty*/ false);
                         const exportedSymbols = visit(resolvedModule);
                         extendExportSymbols(
                             nestedSymbols,
@@ -33537,6 +33548,7 @@ namespace ts {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.CreateBinding);
             }
 
+            checkGrammarExportDeclaration(node);
             if (!node.moduleSpecifier || checkExternalImportOrExportDeclaration(node)) {
                 if (node.exportClause) {
                     // export { x, y }
@@ -33567,6 +33579,14 @@ namespace ts {
                     }
                 }
             }
+        }
+
+        function checkGrammarExportDeclaration(node: ExportDeclaration): boolean {
+            const isTypeOnlyExportStar = node.isTypeOnly && node.exportClause?.kind !== SyntaxKind.NamedExports;
+            if (isTypeOnlyExportStar) {
+                grammarErrorOnNode(node, Diagnostics.Only_named_exports_may_use_export_type);
+            }
+            return !isTypeOnlyExportStar;
         }
 
         function checkGrammarModuleElementContext(node: Statement, errorMessage: DiagnosticMessage): boolean {

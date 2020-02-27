@@ -1727,9 +1727,11 @@ namespace ts {
             case SyntaxKind.ExportSpecifier:
                 return (node as ImportOrExportSpecifier).parent.parent.isTypeOnly;
             case SyntaxKind.NamespaceImport:
-                return (node as NamespaceImport).parent.isTypeOnly;
+            case SyntaxKind.NamespaceExport:
+                return (node as NamespaceImport | NamespaceExport).parent.isTypeOnly;
             case SyntaxKind.ImportClause:
-                return (node as ImportClause).isTypeOnly;
+            case SyntaxKind.ExportDeclaration:
+                return (node as ImportClause | ExportDeclaration).isTypeOnly;
             default:
                 return false;
         }
