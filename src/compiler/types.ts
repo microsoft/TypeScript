@@ -3819,7 +3819,8 @@ namespace ts {
     export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
 
     /* @internal */
-    export type AnyImportOrRequire = AnyImportSyntax | RequireVariableDelcaration;
+    export type AnyImportOrRequire = AnyImportSyntax | RequireVariableDeclaration;
+
 
     /* @internal */
     export type AnyImportOrReExport = AnyImportSyntax | ExportDeclaration;
@@ -3840,7 +3841,8 @@ namespace ts {
     export type RequireOrImportCall = CallExpression & { expression: Identifier, arguments: [StringLiteralLike] };
 
     /* @internal */
-    export interface RequireVariableDelcaration extends VariableDeclaration {
+    export interface RequireVariableDeclaration extends VariableDeclaration {
+
         initializer: RequireOrImportCall;
     }
 
