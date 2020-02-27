@@ -271,21 +271,27 @@ declare module m {
         }
     }
     export class c {
-        readonly foo1: private1;
-        readonly foo2: private1;
-        foo3: private1;
-        foo4: private1;
-        foo5: private1;
-        readonly foo11: public1;
-        readonly foo12: public1;
-        foo13: public1;
-        foo14: public1;
-        foo15: public1;
-        readonly foo111: m2.public2;
-        readonly foo112: m2.public2;
-        foo113: m2.public2;
-        foo114: m2.public2;
-        foo115: m2.public2;
+        get foo1(): private1;
+        get foo2(): private1;
+        set foo3(param: private1);
+        get foo4(): private1;
+        set foo4(param: private1);
+        get foo5(): private1;
+        set foo5(param: private1);
+        get foo11(): public1;
+        get foo12(): public1;
+        set foo13(param: public1);
+        get foo14(): public1;
+        set foo14(param: public1);
+        get foo15(): public1;
+        set foo15(param: public1);
+        get foo111(): m2.public2;
+        get foo112(): m2.public2;
+        set foo113(param: m2.public2);
+        get foo114(): m2.public2;
+        set foo114(param: m2.public2);
+        get foo115(): m2.public2;
+        set foo115(param: m2.public2);
     }
     export {};
 }

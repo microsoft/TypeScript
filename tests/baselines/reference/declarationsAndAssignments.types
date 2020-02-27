@@ -463,12 +463,12 @@ f14([2, ["abc", { x: 0 }]]);
 f14([2, ["abc", { y: false }]]);  // Error, no x
 >f14([2, ["abc", { y: false }]]) : void
 >f14 : ([a, [b, { x, y: c }]]: [number, [string, { x: any; y?: boolean; }]]) => void
->[2, ["abc", { y: false }]] : (number | (string | { y: boolean; })[])[]
+>[2, ["abc", { y: false }]] : [number, [string, { y: false; }]]
 >2 : 2
->["abc", { y: false }] : (string | { y: boolean; })[]
+>["abc", { y: false }] : [string, { y: false; }]
 >"abc" : "abc"
->{ y: false } : { y: boolean; }
->y : boolean
+>{ y: false } : { y: false; }
+>y : false
 >false : false
 
 module M {

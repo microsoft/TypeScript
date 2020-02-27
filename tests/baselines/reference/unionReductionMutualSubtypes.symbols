@@ -1,0 +1,38 @@
+=== tests/cases/compiler/unionReductionMutualSubtypes.ts ===
+// Repro from #35414
+
+interface ReturnVal {
+>ReturnVal : Symbol(ReturnVal, Decl(unionReductionMutualSubtypes.ts, 0, 0))
+
+    something(): void;
+>something : Symbol(ReturnVal.something, Decl(unionReductionMutualSubtypes.ts, 2, 21))
+}
+
+const k: ReturnVal = { something() { } }
+>k : Symbol(k, Decl(unionReductionMutualSubtypes.ts, 6, 5))
+>ReturnVal : Symbol(ReturnVal, Decl(unionReductionMutualSubtypes.ts, 0, 0))
+>something : Symbol(something, Decl(unionReductionMutualSubtypes.ts, 6, 22))
+
+declare const val: ReturnVal;
+>val : Symbol(val, Decl(unionReductionMutualSubtypes.ts, 8, 13))
+>ReturnVal : Symbol(ReturnVal, Decl(unionReductionMutualSubtypes.ts, 0, 0))
+
+function run(options: { something?(b?: string): void }) {
+>run : Symbol(run, Decl(unionReductionMutualSubtypes.ts, 8, 29))
+>options : Symbol(options, Decl(unionReductionMutualSubtypes.ts, 9, 13))
+>something : Symbol(something, Decl(unionReductionMutualSubtypes.ts, 9, 23))
+>b : Symbol(b, Decl(unionReductionMutualSubtypes.ts, 9, 35))
+
+    const something = options.something ?? val.something;
+>something : Symbol(something, Decl(unionReductionMutualSubtypes.ts, 10, 9))
+>options.something : Symbol(something, Decl(unionReductionMutualSubtypes.ts, 9, 23))
+>options : Symbol(options, Decl(unionReductionMutualSubtypes.ts, 9, 13))
+>something : Symbol(something, Decl(unionReductionMutualSubtypes.ts, 9, 23))
+>val.something : Symbol(ReturnVal.something, Decl(unionReductionMutualSubtypes.ts, 2, 21))
+>val : Symbol(val, Decl(unionReductionMutualSubtypes.ts, 8, 13))
+>something : Symbol(ReturnVal.something, Decl(unionReductionMutualSubtypes.ts, 2, 21))
+
+    something('');
+>something : Symbol(something, Decl(unionReductionMutualSubtypes.ts, 10, 9))
+}
+

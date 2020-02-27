@@ -19,8 +19,17 @@ declare let f4: (...args: [string, string] | [string, number, boolean]) => void;
 >f4 : (...args: [string, string] | [string, number, boolean]) => void
 >args : [string, string] | [string, number, boolean]
 
-declare const tt: [string] | [number, boolean];
->tt : [string] | [number, boolean]
+declare const t1: [string] | [number, boolean];
+>t1 : [string] | [number, boolean]
+
+declare const t2: readonly [string] | [number, boolean];
+>t2 : [number, boolean] | readonly [string]
+
+declare const t3: [string] | readonly [number, boolean];
+>t3 : [string] | readonly [number, boolean]
+
+declare const t4: readonly [string] | readonly [number, boolean];
+>t4 : readonly [string] | readonly [number, boolean]
 
 f1("foo", "abc");
 >f1("foo", "abc") : void
@@ -35,12 +44,33 @@ f1("foo", 10, true);
 >10 : 10
 >true : true
 
-f1("foo", ...tt);
->f1("foo", ...tt) : void
+f1("foo", ...t1);
+>f1("foo", ...t1) : void
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
 >"foo" : "foo"
->...tt : string | number | boolean
->tt : [string] | [number, boolean]
+>...t1 : string | number | boolean
+>t1 : [string] | [number, boolean]
+
+f1("foo", ...t2);
+>f1("foo", ...t2) : void
+>f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>"foo" : "foo"
+>...t2 : string | number | boolean
+>t2 : [number, boolean] | readonly [string]
+
+f1("foo", ...t3);
+>f1("foo", ...t3) : void
+>f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>"foo" : "foo"
+>...t3 : string | number | boolean
+>t3 : [string] | readonly [number, boolean]
+
+f1("foo", ...t4);
+>f1("foo", ...t4) : void
+>f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>"foo" : "foo"
+>...t4 : string | number | boolean
+>t4 : readonly [string] | readonly [number, boolean]
 
 f1("foo", 10);  // Error
 >f1("foo", 10) : void
@@ -96,16 +126,16 @@ declare function foo<T extends any[]>(cb: (...args: T) => void): void;
 >args : T
 
 foo<CoolArray<any>>();     // Error
->foo<CoolArray<any>>() : any
+>foo<CoolArray<any>>() : void
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
 
 foo<CoolArray<any>>(100);  // Error
->foo<CoolArray<any>>(100) : any
+>foo<CoolArray<any>>(100) : void
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
 >100 : 100
 
 foo<CoolArray<any>>(foo);  // Error
->foo<CoolArray<any>>(foo) : any
+>foo<CoolArray<any>>(foo) : void
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
 
@@ -125,8 +155,8 @@ let a = bar(10, 20);
 >20 : 20
 
 let b = bar<CoolArray<number>>(10, 20);  // Error
->b : any
->bar<CoolArray<number>>(10, 20) : any
+>b : CoolArray<number>
+>bar<CoolArray<number>>(10, 20) : CoolArray<number>
 >bar : <T extends any[]>(...args: T) => T
 >10 : 10
 >20 : 20
@@ -139,22 +169,22 @@ declare const ca: CoolArray<number>;
 >ca : CoolArray<number>
 
 baz();       // Error
->baz() : any
+>baz() : void
 >baz : <T>(...args: CoolArray<T>) => void
 
 baz(1);      // Error
->baz(1) : any
+>baz(1) : void
 >baz : <T>(...args: CoolArray<T>) => void
 >1 : 1
 
 baz(1, 2);   // Error
->baz(1, 2) : any
+>baz(1, 2) : void
 >baz : <T>(...args: CoolArray<T>) => void
 >1 : 1
 >2 : 2
 
 baz(...ca);  // Error
->baz(...ca) : any
+>baz(...ca) : void
 >baz : <T>(...args: CoolArray<T>) => void
 >...ca : number
 >ca : CoolArray<number>
@@ -176,7 +206,24 @@ hmm(1, "s"); // okay, A = [1, "s"]
 >"s" : "s"
 
 hmm("what"); // no error?  A = [] | [number, string] ?
->hmm("what") : any
+>hmm("what") : void
 >hmm : <A extends [] | [number, string]>(...args: A) => void
 >"what" : "what"
+
+// Repro from #35066
+
+declare function foo2(...args: string[] | number[]): void;
+>foo2 : (...args: string[] | number[]) => void
+>args : string[] | number[]
+
+let x2: ReadonlyArray<string> = ["hello"];
+>x2 : readonly string[]
+>["hello"] : string[]
+>"hello" : "hello"
+
+foo2(...x2);
+>foo2(...x2) : void
+>foo2 : (...args: string[] | number[]) => void
+>...x2 : string
+>x2 : readonly string[]
 

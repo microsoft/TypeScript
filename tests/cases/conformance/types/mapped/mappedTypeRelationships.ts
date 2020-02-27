@@ -188,3 +188,7 @@ type Numeric<T> = { [K in keyof T]?: number };
 function f90<T extends { x: number }>() {
     const n: Numeric<T> = { x: 1 };
 }
+
+function f<T extends { x: {} }>(): Partial<T> {
+    return undefined! as T;
+}

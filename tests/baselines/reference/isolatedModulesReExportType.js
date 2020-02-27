@@ -58,10 +58,17 @@ var C = /** @class */ (function () {
 exports.C = C;
 //// [user.js]
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
 exports.__esModule = true;
 // OK, has a value side
 var exportValue_1 = require("./exportValue");
-exports.C = exportValue_1.C;
+__createBinding(exports, exportValue_1, "C");
 // OK, even though the namespace it exports is only types.
 var NS = require("./exportT");
 exports.NS = NS;

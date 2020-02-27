@@ -39,7 +39,7 @@ Zet.prototype.add = function(v, o) {
     this.u = v || o.nested
 >this.u = v || o.nested : T
 >this.u : T
->this : Zet
+>this : this
 >u : T
 >v || o.nested : T
 >v : T
@@ -49,28 +49,40 @@ Zet.prototype.add = function(v, o) {
 
     return this.u
 >this.u : T
->this : Zet
+>this : this
 >u : T
 }
 var z = new Zet(1)
->z : typeof Zet
->new Zet(1) : typeof Zet
+>z : Zet<number>
+>new Zet(1) : Zet<number>
 >Zet : typeof Zet
 >1 : 1
 
 z.t = 2
 >z.t = 2 : 2
 >z.t : number
->z : typeof Zet
+>z : Zet<number>
 >t : number
 >2 : 2
 
 z.u = false
 >z.u = false : false
 >z.u : number
->z : typeof Zet
+>z : Zet<number>
 >u : number
 >false : false
+
+/** @type {number} */
+let answer = z.add(3, { nested: 4 })
+>answer : number
+>z.add(3, { nested: 4 }) : number
+>z.add : (v: number, o: { nested: number; }) => number
+>z : Zet<number>
+>add : (v: number, o: { nested: number; }) => number
+>3 : 3
+>{ nested: 4 } : { nested: number; }
+>nested : number
+>4 : 4
 
 // lookup in typedef should not crash the compiler, even when the type is unknown
 /**

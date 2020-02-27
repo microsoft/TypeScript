@@ -51,8 +51,8 @@ declare class C {
     static y: number;
     private static a;
     static b(): void;
-    private static readonly c;
-    static readonly d: number;
-    private static e;
-    static f: any;
+    private static get c();
+    static get d(): number;
+    private static set e(value);
+    static set f(v: any);
 }

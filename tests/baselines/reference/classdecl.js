@@ -218,13 +218,14 @@ declare class a {
     constructor(s: string);
     pgF(): void;
     pv: any;
-    d: number;
-    static readonly p2: {
+    get d(): number;
+    set d(a: number);
+    static get p2(): {
         x: number;
         y: number;
     };
     private static d2;
-    private static readonly p3;
+    private static get p3();
     private pv3;
     private foo;
 }

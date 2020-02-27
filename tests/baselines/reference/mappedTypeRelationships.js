@@ -187,6 +187,10 @@ function f90<T extends { x: number }>() {
     const n: Numeric<T> = { x: 1 };
 }
 
+function f<T extends { x: {} }>(): Partial<T> {
+    return undefined! as T;
+}
+
 
 //// [mappedTypeRelationships.js]
 function f1(x, k) {
@@ -319,6 +323,9 @@ function f82(t, k1, k2) {
 function f90() {
     var n = { x: 1 };
 }
+function f() {
+    return undefined;
+}
 
 
 //// [mappedTypeRelationships.d.ts]
@@ -408,3 +415,6 @@ declare type Numeric<T> = {
 declare function f90<T extends {
     x: number;
 }>(): void;
+declare function f<T extends {
+    x: {};
+}>(): Partial<T>;

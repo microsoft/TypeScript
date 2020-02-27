@@ -627,3 +627,121 @@ function switchResponseWrong(x: unknown): SomeResponse {
 >x : unknown
 }
 
+// Repro from #33483
+
+function f2(x: unknown): string | undefined {
+>f2 : (x: unknown) => string | undefined
+>x : unknown
+
+  if (x !== undefined && typeof x !== 'string') {
+>x !== undefined && typeof x !== 'string' : boolean
+>x !== undefined : boolean
+>x : unknown
+>undefined : undefined
+>typeof x !== 'string' : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>'string' : "string"
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+  }
+  return x;
+>x : string | undefined
+}
+
+function notNotEquals(u: unknown)  {
+>notNotEquals : (u: unknown) => void
+>u : unknown
+
+    if (u !== NumberEnum) { }
+>u !== NumberEnum : boolean
+>u : unknown
+>NumberEnum : typeof NumberEnum
+
+    else {
+        const o: object = u;
+>o : object
+>u : object
+    }
+
+    if (u !== NumberEnum.A) { }
+>u !== NumberEnum.A : boolean
+>u : unknown
+>NumberEnum.A : NumberEnum.A
+>NumberEnum : typeof NumberEnum
+>A : NumberEnum.A
+
+    else {
+        const a: NumberEnum.A = u;
+>a : NumberEnum.A
+>NumberEnum : any
+>u : NumberEnum.A
+    }
+    
+
+    if (u !== NumberEnum.A && u !== NumberEnum.B && u !== StringEnum.A) { }
+>u !== NumberEnum.A && u !== NumberEnum.B && u !== StringEnum.A : boolean
+>u !== NumberEnum.A && u !== NumberEnum.B : boolean
+>u !== NumberEnum.A : boolean
+>u : unknown
+>NumberEnum.A : NumberEnum.A
+>NumberEnum : typeof NumberEnum
+>A : NumberEnum.A
+>u !== NumberEnum.B : boolean
+>u : unknown
+>NumberEnum.B : NumberEnum.B
+>NumberEnum : typeof NumberEnum
+>B : NumberEnum.B
+>u !== StringEnum.A : boolean
+>u : unknown
+>StringEnum.A : StringEnum.A
+>StringEnum : typeof StringEnum
+>A : StringEnum.A
+
+    else {
+        const aOrB: NumberEnum.A | NumberEnum.B | StringEnum.A  = u;
+>aOrB : NumberEnum.A | NumberEnum.B | StringEnum.A
+>NumberEnum : any
+>NumberEnum : any
+>StringEnum : any
+>u : NumberEnum.A | NumberEnum.B | StringEnum.A
+    }
+
+    // equivalent to
+    if (!(u === NumberEnum.A || u === NumberEnum.B || u === StringEnum.A)) { }
+>!(u === NumberEnum.A || u === NumberEnum.B || u === StringEnum.A) : boolean
+>(u === NumberEnum.A || u === NumberEnum.B || u === StringEnum.A) : boolean
+>u === NumberEnum.A || u === NumberEnum.B || u === StringEnum.A : boolean
+>u === NumberEnum.A || u === NumberEnum.B : boolean
+>u === NumberEnum.A : boolean
+>u : unknown
+>NumberEnum.A : NumberEnum.A
+>NumberEnum : typeof NumberEnum
+>A : NumberEnum.A
+>u === NumberEnum.B : boolean
+>u : unknown
+>NumberEnum.B : NumberEnum.B
+>NumberEnum : typeof NumberEnum
+>B : NumberEnum.B
+>u === StringEnum.A : boolean
+>u : unknown
+>StringEnum.A : StringEnum.A
+>StringEnum : typeof StringEnum
+>A : StringEnum.A
+
+    else {
+        const aOrB: NumberEnum.A | NumberEnum.B | StringEnum.A  = u;
+>aOrB : NumberEnum.A | NumberEnum.B | StringEnum.A
+>NumberEnum : any
+>NumberEnum : any
+>StringEnum : any
+>u : NumberEnum.A | NumberEnum.B | StringEnum.A
+    }
+}
+
+
+
+
+

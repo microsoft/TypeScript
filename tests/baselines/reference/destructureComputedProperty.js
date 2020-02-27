@@ -13,7 +13,7 @@ const { p: p3 } = new C();
 
 //// [destructureComputedProperty.js]
 var nameN = "n";
-var _a = nameN, n = ab[_a];
+var _a = ab, _b = nameN, n = _a[_b];
 var C = /** @class */ (function () {
     function C() {
     }
@@ -22,5 +22,5 @@ var C = /** @class */ (function () {
 var nameP = "p";
 var p0 = new C()["p"];
 var p1 = new C()["p"];
-var _b = nameP, p2 = new C()[_b];
+var _c = new C(), _d = nameP, p2 = _c[_d];
 var p3 = new C().p;

@@ -44,7 +44,7 @@ for (let _ of [])
 
 // @ts-ignore suppress `with` statement error
 with (window)
->window : Window
+>window : Window & typeof globalThis
 
     const enum H {}
 >H : error

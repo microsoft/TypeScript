@@ -824,3 +824,15 @@ function f90<T extends { x: number }>() {
 >x : Symbol(x, Decl(mappedTypeRelationships.ts, 185, 27))
 }
 
+function f<T extends { x: {} }>(): Partial<T> {
+>f : Symbol(f, Decl(mappedTypeRelationships.ts, 186, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 188, 11))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 188, 22))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 188, 11))
+
+    return undefined! as T;
+>undefined : Symbol(undefined)
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 188, 11))
+}
+

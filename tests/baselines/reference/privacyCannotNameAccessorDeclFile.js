@@ -417,18 +417,18 @@ export declare function createExportedWidget4(): Widgets1.SpecializedGlobalWidge
 //// [privacyCannotNameAccessorDeclFile_consumer.d.ts]
 /// <reference path="privacyCannotNameAccessorDeclFile_GlobalWidgets.d.ts" />
 export declare class publicClassWithWithPrivateGetAccessorTypes {
-    static readonly myPublicStaticMethod: import("./privacyCannotNameAccessorDeclFile_Widgets").Widget1;
-    private static readonly myPrivateStaticMethod;
-    readonly myPublicMethod: import("./privacyCannotNameAccessorDeclFile_Widgets").Widget1;
-    private readonly myPrivateMethod;
-    static readonly myPublicStaticMethod1: import("GlobalWidgets").Widget3;
-    private static readonly myPrivateStaticMethod1;
-    readonly myPublicMethod1: import("GlobalWidgets").Widget3;
-    private readonly myPrivateMethod1;
+    static get myPublicStaticMethod(): import("./privacyCannotNameAccessorDeclFile_Widgets").Widget1;
+    private static get myPrivateStaticMethod();
+    get myPublicMethod(): import("./privacyCannotNameAccessorDeclFile_Widgets").Widget1;
+    private get myPrivateMethod();
+    static get myPublicStaticMethod1(): import("GlobalWidgets").Widget3;
+    private static get myPrivateStaticMethod1();
+    get myPublicMethod1(): import("GlobalWidgets").Widget3;
+    private get myPrivateMethod1();
 }
 export declare class publicClassWithPrivateModuleGetAccessorTypes {
-    static readonly myPublicStaticMethod: import("./privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2;
-    readonly myPublicMethod: import("./privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2;
-    static readonly myPublicStaticMethod1: import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
-    readonly myPublicMethod1: import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
+    static get myPublicStaticMethod(): import("./privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2;
+    get myPublicMethod(): import("./privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2;
+    static get myPublicStaticMethod1(): import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
+    get myPublicMethod1(): import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
 }

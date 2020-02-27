@@ -3562,46 +3562,46 @@ declare class privateClass {
 export declare class publicClass {
 }
 export declare class publicClassWithWithPrivateGetAccessorTypes {
-    static readonly myPublicStaticMethod: privateClass;
-    private static readonly myPrivateStaticMethod;
-    readonly myPublicMethod: privateClass;
-    private readonly myPrivateMethod;
-    static readonly myPublicStaticMethod1: privateClass;
-    private static readonly myPrivateStaticMethod1;
-    readonly myPublicMethod1: privateClass;
-    private readonly myPrivateMethod1;
+    static get myPublicStaticMethod(): privateClass;
+    private static get myPrivateStaticMethod();
+    get myPublicMethod(): privateClass;
+    private get myPrivateMethod();
+    static get myPublicStaticMethod1(): privateClass;
+    private static get myPrivateStaticMethod1();
+    get myPublicMethod1(): privateClass;
+    private get myPrivateMethod1();
 }
 export declare class publicClassWithWithPublicGetAccessorTypes {
-    static readonly myPublicStaticMethod: publicClass;
-    private static readonly myPrivateStaticMethod;
-    readonly myPublicMethod: publicClass;
-    private readonly myPrivateMethod;
-    static readonly myPublicStaticMethod1: publicClass;
-    private static readonly myPrivateStaticMethod1;
-    readonly myPublicMethod1: publicClass;
-    private readonly myPrivateMethod1;
+    static get myPublicStaticMethod(): publicClass;
+    private static get myPrivateStaticMethod();
+    get myPublicMethod(): publicClass;
+    private get myPrivateMethod();
+    static get myPublicStaticMethod1(): publicClass;
+    private static get myPrivateStaticMethod1();
+    get myPublicMethod1(): publicClass;
+    private get myPrivateMethod1();
 }
 export declare class publicClassWithWithPrivateSetAccessorTypes {
-    static myPublicStaticMethod: privateClass;
-    private static myPrivateStaticMethod;
-    myPublicMethod: privateClass;
-    private myPrivateMethod;
+    static set myPublicStaticMethod(param: privateClass);
+    private static set myPrivateStaticMethod(value);
+    set myPublicMethod(param: privateClass);
+    private set myPrivateMethod(value);
 }
 export declare class publicClassWithWithPublicSetAccessorTypes {
-    static myPublicStaticMethod: publicClass;
-    private static myPrivateStaticMethod;
-    myPublicMethod: publicClass;
-    private myPrivateMethod;
+    static set myPublicStaticMethod(param: publicClass);
+    private static set myPrivateStaticMethod(value);
+    set myPublicMethod(param: publicClass);
+    private set myPrivateMethod(value);
 }
 export declare class publicClassWithPrivateModuleGetAccessorTypes {
-    static readonly myPublicStaticMethod: privateModule.publicClass;
-    readonly myPublicMethod: privateModule.publicClass;
-    static readonly myPublicStaticMethod1: privateModule.publicClass;
-    readonly myPublicMethod1: privateModule.publicClass;
+    static get myPublicStaticMethod(): privateModule.publicClass;
+    get myPublicMethod(): privateModule.publicClass;
+    static get myPublicStaticMethod1(): privateModule.publicClass;
+    get myPublicMethod1(): privateModule.publicClass;
 }
 export declare class publicClassWithPrivateModuleSetAccessorTypes {
-    static myPublicStaticMethod: privateModule.publicClass;
-    myPublicMethod: privateModule.publicClass;
+    static set myPublicStaticMethod(param: privateModule.publicClass);
+    set myPublicMethod(param: privateModule.publicClass);
 }
 export declare module publicModule {
     class privateClass {
@@ -3609,46 +3609,46 @@ export declare module publicModule {
     export class publicClass {
     }
     export class publicClassWithWithPrivateGetAccessorTypes {
-        static readonly myPublicStaticMethod: privateClass;
-        private static readonly myPrivateStaticMethod;
-        readonly myPublicMethod: privateClass;
-        private readonly myPrivateMethod;
-        static readonly myPublicStaticMethod1: privateClass;
-        private static readonly myPrivateStaticMethod1;
-        readonly myPublicMethod1: privateClass;
-        private readonly myPrivateMethod1;
+        static get myPublicStaticMethod(): privateClass;
+        private static get myPrivateStaticMethod();
+        get myPublicMethod(): privateClass;
+        private get myPrivateMethod();
+        static get myPublicStaticMethod1(): privateClass;
+        private static get myPrivateStaticMethod1();
+        get myPublicMethod1(): privateClass;
+        private get myPrivateMethod1();
     }
     export class publicClassWithWithPublicGetAccessorTypes {
-        static readonly myPublicStaticMethod: publicClass;
-        private static readonly myPrivateStaticMethod;
-        readonly myPublicMethod: publicClass;
-        private readonly myPrivateMethod;
-        static readonly myPublicStaticMethod1: publicClass;
-        private static readonly myPrivateStaticMethod1;
-        readonly myPublicMethod1: publicClass;
-        private readonly myPrivateMethod1;
+        static get myPublicStaticMethod(): publicClass;
+        private static get myPrivateStaticMethod();
+        get myPublicMethod(): publicClass;
+        private get myPrivateMethod();
+        static get myPublicStaticMethod1(): publicClass;
+        private static get myPrivateStaticMethod1();
+        get myPublicMethod1(): publicClass;
+        private get myPrivateMethod1();
     }
     export class publicClassWithWithPrivateSetAccessorTypes {
-        static myPublicStaticMethod: privateClass;
-        private static myPrivateStaticMethod;
-        myPublicMethod: privateClass;
-        private myPrivateMethod;
+        static set myPublicStaticMethod(param: privateClass);
+        private static set myPrivateStaticMethod(value);
+        set myPublicMethod(param: privateClass);
+        private set myPrivateMethod(value);
     }
     export class publicClassWithWithPublicSetAccessorTypes {
-        static myPublicStaticMethod: publicClass;
-        private static myPrivateStaticMethod;
-        myPublicMethod: publicClass;
-        private myPrivateMethod;
+        static set myPublicStaticMethod(param: publicClass);
+        private static set myPrivateStaticMethod(value);
+        set myPublicMethod(param: publicClass);
+        private set myPrivateMethod(value);
     }
     export class publicClassWithPrivateModuleGetAccessorTypes {
-        static readonly myPublicStaticMethod: privateModule.publicClass;
-        readonly myPublicMethod: privateModule.publicClass;
-        static readonly myPublicStaticMethod1: privateModule.publicClass;
-        readonly myPublicMethod1: privateModule.publicClass;
+        static get myPublicStaticMethod(): privateModule.publicClass;
+        get myPublicMethod(): privateModule.publicClass;
+        static get myPublicStaticMethod1(): privateModule.publicClass;
+        get myPublicMethod1(): privateModule.publicClass;
     }
     export class publicClassWithPrivateModuleSetAccessorTypes {
-        static myPublicStaticMethod: privateModule.publicClass;
-        myPublicMethod: privateModule.publicClass;
+        static set myPublicStaticMethod(param: privateModule.publicClass);
+        set myPublicMethod(param: privateModule.publicClass);
     }
     export {};
 }
@@ -3658,46 +3658,46 @@ declare module privateModule {
     export class publicClass {
     }
     export class publicClassWithWithPrivateGetAccessorTypes {
-        static readonly myPublicStaticMethod: privateClass;
-        private static readonly myPrivateStaticMethod;
-        readonly myPublicMethod: privateClass;
-        private readonly myPrivateMethod;
-        static readonly myPublicStaticMethod1: privateClass;
-        private static readonly myPrivateStaticMethod1;
-        readonly myPublicMethod1: privateClass;
-        private readonly myPrivateMethod1;
+        static get myPublicStaticMethod(): privateClass;
+        private static get myPrivateStaticMethod();
+        get myPublicMethod(): privateClass;
+        private get myPrivateMethod();
+        static get myPublicStaticMethod1(): privateClass;
+        private static get myPrivateStaticMethod1();
+        get myPublicMethod1(): privateClass;
+        private get myPrivateMethod1();
     }
     export class publicClassWithWithPublicGetAccessorTypes {
-        static readonly myPublicStaticMethod: publicClass;
-        private static readonly myPrivateStaticMethod;
-        readonly myPublicMethod: publicClass;
-        private readonly myPrivateMethod;
-        static readonly myPublicStaticMethod1: publicClass;
-        private static readonly myPrivateStaticMethod1;
-        readonly myPublicMethod1: publicClass;
-        private readonly myPrivateMethod1;
+        static get myPublicStaticMethod(): publicClass;
+        private static get myPrivateStaticMethod();
+        get myPublicMethod(): publicClass;
+        private get myPrivateMethod();
+        static get myPublicStaticMethod1(): publicClass;
+        private static get myPrivateStaticMethod1();
+        get myPublicMethod1(): publicClass;
+        private get myPrivateMethod1();
     }
     export class publicClassWithWithPrivateSetAccessorTypes {
-        static myPublicStaticMethod: privateClass;
-        private static myPrivateStaticMethod;
-        myPublicMethod: privateClass;
-        private myPrivateMethod;
+        static set myPublicStaticMethod(param: privateClass);
+        private static set myPrivateStaticMethod(value);
+        set myPublicMethod(param: privateClass);
+        private set myPrivateMethod(value);
     }
     export class publicClassWithWithPublicSetAccessorTypes {
-        static myPublicStaticMethod: publicClass;
-        private static myPrivateStaticMethod;
-        myPublicMethod: publicClass;
-        private myPrivateMethod;
+        static set myPublicStaticMethod(param: publicClass);
+        private static set myPrivateStaticMethod(value);
+        set myPublicMethod(param: publicClass);
+        private set myPrivateMethod(value);
     }
     export class publicClassWithPrivateModuleGetAccessorTypes {
-        static readonly myPublicStaticMethod: privateModule.publicClass;
-        readonly myPublicMethod: privateModule.publicClass;
-        static readonly myPublicStaticMethod1: publicClass;
-        readonly myPublicMethod1: publicClass;
+        static get myPublicStaticMethod(): privateModule.publicClass;
+        get myPublicMethod(): privateModule.publicClass;
+        static get myPublicStaticMethod1(): publicClass;
+        get myPublicMethod1(): publicClass;
     }
     export class publicClassWithPrivateModuleSetAccessorTypes {
-        static myPublicStaticMethod: privateModule.publicClass;
-        myPublicMethod: privateModule.publicClass;
+        static set myPublicStaticMethod(param: privateModule.publicClass);
+        set myPublicMethod(param: privateModule.publicClass);
     }
     export {};
 }
@@ -3706,20 +3706,20 @@ export {};
 declare class publicClassInGlobal {
 }
 declare class publicClassInGlobalWithPublicGetAccessorTypes {
-    static readonly myPublicStaticMethod: publicClassInGlobal;
-    private static readonly myPrivateStaticMethod;
-    readonly myPublicMethod: publicClassInGlobal;
-    private readonly myPrivateMethod;
-    static readonly myPublicStaticMethod1: publicClassInGlobal;
-    private static readonly myPrivateStaticMethod1;
-    readonly myPublicMethod1: publicClassInGlobal;
-    private readonly myPrivateMethod1;
+    static get myPublicStaticMethod(): publicClassInGlobal;
+    private static get myPrivateStaticMethod();
+    get myPublicMethod(): publicClassInGlobal;
+    private get myPrivateMethod();
+    static get myPublicStaticMethod1(): publicClassInGlobal;
+    private static get myPrivateStaticMethod1();
+    get myPublicMethod1(): publicClassInGlobal;
+    private get myPrivateMethod1();
 }
 declare class publicClassInGlobalWithWithPublicSetAccessorTypes {
-    static myPublicStaticMethod: publicClassInGlobal;
-    private static myPrivateStaticMethod;
-    myPublicMethod: publicClassInGlobal;
-    private myPrivateMethod;
+    static set myPublicStaticMethod(param: publicClassInGlobal);
+    private static set myPrivateStaticMethod(value);
+    set myPublicMethod(param: publicClassInGlobal);
+    private set myPrivateMethod(value);
 }
 declare module publicModuleInGlobal {
     class privateClass {
@@ -3732,90 +3732,90 @@ declare module publicModuleInGlobal {
         export class publicClass {
         }
         export class publicClassWithWithPrivateGetAccessorTypes {
-            static readonly myPublicStaticMethod: privateClass;
-            private static readonly myPrivateStaticMethod;
-            readonly myPublicMethod: privateClass;
-            private readonly myPrivateMethod;
-            static readonly myPublicStaticMethod1: privateClass;
-            private static readonly myPrivateStaticMethod1;
-            readonly myPublicMethod1: privateClass;
-            private readonly myPrivateMethod1;
+            static get myPublicStaticMethod(): privateClass;
+            private static get myPrivateStaticMethod();
+            get myPublicMethod(): privateClass;
+            private get myPrivateMethod();
+            static get myPublicStaticMethod1(): privateClass;
+            private static get myPrivateStaticMethod1();
+            get myPublicMethod1(): privateClass;
+            private get myPrivateMethod1();
         }
         export class publicClassWithWithPublicGetAccessorTypes {
-            static readonly myPublicStaticMethod: publicClass;
-            private static readonly myPrivateStaticMethod;
-            readonly myPublicMethod: publicClass;
-            private readonly myPrivateMethod;
-            static readonly myPublicStaticMethod1: publicClass;
-            private static readonly myPrivateStaticMethod1;
-            readonly myPublicMethod1: publicClass;
-            private readonly myPrivateMethod1;
+            static get myPublicStaticMethod(): publicClass;
+            private static get myPrivateStaticMethod();
+            get myPublicMethod(): publicClass;
+            private get myPrivateMethod();
+            static get myPublicStaticMethod1(): publicClass;
+            private static get myPrivateStaticMethod1();
+            get myPublicMethod1(): publicClass;
+            private get myPrivateMethod1();
         }
         export class publicClassWithWithPrivateSetAccessorTypes {
-            static myPublicStaticMethod: privateClass;
-            private static myPrivateStaticMethod;
-            myPublicMethod: privateClass;
-            private myPrivateMethod;
+            static set myPublicStaticMethod(param: privateClass);
+            private static set myPrivateStaticMethod(value);
+            set myPublicMethod(param: privateClass);
+            private set myPrivateMethod(value);
         }
         export class publicClassWithWithPublicSetAccessorTypes {
-            static myPublicStaticMethod: publicClass;
-            private static myPrivateStaticMethod;
-            myPublicMethod: publicClass;
-            private myPrivateMethod;
+            static set myPublicStaticMethod(param: publicClass);
+            private static set myPrivateStaticMethod(value);
+            set myPublicMethod(param: publicClass);
+            private set myPrivateMethod(value);
         }
         export class publicClassWithPrivateModuleGetAccessorTypes {
-            static readonly myPublicStaticMethod: privateModule.publicClass;
-            readonly myPublicMethod: privateModule.publicClass;
-            static readonly myPublicStaticMethod1: publicClass;
-            readonly myPublicMethod1: publicClass;
+            static get myPublicStaticMethod(): privateModule.publicClass;
+            get myPublicMethod(): privateModule.publicClass;
+            static get myPublicStaticMethod1(): publicClass;
+            get myPublicMethod1(): publicClass;
         }
         export class publicClassWithPrivateModuleSetAccessorTypes {
-            static myPublicStaticMethod: privateModule.publicClass;
-            myPublicMethod: privateModule.publicClass;
+            static set myPublicStaticMethod(param: privateModule.publicClass);
+            set myPublicMethod(param: privateModule.publicClass);
         }
         export {};
     }
     export class publicClassWithWithPrivateGetAccessorTypes {
-        static readonly myPublicStaticMethod: privateClass;
-        private static readonly myPrivateStaticMethod;
-        readonly myPublicMethod: privateClass;
-        private readonly myPrivateMethod;
-        static readonly myPublicStaticMethod1: privateClass;
-        private static readonly myPrivateStaticMethod1;
-        readonly myPublicMethod1: privateClass;
-        private readonly myPrivateMethod1;
+        static get myPublicStaticMethod(): privateClass;
+        private static get myPrivateStaticMethod();
+        get myPublicMethod(): privateClass;
+        private get myPrivateMethod();
+        static get myPublicStaticMethod1(): privateClass;
+        private static get myPrivateStaticMethod1();
+        get myPublicMethod1(): privateClass;
+        private get myPrivateMethod1();
     }
     export class publicClassWithWithPublicGetAccessorTypes {
-        static readonly myPublicStaticMethod: publicClass;
-        private static readonly myPrivateStaticMethod;
-        readonly myPublicMethod: publicClass;
-        private readonly myPrivateMethod;
-        static readonly myPublicStaticMethod1: publicClass;
-        private static readonly myPrivateStaticMethod1;
-        readonly myPublicMethod1: publicClass;
-        private readonly myPrivateMethod1;
+        static get myPublicStaticMethod(): publicClass;
+        private static get myPrivateStaticMethod();
+        get myPublicMethod(): publicClass;
+        private get myPrivateMethod();
+        static get myPublicStaticMethod1(): publicClass;
+        private static get myPrivateStaticMethod1();
+        get myPublicMethod1(): publicClass;
+        private get myPrivateMethod1();
     }
     export class publicClassWithWithPrivateSetAccessorTypes {
-        static myPublicStaticMethod: privateClass;
-        private static myPrivateStaticMethod;
-        myPublicMethod: privateClass;
-        private myPrivateMethod;
+        static set myPublicStaticMethod(param: privateClass);
+        private static set myPrivateStaticMethod(value);
+        set myPublicMethod(param: privateClass);
+        private set myPrivateMethod(value);
     }
     export class publicClassWithWithPublicSetAccessorTypes {
-        static myPublicStaticMethod: publicClass;
-        private static myPrivateStaticMethod;
-        myPublicMethod: publicClass;
-        private myPrivateMethod;
+        static set myPublicStaticMethod(param: publicClass);
+        private static set myPrivateStaticMethod(value);
+        set myPublicMethod(param: publicClass);
+        private set myPrivateMethod(value);
     }
     export class publicClassWithPrivateModuleGetAccessorTypes {
-        static readonly myPublicStaticMethod: privateModule.publicClass;
-        readonly myPublicMethod: privateModule.publicClass;
-        static readonly myPublicStaticMethod1: privateModule.publicClass;
-        readonly myPublicMethod1: privateModule.publicClass;
+        static get myPublicStaticMethod(): privateModule.publicClass;
+        get myPublicMethod(): privateModule.publicClass;
+        static get myPublicStaticMethod1(): privateModule.publicClass;
+        get myPublicMethod1(): privateModule.publicClass;
     }
     export class publicClassWithPrivateModuleSetAccessorTypes {
-        static myPublicStaticMethod: privateModule.publicClass;
-        myPublicMethod: privateModule.publicClass;
+        static set myPublicStaticMethod(param: privateModule.publicClass);
+        set myPublicMethod(param: privateModule.publicClass);
     }
     export {};
 }

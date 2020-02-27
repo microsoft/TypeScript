@@ -1,5 +1,5 @@
 namespace ts {
-    import theory = utils.theory;
+    import theory = Utils.theory;
     describe("unittests:: semver", () => {
         describe("Version", () => {
             function assertVersion(version: Version, [major, minor, patch, prerelease, build]: [number, number, number, string[]?, string[]?]) {

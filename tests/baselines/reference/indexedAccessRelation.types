@@ -26,7 +26,7 @@ class Comp<T extends Foo, S> extends Component<S & State<T>>
 >a : T
 
         this.setState({ a: a });
->this.setState({ a: a }) : any
+>this.setState({ a: a }) : void
 >this.setState : <K extends keyof S | "a">(state: Pick<S & State<T>, K>) => void
 >this : this
 >setState : <K extends keyof S | "a">(state: Pick<S & State<T>, K>) => void

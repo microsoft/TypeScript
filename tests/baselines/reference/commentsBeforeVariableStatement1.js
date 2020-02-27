@@ -7,4 +7,6 @@ export var b: number;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    /** b's comment*/
+    exports.b = void 0;
 });

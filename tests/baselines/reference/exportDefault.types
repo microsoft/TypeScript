@@ -1,0 +1,60 @@
+=== /a.ts ===
+export class A {}
+>A : A
+
+=== /b.ts ===
+import type * as types from './a';
+>types : typeof types
+
+export default types;
+>types : typeof types
+
+=== /c.ts ===
+import * as types from './a';
+>types : typeof types
+
+export default types;
+>types : typeof types
+
+=== /d.ts ===
+import types from './b';
+>types : typeof types
+
+new types.A(); // Error
+>new types.A() : types.A
+>types.A : typeof types.A
+>types : typeof types
+>A : typeof types.A
+
+=== /e.ts ===
+import types = require('./b');
+>types : typeof types
+
+new types.A(); // Error
+>new types.A() : any
+>types.A : any
+>types : typeof types
+>A : any
+
+=== /f.ts ===
+import * as types from './b';
+>types : typeof types
+
+new types.default.A(); // Error
+>new types.default.A() : any
+>types.default.A : any
+>types.default : any
+>types : typeof types
+>default : any
+>A : any
+
+=== /g.ts ===
+import type types from './c'
+>types : any
+
+new types.A(); // Error
+>new types.A() : types.A
+>types.A : typeof types.A
+>types : typeof types
+>A : typeof types.A
+
