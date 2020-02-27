@@ -1519,8 +1519,9 @@ namespace ts {
                     case SyntaxKind.JSDocThisTag:
                     case SyntaxKind.JSDocEnumTag:
                         return emitJSDocSimpleTypedTag(node as JSDocTypeTag);
+                    case SyntaxKind.JSDocImplementsTag:
                     case SyntaxKind.JSDocAugmentsTag:
-                        return emitJSDocAugmentsTag(node as JSDocAugmentsTag);
+                        return emitJSDocHeritageTag(node as JSDocImplementsTag | JSDocAugmentsTag);
                     case SyntaxKind.JSDocTemplateTag:
                         return emitJSDocTemplateTag(node as JSDocTemplateTag);
                     case SyntaxKind.JSDocTypedefTag:
@@ -3468,7 +3469,7 @@ namespace ts {
             emitJSDocComment(tag.comment);
         }
 
-        function emitJSDocAugmentsTag(tag: JSDocAugmentsTag) {
+        function emitJSDocHeritageTag(tag: JSDocImplementsTag | JSDocAugmentsTag) {
             emitJSDocTagName(tag.tagName);
             writeSpace();
             writePunctuation("{");

@@ -479,6 +479,9 @@ namespace ts {
                             visitNode(cbNode, (<JSDocPropertyLikeTag>node).name));
             case SyntaxKind.JSDocAuthorTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName);
+            case SyntaxKind.JSDocImplementsTag:
+                return visitNode(cbNode, (node as JSDocTag).tagName) ||
+                    visitNode(cbNode, (<JSDocImplementsTag>node).class);
             case SyntaxKind.JSDocAugmentsTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     visitNode(cbNode, (<JSDocAugmentsTag>node).class);
@@ -6999,6 +7002,9 @@ namespace ts {
                         case "author":
                             tag = parseAuthorTag(start, tagName, margin);
                             break;
+                        case "implements":
+                            tag = parseImplementsTag(start, tagName);
+                            break;
                         case "augments":
                         case "extends":
                             tag = parseAugmentsTag(start, tagName);
@@ -7353,6 +7359,13 @@ namespace ts {
                     if (seenLessThan && seenGreaterThan) {
                         return comments.length === 0 ? undefined : comments.join("");
                     }
+                }
+
+                function parseImplementsTag(start: number, tagName: Identifier): JSDocImplementsTag {
+                    const result = <JSDocImplementsTag>createNode(SyntaxKind.JSDocImplementsTag, start);
+                    result.tagName = tagName;
+                    result.class = parseExpressionWithTypeArgumentsForAugments();
+                    return finishNode(result);
                 }
 
                 function parseAugmentsTag(start: number, tagName: Identifier): JSDocAugmentsTag {
