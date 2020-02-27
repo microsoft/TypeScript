@@ -14433,11 +14433,20 @@ namespace ts {
                 return elaborateElementwise(generateLimitedTupleElements(node, target), source, target, relation, containingMessageChain, errorOutputContainer);
             }
             // recreate a tuple from the elements, if possible
-            const tupleizedType = checkArrayLiteral(node, CheckMode.Contextual, /*forceTuple*/ true);
-            if (isTupleLikeType(tupleizedType)) {
-                return elaborateElementwise(generateLimitedTupleElements(node, target), tupleizedType, target, relation, containingMessageChain, errorOutputContainer);
+            // Since we're re-doing the expression type, we need to reapply the contextual type
+            const oldContext = node.contextualType;
+            node.contextualType = target;
+            try {
+                const tupleizedType = checkArrayLiteral(node, CheckMode.Contextual, /*forceTuple*/ true);
+                node.contextualType = oldContext;
+                if (isTupleLikeType(tupleizedType)) {
+                    return elaborateElementwise(generateLimitedTupleElements(node, target), tupleizedType, target, relation, containingMessageChain, errorOutputContainer);
+                }
+                return false;
             }
-            return false;
+            finally {
+                node.contextualType = oldContext;
+            }
         }
 
         function *generateObjectLiteralElements(node: ObjectLiteralExpression): ElaborationIterator {
