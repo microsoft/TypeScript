@@ -566,7 +566,7 @@ namespace ts {
                 properties.push(setter);
             }
 
-            properties.push(createPropertyAssignment("enumerable", createTrue()));
+            properties.push(createPropertyAssignment("enumerable", getAccessor || setAccessor ? createFalse() : createTrue()));
             properties.push(createPropertyAssignment("configurable", createTrue()));
 
             const expression = setTextRange(

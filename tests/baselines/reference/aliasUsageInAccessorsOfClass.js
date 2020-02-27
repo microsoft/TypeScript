@@ -75,7 +75,7 @@ var C2 = /** @class */ (function () {
         set: function (x) {
             x = moduleA;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C2;

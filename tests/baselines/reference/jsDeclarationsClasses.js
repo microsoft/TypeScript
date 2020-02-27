@@ -264,7 +264,7 @@ var E = /** @class */ (function () {
          * @param {U} _p
          */
         set: function (_p) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(E.prototype, "f2", {
@@ -272,7 +272,7 @@ var E = /** @class */ (function () {
          * @return {U}
          */
         get: function () { return /** @type {*} */ (null); },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(E.prototype, "f3", {
@@ -280,7 +280,7 @@ var E = /** @class */ (function () {
          * @param {U} _p
          */
         set: function (_p) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(E, "s1", {
@@ -292,7 +292,7 @@ var E = /** @class */ (function () {
          * @param {string} _p
          */
         set: function (_p) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(E, "s2", {
@@ -300,7 +300,7 @@ var E = /** @class */ (function () {
          * @return {string}
          */
         get: function () { return ""; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(E, "s3", {
@@ -308,7 +308,7 @@ var E = /** @class */ (function () {
          * @param {string} _p
          */
         set: function (_p) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     E.staticInitializedField = 12;
