@@ -2295,11 +2295,9 @@ namespace ts {
                     ? Diagnostics._0_was_exported_here
                     : Diagnostics._0_was_imported_here;
 
-                // Non-null assertion is safe because `markSymbolOfAliasDeclarationIfTypeOnly` cannot return true
-                // for an ImportEqualsDeclaration without also being passed a defined symbol.
-                // `typeOnlyDeclaration.name` will be an Identifier for all valid cases, but may be undefined for
-                // invalid `export type * ...` syntax.
-                const name = unescapeLeadingUnderscores(tryCast(typeOnlyDeclaration.name, isIdentifier)?.escapedText ?? resolved!.escapedName);
+                // Non-null assertion is safe because the optionality comes from ImportClause,
+                // but if an ImportClause was the typeOnlyDeclaration, it had to have a `name`.
+                const name = unescapeLeadingUnderscores(typeOnlyDeclaration.name!.escapedText);
                 addRelatedInfo(error(node.moduleReference, message), createDiagnosticForNode(typeOnlyDeclaration, relatedMessage, name));
             }
         }
@@ -2730,7 +2728,7 @@ namespace ts {
         }
 
         /** Indicates that a symbol directly or indirectly resolves to a type-only import or export. */
-        function getTypeOnlyAliasDeclaration(symbol: Symbol): TypeOnlyCompatibleAliasDeclaration | NamespaceExport | ExportDeclaration | undefined {
+        function getTypeOnlyAliasDeclaration(symbol: Symbol): TypeOnlyCompatibleAliasDeclaration | undefined {
             if (!(symbol.flags & SymbolFlags.Alias)) {
                 return undefined;
             }

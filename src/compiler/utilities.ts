@@ -6216,8 +6216,7 @@ namespace ts {
     }
 
     export function typeOnlyDeclarationIsExport(typeOnlyDeclaration: Node) {
-        const kind = typeOnlyDeclaration.kind;
-        return kind === SyntaxKind.ExportSpecifier || kind === SyntaxKind.NamespaceExport || kind === SyntaxKind.ExportDeclaration;
+        return typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier;
     }
 
     function isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node: Node) {
