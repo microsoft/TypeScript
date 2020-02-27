@@ -90,6 +90,7 @@ var d = /** @class */ (function () {
     return d;
 }());
 exports.d = d;
+exports.x = void 0;
 function foo() { return null; }
 exports.foo = foo;
 //// [importDecl_require1.js]
@@ -113,6 +114,7 @@ var d = /** @class */ (function () {
     return d;
 }());
 exports.d = d;
+exports.x = void 0;
 function foo() { return null; }
 exports.foo = foo;
 //// [importDecl_require3.js]
@@ -124,6 +126,7 @@ var d = /** @class */ (function () {
     return d;
 }());
 exports.d = d;
+exports.x = void 0;
 function foo() { return null; }
 exports.foo = foo;
 //// [importDecl_require4.js]

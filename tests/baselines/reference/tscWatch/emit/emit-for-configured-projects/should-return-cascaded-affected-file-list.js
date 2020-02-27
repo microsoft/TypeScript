@@ -130,7 +130,13 @@ Change:: change file1Consumer1
 //// [/a/b/file1Consumer1.ts]
 import {Foo} from "./moduleFile1"; export var y = 10;export var T: number;
 
-//// [/a/b/file1Consumer1.js] file written with same contents
+//// [/a/b/file1Consumer1.js]
+"use strict";
+exports.__esModule = true;
+exports.y = 10;
+exports.T = void 0;
+
+
 //// [/a/b/file1Consumer1Consumer1.js] file written with same contents
 
 Output::
@@ -190,7 +196,15 @@ Change:: Change the content of moduleFile1 to `export var T: number;export funct
 //// [/a/b/moduleFile1.ts]
 export var T: number;export function Foo() { };
 
-//// [/a/b/moduleFile1.js] file written with same contents
+//// [/a/b/moduleFile1.js]
+"use strict";
+exports.__esModule = true;
+exports.T = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
+
+
 //// [/a/b/file1Consumer1.js] file written with same contents
 //// [/a/b/file1Consumer2.js] file written with same contents
 
@@ -255,8 +269,23 @@ export var T2: number;export function Foo() { };
 //// [/a/b/file1Consumer1.ts]
 import {Foo} from "./moduleFile1"; export var y = 10;export var T: number;export var T2: number;
 
-//// [/a/b/moduleFile1.js] file written with same contents
-//// [/a/b/file1Consumer1.js] file written with same contents
+//// [/a/b/moduleFile1.js]
+"use strict";
+exports.__esModule = true;
+exports.T2 = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
+
+
+//// [/a/b/file1Consumer1.js]
+"use strict";
+exports.__esModule = true;
+exports.y = 10;
+exports.T = void 0;
+exports.T2 = void 0;
+
+
 //// [/a/b/file1Consumer1Consumer1.js] file written with same contents
 //// [/a/b/file1Consumer2.js] file written with same contents
 
