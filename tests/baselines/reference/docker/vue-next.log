@@ -1,7 +1,7 @@
 Exit Code: 0
 Standard output:
 
-> @X.X.X-alpha.6 build /vue-next
+> @X.X.X-alpha.7 build /vue-next
 > node scripts/build.js "--types"
 Rolling up type definitions for compiler-core...
 Writing: /vue-next/temp/compiler-core.api.json
@@ -142,7 +142,7 @@ Error: /vue-next/packages/vue/src/devCheck.ts(2,11): semantic error TS2774: This
     at forEach (/vue-next/node_modules/rollup-plugin-typescript2/node_modules/lodash/lodash.js:9342:14)
     at _.each (/vue-next/node_modules/rollup-plugin-typescript2/src/print-diagnostics.ts:9:2)
     at Object.transform (/vue-next/node_modules/rollup-plugin-typescript2/src/index.ts:234:5)
-(node:17) UnhandledPromiseRejectionWarning: Error: Command failed with exit code 1 (EPERM): rollup -c --environment COMMIT:d4c6957,NODE_ENV:production,TARGET:vue,TYPES:true
+(node:17) UnhandledPromiseRejectionWarning: Error: Command failed with exit code 1 (EPERM): rollup -c --environment COMMIT:33ab0f8,NODE_ENV:production,TARGET:vue,TYPES:true
     at makeError (/vue-next/node_modules/execa/lib/error.js:59:11)
     at handlePromise (/vue-next/node_modules/execa/index.js:112:26)
     at processTicksAndRejections (internal/process/task_queues.js:97:5)
