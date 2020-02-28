@@ -877,14 +877,14 @@ namespace ts {
         // specially by `getSymbolAtLocation`.
         if (isModifier(node) && (forRename || node.kind !== SyntaxKind.DefaultKeyword) ? contains(parent.modifiers, node) :
             node.kind === SyntaxKind.ClassKeyword ? isClassDeclaration(parent) || isClassExpression(node) :
-            node.kind === SyntaxKind.FunctionKeyword ? isFunctionDeclaration(parent) || isFunctionExpression(node) :
-            node.kind === SyntaxKind.InterfaceKeyword ? isInterfaceDeclaration(parent) :
-            node.kind === SyntaxKind.EnumKeyword ? isEnumDeclaration(parent) :
-            node.kind === SyntaxKind.TypeKeyword ? isTypeAliasDeclaration(parent) :
-            node.kind === SyntaxKind.NamespaceKeyword || node.kind === SyntaxKind.ModuleKeyword ? isModuleDeclaration(parent) :
-            node.kind === SyntaxKind.ImportKeyword ? isImportEqualsDeclaration(parent) :
-            node.kind === SyntaxKind.GetKeyword ? isGetAccessorDeclaration(parent) :
-            node.kind === SyntaxKind.SetKeyword && isSetAccessorDeclaration(parent)) {
+                node.kind === SyntaxKind.FunctionKeyword ? isFunctionDeclaration(parent) || isFunctionExpression(node) :
+                    node.kind === SyntaxKind.InterfaceKeyword ? isInterfaceDeclaration(parent) :
+                        node.kind === SyntaxKind.EnumKeyword ? isEnumDeclaration(parent) :
+                            node.kind === SyntaxKind.TypeKeyword ? isTypeAliasDeclaration(parent) :
+                                node.kind === SyntaxKind.NamespaceKeyword || node.kind === SyntaxKind.ModuleKeyword ? isModuleDeclaration(parent) :
+                                    node.kind === SyntaxKind.ImportKeyword ? isImportEqualsDeclaration(parent) :
+                                        node.kind === SyntaxKind.GetKeyword ? isGetAccessorDeclaration(parent) :
+                                            node.kind === SyntaxKind.SetKeyword && isSetAccessorDeclaration(parent)) {
             const location = getAdjustedLocationForDeclaration(parent, forRename);
             if (location) {
                 return location;
@@ -1945,6 +1945,16 @@ namespace ts {
             }
         }
         return undefined;
+    }
+
+    export function isTextWhiteSpaceLike(text: string, startPos: number, endPos: number): boolean {
+        for (let i = startPos; i < endPos; i++) {
+            if (!isWhiteSpaceLike(text.charCodeAt(i))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     // #endregion

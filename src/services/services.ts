@@ -2081,9 +2081,9 @@ namespace ts {
 
                     pos = commentRange.end + 1;
                 } else { // If it's not in a comment range, then we need to comment the uncommented portions.
-                    isCommenting = true;
+                    let newPos = text.substring(pos, textRange.end).search(`(${openMultilineRegex})|(${closeMultilineRegex})`);
 
-                    const newPos = text.substring(pos, textRange.end).search(`(${openMultilineRegex})|(${closeMultilineRegex})`);
+                    isCommenting = isCommenting || !isTextWhiteSpaceLike(text, pos, newPos === -1 ? textRange.end : pos + newPos);
                     pos = newPos === -1 ? textRange.end + 1 : pos + newPos + closeMultiline.length;
                 }
             }
@@ -2130,20 +2130,20 @@ namespace ts {
                 }
 
                 // Insert open comment if the last position is not a comment already.
-                const lastPos = positions[positions.length - 1];
-                if (text.substr(lastPos - closeMultiline.length, closeMultiline.length) !== closeMultiline) {
+                if (textChanges.length % 2 !== 0) {
                     textChanges.push({
                         newText: closeMultiline,
                         span: {
                             length: 0,
-                            start: lastPos
+                            start: positions[positions.length - 1]
                         }
                     });
                 }
             } else {
                 // If is not commenting then remove all comments found.
                 for (let i = 0; i < positions.length; i++) {
-                    const offset = text.substr(positions[i] - closeMultiline.length, closeMultiline.length) === closeMultiline ? closeMultiline.length : 0;
+                    const from = positions[i] - closeMultiline.length > 0 ? positions[i] - closeMultiline.length : 0;
+                    const offset = text.substr(from, closeMultiline.length) === closeMultiline ? closeMultiline.length : 0;
                     textChanges.push({
                         newText: "",
                         span: {
