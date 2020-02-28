@@ -41,7 +41,6 @@ class Sub extends Base {
             writable: true,
             value: 0
         });
-        this.p = p;
     }
 }
 class Test extends Base {
@@ -61,7 +60,6 @@ class Test extends Base {
             writable: true,
             value: void 0
         });
-        this.p = p;
         this.prop = 1;
     }
 }

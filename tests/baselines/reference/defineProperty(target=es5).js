@@ -42,7 +42,6 @@ var _a;
 var x = "p";
 var A = /** @class */ (function () {
     function A(y) {
-        this.y = y;
         Object.defineProperty(this, "y", {
             enumerable: true,
             configurable: true,
@@ -128,7 +127,6 @@ var C = /** @class */ (function (_super) {
             writable: true,
             value: _this.ka
         });
-        _this.ka = ka;
         return _this;
     }
     return C;

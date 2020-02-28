@@ -667,7 +667,9 @@ namespace ts {
                 );
             }
 
-            // Add the property initializers. Transforms this:
+            // Add the property initializers.
+            // 
+            // If we don't useDefineForClassFields, we directly convert to exressions. Transforms this:
             //
             //  public x = 1;
             //
@@ -677,48 +679,57 @@ namespace ts {
             //      this.x = 1;
             //  }
             //
+            // If we do useDefineForClassFields, they'll be converted elsewhere.
+            // We instead *remove* them from the transformed output at this stage.
             let parameterPropertyDeclarationCount = 0;
             if (constructor && constructor.body) {
-                for (const statement of constructor.body.statements) {
-                    if (isParameterPropertyDeclaration(getOriginalNode(statement), constructor)) {
-                        parameterPropertyDeclarationCount++;
-                    }
+                if (useDefineForClassFields) {
+                    statements = statements.filter(statement => !isParameterPropertyDeclaration(getOriginalNode(statement), constructor));
                 }
-                if (parameterPropertyDeclarationCount > 0 && !useDefineForClassFields) {
-                    // If there was a super() call found, add parameter properties immediately after it
-                    if (foundSuperStatement) {
-                        addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatementAfterSuper, parameterPropertyDeclarationCount));
+                else {
+                    for (const statement of constructor.body.statements) {
+                        if (isParameterPropertyDeclaration(getOriginalNode(statement), constructor)) {
+                            parameterPropertyDeclarationCount++;
+                        }
                     }
-                    // If a synthetic super() call was added, add them just after it
-                    else if (needsSyntheticConstructor) {
-                        statements = addRange(
-                            [statements[0]],
-                            [
-                                ...visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatementAfterSuper, parameterPropertyDeclarationCount),
-                                ...statements.slice(1),
-                            ]
-                        );
-                    }
-                    // Since there wasn't a super() call, add them to the top of the constructor
-                    else {
-                        statements = addRange(
-                            [],
-                            [
-                                ...visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatementAfterSuper, parameterPropertyDeclarationCount),
-                                ...statements,
-                            ]
-                        );
-                    }
+                    if (parameterPropertyDeclarationCount > 0) {
+                        const parameterProperties = visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatementAfterSuper, parameterPropertyDeclarationCount);
 
-                    indexOfFirstStatementAfterSuper += parameterPropertyDeclarationCount;
+                        // If there was a super() call found, add parameter properties immediately after it
+                        if (foundSuperStatement) {
+                            addRange(statements, parameterProperties);
+                        }
+                        // If a synthetic super() call was added, add them just after it
+                        else if (needsSyntheticConstructor) {
+                            statements = addRange(
+                                [statements[0]],
+                                [
+                                    ...parameterProperties,
+                                    ...statements.slice(1),
+                                ]
+                            );
+                        }
+                        // Since there wasn't a super() call, add them to the top of the constructor
+                        else {
+                            statements = addRange(
+                                [],
+                                [
+                                    ...parameterProperties,
+                                    ...statements,
+                                ]
+                            );
+                        }
+
+                        indexOfFirstStatementAfterSuper += parameterPropertyDeclarationCount;
+                    }
                 }
             }
 
-            addPropertyStatements(statements, properties, createThis(), getPropertyStatementInsertionIndex(needsSyntheticConstructor, foundSuperStatement, parameterPropertyDeclarationCount));
+            addPropertyStatements(statements, properties, createThis(), getPropertyStatementInsertionIndex(needsSyntheticConstructor, foundSuperStatement, useDefineForClassFields ? 0 : parameterPropertyDeclarationCount));
 
             // Add existing statements after the initial super call
             if (constructor) {
-                addRange(statements, visitNodes(constructor.body!.statements, visitor, isStatement, indexOfFirstStatementAfterSuper));
+                addRange(statements, visitNodes(constructor.body!.statements, visitBodyStatement, isStatement, indexOfFirstStatementAfterSuper));
             }
 
             statements = mergeLexicalEnvironment(statements, endLexicalEnvironment());
@@ -733,6 +744,14 @@ namespace ts {
                 ),
                 /*location*/ constructor ? constructor.body : undefined
             );
+
+            function visitBodyStatement(statement: Node) {
+                if (useDefineForClassFields && isParameterPropertyDeclaration(getOriginalNode(statement), constructor!)) {
+                    return undefined;
+                }
+
+                return visitor(statement);
+            }
         }
 
         /**

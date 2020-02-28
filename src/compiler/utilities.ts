@@ -1496,7 +1496,7 @@ namespace ts {
                     if (!stopOnFunctions) {
                         continue;
                     }
-                // falls through
+                    // falls through
 
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
@@ -2420,7 +2420,7 @@ namespace ts {
         // var x = function(name) { return name.length; }
         else if (parent.parent &&
             (getSingleVariableOfVariableStatement(parent.parent) === node ||
-                isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken)) {
+            isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken)) {
             return parent.parent;
         }
         else if (parent.parent && parent.parent.parent &&
@@ -3492,7 +3492,7 @@ namespace ts {
     export function escapeJsxAttributeString(s: string, quoteChar?: CharacterCodes.doubleQuote | CharacterCodes.singleQuote) {
         const escapedCharsRegExp =
             quoteChar === CharacterCodes.singleQuote ? jsxSingleQuoteEscapedCharsRegExp :
-                jsxDoubleQuoteEscapedCharsRegExp;
+            jsxDoubleQuoteEscapedCharsRegExp;
         return s.replace(escapedCharsRegExp, getJsxAttributeStringReplacement);
     }
 
