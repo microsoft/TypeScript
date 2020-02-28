@@ -23,7 +23,7 @@ namespace ts.refactor {
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             const { file } = context;
-            const info = Debug.assertDefined(getRangeToExtract(context), "Expected to find a range to extract");
+            const info = Debug.checkDefined(getRangeToExtract(context), "Expected to find a range to extract");
 
             const name = getUniqueName("NewType", file);
             const edits = textChanges.ChangeTracker.with(context, changes => {
@@ -68,7 +68,7 @@ namespace ts.refactor {
         if (!selection || !isTypeNode(selection)) return undefined;
 
         const checker = context.program.getTypeChecker();
-        const firstStatement = Debug.assertDefined(findAncestor(selection, isStatement), "Should find a statement");
+        const firstStatement = Debug.checkDefined(findAncestor(selection, isStatement), "Should find a statement");
         const typeParameters = collectTypeParameters(checker, selection, firstStatement, file);
         if (!typeParameters) return undefined;
 

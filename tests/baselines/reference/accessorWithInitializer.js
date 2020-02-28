@@ -12,14 +12,14 @@ var C = /** @class */ (function () {
         set: function (v) {
             if (v === void 0) { v = 0; }
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "X", {
         set: function (v2) {
             if (v2 === void 0) { v2 = 0; }
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

@@ -55,18 +55,18 @@ WatchedFiles::
 
 FsWatches::
 /a/b/tsconfig.json:
-  {"fallbackPollingInterval":2000,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/tsconfig.json","fallbackPollingInterval":2000,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b/commonfile1.ts:
-  {"fallbackPollingInterval":250,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/commonFile1.ts","fallbackPollingInterval":250,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b/commonfile2.ts:
-  {"fallbackPollingInterval":250,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/commonFile2.ts","fallbackPollingInterval":250,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/lib/lib.d.ts:
-  {"fallbackPollingInterval":250,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/lib/lib.d.ts","fallbackPollingInterval":250,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 FsWatchesRecursive::
 /a/b/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

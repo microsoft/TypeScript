@@ -81,6 +81,7 @@ var c = { a: { x: 'hello', y: 2 } }; // error - y does not exist in type A
 var d = { a: { x: 'hello' }, c: 5 }; // ok
 var e = { a: { x: 2 }, c: 5 }; // error - types of property x are incompatible
 var f = { a: { x: 'hello', y: 2 }, c: 5 }; // error - y does not exist in type A
+exports.obj = void 0;
 exports.photo = {
     id: 1,
     url: '',

@@ -87,7 +87,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         return { renameFilename, renameLocation, edits };
     }
 
-    function isConvertibleName (name: DeclarationName): name is AcceptedNameType {
+    function isConvertibleName(name: DeclarationName): name is AcceptedNameType {
         return isIdentifier(name) || isStringLiteral(name);
     }
 
@@ -95,11 +95,11 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         return isParameterPropertyDeclaration(node, node.parent) || isPropertyDeclaration(node) || isPropertyAssignment(node);
     }
 
-    function createPropertyName (name: string, originalName: AcceptedNameType) {
+    function createPropertyName(name: string, originalName: AcceptedNameType) {
         return isIdentifier(originalName) ? createIdentifier(name) : createLiteral(name);
     }
 
-    function createAccessorAccessExpression (fieldName: AcceptedNameType, isStatic: boolean, container: ContainerDeclaration) {
+    function createAccessorAccessExpression(fieldName: AcceptedNameType, isStatic: boolean, container: ContainerDeclaration) {
         const leftHead = isStatic ? (<ClassLikeDeclaration>container).name! : createThis(); // TODO: GH#18217
         return isIdentifier(fieldName) ? createPropertyAccess(leftHead, fieldName) : createElementAccess(leftHead, createLiteral(fieldName));
     }

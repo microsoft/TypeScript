@@ -55,15 +55,22 @@ define(["require", "exports"], function (require, exports) {
     exports.z = z;
 });
 //// [t4.js]
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+}
 define(["require", "exports", "./t1", "./t2", "./t3"], function (require, exports, t1_1, t2_1, t3_1) {
     "use strict";
-    function __export(m) {
-        for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-    }
     Object.defineProperty(exports, "__esModule", { value: true });
-    __export(t1_1);
-    __export(t2_1);
-    __export(t3_1);
+    __exportStar(t1_1, exports);
+    __exportStar(t2_1, exports);
+    __exportStar(t3_1, exports);
 });
 //// [main.js]
 define(["require", "exports", "./t4"], function (require, exports, t4_1) {

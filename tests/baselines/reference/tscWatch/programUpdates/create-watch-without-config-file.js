@@ -56,16 +56,16 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/c/app.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/c/app.ts","pollingInterval":250}
 /a/b/c/module.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/c/module.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

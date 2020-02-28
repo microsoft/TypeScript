@@ -9,7 +9,7 @@ var C = /** @class */ (function () {
     }
     Object.defineProperty(C.prototype, "Foo", {
         set: function (a) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

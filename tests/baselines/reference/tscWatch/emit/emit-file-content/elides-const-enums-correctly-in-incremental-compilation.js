@@ -63,13 +63,13 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/someone/projects/myproject/file3.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/someone/projects/myproject/file3.ts","pollingInterval":250}
 /user/someone/projects/myproject/file2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/someone/projects/myproject/file2.ts","pollingInterval":250}
 /user/someone/projects/myproject/file1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/someone/projects/myproject/file1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
@@ -112,13 +112,13 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/someone/projects/myproject/file3.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/someone/projects/myproject/file3.ts","pollingInterval":250}
 /user/someone/projects/myproject/file2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/someone/projects/myproject/file2.ts","pollingInterval":250}
 /user/someone/projects/myproject/file1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/someone/projects/myproject/file1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 

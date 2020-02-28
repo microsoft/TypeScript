@@ -291,7 +291,7 @@ namespace ts.server {
 
             const request = this.processRequest<protocol.DefinitionRequest>(CommandNames.DefinitionAndBoundSpan, args);
             const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanResponse>(request);
-            const body = Debug.assertDefined(response.body); // TODO: GH#18217
+            const body = Debug.checkDefined(response.body); // TODO: GH#18217
 
             return {
                 definitions: body.definitions.map(entry => ({
@@ -385,7 +385,7 @@ namespace ts.server {
                     start: entry.start,
                     length: entry.length,
                     messageText: entry.message,
-                    category: Debug.assertDefined(category, "convertDiagnostic: category should not be undefined"),
+                    category: Debug.checkDefined(category, "convertDiagnostic: category should not be undefined"),
                     code: entry.code,
                     reportsUnnecessary: entry.reportsUnnecessary,
                 };
@@ -805,6 +805,10 @@ namespace ts.server {
         }
 
         getSourceMapper(): never {
+            return notImplemented();
+        }
+
+        clearSourceMapperCache(): never {
             return notImplemented();
         }
 

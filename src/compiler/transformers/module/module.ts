@@ -103,11 +103,6 @@ namespace ts {
             insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
             const updated = updateSourceFileNode(node, setTextRange(createNodeArray(statements), node.statements));
-            if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
-                // If we have any `export * from ...` declarations
-                // we need to inform the emitter to add the __export helper.
-                addEmitHelper(updated, exportStarHelper);
-            }
             addEmitHelpers(updated, context.readEmitHelpers());
             return updated;
         }
@@ -435,11 +430,6 @@ namespace ts {
             insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
             const body = createBlock(statements, /*multiLine*/ true);
-            if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
-                // If we have any `export * from ...` declarations
-                // we need to inform the emitter to add the __export helper.
-                addEmitHelper(body, exportStarHelper);
-            }
             if (needUMDDynamicImportHelper) {
                 addEmitHelper(body, dynamicImportUMDHelper);
             }
@@ -1001,20 +991,34 @@ namespace ts {
                     );
                 }
                 for (const specifier of node.exportClause.elements) {
-                    const exportedValue = createPropertyAccess(
-                        generatedName,
-                        specifier.propertyName || specifier.name
-                    );
-                    statements.push(
-                        setOriginalNode(
-                            setTextRange(
-                                createExpressionStatement(
-                                    createExportExpression(getExportName(specifier), exportedValue)
-                                ),
-                                specifier),
-                            specifier
-                        )
-                    );
+                    if (languageVersion === ScriptTarget.ES3) {
+                        statements.push(
+                            setOriginalNode(
+                                setTextRange(
+                                    createExpressionStatement(
+                                        createCreateBindingHelper(context, generatedName, createLiteral(specifier.propertyName || specifier.name), specifier.propertyName ? createLiteral(specifier.name) : undefined)
+                                    ),
+                                    specifier),
+                                specifier
+                            )
+                        );
+                    }
+                    else {
+                        const exportedValue = createPropertyAccess(
+                            generatedName,
+                            specifier.propertyName || specifier.name
+                        );
+                        statements.push(
+                            setOriginalNode(
+                                setTextRange(
+                                    createExpressionStatement(
+                                        createExportExpression(getExportName(specifier), exportedValue, /* location */ undefined, /* liveBinding */ true)
+                                    ),
+                                    specifier),
+                                specifier
+                            )
+                        );
+                    }
                 }
 
                 return singleOrMany(statements);
@@ -1176,7 +1180,6 @@ namespace ts {
                 let modifiers: NodeArray<Modifier> | undefined;
 
                 // If we're exporting these variables, then these just become assignments to 'exports.x'.
-                // We only want to emit assignments for variables with initializers.
                 for (const variable of node.declarationList.declarations) {
                     if (isIdentifier(variable.name) && isLocalName(variable.name)) {
                         if (!modifiers) {
@@ -1185,7 +1188,7 @@ namespace ts {
 
                         variables = append(variables, variable);
                     }
-                    else if (variable.initializer) {
+                    else {
                         expressions = append(expressions, transformInitializedVariable(variable));
                     }
                 }
@@ -1255,7 +1258,7 @@ namespace ts {
                         ),
                         /*location*/ node.name
                     ),
-                    visitNode(node.initializer, moduleExpressionElementVisitor)
+                    node.initializer ? visitNode(node.initializer, moduleExpressionElementVisitor) : createVoidZero()
                 );
             }
         }
@@ -1343,7 +1346,7 @@ namespace ts {
 
                     case SyntaxKind.NamedImports:
                         for (const importBinding of namedBindings.elements) {
-                            statements = appendExportsOfDeclaration(statements, importBinding);
+                            statements = appendExportsOfDeclaration(statements, importBinding, /* liveBinding */ true);
                         }
 
                         break;
@@ -1453,12 +1456,12 @@ namespace ts {
          * appended.
          * @param decl The declaration to export.
          */
-        function appendExportsOfDeclaration(statements: Statement[] | undefined, decl: Declaration): Statement[] | undefined {
+        function appendExportsOfDeclaration(statements: Statement[] | undefined, decl: Declaration, liveBinding?: boolean): Statement[] | undefined {
             const name = getDeclarationName(decl);
             const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(idText(name));
             if (exportSpecifiers) {
                 for (const exportSpecifier of exportSpecifiers) {
-                    statements = appendExportStatement(statements, exportSpecifier.name, name, /*location*/ exportSpecifier.name);
+                    statements = appendExportStatement(statements, exportSpecifier.name, name, /*location*/ exportSpecifier.name, /* allowComments */ undefined, liveBinding);
                 }
             }
             return statements;
@@ -1476,8 +1479,8 @@ namespace ts {
          * @param location The location to use for source maps and comments for the export.
          * @param allowComments Whether to allow comments on the export.
          */
-        function appendExportStatement(statements: Statement[] | undefined, exportName: Identifier, expression: Expression, location?: TextRange, allowComments?: boolean): Statement[] | undefined {
-            statements = append(statements, createExportStatement(exportName, expression, location, allowComments));
+        function appendExportStatement(statements: Statement[] | undefined, exportName: Identifier, expression: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean): Statement[] | undefined {
+            statements = append(statements, createExportStatement(exportName, expression, location, allowComments, liveBinding));
             return statements;
         }
 
@@ -1518,8 +1521,8 @@ namespace ts {
          * @param location The location to use for source maps and comments for the export.
          * @param allowComments An optional value indicating whether to emit comments for the statement.
          */
-        function createExportStatement(name: Identifier, value: Expression, location?: TextRange, allowComments?: boolean) {
-            const statement = setTextRange(createExpressionStatement(createExportExpression(name, value)), location);
+        function createExportStatement(name: Identifier, value: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean) {
+            const statement = setTextRange(createExpressionStatement(createExportExpression(name, value, /* location */ undefined, liveBinding)), location);
             startOnNewLine(statement);
             if (!allowComments) {
                 setEmitFlags(statement, EmitFlags.NoComments);
@@ -1535,9 +1538,31 @@ namespace ts {
          * @param value The exported value.
          * @param location The location to use for source maps and comments for the export.
          */
-        function createExportExpression(name: Identifier, value: Expression, location?: TextRange) {
+        function createExportExpression(name: Identifier, value: Expression, location?: TextRange, liveBinding?: boolean) {
             return setTextRange(
-                createAssignment(
+                liveBinding && languageVersion !== ScriptTarget.ES3 ? createCall(
+                    createPropertyAccess(
+                        createIdentifier("Object"),
+                        "defineProperty"
+                    ),
+                    /*typeArguments*/ undefined,
+                    [
+                        createIdentifier("exports"),
+                        createLiteral(name),
+                        createObjectLiteral([
+                            createPropertyAssignment("enumerable", createLiteral(/*value*/ true)),
+                            createPropertyAssignment("get", createFunctionExpression(
+                                /*modifiers*/ undefined,
+                                /*asteriskToken*/ undefined,
+                                /*name*/ undefined,
+                                /*typeParameters*/ undefined,
+                                /*parameters*/ [],
+                                /*type*/ undefined,
+                                createBlock([createReturn(value)])
+                            ))
+                        ])
+                    ]
+                ) : createAssignment(
                     createPropertyAccess(
                         createIdentifier("exports"),
                         getSynthesizedClone(name)
@@ -1813,21 +1838,55 @@ namespace ts {
         }
     }
 
-    // emit output for the __export helper function
-    const exportStarHelper: EmitHelper = {
-        name: "typescript:export-star",
-        scoped: true,
+    export const createBindingHelper: UnscopedEmitHelper = {
+        name: "typescript:commonjscreatebinding",
+        importName: "__createBinding",
+        scoped: false,
+        priority: 1,
         text: `
-            function __export(m) {
-                for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));`
+    };
+
+    function createCreateBindingHelper(context: TransformationContext, module: Expression, inputName: Expression, outputName: Expression | undefined) {
+        context.requestEmitHelper(createBindingHelper);
+        return createCall(getUnscopedHelperName("__createBinding"), /*typeArguments*/ undefined, [createIdentifier("exports"), module, inputName, ...(outputName ? [outputName] : [])]);
+    }
+
+    export const setModuleDefaultHelper: UnscopedEmitHelper = {
+        name: "typescript:commonjscreatevalue",
+        importName: "__setModuleDefault",
+        scoped: false,
+        priority: 1,
+        text: `
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});`
+    };
+
+    // emit output for the __export helper function
+    const exportStarHelper: UnscopedEmitHelper = {
+        name: "typescript:export-star",
+        importName: "__exportStar",
+        scoped: false,
+        dependencies: [createBindingHelper],
+        priority: 2,
+        text: `
+            var __exportStar = (this && this.__exportStar) || function(m, exports) {
+                for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
             }`
     };
 
     function createExportStarHelper(context: TransformationContext, module: Expression) {
-        const compilerOptions = context.getCompilerOptions();
-        return compilerOptions.importHelpers
-            ? createCall(getUnscopedHelperName("__exportStar"), /*typeArguments*/ undefined, [module, createIdentifier("exports")])
-            : createCall(createIdentifier("__export"), /*typeArguments*/ undefined, [module]);
+        context.requestEmitHelper(exportStarHelper);
+        return createCall(getUnscopedHelperName("__exportStar"), /*typeArguments*/ undefined, [module, createIdentifier("exports")]);
     }
 
     // emit helper for dynamic import
@@ -1843,12 +1902,14 @@ namespace ts {
         name: "typescript:commonjsimportstar",
         importName: "__importStar",
         scoped: false,
+        dependencies: [createBindingHelper, setModuleDefaultHelper],
+        priority: 2,
         text: `
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
     return result;
 };`
     };

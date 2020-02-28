@@ -77,7 +77,7 @@ var Test3 = /** @class */ (function () {
         get: function () {
             return 0;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Test3.prototype.test = function () {
@@ -93,7 +93,7 @@ var Test4 = /** @class */ (function () {
         set: function (v) {
             v;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Test4.prototype.test = function () {

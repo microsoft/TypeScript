@@ -11,7 +11,7 @@ var tuple: [string, number] = ["", 1];
 
 [...[a, b = 0]] = tuple;
 >[...[a, b = 0]] = tuple : [string, number]
->[...[a, b = 0]] : (string | number)[]
+>[...[a, b = 0]] : [string, number]
 >...[a, b = 0] : string | number
 >[a, b = 0] : [string, number]
 >a : string

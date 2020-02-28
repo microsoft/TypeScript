@@ -23,13 +23,13 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.y = t1_1.x;
-    exports.x = t1_1.y;
+    Object.defineProperty(exports, "y", { enumerable: true, get: function () { return t1_1.x; } });
+    Object.defineProperty(exports, "x", { enumerable: true, get: function () { return t1_1.y; } });
 });
 //// [t3.js]
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.y = t1_1.x;
-    exports.x = t1_1.y;
+    Object.defineProperty(exports, "y", { enumerable: true, get: function () { return t1_1.x; } });
+    Object.defineProperty(exports, "x", { enumerable: true, get: function () { return t1_1.y; } });
 });

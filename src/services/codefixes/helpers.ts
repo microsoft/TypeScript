@@ -4,13 +4,14 @@ namespace ts.codefix {
      * Finds members of the resolved type that are missing in the class pointed to by class decl
      * and generates source code for the missing members.
      * @param possiblyMissingSymbols The collection of symbols to filter and then get insertions for.
+     * @param importAdder If provided, type annotations will use identifier type references instead of ImportTypeNodes, and the missing imports will be added to the importAdder.
      * @returns Empty string iff there are no member insertions.
      */
-    export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: readonly Symbol[], context: TypeConstructionContext, preferences: UserPreferences, out: (node: ClassElement) => void): void {
+    export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: readonly Symbol[], context: TypeConstructionContext, preferences: UserPreferences, importAdder: ImportAdder | undefined, addClassElement: (node: ClassElement) => void): void {
         const classMembers = classDeclaration.symbol.members!;
         for (const symbol of possiblyMissingSymbols) {
             if (!classMembers.has(symbol.escapedName)) {
-                addNewNodeForMemberSymbol(symbol, classDeclaration, context, preferences, out);
+                addNewNodeForMemberSymbol(symbol, classDeclaration, context, preferences, importAdder, addClassElement);
             }
         }
     }
@@ -19,7 +20,7 @@ namespace ts.codefix {
         return {
             directoryExists: context.host.directoryExists ? d => context.host.directoryExists!(d) : undefined,
             fileExists: context.host.fileExists ? f => context.host.fileExists!(f) : undefined,
-            getCurrentDirectory: context.host.getCurrentDirectory ? () => context.host.getCurrentDirectory!() : undefined,
+            getCurrentDirectory: context.host.getCurrentDirectory ? () => context.host.getCurrentDirectory() : undefined,
             readFile: context.host.readFile ? f => context.host.readFile!(f) : undefined,
             useCaseSensitiveFileNames: context.host.useCaseSensitiveFileNames ? () => context.host.useCaseSensitiveFileNames!() : undefined,
             getSourceFiles: () => context.program.getSourceFiles(),
@@ -36,19 +37,19 @@ namespace ts.codefix {
 
     export interface TypeConstructionContext {
         program: Program;
-        host: ModuleSpecifierResolutionHost;
+        host: LanguageServiceHost;
     }
 
     /**
      * @returns Empty string iff there we can't figure out a representation for `symbol` in `enclosingDeclaration`.
      */
-    function addNewNodeForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, context: TypeConstructionContext, preferences: UserPreferences, out: (node: Node) => void): void {
+    function addNewNodeForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, context: TypeConstructionContext, preferences: UserPreferences, importAdder: ImportAdder | undefined, addClassElement: (node: Node) => void): void {
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
             return undefined;
         }
         const checker = context.program.getTypeChecker();
-
+        const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
         const declaration = declarations[0];
         const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
         const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));
@@ -61,8 +62,15 @@ namespace ts.codefix {
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
                 const flags = preferences.quotePreference === "single" ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : undefined;
-                const typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context));
-                out(createProperty(
+                let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context));
+                if (importAdder) {
+                    const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeNode, type, scriptTarget);
+                    if (importableReference) {
+                        typeNode = importableReference.typeReference;
+                        importSymbols(importAdder, importableReference.symbols);
+                    }
+                }
+                addClassElement(createProperty(
                     /*decorators*/undefined,
                     modifiers,
                     name,
@@ -72,14 +80,21 @@ namespace ts.codefix {
                 break;
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor: {
+                let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context));
                 const allAccessors = getAllAccessorDeclarations(declarations, declaration as AccessorDeclaration);
-                const typeNode = checker.typeToTypeNode(type, enclosingDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context));
                 const orderedAccessors = allAccessors.secondAccessor
                     ? [allAccessors.firstAccessor, allAccessors.secondAccessor]
                     : [allAccessors.firstAccessor];
+                if (importAdder) {
+                    const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeNode, type, scriptTarget);
+                    if (importableReference) {
+                        typeNode = importableReference.typeReference;
+                        importSymbols(importAdder, importableReference.symbols);
+                    }
+                }
                 for (const accessor of orderedAccessors) {
                     if (isGetAccessorDeclaration(accessor)) {
-                        out(createGetAccessor(
+                        addClassElement(createGetAccessor(
                             /*decorators*/ undefined,
                             modifiers,
                             name,
@@ -91,7 +106,7 @@ namespace ts.codefix {
                         Debug.assertNode(accessor, isSetAccessorDeclaration, "The counterpart to a getter should be a setter");
                         const parameter = getSetAccessorValueParameter(accessor);
                         const parameterName = parameter && isIdentifier(parameter.name) ? idText(parameter.name) : undefined;
-                        out(createSetAccessor(
+                        addClassElement(createSetAccessor(
                             /*decorators*/ undefined,
                             modifiers,
                             name,
@@ -134,15 +149,15 @@ namespace ts.codefix {
                     }
                     else {
                         Debug.assert(declarations.length === signatures.length, "Declarations and signatures should match count");
-                        out(createMethodImplementingSignatures(signatures, name, optional, modifiers, preferences));
+                        addClassElement(createMethodImplementingSignatures(signatures, name, optional, modifiers, preferences));
                     }
                 }
                 break;
         }
 
         function outputMethod(signature: Signature, modifiers: NodeArray<Modifier> | undefined, name: PropertyName, body?: Block): void {
-            const method = signatureToMethodDeclaration(context, signature, enclosingDeclaration, modifiers, name, optional, body);
-            if (method) out(method);
+            const method = signatureToMethodDeclaration(context, signature, enclosingDeclaration, modifiers, name, optional, body, importAdder);
+            if (method) addClassElement(method);
         }
     }
 
@@ -154,11 +169,51 @@ namespace ts.codefix {
         name: PropertyName,
         optional: boolean,
         body: Block | undefined,
+        importAdder: ImportAdder | undefined,
     ): MethodDeclaration | undefined {
         const program = context.program;
-        const signatureDeclaration = <MethodDeclaration>program.getTypeChecker().signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, NodeBuilderFlags.NoTruncation | NodeBuilderFlags.SuppressAnyReturnType, getNoopSymbolTrackerWithResolver(context));
+        const checker = program.getTypeChecker();
+        const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
+        const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, NodeBuilderFlags.NoTruncation | NodeBuilderFlags.SuppressAnyReturnType, getNoopSymbolTrackerWithResolver(context));
         if (!signatureDeclaration) {
             return undefined;
+        }
+
+        if (importAdder) {
+            if (signatureDeclaration.typeParameters) {
+                forEach(signatureDeclaration.typeParameters, (typeParameterDecl, i) => {
+                    const typeParameter = signature.typeParameters![i];
+                    if (typeParameterDecl.constraint) {
+                        const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeParameterDecl.constraint, typeParameter.constraint, scriptTarget);
+                        if (importableReference) {
+                            typeParameterDecl.constraint = importableReference.typeReference;
+                            importSymbols(importAdder, importableReference.symbols);
+                        }
+                    }
+                    if (typeParameterDecl.default) {
+                        const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeParameterDecl.default, typeParameter.default, scriptTarget);
+                        if (importableReference) {
+                            typeParameterDecl.default = importableReference.typeReference;
+                            importSymbols(importAdder, importableReference.symbols);
+                        }
+                    }
+                });
+            }
+            forEach(signatureDeclaration.parameters, (parameterDecl, i) => {
+                const parameter = signature.parameters[i];
+                const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(parameterDecl.type, checker.getTypeAtLocation(parameter.valueDeclaration), scriptTarget);
+                if (importableReference) {
+                    parameterDecl.type = importableReference.typeReference;
+                    importSymbols(importAdder, importableReference.symbols);
+                }
+            });
+            if (signatureDeclaration.type) {
+                const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(signatureDeclaration.type, signature.resolvedReturnType, scriptTarget);
+                if (importableReference) {
+                    signatureDeclaration.type = importableReference.typeReference;
+                    importSymbols(importAdder, importableReference.symbols);
+                }
+            }
         }
 
         signatureDeclaration.decorators = undefined;
@@ -358,5 +413,52 @@ namespace ts.codefix {
 
     export function findJsonProperty(obj: ObjectLiteralExpression, name: string): PropertyAssignment | undefined {
         return find(obj.properties, (p): p is PropertyAssignment => isPropertyAssignment(p) && !!p.name && isStringLiteral(p.name) && p.name.text === name);
+    }
+
+    /**
+     * Given an ImportTypeNode 'import("./a").SomeType<import("./b").OtherType<...>>',
+     * returns an equivalent type reference node with any nested ImportTypeNodes also replaced
+     * with type references, and a list of symbols that must be imported to use the type reference.
+     */
+    export function tryGetAutoImportableReferenceFromImportTypeNode(importTypeNode: TypeNode | undefined, type: Type | undefined, scriptTarget: ScriptTarget) {
+        if (importTypeNode && isLiteralImportTypeNode(importTypeNode) && importTypeNode.qualifier && (!type || type.symbol)) {
+            // Symbol for the left-most thing after the dot
+            const firstIdentifier = getFirstIdentifier(importTypeNode.qualifier);
+            const name = getNameForExportedSymbol(firstIdentifier.symbol, scriptTarget);
+            const qualifier = name !== firstIdentifier.text
+                ? replaceFirstIdentifierOfEntityName(importTypeNode.qualifier, createIdentifier(name))
+                : importTypeNode.qualifier;
+
+            const symbols = [firstIdentifier.symbol];
+            const typeArguments: TypeNode[] = [];
+            if (importTypeNode.typeArguments) {
+                importTypeNode.typeArguments.forEach(arg => {
+                    const ref = tryGetAutoImportableReferenceFromImportTypeNode(arg, /*undefined*/ type, scriptTarget);
+                    if (ref) {
+                        symbols.push(...ref.symbols);
+                        typeArguments.push(ref.typeReference);
+                    }
+                    else {
+                        typeArguments.push(arg);
+                    }
+                });
+            }
+
+            return {
+                symbols,
+                typeReference: createTypeReferenceNode(qualifier, typeArguments)
+            };
+        }
+    }
+
+    function replaceFirstIdentifierOfEntityName(name: EntityName, newIdentifier: Identifier): EntityName {
+        if (name.kind === SyntaxKind.Identifier) {
+            return newIdentifier;
+        }
+        return createQualifiedName(replaceFirstIdentifierOfEntityName(name.left, newIdentifier), name.right);
+    }
+
+    function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol[]) {
+        symbols.forEach(s => importAdder.addImportFromExportedSymbol(s, /*usageIsTypeOnly*/ true));
     }
 }

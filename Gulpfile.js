@@ -408,7 +408,18 @@ task("generate-types-map", generateTypesMap);
 const cleanTypesMap = () => del("built/local/typesMap.json");
 cleanTasks.push(cleanTypesMap);
 
-const buildOtherOutputs = parallel(buildCancellationToken, buildTypingsInstaller, buildWatchGuard, generateTypesMap);
+// Drop a copy of diagnosticMessages.generated.json into the built/local folder. This allows
+// it to be synced to the Azure DevOps repo, so that it can get picked up by the build 
+// pipeline that generates the localization artifacts that are then fed into the translation process.
+const builtLocalDiagnosticMessagesGeneratedJson = "built/local/diagnosticMessages.generated.json";
+const copyBuiltLocalDiagnosticMessages = () => src(diagnosticMessagesGeneratedJson)
+    .pipe(newer(builtLocalDiagnosticMessagesGeneratedJson))
+    .pipe(dest("built/local"));
+
+const cleanBuiltLocalDiagnosticMessages = () => del(builtLocalDiagnosticMessagesGeneratedJson);
+cleanTasks.push(cleanBuiltLocalDiagnosticMessages);
+
+const buildOtherOutputs = parallel(buildCancellationToken, buildTypingsInstaller, buildWatchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages);
 task("other-outputs", series(preBuild, buildOtherOutputs));
 task("other-outputs").description = "Builds miscelaneous scripts and documents distributed with the LKG";
 
@@ -430,7 +441,7 @@ const generateCodeCoverage = () => exec("istanbul", ["cover", "node_modules/moch
 task("generate-code-coverage", series(preBuild, buildTests, generateCodeCoverage));
 task("generate-code-coverage").description = "Generates code coverage data via istanbul";
 
-const preTest = parallel(buildTests, buildServices, buildLssl);
+const preTest = parallel(buildTsc, buildTests, buildServices, buildLssl);
 preTest.displayName = "preTest";
 
 const postTest = (done) => cmdLineOptions.lint ? lint(done) : done();
@@ -456,7 +467,7 @@ task("runtests").flags = {
     "   --shardId": "1-based ID of this shard (default: 1)",
 };
 
-const runTestsParallel = () => runConsoleTests("built/local/run.js", "min", /*runInParallel*/ true, /*watchMode*/ false);
+const runTestsParallel = () => runConsoleTests("built/local/run.js", "min", /*runInParallel*/ cmdLineOptions.workers > 1, /*watchMode*/ false);
 task("runtests-parallel", series(preBuild, preTest, runTestsParallel, postTest));
 task("runtests-parallel").description = "Runs all the tests in parallel using the built run.js file.";
 task("runtests-parallel").flags = {
@@ -471,6 +482,11 @@ task("runtests-parallel").flags = {
     "   --shards": "Total number of shards running tests (default: 1)",
     "   --shardId": "1-based ID of this shard (default: 1)",
 };
+
+
+task("test-browser-integration", () => exec(process.execPath, ["scripts/browserIntegrationTest.js"]));
+task("test-browser-integration").description = "Runs scripts/browserIntegrationTest.ts which tests that typescript.js loads in a browser";
+
 
 task("diff", () => exec(getDiffTool(), [refBaseline, localBaseline], { ignoreExitCode: true, waitForExit: false }));
 task("diff").description = "Diffs the compiler baselines using the diff tool specified by the 'DIFF' environment variable";

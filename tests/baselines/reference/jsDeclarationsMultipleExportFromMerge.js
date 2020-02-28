@@ -30,31 +30,31 @@ exports.c = 3;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var items_1 = require("./items");
-exports.a = items_1.a;
-exports.b = items_1.b;
-exports.c = items_1.c;
+Object.defineProperty(exports, "a", { enumerable: true, get: function () { return items_1.a; } });
+Object.defineProperty(exports, "b", { enumerable: true, get: function () { return items_1.b; } });
+Object.defineProperty(exports, "c", { enumerable: true, get: function () { return items_1.c; } });
 //// [two.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var items_1 = require("./items");
-exports.a = items_1.a;
+Object.defineProperty(exports, "a", { enumerable: true, get: function () { return items_1.a; } });
 var items_2 = require("./items");
-exports.b = items_2.b;
-exports.c = items_2.c;
+Object.defineProperty(exports, "b", { enumerable: true, get: function () { return items_2.b; } });
+Object.defineProperty(exports, "c", { enumerable: true, get: function () { return items_2.c; } });
 //// [multiple.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var items_1 = require("./items");
-exports.a = items_1.a;
-exports.b = items_1.b;
+Object.defineProperty(exports, "a", { enumerable: true, get: function () { return items_1.a; } });
+Object.defineProperty(exports, "b", { enumerable: true, get: function () { return items_1.b; } });
 var two_1 = require("./two");
-exports.aa = two_1.a;
+Object.defineProperty(exports, "aa", { enumerable: true, get: function () { return two_1.a; } });
 var two_2 = require("./two");
-exports.bb = two_2.b;
+Object.defineProperty(exports, "bb", { enumerable: true, get: function () { return two_2.b; } });
 var two_3 = require("./two");
-exports.c = two_3.c;
+Object.defineProperty(exports, "c", { enumerable: true, get: function () { return two_3.c; } });
 var items_2 = require("./items");
-exports.cc = items_2.c;
+Object.defineProperty(exports, "cc", { enumerable: true, get: function () { return items_2.c; } });
 
 
 //// [items.d.ts]

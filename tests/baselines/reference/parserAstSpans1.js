@@ -289,7 +289,7 @@ var c2 = /** @class */ (function () {
         get: function () {
             return 10;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     c2.prototype.c2_nc_f1 = function () {
@@ -298,7 +298,7 @@ var c2 = /** @class */ (function () {
         get: function () {
             return 10;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     /** c2 f1*/
@@ -309,7 +309,7 @@ var c2 = /** @class */ (function () {
         get: function () {
             return 10;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     c2.prototype.nc_f1 = function () {
@@ -318,7 +318,7 @@ var c2 = /** @class */ (function () {
         get: function () {
             return 10;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return c2;
@@ -338,7 +338,7 @@ var c3 = /** @class */ (function (_super) {
         get: function () {
             return 10;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     c3.prototype.nc_f1 = function () {
@@ -347,7 +347,7 @@ var c3 = /** @class */ (function (_super) {
         get: function () {
             return 10;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return c3;

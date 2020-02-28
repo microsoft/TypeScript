@@ -89,27 +89,27 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
 /a/b/file1consumer1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/file1Consumer1.ts","pollingInterval":250}
 /a/b/modulefile1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
 /a/b/file1consumer2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/file1Consumer2.ts","pollingInterval":250}
 /a/b/globalfile3.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/globalFile3.ts","pollingInterval":250}
 /a/b/modulefile2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -118,7 +118,15 @@ Change:: Change the content of moduleFile1 to `export var T: number;export funct
 //// [/a/b/moduleFile1.ts]
 export var T: number;export function Foo() { };
 
-//// [/a/b/moduleFile1.js] file written with same contents
+//// [/a/b/moduleFile1.js]
+"use strict";
+exports.__esModule = true;
+exports.T = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
+
+
 //// [/a/b/file1Consumer1.js] file written with same contents
 //// [/a/b/file1Consumer2.js] file written with same contents
 
@@ -148,27 +156,27 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
 /a/b/file1consumer1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/file1Consumer1.ts","pollingInterval":250}
 /a/b/modulefile1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
 /a/b/file1consumer2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/file1Consumer2.ts","pollingInterval":250}
 /a/b/globalfile3.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/globalFile3.ts","pollingInterval":250}
 /a/b/modulefile2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -180,6 +188,7 @@ export var T: number;export function Foo() { console.log('hi'); };
 //// [/a/b/moduleFile1.js]
 "use strict";
 exports.__esModule = true;
+exports.T = void 0;
 function Foo() { console.log('hi'); }
 exports.Foo = Foo;
 ;
@@ -212,26 +221,26 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
 /a/b/file1consumer1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/file1Consumer1.ts","pollingInterval":250}
 /a/b/modulefile1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
 /a/b/file1consumer2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/file1Consumer2.ts","pollingInterval":250}
 /a/b/globalfile3.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/globalFile3.ts","pollingInterval":250}
 /a/b/modulefile2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

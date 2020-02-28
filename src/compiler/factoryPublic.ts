@@ -1484,7 +1484,7 @@ namespace ts {
 
         let token = rawTextScanner.scan();
         if (token === SyntaxKind.CloseBracketToken) {
-            token = rawTextScanner.reScanTemplateToken();
+            token = rawTextScanner.reScanTemplateToken(/* isTaggedTemplate */ false);
         }
 
         if (rawTextScanner.isUnterminated()) {
@@ -2958,6 +2958,8 @@ namespace ts {
             importDefaultHelper,
             classPrivateFieldGetHelper,
             classPrivateFieldSetHelper,
+            createBindingHelper,
+            setModuleDefaultHelper
         ], helper => helper.name));
     }
 
@@ -2990,10 +2992,10 @@ namespace ts {
             if (textOrInputFiles.buildInfo && textOrInputFiles.buildInfo.bundle) {
                 node.oldFileOfCurrentEmit = textOrInputFiles.oldFileOfCurrentEmit;
                 Debug.assert(mapTextOrStripInternal === undefined || typeof mapTextOrStripInternal === "boolean");
-                stripInternal = mapTextOrStripInternal as boolean | undefined;
+                stripInternal = mapTextOrStripInternal;
                 bundleFileInfo = mapPathOrType === "js" ? textOrInputFiles.buildInfo.bundle.js : textOrInputFiles.buildInfo.bundle.dts;
                 if (node.oldFileOfCurrentEmit) {
-                    parseOldFileOfCurrentEmit(node, Debug.assertDefined(bundleFileInfo));
+                    parseOldFileOfCurrentEmit(node, Debug.checkDefined(bundleFileInfo));
                     return node;
                 }
             }
@@ -3212,13 +3214,13 @@ namespace ts {
             };
             node.javascriptPath = declarationTextOrJavascriptPath;
             node.javascriptMapPath = javascriptMapPath;
-            node.declarationPath = Debug.assertDefined(javascriptMapTextOrDeclarationPath);
+            node.declarationPath = Debug.checkDefined(javascriptMapTextOrDeclarationPath);
             node.declarationMapPath = declarationMapPath;
             node.buildInfoPath = declarationMapTextOrBuildInfoPath;
             Object.defineProperties(node, {
                 javascriptText: { get() { return definedTextGetter(declarationTextOrJavascriptPath); } },
                 javascriptMapText: { get() { return textGetter(javascriptMapPath); } }, // TODO:: if there is inline sourceMap in jsFile, use that
-                declarationText: { get() { return definedTextGetter(Debug.assertDefined(javascriptMapTextOrDeclarationPath)); } },
+                declarationText: { get() { return definedTextGetter(Debug.checkDefined(javascriptMapTextOrDeclarationPath)); } },
                 declarationMapText: { get() { return textGetter(declarationMapPath); } }, // TODO:: if there is inline sourceMap in dtsFile, use that
                 buildInfo: { get() { return getAndCacheBuildInfo(() => textGetter(declarationMapTextOrBuildInfoPath)); } }
             });
