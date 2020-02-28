@@ -47,11 +47,7 @@ declare global {
 //// [declarationEmitRetainsJsdocyComments.js]
 "use strict";
 exports.__esModule = true;
-exports.
-/**
-* comment5
-*/
-someMethod = exports.Foo = exports.foo = void 0;
+exports.someMethod = exports.Foo = exports.foo = void 0;
 /**
  * comment1
  * @param p

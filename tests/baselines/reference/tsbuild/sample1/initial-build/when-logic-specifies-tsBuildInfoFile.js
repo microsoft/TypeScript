@@ -279,7 +279,7 @@ exports.m = mod;
 //# sourceMappingURL=index.js.map
 
 //// [/src/logic/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;QAKa,CAAC,WAJE,eAAe;AAD/B,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
 
 //// [/src/logic/index.js.map.baseline.txt]
 ===================================================================
@@ -295,24 +295,6 @@ sourceFile:index.ts
 >>>"use strict";
 >>>exports.__esModule = true;
 >>>exports.m = exports.getSecondsInDay = void 0;
-1 >^^^^^^^^
-2 >        ^
-3 >         ^^^^^^^^^^^
-4 >                    ^^^^^^^^^^^^^^^
-1 >import * as c from '../core/index';
-  >export function getSecondsInDay() {
-  >    return c.multiply(10, 15);
-  >}
-  >import * as mod from '../core/anotherModule';
-  >export const 
-2 >        m
-3 >         
-4 >                    getSecondsInDay
-1 >Emitted(3, 9) Source(6, 14) + SourceIndex(0)
-2 >Emitted(3, 10) Source(6, 15) + SourceIndex(0)
-3 >Emitted(3, 21) Source(2, 17) + SourceIndex(0)
-4 >Emitted(3, 36) Source(2, 32) + SourceIndex(0)
----
 >>>var c = require("../core/index");
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

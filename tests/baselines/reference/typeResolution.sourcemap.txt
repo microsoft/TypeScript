@@ -12,13 +12,6 @@ sourceFile:typeResolution.ts
 >>>    "use strict";
 >>>    exports.__esModule = true;
 >>>    exports.TopLevelModule1 = void 0;
-1 >^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^
-1 >export module 
-2 >            TopLevelModule1
-1 >Emitted(4, 13) Source(1, 15) + SourceIndex(0)
-2 >Emitted(4, 28) Source(1, 30) + SourceIndex(0)
----
 >>>    var TopLevelModule1;
 1 >^^^^
 2 >    ^^^^

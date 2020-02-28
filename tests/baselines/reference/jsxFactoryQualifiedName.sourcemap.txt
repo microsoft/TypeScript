@@ -11,10 +11,12 @@ sourceFile:Element.ts
 >>>"use strict";
 >>>Object.defineProperty(exports, "__esModule", { value: true });
 >>>exports.createElement = exports.Element = void 0;
-1 >^^^^^^^^
-2 >        ^^^^^^^^^^^^^
-3 >                     ^^^^^^^^^^^
-4 >                                ^^^^^^^
+>>>var Element;
+1 >
+2 >^^^^
+3 >    ^^^^^^^
+4 >           ^
+5 >            ^^^^^^^^^^->
 1 >declare namespace JSX {
   >    interface Element {
   >        name: string;
@@ -27,34 +29,7 @@ sourceFile:Element.ts
   >        props: any;
   >    }
   >}
-  >export namespace Element {
-  >    export function isElement(el: any): el is JSX.Element {
-  >        return el.markAsChildOfRootElement !== undefined;
-  >    }
   >
-  >    export function createElement(args: any[]) {
-  >
-  >        return {
-  >        }
-  >    }
-  >}
-  >
-  >export let 
-2 >        createElement
-3 >                     
-4 >                                Element
-1 >Emitted(3, 9) Source(25, 12) + SourceIndex(0)
-2 >Emitted(3, 22) Source(25, 25) + SourceIndex(0)
-3 >Emitted(3, 33) Source(13, 18) + SourceIndex(0)
-4 >Emitted(3, 40) Source(13, 25) + SourceIndex(0)
----
->>>var Element;
-1 >
-2 >^^^^
-3 >    ^^^^^^^
-4 >           ^
-5 >            ^^^^^^^^^^->
-1 >
 2 >export namespace 
 3 >    Element
 4 >            {

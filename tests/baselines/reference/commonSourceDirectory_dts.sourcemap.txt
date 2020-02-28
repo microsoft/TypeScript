@@ -11,21 +11,12 @@ sourceFile:index.ts
 >>>"use strict";
 >>>exports.__esModule = true;
 >>>exports.x = void 0;
-1 >^^^^^^^^
-2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >/// <reference path="../lib/bar.d.ts" />
-  >export const 
-2 >        x
-1 >Emitted(3, 9) Source(2, 14) + SourceIndex(0)
-2 >Emitted(3, 10) Source(2, 15) + SourceIndex(0)
----
 >>>/// <reference path="../lib/bar.d.ts" />
-1->
+1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-1->
+1 >
 2 >/// <reference path="../lib/bar.d.ts" />
-1->Emitted(4, 1) Source(1, 1) + SourceIndex(0)
+1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(4, 41) Source(1, 41) + SourceIndex(0)
 ---
 >>>exports.x = y;

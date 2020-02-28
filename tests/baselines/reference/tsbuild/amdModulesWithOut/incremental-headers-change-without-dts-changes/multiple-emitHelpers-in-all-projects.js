@@ -91,7 +91,7 @@ appfile4Spread.apply(void 0, __spread([10, 20, 30]));
 //# sourceMappingURL=module.js.map
 
 //// [/src/app/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;;;;YCFnB,CAAC;IAAD,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe,KAAK,CAAC;;;;;YCArC,CAAC;IAAD,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;YCAV,CAAC;IAAD,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,6BAAyC,EAAvC,QAAC,EAAE,wBAAoC,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;;;;;ICFnB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe,KAAK,CAAC;;;;;;ICArC,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,6BAAyC,EAAvC,QAAC,EAAE,wBAAoC,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE"}
 
 //// [/src/app/module.js.map.baseline.txt]
 ===================================================================
@@ -260,14 +260,6 @@ sourceFile:../lib/file1.ts
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
 >>>    exports.x = void 0;
-1->^^^^^^^^^^^^
-2 >            ^
-3 >             ^^^^^^^->
-1->export const 
-2 >            x
-1->Emitted(43, 13) Source(1, 14) + SourceIndex(1)
-2 >Emitted(43, 14) Source(1, 15) + SourceIndex(1)
----
 >>>    exports.x = 10;
 1->^^^^
 2 >    ^^^^^^^^
@@ -276,7 +268,7 @@ sourceFile:../lib/file1.ts
 5 >                ^^
 6 >                  ^
 7 >                   ^^^^^^^^^^^^^^^^->
-1->
+1->export const 
 2 >    
 3 >            x
 4 >              = 
@@ -315,28 +307,20 @@ sourceFile:../lib/file2.ts
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
 >>>    exports.y = void 0;
-1 >^^^^^^^^^^^^
-2 >            ^
-3 >             ^^^^^^^->
-1 >export const 
-2 >            y
-1 >Emitted(50, 13) Source(1, 14) + SourceIndex(2)
-2 >Emitted(50, 14) Source(1, 15) + SourceIndex(2)
----
 >>>    exports.y = 20;
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^^
 3 >            ^
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-1->
+1 >export const 
 2 >    
 3 >            y
 4 >              = 
 5 >                20
 6 >                  ;
-1->Emitted(51, 5) Source(1, 14) + SourceIndex(2)
+1 >Emitted(51, 5) Source(1, 14) + SourceIndex(2)
 2 >Emitted(51, 13) Source(1, 14) + SourceIndex(2)
 3 >Emitted(51, 14) Source(1, 15) + SourceIndex(2)
 4 >Emitted(51, 17) Source(1, 18) + SourceIndex(2)
@@ -377,14 +361,6 @@ sourceFile:file3.ts
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
 >>>    exports.z = void 0;
-1->^^^^^^^^^^^^
-2 >            ^
-3 >             ^^^^^^^->
-1->export const 
-2 >            z
-1->Emitted(57, 13) Source(1, 14) + SourceIndex(4)
-2 >Emitted(57, 14) Source(1, 15) + SourceIndex(4)
----
 >>>    exports.z = 30;
 1->^^^^
 2 >    ^^^^^^^^
@@ -393,7 +369,7 @@ sourceFile:file3.ts
 5 >                ^^
 6 >                  ^
 7 >                   ^^^^^^^^^^^^^^->
-1->
+1->export const 
 2 >    
 3 >            z
 4 >              = 
@@ -825,7 +801,7 @@ var globalConst = 10;
 //# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;;;;YCFnB,CAAC;IAAD,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe,KAAK,CAAC;;;;;YCArC,CAAC;IAAD,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;;;;;ICFnB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe,KAAK,CAAC;;;;;;ICArC,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
 
 //// [/src/lib/module.js.map.baseline.txt]
 ===================================================================
@@ -983,14 +959,6 @@ sourceFile:file1.ts
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
 >>>    exports.x = void 0;
-1->^^^^^^^^^^^^
-2 >            ^
-3 >             ^^^^^^^->
-1->export const 
-2 >            x
-1->Emitted(32, 13) Source(1, 14) + SourceIndex(1)
-2 >Emitted(32, 14) Source(1, 15) + SourceIndex(1)
----
 >>>    exports.x = 10;
 1->^^^^
 2 >    ^^^^^^^^
@@ -999,7 +967,7 @@ sourceFile:file1.ts
 5 >                ^^
 6 >                  ^
 7 >                   ^^^^^^^^^^^^^^^^->
-1->
+1->export const 
 2 >    
 3 >            x
 4 >              = 
@@ -1038,28 +1006,20 @@ sourceFile:file2.ts
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
 >>>    exports.y = void 0;
-1 >^^^^^^^^^^^^
-2 >            ^
-3 >             ^^^^^^^->
-1 >export const 
-2 >            y
-1 >Emitted(39, 13) Source(1, 14) + SourceIndex(2)
-2 >Emitted(39, 14) Source(1, 15) + SourceIndex(2)
----
 >>>    exports.y = 20;
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^^
 3 >            ^
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-1->
+1 >export const 
 2 >    
 3 >            y
 4 >              = 
 5 >                20
 6 >                  ;
-1->Emitted(40, 5) Source(1, 14) + SourceIndex(2)
+1 >Emitted(40, 5) Source(1, 14) + SourceIndex(2)
 2 >Emitted(40, 13) Source(1, 14) + SourceIndex(2)
 3 >Emitted(40, 14) Source(1, 15) + SourceIndex(2)
 4 >Emitted(40, 17) Source(1, 18) + SourceIndex(2)

@@ -232,7 +232,7 @@ var myVar = 30;
 //# sourceMappingURL=module.js.map
 
 //// [/src/app/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;YCAL,CAAC;IAAD,QAAA,CAAC,GAAG,EAAE,CAAC;;;;;YCAP,CAAC;IAAD,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;YCAV,CAAC;IAAD,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,KAAK,GAAG,EAAE,CAAC"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;;;ICAP,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,KAAK,GAAG,EAAE,CAAC"}
 
 //// [/src/app/module.js.map.baseline.txt]
 ===================================================================
@@ -274,14 +274,6 @@ sourceFile:../lib/file1.ts
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
 >>>    exports.x = void 0;
-1->^^^^^^^^^^^^
-2 >            ^
-3 >             ^^^^^^^->
-1->export const 
-2 >            x
-1->Emitted(5, 13) Source(1, 14) + SourceIndex(1)
-2 >Emitted(5, 14) Source(1, 15) + SourceIndex(1)
----
 >>>    exports.x = 10;
 1->^^^^
 2 >    ^^^^^^^^
@@ -289,7 +281,7 @@ sourceFile:../lib/file1.ts
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-1->
+1->export const 
 2 >    
 3 >            x
 4 >              = 
@@ -311,28 +303,20 @@ sourceFile:../lib/file2.ts
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
 >>>    exports.y = void 0;
-1 >^^^^^^^^^^^^
-2 >            ^
-3 >             ^^^^^^^->
-1 >export const 
-2 >            y
-1 >Emitted(11, 13) Source(1, 14) + SourceIndex(2)
-2 >Emitted(11, 14) Source(1, 15) + SourceIndex(2)
----
 >>>    exports.y = 20;
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^^
 3 >            ^
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-1->
+1 >export const 
 2 >    
 3 >            y
 4 >              = 
 5 >                20
 6 >                  ;
-1->Emitted(12, 5) Source(1, 14) + SourceIndex(2)
+1 >Emitted(12, 5) Source(1, 14) + SourceIndex(2)
 2 >Emitted(12, 13) Source(1, 14) + SourceIndex(2)
 3 >Emitted(12, 14) Source(1, 15) + SourceIndex(2)
 4 >Emitted(12, 17) Source(1, 18) + SourceIndex(2)
@@ -373,14 +357,6 @@ sourceFile:file3.ts
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
 >>>    exports.z = void 0;
-1->^^^^^^^^^^^^
-2 >            ^
-3 >             ^^^^^^^->
-1->export const 
-2 >            z
-1->Emitted(18, 13) Source(1, 14) + SourceIndex(4)
-2 >Emitted(18, 14) Source(1, 15) + SourceIndex(4)
----
 >>>    exports.z = 30;
 1->^^^^
 2 >    ^^^^^^^^
@@ -388,7 +364,7 @@ sourceFile:file3.ts
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-1->
+1->export const 
 2 >    
 3 >            z
 4 >              = 
@@ -706,7 +682,7 @@ var globalConst = 10;
 //# sourceMappingURL=module.js.map
 
 //// [/src/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["lib/file0.ts","lib/file1.ts","lib/file2.ts","lib/global.ts"],"names":[],"mappings":"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;YCAL,CAAC;IAAD,QAAA,CAAC,GAAG,EAAE,CAAC;;;;;YCAP,CAAC;IAAD,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["lib/file0.ts","lib/file1.ts","lib/file2.ts","lib/global.ts"],"names":[],"mappings":"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;;;ICAP,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
 
 //// [/src/module.js.map.baseline.txt]
 ===================================================================
@@ -748,14 +724,6 @@ sourceFile:lib/file1.ts
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
 >>>    exports.x = void 0;
-1->^^^^^^^^^^^^
-2 >            ^
-3 >             ^^^^^^^->
-1->export const 
-2 >            x
-1->Emitted(5, 13) Source(1, 14) + SourceIndex(1)
-2 >Emitted(5, 14) Source(1, 15) + SourceIndex(1)
----
 >>>    exports.x = 10;
 1->^^^^
 2 >    ^^^^^^^^
@@ -763,7 +731,7 @@ sourceFile:lib/file1.ts
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-1->
+1->export const 
 2 >    
 3 >            x
 4 >              = 
@@ -785,28 +753,20 @@ sourceFile:lib/file2.ts
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
 >>>    exports.y = void 0;
-1 >^^^^^^^^^^^^
-2 >            ^
-3 >             ^^^^^^^->
-1 >export const 
-2 >            y
-1 >Emitted(11, 13) Source(1, 14) + SourceIndex(2)
-2 >Emitted(11, 14) Source(1, 15) + SourceIndex(2)
----
 >>>    exports.y = 20;
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^^
 3 >            ^
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-1->
+1 >export const 
 2 >    
 3 >            y
 4 >              = 
 5 >                20
 6 >                  ;
-1->Emitted(12, 5) Source(1, 14) + SourceIndex(2)
+1 >Emitted(12, 5) Source(1, 14) + SourceIndex(2)
 2 >Emitted(12, 13) Source(1, 14) + SourceIndex(2)
 3 >Emitted(12, 14) Source(1, 15) + SourceIndex(2)
 4 >Emitted(12, 17) Source(1, 18) + SourceIndex(2)

@@ -97,7 +97,7 @@ namespace ts {
                 append(statements, createUnderscoreUnderscoreESModule());
             }
             if (length(currentModuleInfo.exportedNames)) {
-                append(statements, createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => createAssignment(createPropertyAccess(createIdentifier("exports"), nextId), prev), createVoidZero() as Expression)));
+                append(statements, createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => createAssignment(createPropertyAccess(createIdentifier("exports"), createIdentifier(idText(nextId))), prev), createVoidZero() as Expression)));
             }
 
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement));
@@ -418,7 +418,7 @@ namespace ts {
                 append(statements, createUnderscoreUnderscoreESModule());
             }
             if (length(currentModuleInfo.exportedNames)) {
-                append(statements, createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => createAssignment(createPropertyAccess(createIdentifier("exports"), nextId), prev), createVoidZero() as Expression)));
+                append(statements, createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => createAssignment(createPropertyAccess(createIdentifier("exports"), createIdentifier(idText(nextId))), prev), createVoidZero() as Expression)));
             }
 
             // Visit each statement of the module body.

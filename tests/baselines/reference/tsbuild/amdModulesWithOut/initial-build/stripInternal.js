@@ -356,7 +356,7 @@ var myVar = 30;
 //# sourceMappingURL=module.js.map
 
 //// [/src/app/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":"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"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":"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"}
 
 //// [/src/app/module.js.map.baseline.txt]
 ===================================================================
@@ -404,95 +404,21 @@ sourceFile:../lib/file1.ts
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
 >>>    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;
-1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^
-3 >                        ^^^^^^^^^^^
-4 >                                   ^^^^^^^^^^^^^
-5 >                                                ^^^^^^^^^^^
-6 >                                                           ^^^^^^^^^^^^^^
-7 >                                                                         ^^^^^^^^^^^
-8 >                                                                                    ^^^^^^^^^^^^^
-9 >                                                                                                 ^^^^^^^^^^^
-10>                                                                                                            ^^^^^^^^^^^^^^^^^
-11>                                                                                                                             ^^^^^^^^^^^
-12>                                                                                                                                        ^^^^^^^^^^^
-13>                                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-14>                                                                                                                                                                                  ^^^^^^^
-15>                                                                                                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-16>                                                                                                                                                                                                                      ^
-1->export const x = 10;
-  >export class normalC {
-  >    /*@internal*/ constructor() { }
-  >    /*@internal*/ prop: string;
-  >    /*@internal*/ method() { }
-  >    /*@internal*/ get c() { return 10; }
-  >    /*@internal*/ set c(val: number) { }
-  >}
-  >export namespace normalN {
-  >    /*@internal*/ export class C { }
-  >    /*@internal*/ export function foo() {}
-  >    /*@internal*/ export namespace someNamespace { export class C {} }
-  >    /*@internal*/ export namespace someOther.something { export class someClass {} }
-  >    /*@internal*/ export import someImport = someNamespace.C;
-  >    /*@internal*/ export type internalType = internalC;
-  >    /*@internal*/ export const internalConst = 10;
-  >    /*@internal*/ export enum internalEnum { a, b, c }
-  >}
-  >/*@internal*/ export class internalC {}
-  >/*@internal*/ export function internalfoo() {}
-  >/*@internal*/ export namespace internalNamespace { export class someClass {} }
-  >/*@internal*/ export namespace internalOther.something { export class someClass {} }
-  >/*@internal*/ export import internalImport = internalNamespace.someClass;
-  >/*@internal*/ export type internalType = internalC;
-  >/*@internal*/ export const internalConst = 10;
-  >/*@internal*/ export enum 
-2 >            internalEnum
-3 >                        
-4 >                                   internalConst
-5 >                                                
-6 >                                                           internalImport
-7 >                                                                         
-8 >                                                                                    internalOther
-9 >                                                                                                 
-10>                                                                                                            internalNamespace
-11>                                                                                                                             
-12>                                                                                                                                        internalfoo
-13>                                                                                                                                                   
-14>                                                                                                                                                                                  normalN
-15>                                                                                                                                                                                         
-16>                                                                                                                                                                                                                      x
-1->Emitted(5, 13) Source(26, 27) + SourceIndex(1)
-2 >Emitted(5, 25) Source(26, 39) + SourceIndex(1)
-3 >Emitted(5, 36) Source(25, 28) + SourceIndex(1)
-4 >Emitted(5, 49) Source(25, 41) + SourceIndex(1)
-5 >Emitted(5, 60) Source(23, 29) + SourceIndex(1)
-6 >Emitted(5, 74) Source(23, 43) + SourceIndex(1)
-7 >Emitted(5, 85) Source(22, 32) + SourceIndex(1)
-8 >Emitted(5, 98) Source(22, 45) + SourceIndex(1)
-9 >Emitted(5, 109) Source(21, 32) + SourceIndex(1)
-10>Emitted(5, 126) Source(21, 49) + SourceIndex(1)
-11>Emitted(5, 137) Source(20, 31) + SourceIndex(1)
-12>Emitted(5, 148) Source(20, 42) + SourceIndex(1)
-13>Emitted(5, 179) Source(9, 18) + SourceIndex(1)
-14>Emitted(5, 186) Source(9, 25) + SourceIndex(1)
-15>Emitted(5, 215) Source(1, 14) + SourceIndex(1)
-16>Emitted(5, 216) Source(1, 15) + SourceIndex(1)
----
 >>>    exports.x = 10;
-1 >^^^^
+1->^^^^
 2 >    ^^^^^^^^
 3 >            ^
 4 >             ^^^
 5 >                ^^
 6 >                  ^
 7 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+1->export const 
 2 >    
 3 >            x
 4 >              = 
 5 >                10
 6 >                  ;
-1 >Emitted(6, 5) Source(1, 14) + SourceIndex(1)
+1->Emitted(6, 5) Source(1, 14) + SourceIndex(1)
 2 >Emitted(6, 13) Source(1, 14) + SourceIndex(1)
 3 >Emitted(6, 14) Source(1, 15) + SourceIndex(1)
 4 >Emitted(6, 17) Source(1, 18) + SourceIndex(1)
@@ -1855,28 +1781,20 @@ sourceFile:../lib/file2.ts
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
 >>>    exports.y = void 0;
-1 >^^^^^^^^^^^^
-2 >            ^
-3 >             ^^^^^^^->
-1 >export const 
-2 >            y
-1 >Emitted(101, 13) Source(1, 14) + SourceIndex(2)
-2 >Emitted(101, 14) Source(1, 15) + SourceIndex(2)
----
 >>>    exports.y = 20;
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^^
 3 >            ^
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-1->
+1 >export const 
 2 >    
 3 >            y
 4 >              = 
 5 >                20
 6 >                  ;
-1->Emitted(102, 5) Source(1, 14) + SourceIndex(2)
+1 >Emitted(102, 5) Source(1, 14) + SourceIndex(2)
 2 >Emitted(102, 13) Source(1, 14) + SourceIndex(2)
 3 >Emitted(102, 14) Source(1, 15) + SourceIndex(2)
 4 >Emitted(102, 17) Source(1, 18) + SourceIndex(2)
@@ -1917,14 +1835,6 @@ sourceFile:file3.ts
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
 >>>    exports.z = void 0;
-1->^^^^^^^^^^^^
-2 >            ^
-3 >             ^^^^^^^->
-1->export const 
-2 >            z
-1->Emitted(108, 13) Source(1, 14) + SourceIndex(4)
-2 >Emitted(108, 14) Source(1, 15) + SourceIndex(4)
----
 >>>    exports.z = 30;
 1->^^^^
 2 >    ^^^^^^^^
@@ -1932,7 +1842,7 @@ sourceFile:file3.ts
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-1->
+1->export const 
 2 >    
 3 >            z
 4 >              = 
@@ -3133,7 +3043,7 @@ var globalConst = 10;
 //# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":"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"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":"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"}
 
 //// [/src/lib/module.js.map.baseline.txt]
 ===================================================================
@@ -3181,95 +3091,21 @@ sourceFile:file1.ts
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
 >>>    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;
-1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^
-3 >                        ^^^^^^^^^^^
-4 >                                   ^^^^^^^^^^^^^
-5 >                                                ^^^^^^^^^^^
-6 >                                                           ^^^^^^^^^^^^^^
-7 >                                                                         ^^^^^^^^^^^
-8 >                                                                                    ^^^^^^^^^^^^^
-9 >                                                                                                 ^^^^^^^^^^^
-10>                                                                                                            ^^^^^^^^^^^^^^^^^
-11>                                                                                                                             ^^^^^^^^^^^
-12>                                                                                                                                        ^^^^^^^^^^^
-13>                                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-14>                                                                                                                                                                                  ^^^^^^^
-15>                                                                                                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-16>                                                                                                                                                                                                                      ^
-1->export const x = 10;
-  >export class normalC {
-  >    /*@internal*/ constructor() { }
-  >    /*@internal*/ prop: string;
-  >    /*@internal*/ method() { }
-  >    /*@internal*/ get c() { return 10; }
-  >    /*@internal*/ set c(val: number) { }
-  >}
-  >export namespace normalN {
-  >    /*@internal*/ export class C { }
-  >    /*@internal*/ export function foo() {}
-  >    /*@internal*/ export namespace someNamespace { export class C {} }
-  >    /*@internal*/ export namespace someOther.something { export class someClass {} }
-  >    /*@internal*/ export import someImport = someNamespace.C;
-  >    /*@internal*/ export type internalType = internalC;
-  >    /*@internal*/ export const internalConst = 10;
-  >    /*@internal*/ export enum internalEnum { a, b, c }
-  >}
-  >/*@internal*/ export class internalC {}
-  >/*@internal*/ export function internalfoo() {}
-  >/*@internal*/ export namespace internalNamespace { export class someClass {} }
-  >/*@internal*/ export namespace internalOther.something { export class someClass {} }
-  >/*@internal*/ export import internalImport = internalNamespace.someClass;
-  >/*@internal*/ export type internalType = internalC;
-  >/*@internal*/ export const internalConst = 10;
-  >/*@internal*/ export enum 
-2 >            internalEnum
-3 >                        
-4 >                                   internalConst
-5 >                                                
-6 >                                                           internalImport
-7 >                                                                         
-8 >                                                                                    internalOther
-9 >                                                                                                 
-10>                                                                                                            internalNamespace
-11>                                                                                                                             
-12>                                                                                                                                        internalfoo
-13>                                                                                                                                                   
-14>                                                                                                                                                                                  normalN
-15>                                                                                                                                                                                         
-16>                                                                                                                                                                                                                      x
-1->Emitted(5, 13) Source(26, 27) + SourceIndex(1)
-2 >Emitted(5, 25) Source(26, 39) + SourceIndex(1)
-3 >Emitted(5, 36) Source(25, 28) + SourceIndex(1)
-4 >Emitted(5, 49) Source(25, 41) + SourceIndex(1)
-5 >Emitted(5, 60) Source(23, 29) + SourceIndex(1)
-6 >Emitted(5, 74) Source(23, 43) + SourceIndex(1)
-7 >Emitted(5, 85) Source(22, 32) + SourceIndex(1)
-8 >Emitted(5, 98) Source(22, 45) + SourceIndex(1)
-9 >Emitted(5, 109) Source(21, 32) + SourceIndex(1)
-10>Emitted(5, 126) Source(21, 49) + SourceIndex(1)
-11>Emitted(5, 137) Source(20, 31) + SourceIndex(1)
-12>Emitted(5, 148) Source(20, 42) + SourceIndex(1)
-13>Emitted(5, 179) Source(9, 18) + SourceIndex(1)
-14>Emitted(5, 186) Source(9, 25) + SourceIndex(1)
-15>Emitted(5, 215) Source(1, 14) + SourceIndex(1)
-16>Emitted(5, 216) Source(1, 15) + SourceIndex(1)
----
 >>>    exports.x = 10;
-1 >^^^^
+1->^^^^
 2 >    ^^^^^^^^
 3 >            ^
 4 >             ^^^
 5 >                ^^
 6 >                  ^
 7 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+1->export const 
 2 >    
 3 >            x
 4 >              = 
 5 >                10
 6 >                  ;
-1 >Emitted(6, 5) Source(1, 14) + SourceIndex(1)
+1->Emitted(6, 5) Source(1, 14) + SourceIndex(1)
 2 >Emitted(6, 13) Source(1, 14) + SourceIndex(1)
 3 >Emitted(6, 14) Source(1, 15) + SourceIndex(1)
 4 >Emitted(6, 17) Source(1, 18) + SourceIndex(1)
@@ -4632,28 +4468,20 @@ sourceFile:file2.ts
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
 >>>    exports.y = void 0;
-1 >^^^^^^^^^^^^
-2 >            ^
-3 >             ^^^^^^^->
-1 >export const 
-2 >            y
-1 >Emitted(101, 13) Source(1, 14) + SourceIndex(2)
-2 >Emitted(101, 14) Source(1, 15) + SourceIndex(2)
----
 >>>    exports.y = 20;
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^^
 3 >            ^
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-1->
+1 >export const 
 2 >    
 3 >            y
 4 >              = 
 5 >                20
 6 >                  ;
-1->Emitted(102, 5) Source(1, 14) + SourceIndex(2)
+1 >Emitted(102, 5) Source(1, 14) + SourceIndex(2)
 2 >Emitted(102, 13) Source(1, 14) + SourceIndex(2)
 3 >Emitted(102, 14) Source(1, 15) + SourceIndex(2)
 4 >Emitted(102, 17) Source(1, 18) + SourceIndex(2)

@@ -11,24 +11,6 @@ sourceFile:sourceMapValidationImport.ts
 >>>"use strict";
 >>>exports.__esModule = true;
 >>>exports.b = exports.m = void 0;
-1 >^^^^^^^^
-2 >        ^
-3 >         ^^^^^^^^^^^
-4 >                    ^
-1 >export module m {
-  >    export class c {
-  >    }
-  >}
-  >import a = m.c;
-  >export import 
-2 >        b
-3 >         
-4 >                    m
-1 >Emitted(3, 9) Source(6, 15) + SourceIndex(0)
-2 >Emitted(3, 10) Source(6, 16) + SourceIndex(0)
-3 >Emitted(3, 21) Source(1, 15) + SourceIndex(0)
-4 >Emitted(3, 22) Source(1, 16) + SourceIndex(0)
----
 >>>var m;
 1 >
 2 >^^^^

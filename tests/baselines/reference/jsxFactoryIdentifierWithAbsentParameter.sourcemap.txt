@@ -11,28 +11,20 @@ sourceFile:test.tsx
 >>>"use strict";
 >>>Object.defineProperty(exports, "__esModule", { value: true });
 >>>exports.AppComponent = void 0;
-1 >^^^^^^^^
-2 >        ^^^^^^^^^^^^
-3 >                    ^->
+>>>class AppComponent {
+1 >
+2 >^^^^^^
+3 >      ^^^^^^^^^^^^
 1 >declare module JSX {
   >    interface IntrinsicElements {
   >        [s: string]: any;
   >    }
   >}
   >
-  >export class 
-2 >        AppComponent
-1 >Emitted(3, 9) Source(7, 14) + SourceIndex(0)
-2 >Emitted(3, 21) Source(7, 26) + SourceIndex(0)
----
->>>class AppComponent {
-1->
-2 >^^^^^^
-3 >      ^^^^^^^^^^^^
-1->
+  >
 2 >export class 
 3 >      AppComponent
-1->Emitted(4, 1) Source(7, 1) + SourceIndex(0)
+1 >Emitted(4, 1) Source(7, 1) + SourceIndex(0)
 2 >Emitted(4, 7) Source(7, 14) + SourceIndex(0)
 3 >Emitted(4, 19) Source(7, 26) + SourceIndex(0)
 ---
