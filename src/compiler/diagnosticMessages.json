@@ -1135,6 +1135,10 @@
         "category": "Error",
         "code": 1380
     },
+    "Only named exports may use 'export type'.": {
+        "category": "Error",
+        "code": 1383
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
