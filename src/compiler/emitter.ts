@@ -842,7 +842,7 @@ namespace ts {
         let tempFlags: TempFlags; // TempFlags for the current name generation scope.
         let reservedNamesStack: Map<true>[]; // Stack of TempFlags reserved in enclosing name generation scopes.
         let reservedNames: Map<true>; // TempFlags to reserve in nested name generation scopes.
-        let preserveNewlines = printerOptions.preserveNewlines; // Can be overridden inside nodes with the `IgnoreSourceNewlines` emit flag.
+        let preserveSourceNewlines = printerOptions.preserveSourceNewlines; // Can be overridden inside nodes with the `IgnoreSourceNewlines` emit flag.
 
         let writer: EmitTextWriter;
         let ownWriter: EmitTextWriter; // Reusable `EmitTextWriter` for basic printing.
@@ -1165,11 +1165,11 @@ namespace ts {
         function pipelineEmit(emitHint: EmitHint, node: Node) {
             const savedLastNode = lastNode;
             const savedLastSubstitution = lastSubstitution;
-            const savedPreserveNewlines = preserveNewlines;
+            const savedPreserveSourceNewlines = preserveSourceNewlines;
             lastNode = node;
             lastSubstitution = undefined;
-            if (preserveNewlines && !!(getEmitFlags(node) & EmitFlags.IgnoreSourceNewlines)) {
-                preserveNewlines = false;
+            if (preserveSourceNewlines && !!(getEmitFlags(node) & EmitFlags.IgnoreSourceNewlines)) {
+                preserveSourceNewlines = false;
             }
 
             const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, emitHint, node);
@@ -1180,7 +1180,7 @@ namespace ts {
             const substitute = lastSubstitution;
             lastNode = savedLastNode;
             lastSubstitution = savedLastSubstitution;
-            preserveNewlines = savedPreserveNewlines;
+            preserveSourceNewlines = savedPreserveSourceNewlines;
 
             return substitute || node;
         }
@@ -3997,7 +3997,7 @@ namespace ts {
 
             if (isEmpty) {
                 // Write a line terminator if the parent node was multi-line
-                if (format & ListFormat.MultiLine && !(preserveNewlines && rangeIsOnSingleLine(parentNode, currentSourceFile!))) {
+                if (format & ListFormat.MultiLine && !(preserveSourceNewlines && rangeIsOnSingleLine(parentNode, currentSourceFile!))) {
                     writeLine();
                 }
                 else if (format & ListFormat.SpaceBetweenBraces && !(format & ListFormat.NoSpaceIfEmpty)) {
@@ -4268,7 +4268,7 @@ namespace ts {
         }
 
         function getLeadingLineTerminatorCount(parentNode: TextRange, children: NodeArray<Node>, format: ListFormat): number {
-            if (format & ListFormat.PreserveLines || preserveNewlines) {
+            if (format & ListFormat.PreserveLines || preserveSourceNewlines) {
                 if (format & ListFormat.PreferNewLine) {
                     return 1;
                 }
@@ -4278,7 +4278,7 @@ namespace ts {
                     return rangeIsOnSingleLine(parentNode, currentSourceFile!) ? 0 : 1;
                 }
                 else if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(firstChild) && firstChild.parent === parentNode) {
-                    if (preserveNewlines) {
+                    if (preserveSourceNewlines) {
                         const lines = getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(firstChild.pos, currentSourceFile!, /*includeComments*/ true);
                         return lines === 0
                             ? getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(firstChild.pos, currentSourceFile!, /*includeComments*/ false)
@@ -4294,13 +4294,13 @@ namespace ts {
         }
 
         function getSeparatingLineTerminatorCount(previousNode: Node | undefined, nextNode: Node, format: ListFormat): number {
-            if (format & ListFormat.PreserveLines || preserveNewlines) {
+            if (format & ListFormat.PreserveLines || preserveSourceNewlines) {
                 if (previousNode === undefined || nextNode === undefined) {
                     return 0;
                 }
                 else if (!nodeIsSynthesized(previousNode) && !nodeIsSynthesized(nextNode) && previousNode.parent === nextNode.parent) {
                     const lines = getEffectiveLinesBetweenRanges(previousNode, nextNode);
-                    return preserveNewlines ? lines : Math.min(lines, 1);
+                    return preserveSourceNewlines ? lines : Math.min(lines, 1);
                 }
                 else if (synthesizedNodeStartsOnNewLine(previousNode, format) || synthesizedNodeStartsOnNewLine(nextNode, format)) {
                     return 1;
@@ -4313,7 +4313,7 @@ namespace ts {
         }
 
         function getClosingLineTerminatorCount(parentNode: TextRange, children: NodeArray<Node>, format: ListFormat): number {
-            if (format & ListFormat.PreserveLines || preserveNewlines) {
+            if (format & ListFormat.PreserveLines || preserveSourceNewlines) {
                 if (format & ListFormat.PreferNewLine) {
                     return 1;
                 }
@@ -4324,7 +4324,7 @@ namespace ts {
                 }
                 else if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild) && lastChild.parent === parentNode) {
                     const lines = getLinesBetweenRangeEndPositions(lastChild, parentNode, currentSourceFile!);
-                    return preserveNewlines ? lines : Math.min(lines, 1);
+                    return preserveSourceNewlines ? lines : Math.min(lines, 1);
                 }
                 else if (synthesizedNodeStartsOnNewLine(lastChild, format)) {
                     return 1;
@@ -4337,9 +4337,9 @@ namespace ts {
         }
 
         function getEffectiveLinesBetweenRanges(node1: TextRange, node2: TextRange) {
-            // If 'preserveNewlines' is disabled, skip the more accurate check that might require
+            // If 'preserveSourceNewlines' is disabled, skip the more accurate check that might require
             // querying for source position twice.
-            if (!preserveNewlines) {
+            if (!preserveSourceNewlines) {
                 return getLinesBetweenRangeEndAndRangeStart(node1, node2, currentSourceFile!, /*includeComments*/ false);
             }
             // We start by measuring the line difference from node1's end to node2's comments start,
@@ -4391,7 +4391,7 @@ namespace ts {
 
             if (!nodeIsSynthesized(parent) && !nodeIsSynthesized(node1) && !nodeIsSynthesized(node2)) {
                 const lines = getEffectiveLinesBetweenRanges(node1, node2);
-                return preserveNewlines ? lines : Math.min(lines, 1);
+                return preserveSourceNewlines ? lines : Math.min(lines, 1);
             }
 
             return 0;
