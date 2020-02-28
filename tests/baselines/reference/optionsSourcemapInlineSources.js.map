@@ -1,2 +1,3 @@
 //// [optionsSourcemapInlineSources.js.map]
 {"version":3,"file":"optionsSourcemapInlineSources.js","sourceRoot":"","sources":["optionsSourcemapInlineSources.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC,GAAG,EAAE,CAAC","sourcesContent":["var a = 10;"]}
+//// https://sokra.github.io/source-map-visualization#base64,dmFyIGEgPSAxMDsNCi8vIyBzb3VyY2VNYXBwaW5nVVJMPW9wdGlvbnNTb3VyY2VtYXBJbmxpbmVTb3VyY2VzLmpzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3B0aW9uc1NvdXJjZW1hcElubGluZVNvdXJjZXMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJvcHRpb25zU291cmNlbWFwSW5saW5lU291cmNlcy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxJQUFJLENBQUMsR0FBRyxFQUFFLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJ2YXIgYSA9IDEwOyJdfQ==,dmFyIGEgPSAxMDs=
