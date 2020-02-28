@@ -157,3 +157,12 @@ tests/cases/compiler/inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' do
             }
         }
     }
+    
+    function positiveIntersectionTest(x: { a: string } & { b: string }) {
+        if ("a" in x) {
+            let s: string = x.a;
+        } else {
+            let n: never = x;
+        }
+    }
+    

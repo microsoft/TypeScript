@@ -97,6 +97,15 @@ class UnreachableCodeDetection {
     }
 }
 
+function positiveIntersectionTest(x: { a: string } & { b: string }) {
+    if ("a" in x) {
+        let s: string = x.a;
+    } else {
+        let n: never = x;
+    }
+}
+
+
 //// [inKeywordTypeguard.js]
 var A = /** @class */ (function () {
     function A() {
@@ -228,3 +237,11 @@ var UnreachableCodeDetection = /** @class */ (function () {
     };
     return UnreachableCodeDetection;
 }());
+function positiveIntersectionTest(x) {
+    if ("a" in x) {
+        var s = x.a;
+    }
+    else {
+        var n = x;
+    }
+}
