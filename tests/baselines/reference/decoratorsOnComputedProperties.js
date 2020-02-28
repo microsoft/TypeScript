@@ -204,7 +204,7 @@ function foo() { return ++i + ""; }
 const fieldNameA = "fieldName1";
 const fieldNameB = "fieldName2";
 const fieldNameC = "fieldName3";
-const A = /** @class */ (() => {
+let A = /** @class */ (() => {
     var _a, _b, _c, _d;
     class A {
         constructor() {
@@ -259,7 +259,7 @@ void (_a = class B {
     _g = fieldNameB,
     _h = fieldNameC,
     _a);
-const C = /** @class */ (() => {
+let C = /** @class */ (() => {
     var _a, _b, _c, _d;
     class C {
         constructor() {
@@ -309,7 +309,7 @@ void class D {
     }
     [(foo(), _j = foo(), _k = foo(), _l = fieldNameB, _m = fieldNameC, "some" + "method")]() { }
 };
-const E = /** @class */ (() => {
+let E = /** @class */ (() => {
     var _a, _b, _c, _d;
     class E {
         constructor() {
@@ -363,7 +363,7 @@ void (_b = class F {
     _q = fieldNameB,
     _r = fieldNameC,
     _b);
-const G = /** @class */ (() => {
+let G = /** @class */ (() => {
     var _a, _b, _c, _d;
     class G {
         constructor() {
@@ -418,7 +418,7 @@ void (_c = class H {
     },
     _v = fieldNameC,
     _c);
-const I = /** @class */ (() => {
+let I = /** @class */ (() => {
     var _a, _b, _c, _d, _e;
     class I {
         constructor() {

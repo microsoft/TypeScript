@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-const A = /** @class */ (() => {
+let A = /** @class */ (() => {
     let A = class A {
     };
     A = __decorate([

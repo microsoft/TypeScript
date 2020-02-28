@@ -20,7 +20,7 @@ class C {
 var s;
 var n;
 var a;
-const C = /** @class */ (() => {
+let C = /** @class */ (() => {
     var _a, _b, _c;
     class C {
         constructor() {

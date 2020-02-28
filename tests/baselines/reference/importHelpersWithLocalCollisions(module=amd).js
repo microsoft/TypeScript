@@ -22,7 +22,7 @@ define(["require", "exports", "tslib"], function (require, exports, tslib_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.A = void 0;
-    const A = /** @class */ (() => {
+    let A = /** @class */ (() => {
         let A = class A {
         };
         A = tslib_1.__decorate([

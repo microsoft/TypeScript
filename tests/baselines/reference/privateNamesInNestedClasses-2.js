@@ -24,7 +24,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-const A = /** @class */ (() => {
+let A = /** @class */ (() => {
     var _x;
     class A {
         constructor() {
