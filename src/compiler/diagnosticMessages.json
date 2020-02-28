@@ -1143,6 +1143,10 @@
         "category": "Error",
         "code": 1382
     },
+    "Only named exports may use 'export type'.": {
+        "category": "Error",
+        "code": 1383
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -3642,7 +3646,7 @@
         "category": "Message",
         "code": 6061
     },
-    "Option '{0}' can only be specified in 'tsconfig.json' file.": {
+    "Option '{0}' can only be specified in 'tsconfig.json' file or set to 'null' on command line.": {
         "category": "Error",
         "code": 6064
     },
@@ -4291,6 +4295,14 @@
     "Synchronously call callbacks and update the state of directory watchers on platforms that don't support recursive watching natively.": {
         "category": "Message",
         "code": 6228
+    },
+    "Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.": {
+        "category": "Error",
+        "code": 6229
+    },
+    "Option '{0}' can only be specified in 'tsconfig.json' file or set to 'false' or 'null' on command line.": {
+        "category": "Error",
+        "code": 6230
     },
 
     "Projects to reference": {

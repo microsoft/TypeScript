@@ -278,6 +278,7 @@ namespace ts {
         name: "typescript:spread",
         importName: "__spread",
         scoped: false,
+        dependencies: [readHelper],
         text: `
             var __spread = (this && this.__spread) || function () {
                 for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
@@ -286,7 +287,6 @@ namespace ts {
     };
 
     export function createSpreadHelper(context: TransformationContext, argumentList: readonly Expression[], location?: TextRange) {
-        context.requestEmitHelper(readHelper);
         context.requestEmitHelper(spreadHelper);
         return setTextRange(
             createCall(
@@ -566,7 +566,7 @@ namespace ts {
                 properties.push(setter);
             }
 
-            properties.push(createPropertyAssignment("enumerable", createTrue()));
+            properties.push(createPropertyAssignment("enumerable", getAccessor || setAccessor ? createFalse() : createTrue()));
             properties.push(createPropertyAssignment("configurable", createTrue()));
 
             const expression = setTextRange(
@@ -1829,7 +1829,7 @@ namespace ts {
         if (isBindingElement(element)) {
             if (element.dotDotDotToken) {
                 Debug.assertNode(element.name, isIdentifier);
-                return setOriginalNode(setTextRange(createSpread(<Identifier>element.name), element), element);
+                return setOriginalNode(setTextRange(createSpread(element.name), element), element);
             }
             const expression = convertToAssignmentElementTarget(element.name);
             return element.initializer
@@ -1850,14 +1850,14 @@ namespace ts {
         if (isBindingElement(element)) {
             if (element.dotDotDotToken) {
                 Debug.assertNode(element.name, isIdentifier);
-                return setOriginalNode(setTextRange(createSpreadAssignment(<Identifier>element.name), element), element);
+                return setOriginalNode(setTextRange(createSpreadAssignment(element.name), element), element);
             }
             if (element.propertyName) {
                 const expression = convertToAssignmentElementTarget(element.name);
                 return setOriginalNode(setTextRange(createPropertyAssignment(element.propertyName, element.initializer ? createAssignment(expression, element.initializer) : expression), element), element);
             }
             Debug.assertNode(element.name, isIdentifier);
-            return setOriginalNode(setTextRange(createShorthandPropertyAssignment(<Identifier>element.name, element.initializer), element), element);
+            return setOriginalNode(setTextRange(createShorthandPropertyAssignment(element.name, element.initializer), element), element);
         }
         Debug.assertNode(element, isObjectLiteralElementLike);
         return <ObjectLiteralElementLike>element;

@@ -1,0 +1,25 @@
+=== tests/cases/compiler/thisInClassBodyStaticESNext.ts ===
+// all are allowed with es-compliant class field emit
+class Foo {
+>Foo : Symbol(Foo, Decl(thisInClassBodyStaticESNext.ts, 0, 0))
+
+    x = this
+>x : Symbol(Foo.x, Decl(thisInClassBodyStaticESNext.ts, 1, 11))
+>this : Symbol(Foo, Decl(thisInClassBodyStaticESNext.ts, 0, 0))
+
+    static t = this
+>t : Symbol(Foo.t, Decl(thisInClassBodyStaticESNext.ts, 2, 12))
+>this : Symbol(Foo, Decl(thisInClassBodyStaticESNext.ts, 0, 0))
+
+    static at = () => this
+>at : Symbol(Foo.at, Decl(thisInClassBodyStaticESNext.ts, 3, 19))
+>this : Symbol(Foo, Decl(thisInClassBodyStaticESNext.ts, 0, 0))
+
+    static ft = function () { return this }
+>ft : Symbol(Foo.ft, Decl(thisInClassBodyStaticESNext.ts, 4, 26))
+
+    static mt() { return this }
+>mt : Symbol(Foo.mt, Decl(thisInClassBodyStaticESNext.ts, 5, 43))
+>this : Symbol(Foo, Decl(thisInClassBodyStaticESNext.ts, 0, 0))
+}
+

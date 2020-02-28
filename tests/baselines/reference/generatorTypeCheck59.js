@@ -14,7 +14,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 function* g() {
-    let C = /** @class */ (() => {
+    const C = /** @class */ (() => {
         class C {
             m() { }
         }

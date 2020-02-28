@@ -252,7 +252,7 @@ namespace ts {
                 value = inlineExpressions(append(pendingExpressions, value));
                 pendingExpressions = undefined;
             }
-            pendingDeclarations.push({ pendingExpressions, name: <BindingName>target, value, location, original });
+            pendingDeclarations.push({ pendingExpressions, name: target, value, location, original });
         }
     }
 

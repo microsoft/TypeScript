@@ -20,7 +20,7 @@ function decorator(x) {
     return y => { };
 }
 function* g() {
-    let C = /** @class */ (() => {
+    const C = /** @class */ (() => {
         let C = class C {
             constructor() {
                 this.x = yield 0;

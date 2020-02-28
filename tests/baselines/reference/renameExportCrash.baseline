@@ -1,0 +1,5 @@
+/*====== /tests/cases/fourslash/Foo.js ======*/
+
+let RENAME;
+module.exports = [|RENAME|];
+exports["foo"] = RENAME;

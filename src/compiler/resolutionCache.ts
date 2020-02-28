@@ -294,7 +294,7 @@ namespace ts {
                 // create different collection of failed lookup locations for second pass
                 // if it will fail and we've already found something during the first pass - we don't want to pollute its results
                 const { resolvedModule, failedLookupLocations } = loadModuleFromGlobalCache(
-                    Debug.assertDefined(resolutionHost.globalCacheResolutionModuleName)(moduleName),
+                    Debug.checkDefined(resolutionHost.globalCacheResolutionModuleName)(moduleName),
                     resolutionHost.projectName,
                     compilerOptions,
                     host,
@@ -687,7 +687,7 @@ namespace ts {
                         (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = createMap<true>())).set(containingFilePath, true);
 
                         // When its a file with inferred types resolution, invalidate type reference directive resolution
-                        if (containingFilePath.endsWith(inferredTypesContainingFile)) {
+                        if (endsWith(containingFilePath, inferredTypesContainingFile)) {
                             resolutionHost.onChangedAutomaticTypeDirectiveNames();
                         }
                     }

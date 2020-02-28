@@ -13,7 +13,7 @@ define(["require", "exports"], function (require, exports) {
         }
         Object.defineProperty(C.prototype, "x", {
             get: function () { return 1; },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return C;

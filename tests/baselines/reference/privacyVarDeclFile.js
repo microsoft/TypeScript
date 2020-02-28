@@ -460,6 +460,8 @@ var privateClassWithWithPublicPropertyTypes = /** @class */ (function () {
     }
     return privateClassWithWithPublicPropertyTypes;
 }());
+exports.publicVarWithPrivatePropertyTypes = void 0; // Error
+exports.publicVarWithPublicPropertyTypes = void 0;
 var privateVarWithPrivatePropertyTypes;
 var privateVarWithPublicPropertyTypes;
 var publicClassWithPrivateModulePropertyTypes = /** @class */ (function () {
@@ -468,6 +470,7 @@ var publicClassWithPrivateModulePropertyTypes = /** @class */ (function () {
     return publicClassWithPrivateModulePropertyTypes;
 }());
 exports.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
+exports.publicVarWithPrivateModulePropertyTypes = void 0; // Error
 var privateClassWithPrivateModulePropertyTypes = /** @class */ (function () {
     function privateClassWithPrivateModulePropertyTypes() {
     }

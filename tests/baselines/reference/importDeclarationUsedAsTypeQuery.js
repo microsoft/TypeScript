@@ -23,6 +23,7 @@ exports.B = B;
 //// [importDeclarationUsedAsTypeQuery_1.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 
 
 //// [importDeclarationUsedAsTypeQuery_require.d.ts]

@@ -1053,7 +1053,7 @@ var normalC = /** @class */ (function () {
     Object.defineProperty(normalC.prototype, "c", {
         /**@internal*/ get: function () { return 10; },
         /**@internal*/ set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -1547,7 +1547,7 @@ sourceFile:../second/second_part1.ts
 6 >Emitted(20, 46) Source(18, 41) + SourceIndex(3)
 7 >Emitted(20, 47) Source(18, 42) + SourceIndex(3)
 ---
->>>        enumerable: true,
+>>>        enumerable: false,
 >>>        configurable: true
 >>>    });
 1 >^^^^^^^
@@ -2852,7 +2852,7 @@ sourceFile:../second/second_part2.ts
         },
         {
           "pos": 110,
-          "end": 3544,
+          "end": 3545,
           "kind": "text"
         }
       ]
@@ -2933,7 +2933,7 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-text: (110-3544)
+text: (110-3545)
 var N;
 (function (N) {
     function f() {
@@ -2948,7 +2948,7 @@ var normalC = /** @class */ (function () {
     Object.defineProperty(normalC.prototype, "c", {
         /**@internal*/ get: function () { return 10; },
         /**@internal*/ set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -3902,7 +3902,7 @@ var normalC = /** @class */ (function () {
     Object.defineProperty(normalC.prototype, "c", {
         /**@internal*/ get: function () { return 10; },
         /**@internal*/ set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -4398,7 +4398,7 @@ sourceFile:../../../second/second_part1.ts
 6 >Emitted(20, 46) Source(18, 41) + SourceIndex(3)
 7 >Emitted(20, 47) Source(18, 42) + SourceIndex(3)
 ---
->>>        enumerable: true,
+>>>        enumerable: false,
 >>>        configurable: true
 >>>    });
 1 >^^^^^^^
@@ -5742,20 +5742,20 @@ sourceFile:../../third_part1.ts
       "sections": [
         {
           "pos": 0,
-          "end": 3544,
+          "end": 3545,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
               "pos": 0,
-              "end": 3544,
+              "end": 3545,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 3544,
-          "end": 3580,
+          "pos": 3545,
+          "end": 3581,
           "kind": "text"
         }
       ]
@@ -5790,9 +5790,9 @@ sourceFile:../../third_part1.ts
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-3544):: ../../../2/second-output.js texts:: 1
+prepend: (0-3545):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-3544)
+text: (0-3545)
 var s = "Hello, world";
 console.log(s);
 console.log(f());
@@ -5813,7 +5813,7 @@ var normalC = /** @class */ (function () {
     Object.defineProperty(normalC.prototype, "c", {
         /**@internal*/ get: function () { return 10; },
         /**@internal*/ set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -5903,7 +5903,7 @@ var C = /** @class */ (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (3544-3580)
+text: (3545-3581)
 var c = new C();
 c.doSomething();
 
