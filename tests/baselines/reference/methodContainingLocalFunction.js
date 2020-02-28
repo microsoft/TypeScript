@@ -72,7 +72,7 @@ var BugExhibition2 = /** @class */ (function () {
             x = localFunction;
             return null;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return BugExhibition2;

@@ -1,0 +1,31 @@
+=== /a.js ===
+class A {
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+    /** @return {number} */
+    method() { throw new Error(); }
+>method : Symbol(A.method, Decl(a.js, 0, 9))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+/** @implements {A} */
+class B  {
+>B : Symbol(B, Decl(a.js, 3, 1))
+
+    method() { return 0 }
+>method : Symbol(B.method, Decl(a.js, 5, 10))
+}
+
+/** @implements A */
+class B2  {
+>B2 : Symbol(B2, Decl(a.js, 7, 1))
+
+    /** @return {string} */
+    method() { return "" }
+>method : Symbol(B2.method, Decl(a.js, 10, 11))
+}
+
+/** @implements {A} */
+class B3  {
+>B3 : Symbol(B3, Decl(a.js, 13, 1))
+}
+

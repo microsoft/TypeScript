@@ -673,7 +673,7 @@ namespace ts {
                             /*type*/ undefined,
                             iife
                         )
-                    ], languageVersion > ScriptTarget.ES5 ? NodeFlags.Let : undefined)
+                    ], languageVersion > ScriptTarget.ES5 ? NodeFlags.Const : undefined)
                 );
 
                 setOriginalNode(varStatement, node);
@@ -2514,7 +2514,7 @@ namespace ts {
 
         function declaredNameInScope(node: FunctionDeclaration | ClassDeclaration | ModuleDeclaration | EnumDeclaration): __String {
             Debug.assertNode(node.name, isIdentifier);
-            return (node.name as Identifier).escapedText;
+            return node.name.escapedText;
         }
 
         /**
@@ -2870,7 +2870,7 @@ namespace ts {
             }
 
             // Elide the export declaration if all of its named exports are elided.
-            const exportClause = visitNode(node.exportClause, visitNamedExportBindings, isNamedImportBindings);
+            const exportClause = visitNode(node.exportClause, visitNamedExportBindings, isNamedExportBindings);
             return exportClause
                 ? updateExportDeclaration(
                     node,

@@ -80,5 +80,61 @@ export function Component(x: Config): any;`
                 }
             );
         });
+
+        describe("detects program upto date correctly", () => {
+            function verifyProgramUptoDate(useProjectVersion: boolean) {
+                let projectVersion = "1";
+                const files = createMap<{ version: string, text: string; }>();
+                files.set("/project/root.ts", { version: "1", text: `import { foo } from "./other"` });
+                files.set("/project/other.ts", { version: "1", text: `export function foo() { }` });
+                files.set("/lib/lib.d.ts", { version: "1", text: projectSystem.libFile.content });
+                const host: LanguageServiceHost = {
+                    useCaseSensitiveFileNames: returnTrue,
+                    getCompilationSettings: getDefaultCompilerOptions,
+                    fileExists: path => files.has(path),
+                    getProjectVersion: !useProjectVersion ? undefined : () => projectVersion,
+                    getScriptFileNames: () => ["/project/root.ts"],
+                    getScriptVersion: path => files.get(path)?.version || "",
+                    getScriptSnapshot: path => {
+                        const text = files.get(path)?.text;
+                        return text ? ScriptSnapshot.fromString(text) : undefined;
+                    },
+                    getCurrentDirectory: () => "/project",
+                    getDefaultLibFileName: () => "/lib/lib.d.ts"
+                };
+                const ls = ts.createLanguageService(host);
+                const program1 = ls.getProgram()!;
+                const program2 = ls.getProgram()!;
+                assert.strictEqual(program1, program2);
+                verifyProgramFiles(program1);
+
+                // Change other
+                projectVersion = "2";
+                files.set("/project/other.ts", { version: "2", text: `export function foo() { } export function bar() { }` });
+                const program3 = ls.getProgram()!;
+                assert.notStrictEqual(program2, program3);
+                verifyProgramFiles(program3);
+
+                // change root
+                projectVersion = "3";
+                files.set("/project/root.ts", { version: "2", text: `import { foo, bar } from "./other"` });
+                const program4 = ls.getProgram()!;
+                assert.notStrictEqual(program3, program4);
+                verifyProgramFiles(program4);
+
+                function verifyProgramFiles(program: Program) {
+                    assert.deepEqual(
+                        program.getSourceFiles().map(f => f.fileName),
+                        ["/lib/lib.d.ts", "/project/other.ts", "/project/root.ts"]
+                    );
+                }
+            }
+            it("when host implements getProjectVersion", () => {
+                verifyProgramUptoDate(/*useProjectVersion*/ true);
+            });
+            it("when host does not implement getProjectVersion", () => {
+                verifyProgramUptoDate(/*useProjectVersion*/ false);
+            });
+        });
     });
 }

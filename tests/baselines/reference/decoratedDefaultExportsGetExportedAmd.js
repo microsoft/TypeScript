@@ -24,7 +24,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var decorator;
-    let Foo = /** @class */ (() => {
+    const Foo = /** @class */ (() => {
         let Foo = class Foo {
         };
         Foo = __decorate([
@@ -45,7 +45,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var decorator;
-    let default_1 = /** @class */ (() => {
+    const default_1 = /** @class */ (() => {
         let default_1 = class {
         };
         default_1 = __decorate([

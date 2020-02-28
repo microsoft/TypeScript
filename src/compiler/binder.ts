@@ -409,7 +409,7 @@ namespace ts {
         }
 
         function getDisplayName(node: Declaration): string {
-            return isNamedDeclaration(node) ? declarationNameToString(node.name) : unescapeLeadingUnderscores(Debug.assertDefined(getDeclarationName(node)));
+            return isNamedDeclaration(node) ? declarationNameToString(node.name) : unescapeLeadingUnderscores(Debug.checkDefined(getDeclarationName(node)));
         }
 
         /**
@@ -952,6 +952,10 @@ namespace ts {
             return initFlowNode({ flags: FlowFlags.LoopLabel, antecedents: undefined });
         }
 
+        function createReduceLabel(target: FlowLabel, antecedents: FlowNode[], antecedent: FlowNode): FlowReduceLabel {
+            return initFlowNode({ flags: FlowFlags.ReduceLabel, target, antecedents, antecedent });
+        }
+
         function setFlowNodeReferenced(flow: FlowNode) {
             // On first reference we set the Referenced flag, thereafter we set the Shared flag
             flow.flags |= flow.flags & FlowFlags.Referenced ? FlowFlags.Shared : FlowFlags.Referenced;
@@ -1209,35 +1213,36 @@ namespace ts {
         }
 
         function bindTryStatement(node: TryStatement): void {
-            const preFinallyLabel = createBranchLabel();
             // We conservatively assume that *any* code in the try block can cause an exception, but we only need
             // to track code that causes mutations (because only mutations widen the possible control flow type of
-            // a variable). The currentExceptionTarget is the target label for control flows that result from
-            // exceptions. We add all mutation flow nodes as antecedents of this label such that we can analyze them
-            // as possible antecedents of the start of catch or finally blocks. Furthermore, we add the current
-            // control flow to represent exceptions that occur before any mutations.
+            // a variable). The exceptionLabel is the target label for control flows that result from exceptions.
+            // We add all mutation flow nodes as antecedents of this label such that we can analyze them as possible
+            // antecedents of the start of catch or finally blocks. Furthermore, we add the current control flow to
+            // represent exceptions that occur before any mutations.
             const saveReturnTarget = currentReturnTarget;
             const saveExceptionTarget = currentExceptionTarget;
-            currentReturnTarget = createBranchLabel();
-            currentExceptionTarget = node.catchClause ? createBranchLabel() : currentReturnTarget;
-            addAntecedent(currentExceptionTarget, currentFlow);
+            const normalExitLabel = createBranchLabel();
+            const returnLabel = createBranchLabel();
+            let exceptionLabel = createBranchLabel();
+            if (node.finallyBlock) {
+                currentReturnTarget = returnLabel;
+            }
+            addAntecedent(exceptionLabel, currentFlow);
+            currentExceptionTarget = exceptionLabel;
             bind(node.tryBlock);
-            addAntecedent(preFinallyLabel, currentFlow);
-            const flowAfterTry = currentFlow;
-            let flowAfterCatch = unreachableFlow;
+            addAntecedent(normalExitLabel, currentFlow);
             if (node.catchClause) {
                 // Start of catch clause is the target of exceptions from try block.
-                currentFlow = finishFlowLabel(currentExceptionTarget);
+                currentFlow = finishFlowLabel(exceptionLabel);
                 // The currentExceptionTarget now represents control flows from exceptions in the catch clause.
                 // Effectively, in a try-catch-finally, if an exception occurs in the try block, the catch block
                 // acts like a second try block.
-                currentExceptionTarget = currentReturnTarget;
-                addAntecedent(currentExceptionTarget, currentFlow);
+                exceptionLabel = createBranchLabel();
+                addAntecedent(exceptionLabel, currentFlow);
+                currentExceptionTarget = exceptionLabel;
                 bind(node.catchClause);
-                addAntecedent(preFinallyLabel, currentFlow);
-                flowAfterCatch = currentFlow;
+                addAntecedent(normalExitLabel, currentFlow);
             }
-            const exceptionTarget = finishFlowLabel(currentExceptionTarget);
             currentReturnTarget = saveReturnTarget;
             currentExceptionTarget = saveExceptionTarget;
             if (node.finallyBlock) {
@@ -1250,35 +1255,33 @@ namespace ts {
                 // When analyzing a control flow graph that starts inside a finally block we want to consider all
                 // five possibilities above. However, when analyzing a control flow graph that starts outside (past)
                 // the finally block, we only want to consider the first two (if we're past a finally block then it
-                // must have completed normally). To make this possible, we inject two extra nodes into the control
-                // flow graph: An after-finally with an antecedent of the control flow at the end of the finally
-                // block, and a pre-finally with an antecedent that represents all exceptional control flows. The
-                // 'lock' property of the pre-finally references the after-finally, and the after-finally has a
-                // boolean 'locked' property that we set to true when analyzing a control flow that contained the
-                // the after-finally node. When the lock associated with a pre-finally is locked, the antecedent of
-                // the pre-finally (i.e. the exceptional control flows) are skipped.
-                const preFinallyFlow: PreFinallyFlow = initFlowNode({ flags: FlowFlags.PreFinally, antecedent: exceptionTarget, lock: {} });
-                addAntecedent(preFinallyLabel, preFinallyFlow);
-                currentFlow = finishFlowLabel(preFinallyLabel);
+                // must have completed normally). Likewise, when analyzing a control flow graph from return statements
+                // in try or catch blocks in an IIFE, we only want to consider the third. To make this possible, we
+                // inject a ReduceLabel node into the control flow graph. This node contains an alternate reduced
+                // set of antecedents for the pre-finally label. As control flow analysis passes by a ReduceLabel
+                // node, the pre-finally label is temporarily switched to the reduced antecedent set.
+                const finallyLabel = createBranchLabel();
+                finallyLabel.antecedents = concatenate(concatenate(normalExitLabel.antecedents, exceptionLabel.antecedents), returnLabel.antecedents);
+                currentFlow = finallyLabel;
                 bind(node.finallyBlock);
-                // If the end of the finally block is reachable, but the end of the try and catch blocks are not,
-                // convert the current flow to unreachable. For example, 'try { return 1; } finally { ... }' should
-                // result in an unreachable current control flow.
-                if (!(currentFlow.flags & FlowFlags.Unreachable)) {
-                    if ((flowAfterTry.flags & FlowFlags.Unreachable) && (flowAfterCatch.flags & FlowFlags.Unreachable)) {
-                        currentFlow = flowAfterTry === reportedUnreachableFlow || flowAfterCatch === reportedUnreachableFlow
-                            ? reportedUnreachableFlow
-                            : unreachableFlow;
-                    }
+                if (currentFlow.flags & FlowFlags.Unreachable) {
+                    // If the end of the finally block is unreachable, the end of the entire try statement is unreachable.
+                    currentFlow = unreachableFlow;
                 }
-                if (!(currentFlow.flags & FlowFlags.Unreachable)) {
-                    const afterFinallyFlow: AfterFinallyFlow = initFlowNode({ flags: FlowFlags.AfterFinally, antecedent: currentFlow });
-                    preFinallyFlow.lock = afterFinallyFlow;
-                    currentFlow = afterFinallyFlow;
+                else {
+                    // If we have an IIFE return target and return statements in the try or catch blocks, add a control
+                    // flow that goes back through the finally block and back through only the return statements.
+                    if (currentReturnTarget && returnLabel.antecedents) {
+                        addAntecedent(currentReturnTarget, createReduceLabel(finallyLabel, returnLabel.antecedents, currentFlow));
+                    }
+                    // If the end of the finally block is reachable, but the end of the try and catch blocks are not,
+                    // convert the current flow to unreachable. For example, 'try { return 1; } finally { ... }' should
+                    // result in an unreachable current control flow.
+                    currentFlow = normalExitLabel.antecedents ? createReduceLabel(finallyLabel, normalExitLabel.antecedents, currentFlow) : unreachableFlow;
                 }
             }
             else {
-                currentFlow = finishFlowLabel(preFinallyLabel);
+                currentFlow = finishFlowLabel(normalExitLabel);
             }
         }
 
@@ -2113,7 +2116,9 @@ namespace ts {
                                 container = (declName.parent.expression as PropertyAccessExpression).name;
                                 break;
                             case AssignmentDeclarationKind.Property:
-                                container = isPropertyAccessExpression(declName.parent.expression) ? declName.parent.expression.name : declName.parent.expression;
+                                container = isExportsOrModuleExportsOrAlias(file, declName.parent.expression) ? file
+                                    : isPropertyAccessExpression(declName.parent.expression) ? declName.parent.expression.name
+                                    : declName.parent.expression;
                                 break;
                             case AssignmentDeclarationKind.None:
                                 return Debug.fail("Shouldn't have detected typedef or enum on non-assignment declaration");

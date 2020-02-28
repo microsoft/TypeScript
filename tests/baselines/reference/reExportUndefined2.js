@@ -12,6 +12,7 @@ use(undefined);
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+exports.undefined = void 0;
 var undefined;
 exports.undefined = undefined;
 //// [b.js]

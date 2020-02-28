@@ -15,7 +15,7 @@ class B {
 }
 
 //// [emitClassDeclarationWithLiteralPropertyNameInES6.js]
-let B = /** @class */ (() => {
+const B = /** @class */ (() => {
     class B {
         constructor() {
             this["hello"] = 10;

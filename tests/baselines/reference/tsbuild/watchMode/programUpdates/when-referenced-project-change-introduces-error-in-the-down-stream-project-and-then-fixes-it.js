@@ -39,6 +39,7 @@ createSomeObject().message;
 //// [/user/username/projects/sample1/Library/library.js]
 "use strict";
 exports.__esModule = true;
+exports.createSomeObject = void 0;
 function createSomeObject() {
     return {
         message: "new Object"
@@ -161,6 +162,7 @@ export function createSomeObject(): SomeObject
 //// [/user/username/projects/sample1/Library/library.js]
 "use strict";
 exports.__esModule = true;
+exports.createSomeObject = void 0;
 function createSomeObject() {
     return {
         message2: "new Object"
@@ -276,6 +278,7 @@ export function createSomeObject(): SomeObject
 //// [/user/username/projects/sample1/Library/library.js]
 "use strict";
 exports.__esModule = true;
+exports.createSomeObject = void 0;
 function createSomeObject() {
     return {
         message: "new Object"

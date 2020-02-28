@@ -91,11 +91,13 @@ interface Array<T> { length: number; [n: number]: T; }
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.c = void 0;
     exports.c = 30;
 });
 define("src/file2", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.d = void 0;
     exports.d = 30;
 });
 

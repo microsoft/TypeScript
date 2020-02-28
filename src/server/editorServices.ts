@@ -691,7 +691,7 @@ namespace ts.server {
 
         /*@internal*/
         setDocument(key: DocumentRegistryBucketKey, path: Path, sourceFile: SourceFile) {
-            const info = Debug.assertDefined(this.getScriptInfoForPath(path));
+            const info = Debug.checkDefined(this.getScriptInfoForPath(path));
             info.cacheSourceFile = { key, sourceFile };
         }
 
@@ -873,9 +873,11 @@ namespace ts.server {
             this.delayEnsureProjectForOpenFiles();
         }
 
-        private delayUpdateProjectGraphs(projects: readonly Project[]) {
+        private delayUpdateProjectGraphs(projects: readonly Project[], clearSourceMapperCache: boolean) {
             if (projects.length) {
                 for (const project of projects) {
+                    // Even if program doesnt change, clear the source mapper cache
+                    if (clearSourceMapperCache) project.clearSourceMapperCache();
                     this.delayUpdateProjectGraph(project);
                 }
                 this.delayEnsureProjectForOpenFiles();
@@ -1033,7 +1035,7 @@ namespace ts.server {
                     // file has been changed which might affect the set of referenced files in projects that include
                     // this file and set of inferred projects
                     info.delayReloadNonMixedContentFile();
-                    this.delayUpdateProjectGraphs(info.containingProjects);
+                    this.delayUpdateProjectGraphs(info.containingProjects, /*clearSourceMapperCache*/ false);
                     this.handleSourceMapProjects(info);
                 }
             }
@@ -1066,7 +1068,7 @@ namespace ts.server {
         private delayUpdateProjectsOfScriptInfoPath(path: Path) {
             const info = this.getScriptInfoForPath(path);
             if (info) {
-                this.delayUpdateProjectGraphs(info.containingProjects);
+                this.delayUpdateProjectGraphs(info.containingProjects, /*clearSourceMapperCache*/ true);
             }
         }
 
@@ -1082,7 +1084,7 @@ namespace ts.server {
                 info.detachAllProjects();
 
                 // update projects to make sure that set of referenced files is correct
-                this.delayUpdateProjectGraphs(containingProjects);
+                this.delayUpdateProjectGraphs(containingProjects, /*clearSourceMapperCache*/ false);
                 this.handleSourceMapProjects(info);
                 info.closeSourceMapFileWatcher();
                 // need to recalculate source map from declaration file
@@ -1110,7 +1112,7 @@ namespace ts.server {
                     // don't trigger callback on open, existing files
                     if (project.fileIsOpen(fileOrDirectoryPath)) {
                         if (project.pendingReload !== ConfigFileProgramReloadLevel.Full) {
-                            const info = Debug.assertDefined(this.getScriptInfoForPath(fileOrDirectoryPath));
+                            const info = Debug.checkDefined(this.getScriptInfoForPath(fileOrDirectoryPath));
                             if (info.isAttached(project)) {
                                 project.openFileWatchTriggered.set(fileOrDirectoryPath, true);
                             }
@@ -1642,7 +1644,7 @@ namespace ts.server {
 
             Debug.assert(!isOpenScriptInfo(info) || this.openFiles.has(info.path));
             const projectRootPath = this.openFiles.get(info.path);
-            const scriptInfo = Debug.assertDefined(this.getScriptInfo(info.path));
+            const scriptInfo = Debug.checkDefined(this.getScriptInfo(info.path));
             if (scriptInfo.isDynamic) return undefined;
 
             let searchPath = asNormalizedPath(getDirectoryPath(info.fileName));
@@ -1996,7 +1998,7 @@ namespace ts.server {
                 else {
                     const scriptKind = propertyReader.getScriptKind(f, this.hostConfiguration.extraFileExtensions);
                     const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
-                    const scriptInfo = Debug.assertDefined(this.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(
+                    const scriptInfo = Debug.checkDefined(this.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(
                         fileName,
                         project.currentDirectory,
                         scriptKind,
@@ -2412,7 +2414,7 @@ namespace ts.server {
                     this.openFilesWithNonRootedDiskPath.set(this.toCanonicalFileName(fileName), info);
                 }
             }
-            if (openedByClient && !info.isScriptOpen()) {
+            if (openedByClient) {
                 // Opening closed script info
                 // either it was created just now, or was part of projects but was closed
                 this.stopWatchingScriptInfo(info);
@@ -2420,9 +2422,6 @@ namespace ts.server {
                 if (hasMixedContent) {
                     info.registerFileUpdate();
                 }
-            }
-            else {
-                Debug.assert(fileContent === undefined);
             }
             return info;
         }
@@ -2537,7 +2536,7 @@ namespace ts.server {
                     const declarationInfo = this.getScriptInfoForPath(declarationInfoPath);
                     if (declarationInfo && declarationInfo.sourceMapFilePath && !isString(declarationInfo.sourceMapFilePath)) {
                         // Update declaration and source projects
-                        this.delayUpdateProjectGraphs(declarationInfo.containingProjects);
+                        this.delayUpdateProjectGraphs(declarationInfo.containingProjects, /*clearSourceMapperCache*/ true);
                         this.delayUpdateSourceInfoProjects(declarationInfo.sourceMapFilePath.sourceInfos);
                         declarationInfo.closeSourceMapFileWatcher();
                     }
@@ -3117,8 +3116,9 @@ namespace ts.server {
                 return;
             }
 
-            const info: OpenFileInfo = { checkJs: !!project.getSourceFile(scriptInfo.path)!.checkJsDirective };
-            this.eventHandler({ eventName: OpenFileInfoTelemetryEvent, data: { info } });
+            const sourceFile = project.getSourceFile(scriptInfo.path);
+            const checkJs = !!sourceFile && !!sourceFile.checkJsDirective;
+            this.eventHandler({ eventName: OpenFileInfoTelemetryEvent, data: { info: { checkJs } } });
         }
 
         /**
@@ -3167,11 +3167,9 @@ namespace ts.server {
                     const iterResult = openFiles.next();
                     if (iterResult.done) break;
                     const file = iterResult.value;
-                    const scriptInfo = this.getScriptInfo(file.fileName);
-                    Debug.assert(!scriptInfo || !scriptInfo.isScriptOpen(), "Script should not exist and not be open already");
                     // Create script infos so we have the new content for all the open files before we do any updates to projects
                     const info = this.getOrCreateOpenScriptInfo(
-                        scriptInfo ? scriptInfo.fileName : toNormalizedPath(file.fileName),
+                        toNormalizedPath(file.fileName),
                         file.content,
                         tryConvertScriptKindName(file.scriptKind!),
                         file.hasMixedContent,

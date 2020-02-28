@@ -553,7 +553,7 @@ namespace ts {
         program: Program | undefined,
         rootFileNames: string[],
         newOptions: CompilerOptions,
-        getSourceVersion: (path: Path) => string | undefined,
+        getSourceVersion: (path: Path, fileName: string) => string | undefined,
         fileExists: (fileName: string) => boolean,
         hasInvalidatedResolution: HasInvalidatedResolution,
         hasChangedAutomaticTypeDirectiveNames: boolean,
@@ -606,7 +606,7 @@ namespace ts {
         }
 
         function sourceFileVersionUptoDate(sourceFile: SourceFile) {
-            return sourceFile.version === getSourceVersion(sourceFile.resolvedPath);
+            return sourceFile.version === getSourceVersion(sourceFile.resolvedPath, sourceFile.fileName);
         }
 
         function projectReferenceUptoDate(oldRef: ProjectReference, newRef: ProjectReference, index: number) {
@@ -754,10 +754,10 @@ namespace ts {
         let _compilerOptionsObjectLiteralSyntax: ObjectLiteralExpression | null | undefined;
 
         let moduleResolutionCache: ModuleResolutionCache | undefined;
-        let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference) => ResolvedModuleFull[];
+        let actualResolveModuleNamesWorker: (moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference) => ResolvedModuleFull[];
         const hasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
         if (host.resolveModuleNames) {
-            resolveModuleNamesWorker = (moduleNames, containingFile, reusedNames, redirectedReference) => host.resolveModuleNames!(Debug.assertEachDefined(moduleNames), containingFile, reusedNames, redirectedReference, options).map(resolved => {
+            actualResolveModuleNamesWorker = (moduleNames, containingFile, reusedNames, redirectedReference) => host.resolveModuleNames!(Debug.checkEachDefined(moduleNames), containingFile, reusedNames, redirectedReference, options).map(resolved => {
                 // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
                 if (!resolved || (resolved as ResolvedModuleFull).extension !== undefined) {
                     return resolved as ResolvedModuleFull;
@@ -770,16 +770,16 @@ namespace ts {
         else {
             moduleResolutionCache = createModuleResolutionCache(currentDirectory, x => host.getCanonicalFileName(x), options);
             const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveModuleName(moduleName, containingFile, options, host, moduleResolutionCache, redirectedReference).resolvedModule!; // TODO: GH#18217
-            resolveModuleNamesWorker = (moduleNames, containingFile, _reusedNames, redirectedReference) => loadWithLocalCache<ResolvedModuleFull>(Debug.assertEachDefined(moduleNames), containingFile, redirectedReference, loader);
+            actualResolveModuleNamesWorker = (moduleNames, containingFile, _reusedNames, redirectedReference) => loadWithLocalCache<ResolvedModuleFull>(Debug.checkEachDefined(moduleNames), containingFile, redirectedReference, loader);
         }
 
-        let resolveTypeReferenceDirectiveNamesWorker: (typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference) => (ResolvedTypeReferenceDirective | undefined)[];
+        let actualResolveTypeReferenceDirectiveNamesWorker: (typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference) => (ResolvedTypeReferenceDirective | undefined)[];
         if (host.resolveTypeReferenceDirectives) {
-            resolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile, redirectedReference) => host.resolveTypeReferenceDirectives!(Debug.assertEachDefined(typeDirectiveNames), containingFile, redirectedReference, options);
+            actualResolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile, redirectedReference) => host.resolveTypeReferenceDirectives!(Debug.checkEachDefined(typeDirectiveNames), containingFile, redirectedReference, options);
         }
         else {
             const loader = (typesRef: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveTypeReferenceDirective(typesRef, containingFile, options, host, redirectedReference).resolvedTypeReferenceDirective!; // TODO: GH#18217
-            resolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile, redirectedReference) => loadWithLocalCache<ResolvedTypeReferenceDirective>(Debug.assertEachDefined(typeReferenceDirectiveNames), containingFile, redirectedReference, loader);
+            actualResolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile, redirectedReference) => loadWithLocalCache<ResolvedTypeReferenceDirective>(Debug.checkEachDefined(typeReferenceDirectiveNames), containingFile, redirectedReference, loader);
         }
 
         // Map from a stringified PackageId to the source file with that id.
@@ -946,6 +946,7 @@ namespace ts {
             getIdentifierCount: () => getDiagnosticsProducingTypeChecker().getIdentifierCount(),
             getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
             getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
+            getInstantiationCount: () => getDiagnosticsProducingTypeChecker().getInstantiationCount(),
             getRelationCacheSizes: () => getDiagnosticsProducingTypeChecker().getRelationCacheSizes(),
             getFileProcessingDiagnostics: () => fileProcessingDiagnostics,
             getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives,
@@ -975,6 +976,22 @@ namespace ts {
         performance.measure("Program", "beforeProgram", "afterProgram");
 
         return program;
+
+        function resolveModuleNamesWorker(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference) {
+            performance.mark("beforeResolveModule");
+            const result = actualResolveModuleNamesWorker(moduleNames, containingFile, reusedNames, redirectedReference);
+            performance.mark("afterResolveModule");
+            performance.measure("ResolveModule", "beforeResolveModule", "afterResolveModule");
+            return result;
+        }
+
+        function resolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference) {
+            performance.mark("beforeResolveTypeReference");
+            const result = actualResolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames, containingFile, redirectedReference);
+            performance.mark("afterResolveTypeReference");
+            performance.measure("ResolveTypeReference", "beforeResolveTypeReference", "afterResolveTypeReference");
+            return result;
+        }
 
         function compareDefaultLibFiles(a: SourceFile, b: SourceFile) {
             return compareValues(getDefaultLibFilePriority(a), getDefaultLibFilePriority(b));
@@ -1779,12 +1796,12 @@ namespace ts {
         function getJSSyntacticDiagnosticsForFile(sourceFile: SourceFile): DiagnosticWithLocation[] {
             return runWithCancellationToken(() => {
                 const diagnostics: DiagnosticWithLocation[] = [];
-                let parent: Node = sourceFile;
-                walk(sourceFile);
+                walk(sourceFile, sourceFile);
+                forEachChildRecursively(sourceFile, walk, walkArray);
 
                 return diagnostics;
 
-                function walk(node: Node) {
+                function walk(node: Node, parent: Node) {
                     // Return directly from the case if the given node doesnt want to visit each child
                     // Otherwise break to visit each child
 
@@ -1794,7 +1811,7 @@ namespace ts {
                         case SyntaxKind.MethodDeclaration:
                             if ((<ParameterDeclaration | PropertyDeclaration | MethodDeclaration>parent).questionToken === node) {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, "?"));
-                                return;
+                                return "skip";
                             }
                         // falls through
                         case SyntaxKind.MethodSignature:
@@ -1808,7 +1825,7 @@ namespace ts {
                             // type annotation
                             if ((<FunctionLikeDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration>parent).type === node) {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics.Type_annotations_can_only_be_used_in_TypeScript_files));
-                                return;
+                                return "skip";
                             }
                     }
 
@@ -1816,65 +1833,60 @@ namespace ts {
                         case SyntaxKind.ImportClause:
                             if ((node as ImportClause).isTypeOnly) {
                                 diagnostics.push(createDiagnosticForNode(node.parent, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, "import type"));
-                                return;
+                                return "skip";
                             }
                             break;
                         case SyntaxKind.ExportDeclaration:
                             if ((node as ExportDeclaration).isTypeOnly) {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, "export type"));
-                                return;
+                                return "skip";
                             }
                             break;
                         case SyntaxKind.ImportEqualsDeclaration:
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_TypeScript_files));
-                            return;
+                            return "skip";
                         case SyntaxKind.ExportAssignment:
                             if ((<ExportAssignment>node).isExportEquals) {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_TypeScript_files));
-                                return;
+                                return "skip";
                             }
                             break;
                         case SyntaxKind.HeritageClause:
                             const heritageClause = <HeritageClause>node;
                             if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics.implements_clauses_can_only_be_used_in_TypeScript_files));
-                                return;
+                                return "skip";
                             }
                             break;
                         case SyntaxKind.InterfaceDeclaration:
                             const interfaceKeyword = tokenToString(SyntaxKind.InterfaceKeyword);
-                            Debug.assertDefined(interfaceKeyword);
+                            Debug.assertIsDefined(interfaceKeyword);
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, interfaceKeyword));
-                            return;
+                            return "skip";
                         case SyntaxKind.ModuleDeclaration:
                             const moduleKeyword = node.flags & NodeFlags.Namespace ? tokenToString(SyntaxKind.NamespaceKeyword) : tokenToString(SyntaxKind.ModuleKeyword);
-                            Debug.assertDefined(moduleKeyword);
+                            Debug.assertIsDefined(moduleKeyword);
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, moduleKeyword));
-                            return;
+                            return "skip";
                         case SyntaxKind.TypeAliasDeclaration:
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.Type_aliases_can_only_be_used_in_TypeScript_files));
-                            return;
+                            return "skip";
                         case SyntaxKind.EnumDeclaration:
-                            const enumKeyword = Debug.assertDefined(tokenToString(SyntaxKind.EnumKeyword));
+                            const enumKeyword = Debug.checkDefined(tokenToString(SyntaxKind.EnumKeyword));
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, enumKeyword));
-                            return;
+                            return "skip";
                         case SyntaxKind.NonNullExpression:
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.Non_null_assertions_can_only_be_used_in_TypeScript_files));
-                            return;
+                            return "skip";
                         case SyntaxKind.AsExpression:
                             diagnostics.push(createDiagnosticForNode((node as AsExpression).type, Diagnostics.Type_assertion_expressions_can_only_be_used_in_TypeScript_files));
-                            return;
+                            return "skip";
                         case SyntaxKind.TypeAssertionExpression:
                             Debug.fail(); // Won't parse these in a JS file anyway, as they are interpreted as JSX.
                     }
-
-                    const prevParent = parent;
-                    parent = node;
-                    forEachChild(node, walk, walkArray);
-                    parent = prevParent;
                 }
 
-                function walkArray(nodes: NodeArray<Node>) {
+                function walkArray(nodes: NodeArray<Node>, parent: Node) {
                     if (parent.decorators === nodes && !options.experimentalDecorators) {
                         diagnostics.push(createDiagnosticForNode(parent, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalDecorators_option_in_your_tsconfig_or_jsconfig_to_remove_this_warning));
                     }
@@ -1892,14 +1904,15 @@ namespace ts {
                             // Check type parameters
                             if (nodes === (<DeclarationWithTypeParameterChildren>parent).typeParameters) {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Type_parameter_declarations_can_only_be_used_in_TypeScript_files));
-                                return;
+                                return "skip";
                             }
                             // falls through
 
                         case SyntaxKind.VariableStatement:
                             // Check modifiers
                             if (nodes === parent.modifiers) {
-                                return checkModifiers(parent.modifiers, parent.kind === SyntaxKind.VariableStatement);
+                                checkModifiers(parent.modifiers, parent.kind === SyntaxKind.VariableStatement);
+                                return "skip";
                             }
                             break;
                         case SyntaxKind.PropertyDeclaration:
@@ -1910,14 +1923,14 @@ namespace ts {
                                         diagnostics.push(createDiagnosticForNode(modifier, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, tokenToString(modifier.kind)));
                                     }
                                 }
-                                return;
+                                return "skip";
                             }
                             break;
                         case SyntaxKind.Parameter:
                             // Check modifiers of parameter declaration
                             if (nodes === (<ParameterDeclaration>parent).modifiers) {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Parameter_modifiers_can_only_be_used_in_TypeScript_files));
-                                return;
+                                return "skip";
                             }
                             break;
                         case SyntaxKind.CallExpression:
@@ -1929,13 +1942,9 @@ namespace ts {
                             // Check type arguments
                             if (nodes === (<NodeWithTypeArguments>parent).typeArguments) {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Type_arguments_can_only_be_used_in_TypeScript_files));
-                                return;
+                                return "skip";
                             }
                             break;
-                    }
-
-                    for (const node of nodes) {
-                        walk(node);
                     }
                 }
 
@@ -2906,7 +2915,7 @@ namespace ts {
                     projectReferenceRedirects.set(sourceFilePath, false);
                     return undefined;
                 }
-                sourceFile = Debug.assertDefined(commandLine.options.configFile);
+                sourceFile = Debug.checkDefined(commandLine.options.configFile);
                 Debug.assert(!sourceFile.path || sourceFile.path === sourceFilePath);
                 addFileToFilesByName(sourceFile, sourceFilePath, /*redirectedPath*/ undefined);
             }
@@ -3207,7 +3216,7 @@ namespace ts {
         }
 
         function createFileDiagnosticAtReference(refPathToReportErrorOn: ts.RefFile, message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
-            const refFile = Debug.assertDefined(getSourceFileByPath(refPathToReportErrorOn.file));
+            const refFile = Debug.checkDefined(getSourceFileByPath(refPathToReportErrorOn.file));
             const { kind, index } = refPathToReportErrorOn;
             let pos: number, end: number;
             switch (kind) {
@@ -3473,8 +3482,8 @@ namespace ts {
         return {
             fileExists: f => directoryStructureHost.fileExists(f),
             readDirectory(root, extensions, excludes, includes, depth) {
-                Debug.assertDefined(directoryStructureHost.readDirectory, "'CompilerHost.readDirectory' must be implemented to correctly process 'projectReferences'");
-                return directoryStructureHost.readDirectory!(root, extensions, excludes, includes, depth);
+                Debug.assertIsDefined(directoryStructureHost.readDirectory, "'CompilerHost.readDirectory' must be implemented to correctly process 'projectReferences'");
+                return directoryStructureHost.readDirectory(root, extensions, excludes, includes, depth);
             },
             readFile: f => directoryStructureHost.readFile(f),
             useCaseSensitiveFileNames: host.useCaseSensitiveFileNames(),

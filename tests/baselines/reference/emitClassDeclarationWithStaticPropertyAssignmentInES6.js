@@ -10,13 +10,13 @@ class D {
 
 
 //// [emitClassDeclarationWithStaticPropertyAssignmentInES6.js]
-let C = /** @class */ (() => {
+const C = /** @class */ (() => {
     class C {
     }
     C.z = "Foo";
     return C;
 })();
-let D = /** @class */ (() => {
+const D = /** @class */ (() => {
     class D {
         constructor() {
             this.x = 20000;

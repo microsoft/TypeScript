@@ -27,6 +27,7 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/a/b/f1.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 exports.x = 5;
 
 
@@ -38,6 +39,7 @@ exports.__esModule = true;
 //// [/a/c/f3.js]
 "use strict";
 exports.__esModule = true;
+exports.y = void 0;
 exports.y = 1;
 
 

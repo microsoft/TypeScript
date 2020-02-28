@@ -21,6 +21,7 @@ export function getBazA(baz: Baz) {
 //// [omitTypeTests01.js]
 "use strict";
 exports.__esModule = true;
+exports.getBazA = exports.getBarA = void 0;
 function getBarA(bar) {
     return bar.a;
 }

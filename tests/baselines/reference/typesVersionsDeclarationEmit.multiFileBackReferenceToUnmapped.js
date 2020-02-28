@@ -34,6 +34,7 @@ export const va2 = fa2();
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.va2 = exports.va = void 0;
 const ext_1 = require("ext");
 const other_1 = require("ext/other");
 exports.va = ext_1.fa();
