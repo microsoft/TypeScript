@@ -4520,6 +4520,9 @@
       <Item ItemId=";Expected_type_of_0_field_in_package_json_to_be_1_got_2_6105" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Expected type of '{0}' field in 'package.json' to be '{1}', got '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ожидаемый тип поля "{0}" в "package.json" должен быть "{1}", получен "{2}".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12671,6 +12674,9 @@
       <Item ItemId=";use_strict_directive_cannot_be_used_with_non_simple_parameter_list_1347" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['use strict' directive cannot be used with non-simple parameter list.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Директиву "use strict" запрещено использовать со списком параметров, которые не являются простыми.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
