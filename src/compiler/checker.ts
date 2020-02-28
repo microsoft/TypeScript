@@ -30393,20 +30393,20 @@ namespace ts {
             }
         }
         function checkJSDocAugmentsTag(node: JSDocAugmentsTag): void {
-            const host = findJSDocHost(getJSDocHost(node));
-            if (!host || !isClassDeclaration(host) && !isClassExpression(host)) {
-                error(host, Diagnostics.JSDoc_0_is_not_attached_to_a_class, idText(node.tagName));
+            const classLike = findJSDocHost(getJSDocHost(node));
+            if (!classLike || !isClassDeclaration(classLike) && !isClassExpression(classLike)) {
+                error(classLike, Diagnostics.JSDoc_0_is_not_attached_to_a_class, idText(node.tagName));
                 return;
             }
 
-            const augmentsTags = getJSDocTags(host).filter(isJSDocAugmentsTag);
+            const augmentsTags = getJSDocTags(classLike).filter(isJSDocAugmentsTag);
             Debug.assert(augmentsTags.length > 0);
             if (augmentsTags.length > 1) {
                 error(augmentsTags[1], Diagnostics.Class_declarations_cannot_have_more_than_one_augments_or_extends_tag);
             }
 
             const name = getIdentifierFromEntityNameExpression(node.class.expression);
-            const extend = getClassExtendsHeritageElement(host);
+            const extend = getClassExtendsHeritageElement(classLike);
             if (extend) {
                 const className = getIdentifierFromEntityNameExpression(extend.expression);
                 if (className && name.escapedText !== className.escapedText) {
