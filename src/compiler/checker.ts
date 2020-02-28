@@ -1936,10 +1936,11 @@ namespace ts {
             if (!isValidTypeOnlyAliasUseSite(useSite)) {
                 const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(symbol);
                 if (typeOnlyDeclaration) {
-                    const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
+                    const isExport = typeOnlyDeclarationIsExport(typeOnlyDeclaration);
+                    const message = isExport
                         ? Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type
                         : Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type;
-                    const relatedMessage = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
+                    const relatedMessage = isExport
                         ? Diagnostics._0_was_exported_here
                         : Diagnostics._0_was_imported_here;
                     const unescapedName = unescapeLeadingUnderscores(name);
@@ -2286,12 +2287,14 @@ namespace ts {
         function checkAndReportErrorForResolvingImportAliasToTypeOnlySymbol(node: ImportEqualsDeclaration, resolved: Symbol | undefined) {
             if (markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false)) {
                 const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(getSymbolOfNode(node))!;
-                const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
+                const isExport = typeOnlyDeclarationIsExport(typeOnlyDeclaration);
+                const message = isExport
                     ? Diagnostics.An_import_alias_cannot_reference_a_declaration_that_was_exported_using_export_type
                     : Diagnostics.An_import_alias_cannot_reference_a_declaration_that_was_imported_using_import_type;
-                const relatedMessage = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
+                const relatedMessage = isExport
                     ? Diagnostics._0_was_exported_here
                     : Diagnostics._0_was_imported_here;
+
                 // Non-null assertion is safe because the optionality comes from ImportClause,
                 // but if an ImportClause was the typeOnlyDeclaration, it had to have a `name`.
                 const name = unescapeLeadingUnderscores(typeOnlyDeclaration.name!.escapedText);
@@ -33598,6 +33601,7 @@ namespace ts {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.CreateBinding);
             }
 
+            checkGrammarExportDeclaration(node);
             if (!node.moduleSpecifier || checkExternalImportOrExportDeclaration(node)) {
                 if (node.exportClause) {
                     // export { x, y }
@@ -33628,6 +33632,14 @@ namespace ts {
                     }
                 }
             }
+        }
+
+        function checkGrammarExportDeclaration(node: ExportDeclaration): boolean {
+            const isTypeOnlyExportStar = node.isTypeOnly && node.exportClause?.kind !== SyntaxKind.NamedExports;
+            if (isTypeOnlyExportStar) {
+                grammarErrorOnNode(node, Diagnostics.Only_named_exports_may_use_export_type);
+            }
+            return !isTypeOnlyExportStar;
         }
 
         function checkGrammarModuleElementContext(node: Statement, errorMessage: DiagnosticMessage): boolean {
