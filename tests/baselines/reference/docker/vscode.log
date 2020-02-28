@@ -12,7 +12,7 @@ info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this comm
 Standard error:
 [XX:XX:XX] 'compile' errored after ?s
 [XX:XX:XX] Error: Found 1 errors
-    at Stream.<anonymous> (/vscode/build/lib/reporter.js:74:29)
+    at Stream.<anonymous> (/vscode/build/lib/reporter.js:75:29)
     at _end (/vscode/node_modules/through/index.js:65:9)
     at Stream.stream.end (/vscode/node_modules/through/index.js:74:5)
     at StreamFilter.onend (/vscode/node_modules/readable-stream/lib/_stream_readable.js:570:10)
