@@ -23,6 +23,7 @@ exports.default = Foo;
 //// [usage.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
 var cls_1 = require("./cls");
 exports.x = new cls_1.default();
 var cls_2 = require("./cls");

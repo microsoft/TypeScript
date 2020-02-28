@@ -24,6 +24,7 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/a.js]
 "use strict";
 exports.__esModule = true;
+exports.C = void 0;
 var C = /** @class */ (function () {
     function C() {
     }

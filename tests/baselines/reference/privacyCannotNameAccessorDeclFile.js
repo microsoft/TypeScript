@@ -139,6 +139,7 @@ class privateClassWithPrivateModuleGetAccessorTypes {
 //// [privacyCannotNameAccessorDeclFile_Widgets.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SpecializedWidget = exports.createWidget1 = exports.Widget1 = void 0;
 var Widget1 = /** @class */ (function () {
     function Widget1() {
         this.name = 'one';
@@ -167,6 +168,7 @@ var SpecializedWidget;
 //// [privacyCannotNameAccessorDeclFile_exporter.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createExportedWidget4 = exports.createExportedWidget3 = exports.createExportedWidget2 = exports.createExportedWidget1 = void 0;
 ///<reference path='privacyCannotNameAccessorDeclFile_GlobalWidgets.ts'/>
 var Widgets = require("./privacyCannotNameAccessorDeclFile_Widgets");
 var Widgets1 = require("GlobalWidgets");
@@ -189,6 +191,7 @@ exports.createExportedWidget4 = createExportedWidget4;
 //// [privacyCannotNameAccessorDeclFile_consumer.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.publicClassWithPrivateModuleGetAccessorTypes = exports.publicClassWithWithPrivateGetAccessorTypes = void 0;
 var exporter = require("./privacyCannotNameAccessorDeclFile_exporter");
 var publicClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
     function publicClassWithWithPrivateGetAccessorTypes() {

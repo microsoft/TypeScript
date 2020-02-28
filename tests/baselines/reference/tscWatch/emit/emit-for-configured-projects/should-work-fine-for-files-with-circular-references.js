@@ -26,6 +26,7 @@ export var t2 = 10;
 //// [/a/b/file2.js]
 "use strict";
 exports.__esModule = true;
+exports.t2 = void 0;
 /// <reference path="./file1.ts" />
 exports.t2 = 10;
 
@@ -33,6 +34,7 @@ exports.t2 = 10;
 //// [/a/b/file1.js]
 "use strict";
 exports.__esModule = true;
+exports.t1 = void 0;
 /// <reference path="./file2.ts" />
 exports.t1 = 10;
 
@@ -89,6 +91,7 @@ export var t1 = 10;export var t3 = 10;
 //// [/a/b/file1.js]
 "use strict";
 exports.__esModule = true;
+exports.t3 = exports.t1 = void 0;
 /// <reference path="./file2.ts" />
 exports.t1 = 10;
 exports.t3 = 10;

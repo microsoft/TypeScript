@@ -14,6 +14,7 @@ export var x = 5;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.x = void 0;
     var Foo = /** @class */ (function () {
         function Foo() {
         }

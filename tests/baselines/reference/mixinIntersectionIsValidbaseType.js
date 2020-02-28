@@ -43,6 +43,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.Serializable = void 0;
 /**
  * Plain mixin where the superclass must be Initable
  */

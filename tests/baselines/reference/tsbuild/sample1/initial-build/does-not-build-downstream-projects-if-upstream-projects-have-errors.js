@@ -31,6 +31,7 @@ export declare const World = "hello";
 //// [/src/core/anotherModule.js]
 "use strict";
 exports.__esModule = true;
+exports.World = void 0;
 exports.World = "hello";
 
 
@@ -46,6 +47,7 @@ export declare function multiply(a: number, b: number): number;
 //// [/src/core/index.js]
 "use strict";
 exports.__esModule = true;
+exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
 exports.leftPad = leftPad;

@@ -18,3 +18,4 @@ export {NS2 as NNNS2};
 //// [file2.js]
 "use strict";
 exports.__esModule = true;
+exports.NNNS2 = exports.NNNS1 = exports.NNS2 = exports.NS2 = exports.NNS1 = exports.NS1 = void 0;

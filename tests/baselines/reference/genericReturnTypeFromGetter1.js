@@ -12,6 +12,7 @@ export class DbSet<T> {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.DbSet = void 0;
     var DbSet = /** @class */ (function () {
         function DbSet() {
         }

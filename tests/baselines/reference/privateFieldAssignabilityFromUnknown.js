@@ -10,6 +10,7 @@ const task: Class = {} as unknown;
 "use strict";
 var _field;
 exports.__esModule = true;
+exports.Class = void 0;
 var Class = /** @class */ (function () {
     function Class() {
         _field.set(this, void 0);

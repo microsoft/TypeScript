@@ -28,6 +28,7 @@ class C {
 //// [external.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.B = exports.A = void 0;
 var tslib_1 = require("tslib");
 var A = /** @class */ (function () {
     function A() {

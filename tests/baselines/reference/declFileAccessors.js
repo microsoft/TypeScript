@@ -103,6 +103,7 @@ class c2 {
 //// [declFileAccessors_0.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.c1 = void 0;
 /** This is comment for c1*/
 var c1 = /** @class */ (function () {
     function c1() {

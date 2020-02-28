@@ -37,6 +37,7 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/user/username/projects/myproject/c.js]
 "use strict";
 exports.__esModule = true;
+exports.C = void 0;
 var C = /** @class */ (function () {
     function C() {
         this.d = 1;
@@ -55,6 +56,7 @@ export declare class C {
 //// [/user/username/projects/myproject/b.js]
 "use strict";
 exports.__esModule = true;
+exports.B = void 0;
 var c_1 = require("./c");
 var B = /** @class */ (function () {
     function B() {
@@ -141,6 +143,7 @@ export class C
 //// [/user/username/projects/myproject/c.js]
 "use strict";
 exports.__esModule = true;
+exports.C = void 0;
 var C = /** @class */ (function () {
     function C() {
         this.d2 = 1;
