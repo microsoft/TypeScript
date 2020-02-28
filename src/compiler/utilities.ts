@@ -6220,6 +6220,10 @@ namespace ts {
             || !isExpressionNode(useSite);
     }
 
+    export function typeOnlyDeclarationIsExport(typeOnlyDeclaration: Node) {
+        return typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier;
+    }
+
     function isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node: Node) {
         while (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression) {
             node = node.parent;
