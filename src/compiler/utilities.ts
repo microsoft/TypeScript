@@ -2452,17 +2452,18 @@ namespace ts {
     }
 
     export function getHostSignatureFromJSDoc(node: Node): SignatureDeclaration | undefined {
-        return getHostSignatureFromJSDocHost(getJSDocHost(node));
+        const host = findJSDocHost(getJSDocHost(node));
+        return host && isFunctionLike(host) ? host : undefined;
     }
 
-    export function getHostSignatureFromJSDocHost(host: HasJSDoc): SignatureDeclaration | undefined {
+    export function findJSDocHost(host: HasJSDoc): Node | undefined {
         const decl = getSourceOfDefaultedAssignment(host) ||
             getSourceOfAssignment(host) ||
             getSingleInitializerOfVariableStatementOrPropertyDeclaration(host) ||
             getSingleVariableOfVariableStatement(host) ||
             getNestedModuleDeclaration(host) ||
             host;
-        return decl && isFunctionLike(decl) ? decl : undefined;
+        return decl;
     }
 
     export function getJSDocHost(node: Node): HasJSDoc {
