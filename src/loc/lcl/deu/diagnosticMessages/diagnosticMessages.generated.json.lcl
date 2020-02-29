@@ -7032,11 +7032,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Option_0_can_only_be_specified_in_tsconfig_json_file_6064" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_null_on_command_line_6230" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Option '{0}' can only be specified in 'tsconfig.json' file.]]></Val>
+          <Val><![CDATA[Option '{0}' can only be specified in 'tsconfig.json' file or set to 'false' or 'null' on command line.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Die Option "{0}" kann nur in der Datei "tsconfig.json" angegeben werden.]]></Val>
+            <Val><![CDATA[Die Option "{0}" kann nur in der Datei "tsconfig.json" angegeben oder in der Befehlszeile auf FALSE oder NULL festgelegt werden.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line_6064" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Option '{0}' can only be specified in 'tsconfig.json' file or set to 'null' on command line.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die Option "{0}" kann nur in der Datei "tsconfig.json" angegeben oder in der Befehlszeile auf NULL festgelegt werden.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9525,6 +9534,9 @@
       <Item ItemId=";Tag_0_expects_at_least_1_arguments_but_the_JSX_factory_2_provides_at_most_3_6229" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Das Tag "{0}" erwartet mindestens {1} Argumente, von der JSX-Factory "{2}" werden aber höchstens {3} bereitgestellt.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
