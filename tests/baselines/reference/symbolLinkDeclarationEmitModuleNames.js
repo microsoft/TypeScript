@@ -53,6 +53,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
 }
 exports.__esModule = true;
+__exportStar(require("./src/value-promise"), exports);
 __exportStar(require("./src/bindingkey"), exports);
 //// [application.js]
 "use strict";
