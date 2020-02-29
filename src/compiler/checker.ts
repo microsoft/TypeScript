@@ -18903,10 +18903,6 @@ namespace ts {
             return false;
         }
 
-        function isSyntheticThisPropertyAccess(expr: Node) {
-            return isAccessExpression(expr) && expr.expression.kind === SyntaxKind.ThisKeyword && !!(expr.expression.flags & NodeFlags.Synthesized);
-        }
-
         function findDiscriminantProperties(sourceProperties: Symbol[], target: Type): Symbol[] | undefined {
             let result: Symbol[] | undefined;
             for (const sourceProperty of sourceProperties) {
@@ -19634,7 +19630,7 @@ namespace ts {
             // on empty arrays are possible without implicit any errors and new element types can be inferred without
             // type mismatch errors.
             const resultType = getObjectFlags(evolvedType) & ObjectFlags.EvolvingArray && isEvolvingArrayOperationTarget(reference) ? autoArrayType : finalizeEvolvingArrayType(evolvedType);
-            if (resultType === unreachableNeverType|| reference.parent && reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
+            if (resultType === unreachableNeverType || reference.parent && reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
                 return declaredType;
             }
             return resultType;
@@ -20241,11 +20237,6 @@ namespace ts {
                     if (strictNullChecks && optionalChainContainsReference(target, reference) && assumeTrue === (literal.text !== "undefined")) {
                         return getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
                     }
-                    // For a reference of the form 'x.y', a 'typeof x === ...' type guard resets the
-                    // narrowed type of 'y' to its declared type.
-                    if (containsMatchingReference(reference, target)) {
-                        return declaredType;
-                    }
                     return type;
                 }
                 if (type.flags & TypeFlags.Any && literal.text === "function") {
@@ -20427,16 +20418,6 @@ namespace ts {
                     if (assumeTrue && strictNullChecks && optionalChainContainsReference(left, reference)) {
                         return getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
                     }
-                    // For a reference of the form 'x.y', an 'x instanceof T' type guard resets the
-                    // narrowed type of 'y' to its declared type. We do this because preceding 'x.y'
-                    // references might reference a different 'y' property. However, we make an exception
-                    // for property accesses where x is a synthetic 'this' expression, indicating that we
-                    // were called from isPropertyInitializedInConstructor. Without this exception,
-                    // initializations of 'this' properties that occur before a 'this instanceof XXX'
-                    // check would not be considered.
-                    if (containsMatchingReference(reference, left) && !isSyntheticThisPropertyAccess(reference)) {
-                        return declaredType;
-                    }
                     return type;
                 }
 
@@ -20516,9 +20497,6 @@ namespace ts {
                         if (strictNullChecks && assumeTrue && optionalChainContainsReference(predicateArgument, reference) &&
                             !(getTypeFacts(predicate.type) & TypeFacts.EQUndefined)) {
                             return getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
-                        }
-                        if (containsMatchingReference(reference, predicateArgument)) {
-                            return declaredType;
                         }
                     }
                 }
