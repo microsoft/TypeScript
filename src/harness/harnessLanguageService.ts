@@ -606,6 +606,12 @@ namespace Harness.LanguageService {
         toggleMultilineComment(fileName: string, textRange: ts.TextRange): ts.TextChange[] {
             return unwrapJSONCallResult(this.shim.toggleMultilineComment(fileName, textRange));
         }
+        commentSelection(fileName: string, textRange: ts.TextRange): ts.TextChange[] {
+            return unwrapJSONCallResult(this.shim.commentSelection(fileName, textRange));
+        }
+        uncommentSelection(fileName: string, textRange: ts.TextRange): ts.TextChange[] {
+            return unwrapJSONCallResult(this.shim.uncommentSelection(fileName, textRange));
+        }
         dispose(): void { this.shim.dispose({}); }
     }
 

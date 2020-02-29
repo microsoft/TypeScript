@@ -273,7 +273,9 @@ namespace ts.server {
                 CommandNames.ProvideCallHierarchyIncomingCalls,
                 CommandNames.ProvideCallHierarchyOutgoingCalls,
                 CommandNames.ToggleLineComment,
-                CommandNames.ToggleMultilineComment
+                CommandNames.ToggleMultilineComment,
+                CommandNames.CommentSelection,
+                CommandNames.UncommentSelection,
             ];
 
             it("should not throw when commands are executed with invalid arguments", () => {

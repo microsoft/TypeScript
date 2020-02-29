@@ -488,6 +488,8 @@ namespace ts {
 
         toggleLineComment(fileName: string, textRanges: TextRange): TextChange[];
         toggleMultilineComment(fileName: string, textRanges: TextRange): TextChange[];
+        commentSelection(fileName: string, textRanges: TextRange): TextChange[];
+        uncommentSelection(fileName: string, textRanges: TextRange): TextChange[];
 
         dispose(): void;
     }

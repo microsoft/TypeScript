@@ -218,6 +218,14 @@ namespace FourSlashInterface {
         public toggleMultilineComment(newFileContent: string) {
             this.state.toggleMultilineComment(newFileContent);
         }
+
+        public commentSelection(newFileContent: string) {
+            this.state.commentSelection(newFileContent);
+        }
+
+        public uncommentSelection(newFileContent: string) {
+            this.state.uncommentSelection(newFileContent);
+        }
     }
 
     export class Verify extends VerifyNegatable {

@@ -280,6 +280,8 @@ namespace ts {
 
         toggleLineComment(fileName: string, textChange: ts.TextRange): string;
         toggleMultilineComment(fileName: string, textChange: ts.TextRange): string;
+        commentSelection(fileName: string, textChange: ts.TextRange): string;
+        uncommentSelection(fileName: string, textChange: ts.TextRange): string;
     }
 
     export interface ClassifierShim extends Shim {
@@ -1081,6 +1083,20 @@ namespace ts {
             return this.forwardJSONCall(
                 `toggleMultilineComment('${fileName}', '${JSON.stringify(textRange)}')`,
                 () => this.languageService.toggleMultilineComment(fileName, textRange)
+            );
+        }
+
+        public commentSelection(fileName: string, textRange: ts.TextRange): string {
+            return this.forwardJSONCall(
+                `commentSelection('${fileName}', '${JSON.stringify(textRange)}')`,
+                () => this.languageService.commentSelection(fileName, textRange)
+            );
+        }
+
+        public uncommentSelection(fileName: string, textRange: ts.TextRange): string {
+            return this.forwardJSONCall(
+                `uncommentSelection('${fileName}', '${JSON.stringify(textRange)}')`,
+                () => this.languageService.uncommentSelection(fileName, textRange)
             );
         }
     }

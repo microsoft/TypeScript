@@ -3679,6 +3679,28 @@ namespace FourSlash {
 
             this.verifyCurrentFileContent(newFileContent);
         }
+
+        public commentSelection(newFileContent: string): void {
+            let changes: ts.TextChange[] = [];
+            for (let range of this.getRanges()) {
+                changes.push.apply(changes, this.languageService.commentSelection(this.activeFile.fileName, range));
+            }
+
+            this.applyEdits(this.activeFile.fileName, changes);
+
+            this.verifyCurrentFileContent(newFileContent);
+        }
+
+        public uncommentSelection(newFileContent: string): void {
+            let changes: ts.TextChange[] = [];
+            for (let range of this.getRanges()) {
+                changes.push.apply(changes, this.languageService.uncommentSelection(this.activeFile.fileName, range));
+            }
+
+            this.applyEdits(this.activeFile.fileName, changes);
+
+            this.verifyCurrentFileContent(newFileContent);
+        }
     }
 
     function prefixMessage(message: string | undefined) {

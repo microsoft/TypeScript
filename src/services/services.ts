@@ -1985,12 +1985,12 @@ namespace ts {
             }
         }
 
-        function toggleLineComment(fileName: string, textRange: TextRange): TextChange[] {
+        function toggleLineComment(fileName: string, textRange: TextRange, insertComment?: boolean): TextChange[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             const textChanges: TextChange[] = [];
             const { lineStarts, firstLine, lastLine } = getLinesForRange(sourceFile, textRange);
 
-            let isCommenting = false;
+            let isCommenting = insertComment || false;
             let leftMostPosition = Number.MAX_VALUE;
             let lineTextStarts = new Map<number>();
             const whiteSpaceRegex = new RegExp(/\S/);
@@ -2008,7 +2008,7 @@ namespace ts {
                     lineTextStarts.set(i.toString(), regExec.index);
 
                     if (lineText.substr(regExec.index, openComment.length) !== openComment) {
-                        isCommenting = true;
+                        isCommenting = insertComment !== undefined ? insertComment : true;
                     }
                 }
             }
@@ -2029,7 +2029,7 @@ namespace ts {
                                 start: lineStarts[i] + leftMostPosition
                             }
                         });
-                    } else {
+                    } else if (sourceFile.text.substr(lineStarts[i] + lineTextStart, openComment.length) === openComment) {
                         textChanges.push({
                             newText: "",
                             span: {
@@ -2049,7 +2049,7 @@ namespace ts {
             const textChanges: TextChange[] = [];
             const { text } = sourceFile;
 
-            let isCommenting = insertComment !== undefined ? insertComment : false;
+            let isCommenting = insertComment || false;
             const positions = [] as number[] as SortedArray<number>;
 
             let pos = textRange.pos;
@@ -2083,7 +2083,9 @@ namespace ts {
                 } else { // If it's not in a comment range, then we need to comment the uncommented portions.
                     let newPos = text.substring(pos, textRange.end).search(`(${openMultilineRegex})|(${closeMultilineRegex})`);
 
-                    isCommenting = isCommenting || !isTextWhiteSpaceLike(text, pos, newPos === -1 ? textRange.end : pos + newPos);
+                    isCommenting = insertComment !== undefined
+                        ? insertComment
+                        : isCommenting || !isTextWhiteSpaceLike(text, pos, newPos === -1 ? textRange.end : pos + newPos); // If isCommenting is already true we don't need to check whitespace again.
                     pos = newPos === -1 ? textRange.end + 1 : pos + newPos + closeMultiline.length;
                 }
             }
@@ -2151,6 +2153,31 @@ namespace ts {
                             start: positions[i] - offset
                         }
                     });
+                }
+            }
+
+            return textChanges;
+        }
+
+        function commentSelection(fileName: string, textRange: TextRange): TextChange[] {
+            return toggleLineComment(fileName, textRange, true);
+        }
+        function uncommentSelection(fileName: string, textRange: TextRange): TextChange[] {
+            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            const textChanges: TextChange[] = [];
+
+            for (let i = textRange.pos; i <= textRange.end; i++) {
+                let commentRange = isInComment(sourceFile, i);
+                if (commentRange) {
+                    switch (commentRange.kind) {
+                        case SyntaxKind.SingleLineCommentTrivia:
+                            textChanges.push.apply(textChanges, toggleLineComment(fileName, { end: commentRange.end, pos: commentRange.pos + 1 }, false));
+                            break;
+                        case SyntaxKind.MultiLineCommentTrivia:
+                            textChanges.push.apply(textChanges, toggleMultilineComment(fileName, { end: commentRange.end, pos: commentRange.pos + 1 }, false));
+                    }
+
+                    i = commentRange.end + 1;
                 }
             }
 
@@ -2437,7 +2464,9 @@ namespace ts {
             provideCallHierarchyIncomingCalls,
             provideCallHierarchyOutgoingCalls,
             toggleLineComment,
-            toggleMultilineComment
+            toggleMultilineComment,
+            commentSelection,
+            uncommentSelection,
         };
     }
 

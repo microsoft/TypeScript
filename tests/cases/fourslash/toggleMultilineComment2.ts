@@ -1,4 +1,4 @@
-// If selection is outside of a block comment then insert comment
+// If selection is outside of a multiline comment then insert comment
 // instead of removing.
 
 //// let var1/* = 1;

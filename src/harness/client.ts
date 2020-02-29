@@ -820,6 +820,14 @@ namespace ts.server {
             throw new Error("Method not implemented.");
         }
 
+        commentSelection(): ts.TextChange[] {
+            throw new Error("Method not implemented.");
+        }
+
+        uncommentSelection(): ts.TextChange[] {
+            throw new Error("Method not implemented.");
+        }
+
         dispose(): void {
             throw new Error("dispose is not available through the server layer.");
         }

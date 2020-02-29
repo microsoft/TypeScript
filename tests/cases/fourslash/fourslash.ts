@@ -399,6 +399,8 @@ declare namespace FourSlashInterface {
 
         toggleLineComment(newFileContent: string): void;
         toggleMultilineComment(newFileContent: string): void;
+        commentSelection(newFileContent: string): void;
+        uncommentSelection(newFileContent: string): void;
     }
     class edit {
         backspace(count?: number): void;

@@ -5315,8 +5315,10 @@ declare namespace ts {
         getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
         getProgram(): Program | undefined;
-        toggleLineComment(fileName: string, textRanges: TextRange[]): TextChange[];
-        toggleMultilineComment(fileName: string, textRanges: TextRange[]): TextChange[];
+        toggleLineComment(fileName: string, textRanges: TextRange): TextChange[];
+        toggleMultilineComment(fileName: string, textRanges: TextRange): TextChange[];
+        commentSelection(fileName: string, textRanges: TextRange): TextChange[];
+        uncommentSelection(fileName: string, textRanges: TextRange): TextChange[];
         dispose(): void;
     }
     interface JsxClosingTagInfo {
