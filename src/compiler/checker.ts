@@ -21096,8 +21096,10 @@ namespace ts {
                 if (isInJS && className) {
                     const classSymbol = checkExpression(className).symbol;
                     if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
-                        const classType = (getDeclaredTypeOfSymbol(classSymbol) as InterfaceType).thisType!;
-                        return getFlowTypeOfReference(node, classType);
+                        const classType = (getDeclaredTypeOfSymbol(classSymbol) as InterfaceType).thisType;
+                        if (classType) {
+                            return getFlowTypeOfReference(node, classType);
+                        }
                     }
                 }
                 // Check if it's a constructor definition, can be either a variable decl or function decl
