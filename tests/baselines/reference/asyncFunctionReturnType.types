@@ -133,7 +133,7 @@ async function fGenericIndexedTypeForExplicitPromiseOfStringProp<TObj extends Ob
 >obj : TObj
 
     return Promise.resolve<TObj["stringProp"]>(obj.stringProp);
->Promise.resolve<TObj["stringProp"]>(obj.stringProp) : Promise<awaited TObj["stringProp"]>
+>Promise.resolve<TObj["stringProp"]>(obj.stringProp) : Promise<TObj["stringProp"]>
 >Promise.resolve : { <T>(value: T): Promise<awaited T>; (): Promise<void>; }
 >Promise : PromiseConstructor
 >resolve : { <T>(value: T): Promise<awaited T>; (): Promise<void>; }
@@ -180,8 +180,8 @@ async function fGenericIndexedTypeForExplicitPromiseOfAnyProp<TObj extends Obj>(
 >anyProp : any
 }
 
-async function fGenericIndexedTypeForKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<awaited TObj[K]> {
->fGenericIndexedTypeForKProp : <TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K) => Promise<awaited TObj[K]>
+async function fGenericIndexedTypeForKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K]> {
+>fGenericIndexedTypeForKProp : <TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K) => Promise<TObj[K]>
 >obj : TObj
 >key : K
 
@@ -191,8 +191,8 @@ async function fGenericIndexedTypeForKProp<TObj extends Obj, K extends keyof TOb
 >key : K
 }
 
-async function fGenericIndexedTypeForPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<awaited TObj[K]> {
->fGenericIndexedTypeForPromiseOfKProp : <TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K) => Promise<awaited TObj[K]>
+async function fGenericIndexedTypeForPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K]> {
+>fGenericIndexedTypeForPromiseOfKProp : <TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K) => Promise<TObj[K]>
 >obj : TObj
 >key : K
 
@@ -206,8 +206,8 @@ async function fGenericIndexedTypeForPromiseOfKProp<TObj extends Obj, K extends 
 >key : K
 }
 
-async function fGenericIndexedTypeForExplicitPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<awaited TObj[K]> {
->fGenericIndexedTypeForExplicitPromiseOfKProp : <TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K) => Promise<awaited TObj[K]>
+async function fGenericIndexedTypeForExplicitPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K]> {
+>fGenericIndexedTypeForExplicitPromiseOfKProp : <TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K) => Promise<TObj[K]>
 >obj : TObj
 >key : K
 

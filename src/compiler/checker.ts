@@ -29958,6 +29958,33 @@ namespace ts {
         }
 
         /**
+         * Determines whether a type has a callable `then` member.
+         */
+        function isThenableType(type: Type): boolean {
+            const thenFunction = getTypeOfPropertyOfType(type, "then" as __String);
+            return !!thenFunction && getSignaturesOfType(getTypeWithFacts(thenFunction, TypeFacts.NEUndefinedOrNull), SignatureKind.Call).length > 0;
+        }
+
+        /**
+         * Determines whether a type is a generic type whose base constraint could possibly resolve to a different
+         * type when awaited. A type is a generic "thenable" type when the type is a generic object type and
+         * any of the following conditions are met
+         * - The type has no base constraint.
+         * - OR The base constraint of the type is `any` or `unknown` or the empty object `{}`.
+         * - OR The base constraint has a callable `then` member.
+         */
+        function isGenericAwaitableType(type: Type): boolean {
+            if (isGenericObjectType(type)) {
+                const baseConstraint = getBaseConstraintOfType(type);
+                return !baseConstraint ||
+                    !!(baseConstraint.flags & (TypeFlags.AnyOrUnknown)) ||
+                    baseConstraint === emptyObjectType ||
+                    isThenableType(baseConstraint);
+            }
+            return false;
+        }
+
+        /**
          * Gets the "awaited type" of a type.
          *
          * The "awaited type" of an expression is its "promised type" if the expression is a
@@ -29969,13 +29996,23 @@ namespace ts {
          * type.
          */
         function getAwaitedType(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, arg0?: string | number): Type | undefined {
+            if (isTypeAny(type)) {
+                return type;
+            }
+
+            // If the type is already an awaited type, return it.
+            //
+            // For example:
+            //
+            //   awaited T -> awaited T
+            //
+            if (type.flags & TypeFlags.Awaited) {
+                return type;
+            }
+
             const typeAsAwaitable = <PromiseOrAwaitableType>type;
             if (typeAsAwaitable.awaitedTypeOfType) {
                 return typeAsAwaitable.awaitedTypeOfType;
-            }
-
-            if (isTypeAny(type)) {
-                return type;
             }
 
             // For a union, get a union of the awaited types of each constituent.
@@ -30011,13 +30048,11 @@ namespace ts {
             //
             //   T -> awaited T
             //
-            if (isGenericObjectType(type)) {
+            if (isGenericAwaitableType(type)) {
                 return getAwaitedTypeForGenericType(<TypeVariable>type);
             }
 
             const typeAsAwaitable = <PromiseOrAwaitableType>type;
-
-            // Use the cached type if already computed.
             if (typeAsAwaitable.awaitedTypeOfType) {
                 return typeAsAwaitable.awaitedTypeOfType;
             }
@@ -30038,6 +30073,7 @@ namespace ts {
                     //          onfulfilled: (value: BadPromise) => any,
                     //          onrejected: (error: any) => any): BadPromise;
                     //  }
+                    //
                     // The above interface will pass the PromiseLike check, and return a
                     // promised type of `BadPromise`. Since this is a self reference, we
                     // don't want to keep recursing ad infinitum.
@@ -30078,8 +30114,8 @@ namespace ts {
 
             // The type was not a promise, so it could not be unwrapped any further.
             // As long as the type does not have a callable "then" property, it is
-            // safe to return the type; otherwise, an error will be reported in
-            // the call to getNonThenableType and we will return undefined.
+            // safe to return the type; otherwise, an error is reported and we return
+            // undefined.
             //
             // An example of a non-promise "thenable" might be:
             //
@@ -30091,8 +30127,7 @@ namespace ts {
             // of a runtime problem. If the user wants to return this value from an async
             // function, they would need to wrap it in some other value. If they want it to
             // be treated as a promise, they can cast to <any>.
-            const thenFunction = getTypeOfPropertyOfType(type, "then" as __String);
-            if (thenFunction && getSignaturesOfType(thenFunction, SignatureKind.Call).length > 0) {
+            if (isThenableType(type)) {
                 if (errorNode) {
                     if (!diagnosticMessage) return Debug.fail();
                     error(errorNode, diagnosticMessage, arg0);
@@ -32253,7 +32288,7 @@ namespace ts {
             const isGenerator = !!(functionFlags & FunctionFlags.Generator);
             const isAsync = !!(functionFlags & FunctionFlags.Async);
             return isGenerator ? getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, isAsync) || errorType :
-                isAsync ? getPromisedTypeOfPromise(returnType) || errorType :
+                isAsync ? getAwaitedType(returnType) || errorType :
                 returnType;
         }
 
