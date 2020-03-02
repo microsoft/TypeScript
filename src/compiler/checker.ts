@@ -2679,6 +2679,15 @@ namespace ts {
             return links.target;
         }
 
+        function tryResolveAlias(symbol: Symbol): Symbol | undefined {
+            const links = getSymbolLinks(symbol);
+            if (links.target !== resolvingSymbol) {
+                return resolveAlias(symbol);
+            }
+
+            return undefined;
+        }
+
         /**
          * Marks a symbol as type-only if its declaration is syntactically type-only.
          * If it is not itself marked type-only, but resolves to a type-only alias
@@ -23922,12 +23931,26 @@ namespace ts {
             return getSpellingSuggestion(name, symbols, getCandidateName);
             function getCandidateName(candidate: Symbol) {
                 const candidateName = symbolName(candidate);
-                return !startsWith(candidateName, "\"") && candidate.flags & meaning ? candidateName : undefined;
+                if (startsWith(candidateName, "\"")) {
+                    return undefined;
+                }
+
+                if (candidate.flags & meaning) {
+                    return candidateName;
+                }
+
+                if (candidate.flags & SymbolFlags.Alias) {
+                    const alias = tryResolveAlias(candidate);
+                    if (alias && alias.flags & meaning) {
+                        return candidateName;
+                    }
+                }
+
+                return undefined;
             }
         }
 
         function markPropertyAsReferenced(prop: Symbol, nodeForCheckWriteOnly: Node | undefined, isThisAccess: boolean) {
-
             const valueDeclaration = prop && (prop.flags & SymbolFlags.ClassMember) && prop.valueDeclaration;
             if (!valueDeclaration) {
                 return;
