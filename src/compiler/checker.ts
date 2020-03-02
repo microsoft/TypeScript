@@ -6138,7 +6138,7 @@ namespace ts {
                         const varName = getUnusedName(name, symbol);
                         // We have to use `getWidenedType` here since the object within a json file is unwidened within the file
                         // (Unwidened types can only exist in expression contexts and should never be serialized)
-                        const typeToSerialize = getWidenedType(getTypeOfSymbol(symbol));
+                        const typeToSerialize = getWidenedType(getTypeOfSymbol(getMergedSymbol(symbol)));
                         if (isTypeRepresentableAsFunctionNamespaceMerge(typeToSerialize, symbol)) {
                             // If there are no index signatures and `typeToSerialize` is an object type, emit as a namespace instead of a const
                             serializeAsFunctionNamespaceMerge(typeToSerialize, symbol, varName, isExportAssignment ? ModifierFlags.None : ModifierFlags.Export);

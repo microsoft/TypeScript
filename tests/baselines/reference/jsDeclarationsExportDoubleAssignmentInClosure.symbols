@@ -1,0 +1,22 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+// @ts-nocheck
+function foo() {
+>foo : Symbol(foo, Decl(index.js, 0, 0))
+
+    module.exports = exports = function (o) {
+>module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))
+>module : Symbol(export=, Decl(index.js, 1, 16))
+>exports : Symbol(export=, Decl(index.js, 1, 16))
+>exports : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))
+>o : Symbol(o, Decl(index.js, 2, 41))
+
+        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
+>o : Symbol(o, Decl(index.js, 2, 41))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>o : Symbol(o, Decl(index.js, 2, 41))
+
+    };
+    exports.methods = methods;
+>exports : Symbol(methods, Decl(index.js, 4, 6))
+>methods : Symbol(methods, Decl(index.js, 4, 6))
+}
