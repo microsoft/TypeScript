@@ -31,9 +31,11 @@ export let y: number;
 //// [module2.js]
 "use strict";
 exports.__esModule = true;
+exports.b = void 0;
 //// [file2.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 var module1_1 = require("module1");
 var module2_1 = require("templates/module2");
 var file3_1 = require("../file3");

@@ -46,6 +46,7 @@ exports.default = 12;
 //// [index2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.bar = exports.x = void 0;
 function foo() {
     return foo;
 }
@@ -55,6 +56,7 @@ exports.x = foo;
 //// [index3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Bar = exports.X = void 0;
 var Foo = /** @class */ (function () {
     function Foo() {
         this.a = (null);

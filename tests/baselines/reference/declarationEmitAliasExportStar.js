@@ -18,6 +18,7 @@ exports.__esModule = true;
 //// [index.js]
 "use strict";
 exports.__esModule = true;
+exports.thing2 = void 0;
 exports.thing2 = function (param) { return null; };
 
 

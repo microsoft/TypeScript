@@ -10,6 +10,7 @@ export const bar = (null as TestType[Extract<keyof TestType, string>][]);
 //// [declarationEmitNoNonRequiredParens.js]
 "use strict";
 exports.__esModule = true;
+exports.bar = exports.Test = void 0;
 var Test;
 (function (Test) {
     Test[Test["A"] = 0] = "A";

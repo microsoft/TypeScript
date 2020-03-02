@@ -14,6 +14,7 @@ exitCode:: ExitStatus.Success
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.World = void 0;
     exports.World = "hello";
 });
 
@@ -22,6 +23,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.multiply = exports.leftPad = exports.someString = void 0;
     exports.someString = "HELLO WORLD";
     function leftPad(s, n) { return s + n; }
     exports.leftPad = leftPad;

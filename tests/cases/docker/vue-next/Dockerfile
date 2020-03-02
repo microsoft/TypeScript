@@ -1,5 +1,5 @@
 FROM node:current
-RUN npm install -g yarn lerna
+RUN npm install -g yarn lerna --force
 RUN git clone https://github.com/vuejs/vue-next.git /vue-next
 WORKDIR /vue-next
 RUN git pull

@@ -479,6 +479,9 @@ namespace ts {
                             visitNode(cbNode, (<JSDocPropertyLikeTag>node).name));
             case SyntaxKind.JSDocAuthorTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName);
+            case SyntaxKind.JSDocImplementsTag:
+                return visitNode(cbNode, (node as JSDocTag).tagName) ||
+                    visitNode(cbNode, (<JSDocImplementsTag>node).class);
             case SyntaxKind.JSDocAugmentsTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     visitNode(cbNode, (<JSDocAugmentsTag>node).class);
@@ -519,6 +522,76 @@ namespace ts {
                 return visitNode(cbNode, (node as JSDocTag).tagName);
             case SyntaxKind.PartiallyEmittedExpression:
                 return visitNode(cbNode, (<PartiallyEmittedExpression>node).expression);
+        }
+    }
+
+    /** @internal */
+    /**
+     * Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
+     * stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; additionally,
+     * unlike `forEachChild`, embedded arrays are flattened and the 'cbNode' callback is invoked for each element.
+     *  If a callback returns a truthy value, iteration stops and that value is returned. Otherwise, undefined is returned.
+     *
+     * @param node a given node to visit its children
+     * @param cbNode a callback to be invoked for all child nodes
+     * @param cbNodes a callback to be invoked for embedded array
+     *
+     * @remarks Unlike `forEachChild`, `forEachChildRecursively` handles recursively invoking the traversal on each child node found,
+     * and while doing so, handles traversing the structure without relying on the callstack to encode the tree structure.
+     */
+    export function forEachChildRecursively<T>(rootNode: Node, cbNode: (node: Node, parent: Node) => T | "skip" | undefined, cbNodes?: (nodes: NodeArray<Node>, parent: Node) => T | "skip" | undefined): T | undefined {
+
+        const stack: Node[] = [rootNode];
+        while (stack.length) {
+            const parent = stack.pop()!;
+            const res = visitAllPossibleChildren(parent, gatherPossibleChildren(parent));
+            if (res) {
+                return res;
+            }
+        }
+
+        return;
+
+        function gatherPossibleChildren(node: Node) {
+            const children: (Node | NodeArray<Node>)[] = [];
+            forEachChild(node, addWorkItem, addWorkItem); // By using a stack above and `unshift` here, we emulate a depth-first preorder traversal
+            return children;
+
+            function addWorkItem(n: Node | NodeArray<Node>) {
+                children.unshift(n);
+            }
+        }
+
+        function visitAllPossibleChildren(parent: Node, children: readonly (Node | NodeArray<Node>)[]) {
+            for (const child of children) {
+                if (isArray(child)) {
+                    if (cbNodes) {
+                        const res = cbNodes(child, parent);
+                        if (res) {
+                            if (res === "skip") continue;
+                            return res;
+                        }
+                    }
+
+                    for (let i = child.length - 1; i >= 0; i--) {
+                        const realChild = child[i];
+                        const res = cbNode(realChild, parent);
+                        if (res) {
+                            if (res === "skip") continue;
+                            return res;
+                        }
+                        stack.push(realChild);
+                    }
+                }
+                else {
+                    stack.push(child);
+                    const res = cbNode(child, parent);
+                    if (res) {
+                        if (res === "skip") continue;
+                        return res;
+                    }
+                }
+            }
         }
     }
 
@@ -903,31 +976,14 @@ namespace ts {
             // a syntax tree, and no semantic features, then the binding process is an unnecessary
             // overhead.  This functions allows us to set all the parents, without all the expense of
             // binding.
+            forEachChildRecursively(rootNode, bindParentToChild);
 
-            const stack: Node[] = [rootNode];
-            while (stack.length) {
-                const parent = stack.pop()!;
-                bindParentToChildren(parent, gatherChildren(parent));
-            }
-
-            return;
-
-            function gatherChildren(node: Node) {
-                const children: Node[] = [];
-                forEachChild(node, n => { children.unshift(n); }); // By using a stack above and `unshift` here, we emulate a depth-first preorder traversal
-                return children;
-            }
-
-            function bindParentToChildren(parent: Node, children: readonly Node[]) {
-                for (const child of children) {
-                    if (child.parent === parent) continue; // already bound, assume subtree is bound
-                    child.parent = parent;
-                    stack.push(child);
-                    if (hasJSDocNodes(child)) {
-                        for (const jsDoc of child.jsDoc!) {
-                            jsDoc.parent = child;
-                            stack.push(jsDoc);
-                        }
+            function bindParentToChild(child: Node, parent: Node) {
+                child.parent = parent;
+                if (hasJSDocNodes(child)) {
+                    for (const doc of child.jsDoc!) {
+                        bindParentToChild(doc, child);
+                        forEachChildRecursively(doc, bindParentToChild);
                     }
                 }
             }
@@ -6234,7 +6290,7 @@ namespace ts {
             const tok = token();
             Debug.assert(tok === SyntaxKind.ExtendsKeyword || tok === SyntaxKind.ImplementsKeyword); // isListElement() should ensure this.
             const node = <HeritageClause>createNode(SyntaxKind.HeritageClause);
-            node.token = tok as SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword;
+            node.token = tok;
             nextToken();
             node.types = parseDelimitedList(ParsingContext.HeritageClauseElement, parseExpressionWithTypeArguments);
             return finishNode(node);
@@ -6946,6 +7002,9 @@ namespace ts {
                         case "author":
                             tag = parseAuthorTag(start, tagName, margin);
                             break;
+                        case "implements":
+                            tag = parseImplementsTag(start, tagName);
+                            break;
                         case "augments":
                         case "extends":
                             tag = parseAugmentsTag(start, tagName);
@@ -7300,6 +7359,13 @@ namespace ts {
                     if (seenLessThan && seenGreaterThan) {
                         return comments.length === 0 ? undefined : comments.join("");
                     }
+                }
+
+                function parseImplementsTag(start: number, tagName: Identifier): JSDocImplementsTag {
+                    const result = <JSDocImplementsTag>createNode(SyntaxKind.JSDocImplementsTag, start);
+                    result.tagName = tagName;
+                    result.class = parseExpressionWithTypeArgumentsForAugments();
+                    return finishNode(result);
                 }
 
                 function parseAugmentsTag(start: number, tagName: Identifier): JSDocAugmentsTag {

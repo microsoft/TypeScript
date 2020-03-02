@@ -105,7 +105,7 @@ namespace ts {
 
         // Visit each original node.
         for (let i = 0; i < count; i++) {
-            const node = nodes[i + start];
+            const node: T = nodes[i + start];
             aggregateTransformFlags(node);
             const visited = node !== undefined ? visitor(node) : undefined;
             if (updated !== undefined || visited === undefined || visited !== node) {

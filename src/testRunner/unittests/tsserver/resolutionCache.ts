@@ -918,7 +918,7 @@ export const x = 10;`
                 const service = createProjectService(host);
                 service.openClientFile(file1.path);
                 checkNumberOfProjects(service, { configuredProjects: 1 });
-                const project = Debug.assertDefined(service.configuredProjects.get(config.path));
+                const project = Debug.checkDefined(service.configuredProjects.get(config.path));
                 checkProjectActualFiles(project, files.map(f => f.path));
                 host.checkTimeoutQueueLength(0);
 
