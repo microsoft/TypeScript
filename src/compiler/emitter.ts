@@ -4280,6 +4280,19 @@ namespace ts {
                 }
                 else if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(firstChild) && firstChild.parent === parentNode) {
                     if (preserveSourceNewlines) {
+                        // To determine how many line breaks to write before `firstChild`, we first walk backwards from its comments,
+                        // so that this is measured as a one-line difference, not two:
+                        //
+                        // function parentNode() {
+                        //   // FIRSTCHILD COMMENT
+                        //   firstChild;
+                        //
+                        // However, if that returns zero, we might have this:
+                        //
+                        // function parentNode() { // FIRSTCHILD COMMENT
+                        //   firstChild;
+                        //
+                        // in which case we should be ignoring the comment, so this too is counted as a one-line difference, not zero.
                         const lines = getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(firstChild.pos, currentSourceFile!, /*includeComments*/ true);
                         return lines === 0
                             ? getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(firstChild.pos, currentSourceFile!, /*includeComments*/ false)
