@@ -1,7 +1,7 @@
 Exit Code: 0
 Standard output:
 
-> @X.X.X-alpha.6 build /vue-next
+> @X.X.X-alpha.7 build /vue-next
 > node scripts/build.js "--types"
 Rolling up type definitions for compiler-core...
 Writing: /vue-next/temp/compiler-core.api.json
@@ -42,11 +42,6 @@ Rolling up type definitions for runtime-test...
 Writing: /vue-next/temp/runtime-test.api.json
 The API report is up to date: temp/runtime-test.api.md
 Writing package typings: /vue-next/packages/runtime-test/dist/runtime-test.d.ts
-API Extractor completed successfully.
-Rolling up type definitions for server-renderer...
-Writing: /vue-next/temp/server-renderer.api.json
-The API report is up to date: temp/server-renderer.api.md
-Writing package typings: /vue-next/packages/server-renderer/dist/server-renderer.d.ts
 API Extractor completed successfully.
 
 
@@ -119,16 +114,6 @@ created packages/runtime-test/dist/runtime-test.global.js in ?s
 /vue-next/packages/runtime-test/src/index.ts → packages/runtime-test/dist/runtime-test.global.prod.js...
 created packages/runtime-test/dist/runtime-test.global.prod.js in ?s
 /vue-next/packages/server-renderer/src/index.ts → packages/server-renderer/dist/server-renderer.cjs.js...
-created packages/server-renderer/dist/server-renderer.cjs.js in ?s
-/vue-next/packages/server-renderer/src/index.ts → packages/server-renderer/dist/server-renderer.cjs.prod.js...
-created packages/server-renderer/dist/server-renderer.cjs.prod.js in ?s
-/vue-next/packages/size-check/src/index.ts → packages/size-check/dist/size-check.global.js...
-created packages/size-check/dist/size-check.global.js in ?s
-/vue-next/packages/size-check/src/index.ts → packages/size-check/dist/size-check.global.prod.js...
-created packages/size-check/dist/size-check.global.prod.js in ?s
-/vue-next/packages/template-explorer/src/index.ts → packages/template-explorer/dist/template-explorer.global.js...
-created packages/template-explorer/dist/template-explorer.global.js in ?s
-/vue-next/packages/vue/src/index.ts → packages/vue/dist/vue.esm-bundler.js...
 [!] (plugin rpt2) Error: /vue-next/packages/vue/src/devCheck.ts(2,11): semantic error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
 packages/vue/src/devCheck.ts
 Error: /vue-next/packages/vue/src/devCheck.ts(2,11): semantic error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
@@ -142,12 +127,12 @@ Error: /vue-next/packages/vue/src/devCheck.ts(2,11): semantic error TS2774: This
     at forEach (/vue-next/node_modules/rollup-plugin-typescript2/node_modules/lodash/lodash.js:9342:14)
     at _.each (/vue-next/node_modules/rollup-plugin-typescript2/src/print-diagnostics.ts:9:2)
     at Object.transform (/vue-next/node_modules/rollup-plugin-typescript2/src/index.ts:234:5)
-(node:17) UnhandledPromiseRejectionWarning: Error: Command failed with exit code 1 (EPERM): rollup -c --environment COMMIT:d4c6957,NODE_ENV:production,TARGET:vue,TYPES:true
+(node:18) UnhandledPromiseRejectionWarning: Error: Command failed with exit code 1 (EPERM): rollup -c --environment COMMIT:e6ef52c,NODE_ENV:production,TARGET:server-renderer,TYPES:true
     at makeError (/vue-next/node_modules/execa/lib/error.js:59:11)
     at handlePromise (/vue-next/node_modules/execa/index.js:112:26)
     at processTicksAndRejections (internal/process/task_queues.js:97:5)
     at async build (/vue-next/scripts/build.js:72:3)
     at async buildAll (/vue-next/scripts/build.js:51:5)
     at async run (/vue-next/scripts/build.js:41:5)
-(node:17) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)
-(node:17) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+(node:18) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)
+(node:18) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
