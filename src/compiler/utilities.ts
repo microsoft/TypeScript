@@ -3841,12 +3841,13 @@ namespace ts {
         }
     }
 
-    export function getLineOfLocalPosition(currentSourceFile: SourceFile, pos: number) {
-        return getLineAndCharacterOfPosition(currentSourceFile, pos).line;
+    export function getLineOfLocalPosition(sourceFile: SourceFile, pos: number) {
+        const lineStarts = getLineStarts(sourceFile);
+        return computeLineOfPosition(lineStarts, pos);
     }
 
     export function getLineOfLocalPositionFromLineMap(lineMap: readonly number[], pos: number) {
-        return computeLineAndCharacterOfPosition(lineMap, pos).line;
+        return computeLineOfPosition(lineMap, pos);
     }
 
     export function getFirstConstructorWithBody(node: ClassLikeDeclaration): ConstructorDeclaration & { body: FunctionBody } | undefined {
@@ -4684,11 +4685,11 @@ namespace ts {
 
     export function getLinesBetweenRangeEndAndRangeStart(range1: TextRange, range2: TextRange, sourceFile: SourceFile, includeSecondRangeComments: boolean) {
         const range2Start = getStartPositionOfRange(range2, sourceFile, includeSecondRangeComments);
-        return range2Start === range1.end ? 0 : getLineOfLocalPosition(sourceFile, range2Start) - getLineOfLocalPosition(sourceFile, range1.end);
+        return getLinesBetweenPositions(sourceFile, range1.end, range2Start);
     }
 
     export function getLinesBetweenRangeEndPositions(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
-        return range1.end === range2.end ? 0 : getLineOfLocalPosition(sourceFile, range2.end) - getLineOfLocalPosition(sourceFile, range1.end);
+        return getLinesBetweenPositions(sourceFile, range1.end, range2.end);
     }
 
     export function isNodeArrayMultiLine(list: NodeArray<Node>, sourceFile: SourceFile): boolean {
@@ -4696,8 +4697,7 @@ namespace ts {
     }
 
     export function positionsAreOnSameLine(pos1: number, pos2: number, sourceFile: SourceFile) {
-        return pos1 === pos2 ||
-            getLineOfLocalPosition(sourceFile, pos1) === getLineOfLocalPosition(sourceFile, pos2);
+        return getLinesBetweenPositions(sourceFile, pos1, pos2) === 0;
     }
 
     export function getStartPositionOfRange(range: TextRange, sourceFile: SourceFile, includeComments: boolean) {
@@ -4707,7 +4707,7 @@ namespace ts {
     export function getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(pos: number, sourceFile: SourceFile, includeComments?: boolean) {
         const startPos = skipTrivia(sourceFile.text, pos, /*stopAfterLineBreak*/ false, includeComments);
         const prevPos = getPreviousNonWhitespacePosition(startPos, sourceFile);
-        return getLineOfLocalPosition(sourceFile, startPos) - getLineOfLocalPosition(sourceFile, prevPos || 0);
+        return getLinesBetweenPositions(sourceFile, prevPos || 0, startPos);
     }
 
     function getPreviousNonWhitespacePosition(pos: number, sourceFile: SourceFile) {
