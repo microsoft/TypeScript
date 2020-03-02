@@ -1,16 +1,17 @@
-namespace ts {
-    // https://github.com/microsoft/TypeScript/issues/31696
-    describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers to referenced projects resolve correctly", () => {
-        verifyTsc({
-            scenario: "moduleSpecifiers",
-            subScenario: `synthesized module specifiers resolve correctly`,
-            fs: () => loadProjectFromFiles({
-                "/src/solution/common/nominal.ts": Utils.dedent`
+import { verifyTsc, loadProjectFromFiles, symbolLibContent } from "../../ts";
+import { dedent } from "../../Utils";
+// https://github.com/microsoft/TypeScript/issues/31696
+describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers to referenced projects resolve correctly", () => {
+    verifyTsc({
+        scenario: "moduleSpecifiers",
+        subScenario: `synthesized module specifiers resolve correctly`,
+        fs: () => loadProjectFromFiles({
+            "/src/solution/common/nominal.ts": dedent `
                     export declare type Nominal<T, Name extends string> = T & {
                         [Symbol.species]: Name;
                     };
                     `,
-                "/src/solution/common/tsconfig.json": Utils.dedent`
+            "/src/solution/common/tsconfig.json": dedent `
                     {
                         "extends": "../../tsconfig.base.json",
                         "compilerOptions": {
@@ -18,12 +19,12 @@ namespace ts {
                         },
                         "include": ["nominal.ts"]
                     }`,
-                "/src/solution/sub-project/index.ts": Utils.dedent`
+            "/src/solution/sub-project/index.ts": dedent `
                     import { Nominal } from '../common/nominal';
 
                     export type MyNominal = Nominal<string, 'MyNominal'>;
                     `,
-                "/src/solution/sub-project/tsconfig.json": Utils.dedent`
+            "/src/solution/sub-project/tsconfig.json": dedent `
                     {
                         "extends": "../../tsconfig.base.json",
                         "compilerOptions": {
@@ -34,7 +35,7 @@ namespace ts {
                         ],
                         "include": ["./index.ts"]
                     }`,
-                "/src/solution/sub-project-2/index.ts": Utils.dedent`
+            "/src/solution/sub-project-2/index.ts": dedent `
                     import { MyNominal } from '../sub-project/index';
 
                     const variable = {
@@ -45,7 +46,7 @@ namespace ts {
                         return 'key';
                     }
                     `,
-                "/src/solution/sub-project-2/tsconfig.json": Utils.dedent`
+            "/src/solution/sub-project-2/tsconfig.json": dedent `
                     {
                         "extends": "../../tsconfig.base.json",
                         "compilerOptions": {
@@ -56,7 +57,7 @@ namespace ts {
                         ],
                         "include": ["./index.ts"]
                     }`,
-                "/src/solution/tsconfig.json": Utils.dedent`
+            "/src/solution/tsconfig.json": dedent `
                     {
                         "compilerOptions": {
                             "composite": true
@@ -67,7 +68,7 @@ namespace ts {
                         ],
                         "include": []
                     }`,
-                "/src/tsconfig.base.json": Utils.dedent`
+            "/src/tsconfig.base.json": dedent `
                     {
                         "compilerOptions": {
                             "skipLibCheck": true,
@@ -75,7 +76,7 @@ namespace ts {
                             "outDir": "lib",
                         }
                     }`,
-                "/src/tsconfig.json": Utils.dedent`{
+            "/src/tsconfig.json": dedent `{
                     "compilerOptions": {
                         "composite": true
                     },
@@ -84,8 +85,7 @@ namespace ts {
                     ],
                     "include": []
                 }`
-            }, symbolLibContent),
-            commandLineArgs: ["-b", "/src", "--verbose"]
-        });
+        }, symbolLibContent),
+        commandLineArgs: ["-b", "/src", "--verbose"]
     });
-}
+});

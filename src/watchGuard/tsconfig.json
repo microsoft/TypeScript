@@ -2,8 +2,8 @@
     "extends": "../tsconfig-noncomposite-base",
     "compilerOptions": {
         "removeComments": true,
-        "incremental":  false,
-        "outFile": "../../built/local/watchGuard.js",
+        "incremental": false,
+        "outDir": "../../built/local",
         "types": [
             "node"
         ],

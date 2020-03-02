@@ -1,9 +1,10 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/shims.js"
+        "outDir": "../../built/local"
     },
     "files": [
-        "mapShim.ts"
+        "mapShim.ts",
+        "./ts.ts"
     ]
 }

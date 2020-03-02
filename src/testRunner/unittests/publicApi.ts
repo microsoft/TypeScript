@@ -1,53 +1,53 @@
+import { IO, Baseline, Compiler } from "../Harness";
+import { createFromFileSystem, builtFolder, srcFolder } from "../vfs";
+import { System, CompilerHost } from "../fakes";
+import { compileFiles } from "../compiler";
+import { SyntaxKind, tokenToString, Debug, createPrivateIdentifier } from "../ts";
 describe("Public APIs", () => {
     function verifyApi(fileName: string) {
         const builtFile = `built/local/${fileName}`;
         const api = `api/${fileName}`;
         let fileContent: string;
         before(() => {
-            fileContent = Harness.IO.readFile(builtFile)!;
-            if (!fileContent) throw new Error(`File ${fileName} was not present in built/local`);
+            fileContent = (IO.readFile(builtFile)!);
+            if (!fileContent)
+                throw new Error(`File ${fileName} was not present in built/local`);
             fileContent = fileContent.replace(/\r\n/g, "\n");
         });
-
         it("should be acknowledged when they change", () => {
-            Harness.Baseline.runBaseline(api, fileContent);
+            Baseline.runBaseline(api, fileContent);
         });
-
         it("should compile", () => {
-            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
-            fs.linkSync(`${vfs.builtFolder}/${fileName}`, `${vfs.srcFolder}/${fileName}`);
-            const sys = new fakes.System(fs);
-            const host = new fakes.CompilerHost(sys);
-            const result = compiler.compileFiles(host, [`${vfs.srcFolder}/${fileName}`], {});
-            assert(!result.diagnostics || !result.diagnostics.length, Harness.Compiler.minimalDiagnosticsToString(result.diagnostics, /*pretty*/ true));
+            const fs = createFromFileSystem(IO, /*ignoreCase*/ false);
+            fs.linkSync(`${builtFolder}/${fileName}`, `${srcFolder}/${fileName}`);
+            const sys = new System(fs);
+            const host = new CompilerHost(sys);
+            const result = compileFiles(host, [`${srcFolder}/${fileName}`], {});
+            assert(!result.diagnostics || !result.diagnostics.length, Compiler.minimalDiagnosticsToString(result.diagnostics, /*pretty*/ true));
         });
     }
-
     describe("for the language service and compiler", () => {
         verifyApi("typescript.d.ts");
     });
-
     describe("for the language server", () => {
         verifyApi("tsserverlibrary.d.ts");
     });
 });
-
 describe("Public APIs:: token to string", () => {
-    function assertDefinedTokenToString(initial: ts.SyntaxKind, last: ts.SyntaxKind) {
+    function assertDefinedTokenToString(initial: SyntaxKind, last: SyntaxKind) {
         for (let t = initial; t <= last; t++) {
-            assert.isDefined(ts.tokenToString(t), `Expected tokenToString defined for ${ts.Debug.formatSyntaxKind(t)}`);
+            assert.isDefined(tokenToString(t), `Expected tokenToString defined for ${Debug.formatSyntaxKind(t)}`);
         }
     }
-
     it("for punctuations", () => {
-        assertDefinedTokenToString(ts.SyntaxKind.FirstPunctuation, ts.SyntaxKind.LastPunctuation);
+        assertDefinedTokenToString(SyntaxKind.FirstPunctuation, SyntaxKind.LastPunctuation);
     });
     it("for keywords", () => {
-        assertDefinedTokenToString(ts.SyntaxKind.FirstKeyword, ts.SyntaxKind.LastKeyword);
+        assertDefinedTokenToString(SyntaxKind.FirstKeyword, SyntaxKind.LastKeyword);
     });
 });
 describe("Public APIs:: createPrivateIdentifier", () => {
     it("throws when name doesn't start with #", () => {
-            assert.throw(() => ts.createPrivateIdentifier("not"), "Debug Failure. First character of private identifier must be #: not");
+        assert.throw(() => createPrivateIdentifier("not"), "Debug Failure. First character of private identifier must be #: not");
     });
 });

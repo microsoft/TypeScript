@@ -1,15 +1,13 @@
-namespace ts {} // empty ts module so the module migration script knows this file depends on the `ts` project namespace
+import { Debug, sys, executeCommandLine, noop } from "./ts";
+// empty ts module so the module migration script knows this file depends on the `ts` project namespace
 // This file actually uses arguments passed on commandline and executes it
-if (ts.Debug.isDebugging) {
-    ts.Debug.enableDebugInfo();
+if (Debug.isDebugging) {
+    Debug.enableDebugInfo();
 }
-
-if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
-    ts.sys.tryEnableSourceMapsForHost();
+if (sys.tryEnableSourceMapsForHost && /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))) {
+    sys.tryEnableSourceMapsForHost();
 }
-
-if (ts.sys.setBlocking) {
-    ts.sys.setBlocking();
+if (sys.setBlocking) {
+    sys.setBlocking();
 }
-
-ts.executeCommandLine(ts.sys, ts.noop, ts.sys.args);
+executeCommandLine(sys, noop, sys.args);

@@ -1,7 +1,7 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/harness.js",
+        "outDir": "../../built/local",
         "types": [
             "node", "mocha", "chai"
         ],
@@ -17,7 +17,6 @@
         { "path": "../server" },
         { "path": "../typingsInstallerCore" }
     ],
-
     "files": [
         "collectionsImpl.ts",
         "util.ts",
@@ -28,7 +27,6 @@
         "evaluatorImpl.ts",
         "fakesHosts.ts",
         "client.ts",
-
         "runnerbase.ts",
         "sourceMapRecorder.ts",
         "harnessGlobals.ts",
@@ -39,6 +37,23 @@
         "fourslashImpl.ts",
         "fourslashInterfaceImpl.ts",
         "typeWriter.ts",
-        "loggedIO.ts"
+        "loggedIO.ts",
+        "./collections.ts",
+        "./Utils.ts",
+        "./documents.ts",
+        "./vpath.ts",
+        "./vfs.ts",
+        "./compiler.ts",
+        "./evaluator.ts",
+        "./fakes.ts",
+        "./ts.server.ts",
+        "./ts.ts",
+        "./Harness.ts",
+        "./Harness.SourceMapRecorder.ts",
+        "./Harness.LanguageService.ts",
+        "./ts.TestFSWithWatch.ts",
+        "./FourSlash.ts",
+        "./FourSlashInterface.ts",
+        "./Playback.ts"
     ]
 }

@@ -2,7 +2,7 @@
     "extends": "../tsconfig-noncomposite-base",
     "compilerOptions": {
         "removeComments": true,
-        "outFile": "../../built/local/typingsInstaller.js",
+        "outDir": "../../built/local",
         "types": [
             "node"
         ],
@@ -12,11 +12,14 @@
         ]
     },
     "references": [
-        { "path": "../compiler", "prepend": true },
-        { "path": "../jsTyping", "prepend": true },
-        { "path": "../typingsInstallerCore", "prepend": true }
+        { "path": "../compiler" },
+        { "path": "../jsTyping" },
+        { "path": "../typingsInstallerCore" }
     ],
     "files": [
-        "nodeTypingsInstaller.ts"
+        "nodeTypingsInstaller.ts",
+        "./ts.server.typingsInstaller.ts",
+        "./ts.ts",
+        "./ts.server.ts"
     ]
 }

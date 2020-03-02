@@ -1,6 +1,8 @@
+import { evaluateTypeScript } from "../../evaluator";
+import { ScriptTarget } from "../../ts";
 describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
     it("sync (es5)", async () => {
-        const result = evaluator.evaluateTypeScript(`
+        const result = evaluateTypeScript(`
         let i = 0;
         const iterator: IterableIterator<any> = {
             [Symbol.iterator]() { return this; },
@@ -24,9 +26,8 @@ describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
         assert.strictEqual(result.output[1], 2);
         assert.strictEqual(result.output[2], 3);
     });
-
     it("sync (es2015)", async () => {
-        const result = evaluator.evaluateTypeScript(`
+        const result = evaluateTypeScript(`
         let i = 0;
         const iterator: IterableIterator<any> = {
             [Symbol.iterator]() { return this; },
@@ -44,15 +45,14 @@ describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
             for await (const item of iterator) {
                 output.push(item);
             }
-        }`, { target: ts.ScriptTarget.ES2015 });
+        }`, { target: ScriptTarget.ES2015 });
         await result.main();
         assert.strictEqual(result.output[0], 1);
         assert.strictEqual(result.output[1], 2);
         assert.strictEqual(result.output[2], 3);
     });
-
     it("async (es5)", async () => {
-        const result = evaluator.evaluateTypeScript(`
+        const result = evaluateTypeScript(`
         let i = 0;
         const iterator = {
             [Symbol.asyncIterator](): AsyncIterableIterator<any> { return this; },
@@ -76,9 +76,8 @@ describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
         assert.instanceOf(result.output[1], Promise);
         assert.instanceOf(result.output[2], Promise);
     });
-
     it("async (es2015)", async () => {
-        const result = evaluator.evaluateTypeScript(`
+        const result = evaluateTypeScript(`
         let i = 0;
         const iterator = {
             [Symbol.asyncIterator](): AsyncIterableIterator<any> { return this; },
@@ -96,7 +95,7 @@ describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
             for await (const item of iterator) {
                 output.push(item);
             }
-        }`, { target: ts.ScriptTarget.ES2015 });
+        }`, { target: ScriptTarget.ES2015 });
         await result.main();
         assert.strictEqual(result.output[0], 1);
         assert.instanceOf(result.output[1], Promise);

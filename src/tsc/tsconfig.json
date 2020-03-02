@@ -1,13 +1,14 @@
 {
     "extends": "../tsconfig-noncomposite-base",
     "compilerOptions": {
-        "outFile": "../../built/local/tsc.js"
+        "outDir": "../../built/local"
     },
     "files": [
-        "tsc.ts"
+        "tsc.ts",
+        "./ts.ts"
     ],
     "references": [
-        { "path": "../compiler", "prepend": true },
-        { "path": "../executeCommandLine", "prepend": true }
+        { "path": "../compiler" },
+        { "path": "../executeCommandLine" }
     ]
 }

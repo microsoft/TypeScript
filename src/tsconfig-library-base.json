@@ -2,10 +2,10 @@
     "extends": "./tsconfig-base",
     "compilerOptions": {
         "declarationMap": false,
-        "sourceMap":  false,
+        "sourceMap": false,
         "composite": false,
-        "incremental":  true,
+        "incremental": true,
         "declaration": true,
-        "stripInternal":  true
+        "stripInternal": true
     }
 }

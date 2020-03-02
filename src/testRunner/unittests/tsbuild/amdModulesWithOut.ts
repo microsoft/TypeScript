@@ -1,134 +1,129 @@
-namespace ts {
-    describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
-        let outFileFs: vfs.FileSystem;
-        const enum project { lib, app }
-        function relName(path: string) { return path.slice(1); }
-        type Sources = [string, readonly string[]];
-        const enum source { config, ts }
-        const sources: [Sources, Sources] = [
+import { FileSystem } from "../../vfs";
+import { loadProjectFromDisk, verifyTscIncrementalEdits, BuildKind, appendText, emptyArray, enableStrict, addTestPrologue, addShebang, addSpread, addRest, removeRest, addTripleSlashRef, replaceText, verifyTsc } from "../../ts";
+describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
+    let outFileFs: FileSystem;
+    const enum project {
+        lib,
+        app
+    }
+    function relName(path: string) { return path.slice(1); }
+    type Sources = [string, readonly string[]];
+    const enum source {
+        config,
+        ts
+    }
+    const sources: [Sources, Sources] = [
+        [
+            "/src/lib/tsconfig.json",
             [
-                "/src/lib/tsconfig.json",
-                [
-                    "/src/lib/file0.ts",
-                    "/src/lib/file1.ts",
-                    "/src/lib/file2.ts",
-                    "/src/lib/global.ts",
-                ]
-            ],
-            [
-                "/src/app/tsconfig.json",
-                [
-                    "/src/app/file3.ts",
-                    "/src/app/file4.ts"
-                ]
+                "/src/lib/file0.ts",
+                "/src/lib/file1.ts",
+                "/src/lib/file2.ts",
+                "/src/lib/global.ts",
             ]
-        ];
-        before(() => {
-            outFileFs = loadProjectFromDisk("tests/projects/amdModulesWithOut");
-        });
-        after(() => {
-            outFileFs = undefined!;
-        });
-
-        interface VerifyOutFileScenarioInput {
-            subScenario: string;
-            modifyFs?: (fs: vfs.FileSystem) => void;
-            modifyAgainFs?: (fs: vfs.FileSystem) => void;
-        }
-
-        function verifyOutFileScenario({
+        ],
+        [
+            "/src/app/tsconfig.json",
+            [
+                "/src/app/file3.ts",
+                "/src/app/file4.ts"
+            ]
+        ]
+    ];
+    before(() => {
+        outFileFs = loadProjectFromDisk("tests/projects/amdModulesWithOut");
+    });
+    after(() => {
+        outFileFs = undefined!;
+    });
+    interface VerifyOutFileScenarioInput {
+        subScenario: string;
+        modifyFs?: (fs: FileSystem) => void;
+        modifyAgainFs?: (fs: FileSystem) => void;
+    }
+    function verifyOutFileScenario({ subScenario, modifyFs, modifyAgainFs }: VerifyOutFileScenarioInput) {
+        verifyTscIncrementalEdits({
+            scenario: "amdModulesWithOut",
             subScenario,
+            fs: () => outFileFs,
+            commandLineArgs: ["--b", "/src/app", "--verbose"],
+            baselineSourceMap: true,
             modifyFs,
-            modifyAgainFs
-        }: VerifyOutFileScenarioInput) {
-            verifyTscIncrementalEdits({
-                scenario: "amdModulesWithOut",
-                subScenario,
-                fs: () => outFileFs,
-                commandLineArgs: ["--b", "/src/app", "--verbose"],
-                baselineSourceMap: true,
-                modifyFs,
-                incrementalScenarios: [
-                    {
-                        buildKind: BuildKind.IncrementalDtsUnchanged,
-                        modifyFs: fs => appendText(fs, relName(sources[project.lib][source.ts][1]), "console.log(x);")
-                    },
-                    ...(modifyAgainFs ? [{
+            incrementalScenarios: [
+                {
+                    buildKind: BuildKind.IncrementalDtsUnchanged,
+                    modifyFs: fs => appendText(fs, relName(sources[project.lib][source.ts][1]), "console.log(x);")
+                },
+                ...(modifyAgainFs ? [{
                         buildKind: BuildKind.IncrementalHeadersChange,
                         modifyFs: modifyAgainFs
                     }] : emptyArray),
-                ]
-            });
-        }
-
-        describe("Prepend output with .tsbuildinfo", () => {
+            ]
+        });
+    }
+    describe("Prepend output with .tsbuildinfo", () => {
+        verifyOutFileScenario({
+            subScenario: "modules and globals mixed in amd",
+        });
+        // Prologues
+        describe("Prologues", () => {
             verifyOutFileScenario({
-                subScenario: "modules and globals mixed in amd",
+                subScenario: "multiple prologues in all projects",
+                modifyFs: fs => {
+                    enableStrict(fs, sources[project.lib][source.config]);
+                    addTestPrologue(fs, sources[project.lib][source.ts][0], `"myPrologue"`);
+                    addTestPrologue(fs, sources[project.lib][source.ts][2], `"myPrologueFile"`);
+                    addTestPrologue(fs, sources[project.lib][source.ts][3], `"myPrologue3"`);
+                    enableStrict(fs, sources[project.app][source.config]);
+                    addTestPrologue(fs, sources[project.app][source.ts][0], `"myPrologue"`);
+                    addTestPrologue(fs, sources[project.app][source.ts][1], `"myPrologue2";`);
+                },
+                modifyAgainFs: fs => addTestPrologue(fs, relName(sources[project.lib][source.ts][1]), `"myPrologue5"`)
             });
-
-            // Prologues
-            describe("Prologues", () => {
-                verifyOutFileScenario({
-                    subScenario: "multiple prologues in all projects",
-                    modifyFs: fs => {
-                        enableStrict(fs, sources[project.lib][source.config]);
-                        addTestPrologue(fs, sources[project.lib][source.ts][0], `"myPrologue"`);
-                        addTestPrologue(fs, sources[project.lib][source.ts][2], `"myPrologueFile"`);
-                        addTestPrologue(fs, sources[project.lib][source.ts][3], `"myPrologue3"`);
-                        enableStrict(fs, sources[project.app][source.config]);
-                        addTestPrologue(fs, sources[project.app][source.ts][0], `"myPrologue"`);
-                        addTestPrologue(fs, sources[project.app][source.ts][1], `"myPrologue2";`);
-                    },
-                    modifyAgainFs: fs => addTestPrologue(fs, relName(sources[project.lib][source.ts][1]), `"myPrologue5"`)
-                });
+        });
+        // Shebang
+        describe("Shebang", () => {
+            // changes declaration because its emitted in .d.ts file
+            verifyOutFileScenario({
+                subScenario: "shebang in all projects",
+                modifyFs: fs => {
+                    addShebang(fs, "lib", "file0");
+                    addShebang(fs, "lib", "file1");
+                    addShebang(fs, "app", "file3");
+                },
             });
-
-            // Shebang
-            describe("Shebang", () => {
-                // changes declaration because its emitted in .d.ts file
-                verifyOutFileScenario({
-                    subScenario: "shebang in all projects",
-                    modifyFs: fs => {
-                        addShebang(fs, "lib", "file0");
-                        addShebang(fs, "lib", "file1");
-                        addShebang(fs, "app", "file3");
-                    },
-                });
+        });
+        // emitHelpers
+        describe("emitHelpers", () => {
+            verifyOutFileScenario({
+                subScenario: "multiple emitHelpers in all projects",
+                modifyFs: fs => {
+                    addSpread(fs, "lib", "file0");
+                    addRest(fs, "lib", "file1");
+                    addRest(fs, "app", "file3");
+                    addSpread(fs, "app", "file4");
+                },
+                modifyAgainFs: fs => removeRest(fs, "lib", "file1")
             });
-
-            // emitHelpers
-            describe("emitHelpers", () => {
-                verifyOutFileScenario({
-                    subScenario: "multiple emitHelpers in all projects",
-                    modifyFs: fs => {
-                        addSpread(fs, "lib", "file0");
-                        addRest(fs, "lib", "file1");
-                        addRest(fs, "app", "file3");
-                        addSpread(fs, "app", "file4");
-                    },
-                    modifyAgainFs: fs => removeRest(fs, "lib", "file1")
-                });
+        });
+        // triple slash refs
+        describe("triple slash refs", () => {
+            // changes declaration because its emitted in .d.ts file
+            verifyOutFileScenario({
+                subScenario: "triple slash refs in all projects",
+                modifyFs: fs => {
+                    addTripleSlashRef(fs, "lib", "file0");
+                    addTripleSlashRef(fs, "app", "file4");
+                }
             });
-
-            // triple slash refs
-            describe("triple slash refs", () => {
-                // changes declaration because its emitted in .d.ts file
-                verifyOutFileScenario({
-                    subScenario: "triple slash refs in all projects",
-                    modifyFs: fs => {
-                        addTripleSlashRef(fs, "lib", "file0");
-                        addTripleSlashRef(fs, "app", "file4");
-                    }
-                });
-            });
-
-            describe("stripInternal", () => {
-                function stripInternalScenario(fs: vfs.FileSystem) {
-                    const internal = "/*@internal*/";
-                    replaceText(fs, sources[project.app][source.config], `"composite": true,`, `"composite": true,
+        });
+        describe("stripInternal", () => {
+            function stripInternalScenario(fs: FileSystem) {
+                const internal = "/*@internal*/";
+                replaceText(fs, sources[project.app][source.config], `"composite": true,`, `"composite": true,
 "stripInternal": true,`);
-                    replaceText(fs, sources[project.lib][source.ts][0], "const", `${internal} const`);
-                    appendText(fs, sources[project.lib][source.ts][1], `
+                replaceText(fs, sources[project.lib][source.ts][0], "const", `${internal} const`);
+                appendText(fs, sources[project.lib][source.ts][1], `
 export class normalC {
     ${internal} constructor() { }
     ${internal} prop: string;
@@ -154,33 +149,29 @@ ${internal} export import internalImport = internalNamespace.someClass;
 ${internal} export type internalType = internalC;
 ${internal} export const internalConst = 10;
 ${internal} export enum internalEnum { a, b, c }`);
-                }
-
-                // Verify initial + incremental edits
-                verifyOutFileScenario({
-                    subScenario: "stripInternal",
-                    modifyFs: stripInternalScenario,
-                    modifyAgainFs: fs => replaceText(fs, sources[project.lib][source.ts][1], `export const`, `/*@internal*/ export const`),
-                });
+            }
+            // Verify initial + incremental edits
+            verifyOutFileScenario({
+                subScenario: "stripInternal",
+                modifyFs: stripInternalScenario,
+                modifyAgainFs: fs => replaceText(fs, sources[project.lib][source.ts][1], `export const`, `/*@internal*/ export const`),
             });
-
-            describe("when the module resolution finds original source file", () => {
-                function modifyFs(fs: vfs.FileSystem) {
-                    // Make lib to output to parent dir
-                    replaceText(fs, sources[project.lib][source.config], `"outFile": "module.js"`, `"outFile": "../module.js", "rootDir": "../"`);
-                    // Change reference to file1 module to resolve to lib/file1
-                    replaceText(fs, sources[project.app][source.ts][0], "file1", "lib/file1");
-                }
-
-                verifyTsc({
-                    scenario: "amdModulesWithOut",
-                    subScenario: "when the module resolution finds original source file",
-                    fs: () => outFileFs,
-                    commandLineArgs: ["-b", "/src/app", "--verbose"],
-                    modifyFs,
-                    baselineSourceMap: true,
-                });
+        });
+        describe("when the module resolution finds original source file", () => {
+            function modifyFs(fs: FileSystem) {
+                // Make lib to output to parent dir
+                replaceText(fs, sources[project.lib][source.config], `"outFile": "module.js"`, `"outFile": "../module.js", "rootDir": "../"`);
+                // Change reference to file1 module to resolve to lib/file1
+                replaceText(fs, sources[project.app][source.ts][0], "file1", "lib/file1");
+            }
+            verifyTsc({
+                scenario: "amdModulesWithOut",
+                subScenario: "when the module resolution finds original source file",
+                fs: () => outFileFs,
+                commandLineArgs: ["-b", "/src/app", "--verbose"],
+                modifyFs,
+                baselineSourceMap: true,
             });
         });
     });
-}
+});

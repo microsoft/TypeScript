@@ -1,13 +1,10 @@
 /// <reference types="node"/>
-
 import fs = require("fs");
-
 interface ServerCancellationToken {
     isCancellationRequested(): boolean;
     setRequest(requestId: number): void;
     resetRequest(requestId: number): void;
 }
-
 function pipeExists(name: string): boolean {
     // Unlike statSync, existsSync doesn't throw an exception if the target doesn't exist.
     // A comment in the node code suggests they're stuck with that decision for back compat
@@ -18,7 +15,6 @@ function pipeExists(name: string): boolean {
     // implementation returned false from its catch block.
     return fs.existsSync(name);
 }
-
 function createCancellationToken(args: string[]): ServerCancellationToken {
     let cancellationPipeName: string | undefined;
     for (let i = 0; i < args.length - 1; i++) {
@@ -62,7 +58,7 @@ function createCancellationToken(args: string[]): ServerCancellationToken {
     }
     else {
         return {
-            isCancellationRequested: () => pipeExists(cancellationPipeName!), // TODO: GH#18217
+            isCancellationRequested: () => pipeExists(cancellationPipeName!),
             setRequest: (_requestId: number): void => void 0,
             resetRequest: (_requestId: number): void => void 0
         };

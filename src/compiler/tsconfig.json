@@ -1,13 +1,11 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/compiler.js"
+        "outDir": "../../built/local"
     },
-
     "references": [
         { "path": "../shims" }
     ],
-
     "files": [
         "corePublic.ts",
         "core.ts",
@@ -16,7 +14,6 @@
         "performance.ts",
         "perfLogger.ts",
         "semver.ts",
-
         "types.ts",
         "sys.ts",
         "path.ts",
@@ -27,7 +24,6 @@
         "parser.ts",
         "commandLineParser.ts",
         "moduleNameResolver.ts",
-
         "binder.ts",
         "symbolWalker.ts",
         "checker.ts",
@@ -69,6 +65,9 @@
         "watch.ts",
         "watchPublic.ts",
         "tsbuild.ts",
-        "tsbuildPublic.ts"
+        "tsbuildPublic.ts",
+        "./ts.ts",
+        "./ts.performance.ts",
+        "./ts.moduleSpecifiers.ts"
     ]
 }

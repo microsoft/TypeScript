@@ -2,7 +2,7 @@
     "extends": "../tsconfig-base",
     "compilerOptions": {
         "removeComments": false,
-        "outFile": "../../built/local/server.js",
+        "outDir": "../../built/local",
         "preserveConstEnums": true,
         "types": [
             "node"
@@ -25,6 +25,9 @@
         "editorServices.ts",
         "packageJsonCache.ts",
         "session.ts",
-        "scriptVersionCache.ts"
+        "scriptVersionCache.ts",
+        "./ts.server.ts",
+        "./ts.ts",
+        "./ts.server.protocol.ts"
     ]
 }

@@ -1,7 +1,7 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/services.js"
+        "outDir": "../../built/local"
     },
     "references": [
         { "path": "../shims" },
@@ -107,6 +107,31 @@
         "transform.ts",
         "shims.ts",
         "globalThisShim.ts",
-        "exportAsModule.ts"
+        "exportAsModule.ts",
+        "./ts.ts",
+        "./ts.Completions.StringCompletions.ts",
+        "./ts.Completions.ts",
+        "./ts.FindAllReferences.ts",
+        "./ts.CallHierarchy.ts",
+        "./ts.GoToDefinition.ts",
+        "./ts.JsDoc.ts",
+        "./ts.NavigateTo.ts",
+        "./ts.NavigationBar.ts",
+        "./ts.OrganizeImports.ts",
+        "./ts.OutliningElementsCollector.ts",
+        "./ts.Rename.ts",
+        "./ts.SmartSelectionRange.ts",
+        "./ts.SignatureHelp.ts",
+        "./ts.SymbolDisplay.ts",
+        "./ts.formatting.ts",
+        "./ts.textChanges.ts",
+        "./ts.codefix.ts",
+        "./ts.refactor.ts",
+        "./ts.refactor.extractSymbol.ts",
+        "./ts.refactor.generateGetAccessorAndSetAccessor.ts",
+        "./ts.refactor.addOrRemoveBracesToArrowFunction.ts",
+        "./ts.refactor.convertParamsToDestructuredObject.ts",
+        "./ts.refactor.convertStringOrTemplateLiteral.ts",
+        "./ts.BreakpointResolver.ts"
     ]
 }
