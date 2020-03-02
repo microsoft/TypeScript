@@ -362,12 +362,6 @@ namespace ts.server {
         RootOfInferredProjectFalse = "Open file was set as not inferred root",
     }
 
-    const enum ConfigFileActionResult {
-        Continue,
-        Return,
-        Break,
-    }
-
     /*@internal*/
     interface ConfigFileExistenceInfo {
         /**
@@ -1643,7 +1637,7 @@ namespace ts.server {
          * The server must start searching from the directory containing
          * the newly opened file.
          */
-        private forEachConfigFileLocation(info: OpenScriptInfoOrClosedOrConfigFileInfo, action: (configFileName: NormalizedPath, canonicalConfigFilePath: string) => ConfigFileActionResult | void) {
+        private forEachConfigFileLocation(info: OpenScriptInfoOrClosedOrConfigFileInfo, action: (configFileName: NormalizedPath, canonicalConfigFilePath: string) => boolean | void) {
             if (this.syntaxOnly) {
                 return undefined;
             }
@@ -1664,23 +1658,19 @@ namespace ts.server {
                 if (searchInDirectory) {
                     const canonicalSearchPath = normalizedPathToPath(searchPath, this.currentDirectory, this.toCanonicalFileName);
                     const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, "tsconfig.json"));
-                    const tsResult = action(tsconfigFileName, combinePaths(canonicalSearchPath, "tsconfig.json"));
-                    if (tsResult === ConfigFileActionResult.Return) {
-                        return tsconfigFileName;
-                    }
+                    let result = action(tsconfigFileName, combinePaths(canonicalSearchPath, "tsconfig.json"));
+                    if (result) return tsconfigFileName;
 
                     const jsconfigFileName = asNormalizedPath(combinePaths(searchPath, "jsconfig.json"));
-                    const jsResult = action(jsconfigFileName, combinePaths(canonicalSearchPath, "jsconfig.json"));
-                    if (jsResult === ConfigFileActionResult.Return) {
-                        return jsconfigFileName;
-                    }
+                    result = action(jsconfigFileName, combinePaths(canonicalSearchPath, "jsconfig.json"));
+                    if (result) return jsconfigFileName;
 
-                    if (tsResult === ConfigFileActionResult.Break || jsResult === ConfigFileActionResult.Break) {
+                    // If we started within node_modules, don't look outside node_modules.
+                    // Otherwise, we might pick up a very large project and pull in the world,
+                    // causing an editor delay.
+                    if (isNodeModulesDirectory(canonicalSearchPath)) {
                         break;
                     }
-
-                    Debug.assert(!tsResult);
-                    Debug.assert(!jsResult);
                 }
 
                 const parentPath = asNormalizedPath(getDirectoryPath(searchPath));
@@ -1714,11 +1704,7 @@ namespace ts.server {
             if (isOpenScriptInfo(info)) Debug.assert(info.isScriptOpen());
             this.logger.info(`Search path: ${getDirectoryPath(info.fileName)}`);
             const configFileName = this.forEachConfigFileLocation(info, (configFileName, canonicalConfigFilePath) =>
-                this.configFileExists(configFileName, canonicalConfigFilePath, info)
-                    ? ConfigFileActionResult.Return
-                    : isNodeModulesDirectory(getDirectoryPath(canonicalConfigFilePath) as Path)
-                        ? ConfigFileActionResult.Break
-                        : ConfigFileActionResult.Continue);
+                this.configFileExists(configFileName, canonicalConfigFilePath, info));
             if (configFileName) {
                 this.logger.info(`For info: ${info.fileName} :: Config file name: ${configFileName}`);
             }
