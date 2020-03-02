@@ -7007,6 +7007,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Only_named_exports_may_use_export_type_1383" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Only named exports may use 'export type'.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword_2340" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Only public and protected methods of the base class are accessible via the 'super' keyword.]]></Val>
@@ -7034,11 +7040,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Option_0_can_only_be_specified_in_tsconfig_json_file_6064" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_null_on_command_line_6230" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Option '{0}' can only be specified in 'tsconfig.json' file.]]></Val>
+          <Val><![CDATA[Option '{0}' can only be specified in 'tsconfig.json' file or set to 'false' or 'null' on command line.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Параметр "{0}" можно указать только в файле tsconfig.json.]]></Val>
+            <Val><![CDATA[Параметр "{0}" можно указать только в файле "tsconfig.json" либо задать значение "false" или "null" для этого параметра в командной строке.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line_6064" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Option '{0}' can only be specified in 'tsconfig.json' file or set to 'null' on command line.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Параметр "{0}" можно указать только в файле "tsconfig.json" либо задать значение "null" для этого параметра в командной строке.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10853,6 +10868,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Тип элементов итерации для операнда "yield*" должен быть допустимым обещанием либо не должен содержать вызываемый элемент "then".]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_of_property_0_circularly_references_itself_in_mapped_type_1_2615" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type of property '{0}' circularly references itself in mapped type '{1}'.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
