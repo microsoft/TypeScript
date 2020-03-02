@@ -2910,8 +2910,8 @@ namespace ts {
                     return getDeclarationOfJSPrototypeContainer(symbol);
                 }
             }
-            const sig = getHostSignatureFromJSDocHost(host);
-            if (sig) {
+            const sig = getEffectiveJSDocHost(node);
+            if (sig && isFunctionLike(sig)) {
                 const symbol = getSymbolOfNode(sig);
                 return symbol && symbol.valueDeclaration;
             }
@@ -30444,15 +30444,14 @@ namespace ts {
         }
 
         function checkJSDocImplementsTag(node: JSDocImplementsTag): void {
-            const classLike = getJSDocHost(node);
-            if (!isClassDeclaration(classLike) && !isClassExpression(classLike)) {
+            const classLike = getEffectiveJSDocHost(node);
+            if (!classLike || !isClassDeclaration(classLike) && !isClassExpression(classLike)) {
                 error(classLike, Diagnostics.JSDoc_0_is_not_attached_to_a_class, idText(node.tagName));
-                return;
             }
         }
         function checkJSDocAugmentsTag(node: JSDocAugmentsTag): void {
-            const classLike = getJSDocHost(node);
-            if (!isClassDeclaration(classLike) && !isClassExpression(classLike)) {
+            const classLike = getEffectiveJSDocHost(node);
+            if (!classLike || !isClassDeclaration(classLike) && !isClassExpression(classLike)) {
                 error(classLike, Diagnostics.JSDoc_0_is_not_attached_to_a_class, idText(node.tagName));
                 return;
             }
