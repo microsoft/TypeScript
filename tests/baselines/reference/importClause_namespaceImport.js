@@ -19,6 +19,7 @@ const c: types.C<string> = "";
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+exports.Value = exports.B = exports.A = void 0;
 var A = /** @class */ (function () {
     function A() {
     }

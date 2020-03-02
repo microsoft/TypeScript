@@ -62,6 +62,7 @@ export class ClassWithPrivateNamedAccessors {
 //// [uniqueSymbolsDeclarationsErrors.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ClassWithPrivateNamedAccessors = exports.ClassWithPrivateNamedMethods = exports.ClassWithPrivateNamedProperties = exports.funcInferredReturnType = exports.classExpression = exports.obj = void 0;
 // not allowed when emitting declarations
 exports.obj = {
     method1(p) {

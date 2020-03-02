@@ -25,6 +25,7 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/user/username/projects/myproject/a.js]
 "use strict";
 exports.__esModule = true;
+exports.a = void 0;
 exports.a = "";
 
 
@@ -85,6 +86,7 @@ export const a: number = 1
 //// [/user/username/projects/myproject/a.js]
 "use strict";
 exports.__esModule = true;
+exports.a = void 0;
 exports.a = 1;
 
 

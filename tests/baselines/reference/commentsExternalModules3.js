@@ -63,6 +63,7 @@ export var newVar2 = new extMod.m4.m2.c();
 //// [commentsExternalModules2_0.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.m4 = exports.m1 = void 0;
 /** Module comment*/
 var m1;
 (function (m1) {
@@ -126,6 +127,7 @@ var myvar2 = new m4.m2.c();
 //// [commentsExternalModules_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.newVar2 = exports.newVar = void 0;
 /**This is on import declaration*/
 var extMod = require("./commentsExternalModules2_0"); // trailing comment 1
 extMod.m1.fooExport();

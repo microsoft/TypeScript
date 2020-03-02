@@ -35,6 +35,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.Empty = void 0;
 var Empty = /** @class */ (function (_super) {
     __extends(Empty, _super);
     function Empty() {

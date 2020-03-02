@@ -27,7 +27,7 @@ const O = {
 //// [invalidNewTarget.es6.js]
 const a = new.target;
 const b = () => new.target;
-const C = /** @class */ (() => {
+let C = /** @class */ (() => {
     class C {
         constructor() {
             this.f = () => new.target;

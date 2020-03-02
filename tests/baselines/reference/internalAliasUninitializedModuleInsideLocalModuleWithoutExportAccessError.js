@@ -20,9 +20,9 @@ export var z: c.b.I;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.z = exports.c = void 0;
     var c;
     (function (c) {
         c.x.foo();
     })(c = exports.c || (exports.c = {}));
-    exports.z = void 0;
 });

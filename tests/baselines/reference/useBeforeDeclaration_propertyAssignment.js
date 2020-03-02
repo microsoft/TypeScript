@@ -25,7 +25,7 @@ export class C {
         this.c = { c: this.b };
     }
 }
-const D = /** @class */ (() => {
+let D = /** @class */ (() => {
     class D {
     }
     D.A = class extends D.B {

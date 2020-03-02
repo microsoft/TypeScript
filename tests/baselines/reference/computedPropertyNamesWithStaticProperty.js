@@ -11,7 +11,7 @@ class C {
 }
 
 //// [computedPropertyNamesWithStaticProperty.js]
-const C = /** @class */ (() => {
+let C = /** @class */ (() => {
     class C {
         get [C.staticProp]() {
             return "hello";

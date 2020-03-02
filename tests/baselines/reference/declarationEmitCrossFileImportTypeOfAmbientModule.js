@@ -15,6 +15,7 @@ export const reeexported = item;
 //// [index.js]
 "use strict";
 exports.__esModule = true;
+exports.reeexported = void 0;
 var somepackage_1 = require("../somepackage");
 exports.reeexported = somepackage_1.item;
 

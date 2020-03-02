@@ -35,6 +35,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = void 0;
 var a_1 = require("./a");
 exports.b = {
     f: function () {
@@ -69,6 +70,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.a = void 0;
 var b_1 = require("./b");
 exports.a = {
     f: function () {

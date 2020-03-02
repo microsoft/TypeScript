@@ -49,6 +49,7 @@ export const ADMIN = MetadataAccessor.create<boolean>('1');
 //// [keys.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ADMIN = void 0;
 var pkg2_1 = require("@raymondfeng/pkg2");
 exports.ADMIN = pkg2_1.MetadataAccessor.create('1');
 //// [index.js]

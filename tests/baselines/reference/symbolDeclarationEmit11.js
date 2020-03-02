@@ -7,7 +7,7 @@ class C {
 }
 
 //// [symbolDeclarationEmit11.js]
-const C = /** @class */ (() => {
+let C = /** @class */ (() => {
     class C {
         static [Symbol.isConcatSpreadable]() { }
         static get [Symbol.toPrimitive]() { return ""; }

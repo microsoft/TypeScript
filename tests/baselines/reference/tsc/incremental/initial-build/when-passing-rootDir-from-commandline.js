@@ -6,6 +6,7 @@ exitCode:: ExitStatus.Success
 //// [/src/project/dist/main.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 exports.x = 10;
 
 

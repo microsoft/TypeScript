@@ -24,6 +24,7 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/user/username/projects/myproject/lib/b.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 exports.x = 10;
 
 

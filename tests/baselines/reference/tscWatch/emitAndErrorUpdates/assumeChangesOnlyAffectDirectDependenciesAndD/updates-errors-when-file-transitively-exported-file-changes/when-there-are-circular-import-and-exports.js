@@ -86,6 +86,7 @@ export * from "./tools/public";
 //// [/user/username/projects/myproject/lib2/data2.js]
 "use strict";
 exports.__esModule = true;
+exports.Data2 = void 0;
 var Data2 = /** @class */ (function () {
     function Data2() {
     }
@@ -104,6 +105,7 @@ export declare class Data2 {
 //// [/user/username/projects/myproject/lib2/data.js]
 "use strict";
 exports.__esModule = true;
+exports.Data = void 0;
 var Data = /** @class */ (function () {
     function Data() {
     }
@@ -150,6 +152,7 @@ export * from "./data";
 //// [/user/username/projects/myproject/app.js]
 "use strict";
 exports.__esModule = true;
+exports.App = void 0;
 var public_1 = require("lib2/public");
 var App = /** @class */ (function () {
     function App() {

@@ -12,6 +12,7 @@ import { assertNevar } from "./a";
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+exports.assertNever = void 0;
 function assertNever(x, msg) {
     throw new Error("Unexpected " + msg);
 }

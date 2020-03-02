@@ -24,6 +24,7 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/user/username/projects/myproject/logger.js]
 "use strict";
 exports.__esModule = true;
+exports.logger = void 0;
 var logger = /** @class */ (function () {
     function logger() {
     }

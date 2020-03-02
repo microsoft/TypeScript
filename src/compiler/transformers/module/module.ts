@@ -96,6 +96,9 @@ namespace ts {
             if (shouldEmitUnderscoreUnderscoreESModule()) {
                 append(statements, createUnderscoreUnderscoreESModule());
             }
+            if (length(currentModuleInfo.exportedNames)) {
+                append(statements, createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => createAssignment(createPropertyAccess(createIdentifier("exports"), createIdentifier(idText(nextId))), prev), createVoidZero() as Expression)));
+            }
 
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
@@ -413,6 +416,9 @@ namespace ts {
 
             if (shouldEmitUnderscoreUnderscoreESModule()) {
                 append(statements, createUnderscoreUnderscoreESModule());
+            }
+            if (length(currentModuleInfo.exportedNames)) {
+                append(statements, createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => createAssignment(createPropertyAccess(createIdentifier("exports"), createIdentifier(idText(nextId))), prev), createVoidZero() as Expression)));
             }
 
             // Visit each statement of the module body.
@@ -1188,7 +1194,7 @@ namespace ts {
 
                         variables = append(variables, variable);
                     }
-                    else {
+                    else if (variable.initializer) {
                         expressions = append(expressions, transformInitializedVariable(variable));
                     }
                 }

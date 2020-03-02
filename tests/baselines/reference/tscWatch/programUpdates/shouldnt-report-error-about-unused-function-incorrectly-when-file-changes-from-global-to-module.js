@@ -74,6 +74,7 @@ export function two() {
 //// [/a/b/file.js]
 "use strict";
 exports.__esModule = true;
+exports.two = void 0;
 function one() { }
 function two() {
     return function three() {
