@@ -2711,28 +2711,28 @@ namespace ts.server {
                 return this.requiredResponse(this.provideCallHierarchyOutgoingCalls(request.arguments));
             },
             [CommandNames.ToggleLineComment]: (request: protocol.ToggleLineCommentRequest) => {
-                return this.requiredResponse(this.toggleLineComment(request.arguments, /*simplifiedResult*/true));
+                return this.requiredResponse(this.toggleLineComment(request.arguments, /*simplifiedResult*/ true));
             },
             [CommandNames.ToggleLineCommentFull]: (request: protocol.ToggleLineCommentRequest) => {
-                return this.requiredResponse(this.toggleLineComment(request.arguments, /*simplifiedResult*/false));
+                return this.requiredResponse(this.toggleLineComment(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.ToggleMultilineComment]: (request: protocol.ToggleMultilineCommentRequest) => {
-                return this.requiredResponse(this.toggleMultilineComment(request.arguments, /*simplifiedResult*/true));
+                return this.requiredResponse(this.toggleMultilineComment(request.arguments, /*simplifiedResult*/ true));
             },
             [CommandNames.ToggleMultilineCommentFull]: (request: protocol.ToggleMultilineCommentRequest) => {
-                return this.requiredResponse(this.toggleMultilineComment(request.arguments, /*simplifiedResult*/false));
+                return this.requiredResponse(this.toggleMultilineComment(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.CommentSelection]: (request: protocol.CommentSelectionRequest) => {
-                return this.requiredResponse(this.commentSelection(request.arguments, /*simplifiedResult*/true));
+                return this.requiredResponse(this.commentSelection(request.arguments, /*simplifiedResult*/ true));
             },
             [CommandNames.CommentSelectionFull]: (request: protocol.CommentSelectionRequest) => {
-                return this.requiredResponse(this.commentSelection(request.arguments, /*simplifiedResult*/false));
+                return this.requiredResponse(this.commentSelection(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.UncommentSelection]: (request: protocol.UncommentSelectionRequest) => {
-                return this.requiredResponse(this.uncommentSelection(request.arguments, /*simplifiedResult*/true));
+                return this.requiredResponse(this.uncommentSelection(request.arguments, /*simplifiedResult*/ true));
             },
             [CommandNames.UncommentSelectionFull]: (request: protocol.UncommentSelectionRequest) => {
-                return this.requiredResponse(this.uncommentSelection(request.arguments, /*simplifiedResult*/false));
+                return this.requiredResponse(this.uncommentSelection(request.arguments, /*simplifiedResult*/ false));
             },
         });
 

@@ -3659,8 +3659,8 @@ namespace FourSlash {
         }
 
         public toggleLineComment(newFileContent: string): void {
-            let changes: ts.TextChange[] = [];
-            for (let range of this.getRanges()) {
+            const changes: ts.TextChange[] = [];
+            for (const range of this.getRanges()) {
                 changes.push.apply(changes, this.languageService.toggleLineComment(this.activeFile.fileName, range));
             }
 
@@ -3670,8 +3670,8 @@ namespace FourSlash {
         }
 
         public toggleMultilineComment(newFileContent: string): void {
-            let changes: ts.TextChange[] = [];
-            for (let range of this.getRanges()) {
+            const changes: ts.TextChange[] = [];
+            for (const range of this.getRanges()) {
                 changes.push.apply(changes, this.languageService.toggleMultilineComment(this.activeFile.fileName, range));
             }
 
@@ -3681,8 +3681,8 @@ namespace FourSlash {
         }
 
         public commentSelection(newFileContent: string): void {
-            let changes: ts.TextChange[] = [];
-            for (let range of this.getRanges()) {
+            const changes: ts.TextChange[] = [];
+            for (const range of this.getRanges()) {
                 changes.push.apply(changes, this.languageService.commentSelection(this.activeFile.fileName, range));
             }
 
@@ -3692,8 +3692,8 @@ namespace FourSlash {
         }
 
         public uncommentSelection(newFileContent: string): void {
-            let changes: ts.TextChange[] = [];
-            for (let range of this.getRanges()) {
+            const changes: ts.TextChange[] = [];
+            for (const range of this.getRanges()) {
                 changes.push.apply(changes, this.languageService.uncommentSelection(this.activeFile.fileName, range));
             }
 

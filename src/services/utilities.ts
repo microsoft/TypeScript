@@ -1332,9 +1332,11 @@ namespace ts {
                     || node.kind === SyntaxKind.OpenBraceToken
                     || node.kind === SyntaxKind.SlashToken) {
                     node = node.parent;
-                } else if (node.kind === SyntaxKind.JsxElement) {
+                }
+                else if (node.kind === SyntaxKind.JsxElement) {
                     return position > node.getStart(sourceFile) || isInsideJsxElementRecursion(node.parent);
-                } else {
+                }
+                else {
                     return false;
                 }
             }

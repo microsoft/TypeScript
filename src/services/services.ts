@@ -1982,7 +1982,7 @@ namespace ts {
                 lineStarts: sourceFile.getLineStarts(),
                 firstLine: sourceFile.getLineAndCharacterOfPosition(textRange.pos).line,
                 lastLine: sourceFile.getLineAndCharacterOfPosition(textRange.end).line
-            }
+            };
         }
 
         function toggleLineComment(fileName: string, textRange: TextRange, insertComment?: boolean): TextChange[] {
@@ -1992,9 +1992,9 @@ namespace ts {
 
             let isCommenting = insertComment || false;
             let leftMostPosition = Number.MAX_VALUE;
-            let lineTextStarts = new Map<number>();
+            const lineTextStarts = new Map<number>();
             const whiteSpaceRegex = new RegExp(/\S/);
-            const isJsx = isInsideJsxElement(sourceFile, lineStarts[firstLine])
+            const isJsx = isInsideJsxElement(sourceFile, lineStarts[firstLine]);
             const openComment = isJsx ? "{/*" : "//";
 
             // Check each line before any text changes.
@@ -2021,7 +2021,8 @@ namespace ts {
                 if (lineTextStart !== undefined) {
                     if (isJsx) {
                         textChanges.push.apply(textChanges, toggleMultilineComment(fileName, { pos: lineStarts[i] + leftMostPosition, end: sourceFile.getLineEndOfPosition(lineStarts[i]) }, isCommenting, isJsx));
-                    } else if (isCommenting) {
+                    }
+                    else if (isCommenting) {
                         textChanges.push({
                             newText: openComment,
                             span: {
@@ -2029,7 +2030,8 @@ namespace ts {
                                 start: lineStarts[i] + leftMostPosition
                             }
                         });
-                    } else if (sourceFile.text.substr(lineStarts[i] + lineTextStart, openComment.length) === openComment) {
+                    }
+                    else if (sourceFile.text.substr(lineStarts[i] + lineTextStart, openComment.length) === openComment) {
                         textChanges.push({
                             newText: "",
                             span: {
@@ -2080,8 +2082,9 @@ namespace ts {
                     }
 
                     pos = commentRange.end + 1;
-                } else { // If it's not in a comment range, then we need to comment the uncommented portions.
-                    let newPos = text.substring(pos, textRange.end).search(`(${openMultilineRegex})|(${closeMultilineRegex})`);
+                }
+                else { // If it's not in a comment range, then we need to comment the uncommented portions.
+                    const newPos = text.substring(pos, textRange.end).search(`(${openMultilineRegex})|(${closeMultilineRegex})`);
 
                     isCommenting = insertComment !== undefined
                         ? insertComment
@@ -2141,16 +2144,17 @@ namespace ts {
                         }
                     });
                 }
-            } else {
+            }
+            else {
                 // If is not commenting then remove all comments found.
-                for (let i = 0; i < positions.length; i++) {
-                    const from = positions[i] - closeMultiline.length > 0 ? positions[i] - closeMultiline.length : 0;
+                for (const pos of positions) {
+                    const from = pos - closeMultiline.length > 0 ? pos - closeMultiline.length : 0;
                     const offset = text.substr(from, closeMultiline.length) === closeMultiline ? closeMultiline.length : 0;
                     textChanges.push({
                         newText: "",
                         span: {
                             length: openMultiline.length,
-                            start: positions[i] - offset
+                            start: pos - offset
                         }
                     });
                 }
@@ -2160,21 +2164,22 @@ namespace ts {
         }
 
         function commentSelection(fileName: string, textRange: TextRange): TextChange[] {
-            return toggleLineComment(fileName, textRange, true);
+            return toggleLineComment(fileName, textRange, /*insertComment*/ true);
         }
+
         function uncommentSelection(fileName: string, textRange: TextRange): TextChange[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             const textChanges: TextChange[] = [];
 
             for (let i = textRange.pos; i <= textRange.end; i++) {
-                let commentRange = isInComment(sourceFile, i);
+                const commentRange = isInComment(sourceFile, i);
                 if (commentRange) {
                     switch (commentRange.kind) {
                         case SyntaxKind.SingleLineCommentTrivia:
-                            textChanges.push.apply(textChanges, toggleLineComment(fileName, { end: commentRange.end, pos: commentRange.pos + 1 }, false));
+                            textChanges.push.apply(textChanges, toggleLineComment(fileName, { end: commentRange.end, pos: commentRange.pos + 1 }, /*insertComment*/ false));
                             break;
                         case SyntaxKind.MultiLineCommentTrivia:
-                            textChanges.push.apply(textChanges, toggleMultilineComment(fileName, { end: commentRange.end, pos: commentRange.pos + 1 }, false));
+                            textChanges.push.apply(textChanges, toggleMultilineComment(fileName, { end: commentRange.end, pos: commentRange.pos + 1 }, /*insertComment*/ false));
                     }
 
                     i = commentRange.end + 1;
