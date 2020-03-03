@@ -106,24 +106,21 @@ function j() {
 >command : string
 >"bye" : "bye"
 }
-function k(b: boolean, t: { command: string, ok: string }) {
->k : (b: boolean, t: { command: string; ok: string; }) => { command: string; ok: string; spoiler: boolean; } | { spoiler: boolean; command: string; }
->b : boolean
+function k(t: { command: string, ok: string }) {
+>k : (t: { command: string; ok: string; }) => { command: string; ok: string; spoiler2: boolean; spoiler: boolean; }
 >t : { command: string; ok: string; }
 >command : string
 >ok : string
 
-    return { command: "hi", ...{ spoiler: true }, ...(b ? t : {}) } // ok
->{ command: "hi", ...{ spoiler: true }, ...(b ? t : {}) } : { command: string; ok: string; spoiler: boolean; } | { spoiler: boolean; command: string; }
+    return { command: "hi", ...{ spoiler: true }, spoiler2: true, ...t } // error
+>{ command: "hi", ...{ spoiler: true }, spoiler2: true, ...t } : { command: string; ok: string; spoiler2: boolean; spoiler: boolean; }
 >command : string
 >"hi" : "hi"
 >{ spoiler: true } : { spoiler: boolean; }
 >spoiler : boolean
 >true : true
->(b ? t : {}) : { command: string; ok: string; } | {}
->b ? t : {} : { command: string; ok: string; } | {}
->b : boolean
+>spoiler2 : boolean
+>true : true
 >t : { command: string; ok: string; }
->{} : {}
 }
 

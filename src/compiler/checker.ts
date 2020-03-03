@@ -22533,6 +22533,7 @@ namespace ts {
             checkGrammarObjectLiteralExpression(node, inDestructuringPattern);
 
             let propertiesTable: SymbolTable;
+            const allPropertiesTable = createSymbolTable();
             let propertiesArray: Symbol[] = [];
             let spread: Type = emptyObjectType;
 
@@ -22548,7 +22549,6 @@ namespace ts {
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
-            const propertyDeclarations = createMap<Symbol>();
             propertiesTable = createSymbolTable();
 
             let offset = 0;
@@ -22615,7 +22615,7 @@ namespace ts {
                     prop.type = type;
                     prop.target = member;
                     member = prop;
-                    propertyDeclarations.set(prop.escapedName as string, prop);
+                    allPropertiesTable.set(prop.escapedName, prop);
                 }
                 else if (memberDecl.kind === SyntaxKind.SpreadAssignment) {
                     if (languageVersion < ScriptTarget.ES2015) {
@@ -22635,7 +22635,7 @@ namespace ts {
                     }
                     for (const right of getPropertiesOfType(type)) {
                         const rightType = getTypeOfSymbol(right);
-                        const left = propertyDeclarations.get(right.escapedName as string);
+                        const left = allPropertiesTable.get(right.escapedName);
                         if (strictNullChecks &&
                             left &&
                             !maybeTypeOfKind(rightType, TypeFlags.Nullable)) {

@@ -81,17 +81,16 @@ function j() {
 >command : Symbol(command, Decl(spreadOverwritesPropertyStrict.ts, 20, 17))
 >command : Symbol(command, Decl(spreadOverwritesPropertyStrict.ts, 20, 40))
 }
-function k(b: boolean, t: { command: string, ok: string }) {
+function k(t: { command: string, ok: string }) {
 >k : Symbol(k, Decl(spreadOverwritesPropertyStrict.ts, 21, 1))
->b : Symbol(b, Decl(spreadOverwritesPropertyStrict.ts, 22, 11))
->t : Symbol(t, Decl(spreadOverwritesPropertyStrict.ts, 22, 22))
->command : Symbol(command, Decl(spreadOverwritesPropertyStrict.ts, 22, 27))
->ok : Symbol(ok, Decl(spreadOverwritesPropertyStrict.ts, 22, 44))
+>t : Symbol(t, Decl(spreadOverwritesPropertyStrict.ts, 22, 11))
+>command : Symbol(command, Decl(spreadOverwritesPropertyStrict.ts, 22, 15))
+>ok : Symbol(ok, Decl(spreadOverwritesPropertyStrict.ts, 22, 32))
 
-    return { command: "hi", ...{ spoiler: true }, ...(b ? t : {}) } // ok
+    return { command: "hi", ...{ spoiler: true }, spoiler2: true, ...t } // error
 >command : Symbol(command, Decl(spreadOverwritesPropertyStrict.ts, 23, 12))
 >spoiler : Symbol(spoiler, Decl(spreadOverwritesPropertyStrict.ts, 23, 32))
->b : Symbol(b, Decl(spreadOverwritesPropertyStrict.ts, 22, 11))
->t : Symbol(t, Decl(spreadOverwritesPropertyStrict.ts, 22, 22))
+>spoiler2 : Symbol(spoiler2, Decl(spreadOverwritesPropertyStrict.ts, 23, 49))
+>t : Symbol(t, Decl(spreadOverwritesPropertyStrict.ts, 22, 11))
 }
 

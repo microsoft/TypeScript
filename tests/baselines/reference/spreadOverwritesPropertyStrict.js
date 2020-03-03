@@ -21,8 +21,8 @@ function i(b: boolean, t: { command: string, ok: string }) {
 function j() {
     return { ...{ command: "hi" } , ...{ command: "bye" } } // ok
 }
-function k(b: boolean, t: { command: string, ok: string }) {
-    return { command: "hi", ...{ spoiler: true }, ...(b ? t : {}) } // ok
+function k(t: { command: string, ok: string }) {
+    return { command: "hi", ...{ spoiler: true }, spoiler2: true, ...t } // error
 }
 
 
@@ -59,6 +59,6 @@ function i(b, t) {
 function j() {
     return __assign({ command: "hi" }, { command: "bye" }); // ok
 }
-function k(b, t) {
-    return __assign(__assign({ command: "hi" }, { spoiler: true }), (b ? t : {})); // ok
+function k(t) {
+    return __assign(__assign(__assign({ command: "hi" }, { spoiler: true }), { spoiler2: true }), t); // error
 }
