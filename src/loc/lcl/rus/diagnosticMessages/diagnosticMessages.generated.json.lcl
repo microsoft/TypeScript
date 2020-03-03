@@ -9545,6 +9545,9 @@
       <Item ItemId=";Tag_0_expects_at_least_1_arguments_but_the_JSX_factory_2_provides_at_most_3_6229" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Минимальное ожидаемое число аргументов для тега "{0}" — "{1}", при этом максимальное число аргументов, предоставляемое фабрикой JSX "{2}", — "{3}".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
