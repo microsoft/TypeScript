@@ -23,4 +23,13 @@ tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts(15,14): e
                  ~~~~
 !!! error TS2783: 'x' is specified more than once, so this usage will be overwritten.
     }
+    function i(b: boolean, t: { command: string, ok: string }) {
+        return { command: "hi", ...(b ? t : {}) } // ok
+    }
+    function j() {
+        return { ...{ command: "hi" } , ...{ command: "bye" } } // ok
+    }
+    function k(b: boolean, t: { command: string, ok: string }) {
+        return { command: "hi", ...{ spoiler: true }, ...(b ? t : {}) } // ok
+    }
     
