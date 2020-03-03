@@ -9,6 +9,7 @@ import y = require("./a");
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 exports.x = 1;
 //// [b.js]
 "use strict";

@@ -304,14 +304,14 @@ sourceFile:sourceMapValidationClass.ts
 >>>        },
 1 >^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^^^->
 1 >
   >    
 2 >        }
 1 >Emitted(22, 9) Source(17, 5) + SourceIndex(0)
 2 >Emitted(22, 10) Source(17, 6) + SourceIndex(0)
 ---
->>>        enumerable: true,
+>>>        enumerable: false,
 >>>        configurable: true
 >>>    });
 1->^^^^^^^

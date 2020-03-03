@@ -50,6 +50,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.Timestamped = exports.wrapClass = void 0;
 function wrapClass(param) {
     return /** @class */ (function () {
         function Wrapped() {
@@ -89,6 +90,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.TimestampedUser = exports.User = void 0;
 var wrapClass_1 = require("./wrapClass");
 exports["default"] = wrapClass_1.wrapClass(0);
 // Simple class

@@ -26,7 +26,7 @@ namespace ts.codefix {
         if (!importDeclaration) {
             return;
         }
-        const importClause = Debug.assertDefined(importDeclaration.importClause);
+        const importClause = Debug.checkDefined(importDeclaration.importClause);
         changes.replaceNode(context.sourceFile, importDeclaration, updateImportDeclaration(
             importDeclaration,
             importDeclaration.decorators,

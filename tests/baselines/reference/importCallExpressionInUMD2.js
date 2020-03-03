@@ -28,6 +28,7 @@ foo(import("./0"));
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.B = void 0;
     class B {
         print() { return "I am B"; }
     }

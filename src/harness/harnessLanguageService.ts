@@ -598,6 +598,9 @@ namespace Harness.LanguageService {
         getSourceMapper(): never {
             return ts.notImplemented();
         }
+        clearSourceMapperCache(): never {
+            return ts.notImplemented();
+        }
         dispose(): void { this.shim.dispose({}); }
     }
 

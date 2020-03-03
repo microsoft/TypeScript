@@ -20,6 +20,7 @@ export declare const actions: {
 //// [/src/plugin-one/action.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.actions = void 0;
 var typescript_fsa_1 = require("typescript-fsa"); // Include version of shared lib
 var action = typescript_fsa_1.actionCreatorFactory("somekey");
 var featureOne = action("feature-one");

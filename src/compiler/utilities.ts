@@ -864,14 +864,17 @@ namespace ts {
         }
     }
 
-    export function entityNameToString(name: EntityNameOrEntityNameExpression): string {
+    export function entityNameToString(name: EntityNameOrEntityNameExpression | JsxTagNameExpression | PrivateIdentifier): string {
         switch (name.kind) {
+            case SyntaxKind.ThisKeyword:
+                return "this";
+            case SyntaxKind.PrivateIdentifier:
             case SyntaxKind.Identifier:
                 return getFullWidth(name) === 0 ? idText(name) : getTextOfNode(name);
             case SyntaxKind.QualifiedName:
                 return entityNameToString(name.left) + "." + entityNameToString(name.right);
             case SyntaxKind.PropertyAccessExpression:
-                if (isIdentifier(name.name)) {
+                if (isIdentifier(name.name) || isPrivateIdentifier(name.name)) {
                     return entityNameToString(name.expression) + "." + entityNameToString(name.name);
                 }
                 else {
@@ -1853,6 +1856,20 @@ namespace ts {
         return !requireStringLiteralLikeArgument || isStringLiteralLike(arg);
     }
 
+    /**
+     * Returns true if the node is a VariableDeclaration initialized to a require call (see `isRequireCall`).
+     * This function does not test if the node is in a JavaScript file or not.
+     */
+    export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: true): node is RequireVariableDeclaration;
+    export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration;
+    export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration {
+        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(node.initializer, requireStringLiteralLikeArgument);
+    }
+
+    export function isRequireVariableDeclarationStatement(node: Node, requireStringLiteralLikeArgument = true): node is VariableStatement {
+        return isVariableStatement(node) && every(node.declarationList.declarations, decl => isRequireVariableDeclaration(decl, requireStringLiteralLikeArgument));
+    }
+
     export function isSingleOrDoubleQuote(charCode: number) {
         return charCode === CharacterCodes.singleQuote || charCode === CharacterCodes.doubleQuote;
     }
@@ -2203,7 +2220,7 @@ namespace ts {
                 // exports.name = expr OR module.exports.name = expr OR exports["name"] = expr ...
                 return AssignmentDeclarationKind.ExportsProperty;
             }
-            if (isBindableStaticNameExpression(lhs, /*excludeThisKeyword*/ true) || (isElementAccessExpression(lhs) && isDynamicName(lhs) && lhs.expression.kind !== SyntaxKind.ThisKeyword)) {
+            if (isBindableStaticNameExpression(lhs, /*excludeThisKeyword*/ true) || (isElementAccessExpression(lhs) && isDynamicName(lhs))) {
                 // F.G...x = expr
                 return AssignmentDeclarationKind.Property;
             }
@@ -2449,21 +2466,24 @@ namespace ts {
     }
 
     export function getHostSignatureFromJSDoc(node: Node): SignatureDeclaration | undefined {
-        return getHostSignatureFromJSDocHost(getJSDocHost(node));
+        const host = getEffectiveJSDocHost(node);
+        return host && isFunctionLike(host) ? host : undefined;
     }
 
-    export function getHostSignatureFromJSDocHost(host: HasJSDoc): SignatureDeclaration | undefined {
+    export function getEffectiveJSDocHost(node: Node): Node | undefined {
+        const host = getJSDocHost(node);
         const decl = getSourceOfDefaultedAssignment(host) ||
             getSourceOfAssignment(host) ||
             getSingleInitializerOfVariableStatementOrPropertyDeclaration(host) ||
             getSingleVariableOfVariableStatement(host) ||
             getNestedModuleDeclaration(host) ||
             host;
-        return decl && isFunctionLike(decl) ? decl : undefined;
+        return decl;
     }
 
+    /** Use getEffectiveJSDocHost if you additionally need to look for jsdoc on parent nodes, like assignments.  */
     export function getJSDocHost(node: Node): HasJSDoc {
-        return Debug.assertDefined(findAncestor(node.parent, isJSDoc)).parent;
+        return Debug.checkDefined(findAncestor(node.parent, isJSDoc)).parent;
     }
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
@@ -2804,15 +2824,20 @@ namespace ts {
         return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;
     }
 
-    export function getClassImplementsHeritageClauseElements(node: ClassLikeDeclaration) {
-        const heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ImplementsKeyword);
-        return heritageClause ? heritageClause.types : undefined;
+    export function getEffectiveImplementsTypeNodes(node: ClassLikeDeclaration): undefined | readonly ExpressionWithTypeArguments[]{
+        if(isInJSFile(node)) {
+            return getJSDocImplementsTags(node).map(n => n.class);
+        }
+        else {
+            const heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ImplementsKeyword);
+            return heritageClause?.types;
+        }
     }
 
     /** Returns the node in an `extends` or `implements` clause of a class or interface. */
     export function getAllSuperTypeNodes(node: Node): readonly TypeNode[] {
         return isInterfaceDeclaration(node) ? getInterfaceBaseTypeNodes(node) || emptyArray :
-            isClassLike(node) ? concatenate(singleElementArray(getEffectiveBaseTypeNode(node)), getClassImplementsHeritageClauseElements(node)) || emptyArray :
+            isClassLike(node) ? concatenate(singleElementArray(getEffectiveBaseTypeNode(node)), getEffectiveImplementsTypeNodes(node)) || emptyArray :
             emptyArray;
     }
 
@@ -5036,6 +5061,14 @@ namespace ts {
         return node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression;
     }
 
+    export function getNameOfAccessExpression(node: AccessExpression) {
+        if (node.kind === SyntaxKind.PropertyAccessExpression) {
+            return node.name;
+        }
+        Debug.assert(node.kind === SyntaxKind.ElementAccessExpression);
+        return node.argumentExpression;
+    }
+
     export function isBundleFileTextLike(section: BundleFileSection): section is BundleFileTextLike {
         switch (section.kind) {
             case BundleFileSectionKind.Text:
@@ -5148,7 +5181,7 @@ namespace ts {
     }
 
     export function formatStringFromArgs(text: string, args: ArrayLike<string | number>, baseIndex = 0): string {
-        return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.assertDefined(args[+index + baseIndex]));
+        return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.checkDefined(args[+index + baseIndex]));
     }
 
     export let localizedDiagnosticMessages: MapLike<string> | undefined;
@@ -6229,6 +6262,10 @@ namespace ts {
             || isFirstIdentifierOfNonEmittingHeritageClause(useSite)
             || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
             || !isExpressionNode(useSite);
+    }
+
+    export function typeOnlyDeclarationIsExport(typeOnlyDeclaration: Node) {
+        return typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier;
     }
 
     function isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node: Node) {

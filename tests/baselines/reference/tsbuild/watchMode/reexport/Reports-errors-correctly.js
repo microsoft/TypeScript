@@ -76,7 +76,18 @@ export interface Session {
 
 //// [/user/username/projects/reexport/out/pure/index.js]
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+}
 exports.__esModule = true;
+__exportStar(require("./session"), exports);
 
 
 //// [/user/username/projects/reexport/out/pure/index.d.ts]
@@ -129,6 +140,7 @@ export * from "./session";
 //// [/user/username/projects/reexport/out/main/index.js]
 "use strict";
 exports.__esModule = true;
+exports.session = void 0;
 exports.session = {
     foo: 1
 };

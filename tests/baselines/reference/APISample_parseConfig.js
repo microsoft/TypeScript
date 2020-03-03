@@ -50,6 +50,7 @@ export function createProgram(rootFiles: string[], compilerOptionsJson: string):
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 exports.__esModule = true;
+exports.createProgram = void 0;
 var ts = require("typescript");
 function printError(error) {
     if (!error) {

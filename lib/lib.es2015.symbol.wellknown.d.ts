@@ -91,7 +91,7 @@ interface Array<T> {
      * Returns an object whose properties have the value 'true'
      * when they will be absent when used in a 'with' statement.
      */
-    [Symbol.unscopables]: {
+    [Symbol.unscopables](): {
         copyWithin: boolean;
         entries: boolean;
         fill: boolean;

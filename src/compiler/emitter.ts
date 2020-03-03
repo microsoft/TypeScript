@@ -131,7 +131,7 @@ namespace ts {
     }
 
     function rootDirOfOptions(configFile: ParsedCommandLine) {
-        return configFile.options.rootDir || getDirectoryPath(Debug.assertDefined(configFile.options.configFilePath));
+        return configFile.options.rootDir || getDirectoryPath(Debug.checkDefined(configFile.options.configFilePath));
     }
 
     function getOutputPathWithoutChangingExt(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, outputDir: string | undefined) {
@@ -163,7 +163,7 @@ namespace ts {
                     Extension.Jsx :
                     Extension.Js
         );
-        return !isJsonFile || comparePaths(inputFileName, outputFileName, Debug.assertDefined(configFile.options.configFilePath), ignoreCase) !== Comparison.EqualTo ?
+        return !isJsonFile || comparePaths(inputFileName, outputFileName, Debug.checkDefined(configFile.options.configFilePath), ignoreCase) !== Comparison.EqualTo ?
             outputFileName :
             undefined;
     }
@@ -239,7 +239,7 @@ namespace ts {
     export function getFirstProjectOutput(configFile: ParsedCommandLine, ignoreCase: boolean): string {
         if (configFile.options.outFile || configFile.options.out) {
             const { jsFilePath } = getOutputPathsForBundle(configFile.options, /*forceDtsPaths*/ false);
-            return Debug.assertDefined(jsFilePath, `project ${configFile.options.configFilePath} expected to have at least one output`);
+            return Debug.checkDefined(jsFilePath, `project ${configFile.options.configFilePath} expected to have at least one output`);
         }
 
         for (const inputFileName of configFile.fileNames) {
@@ -587,7 +587,7 @@ namespace ts {
                 return `data:application/json;base64,${base64SourceMapText}`;
             }
 
-            const sourceMapFile = getBaseFileName(normalizeSlashes(Debug.assertDefined(sourceMapFilePath)));
+            const sourceMapFile = getBaseFileName(normalizeSlashes(Debug.checkDefined(sourceMapFilePath)));
             if (mapOptions.mapRoot) {
                 let sourceMapDir = normalizeSlashes(mapOptions.mapRoot);
                 if (sourceFile) {
@@ -690,7 +690,7 @@ namespace ts {
             sourceFile.statements = createNodeArray();
             return sourceFile;
         });
-        const jsBundle = Debug.assertDefined(bundle.js);
+        const jsBundle = Debug.checkDefined(bundle.js);
         forEach(jsBundle.sources && jsBundle.sources.prologues, prologueInfo => {
             const sourceFile = sourceFiles[prologueInfo.file];
             sourceFile.text = prologueInfo.text;
@@ -713,9 +713,9 @@ namespace ts {
         customTransformers?: CustomTransformers
     ): EmitUsingBuildInfoResult {
         const { buildInfoPath, jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(config.options, /*forceDtsPaths*/ false);
-        const buildInfoText = host.readFile(Debug.assertDefined(buildInfoPath));
+        const buildInfoText = host.readFile(Debug.checkDefined(buildInfoPath));
         if (!buildInfoText) return buildInfoPath!;
-        const jsFileText = host.readFile(Debug.assertDefined(jsFilePath));
+        const jsFileText = host.readFile(Debug.checkDefined(jsFilePath));
         if (!jsFileText) return jsFilePath!;
         const sourceMapText = sourceMapFilePath && host.readFile(sourceMapFilePath);
         // error if no source map or for now if inline sourcemap
@@ -848,7 +848,7 @@ namespace ts {
         let write = writeBase;
         let isOwnFileEmit: boolean;
         const bundleFileInfo = printerOptions.writeBundleFileInfo ? { sections: [] } as BundleFileInfo : undefined;
-        const relativeToBuildInfo = bundleFileInfo ? Debug.assertDefined(printerOptions.relativeToBuildInfo) : undefined;
+        const relativeToBuildInfo = bundleFileInfo ? Debug.checkDefined(printerOptions.relativeToBuildInfo) : undefined;
         const recordInternalSection = printerOptions.recordInternalSection;
         let sourceFileTextPos = 0;
         let sourceFileTextKind: BundleFileTextLikeKind = BundleFileSectionKind.Text;
@@ -1519,8 +1519,9 @@ namespace ts {
                     case SyntaxKind.JSDocThisTag:
                     case SyntaxKind.JSDocEnumTag:
                         return emitJSDocSimpleTypedTag(node as JSDocTypeTag);
+                    case SyntaxKind.JSDocImplementsTag:
                     case SyntaxKind.JSDocAugmentsTag:
-                        return emitJSDocAugmentsTag(node as JSDocAugmentsTag);
+                        return emitJSDocHeritageTag(node as JSDocImplementsTag | JSDocAugmentsTag);
                     case SyntaxKind.JSDocTemplateTag:
                         return emitJSDocTemplateTag(node as JSDocTemplateTag);
                     case SyntaxKind.JSDocTypedefTag:
@@ -3468,7 +3469,7 @@ namespace ts {
             emitJSDocComment(tag.comment);
         }
 
-        function emitJSDocAugmentsTag(tag: JSDocAugmentsTag) {
+        function emitJSDocHeritageTag(tag: JSDocImplementsTag | JSDocAugmentsTag) {
             emitJSDocTagName(tag.tagName);
             writeSpace();
             writePunctuation("{");
@@ -3784,7 +3785,7 @@ namespace ts {
             else {
                 for (const prepend of sourceFileOrBundle.prepends) {
                     Debug.assertNode(prepend, isUnparsedSource);
-                    if (emitShebangIfNeeded(prepend as UnparsedSource)) {
+                    if (emitShebangIfNeeded(prepend)) {
                         return true;
                     }
                 }
