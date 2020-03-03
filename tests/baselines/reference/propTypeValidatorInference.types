@@ -35,9 +35,7 @@ export interface Validator<T> {
 >nominalTypeHack : unique symbol
 }
 
-export interface Requireable<T> extends Validator<T | undefined | null> {
->null : null
-
+export interface Requireable<T> extends Validator<T> {
     isRequired: Validator<NonNullable<T>>;
 >isRequired : Validator<NonNullable<T>>
 }
