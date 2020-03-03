@@ -6331,7 +6331,8 @@ namespace ts {
                     return result;
 
                     function visitExistingNodeTreeSymbols<T extends Node>(node: T): Node {
-                        if (isJSDocAllType(node)) {
+                        // We don't _actually_ support jsdoc namepath types, emit `any` instead
+                        if (isJSDocAllType(node) || node.kind === SyntaxKind.JSDocNamepathType) {
                             return createKeywordTypeNode(SyntaxKind.AnyKeyword);
                         }
                         if (isJSDocUnknownType(node)) {
