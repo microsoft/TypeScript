@@ -15363,7 +15363,7 @@ namespace ts {
                         //
                         //    - For a primitive type or type parameter (such as 'number = A & B') there is no point in
                         //          breaking the intersection apart.
-                        if (!isNonGenericObjectType(target) || !every((<IntersectionType>source).types, isNonGenericObjectType)) {
+                        if (!isNonGenericObjectType(target) || !every((<IntersectionType>source).types, t => isNonGenericObjectType(t) && !(getObjectFlags(t) & ObjectFlags.NonInferrableType))) {
                             result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false, IntersectionState.Source);
                         }
                     }
