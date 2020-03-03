@@ -1,0 +1,118 @@
+tests/cases/compiler/file.ts(35,5): error TS2322: Type 'Validator<InferProps<{ foo: Validator<string>; bar: Requireable<boolean>; baz: Requireable<any>; }>>' is not assignable to type 'Validator<{ foo: string; bar?: boolean | undefined; baz?: any; }>'.
+  Type 'InferProps<{ foo: Validator<string>; bar: Requireable<boolean>; baz: Requireable<any>; }>' is not assignable to type '{ foo: string; bar?: boolean | undefined; baz?: any; }'.
+    Types of property 'bar' are incompatible.
+      Type 'boolean | null | undefined' is not assignable to type 'boolean | undefined'.
+        Type 'null' is not assignable to type 'boolean | undefined'.
+tests/cases/compiler/file.ts(36,5): error TS2322: Type 'Validator<string | boolean | InferProps<{ foo: Requireable<string>; bar: Validator<number>; }>>' is not assignable to type 'Validator<string | boolean | { foo?: string | undefined; bar: number; }>'.
+  Type 'string | boolean | InferProps<{ foo: Requireable<string>; bar: Validator<number>; }>' is not assignable to type 'string | boolean | { foo?: string | undefined; bar: number; }'.
+    Type 'InferProps<{ foo: Requireable<string>; bar: Validator<number>; }>' is not assignable to type 'string | boolean | { foo?: string | undefined; bar: number; }'.
+      Type 'InferProps<{ foo: Requireable<string>; bar: Validator<number>; }>' is not assignable to type '{ foo?: string | undefined; bar: number; }'.
+        Types of property 'foo' are incompatible.
+          Type 'string | null | undefined' is not assignable to type 'string | undefined'.
+            Type 'null' is not assignable to type 'string | undefined'.
+
+
+==== tests/cases/compiler/node_modules/prop-types/index.d.ts (0 errors) ====
+    export const nominalTypeHack: unique symbol;
+    
+    export type IsOptional<T> = undefined | null extends T ? true : undefined extends T ? true : null extends T ? true : false;
+    
+    export type RequiredKeys<V> = { [K in keyof V]-?: Exclude<V[K], undefined> extends Validator<infer T> ? IsOptional<T> extends true ? never : K : never }[keyof V];
+    export type OptionalKeys<V> = Exclude<keyof V, RequiredKeys<V>>;
+    export type InferPropsInner<V> = { [K in keyof V]-?: InferType<V[K]>; };
+    
+    export interface Validator<T> {
+        (props: object, propName: string, componentName: string, location: string, propFullName: string): Error | null;
+        [nominalTypeHack]?: T;
+    }
+    
+    export interface Requireable<T> extends Validator<T | undefined | null> {
+        isRequired: Validator<NonNullable<T>>;
+    }
+    
+    export type ValidationMap<T> = { [K in keyof T]?: Validator<T[K]> };
+    
+    export type InferType<V> = V extends Validator<infer T> ? T : any;
+    export type InferProps<V> =
+        & InferPropsInner<Pick<V, RequiredKeys<V>>>
+        & Partial<InferPropsInner<Pick<V, OptionalKeys<V>>>>;
+    
+    export const any: Requireable<any>;
+    export const array: Requireable<any[]>;
+    export const bool: Requireable<boolean>;
+    export const string: Requireable<string>;
+    export const number: Requireable<number>;
+    export function shape<P extends ValidationMap<any>>(type: P): Requireable<InferProps<P>>;
+    export function oneOfType<T extends Validator<any>>(types: T[]): Requireable<NonNullable<InferType<T>>>;
+    
+    
+==== tests/cases/compiler/file.ts (2 errors) ====
+    import * as PropTypes from "prop-types";
+    interface Props {
+        any?: any;
+        array: string[];
+        bool: boolean;
+        shape: {
+            foo: string;
+            bar?: boolean;
+            baz?: any
+        };
+        oneOfType: string | boolean | {
+            foo?: string;
+            bar: number;
+        };
+    }
+    
+    type PropTypesMap = PropTypes.ValidationMap<Props>;
+    
+    const innerProps = {
+        foo: PropTypes.string.isRequired,
+        bar: PropTypes.bool,
+        baz: PropTypes.any
+    };
+    
+    const arrayOfTypes = [PropTypes.string, PropTypes.bool, PropTypes.shape({
+        foo: PropTypes.string,
+        bar: PropTypes.number.isRequired
+    })];
+    
+    // TS checking
+    const propTypes: PropTypesMap = {
+        any: PropTypes.any,
+        array: PropTypes.array.isRequired,
+        bool: PropTypes.bool.isRequired,
+        shape: PropTypes.shape(innerProps).isRequired,
+        ~~~~~
+!!! error TS2322: Type 'Validator<InferProps<{ foo: Validator<string>; bar: Requireable<boolean>; baz: Requireable<any>; }>>' is not assignable to type 'Validator<{ foo: string; bar?: boolean | undefined; baz?: any; }>'.
+!!! error TS2322:   Type 'InferProps<{ foo: Validator<string>; bar: Requireable<boolean>; baz: Requireable<any>; }>' is not assignable to type '{ foo: string; bar?: boolean | undefined; baz?: any; }'.
+!!! error TS2322:     Types of property 'bar' are incompatible.
+!!! error TS2322:       Type 'boolean | null | undefined' is not assignable to type 'boolean | undefined'.
+!!! error TS2322:         Type 'null' is not assignable to type 'boolean | undefined'.
+!!! related TS6500 tests/cases/compiler/file.ts:6:5: The expected type comes from property 'shape' which is declared here on type 'ValidationMap<Props>'
+        oneOfType: PropTypes.oneOfType(arrayOfTypes).isRequired,
+        ~~~~~~~~~
+!!! error TS2322: Type 'Validator<string | boolean | InferProps<{ foo: Requireable<string>; bar: Validator<number>; }>>' is not assignable to type 'Validator<string | boolean | { foo?: string | undefined; bar: number; }>'.
+!!! error TS2322:   Type 'string | boolean | InferProps<{ foo: Requireable<string>; bar: Validator<number>; }>' is not assignable to type 'string | boolean | { foo?: string | undefined; bar: number; }'.
+!!! error TS2322:     Type 'InferProps<{ foo: Requireable<string>; bar: Validator<number>; }>' is not assignable to type 'string | boolean | { foo?: string | undefined; bar: number; }'.
+!!! error TS2322:       Type 'InferProps<{ foo: Requireable<string>; bar: Validator<number>; }>' is not assignable to type '{ foo?: string | undefined; bar: number; }'.
+!!! error TS2322:         Types of property 'foo' are incompatible.
+!!! error TS2322:           Type 'string | null | undefined' is not assignable to type 'string | undefined'.
+!!! error TS2322:             Type 'null' is not assignable to type 'string | undefined'.
+!!! related TS6500 tests/cases/compiler/file.ts:11:5: The expected type comes from property 'oneOfType' which is declared here on type 'ValidationMap<Props>'
+    };
+    
+    // JS checking
+    const propTypesWithoutAnnotation = {
+        any: PropTypes.any,
+        array: PropTypes.array.isRequired,
+        bool: PropTypes.bool.isRequired,
+        shape: PropTypes.shape(innerProps).isRequired,
+        oneOfType: PropTypes.oneOfType(arrayOfTypes).isRequired,
+    };
+    
+    type ExtractedProps = PropTypes.InferProps<typeof propTypes>;
+    
+    type ExtractedPropsWithoutAnnotation = PropTypes.InferProps<typeof propTypesWithoutAnnotation>;
+    
+    type ExtractPropsMatch = ExtractedProps extends ExtractedPropsWithoutAnnotation ? true : false;
+    const x: true = (null as any as ExtractPropsMatch);
