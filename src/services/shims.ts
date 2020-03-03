@@ -279,7 +279,7 @@ namespace ts {
         getEmitOutputObject(fileName: string): EmitOutput;
 
         toggleLineComment(fileName: string, textChange: TextRange): string;
-        toggleMultilineComment(fileName: string, textChange:TextRange): string;
+        toggleMultilineComment(fileName: string, textChange: TextRange): string;
         commentSelection(fileName: string, textChange: TextRange): string;
         uncommentSelection(fileName: string, textChange: TextRange): string;
     }

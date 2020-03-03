@@ -812,20 +812,20 @@ namespace ts.server {
             return notImplemented();
         }
 
-        toggleLineComment(): ts.TextChange[] {
-            throw new Error("Method not implemented.");
+        toggleLineComment(): TextChange[] {
+            return notImplemented();
         }
 
-        toggleMultilineComment(): ts.TextChange[] {
-            throw new Error("Method not implemented.");
+        toggleMultilineComment(): TextChange[] {
+            return notImplemented();
         }
 
-        commentSelection(): ts.TextChange[] {
-            throw new Error("Method not implemented.");
+        commentSelection(): TextChange[] {
+            return notImplemented();
         }
 
-        uncommentSelection(): ts.TextChange[] {
-            throw new Error("Method not implemented.");
+        uncommentSelection(): TextChange[] {
+            return notImplemented();
         }
 
         dispose(): void {
