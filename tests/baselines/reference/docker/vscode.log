@@ -4,6 +4,7 @@ yarn run vX.X.X
 $ gulp compile --max_old_space_size=4095
 [XX:XX:XX] Node flags detected: --max_old_space_size=4095
 [XX:XX:XX] Using gulpfile /vscode/gulpfile.js
+[XX:XX:XX] Error: /vscode/src/vs/base/common/uuid.ts(17,27): Property 'padStart' does not exist on type 'string'.
 Done in ?s.
 
 
