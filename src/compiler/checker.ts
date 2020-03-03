@@ -11058,8 +11058,18 @@ namespace ts {
                 }
                 else {
                     const constraintDeclaration = getConstraintDeclaration(typeParameter);
-                    typeParameter.constraint = constraintDeclaration ? getTypeFromTypeNode(constraintDeclaration) :
-                        getInferredTypeParameterConstraint(typeParameter) || noConstraintType;
+                    if (!constraintDeclaration) {
+                        typeParameter.constraint = getInferredTypeParameterConstraint(typeParameter) || noConstraintType;
+                    }
+                    else {
+                        let type = getTypeFromTypeNode(constraintDeclaration);
+                        if (type.flags & TypeFlags.Any && type !== errorType) { // Allow errorType to propegate to keep downstream errors suppressed
+                            // use keyofConstraintType as the base constraint for mapped type key constraints (unknown isn;t assignable to that, but `any` was),
+                            // use unknown otherwise
+                            type = constraintDeclaration.parent.parent.kind === SyntaxKind.MappedType ? keyofConstraintType : unknownType;
+                        }
+                        typeParameter.constraint = type;
+                    }
                 }
             }
             return typeParameter.constraint === noConstraintType ? undefined : typeParameter.constraint;
