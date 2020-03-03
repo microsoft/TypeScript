@@ -25,6 +25,7 @@ export { foo2 };
 //// [foo.js]
 "use strict";
 exports.__esModule = true;
+exports.arr = exports.foo = void 0;
 var foo = { bar: 'hello', bat: 'world', bam: { bork: { bar: 'a', baz: 'b' } } };
 exports.foo = foo;
 var arr = [0, 1, 2, ['a', 'b', 'c', [{ def: 'def' }, { sec: 'sec' }]]];
@@ -32,6 +33,7 @@ exports.arr = arr;
 //// [index.js]
 "use strict";
 exports.__esModule = true;
+exports.foo2 = exports.sec = exports.bee = exports.one = exports.ibaz = exports.baz = exports.arr = exports.foo = void 0;
 var foo_1 = require("./foo");
 exports.foo = foo_1.foo;
 exports.arr = foo_1.arr;

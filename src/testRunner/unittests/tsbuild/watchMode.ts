@@ -1266,8 +1266,7 @@ const a = {
             ),
             changes: [
                 sys => {
-                    const content = sys.readFile(`${projectsLocation}/reexport/src/pure/session.ts`)!;
-                    sys.writeFile(`${projectsLocation}/reexport/src/pure/session.ts`, content.replace("// ", ""));
+                    replaceFileText(sys, `${projectsLocation}/reexport/src/pure/session.ts`, "// ", "");
                     sys.checkTimeoutQueueLengthAndRun(1); // build src/pure
                     sys.checkTimeoutQueueLengthAndRun(1); // build src/main
                     sys.checkTimeoutQueueLengthAndRun(1); // build src
@@ -1275,13 +1274,71 @@ const a = {
                     return "Introduce error";
                 },
                 sys => {
-                    const content = sys.readFile(`${projectsLocation}/reexport/src/pure/session.ts`)!;
-                    sys.writeFile(`${projectsLocation}/reexport/src/pure/session.ts`, content.replace("bar: ", "// bar: "));
+                    replaceFileText(sys, `${projectsLocation}/reexport/src/pure/session.ts`, "bar: ", "// bar: ");
                     sys.checkTimeoutQueueLengthAndRun(1); // build src/pure
                     sys.checkTimeoutQueueLengthAndRun(1); // build src/main
                     sys.checkTimeoutQueueLengthAndRun(1); // build src
                     sys.checkTimeoutQueueLength(0);
                     return "Fix error";
+                }
+            ]
+        });
+    });
+
+    describe("unittests:: tsbuild:: watchMode:: configFileErrors:: reports syntax errors in config file", () => {
+        verifyTscWatch({
+            scenario: "configFileErrors",
+            subScenario: "reports syntax errors in config file",
+            sys: () => createWatchedSystem(
+                [
+                    { path: `${projectRoot}/a.ts`, content: "export function foo() { }" },
+                    { path: `${projectRoot}/b.ts`, content: "export function bar() { }" },
+                    {
+                        path: `${projectRoot}/tsconfig.json`,
+                        content: Utils.dedent`
+{
+    "compilerOptions": {
+        "composite": true,
+    },
+    "files": [
+        "a.ts"
+        "b.ts"
+    ]
+}`
+                    },
+                    libFile
+                ],
+                { currentDirectory: projectRoot }
+            ),
+            commandLineArgs: ["--b", "-w"],
+            changes: [
+                sys => {
+                    replaceFileText(sys, `${projectRoot}/tsconfig.json`, ",", `,
+        "declaration": true,`);
+                    sys.checkTimeoutQueueLengthAndRun(1); // build the project
+                    sys.checkTimeoutQueueLength(0);
+                    return "reports syntax errors after change to config file";
+                },
+                sys => {
+                    replaceFileText(sys, `${projectRoot}/a.ts`, "foo", "fooBar");
+                    sys.checkTimeoutQueueLengthAndRun(1); // build the project
+                    sys.checkTimeoutQueueLength(0);
+                    return "reports syntax errors after change to ts file";
+                },
+                sys => {
+                    replaceFileText(sys, `${projectRoot}/tsconfig.json`, "", "");
+                    sys.checkTimeoutQueueLengthAndRun(1); // build the project
+                    sys.checkTimeoutQueueLength(0);
+                    return "reports error when there is no change to tsconfig file";
+                },
+                sys => {
+                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({
+                        compilerOptions: { composite: true, declaration: true },
+                        files: ["a.ts", "b.ts"]
+                    }));
+                    sys.checkTimeoutQueueLengthAndRun(1); // build the project
+                    sys.checkTimeoutQueueLength(0);
+                    return "builds after fixing config file errors";
                 }
             ]
         });

@@ -35,3 +35,6 @@ jobs:
         npm install
         npm update
         npm test
+    - name: Validate the browser can import TypeScript
+      run: gulp test-browser-integration
+    

@@ -22,6 +22,7 @@ export var x = Foo();
 //// [/a/b/referenceFile1.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 /// <reference path="./moduleFile2.ts" />
 exports.x = Foo();
 
@@ -52,21 +53,21 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
 /a/b/referencefile1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/referenceFile1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /a/b/modulefile2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/modulefile2.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -79,6 +80,7 @@ export var x = Foo();export var yy = Foo();
 //// [/a/b/referenceFile1.js]
 "use strict";
 exports.__esModule = true;
+exports.yy = exports.x = void 0;
 /// <reference path="./moduleFile2.ts" />
 exports.x = Foo();
 exports.yy = Foo();
@@ -111,21 +113,21 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
 /a/b/referencefile1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/referenceFile1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /a/b/modulefile2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/modulefile2.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -138,6 +140,7 @@ export var Foo4 = 10;
 //// [/a/b/moduleFile2.js]
 "use strict";
 exports.__esModule = true;
+exports.Foo4 = void 0;
 exports.Foo4 = 10;
 
 
@@ -168,20 +171,20 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
 /a/b/referencefile1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/referenceFile1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /a/b/modulefile2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

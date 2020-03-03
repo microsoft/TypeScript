@@ -105,7 +105,7 @@ namespace ts {
 
         // Visit each original node.
         for (let i = 0; i < count; i++) {
-            const node = nodes[i + start];
+            const node: T = nodes[i + start];
             aggregateTransformFlags(node);
             const visited = node !== undefined ? visitor(node) : undefined;
             if (updated !== undefined || visited === undefined || visited !== node) {
@@ -792,7 +792,8 @@ namespace ts {
             case SyntaxKind.ImportClause:
                 return updateImportClause(<ImportClause>node,
                     visitNode((<ImportClause>node).name, visitor, isIdentifier),
-                    visitNode((<ImportClause>node).namedBindings, visitor, isNamedImportBindings));
+                    visitNode((<ImportClause>node).namedBindings, visitor, isNamedImportBindings),
+                    (node as ImportClause).isTypeOnly);
 
             case SyntaxKind.NamespaceImport:
                 return updateNamespaceImport(<NamespaceImport>node,
@@ -822,7 +823,8 @@ namespace ts {
                     nodesVisitor((<ExportDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<ExportDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<ExportDeclaration>node).exportClause, visitor, isNamedExportBindings),
-                    visitNode((<ExportDeclaration>node).moduleSpecifier, visitor, isExpression));
+                    visitNode((<ExportDeclaration>node).moduleSpecifier, visitor, isExpression),
+                    (node as ExportDeclaration).isTypeOnly);
 
             case SyntaxKind.NamedExports:
                 return updateNamedExports(<NamedExports>node,

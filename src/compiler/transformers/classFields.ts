@@ -518,7 +518,7 @@ namespace ts {
 
             if (some(staticProperties) || some(pendingExpressions)) {
                 if (isDecoratedClassDeclaration) {
-                    Debug.assertDefined(pendingStatements, "Decorated classes transformed by TypeScript are expected to be within a variable declaration.");
+                    Debug.assertIsDefined(pendingStatements, "Decorated classes transformed by TypeScript are expected to be within a variable declaration.");
 
                     // Write any pending expressions from elided or moved computed property names
                     if (pendingStatements && pendingExpressions && some(pendingExpressions)) {
@@ -777,8 +777,9 @@ namespace ts {
                 return undefined;
             }
 
+            const propertyOriginalNode = getOriginalNode(property);
             const initializer = property.initializer || emitAssignment ? visitNode(property.initializer, visitor, isExpression)
-                : hasModifier(getOriginalNode(property), ModifierFlags.ParameterPropertyModifier) && isIdentifier(propertyName) ? propertyName
+                : isParameterPropertyDeclaration(propertyOriginalNode, propertyOriginalNode.parent) && isIdentifier(propertyName) ? propertyName
                 : createVoidZero();
 
             if (emitAssignment || isPrivateIdentifier(propertyName)) {
@@ -975,7 +976,7 @@ namespace ts {
             );
         }
 
-        function visitArrayAssignmentTarget(node: AssignmentPattern) {
+        function visitArrayAssignmentTarget(node: BindingOrAssignmentElement) {
             const target = getTargetOfBindingOrAssignmentElement(node);
             if (target && isPrivateIdentifierPropertyAccessExpression(target)) {
                 const wrapped = wrapPrivateIdentifierForDestructuringTarget(target);

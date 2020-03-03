@@ -31,10 +31,10 @@ let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"]
 >secondarySkillA : Symbol(secondarySkillA, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts, 9, 51))
 >multiRobotA : Symbol(multiRobotA, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts, 4, 3))
 
-let [nameMC = "noName" ] = ["roomba", ["vaccum", "mopping"]];
+let [nameMC = "noName" ] = ["roomba", ["vacuum", "mopping"]];
 >nameMC : Symbol(nameMC, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts, 11, 5))
 
-let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vaccum", "mopping"]];
+let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vacuum", "mopping"]];
 >nameMC2 : Symbol(nameMC2, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts, 12, 5))
 >primarySkillC : Symbol(primarySkillC, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts, 12, 26))
 >secondarySkillC : Symbol(secondarySkillC, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts, 12, 52))

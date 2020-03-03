@@ -16,6 +16,7 @@ export declare class A {
 //// [/src/a.js]
 "use strict";
 exports.__esModule = true;
+exports.A = void 0;
 var A = /** @class */ (function () {
     function A() {
     }

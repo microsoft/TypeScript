@@ -49,22 +49,22 @@ test({ method: 'x', nested: { p: 'a' } })
 test({ method: 'z', nested: { p: 'b' } })
 >test({ method: 'z', nested: { p: 'b' } }) : void
 >test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
->{ method: 'z', nested: { p: 'b' } } : { method: string; nested: { p: string; }; }
->method : string
+>{ method: 'z', nested: { p: 'b' } } : { method: "z"; nested: { p: "b"; }; }
+>method : "z"
 >'z' : "z"
->nested : { p: string; }
->{ p: 'b' } : { p: string; }
->p : string
+>nested : { p: "b"; }
+>{ p: 'b' } : { p: "b"; }
+>p : "b"
 >'b' : "b"
 
 test({ method: 'one', nested: { p: 'a' } })
 >test({ method: 'one', nested: { p: 'a' } }) : void
 >test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
->{ method: 'one', nested: { p: 'a' } } : { method: string; nested: { p: string; }; }
->method : string
+>{ method: 'one', nested: { p: 'a' } } : { method: "one"; nested: { p: "a"; }; }
+>method : "one"
 >'one' : "one"
->nested : { p: string; }
->{ p: 'a' } : { p: string; }
->p : string
+>nested : { p: "a"; }
+>{ p: 'a' } : { p: "a"; }
+>p : "a"
 >'a' : "a"
 

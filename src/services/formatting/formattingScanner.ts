@@ -122,7 +122,13 @@ namespace ts.formatting {
         }
 
         function shouldRescanJsxText(node: Node): boolean {
-            return node.kind === SyntaxKind.JsxText;
+            const isJSXText = isJsxText(node);
+            if (isJSXText) {
+                const containingElement = findAncestor(node.parent, p => isJsxElement(p));
+                if (!containingElement) return false; // should never happen
+                return !isParenthesizedExpression(containingElement.parent);
+            }
+            return false;
         }
 
         function shouldRescanSlashToken(container: Node): boolean {
@@ -236,7 +242,7 @@ namespace ts.formatting {
                 case ScanAction.RescanTemplateToken:
                     if (token === SyntaxKind.CloseBraceToken) {
                         lastScanAction = ScanAction.RescanTemplateToken;
-                        return scanner.reScanTemplateToken();
+                        return scanner.reScanTemplateToken(/* isTaggedTemplate */ false);
                     }
                     break;
                 case ScanAction.RescanJsxIdentifier:

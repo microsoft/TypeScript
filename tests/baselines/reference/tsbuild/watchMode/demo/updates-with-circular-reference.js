@@ -170,33 +170,33 @@ error TS6202: Project references may not form a circular graph. Cycle detected: 
 
 WatchedFiles::
 /user/username/projects/demo/animals/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/animals/animal.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/animal.ts","pollingInterval":250}
 /user/username/projects/demo/animals/dog.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/dog.ts","pollingInterval":250}
 /user/username/projects/demo/animals/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/index.ts","pollingInterval":250}
 /user/username/projects/demo/zoo/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/zoo/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/zoo/zoo.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/zoo/zoo.ts","pollingInterval":250}
 /user/username/projects/demo/core/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/core/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/core/utilities.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/core/utilities.ts","pollingInterval":250}
 /user/username/projects/demo/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/tsconfig.json","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/demo/animals:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/animals","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/demo/zoo:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/zoo","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/demo/core:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -214,6 +214,7 @@ Change:: Fix error
 //// [/user/username/projects/demo/lib/core/utilities.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.lastElementOf = exports.makeRandomName = void 0;
 function makeRandomName() {
     return "Bob!?! ";
 }
@@ -284,9 +285,10 @@ export default interface Animal {
 //// [/user/username/projects/demo/lib/animals/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createDog = void 0;
 var animal_1 = require("./animal");
 var dog_1 = require("./dog");
-exports.createDog = dog_1.createDog;
+Object.defineProperty(exports, "createDog", { enumerable: true, get: function () { return dog_1.createDog; } });
 
 
 //// [/user/username/projects/demo/lib/animals/index.d.ts]
@@ -299,6 +301,7 @@ export { createDog, Dog };
 //// [/user/username/projects/demo/lib/animals/dog.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createDog = void 0;
 var utilities_1 = require("../core/utilities");
 function createDog() {
     return ({
@@ -394,6 +397,7 @@ export declare function createDog(): Dog;
 //// [/user/username/projects/demo/lib/zoo/zoo.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createZoo = void 0;
 var index_1 = require("../animals/index");
 function createZoo() {
     return [
@@ -555,32 +559,32 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/demo/animals/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/animals/animal.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/animal.ts","pollingInterval":250}
 /user/username/projects/demo/animals/dog.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/dog.ts","pollingInterval":250}
 /user/username/projects/demo/animals/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/index.ts","pollingInterval":250}
 /user/username/projects/demo/zoo/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/zoo/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/zoo/zoo.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/zoo/zoo.ts","pollingInterval":250}
 /user/username/projects/demo/core/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/core/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/core/utilities.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/core/utilities.ts","pollingInterval":250}
 /user/username/projects/demo/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/tsconfig.json","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/demo/animals:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/animals","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/demo/zoo:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/zoo","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/demo/core:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

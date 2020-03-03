@@ -41,6 +41,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.l = exports.cl2 = exports.obj = exports.cl1 = exports.fn = void 0;
     function fn() {
         return __awaiter(this, void 0, void 0, function* () {
             const req = yield new Promise((resolve_1, reject_1) => { require(['./test'], resolve_1, reject_1); }); // ONE

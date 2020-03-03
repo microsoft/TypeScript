@@ -11,6 +11,7 @@ export const Baa = {
 "use strict";
 var _a;
 exports.__esModule = true;
+exports.Baa = void 0;
 var Foo = {
     BANANA: 'banana'
 };

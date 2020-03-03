@@ -1,14 +1,5 @@
-tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts(10,9): error TS2322: Type '{ foo: string; jj: number; }[][][]' is not assignable to type 'Style'.
-  Type '{ foo: string; jj: number; }[][][]' is not assignable to type 'StyleArray'.
-    The types returned by 'pop()' are incompatible between these types.
-      Type '{ foo: string; jj: number; }[][]' is not assignable to type 'Style'.
-        Type '{ foo: string; jj: number; }[][]' is not assignable to type 'StyleArray'.
-          The types returned by 'pop()' are incompatible between these types.
-            Type '{ foo: string; jj: number; }[]' is not assignable to type 'Style'.
-              Type '{ foo: string; jj: number; }[]' is not assignable to type 'StyleArray'.
-                The types returned by 'pop()' are incompatible between these types.
-                  Type '{ foo: string; jj: number; }' is not assignable to type 'Style'.
-                    Object literal may only specify known properties, and 'jj' does not exist in type 'Style'.
+tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts(10,9): error TS2322: Type '{ foo: string; jj: number; }' is not assignable to type 'Style'.
+  Object literal may only specify known properties, and 'jj' does not exist in type 'Style'.
 
 
 ==== tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts (1 errors) ====
@@ -23,17 +14,8 @@ tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts(10,9): error TS232
             foo: 'asdf',
             jj: 1 // intentional error
             ~~~~~
-!!! error TS2322: Type '{ foo: string; jj: number; }[][][]' is not assignable to type 'Style'.
-!!! error TS2322:   Type '{ foo: string; jj: number; }[][][]' is not assignable to type 'StyleArray'.
-!!! error TS2322:     The types returned by 'pop()' are incompatible between these types.
-!!! error TS2322:       Type '{ foo: string; jj: number; }[][]' is not assignable to type 'Style'.
-!!! error TS2322:         Type '{ foo: string; jj: number; }[][]' is not assignable to type 'StyleArray'.
-!!! error TS2322:           The types returned by 'pop()' are incompatible between these types.
-!!! error TS2322:             Type '{ foo: string; jj: number; }[]' is not assignable to type 'Style'.
-!!! error TS2322:               Type '{ foo: string; jj: number; }[]' is not assignable to type 'StyleArray'.
-!!! error TS2322:                 The types returned by 'pop()' are incompatible between these types.
-!!! error TS2322:                   Type '{ foo: string; jj: number; }' is not assignable to type 'Style'.
-!!! error TS2322:                     Object literal may only specify known properties, and 'jj' does not exist in type 'Style'.
+!!! error TS2322: Type '{ foo: string; jj: number; }' is not assignable to type 'Style'.
+!!! error TS2322:   Object literal may only specify known properties, and 'jj' does not exist in type 'Style'.
         }]]
     ];
     

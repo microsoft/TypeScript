@@ -13,6 +13,6 @@
 ////BrowserRouter/**/
 
 goTo.file("/project/index.js");
-verify.importFixAtPosition([`import { BrowserRouter } from "react-router-dom";
+verify.importFixAtPosition([`const { BrowserRouter } = require("react-router-dom");
 
 BrowserRouter`]);

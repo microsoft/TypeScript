@@ -78,6 +78,7 @@ export const m = mod;
 //// [/user/username/projects/sample1/core/anotherModule.js]
 "use strict";
 exports.__esModule = true;
+exports.World = void 0;
 exports.World = "hello";
 
 
@@ -88,6 +89,7 @@ export declare const World = "hello";
 //// [/user/username/projects/sample1/core/index.js]
 "use strict";
 exports.__esModule = true;
+exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
 exports.leftPad = leftPad;
@@ -136,11 +138,12 @@ export declare function multiply(a: number, b: number): number;
 }
 
 //// [/user/username/projects/sample1/logic/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
 
 //// [/user/username/projects/sample1/logic/index.js]
 "use strict";
 exports.__esModule = true;
+exports.m = exports.getSecondsInDay = void 0;
 var c = require("../core/index");
 function getSecondsInDay() {
     return c.multiply(10, 15);
@@ -210,6 +213,7 @@ export declare const m: typeof mod;
 //// [/user/username/projects/sample1/tests/index.js]
 "use strict";
 exports.__esModule = true;
+exports.m = void 0;
 var c = require("../core/index");
 var logic = require("../logic/index");
 c.leftPad("", 10);
@@ -339,27 +343,27 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/core/anothermodule.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
 /user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/logic/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
 /user/username/projects/sample1/tests/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/tests/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/sample1/logic:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -377,6 +381,7 @@ function foo() { }
 //// [/user/username/projects/sample1/core/index.js]
 "use strict";
 exports.__esModule = true;
+exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
 exports.leftPad = leftPad;
@@ -439,27 +444,27 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/core/anothermodule.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
 /user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/logic/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
 /user/username/projects/sample1/tests/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/tests/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/sample1/logic:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -474,27 +479,27 @@ Output::
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/core/anothermodule.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
 /user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/logic/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
 /user/username/projects/sample1/tests/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/tests/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/sample1/logic:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -511,26 +516,26 @@ Output::
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/core/anothermodule.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
 /user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/logic/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
 /user/username/projects/sample1/tests/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/tests/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/sample1/logic:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

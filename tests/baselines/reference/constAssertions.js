@@ -143,7 +143,7 @@ declare let vc1: "abc";
 declare let a1: readonly [];
 declare let a2: readonly [1, 2, 3];
 declare let a3: readonly [10, "hello", true];
-declare let a4: readonly (1 | 2 | 3)[];
+declare let a4: readonly [1, 2, 3];
 declare let a5: number[];
 declare let a6: readonly number[];
 declare let a7: number[];

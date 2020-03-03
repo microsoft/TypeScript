@@ -101,7 +101,7 @@ namespace ts {
             return transformSourceFile(`let a!: () => void`, [
                 context => file => visitNode(file, function visitor(node: Node): VisitResult<Node> {
                     if (node.kind === SyntaxKind.VoidKeyword) {
-                        return createIdentifier("undefined");
+                        return createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
                     }
                     return visitEachChild(node, visitor, context);
                 })
@@ -231,7 +231,7 @@ namespace ts {
                             const exports = [{ name: "x" }];
                             const exportSpecifiers = exports.map(e => createExportSpecifier(e.name, e.name));
                             const exportClause = createNamedExports(exportSpecifiers);
-                            const newEd = updateExportDeclaration(ed, ed.decorators, ed.modifiers, exportClause, ed.moduleSpecifier);
+                            const newEd = updateExportDeclaration(ed, ed.decorators, ed.modifiers, exportClause, ed.moduleSpecifier, ed.isTypeOnly);
 
                             return newEd as Node as T;
                         }
