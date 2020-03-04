@@ -1,0 +1,21 @@
+Exit Code: 1
+Standard output:
+
+
+
+Standard error:
+
+../../../src/compiler/utilities.ts:4955
+        return type.flags & TypeFlags.ObjectFlagsType ? (<ObjectFlagsType>type).objectFlags : 0;
+                    ^
+TypeError: Cannot read property 'flags' of undefined
+    at Object.getObjectFlags (../../../src/compiler/utilities.ts:4955:21)
+    at couldContainTypeVariables (../../../src/compiler/checker.ts:17950:33)
+    at inferFromTypes (../../../src/compiler/checker.ts:18124:22)
+    at inferFromTypes (../../../src/compiler/checker.ts:18286:21)
+    at inferFromTypes (../../../src/compiler/checker.ts:18306:25)
+    at inferToMultipleTypes (../../../src/compiler/checker.ts:18485:29)
+    at inferFromTypes (../../../src/compiler/checker.ts:18297:21)
+    at inferFromContravariantTypes (../../../src/compiler/checker.ts:18396:21)
+    at applyToParameterTypes (../../../src/compiler/checker.ts:17850:17)
+    at inferFromSignature (../../../src/compiler/checker.ts:18658:21)
