@@ -1872,26 +1872,15 @@ foo;`
             const session = createSession(host, { canUseEvents: true });
             const service = session.getProjectService();
             service.openClientFile(main.path);
-            checkNumberOfProjects(service, { configuredProjects: 1, inferredProjects: 1 });
-            checkProjectActualFiles(service.inferredProjects[0], [main.path, libFile.path]);
+            checkNumberOfProjects(service, { configuredProjects: 2 });
+            checkProjectActualFiles(service.configuredProjects.get(tsconfigSrc.path)!, [tsconfigSrc.path, main.path, helper.path, libFile.path]);
             checkProjectActualFiles(service.configuredProjects.get(tsconfig.path)!, [tsconfig.path]);
 
-            const location = protocolTextSpanFromSubstring(main.content, `'helpers/functions'`);
             verifyGetErrRequest({
                 session,
                 host,
                 expected: [
-                    {
-                        file: main,
-                        syntax: [],
-                        semantic: [createDiagnostic(
-                            location.start,
-                            location.end,
-                            Diagnostics.Cannot_find_module_0,
-                            ["helpers/functions"]
-                        )],
-                        suggestion: []
-                    },
+                    { file: main, syntax: [], semantic: [], suggestion: [] },
                 ]
             });
         });
