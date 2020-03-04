@@ -53,6 +53,7 @@ for ((stuff[n]) of []) {}
 //// [f1.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 exports.x = 1;
 //// [f2.js]
 "use strict";

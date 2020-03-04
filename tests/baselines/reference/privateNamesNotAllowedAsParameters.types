@@ -3,7 +3,7 @@ class A {
 >A : A
 
     setFoo(#foo: string) {}
->setFoo : () => any
+>setFoo : (#foo: string) => void
 >#foo : string
 }
 

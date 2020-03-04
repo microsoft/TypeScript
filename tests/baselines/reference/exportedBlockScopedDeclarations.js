@@ -21,6 +21,7 @@ namespace NS1 {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.bar1 = exports.bar = void 0;
     var foo = foo; // compile error
     exports.bar = exports.bar; // should be compile error
     function f() {

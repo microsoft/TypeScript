@@ -47,11 +47,11 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/commonfile1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /a/b/commonfile2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/commonfile2.ts","pollingInterval":250}
 
 FsWatches::
 
@@ -93,11 +93,11 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/commonfile1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /a/b/commonfile2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
 
 FsWatches::
 

@@ -720,20 +720,20 @@ sourceFile:../../third_part1.ts
         },
         {
           "pos": 110,
-          "end": 3526,
+          "end": 3527,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
               "pos": 110,
-              "end": 3526,
+              "end": 3527,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 3526,
-          "end": 3562,
+          "pos": 3527,
+          "end": 3563,
           "kind": "text"
         }
       ]
@@ -792,9 +792,9 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (110-3526):: ../../../2/second-output.js texts:: 1
+prepend: (110-3527):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (110-3526)
+text: (110-3527)
 var N;
 (function (N) {
     function f() {
@@ -809,7 +809,7 @@ var normalC = /** @class */ (function () {
     Object.defineProperty(normalC.prototype, "c", {
         /*@internal*/ get: function () { return 10; },
         /*@internal*/ set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -899,7 +899,7 @@ var C = /** @class */ (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (3526-3562)
+text: (3527-3563)
 var c = new C();
 c.doSomething();
 

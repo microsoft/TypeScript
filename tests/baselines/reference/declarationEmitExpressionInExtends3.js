@@ -58,6 +58,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.MyClass4 = exports.MyClass3 = exports.MyClass2 = exports.MyClass = exports.ExportedClass = void 0;
 var ExportedClass = /** @class */ (function () {
     function ExportedClass() {
     }

@@ -39,6 +39,7 @@ createSomeObject().message;
 //// [/user/username/projects/sample1/Library/library.js]
 "use strict";
 exports.__esModule = true;
+exports.createSomeObject = void 0;
 function createSomeObject() {
     return {
         message: "new Object"
@@ -124,21 +125,21 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/sample1/library/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/Library/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/library/library.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/Library/library.ts","pollingInterval":250}
 /user/username/projects/sample1/app/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/App/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/app/app.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/App/app.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/library:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/library","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/sample1/app:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -161,6 +162,7 @@ export function createSomeObject(): SomeObject
 //// [/user/username/projects/sample1/Library/library.js]
 "use strict";
 exports.__esModule = true;
+exports.createSomeObject = void 0;
 function createSomeObject() {
     return {
         message2: "new Object"
@@ -239,21 +241,21 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/sample1/library/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/Library/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/library/library.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/Library/library.ts","pollingInterval":250}
 /user/username/projects/sample1/app/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/App/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/app/app.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/App/app.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/library:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/library","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/sample1/app:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -276,6 +278,7 @@ export function createSomeObject(): SomeObject
 //// [/user/username/projects/sample1/Library/library.js]
 "use strict";
 exports.__esModule = true;
+exports.createSomeObject = void 0;
 function createSomeObject() {
     return {
         message: "new Object"
@@ -353,20 +356,20 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/sample1/library/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/Library/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/library/library.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/Library/library.ts","pollingInterval":250}
 /user/username/projects/sample1/app/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/App/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/app/app.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/App/app.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/library:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/library","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/sample1/app:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

@@ -28,6 +28,7 @@ define("datastore_result", ["require", "exports"], function (require, exports) {
 define("conditional_directive_field", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.build = void 0;
     exports.build = function () {
         return null;
     };

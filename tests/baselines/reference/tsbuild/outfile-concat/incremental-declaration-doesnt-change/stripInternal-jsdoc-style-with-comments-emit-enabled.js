@@ -311,7 +311,7 @@ var normalC = /** @class */ (function () {
     Object.defineProperty(normalC.prototype, "c", {
         /**@internal*/ get: function () { return 10; },
         /**@internal*/ set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -835,7 +835,7 @@ sourceFile:../../../second/second_part1.ts
 6 >Emitted(21, 46) Source(18, 41) + SourceIndex(3)
 7 >Emitted(21, 47) Source(18, 42) + SourceIndex(3)
 ---
->>>        enumerable: true,
+>>>        enumerable: false,
 >>>        configurable: true
 >>>    });
 1 >^^^^^^^
@@ -2192,20 +2192,20 @@ sourceFile:../../third_part1.ts
         },
         {
           "pos": 127,
-          "end": 3561,
+          "end": 3562,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
               "pos": 127,
-              "end": 3561,
+              "end": 3562,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 3561,
-          "end": 3597,
+          "pos": 3562,
+          "end": 3598,
           "kind": "text"
         }
       ]
@@ -2265,9 +2265,9 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (127-3561):: ../../../2/second-output.js texts:: 1
+prepend: (127-3562):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (127-3561)
+text: (127-3562)
 var N;
 (function (N) {
     function f() {
@@ -2282,7 +2282,7 @@ var normalC = /** @class */ (function () {
     Object.defineProperty(normalC.prototype, "c", {
         /**@internal*/ get: function () { return 10; },
         /**@internal*/ set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -2372,7 +2372,7 @@ var C = /** @class */ (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (3561-3597)
+text: (3562-3598)
 var c = new C();
 c.doSomething();
 

@@ -1,5 +1,5 @@
-/a.ts(2,1): error TS2708: Cannot use namespace 'ns' as a value.
-/a.ts(3,1): error TS2708: Cannot use namespace 'ns' as a value.
+/a.ts(2,1): error TS1361: 'ns' cannot be used as a value because it was imported using 'import type'.
+/a.ts(3,1): error TS1361: 'ns' cannot be used as a value because it was imported using 'import type'.
 
 
 ==== /ns.ts (0 errors) ====
@@ -20,10 +20,12 @@
     import type ns from './ns';
     ns.Class; // Error
     ~~
-!!! error TS2708: Cannot use namespace 'ns' as a value.
+!!! error TS1361: 'ns' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /a.ts:1:8: 'ns' was imported here.
     ns.Value; // Error
     ~~
-!!! error TS2708: Cannot use namespace 'ns' as a value.
+!!! error TS1361: 'ns' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /a.ts:1:8: 'ns' was imported here.
     let c: ns.Class;
     let t: ns.Type = "";
     let n: ns.nested.NestedClass = { a: '' };

@@ -863,7 +863,7 @@
         "category": "Error",
         "code": 1300
     },
-    "'await' expression is only allowed within an async function.": {
+    "'await' expressions are only allowed within async functions and at the top levels of modules.": {
         "category": "Error",
         "code": 1308
     },
@@ -1059,11 +1059,11 @@
         "category": "Error",
         "code": 1360
     },
-    "Type-only {0} must reference a type, but '{1}' is a value.": {
+    "'{0}' cannot be used as a value because it was imported using 'import type'.": {
         "category": "Error",
         "code": 1361
     },
-    "Enum '{0}' cannot be used as a value because only its type has been imported.": {
+    "'{0}' cannot be used as a value because it was exported using 'export type'.": {
         "category": "Error",
         "code": 1362
     },
@@ -1085,7 +1085,7 @@
     },
     "Split all invalid type-only imports": {
         "category": "Message",
-        "code": 1377
+        "code": 1367
     },
     "Specify emit/checking behavior for imports that are only used for types": {
         "category": "Message",
@@ -1103,10 +1103,6 @@
         "category": "Error",
         "code": 1371
     },
-    "This import may be converted to a type-only import.": {
-        "category": "Suggestion",
-        "code": 1372
-    },
     "Convert to type-only import": {
         "category": "Message",
         "code": 1373
@@ -1115,10 +1111,43 @@
         "category": "Message",
         "code": 1374
     },
-    "'await' outside of an async function is only allowed at the top level of a module when '--module' is 'esnext' or 'system' and '--target' is 'es2017' or higher.": {
+    "'await' expressions are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.": {
         "category": "Error",
         "code": 1375
     },
+    "'{0}' was imported here.": {
+        "category": "Message",
+        "code": 1376
+    },
+    "'{0}' was exported here.": {
+        "category": "Message",
+        "code": 1377
+    },
+    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.": {
+        "category": "Error",
+        "code": 1378
+    },
+    "An import alias cannot reference a declaration that was exported using 'export type'.": {
+        "category": "Error",
+        "code": 1379
+    },
+    "An import alias cannot reference a declaration that was imported using 'import type'.": {
+        "category": "Error",
+        "code": 1380
+    },
+    "Unexpected token. Did you mean `{'}'}` or `&rbrace;`?": {
+        "category": "Error",
+        "code": 1381
+    },
+    "Unexpected token. Did you mean `{'>'}` or `&gt;`?": {
+        "category": "Error",
+        "code": 1382
+    },
+    "Only named exports may use 'export type'.": {
+        "category": "Error",
+        "code": 1383
+    },
+
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
@@ -1764,6 +1793,14 @@
         "category": "Error",
         "code": 2458
     },
+    "Module '{0}' declares '{1}' locally, but it is not exported.": {
+        "category": "Error",
+        "code": 2459
+    },
+    "Module '{0}' declares '{1}' locally, but it is exported as '{2}'.": {
+        "category": "Error",
+        "code": 2460
+    },
     "Type '{0}' is not an array type.": {
         "category": "Error",
         "code": 2461
@@ -2328,6 +2365,10 @@
         "category": "Error",
         "code": 2614
     },
+    "Type of property '{0}' circularly references itself in mapped type '{1}'.": {
+        "category": "Error",
+        "code": 2615
+    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
@@ -2658,7 +2699,7 @@
         "category": "Error",
         "code": 2733
     },
-    "It is highly likely that you are missing a semicolon.": {
+    "Are you missing a semicolon?": {
         "category": "Error",
         "code": 2734
     },
@@ -2853,6 +2894,14 @@
     "'{0}' needs an explicit type annotation.": {
         "category": "Message",
         "code": 2782
+    },
+    "'{0}' is specified more than once, so this usage will be overwritten.": {
+        "category": "Error",
+        "code": 2783
+    },
+    "'get' and 'set' accessors cannot declare 'this' parameters.": {
+        "category": "Error",
+        "code": 2784
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3605,7 +3654,7 @@
         "category": "Message",
         "code": 6061
     },
-    "Option '{0}' can only be specified in 'tsconfig.json' file.": {
+    "Option '{0}' can only be specified in 'tsconfig.json' file or set to 'null' on command line.": {
         "category": "Error",
         "code": 6064
     },
@@ -4254,6 +4303,14 @@
     "Synchronously call callbacks and update the state of directory watchers on platforms that don't support recursive watching natively.": {
         "category": "Message",
         "code": 6228
+    },
+    "Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.": {
+        "category": "Error",
+        "code": 6229
+    },
+    "Option '{0}' can only be specified in 'tsconfig.json' file or set to 'false' or 'null' on command line.": {
+        "category": "Error",
+        "code": 6230
     },
 
     "Projects to reference": {
@@ -4924,7 +4981,7 @@
         "category": "Message",
         "code": 90003
     },
-    "Remove declaration for: '{0}'": {
+    "Remove unused declaration for: '{0}'": {
         "category": "Message",
         "code": 90004
     },
@@ -5047,6 +5104,10 @@
     "Add parameter name": {
         "category": "Message",
         "code": 90034
+    },
+    "Declare a private field named '{0}'.": {
+        "category": "Message",
+        "code": 90053
     },
     "Convert function to an ES2015 class": {
         "category": "Message",
@@ -5416,25 +5477,45 @@
         "category": "Message",
         "code": 95096
     },
-    "Add a return statement": {
+    "Add 'export {}' to make this file into a module": {
         "category": "Message",
         "code": 95097
     },
-    "Remove block body braces": {
+    "Set the 'target' option in your configuration file to '{0}'": {
         "category": "Message",
         "code": 95098
     },
-    "Replace braces with parentheses": {
+    "Set the 'module' option in your configuration file to '{0}'": {
         "category": "Message",
         "code": 95099
     },
-    "Wrap this block with parentheses": {
+    "Convert invalid character to its html entity code": {
         "category": "Message",
         "code": 95100
     },
-    "Correct all return expressions": {
+    "Wrap invalid character in an expression container": {
         "category": "Message",
         "code": 95101
+    },
+    "Add a return statement": {
+        "category": "Message",
+        "code": 95102
+    },
+    "Remove block body braces": {
+        "category": "Message",
+        "code": 95103
+    },
+    "Replace braces with parentheses": {
+        "category": "Message",
+        "code": 95104
+    },
+    "Wrap this block with parentheses": {
+        "category": "Message",
+        "code": 95105
+    },
+    "Correct all return expressions": {
+        "category": "Message",
+        "code": 95106
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
@@ -5448,10 +5529,6 @@
     "JSX expressions may not use the comma operator. Did you mean to write an array?": {
         "category": "Error",
         "code": 18007
-    },
-    "'#!' can only be used at the start of a file.": {
-        "category": "Error",
-        "code": 18008
     },
     "Private identifiers cannot be used as parameters": {
         "category": "Error",

@@ -78,7 +78,7 @@ namespace ts.CallHierarchy {
         if (isSourceFile(node)) return node;
         if (isNamedDeclaration(node)) return node.name;
         if (isConstNamedExpression(node)) return node.parent.name;
-        return Debug.assertDefined(node.modifiers && find(node.modifiers, isDefaultModifier));
+        return Debug.checkDefined(node.modifiers && find(node.modifiers, isDefaultModifier));
     }
 
     function isDefaultModifier(node: Node) {
@@ -105,7 +105,7 @@ namespace ts.CallHierarchy {
         }
 
         const declName = isConstNamedExpression(node) ? node.parent.name :
-            Debug.assertDefined(getNameOfDeclaration(node), "Expected call hierarchy item to have a name");
+            Debug.checkDefined(getNameOfDeclaration(node), "Expected call hierarchy item to have a name");
 
         let text =
             isIdentifier(declName) ? idText(declName) :
@@ -260,16 +260,18 @@ namespace ts.CallHierarchy {
         range: TextRange;
     }
 
-    function convertEntryToCallSite(entry: FindAllReferences.Entry, _originalNode: Node, typeChecker: TypeChecker): CallSite | undefined {
+    function convertEntryToCallSite(entry: FindAllReferences.Entry): CallSite | undefined {
         if (entry.kind === FindAllReferences.EntryKind.Node) {
-            if (isCallOrNewExpressionTarget(entry.node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
-                || isTaggedTemplateTag(entry.node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
-                || isDecoratorTarget(entry.node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
-                || isJsxOpeningLikeElementTagName(entry.node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
-                || isRightSideOfPropertyAccess(entry.node)
-                || isArgumentExpressionOfElementAccess(entry.node)) {
-                const ancestor = findAncestor(entry.node, isValidCallHierarchyDeclaration) || entry.node.getSourceFile();
-                return { declaration: firstOrOnly(findImplementationOrAllInitialDeclarations(typeChecker, ancestor)), range: createTextRangeFromNode(entry.node, entry.node.getSourceFile()) };
+            const { node } = entry;
+            if (isCallOrNewExpressionTarget(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
+                || isTaggedTemplateTag(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
+                || isDecoratorTarget(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
+                || isJsxOpeningLikeElementTagName(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
+                || isRightSideOfPropertyAccess(node)
+                || isArgumentExpressionOfElementAccess(node)) {
+                const sourceFile = node.getSourceFile();
+                const ancestor = findAncestor(node, isValidCallHierarchyDeclaration) || sourceFile;
+                return { declaration: ancestor, range: createTextRangeFromNode(node, sourceFile) };
             }
         }
     }
@@ -293,7 +295,7 @@ namespace ts.CallHierarchy {
             return [];
         }
         const location = getCallHierarchyDeclarationReferenceNode(declaration);
-        const calls = filter(FindAllReferences.findReferenceOrRenameEntries(program, cancellationToken, program.getSourceFiles(), location, /*position*/ 0, /*options*/ undefined, convertEntryToCallSite), isDefined);
+        const calls = filter(FindAllReferences.findReferenceOrRenameEntries(program, cancellationToken, program.getSourceFiles(), location, /*position*/ 0, { use: FindAllReferences.FindReferencesUse.References }, convertEntryToCallSite), isDefined);
         return calls ? group(calls, getCallSiteGroupKey, entries => convertCallSiteGroupToIncomingCall(program, entries)) : [];
     }
 

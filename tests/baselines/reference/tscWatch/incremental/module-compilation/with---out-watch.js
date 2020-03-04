@@ -25,11 +25,13 @@ export const y = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.x = void 0;
     exports.x = 10;
 });
 define("file2", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.y = void 0;
     exports.y = 20;
 });
 
@@ -46,7 +48,7 @@ define("file2", ["require", "exports"], function (require, exports) {
       "sections": [
         {
           "pos": 0,
-          "end": 286,
+          "end": 334,
           "kind": "text"
         }
       ]
@@ -59,15 +61,17 @@ define("file2", ["require", "exports"], function (require, exports) {
 ======================================================================
 File:: /users/username/projects/project/out.js
 ----------------------------------------------------------------------
-text: (0-286)
+text: (0-334)
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.x = void 0;
     exports.x = 10;
 });
 define("file2", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.y = void 0;
     exports.y = 20;
 });
 
@@ -94,20 +98,20 @@ No cached semantic diagnostics in the builder::
 
 WatchedFiles::
 /users/username/projects/project/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
 /users/username/projects/project/file1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/file1.ts","pollingInterval":250}
 /users/username/projects/project/file2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/file2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /users/username/projects/project/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/users/username/projects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /users/username/projects/project:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

@@ -199,17 +199,21 @@ interface Array<T> { length: number; [n: number]: T; }`
         checkMap(`watchedFiles:: ${additionalInfo || ""}::`, host.watchedFiles, expectedFiles, /*eachKeyCount*/ undefined);
     }
 
-    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<number>, expectedPollingIntervals?: Map<PollingInterval[]>): void;
-    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: readonly string[], eachFileWatchCount: number, expectedPollingIntervals?: Map<PollingInterval[]>): void;
-    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<number> | readonly string[], eachFileWatchCount?: number | Map<PollingInterval[]>, expectedPollingIntervals?: Map<PollingInterval[]>) {
-        if (!isNumber(eachFileWatchCount)) expectedPollingIntervals = eachFileWatchCount;
+    export interface WatchFileDetails {
+        fileName: string;
+        pollingInterval: PollingInterval;
+    }
+    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<number>, expectedDetails?: Map<WatchFileDetails[]>): void;
+    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: readonly string[], eachFileWatchCount: number, expectedDetails?: Map<WatchFileDetails[]>): void;
+    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<number> | readonly string[], eachFileWatchCountOrExpectedDetails?: number | Map<WatchFileDetails[]>, expectedDetails?: Map<WatchFileDetails[]>) {
+        if (!isNumber(eachFileWatchCountOrExpectedDetails)) expectedDetails = eachFileWatchCountOrExpectedDetails;
         if (isArray(expectedFiles)) {
             checkMap(
                 "watchedFiles",
                 host.watchedFiles,
                 expectedFiles,
-                eachFileWatchCount as number,
-                [expectedPollingIntervals, ({ pollingInterval }) => pollingInterval]
+                eachFileWatchCountOrExpectedDetails as number,
+                [expectedDetails, ({ fileName, pollingInterval }) => ({ fileName, pollingInterval })]
             );
         }
         else {
@@ -217,7 +221,7 @@ interface Array<T> { length: number; [n: number]: T; }`
                 "watchedFiles",
                 host.watchedFiles,
                 expectedFiles,
-                [expectedPollingIntervals, ({ pollingInterval }) => pollingInterval]
+                [expectedDetails, ({ fileName, pollingInterval }) => ({ fileName, pollingInterval })]
             );
         }
     }
@@ -226,30 +230,31 @@ interface Array<T> { length: number; [n: number]: T; }`
         checkMap(`watchedDirectories${recursive ? " recursive" : ""}`, recursive ? host.fsWatchesRecursive : host.fsWatches, expectedDirectories, /*eachKeyCount*/ undefined);
     }
 
-    export interface FallbackPollingOptions {
+    export interface WatchDirectoryDetails {
+        directoryName: string;
         fallbackPollingInterval: PollingInterval;
         fallbackOptions: WatchOptions | undefined;
     }
-    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyMap<number>, recursive: boolean, expectedFallbacks?: Map<FallbackPollingOptions[]>): void;
-    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: readonly string[], eachDirectoryWatchCount: number, recursive: boolean, expectedFallbacks?: Map<FallbackPollingOptions[]>): void;
-    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyMap<number> | readonly string[], recursiveOrEachDirectoryWatchCount: boolean | number, recursiveOrExpectedFallbacks?: boolean | Map<FallbackPollingOptions[]>, expectedFallbacks?: Map<FallbackPollingOptions[]>) {
-        if (typeof recursiveOrExpectedFallbacks !== "boolean") expectedFallbacks = recursiveOrExpectedFallbacks;
+    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyMap<number>, recursive: boolean, expectedDetails?: Map<WatchDirectoryDetails[]>): void;
+    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: readonly string[], eachDirectoryWatchCount: number, recursive: boolean, expectedDetails?: Map<WatchDirectoryDetails[]>): void;
+    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyMap<number> | readonly string[], recursiveOrEachDirectoryWatchCount: boolean | number, recursiveOrExpectedDetails?: boolean | Map<WatchDirectoryDetails[]>, expectedDetails?: Map<WatchDirectoryDetails[]>) {
+        if (typeof recursiveOrExpectedDetails !== "boolean") expectedDetails = recursiveOrExpectedDetails;
         if (isArray(expectedDirectories)) {
             checkMap(
-                `fsWatches${recursiveOrExpectedFallbacks ? " recursive" : ""}`,
-                recursiveOrExpectedFallbacks as boolean ? host.fsWatchesRecursive : host.fsWatches,
+                `fsWatches${recursiveOrExpectedDetails ? " recursive" : ""}`,
+                recursiveOrExpectedDetails as boolean ? host.fsWatchesRecursive : host.fsWatches,
                 expectedDirectories,
                 recursiveOrEachDirectoryWatchCount as number,
-                [expectedFallbacks, ({ fallbackPollingInterval, fallbackOptions }) => ({ fallbackPollingInterval, fallbackOptions })]
+                [expectedDetails, ({ directoryName, fallbackPollingInterval, fallbackOptions }) => ({ directoryName, fallbackPollingInterval, fallbackOptions })]
             );
         }
         else {
-            recursiveOrExpectedFallbacks = recursiveOrEachDirectoryWatchCount as boolean;
+            recursiveOrExpectedDetails = recursiveOrEachDirectoryWatchCount as boolean;
             checkMap(
                 `fsWatches{recursive ? " recursive" : ""}`,
-                recursiveOrExpectedFallbacks ? host.fsWatchesRecursive : host.fsWatches,
+                recursiveOrExpectedDetails ? host.fsWatchesRecursive : host.fsWatches,
                 expectedDirectories,
-                [expectedFallbacks, ({ fallbackPollingInterval, fallbackOptions }) => ({ fallbackPollingInterval, fallbackOptions })]
+                [expectedDetails, ({ directoryName, fallbackPollingInterval, fallbackOptions }) => ({ directoryName, fallbackPollingInterval, fallbackOptions })]
             );
         }
     }
@@ -330,6 +335,7 @@ interface Array<T> { length: number; [n: number]: T; }`
 
     export interface TestFsWatcher {
         cb: FsWatchCallback;
+        directoryName: string;
         fallbackPollingInterval: PollingInterval;
         fallbackOptions: WatchOptions | undefined;
     }
@@ -740,7 +746,12 @@ interface Array<T> { length: number; [n: number]: T; }`
                 createWatcher(
                     recursive ? this.fsWatchesRecursive : this.fsWatches,
                     this.toFullPath(fileOrDirectory),
-                    { cb, fallbackPollingInterval, fallbackOptions }
+                    {
+                        directoryName: fileOrDirectory,
+                        cb,
+                        fallbackPollingInterval,
+                        fallbackOptions
+                    }
                 );
         }
 
@@ -1068,7 +1079,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
 
         serializeWatches(baseline: string[]) {
-            serializeMultiMap(baseline, "WatchedFiles", this.watchedFiles, ({ pollingInterval }) => ({ pollingInterval }));
+            serializeMultiMap(baseline, "WatchedFiles", this.watchedFiles, ({ fileName, pollingInterval }) => ({ fileName, pollingInterval }));
             baseline.push("");
             serializeMultiMap(baseline, "FsWatches", this.fsWatches, serializeTestFsWatcher);
             baseline.push("");
@@ -1171,8 +1182,9 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
     }
 
-    function serializeTestFsWatcher({ fallbackPollingInterval, fallbackOptions }: TestFsWatcher) {
+    function serializeTestFsWatcher({ directoryName, fallbackPollingInterval, fallbackOptions }: TestFsWatcher) {
         return {
+            directoryName,
             fallbackPollingInterval,
             fallbackOptions: serializeWatchOptions(fallbackOptions)
         };
