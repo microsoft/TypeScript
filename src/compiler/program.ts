@@ -968,7 +968,8 @@ namespace ts {
             forEachResolvedProjectReference,
             isSourceOfProjectReferenceRedirect,
             emitBuildInfo,
-            getProbableSymlinks
+            getProbableSymlinks,
+            useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
         };
 
         verifyCompilerOptions();

@@ -2151,11 +2151,13 @@ namespace ts {
             const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
             if (renameInfo && renameInfo.text !== (node.name || node.propertyName).getText()) {
-                clone = createBindingElement(
-                    node.dotDotDotToken,
-                    node.propertyName || node.name,
-                    renameInfo,
-                    node.initializer);
+                clone = setOriginalNode(
+                    createBindingElement(
+                        node.dotDotDotToken,
+                        node.propertyName || node.name,
+                        renameInfo,
+                        node.initializer),
+                    node);
             }
         }
         else if (renameMap && checker && isIdentifier(node)) {
@@ -2163,7 +2165,7 @@ namespace ts {
             const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
             if (renameInfo) {
-                clone = createIdentifier(renameInfo.text);
+                clone = setOriginalNode(createIdentifier(renameInfo.text), node);
             }
         }
 

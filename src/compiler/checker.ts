@@ -2679,6 +2679,15 @@ namespace ts {
             return links.target;
         }
 
+        function tryResolveAlias(symbol: Symbol): Symbol | undefined {
+            const links = getSymbolLinks(symbol);
+            if (links.target !== resolvingSymbol) {
+                return resolveAlias(symbol);
+            }
+
+            return undefined;
+        }
+
         /**
          * Marks a symbol as type-only if its declaration is syntactically type-only.
          * If it is not itself marked type-only, but resolves to a type-only alias
@@ -4049,6 +4058,7 @@ namespace ts {
                         getSourceFiles: () => host.getSourceFiles(),
                         getCurrentDirectory: maybeBind(host, host.getCurrentDirectory),
                         getProbableSymlinks: maybeBind(host, host.getProbableSymlinks),
+                        useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames)
                     } : undefined },
                     encounteredError: false,
                     visitedTypes: undefined,
@@ -6330,7 +6340,8 @@ namespace ts {
                     return result;
 
                     function visitExistingNodeTreeSymbols<T extends Node>(node: T): Node {
-                        if (isJSDocAllType(node)) {
+                        // We don't _actually_ support jsdoc namepath types, emit `any` instead
+                        if (isJSDocAllType(node) || node.kind === SyntaxKind.JSDocNamepathType) {
                             return createKeywordTypeNode(SyntaxKind.AnyKeyword);
                         }
                         if (isJSDocUnknownType(node)) {
@@ -11058,8 +11069,18 @@ namespace ts {
                 }
                 else {
                     const constraintDeclaration = getConstraintDeclaration(typeParameter);
-                    typeParameter.constraint = constraintDeclaration ? getTypeFromTypeNode(constraintDeclaration) :
-                        getInferredTypeParameterConstraint(typeParameter) || noConstraintType;
+                    if (!constraintDeclaration) {
+                        typeParameter.constraint = getInferredTypeParameterConstraint(typeParameter) || noConstraintType;
+                    }
+                    else {
+                        let type = getTypeFromTypeNode(constraintDeclaration);
+                        if (type.flags & TypeFlags.Any && type !== errorType) { // Allow errorType to propegate to keep downstream errors suppressed
+                            // use keyofConstraintType as the base constraint for mapped type key constraints (unknown isn;t assignable to that, but `any` was),
+                            // use unknown otherwise
+                            type = constraintDeclaration.parent.parent.kind === SyntaxKind.MappedType ? keyofConstraintType : unknownType;
+                        }
+                        typeParameter.constraint = type;
+                    }
                 }
             }
             return typeParameter.constraint === noConstraintType ? undefined : typeParameter.constraint;
@@ -13154,7 +13175,7 @@ namespace ts {
          * this function should be called in a left folding style, with left = previous result of getSpreadType
          * and right = the new element to be spread.
          */
-        function getSpreadType(left: Type, right: Type, symbol: Symbol | undefined, objectFlags: ObjectFlags, readonly: boolean, isParentTypeNullable?: boolean): Type {
+        function getSpreadType(left: Type, right: Type, symbol: Symbol | undefined, objectFlags: ObjectFlags, readonly: boolean): Type {
             if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
                 return anyType;
             }
@@ -13170,16 +13191,16 @@ namespace ts {
             if (left.flags & TypeFlags.Union) {
                 const merged = tryMergeUnionOfObjectTypeAndEmptyObject(left as UnionType, readonly);
                 if (merged) {
-                    return getSpreadType(merged, right, symbol, objectFlags, readonly, isParentTypeNullable);
+                    return getSpreadType(merged, right, symbol, objectFlags, readonly);
                 }
-                return mapType(left, t => getSpreadType(t, right, symbol, objectFlags, readonly, isParentTypeNullable));
+                return mapType(left, t => getSpreadType(t, right, symbol, objectFlags, readonly));
             }
             if (right.flags & TypeFlags.Union) {
                 const merged = tryMergeUnionOfObjectTypeAndEmptyObject(right as UnionType, readonly);
                 if (merged) {
-                    return getSpreadType(left, merged, symbol, objectFlags, readonly, maybeTypeOfKind(right, TypeFlags.Nullable));
+                    return getSpreadType(left, merged, symbol, objectFlags, readonly);
                 }
-                return mapType(right, t => getSpreadType(left, t, symbol, objectFlags, readonly, maybeTypeOfKind(right, TypeFlags.Nullable)));
+                return mapType(right, t => getSpreadType(left, t, symbol, objectFlags, readonly));
             }
             if (right.flags & (TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.BigIntLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive | TypeFlags.Index)) {
                 return left;
@@ -13242,14 +13263,6 @@ namespace ts {
                         result.declarations = declarations;
                         result.nameType = getSymbolLinks(leftProp).nameType;
                         members.set(leftProp.escapedName, result);
-                    }
-                    else if (strictNullChecks &&
-                             !isParentTypeNullable &&
-                             symbol &&
-                             !isFromSpreadAssignment(leftProp, symbol) &&
-                             isFromSpreadAssignment(rightProp, symbol) &&
-                             !maybeTypeOfKind(rightType, TypeFlags.Nullable)) {
-                        error(leftProp.valueDeclaration, Diagnostics._0_is_specified_more_than_once_so_this_usage_will_be_overwritten, unescapeLeadingUnderscores(leftProp.escapedName));
                     }
                 }
                 else {
@@ -16781,10 +16794,6 @@ namespace ts {
             const match = discriminable.indexOf(/*searchElement*/ true);
             // make sure exactly 1 matches before returning it
             return match === -1 || discriminable.indexOf(/*searchElement*/ true, match + 1) !== -1 ? defaultValue : target.types[match];
-        }
-
-        function isFromSpreadAssignment(prop: Symbol, container: Symbol) {
-            return prop.valueDeclaration?.parent !== container.valueDeclaration;
         }
 
         /**
@@ -22547,6 +22556,7 @@ namespace ts {
             checkGrammarObjectLiteralExpression(node, inDestructuringPattern);
 
             let propertiesTable: SymbolTable;
+            const allPropertiesTable = createSymbolTable();
             let propertiesArray: Symbol[] = [];
             let spread: Type = emptyObjectType;
 
@@ -22628,6 +22638,7 @@ namespace ts {
                     prop.type = type;
                     prop.target = member;
                     member = prop;
+                    allPropertiesTable.set(prop.escapedName, prop);
                 }
                 else if (memberDecl.kind === SyntaxKind.SpreadAssignment) {
                     if (languageVersion < ScriptTarget.ES2015) {
@@ -22645,6 +22656,16 @@ namespace ts {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return errorType;
                     }
+                    for (const right of getPropertiesOfType(type)) {
+                        const rightType = getTypeOfSymbol(right);
+                        const left = allPropertiesTable.get(right.escapedName);
+                        if (strictNullChecks &&
+                            left &&
+                            !maybeTypeOfKind(rightType, TypeFlags.Nullable)) {
+                            error(left.valueDeclaration, Diagnostics._0_is_specified_more_than_once_so_this_usage_will_be_overwritten, unescapeLeadingUnderscores(left.escapedName));
+                        }
+                    }
+
                     spread = getSpreadType(spread, type, node.symbol, objectFlags, inConstContext);
                     offset = i + 1;
                     continue;
@@ -23924,12 +23945,26 @@ namespace ts {
             return getSpellingSuggestion(name, symbols, getCandidateName);
             function getCandidateName(candidate: Symbol) {
                 const candidateName = symbolName(candidate);
-                return !startsWith(candidateName, "\"") && candidate.flags & meaning ? candidateName : undefined;
+                if (startsWith(candidateName, "\"")) {
+                    return undefined;
+                }
+
+                if (candidate.flags & meaning) {
+                    return candidateName;
+                }
+
+                if (candidate.flags & SymbolFlags.Alias) {
+                    const alias = tryResolveAlias(candidate);
+                    if (alias && alias.flags & meaning) {
+                        return candidateName;
+                    }
+                }
+
+                return undefined;
             }
         }
 
         function markPropertyAsReferenced(prop: Symbol, nodeForCheckWriteOnly: Node | undefined, isThisAccess: boolean) {
-
             const valueDeclaration = prop && (prop.flags & SymbolFlags.ClassMember) && prop.valueDeclaration;
             if (!valueDeclaration) {
                 return;
@@ -28753,6 +28788,9 @@ namespace ts {
                 }
                 if (func.kind === SyntaxKind.ArrowFunction) {
                     error(node, Diagnostics.An_arrow_function_cannot_have_a_this_parameter);
+                }
+                if (func.kind === SyntaxKind.GetAccessor || func.kind === SyntaxKind.SetAccessor) {
+                    error(node, Diagnostics.get_and_set_accessors_cannot_declare_this_parameters);
                 }
             }
 
