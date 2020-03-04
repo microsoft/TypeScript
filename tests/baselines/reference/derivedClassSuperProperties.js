@@ -764,14 +764,14 @@ var DerivedWithObjectAccessorsUsingThisInKeys = /** @class */ (function (_super)
                 get: function () {
                     return true;
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             }),
             Object.defineProperty(_a, _this.propName, {
                 set: function (param) {
                     this._prop = param;
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             }),
             _a);
