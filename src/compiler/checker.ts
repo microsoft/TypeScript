@@ -2378,18 +2378,7 @@ namespace ts {
                         ));
                     }
                     else {
-                        if (moduleSymbol.exports && moduleSymbol.exports.has(node.symbol.escapedName)) {
-                            error(
-                                node.name,
-                                Diagnostics.Module_0_has_no_default_export_Did_you_mean_to_use_import_1_from_0_instead,
-                                symbolToString(moduleSymbol),
-                                symbolToString(node.symbol),
-                            );
-                        }
-                        else {
-                            error(node.name, Diagnostics.Module_0_has_no_default_export, symbolToString(moduleSymbol));
-                        }
-
+                        reportNonDefaultExport(moduleSymbol, node);
                     }
                 }
                 else if (hasSyntheticDefault) {
@@ -2400,6 +2389,30 @@ namespace ts {
                 }
                 markSymbolOfAliasDeclarationIfTypeOnly(node, exportDefaultSymbol, /*finalTarget*/ undefined, /*overwriteTypeOnly*/ false);
                 return exportDefaultSymbol;
+            }
+        }
+
+        function reportNonDefaultExport(moduleSymbol: Symbol, node: ImportClause) {
+            if (moduleSymbol.exports?.has(node.symbol.escapedName)) {
+                error(
+                    node.name,
+                    Diagnostics.Module_0_has_no_default_export_Did_you_mean_to_use_import_1_from_0_instead,
+                    symbolToString(moduleSymbol),
+                    symbolToString(node.symbol),
+                );
+            }
+            else {
+                const diagnostic = error(node.name, Diagnostics.Module_0_has_no_default_export, symbolToString(moduleSymbol));
+                const exportStar = moduleSymbol.exports?.get(InternalSymbolName.ExportStar);
+                if (exportStar) {
+                    const defaultExport = find(exportStar.declarations, decl => !!(
+                        isExportDeclaration(decl) && decl.moduleSpecifier &&
+                            resolveExternalModuleName(decl, decl.moduleSpecifier)?.exports?.has(InternalSymbolName.Default)
+                    ));
+                    if (defaultExport) {
+                        addRelatedInfo(diagnostic, createDiagnosticForNode(defaultExport, Diagnostics.export_Asterisk_does_not_re_export_a_default));
+                    }
+                }
             }
         }
 
