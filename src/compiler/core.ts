@@ -1354,7 +1354,7 @@ namespace ts {
     /**
      * Tests whether a value is an array.
      */
-    export function isArray(value: any): value is readonly {}[] {
+    export function isArray(value: any): value is readonly unknown[] {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
     }
 
