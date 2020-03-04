@@ -78,6 +78,7 @@ fileNames.forEach(fileName => {
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 exports.__esModule = true;
+exports.delint = void 0;
 var ts = require("typescript");
 function delint(sourceFile) {
     delintNode(sourceFile);

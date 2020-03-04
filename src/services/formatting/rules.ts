@@ -59,8 +59,8 @@ namespace ts.formatting {
             // in other cases there should be no space between '?' and next token
             rule("NoSpaceAfterQuestionMark", SyntaxKind.QuestionToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
-            rule("NoSpaceBeforeDot", anyToken, SyntaxKind.DotToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
-            rule("NoSpaceAfterDot", SyntaxKind.DotToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+            rule("NoSpaceBeforeDot", anyToken, [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+            rule("NoSpaceAfterDot", [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
             rule("NoSpaceBetweenImportParenInImportType", SyntaxKind.ImportKeyword, SyntaxKind.OpenParenToken, [isNonJsxSameLineTokenContext, isImportTypeContext], RuleAction.DeleteSpace),
 
@@ -70,8 +70,8 @@ namespace ts.formatting {
             rule("NoSpaceAfterUnaryPrefixOperator", unaryPrefixOperators, unaryPrefixExpressions, [isNonJsxSameLineTokenContext, isNotBinaryOpContext], RuleAction.DeleteSpace),
             rule("NoSpaceAfterUnaryPreincrementOperator", SyntaxKind.PlusPlusToken, unaryPreincrementExpressions, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
             rule("NoSpaceAfterUnaryPredecrementOperator", SyntaxKind.MinusMinusToken, unaryPredecrementExpressions, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
-            rule("NoSpaceBeforeUnaryPostincrementOperator", unaryPostincrementExpressions, SyntaxKind.PlusPlusToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
-            rule("NoSpaceBeforeUnaryPostdecrementOperator", unaryPostdecrementExpressions, SyntaxKind.MinusMinusToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+            rule("NoSpaceBeforeUnaryPostincrementOperator", unaryPostincrementExpressions, SyntaxKind.PlusPlusToken, [isNonJsxSameLineTokenContext, isNotStatementConditionContext], RuleAction.DeleteSpace),
+            rule("NoSpaceBeforeUnaryPostdecrementOperator", unaryPostdecrementExpressions, SyntaxKind.MinusMinusToken, [isNonJsxSameLineTokenContext, isNotStatementConditionContext], RuleAction.DeleteSpace),
 
             // More unary operator special-casing.
             // DevDiv 181814: Be careful when removing leading whitespace
@@ -241,7 +241,7 @@ namespace ts.formatting {
             rule("SpaceAfterConstructor", SyntaxKind.ConstructorKeyword, SyntaxKind.OpenParenToken, [isOptionEnabled("insertSpaceAfterConstructor"), isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
             rule("NoSpaceAfterConstructor", SyntaxKind.ConstructorKeyword, SyntaxKind.OpenParenToken, [isOptionDisabledOrUndefined("insertSpaceAfterConstructor"), isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
-            rule("SpaceAfterComma", SyntaxKind.CommaToken, anyToken, [isOptionEnabled("insertSpaceAfterCommaDelimiter"), isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext, isNextTokenNotCloseBracket], RuleAction.InsertSpace),
+            rule("SpaceAfterComma", SyntaxKind.CommaToken, anyToken, [isOptionEnabled("insertSpaceAfterCommaDelimiter"), isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext, isNextTokenNotCloseBracket, isNextTokenNotCloseParen], RuleAction.InsertSpace),
             rule("NoSpaceAfterComma", SyntaxKind.CommaToken, anyToken, [isOptionDisabledOrUndefined("insertSpaceAfterCommaDelimiter"), isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext], RuleAction.DeleteSpace),
 
             // Insert space after function keyword for anonymous functions
@@ -433,9 +433,9 @@ namespace ts.formatting {
     }
 
     function isBinaryOpContext(context: FormattingContext): boolean {
-
         switch (context.contextNode.kind) {
             case SyntaxKind.BinaryExpression:
+                return (<BinaryExpression>context.contextNode).operatorToken.kind !== SyntaxKind.CommaToken;
             case SyntaxKind.ConditionalExpression:
             case SyntaxKind.ConditionalType:
             case SyntaxKind.AsExpression:
@@ -670,6 +670,10 @@ namespace ts.formatting {
         return context.nextTokenSpan.kind !== SyntaxKind.CloseBracketToken;
     }
 
+    function isNextTokenNotCloseParen(context: FormattingContext): boolean {
+        return context.nextTokenSpan.kind !== SyntaxKind.CloseParenToken;
+    }
+
     function isArrowFunctionContext(context: FormattingContext): boolean {
         return context.contextNode.kind === SyntaxKind.ArrowFunction;
     }
@@ -790,6 +794,25 @@ namespace ts.formatting {
         return context.contextNode.kind === SyntaxKind.NonNullExpression;
     }
 
+    function isNotStatementConditionContext(context: FormattingContext): boolean {
+        return !isStatementConditionContext(context);
+    }
+
+    function isStatementConditionContext(context: FormattingContext): boolean {
+        switch (context.contextNode.kind) {
+            case SyntaxKind.IfStatement:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.WhileStatement:
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
     function isSemicolonDeletionContext(context: FormattingContext): boolean {
         let nextTokenKind = context.nextTokenSpan.kind;
         let nextTokenStart = context.nextTokenSpan.pos;
@@ -855,13 +878,6 @@ namespace ts.formatting {
     }
 
     function isSemicolonInsertionContext(context: FormattingContext): boolean {
-        const contextAncestor = findAncestor(context.currentTokenParent, ancestor => {
-            if (ancestor.end !== context.currentTokenSpan.end) {
-                return "quit";
-            }
-            return syntaxMayBeASICandidate(ancestor.kind);
-        });
-
-        return !!contextAncestor && isASICandidate(contextAncestor, context.sourceFile);
+        return positionIsASICandidate(context.currentTokenSpan.end, context.currentTokenParent, context.sourceFile);
     }
 }

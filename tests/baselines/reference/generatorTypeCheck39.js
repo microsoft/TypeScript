@@ -20,12 +20,15 @@ function decorator(x) {
     return y => { };
 }
 function* g() {
-    let C = class C {
-        constructor() {
-            this.x = yield 0;
-        }
-    };
-    C = __decorate([
-        decorator(yield 0)
-    ], C);
+    let C = /** @class */ (() => {
+        let C = class C {
+            constructor() {
+                this.x = yield 0;
+            }
+        };
+        C = __decorate([
+            decorator(yield 0)
+        ], C);
+        return C;
+    })();
 }

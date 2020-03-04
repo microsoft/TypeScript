@@ -30,7 +30,7 @@ namespace ts.moduleSpecifiers {
     function getPreferencesForUpdate(compilerOptions: CompilerOptions, oldImportSpecifier: string): Preferences {
         return {
             relativePreference: isExternalModuleNameRelative(oldImportSpecifier) ? RelativePreference.Relative : RelativePreference.NonRelative,
-            ending: hasJSOrJsonFileExtension(oldImportSpecifier) ?
+            ending: hasJSFileExtension(oldImportSpecifier) ?
                 Ending.JsExtension :
                 getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeJs || endsWith(oldImportSpecifier, "index") ? Ending.Index : Ending.Minimal,
         };
@@ -163,7 +163,7 @@ namespace ts.moduleSpecifiers {
     }
 
     function usesJsExtensionOnImports({ imports }: SourceFile): boolean {
-        return firstDefined(imports, ({ text }) => pathIsRelative(text) ? hasJSOrJsonFileExtension(text) : undefined) || false;
+        return firstDefined(imports, ({ text }) => pathIsRelative(text) ? hasJSFileExtension(text) : undefined) || false;
     }
 
     function numberOfDirectorySeparators(str: string) {
@@ -171,7 +171,7 @@ namespace ts.moduleSpecifiers {
         return match ? match.length : 0;
     }
 
-    function comparePathsByNumberOfDirectrorySeparators(a: string, b: string) {
+    function comparePathsByNumberOfDirectorySeparators(a: string, b: string) {
         return compareValues(
             numberOfDirectorySeparators(a),
             numberOfDirectorySeparators(b)
@@ -216,7 +216,6 @@ namespace ts.moduleSpecifiers {
         for (
             let directory = getDirectoryPath(toPath(importingFileName, cwd, getCanonicalFileName));
             allFileNames.size !== 0;
-            directory = getDirectoryPath(directory)
         ) {
             const directoryStart = ensureTrailingDirectorySeparator(directory);
             let pathsInDirectory: string[] | undefined;
@@ -228,10 +227,18 @@ namespace ts.moduleSpecifiers {
             });
             if (pathsInDirectory) {
                 if (pathsInDirectory.length > 1) {
-                    pathsInDirectory.sort(comparePathsByNumberOfDirectrorySeparators);
+                    pathsInDirectory.sort(comparePathsByNumberOfDirectorySeparators);
                 }
                 sortedPaths.push(...pathsInDirectory);
             }
+            const newDirectory = getDirectoryPath(directory);
+            if (newDirectory === directory) break;
+            directory = newDirectory;
+        }
+        if (allFileNames.size) {
+            const remainingPaths = arrayFrom(allFileNames.values());
+            if (remainingPaths.length > 1) remainingPaths.sort(comparePathsByNumberOfDirectorySeparators);
+            sortedPaths.push(...remainingPaths);
         }
         return sortedPaths;
     }
@@ -317,9 +324,13 @@ namespace ts.moduleSpecifiers {
 
         // If the module could be imported by a directory name, use that directory's name
         const moduleSpecifier = packageNameOnly ? moduleFileName : getDirectoryOrExtensionlessFileName(moduleFileName);
+        const globalTypingsCacheLocation = host.getGlobalTypingsCacheLocation && host.getGlobalTypingsCacheLocation();
         // Get a path that's relative to node_modules or the importing file's path
         // if node_modules folder is in this folder or any of its parent folders, no need to keep it.
-        if (!startsWith(sourceDirectory, getCanonicalFileName(moduleSpecifier.substring(0, parts.topLevelNodeModulesIndex)))) return undefined;
+        const pathToTopLevelNodeModules = getCanonicalFileName(moduleSpecifier.substring(0, parts.topLevelNodeModulesIndex));
+        if (!(startsWith(sourceDirectory, pathToTopLevelNodeModules) || globalTypingsCacheLocation && startsWith(getCanonicalFileName(globalTypingsCacheLocation), pathToTopLevelNodeModules))) {
+            return undefined;
+        }
 
         // If the module was found in @types, get the actual Node package name
         const nodeModulesDirectoryName = moduleSpecifier.substring(parts.topLevelPackageNameIndex + 1);
@@ -331,7 +342,7 @@ namespace ts.moduleSpecifiers {
             // If the file is the main module, it can be imported by the package name
             if (packageJsonContent) {
                 const mainFileRelative = packageJsonContent.typings || packageJsonContent.types || packageJsonContent.main;
-                if (mainFileRelative) {
+                if (isString(mainFileRelative)) {
                     const mainExportFile = toPath(mainFileRelative, packageRootPath, getCanonicalFileName);
                     if (removeFileExtension(mainExportFile) === removeFileExtension(getCanonicalFileName(path))) {
                         return packageRootPath;

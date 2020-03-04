@@ -176,7 +176,9 @@ namespace ts.FindAllReferences {
             const directImports = getDirectImports(moduleSymbol);
             if (directImports) {
                 for (const directImport of directImports) {
-                    addIndirectUsers(getSourceFileLikeForImportDeclaration(directImport));
+                    if (!isImportTypeNode(directImport)) {
+                        addIndirectUsers(getSourceFileLikeForImportDeclaration(directImport));
+                    }
                 }
             }
         }
@@ -221,8 +223,9 @@ namespace ts.FindAllReferences {
 
             if (decl.kind === SyntaxKind.ImportType) {
                 if (decl.qualifier) {
-                    if (isIdentifier(decl.qualifier) && decl.qualifier.escapedText === symbolName(exportSymbol)) {
-                        singleReferences.push(decl.qualifier);
+                    const firstIdentifier = getFirstIdentifier(decl.qualifier);
+                    if (firstIdentifier.escapedText === symbolName(exportSymbol)) {
+                        singleReferences.push(firstIdentifier);
                     }
                 }
                 else if (exportKind === ExportKind.ExportEquals) {
@@ -237,7 +240,9 @@ namespace ts.FindAllReferences {
             }
 
             if (decl.kind === SyntaxKind.ExportDeclaration) {
-                searchForNamedImport(decl.exportClause);
+                if (decl.exportClause && isNamedExports(decl.exportClause)) {
+                    searchForNamedImport(decl.exportClause);
+                }
                 return;
             }
 
@@ -323,7 +328,7 @@ namespace ts.FindAllReferences {
         return !!forEachPossibleImportOrExportStatement(sourceFileLike, statement => {
             if (!isExportDeclaration(statement)) return;
             const { exportClause, moduleSpecifier } = statement;
-            return !moduleSpecifier && exportClause &&
+            return !moduleSpecifier && exportClause && isNamedExports(exportClause) &&
                 exportClause.elements.some(element => checker.getExportSpecifierLocalTargetSymbol(element) === namespaceImportSymbol);
         });
     }
@@ -494,7 +499,7 @@ namespace ts.FindAllReferences {
 
             function getExportAssignmentExport(ex: ExportAssignment): ExportedSymbol {
                 // Get the symbol for the `export =` node; its parent is the module it's the export of.
-                const exportingModuleSymbol = Debug.assertDefined(ex.symbol.parent, "Expected export symbol to have a parent");
+                const exportingModuleSymbol = Debug.checkDefined(ex.symbol.parent, "Expected export symbol to have a parent");
                 const exportKind = ex.isExportEquals ? ExportKind.ExportEquals : ExportKind.Default;
                 return { kind: ImportExport.Export, symbol, exportInfo: { exportingModuleSymbol, exportKind } };
             }
@@ -512,11 +517,7 @@ namespace ts.FindAllReferences {
                         return undefined;
                 }
 
-                const sym = useLhsSymbol ? checker.getSymbolAtLocation(cast(node.left, isPropertyAccessExpression).name) : symbol;
-                // Better detection for GH#20803
-                if (sym && !(checker.getMergedSymbol(sym.parent!).flags & SymbolFlags.Module)) {
-                    Debug.fail(`Special property assignment kind does not have a module as its parent. Assignment is ${Debug.formatSymbol(sym)}, parent is ${Debug.formatSymbol(sym.parent!)}`);
-                }
+                const sym = useLhsSymbol ? checker.getSymbolAtLocation(getNameOfAccessExpression(cast(node.left, isAccessExpression))) : symbol;
                 return sym && exportInfo(sym, kind);
             }
         }
@@ -558,18 +559,18 @@ namespace ts.FindAllReferences {
 
     function getExportEqualsLocalSymbol(importedSymbol: Symbol, checker: TypeChecker): Symbol {
         if (importedSymbol.flags & SymbolFlags.Alias) {
-            return Debug.assertDefined(checker.getImmediateAliasedSymbol(importedSymbol));
+            return Debug.checkDefined(checker.getImmediateAliasedSymbol(importedSymbol));
         }
 
         const decl = importedSymbol.valueDeclaration;
         if (isExportAssignment(decl)) { // `export = class {}`
-            return Debug.assertDefined(decl.expression.symbol);
+            return Debug.checkDefined(decl.expression.symbol);
         }
         else if (isBinaryExpression(decl)) { // `module.exports = class {}`
-            return Debug.assertDefined(decl.right.symbol);
+            return Debug.checkDefined(decl.right.symbol);
         }
         else if (isSourceFile(decl)) { // json module
-            return Debug.assertDefined(decl.symbol);
+            return Debug.checkDefined(decl.symbol);
         }
         return Debug.fail();
     }

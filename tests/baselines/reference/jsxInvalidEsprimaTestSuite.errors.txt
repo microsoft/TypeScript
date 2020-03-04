@@ -39,6 +39,7 @@ tests/cases/conformance/jsx/19.tsx(1,9): error TS2695: Left side of comma operat
 tests/cases/conformance/jsx/19.tsx(1,64): error TS2657: JSX expressions must have one parent element.
 tests/cases/conformance/jsx/2.tsx(1,3): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/20.tsx(1,10): error TS1005: '}' expected.
+tests/cases/conformance/jsx/20.tsx(1,11): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
 tests/cases/conformance/jsx/21.tsx(1,20): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/22.tsx(1,15): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/22.tsx(1,21): error TS1109: Expression expected.
@@ -55,6 +56,8 @@ tests/cases/conformance/jsx/25.tsx(1,29): error TS1128: Declaration or statement
 tests/cases/conformance/jsx/25.tsx(1,32): error TS2304: Cannot find name 'props'.
 tests/cases/conformance/jsx/25.tsx(1,38): error TS1109: Expression expected.
 tests/cases/conformance/jsx/25.tsx(1,39): error TS1109: Expression expected.
+tests/cases/conformance/jsx/26.tsx(1,4): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+tests/cases/conformance/jsx/27.tsx(1,5): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
 tests/cases/conformance/jsx/28.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
 tests/cases/conformance/jsx/28.tsx(1,6): error TS1005: '{' expected.
 tests/cases/conformance/jsx/28.tsx(2,1): error TS1005: '</' expected.
@@ -67,6 +70,7 @@ tests/cases/conformance/jsx/3.tsx(1,2): error TS1109: Expression expected.
 tests/cases/conformance/jsx/3.tsx(1,3): error TS2304: Cannot find name 'a'.
 tests/cases/conformance/jsx/3.tsx(1,6): error TS1109: Expression expected.
 tests/cases/conformance/jsx/3.tsx(1,7): error TS1109: Expression expected.
+tests/cases/conformance/jsx/30.tsx(1,4): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
 tests/cases/conformance/jsx/31.tsx(1,4): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/4.tsx(1,6): error TS1005: '{' expected.
 tests/cases/conformance/jsx/5.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
@@ -236,10 +240,12 @@ tests/cases/conformance/jsx/9.tsx(1,16): error TS1109: Expression expected.
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
                                                                    ~
 !!! error TS2657: JSX expressions must have one parent element.
-==== tests/cases/conformance/jsx/20.tsx (1 errors) ====
+==== tests/cases/conformance/jsx/20.tsx (2 errors) ====
     <a>{"str";}</a>;
              ~
 !!! error TS1005: '}' expected.
+              ~
+!!! error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
 ==== tests/cases/conformance/jsx/21.tsx (1 errors) ====
     <span className="a", id="b" />;
                        ~
@@ -286,11 +292,15 @@ tests/cases/conformance/jsx/9.tsx(1,16): error TS1109: Expression expected.
 !!! error TS1109: Expression expected.
     
     
-==== tests/cases/conformance/jsx/26.tsx (0 errors) ====
+==== tests/cases/conformance/jsx/26.tsx (1 errors) ====
     <a>></a>;
+       ~
+!!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
     
-==== tests/cases/conformance/jsx/27.tsx (0 errors) ====
+==== tests/cases/conformance/jsx/27.tsx (1 errors) ====
     <a> ></a>;
+        ~
+!!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
     
 ==== tests/cases/conformance/jsx/28.tsx (3 errors) ====
     <a b=}>;
@@ -312,8 +322,10 @@ tests/cases/conformance/jsx/9.tsx(1,16): error TS1109: Expression expected.
     
     
 !!! error TS1005: '</' expected.
-==== tests/cases/conformance/jsx/30.tsx (0 errors) ====
+==== tests/cases/conformance/jsx/30.tsx (1 errors) ====
     <a>}</a>;
+       ~
+!!! error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
     
 ==== tests/cases/conformance/jsx/31.tsx (1 errors) ====
     <a .../*hai*/asdf/>;

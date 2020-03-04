@@ -2,9 +2,9 @@
 
 // @Filename: a.ts
 ////export class C {
-////    [|[|{| "contextRangeIndex": 0 |}constructor|](n: number);|]
-////    [|[|{| "contextRangeIndex": 2 |}constructor|]();|]
-////    [|[|{| "contextRangeIndex": 4 |}constructor|](n?: number){}|]
+////    [|[|{| "contextRangeIndex": 0, "isDefinition": true |}constructor|](n: number);|]
+////    [|[|{| "contextRangeIndex": 2, "isDefinition": true |}constructor|]();|]
+////    [|[|{| "contextRangeIndex": 4, "isDefinition": true |}constructor|](n?: number){}|]
 ////    static f() {
 ////        this.f();
 ////        new [|this|]();

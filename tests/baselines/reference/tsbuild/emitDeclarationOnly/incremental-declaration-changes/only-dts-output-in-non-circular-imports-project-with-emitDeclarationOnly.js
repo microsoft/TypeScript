@@ -7,7 +7,7 @@
 
 12:04:00 AM - Building project '/src/tsconfig.json'...
 
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/lib/a.d.ts]

@@ -170,3 +170,54 @@ const dd4 = d4 ?? {b: 1};
 >b : number
 >1 : 1
 
+// Repro from #34635
+
+declare function foo(): void;
+>foo : () => void
+
+const maybeBool = false;
+>maybeBool : false
+>false : false
+
+if (!(maybeBool ?? true)) {
+>!(maybeBool ?? true) : true
+>(maybeBool ?? true) : false
+>maybeBool ?? true : false
+>maybeBool : false
+>true : true
+
+    foo();
+>foo() : void
+>foo : () => void
+}
+
+if (maybeBool ?? true) {
+>maybeBool ?? true : false
+>maybeBool : false
+>true : true
+
+    foo();
+>foo() : void
+>foo : () => void
+}
+else {
+    foo();
+>foo() : void
+>foo : () => void
+}
+
+if (false ?? true) {
+>false ?? true : false
+>false : false
+>true : true
+
+    foo();
+>foo() : void
+>foo : () => void
+}
+else {
+    foo();
+>foo() : void
+>foo : () => void
+}
+

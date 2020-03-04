@@ -7,18 +7,20 @@
 
 12:01:00 AM - Building project '/src/core/tsconfig.json'...
 
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/core/anotherModule.js]
 "use strict";
 exports.__esModule = true;
+exports.World = void 0;
 exports.World = "hello";
 
 
 //// [/src/core/index.js]
 "use strict";
 exports.__esModule = true;
+exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
 exports.leftPad = leftPad;
