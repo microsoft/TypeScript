@@ -1,0 +1,11 @@
+Exit Code: 1
+Standard output:
+test/property-test/Option.ts(25,3): error TS2322: Type 'Arbitrary<None | Some<unknown> | Some<A>>' is not assignable to type 'Arbitrary<Option<A>>'.
+  Type 'None | Some<unknown> | Some<A>' is not assignable to type 'Option<A>'.
+    Type 'Some<unknown>' is not assignable to type 'Option<A>'.
+      Type 'Some<unknown>' is not assignable to type 'Some<A>'.
+        Type 'unknown' is not assignable to type 'A'.
+
+
+
+Standard error:
