@@ -237,10 +237,15 @@ namespace ts.server.protocol {
          */
         metadata?: unknown;
 
+        /* @internal */
+        performanceData?: PerformanceData;
+    }
+
+    /* @internal */
+    export interface PerformanceData {
         /**
          * Time spent updating the program graph, in milliseconds.
          */
-        /* @internal */
         updateGraphDurationMs?: number;
     }
 
