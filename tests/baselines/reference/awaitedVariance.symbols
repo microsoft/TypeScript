@@ -1,0 +1,242 @@
+=== tests/cases/conformance/types/awaited/awaitedVariance.ts ===
+declare let p0: Promise<number>;
+>p0 : Symbol(p0, Decl(awaitedVariance.ts, 0, 11))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+declare let p1: Promise<Promise<number>>;
+>p1 : Symbol(p1, Decl(awaitedVariance.ts, 1, 11))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+declare let p2: Promise<awaited number>;
+>p2 : Symbol(p2, Decl(awaitedVariance.ts, 2, 11))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+p0 = p1;
+>p0 : Symbol(p0, Decl(awaitedVariance.ts, 0, 11))
+>p1 : Symbol(p1, Decl(awaitedVariance.ts, 1, 11))
+
+p0 = p2;
+>p0 : Symbol(p0, Decl(awaitedVariance.ts, 0, 11))
+>p2 : Symbol(p2, Decl(awaitedVariance.ts, 2, 11))
+
+p1 = p0;
+>p1 : Symbol(p1, Decl(awaitedVariance.ts, 1, 11))
+>p0 : Symbol(p0, Decl(awaitedVariance.ts, 0, 11))
+
+p1 = p2;
+>p1 : Symbol(p1, Decl(awaitedVariance.ts, 1, 11))
+>p2 : Symbol(p2, Decl(awaitedVariance.ts, 2, 11))
+
+p2 = p0;
+>p2 : Symbol(p2, Decl(awaitedVariance.ts, 2, 11))
+>p0 : Symbol(p0, Decl(awaitedVariance.ts, 0, 11))
+
+p2 = p1;
+>p2 : Symbol(p2, Decl(awaitedVariance.ts, 2, 11))
+>p1 : Symbol(p1, Decl(awaitedVariance.ts, 1, 11))
+
+function f1<T>(p0: Promise<T>, p1: Promise<Promise<T>>, p2: Promise<awaited T>) {
+>f1 : Symbol(f1, Decl(awaitedVariance.ts, 8, 8))
+>T : Symbol(T, Decl(awaitedVariance.ts, 10, 12))
+>p0 : Symbol(p0, Decl(awaitedVariance.ts, 10, 15))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>T : Symbol(T, Decl(awaitedVariance.ts, 10, 12))
+>p1 : Symbol(p1, Decl(awaitedVariance.ts, 10, 30))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>T : Symbol(T, Decl(awaitedVariance.ts, 10, 12))
+>p2 : Symbol(p2, Decl(awaitedVariance.ts, 10, 55))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>T : Symbol(T, Decl(awaitedVariance.ts, 10, 12))
+
+    p0 = p1;
+>p0 : Symbol(p0, Decl(awaitedVariance.ts, 10, 15))
+>p1 : Symbol(p1, Decl(awaitedVariance.ts, 10, 30))
+
+    p0 = p2;
+>p0 : Symbol(p0, Decl(awaitedVariance.ts, 10, 15))
+>p2 : Symbol(p2, Decl(awaitedVariance.ts, 10, 55))
+
+    p1 = p0;
+>p1 : Symbol(p1, Decl(awaitedVariance.ts, 10, 30))
+>p0 : Symbol(p0, Decl(awaitedVariance.ts, 10, 15))
+
+    p1 = p2;
+>p1 : Symbol(p1, Decl(awaitedVariance.ts, 10, 30))
+>p2 : Symbol(p2, Decl(awaitedVariance.ts, 10, 55))
+
+    p2 = p0;
+>p2 : Symbol(p2, Decl(awaitedVariance.ts, 10, 55))
+>p0 : Symbol(p0, Decl(awaitedVariance.ts, 10, 15))
+
+    p2 = p1;
+>p2 : Symbol(p2, Decl(awaitedVariance.ts, 10, 55))
+>p1 : Symbol(p1, Decl(awaitedVariance.ts, 10, 30))
+}
+
+declare let pl0: PromiseLike<number>;
+>pl0 : Symbol(pl0, Decl(awaitedVariance.ts, 19, 11))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+
+declare let pl1: PromiseLike<PromiseLike<number>>;
+>pl1 : Symbol(pl1, Decl(awaitedVariance.ts, 20, 11))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+
+declare let pl2: PromiseLike<awaited number>;
+>pl2 : Symbol(pl2, Decl(awaitedVariance.ts, 21, 11))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+
+pl0 = pl1;
+>pl0 : Symbol(pl0, Decl(awaitedVariance.ts, 19, 11))
+>pl1 : Symbol(pl1, Decl(awaitedVariance.ts, 20, 11))
+
+pl0 = pl2;
+>pl0 : Symbol(pl0, Decl(awaitedVariance.ts, 19, 11))
+>pl2 : Symbol(pl2, Decl(awaitedVariance.ts, 21, 11))
+
+pl1 = pl0;
+>pl1 : Symbol(pl1, Decl(awaitedVariance.ts, 20, 11))
+>pl0 : Symbol(pl0, Decl(awaitedVariance.ts, 19, 11))
+
+pl1 = pl2;
+>pl1 : Symbol(pl1, Decl(awaitedVariance.ts, 20, 11))
+>pl2 : Symbol(pl2, Decl(awaitedVariance.ts, 21, 11))
+
+pl2 = pl0;
+>pl2 : Symbol(pl2, Decl(awaitedVariance.ts, 21, 11))
+>pl0 : Symbol(pl0, Decl(awaitedVariance.ts, 19, 11))
+
+pl2 = pl1;
+>pl2 : Symbol(pl2, Decl(awaitedVariance.ts, 21, 11))
+>pl1 : Symbol(pl1, Decl(awaitedVariance.ts, 20, 11))
+
+function f2<T>(pl0: PromiseLike<T>, pl1: PromiseLike<PromiseLike<T>>, pl2: PromiseLike<awaited T>) {
+>f2 : Symbol(f2, Decl(awaitedVariance.ts, 27, 10))
+>T : Symbol(T, Decl(awaitedVariance.ts, 29, 12))
+>pl0 : Symbol(pl0, Decl(awaitedVariance.ts, 29, 15))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(awaitedVariance.ts, 29, 12))
+>pl1 : Symbol(pl1, Decl(awaitedVariance.ts, 29, 35))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(awaitedVariance.ts, 29, 12))
+>pl2 : Symbol(pl2, Decl(awaitedVariance.ts, 29, 69))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(awaitedVariance.ts, 29, 12))
+
+    pl0 = pl1;
+>pl0 : Symbol(pl0, Decl(awaitedVariance.ts, 29, 15))
+>pl1 : Symbol(pl1, Decl(awaitedVariance.ts, 29, 35))
+
+    pl0 = pl2;
+>pl0 : Symbol(pl0, Decl(awaitedVariance.ts, 29, 15))
+>pl2 : Symbol(pl2, Decl(awaitedVariance.ts, 29, 69))
+
+    pl1 = pl0;
+>pl1 : Symbol(pl1, Decl(awaitedVariance.ts, 29, 35))
+>pl0 : Symbol(pl0, Decl(awaitedVariance.ts, 29, 15))
+
+    pl1 = pl2;
+>pl1 : Symbol(pl1, Decl(awaitedVariance.ts, 29, 35))
+>pl2 : Symbol(pl2, Decl(awaitedVariance.ts, 29, 69))
+
+    pl2 = pl0;
+>pl2 : Symbol(pl2, Decl(awaitedVariance.ts, 29, 69))
+>pl0 : Symbol(pl0, Decl(awaitedVariance.ts, 29, 15))
+
+    pl2 = pl1;
+>pl2 : Symbol(pl2, Decl(awaitedVariance.ts, 29, 69))
+>pl1 : Symbol(pl1, Decl(awaitedVariance.ts, 29, 35))
+}
+
+pl0 = p0;
+>pl0 : Symbol(pl0, Decl(awaitedVariance.ts, 19, 11))
+>p0 : Symbol(p0, Decl(awaitedVariance.ts, 0, 11))
+
+pl0 = p1;
+>pl0 : Symbol(pl0, Decl(awaitedVariance.ts, 19, 11))
+>p1 : Symbol(p1, Decl(awaitedVariance.ts, 1, 11))
+
+pl0 = p2;
+>pl0 : Symbol(pl0, Decl(awaitedVariance.ts, 19, 11))
+>p2 : Symbol(p2, Decl(awaitedVariance.ts, 2, 11))
+
+pl1 = p0;
+>pl1 : Symbol(pl1, Decl(awaitedVariance.ts, 20, 11))
+>p0 : Symbol(p0, Decl(awaitedVariance.ts, 0, 11))
+
+pl1 = p1;
+>pl1 : Symbol(pl1, Decl(awaitedVariance.ts, 20, 11))
+>p1 : Symbol(p1, Decl(awaitedVariance.ts, 1, 11))
+
+pl1 = p2;
+>pl1 : Symbol(pl1, Decl(awaitedVariance.ts, 20, 11))
+>p2 : Symbol(p2, Decl(awaitedVariance.ts, 2, 11))
+
+pl2 = p0;
+>pl2 : Symbol(pl2, Decl(awaitedVariance.ts, 21, 11))
+>p0 : Symbol(p0, Decl(awaitedVariance.ts, 0, 11))
+
+pl2 = p1;
+>pl2 : Symbol(pl2, Decl(awaitedVariance.ts, 21, 11))
+>p1 : Symbol(p1, Decl(awaitedVariance.ts, 1, 11))
+
+pl2 = p2;
+>pl2 : Symbol(pl2, Decl(awaitedVariance.ts, 21, 11))
+>p2 : Symbol(p2, Decl(awaitedVariance.ts, 2, 11))
+
+interface A<T> {
+>A : Symbol(A, Decl(awaitedVariance.ts, 46, 9))
+>T : Symbol(T, Decl(awaitedVariance.ts, 48, 12))
+
+    x: awaited T;
+>x : Symbol(A.x, Decl(awaitedVariance.ts, 48, 16))
+>T : Symbol(T, Decl(awaitedVariance.ts, 48, 12))
+}
+
+declare let a1: A<number>;
+>a1 : Symbol(a1, Decl(awaitedVariance.ts, 52, 11))
+>A : Symbol(A, Decl(awaitedVariance.ts, 46, 9))
+
+declare let a2: A<Promise<number>>;
+>a2 : Symbol(a2, Decl(awaitedVariance.ts, 53, 11))
+>A : Symbol(A, Decl(awaitedVariance.ts, 46, 9))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+a1 = a2;
+>a1 : Symbol(a1, Decl(awaitedVariance.ts, 52, 11))
+>a2 : Symbol(a2, Decl(awaitedVariance.ts, 53, 11))
+
+a2 = a1;
+>a2 : Symbol(a2, Decl(awaitedVariance.ts, 53, 11))
+>a1 : Symbol(a1, Decl(awaitedVariance.ts, 52, 11))
+
+interface B<T> {
+>B : Symbol(B, Decl(awaitedVariance.ts, 55, 8))
+>T : Symbol(T, Decl(awaitedVariance.ts, 57, 12))
+
+    a: A<T>;
+>a : Symbol(B.a, Decl(awaitedVariance.ts, 57, 16))
+>A : Symbol(A, Decl(awaitedVariance.ts, 46, 9))
+>T : Symbol(T, Decl(awaitedVariance.ts, 57, 12))
+}
+
+declare let b1: B<number>;
+>b1 : Symbol(b1, Decl(awaitedVariance.ts, 61, 11))
+>B : Symbol(B, Decl(awaitedVariance.ts, 55, 8))
+
+declare let b2: B<Promise<number>>;
+>b2 : Symbol(b2, Decl(awaitedVariance.ts, 62, 11))
+>B : Symbol(B, Decl(awaitedVariance.ts, 55, 8))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+b1 = b2;
+>b1 : Symbol(b1, Decl(awaitedVariance.ts, 61, 11))
+>b2 : Symbol(b2, Decl(awaitedVariance.ts, 62, 11))
+
+b2 = b1;
+>b2 : Symbol(b2, Decl(awaitedVariance.ts, 62, 11))
+>b1 : Symbol(b1, Decl(awaitedVariance.ts, 61, 11))
+

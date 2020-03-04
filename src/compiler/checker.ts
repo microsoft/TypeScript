@@ -919,7 +919,7 @@ namespace ts {
 
         let _jsxNamespace: __String;
         let _jsxFactoryEntity: EntityName | undefined;
-        let outofbandVarianceMarkerHandler: ((onlyUnreliable: boolean) => void) | undefined;
+        let outofbandVarianceMarkerHandler: ((variance: VarianceFlags) => void) | undefined;
 
         const subtypeRelation = createMap<RelationComparisonResult>();
         const strictSubtypeRelation = createMap<RelationComparisonResult>();
@@ -15642,8 +15642,8 @@ namespace ts {
                     const variance = varianceFlags & VarianceFlags.VarianceMask;
                     // We ignore arguments for independent type parameters (because they're never witnessed).
                     if (variance !== VarianceFlags.Independent) {
-                        const s = sources[i];
-                        const t = targets[i];
+                        const s = varianceFlags & VarianceFlags.Awaitable ? unwrapAwaitedType(getAwaitedType(sources[i]) ?? unknownType) : sources[i];
+                        const t = varianceFlags & VarianceFlags.Awaitable ? unwrapAwaitedType(getAwaitedType(targets[i]) ?? unknownType) : targets[i];
                         let related = Ternary.True;
                         if (varianceFlags & VarianceFlags.Unmeasurable) {
                             // Even an `Unmeasurable` variance works out without a structural check if the source and target are _identical_.
@@ -15711,6 +15711,9 @@ namespace ts {
                             if (saved & RelationComparisonResult.ReportsUnreliable) {
                                 instantiateType(source, reportUnreliableMarkers);
                             }
+                            if (saved & RelationComparisonResult.ReportsAwaitable) {
+                                instantiateType(source, reportAwaitableMarkers);
+                            }
                         }
                         return entry & RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
                     }
@@ -15745,9 +15748,12 @@ namespace ts {
                 let propagatingVarianceFlags: RelationComparisonResult = 0;
                 if (outofbandVarianceMarkerHandler) {
                     originalHandler = outofbandVarianceMarkerHandler;
-                    outofbandVarianceMarkerHandler = onlyUnreliable => {
-                        propagatingVarianceFlags |= onlyUnreliable ? RelationComparisonResult.ReportsUnreliable : RelationComparisonResult.ReportsUnmeasurable;
-                        return originalHandler!(onlyUnreliable);
+                    outofbandVarianceMarkerHandler = variance => {
+                        propagatingVarianceFlags |=
+                            variance === VarianceFlags.Awaitable ? RelationComparisonResult.ReportsAwaitable :
+                            variance === VarianceFlags.Unreliable ? RelationComparisonResult.ReportsUnreliable :
+                            RelationComparisonResult.ReportsUnmeasurable;
+                        return originalHandler!(variance);
                     };
                 }
                 const result = expandingFlags !== ExpandingFlags.Both ? structuredTypeRelatedTo(source, target, reportErrors, intersectionState) : Ternary.Maybe;
@@ -15878,11 +15884,13 @@ namespace ts {
                     }
                 }
                 else if (target.flags & TypeFlags.Awaited && source.flags & TypeFlags.Awaited) {
+                    const targetType = (<AwaitedType>target).awaitedType;
+                    const sourceType = instantiateType((<AwaitedType>source).awaitedType, reportAwaitableMarkers);
                     // An `awaited S` is related to an `awaited T` if `S` is related to `T`:
                     //
                     //  S <: T ⇒ awaited S <: awaited T
                     //
-                    if (result = isRelatedTo((<AwaitedType>source).awaitedType, (<AwaitedType>target).awaitedType, reportErrors)) {
+                    if (result = isRelatedTo(sourceType, targetType, reportErrors)) {
                         return result;
                     }
                 }
@@ -16157,14 +16165,21 @@ namespace ts {
 
             function reportUnmeasurableMarkers(p: TypeParameter) {
                 if (outofbandVarianceMarkerHandler && (p === markerSuperType || p === markerSubType || p === markerOtherType)) {
-                    outofbandVarianceMarkerHandler(/*onlyUnreliable*/ false);
+                    outofbandVarianceMarkerHandler(VarianceFlags.Unmeasurable);
                 }
                 return p;
             }
 
             function reportUnreliableMarkers(p: TypeParameter) {
                 if (outofbandVarianceMarkerHandler && (p === markerSuperType || p === markerSubType || p === markerOtherType)) {
-                    outofbandVarianceMarkerHandler(/*onlyUnreliable*/ true);
+                    outofbandVarianceMarkerHandler(VarianceFlags.Unreliable);
+                }
+                return p;
+            }
+
+            function reportAwaitableMarkers(p: TypeParameter) {
+                if (outofbandVarianceMarkerHandler && (p === markerSuperType || p === markerSubType || p === markerOtherType)) {
+                    outofbandVarianceMarkerHandler(VarianceFlags.Awaitable);
                 }
                 return p;
             }
@@ -16883,8 +16898,12 @@ namespace ts {
                 for (const tp of typeParameters) {
                     let unmeasurable = false;
                     let unreliable = false;
+                    let awaitable = false;
                     const oldHandler = outofbandVarianceMarkerHandler;
-                    outofbandVarianceMarkerHandler = (onlyUnreliable) => onlyUnreliable ? unreliable = true : unmeasurable = true;
+                    outofbandVarianceMarkerHandler = (variance) =>
+                        variance === VarianceFlags.Awaitable ? awaitable = true :
+                        variance === VarianceFlags.Unreliable ? unreliable = true :
+                        unmeasurable = true;
                     // We first compare instantiations where the type parameter is replaced with
                     // marker types that have a known subtype relationship. From this we can infer
                     // invariance, covariance, contravariance or bivariance.
@@ -16900,13 +16919,14 @@ namespace ts {
                         variance = VarianceFlags.Independent;
                     }
                     outofbandVarianceMarkerHandler = oldHandler;
-                    if (unmeasurable || unreliable) {
-                        if (unmeasurable) {
-                            variance |= VarianceFlags.Unmeasurable;
-                        }
-                        if (unreliable) {
-                            variance |= VarianceFlags.Unreliable;
-                        }
+                    if (unmeasurable) {
+                        variance |= VarianceFlags.Unmeasurable;
+                    }
+                    if (unreliable) {
+                        variance |= VarianceFlags.Unreliable;
+                    }
+                    if (awaitable) {
+                        variance |= VarianceFlags.Awaitable;
                     }
                     variances.push(variance);
                 }
@@ -29952,7 +29972,7 @@ namespace ts {
 
             if (isReferenceToType(type, getGlobalPromiseType(/*reportErrors*/ false)) ||
                 isReferenceToType(type, getGlobalPromiseLikeType(/*reportErrors*/ false))) {
-                return typeAsPromise.promisedTypeOfPromise = getTypeArguments(<GenericType>type)[0];
+                return typeAsPromise.promisedTypeOfPromise = getAwaitedType(getTypeArguments(<GenericType>type)[0], errorNode);
             }
 
             const thenFunction = getTypeOfPropertyOfType(type, "then" as __String)!; // TODO: GH#18217
@@ -30012,6 +30032,12 @@ namespace ts {
                 awaitedTypes.set(typeId, awaitedType);
             }
             return awaitedType;
+        }
+
+        function unwrapAwaitedType(type: Type): Type {
+            return type.flags & TypeFlags.Union ?
+                mapType(type, unwrapAwaitedType) :
+                type.flags & TypeFlags.Awaited ? (<AwaitedType>type).awaitedType : type;
         }
 
         /**
@@ -32346,7 +32372,7 @@ namespace ts {
             const isGenerator = !!(functionFlags & FunctionFlags.Generator);
             const isAsync = !!(functionFlags & FunctionFlags.Async);
             return isGenerator ? getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, isAsync) || errorType :
-                isAsync ? getAwaitedType(returnType) || errorType :
+                isAsync ? unwrapAwaitedType(getAwaitedType(returnType) || errorType) :
                 returnType;
         }
 
@@ -32385,7 +32411,7 @@ namespace ts {
                 else if (getReturnTypeFromAnnotation(func)) {
                     const unwrappedReturnType = unwrapReturnType(returnType, functionFlags);
                     const unwrappedExprType = functionFlags & FunctionFlags.Async
-                        ? checkAwaitedType(exprType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
+                        ? unwrapAwaitedType(checkAwaitedType(exprType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member))
                         : exprType;
                     if (unwrappedReturnType) {
                         // If the function has a return type, but promisedType is
