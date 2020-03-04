@@ -21609,7 +21609,7 @@ namespace ts {
                 const contextualReturnType = getContextualReturnType(func);
                 if (contextualReturnType) {
                     if (functionFlags & FunctionFlags.Async) { // Async function
-                        const contextualAwaitedType = getAwaitedTypeOfPromise(contextualReturnType);
+                        const contextualAwaitedType = mapType(contextualReturnType, getAwaitedTypeOfPromise);
                         return contextualAwaitedType && getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
                     }
                     return contextualReturnType; // Regular function
