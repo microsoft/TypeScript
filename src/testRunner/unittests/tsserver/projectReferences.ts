@@ -1891,6 +1891,10 @@ export { foo };`
                 service.openClientFile(main.path);
                 verifyProjects(/*includeConfigured*/ true, /*includeDummy*/ false);
                 checkEvents(session, expectedOpenEvents);
+                const info = service.getScriptInfoForPath(mainPath as Path)!;
+                const project = service.configuredProjects.get(tsconfigSrc.path)!;
+                assert.equal(info.getDefaultProject(), project);
+                assert.equal(service.findDefaultConfiguredProject(info), project);
 
                 verifyGetErrRequest({
                     session,
@@ -1959,9 +1963,26 @@ export { foo };`
                     content: `import { foo } from 'main';
 foo;`
                 };
+                const tsconfigIndirect2: File = {
+                    path: `${tscWatch.projectRoot}/tsconfig-indirect2.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            composite: true,
+                            outDir: "./target/",
+                            baseUrl: "./src/"
+                        },
+                        files: ["./indirect2/main2.ts"],
+                        references: [{ path: "./tsconfig-src.json" }]
+                    })
+                };
+                const indirect2: File = {
+                    path: `${tscWatch.projectRoot}/indirect2/main2.ts`,
+                    content: `import { foo } from 'main';
+foo;`
+                };
                 verifySolutionScenario({
-                    configRefs: ["./tsconfig-indirect.json"],
-                    additionalFiles: [tsconfigIndirect, indirect],
+                    configRefs: ["./tsconfig-indirect.json", "./tsconfig-indirect2.json"],
+                    additionalFiles: [tsconfigIndirect, indirect, tsconfigIndirect2, indirect2],
                     additionalProjects: [{
                         projectName: tsconfigIndirect.path,
                         files: [tsconfigIndirect.path, mainPath, helperPath, indirect.path, libFile.path]

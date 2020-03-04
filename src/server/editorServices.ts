@@ -1687,8 +1687,12 @@ namespace ts.server {
         findDefaultConfiguredProject(info: ScriptInfo) {
             if (!info.isScriptOpen()) return undefined;
             const configFileName = this.getConfigFileNameForFile(info);
-            return configFileName &&
+            const project = configFileName &&
                 this.findConfiguredProjectByProjectName(configFileName);
+
+            return project?.isSolution() ?
+                project.getDefaultChildProjectFromSolution(info) :
+                project;
         }
 
         /**

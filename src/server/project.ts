@@ -2170,6 +2170,21 @@ namespace ts.server {
                 !this.canConfigFileJsonReportNoInputFiles;
         }
 
+        /* @internal */
+        getDefaultChildProjectFromSolution(info: ScriptInfo) {
+            Debug.assert(this.isSolution());
+            return forEachResolvedProjectReference(this, ref => {
+                if (!ref) return undefined;
+                const configFileName = toNormalizedPath(ref.sourceFile.fileName);
+                const child = this.projectService.findConfiguredProjectByProjectName(configFileName);
+                return child &&
+                    child.containsScriptInfo(info) &&
+                    !child.isSourceOfProjectReferenceRedirect(info.path) ?
+                    child :
+                    undefined;
+            });
+        }
+
         /** Returns true if the project is needed by any of the open script info/external project */
         /* @internal */
         hasOpenRef() {
@@ -2198,14 +2213,7 @@ namespace ts.server {
             return forEachEntry(
                 configFileExistenceInfo.openFilesImpactedByConfigFile,
                 (_value, infoPath) => isSolution ?
-                    forEachResolvedProjectReference(this, ref => {
-                        if (!ref) return false;
-                        const configFileName = toNormalizedPath(ref.sourceFile.fileName);
-                        const child = this.projectService.findConfiguredProjectByProjectName(configFileName);
-                        return child &&
-                            child.containsScriptInfo(this.projectService.getScriptInfoForPath(infoPath as Path)!) &&
-                            !child.isSourceOfProjectReferenceRedirect(infoPath);
-                    }) :
+                    !!this.getDefaultChildProjectFromSolution(this.projectService.getScriptInfoForPath(infoPath as Path)!) :
                     this.containsScriptInfo(this.projectService.getScriptInfoForPath(infoPath as Path)!)
             ) || false;
         }
