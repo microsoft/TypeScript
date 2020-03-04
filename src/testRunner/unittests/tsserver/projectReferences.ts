@@ -1840,71 +1840,146 @@ bar();
             checkNumberOfProjects(service, { configuredProjects: 1 });
         });
 
-        it("when default project is solution project", () => {
-            const tsconfigSrc: File = {
-                path: `${tscWatch.projectRoot}/tsconfig-src.json`,
-                content: JSON.stringify({
-                    compilerOptions: {
-                        composite: true,
-                        outDir: "./target/",
-                        baseUrl: "./src/"
-                    },
-                    include: ["./src/**/*"]
-                })
-            };
-            const tsconfig: File = {
-                path: `${tscWatch.projectRoot}/tsconfig.json`,
-                content: JSON.stringify({
-                    references: [{ path: "./tsconfig-src.json" }],
-                    files: []
-                })
-            };
-            const main: File = {
-                path: `${tscWatch.projectRoot}/src/main.ts`,
-                content: `import { foo } from 'helpers/functions';
-foo;`
-            };
-            const helper: File = {
-                path: `${tscWatch.projectRoot}/src/helpers/functions.ts`,
-                content: `export const foo = 1;`
-            };
-            const dummyFile: File = {
-                path: "/dummy/dummy.ts",
-                content: "let a = 10;"
-            };
-            const host = createServerHost([tsconfigSrc, tsconfig, main, helper, libFile, dummyFile]);
-            const session = createSession(host, { canUseEvents: true });
-            const service = session.getProjectService();
-            service.openClientFile(main.path);
-            verifyProjects(/*includeConfigured*/ true, /*includeDummy*/ false);
-            verifyGetErrRequest({
-                session,
-                host,
-                expected: [
-                    { file: main, syntax: [], semantic: [], suggestion: [] },
-                ]
-            });
+        describe("when default project is solution project", () => {
+            interface VerifySolutionScenario {
+                configRefs: string[];
+                additionalFiles: readonly File[];
+                additionalProjects: readonly { projectName: string, files: readonly string[] }[];
+                expectedOpenEvents: protocol.Event[];
+            }
+            const mainPath = `${tscWatch.projectRoot}/src/main.ts`;
+            const helperPath = `${tscWatch.projectRoot}/src/helpers/functions.ts`;
+            const tsconfigSrcPath = `${tscWatch.projectRoot}/tsconfig-src.json`;
+            const tsconfigPath = `${tscWatch.projectRoot}/tsconfig.json`;
+            function verifySolutionScenario({
+                configRefs, additionalFiles, additionalProjects, expectedOpenEvents
+            }: VerifySolutionScenario) {
+                const tsconfigSrc: File = {
+                    path: tsconfigSrcPath,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            composite: true,
+                            outDir: "./target/",
+                            baseUrl: "./src/"
+                        },
+                        include: ["./src/**/*"]
+                    })
+                };
+                const tsconfig: File = {
+                    path: tsconfigPath,
+                    content: JSON.stringify({
+                        references: configRefs.map(path => ({ path })),
+                        files: []
+                    })
+                };
+                const main: File = {
+                    path: mainPath,
+                    content: `import { foo } from 'helpers/functions';
+export { foo };`
+                };
+                const helper: File = {
+                    path: helperPath,
+                    content: `export const foo = 1;`
+                };
+                const dummyFile: File = {
+                    path: "/dummy/dummy.ts",
+                    content: "let a = 10;"
+                };
+                const host = createServerHost([tsconfigSrc, tsconfig, main, helper, libFile, dummyFile, ...additionalFiles]);
+                const session = createSession(host, { canUseEvents: true });
+                const service = session.getProjectService();
+                service.openClientFile(main.path);
+                verifyProjects(/*includeConfigured*/ true, /*includeDummy*/ false);
+                checkEvents(session, expectedOpenEvents);
 
-            service.openClientFile(dummyFile.path);
-            verifyProjects(/*includeConfigured*/ true, /*includeDummy*/ true);
+                verifyGetErrRequest({
+                    session,
+                    host,
+                    expected: [
+                        { file: main, syntax: [], semantic: [], suggestion: [] },
+                    ]
+                });
 
-            service.closeClientFile(main.path);
-            service.closeClientFile(dummyFile.path);
-            service.openClientFile(dummyFile.path);
-            verifyProjects(/*includeConfigured*/ false, /*includeDummy*/ true);
+                service.openClientFile(dummyFile.path);
+                verifyProjects(/*includeConfigured*/ true, /*includeDummy*/ true);
 
-            function verifyProjects(includeConfigured: boolean, includeDummy: boolean) {
-                const inferredProjects = includeDummy ? 1 : 0;
-                const configuredProjects = includeConfigured ? 2 : 0;
-                checkNumberOfProjects(service, { configuredProjects, inferredProjects });
-                if (includeConfigured) {
-                    checkProjectActualFiles(service.configuredProjects.get(tsconfigSrc.path)!, [tsconfigSrc.path, main.path, helper.path, libFile.path]);
-                    checkProjectActualFiles(service.configuredProjects.get(tsconfig.path)!, [tsconfig.path]);
-                }
-                if (includeDummy) {
-                    checkProjectActualFiles(service.inferredProjects[0], [dummyFile.path, libFile.path]);
+                service.closeClientFile(main.path);
+                service.closeClientFile(dummyFile.path);
+                service.openClientFile(dummyFile.path);
+                verifyProjects(/*includeConfigured*/ false, /*includeDummy*/ true);
+
+                function verifyProjects(includeConfigured: boolean, includeDummy: boolean) {
+                    const inferredProjects = includeDummy ? 1 : 0;
+                    const configuredProjects = includeConfigured ? additionalProjects.length + 2 : 0;
+                    checkNumberOfProjects(service, { configuredProjects, inferredProjects });
+                    if (includeConfigured) {
+                        checkProjectActualFiles(service.configuredProjects.get(tsconfigSrc.path)!, [tsconfigSrc.path, main.path, helper.path, libFile.path]);
+                        checkProjectActualFiles(service.configuredProjects.get(tsconfig.path)!, [tsconfig.path]);
+                        additionalProjects.forEach(({ projectName, files }) =>
+                            checkProjectActualFiles(service.configuredProjects.get(projectName)!, files));
+                    }
+                    if (includeDummy) {
+                        checkProjectActualFiles(service.inferredProjects[0], [dummyFile.path, libFile.path]);
+                    }
                 }
             }
+
+            it("when project is directly referenced by solution", () => {
+                verifySolutionScenario({
+                    configRefs: ["./tsconfig-src.json"],
+                    additionalFiles: emptyArray,
+                    additionalProjects: emptyArray,
+                    expectedOpenEvents: [
+                        projectLoadingStartEvent(tsconfigPath, `Creating possible configured project for ${mainPath} to open`),
+                        projectLoadingFinishEvent(tsconfigPath),
+                        projectInfoTelemetryEvent(),
+                        projectLoadingStartEvent(tsconfigSrcPath, `Creating project referenced in solution ${tsconfigPath} to find possible configured project for ${mainPath} to open`),
+                        projectLoadingFinishEvent(tsconfigSrcPath),
+                        projectInfoTelemetryEvent(),
+                        configFileDiagEvent(mainPath, tsconfigSrcPath, [])
+                    ]
+                });
+            });
+
+            it("when project is indirectly referenced by solution", () => {
+                const tsconfigIndirect: File = {
+                    path: `${tscWatch.projectRoot}/tsconfig-indirect.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            composite: true,
+                            outDir: "./target/",
+                            baseUrl: "./src/"
+                        },
+                        files: ["./indirect/main.ts"],
+                        references: [{ path: "./tsconfig-src.json" }]
+                    })
+                };
+                const indirect: File = {
+                    path: `${tscWatch.projectRoot}/indirect/main.ts`,
+                    content: `import { foo } from 'main';
+foo;`
+                };
+                verifySolutionScenario({
+                    configRefs: ["./tsconfig-indirect.json"],
+                    additionalFiles: [tsconfigIndirect, indirect],
+                    additionalProjects: [{
+                        projectName: tsconfigIndirect.path,
+                        files: [tsconfigIndirect.path, mainPath, helperPath, indirect.path, libFile.path]
+                    }],
+                    expectedOpenEvents: [
+                        projectLoadingStartEvent(tsconfigPath, `Creating possible configured project for ${mainPath} to open`),
+                        projectLoadingFinishEvent(tsconfigPath),
+                        projectInfoTelemetryEvent(),
+                        projectLoadingStartEvent(tsconfigIndirect.path, `Creating project referenced in solution ${tsconfigPath} to find possible configured project for ${mainPath} to open`),
+                        projectLoadingFinishEvent(tsconfigIndirect.path),
+                        projectInfoTelemetryEvent(),
+                        projectLoadingStartEvent(tsconfigSrcPath, `Creating project referenced in solution ${tsconfigPath} to find possible configured project for ${mainPath} to open`),
+                        projectLoadingFinishEvent(tsconfigSrcPath),
+                        projectInfoTelemetryEvent(),
+                        configFileDiagEvent(mainPath, tsconfigSrcPath, [])
+                    ]
+                });
+            });
         });
     });
 }

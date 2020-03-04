@@ -2902,6 +2902,7 @@ namespace ts.server {
                                 const configFileName = toNormalizedPath(ref.sourceFile.fileName);
                                 const child = this.findConfiguredProjectByProjectName(configFileName) ||
                                     this.createAndLoadConfiguredProject(configFileName, `Creating project referenced in solution ${defaultConfigProject!.projectName} to find possible configured project for ${info.fileName} to open`);
+                                updateProjectIfDirty(child);
                                 // Retain these projects
                                 if (!isArray(retainProjects)) {
                                     retainProjects = [defaultConfigProject!, child];
@@ -2913,6 +2914,8 @@ namespace ts.server {
                                 if (child.containsScriptInfo(info) &&
                                     !child.isSourceOfProjectReferenceRedirect(info.fileName)) {
                                     defaultConfigProject = child;
+                                    configFileErrors = child.getAllProjectErrors();
+                                    this.sendConfigFileDiagEvent(child, info.fileName);
                                     return true;
                                 }
                             }
