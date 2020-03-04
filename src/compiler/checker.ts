@@ -15642,8 +15642,8 @@ namespace ts {
                     const variance = varianceFlags & VarianceFlags.VarianceMask;
                     // We ignore arguments for independent type parameters (because they're never witnessed).
                     if (variance !== VarianceFlags.Independent) {
-                        const s = sources[i];
-                        const t = targets[i];
+                        const s = varianceFlags & VarianceFlags.Awaitable ? unwrapAwaitedType(getAwaitedType(sources[i]) ?? unknownType) : sources[i];
+                        const t = varianceFlags & VarianceFlags.Awaitable ? unwrapAwaitedType(getAwaitedType(targets[i]) ?? unknownType) : targets[i];
                         let related = Ternary.True;
                         if (varianceFlags & VarianceFlags.Unmeasurable) {
                             // Even an `Unmeasurable` variance works out without a structural check if the source and target are _identical_.
@@ -16862,7 +16862,7 @@ namespace ts {
 
         function getAliasVariances(symbol: Symbol) {
             const links = getSymbolLinks(symbol);
-            return getVariancesWorker(links.typeParameters, links, (_links, param, marker) => {
+            return getVariancesWorker(links.typeParameters, links, /*promisedType*/ undefined, (_links, param, marker) => {
                 const type = getTypeAliasInstantiation(symbol, instantiateTypes(links.typeParameters!, makeUnaryTypeMapper(param, marker)));
                 type.aliasTypeArgumentsContainsMarker = true;
                 return type;
@@ -16874,7 +16874,7 @@ namespace ts {
         // generic type are structurally compared. We infer the variance information by comparing
         // instantiations of the generic type for type arguments with known relations. The function
         // returns the emptyArray singleton when invoked recursively for the given generic type.
-        function getVariancesWorker<TCache extends { variances?: VarianceFlags[] }>(typeParameters: readonly TypeParameter[] = emptyArray, cache: TCache, createMarkerType: (input: TCache, param: TypeParameter, marker: Type) => Type): VarianceFlags[] {
+        function getVariancesWorker<TCache extends { variances?: VarianceFlags[] }>(typeParameters: readonly TypeParameter[] = emptyArray, cache: TCache, promisedType: Type | undefined, createMarkerType: (input: TCache, param: TypeParameter, marker: Type) => Type): VarianceFlags[] {
             let variances = cache.variances;
             if (!variances) {
                 // The emptyArray singleton is used to signal a recursive invocation.
@@ -16908,6 +16908,15 @@ namespace ts {
                             variance |= VarianceFlags.Unreliable;
                         }
                     }
+                    // As a simplified hueristic, if the type was "thenable" (i.e. has a callable "then" method) with a single
+                    // type parameter, and that type parameter is referenced as an `awaited` type for the `value` parameter
+                    // of the `onfulfilled` callback, then the type parameter is 'Awaitable'.
+                    if (typeParameters.length === 1 &&
+                        promisedType &&
+                        promisedType.flags & TypeFlags.Awaited &&
+                        (promisedType as AwaitedType).awaitedType === tp) {
+                        variance |= VarianceFlags.Awaitable;
+                    }
                     variances.push(variance);
                 }
                 cache.variances = variances;
@@ -16920,7 +16929,8 @@ namespace ts {
             if (type === globalArrayType || type === globalReadonlyArrayType || type.objectFlags & ObjectFlags.Tuple) {
                 return arrayVariances;
             }
-            return getVariancesWorker(type.typeParameters, type, getMarkerTypeReference);
+            const promisedType: Type | undefined = isThenableType(type) ? getPromisedTypeOfPromise(type) : undefined;
+            return getVariancesWorker(type.typeParameters, type, promisedType, getMarkerTypeReference);
         }
 
         // Return true if the given type reference has a 'void' type argument for a covariant type parameter.
@@ -29952,7 +29962,7 @@ namespace ts {
 
             if (isReferenceToType(type, getGlobalPromiseType(/*reportErrors*/ false)) ||
                 isReferenceToType(type, getGlobalPromiseLikeType(/*reportErrors*/ false))) {
-                return typeAsPromise.promisedTypeOfPromise = getTypeArguments(<GenericType>type)[0];
+                return typeAsPromise.promisedTypeOfPromise = getAwaitedType(getTypeArguments(<GenericType>type)[0], errorNode);
             }
 
             const thenFunction = getTypeOfPropertyOfType(type, "then" as __String)!; // TODO: GH#18217
@@ -30012,6 +30022,12 @@ namespace ts {
                 awaitedTypes.set(typeId, awaitedType);
             }
             return awaitedType;
+        }
+
+        function unwrapAwaitedType(type: Type): Type {
+            return type.flags & TypeFlags.Union ?
+                mapType(type, unwrapAwaitedType) :
+                type.flags & TypeFlags.Awaited ? (<AwaitedType>type).awaitedType : type;
         }
 
         /**
@@ -32346,7 +32362,7 @@ namespace ts {
             const isGenerator = !!(functionFlags & FunctionFlags.Generator);
             const isAsync = !!(functionFlags & FunctionFlags.Async);
             return isGenerator ? getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, isAsync) || errorType :
-                isAsync ? getAwaitedType(returnType) || errorType :
+                isAsync ? unwrapAwaitedType(getAwaitedType(returnType) || errorType) :
                 returnType;
         }
 
@@ -32385,7 +32401,7 @@ namespace ts {
                 else if (getReturnTypeFromAnnotation(func)) {
                     const unwrappedReturnType = unwrapReturnType(returnType, functionFlags);
                     const unwrappedExprType = functionFlags & FunctionFlags.Async
-                        ? checkAwaitedType(exprType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
+                        ? unwrapAwaitedType(checkAwaitedType(exprType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member))
                         : exprType;
                     if (unwrappedReturnType) {
                         // If the function has a return type, but promisedType is
