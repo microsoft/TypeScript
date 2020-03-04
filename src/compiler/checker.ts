@@ -9301,12 +9301,17 @@ namespace ts {
                 return false;
             }
 
+            const mapper = createTypeMapper(targetParams, sourceParams);
             for (let i = 0; i < sourceParams.length; i++) {
                 const source = sourceParams[i];
                 const target = targetParams[i];
                 if (source === target) continue;
-                if (!isTypeIdenticalTo(getConstraintFromTypeParameter(source) || unknownType, getConstraintFromTypeParameter(target) || unknownType)) return false;
-                if (!isTypeIdenticalTo(getDefaultFromTypeParameter(source) || unknownType, getDefaultFromTypeParameter(target) || unknownType)) return false;
+                // We instantiate the target type parameter constraints into the source types so we can recognize `<T, U extends T>` as the same as `<A, B extends A>`
+                if (!isTypeIdenticalTo(getConstraintFromTypeParameter(source) || unknownType, instantiateType(getConstraintFromTypeParameter(target) || unknownType, mapper))) return false;
+                // We don't compare defaults - we just use the type parameter defaults from the first signature that seems to match.
+                // It might make sense to combine these defaults in the future, but doing so intelligently requires knowing
+                // if the parameter is used covariantly or contravariantly (so we intersect if it's used like a parameter or union if used like a return type)
+                // and, since it's just an inference _default_, just picking one arbitrarily works OK.
             }
 
             return true;
@@ -9374,6 +9379,7 @@ namespace ts {
             let paramMapper: TypeMapper | undefined;
             if (left.typeParameters && right.typeParameters) {
                 paramMapper = createTypeMapper(right.typeParameters, left.typeParameters);
+                // We just use the type parameter defaults from the first signature
             }
             const declaration = left.declaration;
             const params = combineUnionParameters(left, right, paramMapper);
