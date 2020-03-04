@@ -1,0 +1,29 @@
+=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator3.ts ===
+declare const a1: 'literal' | undefined | null
+>a1 : Symbol(a1, Decl(nullishCoalescingOperator3.ts, 0, 13))
+
+declare const a2: '' | undefined | null
+>a2 : Symbol(a2, Decl(nullishCoalescingOperator3.ts, 1, 13))
+
+declare const a3: 1 | undefined | null
+>a3 : Symbol(a3, Decl(nullishCoalescingOperator3.ts, 2, 13))
+
+declare const a4: 0 | undefined | null
+>a4 : Symbol(a4, Decl(nullishCoalescingOperator3.ts, 3, 13))
+
+declare const a5: true | undefined | null
+>a5 : Symbol(a5, Decl(nullishCoalescingOperator3.ts, 4, 13))
+
+declare const a6: false | undefined | null
+>a6 : Symbol(a6, Decl(nullishCoalescingOperator3.ts, 5, 13))
+
+
+const aa1 = a1 ?? a2 ?? a3 ?? a4 ?? a5 ?? a6 ?? 'whatever'
+>aa1 : Symbol(aa1, Decl(nullishCoalescingOperator3.ts, 8, 5))
+>a1 : Symbol(a1, Decl(nullishCoalescingOperator3.ts, 0, 13))
+>a2 : Symbol(a2, Decl(nullishCoalescingOperator3.ts, 1, 13))
+>a3 : Symbol(a3, Decl(nullishCoalescingOperator3.ts, 2, 13))
+>a4 : Symbol(a4, Decl(nullishCoalescingOperator3.ts, 3, 13))
+>a5 : Symbol(a5, Decl(nullishCoalescingOperator3.ts, 4, 13))
+>a6 : Symbol(a6, Decl(nullishCoalescingOperator3.ts, 5, 13))
+

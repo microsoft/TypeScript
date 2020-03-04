@@ -1,0 +1,57 @@
+=== tests/cases/compiler/recursiveFieldSetting.ts ===
+// #32721
+
+class Recursive1 {
+>Recursive1 : Symbol(Recursive1, Decl(recursiveFieldSetting.ts, 0, 0))
+
+    constructor(private readonly parent?: Recursive1) {}
+>parent : Symbol(Recursive1.parent, Decl(recursiveFieldSetting.ts, 3, 16))
+>Recursive1 : Symbol(Recursive1, Decl(recursiveFieldSetting.ts, 0, 0))
+
+    private depth: number = this.parent ? this.parent.depth + 1 : 0;
+>depth : Symbol(Recursive1.depth, Decl(recursiveFieldSetting.ts, 3, 56))
+>this.parent : Symbol(Recursive1.parent, Decl(recursiveFieldSetting.ts, 3, 16))
+>this : Symbol(Recursive1, Decl(recursiveFieldSetting.ts, 0, 0))
+>parent : Symbol(Recursive1.parent, Decl(recursiveFieldSetting.ts, 3, 16))
+>this.parent.depth : Symbol(Recursive1.depth, Decl(recursiveFieldSetting.ts, 3, 56))
+>this.parent : Symbol(Recursive1.parent, Decl(recursiveFieldSetting.ts, 3, 16))
+>this : Symbol(Recursive1, Decl(recursiveFieldSetting.ts, 0, 0))
+>parent : Symbol(Recursive1.parent, Decl(recursiveFieldSetting.ts, 3, 16))
+>depth : Symbol(Recursive1.depth, Decl(recursiveFieldSetting.ts, 3, 56))
+}
+
+class Recursive2 {
+>Recursive2 : Symbol(Recursive2, Decl(recursiveFieldSetting.ts, 5, 1))
+
+    parent!: Recursive2;
+>parent : Symbol(Recursive2.parent, Decl(recursiveFieldSetting.ts, 7, 18))
+>Recursive2 : Symbol(Recursive2, Decl(recursiveFieldSetting.ts, 5, 1))
+
+    depth: number = this.parent.depth;
+>depth : Symbol(Recursive2.depth, Decl(recursiveFieldSetting.ts, 8, 24))
+>this.parent.depth : Symbol(Recursive2.depth, Decl(recursiveFieldSetting.ts, 8, 24))
+>this.parent : Symbol(Recursive2.parent, Decl(recursiveFieldSetting.ts, 7, 18))
+>this : Symbol(Recursive2, Decl(recursiveFieldSetting.ts, 5, 1))
+>parent : Symbol(Recursive2.parent, Decl(recursiveFieldSetting.ts, 7, 18))
+>depth : Symbol(Recursive2.depth, Decl(recursiveFieldSetting.ts, 8, 24))
+}
+
+class Recursive3 {
+>Recursive3 : Symbol(Recursive3, Decl(recursiveFieldSetting.ts, 10, 1))
+
+    parent!: Recursive3;
+>parent : Symbol(Recursive3.parent, Decl(recursiveFieldSetting.ts, 12, 18))
+>Recursive3 : Symbol(Recursive3, Decl(recursiveFieldSetting.ts, 10, 1))
+
+    depth: number = this.parent.alpha;
+>depth : Symbol(Recursive3.depth, Decl(recursiveFieldSetting.ts, 13, 24))
+>this.parent.alpha : Symbol(Recursive3.alpha, Decl(recursiveFieldSetting.ts, 14, 38))
+>this.parent : Symbol(Recursive3.parent, Decl(recursiveFieldSetting.ts, 12, 18))
+>this : Symbol(Recursive3, Decl(recursiveFieldSetting.ts, 10, 1))
+>parent : Symbol(Recursive3.parent, Decl(recursiveFieldSetting.ts, 12, 18))
+>alpha : Symbol(Recursive3.alpha, Decl(recursiveFieldSetting.ts, 14, 38))
+
+    alpha = 0;
+>alpha : Symbol(Recursive3.alpha, Decl(recursiveFieldSetting.ts, 14, 38))
+}
+

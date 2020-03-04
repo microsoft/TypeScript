@@ -17,10 +17,12 @@ verify.codeFix({
     index: 0,
     description: "Implement interface 'Foo'",
     newFileContent: {
-        "/tests/cases/fourslash/index.ts": `import { Foo } from './interface';
+        "/tests/cases/fourslash/index.ts":
+`import { Foo } from './interface';
+import { Class } from './class';
 
 class X implements Foo {
-    x: import("./class").Class;
+    x: Class;
 }`
     }
 });

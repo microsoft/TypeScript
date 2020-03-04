@@ -688,6 +688,7 @@ module publicModuleInGlobal {
 //// [privacyFunctionParameterDeclFile_externalModule.js]
 "use strict";
 exports.__esModule = true;
+exports.publicModule = exports.publicFunctionWithPrivateModuleParameterTypes = exports.publicClassWithPrivateModuleParameterTypes = exports.publicFunctionWithPublicParmeterTypes = exports.publicFunctionWithPrivateParmeterTypes = exports.publicClassWithWithPublicParmeterTypes = exports.publicClassWithWithPrivateParmeterTypes = exports.publicClass = void 0;
 var privateClass = /** @class */ (function () {
     function privateClass() {
     }
@@ -1334,19 +1335,19 @@ export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(par
 export declare module publicModule {
     class privateClass {
     }
-    class publicClass {
+    export class publicClass {
     }
-    interface publicInterfaceWithPrivateParmeterTypes {
+    export interface publicInterfaceWithPrivateParmeterTypes {
         new (param: privateClass): publicClass;
         (param: privateClass): publicClass;
         myMethod(param: privateClass): void;
     }
-    interface publicInterfaceWithPublicParmeterTypes {
+    export interface publicInterfaceWithPublicParmeterTypes {
         new (param: publicClass): publicClass;
         (param: publicClass): publicClass;
         myMethod(param: publicClass): void;
     }
-    class publicClassWithWithPrivateParmeterTypes {
+    export class publicClassWithWithPrivateParmeterTypes {
         private param1;
         param2: privateClass;
         static myPublicStaticMethod(param: privateClass): void;
@@ -1355,7 +1356,7 @@ export declare module publicModule {
         private myPrivateMethod;
         constructor(param: privateClass, param1: privateClass, param2: privateClass);
     }
-    class publicClassWithWithPublicParmeterTypes {
+    export class publicClassWithWithPublicParmeterTypes {
         private param1;
         param2: publicClass;
         static myPublicStaticMethod(param: publicClass): void;
@@ -1364,41 +1365,42 @@ export declare module publicModule {
         private myPrivateMethod;
         constructor(param: publicClass, param1: publicClass, param2: publicClass);
     }
-    function publicFunctionWithPrivateParmeterTypes(param: privateClass): void;
-    function publicFunctionWithPublicParmeterTypes(param: publicClass): void;
-    function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
-    function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
-    interface publicInterfaceWithPrivateModuleParameterTypes {
+    export function publicFunctionWithPrivateParmeterTypes(param: privateClass): void;
+    export function publicFunctionWithPublicParmeterTypes(param: publicClass): void;
+    export function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
+    export function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
+    export interface publicInterfaceWithPrivateModuleParameterTypes {
         new (param: privateModule.publicClass): publicClass;
         (param: privateModule.publicClass): publicClass;
         myMethod(param: privateModule.publicClass): void;
     }
-    class publicClassWithPrivateModuleParameterTypes {
+    export class publicClassWithPrivateModuleParameterTypes {
         private param1;
         param2: privateModule.publicClass;
         static myPublicStaticMethod(param: privateModule.publicClass): void;
         myPublicMethod(param: privateModule.publicClass): void;
         constructor(param: privateModule.publicClass, param1: privateModule.publicClass, param2: privateModule.publicClass);
     }
-    function publicFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
-    function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
+    export function publicFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
+    export function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
+    export {};
 }
 declare module privateModule {
     class privateClass {
     }
-    class publicClass {
+    export class publicClass {
     }
-    interface publicInterfaceWithPrivateParmeterTypes {
+    export interface publicInterfaceWithPrivateParmeterTypes {
         new (param: privateClass): publicClass;
         (param: privateClass): publicClass;
         myMethod(param: privateClass): void;
     }
-    interface publicInterfaceWithPublicParmeterTypes {
+    export interface publicInterfaceWithPublicParmeterTypes {
         new (param: publicClass): publicClass;
         (param: publicClass): publicClass;
         myMethod(param: publicClass): void;
     }
-    class publicClassWithWithPrivateParmeterTypes {
+    export class publicClassWithWithPrivateParmeterTypes {
         private param1;
         param2: privateClass;
         static myPublicStaticMethod(param: privateClass): void;
@@ -1407,7 +1409,7 @@ declare module privateModule {
         private myPrivateMethod;
         constructor(param: privateClass, param1: privateClass, param2: privateClass);
     }
-    class publicClassWithWithPublicParmeterTypes {
+    export class publicClassWithWithPublicParmeterTypes {
         private param1;
         param2: publicClass;
         static myPublicStaticMethod(param: publicClass): void;
@@ -1416,24 +1418,25 @@ declare module privateModule {
         private myPrivateMethod;
         constructor(param: publicClass, param1: publicClass, param2: publicClass);
     }
-    function publicFunctionWithPrivateParmeterTypes(param: privateClass): void;
-    function publicFunctionWithPublicParmeterTypes(param: publicClass): void;
-    function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
-    function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
-    interface publicInterfaceWithPrivateModuleParameterTypes {
+    export function publicFunctionWithPrivateParmeterTypes(param: privateClass): void;
+    export function publicFunctionWithPublicParmeterTypes(param: publicClass): void;
+    export function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
+    export function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
+    export interface publicInterfaceWithPrivateModuleParameterTypes {
         new (param: privateModule.publicClass): publicClass;
         (param: privateModule.publicClass): publicClass;
         myMethod(param: privateModule.publicClass): void;
     }
-    class publicClassWithPrivateModuleParameterTypes {
+    export class publicClassWithPrivateModuleParameterTypes {
         private param1;
         param2: privateModule.publicClass;
         static myPublicStaticMethod(param: privateModule.publicClass): void;
         myPublicMethod(param: privateModule.publicClass): void;
         constructor(param: privateModule.publicClass, param1: privateModule.publicClass, param2: privateModule.publicClass);
     }
-    function publicFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
-    function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
+    export function publicFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
+    export function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
+    export {};
 }
 export {};
 //// [privacyFunctionParameterDeclFile_GlobalFile.d.ts]
@@ -1458,24 +1461,24 @@ declare function publicAmbientFunctionWithPublicParmeterTypesInGlobal(param: pub
 declare module publicModuleInGlobal {
     class privateClass {
     }
-    class publicClass {
+    export class publicClass {
     }
     module privateModule {
         class privateClass {
         }
-        class publicClass {
+        export class publicClass {
         }
-        interface publicInterfaceWithPrivateParmeterTypes {
+        export interface publicInterfaceWithPrivateParmeterTypes {
             new (param: privateClass): publicClass;
             (param: privateClass): publicClass;
             myMethod(param: privateClass): void;
         }
-        interface publicInterfaceWithPublicParmeterTypes {
+        export interface publicInterfaceWithPublicParmeterTypes {
             new (param: publicClass): publicClass;
             (param: publicClass): publicClass;
             myMethod(param: publicClass): void;
         }
-        class publicClassWithWithPrivateParmeterTypes {
+        export class publicClassWithWithPrivateParmeterTypes {
             private param1;
             param2: privateClass;
             static myPublicStaticMethod(param: privateClass): void;
@@ -1484,7 +1487,7 @@ declare module publicModuleInGlobal {
             private myPrivateMethod;
             constructor(param: privateClass, param1: privateClass, param2: privateClass);
         }
-        class publicClassWithWithPublicParmeterTypes {
+        export class publicClassWithWithPublicParmeterTypes {
             private param1;
             param2: publicClass;
             static myPublicStaticMethod(param: publicClass): void;
@@ -1493,36 +1496,37 @@ declare module publicModuleInGlobal {
             private myPrivateMethod;
             constructor(param: publicClass, param1: publicClass, param2: publicClass);
         }
-        function publicFunctionWithPrivateParmeterTypes(param: privateClass): void;
-        function publicFunctionWithPublicParmeterTypes(param: publicClass): void;
-        function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
-        function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
-        interface publicInterfaceWithPrivateModuleParameterTypes {
+        export function publicFunctionWithPrivateParmeterTypes(param: privateClass): void;
+        export function publicFunctionWithPublicParmeterTypes(param: publicClass): void;
+        export function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
+        export function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
+        export interface publicInterfaceWithPrivateModuleParameterTypes {
             new (param: privateModule.publicClass): publicClass;
             (param: privateModule.publicClass): publicClass;
             myMethod(param: privateModule.publicClass): void;
         }
-        class publicClassWithPrivateModuleParameterTypes {
+        export class publicClassWithPrivateModuleParameterTypes {
             private param1;
             param2: privateModule.publicClass;
             static myPublicStaticMethod(param: privateModule.publicClass): void;
             myPublicMethod(param: privateModule.publicClass): void;
             constructor(param: privateModule.publicClass, param1: privateModule.publicClass, param2: privateModule.publicClass);
         }
-        function publicFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
-        function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
+        export function publicFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
+        export function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
+        export {};
     }
-    interface publicInterfaceWithPrivateParmeterTypes {
+    export interface publicInterfaceWithPrivateParmeterTypes {
         new (param: privateClass): publicClass;
         (param: privateClass): publicClass;
         myMethod(param: privateClass): void;
     }
-    interface publicInterfaceWithPublicParmeterTypes {
+    export interface publicInterfaceWithPublicParmeterTypes {
         new (param: publicClass): publicClass;
         (param: publicClass): publicClass;
         myMethod(param: publicClass): void;
     }
-    class publicClassWithWithPrivateParmeterTypes {
+    export class publicClassWithWithPrivateParmeterTypes {
         private param1;
         param2: privateClass;
         static myPublicStaticMethod(param: privateClass): void;
@@ -1531,7 +1535,7 @@ declare module publicModuleInGlobal {
         private myPrivateMethod;
         constructor(param: privateClass, param1: privateClass, param2: privateClass);
     }
-    class publicClassWithWithPublicParmeterTypes {
+    export class publicClassWithWithPublicParmeterTypes {
         private param1;
         param2: publicClass;
         static myPublicStaticMethod(param: publicClass): void;
@@ -1540,22 +1544,23 @@ declare module publicModuleInGlobal {
         private myPrivateMethod;
         constructor(param: publicClass, param1: publicClass, param2: publicClass);
     }
-    function publicFunctionWithPrivateParmeterTypes(param: privateClass): void;
-    function publicFunctionWithPublicParmeterTypes(param: publicClass): void;
-    function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
-    function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
-    interface publicInterfaceWithPrivateModuleParameterTypes {
+    export function publicFunctionWithPrivateParmeterTypes(param: privateClass): void;
+    export function publicFunctionWithPublicParmeterTypes(param: publicClass): void;
+    export function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
+    export function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
+    export interface publicInterfaceWithPrivateModuleParameterTypes {
         new (param: privateModule.publicClass): publicClass;
         (param: privateModule.publicClass): publicClass;
         myMethod(param: privateModule.publicClass): void;
     }
-    class publicClassWithPrivateModuleParameterTypes {
+    export class publicClassWithPrivateModuleParameterTypes {
         private param1;
         param2: privateModule.publicClass;
         static myPublicStaticMethod(param: privateModule.publicClass): void;
         myPublicMethod(param: privateModule.publicClass): void;
         constructor(param: privateModule.publicClass, param1: privateModule.publicClass, param2: privateModule.publicClass);
     }
-    function publicFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
-    function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
+    export function publicFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
+    export function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
+    export {};
 }

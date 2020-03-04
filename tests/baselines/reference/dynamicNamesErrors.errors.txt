@@ -35,6 +35,7 @@ tests/cases/compiler/dynamicNamesErrors.ts(25,1): error TS2322: Type 'T1' is not
         [c1]: string;
         ~~~~
 !!! error TS2717: Subsequent property declarations must have the same type.  Property '[c1]' must be of type 'number', but here has type 'string'.
+!!! related TS6203 tests/cases/compiler/dynamicNamesErrors.ts:18:5: '[c1]' was also declared here.
     }
     
     let t1: T1;

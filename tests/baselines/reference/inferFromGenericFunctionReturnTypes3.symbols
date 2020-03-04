@@ -204,9 +204,9 @@ function objectToMap(obj: any) {
 	return new Map(Object.keys(obj).map(key => [key, obj[key]]));
 >Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Object.keys(obj).map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >obj : Symbol(obj, Decl(inferFromGenericFunctionReturnTypes3.ts, 83, 21))
 >map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >key : Symbol(key, Decl(inferFromGenericFunctionReturnTypes3.ts, 84, 37))
@@ -458,4 +458,85 @@ let x: Foo[] = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]); 
 >State.B : Symbol(State.B, Decl(inferFromGenericFunctionReturnTypes3.ts, 176, 15))
 >State : Symbol(State, Decl(inferFromGenericFunctionReturnTypes3.ts, 174, 56))
 >B : Symbol(State.B, Decl(inferFromGenericFunctionReturnTypes3.ts, 176, 15))
+
+// Repros from #31443
+
+enum Enum { A, B }
+>Enum : Symbol(Enum, Decl(inferFromGenericFunctionReturnTypes3.ts, 179, 79))
+>A : Symbol(Enum.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 11))
+>B : Symbol(Enum.B, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 14))
+
+class ClassWithConvert<T> {
+>ClassWithConvert : Symbol(ClassWithConvert, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 18))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 185, 23))
+
+  constructor(val: T) { }
+>val : Symbol(val, Decl(inferFromGenericFunctionReturnTypes3.ts, 186, 14))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 185, 23))
+
+  convert(converter: { to: (v: T) => T; }) { }
+>convert : Symbol(ClassWithConvert.convert, Decl(inferFromGenericFunctionReturnTypes3.ts, 186, 25))
+>converter : Symbol(converter, Decl(inferFromGenericFunctionReturnTypes3.ts, 187, 10))
+>to : Symbol(to, Decl(inferFromGenericFunctionReturnTypes3.ts, 187, 22))
+>v : Symbol(v, Decl(inferFromGenericFunctionReturnTypes3.ts, 187, 28))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 185, 23))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 185, 23))
+}
+
+function fn<T>(arg: ClassWithConvert<T>, f: () => ClassWithConvert<T>) { }
+>fn : Symbol(fn, Decl(inferFromGenericFunctionReturnTypes3.ts, 188, 1))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 190, 12))
+>arg : Symbol(arg, Decl(inferFromGenericFunctionReturnTypes3.ts, 190, 15))
+>ClassWithConvert : Symbol(ClassWithConvert, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 18))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 190, 12))
+>f : Symbol(f, Decl(inferFromGenericFunctionReturnTypes3.ts, 190, 40))
+>ClassWithConvert : Symbol(ClassWithConvert, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 18))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 190, 12))
+
+fn(new ClassWithConvert(Enum.A), () => new ClassWithConvert(Enum.A));
+>fn : Symbol(fn, Decl(inferFromGenericFunctionReturnTypes3.ts, 188, 1))
+>ClassWithConvert : Symbol(ClassWithConvert, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 18))
+>Enum.A : Symbol(Enum.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 11))
+>Enum : Symbol(Enum, Decl(inferFromGenericFunctionReturnTypes3.ts, 179, 79))
+>A : Symbol(Enum.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 11))
+>ClassWithConvert : Symbol(ClassWithConvert, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 18))
+>Enum.A : Symbol(Enum.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 11))
+>Enum : Symbol(Enum, Decl(inferFromGenericFunctionReturnTypes3.ts, 179, 79))
+>A : Symbol(Enum.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 11))
+
+type Func<T> = (x: T) => T;
+>Func : Symbol(Func, Decl(inferFromGenericFunctionReturnTypes3.ts, 191, 69))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 193, 10))
+>x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes3.ts, 193, 16))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 193, 10))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 193, 10))
+
+declare function makeFoo<T>(x: T): Func<T>;
+>makeFoo : Symbol(makeFoo, Decl(inferFromGenericFunctionReturnTypes3.ts, 193, 27))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 195, 25))
+>x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes3.ts, 195, 28))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 195, 25))
+>Func : Symbol(Func, Decl(inferFromGenericFunctionReturnTypes3.ts, 191, 69))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 195, 25))
+
+declare function baz<U>(x: Func<U>, y: Func<U>): void;
+>baz : Symbol(baz, Decl(inferFromGenericFunctionReturnTypes3.ts, 195, 43))
+>U : Symbol(U, Decl(inferFromGenericFunctionReturnTypes3.ts, 196, 21))
+>x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes3.ts, 196, 24))
+>Func : Symbol(Func, Decl(inferFromGenericFunctionReturnTypes3.ts, 191, 69))
+>U : Symbol(U, Decl(inferFromGenericFunctionReturnTypes3.ts, 196, 21))
+>y : Symbol(y, Decl(inferFromGenericFunctionReturnTypes3.ts, 196, 35))
+>Func : Symbol(Func, Decl(inferFromGenericFunctionReturnTypes3.ts, 191, 69))
+>U : Symbol(U, Decl(inferFromGenericFunctionReturnTypes3.ts, 196, 21))
+
+baz(makeFoo(Enum.A), makeFoo(Enum.A));
+>baz : Symbol(baz, Decl(inferFromGenericFunctionReturnTypes3.ts, 195, 43))
+>makeFoo : Symbol(makeFoo, Decl(inferFromGenericFunctionReturnTypes3.ts, 193, 27))
+>Enum.A : Symbol(Enum.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 11))
+>Enum : Symbol(Enum, Decl(inferFromGenericFunctionReturnTypes3.ts, 179, 79))
+>A : Symbol(Enum.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 11))
+>makeFoo : Symbol(makeFoo, Decl(inferFromGenericFunctionReturnTypes3.ts, 193, 27))
+>Enum.A : Symbol(Enum.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 11))
+>Enum : Symbol(Enum, Decl(inferFromGenericFunctionReturnTypes3.ts, 179, 79))
+>A : Symbol(Enum.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 11))
 

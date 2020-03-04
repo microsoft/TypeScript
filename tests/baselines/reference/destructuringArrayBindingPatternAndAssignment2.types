@@ -4,7 +4,7 @@
 var [[a0], [[a1]]] = []         // Error
 >a0 : any
 >a1 : any
->[] : [undefined?, undefined?]
+>[] : []
 
 var [[a2], [[a3]]] = undefined  // Error
 >a2 : any

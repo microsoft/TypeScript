@@ -1,0 +1,29 @@
+name: Sync branch with master
+
+on:
+  repository_dispatch:
+    types: sync-branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Use node version 12.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.client_payload.branch_name }}
+    # This does a test post-merge and only pushes the result if the test succeeds
+    # required client_payload members:
+    # branch_name - the target branch
+    - run: |
+        git config user.email "ts_bot@rcavanaugh.com"
+        git config user.name "TypeScript Bot"
+        git fetch origin master
+        git merge master --no-ff
+        npm install
+        npm test
+        git push

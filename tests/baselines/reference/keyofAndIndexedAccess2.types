@@ -249,7 +249,7 @@ function f10<T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof It
 
   obj[k2] = 123;  // Error
 >obj[k2] = 123 : 123
->obj[k2] : string & number
+>obj[k2] : never
 >obj : T
 >k2 : "a" | "b"
 >123 : 123
@@ -436,4 +436,139 @@ type A<T> = { [Q in { [P in keyof T]: P; }[keyof T]]: T[Q]; };
 
 type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
 >B : A<{ [Q in keyof T]: StrictExclude<A<{ [Q in keyof T[Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q][Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q][Q][Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q][Q][Q][Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q][Q][Q][Q][Q][Q][Q]]: StrictExclude<A<any>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>
+
+// Repros from #30938
+
+function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(param: T, cb: (element: T['elements'][number]) => void) {
+>fn : <T extends { elements: string[]; } | { elements: number[]; }>(param: T, cb: (element: T["elements"][number]) => void) => void
+>elements : string[]
+>elements : number[]
+>param : T
+>cb : (element: T["elements"][number]) => void
+>element : T["elements"][number]
+
+    cb(param.elements[0]);
+>cb(param.elements[0]) : void
+>cb : (element: T["elements"][number]) => void
+>param.elements[0] : string | number
+>param.elements : string[] | number[]
+>param : T
+>elements : string[] | number[]
+>0 : 0
+}
+
+function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void) {
+>fn2 : <T extends string[]>(param: T, cb: (element: T[number]) => void) => void
+>param : T
+>cb : (element: T[number]) => void
+>element : T[number]
+
+    cb(param[0]);
+>cb(param[0]) : void
+>cb : (element: T[number]) => void
+>param[0] : string
+>param : T
+>0 : 0
+}
+
+// Repro from #31149
+
+function fn3<T extends ReadonlyArray<string>>(param: T, cb: (element: T[number]) => void) {
+>fn3 : <T extends readonly string[]>(param: T, cb: (element: T[number]) => void) => void
+>param : T
+>cb : (element: T[number]) => void
+>element : T[number]
+
+    cb(param[0]);
+>cb(param[0]) : void
+>cb : (element: T[number]) => void
+>param[0] : string
+>param : T
+>0 : 0
+}
+
+function fn4<K extends number>() {
+>fn4 : <K extends number>() => void
+
+    let x: Array<string>[K] = 'abc';
+>x : string[][K]
+>'abc' : "abc"
+
+    let y: ReadonlyArray<string>[K] = 'abc';
+>y : readonly string[][K]
+>'abc' : "abc"
+}
+
+// Repro from #31439 and #31691
+
+export class c {
+>c : c
+
+  [x: string]: string;
+>x : string
+
+  constructor() {
+    this.a = "b";
+>this.a = "b" : "b"
+>this.a : string
+>this : this
+>a : string
+>"b" : "b"
+
+    this["a"] = "b";
+>this["a"] = "b" : "b"
+>this["a"] : string
+>this : this
+>"a" : "a"
+>"b" : "b"
+  }
+}
+
+// Repro from #31385
+
+type Foo<T> = { [key: string]: { [K in keyof T]: K }[keyof T] };
+>Foo : Foo<T>
+>key : string
+
+type Bar<T> = { [key: string]: { [K in keyof T]: [K] }[keyof T] };
+>Bar : Bar<T>
+>key : string
+
+type Baz<T, Q extends Foo<T>> = { [K in keyof Q]: T[Q[K]] };
+>Baz : Baz<T, Q>
+
+type Qux<T, Q extends Bar<T>> = { [K in keyof Q]: T[Q[K]["0"]] };
+>Qux : Qux<T, Q>
+
+// Repro from #32038
+
+const actions = ['resizeTo', 'resizeBy'] as const;
+>actions : readonly ["resizeTo", "resizeBy"]
+>['resizeTo', 'resizeBy'] as const : readonly ["resizeTo", "resizeBy"]
+>['resizeTo', 'resizeBy'] : readonly ["resizeTo", "resizeBy"]
+>'resizeTo' : "resizeTo"
+>'resizeBy' : "resizeBy"
+
+for (const action of actions) {
+>action : "resizeTo" | "resizeBy"
+>actions : readonly ["resizeTo", "resizeBy"]
+
+	window[action] = (x, y) => {
+>window[action] = (x, y) => {		window[action](x, y);	} : (x: number, y: number) => void
+>window[action] : ((x: number, y: number) => void) & ((x: number, y: number) => void) & ((x: number, y: number) => void) & ((x: number, y: number) => void)
+>window : Window & typeof globalThis
+>action : "resizeTo" | "resizeBy"
+>(x, y) => {		window[action](x, y);	} : (x: number, y: number) => void
+>x : number
+>y : number
+
+		window[action](x, y);
+>window[action](x, y) : void
+>window[action] : (((x: number, y: number) => void) & ((x: number, y: number) => void)) | (((x: number, y: number) => void) & ((x: number, y: number) => void))
+>window : Window & typeof globalThis
+>action : "resizeTo" | "resizeBy"
+>x : number
+>y : number
+	}
+}
 

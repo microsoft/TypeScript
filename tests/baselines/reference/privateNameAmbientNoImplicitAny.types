@@ -1,0 +1,13 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameAmbientNoImplicitAny.ts ===
+declare class A {
+>A : A
+
+    #prop;
+>#prop : any
+}
+class B {
+>B : B
+
+    #prop;
+>#prop : any
+}

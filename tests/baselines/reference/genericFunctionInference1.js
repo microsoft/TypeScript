@@ -63,6 +63,53 @@ declare function baz<T, U extends T>(t1: T, t2: T, u: U): [T, U];
 
 let f60 = wrap3(baz);
 
+declare const list2: {
+    <T>(a: T): T[];
+    foo: string;
+    bar(): number;
+}
+
+let f70 = pipe(list2, box);
+let f71 = pipe(box, list2);
+
+declare class Point {
+    constructor(x: number, y: number);
+    readonly x: number;
+    readonly y: number;
+}
+
+declare class Bag<T> {
+    constructor(...args: T[]);
+    contains(value: T): boolean;
+    static foo: string;
+}
+
+function asFunction<A extends any[], B>(cf: new (...args: A) => B) {
+    return (...args: A) => new cf(...args);
+}
+
+const newPoint = asFunction(Point);
+const newBag = asFunction(Bag);
+const p1 = new Point(10, 20);
+const p2 = newPoint(10, 20);
+const bag1 = new Bag(1, 2, 3);
+const bag2 = newBag('a', 'b', 'c');
+
+declare class Comp<P> {
+    props: P;
+    constructor(props: P);
+}
+
+type CompClass<P> = new (props: P) => Comp<P>;
+
+declare function myHoc<P>(C: CompClass<P>): CompClass<P>;
+
+type GenericProps<T> = { foo: number, stuff: T };
+
+declare class GenericComp<T> extends Comp<GenericProps<T>> {}
+
+const GenericComp2 = myHoc(GenericComp);
+
 // #417
 
 function mirror<A, B>(f: (a: A) => B): (a: A) => B { return f; }
@@ -242,6 +289,18 @@ const f40 = pipe4([list, box]);
 const f41 = pipe4([box, list]);
 const f50 = pipe5(list); // No higher order inference
 let f60 = wrap3(baz);
+let f70 = pipe(list2, box);
+let f71 = pipe(box, list2);
+function asFunction(cf) {
+    return (...args) => new cf(...args);
+}
+const newPoint = asFunction(Point);
+const newBag = asFunction(Bag);
+const p1 = new Point(10, 20);
+const p2 = newPoint(10, 20);
+const bag1 = new Bag(1, 2, 3);
+const bag2 = newBag('a', 'b', 'c');
+const GenericComp2 = myHoc(GenericComp);
 // #417
 function mirror(f) { return f; }
 var identityM = mirror(identity);

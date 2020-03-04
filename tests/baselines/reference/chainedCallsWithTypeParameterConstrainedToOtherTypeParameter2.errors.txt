@@ -1,5 +1,7 @@
 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(7,49): error TS2322: Type 'T' is not assignable to type 'S'.
+  'T' is assignable to the constraint of type 'S', but 'S' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(10,35): error TS2322: Type 'T' is not assignable to type 'S'.
+  'T' is assignable to the constraint of type 'S', but 'S' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(32,9): error TS2322: Type '""' is not assignable to type 'number'.
 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(36,9): error TS2322: Type '""' is not assignable to type 'number'.
 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(37,9): error TS2322: Type '""' is not assignable to type 'number'.
@@ -15,12 +17,14 @@ tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParamete
             (new Chain(t)).then(tt => s).then(ss => t);
                                                     ~
 !!! error TS2322: Type 'T' is not assignable to type 'S'.
+!!! error TS2322:   'T' is assignable to the constraint of type 'S', but 'S' could be instantiated with a different subtype of constraint '{}'.
 !!! related TS6502 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:3:27: The expected type comes from the return type of this signature.
     
             // But error to try to climb up the chain
             (new Chain(s)).then(ss => t);
                                       ~
 !!! error TS2322: Type 'T' is not assignable to type 'S'.
+!!! error TS2322:   'T' is assignable to the constraint of type 'S', but 'S' could be instantiated with a different subtype of constraint '{}'.
 !!! related TS6502 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:3:27: The expected type comes from the return type of this signature.
     
             // Staying at T or S should be fine

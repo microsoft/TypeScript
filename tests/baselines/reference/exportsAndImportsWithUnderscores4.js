@@ -36,6 +36,7 @@ _hi();
 //// [m1.js]
 "use strict";
 exports.__esModule = true;
+exports.___hello = exports.__esmodule = exports.__proto = exports._hi = exports.___ = exports.__ = exports._ = void 0;
 function _() {
     console.log("_");
 }

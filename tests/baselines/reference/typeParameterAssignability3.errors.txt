@@ -1,11 +1,19 @@
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts(14,5): error TS2322: Type 'U' is not assignable to type 'T'.
-  Type 'Foo' is not assignable to type 'T'.
+  'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
+    Type 'Foo' is not assignable to type 'T'.
+      'Foo' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts(15,5): error TS2322: Type 'T' is not assignable to type 'U'.
-  Type 'Foo' is not assignable to type 'U'.
+  'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
+    Type 'Foo' is not assignable to type 'U'.
+      'Foo' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts(22,9): error TS2322: Type 'U' is not assignable to type 'T'.
-  Type 'Foo' is not assignable to type 'T'.
+  'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
+    Type 'Foo' is not assignable to type 'T'.
+      'Foo' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts(23,9): error TS2322: Type 'T' is not assignable to type 'U'.
-  Type 'Foo' is not assignable to type 'U'.
+  'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
+    Type 'Foo' is not assignable to type 'U'.
+      'Foo' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts (4 errors) ====
@@ -25,11 +33,15 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         t = u; // error
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   Type 'Foo' is not assignable to type 'T'.
+!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
+!!! error TS2322:     Type 'Foo' is not assignable to type 'T'.
+!!! error TS2322:       'Foo' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
         u = t; // error
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'U'.
-!!! error TS2322:   Type 'Foo' is not assignable to type 'U'.
+!!! error TS2322:   'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
+!!! error TS2322:     Type 'Foo' is not assignable to type 'U'.
+!!! error TS2322:       'Foo' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
     }
     
     class C<T extends Foo, U extends Foo> {
@@ -39,10 +51,14 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
             this.t = this.u; // error
             ~~~~~~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   Type 'Foo' is not assignable to type 'T'.
+!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
+!!! error TS2322:     Type 'Foo' is not assignable to type 'T'.
+!!! error TS2322:       'Foo' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
             this.u = this.t; // error
             ~~~~~~
 !!! error TS2322: Type 'T' is not assignable to type 'U'.
-!!! error TS2322:   Type 'Foo' is not assignable to type 'U'.
+!!! error TS2322:   'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
+!!! error TS2322:     Type 'Foo' is not assignable to type 'U'.
+!!! error TS2322:       'Foo' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
         }
     }

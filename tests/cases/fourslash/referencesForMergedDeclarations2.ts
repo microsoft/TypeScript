@@ -6,7 +6,7 @@
 ////
 ////function ATest() { }
 ////
-////import [|{| "isWriteAccess": true, "isDefinition": true |}alias|] = ATest; // definition
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}alias|] = ATest;|] // definition
 ////
 ////var a: [|alias|].Bar; // namespace
 ////[|alias|].call(this); // value
@@ -15,4 +15,4 @@ verify.singleReferenceGroup([
     "(alias) function alias(): void",
     "(alias) namespace alias",
     "import alias = ATest"
-].join("\n"));
+].join("\n"), "alias");

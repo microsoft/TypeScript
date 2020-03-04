@@ -10,7 +10,7 @@
 ////}
 
 verify.codeFix({
-    description: "Remove declaration for: 'x'",
+    description: "Remove unused declaration for: 'x'",
     newRangeContent: `let x = 10;
     {
     }

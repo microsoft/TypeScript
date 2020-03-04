@@ -28,7 +28,7 @@ var Foo = /** @class */ (function () {
         },
         set: function (n) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Foo;
@@ -42,7 +42,7 @@ var Foo2 = /** @class */ (function () {
         },
         set: function (n) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Foo2;

@@ -30,7 +30,7 @@ f `abc`
 >`abc` : "abc"
 
 f `abc${1}def${2}ghi`;
->f `abc${1}def${2}ghi` : any
+>f `abc${1}def${2}ghi` : I
 >f : I
 >`abc${1}def${2}ghi` : string
 >1 : 1
@@ -44,13 +44,13 @@ f `abc`.member
 >member : I
 
 f `abc${1}def${2}ghi`.member;
->f `abc${1}def${2}ghi`.member : any
->f `abc${1}def${2}ghi` : any
+>f `abc${1}def${2}ghi`.member : I
+>f `abc${1}def${2}ghi` : I
 >f : I
 >`abc${1}def${2}ghi` : string
 >1 : 1
 >2 : 2
->member : any
+>member : I
 
 f `abc`["member"];
 >f `abc`["member"] : I
@@ -60,8 +60,8 @@ f `abc`["member"];
 >"member" : "member"
 
 f `abc${1}def${2}ghi`["member"];
->f `abc${1}def${2}ghi`["member"] : any
->f `abc${1}def${2}ghi` : any
+>f `abc${1}def${2}ghi`["member"] : I
+>f `abc${1}def${2}ghi` : I
 >f : I
 >`abc${1}def${2}ghi` : string
 >1 : 1
@@ -69,7 +69,7 @@ f `abc${1}def${2}ghi`["member"];
 >"member" : "member"
 
 f `abc`[0].member `abc${1}def${2}ghi`;
->f `abc`[0].member `abc${1}def${2}ghi` : any
+>f `abc`[0].member `abc${1}def${2}ghi` : I
 >f `abc`[0].member : I
 >f `abc`[0] : I
 >f `abc` : I
@@ -82,22 +82,22 @@ f `abc`[0].member `abc${1}def${2}ghi`;
 >2 : 2
 
 f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi`;
->f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi` : any
->f `abc${1}def${2}ghi`["member"].member : any
->f `abc${1}def${2}ghi`["member"] : any
->f `abc${1}def${2}ghi` : any
+>f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi` : I
+>f `abc${1}def${2}ghi`["member"].member : I
+>f `abc${1}def${2}ghi`["member"] : I
+>f `abc${1}def${2}ghi` : I
 >f : I
 >`abc${1}def${2}ghi` : string
 >1 : 1
 >2 : 2
 >"member" : "member"
->member : any
+>member : I
 >`abc${1}def${2}ghi` : string
 >1 : 1
 >2 : 2
 
 f `abc${ true }def${ true }ghi`["member"].member `abc${ 1 }def${ 2 }ghi`;
->f `abc${ true }def${ true }ghi`["member"].member `abc${ 1 }def${ 2 }ghi` : any
+>f `abc${ true }def${ true }ghi`["member"].member `abc${ 1 }def${ 2 }ghi` : I
 >f `abc${ true }def${ true }ghi`["member"].member : I
 >f `abc${ true }def${ true }ghi`["member"] : I
 >f `abc${ true }def${ true }ghi` : I

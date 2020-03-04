@@ -4,7 +4,7 @@
 
 type T00 = unknown & null;  // null
 type T01 = unknown & undefined;  // undefined
-type T02 = unknown & null & undefined;  // null & undefined (which becomes never in union)
+type T02 = unknown & null & undefined;  // never
 type T03 = unknown & string;  // string
 type T04 = unknown & string[];  // string[]
 type T05 = unknown & unknown;  // unknown
@@ -144,6 +144,7 @@ function f26(x: {}, y: unknown, z: any) {
     let o1 = { a: 42, ...x };  // { a: number }
     let o2 = { a: 42, ...x, ...y };  // unknown
     let o3 = { a: 42, ...x, ...y, ...z };  // any
+    let o4 = { a: 42, ...z }; // any
 }
 
 // Functions with unknown return type don't need return expressions

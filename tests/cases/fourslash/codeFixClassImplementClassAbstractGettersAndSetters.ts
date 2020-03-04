@@ -24,8 +24,17 @@ verify.codeFix({
 }
 
 class C implements A {
-    a: string;
-    b: number;
-    c: string | number;
+    get a(): string {
+        throw new Error("Method not implemented.");
+    }
+    set a(newName: string) {
+        throw new Error("Method not implemented.");
+    }
+    get b(): number {
+        throw new Error("Method not implemented.");
+    }
+    set c(arg: string | number) {
+        throw new Error("Method not implemented.");
+    }
 }`,
 });

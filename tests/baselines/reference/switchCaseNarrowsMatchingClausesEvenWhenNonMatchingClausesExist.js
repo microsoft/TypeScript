@@ -43,6 +43,7 @@ export const narrowToLiterals = (str: string) => {
 //// [switchCaseNarrowsMatchingClausesEvenWhenNonMatchingClausesExist.js]
 "use strict";
 exports.__esModule = true;
+exports.narrowToStringOrNumber = exports.narrowToString = exports.narrowToLiterals = void 0;
 exports.narrowToLiterals = function (str) {
     switch (str) {
         case 'abc': {

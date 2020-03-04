@@ -1,0 +1,21 @@
+=== tests/cases/compiler/noImplicitAnyLoopCrash.ts ===
+let foo = () => {};
+>foo : () => void
+>() => {} : () => void
+
+let bar;
+>bar : any
+
+while (1) {
+>1 : 1
+
+    bar = ~foo(...bar);
+>bar = ~foo(...bar) : number
+>bar : any
+>~foo(...bar) : number
+>foo(...bar) : void
+>foo : () => void
+>...bar : any
+>bar : number
+}
+
