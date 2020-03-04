@@ -1,5 +1,6 @@
 Exit Code: 1
 Standard output:
+node_modules/@types/node/ts3.2/index.d.ts(7,21): error TS2727: Cannot find lib definition for 'esnext.bigint'. Did you mean 'esnext.intl'?
 node_modules/async/all.js(32,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/all.js(49,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/all.js(49,46): error TS2695: Left side of comma operator is unused and has no side effects.

@@ -1,0 +1,9 @@
+Exit Code: 1
+Standard output:
+node_modules/@jimp/core/types/utils.d.ts(16,3): error TS2536: Type '"class"' cannot be used to index type 'T'.
+node_modules/@jimp/core/types/utils.d.ts(17,3): error TS2536: Type '"constants"' cannot be used to index type 'T'.
+node_modules/@types/node/ts3.2/index.d.ts(7,21): error TS2727: Cannot find lib definition for 'esnext.bigint'. Did you mean 'esnext.intl'?
+
+
+
+Standard error:

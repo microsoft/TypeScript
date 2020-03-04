@@ -1,5 +1,6 @@
 Exit Code: 1
 Standard output:
+node_modules/@types/node/ts3.2/index.d.ts(7,21): error TS2727: Cannot find lib definition for 'esnext.bigint'. Did you mean 'esnext.intl'?
 node_modules/npmlog/log.js(83,12): error TS2551: Property '_pause' does not exist on type 'typeof EventEmitter'. Did you mean 'pause'?
 node_modules/npmlog/log.js(149,8): error TS2551: Property '_paused' does not exist on type 'typeof EventEmitter'. Did you mean 'pause'?
 node_modules/npmlog/log.js(154,13): error TS2551: Property '_paused' does not exist on type 'typeof EventEmitter'. Did you mean 'pause'?

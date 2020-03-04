@@ -1,0 +1,7 @@
+Exit Code: 1
+Standard output:
+../../../../node_modules/@types/node/ts3.2/index.d.ts(7,21): error TS2727: Cannot find lib definition for 'esnext.bigint'. Did you mean 'esnext.intl'?
+
+
+
+Standard error:

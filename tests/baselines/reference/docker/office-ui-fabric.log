@@ -37,79 +37,7 @@ Standard output:
 @uifabric/migration: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
 @uifabric/migration: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/migration/tsconfig.json
 @uifabric/migration: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module commonjs --project "/office-ui-fabric-react/packages/migration/tsconfig.json"
-@uifabric/migration: Done in ?s.
-@uifabric/monaco-editor: yarn run vX.X.X
-@uifabric/monaco-editor: $ just-scripts build
-@uifabric/monaco-editor: [XX:XX:XX XM] ■ Removing [esm, lib, lib-commonjs]
-@uifabric/monaco-editor: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/monaco-editor/tsconfig.json
-@uifabric/monaco-editor: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/monaco-editor/tsconfig.json"
-@uifabric/monaco-editor: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/monaco-editor/tsconfig.json
-@uifabric/monaco-editor: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/monaco-editor/tsconfig.json"
-@uifabric/monaco-editor: Done in ?s.
-@uifabric/set-version: yarn run vX.X.X
-@uifabric/set-version: $ just-scripts build
-@uifabric/set-version: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/set-version: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/set-version/tsconfig.json
-@uifabric/set-version: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/set-version/tsconfig.json"
-@uifabric/set-version: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/set-version/tsconfig.json
-@uifabric/set-version: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/set-version/tsconfig.json"
-@uifabric/set-version: Done in ?s.
-@uifabric/webpack-utils: yarn run vX.X.X
-@uifabric/webpack-utils: $ just-scripts build
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/webpack-utils/tsconfig.json
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module commonjs --project "/office-ui-fabric-react/packages/webpack-utils/tsconfig.json"
-@uifabric/webpack-utils: Done in ?s.
-@fluentui/accessibility: yarn run vX.X.X
-@fluentui/accessibility: $ gulp bundle:package:no-umd
-@fluentui/accessibility: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
-@fluentui/accessibility: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/accessibility/gulpfile.ts
-@fluentui/accessibility: Done in ?s.
-@fluentui/docs: yarn run vX.X.X
-@fluentui/docs: $ gulp build:docs
-@fluentui/docs: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
-@fluentui/docs: [XX:XX:XX] Working directory changed to /office-ui-fabric-react
-@fluentui/docs: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/gulpfile.ts
-@fluentui/docs: DocToccing single file "/office-ui-fabric-react/.github/CONTRIBUTING.md" for github.com.
-@fluentui/docs: ==================
-@fluentui/docs: > @fluentui/ability-attributes@X.X.X schema /office-ui-fabric-react/packages/fluentui/ability-attributes
-@fluentui/docs: > allyschema -c "process.env.NODE_ENV !== 'production'" schema.json > ./src/schema.ts
-@fluentui/docs: "/office-ui-fabric-react/.github/CONTRIBUTING.md" will be updated
-@fluentui/docs: Everything is OK.
-@fluentui/docs: DocToccing single file "/office-ui-fabric-react/.github/setup-local-development.md" for github.com.
-@fluentui/docs: ==================
-@fluentui/docs: "/office-ui-fabric-react/.github/setup-local-development.md" will be updated
-@fluentui/docs: Everything is OK.
-@fluentui/docs: DocToccing single file "/office-ui-fabric-react/.github/add-a-feature.md" for github.com.
-@fluentui/docs: ==================
-@fluentui/docs: "/office-ui-fabric-react/.github/add-a-feature.md" will be updated
-@fluentui/docs: Everything is OK.
-@fluentui/docs: DocToccing single file "/office-ui-fabric-react/.github/document-a-feature.md" for github.com.
-@fluentui/docs: ==================
-@fluentui/docs: "/office-ui-fabric-react/.github/document-a-feature.md" will be updated
-@fluentui/docs: Everything is OK.
-@fluentui/docs: DocToccing single file "/office-ui-fabric-react/.github/test-a-feature.md" for github.com.
-@fluentui/docs: ==================
-@fluentui/docs: "/office-ui-fabric-react/.github/test-a-feature.md" will be updated
-@fluentui/docs: Everything is OK.
-@fluentui/docs: Starting type checking service...
-@fluentui/docs: Using 1 worker with 2048MB memory limit
-@fluentui/docs: [XX:XX:XX] Time: ?s
-@fluentui/docs: Built at: XX/XX/XX XX:XX:XX XM
-@fluentui/docs: Entrypoint app = runtime~app.js 2.js app.js
-@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/examples/components/Toolbar/Content/ToolbarExampleMenuRadioGroup.shorthand.tsx
-@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/examples/components/Toolbar/Content/ToolbarExampleMenuRadioGroup.shorthand.tsx(35,25):
-@fluentui/docs: TS2345: Argument of type 'boolean' is not assignable to parameter of type '(prevState: undefined) => undefined'.
-@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx
-@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx(34,22):
-@fluentui/docs: TS2345: Argument of type 'number' is not assignable to parameter of type '(prevState: undefined) => undefined'.
-@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx
-@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx(64,31):
-@fluentui/docs: TS2538: Type 'undefined' cannot be used as an index type.
-@fluentui/docs: Child HtmlWebpackCompiler:
-@fluentui/docs:     Entrypoint HtmlWebpackPlugin_0 = __child-HtmlWebpackPlugin_0
-@fluentui/docs: [XX:XX:XX] Webpack compiler encountered errors.
-@fluentui/docs: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+@uifabric/migration: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
 
 
 
@@ -117,21 +45,26 @@ Standard error:
 info cli using local version of lerna
 @fluentui/ability-attributes: npm WARN lifecycle The node binary used for scripts is  but npm is using /usr/local/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
 @uifabric/example-data: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
-@uifabric/set-version: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
-@fluentui/docs: npm WARN lifecycle The node binary used for scripts is  but npm is using /usr/local/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
-@fluentui/docs: @fluentui/react: You are running Fela in production mode. This limits your ability to edit styles in browsers development tools. To enable development mode please paste `window.localStorage.felaDevMode = true` to your browsers console and reload the page.
-@fluentui/docs: [XX:XX:XX] 'build:docs:webpack' errored after 
-@fluentui/docs: [XX:XX:XX] Error in plugin 'webpack'
-@fluentui/docs: Message:
-@fluentui/docs:     /office-ui-fabric-react/packages/fluentui/docs/src/examples/components/Toolbar/Content/ToolbarExampleMenuRadioGroup.shorthand.tsx
-@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/examples/components/Toolbar/Content/ToolbarExampleMenuRadioGroup.shorthand.tsx(35,25):
-@fluentui/docs: TS2345: Argument of type 'boolean' is not assignable to parameter of type '(prevState: undefined) => undefined'.,/office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx
-@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx(34,22):
-@fluentui/docs: TS2345: Argument of type 'number' is not assignable to parameter of type '(prevState: undefined) => undefined'.,/office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx
-@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx(64,31):
-@fluentui/docs: TS2538: Type 'undefined' cannot be used as an index type.
-@fluentui/docs: Details:
-@fluentui/docs:     domainThrown: true
-@fluentui/docs: [XX:XX:XX] 'build:docs' errored after 
-@fluentui/docs: error Command failed with exit code 1.
-lerna ERR! yarn run build exited 1 in '@fluentui/docs'
+@uifabric/migration: [XX:XX:XX XM] x Error detected while running 'ts:commonjs-only'
+@uifabric/migration: [XX:XX:XX XM] x ------------------------------------
+@uifabric/migration: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module commonjs --project "/office-ui-fabric-react/packages/migration/tsconfig.json"
+@uifabric/migration:     at ChildProcess.exithandler (child_process.js:303:12)
+@uifabric/migration:     at ChildProcess.emit (events.js:311:20)
+@uifabric/migration:     at ChildProcess.EventEmitter.emit (domain.js:505:15)
+@uifabric/migration:     at maybeClose (internal/child_process.js:1021:16)
+@uifabric/migration:     at Process.ChildProcess._handle.onexit (internal/child_process.js:286:5)
+@uifabric/migration: [XX:XX:XX XM] x stdout:
+@uifabric/migration: [XX:XX:XX XM] x node_modules/@types/node/ts3.2/index.d.ts:12:21 - error TS2727: Cannot find lib definition for 'esnext.bigint'. Did you mean 'esnext.intl'?
+@uifabric/migration: 12 /// <reference lib="esnext.bigint" />
+@uifabric/migration:                        ~~~~~~~~~~~~~
+@uifabric/migration: node_modules/@types/node/ts3.2/util.d.ts:12:56 - error TS2304: Cannot find name 'BigInt64Array'.
+@uifabric/migration: 12         function isBigInt64Array(value: any): value is BigInt64Array;
+@uifabric/migration:                                                           ~~~~~~~~~~~~~
+@uifabric/migration: node_modules/@types/node/ts3.2/util.d.ts:13:57 - error TS2304: Cannot find name 'BigUint64Array'.
+@uifabric/migration: 13         function isBigUint64Array(value: any): value is BigUint64Array;
+@uifabric/migration:                                                            ~~~~~~~~~~~~~~
+@uifabric/migration: Found 3 errors.
+@uifabric/migration: [XX:XX:XX XM] x ------------------------------------
+@uifabric/migration: [XX:XX:XX XM] x Error previously detected. See above for error messages.
+@uifabric/migration: error Command failed with exit code 1.
+lerna ERR! yarn run build exited 1 in '@uifabric/migration'

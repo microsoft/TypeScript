@@ -1,0 +1,14 @@
+Exit Code: 1
+Standard output:
+node_modules/@types/node/ts3.2/fs.d.ts(5,45): error TS2304: Cannot find name 'BigInt'.
+node_modules/@types/node/ts3.2/fs.d.ts(9,18): error TS2304: Cannot find name 'BigInt'.
+node_modules/@types/node/ts3.2/fs.d.ts(10,18): error TS2304: Cannot find name 'BigInt'.
+node_modules/@types/node/ts3.2/fs.d.ts(11,18): error TS2304: Cannot find name 'BigInt'.
+node_modules/@types/node/ts3.2/fs.d.ts(12,22): error TS2304: Cannot find name 'BigInt'.
+node_modules/@types/node/ts3.2/index.d.ts(7,21): error TS2727: Cannot find lib definition for 'esnext.bigint'. Did you mean 'esnext.intl'?
+node_modules/@types/node/ts3.2/util.d.ts(6,56): error TS2304: Cannot find name 'BigInt64Array'.
+node_modules/@types/node/ts3.2/util.d.ts(7,57): error TS2304: Cannot find name 'BigUint64Array'.
+
+
+
+Standard error:

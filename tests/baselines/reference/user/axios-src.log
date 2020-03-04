@@ -1,5 +1,6 @@
 Exit Code: 1
 Standard output:
+../../../../../node_modules/@types/node/ts3.2/index.d.ts(7,21): error TS2727: Cannot find lib definition for 'esnext.bigint'. Did you mean 'esnext.intl'?
 lib/adapters/http.js(13,19): error TS2732: Cannot find module './../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
 lib/adapters/http.js(84,22): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
   Type 'null' is not assignable to type 'string'.

@@ -1,5 +1,6 @@
 Exit Code: 1
 Standard output:
+node_modules/@types/node/ts3.2/index.d.ts(7,21): error TS2727: Cannot find lib definition for 'esnext.bigint'. Did you mean 'esnext.intl'?
 node_modules/lodash/_Hash.js(20,17): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_ListCache.js(20,17): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_MapCache.js(20,17): error TS2532: Object is possibly 'undefined'.

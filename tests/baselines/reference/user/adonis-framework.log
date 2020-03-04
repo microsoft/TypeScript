@@ -1,5 +1,6 @@
 Exit Code: 1
 Standard output:
+node_modules/@types/node/ts3.2/index.d.ts(7,21): error TS2727: Cannot find lib definition for 'esnext.bigint'. Did you mean 'esnext.intl'?
 node_modules/adonis-framework/lib/util.js(24,13): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/providers/ConfigProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
 node_modules/adonis-framework/providers/EncryptionProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.

@@ -1,5 +1,6 @@
 Exit Code: 1
 Standard output:
+node_modules/@types/node/ts3.2/index.d.ts(7,21): error TS2727: Cannot find lib definition for 'esnext.bigint'. Did you mean 'esnext.intl'?
 node_modules/bcryptjs/scripts/build.js(1,26): error TS2307: Cannot find module 'metascript'.
 node_modules/bcryptjs/scripts/build.js(32,1): error TS2741: Property 'ISAAC' is missing in type '{ VERSION: any; }' but required in type '{ VERSION: any; ISAAC: boolean; }'.
 node_modules/bcryptjs/src/bcrypt.js(25,13): error TS2740: Type 'Buffer' is missing the following properties from type 'number[]': pop, push, concat, shift, and 5 more.

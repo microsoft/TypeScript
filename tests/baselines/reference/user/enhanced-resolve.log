@@ -1,5 +1,6 @@
 Exit Code: 1
 Standard output:
+node_modules/@types/node/ts3.2/index.d.ts(7,21): error TS2727: Cannot find lib definition for 'esnext.bigint'. Did you mean 'esnext.intl'?
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(127,18): error TS2769: No overload matches this call.
   Overload 1 of 2, '(intervalId: Timeout): void', gave the following error.
     Argument of type 'Timeout | null' is not assignable to parameter of type 'Timeout'.

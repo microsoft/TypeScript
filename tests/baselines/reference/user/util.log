@@ -1,5 +1,6 @@
 Exit Code: 1
 Standard output:
+node_modules/@types/node/ts3.2/index.d.ts(7,21): error TS2727: Cannot find lib definition for 'esnext.bigint'. Did you mean 'esnext.intl'?
 node_modules/util/util.js(27,20): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/util/util.js(35,45): error TS2769: No overload matches this call.
   The last overload gave the following error.
