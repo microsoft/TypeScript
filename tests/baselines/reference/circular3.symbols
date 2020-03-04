@@ -1,0 +1,16 @@
+=== /a.ts ===
+import type { A } from './b';
+>A : Symbol(A, Decl(a.ts, 0, 13))
+
+export type { A as B };
+>A : Symbol(A, Decl(a.ts, 0, 13))
+>B : Symbol(B, Decl(a.ts, 1, 13))
+
+=== /b.ts ===
+import type { B } from './a';
+>B : Symbol(B, Decl(b.ts, 0, 13))
+
+export type { B as A };
+>B : Symbol(B, Decl(b.ts, 0, 13))
+>A : Symbol(A, Decl(b.ts, 1, 13))
+

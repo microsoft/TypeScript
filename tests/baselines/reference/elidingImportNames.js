@@ -17,10 +17,12 @@ export var main = 10;
 //// [elidingImportNames_main.js]
 "use strict";
 exports.__esModule = true;
+exports.main = void 0;
 exports.main = 10;
 //// [elidingImportNames_main1.js]
 "use strict";
 exports.__esModule = true;
+exports.main = void 0;
 exports.main = 10;
 //// [elidingImportNames_test.js]
 "use strict";

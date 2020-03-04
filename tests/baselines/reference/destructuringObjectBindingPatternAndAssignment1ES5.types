@@ -110,7 +110,7 @@ function foo1(): F1 {
 >foo1 : () => F1
 
     return {
->{        "prop1": 2    } : { "prop1": number; }
+>{        "prop1": 2    } : { prop1: number; }
 
         "prop1": 2
 >"prop1" : number

@@ -8,7 +8,9 @@ const { Thing, useThing, cbThing } = require("./index");
 
 useThing(Thing.a);
 >useThing : Symbol(useThing, Decl(usage.js, 0, 14))
+>Thing.a : Symbol(a, Decl(index.js, 1, 29))
 >Thing : Symbol(Thing, Decl(usage.js, 0, 7))
+>a : Symbol(a, Decl(index.js, 1, 29))
 
 /**
  * @typedef {Object} LogEntry

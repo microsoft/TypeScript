@@ -7,6 +7,6 @@
 
 verify.codeFix({
     index: 0,
-    description: "Remove declaration for: 'Y'",
+    description: "Remove unused declaration for: 'Y'",
     newRangeContent: "public f1<X, Z>(a: X)",
 });

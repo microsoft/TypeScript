@@ -102,6 +102,7 @@ var privateVarWithPrivateModulePropertyTypes1 = exporter.createExportedWidget4()
 //// [privacyCannotNameVarTypeDeclFile_Widgets.js]
 "use strict";
 exports.__esModule = true;
+exports.SpecializedWidget = exports.createWidget1 = exports.Widget1 = void 0;
 var Widget1 = /** @class */ (function () {
     function Widget1() {
         this.name = 'one';
@@ -130,6 +131,7 @@ var SpecializedWidget;
 //// [privacyCannotNameVarTypeDeclFile_exporter.js]
 "use strict";
 exports.__esModule = true;
+exports.createExportedWidget4 = exports.createExportedWidget3 = exports.createExportedWidget2 = exports.createExportedWidget1 = void 0;
 ///<reference path='privacyCannotNameVarTypeDeclFile_GlobalWidgets.ts'/>
 var Widgets = require("./privacyCannotNameVarTypeDeclFile_Widgets");
 var Widgets1 = require("GlobalWidgets");
@@ -152,6 +154,7 @@ exports.createExportedWidget4 = createExportedWidget4;
 //// [privacyCannotNameVarTypeDeclFile_consumer.js]
 "use strict";
 exports.__esModule = true;
+exports.publicVarWithPrivateModulePropertyTypes1 = exports.publicVarWithPrivateModulePropertyTypes = exports.publicClassWithPrivateModulePropertyTypes = exports.publicVarWithPrivatePropertyTypes1 = exports.publicVarWithPrivatePropertyTypes = exports.publicClassWithWithPrivatePropertyTypes = void 0;
 var exporter = require("./privacyCannotNameVarTypeDeclFile_exporter");
 var publicClassWithWithPrivatePropertyTypes = /** @class */ (function () {
     function publicClassWithWithPrivatePropertyTypes() {

@@ -1,0 +1,17 @@
+/c.ts(3,5): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+
+
+==== /a.ts (0 errors) ====
+    export class A {}
+    
+==== /b.ts (0 errors) ====
+    export type { A } from './a';
+    
+==== /c.ts (1 errors) ====
+    import { A } from './b';
+    declare const a: A;
+    new A();
+        ~
+!!! error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+!!! related TS1377 /b.ts:1:15: 'A' was exported here.
+    

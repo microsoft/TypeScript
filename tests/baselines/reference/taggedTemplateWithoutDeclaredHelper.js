@@ -14,6 +14,7 @@ export { };
 //// [foo.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.result = void 0;
 var tslib_1 = require("tslib");
 function id(x) {
     return x;

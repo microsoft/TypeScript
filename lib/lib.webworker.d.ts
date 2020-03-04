@@ -1,14 +1,14 @@
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved. 
+Copyright (c) Microsoft Corporation. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0  
- 
+License at http://www.apache.org/licenses/LICENSE-2.0
+
 THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE, 
-MERCHANTABLITY OR NON-INFRINGEMENT. 
- 
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
@@ -370,7 +370,7 @@ interface PushPermissionDescriptor extends PermissionDescriptor {
     userVisibleOnly?: boolean;
 }
 
-interface PushSubscriptionChangeInit extends ExtendableEventInit {
+interface PushSubscriptionChangeEventInit extends ExtendableEventInit {
     newSubscription?: PushSubscription;
     oldSubscription?: PushSubscription;
 }
@@ -389,6 +389,16 @@ interface PushSubscriptionOptionsInit {
 interface QueuingStrategy<T = any> {
     highWaterMark?: number;
     size?: QueuingStrategySizeCallback<T>;
+}
+
+interface ReadableStreamReadDoneResult<T> {
+    done: true;
+    value?: T;
+}
+
+interface ReadableStreamReadValueResult<T> {
+    done: false;
+    value: T;
 }
 
 interface RegistrationOptions {
@@ -642,7 +652,10 @@ interface AnimationFrameProvider {
 interface Blob {
     readonly size: number;
     readonly type: string;
+    arrayBuffer(): Promise<ArrayBuffer>;
     slice(start?: number, end?: number, contentType?: string): Blob;
+    stream(): ReadableStream;
+    text(): Promise<string>;
 }
 
 declare var Blob: {
@@ -723,7 +736,7 @@ interface CacheStorage {
     delete(cacheName: string): Promise<boolean>;
     has(cacheName: string): Promise<boolean>;
     keys(): Promise<string[]>;
-    match(request: RequestInfo, options?: CacheQueryOptions): Promise<Response | undefined>;
+    match(request: RequestInfo, options?: MultiCacheQueryOptions): Promise<Response | undefined>;
     open(cacheName: string): Promise<Cache>;
 }
 
@@ -903,11 +916,18 @@ declare var Clients: {
 
 /** A CloseEvent is sent to clients using WebSockets when the connection is closed. This is delivered to the listener indicated by the WebSocket object's onclose attribute. */
 interface CloseEvent extends Event {
+    /**
+     * Returns the WebSocket connection close code provided by the server.
+     */
     readonly code: number;
+    /**
+     * Returns the WebSocket connection close reason provided by the server.
+     */
     readonly reason: string;
+    /**
+     * Returns true if the connection closed cleanly; false otherwise.
+     */
     readonly wasClean: boolean;
-    /** @deprecated */
-    initCloseEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, wasCleanArg: boolean, codeArg: number, reasonArg: string): void;
 }
 
 declare var CloseEvent: {
@@ -1475,7 +1495,7 @@ interface EventTarget {
      * 
      * When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
      * 
-     * When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in §2.8 Observing event listeners.
+     * When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
      * 
      * When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
      * 
@@ -1636,7 +1656,7 @@ interface GenericTransformStream {
      */
     readonly readable: ReadableStream;
     /**
-     * Returns a writable stream which accepts BufferSource chunks and runs them through encoding's decoder before making them available to readable.
+     * Returns a writable stream which accepts [AllowShared] BufferSource chunks and runs them through encoding's decoder before making them available to readable.
      * 
      * Typically this will be used via the pipeThrough() method on a ReadableStream source.
      * 
@@ -2222,7 +2242,7 @@ interface ImageData {
 declare var ImageData: {
     prototype: ImageData;
     new(width: number, height: number): ImageData;
-    new(array: Uint8ClampedArray, width: number, height: number): ImageData;
+    new(array: Uint8ClampedArray, width: number, height?: number): ImageData;
 };
 
 /** This Channel Messaging API interface allows us to create a new message channel and send data through it via its two MessagePort properties. */
@@ -2472,7 +2492,7 @@ declare var OffscreenCanvas: {
     new(width: number, height: number): OffscreenCanvas;
 };
 
-interface OffscreenCanvasRenderingContext2D extends CanvasState, CanvasTransform, CanvasCompositing, CanvasImageSmoothing, CanvasFillStrokeStyles, CanvasShadowStyles, CanvasFilters, CanvasRect, CanvasDrawPath, CanvasText, CanvasDrawImage, CanvasImageData, CanvasPathDrawingStyles, CanvasTextDrawingStyles, CanvasPath {
+interface OffscreenCanvasRenderingContext2D extends CanvasCompositing, CanvasDrawImage, CanvasDrawPath, CanvasFillStrokeStyles, CanvasFilters, CanvasImageData, CanvasImageSmoothing, CanvasPath, CanvasPathDrawingStyles, CanvasRect, CanvasShadowStyles, CanvasState, CanvasText, CanvasTextDrawingStyles, CanvasTransform {
     readonly canvas: OffscreenCanvas;
     commit(): void;
 }
@@ -2715,7 +2735,7 @@ interface PushSubscriptionChangeEvent extends ExtendableEvent {
 
 declare var PushSubscriptionChangeEvent: {
     prototype: PushSubscriptionChangeEvent;
-    new(type: string, eventInitDict?: PushSubscriptionChangeInit): PushSubscriptionChangeEvent;
+    new(type: string, eventInitDict?: PushSubscriptionChangeEventInit): PushSubscriptionChangeEvent;
 };
 
 interface PushSubscriptionOptions {
@@ -2778,11 +2798,6 @@ interface ReadableStreamDefaultReader<R = any> {
     cancel(reason?: any): Promise<void>;
     read(): Promise<ReadableStreamReadResult<R>>;
     releaseLock(): void;
-}
-
-interface ReadableStreamReadResult<T> {
-    done: boolean;
-    value: T;
 }
 
 interface ReadableStreamReader<R = any> {
@@ -2963,6 +2978,7 @@ interface ServiceWorkerGlobalScope extends WorkerGlobalScope {
     onpushsubscriptionchange: ((this: ServiceWorkerGlobalScope, ev: PushSubscriptionChangeEvent) => any) | null;
     onsync: ((this: ServiceWorkerGlobalScope, ev: SyncEvent) => any) | null;
     readonly registration: ServiceWorkerRegistration;
+    readonly serviceWorker: ServiceWorker;
     skipWaiting(): Promise<void>;
     addEventListener<K extends keyof ServiceWorkerGlobalScopeEventMap>(type: K, listener: (this: ServiceWorkerGlobalScope, ev: ServiceWorkerGlobalScopeEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -3102,7 +3118,9 @@ interface TextDecoderCommon {
     readonly ignoreBOM: boolean;
 }
 
-interface TextDecoderStream extends TextDecoderCommon, GenericTransformStream {
+interface TextDecoderStream extends GenericTransformStream, TextDecoderCommon {
+    readonly readable: ReadableStream<string>;
+    readonly writable: WritableStream<BufferSource>;
 }
 
 declare var TextDecoderStream: {
@@ -3134,7 +3152,9 @@ interface TextEncoderCommon {
     readonly encoding: string;
 }
 
-interface TextEncoderStream extends TextEncoderCommon, GenericTransformStream {
+interface TextEncoderStream extends GenericTransformStream, TextEncoderCommon {
+    readonly readable: ReadableStream<Uint8Array>;
+    readonly writable: WritableStream<string>;
 }
 
 declare var TextEncoderStream: {
@@ -3222,6 +3242,7 @@ interface URL {
     host: string;
     hostname: string;
     href: string;
+    toString(): string;
     readonly origin: string;
     password: string;
     pathname: string;
@@ -3266,12 +3287,17 @@ interface URLSearchParams {
      */
     set(name: string, value: string): void;
     sort(): void;
+    /**
+     * Returns a string containing a query string suitable for use in a URL. Does not include the question mark.
+     */
+    toString(): string;
     forEach(callbackfn: (value: string, key: string, parent: URLSearchParams) => void, thisArg?: any): void;
 }
 
 declare var URLSearchParams: {
     prototype: URLSearchParams;
     new(init?: string[][] | Record<string, string> | string | URLSearchParams): URLSearchParams;
+    toString(): string;
 };
 
 interface WEBGL_color_buffer_float {
@@ -3385,7 +3411,7 @@ interface WEBGL_lose_context {
     restoreContext(): void;
 }
 
-interface WebGL2RenderingContext extends WebGLRenderingContextBase, WebGL2RenderingContextBase, WebGL2RenderingContextOverloads {
+interface WebGL2RenderingContext extends WebGL2RenderingContextBase, WebGL2RenderingContextOverloads, WebGLRenderingContextBase {
 }
 
 declare var WebGL2RenderingContext: {
@@ -5277,17 +5303,45 @@ interface WebSocketEventMap {
 
 /** Provides the API for creating and managing a WebSocket connection to a server, as well as for sending and receiving data on the connection. */
 interface WebSocket extends EventTarget {
+    /**
+     * Returns a string that indicates how binary data from the WebSocket object is exposed to scripts:
+     * 
+     * Can be set, to change how binary data is returned. The default is "blob".
+     */
     binaryType: BinaryType;
+    /**
+     * Returns the number of bytes of application data (UTF-8 text and binary data) that have been queued using send() but not yet been transmitted to the network.
+     * 
+     * If the WebSocket connection is closed, this attribute's value will only increase with each call to the send() method. (The number does not reset to zero once the connection closes.)
+     */
     readonly bufferedAmount: number;
+    /**
+     * Returns the extensions selected by the server, if any.
+     */
     readonly extensions: string;
     onclose: ((this: WebSocket, ev: CloseEvent) => any) | null;
     onerror: ((this: WebSocket, ev: Event) => any) | null;
     onmessage: ((this: WebSocket, ev: MessageEvent) => any) | null;
     onopen: ((this: WebSocket, ev: Event) => any) | null;
+    /**
+     * Returns the subprotocol selected by the server, if any. It can be used in conjunction with the array form of the constructor's second argument to perform subprotocol negotiation.
+     */
     readonly protocol: string;
+    /**
+     * Returns the state of the WebSocket object's connection. It can have the values described below.
+     */
     readonly readyState: number;
+    /**
+     * Returns the URL that was used to establish the WebSocket connection.
+     */
     readonly url: string;
+    /**
+     * Closes the WebSocket connection, optionally using code as the the WebSocket connection close code and reason as the the WebSocket connection close reason.
+     */
     close(code?: number, reason?: string): void;
+    /**
+     * Transmits data using the WebSocket connection. data can be a string, a Blob, an ArrayBuffer, or an ArrayBufferView.
+     */
     send(data: string | ArrayBufferLike | Blob | ArrayBufferView): void;
     readonly CLOSED: number;
     readonly CLOSING: number;
@@ -5344,7 +5398,7 @@ interface WindowOrWorkerGlobalScope {
     createImageBitmap(image: ImageBitmapSource): Promise<ImageBitmap>;
     createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number): Promise<ImageBitmap>;
     fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
-    queueMicrotask(callback: Function): void;
+    queueMicrotask(callback: VoidFunction): void;
     setInterval(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
     setTimeout(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
 }
@@ -5375,7 +5429,7 @@ interface WorkerGlobalScopeEventMap {
 }
 
 /** This Web Workers API interface is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop. */
-interface WorkerGlobalScope extends EventTarget, WorkerUtils, WindowConsole, WindowOrWorkerGlobalScope {
+interface WorkerGlobalScope extends EventTarget, WindowConsole, WindowOrWorkerGlobalScope, WorkerUtils {
     readonly caches: CacheStorage;
     readonly isSecureContext: boolean;
     readonly location: WorkerLocation;
@@ -5400,12 +5454,12 @@ interface WorkerLocation {
     readonly host: string;
     readonly hostname: string;
     readonly href: string;
+    toString(): string;
     readonly origin: string;
     readonly pathname: string;
     readonly port: string;
     readonly protocol: string;
     readonly search: string;
-    toString(): string;
 }
 
 declare var WorkerLocation: {
@@ -5414,7 +5468,7 @@ declare var WorkerLocation: {
 };
 
 /** A subset of the Navigator interface allowed to be accessed from a Worker. Such an object is initialized for each worker and is available via the WorkerGlobalScope.navigator property obtained by calling window.self.navigator. */
-interface WorkerNavigator extends NavigatorID, NavigatorOnLine, NavigatorBeacon, NavigatorConcurrentHardware, NavigatorStorage {
+interface WorkerNavigator extends NavigatorBeacon, NavigatorConcurrentHardware, NavigatorID, NavigatorOnLine, NavigatorStorage {
     readonly permissions: Permissions;
     readonly serviceWorker: ServiceWorkerContainer;
 }
@@ -5620,16 +5674,16 @@ declare namespace WebAssembly {
     
     var Global: {
         prototype: Global;
-        new(descriptor: GlobalDescriptor, value?: any): Global;
+        new(descriptor: GlobalDescriptor, v?: any): Global;
     };
     
     interface Instance {
-        readonly exports: any;
+        readonly exports: Exports;
     }
     
     var Instance: {
         prototype: Instance;
-        new(module: Module, importObject?: any): Instance;
+        new(module: Module, importObject?: Imports): Instance;
     };
     
     interface Memory {
@@ -5648,9 +5702,9 @@ declare namespace WebAssembly {
     var Module: {
         prototype: Module;
         new(bytes: BufferSource): Module;
-        customSections(module: Module, sectionName: string): ArrayBuffer[];
-        exports(module: Module): ModuleExportDescriptor[];
-        imports(module: Module): ModuleImportDescriptor[];
+        customSections(moduleObject: Module, sectionName: string): ArrayBuffer[];
+        exports(moduleObject: Module): ModuleExportDescriptor[];
+        imports(moduleObject: Module): ModuleImportDescriptor[];
     };
     
     interface Table {
@@ -5667,7 +5721,7 @@ declare namespace WebAssembly {
     
     interface GlobalDescriptor {
         mutable?: boolean;
-        value: string;
+        value: ValueType;
     }
     
     interface MemoryDescriptor {
@@ -5697,11 +5751,19 @@ declare namespace WebAssembly {
         module: Module;
     }
     
-    type ImportExportKind = "function" | "table" | "memory" | "global";
+    type ImportExportKind = "function" | "global" | "memory" | "table";
     type TableKind = "anyfunc";
+    type ValueType = "f32" | "f64" | "i32" | "i64";
+    type ExportValue = Function | Global | Memory | Table;
+    type Exports = Record<string, ExportValue>;
+    type ImportValue = ExportValue | number;
+    type ModuleImports = Record<string, ImportValue>;
+    type Imports = Record<string, ModuleImports>;
     function compile(bytes: BufferSource): Promise<Module>;
-    function instantiate(bytes: BufferSource, importObject?: any): Promise<WebAssemblyInstantiatedSource>;
-    function instantiate(moduleObject: Module, importObject?: any): Promise<Instance>;
+    function compileStreaming(source: Response | Promise<Response>): Promise<Module>;
+    function instantiate(bytes: BufferSource, importObject?: Imports): Promise<WebAssemblyInstantiatedSource>;
+    function instantiate(moduleObject: Module, importObject?: Imports): Promise<Instance>;
+    function instantiateStreaming(response: Response | PromiseLike<Response>, importObject?: Imports): Promise<WebAssemblyInstantiatedSource>;
     function validate(bytes: BufferSource): boolean;
 }
 
@@ -5739,6 +5801,10 @@ interface TransformStreamDefaultControllerCallback<O> {
 
 interface TransformStreamDefaultControllerTransformCallback<I, O> {
     (chunk: I, controller: TransformStreamDefaultController<O>): void | PromiseLike<void>;
+}
+
+interface VoidFunction {
+    (): void;
 }
 
 interface WritableStreamDefaultControllerCloseCallback {
@@ -5795,7 +5861,7 @@ declare function clearTimeout(handle?: number): void;
 declare function createImageBitmap(image: ImageBitmapSource): Promise<ImageBitmap>;
 declare function createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number): Promise<ImageBitmap>;
 declare function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
-declare function queueMicrotask(callback: Function): void;
+declare function queueMicrotask(callback: VoidFunction): void;
 declare function setInterval(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
 declare function setTimeout(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
 declare function cancelAnimationFrame(handle: number): void;
@@ -5816,6 +5882,7 @@ type ImageBitmapSource = CanvasImageSource | Blob | ImageData;
 type TimerHandler = string | Function;
 type PerformanceEntryList = PerformanceEntry[];
 type PushMessageDataInit = BufferSource | string;
+type ReadableStreamReadResult<T> = ReadableStreamReadValueResult<T> | ReadableStreamReadDoneResult<T>;
 type VibratePattern = number | number[];
 type AlgorithmIdentifier = string | Algorithm;
 type HashAlgorithmIdentifier = AlgorithmIdentifier;
@@ -5841,41 +5908,41 @@ type BufferSource = ArrayBufferView | ArrayBuffer;
 type DOMTimeStamp = number;
 type FormDataEntryValue = File | string;
 type IDBValidKey = number | string | Date | BufferSource | IDBArrayKey;
-type Transferable = ArrayBuffer | MessagePort | ImageBitmap;
-type BinaryType = "blob" | "arraybuffer";
-type CanvasDirection = "ltr" | "rtl" | "inherit";
-type CanvasFillRule = "nonzero" | "evenodd";
+type Transferable = ArrayBuffer | MessagePort | ImageBitmap | OffscreenCanvas;
+type BinaryType = "arraybuffer" | "blob";
+type CanvasDirection = "inherit" | "ltr" | "rtl";
+type CanvasFillRule = "evenodd" | "nonzero";
 type CanvasLineCap = "butt" | "round" | "square";
-type CanvasLineJoin = "round" | "bevel" | "miter";
-type CanvasTextAlign = "start" | "end" | "left" | "right" | "center";
-type CanvasTextBaseline = "top" | "hanging" | "middle" | "alphabetic" | "ideographic" | "bottom";
-type ClientTypes = "window" | "worker" | "sharedworker" | "all";
-type EndingType = "transparent" | "native";
-type FrameType = "auxiliary" | "top-level" | "nested" | "none";
+type CanvasLineJoin = "bevel" | "miter" | "round";
+type CanvasTextAlign = "center" | "end" | "left" | "right" | "start";
+type CanvasTextBaseline = "alphabetic" | "bottom" | "hanging" | "ideographic" | "middle" | "top";
+type ClientTypes = "all" | "sharedworker" | "window" | "worker";
+type EndingType = "native" | "transparent";
+type FrameType = "auxiliary" | "nested" | "none" | "top-level";
 type IDBCursorDirection = "next" | "nextunique" | "prev" | "prevunique";
-type IDBRequestReadyState = "pending" | "done";
+type IDBRequestReadyState = "done" | "pending";
 type IDBTransactionMode = "readonly" | "readwrite" | "versionchange";
-type ImageSmoothingQuality = "low" | "medium" | "high";
-type KeyFormat = "raw" | "spki" | "pkcs8" | "jwk";
-type KeyType = "public" | "private" | "secret";
-type KeyUsage = "encrypt" | "decrypt" | "sign" | "verify" | "deriveKey" | "deriveBits" | "wrapKey" | "unwrapKey";
+type ImageSmoothingQuality = "high" | "low" | "medium";
+type KeyFormat = "jwk" | "pkcs8" | "raw" | "spki";
+type KeyType = "private" | "public" | "secret";
+type KeyUsage = "decrypt" | "deriveBits" | "deriveKey" | "encrypt" | "sign" | "unwrapKey" | "verify" | "wrapKey";
 type NotificationDirection = "auto" | "ltr" | "rtl";
 type NotificationPermission = "default" | "denied" | "granted";
 type OffscreenRenderingContextId = "2d" | "bitmaprenderer" | "webgl" | "webgl2";
-type PermissionName = "geolocation" | "notifications" | "push" | "midi" | "camera" | "microphone" | "speaker" | "device-info" | "background-sync" | "bluetooth" | "persistent-storage" | "ambient-light-sensor" | "accelerometer" | "gyroscope" | "magnetometer" | "clipboard";
-type PermissionState = "granted" | "denied" | "prompt";
-type PushEncryptionKeyName = "p256dh" | "auth";
+type PermissionName = "accelerometer" | "ambient-light-sensor" | "background-sync" | "bluetooth" | "camera" | "clipboard" | "device-info" | "geolocation" | "gyroscope" | "magnetometer" | "microphone" | "midi" | "notifications" | "persistent-storage" | "push" | "speaker";
+type PermissionState = "denied" | "granted" | "prompt";
+type PushEncryptionKeyName = "auth" | "p256dh";
 type PushPermissionState = "denied" | "granted" | "prompt";
-type ReferrerPolicy = "" | "no-referrer" | "no-referrer-when-downgrade" | "same-origin" | "origin" | "strict-origin" | "origin-when-cross-origin" | "strict-origin-when-cross-origin" | "unsafe-url";
-type RequestCache = "default" | "no-store" | "reload" | "no-cache" | "force-cache" | "only-if-cached";
-type RequestCredentials = "omit" | "same-origin" | "include";
+type ReferrerPolicy = "" | "no-referrer" | "no-referrer-when-downgrade" | "origin" | "origin-when-cross-origin" | "same-origin" | "strict-origin" | "strict-origin-when-cross-origin" | "unsafe-url";
+type RequestCache = "default" | "force-cache" | "no-cache" | "no-store" | "only-if-cached" | "reload";
+type RequestCredentials = "include" | "omit" | "same-origin";
 type RequestDestination = "" | "audio" | "audioworklet" | "document" | "embed" | "font" | "image" | "manifest" | "object" | "paintworklet" | "report" | "script" | "sharedworker" | "style" | "track" | "video" | "worker" | "xslt";
-type RequestMode = "navigate" | "same-origin" | "no-cors" | "cors";
-type RequestRedirect = "follow" | "error" | "manual";
+type RequestMode = "cors" | "navigate" | "no-cors" | "same-origin";
+type RequestRedirect = "error" | "follow" | "manual";
 type ResponseType = "basic" | "cors" | "default" | "error" | "opaque" | "opaqueredirect";
-type ServiceWorkerState = "installing" | "installed" | "activating" | "activated" | "redundant";
-type ServiceWorkerUpdateViaCache = "imports" | "all" | "none";
-type VisibilityState = "hidden" | "visible" | "prerender";
-type WebGLPowerPreference = "default" | "low-power" | "high-performance";
+type ServiceWorkerState = "activated" | "activating" | "installed" | "installing" | "parsed" | "redundant";
+type ServiceWorkerUpdateViaCache = "all" | "imports" | "none";
+type VisibilityState = "hidden" | "visible";
+type WebGLPowerPreference = "default" | "high-performance" | "low-power";
 type WorkerType = "classic" | "module";
 type XMLHttpRequestResponseType = "" | "arraybuffer" | "blob" | "document" | "json" | "text";

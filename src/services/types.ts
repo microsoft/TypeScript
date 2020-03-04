@@ -17,12 +17,20 @@ namespace ts {
         getFullText(sourceFile?: SourceFile): string;
         getText(sourceFile?: SourceFile): string;
         getFirstToken(sourceFile?: SourceFile): Node | undefined;
+        /* @internal */
+        getFirstToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
         getLastToken(sourceFile?: SourceFile): Node | undefined;
+        /* @internal */
+        getLastToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
         // See ts.forEachChild for documentation.
         forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
     }
 
     export interface Identifier {
+        readonly text: string;
+    }
+
+    export interface PrivateIdentifier {
         readonly text: string;
     }
 
@@ -48,6 +56,8 @@ namespace ts {
         getNumberIndexType(): Type | undefined;
         getBaseTypes(): BaseType[] | undefined;
         getNonNullableType(): Type;
+        /*@internal*/ getNonOptionalType(): Type;
+        /*@internal*/ isNullableType(): boolean;
         getConstraint(): Type | undefined;
         getDefault(): Type | undefined;
 
@@ -60,6 +70,10 @@ namespace ts {
         isTypeParameter(): this is TypeParameter;
         isClassOrInterface(): this is InterfaceType;
         isClass(): this is InterfaceType;
+    }
+
+    export interface TypeReference {
+        typeArguments?: readonly Type[];
     }
 
     export interface Signature {
@@ -167,10 +181,30 @@ namespace ts {
         packageName: string;
     }
 
+    /* @internal */
+    export const enum PackageJsonDependencyGroup {
+        Dependencies         = 1 << 0,
+        DevDependencies      = 1 << 1,
+        PeerDependencies     = 1 << 2,
+        OptionalDependencies = 1 << 3,
+        All = Dependencies | DevDependencies | PeerDependencies | OptionalDependencies,
+    }
+
+    /* @internal */
+    export interface PackageJsonInfo {
+        fileName: string;
+        dependencies?: Map<string>;
+        devDependencies?: Map<string>;
+        peerDependencies?: Map<string>;
+        optionalDependencies?: Map<string>;
+        get(dependencyName: string, inGroups?: PackageJsonDependencyGroup): string | undefined;
+        has(dependencyName: string, inGroups?: PackageJsonDependencyGroup): boolean;
+    }
+
     //
     // Public interface of the host of a language service instance.
     //
-    export interface LanguageServiceHost extends GetEffectiveTypeRootsHost {
+    export interface LanguageServiceHost extends ModuleSpecifierResolutionHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
         getProjectVersion?(): string;
@@ -186,7 +220,6 @@ namespace ts {
         log?(s: string): void;
         trace?(s: string): void;
         error?(s: string): void;
-        useCaseSensitiveFileNames?(): boolean;
 
         /*
          * LS host can optionally implement these methods to support completions for module specifiers.
@@ -214,6 +247,8 @@ namespace ts {
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
+        /* @internal */
+        getGlobalTypingsCacheLocation?(): string | undefined;
 
         /*
          * Required for full import and type reference completions.
@@ -234,6 +269,14 @@ namespace ts {
         getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
         /* @internal */
         getSourceFileLike?(fileName: string): SourceFileLike | undefined;
+        /* @internal */
+        getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
+        /* @internal */
+        getImportSuggestionsCache?(): Completions.ImportSuggestionsForFileCache;
+        /* @internal */
+        setResolvedProjectReferenceCallbacks?(callbacks: ResolvedProjectReferenceCallbacks): void;
+        /* @internal */
+        useSourceOfProjectReferenceRedirect?(): boolean;
     }
 
     /* @internal */
@@ -312,6 +355,10 @@ namespace ts {
         getNavigationBarItems(fileName: string): NavigationBarItem[];
         getNavigationTree(fileName: string): NavigationTree;
 
+        prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined;
+        provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
+        provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
+
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
@@ -335,6 +382,8 @@ namespace ts {
         toLineColumnOffset?(fileName: string, position: number): LineAndCharacter;
         /** @internal */
         getSourceMapper(): SourceMapper;
+        /** @internal */
+        clearSourceMapperCache(): void;
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: readonly number[], formatOptions: FormatCodeSettings, preferences: UserPreferences): readonly CodeFixAction[];
         getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, preferences: UserPreferences): CombinedCodeActions;
@@ -354,7 +403,7 @@ namespace ts {
         organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
 
-        getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
+        getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
 
         getProgram(): Program | undefined;
 
@@ -371,7 +420,7 @@ namespace ts {
 
     export type OrganizeImportsScope = CombinedCodeFixScope;
 
-    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<";
+    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#";
 
     export interface GetCompletionsAtPositionOptions extends UserPreferences {
         /**
@@ -483,6 +532,24 @@ namespace ts {
         childItems?: NavigationTree[];
     }
 
+    export interface CallHierarchyItem {
+        name: string;
+        kind: ScriptElementKind;
+        file: string;
+        span: TextSpan;
+        selectionSpan: TextSpan;
+    }
+
+    export interface CallHierarchyIncomingCall {
+        from: CallHierarchyItem;
+        fromSpans: TextSpan[];
+    }
+
+    export interface CallHierarchyOutgoingCall {
+        to: CallHierarchyItem;
+        fromSpans: TextSpan[];
+    }
+
     export interface TodoCommentDescriptor {
         text: string;
         priority: number;
@@ -501,7 +568,7 @@ namespace ts {
 
     export interface FileTextChanges {
         fileName: string;
-        textChanges: TextChange[];
+        textChanges: readonly TextChange[];
         isNewFile?: boolean;
     }
 
@@ -638,11 +705,6 @@ namespace ts {
         displayParts: SymbolDisplayPart[];
     }
 
-    export interface DocumentHighlights {
-        fileName: string;
-        highlightSpans: HighlightSpan[];
-    }
-
     export const enum HighlightSpanKind {
         none = "none",
         definition = "definition",
@@ -674,6 +736,12 @@ namespace ts {
         None = 0,
         Block = 1,
         Smart = 2,
+    }
+
+    export enum SemicolonPreference {
+        Ignore = "ignore",
+        Insert = "insert",
+        Remove = "remove",
     }
 
     /* @deprecated - consider using EditorSettings instead */
@@ -734,6 +802,7 @@ namespace ts {
         readonly placeOpenBraceOnNewLineForControlBlocks?: boolean;
         readonly insertSpaceBeforeTypeAnnotation?: boolean;
         readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
+        readonly semicolons?: SemicolonPreference;
     }
 
     export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings {
@@ -757,6 +826,7 @@ namespace ts {
             insertSpaceBeforeFunctionParenthesis: false,
             placeOpenBraceOnNewLineForFunctions: false,
             placeOpenBraceOnNewLineForControlBlocks: false,
+            semicolons: SemicolonPreference.Ignore,
         };
     }
 
@@ -768,6 +838,7 @@ namespace ts {
         name: string;
         containerKind: ScriptElementKind;
         containerName: string;
+        /* @internal */ isLocal?: boolean;
     }
 
     export interface DefinitionInfoAndBoundSpan {
@@ -919,6 +990,7 @@ namespace ts {
         hasAction?: true;
         source?: string;
         isRecommended?: true;
+        isFromUncheckedFile?: true;
     }
 
     export interface CompletionEntryDetails {
@@ -1206,5 +1278,51 @@ namespace ts {
         jsxText = 23,
         jsxAttributeStringLiteralValue = 24,
         bigintLiteral = 25,
+    }
+
+    /** @internal */
+    export interface CodeFixRegistration {
+        errorCodes: readonly number[];
+        getCodeActions(context: CodeFixContext): CodeFixAction[] | undefined;
+        fixIds?: readonly string[];
+        getAllCodeActions?(context: CodeFixAllContext): CombinedCodeActions;
+    }
+
+    /** @internal */
+    export interface CodeFixContextBase extends textChanges.TextChangesContext {
+        sourceFile: SourceFile;
+        program: Program;
+        cancellationToken: CancellationToken;
+        preferences: UserPreferences;
+    }
+
+    /** @internal */
+    export interface CodeFixAllContext extends CodeFixContextBase {
+        fixId: {};
+    }
+
+    /** @internal */
+    export interface CodeFixContext extends CodeFixContextBase {
+        errorCode: number;
+        span: TextSpan;
+    }
+
+    /** @internal */
+    export interface Refactor {
+        /** Compute the associated code actions */
+        getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined;
+
+        /** Compute (quickly) which actions are available here */
+        getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[];
+    }
+
+    /** @internal */
+    export interface RefactorContext extends textChanges.TextChangesContext {
+        file: SourceFile;
+        startPosition: number;
+        endPosition?: number;
+        program: Program;
+        cancellationToken?: CancellationToken;
+        preferences: UserPreferences;
     }
 }

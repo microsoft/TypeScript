@@ -143,7 +143,7 @@ interface AB<A, B> {
 }
 
 type Pair<T> = AB<T, T>;
->Pair : AB<T, T>
+>Pair : Pair<T>
 
 interface TaggedPair<T> extends Pair<T> {
     tag: string;

@@ -16,7 +16,7 @@ verify.codeFix({
         "/dir/tsconfig.json":
 `{
     "compilerOptions": {
-        "jsx": "react",
+        "jsx": "react"
     }
 }`,
     },

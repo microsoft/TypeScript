@@ -1,0 +1,34 @@
+=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator7.ts ===
+declare const a: string | undefined;
+>a : Symbol(a, Decl(nullishCoalescingOperator7.ts, 0, 13))
+
+declare const b: string | undefined;
+>b : Symbol(b, Decl(nullishCoalescingOperator7.ts, 1, 13))
+
+declare const c: string | undefined;
+>c : Symbol(c, Decl(nullishCoalescingOperator7.ts, 2, 13))
+
+const foo1 = a ? 1 : 2;
+>foo1 : Symbol(foo1, Decl(nullishCoalescingOperator7.ts, 4, 5))
+>a : Symbol(a, Decl(nullishCoalescingOperator7.ts, 0, 13))
+
+const foo2 = a ?? 'foo' ? 1 : 2;
+>foo2 : Symbol(foo2, Decl(nullishCoalescingOperator7.ts, 5, 5))
+>a : Symbol(a, Decl(nullishCoalescingOperator7.ts, 0, 13))
+
+const foo3 = a ?? 'foo' ? (b ?? 'bar') : (c ?? 'baz');
+>foo3 : Symbol(foo3, Decl(nullishCoalescingOperator7.ts, 6, 5))
+>a : Symbol(a, Decl(nullishCoalescingOperator7.ts, 0, 13))
+>b : Symbol(b, Decl(nullishCoalescingOperator7.ts, 1, 13))
+>c : Symbol(c, Decl(nullishCoalescingOperator7.ts, 2, 13))
+
+function f () {
+>f : Symbol(f, Decl(nullishCoalescingOperator7.ts, 6, 54))
+
+    const foo4 = a ?? 'foo' ? b ?? 'bar' : c ?? 'baz';
+>foo4 : Symbol(foo4, Decl(nullishCoalescingOperator7.ts, 9, 9))
+>a : Symbol(a, Decl(nullishCoalescingOperator7.ts, 0, 13))
+>b : Symbol(b, Decl(nullishCoalescingOperator7.ts, 1, 13))
+>c : Symbol(c, Decl(nullishCoalescingOperator7.ts, 2, 13))
+}
+

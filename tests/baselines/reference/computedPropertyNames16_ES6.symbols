@@ -54,6 +54,7 @@ class C {
 
     set [`hello bye`](v) { }
 >[`hello bye`] : Symbol(C[`hello bye`], Decl(computedPropertyNames16_ES6.ts, 12, 42))
+>`hello bye` : Symbol(C[`hello bye`], Decl(computedPropertyNames16_ES6.ts, 12, 42))
 >v : Symbol(v, Decl(computedPropertyNames16_ES6.ts, 13, 22))
 
     get [`hello ${a} bye`]() { return 0; }
