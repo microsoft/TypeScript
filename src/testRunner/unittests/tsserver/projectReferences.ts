@@ -1839,5 +1839,61 @@ bar();
             // No new solutions/projects loaded
             checkNumberOfProjects(service, { configuredProjects: 1 });
         });
+
+        it("when default project is solution project", () => {
+            const tsconfigSrc: File = {
+                path: `${tscWatch.projectRoot}/tsconfig-src.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                        outDir: "./target/",
+                        baseUrl: "./src/"
+                    },
+                    include: ["./src/**/*"]
+                })
+            };
+            const tsconfig: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: JSON.stringify({
+                    references: [{ path: "./tsconfig-src.json" }],
+                    files: []
+                })
+            };
+            const main: File = {
+                path: `${tscWatch.projectRoot}/src/main.ts`,
+                content: `import { foo } from 'helpers/functions';
+foo;`
+            };
+            const helper: File = {
+                path: `${tscWatch.projectRoot}/src/helpers/functions.ts`,
+                content: `export const foo = 1;`
+            };
+            const host = createServerHost([tsconfigSrc, tsconfig, main, helper, libFile]);
+            const session = createSession(host, { canUseEvents: true });
+            const service = session.getProjectService();
+            service.openClientFile(main.path);
+            checkNumberOfProjects(service, { configuredProjects: 1, inferredProjects: 1 });
+            checkProjectActualFiles(service.inferredProjects[0], [main.path, libFile.path]);
+            checkProjectActualFiles(service.configuredProjects.get(tsconfig.path)!, [tsconfig.path]);
+
+            const location = protocolTextSpanFromSubstring(main.content, `'helpers/functions'`);
+            verifyGetErrRequest({
+                session,
+                host,
+                expected: [
+                    {
+                        file: main,
+                        syntax: [],
+                        semantic: [createDiagnostic(
+                            location.start,
+                            location.end,
+                            Diagnostics.Cannot_find_module_0,
+                            ["helpers/functions"]
+                        )],
+                        suggestion: []
+                    },
+                ]
+            });
+        });
     });
 }
