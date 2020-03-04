@@ -2164,6 +2164,12 @@ namespace ts.server {
             this.externalProjectRefCount--;
         }
 
+        /* @internal */
+        isSolution() {
+            return this.getRootFilesMap().size === 0 &&
+                !this.canConfigFileJsonReportNoInputFiles;
+        }
+
         /** Returns true if the project is needed by any of the open script info/external project */
         /* @internal */
         hasOpenRef() {
@@ -2184,12 +2190,23 @@ namespace ts.server {
                 return !!configFileExistenceInfo.openFilesImpactedByConfigFile.size;
             }
 
+            const isSolution = this.isSolution();
+
             // If there is no pending update for this project,
             // We know exact set of open files that get impacted by this configured project as the files in the project
             // The project is referenced only if open files impacted by this project are present in this project
             return forEachEntry(
                 configFileExistenceInfo.openFilesImpactedByConfigFile,
-                (_value, infoPath) => this.containsScriptInfo(this.projectService.getScriptInfoForPath(infoPath as Path)!)
+                (_value, infoPath) => isSolution ?
+                    forEachResolvedProjectReference(this, ref => {
+                        if (!ref) return false;
+                        const configFileName = toNormalizedPath(ref.sourceFile.fileName);
+                        const child = this.projectService.findConfiguredProjectByProjectName(configFileName);
+                        return child &&
+                            child.containsScriptInfo(this.projectService.getScriptInfoForPath(infoPath as Path)!) &&
+                            !child.isSourceOfProjectReferenceRedirect(infoPath);
+                    }) :
+                    this.containsScriptInfo(this.projectService.getScriptInfoForPath(infoPath as Path)!)
             ) || false;
         }
 

@@ -1868,14 +1868,15 @@ foo;`
                 path: `${tscWatch.projectRoot}/src/helpers/functions.ts`,
                 content: `export const foo = 1;`
             };
-            const host = createServerHost([tsconfigSrc, tsconfig, main, helper, libFile]);
+            const dummyFile: File = {
+                path: "/dummy/dummy.ts",
+                content: "let a = 10;"
+            };
+            const host = createServerHost([tsconfigSrc, tsconfig, main, helper, libFile, dummyFile]);
             const session = createSession(host, { canUseEvents: true });
             const service = session.getProjectService();
             service.openClientFile(main.path);
-            checkNumberOfProjects(service, { configuredProjects: 2 });
-            checkProjectActualFiles(service.configuredProjects.get(tsconfigSrc.path)!, [tsconfigSrc.path, main.path, helper.path, libFile.path]);
-            checkProjectActualFiles(service.configuredProjects.get(tsconfig.path)!, [tsconfig.path]);
-
+            verifyProjects(/*includeConfigured*/ true, /*includeDummy*/ false);
             verifyGetErrRequest({
                 session,
                 host,
@@ -1883,6 +1884,27 @@ foo;`
                     { file: main, syntax: [], semantic: [], suggestion: [] },
                 ]
             });
+
+            service.openClientFile(dummyFile.path);
+            verifyProjects(/*includeConfigured*/ true, /*includeDummy*/ true);
+
+            service.closeClientFile(main.path);
+            service.closeClientFile(dummyFile.path);
+            service.openClientFile(dummyFile.path);
+            verifyProjects(/*includeConfigured*/ false, /*includeDummy*/ true);
+
+            function verifyProjects(includeConfigured: boolean, includeDummy: boolean) {
+                const inferredProjects = includeDummy ? 1 : 0;
+                const configuredProjects = includeConfigured ? 2 : 0;
+                checkNumberOfProjects(service, { configuredProjects, inferredProjects });
+                if (includeConfigured) {
+                    checkProjectActualFiles(service.configuredProjects.get(tsconfigSrc.path)!, [tsconfigSrc.path, main.path, helper.path, libFile.path]);
+                    checkProjectActualFiles(service.configuredProjects.get(tsconfig.path)!, [tsconfig.path]);
+                }
+                if (includeDummy) {
+                    checkProjectActualFiles(service.inferredProjects[0], [dummyFile.path, libFile.path]);
+                }
+            }
         });
     });
 }

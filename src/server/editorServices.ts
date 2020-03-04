@@ -424,7 +424,8 @@ namespace ts.server {
         return !!(infoOrFileNameOrConfig as AncestorConfigFileInfo).configFileInfo;
     }
 
-    function forEachResolvedProjectReference<T>(
+    /*@internal*/
+    export function forEachResolvedProjectReference<T>(
         project: ConfiguredProject,
         cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined
     ): T | undefined {
@@ -1737,7 +1738,8 @@ namespace ts.server {
             this.logger.endGroup();
         }
 
-        private findConfiguredProjectByProjectName(configFileName: NormalizedPath): ConfiguredProject | undefined {
+        /*@internal*/
+        findConfiguredProjectByProjectName(configFileName: NormalizedPath): ConfiguredProject | undefined {
             // make sure that casing of config file name is consistent
             const canonicalConfigFilePath = asNormalizedPath(this.toCanonicalFileName(configFileName));
             return this.getConfiguredProjectByCanonicalConfigFilePath(canonicalConfigFilePath);
@@ -2888,8 +2890,7 @@ namespace ts.server {
                     // If this configured project doesnt contain script info but
                     // it is solution with project references, try those project references
                     if (!project.containsScriptInfo(info) &&
-                        project.getRootFilesMap().size === 0 &&
-                        !project.canConfigFileJsonReportNoInputFiles) {
+                        project.isSolution()) {
 
                         // try to load project from the tree
                         forEachResolvedProjectReference(
@@ -2909,7 +2910,8 @@ namespace ts.server {
                                     retainProjects.push(child);
                                 }
 
-                                if (child.containsScriptInfo(info)) {
+                                if (child.containsScriptInfo(info) &&
+                                    !child.isSourceOfProjectReferenceRedirect(info.fileName)) {
                                     defaultConfigProject = child;
                                     return true;
                                 }
