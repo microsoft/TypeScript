@@ -13602,7 +13602,7 @@ namespace ts {
         function combineTypeMappers(mapper1: TypeMapper | undefined, mapper2: TypeMapper): TypeMapper;
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper | undefined): TypeMapper;
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
-            return !mapper1 ? mapper2 : !mapper2 ?  mapper1 : makeCompositeTypeMapper(mapper1, mapper2);
+            return !mapper1 ? mapper2 : !mapper2 ? mapper1 : makeCompositeTypeMapper(mapper1, mapper2);
         }
 
         function createReplacementMapper(source: Type, target: Type, baseMapper: TypeMapper): TypeMapper {
