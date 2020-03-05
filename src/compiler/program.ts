@@ -1668,7 +1668,7 @@ namespace ts {
                 return flatDiagnostics;
             }
 
-            return getDiagnosticsPastDirectives(sourceFile, sourceFile.commentDirectives, flatDiagnostics).diagnostics;
+            return getDiagnosticsWithPrecedingDirectives(sourceFile, sourceFile.commentDirectives, flatDiagnostics).diagnostics;
         }
 
         function getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[] {
@@ -1756,7 +1756,7 @@ namespace ts {
                 return flatDiagnostics;
             }
 
-            const { diagnostics, directives } = getDiagnosticsPastDirectives(sourceFile, sourceFile.commentDirectives, flatDiagnostics);
+            const { diagnostics, directives } = getDiagnosticsWithPrecedingDirectives(sourceFile, sourceFile.commentDirectives, flatDiagnostics);
 
             for (const errorExpectation of directives.getUnusedExpectations()) {
                 diagnostics.push(createDiagnosticForRange(sourceFile, errorExpectation.range, Diagnostics.Unused_ts_expect_error_directive));
@@ -1765,7 +1765,7 @@ namespace ts {
             return diagnostics;
         }
 
-        function getDiagnosticsPastDirectives(sourceFile: SourceFile, commentDirectives: CommentDirective[], flatDiagnostics: Diagnostic[]) {
+        function getDiagnosticsWithPrecedingDirectives(sourceFile: SourceFile, commentDirectives: CommentDirective[], flatDiagnostics: Diagnostic[]) {
             // Diagnostics are only reported if there is no comment directive preceding them
             // This will modify the directives map by marking "used" ones with a corresponding diagnostic
             const directives = createCommentDirectivesMap(sourceFile, commentDirectives);
