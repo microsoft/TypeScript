@@ -2899,9 +2899,13 @@
         "category": "Error",
         "code": 2783
     },
-    "A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.": {
+    "'get' and 'set' accessors cannot declare 'this' parameters.": {
         "category": "Error",
         "code": 2784
+    },
+    "A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.": {
+        "category": "Error",
+        "code": 2785
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

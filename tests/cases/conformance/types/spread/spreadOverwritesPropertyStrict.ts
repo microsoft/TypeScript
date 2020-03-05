@@ -15,3 +15,12 @@ function f(obj: { x: number } | undefined) {
 function h(obj: { x: number } | { x: string }) {
     return { x: 1, ...obj } // error
 }
+function i(b: boolean, t: { command: string, ok: string }) {
+    return { command: "hi", ...(b ? t : {}) } // ok
+}
+function j() {
+    return { ...{ command: "hi" } , ...{ command: "bye" } } // ok
+}
+function k(t: { command: string, ok: string }) {
+    return { command: "hi", ...{ spoiler: true }, spoiler2: true, ...t } // error
+}
