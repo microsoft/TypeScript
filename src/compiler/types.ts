@@ -4876,16 +4876,18 @@ namespace ts {
 
     /* @internal */
     export const enum TypeMapKind {
-        Single,
-        Multiple,
+        Simple,
+        Array,
         Function,
+        Composite,
     }
 
     /* @internal */
     export type TypeMapper =
-        { kind: TypeMapKind.Single, source: Type, target: Type } |
-        { kind: TypeMapKind.Multiple, sources: readonly Type[], targets: readonly Type[] | undefined } |
-        { kind: TypeMapKind.Function, func: (t: Type) => Type };
+        | { kind: TypeMapKind.Simple, source1: Type, target1: Type, source2: Type, target2: Type }
+        | { kind: TypeMapKind.Array, sources: readonly Type[], targets: readonly Type[] | undefined }
+        | { kind: TypeMapKind.Function, func: (t: Type) => Type }
+        | { kind: TypeMapKind.Composite, mapper1: TypeMapper, mapper2: TypeMapper };
 
     export const enum InferencePriority {
         NakedTypeVariable            = 1 << 0,  // Naked type variable in union or intersection type

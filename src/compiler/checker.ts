@@ -728,7 +728,7 @@ namespace ts {
         const keyofConstraintType = keyofStringsOnly ? stringType : stringNumberSymbolType;
         const numberOrBigIntType = getUnionType([numberType, bigintType]);
 
-        const identityMapper: TypeMapper = makeFunctionTypeMapper(t => t);
+        const identityMapper: TypeMapper = makeUnaryTypeMapper(anyType, anyType);
         const restrictiveMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? getRestrictiveTypeParameter(<TypeParameter>t) : t);
         const permissiveMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? wildcardType : t);
 
@@ -13542,16 +13542,16 @@ namespace ts {
         }
 
         function createTypeMapper(sources: readonly TypeParameter[], targets: readonly Type[] | undefined): TypeMapper {
-            return sources.length === 1 ?
-                makeUnaryTypeMapper(sources[0], targets ? targets[0] : anyType) :
-                makeMultipleTypeMapper(sources, targets);
+            return sources.length === 1 ? makeUnaryTypeMapper(sources[0], targets ? targets[0] : anyType) :
+                sources.length === 2 ? makeSimpleTypeMapper(sources[0], targets ? targets[0] : anyType, sources[1], targets ? targets[1] : anyType) :
+                makeArrayTypeMapper(sources, targets);
         }
 
         function getMappedType(type: Type, map: TypeMapper): Type {
             switch (map.kind) {
-                case TypeMapKind.Single:
-                    return type === map.source ? map.target : type;
-                case TypeMapKind.Multiple:
+                case TypeMapKind.Simple:
+                    return type === map.source1 ? map.target1 : type === map.source2 ? map.target2 : type;
+                case TypeMapKind.Array:
                     const sources = map.sources;
                     const targets = map.targets;
                     for (let i = 0; i < sources.length; i++) {
@@ -13562,19 +13562,29 @@ namespace ts {
                     return type;
                 case TypeMapKind.Function:
                     return map.func(type);
+                case TypeMapKind.Composite:
+                    return instantiateType(getMappedType(type, map.mapper1), map.mapper2);
             }
         }
 
         function makeUnaryTypeMapper(source: Type, target: Type): TypeMapper {
-            return { kind: TypeMapKind.Single, source, target };
+            return makeSimpleTypeMapper(source, target, anyType, anyType);
         }
 
-        function makeMultipleTypeMapper(sources: readonly TypeParameter[], targets: readonly Type[] | undefined): TypeMapper {
-            return { kind: TypeMapKind.Multiple, sources, targets };
+        function makeSimpleTypeMapper(source1: Type, target1: Type, source2: Type, target2: Type): TypeMapper {
+            return { kind: TypeMapKind.Simple, source1, target1, source2, target2 };
+        }
+
+        function makeArrayTypeMapper(sources: readonly TypeParameter[], targets: readonly Type[] | undefined): TypeMapper {
+            return { kind: TypeMapKind.Array, sources, targets };
         }
 
         function makeFunctionTypeMapper(func: (t: Type) => Type): TypeMapper {
             return { kind: TypeMapKind.Function, func };
+        }
+
+        function makeCompositeTypeMapper(mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
+            return { kind: TypeMapKind.Composite, mapper1, mapper2 };
         }
 
         function createTypeEraser(sources: readonly TypeParameter[]): TypeMapper {
@@ -13589,26 +13599,20 @@ namespace ts {
             return makeFunctionTypeMapper(t => findIndex(context.inferences, info => info.typeParameter === t) >= index ? unknownType : t);
         }
 
-        function getTypeMapperSources(mapper: TypeMapper) {
-            return mapper.kind === TypeMapKind.Single ? [mapper.source] : mapper.kind === TypeMapKind.Multiple ? mapper.sources : emptyArray;
-        }
-
-        function getTypeMapperTargets(mapper: TypeMapper) {
-            return mapper.kind === TypeMapKind.Single ? [mapper.target] : mapper.kind === TypeMapKind.Multiple ? mapper.targets : emptyArray;
-        }
-
         function combineTypeMappers(mapper1: TypeMapper | undefined, mapper2: TypeMapper): TypeMapper;
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper | undefined): TypeMapper;
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
-            if (!mapper1) return mapper2;
-            if (!mapper2) return mapper1;
-            return mapper1.kind !== TypeMapKind.Function && mapper2.kind !== TypeMapKind.Function ?
-                createTypeMapper(concatenate(getTypeMapperSources(mapper1), getTypeMapperSources(mapper2)),
-                    concatenate(map(getTypeMapperTargets(mapper1), t => instantiateType(t, mapper2)), getTypeMapperTargets(mapper2))) :
-                makeFunctionTypeMapper(t => instantiateType(getMappedType(t, mapper1), mapper2));
+            return !mapper1 ? mapper2 : !mapper2 ?  mapper1 : makeCompositeTypeMapper(mapper1, mapper2);
         }
 
         function createReplacementMapper(source: Type, target: Type, baseMapper: TypeMapper): TypeMapper {
+            switch (baseMapper.kind) {
+                case TypeMapKind.Simple:
+                    return makeSimpleTypeMapper(baseMapper.source1, baseMapper.source1 === source ? target : baseMapper.target1,
+                        baseMapper.source2, baseMapper.source2 === source ? target : baseMapper.target2);
+                case TypeMapKind.Array:
+                    return makeArrayTypeMapper(baseMapper.sources, map(baseMapper.targets, (t, i) => baseMapper.sources[i] === source ? target : t));
+            }
             return makeFunctionTypeMapper(t => t === source ? target : getMappedType(t, baseMapper));
         }
 
