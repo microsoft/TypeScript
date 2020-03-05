@@ -3052,7 +3052,10 @@ namespace ts.server {
                 if (forEachPotentialProjectReference(
                     project,
                     potentialRefPath => forProjects!.has(potentialRefPath)
-                )) {
+                ) || (project.isSolution() && forEachResolvedProjectReference(
+                    project,
+                    (_ref, resolvedPath) => forProjects!.has(resolvedPath)
+                ))) {
                     // Load children
                     this.ensureProjectChildren(project, seenProjects);
                 }
