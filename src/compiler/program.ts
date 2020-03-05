@@ -1765,6 +1765,10 @@ namespace ts {
             return diagnostics;
         }
 
+        /**
+         * Creates a map of comment directives along with the diagnostics immediately preceded by one of them.
+         * Comments that match to any of those diagnostics are marked as used.
+         */
         function getDiagnosticsWithPrecedingDirectives(sourceFile: SourceFile, commentDirectives: CommentDirective[], flatDiagnostics: Diagnostic[]) {
             // Diagnostics are only reported if there is no comment directive preceding them
             // This will modify the directives map by marking "used" ones with a corresponding diagnostic
