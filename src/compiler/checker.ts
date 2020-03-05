@@ -728,9 +728,9 @@ namespace ts {
         const keyofConstraintType = keyofStringsOnly ? stringType : stringNumberSymbolType;
         const numberOrBigIntType = getUnionType([numberType, bigintType]);
 
-        const identityMapper: TypeMapper = { kind: TypeMapKind.Function, func: t => t };
-        const restrictiveMapper: TypeMapper = { kind: TypeMapKind.Function, func: t => t.flags & TypeFlags.TypeParameter ? getRestrictiveTypeParameter(<TypeParameter>t) : t };
-        const permissiveMapper: TypeMapper = { kind: TypeMapKind.Function, func: t => t.flags & TypeFlags.TypeParameter ? wildcardType : t };
+        const identityMapper: TypeMapper = makeFunctionTypeMapper(t => t);
+        const restrictiveMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? getRestrictiveTypeParameter(<TypeParameter>t) : t);
+        const permissiveMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? wildcardType : t);
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         const emptyJsxObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -13544,7 +13544,7 @@ namespace ts {
         function createTypeMapper(sources: readonly TypeParameter[], targets: readonly Type[] | undefined): TypeMapper {
             return sources.length === 1 ?
                 makeUnaryTypeMapper(sources[0], targets ? targets[0] : anyType) :
-                { kind: TypeMapKind.Multiple, sources, targets };
+                makeMultipleTypeMapper(sources, targets);
         }
 
         function getMappedType(type: Type, map: TypeMapper): Type {
@@ -13569,6 +13569,10 @@ namespace ts {
             return { kind: TypeMapKind.Single, source, target };
         }
 
+        function makeMultipleTypeMapper(sources: readonly TypeParameter[], targets: readonly Type[] | undefined): TypeMapper {
+            return { kind: TypeMapKind.Multiple, sources, targets };
+        }
+
         function makeFunctionTypeMapper(func: (t: Type) => Type): TypeMapper {
             return { kind: TypeMapKind.Function, func };
         }
@@ -13582,7 +13586,7 @@ namespace ts {
          * This is used during inference when instantiating type parameter defaults.
          */
         function createBackreferenceMapper(context: InferenceContext, index: number): TypeMapper {
-            return { kind: TypeMapKind.Function, func: t => findIndex(context.inferences, info => info.typeParameter === t) >= index ? unknownType : t };
+            return makeFunctionTypeMapper(t => findIndex(context.inferences, info => info.typeParameter === t) >= index ? unknownType : t);
         }
 
         function getTypeMapperSources(mapper: TypeMapper) {
