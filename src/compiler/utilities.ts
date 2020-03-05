@@ -470,6 +470,34 @@ namespace ts {
             text.charCodeAt(start + 2) === CharacterCodes.exclamation;
     }
 
+    export function createCommentDirectivesMap(sourceFile: SourceFile, commentDirectives: CommentDirective[]): CommentDirectivesMap {
+        const directivesByLine = createMapFromEntries(
+            commentDirectives.map(commentDirective => ([
+                `${getLineAndCharacterOfPosition(sourceFile, commentDirective.range.pos).line}`,
+                commentDirective,
+            ]))
+        );
+
+        const usedLines = createMap<boolean>();
+
+        return { getUnusedExpectations, markUsed };
+
+        function getUnusedExpectations() {
+            return arrayFrom(directivesByLine.entries())
+                .filter(([line, directive]) => directive.type === CommentDirectiveType.ExpectError && !usedLines.get(line))
+                .map(([_, directive]) => directive);
+        }
+
+        function markUsed(line: number) {
+            if (!directivesByLine.has(`${line}`)) {
+                return false;
+            }
+
+            usedLines.set(`${line}`, true);
+            return true;
+        }
+    }
+
     export function getTokenPosOfNode(node: Node, sourceFile?: SourceFileLike, includeJsDoc?: boolean): number {
         // With nodes that have no width (i.e. 'Missing' nodes), we actually *don't*
         // want to skip trivia because this will launch us forward to the next token.
@@ -911,6 +939,17 @@ namespace ts {
             category: messageChain.category,
             messageText: messageChain.next ? messageChain : messageChain.messageText,
             relatedInformation
+        };
+    }
+
+    export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRange, message: DiagnosticMessage): DiagnosticWithLocation {
+        return {
+            file: sourceFile,
+            start: range.pos,
+            length: range.end - range.pos,
+            code: message.code,
+            category: message.category,
+            messageText: message.message,
         };
     }
 
