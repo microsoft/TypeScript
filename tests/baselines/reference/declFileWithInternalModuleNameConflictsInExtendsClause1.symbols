@@ -17,7 +17,7 @@ module X.A.B.C {
     module A {
 >A : Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 4, 16))
     }
-    export class W implements X.A.C.Z { // This needs to be refered as X.A.C.Z as A has conflict
+    export class W implements X.A.C.Z { // This needs to be referred as X.A.C.Z as A has conflict
 >W : Symbol(W, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 6, 5))
 >X.A.C.Z : Symbol(X.A.C.Z, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 0, 14))
 >X.A.C : Symbol(C, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 0, 11))

@@ -1086,8 +1086,7 @@ export function two() {
         });
 
         function changeParameterTypeOfBFile(sys: WatchedSystem, parameterName: string, toType: string) {
-            const oldContent = sys.readFile(`${projectRoot}/b.ts`)!;
-            sys.writeFile(`${projectRoot}/b.ts`, oldContent.replace(new RegExp(`${parameterName}\: [a-z]*`), `${parameterName}: ${toType}`));
+            replaceFileText(sys, `${projectRoot}/b.ts`, new RegExp(`${parameterName}\: [a-z]*`), `${parameterName}: ${toType}`);
             sys.runQueuedTimeoutCallbacks();
             return `Changed ${parameterName} type to ${toType}`;
         }

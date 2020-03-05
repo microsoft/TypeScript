@@ -27,6 +27,7 @@ export class myClass { }
 //// [/user/username/projects/solution/app/fileWithError.js]
 "use strict";
 exports.__esModule = true;
+exports.myClassWithError = void 0;
 exports.myClassWithError = /** @class */ (function () {
     function myClassWithError() {
     }
@@ -46,6 +47,7 @@ export declare var myClassWithError: {
 //// [/user/username/projects/solution/app/fileWithoutError.js]
 "use strict";
 exports.__esModule = true;
+exports.myClass = void 0;
 var myClass = /** @class */ (function () {
     function myClass() {
     }
@@ -116,17 +118,17 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/solution/app/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/tsconfig.json","pollingInterval":250}
 /user/username/projects/solution/app/filewitherror.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/fileWithError.ts","pollingInterval":250}
 /user/username/projects/solution/app/filewithouterror.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/fileWithoutError.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/solution/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -162,17 +164,17 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/solution/app/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/tsconfig.json","pollingInterval":250}
 /user/username/projects/solution/app/filewitherror.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/fileWithError.ts","pollingInterval":250}
 /user/username/projects/solution/app/filewithouterror.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/fileWithoutError.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/solution/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -211,16 +213,16 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/solution/app/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/tsconfig.json","pollingInterval":250}
 /user/username/projects/solution/app/filewitherror.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/fileWithError.ts","pollingInterval":250}
 /user/username/projects/solution/app/filewithouterror.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/fileWithoutError.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/solution/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

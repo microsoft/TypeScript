@@ -11,8 +11,8 @@ let [, skillA] = multiRobotA;
 let [nameMB] = multiRobotB;
 let [nameMA, [primarySkillA, secondarySkillA]] = multiRobotA;
 
-let [nameMC] = ["roomba", ["vaccum", "mopping"]];
-let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vaccum", "mopping"]];
+let [nameMC] = ["roomba", ["vacuum", "mopping"]];
+let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vacuum", "mopping"]];
 
 let [...multiRobotAInfo] = multiRobotA;
 

@@ -47,7 +47,7 @@ var b = /** @class */ (function (_super) {
         },
         set: function (aValue) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return b;

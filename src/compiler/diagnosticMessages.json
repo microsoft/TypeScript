@@ -1135,6 +1135,18 @@
         "category": "Error",
         "code": 1380
     },
+    "Unexpected token. Did you mean `{'}'}` or `&rbrace;`?": {
+        "category": "Error",
+        "code": 1381
+    },
+    "Unexpected token. Did you mean `{'>'}` or `&gt;`?": {
+        "category": "Error",
+        "code": 1382
+    },
+    "Only named exports may use 'export type'.": {
+        "category": "Error",
+        "code": 1383
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -2353,6 +2365,10 @@
         "category": "Error",
         "code": 2614
     },
+    "Type of property '{0}' circularly references itself in mapped type '{1}'.": {
+        "category": "Error",
+        "code": 2615
+    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
@@ -2683,7 +2699,7 @@
         "category": "Error",
         "code": 2733
     },
-    "It is highly likely that you are missing a semicolon.": {
+    "Are you missing a semicolon?": {
         "category": "Error",
         "code": 2734
     },
@@ -2878,6 +2894,14 @@
     "'{0}' needs an explicit type annotation.": {
         "category": "Message",
         "code": 2782
+    },
+    "'{0}' is specified more than once, so this usage will be overwritten.": {
+        "category": "Error",
+        "code": 2783
+    },
+    "'get' and 'set' accessors cannot declare 'this' parameters.": {
+        "category": "Error",
+        "code": 2784
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3630,7 +3654,7 @@
         "category": "Message",
         "code": 6061
     },
-    "Option '{0}' can only be specified in 'tsconfig.json' file.": {
+    "Option '{0}' can only be specified in 'tsconfig.json' file or set to 'null' on command line.": {
         "category": "Error",
         "code": 6064
     },
@@ -4279,6 +4303,14 @@
     "Synchronously call callbacks and update the state of directory watchers on platforms that don't support recursive watching natively.": {
         "category": "Message",
         "code": 6228
+    },
+    "Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.": {
+        "category": "Error",
+        "code": 6229
+    },
+    "Option '{0}' can only be specified in 'tsconfig.json' file or set to 'false' or 'null' on command line.": {
+        "category": "Error",
+        "code": 6230
     },
 
     "Projects to reference": {
@@ -5456,6 +5488,14 @@
     "Set the 'module' option in your configuration file to '{0}'": {
         "category": "Message",
         "code": 95099
+    },
+    "Convert invalid character to its html entity code": {
+        "category": "Message",
+        "code": 95100
+    },
+    "Wrap invalid character in an expression container": {
+        "category": "Message",
+        "code": 95101
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

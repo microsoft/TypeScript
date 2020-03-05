@@ -18,6 +18,11 @@ verify.noErrors();
 // TODO: GH#24025
 
 const [rModuleDef, rModule, r0Def, r0, r1Def, r1, r2Def, r2, r3Def, r3, r4Def, r4, r5] = test.ranges();
+verify.referenceGroups([r3, r4], [
+    { definition: 'module "/a"', ranges: [r4, rModule] },
+    { definition: "(local class) C", ranges: [r0] },
+    { definition: "(alias) (local class) export=\nimport export=", ranges: [r3] },
+]);
 verify.referenceGroups(rModule, [{ definition: 'module "/a"', ranges: [r3, r4, rModule] }]);
 verify.referenceGroups(r0, [
     { definition: "(local class) C", ranges: [r0] },
@@ -33,6 +38,6 @@ verify.referenceGroups(r2, [
 ]);
 verify.referenceGroups([r3, r4], [
     { definition: 'module "/a"', ranges: [r4, rModule] },
-    { definition: "(local class) C", ranges: [r0] },
-    { definition: "(alias) (local class) export=\nimport export=", ranges: [r3] },
+    //{ definition: "(local class) C", ranges: [r0] },
+    //{ definition: "(alias) (local class) export=\nimport export=", ranges: [r3] },
 ]);

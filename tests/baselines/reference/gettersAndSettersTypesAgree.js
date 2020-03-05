@@ -19,7 +19,7 @@ var C = /** @class */ (function () {
         ,
         set: function (foo) { } // ok - type inferred from getter return statement
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C.prototype, "Bar", {
@@ -27,7 +27,7 @@ var C = /** @class */ (function () {
         ,
         set: function (bar) { } // ok - type must be declared
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

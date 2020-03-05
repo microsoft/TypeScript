@@ -376,7 +376,7 @@ namespace ts.server {
          * openFilesImpactedByConfigFiles is a map of open files that would be impacted by this config file
          *   because these are the paths being looked up for their default configured project location
          * The value in the map is true if the open file is root of the inferred project
-         * It is false when the open file that would still be impacted by existance of
+         * It is false when the open file that would still be impacted by existence of
          *   this config file but it is not the root of inferred project
          */
         openFilesImpactedByConfigFile: Map<boolean>;
@@ -575,7 +575,7 @@ namespace ts.server {
          */
         private readonly projectToSizeMap: Map<number> = createMap<number>();
         /**
-         * This is a map of config file paths existance that doesnt need query to disk
+         * This is a map of config file paths existence that doesnt need query to disk
          * - The entry can be present because there is inferred project that needs to watch addition of config file to directory
          *   In this case the exists could be true/false based on config file is present or not
          * - Or it is present if we have configured project open with config file at that location
@@ -691,7 +691,7 @@ namespace ts.server {
 
         /*@internal*/
         setDocument(key: DocumentRegistryBucketKey, path: Path, sourceFile: SourceFile) {
-            const info = Debug.assertDefined(this.getScriptInfoForPath(path));
+            const info = Debug.checkDefined(this.getScriptInfoForPath(path));
             info.cacheSourceFile = { key, sourceFile };
         }
 
@@ -873,9 +873,11 @@ namespace ts.server {
             this.delayEnsureProjectForOpenFiles();
         }
 
-        private delayUpdateProjectGraphs(projects: readonly Project[]) {
+        private delayUpdateProjectGraphs(projects: readonly Project[], clearSourceMapperCache: boolean) {
             if (projects.length) {
                 for (const project of projects) {
+                    // Even if program doesnt change, clear the source mapper cache
+                    if (clearSourceMapperCache) project.clearSourceMapperCache();
                     this.delayUpdateProjectGraph(project);
                 }
                 this.delayEnsureProjectForOpenFiles();
@@ -1033,7 +1035,7 @@ namespace ts.server {
                     // file has been changed which might affect the set of referenced files in projects that include
                     // this file and set of inferred projects
                     info.delayReloadNonMixedContentFile();
-                    this.delayUpdateProjectGraphs(info.containingProjects);
+                    this.delayUpdateProjectGraphs(info.containingProjects, /*clearSourceMapperCache*/ false);
                     this.handleSourceMapProjects(info);
                 }
             }
@@ -1066,7 +1068,7 @@ namespace ts.server {
         private delayUpdateProjectsOfScriptInfoPath(path: Path) {
             const info = this.getScriptInfoForPath(path);
             if (info) {
-                this.delayUpdateProjectGraphs(info.containingProjects);
+                this.delayUpdateProjectGraphs(info.containingProjects, /*clearSourceMapperCache*/ true);
             }
         }
 
@@ -1082,7 +1084,7 @@ namespace ts.server {
                 info.detachAllProjects();
 
                 // update projects to make sure that set of referenced files is correct
-                this.delayUpdateProjectGraphs(containingProjects);
+                this.delayUpdateProjectGraphs(containingProjects, /*clearSourceMapperCache*/ false);
                 this.handleSourceMapProjects(info);
                 info.closeSourceMapFileWatcher();
                 // need to recalculate source map from declaration file
@@ -1110,7 +1112,7 @@ namespace ts.server {
                     // don't trigger callback on open, existing files
                     if (project.fileIsOpen(fileOrDirectoryPath)) {
                         if (project.pendingReload !== ConfigFileProgramReloadLevel.Full) {
-                            const info = Debug.assertDefined(this.getScriptInfoForPath(fileOrDirectoryPath));
+                            const info = Debug.checkDefined(this.getScriptInfoForPath(fileOrDirectoryPath));
                             if (info.isAttached(project)) {
                                 project.openFileWatchTriggered.set(fileOrDirectoryPath, true);
                             }
@@ -1256,7 +1258,20 @@ namespace ts.server {
 
             const project = this.getOrCreateInferredProjectForProjectRootPathIfEnabled(info, projectRootPath) ||
                 this.getOrCreateSingleInferredProjectIfEnabled() ||
-                this.getOrCreateSingleInferredWithoutProjectRoot(info.isDynamic ? projectRootPath || this.currentDirectory : getDirectoryPath(info.path));
+                this.getOrCreateSingleInferredWithoutProjectRoot(
+                    info.isDynamic ?
+                        projectRootPath || this.currentDirectory :
+                        getDirectoryPath(
+                            isRootedDiskPath(info.fileName) ?
+                                info.fileName :
+                                getNormalizedAbsolutePath(
+                                    info.fileName,
+                                    projectRootPath ?
+                                        this.getNormalizedAbsolutePath(projectRootPath) :
+                                        this.currentDirectory
+                                )
+                        )
+                );
 
             project.addRoot(info);
             if (info.containingProjects[0] !== project) {
@@ -1426,7 +1441,7 @@ namespace ts.server {
         private setConfigFileExistenceByNewConfiguredProject(project: ConfiguredProject) {
             const configFileExistenceInfo = this.getConfigFileExistenceInfo(project);
             if (configFileExistenceInfo) {
-                // The existance might not be set if the file watcher is not invoked by the time config project is created by external project
+                // The existence might not be set if the file watcher is not invoked by the time config project is created by external project
                 configFileExistenceInfo.exists = true;
                 // close existing watcher
                 if (configFileExistenceInfo.configFileWatcherForRootOfInferredProject) {
@@ -1629,7 +1644,7 @@ namespace ts.server {
 
             Debug.assert(!isOpenScriptInfo(info) || this.openFiles.has(info.path));
             const projectRootPath = this.openFiles.get(info.path);
-            const scriptInfo = Debug.assertDefined(this.getScriptInfo(info.path));
+            const scriptInfo = Debug.checkDefined(this.getScriptInfo(info.path));
             if (scriptInfo.isDynamic) return undefined;
 
             let searchPath = asNormalizedPath(getDirectoryPath(info.fileName));
@@ -1649,6 +1664,13 @@ namespace ts.server {
                     const jsconfigFileName = asNormalizedPath(combinePaths(searchPath, "jsconfig.json"));
                     result = action(jsconfigFileName, combinePaths(canonicalSearchPath, "jsconfig.json"));
                     if (result) return jsconfigFileName;
+
+                    // If we started within node_modules, don't look outside node_modules.
+                    // Otherwise, we might pick up a very large project and pull in the world,
+                    // causing an editor delay.
+                    if (isNodeModulesDirectory(canonicalSearchPath)) {
+                        break;
+                    }
                 }
 
                 const parentPath = asNormalizedPath(getDirectoryPath(searchPath));
@@ -1983,7 +2005,7 @@ namespace ts.server {
                 else {
                     const scriptKind = propertyReader.getScriptKind(f, this.hostConfiguration.extraFileExtensions);
                     const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
-                    const scriptInfo = Debug.assertDefined(this.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(
+                    const scriptInfo = Debug.checkDefined(this.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(
                         fileName,
                         project.currentDirectory,
                         scriptKind,
@@ -2399,7 +2421,7 @@ namespace ts.server {
                     this.openFilesWithNonRootedDiskPath.set(this.toCanonicalFileName(fileName), info);
                 }
             }
-            if (openedByClient && !info.isScriptOpen()) {
+            if (openedByClient) {
                 // Opening closed script info
                 // either it was created just now, or was part of projects but was closed
                 this.stopWatchingScriptInfo(info);
@@ -2407,9 +2429,6 @@ namespace ts.server {
                 if (hasMixedContent) {
                     info.registerFileUpdate();
                 }
-            }
-            else {
-                Debug.assert(fileContent === undefined);
             }
             return info;
         }
@@ -2524,7 +2543,7 @@ namespace ts.server {
                     const declarationInfo = this.getScriptInfoForPath(declarationInfoPath);
                     if (declarationInfo && declarationInfo.sourceMapFilePath && !isString(declarationInfo.sourceMapFilePath)) {
                         // Update declaration and source projects
-                        this.delayUpdateProjectGraphs(declarationInfo.containingProjects);
+                        this.delayUpdateProjectGraphs(declarationInfo.containingProjects, /*clearSourceMapperCache*/ true);
                         this.delayUpdateSourceInfoProjects(declarationInfo.sourceMapFilePath.sourceInfos);
                         declarationInfo.closeSourceMapFileWatcher();
                     }
@@ -2718,7 +2737,7 @@ namespace ts.server {
             // since info is added as root to the inferred project only when there are no other projects containing it
             // So when it is root of the inferred project and after project structure updates its now part
             // of multiple project it needs to be removed from that inferred project because:
-            // - references in inferred project supercede the root part
+            // - references in inferred project supersede the root part
             // - root / reference in non - inferred project beats root in inferred project
 
             // eg. say this is structure /a/b/a.ts /a/b/c.ts where c.ts references a.ts
@@ -3104,8 +3123,9 @@ namespace ts.server {
                 return;
             }
 
-            const info: OpenFileInfo = { checkJs: !!project.getSourceFile(scriptInfo.path)!.checkJsDirective };
-            this.eventHandler({ eventName: OpenFileInfoTelemetryEvent, data: { info } });
+            const sourceFile = project.getSourceFile(scriptInfo.path);
+            const checkJs = !!sourceFile && !!sourceFile.checkJsDirective;
+            this.eventHandler({ eventName: OpenFileInfoTelemetryEvent, data: { info: { checkJs } } });
         }
 
         /**
@@ -3154,11 +3174,9 @@ namespace ts.server {
                     const iterResult = openFiles.next();
                     if (iterResult.done) break;
                     const file = iterResult.value;
-                    const scriptInfo = this.getScriptInfo(file.fileName);
-                    Debug.assert(!scriptInfo || !scriptInfo.isScriptOpen(), "Script should not exist and not be open already");
                     // Create script infos so we have the new content for all the open files before we do any updates to projects
                     const info = this.getOrCreateOpenScriptInfo(
-                        scriptInfo ? scriptInfo.fileName : toNormalizedPath(file.fileName),
+                        toNormalizedPath(file.fileName),
                         file.content,
                         tryConvertScriptKindName(file.scriptKind!),
                         file.hasMixedContent,
@@ -3354,7 +3372,7 @@ namespace ts.server {
                 else {
                     let exclude = false;
                     if (typeAcquisition.enable || typeAcquisition.enableAutoDiscovery) {
-                        const baseName = getBaseFileName(normalizedNames[i].toLowerCase());
+                        const baseName = getBaseFileName(toFileNameLowerCase(normalizedNames[i]));
                         if (fileExtensionIs(baseName, "js")) {
                             const inferredTypingName = removeFileExtension(baseName);
                             const cleanedTypingName = removeMinAndVersionNumbers(inferredTypingName);

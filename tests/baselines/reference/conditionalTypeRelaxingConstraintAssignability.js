@@ -40,6 +40,7 @@ function g(p1: I, p2: Partial<I>): I {
 //// [conditionalTypeRelaxingConstraintAssignability.js]
 "use strict";
 exports.__esModule = true;
+exports.Elem = void 0;
 var Elem = /** @class */ (function () {
     function Elem(children_) {
         this.children_ = children_;

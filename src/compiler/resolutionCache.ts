@@ -176,6 +176,7 @@ namespace ts {
         const directoryWatchesOfFailedLookups = createMap<DirectoryWatchesOfFailedLookup>();
         const rootDir = rootDirForResolution && removeTrailingDirectorySeparator(getNormalizedAbsolutePath(rootDirForResolution, getCurrentDirectory()));
         const rootPath = (rootDir && resolutionHost.toPath(rootDir)) as Path; // TODO: GH#18217
+        const rootSplitLength = rootPath !== undefined ? rootPath.split(directorySeparator).length : 0;
 
         // TypeRoot watches for the types that get added as part of getAutomaticTypeDirectiveNames
         const typeRootsWatches = createMap<FileWatcher>();
@@ -293,7 +294,7 @@ namespace ts {
                 // create different collection of failed lookup locations for second pass
                 // if it will fail and we've already found something during the first pass - we don't want to pollute its results
                 const { resolvedModule, failedLookupLocations } = loadModuleFromGlobalCache(
-                    Debug.assertDefined(resolutionHost.globalCacheResolutionModuleName)(moduleName),
+                    Debug.checkDefined(resolutionHost.globalCacheResolutionModuleName)(moduleName),
                     resolutionHost.projectName,
                     compilerOptions,
                     host,
@@ -427,10 +428,6 @@ namespace ts {
             return cache && cache.get(moduleName);
         }
 
-        function isNodeModulesDirectory(dirPath: Path) {
-            return endsWith(dirPath, "/node_modules");
-        }
-
         function isNodeModulesAtTypesDirectory(dirPath: Path) {
             return endsWith(dirPath, "/node_modules/@types");
         }
@@ -439,15 +436,23 @@ namespace ts {
             if (isInDirectoryPath(rootPath, failedLookupLocationPath)) {
                 // Ensure failed look up is normalized path
                 failedLookupLocation = isRootedDiskPath(failedLookupLocation) ? normalizePath(failedLookupLocation) : getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory());
-                Debug.assert(failedLookupLocation.length === failedLookupLocationPath.length, `FailedLookup: ${failedLookupLocation} failedLookupLocationPath: ${failedLookupLocationPath}`);
-                const subDirectoryInRoot = failedLookupLocationPath.indexOf(directorySeparator, rootPath.length + 1);
-                if (subDirectoryInRoot !== -1) {
+                const failedLookupPathSplit = failedLookupLocationPath.split(directorySeparator);
+                const failedLookupSplit = failedLookupLocation.split(directorySeparator);
+                Debug.assert(failedLookupSplit.length === failedLookupPathSplit.length, `FailedLookup: ${failedLookupLocation} failedLookupLocationPath: ${failedLookupLocationPath}`);
+                if (failedLookupPathSplit.length > rootSplitLength + 1) {
                     // Instead of watching root, watch directory in root to avoid watching excluded directories not needed for module resolution
-                    return { dir: failedLookupLocation.substr(0, subDirectoryInRoot), dirPath: failedLookupLocationPath.substr(0, subDirectoryInRoot) as Path };
+                    return {
+                        dir: failedLookupSplit.slice(0, rootSplitLength + 1).join(directorySeparator),
+                        dirPath: failedLookupPathSplit.slice(0, rootSplitLength + 1).join(directorySeparator) as Path
+                    };
                 }
                 else {
                     // Always watch root directory non recursively
-                    return { dir: rootDir!, dirPath: rootPath, nonRecursive: false }; // TODO: GH#18217
+                    return {
+                        dir: rootDir!,
+                        dirPath: rootPath,
+                        nonRecursive: false
+                    };
                 }
             }
 
@@ -678,7 +683,7 @@ namespace ts {
                         (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = createMap<true>())).set(containingFilePath, true);
 
                         // When its a file with inferred types resolution, invalidate type reference directive resolution
-                        if (containingFilePath.endsWith(inferredTypesContainingFile)) {
+                        if (endsWith(containingFilePath, inferredTypesContainingFile)) {
                             resolutionHost.onChangedAutomaticTypeDirectiveNames();
                         }
                     }

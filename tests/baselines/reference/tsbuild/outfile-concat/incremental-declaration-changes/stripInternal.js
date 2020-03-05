@@ -724,7 +724,7 @@ var normalC = (function () {
     Object.defineProperty(normalC.prototype, "c", {
         get: function () { return 10; },
         set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -1197,7 +1197,7 @@ sourceFile:../../../second/second_part1.ts
 4 >Emitted(20, 31) Source(18, 40) + SourceIndex(3)
 5 >Emitted(20, 32) Source(18, 41) + SourceIndex(3)
 ---
->>>        enumerable: true,
+>>>        enumerable: false,
 >>>        configurable: true
 >>>    });
 1 >^^^^^^^
@@ -2477,20 +2477,20 @@ sourceFile:../../third_part1.ts
         },
         {
           "pos": 109,
-          "end": 3161,
+          "end": 3162,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
               "pos": 109,
-              "end": 3161,
+              "end": 3162,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 3161,
-          "end": 3197,
+          "pos": 3162,
+          "end": 3198,
           "kind": "text"
         }
       ]
@@ -2549,9 +2549,9 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (109-3161):: ../../../2/second-output.js texts:: 1
+prepend: (109-3162):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (109-3161)
+text: (109-3162)
 var N;
 (function (N) {
     function f() {
@@ -2566,7 +2566,7 @@ var normalC = (function () {
     Object.defineProperty(normalC.prototype, "c", {
         get: function () { return 10; },
         set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -2656,7 +2656,7 @@ var C = (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (3161-3197)
+text: (3162-3198)
 var c = new C();
 c.doSomething();
 

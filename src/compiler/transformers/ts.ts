@@ -23,11 +23,10 @@ namespace ts {
         IsNamedExternalExport = 1 << 4,
         IsDefaultExternalExport = 1 << 5,
         IsDerivedClass = 1 << 6,
-        UseImmediatelyInvokedFunctionExpression = 1 << 7,
 
         HasAnyDecorators = HasConstructorDecorators | HasMemberDecorators,
         NeedsName = HasStaticInitializedProperties | HasMemberDecorators,
-        MayNeedImmediatelyInvokedFunctionExpression = HasAnyDecorators | HasStaticInitializedProperties,
+        UseImmediatelyInvokedFunctionExpression = HasAnyDecorators | HasStaticInitializedProperties,
         IsExported = IsExportOfNamespace | IsDefaultExternalExport | IsNamedExternalExport,
     }
 
@@ -590,7 +589,6 @@ namespace ts {
             if (isExportOfNamespace(node)) facts |= ClassFacts.IsExportOfNamespace;
             else if (isDefaultExternalModuleExport(node)) facts |= ClassFacts.IsDefaultExternalExport;
             else if (isNamedExternalModuleExport(node)) facts |= ClassFacts.IsNamedExternalExport;
-            if (languageVersion <= ScriptTarget.ES5 && (facts & ClassFacts.MayNeedImmediatelyInvokedFunctionExpression)) facts |= ClassFacts.UseImmediatelyInvokedFunctionExpression;
             return facts;
         }
 
@@ -661,6 +659,12 @@ namespace ts {
                 const iife = createImmediatelyInvokedArrowFunction(statements);
                 setEmitFlags(iife, EmitFlags.TypeScriptClassWrapper);
 
+                // Class comment is already added by the ES2015 transform when targeting ES5 or below.
+                // Only add if targetting ES2015+ to prevent duplicates
+                if (languageVersion > ScriptTarget.ES5) {
+                    addSyntheticLeadingComment(iife, SyntaxKind.MultiLineCommentTrivia, "* @class ");
+                }
+
                 const varStatement = createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([
@@ -669,7 +673,7 @@ namespace ts {
                             /*type*/ undefined,
                             iife
                         )
-                    ])
+                    ], languageVersion > ScriptTarget.ES5 ? NodeFlags.Let : undefined)
                 );
 
                 setOriginalNode(varStatement, node);
@@ -2510,7 +2514,7 @@ namespace ts {
 
         function declaredNameInScope(node: FunctionDeclaration | ClassDeclaration | ModuleDeclaration | EnumDeclaration): __String {
             Debug.assertNode(node.name, isIdentifier);
-            return (node.name as Identifier).escapedText;
+            return node.name.escapedText;
         }
 
         /**
@@ -2855,9 +2859,11 @@ namespace ts {
                 return undefined;
             }
 
-            if (!node.exportClause) {
-                // Elide a star export if the module it references does not export a value.
-                return compilerOptions.isolatedModules || resolver.moduleExportsSomeValue(node.moduleSpecifier!) ? node : undefined;
+            if (!node.exportClause || isNamespaceExport(node.exportClause)) {
+                // never elide `export <whatever> from <whereever>` declarations -
+                // they should be kept for sideffects/untyped exports, even when the
+                // type checker doesn't know about any exports
+                return node;
             }
 
             if (!resolver.isValueAliasDeclaration(node)) {
@@ -2866,7 +2872,7 @@ namespace ts {
             }
 
             // Elide the export declaration if all of its named exports are elided.
-            const exportClause = visitNode(node.exportClause, visitNamedExportBindings, isNamedImportBindings);
+            const exportClause = visitNode(node.exportClause, visitNamedExportBindings, isNamedExportBindings);
             return exportClause
                 ? updateExportDeclaration(
                     node,

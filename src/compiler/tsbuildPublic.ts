@@ -294,7 +294,7 @@ namespace ts {
         if (!compilerHost.resolveModuleNames) {
             const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveModuleName(moduleName, containingFile, state.projectCompilerOptions, compilerHost, moduleResolutionCache, redirectedReference).resolvedModule!;
             compilerHost.resolveModuleNames = (moduleNames, containingFile, _reusedNames, redirectedReference) =>
-                loadWithLocalCache<ResolvedModuleFull>(Debug.assertEachDefined(moduleNames), containingFile, redirectedReference, loader);
+                loadWithLocalCache<ResolvedModuleFull>(Debug.checkEachDefined(moduleNames), containingFile, redirectedReference, loader);
         }
 
         const { watchFile, watchFilePath, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(hostWithWatch, options);
@@ -828,7 +828,7 @@ namespace ts {
             if (state.options.verbose) reportStatus(state, Diagnostics.Building_project_0, project);
 
             if (config.fileNames.length === 0) {
-                reportAndStoreErrors(state, projectPath, config.errors);
+                reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
                 // Nothing to build - must be a solution file, basically
                 buildResult = BuildResultFlags.None;
                 step = Step.QueueReferencingProjects;
@@ -846,7 +846,7 @@ namespace ts {
                 config.options,
                 compilerHost,
                 getOldProgram(state, projectPath, config),
-                config.errors,
+                getConfigFileParsingDiagnostics(config),
                 config.projectReferences
             );
             step++;
@@ -871,13 +871,13 @@ namespace ts {
         }
 
         function getSyntaxDiagnostics(cancellationToken?: CancellationToken) {
-            Debug.assertDefined(program);
+            Debug.assertIsDefined(program);
             handleDiagnostics(
                 [
-                    ...program!.getConfigFileParsingDiagnostics(),
-                    ...program!.getOptionsDiagnostics(cancellationToken),
-                    ...program!.getGlobalDiagnostics(cancellationToken),
-                    ...program!.getSyntacticDiagnostics(/*sourceFile*/ undefined, cancellationToken)
+                    ...program.getConfigFileParsingDiagnostics(),
+                    ...program.getOptionsDiagnostics(cancellationToken),
+                    ...program.getGlobalDiagnostics(cancellationToken),
+                    ...program.getSyntacticDiagnostics(/*sourceFile*/ undefined, cancellationToken)
                 ],
                 BuildResultFlags.SyntaxErrors,
                 "Syntactic"
@@ -886,22 +886,22 @@ namespace ts {
 
         function getSemanticDiagnostics(cancellationToken?: CancellationToken) {
             handleDiagnostics(
-                Debug.assertDefined(program).getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken),
+                Debug.checkDefined(program).getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken),
                 BuildResultFlags.TypeErrors,
                 "Semantic"
             );
         }
 
         function emit(writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitResult {
-            Debug.assertDefined(program);
+            Debug.assertIsDefined(program);
             Debug.assert(step === Step.Emit);
             // Before emitting lets backup state, so we can revert it back if there are declaration errors to handle emit and declaration errors correctly
-            program!.backupState();
+            program.backupState();
             let declDiagnostics: Diagnostic[] | undefined;
             const reportDeclarationDiagnostics = (d: Diagnostic) => (declDiagnostics || (declDiagnostics = [])).push(d);
             const outputFiles: OutputFile[] = [];
             const { emitResult } = emitFilesAndReportErrors(
-                program!,
+                program,
                 reportDeclarationDiagnostics,
                 /*writeFileName*/ undefined,
                 /*reportSummary*/ undefined,
@@ -912,7 +912,7 @@ namespace ts {
             );
             // Don't emit .d.ts if there are decl file errors
             if (declDiagnostics) {
-                program!.restoreState();
+                program.restoreState();
                 buildResult = buildErrors(
                     state,
                     projectPath,
@@ -1095,12 +1095,12 @@ namespace ts {
                         break;
 
                     case Step.BuildInvalidatedProjectOfBundle:
-                        Debug.assertDefined(invalidatedProjectOfBundle).done(cancellationToken);
+                        Debug.checkDefined(invalidatedProjectOfBundle).done(cancellationToken);
                         step = Step.Done;
                         break;
 
                     case Step.QueueReferencingProjects:
-                        queueReferencingProjects(state, project, projectPath, projectIndex, config, buildOrder, Debug.assertDefined(buildResult));
+                        queueReferencingProjects(state, project, projectPath, projectIndex, config, buildOrder, Debug.checkDefined(buildResult));
                         step++;
                         break;
 
@@ -1118,7 +1118,7 @@ namespace ts {
     function needsBuild({ options }: SolutionBuilderState, status: UpToDateStatus, config: ParsedCommandLine) {
         if (status.type !== UpToDateStatusType.OutOfDateWithPrepend || options.force) return true;
         return config.fileNames.length === 0 ||
-            !!config.errors.length ||
+            !!getConfigFileParsingDiagnostics(config).length ||
             !isIncrementalCompilation(config.options);
     }
 
@@ -1172,7 +1172,7 @@ namespace ts {
             verboseReportProjectStatus(state, project, status);
             if (!options.force) {
                 if (status.type === UpToDateStatusType.UpToDate) {
-                    reportAndStoreErrors(state, projectPath, config.errors);
+                    reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
                     projectPendingBuild.delete(projectPath);
                     // Up to date, skip
                     if (options.dry) {
@@ -1183,7 +1183,7 @@ namespace ts {
                 }
 
                 if (status.type === UpToDateStatusType.UpToDateWithUpstreamTypes) {
-                    reportAndStoreErrors(state, projectPath, config.errors);
+                    reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
                     return createUpdateOutputFileStampsProject(
                         state,
                         project,
@@ -1195,7 +1195,7 @@ namespace ts {
             }
 
             if (status.type === UpToDateStatusType.UpstreamBlocked) {
-                reportAndStoreErrors(state, projectPath, config.errors);
+                reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
                 projectPendingBuild.delete(projectPath);
                 if (options.verbose) {
                     reportStatus(
@@ -1211,7 +1211,7 @@ namespace ts {
             }
 
             if (status.type === UpToDateStatusType.ContainerOnly) {
-                reportAndStoreErrors(state, projectPath, config.errors);
+                reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
                 projectPendingBuild.delete(projectPath);
                 // Do nothing
                 continue;

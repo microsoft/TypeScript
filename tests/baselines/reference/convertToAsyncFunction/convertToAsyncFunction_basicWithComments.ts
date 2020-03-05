@@ -13,7 +13,7 @@ async function f(): Promise<void>{
     /* Note - some of these comments are removed during the refactor. This is not ideal. */
 
     // a
-    /*b*/ const result = await fetch(/*d*/ 'https://typescriptlang.org' /*e*/);
+    /*b*/ const result /*g*/ = await fetch(/*d*/ 'https://typescriptlang.org' /*e*/);
     console.log(result); /*k*/
     // m
 }

@@ -17,16 +17,19 @@ class C {
 }
 
 //// [computedPropertyNames12_ES6.js]
-var _a, _b, _c;
 var s;
 var n;
 var a;
-class C {
-    constructor() {
-        this[_a] = n;
-        this[_b] = 2;
-        this[`hello bye`] = 0;
+let C = /** @class */ (() => {
+    var _a, _b, _c;
+    class C {
+        constructor() {
+            this[_a] = n;
+            this[_b] = 2;
+            this[`hello bye`] = 0;
+        }
     }
-}
-_a = n, s + s, _b = s + n, +s, _c = `hello ${a} bye`;
-C[_c] = 0;
+    _a = n, s + s, _b = s + n, +s, _c = `hello ${a} bye`;
+    C[_c] = 0;
+    return C;
+})();

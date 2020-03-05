@@ -73,7 +73,7 @@ var C1 = /** @class */ (function () {
     Object.defineProperty(C1.prototype, "accessor", {
         get: function () { return 0; },
         set: function (a) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C1.sf = function () {
@@ -81,12 +81,12 @@ var C1 = /** @class */ (function () {
     };
     Object.defineProperty(C1, "staticSetter", {
         set: function (a) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C1, "staticGetter", {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C1;
@@ -119,7 +119,7 @@ var C3 = /** @class */ (function (_super) {
     };
     Object.defineProperty(C3, "staticGetter", {
         get: function () { return 1; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C3;

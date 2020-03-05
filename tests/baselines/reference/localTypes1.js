@@ -292,7 +292,7 @@ var A = /** @class */ (function () {
             }());
             return new C();
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return A;

@@ -12,6 +12,7 @@ export namespace N {
 //// [f1.js]
 "use strict";
 exports.__esModule = true;
+exports.N = void 0;
 var N;
 (function (N) {
     N.x = 1;

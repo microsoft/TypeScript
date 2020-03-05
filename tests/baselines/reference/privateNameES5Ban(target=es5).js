@@ -23,13 +23,13 @@ var A = /** @class */ (function () {
     Object.defineProperty(A.prototype, "", {
         get: function () { return ""; },
         set: function (x) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(A, "", {
         get: function () { return 0; },
         set: function (x) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     var _field, _sField;
