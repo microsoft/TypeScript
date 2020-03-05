@@ -2876,10 +2876,25 @@ namespace ts.server {
             const configFileName = this.getConfigFileNameForFile(originalFileInfo);
             if (!configFileName) return undefined;
 
-            const configuredProject = this.findConfiguredProjectByProjectName(configFileName) ||
+            let configuredProject: ConfiguredProject | undefined = this.findConfiguredProjectByProjectName(configFileName) ||
                 this.createAndLoadConfiguredProject(configFileName, `Creating project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`);
-            if (configuredProject === project) return originalLocation;
             updateProjectIfDirty(configuredProject);
+
+            if (configuredProject.isSolution()) {
+                configuredProject = forEachResolvedProjectReferenceProject(
+                    configuredProject,
+                    child => {
+                        updateProjectIfDirty(child);
+                        const info = this.getScriptInfo(fileName);
+                        return info && projectContainsInfoDirectly(child, info) ? child : undefined;
+                    },
+                    ProjectReferenceProjectLoadKind.FindCreateLoad,
+                    `Creating project referenced in solution ${configuredProject.projectName} to find possible configured project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`
+                );
+                if (!configuredProject) return undefined;
+                if (configuredProject === project) return originalLocation;
+            }
+
             // Keep this configured project as referenced from project
             addOriginalConfiguredProject(configuredProject);
 

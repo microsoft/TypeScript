@@ -1848,6 +1848,7 @@ bar();
                 expectedOpenEvents: protocol.Event[];
                 expectedReloadEvents: protocol.Event[];
                 expectedReferences: protocol.ReferencesResponseBody;
+                expectedReferencesFromDtsProject: protocol.ReferencesResponseBody;
             }
             const main: File = {
                 path: `${tscWatch.projectRoot}/src/main.ts`,
@@ -1858,11 +1859,44 @@ export { foo };`
                 path: `${tscWatch.projectRoot}/src/helpers/functions.ts`,
                 content: `export const foo = 1;`
             };
+            const mainDts: File = {
+                path: `${tscWatch.projectRoot}/target/src/main.d.ts`,
+                content: `import { foo } from 'helpers/functions';
+export { foo };
+//# sourceMappingURL=main.d.ts.map`
+            };
+            const mainDtsMap: File = {
+                path: `${tscWatch.projectRoot}/target/src/main.d.ts.map`,
+                content: `{"version":3,"file":"main.d.ts","sourceRoot":"","sources":["../../src/main.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,GAAG,EAAE,MAAM,mBAAmB,CAAC;AAExC,OAAO,EAAC,GAAG,EAAC,CAAC"}`
+            };
+            const helperDts: File = {
+                path: `${tscWatch.projectRoot}/target/src/helpers/functions.d.ts`,
+                content: `export declare const foo = 1;
+//# sourceMappingURL=functions.d.ts.map`
+            };
+            const helperDtsMap: File = {
+                path: `${tscWatch.projectRoot}/target/src/helpers/functions.d.ts.map`,
+                content: `{"version":3,"file":"functions.d.ts","sourceRoot":"","sources":["../../../src/helpers/functions.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,GAAG,IAAI,CAAC"}`
+            };
+            const tsconfigIndirect3: File = {
+                path: `${tscWatch.projectRoot}/indirect3/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        baseUrl: "../target/src/"
+                    },
+                })
+            };
+            const fileResolvingToMainDts: File = {
+                path: `${tscWatch.projectRoot}/indirect3/main.ts`,
+                content: `import { foo } from 'main';
+foo;`
+            };
             const tsconfigSrcPath = `${tscWatch.projectRoot}/tsconfig-src.json`;
             const tsconfigPath = `${tscWatch.projectRoot}/tsconfig.json`;
             function verifySolutionScenario({
                 configRefs, additionalFiles, additionalProjects,
-                expectedOpenEvents, expectedReloadEvents, expectedReferences
+                expectedOpenEvents, expectedReloadEvents,
+                expectedReferences, expectedReferencesFromDtsProject
             }: VerifySolutionScenario) {
                 const tsconfigSrc: File = {
                     path: tsconfigSrcPath,
@@ -1886,7 +1920,12 @@ export { foo };`
                     path: "/dummy/dummy.ts",
                     content: "let a = 10;"
                 };
-                const host = createServerHost([tsconfigSrc, tsconfig, main, helper, libFile, dummyFile, ...additionalFiles]);
+                const host = createServerHost([
+                    tsconfigSrc, tsconfig, main, helper,
+                    libFile, dummyFile,
+                    mainDts, mainDtsMap, helperDts, helperDtsMap,
+                    tsconfigIndirect3, fileResolvingToMainDts,
+                    ...additionalFiles]);
                 const session = createSession(host, { canUseEvents: true });
                 const service = session.getProjectService();
                 service.openClientFile(main.path);
@@ -1935,7 +1974,18 @@ export { foo };`
 
                 service.closeClientFile(main.path);
                 service.closeClientFile(dummyFile.path);
-                service.openClientFile(dummyFile.path);
+
+                // Verify when declaration map references the file
+                service.openClientFile(fileResolvingToMainDts.path);
+                checkNumberOfProjects(service, { configuredProjects: 1 });
+                checkProjectActualFiles(service.configuredProjects.get(tsconfigIndirect3.path)!, [tsconfigIndirect3.path, fileResolvingToMainDts.path, mainDts.path, helperDts.path, libFile.path]);
+
+                // Find all refs from dts include
+                const response2 = session.executeCommandSeq<protocol.ReferencesRequest>({
+                    command: protocol.CommandTypes.References,
+                    arguments: protocolFileLocationFromSubstring(fileResolvingToMainDts, "foo")
+                }).response as protocol.ReferencesResponseBody;
+                assert.deepEqual(response2, expectedReferencesFromDtsProject);
 
                 function verifyProjects(includeConfigured: boolean, includeDummy: boolean) {
                     const inferredProjects = includeDummy ? 1 : 0;
@@ -2033,7 +2083,7 @@ export { foo };`
                 ];
             }
 
-            function getIndirectProject(postfix = "") {
+            function getIndirectProject(postfix: string) {
                 const tsconfigIndirect: File = {
                     path: `${tscWatch.projectRoot}/tsconfig-indirect${postfix}.json`,
                     content: JSON.stringify({
@@ -2048,13 +2098,13 @@ export { foo };`
                 };
                 const indirect: File = {
                     path: `${tscWatch.projectRoot}/indirect${postfix}/main.ts`,
-                    content: `import { foo } from 'main';
-foo;`
+                    content: fileResolvingToMainDts.content
                 };
                 return { tsconfigIndirect, indirect };
             }
 
             it("when project is directly referenced by solution", () => {
+                const expectedReferences = expectedReferencesResponse();
                 verifySolutionScenario({
                     configRefs: ["./tsconfig-src.json"],
                     additionalFiles: emptyArray,
@@ -2068,16 +2118,24 @@ foo;`
                         ...expectedReloadEvent(tsconfigPath),
                         ...expectedReloadEvent(tsconfigSrcPath),
                     ],
-                    expectedReferences: expectedReferencesResponse()
+                    expectedReferences,
+                    expectedReferencesFromDtsProject: {
+                        ...expectedReferences,
+                        refs: [
+                            ...expectedIndirectRefs(fileResolvingToMainDts),
+                            ...expectedReferences.refs
+                        ],
+                        symbolDisplayString: "(alias) const foo: 1\nimport foo",
+                    }
                 });
             });
 
             it("when project is indirectly referenced by solution", () => {
-                const { tsconfigIndirect, indirect } = getIndirectProject();
+                const { tsconfigIndirect, indirect } = getIndirectProject("1");
                 const { tsconfigIndirect: tsconfigIndirect2, indirect: indirect2 } = getIndirectProject("2");
                 const { refs, ...rest } = expectedReferencesResponse();
                 verifySolutionScenario({
-                    configRefs: ["./tsconfig-indirect.json", "./tsconfig-indirect2.json"],
+                    configRefs: ["./tsconfig-indirect1.json", "./tsconfig-indirect2.json"],
                     additionalFiles: [tsconfigIndirect, indirect, tsconfigIndirect2, indirect2],
                     additionalProjects: [{
                         projectName: tsconfigIndirect.path,
@@ -2101,6 +2159,16 @@ foo;`
                             ...expectedIndirectRefs(indirect2),
                         ],
                         ...rest
+                    },
+                    expectedReferencesFromDtsProject: {
+                        ...rest,
+                        refs: [
+                            ...expectedIndirectRefs(fileResolvingToMainDts),
+                            ...refs,
+                            ...expectedIndirectRefs(indirect2),
+                            ...expectedIndirectRefs(indirect),
+                        ],
+                        symbolDisplayString: "(alias) const foo: 1\nimport foo",
                     }
                 });
             });

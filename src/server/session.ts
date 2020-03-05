@@ -431,10 +431,16 @@ namespace ts.server {
         if (initialLocation) {
             const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation!);
             if (defaultDefinition) {
+                const getGeneratedDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition.fileName) ?
+                    defaultDefinition :
+                    defaultProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(defaultDefinition));
+                const getSourceDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition.fileName) ?
+                    defaultDefinition :
+                    defaultProject.getLanguageService().getSourceMapper().tryGetSourcePosition(defaultDefinition));
                 projectService.loadAncestorProjectTree(seenProjects);
                 projectService.forEachEnabledProject(project => {
                     if (!addToSeen(seenProjects, project)) return;
-                    const definition = mapDefinitionInProject(defaultDefinition, defaultProject, project);
+                    const definition = mapDefinitionInProject(defaultDefinition, project, getGeneratedDefinition, getSourceDefinition);
                     if (definition) {
                         toDo = callbackProjectAndLocation<TLocation>({ project, location: definition as TLocation }, projectService, toDo, seenProjects, cb);
                     }
@@ -447,17 +453,21 @@ namespace ts.server {
         }
     }
 
-    function mapDefinitionInProject(definition: DocumentPosition | undefined, definingProject: Project, project: Project): DocumentPosition | undefined {
+    function mapDefinitionInProject(
+        definition: DocumentPosition,
+        project: Project,
+        getGeneratedDefinition: () => DocumentPosition | undefined,
+        getSourceDefinition: () => DocumentPosition | undefined
+    ): DocumentPosition | undefined {
         // If the definition is actually from the project, definition is correct as is
-        if (!definition ||
-            project.containsFile(toNormalizedPath(definition.fileName)) &&
+        if (project.containsFile(toNormalizedPath(definition.fileName)) &&
             !isLocationProjectReferenceRedirect(project, definition)) {
             return definition;
         }
-        const mappedDefinition = definingProject.isSourceOfProjectReferenceRedirect(definition.fileName) ?
-            definition :
-            definingProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(definition);
-        return mappedDefinition && project.containsFile(toNormalizedPath(mappedDefinition.fileName)) ? mappedDefinition : undefined;
+        const generatedDefinition = getGeneratedDefinition();
+        if (generatedDefinition && project.containsFile(toNormalizedPath(generatedDefinition.fileName))) return generatedDefinition;
+        const sourceDefinition = getSourceDefinition();
+        return sourceDefinition && project.containsFile(toNormalizedPath(sourceDefinition.fileName)) ? sourceDefinition : undefined;
     }
 
     function isLocationProjectReferenceRedirect(project: Project, location: DocumentPosition | undefined) {
