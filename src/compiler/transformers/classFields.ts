@@ -668,7 +668,7 @@ namespace ts {
             }
 
             // Add the property initializers.
-            // 
+            //
             // If we don't useDefineForClassFields, we directly convert to exressions. Transforms this:
             //
             //  public x = 1;
