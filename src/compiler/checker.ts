@@ -9692,6 +9692,7 @@ namespace ts {
                     type = errorType;
                 }
                 symbol.type = type;
+                symbol.mapper = undefined!;
             }
             return symbol.type;
         }
@@ -13663,7 +13664,7 @@ namespace ts {
 
         function instantiateSymbol(symbol: Symbol, mapper: TypeMapper): Symbol {
             const links = getSymbolLinks(symbol);
-            if (links.type && !maybeTypeOfKind(links.type, TypeFlags.Object | TypeFlags.Instantiable)) {
+            if (links.type && !couldContainTypeVariables(links.type)) {
                 // If the type of the symbol is already resolved, and if that type could not possibly
                 // be affected by instantiation, simply return the symbol itself.
                 return symbol;
