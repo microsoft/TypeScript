@@ -2173,16 +2173,13 @@ namespace ts.server {
         /* @internal */
         getDefaultChildProjectFromSolution(info: ScriptInfo) {
             Debug.assert(this.isSolution());
-            return forEachResolvedProjectReference(this, ref => {
-                if (!ref) return undefined;
-                const configFileName = toNormalizedPath(ref.sourceFile.fileName);
-                const child = this.projectService.findConfiguredProjectByProjectName(configFileName);
-                return child &&
-                    child.containsScriptInfo(info) &&
-                    !child.isSourceOfProjectReferenceRedirect(info.path) ?
+            return forEachResolvedProjectReferenceProject(
+                this,
+                child => projectContainsInfoDirectly(child, info) ?
                     child :
-                    undefined;
-            });
+                    undefined,
+                ProjectReferenceProjectLoadKind.Find
+            );
         }
 
         /** Returns true if the project is needed by any of the open script info/external project */

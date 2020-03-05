@@ -1846,13 +1846,15 @@ bar();
                 additionalFiles: readonly File[];
                 additionalProjects: readonly { projectName: string, files: readonly string[] }[];
                 expectedOpenEvents: protocol.Event[];
+                expectedReloadEvents: protocol.Event[];
             }
             const mainPath = `${tscWatch.projectRoot}/src/main.ts`;
             const helperPath = `${tscWatch.projectRoot}/src/helpers/functions.ts`;
             const tsconfigSrcPath = `${tscWatch.projectRoot}/tsconfig-src.json`;
             const tsconfigPath = `${tscWatch.projectRoot}/tsconfig.json`;
             function verifySolutionScenario({
-                configRefs, additionalFiles, additionalProjects, expectedOpenEvents
+                configRefs, additionalFiles, additionalProjects,
+                expectedOpenEvents, expectedReloadEvents
             }: VerifySolutionScenario) {
                 const tsconfigSrc: File = {
                     path: tsconfigSrcPath,
@@ -1912,6 +1914,16 @@ export { foo };`
                 service.openClientFile(dummyFile.path);
                 verifyProjects(/*includeConfigured*/ false, /*includeDummy*/ true);
 
+                service.openClientFile(main.path);
+                service.closeClientFile(dummyFile.path);
+                service.openClientFile(dummyFile.path);
+                verifyProjects(/*includeConfigured*/ true, /*includeDummy*/ true);
+
+                session.clearMessages();
+                service.reloadProjects();
+                checkEvents(session, expectedReloadEvents);
+                verifyProjects(/*includeConfigured*/ true, /*includeDummy*/ true);
+
                 function verifyProjects(includeConfigured: boolean, includeDummy: boolean) {
                     const inferredProjects = includeDummy ? 1 : 0;
                     const configuredProjects = includeConfigured ? additionalProjects.length + 2 : 0;
@@ -1941,6 +1953,14 @@ export { foo };`
                         projectLoadingFinishEvent(tsconfigSrcPath),
                         projectInfoTelemetryEvent(),
                         configFileDiagEvent(mainPath, tsconfigSrcPath, [])
+                    ],
+                    expectedReloadEvents: [
+                        projectLoadingStartEvent(tsconfigPath, `User requested reload projects`),
+                        projectLoadingFinishEvent(tsconfigPath),
+                        configFileDiagEvent(tsconfigPath, tsconfigPath, []),
+                        projectLoadingStartEvent(tsconfigSrcPath, `User requested reload projects`),
+                        projectLoadingFinishEvent(tsconfigSrcPath),
+                        configFileDiagEvent(tsconfigSrcPath, tsconfigSrcPath, [])
                     ]
                 });
             });
@@ -1998,6 +2018,17 @@ foo;`
                         projectLoadingFinishEvent(tsconfigSrcPath),
                         projectInfoTelemetryEvent(),
                         configFileDiagEvent(mainPath, tsconfigSrcPath, [])
+                    ],
+                    expectedReloadEvents: [
+                        projectLoadingStartEvent(tsconfigPath, `User requested reload projects`),
+                        projectLoadingFinishEvent(tsconfigPath),
+                        configFileDiagEvent(tsconfigPath, tsconfigPath, []),
+                        projectLoadingStartEvent(tsconfigIndirect.path, `User requested reload projects`),
+                        projectLoadingFinishEvent(tsconfigIndirect.path),
+                        configFileDiagEvent(tsconfigIndirect.path, tsconfigIndirect.path, []),
+                        projectLoadingStartEvent(tsconfigSrcPath, `User requested reload projects`),
+                        projectLoadingFinishEvent(tsconfigSrcPath),
+                        configFileDiagEvent(tsconfigSrcPath, tsconfigSrcPath, [])
                     ]
                 });
             });
