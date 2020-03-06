@@ -6267,7 +6267,7 @@ namespace ts {
     export function isValidTypeOnlyAliasUseSite(useSite: Node): boolean {
         return !!(useSite.flags & NodeFlags.Ambient)
             || isPartOfTypeQuery(useSite)
-            || isFirstIdentifierOfNonEmittingHeritageClause(useSite)
+            || isIdentifierInNonEmittingHeritageClause(useSite)
             || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
             || !isExpressionNode(useSite);
     }
@@ -6290,8 +6290,8 @@ namespace ts {
         return containerKind === SyntaxKind.InterfaceDeclaration || containerKind === SyntaxKind.TypeLiteral;
     }
 
-    /** Returns true for the first identifier of 1) an `implements` clause, and 2) an `extends` clause of an interface. */
-    function isFirstIdentifierOfNonEmittingHeritageClause(node: Node): boolean {
+    /** Returns true for an identifier in 1) an `implements` clause, and 2) an `extends` clause of an interface. */
+    function isIdentifierInNonEmittingHeritageClause(node: Node): boolean {
         if (node.kind !== SyntaxKind.Identifier) return false;
         const heritageClause = findAncestor(node.parent, parent => {
             switch (parent.kind) {
