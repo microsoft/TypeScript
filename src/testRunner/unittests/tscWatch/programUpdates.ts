@@ -401,7 +401,7 @@ export class A {
         verifyTscWatch({
             scenario,
             subScenario: "deleted files affect project structure",
-            commandLineArgs: ["-w", "/a/b/f1.ts"],
+            commandLineArgs: ["-w", "/a/b/f1.ts", "--noImplicitAny"],
             sys: () => {
                 const file1 = {
                     path: "/a/b/f1.ts",
@@ -429,7 +429,7 @@ export class A {
         verifyTscWatch({
             scenario,
             subScenario: "deleted files affect project structure-2",
-            commandLineArgs: ["-w", "/a/b/f1.ts", "/a/c/f3.ts"],
+            commandLineArgs: ["-w", "/a/b/f1.ts", "/a/c/f3.ts", "--noImplicitAny"],
             sys: () => {
                 const file1 = {
                     path: "/a/b/f1.ts",

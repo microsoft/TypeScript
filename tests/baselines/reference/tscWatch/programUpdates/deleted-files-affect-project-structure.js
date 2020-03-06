@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w /a/b/f1.ts
+/a/lib/tsc.js -w /a/b/f1.ts --noImplicitAny
 //// [/a/b/f1.ts]
 export * from "./f2"
 
@@ -71,7 +71,7 @@ Output::
 
 
 Program root files: ["/a/b/f1.ts"]
-Program options: {"watch":true}
+Program options: {"watch":true,"noImplicitAny":true}
 Program files::
 /a/lib/lib.d.ts
 /a/c/f3.ts
@@ -110,12 +110,14 @@ Output::
 12:00:28 AM - File change detected. Starting incremental compilation...
 
 
+a/b/f1.ts(1,15): error TS7016: Could not find a declaration file for module './f2'. '/a/b/f2.js' implicitly has an 'any' type.
 
-12:00:32 AM - Found 0 errors. Watching for file changes.
+
+12:00:32 AM - Found 1 error. Watching for file changes.
 
 
 Program root files: ["/a/b/f1.ts"]
-Program options: {"watch":true}
+Program options: {"watch":true,"noImplicitAny":true}
 Program files::
 /a/lib/lib.d.ts
 /a/b/f1.ts
