@@ -9639,7 +9639,7 @@ namespace ts {
                 // Create a mapper from T to the current iteration type constituent. Then, if the
                 // mapped type is itself an instantiated type, combine the iteration mapper with the
                 // instantiation mapper.
-                const templateMapper = combineTypeMappers(type.mapper, createTypeMapper([typeParameter], [t]));
+                const templateMapper = addTypeMapping(type.mapper, typeParameter, t);
                 // If the current iteration type constituent is a string literal type, create a property.
                 // Otherwise, for type string create a string index signature.
                 if (isTypeUsableAsPropertyName(t)) {
@@ -13606,6 +13606,12 @@ namespace ts {
             return !mapper1 ? mapper2 : !mapper2 ? mapper1 : makeCompositeTypeMapper(mapper1, mapper2);
         }
 
+        function addTypeMapping(mapper: TypeMapper | undefined, source: TypeParameter, target: Type) {
+            return mapper && mapper.kind === TypeMapKind.Simple && mapper.source2 === mapper.target2 ?
+                makeSimpleTypeMapper(mapper.source1, mapper.target1, source, target) :
+                combineTypeMappers(mapper, makeUnaryTypeMapper(source, target));
+        }
+
         function createReplacementMapper(source: Type, target: Type, baseMapper: TypeMapper): TypeMapper {
             switch (baseMapper.kind) {
                 case TypeMapKind.Simple:
@@ -13845,7 +13851,7 @@ namespace ts {
         }
 
         function instantiateMappedTypeTemplate(type: MappedType, key: Type, isOptional: boolean, mapper: TypeMapper) {
-            const templateMapper = combineTypeMappers(mapper, createTypeMapper([getTypeParameterFromMappedType(type)], [key]));
+            const templateMapper = addTypeMapping(mapper, getTypeParameterFromMappedType(type), key);
             const propType = instantiateType(getTemplateTypeFromMappedType(<MappedType>type.target || type), templateMapper);
             const modifiers = getMappedTypeModifiers(type);
             return strictNullChecks && modifiers & MappedTypeModifiers.IncludeOptional && !maybeTypeOfKind(propType, TypeFlags.Undefined | TypeFlags.Void) ? getOptionalType(propType) :
