@@ -1622,7 +1622,7 @@ interface Int8Array {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): Int8Array;
+    subarray(begin?: number, end?: number): Int8Array;
 
     /**
       * Converts a number to a string by using the current locale.
@@ -1895,7 +1895,7 @@ interface Uint8Array {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): Uint8Array;
+    subarray(begin?: number, end?: number): Uint8Array;
 
     /**
       * Converts a number to a string by using the current locale.
@@ -2169,7 +2169,7 @@ interface Uint8ClampedArray {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): Uint8ClampedArray;
+    subarray(begin?: number, end?: number): Uint8ClampedArray;
 
     /**
       * Converts a number to a string by using the current locale.
@@ -2442,7 +2442,7 @@ interface Int16Array {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): Int16Array;
+    subarray(begin?: number, end?: number): Int16Array;
 
     /**
       * Converts a number to a string by using the current locale.
@@ -2716,7 +2716,7 @@ interface Uint16Array {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): Uint16Array;
+    subarray(begin?: number, end?: number): Uint16Array;
 
     /**
       * Converts a number to a string by using the current locale.
@@ -2989,7 +2989,7 @@ interface Int32Array {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): Int32Array;
+    subarray(begin?: number, end?: number): Int32Array;
 
     /**
       * Converts a number to a string by using the current locale.
@@ -3262,7 +3262,7 @@ interface Uint32Array {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): Uint32Array;
+    subarray(begin?: number, end?: number): Uint32Array;
 
     /**
       * Converts a number to a string by using the current locale.
@@ -3535,7 +3535,7 @@ interface Float32Array {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): Float32Array;
+    subarray(begin?: number, end?: number): Float32Array;
 
     /**
       * Converts a number to a string by using the current locale.
@@ -3809,7 +3809,7 @@ interface Float64Array {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): Float64Array;
+    subarray(begin?: number, end?: number): Float64Array;
 
     /**
       * Converts a number to a string by using the current locale.

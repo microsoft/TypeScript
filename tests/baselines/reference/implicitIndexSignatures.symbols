@@ -168,3 +168,52 @@ function f4() {
 >o2 : Symbol(o2, Decl(implicitIndexSignatures.ts, 39, 7))
 }
 
+function f5() {
+>f5 : Symbol(f5, Decl(implicitIndexSignatures.ts, 44, 1))
+
+    enum E1 { A, B }
+>E1 : Symbol(E1, Decl(implicitIndexSignatures.ts, 46, 15))
+>A : Symbol(E1.A, Decl(implicitIndexSignatures.ts, 47, 13))
+>B : Symbol(E1.B, Decl(implicitIndexSignatures.ts, 47, 16))
+
+    enum E2 { A = "A", B = "B" }
+>E2 : Symbol(E2, Decl(implicitIndexSignatures.ts, 47, 20))
+>A : Symbol(E2.A, Decl(implicitIndexSignatures.ts, 48, 13))
+>B : Symbol(E2.B, Decl(implicitIndexSignatures.ts, 48, 22))
+
+    enum E3 { A = 0, B = "B" }
+>E3 : Symbol(E3, Decl(implicitIndexSignatures.ts, 48, 32))
+>A : Symbol(E3.A, Decl(implicitIndexSignatures.ts, 49, 13))
+>B : Symbol(E3.B, Decl(implicitIndexSignatures.ts, 49, 20))
+
+    const v1 = getStringIndexValue(E1);
+>v1 : Symbol(v1, Decl(implicitIndexSignatures.ts, 50, 9))
+>getStringIndexValue : Symbol(getStringIndexValue, Decl(implicitIndexSignatures.ts, 11, 13))
+>E1 : Symbol(E1, Decl(implicitIndexSignatures.ts, 46, 15))
+
+    const v2 = getStringIndexValue(E2);
+>v2 : Symbol(v2, Decl(implicitIndexSignatures.ts, 51, 9))
+>getStringIndexValue : Symbol(getStringIndexValue, Decl(implicitIndexSignatures.ts, 11, 13))
+>E2 : Symbol(E2, Decl(implicitIndexSignatures.ts, 47, 20))
+
+    const v3 = getStringIndexValue(E3);
+>v3 : Symbol(v3, Decl(implicitIndexSignatures.ts, 52, 9))
+>getStringIndexValue : Symbol(getStringIndexValue, Decl(implicitIndexSignatures.ts, 11, 13))
+>E3 : Symbol(E3, Decl(implicitIndexSignatures.ts, 48, 32))
+
+    const v4 = getNumberIndexValue(E1);
+>v4 : Symbol(v4, Decl(implicitIndexSignatures.ts, 53, 9))
+>getNumberIndexValue : Symbol(getNumberIndexValue, Decl(implicitIndexSignatures.ts, 13, 68))
+>E1 : Symbol(E1, Decl(implicitIndexSignatures.ts, 46, 15))
+
+    const v5 = getNumberIndexValue(E2);
+>v5 : Symbol(v5, Decl(implicitIndexSignatures.ts, 54, 9))
+>getNumberIndexValue : Symbol(getNumberIndexValue, Decl(implicitIndexSignatures.ts, 13, 68))
+>E2 : Symbol(E2, Decl(implicitIndexSignatures.ts, 47, 20))
+
+    const v6 = getNumberIndexValue(E3);
+>v6 : Symbol(v6, Decl(implicitIndexSignatures.ts, 55, 9))
+>getNumberIndexValue : Symbol(getNumberIndexValue, Decl(implicitIndexSignatures.ts, 13, 68))
+>E3 : Symbol(E3, Decl(implicitIndexSignatures.ts, 48, 32))
+}
+

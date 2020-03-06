@@ -64,6 +64,7 @@ module.exports = f;
 //// [declarationEmit_nameConflicts_0.js]
 "use strict";
 exports.__esModule = true;
+exports.M = void 0;
 var im = require("./declarationEmit_nameConflicts_1");
 var M;
 (function (M) {
@@ -167,7 +168,7 @@ export declare module M.P {
     var a: typeof M.f;
     var b: typeof M.C;
     var c: typeof M.N;
-    var g: typeof M.c.g;
+    var g: typeof M.N.g;
     var d: typeof M.d;
 }
 export declare module M.Q {

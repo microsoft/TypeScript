@@ -1,0 +1,45 @@
+=== tests/cases/compiler/methodChainError.ts ===
+class Builder {
+>Builder : Symbol(Builder, Decl(methodChainError.ts, 0, 0))
+
+    notMethod: string
+>notMethod : Symbol(Builder.notMethod, Decl(methodChainError.ts, 0, 15))
+
+    method(param: string): Builder {
+>method : Symbol(Builder.method, Decl(methodChainError.ts, 1, 21))
+>param : Symbol(param, Decl(methodChainError.ts, 2, 11))
+>Builder : Symbol(Builder, Decl(methodChainError.ts, 0, 0))
+
+        return this;
+>this : Symbol(Builder, Decl(methodChainError.ts, 0, 0))
+    }
+}
+
+new Builder()
+>new Builder()    .method("a")    .method()    .method : Symbol(Builder.method, Decl(methodChainError.ts, 1, 21))
+>new Builder()    .method("a")    .method : Symbol(Builder.method, Decl(methodChainError.ts, 1, 21))
+>new Builder()    .method : Symbol(Builder.method, Decl(methodChainError.ts, 1, 21))
+>Builder : Symbol(Builder, Decl(methodChainError.ts, 0, 0))
+
+    .method("a")
+>method : Symbol(Builder.method, Decl(methodChainError.ts, 1, 21))
+
+    .method()
+>method : Symbol(Builder.method, Decl(methodChainError.ts, 1, 21))
+
+    .method("a");
+>method : Symbol(Builder.method, Decl(methodChainError.ts, 1, 21))
+
+    
+new Builder()
+>new Builder()    .method("a")    .notMethod : Symbol(Builder.notMethod, Decl(methodChainError.ts, 0, 15))
+>new Builder()    .method : Symbol(Builder.method, Decl(methodChainError.ts, 1, 21))
+>Builder : Symbol(Builder, Decl(methodChainError.ts, 0, 0))
+
+    .method("a")
+>method : Symbol(Builder.method, Decl(methodChainError.ts, 1, 21))
+
+    .notMethod()
+>notMethod : Symbol(Builder.notMethod, Decl(methodChainError.ts, 0, 15))
+
+    .method("a");

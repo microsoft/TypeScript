@@ -24,6 +24,8 @@ Zet.prototype.add = function(v, o) {
 var z = new Zet(1)
 z.t = 2
 z.u = false
+/** @type {number} */
+let answer = z.add(3, { nested: 4 })
 
 // lookup in typedef should not crash the compiler, even when the type is unknown
 /**

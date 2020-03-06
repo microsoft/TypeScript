@@ -5,7 +5,7 @@ tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(12,12): error TS1
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(15,5): error TS4104: The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(17,5): error TS4104: The type 'readonly [string, string]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(21,5): error TS2739: Type 'string[]' is missing the following properties from type '[string, string]': 0, 1
-tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(22,5): error TS2740: Type 'readonly string[]' is missing the following properties from type '[string, string]': 0, 1, pop, push, and 5 more.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(22,5): error TS4104: The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type '[string, string]'.
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(23,5): error TS4104: The type 'readonly [string, string]' is 'readonly' and cannot be assigned to the mutable type '[string, string]'.
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(24,5): error TS2739: Type 'string[]' is missing the following properties from type 'readonly [string, string]': 0, 1
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(25,5): error TS2739: Type 'readonly string[]' is missing the following properties from type 'readonly [string, string]': 0, 1
@@ -56,7 +56,7 @@ tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(36,8): error TS25
 !!! error TS2739: Type 'string[]' is missing the following properties from type '[string, string]': 0, 1
         mt = ra;  // Error
         ~~
-!!! error TS2740: Type 'readonly string[]' is missing the following properties from type '[string, string]': 0, 1, pop, push, and 5 more.
+!!! error TS4104: The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type '[string, string]'.
         mt = rt;  // Error
         ~~
 !!! error TS4104: The type 'readonly [string, string]' is 'readonly' and cannot be assigned to the mutable type '[string, string]'.

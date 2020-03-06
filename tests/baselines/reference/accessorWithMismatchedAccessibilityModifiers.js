@@ -41,7 +41,7 @@ var C = /** @class */ (function () {
         },
         set: function (v) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;
@@ -55,7 +55,7 @@ var D = /** @class */ (function () {
         },
         set: function (v) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return D;
@@ -69,7 +69,7 @@ var E = /** @class */ (function () {
         },
         set: function (v) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return E;
@@ -83,7 +83,7 @@ var F = /** @class */ (function () {
         },
         set: function (v) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return F;

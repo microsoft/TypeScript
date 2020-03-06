@@ -17,6 +17,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 exports.__esModule = true;
+exports.C = void 0;
 var C = /** @class */ (function () {
     function C() {
     }

@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts"/>
 
+////// Should not merge grandchildren with property assignments
 ////const o = {
 ////    a: {
 ////        m() {},
@@ -17,8 +18,20 @@ verify.navigationTree({
             text: "o",
             kind: "const",
             childItems: [
-                { text: "m", kind: "method" },
-                { text: "m", kind: "method" },
+                { 
+                    text: "a",
+                    kind: "property",
+                    childItems: [
+                        { text: "m", kind: "method" }
+                    ]
+                },
+                { 
+                    text: "b",
+                    kind: "property",
+                    childItems: [
+                        { text: "m", kind: "method" }
+                    ]
+                },
             ],
         },
     ]
@@ -36,9 +49,26 @@ verify.navigationBar([
         text: "o",
         kind: "const",
         childItems: [
-            { text: "m", kind: "method" },
-            { text: "m", kind: "method" },
+            { text: "a", kind: "property" },
+            { text: "b", kind: "property" },
         ],
         indent: 1,
     },
+    {
+        text: "a",
+        kind: "property",
+        childItems: [
+            { text: "m", kind: "method" },
+        ],
+        indent: 2,
+    },
+    {
+        text: "b",
+        kind: "property",
+        childItems: [
+            { text: "m", kind: "method" },
+        ],
+        indent: 2,
+    },
+
 ]);

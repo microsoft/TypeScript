@@ -36,6 +36,7 @@ let z2 = Observable.someAnotherValue.toLowerCase();
 //// [observable.js]
 "use strict";
 exports.__esModule = true;
+exports.Observable = void 0;
 var Observable;
 (function (Observable) {
 })(Observable = exports.Observable || (exports.Observable = {}));

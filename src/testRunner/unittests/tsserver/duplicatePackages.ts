@@ -31,12 +31,10 @@ namespace ts.projectSystem {
                     endOffset: 4,
                     errorCodes: [Diagnostics.Cannot_find_name_0.code],
                 });
-                assert.deepEqual<ReadonlyArray<protocol.CodeFixAction> | undefined>(response, [
+                assert.deepEqual<readonly protocol.CodeFixAction[] | undefined>(response, [
                     {
                         description: `Import 'foo' from module "foo"`,
                         fixName: "import",
-                        fixId: "fixMissingImport",
-                        fixAllDescription: "Add all missing imports",
                         changes: [{
                             fileName: user.path,
                             textChanges: [{
@@ -46,6 +44,8 @@ namespace ts.projectSystem {
                             }],
                         }],
                         commands: undefined,
+                        fixId: undefined,
+                        fixAllDescription: undefined
                     },
                 ]);
             }

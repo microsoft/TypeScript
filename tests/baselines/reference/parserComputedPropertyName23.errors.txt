@@ -1,12 +1,9 @@
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName23.ts(2,9): error TS1086: An accessor cannot be declared in an ambient context.
 tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName23.ts(2,10): error TS2304: Cannot find name 'e'.
 
 
-==== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName23.ts (2 errors) ====
+==== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName23.ts (1 errors) ====
     declare class C {
         get [e](): number 
-            ~~~
-!!! error TS1086: An accessor cannot be declared in an ambient context.
              ~
 !!! error TS2304: Cannot find name 'e'.
     }

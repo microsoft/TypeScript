@@ -136,6 +136,13 @@ function test<T extends { a: string, b: string }>(obj: T): T {
     return { a: 'hello', ...rest } as T;
 }
 
+// Repro from #32169
+
+declare function f<T>(x: T): NonNullable<T>;
+enum E { A, B }
+const a = f(E.A);
+const b: E.A = a;
+
 
 //// [literalTypeWidening.js]
 "use strict";
@@ -163,6 +170,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 exports.__esModule = true;
+exports.langCodes = exports.keys = exports.Set = void 0;
 function f1() {
     var c1 = "hello"; // Widening type "hello"
     var v1 = c1; // Type string
@@ -267,3 +275,10 @@ function test(obj) {
     var a = obj.a, rest = __rest(obj, ["a"]);
     return __assign({ a: 'hello' }, rest);
 }
+var E;
+(function (E) {
+    E[E["A"] = 0] = "A";
+    E[E["B"] = 1] = "B";
+})(E || (E = {}));
+var a = f(E.A);
+var b = a;

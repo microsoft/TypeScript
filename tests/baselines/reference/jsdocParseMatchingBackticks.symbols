@@ -1,0 +1,30 @@
+=== tests/cases/conformance/jsdoc/jsdocParseMatchingBackticks.js ===
+/**
+ * `@param` initial at-param is OK in title comment
+ * @param {string} x hi there `@param`
+ * @param {string} y hi there `@ * param
+ *                   this is the margin
+ *                   so we'll drop everything before it
+ `@param` @param {string} z hello???
+ * `@param` @param {string} alpha hello???
+ * `@ * param` @param {string} beta hello???
+ * @param {string} gamma
+ */
+export function f(x, y, z, alpha, beta, gamma) {
+>f : Symbol(f, Decl(jsdocParseMatchingBackticks.js, 0, 0))
+>x : Symbol(x, Decl(jsdocParseMatchingBackticks.js, 11, 18))
+>y : Symbol(y, Decl(jsdocParseMatchingBackticks.js, 11, 20))
+>z : Symbol(z, Decl(jsdocParseMatchingBackticks.js, 11, 23))
+>alpha : Symbol(alpha, Decl(jsdocParseMatchingBackticks.js, 11, 26))
+>beta : Symbol(beta, Decl(jsdocParseMatchingBackticks.js, 11, 33))
+>gamma : Symbol(gamma, Decl(jsdocParseMatchingBackticks.js, 11, 39))
+
+    return x + y + z + alpha + beta + gamma
+>x : Symbol(x, Decl(jsdocParseMatchingBackticks.js, 11, 18))
+>y : Symbol(y, Decl(jsdocParseMatchingBackticks.js, 11, 20))
+>z : Symbol(z, Decl(jsdocParseMatchingBackticks.js, 11, 23))
+>alpha : Symbol(alpha, Decl(jsdocParseMatchingBackticks.js, 11, 26))
+>beta : Symbol(beta, Decl(jsdocParseMatchingBackticks.js, 11, 33))
+>gamma : Symbol(gamma, Decl(jsdocParseMatchingBackticks.js, 11, 39))
+}
+

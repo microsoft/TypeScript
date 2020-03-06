@@ -34,7 +34,8 @@ namespace ts.formatting {
 
             const precedingToken = findPrecedingToken(position, sourceFile, /*startNode*/ undefined, /*excludeJsdoc*/ true);
 
-            const enclosingCommentRange = getRangeOfEnclosingComment(sourceFile, position, precedingToken || null); // tslint:disable-line:no-null-keyword
+            // eslint-disable-next-line no-null/no-null
+            const enclosingCommentRange = getRangeOfEnclosingComment(sourceFile, position, precedingToken || null);
             if (enclosingCommentRange && enclosingCommentRange.kind === SyntaxKind.MultiLineCommentTrivia) {
                 return getCommentIndent(sourceFile, position, options, enclosingCommentRange);
             }
@@ -322,6 +323,26 @@ namespace ts.formatting {
             return false;
         }
 
+        export function argumentStartsOnSameLineAsPreviousArgument(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
+            if (isCallOrNewExpression(parent)) {
+                if (!parent.arguments) return false;
+                const currentNode = find(parent.arguments, arg => arg.pos === child.pos);
+                // If it's not one of the arguments, don't look past this
+                if (!currentNode) return false;
+                const currentIndex = parent.arguments.indexOf(currentNode);
+                if (currentIndex === 0) return false; // Can't look at previous node if first
+
+                const previousNode = parent.arguments[currentIndex - 1];
+                const lineOfPreviousNode = getLineAndCharacterOfPosition(sourceFile, previousNode.getEnd()).line;
+
+                if (childStartLine === lineOfPreviousNode) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         export function getContainingList(node: Node, sourceFile: SourceFile): NodeArray<Node> | undefined {
             return node.parent && getListByRange(node.getStart(sourceFile), node.getEnd(), node.parent, sourceFile);
         }
@@ -410,7 +431,7 @@ namespace ts.formatting {
             return Value.Unknown;
         }
 
-        function deriveActualIndentationFromList(list: ReadonlyArray<Node>, index: number, sourceFile: SourceFile, options: EditorSettings): number {
+        function deriveActualIndentationFromList(list: readonly Node[], index: number, sourceFile: SourceFile, options: EditorSettings): number {
             Debug.assert(index >= 0 && index < list.length);
             const node = list[index];
 
@@ -520,10 +541,14 @@ namespace ts.formatting {
                     return true;
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.BinaryExpression:
                     if (!settings.indentMultiLineObjectLiteralBeginningOnBlankLine && sourceFile && childKind === SyntaxKind.ObjectLiteralExpression) { // TODO: GH#18217
                         return rangeIsOnOneLine(sourceFile, child!);
                     }
-                    return true;
+                    if (parent.kind !== SyntaxKind.BinaryExpression) {
+                        return true;
+                    }
+                    break;
                 case SyntaxKind.DoStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.ForInStatement:

@@ -1,19 +1,18 @@
 /// <reference path='fourslash.ts'/>
 
-////export default function [|{| "isWriteAccess": true, "isDefinition": true |}DefaultExportedFunction|]() {
+////[|export default function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}DefaultExportedFunction|]() {
 ////    return [|DefaultExportedFunction|];
-////}
+////}|]
 ////
 ////var x: typeof [|DefaultExportedFunction|];
 ////
 ////var y = [|DefaultExportedFunction|]();
 ////
-////namespace [|{| "isWriteAccess": true, "isDefinition": true |}DefaultExportedFunction|] {
-////}
+////[|namespace [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 5 |}DefaultExportedFunction|] {
+////}|]
 
 
-const ranges = test.ranges();
-const [r0, r1, r2, r3, r4] = ranges;
+const [r0Def, r0, r1, r2, r3, r4Def, r4] = test.ranges();
 const fnRanges = [r0, r1, r2, r3];
 verify.singleReferenceGroup("function DefaultExportedFunction(): () => typeof DefaultExportedFunction", fnRanges);
 

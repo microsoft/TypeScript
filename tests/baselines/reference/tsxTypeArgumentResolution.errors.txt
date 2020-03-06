@@ -3,9 +3,7 @@ tests/cases/conformance/jsx/file.tsx(18,26): error TS2322: Type 'number' is not 
 tests/cases/conformance/jsx/file.tsx(20,13): error TS2558: Expected 1 type arguments, but got 2.
 tests/cases/conformance/jsx/file.tsx(22,13): error TS2558: Expected 1 type arguments, but got 2.
 tests/cases/conformance/jsx/file.tsx(24,12): error TS1099: Type argument list cannot be empty.
-tests/cases/conformance/jsx/file.tsx(24,13): error TS2558: Expected 1 type arguments, but got 0.
 tests/cases/conformance/jsx/file.tsx(26,12): error TS1099: Type argument list cannot be empty.
-tests/cases/conformance/jsx/file.tsx(26,13): error TS2558: Expected 1 type arguments, but got 0.
 tests/cases/conformance/jsx/file.tsx(39,14): error TS2344: Type 'Prop' does not satisfy the constraint '{ a: string; }'.
   Types of property 'a' are incompatible.
     Type 'number' is not assignable to type 'string'.
@@ -16,7 +14,7 @@ tests/cases/conformance/jsx/file.tsx(51,47): error TS2322: Type 'string' is not 
 tests/cases/conformance/jsx/file.tsx(53,47): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (14 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (12 errors) ====
     import React = require('react');
     
     interface Prop {
@@ -53,14 +51,10 @@ tests/cases/conformance/jsx/file.tsx(53,47): error TS2322: Type 'string' is not 
     x = <MyComp<> a={10} b="hi" />; // error
                ~~
 !!! error TS1099: Type argument list cannot be empty.
-                
-!!! error TS2558: Expected 1 type arguments, but got 0.
     
     x = <MyComp<> a={10} b="hi"></MyComp>; // error
                ~~
 !!! error TS1099: Type argument list cannot be empty.
-                
-!!! error TS2558: Expected 1 type arguments, but got 0.
     
     x= <MyComp<{}> /> // OK
     

@@ -4,11 +4,11 @@
 
 // @Filename: /a.js
 ////module.exports = 0;
-/////** @typedef {number} [|{| "isWriteAccess": true, "isDefinition": true |}Foo|] */
+/////** [|@typedef {number} [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Foo|]|] */
 ////const dummy = 0;
 
 // @Filename: /b.js
 /////** @type {import('./a').[|Foo|]} */
 ////const x = 0;
 
-verify.singleReferenceGroup("type Foo = number");
+verify.singleReferenceGroup("type Foo = number", "Foo");

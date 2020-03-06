@@ -207,7 +207,7 @@ var C = /** @class */ (function () {
                 v;
             });
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;
@@ -234,7 +234,7 @@ var E = /** @class */ (function () {
                 v;
             });
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return class_1;

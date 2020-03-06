@@ -4,10 +4,10 @@
 // @Filename: a.js
 ////class C {
 ////  constructor(y) {
-////    this.[|x|] = y;
+////    [|this.[|{| "contextRangeIndex": 0 |}x|] = y;|]
 ////  }
 ////}
 ////var t = new C(12);
-////t.[|x|] = 11;
+////[|t.[|{| "contextRangeIndex": 2 |}x|] = 11;|]
 
-verify.rangesAreRenameLocations();
+verify.rangesWithSameTextAreRenameLocations("x");

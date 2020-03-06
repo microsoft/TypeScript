@@ -1,0 +1,13 @@
+=== tests/cases/conformance/jsdoc/declarations/source.js ===
+export class Thing {}
+>Thing : Thing
+
+export class OtherThing {}
+>OtherThing : OtherThing
+
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+export { Thing, OtherThing as default } from "./source";
+>Thing : typeof import("tests/cases/conformance/jsdoc/declarations/source").Thing
+>OtherThing : typeof import("tests/cases/conformance/jsdoc/declarations/source").OtherThing
+>default : typeof import("tests/cases/conformance/jsdoc/declarations/source").OtherThing
+

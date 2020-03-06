@@ -28,7 +28,7 @@ var npmlog = module.exports = new EE()
 >npmlog : typeof EE
 >module.exports = new EE() : typeof EE
 >module.exports : typeof EE
->module : { "tests/cases/conformance/salsa/npmlog": typeof EE; }
+>module : { "\"tests/cases/conformance/salsa/npmlog\"": typeof EE; }
 >exports : typeof EE
 >new EE() : EE
 >EE : typeof EE
@@ -44,7 +44,7 @@ module.exports.on('hi') // here too
 >module.exports.on('hi') : void
 >module.exports.on : (s: string) => void
 >module.exports : typeof EE
->module : { "tests/cases/conformance/salsa/npmlog": typeof EE; }
+>module : { "\"tests/cases/conformance/salsa/npmlog\"": typeof EE; }
 >exports : typeof EE
 >on : (s: string) => void
 >'hi' : "hi"
@@ -60,7 +60,7 @@ module.exports.y = 2
 >module.exports.y = 2 : 2
 >module.exports.y : number
 >module.exports : typeof EE
->module : { "tests/cases/conformance/salsa/npmlog": typeof EE; }
+>module : { "\"tests/cases/conformance/salsa/npmlog\"": typeof EE; }
 >exports : typeof EE
 >y : number
 >2 : 2
@@ -73,7 +73,7 @@ npmlog.y
 module.exports.x
 >module.exports.x : number
 >module.exports : typeof EE
->module : { "tests/cases/conformance/salsa/npmlog": typeof EE; }
+>module : { "\"tests/cases/conformance/salsa/npmlog\"": typeof EE; }
 >exports : typeof EE
 >x : number
 

@@ -14,6 +14,7 @@ var r: string = s.foo;
 //// [importUsedInExtendsList1_require.js]
 "use strict";
 exports.__esModule = true;
+exports.Super = void 0;
 var Super = /** @class */ (function () {
     function Super() {
     }

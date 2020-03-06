@@ -48,6 +48,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.CKind = exports.BKind = exports.AKind = void 0;
 var kindCache = {};
 function register(kind) {
     if (kindCache[kind]) {

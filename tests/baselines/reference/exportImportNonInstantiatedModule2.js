@@ -28,6 +28,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.w = void 0;
     function w() {
         return { name: 'value' };
     }

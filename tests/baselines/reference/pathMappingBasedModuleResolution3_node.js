@@ -21,10 +21,12 @@ export var y: number;
 //// [file3.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 exports.x = 1;
 //// [file2.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 var file3_1 = require("./file3"); // found with baseurl
 var file4_1 = require("file4"); // found with fallback
 exports.x = file3_1.x + file4_1.y;

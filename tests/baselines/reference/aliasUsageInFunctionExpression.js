@@ -23,6 +23,7 @@ f = (x) => moduleA;
 //// [aliasUsageInFunctionExpression_backbone.js]
 "use strict";
 exports.__esModule = true;
+exports.Model = void 0;
 var Model = /** @class */ (function () {
     function Model() {
     }
@@ -45,6 +46,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.VisualizationModel = void 0;
 var Backbone = require("./aliasUsageInFunctionExpression_backbone");
 var VisualizationModel = /** @class */ (function (_super) {
     __extends(VisualizationModel, _super);

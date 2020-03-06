@@ -1,7 +1,7 @@
 namespace ts {
     interface TestProjectSpecification {
         configFileName?: string;
-        references?: ReadonlyArray<string | ProjectReference>;
+        references?: readonly (string | ProjectReference)[];
         files: { [fileName: string]: string };
         outputFiles?: { [fileName: string]: string };
         config?: object;
@@ -11,14 +11,14 @@ namespace ts {
         [path: string]: TestProjectSpecification;
     }
 
-    function assertHasError(message: string, errors: ReadonlyArray<Diagnostic>, diag: DiagnosticMessage) {
+    function assertHasError(message: string, errors: readonly Diagnostic[], diag: DiagnosticMessage) {
         if (!errors.some(e => e.code === diag.code)) {
             const errorString = errors.map(e => `    ${e.file ? e.file.fileName : "[global]"}: ${e.messageText}`).join("\r\n");
             assert(false, `${message}: Did not find any diagnostic for ${diag.message} in:\r\n${errorString}`);
         }
     }
 
-    function assertNoErrors(message: string, errors: ReadonlyArray<Diagnostic>) {
+    function assertNoErrors(message: string, errors: readonly Diagnostic[]) {
         if (errors && errors.length > 0) {
             assert(false, `${message}: Expected no errors, but found:\r\n${errors.map(e => `    ${e.messageText}`).join("\r\n")}`);
         }
@@ -193,8 +193,8 @@ namespace ts {
             };
 
             testProjectReferences(spec, "/primary/tsconfig.json", program => {
-                const errs = program.getOptionsDiagnostics();
-                assertHasError("Reports an error about b.ts not being in the list", errs, Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern);
+                const errs = program.getSemanticDiagnostics(program.getSourceFile("/primary/a.ts"));
+                assertHasError("Reports an error about b.ts not being in the list", errs, Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern);
             });
         });
 
@@ -325,7 +325,7 @@ namespace ts {
             };
             testProjectReferences(spec, "/alpha/tsconfig.json", (program, host) => {
                 program.emit();
-                assert.deepEqual(host.outputs.map(e => e.file).sort(), ["/alpha/bin/src/a.d.ts", "/alpha/bin/src/a.js"]);
+                assert.deepEqual(host.outputs.map(e => e.file).sort(), ["/alpha/bin/src/a.d.ts", "/alpha/bin/src/a.js", "/alpha/bin/tsconfig.tsbuildinfo"]);
             });
         });
     });
@@ -343,10 +343,10 @@ namespace ts {
                 }
             };
             testProjectReferences(spec, "/alpha/tsconfig.json", (program) => {
-                assertHasError("Issues an error about the rootDir", program.getOptionsDiagnostics(), Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files);
-                assertHasError("Issues an error about the fileList", program.getOptionsDiagnostics(), Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern);
+                const semanticDiagnostics = program.getSemanticDiagnostics(program.getSourceFile("/alpha/src/a.ts"));
+                assertHasError("Issues an error about the rootDir", semanticDiagnostics, Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files);
+                assertHasError("Issues an error about the fileList", semanticDiagnostics, Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern);
             });
         });
     });
-
 }
