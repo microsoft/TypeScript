@@ -110,10 +110,8 @@ Output::
 12:00:28 AM - File change detected. Starting incremental compilation...
 
 
-a/b/f1.ts(1,15): error TS2307: Cannot find module './f2'.
 
-
-12:00:32 AM - Found 1 error. Watching for file changes.
+12:00:32 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/f1.ts","/a/c/f3.ts"]
@@ -133,11 +131,11 @@ WatchedFiles::
   {"fileName":"/a/c/f3.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/f2.ts:
-  {"fileName":"/a/b/f2.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
+/a:
+  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
