@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/spread/iteratorSpreadInCall4.ts(15,1): error TS2557: Expected at least 1 arguments, but got 0 or more.
+tests/cases/conformance/es6/spread/iteratorSpreadInCall4.ts(15,5): error TS2557: Expected at least 1 arguments, but got 0 or more.
 
 
 ==== tests/cases/conformance/es6/spread/iteratorSpreadInCall4.ts (1 errors) ====
@@ -17,6 +17,6 @@ tests/cases/conformance/es6/spread/iteratorSpreadInCall4.ts(15,1): error TS2557:
     }
     
     foo(...new SymbolIterator);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2557: Expected at least 1 arguments, but got 0 or more.
 !!! related TS6210 tests/cases/conformance/es6/spread/iteratorSpreadInCall4.ts:1:14: An argument for 's1' was not provided.

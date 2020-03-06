@@ -29,6 +29,13 @@ declare function normal(s: string): void;
 declare function thunk(): string;
 >thunk : () => string
 
+declare function prefix2(s: string, n: number, a?: number, b?: number): void;
+>prefix2 : (s: string, n: number, a?: number, b?: number) => void
+>s : string
+>n : number
+>a : number
+>b : number
+
 declare var ns: number[];
 >ns : number[]
 
@@ -150,4 +157,11 @@ prefix(...tuple)
 >prefix : (s: string, a?: number, b?: number) => void
 >...tuple : string | number
 >tuple : [number, string]
+
+prefix2("g", ...ns);
+>prefix2("g", ...ns) : void
+>prefix2 : (s: string, n: number, a?: number, b?: number) => void
+>"g" : "g"
+>...ns : number
+>ns : number[]
 

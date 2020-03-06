@@ -15,7 +15,7 @@ var Employee = /** @class */ (function () {
         set: function (newName) {
             this._fullName = newName;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Employee;

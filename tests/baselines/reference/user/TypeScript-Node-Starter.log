@@ -1,7 +1,0 @@
-Exit Code: 1
-Standard output:
-node_modules/@types/passport-facebook/index.d.ts(50,31): error TS2689: Cannot extend an interface 'passport.Strategy'. Did you mean 'implements'?
-
-
-
-Standard error:

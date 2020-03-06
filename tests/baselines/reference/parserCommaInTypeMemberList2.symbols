@@ -5,4 +5,5 @@ var s = $.extend< { workItem: any }, { workItem: any, width: string }>({ workIte
 >workItem : Symbol(workItem, Decl(parserCommaInTypeMemberList2.ts, 0, 38))
 >width : Symbol(width, Decl(parserCommaInTypeMemberList2.ts, 0, 53))
 >workItem : Symbol(workItem, Decl(parserCommaInTypeMemberList2.ts, 0, 72))
+>this : Symbol(globalThis)
 

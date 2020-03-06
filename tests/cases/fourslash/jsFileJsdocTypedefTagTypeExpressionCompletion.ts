@@ -29,7 +29,7 @@ const typeMembers: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntryObjec
     { name: "O", kind: "module", kindModifiers: "export" },
 ];
 function warnings(entries: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntryObject>): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> {
-    return entries.map(e => ({ ...e, kind: "warning", kindModifiers: undefined }));
+    return entries.map(e => ({ ...e, kind: "warning", kindModifiers: undefined, sortText: completion.SortText.JavascriptIdentifiers }));
 }
 
 verify.completions(

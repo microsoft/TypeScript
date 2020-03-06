@@ -7,8 +7,8 @@
 ////    "any": "valid identifier name (matches a typescript keyword)",
 ////    "#": "invalid identifier name",
 ////    "$": "valid identifier name",
-////    "\u0062": "valid unicode identifer name (b)",
-////    "\u0031\u0062": "invalid unicode identifer name (1b)"
+////    "\u0062": "valid unicode identifier name (b)",
+////    "\u0031\u0062": "invalid unicode identifier name (1b)"
 ////};
 ////
 ////x[|./*a*/|];

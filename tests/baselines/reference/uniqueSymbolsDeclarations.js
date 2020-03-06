@@ -282,15 +282,18 @@ async function* asyncGenFuncYieldConstCall() { yield constCall; }
 async function* asyncGenFuncYieldLetCall() { yield letCall; }
 async function* asyncGenFuncYieldVarCall() { yield varCall; }
 // classes
-class C {
-    constructor() {
-        this.readonlyCall = Symbol();
-        this.readwriteCall = Symbol();
+let C = /** @class */ (() => {
+    class C {
+        constructor() {
+            this.readonlyCall = Symbol();
+            this.readwriteCall = Symbol();
+        }
     }
-}
-C.readonlyStaticCall = Symbol();
-C.readonlyStaticTypeAndCall = Symbol();
-C.readwriteStaticCall = Symbol();
+    C.readonlyStaticCall = Symbol();
+    C.readonlyStaticTypeAndCall = Symbol();
+    C.readwriteStaticCall = Symbol();
+    return C;
+})();
 const constInitToCReadonlyStaticCall = C.readonlyStaticCall;
 const constInitToCReadonlyStaticType = C.readonlyStaticType;
 const constInitToCReadonlyStaticTypeAndCall = C.readonlyStaticTypeAndCall;
@@ -338,27 +341,30 @@ const o2 = {
     method5(p = s) { return p; }
 };
 // property initializers
-class C0 {
-    constructor() {
-        this.a = s;
-        this.b = N.s;
-        this.c = N["s"];
-        this.d = s;
-        this.e = N.s;
-        this.f = N["s"];
+let C0 = /** @class */ (() => {
+    class C0 {
+        constructor() {
+            this.a = s;
+            this.b = N.s;
+            this.c = N["s"];
+            this.d = s;
+            this.e = N.s;
+            this.f = N["s"];
+        }
+        method1() { return s; }
+        async method2() { return s; }
+        async *method3() { yield s; }
+        *method4() { yield s; }
+        method5(p = s) { return p; }
     }
-    method1() { return s; }
-    async method2() { return s; }
-    async *method3() { yield s; }
-    *method4() { yield s; }
-    method5(p = s) { return p; }
-}
-C0.a = s;
-C0.b = N.s;
-C0.c = N["s"];
-C0.d = s;
-C0.e = N.s;
-C0.f = N["s"];
+    C0.a = s;
+    C0.b = N.s;
+    C0.c = N["s"];
+    C0.d = s;
+    C0.e = N.s;
+    C0.f = N["s"];
+    return C0;
+})();
 // non-widening positions
 // element access
 o[s];
@@ -430,16 +436,16 @@ declare function funcReturnConstCall(): symbol;
 declare function funcReturnLetCall(): symbol;
 declare function funcReturnVarCall(): symbol;
 declare function funcReturnConstCallWithTypeQuery(): typeof constCall;
-declare function genFuncYieldConstCall(): IterableIterator<symbol>;
-declare function genFuncYieldLetCall(): IterableIterator<symbol>;
-declare function genFuncYieldVarCall(): IterableIterator<symbol>;
+declare function genFuncYieldConstCall(): Generator<symbol, void, unknown>;
+declare function genFuncYieldLetCall(): Generator<symbol, void, unknown>;
+declare function genFuncYieldVarCall(): Generator<symbol, void, unknown>;
 declare function genFuncYieldConstCallWithTypeQuery(): IterableIterator<typeof constCall>;
 declare function asyncFuncReturnConstCall(): Promise<symbol>;
 declare function asyncFuncReturnLetCall(): Promise<symbol>;
 declare function asyncFuncReturnVarCall(): Promise<symbol>;
-declare function asyncGenFuncYieldConstCall(): AsyncIterableIterator<symbol>;
-declare function asyncGenFuncYieldLetCall(): AsyncIterableIterator<symbol>;
-declare function asyncGenFuncYieldVarCall(): AsyncIterableIterator<symbol>;
+declare function asyncGenFuncYieldConstCall(): AsyncGenerator<symbol, void, unknown>;
+declare function asyncGenFuncYieldLetCall(): AsyncGenerator<symbol, void, unknown>;
+declare function asyncGenFuncYieldVarCall(): AsyncGenerator<symbol, void, unknown>;
 declare class C {
     static readonly readonlyStaticCall: unique symbol;
     static readonly readonlyStaticType: unique symbol;
@@ -502,8 +508,8 @@ declare const o2: {
     c: symbol;
     method1(): symbol;
     method2(): Promise<symbol>;
-    method3(): AsyncIterableIterator<symbol>;
-    method4(): IterableIterator<symbol>;
+    method3(): AsyncGenerator<symbol, void, unknown>;
+    method4(): Generator<symbol, void, unknown>;
     method5(p?: symbol): symbol;
 };
 declare class C0 {
@@ -521,8 +527,8 @@ declare class C0 {
     f: symbol;
     method1(): symbol;
     method2(): Promise<symbol>;
-    method3(): AsyncIterableIterator<symbol>;
-    method4(): IterableIterator<symbol>;
+    method3(): AsyncGenerator<symbol, void, unknown>;
+    method4(): Generator<symbol, void, unknown>;
     method5(p?: symbol): symbol;
 }
 declare class C1 {

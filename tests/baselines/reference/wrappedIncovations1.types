@@ -7,7 +7,7 @@ var v = this
 >this  .foo()  .bar : any
 >this  .foo() : any
 >this  .foo : any
->this : any
+>this : typeof globalThis
 
   .foo()
 >foo : any

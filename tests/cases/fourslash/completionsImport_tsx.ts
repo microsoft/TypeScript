@@ -12,7 +12,7 @@
 
 verify.completions({
     marker: "",
-    includes: { name: "Foo", source: "/a", hasAction: true },
+    includes: { name: "Foo", source: "/a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions },
     excludes: "Bar",
     preferences: {
         includeCompletionsForModuleExports: true,

@@ -108,7 +108,7 @@ var NoBase = /** @class */ (function () {
         set: function (v) {
             _this = _super.call(this) || this;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     //super call in static class member function with no base type
@@ -124,7 +124,7 @@ var NoBase = /** @class */ (function () {
         set: function (n) {
             _this = _super.call(this) || this;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     //super call in static class member initializer with no base type
@@ -140,8 +140,7 @@ var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     //super call with type arguments 
     function Derived() {
-        var _this = this;
-        _super.prototype..call(_this);
+        var _this = _super.call(this) || this;
         _this = _super.call(this) || this;
         return _this;
     }
@@ -173,7 +172,7 @@ var OtherDerived = /** @class */ (function (_super) {
         set: function (n) {
             _this = _super.call(this) || this;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return OtherDerived;

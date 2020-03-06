@@ -1,0 +1,103 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+export class A {
+>A : Symbol(A, Decl(index.js, 0, 0))
+
+    get x() {
+>x : Symbol(A.x, Decl(index.js, 0, 16))
+
+        return 12;
+    }
+}
+
+export class B {
+>B : Symbol(B, Decl(index.js, 4, 1))
+
+    /**
+     * @param {number} _arg
+     */
+    set x(_arg) {
+>x : Symbol(B.x, Decl(index.js, 6, 16))
+>_arg : Symbol(_arg, Decl(index.js, 10, 10))
+    }
+}
+
+export class C {
+>C : Symbol(C, Decl(index.js, 12, 1))
+
+    get x() {
+>x : Symbol(C.x, Decl(index.js, 14, 16), Decl(index.js, 17, 5))
+
+        return 12;
+    }
+    set x(_arg) {
+>x : Symbol(C.x, Decl(index.js, 14, 16), Decl(index.js, 17, 5))
+>_arg : Symbol(_arg, Decl(index.js, 18, 10))
+    }
+}
+
+export class D {}
+>D : Symbol(D, Decl(index.js, 20, 1))
+
+Object.defineProperty(D.prototype, "x", {
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>D.prototype : Symbol(D.prototype)
+>D : Symbol(D, Decl(index.js, 20, 1))
+>prototype : Symbol(D.prototype)
+>"x" : Symbol(D.x, Decl(index.js, 22, 17))
+
+    get() {
+>get : Symbol(get, Decl(index.js, 23, 41))
+
+        return 12;
+    }
+});
+
+export class E {}
+>E : Symbol(E, Decl(index.js, 27, 3))
+
+Object.defineProperty(E.prototype, "x", {
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>E.prototype : Symbol(E.prototype)
+>E : Symbol(E, Decl(index.js, 27, 3))
+>prototype : Symbol(E.prototype)
+>"x" : Symbol(E.x, Decl(index.js, 29, 17))
+
+    /**
+     * @param {number} _arg
+     */
+    set(_arg) {}
+>set : Symbol(set, Decl(index.js, 30, 41))
+>_arg : Symbol(_arg, Decl(index.js, 34, 8))
+
+});
+
+export class F {}
+>F : Symbol(F, Decl(index.js, 35, 3))
+
+Object.defineProperty(F.prototype, "x", {
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>F.prototype : Symbol(F.prototype)
+>F : Symbol(F, Decl(index.js, 35, 3))
+>prototype : Symbol(F.prototype)
+>"x" : Symbol(F.x, Decl(index.js, 37, 17))
+
+    get() {
+>get : Symbol(get, Decl(index.js, 38, 41))
+
+        return 12;
+    },
+    /**
+     * @param {number} _arg
+     */
+    set(_arg) {}
+>set : Symbol(set, Decl(index.js, 41, 6))
+>_arg : Symbol(_arg, Decl(index.js, 45, 8))
+
+});
+

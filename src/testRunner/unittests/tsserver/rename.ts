@@ -14,7 +14,16 @@ namespace ts.projectSystem {
                     canRename: false,
                     localizedErrorMessage: "You cannot rename this element."
                 },
-                locs: [{ file: bTs.path, locs: [protocolRenameSpanFromSubstring(bTs.content, "./a")] }],
+                locs: [{
+                    file: bTs.path,
+                    locs: [
+                        protocolRenameSpanFromSubstring({
+                            fileText: bTs.content,
+                            text: "./a",
+                            contextText: bTs.content
+                        })
+                    ]
+                }],
             });
 
             // rename succeeds with allowRenameOfImportPath enabled in host
@@ -30,7 +39,16 @@ namespace ts.projectSystem {
                     kindModifiers: "",
                     triggerSpan: protocolTextSpanFromSubstring(bTs.content, "a", { index: 1 }),
                 },
-                locs: [{ file: bTs.path, locs: [protocolRenameSpanFromSubstring(bTs.content, "./a")] }],
+                locs: [{
+                    file: bTs.path,
+                    locs: [
+                        protocolRenameSpanFromSubstring({
+                            fileText: bTs.content,
+                            text: "./a",
+                            contextText: bTs.content
+                        })
+                    ]
+                }],
             });
 
             // rename succeeds with allowRenameOfImportPath enabled in file
@@ -47,7 +65,16 @@ namespace ts.projectSystem {
                     kindModifiers: "",
                     triggerSpan: protocolTextSpanFromSubstring(bTs.content, "a", { index: 1 }),
                 },
-                locs: [{ file: bTs.path, locs: [protocolRenameSpanFromSubstring(bTs.content, "./a")] }],
+                locs: [{
+                    file: bTs.path,
+                    locs: [
+                        protocolRenameSpanFromSubstring({
+                            fileText: bTs.content,
+                            text: "./a",
+                            contextText: bTs.content
+                        })
+                    ]
+                }],
             });
         });
 
@@ -73,8 +100,16 @@ namespace ts.projectSystem {
                     {
                         file: aTs.path,
                         locs: [
-                            protocolRenameSpanFromSubstring(aTs.content, "x"),
-                            protocolRenameSpanFromSubstring(aTs.content, "x", { index: 1 }),
+                            protocolRenameSpanFromSubstring({
+                                fileText: aTs.content,
+                                text: "x",
+                                contextText: "const x = 0;"
+                            }),
+                            protocolRenameSpanFromSubstring({
+                                fileText: aTs.content,
+                                text: "x",
+                                options: { index: 1 }
+                            }),
                         ],
                     },
                 ],
@@ -97,8 +132,17 @@ namespace ts.projectSystem {
                     {
                         file: aTs.path,
                         locs: [
-                            protocolRenameSpanFromSubstring(aTs.content, "x"),
-                            protocolRenameSpanFromSubstring(aTs.content, "x", { index: 1 }, { prefixText: "x: " }),
+                            protocolRenameSpanFromSubstring({
+                                fileText: aTs.content,
+                                text: "x",
+                                contextText: "const x = 0;"
+                            }),
+                            protocolRenameSpanFromSubstring({
+                                fileText: aTs.content,
+                                text: "x",
+                                options: { index: 1 },
+                                prefixSuffixText: { prefixText: "x: " }
+                            }),
                         ],
                     },
                 ],
@@ -122,8 +166,17 @@ namespace ts.projectSystem {
                     {
                         file: aTs.path,
                         locs: [
-                            protocolRenameSpanFromSubstring(aTs.content, "x"),
-                            protocolRenameSpanFromSubstring(aTs.content, "x", { index: 1 }, { prefixText: "x: " }),
+                            protocolRenameSpanFromSubstring({
+                                fileText: aTs.content,
+                                text: "x",
+                                contextText: "const x = 0;"
+                            }),
+                            protocolRenameSpanFromSubstring({
+                                fileText: aTs.content,
+                                text: "x",
+                                options: { index: 1 },
+                                prefixSuffixText: { prefixText: "x: " }
+                            }),
                         ],
                     },
                 ],
@@ -154,8 +207,18 @@ namespace ts.projectSystem {
                     {
                         file: aTs.path,
                         locs: [
-                            protocolRenameSpanFromSubstring(aTs.content, "x"),
-                            protocolRenameSpanFromSubstring(aTs.content, "x", { index: 2 }, { suffixText: " as x" }),
+                            protocolRenameSpanFromSubstring({
+                                fileText: aTs.content,
+                                text: "x",
+                                contextText: "const x = 1;"
+                            }),
+                            protocolRenameSpanFromSubstring({
+                                fileText: aTs.content,
+                                text: "x",
+                                options: { index: 2 },
+                                contextText: "export { x };",
+                                prefixSuffixText: { suffixText: " as x" }
+                            }),
                         ],
                     },
                 ],
@@ -177,15 +240,32 @@ namespace ts.projectSystem {
                     {
                         file: bTs.path,
                         locs: [
-                            protocolRenameSpanFromSubstring(bTs.content, "x"),
-                            protocolRenameSpanFromSubstring(bTs.content, "x", { index: 1 })
+                            protocolRenameSpanFromSubstring({
+                                fileText: bTs.content,
+                                text: "x",
+                                contextText: `import { x } from "./a";`
+                            }),
+                            protocolRenameSpanFromSubstring({
+                                fileText: bTs.content,
+                                text: "x",
+                                options: { index: 1 },
+                            })
                         ]
                     },
                     {
                         file: aTs.path,
                         locs: [
-                            protocolRenameSpanFromSubstring(aTs.content, "x"),
-                            protocolRenameSpanFromSubstring(aTs.content, "x", { index: 2 }),
+                            protocolRenameSpanFromSubstring({
+                                fileText: aTs.content,
+                                text: "x",
+                                contextText: "const x = 1;"
+                            }),
+                            protocolRenameSpanFromSubstring({
+                                fileText: aTs.content,
+                                text: "x",
+                                options: { index: 2 },
+                                contextText: "export { x };",
+                            }),
                         ],
                     },
                 ],

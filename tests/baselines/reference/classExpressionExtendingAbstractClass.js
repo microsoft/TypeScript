@@ -28,9 +28,9 @@ var A = /** @class */ (function () {
     return A;
 }());
 var C = /** @class */ (function (_super) {
-    __extends(class_1, _super);
-    function class_1() {
+    __extends(C, _super);
+    function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    return class_1;
+    return C;
 }(A));

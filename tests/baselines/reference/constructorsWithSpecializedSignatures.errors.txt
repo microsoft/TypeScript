@@ -1,5 +1,5 @@
-tests/cases/compiler/constructorsWithSpecializedSignatures.ts(18,5): error TS2394: Overload signature is not compatible with function implementation.
-tests/cases/compiler/constructorsWithSpecializedSignatures.ts(26,5): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/compiler/constructorsWithSpecializedSignatures.ts(18,5): error TS2394: This overload signature is not compatible with its implementation signature.
+tests/cases/compiler/constructorsWithSpecializedSignatures.ts(26,5): error TS2394: This overload signature is not compatible with its implementation signature.
 
 
 ==== tests/cases/compiler/constructorsWithSpecializedSignatures.ts (2 errors) ====
@@ -22,7 +22,8 @@ tests/cases/compiler/constructorsWithSpecializedSignatures.ts(26,5): error TS239
         constructor(x: "hi");
         constructor(x: "foo");
         ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2394: Overload signature is not compatible with function implementation.
+!!! error TS2394: This overload signature is not compatible with its implementation signature.
+!!! related TS2750 tests/cases/compiler/constructorsWithSpecializedSignatures.ts:20:5: The implementation signature is declared here.
         constructor(x: number);
         constructor(x: "hi") { }
     }
@@ -32,7 +33,8 @@ tests/cases/compiler/constructorsWithSpecializedSignatures.ts(26,5): error TS239
         constructor(x: "hi");
         constructor(x: "foo");
         ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2394: Overload signature is not compatible with function implementation.
+!!! error TS2394: This overload signature is not compatible with its implementation signature.
+!!! related TS2750 tests/cases/compiler/constructorsWithSpecializedSignatures.ts:28:5: The implementation signature is declared here.
         constructor(x: string);
         constructor(x: "hi") { } // error
     }

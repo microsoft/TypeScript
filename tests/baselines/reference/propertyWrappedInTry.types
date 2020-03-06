@@ -21,7 +21,7 @@ class Foo {
 
         return this.bar; // doesn't get rewritten to Foo.bar.
 >this.bar : any
->this : any
+>this : typeof globalThis
 >bar : any
 
     }

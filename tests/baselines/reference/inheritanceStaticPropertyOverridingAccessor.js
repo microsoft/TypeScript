@@ -35,7 +35,7 @@ var a = /** @class */ (function () {
         },
         set: function (aValue) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return a;

@@ -17,7 +17,7 @@ var C = /** @class */ (function () {
         get: function () {
             return this.data;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

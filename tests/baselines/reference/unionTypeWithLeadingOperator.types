@@ -12,5 +12,11 @@ type B =
 >type : "DECREMENT"
 
 type C = [| 0 | 1, | "foo" | "bar"];
->C : [0 | 1, "foo" | "bar"]
+>C : C
 
+export type D = 
+>D : D
+
+  /*leading0*/
+  | /*leading1*/ 1 /*trailing1*/ 
+  | /*leading2*/ 2 /*trailing2*/;

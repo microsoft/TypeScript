@@ -1,0 +1,15 @@
+tests/cases/conformance/es2019/globalThisReadonlyProperties.ts(1,12): error TS2540: Cannot assign to 'globalThis' because it is a read-only property.
+tests/cases/conformance/es2019/globalThisReadonlyProperties.ts(5,12): error TS2339: Property 'y' does not exist on type 'typeof globalThis'.
+
+
+==== tests/cases/conformance/es2019/globalThisReadonlyProperties.ts (2 errors) ====
+    globalThis.globalThis = 1 as any // should error
+               ~~~~~~~~~~
+!!! error TS2540: Cannot assign to 'globalThis' because it is a read-only property.
+    var x = 1
+    const y = 2
+    globalThis.x = 3
+    globalThis.y = 4 // should error
+               ~
+!!! error TS2339: Property 'y' does not exist on type 'typeof globalThis'.
+    

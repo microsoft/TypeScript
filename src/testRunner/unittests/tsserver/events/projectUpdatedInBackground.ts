@@ -1,6 +1,6 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
-        function verifyFiles(caption: string, actual: ReadonlyArray<string>, expected: ReadonlyArray<string>) {
+        function verifyFiles(caption: string, actual: readonly string[], expected: readonly string[]) {
             assert.equal(actual.length, expected.length, `Incorrect number of ${caption}. Actual: ${actual} Expected: ${expected}`);
             const seen = createMap<true>();
             forEach(actual, f => {
@@ -528,11 +528,11 @@ namespace ts.projectSystem {
                     return JSON.stringify(event && { eventName: event.eventName, data: event.data });
                 }
 
-                function eventsToString(events: ReadonlyArray<server.ProjectsUpdatedInBackgroundEvent>) {
+                function eventsToString(events: readonly server.ProjectsUpdatedInBackgroundEvent[]) {
                     return "[" + map(events, eventToString).join(",") + "]";
                 }
 
-                function verifyProjectsUpdatedInBackgroundEventHandler(expectedEvents: ReadonlyArray<server.ProjectsUpdatedInBackgroundEvent>) {
+                function verifyProjectsUpdatedInBackgroundEventHandler(expectedEvents: readonly server.ProjectsUpdatedInBackgroundEvent[]) {
                     assert.equal(projectChangedEvents.length, expectedEvents.length, `Incorrect number of events Actual: ${eventsToString(projectChangedEvents)} Expected: ${eventsToString(expectedEvents)}`);
                     forEach(projectChangedEvents, (actualEvent, i) => {
                         const expectedEvent = expectedEvents[i];
@@ -565,7 +565,7 @@ namespace ts.projectSystem {
                     verifyInitialOpen: createVerifyInitialOpen(session, verifyProjectsUpdatedInBackgroundEventHandler)
                 };
 
-                function verifyProjectsUpdatedInBackgroundEventHandler(expected: ReadonlyArray<server.ProjectsUpdatedInBackgroundEvent>) {
+                function verifyProjectsUpdatedInBackgroundEventHandler(expected: readonly server.ProjectsUpdatedInBackgroundEvent[]) {
                     const expectedEvents: protocol.ProjectsUpdatedInBackgroundEventBody[] = map(expected, e => {
                         return {
                             openFiles: e.data.openFiles

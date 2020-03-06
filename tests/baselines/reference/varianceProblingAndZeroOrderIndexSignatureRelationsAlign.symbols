@@ -1,0 +1,248 @@
+=== tests/cases/compiler/varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts ===
+type Either<L, A> = Left<L, A> | Right<L, A>;
+>Either : Symbol(Either, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 0, 0))
+>L : Symbol(L, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 0, 12))
+>A : Symbol(A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 0, 14))
+>Left : Symbol(Left, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 0, 45))
+>L : Symbol(L, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 0, 12))
+>A : Symbol(A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 0, 14))
+>Right : Symbol(Right, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 14, 1))
+>L : Symbol(L, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 0, 12))
+>A : Symbol(A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 0, 14))
+
+class Left<L, A> {
+>Left : Symbol(Left, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 0, 45))
+>L : Symbol(L, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 2, 11))
+>A : Symbol(A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 2, 13))
+
+    readonly _tag: 'Left' = 'Left'
+>_tag : Symbol(Left._tag, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 2, 18))
+
+    readonly _A!: A
+>_A : Symbol(Left._A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 3, 34))
+>A : Symbol(A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 2, 13))
+
+    readonly _L!: L
+>_L : Symbol(Left._L, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 4, 19))
+>L : Symbol(L, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 2, 11))
+
+    constructor(readonly value: L) {}
+>value : Symbol(Left.value, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 6, 16))
+>L : Symbol(L, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 2, 11))
+
+    /** The given function is applied if this is a `Right` */
+    map<B>(f: (a: A) => B): Either<L, B> {
+>map : Symbol(Left.map, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 6, 37))
+>B : Symbol(B, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 8, 8))
+>f : Symbol(f, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 8, 11))
+>a : Symbol(a, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 8, 15))
+>A : Symbol(A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 2, 13))
+>B : Symbol(B, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 8, 8))
+>Either : Symbol(Either, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 0, 0))
+>L : Symbol(L, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 2, 11))
+>B : Symbol(B, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 8, 8))
+
+      return this as any
+>this : Symbol(Left, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 0, 45))
+    }
+    ap<B>(fab: Either<L, (a: A) => B>): Either<L, B> {
+>ap : Symbol(Left.ap, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 10, 5))
+>B : Symbol(B, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 11, 7))
+>fab : Symbol(fab, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 11, 10))
+>Either : Symbol(Either, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 0, 0))
+>L : Symbol(L, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 2, 11))
+>a : Symbol(a, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 11, 26))
+>A : Symbol(A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 2, 13))
+>B : Symbol(B, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 11, 7))
+>Either : Symbol(Either, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 0, 0))
+>L : Symbol(L, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 2, 11))
+>B : Symbol(B, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 11, 7))
+
+      return null as any
+    }
+}
+
+class Right<L, A> {
+>Right : Symbol(Right, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 14, 1))
+>L : Symbol(L, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 16, 12))
+>A : Symbol(A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 16, 14))
+
+    readonly _tag: 'Right' = 'Right'
+>_tag : Symbol(Right._tag, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 16, 19))
+
+    readonly _A!: A
+>_A : Symbol(Right._A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 17, 36))
+>A : Symbol(A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 16, 14))
+
+    readonly _L!: L
+>_L : Symbol(Right._L, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 18, 19))
+>L : Symbol(L, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 16, 12))
+
+    constructor(readonly value: A) {}
+>value : Symbol(Right.value, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 20, 16))
+>A : Symbol(A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 16, 14))
+
+    map<B>(f: (a: A) => B): Either<L, B> {
+>map : Symbol(Right.map, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 20, 37))
+>B : Symbol(B, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 21, 8))
+>f : Symbol(f, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 21, 11))
+>a : Symbol(a, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 21, 15))
+>A : Symbol(A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 16, 14))
+>B : Symbol(B, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 21, 8))
+>Either : Symbol(Either, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 0, 0))
+>L : Symbol(L, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 16, 12))
+>B : Symbol(B, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 21, 8))
+
+      return new Right(f(this.value))
+>Right : Symbol(Right, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 14, 1))
+>f : Symbol(f, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 21, 11))
+>this.value : Symbol(Right.value, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 20, 16))
+>this : Symbol(Right, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 14, 1))
+>value : Symbol(Right.value, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 20, 16))
+    }
+    ap<B>(fab: Either<L, (a: A) => B>): Either<L, B> {
+>ap : Symbol(Right.ap, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 23, 5))
+>B : Symbol(B, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 24, 7))
+>fab : Symbol(fab, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 24, 10))
+>Either : Symbol(Either, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 0, 0))
+>L : Symbol(L, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 16, 12))
+>a : Symbol(a, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 24, 26))
+>A : Symbol(A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 16, 14))
+>B : Symbol(B, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 24, 7))
+>Either : Symbol(Either, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 0, 0))
+>L : Symbol(L, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 16, 12))
+>B : Symbol(B, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 24, 7))
+
+      return null as any;
+    }
+}
+
+class Type<A, O = A, I = unknown> {
+>Type : Symbol(Type, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 27, 1))
+>A : Symbol(A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 29, 11))
+>O : Symbol(O, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 29, 13))
+>A : Symbol(A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 29, 11))
+>I : Symbol(I, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 29, 20))
+
+  readonly _A!: A;
+>_A : Symbol(Type._A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 29, 35))
+>A : Symbol(A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 29, 11))
+
+  readonly _O!: O;
+>_O : Symbol(Type._O, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 30, 18))
+>O : Symbol(O, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 29, 13))
+
+  readonly _I!: I;
+>_I : Symbol(Type._I, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 31, 18))
+>I : Symbol(I, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 29, 20))
+
+  constructor(
+    /** a unique name for this codec */
+    readonly name: string,
+>name : Symbol(Type.name, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 33, 14))
+
+    /** a custom type guard */
+    readonly is: (u: unknown) => u is A,
+>is : Symbol(Type.is, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 35, 26))
+>u : Symbol(u, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 37, 18))
+>u : Symbol(u, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 37, 18))
+>A : Symbol(A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 29, 11))
+
+    /** succeeds if a value of type I can be decoded to a value of type A */
+    readonly validate: (input: I, context: {}[]) => Either<{}[], A>,
+>validate : Symbol(Type.validate, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 37, 40))
+>input : Symbol(input, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 39, 24))
+>I : Symbol(I, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 29, 20))
+>context : Symbol(context, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 39, 33))
+>Either : Symbol(Either, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 0, 0))
+>A : Symbol(A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 29, 11))
+
+    /** converts a value of type A to a value of type O */
+    readonly encode: (a: A) => O
+>encode : Symbol(Type.encode, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 39, 68))
+>a : Symbol(a, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 41, 22))
+>A : Symbol(A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 29, 11))
+>O : Symbol(O, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 29, 13))
+
+  ) {}
+  /** a version of `validate` with a default context */
+  decode(i: I): Either<{}[], A> { return null as any; }
+>decode : Symbol(Type.decode, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 42, 6))
+>i : Symbol(i, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 44, 9))
+>I : Symbol(I, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 29, 20))
+>Either : Symbol(Either, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 0, 0))
+>A : Symbol(A, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 29, 11))
+}
+
+interface Any extends Type<any, any, any> {}
+>Any : Symbol(Any, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 45, 1))
+>Type : Symbol(Type, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 27, 1))
+
+type TypeOf<C extends Any> = C["_A"];
+>TypeOf : Symbol(TypeOf, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 47, 44))
+>C : Symbol(C, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 49, 12))
+>Any : Symbol(Any, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 45, 1))
+>C : Symbol(C, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 49, 12))
+
+type ToB<S extends {[_ in string | number | symbol]: Any}> = { [k in keyof S]: TypeOf<S[k]> };
+>ToB : Symbol(ToB, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 49, 37))
+>S : Symbol(S, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 51, 9))
+>_ : Symbol(_, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 51, 21))
+>Any : Symbol(Any, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 45, 1))
+>k : Symbol(k, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 51, 64))
+>S : Symbol(S, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 51, 9))
+>TypeOf : Symbol(TypeOf, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 47, 44))
+>S : Symbol(S, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 51, 9))
+>k : Symbol(k, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 51, 64))
+
+type ToA<S> = { [k in keyof S]: Type<S[k]> };
+>ToA : Symbol(ToA, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 51, 94))
+>S : Symbol(S, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 52, 9))
+>k : Symbol(k, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 52, 17))
+>S : Symbol(S, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 52, 9))
+>Type : Symbol(Type, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 27, 1))
+>S : Symbol(S, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 52, 9))
+>k : Symbol(k, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 52, 17))
+
+type NeededInfo<MyNamespaceSchema = {}> = {
+>NeededInfo : Symbol(NeededInfo, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 52, 45))
+>MyNamespaceSchema : Symbol(MyNamespaceSchema, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 54, 16))
+
+  ASchema: ToA<MyNamespaceSchema>;
+>ASchema : Symbol(ASchema, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 54, 43))
+>ToA : Symbol(ToA, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 51, 94))
+>MyNamespaceSchema : Symbol(MyNamespaceSchema, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 54, 16))
+
+};
+
+export type MyInfo = NeededInfo<ToB<{ initialize: any }>>;
+>MyInfo : Symbol(MyInfo, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 56, 2))
+>NeededInfo : Symbol(NeededInfo, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 52, 45))
+>ToB : Symbol(ToB, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 49, 37))
+>initialize : Symbol(initialize, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 58, 37))
+
+const tmp1: MyInfo = null!;
+>tmp1 : Symbol(tmp1, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 60, 5))
+>MyInfo : Symbol(MyInfo, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 56, 2))
+
+function tmp2<N extends NeededInfo>(n: N) {}
+>tmp2 : Symbol(tmp2, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 60, 27))
+>N : Symbol(N, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 61, 14))
+>NeededInfo : Symbol(NeededInfo, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 52, 45))
+>n : Symbol(n, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 61, 36))
+>N : Symbol(N, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 61, 14))
+
+tmp2(tmp1); // uncommenting this line removes a type error from a completely unrelated line ??
+>tmp2 : Symbol(tmp2, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 60, 27))
+>tmp1 : Symbol(tmp1, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 60, 5))
+
+class Server<X extends NeededInfo> {}
+>Server : Symbol(Server, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 62, 11))
+>X : Symbol(X, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 64, 13))
+>NeededInfo : Symbol(NeededInfo, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 52, 45))
+
+export class MyServer extends Server<MyInfo> {} // not assignable error at `MyInfo`
+>MyServer : Symbol(MyServer, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 64, 37))
+>Server : Symbol(Server, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 62, 11))
+>MyInfo : Symbol(MyInfo, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 56, 2))
+

@@ -1,7 +1,7 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "removeComments": true,
+        "removeComments": false,
         "outFile": "../../built/local/server.js",
         "preserveConstEnums": true,
         "types": [
@@ -15,12 +15,15 @@
     ],
     "files": [
         "types.ts",
+        "utilitiesPublic.ts",
         "utilities.ts",
+        "watchType.ts",
         "protocol.ts",
         "scriptInfo.ts",
         "typingsCache.ts",
         "project.ts",
         "editorServices.ts",
+        "packageJsonCache.ts",
         "session.ts",
         "scriptVersionCache.ts"
     ]

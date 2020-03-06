@@ -16,3 +16,26 @@ fn(a);
 >fn : Symbol(fn, Decl(mappedToToIndexSignatureInference.ts, 0, 13))
 >a : Symbol(a, Decl(mappedToToIndexSignatureInference.ts, 1, 13))
 
+// Repro from #30218
+
+declare function enumValues<K extends string, V extends string>(e: Record<K, V>): V[];
+>enumValues : Symbol(enumValues, Decl(mappedToToIndexSignatureInference.ts, 2, 6))
+>K : Symbol(K, Decl(mappedToToIndexSignatureInference.ts, 6, 28))
+>V : Symbol(V, Decl(mappedToToIndexSignatureInference.ts, 6, 45))
+>e : Symbol(e, Decl(mappedToToIndexSignatureInference.ts, 6, 64))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(mappedToToIndexSignatureInference.ts, 6, 28))
+>V : Symbol(V, Decl(mappedToToIndexSignatureInference.ts, 6, 45))
+>V : Symbol(V, Decl(mappedToToIndexSignatureInference.ts, 6, 45))
+
+enum E { A = 'foo', B = 'bar' }
+>E : Symbol(E, Decl(mappedToToIndexSignatureInference.ts, 6, 86))
+>A : Symbol(E.A, Decl(mappedToToIndexSignatureInference.ts, 8, 8))
+>B : Symbol(E.B, Decl(mappedToToIndexSignatureInference.ts, 8, 19))
+
+let x: E[] = enumValues(E);
+>x : Symbol(x, Decl(mappedToToIndexSignatureInference.ts, 10, 3))
+>E : Symbol(E, Decl(mappedToToIndexSignatureInference.ts, 6, 86))
+>enumValues : Symbol(enumValues, Decl(mappedToToIndexSignatureInference.ts, 2, 6))
+>E : Symbol(E, Decl(mappedToToIndexSignatureInference.ts, 6, 86))
+

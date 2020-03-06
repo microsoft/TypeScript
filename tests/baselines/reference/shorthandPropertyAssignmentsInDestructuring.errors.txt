@@ -13,7 +13,7 @@ tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(85,19): erro
   Types of property 'x' are incompatible.
     Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(85,26): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(111,12): error TS2304: Cannot find name 's'.
+tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(111,12): error TS18004: No value exists in scope for the shorthand property 's'. Either declare one or provide an initializer.
 tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(111,14): error TS1312: '=' can only be used in an object literal property inside a destructuring assignment.
 
 
@@ -160,7 +160,7 @@ tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(111,14): err
     (function() {
     	let a = { s = 5 };
     	          ~
-!!! error TS2304: Cannot find name 's'.
+!!! error TS18004: No value exists in scope for the shorthand property 's'. Either declare one or provide an initializer.
     	            ~
 !!! error TS1312: '=' can only be used in an object literal property inside a destructuring assignment.
     });

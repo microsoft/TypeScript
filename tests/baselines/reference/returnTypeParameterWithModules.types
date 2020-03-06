@@ -39,7 +39,7 @@ module M2 {
 >compose : () => void
 
         A.reduce(arguments, compose2);
->A.reduce(arguments, compose2) : {}[]
+>A.reduce(arguments, compose2) : unknown[]
 >A.reduce : <A>(ar: any, f: any, e?: any) => A[]
 >A : typeof A
 >reduce : <A>(ar: any, f: any, e?: any) => A[]

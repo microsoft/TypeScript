@@ -238,7 +238,7 @@ var c1 = /** @class */ (function () {
             this.p1 = this.p2(value);
         } // trailing comment Setter
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     /** sum with property*/
@@ -254,7 +254,7 @@ var c1 = /** @class */ (function () {
         set: function (/** this is value*/ value) {
             this.pp1 = this.pp2(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     /** static sum with property*/
@@ -270,7 +270,7 @@ var c1 = /** @class */ (function () {
         set: function (/** this is value*/ value) {
             c1.s1 = c1.s2(value);
         } /*trailing comment 2 */ /*setter*/,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     c1.prototype.nc_p2 = function (b) {
@@ -283,7 +283,7 @@ var c1 = /** @class */ (function () {
         set: function (value) {
             this.nc_p1 = this.nc_p2(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     c1.prototype.nc_pp2 = function (b) {
@@ -296,7 +296,7 @@ var c1 = /** @class */ (function () {
         set: function (value) {
             this.nc_pp1 = this.nc_pp2(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     c1.nc_s2 = function (b) {
@@ -309,7 +309,7 @@ var c1 = /** @class */ (function () {
         set: function (value) {
             c1.nc_s1 = c1.nc_s2(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     // sum with property
@@ -325,7 +325,7 @@ var c1 = /** @class */ (function () {
         set: function (value) {
             this.a_p1 = this.a_p2(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     // sum with property
@@ -341,7 +341,7 @@ var c1 = /** @class */ (function () {
         set: function (value) {
             this.a_pp1 = this.a_pp2(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     // static sum with property
@@ -357,7 +357,7 @@ var c1 = /** @class */ (function () {
         set: function (value) {
             c1.a_s1 = c1.a_s2(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     /** sum with property */
@@ -373,7 +373,7 @@ var c1 = /** @class */ (function () {
         set: function (value) {
             this.b_p1 = this.b_p2(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     /** sum with property */
@@ -389,7 +389,7 @@ var c1 = /** @class */ (function () {
         set: function (value) {
             this.b_pp1 = this.b_pp2(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     /** static sum with property */
@@ -408,7 +408,7 @@ var c1 = /** @class */ (function () {
             /** setter */
             c1.b_s1 = c1.b_s2(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return c1;
@@ -446,14 +446,14 @@ var cProperties = /** @class */ (function () {
             return this.val;
         } // trailing comment of only getter
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(cProperties.prototype, "nc_p1", {
         get: function () {
             return this.val;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(cProperties.prototype, "p2", {
@@ -461,14 +461,14 @@ var cProperties = /** @class */ (function () {
         set: function (value) {
             this.val = value;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(cProperties.prototype, "nc_p2", {
         set: function (value) {
             this.val = value;
         } /* trailing comment of setter only*/,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return cProperties;
@@ -486,15 +486,17 @@ declare class c1 {
     /** sum with property*/
     p2(/** number to add*/ b: number): number;
     /** getter property*/
+    get p3(): number;
     /** setter property*/
-    p3: number;
+    set p3(/** this is value*/ value: number);
     /** pp1 is property of c1*/
     private pp1;
     /** sum with property*/
     private pp2;
     /** getter property*/
+    private get pp3();
     /** setter property*/
-    private pp3;
+    private set pp3(value);
     /** Constructor method*/
     constructor();
     /** s1 is static property of c1*/
@@ -502,49 +504,59 @@ declare class c1 {
     /** static sum with property*/
     static s2(/** number to add*/ b: number): number;
     /** static getter property*/
+    static get s3(): number;
     /** setter property*/
-    static s3: number;
+    static set s3(/** this is value*/ value: number);
     nc_p1: number;
     nc_p2(b: number): number;
-    nc_p3: number;
+    get nc_p3(): number;
+    set nc_p3(value: number);
     private nc_pp1;
     private nc_pp2;
-    private nc_pp3;
+    private get nc_pp3();
+    private set nc_pp3(value);
     static nc_s1: number;
     static nc_s2(b: number): number;
-    static nc_s3: number;
+    static get nc_s3(): number;
+    static set nc_s3(value: number);
     a_p1: number;
     a_p2(b: number): number;
-    a_p3: number;
+    get a_p3(): number;
+    set a_p3(value: number);
     private a_pp1;
     private a_pp2;
-    private a_pp3;
+    private get a_pp3();
+    private set a_pp3(value);
     static a_s1: number;
     static a_s2(b: number): number;
-    static a_s3: number;
+    static get a_s3(): number;
+    static set a_s3(value: number);
     /** p1 is property of c1 */
     b_p1: number;
     /** sum with property */
     b_p2(b: number): number;
     /** getter property */
+    get b_p3(): number;
     /** setter property */
-    b_p3: number;
+    set b_p3(value: number);
     /** pp1 is property of c1 */
     private b_pp1;
     /** sum with property */
     private b_pp2;
     /** getter property */
+    private get b_pp3();
     /** setter property */
-    private b_pp3;
+    private set b_pp3(value);
     /** s1 is static property of c1 */
     static b_s1: number;
     /** static sum with property */
     static b_s2(b: number): number;
     /** static getter property
     */
+    static get b_s3(): number;
     /** setter property
     */
-    static b_s3: number;
+    static set b_s3(value: number);
 }
 declare var i1: c1;
 declare var i1_p: number;
@@ -567,11 +579,11 @@ declare var i1_c: typeof c1;
 declare class cProperties {
     private val;
     /** getter only property*/
-    readonly p1: number;
-    readonly nc_p1: number;
+    get p1(): number;
+    get nc_p1(): number;
     /**setter only property*/
-    p2: number;
-    nc_p2: number;
+    set p2(value: number);
+    set nc_p2(value: number);
     x: number;
     private y;
 }

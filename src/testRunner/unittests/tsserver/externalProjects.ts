@@ -50,6 +50,68 @@ namespace ts.projectSystem {
             });
         });
 
+        it("load global plugins", () => {
+            const f1 = {
+                path: "/a/file1.ts",
+                content: "let x = [1, 2];"
+            };
+            const p1 = { projectFileName: "/a/proj1.csproj", rootFiles: [toExternalFile(f1.path)], options: {} };
+
+            const host = createServerHost([f1]);
+            host.require = (_initialPath, moduleName) => {
+                assert.equal(moduleName, "myplugin");
+                return {
+                    module: () => ({
+                        create(info: server.PluginCreateInfo) {
+                            const proxy = Harness.LanguageService.makeDefaultProxy(info);
+                            proxy.getSemanticDiagnostics = filename => {
+                                const prev = info.languageService.getSemanticDiagnostics(filename);
+                                const sourceFile: SourceFile = info.project.getSourceFile(toPath(filename, /*basePath*/ undefined, createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames)))!;
+                                prev.push({
+                                    category: DiagnosticCategory.Warning,
+                                    file: sourceFile,
+                                    code: 9999,
+                                    length: 3,
+                                    messageText: `Plugin diagnostic`,
+                                    start: 0
+                                });
+                                return prev;
+                            };
+                            return proxy;
+                        }
+                    }),
+                    error: undefined
+                };
+            };
+            const session = createSession(host, { globalPlugins: ["myplugin"] });
+
+            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+                seq: 1,
+                type: "request",
+                command: "openExternalProjects",
+                arguments: { projects: [p1] }
+            });
+
+            const projectService = session.getProjectService();
+            checkNumberOfProjects(projectService, { externalProjects: 1 });
+            assert.equal(projectService.externalProjects[0].getProjectName(), p1.projectFileName);
+
+            const handlerResponse = session.executeCommand(<protocol.SemanticDiagnosticsSyncRequest>{
+                seq: 2,
+                type: "request",
+                command: "semanticDiagnosticsSync",
+                arguments: {
+                    file: f1.path,
+                    projectFileName: p1.projectFileName
+                }
+            });
+
+            assert.isDefined(handlerResponse.response);
+            const response = handlerResponse.response as protocol.Diagnostic[];
+            assert.equal(response.length, 1);
+            assert.equal(response[0].text, "Plugin diagnostic");
+        });
+
         it("remove not-listed external projects", () => {
             const f1 = {
                 path: "/a/app.ts",
@@ -159,9 +221,31 @@ namespace ts.projectSystem {
 
             checkNumberOfExternalProjects(projectService, 1);
             checkNumberOfInferredProjects(projectService, 0);
+            verifyDynamic(projectService, "/^scriptdocument1 file1.ts");
 
             externalFiles[0].content = "let x =1;";
-            projectService.applyChangesInOpenFiles(externalFiles, [], []);
+            projectService.applyChangesInOpenFiles(arrayIterator(externalFiles));
+        });
+
+        it("when file name starts with ^", () => {
+            const file: File = {
+                path: `${tscWatch.projectRoot}/file.ts`,
+                content: "const x = 10;"
+            };
+            const app: File = {
+                path: `${tscWatch.projectRoot}/^app.ts`,
+                content: "const y = 10;"
+            };
+            const host = createServerHost([file, app, libFile]);
+            const service = createProjectService(host);
+            service.openExternalProjects([{
+                projectFileName: `${tscWatch.projectRoot}/myproject.njsproj`,
+                rootFiles: [
+                    toExternalFile(file.path),
+                    toExternalFile(app.path)
+                ],
+                options: { },
+            }]);
         });
 
         it("external project that included config files", () => {
@@ -762,10 +846,9 @@ namespace ts.projectSystem {
         });
 
         it("handles creation of external project with jsconfig before jsconfig creation watcher is invoked", () => {
-            const projectLocation = `/user/username/projects/WebApplication36/WebApplication36`;
-            const projectFileName = `${projectLocation}/WebApplication36.csproj`;
+            const projectFileName = `${tscWatch.projectRoot}/WebApplication36.csproj`;
             const tsconfig: File = {
-                path: `${projectLocation}/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
                 content: "{}"
             };
             const files = [libFile, tsconfig];
@@ -783,16 +866,14 @@ namespace ts.projectSystem {
             checkProjectActualFiles(configProject, [tsconfig.path]);
 
             // write js file, open external project and open it for edit
-            const jsFilePath = `${projectLocation}/javascript.js`;
+            const jsFilePath = `${tscWatch.projectRoot}/javascript.js`;
             host.writeFile(jsFilePath, "");
             service.openExternalProjects([{
                 projectFileName,
                 rootFiles: [{ fileName: tsconfig.path }, { fileName: jsFilePath }],
                 options: { allowJs: false }
             }]);
-            service.applyChangesInOpenFiles([
-                { fileName: jsFilePath, scriptKind: ScriptKind.JS, content: "" }
-            ], /*changedFiles*/ undefined, /*closedFiles*/ undefined);
+            service.applyChangesInOpenFiles(singleIterator({ fileName: jsFilePath, scriptKind: ScriptKind.JS, content: "" }));
             checkNumberOfProjects(service, { configuredProjects: 1, inferredProjects: 1 });
             checkProjectActualFiles(configProject, [tsconfig.path]);
             const inferredProject = service.inferredProjects[0];
@@ -800,7 +881,7 @@ namespace ts.projectSystem {
 
             // write jsconfig file
             const jsConfig: File = {
-                path: `${projectLocation}/jsconfig.json`,
+                path: `${tscWatch.projectRoot}/jsconfig.json`,
                 content: "{}"
             };
             // Dont invoke file creation watchers as the repro suggests

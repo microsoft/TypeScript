@@ -15,10 +15,10 @@ namespace Harness.SourceMapRecorder {
             error?: string;
         }
 
-        export function initializeSourceMapDecoding(sourceMapData: ts.SourceMapEmitResult) {
+        export function initializeSourceMapDecoding(sourceMap: ts.RawSourceMap) {
             decodingIndex = 0;
-            sourceMapMappings = sourceMapData.sourceMap.mappings;
-            mappings = ts.decodeMappings(sourceMapData.sourceMap.mappings);
+            sourceMapMappings = sourceMap.mappings;
+            mappings = ts.decodeMappings(sourceMap.mappings);
         }
 
         export function decodeNextEncodedSourceMapSpan(): DecodedMapping {
@@ -44,7 +44,7 @@ namespace Harness.SourceMapRecorder {
         let sourceMapNames: string[] | null | undefined;
 
         let jsFile: documents.TextDocument;
-        let jsLineMap: ReadonlyArray<number>;
+        let jsLineMap: readonly number[];
         let tsCode: string;
         let tsLineMap: number[];
 
@@ -53,10 +53,10 @@ namespace Harness.SourceMapRecorder {
         let nextJsLineToWrite: number;
         let spanMarkerContinues: boolean;
 
-        export function initializeSourceMapSpanWriter(sourceMapRecordWriter: Compiler.WriterAggregator, sourceMapData: ts.SourceMapEmitResult, currentJsFile: documents.TextDocument) {
+        export function initializeSourceMapSpanWriter(sourceMapRecordWriter: Compiler.WriterAggregator, sourceMap: ts.RawSourceMap, currentJsFile: documents.TextDocument) {
             sourceMapRecorder = sourceMapRecordWriter;
-            sourceMapSources = sourceMapData.sourceMap.sources;
-            sourceMapNames = sourceMapData.sourceMap.names;
+            sourceMapSources = sourceMap.sources;
+            sourceMapNames = sourceMap.names;
 
             jsFile = currentJsFile;
             jsLineMap = jsFile.lineStarts;
@@ -66,14 +66,14 @@ namespace Harness.SourceMapRecorder {
             nextJsLineToWrite = 0;
             spanMarkerContinues = false;
 
-            SourceMapDecoder.initializeSourceMapDecoding(sourceMapData);
+            SourceMapDecoder.initializeSourceMapDecoding(sourceMap);
             sourceMapRecorder.WriteLine("===================================================================");
-            sourceMapRecorder.WriteLine("JsFile: " + sourceMapData.sourceMap.file);
+            sourceMapRecorder.WriteLine("JsFile: " + sourceMap.file);
             sourceMapRecorder.WriteLine("mapUrl: " + ts.tryGetSourceMappingURL(ts.getLineInfo(jsFile.text, jsLineMap)));
-            sourceMapRecorder.WriteLine("sourceRoot: " + sourceMapData.sourceMap.sourceRoot);
-            sourceMapRecorder.WriteLine("sources: " + sourceMapData.sourceMap.sources);
-            if (sourceMapData.sourceMap.sourcesContent) {
-                sourceMapRecorder.WriteLine("sourcesContent: " + JSON.stringify(sourceMapData.sourceMap.sourcesContent));
+            sourceMapRecorder.WriteLine("sourceRoot: " + sourceMap.sourceRoot);
+            sourceMapRecorder.WriteLine("sources: " + sourceMap.sources);
+            if (sourceMap.sourcesContent) {
+                sourceMapRecorder.WriteLine("sourcesContent: " + JSON.stringify(sourceMap.sourcesContent));
             }
             sourceMapRecorder.WriteLine("===================================================================");
         }
@@ -153,11 +153,11 @@ namespace Harness.SourceMapRecorder {
             writeJsFileLines(jsLineMap.length);
         }
 
-        function getTextOfLine(line: number, lineMap: ReadonlyArray<number>, code: string) {
+        function getTextOfLine(line: number, lineMap: readonly number[], code: string) {
             const startPos = lineMap[line];
             const endPos = lineMap[line + 1];
             const text = code.substring(startPos, endPos);
-            return line === 0 ? utils.removeByteOrderMark(text) : text;
+            return line === 0 ? Utils.removeByteOrderMark(text) : text;
         }
 
         function writeJsFileLines(endJsLine: number) {
@@ -275,7 +275,7 @@ namespace Harness.SourceMapRecorder {
         }
     }
 
-    export function getSourceMapRecord(sourceMapDataList: ReadonlyArray<ts.SourceMapEmitResult>, program: ts.Program, jsFiles: ReadonlyArray<documents.TextDocument>, declarationFiles: ReadonlyArray<documents.TextDocument>) {
+    export function getSourceMapRecord(sourceMapDataList: readonly ts.SourceMapEmitResult[], program: ts.Program, jsFiles: readonly documents.TextDocument[], declarationFiles: readonly documents.TextDocument[]) {
         const sourceMapRecorder = new Compiler.WriterAggregator();
 
         for (let i = 0; i < sourceMapDataList.length; i++) {
@@ -299,9 +299,10 @@ namespace Harness.SourceMapRecorder {
                 }
             }
 
-            SourceMapSpanWriter.initializeSourceMapSpanWriter(sourceMapRecorder, sourceMapData, currentFile);
+            SourceMapSpanWriter.initializeSourceMapSpanWriter(sourceMapRecorder, sourceMapData.sourceMap, currentFile);
             const mapper = ts.decodeMappings(sourceMapData.sourceMap.mappings);
-            for (let { value: decodedSourceMapping, done } = mapper.next(); !done; { value: decodedSourceMapping, done } = mapper.next()) {
+            for (let iterResult = mapper.next(); !iterResult.done; iterResult = mapper.next()) {
+                const decodedSourceMapping = iterResult.value;
                 const currentSourceFile = ts.isSourceMapping(decodedSourceMapping)
                     ? program.getSourceFile(sourceMapData.inputSourceFileNames[decodedSourceMapping.sourceIndex])
                     : undefined;
@@ -319,5 +320,48 @@ namespace Harness.SourceMapRecorder {
         }
         sourceMapRecorder.Close();
         return sourceMapRecorder.lines.join("\r\n");
+    }
+
+    export function getSourceMapRecordWithSystem(sys: ts.System, sourceMapFile: string) {
+        const sourceMapRecorder = new Compiler.WriterAggregator();
+        let prevSourceFile: documents.TextDocument | undefined;
+        const files = ts.createMap<documents.TextDocument>();
+        const sourceMap = ts.tryParseRawSourceMap(sys.readFile(sourceMapFile, "utf8")!);
+        if (sourceMap) {
+            const mapDirectory = ts.getDirectoryPath(sourceMapFile);
+            const sourceRoot = sourceMap.sourceRoot ? ts.getNormalizedAbsolutePath(sourceMap.sourceRoot, mapDirectory) : mapDirectory;
+            const generatedAbsoluteFilePath = ts.getNormalizedAbsolutePath(sourceMap.file, mapDirectory);
+            const sourceFileAbsolutePaths = sourceMap.sources.map(source => ts.getNormalizedAbsolutePath(source, sourceRoot));
+            const currentFile = getFile(generatedAbsoluteFilePath);
+
+            SourceMapSpanWriter.initializeSourceMapSpanWriter(sourceMapRecorder, sourceMap, currentFile);
+            const mapper = ts.decodeMappings(sourceMap.mappings);
+            for (let iterResult = mapper.next(); !iterResult.done; iterResult = mapper.next()) {
+                const decodedSourceMapping = iterResult.value;
+                const currentSourceFile = ts.isSourceMapping(decodedSourceMapping)
+                    ? getFile(sourceFileAbsolutePaths[decodedSourceMapping.sourceIndex])
+                    : undefined;
+                if (currentSourceFile !== prevSourceFile) {
+                    if (currentSourceFile) {
+                        SourceMapSpanWriter.recordNewSourceFileSpan(decodedSourceMapping, currentSourceFile.text);
+                    }
+                    prevSourceFile = currentSourceFile;
+                }
+                else {
+                    SourceMapSpanWriter.recordSourceMapSpan(decodedSourceMapping);
+                }
+            }
+            SourceMapSpanWriter.close(); // If the last spans werent emitted, emit them
+        }
+        sourceMapRecorder.Close();
+        return sourceMapRecorder.lines.join("\r\n");
+
+        function getFile(path: string) {
+            const existing = files.get(path);
+            if (existing) return existing;
+            const value = new documents.TextDocument(path, sys.readFile(path, "utf8")!);
+            files.set(path, value);
+            return value;
+        }
     }
 }

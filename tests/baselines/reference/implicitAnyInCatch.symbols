@@ -8,6 +8,7 @@ try { } catch (error) {
 }
 for (var key in this) { }
 >key : Symbol(key, Decl(implicitAnyInCatch.ts, 4, 8))
+>this : Symbol(globalThis)
 
 class C {
 >C : Symbol(C, Decl(implicitAnyInCatch.ts, 4, 25))

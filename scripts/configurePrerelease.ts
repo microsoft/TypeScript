@@ -1,9 +1,7 @@
 /// <reference types="node"/>
-import { normalize } from "path";
+import { normalize, relative } from "path";
 import assert = require("assert");
 import { readFileSync, writeFileSync } from "fs";
-const args = process.argv.slice(2);
-
 
 /**
  * A minimal description for a parsed package.json object.
@@ -15,14 +13,16 @@ interface PackageJson {
 }
 
 function main(): void {
+    const args = process.argv.slice(2);
     if (args.length < 3) {
+        const thisProgramName = relative(process.cwd(), __filename);
         console.log("Usage:");
-        console.log("\tnode configureNightly.js <dev|insiders> <package.json location> <file containing version>");
+        console.log(`\tnode ${thisProgramName} <dev|insiders> <package.json location> <file containing version>`);
         return;
     }
 
     const tag = args[0];
-    if (tag !== "dev" && tag !== "insiders") {
+    if (tag !== "dev" && tag !== "insiders" && tag !== "experimental") {
         throw new Error(`Unexpected tag name '${tag}'.`);
     }
 
@@ -48,10 +48,11 @@ function main(): void {
     // Finally write the changes to disk.
     // Modify the package.json structure
     packageJsonValue.version = `${majorMinor}.${prereleasePatch}`;
-    writeFileSync(packageJsonFilePath, JSON.stringify(packageJsonValue, /*replacer:*/ undefined, /*space:*/ 4))
+    writeFileSync(packageJsonFilePath, JSON.stringify(packageJsonValue, /*replacer:*/ undefined, /*space:*/ 4));
     writeFileSync(tsFilePath, modifiedTsFileContents);
 }
 
+/* eslint-disable no-null/no-null */
 function updateTsFile(tsFilePath: string, tsFileContents: string, majorMinor: string, patch: string, nightlyPatch: string): string {
     const majorMinorRgx = /export const versionMajorMinor = "(\d+\.\d+)"/;
     const majorMinorMatch = majorMinorRgx.exec(tsFileContents);
@@ -59,7 +60,7 @@ function updateTsFile(tsFilePath: string, tsFileContents: string, majorMinor: st
     const parsedMajorMinor = majorMinorMatch![1];
     assert(parsedMajorMinor === majorMinor, `versionMajorMinor does not match. ${tsFilePath}: '${parsedMajorMinor}'; package.json: '${majorMinor}'`);
 
-    const versionRgx = /export const version = `\$\{versionMajorMinor\}\.(\d)(-dev)?`;/;
+    const versionRgx = /export const version = `\$\{versionMajorMinor\}\.(\d)(-\w+)?`;/;
     const patchMatch = versionRgx.exec(tsFileContents);
     assert(patchMatch !== null, `The file '${tsFilePath}' seems to no longer have a string matching '${versionRgx.toString()}'.`);
     const parsedPatch = patchMatch![1];
@@ -76,6 +77,7 @@ function parsePackageJsonVersion(versionString: string): { majorMinor: string, p
     assert(match !== null, "package.json 'version' should match " + versionRgx.toString());
     return { majorMinor: match![1], patch: match![2] };
 }
+/* eslint-enable no-null/no-null */
 
 /** e.g. 0-dev.20170707 */
 function getPrereleasePatch(tag: string, plainPatch: string): string {

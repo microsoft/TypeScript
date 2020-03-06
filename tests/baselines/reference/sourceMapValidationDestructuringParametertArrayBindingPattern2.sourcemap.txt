@@ -359,7 +359,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 5 >Emitted(18, 13) Source(23, 13) + SourceIndex(0)
 6 >Emitted(18, 14) Source(23, 14) + SourceIndex(0)
 ---
->>>foo1(["roomba", ["vaccum", "mopping"]]);
+>>>foo1(["roomba", ["vacuum", "mopping"]]);
 1->
 2 >^^^^
 3 >    ^
@@ -382,7 +382,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 5 >      "roomba"
 6 >              , 
 7 >                [
-8 >                 "vaccum"
+8 >                 "vacuum"
 9 >                         , 
 10>                           "mopping"
 11>                                    ]
@@ -427,7 +427,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 5 >Emitted(20, 13) Source(26, 13) + SourceIndex(0)
 6 >Emitted(20, 14) Source(26, 14) + SourceIndex(0)
 ---
->>>foo2(["roomba", ["vaccum", "mopping"]]);
+>>>foo2(["roomba", ["vacuum", "mopping"]]);
 1->
 2 >^^^^
 3 >    ^
@@ -450,7 +450,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 5 >      "roomba"
 6 >              , 
 7 >                [
-8 >                 "vaccum"
+8 >                 "vacuum"
 9 >                         , 
 10>                           "mopping"
 11>                                    ]
@@ -495,7 +495,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 5 >Emitted(22, 13) Source(29, 13) + SourceIndex(0)
 6 >Emitted(22, 14) Source(29, 14) + SourceIndex(0)
 ---
->>>foo3(["roomba", ["vaccum", "mopping"]]);
+>>>foo3(["roomba", ["vacuum", "mopping"]]);
 1->
 2 >^^^^
 3 >    ^
@@ -518,7 +518,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 5 >      "roomba"
 6 >              , 
 7 >                [
-8 >                 "vaccum"
+8 >                 "vacuum"
 9 >                         , 
 10>                           "mopping"
 11>                                    ]
@@ -563,7 +563,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 5 >Emitted(24, 13) Source(32, 13) + SourceIndex(0)
 6 >Emitted(24, 14) Source(32, 14) + SourceIndex(0)
 ---
->>>foo4(["roomba", ["vaccum", "mopping"]]);
+>>>foo4(["roomba", ["vacuum", "mopping"]]);
 1->
 2 >^^^^
 3 >    ^
@@ -587,7 +587,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 5 >      "roomba"
 6 >              , 
 7 >                [
-8 >                 "vaccum"
+8 >                 "vacuum"
 9 >                         , 
 10>                           "mopping"
 11>                                    ]

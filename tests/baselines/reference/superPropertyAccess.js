@@ -60,7 +60,7 @@ var MyBase = /** @class */ (function () {
     Object.defineProperty(MyBase.prototype, "value", {
         get: function () { return 0; },
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return MyBase;

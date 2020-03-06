@@ -1,0 +1,27 @@
+=== tests/cases/compiler/decoratorReferences.ts ===
+declare function y(...args: any[]): any;
+>y : Symbol(y, Decl(decoratorReferences.ts, 0, 0))
+>args : Symbol(args, Decl(decoratorReferences.ts, 0, 19))
+
+type T = number;
+>T : Symbol(T, Decl(decoratorReferences.ts, 0, 40))
+
+@y(1 as T, C) // <-- T should be resolved to the type alias, not the type parameter of the class; C should resolve to the class
+>y : Symbol(y, Decl(decoratorReferences.ts, 0, 0))
+>T : Symbol(T, Decl(decoratorReferences.ts, 0, 40))
+>C : Symbol(C, Decl(decoratorReferences.ts, 1, 16))
+
+class C<T> {
+>C : Symbol(C, Decl(decoratorReferences.ts, 1, 16))
+>T : Symbol(T, Decl(decoratorReferences.ts, 3, 8))
+
+    @y(null as T) // <-- y should resolve to the function declaration, not the parameter; T should resolve to the type parameter of the class
+>y : Symbol(y, Decl(decoratorReferences.ts, 0, 0))
+>T : Symbol(T, Decl(decoratorReferences.ts, 3, 8))
+
+    method(@y x, y) {} // <-- decorator y should be resolved at the class declaration, not the parameter.
+>method : Symbol(C.method, Decl(decoratorReferences.ts, 3, 12))
+>y : Symbol(y, Decl(decoratorReferences.ts, 0, 0))
+>x : Symbol(x, Decl(decoratorReferences.ts, 5, 11))
+>y : Symbol(y, Decl(decoratorReferences.ts, 5, 16))
+}

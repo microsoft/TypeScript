@@ -1,0 +1,36 @@
+/a.js(9,5): error TS2416: Property 'mNumber' in type 'B2' is not assignable to the same property in base type 'A'.
+  Type '() => string' is not assignable to type '() => number'.
+    Type 'string' is not assignable to type 'number'.
+/a.js(14,7): error TS2420: Class 'B3' incorrectly implements interface 'A'.
+  Property 'mNumber' is missing in type 'B3' but required in type 'A'.
+
+
+==== /defs.d.ts (0 errors) ====
+    interface A {
+        mNumber(): number;
+    }
+==== /a.js (2 errors) ====
+    /** @implements A */
+    class B {
+        mNumber() {
+            return 0;
+        }
+    }
+    /** @implements {A} */
+    class B2 {
+        mNumber() {
+        ~~~~~~~
+!!! error TS2416: Property 'mNumber' in type 'B2' is not assignable to the same property in base type 'A'.
+!!! error TS2416:   Type '() => string' is not assignable to type '() => number'.
+!!! error TS2416:     Type 'string' is not assignable to type 'number'.
+            return "";
+        }
+    }
+    /** @implements A */
+    class B3 {
+          ~~
+!!! error TS2420: Class 'B3' incorrectly implements interface 'A'.
+!!! error TS2420:   Property 'mNumber' is missing in type 'B3' but required in type 'A'.
+!!! related TS2728 /defs.d.ts:2:5: 'mNumber' is declared here.
+    }
+    

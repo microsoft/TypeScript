@@ -165,3 +165,57 @@ type b = Remap2<string[]>;  // string[]
 >b : Symbol(b, Decl(recursiveMappedTypes.ts, 59, 26))
 >Remap2 : Symbol(Remap2, Decl(recursiveMappedTypes.ts, 56, 51))
 
+// Repro from #29992
+
+type NonOptionalKeys<T> = { [P in keyof T]: undefined extends T[P] ? never : P }[keyof T];
+>NonOptionalKeys : Symbol(NonOptionalKeys, Decl(recursiveMappedTypes.ts, 60, 26))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 64, 21))
+>P : Symbol(P, Decl(recursiveMappedTypes.ts, 64, 29))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 64, 21))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 64, 21))
+>P : Symbol(P, Decl(recursiveMappedTypes.ts, 64, 29))
+>P : Symbol(P, Decl(recursiveMappedTypes.ts, 64, 29))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 64, 21))
+
+type Child<T> = { [P in NonOptionalKeys<T>]: T[P] }
+>Child : Symbol(Child, Decl(recursiveMappedTypes.ts, 64, 90))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 65, 11))
+>P : Symbol(P, Decl(recursiveMappedTypes.ts, 65, 19))
+>NonOptionalKeys : Symbol(NonOptionalKeys, Decl(recursiveMappedTypes.ts, 60, 26))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 65, 11))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 65, 11))
+>P : Symbol(P, Decl(recursiveMappedTypes.ts, 65, 19))
+
+export interface ListWidget {
+>ListWidget : Symbol(ListWidget, Decl(recursiveMappedTypes.ts, 65, 51))
+
+    "type": "list",
+>"type" : Symbol(ListWidget["type"], Decl(recursiveMappedTypes.ts, 67, 29))
+
+    "minimum_count": number,
+>"minimum_count" : Symbol(ListWidget["minimum_count"], Decl(recursiveMappedTypes.ts, 68, 19))
+
+    "maximum_count": number,
+>"maximum_count" : Symbol(ListWidget["maximum_count"], Decl(recursiveMappedTypes.ts, 69, 28))
+
+    "collapsable"?: boolean, //default to false, means all expanded
+>"collapsable" : Symbol(ListWidget["collapsable"], Decl(recursiveMappedTypes.ts, 70, 28))
+
+    "each": Child<ListWidget>;
+>"each" : Symbol(ListWidget["each"], Decl(recursiveMappedTypes.ts, 71, 28))
+>Child : Symbol(Child, Decl(recursiveMappedTypes.ts, 64, 90))
+>ListWidget : Symbol(ListWidget, Decl(recursiveMappedTypes.ts, 65, 51))
+}
+
+type ListChild = Child<ListWidget>
+>ListChild : Symbol(ListChild, Decl(recursiveMappedTypes.ts, 73, 1))
+>Child : Symbol(Child, Decl(recursiveMappedTypes.ts, 64, 90))
+>ListWidget : Symbol(ListWidget, Decl(recursiveMappedTypes.ts, 65, 51))
+
+declare let x: ListChild;
+>x : Symbol(x, Decl(recursiveMappedTypes.ts, 77, 11))
+>ListChild : Symbol(ListChild, Decl(recursiveMappedTypes.ts, 73, 1))
+
+x.type;
+>x : Symbol(x, Decl(recursiveMappedTypes.ts, 77, 11))
+

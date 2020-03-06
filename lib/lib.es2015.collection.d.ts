@@ -1,14 +1,14 @@
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved. 
+Copyright (c) Microsoft Corporation. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0  
- 
+License at http://www.apache.org/licenses/LICENSE-2.0
+
 THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE, 
-MERCHANTABLITY OR NON-INFRINGEMENT. 
- 
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
@@ -30,7 +30,7 @@ interface Map<K, V> {
 
 interface MapConstructor {
     new(): Map<any, any>;
-    new<K, V>(entries?: ReadonlyArray<[K, V]> | null): Map<K, V>;
+    new<K, V>(entries?: readonly (readonly [K, V])[] | null): Map<K, V>;
     readonly prototype: Map<any, any>;
 }
 declare var Map: MapConstructor;
@@ -50,7 +50,7 @@ interface WeakMap<K extends object, V> {
 }
 
 interface WeakMapConstructor {
-    new <K extends object = object, V = any>(entries?: ReadonlyArray<[K, V]> | null): WeakMap<K, V>;
+    new <K extends object = object, V = any>(entries?: readonly [K, V][] | null): WeakMap<K, V>;
     readonly prototype: WeakMap<object, any>;
 }
 declare var WeakMap: WeakMapConstructor;
@@ -65,7 +65,7 @@ interface Set<T> {
 }
 
 interface SetConstructor {
-    new <T = any>(values?: ReadonlyArray<T> | null): Set<T>;
+    new <T = any>(values?: readonly T[] | null): Set<T>;
     readonly prototype: Set<any>;
 }
 declare var Set: SetConstructor;
@@ -83,7 +83,7 @@ interface WeakSet<T extends object> {
 }
 
 interface WeakSetConstructor {
-    new <T extends object = object>(values?: ReadonlyArray<T> | null): WeakSet<T>;
+    new <T extends object = object>(values?: readonly T[] | null): WeakSet<T>;
     readonly prototype: WeakSet<object>;
 }
 declare var WeakSet: WeakSetConstructor;

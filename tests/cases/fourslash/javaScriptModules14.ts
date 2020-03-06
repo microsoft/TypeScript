@@ -21,4 +21,8 @@
 //// var x = require('myMod');
 //// /**/;
 
-verify.completions({ marker: "", includes: "y", excludes: "invisible" });
+verify.completions({
+    marker: "",
+    includes: { name: "y", sortText: completion.SortText.GlobalsOrKeywords },
+    excludes: "invisible"
+});

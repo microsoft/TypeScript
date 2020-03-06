@@ -28,6 +28,7 @@ const classEntry = (isConstructor: boolean): FourSlashInterface.ExpectedCompleti
     text: isConstructor ? "constructor Cls(): Cls" : "class Cls",
     hasAction: true,
     isRecommended: true,
+    sortText: completion.SortText.AutoImportSuggestions
 });
 verify.completions(
     { marker: "b0", includes: classEntry(true), preferences },

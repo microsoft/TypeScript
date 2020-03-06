@@ -1,7 +1,7 @@
-tests/cases/conformance/types/rest/restTuplesFromContextualTypes.ts(56,7): error TS2345: Argument of type '(a: number, b: any, ...x: any[]) => void' is not assignable to parameter of type '(x: number, ...args: T) => void'.
+tests/cases/conformance/types/rest/restTuplesFromContextualTypes.ts(56,7): error TS2345: Argument of type '(a: number, b: T[0], ...x: T[number][]) => void' is not assignable to parameter of type '(x: number, ...args: T) => void'.
   Types of parameters 'b' and 'args' are incompatible.
-    Type 'T' is not assignable to type '[any, ...any[]]'.
-      Property '0' is missing in type 'any[]' but required in type '[any, ...any[]]'.
+    Type 'T' is not assignable to type '[T[0], ...T[number][]]'.
+      Property '0' is missing in type 'any[]' but required in type '[T[0], ...T[number][]]'.
 
 
 ==== tests/cases/conformance/types/rest/restTuplesFromContextualTypes.ts (1 errors) ====
@@ -62,11 +62,26 @@ tests/cases/conformance/types/rest/restTuplesFromContextualTypes.ts(56,7): error
         f((a, ...x) => {});
         f((a, b, ...x) => {});
           ~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(a: number, b: any, ...x: any[]) => void' is not assignable to parameter of type '(x: number, ...args: T) => void'.
+!!! error TS2345: Argument of type '(a: number, b: T[0], ...x: T[number][]) => void' is not assignable to parameter of type '(x: number, ...args: T) => void'.
 !!! error TS2345:   Types of parameters 'b' and 'args' are incompatible.
-!!! error TS2345:     Type 'T' is not assignable to type '[any, ...any[]]'.
-!!! error TS2345:       Property '0' is missing in type 'any[]' but required in type '[any, ...any[]]'.
+!!! error TS2345:     Type 'T' is not assignable to type '[T[0], ...T[number][]]'.
+!!! error TS2345:       Property '0' is missing in type 'any[]' but required in type '[T[0], ...T[number][]]'.
     }
+    
+    declare function f5<T extends any[], U>(f: (...args: T) => U): (...args: T) => U;
+    
+    let g0 = f5(() => "hello");
+    let g1 = f5((x, y) => 42);
+    let g2 = f5((x: number, y) => 42);
+    let g3 = f5((x: number, y: number) => x + y);
+    let g4 = f5((...args) => true);
+    
+    declare function pipe<A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C): (...args: A) => C;
+    
+    let g5 = pipe(() => true, b => 42);
+    let g6 = pipe(x => "hello", s => s.length);
+    let g7 = pipe((x, y) => 42, x => "" + x);
+    let g8 = pipe((x: number, y: string) => 42, x => "" + x);
     
     // Repro from #25288
     
@@ -79,4 +94,18 @@ tests/cases/conformance/types/rest/restTuplesFromContextualTypes.ts(56,7): error
     
     (function foo(...rest){}(1, ''));
     take(function(...rest){});
+    
+    // Repro from #29833
+    
+    type ArgsUnion = [number, string] | [number, Error];
+    type TupleUnionFunc = (...params: ArgsUnion) => number;
+    
+    const funcUnionTupleNoRest: TupleUnionFunc = (num, strOrErr) => {
+      return num;
+    };
+    
+    const funcUnionTupleRest: TupleUnionFunc = (...params) => {
+      const [num, strOrErr] = params;
+      return num;
+    };
     

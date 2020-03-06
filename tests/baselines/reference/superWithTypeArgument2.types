@@ -14,10 +14,8 @@ class D<T> extends C<T> {
 >x : any
 
         super<T>(x);
->super<T>(x) : any
->super : any
->super : C<T>
-> : any
+>super<T>(x) : void
+>super : typeof C
 >x : any
     }
 }

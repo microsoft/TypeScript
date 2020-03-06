@@ -9,8 +9,8 @@
 verify.signatureHelp(
     { marker: "1", text: "f(x: number, y: string): number" },
     { marker: "2", text: "f(x: boolean, y: string): boolean" },
-    // too few -- fill in rest with {}
-    { marker: "3", text: "f(x: number, y: {}): number" },
+    // too few -- fill in rest with unknown
+    { marker: "3", text: "f(x: number, y: unknown): number" },
     // too many -- ignore extra type arguments
     { marker: "4", text: "f(x: number, y: string): number" },
 );

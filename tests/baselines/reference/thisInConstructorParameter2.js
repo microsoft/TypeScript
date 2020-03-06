@@ -12,16 +12,15 @@ class P {
 }
 
 //// [thisInConstructorParameter2.js]
-var _this = this;
 var P = /** @class */ (function () {
     function P(z, zz, zzz) {
+        var _this = this;
         if (z === void 0) { z = this; }
         if (zz === void 0) { zz = this; }
         if (zzz === void 0) { zzz = function (p) {
             if (p === void 0) { p = _this; }
             return _this;
         }; }
-        var _this = this;
         this.z = z;
         this.x = this;
         zzz = function (p) {

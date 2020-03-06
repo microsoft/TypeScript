@@ -1,15 +1,15 @@
 === tests/cases/conformance/jsx/tsxTypeErrors.tsx ===
 // A built-in element (OK)
 var a1 = <div id="foo" />;
->a1 : any
-><div id="foo" /> : any
+>a1 : error
+><div id="foo" /> : error
 >div : any
 >id : string
 
 // A built-in element with a mistyped property (error)
 var a2 = <img srce="foo.jpg" />
->a2 : any
-><img srce="foo.jpg" /> : any
+>a2 : error
+><img srce="foo.jpg" /> : error
 >img : any
 >srce : string
 
@@ -21,16 +21,16 @@ var thing = { oops: 100 };
 >100 : 100
 
 var a3 = <div id={thing} />
->a3 : any
-><div id={thing} /> : any
+>a3 : error
+><div id={thing} /> : error
 >div : any
 >id : { oops: number; }
 >thing : { oops: number; }
 
 // Mistyped html name (error)
 var e1 = <imag src="bar.jpg" />
->e1 : any
-><imag src="bar.jpg" /> : any
+>e1 : error
+><imag src="bar.jpg" /> : error
 >imag : any
 >src : string
 
@@ -57,8 +57,8 @@ class MyClass {
 // Let's use it
 // TODO: Error on missing 'reqd'
 var b1 = <MyClass reqd={true} />; 
->b1 : any
-><MyClass reqd={true} /> : any
+>b1 : error
+><MyClass reqd={true} /> : error
 >MyClass : typeof MyClass
 >reqd : boolean
 >true : true
@@ -68,8 +68,8 @@ var b1 = <MyClass reqd={true} />;
 //  Types of property 'y' are incompatible.
 //    Type 'string' is not assignable to type 'number'.
 var b2 = <MyClass pt={{x: 4, y: 'oops'}} />;
->b2 : any
-><MyClass pt={{x: 4, y: 'oops'}} /> : any
+>b2 : error
+><MyClass pt={{x: 4, y: 'oops'}} /> : error
 >MyClass : typeof MyClass
 >pt : { x: number; y: string; }
 >{x: 4, y: 'oops'} : { x: number; y: string; }

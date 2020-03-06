@@ -16,4 +16,3 @@ tests/cases/conformance/jsx/file.tsx(12,10): error TS2322: Type 'string' is not 
     <SFCComp x={"hi"}/>
              ~
 !!! error TS2322: Type 'string' is not assignable to type 'never'.
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:3:23: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & { x: number; } & { x: boolean; }'
