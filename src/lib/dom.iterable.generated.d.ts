@@ -225,7 +225,7 @@ interface SpeechRecognitionResultList {
 }
 
 interface StyleSheetList {
-    [Symbol.iterator](): IterableIterator<StyleSheet>;
+    [Symbol.iterator](): IterableIterator<CSSStyleSheet>;
 }
 
 interface TextTrackCueList {
