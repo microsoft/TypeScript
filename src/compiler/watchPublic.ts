@@ -450,7 +450,7 @@ namespace ts {
             // If file is missing on host from cache, we can definitely say file doesnt exist
             // otherwise we need to ensure from the disk
             if (isFileMissingOnHost(sourceFilesCache.get(path))) {
-                return true;
+                return false;
             }
 
             return directoryStructureHost.fileExists(fileName);
