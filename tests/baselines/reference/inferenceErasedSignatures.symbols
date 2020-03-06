@@ -1,0 +1,178 @@
+=== tests/cases/compiler/inferenceErasedSignatures.ts ===
+// Repro from #37163
+
+declare class SomeBaseClass {
+>SomeBaseClass : Symbol(SomeBaseClass, Decl(inferenceErasedSignatures.ts, 0, 0))
+
+    set<K extends keyof this>(key: K, value: this[K]): this[K];
+>set : Symbol(SomeBaseClass.set, Decl(inferenceErasedSignatures.ts, 2, 29))
+>K : Symbol(K, Decl(inferenceErasedSignatures.ts, 3, 8))
+>key : Symbol(key, Decl(inferenceErasedSignatures.ts, 3, 30))
+>K : Symbol(K, Decl(inferenceErasedSignatures.ts, 3, 8))
+>value : Symbol(value, Decl(inferenceErasedSignatures.ts, 3, 37))
+>K : Symbol(K, Decl(inferenceErasedSignatures.ts, 3, 8))
+>K : Symbol(K, Decl(inferenceErasedSignatures.ts, 3, 8))
+}
+
+abstract class SomeAbstractClass<C, M, R> extends SomeBaseClass {
+>SomeAbstractClass : Symbol(SomeAbstractClass, Decl(inferenceErasedSignatures.ts, 4, 1))
+>C : Symbol(C, Decl(inferenceErasedSignatures.ts, 6, 33))
+>M : Symbol(M, Decl(inferenceErasedSignatures.ts, 6, 35))
+>R : Symbol(R, Decl(inferenceErasedSignatures.ts, 6, 38))
+>SomeBaseClass : Symbol(SomeBaseClass, Decl(inferenceErasedSignatures.ts, 0, 0))
+
+    foo!: (r?: R) => void;
+>foo : Symbol(SomeAbstractClass.foo, Decl(inferenceErasedSignatures.ts, 6, 65))
+>r : Symbol(r, Decl(inferenceErasedSignatures.ts, 7, 11))
+>R : Symbol(R, Decl(inferenceErasedSignatures.ts, 6, 38))
+
+    bar!: (r?: any) => void;
+>bar : Symbol(SomeAbstractClass.bar, Decl(inferenceErasedSignatures.ts, 7, 26))
+>r : Symbol(r, Decl(inferenceErasedSignatures.ts, 8, 11))
+
+    abstract baz(c: C): Promise<M>;
+>baz : Symbol(SomeAbstractClass.baz, Decl(inferenceErasedSignatures.ts, 8, 28))
+>c : Symbol(c, Decl(inferenceErasedSignatures.ts, 9, 17))
+>C : Symbol(C, Decl(inferenceErasedSignatures.ts, 6, 33))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>M : Symbol(M, Decl(inferenceErasedSignatures.ts, 6, 35))
+}
+
+class SomeClass extends SomeAbstractClass<number, string, boolean> {
+>SomeClass : Symbol(SomeClass, Decl(inferenceErasedSignatures.ts, 10, 1))
+>SomeAbstractClass : Symbol(SomeAbstractClass, Decl(inferenceErasedSignatures.ts, 4, 1))
+
+    async baz(context: number): Promise<string> {
+>baz : Symbol(SomeClass.baz, Decl(inferenceErasedSignatures.ts, 12, 68))
+>context : Symbol(context, Decl(inferenceErasedSignatures.ts, 13, 14))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+        return `${context}`;
+>context : Symbol(context, Decl(inferenceErasedSignatures.ts, 13, 14))
+    }
+}
+
+type CType<T> = T extends SomeAbstractClass<infer C, any, any> ? C : never;
+>CType : Symbol(CType, Decl(inferenceErasedSignatures.ts, 16, 1))
+>T : Symbol(T, Decl(inferenceErasedSignatures.ts, 18, 11))
+>T : Symbol(T, Decl(inferenceErasedSignatures.ts, 18, 11))
+>SomeAbstractClass : Symbol(SomeAbstractClass, Decl(inferenceErasedSignatures.ts, 4, 1))
+>C : Symbol(C, Decl(inferenceErasedSignatures.ts, 18, 49))
+>C : Symbol(C, Decl(inferenceErasedSignatures.ts, 18, 49))
+
+type MType<T> = T extends SomeAbstractClass<any, infer M, any> ? M : never;
+>MType : Symbol(MType, Decl(inferenceErasedSignatures.ts, 18, 75))
+>T : Symbol(T, Decl(inferenceErasedSignatures.ts, 19, 11))
+>T : Symbol(T, Decl(inferenceErasedSignatures.ts, 19, 11))
+>SomeAbstractClass : Symbol(SomeAbstractClass, Decl(inferenceErasedSignatures.ts, 4, 1))
+>M : Symbol(M, Decl(inferenceErasedSignatures.ts, 19, 54))
+>M : Symbol(M, Decl(inferenceErasedSignatures.ts, 19, 54))
+
+type RType<T> = T extends SomeAbstractClass<any, any, infer R> ? R : never;
+>RType : Symbol(RType, Decl(inferenceErasedSignatures.ts, 19, 75))
+>T : Symbol(T, Decl(inferenceErasedSignatures.ts, 20, 11))
+>T : Symbol(T, Decl(inferenceErasedSignatures.ts, 20, 11))
+>SomeAbstractClass : Symbol(SomeAbstractClass, Decl(inferenceErasedSignatures.ts, 4, 1))
+>R : Symbol(R, Decl(inferenceErasedSignatures.ts, 20, 59))
+>R : Symbol(R, Decl(inferenceErasedSignatures.ts, 20, 59))
+
+type SomeClassC = CType<SomeClass>; // number
+>SomeClassC : Symbol(SomeClassC, Decl(inferenceErasedSignatures.ts, 20, 75))
+>CType : Symbol(CType, Decl(inferenceErasedSignatures.ts, 16, 1))
+>SomeClass : Symbol(SomeClass, Decl(inferenceErasedSignatures.ts, 10, 1))
+
+type SomeClassM = MType<SomeClass>; // string
+>SomeClassM : Symbol(SomeClassM, Decl(inferenceErasedSignatures.ts, 22, 35))
+>MType : Symbol(MType, Decl(inferenceErasedSignatures.ts, 18, 75))
+>SomeClass : Symbol(SomeClass, Decl(inferenceErasedSignatures.ts, 10, 1))
+
+type SomeClassR = RType<SomeClass>; // boolean
+>SomeClassR : Symbol(SomeClassR, Decl(inferenceErasedSignatures.ts, 23, 35))
+>RType : Symbol(RType, Decl(inferenceErasedSignatures.ts, 19, 75))
+>SomeClass : Symbol(SomeClass, Decl(inferenceErasedSignatures.ts, 10, 1))
+
+// Repro from #37163
+
+interface BaseType<T1, T2>  {
+>BaseType : Symbol(BaseType, Decl(inferenceErasedSignatures.ts, 24, 35))
+>T1 : Symbol(T1, Decl(inferenceErasedSignatures.ts, 28, 19))
+>T2 : Symbol(T2, Decl(inferenceErasedSignatures.ts, 28, 22))
+
+    set<K extends keyof this>(key: K, value: this[K]): this[K];
+>set : Symbol(BaseType.set, Decl(inferenceErasedSignatures.ts, 28, 29))
+>K : Symbol(K, Decl(inferenceErasedSignatures.ts, 29, 8))
+>key : Symbol(key, Decl(inferenceErasedSignatures.ts, 29, 30))
+>K : Symbol(K, Decl(inferenceErasedSignatures.ts, 29, 8))
+>value : Symbol(value, Decl(inferenceErasedSignatures.ts, 29, 37))
+>K : Symbol(K, Decl(inferenceErasedSignatures.ts, 29, 8))
+>K : Symbol(K, Decl(inferenceErasedSignatures.ts, 29, 8))
+
+    useT1(c: T1): void;
+>useT1 : Symbol(BaseType.useT1, Decl(inferenceErasedSignatures.ts, 29, 63))
+>c : Symbol(c, Decl(inferenceErasedSignatures.ts, 30, 10))
+>T1 : Symbol(T1, Decl(inferenceErasedSignatures.ts, 28, 19))
+
+    useT2(r?: T2): void;
+>useT2 : Symbol(BaseType.useT2, Decl(inferenceErasedSignatures.ts, 30, 23))
+>r : Symbol(r, Decl(inferenceErasedSignatures.ts, 31, 10))
+>T2 : Symbol(T2, Decl(inferenceErasedSignatures.ts, 28, 22))
+
+    unrelatedButSomehowRelevant(r?: any): void;
+>unrelatedButSomehowRelevant : Symbol(BaseType.unrelatedButSomehowRelevant, Decl(inferenceErasedSignatures.ts, 31, 24))
+>r : Symbol(r, Decl(inferenceErasedSignatures.ts, 32, 32))
+}
+
+interface InheritedType extends BaseType<number, boolean> {
+>InheritedType : Symbol(InheritedType, Decl(inferenceErasedSignatures.ts, 33, 1))
+>BaseType : Symbol(BaseType, Decl(inferenceErasedSignatures.ts, 24, 35))
+
+    // This declaration shouldn't do anything...
+    useT1(_: number): void
+>useT1 : Symbol(InheritedType.useT1, Decl(inferenceErasedSignatures.ts, 35, 59))
+>_ : Symbol(_, Decl(inferenceErasedSignatures.ts, 37, 10))
+}
+
+// Structural expansion of InheritedType
+interface StructuralVersion  {
+>StructuralVersion : Symbol(StructuralVersion, Decl(inferenceErasedSignatures.ts, 38, 1))
+
+    set<K extends keyof this>(key: K, value: this[K]): this[K];
+>set : Symbol(StructuralVersion.set, Decl(inferenceErasedSignatures.ts, 41, 30))
+>K : Symbol(K, Decl(inferenceErasedSignatures.ts, 42, 8))
+>key : Symbol(key, Decl(inferenceErasedSignatures.ts, 42, 30))
+>K : Symbol(K, Decl(inferenceErasedSignatures.ts, 42, 8))
+>value : Symbol(value, Decl(inferenceErasedSignatures.ts, 42, 37))
+>K : Symbol(K, Decl(inferenceErasedSignatures.ts, 42, 8))
+>K : Symbol(K, Decl(inferenceErasedSignatures.ts, 42, 8))
+
+    useT1(c: number): void;
+>useT1 : Symbol(StructuralVersion.useT1, Decl(inferenceErasedSignatures.ts, 42, 63))
+>c : Symbol(c, Decl(inferenceErasedSignatures.ts, 43, 10))
+
+    useT2(r?: boolean): void;
+>useT2 : Symbol(StructuralVersion.useT2, Decl(inferenceErasedSignatures.ts, 43, 27))
+>r : Symbol(r, Decl(inferenceErasedSignatures.ts, 44, 10))
+
+    unrelatedButSomehowRelevant(r?: any): void;
+>unrelatedButSomehowRelevant : Symbol(StructuralVersion.unrelatedButSomehowRelevant, Decl(inferenceErasedSignatures.ts, 44, 29))
+>r : Symbol(r, Decl(inferenceErasedSignatures.ts, 45, 32))
+}
+
+type GetT1<T> = T extends BaseType<infer U, any> ? U : never;
+>GetT1 : Symbol(GetT1, Decl(inferenceErasedSignatures.ts, 46, 1))
+>T : Symbol(T, Decl(inferenceErasedSignatures.ts, 48, 11))
+>T : Symbol(T, Decl(inferenceErasedSignatures.ts, 48, 11))
+>BaseType : Symbol(BaseType, Decl(inferenceErasedSignatures.ts, 24, 35))
+>U : Symbol(U, Decl(inferenceErasedSignatures.ts, 48, 40))
+>U : Symbol(U, Decl(inferenceErasedSignatures.ts, 48, 40))
+
+type T1 = GetT1<InheritedType>; // number
+>T1 : Symbol(T1, Decl(inferenceErasedSignatures.ts, 48, 61))
+>GetT1 : Symbol(GetT1, Decl(inferenceErasedSignatures.ts, 46, 1))
+>InheritedType : Symbol(InheritedType, Decl(inferenceErasedSignatures.ts, 33, 1))
+
+type T2 = GetT1<StructuralVersion>; // number
+>T2 : Symbol(T2, Decl(inferenceErasedSignatures.ts, 50, 31))
+>GetT1 : Symbol(GetT1, Decl(inferenceErasedSignatures.ts, 46, 1))
+>StructuralVersion : Symbol(StructuralVersion, Decl(inferenceErasedSignatures.ts, 38, 1))
+
