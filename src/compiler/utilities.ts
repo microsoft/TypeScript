@@ -2911,8 +2911,6 @@ namespace ts {
                 switch (node.parent.kind) {
                     case SyntaxKind.Constructor:
                     case SyntaxKind.MethodDeclaration:
-                    // The `extends` clause of a class is its parent scope, unlike its constructor and methods
-                    // falls through
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                         // Object properties can have computed names; only method-like bodies start a new scope
