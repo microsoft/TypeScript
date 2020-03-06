@@ -26,6 +26,24 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(67,3): error TS232
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(68,3): error TS2322: Type '123' is not assignable to type 'T[K]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS2322: Type '123' is not assignable to type 'Type[K]'.
   Type '123' is not assignable to type 'never'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(126,1): error TS2322: Type 'Demo<{ b: string; }>' is not assignable to type 'Demo<{ a: number; }>'.
+  Types of parameters 'key' and 'key' are incompatible.
+    Type '"a"' is not assignable to type '"b"'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(127,1): error TS2322: Type 'Demo<{ a: number; b: string; }>' is not assignable to type 'Demo<{ a: number; }>'.
+  Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(128,1): error TS2322: Type 'Demo<{ a: number; }>' is not assignable to type 'Demo<{ b: string; }>'.
+  Types of parameters 'key' and 'key' are incompatible.
+    Type '"b"' is not assignable to type '"a"'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(129,1): error TS2322: Type 'Demo<{ a: number; b: string; }>' is not assignable to type 'Demo<{ b: string; }>'.
+  Property 'a' is missing in type '{ b: string; }' but required in type '{ a: number; b: string; }'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(130,1): error TS2322: Type 'Demo<{ a: number; }>' is not assignable to type 'Demo<{ a: number; b: string; }>'.
+  Types of parameters 'key' and 'key' are incompatible.
+    Type '"a" | "b"' is not assignable to type '"a"'.
+      Type '"b"' is not assignable to type '"a"'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(131,1): error TS2322: Type 'Demo<{ b: string; }>' is not assignable to type 'Demo<{ a: number; b: string; }>'.
+  Types of parameters 'key' and 'key' are incompatible.
+    Type '"a" | "b"' is not assignable to type '"b"'.
+      Type '"a"' is not assignable to type '"b"'.
 
 
 ==== tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts (29 errors) ====
@@ -210,23 +228,19 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
 !!! error TS2322: Type 'Demo<{ b: string; }>' is not assignable to type 'Demo<{ a: number; }>'.
 !!! error TS2322:   Types of parameters 'key' and 'key' are incompatible.
 !!! error TS2322:     Type '"a"' is not assignable to type '"b"'.
-!!! related TS2728 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:122:24: 'a' is declared here.
     da = dc;
     ~~
 !!! error TS2322: Type 'Demo<{ a: number; b: string; }>' is not assignable to type 'Demo<{ a: number; }>'.
 !!! error TS2322:   Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-!!! related TS2728 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:124:35: 'b' is declared here.
     db = da;  // Error
     ~~
 !!! error TS2322: Type 'Demo<{ a: number; }>' is not assignable to type 'Demo<{ b: string; }>'.
 !!! error TS2322:   Types of parameters 'key' and 'key' are incompatible.
 !!! error TS2322:     Type '"b"' is not assignable to type '"a"'.
-!!! related TS2728 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:123:24: 'b' is declared here.
     db = dc;
     ~~
 !!! error TS2322: Type 'Demo<{ a: number; b: string; }>' is not assignable to type 'Demo<{ b: string; }>'.
 !!! error TS2322:   Property 'a' is missing in type '{ b: string; }' but required in type '{ a: number; b: string; }'.
-!!! related TS2728 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:124:24: 'a' is declared here.
     dc = da;  // Error
     ~~
 !!! error TS2322: Type 'Demo<{ a: number; }>' is not assignable to type 'Demo<{ a: number; b: string; }>'.
