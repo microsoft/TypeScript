@@ -341,6 +341,9 @@ namespace ts.codefix {
             enumDeclaration.modifiers,
             enumDeclaration.name,
             concatenate(enumDeclaration.members, singleElementArray(enumMember))
-        ), { useNonAdjustedStartPosition: false, useNonAdjustedEndPosition: true });
+        ), {
+            leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
+            trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude
+        });
     }
 }

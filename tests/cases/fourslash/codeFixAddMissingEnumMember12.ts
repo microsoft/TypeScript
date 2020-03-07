@@ -8,7 +8,8 @@
 ////E.a
 
 verify.codeFix({
-    description: "Add missing enum member 'a'",
+    index: 0,
+    description: [ts.Diagnostics.Add_missing_enum_member_0.message, "a"],
     newFileContent: `const x; // this is x
 
 // this is E
