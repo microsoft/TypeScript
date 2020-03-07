@@ -15,8 +15,8 @@ namespace ts.tscWatch {
             const host = createWatchedSystem(files);
             const watch = createWatchOfFilesAndCompilerOptions([root.path], host, { module: ModuleKind.AMD });
 
-            const f1IsNotModule = getDiagnosticOfFileFromProgram(watch(), root.path, root.content.indexOf('"f1"'), '"f1"'.length, Diagnostics.File_0_is_not_a_module, imported.path);
-            const cannotFindFoo = getDiagnosticOfFileFromProgram(watch(), imported.path, imported.content.indexOf("foo"), "foo".length, Diagnostics.Cannot_find_name_0, "foo");
+            const f1IsNotModule = getDiagnosticOfFileFromProgram(watch.getCurrentProgram().getProgram(), root.path, root.content.indexOf('"f1"'), '"f1"'.length, Diagnostics.File_0_is_not_a_module, imported.path);
+            const cannotFindFoo = getDiagnosticOfFileFromProgram(watch.getCurrentProgram().getProgram(), imported.path, imported.content.indexOf("foo"), "foo".length, Diagnostics.Cannot_find_name_0, "foo");
 
             // ensure that imported file was found
             checkOutputErrorsInitial(host, [f1IsNotModule, cannotFindFoo]);
@@ -37,7 +37,7 @@ namespace ts.tscWatch {
                 // ensure file has correct number of errors after edit
                 checkOutputErrorsIncremental(host, [
                     f1IsNotModule,
-                    getDiagnosticOfFileFromProgram(watch(), root.path, newContent.indexOf("var x") + "var ".length, "x".length, Diagnostics.Type_0_is_not_assignable_to_type_1, 1, "string"),
+                    getDiagnosticOfFileFromProgram(watch.getCurrentProgram().getProgram(), root.path, newContent.indexOf("var x") + "var ".length, "x".length, Diagnostics.Type_0_is_not_assignable_to_type_1, 1, "string"),
                     cannotFindFoo
                 ]);
             }
@@ -60,7 +60,7 @@ namespace ts.tscWatch {
 
                 // ensure file has correct number of errors after edit
                 checkOutputErrorsIncremental(host, [
-                    getDiagnosticModuleNotFoundOfFile(watch(), root, "f2")
+                    getDiagnosticModuleNotFoundOfFile(watch.getCurrentProgram().getProgram(), root, "f2")
                 ]);
 
                 assert.isTrue(fileExistsIsCalled);
@@ -118,7 +118,7 @@ namespace ts.tscWatch {
 
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
             checkOutputErrorsInitial(host, [
-                getDiagnosticModuleNotFoundOfFile(watch(), root, "bar")
+                getDiagnosticModuleNotFoundOfFile(watch.getCurrentProgram().getProgram(), root, "bar")
             ]);
 
             fileExistsCalledForBar = false;
@@ -166,7 +166,7 @@ namespace ts.tscWatch {
             host.runQueuedTimeoutCallbacks();
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
             checkOutputErrorsIncremental(host, [
-                getDiagnosticModuleNotFoundOfFile(watch(), root, "bar")
+                getDiagnosticModuleNotFoundOfFile(watch.getCurrentProgram().getProgram(), root, "bar")
             ]);
 
             fileExistsCalledForBar = false;
@@ -391,6 +391,13 @@ declare namespace myapp {
                     });
                     sys.checkTimeoutQueueLengthAndRun(1);
                     return "npm install ts-types";
+                },
+                (sys, [[oldProgram, oldBuilderProgram]], watchorSolution) => {
+                    sys.checkTimeoutQueueLength(0);
+                    const newProgram = (watchorSolution as Watch).getProgram();
+                    assert.strictEqual(newProgram, oldBuilderProgram, "No change so builder program should be same");
+                    assert.strictEqual(newProgram.getProgram(), oldProgram, "No change so program should be same");
+                    return "No change, just check program";
                 }
             ]
         });
