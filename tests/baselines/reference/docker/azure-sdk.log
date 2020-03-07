@@ -50,13 +50,14 @@ Use output.globals to specify browser global variable names corresponding to ext
 os-name (guessing 'osName')
 created dist/index.js in ?s
 XX of XX: [@azure/eventhubs-checkpointstore-blob] completed successfully in ? seconds
+XX of XX: [@azure/search] completed successfully in ? seconds
 XX of XX: [@azure/service-bus] completed successfully in ? seconds
 XX of XX: [@azure/storage-file-datalake] completed successfully in ? seconds
 XX of XX: [@azure/storage-file-share] completed successfully in ? seconds
 XX of XX: [@azure/storage-queue] completed successfully in ? seconds
 XX of XX: [@azure/template] completed successfully in ? seconds
 XX of XX: [testhub] completed successfully in ? seconds
-SUCCESS (25)
+SUCCESS (26)
 ================================
 @azure/abort-controller (? seconds)
 @azure/core-auth (? seconds)
@@ -77,6 +78,7 @@ SUCCESS (25)
 @azure/core-arm (? seconds)
 @azure/core-tracing (? seconds)
 @azure/eventhubs-checkpointstore-blob (? seconds)
+@azure/search (? seconds)
 @azure/service-bus (? seconds)
 @azure/storage-file-datalake (? seconds)
 @azure/storage-file-share (? seconds)

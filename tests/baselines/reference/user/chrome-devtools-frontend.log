@@ -752,6 +752,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21466,6): error TS2339: Property 'push' does not exist on type 'Zlib'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21690,5): error TS2339: Property '__proto__' does not exist on type 'Uint8Array'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21691,12): error TS2339: Property 'foo' does not exist on type 'Uint8Array'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21716,6): error TS2554: Expected 3 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22168,14): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22179,14): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22191,14): error TS2339: Property 'length' does not exist on type 'Buffer'.
@@ -767,6 +768,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22542,38): error TS2339: Property '_arr' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22693,14): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22715,13): error TS2339: Property 'subarray' does not exist on type 'Buffer'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22719,8): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22739,49): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22755,36): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22768,40): error TS2339: Property 'length' does not exist on type 'Buffer'.
@@ -796,6 +798,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23247,18): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23247,37): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23256,26): error TS2339: Property 'length' does not exist on type 'Buffer'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23268,13): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23459,1): error TS2323: Cannot redeclare exported variable 'isArray'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23464,1): error TS2323: Cannot redeclare exported variable 'isBoolean'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23469,1): error TS2323: Cannot redeclare exported variable 'isNull'.
@@ -2975,6 +2978,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66549,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66811,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67117,1): error TS2739: Type 'string[]' is missing the following properties from type 'RegExpExecArray': index, input
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67167,8): error TS2554: Expected 1 arguments, but got 0.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67300,14): error TS2339: Property 'Channels' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67300,35): error TS2339: Property 'Channels' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67301,24): error TS2339: Property 'Channels' does not exist on type '{}'.
@@ -3038,6 +3042,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(68410,39): error TS2339: Property 'height' does not exist on type 'constructor'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(69550,21): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(69799,1): error TS2323: Cannot redeclare exported variable 'parse'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70734,12): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70747,4): error TS2531: Object is possibly 'null'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70747,26): error TS2531: Object is possibly 'null'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70753,6): error TS2531: Object is possibly 'null'.
@@ -3378,6 +3383,9 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(689,28): error 
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(690,25): error TS2345: Argument of type '{ from: any; to: any; }' is not assignable to parameter of type 'number'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(691,26): error TS2339: Property 'inclusiveRight' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(692,25): error TS2345: Argument of type '{ from: any; to: any; }' is not assignable to parameter of type 'number'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1521,14): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1597,38): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1600,64): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2428,8): error TS2551: Property 'lineN' does not exist on type 'LineView'. Did you mean 'line'?
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2429,20): error TS2339: Property 'built' does not exist on type 'LineView'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2601,32): error TS2339: Property 'logicalXDPI' does not exist on type 'Screen'.
@@ -3396,7 +3404,9 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2856,10): error
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2858,32): error TS2339: Property 'left' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2858,49): error TS2339: Property 'right' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3034,25): error TS2339: Property 'xRel' does not exist on type 'Pos'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4270,16): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4840,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5152,12): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5634,9): error TS2322: Type 'BranchChunk' is not assignable to type 'this'.
   'BranchChunk' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'BranchChunk'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5675,35): error TS2339: Property 'line' does not exist on type 'LineWidget'.
@@ -3447,12 +3457,16 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5933,57): error
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5933,78): error TS2339: Property 'endStyle' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5933,97): error TS2339: Property 'css' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5935,16): error TS2339: Property 'atomic' does not exist on type 'TextMarker'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6022,42): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6164,32): error TS2322: Type 'string' is not assignable to type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6378,11): error TS2339: Property 'setHistory' does not exist on type 'Doc'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6391,10): error TS2339: Property 'linked' does not exist on type 'Doc'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6464,44): error TS2345: Argument of type 'string | ArrayBuffer' is not assignable to parameter of type 'string'.
   Type 'ArrayBuffer' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6553,25): error TS2339: Property 'CodeMirror' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6987,44): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6989,17): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6995,19): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7343,11): error TS2339: Property 'copy' does not exist on type '(...args: any[]) => any'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7777,11): error TS2339: Property 'wrapper' does not exist on type 'Display'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7827,32): error TS2339: Property 'lineDiv' does not exist on type 'Display'.
@@ -3530,6 +3544,7 @@ node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(6,17): error T
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(8,5): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(160,18): error TS2554: Expected 6 arguments, but got 5.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clojure.js(11,17): error TS2307: Cannot find module '../../lib/codemirror'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clojure.js(12,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clojure.js(12,43): error TS2304: Cannot find name 'define'.
@@ -3547,6 +3562,7 @@ node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,73): error TS2
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(8,5): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(127,26): error TS2554: Expected 4 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(11,17): error TS2307: Cannot find module '../../lib/codemirror'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(12,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(12,43): error TS2304: Cannot find name 'define'.
@@ -3572,6 +3588,8 @@ node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(8,17): error 
 node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(9,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(9,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(10,5): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(218,23): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(658,20): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(7,43): error TS2304: Cannot find name 'define'.
@@ -3595,6 +3613,7 @@ node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(6,17)
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(8,5): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(773,18): error TS2554: Expected 6 arguments, but got 4.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/xml.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/xml.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/xml.js(7,43): error TS2304: Cannot find name 'define'.
@@ -6363,6 +6382,12 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(4,35): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(4,48): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(5,20): error TS2339: Property 'acorn' does not exist on type 'typeof import("/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn")'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(150,8): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(154,13): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(156,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(158,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(162,8): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(165,13): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(402,56): error TS2339: Property 'push' does not exist on type '(token: any) => any'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(527,43): error TS2339: Property 'startNode' does not exist on type 'Parser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(528,8): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
@@ -6371,6 +6396,13 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2451,7): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2451,22): error TS2339: Property 'loc' does not exist on type 'SyntaxError'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2451,37): error TS2339: Property 'raisedAt' does not exist on type 'SyntaxError'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2468,16): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2521,11): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2522,11): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2523,11): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2524,11): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2525,11): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2527,11): error TS2554: Expected 4 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2564,12): error TS2339: Property 'context' does not exist on type 'TokenType'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2565,10): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2568,18): error TS2339: Property 'context' does not exist on type 'TokenType'.
@@ -6395,8 +6427,10 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2611,8): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2634,22): error TS2304: Cannot find name 'Packages'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2634,77): error TS2304: Cannot find name 'Packages'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3353,10): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3362,5): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3363,12): error TS2339: Property 'parseExpression' does not exist on type 'Parser'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3370,10): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(4,10): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(4,35): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(4,48): error TS2304: Cannot find name 'define'.
