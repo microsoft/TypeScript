@@ -380,7 +380,7 @@ namespace ts {
                 createNewProgram(hasInvalidatedResolution);
             }
 
-            if (host.afterProgramCreate) {
+            if (host.afterProgramCreate && program !== builderProgram) {
                 host.afterProgramCreate(builderProgram);
             }
 
@@ -399,6 +399,7 @@ namespace ts {
             resolutionCache.startCachingPerDirectoryResolution();
             compilerHost.hasInvalidatedResolution = hasInvalidatedResolution;
             compilerHost.hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames;
+            hasChangedAutomaticTypeDirectiveNames = false;
             builderProgram = createProgram(rootFileNames, compilerOptions, compilerHost, builderProgram, configFileParsingDiagnostics, projectReferences);
             resolutionCache.finishCachingPerDirectoryResolution();
 

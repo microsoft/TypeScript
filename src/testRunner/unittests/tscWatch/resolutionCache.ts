@@ -391,6 +391,13 @@ declare namespace myapp {
                     });
                     sys.checkTimeoutQueueLengthAndRun(1);
                     return "npm install ts-types";
+                },
+                (sys, [[oldProgram, oldBuilderProgram]], watchorSolution) => {
+                    sys.checkTimeoutQueueLength(0);
+                    const newProgram = (watchorSolution as Watch).getProgram();
+                    assert.strictEqual(newProgram, oldBuilderProgram, "No change so builder program should be same");
+                    assert.strictEqual(newProgram.getProgram(), oldProgram, "No change so program should be same");
+                    return "No change, just check program";
                 }
             ]
         });
