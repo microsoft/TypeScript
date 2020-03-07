@@ -341,6 +341,6 @@ namespace ts.codefix {
             enumDeclaration.modifiers,
             enumDeclaration.name,
             concatenate(enumDeclaration.members, singleElementArray(enumMember))
-        ));
+        ), { useNonAdjustedStartPosition: false, useNonAdjustedEndPosition: true });
     }
 }
