@@ -4880,14 +4880,15 @@ namespace ts {
         Array,
         Function,
         Composite,
+        Merged,
     }
 
     /* @internal */
     export type TypeMapper =
-        | { kind: TypeMapKind.Simple, source1: Type, target1: Type, source2: Type, target2: Type }
+        | { kind: TypeMapKind.Simple, source: Type, target: Type }
         | { kind: TypeMapKind.Array, sources: readonly Type[], targets: readonly Type[] | undefined }
         | { kind: TypeMapKind.Function, func: (t: Type) => Type }
-        | { kind: TypeMapKind.Composite, mapper1: TypeMapper, mapper2: TypeMapper };
+        | { kind: TypeMapKind.Composite | TypeMapKind.Merged, mapper1: TypeMapper, mapper2: TypeMapper, cachedSource: Type, cachedTarget: Type };
 
     export const enum InferencePriority {
         NakedTypeVariable            = 1 << 0,  // Naked type variable in union or intersection type
