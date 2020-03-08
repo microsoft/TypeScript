@@ -13560,14 +13560,8 @@ namespace ts {
                     return mapper.func(type);
                 case TypeMapKind.Composite:
                 case TypeMapKind.Merged:
-                    if (type === mapper.cachedSource) return mapper.cachedTarget;
                     const t1 = getMappedType(type, mapper.mapper1);
-                    const t2 = t1 !== type && mapper.kind === TypeMapKind.Composite ? instantiateType(t1, mapper.mapper2) : getMappedType(t1, mapper.mapper2);
-                    if (t2 !== type) {
-                        mapper.cachedSource = type;
-                        mapper.cachedTarget = t2;
-                    }
-                    return t2;
+                    return t1 !== type && mapper.kind === TypeMapKind.Composite ? instantiateType(t1, mapper.mapper2) : getMappedType(t1, mapper.mapper2);
             }
         }
 
@@ -13584,7 +13578,7 @@ namespace ts {
         }
 
         function makeCompositeTypeMapper(kind: TypeMapKind.Composite | TypeMapKind.Merged, mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
-            return { kind, mapper1, mapper2, cachedSource: undefined!, cachedTarget: undefined! };
+            return { kind, mapper1, mapper2 };
         }
 
         function createTypeEraser(sources: readonly TypeParameter[]): TypeMapper {
