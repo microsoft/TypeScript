@@ -1569,6 +1569,10 @@
         "category": "Error",
         "code": 2397
     },
+    "'constructor' cannot be used as a parameter property name.": {
+        "category": "Error",
+        "code": 2398
+    },
     "Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.": {
         "category": "Error",
         "code": 2399
