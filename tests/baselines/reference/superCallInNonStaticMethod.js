@@ -111,7 +111,7 @@ var Other = /** @class */ (function (_super) {
         set: function (value) {
             _super.prototype.instanceMethod.call(this);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Other;

@@ -61,7 +61,7 @@ var C2 = /** @class */ (function () {
         ,
         set: function (bar) { barback = bar; } // not ok
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C2;

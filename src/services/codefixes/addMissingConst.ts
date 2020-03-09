@@ -30,7 +30,7 @@ namespace ts.codefix {
         if (forInitializer) return applyChange(changeTracker, forInitializer, sourceFile, fixedNodes);
 
         const parent = token.parent;
-        if (isBinaryExpression(parent) && isExpressionStatement(parent.parent)) {
+        if (isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken && isExpressionStatement(parent.parent)) {
             return applyChange(changeTracker, token, sourceFile, fixedNodes);
         }
 
@@ -104,6 +104,8 @@ namespace ts.codefix {
             return every([expression.left, expression.right], expression => expressionCouldBeVariableDeclaration(expression, checker));
         }
 
-        return isIdentifier(expression.left) && !checker.getSymbolAtLocation(expression.left);
+        return expression.operatorToken.kind === SyntaxKind.EqualsToken
+            && isIdentifier(expression.left)
+            && !checker.getSymbolAtLocation(expression.left);
     }
 }

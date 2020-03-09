@@ -1,0 +1,15 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty7.ts ===
+abstract class A {
+>A : Symbol(A, Decl(accessorsOverrideProperty7.ts, 0, 0))
+
+    abstract p = 'yep'
+>p : Symbol(A.p, Decl(accessorsOverrideProperty7.ts, 0, 18))
+}
+class B extends A {
+>B : Symbol(B, Decl(accessorsOverrideProperty7.ts, 2, 1))
+>A : Symbol(A, Decl(accessorsOverrideProperty7.ts, 0, 0))
+
+    get p() { return 'oh no' } // error
+>p : Symbol(B.p, Decl(accessorsOverrideProperty7.ts, 3, 19))
+}
+

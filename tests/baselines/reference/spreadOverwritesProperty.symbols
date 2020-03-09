@@ -1,0 +1,46 @@
+=== tests/cases/conformance/types/spread/spreadOverwritesProperty.ts ===
+// without strict null checks, none of these should be an error
+declare var ab: { a: number, b: number };
+>ab : Symbol(ab, Decl(spreadOverwritesProperty.ts, 1, 11))
+>a : Symbol(a, Decl(spreadOverwritesProperty.ts, 1, 17))
+>b : Symbol(b, Decl(spreadOverwritesProperty.ts, 1, 28))
+
+declare var abq: { a: number, b?: number };
+>abq : Symbol(abq, Decl(spreadOverwritesProperty.ts, 2, 11))
+>a : Symbol(a, Decl(spreadOverwritesProperty.ts, 2, 18))
+>b : Symbol(b, Decl(spreadOverwritesProperty.ts, 2, 29))
+
+var unused1 = { b: 1, ...ab }
+>unused1 : Symbol(unused1, Decl(spreadOverwritesProperty.ts, 3, 3))
+>b : Symbol(b, Decl(spreadOverwritesProperty.ts, 3, 15))
+>ab : Symbol(ab, Decl(spreadOverwritesProperty.ts, 1, 11))
+
+var unused2 = { ...ab, ...ab }
+>unused2 : Symbol(unused2, Decl(spreadOverwritesProperty.ts, 4, 3))
+>ab : Symbol(ab, Decl(spreadOverwritesProperty.ts, 1, 11))
+>ab : Symbol(ab, Decl(spreadOverwritesProperty.ts, 1, 11))
+
+var unused3 = { b: 1, ...abq }
+>unused3 : Symbol(unused3, Decl(spreadOverwritesProperty.ts, 5, 3))
+>b : Symbol(b, Decl(spreadOverwritesProperty.ts, 5, 15))
+>abq : Symbol(abq, Decl(spreadOverwritesProperty.ts, 2, 11))
+
+function g(obj: { x: number | undefined }) {
+>g : Symbol(g, Decl(spreadOverwritesProperty.ts, 5, 30))
+>obj : Symbol(obj, Decl(spreadOverwritesProperty.ts, 7, 11))
+>x : Symbol(x, Decl(spreadOverwritesProperty.ts, 7, 17))
+
+    return { x: 1, ...obj };
+>x : Symbol(x, Decl(spreadOverwritesProperty.ts, 8, 12))
+>obj : Symbol(obj, Decl(spreadOverwritesProperty.ts, 7, 11))
+}
+function h(obj: { x: number }) {
+>h : Symbol(h, Decl(spreadOverwritesProperty.ts, 9, 1))
+>obj : Symbol(obj, Decl(spreadOverwritesProperty.ts, 10, 11))
+>x : Symbol(x, Decl(spreadOverwritesProperty.ts, 10, 17))
+
+    return { x: 1, ...obj };
+>x : Symbol(x, Decl(spreadOverwritesProperty.ts, 11, 12))
+>obj : Symbol(obj, Decl(spreadOverwritesProperty.ts, 10, 11))
+}
+

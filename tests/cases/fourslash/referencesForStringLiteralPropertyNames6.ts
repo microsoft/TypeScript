@@ -2,7 +2,7 @@
 
 ////const x = function () { return 111111; }
 ////x.[|{| "isWriteAccess": true, "isDefinition": true |}someProperty|] = 5;
-////x["[|someProperty|]"] = 3;
+////x["[|{| "isWriteAccess": true, "isDefinition": true |}someProperty|]"] = 3;
 
 const ranges = test.ranges();
 const [r0, r1] = ranges;

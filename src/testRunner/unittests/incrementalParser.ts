@@ -1,6 +1,4 @@
 namespace ts {
-    ts.disableIncrementalParsing = false; // tslint:disable-line no-unnecessary-qualifier (make clear this is a global mutation!)
-
     function withChange(text: IScriptSnapshot, start: number, length: number, newText: string): { text: IScriptSnapshot; textChangeRange: TextChangeRange; } {
         const contents = getSnapshotText(text);
         const newContents = contents.substr(0, start) + newText + contents.substring(start + length);
@@ -671,7 +669,7 @@ module m3 { }\
             const oldText = ScriptSnapshot.fromString(source);
             const newTextAndChange = withInsert(oldText, 0, "{");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 9);
         });
 
         it("Removing block around function declarations", () => {
@@ -680,7 +678,7 @@ module m3 { }\
             const oldText = ScriptSnapshot.fromString(source);
             const newTextAndChange = withDelete(oldText, 0, "{".length);
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 9);
         });
 
         it("Moving methods from class to object literal", () => {

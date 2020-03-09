@@ -43,6 +43,7 @@ export class D {
 //// [0.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.foo = exports.B = void 0;
 class B {
     print() { return "I am B"; }
 }
@@ -52,11 +53,13 @@ exports.foo = foo;
 //// [1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.backup = void 0;
 function backup() { return "backup"; }
 exports.backup = backup;
 //// [2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.D = void 0;
 class C {
     constructor() {
         this.myModule = Promise.resolve().then(() => require("./0"));

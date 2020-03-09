@@ -30,5 +30,14 @@ var [debugger, if] = [1, 2];
 enum void {}
 > : Symbol((Missing), Decl(reservedWords2.ts, 8, 28))
 
+function f(default: number) {}
+>f : Symbol(f, Decl(reservedWords2.ts, 9, 12))
+> : Symbol((Missing), Decl(reservedWords2.ts, 10, 11))
+
+class C { m(null: string) {} }
+>C : Symbol(C, Decl(reservedWords2.ts, 10, 30))
+>m : Symbol(C.m, Decl(reservedWords2.ts, 11, 9))
+> : Symbol((Missing), Decl(reservedWords2.ts, 11, 12))
+>string : Symbol(string, Decl(reservedWords2.ts, 11, 17))
 
 

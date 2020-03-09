@@ -153,8 +153,8 @@ function f20() {
 >f20 : () => void
 
     let x1 = objAndReadonly({ x: 0, y: 0 }, { x: 1 });  // Error
->x1 : any
->objAndReadonly({ x: 0, y: 0 }, { x: 1 }) : any
+>x1 : { x: number; y: number; }
+>objAndReadonly({ x: 0, y: 0 }, { x: 1 }) : { x: number; y: number; }
 >objAndReadonly : <T>(primary: T, secondary: Readonly<T>) => T
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
@@ -181,8 +181,8 @@ function f20() {
 >1 : 1
 
     let x3 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
->x3 : any
->objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 }) : any
+>x3 : { x: number; y: number; }
+>objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 }) : { x: number; y: number; }
 >objAndReadonly : <T>(primary: T, secondary: Readonly<T>) => T
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
@@ -230,8 +230,8 @@ function f21() {
 >1 : 1
 
     let x3 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
->x3 : any
->objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 }) : any
+>x3 : { x: number; y: number; }
+>objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 }) : { x: number; y: number; }
 >objAndPartial : <T>(primary: T, secondary: Partial<T>) => T
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
@@ -324,7 +324,7 @@ setState(foo, foo);
 >foo : Foo
 
 setState(foo, { a: undefined });  // Error
->setState(foo, { a: undefined }) : any
+>setState(foo, { a: undefined }) : void
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
 >foo : Foo
 >{ a: undefined } : { a: undefined; }
@@ -332,7 +332,7 @@ setState(foo, { a: undefined });  // Error
 >undefined : undefined
 
 setState(foo, { c: true });  // Error
->setState(foo, { c: true }) : any
+>setState(foo, { c: true }) : void
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
 >foo : Foo
 >{ c: true } : { c: boolean; }
@@ -416,7 +416,7 @@ c.setState(foo);
 >foo : Foo
 
 c.setState({ a: undefined });  // Error
->c.setState({ a: undefined }) : any
+>c.setState({ a: undefined }) : void
 >c.setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
 >c : C<Foo>
 >setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
@@ -425,7 +425,7 @@ c.setState({ a: undefined });  // Error
 >undefined : undefined
 
 c.setState({ c: true });  // Error
->c.setState({ c: true }) : any
+>c.setState({ c: true }) : void
 >c.setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
 >c : C<Foo>
 >setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void

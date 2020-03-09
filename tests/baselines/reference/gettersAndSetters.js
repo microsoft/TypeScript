@@ -54,7 +54,7 @@ var C = /** @class */ (function () {
         ,
         set: function (foo) { this.fooBack = foo; } // ok
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "Bar", {
@@ -62,7 +62,7 @@ var C = /** @class */ (function () {
         ,
         set: function (bar) { C.barBack = bar; } // ok
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C.barBack = "";

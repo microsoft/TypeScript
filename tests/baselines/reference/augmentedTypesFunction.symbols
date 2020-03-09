@@ -21,16 +21,16 @@ var y2a = () => { } // error
 
 // function then class
 function y3() { } // error
->y3 : Symbol(y3, Decl(augmentedTypesFunction.ts, 9, 19))
+>y3 : Symbol(y3, Decl(augmentedTypesFunction.ts, 9, 19), Decl(augmentedTypesFunction.ts, 12, 17))
 
 class y3 { } // error
->y3 : Symbol(y3, Decl(augmentedTypesFunction.ts, 12, 17))
+>y3 : Symbol(y3, Decl(augmentedTypesFunction.ts, 9, 19), Decl(augmentedTypesFunction.ts, 12, 17))
 
 function y3a() { } // error
->y3a : Symbol(y3a, Decl(augmentedTypesFunction.ts, 13, 12))
+>y3a : Symbol(y3a, Decl(augmentedTypesFunction.ts, 13, 12), Decl(augmentedTypesFunction.ts, 15, 18))
 
 class y3a { public foo() { } } // error
->y3a : Symbol(y3a, Decl(augmentedTypesFunction.ts, 15, 18))
+>y3a : Symbol(y3a, Decl(augmentedTypesFunction.ts, 13, 12), Decl(augmentedTypesFunction.ts, 15, 18))
 >foo : Symbol(y3a.foo, Decl(augmentedTypesFunction.ts, 16, 11))
 
 // function then enum
