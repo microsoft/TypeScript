@@ -1,0 +1,69 @@
+=== tests/cases/compiler/assertionFunctionsCanNarrowByDiscriminant.ts ===
+interface Cat {
+>Cat : Symbol(Cat, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 0, 0))
+
+    type: 'cat';
+>type : Symbol(Cat.type, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 0, 15))
+
+    canMeow: true;
+>canMeow : Symbol(Cat.canMeow, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 1, 16))
+}
+
+interface Dog {
+>Dog : Symbol(Dog, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 3, 1))
+
+    type: 'dog';
+>type : Symbol(Dog.type, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 5, 15))
+
+    canBark: true;
+>canBark : Symbol(Dog.canBark, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 6, 16))
+}
+
+type Animal = Cat | Dog;
+>Animal : Symbol(Animal, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 8, 1))
+>Cat : Symbol(Cat, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 0, 0))
+>Dog : Symbol(Dog, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 3, 1))
+
+declare function assertEqual<T>(value: any, type: T): asserts value is T;
+>assertEqual : Symbol(assertEqual, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 10, 24))
+>T : Symbol(T, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 12, 29))
+>value : Symbol(value, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 12, 32))
+>type : Symbol(type, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 12, 43))
+>T : Symbol(T, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 12, 29))
+>value : Symbol(value, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 12, 32))
+>T : Symbol(T, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 12, 29))
+
+const animal = { type: 'cat', canMeow: true } as Animal;
+>animal : Symbol(animal, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 14, 5))
+>type : Symbol(type, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 14, 16))
+>canMeow : Symbol(canMeow, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 14, 29))
+>Animal : Symbol(Animal, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 8, 1))
+
+assertEqual(animal.type, 'cat' as const);
+>assertEqual : Symbol(assertEqual, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 10, 24))
+>animal.type : Symbol(type, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 0, 15), Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 5, 15))
+>animal : Symbol(animal, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 14, 5))
+>type : Symbol(type, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 0, 15), Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 5, 15))
+
+animal.canMeow; // since is cat, should not be an error
+>animal.canMeow : Symbol(Cat.canMeow, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 1, 16))
+>animal : Symbol(animal, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 14, 5))
+>canMeow : Symbol(Cat.canMeow, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 1, 16))
+
+const animalOrUndef = { type: 'cat', canMeow: true } as Animal | undefined;
+>animalOrUndef : Symbol(animalOrUndef, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 19, 5))
+>type : Symbol(type, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 19, 23))
+>canMeow : Symbol(canMeow, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 19, 36))
+>Animal : Symbol(Animal, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 8, 1))
+
+assertEqual(animalOrUndef?.type, 'cat' as const);
+>assertEqual : Symbol(assertEqual, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 10, 24))
+>animalOrUndef?.type : Symbol(type, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 0, 15), Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 5, 15))
+>animalOrUndef : Symbol(animalOrUndef, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 19, 5))
+>type : Symbol(type, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 0, 15), Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 5, 15))
+
+animalOrUndef.canMeow; // since is cat, should not be an error
+>animalOrUndef.canMeow : Symbol(Cat.canMeow, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 1, 16))
+>animalOrUndef : Symbol(animalOrUndef, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 19, 5))
+>canMeow : Symbol(Cat.canMeow, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 1, 16))
+
