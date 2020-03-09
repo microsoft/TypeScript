@@ -1,0 +1,92 @@
+=== tests/cases/compiler/enumPlusEquals.ts ===
+enum E { F = "Foo", B = "Bar" }
+>E : Symbol(E, Decl(enumPlusEquals.ts, 0, 0))
+>F : Symbol(E.F, Decl(enumPlusEquals.ts, 0, 8))
+>B : Symbol(E.B, Decl(enumPlusEquals.ts, 0, 19))
+
+let s: string = "Foo";
+>s : Symbol(s, Decl(enumPlusEquals.ts, 1, 3))
+
+if (s == E.F) s = s + "";
+>s : Symbol(s, Decl(enumPlusEquals.ts, 1, 3))
+>E.F : Symbol(E.F, Decl(enumPlusEquals.ts, 0, 8))
+>E : Symbol(E, Decl(enumPlusEquals.ts, 0, 0))
+>F : Symbol(E.F, Decl(enumPlusEquals.ts, 0, 8))
+>s : Symbol(s, Decl(enumPlusEquals.ts, 1, 3))
+>s : Symbol(s, Decl(enumPlusEquals.ts, 1, 3))
+
+// this should be fine too (GH#35824): the single `s` should be E.F when
+// reading and strnig when writing
+if (s == E.F) s += "";
+>s : Symbol(s, Decl(enumPlusEquals.ts, 1, 3))
+>E.F : Symbol(E.F, Decl(enumPlusEquals.ts, 0, 8))
+>E : Symbol(E, Decl(enumPlusEquals.ts, 0, 0))
+>F : Symbol(E.F, Decl(enumPlusEquals.ts, 0, 8))
+>s : Symbol(s, Decl(enumPlusEquals.ts, 1, 3))
+
+enum E1 { F = "Foo", B = "Bar" }
+>E1 : Symbol(E1, Decl(enumPlusEquals.ts, 5, 22))
+>F : Symbol(E1.F, Decl(enumPlusEquals.ts, 7, 9))
+>B : Symbol(E1.B, Decl(enumPlusEquals.ts, 7, 20))
+
+let s1: string = "Foo";
+>s1 : Symbol(s1, Decl(enumPlusEquals.ts, 8, 3))
+
+function foo1(c: E1) {
+>foo1 : Symbol(foo1, Decl(enumPlusEquals.ts, 8, 23))
+>c : Symbol(c, Decl(enumPlusEquals.ts, 9, 14))
+>E1 : Symbol(E1, Decl(enumPlusEquals.ts, 5, 22))
+
+    if (s == c) s += "";
+>s : Symbol(s, Decl(enumPlusEquals.ts, 1, 3))
+>c : Symbol(c, Decl(enumPlusEquals.ts, 9, 14))
+>s : Symbol(s, Decl(enumPlusEquals.ts, 1, 3))
+}
+
+enum E2 { F = "Foo", B = 9 }
+>E2 : Symbol(E2, Decl(enumPlusEquals.ts, 11, 1))
+>F : Symbol(E2.F, Decl(enumPlusEquals.ts, 13, 9))
+>B : Symbol(E2.B, Decl(enumPlusEquals.ts, 13, 20))
+
+let s2: string = "Foo";
+>s2 : Symbol(s2, Decl(enumPlusEquals.ts, 14, 3))
+
+function foo2(c: E2) {
+>foo2 : Symbol(foo2, Decl(enumPlusEquals.ts, 14, 23))
+>c : Symbol(c, Decl(enumPlusEquals.ts, 15, 14))
+>E2 : Symbol(E2, Decl(enumPlusEquals.ts, 11, 1))
+
+    if (s == c) s += "";
+>s : Symbol(s, Decl(enumPlusEquals.ts, 1, 3))
+>c : Symbol(c, Decl(enumPlusEquals.ts, 15, 14))
+>s : Symbol(s, Decl(enumPlusEquals.ts, 1, 3))
+}
+
+enum E3 { F = "Foo", B = "Bar" }
+>E3 : Symbol(E3, Decl(enumPlusEquals.ts, 17, 1))
+>F : Symbol(E3.F, Decl(enumPlusEquals.ts, 19, 9))
+>B : Symbol(E3.B, Decl(enumPlusEquals.ts, 19, 20))
+
+let s3: string = "Foo";
+>s3 : Symbol(s3, Decl(enumPlusEquals.ts, 20, 3))
+
+function foo3(c: E3) {
+>foo3 : Symbol(foo3, Decl(enumPlusEquals.ts, 20, 23))
+>c : Symbol(c, Decl(enumPlusEquals.ts, 21, 14))
+>E3 : Symbol(E3, Decl(enumPlusEquals.ts, 17, 1))
+
+    if (s == c) {
+>s : Symbol(s, Decl(enumPlusEquals.ts, 1, 3))
+>c : Symbol(c, Decl(enumPlusEquals.ts, 21, 14))
+
+        s; // it's an E3
+>s : Symbol(s, Decl(enumPlusEquals.ts, 1, 3))
+
+        s += "";
+>s : Symbol(s, Decl(enumPlusEquals.ts, 1, 3))
+
+        s; // now it's a string
+>s : Symbol(s, Decl(enumPlusEquals.ts, 1, 3))
+    }
+}
+

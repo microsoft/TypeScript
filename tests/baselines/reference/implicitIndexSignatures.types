@@ -225,7 +225,7 @@ function f5() {
 >E1 : typeof E1
 
     const v2 = getStringIndexValue(E2);
->v2 : E2
+>v2 : E2.A | E2.B
 >getStringIndexValue(E2) : E2
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
 >E2 : typeof E2

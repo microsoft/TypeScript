@@ -73,9 +73,9 @@ const foo1 = { a: E1.a }
 >a : E1.a
 
 const foo2 = { a: E2.a }
->foo2 : { a: E2; }
->{ a: E2.a } : { a: E2; }
->a : E2
+>foo2 : { a: string; }
+>{ a: E2.a } : { a: string; }
+>a : string
 >E2.a : E2.a
 >E2 : typeof E2
 >a : E2.a

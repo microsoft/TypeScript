@@ -1,0 +1,117 @@
+=== tests/cases/compiler/enumPlusEquals.ts ===
+enum E { F = "Foo", B = "Bar" }
+>E : E
+>F : E.F
+>"Foo" : "Foo"
+>B : E.B
+>"Bar" : "Bar"
+
+let s: string = "Foo";
+>s : string
+>"Foo" : "Foo"
+
+if (s == E.F) s = s + "";
+>s == E.F : boolean
+>s : string
+>E.F : E.F
+>E : typeof E
+>F : E.F
+>s = s + "" : string
+>s : string
+>s + "" : string
+>s : E.F
+>"" : ""
+
+// this should be fine too (GH#35824): the single `s` should be E.F when
+// reading and strnig when writing
+if (s == E.F) s += "";
+>s == E.F : boolean
+>s : string
+>E.F : E.F
+>E : typeof E
+>F : E.F
+>s += "" : string
+>s : string
+>"" : ""
+
+enum E1 { F = "Foo", B = "Bar" }
+>E1 : E1
+>F : E1.F
+>"Foo" : "Foo"
+>B : E1.B
+>"Bar" : "Bar"
+
+let s1: string = "Foo";
+>s1 : string
+>"Foo" : "Foo"
+
+function foo1(c: E1) {
+>foo1 : (c: E1) => void
+>c : E1
+
+    if (s == c) s += "";
+>s == c : boolean
+>s : string
+>c : E1
+>s += "" : string
+>s : string
+>"" : ""
+}
+
+enum E2 { F = "Foo", B = 9 }
+>E2 : E2
+>F : E2.F
+>"Foo" : "Foo"
+>B : E2.B
+>9 : 9
+
+let s2: string = "Foo";
+>s2 : string
+>"Foo" : "Foo"
+
+function foo2(c: E2) {
+>foo2 : (c: E2) => void
+>c : E2
+
+    if (s == c) s += "";
+>s == c : boolean
+>s : string
+>c : E2
+>s += "" : string
+>s : string
+>"" : ""
+}
+
+enum E3 { F = "Foo", B = "Bar" }
+>E3 : E3
+>F : E3.F
+>"Foo" : "Foo"
+>B : E3.B
+>"Bar" : "Bar"
+
+let s3: string = "Foo";
+>s3 : string
+>"Foo" : "Foo"
+
+function foo3(c: E3) {
+>foo3 : (c: E3) => void
+>c : E3
+
+    if (s == c) {
+>s == c : boolean
+>s : string
+>c : E3
+
+        s; // it's an E3
+>s : E3
+
+        s += "";
+>s += "" : string
+>s : string
+>"" : ""
+
+        s; // now it's a string
+>s : string
+    }
+}
+

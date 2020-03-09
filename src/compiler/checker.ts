@@ -8579,7 +8579,12 @@ namespace ts {
         }
 
         function getBaseTypeOfEnumLiteralType(type: Type) {
-            return type.flags & TypeFlags.EnumLiteral && !(type.flags & TypeFlags.Union) ? getDeclaredTypeOfSymbol(getParentOfSymbol(type.symbol)!) : type;
+            if (!(type.flags & TypeFlags.EnumLiteral)) return type;
+            // this should really be done for numbers too (possibly even for mixes),
+            // but the legacy treatment of numeric enums as compatible with numbers makes it redundant
+            // (see the "Type number or any numeric literal" comment below)
+            if (everyType(type, t => !!(t.flags & TypeFlags.EnumLiteral) && !!(t.flags & TypeFlags.StringLiteral))) return stringType;
+            return !(type.flags & TypeFlags.Union) ? getDeclaredTypeOfSymbol(getParentOfSymbol(type.symbol)!) : type;
         }
 
         function getDeclaredTypeOfEnum(symbol: Symbol): Type {
