@@ -71,9 +71,9 @@ Standard output:
 @fluentui/docs: [XX:XX:XX] Working directory changed to /office-ui-fabric-react
 @fluentui/docs: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/gulpfile.ts
 @fluentui/docs: DocToccing single file "/office-ui-fabric-react/.github/CONTRIBUTING.md" for github.com.
-@fluentui/docs: ==================
 @fluentui/docs: > @fluentui/ability-attributes@X.X.X schema /office-ui-fabric-react/packages/fluentui/ability-attributes
 @fluentui/docs: > allyschema -c "process.env.NODE_ENV !== 'production'" schema.json > ./src/schema.ts
+@fluentui/docs: ==================
 @fluentui/docs: "/office-ui-fabric-react/.github/CONTRIBUTING.md" will be updated
 @fluentui/docs: Everything is OK.
 @fluentui/docs: DocToccing single file "/office-ui-fabric-react/.github/setup-local-development.md" for github.com.
@@ -101,10 +101,10 @@ Standard output:
 @fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/examples/components/Toolbar/Content/ToolbarExampleMenuRadioGroup.shorthand.tsx(35,25):
 @fluentui/docs: TS2345: Argument of type 'boolean' is not assignable to parameter of type '(prevState: undefined) => undefined'.
 @fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx
-@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx(34,22):
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx(32,22):
 @fluentui/docs: TS2345: Argument of type 'number' is not assignable to parameter of type '(prevState: undefined) => undefined'.
 @fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx
-@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx(64,31):
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx(62,31):
 @fluentui/docs: TS2538: Type 'undefined' cannot be used as an index type.
 @fluentui/docs: Child HtmlWebpackCompiler:
 @fluentui/docs:     Entrypoint HtmlWebpackPlugin_0 = __child-HtmlWebpackPlugin_0
@@ -126,9 +126,9 @@ info cli using local version of lerna
 @fluentui/docs:     /office-ui-fabric-react/packages/fluentui/docs/src/examples/components/Toolbar/Content/ToolbarExampleMenuRadioGroup.shorthand.tsx
 @fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/examples/components/Toolbar/Content/ToolbarExampleMenuRadioGroup.shorthand.tsx(35,25):
 @fluentui/docs: TS2345: Argument of type 'boolean' is not assignable to parameter of type '(prevState: undefined) => undefined'.,/office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx
-@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx(34,22):
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx(32,22):
 @fluentui/docs: TS2345: Argument of type 'number' is not assignable to parameter of type '(prevState: undefined) => undefined'.,/office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx
-@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx(64,31):
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx(62,31):
 @fluentui/docs: TS2538: Type 'undefined' cannot be used as an index type.
 @fluentui/docs: Details:
 @fluentui/docs:     domainThrown: true

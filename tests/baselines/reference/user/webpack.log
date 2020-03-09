@@ -1,0 +1,8 @@
+Exit Code: 1
+Standard output:
+lib/Stats.js(68,31): error TS2554: Expected 3 arguments, but got 2.
+tooling/format-file-header.js(151,34): error TS2556: Expected 1-2 arguments, but got 0 or more.
+
+
+
+Standard error:
