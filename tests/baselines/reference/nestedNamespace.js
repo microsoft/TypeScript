@@ -13,7 +13,6 @@ interface B extends a.types.A {}
 //// [a.js]
 "use strict";
 exports.__esModule = true;
-exports.types = void 0;
 var types;
 (function (types) {
     var A = /** @class */ (function () {
