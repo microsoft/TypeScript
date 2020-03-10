@@ -1402,7 +1402,7 @@ namespace ts {
                 return true;
             }
             if (isUsedInFunctionOrInstanceProperty(usage, declaration, container)) {
-                if (compilerOptions.target === ScriptTarget.ESNext && !!compilerOptions.useDefineForClassFields) {
+                if (compilerOptions.target === ScriptTarget.ESNext && !!compilerOptions.useDefineForClassFields && getContainingClass(declaration)) {
                     return (isPropertyDeclaration(declaration) || isParameterPropertyDeclaration(declaration, declaration.parent)) &&
                         !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage, /*stopAtAnyPropertyDeclaration*/ true);
                 }
