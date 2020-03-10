@@ -1,0 +1,11 @@
+Exit Code: 1
+Standard output:
+lib/ExternalModule.js(305,28): error TS2554: Expected 1 arguments, but got 0.
+lib/Stats.js(68,31): error TS2554: Expected 3 arguments, but got 2.
+lib/library/SystemLibraryPlugin.js(127,35): error TS2554: Expected 1 arguments, but got 0.
+lib/optimize/ConcatenatedModule.js(205,32): error TS2554: Expected 1 arguments, but got 0.
+tooling/format-file-header.js(151,34): error TS2556: Expected 1-2 arguments, but got 0 or more.
+
+
+
+Standard error:

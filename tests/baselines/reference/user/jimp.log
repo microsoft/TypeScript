@@ -1,0 +1,8 @@
+Exit Code: 1
+Standard output:
+node_modules/@jimp/core/types/utils.d.ts(16,3): error TS2536: Type '"class"' cannot be used to index type 'T'.
+node_modules/@jimp/core/types/utils.d.ts(17,3): error TS2536: Type '"constants"' cannot be used to index type 'T'.
+
+
+
+Standard error:
