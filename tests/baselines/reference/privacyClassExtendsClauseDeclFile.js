@@ -112,6 +112,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.publicClassExtendingFromPrivateModuleClass = exports.publicClassExtendingPrivateClass = exports.publicClassExtendingPublicClass = exports.publicClass = exports.publicModule = void 0;
 var publicModule;
 (function (publicModule) {
     var publicClassInPublicModule = /** @class */ (function () {

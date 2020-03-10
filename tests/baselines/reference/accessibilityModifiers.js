@@ -52,34 +52,34 @@ var C = /** @class */ (function () {
     C.privateMethod = function () { };
     Object.defineProperty(C, "privateGetter", {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "privateSetter", {
         set: function (a) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C.protectedMethod = function () { };
     Object.defineProperty(C, "protectedGetter", {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "protectedSetter", {
         set: function (a) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C.publicMethod = function () { };
     Object.defineProperty(C, "publicGetter", {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "publicSetter", {
         set: function (a) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;
@@ -91,34 +91,34 @@ var D = /** @class */ (function () {
     D.privateMethod = function () { };
     Object.defineProperty(D, "privateGetter", {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(D, "privateSetter", {
         set: function (a) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     D.protectedMethod = function () { };
     Object.defineProperty(D, "protectedGetter", {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(D, "protectedSetter", {
         set: function (a) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     D.publicMethod = function () { };
     Object.defineProperty(D, "publicGetter", {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(D, "publicSetter", {
         set: function (a) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return D;
@@ -130,12 +130,12 @@ var E = /** @class */ (function () {
     E.prototype.method = function () { };
     Object.defineProperty(E.prototype, "getter", {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(E.prototype, "setter", {
         set: function (a) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return E;

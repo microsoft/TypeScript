@@ -18,7 +18,7 @@ var x = new C<number>();
 >C : typeof C
 
 x.bar2<string>(2, "");
->x.bar2<string>(2, "") : any
+>x.bar2<string>(2, "") : number
 >x.bar2 : <U extends number>(x: number, y: U) => number
 >x : C<number>
 >bar2 : <U extends number>(x: number, y: U) => number

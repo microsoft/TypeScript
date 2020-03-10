@@ -3,8 +3,9 @@ namespace ts {
     function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
         switch (moduleKind) {
             case ModuleKind.ESNext:
+            case ModuleKind.ES2020:
             case ModuleKind.ES2015:
-                return transformES2015Module;
+                return transformECMAScriptModule;
             case ModuleKind.System:
                 return transformSystemModule;
             default:
@@ -52,6 +53,10 @@ namespace ts {
 
         if (languageVersion < ScriptTarget.ESNext) {
             transformers.push(transformESNext);
+        }
+
+        if (languageVersion < ScriptTarget.ES2020) {
+            transformers.push(transformES2020);
         }
 
         if (languageVersion < ScriptTarget.ES2019) {
@@ -220,6 +225,7 @@ namespace ts {
             transformed,
             substituteNode,
             emitNodeWithNotification,
+            isEmitNotificationEnabled,
             dispose,
             diagnostics
         };
@@ -283,6 +289,8 @@ namespace ts {
         function emitNodeWithNotification(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
             Debug.assert(state < TransformationState.Disposed, "Cannot invoke TransformationResult callbacks after the result is disposed.");
             if (node) {
+                // TODO: Remove check and unconditionally use onEmitNode when API is breakingly changed
+                // (see https://github.com/microsoft/TypeScript/pull/36248/files/5062623f39120171b98870c71344b3242eb03d23#r369766739)
                 if (isEmitNotificationEnabled(node)) {
                     onEmitNode(hint, node, emitCallback);
                 }
@@ -404,6 +412,11 @@ namespace ts {
             Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the transformation context during initialization.");
             Debug.assert(state < TransformationState.Completed, "Cannot modify the transformation context after transformation has completed.");
             Debug.assert(!helper.scoped, "Cannot request a scoped emit helper.");
+            if (helper.dependencies) {
+                for (const h of helper.dependencies) {
+                    requestEmitHelper(h);
+                }
+            }
             emitHelpers = append(emitHelpers, helper);
         }
 

@@ -34,6 +34,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.Text = void 0;
 var React = require("react");
 var Text = /** @class */ (function (_super) {
     __extends(Text, _super);

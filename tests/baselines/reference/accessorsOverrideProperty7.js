@@ -40,7 +40,7 @@ var B = /** @class */ (function (_super) {
     Object.defineProperty(B.prototype, "p", {
         get: function () { return 'oh no'; } // error
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return B;

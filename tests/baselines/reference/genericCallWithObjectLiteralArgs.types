@@ -10,8 +10,8 @@ function foo<T>(x: { bar: T; baz: T }) {
 }
 
 var r = foo({ bar: 1, baz: '' }); // error
->r : any
->foo({ bar: 1, baz: '' }) : any
+>r : { bar: number; baz: number; }
+>foo({ bar: 1, baz: '' }) : { bar: number; baz: number; }
 >foo : <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }
 >{ bar: 1, baz: '' } : { bar: number; baz: string; }
 >bar : number

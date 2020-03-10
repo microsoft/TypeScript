@@ -22,6 +22,7 @@ export namespace Something {
 //// [this.js]
 "use strict";
 exports.__esModule = true;
+exports.Something = exports.make = void 0;
 var me = require("./this");
 function make(x) {
     return null;

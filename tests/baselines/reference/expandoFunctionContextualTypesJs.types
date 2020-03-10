@@ -89,7 +89,7 @@ function foo() {
 module.exports = {
 >module.exports = {    color: "red"} : { color: "red" | "blue"; }
 >module.exports : { color: "red" | "blue"; }
->module : { "tests/cases/compiler/input": { color: "red" | "blue"; }; }
+>module : { "\"tests/cases/compiler/input\"": { color: "red" | "blue"; }; }
 >exports : { color: "red" | "blue"; }
 >{    color: "red"} : { color: "red"; }
 
@@ -104,6 +104,6 @@ expectLiteral({ props: module.exports });
 >{ props: module.exports } : { props: { color: "red" | "blue"; }; }
 >props : { color: "red" | "blue"; }
 >module.exports : { color: "red" | "blue"; }
->module : { "tests/cases/compiler/input": { color: "red" | "blue"; }; }
+>module : { "\"tests/cases/compiler/input\"": { color: "red" | "blue"; }; }
 >exports : { color: "red" | "blue"; }
 

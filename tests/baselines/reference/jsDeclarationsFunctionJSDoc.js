@@ -38,6 +38,7 @@ export const c = 12;
 //// [source.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.c = exports.Aleph = exports.foo = void 0;
 /**
  * Foos a bar together using an `a` and a `b`
  * @param {number} a

@@ -16,13 +16,16 @@ class C {
 
 
 //// [useBeforeDeclaration_jsx.jsx]
-class C {
-}
-C.a = <C.z></C.z>;
-C.b = <C.z />;
-C.c = <span {...C.x}></span>;
-C.d = <span id={C.y}></span>;
-C.e = <span>{C.y}</span>;
-C.x = {};
-C.y = '';
-C.z = () => <b></b>;
+let C = /** @class */ (() => {
+    class C {
+    }
+    C.a = <C.z></C.z>;
+    C.b = <C.z />;
+    C.c = <span {...C.x}></span>;
+    C.d = <span id={C.y}></span>;
+    C.e = <span>{C.y}</span>;
+    C.x = {};
+    C.y = '';
+    C.z = () => <b></b>;
+    return C;
+})();

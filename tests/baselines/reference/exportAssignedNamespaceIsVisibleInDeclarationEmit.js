@@ -13,6 +13,7 @@ export const thing = f();
 //// [index.js]
 "use strict";
 exports.__esModule = true;
+exports.thing = void 0;
 var thing_1 = require("./thing");
 exports.thing = thing_1.f();
 

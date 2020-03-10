@@ -29,6 +29,7 @@ const y: OriginalB = x;
 //// [b.js]
 "use strict";
 exports.__esModule = true;
+exports.zzz = void 0;
 exports.zzz = 123;
 //// [a.js]
 "use strict";

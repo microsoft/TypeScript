@@ -1,12 +1,16 @@
 /*comment*/
-class Clazz {
+let Clazz = /** @class */ (() => {
     /*comment*/
-    constructor(/*comment*/
-    field = 1) {
-        this.field = field;
+    class Clazz {
         /*comment*/
-        this.instanceProp = 2;
+        constructor(/*comment*/
+        field = 1) {
+            this.field = field;
+            /*comment*/
+            this.instanceProp = 2;
+        }
     }
-}
-/*comment*/
-Clazz.staticProp = 1;
+    /*comment*/
+    Clazz.staticProp = 1;
+    return Clazz;
+})();

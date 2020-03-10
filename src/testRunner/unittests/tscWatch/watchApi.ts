@@ -20,7 +20,7 @@ namespace ts.tscWatch {
         it("verify that module resolution with json extension works when returned without extension", () => {
             const files = [libFile, mainFile, config, settingsJson];
             const host = createWatchedSystem(files, { currentDirectory: projectRoot });
-            const compilerHost = createWatchCompilerHostOfConfigFile(config.path, {}, host);
+            const compilerHost = createWatchCompilerHostOfConfigFile(config.path, {}, /*watchOptionsToExtend*/ undefined, host);
             const parsedCommandResult = parseJsonConfigFileContent(configFileJson, host, config.path);
             compilerHost.resolveModuleNames = (moduleNames, containingFile) => moduleNames.map(m => {
                 const result = resolveModuleName(m, containingFile, parsedCommandResult.options, compilerHost);
@@ -58,9 +58,32 @@ namespace ts.tscWatch {
             const reportWatchStatus: WatchStatusReporter = (_, __, ___, errorCount) => {
                 watchedErrorCount = errorCount;
             };
-            const compilerHost = createWatchCompilerHostOfConfigFile(config.path, {}, host, /*createProgram*/ undefined, /*reportDiagnostic*/ undefined, reportWatchStatus);
+            const compilerHost = createWatchCompilerHostOfConfigFile(config.path, {}, /*watchOptionsToExtend*/ undefined, host, /*createProgram*/ undefined, /*reportDiagnostic*/ undefined, reportWatchStatus);
             createWatchProgram(compilerHost);
             assert.equal(watchedErrorCount, 2, "The error count was expected to be 2 for the file change");
+        });
+    });
+
+    describe("unittests:: tsc-watch:: watchAPI:: when watchHost does not implement setTimeout or clearTimeout", () => {
+        it("verifies that getProgram gets updated program if new file is added to the program", () => {
+            const config: File = {
+                path: `${projectRoot}/tsconfig.json`,
+                content: "{}"
+            };
+            const mainFile: File = {
+                path: `${projectRoot}/main.ts`,
+                content: "const x = 10;"
+            };
+            const sys = createWatchedSystem([config, mainFile, libFile]);
+            const watchCompilerHost = createWatchCompilerHost(config.path, {}, sys);
+            watchCompilerHost.setTimeout = undefined;
+            watchCompilerHost.clearTimeout = undefined;
+            const watch = createWatchProgram(watchCompilerHost);
+            checkProgramActualFiles(watch.getProgram().getProgram(), [mainFile.path, libFile.path]);
+            // Write new file
+            const barPath = `${projectRoot}/bar.ts`;
+            sys.writeFile(barPath, "const y =10;");
+            checkProgramActualFiles(watch.getProgram().getProgram(), [mainFile.path, barPath, libFile.path]);
         });
     });
 }

@@ -26,6 +26,15 @@ A.prototype.func = function() { this._func = 0; }
 >prototype : Symbol(A.prototype)
 >this : Symbol(A, Decl(mod1.js, 0, 0))
 
+Object.defineProperty(A.prototype, "def", { value: 0 });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>A.prototype : Symbol(A.prototype)
+>A : Symbol(A, Decl(main.js, 0, 6))
+>prototype : Symbol(A.prototype)
+>value : Symbol(value, Decl(main.js, 3, 43))
+
 new A().bar
 >new A().bar : Symbol(A.bar, Decl(mod1.js, 0, 13))
 >A : Symbol(A, Decl(main.js, 0, 6))
@@ -35,5 +44,8 @@ new A().foo
 >A : Symbol(A, Decl(main.js, 0, 6))
 
 new A().func()
+>A : Symbol(A, Decl(main.js, 0, 6))
+
+new A().def
 >A : Symbol(A, Decl(main.js, 0, 6))
 

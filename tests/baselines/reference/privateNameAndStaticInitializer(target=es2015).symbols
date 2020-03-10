@@ -1,0 +1,16 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameAndStaticInitializer.ts ===
+class A {
+>A : Symbol(A, Decl(privateNameAndStaticInitializer.ts, 0, 0))
+
+  #foo = 1;
+>#foo : Symbol(A.#foo, Decl(privateNameAndStaticInitializer.ts, 0, 9))
+
+  static inst = new A();
+>inst : Symbol(A.inst, Decl(privateNameAndStaticInitializer.ts, 1, 11))
+>A : Symbol(A, Decl(privateNameAndStaticInitializer.ts, 0, 0))
+
+  #prop = 2;
+>#prop : Symbol(A.#prop, Decl(privateNameAndStaticInitializer.ts, 2, 24))
+}
+
+

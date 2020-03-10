@@ -1,0 +1,11 @@
+=== /defs.d.ts ===
+interface Sig {
+    [index: string]: string
+>index : string
+}
+=== /a.js ===
+/** @implements {Sig} */
+class B  {
+>B : B
+}
+
