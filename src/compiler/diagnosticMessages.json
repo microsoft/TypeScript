@@ -2245,6 +2245,10 @@
         "category": "Error",
         "code": 2577
     },
+    "Unused '@ts-expect-error' directive.": {
+        "category": "Error",
+        "code": 2578
+    },
     "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.": {
         "category": "Error",
         "code": 2580
@@ -2898,6 +2902,10 @@
     "'{0}' is specified more than once, so this usage will be overwritten.": {
         "category": "Error",
         "code": 2783
+    },
+    "'get' and 'set' accessors cannot declare 'this' parameters.": {
+        "category": "Error",
+        "code": 2784
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

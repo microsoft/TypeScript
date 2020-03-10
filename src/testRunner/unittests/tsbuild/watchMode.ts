@@ -598,7 +598,7 @@ let x: string = 10;`);
                 }
 
                 function verifyDependencies(watch: Watch, filePath: string, expected: readonly string[]) {
-                    checkArray(`${filePath} dependencies`, watch.getBuilderProgram().getAllDependencies(watch().getSourceFile(filePath)!), expected);
+                    checkArray(`${filePath} dependencies`, watch.getCurrentProgram().getAllDependencies(watch.getCurrentProgram().getSourceFile(filePath)!), expected);
                 }
 
                 describe("on sample project", () => {
@@ -639,7 +639,7 @@ let x: string = 10;`);
 
                             host.checkTimeoutQueueLengthAndRun(1);
                             checkOutputErrorsIncremental(host, emptyArray);
-                            checkProgramActualFiles(watch(), expectedProgramFilesAfterEdit());
+                            checkProgramActualFiles(watch.getCurrentProgram().getProgram(), expectedProgramFilesAfterEdit());
 
                         });
 
@@ -739,7 +739,7 @@ export function gfoo() {
                         expectedWatchedDirectoriesRecursive: readonly string[],
                         dependencies: readonly [string, readonly string[]][],
                         expectedWatchedDirectories?: readonly string[]) {
-                        checkProgramActualFiles(watch(), expectedProgramFiles);
+                        checkProgramActualFiles(watch.getCurrentProgram().getProgram(), expectedProgramFiles);
                         verifyWatchesOfProject(host, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, expectedWatchedDirectories);
                         for (const [file, deps] of dependencies) {
                             verifyDependencies(watch, file, deps);

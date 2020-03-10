@@ -111,7 +111,6 @@ namespace ts {
         // TODO: GH#18217 Optional methods are frequently asserted
         createDirectory?(path: string): void;
         writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
-        onCachedDirectoryStructureHostCreate?(host: CachedDirectoryStructureHost): void;
     }
 
     export interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
@@ -247,9 +246,6 @@ namespace ts {
         let hasChangedConfigFileParsingErrors = false;
 
         const cachedDirectoryStructureHost = configFileName === undefined ? undefined : createCachedDirectoryStructureHost(host, currentDirectory, useCaseSensitiveFileNames);
-        if (cachedDirectoryStructureHost && host.onCachedDirectoryStructureHostCreate) {
-            host.onCachedDirectoryStructureHostCreate(cachedDirectoryStructureHost);
-        }
         const directoryStructureHost: DirectoryStructureHost = cachedDirectoryStructureHost || host;
         const parseConfigFileHost = parseConfigHostFromCompilerHostLike(host, directoryStructureHost);
 
@@ -324,8 +320,8 @@ namespace ts {
         watchConfigFileWildCardDirectories();
 
         return configFileName ?
-            { getCurrentProgram: getCurrentBuilderProgram, getProgram: synchronizeProgram, close } :
-            { getCurrentProgram: getCurrentBuilderProgram, getProgram: synchronizeProgram, updateRootFileNames, close };
+            { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, close } :
+            { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, updateRootFileNames, close };
 
         function close() {
             resolutionCache.clear();
@@ -380,7 +376,7 @@ namespace ts {
                 createNewProgram(hasInvalidatedResolution);
             }
 
-            if (host.afterProgramCreate) {
+            if (host.afterProgramCreate && program !== builderProgram) {
                 host.afterProgramCreate(builderProgram);
             }
 
@@ -399,6 +395,7 @@ namespace ts {
             resolutionCache.startCachingPerDirectoryResolution();
             compilerHost.hasInvalidatedResolution = hasInvalidatedResolution;
             compilerHost.hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames;
+            hasChangedAutomaticTypeDirectiveNames = false;
             builderProgram = createProgram(rootFileNames, compilerOptions, compilerHost, builderProgram, configFileParsingDiagnostics, projectReferences);
             resolutionCache.finishCachingPerDirectoryResolution();
 
@@ -450,7 +447,7 @@ namespace ts {
             // If file is missing on host from cache, we can definitely say file doesnt exist
             // otherwise we need to ensure from the disk
             if (isFileMissingOnHost(sourceFilesCache.get(path))) {
-                return true;
+                return false;
             }
 
             return directoryStructureHost.fileExists(fileName);
@@ -556,7 +553,7 @@ namespace ts {
                 host.clearTimeout(timerToUpdateProgram);
             }
             writeLog("Scheduling update");
-            timerToUpdateProgram = host.setTimeout(updateProgram, 250);
+            timerToUpdateProgram = host.setTimeout(updateProgramWithWatchStatus, 250);
         }
 
         function scheduleProgramReload() {
@@ -565,10 +562,13 @@ namespace ts {
             scheduleProgramUpdate();
         }
 
-        function updateProgram() {
+        function updateProgramWithWatchStatus() {
             timerToUpdateProgram = undefined;
             reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
+            updateProgram();
+        }
 
+        function updateProgram() {
             switch (reloadLevel) {
                 case ConfigFileProgramReloadLevel.Partial:
                     perfLogger.logStartUpdateProgram("PartialConfigReload");
@@ -584,6 +584,7 @@ namespace ts {
                     break;
             }
             perfLogger.logStopUpdateProgram("Done");
+            return getCurrentBuilderProgram();
         }
 
         function reloadFileNamesFromConfigFile() {

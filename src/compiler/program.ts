@@ -1,6 +1,4 @@
 namespace ts {
-    const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?)/;
-
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string | undefined {
         return forEachAncestorDirectory(searchPath, ancestor => {
             const fileName = combinePaths(ancestor, configName);
@@ -968,7 +966,8 @@ namespace ts {
             forEachResolvedProjectReference,
             isSourceOfProjectReferenceRedirect,
             emitBuildInfo,
-            getProbableSymlinks
+            getProbableSymlinks,
+            useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
         };
 
         verifyCompilerOptions();
@@ -1660,17 +1659,16 @@ namespace ts {
             const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
             const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
 
-            let diagnostics: Diagnostic[] | undefined;
-            for (const diags of [fileProcessingDiagnosticsInFile, programDiagnosticsInFile]) {
-                if (diags) {
-                    for (const diag of diags) {
-                        if (shouldReportDiagnostic(diag)) {
-                            diagnostics = append(diagnostics, diag);
-                        }
-                    }
-                }
+            return getMergedProgramDiagnostics(sourceFile, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
+        }
+
+        function getMergedProgramDiagnostics(sourceFile: SourceFile, ...allDiagnostics: (readonly Diagnostic[] | undefined)[]) {
+            const flatDiagnostics = flatten(allDiagnostics);
+            if (!sourceFile.commentDirectives?.length) {
+                return flatDiagnostics;
             }
-            return diagnostics || emptyArray;
+
+            return getDiagnosticsWithPrecedingDirectives(sourceFile, sourceFile.commentDirectives, flatDiagnostics).diagnostics;
         }
 
         function getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[] {
@@ -1748,18 +1746,36 @@ namespace ts {
                 const bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
                 const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
 
-                let diagnostics: Diagnostic[] | undefined;
-                for (const diags of [bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined]) {
-                    if (diags) {
-                        for (const diag of diags) {
-                            if (shouldReportDiagnostic(diag)) {
-                                diagnostics = append(diagnostics, diag);
-                            }
-                        }
-                    }
-                }
-                return diagnostics || emptyArray;
+                return getMergedBindAndCheckDiagnostics(sourceFile, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
             });
+        }
+
+        function getMergedBindAndCheckDiagnostics(sourceFile: SourceFile, ...allDiagnostics: (readonly Diagnostic[] | undefined)[]) {
+            const flatDiagnostics = flatten(allDiagnostics);
+            if (!sourceFile.commentDirectives?.length) {
+                return flatDiagnostics;
+            }
+
+            const { diagnostics, directives } = getDiagnosticsWithPrecedingDirectives(sourceFile, sourceFile.commentDirectives, flatDiagnostics);
+
+            for (const errorExpectation of directives.getUnusedExpectations()) {
+                diagnostics.push(createDiagnosticForRange(sourceFile, errorExpectation.range, Diagnostics.Unused_ts_expect_error_directive));
+            }
+
+            return diagnostics;
+        }
+
+        /**
+         * Creates a map of comment directives along with the diagnostics immediately preceded by one of them.
+         * Comments that match to any of those diagnostics are marked as used.
+         */
+        function getDiagnosticsWithPrecedingDirectives(sourceFile: SourceFile, commentDirectives: CommentDirective[], flatDiagnostics: Diagnostic[]) {
+            // Diagnostics are only reported if there is no comment directive preceding them
+            // This will modify the directives map by marking "used" ones with a corresponding diagnostic
+            const directives = createCommentDirectivesMap(sourceFile, commentDirectives);
+            const diagnostics = flatDiagnostics.filter(diagnostic => markPrecedingCommentDirectiveLine(diagnostic, directives) === -1);
+
+            return { diagnostics, directives };
         }
 
         function getSuggestionDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): readonly DiagnosticWithLocation[] {
@@ -1769,28 +1785,33 @@ namespace ts {
         }
 
         /**
-         * Skip errors if previous line start with '// @ts-ignore' comment, not counting non-empty non-comment lines
+         * @returns The line index marked as preceding the diagnostic, or -1 if none was.
          */
-        function shouldReportDiagnostic(diagnostic: Diagnostic) {
+        function markPrecedingCommentDirectiveLine(diagnostic: Diagnostic, directives: CommentDirectivesMap) {
             const { file, start } = diagnostic;
-            if (file) {
-                const lineStarts = getLineStarts(file);
-                let { line } = computeLineAndCharacterOfPosition(lineStarts, start!); // TODO: GH#18217
-                while (line > 0) {
-                    const previousLineText = file.text.slice(lineStarts[line - 1], lineStarts[line]);
-                    const result = ignoreDiagnosticCommentRegEx.exec(previousLineText);
-                    if (!result) {
-                        // non-empty line
-                        return true;
-                    }
-                    if (result[3]) {
-                        // @ts-ignore
-                        return false;
-                    }
-                    line--;
-                }
+            if (!file) {
+                return -1;
             }
-            return true;
+
+            // Start out with the line just before the text
+            const lineStarts = getLineStarts(file);
+            let line = computeLineAndCharacterOfPosition(lineStarts, start!).line - 1; // TODO: GH#18217
+            while (line >= 0) {
+                // As soon as that line is known to have a comment directive, use that
+                if (directives.markUsed(line)) {
+                    return line;
+                }
+
+                // Stop searching if the line is not empty and not a comment
+                const lineText = file.text.slice(lineStarts[line - 1], lineStarts[line]).trim();
+                if (lineText !== "" && !/^(\s*)\/\/(.*)$/.test(lineText)) {
+                    return -1;
+                }
+
+                line--;
+            }
+
+            return -1;
         }
 
         function getJSSyntacticDiagnosticsForFile(sourceFile: SourceFile): DiagnosticWithLocation[] {

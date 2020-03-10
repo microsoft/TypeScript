@@ -459,7 +459,7 @@ namespace ts {
                 if (node.flags & NodeFlags.OptionalChain) {
                     return updatePropertyAccessChain(<PropertyAccessChain>node,
                         visitNode((<PropertyAccessChain>node).expression, visitor, isExpression),
-                        visitNode((<PropertyAccessChain>node).questionDotToken, visitor, isToken),
+                        visitNode((<PropertyAccessChain>node).questionDotToken, tokenVisitor, isToken),
                         visitNode((<PropertyAccessChain>node).name, visitor, isIdentifier));
                 }
                 return updatePropertyAccess(<PropertyAccessExpression>node,
@@ -470,7 +470,7 @@ namespace ts {
                 if (node.flags & NodeFlags.OptionalChain) {
                     return updateElementAccessChain(<ElementAccessChain>node,
                         visitNode((<ElementAccessChain>node).expression, visitor, isExpression),
-                        visitNode((<ElementAccessChain>node).questionDotToken, visitor, isToken),
+                        visitNode((<ElementAccessChain>node).questionDotToken, tokenVisitor, isToken),
                         visitNode((<ElementAccessChain>node).argumentExpression, visitor, isExpression));
                 }
                 return updateElementAccess(<ElementAccessExpression>node,
@@ -481,7 +481,7 @@ namespace ts {
                 if (node.flags & NodeFlags.OptionalChain) {
                     return updateCallChain(<CallChain>node,
                         visitNode((<CallChain>node).expression, visitor, isExpression),
-                        visitNode((<CallChain>node).questionDotToken, visitor, isToken),
+                        visitNode((<CallChain>node).questionDotToken, tokenVisitor, isToken),
                         nodesVisitor((<CallChain>node).typeArguments, visitor, isTypeNode),
                         nodesVisitor((<CallChain>node).arguments, visitor, isExpression));
                 }
@@ -527,7 +527,7 @@ namespace ts {
                     nodesVisitor((<ArrowFunction>node).typeParameters, visitor, isTypeParameterDeclaration),
                     visitParameterList((<ArrowFunction>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<ArrowFunction>node).type, visitor, isTypeNode),
-                    visitNode((<ArrowFunction>node).equalsGreaterThanToken, visitor, isToken),
+                    visitNode((<ArrowFunction>node).equalsGreaterThanToken, tokenVisitor, isToken),
                     visitFunctionBody((<ArrowFunction>node).body, visitor, context));
 
             case SyntaxKind.DeleteExpression:
@@ -558,14 +558,14 @@ namespace ts {
                 return updateBinary(<BinaryExpression>node,
                     visitNode((<BinaryExpression>node).left, visitor, isExpression),
                     visitNode((<BinaryExpression>node).right, visitor, isExpression),
-                    visitNode((<BinaryExpression>node).operatorToken, visitor, isToken));
+                    visitNode((<BinaryExpression>node).operatorToken, tokenVisitor, isToken));
 
             case SyntaxKind.ConditionalExpression:
                 return updateConditional(<ConditionalExpression>node,
                     visitNode((<ConditionalExpression>node).condition, visitor, isExpression),
-                    visitNode((<ConditionalExpression>node).questionToken, visitor, isToken),
+                    visitNode((<ConditionalExpression>node).questionToken, tokenVisitor, isToken),
                     visitNode((<ConditionalExpression>node).whenTrue, visitor, isExpression),
-                    visitNode((<ConditionalExpression>node).colonToken, visitor, isToken),
+                    visitNode((<ConditionalExpression>node).colonToken, tokenVisitor, isToken),
                     visitNode((<ConditionalExpression>node).whenFalse, visitor, isExpression));
 
             case SyntaxKind.TemplateExpression:
@@ -659,7 +659,7 @@ namespace ts {
 
             case SyntaxKind.ForOfStatement:
                 return updateForOf(<ForOfStatement>node,
-                    visitNode((<ForOfStatement>node).awaitModifier, visitor, isToken),
+                    visitNode((<ForOfStatement>node).awaitModifier, tokenVisitor, isToken),
                     visitNode((<ForOfStatement>node).initializer, visitor, isForInitializer),
                     visitNode((<ForOfStatement>node).expression, visitor, isExpression),
                     visitNode((<ForOfStatement>node).statement, visitor, isStatement, liftToBlock));

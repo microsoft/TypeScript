@@ -1664,6 +1664,13 @@ namespace ts.server {
                     const jsconfigFileName = asNormalizedPath(combinePaths(searchPath, "jsconfig.json"));
                     result = action(jsconfigFileName, combinePaths(canonicalSearchPath, "jsconfig.json"));
                     if (result) return jsconfigFileName;
+
+                    // If we started within node_modules, don't look outside node_modules.
+                    // Otherwise, we might pick up a very large project and pull in the world,
+                    // causing an editor delay.
+                    if (isNodeModulesDirectory(canonicalSearchPath)) {
+                        break;
+                    }
                 }
 
                 const parentPath = asNormalizedPath(getDirectoryPath(searchPath));
