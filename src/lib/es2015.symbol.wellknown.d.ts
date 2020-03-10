@@ -207,7 +207,7 @@ interface RegExpConstructor {
 
 interface String {
     /**
-     * Matches a string or an object that supports being matched against, and returns an array 
+     * Matches a string or an object that supports being matched against, and returns an array
      * containing the results of that search, or null if no matches are found.
      * @param matcher An object that supports being matched against.
      */
