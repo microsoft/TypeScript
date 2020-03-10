@@ -2171,6 +2171,7 @@ namespace ts.server {
         }
 
         /* @internal */
+        /** Find the configured project from the project references in this solution which contains the info directly */
         getDefaultChildProjectFromSolution(info: ScriptInfo) {
             Debug.assert(this.isSolution());
             return forEachResolvedProjectReferenceProject(

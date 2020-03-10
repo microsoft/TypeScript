@@ -425,9 +425,13 @@ namespace ts.server {
     }
 
     /*@internal*/
+    /** Kind of operation to perform to get project reference project */
     export enum ProjectReferenceProjectLoadKind {
+        /** Find existing project for project reference */
         Find,
+        /** Find existing project or create one for the project reference */
         FindCreate,
+        /** Find existing project or create and loas it for the project reference */
         FindCreateLoad
     }
 
@@ -528,6 +532,7 @@ namespace ts.server {
     }
 
     /*@internal*/
+    /** true if script info is part of project and is not in project because it is referenced from project reference source */
     export function projectContainsInfoDirectly(project: Project, info: ScriptInfo) {
         return project.containsScriptInfo(info) &&
             !project.isSourceOfProjectReferenceRedirect(info.path);
@@ -2776,6 +2781,7 @@ namespace ts.server {
                         else {
                             // reload from the disk
                             this.reloadConfiguredProject(project, reason);
+                            // If this is solution, reload the project till the reloaded project contains the script info directly
                             if (!project.containsScriptInfo(info) && project.isSolution()) {
                                 forEachResolvedProjectReferenceProject(
                                     project,
@@ -2881,6 +2887,7 @@ namespace ts.server {
             updateProjectIfDirty(configuredProject);
 
             if (configuredProject.isSolution()) {
+                // Find the project that is referenced from this solution that contains the script info directly
                 configuredProject = forEachResolvedProjectReferenceProject(
                     configuredProject,
                     child => {
