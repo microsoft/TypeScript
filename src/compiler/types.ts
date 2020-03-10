@@ -641,8 +641,7 @@ namespace ts {
 
         ReportsUnmeasurable = 1 << 3,
         ReportsUnreliable   = 1 << 4,
-        ReportsAwaitable    = 1 << 5,
-        ReportsMask         = ReportsUnmeasurable | ReportsUnreliable | ReportsAwaitable
+        ReportsMask         = ReportsUnmeasurable | ReportsUnreliable
     }
 
     export interface Node extends TextRange {
@@ -4602,7 +4601,6 @@ namespace ts {
         VarianceMask  = Invariant | Covariant | Contravariant | Independent, // Mask containing all measured variances without the unmeasurable flag
         Unmeasurable  = 1 << 3,  // Variance result is unusable - relationship relies on structural comparisons which are not reflected in generic relationships
         Unreliable    = 1 << 4,  // Variance result is unreliable - checking may produce false negatives, but not false positives
-        Awaitable     = 1 << 5,  // Type parameter is awaitable
         AllowsStructuralFallback = Unmeasurable | Unreliable,
     }
 
