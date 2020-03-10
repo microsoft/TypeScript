@@ -2907,6 +2907,10 @@
         "category": "Error",
         "code": 2784
     },
+    "This spread always overwrites this property.": {
+        "category": "Error",
+        "code": 2785
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

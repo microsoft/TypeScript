@@ -22557,8 +22557,8 @@ namespace ts {
             // Grammar checking
             checkGrammarObjectLiteralExpression(node, inDestructuringPattern);
 
-            let propertiesTable: SymbolTable;
-            const allPropertiesTable = createSymbolTable();
+            const allPropertiesTable = strictNullChecks ? createSymbolTable() : undefined;
+            let propertiesTable = createSymbolTable();
             let propertiesArray: Symbol[] = [];
             let spread: Type = emptyObjectType;
 
@@ -22574,7 +22574,6 @@ namespace ts {
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
-            propertiesTable = createSymbolTable();
 
             let offset = 0;
             for (let i = 0; i < node.properties.length; i++) {
@@ -22640,7 +22639,7 @@ namespace ts {
                     prop.type = type;
                     prop.target = member;
                     member = prop;
-                    allPropertiesTable.set(prop.escapedName, prop);
+                    allPropertiesTable?.set(prop.escapedName, prop);
                 }
                 else if (memberDecl.kind === SyntaxKind.SpreadAssignment) {
                     if (languageVersion < ScriptTarget.ES2015) {
@@ -22658,16 +22657,9 @@ namespace ts {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return errorType;
                     }
-                    for (const right of getPropertiesOfType(type)) {
-                        const rightType = getTypeOfSymbol(right);
-                        const left = allPropertiesTable.get(right.escapedName);
-                        if (strictNullChecks &&
-                            left &&
-                            !maybeTypeOfKind(rightType, TypeFlags.Nullable)) {
-                            error(left.valueDeclaration, Diagnostics._0_is_specified_more_than_once_so_this_usage_will_be_overwritten, unescapeLeadingUnderscores(left.escapedName));
-                        }
+                    if (allPropertiesTable) {
+                        checkSpreadPropOverrides(type, allPropertiesTable, memberDecl);
                     }
-
                     spread = getSpreadType(spread, type, node.symbol, objectFlags, inConstContext);
                     offset = i + 1;
                     continue;
@@ -22838,6 +22830,7 @@ namespace ts {
          */
         function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, checkMode: CheckMode | undefined) {
             const attributes = openingLikeElement.attributes;
+            const allAttributesTable = strictNullChecks ? createSymbolTable() : undefined;
             let attributesTable = createSymbolTable();
             let spread: Type = emptyJsxObjectType;
             let hasSpreadAnyType = false;
@@ -22861,6 +22854,7 @@ namespace ts {
                     attributeSymbol.type = exprType;
                     attributeSymbol.target = member;
                     attributesTable.set(attributeSymbol.escapedName, attributeSymbol);
+                    allAttributesTable?.set(attributeSymbol.escapedName, attributeSymbol);
                     if (attributeDecl.name.escapedText === jsxChildrenPropertyName) {
                         explicitlySpecifyChildrenAttribute = true;
                     }
@@ -22877,6 +22871,9 @@ namespace ts {
                     }
                     if (isValidSpreadType(exprType)) {
                         spread = getSpreadType(spread, exprType, attributes.symbol, objectFlags, /*readonly*/ false);
+                        if (allAttributesTable) {
+                            checkSpreadPropOverrides(exprType, allAttributesTable, attributeDecl);
+                        }
                     }
                     else {
                         typeToIntersect = typeToIntersect ? getIntersectionType([typeToIntersect, exprType]) : exprType;
@@ -22959,6 +22956,16 @@ namespace ts {
                 }
             }
             return childrenTypes;
+        }
+
+        function checkSpreadPropOverrides(type: Type, props: SymbolTable, spread: SpreadAssignment | JsxSpreadAttribute) {
+            for (const right of getPropertiesOfType(type)) {
+                const left = props.get(right.escapedName);
+                if (left && !maybeTypeOfKind(getTypeOfSymbol(right), TypeFlags.Nullable)) {
+                    const diagnostic = error(left.valueDeclaration, Diagnostics._0_is_specified_more_than_once_so_this_usage_will_be_overwritten, unescapeLeadingUnderscores(left.escapedName));
+                    addRelatedInfo(diagnostic, createDiagnosticForNode(spread, Diagnostics.This_spread_always_overwrites_this_property));
+                }
+            }
         }
 
         /**
