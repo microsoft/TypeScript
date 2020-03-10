@@ -4,7 +4,7 @@ export default class {
 }
 
 //// [exportDefaultClassWithStaticPropertyAssignmentsInES6.js]
-const default_1 = /** @class */ (() => {
+let default_1 = /** @class */ (() => {
     class default_1 {
     }
     default_1.z = "Foo";

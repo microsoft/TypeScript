@@ -24,7 +24,7 @@ var Foo = /** @class */ (function () {
         set: function (thing) {
             this._bar = thing;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Foo;

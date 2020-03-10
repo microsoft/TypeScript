@@ -214,6 +214,7 @@ Change:: Fix error
 //// [/user/username/projects/demo/lib/core/utilities.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.lastElementOf = exports.makeRandomName = void 0;
 function makeRandomName() {
     return "Bob!?! ";
 }
@@ -284,6 +285,7 @@ export default interface Animal {
 //// [/user/username/projects/demo/lib/animals/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createDog = void 0;
 var animal_1 = require("./animal");
 var dog_1 = require("./dog");
 Object.defineProperty(exports, "createDog", { enumerable: true, get: function () { return dog_1.createDog; } });
@@ -299,6 +301,7 @@ export { createDog, Dog };
 //// [/user/username/projects/demo/lib/animals/dog.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createDog = void 0;
 var utilities_1 = require("../core/utilities");
 function createDog() {
     return ({
@@ -394,6 +397,7 @@ export declare function createDog(): Dog;
 //// [/user/username/projects/demo/lib/zoo/zoo.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createZoo = void 0;
 var index_1 = require("../animals/index");
 function createZoo() {
     return [

@@ -46,6 +46,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.Button = void 0;
 var React = require("react");
 var Button = /** @class */ (function (_super) {
     __extends(Button, _super);
@@ -74,6 +75,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.App = void 0;
 var React = require("react");
 // Should see var button_1 = require('./button') here
 var button_1 = require("./button");

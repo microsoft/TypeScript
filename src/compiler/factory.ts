@@ -566,7 +566,7 @@ namespace ts {
                 properties.push(setter);
             }
 
-            properties.push(createPropertyAssignment("enumerable", createTrue()));
+            properties.push(createPropertyAssignment("enumerable", getAccessor || setAccessor ? createFalse() : createTrue()));
             properties.push(createPropertyAssignment("configurable", createTrue()));
 
             const expression = setTextRange(
@@ -1795,9 +1795,7 @@ namespace ts {
 
         const target = getTargetOfBindingOrAssignmentElement(bindingElement);
         if (target && isPropertyName(target)) {
-            return isComputedPropertyName(target) && isStringOrNumericLiteral(target.expression)
-                ? target.expression
-                : target;
+            return target;
         }
     }
 

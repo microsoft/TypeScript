@@ -1618,7 +1618,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An enum member name must be followed by a ',', '=', or '}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[列挙型メンバー名の後ろには、','、'='、'}' のいずれかを指定する必要があります。]]></Val>
+            <Val><![CDATA[列挙型メンバー名の後には、','、'='、'}' のいずれかを指定する必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2062,7 +2062,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Assertions require the call target to be an identifier or qualified name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[アサーションでは、呼び出し元が識別子または修飾名である必要があります。]]></Val>
+            <Val><![CDATA[アサーションでは、呼び出し先が識別子または修飾名である必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5365,7 +5365,7 @@
         <Str Cat="Text">
           <Val><![CDATA[If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}`]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' パッケージが実際にこのモジュールを公開する場合は、pull request を送信して 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}' を修正することを検討してください。]]></Val>
+            <Val><![CDATA['{0}' パッケージが実際にこのモジュールを公開する場合は、pull request を送信して 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}' を修正することを検討してください]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7008,6 +7008,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Only_named_exports_may_use_export_type_1383" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Only named exports may use 'export type'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['export type' を使用できるのは名前付きエクスポートのみです。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword_2340" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Only public and protected methods of the base class are accessible via the 'super' keyword.]]></Val>
@@ -7035,11 +7044,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Option_0_can_only_be_specified_in_tsconfig_json_file_6064" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_null_on_command_line_6230" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Option '{0}' can only be specified in 'tsconfig.json' file.]]></Val>
+          <Val><![CDATA[Option '{0}' can only be specified in 'tsconfig.json' file or set to 'false' or 'null' on command line.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[オプション '{0}' は 'tsconfig.json' ファイルにのみ指定できます。]]></Val>
+            <Val><![CDATA[オプション '{0}' は、'tsconfig.json' ファイルで指定することか、コマンド ラインで 'false' または 'null' に設定することしかできません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line_6064" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Option '{0}' can only be specified in 'tsconfig.json' file or set to 'null' on command line.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[オプション '{0}' は、'tsconfig.json' ファイルで指定することか、コマンド ラインで 'null' に設定することしかできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7210,7 +7228,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Overload {0} of {1}, '{2}', gave the following error.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{1} のうち {0}、'{2}' のオーバーロードにより、次のエラーが発生しました。]]></Val>
+            <Val><![CDATA[{1}、'{2}' の {0} のオーバーロードにより、次のエラーが発生しました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7651,7 +7669,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Print names of files that are part of the compilation and then stop processing.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[コンパイルの一部であるファイルの名前の表示を実行してから、処理を停止します。]]></Val>
+            <Val><![CDATA[コンパイルの一部であるファイルの名前を出力してから、処理を停止します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7678,7 +7696,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Print the final configuration instead of building.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ビルドを実行するのではなく、最終的な構成を表示します。]]></Val>
+            <Val><![CDATA[ビルドを実行するのではなく、最終的な構成を出力します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9160,7 +9178,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ECMAScript のターゲット バージョンを指定します。'ES3' (既定値)、'ES5'、'ES2015'、'ES2016'、'ES2017'、'ES2018'、'ES2019'、'ES2020'、'ESNEXT']]></Val>
+            <Val><![CDATA[ECMAScript のターゲット バージョンを指定します: 'ES3' (既定値)、'ES5'、'ES2015'、'ES2016'、'ES2017'、'ES2018'、'ES2019'、'ES2020'、'ESNEXT'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9205,7 +9223,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[モジュール コードの生成を指定します。'none'、'commonjs'、'amd'、'system'、'umd'、'es2015'、'es2020、'ESNext'。]]></Val>
+            <Val><![CDATA[モジュール コードの生成を指定します: 'none'、'commonjs'、'amd'、'system'、'umd'、'es2015'、'es2020、'ESNext'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9223,7 +9241,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify strategy for creating a polling watch when it fails to create using file system events: 'FixedInterval' (default), 'PriorityInterval', 'DynamicPriority'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ファイル システムのイベントを使用して作成できなかった場合に、ポーリング監視を作成する方法を指定します。'FixedInterval' (既定)、'PriorityInterval'、'DynamicPriority'。]]></Val>
+            <Val><![CDATA[ファイル システムのイベントを使用して作成できなかった場合に、ポーリング監視を作成する方法を指定します: 'FixedInterval' (既定)、'PriorityInterval'、'DynamicPriority'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9232,7 +9250,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify strategy for watching directory on platforms that don't support recursive watching natively: 'UseFsEvents' (default), 'FixedPollingInterval', 'DynamicPriorityPolling'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[再帰的な監視をサポートしていないプラットフォーム上のディレクトリを監視する方法を指定します。'UseFsEvents' (既定)、'FixedPollingInterval'、'DynamicPriorityPolling'。]]></Val>
+            <Val><![CDATA[再帰的な監視をネイティブでサポートしていないプラットフォーム上のディレクトリを監視する方法を指定します: 'UseFsEvents' (既定)、'FixedPollingInterval'、'DynamicPriorityPolling'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9241,7 +9259,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify strategy for watching file: 'FixedPollingInterval' (default), 'PriorityPollingInterval', 'DynamicPriorityPolling', 'UseFsEvents', 'UseFsEventsOnParentDirectory'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ファイルの監視方法を指定します。'FixedPollingInterval' (既定)、'PriorityPollingInterval'、'DynamicPriorityPolling'、'UseFsEvents'、'UseFsEventsOnParentDirectory'。]]></Val>
+            <Val><![CDATA[ファイルの監視方法を指定します: 'FixedPollingInterval' (既定)、'PriorityPollingInterval'、'DynamicPriorityPolling'、'UseFsEvents'、'UseFsEventsOnParentDirectory'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9524,6 +9542,15 @@
           <Val><![CDATA[Syntax: {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[構文: {0}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Tag_0_expects_at_least_1_arguments_but_the_JSX_factory_2_provides_at_most_3_6229" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[タグ '{0}' には少なくとも '{1}' 個の引数が必要ですが、JSX ファクトリ '{2}' で提供されるのは最大 '{3}' 個です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9868,7 +9895,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[算術演算の左辺には、'any' 型、'number' 型、'bigint' 型または列挙型を指定する必要があります。]]></Val>
+            <Val><![CDATA[算術演算の左辺には、'any' 型、'number' 型、'bigint' 型、または列挙型を指定する必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9985,7 +10012,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The parser expected to find a '}' to match the '{' token here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[パーサーは、'{' トークンに一致する '}' を予期していました。]]></Val>
+            <Val><![CDATA[パーサーは、ここで '{' トークンに一致する '}' を予期していました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10057,7 +10084,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[算術演算の右辺には、'any' 型、'number' 型、'bigint' 型または列挙型を指定する必要があります。]]></Val>
+            <Val><![CDATA[算術演算の右辺には、'any' 型、'number' 型、'bigint' 型、または列挙型を指定する必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10171,7 +10198,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The type of a function declaration must match the function's signature.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[関数宣言の型は、関数のシグネチャと一致する必要があります。]]></Val>
+            <Val><![CDATA[関数の宣言の型は、関数のシグネチャと一致する必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10525,7 +10552,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is missing the following properties from type '{1}': {2}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型 '{0}' には 型 '{1}': {2} からの次のプロパティがありません]]></Val>
+            <Val><![CDATA[型 '{0}' には 型 '{1}' からの次のプロパティがありません: {2}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10534,7 +10561,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is missing the following properties from type '{1}': {2}, and {3} more.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型 '{0}' には 型 '{1}': {2}、{3} などからの次のプロパティがありません]]></Val>
+            <Val><![CDATA[型 '{0}' には 型 '{1}' からの次のプロパティがありません: {2}、{3} など。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10851,6 +10878,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Type_of_property_0_circularly_references_itself_in_mapped_type_1_2615" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type of property '{0}' circularly references itself in mapped type '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[マップされた型 '{1}' で、プロパティ '{0}' の型によってそれ自体が循環参照されています。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Type_of_yield_operand_in_an_async_generator_must_either_be_a_valid_promise_or_must_not_contain_a_cal_1321" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.]]></Val>
@@ -10864,7 +10900,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型はこのインポートから生成されます。名前空間スタイルのインポートは、呼び出すこともコンストラクトすることもできず、実行時にエラーが発生します。代わりに、既定のインポートまたはインポートの要求を使用することを検討してください。]]></Val>
+            <Val><![CDATA[型はこのインポートで生成されます。名前空間スタイルのインポートは、呼び出すこともコンストラクトすることもできず、実行時にエラーが発生します。代わりに、ここで既定のインポートまたはインポートの要求を使用することを検討してください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12178,7 +12214,7 @@
         <Str Cat="Text">
           <Val><![CDATA[const enum member initializers can only contain literal values and other computed enum values.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[定数列挙型メンバーの初期化子には、リテラル値および他の計算された列挙型の値のみを含めることができます。]]></Val>
+            <Val><![CDATA[const 列挙型メンバーの初期化子には、リテラル値および他の計算された列挙型の値のみを含めることができます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12300,6 +12336,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['get' アクセサーと 'set' アクセサーは同じ型でなければなりません。]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";get_and_set_accessors_cannot_declare_this_parameters_2784" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['get' and 'set' accessors cannot declare 'this' parameters.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>

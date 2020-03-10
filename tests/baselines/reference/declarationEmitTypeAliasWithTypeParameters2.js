@@ -7,6 +7,7 @@ export const y = (x: Baa<number>) => 1
 //// [declarationEmitTypeAliasWithTypeParameters2.js]
 "use strict";
 exports.__esModule = true;
+exports.y = void 0;
 exports.y = function (x) { return 1; };
 
 

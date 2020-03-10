@@ -36,6 +36,7 @@ export { v, f, C, I, E, D, M, N, T, a };
 //// [t1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.a1 = exports.M1 = exports.E1 = exports.C1 = exports.f1 = exports.v1 = exports.a = exports.M = exports.E = exports.C = exports.f = exports.v = void 0;
 exports.v = 1;
 exports.v1 = exports.v;
 function f() { }
@@ -71,6 +72,7 @@ Object.defineProperty(exports, "a", { enumerable: true, get: function () { retur
 //// [t3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.a = exports.M = exports.E = exports.C = exports.f = exports.v = void 0;
 const t1_1 = require("./t1");
 Object.defineProperty(exports, "v", { enumerable: true, get: function () { return t1_1.v1; } });
 Object.defineProperty(exports, "f", { enumerable: true, get: function () { return t1_1.f1; } });

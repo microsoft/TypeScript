@@ -33,6 +33,7 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/a/b/moduleFile1.js]
 "use strict";
 exports.__esModule = true;
+exports.Foo = void 0;
 function Foo() { }
 exports.Foo = Foo;
 ;
@@ -41,6 +42,7 @@ exports.Foo = Foo;
 //// [/a/b/file1Consumer1.js]
 "use strict";
 exports.__esModule = true;
+exports.y = void 0;
 exports.y = 10;
 
 
@@ -56,6 +58,7 @@ var z = 10;
 //// [/a/b/moduleFile2.js]
 "use strict";
 exports.__esModule = true;
+exports.Foo4 = void 0;
 exports.Foo4 = 10;
 
 
@@ -121,7 +124,7 @@ export var T: number;export function Foo() { };
 //// [/a/b/moduleFile1.js]
 "use strict";
 exports.__esModule = true;
-exports.T = void 0;
+exports.Foo = exports.T = void 0;
 function Foo() { }
 exports.Foo = Foo;
 ;
@@ -188,7 +191,7 @@ export var T: number;export function Foo() { console.log('hi'); };
 //// [/a/b/moduleFile1.js]
 "use strict";
 exports.__esModule = true;
-exports.T = void 0;
+exports.Foo = exports.T = void 0;
 function Foo() { console.log('hi'); }
 exports.Foo = Foo;
 ;

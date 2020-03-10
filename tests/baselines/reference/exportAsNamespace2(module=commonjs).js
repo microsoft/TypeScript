@@ -18,6 +18,7 @@ foo.ns.b;
 //// [0.js]
 "use strict";
 exports.__esModule = true;
+exports.b = exports.a = void 0;
 exports.a = 1;
 exports.b = 2;
 //// [1.js]

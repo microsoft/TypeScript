@@ -13,6 +13,7 @@ export const thing = () => parse();
 //// [usage.js]
 "use strict";
 exports.__esModule = true;
+exports.thing = void 0;
 var url_1 = require("url");
 exports.thing = function () { return url_1.parse(); };
 

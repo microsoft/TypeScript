@@ -673,7 +673,7 @@ namespace ts {
                             /*type*/ undefined,
                             iife
                         )
-                    ], languageVersion > ScriptTarget.ES5 ? NodeFlags.Const : undefined)
+                    ], languageVersion > ScriptTarget.ES5 ? NodeFlags.Let : undefined)
                 );
 
                 setOriginalNode(varStatement, node);
@@ -2859,9 +2859,11 @@ namespace ts {
                 return undefined;
             }
 
-            if (!node.exportClause) {
-                // Elide a star export if the module it references does not export a value.
-                return compilerOptions.isolatedModules || resolver.moduleExportsSomeValue(node.moduleSpecifier!) ? node : undefined;
+            if (!node.exportClause || isNamespaceExport(node.exportClause)) {
+                // never elide `export <whatever> from <whereever>` declarations -
+                // they should be kept for sideffects/untyped exports, even when the
+                // type checker doesn't know about any exports
+                return node;
             }
 
             if (!resolver.isValueAliasDeclaration(node)) {

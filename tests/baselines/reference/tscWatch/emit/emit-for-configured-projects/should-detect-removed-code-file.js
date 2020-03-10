@@ -25,6 +25,7 @@ export function Foo() { };
 //// [/a/b/moduleFile1.js]
 "use strict";
 exports.__esModule = true;
+exports.Foo = void 0;
 function Foo() { }
 exports.Foo = Foo;
 ;
@@ -33,6 +34,7 @@ exports.Foo = Foo;
 //// [/a/b/referenceFile1.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 /// <reference path="./moduleFile1.ts" />
 exports.x = Foo();
 
