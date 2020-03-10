@@ -28,6 +28,16 @@ namespace ts {
             assert.isTrue(rootProject.containsFile(rootFilePath));
             assert.isTrue(rootProject.containsFile(nodeModulesFilePath1));
             assert.isTrue(rootProject.containsFile(nodeModulesFilePath2));
+
+            assertNotInInferredProject(rootFilePath);
+            assertNotInInferredProject(nodeModulesFilePath1);
+            assertNotInInferredProject(nodeModulesFilePath2);
+
+            function assertNotInInferredProject(path: string) {
+                const scriptInfo = projectService.getScriptInfo(path);
+                assert.exists(scriptInfo);
+                assert.isEmpty(scriptInfo!.containingProjects.filter(p => server.isInferredProject(p)));
+            }
         });
     });
 }
