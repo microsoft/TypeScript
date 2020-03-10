@@ -101,7 +101,6 @@
         "unittests/services/extract/ranges.ts",
         "unittests/services/hostNewLineSupport.ts",
         "unittests/services/languageService.ts",
-        "unittests/services/projectService.ts",
         "unittests/services/organizeImports.ts",
         "unittests/services/patternMatcher.ts",
         "unittests/services/preProcessFile.ts",
