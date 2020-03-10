@@ -10458,7 +10458,7 @@ namespace ts {
                     append(propTypes, getIndexTypeOfType(type, IndexKind.Number));
                 }
                 if (propTypes.length) {
-                    return getUnionType(propTypes, UnionReduction.Subtype);
+                    return getUnionType(propTypes);
                 }
             }
             return undefined;
