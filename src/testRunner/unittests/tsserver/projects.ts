@@ -1615,19 +1615,9 @@ namespace ts.projectSystem {
             assert.isUndefined(openNodeModulesFileResult2.configFileName);
 
             const rootProject = projectService.findProject(rootProjectPath)!;
-            assert.isTrue(rootProject.containsFile(rootFilePath));
-            assert.isTrue(rootProject.containsFile(nodeModulesFilePath1));
-            assert.isTrue(rootProject.containsFile(nodeModulesFilePath2));
+            checkProjectActualFiles(rootProject, [rootProjectPath, rootFilePath, nodeModulesFilePath1, nodeModulesFilePath2]);
 
-            assertNotInInferredProject(rootFilePath);
-            assertNotInInferredProject(nodeModulesFilePath1);
-            assertNotInInferredProject(nodeModulesFilePath2);
-
-            function assertNotInInferredProject(path: string) {
-                const scriptInfo = projectService.getScriptInfo(path);
-                assert.exists(scriptInfo);
-                assert.isEmpty(scriptInfo!.containingProjects.filter(p => server.isInferredProject(p)));
-            }
+            checkNumberOfInferredProjects(projectService, 0);
         });
     });
 }
