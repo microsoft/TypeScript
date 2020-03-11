@@ -8,17 +8,25 @@ node_modules/chrome-devtools-frontend/front_end/Runtime.js(78,16): error TS7014:
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(95,28): error TS2339: Property 'response' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(147,37): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(270,9): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
-  Type 'void' is not assignable to type 'undefined'.
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>' is not assignable to type '<TResult1 = undefined, TResult2 = never>(onfulfilled?: (value: undefined) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'void' is not assignable to type 'undefined'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(280,5): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(283,12): error TS2554: Expected 2-3 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(525,9): error TS2322: Type 'Window' is not assignable to type 'Window & typeof globalThis'.
-  Type 'Window' is missing the following properties from type 'typeof globalThis': globalThis, eval, parseInt, parseFloat, and 871 more.
+  Type 'Window' is missing the following properties from type 'typeof globalThis': globalThis, eval, parseInt, parseFloat, and 872 more.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(527,49): error TS2352: Conversion of type 'Window & typeof globalThis' to type 'new () => any' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type 'Window & typeof globalThis' provides no match for the signature 'new (): any'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(539,24): error TS2351: This expression is not constructable.
   Type 'Function' has no construct signatures.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(693,7): error TS2322: Type 'Promise<boolean>' is not assignable to type 'Promise<undefined>'.
-  Type 'boolean' is not assignable to type 'undefined'.
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>' is not assignable to type '<TResult1 = undefined, TResult2 = never>(onfulfilled?: (value: undefined) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'boolean' is not assignable to type 'undefined'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(705,5): error TS2322: Type 'Promise<boolean>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(715,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(729,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
@@ -108,8 +116,11 @@ node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(182,13): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(213,36): error TS2339: Property '_isEditingName' does not exist on type 'ARIAAttributePrompt'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(215,5): error TS2322: Type 'Promise<{ text: string; }[]>' is not assignable to type 'Promise<{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]>'.
-  Type '{ text: string; }[]' is not assignable to type '{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]'.
-    Type '{ text: string; }' is missing the following properties from type '{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }': subtitle, iconType, priority, isSecondary, title
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = { text: string; }[], TResult2 = never>(onfulfilled?: (value: { text: string; }[]) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>' is not assignable to type '<TResult1 = { text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[], TResult2 = never>(onfulfilled?: (value: { text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]) => TResult1, onrejected?: (reason: any) =...'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type '{ text: string; }[]' is not assignable to type '{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAMetadata.js(56,35): error TS2339: Property '_instance' does not exist on type 'typeof ARIAMetadata'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAMetadata.js(57,32): error TS2339: Property '_instance' does not exist on type 'typeof ARIAMetadata'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAMetadata.js(58,37): error TS2339: Property '_instance' does not exist on type 'typeof ARIAMetadata'.
@@ -661,8 +672,12 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15636,30): error TS2304: Cannot find name 'fs'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15645,18): error TS2304: Cannot find name 'fs'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15684,1): error TS2322: Type 'Promise<void | any[]>' is not assignable to type 'Promise<any[]>'.
-  Type 'void | any[]' is not assignable to type 'any[]'.
-    Type 'void' is not assignable to type 'any[]'.
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = void | any[], TResult2 = never>(onfulfilled?: (value: void | any[]) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>' is not assignable to type '<TResult1 = any[], TResult2 = never>(onfulfilled?: (value: any[]) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'void | any[]' is not assignable to type 'any[]'.
+            Type 'void' is not assignable to type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15687,1): error TS2304: Cannot find name 'fs'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15694,1): error TS2322: Type 'Promise<void | any[]>' is not assignable to type 'Promise<any[]>'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15695,1): error TS2304: Cannot find name 'fs'.
@@ -691,16 +706,24 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(18010,29): error TS2554: Expected 0 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19499,6): error TS2339: Property 'Util' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19585,1): error TS2322: Type 'Promise<void | { artifacts: any; auditResults: any[]; }>' is not assignable to type 'Promise<void>'.
-  Type 'void | { artifacts: any; auditResults: any[]; }' is not assignable to type 'void'.
-    Type '{ artifacts: any; auditResults: any[]; }' is not assignable to type 'void'.
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = void | { artifacts: any; auditResults: any[]; }, TResult2 = never>(onfulfilled?: (value: void | { artifacts: any; auditResults: any[]; }) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<...>' is not assignable to type '<TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'void | { artifacts: any; auditResults: any[]; }' is not assignable to type 'void'.
+            Type '{ artifacts: any; auditResults: any[]; }' is not assignable to type 'void'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19591,15): error TS2339: Property 'artifacts' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19592,42): error TS2339: Property 'artifacts' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19597,31): error TS2339: Property 'auditResults' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19605,22): error TS2339: Property 'artifacts' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19612,22): error TS2339: Property 'artifacts' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19683,1): error TS2322: Type 'Promise<number | void>' is not assignable to type 'Promise<void>'.
-  Type 'number | void' is not assignable to type 'void'.
-    Type 'number' is not assignable to type 'void'.
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = number | void, TResult2 = never>(onfulfilled?: (value: number | void) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>' is not assignable to type '<TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'number | void' is not assignable to type 'void'.
+            Type 'number' is not assignable to type 'void'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19744,7): error TS2339: Property 'expected' does not exist on type 'Error'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20005,8): error TS2339: Property 'runLighthouseForConnection' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20015,15): error TS2554: Expected 0 arguments, but got 1.
@@ -752,6 +775,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21466,6): error TS2339: Property 'push' does not exist on type 'Zlib'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21690,5): error TS2339: Property '__proto__' does not exist on type 'Uint8Array'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21691,12): error TS2339: Property 'foo' does not exist on type 'Uint8Array'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21716,6): error TS2554: Expected 3 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22168,14): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22179,14): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22191,14): error TS2339: Property 'length' does not exist on type 'Buffer'.
@@ -767,6 +791,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22542,38): error TS2339: Property '_arr' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22693,14): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22715,13): error TS2339: Property 'subarray' does not exist on type 'Buffer'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22719,8): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22739,49): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22755,36): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22768,40): error TS2339: Property 'length' does not exist on type 'Buffer'.
@@ -796,6 +821,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23247,18): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23247,37): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23256,26): error TS2339: Property 'length' does not exist on type 'Buffer'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23268,13): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23459,1): error TS2323: Cannot redeclare exported variable 'isArray'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23464,1): error TS2323: Cannot redeclare exported variable 'isBoolean'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23469,1): error TS2323: Cannot redeclare exported variable 'isNull'.
@@ -2975,6 +3001,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66549,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66811,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67117,1): error TS2739: Type 'string[]' is missing the following properties from type 'RegExpExecArray': index, input
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67167,8): error TS2554: Expected 1 arguments, but got 0.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67300,14): error TS2339: Property 'Channels' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67300,35): error TS2339: Property 'Channels' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67301,24): error TS2339: Property 'Channels' does not exist on type '{}'.
@@ -3038,6 +3065,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(68410,39): error TS2339: Property 'height' does not exist on type 'constructor'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(69550,21): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(69799,1): error TS2323: Cannot redeclare exported variable 'parse'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70734,12): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70747,4): error TS2531: Object is possibly 'null'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70747,26): error TS2531: Object is possibly 'null'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70753,6): error TS2531: Object is possibly 'null'.
@@ -3378,6 +3406,9 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(689,28): error 
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(690,25): error TS2345: Argument of type '{ from: any; to: any; }' is not assignable to parameter of type 'number'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(691,26): error TS2339: Property 'inclusiveRight' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(692,25): error TS2345: Argument of type '{ from: any; to: any; }' is not assignable to parameter of type 'number'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1521,14): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1597,38): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1600,64): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2428,8): error TS2551: Property 'lineN' does not exist on type 'LineView'. Did you mean 'line'?
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2429,20): error TS2339: Property 'built' does not exist on type 'LineView'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2601,32): error TS2339: Property 'logicalXDPI' does not exist on type 'Screen'.
@@ -3396,7 +3427,9 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2856,10): error
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2858,32): error TS2339: Property 'left' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2858,49): error TS2339: Property 'right' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3034,25): error TS2339: Property 'xRel' does not exist on type 'Pos'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4270,16): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4840,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5152,12): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5634,9): error TS2322: Type 'BranchChunk' is not assignable to type 'this'.
   'BranchChunk' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'BranchChunk'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5675,35): error TS2339: Property 'line' does not exist on type 'LineWidget'.
@@ -3447,12 +3480,16 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5933,57): error
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5933,78): error TS2339: Property 'endStyle' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5933,97): error TS2339: Property 'css' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5935,16): error TS2339: Property 'atomic' does not exist on type 'TextMarker'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6022,42): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6164,32): error TS2322: Type 'string' is not assignable to type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6378,11): error TS2339: Property 'setHistory' does not exist on type 'Doc'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6391,10): error TS2339: Property 'linked' does not exist on type 'Doc'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6464,44): error TS2345: Argument of type 'string | ArrayBuffer' is not assignable to parameter of type 'string'.
   Type 'ArrayBuffer' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6553,25): error TS2339: Property 'CodeMirror' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6987,44): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6989,17): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6995,19): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7343,11): error TS2339: Property 'copy' does not exist on type '(...args: any[]) => any'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7777,11): error TS2339: Property 'wrapper' does not exist on type 'Display'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7827,32): error TS2339: Property 'lineDiv' does not exist on type 'Display'.
@@ -3530,6 +3567,7 @@ node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(6,17): error T
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(8,5): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(160,18): error TS2554: Expected 6 arguments, but got 5.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clojure.js(11,17): error TS2307: Cannot find module '../../lib/codemirror'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clojure.js(12,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clojure.js(12,43): error TS2304: Cannot find name 'define'.
@@ -3547,6 +3585,7 @@ node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,73): error TS2
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(8,5): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(127,26): error TS2554: Expected 4 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(11,17): error TS2307: Cannot find module '../../lib/codemirror'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(12,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(12,43): error TS2304: Cannot find name 'define'.
@@ -3572,6 +3611,8 @@ node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(8,17): error 
 node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(9,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(9,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(10,5): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(218,23): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(658,20): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(7,43): error TS2304: Cannot find name 'define'.
@@ -3595,6 +3636,7 @@ node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(6,17)
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(8,5): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(773,18): error TS2554: Expected 6 arguments, but got 4.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/xml.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/xml.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/xml.js(7,43): error TS2304: Cannot find name 'define'.
@@ -5161,9 +5203,12 @@ node_modules/chrome-devtools-frontend/front_end/elements/ClassesPaneWidget.js(29
 node_modules/chrome-devtools-frontend/front_end/elements/ClassesPaneWidget.js(297,55): error TS2339: Property 'addAll' does not exist on type 'Set<any>'.
 node_modules/chrome-devtools-frontend/front_end/elements/ClassesPaneWidget.js(299,57): error TS2339: Property 'valuesArray' does not exist on type 'Set<any>'.
 node_modules/chrome-devtools-frontend/front_end/elements/ClassesPaneWidget.js(319,5): error TS2322: Type 'Promise<{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[] | { text: string; }[]>' is not assignable to type 'Promise<{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]>'.
-  Type '{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[] | { text: string; }[]' is not assignable to type '{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]'.
-    Type '{ text: string; }[]' is not assignable to type '{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]'.
-      Type '{ text: string; }' is missing the following properties from type '{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }': subtitle, iconType, priority, isSecondary, title
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = { text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[] | { text: string; }[], TResult2 = never>(onfulfilled?: (value: { text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[] | { ...; }[]) => TRe...' is not assignable to type '<TResult1 = { text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[], TResult2 = never>(onfulfilled?: (value: { text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]) => TResult1, onrejected?: (reason: any) =...'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type '{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[] | { text: string; }[]' is not assignable to type '{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]'.
+            Type '{ text: string; }[]' is not assignable to type '{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]'.
 node_modules/chrome-devtools-frontend/front_end/elements/ColorSwatchPopoverIcon.js(18,32): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/ColorSwatchPopoverIcon.js(18,47): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/elements/ColorSwatchPopoverIcon.js(20,77): error TS2339: Property 'consume' does not exist on type 'Event'.
@@ -5180,28 +5225,17 @@ node_modules/chrome-devtools-frontend/front_end/elements/ColorSwatchPopoverIcon.
 node_modules/chrome-devtools-frontend/front_end/elements/ColorSwatchPopoverIcon.js(248,11): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/ColorSwatchPopoverIcon.js(262,47): error TS2339: Property 'enclosingNodeOrSelfWithClass' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleModel.js(122,5): error TS2322: Type 'Promise<Map<string, string>>' is not assignable to type 'Promise<ComputedStyle>'.
-  Type 'Map<string, string>' is missing the following properties from type 'ComputedStyle': node, computedStyle
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = Map<string, string>, TResult2 = never>(onfulfilled?: (value: Map<string, string>) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>' is not assignable to type '<TResult1 = ComputedStyle, TResult2 = never>(onfulfilled?: (value: ComputedStyle) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'Map<string, string>' is not assignable to type 'ComputedStyle'.
 node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(48,36): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(51,16): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(52,56): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(58,78): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(73,12): error TS2339: Property '_filterRegex' does not exist on type 'ComputedStyleWidget'.
-node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(91,24): error TS2769: No overload matches this call.
-  The last overload gave the following error.
-    Argument of type '(Promise<ComputedStyle> | Promise<CSSMatchedStyles>)[]' is not assignable to parameter of type 'Iterable<ComputedStyle | PromiseLike<ComputedStyle>>'.
-      The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
-        Type 'IteratorResult<Promise<ComputedStyle> | Promise<CSSMatchedStyles>, any>' is not assignable to type 'IteratorResult<ComputedStyle | PromiseLike<ComputedStyle>, any>'.
-          Type 'IteratorYieldResult<Promise<ComputedStyle> | Promise<CSSMatchedStyles>>' is not assignable to type 'IteratorResult<ComputedStyle | PromiseLike<ComputedStyle>, any>'.
-            Type 'IteratorYieldResult<Promise<ComputedStyle> | Promise<CSSMatchedStyles>>' is not assignable to type 'IteratorYieldResult<ComputedStyle | PromiseLike<ComputedStyle>>'.
-              Type 'Promise<ComputedStyle> | Promise<CSSMatchedStyles>' is not assignable to type 'ComputedStyle | PromiseLike<ComputedStyle>'.
-                Type 'Promise<CSSMatchedStyles>' is not assignable to type 'ComputedStyle | PromiseLike<ComputedStyle>'.
-                  Type 'Promise<CSSMatchedStyles>' is not assignable to type 'PromiseLike<ComputedStyle>'.
-                    Types of property 'then' are incompatible.
-                      Type '<TResult1 = CSSMatchedStyles, TResult2 = never>(onfulfilled?: (value: CSSMatchedStyles) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<...>) => Promise<...>' is not assignable to type '<TResult1 = ComputedStyle, TResult2 = never>(onfulfilled?: (value: ComputedStyle) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<...>) => PromiseLike<...>'.
-                        Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
-                          Types of parameters 'value' and 'value' are incompatible.
-                            Property 'computedStyle' is missing in type 'CSSMatchedStyles' but required in type 'ComputedStyle'.
-node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(91,34): error TS2339: Property 'spread' does not exist on type 'Promise<[any, any, any, any, any, any, any, any, any, any]>'.
+node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(91,34): error TS2339: Property 'spread' does not exist on type 'Promise<(CSSMatchedStyles | ComputedStyle)[]>'.
 node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(147,52): error TS2339: Property 'keysArray' does not exist on type 'Map<string, string>'.
 node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(179,50): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(200,74): error TS2339: Property 'consume' does not exist on type 'Event'.
@@ -5510,21 +5544,6 @@ node_modules/chrome-devtools-frontend/front_end/elements/InspectElementModeContr
       Type 'T' is not assignable to type 'OverlayModel'.
 node_modules/chrome-devtools-frontend/front_end/elements/InspectElementModeController.js(91,24): error TS2694: Namespace 'Protocol' has no exported member 'Overlay'.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(56,27): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(82,24): error TS2769: No overload matches this call.
-  The last overload gave the following error.
-    Argument of type '(Promise<Map<string, string>> | Promise<InlineStyleResult>)[]' is not assignable to parameter of type 'Iterable<Map<string, string> | PromiseLike<Map<string, string>>>'.
-      The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
-        Type 'IteratorResult<Promise<Map<string, string>> | Promise<InlineStyleResult>, any>' is not assignable to type 'IteratorResult<Map<string, string> | PromiseLike<Map<string, string>>, any>'.
-          Type 'IteratorYieldResult<Promise<Map<string, string>> | Promise<InlineStyleResult>>' is not assignable to type 'IteratorResult<Map<string, string> | PromiseLike<Map<string, string>>, any>'.
-            Type 'IteratorYieldResult<Promise<Map<string, string>> | Promise<InlineStyleResult>>' is not assignable to type 'IteratorYieldResult<Map<string, string> | PromiseLike<Map<string, string>>>'.
-              Type 'Promise<Map<string, string>> | Promise<InlineStyleResult>' is not assignable to type 'Map<string, string> | PromiseLike<Map<string, string>>'.
-                Type 'Promise<InlineStyleResult>' is not assignable to type 'Map<string, string> | PromiseLike<Map<string, string>>'.
-                  Type 'Promise<InlineStyleResult>' is not assignable to type 'PromiseLike<Map<string, string>>'.
-                    Types of property 'then' are incompatible.
-                      Type '<TResult1 = InlineStyleResult, TResult2 = never>(onfulfilled?: (value: InlineStyleResult) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<...>) => Promise<...>' is not assignable to type '<TResult1 = Map<string, string>, TResult2 = never>(onfulfilled?: (value: Map<string, string>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<...>) => PromiseLike<...>'.
-                        Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
-                          Types of parameters 'value' and 'value' are incompatible.
-                            Type 'InlineStyleResult' is missing the following properties from type 'Map<string, string>': clear, delete, forEach, get, and 8 more.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(120,11): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(164,22): error TS2339: Property 'toFixedIfFloating' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(179,18): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
@@ -6363,6 +6382,12 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(4,35): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(4,48): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(5,20): error TS2339: Property 'acorn' does not exist on type 'typeof import("/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn")'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(150,8): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(154,13): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(156,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(158,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(162,8): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(165,13): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(402,56): error TS2339: Property 'push' does not exist on type '(token: any) => any'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(527,43): error TS2339: Property 'startNode' does not exist on type 'Parser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(528,8): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
@@ -6371,6 +6396,13 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2451,7): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2451,22): error TS2339: Property 'loc' does not exist on type 'SyntaxError'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2451,37): error TS2339: Property 'raisedAt' does not exist on type 'SyntaxError'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2468,16): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2521,11): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2522,11): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2523,11): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2524,11): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2525,11): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2527,11): error TS2554: Expected 4 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2564,12): error TS2339: Property 'context' does not exist on type 'TokenType'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2565,10): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2568,18): error TS2339: Property 'context' does not exist on type 'TokenType'.
@@ -6395,8 +6427,10 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2611,8): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2634,22): error TS2304: Cannot find name 'Packages'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2634,77): error TS2304: Cannot find name 'Packages'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3353,10): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3362,5): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3363,12): error TS2339: Property 'parseExpression' does not exist on type 'Parser'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3370,10): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(4,10): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(4,35): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(4,48): error TS2304: Cannot find name 'define'.
@@ -9987,6 +10021,12 @@ node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1177,14): er
 node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1179,3): error TS2416: Property 'callFunctionJSON' in type 'LocalJSONObject' is not assignable to the same property in base type 'RemoteObject'.
   Type '(functionDeclaration: (this: any) => any, args: any[], callback: (arg0: any) => any) => void' is not assignable to type '<T>(functionDeclaration: (this: any, ...arg1: any[]) => T, args: any[], callback: (arg0: T) => any) => void'.
     Types of parameters 'functionDeclaration' and 'functionDeclaration' are incompatible.
+node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1291,5): error TS2322: Type 'Promise<(awaited T)[]>' is not assignable to type 'Promise<T[]>'.
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = (awaited T)[], TResult2 = never>(onfulfilled?: (value: (awaited T)[]) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>' is not assignable to type '<TResult1 = T[], TResult2 = never>(onfulfilled?: (value: T[]) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type '(awaited T)[]' is not assignable to type 'T[]'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Resource.js(38,24): error TS2694: Namespace 'Protocol' has no exported member 'Page'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Resource.js(39,24): error TS2694: Namespace 'Protocol' has no exported member 'Network'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Resource.js(56,55): error TS2339: Property 'isValid' does not exist on type 'Date'.
@@ -10654,8 +10694,11 @@ node_modules/chrome-devtools-frontend/front_end/sources/CSSPlugin.js(223,11): er
 node_modules/chrome-devtools-frontend/front_end/sources/CSSPlugin.js(266,25): error TS2339: Property 'setColor' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/CSSPlugin.js(292,25): error TS2339: Property 'setBezierText' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/CSSPlugin.js(347,5): error TS2322: Type 'Promise<{ text: string; }[]>' is not assignable to type 'Promise<{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]>'.
-  Type '{ text: string; }[]' is not assignable to type '{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]'.
-    Type '{ text: string; }' is missing the following properties from type '{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }': subtitle, iconType, priority, isSecondary, title
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = { text: string; }[], TResult2 = never>(onfulfilled?: (value: { text: string; }[]) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>' is not assignable to type '<TResult1 = { text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[], TResult2 = never>(onfulfilled?: (value: { text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]) => TResult1, onrejected?: (reason: any) =...'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type '{ text: string; }[]' is not assignable to type '{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]'.
 node_modules/chrome-devtools-frontend/front_end/sources/CallStackSidebarPane.js(33,18): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sources/CallStackSidebarPane.js(39,57): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/CallStackSidebarPane.js(40,56): error TS2555: Expected at least 2 arguments, but got 1.
@@ -11373,8 +11416,8 @@ node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(363,62
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(368,34): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(372,42): error TS2339: Property 'result' does not exist on type '{ response: RemoteObject; exceptionDetails: any; }'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(381,35): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
-node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(503,30): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(value: any[]) => any[] | PromiseLike<any[]>'.
-  Type 'Function' provides no match for the signature '(value: any[]): any[] | PromiseLike<any[]>'.
+node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(503,30): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(value: any[]) => any[]'.
+  Type 'Function' provides no match for the signature '(value: any[]): any[]'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(641,59): error TS2551: Property 'testRunner' does not exist on type 'Window & typeof globalThis'. Did you mean 'TestRunner'?
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(641,92): error TS2551: Property 'testRunner' does not exist on type 'Window & typeof globalThis'. Did you mean 'TestRunner'?
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(642,3): error TS2322: Type '1' is not assignable to type 'boolean'.
@@ -11470,8 +11513,11 @@ node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorUtils.js(1
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorUtils.js(149,67): error TS2339: Property 'length' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(42,30): error TS2345: Argument of type 'void' is not assignable to parameter of type 'string'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(130,5): error TS2322: Type 'Promise<{ text: string; }[]>' is not assignable to type 'Promise<{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]>'.
-  Type '{ text: string; }[]' is not assignable to type '{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]'.
-    Type '{ text: string; }' is missing the following properties from type '{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }': subtitle, iconType, priority, isSecondary, title
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = { text: string; }[], TResult2 = never>(onfulfilled?: (value: { text: string; }[]) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>' is not assignable to type '<TResult1 = { text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[], TResult2 = never>(onfulfilled?: (value: { text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]) => TResult1, onrejected?: (reason: any) =...'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type '{ text: string; }[]' is not assignable to type '{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(163,43): error TS2339: Property 'line' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(163,85): error TS2339: Property 'ch' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(168,83): error TS2339: Property 'line' does not exist on type 'void'.
@@ -11633,8 +11679,12 @@ node_modules/chrome-devtools-frontend/front_end/timeline/TimelineEventOverview.j
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineEventOverview.js(246,68): error TS2339: Property 'peekLast' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineEventOverview.js(248,81): error TS2339: Property '_overviewIndex' does not exist on type 'TimelineCategory'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineEventOverview.js(384,7): error TS2322: Type 'Promise<HTMLImageElement | (new (width?: number, height?: number) => HTMLImageElement)>' is not assignable to type 'Promise<HTMLImageElement>'.
-  Type 'HTMLImageElement | (new (width?: number, height?: number) => HTMLImageElement)' is not assignable to type 'HTMLImageElement'.
-    Type 'new (width?: number, height?: number) => HTMLImageElement' is missing the following properties from type 'HTMLImageElement': align, alt, border, complete, and 257 more.
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = HTMLImageElement | (new (width?: number, height?: number) => HTMLImageElement), TResult2 = never>(onfulfilled?: (value: HTMLImageElement | (new (width?: number, height?: number) => HTMLImageElement)) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<...>' is not assignable to type '<TResult1 = HTMLImageElement, TResult2 = never>(onfulfilled?: (value: HTMLImageElement) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<...>'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'HTMLImageElement | (new (width?: number, height?: number) => HTMLImageElement)' is not assignable to type 'HTMLImageElement'.
+            Type 'new (width?: number, height?: number) => HTMLImageElement' is not assignable to type 'HTMLImageElement'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineEventOverview.js(457,17): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineEventOverview.js(483,31): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineEventOverview.js(524,28): error TS2339: Property 'peekLast' does not exist on type 'TimelineFrame[]'.
@@ -12404,8 +12454,11 @@ node_modules/chrome-devtools-frontend/front_end/ui/FilterBar.js(351,46): error T
 node_modules/chrome-devtools-frontend/front_end/ui/FilterBar.js(351,59): error TS2339: Property 'shiftKey' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/FilterBar.js(352,37): error TS2339: Property 'typeName' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/ui/FilterSuggestionBuilder.js(51,5): error TS2322: Type 'Promise<{ text: string; }[]>' is not assignable to type 'Promise<{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]>'.
-  Type '{ text: string; }[]' is not assignable to type '{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]'.
-    Type '{ text: string; }' is missing the following properties from type '{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }': subtitle, iconType, priority, isSecondary, title
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = { text: string; }[], TResult2 = never>(onfulfilled?: (value: { text: string; }[]) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>' is not assignable to type '<TResult1 = { text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[], TResult2 = never>(onfulfilled?: (value: { text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]) => TResult1, onrejected?: (reason: any) =...'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type '{ text: string; }[]' is not assignable to type '{ text: string; subtitle: string; iconType: string; priority: number; isSecondary: boolean; title: string; }[]'.
 node_modules/chrome-devtools-frontend/front_end/ui/ForwardedInputEventHandler.js(9,27): error TS2339: Property 'events' does not exist on type 'InspectorFrontendHostAPI'.
 node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(113,55): error TS2339: Property 'hasAttributes' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(114,18): error TS2339: Property 'hasAttribute' does not exist on type 'Node'.
@@ -13154,27 +13207,9 @@ node_modules/chrome-devtools-frontend/front_end/ui/View.js(326,21): error TS2339
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(371,23): error TS2339: Property 'showView' does not exist on type '_Location'.
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(440,18): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(454,38): error TS2339: Property 'hasFocus' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/ui/View.js(461,44): error TS2769: No overload matches this call.
-  The last overload gave the following error.
-    Argument of type '(Promise<void> | Promise<ToolbarItem[]>)[]' is not assignable to parameter of type 'Iterable<void | PromiseLike<void>>'.
-      The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
-        Type 'IteratorResult<Promise<void> | Promise<ToolbarItem[]>, any>' is not assignable to type 'IteratorResult<void | PromiseLike<void>, any>'.
-          Type 'IteratorYieldResult<Promise<void> | Promise<ToolbarItem[]>>' is not assignable to type 'IteratorResult<void | PromiseLike<void>, any>'.
-            Type 'IteratorYieldResult<Promise<void> | Promise<ToolbarItem[]>>' is not assignable to type 'IteratorYieldResult<void | PromiseLike<void>>'.
-              Type 'Promise<void> | Promise<ToolbarItem[]>' is not assignable to type 'void | PromiseLike<void>'.
-                Type 'Promise<ToolbarItem[]>' is not assignable to type 'void | PromiseLike<void>'.
-                  Type 'Promise<ToolbarItem[]>' is not assignable to type 'PromiseLike<void>'.
-                    Types of property 'then' are incompatible.
-                      Type '<TResult1 = ToolbarItem[], TResult2 = never>(onfulfilled?: (value: ToolbarItem[]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<...>) => Promise<...>' is not assignable to type '<TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<...>'.
-                        Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
-                          Types of parameters 'value' and 'value' are incompatible.
-                            Type 'ToolbarItem[]' is not assignable to type 'void'.
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(495,24): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(496,24): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(501,25): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/ui/View.js(520,44): error TS2769: No overload matches this call.
-  The last overload gave the following error.
-    Argument of type '(Promise<void> | Promise<ToolbarItem[]>)[]' is not assignable to parameter of type 'Iterable<void | PromiseLike<void>>'.
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(556,36): error TS2339: Property 'keyCode' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(558,22): error TS2339: Property 'key' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(560,22): error TS2339: Property 'key' does not exist on type 'Event'.
