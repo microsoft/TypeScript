@@ -312,7 +312,6 @@ namespace ts {
         let currentNode: Node | undefined;
 
         const emptySymbols = createSymbolTable();
-        const identityMapper: (type: Type) => Type = identity;
         const arrayVariances = [VarianceFlags.Covariant];
 
         const compilerOptions = host.getCompilerOptions();
@@ -735,6 +734,9 @@ namespace ts {
         const stringNumberSymbolType = getUnionType([stringType, numberType, esSymbolType]);
         const keyofConstraintType = keyofStringsOnly ? stringType : stringNumberSymbolType;
         const numberOrBigIntType = getUnionType([numberType, bigintType]);
+
+        const restrictiveMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? getRestrictiveTypeParameter(<TypeParameter>t) : t);
+        const permissiveMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? wildcardType : t);
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         const emptyJsxObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -4964,7 +4966,7 @@ namespace ts {
                         const params = getTypeParametersOfClassOrInterface(
                             parentSymbol.flags & SymbolFlags.Alias ? resolveAlias(parentSymbol) : parentSymbol
                         );
-                        typeParameterNodes = mapToTypeNodes(map(params, (nextSymbol as TransientSymbol).mapper!), context);
+                        typeParameterNodes = mapToTypeNodes(map(params, t => getMappedType(t, (nextSymbol as TransientSymbol).mapper!)), context);
                     }
                     else {
                         typeParameterNodes = typeParametersToTypeParameterDeclarations(symbol, context);
@@ -9047,14 +9049,13 @@ namespace ts {
         }
 
         function resolveObjectTypeMembers(type: ObjectType, source: InterfaceTypeWithDeclaredMembers, typeParameters: readonly TypeParameter[], typeArguments: readonly Type[]) {
-            let mapper: TypeMapper;
+            let mapper: TypeMapper | undefined;
             let members: SymbolTable;
             let callSignatures: readonly Signature[];
             let constructSignatures: readonly Signature[] | undefined;
             let stringIndexInfo: IndexInfo | undefined;
             let numberIndexInfo: IndexInfo | undefined;
             if (rangeEquals(typeParameters, typeArguments, 0, typeParameters.length)) {
-                mapper = identityMapper;
                 members = source.symbol ? getMembersOfSymbol(source.symbol) : createSymbolTable(source.declaredProperties);
                 callSignatures = source.declaredCallSignatures;
                 constructSignatures = source.declaredConstructSignatures;
@@ -9592,8 +9593,7 @@ namespace ts {
                     const checkType = (<ConditionalType>type).checkType;
                     const constraint = getLowerBoundOfKeyType(checkType);
                     if (constraint !== checkType) {
-                        const mapper = makeUnaryTypeMapper((<ConditionalType>type).root.checkType, constraint);
-                        return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers(mapper, (<ConditionalType>type).mapper));
+                        return getConditionalTypeInstantiation(<ConditionalType>type, prependTypeMapping((<ConditionalType>type).root.checkType, constraint, (<ConditionalType>type).mapper));
                     }
                 }
                 return type;
@@ -9643,7 +9643,7 @@ namespace ts {
                 // Create a mapper from T to the current iteration type constituent. Then, if the
                 // mapped type is itself an instantiated type, combine the iteration mapper with the
                 // instantiation mapper.
-                const templateMapper = combineTypeMappers(type.mapper, createTypeMapper([typeParameter], [t]));
+                const templateMapper = appendTypeMapping(type.mapper, typeParameter, t);
                 // If the current iteration type constituent is a string literal type, create a property.
                 // Otherwise, for type string create a string index signature.
                 if (isTypeUsableAsPropertyName(t)) {
@@ -9696,6 +9696,7 @@ namespace ts {
                     type = errorType;
                 }
                 symbol.type = type;
+                symbol.mapper = undefined!;
             }
             return symbol.type;
         }
@@ -9713,7 +9714,7 @@ namespace ts {
         function getTemplateTypeFromMappedType(type: MappedType) {
             return type.templateType ||
                 (type.templateType = type.declaration.type ?
-                    instantiateType(addOptionality(getTypeFromTypeNode(type.declaration.type), !!(getMappedTypeModifiers(type) & MappedTypeModifiers.IncludeOptional)), type.mapper || identityMapper) :
+                    instantiateType(addOptionality(getTypeFromTypeNode(type.declaration.type), !!(getMappedTypeModifiers(type) & MappedTypeModifiers.IncludeOptional)), type.mapper) :
                     errorType);
         }
 
@@ -9733,7 +9734,7 @@ namespace ts {
                     // If the constraint declaration is a 'keyof T' node, the modifiers type is T. We check
                     // AST nodes here because, when T is a non-generic type, the logic below eagerly resolves
                     // 'keyof T' to a literal union type and we can't recover T from that type.
-                    type.modifiersType = instantiateType(getTypeFromTypeNode((<TypeOperatorNode>getConstraintDeclarationForMappedType(type)).type), type.mapper || identityMapper);
+                    type.modifiersType = instantiateType(getTypeFromTypeNode((<TypeOperatorNode>getConstraintDeclarationForMappedType(type)).type), type.mapper);
                 }
                 else {
                     // Otherwise, get the declared constraint type, and if the constraint type is a type parameter,
@@ -9742,7 +9743,7 @@ namespace ts {
                     const declaredType = <MappedType>getTypeFromMappedTypeNode(type.declaration);
                     const constraint = getConstraintTypeFromMappedType(declaredType);
                     const extendedConstraint = constraint && constraint.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>constraint) : constraint;
-                    type.modifiersType = extendedConstraint && extendedConstraint.flags & TypeFlags.Index ? instantiateType((<IndexType>extendedConstraint).type, type.mapper || identityMapper) : unknownType;
+                    type.modifiersType = extendedConstraint && extendedConstraint.flags & TypeFlags.Index ? instantiateType((<IndexType>extendedConstraint).type, type.mapper) : unknownType;
                 }
             }
             return type.modifiersType;
@@ -9946,8 +9947,7 @@ namespace ts {
                 const simplified = getSimplifiedType(type.checkType, /*writing*/ false);
                 const constraint = simplified === type.checkType ? getConstraintOfType(simplified) : simplified;
                 if (constraint && constraint !== type.checkType) {
-                    const mapper = makeUnaryTypeMapper(type.root.checkType, constraint);
-                    const instantiated = getConditionalTypeInstantiation(type, combineTypeMappers(mapper, type.mapper));
+                    const instantiated = getConditionalTypeInstantiation(type, prependTypeMapping(type.root.checkType, constraint, type.mapper));
                     if (!(instantiated.flags & TypeFlags.Never)) {
                         return instantiated;
                     }
@@ -10178,8 +10178,7 @@ namespace ts {
             if (typeVariable) {
                 const constraint = getConstraintOfTypeParameter(typeVariable);
                 if (constraint && (isArrayType(constraint) || isTupleType(constraint))) {
-                    const mapper = makeUnaryTypeMapper(typeVariable, constraint);
-                    return instantiateType(type, combineTypeMappers(mapper, type.mapper));
+                    return instantiateType(type, prependTypeMapping(typeVariable, constraint, type.mapper));
                 }
             }
             return type;
@@ -12906,7 +12905,7 @@ namespace ts {
                     // types rules (i.e. proper contravariance) for inferences.
                     inferTypes(context.inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
                 }
-                combinedMapper = combineTypeMappers(mapper, context.mapper);
+                combinedMapper = mergeTypeMappers(mapper, context.mapper);
             }
             // Instantiate the extends type including inferences for 'infer T' type parameters
             const inferredExtendsType = combinedMapper ? instantiateType(root.extendsType, combinedMapper) : extendsType;
@@ -13545,30 +13544,46 @@ namespace ts {
             return instantiateList<Signature>(signatures, mapper, instantiateSignature);
         }
 
-        function makeUnaryTypeMapper(source: Type, target: Type) {
-            return (t: Type) => t === source ? target : t;
-        }
-
-        function makeBinaryTypeMapper(source1: Type, target1: Type, source2: Type, target2: Type) {
-            return (t: Type) => t === source1 ? target1 : t === source2 ? target2 : t;
-        }
-
-        function makeArrayTypeMapper(sources: readonly Type[], targets: readonly Type[] | undefined) {
-            return (t: Type) => {
-                for (let i = 0; i < sources.length; i++) {
-                    if (t === sources[i]) {
-                        return targets ? targets[i] : anyType;
-                    }
-                }
-                return t;
-            };
-        }
-
         function createTypeMapper(sources: readonly TypeParameter[], targets: readonly Type[] | undefined): TypeMapper {
-            Debug.assert(targets === undefined || sources.length === targets.length);
-            return sources.length === 1 ? makeUnaryTypeMapper(sources[0], targets ? targets[0] : anyType) :
-                sources.length === 2 ? makeBinaryTypeMapper(sources[0], targets ? targets[0] : anyType, sources[1], targets ? targets[1] : anyType) :
-                makeArrayTypeMapper(sources, targets);
+            return sources.length === 1 ? makeUnaryTypeMapper(sources[0], targets ? targets[0] : anyType) : makeArrayTypeMapper(sources, targets);
+        }
+
+        function getMappedType(type: Type, mapper: TypeMapper): Type {
+            switch (mapper.kind) {
+                case TypeMapKind.Simple:
+                    return type === mapper.source ? mapper.target : type;
+                case TypeMapKind.Array:
+                    const sources = mapper.sources;
+                    const targets = mapper.targets;
+                    for (let i = 0; i < sources.length; i++) {
+                        if (type === sources[i]) {
+                            return targets ? targets[i] : anyType;
+                        }
+                    }
+                    return type;
+                case TypeMapKind.Function:
+                    return mapper.func(type);
+                case TypeMapKind.Composite:
+                case TypeMapKind.Merged:
+                    const t1 = getMappedType(type, mapper.mapper1);
+                    return t1 !== type && mapper.kind === TypeMapKind.Composite ? instantiateType(t1, mapper.mapper2) : getMappedType(t1, mapper.mapper2);
+            }
+        }
+
+        function makeUnaryTypeMapper(source: Type, target: Type): TypeMapper {
+            return { kind: TypeMapKind.Simple, source, target };
+        }
+
+        function makeArrayTypeMapper(sources: readonly TypeParameter[], targets: readonly Type[] | undefined): TypeMapper {
+            return { kind: TypeMapKind.Array, sources, targets };
+        }
+
+        function makeFunctionTypeMapper(func: (t: Type) => Type): TypeMapper {
+            return { kind: TypeMapKind.Function, func };
+        }
+
+        function makeCompositeTypeMapper(kind: TypeMapKind.Composite | TypeMapKind.Merged, mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
+            return { kind, mapper1, mapper2 };
         }
 
         function createTypeEraser(sources: readonly TypeParameter[]): TypeMapper {
@@ -13580,23 +13595,23 @@ namespace ts {
          * This is used during inference when instantiating type parameter defaults.
          */
         function createBackreferenceMapper(context: InferenceContext, index: number): TypeMapper {
-            return t => findIndex(context.inferences, info => info.typeParameter === t) >= index ? unknownType : t;
+            return makeFunctionTypeMapper(t => findIndex(context.inferences, info => info.typeParameter === t) >= index ? unknownType : t);
         }
 
-        function combineTypeMappers(mapper1: TypeMapper | undefined, mapper2: TypeMapper): TypeMapper;
-        function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper | undefined): TypeMapper;
-        function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
-            if (!mapper1) return mapper2;
-            if (!mapper2) return mapper1;
-            return t => instantiateType(mapper1(t), mapper2);
+        function combineTypeMappers(mapper1: TypeMapper | undefined, mapper2: TypeMapper): TypeMapper {
+            return mapper1 ? makeCompositeTypeMapper(TypeMapKind.Composite, mapper1, mapper2) : mapper2;
         }
 
-        function createReplacementMapper(source: Type, target: Type, baseMapper: TypeMapper): TypeMapper {
-            return t => t === source ? target : baseMapper(t);
+        function mergeTypeMappers(mapper1: TypeMapper | undefined, mapper2: TypeMapper): TypeMapper {
+            return mapper1 ? makeCompositeTypeMapper(TypeMapKind.Merged, mapper1, mapper2) : mapper2;
         }
 
-        function permissiveMapper(type: Type) {
-            return type.flags & TypeFlags.TypeParameter ? wildcardType : type;
+        function prependTypeMapping(source: Type, target: Type, mapper: TypeMapper | undefined) {
+            return !mapper ? makeUnaryTypeMapper(source, target) : makeCompositeTypeMapper(TypeMapKind.Merged, makeUnaryTypeMapper(source, target), mapper);
+        }
+
+        function appendTypeMapping(mapper: TypeMapper | undefined, source: Type, target: Type) {
+            return !mapper ? makeUnaryTypeMapper(source, target) : makeCompositeTypeMapper(TypeMapKind.Merged, mapper, makeUnaryTypeMapper(source, target));
         }
 
         function getRestrictiveTypeParameter(tp: TypeParameter) {
@@ -13605,10 +13620,6 @@ namespace ts {
                 (tp.restrictiveInstantiation as TypeParameter).constraint = unknownType,
                 tp.restrictiveInstantiation
             );
-        }
-
-        function restrictiveMapper(type: Type) {
-            return type.flags & TypeFlags.TypeParameter ? getRestrictiveTypeParameter(<TypeParameter>type) : type;
         }
 
         function cloneTypeParameter(typeParameter: TypeParameter): TypeParameter {
@@ -13650,7 +13661,7 @@ namespace ts {
 
         function instantiateSymbol(symbol: Symbol, mapper: TypeMapper): Symbol {
             const links = getSymbolLinks(symbol);
-            if (links.type && !maybeTypeOfKind(links.type, TypeFlags.Object | TypeFlags.Instantiable)) {
+            if (links.type && !couldContainTypeVariables(links.type)) {
                 // If the type of the symbol is already resolved, and if that type could not possibly
                 // be affected by instantiation, simply return the symbol itself.
                 return symbol;
@@ -13717,7 +13728,8 @@ namespace ts {
                 // We are instantiating an anonymous type that has one or more type parameters in scope. Apply the
                 // mapper to the type parameters to produce the effective list of type arguments, and compute the
                 // instantiation cache key from the type IDs of the type arguments.
-                const typeArguments = map(typeParameters, combineTypeMappers(type.mapper, mapper));
+                const combinedMapper = combineTypeMappers(type.mapper, mapper);
+                const typeArguments = map(typeParameters, t => getMappedType(t, combinedMapper));
                 const id = getTypeListId(typeArguments);
                 let result = links.instantiations!.get(id);
                 if (!result) {
@@ -13794,7 +13806,7 @@ namespace ts {
                 if (typeVariable !== mappedTypeVariable) {
                     return mapType(getReducedType(mappedTypeVariable), t => {
                         if (t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object | TypeFlags.Intersection) && t !== wildcardType && t !== errorType) {
-                            const replacementMapper = createReplacementMapper(typeVariable, t, mapper);
+                            const replacementMapper = prependTypeMapping(typeVariable, t, mapper);
                             return isArrayType(t) ? instantiateMappedArrayType(t, type, replacementMapper) :
                                 isTupleType(t) ? instantiateMappedTupleType(t, type, replacementMapper) :
                                 instantiateAnonymousType(type, replacementMapper);
@@ -13830,7 +13842,7 @@ namespace ts {
         }
 
         function instantiateMappedTypeTemplate(type: MappedType, key: Type, isOptional: boolean, mapper: TypeMapper) {
-            const templateMapper = combineTypeMappers(mapper, createTypeMapper([getTypeParameterFromMappedType(type)], [key]));
+            const templateMapper = appendTypeMapping(mapper, getTypeParameterFromMappedType(type), key);
             const propType = instantiateType(getTemplateTypeFromMappedType(<MappedType>type.target || type), templateMapper);
             const modifiers = getMappedTypeModifiers(type);
             return strictNullChecks && modifiers & MappedTypeModifiers.IncludeOptional && !maybeTypeOfKind(propType, TypeFlags.Undefined | TypeFlags.Void) ? getOptionalType(propType) :
@@ -13862,7 +13874,7 @@ namespace ts {
                 // We are instantiating a conditional type that has one or more type parameters in scope. Apply the
                 // mapper to the type parameters to produce the effective list of type arguments, and compute the
                 // instantiation cache key from the type IDs of the type arguments.
-                const typeArguments = map(root.outerTypeParameters, mapper);
+                const typeArguments = map(root.outerTypeParameters, t => getMappedType(t, mapper));
                 const id = getTypeListId(typeArguments);
                 let result = root.instantiations!.get(id);
                 if (!result) {
@@ -13881,9 +13893,9 @@ namespace ts {
             // type A | B, we produce (A extends U ? X : Y) | (B extends U ? X : Y).
             if (root.isDistributive) {
                 const checkType = <TypeParameter>root.checkType;
-                const instantiatedType = mapper(checkType);
+                const instantiatedType = getMappedType(checkType, mapper);
                 if (checkType !== instantiatedType && instantiatedType.flags & (TypeFlags.Union | TypeFlags.Never)) {
-                    return mapType(instantiatedType, t => getConditionalType(root, createReplacementMapper(checkType, t, mapper)));
+                    return mapType(instantiatedType, t => getConditionalType(root, prependTypeMapping(checkType, t, mapper)));
                 }
             }
             return getConditionalType(root, mapper);
@@ -13892,7 +13904,7 @@ namespace ts {
         function instantiateType(type: Type, mapper: TypeMapper | undefined): Type;
         function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined): Type | undefined;
         function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined): Type | undefined {
-            if (!type || !mapper || mapper === identityMapper) {
+            if (!type || !mapper) {
                 return type;
             }
             if (instantiationDepth === 50 || instantiationCount >= 5000000) {
@@ -13913,7 +13925,7 @@ namespace ts {
         function instantiateTypeWorker(type: Type, mapper: TypeMapper): Type {
             const flags = type.flags;
             if (flags & TypeFlags.TypeParameter) {
-                return mapper(type);
+                return getMappedType(type, mapper);
             }
             if (flags & TypeFlags.Object) {
                 const objectFlags = (<ObjectType>type).objectFlags;
@@ -15712,10 +15724,10 @@ namespace ts {
                             // We're in the middle of variance checking - integrate any unmeasurable/unreliable flags from this cached component
                             const saved = entry & RelationComparisonResult.ReportsMask;
                             if (saved & RelationComparisonResult.ReportsUnmeasurable) {
-                                instantiateType(source, reportUnmeasurableMarkers);
+                                instantiateType(source, makeFunctionTypeMapper(reportUnmeasurableMarkers));
                             }
                             if (saved & RelationComparisonResult.ReportsUnreliable) {
-                                instantiateType(source, reportUnreliableMarkers);
+                                instantiateType(source, makeFunctionTypeMapper(reportUnreliableMarkers));
                             }
                         }
                         return entry & RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
@@ -16160,7 +16172,7 @@ namespace ts {
                 if (modifiersRelated) {
                     let result: Ternary;
                     const targetConstraint = getConstraintTypeFromMappedType(target);
-                    const sourceConstraint = instantiateType(getConstraintTypeFromMappedType(source), getCombinedMappedTypeOptionality(source) < 0 ? reportUnmeasurableMarkers : reportUnreliableMarkers);
+                    const sourceConstraint = instantiateType(getConstraintTypeFromMappedType(source), makeFunctionTypeMapper(getCombinedMappedTypeOptionality(source) < 0 ? reportUnmeasurableMarkers : reportUnreliableMarkers));
                     if (result = isRelatedTo(targetConstraint, sourceConstraint, reportErrors)) {
                         const mapper = createTypeMapper([getTypeParameterFromMappedType(source)], [getTypeParameterFromMappedType(target)]);
                         return result & isRelatedTo(instantiateType(getTemplateTypeFromMappedType(source), mapper), getTemplateTypeFromMappedType(target), reportErrors);
@@ -16639,7 +16651,7 @@ namespace ts {
              */
             function signatureRelatedTo(source: Signature, target: Signature, erase: boolean, reportErrors: boolean, incompatibleReporter: (source: Type, target: Type) => void): Ternary {
                 return compareSignaturesRelated(erase ? getErasedSignature(source) : source, erase ? getErasedSignature(target) : target,
-                    relation === strictSubtypeRelation ? SignatureCheckMode.StrictArity : 0, reportErrors, reportError, incompatibleReporter, isRelatedTo, reportUnreliableMarkers);
+                    relation === strictSubtypeRelation ? SignatureCheckMode.StrictArity : 0, reportErrors, reportError, incompatibleReporter, isRelatedTo, makeFunctionTypeMapper(reportUnreliableMarkers));
             }
 
             function signaturesIdenticalTo(source: Type, target: Type, kind: SignatureKind): Ternary {
@@ -17836,8 +17848,8 @@ namespace ts {
                 signature,
                 flags,
                 compareTypes,
-                mapper: t => mapToInferredType(context, t, /*fix*/ true),
-                nonFixingMapper: t => mapToInferredType(context, t, /*fix*/ false),
+                mapper: makeFunctionTypeMapper(t => mapToInferredType(context, t, /*fix*/ true)),
+                nonFixingMapper: makeFunctionTypeMapper(t => mapToInferredType(context, t, /*fix*/ false)),
             };
             return context;
         }
@@ -18722,7 +18734,7 @@ namespace ts {
                         if (defaultType) {
                             // Instantiate the default type. Any forward reference to a type
                             // parameter should be instantiated to the empty object type.
-                            inferredType = instantiateType(defaultType, combineTypeMappers(createBackreferenceMapper(context, index), context.nonFixingMapper));
+                            inferredType = instantiateType(defaultType, mergeTypeMappers(createBackreferenceMapper(context, index), context.nonFixingMapper));
                         }
                     }
                 }
