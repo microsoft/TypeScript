@@ -30,8 +30,8 @@ lib/FrameManager.js(668,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/JSHandle.js(32,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/JSHandle.js(146,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/JSHandle.js(237,29): error TS2503: Cannot find namespace 'Protocol'.
-lib/Launcher.js(179,17): error TS1003: Identifier expected.
-lib/Launcher.js(357,17): error TS1003: Identifier expected.
+lib/Launcher.js(181,17): error TS1003: Identifier expected.
+lib/Launcher.js(359,17): error TS1003: Identifier expected.
 lib/NetworkManager.js(32,30): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(159,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(178,15): error TS2503: Cannot find namespace 'Protocol'.
