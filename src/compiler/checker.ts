@@ -18273,7 +18273,7 @@ namespace ts {
                     inferFromTypes(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target));
                     inferFromTypes(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target));
                 }
-                else if (source.flags & TypeFlags.Awaited && target.flags && TypeFlags.Awaited) {
+                else if (source.flags & TypeFlags.Awaited && target.flags & TypeFlags.Awaited) {
                     inferFromTypes((<AwaitedType>source).awaitedType, (<AwaitedType>target).awaitedType);
                 }
                 else if (target.flags & TypeFlags.Conditional) {
