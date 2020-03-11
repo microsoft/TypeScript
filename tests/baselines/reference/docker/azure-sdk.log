@@ -8,9 +8,8 @@ Executing a maximum of ?simultaneous processes...
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
 XX of XX: [@azure/core-auth] completed successfully in ? seconds
 XX of XX: [@azure/logger] completed successfully in ? seconds
-XX of XX: [@azure/core-http] completed successfully in ? seconds
 XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
-XX of XX: [@azure/identity] completed successfully in ? seconds
+XX of XX: [@azure/core-http] completed successfully in ? seconds
 XX of XX: [@azure/core-amqp] completed successfully in ? seconds
 XX of XX: [@azure/core-lro] completed successfully in ? seconds
 XX of XX: [@azure/core-paging] completed successfully in ? seconds
@@ -20,19 +19,19 @@ XX of XX: [@azure/event-hubs] completed successfully in ? seconds
 XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/keyvault-keys@X.X.X extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! @azure/keyvault-keys@X.X.X-preview.2 extract-api: `tsc -p . && api-extractor run --local`
 npm ERR! Exit status 2
 npm ERR! 
-npm ERR! Failed at the @azure/keyvault-keys@X.X.X extract-api script.
+npm ERR! Failed at the @azure/keyvault-keys@X.X.X-preview.2 extract-api script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/keyvault-secrets@X.X.X extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! @azure/keyvault-secrets@X.X.X-preview.2 extract-api: `tsc -p . && api-extractor run --local`
 npm ERR! Exit status 2
 npm ERR! 
-npm ERR! Failed at the @azure/keyvault-secrets@X.X.X extract-api script.
+npm ERR! Failed at the @azure/keyvault-secrets@X.X.X-preview.2 extract-api script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
@@ -50,7 +49,9 @@ Use output.globals to specify browser global variable names corresponding to ext
 os-name (guessing 'osName')
 created dist/index.js in ?s
 XX of XX: [@azure/eventhubs-checkpointstore-blob] completed successfully in ? seconds
-XX of XX: [@azure/service-bus] completed successfully in ? seconds
+XX of XX: [@azure/identity] completed successfully in ? seconds
+XX of XX: [@azure/search] completed successfully in ? seconds
+Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
 XX of XX: [@azure/storage-file-datalake] completed successfully in ? seconds
 XX of XX: [@azure/storage-file-share] completed successfully in ? seconds
 XX of XX: [@azure/storage-queue] completed successfully in ? seconds
@@ -61,9 +62,8 @@ SUCCESS (25)
 @azure/abort-controller (? seconds)
 @azure/core-auth (? seconds)
 @azure/logger (? seconds)
-@azure/core-http (? seconds)
 @azure/core-asynciterator-polyfill (? seconds)
-@azure/identity (? seconds)
+@azure/core-http (? seconds)
 @azure/core-amqp (? seconds)
 @azure/core-lro (? seconds)
 @azure/core-paging (? seconds)
@@ -77,14 +77,15 @@ SUCCESS (25)
 @azure/core-arm (? seconds)
 @azure/core-tracing (? seconds)
 @azure/eventhubs-checkpointstore-blob (? seconds)
-@azure/service-bus (? seconds)
+@azure/identity (? seconds)
+@azure/search (? seconds)
 @azure/storage-file-datalake (? seconds)
 @azure/storage-file-share (? seconds)
 @azure/storage-queue (? seconds)
 @azure/template (? seconds)
 testhub (? seconds)
 ================================
-SUCCESS WITH WARNINGS (1)
+SUCCESS WITH WARNINGS (2)
 ================================
 @azure/cosmos (? seconds)
 dist-esm/index.js → dist/index.js...
@@ -95,6 +96,8 @@ os-name (imported by dist-esm/utils/user-agent.js)
 Use output.globals to specify browser global variable names corresponding to external modules
 os-name (guessing 'osName')
 created dist/index.js in ?s
+@azure/service-bus (? seconds)
+Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
 ================================
 BLOCKED (1)
 ================================
@@ -105,20 +108,20 @@ FAILURE (2)
 @azure/keyvault-keys ( ? seconds)
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/keyvault-keys@X.X.X extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! @azure/keyvault-keys@X.X.X-preview.2 extract-api: `tsc -p . && api-extractor run --local`
 npm ERR! Exit status 2
 npm ERR!
-npm ERR! Failed at the @azure/keyvault-keys@X.X.X extract-api script.
+npm ERR! Failed at the @azure/keyvault-keys@X.X.X-preview.2 extract-api script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 @azure/keyvault-secrets ( ? seconds)
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/keyvault-secrets@X.X.X extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! @azure/keyvault-secrets@X.X.X-preview.2 extract-api: `tsc -p . && api-extractor run --local`
 npm ERR! Exit status 2
 npm ERR!
-npm ERR! Failed at the @azure/keyvault-secrets@X.X.X extract-api script.
+npm ERR! Failed at the @azure/keyvault-secrets@X.X.X-preview.2 extract-api script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
@@ -134,5 +137,6 @@ XX of XX: [@azure/keyvault-keys] failed!
 XX of XX: [@azure/keyvault-certificates] blocked by [@azure/keyvault-keys]!
 XX of XX: [@azure/keyvault-secrets] failed!
 XX of XX: [@azure/cosmos] completed with warnings in ? seconds
+XX of XX: [@azure/service-bus] completed with warnings in ? seconds
 [@azure/keyvault-keys] Returned error code: 2
 [@azure/keyvault-secrets] Returned error code: 2
