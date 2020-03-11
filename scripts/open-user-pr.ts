@@ -4,18 +4,14 @@
 import { Octokit } from "@octokit/rest";
 import {runSequence} from "./run-sequence";
 
-function padNum(num: number) {
-    const str = "" + num;
-    return str.length >= 2 ? str : "0" + str;
-}
-
 const userName = process.env.GH_USERNAME;
 const reviewers = process.env.REQUESTING_USER ? [process.env.REQUESTING_USER] : ["weswigham", "sandersn", "RyanCavanaugh"];
 const now = new Date();
 const masterBranchname = `user-baseline-updates`;
-const branchName = process.env.TARGET_FORK.toLowerCase() === "microsoft" && (process.env.TARGET_BRANCH || "master") === "master"
+const targetBranch = process.env.TARGET_BRANCH || "master";
+const branchName = process.env.TARGET_FORK.toLowerCase() === "microsoft" && (targetBranch === "master" || targetBranch === "refs/heads/master")
     ? masterBranchname
-    : `user-update-${process.env.TARGET_FORK}-${now.getFullYear()}${padNum(now.getMonth() + 1)}${padNum(now.getDate())}${process.env.TARGET_BRANCH ? "-" + process.env.TARGET_BRANCH : ""}`;
+    : `user-update-${process.env.TARGET_FORK}-${process.env.TARGET_BRANCH ? "-" + process.env.TARGET_BRANCH : ""}`;
 const remoteUrl = `https://${process.argv[2]}@github.com/${userName}/TypeScript.git`;
 const baseRef = branchName === masterBranchname ? "master" : masterBranchname;
 runSequence([
