@@ -431,7 +431,7 @@ namespace ts.server {
         Find,
         /** Find existing project or create one for the project reference */
         FindCreate,
-        /** Find existing project or create and loas it for the project reference */
+        /** Find existing project or create and load it for the project reference */
         FindCreateLoad
     }
 
