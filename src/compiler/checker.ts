@@ -11315,15 +11315,15 @@ namespace ts {
             }
             symbol = getExpandoSymbol(symbol) || symbol;
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                return getConditionalFlowTypeOfType(getTypeFromClassOrInterfaceReference(node, symbol), node);
+                return getTypeFromClassOrInterfaceReference(node, symbol);
             }
             if (symbol.flags & SymbolFlags.TypeAlias) {
-                return getConditionalFlowTypeOfType(getTypeFromTypeAliasReference(node, symbol), node);
+                return getTypeFromTypeAliasReference(node, symbol);
             }
             // Get type from reference to named type that cannot be generic (enum or type parameter)
             const res = tryGetDeclaredTypeOfSymbol(symbol);
             if (res) {
-                return checkNoTypeArguments(node, symbol) ? getConditionalFlowTypeOfType(getRegularTypeOfLiteralType(res), node) : errorType;
+                return checkNoTypeArguments(node, symbol) ? getRegularTypeOfLiteralType(res) : errorType;
             }
             if (symbol.flags & SymbolFlags.Value && isJSDocTypeReference(node)) {
                 const jsdocType = getTypeFromJSDocValueReference(node, symbol);
@@ -11333,7 +11333,7 @@ namespace ts {
                 else {
                     // Resolve the type reference as a Type for the purpose of reporting errors.
                     resolveTypeReferenceName(getTypeReferenceName(node), SymbolFlags.Type);
-                    return getConditionalFlowTypeOfType(getTypeOfSymbol(symbol), node);
+                    return getTypeOfSymbol(symbol);
                 }
             }
             return errorType;
@@ -12982,7 +12982,7 @@ namespace ts {
                     node,
                     checkType,
                     extendsType: getTypeFromTypeNode(node.extendsType),
-                    trueType: getConditionalFlowTypeOfType(getTypeFromTypeNode(node.trueType), node.trueType),
+                    trueType: getTypeFromTypeNode(node.trueType),
                     falseType: getTypeFromTypeNode(node.falseType),
                     isDistributive: !!(checkType.flags & TypeFlags.TypeParameter),
                     inferTypeParameters: getInferTypeParameters(node),
@@ -13422,6 +13422,10 @@ namespace ts {
         }
 
         function getTypeFromTypeNode(node: TypeNode): Type {
+            return getConditionalFlowTypeOfType(getTypeFromTypeNodeWorker(node), node);
+        }
+
+        function getTypeFromTypeNodeWorker(node: TypeNode): Type {
             switch (node.kind) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.JSDocAllType:
@@ -13756,7 +13760,7 @@ namespace ts {
                         return !!tp.isThisType;
                     case SyntaxKind.Identifier:
                         return !tp.isThisType && isPartOfTypeNode(node) && maybeTypeParameterReference(node) &&
-                            getTypeFromTypeNode(<TypeNode>node) === tp;
+                            getTypeFromTypeNodeWorker(<TypeNode>node) === tp; // use worker because we're looking for === equality
                     case SyntaxKind.TypeQuery:
                         return true;
                 }
