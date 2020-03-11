@@ -282,7 +282,7 @@ namespace ts.tscWatch {
         scenario: string;
         subScenario: string;
         commandLineArgs: readonly string[];
-        changes: TscWatchCompileChange[];
+        changes: readonly TscWatchCompileChange[];
     }
     export interface TscWatchCompile extends TscWatchCompileBase {
         sys: () => WatchedSystem;

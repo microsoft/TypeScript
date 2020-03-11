@@ -806,7 +806,17 @@ namespace ts {
         let projectReferenceRedirects: Map<ResolvedProjectReference | false> | undefined;
         let mapFromFileToProjectReferenceRedirects: Map<Path> | undefined;
         let mapFromToProjectReferenceRedirectSource: Map<SourceOfProjectReferenceRedirect> | undefined;
-        const useSourceOfProjectReferenceRedirect = !!host.useSourceOfProjectReferenceRedirect && host.useSourceOfProjectReferenceRedirect();
+
+        const useSourceOfProjectReferenceRedirect = !!host.useSourceOfProjectReferenceRedirect?.() &&
+            !options.disableSourceOfProjectReferenceRedirect;
+        const onProgramCreateComplete = updateHostForUseSourceOfProjectReferenceRedirect({
+            compilerHost: host,
+            useSourceOfProjectReferenceRedirect,
+            toPath,
+            getResolvedProjectReferences,
+            getSourceOfProjectReferenceRedirect,
+            forEachResolvedProjectReference
+        });
 
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
         // We set `structuralIsReused` to `undefined` because `tryReuseStructureFromOldProgram` calls `tryReuseStructureFromOldProgram` which checks
@@ -820,12 +830,6 @@ namespace ts {
             if (projectReferences) {
                 if (!resolvedProjectReferences) {
                     resolvedProjectReferences = projectReferences.map(parseProjectReferenceConfigFile);
-                }
-                if (host.setResolvedProjectReferenceCallbacks) {
-                    host.setResolvedProjectReferenceCallbacks({
-                        getSourceOfProjectReferenceRedirect,
-                        forEachResolvedProjectReference
-                    });
                 }
                 if (rootNames.length) {
                     for (const parsedRef of resolvedProjectReferences) {
@@ -970,6 +974,7 @@ namespace ts {
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
         };
 
+        onProgramCreateComplete();
         verifyCompilerOptions();
         performance.mark("afterProgram");
         performance.measure("Program", "beforeProgram", "afterProgram");
@@ -1248,12 +1253,6 @@ namespace ts {
             }
             if (projectReferences) {
                 resolvedProjectReferences = projectReferences.map(parseProjectReferenceConfigFile);
-                if (host.setResolvedProjectReferenceCallbacks) {
-                    host.setResolvedProjectReferenceCallbacks({
-                        getSourceOfProjectReferenceRedirect,
-                        forEachResolvedProjectReference
-                    });
-                }
             }
 
             // check if program source files has changed in the way that can affect structure of the program
@@ -3457,6 +3456,183 @@ namespace ts {
                 files,
                 getCanonicalFileName,
                 host.getCurrentDirectory()));
+        }
+    }
+
+    interface SymlinkedDirectory {
+        real: string;
+        realPath: Path;
+    }
+
+    interface HostForUseSourceOfProjectReferenceRedirect {
+        compilerHost: CompilerHost;
+        useSourceOfProjectReferenceRedirect: boolean;
+        toPath(fileName: string): Path;
+        getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;
+        getSourceOfProjectReferenceRedirect(fileName: string): SourceOfProjectReferenceRedirect | undefined;
+        forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined): T | undefined;
+    }
+
+    function updateHostForUseSourceOfProjectReferenceRedirect(host: HostForUseSourceOfProjectReferenceRedirect) {
+        let mapOfDeclarationDirectories: Map<true> | undefined;
+        let symlinkedDirectories: Map<SymlinkedDirectory | false> | undefined;
+        let symlinkedFiles: Map<string> | undefined;
+
+        const originalFileExists = host.compilerHost.fileExists;
+        const originalDirectoryExists = host.compilerHost.directoryExists;
+        const originalGetDirectories = host.compilerHost.getDirectories;
+        const originalRealpath = host.compilerHost.realpath;
+
+
+        if (!host.useSourceOfProjectReferenceRedirect) return noop;
+
+        // This implementation of fileExists checks if the file being requested is
+        // .d.ts file for the referenced Project.
+        // If it is it returns true irrespective of whether that file exists on host
+        host.compilerHost.fileExists = (file) => {
+            if (originalFileExists.call(host.compilerHost, file)) return true;
+            if (!host.getResolvedProjectReferences()) return false;
+            if (!isDeclarationFileName(file)) return false;
+
+            // Project references go to source file instead of .d.ts file
+            return fileOrDirectoryExistsUsingSource(file, /*isFile*/ true);
+        };
+
+        if (originalDirectoryExists) {
+            // This implementation of directoryExists checks if the directory being requested is
+            // directory of .d.ts file for the referenced Project.
+            // If it is it returns true irrespective of whether that directory exists on host
+            host.compilerHost.directoryExists = path => {
+                if (originalDirectoryExists.call(host.compilerHost, path)) {
+                    handleDirectoryCouldBeSymlink(path);
+                    return true;
+                }
+
+                if (!host.getResolvedProjectReferences()) return false;
+
+                if (!mapOfDeclarationDirectories) {
+                    mapOfDeclarationDirectories = createMap();
+                    host.forEachResolvedProjectReference(ref => {
+                        if (!ref) return;
+                        const out = ref.commandLine.options.outFile || ref.commandLine.options.out;
+                        if (out) {
+                            mapOfDeclarationDirectories!.set(getDirectoryPath(host.toPath(out)), true);
+                        }
+                        else {
+                            // Set declaration's in different locations only, if they are next to source the directory present doesnt change
+                            const declarationDir = ref.commandLine.options.declarationDir || ref.commandLine.options.outDir;
+                            if (declarationDir) {
+                                mapOfDeclarationDirectories!.set(host.toPath(declarationDir), true);
+                            }
+                        }
+                    });
+                }
+
+                return fileOrDirectoryExistsUsingSource(path, /*isFile*/ false);
+            };
+        }
+
+        if (originalGetDirectories) {
+            // Call getDirectories only if directory actually present on the host
+            // This is needed to ensure that we arent getting directories that we fake about presence for
+            host.compilerHost.getDirectories = path =>
+                !host.getResolvedProjectReferences() || (originalDirectoryExists && originalDirectoryExists.call(host.compilerHost, path)) ?
+                    originalGetDirectories.call(host.compilerHost, path) :
+                    [];
+        }
+
+        // This is something we keep for life time of the host
+        if (originalRealpath) {
+            host.compilerHost.realpath = s =>
+                symlinkedFiles?.get(host.toPath(s)) ||
+                originalRealpath.call(host.compilerHost, s);
+        }
+
+        return onProgramCreateComplete;
+
+
+        function onProgramCreateComplete() {
+            host.compilerHost.fileExists = originalFileExists;
+            host.compilerHost.directoryExists = originalDirectoryExists;
+            host.compilerHost.getDirectories = originalGetDirectories;
+            // DO not revert realpath as it could be used later
+        }
+
+        function fileExistsIfProjectReferenceDts(file: string) {
+            const source = host.getSourceOfProjectReferenceRedirect(file);
+            return source !== undefined ?
+                isString(source) ? originalFileExists.call(host.compilerHost, source) : true :
+                undefined;
+        }
+
+        function directoryExistsIfProjectReferenceDeclDir(dir: string) {
+            const dirPath = host.toPath(dir);
+            const dirPathWithTrailingDirectorySeparator = `${dirPath}${directorySeparator}`;
+            return forEachKey(
+                mapOfDeclarationDirectories!,
+                declDirPath => dirPath === declDirPath ||
+                    // Any parent directory of declaration dir
+                    startsWith(declDirPath, dirPathWithTrailingDirectorySeparator) ||
+                    // Any directory inside declaration dir
+                    startsWith(dirPath, `${declDirPath}/`)
+            );
+        }
+
+        function handleDirectoryCouldBeSymlink(directory: string) {
+            if (!host.getResolvedProjectReferences()) return;
+
+            // Because we already watch node_modules, handle symlinks in there
+            if (!originalRealpath || !stringContains(directory, nodeModulesPathPart)) return;
+            if (!symlinkedDirectories) symlinkedDirectories = createMap();
+            const directoryPath = ensureTrailingDirectorySeparator(host.toPath(directory));
+            if (symlinkedDirectories.has(directoryPath)) return;
+
+            const real = normalizePath(originalRealpath.call(host.compilerHost, directory));
+            let realPath: Path;
+            if (real === directory ||
+                (realPath = ensureTrailingDirectorySeparator(host.toPath(real))) === directoryPath) {
+                // not symlinked
+                symlinkedDirectories.set(directoryPath, false);
+                return;
+            }
+
+            symlinkedDirectories.set(directoryPath, {
+                real: ensureTrailingDirectorySeparator(real),
+                realPath
+            });
+        }
+
+        function fileOrDirectoryExistsUsingSource(fileOrDirectory: string, isFile: boolean): boolean {
+            const fileOrDirectoryExistsUsingSource = isFile ?
+                (file: string) => fileExistsIfProjectReferenceDts(file) :
+                (dir: string) => directoryExistsIfProjectReferenceDeclDir(dir);
+            // Check current directory or file
+            const result = fileOrDirectoryExistsUsingSource(fileOrDirectory);
+            if (result !== undefined) return result;
+
+            if (!symlinkedDirectories) return false;
+            const fileOrDirectoryPath = host.toPath(fileOrDirectory);
+            if (!stringContains(fileOrDirectoryPath, nodeModulesPathPart)) return false;
+            if (isFile && symlinkedFiles && symlinkedFiles.has(fileOrDirectoryPath)) return true;
+
+            // If it contains node_modules check if its one of the symlinked path we know of
+            return firstDefinedIterator(
+                symlinkedDirectories.entries(),
+                ([directoryPath, symlinkedDirectory]) => {
+                    if (!symlinkedDirectory || !startsWith(fileOrDirectoryPath, directoryPath)) return undefined;
+                    const result = fileOrDirectoryExistsUsingSource(fileOrDirectoryPath.replace(directoryPath, symlinkedDirectory.realPath));
+                    if (isFile && result) {
+                        if (!symlinkedFiles) symlinkedFiles = createMap();
+                        // Store the real path for the file'
+                        const absolutePath = getNormalizedAbsolutePath(fileOrDirectory, host.compilerHost.getCurrentDirectory());
+                        symlinkedFiles.set(
+                            fileOrDirectoryPath,
+                            `${symlinkedDirectory.real}${absolutePath.replace(new RegExp(directoryPath, "i"), "")}`
+                        );
+                    }
+                    return result;
+                }
+            ) || false;
         }
     }
 
