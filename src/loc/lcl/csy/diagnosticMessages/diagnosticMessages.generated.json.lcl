@@ -11412,6 +11412,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Unused_ts_expect_error_directive_2578" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Unused '@ts-expect-error' directive.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nepoužitá direktiva @ts-expect-error]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Updating_output_of_project_0_6373" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Updating output of project '{0}'...]]></Val>
@@ -12351,6 +12360,9 @@
       <Item ItemId=";get_and_set_accessors_cannot_declare_this_parameters_2784" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['get' and 'set' accessors cannot declare 'this' parameters.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Přístupové objekty get a set nemůžou deklarovat parametry this.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
