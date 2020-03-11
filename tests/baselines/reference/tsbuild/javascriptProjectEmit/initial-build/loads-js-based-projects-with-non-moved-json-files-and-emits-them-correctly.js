@@ -1,11 +1,12 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc -b /src
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/out/sub-project/index.d.ts]
-export const m: typeof mod;
-import mod from "../common";
+export const m: {
+    val: number;
+};
 
 
 //// [/out/sub-project/index.js]
@@ -14,6 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
+exports.m = void 0;
 var common_1 = __importDefault(require("../common"));
 exports.m = common_1["default"];
 
@@ -27,16 +29,15 @@ exports.m = common_1["default"];
         "signature": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n"
       },
       "../../src/common/obj.json": {
-        "version": "-6323167306-export declare const val: number;\r\n",
-        "signature": "-6323167306-export declare const val: number;\r\n"
+        "version": "2151907832-{\n    \"val\": 42\n}"
       },
-      "../../src/common/index.ts": {
+      "../../src/common/index.d.ts": {
         "version": "-4085459678-import x = require(\"./obj.json\");\r\nexport = x;\r\n",
         "signature": "-4085459678-import x = require(\"./obj.json\");\r\nexport = x;\r\n"
       },
       "../../src/sub-project/index.js": {
         "version": "-14684157955-import mod from '../common';\n\nexport const m = mod;\n",
-        "signature": "-229957289-export const m: typeof mod;\r\nimport mod from \"../common\";\r\n"
+        "signature": "-15768184370-export const m: {\r\n    val: number;\r\n};\r\n"
       }
     },
     "options": {
@@ -52,21 +53,21 @@ exports.m = common_1["default"];
       "configFilePath": "../../src/sub-project/tsconfig.json"
     },
     "referencedMap": {
-      "../../src/common/index.ts": [
-        "../../src/common/obj.d.ts"
+      "../../src/common/index.d.ts": [
+        "../../src/common/obj.json"
       ],
       "../../src/sub-project/index.js": [
         "../../src/common/index.d.ts"
       ]
     },
     "exportedModulesMap": {
-      "../../src/common/index.ts": [
-        "../../src/common/obj.d.ts"
+      "../../src/common/index.d.ts": [
+        "../../src/common/obj.json"
       ]
     },
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
-      "../../src/common/index.ts",
+      "../../src/common/index.d.ts",
       "../../src/common/obj.json",
       "../../src/sub-project/index.js"
     ]
@@ -76,13 +77,16 @@ exports.m = common_1["default"];
 
 //// [/out/sub-project-2/index.d.ts]
 export function getVar(): {
-    key: typeof import("../common/obj.json");
+    key: {
+        val: number;
+    };
 };
 
 
 //// [/out/sub-project-2/index.js]
 "use strict";
 exports.__esModule = true;
+exports.getVar = void 0;
 var index_1 = require("../sub-project/index");
 var variable = {
     key: index_1.m
@@ -101,21 +105,13 @@ exports.getVar = getVar;
         "version": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
         "signature": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n"
       },
-      "../../src/common/obj.json": {
-        "version": "-6323167306-export declare const val: number;\r\n",
-        "signature": "-6323167306-export declare const val: number;\r\n"
-      },
-      "../../src/common/index.ts": {
-        "version": "-4085459678-import x = require(\"./obj.json\");\r\nexport = x;\r\n",
-        "signature": "-4085459678-import x = require(\"./obj.json\");\r\nexport = x;\r\n"
-      },
-      "../../src/sub-project/index.js": {
-        "version": "-229957289-export const m: typeof mod;\r\nimport mod from \"../common\";\r\n",
-        "signature": "-229957289-export const m: typeof mod;\r\nimport mod from \"../common\";\r\n"
+      "../sub-project/index.d.ts": {
+        "version": "-15768184370-export const m: {\r\n    val: number;\r\n};\r\n",
+        "signature": "-15768184370-export const m: {\r\n    val: number;\r\n};\r\n"
       },
       "../../src/sub-project-2/index.js": {
         "version": "13545386800-import { m } from '../sub-project/index';\n\nconst variable = {\n    key: m,\n};\n\nexport function getVar() {\n    return variable;\n}\n",
-        "signature": "-9206156860-export function getVar(): {\r\n    key: typeof import(\"../common/obj.json\");\r\n};\r\n"
+        "signature": "-2686589794-export function getVar(): {\r\n    key: {\r\n        val: number;\r\n    };\r\n};\r\n"
       }
     },
     "options": {
@@ -131,33 +127,15 @@ exports.getVar = getVar;
       "configFilePath": "../../src/sub-project-2/tsconfig.json"
     },
     "referencedMap": {
-      "../../src/common/index.ts": [
-        "../../src/common/obj.d.ts"
-      ],
       "../../src/sub-project-2/index.js": [
         "../sub-project/index.d.ts"
-      ],
-      "../../src/sub-project/index.js": [
-        "../../src/common/index.d.ts"
       ]
     },
-    "exportedModulesMap": {
-      "../../src/common/index.ts": [
-        "../../src/common/obj.d.ts"
-      ],
-      "../../src/sub-project-2/index.js": [
-        "../../src/common/obj.d.ts"
-      ],
-      "../../src/sub-project/index.js": [
-        "../../src/common/index.d.ts"
-      ]
-    },
+    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
-      "../../src/common/index.ts",
-      "../../src/common/obj.json",
       "../../src/sub-project-2/index.js",
-      "../../src/sub-project/index.js"
+      "../sub-project/index.d.ts"
     ]
   },
   "version": "FakeTSVersion"
@@ -172,10 +150,6 @@ export = x;
 "use strict";
 var x = require("./obj.json");
 module.exports = x;
-
-
-//// [/src/common/obj.d.ts]
-export declare const val: number;
 
 
 //// [/src/common/tsconfig.tsbuildinfo]

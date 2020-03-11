@@ -155,6 +155,7 @@ module import_private {
 //// [privacyLocalInternalReferenceImportWithExport.js]
 "use strict";
 exports.__esModule = true;
+exports.import_public = exports.m_public = void 0;
 // private elements
 var m_private;
 (function (m_private) {

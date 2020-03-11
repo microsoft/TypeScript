@@ -10,7 +10,8 @@ namespace ts.OutliningElementsCollector {
     function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
         let depthRemaining = 40;
         let current = 0;
-        const statements = sourceFile.statements;
+        // Includes the EOF Token so that comments which aren't attached to statements are included
+        const statements = [...sourceFile.statements, sourceFile.endOfFileToken];
         const n = statements.length;
         while (current < n) {
             while (current < n && !isAnyImportSyntax(statements[current])) {
@@ -33,7 +34,7 @@ namespace ts.OutliningElementsCollector {
             if (depthRemaining === 0) return;
             cancellationToken.throwIfCancellationRequested();
 
-            if (isDeclaration(n)) {
+            if (isDeclaration(n) || n.kind === SyntaxKind.EndOfFileToken) {
                 addOutliningForLeadingCommentsForNode(n, sourceFile, cancellationToken, out);
             }
 
@@ -45,7 +46,14 @@ namespace ts.OutliningElementsCollector {
             if (span) out.push(span);
 
             depthRemaining--;
-            if (isIfStatement(n) && n.elseStatement && isIfStatement(n.elseStatement)) {
+            if (isCallExpression(n)) {
+                depthRemaining++;
+                visitNonImportNode(n.expression);
+                depthRemaining--;
+                n.arguments.forEach(visitNonImportNode);
+                n.typeArguments?.forEach(visitNonImportNode);
+            }
+            else if (isIfStatement(n) && n.elseStatement && isIfStatement(n.elseStatement)) {
                 // Consider an 'else if' to be on the same depth as the 'if'.
                 visitNonImportNode(n.expression);
                 visitNonImportNode(n.thenStatement);
@@ -175,7 +183,8 @@ namespace ts.OutliningElementsCollector {
                             return spanForNode(n.parent);
                         }
                         else if (tryStatement.finallyBlock === n) {
-                            return spanForNode(findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile)!);
+                            const node = findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile);
+                            if (node) return spanForNode(node);
                         }
                         // falls through
                     default:
@@ -202,6 +211,9 @@ namespace ts.OutliningElementsCollector {
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxOpeningElement:
                 return spanForJSXAttributes((<JsxOpeningLikeElement>n).attributes);
+            case SyntaxKind.TemplateExpression:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                return spanForTemplateLiteral(<TemplateExpression | NoSubstitutionTemplateLiteral>n);
         }
 
         function spanForJSXElement(node: JsxElement): OutliningSpan | undefined {
@@ -222,6 +234,13 @@ namespace ts.OutliningElementsCollector {
                 return undefined;
             }
 
+            return createOutliningSpanFromBounds(node.getStart(sourceFile), node.getEnd(), OutliningSpanKind.Code);
+        }
+
+        function spanForTemplateLiteral(node: TemplateExpression | NoSubstitutionTemplateLiteral) {
+            if (node.kind === SyntaxKind.NoSubstitutionTemplateLiteral && node.text.length === 0) {
+                return undefined;
+            }
             return createOutliningSpanFromBounds(node.getStart(sourceFile), node.getEnd(), OutliningSpanKind.Code);
         }
 

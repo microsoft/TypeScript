@@ -61,6 +61,7 @@ export function j() {}
 //// [index.js]
 "use strict";
 exports.__esModule = true;
+exports.j = exports.jj = exports.ii = exports.i = exports.h = exports.g = exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = void 0;
 function a() { }
 exports.a = a;
 function b() { }
@@ -130,8 +131,6 @@ export namespace b {
 export function c(): void;
 export namespace c {
     export { Cls };
-    class Cls {
-    }
 }
 /**
  * @param {number} a
@@ -156,6 +155,8 @@ export namespace f {
 }
 export function i(): void;
 export function j(): void;
+declare class Cls {
+}
 /**
  * @param {{x: string}} a
  * @param {{y: typeof b}} b

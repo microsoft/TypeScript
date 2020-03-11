@@ -37,7 +37,7 @@ var Base = /** @class */ (function () {
         },
         set: function (v) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Base;

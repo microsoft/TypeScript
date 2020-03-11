@@ -17,7 +17,7 @@ const thing = new Something();
 module.exports = {
 >module.exports = {    thing} : { thing: import("fs").Something; }
 >module.exports : { thing: import("fs").Something; }
->module : { "tests/cases/conformance/jsdoc/declarations/index": { thing: import("fs").Something; }; }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": { thing: import("fs").Something; }; }
 >exports : { thing: import("fs").Something; }
 >{    thing} : { thing: import("fs").Something; }
 

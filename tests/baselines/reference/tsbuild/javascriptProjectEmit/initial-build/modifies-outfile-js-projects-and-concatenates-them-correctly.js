@@ -1,6 +1,6 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc -b /src
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/common/common.d.ts]

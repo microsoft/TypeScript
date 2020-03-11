@@ -184,17 +184,19 @@ type TypeOf<C extends Any> = C["_A"];
 >Any : Symbol(Any, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 45, 1))
 >C : Symbol(C, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 49, 12))
 
-type ToB<S extends any> = { [k in keyof S]: TypeOf<S[k]> };
+type ToB<S extends {[_ in string | number | symbol]: Any}> = { [k in keyof S]: TypeOf<S[k]> };
 >ToB : Symbol(ToB, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 49, 37))
 >S : Symbol(S, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 51, 9))
->k : Symbol(k, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 51, 29))
+>_ : Symbol(_, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 51, 21))
+>Any : Symbol(Any, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 45, 1))
+>k : Symbol(k, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 51, 64))
 >S : Symbol(S, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 51, 9))
 >TypeOf : Symbol(TypeOf, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 47, 44))
 >S : Symbol(S, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 51, 9))
->k : Symbol(k, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 51, 29))
+>k : Symbol(k, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 51, 64))
 
 type ToA<S> = { [k in keyof S]: Type<S[k]> };
->ToA : Symbol(ToA, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 51, 59))
+>ToA : Symbol(ToA, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 51, 94))
 >S : Symbol(S, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 52, 9))
 >k : Symbol(k, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 52, 17))
 >S : Symbol(S, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 52, 9))
@@ -208,7 +210,7 @@ type NeededInfo<MyNamespaceSchema = {}> = {
 
   ASchema: ToA<MyNamespaceSchema>;
 >ASchema : Symbol(ASchema, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 54, 43))
->ToA : Symbol(ToA, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 51, 59))
+>ToA : Symbol(ToA, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 51, 94))
 >MyNamespaceSchema : Symbol(MyNamespaceSchema, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts, 54, 16))
 
 };

@@ -96,7 +96,7 @@ module.exports.F = F;
 >module.exports.F = F : typeof F
 >module.exports.F : typeof F
 >module.exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6")
->module : { "tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6"); }
+>module : { "\"tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6\"": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6"); }
 >exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6")
 >F : typeof F
 >F : typeof F
@@ -105,7 +105,7 @@ module.exports.S = _sym;
 >module.exports.S = _sym : unique symbol
 >module.exports.S : unique symbol
 >module.exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6")
->module : { "tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6"); }
+>module : { "\"tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6\"": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6"); }
 >exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6")
 >S : unique symbol
 >_sym : unique symbol

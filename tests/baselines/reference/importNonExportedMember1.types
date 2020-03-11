@@ -1,0 +1,14 @@
+=== tests/cases/compiler/a.ts ===
+declare function foo(): any
+>foo : () => any
+
+declare function bar(): any;
+>bar : () => any
+
+export { foo };
+>foo : () => any
+
+=== tests/cases/compiler/b.ts ===
+import { bar } from "./a";
+>bar : any
+

@@ -22,7 +22,7 @@ var C = /** @class */ (function () {
     }
     Object.defineProperty(C, "x", {
         get: function () { return 1; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;
@@ -32,7 +32,7 @@ var D = /** @class */ (function () {
     }
     Object.defineProperty(D, "x", {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return D;
@@ -45,7 +45,7 @@ var E = /** @class */ (function () {
             return 1;
         },
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return E;
