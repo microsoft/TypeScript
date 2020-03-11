@@ -1105,7 +1105,7 @@ namespace ts.server {
             this.projectService.sendUpdateGraphPerformanceEvent(elapsed);
             this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Version: ${this.getProjectVersion()} structureChanged: ${hasNewProgram} Elapsed: ${elapsed}ms`);
             if (this.hasAddedorRemovedFiles) {
-                this.print();
+                this.print(/*writeProjectFileNames*/ true);
             }
             else if (this.program !== oldProgram) {
                 this.writeLog(`Different program with same set of files:: oldProgram.structureIsReused:: ${oldProgram && oldProgram.structureIsReused}`);
@@ -1285,9 +1285,9 @@ namespace ts.server {
         }
 
         /*@internal*/
-        print(counter?: number) {
-            this.writeLog(`Project '${this.projectName}' (${ProjectKind[this.projectKind]}) ${counter === undefined ? "" : counter}`);
-            this.writeLog(this.filesToString(this.projectService.logger.hasLevel(LogLevel.verbose)));
+        print(writeProjectFileNames: boolean) {
+            this.writeLog(`Project '${this.projectName}' (${ProjectKind[this.projectKind]})`);
+            this.writeLog(this.filesToString(writeProjectFileNames && this.projectService.logger.hasLevel(LogLevel.verbose)));
             this.writeLog("-----------------------------------------------");
         }
 
