@@ -116,10 +116,6 @@ namespace ts {
     export interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
         /** If provided, callback to invoke after every new program creation */
         afterProgramCreate?(program: T): void;
-
-        // Only for testing
-        /*@internal*/
-        maxNumberOfFilesToIterateForInvalidation?: number;
     }
 
     /**
@@ -293,7 +289,6 @@ namespace ts {
             scheduleProgramUpdate();
         };
         compilerHost.fileIsOpen = returnFalse;
-        compilerHost.maxNumberOfFilesToIterateForInvalidation = host.maxNumberOfFilesToIterateForInvalidation;
         compilerHost.getCurrentProgram = getCurrentProgram;
         compilerHost.writeLog = writeLog;
 

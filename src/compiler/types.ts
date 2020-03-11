@@ -5648,7 +5648,7 @@ namespace ts {
     export interface ResolvedModuleWithFailedLookupLocations {
         readonly resolvedModule: ResolvedModuleFull | undefined;
         /* @internal */
-        readonly failedLookupLocations: readonly string[];
+        readonly failedLookupLocations: string[];
     }
 
     export interface ResolvedTypeReferenceDirective {
@@ -5663,7 +5663,7 @@ namespace ts {
 
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
-        readonly failedLookupLocations: readonly string[];
+        readonly failedLookupLocations: string[];
     }
 
     /* @internal */

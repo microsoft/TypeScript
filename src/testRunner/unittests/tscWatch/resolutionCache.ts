@@ -320,7 +320,6 @@ declare module "fs" {
                     scenario,
                     subScenario: `ignores changes in node_modules that start with dot/${subScenario}`,
                     commandLineArgs,
-                    maxNumberOfFilesToIterateForInvalidation: 1,
                     sys: () => {
                         const file1: File = {
                             path: `${projectRoot}/test.ts`,
