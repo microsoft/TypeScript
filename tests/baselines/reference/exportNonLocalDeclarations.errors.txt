@@ -1,0 +1,12 @@
+tests/cases/conformance/externalModules/exportNonLocalDeclarations.ts(1,10): error TS2661: Cannot export 'string'. Only local declarations can be exported from a module.
+tests/cases/conformance/externalModules/exportNonLocalDeclarations.ts(2,15): error TS2661: Cannot export 'number'. Only local declarations can be exported from a module.
+
+
+==== tests/cases/conformance/externalModules/exportNonLocalDeclarations.ts (2 errors) ====
+    export { string };
+             ~~~~~~
+!!! error TS2661: Cannot export 'string'. Only local declarations can be exported from a module.
+    export type { number };
+                  ~~~~~~
+!!! error TS2661: Cannot export 'number'. Only local declarations can be exported from a module.
+    

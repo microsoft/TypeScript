@@ -26,7 +26,7 @@ namespace ts.SmartSelectionRange {
                     //
                     // Dive in without pushing a selection range.
                     if (isBlock(node)
-                        || isTemplateSpan(node) || isTemplateHead(node)
+                        || isTemplateSpan(node) || isTemplateHead(node) || isTemplateTail(node)
                         || prevNode && isTemplateHead(prevNode)
                         || isVariableDeclarationList(node) && isVariableStatement(parentNode)
                         || isSyntaxList(node) && isVariableDeclarationList(parentNode)
@@ -126,7 +126,7 @@ namespace ts.SmartSelectionRange {
      * selected all together, even though in the AST they’re just siblings of each
      * other as well as of other top-level statements and declarations.
      */
-    function getSelectionChildren(node: Node): ReadonlyArray<Node> {
+    function getSelectionChildren(node: Node): readonly Node[] {
         // Group top-level imports
         if (isSourceFile(node)) {
             return groupChildren(node.getChildAt(0).getChildren(), isImport);
@@ -144,7 +144,7 @@ namespace ts.SmartSelectionRange {
         // few keystrokes.
         if (isMappedTypeNode(node)) {
             const [openBraceToken, ...children] = node.getChildren();
-            const closeBraceToken = Debug.assertDefined(children.pop());
+            const closeBraceToken = Debug.checkDefined(children.pop());
             Debug.assertEqual(openBraceToken.kind, SyntaxKind.OpenBraceToken);
             Debug.assertEqual(closeBraceToken.kind, SyntaxKind.CloseBraceToken);
             // Group `-/+readonly` and `-/+?`

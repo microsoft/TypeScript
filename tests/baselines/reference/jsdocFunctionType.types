@@ -93,7 +93,7 @@ function D(n) {
   this.length = n;
 >this.length = n : number
 >this.length : number
->this : D
+>this : this
 >length : number
 >n : number
 }
@@ -152,7 +152,7 @@ var E = function(n) {
   this.not_length_on_purpose = n;
 >this.not_length_on_purpose = n : number
 >this.not_length_on_purpose : number
->this : E
+>this : this
 >not_length_on_purpose : number
 >n : number
 

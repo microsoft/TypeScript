@@ -13,6 +13,7 @@ function foo() {
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.c = void 0;
     var c = /** @class */ (function () {
         function c() {
         }

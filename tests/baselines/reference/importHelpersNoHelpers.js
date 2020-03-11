@@ -39,10 +39,12 @@ export {}
 //// [other.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
 exports.x = 1;
 //// [external.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.B = exports.A = void 0;
 var tslib_1 = require("tslib");
 tslib_1.__exportStar(require("./other"), exports);
 var A = /** @class */ (function () {

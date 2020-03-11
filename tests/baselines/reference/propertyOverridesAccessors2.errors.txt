@@ -1,0 +1,18 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors2.ts(7,3): error TS2610: 'x' is defined as an accessor in class 'Base', but is overridden here in 'Derived' as an instance property.
+
+
+==== tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors2.ts (1 errors) ====
+    class Base {
+      get x() { return 2; }
+      set x(value) { console.log(`x was set to ${value}`); }
+    }
+    
+    class Derived extends Base {
+      x = 1;
+      ~
+!!! error TS2610: 'x' is defined as an accessor in class 'Base', but is overridden here in 'Derived' as an instance property.
+    }
+    
+    const obj = new Derived(); // prints 'x was set to 1'
+    console.log(obj.x); // 2
+    

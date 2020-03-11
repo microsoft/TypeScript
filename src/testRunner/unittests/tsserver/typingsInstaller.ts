@@ -840,6 +840,7 @@ namespace ts.projectSystem {
             const watchedFilesExpected = createMap<number>();
             watchedFilesExpected.set(jsconfig.path, 1); // project files
             watchedFilesExpected.set(libFile.path, 1); // project files
+            watchedFilesExpected.set(combinePaths(installer.globalTypingsCacheLocation, "package.json"), 1);
             checkWatchedFilesDetailed(host, watchedFilesExpected);
 
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
@@ -993,19 +994,18 @@ namespace ts.projectSystem {
         });
 
         it("should redo resolution that resolved to '.js' file after typings are installed", () => {
-            const projects = `/user/username/projects`;
             const file: TestFSWithWatch.File = {
-                path: `${projects}/a/b/app.js`,
+                path: `${tscWatch.projects}/a/b/app.js`,
                 content: `
                 import * as commander from "commander";`
             };
-            const cachePath = `${projects}/a/cache`;
+            const cachePath = `${tscWatch.projects}/a/cache`;
             const commanderJS: TestFSWithWatch.File = {
-                path: `${projects}/node_modules/commander/index.js`,
+                path: `${tscWatch.projects}/node_modules/commander/index.js`,
                 content: "module.exports = 0",
             };
 
-            const typeNames: ReadonlyArray<string> = ["commander"];
+            const typeNames: readonly string[] = ["commander"];
             const typePath = (name: string): string => `${cachePath}/node_modules/@types/${name}/index.d.ts`;
             const host = createServerHost([file, commanderJS]);
             const installer = new (class extends Installer {
@@ -1025,12 +1025,12 @@ namespace ts.projectSystem {
             checkWatchedDirectories(host, [], /*recursive*/ false);
             // Does not include cachePath because that is handled by typingsInstaller
             checkWatchedDirectories(host, [
-                `${projects}/node_modules`,
-                `${projects}/a/node_modules`,
-                `${projects}/a/b/node_modules`,
-                `${projects}/a/node_modules/@types`,
-                `${projects}/a/b/node_modules/@types`,
-                `${projects}/a/b/bower_components`
+                `${tscWatch.projects}/node_modules`,
+                `${tscWatch.projects}/a/node_modules`,
+                `${tscWatch.projects}/a/b/node_modules`,
+                `${tscWatch.projects}/a/node_modules/@types`,
+                `${tscWatch.projects}/a/b/node_modules/@types`,
+                `${tscWatch.projects}/a/b/bower_components`
             ], /*recursive*/ true);
 
             service.checkNumberOfProjects({ inferredProjects: 1 });

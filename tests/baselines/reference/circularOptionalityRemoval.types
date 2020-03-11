@@ -1,0 +1,21 @@
+=== tests/cases/compiler/circularOptionalityRemoval.ts ===
+// Constructed repro
+function fn1(x: number | undefined = x > 0 ? x : 0) { }
+>fn1 : (x?: number | undefined) => void
+>x : number | undefined
+>x > 0 ? x : 0 : number | undefined
+>x > 0 : boolean
+>x : number | undefined
+>0 : 0
+>x : number | undefined
+>0 : 0
+
+// Report from user
+function fn2(x?: string = someCondition ? 'value1' : x) { }
+>fn2 : (x?: string | undefined) => void
+>x : string | undefined
+>someCondition ? 'value1' : x : string | undefined
+>someCondition : any
+>'value1' : "value1"
+>x : string | undefined
+

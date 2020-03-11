@@ -230,7 +230,7 @@ namespace ts {
         }
 
         function releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey): void {
-            const bucket = Debug.assertDefined(buckets.get(key));
+            const bucket = Debug.checkDefined(buckets.get(key));
             const entry = bucket.get(path)!;
             entry.languageServiceRefCount--;
 

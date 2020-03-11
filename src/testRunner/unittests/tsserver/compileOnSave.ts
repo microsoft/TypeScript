@@ -565,46 +565,46 @@ namespace ts.projectSystem {
 
             it("should return empty array if change is made in a global declaration file", () => {
                 testDTS(
-                /*dtsFileContents*/ "declare const x: string;",
-                /*tsFileContents*/ "var y = 1;",
-                /*opts*/ {},
-                /*expectDTSEmit*/ false
+                    /*dtsFileContents*/ "declare const x: string;",
+                    /*tsFileContents*/ "var y = 1;",
+                    /*opts*/ {},
+                    /*expectDTSEmit*/ false
                 );
             });
 
             it("should return empty array if change is made in a module declaration file", () => {
                 testDTS(
-                /*dtsFileContents*/ "export const x: string;",
-                /*tsFileContents*/  "import { x } from './runtime/a;",
-                /*opts*/ {},
-                /*expectDTSEmit*/ false
+                    /*dtsFileContents*/ "export const x: string;",
+                    /*tsFileContents*/  "import { x } from './runtime/a;",
+                    /*opts*/ {},
+                    /*expectDTSEmit*/ false
                 );
             });
 
             it("should return results if change is made in a global declaration file with declaration emit", () => {
                 testDTS(
-                /*dtsFileContents*/ "declare const x: string;",
-                /*tsFileContents*/ "var y = 1;",
-                /*opts*/ { declaration: true },
-                /*expectDTSEmit*/ true
+                    /*dtsFileContents*/ "declare const x: string;",
+                    /*tsFileContents*/ "var y = 1;",
+                    /*opts*/ { declaration: true },
+                    /*expectDTSEmit*/ true
                 );
             });
 
             it("should return results if change is made in a global declaration file with composite enabled", () => {
                 testDTS(
-                /*dtsFileContents*/ "declare const x: string;",
-                /*tsFileContents*/ "var y = 1;",
-                /*opts*/ { composite: true },
-                /*expectDTSEmit*/ true
+                    /*dtsFileContents*/ "declare const x: string;",
+                    /*tsFileContents*/ "var y = 1;",
+                    /*opts*/ { composite: true },
+                    /*expectDTSEmit*/ true
                 );
             });
 
             it("should return results if change is made in a global declaration file with decorator emit enabled", () => {
                 testDTS(
-                /*dtsFileContents*/ "declare const x: string;",
-                /*tsFileContents*/ "var y = 1;",
-                /*opts*/ { experimentalDecorators: true, emitDecoratorMetadata: true },
-                /*expectDTSEmit*/ true
+                    /*dtsFileContents*/ "declare const x: string;",
+                    /*tsFileContents*/ "var y = 1;",
+                    /*opts*/ { experimentalDecorators: true, emitDecoratorMetadata: true },
+                    /*expectDTSEmit*/ true
                 );
             });
         });
@@ -714,7 +714,7 @@ namespace ts.projectSystem {
 
             const expectedEmittedFileName = "/a/b/f1.js";
             assert.isTrue(host.fileExists(expectedEmittedFileName));
-            assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nexports.__esModule = true;\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
+            assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nexports.__esModule = true;\r\nexports.Foo = void 0;\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
         });
 
         it("shoud not emit js files in external projects", () => {
@@ -802,21 +802,20 @@ namespace ts.projectSystem {
     });
 
     describe("unittests:: tsserver:: compileOnSave:: CompileOnSaveAffectedFileListRequest with and without projectFileName in request", () => {
-        const projectRoot = "/user/username/projects/myproject";
         const core: File = {
-            path: `${projectRoot}/core/core.ts`,
+            path: `${tscWatch.projectRoot}/core/core.ts`,
             content: "let z = 10;"
         };
         const app1: File = {
-            path: `${projectRoot}/app1/app.ts`,
+            path: `${tscWatch.projectRoot}/app1/app.ts`,
             content: "let x = 10;"
         };
         const app2: File = {
-            path: `${projectRoot}/app2/app.ts`,
+            path: `${tscWatch.projectRoot}/app2/app.ts`,
             content: "let y = 10;"
         };
         const app1Config: File = {
-            path: `${projectRoot}/app1/tsconfig.json`,
+            path: `${tscWatch.projectRoot}/app1/tsconfig.json`,
             content: JSON.stringify({
                 files: ["app.ts", "../core/core.ts"],
                 compilerOptions: { outFile: "build/output.js" },
@@ -824,7 +823,7 @@ namespace ts.projectSystem {
             })
         };
         const app2Config: File = {
-            path: `${projectRoot}/app2/tsconfig.json`,
+            path: `${tscWatch.projectRoot}/app2/tsconfig.json`,
             content: JSON.stringify({
                 files: ["app.ts", "../core/core.ts"],
                 compilerOptions: { outFile: "build/output.js" },

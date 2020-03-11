@@ -70,6 +70,11 @@ namespace ts {
             if (!sourceFile) return undefined;
 
             const program = host.getProgram()!;
+            // If this is source file of project reference source (instead of redirect) there is no generated position
+            if (program.isSourceOfProjectReferenceRedirect(sourceFile.fileName)) {
+                return undefined;
+            }
+
             const options = program.getCompilerOptions();
             const outPath = options.outFile || options.out;
 
@@ -175,6 +180,9 @@ namespace ts {
             // obviously invalid map
             return undefined;
         }
+
+        // Dont support sourcemaps that contain inlined sources
+        if (map.sourcesContent && map.sourcesContent.some(isString)) return undefined;
 
         return createDocumentPositionMapper(host, map, mapFileName);
     }

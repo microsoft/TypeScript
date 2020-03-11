@@ -1,0 +1,307 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+export class A {}
+>A : Symbol(A, Decl(index.js, 0, 0))
+
+export class B {
+>B : Symbol(B, Decl(index.js, 0, 17))
+
+    static cat = "cat";
+>cat : Symbol(B.cat, Decl(index.js, 2, 16))
+}
+
+export class C {
+>C : Symbol(C, Decl(index.js, 4, 1))
+
+    static Cls = class {}
+>Cls : Symbol(C.Cls, Decl(index.js, 6, 16))
+}
+
+export class D {
+>D : Symbol(D, Decl(index.js, 8, 1))
+
+    /**
+     * @param {number} a
+     * @param {number} b
+     */
+    constructor(a, b) {}
+>a : Symbol(a, Decl(index.js, 15, 16))
+>b : Symbol(b, Decl(index.js, 15, 18))
+}
+
+/**
+ * @template T,U
+ */
+export class E {
+>E : Symbol(E, Decl(index.js, 16, 1))
+
+    /**
+     * @type {T & U}
+     */
+    field;
+>field : Symbol(E.field, Decl(index.js, 21, 16))
+
+    // @readonly is currently unsupported, it seems - included here just in case that changes
+    /**
+     * @type {T & U}
+     * @readonly
+     */
+    readonlyField;
+>readonlyField : Symbol(E.readonlyField, Decl(index.js, 25, 10))
+
+    initializedField = 12;
+>initializedField : Symbol(E.initializedField, Decl(index.js, 32, 18))
+
+    /**
+     * @return {U}
+     */
+    get f1() { return /** @type {*} */(null); }
+>f1 : Symbol(E.f1, Decl(index.js, 34, 26), Decl(index.js, 39, 47))
+
+    /**
+     * @param {U} _p
+     */
+    set f1(_p) {}
+>f1 : Symbol(E.f1, Decl(index.js, 34, 26), Decl(index.js, 39, 47))
+>_p : Symbol(_p, Decl(index.js, 44, 11))
+
+    /**
+     * @return {U}
+     */
+    get f2() { return /** @type {*} */(null); }
+>f2 : Symbol(E.f2, Decl(index.js, 44, 17))
+
+    /**
+     * @param {U} _p
+     */
+    set f3(_p) {}
+>f3 : Symbol(E.f3, Decl(index.js, 49, 47))
+>_p : Symbol(_p, Decl(index.js, 54, 11))
+
+    /**
+     * @param {T} a
+     * @param {U} b
+     */
+    constructor(a, b) {}
+>a : Symbol(a, Decl(index.js, 60, 16))
+>b : Symbol(b, Decl(index.js, 60, 18))
+
+
+    /**
+     * @type {string}
+     */
+    static staticField;
+>staticField : Symbol(E.staticField, Decl(index.js, 60, 24))
+
+    // @readonly is currently unsupported, it seems - included here just in case that changes
+    /**
+     * @type {string}
+     * @readonly
+     */
+    static staticReadonlyField;
+>staticReadonlyField : Symbol(E.staticReadonlyField, Decl(index.js, 66, 23))
+
+    static staticInitializedField = 12;
+>staticInitializedField : Symbol(E.staticInitializedField, Decl(index.js, 73, 31))
+
+    /**
+     * @return {string}
+     */
+    static get s1() { return ""; }
+>s1 : Symbol(E.s1, Decl(index.js, 75, 39), Decl(index.js, 80, 34))
+
+    /**
+     * @param {string} _p
+     */
+    static set s1(_p) {}
+>s1 : Symbol(E.s1, Decl(index.js, 75, 39), Decl(index.js, 80, 34))
+>_p : Symbol(_p, Decl(index.js, 85, 18))
+
+    /**
+     * @return {string}
+     */
+    static get s2() { return ""; }
+>s2 : Symbol(E.s2, Decl(index.js, 85, 24))
+
+    /**
+     * @param {string} _p
+     */
+    static set s3(_p) {}
+>s3 : Symbol(E.s3, Decl(index.js, 90, 34))
+>_p : Symbol(_p, Decl(index.js, 95, 18))
+}
+
+/**
+ * @template T,U
+ */
+export class F {
+>F : Symbol(F, Decl(index.js, 96, 1))
+
+    /**
+     * @type {T & U}
+     */
+    field;
+>field : Symbol(F.field, Decl(index.js, 101, 16))
+
+    /**
+     * @param {T} a
+     * @param {U} b
+     */
+    constructor(a, b) {}
+>a : Symbol(a, Decl(index.js, 110, 16))
+>b : Symbol(b, Decl(index.js, 110, 18))
+
+    /**
+     * @template A,B
+     * @param {A} a
+     * @param {B} b
+     */
+    static create(a, b) { return new F(a, b); }
+>create : Symbol(F.create, Decl(index.js, 110, 24))
+>a : Symbol(a, Decl(index.js, 117, 18))
+>b : Symbol(b, Decl(index.js, 117, 20))
+>F : Symbol(F, Decl(index.js, 96, 1))
+>a : Symbol(a, Decl(index.js, 117, 18))
+>b : Symbol(b, Decl(index.js, 117, 20))
+}
+
+class G {}
+>G : Symbol(G, Decl(index.js, 118, 1))
+
+export { G };
+>G : Symbol(G, Decl(index.js, 122, 8))
+
+class HH {}
+>HH : Symbol(HH, Decl(index.js, 122, 13))
+
+export { HH as H };
+>HH : Symbol(HH, Decl(index.js, 122, 13))
+>H : Symbol(H, Decl(index.js, 126, 8))
+
+export class I {}
+>I : Symbol(I, Decl(index.js, 126, 19))
+
+export { I as II };
+>I : Symbol(I, Decl(index.js, 126, 19))
+>II : Symbol(II, Decl(index.js, 129, 8))
+
+export { J as JJ };
+>J : Symbol(J, Decl(index.js, 131, 19))
+>JJ : Symbol(JJ, Decl(index.js, 131, 8))
+
+export class J {}
+>J : Symbol(J, Decl(index.js, 131, 19))
+
+
+export class K {
+>K : Symbol(K, Decl(index.js, 132, 17))
+
+    constructor() {
+        this.p1 = 12;
+>this.p1 : Symbol(K.p1, Decl(index.js, 136, 19))
+>this : Symbol(K, Decl(index.js, 132, 17))
+>p1 : Symbol(K.p1, Decl(index.js, 136, 19))
+
+        this.p2 = "ok";
+>this.p2 : Symbol(K.p2, Decl(index.js, 137, 21))
+>this : Symbol(K, Decl(index.js, 132, 17))
+>p2 : Symbol(K.p2, Decl(index.js, 137, 21))
+    }
+
+    method() {
+>method : Symbol(K.method, Decl(index.js, 139, 5))
+
+        return this.p1;
+>this.p1 : Symbol(K.p1, Decl(index.js, 136, 19))
+>this : Symbol(K, Decl(index.js, 132, 17))
+>p1 : Symbol(K.p1, Decl(index.js, 136, 19))
+    }
+}
+
+export class L extends K {}
+>L : Symbol(L, Decl(index.js, 144, 1))
+>K : Symbol(K, Decl(index.js, 132, 17))
+
+export class M extends null {
+>M : Symbol(M, Decl(index.js, 146, 27))
+
+    constructor() {
+        this.prop = 12;
+>this.prop : Symbol(M.prop, Decl(index.js, 149, 19))
+>this : Symbol(M, Decl(index.js, 146, 27))
+>prop : Symbol(M.prop, Decl(index.js, 149, 19))
+    }
+}
+
+
+/**
+ * @template T
+ */
+export class N extends L {
+>N : Symbol(N, Decl(index.js, 152, 1))
+>L : Symbol(L, Decl(index.js, 144, 1))
+
+    /**
+     * @param {T} param 
+     */
+    constructor(param) {
+>param : Symbol(param, Decl(index.js, 162, 16))
+
+        super();
+>super : Symbol(L, Decl(index.js, 144, 1))
+
+        this.another = param;
+>this.another : Symbol(N.another, Decl(index.js, 163, 16))
+>this : Symbol(N, Decl(index.js, 152, 1))
+>another : Symbol(N.another, Decl(index.js, 163, 16))
+>param : Symbol(param, Decl(index.js, 162, 16))
+    }
+}
+
+/**
+ * @template U
+ * @extends {N<U>}
+ */
+export class O extends N {
+>O : Symbol(O, Decl(index.js, 166, 1))
+>N : Symbol(N, Decl(index.js, 152, 1))
+
+    /**
+     * @param {U} param 
+     */
+    constructor(param) {
+>param : Symbol(param, Decl(index.js, 176, 16))
+
+        super(param);
+>super : Symbol(N, Decl(index.js, 152, 1))
+>param : Symbol(param, Decl(index.js, 176, 16))
+
+        this.another2 = param;
+>this.another2 : Symbol(O.another2, Decl(index.js, 177, 21))
+>this : Symbol(O, Decl(index.js, 166, 1))
+>another2 : Symbol(O.another2, Decl(index.js, 177, 21))
+>param : Symbol(param, Decl(index.js, 176, 16))
+    }
+}
+
+var x = /** @type {*} */(null);
+>x : Symbol(x, Decl(index.js, 182, 3))
+
+export class VariableBase extends x {}
+>VariableBase : Symbol(VariableBase, Decl(index.js, 182, 31))
+>x : Symbol(x, Decl(index.js, 182, 3))
+
+export class HasStatics {
+>HasStatics : Symbol(HasStatics, Decl(index.js, 184, 38))
+
+    static staticMethod() {}
+>staticMethod : Symbol(HasStatics.staticMethod, Decl(index.js, 186, 25))
+}
+
+export class ExtendsStatics extends HasStatics {
+>ExtendsStatics : Symbol(ExtendsStatics, Decl(index.js, 188, 1))
+>HasStatics : Symbol(HasStatics, Decl(index.js, 184, 38))
+
+    static also() {}
+>also : Symbol(ExtendsStatics.also, Decl(index.js, 190, 48))
+}
+

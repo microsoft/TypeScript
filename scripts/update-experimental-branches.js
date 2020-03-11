@@ -1,6 +1,6 @@
 // @ts-check
 /// <reference lib="esnext.asynciterable" />
-const Octokit = require("@octokit/rest");
+const { Octokit } = require("@octokit/rest");
 const { runSequence } = require("./run-sequence");
 
 // The first is used by bot-based kickoffs, the second by automatic triggers
@@ -76,7 +76,8 @@ async function main() {
     ]);
 
     // Merge each branch into `experimental` (which, if there is a conflict, we now know is from inter-experiment conflict)
-    for (const branch of prnums) {
+    for (const branchnum of prnums) {
+        const branch = "" + branchnum;
         // Find the merge base
         const mergeBase = runSequence([
             ["git", ["merge-base", branch, "experimental"]],

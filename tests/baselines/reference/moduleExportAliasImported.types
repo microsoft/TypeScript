@@ -12,12 +12,12 @@ function alias() { }
 module.exports = alias
 >module.exports = alias : typeof alias
 >module.exports : typeof alias
->module : { "tests/cases/conformance/salsa/bug28014": typeof alias; }
+>module : { "\"tests/cases/conformance/salsa/bug28014\"": typeof alias; }
 >exports : typeof alias
 >alias : typeof alias
 
 === tests/cases/conformance/salsa/importer.js ===
 import('./bug28014')
->import('./bug28014') : Promise<() => void>
+>import('./bug28014') : Promise<{ (): void; version: number; }>
 >'./bug28014' : "./bug28014"
 
