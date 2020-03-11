@@ -4275,7 +4275,7 @@ namespace ts {
                     return createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
                 }
                 if (type.flags & TypeFlags.Substitution) {
-                    return typeToTypeNodeHelper((<SubstitutionType>type).typeVariable, context);
+                    return typeToTypeNodeHelper((<SubstitutionType>type).baseType, context);
                 }
 
                 return Debug.fail("Should be unreachable.");
@@ -11315,17 +11315,15 @@ namespace ts {
             }
             symbol = getExpandoSymbol(symbol) || symbol;
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                return getTypeFromClassOrInterfaceReference(node, symbol);
+                return getConditionalFlowTypeOfType(getTypeFromClassOrInterfaceReference(node, symbol), node);
             }
             if (symbol.flags & SymbolFlags.TypeAlias) {
-                return getTypeFromTypeAliasReference(node, symbol);
+                return getConditionalFlowTypeOfType(getTypeFromTypeAliasReference(node, symbol), node);
             }
             // Get type from reference to named type that cannot be generic (enum or type parameter)
             const res = tryGetDeclaredTypeOfSymbol(symbol);
             if (res) {
-                return checkNoTypeArguments(node, symbol) ?
-                    res.flags & TypeFlags.TypeParameter ? getConstrainedTypeVariable(<TypeParameter>res, node) : getRegularTypeOfLiteralType(res) :
-                    errorType;
+                return checkNoTypeArguments(node, symbol) ? getConditionalFlowTypeOfType(getRegularTypeOfLiteralType(res), node) : errorType;
             }
             if (symbol.flags & SymbolFlags.Value && isJSDocTypeReference(node)) {
                 const jsdocType = getTypeFromJSDocValueReference(node, symbol);
@@ -11335,7 +11333,7 @@ namespace ts {
                 else {
                     // Resolve the type reference as a Type for the purpose of reporting errors.
                     resolveTypeReferenceName(getTypeReferenceName(node), SymbolFlags.Type);
-                    return getTypeOfSymbol(symbol);
+                    return getConditionalFlowTypeOfType(getTypeOfSymbol(symbol), node);
                 }
             }
             return errorType;
@@ -11373,17 +11371,17 @@ namespace ts {
             return links.resolvedJSDocType;
         }
 
-        function getSubstitutionType(typeVariable: TypeVariable, substitute: Type) {
-            if (substitute.flags & TypeFlags.AnyOrUnknown || substitute === typeVariable) {
-                return typeVariable;
+        function getSubstitutionType(baseType: Type, substitute: Type) {
+            if (substitute.flags & TypeFlags.AnyOrUnknown || substitute === baseType) {
+                return baseType;
             }
-            const id = `${getTypeId(typeVariable)}>${getTypeId(substitute)}`;
+            const id = `${getTypeId(baseType)}>${getTypeId(substitute)}`;
             const cached = substitutionTypes.get(id);
             if (cached) {
                 return cached;
             }
             const result = <SubstitutionType>createType(TypeFlags.Substitution);
-            result.typeVariable = typeVariable;
+            result.baseType = baseType;
             result.substitute = substitute;
             substitutionTypes.set(id, result);
             return result;
@@ -11393,25 +11391,25 @@ namespace ts {
             return node.kind === SyntaxKind.TupleType && (<TupleTypeNode>node).elementTypes.length === 1;
         }
 
-        function getImpliedConstraint(typeVariable: TypeVariable, checkNode: TypeNode, extendsNode: TypeNode): Type | undefined {
-            return isUnaryTupleTypeNode(checkNode) && isUnaryTupleTypeNode(extendsNode) ? getImpliedConstraint(typeVariable, (<TupleTypeNode>checkNode).elementTypes[0], (<TupleTypeNode>extendsNode).elementTypes[0]) :
-                getActualTypeVariable(getTypeFromTypeNode(checkNode)) === typeVariable ? getTypeFromTypeNode(extendsNode) :
+        function getImpliedConstraint(type: Type, checkNode: TypeNode, extendsNode: TypeNode): Type | undefined {
+            return isUnaryTupleTypeNode(checkNode) && isUnaryTupleTypeNode(extendsNode) ? getImpliedConstraint(type, (<TupleTypeNode>checkNode).elementTypes[0], (<TupleTypeNode>extendsNode).elementTypes[0]) :
+                getActualTypeVariable(getTypeFromTypeNode(checkNode)) === type ? getTypeFromTypeNode(extendsNode) :
                 undefined;
         }
 
-        function getConstrainedTypeVariable(typeVariable: TypeVariable, node: Node) {
+        function getConditionalFlowTypeOfType(type: Type, node: Node) {
             let constraints: Type[] | undefined;
             while (node && !isStatement(node) && node.kind !== SyntaxKind.JSDocComment) {
                 const parent = node.parent;
                 if (parent.kind === SyntaxKind.ConditionalType && node === (<ConditionalTypeNode>parent).trueType) {
-                    const constraint = getImpliedConstraint(typeVariable, (<ConditionalTypeNode>parent).checkType, (<ConditionalTypeNode>parent).extendsType);
+                    const constraint = getImpliedConstraint(type, (<ConditionalTypeNode>parent).checkType, (<ConditionalTypeNode>parent).extendsType);
                     if (constraint) {
                         constraints = append(constraints, constraint);
                     }
                 }
                 node = parent;
             }
-            return constraints ? getSubstitutionType(typeVariable, getIntersectionType(append(constraints, typeVariable))) : typeVariable;
+            return constraints ? getSubstitutionType(type, getIntersectionType(append(constraints, type))) : type;
         }
 
         function isJSDocTypeReference(node: Node): node is TypeReferenceNode {
@@ -12854,7 +12852,7 @@ namespace ts {
                 links.resolvedType = resolved.flags & TypeFlags.IndexedAccess &&
                     (<IndexedAccessType>resolved).objectType === objectType &&
                     (<IndexedAccessType>resolved).indexType === indexType ?
-                    getConstrainedTypeVariable(<IndexedAccessType>resolved, node) : resolved;
+                    getConditionalFlowTypeOfType(resolved, node) : resolved;
             }
             return links.resolvedType;
         }
@@ -12876,7 +12874,7 @@ namespace ts {
 
         function getActualTypeVariable(type: Type): Type {
             if (type.flags & TypeFlags.Substitution) {
-                return (<SubstitutionType>type).typeVariable;
+                return (<SubstitutionType>type).baseType;
             }
             if (type.flags & TypeFlags.IndexedAccess && (
                 (<IndexedAccessType>type).objectType.flags & TypeFlags.Substitution ||
@@ -12984,7 +12982,7 @@ namespace ts {
                     node,
                     checkType,
                     extendsType: getTypeFromTypeNode(node.extendsType),
-                    trueType: getTypeFromTypeNode(node.trueType),
+                    trueType: getConditionalFlowTypeOfType(getTypeFromTypeNode(node.trueType), node.trueType),
                     falseType: getTypeFromTypeNode(node.falseType),
                     isDistributive: !!(checkType.flags & TypeFlags.TypeParameter),
                     inferTypeParameters: getInferTypeParameters(node),
@@ -13959,7 +13957,7 @@ namespace ts {
                 return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers((<ConditionalType>type).mapper, mapper));
             }
             if (flags & TypeFlags.Substitution) {
-                const maybeVariable = instantiateType((<SubstitutionType>type).typeVariable, mapper);
+                const maybeVariable = instantiateType((<SubstitutionType>type).baseType, mapper);
                 if (maybeVariable.flags & TypeFlags.TypeVariable) {
                     return getSubstitutionType(maybeVariable as TypeVariable, instantiateType((<SubstitutionType>type).substitute, mapper));
                 }
@@ -14968,7 +14966,7 @@ namespace ts {
                 const t = isFreshLiteralType(type) ? (<FreshableType>type).regularType :
                     getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? createTypeReference((<TypeReference>type).target, getTypeArguments(<TypeReference>type)) :
                     type.flags & TypeFlags.UnionOrIntersection ? getReducedType(type) :
-                    type.flags & TypeFlags.Substitution ? writing ? (<SubstitutionType>type).typeVariable : (<SubstitutionType>type).substitute :
+                    type.flags & TypeFlags.Substitution ? writing ? (<SubstitutionType>type).baseType : (<SubstitutionType>type).substitute :
                     type.flags & TypeFlags.Simplifiable ? getSimplifiedType(type, writing) :
                     type;
                 if (t === type) break;
