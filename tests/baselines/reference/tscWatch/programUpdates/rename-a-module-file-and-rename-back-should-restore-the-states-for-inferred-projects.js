@@ -104,12 +104,12 @@ WatchedFiles::
   {"fileName":"/a/b/file1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/modulefile.ts:
-  {"fileName":"/a/b/modulefile.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
+/a:
+  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

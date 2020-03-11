@@ -18537,6 +18537,32 @@ namespace ts {
                 }
                 // Infer from the members of source and target only if the two types are possibly related
                 if (!typesDefinitelyUnrelated(source, target)) {
+                    if (isArrayType(source) || isTupleType(source)) {
+                        if (isTupleType(target)) {
+                            const sourceLength = isTupleType(source) ? getLengthOfTupleType(source) : 0;
+                            const targetLength = getLengthOfTupleType(target);
+                            const sourceRestType = isTupleType(source) ? getRestTypeOfTupleType(source) : getElementTypeOfArrayType(source);
+                            const targetRestType = getRestTypeOfTupleType(target);
+                            const fixedLength = targetLength < sourceLength || sourceRestType ? targetLength : sourceLength;
+                            for (let i = 0; i < fixedLength; i++) {
+                                inferFromTypes(i < sourceLength ? getTypeArguments(<TypeReference>source)[i] : sourceRestType!, getTypeArguments(target)[i]);
+                            }
+                            if (targetRestType) {
+                                const types = fixedLength < sourceLength ? getTypeArguments(<TypeReference>source).slice(fixedLength, sourceLength) : [];
+                                if (sourceRestType) {
+                                    types.push(sourceRestType);
+                                }
+                                if (types.length) {
+                                    inferFromTypes(getUnionType(types), targetRestType);
+                                }
+                            }
+                            return;
+                        }
+                        if (isArrayType(target)) {
+                            inferFromIndexTypes(source, target);
+                            return;
+                        }
+                    }
                     inferFromProperties(source, target);
                     inferFromSignatures(source, target, SignatureKind.Call);
                     inferFromSignatures(source, target, SignatureKind.Construct);
@@ -18545,32 +18571,6 @@ namespace ts {
             }
 
             function inferFromProperties(source: Type, target: Type) {
-                if (isArrayType(source) || isTupleType(source)) {
-                    if (isTupleType(target)) {
-                        const sourceLength = isTupleType(source) ? getLengthOfTupleType(source) : 0;
-                        const targetLength = getLengthOfTupleType(target);
-                        const sourceRestType = isTupleType(source) ? getRestTypeOfTupleType(source) : getElementTypeOfArrayType(source);
-                        const targetRestType = getRestTypeOfTupleType(target);
-                        const fixedLength = targetLength < sourceLength || sourceRestType ? targetLength : sourceLength;
-                        for (let i = 0; i < fixedLength; i++) {
-                            inferFromTypes(i < sourceLength ? getTypeArguments(<TypeReference>source)[i] : sourceRestType!, getTypeArguments(target)[i]);
-                        }
-                        if (targetRestType) {
-                            const types = fixedLength < sourceLength ? getTypeArguments(<TypeReference>source).slice(fixedLength, sourceLength) : [];
-                            if (sourceRestType) {
-                                types.push(sourceRestType);
-                            }
-                            if (types.length) {
-                                inferFromTypes(getUnionType(types), targetRestType);
-                            }
-                        }
-                        return;
-                    }
-                    if (isArrayType(target)) {
-                        inferFromIndexTypes(source, target);
-                        return;
-                    }
-                }
                 const properties = getPropertiesOfObjectType(target);
                 for (const targetProp of properties) {
                     const sourceProp = getPropertyOfType(source, targetProp.escapedName);
@@ -18588,7 +18588,7 @@ namespace ts {
                 const len = sourceLen < targetLen ? sourceLen : targetLen;
                 const skipParameters = !!(getObjectFlags(source) & ObjectFlags.NonInferrableType);
                 for (let i = 0; i < len; i++) {
-                    inferFromSignature(getBaseSignature(sourceSignatures[sourceLen - len + i]), getBaseSignature(targetSignatures[targetLen - len + i]), skipParameters);
+                    inferFromSignature(getBaseSignature(sourceSignatures[sourceLen - len + i]), getErasedSignature(targetSignatures[targetLen - len + i]), skipParameters);
                 }
             }
 
@@ -19244,7 +19244,9 @@ namespace ts {
 
         // Get the types from all cases in a switch on `typeof`. An
         // `undefined` element denotes an explicit `default` clause.
-        function getSwitchClauseTypeOfWitnesses(switchStatement: SwitchStatement): (string | undefined)[] {
+        function getSwitchClauseTypeOfWitnesses(switchStatement: SwitchStatement, retainDefault: false): string[];
+        function getSwitchClauseTypeOfWitnesses(switchStatement: SwitchStatement, retainDefault: boolean): (string | undefined)[];
+        function getSwitchClauseTypeOfWitnesses(switchStatement: SwitchStatement, retainDefault: boolean): (string | undefined)[] {
             const witnesses: (string | undefined)[] = [];
             for (const clause of switchStatement.caseBlock.clauses) {
                 if (clause.kind === SyntaxKind.CaseClause) {
@@ -19254,7 +19256,7 @@ namespace ts {
                     }
                     return emptyArray;
                 }
-                witnesses.push(/*explicitDefaultStatement*/ undefined);
+                if (retainDefault) witnesses.push(/*explicitDefaultStatement*/ undefined);
             }
             return witnesses;
         }
@@ -20359,7 +20361,7 @@ namespace ts {
             }
 
             function narrowBySwitchOnTypeOf(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): Type {
-                const switchWitnesses = getSwitchClauseTypeOfWitnesses(switchStatement);
+                const switchWitnesses = getSwitchClauseTypeOfWitnesses(switchStatement, /*retainDefault*/ true);
                 if (!switchWitnesses.length) {
                     return type;
                 }
@@ -21107,8 +21109,10 @@ namespace ts {
                 if (isInJS && className) {
                     const classSymbol = checkExpression(className).symbol;
                     if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
-                        const classType = (getDeclaredTypeOfSymbol(classSymbol) as InterfaceType).thisType!;
-                        return getFlowTypeOfReference(node, classType);
+                        const classType = (getDeclaredTypeOfSymbol(classSymbol) as InterfaceType).thisType;
+                        if (classType) {
+                            return getFlowTypeOfReference(node, classType);
+                        }
                     }
                 }
                 // Check if it's a constructor definition, can be either a variable decl or function decl
@@ -26770,8 +26774,7 @@ namespace ts {
         function computeExhaustiveSwitchStatement(node: SwitchStatement): boolean {
             if (node.expression.kind === SyntaxKind.TypeOfExpression) {
                 const operandType = getTypeOfExpression((node.expression as TypeOfExpression).expression);
-                // This cast is safe because the switch is possibly exhaustive and does not contain a default case, so there can be no undefined.
-                const witnesses = <string[]>getSwitchClauseTypeOfWitnesses(node);
+                const witnesses = getSwitchClauseTypeOfWitnesses(node, /*retainDefault*/ false);
                 // notEqualFacts states that the type of the switched value is not equal to every type in the switch.
                 const notEqualFacts = getFactsFromTypeofSwitch(0, 0, witnesses, /*hasDefault*/ true);
                 const type = getBaseConstraintOfType(operandType) || operandType;
