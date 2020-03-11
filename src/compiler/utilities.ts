@@ -4431,8 +4431,8 @@ namespace ts {
             isPropertyAccessExpression(expr) && idText(expr.name) === "constructor" ||
             isElementAccessExpression(expr) && isStringLiteralLike(expr.argumentExpression) && expr.argumentExpression.text === "constructor"
         );
+    }
 
-          
     export function tryGetPropertyAccessOrIdentifierToString(expr: Expression): string | undefined {
         if (isPropertyAccessExpression(expr)) {
             const baseStr = tryGetPropertyAccessOrIdentifierToString(expr.expression);
