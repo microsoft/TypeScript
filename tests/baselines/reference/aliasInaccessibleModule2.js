@@ -31,4 +31,5 @@ declare module M {
     }
     import R = N;
     export import X = R;
+    export {};
 }

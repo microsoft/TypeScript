@@ -10,22 +10,27 @@
 
         this._map = {};
 >this._map : Symbol(Multimap._map, Decl(a.js, 4, 31))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
 >_map : Symbol(Multimap._map, Decl(a.js, 4, 31))
 
         this._map
 >this._map : Symbol(Multimap._map, Decl(a.js, 4, 31))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
 >_map : Symbol(Multimap._map, Decl(a.js, 4, 31))
 
         this.set
 >this.set : Symbol(set, Decl(a.js, 12, 26))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
 >set : Symbol(set, Decl(a.js, 12, 26))
 
         this.get
 >this.get : Symbol(get, Decl(a.js, 18, 10))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
 >get : Symbol(get, Decl(a.js, 18, 10))
 
         this.addon
 >this.addon : Symbol(Multimap.addon, Decl(a.js, 25, 5))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
 >addon : Symbol(Multimap.addon, Decl(a.js, 25, 5))
 
     };
@@ -40,18 +45,22 @@
 
             this._map
 >this._map : Symbol(Multimap._map, Decl(a.js, 4, 31))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
 >_map : Symbol(Multimap._map, Decl(a.js, 4, 31))
 
             this.set
 >this.set : Symbol(set, Decl(a.js, 12, 26))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
 >set : Symbol(set, Decl(a.js, 12, 26))
 
             this.get
 >this.get : Symbol(get, Decl(a.js, 18, 10))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
 >get : Symbol(get, Decl(a.js, 18, 10))
 
             this.addon
 >this.addon : Symbol(Multimap.addon, Decl(a.js, 25, 5))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
 >addon : Symbol(Multimap.addon, Decl(a.js, 25, 5))
 
         },
@@ -60,18 +69,22 @@
 
             this._map
 >this._map : Symbol(Multimap._map, Decl(a.js, 4, 31))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
 >_map : Symbol(Multimap._map, Decl(a.js, 4, 31))
 
             this.set
 >this.set : Symbol(set, Decl(a.js, 12, 26))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
 >set : Symbol(set, Decl(a.js, 12, 26))
 
             this.get
 >this.get : Symbol(get, Decl(a.js, 18, 10))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
 >get : Symbol(get, Decl(a.js, 18, 10))
 
             this.addon
 >this.addon : Symbol(Multimap.addon, Decl(a.js, 25, 5))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
 >addon : Symbol(Multimap.addon, Decl(a.js, 25, 5))
         }
     }
@@ -84,18 +97,22 @@
 
         this._map
 >this._map : Symbol(Multimap._map, Decl(a.js, 4, 31))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
 >_map : Symbol(Multimap._map, Decl(a.js, 4, 31))
 
         this.set
 >this.set : Symbol(set, Decl(a.js, 12, 26))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
 >set : Symbol(set, Decl(a.js, 12, 26))
 
         this.get
 >this.get : Symbol(get, Decl(a.js, 18, 10))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
 >get : Symbol(get, Decl(a.js, 18, 10))
 
         this.addon
 >this.addon : Symbol(Multimap.addon, Decl(a.js, 25, 5))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
 >addon : Symbol(Multimap.addon, Decl(a.js, 25, 5))
     }
 

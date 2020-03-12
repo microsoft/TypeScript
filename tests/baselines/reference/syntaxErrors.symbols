@@ -17,12 +17,8 @@ function f(x, y, skipped) {
 >skipped : Symbol(skipped, Decl(badTypeArguments.js, 4, 16))
 
     return x.t + y.t;
->x.t : Symbol(C.t, Decl(dummyType.d.ts, 0, 20))
 >x : Symbol(x, Decl(badTypeArguments.js, 4, 11))
->t : Symbol(C.t, Decl(dummyType.d.ts, 0, 20))
->y.t : Symbol(C.t, Decl(dummyType.d.ts, 0, 20))
 >y : Symbol(y, Decl(badTypeArguments.js, 4, 13))
->t : Symbol(C.t, Decl(dummyType.d.ts, 0, 20))
 }
 var x = f({ t: 1000 }, { t: 3000 }, { t: 5000 });
 >x : Symbol(x, Decl(badTypeArguments.js, 7, 3))

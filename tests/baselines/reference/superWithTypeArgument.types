@@ -10,9 +10,7 @@ class D<T> extends C {
 
     constructor() {
         super<T>();
->super<T>() : any
->super : any
->super : C
-> : any
+>super<T>() : void
+>super : typeof C
     }
 }

@@ -14,15 +14,15 @@ verify.completions(
     {
         marker: "",
         includes: [
-            { name: "xyz", text: "(method) C.xyz(): any", kind: "method", insertText: "this.xyz" },
-            { name: "foo bar", text: '(property) C["foo bar"]: number', kind: "property", insertText: 'this["foo bar"]' },
+            { name: "xyz", text: "(method) C.xyz(): any", kind: "method", insertText: "this.xyz", sortText: completion.SortText.SuggestedClassMembers },
+            { name: "foo bar", text: '(property) C["foo bar"]: number', kind: "property", insertText: 'this["foo bar"]', sortText: completion.SortText.SuggestedClassMembers },
         ],
         isNewIdentifierLocation: true,
         preferences,
     },
     {
         marker: "f",
-        includes: { name: "x", text: "(property) x: number", kind: "property", insertText: "this.x" },
+        includes: { name: "x", text: "(property) x: number", kind: "property", insertText: "this.x", sortText: completion.SortText.SuggestedClassMembers },
         preferences,
     },
 );

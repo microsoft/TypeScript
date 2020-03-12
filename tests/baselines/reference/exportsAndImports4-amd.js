@@ -48,13 +48,14 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "./t1", "./t1", "./t1", "./t1", "./t1", "./t1"], function (require, exports, a, t1_1, c, t1_2, t1_3, t1_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.f2 = exports.f1 = exports.e2 = exports.e1 = exports.d = exports.c = exports.b = exports.a = void 0;
     exports.a = a;
     a.default;
     exports.b = t1_1.default;
     t1_1.default;
     exports.c = c;
     c.default;
-    exports.d = t1_2.default;
+    Object.defineProperty(exports, "d", { enumerable: true, get: function () { return t1_2.default; } });
     t1_2.default;
     var e2 = t1_3;
     exports.e1 = t1_3.default;
@@ -62,7 +63,7 @@ define(["require", "exports", "./t1", "./t1", "./t1", "./t1", "./t1", "./t1"], f
     t1_3.default;
     e2.default;
     exports.f1 = t1_4.default;
-    exports.f2 = t1_4.default;
+    Object.defineProperty(exports, "f2", { enumerable: true, get: function () { return t1_4.default; } });
     t1_4.default;
     t1_4.default;
 });

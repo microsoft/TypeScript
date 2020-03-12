@@ -71,7 +71,7 @@ declare module m {
         class public1 {
         }
     }
-    var x: {
+    export var x: {
         x: private1;
         y: m2.public1;
         (): m2.public1[];
@@ -79,12 +79,12 @@ declare module m {
         [n: number]: private1;
         [s: string]: m2.public1;
     };
-    var x2: {
+    export var x2: {
         x: private1;
         y: m2.public1;
         method(): private1;
     };
-    var x3: {
+    export var x3: {
         (): m2.public1[];
         [s: string]: m2.public1;
         [n: number]: private1;
@@ -92,8 +92,9 @@ declare module m {
         y: m2.public1;
         method(): private1;
     };
-    var y: (a: private1) => m2.public1;
-    var y2: (a: private1) => m2.public1;
-    var z: new (a: private1) => m2.public1;
-    var z2: new (a: private1) => m2.public1;
+    export var y: (a: private1) => m2.public1;
+    export var y2: (a: private1) => m2.public1;
+    export var z: new (a: private1) => m2.public1;
+    export var z2: new (a: private1) => m2.public1;
+    export {};
 }

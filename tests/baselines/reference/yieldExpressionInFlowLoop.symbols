@@ -1,0 +1,14 @@
+=== tests/cases/compiler/yieldExpressionInFlowLoop.ts ===
+function* f() {
+>f : Symbol(f, Decl(yieldExpressionInFlowLoop.ts, 0, 0))
+
+    let result;
+>result : Symbol(result, Decl(yieldExpressionInFlowLoop.ts, 1, 7))
+
+    while (1) {
+        result = yield result;
+>result : Symbol(result, Decl(yieldExpressionInFlowLoop.ts, 1, 7))
+>result : Symbol(result, Decl(yieldExpressionInFlowLoop.ts, 1, 7))
+    }
+}
+

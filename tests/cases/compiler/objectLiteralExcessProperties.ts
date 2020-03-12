@@ -31,3 +31,20 @@ interface Indexed {
 var b10: Indexed = { 0: { }, '1': { } }; // ok
 
 var b11: Indexed = { 0: { colour: "blue" } }; // nested object literal still errors
+
+// Repros inspired by #28752
+
+function test<T extends IFoo>() {
+    // No excess property checks on generic types
+    const obj1: T = { name: "test" };
+    // No excess property checks on intersections involving generics
+    const obj2: T & { prop: boolean } = { name: "test", prop: true };
+    // Excess property checks only on non-generic parts of unions
+    const obj3: T | { prop: boolean } = { name: "test", prop: true };
+    // Excess property checks only on non-generic parts of unions
+    const obj4: T & { prop: boolean } | { name: string } = { name: "test", prop: true };
+    // No excess property checks when union includes 'object' type
+    const obj5: object | { x: string } = { z: 'abc' }
+    // The 'object' type has no effect on intersections
+    const obj6: object & { x: string } = { z: 'abc' }
+}

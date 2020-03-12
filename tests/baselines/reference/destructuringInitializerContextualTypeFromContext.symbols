@@ -1,0 +1,72 @@
+=== tests/cases/compiler/destructuringInitializerContextualTypeFromContext.ts ===
+interface SFC<P = {}> {
+>SFC : Symbol(SFC, Decl(destructuringInitializerContextualTypeFromContext.ts, 0, 0))
+>P : Symbol(P, Decl(destructuringInitializerContextualTypeFromContext.ts, 0, 14))
+
+    (props: P & { children?: any }): any | null;
+>props : Symbol(props, Decl(destructuringInitializerContextualTypeFromContext.ts, 1, 5))
+>P : Symbol(P, Decl(destructuringInitializerContextualTypeFromContext.ts, 0, 14))
+>children : Symbol(children, Decl(destructuringInitializerContextualTypeFromContext.ts, 1, 17))
+}
+
+interface Props {
+>Props : Symbol(Props, Decl(destructuringInitializerContextualTypeFromContext.ts, 2, 1))
+
+    name: "Apollo" | "Artemis" | "Dionysus" | "Persephone";
+>name : Symbol(Props.name, Decl(destructuringInitializerContextualTypeFromContext.ts, 4, 17))
+}
+
+const Parent: SFC<Props> = ({
+>Parent : Symbol(Parent, Decl(destructuringInitializerContextualTypeFromContext.ts, 8, 5))
+>SFC : Symbol(SFC, Decl(destructuringInitializerContextualTypeFromContext.ts, 0, 0))
+>Props : Symbol(Props, Decl(destructuringInitializerContextualTypeFromContext.ts, 2, 1))
+
+    children,
+>children : Symbol(children, Decl(destructuringInitializerContextualTypeFromContext.ts, 8, 29))
+
+    name = "Artemis",
+>name : Symbol(name, Decl(destructuringInitializerContextualTypeFromContext.ts, 9, 13))
+
+    ...props
+>props : Symbol(props, Decl(destructuringInitializerContextualTypeFromContext.ts, 10, 21))
+
+}) => Child({name, ...props});
+>Child : Symbol(Child, Decl(destructuringInitializerContextualTypeFromContext.ts, 14, 5))
+>name : Symbol(name, Decl(destructuringInitializerContextualTypeFromContext.ts, 12, 13))
+>props : Symbol(props, Decl(destructuringInitializerContextualTypeFromContext.ts, 10, 21))
+
+const Child: SFC<Props> = ({
+>Child : Symbol(Child, Decl(destructuringInitializerContextualTypeFromContext.ts, 14, 5))
+>SFC : Symbol(SFC, Decl(destructuringInitializerContextualTypeFromContext.ts, 0, 0))
+>Props : Symbol(Props, Decl(destructuringInitializerContextualTypeFromContext.ts, 2, 1))
+
+    children,
+>children : Symbol(children, Decl(destructuringInitializerContextualTypeFromContext.ts, 14, 28))
+
+    name = "Artemis",
+>name : Symbol(name, Decl(destructuringInitializerContextualTypeFromContext.ts, 15, 13))
+
+    ...props
+>props : Symbol(props, Decl(destructuringInitializerContextualTypeFromContext.ts, 16, 21))
+
+}) => `name: ${name} props: ${JSON.stringify(props)}`;
+>name : Symbol(name, Decl(destructuringInitializerContextualTypeFromContext.ts, 15, 13))
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>props : Symbol(props, Decl(destructuringInitializerContextualTypeFromContext.ts, 16, 21))
+
+// Repro from #29189
+
+declare function f(g: (as: string[]) => void): void
+>f : Symbol(f, Decl(destructuringInitializerContextualTypeFromContext.ts, 18, 54))
+>g : Symbol(g, Decl(destructuringInitializerContextualTypeFromContext.ts, 22, 19))
+>as : Symbol(as, Decl(destructuringInitializerContextualTypeFromContext.ts, 22, 23))
+
+f(([_1, _2 = undefined]) => undefined)
+>f : Symbol(f, Decl(destructuringInitializerContextualTypeFromContext.ts, 18, 54))
+>_1 : Symbol(_1, Decl(destructuringInitializerContextualTypeFromContext.ts, 23, 4))
+>_2 : Symbol(_2, Decl(destructuringInitializerContextualTypeFromContext.ts, 23, 7))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+

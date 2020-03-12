@@ -7,7 +7,7 @@ module _this { //Error
     }
 }
 var f = () => this;
->f : () => any
->() => this : () => any
->this : any
+>f : () => typeof globalThis
+>() => this : () => typeof globalThis
+>this : typeof globalThis
 

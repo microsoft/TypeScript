@@ -7,7 +7,7 @@ tests/cases/compiler/a.js(19,1): error TS7028: Unused label.
     function foo(a, b) {
         switch (a) {
             case 10:
-            ~~~~
+            ~~~~~~~~
 !!! error TS7029: Fallthrough case in switch.
                 if (b) {
                     return b;

@@ -5,9 +5,12 @@ tests/cases/conformance/classes/members/accessibility/privateProtectedMembersAre
 tests/cases/conformance/classes/members/accessibility/privateProtectedMembersAreNotAccessibleDestructuring.ts(20,5): error TS2341: Property 'priv' is private and only accessible within class 'K'.
 tests/cases/conformance/classes/members/accessibility/privateProtectedMembersAreNotAccessibleDestructuring.ts(20,5): error TS2341: Property 'privateMethod' is private and only accessible within class 'K'.
 tests/cases/conformance/classes/members/accessibility/privateProtectedMembersAreNotAccessibleDestructuring.ts(20,5): error TS2445: Property 'prot' is protected and only accessible within class 'K' and its subclasses.
+tests/cases/conformance/classes/members/accessibility/privateProtectedMembersAreNotAccessibleDestructuring.ts(21,12): error TS2341: Property 'priv' is private and only accessible within class 'K'.
+tests/cases/conformance/classes/members/accessibility/privateProtectedMembersAreNotAccessibleDestructuring.ts(21,12): error TS2341: Property 'privateMethod' is private and only accessible within class 'K'.
+tests/cases/conformance/classes/members/accessibility/privateProtectedMembersAreNotAccessibleDestructuring.ts(21,12): error TS2445: Property 'prot' is protected and only accessible within class 'K' and its subclasses.
 
 
-==== tests/cases/conformance/classes/members/accessibility/privateProtectedMembersAreNotAccessibleDestructuring.ts (7 errors) ====
+==== tests/cases/conformance/classes/members/accessibility/privateProtectedMembersAreNotAccessibleDestructuring.ts (10 errors) ====
     class K {
         private priv;
         protected prot;
@@ -26,7 +29,7 @@ tests/cases/conformance/classes/members/accessibility/privateProtectedMembersAre
         }
     }
     let k = new K();
-    let { priv } = k; // error 
+    let { priv } = k; // error
         ~~~~~~~~
 !!! error TS2341: Property 'priv' is private and only accessible within class 'K'.
     let { prot } = k; // error
@@ -35,11 +38,20 @@ tests/cases/conformance/classes/members/accessibility/privateProtectedMembersAre
     let { privateMethod } = k; // error
         ~~~~~~~~~~~~~~~~~
 !!! error TS2341: Property 'privateMethod' is private and only accessible within class 'K'.
-    let { priv: a, prot: b, privateMethod: f } = k; // error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    let { priv: a, prot: b, privateMethod: pm } = k; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2341: Property 'priv' is private and only accessible within class 'K'.
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2341: Property 'privateMethod' is private and only accessible within class 'K'.
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2445: Property 'prot' is protected and only accessible within class 'K' and its subclasses.
+    function f({ priv, prot, privateMethod }: K) {
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'priv' is private and only accessible within class 'K'.
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'privateMethod' is private and only accessible within class 'K'.
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'prot' is protected and only accessible within class 'K' and its subclasses.
+    
+    }
     

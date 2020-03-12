@@ -30,6 +30,7 @@ var v4 = function () { return 5; };
 //// [file3.js]
 "use strict";
 exports.__esModule = true;
+exports.v3 = void 0;
 exports.v3 = true;
 var v2 = [1, 2, 3]; // Module scope. Should not appear in global scope
 //// [file4.js]

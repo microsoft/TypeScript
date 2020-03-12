@@ -18,7 +18,7 @@ edit.applyRefactor({
     q[0]++
 
     function newFunction() {
-        return [0];
+        return [0]
     }
 }`
 });

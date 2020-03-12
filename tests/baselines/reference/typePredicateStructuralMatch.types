@@ -2,25 +2,25 @@
 // Repro from #12235
 
 getResults1([]);
->getResults1([]) : Result[]
->getResults1 : (value: Result[] | { data: Result[]; }) => Result[]
+>getResults1([]) : Results
+>getResults1 : (value: Results | { data: Results; }) => Results
 >[] : undefined[]
 
 getResults1({data: []});
->getResults1({data: []}) : Result[]
->getResults1 : (value: Result[] | { data: Result[]; }) => Result[]
+>getResults1({data: []}) : Results
+>getResults1 : (value: Results | { data: Results; }) => Results
 >{data: []} : { data: undefined[]; }
 >data : undefined[]
 >[] : undefined[]
 
 getResults2([]);
->getResults2([]) : Result[]
->getResults2 : (value: Result[] | { data: Result[]; }) => Result[]
+>getResults2([]) : Results
+>getResults2 : (value: Results | { data: Results; }) => Results
 >[] : undefined[]
 
 getResults2({data: []});
->getResults2({data: []}) : Result[]
->getResults2 : (value: Result[] | { data: Result[]; }) => Result[]
+>getResults2({data: []}) : Results
+>getResults2 : (value: Results | { data: Results; }) => Results
 >{data: []} : { data: undefined[]; }
 >data : undefined[]
 >[] : undefined[]
@@ -30,7 +30,7 @@ type Result = { value: string };
 >value : string
 
 type Results = Result[];
->Results : Result[]
+>Results : Results
 
 function isResponseInData<T>(value: T | { data: T}): value is { data: T } {
 >isResponseInData : <T>(value: T | { data: T; }) => value is { data: T; }
@@ -47,19 +47,19 @@ function isResponseInData<T>(value: T | { data: T}): value is { data: T } {
 }
 
 function getResults1(value: Results | { data: Results }): Results {
->getResults1 : (value: Result[] | { data: Result[]; }) => Result[]
->value : Result[] | { data: Result[]; }
->data : Result[]
+>getResults1 : (value: Results | { data: Results; }) => Results
+>value : Results | { data: Results; }
+>data : Results
 
     return isResponseInData(value) ? value.data : value;
->isResponseInData(value) ? value.data : value : Result[]
+>isResponseInData(value) ? value.data : value : Results
 >isResponseInData(value) : boolean
 >isResponseInData : <T>(value: T | { data: T; }) => value is { data: T; }
->value : Result[] | { data: Result[]; }
->value.data : Result[]
->value : { data: Result[]; }
->data : Result[]
->value : Result[]
+>value : Results | { data: Results; }
+>value.data : Results
+>value : { data: Results; }
+>data : Results
+>value : Results
 }
 
 function isPlainResponse<T>(value: T | { data: T}): value is T {
@@ -77,17 +77,17 @@ function isPlainResponse<T>(value: T | { data: T}): value is T {
 }
 
 function getResults2(value: Results | { data: Results }): Results {
->getResults2 : (value: Result[] | { data: Result[]; }) => Result[]
->value : Result[] | { data: Result[]; }
->data : Result[]
+>getResults2 : (value: Results | { data: Results; }) => Results
+>value : Results | { data: Results; }
+>data : Results
 
     return isPlainResponse(value) ? value : value.data;
->isPlainResponse(value) ? value : value.data : Result[]
+>isPlainResponse(value) ? value : value.data : Results
 >isPlainResponse(value) : boolean
 >isPlainResponse : <T>(value: T | { data: T; }) => value is T
->value : Result[] | { data: Result[]; }
->value : Result[]
->value.data : Result[]
->value : { data: Result[]; }
->data : Result[]
+>value : Results | { data: Results; }
+>value : Results
+>value.data : Results
+>value : { data: Results; }
+>data : Results
 }

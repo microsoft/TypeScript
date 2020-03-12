@@ -1,0 +1,13 @@
+=== tests/cases/compiler/extendGlobalThis2.ts ===
+namespace globalThis {
+>globalThis : typeof globalThis
+
+    export function foo() { console.log("x"); }
+>foo : () => void
+>console.log("x") : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>"x" : "x"
+}
+

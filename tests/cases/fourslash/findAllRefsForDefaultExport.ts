@@ -1,17 +1,16 @@
 /// <reference path="fourslash.ts" />
 
 // @Filename: a.ts
-////export default function /*def*/[|{| "isWriteAccess": true, "isDefinition": true |}f|]() {}
+////[|export default function /*def*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}f|]() {}|]
 
 // @Filename: b.ts
-////import [|{| "isWriteAccess": true, "isDefinition": true |}g|] from "./a";
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}g|] from "./a";|]
 ////[|/*ref*/g|]();
 
 // @Filename: c.ts
 ////import { f } from "./a";
 
-const ranges = test.ranges();
-const [r0, r1, r2] = ranges;
+const [r0Def, r0, r1Def, r1, r2] = test.ranges();
 verify.referenceGroups(r0, [
     { definition: "function f(): void", ranges: [r0] },
     { definition: "(alias) function g(): void\nimport g", ranges: [r1, r2] }

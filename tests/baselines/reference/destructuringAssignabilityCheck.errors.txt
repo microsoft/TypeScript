@@ -1,0 +1,43 @@
+tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts(1,7): error TS2461: Type '{}' is not an array type.
+tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts(2,7): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts(3,3): error TS2461: Type '{}' is not an array type.
+tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts(4,3): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts(6,14): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts(9,14): error TS2461: Type '{}' is not an array type.
+tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts(13,7): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts(15,7): error TS2461: Type '{}' is not an array type.
+
+
+==== tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts (8 errors) ====
+    const [] = {}; // should be error
+          ~~
+!!! error TS2461: Type '{}' is not an array type.
+    const {} = undefined; // error correctly
+          ~~
+!!! error TS2532: Object is possibly 'undefined'.
+    (([]) => 0)({}); // should be error
+      ~~
+!!! error TS2461: Type '{}' is not an array type.
+    (({}) => 0)(undefined); // should be error
+      ~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+    function foo({}: undefined) {
+                 ~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+        return 0
+    }
+    function bar([]: {}) {
+                 ~~~~~~
+!!! error TS2461: Type '{}' is not an array type.
+        return 0
+    }
+    
+    const { }: undefined = 1
+          ~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+    const []: {} = {}
+          ~~
+!!! error TS2461: Type '{}' is not an array type.
+    

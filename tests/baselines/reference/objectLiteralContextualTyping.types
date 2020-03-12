@@ -74,11 +74,11 @@ declare function bar<T>(param: { x?: T }): T;
 >x : T
 
 var b = bar({});
->b : {}
->bar({}) : {}
+>b : unknown
+>bar({}) : unknown
 >bar : <T>(param: { x?: T; }) => T
 >{} : {}
 
 var b: {};
->b : {}
+>b : unknown
 

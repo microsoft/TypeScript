@@ -3,7 +3,7 @@
 //@Filename: findAllRefsOnDefinition2-import.ts
 ////export module Test{
 ////
-////    export interface [|{| "isWriteAccess": true, "isDefinition": true |}start|] { }
+////    [|export interface [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}start|] { }|]
 ////
 ////    export interface stop { }
 ////}
@@ -14,4 +14,4 @@
 ////var start: Second.Test.[|start|];
 ////var stop: Second.Test.stop;
 
-verify.singleReferenceGroup("interface Test.start");
+verify.singleReferenceGroup("interface Test.start", "start");

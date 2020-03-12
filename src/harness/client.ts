@@ -37,7 +37,7 @@ namespace ts.server {
         private sequence = 0;
         private lineMaps: Map<number[]> = createMap<number[]>();
         private messages: string[] = [];
-        private lastRenameEntry: RenameEntry;
+        private lastRenameEntry: RenameEntry | undefined;
 
         constructor(private host: SessionClientHost) {
         }
@@ -90,7 +90,7 @@ namespace ts.server {
             return <T>request;
         }
 
-        private processResponse<T extends protocol.Response>(request: protocol.Request): T {
+        private processResponse<T extends protocol.Response>(request: protocol.Request, expectEmptyBody = false): T {
             let foundResponseMessage = false;
             let response!: T;
             while (!foundResponseMessage) {
@@ -118,9 +118,17 @@ namespace ts.server {
                 throw new Error("Error " + response.message);
             }
 
-            Debug.assert(!!response.body, "Malformed response: Unexpected empty response body.");
+            Debug.assert(expectEmptyBody || !!response.body, "Malformed response: Unexpected empty response body.");
+            Debug.assert(!expectEmptyBody || !response.body, "Malformed response: Unexpected non-empty response body.");
 
             return response;
+        }
+
+        /*@internal*/
+        configure(preferences: UserPreferences) {
+            const args: protocol.ConfigureRequestArguments = { preferences };
+            const request = this.processRequest(CommandNames.Configure, args);
+            this.processResponse(request, /*expectEmptyBody*/ true);
         }
 
         openFile(file: string, fileContent?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
@@ -133,11 +141,13 @@ namespace ts.server {
             this.processRequest(CommandNames.Close, args);
         }
 
-        changeFile(fileName: string, start: number, end: number, insertString: string): void {
+        createChangeFileRequestArgs(fileName: string, start: number, end: number, insertString: string): protocol.ChangeRequestArgs {
+            return { ...this.createFileLocationRequestArgsWithEndLineAndOffset(fileName, start, end), insertString };
+        }
+
+        changeFile(fileName: string, args: protocol.ChangeRequestArgs): void {
             // clear the line map after an edit
             this.lineMaps.set(fileName, undefined!); // TODO: GH#18217
-
-            const args: protocol.ChangeRequestArgs = { ...this.createFileLocationRequestArgsWithEndLineAndOffset(fileName, start, end), insertString };
             this.processRequest(CommandNames.Change, args);
         }
 
@@ -280,8 +290,8 @@ namespace ts.server {
             const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
             const request = this.processRequest<protocol.DefinitionRequest>(CommandNames.DefinitionAndBoundSpan, args);
-            const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanReponse>(request);
-            const body = Debug.assertDefined(response.body); // TODO: GH#18217
+            const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanResponse>(request);
+            const body = Debug.checkDefined(response.body); // TODO: GH#18217
 
             return {
                 definitions: body.definitions.map(entry => ({
@@ -364,16 +374,18 @@ namespace ts.server {
         private getDiagnostics(file: string, command: CommandNames): DiagnosticWithLocation[] {
             const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest | protocol.SemanticDiagnosticsSyncRequest | protocol.SuggestionDiagnosticsSyncRequest>(command, { file, includeLinePosition: true });
             const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse | protocol.SemanticDiagnosticsSyncResponse | protocol.SuggestionDiagnosticsSyncResponse>(request);
+            const sourceText = getSnapshotText(this.host.getScriptSnapshot(file)!);
+            const fakeSourceFile = { fileName: file, text: sourceText } as SourceFile; // Warning! This is a huge lie!
 
             return (<protocol.DiagnosticWithLinePosition[]>response.body).map((entry): DiagnosticWithLocation => {
                 const category = firstDefined(Object.keys(DiagnosticCategory), id =>
                     isString(id) && entry.category === id.toLowerCase() ? (<any>DiagnosticCategory)[id] : undefined);
                 return {
-                    file: undefined!, // TODO: GH#18217
+                    file: fakeSourceFile,
                     start: entry.start,
                     length: entry.length,
                     messageText: entry.message,
-                    category: Debug.assertDefined(category, "convertDiagnostic: category should not be undefined"),
+                    category: Debug.checkDefined(category, "convertDiagnostic: category should not be undefined"),
                     code: entry.code,
                     reportsUnnecessary: entry.reportsUnnecessary,
                 };
@@ -384,7 +396,8 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getRenameInfo(fileName: string, position: number, findInStrings?: boolean, findInComments?: boolean): RenameInfo {
+        getRenameInfo(fileName: string, position: number, _options?: RenameInfoOptions, findInStrings?: boolean, findInComments?: boolean): RenameInfo {
+            // Not passing along 'options' because server should already have those from the 'configure' command
             const args: protocol.RenameRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), findInStrings, findInComments };
 
             const request = this.processRequest<protocol.RenameRequest>(CommandNames.Rename, args);
@@ -393,8 +406,15 @@ namespace ts.server {
             const locations: RenameLocation[] = [];
             for (const entry of body.locs) {
                 const fileName = entry.file;
-                for (const { start, end, ...prefixSuffixText } of entry.locs) {
-                    locations.push({ textSpan: this.decodeSpan({ start, end }, fileName), fileName, ...prefixSuffixText });
+                for (const { start, end, contextStart, contextEnd, ...prefixSuffixText } of entry.locs) {
+                    locations.push({
+                        textSpan: this.decodeSpan({ start, end }, fileName),
+                        fileName,
+                        ...(contextStart !== undefined ?
+                            { contextSpan: this.decodeSpan({ start: contextStart, end: contextEnd! }, fileName) } :
+                            undefined),
+                        ...prefixSuffixText
+                    });
                 }
             }
 
@@ -422,16 +442,20 @@ namespace ts.server {
             return renameInfo;
         }
 
+        getSmartSelectionRange() {
+            return notImplemented();
+        }
+
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
             if (!this.lastRenameEntry ||
                 this.lastRenameEntry.inputs.fileName !== fileName ||
                 this.lastRenameEntry.inputs.position !== position ||
                 this.lastRenameEntry.inputs.findInStrings !== findInStrings ||
                 this.lastRenameEntry.inputs.findInComments !== findInComments) {
-                this.getRenameInfo(fileName, position, findInStrings, findInComments);
+                this.getRenameInfo(fileName, position, { allowRenameOfImportPath: true }, findInStrings, findInComments);
             }
 
-            return this.lastRenameEntry.locations;
+            return this.lastRenameEntry!.locations;
         }
 
         private decodeNavigationBarItems(items: protocol.NavigationBarItem[] | undefined, fileName: string, lineMap: number[]): NavigationBarItem[] {
@@ -496,14 +520,14 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
+        getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems | undefined {
             const args: protocol.SignatureHelpRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
             const request = this.processRequest<protocol.SignatureHelpRequest>(CommandNames.SignatureHelp, args);
             const response = this.processResponse<protocol.SignatureHelpResponse>(request);
 
             if (!response.body) {
-                return undefined!; // TODO: GH#18217
+                return undefined;
             }
 
             const { items, applicableSpan: encodedApplicableSpan, selectedItemIndex, argumentIndex, argumentCount } = response.body;
@@ -575,7 +599,7 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getCodeFixesAtPosition(file: string, start: number, end: number, errorCodes: ReadonlyArray<number>): ReadonlyArray<CodeFixAction> {
+        getCodeFixesAtPosition(file: string, start: number, end: number, errorCodes: readonly number[]): readonly CodeFixAction[] {
             const args: protocol.CodeFixRequestArgs = { ...this.createFileRangeRequestArgs(file, start, end), errorCodes };
 
             const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixes, args);
@@ -653,7 +677,7 @@ namespace ts.server {
             };
         }
 
-        organizeImports(_scope: OrganizeImportsScope, _formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {
+        organizeImports(_scope: OrganizeImportsScope, _formatOptions: FormatCodeSettings): readonly FileTextChanges[] {
             return notImplemented();
         }
 
@@ -695,7 +719,8 @@ namespace ts.server {
         }
 
         configurePlugin(pluginName: string, configuration: any): void {
-            this.processRequest<protocol.ConfigurePluginRequest>("configurePlugin", { pluginName, configuration });
+            const request = this.processRequest<protocol.ConfigurePluginRequest>("configurePlugin", { pluginName, configuration });
+            this.processResponse<protocol.ConfigurePluginResponse>(request, /*expectEmptyBody*/ true);
         }
 
         getIndentationAtPosition(_fileName: string, _position: number, _options: EditorOptions): number {
@@ -718,6 +743,51 @@ namespace ts.server {
             return notImplemented();
         }
 
+        private convertCallHierarchyItem(item: protocol.CallHierarchyItem): CallHierarchyItem {
+            return {
+                file: item.file,
+                name: item.name,
+                kind: item.kind,
+                span: this.decodeSpan(item.span, item.file),
+                selectionSpan: this.decodeSpan(item.selectionSpan, item.file)
+            };
+        }
+
+        prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined {
+            const args = this.createFileLocationRequestArgs(fileName, position);
+            const request = this.processRequest<protocol.PrepareCallHierarchyRequest>(CommandNames.PrepareCallHierarchy, args);
+            const response = this.processResponse<protocol.PrepareCallHierarchyResponse>(request);
+            return response.body && mapOneOrMany(response.body, item => this.convertCallHierarchyItem(item));
+        }
+
+        private convertCallHierarchyIncomingCall(item: protocol.CallHierarchyIncomingCall): CallHierarchyIncomingCall {
+            return {
+                from: this.convertCallHierarchyItem(item.from),
+                fromSpans: item.fromSpans.map(span => this.decodeSpan(span, item.from.file))
+            };
+        }
+
+        provideCallHierarchyIncomingCalls(fileName: string, position: number) {
+            const args = this.createFileLocationRequestArgs(fileName, position);
+            const request = this.processRequest<protocol.ProvideCallHierarchyIncomingCallsRequest>(CommandNames.PrepareCallHierarchy, args);
+            const response = this.processResponse<protocol.ProvideCallHierarchyIncomingCallsResponse>(request);
+            return response.body.map(item => this.convertCallHierarchyIncomingCall(item));
+        }
+
+        private convertCallHierarchyOutgoingCall(file: string, item: protocol.CallHierarchyOutgoingCall): CallHierarchyOutgoingCall {
+            return {
+                to: this.convertCallHierarchyItem(item.to),
+                fromSpans: item.fromSpans.map(span => this.decodeSpan(span, file))
+            };
+        }
+
+        provideCallHierarchyOutgoingCalls(fileName: string, position: number) {
+            const args = this.createFileLocationRequestArgs(fileName, position);
+            const request = this.processRequest<protocol.ProvideCallHierarchyOutgoingCallsRequest>(CommandNames.PrepareCallHierarchy, args);
+            const response = this.processResponse<protocol.ProvideCallHierarchyOutgoingCallsResponse>(request);
+            return response.body.map(item => this.convertCallHierarchyOutgoingCall(fileName, item));
+        }
+
         getProgram(): Program {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
         }
@@ -735,6 +805,10 @@ namespace ts.server {
         }
 
         getSourceMapper(): never {
+            return notImplemented();
+        }
+
+        clearSourceMapperCache(): never {
             return notImplemented();
         }
 

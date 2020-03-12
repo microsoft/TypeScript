@@ -129,3 +129,75 @@ class Foo2
     }
 }
 
+// Repro from  #29513
+
+class AInfo {
+>AInfo : Symbol(AInfo, Decl(narrowingOfDottedNames.ts, 56, 1))
+
+    a_count: number = 1;
+>a_count : Symbol(AInfo.a_count, Decl(narrowingOfDottedNames.ts, 60, 13))
+}
+
+class BInfo {
+>BInfo : Symbol(BInfo, Decl(narrowingOfDottedNames.ts, 62, 1))
+
+    b_count: number = 1;
+>b_count : Symbol(BInfo.b_count, Decl(narrowingOfDottedNames.ts, 64, 13))
+}
+
+class Base {
+>Base : Symbol(Base, Decl(narrowingOfDottedNames.ts, 66, 1))
+
+    id: number = 0;
+>id : Symbol(Base.id, Decl(narrowingOfDottedNames.ts, 68, 12))
+}
+
+class A2 extends Base {
+>A2 : Symbol(A2, Decl(narrowingOfDottedNames.ts, 70, 1))
+>Base : Symbol(Base, Decl(narrowingOfDottedNames.ts, 66, 1))
+
+    info!: AInfo;
+>info : Symbol(A2.info, Decl(narrowingOfDottedNames.ts, 72, 23))
+>AInfo : Symbol(AInfo, Decl(narrowingOfDottedNames.ts, 56, 1))
+}
+
+class B2 extends Base {
+>B2 : Symbol(B2, Decl(narrowingOfDottedNames.ts, 74, 1))
+>Base : Symbol(Base, Decl(narrowingOfDottedNames.ts, 66, 1))
+
+    info!: BInfo;
+>info : Symbol(B2.info, Decl(narrowingOfDottedNames.ts, 76, 23))
+>BInfo : Symbol(BInfo, Decl(narrowingOfDottedNames.ts, 62, 1))
+}
+
+let target: Base = null as any;
+>target : Symbol(target, Decl(narrowingOfDottedNames.ts, 80, 3))
+>Base : Symbol(Base, Decl(narrowingOfDottedNames.ts, 66, 1))
+
+while (target) {
+>target : Symbol(target, Decl(narrowingOfDottedNames.ts, 80, 3))
+
+    if (target instanceof A2) {
+>target : Symbol(target, Decl(narrowingOfDottedNames.ts, 80, 3))
+>A2 : Symbol(A2, Decl(narrowingOfDottedNames.ts, 70, 1))
+
+        target.info.a_count = 3;
+>target.info.a_count : Symbol(AInfo.a_count, Decl(narrowingOfDottedNames.ts, 60, 13))
+>target.info : Symbol(A2.info, Decl(narrowingOfDottedNames.ts, 72, 23))
+>target : Symbol(target, Decl(narrowingOfDottedNames.ts, 80, 3))
+>info : Symbol(A2.info, Decl(narrowingOfDottedNames.ts, 72, 23))
+>a_count : Symbol(AInfo.a_count, Decl(narrowingOfDottedNames.ts, 60, 13))
+    }
+    else if (target instanceof B2) {
+>target : Symbol(target, Decl(narrowingOfDottedNames.ts, 80, 3))
+>B2 : Symbol(B2, Decl(narrowingOfDottedNames.ts, 74, 1))
+
+        const j: BInfo = target.info;
+>j : Symbol(j, Decl(narrowingOfDottedNames.ts, 87, 13))
+>BInfo : Symbol(BInfo, Decl(narrowingOfDottedNames.ts, 62, 1))
+>target.info : Symbol(B2.info, Decl(narrowingOfDottedNames.ts, 76, 23))
+>target : Symbol(target, Decl(narrowingOfDottedNames.ts, 80, 3))
+>info : Symbol(B2.info, Decl(narrowingOfDottedNames.ts, 76, 23))
+    }
+}
+

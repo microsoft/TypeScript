@@ -37,3 +37,15 @@ enum E12 {
     D = {},
     E = 1 + 1,
 }
+
+// Enum with incorrect syntax
+enum E13 {
+    postComma,
+    postValueComma = 1,
+
+    postSemicolon;
+    postColonValueComma: 2,
+    postColonValueSemicolon: 3;
+};
+
+enum E14 { a, b: any "hello" += 1, c, d}

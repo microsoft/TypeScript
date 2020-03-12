@@ -10,18 +10,18 @@ declare const a: { prop: string } & { prop: number };
 >prop : number
 
 declare const b: { prop: string & number };
->b : { prop: string & number; }
->prop : string & number
+>b : { prop: never; }
+>prop : never
 
-f(a);  // string & number
->f(a) : string & number
+f(a);  // never
+>f(a) : never
 >f : <T>(x: { prop: T; }) => T
 >a : { prop: string; } & { prop: number; }
 
-f(b);  // string & number
->f(b) : string & number
+f(b);  // never
+>f(b) : never
 >f : <T>(x: { prop: T; }) => T
->b : { prop: string & number; }
+>b : { prop: never; }
 
 // Repro from #18354
 

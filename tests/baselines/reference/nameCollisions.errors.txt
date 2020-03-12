@@ -67,16 +67,20 @@ tests/cases/compiler/nameCollisions.ts(37,11): error TS2300: Duplicate identifie
         class C { }
               ~
 !!! error TS2300: Duplicate identifier 'C'.
+!!! related TS6203 tests/cases/compiler/nameCollisions.ts:34:14: 'C' was also declared here.
         function C() { } // error
                  ~
 !!! error TS2300: Duplicate identifier 'C'.
+!!! related TS6203 tests/cases/compiler/nameCollisions.ts:33:11: 'C' was also declared here.
     
         function C2() { }
                  ~~
 !!! error TS2300: Duplicate identifier 'C2'.
+!!! related TS6203 tests/cases/compiler/nameCollisions.ts:37:11: 'C2' was also declared here.
         class C2 { } // error
               ~~
 !!! error TS2300: Duplicate identifier 'C2'.
+!!! related TS6203 tests/cases/compiler/nameCollisions.ts:36:14: 'C2' was also declared here.
     
         function fi() { }
         interface fi { } // ok

@@ -1,16 +1,22 @@
 tests/cases/conformance/types/mapped/mappedTypes6.ts(23,5): error TS2322: Type 'T' is not assignable to type 'Required<T>'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(24,5): error TS2322: Type 'Partial<T>' is not assignable to type 'Required<T>'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(27,5): error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
+  'Partial<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(37,5): error TS2322: Type 'Required<T>' is not assignable to type 'Denullified<T>'.
   Type 'T[P]' is not assignable to type 'NonNullable<T[P]>'.
+    Type 'T[keyof T]' is not assignable to type 'NonNullable<T[P]>'.
+      Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'NonNullable<T[P]>'.
+        Type 'T[string]' is not assignable to type 'NonNullable<T[P]>'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(38,5): error TS2322: Type 'T' is not assignable to type 'Denullified<T>'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(39,5): error TS2322: Type 'Partial<T>' is not assignable to type 'Denullified<T>'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(42,5): error TS2322: Type 'T' is not assignable to type 'Required<T>'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(43,5): error TS2322: Type 'Partial<T>' is not assignable to type 'Required<T>'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(47,5): error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
+  'Partial<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(56,5): error TS2322: Type '{}' is not assignable to type 'Denullified<T>'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(57,5): error TS2322: Type '{}' is not assignable to type 'Required<T>'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(58,5): error TS2322: Type '{}' is not assignable to type 'T'.
+  '{}' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(92,1): error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Foo'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(104,1): error TS2739: Type '{ a: number; }' is missing the following properties from type 'Required<Foo>': b, c, d
 tests/cases/conformance/types/mapped/mappedTypes6.ts(105,1): error TS2739: Type '{ a: number; b: number; }' is missing the following properties from type 'Required<Foo>': c, d
@@ -54,6 +60,7 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
         y = z;  // Error
         ~
 !!! error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
+!!! error TS2322:   'Partial<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
         z = x;
         z = y;
         z = z;
@@ -67,6 +74,9 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
         ~
 !!! error TS2322: Type 'Required<T>' is not assignable to type 'Denullified<T>'.
 !!! error TS2322:   Type 'T[P]' is not assignable to type 'NonNullable<T[P]>'.
+!!! error TS2322:     Type 'T[keyof T]' is not assignable to type 'NonNullable<T[P]>'.
+!!! error TS2322:       Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'NonNullable<T[P]>'.
+!!! error TS2322:         Type 'T[string]' is not assignable to type 'NonNullable<T[P]>'.
         w = y;  // Error
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'Denullified<T>'.
@@ -87,6 +97,7 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
         y = z;  // Error
         ~
 !!! error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
+!!! error TS2322:   'Partial<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
         z = w;
         z = x;
         z = y;
@@ -104,6 +115,7 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
         y = {};  // Error
         ~
 !!! error TS2322: Type '{}' is not assignable to type 'T'.
+!!! error TS2322:   '{}' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
         z = {};
     }
     

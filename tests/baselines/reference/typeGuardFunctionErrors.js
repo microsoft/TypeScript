@@ -274,14 +274,14 @@ var D = /** @class */ (function () {
         get: function (p1) {
             return true;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(D.prototype, "m2", {
         set: function (p1) {
             return true;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return D;

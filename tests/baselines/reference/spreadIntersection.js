@@ -23,4 +23,4 @@ var intersection;
 var o1;
 var o1 = __assign({}, intersection);
 var o2;
-var o2 = __assign({}, intersection, { c: false });
+var o2 = __assign(__assign({}, intersection), { c: false });

@@ -1,6 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(42,11): error TS2322: Type '{ children: Element[]; a: number; b: string; }' is not assignable to type 'SingleChildProp'.
-  Types of property 'children' are incompatible.
-    Type 'Element[]' is missing the following properties from type 'Element': type, props
+tests/cases/conformance/jsx/file.tsx(42,11): error TS2746: This JSX tag's 'children' prop expects a single child of type 'Element', but multiple children were provided.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
@@ -47,6 +45,4 @@ tests/cases/conformance/jsx/file.tsx(42,11): error TS2322: Type '{ children: Ele
     // Error
     let k5 = <SingleChildComp a={10} b="hi"><></><Button /><AnotherButton /></SingleChildComp>;
               ~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ children: Element[]; a: number; b: string; }' is not assignable to type 'SingleChildProp'.
-!!! error TS2322:   Types of property 'children' are incompatible.
-!!! error TS2322:     Type 'Element[]' is missing the following properties from type 'Element': type, props
+!!! error TS2746: This JSX tag's 'children' prop expects a single child of type 'Element', but multiple children were provided.

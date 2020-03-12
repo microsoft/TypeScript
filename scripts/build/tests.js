@@ -1,16 +1,16 @@
 // @ts-check
-const gulp = require("./gulp");
+const gulp = require("gulp");
 const del = require("del");
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
-const mkdirP = require("./mkdirp");
+const mkdirP = require("mkdirp");
+const log = require("fancy-log");
 const cmdLineOptions = require("./options");
-const exec = require("./exec");
-const log = require("fancy-log"); // was `require("gulp-util").log (see https://github.com/gulpjs/gulp-util)
 const { CancellationToken } = require("prex");
-const mochaJs = require.resolve("mocha/bin/_mocha");
+const { exec } = require("./utils");
 
+const mochaJs = require.resolve("mocha/bin/_mocha");
 exports.localBaseline = "tests/baselines/local/";
 exports.refBaseline = "tests/baselines/reference/";
 exports.localRwcBaseline = "internal/baselines/rwc/local";
@@ -27,7 +27,6 @@ exports.localTest262Baseline = "internal/baselines/test262/local";
 async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode, cancelToken = CancellationToken.none) {
     let testTimeout = cmdLineOptions.timeout;
     let tests = cmdLineOptions.tests;
-    const lintFlag = cmdLineOptions.lint;
     const debug = cmdLineOptions.debug;
     const inspect = cmdLineOptions.inspect;
     const runners = cmdLineOptions.runners;
@@ -36,6 +35,8 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
     const testConfigFile = "test.config";
     const failed = cmdLineOptions.failed;
     const keepFailed = cmdLineOptions.keepFailed;
+    const shards = +cmdLineOptions.shards || undefined;
+    const shardId = +cmdLineOptions.shardId || undefined;
     if (!cmdLineOptions.dirty) {
         await cleanTestDirs();
         cancelToken.throwIfCancellationRequested();
@@ -63,8 +64,8 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
         testTimeout = 400000;
     }
 
-    if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed) {
-        writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout, keepFailed);
+    if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed || shards || shardId) {
+        writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout, keepFailed, shards, shardId);
     }
 
     const colors = cmdLineOptions.colors;
@@ -88,11 +89,13 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
         else {
             args.push("--no-colors");
         }
-        if (inspect) {
-            args.unshift("--inspect-brk");
+        if (inspect !== undefined) {
+            args.unshift(inspect == "" ? "--inspect-brk" : "--inspect-brk="+inspect);
+            args.push("-t", "0");
         }
         else if (debug) {
             args.unshift("--debug-brk");
+            args.push("-t", "0");
         }
         else {
             args.push("-t", "" + testTimeout);
@@ -117,8 +120,16 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
             errorStatus = exitCode;
             error = new Error(`Process exited with status code ${errorStatus}.`);
         }
-        else if (lintFlag) {
-            await new Promise((resolve, reject) => gulp.start(["lint"], error => error ? reject(error) : resolve()));
+        else if (process.env.CI === "true") {
+            // finally, do a sanity check and build the compiler with the built version of itself
+            log.info("Starting sanity check build...");
+            // Cleanup everything except lint rules (we'll need those later and would rather not waste time rebuilding them)
+            await exec("gulp", ["clean-tsc", "clean-services", "clean-tsserver", "clean-lssl", "clean-tests"], { cancelToken });
+            const { exitCode } = await exec("gulp", ["local", "--lkg=false"], { cancelToken });
+            if (exitCode !== 0) {
+                errorStatus = exitCode;
+                error = new Error(`Sanity check build process exited with status code ${errorStatus}.`);
+            }
         }
     }
     catch (e) {
@@ -133,26 +144,21 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
     await deleteTemporaryProjectOutput();
 
     if (error !== undefined) {
-        if (watchMode) {
-            throw error;
-        }
-        else {
-            log.error(error);
-            process.exit(typeof errorStatus === "number" ? errorStatus : 2);
-        }
+        process.exitCode = typeof errorStatus === "number" ? errorStatus : 2;
+        throw error;
     }
 }
 exports.runConsoleTests = runConsoleTests;
 
-function cleanTestDirs() {
-    return del([exports.localBaseline, exports.localRwcBaseline])
-        .then(() => mkdirP(exports.localRwcBaseline))
-        .then(() => mkdirP(exports.localBaseline));
+async function cleanTestDirs() {
+    await del([exports.localBaseline, exports.localRwcBaseline])
+    mkdirP.sync(exports.localRwcBaseline);
+    mkdirP.sync(exports.localBaseline);
 }
 exports.cleanTestDirs = cleanTestDirs;
 
 /**
- * used to pass data from jake command line directly to run.js
+ * used to pass data from gulp command line directly to run.js
  * @param {string} tests
  * @param {string} runners
  * @param {boolean} light
@@ -161,18 +167,22 @@ exports.cleanTestDirs = cleanTestDirs;
  * @param {string} [stackTraceLimit]
  * @param {string | number} [timeout]
  * @param {boolean} [keepFailed]
+ * @param {number | undefined} [shards]
+ * @param {number | undefined} [shardId]
  */
-function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed) {
+function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed, shards, shardId) {
     const testConfigContents = JSON.stringify({
         test: tests ? [tests] : undefined,
-        runner: runners ? runners.split(",") : undefined,
+        runners: runners ? runners.split(",") : undefined,
         light,
         workerCount,
         stackTraceLimit,
         taskConfigsFolder,
         noColor: !cmdLineOptions.colors,
         timeout,
-        keepFailed
+        keepFailed,
+        shards,
+        shardId
     });
     log.info("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);

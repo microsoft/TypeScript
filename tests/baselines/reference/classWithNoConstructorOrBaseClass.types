@@ -26,8 +26,8 @@ class D<T,U> {
 }
 
 var d = new D();
->d : D<{}, {}>
->new D() : D<{}, {}>
+>d : D<unknown, unknown>
+>new D() : D<unknown, unknown>
 >D : typeof D
 
 var d2 = new D<string, number>();

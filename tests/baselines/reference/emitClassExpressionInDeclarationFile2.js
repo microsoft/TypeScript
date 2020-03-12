@@ -44,8 +44,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
 var _a;
+exports.__esModule = true;
+exports.Test = exports.WithTags = exports.FooItem = exports.noPrivates = void 0;
 exports.noPrivates = (_a = /** @class */ (function () {
         function class_1() {
             this.p = 12;

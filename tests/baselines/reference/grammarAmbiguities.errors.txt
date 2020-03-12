@@ -1,5 +1,5 @@
-tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts(8,1): error TS2554: Expected 1 arguments, but got 2.
-tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts(9,1): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts(8,10): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts(9,10): error TS2554: Expected 1 arguments, but got 2.
 
 
 ==== tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts (2 errors) ====
@@ -11,10 +11,10 @@ tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts(9,1): er
     
     f(g<A, B>(7));
     f(g < A, B > 7); // Should error
-    ~~~~~~~~~~~~~~~
+             ~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
     f(g < A, B > +(7)); // Should error
-    ~~~~~~~~~~~~~~~~~~
+             ~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
     
     

@@ -1,5 +1,5 @@
 namespace ts {
-    describe("base64", () => {
+    describe("unittests:: base64", () => {
         describe("base64decode", () => {
             it("can decode input strings correctly without needing a host implementation", () => {
                 const tests = [

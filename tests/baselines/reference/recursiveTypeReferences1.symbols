@@ -1,0 +1,479 @@
+=== tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences1.ts ===
+type ValueOrArray<T> = T | Array<ValueOrArray<T>>;
+>ValueOrArray : Symbol(ValueOrArray, Decl(recursiveTypeReferences1.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 0, 18))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 0, 18))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ValueOrArray : Symbol(ValueOrArray, Decl(recursiveTypeReferences1.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 0, 18))
+
+const a0: ValueOrArray<number> = 1;
+>a0 : Symbol(a0, Decl(recursiveTypeReferences1.ts, 2, 5))
+>ValueOrArray : Symbol(ValueOrArray, Decl(recursiveTypeReferences1.ts, 0, 0))
+
+const a1: ValueOrArray<number> = [1, [2, 3], [4, [5, [6, 7]]]];
+>a1 : Symbol(a1, Decl(recursiveTypeReferences1.ts, 3, 5))
+>ValueOrArray : Symbol(ValueOrArray, Decl(recursiveTypeReferences1.ts, 0, 0))
+
+type HypertextNode = string | [string, { [key: string]: unknown }, ...HypertextNode[]];
+>HypertextNode : Symbol(HypertextNode, Decl(recursiveTypeReferences1.ts, 3, 63))
+>key : Symbol(key, Decl(recursiveTypeReferences1.ts, 5, 42))
+>HypertextNode : Symbol(HypertextNode, Decl(recursiveTypeReferences1.ts, 3, 63))
+
+const hypertextNode: HypertextNode =
+>hypertextNode : Symbol(hypertextNode, Decl(recursiveTypeReferences1.ts, 7, 5))
+>HypertextNode : Symbol(HypertextNode, Decl(recursiveTypeReferences1.ts, 3, 63))
+
+    ["div", { id: "parent" },
+>id : Symbol(id, Decl(recursiveTypeReferences1.ts, 8, 13))
+
+        ["div", { id: "first-child" }, "I'm the first child"],
+>id : Symbol(id, Decl(recursiveTypeReferences1.ts, 9, 17))
+
+        ["div", { id: "second-child" }, "I'm the second child"]
+>id : Symbol(id, Decl(recursiveTypeReferences1.ts, 10, 17))
+
+    ];
+
+type Json = string | number | boolean | null | Json[] | { [key: string]: Json };
+>Json : Symbol(Json, Decl(recursiveTypeReferences1.ts, 11, 6))
+>Json : Symbol(Json, Decl(recursiveTypeReferences1.ts, 11, 6))
+>key : Symbol(key, Decl(recursiveTypeReferences1.ts, 13, 59))
+>Json : Symbol(Json, Decl(recursiveTypeReferences1.ts, 11, 6))
+
+let data: Json = {
+>data : Symbol(data, Decl(recursiveTypeReferences1.ts, 15, 3))
+>Json : Symbol(Json, Decl(recursiveTypeReferences1.ts, 11, 6))
+
+    caption: "Test",
+>caption : Symbol(caption, Decl(recursiveTypeReferences1.ts, 15, 18))
+
+    location: { x: 10, y: 20 },
+>location : Symbol(location, Decl(recursiveTypeReferences1.ts, 16, 20))
+>x : Symbol(x, Decl(recursiveTypeReferences1.ts, 17, 15))
+>y : Symbol(y, Decl(recursiveTypeReferences1.ts, 17, 22))
+
+    values: [true, [10, 20], null]
+>values : Symbol(values, Decl(recursiveTypeReferences1.ts, 17, 31))
+
+};
+
+interface Box<T> { value: T };
+>Box : Symbol(Box, Decl(recursiveTypeReferences1.ts, 19, 2))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 21, 14))
+>value : Symbol(Box.value, Decl(recursiveTypeReferences1.ts, 21, 18))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 21, 14))
+
+type T1 = Box<T1>;
+>T1 : Symbol(T1, Decl(recursiveTypeReferences1.ts, 21, 30))
+>Box : Symbol(Box, Decl(recursiveTypeReferences1.ts, 19, 2))
+>T1 : Symbol(T1, Decl(recursiveTypeReferences1.ts, 21, 30))
+
+type T2 = Box<Box<T2>>;
+>T2 : Symbol(T2, Decl(recursiveTypeReferences1.ts, 23, 18))
+>Box : Symbol(Box, Decl(recursiveTypeReferences1.ts, 19, 2))
+>Box : Symbol(Box, Decl(recursiveTypeReferences1.ts, 19, 2))
+>T2 : Symbol(T2, Decl(recursiveTypeReferences1.ts, 23, 18))
+
+type T3 = Box<Box<Box<T3>>>;
+>T3 : Symbol(T3, Decl(recursiveTypeReferences1.ts, 24, 23))
+>Box : Symbol(Box, Decl(recursiveTypeReferences1.ts, 19, 2))
+>Box : Symbol(Box, Decl(recursiveTypeReferences1.ts, 19, 2))
+>Box : Symbol(Box, Decl(recursiveTypeReferences1.ts, 19, 2))
+>T3 : Symbol(T3, Decl(recursiveTypeReferences1.ts, 24, 23))
+
+function f1(t1: T1, t2: T2, t3: T3) {
+>f1 : Symbol(f1, Decl(recursiveTypeReferences1.ts, 25, 28))
+>t1 : Symbol(t1, Decl(recursiveTypeReferences1.ts, 27, 12))
+>T1 : Symbol(T1, Decl(recursiveTypeReferences1.ts, 21, 30))
+>t2 : Symbol(t2, Decl(recursiveTypeReferences1.ts, 27, 19))
+>T2 : Symbol(T2, Decl(recursiveTypeReferences1.ts, 23, 18))
+>t3 : Symbol(t3, Decl(recursiveTypeReferences1.ts, 27, 27))
+>T3 : Symbol(T3, Decl(recursiveTypeReferences1.ts, 24, 23))
+
+    t1 = t2;
+>t1 : Symbol(t1, Decl(recursiveTypeReferences1.ts, 27, 12))
+>t2 : Symbol(t2, Decl(recursiveTypeReferences1.ts, 27, 19))
+
+    t1 = t3;
+>t1 : Symbol(t1, Decl(recursiveTypeReferences1.ts, 27, 12))
+>t3 : Symbol(t3, Decl(recursiveTypeReferences1.ts, 27, 27))
+
+    t2 = t1;
+>t2 : Symbol(t2, Decl(recursiveTypeReferences1.ts, 27, 19))
+>t1 : Symbol(t1, Decl(recursiveTypeReferences1.ts, 27, 12))
+
+    t2 = t3;
+>t2 : Symbol(t2, Decl(recursiveTypeReferences1.ts, 27, 19))
+>t3 : Symbol(t3, Decl(recursiveTypeReferences1.ts, 27, 27))
+
+    t3 = t1;
+>t3 : Symbol(t3, Decl(recursiveTypeReferences1.ts, 27, 27))
+>t1 : Symbol(t1, Decl(recursiveTypeReferences1.ts, 27, 12))
+
+    t3 = t2;
+>t3 : Symbol(t3, Decl(recursiveTypeReferences1.ts, 27, 27))
+>t2 : Symbol(t2, Decl(recursiveTypeReferences1.ts, 27, 19))
+}
+
+type Box1 = Box<Box1> | number;
+>Box1 : Symbol(Box1, Decl(recursiveTypeReferences1.ts, 34, 1))
+>Box : Symbol(Box, Decl(recursiveTypeReferences1.ts, 19, 2))
+>Box1 : Symbol(Box1, Decl(recursiveTypeReferences1.ts, 34, 1))
+
+const b10: Box1 = 42;
+>b10 : Symbol(b10, Decl(recursiveTypeReferences1.ts, 38, 5))
+>Box1 : Symbol(Box1, Decl(recursiveTypeReferences1.ts, 34, 1))
+
+const b11: Box1 = { value: 42 };
+>b11 : Symbol(b11, Decl(recursiveTypeReferences1.ts, 39, 5))
+>Box1 : Symbol(Box1, Decl(recursiveTypeReferences1.ts, 34, 1))
+>value : Symbol(value, Decl(recursiveTypeReferences1.ts, 39, 19))
+
+const b12: Box1 = { value: { value: { value: 42 }}};
+>b12 : Symbol(b12, Decl(recursiveTypeReferences1.ts, 40, 5))
+>Box1 : Symbol(Box1, Decl(recursiveTypeReferences1.ts, 34, 1))
+>value : Symbol(value, Decl(recursiveTypeReferences1.ts, 40, 19))
+>value : Symbol(value, Decl(recursiveTypeReferences1.ts, 40, 28))
+>value : Symbol(value, Decl(recursiveTypeReferences1.ts, 40, 37))
+
+type Box2 = Box<Box2 | number>;
+>Box2 : Symbol(Box2, Decl(recursiveTypeReferences1.ts, 40, 52))
+>Box : Symbol(Box, Decl(recursiveTypeReferences1.ts, 19, 2))
+>Box2 : Symbol(Box2, Decl(recursiveTypeReferences1.ts, 40, 52))
+
+const b20: Box2 = 42;  // Error
+>b20 : Symbol(b20, Decl(recursiveTypeReferences1.ts, 44, 5))
+>Box2 : Symbol(Box2, Decl(recursiveTypeReferences1.ts, 40, 52))
+
+const b21: Box2 = { value: 42 };
+>b21 : Symbol(b21, Decl(recursiveTypeReferences1.ts, 45, 5))
+>Box2 : Symbol(Box2, Decl(recursiveTypeReferences1.ts, 40, 52))
+>value : Symbol(value, Decl(recursiveTypeReferences1.ts, 45, 19))
+
+const b22: Box2 = { value: { value: { value: 42 }}};
+>b22 : Symbol(b22, Decl(recursiveTypeReferences1.ts, 46, 5))
+>Box2 : Symbol(Box2, Decl(recursiveTypeReferences1.ts, 40, 52))
+>value : Symbol(value, Decl(recursiveTypeReferences1.ts, 46, 19))
+>value : Symbol(value, Decl(recursiveTypeReferences1.ts, 46, 28))
+>value : Symbol(value, Decl(recursiveTypeReferences1.ts, 46, 37))
+
+type RecArray<T> = Array<T | RecArray<T>>;
+>RecArray : Symbol(RecArray, Decl(recursiveTypeReferences1.ts, 46, 52))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 48, 14))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 48, 14))
+>RecArray : Symbol(RecArray, Decl(recursiveTypeReferences1.ts, 46, 52))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 48, 14))
+
+declare function flat<T>(a: RecArray<T>): Array<T>;
+>flat : Symbol(flat, Decl(recursiveTypeReferences1.ts, 48, 42))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 50, 22))
+>a : Symbol(a, Decl(recursiveTypeReferences1.ts, 50, 25))
+>RecArray : Symbol(RecArray, Decl(recursiveTypeReferences1.ts, 46, 52))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 50, 22))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 50, 22))
+
+declare function flat1<T>(a: Array<T | Array<T>>): Array<T>
+>flat1 : Symbol(flat1, Decl(recursiveTypeReferences1.ts, 50, 51))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 51, 23))
+>a : Symbol(a, Decl(recursiveTypeReferences1.ts, 51, 26))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 51, 23))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 51, 23))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 51, 23))
+
+declare function flat2<T>(a: Array<T | Array<T | Array<T>>>): Array<T>;
+>flat2 : Symbol(flat2, Decl(recursiveTypeReferences1.ts, 51, 59))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 52, 23))
+>a : Symbol(a, Decl(recursiveTypeReferences1.ts, 52, 26))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 52, 23))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 52, 23))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 52, 23))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 52, 23))
+
+flat([1, [2, [3]]]);  // number[]
+>flat : Symbol(flat, Decl(recursiveTypeReferences1.ts, 48, 42))
+
+flat([[[0]]]);  // number[]
+>flat : Symbol(flat, Decl(recursiveTypeReferences1.ts, 48, 42))
+
+flat([[[[[[[[[[[4]]]]]]]]]]]);  // number[]
+>flat : Symbol(flat, Decl(recursiveTypeReferences1.ts, 48, 42))
+
+flat([1, 'a', [2]]);  // (string | number)[]
+>flat : Symbol(flat, Decl(recursiveTypeReferences1.ts, 48, 42))
+
+flat([1, [2, 'a']]);  // (string | number)[]
+>flat : Symbol(flat, Decl(recursiveTypeReferences1.ts, 48, 42))
+
+flat([1, ['a']]);  // Error
+>flat : Symbol(flat, Decl(recursiveTypeReferences1.ts, 48, 42))
+
+flat1([1, [2, [3]]]);  // (number | number[])[]
+>flat1 : Symbol(flat1, Decl(recursiveTypeReferences1.ts, 50, 51))
+
+flat1([[[0]]]);  // number[][]
+>flat1 : Symbol(flat1, Decl(recursiveTypeReferences1.ts, 50, 51))
+
+flat1([1, 'a', [2]]);  // (string | number)[]
+>flat1 : Symbol(flat1, Decl(recursiveTypeReferences1.ts, 50, 51))
+
+flat1([1, [2, 'a']]);  // (string | number)[]
+>flat1 : Symbol(flat1, Decl(recursiveTypeReferences1.ts, 50, 51))
+
+flat1([1, ['a']]);  // Error
+>flat1 : Symbol(flat1, Decl(recursiveTypeReferences1.ts, 50, 51))
+
+flat2([1, [2, [3]]]);  // number[]
+>flat2 : Symbol(flat2, Decl(recursiveTypeReferences1.ts, 51, 59))
+
+flat2([[[0]]]);  // number[]
+>flat2 : Symbol(flat2, Decl(recursiveTypeReferences1.ts, 51, 59))
+
+flat2([1, 'a', [2]]);  // (string | number)[]
+>flat2 : Symbol(flat2, Decl(recursiveTypeReferences1.ts, 51, 59))
+
+flat2([1, [2, 'a']]);  // (string | number)[]
+>flat2 : Symbol(flat2, Decl(recursiveTypeReferences1.ts, 51, 59))
+
+flat2([1, ['a']]);  // Error
+>flat2 : Symbol(flat2, Decl(recursiveTypeReferences1.ts, 51, 59))
+
+type T10 = T10[];
+>T10 : Symbol(T10, Decl(recursiveTypeReferences1.ts, 71, 18))
+>T10 : Symbol(T10, Decl(recursiveTypeReferences1.ts, 71, 18))
+
+type T11 = readonly T11[];
+>T11 : Symbol(T11, Decl(recursiveTypeReferences1.ts, 73, 17))
+>T11 : Symbol(T11, Decl(recursiveTypeReferences1.ts, 73, 17))
+
+type T12 = (T12)[];
+>T12 : Symbol(T12, Decl(recursiveTypeReferences1.ts, 74, 26))
+>T12 : Symbol(T12, Decl(recursiveTypeReferences1.ts, 74, 26))
+
+type T13 = T13[] | string;
+>T13 : Symbol(T13, Decl(recursiveTypeReferences1.ts, 75, 19))
+>T13 : Symbol(T13, Decl(recursiveTypeReferences1.ts, 75, 19))
+
+type T14 = T14[] & { x: string };
+>T14 : Symbol(T14, Decl(recursiveTypeReferences1.ts, 76, 26))
+>T14 : Symbol(T14, Decl(recursiveTypeReferences1.ts, 76, 26))
+>x : Symbol(x, Decl(recursiveTypeReferences1.ts, 77, 20))
+
+type T15<X> = X extends string ? T15<X>[] : never;
+>T15 : Symbol(T15, Decl(recursiveTypeReferences1.ts, 77, 33))
+>X : Symbol(X, Decl(recursiveTypeReferences1.ts, 78, 9))
+>X : Symbol(X, Decl(recursiveTypeReferences1.ts, 78, 9))
+>T15 : Symbol(T15, Decl(recursiveTypeReferences1.ts, 77, 33))
+>X : Symbol(X, Decl(recursiveTypeReferences1.ts, 78, 9))
+
+type ValueOrArray1<T> = T | ValueOrArray1<T>[];
+>ValueOrArray1 : Symbol(ValueOrArray1, Decl(recursiveTypeReferences1.ts, 78, 50))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 80, 19))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 80, 19))
+>ValueOrArray1 : Symbol(ValueOrArray1, Decl(recursiveTypeReferences1.ts, 78, 50))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 80, 19))
+
+type ValueOrArray2<T> = T | ValueOrArray2<T>[];
+>ValueOrArray2 : Symbol(ValueOrArray2, Decl(recursiveTypeReferences1.ts, 80, 47))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 81, 19))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 81, 19))
+>ValueOrArray2 : Symbol(ValueOrArray2, Decl(recursiveTypeReferences1.ts, 80, 47))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 81, 19))
+
+declare function foo1<T>(a: ValueOrArray1<T>): T;
+>foo1 : Symbol(foo1, Decl(recursiveTypeReferences1.ts, 81, 47))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 83, 22))
+>a : Symbol(a, Decl(recursiveTypeReferences1.ts, 83, 25))
+>ValueOrArray1 : Symbol(ValueOrArray1, Decl(recursiveTypeReferences1.ts, 78, 50))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 83, 22))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 83, 22))
+
+declare let ra1: ValueOrArray2<string>;
+>ra1 : Symbol(ra1, Decl(recursiveTypeReferences1.ts, 84, 11))
+>ValueOrArray2 : Symbol(ValueOrArray2, Decl(recursiveTypeReferences1.ts, 80, 47))
+
+let x1 = foo1(ra1);  // Boom!
+>x1 : Symbol(x1, Decl(recursiveTypeReferences1.ts, 86, 3))
+>foo1 : Symbol(foo1, Decl(recursiveTypeReferences1.ts, 81, 47))
+>ra1 : Symbol(ra1, Decl(recursiveTypeReferences1.ts, 84, 11))
+
+type NumberOrArray1<T> = T | ValueOrArray1<T>[];
+>NumberOrArray1 : Symbol(NumberOrArray1, Decl(recursiveTypeReferences1.ts, 86, 19))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 88, 20))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 88, 20))
+>ValueOrArray1 : Symbol(ValueOrArray1, Decl(recursiveTypeReferences1.ts, 78, 50))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 88, 20))
+
+type NumberOrArray2<T> = T | ValueOrArray2<T>[];
+>NumberOrArray2 : Symbol(NumberOrArray2, Decl(recursiveTypeReferences1.ts, 88, 48))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 89, 20))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 89, 20))
+>ValueOrArray2 : Symbol(ValueOrArray2, Decl(recursiveTypeReferences1.ts, 80, 47))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 89, 20))
+
+declare function foo2<T>(a: ValueOrArray1<T>): T;
+>foo2 : Symbol(foo2, Decl(recursiveTypeReferences1.ts, 89, 48))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 91, 22))
+>a : Symbol(a, Decl(recursiveTypeReferences1.ts, 91, 25))
+>ValueOrArray1 : Symbol(ValueOrArray1, Decl(recursiveTypeReferences1.ts, 78, 50))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 91, 22))
+>T : Symbol(T, Decl(recursiveTypeReferences1.ts, 91, 22))
+
+declare let ra2: ValueOrArray2<string>;
+>ra2 : Symbol(ra2, Decl(recursiveTypeReferences1.ts, 92, 11))
+>ValueOrArray2 : Symbol(ValueOrArray2, Decl(recursiveTypeReferences1.ts, 80, 47))
+
+let x2 = foo2(ra2);  // Boom!
+>x2 : Symbol(x2, Decl(recursiveTypeReferences1.ts, 94, 3))
+>foo2 : Symbol(foo2, Decl(recursiveTypeReferences1.ts, 89, 48))
+>ra2 : Symbol(ra2, Decl(recursiveTypeReferences1.ts, 92, 11))
+
+// Repro from #33617 (errors are expected)
+
+type Tree = [HTMLHeadingElement, Tree][];
+>Tree : Symbol(Tree, Decl(recursiveTypeReferences1.ts, 94, 19))
+>HTMLHeadingElement : Symbol(HTMLHeadingElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>Tree : Symbol(Tree, Decl(recursiveTypeReferences1.ts, 94, 19))
+
+function parse(node: Tree, index: number[] = []): HTMLUListElement {
+>parse : Symbol(parse, Decl(recursiveTypeReferences1.ts, 98, 41))
+>node : Symbol(node, Decl(recursiveTypeReferences1.ts, 100, 15))
+>Tree : Symbol(Tree, Decl(recursiveTypeReferences1.ts, 94, 19))
+>index : Symbol(index, Decl(recursiveTypeReferences1.ts, 100, 26))
+>HTMLUListElement : Symbol(HTMLUListElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+  return html('ul', node.map(([el, children], i) => {
+>node.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>node : Symbol(node, Decl(recursiveTypeReferences1.ts, 100, 15))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>el : Symbol(el, Decl(recursiveTypeReferences1.ts, 101, 31))
+>children : Symbol(children, Decl(recursiveTypeReferences1.ts, 101, 34))
+>i : Symbol(i, Decl(recursiveTypeReferences1.ts, 101, 45))
+
+    const idx = [...index, i + 1];
+>idx : Symbol(idx, Decl(recursiveTypeReferences1.ts, 102, 9))
+>index : Symbol(index, Decl(recursiveTypeReferences1.ts, 100, 26))
+>i : Symbol(i, Decl(recursiveTypeReferences1.ts, 101, 45))
+
+    return html('li', [
+      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),
+>href : Symbol(href, Decl(recursiveTypeReferences1.ts, 104, 17))
+>el.id : Symbol(Element.id, Decl(lib.dom.d.ts, --, --))
+>el : Symbol(el, Decl(recursiveTypeReferences1.ts, 101, 31))
+>id : Symbol(Element.id, Decl(lib.dom.d.ts, --, --))
+>rel : Symbol(rel, Decl(recursiveTypeReferences1.ts, 104, 36))
+>'data-index' : Symbol('data-index', Decl(recursiveTypeReferences1.ts, 104, 53))
+>idx.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>idx : Symbol(idx, Decl(recursiveTypeReferences1.ts, 102, 9))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>el.textContent : Symbol(Node.textContent, Decl(lib.dom.d.ts, --, --))
+>el : Symbol(el, Decl(recursiveTypeReferences1.ts, 101, 31))
+>textContent : Symbol(Node.textContent, Decl(lib.dom.d.ts, --, --))
+
+      children.length > 0 ? parse(children, idx) : frag()
+>children.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>children : Symbol(children, Decl(recursiveTypeReferences1.ts, 101, 34))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>parse : Symbol(parse, Decl(recursiveTypeReferences1.ts, 98, 41))
+>children : Symbol(children, Decl(recursiveTypeReferences1.ts, 101, 34))
+>idx : Symbol(idx, Decl(recursiveTypeReferences1.ts, 102, 9))
+
+    ]);
+  }));
+}
+
+function cons(hs: HTMLHeadingElement[]): Tree {
+>cons : Symbol(cons, Decl(recursiveTypeReferences1.ts, 108, 1))
+>hs : Symbol(hs, Decl(recursiveTypeReferences1.ts, 110, 14))
+>HTMLHeadingElement : Symbol(HTMLHeadingElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>Tree : Symbol(Tree, Decl(recursiveTypeReferences1.ts, 94, 19))
+
+  return hs
+>hs    .reduce<HTMLHeadingElement[][]>((hss, h) => {      const hs = hss.pop()!;      return hs.length === 0 || level(h) > level(hs[0])        ? concat(hss, [concat(hs, [h])])        : concat(hss, [hs, [h]]);    }, [[]])    .reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>hs    .reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>hs : Symbol(hs, Decl(recursiveTypeReferences1.ts, 110, 14))
+
+    .reduce<HTMLHeadingElement[][]>((hss, h) => {
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>HTMLHeadingElement : Symbol(HTMLHeadingElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>hss : Symbol(hss, Decl(recursiveTypeReferences1.ts, 112, 37))
+>h : Symbol(h, Decl(recursiveTypeReferences1.ts, 112, 41))
+
+      const hs = hss.pop()!;
+>hs : Symbol(hs, Decl(recursiveTypeReferences1.ts, 113, 11))
+>hss.pop : Symbol(Array.pop, Decl(lib.es5.d.ts, --, --))
+>hss : Symbol(hss, Decl(recursiveTypeReferences1.ts, 112, 37))
+>pop : Symbol(Array.pop, Decl(lib.es5.d.ts, --, --))
+
+      return hs.length === 0 || level(h) > level(hs[0])
+>hs.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>hs : Symbol(hs, Decl(recursiveTypeReferences1.ts, 113, 11))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>level : Symbol(level, Decl(recursiveTypeReferences1.ts, 123, 1))
+>h : Symbol(h, Decl(recursiveTypeReferences1.ts, 112, 41))
+>level : Symbol(level, Decl(recursiveTypeReferences1.ts, 123, 1))
+>hs : Symbol(hs, Decl(recursiveTypeReferences1.ts, 113, 11))
+
+        ? concat(hss, [concat(hs, [h])])
+>hss : Symbol(hss, Decl(recursiveTypeReferences1.ts, 112, 37))
+>hs : Symbol(hs, Decl(recursiveTypeReferences1.ts, 113, 11))
+>h : Symbol(h, Decl(recursiveTypeReferences1.ts, 112, 41))
+
+        : concat(hss, [hs, [h]]);
+>hss : Symbol(hss, Decl(recursiveTypeReferences1.ts, 112, 37))
+>hs : Symbol(hs, Decl(recursiveTypeReferences1.ts, 113, 11))
+>h : Symbol(h, Decl(recursiveTypeReferences1.ts, 112, 41))
+
+    }, [[]])
+    .reduce<Tree>((node, hs) =>
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Tree : Symbol(Tree, Decl(recursiveTypeReferences1.ts, 94, 19))
+>node : Symbol(node, Decl(recursiveTypeReferences1.ts, 118, 19))
+>hs : Symbol(hs, Decl(recursiveTypeReferences1.ts, 118, 24))
+
+      hs.length === 0
+>hs.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>hs : Symbol(hs, Decl(recursiveTypeReferences1.ts, 118, 24))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+        ? node
+>node : Symbol(node, Decl(recursiveTypeReferences1.ts, 118, 19))
+
+        : concat<Tree[number]>(node, [[hs.shift()!, cons(hs)]])
+>Tree : Symbol(Tree, Decl(recursiveTypeReferences1.ts, 94, 19))
+>node : Symbol(node, Decl(recursiveTypeReferences1.ts, 118, 19))
+>hs.shift : Symbol(Array.shift, Decl(lib.es5.d.ts, --, --))
+>hs : Symbol(hs, Decl(recursiveTypeReferences1.ts, 118, 24))
+>shift : Symbol(Array.shift, Decl(lib.es5.d.ts, --, --))
+>cons : Symbol(cons, Decl(recursiveTypeReferences1.ts, 108, 1))
+>hs : Symbol(hs, Decl(recursiveTypeReferences1.ts, 118, 24))
+
+    , []);
+}
+
+function level(h: HTMLHeadingElement): number {
+>level : Symbol(level, Decl(recursiveTypeReferences1.ts, 123, 1))
+>h : Symbol(h, Decl(recursiveTypeReferences1.ts, 125, 15))
+>HTMLHeadingElement : Symbol(HTMLHeadingElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+  assert(isFinite(+h.tagName[1]));
+>isFinite : Symbol(isFinite, Decl(lib.es5.d.ts, --, --))
+>h.tagName : Symbol(Element.tagName, Decl(lib.dom.d.ts, --, --))
+>h : Symbol(h, Decl(recursiveTypeReferences1.ts, 125, 15))
+>tagName : Symbol(Element.tagName, Decl(lib.dom.d.ts, --, --))
+
+  return +h.tagName[1];
+>h.tagName : Symbol(Element.tagName, Decl(lib.dom.d.ts, --, --))
+>h : Symbol(h, Decl(recursiveTypeReferences1.ts, 125, 15))
+>tagName : Symbol(Element.tagName, Decl(lib.dom.d.ts, --, --))
+}
+

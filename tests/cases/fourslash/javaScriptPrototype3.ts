@@ -22,6 +22,10 @@ verify.completions({
         { name: "qua", kind: "property" },
         { name: "foo", kind: "method" },
         { name: "bar", kind: "method" },
-        ...["myCtor", "x", "prototype"].map(name => ({ name, kind: "warning" })),
+        ...["myCtor", "x", "prototype"].map(name => ({
+            name,
+            kind: "warning",
+            sortText: completion.SortText.JavascriptIdentifiers
+        })),
     ],
 });

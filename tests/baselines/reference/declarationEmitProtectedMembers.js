@@ -73,7 +73,7 @@ var C1 = /** @class */ (function () {
     Object.defineProperty(C1.prototype, "accessor", {
         get: function () { return 0; },
         set: function (a) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C1.sf = function () {
@@ -81,12 +81,12 @@ var C1 = /** @class */ (function () {
     };
     Object.defineProperty(C1, "staticSetter", {
         set: function (a) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C1, "staticGetter", {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C1;
@@ -119,7 +119,7 @@ var C3 = /** @class */ (function (_super) {
     };
     Object.defineProperty(C3, "staticGetter", {
         get: function () { return 1; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C3;
@@ -138,11 +138,12 @@ var C4 = /** @class */ (function () {
 declare class C1 {
     protected x: number;
     protected f(): number;
-    protected accessor: number;
+    protected set accessor(a: number);
+    protected get accessor(): number;
     protected static sx: number;
     protected static sf(): number;
-    protected static staticSetter: number;
-    protected static readonly staticGetter: number;
+    protected static set staticSetter(a: number);
+    protected static get staticGetter(): number;
 }
 declare class C2 extends C1 {
     protected f(): number;
@@ -153,7 +154,7 @@ declare class C3 extends C2 {
     static sx: number;
     f(): number;
     static sf(): number;
-    static readonly staticGetter: number;
+    static get staticGetter(): number;
 }
 declare class C4 {
     protected a: number;

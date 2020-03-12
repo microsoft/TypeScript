@@ -6,7 +6,7 @@ tests/cases/compiler/controlFlowArrayErrors.ts(19,9): error TS7034: Variable 'x'
 tests/cases/compiler/controlFlowArrayErrors.ts(22,9): error TS7005: Variable 'x' implicitly has an 'any[]' type.
 tests/cases/compiler/controlFlowArrayErrors.ts(29,12): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string | number'.
 tests/cases/compiler/controlFlowArrayErrors.ts(34,12): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string | number'.
-tests/cases/compiler/controlFlowArrayErrors.ts(48,5): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((...items: (string | number)[]) => number) | ((...items: boolean[]) => number)' has no compatible call signatures.
+tests/cases/compiler/controlFlowArrayErrors.ts(48,12): error TS2345: Argument of type '99' is not assignable to parameter of type 'never'.
 tests/cases/compiler/controlFlowArrayErrors.ts(56,12): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
 tests/cases/compiler/controlFlowArrayErrors.ts(60,11): error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
 tests/cases/compiler/controlFlowArrayErrors.ts(63,9): error TS7005: Variable 'x' implicitly has an 'any[]' type.
@@ -77,8 +77,8 @@ tests/cases/compiler/controlFlowArrayErrors.ts(63,9): error TS7005: Variable 'x'
         }
         x;           // boolean[] | (string | number)[]
         x.push(99);  // Error
-        ~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((...items: (string | number)[]) => number) | ((...items: boolean[]) => number)' has no compatible call signatures.
+               ~~
+!!! error TS2345: Argument of type '99' is not assignable to parameter of type 'never'.
     }
     
     function f7() {

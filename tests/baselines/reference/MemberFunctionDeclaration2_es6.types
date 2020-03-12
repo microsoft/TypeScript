@@ -3,5 +3,5 @@ class C {
 >C : C
 
    public * foo() { }
->foo : () => IterableIterator<any>
+>foo : () => Generator<never, void, unknown>
 }

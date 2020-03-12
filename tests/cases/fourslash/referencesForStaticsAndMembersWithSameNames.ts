@@ -3,13 +3,13 @@
 ////module FindRef4 {
 ////	module MixedStaticsClassTest {
 ////		export class Foo {
-////			[|{| "isDefinition": true |}bar|]: Foo;
-////			static [|{| "isDefinition": true |}bar|]: Foo;
+////			[|[|{| "isDefinition": true, "contextRangeIndex": 0 |}bar|]: Foo;|]
+////			[|static [|{| "isDefinition": true, "contextRangeIndex": 2 |}bar|]: Foo;|]
 ////
-////			public [|{| "isWriteAccess": true, "isDefinition": true |}foo|](): void {
-////			}
-////			public static [|{| "isWriteAccess": true, "isDefinition": true |}foo|](): void {
-////			}
+////			[|public [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}foo|](): void {
+////			}|]
+////			[|public static [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}foo|](): void {
+////			}|]
 ////		}
 ////	}
 ////
@@ -25,7 +25,7 @@
 ////	}
 ////}
 
-const [fooBar, fooStaticBar, fooFoo, fooStaticFoo, xFoo, xBar, staticFoo, staticBar] = test.ranges();
+const [fooBarDef, fooBar, fooStaticBarDef, fooStaticBar, fooFooDef, fooFoo, fooStaticFooDef, fooStaticFoo, xFoo, xBar, staticFoo, staticBar] = test.ranges();
 
 // References to a member method with the same name as a static.
 verify.singleReferenceGroup("(method) MixedStaticsClassTest.Foo.foo(): void", [fooFoo, xFoo]);

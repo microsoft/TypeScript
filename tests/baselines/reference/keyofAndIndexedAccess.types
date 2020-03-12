@@ -58,7 +58,7 @@ type K00 = keyof any;  // string
 >K00 : string | number | symbol
 
 type K01 = keyof string;  // "toString" | "charAt" | ...
->K01 : number | "length" | "toString" | "concat" | "slice" | "indexOf" | "lastIndexOf" | "charAt" | "charCodeAt" | "localeCompare" | "match" | "replace" | "search" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
+>K01 : number | "length" | "toString" | "concat" | "slice" | "indexOf" | "lastIndexOf" | "valueOf" | "charAt" | "charCodeAt" | "localeCompare" | "match" | "replace" | "search" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
 
 type K02 = keyof number;  // "toString" | "toFixed" | "toExponential" | ...
 >K02 : "toString" | "toLocaleString" | "valueOf" | "toFixed" | "toExponential" | "toPrecision"
@@ -76,8 +76,11 @@ type K06 = keyof null;  // never
 >K06 : never
 >null : null
 
-type K07 = keyof never;  // never
->K07 : never
+type K07 = keyof never;  // string | number | symbol
+>K07 : string | number | symbol
+
+type K08 = keyof unknown; // never
+>K08 : never
 
 type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
 >K10 : "name" | "width" | "height" | "visible"
@@ -1523,8 +1526,8 @@ declare function one<T>(handler: (t: T) => void): T
 >t : T
 
 var empty = one(() => {}) // inferred as {}, expected
->empty : {}
->one(() => {}) : {}
+>empty : unknown
+>one(() => {}) : unknown
 >one : <T>(handler: (t: T) => void) => T
 >() => {} : () => void
 
@@ -1537,8 +1540,8 @@ declare function on<T>(handlerHash: Handlers<T>): T
 >handlerHash : Handlers<T>
 
 var hashOfEmpty1 = on({ test: () => {} });  // {}
->hashOfEmpty1 : { test: {}; }
->on({ test: () => {} }) : { test: {}; }
+>hashOfEmpty1 : { test: unknown; }
+>on({ test: () => {} }) : { test: unknown; }
 >on : <T>(handlerHash: Handlers<T>) => T
 >{ test: () => {} } : { test: () => void; }
 >test : () => void
@@ -1575,8 +1578,8 @@ declare class Component1<Data, Computed> {
 }
 
 let c1 = new Component1({
->c1 : Component1<{ hello: string; }, {}>
->new Component1({    data: {        hello: ""    }}) : Component1<{ hello: string; }, {}>
+>c1 : Component1<{ hello: string; }, unknown>
+>new Component1({    data: {        hello: ""    }}) : Component1<{ hello: string; }, unknown>
 >Component1 : typeof Component1
 >{    data: {        hello: ""    }} : { data: { hello: string; }; }
 
@@ -1593,7 +1596,7 @@ let c1 = new Component1({
 c1.get("hello");
 >c1.get("hello") : string
 >c1.get : <K extends "hello">(key: K) => { hello: string; }[K]
->c1 : Component1<{ hello: string; }, {}>
+>c1 : Component1<{ hello: string; }, unknown>
 >get : <K extends "hello">(key: K) => { hello: string; }[K]
 >"hello" : "hello"
 
@@ -1731,7 +1734,7 @@ function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
 // Repro from #13285
 
 function updateIds<T extends Record<K, string>, K extends string>(
->updateIds : <T extends Record<K, string>, K extends string>(obj: T, idFields: K[], idMapping: { [oldId: string]: string; }) => Record<K, string>
+>updateIds : <T extends Record<K, string>, K extends string>(obj: T, idFields: K[], idMapping: Partial<Record<T[K], T[K]>>) => Record<K, string>
 
     obj: T,
 >obj : T
@@ -1739,32 +1742,31 @@ function updateIds<T extends Record<K, string>, K extends string>(
     idFields: K[],
 >idFields : K[]
 
-    idMapping: { [oldId: string]: string }
->idMapping : { [oldId: string]: string; }
->oldId : string
+    idMapping: Partial<Record<T[K], T[K]>>
+>idMapping : Partial<Record<T[K], T[K]>>
 
 ): Record<K, string> {
     for (const idField of idFields) {
 >idField : K
 >idFields : K[]
 
-        const newId = idMapping[obj[idField]];
->newId : { [oldId: string]: string; }[T[K]]
->idMapping[obj[idField]] : { [oldId: string]: string; }[T[K]]
->idMapping : { [oldId: string]: string; }
+        const newId: T[K] | undefined = idMapping[obj[idField]];
+>newId : T[K] | undefined
+>idMapping[obj[idField]] : Partial<Record<T[K], T[K]>>[T[K]]
+>idMapping : Partial<Record<T[K], T[K]>>
 >obj[idField] : T[K]
 >obj : T
 >idField : K
 
         if (newId) {
->newId : { [oldId: string]: string; }[T[K]]
+>newId : T[K] | undefined
 
             obj[idField] = newId;
->obj[idField] = newId : { [oldId: string]: string; }[T[K]]
+>obj[idField] = newId : T[K]
 >obj[idField] : T[K]
 >obj : T
 >idField : K
->newId : { [oldId: string]: string; }[T[K]]
+>newId : T[K]
         }
     }
     return obj;
@@ -1795,7 +1797,7 @@ function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
 >key : K
 
     stringMap[x]; // Should be OK.
->stringMap[x] : { [oldId: string]: string; }[T[K]]
+>stringMap[x] : string
 >stringMap : { [oldId: string]: string; }
 >x : T[K]
 }
@@ -1874,9 +1876,9 @@ class SampleClass<P> {
 >this : this
 >props : Readonly<P>
 >Object.freeze(props) : Readonly<P>
->Object.freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
->freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
 >props : P
     }
 }

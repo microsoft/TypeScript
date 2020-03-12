@@ -1,0 +1,34 @@
+=== tests/cases/compiler/unionExcessPropsWithPartialMember.ts ===
+interface A {
+    unused?: string;
+>unused : string | undefined
+
+    x: string;
+>x : string
+}
+
+interface B {
+    x: string;
+>x : string
+
+    y: string;
+>y : string
+}
+
+declare var ab: A | B;
+>ab : A | B
+
+declare var a: A;
+>a : A
+
+ab = {...a, y: (null as any as string | undefined)}; // Should be allowed, since `y` is missing on `A`
+>ab = {...a, y: (null as any as string | undefined)} : { y: string | undefined; unused?: string | undefined; x: string; }
+>ab : A | B
+>{...a, y: (null as any as string | undefined)} : { y: string | undefined; unused?: string | undefined; x: string; }
+>a : A
+>y : string | undefined
+>(null as any as string | undefined) : string | undefined
+>null as any as string | undefined : string | undefined
+>null as any : any
+>null : null
+

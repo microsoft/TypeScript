@@ -6,7 +6,7 @@
 
 // In a perfect world, /*~c*/ would probably be retained, rather than /*~e*/.
 verify.codeFix({
-    description: "Remove declaration for: 'y'",
+    description: "Remove unused declaration for: 'y'",
     index: 0,
     newRangeContent: "/*~a*/(/*~b*/x/*~e*/)/*~f*/ => /*~g*/x/*~h*/",
 });

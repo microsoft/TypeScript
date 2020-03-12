@@ -1,0 +1,19 @@
+=== tests/cases/compiler/a.ts ===
+export type A = {};
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+=== tests/cases/compiler/b.ts ===
+export class B {}
+>B : Symbol(B, Decl(b.ts, 0, 0))
+
+=== tests/cases/compiler/c.ts ===
+import { A } from './a';
+>A : Symbol(A, Decl(c.ts, 0, 8))
+
+import { B } from './b';
+>B : Symbol(B, Decl(c.ts, 1, 8))
+
+let b: B;
+>b : Symbol(b, Decl(c.ts, 3, 3))
+>B : Symbol(B, Decl(c.ts, 1, 8))
+

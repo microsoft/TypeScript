@@ -13,7 +13,7 @@ class Baz { z: number }
 >z : number
 
 function* g3() {
->g3 : () => IterableIterator<Bar | Baz>
+>g3 : () => Generator<Bar | Baz, void, undefined>
 
     yield;
 >yield : any

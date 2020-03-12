@@ -8,6 +8,6 @@ class C {
 
         var a = () => arguments;
 >a : Symbol(a, Decl(emitArrowFunctionWhenUsingArguments12_ES6.ts, 2, 11))
->arguments : Symbol(arguments)
+>arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments12_ES6.ts, 1, 6))
     }
 }

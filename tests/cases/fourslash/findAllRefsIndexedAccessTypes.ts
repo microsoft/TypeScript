@@ -1,14 +1,13 @@
 /// <reference path='fourslash.ts' />
 
 ////interface I {
-////    [|{| "isDefinition": true |}0|]: number;
-////    [|{| "isDefinition": true |}s|]: string;
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}0|]: number;|]
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 2 |}s|]: string;|]
 ////}
 ////interface J {
 ////    a: I[[|0|]],
 ////    b: I["[|s|]"],
 ////}
 
-const [n0, s0, n1, s1] = test.ranges();
-verify.singleReferenceGroup("(property) I[0]: number", [n0, n1]);
-verify.singleReferenceGroup("(property) I.s: string", [s0, s1]);
+verify.singleReferenceGroup("(property) I[0]: number", "0");
+verify.singleReferenceGroup("(property) I.s: string", "s");

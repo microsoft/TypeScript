@@ -21,7 +21,11 @@ declare var a;
 (<any>null); 
 // names and dotted names
 (<any>this); 
+>this : Symbol(globalThis)
+
 (<any>this.x); 
+>this : Symbol(globalThis)
+
 (<any>(<any>a).x);
 >a : Symbol(a, Decl(castExpressionParentheses.ts, 0, 11))
 

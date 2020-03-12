@@ -123,13 +123,13 @@ const unaryPlusHex = +0x123n;
     const legacyOct = 0123, n;
 }
 {
-    const scientific = 1e2, n;
+    const scientific = 1e2n;
 }
 {
-    const decimal = 4.1, n;
+    const decimal = 4.1n;
 }
 {
-    const leadingDecimal = .1, n;
+    const leadingDecimal = .1n;
 }
 const emptyBinary = 0n; // should error but infer 0n
 const emptyOct = 0n; // should error but infer 0n

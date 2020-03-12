@@ -265,63 +265,63 @@ var StaticName_Anonymous = /** @class */ (function () {
     return class_1;
 }());
 var StaticNameFn_Anonymous = /** @class */ (function () {
-    function class_2() {
+    function StaticNameFn_Anonymous() {
     }
-    class_2.name = function () { }; // error
-    class_2.prototype.name = function () { }; // ok
-    return class_2;
+    StaticNameFn_Anonymous.name = function () { }; // error
+    StaticNameFn_Anonymous.prototype.name = function () { }; // ok
+    return StaticNameFn_Anonymous;
 }());
 // length
 var StaticLength_Anonymous = /** @class */ (function () {
+    function class_2() {
+    }
+    return class_2;
+}());
+var StaticLengthFn_Anonymous = /** @class */ (function () {
+    function StaticLengthFn_Anonymous() {
+    }
+    StaticLengthFn_Anonymous.length = function () { }; // error
+    StaticLengthFn_Anonymous.prototype.length = function () { }; // ok
+    return StaticLengthFn_Anonymous;
+}());
+// prototype
+var StaticPrototype_Anonymous = /** @class */ (function () {
     function class_3() {
     }
     return class_3;
 }());
-var StaticLengthFn_Anonymous = /** @class */ (function () {
+var StaticPrototypeFn_Anonymous = /** @class */ (function () {
+    function StaticPrototypeFn_Anonymous() {
+    }
+    StaticPrototypeFn_Anonymous.prototype = function () { }; // error
+    StaticPrototypeFn_Anonymous.prototype.prototype = function () { }; // ok
+    return StaticPrototypeFn_Anonymous;
+}());
+// caller
+var StaticCaller_Anonymous = /** @class */ (function () {
     function class_4() {
     }
-    class_4.length = function () { }; // error
-    class_4.prototype.length = function () { }; // ok
     return class_4;
 }());
-// prototype
-var StaticPrototype_Anonymous = /** @class */ (function () {
+var StaticCallerFn_Anonymous = /** @class */ (function () {
+    function StaticCallerFn_Anonymous() {
+    }
+    StaticCallerFn_Anonymous.caller = function () { }; // error
+    StaticCallerFn_Anonymous.prototype.caller = function () { }; // ok
+    return StaticCallerFn_Anonymous;
+}());
+// arguments
+var StaticArguments_Anonymous = /** @class */ (function () {
     function class_5() {
     }
     return class_5;
 }());
-var StaticPrototypeFn_Anonymous = /** @class */ (function () {
-    function class_6() {
-    }
-    class_6.prototype = function () { }; // error
-    class_6.prototype.prototype = function () { }; // ok
-    return class_6;
-}());
-// caller
-var StaticCaller_Anonymous = /** @class */ (function () {
-    function class_7() {
-    }
-    return class_7;
-}());
-var StaticCallerFn_Anonymous = /** @class */ (function () {
-    function class_8() {
-    }
-    class_8.caller = function () { }; // error
-    class_8.prototype.caller = function () { }; // ok
-    return class_8;
-}());
-// arguments
-var StaticArguments_Anonymous = /** @class */ (function () {
-    function class_9() {
-    }
-    return class_9;
-}());
 var StaticArgumentsFn_Anonymous = /** @class */ (function () {
-    function class_10() {
+    function StaticArgumentsFn_Anonymous() {
     }
-    class_10.arguments = function () { }; // error
-    class_10.prototype.arguments = function () { }; // ok
-    return class_10;
+    StaticArgumentsFn_Anonymous.arguments = function () { }; // error
+    StaticArgumentsFn_Anonymous.prototype.arguments = function () { }; // ok
+    return StaticArgumentsFn_Anonymous;
 }());
 // === Static properties on default exported classes ===
 // name

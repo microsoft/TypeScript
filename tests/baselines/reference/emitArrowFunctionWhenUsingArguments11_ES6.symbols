@@ -8,5 +8,5 @@ function f(arguments) {
 
     var a = () => () => arguments;
 >a : Symbol(a, Decl(emitArrowFunctionWhenUsingArguments11_ES6.ts, 2, 7))
->arguments : Symbol(arguments)
+>arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments11_ES6.ts, 0, 11))
 }

@@ -1,6 +1,6 @@
 tests/cases/conformance/jsx/file.tsx(8,43): error TS2322: Type '10' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(13,15): error TS2322: Type 'T' is not assignable to type 'IntrinsicAttributes & { prop: {}; "ignore-prop": string; }'.
-  Type 'T' is not assignable to type '{ prop: {}; "ignore-prop": string; }'.
+tests/cases/conformance/jsx/file.tsx(13,15): error TS2322: Type 'T' is not assignable to type 'IntrinsicAttributes & { prop: unknown; "ignore-prop": string; }'.
+  Type 'T' is not assignable to type '{ prop: unknown; "ignore-prop": string; }'.
 tests/cases/conformance/jsx/file.tsx(20,19): error TS2322: Type '(a: number, b: string) => void' is not assignable to type '(arg: number) => void'.
 tests/cases/conformance/jsx/file.tsx(31,52): error TS2322: Type '(val: string) => void' is not assignable to type '(selectedVal: number) => void'.
   Types of parameters 'val' and 'selectedVal' are incompatible.
@@ -25,8 +25,8 @@ tests/cases/conformance/jsx/file.tsx(31,52): error TS2322: Type '(val: string) =
     function Baz<T>(arg: T) {
         let a0 = <ComponentSpecific1 {...arg} />
                   ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'T' is not assignable to type 'IntrinsicAttributes & { prop: {}; "ignore-prop": string; }'.
-!!! error TS2322:   Type 'T' is not assignable to type '{ prop: {}; "ignore-prop": string; }'.
+!!! error TS2322: Type 'T' is not assignable to type 'IntrinsicAttributes & { prop: unknown; "ignore-prop": string; }'.
+!!! error TS2322:   Type 'T' is not assignable to type '{ prop: unknown; "ignore-prop": string; }'.
     }
     
     declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;

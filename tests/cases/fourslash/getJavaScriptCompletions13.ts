@@ -14,6 +14,21 @@
 ////file2Identifier2./*2*/
 
 verify.completions(
-    { marker: "1", includes: ["file2Identifier1", "file2Identifier2", "file1Identifier"], excludes: "FooProp" },
-    { marker: "2", includes: ["file2Identifier1", "file2Identifier2"], excludes: ["file1Identifier", "FooProp"] },
-)
+    {
+        marker: "1",
+        includes: [
+            "file2Identifier1",
+            "file2Identifier2",
+            { name: "file1Identifier", sortText: completion.SortText.GlobalsOrKeywords }
+        ],
+        excludes: "FooProp"
+    },
+    {
+        marker: "2",
+        includes: [
+            { name: "file2Identifier1", sortText: completion.SortText.JavascriptIdentifiers },
+            { name: "file2Identifier2", sortText: completion.SortText.JavascriptIdentifiers }
+        ],
+        excludes: ["file1Identifier", "FooProp"]
+    },
+);

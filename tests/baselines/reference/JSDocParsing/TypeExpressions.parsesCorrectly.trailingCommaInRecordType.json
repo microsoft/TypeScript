@@ -3,17 +3,23 @@
     "pos": 1,
     "end": 5,
     "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "members": {
         "0": {
             "kind": "PropertySignature",
             "pos": 2,
             "end": 4,
             "flags": "JSDoc",
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "name": {
                 "kind": "Identifier",
                 "pos": 2,
                 "end": 3,
                 "flags": "JSDoc",
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "escapedText": "a"
             }
         },

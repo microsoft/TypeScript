@@ -26,21 +26,21 @@ namespace ts.codefix {
 
     function createAction(context: CodeFixContext, sourceFile: SourceFile, node: Node, replacement: Node): CodeFixAction {
         const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, node, replacement));
-        return createCodeFixActionNoFixId(fixName, changes, [Diagnostics.Replace_import_with_0, changes[0].textChanges[0].newText]);
+        return createCodeFixActionWithoutFixAll(fixName, changes, [Diagnostics.Replace_import_with_0, changes[0].textChanges[0].newText]);
     }
 
     registerCodeFix({
         errorCodes: [
-            Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures.code,
-            Diagnostics.Cannot_use_new_with_an_expression_whose_type_lacks_a_call_or_construct_signature.code,
+            Diagnostics.This_expression_is_not_callable.code,
+            Diagnostics.This_expression_is_not_constructable.code,
         ],
         getCodeActions: getActionsForUsageOfInvalidImport
     });
 
     function getActionsForUsageOfInvalidImport(context: CodeFixContext): CodeFixAction[] | undefined {
         const sourceFile = context.sourceFile;
-        const targetKind = Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures.code === context.errorCode ? SyntaxKind.CallExpression : SyntaxKind.NewExpression;
-        const node = findAncestor(getTokenAtPosition(sourceFile, context.span.start), a => a.kind === targetKind && a.getStart() === context.span.start && a.getEnd() === (context.span.start + context.span.length)) as CallExpression | NewExpression;
+        const targetKind = Diagnostics.This_expression_is_not_callable.code === context.errorCode ? SyntaxKind.CallExpression : SyntaxKind.NewExpression;
+        const node = findAncestor(getTokenAtPosition(sourceFile, context.span.start), a => a.kind === targetKind) as CallExpression | NewExpression;
         if (!node) {
             return [];
         }
@@ -89,7 +89,7 @@ namespace ts.codefix {
         if (isExpression(expr) && !(isNamedDeclaration(expr.parent) && expr.parent.name === expr)) {
             const sourceFile = context.sourceFile;
             const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, expr, createPropertyAccess(expr, "default"), {}));
-            fixes.push(createCodeFixActionNoFixId(fixName, changes, Diagnostics.Use_synthetic_default_member));
+            fixes.push(createCodeFixActionWithoutFixAll(fixName, changes, Diagnostics.Use_synthetic_default_member));
         }
         return fixes;
     }

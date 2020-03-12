@@ -1,0 +1,67 @@
+=== tests/cases/compiler/inferenceAndSelfReferentialConstraint.ts ===
+// @strict
+
+// Repro from #29520
+
+type Test<K extends keyof any> = {
+>Test : Test<K>
+
+  [P in K | "foo"]: P extends "foo" ? true : () => any
+>true : true
+}
+
+function test<T extends Test<keyof T>>(arg: T) {
+>test : <T extends Test<keyof T>>(arg: T) => T
+>arg : T
+
+  return arg;
+>arg : T
+}
+
+const res1 = test({
+>res1 : { foo: true; bar(): void; }
+>test({  foo: true,  bar() {  }}) : { foo: true; bar(): void; }
+>test : <T extends Test<keyof T>>(arg: T) => T
+>{  foo: true,  bar() {  }} : { foo: true; bar(): void; }
+
+  foo: true,
+>foo : true
+>true : true
+
+  bar() {
+>bar : () => void
+  }
+});
+
+const res2 = test({
+>res2 : { foo: true; bar: () => void; }
+>test({  foo: true,  bar: function () {  }}) : { foo: true; bar: () => void; }
+>test : <T extends Test<keyof T>>(arg: T) => T
+>{  foo: true,  bar: function () {  }} : { foo: true; bar: () => void; }
+
+  foo: true,
+>foo : true
+>true : true
+
+  bar: function () {
+>bar : () => void
+>function () {  } : () => void
+  }
+});
+
+const res3 = test({
+>res3 : { foo: true; bar: () => void; }
+>test({  foo: true,  bar: () => {  }}) : { foo: true; bar: () => void; }
+>test : <T extends Test<keyof T>>(arg: T) => T
+>{  foo: true,  bar: () => {  }} : { foo: true; bar: () => void; }
+
+  foo: true,
+>foo : true
+>true : true
+
+  bar: () => {
+>bar : () => void
+>() => {  } : () => void
+  }
+});
+

@@ -45,11 +45,11 @@ var B = /** @class */ (function (_super) {
     function B() {
         var _this = this;
         var D = /** @class */ (function (_super) {
-            __extends(class_1, _super);
-            function class_1() {
+            __extends(D, _super);
+            function D() {
                 return _super.call(this) || this;
             }
-            return class_1;
+            return D;
         }(C));
         return _this;
     }

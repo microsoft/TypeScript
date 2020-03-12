@@ -1,11 +1,10 @@
 namespace Harness.LanguageService {
 
     export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
-        // tslint:disable-next-line:no-null-keyword
-        const proxy = Object.create(/*prototype*/ null);
+        const proxy = Object.create(/*prototype*/ null); // eslint-disable-line no-null/no-null
         const langSvc: any = info.languageService;
         for (const k of Object.keys(langSvc)) {
-            // tslint:disable-next-line only-arrow-functions
+            // eslint-disable-next-line only-arrow-functions
             proxy[k] = function () {
                 return langSvc[k].apply(langSvc, arguments);
             };
@@ -204,6 +203,12 @@ namespace Harness.LanguageService {
             return ts.computeLineAndCharacterOfPosition(script.getLineMap(), position);
         }
 
+        public lineAndCharacterToPosition(fileName: string, lineAndCharacter: ts.LineAndCharacter): number {
+            const script: ScriptInfo = this.getScriptInfo(fileName)!;
+            assert.isOk(script);
+            return ts.computePositionOfLineAndCharacter(script.getLineMap(), lineAndCharacter.line, lineAndCharacter.character);
+        }
+
         useCaseSensitiveFileNames() {
             return !this.vfs.ignoreCase;
         }
@@ -213,6 +218,10 @@ namespace Harness.LanguageService {
     class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost, LanguageServiceAdapterHost {
         isKnownTypesPackageName(name: string): boolean {
             return !!this.typesRegistry && this.typesRegistry.has(name);
+        }
+
+        getGlobalTypingsCacheLocation() {
+            return "/Library/Caches/typescript";
         }
 
         installPackage = ts.notImplemented;
@@ -253,7 +262,7 @@ namespace Harness.LanguageService {
             return this.sys.fileExists(fileName);
         }
 
-        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
+        readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
             return this.sys.readDirectory(path, extensions, exclude, include, depth);
         }
 
@@ -289,8 +298,8 @@ namespace Harness.LanguageService {
     class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceShimHost, ts.CoreServicesShimHost {
         private nativeHost: NativeLanguageServiceHost;
 
-        public getModuleResolutionsForFile: (fileName: string) => string;
-        public getTypeReferenceDirectiveResolutionsForFile: (fileName: string) => string;
+        public getModuleResolutionsForFile: ((fileName: string) => string) | undefined;
+        public getTypeReferenceDirectiveResolutionsForFile: ((fileName: string) => string) | undefined;
 
         constructor(preprocessToResolve: boolean, cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
             super(cancellationToken, options);
@@ -469,11 +478,14 @@ namespace Harness.LanguageService {
         getSignatureHelpItems(fileName: string, position: number, options: ts.SignatureHelpItemsOptions | undefined): ts.SignatureHelpItems {
             return unwrapJSONCallResult(this.shim.getSignatureHelpItems(fileName, position, options));
         }
-        getRenameInfo(fileName: string, position: number): ts.RenameInfo {
-            return unwrapJSONCallResult(this.shim.getRenameInfo(fileName, position));
+        getRenameInfo(fileName: string, position: number, options?: ts.RenameInfoOptions): ts.RenameInfo {
+            return unwrapJSONCallResult(this.shim.getRenameInfo(fileName, position, options));
         }
-        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ts.RenameLocation[] {
-            return unwrapJSONCallResult(this.shim.findRenameLocations(fileName, position, findInStrings, findInComments));
+        getSmartSelectionRange(fileName: string, position: number): ts.SelectionRange {
+            return unwrapJSONCallResult(this.shim.getSmartSelectionRange(fileName, position));
+        }
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): ts.RenameLocation[] {
+            return unwrapJSONCallResult(this.shim.findRenameLocations(fileName, position, findInStrings, findInComments, providePrefixAndSuffixTextForRename));
         }
         getDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
             return unwrapJSONCallResult(this.shim.getDefinitionAtPosition(fileName, position));
@@ -556,11 +568,20 @@ namespace Harness.LanguageService {
         getApplicableRefactors(): ts.ApplicableRefactorInfo[] {
             throw new Error("Not supported on the shim.");
         }
-        organizeImports(_scope: ts.OrganizeImportsScope, _formatOptions: ts.FormatCodeSettings): ReadonlyArray<ts.FileTextChanges> {
+        organizeImports(_scope: ts.OrganizeImportsScope, _formatOptions: ts.FormatCodeSettings): readonly ts.FileTextChanges[] {
             throw new Error("Not supported on the shim.");
         }
-        getEditsForFileRename(): ReadonlyArray<ts.FileTextChanges> {
+        getEditsForFileRename(): readonly ts.FileTextChanges[] {
             throw new Error("Not supported on the shim.");
+        }
+        prepareCallHierarchy(fileName: string, position: number) {
+            return unwrapJSONCallResult(this.shim.prepareCallHierarchy(fileName, position));
+        }
+        provideCallHierarchyIncomingCalls(fileName: string, position: number) {
+            return unwrapJSONCallResult(this.shim.provideCallHierarchyIncomingCalls(fileName, position));
+        }
+        provideCallHierarchyOutgoingCalls(fileName: string, position: number) {
+            return unwrapJSONCallResult(this.shim.provideCallHierarchyOutgoingCalls(fileName, position));
         }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
@@ -577,6 +598,9 @@ namespace Harness.LanguageService {
         getSourceMapper(): never {
             return ts.notImplemented();
         }
+        clearSourceMapperCache(): never {
+            return ts.notImplemented();
+        }
         dispose(): void { this.shim.dispose({}); }
     }
 
@@ -585,21 +609,19 @@ namespace Harness.LanguageService {
         private factory: ts.TypeScriptServicesFactory;
         constructor(preprocessToResolve: boolean, cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
             this.host = new ShimLanguageServiceHost(preprocessToResolve, cancellationToken, options);
-            this.factory = new TypeScript.Services.TypeScriptServicesFactory();
+            this.factory = new ts.TypeScriptServicesFactory();
         }
         getHost() { return this.host; }
         getLanguageService(): ts.LanguageService { return new LanguageServiceShimProxy(this.factory.createLanguageServiceShim(this.host)); }
         getClassifier(): ts.Classifier { return new ClassifierShimProxy(this.factory.createClassifierShim(this.host)); }
         getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo {
-            let shimResult: {
+            const coreServicesShim = this.factory.createCoreServicesShim(this.host);
+            const shimResult: {
                 referencedFiles: ts.ShimsFileReference[];
                 typeReferenceDirectives: ts.ShimsFileReference[];
                 importedFiles: ts.ShimsFileReference[];
                 isLibFile: boolean;
-            };
-
-            const coreServicesShim = this.factory.createCoreServicesShim(this.host);
-            shimResult = unwrapJSONCallResult(coreServicesShim.getPreProcessedFileInfo(fileName, ts.ScriptSnapshot.fromString(fileContents)));
+            } = unwrapJSONCallResult(coreServicesShim.getPreProcessedFileInfo(fileName, ts.ScriptSnapshot.fromString(fileContents)));
 
             const convertResult: ts.PreProcessedFileInfo = {
                 referencedFiles: [],
@@ -639,7 +661,7 @@ namespace Harness.LanguageService {
 
     // Server adapter
     class SessionClientHost extends NativeLanguageServiceHost implements ts.server.SessionClientHost {
-        private client: ts.server.SessionClient;
+        private client!: ts.server.SessionClient;
 
         constructor(cancellationToken: ts.HostCancellationToken | undefined, settings: ts.CompilerOptions | undefined) {
             super(cancellationToken, settings);
@@ -658,8 +680,9 @@ namespace Harness.LanguageService {
         }
 
         editScript(fileName: string, start: number, end: number, newText: string) {
+            const changeArgs = this.client.createChangeFileRequestArgs(fileName, start, end, newText);
             super.editScript(fileName, start, end, newText);
-            this.client.changeFile(fileName, start, end, newText);
+            this.client.changeFile(fileName, changeArgs);
         }
     }
 
@@ -716,15 +739,15 @@ namespace Harness.LanguageService {
             return this.host.getCurrentDirectory();
         }
 
-        getDirectories(): string[] {
-            return [];
+        getDirectories(path: string): string[] {
+            return this.host.getDirectories(path);
         }
 
         getEnvironmentVariable(name: string): string {
             return ts.sys.getEnvironmentVariable(name);
         }
 
-        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
+        readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
             return this.host.readDirectory(path, extensions, exclude, include, depth);
         }
 
@@ -766,18 +789,22 @@ namespace Harness.LanguageService {
         }
 
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
+            // eslint-disable-next-line no-restricted-globals
             return setTimeout(callback, ms, args);
         }
 
         clearTimeout(timeoutId: any): void {
+            // eslint-disable-next-line no-restricted-globals
             clearTimeout(timeoutId);
         }
 
         setImmediate(callback: (...args: any[]) => void, _ms: number, ...args: any[]): any {
+            // eslint-disable-next-line no-restricted-globals
             return setImmediate(callback, args);
         }
 
         clearImmediate(timeoutId: any): void {
+            // eslint-disable-next-line no-restricted-globals
             clearImmediate(timeoutId);
         }
 
@@ -785,7 +812,7 @@ namespace Harness.LanguageService {
             return mockHash(s);
         }
 
-        require(_initialDir: string, _moduleName: string): ts.server.RequireResult {
+        require(_initialDir: string, _moduleName: string): ts.RequireResult {
             switch (_moduleName) {
                 // Adds to the Quick Info a fixed string and a string from the config file
                 // and replaces the first display part
@@ -795,7 +822,7 @@ namespace Harness.LanguageService {
                             create(info: ts.server.PluginCreateInfo) {
                                 const proxy = makeDefaultProxy(info);
                                 const langSvc: any = info.languageService;
-                                // tslint:disable-next-line only-arrow-functions
+                                // eslint-disable-next-line only-arrow-functions
                                 proxy.getQuickInfoAtPosition = function () {
                                     const parts = langSvc.getQuickInfoAtPosition.apply(langSvc, arguments);
                                     if (parts.displayParts.length > 0) {
@@ -886,9 +913,16 @@ namespace Harness.LanguageService {
         }
     }
 
+    class FourslashSession extends ts.server.Session {
+        getText(fileName: string) {
+            return ts.getSnapshotText(this.projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!.getScriptSnapshot(fileName)!);
+        }
+    }
+
     export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
         private host: SessionClientHost;
         private client: ts.server.SessionClient;
+        private server: FourslashSession;
         constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
             // This is the main host that tests use to direct tests
             const clientHost = new SessionClientHost(cancellationToken, options);
@@ -908,11 +942,12 @@ namespace Harness.LanguageService {
                 logger: serverHost,
                 canUseEvents: true
             };
-            const server = new ts.server.Session(opts);
+            this.server = new FourslashSession(opts);
+
 
             // Fake the connection between the client and the server
             serverHost.writeMessage = client.onMessage.bind(client);
-            clientHost.writeMessage = server.onMessage.bind(server);
+            clientHost.writeMessage = this.server.onMessage.bind(this.server);
 
             // Wire the client to the host to get notifications when a file is open
             // or edited.
@@ -926,5 +961,20 @@ namespace Harness.LanguageService {
         getLanguageService(): ts.LanguageService { return this.client; }
         getClassifier(): ts.Classifier { throw new Error("getClassifier is not available using the server interface."); }
         getPreProcessedFileInfo(): ts.PreProcessedFileInfo { throw new Error("getPreProcessedFileInfo is not available using the server interface."); }
+        assertTextConsistent(fileName: string) {
+            const serverText = this.server.getText(fileName);
+            const clientText = this.host.readFile(fileName);
+            ts.Debug.assert(serverText === clientText, [
+                "Server and client text are inconsistent.",
+                "",
+                "\x1b[1mServer\x1b[0m\x1b[31m:",
+                serverText,
+                "",
+                "\x1b[1mClient\x1b[0m\x1b[31m:",
+                clientText,
+                "",
+                "This probably means something is wrong with the fourslash infrastructure, not with the test."
+            ].join(ts.sys.newLine));
+        }
     }
 }

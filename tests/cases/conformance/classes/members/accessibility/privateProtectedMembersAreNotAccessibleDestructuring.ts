@@ -14,7 +14,10 @@ class C extends K {
     }
 }
 let k = new K();
-let { priv } = k; // error 
+let { priv } = k; // error
 let { prot } = k; // error
 let { privateMethod } = k; // error
-let { priv: a, prot: b, privateMethod: f } = k; // error
+let { priv: a, prot: b, privateMethod: pm } = k; // error
+function f({ priv, prot, privateMethod }: K) {
+
+}

@@ -99,7 +99,7 @@ export const MySFC = (props: {x: number, y: number, children?: predom.JSX.Elemen
 >y : number
 >this.props.children : any
 >this.props : any
->this : any
+>this : typeof globalThis
 >props : any
 >children : any
 >p : any

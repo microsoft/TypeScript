@@ -14,7 +14,18 @@
 //// inst2.blah/*b*/;
 
 goTo.marker('a');
-verify.completions({ exact: ["property", "TestObj", "constructor", "instance", "class2", "prototype", "blah", "inst2"] });
+verify.completions({
+    exact: [
+        "property",
+        { name: "TestObj", sortText: completion.SortText.JavascriptIdentifiers },
+        { name: "constructor", sortText: completion.SortText.JavascriptIdentifiers },
+        { name: "instance", sortText: completion.SortText.JavascriptIdentifiers },
+        { name: "class2", sortText: completion.SortText.JavascriptIdentifiers },
+        { name: "prototype", sortText: completion.SortText.JavascriptIdentifiers },
+        { name: "blah", sortText: completion.SortText.JavascriptIdentifiers },
+        { name: "inst2", sortText: completion.SortText.JavascriptIdentifiers }
+    ]
+});
 edit.backspace();
 
 goTo.marker('b');

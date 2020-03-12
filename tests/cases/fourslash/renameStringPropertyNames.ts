@@ -1,15 +1,15 @@
 /// <reference path='fourslash.ts' />
 
 ////var o = {
-////    [|prop|]: 0
+////    [|[|{| "contextRangeIndex": 0 |}prop|]: 0|]
 ////};
 ////
 ////o = {
-////    "[|prop|]": 1
+////    [|"[|{| "contextRangeIndex": 2 |}prop|]": 1|]
 ////};
 ////
 ////o["[|prop|]"];
 ////o['[|prop|]'];
 ////o.[|prop|];
 
-verify.rangesAreRenameLocations();
+verify.rangesWithSameTextAreRenameLocations("prop");

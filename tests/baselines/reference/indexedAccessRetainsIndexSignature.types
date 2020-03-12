@@ -21,7 +21,7 @@ type O = Omit<{ a: number, b: string }, 'a'>
 >a : number
 >b : string
 
-const o: O = { b: '' }
+export const o: O = { b: '' }
 >o : Pick<{ a: number; b: string; }, "b">
 >{ b: '' } : { b: string; }
 >b : string

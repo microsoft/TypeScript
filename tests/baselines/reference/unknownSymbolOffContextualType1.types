@@ -35,9 +35,9 @@ function getMaxWidth(elementNames: string[]) {
     var enabled = elements.filter(function (e) {
 >enabled : HTMLElement[]
 >elements.filter(function (e) {        return !e.isDisabled;    }) : HTMLElement[]
->elements.filter : { <S extends HTMLElement>(callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => any, thisArg?: any): HTMLElement[]; }
+>elements.filter : { <S extends HTMLElement>(callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => unknown, thisArg?: any): HTMLElement[]; }
 >elements : HTMLElement[]
->filter : { <S extends HTMLElement>(callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => any, thisArg?: any): HTMLElement[]; }
+>filter : { <S extends HTMLElement>(callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => unknown, thisArg?: any): HTMLElement[]; }
 >function (e) {        return !e.isDisabled;    } : (e: HTMLElement) => boolean
 >e : HTMLElement
 

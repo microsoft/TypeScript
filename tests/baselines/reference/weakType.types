@@ -147,8 +147,8 @@ type Weak = {
 >b : number
     }
 }
-declare let unknown: {
->unknown : { properties: { wrong: string; }; }
+declare let propertiesWrong: {
+>propertiesWrong : { properties: { wrong: string; }; }
 
     properties: {
 >properties : { wrong: string; }
@@ -157,8 +157,8 @@ declare let unknown: {
 >wrong : string
     }
 }
-let weak: Weak & Spoiler = unknown
+let weak: Weak & Spoiler = propertiesWrong
 >weak : Weak & Spoiler
->unknown : { properties: { wrong: string; }; }
+>propertiesWrong : { properties: { wrong: string; }; }
 
 

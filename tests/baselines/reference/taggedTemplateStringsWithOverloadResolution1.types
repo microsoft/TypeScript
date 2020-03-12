@@ -29,45 +29,45 @@ function foo(...stuff: any[]): any {
 }
 
 var a = foo([]);             // number
->a : any
->foo([]) : any
+>a : never
+>foo([]) : never
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
 >[] : undefined[]
 
 var b = foo([], 1);          // string
->b : any
->foo([], 1) : any
+>b : never
+>foo([], 1) : never
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
 >[] : undefined[]
 >1 : 1
 
 var c = foo([], 1, 2);       // boolean
->c : any
->foo([], 1, 2) : any
+>c : never
+>foo([], 1, 2) : never
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
 >[] : undefined[]
 >1 : 1
 >2 : 2
 
 var d = foo([], 1, true);    // boolean (with error)
->d : any
->foo([], 1, true) : any
+>d : never
+>foo([], 1, true) : never
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
 >[] : undefined[]
 >1 : 1
 >true : true
 
 var e = foo([], 1, "2");     // {}
->e : any
->foo([], 1, "2") : any
+>e : never
+>foo([], 1, "2") : never
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
 >[] : undefined[]
 >1 : 1
 >"2" : "2"
 
 var f = foo([], 1, 2, 3);    // any (with error)
->f : any
->foo([], 1, 2, 3) : any
+>f : never
+>foo([], 1, 2, 3) : never
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
 >[] : undefined[]
 >1 : 1
@@ -96,8 +96,8 @@ var w = foo `${1}${2}`;      // boolean
 >2 : 2
 
 var x = foo `${1}${true}`;   // boolean (with error)
->x : any
->foo `${1}${true}` : any
+>x : never
+>foo `${1}${true}` : never
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
 >`${1}${true}` : string
 >1 : 1
@@ -112,8 +112,8 @@ var y = foo `${1}${"2"}`;    // {}
 >"2" : "2"
 
 var z = foo `${1}${2}${3}`;  // any (with error)
->z : any
->foo `${1}${2}${3}` : any
+>z : never
+>foo `${1}${2}${3}` : never
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
 >`${1}${2}${3}` : string
 >1 : 1

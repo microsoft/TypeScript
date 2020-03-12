@@ -1,5 +1,5 @@
 namespace ts {
-    describe("BigInt literal base conversions", () => {
+    describe("unittests:: BigInt literal base conversions", () => {
         describe("parsePseudoBigInt", () => {
             const testNumbers: number[] = [];
             for (let i = 0; i < 1e3; i++) testNumbers.push(i);

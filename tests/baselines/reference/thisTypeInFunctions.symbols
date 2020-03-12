@@ -126,6 +126,7 @@ let impl: I = {
 
     explicitVoid2: () => this.a, // ok, this: any because it refers to some outer object (window?)
 >explicitVoid2 : Symbol(explicitVoid2, Decl(thisTypeInFunctions.ts, 38, 10))
+>this : Symbol(globalThis)
 
     explicitVoid1() { return 12; },
 >explicitVoid1 : Symbol(explicitVoid1, Decl(thisTypeInFunctions.ts, 39, 32))
@@ -365,6 +366,7 @@ let unboundToSpecified: (this: { y: number }, x: number) => number = x => x + th
 >x : Symbol(x, Decl(thisTypeInFunctions.ts, 92, 45))
 >x : Symbol(x, Decl(thisTypeInFunctions.ts, 92, 68))
 >x : Symbol(x, Decl(thisTypeInFunctions.ts, 92, 68))
+>this : Symbol(globalThis)
 
 let specifiedToSpecified: (this: {y: number}, x: number) => number = explicitStructural;
 >specifiedToSpecified : Symbol(specifiedToSpecified, Decl(thisTypeInFunctions.ts, 93, 3))
@@ -495,6 +497,7 @@ c.explicitC = m => m + this.n;
 >explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctions.ts, 8, 5))
 >m : Symbol(m, Decl(thisTypeInFunctions.ts, 117, 13))
 >m : Symbol(m, Decl(thisTypeInFunctions.ts, 117, 13))
+>this : Symbol(globalThis)
 
 c.explicitThis = m => m + this.n;
 >c.explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctions.ts, 5, 14))
@@ -502,6 +505,7 @@ c.explicitThis = m => m + this.n;
 >explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctions.ts, 5, 14))
 >m : Symbol(m, Decl(thisTypeInFunctions.ts, 118, 16))
 >m : Symbol(m, Decl(thisTypeInFunctions.ts, 118, 16))
+>this : Symbol(globalThis)
 
 c.explicitProperty = m => m + this.n;
 >c.explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctions.ts, 11, 5))
@@ -509,6 +513,7 @@ c.explicitProperty = m => m + this.n;
 >explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctions.ts, 11, 5))
 >m : Symbol(m, Decl(thisTypeInFunctions.ts, 119, 20))
 >m : Symbol(m, Decl(thisTypeInFunctions.ts, 119, 20))
+>this : Symbol(globalThis)
 
 //NOTE: this=C here, I guess?
 c.explicitThis = explicitCFunction;

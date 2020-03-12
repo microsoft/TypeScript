@@ -1,3 +1,4 @@
+// @target: esnext
 class MyTestClass {
     private canary: number;
     static staticCanary: number;
@@ -158,19 +159,19 @@ var q1 = function (s = this) {
     this.spaaaaace = 4;
 }
 
-//type of 'this' in a fat arrow expression param list is Any
+//type of 'this' in a fat arrow expression param list is typeof globalThis
 var q2 = (s = this) => {
-    var s: any;
+    var s: typeof globalThis;
     s.spaaaaaaace = 4;
 
-    //type of 'this' in a fat arrow expression body is Any
-    var t: any;
+    //type of 'this' in a fat arrow expression body is typeof globalThis
+    var t: typeof globalThis;
     var t = this;
     this.spaaaaace = 4;
 }
 
-//type of 'this' in global module is Any
-var t: any;
+//type of 'this' in global module is GlobalThis
+var t: typeof globalThis;
 var t = this;
 this.spaaaaace = 4;
 

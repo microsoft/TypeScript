@@ -1,8 +1,8 @@
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(19,20): error TS2313: Type parameter 'P' has a circular constraint.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(21,20): error TS2322: Type 'Date' is not assignable to type 'string | number | symbol'.
-  Type 'Date' is not assignable to type 'symbol'.
+  Type 'Date' is not assignable to type 'number'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(22,19): error TS2344: Type 'Date' does not satisfy the constraint 'string | number | symbol'.
-  Type 'Date' is not assignable to type 'symbol'.
+  Type 'Date' is not assignable to type 'number'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(25,24): error TS2344: Type '"foo"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(26,24): error TS2344: Type '"name" | "foo"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
   Type '"foo"' is not assignable to type '"name" | "width" | "height" | "visible"'.
@@ -69,11 +69,11 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
     type T02 = { [P in Date]: number };  // Error
                        ~~~~
 !!! error TS2322: Type 'Date' is not assignable to type 'string | number | symbol'.
-!!! error TS2322:   Type 'Date' is not assignable to type 'symbol'.
+!!! error TS2322:   Type 'Date' is not assignable to type 'number'.
     type T03 = Record<Date, number>;  // Error
                       ~~~~
 !!! error TS2344: Type 'Date' does not satisfy the constraint 'string | number | symbol'.
-!!! error TS2344:   Type 'Date' is not assignable to type 'symbol'.
+!!! error TS2344:   Type 'Date' is not assignable to type 'number'.
     
     type T10 = Pick<Shape, "name">;
     type T11 = Pick<Shape, "foo">;  // Error
@@ -133,12 +133,15 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
         var x: { [P in keyof T]?: T[P] };  // Error
             ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]?: T[P] | undefined; }'.
+!!! related TS6203 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:58:9: 'x' was also declared here.
         var x: { readonly [P in keyof T]: T[P] };  // Error
             ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]: T[P]; }'.
+!!! related TS6203 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:58:9: 'x' was also declared here.
         var x: { readonly [P in keyof T]?: T[P] };  // Error
             ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]?: T[P] | undefined; }'.
+!!! related TS6203 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:58:9: 'x' was also declared here.
     }
     
     function f12<T>() {
@@ -146,6 +149,7 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
         var x: { [P in keyof T]: T[P][] };  // Error
             ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]: T[P][]; }'.
+!!! related TS6203 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:65:9: 'x' was also declared here.
     }
     
     // Check that inferences to mapped types are secondary

@@ -1,0 +1,8 @@
+Syntactic Diagnostics for file '/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics3.ts':
+/tests/cases/fourslash/a.js(1,9): error TS8004: Type parameter declarations can only be used in TypeScript files.
+
+
+==== /tests/cases/fourslash/a.js (1 errors) ====
+    class C<T> { }
+            ~
+!!! error TS8004: Type parameter declarations can only be used in TypeScript files.

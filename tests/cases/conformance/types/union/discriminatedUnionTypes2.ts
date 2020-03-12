@@ -72,3 +72,74 @@ function f20<Data>(carrier: DataCarrier<Data>) {
         const data: null = carrier.data
     }
 }
+
+// Repro from #28935
+
+type Foo = { tag: true, x: number } | { tag: false, y: number } | { [x: string]: string };
+
+function f30(foo: Foo) {
+    if (foo.tag) {
+        foo;
+    }
+    else {
+        foo;
+    }
+}
+
+function f31(foo: Foo) {
+    if (foo.tag === true) {
+        foo;
+    }
+    else {
+        foo;
+    }
+}
+
+// Repro from #33448
+
+type a = {
+    type: 'a',
+    data: string
+}
+type b = {
+    type: 'b',
+    name: string
+}
+type c = {
+    type: 'c',
+    other: string
+}
+
+type abc = a | b | c;
+
+function f(problem: abc & (b | c)) {
+    if (problem.type === 'b') {
+        problem.name;
+    }
+    else {
+        problem.other;
+    }
+}
+
+type RuntimeValue =
+    | { type: 'number', value: number }
+    | { type: 'string', value: string }
+    | { type: 'boolean', value: boolean };
+
+function foo1(x: RuntimeValue & { type: 'number' }) {
+    if (x.type === 'number') {
+        x.value;  // number
+    }
+    else {
+        x.value;  // number
+    }
+}
+
+function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
+    if (x.type === 'number') {
+        x.value;  // number
+    }
+    else {
+        x.value;  // string
+    }
+}

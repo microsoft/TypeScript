@@ -5,10 +5,10 @@
 // @esModuleInterop: true
 
 // @Filename: /foo.ts
-////import [|{| "isWriteAccess": true, "isDefinition": true |}settings|] from "./settings.json";
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}settings|] from "./settings.json";|]
 ////[|settings|];
 
 // @Filename: /settings.json
 //// {}
 
-verify.singleReferenceGroup("import settings");
+verify.singleReferenceGroup("import settings", "settings");

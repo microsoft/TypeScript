@@ -8,6 +8,7 @@
 ////var f = /*a*/x/*b*/ => x
 
 verify.codeFix({
+    index: 0,
     description: "Annotate with type from JSDoc",
     newFileContent:
 `/**

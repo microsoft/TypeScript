@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/Symbols/symbolProperty29.ts(5,6): error TS1023: An index signature parameter type must be 'string' or 'number'.
+tests/cases/conformance/es6/Symbols/symbolProperty29.ts(5,6): error TS1023: An index signature parameter type must be either 'string' or 'number'.
 
 
 ==== tests/cases/conformance/es6/Symbols/symbolProperty29.ts (1 errors) ====
@@ -8,5 +8,5 @@ tests/cases/conformance/es6/Symbols/symbolProperty29.ts(5,6): error TS1023: An i
         }
         [s: symbol]: () => { x: string };
          ~
-!!! error TS1023: An index signature parameter type must be 'string' or 'number'.
+!!! error TS1023: An index signature parameter type must be either 'string' or 'number'.
     }

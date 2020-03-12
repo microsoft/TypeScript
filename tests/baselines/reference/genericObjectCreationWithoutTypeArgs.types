@@ -15,12 +15,12 @@ var x2 = new SS < number>;   // Correctly give error
 >SS : typeof SS
 
 var x3 = new SS();         // OK
->x3 : SS<{}>
->new SS() : SS<{}>
+>x3 : SS<unknown>
+>new SS() : SS<unknown>
 >SS : typeof SS
 
 var x4 = new SS;           // Should be allowed, but currently give error ('supplied parameters do not match any signature of the call target')
->x4 : SS<{}>
->new SS : SS<{}>
+>x4 : SS<unknown>
+>new SS : SS<unknown>
 >SS : typeof SS
 

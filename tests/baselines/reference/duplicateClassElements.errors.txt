@@ -97,6 +97,7 @@ tests/cases/compiler/duplicateClassElements.ts(41,12): error TS2300: Duplicate i
 !!! error TS2300: Duplicate identifier 'x2'.
                ~~
 !!! error TS2717: Subsequent property declarations must have the same type.  Property 'x2' must be of type 'number', but here has type 'any'.
+!!! related TS6203 tests/cases/compiler/duplicateClassElements.ts:29:9: 'x2' was also declared here.
     
         get z2() {
             ~~

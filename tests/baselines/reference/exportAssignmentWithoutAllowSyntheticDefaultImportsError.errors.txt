@@ -1,0 +1,15 @@
+/bar.ts(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+/foo.ts(1,8): error TS1259: Module '"/bar"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
+
+
+==== /bar.ts (1 errors) ====
+    export = bar;
+    ~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+    function bar() {}
+    
+==== /foo.ts (1 errors) ====
+    import bar from './bar';
+           ~~~
+!!! error TS1259: Module '"/bar"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
+!!! related TS2594 /bar.ts:1:1: This module is declared with using 'export =', and can only be used with a default import when using the 'allowSyntheticDefaultImports' flag.

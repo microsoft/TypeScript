@@ -102,11 +102,11 @@ function foo5(x: number | string | boolean) {
 >typeof x !== "number"  // number | boolean        && x : boolean
 >typeof x !== "number" : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : number | boolean
+>x : number | true
 >"number" : "number"
 
         && x));   // boolean
->x : boolean
+>x : true
 }
 function foo6(x: number | string | boolean) {
 >foo6 : (x: string | number | boolean) => boolean
@@ -167,7 +167,7 @@ function foo7(x: number | string | boolean) {
 >typeof x === "number"        // change value of x        ? ((x = 10) && x.toString()) // x is number        // do not change value        : ((y = x) && x.toString()) : string
 >typeof x === "number" : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : number | boolean
+>x : number | true
 >"number" : "number"
 
         // change value of x
@@ -187,13 +187,13 @@ function foo7(x: number | string | boolean) {
         : ((y = x) && x.toString()))); // x is boolean
 >((y = x) && x.toString()) : string
 >(y = x) && x.toString() : string
->(y = x) : boolean
->y = x : boolean
+>(y = x) : true
+>y = x : true
 >y : string | number | boolean
->x : boolean
+>x : true
 >x.toString() : string
 >x.toString : () => string
->x : boolean
+>x : true
 >toString : () => string
 }
 

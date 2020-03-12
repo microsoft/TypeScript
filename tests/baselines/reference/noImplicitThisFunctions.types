@@ -42,15 +42,15 @@ let f4: (b: number) => number = b => this.c + b;
 >b : number
 >this.c + b : any
 >this.c : any
->this : any
+>this : typeof globalThis
 >c : any
 >b : number
 
 let f5 = () => () => this;
->f5 : () => () => any
->() => () => this : () => () => any
->() => this : () => any
->this : any
+>f5 : () => () => typeof globalThis
+>() => () => this : () => () => typeof globalThis
+>() => this : () => typeof globalThis
+>this : typeof globalThis
 
 let f6 = function() { return () => this; };
 >f6 : () => () => any

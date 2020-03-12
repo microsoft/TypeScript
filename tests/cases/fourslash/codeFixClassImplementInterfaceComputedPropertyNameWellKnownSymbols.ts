@@ -20,6 +20,7 @@
 ////class C implements I<number> {}
 
 verify.codeFix({
+    index: 0,
     description: "Implement interface 'I<number>'",
     newFileContent:
 `interface I<Species> {

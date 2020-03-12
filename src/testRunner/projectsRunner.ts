@@ -3,7 +3,7 @@ namespace project {
     interface ProjectRunnerTestCase {
         scenario: string;
         projectRoot: string; // project where it lives - this also is the current directory when compiling
-        inputFiles: ReadonlyArray<string>; // list of input files to be given to program
+        inputFiles: readonly string[]; // list of input files to be given to program
         resolveMapRoot?: boolean; // should we resolve this map root and give compiler the absolute disk path as map root?
         resolveSourceRoot?: boolean; // should we resolve this source root and give compiler the absolute disk path as map root?
         baselineCheck?: boolean; // Verify the baselines of output files, if this is false, we will write to output to the disk but there is no verification of baselines
@@ -13,29 +13,33 @@ namespace project {
 
     interface ProjectRunnerTestCaseResolutionInfo extends ProjectRunnerTestCase {
         // Apart from actual test case the results of the resolution
-        resolvedInputFiles: ReadonlyArray<string>; // List of files that were asked to read by compiler
-        emittedFiles: ReadonlyArray<string>; // List of files that were emitted by the compiler
+        resolvedInputFiles: readonly string[]; // List of files that were asked to read by compiler
+        emittedFiles: readonly string[]; // List of files that were emitted by the compiler
     }
 
     interface CompileProjectFilesResult {
-        configFileSourceFiles: ReadonlyArray<ts.SourceFile>;
+        configFileSourceFiles: readonly ts.SourceFile[];
         moduleKind: ts.ModuleKind;
         program?: ts.Program;
         compilerOptions?: ts.CompilerOptions;
-        errors: ReadonlyArray<ts.Diagnostic>;
-        sourceMapData?: ReadonlyArray<ts.SourceMapEmitResult>;
+        errors: readonly ts.Diagnostic[];
+        sourceMapData?: readonly ts.SourceMapEmitResult[];
     }
 
     interface BatchCompileProjectTestCaseResult extends CompileProjectFilesResult {
-        outputFiles?: ReadonlyArray<documents.TextDocument>;
+        outputFiles?: readonly documents.TextDocument[];
     }
 
-    export class ProjectRunner extends RunnerBase {
+    export class ProjectRunner extends Harness.RunnerBase {
         public enumerateTestFiles() {
-            return this.enumerateFiles("tests/cases/project", /\.json$/, { recursive: true });
+            const all = this.enumerateFiles("tests/cases/project", /\.json$/, { recursive: true });
+            if (Harness.shards === 1) {
+                return all;
+            }
+            return all.filter((_val, idx) => idx % Harness.shards === (Harness.shardId - 1));
         }
 
-        public kind(): TestRunnerKind {
+        public kind(): Harness.TestRunnerKind {
             return "project";
         }
 
@@ -67,7 +71,7 @@ namespace project {
 
     class ProjectCompilerHost extends fakes.CompilerHost {
         private _testCase: ProjectRunnerTestCase & ts.CompilerOptions;
-        private _projectParseConfigHost: ProjectParseConfigHost;
+        private _projectParseConfigHost: ProjectParseConfigHost | undefined;
 
         constructor(sys: fakes.System | vfs.FileSystem, compilerOptions: ts.CompilerOptions, _testCaseJustName: string, testCase: ProjectRunnerTestCase & ts.CompilerOptions, _moduleKind: ts.ModuleKind) {
             super(sys, compilerOptions);
@@ -202,13 +206,14 @@ namespace project {
             const ignoreCase = this.vfs.ignoreCase;
             const resolutionInfo: ProjectRunnerTestCaseResolutionInfo & ts.CompilerOptions = JSON.parse(JSON.stringify(this.testCase));
             resolutionInfo.resolvedInputFiles = this.compilerResult.program!.getSourceFiles()
-                .map(({ fileName: input }) => vpath.beneath(vfs.builtFolder, input, this.vfs.ignoreCase) || vpath.beneath(vfs.testLibFolder, input, this.vfs.ignoreCase) ? utils.removeTestPathPrefixes(input) :
+                .map(({ fileName: input }) =>
+                    vpath.beneath(vfs.builtFolder, input, this.vfs.ignoreCase) || vpath.beneath(vfs.testLibFolder, input, this.vfs.ignoreCase) ? Utils.removeTestPathPrefixes(input) :
                     vpath.isAbsolute(input) ? vpath.relative(cwd, input, ignoreCase) :
                     input);
 
             resolutionInfo.emittedFiles = this.compilerResult.outputFiles!
                 .map(output => output.meta.get("fileName") || output.file)
-                .map(output => utils.removeTestPathPrefixes(vpath.isAbsolute(output) ? vpath.relative(cwd, output, ignoreCase) : output));
+                .map(output => Utils.removeTestPathPrefixes(vpath.isAbsolute(output) ? vpath.relative(cwd, output, ignoreCase) : output));
 
             const content = JSON.stringify(resolutionInfo, undefined, "    ");
             Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".json", content);
@@ -241,7 +246,7 @@ namespace project {
                             nonSubfolderDiskFiles++;
                         }
 
-                        const content = utils.removeTestPathPrefixes(output.text, /*retainTrailingDirectorySeparator*/ true);
+                        const content = Utils.removeTestPathPrefixes(output.text, /*retainTrailingDirectorySeparator*/ true);
                         Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, content as string | null); // TODO: GH#18217
                     }
                     catch (e) {
@@ -302,8 +307,8 @@ namespace project {
             return url;
         }
 
-        private compileProjectFiles(moduleKind: ts.ModuleKind, configFileSourceFiles: ReadonlyArray<ts.SourceFile>,
-            getInputFiles: () => ReadonlyArray<string>,
+        private compileProjectFiles(moduleKind: ts.ModuleKind, configFileSourceFiles: readonly ts.SourceFile[],
+            getInputFiles: () => readonly string[],
             compilerHost: ts.CompilerHost,
             compilerOptions: ts.CompilerOptions): CompileProjectFilesResult {
 
@@ -391,11 +396,8 @@ namespace project {
     }
 
     function moduleNameToString(moduleKind: ts.ModuleKind) {
-        return moduleKind === ts.ModuleKind.AMD
-            ? "amd"
-            : moduleKind === ts.ModuleKind.CommonJS
-            ? "node"
-            : "none";
+        return moduleKind === ts.ModuleKind.AMD ? "amd" :
+            moduleKind === ts.ModuleKind.CommonJS ? "node" : "none";
     }
 
     function getErrorsBaseline(compilerResult: CompileProjectFilesResult) {
@@ -410,7 +412,7 @@ namespace project {
 
         const inputFiles = inputSourceFiles.map<Harness.Compiler.TestFile>(sourceFile => ({
             unitName: ts.isRootedDiskPath(sourceFile.fileName) ?
-                RunnerBase.removeFullPaths(sourceFile.fileName) :
+                Harness.RunnerBase.removeFullPaths(sourceFile.fileName) :
                 sourceFile.fileName,
             content: sourceFile.text
         }));

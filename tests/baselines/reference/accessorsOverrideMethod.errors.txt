@@ -1,0 +1,13 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideMethod.ts(5,9): error TS2423: Class 'A' defines instance member function 'm', but extended class 'B' defines it as instance member accessor.
+
+
+==== tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideMethod.ts (1 errors) ====
+    class A {
+        m() { }
+    }
+    class B extends A {
+        get m() { return () => 1 }
+            ~
+!!! error TS2423: Class 'A' defines instance member function 'm', but extended class 'B' defines it as instance member accessor.
+    }
+    

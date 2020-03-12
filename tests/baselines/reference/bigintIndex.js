@@ -31,6 +31,7 @@ const a = {1n: 123};
 const b = {[1n]: 456};
 const c = {[bigNum]: 789};
 
+
 //// [a.js]
 const arr = [1, 2, 3];
 let num = arr[1];

@@ -1,7 +1,6 @@
 tests/cases/compiler/test.ts(4,5): error TS2322: Type 'PassportStatic' is not assignable to type 'Passport'.
-  Types of property 'use' are incompatible.
-    Type '() => PassportStatic' is not assignable to type '() => this'.
-      Type 'PassportStatic' is not assignable to type 'this'.
+  The types returned by 'use()' are incompatible between these types.
+    Type 'PassportStatic' is not assignable to type 'this'.
 
 
 ==== tests/cases/compiler/passport.d.ts (0 errors) ====
@@ -27,6 +26,5 @@ tests/cases/compiler/test.ts(4,5): error TS2322: Type 'PassportStatic' is not as
     let p: Passport = passport.use();
         ~
 !!! error TS2322: Type 'PassportStatic' is not assignable to type 'Passport'.
-!!! error TS2322:   Types of property 'use' are incompatible.
-!!! error TS2322:     Type '() => PassportStatic' is not assignable to type '() => this'.
-!!! error TS2322:       Type 'PassportStatic' is not assignable to type 'this'.
+!!! error TS2322:   The types returned by 'use()' are incompatible between these types.
+!!! error TS2322:     Type 'PassportStatic' is not assignable to type 'this'.

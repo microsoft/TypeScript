@@ -1,17 +1,14 @@
-tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression2.ts(3,5): error TS2335: 'super' can only be referenced in a derived class.
-tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression2.ts(3,10): error TS1034: 'super' must be followed by an argument list or member access.
-tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression2.ts(3,11): error TS2304: Cannot find name 'T'.
+tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression2.ts(3,5): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression2.ts(3,10): error TS2754: 'super' may not use type arguments.
 
 
-==== tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression2.ts (3 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression2.ts (2 errors) ====
     class C {
       M() {
         super<T>(0);
         ~~~~~
-!!! error TS2335: 'super' can only be referenced in a derived class.
-             ~
-!!! error TS1034: 'super' must be followed by an argument list or member access.
-              ~
-!!! error TS2304: Cannot find name 'T'.
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+             ~~~
+!!! error TS2754: 'super' may not use type arguments.
       }
     }

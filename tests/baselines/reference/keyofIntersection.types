@@ -46,7 +46,7 @@ type Result3 = Example3<'x' | 'y'>;  // "x" | "y"
 >Result3 : "x" | "y"
 
 type Example4<T extends string, U extends string> = (Record<T, any> & Record<U, any>);
->Example4 : Record<T, any> & Record<U, any>
+>Example4 : Example4<T, U>
 
 type Result4 = keyof Example4<'x', 'y'>;  // "x" | "y"
 >Result4 : "x" | "y"

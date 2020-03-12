@@ -1,3 +1,5 @@
 {
-    "types": ["jest"]
+    "cloneUrl": "https://github.com/Microsoft/TypeScript-React-Native-Starter.git",
+    "types": ["jest"],
+    "path": "TypeScript-React-Native-Starter/ExampleProject"
 }
