@@ -1,11 +1,19 @@
+--- 
 blank_issues_enabled: false
-contact_links:
-  - name: Question
-    url: https://stackoverflow.com/questions/tagged/typescript
-    about: Please ask and answer questions here.
-  - name: TypeScript FAQ
-    url: https://github.com/microsoft/TypeScript/wiki/FAQ
-    about: Please check the FAQ before filing new issues
-- name: Website
-    url: https://github.com/microsoft/TypeScript-Website/issues/new
-    about: Please raise issues about the site on it's own repo.
+contact_links: 
+  - 
+    about: "Please ask and answer usage questions on Stack Overflow."
+    name: Question
+    url: "https://stackoverflow.com/questions/tagged/typescript"
+  - 
+    about: "Alternatively, you can use the TypeScript Community Discord."
+    name: Chat
+    url: "https://discord.gg/typescript"
+  - 
+    about: "Please check the FAQ before filing new issues"
+    name: "TypeScript FAQ"
+    url: "https://github.com/microsoft/TypeScript/wiki/FAQ"
+  - 
+    about: "Please raise issues about the site on it's own repo."
+    name: Website
+    url: "https://github.com/microsoft/TypeScript-Website/issues/new"

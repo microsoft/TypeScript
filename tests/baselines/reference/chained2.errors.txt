@@ -1,0 +1,36 @@
+/d.ts(2,11): error TS2339: Property 'A' does not exist on type 'typeof import("/b")'.
+/d.ts(3,11): error TS2339: Property 'B' does not exist on type 'typeof import("/b")'.
+/d.ts(4,7): error TS2741: Property 'a' is missing in type '{}' but required in type 'A'.
+/d.ts(5,7): error TS2741: Property 'a' is missing in type '{}' but required in type 'A'.
+
+
+==== /a.ts (0 errors) ====
+    class A { a!: string }
+    export type { A as default };
+    
+==== /b.ts (0 errors) ====
+    import A from './a';
+    import type { default as B } from './a';
+    export { A, B };
+    
+==== /c.ts (0 errors) ====
+    import * as types from './b';
+    export { types as default };
+    
+==== /d.ts (4 errors) ====
+    import types from './c';
+    new types.A();
+              ~
+!!! error TS2339: Property 'A' does not exist on type 'typeof import("/b")'.
+    new types.B();
+              ~
+!!! error TS2339: Property 'B' does not exist on type 'typeof import("/b")'.
+    const a: types.A = {};
+          ~
+!!! error TS2741: Property 'a' is missing in type '{}' but required in type 'A'.
+!!! related TS2728 /a.ts:1:11: 'a' is declared here.
+    const b: types.B = {};
+          ~
+!!! error TS2741: Property 'a' is missing in type '{}' but required in type 'A'.
+!!! related TS2728 /a.ts:1:11: 'a' is declared here.
+    

@@ -21,12 +21,14 @@ exitCode:: ExitStatus.Success
 //// [/src/core/anotherModule.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.World = void 0;
 exports.World = "hello";
 
 
 //// [/src/core/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
 exports.leftPad = leftPad;

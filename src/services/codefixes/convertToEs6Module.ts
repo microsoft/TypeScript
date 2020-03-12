@@ -13,7 +13,7 @@ namespace ts.codefix {
                 }
             });
             // No support for fix-all since this applies to the whole file at once anyway.
-            return [createCodeFixActionNoFixId("convertToEs6Module", changes, Diagnostics.Convert_to_ES6_module)];
+            return [createCodeFixActionWithoutFixAll("convertToEs6Module", changes, Diagnostics.Convert_to_ES6_module)];
         },
     });
 

@@ -49,7 +49,7 @@ var C = /** @class */ (function () {
         get: function () {
             return 1;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C.prototype.bar = function () { };
@@ -73,7 +73,7 @@ var D = /** @class */ (function (_super) {
             _super.prototype.x; // error
             return 1;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return D;

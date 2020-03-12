@@ -61,11 +61,18 @@ export interface ITest {
 
 //// [/user/username/projects/myproject/lib1/tools/public.js]
 "use strict";
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
 }
 exports.__esModule = true;
-__export(require("./tools.interface"));
+__exportStar(require("./tools.interface"), exports);
 
 
 //// [/user/username/projects/myproject/lib1/tools/public.d.ts]
@@ -74,11 +81,18 @@ export * from "./tools.interface";
 
 //// [/user/username/projects/myproject/lib1/public.js]
 "use strict";
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
 }
 exports.__esModule = true;
-__export(require("./tools/public"));
+__exportStar(require("./tools/public"), exports);
 
 
 //// [/user/username/projects/myproject/lib1/public.d.ts]
@@ -88,6 +102,7 @@ export * from "./tools/public";
 //// [/user/username/projects/myproject/lib2/data.js]
 "use strict";
 exports.__esModule = true;
+exports.Data = void 0;
 var Data = /** @class */ (function () {
     function Data() {
     }
@@ -111,11 +126,18 @@ export declare class Data {
 
 //// [/user/username/projects/myproject/lib2/public.js]
 "use strict";
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
 }
 exports.__esModule = true;
-__export(require("./data"));
+__exportStar(require("./data"), exports);
 
 
 //// [/user/username/projects/myproject/lib2/public.d.ts]
@@ -125,6 +147,7 @@ export * from "./data";
 //// [/user/username/projects/myproject/app.js]
 "use strict";
 exports.__esModule = true;
+exports.App = void 0;
 var public_1 = require("lib2/public");
 var App = /** @class */ (function () {
     function App() {
@@ -173,27 +196,27 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/app.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/app.ts","pollingInterval":250}
 /user/username/projects/myproject/lib2/public.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/lib2/public.ts","pollingInterval":250}
 /user/username/projects/myproject/lib2/data.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/lib2/data.ts","pollingInterval":250}
 /user/username/projects/myproject/lib1/public.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/lib1/public.ts","pollingInterval":250}
 /user/username/projects/myproject/lib1/tools/public.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/lib1/tools/public.ts","pollingInterval":250}
 /user/username/projects/myproject/lib1/tools/tools.interface.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/lib1/tools/tools.interface.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -250,26 +273,26 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/app.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/app.ts","pollingInterval":250}
 /user/username/projects/myproject/lib2/public.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/lib2/public.ts","pollingInterval":250}
 /user/username/projects/myproject/lib2/data.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/lib2/data.ts","pollingInterval":250}
 /user/username/projects/myproject/lib1/public.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/lib1/public.ts","pollingInterval":250}
 /user/username/projects/myproject/lib1/tools/public.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/lib1/tools/public.ts","pollingInterval":250}
 /user/username/projects/myproject/lib1/tools/tools.interface.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/lib1/tools/tools.interface.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

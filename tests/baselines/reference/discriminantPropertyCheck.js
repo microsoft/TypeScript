@@ -179,6 +179,7 @@ function func3(value: Partial<UnionOfBar>) {
 //// [discriminantPropertyCheck.js]
 "use strict";
 exports.__esModule = true;
+exports.foo = void 0;
 function goo1(x) {
     if (x.kind === "A" && x.foo !== undefined) {
         x.foo.length;

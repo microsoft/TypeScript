@@ -12,6 +12,7 @@ export const Form3 = brokenFunction(parameterFn)({store: "hello"})
 "use strict";
 // Repro from #8801
 exports.__esModule = true;
+exports.Form3 = void 0;
 function alert(s) { }
 var parameterFn = function (props) { return alert(props.store); };
 var brokenFunction = function (f) { return function (o) { return o; }; };

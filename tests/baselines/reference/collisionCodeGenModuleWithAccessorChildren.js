@@ -56,7 +56,7 @@ var M;
             set: function (M) {
                 this.y = M_1.x;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return c;
@@ -71,7 +71,7 @@ var M;
                 var M = 10;
                 this.y = M_2.x;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return d;
@@ -85,7 +85,7 @@ var M;
             set: function (p) {
                 this.y = M.x;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return e;
@@ -100,7 +100,7 @@ var M;
                 var M = 10;
                 return M_3.x;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return f;
@@ -114,7 +114,7 @@ var M;
             get: function () {
                 return M.x;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return e;

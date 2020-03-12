@@ -534,6 +534,8 @@ ${indentText}${text}`;
             buildInfo.version = ts.version;
             return ts.getBuildInfoText(buildInfo);
         };
+        const originalWrite = sys.write;
+        sys.write = msg => originalWrite.call(sys, msg.replace(ts.version, version));
 
         if (sys.writeFile) {
             const originalWriteFile = sys.writeFile;

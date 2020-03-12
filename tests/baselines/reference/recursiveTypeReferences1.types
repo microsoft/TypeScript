@@ -248,7 +248,7 @@ flat([1, [2, 'a']]);  // (string | number)[]
 >'a' : "a"
 
 flat([1, ['a']]);  // Error
->flat([1, ['a']]) : any
+>flat([1, ['a']]) : string[]
 >flat : <T>(a: RecArray<T>) => T[]
 >[1, ['a']] : (number | string[])[]
 >1 : 1
@@ -292,7 +292,7 @@ flat1([1, [2, 'a']]);  // (string | number)[]
 >'a' : "a"
 
 flat1([1, ['a']]);  // Error
->flat1([1, ['a']]) : any
+>flat1([1, ['a']]) : string[]
 >flat1 : <T>(a: (T | T[])[]) => T[]
 >[1, ['a']] : (number | string[])[]
 >1 : 1
@@ -336,7 +336,7 @@ flat2([1, [2, 'a']]);  // (string | number)[]
 >'a' : "a"
 
 flat2([1, ['a']]);  // Error
->flat2([1, ['a']]) : any
+>flat2([1, ['a']]) : string[]
 >flat2 : <T>(a: (T | (T | T[])[])[]) => T[]
 >[1, ['a']] : (number | string[])[]
 >1 : 1

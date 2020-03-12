@@ -51,9 +51,9 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/file.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/file.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
@@ -74,6 +74,7 @@ export function two() {
 //// [/a/b/file.js]
 "use strict";
 exports.__esModule = true;
+exports.two = void 0;
 function one() { }
 function two() {
     return function three() {
@@ -104,9 +105,9 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/file.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/file.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 

@@ -104,5 +104,29 @@ namespace ts.projectSystem {
                 checkProjectActualFiles(project, files.map(f => f.path));
             }
         });
+
+        it("can open same file again", () => {
+            const projectFolder = "/user/someuser/projects/myproject";
+            const aFile: File = {
+                path: `${projectFolder}/src/a.ts`,
+                content: "export const x = 0;"
+            };
+            const configFile: File = {
+                path: `${projectFolder}/tsconfig.json`,
+                content: "{}"
+            };
+            const files = [aFile, configFile, libFile];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            verifyProject(aFile.content);
+            verifyProject(`${aFile.content}export const y = 10;`);
+
+            function verifyProject(aFileContent: string) {
+                service.openClientFile(aFile.path, aFileContent, ScriptKind.TS, projectFolder);
+                const project = service.configuredProjects.get(configFile.path)!;
+                checkProjectActualFiles(project, files.map(f => f.path));
+                assert.equal(project.getCurrentProgram()?.getSourceFile(aFile.path)!.text, aFileContent);
+            }
+        });
     });
 }
