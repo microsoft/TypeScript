@@ -1400,7 +1400,7 @@ namespace ts {
 
         function createNodeWithJSDoc(kind: SyntaxKind, pos?: number): Node {
             const node = createNode(kind, pos);
-            if (scanner.getTokenFlags() & TokenFlags.PrecedingJSDocComment) {
+            if (scanner.getTokenFlags() & TokenFlags.PrecedingJSDocComment && (kind !== SyntaxKind.ExpressionStatement || token() !== SyntaxKind.OpenParenToken)) {
                 addJSDocComment(<HasJSDoc>node);
             }
             return node;
@@ -5469,7 +5469,7 @@ namespace ts {
             // Avoiding having to do the lookahead for a labeled statement by just trying to parse
             // out an expression, seeing if it is identifier and then seeing if it is followed by
             // a colon.
-            const node = <ExpressionStatement | LabeledStatement>createNodeWithJSDoc(SyntaxKind.Unknown);
+            const node = <ExpressionStatement | LabeledStatement>createNodeWithJSDoc(token() === SyntaxKind.Identifier ? SyntaxKind.Unknown : SyntaxKind.ExpressionStatement);
             const expression = allowInAnd(parseExpression);
             if (expression.kind === SyntaxKind.Identifier && parseOptional(SyntaxKind.ColonToken)) {
                 node.kind = SyntaxKind.LabeledStatement;
