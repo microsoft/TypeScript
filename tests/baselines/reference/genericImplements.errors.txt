@@ -1,6 +1,7 @@
 tests/cases/compiler/genericImplements.ts(9,5): error TS2416: Property 'f' in type 'X' is not assignable to the same property in base type 'I'.
   Type '<T extends B>() => T' is not assignable to type '<T extends A>() => T'.
     Type 'B' is not assignable to type 'T'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'B'.
 
 
 ==== tests/cases/compiler/genericImplements.ts (1 errors) ====
@@ -17,6 +18,7 @@ tests/cases/compiler/genericImplements.ts(9,5): error TS2416: Property 'f' in ty
 !!! error TS2416: Property 'f' in type 'X' is not assignable to the same property in base type 'I'.
 !!! error TS2416:   Type '<T extends B>() => T' is not assignable to type '<T extends A>() => T'.
 !!! error TS2416:     Type 'B' is not assignable to type 'T'.
+!!! error TS2416:       'T' could be instantiated with an arbitrary type which could be unrelated to 'B'.
     } // { f: () => { b; } }
     
     // OK
