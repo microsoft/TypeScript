@@ -1205,7 +1205,7 @@
         "category": "Error",
         "code": 2306
     },
-    "Cannot find module '{0}'.": {
+    "Cannot find module '{0}' or its corresponding type declarations.": {
         "category": "Error",
         "code": 2307
     },

@@ -1,6 +1,6 @@
 Exit Code: 1
 Standard output:
-node_modules/bcryptjs/scripts/build.js(1,26): error TS2307: Cannot find module 'metascript'.
+node_modules/bcryptjs/scripts/build.js(1,26): error TS2307: Cannot find module 'metascript' or its corresponding type declarations.
 node_modules/bcryptjs/scripts/build.js(32,1): error TS2741: Property 'ISAAC' is missing in type '{ VERSION: any; }' but required in type '{ VERSION: any; ISAAC: boolean; }'.
 node_modules/bcryptjs/src/bcrypt.js(25,13): error TS2740: Type 'Buffer' is missing the following properties from type 'number[]': pop, push, concat, shift, and 5 more.
 node_modules/bcryptjs/src/bcrypt.js(94,14): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
@@ -29,7 +29,7 @@ node_modules/bcryptjs/src/wrap.js(37,26): error TS2304: Cannot find name 'define
 node_modules/bcryptjs/src/wrap.js(37,51): error TS2304: Cannot find name 'define'.
 node_modules/bcryptjs/src/wrap.js(38,9): error TS2304: Cannot find name 'define'.
 node_modules/bcryptjs/src/wrap.js(49,12): error TS2552: Cannot find name 'bcrypt'. Did you mean 'Crypto'?
-node_modules/bcryptjs/tests/suite.js(3,23): error TS2307: Cannot find module 'bcrypt'.
+node_modules/bcryptjs/tests/suite.js(3,23): error TS2307: Cannot find module 'bcrypt' or its corresponding type declarations.
 
 
 
