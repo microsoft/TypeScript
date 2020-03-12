@@ -57,6 +57,7 @@ namespace ts {
         writeLog(s: string): void;
         getCurrentProgram(): Program | undefined;
         fileIsOpen(filePath: Path): boolean;
+        getCompilerHost?(): CompilerHost | undefined;
     }
 
     interface DirectoryWatchesOfFailedLookup {
@@ -364,7 +365,7 @@ namespace ts {
                         resolution = resolutionInDirectory;
                     }
                     else {
-                        resolution = loader(name, containingFile, compilerOptions, resolutionHost, redirectedReference);
+                        resolution = loader(name, containingFile, compilerOptions, resolutionHost.getCompilerHost?.() || resolutionHost, redirectedReference);
                         perDirectoryResolution.set(name, resolution);
                     }
                     resolutionsInFile.set(name, resolution);

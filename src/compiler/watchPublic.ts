@@ -114,6 +114,9 @@ namespace ts {
     }
 
     export interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
+        /** Instead of using output d.ts file from project reference, use its source file */
+        useSourceOfProjectReferenceRedirect?(): boolean;
+
         /** If provided, callback to invoke after every new program creation */
         afterProgramCreate?(program: T): void;
     }
@@ -280,6 +283,7 @@ namespace ts {
         // Members for ResolutionCacheHost
         compilerHost.toPath = toPath;
         compilerHost.getCompilationSettings = () => compilerOptions;
+        compilerHost.useSourceOfProjectReferenceRedirect = maybeBind(host, host.useSourceOfProjectReferenceRedirect);
         compilerHost.watchDirectoryOfFailedLookupLocation = (dir, cb, flags) => watchDirectory(host, dir, cb, flags, watchOptions, WatchType.FailedLookupLocations);
         compilerHost.watchTypeRootsDirectory = (dir, cb, flags) => watchDirectory(host, dir, cb, flags, watchOptions, WatchType.TypeRoots);
         compilerHost.getCachedDirectoryStructureHost = () => cachedDirectoryStructureHost;
