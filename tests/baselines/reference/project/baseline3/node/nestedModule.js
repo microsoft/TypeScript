@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+exports.outer = void 0;
 var outer;
 (function (outer) {
     var inner;

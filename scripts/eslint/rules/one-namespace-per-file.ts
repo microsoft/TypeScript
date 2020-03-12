@@ -10,7 +10,7 @@ export = createRule({
             recommended: "error",
         },
         messages: {
-            excessNamespaceError: `All but one of these namespaces should be moved into seperate files.`,
+            excessNamespaceError: `All but one of these namespaces should be moved into separate files.`,
         },
         schema: [],
         type: "problem",

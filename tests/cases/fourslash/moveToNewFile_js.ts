@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @module: esnext
 // @allowJs: true
 
 // @Filename: /a.js
@@ -16,10 +17,8 @@
 verify.moveToNewFile({
     newFileContents: {
         "/a.js":
-// TODO: GH#22330
-`const { y, z } = require("./y");
-
-const { a, } = require("./other");
+`const { a, } = require("./other");
+const { y, z } = require("./y");
 const p = 0;
 exports.p = p;
 a; y; z;`,

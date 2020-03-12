@@ -13,6 +13,7 @@ export const x = y;
 //// [/app/bin/index.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 /// <reference path="../lib/bar.d.ts" />
 exports.x = y;
 //# sourceMappingURL=../src/myMapRoot/index.js.map

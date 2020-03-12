@@ -30,7 +30,7 @@ namespace Harness {
 
             // eslint-disable-next-line @typescript-eslint/no-this-alias
             const cls = this;
-            describe(`${this.kind()} code samples`, function(this: Mocha.ISuiteCallbackContext) {
+            describe(`${this.kind()} code samples`, function (this: Mocha.ISuiteCallbackContext) {
                 this.timeout(600_000); // 10 minutes
                 for (const test of testList) {
                     cls.runTest(typeof test === "string" ? test : test.file);
@@ -41,7 +41,7 @@ namespace Harness {
             // eslint-disable-next-line @typescript-eslint/no-this-alias
             const cls = this;
             const timeout = 600_000; // 10 minutes
-            describe(directoryName, function(this: Mocha.ISuiteCallbackContext) {
+            describe(directoryName, function (this: Mocha.ISuiteCallbackContext) {
                 this.timeout(timeout);
                 const cp: typeof import("child_process") = require("child_process");
 
@@ -56,11 +56,13 @@ namespace Harness {
                         ts.Debug.assert(!!config.cloneUrl, "Bad format from test.json: cloneUrl field must be present.");
                         const submoduleDir = path.join(cwd, directoryName);
                         if (!fs.existsSync(submoduleDir)) {
-                            exec("git", ["clone", config.cloneUrl, directoryName], { cwd });
+                            exec("git", ["--work-tree", submoduleDir, "clone", config.cloneUrl, path.join(submoduleDir, ".git")], { cwd });
                         }
-                        exec("git", ["reset", "HEAD", "--hard"], { cwd: submoduleDir });
-                        exec("git", ["clean", "-f"], { cwd: submoduleDir });
-                        exec("git", ["pull", "-f"], { cwd: submoduleDir });
+                        else {
+                            exec("git", ["--git-dir", path.join(submoduleDir, ".git"), "--work-tree", submoduleDir, "reset", "HEAD", "--hard"], { cwd: submoduleDir });
+                            exec("git", ["--git-dir", path.join(submoduleDir, ".git"), "--work-tree", submoduleDir, "clean", "-f"], { cwd: submoduleDir });
+                            exec("git", ["--git-dir", path.join(submoduleDir, ".git"), "--work-tree", submoduleDir, "pull", "-f"], { cwd: submoduleDir });
+                        }
 
                         types = config.types;
 
@@ -79,15 +81,17 @@ namespace Harness {
                     if (types) {
                         args.push("--types", types.join(","));
                         // Also actually install those types (for, eg, the js projects which need node)
-                        exec("npm", ["i", ...types.map(t => `@types/${t}`), "--no-save", "--ignore-scripts"], { cwd: originalCwd, timeout: timeout / 2 }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
+                        if (types.length) {
+                            exec("npm", ["i", ...types.map(t => `@types/${t}`), "--no-save", "--ignore-scripts"], { cwd: originalCwd, timeout: timeout / 2 }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
+                        }
                     }
                     args.push("--noEmit");
                     Baseline.runBaseline(`${cls.kind()}/${directoryName}.log`, cls.report(cp.spawnSync(`node`, args, { cwd, timeout, shell: true }), cwd));
 
                     function exec(command: string, args: string[], options: { cwd: string, timeout?: number }): void {
-                        const res = cp.spawnSync(command, args, { timeout, shell: true, stdio, ...options });
+                        const res = cp.spawnSync(isWorker ? `${command} 2>&1` : command, args, { shell: true, stdio, ...options });
                         if (res.status !== 0) {
-                            throw new Error(`${command} ${args.join(" ")} for ${directoryName} failed: ${res.stderr && res.stderr.toString()}`);
+                            throw new Error(`${command} ${args.join(" ")} for ${directoryName} failed: ${res.stdout && res.stdout.toString()}`);
                         }
                     }
                 });
@@ -123,7 +127,7 @@ ${stripAbsoluteImportPaths(result.stderr.toString().replace(/\r\n/g, "\n"))}`;
 
             // eslint-disable-next-line @typescript-eslint/no-this-alias
             const cls = this;
-            describe(`${this.kind()} code samples`, function(this: Mocha.ISuiteCallbackContext) {
+            describe(`${this.kind()} code samples`, function (this: Mocha.ISuiteCallbackContext) {
                 this.timeout(cls.timeout); // 20 minutes
                 before(() => {
                     cls.exec("docker", ["build", ".", "-t", "typescript/typescript"], { cwd: IO.getWorkspaceRoot() }); // cached because workspace is hashed to determine cacheability
@@ -142,12 +146,12 @@ ${stripAbsoluteImportPaths(result.stderr.toString().replace(/\r\n/g, "\n"))}`;
         }
 
         private timeout = 1_200_000; // 20 minutes;
-        private exec(command: string, args: string[], options: { cwd: string, timeout?: number }): void {
+        private exec(command: string, args: string[], options: { cwd: string }): void {
             const cp: typeof import("child_process") = require("child_process");
             const stdio = isWorker ? "pipe" : "inherit";
-            const res = cp.spawnSync(command, args, { timeout: this.timeout, shell: true, stdio, ...options });
+            const res = cp.spawnSync(isWorker ? `${command} 2>&1` : command, args, { timeout: this.timeout, shell: true, stdio, ...options });
             if (res.status !== 0) {
-                throw new Error(`${command} ${args.join(" ")} for ${options.cwd} failed: ${res.stderr && res.stderr.toString()}`);
+                throw new Error(`${command} ${args.join(" ")} for ${options.cwd} failed: ${res.stdout && res.stdout.toString()}`);
             }
         }
         report(result: ExecResult) {
@@ -204,7 +208,8 @@ ${sanitizeDockerfileOutput(result.stderr.toString())}`;
         return result.replace(/^.*(\] (Starting)|(Finished)).*$/gm, "") // "gulp" task start/end messages (nondeterministic order)
             .replace(/^.*(\] . (finished)|(started)).*$/gm, "") // "just" task start/end messages (nondeterministic order)
             .replace(/^.*\] Respawned to PID: \d+.*$/gm, "") // PID of child is OS and system-load dependent (likely stableish in a container but still dangerous)
-            .replace(/\n+/g, "\n");
+            .replace(/\n+/g, "\n")
+            .replace(/\/tmp\/yarn--.*?\/node/g, "");
     }
 
     function sanitizeTimestamps(result: string): string {

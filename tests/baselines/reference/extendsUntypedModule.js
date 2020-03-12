@@ -30,6 +30,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.A = void 0;
 var foo_1 = require("foo");
 var A = /** @class */ (function (_super) {
     __extends(A, _super);

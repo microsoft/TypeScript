@@ -245,6 +245,49 @@ namespace ts.tscWatch {
 
         verifyTscWatch({
             scenario,
+            subScenario: "updates diagnostics and emit for decorators",
+            commandLineArgs: ["-w"],
+            sys: () => {
+                const aTs: File = {
+                    path: "/a.ts",
+                    content: `import {B} from './b'
+@((_) => {})
+export class A {
+    constructor(p: B) {}
+}`,
+                };
+                const bTs: File = {
+                    path: "/b.ts",
+                    content: `export class B {}`,
+                };
+                const tsconfig: File = {
+                    path: "/tsconfig.json",
+                    content: JSON.stringify({
+                        compilerOptions: { target: "es6", importsNotUsedAsValues: "error" }
+                    })
+                };
+                return createWatchedSystem([libFile, aTs, bTs, tsconfig]);
+            },
+            changes: [
+                sys => {
+                    sys.modifyFile("/tsconfig.json", JSON.stringify({
+                        compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true }
+                    }));
+                    sys.checkTimeoutQueueLengthAndRun(1);
+                    return "Enable experimentalDecorators";
+                },
+                sys => {
+                    sys.modifyFile("/tsconfig.json", JSON.stringify({
+                        compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true, emitDecoratorMetadata: true }
+                    }));
+                    sys.checkTimeoutQueueLengthAndRun(1);
+                    return "Enable emitDecoratorMetadata";
+                }
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
             subScenario: "files explicitly excluded in config file",
             commandLineArgs: ["-w", "-p", configFilePath],
             sys: () => {
@@ -358,7 +401,7 @@ namespace ts.tscWatch {
         verifyTscWatch({
             scenario,
             subScenario: "deleted files affect project structure",
-            commandLineArgs: ["-w", "/a/b/f1.ts"],
+            commandLineArgs: ["-w", "/a/b/f1.ts", "--noImplicitAny"],
             sys: () => {
                 const file1 = {
                     path: "/a/b/f1.ts",
@@ -386,7 +429,7 @@ namespace ts.tscWatch {
         verifyTscWatch({
             scenario,
             subScenario: "deleted files affect project structure-2",
-            commandLineArgs: ["-w", "/a/b/f1.ts", "/a/c/f3.ts"],
+            commandLineArgs: ["-w", "/a/b/f1.ts", "/a/c/f3.ts", "--noImplicitAny"],
             sys: () => {
                 const file1 = {
                     path: "/a/b/f1.ts",
@@ -454,13 +497,13 @@ namespace ts.tscWatch {
             };
             const host = createWatchedSystem([file1, file2, file3]);
             const watch = createWatchOfFilesAndCompilerOptions([file2.path, file3.path], host);
-            checkProgramActualFiles(watch(), [file2.path, file3.path]);
+            checkProgramActualFiles(watch.getCurrentProgram().getProgram(), [file2.path, file3.path]);
 
             const watch2 = createWatchOfFilesAndCompilerOptions([file1.path], host);
-            checkProgramActualFiles(watch2(), [file1.path, file2.path, file3.path]);
+            checkProgramActualFiles(watch2.getCurrentProgram().getProgram(), [file1.path, file2.path, file3.path]);
 
             // Previous program shouldnt be updated
-            checkProgramActualFiles(watch(), [file2.path, file3.path]);
+            checkProgramActualFiles(watch.getCurrentProgram().getProgram(), [file2.path, file3.path]);
             host.checkTimeoutQueueLength(0);
         });
 
@@ -894,7 +937,7 @@ declare const eval: any`
             };
             const host = createWatchedSystem([f, libFile]);
             const watch = createWatchOfFilesAndCompilerOptions([f.path], host, { allowNonTsExtensions: true });
-            checkProgramActualFiles(watch(), [f.path, libFile.path]);
+            checkProgramActualFiles(watch.getCurrentProgram().getProgram(), [f.path, libFile.path]);
         });
 
         verifyTscWatch({
@@ -941,7 +984,6 @@ declare const eval: any`
                     scenario,
                     subScenario: `should not trigger recompilation because of program emit/${subScenario}`,
                     commandLineArgs: ["-w", "-p", `${projectRoot}/tsconfig.json`],
-                    maxNumberOfFilesToIterateForInvalidation: 1,
                     sys: () => {
                         const file1: File = {
                             path: `${projectRoot}/file1.ts`,
@@ -1043,8 +1085,7 @@ export function two() {
         });
 
         function changeParameterTypeOfBFile(sys: WatchedSystem, parameterName: string, toType: string) {
-            const oldContent = sys.readFile(`${projectRoot}/b.ts`)!;
-            sys.writeFile(`${projectRoot}/b.ts`, oldContent.replace(new RegExp(`${parameterName}\: [a-z]*`), `${parameterName}: ${toType}`));
+            replaceFileText(sys, `${projectRoot}/b.ts`, new RegExp(`${parameterName}\: [a-z]*`), `${parameterName}: ${toType}`);
             sys.runQueuedTimeoutCallbacks();
             return `Changed ${parameterName} type to ${toType}`;
         }
@@ -1117,6 +1158,160 @@ foo().hello`
                     sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: {} }));
                     sys.runQueuedTimeoutCallbacks();
                     return "Disable strict";
+                },
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "updates errors when noErrorTruncation changes",
+            commandLineArgs: ["-w"],
+            sys: () => {
+                const aFile: File = {
+                    path: `${projectRoot}/a.ts`,
+                    content: `declare var v: {
+    reallyLongPropertyName1: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName2: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName3: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName4: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName5: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName6: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName7: string | number | boolean | object | symbol | bigint;
+};
+v === 'foo';`
+                };
+                const config: File = {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({ compilerOptions: {} })
+                };
+                return createWatchedSystem([aFile, config, libFile], { currentDirectory: projectRoot });
+            },
+            changes: [
+                sys => {
+                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { noErrorTruncation: true } }));
+                    sys.runQueuedTimeoutCallbacks();
+                    return "Enable noErrorTruncation";
+                },
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "updates diagnostics and emit when useDefineForClassFields changes",
+            commandLineArgs: ["-w"],
+            sys: () => {
+                const aFile: File = {
+                    path: `/a.ts`,
+                    content: `class C { get prop() { return 1; } }
+class D extends C { prop = 1; }`
+                };
+                const config: File = {
+                    path: `/tsconfig.json`,
+                    content: JSON.stringify({ compilerOptions: { target: "es6" } })
+                };
+                return createWatchedSystem([aFile, config, libFile]);
+            },
+            changes: [
+                sys => {
+                    sys.writeFile(`/tsconfig.json`, JSON.stringify({ compilerOptions: { target: "es6", useDefineForClassFields: true } }));
+                    sys.runQueuedTimeoutCallbacks();
+                    return "Enable useDefineForClassFields";
+                },
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "updates errors and emit when importsNotUsedAsValues changes",
+            commandLineArgs: ["-w"],
+            sys: () => {
+                const aFile: File = {
+                    path: `${projectRoot}/a.ts`,
+                    content: `export class C {}`
+                };
+                const bFile: File = {
+                    path: `${projectRoot}/b.ts`,
+                    content: `import {C} from './a';
+export function f(p: C) { return p; }`
+                };
+                const config: File = {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({ compilerOptions: {} })
+                };
+                return createWatchedSystem([aFile, bFile, config, libFile], { currentDirectory: projectRoot });
+            },
+            changes: [
+                sys => {
+                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "remove" } }));
+                    sys.runQueuedTimeoutCallbacks();
+                    return 'Set to "remove"';
+                },
+                sys => {
+                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "error" } }));
+                    sys.runQueuedTimeoutCallbacks();
+                    return 'Set to "error"';
+                },
+                sys => {
+                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "preserve" } }));
+                    sys.runQueuedTimeoutCallbacks();
+                    return 'Set to "preserve"';
+                },
+            ]
+        });
+
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "updates errors when forceConsistentCasingInFileNames changes",
+            commandLineArgs: ["-w"],
+            sys: () => {
+                const aFile: File = {
+                    path: `/a.ts`,
+                    content: `export class C {}`
+                };
+                const bFile: File = {
+                    path: `/b.ts`,
+                    content: `import {C} from './a'; import * as A from './A';`
+                };
+                const config: File = {
+                    path: `/tsconfig.json`,
+                    content: JSON.stringify({ compilerOptions: {} })
+                };
+                return createWatchedSystem([aFile, bFile, config, libFile], { useCaseSensitiveFileNames: false });
+            },
+            changes: [
+                sys => {
+                    sys.writeFile(`/tsconfig.json`, JSON.stringify({ compilerOptions: { forceConsistentCasingInFileNames: true } }));
+                    sys.runQueuedTimeoutCallbacks();
+                    return "Enable forceConsistentCasingInFileNames";
+                },
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "updates moduleResolution when resolveJsonModule changes",
+            commandLineArgs: ["-w"],
+            sys: () => {
+                const aFile: File = {
+                    path: `${projectRoot}/a.ts`,
+                    content: `import * as data from './data.json'`
+                };
+                const jsonFile: File = {
+                    path: `${projectRoot}/data.json`,
+                    content: `{ "foo": 1 }`
+                };
+                const config: File = {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({ compilerOptions: { moduleResolution: "node" } })
+                };
+                return createWatchedSystem([aFile, jsonFile, config, libFile], { currentDirectory: projectRoot });
+            },
+            changes: [
+                sys => {
+                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { moduleResolution: "node", resolveJsonModule: true } }));
+                    sys.runQueuedTimeoutCallbacks();
+                    return "Enable resolveJsonModule";
                 },
             ]
         });

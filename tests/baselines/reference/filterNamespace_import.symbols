@@ -31,11 +31,19 @@ import type ns from './ns';
 >ns : Symbol(ns, Decl(a.ts, 0, 6))
 
 ns.Class; // Error
+>ns.Class : Symbol(ns.Class, Decl(ns.ts, 1, 28))
+>ns : Symbol(ns, Decl(a.ts, 0, 6))
+>Class : Symbol(ns.Class, Decl(ns.ts, 1, 28))
+
 ns.Value; // Error
+>ns.Value : Symbol(ns.Value, Decl(ns.ts, 3, 14))
+>ns : Symbol(ns, Decl(a.ts, 0, 6))
+>Value : Symbol(ns.Value, Decl(ns.ts, 3, 14))
+
 let c: ns.Class;
 >c : Symbol(c, Decl(a.ts, 3, 3))
 >ns : Symbol(ns, Decl(a.ts, 0, 6))
->Class : Symbol(ns.Class)
+>Class : Symbol(ns.Class, Decl(ns.ts, 1, 28))
 
 let t: ns.Type = "";
 >t : Symbol(t, Decl(a.ts, 4, 3))
@@ -46,6 +54,6 @@ let n: ns.nested.NestedClass = { a: '' };
 >n : Symbol(n, Decl(a.ts, 5, 3))
 >ns : Symbol(ns, Decl(a.ts, 0, 6))
 >nested : Symbol(ns.nested, Decl(ns.ts, 3, 26))
->NestedClass : Symbol(NestedClass)
+>NestedClass : Symbol(ns.nested.NestedClass, Decl(ns.ts, 4, 27))
 >a : Symbol(a, Decl(a.ts, 5, 32))
 

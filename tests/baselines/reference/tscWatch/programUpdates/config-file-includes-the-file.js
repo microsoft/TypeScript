@@ -27,6 +27,7 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/a/b/f1.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 exports.x = 5;
 
 
@@ -38,6 +39,7 @@ exports.__esModule = true;
 //// [/a/c/f3.js]
 "use strict";
 exports.__esModule = true;
+exports.y = void 0;
 exports.y = 1;
 
 
@@ -67,20 +69,20 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/c/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/c/tsconfig.json","pollingInterval":250}
 /a/c/f2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/c/f2.ts","pollingInterval":250}
 /a/b/f1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/f1.ts","pollingInterval":250}
 /a/c/f3.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/c/f3.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/c/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/c/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

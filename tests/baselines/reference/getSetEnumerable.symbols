@@ -1,0 +1,56 @@
+=== tests/cases/compiler/getSetEnumerable.ts ===
+class GetSetEnumerableClassGet {
+>GetSetEnumerableClassGet : Symbol(GetSetEnumerableClassGet, Decl(getSetEnumerable.ts, 0, 0))
+
+    get prop() { return true;}
+>prop : Symbol(GetSetEnumerableClassGet.prop, Decl(getSetEnumerable.ts, 0, 32))
+}
+
+class GetSetEnumerableClassSet {
+>GetSetEnumerableClassSet : Symbol(GetSetEnumerableClassSet, Decl(getSetEnumerable.ts, 2, 1))
+
+    set prop(value: boolean) { }
+>prop : Symbol(GetSetEnumerableClassSet.prop, Decl(getSetEnumerable.ts, 4, 32))
+>value : Symbol(value, Decl(getSetEnumerable.ts, 5, 13))
+}
+
+class GetSetEnumerableClassGetSet {
+>GetSetEnumerableClassGetSet : Symbol(GetSetEnumerableClassGetSet, Decl(getSetEnumerable.ts, 6, 1))
+
+    get prop() { return true;}
+>prop : Symbol(GetSetEnumerableClassGetSet.prop, Decl(getSetEnumerable.ts, 8, 35), Decl(getSetEnumerable.ts, 9, 30))
+
+    set prop(value: boolean) { }
+>prop : Symbol(GetSetEnumerableClassGetSet.prop, Decl(getSetEnumerable.ts, 8, 35), Decl(getSetEnumerable.ts, 9, 30))
+>value : Symbol(value, Decl(getSetEnumerable.ts, 10, 13))
+}
+
+const GetSetEnumerableObjectGet = {
+>GetSetEnumerableObjectGet : Symbol(GetSetEnumerableObjectGet, Decl(getSetEnumerable.ts, 13, 5))
+
+    get prop() { return true; }
+>prop : Symbol(prop, Decl(getSetEnumerable.ts, 13, 35))
+
+};
+
+const GetSetEnumerableObjectSet = {
+>GetSetEnumerableObjectSet : Symbol(GetSetEnumerableObjectSet, Decl(getSetEnumerable.ts, 17, 5))
+
+    set prop(value: boolean) { }
+>prop : Symbol(prop, Decl(getSetEnumerable.ts, 17, 35))
+>value : Symbol(value, Decl(getSetEnumerable.ts, 18, 13))
+
+};
+
+const GetSetEnumerableObjectGetSet = {
+>GetSetEnumerableObjectGetSet : Symbol(GetSetEnumerableObjectGetSet, Decl(getSetEnumerable.ts, 21, 5))
+
+    get prop() { return true; },
+>prop : Symbol(prop, Decl(getSetEnumerable.ts, 21, 38), Decl(getSetEnumerable.ts, 22, 32))
+
+    set prop(value: boolean) { }
+>prop : Symbol(prop, Decl(getSetEnumerable.ts, 21, 38), Decl(getSetEnumerable.ts, 22, 32))
+>value : Symbol(value, Decl(getSetEnumerable.ts, 23, 13))
+
+};
+

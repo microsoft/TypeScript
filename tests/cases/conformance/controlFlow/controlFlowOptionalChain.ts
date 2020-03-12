@@ -329,6 +329,33 @@ function f15(o: Thing | undefined, value: number) {
     }
 }
 
+function f15a(o: Thing | undefined, value: unknown) {
+    if (o?.foo === value) {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (o?.foo !== value) {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (o?.foo == value) {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (o?.foo != value) {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;  // Error
+    }
+}
+
 function f16(o: Thing | undefined) {
     if (o?.foo === undefined) {
         o.foo;  // Error
@@ -527,4 +554,39 @@ function extractCoordinates(f: Feature): number[] {
         return [];
     }
     return f.geometry.coordinates;
+}
+
+// Repro from #35842
+
+interface SomeObject {
+    someProperty: unknown;
+}
+
+let lastSomeProperty: unknown | undefined;
+
+function someFunction(someOptionalObject: SomeObject | undefined): void {
+    if (someOptionalObject?.someProperty !== lastSomeProperty) {
+        console.log(someOptionalObject);
+        console.log(someOptionalObject.someProperty);  // Error
+        lastSomeProperty = someOptionalObject?.someProperty;
+    }
+}
+
+const someObject: SomeObject = {
+    someProperty: 42
+};
+
+someFunction(someObject);
+someFunction(undefined);
+
+// Repro from #35970
+
+let i = 0;
+declare const arr: { tag: ("left" | "right") }[];
+
+while (arr[i]?.tag === "left") {
+    i += 1;
+    if (arr[i]?.tag === "right") {
+        console.log("I should ALSO be reachable");
+    }
 }
