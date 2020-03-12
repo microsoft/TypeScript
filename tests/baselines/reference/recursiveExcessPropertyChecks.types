@@ -1,0 +1,27 @@
+=== tests/cases/compiler/recursiveExcessPropertyChecks.ts ===
+// Repro from #35804
+
+interface ITreeItem {    
+  Parent?: this;
+>Parent : this | undefined
+}
+
+type NodeWithId = ITreeItem & { Id?: number };
+>NodeWithId : NodeWithId
+>Id : number | undefined
+
+function getMaxId(items: NodeWithId[]) {
+>getMaxId : (items: NodeWithId[]) => void
+>items : NodeWithId[]
+}
+
+const nodes = [] as ITreeItem[];
+>nodes : ITreeItem[]
+>[] as ITreeItem[] : ITreeItem[]
+>[] : never[]
+
+getMaxId(nodes);
+>getMaxId(nodes) : void
+>getMaxId : (items: NodeWithId[]) => void
+>nodes : ITreeItem[]
+
