@@ -5110,13 +5110,22 @@ namespace ts {
 
         function parseObjectLiteralExpression(): ObjectLiteralExpression {
             const node = <ObjectLiteralExpression>createNode(SyntaxKind.ObjectLiteralExpression);
+            const openBracePosition = scanner.getTokenPos();
             parseExpected(SyntaxKind.OpenBraceToken);
             if (scanner.hasPrecedingLineBreak()) {
                 node.multiLine = true;
             }
 
             node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimiter*/ true);
-            parseExpected(SyntaxKind.CloseBraceToken);
+            if (!parseExpected(SyntaxKind.CloseBraceToken)) {
+                const lastError = lastOrUndefined(parseDiagnostics);
+                if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                    addRelatedInfo(
+                        lastError,
+                        createFileDiagnostic(sourceFile, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
+                    );
+                }
+            }
             return finishNode(node);
         }
 
