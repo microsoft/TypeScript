@@ -84,7 +84,7 @@ Output::
 [[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
 
 
-[96ma/b/file1.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS2307: [0mCannot find module './moduleFile'.
+[96ma/b/file1.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS2307: [0mCannot find module './moduleFile' or its corresponding type declarations.
 
 [7m1[0m import * as T from "./moduleFile"; T.bar();
 [7m [0m [91m                   ~~~~~~~~~~~~~~[0m
