@@ -94,11 +94,11 @@ library_1.createSomeObject().message;
 
 Output::
 >> Screen clear
-12:00:29 AM - Starting compilation in watch mode...
+[[90m12:00:29 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:38 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/sample1/Library/library.ts"]
@@ -210,13 +210,22 @@ export {};
 
 Output::
 >> Screen clear
-12:00:42 AM - File change detected. Starting incremental compilation...
+[[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
 
 
-App/app.ts(2,20): error TS2551: Property 'message' does not exist on type 'SomeObject'. Did you mean 'message2'?
+[96mApp/app.ts[0m:[93m2[0m:[93m20[0m - [91merror[0m[90m TS2551: [0mProperty 'message' does not exist on type 'SomeObject'. Did you mean 'message2'?
+
+[7m2[0m createSomeObject().message;
+[7m [0m [91m                   ~~~~~~~[0m
+
+  [96mLibrary/library.d.ts[0m:[93m2[0m:[93m5[0m
+    [7m2[0m     message2: string;
+    [7m [0m [96m    ~~~~~~~~[0m
+    'message2' is declared here.
 
 
-12:00:52 AM - Found 1 error. Watching for file changes.
+[[90m12:00:52 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/sample1/Library/library.ts"]
@@ -327,11 +336,11 @@ export {};
 
 Output::
 >> Screen clear
-12:00:56 AM - File change detected. Starting incremental compilation...
+[[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:01:09 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:09 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/sample1/Library/library.ts"]

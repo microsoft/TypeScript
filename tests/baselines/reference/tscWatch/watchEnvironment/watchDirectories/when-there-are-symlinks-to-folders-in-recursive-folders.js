@@ -35,8 +35,7 @@ exports.__esModule = true;
 
 
 Output::
-
-12:00:45 AM - Starting compilation in watch mode...
+[[90m12:00:45 AM[0m] Starting compilation in watch mode...
 
 
 Current directory: /home/user/projects/myproject CaseSensitiveFileNames: false
@@ -95,8 +94,8 @@ DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules
 
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
 
+[[90m12:00:48 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:48 AM - Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
 

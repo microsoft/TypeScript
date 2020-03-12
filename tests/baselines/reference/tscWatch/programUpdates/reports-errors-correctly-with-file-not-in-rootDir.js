@@ -36,13 +36,17 @@ exports.__esModule = true;
 
 Output::
 >> Screen clear
-12:00:23 AM - Starting compilation in watch mode...
+[[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 
-a.ts(1,19): error TS6059: File '/user/username/projects/b.ts' is not under 'rootDir' '/user/username/projects/myproject'. 'rootDir' is expected to contain all source files.
+[96ma.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/b.ts' is not under 'rootDir' '/user/username/projects/myproject'. 'rootDir' is expected to contain all source files.
+
+[7m1[0m import { x } from "../b";
+[7m [0m [91m                  ~~~~~~[0m
 
 
-12:00:34 AM - Found 1 error. Watching for file changes.
+[[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/myproject/a.ts"]
@@ -88,13 +92,17 @@ import { x } from "../b";
 
 Output::
 >> Screen clear
-12:00:38 AM - File change detected. Starting incremental compilation...
+[[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
 
-a.ts(3,19): error TS6059: File '/user/username/projects/b.ts' is not under 'rootDir' '/user/username/projects/myproject'. 'rootDir' is expected to contain all source files.
+[96ma.ts[0m:[93m3[0m:[93m19[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/b.ts' is not under 'rootDir' '/user/username/projects/myproject'. 'rootDir' is expected to contain all source files.
+
+[7m3[0m import { x } from "../b";
+[7m [0m [91m                  ~~~~~~[0m
 
 
-12:00:42 AM - Found 1 error. Watching for file changes.
+[[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/myproject/a.ts"]

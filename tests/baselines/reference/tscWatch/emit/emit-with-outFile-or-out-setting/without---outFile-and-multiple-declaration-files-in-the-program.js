@@ -49,13 +49,17 @@ var main;
 
 Output::
 >> Screen clear
-12:00:31 AM - Starting compilation in watch mode...
+[[90m12:00:31 AM[0m] Starting compilation in watch mode...
 
 
-a/b/project/src/main2.ts(1,114): error TS2694: Namespace 'Common.SomeComponent.DynamicMenu' has no exported member 'z'.
+[96ma/b/project/src/main2.ts[0m:[93m1[0m:[93m114[0m - [91merror[0m[90m TS2694: [0mNamespace 'Common.SomeComponent.DynamicMenu' has no exported member 'z'.
+
+[7m1[0m namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }
+[7m [0m [91m                                                                                                                 ~[0m
 
 
-12:00:36 AM - Found 1 error. Watching for file changes.
+[[90m12:00:36 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/a/b/output/AnotherDependency/file1.d.ts","/a/b/dependencies/file2.d.ts","/a/b/project/src/main.ts","/a/b/project/src/main2.ts"]

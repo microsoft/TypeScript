@@ -80,6 +80,7 @@ define("file2", ["require", "exports"], function (require, exports) {
 
 Output::
 
+
 Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
 Program options: {"incremental":true,"module":2,"outFile":"/users/username/projects/project/out.js","configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program files::

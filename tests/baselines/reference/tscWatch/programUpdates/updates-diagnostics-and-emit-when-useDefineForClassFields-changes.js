@@ -34,11 +34,11 @@ class D extends C {
 
 Output::
 >> Screen clear
-12:00:13 AM - Starting compilation in watch mode...
+[[90m12:00:13 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:16 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:16 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a.ts","/a/lib/lib.d.ts"]
@@ -92,13 +92,17 @@ class D extends C {
 
 Output::
 >> Screen clear
-12:00:20 AM - File change detected. Starting incremental compilation...
+[[90m12:00:20 AM[0m] File change detected. Starting incremental compilation...
 
 
-a.ts(2,21): error TS2610: 'prop' is defined as an accessor in class 'C', but is overridden here in 'D' as an instance property.
+[96ma.ts[0m:[93m2[0m:[93m21[0m - [91merror[0m[90m TS2610: [0m'prop' is defined as an accessor in class 'C', but is overridden here in 'D' as an instance property.
+
+[7m2[0m class D extends C { prop = 1; }
+[7m [0m [91m                    ~~~~[0m
 
 
-12:00:24 AM - Found 1 error. Watching for file changes.
+[[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/a.ts","/a/lib/lib.d.ts"]

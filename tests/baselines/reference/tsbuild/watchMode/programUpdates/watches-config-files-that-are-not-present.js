@@ -140,13 +140,14 @@ export declare function multiply(a: number, b: number): number;
 
 Output::
 >> Screen clear
-12:00:37 AM - Starting compilation in watch mode...
+[[90m12:00:37 AM[0m] Starting compilation in watch mode...
 
 
-error TS6053: File '/user/username/projects/sample1/logic/tsconfig.json' not found.
+[91merror[0m[90m TS6053: [0mFile '/user/username/projects/sample1/logic/tsconfig.json' not found.
 
 
-12:00:52 AM - Found 1 error. Watching for file changes.
+[[90m12:00:52 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/index.ts"]
@@ -276,7 +277,7 @@ export declare const m: typeof mod;
 
 Output::
 >> Screen clear
-12:00:55 AM - File change detected. Starting incremental compilation...
+[[90m12:00:55 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -403,8 +404,8 @@ export declare const m: typeof mod;
 
 
 Output::
+[[90m12:01:10 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:10 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/sample1/tests/index.ts"]

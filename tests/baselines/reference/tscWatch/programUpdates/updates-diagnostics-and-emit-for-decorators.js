@@ -53,15 +53,23 @@ export { A };
 
 Output::
 >> Screen clear
-12:00:15 AM - Starting compilation in watch mode...
+[[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
 
-a.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.
+[96ma.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1371: [0mThis import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.
 
-a.ts(3,14): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
+[7m1[0m import {B} from './b'
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
 
 
-12:00:20 AM - Found 2 errors. Watching for file changes.
+[96ma.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS1219: [0mExperimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
+
+[7m3[0m export class A {
+[7m [0m [91m             ~[0m
+
+
+[[90m12:00:20 AM[0m] Found 2 errors. Watching for file changes.
+
 
 
 Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
@@ -102,13 +110,17 @@ Change:: Enable experimentalDecorators
 
 Output::
 >> Screen clear
-12:00:23 AM - File change detected. Starting incremental compilation...
+[[90m12:00:23 AM[0m] File change detected. Starting incremental compilation...
 
 
-a.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.
+[96ma.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1371: [0mThis import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.
+
+[7m1[0m import {B} from './b'
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
 
 
-12:00:24 AM - Found 1 error. Watching for file changes.
+[[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
@@ -174,11 +186,11 @@ export { A };
 
 Output::
 >> Screen clear
-12:00:27 AM - File change detected. Starting incremental compilation...
+[[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:34 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]

@@ -1,22 +1,29 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc --b /src/tests --verbose
-12:00:00 AM - Projects in this build: 
+[[90m12:00:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-12:00:00 AM - Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.js' does not exist
+[[90m12:00:00 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.js' does not exist
 
-12:00:00 AM - Building project '/src/core/tsconfig.json'...
+[[90m12:00:00 AM[0m] Building project '/src/core/tsconfig.json'...
 
-12:00:00 AM - Project 'src/logic/tsconfig.json' is out of date because output file 'src/logic/index.js' does not exist
+[[90m12:00:00 AM[0m] Project 'src/logic/tsconfig.json' is out of date because output file 'src/logic/index.js' does not exist
 
-12:00:00 AM - Building project '/src/logic/tsconfig.json'...
+[[90m12:00:00 AM[0m] Building project '/src/logic/tsconfig.json'...
 
-src/logic/index.ts(3,14): error TS2339: Property 'muitply' does not exist on type 'typeof import("/src/core/index")'.
-12:00:00 AM - Project 'src/tests/tsconfig.json' can't be built because its dependency 'src/logic' has errors
+[96msrc/logic/index.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2339: [0mProperty 'muitply' does not exist on type 'typeof import("/src/core/index")'.
 
-12:00:00 AM - Skipping build of project '/src/tests/tsconfig.json' because its dependency '/src/logic' has errors
+[7m3[0m     return c.muitply();
+[7m [0m [91m             ~~~~~~~[0m
+
+[[90m12:00:00 AM[0m] Project 'src/tests/tsconfig.json' can't be built because its dependency 'src/logic' has errors
+
+[[90m12:00:00 AM[0m] Skipping build of project '/src/tests/tsconfig.json' because its dependency '/src/logic' has errors
+
+
+Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 

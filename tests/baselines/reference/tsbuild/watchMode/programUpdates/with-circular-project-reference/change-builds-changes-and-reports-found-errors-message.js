@@ -292,11 +292,11 @@ export declare const m: typeof mod;
 
 Output::
 >> Screen clear
-12:00:39 AM - Starting compilation in watch mode...
+[[90m12:00:39 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:01:04 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:04 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/index.ts"]
@@ -440,7 +440,7 @@ export declare class someClass {
 
 Output::
 >> Screen clear
-12:01:08 AM - File change detected. Starting incremental compilation...
+[[90m12:01:08 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -645,8 +645,8 @@ Change:: Build Tests
 
 
 Output::
+[[90m12:01:40 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:40 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/sample1/tests/index.ts"]
@@ -752,7 +752,7 @@ export declare function multiply(a: number, b: number): number;
 
 Output::
 >> Screen clear
-12:01:44 AM - File change detected. Starting incremental compilation...
+[[90m12:01:44 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -957,8 +957,8 @@ Change:: Build Tests
 
 
 Output::
+[[90m12:02:16 AM[0m] Found 0 errors. Watching for file changes.
 
-12:02:16 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/sample1/tests/index.ts"]
@@ -1082,7 +1082,7 @@ export declare class someClass2 {
 
 Output::
 >> Screen clear
-12:02:23 AM - File change detected. Starting incremental compilation...
+[[90m12:02:23 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -1287,8 +1287,8 @@ Change:: Build Tests
 
 
 Output::
+[[90m12:02:55 AM[0m] Found 0 errors. Watching for file changes.
 
-12:02:55 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/sample1/tests/index.ts"]

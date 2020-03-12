@@ -1,17 +1,17 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc --b src/tsconfig.json --verbose
-12:01:00 AM - Projects in this build: 
+[[90m12:01:00 AM[0m] Projects in this build: 
     * src/strings/tsconfig.json
     * src/main/tsconfig.json
     * src/tsconfig.json
 
-12:01:00 AM - Project 'src/strings/tsconfig.json' is out of date because output file 'src/strings/tsconfig.tsbuildinfo' does not exist
+[[90m12:01:00 AM[0m] Project 'src/strings/tsconfig.json' is out of date because output file 'src/strings/tsconfig.tsbuildinfo' does not exist
 
-12:01:00 AM - Building project '/src/strings/tsconfig.json'...
+[[90m12:01:00 AM[0m] Building project '/src/strings/tsconfig.json'...
 
-12:01:00 AM - Project 'src/main/tsconfig.json' is out of date because output file 'src/main/index.js' does not exist
+[[90m12:01:00 AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'src/main/index.js' does not exist
 
-12:01:00 AM - Building project '/src/main/tsconfig.json'...
+[[90m12:01:00 AM[0m] Building project '/src/main/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

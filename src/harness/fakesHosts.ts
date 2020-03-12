@@ -32,6 +32,11 @@ namespace fakes {
             this._env = env;
         }
 
+        // Pretty output
+        writeOutputIsTTY() {
+            return true;
+        }
+
         public write(message: string) {
             this.output.push(message);
         }

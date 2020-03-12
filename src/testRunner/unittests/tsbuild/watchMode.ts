@@ -1131,6 +1131,38 @@ export function someFn() { }`);
                 }
             ],
         });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "works when noUnusedParameters changes to false",
+            commandLineArgs: ["-b", "-w"],
+            sys: () => {
+                const index: File = {
+                    path: `${projectRoot}/index.ts`,
+                    content: `const fn = (a: string, b: string) => b;`
+                };
+                const configFile: File = {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            noUnusedParameters: true
+                        }
+                    })
+                };
+                return createWatchedSystem([index, configFile, libFile], { currentDirectory: projectRoot });
+            },
+            changes: [
+                sys => {
+                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({
+                        compilerOptions: {
+                            noUnusedParameters: false
+                        }
+                    }));
+                    sys.runQueuedTimeoutCallbacks();
+                    return "Change tsconfig to set noUnusedParameters to false";
+                },
+            ]
+        });
     });
 
     describe("unittests:: tsbuild:: watchMode:: with demo project", () => {
