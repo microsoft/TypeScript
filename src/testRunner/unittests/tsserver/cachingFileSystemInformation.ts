@@ -240,7 +240,7 @@ namespace ts.projectSystem {
             let diags = project.getLanguageService().getSemanticDiagnostics(root.path);
             assert.equal(diags.length, 1);
             const diag = diags[0];
-            assert.equal(diag.code, Diagnostics.Cannot_find_module_0.code);
+            assert.equal(diag.code, Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations.code);
             assert.equal(flattenDiagnosticMessageText(diag.messageText, "\n"), "Cannot find module 'bar'.");
             callsTrackingHost.verifyCalledOn(CalledMapsWithSingleArg.fileExists, imported.path);
 
