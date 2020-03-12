@@ -1,22 +1,22 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc --b /src/tsconfig.json --verbose
-12:00:00 AM - Projects in this build: 
+[[90m12:00:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/animals/tsconfig.json
     * src/zoo/tsconfig.json
     * src/tsconfig.json
 
-12:00:00 AM - Project 'src/core/tsconfig.json' is out of date because output file 'src/lib/core/utilities.js' does not exist
+[[90m12:00:00 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/lib/core/utilities.js' does not exist
 
-12:00:00 AM - Building project '/src/core/tsconfig.json'...
+[[90m12:00:00 AM[0m] Building project '/src/core/tsconfig.json'...
 
-12:00:00 AM - Project 'src/animals/tsconfig.json' is out of date because output file 'src/lib/animals/animal.js' does not exist
+[[90m12:00:00 AM[0m] Project 'src/animals/tsconfig.json' is out of date because output file 'src/lib/animals/animal.js' does not exist
 
-12:00:00 AM - Building project '/src/animals/tsconfig.json'...
+[[90m12:00:00 AM[0m] Building project '/src/animals/tsconfig.json'...
 
-12:00:00 AM - Project 'src/zoo/tsconfig.json' is out of date because output file 'src/lib/zoo/zoo.js' does not exist
+[[90m12:00:00 AM[0m] Project 'src/zoo/tsconfig.json' is out of date because output file 'src/lib/zoo/zoo.js' does not exist
 
-12:00:00 AM - Building project '/src/zoo/tsconfig.json'...
+[[90m12:00:00 AM[0m] Building project '/src/zoo/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -45,6 +45,7 @@ export declare function createDog(): Dog;
 //// [/src/lib/animals/dog.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createDog = void 0;
 var utilities_1 = require("../core/utilities");
 function createDog() {
     return ({
@@ -68,6 +69,7 @@ export { createDog, Dog };
 //// [/src/lib/animals/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createDog = void 0;
 var animal_1 = require("./animal");
 var dog_1 = require("./dog");
 Object.defineProperty(exports, "createDog", { enumerable: true, get: function () { return dog_1.createDog; } });
@@ -187,6 +189,7 @@ export declare function lastElementOf<T>(arr: T[]): T | undefined;
 //// [/src/lib/core/utilities.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.lastElementOf = exports.makeRandomName = void 0;
 function makeRandomName() {
     return "Bob!?! ";
 }
@@ -281,6 +284,7 @@ export declare function createZoo(): Array<Dog>;
 //// [/src/lib/zoo/zoo.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createZoo = void 0;
 var index_1 = require("../animals/index");
 function createZoo() {
     return [

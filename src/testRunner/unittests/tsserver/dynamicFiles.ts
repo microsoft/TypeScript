@@ -1,6 +1,6 @@
 namespace ts.projectSystem {
     export function verifyDynamic(service: server.ProjectService, path: string) {
-        const info = Debug.assertDefined(service.filenameToScriptInfo.get(path), `Expected ${path} in :: ${JSON.stringify(arrayFrom(service.filenameToScriptInfo.entries(), ([key, f]) => ({ key, fileName: f.fileName, path: f.path })))}`);
+        const info = Debug.checkDefined(service.filenameToScriptInfo.get(path), `Expected ${path} in :: ${JSON.stringify(arrayFrom(service.filenameToScriptInfo.entries(), ([key, f]) => ({ key, fileName: f.fileName, path: f.path })))}`);
         assert.isTrue(info.isDynamic);
     }
 
@@ -191,7 +191,7 @@ var x = 10;`
                 catch (e) {
                     assert.strictEqual(
                         e.message.replace(/\r?\n/, "\n"),
-                        `Debug Failure. False expression: \nVerbose Debug Information: {"fileName":"^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js","currentDirectory":"/user/username/projects/myproject","hostCurrentDirectory":"/","openKeys":[]}\nDynamic files must always be opened with service's current directory or service should support inferred project per projectRootPath.`
+                        `Debug Failure. False expression.\nVerbose Debug Information: {"fileName":"^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js","currentDirectory":"/user/username/projects/myproject","hostCurrentDirectory":"/","openKeys":[]}\nDynamic files must always be opened with service's current directory or service should support inferred project per projectRootPath.`
                     );
                 }
                 const file2Path = file.path.replace("#1", "#2");

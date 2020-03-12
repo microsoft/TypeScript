@@ -15,6 +15,7 @@ export module c {
 //// [internalAliasFunctionInsideLocalModuleWithoutExport.js]
 "use strict";
 exports.__esModule = true;
+exports.c = exports.a = void 0;
 var a;
 (function (a) {
     function foo(x) {

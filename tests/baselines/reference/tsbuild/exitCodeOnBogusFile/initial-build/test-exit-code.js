@@ -1,6 +1,10 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc -b bogus.json
-error TS6053: File '/bogus.json' not found.
+[91merror[0m[90m TS6053: [0mFile '/bogus.json' not found.
+
+
+Found 1 error.
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 

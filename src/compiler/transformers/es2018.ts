@@ -1096,6 +1096,7 @@ namespace ts {
         name: "typescript:asyncGenerator",
         importName: "__asyncGenerator",
         scoped: false,
+        dependencies: [awaitHelper],
         text: `
             var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
                 if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -1111,7 +1112,6 @@ namespace ts {
     };
 
     function createAsyncGeneratorHelper(context: TransformationContext, generatorFunc: FunctionExpression, hasLexicalThis: boolean) {
-        context.requestEmitHelper(awaitHelper);
         context.requestEmitHelper(asyncGeneratorHelper);
 
         // Mark this node as originally an async function
@@ -1132,6 +1132,7 @@ namespace ts {
         name: "typescript:asyncDelegator",
         importName: "__asyncDelegator",
         scoped: false,
+        dependencies: [awaitHelper],
         text: `
             var __asyncDelegator = (this && this.__asyncDelegator) || function (o) {
                 var i, p;
@@ -1141,7 +1142,6 @@ namespace ts {
     };
 
     function createAsyncDelegatorHelper(context: TransformationContext, expression: Expression, location?: TextRange) {
-        context.requestEmitHelper(awaitHelper);
         context.requestEmitHelper(asyncDelegator);
         return setTextRange(
             createCall(

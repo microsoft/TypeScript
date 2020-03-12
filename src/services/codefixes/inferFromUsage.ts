@@ -1031,7 +1031,7 @@ namespace ts.codefix {
             usage.properties.forEach((propUsage, name) => {
                 const genericPropertyType = checker.getTypeOfPropertyOfType(generic, name as string);
                 Debug.assert(!!genericPropertyType, "generic should have all the properties of its reference.");
-                types.push(...inferTypeParameters(genericPropertyType!, combineFromUsage(propUsage), singleTypeParameter));
+                types.push(...inferTypeParameters(genericPropertyType, combineFromUsage(propUsage), singleTypeParameter));
             });
             return builtinConstructors[type.symbol.escapedName as string](combineTypes(types));
         }

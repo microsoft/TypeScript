@@ -26,6 +26,7 @@ export var t2 = 10;
 //// [/a/b/file2.js]
 "use strict";
 exports.__esModule = true;
+exports.t2 = void 0;
 /// <reference path="./file1.ts" />
 exports.t2 = 10;
 
@@ -33,6 +34,7 @@ exports.t2 = 10;
 //// [/a/b/file1.js]
 "use strict";
 exports.__esModule = true;
+exports.t1 = void 0;
 /// <reference path="./file2.ts" />
 exports.t1 = 10;
 
@@ -40,11 +42,11 @@ exports.t1 = 10;
 
 Output::
 >> Screen clear
-12:00:17 AM - Starting compilation in watch mode...
+[[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:22 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/file1.ts","/a/b/file2.ts"]
@@ -89,6 +91,7 @@ export var t1 = 10;export var t3 = 10;
 //// [/a/b/file1.js]
 "use strict";
 exports.__esModule = true;
+exports.t3 = exports.t1 = void 0;
 /// <reference path="./file2.ts" />
 exports.t1 = 10;
 exports.t3 = 10;
@@ -97,11 +100,11 @@ exports.t3 = 10;
 
 Output::
 >> Screen clear
-12:00:25 AM - File change detected. Starting incremental compilation...
+[[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:32 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/file1.ts","/a/b/file2.ts"]

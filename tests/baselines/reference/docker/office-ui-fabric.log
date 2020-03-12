@@ -70,8 +70,28 @@ Standard output:
 @fluentui/docs: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
 @fluentui/docs: [XX:XX:XX] Working directory changed to /office-ui-fabric-react
 @fluentui/docs: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/gulpfile.ts
+@fluentui/docs: DocToccing single file "/office-ui-fabric-react/.github/CONTRIBUTING.md" for github.com.
+@fluentui/docs: ==================
 @fluentui/docs: > @fluentui/ability-attributes@X.X.X schema /office-ui-fabric-react/packages/fluentui/ability-attributes
 @fluentui/docs: > allyschema -c "process.env.NODE_ENV !== 'production'" schema.json > ./src/schema.ts
+@fluentui/docs: "/office-ui-fabric-react/.github/CONTRIBUTING.md" will be updated
+@fluentui/docs: Everything is OK.
+@fluentui/docs: DocToccing single file "/office-ui-fabric-react/.github/setup-local-development.md" for github.com.
+@fluentui/docs: ==================
+@fluentui/docs: "/office-ui-fabric-react/.github/setup-local-development.md" will be updated
+@fluentui/docs: Everything is OK.
+@fluentui/docs: DocToccing single file "/office-ui-fabric-react/.github/add-a-feature.md" for github.com.
+@fluentui/docs: ==================
+@fluentui/docs: "/office-ui-fabric-react/.github/add-a-feature.md" will be updated
+@fluentui/docs: Everything is OK.
+@fluentui/docs: DocToccing single file "/office-ui-fabric-react/.github/document-a-feature.md" for github.com.
+@fluentui/docs: ==================
+@fluentui/docs: "/office-ui-fabric-react/.github/document-a-feature.md" will be updated
+@fluentui/docs: Everything is OK.
+@fluentui/docs: DocToccing single file "/office-ui-fabric-react/.github/test-a-feature.md" for github.com.
+@fluentui/docs: ==================
+@fluentui/docs: "/office-ui-fabric-react/.github/test-a-feature.md" will be updated
+@fluentui/docs: Everything is OK.
 @fluentui/docs: Starting type checking service...
 @fluentui/docs: Using 1 worker with 2048MB memory limit
 @fluentui/docs: [XX:XX:XX] Time: ?s
@@ -95,9 +115,6 @@ Standard output:
 
 Standard error:
 info cli using local version of lerna
-lerna notice cli vX.X.X
-lerna info ci enabled
-lerna info Executing command in 62 packages: "yarn run build"
 @fluentui/ability-attributes: npm WARN lifecycle The node binary used for scripts is  but npm is using /usr/local/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
 @uifabric/example-data: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/set-version: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
@@ -118,4 +135,3 @@ lerna info Executing command in 62 packages: "yarn run build"
 @fluentui/docs: [XX:XX:XX] 'build:docs' errored after 
 @fluentui/docs: error Command failed with exit code 1.
 lerna ERR! yarn run build exited 1 in '@fluentui/docs'
-lerna WARN complete Waiting for 1 child process to exit. CTRL-C to exit immediately.

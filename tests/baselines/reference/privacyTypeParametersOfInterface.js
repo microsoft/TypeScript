@@ -61,6 +61,7 @@ interface privateInterfaceWithPublicTypeParametersWithoutExtends<T> {
 //// [privacyTypeParametersOfInterface.js]
 "use strict";
 exports.__esModule = true;
+exports.publicClassT = exports.publicClass = void 0;
 var privateClass = /** @class */ (function () {
     function privateClass() {
     }

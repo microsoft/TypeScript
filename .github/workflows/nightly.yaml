@@ -2,7 +2,7 @@ name: Publish Nightly
 
 on:
   schedule:
-    - cron:  '0 23 * * *'
+    - cron:  '0 7 * * *'
   repository_dispatch:
     types: publish-nightly
 

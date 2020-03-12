@@ -1675,7 +1675,7 @@ namespace ts {
             }
 
             properties.push(
-                createPropertyAssignment("enumerable", createTrue()),
+                createPropertyAssignment("enumerable", getAccessor || setAccessor ? createFalse() : createTrue()),
                 createPropertyAssignment("configurable", createTrue())
             );
 
@@ -1879,7 +1879,7 @@ namespace ts {
                 // being emitted for the end position only.
                 statementsLocation = moveRangeEnd(body, -1);
 
-                const equalsGreaterThanToken = (<ArrowFunction>node).equalsGreaterThanToken;
+                const equalsGreaterThanToken = node.equalsGreaterThanToken;
                 if (!nodeIsSynthesized(equalsGreaterThanToken) && !nodeIsSynthesized(body)) {
                     if (rangeEndIsOnSameLineAsRangeStart(equalsGreaterThanToken, body, currentSourceFile)) {
                         singleLine = true;
@@ -3431,12 +3431,12 @@ namespace ts {
             const ancestorFacts = enterSubtree(HierarchyFacts.BlockScopeExcludes, HierarchyFacts.BlockScopeIncludes);
             let updated: CatchClause;
             Debug.assert(!!node.variableDeclaration, "Catch clause variable should always be present when downleveling ES2015.");
-            if (isBindingPattern(node.variableDeclaration!.name)) {
+            if (isBindingPattern(node.variableDeclaration.name)) {
                 const temp = createTempVariable(/*recordTempVariable*/ undefined);
                 const newVariableDeclaration = createVariableDeclaration(temp);
                 setTextRange(newVariableDeclaration, node.variableDeclaration);
                 const vars = flattenDestructuringBinding(
-                    node.variableDeclaration!,
+                    node.variableDeclaration,
                     visitor,
                     context,
                     FlattenLevel.All,

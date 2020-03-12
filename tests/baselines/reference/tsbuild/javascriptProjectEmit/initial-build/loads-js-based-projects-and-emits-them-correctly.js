@@ -116,6 +116,7 @@ export function getVar(): "key";
 //// [/lib/sub-project-2/index.js]
 "use strict";
 exports.__esModule = true;
+exports.getVar = void 0;
 var variable = {
     key: /** @type {MyNominal} */ ('value')
 };

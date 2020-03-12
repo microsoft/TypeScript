@@ -96,6 +96,9 @@ namespace ts {
             if (shouldEmitUnderscoreUnderscoreESModule()) {
                 append(statements, createUnderscoreUnderscoreESModule());
             }
+            if (length(currentModuleInfo.exportedNames)) {
+                append(statements, createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => createAssignment(createPropertyAccess(createIdentifier("exports"), createIdentifier(idText(nextId))), prev), createVoidZero() as Expression)));
+            }
 
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
@@ -413,6 +416,9 @@ namespace ts {
 
             if (shouldEmitUnderscoreUnderscoreESModule()) {
                 append(statements, createUnderscoreUnderscoreESModule());
+            }
+            if (length(currentModuleInfo.exportedNames)) {
+                append(statements, createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => createAssignment(createPropertyAccess(createIdentifier("exports"), createIdentifier(idText(nextId))), prev), createVoidZero() as Expression)));
             }
 
             // Visit each statement of the module body.
@@ -1180,7 +1186,6 @@ namespace ts {
                 let modifiers: NodeArray<Modifier> | undefined;
 
                 // If we're exporting these variables, then these just become assignments to 'exports.x'.
-                // We only want to emit assignments for variables with initializers.
                 for (const variable of node.declarationList.declarations) {
                     if (isIdentifier(variable.name) && isLocalName(variable.name)) {
                         if (!modifiers) {
@@ -1259,7 +1264,7 @@ namespace ts {
                         ),
                         /*location*/ node.name
                     ),
-                    visitNode(node.initializer, moduleExpressionElementVisitor)
+                    node.initializer ? visitNode(node.initializer, moduleExpressionElementVisitor) : createVoidZero()
                 );
             }
         }

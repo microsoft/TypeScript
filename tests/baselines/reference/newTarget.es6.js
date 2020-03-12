@@ -33,7 +33,7 @@ const O = {
 
 
 //// [newTarget.es6.js]
-const A = /** @class */ (() => {
+let A = /** @class */ (() => {
     class A {
         constructor() {
             this.d = function () { return new.target; };

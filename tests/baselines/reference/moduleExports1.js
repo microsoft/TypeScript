@@ -17,6 +17,7 @@ if (!module.exports) module.exports = "";
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.TypeScript = void 0;
     var TypeScript;
     (function (TypeScript) {
         var Strasse;

@@ -4,7 +4,7 @@ class C3 {
 }
 
 //// [classDeclarationCheckUsedBeforeDefinitionInItself.js]
-const C3 = /** @class */ (() => {
+let C3 = /** @class */ (() => {
     class C3 {
     }
     C3.intance = new C3(); // ok

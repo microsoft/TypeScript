@@ -14,6 +14,7 @@ let B: typeof types.B;
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+exports.B = void 0;
 var A = /** @class */ (function () {
     function A() {
     }

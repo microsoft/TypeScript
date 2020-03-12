@@ -1143,6 +1143,10 @@
         "category": "Error",
         "code": 1382
     },
+    "Only named exports may use 'export type'.": {
+        "category": "Error",
+        "code": 1383
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -2241,6 +2245,10 @@
         "category": "Error",
         "code": 2577
     },
+    "Unused '@ts-expect-error' directive.": {
+        "category": "Error",
+        "code": 2578
+    },
     "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.": {
         "category": "Error",
         "code": 2580
@@ -2360,6 +2368,10 @@
     "Module '{0}' has no exported member '{1}'. Did you mean to use 'import {1} from {0}' instead?": {
         "category": "Error",
         "code": 2614
+    },
+    "Type of property '{0}' circularly references itself in mapped type '{1}'.": {
+        "category": "Error",
+        "code": 2615
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
@@ -2751,7 +2763,7 @@
         "category": "Error",
         "code": 2748
     },
-    "'{0}' refers to a value, but is being used as a type here.": {
+    "'{0}' refers to a value, but is being used as a type here. Did you mean 'typeof {0}'?": {
         "category": "Error",
         "code": 2749
     },
@@ -2890,6 +2902,10 @@
     "'{0}' is specified more than once, so this usage will be overwritten.": {
         "category": "Error",
         "code": 2783
+    },
+    "'get' and 'set' accessors cannot declare 'this' parameters.": {
+        "category": "Error",
+        "code": 2784
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3642,7 +3658,7 @@
         "category": "Message",
         "code": 6061
     },
-    "Option '{0}' can only be specified in 'tsconfig.json' file.": {
+    "Option '{0}' can only be specified in 'tsconfig.json' file or set to 'null' on command line.": {
         "category": "Error",
         "code": 6064
     },
@@ -4291,6 +4307,14 @@
     "Synchronously call callbacks and update the state of directory watchers on platforms that don't support recursive watching natively.": {
         "category": "Message",
         "code": 6228
+    },
+    "Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.": {
+        "category": "Error",
+        "code": 6229
+    },
+    "Option '{0}' can only be specified in 'tsconfig.json' file or set to 'false' or 'null' on command line.": {
+        "category": "Error",
+        "code": 6230
     },
 
     "Projects to reference": {

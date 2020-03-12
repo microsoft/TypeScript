@@ -1691,6 +1691,9 @@ namespace ts {
             : isPrivateIdentifier(name) ? idText(name) : getTextOfIdentifierOrLiteral(name);
     }
 
+    export function programContainsModules(program: Program): boolean {
+        return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!(s.externalModuleIndicator || s.commonJsModuleIndicator));
+    }
     export function programContainsEs6Modules(program: Program): boolean {
         return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
     }
@@ -1832,7 +1835,8 @@ namespace ts {
     }
 
     export function insertImport(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDecl: Statement, blankLineBetween: boolean): void {
-        const lastImportDeclaration = findLast(sourceFile.statements, isAnyImportSyntax);
+        const importKindPredicate = importDecl.kind === SyntaxKind.VariableStatement ? isRequireVariableDeclarationStatement : isAnyImportSyntax;
+        const lastImportDeclaration = findLast(sourceFile.statements, statement => importKindPredicate(statement));
         if (lastImportDeclaration) {
             changes.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl);
         }
@@ -2147,11 +2151,13 @@ namespace ts {
             const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
             if (renameInfo && renameInfo.text !== (node.name || node.propertyName).getText()) {
-                clone = createBindingElement(
-                    node.dotDotDotToken,
-                    node.propertyName || node.name,
-                    renameInfo,
-                    node.initializer);
+                clone = setOriginalNode(
+                    createBindingElement(
+                        node.dotDotDotToken,
+                        node.propertyName || node.name,
+                        renameInfo,
+                        node.initializer),
+                    node);
             }
         }
         else if (renameMap && checker && isIdentifier(node)) {
@@ -2159,7 +2165,7 @@ namespace ts {
             const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
             if (renameInfo) {
-                clone = createIdentifier(renameInfo.text);
+                clone = setOriginalNode(createIdentifier(renameInfo.text), node);
             }
         }
 
@@ -2749,7 +2755,7 @@ namespace ts {
         if (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default) {
             // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
             return firstDefined(symbol.declarations, d => isExportAssignment(d) && isIdentifier(d.expression) ? d.expression.text : undefined)
-                || codefix.moduleSymbolToValidIdentifier(Debug.assertDefined(symbol.parent), scriptTarget);
+                || codefix.moduleSymbolToValidIdentifier(Debug.checkDefined(symbol.parent), scriptTarget);
         }
         return symbol.name;
     }

@@ -21,6 +21,7 @@ export class Test {
 //// [ThingA.js]
 "use strict";
 exports.__esModule = true;
+exports.ThingA = void 0;
 // https://github.com/Microsoft/TypeScript/issues/8612
 var ThingA = /** @class */ (function () {
     function ThingA() {
@@ -31,6 +32,7 @@ exports.ThingA = ThingA;
 //// [ThingB.js]
 "use strict";
 exports.__esModule = true;
+exports.ThingB = void 0;
 var ThingB = /** @class */ (function () {
     function ThingB() {
     }
@@ -54,6 +56,7 @@ __createBinding(exports, ThingB_1, "ThingB");
 //// [Test.js]
 "use strict";
 exports.__esModule = true;
+exports.Test = void 0;
 var Test = /** @class */ (function () {
     function Test() {
         this.method = function (input) { };

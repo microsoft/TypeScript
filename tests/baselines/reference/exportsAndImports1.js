@@ -36,6 +36,7 @@ export { v, f, C, I, E, D, M, N, T, a };
 //// [t1.js]
 "use strict";
 exports.__esModule = true;
+exports.a = exports.M = exports.E = exports.C = exports.f = exports.v = void 0;
 var v = 1;
 exports.v = v;
 function f() { }
@@ -79,6 +80,7 @@ __createBinding(exports, t1_1, "a");
 //// [t3.js]
 "use strict";
 exports.__esModule = true;
+exports.a = exports.M = exports.E = exports.C = exports.f = exports.v = void 0;
 var t1_1 = require("./t1");
 exports.v = t1_1.v;
 exports.f = t1_1.f;

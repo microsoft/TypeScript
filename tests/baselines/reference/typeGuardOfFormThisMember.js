@@ -110,14 +110,14 @@ var Test;
             set: function (param) {
                 // noop
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(FileSystemObject.prototype, "isDirectory", {
             get: function () {
                 return this instanceof Directory;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return FileSystemObject;

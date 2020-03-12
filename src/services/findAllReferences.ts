@@ -700,19 +700,21 @@ namespace ts.FindAllReferences {
                 }
             });
 
-            for (const decl of symbol.declarations) {
-                switch (decl.kind) {
-                    case SyntaxKind.SourceFile:
-                        // Don't include the source file itself. (This may not be ideal behavior, but awkward to include an entire file as a reference.)
-                        break;
-                    case SyntaxKind.ModuleDeclaration:
-                        if (sourceFilesSet.has(decl.getSourceFile().fileName)) {
-                            references.push(nodeEntry((decl as ModuleDeclaration).name));
-                        }
-                        break;
-                    default:
-                        // This may be merged with something.
-                        Debug.assert(!!(symbol.flags & SymbolFlags.Transient), "Expected a module symbol to be declared by a SourceFile or ModuleDeclaration.");
+            if (symbol.declarations) {
+                for (const decl of symbol.declarations) {
+                    switch (decl.kind) {
+                        case SyntaxKind.SourceFile:
+                            // Don't include the source file itself. (This may not be ideal behavior, but awkward to include an entire file as a reference.)
+                            break;
+                        case SyntaxKind.ModuleDeclaration:
+                            if (sourceFilesSet.has(decl.getSourceFile().fileName)) {
+                                references.push(nodeEntry((decl as ModuleDeclaration).name));
+                            }
+                            break;
+                        default:
+                            // This may be merged with something.
+                            Debug.assert(!!(symbol.flags & SymbolFlags.Transient), "Expected a module symbol to be declared by a SourceFile or ModuleDeclaration.");
+                    }
                 }
             }
 
@@ -723,7 +725,7 @@ namespace ts.FindAllReferences {
                     if (sourceFilesSet.has(sourceFile.fileName)) {
                         // At `module.exports = ...`, reference node is `module`
                         const node = isBinaryExpression(decl) && isPropertyAccessExpression(decl.left) ? decl.left.expression :
-                            isExportAssignment(decl) ? Debug.assertDefined(findChildOfKind(decl, SyntaxKind.ExportKeyword, sourceFile)) :
+                            isExportAssignment(decl) ? Debug.checkDefined(findChildOfKind(decl, SyntaxKind.ExportKeyword, sourceFile)) :
                             getNameOfDeclaration(decl) || decl;
                         references.push(nodeEntry(node));
                     }
@@ -801,7 +803,7 @@ namespace ts.FindAllReferences {
             }
             else if (node && node.kind === SyntaxKind.DefaultKeyword) {
                 addReference(node, symbol, state);
-                searchForImportsOfExport(node, symbol, { exportingModuleSymbol: Debug.assertDefined(symbol.parent, "Expected export symbol to have a parent"), exportKind: ExportKind.Default }, state);
+                searchForImportsOfExport(node, symbol, { exportingModuleSymbol: Debug.checkDefined(symbol.parent, "Expected export symbol to have a parent"), exportKind: ExportKind.Default }, state);
             }
             else {
                 const search = state.createSearch(node, symbol, /*comingFrom*/ undefined, { allSearchSymbols: node ? populateSearchSymbolSet(symbol, node, checker, options.use === FindReferencesUse.Rename, !!options.providePrefixAndSuffixTextForRename, !!options.implementations) : [symbol] });
@@ -1075,6 +1077,8 @@ namespace ts.FindAllReferences {
 
         // Go to the symbol we imported from and find references for it.
         function searchForImportedSymbol(symbol: Symbol, state: State): void {
+            if (!symbol.declarations) return;
+
             for (const declaration of symbol.declarations) {
                 const exportingFile = declaration.getSourceFile();
                 // Need to search in the file even if it's not in the search-file set, because it might export the symbol.
@@ -1194,7 +1198,7 @@ namespace ts.FindAllReferences {
         export function eachSignatureCall(signature: SignatureDeclaration, sourceFiles: readonly SourceFile[], checker: TypeChecker, cb: (call: CallExpression) => void): void {
             if (!signature.name || !isIdentifier(signature.name)) return;
 
-            const symbol = Debug.assertDefined(checker.getSymbolAtLocation(signature.name));
+            const symbol = Debug.checkDefined(checker.getSymbolAtLocation(signature.name));
 
             for (const sourceFile of sourceFiles) {
                 for (const name of getPossibleSymbolReferenceNodes(sourceFile, symbol.name)) {
@@ -1410,7 +1414,7 @@ namespace ts.FindAllReferences {
                 }
 
                 if (addReferencesHere && state.options.use !== FindReferencesUse.Rename && state.markSeenReExportRHS(name)) {
-                    addReference(name, Debug.assertDefined(exportSpecifier.symbol), state);
+                    addReference(name, Debug.checkDefined(exportSpecifier.symbol), state);
                 }
             }
             else {
@@ -1424,7 +1428,7 @@ namespace ts.FindAllReferences {
                 const isDefaultExport = referenceLocation.originalKeywordKind === SyntaxKind.DefaultKeyword
                     || exportSpecifier.name.originalKeywordKind === SyntaxKind.DefaultKeyword;
                 const exportKind = isDefaultExport ? ExportKind.Default : ExportKind.Named;
-                const exportSymbol = Debug.assertDefined(exportSpecifier.symbol);
+                const exportSymbol = Debug.checkDefined(exportSpecifier.symbol);
                 const exportInfo = getExportInfo(exportSymbol, exportKind, state.checker);
                 if (exportInfo) {
                     searchForImportsOfExport(referenceLocation, exportSymbol, exportInfo, state);
@@ -1554,7 +1558,7 @@ namespace ts.FindAllReferences {
          */
         function findOwnConstructorReferences(classSymbol: Symbol, sourceFile: SourceFile, addNode: (node: Node) => void): void {
             const constructorSymbol = getClassConstructorSymbol(classSymbol);
-            if (constructorSymbol) {
+            if (constructorSymbol && constructorSymbol.declarations) {
                 for (const decl of constructorSymbol.declarations) {
                     const ctrKeyword = findChildOfKind(decl, SyntaxKind.ConstructorKeyword, sourceFile)!;
                     Debug.assert(decl.kind === SyntaxKind.Constructor && !!ctrKeyword);
@@ -1586,7 +1590,7 @@ namespace ts.FindAllReferences {
         /** Find references to `super` in the constructor of an extending class.  */
         function findSuperConstructorAccesses(classDeclaration: ClassLikeDeclaration, addNode: (node: Node) => void): void {
             const constructor = getClassConstructorSymbol(classDeclaration.symbol);
-            if (!constructor) {
+            if (!(constructor && constructor.declarations)) {
                 return;
             }
 
@@ -1722,7 +1726,7 @@ namespace ts.FindAllReferences {
             // Set the key so that we don't infinitely recurse
             cachedResults.set(key, false);
 
-            const inherits = symbol.declarations.some(declaration =>
+            const inherits = !!symbol.declarations && symbol.declarations.some(declaration =>
                 getAllSuperTypeNodes(declaration).some(typeReference => {
                     const type = checker.getTypeAtLocation(typeReference);
                     return !!type && !!type.symbol && explicitlyInheritsFrom(type.symbol, parent, cachedResults, checker);

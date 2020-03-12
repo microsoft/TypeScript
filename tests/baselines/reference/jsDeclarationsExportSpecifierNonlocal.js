@@ -10,6 +10,7 @@ export { Thing, OtherThing as default } from "./source";
 //// [source.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.OtherThing = exports.Thing = void 0;
 var Thing = /** @class */ (function () {
     function Thing() {
     }

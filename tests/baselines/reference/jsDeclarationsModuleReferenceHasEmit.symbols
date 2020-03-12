@@ -1,0 +1,18 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+/**
+ * @module A
+ */
+class A {}
+>A : Symbol(A, Decl(index.js, 0, 0))
+
+
+/**
+ * Target element
+ * @type {module:A}
+ */
+export let el = null;
+>el : Symbol(el, Decl(index.js, 10, 10))
+
+export default A;
+>A : Symbol(A, Decl(index.js, 0, 0))
+

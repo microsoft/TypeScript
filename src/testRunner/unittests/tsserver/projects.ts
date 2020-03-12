@@ -1291,7 +1291,7 @@ namespace ts.projectSystem {
             verifyFile2InfoIsOrphan();
 
             function verifyFile2InfoIsOrphan() {
-                const info = Debug.assertDefined(service.getScriptInfoForPath(file2.path as Path));
+                const info = Debug.checkDefined(service.getScriptInfoForPath(file2.path as Path));
                 assert.equal(info.containingProjects.length, 0);
             }
         });

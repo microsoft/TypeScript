@@ -317,7 +317,7 @@ declare namespace FourSlashInterface {
         baselineQuickInfo(): void;
         baselineSmartSelection(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
-        outliningSpansInCurrentFile(spans: Range[]): void;
+        outliningSpansInCurrentFile(spans: Range[], kind?: "comment" | "region" | "code" | "imports"): void;
         outliningHintSpansInCurrentFile(spans: Range[]): void;
         todoCommentsInCurrentFile(descriptors: string[]): void;
         matchingBracePositionInCurrentFile(bracePosition: number, expectedMatchPosition: number): void;
