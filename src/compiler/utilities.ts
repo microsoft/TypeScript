@@ -4735,6 +4735,11 @@ namespace ts {
         return getLinesBetweenPositions(sourceFile, prevPos || 0, startPos);
     }
 
+    export function getLinesBetweenPositionAndNextNonWhitespaceCharacter(pos: number, sourceFile: SourceFile, includeComments?: boolean) {
+        const nextPos = skipTrivia(sourceFile.text, pos, /*stopAfterLineBreak*/ false, includeComments);
+        return getLinesBetweenPositions(sourceFile, pos, nextPos);
+    }
+
     function getPreviousNonWhitespacePosition(pos: number, sourceFile: SourceFile) {
         while (pos-- > 0) {
             if (!isWhiteSpaceLike(sourceFile.text.charCodeAt(pos))) {

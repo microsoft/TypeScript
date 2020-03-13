@@ -4280,23 +4280,11 @@ namespace ts {
                 }
                 else if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(firstChild) && firstChild.parent === parentNode) {
                     if (preserveSourceNewlines) {
-                        // To determine how many line breaks to write before `firstChild`, we first walk backwards from its comments,
-                        // so that this is measured as a one-line difference, not two:
-                        //
-                        // function parentNode() {
-                        //   // FIRSTCHILD COMMENT
-                        //   firstChild;
-                        //
-                        // However, if that returns zero, we might have this:
-                        //
-                        // function parentNode() { // FIRSTCHILD COMMENT
-                        //   firstChild;
-                        //
-                        // in which case we should be ignoring the comment, so this too is counted as a one-line difference, not zero.
-                        const lines = getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(firstChild.pos, currentSourceFile!, /*includeComments*/ true);
-                        return lines === 0
-                            ? getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(firstChild.pos, currentSourceFile!, /*includeComments*/ false)
-                            : lines;
+                        return getEffectiveLines(
+                            includeComments => getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(
+                                firstChild.pos,
+                                currentSourceFile!,
+                                includeComments));
                     }
                     return rangeStartPositionsAreOnSameLine(parentNode, firstChild, currentSourceFile!) ? 0 : 1;
                 }
@@ -4313,8 +4301,12 @@ namespace ts {
                     return 0;
                 }
                 else if (!nodeIsSynthesized(previousNode) && !nodeIsSynthesized(nextNode) && previousNode.parent === nextNode.parent) {
-                    const lines = getEffectiveLinesBetweenRanges(previousNode, nextNode);
-                    return preserveSourceNewlines ? lines : Math.min(lines, 1);
+                    return getEffectiveLines(
+                        includeComments => getLinesBetweenRangeEndAndRangeStart(
+                            previousNode,
+                            nextNode,
+                            currentSourceFile!,
+                            includeComments));
                 }
                 else if (synthesizedNodeStartsOnNewLine(previousNode, format) || synthesizedNodeStartsOnNewLine(nextNode, format)) {
                     return 1;
@@ -4337,8 +4329,14 @@ namespace ts {
                     return rangeIsOnSingleLine(parentNode, currentSourceFile!) ? 0 : 1;
                 }
                 else if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild) && lastChild.parent === parentNode) {
-                    const lines = getLinesBetweenRangeEndPositions(lastChild, parentNode, currentSourceFile!);
-                    return preserveSourceNewlines ? lines : Math.min(lines, 1);
+                    if (preserveSourceNewlines) {
+                        return getEffectiveLines(
+                            includeComments => getLinesBetweenPositionAndNextNonWhitespaceCharacter(
+                                lastChild.end,
+                                currentSourceFile!,
+                                includeComments));
+                    }
+                    return rangeEndPositionsAreOnSameLine(parentNode, lastChild, currentSourceFile!) ? 0 : 1;
                 }
                 else if (synthesizedNodeStartsOnNewLine(lastChild, format)) {
                     return 1;
@@ -4350,28 +4348,28 @@ namespace ts {
             return 0;
         }
 
-        function getEffectiveLinesBetweenRanges(node1: TextRange, node2: TextRange) {
+        function getEffectiveLines(getLineDifference: (includeComments: boolean) => number) {
             // If 'preserveSourceNewlines' is disabled, skip the more accurate check that might require
-            // querying for source position twice.
+            // querying for source positions twice.
             if (!preserveSourceNewlines) {
-                return getLinesBetweenRangeEndAndRangeStart(node1, node2, currentSourceFile!, /*includeComments*/ false);
+                return Math.min(1, getLineDifference(/*includeComments*/ false));
             }
-            // We start by measuring the line difference from node1's end to node2's comments start,
+            // We start by measuring the line difference from a position to its adjacent comments,
             // so that this is counted as a one-line difference, not two:
             //
             //   node1;
             //   // NODE2 COMMENT
             //   node2;
-            const lines = getLinesBetweenRangeEndAndRangeStart(node1, node2, currentSourceFile!, /*includeComments*/ true);
+            const lines = getLineDifference(/*includeComments*/ true);
             if (lines === 0) {
-                // However, if the line difference considering node2's comments was 0, we might have this:
+                // However, if the line difference considering comments was 0, we might have this:
                 //
                 //   node1; // NODE2 COMMENT
                 //   node2;
                 //
                 // in which case we should be ignoring node2's comment, so this too is counted as
                 // a one-line difference, not zero.
-                return getLinesBetweenRangeEndAndRangeStart(node1, node2, currentSourceFile!, /*includeComments*/ false);
+                return getLineDifference(/*includeComments*/ false);
             }
             return lines;
         }
@@ -4404,8 +4402,12 @@ namespace ts {
             }
 
             if (!nodeIsSynthesized(parent) && !nodeIsSynthesized(node1) && !nodeIsSynthesized(node2)) {
-                const lines = getEffectiveLinesBetweenRanges(node1, node2);
-                return preserveSourceNewlines ? lines : Math.min(lines, 1);
+                return getEffectiveLines(
+                    includeComments => getLinesBetweenRangeEndAndRangeStart(
+                        node1,
+                        node2,
+                        currentSourceFile!,
+                        includeComments));
             }
 
             return 0;
