@@ -274,7 +274,7 @@ namespace ts {
         /* @internal */
         getImportSuggestionsCache?(): Completions.ImportSuggestionsForFileCache;
         /* @internal */
-        setResolvedProjectReferenceCallbacks?(callbacks: ResolvedProjectReferenceCallbacks): void;
+        setCompilerHost?(host: CompilerHost): void;
         /* @internal */
         useSourceOfProjectReferenceRedirect?(): boolean;
     }
@@ -382,6 +382,8 @@ namespace ts {
         toLineColumnOffset?(fileName: string, position: number): LineAndCharacter;
         /** @internal */
         getSourceMapper(): SourceMapper;
+        /** @internal */
+        clearSourceMapperCache(): void;
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: readonly number[], formatOptions: FormatCodeSettings, preferences: UserPreferences): readonly CodeFixAction[];
         getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, preferences: UserPreferences): CombinedCodeActions;
@@ -792,6 +794,7 @@ namespace ts {
         readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
         readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
         readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingEmptyBraces?: boolean;
         readonly insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
         readonly insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
         readonly insertSpaceAfterTypeAssertion?: boolean;

@@ -71,7 +71,7 @@ foo({
 }, getNum(), [
 >getNum() : number
 >getNum : () => number
->[    1,    2,    getNum] : (number | (() => number))[]
+>[    1,    2,    getNum] : [number, number, () => number]
 
     1,
 >1 : 1

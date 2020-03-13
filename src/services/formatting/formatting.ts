@@ -824,8 +824,11 @@ namespace ts.formatting {
                 if (listEndToken !== SyntaxKind.Unknown && formattingScanner.isOnToken()) {
                     let tokenInfo: TokenInfo | undefined = formattingScanner.readTokenInfo(parent);
                     if (tokenInfo.token.kind === SyntaxKind.CommaToken && isCallLikeExpression(parent)) {
-                        formattingScanner.advance();
-                        tokenInfo = formattingScanner.isOnToken() ? formattingScanner.readTokenInfo(parent) : undefined;
+                        const commaTokenLine = sourceFile.getLineAndCharacterOfPosition(tokenInfo.token.pos).line;
+                        if (startLine !== commaTokenLine) {
+                            formattingScanner.advance();
+                            tokenInfo = formattingScanner.isOnToken() ? formattingScanner.readTokenInfo(parent) : undefined;
+                        }
                     }
 
                     // consume the list end token only if it is still belong to the parent

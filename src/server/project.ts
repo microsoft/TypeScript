@@ -260,7 +260,7 @@ namespace ts.server {
             protected watchOptions: WatchOptions | undefined,
             directoryStructureHost: DirectoryStructureHost,
             currentDirectory: string | undefined,
-            customRealpath?: (s: string) => string) {
+        ) {
             this.directoryStructureHost = directoryStructureHost;
             this.currentDirectory = this.projectService.getNormalizedAbsolutePath(currentDirectory || "");
             this.getCanonicalFileName = this.projectService.toCanonicalFileName;
@@ -286,10 +286,7 @@ namespace ts.server {
             else if (host.trace) {
                 this.trace = s => host.trace!(s);
             }
-
-            if (host.realpath) {
-                this.realpath = customRealpath || (path => host.realpath!(path));
-            }
+            this.realpath = maybeBind(host, host.realpath);
 
             // Use the current directory as resolution root only if the project created using current directory string
             this.resolutionCache = createResolutionCache(this, currentDirectory && this.currentDirectory, /*logChangesWhenResolvingModule*/ true);
@@ -384,7 +381,9 @@ namespace ts.server {
         }
 
         getScriptVersion(filename: string) {
-            const info = this.getOrCreateScriptInfoAndAttachToProject(filename);
+            // Don't attach to the project if version is asked
+
+            const info = this.projectService.getOrCreateScriptInfoNotOpenedByClient(filename, this.currentDirectory, this.directoryStructureHost);
             return (info && info.getLatestVersion())!; // TODO: GH#18217
         }
 
@@ -425,11 +424,6 @@ namespace ts.server {
         }
 
         fileExists(file: string): boolean {
-            return this.fileExistsWithCache(file);
-        }
-
-        /* @internal */
-        fileExistsWithCache(file: string): boolean {
             // As an optimization, don't hit the disks for files we already know don't exist
             // (because we're watching for their creation).
             const path = this.toPath(file);
@@ -556,6 +550,11 @@ namespace ts.server {
         /** @internal */
         getSourceMapper(): SourceMapper {
             return this.getLanguageService().getSourceMapper();
+        }
+
+        /** @internal */
+        clearSourceMapperCache() {
+            this.languageService.clearSourceMapperCache();
         }
 
         /*@internal*/
@@ -758,7 +757,7 @@ namespace ts.server {
             return map(this.program!.getSourceFiles(), sourceFile => {
                 const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.resolvedPath);
                 Debug.assert(!!scriptInfo, "getScriptInfo", () => `scriptInfo for a file '${sourceFile.fileName}' Path: '${sourceFile.path}' / '${sourceFile.resolvedPath}' is missing.`);
-                return scriptInfo!;
+                return scriptInfo;
             });
         }
 
@@ -1098,7 +1097,7 @@ namespace ts.server {
             this.projectService.sendUpdateGraphPerformanceEvent(elapsed);
             this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Version: ${this.getProjectVersion()} structureChanged: ${hasNewProgram} Elapsed: ${elapsed}ms`);
             if (this.hasAddedorRemovedFiles) {
-                this.print();
+                this.print(/*writeProjectFileNames*/ true);
             }
             else if (this.program !== oldProgram) {
                 this.writeLog(`Different program with same set of files:: oldProgram.structureIsReused:: ${oldProgram && oldProgram.structureIsReused}`);
@@ -1224,7 +1223,10 @@ namespace ts.server {
                 watcher: this.projectService.watchFactory.watchFile(
                     this.projectService.host,
                     generatedFile,
-                    () => this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this),
+                    () => {
+                        this.clearSourceMapperCache();
+                        this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
+                    },
                     PollingInterval.High,
                     this.projectService.getWatchOptions(this),
                     WatchType.MissingGeneratedFile,
@@ -1275,9 +1277,9 @@ namespace ts.server {
         }
 
         /*@internal*/
-        print(counter?: number) {
-            this.writeLog(`Project '${this.projectName}' (${ProjectKind[this.projectKind]}) ${counter === undefined ? "" : counter}`);
-            this.writeLog(this.filesToString(this.projectService.logger.hasLevel(LogLevel.verbose)));
+        print(writeProjectFileNames: boolean) {
+            this.writeLog(`Project '${this.projectName}' (${ProjectKind[this.projectKind]})`);
+            this.writeLog(this.filesToString(writeProjectFileNames && this.projectService.logger.hasLevel(LogLevel.verbose)));
             this.writeLog("-----------------------------------------------");
         }
 
@@ -1379,7 +1381,7 @@ namespace ts.server {
                     changes: {
                         added: includeProjectReferenceRedirectInfoIfRequested(added),
                         removed: includeProjectReferenceRedirectInfoIfRequested(removed),
-                        updated: includeProjectReferenceRedirectInfoIfRequested
+                        updated: includeProjectReferenceRedirectInfo
                             ? updated.map((fileName): protocol.FileWithProjectReferenceRedirectInfo => ({
                                 fileName,
                                 isSourceOfProjectReferenceRedirect: this.isSourceOfProjectReferenceRedirect(fileName)
@@ -1736,12 +1738,6 @@ namespace ts.server {
         }
     }
 
-    /*@internal*/
-    interface SymlinkedDirectory {
-        real: string;
-        realPath: Path;
-    }
-
     /**
      * If a file is opened, the server will look for a tsconfig (or jsconfig)
      * and if successful create a ConfiguredProject for it.
@@ -1753,10 +1749,6 @@ namespace ts.server {
         configFileWatcher: FileWatcher | undefined;
         private directoriesWatchedForWildcards: Map<WildcardDirectoryWatcher> | undefined;
         readonly canonicalConfigFilePath: NormalizedPath;
-        private projectReferenceCallbacks: ResolvedProjectReferenceCallbacks | undefined;
-        private mapOfDeclarationDirectories: Map<true> | undefined;
-        private symlinkedDirectories: Map<SymlinkedDirectory | false> | undefined;
-        private symlinkedFiles: Map<string> | undefined;
 
         /* @internal */
         pendingReload: ConfigFileProgramReloadLevel | undefined;
@@ -1793,6 +1785,9 @@ namespace ts.server {
         sendLoadingProjectFinish = false;
 
         /*@internal*/
+        private compilerHost?: CompilerHost;
+
+        /*@internal*/
         constructor(configFileName: NormalizedPath,
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
@@ -1808,161 +1803,23 @@ namespace ts.server {
                 /*watchOptions*/ undefined,
                 cachedDirectoryStructureHost,
                 getDirectoryPath(configFileName),
-                projectService.host.realpath && (s => this.getRealpath(s))
             );
             this.canonicalConfigFilePath = asNormalizedPath(projectService.toCanonicalFileName(configFileName));
         }
 
         /* @internal */
-        setResolvedProjectReferenceCallbacks(projectReferenceCallbacks: ResolvedProjectReferenceCallbacks) {
-            this.projectReferenceCallbacks = projectReferenceCallbacks;
+        setCompilerHost(host: CompilerHost) {
+            this.compilerHost = host;
         }
 
         /* @internal */
-        useSourceOfProjectReferenceRedirect = () => !!this.languageServiceEnabled &&
-            !this.getCompilerOptions().disableSourceOfProjectReferenceRedirect;
-
-        private fileExistsIfProjectReferenceDts(file: string) {
-            const source = this.projectReferenceCallbacks!.getSourceOfProjectReferenceRedirect(file);
-            return source !== undefined ?
-                isString(source) ? super.fileExists(source) : true :
-                undefined;
+        getCompilerHost(): CompilerHost | undefined {
+            return this.compilerHost;
         }
 
-        /**
-         * This implementation of fileExists checks if the file being requested is
-         * .d.ts file for the referenced Project.
-         * If it is it returns true irrespective of whether that file exists on host
-         */
-        fileExists(file: string): boolean {
-            if (super.fileExists(file)) return true;
-            if (!this.useSourceOfProjectReferenceRedirect() || !this.projectReferenceCallbacks) return false;
-            if (!isDeclarationFileName(file)) return false;
-
-            // Project references go to source file instead of .d.ts file
-            return this.fileOrDirectoryExistsUsingSource(file, /*isFile*/ true);
-        }
-
-        private directoryExistsIfProjectReferenceDeclDir(dir: string) {
-            const dirPath = this.toPath(dir);
-            const dirPathWithTrailingDirectorySeparator = `${dirPath}${directorySeparator}`;
-            return forEachKey(
-                this.mapOfDeclarationDirectories!,
-                declDirPath => dirPath === declDirPath ||
-                    // Any parent directory of declaration dir
-                    startsWith(declDirPath, dirPathWithTrailingDirectorySeparator) ||
-                    // Any directory inside declaration dir
-                    startsWith(dirPath, `${declDirPath}/`)
-            );
-        }
-
-        /**
-         * This implementation of directoryExists checks if the directory being requested is
-         * directory of .d.ts file for the referenced Project.
-         * If it is it returns true irrespective of whether that directory exists on host
-         */
-        directoryExists(path: string): boolean {
-            if (super.directoryExists(path)) {
-                this.handleDirectoryCouldBeSymlink(path);
-                return true;
-            }
-            if (!this.useSourceOfProjectReferenceRedirect() || !this.projectReferenceCallbacks) return false;
-
-            if (!this.mapOfDeclarationDirectories) {
-                this.mapOfDeclarationDirectories = createMap();
-                this.projectReferenceCallbacks.forEachResolvedProjectReference(ref => {
-                    if (!ref) return;
-                    const out = ref.commandLine.options.outFile || ref.commandLine.options.out;
-                    if (out) {
-                        this.mapOfDeclarationDirectories!.set(getDirectoryPath(this.toPath(out)), true);
-                    }
-                    else {
-                        // Set declaration's in different locations only, if they are next to source the directory present doesnt change
-                        const declarationDir = ref.commandLine.options.declarationDir || ref.commandLine.options.outDir;
-                        if (declarationDir) {
-                            this.mapOfDeclarationDirectories!.set(this.toPath(declarationDir), true);
-                        }
-                    }
-                });
-            }
-
-            return this.fileOrDirectoryExistsUsingSource(path, /*isFile*/ false);
-        }
-
-        /**
-         * Call super.getDirectories only if directory actually present on the host
-         * This is needed to ensure that we arent getting directories that we fake about presence for
-         */
-        getDirectories(path: string): string[] {
-            return !this.useSourceOfProjectReferenceRedirect() || !this.projectReferenceCallbacks || super.directoryExists(path) ?
-                super.getDirectories(path) :
-                [];
-        }
-
-        private realpathIfSymlinkedProjectReferenceDts(s: string): string | undefined {
-            return this.symlinkedFiles && this.symlinkedFiles.get(this.toPath(s));
-        }
-
-        private getRealpath(s: string): string {
-            return this.realpathIfSymlinkedProjectReferenceDts(s) ||
-                this.projectService.host.realpath!(s);
-        }
-
-        private handleDirectoryCouldBeSymlink(directory: string) {
-            if (!this.useSourceOfProjectReferenceRedirect() || !this.projectReferenceCallbacks) return;
-
-            // Because we already watch node_modules, handle symlinks in there
-            if (!this.realpath || !stringContains(directory, nodeModulesPathPart)) return;
-            if (!this.symlinkedDirectories) this.symlinkedDirectories = createMap();
-            const directoryPath = ensureTrailingDirectorySeparator(this.toPath(directory));
-            if (this.symlinkedDirectories.has(directoryPath)) return;
-
-            const real = normalizePath(this.projectService.host.realpath!(directory));
-            let realPath: Path;
-            if (real === directory ||
-                (realPath = ensureTrailingDirectorySeparator(this.toPath(real))) === directoryPath) {
-                // not symlinked
-                this.symlinkedDirectories.set(directoryPath, false);
-                return;
-            }
-
-            this.symlinkedDirectories.set(directoryPath, {
-                real: ensureTrailingDirectorySeparator(real),
-                realPath
-            });
-        }
-
-        private fileOrDirectoryExistsUsingSource(fileOrDirectory: string, isFile: boolean): boolean {
-            const fileOrDirectoryExistsUsingSource = isFile ?
-                (file: string) => this.fileExistsIfProjectReferenceDts(file) :
-                (dir: string) => this.directoryExistsIfProjectReferenceDeclDir(dir);
-            // Check current directory or file
-            const result = fileOrDirectoryExistsUsingSource(fileOrDirectory);
-            if (result !== undefined) return result;
-
-            if (!this.symlinkedDirectories) return false;
-            const fileOrDirectoryPath = this.toPath(fileOrDirectory);
-            if (!stringContains(fileOrDirectoryPath, nodeModulesPathPart)) return false;
-            if (isFile && this.symlinkedFiles && this.symlinkedFiles.has(fileOrDirectoryPath)) return true;
-
-            // If it contains node_modules check if its one of the symlinked path we know of
-            return firstDefinedIterator(
-                this.symlinkedDirectories.entries(),
-                ([directoryPath, symlinkedDirectory]) => {
-                    if (!symlinkedDirectory || !startsWith(fileOrDirectoryPath, directoryPath)) return undefined;
-                    const result = fileOrDirectoryExistsUsingSource(fileOrDirectoryPath.replace(directoryPath, symlinkedDirectory.realPath));
-                    if (isFile && result) {
-                        if (!this.symlinkedFiles) this.symlinkedFiles = createMap();
-                        // Store the real path for the file'
-                        const absolutePath = getNormalizedAbsolutePath(fileOrDirectory, this.currentDirectory);
-                        this.symlinkedFiles.set(
-                            fileOrDirectoryPath,
-                            `${symlinkedDirectory.real}${absolutePath.replace(new RegExp(directoryPath, "i"), "")}`
-                        );
-                    }
-                    return result;
-                }
-            ) || false;
+        /* @internal */
+        useSourceOfProjectReferenceRedirect() {
+            return this.languageServiceEnabled;
         }
 
         /* @internal */
@@ -1999,10 +1856,6 @@ namespace ts.server {
             this.isInitialLoadPending = returnFalse;
             const reloadLevel = this.pendingReload;
             this.pendingReload = ConfigFileProgramReloadLevel.None;
-            this.projectReferenceCallbacks = undefined;
-            this.mapOfDeclarationDirectories = undefined;
-            this.symlinkedDirectories = undefined;
-            this.symlinkedFiles = undefined;
             let result: boolean;
             switch (reloadLevel) {
                 case ConfigFileProgramReloadLevel.Partial:
@@ -2011,7 +1864,7 @@ namespace ts.server {
                     break;
                 case ConfigFileProgramReloadLevel.Full:
                     this.openFileWatchTriggered.clear();
-                    const reason = Debug.assertDefined(this.pendingReloadReason);
+                    const reason = Debug.checkDefined(this.pendingReloadReason);
                     this.pendingReloadReason = undefined;
                     this.projectService.reloadConfiguredProject(this, reason);
                     result = true;
@@ -2019,6 +1872,7 @@ namespace ts.server {
                 default:
                     result = super.updateGraph();
             }
+            this.compilerHost = undefined;
             this.projectService.sendProjectLoadingFinishEvent(this);
             this.projectService.sendProjectTelemetry(this);
             return result;
@@ -2136,11 +1990,8 @@ namespace ts.server {
             this.stopWatchingWildCards();
             this.projectErrors = undefined;
             this.configFileSpecs = undefined;
-            this.projectReferenceCallbacks = undefined;
-            this.mapOfDeclarationDirectories = undefined;
-            this.symlinkedDirectories = undefined;
-            this.symlinkedFiles = undefined;
             this.openFileWatchTriggered.clear();
+            this.compilerHost = undefined;
             super.close();
         }
 

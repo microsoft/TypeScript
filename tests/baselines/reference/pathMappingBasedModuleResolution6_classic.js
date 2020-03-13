@@ -12,10 +12,17 @@ export let x: number;
 export {x} from "../file2";
 
 //// [file3.js]
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
 define(["require", "exports", "../file2"], function (require, exports, file2_1) {
     "use strict";
     exports.__esModule = true;
-    exports.x = file2_1.x;
+    __createBinding(exports, file2_1, "x");
 });
 //// [file1.js]
 define(["require", "exports", "./project/file3"], function (require, exports, file3_1) {

@@ -242,7 +242,7 @@ namespace ts.formatting {
                 case ScanAction.RescanTemplateToken:
                     if (token === SyntaxKind.CloseBraceToken) {
                         lastScanAction = ScanAction.RescanTemplateToken;
-                        return scanner.reScanTemplateToken();
+                        return scanner.reScanTemplateToken(/* isTaggedTemplate */ false);
                     }
                     break;
                 case ScanAction.RescanJsxIdentifier:

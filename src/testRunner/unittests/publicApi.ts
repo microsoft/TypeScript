@@ -46,8 +46,16 @@ describe("Public APIs:: token to string", () => {
         assertDefinedTokenToString(ts.SyntaxKind.FirstKeyword, ts.SyntaxKind.LastKeyword);
     });
 });
+
 describe("Public APIs:: createPrivateIdentifier", () => {
     it("throws when name doesn't start with #", () => {
-            assert.throw(() => ts.createPrivateIdentifier("not"), "Debug Failure. First character of private identifier must be #: not");
+        assert.throw(() => ts.createPrivateIdentifier("not"), "Debug Failure. First character of private identifier must be #: not");
+    });
+});
+
+describe("Public APIs:: isPropertyName", () => {
+    it("checks if a PrivateIdentifier is a valid property name", () => {
+        const prop = ts.createPrivateIdentifier("#foo");
+        assert.isTrue(ts.isPropertyName(prop), "PrivateIdentifier must be a valid property name.");
     });
 });

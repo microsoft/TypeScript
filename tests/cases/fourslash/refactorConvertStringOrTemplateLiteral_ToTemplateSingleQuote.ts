@@ -3,10 +3,4 @@
 //// const foo = '/*x*/f/*y*/oobar rocks'
 
 goTo.select("x", "y");
-edit.applyRefactor({
-    refactorName: "Convert to template string",
-    actionName: "Convert to template string",
-    actionDescription: ts.Diagnostics.Convert_to_template_string.message,
-    newContent:
-`const foo = \`foobar rocks\``,
-});
+verify.not.refactorAvailable(ts.Diagnostics.Convert_to_template_string.message);

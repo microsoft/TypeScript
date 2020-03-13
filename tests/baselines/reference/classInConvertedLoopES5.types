@@ -1,0 +1,35 @@
+=== tests/cases/compiler/classInConvertedLoopES5.ts ===
+const classesByRow: Record<string, object> = {};
+>classesByRow : Record<string, object>
+>{} : {}
+
+for (const row of ['1', '2', '3', '4', '5']) {
+>row : string
+>['1', '2', '3', '4', '5'] : string[]
+>'1' : "1"
+>'2' : "2"
+>'3' : "3"
+>'4' : "4"
+>'5' : "5"
+
+  class RowClass {
+>RowClass : RowClass
+
+    row = row;
+>row : string
+>row : string
+
+    static factory = () => new RowClass();
+>factory : () => RowClass
+>() => new RowClass() : () => RowClass
+>new RowClass() : RowClass
+>RowClass : typeof RowClass
+  }
+
+  classesByRow[row] = RowClass;
+>classesByRow[row] = RowClass : typeof RowClass
+>classesByRow[row] : object
+>classesByRow : Record<string, object>
+>row : string
+>RowClass : typeof RowClass
+}

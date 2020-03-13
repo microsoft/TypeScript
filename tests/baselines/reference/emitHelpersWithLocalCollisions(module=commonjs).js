@@ -16,11 +16,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-let A = class A {
-};
-A = __decorate([
-    dec
-], A);
+exports.A = void 0;
+let A = /** @class */ (() => {
+    let A = class A {
+    };
+    A = __decorate([
+        dec
+    ], A);
+    return A;
+})();
 exports.A = A;
 const o = { a: 1 };
 const y = Object.assign({}, o);

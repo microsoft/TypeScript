@@ -26,6 +26,7 @@ const b: string = a;
 "use strict";
 // Repros from #22755
 exports.__esModule = true;
+exports.bar2 = exports.bar = void 0;
 function bar(obj) {
     return foo(obj);
 }

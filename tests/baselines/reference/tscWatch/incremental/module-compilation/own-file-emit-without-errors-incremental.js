@@ -25,6 +25,7 @@ export const y = 20;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.x = void 0;
     exports.x = 10;
 });
 
@@ -33,6 +34,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.y = void 0;
     exports.y = 20;
 });
 
@@ -73,6 +75,7 @@ define(["require", "exports"], function (require, exports) {
 
 Output::
 
+
 Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
 Program options: {"incremental":true,"module":2,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program files::
@@ -102,6 +105,7 @@ export const z = 10;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.z = void 0;
     exports.z = 10;
 });
 
@@ -141,6 +145,7 @@ define(["require", "exports"], function (require, exports) {
 
 
 Output::
+
 
 Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
 Program options: {"incremental":true,"module":2,"configFilePath":"/users/username/projects/project/tsconfig.json"}

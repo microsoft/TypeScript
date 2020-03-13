@@ -36,6 +36,7 @@ import {y} from "./file1Consumer1";
 //// [/a/b/moduleFile1.js]
 "use strict";
 exports.__esModule = true;
+exports.Foo = void 0;
 function Foo() { }
 exports.Foo = Foo;
 ;
@@ -44,6 +45,7 @@ exports.Foo = Foo;
 //// [/a/b/file1Consumer1.js]
 "use strict";
 exports.__esModule = true;
+exports.y = void 0;
 exports.y = 10;
 
 
@@ -64,17 +66,18 @@ var z = 10;
 //// [/a/b/moduleFile2.js]
 "use strict";
 exports.__esModule = true;
+exports.Foo4 = void 0;
 exports.Foo4 = 10;
 
 
 
 Output::
 >> Screen clear
-12:00:25 AM - Starting compilation in watch mode...
+[[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:38 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
@@ -130,16 +133,22 @@ Change:: change file1Consumer1
 //// [/a/b/file1Consumer1.ts]
 import {Foo} from "./moduleFile1"; export var y = 10;export var T: number;
 
-//// [/a/b/file1Consumer1.js] file written with same contents
+//// [/a/b/file1Consumer1.js]
+"use strict";
+exports.__esModule = true;
+exports.T = exports.y = void 0;
+exports.y = 10;
+
+
 //// [/a/b/file1Consumer1Consumer1.js] file written with same contents
 
 Output::
 >> Screen clear
-12:00:41 AM - File change detected. Starting incremental compilation...
+[[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:48 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:48 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
@@ -190,17 +199,25 @@ Change:: Change the content of moduleFile1 to `export var T: number;export funct
 //// [/a/b/moduleFile1.ts]
 export var T: number;export function Foo() { };
 
-//// [/a/b/moduleFile1.js] file written with same contents
+//// [/a/b/moduleFile1.js]
+"use strict";
+exports.__esModule = true;
+exports.Foo = exports.T = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
+
+
 //// [/a/b/file1Consumer1.js] file written with same contents
 //// [/a/b/file1Consumer2.js] file written with same contents
 
 Output::
 >> Screen clear
-12:00:52 AM - File change detected. Starting incremental compilation...
+[[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:01:02 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:02 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
@@ -255,18 +272,32 @@ export var T2: number;export function Foo() { };
 //// [/a/b/file1Consumer1.ts]
 import {Foo} from "./moduleFile1"; export var y = 10;export var T: number;export var T2: number;
 
-//// [/a/b/moduleFile1.js] file written with same contents
-//// [/a/b/file1Consumer1.js] file written with same contents
+//// [/a/b/moduleFile1.js]
+"use strict";
+exports.__esModule = true;
+exports.Foo = exports.T2 = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
+
+
+//// [/a/b/file1Consumer1.js]
+"use strict";
+exports.__esModule = true;
+exports.T2 = exports.T = exports.y = void 0;
+exports.y = 10;
+
+
 //// [/a/b/file1Consumer1Consumer1.js] file written with same contents
 //// [/a/b/file1Consumer2.js] file written with same contents
 
 Output::
 >> Screen clear
-12:01:08 AM - File change detected. Starting incremental compilation...
+[[90m12:01:08 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:01:21 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:21 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]

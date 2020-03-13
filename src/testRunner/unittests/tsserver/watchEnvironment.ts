@@ -45,7 +45,7 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
             projectService.openClientFile(index.path);
 
-            const project = Debug.assertDefined(projectService.configuredProjects.get(configFile.path));
+            const project = Debug.checkDefined(projectService.configuredProjects.get(configFile.path));
             verifyProjectAndCompletions();
 
             // Add file2
@@ -168,7 +168,7 @@ namespace ts.projectSystem {
         const projectService = createProjectService(host);
         projectService.openClientFile(index.path);
 
-        const project = Debug.assertDefined(projectService.configuredProjects.get(configFile.path));
+        const project = Debug.checkDefined(projectService.configuredProjects.get(configFile.path));
         verifyProject();
 
         const nodeModulesIgnoredFileFromIgnoreDirectory: File = {

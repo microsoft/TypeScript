@@ -2,7 +2,7 @@
 // Must reference esnext.asynciterable lib, since octokit uses AsyncIterable internally
 /// <reference types="node" />
 
-import Octokit = require("@octokit/rest");
+import { Octokit } from "@octokit/rest";
 const {runSequence} = require("./run-sequence");
 import fs = require("fs");
 import path = require("path");
@@ -26,18 +26,32 @@ async function main() {
     const currentAuthor = runSequence([
         ["git", ["log", "-1", `--pretty="%aN <%aE>"`]]
     ]);
+
+    const gh = new Octokit({
+        auth: process.argv[2]
+    });
+
+    const inputPR = (await gh.pulls.get({ pull_number: +process.env.SOURCE_ISSUE, owner: "microsoft", repo: "TypeScript" })).data;
+    let remoteName = "origin";
+    if (inputPR.base.repo.git_url !== `git:github.com/microsoft/TypeScript`) {
+        runSequence([
+            ["git", ["remote", "add", "nonlocal", inputPR.base.repo.git_url]]
+        ]);
+        remoteName = "nonlocal";
+    }
+    const baseBranchName = inputPR.base.ref;
     runSequence([
-        ["git", ["fetch", "origin", "master"]]
+        ["git", ["fetch", remoteName, baseBranchName]]
     ]);
     let logText = runSequence([
-        ["git", ["log", `origin/master..${currentSha.trim()}`, `--pretty="%h %s%n%b"`, "--reverse"]]
+        ["git", ["log", `${remoteName}/${baseBranchName}..${currentSha.trim()}`, `--pretty="%h %s%n%b"`, "--reverse"]]
     ]);
     logText = `Cherry-pick PR #${process.env.SOURCE_ISSUE} into ${process.env.TARGET_BRANCH}
 
 Component commits:
 ${logText.trim()}`;
     const logpath = path.join(__dirname, "../", "logmessage.txt");
-    const mergebase = runSequence([["git", ["merge-base", "origin/master", currentSha]]]).trim();
+    const mergebase = runSequence([["git", ["merge-base", `${remoteName}/${baseBranchName}`, currentSha]]]).trim();
     runSequence([
         ["git", ["checkout", "-b", "temp-branch"]],
         ["git", ["reset", mergebase, "--soft"]]
@@ -67,20 +81,15 @@ ${logText.trim()}`;
         ["git", ["push", "--set-upstream", "fork", branchName, "-f"]] // push the branch
     ]);
 
-    const gh = new Octokit();
-    gh.authenticate({
-        type: "token",
-        token: process.argv[2]
-    });
     const r = await gh.pulls.create({
         owner: "Microsoft",
         repo: "TypeScript",
         maintainer_can_modify: true,
-        title: `🤖 Cherry-pick PR #${process.env.SOURCE_ISSUE} into ${process.env.TARGET_BRANCH}`,
+        title: `🤖 Pick PR #${process.env.SOURCE_ISSUE} (${inputPR.title.substring(0, 35)}${inputPR.title.length > 35 ? "..." : ""}) into ${process.env.TARGET_BRANCH}`,
         head: `${userName}:${branchName}`,
         base: process.env.TARGET_BRANCH,
         body:
-    `This cherry-pick was triggerd by a request on https://github.com/Microsoft/TypeScript/pull/${process.env.SOURCE_ISSUE}
+    `This cherry-pick was triggered by a request on https://github.com/Microsoft/TypeScript/pull/${process.env.SOURCE_ISSUE}
 Please review the diff and merge if no changes are unexpected.${produceLKG ? ` An LKG update commit is included seperately from the base change.` : ""}
 You can view the cherry-pick log [here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary).
 
@@ -90,7 +99,7 @@ cc ${reviewers.map(r => "@" + r).join(" ")}`,
     console.log(`Pull request ${num} created.`);
 
     await gh.issues.createComment({
-        number: +process.env.SOURCE_ISSUE,
+        issue_number: +process.env.SOURCE_ISSUE,
         owner: "Microsoft",
         repo: "TypeScript",
         body: `Hey @${process.env.REQUESTING_USER}, I've opened #${num} for you.`
@@ -101,13 +110,11 @@ main().catch(async e => {
     console.error(e);
     process.exitCode = 1;
     if (process.env.SOURCE_ISSUE) {
-        const gh = new Octokit();
-        gh.authenticate({
-            type: "token",
-            token: process.argv[2]
+        const gh = new Octokit({
+            auth: process.argv[2]
         });
         await gh.issues.createComment({
-            number: +process.env.SOURCE_ISSUE,
+            issue_number: +process.env.SOURCE_ISSUE,
             owner: "Microsoft",
             repo: "TypeScript",
             body: `Hey @${process.env.REQUESTING_USER}, I couldn't open a PR with the cherry-pick. ([You can check the log here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary)). You may need to squash and pick this PR into ${process.env.TARGET_BRANCH} manually.`

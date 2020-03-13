@@ -241,7 +241,7 @@ namespace ts.projectSystem {
                 }
                 return true;
             });
-            return Debug.assertDefined(eventData);
+            return Debug.checkDefined(eventData);
         }
 
         hasZeroEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"]) {

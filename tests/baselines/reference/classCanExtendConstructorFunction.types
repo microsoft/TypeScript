@@ -284,13 +284,13 @@ chowder.flavour.claim
 >claim : "ignorant" | "malicious"
 
 var errorNoArgs = new Chowder();
->errorNoArgs : any
->new Chowder() : any
+>errorNoArgs : Chowder
+>new Chowder() : Chowder
 >Chowder : typeof Chowder
 
 var errorArgType = new Chowder(0);
->errorArgType : any
->new Chowder(0) : any
+>errorArgType : Chowder
+>new Chowder(0) : Chowder
 >Chowder : typeof Chowder
 >0 : 0
 

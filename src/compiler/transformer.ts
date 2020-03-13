@@ -412,6 +412,11 @@ namespace ts {
             Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the transformation context during initialization.");
             Debug.assert(state < TransformationState.Completed, "Cannot modify the transformation context after transformation has completed.");
             Debug.assert(!helper.scoped, "Cannot request a scoped emit helper.");
+            if (helper.dependencies) {
+                for (const h of helper.dependencies) {
+                    requestEmitHelper(h);
+                }
+            }
             emitHelpers = append(emitHelpers, helper);
         }
 

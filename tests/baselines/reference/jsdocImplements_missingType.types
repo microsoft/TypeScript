@@ -1,0 +1,14 @@
+=== /a.js ===
+class A { constructor() { this.x = 0; } }
+>A : A
+>this.x = 0 : 0
+>this.x : number
+>this : this
+>x : number
+>0 : 0
+
+/** @implements */
+class B  {
+>B : B
+}
+
