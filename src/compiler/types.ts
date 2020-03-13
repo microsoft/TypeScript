@@ -4808,8 +4808,8 @@ namespace ts {
     // Thus, if Foo has a 'string' constraint on its type parameter, T will satisfy it. Substitution
     // types disappear upon instantiation (just like type parameters).
     export interface SubstitutionType extends InstantiableType {
-        typeVariable: TypeVariable;  // Target type variable
-        substitute: Type;            // Type to substitute for type parameter
+        baseType: Type;     // Target type
+        substitute: Type;   // Type to substitute for type parameter
     }
 
     /* @internal */
