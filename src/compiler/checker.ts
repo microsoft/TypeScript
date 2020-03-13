@@ -7164,6 +7164,10 @@ namespace ts {
             if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
                 parentType = getNonNullableType(parentType);
             }
+            // Filter `undefined` from the type we check against if the parent has an initializer (which handles the `undefined` case implicitly)
+            else if (strictNullChecks && pattern.parent.initializer) {
+                parentType = getTypeWithFacts(parentType, TypeFacts.NEUndefined);
+            }
 
             let type: Type | undefined;
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
