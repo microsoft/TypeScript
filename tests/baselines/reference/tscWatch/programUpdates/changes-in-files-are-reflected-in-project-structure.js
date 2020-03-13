@@ -24,6 +24,7 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/a/b/f2.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 exports.x = 1;
 
 
@@ -46,11 +47,11 @@ __exportStar(require("./f2"), exports);
 
 Output::
 >> Screen clear
-12:00:19 AM - Starting compilation in watch mode...
+[[90m12:00:19 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:24 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:24 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/f1.ts"]
@@ -104,17 +105,18 @@ __exportStar(require("../c/f3"), exports);
 //// [/a/c/f3.js]
 "use strict";
 exports.__esModule = true;
+exports.y = void 0;
 exports.y = 1;
 
 
 
 Output::
 >> Screen clear
-12:00:27 AM - File change detected. Starting incremental compilation...
+[[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:36 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/f1.ts"]

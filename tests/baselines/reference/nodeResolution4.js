@@ -15,7 +15,6 @@ var x = 1;
 //// [a.js]
 "use strict";
 exports.__esModule = true;
-/// <reference path="ref.ts"/>
 exports.y = void 0;
 //// [b.js]
 "use strict";

@@ -18,8 +18,8 @@ export let y = () => x
 "use strict";
 /// <reference types="lib"/>
 exports.__esModule = true;
+exports.y = exports.x = exports.$ = void 0;
 exports.$ = 1;
-exports.x = void 0;
 exports.y = function () { return exports.x; };
 
 

@@ -14,11 +14,13 @@ export function __foo(): string | void {}
 //// [b.js]
 "use strict";
 exports.__esModule = true;
+exports.__foo = void 0;
 function __foo() { }
 exports.__foo = __foo;
 //// [c.js]
 "use strict";
 exports.__esModule = true;
+exports.__foo = void 0;
 function __foo() { }
 exports.__foo = __foo;
 //// [index.js]

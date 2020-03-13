@@ -50,6 +50,7 @@ exports.__esModule = true;
 //// [exportValue.js]
 "use strict";
 exports.__esModule = true;
+exports.C = void 0;
 var C = /** @class */ (function () {
     function C() {
     }
@@ -66,6 +67,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
+exports.NS = void 0;
 // OK, has a value side
 var exportValue_1 = require("./exportValue");
 __createBinding(exports, exportValue_1, "C");

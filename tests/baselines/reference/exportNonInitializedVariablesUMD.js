@@ -45,20 +45,15 @@ export let h1: D = new D;
 })(function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.h1 = exports.g1 = exports.f1 = exports.e1 = exports.d1 = exports.c1 = exports.b1 = exports.a1 = exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = void 0;
     var ;
     let;
     var ;
-    exports.a = void 0;
-    exports.b = void 0;
-    exports.c = void 0;
-    exports.d = void 0;
     var A = /** @class */ (function () {
         function A() {
         }
         return A;
     }());
-    exports.e = void 0;
-    exports.f = void 0;
     var B;
     (function (B) {
         B.a = 1, B.c = 2;

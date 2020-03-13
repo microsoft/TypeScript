@@ -19,6 +19,7 @@ export class Class2 {
 //// [Class1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Class1 = void 0;
 var Class1 = /** @class */ (function () {
     function Class1() {
     }
@@ -37,6 +38,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Class2 = void 0;
 var Class1_1 = require("./Class1");
 function decorate(target, propertyKey) {
 }

@@ -94,6 +94,7 @@
         "codefixes/removeUnnecessaryAwait.ts",
         "codefixes/splitTypeOnlyImport.ts",
         "codefixes/convertConstToLet.ts",
+        "codefixes/fixExpectedComma.ts",
         "refactors/convertExport.ts",
         "refactors/convertImport.ts",
         "refactors/extractSymbol.ts",

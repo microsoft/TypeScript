@@ -30,6 +30,8 @@ lib/FrameManager.js(668,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/JSHandle.js(32,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/JSHandle.js(146,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/JSHandle.js(237,29): error TS2503: Cannot find namespace 'Protocol'.
+lib/Launcher.js(179,17): error TS1003: Identifier expected.
+lib/Launcher.js(357,17): error TS1003: Identifier expected.
 lib/NetworkManager.js(32,30): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(159,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(178,15): error TS2503: Cannot find namespace 'Protocol'.
@@ -69,11 +71,13 @@ lib/Page.js(552,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(605,14): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(941,19): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(1352,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/PipeTransport.js(19,17): error TS1003: Identifier expected.
 lib/Target.js(23,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Target.js(87,7): error TS2322: Type 'Promise<Worker | Worker>' is not assignable to type 'Promise<Worker>'.
   Type 'Worker | Worker' is not assignable to type 'Worker'.
     Type 'Worker' is not assignable to type 'Worker'. Two different types with this name exist, but they are unrelated.
 lib/Target.js(135,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/WebSocketTransport.js(19,17): error TS1003: Identifier expected.
 lib/WebSocketTransport.js(32,72): error TS2345: Argument of type 'import("/puppeteer/puppeteer/node_modules/@types/ws/index")' is not assignable to parameter of type 'WebSocket'.
   Property 'dispatchEvent' is missing in type 'import("/puppeteer/puppeteer/node_modules/@types/ws/index")' but required in type 'WebSocket'.
 lib/Worker.js(25,50): error TS2503: Cannot find namespace 'Protocol'.

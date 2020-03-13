@@ -28,6 +28,7 @@ export declare class someClass {
 //// [/src/core/index.js]
 "use strict";
 exports.__esModule = true;
+exports.someClass = exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
 exports.leftPad = leftPad;

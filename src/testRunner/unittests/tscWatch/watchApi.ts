@@ -63,4 +63,27 @@ namespace ts.tscWatch {
             assert.equal(watchedErrorCount, 2, "The error count was expected to be 2 for the file change");
         });
     });
+
+    describe("unittests:: tsc-watch:: watchAPI:: when watchHost does not implement setTimeout or clearTimeout", () => {
+        it("verifies that getProgram gets updated program if new file is added to the program", () => {
+            const config: File = {
+                path: `${projectRoot}/tsconfig.json`,
+                content: "{}"
+            };
+            const mainFile: File = {
+                path: `${projectRoot}/main.ts`,
+                content: "const x = 10;"
+            };
+            const sys = createWatchedSystem([config, mainFile, libFile]);
+            const watchCompilerHost = createWatchCompilerHost(config.path, {}, sys);
+            watchCompilerHost.setTimeout = undefined;
+            watchCompilerHost.clearTimeout = undefined;
+            const watch = createWatchProgram(watchCompilerHost);
+            checkProgramActualFiles(watch.getProgram().getProgram(), [mainFile.path, libFile.path]);
+            // Write new file
+            const barPath = `${projectRoot}/bar.ts`;
+            sys.writeFile(barPath, "const y =10;");
+            checkProgramActualFiles(watch.getProgram().getProgram(), [mainFile.path, barPath, libFile.path]);
+        });
+    });
 }

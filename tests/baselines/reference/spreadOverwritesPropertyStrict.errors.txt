@@ -1,8 +1,9 @@
 tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts(3,17): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
 tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts(15,14): error TS2783: 'x' is specified more than once, so this usage will be overwritten.
+tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts(24,14): error TS2783: 'command' is specified more than once, so this usage will be overwritten.
 
 
-==== tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts (2 errors) ====
+==== tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts (3 errors) ====
     declare var ab: { a: number, b: number };
     declare var abq: { a: number, b?: number };
     var unused1 = { b: 1, ...ab } // error
@@ -22,5 +23,16 @@ tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts(15,14): e
         return { x: 1, ...obj } // error
                  ~~~~
 !!! error TS2783: 'x' is specified more than once, so this usage will be overwritten.
+    }
+    function i(b: boolean, t: { command: string, ok: string }) {
+        return { command: "hi", ...(b ? t : {}) } // ok
+    }
+    function j() {
+        return { ...{ command: "hi" } , ...{ command: "bye" } } // ok
+    }
+    function k(t: { command: string, ok: string }) {
+        return { command: "hi", ...{ spoiler: true }, spoiler2: true, ...t } // error
+                 ~~~~~~~~~~~~~
+!!! error TS2783: 'command' is specified more than once, so this usage will be overwritten.
     }
     

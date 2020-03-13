@@ -773,7 +773,7 @@ namespace ts.server {
 
         private delayEnsureProjectForOpenFiles() {
             this.pendingEnsureProjectForOpenFiles = true;
-            this.throttledOperations.schedule("*ensureProjectForOpenFiles*", /*delay*/ 250, () => {
+            this.throttledOperations.schedule("*ensureProjectForOpenFiles*", /*delay*/ 2500, () => {
                 if (this.pendingProjectUpdates.size !== 0) {
                     this.delayEnsureProjectForOpenFiles();
                 }
@@ -1210,7 +1210,7 @@ namespace ts.server {
 
         private removeProject(project: Project) {
             this.logger.info("`remove Project::");
-            project.print();
+            project.print(/*writeProjectFileNames*/ true);
 
             project.close();
             if (Debug.shouldAssert(AssertionLevel.Normal)) {
@@ -1664,6 +1664,13 @@ namespace ts.server {
                     const jsconfigFileName = asNormalizedPath(combinePaths(searchPath, "jsconfig.json"));
                     result = action(jsconfigFileName, combinePaths(canonicalSearchPath, "jsconfig.json"));
                     if (result) return jsconfigFileName;
+
+                    // If we started within node_modules, don't look outside node_modules.
+                    // Otherwise, we might pick up a very large project and pull in the world,
+                    // causing an editor delay.
+                    if (isNodeModulesDirectory(canonicalSearchPath)) {
+                        break;
+                    }
                 }
 
                 const parentPath = asNormalizedPath(getDirectoryPath(searchPath));
@@ -1712,19 +1719,17 @@ namespace ts.server {
                 return;
             }
 
-            const writeProjectFileNames = this.logger.hasLevel(LogLevel.verbose);
             this.logger.startGroup();
-            let counter = printProjectsWithCounter(this.externalProjects, 0);
-            counter = printProjectsWithCounter(arrayFrom(this.configuredProjects.values()), counter);
-            printProjectsWithCounter(this.inferredProjects, counter);
+
+            this.externalProjects.forEach(printProjectWithoutFileNames);
+            this.configuredProjects.forEach(printProjectWithoutFileNames);
+            this.inferredProjects.forEach(printProjectWithoutFileNames);
 
             this.logger.info("Open files: ");
             this.openFiles.forEach((projectRootPath, path) => {
                 const info = this.getScriptInfoForPath(path as Path)!;
                 this.logger.info(`\tFileName: ${info.fileName} ProjectRootPath: ${projectRootPath}`);
-                if (writeProjectFileNames) {
-                    this.logger.info(`\t\tProjects: ${info.containingProjects.map(p => p.getProjectName())}`);
-                }
+                this.logger.info(`\t\tProjects: ${info.containingProjects.map(p => p.getProjectName())}`);
             });
 
             this.logger.endGroup();
@@ -1981,7 +1986,7 @@ namespace ts.server {
                 const isDynamic = isDynamicFileName(fileName);
                 let path: Path;
                 // Use the project's fileExists so that it can use caching instead of reaching to disk for the query
-                if (!isDynamic && !project.fileExistsWithCache(newRootFile)) {
+                if (!isDynamic && !project.fileExists(newRootFile)) {
                     path = normalizedPathToPath(fileName, this.currentDirectory, this.toCanonicalFileName);
                     const existingValue = projectRootFilesMap.get(path);
                     if (existingValue) {
@@ -2030,7 +2035,7 @@ namespace ts.server {
                 projectRootFilesMap.forEach((value, path) => {
                     if (!newRootScriptInfoMap.has(path)) {
                         if (value.info) {
-                            project.removeFile(value.info, project.fileExistsWithCache(path), /*detachFromProject*/ true);
+                            project.removeFile(value.info, project.fileExists(path), /*detachFromProject*/ true);
                         }
                         else {
                             projectRootFilesMap.delete(path);
@@ -2759,7 +2764,7 @@ namespace ts.server {
          * After that all the inferred project graphs are updated
          */
         private ensureProjectForOpenFiles() {
-            this.logger.info("Structure before ensureProjectForOpenFiles:");
+            this.logger.info("Before ensureProjectForOpenFiles:");
             this.printProjects();
 
             this.openFiles.forEach((projectRootPath, path) => {
@@ -2776,7 +2781,7 @@ namespace ts.server {
             this.pendingEnsureProjectForOpenFiles = false;
             this.inferredProjects.forEach(updateProjectIfDirty);
 
-            this.logger.info("Structure after ensureProjectForOpenFiles:");
+            this.logger.info("After ensureProjectForOpenFiles:");
             this.printProjects();
         }
 
@@ -3546,11 +3551,7 @@ namespace ts.server {
         return (config as TsConfigSourceFile).kind !== undefined;
     }
 
-    function printProjectsWithCounter(projects: Project[], counter: number) {
-        for (const project of projects) {
-            project.print(counter);
-            counter++;
-        }
-        return counter;
+    function printProjectWithoutFileNames(project: Project) {
+        project.print(/*writeProjectFileNames*/ false);
     }
 }

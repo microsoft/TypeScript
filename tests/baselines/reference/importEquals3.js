@@ -23,6 +23,7 @@ console.log(x);
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+exports.A = void 0;
 var A = /** @class */ (function () {
     function A() {
     }
@@ -32,6 +33,7 @@ exports.A = A;
 //// [b.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 var x = 0;
 exports.x = x;
 //// [c.js]

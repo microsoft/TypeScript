@@ -23,6 +23,7 @@ class Wat {
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.test = void 0;
 // from #3108
 exports.test = 'abc';
 //// [b.js]

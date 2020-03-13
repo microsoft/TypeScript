@@ -35,6 +35,7 @@ exports.__esModule = true;
 //// [c.js]
 "use strict";
 exports.__esModule = true;
+exports["default"] = void 0;
 var types = require("./b");
 exports["default"] = types;
 //// [d.js]

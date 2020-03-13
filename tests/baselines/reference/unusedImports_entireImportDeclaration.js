@@ -20,6 +20,7 @@ ns3;
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+exports.b = exports.a = void 0;
 exports.a = 0;
 exports.b = 0;
 exports["default"] = 0;

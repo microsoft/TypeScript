@@ -30,6 +30,7 @@ module m4 {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.foo = void 0;
     function foo() {
     }
     exports.foo = foo;

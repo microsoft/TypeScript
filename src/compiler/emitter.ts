@@ -2273,7 +2273,7 @@ namespace ts {
 
         function emitPropertyAccessExpression(node: PropertyAccessExpression) {
             const expression = cast(emitExpression(node.expression), isExpression);
-            const token = getDotOrQuestionDotToken(node);
+            const token = node.questionDotToken || createNode(SyntaxKind.DotToken, node.expression.end, node.name.pos) as DotToken;
             const indentBeforeDot = needsIndentation(node, node.expression, token);
             const indentAfterDot = needsIndentation(node, token, node.name);
 
@@ -2289,7 +2289,12 @@ namespace ts {
                 writePunctuation(".");
             }
 
-            emitTokenWithComment(token.kind, node.expression.end, writePunctuation, node);
+            if (node.questionDotToken) {
+                emit(token);
+            }
+            else {
+                emitTokenWithComment(token.kind, node.expression.end, writePunctuation, node);
+            }
             increaseIndentIf(indentAfterDot, /*writeSpaceIfNotIndenting*/ false);
             emit(node.name);
             decreaseIndentIf(indentBeforeDot, indentAfterDot);

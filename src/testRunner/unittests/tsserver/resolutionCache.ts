@@ -111,7 +111,7 @@ namespace ts.projectSystem {
             );
             let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyDiagnostics(diags, [
-                { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
+                { diagnosticMessage: Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, errorTextArguments: ["./moduleFile"] }
             ]);
 
             host.reloadFS([file1, moduleFile]);
@@ -158,7 +158,7 @@ namespace ts.projectSystem {
                     file: file1,
                     syntax: [],
                     semantic: [
-                        createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + '"pad"'.length }, Diagnostics.Cannot_find_module_0, ["pad"])
+                        createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + '"pad"'.length }, Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, ["pad"])
                     ],
                     suggestion: []
                 }]
@@ -342,7 +342,7 @@ namespace ts.projectSystem {
             host.runQueuedTimeoutCallbacks();
             diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyDiagnostics(diags, [
-                { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
+                { diagnosticMessage: Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, errorTextArguments: ["./moduleFile"] }
             ]);
             assert.equal(diags.length, 1);
 
@@ -393,7 +393,7 @@ namespace ts.projectSystem {
             host.runQueuedTimeoutCallbacks();
             diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyDiagnostics(diags, [
-                { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
+                { diagnosticMessage: Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, errorTextArguments: ["./moduleFile"] }
             ]);
 
             moduleFile.path = moduleFileOldPath;
@@ -902,7 +902,6 @@ export const x = 10;`
                 checkNumberOfProjects(service, { inferredProjects: 1 });
                 const project = service.inferredProjects[0];
                 checkProjectActualFiles(project, files.map(f => f.path));
-                (project as ResolutionCacheHost).maxNumberOfFilesToIterateForInvalidation = 1;
                 host.checkTimeoutQueueLength(0);
 
                 host.ensureFileOrFolder(npmCacheFile);
@@ -943,8 +942,6 @@ export const x = 10;`
                 const resolutionTrace = createHostModuleResolutionTrace(host);
                 const service = createProjectService(host);
                 service.openClientFile(file1.path);
-                const project = service.configuredProjects.get(configFile.path)!;
-                (project as ResolutionCacheHost).maxNumberOfFilesToIterateForInvalidation = 1;
                 const expectedTrace = getExpectedNonRelativeModuleResolutionTrace(host, file1, module1, module1Name);
                 getExpectedNonRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
                 verifyTrace(resolutionTrace, expectedTrace);

@@ -1,5 +1,5 @@
 tests/cases/compiler/ambientExternalModuleWithRelativeExternalImportDeclaration.ts(2,5): error TS2439: Import or export declaration in an ambient module declaration cannot reference module through relative module name.
-tests/cases/compiler/ambientExternalModuleWithRelativeExternalImportDeclaration.ts(2,25): error TS2307: Cannot find module './SubModule'.
+tests/cases/compiler/ambientExternalModuleWithRelativeExternalImportDeclaration.ts(2,25): error TS2307: Cannot find module './SubModule' or its corresponding type declarations.
 
 
 ==== tests/cases/compiler/ambientExternalModuleWithRelativeExternalImportDeclaration.ts (2 errors) ====
@@ -8,7 +8,7 @@ tests/cases/compiler/ambientExternalModuleWithRelativeExternalImportDeclaration.
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2439: Import or export declaration in an ambient module declaration cannot reference module through relative module name.
                             ~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module './SubModule'.
+!!! error TS2307: Cannot find module './SubModule' or its corresponding type declarations.
         class SubModule {
             public static StaticVar: number;
             public InstanceVar: number;

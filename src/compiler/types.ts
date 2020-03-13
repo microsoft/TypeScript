@@ -2990,6 +2990,8 @@ namespace ts {
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: readonly number[];
         /* @internal */ classifiableNames?: ReadonlyUnderscoreEscapedMap<true>;
+        // Comments containing @ts-* directives, in order.
+        /* @internal */ commentDirectives?: CommentDirective[];
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
@@ -3007,6 +3009,18 @@ namespace ts {
         /* @internal */ localJsxFactory?: EntityName;
 
         /*@internal*/ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
+    }
+
+    /* @internal */
+    export interface CommentDirective {
+        range: TextRange;
+        type: CommentDirectiveType,
+    }
+
+    /* @internal */
+    export const enum CommentDirectiveType {
+        ExpectError,
+        Ignore,
     }
 
     /*@internal*/
@@ -3174,8 +3188,8 @@ namespace ts {
     }
 
     // TODO: This should implement TypeCheckerHost but that's an internal type.
-    export interface Program extends ScriptReferenceHost {
-
+    export interface Program extends ScriptReferenceHost, ModuleSpecifierResolutionHost {
+        getCurrentDirectory(): string;
         /**
          * Get a list of root file names that were passed to a 'createProgram'
          */
@@ -3596,6 +3610,7 @@ namespace ts {
          */
         /* @internal */ getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined;
         /* @internal */ getTypePredicateOfSignature(signature: Signature): TypePredicate | undefined;
+        /* @internal */ resolveExternalModuleName(moduleSpecifier: Expression): Symbol | undefined;
         /**
          * An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
          * and an external module with no 'export =' declaration resolves to the module itself.
@@ -3831,6 +3846,10 @@ namespace ts {
     export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
 
     /* @internal */
+    export type AnyImportOrRequire = AnyImportSyntax | RequireVariableDeclaration;
+
+
+    /* @internal */
     export type AnyImportOrReExport = AnyImportSyntax | ExportDeclaration;
 
     /* @internal */
@@ -3846,7 +3865,13 @@ namespace ts {
         | ValidImportTypeNode;
 
     /* @internal */
-    export type RequireOrImportCall = CallExpression & { arguments: [StringLiteralLike] };
+    export type RequireOrImportCall = CallExpression & { expression: Identifier, arguments: [StringLiteralLike] };
+
+    /* @internal */
+    export interface RequireVariableDeclaration extends VariableDeclaration {
+
+        initializer: RequireOrImportCall;
+    }
 
     /* @internal */
     export type LateVisibilityPaintedStatement =
@@ -4144,6 +4169,9 @@ namespace ts {
         OptionalParameter = 1 << 14,        // Optional parameter
         RestParameter     = 1 << 15,        // Rest parameter
         DeferredType      = 1 << 16,        // Calculation of the type of this symbol is deferred due to processing costs, should be fetched with `getTypeOfSymbolWithDeferredType`
+        HasNeverType      = 1 << 17,        // Synthetic property with at least one never type in constituents
+        Mapped            = 1 << 18,        // Property of mapped type
+        StripOptional     = 1 << 19,        // Strip optionality in mapped property
         Synthetic = SyntheticProperty | SyntheticMethod,
         Discriminant = HasNonUniformType | HasLiteralType,
         Partial = ReadPartial | WritePartial
@@ -4152,6 +4180,12 @@ namespace ts {
     /* @internal */
     export interface TransientSymbol extends Symbol, SymbolLinks {
         checkFlags: CheckFlags;
+    }
+
+    /* @internal */
+    export interface MappedSymbol extends TransientSymbol {
+        mappedType: MappedType;
+        mapper: TypeMapper;
     }
 
     /* @internal */
@@ -4351,16 +4385,16 @@ namespace ts {
         NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | StructuredOrInstantiable,
         // The following flags are aggregated during union and intersection type construction
         /* @internal */
-        IncludesMask = Any | Unknown | Primitive | Never | Object | Union | NonPrimitive,
+        IncludesMask = Any | Unknown | Primitive | Never | Object | Union | Intersection | NonPrimitive,
         // The following flags are used for different purposes during union and intersection type construction
         /* @internal */
         IncludesStructuredOrInstantiable = TypeParameter,
         /* @internal */
-        IncludesNonWideningType = Intersection,
+        IncludesNonWideningType = Index,
         /* @internal */
-        IncludesWildcard = Index,
+        IncludesWildcard = IndexedAccess,
         /* @internal */
-        IncludesEmptyObject = IndexedAccess,
+        IncludesEmptyObject = Conditional,
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -4476,6 +4510,12 @@ namespace ts {
         CouldContainTypeVariablesComputed = 1 << 26, // CouldContainTypeVariables flag has been computed
         /* @internal */
         CouldContainTypeVariables = 1 << 27, // Type could contain a type variable
+        /* @internal */
+        ContainsIntersections = 1 << 28, // Union contains intersections
+        /* @internal */
+        IsNeverIntersectionComputed = 1 << 28, // IsNeverLike flag has been computed
+        /* @internal */
+        IsNeverIntersection = 1 << 29, // Intersection reduces to never
         ClassOrInterface = Class | Interface,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
@@ -4597,6 +4637,8 @@ namespace ts {
     }
 
     export interface UnionType extends UnionOrIntersectionType {
+        /* @internal */
+        resolvedReducedType: Type;
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {
@@ -4789,6 +4831,7 @@ namespace ts {
         HasLiteralTypes = 1 << 1,           // Indicates signature is specialized
         IsInnerCallChain = 1 << 2,          // Indicates signature comes from a CallChain nested in an outer OptionalChain
         IsOuterCallChain = 1 << 3,          // Indicates signature comes from a CallChain that is the outermost chain of an optional expression
+        IsUntypedSignatureInJSFile = 1 << 4, // Indicates signature is from a js file and has no types
 
         // We do not propagate `IsInnerCallChain` to instantiated signatures, as that would result in us
         // attempting to add `| undefined` on each recursive call to `getReturnTypeOfSignature` when
@@ -4846,7 +4889,20 @@ namespace ts {
     }
 
     /* @internal */
-    export type TypeMapper = (t: TypeParameter) => Type;
+    export const enum TypeMapKind {
+        Simple,
+        Array,
+        Function,
+        Composite,
+        Merged,
+    }
+
+    /* @internal */
+    export type TypeMapper =
+        | { kind: TypeMapKind.Simple, source: Type, target: Type }
+        | { kind: TypeMapKind.Array, sources: readonly Type[], targets: readonly Type[] | undefined }
+        | { kind: TypeMapKind.Function, func: (t: Type) => Type }
+        | { kind: TypeMapKind.Composite | TypeMapKind.Merged, mapper1: TypeMapper, mapper2: TypeMapper };
 
     export const enum InferencePriority {
         NakedTypeVariable            = 1 << 0,  // Naked type variable in union or intersection type
@@ -5592,7 +5648,7 @@ namespace ts {
     export interface ResolvedModuleWithFailedLookupLocations {
         readonly resolvedModule: ResolvedModuleFull | undefined;
         /* @internal */
-        readonly failedLookupLocations: readonly string[];
+        readonly failedLookupLocations: string[];
     }
 
     export interface ResolvedTypeReferenceDirective {
@@ -5607,7 +5663,7 @@ namespace ts {
 
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
-        readonly failedLookupLocations: readonly string[];
+        readonly failedLookupLocations: string[];
     }
 
     /* @internal */
@@ -5644,7 +5700,6 @@ namespace ts {
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
         createHash?(data: string): string;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
-        /* @internal */ setResolvedProjectReferenceCallbacks?(callbacks: ResolvedProjectReferenceCallbacks): void;
         /* @internal */ useSourceOfProjectReferenceRedirect?(): boolean;
 
         // TODO: later handle this in better way in builder host instead once the api for tsbuild finalizes and doesn't use compilerHost as base
@@ -6636,6 +6691,12 @@ namespace ts {
         set<TKey extends keyof PragmaPseudoMap>(key: TKey, value: PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][]): this;
         get<TKey extends keyof PragmaPseudoMap>(key: TKey): PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][];
         forEach(action: <TKey extends keyof PragmaPseudoMap>(value: PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][], key: TKey) => void): void;
+    }
+
+    /* @internal */
+    export interface CommentDirectivesMap {
+        getUnusedExpectations(): CommentDirective[];
+        markUsed(matchedLine: number): boolean;
     }
 
     export interface UserPreferences {

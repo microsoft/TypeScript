@@ -17,6 +17,7 @@ ignoreJsdoc.extra = 111
 //// [propertyAssignmentUseParentType1.js]
 "use strict";
 exports.__esModule = true;
+exports.ignoreJsdoc = exports.inlined = exports.interfaced = void 0;
 exports.interfaced = function () { return true; };
 exports.interfaced.num = 123;
 exports.inlined = function () { return true; };
