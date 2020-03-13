@@ -829,6 +829,7 @@ namespace ts {
         newLineCharacter?: string;
         convertTabsToSpaces?: boolean;
         indentStyle?: IndentStyle;
+        trimTrailingWhitespace?: boolean;
     }
 
     /* @deprecated - consider using FormatCodeSettings instead */
@@ -895,6 +896,7 @@ namespace ts {
             placeOpenBraceOnNewLineForFunctions: false,
             placeOpenBraceOnNewLineForControlBlocks: false,
             semicolons: SemicolonPreference.Ignore,
+            trimTrailingWhitespace: true
         };
     }
 
