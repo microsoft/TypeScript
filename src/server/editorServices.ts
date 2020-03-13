@@ -2641,7 +2641,7 @@ namespace ts.server {
                 }
 
                 if (args.watchOptions) {
-                    this.hostConfiguration.watchOptions = convertWatchOptions(args.watchOptions);
+                    this.hostConfiguration.watchOptions = convertWatchOptions(args.watchOptions as any);
                     this.logger.info(`Host watch options changed to ${JSON.stringify(this.hostConfiguration.watchOptions)}, it will be take effect for next watches.`);
                 }
             }
