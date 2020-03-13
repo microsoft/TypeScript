@@ -74,7 +74,7 @@ namespace ts.codefix {
                             }
                             else {
                                 const typeNode = getTypeNode(program.getTypeChecker(), parentDeclaration, token);
-                                addPropertyDeclaration(changes, declSourceFile, parentDeclaration, token.text, typeNode, makeStatic);
+                                addPropertyDeclaration(changes, declSourceFile, parentDeclaration, token.text, typeNode, makeStatic ? ModifierFlags.Static : 0);
                             }
                         }
                     }
@@ -211,8 +211,17 @@ namespace ts.codefix {
 
     function getActionsForAddMissingMemberInTypeScriptFile(context: CodeFixContext, declSourceFile: SourceFile, classDeclaration: ClassOrInterface, token: Identifier | PrivateIdentifier, makeStatic: boolean): CodeFixAction[] | undefined {
         const typeNode = getTypeNode(context.program.getTypeChecker(), classDeclaration, token);
-        const addProp = createAddPropertyDeclarationAction(context, declSourceFile, classDeclaration, makeStatic, token.text, typeNode);
-        return makeStatic || isPrivateIdentifier(token) ? [addProp] : [addProp, createAddIndexSignatureAction(context, declSourceFile, classDeclaration, token.text, typeNode)];
+        const actions: CodeFixAction[] = [createAddPropertyDeclarationAction(context, declSourceFile, classDeclaration, token.text, typeNode, makeStatic ? ModifierFlags.Static : 0)];
+        if (makeStatic || isPrivateIdentifier(token)) {
+            return actions;
+        }
+
+        if (startsWithUnderscore(token.text)) {
+            actions.unshift(createAddPropertyDeclarationAction(context, declSourceFile, classDeclaration, token.text, typeNode, ModifierFlags.Private));
+        }
+
+        actions.push(createAddIndexSignatureAction(context, declSourceFile, classDeclaration, token.text, typeNode));
+        return actions;
     }
 
     function getTypeNode(checker: TypeChecker, classDeclaration: ClassOrInterface, token: Node) {
@@ -230,15 +239,18 @@ namespace ts.codefix {
         return typeNode || createKeywordTypeNode(SyntaxKind.AnyKeyword);
     }
 
-    function createAddPropertyDeclarationAction(context: CodeFixContext, declSourceFile: SourceFile, classDeclaration: ClassOrInterface, makeStatic: boolean, tokenName: string, typeNode: TypeNode): CodeFixAction {
-        const changes = textChanges.ChangeTracker.with(context, t => addPropertyDeclaration(t, declSourceFile, classDeclaration, tokenName, typeNode, makeStatic));
-        return createCodeFixAction(fixName, changes, [makeStatic ? Diagnostics.Declare_static_property_0 : Diagnostics.Declare_property_0, tokenName], fixId, Diagnostics.Add_all_missing_members);
+    function createAddPropertyDeclarationAction(context: CodeFixContext, declSourceFile: SourceFile, classDeclaration: ClassOrInterface, tokenName: string, typeNode: TypeNode, modifierFlags: ModifierFlags): CodeFixAction {
+        const changes = textChanges.ChangeTracker.with(context, t => addPropertyDeclaration(t, declSourceFile, classDeclaration, tokenName, typeNode, modifierFlags));
+        if (modifierFlags & ModifierFlags.Private) {
+            return createCodeFixActionWithoutFixAll(fixName, changes, [Diagnostics.Declare_private_property_0, tokenName]);
+        }
+        return createCodeFixAction(fixName, changes, [modifierFlags & ModifierFlags.Static ? Diagnostics.Declare_static_property_0 : Diagnostics.Declare_property_0, tokenName], fixId, Diagnostics.Add_all_missing_members);
     }
 
-    function addPropertyDeclaration(changeTracker: textChanges.ChangeTracker, declSourceFile: SourceFile, classDeclaration: ClassOrInterface, tokenName: string, typeNode: TypeNode, makeStatic: boolean): void {
+    function addPropertyDeclaration(changeTracker: textChanges.ChangeTracker, declSourceFile: SourceFile, classDeclaration: ClassOrInterface, tokenName: string, typeNode: TypeNode, modifierFlags: ModifierFlags): void {
         const property = createProperty(
             /*decorators*/ undefined,
-            /*modifiers*/ makeStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
+            /*modifiers*/ modifierFlags ? createNodeArray(createModifiersFromModifierFlags(modifierFlags)) : undefined,
             tokenName,
             /*questionToken*/ undefined,
             typeNode,
