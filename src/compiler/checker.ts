@@ -15589,7 +15589,19 @@ namespace ts {
             }
 
             function shouldCheckAsExcessProperty(prop: Symbol, container: Symbol) {
-                return prop.valueDeclaration && container.valueDeclaration && prop.valueDeclaration.parent === container.valueDeclaration;
+                if (prop.valueDeclaration && container.valueDeclaration) {
+                    let node = prop.valueDeclaration.parent;
+                    if (node === container.valueDeclaration) {
+                        return true;
+                    }
+                    while (node) {
+                        if (node.kind === SyntaxKind.SpreadAssignment && node.parent === container.valueDeclaration) {
+                            return true;
+                        }
+                        node = node.parent;
+                    }
+                }
+                return false;
             }
 
             function eachTypeRelatedToSomeType(source: UnionOrIntersectionType, target: UnionOrIntersectionType): Ternary {
