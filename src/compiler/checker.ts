@@ -2969,7 +2969,7 @@ namespace ts {
 
 
         function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression, ignoreErrors?: boolean): Symbol | undefined {
-            return resolveExternalModuleNameWorker(location, moduleReferenceExpression, ignoreErrors ? undefined : Diagnostics.Cannot_find_module_0);
+            return resolveExternalModuleNameWorker(location, moduleReferenceExpression, ignoreErrors ? undefined : Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations);
         }
 
         function resolveExternalModuleNameWorker(location: Node, moduleReferenceExpression: Expression, moduleNotFoundError: DiagnosticMessage | undefined, isForAugmentation = false): Symbol | undefined {
@@ -7163,6 +7163,10 @@ namespace ts {
             // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
             if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
                 parentType = getNonNullableType(parentType);
+            }
+            // Filter `undefined` from the type we check against if the parent has an initializer (which handles the `undefined` case implicitly)
+            else if (strictNullChecks && pattern.parent.initializer) {
+                parentType = getTypeWithFacts(parentType, TypeFacts.NEUndefined);
             }
 
             let type: Type | undefined;
@@ -15218,13 +15222,24 @@ namespace ts {
                 if (incompatibleStack.length) reportIncompatibleStack();
                 const [sourceType, targetType] = getTypeNamesForErrorDisplay(source, target);
 
-                if (target.flags & TypeFlags.TypeParameter && target.immediateBaseConstraint !== undefined && isTypeAssignableTo(source, target.immediateBaseConstraint)) {
-                    reportError(
-                        Diagnostics._0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_constraint_2,
-                        sourceType,
-                        targetType,
-                        typeToString(target.immediateBaseConstraint),
-                    );
+                if (target.flags & TypeFlags.TypeParameter) {
+                    const constraint = getBaseConstraintOfType(target);
+                    const constraintElab = constraint && isTypeAssignableTo(source, constraint);
+                    if (constraintElab) {
+                        reportError(
+                            Diagnostics._0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_constraint_2,
+                            sourceType,
+                            targetType,
+                            typeToString(constraint!),
+                        );
+                    }
+                    else {
+                        reportError(
+                            Diagnostics._0_could_be_instantiated_with_an_arbitrary_type_which_could_be_unrelated_to_1,
+                            targetType,
+                            sourceType
+                        );
+                    }
                 }
 
                 if (!message) {
@@ -24056,7 +24071,7 @@ namespace ts {
             if (!hasPrivateModifier && !hasPrivateIdentifier) {
                 return;
             }
-            if (nodeForCheckWriteOnly && isWriteOnlyAccess(nodeForCheckWriteOnly) && !(prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor))) {
+            if (nodeForCheckWriteOnly && isWriteOnlyAccess(nodeForCheckWriteOnly) && !(prop.flags & SymbolFlags.SetAccessor)) {
                 return;
             }
 
@@ -35634,10 +35649,12 @@ namespace ts {
                     if (!resolvedDirective || !resolvedDirective.resolvedFileName) {
                         return;
                     }
-                    const file = host.getSourceFile(resolvedDirective.resolvedFileName)!;
-                    // Add the transitive closure of path references loaded by this file (as long as they are not)
-                    // part of an existing type reference.
-                    addReferencedFilesToTypeDirective(file, key);
+                    const file = host.getSourceFile(resolvedDirective.resolvedFileName);
+                    if (file) {
+                        // Add the transitive closure of path references loaded by this file (as long as they are not)
+                        // part of an existing type reference.
+                        addReferencedFilesToTypeDirective(file, key);
+                    }
                 });
             }
 
