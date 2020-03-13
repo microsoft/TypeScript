@@ -138,7 +138,7 @@ var Test6 = /** @class */ (function () {
         set: function (v) {
             v;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Test6.prototype.test = function () {
