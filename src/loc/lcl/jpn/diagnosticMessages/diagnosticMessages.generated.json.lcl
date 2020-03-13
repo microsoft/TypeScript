@@ -11403,6 +11403,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Unused_ts_expect_error_directive_2578" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Unused '@ts-expect-error' directive.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['@ts-expect-error' ディレクティブが使用されていません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Updating_output_of_project_0_6373" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Updating output of project '{0}'...]]></Val>
@@ -11997,12 +12006,9 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";_0_refers_to_a_value_but_is_being_used_as_a_type_here_2749" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";_0_refers_to_a_value_but_is_being_used_as_a_type_here_Did_you_mean_typeof_0_2749" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA['{0}' refers to a value, but is being used as a type here.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' は値を参照しますが、ここでは型として使用されています。]]></Val>
-          </Tgt>
+          <Val><![CDATA['{0}' refers to a value, but is being used as a type here. Did you mean 'typeof {0}'?]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12342,6 +12348,9 @@
       <Item ItemId=";get_and_set_accessors_cannot_declare_this_parameters_2784" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['get' and 'set' accessors cannot declare 'this' parameters.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['get' および 'set' アクセサーでは 'this' パラメーターを宣言できません。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
