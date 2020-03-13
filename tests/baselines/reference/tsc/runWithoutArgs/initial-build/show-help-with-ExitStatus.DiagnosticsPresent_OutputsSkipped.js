@@ -45,6 +45,7 @@ Options:
  --types                                            Type declaration files to be included in compilation.
  --esModuleInterop                                  Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'.
  --emitExtension                                    Specify the extension name of the emitted files.
+ --noImplicitExtensionName                          Report error for implicit extension name.
  @<file>                                            Insert command line options and files from a file.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
