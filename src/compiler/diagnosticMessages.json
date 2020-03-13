@@ -5377,6 +5377,14 @@
         "category": "Message",
         "code": 95066
     },
+    "Add missing call parentheses": {
+        "category": "Message",
+        "code": 95067
+    },
+    "Add all missing call parentheses": {
+        "category": "Message",
+        "code": 95068
+    },
     "Add 'unknown' conversion for non-overlapping types": {
         "category": "Message",
         "code": 95069
