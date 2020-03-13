@@ -1452,12 +1452,6 @@ namespace ts {
             return computeSuggestionDiagnostics(getValidSourceFile(fileName), program, cancellationToken);
         }
 
-        // @ts-ignore - 'getProgramDiagnostics' is declared but its value is never read - this is because it is a dupe of getCompilerOptionsDiagnostics
-        // so that the external interface makes more sense.
-        function getProgramDiagnostics() {
-            return getCompilerOptionsDiagnostics();
-        }
-
         function getCompilerOptionsDiagnostics() {
             synchronizeHostData();
             return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
@@ -2184,7 +2178,6 @@ namespace ts {
             getSyntacticDiagnostics,
             getSemanticDiagnostics,
             getSuggestionDiagnostics,
-            getProgramDiagnostics: getCompilerOptionsDiagnostics,
             getCompilerOptionsDiagnostics,
             getSyntacticClassifications,
             getSemanticClassifications,

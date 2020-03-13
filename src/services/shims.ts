@@ -143,7 +143,6 @@ namespace ts {
         getSemanticDiagnostics(fileName: string): string;
         getSuggestionDiagnostics(fileName: string): string;
         getCompilerOptionsDiagnostics(): string;
-        getProgramDiagnostics(): string;
 
         getSyntacticClassifications(fileName: string, start: number, length: number): string;
         getSemanticClassifications(fileName: string, start: number, length: number): string;
@@ -733,10 +732,6 @@ namespace ts {
 
         public getSuggestionDiagnostics(fileName: string): string {
             return this.forwardJSONCall(`getSuggestionDiagnostics('${fileName}')`, () => this.realizeDiagnostics(this.languageService.getSuggestionDiagnostics(fileName)));
-        }
-
-        public getProgramDiagnostics(): string {
-            return this.getCompilerOptionsDiagnostics();
         }
 
         public getCompilerOptionsDiagnostics(): string {

@@ -445,9 +445,6 @@ namespace Harness.LanguageService {
         getCompilerOptionsDiagnostics(): ts.Diagnostic[] {
             return unwrapJSONCallResult(this.shim.getCompilerOptionsDiagnostics());
         }
-        getProgramDiagnostics(): ts.Diagnostic[] {
-            return this.getCompilerOptionsDiagnostics();
-        }
         getSyntacticClassifications(fileName: string, span: ts.TextSpan): ts.ClassifiedSpan[] {
             return unwrapJSONCallResult(this.shim.getSyntacticClassifications(fileName, span.start, span.length));
         }

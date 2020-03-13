@@ -337,12 +337,12 @@ namespace ts {
          */
         getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[];
 
+        // TODO: Rename this to getProgramDiagnostics to better indicate that these are any
+        // diagnostics present for the program level, and not just 'options' diagnostics.
+
         /**
          * Gets global diagnostics related to the program configuration and compiler options.
          */
-        getProgramDiagnostics(): Diagnostic[];
-
-        /**  @deprecated Use getProgramDiagnostics instead. */
         getCompilerOptionsDiagnostics(): Diagnostic[];
 
         /** @deprecated Use getEncodedSyntacticClassifications instead. */
@@ -392,7 +392,6 @@ namespace ts {
          *
          * @param fileName The path to the file
          * @param position A zero-based index of the character where you want the quick info
-
          */
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined;
 
