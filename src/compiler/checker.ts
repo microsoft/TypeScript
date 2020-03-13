@@ -24364,24 +24364,17 @@ namespace ts {
                 // If we are missing the close parenthesis, the call is incomplete.
                 callIsIncomplete = node.arguments.end === node.end;
 
-                // If a spread argument is present, check that it corresponds to a rest parameter or at least that it's in the valid range.
+                // If one or more spread arguments are present, check that they correspond to a rest parameter or at least that they are in the valid range.
                 const firstSpreadArgIndex = getSpreadArgumentIndex(args);
-                const existSpreadArgIndex = firstSpreadArgIndex >= 0;
-                if (existSpreadArgIndex) {
-                      if (firstSpreadArgIndex === args.length - 1) {
-                          return firstSpreadArgIndex >= getMinArgumentCount(signature) && (hasEffectiveRestParameter(signature) || firstSpreadArgIndex < getParameterCount(signature));
-                      }
+                if (firstSpreadArgIndex >= 0) {
+                    if (firstSpreadArgIndex === args.length - 1) {
+                        return firstSpreadArgIndex >= getMinArgumentCount(signature) && (hasEffectiveRestParameter(signature) || firstSpreadArgIndex < getParameterCount(signature));
+                    }
 
-                      const totalCount = node.arguments.reduce((total, next) => {
-                        if (isSpreadArgument(next)) {
-                            const spreadArgment = <SpreadElement>next;
-                            const type = flowLoopCount ? checkExpression(spreadArgment.expression) : checkExpressionCached(spreadArgment.expression);
-                            if (isTupleType(type)) {
-                                return total + getSyntheticExpressions(type, spreadArgment).length;
-                            }
-                        }
-                        return total + 1;
-                    }, 0);
+                    let totalCount = countSpreadArgumentLength(<SpreadElement>args[firstSpreadArgIndex]);
+                    for (let i = firstSpreadArgIndex; i < args.length; i++) {
+                        totalCount += isSpreadArgument(args[i]) ? countSpreadArgumentLength(<SpreadElement>args[i]) : 1;
+                    }
                     return totalCount >= getMinArgumentCount(signature) && (hasEffectiveRestParameter(signature) || totalCount < getParameterCount(signature));
                 }
             }
@@ -24403,6 +24396,11 @@ namespace ts {
                 }
             }
             return true;
+        }
+
+        function countSpreadArgumentLength(argment: SpreadElement): number {
+            const type = flowLoopCount ? checkExpression(argment.expression) : checkExpressionCached(argment.expression);
+            return isTupleType(type) ? getTypeArguments(type).length : 1;
         }
 
         function hasCorrectTypeArgumentArity(signature: Signature, typeArguments: NodeArray<TypeNode> | undefined) {
@@ -24855,16 +24853,13 @@ namespace ts {
                 const spreadArgument = <SpreadElement>args[length - 1];
                 const type = flowLoopCount ? checkExpression(spreadArgument.expression) : checkExpressionCached(spreadArgument.expression);
                 if (isTupleType(type)) {
-                    return concatenate(args.slice(0, length - 1), getSyntheticExpressions(type, spreadArgument));
+                    const typeArguments = getTypeArguments(type);
+                    const restIndex = type.target.hasRestElement ? typeArguments.length - 1 : -1;
+                    const syntheticArgs = map(typeArguments, (t, i) => createSyntheticExpression(spreadArgument, t, /*isSpread*/ i === restIndex));
+                    return concatenate(args.slice(0, length - 1), syntheticArgs);
                 }
             }
             return args;
-        }
-
-        function getSyntheticExpressions(type: TupleTypeReference, spreadArgument: SpreadElement): SyntheticExpression[] {
-          const typeArguments = getTypeArguments(<TypeReference>type);
-          const restIndex = type.target.hasRestElement ? typeArguments.length - 1 : -1;
-          return map(typeArguments, (t, i) => createSyntheticExpression(spreadArgument, t, /*isSpread*/ i === restIndex));
         }
 
         /**
