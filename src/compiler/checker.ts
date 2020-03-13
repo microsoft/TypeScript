@@ -16504,7 +16504,7 @@ namespace ts {
                             }
                             result &= related;
                         }
-                        else if (!isPrivateIdentifierPropertyDeclaration(targetProp.valueDeclaration)) {
+                        else if (!targetProp.valueDeclaration || !isPrivateIdentifierPropertyDeclaration(targetProp.valueDeclaration)) {
                             Debug.assert(!!(targetProp.flags & SymbolFlags.Optional));
                             let sourcePropType, diagnostic;
                             if (isTupleType(source)) {
