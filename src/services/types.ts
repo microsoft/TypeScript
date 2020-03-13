@@ -289,55 +289,56 @@ namespace ts {
     // with a language service host instance
     //
     export interface LanguageService {
-        /** This is used as a part of restarting the language server */
+        /** This is used as a part of restarting the language service. */
         cleanupSemanticCache(): void;
 
         /**
-         * Gets warnings or errors indicating invalid syntax in a given file.
-         * These diagnostics are inexpensive to compute and don't require knowledge of other
-         * files.  Note that a non-empty result increases the likelihood of false positives
-         * from getSemanticDiagnostics.
+         * Gets errors indicating invalid syntax in a file.
          *
-         * While these represent the majority of syntax-related diagnostics, there are diagnostics
-         * which require the type-system, and those will be available via getSemanticDiagnostics.
+         * In English, "this cdeo have, erorrs" is syntactically invalid because it has typos,
+         * grammatical errors, and misplaced punctuation. Likewise, examples of syntax
+         * errors in TypeScript are missing parentheses in an `if` statement, mismatched
+         * curly braces, and using a reserved keyword as a variable name.
          *
-         * To contrast with English, this cdeo has erorrs." is not syntactically correct because
-         * it has typoes, even though you can squint to understand.
+         * These diagnostics are inexpensive to compute and don't require knowledge of
+         * other files. Note that a non-empty result increases the likelihood of false positives
+         * from `getSemanticDiagnostics`.
          *
-         * @param fileName A path to the file you want semantic diagnostics for
+         * While these represent the majority of syntax-related diagnostics, there are some
+         * that require the type system, which will be present in `getSemanticDiagnostics`.
+         *
+         * @param fileName A path to the file you want syntactic diagnostics for
          */
         getSyntacticDiagnostics(fileName: string): DiagnosticWithLocation[];
 
         /**
          * Gets warnings or errors indicating type system issues in a given file.
-         * Requesting semantic diagnostics may start-up the type system, and
-         * run deferred work, so the first time you make this call it may take longer than
-         * subsequent calls.
+         * Requesting semantic diagnostics may start up the type system and
+         * run deferred work, so the first call may take longer than subsequent calls.
          *
          * Unlike the other get*Diagnostics functions, these diagnostics can potentially not
          * include a reference to a source file. Specifically, the first time this is called,
          * it will return global diagnostics with no associated location.
          *
          * To contrast the differences between semantic and syntactic diagnostics, consider the
-         * sentence: "The sun is green." is syntactically correct; those are all real words
-         * in english. However, it is semantically invalid, because it is not true.
+         * sentence: "The sun is green." is syntactically correct; those are real English words with
+         * correct sentence structure. However, it is semantically invalid, because it is not true.
          *
          * @param fileName A path to the file you want semantic diagnostics for
          */
         getSemanticDiagnostics(fileName: string): Diagnostic[];
 
         /**
-         * Get suggestion diagnostics for a specific files. These suggestions tend
-         * to be proactive codefixes and refactors, as opposed to issues which require
-         * fixing in order for the to be correct.
+         * Gets suggestion diagnostics for a specific file. These diagnostics tend to
+         * proactively suggest refactors, as opposed to diagnostics that indicate
+         * potentially incorrect runtime behavior.
          *
          * @param fileName A path to the file you want semantic diagnostics for
          */
         getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[];
 
         /**
-         * Gets diagnostics related the current program, these tend to be about the compiler
-         * options for a project.
+         * Gets global diagnostics related to the program configuration and compiler options.
          */
         getProgramDiagnostics(): Diagnostic[];
 
@@ -355,16 +356,17 @@ namespace ts {
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
 
         /**
-         * Get the completion entries at a particular cursor
+         * Gets completion entries at a particular position in a file.
          *
          * @param fileName The path to the file
-         * @param position A zero based index of the character where you want the entries
-         * @param options An object describing how the completions were triggered, can be undefined for backwards compatibility
+         * @param position A zero-based index of the character where you want the entries
+         * @param options An object describing how the request was triggered and what kinds
+         * of code actions can be returned with the completions.
          */
         getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): WithMetadata<CompletionInfo> | undefined;
 
         /**
-         * Gets the extended details for a completion entry
+         * Gets the extended details for a completion entry retrieved from `getCompletionsAtPosition`.
          *
          * @param fileName The path to the file
          * @param position A zero based index of the character where you want the entries
@@ -389,7 +391,8 @@ namespace ts {
          * file. Quick info is what you typically see when you hover in an editor.
          *
          * @param fileName The path to the file
-         * @param position a zero based index of the character where you want the quick info
+         * @param position A zero-based index of the character where you want the quick info
+
          */
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined;
 
