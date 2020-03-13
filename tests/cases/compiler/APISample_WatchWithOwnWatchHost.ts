@@ -40,8 +40,8 @@ function watchMain() {
         readDirectory: ts.sys.readDirectory,
         realpath: ts.sys.realpath,
 
-        watchFile: ts.sys.watchFile!,
-        watchDirectory: ts.sys.watchDirectory!,
+        watchFile: ts.sys.watchFile! as any,
+        watchDirectory: ts.sys.watchDirectory! as any,
         createProgram: ts.createAbstractBuilder
     };
 
