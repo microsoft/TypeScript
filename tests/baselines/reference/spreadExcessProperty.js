@@ -1,7 +1,12 @@
 //// [spreadExcessProperty.ts]
-type A = { a: string, b: string };
+type A = { a: string; b: string };
 const extra1 = { a: "a", b: "b", extra: "extra" };
 const a1: A = { ...extra1 }; // spread should not give excess property errors
+
+const b: { a?: string; b?: string } = {
+  a: "",
+  ...{ b2: "" }
+};
 
 
 //// [spreadExcessProperty.js]
@@ -18,3 +23,4 @@ var __assign = (this && this.__assign) || function () {
 };
 var extra1 = { a: "a", b: "b", extra: "extra" };
 var a1 = __assign({}, extra1); // spread should not give excess property errors
+var b = __assign({ a: "" }, { b2: "" });

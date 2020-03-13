@@ -1,0 +1,17 @@
+tests/cases/conformance/types/spread/spreadExcessProperty.ts(7,8): error TS2322: Type '{ b2: string; a: string; }' is not assignable to type '{ a?: string; b?: string; }'.
+  Object literal may only specify known properties, and 'b2' does not exist in type '{ a?: string; b?: string; }'.
+
+
+==== tests/cases/conformance/types/spread/spreadExcessProperty.ts (1 errors) ====
+    type A = { a: string; b: string };
+    const extra1 = { a: "a", b: "b", extra: "extra" };
+    const a1: A = { ...extra1 }; // spread should not give excess property errors
+    
+    const b: { a?: string; b?: string } = {
+      a: "",
+      ...{ b2: "" }
+           ~~~~~~
+!!! error TS2322: Type '{ b2: string; a: string; }' is not assignable to type '{ a?: string; b?: string; }'.
+!!! error TS2322:   Object literal may only specify known properties, and 'b2' does not exist in type '{ a?: string; b?: string; }'.
+    };
+    
