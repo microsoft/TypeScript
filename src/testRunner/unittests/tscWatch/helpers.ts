@@ -300,6 +300,7 @@ namespace ts.tscWatch {
                 baselineSourceMap
             } = input;
 
+            if (!isWatch(commandLineArgs)) sys.exit = exitCode => sys.exitCode = exitCode;
             const { cb, getPrograms } = commandLineCallbacks(sys);
             const watchOrSolution = executeCommandLine(
                 sys,
@@ -352,7 +353,17 @@ namespace ts.tscWatch {
                 baselineSourceMap
             });
         }
-        Harness.Baseline.runBaseline(`${isBuild(commandLineArgs) ? "tsbuild/watchMode" : "tscWatch"}/${scenario}/${subScenario.split(" ").join("-")}.js`, baseline.join("\r\n"));
+        Harness.Baseline.runBaseline(`${isBuild(commandLineArgs) ?
+            isWatch(commandLineArgs) ? "tsbuild/watchMode" : "tsbuild" :
+            isWatch(commandLineArgs) ? "tscWatch" : "tsc"}/${scenario}/${subScenario.split(" ").join("-")}.js`, baseline.join("\r\n"));
+    }
+
+    function isWatch(commandLineArgs: readonly string[]) {
+        return forEach(commandLineArgs, arg => {
+            if (arg.charCodeAt(0) !== CharacterCodes.minus) return false;
+            const option = arg.slice(arg.charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
+            return option === "watch" || option === "w";
+        });
     }
 
     export interface WatchBaseline extends TscWatchCheckOptions {

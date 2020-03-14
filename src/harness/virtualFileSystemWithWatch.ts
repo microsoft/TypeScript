@@ -70,11 +70,11 @@ interface Array<T> { length: number; [n: number]: T; }`
     }
 
     export type FileOrFolderOrSymLink = File | Folder | SymLink;
-    function isFile(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is File {
+    export function isFile(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is File {
         return isString((<File>fileOrFolderOrSymLink).content);
     }
 
-    function isSymLink(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is SymLink {
+    export function isSymLink(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is SymLink {
         return isString((<SymLink>fileOrFolderOrSymLink).symLink);
     }
 
