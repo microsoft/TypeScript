@@ -889,7 +889,9 @@ namespace ts.textChanges {
                 : format(change.node);
             // strip initial indentation (spaces or tabs) if text will be inserted in the middle of the line
             const noIndent = (options.preserveLeadingWhitespace || options.indentation !== undefined || getLineStartPositionForPosition(pos, sourceFile) === pos) ? text : text.replace(/^\s+/, "");
-            return (options.prefix || "") + noIndent + (options.suffix || "");
+            return (options.prefix || "") + noIndent
+                 + ((!options.suffix || endsWith(noIndent, options.suffix))
+                    ? "" : options.suffix);
         }
 
         function getFormatCodeSettingsForWriting({ options }: formatting.FormatContext, sourceFile: SourceFile): FormatCodeSettings {
@@ -965,7 +967,6 @@ namespace ts.textChanges {
 
     function createWriter(newLine: string): TextChangesWriter {
         let lastNonTriviaPosition = 0;
-
 
         const writer = createTextWriter(newLine);
         const onEmitNode: PrintHandlers["onEmitNode"] = (hint, node, printCallback) => {

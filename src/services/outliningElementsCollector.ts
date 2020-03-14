@@ -200,6 +200,9 @@ namespace ts.OutliningElementsCollector {
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.CaseBlock:
                 return spanForNode(n);
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.DefaultClause:
+                return spanForNodeArray((n as CaseClause | DefaultClause).statements);
             case SyntaxKind.ObjectLiteralExpression:
                 return spanForObjectOrArrayLiteral(n);
             case SyntaxKind.ArrayLiteralExpression:
@@ -255,6 +258,10 @@ namespace ts.OutliningElementsCollector {
             const openToken = findChildOfKind(n, open, sourceFile);
             const closeToken = findChildOfKind(n, close, sourceFile);
             return openToken && closeToken && spanBetweenTokens(openToken, closeToken, hintSpanNode, sourceFile, autoCollapse, useFullStart);
+        }
+
+        function spanForNodeArray(nodeArray: NodeArray<Node>): OutliningSpan | undefined {
+            return nodeArray.length ? createOutliningSpan(createTextSpanFromRange(nodeArray), OutliningSpanKind.Code) : undefined;
         }
     }
 

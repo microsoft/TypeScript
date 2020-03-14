@@ -1,6 +1,6 @@
 tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts(6,5): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts(12,9): error TS2322: Type 'T2' is not assignable to type 'T1'.
-  'T2' is assignable to the constraint of type 'T1', but 'T1' could be instantiated with a different subtype of constraint '{}'.
+  'T1' could be instantiated with an arbitrary type which could be unrelated to 'T2'.
 
 
 ==== tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts (2 errors) ====
@@ -20,5 +20,5 @@ tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOpera
         var result: T1 = (x, y); //error here
             ~~~~~~
 !!! error TS2322: Type 'T2' is not assignable to type 'T1'.
-!!! error TS2322:   'T2' is assignable to the constraint of type 'T1', but 'T1' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:   'T1' could be instantiated with an arbitrary type which could be unrelated to 'T2'.
     }

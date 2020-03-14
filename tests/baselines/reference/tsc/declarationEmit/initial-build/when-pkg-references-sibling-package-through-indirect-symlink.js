@@ -1,6 +1,10 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc -p src/pkg3 --listFiles
-src/pkg3/src/keys.ts(2,14): error TS2742: The inferred type of 'ADMIN' cannot be named without a reference to '@raymondfeng/pkg2/node_modules/@raymondfeng/pkg1'. This is likely not portable. A type annotation is necessary.
+[96msrc/pkg3/src/keys.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2742: [0mThe inferred type of 'ADMIN' cannot be named without a reference to '@raymondfeng/pkg2/node_modules/@raymondfeng/pkg1'. This is likely not portable. A type annotation is necessary.
+
+[7m2[0m export const ADMIN = MetadataAccessor.create<boolean>('1');
+[7m [0m [91m             ~~~~~[0m
+
 /lib/lib.d.ts
 /src/pkg3/node_modules/@raymondfeng/pkg2/node_modules/@raymondfeng/pkg1/dist/types.d.ts
 /src/pkg3/node_modules/@raymondfeng/pkg2/node_modules/@raymondfeng/pkg1/dist/index.d.ts
@@ -8,6 +12,9 @@ src/pkg3/src/keys.ts(2,14): error TS2742: The inferred type of 'ADMIN' cannot be
 /src/pkg3/node_modules/@raymondfeng/pkg2/dist/index.d.ts
 /src/pkg3/src/keys.ts
 /src/pkg3/src/index.ts
+
+Found 1 error.
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 

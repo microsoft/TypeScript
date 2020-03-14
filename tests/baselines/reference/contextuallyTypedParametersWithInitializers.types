@@ -162,7 +162,7 @@ declare function g1<T>(x: T): T;
 >x : T
 
 declare function g2<T extends any>(x: T): T;
->g2 : <T extends any>(x: T) => T
+>g2 : <T extends unknown>(x: T) => T
 >x : T
 
 declare function g3<T extends unknown>(x: T): T;
@@ -192,7 +192,7 @@ g1((x = 1) => 0);  // number
 
 g2((x = 1) => 0);  // number
 >g2((x = 1) => 0) : (x?: number) => 0
->g2 : <T extends any>(x: T) => T
+>g2 : <T extends unknown>(x: T) => T
 >(x = 1) => 0 : (x?: number) => 0
 >x : number
 >1 : 1

@@ -28,11 +28,11 @@ var x = 1;
 
 Output::
 >> Screen clear
-12:00:25 AM - Starting compilation in watch mode...
+[[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:28 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/app.ts"]

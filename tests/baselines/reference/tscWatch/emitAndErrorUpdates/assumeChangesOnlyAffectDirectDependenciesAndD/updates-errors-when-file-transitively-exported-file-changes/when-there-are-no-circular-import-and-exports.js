@@ -61,7 +61,18 @@ export interface ITest {
 
 //// [/user/username/projects/myproject/lib1/tools/public.js]
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+}
 exports.__esModule = true;
+__exportStar(require("./tools.interface"), exports);
 
 
 //// [/user/username/projects/myproject/lib1/tools/public.d.ts]
@@ -70,7 +81,18 @@ export * from "./tools.interface";
 
 //// [/user/username/projects/myproject/lib1/public.js]
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+}
 exports.__esModule = true;
+__exportStar(require("./tools/public"), exports);
 
 
 //// [/user/username/projects/myproject/lib1/public.d.ts]
@@ -145,11 +167,11 @@ export declare class App {
 
 Output::
 >> Screen clear
-12:00:37 AM - Starting compilation in watch mode...
+[[90m12:00:37 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:01:02 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:02 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
@@ -217,11 +239,11 @@ export interface ITest {
 
 Output::
 >> Screen clear
-12:01:06 AM - File change detected. Starting incremental compilation...
+[[90m12:01:06 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:01:19 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:19 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]

@@ -212,7 +212,7 @@ new C();`
                         verifyWatchedFilesAndDirectories(session.testhost, filesInProjectWithUnresolvedModule, watchedDirectoriesWithUnresolvedModule, nonRecursiveWatchedDirectories);
                         const startOffset = recognizersDateTimeSrcFile.content.indexOf('"') + 1;
                         verifyErrors(session, [
-                            createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + moduleNameInFile.length }, Diagnostics.Cannot_find_module_0, [moduleName])
+                            createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + moduleNameInFile.length }, Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, [moduleName])
                         ]);
                     }
 

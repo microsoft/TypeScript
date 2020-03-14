@@ -67,7 +67,18 @@ export interface ITest {
 
 //// [/user/username/projects/myproject/lib1/tools/public.js]
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+}
 exports.__esModule = true;
+__exportStar(require("./tools.interface"), exports);
 
 
 //// [/user/username/projects/myproject/lib1/tools/public.d.ts]
@@ -76,7 +87,18 @@ export * from "./tools.interface";
 
 //// [/user/username/projects/myproject/lib1/public.js]
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+}
 exports.__esModule = true;
+__exportStar(require("./tools/public"), exports);
 
 
 //// [/user/username/projects/myproject/lib1/public.d.ts]
@@ -172,11 +194,11 @@ export declare class App {
 
 Output::
 >> Screen clear
-12:00:39 AM - Starting compilation in watch mode...
+[[90m12:00:39 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:01:08 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:08 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
@@ -253,14 +275,18 @@ export interface ITest {
 
 Output::
 >> Screen clear
-12:01:12 AM - File change detected. Starting incremental compilation...
+[[90m12:01:12 AM[0m] File change detected. Starting incremental compilation...
 
 
-lib2/data.ts(5,13): error TS2322: Type '{ title: string; }' is not assignable to type 'ITest'.
+[96mlib2/data.ts[0m:[93m5[0m:[93m13[0m - [91merror[0m[90m TS2322: [0mType '{ title: string; }' is not assignable to type 'ITest'.
   Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
 
+[7m5[0m             title: "title"
+[7m [0m [91m            ~~~~~~~~~~~~~~[0m
 
-12:01:40 AM - Found 1 error. Watching for file changes.
+
+[[90m12:01:40 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]

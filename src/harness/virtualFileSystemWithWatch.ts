@@ -445,6 +445,11 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.reloadFS(fileOrFolderorSymLinkList);
         }
 
+        // Output is pretty
+        writeOutputIsTTY() {
+            return true;
+        }
+
         getNewLine() {
             return this.newLine;
         }

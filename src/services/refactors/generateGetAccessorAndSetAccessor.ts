@@ -112,10 +112,6 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         return modifiers && createNodeArray(modifiers);
     }
 
-    function startsWithUnderscore(name: string): boolean {
-        return name.charCodeAt(0) === CharacterCodes._;
-    }
-
     function getConvertibleFieldAtPosition(context: RefactorContext): Info | undefined {
         const { file, startPosition, endPosition } = context;
 
