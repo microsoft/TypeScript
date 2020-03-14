@@ -38,6 +38,7 @@ verify.moveToNewFile({
             </div>
         </div>
     );
-}`
+}
+`
   }
 });
