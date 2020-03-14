@@ -1901,7 +1901,7 @@ namespace ts {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Type_parameter_declarations_can_only_be_used_in_TypeScript_files));
                                 return;
                             }
-                            // falls through
+                        // falls through
 
                         case SyntaxKind.VariableStatement:
                             // Check modifiers
@@ -2249,7 +2249,7 @@ namespace ts {
                 }
 
                 const sourceFileWithAddedExtension = forEach(supportedExtensions, extension => getSourceFile(fileName + extension));
-                if (fail && !sourceFileWithAddedExtension) fail(Diagnostics.No_file_under_0_found_with_any_supported_extension, fileName);
+                if (fail && !sourceFileWithAddedExtension) fail(Diagnostics.Could_not_resolve_the_path_0_with_the_extensions_Colon_1, fileName, "'" + supportedExtensions.join("', '") + "'");
                 return sourceFileWithAddedExtension;
             }
         }

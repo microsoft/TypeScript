@@ -4252,7 +4252,7 @@
         "category": "Message",
         "code": 6228
     },
-    "No file under '{0}' found with any supported extension.": {
+    "Could not resolve the path '{0}' with the extensions: {1}.": {
         "category": "Error",
         "code": 6229
     },
