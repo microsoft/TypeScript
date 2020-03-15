@@ -1148,15 +1148,8 @@ namespace ts {
             parseErrorAtPosition(start, end - start, message, arg0);
         }
 
-        function parseErrorAtRange(range: TextRange | any, message: DiagnosticMessage, arg0?: any): void {
-            let start = range.pos;
-            if (range.kind === SyntaxKind.PropertyAccessExpression){
-                start = range.expression.end - (range.expression.escapedText.length);
-            }
-            else if(range.kind === SyntaxKind.Identifier) {
-                start = range.end - range.escapedText.length;
-            }
-            parseErrorAt(start, range.end, message, arg0);
+        function parseErrorAtRange(range: TextRange, message: DiagnosticMessage, arg0?: any): void {
+            parseErrorAt(range.pos, range.end, message, arg0);
         }
 
         function scanError(message: DiagnosticMessage, length: number): void {
@@ -4552,7 +4545,18 @@ namespace ts {
                         parseErrorAtRange(openingTag, Diagnostics.JSX_fragment_has_no_corresponding_closing_tag);
                     }
                     else {
-                        parseErrorAtRange(openingTag.tagName, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTag.tagName));
+                        // We want the error to span only property identifier "Foo.Bar" e.g in < Foo.Bar >...
+                        const tag = openingTag.tagName as any;
+                        let start = tag.pos;
+                        if (tag.kind === SyntaxKind.PropertyAccessExpression){
+                            start = tag.expression.end - (tag.expression.escapedText.length);
+                        }
+                        // We want the error to span only tag identifier "Foo" e.g in < Foo >...
+                        else if(tag.kind === SyntaxKind.Identifier) {
+                            start = tag.end - tag.escapedText.length;
+                        }
+
+                        parseErrorAtRange({pos: start, end: tag.end}, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTag.tagName));
                     }
                     return undefined;
                 case SyntaxKind.LessThanSlashToken:
