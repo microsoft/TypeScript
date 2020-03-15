@@ -1148,8 +1148,15 @@ namespace ts {
             parseErrorAtPosition(start, end - start, message, arg0);
         }
 
-        function parseErrorAtRange(range: TextRange, message: DiagnosticMessage, arg0?: any): void {
-            parseErrorAt(range.pos, range.end, message, arg0);
+        function parseErrorAtRange(range: TextRange | any, message: DiagnosticMessage, arg0?: any): void {
+            let start = range.pos;
+            if (range.kind === SyntaxKind.PropertyAccessExpression){
+                start = range.expression.end - (range.expression.escapedText.length);
+            }
+            else if(range.kind === SyntaxKind.Identifier) {
+                start = range.end - range.escapedText.length;
+            }
+            parseErrorAt(start, range.end, message, arg0);
         }
 
         function scanError(message: DiagnosticMessage, length: number): void {
