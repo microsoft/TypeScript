@@ -55,11 +55,11 @@ namespace ts.codefix {
         else { // No outer 'this', must add a jsdoc tag / parameter
             if (isSourceFileJS(sourceFile)) {
                 const addClassTag = isPropertyAccessExpression(token.parent) && isAssignmentExpression(token.parent.parent);
-                addJSDocTags(changes, sourceFile, fn, [addClassTag ? createJSDocClassTag() : createJSDocThisTag(createKeywordTypeNode(SyntaxKind.AnyKeyword))]);
+                addJSDocTags(changes, sourceFile, fn, [addClassTag ? createJSDocClassTag() : createJSDocThisTag(createJSDocTypeExpression(createKeywordTypeNode(SyntaxKind.AnyKeyword)))]);
                 return addClassTag ? Diagnostics.Add_class_tag : Diagnostics.Add_this_tag;
             }
             else {
-                changes.insertFirstParameter(sourceFile, fn.parameters, makeParameter("this", createKeywordTypeNode(SyntaxKind.AnyKeyword)));
+                changes.insertFirstParameter(sourceFile, fn.parameters, createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "this", /*questionToken*/ undefined, createKeywordTypeNode(SyntaxKind.AnyKeyword)));
                 return Diagnostics.Add_this_parameter;
             }
         }

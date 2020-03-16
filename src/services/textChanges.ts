@@ -1303,11 +1303,11 @@ namespace ts.textChanges {
                     break;
 
                 case SyntaxKind.SemicolonToken:
-                    deleteNode(changes, sourceFile, node, { useNonAdjustedEndPosition: true });
+                    deleteNode(changes, sourceFile, node, { trailingTriviaOption: TrailingTriviaOption.Exclude });
                     break;
 
                 case SyntaxKind.FunctionKeyword:
-                    deleteNode(changes, sourceFile, node, { useNonAdjustedStartPosition: true });
+                    deleteNode(changes, sourceFile, node, { leadingTriviaOption: LeadingTriviaOption.Exclude });
                     break;
 
                 default:
