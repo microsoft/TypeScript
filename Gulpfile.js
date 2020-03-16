@@ -447,7 +447,7 @@ preTest.displayName = "preTest";
 const postTest = (done) => cmdLineOptions.lint ? lint(done) : done();
 
 const runTests = () => runConsoleTests("built/local/run.js", "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
-task("runtests", series(preBuild, preTest, runTests, postTest));
+task("runtests", series(preBuild, preTest, postTest));
 task("runtests").description = "Runs the tests using the built run.js file.";
 task("runtests").flags = {
     "-t --tests=<regex>": "Pattern for tests to run.",
@@ -468,7 +468,7 @@ task("runtests").flags = {
 };
 
 const runTestsParallel = () => runConsoleTests("built/local/run.js", "min", /*runInParallel*/ cmdLineOptions.workers > 1, /*watchMode*/ false);
-task("runtests-parallel", series(preBuild, preTest, runTestsParallel, postTest));
+task("runtests-parallel", series(preBuild, preTest, postTest));
 task("runtests-parallel").description = "Runs all the tests in parallel using the built run.js file.";
 task("runtests-parallel").flags = {
     "   --no-lint": "disables lint.",
