@@ -986,7 +986,7 @@ declare var Error: ErrorConstructor;
 interface EvalError extends Error {
 }
 
-interface EvalErrorConstructor {
+interface EvalErrorConstructor extends ErrorConstructor {
     new(message?: string): EvalError;
     (message?: string): EvalError;
     readonly prototype: EvalError;
@@ -997,7 +997,7 @@ declare var EvalError: EvalErrorConstructor;
 interface RangeError extends Error {
 }
 
-interface RangeErrorConstructor {
+interface RangeErrorConstructor extends ErrorConstructor {
     new(message?: string): RangeError;
     (message?: string): RangeError;
     readonly prototype: RangeError;
@@ -1008,7 +1008,7 @@ declare var RangeError: RangeErrorConstructor;
 interface ReferenceError extends Error {
 }
 
-interface ReferenceErrorConstructor {
+interface ReferenceErrorConstructor extends ErrorConstructor {
     new(message?: string): ReferenceError;
     (message?: string): ReferenceError;
     readonly prototype: ReferenceError;
@@ -1019,7 +1019,7 @@ declare var ReferenceError: ReferenceErrorConstructor;
 interface SyntaxError extends Error {
 }
 
-interface SyntaxErrorConstructor {
+interface SyntaxErrorConstructor extends ErrorConstructor {
     new(message?: string): SyntaxError;
     (message?: string): SyntaxError;
     readonly prototype: SyntaxError;
@@ -1030,7 +1030,7 @@ declare var SyntaxError: SyntaxErrorConstructor;
 interface TypeError extends Error {
 }
 
-interface TypeErrorConstructor {
+interface TypeErrorConstructor extends ErrorConstructor {
     new(message?: string): TypeError;
     (message?: string): TypeError;
     readonly prototype: TypeError;
@@ -1041,7 +1041,7 @@ declare var TypeError: TypeErrorConstructor;
 interface URIError extends Error {
 }
 
-interface URIErrorConstructor {
+interface URIErrorConstructor extends ErrorConstructor {
     new(message?: string): URIError;
     (message?: string): URIError;
     readonly prototype: URIError;
@@ -1407,7 +1407,7 @@ interface PromiseLike<T> {
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): PromiseLike<TResult1 | TResult2>;
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: awaited T) => TResult1) | undefined | null, onrejected?: ((reason: any) => TResult2) | undefined | null): PromiseLike<awaited TResult1 | awaited TResult2>;
 }
 
 /**
@@ -1420,14 +1420,14 @@ interface Promise<T> {
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: awaited T) => TResult1) | undefined | null, onrejected?: ((reason: any) => TResult2) | undefined | null): Promise<awaited TResult1 | awaited TResult2>;
 
     /**
      * Attaches a callback for only the rejection of the Promise.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of the callback.
      */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult) | undefined | null): Promise<awaited T | awaited TResult>;
 }
 
 interface ArrayLike<T> {
