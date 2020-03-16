@@ -9853,7 +9853,7 @@ namespace ts {
         }
 
         function getPropertiesOfType(type: Type): Symbol[] {
-            type = getApparentType(getReducedType(type));
+            type = getApparentType(type);
             return type.flags & TypeFlags.UnionOrIntersection ?
                 getPropertiesOfUnionOrIntersectionType(<UnionType>type) :
                 getPropertiesOfObjectType(type);
@@ -10195,6 +10195,7 @@ namespace ts {
          * type itself.
          */
         function getApparentType(type: Type): Type {
+            type = getReducedType(type);
             const t = type.flags & TypeFlags.Instantiable ? getBaseConstraintOfType(type) || unknownType : type;
             return getObjectFlags(t) & ObjectFlags.Mapped ? getApparentTypeOfMappedType(<MappedType>t) :
                 t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(<IntersectionType>t) :
@@ -10352,7 +10353,7 @@ namespace ts {
          * no constituent property has type 'never', but the intersection of the constituent property types is 'never'.
          */
         function getReducedType(type: Type): Type {
-            if (type.flags & TypeFlags.Union && (<UnionType>type).objectFlags & ObjectFlags.ContainsIntersections) {
+            if (type.flags & TypeFlags.Union && (<UnionType>type).objectFlags & ObjectFlags.ContainsReducibles) {
                 return (<UnionType>type).resolvedReducedType || ((<UnionType>type).resolvedReducedType = getReducedUnionType(<UnionType>type));
             }
             else if (type.flags & TypeFlags.Intersection) {
@@ -10360,7 +10361,13 @@ namespace ts {
                     (<IntersectionType>type).objectFlags |= ObjectFlags.IsNeverIntersectionComputed |
                         (some(getPropertiesOfUnionOrIntersectionType(<IntersectionType>type), isDiscriminantWithNeverType) ? ObjectFlags.IsNeverIntersection : 0);
                 }
-                return (<IntersectionType>type).objectFlags & ObjectFlags.IsNeverIntersection ? neverType : type;
+                if ((<IntersectionType>type).objectFlags & ObjectFlags.IsNeverIntersection) {
+                    return neverType;
+                }
+                return (<IntersectionType>type).resolvedReducedType || ((<IntersectionType>type).resolvedReducedType = getReducedIntersectionType(<IntersectionType>type));
+            }
+            else if (type.flags & TypeFlags.Conditional) {
+                return getReducedConditionalType(type as ConditionalType);
             }
             return type;
         }
@@ -10373,6 +10380,18 @@ namespace ts {
             const reduced = getUnionType(reducedTypes);
             if (reduced.flags & TypeFlags.Union) {
                 (<UnionType>reduced).resolvedReducedType = reduced;
+            }
+            return reduced;
+        }
+
+        function getReducedIntersectionType(type: IntersectionType) {
+            const reducedTypes = sameMap(type.types, getReducedType);
+            if (reducedTypes === type.types) {
+                return type;
+            }
+            const reduced = getIntersectionType(reducedTypes);
+            if (reduced.flags & TypeFlags.Intersection) {
+                (<IntersectionType>reduced).resolvedReducedType = reduced;
             }
             return reduced;
         }
@@ -10430,7 +10449,7 @@ namespace ts {
          * maps primitive types and type parameters are to their apparent types.
          */
         function getSignaturesOfType(type: Type, kind: SignatureKind): readonly Signature[] {
-            return getSignaturesOfStructuredType(getApparentType(getReducedType(type)), kind);
+            return getSignaturesOfStructuredType(getApparentType(type), kind);
         }
 
         function getIndexInfoOfStructuredType(type: Type, kind: IndexKind): IndexInfo | undefined {
@@ -10448,13 +10467,13 @@ namespace ts {
         // Return the indexing info of the given kind in the given type. Creates synthetic union index types when necessary and
         // maps primitive types and type parameters are to their apparent types.
         function getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined {
-            return getIndexInfoOfStructuredType(getApparentType(getReducedType(type)), kind);
+            return getIndexInfoOfStructuredType(getApparentType(type), kind);
         }
 
         // Return the index type of the given kind in the given type. Creates synthetic union index types when necessary and
         // maps primitive types and type parameters are to their apparent types.
         function getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined {
-            return getIndexTypeOfStructuredType(getApparentType(getReducedType(type)), kind);
+            return getIndexTypeOfStructuredType(getApparentType(type), kind);
         }
 
         function getImplicitIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined {
@@ -12035,7 +12054,7 @@ namespace ts {
                 }
             }
             const objectFlags = (includes & TypeFlags.NotPrimitiveUnion ? 0 : ObjectFlags.PrimitiveUnion) |
-                (includes & TypeFlags.Intersection ? ObjectFlags.ContainsIntersections : 0);
+                (includes & TypeFlags.ReducibleNotUnion ? ObjectFlags.ContainsReducibles : 0);
             return getUnionTypeFromSortedList(typeSet, objectFlags, aliasSymbol, aliasTypeArguments);
         }
 
@@ -12750,6 +12769,25 @@ namespace ts {
             return type[cache] = type;
         }
 
+        function getReducedConditionalType(type: ConditionalType): Type {
+            const checkType = type.checkType;
+            const extendsType = getInferredExtendsTypeOfConditional(type);
+
+            if (!isGenericObjectType(checkType) && !isGenericIndexType(checkType) && !isGenericObjectType(extendsType) && !isGenericIndexType(extendsType)) {
+                const result = getConditionalSimplificationState(checkType, extendsType);
+                switch (result) {
+                    case ConditionalSimplificationState.True:
+                        return getReducedType(getInferredTrueTypeFromConditionalType(type));
+                    case ConditionalSimplificationState.False:
+                        return getReducedType(getFalseTypeFromConditionalType(type));
+                    case ConditionalSimplificationState.Both:
+                        return getUnionType([getReducedType(getInferredTrueTypeFromConditionalType(type)), getReducedType(getFalseTypeFromConditionalType(type))]);
+                    // None: Fall out and return `type`
+                }
+            }
+            return type;
+        }
+
         function getSimplifiedConditionalType(type: ConditionalType, writing: boolean) {
             const checkType = type.checkType;
             const extendsType = type.extendsType;
@@ -12821,7 +12859,7 @@ namespace ts {
             // In the following we resolve T[K] to the type of the property in T selected by K.
             // We treat boolean as different from other unions to improve errors;
             // skipping straight to getPropertyTypeForIndexType gives errors with 'boolean' instead of 'true'.
-            const apparentObjectType = getApparentType(getReducedType(objectType));
+            const apparentObjectType = getApparentType(objectType);
             if (indexType.flags & TypeFlags.Union && !(indexType.flags & TypeFlags.Boolean)) {
                 const propTypes: Type[] = [];
                 let wasMissingProp = false;
@@ -12888,6 +12926,14 @@ namespace ts {
             return type;
         }
 
+        function isTypeDeferredTypeReference(type: Type) {
+            return !!(getObjectFlags(type) & ObjectFlags.Reference) && !!(type as TypeReference).node;
+        }
+
+        function getInferredExtendsTypeOfConditional(type: ConditionalType) {
+            return instantiateType(type.root.extendsType, type.combinedMapper || type.mapper);
+        }
+
         function getConditionalType(root: ConditionalRoot, mapper: TypeMapper | undefined): Type {
             const checkType = instantiateType(root.checkType, mapper);
             const extendsType = instantiateType(root.extendsType, mapper);
@@ -12913,28 +12959,17 @@ namespace ts {
             // Instantiate the extends type including inferences for 'infer T' type parameters
             const inferredExtendsType = combinedMapper ? instantiateType(root.extendsType, combinedMapper) : extendsType;
             // We attempt to resolve the conditional type only when the check and extends types are non-generic
-            if (!checkTypeInstantiable && !isGenericObjectType(inferredExtendsType) && !isGenericIndexType(inferredExtendsType)) {
-                if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown) {
-                    return instantiateType(root.trueType, combinedMapper || mapper);
-                }
-                // Return union of trueType and falseType for 'any' since it matches anything
-                if (checkType.flags & TypeFlags.Any) {
-                    return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), instantiateType(root.falseType, mapper)]);
-                }
-                // Return falseType for a definitely false extends check. We check an instantiations of the two
-                // types with type parameters mapped to the wildcard type, the most permissive instantiations
-                // possible (the wildcard type is assignable to and from all types). If those are not related,
-                // then no instantiations will be and we can just return the false branch type.
-                if (!isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType))) {
-                    return instantiateType(root.falseType, mapper);
-                }
-                // Return trueType for a definitely true extends check. We check instantiations of the two
-                // types with type parameters mapped to their restrictive form, i.e. a form of the type parameter
-                // that has no constraint. This ensures that, for example, the type
-                //   type Foo<T extends { x: any }> = T extends { x: string } ? string : number
-                // doesn't immediately resolve to 'string' instead of being deferred.
-                if (isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(inferredExtendsType))) {
-                    return instantiateType(root.trueType, combinedMapper || mapper);
+            if (!checkTypeInstantiable && !isGenericObjectType(inferredExtendsType) && !isGenericIndexType(inferredExtendsType)
+                && !isTypeDeferredTypeReference(checkType) && !isTypeDeferredTypeReference(inferredExtendsType)) {
+                const result = getConditionalSimplificationState(checkType, inferredExtendsType);
+                switch (result) {
+                    case ConditionalSimplificationState.True:
+                        return instantiateType(root.trueType, combinedMapper || mapper);
+                    case ConditionalSimplificationState.Both:
+                        return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), instantiateType(root.falseType, mapper)]);
+                    case ConditionalSimplificationState.False:
+                        return instantiateType(root.falseType, mapper);
+                    // None: Fall out and defer
                 }
             }
             // Return a deferred type for a check that is neither definitely true nor definitely false
@@ -12948,6 +12983,39 @@ namespace ts {
             result.aliasSymbol = root.aliasSymbol;
             result.aliasTypeArguments = instantiateTypes(root.aliasTypeArguments, mapper!); // TODO: GH#18217
             return result;
+        }
+
+        const enum ConditionalSimplificationState {
+            None = 0,
+            True = 1,
+            False = 2,
+            Both = True | False,
+        }
+
+        function getConditionalSimplificationState(checkType: Type, inferredExtendsType: Type): ConditionalSimplificationState {
+            if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown) {
+                return ConditionalSimplificationState.True;
+            }
+            // Return union of trueType and falseType for 'any' since it matches anything
+            if (checkType.flags & TypeFlags.Any) {
+                return ConditionalSimplificationState.Both;
+            }
+            // Return falseType for a definitely false extends check. We check an instantiations of the two
+            // types with type parameters mapped to the wildcard type, the most permissive instantiations
+            // possible (the wildcard type is assignable to and from all types). If those are not related,
+            // then no instantiations will be and we can just return the false branch type.
+            if (!isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType))) {
+                return ConditionalSimplificationState.False;
+            }
+            // Return trueType for a definitely true extends check. We check instantiations of the two
+            // types with type parameters mapped to their restrictive form, i.e. a form of the type parameter
+            // that has no constraint. This ensures that, for example, the type
+            //   type Foo<T extends { x: any }> = T extends { x: string } ? string : number
+            // doesn't immediately resolve to 'string' instead of being deferred.
+            if (isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(inferredExtendsType))) {
+                return ConditionalSimplificationState.True;
+            }
+            return ConditionalSimplificationState.None;
         }
 
         function getTrueTypeFromConditionalType(type: ConditionalType) {
@@ -14986,7 +15054,7 @@ namespace ts {
             while (true) {
                 const t = isFreshLiteralType(type) ? (<FreshableType>type).regularType :
                     getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? createTypeReference((<TypeReference>type).target, getTypeArguments(<TypeReference>type)) :
-                    type.flags & TypeFlags.UnionOrIntersection ? getReducedType(type) :
+                    type.flags & TypeFlags.Reducible ? getSimplifiedType(getReducedType(type), writing) :
                     type.flags & TypeFlags.Substitution ? writing ? (<SubstitutionType>type).baseType : (<SubstitutionType>type).substitute :
                     type.flags & TypeFlags.Simplifiable ? getSimplifiedType(type, writing) :
                     type;

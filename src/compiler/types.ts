@@ -4376,6 +4376,10 @@ namespace ts {
         /* @internal */
         Simplifiable = IndexedAccess | Conditional,
         /* @internal */
+        ReducibleNotUnion = Intersection | Conditional,
+        /* @internal */
+        Reducible = ReducibleNotUnion | Union,
+        /* @internal */
         Substructure = Object | Union | Intersection | Index | IndexedAccess | Conditional | Substitution,
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
@@ -4385,7 +4389,7 @@ namespace ts {
         NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | StructuredOrInstantiable,
         // The following flags are aggregated during union and intersection type construction
         /* @internal */
-        IncludesMask = Any | Unknown | Primitive | Never | Object | Union | Intersection | NonPrimitive,
+        IncludesMask = Any | Unknown | Primitive | Never | Object | Union | Intersection | NonPrimitive | Conditional,
         // The following flags are used for different purposes during union and intersection type construction
         /* @internal */
         IncludesStructuredOrInstantiable = TypeParameter,
@@ -4394,7 +4398,7 @@ namespace ts {
         /* @internal */
         IncludesWildcard = IndexedAccess,
         /* @internal */
-        IncludesEmptyObject = Conditional,
+        IncludesEmptyObject = 1 << 27,
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -4511,7 +4515,7 @@ namespace ts {
         /* @internal */
         CouldContainTypeVariables = 1 << 27, // Type could contain a type variable
         /* @internal */
-        ContainsIntersections = 1 << 28, // Union contains intersections
+        ContainsReducibles = 1 << 28, // Union contains intersections
         /* @internal */
         IsNeverIntersectionComputed = 1 << 28, // IsNeverLike flag has been computed
         /* @internal */
@@ -4634,11 +4638,11 @@ namespace ts {
         resolvedStringIndexType: IndexType;
         /* @internal */
         resolvedBaseConstraint: Type;
+        /* @internal */
+        resolvedReducedType: Type;
     }
 
     export interface UnionType extends UnionOrIntersectionType {
-        /* @internal */
-        resolvedReducedType: Type;
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {
