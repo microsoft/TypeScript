@@ -1,7 +1,9 @@
 let Foo = {
-  Bar() {
-    
-  }
+  Bar() {}
 }
 
+let Baz = () => {}
+
 let x = <    Foo.Bar >Hello
+
+let y = <   Baz >Hello

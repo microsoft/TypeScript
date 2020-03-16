@@ -4556,7 +4556,7 @@ namespace ts {
                             start = tag.end - tag.escapedText.length;
                         }
 
-                        parseErrorAtRange({pos: start, end: tag.end}, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTag.tagName));
+                        parseErrorAtRange({ pos: start, end: tag.end }, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTag.tagName));
                     }
                     return undefined;
                 case SyntaxKind.LessThanSlashToken:
