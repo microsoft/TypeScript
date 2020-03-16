@@ -2365,12 +2365,12 @@ namespace ts {
 
         function emitParenthesizedExpression(node: ParenthesizedExpression) {
             const openParenPos = emitTokenWithComment(SyntaxKind.OpenParenToken, node.pos, writePunctuation, node);
-            const leadingNewlines = getLeadingLineTerminatorCount(node, node.expression, ListFormat.None);
+            const leadingNewlines = preserveSourceNewlines && getLeadingLineTerminatorCount(node, [node.expression], ListFormat.None);
             if (leadingNewlines) {
                 writeLinesAndIndent(leadingNewlines, /*writeLinesIfNotIndenting*/ false);
             }
             emitExpression(node.expression);
-            const trailingNewlines = getClosingLineTerminatorCount(node, node.expression, ListFormat.None);
+            const trailingNewlines = preserveSourceNewlines && getClosingLineTerminatorCount(node, [node.expression], ListFormat.None);
             if (trailingNewlines) {
                 writeLine(trailingNewlines);
             }
@@ -4282,13 +4282,13 @@ namespace ts {
             }
         }
 
-        function getLeadingLineTerminatorCount(parentNode: TextRange, children: NodeArray<Node> | Node, format: ListFormat): number {
+        function getLeadingLineTerminatorCount(parentNode: TextRange, children: readonly Node[], format: ListFormat): number {
             if (format & ListFormat.PreserveLines || preserveSourceNewlines) {
                 if (format & ListFormat.PreferNewLine) {
                     return 1;
                 }
 
-                const firstChild = isArray(children) ? children[0] : children;
+                const firstChild = children[0];
                 if (firstChild === undefined) {
                     return rangeIsOnSingleLine(parentNode, currentSourceFile!) ? 0 : 1;
                 }
@@ -4340,17 +4340,17 @@ namespace ts {
             return format & ListFormat.MultiLine ? 1 : 0;
         }
 
-        function getClosingLineTerminatorCount(parentNode: TextRange, children: NodeArray<Node> | Node, format: ListFormat): number {
+        function getClosingLineTerminatorCount(parentNode: TextRange, children: readonly Node[], format: ListFormat): number {
             if (format & ListFormat.PreserveLines || preserveSourceNewlines) {
                 if (format & ListFormat.PreferNewLine) {
                     return 1;
                 }
 
-                const lastChild = isArray(children) ? lastOrUndefined(children) : children;
+                const lastChild = lastOrUndefined(children);
                 if (lastChild === undefined) {
                     return rangeIsOnSingleLine(parentNode, currentSourceFile!) ? 0 : 1;
                 }
-                else if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild) && lastChild.parent === parentNode) {
+                if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild) && lastChild.parent === parentNode) {
                     if (preserveSourceNewlines) {
                         return getEffectiveLines(
                             includeComments => getLinesBetweenPositionAndNextNonWhitespaceCharacter(
@@ -4360,7 +4360,7 @@ namespace ts {
                     }
                     return rangeEndPositionsAreOnSameLine(parentNode, lastChild, currentSourceFile!) ? 0 : 1;
                 }
-                else if (synthesizedNodeStartsOnNewLine(lastChild, format)) {
+                if (synthesizedNodeStartsOnNewLine(lastChild, format)) {
                     return 1;
                 }
             }
