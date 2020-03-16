@@ -4,7 +4,6 @@ import * as ns from 'file1';
 
 import {a, b as c} from 'file2';
 >a : Symbol(a, Decl(systemModule9.ts, 1, 8))
->b : Symbol(c, Decl(systemModule9.ts, 1, 10))
 >c : Symbol(c, Decl(systemModule9.ts, 1, 10))
 
 import d from 'file3'
@@ -49,6 +48,6 @@ export {x};
 >x : Symbol(x, Decl(systemModule9.ts, 18, 8))
 
 export {y as z};
->y : Symbol(z, Decl(systemModule9.ts, 19, 8))
+>y : Symbol(y, Decl(systemModule9.ts, 17, 6))
 >z : Symbol(z, Decl(systemModule9.ts, 19, 8))
 

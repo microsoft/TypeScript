@@ -35,7 +35,7 @@ export var xxxx = a;
 >a : Symbol(a, Decl(client.ts, 1, 15))
 
 export import { a as b } from "./server";
->a : Symbol(b, Decl(client.ts, 3, 15))
+>a : Symbol(a, Decl(server.ts, 0, 10))
 >b : Symbol(b, Decl(client.ts, 3, 15))
 
 export var xxxx = b;
@@ -44,7 +44,7 @@ export var xxxx = b;
 
 export import { x, a as y } from "./server";
 >x : Symbol(x, Decl(client.ts, 5, 15))
->a : Symbol(y, Decl(client.ts, 5, 18))
+>a : Symbol(a, Decl(server.ts, 0, 10))
 >y : Symbol(y, Decl(client.ts, 5, 18))
 
 export var xxxx = x;
@@ -56,7 +56,7 @@ export var xxxx = y;
 >y : Symbol(y, Decl(client.ts, 5, 18))
 
 export import { x as z,  } from "./server";
->x : Symbol(z, Decl(client.ts, 8, 15))
+>x : Symbol(x, Decl(server.ts, 1, 10))
 >z : Symbol(z, Decl(client.ts, 8, 15))
 
 export var xxxx = z;
@@ -83,9 +83,9 @@ export var xxxx = x1;
 >x1 : Symbol(x1, Decl(client.ts, 12, 19))
 
 export import { a1 as a11, x1 as x11 } from "./server";
->a1 : Symbol(a11, Decl(client.ts, 15, 15))
+>a1 : Symbol(a1, Decl(server.ts, 3, 10))
 >a11 : Symbol(a11, Decl(client.ts, 15, 15))
->x1 : Symbol(x11, Decl(client.ts, 15, 26))
+>x1 : Symbol(x1, Decl(server.ts, 4, 10))
 >x11 : Symbol(x11, Decl(client.ts, 15, 26))
 
 export var xxxx = a11;
@@ -104,7 +104,7 @@ export var z111 = z1;
 >z1 : Symbol(z1, Decl(client.ts, 18, 15))
 
 export import { z2 as z3 } from "./server";
->z2 : Symbol(z3, Decl(client.ts, 20, 15))
+>z2 : Symbol(z3, Decl(server.ts, 6, 10))
 >z3 : Symbol(z3, Decl(client.ts, 20, 15))
 
 export var z2 = z3; // z2 shouldn't give redeclare error
@@ -116,6 +116,6 @@ export import { aaaa } from "./server";
 >aaaa : Symbol(aaaa, Decl(client.ts, 24, 15))
 
 export import { aaaa as bbbb } from "./server";
->aaaa : Symbol(bbbb, Decl(client.ts, 25, 15))
+>aaaa : Symbol(aaaa, Decl(server.ts, 7, 10))
 >bbbb : Symbol(bbbb, Decl(client.ts, 25, 15))
 

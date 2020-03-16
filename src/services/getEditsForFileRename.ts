@@ -6,14 +6,14 @@ namespace ts {
         newFileOrDirPath: string,
         host: LanguageServiceHost,
         formatContext: formatting.FormatContext,
-        _preferences: UserPreferences,
+        preferences: UserPreferences,
         sourceMapper: SourceMapper,
-    ): ReadonlyArray<FileTextChanges> {
+    ): readonly FileTextChanges[] {
         const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
         const oldToNew = getPathUpdater(oldFileOrDirPath, newFileOrDirPath, getCanonicalFileName, sourceMapper);
         const newToOld = getPathUpdater(newFileOrDirPath, oldFileOrDirPath, getCanonicalFileName, sourceMapper);
-        return textChanges.ChangeTracker.with({ host, formatContext }, changeTracker => {
+        return textChanges.ChangeTracker.with({ host, formatContext, preferences }, changeTracker => {
             updateTsconfigFiles(program, changeTracker, oldToNew, oldFileOrDirPath, newFileOrDirPath, host.getCurrentDirectory(), useCaseSensitiveFileNames);
             updateImports(program, changeTracker, oldToNew, newToOld, host, getCanonicalFileName);
         });
@@ -63,8 +63,8 @@ namespace ts {
                         const includes = mapDefined(property.initializer.elements, e => isStringLiteral(e) ? e.text : undefined);
                         const matchers = getFileMatcherPatterns(configDir, /*excludes*/ [], includes, useCaseSensitiveFileNames, currentDirectory);
                         // If there isn't some include for this, add a new one.
-                        if (getRegexFromPattern(Debug.assertDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(oldFileOrDirPath) &&
-                            !getRegexFromPattern(Debug.assertDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)) {
+                        if (getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(oldFileOrDirPath) &&
+                            !getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)) {
                             changeTracker.insertNodeAfter(configFile, last(property.initializer.elements), createStringLiteral(relativePath(newFileOrDirPath)));
                         }
                     }
@@ -91,7 +91,7 @@ namespace ts {
 
         function updatePaths(property: PropertyAssignment): boolean {
             // Type annotation needed due to #7294
-            const elements: ReadonlyArray<Expression> = isArrayLiteralExpression(property.initializer) ? property.initializer.elements : [property.initializer];
+            const elements: readonly Expression[] = isArrayLiteralExpression(property.initializer) ? property.initializer.elements : [property.initializer];
             let foundExactMatch = false;
             for (const element of elements) {
                 foundExactMatch = tryUpdateString(element) || foundExactMatch;
@@ -151,7 +151,8 @@ namespace ts {
                     const toImport = oldFromNew !== undefined
                         // If we're at the new location (file was already renamed), need to redo module resolution starting from the old location.
                         // TODO:GH#18217
-                        ? getSourceFileToImportFromResolved(resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost), oldToNew, host)
+                        ? getSourceFileToImportFromResolved(resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost),
+                                                            oldToNew, allFiles)
                         : getSourceFileToImport(importedModuleSymbol, importLiteral, sourceFile, program, host, oldToNew);
 
                     // Need an update if the imported file moved, or the importing file moved and was using a relative path.
@@ -192,28 +193,43 @@ namespace ts {
             const resolved = host.resolveModuleNames
                 ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName)
                 : program.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName);
-            return getSourceFileToImportFromResolved(resolved, oldToNew, host);
+            return getSourceFileToImportFromResolved(resolved, oldToNew, program.getSourceFiles());
         }
     }
 
-    function getSourceFileToImportFromResolved(resolved: ResolvedModuleWithFailedLookupLocations | undefined, oldToNew: PathUpdater, host: LanguageServiceHost): ToImport | undefined {
+    function getSourceFileToImportFromResolved(resolved: ResolvedModuleWithFailedLookupLocations | undefined, oldToNew: PathUpdater, sourceFiles: readonly SourceFile[]): ToImport | undefined {
         // Search through all locations looking for a moved file, and only then test already existing files.
         // This is because if `a.ts` is compiled to `a.js` and `a.ts` is moved, we don't want to resolve anything to `a.js`, but to `a.ts`'s new location.
-        return tryEach(tryGetNewFile) || tryEach(tryGetOldFile);
+        if (!resolved) return undefined;
 
-        function tryEach(cb: (oldFileName: string) => ToImport | undefined): ToImport | undefined {
-            return resolved && (
-                (resolved.resolvedModule && cb(resolved.resolvedModule.resolvedFileName)) || firstDefined(resolved.failedLookupLocations, cb));
+        // First try resolved module
+        if (resolved.resolvedModule) {
+            const result = tryChange(resolved.resolvedModule.resolvedFileName);
+            if (result) return result;
         }
 
-        function tryGetNewFile(oldFileName: string): ToImport | undefined {
+        // Then failed lookups that are in the list of sources
+        const result = forEach(resolved.failedLookupLocations, tryChangeWithIgnoringPackageJsonExisting)
+            // Then failed lookups except package.json since we dont want to touch them (only included ts/js files)
+            || forEach(resolved.failedLookupLocations, tryChangeWithIgnoringPackageJson);
+        if (result) return result;
+
+        // If nothing changed, then result is resolved module file thats not updated
+        return resolved.resolvedModule && { newFileName: resolved.resolvedModule.resolvedFileName, updated: false };
+
+        function tryChangeWithIgnoringPackageJsonExisting(oldFileName: string) {
             const newFileName = oldToNew(oldFileName);
-            return newFileName !== undefined && host.fileExists!(newFileName) ? { newFileName, updated: true } : undefined; // TODO: GH#18217
+            return newFileName && find(sourceFiles, src => src.fileName === newFileName)
+                ? tryChangeWithIgnoringPackageJson(oldFileName) : undefined;
         }
 
-        function tryGetOldFile(oldFileName: string): ToImport | undefined {
+        function tryChangeWithIgnoringPackageJson(oldFileName: string) {
+            return !endsWith(oldFileName, "/package.json") ? tryChange(oldFileName) : undefined;
+        }
+
+        function tryChange(oldFileName: string) {
             const newFileName = oldToNew(oldFileName);
-            return host.fileExists!(oldFileName) ? newFileName !== undefined ? { newFileName, updated: true } : { newFileName: oldFileName, updated: false } : undefined; // TODO: GH#18217
+            return newFileName && { newFileName, updated: true };
         }
     }
 

@@ -1,10 +1,6 @@
 /a.d.ts(3,14): error TS2451: Cannot redeclare block-scoped variable 'conflict'.
 /b.ts(6,22): error TS2451: Cannot redeclare block-scoped variable 'conflict'.
 /b.ts(12,18): error TS2451: Cannot redeclare block-scoped variable 'conflict'.
-/b.ts(15,1): error TS2686: 'a' refers to a UMD global, but the current file is a module. Consider adding an import instead.
-/b.ts(15,7): error TS2686: 'a' refers to a UMD global, but the current file is a module. Consider adding an import instead.
-/b.ts(15,13): error TS2686: 'a' refers to a UMD global, but the current file is a module. Consider adding an import instead.
-/b.ts(15,19): error TS2686: 'a' refers to a UMD global, but the current file is a module. Consider adding an import instead.
 
 
 ==== /a.d.ts (1 errors) ====
@@ -16,7 +12,7 @@
 !!! related TS6203 /b.ts:6:22: 'conflict' was also declared here.
 !!! related TS6204 /b.ts:12:18: and here.
     
-==== /b.ts (6 errors) ====
+==== /b.ts (2 errors) ====
     import * as a2 from "./a";
     
     declare global {
@@ -38,13 +34,5 @@
     }
     
     a.x + a.y + a.z + a.conflict;
-    ~
-!!! error TS2686: 'a' refers to a UMD global, but the current file is a module. Consider adding an import instead.
-          ~
-!!! error TS2686: 'a' refers to a UMD global, but the current file is a module. Consider adding an import instead.
-                ~
-!!! error TS2686: 'a' refers to a UMD global, but the current file is a module. Consider adding an import instead.
-                      ~
-!!! error TS2686: 'a' refers to a UMD global, but the current file is a module. Consider adding an import instead.
     a2.x + a2.y + a2.z + a2.conflict;
     

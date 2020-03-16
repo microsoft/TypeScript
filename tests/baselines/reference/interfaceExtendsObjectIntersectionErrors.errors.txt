@@ -51,8 +51,8 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
   Type 'I23' is not assignable to type 'T1'.
     Types of property 'a' are incompatible.
       Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(46,23): error TS2312: An interface may only extend a class or another interface.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(47,26): error TS2312: An interface may only extend a class or another interface.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(46,23): error TS2312: An interface can only extend an object type or intersection of object types with statically known members.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(47,26): error TS2312: An interface can only extend an object type or intersection of object types with statically known members.
 
 
 ==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts (23 errors) ====
@@ -177,8 +177,8 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
     
     interface I30 extends U { x: string }
                           ~
-!!! error TS2312: An interface may only extend a class or another interface.
+!!! error TS2312: An interface can only extend an object type or intersection of object types with statically known members.
     interface I31<T> extends T { x: string }
                              ~
-!!! error TS2312: An interface may only extend a class or another interface.
+!!! error TS2312: An interface can only extend an object type or intersection of object types with statically known members.
     

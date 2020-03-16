@@ -90,3 +90,53 @@ var b11: Indexed = { 0: { colour: "blue" } }; // nested object literal still err
 >0 : Symbol(0, Decl(objectLiteralExcessProperties.ts, 32, 20))
 >colour : Symbol(colour, Decl(objectLiteralExcessProperties.ts, 32, 25))
 
+// Repros inspired by #28752
+
+function test<T extends IFoo>() {
+>test : Symbol(test, Decl(objectLiteralExcessProperties.ts, 32, 45))
+>T : Symbol(T, Decl(objectLiteralExcessProperties.ts, 36, 14))
+
+    // No excess property checks on generic types
+    const obj1: T = { name: "test" };
+>obj1 : Symbol(obj1, Decl(objectLiteralExcessProperties.ts, 38, 9))
+>T : Symbol(T, Decl(objectLiteralExcessProperties.ts, 36, 14))
+>name : Symbol(name, Decl(objectLiteralExcessProperties.ts, 38, 21))
+
+    // No excess property checks on intersections involving generics
+    const obj2: T & { prop: boolean } = { name: "test", prop: true };
+>obj2 : Symbol(obj2, Decl(objectLiteralExcessProperties.ts, 40, 9))
+>T : Symbol(T, Decl(objectLiteralExcessProperties.ts, 36, 14))
+>prop : Symbol(prop, Decl(objectLiteralExcessProperties.ts, 40, 21))
+>name : Symbol(name, Decl(objectLiteralExcessProperties.ts, 40, 41))
+>prop : Symbol(prop, Decl(objectLiteralExcessProperties.ts, 40, 55))
+
+    // Excess property checks only on non-generic parts of unions
+    const obj3: T | { prop: boolean } = { name: "test", prop: true };
+>obj3 : Symbol(obj3, Decl(objectLiteralExcessProperties.ts, 42, 9))
+>T : Symbol(T, Decl(objectLiteralExcessProperties.ts, 36, 14))
+>prop : Symbol(prop, Decl(objectLiteralExcessProperties.ts, 42, 21))
+>name : Symbol(name, Decl(objectLiteralExcessProperties.ts, 42, 41))
+>prop : Symbol(prop, Decl(objectLiteralExcessProperties.ts, 42, 55))
+
+    // Excess property checks only on non-generic parts of unions
+    const obj4: T & { prop: boolean } | { name: string } = { name: "test", prop: true };
+>obj4 : Symbol(obj4, Decl(objectLiteralExcessProperties.ts, 44, 9))
+>T : Symbol(T, Decl(objectLiteralExcessProperties.ts, 36, 14))
+>prop : Symbol(prop, Decl(objectLiteralExcessProperties.ts, 44, 21))
+>name : Symbol(name, Decl(objectLiteralExcessProperties.ts, 44, 41))
+>name : Symbol(name, Decl(objectLiteralExcessProperties.ts, 44, 60))
+>prop : Symbol(prop, Decl(objectLiteralExcessProperties.ts, 44, 74))
+
+    // No excess property checks when union includes 'object' type
+    const obj5: object | { x: string } = { z: 'abc' }
+>obj5 : Symbol(obj5, Decl(objectLiteralExcessProperties.ts, 46, 9))
+>x : Symbol(x, Decl(objectLiteralExcessProperties.ts, 46, 26))
+>z : Symbol(z, Decl(objectLiteralExcessProperties.ts, 46, 42))
+
+    // The 'object' type has no effect on intersections
+    const obj6: object & { x: string } = { z: 'abc' }
+>obj6 : Symbol(obj6, Decl(objectLiteralExcessProperties.ts, 48, 9))
+>x : Symbol(x, Decl(objectLiteralExcessProperties.ts, 48, 26))
+>z : Symbol(z, Decl(objectLiteralExcessProperties.ts, 48, 42))
+}
+

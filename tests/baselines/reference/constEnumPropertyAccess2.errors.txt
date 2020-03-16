@@ -1,7 +1,7 @@
 tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(13,9): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
 tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(14,12): error TS2476: A const enum member can only be accessed using a string literal.
 tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(16,1): error TS2322: Type '"string"' is not assignable to type 'G'.
-tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(18,3): error TS2540: Cannot assign to 'B' because it is a constant or a read-only property.
+tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(18,3): error TS2540: Cannot assign to 'B' because it is a read-only property.
 
 
 ==== tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts (4 errors) ====
@@ -30,5 +30,5 @@ tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(18,3): error TS25
     function foo(x: G) { }
     G.B = 3;
       ~
-!!! error TS2540: Cannot assign to 'B' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'B' because it is a read-only property.
     

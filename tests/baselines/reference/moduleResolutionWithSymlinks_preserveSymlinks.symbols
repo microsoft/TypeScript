@@ -3,11 +3,11 @@
 /// <reference types="linked" />
 
 import { C as C1 } from "linked";
->C : Symbol(C1, Decl(app.ts, 3, 8))
+>C : Symbol(C1, Decl(index.d.ts, 0, 28))
 >C1 : Symbol(C1, Decl(app.ts, 3, 8))
 
 import { C as C2 } from "linked2";
->C : Symbol(C2, Decl(app.ts, 4, 8))
+>C : Symbol(C2, Decl(index.d.ts, 0, 28))
 >C2 : Symbol(C2, Decl(app.ts, 4, 8))
 
 let x = new C1();

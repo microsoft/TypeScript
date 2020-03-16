@@ -1,0 +1,25 @@
+=== tests/cases/compiler/jsxIntrinsicUnions.tsx ===
+/// <reference path="react16.d.ts" />
+
+import * as React from "react";
+>React : typeof React
+
+const El = Math.random() ? 'h1' : 'h2';
+>El : "h1" | "h2"
+>Math.random() ? 'h1' : 'h2' : "h1" | "h2"
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>'h1' : "h1"
+>'h2' : "h2"
+
+const tag = <El className="ok" key="key">{"Title"}</El>;
+>tag : JSX.Element
+><El className="ok" key="key">{"Title"}</El> : JSX.Element
+>El : "h1" | "h2"
+>className : string
+>key : string
+>"Title" : "Title"
+>El : "h1" | "h2"
+

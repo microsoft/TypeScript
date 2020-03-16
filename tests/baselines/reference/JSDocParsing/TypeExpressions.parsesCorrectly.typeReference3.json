@@ -3,16 +3,22 @@
     "pos": 1,
     "end": 11,
     "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "typeName": {
         "kind": "FirstNode",
         "pos": 1,
         "end": 11,
         "flags": "JSDoc",
+        "modifierFlagsCache": 0,
+        "transformFlags": 0,
         "left": {
             "kind": "Identifier",
             "pos": 1,
             "end": 2,
             "flags": "JSDoc",
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "escapedText": "a"
         },
         "right": {
@@ -20,6 +26,8 @@
             "pos": 3,
             "end": 11,
             "flags": "JSDoc",
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "originalKeywordKind": "FunctionKeyword",
             "escapedText": "function"
         }

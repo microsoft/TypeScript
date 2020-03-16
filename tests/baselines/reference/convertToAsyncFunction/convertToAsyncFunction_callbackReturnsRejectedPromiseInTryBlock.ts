@@ -4,7 +4,7 @@ function /*[#|*/f/*|]*/() {
     return Promise.resolve(1)
         .then(x => Promise.reject(x))
         .catch(err => console.log(err));
-}    
+}
 
 // ==ASYNC FUNCTION::Convert to async function==
 
@@ -16,4 +16,4 @@ async function f() {
     catch (err) {
         return console.log(err);
     }
-}    
+}

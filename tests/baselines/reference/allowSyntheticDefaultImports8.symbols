@@ -7,7 +7,6 @@ export function bar();
 
 === tests/cases/compiler/a.ts ===
 import { default as Foo } from "./b";
->default : Symbol(Foo, Decl(a.ts, 0, 8))
 >Foo : Symbol(Foo, Decl(a.ts, 0, 8))
 
 Foo.bar();

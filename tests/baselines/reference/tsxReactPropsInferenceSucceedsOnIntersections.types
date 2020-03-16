@@ -25,7 +25,7 @@ interface CustomButtonProps extends ButtonProps {
 }
 
 const CustomButton: React.SFC<CustomButtonProps> = props => <Button {...props} />;
->CustomButton : React.StatelessComponent<CustomButtonProps>
+>CustomButton : React.SFC<CustomButtonProps>
 >React : any
 >props => <Button {...props} /> : (props: CustomButtonProps & { children?: React.ReactNode; }) => JSX.Element
 >props : CustomButtonProps & { children?: React.ReactNode; }

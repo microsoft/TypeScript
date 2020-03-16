@@ -37,7 +37,7 @@ f12("a");
 f12("a", "b");
 >f12 : Symbol(f12, Decl(unionTypeCallSignatures4.ts, 6, 3))
 
-f12("a", "b", "c");  // error
+f12("a", "b", "c");  // ok
 >f12 : Symbol(f12, Decl(unionTypeCallSignatures4.ts, 6, 3))
 
 var f34: F3 | F4;
@@ -67,7 +67,7 @@ f1234("a");
 f1234("a", "b");
 >f1234 : Symbol(f1234, Decl(unionTypeCallSignatures4.ts, 16, 3))
 
-f1234("a", "b", "c");  // error
+f1234("a", "b", "c");  // ok
 >f1234 : Symbol(f1234, Decl(unionTypeCallSignatures4.ts, 16, 3))
 
 var f12345: F1 | F2 | F3 | F4 | F5;

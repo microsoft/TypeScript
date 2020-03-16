@@ -22,7 +22,7 @@ import { fa } from "ext";
 >fa : Symbol(fa, Decl(main.ts, 0, 8))
 
 import { fa as fa2 } from "ext/other";
->fa : Symbol(fa2, Decl(main.ts, 1, 8))
+>fa : Symbol(fa, Decl(other.d.ts, 0, 22))
 >fa2 : Symbol(fa2, Decl(main.ts, 1, 8))
 
 export const va = fa();

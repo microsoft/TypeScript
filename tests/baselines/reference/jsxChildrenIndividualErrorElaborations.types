@@ -1,0 +1,183 @@
+=== tests/cases/compiler/index.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : typeof React
+
+interface Props {
+  children: (x: number) => string;
+>children : (x: number) => string
+>x : number
+}
+
+export function Blah(props: Props) {
+>Blah : (props: Props) => JSX.Element
+>props : Props
+
+  return <></>;
+><></> : JSX.Element
+}
+
+// Incompatible child.
+var a = <Blah>
+>a : JSX.Element
+><Blah>  {x => x}</Blah> : JSX.Element
+>Blah : (props: Props) => JSX.Element
+
+  {x => x}
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+</Blah>
+>Blah : (props: Props) => JSX.Element
+
+// Blah components don't accept text as child elements
+var a = <Blah>
+>a : JSX.Element
+><Blah>  Hello unexpected text!</Blah> : JSX.Element
+>Blah : (props: Props) => JSX.Element
+
+  Hello unexpected text!
+</Blah>
+>Blah : (props: Props) => JSX.Element
+
+// Blah components don't accept multiple children.
+var a = <Blah>
+>a : JSX.Element
+><Blah>  {x => "" + x}  {x => "" + x}</Blah> : JSX.Element
+>Blah : (props: Props) => JSX.Element
+
+  {x => "" + x}
+>x => "" + x : (x: number) => string
+>x : number
+>"" + x : string
+>"" : ""
+>x : number
+
+  {x => "" + x}
+>x => "" + x : (x: number) => string
+>x : number
+>"" + x : string
+>"" : ""
+>x : number
+
+</Blah>
+>Blah : (props: Props) => JSX.Element
+
+interface PropsArr {
+  children: ((x: number) => string)[];
+>children : ((x: number) => string)[]
+>x : number
+}
+
+export function Blah2(props: PropsArr) {
+>Blah2 : (props: PropsArr) => JSX.Element
+>props : PropsArr
+
+  return <></>;
+><></> : JSX.Element
+}
+
+// Incompatible child.
+var a = <Blah2>
+>a : JSX.Element
+><Blah2>  {x => x}</Blah2> : JSX.Element
+>Blah2 : (props: PropsArr) => JSX.Element
+
+  {x => x}
+>x => x : (x: any) => any
+>x : any
+>x : any
+
+</Blah2>
+>Blah2 : (props: PropsArr) => JSX.Element
+
+// Blah2 components don't accept text as child elements
+var a = <Blah2>
+>a : JSX.Element
+><Blah2>  Hello unexpected text!</Blah2> : JSX.Element
+>Blah2 : (props: PropsArr) => JSX.Element
+
+  Hello unexpected text!
+</Blah2>
+>Blah2 : (props: PropsArr) => JSX.Element
+
+// Blah2 components don't accept multiple children of the wrong type.
+var a = <Blah2>
+>a : JSX.Element
+><Blah2>  {x => x}  {x => x}</Blah2> : JSX.Element
+>Blah2 : (props: PropsArr) => JSX.Element
+
+  {x => x}
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+  {x => x}
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+</Blah2>
+>Blah2 : (props: PropsArr) => JSX.Element
+
+type Cb = (x: number) => string;
+>Cb : Cb
+>x : number
+
+interface PropsMixed {
+  children: Cb | Cb[];
+>children : Cb | Cb[]
+}
+
+export function Blah3(props: PropsMixed) {
+>Blah3 : (props: PropsMixed) => JSX.Element
+>props : PropsMixed
+
+  return <></>;
+><></> : JSX.Element
+}
+
+// Incompatible child.
+var a = <Blah3>
+>a : JSX.Element
+><Blah3>  {x => x}</Blah3> : JSX.Element
+>Blah3 : (props: PropsMixed) => JSX.Element
+
+  {x => x}
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+</Blah3>
+>Blah3 : (props: PropsMixed) => JSX.Element
+
+// Blah3 components don't accept text as child elements
+var a = <Blah3>
+>a : JSX.Element
+><Blah3>  Hello unexpected text!</Blah3> : JSX.Element
+>Blah3 : (props: PropsMixed) => JSX.Element
+
+  Hello unexpected text!
+</Blah3>
+>Blah3 : (props: PropsMixed) => JSX.Element
+
+// Blah3 components don't accept multiple children of the wrong type.
+var a = <Blah3>
+>a : JSX.Element
+><Blah3>  {x => x}  {x => x}</Blah3> : JSX.Element
+>Blah3 : (props: PropsMixed) => JSX.Element
+
+  {x => x}
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+  {x => x}
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+</Blah3>
+>Blah3 : (props: PropsMixed) => JSX.Element
+

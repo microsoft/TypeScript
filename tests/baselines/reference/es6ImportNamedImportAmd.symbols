@@ -35,7 +35,7 @@ var xxxx = a;
 >a : Symbol(a, Decl(es6ImportNamedImportAmd_1.ts, 1, 8))
 
 import { a as b } from "es6ImportNamedImportAmd_0";
->a : Symbol(b, Decl(es6ImportNamedImportAmd_1.ts, 3, 8))
+>a : Symbol(a, Decl(es6ImportNamedImportAmd_0.ts, 0, 10))
 >b : Symbol(b, Decl(es6ImportNamedImportAmd_1.ts, 3, 8))
 
 var xxxx = b;
@@ -44,7 +44,7 @@ var xxxx = b;
 
 import { x, a as y } from "es6ImportNamedImportAmd_0";
 >x : Symbol(x, Decl(es6ImportNamedImportAmd_1.ts, 5, 8))
->a : Symbol(y, Decl(es6ImportNamedImportAmd_1.ts, 5, 11))
+>a : Symbol(a, Decl(es6ImportNamedImportAmd_0.ts, 0, 10))
 >y : Symbol(y, Decl(es6ImportNamedImportAmd_1.ts, 5, 11))
 
 var xxxx = x;
@@ -56,7 +56,7 @@ var xxxx = y;
 >y : Symbol(y, Decl(es6ImportNamedImportAmd_1.ts, 5, 11))
 
 import { x as z,  } from "es6ImportNamedImportAmd_0";
->x : Symbol(z, Decl(es6ImportNamedImportAmd_1.ts, 8, 8))
+>x : Symbol(x, Decl(es6ImportNamedImportAmd_0.ts, 1, 10))
 >z : Symbol(z, Decl(es6ImportNamedImportAmd_1.ts, 8, 8))
 
 var xxxx = z;
@@ -83,9 +83,9 @@ var xxxx = x1;
 >x1 : Symbol(x1, Decl(es6ImportNamedImportAmd_1.ts, 12, 12))
 
 import { a1 as a11, x1 as x11 } from "es6ImportNamedImportAmd_0";
->a1 : Symbol(a11, Decl(es6ImportNamedImportAmd_1.ts, 15, 8))
+>a1 : Symbol(a1, Decl(es6ImportNamedImportAmd_0.ts, 3, 10))
 >a11 : Symbol(a11, Decl(es6ImportNamedImportAmd_1.ts, 15, 8))
->x1 : Symbol(x11, Decl(es6ImportNamedImportAmd_1.ts, 15, 19))
+>x1 : Symbol(x1, Decl(es6ImportNamedImportAmd_0.ts, 4, 10))
 >x11 : Symbol(x11, Decl(es6ImportNamedImportAmd_1.ts, 15, 19))
 
 var xxxx = a11;
@@ -104,7 +104,7 @@ var z111 = z1;
 >z1 : Symbol(z1, Decl(es6ImportNamedImportAmd_1.ts, 18, 8))
 
 import { z2 as z3 } from "es6ImportNamedImportAmd_0";
->z2 : Symbol(z3, Decl(es6ImportNamedImportAmd_1.ts, 20, 8))
+>z2 : Symbol(z3, Decl(es6ImportNamedImportAmd_0.ts, 6, 10))
 >z3 : Symbol(z3, Decl(es6ImportNamedImportAmd_1.ts, 20, 8))
 
 var z2 = z3; // z2 shouldn't give redeclare error
@@ -117,6 +117,6 @@ import { aaaa } from "es6ImportNamedImportAmd_0";
 
 // These are elided
 import { aaaa as bbbb } from "es6ImportNamedImportAmd_0";
->aaaa : Symbol(bbbb, Decl(es6ImportNamedImportAmd_1.ts, 26, 8))
+>aaaa : Symbol(aaaa, Decl(es6ImportNamedImportAmd_0.ts, 7, 10))
 >bbbb : Symbol(bbbb, Decl(es6ImportNamedImportAmd_1.ts, 26, 8))
 

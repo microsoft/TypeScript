@@ -7,7 +7,7 @@ type F5 = (a: string, b: string) => void;
 var f12: F1 | F2;
 f12("a");
 f12("a", "b");
-f12("a", "b", "c");  // error
+f12("a", "b", "c");  // ok
 
 var f34: F3 | F4;
 f34("a");
@@ -17,7 +17,7 @@ f34("a", "b", "c");
 var f1234: F1 | F2 | F3 | F4;
 f1234("a");
 f1234("a", "b");
-f1234("a", "b", "c");  // error
+f1234("a", "b", "c");  // ok
 
 var f12345: F1 | F2 | F3 | F4 | F5;
 f12345("a");  // error

@@ -1,8 +1,8 @@
 tests/cases/compiler/blockScopedSameNameFunctionDeclarationES5.ts(3,18): error TS2393: Duplicate function implementation.
-tests/cases/compiler/blockScopedSameNameFunctionDeclarationES5.ts(5,9): error TS2554: Expected 0 arguments, but got 1.
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationES5.ts(5,13): error TS2554: Expected 0 arguments, but got 1.
 tests/cases/compiler/blockScopedSameNameFunctionDeclarationES5.ts(8,18): error TS2393: Duplicate function implementation.
-tests/cases/compiler/blockScopedSameNameFunctionDeclarationES5.ts(10,9): error TS2554: Expected 0 arguments, but got 1.
-tests/cases/compiler/blockScopedSameNameFunctionDeclarationES5.ts(12,5): error TS2554: Expected 0 arguments, but got 1.
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationES5.ts(10,13): error TS2554: Expected 0 arguments, but got 1.
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationES5.ts(12,9): error TS2554: Expected 0 arguments, but got 1.
 tests/cases/compiler/blockScopedSameNameFunctionDeclarationES5.ts(16,1): error TS2554: Expected 1 arguments, but got 0.
 
 
@@ -14,7 +14,7 @@ tests/cases/compiler/blockScopedSameNameFunctionDeclarationES5.ts(16,1): error T
 !!! error TS2393: Duplicate function implementation.
             foo(); 
             foo(10); // not ok
-            ~~~~~~~
+                ~~
 !!! error TS2554: Expected 0 arguments, but got 1.
         }
         else {
@@ -23,11 +23,11 @@ tests/cases/compiler/blockScopedSameNameFunctionDeclarationES5.ts(16,1): error T
 !!! error TS2393: Duplicate function implementation.
             foo(); 
             foo(10); // not ok
-            ~~~~~~~
+                ~~
 !!! error TS2554: Expected 0 arguments, but got 1.
         }
         foo(10); // not ok
-        ~~~~~~~
+            ~~
 !!! error TS2554: Expected 0 arguments, but got 1.
         foo(); 
     }

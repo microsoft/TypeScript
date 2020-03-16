@@ -1,0 +1,35 @@
+=== tests/cases/compiler/declarationEmitForDefaultExportClassExtendingExpression01.ts ===
+interface Greeter {
+>Greeter : Symbol(Greeter, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 0, 0))
+
+    getGreeting(): string;
+>getGreeting : Symbol(Greeter.getGreeting, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 0, 19))
+}
+
+interface GreeterConstructor {
+>GreeterConstructor : Symbol(GreeterConstructor, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 2, 1))
+
+    new (): Greeter;
+>Greeter : Symbol(Greeter, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 0, 0))
+}
+
+class A {
+>A : Symbol(A, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 6, 1))
+
+    getGreeting() {
+>getGreeting : Symbol(A.getGreeting, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 8, 9))
+
+        return 'hello';
+    }
+}
+
+const getGreeterBase = (): GreeterConstructor => A;
+>getGreeterBase : Symbol(getGreeterBase, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 14, 5))
+>GreeterConstructor : Symbol(GreeterConstructor, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 2, 1))
+>A : Symbol(A, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 6, 1))
+
+export default class extends getGreeterBase() {
+>getGreeterBase : Symbol(getGreeterBase, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 14, 5))
+}
+
+

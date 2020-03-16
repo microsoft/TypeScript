@@ -30,6 +30,7 @@ tests/cases/compiler/augmentedTypesVar.ts(31,8): error TS2300: Duplicate identif
     var x3 = () => { } // error
         ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x3' must be of type 'number', but here has type '() => void'.
+!!! related TS6203 tests/cases/compiler/augmentedTypesVar.ts:9:5: 'x3' was also declared here.
     
     // var then class
     var x4 = 1; // error

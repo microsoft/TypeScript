@@ -8,11 +8,11 @@ export function consoleTestResultHandler(testResult: any): boolean {
     for (const q of a) {
         void a;
 
-        /* tslint:disable:no-console */
+        /* eslint-disable no-console */
         if (a) {
         } else {
         }
-        /* tslint:enable:no-console */
+        /* eslint-enable no-console */
     }
 
     return true;
@@ -21,18 +21,19 @@ export function consoleTestResultHandler(testResult: any): boolean {
 //// [forLoopEndingMultilineComments.js]
 "use strict";
 exports.__esModule = true;
+exports.consoleTestResultHandler = void 0;
 function consoleTestResultHandler(testResult) {
     // needed to get colors to show up when passing through Grunt
     void a;
     for (var _i = 0, a_1 = a; _i < a_1.length; _i++) {
         var q = a_1[_i];
         void a;
-        /* tslint:disable:no-console */
+        /* eslint-disable no-console */
         if (a) {
         }
         else {
         }
-        /* tslint:enable:no-console */
+        /* eslint-enable no-console */
     }
     return true;
 }

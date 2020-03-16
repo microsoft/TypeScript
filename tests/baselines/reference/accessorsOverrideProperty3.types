@@ -1,0 +1,31 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty3.ts ===
+declare class Animal {
+>Animal : Animal
+
+    sound: string
+>sound : string
+}
+class Lion extends Animal {
+>Lion : Lion
+>Animal : Animal
+
+    _sound = 'grrr'
+>_sound : string
+>'grrr' : "grrr"
+
+    get sound() { return this._sound } // error here
+>sound : string
+>this._sound : string
+>this : this
+>_sound : string
+
+    set sound(val) { this._sound = val }
+>sound : string
+>val : string
+>this._sound = val : string
+>this._sound : string
+>this : this
+>_sound : string
+>val : string
+}
+

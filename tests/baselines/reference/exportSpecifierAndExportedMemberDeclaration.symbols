@@ -12,7 +12,7 @@ declare module "m2" {
 >Y : Symbol(Y, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 3, 5))
 
     export { Y as X };
->Y : Symbol(X, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 0, 21), Decl(exportSpecifierAndExportedMemberDeclaration.ts, 5, 12))
+>Y : Symbol(Y, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 3, 5))
 >X : Symbol(X, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 0, 21), Decl(exportSpecifierAndExportedMemberDeclaration.ts, 5, 12))
 
     function Z(): X.I;

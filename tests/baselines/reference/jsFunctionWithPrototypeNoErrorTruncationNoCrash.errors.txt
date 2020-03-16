@@ -1,0 +1,45 @@
+tests/cases/compiler/index.js(1,16): error TS7006: Parameter 'obj' implicitly has an 'any' type.
+tests/cases/compiler/index.js(6,21): error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+tests/cases/compiler/index.js(7,20): error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+tests/cases/compiler/index.js(8,22): error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+tests/cases/compiler/index.js(9,24): error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+tests/cases/compiler/index.js(10,20): error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+tests/cases/compiler/index.js(11,21): error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+tests/cases/compiler/index.js(13,21): error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+tests/cases/compiler/index.js(14,35): error TS2339: Property 'rgb' does not exist on type 'Color'.
+
+
+==== tests/cases/compiler/index.js (9 errors) ====
+    function Color(obj) {
+                   ~~~
+!!! error TS7006: Parameter 'obj' implicitly has an 'any' type.
+        this.example = true
+    };
+    Color.prototype = {
+    	negate: function () {return this;},
+    	lighten: function (ratio) {return this;},
+    	                   ~~~~~
+!!! error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+    	darken: function (ratio) {return this;},
+    	                  ~~~~~
+!!! error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+    	saturate: function (ratio) {return this;},
+    	                    ~~~~~
+!!! error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+    	desaturate: function (ratio) {return this;},
+    	                      ~~~~~
+!!! error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+    	whiten: function (ratio) {return this;},
+    	                  ~~~~~
+!!! error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+    	blacken: function (ratio) {return this;},
+    	                   ~~~~~
+!!! error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+    	greyscale: function () {return this;},
+    	clearer: function (ratio) {return this;},
+    	                   ~~~~~
+!!! error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+    	toJSON: function () {return this.rgb();},
+    	                                 ~~~
+!!! error TS2339: Property 'rgb' does not exist on type 'Color'.
+    };

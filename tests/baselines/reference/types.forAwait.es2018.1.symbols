@@ -1,0 +1,77 @@
+=== tests/cases/conformance/types/forAwait/types.forAwait.es2018.1.ts ===
+declare const asyncIterable: AsyncIterable<number>;
+>asyncIterable : Symbol(asyncIterable, Decl(types.forAwait.es2018.1.ts, 0, 13))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+declare const iterable: Iterable<number>;
+>iterable : Symbol(iterable, Decl(types.forAwait.es2018.1.ts, 1, 13))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+
+declare const iterableOfPromise: Iterable<Promise<number>>;
+>iterableOfPromise : Symbol(iterableOfPromise, Decl(types.forAwait.es2018.1.ts, 2, 13))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+async function f1() {
+>f1 : Symbol(f1, Decl(types.forAwait.es2018.1.ts, 2, 59))
+
+    let y: number;
+>y : Symbol(y, Decl(types.forAwait.es2018.1.ts, 4, 7))
+
+    for await (const x of asyncIterable) {
+>x : Symbol(x, Decl(types.forAwait.es2018.1.ts, 5, 20))
+>asyncIterable : Symbol(asyncIterable, Decl(types.forAwait.es2018.1.ts, 0, 13))
+    }
+    for await (const x of iterable) {
+>x : Symbol(x, Decl(types.forAwait.es2018.1.ts, 7, 20))
+>iterable : Symbol(iterable, Decl(types.forAwait.es2018.1.ts, 1, 13))
+    }
+    for await (const x of iterableOfPromise) {
+>x : Symbol(x, Decl(types.forAwait.es2018.1.ts, 9, 20))
+>iterableOfPromise : Symbol(iterableOfPromise, Decl(types.forAwait.es2018.1.ts, 2, 13))
+    }
+    for await (y of asyncIterable) {
+>y : Symbol(y, Decl(types.forAwait.es2018.1.ts, 4, 7))
+>asyncIterable : Symbol(asyncIterable, Decl(types.forAwait.es2018.1.ts, 0, 13))
+    }
+    for await (y of iterable) {
+>y : Symbol(y, Decl(types.forAwait.es2018.1.ts, 4, 7))
+>iterable : Symbol(iterable, Decl(types.forAwait.es2018.1.ts, 1, 13))
+    }
+    for await (y of iterableOfPromise) {
+>y : Symbol(y, Decl(types.forAwait.es2018.1.ts, 4, 7))
+>iterableOfPromise : Symbol(iterableOfPromise, Decl(types.forAwait.es2018.1.ts, 2, 13))
+    }
+}
+async function * f2() {
+>f2 : Symbol(f2, Decl(types.forAwait.es2018.1.ts, 17, 1))
+
+    let y: number;
+>y : Symbol(y, Decl(types.forAwait.es2018.1.ts, 19, 7))
+
+    for await (const x of asyncIterable) {
+>x : Symbol(x, Decl(types.forAwait.es2018.1.ts, 20, 20))
+>asyncIterable : Symbol(asyncIterable, Decl(types.forAwait.es2018.1.ts, 0, 13))
+    }
+    for await (const x of iterable) {
+>x : Symbol(x, Decl(types.forAwait.es2018.1.ts, 22, 20))
+>iterable : Symbol(iterable, Decl(types.forAwait.es2018.1.ts, 1, 13))
+    }
+    for await (const x of iterableOfPromise) {
+>x : Symbol(x, Decl(types.forAwait.es2018.1.ts, 24, 20))
+>iterableOfPromise : Symbol(iterableOfPromise, Decl(types.forAwait.es2018.1.ts, 2, 13))
+    }
+    for await (y of asyncIterable) {
+>y : Symbol(y, Decl(types.forAwait.es2018.1.ts, 19, 7))
+>asyncIterable : Symbol(asyncIterable, Decl(types.forAwait.es2018.1.ts, 0, 13))
+    }
+    for await (y of iterable) {
+>y : Symbol(y, Decl(types.forAwait.es2018.1.ts, 19, 7))
+>iterable : Symbol(iterable, Decl(types.forAwait.es2018.1.ts, 1, 13))
+    }
+    for await (y of iterableOfPromise) {
+>y : Symbol(y, Decl(types.forAwait.es2018.1.ts, 19, 7))
+>iterableOfPromise : Symbol(iterableOfPromise, Decl(types.forAwait.es2018.1.ts, 2, 13))
+    }
+}
+

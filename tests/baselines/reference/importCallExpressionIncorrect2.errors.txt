@@ -8,3 +8,4 @@ tests/cases/conformance/dynamicImport/1.ts(1,9): error TS1109: Expression expect
     var x = import { foo } from './0';
             ~~~~~~
 !!! error TS1109: Expression expected.
+    

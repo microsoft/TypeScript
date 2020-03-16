@@ -40,12 +40,12 @@ const enum Tag2 {}
 >Tag2 : Tag2
 
 declare function isNonBlank2(value: string) : value is (string & Tag2);
->isNonBlank2 : (value: string) => value is string & Tag2
+>isNonBlank2 : (value: string) => value is never
 >value : string
 
 declare function doThis2(value: string & Tag2): void;
->doThis2 : (value: string & Tag2) => void
->value : string & Tag2
+>doThis2 : (value: never) => void
+>value : never
 
 declare function doThat2(value: string) : void;
 >doThat2 : (value: string) => void
@@ -53,13 +53,13 @@ declare function doThat2(value: string) : void;
 
 if (isNonBlank2(value)) {
 >isNonBlank2(value) : boolean
->isNonBlank2 : (value: string) => value is string & Tag2
+>isNonBlank2 : (value: string) => value is never
 >value : string
 
     doThis2(value);
 >doThis2(value) : void
->doThis2 : (value: string & Tag2) => void
->value : string & Tag2
+>doThis2 : (value: never) => void
+>value : never
 
 } else {
     doThat2(value);

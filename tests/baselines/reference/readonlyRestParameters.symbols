@@ -1,0 +1,81 @@
+=== tests/cases/conformance/es6/restParameters/readonlyRestParameters.ts ===
+function f0(a: string, b: string) {
+>f0 : Symbol(f0, Decl(readonlyRestParameters.ts, 0, 0))
+>a : Symbol(a, Decl(readonlyRestParameters.ts, 0, 12))
+>b : Symbol(b, Decl(readonlyRestParameters.ts, 0, 22))
+
+    f0(a, b);
+>f0 : Symbol(f0, Decl(readonlyRestParameters.ts, 0, 0))
+>a : Symbol(a, Decl(readonlyRestParameters.ts, 0, 12))
+>b : Symbol(b, Decl(readonlyRestParameters.ts, 0, 22))
+
+    f1(a, b);
+>f1 : Symbol(f1, Decl(readonlyRestParameters.ts, 4, 1))
+>a : Symbol(a, Decl(readonlyRestParameters.ts, 0, 12))
+>b : Symbol(b, Decl(readonlyRestParameters.ts, 0, 22))
+
+    f2(a, b);
+>f2 : Symbol(f2, Decl(readonlyRestParameters.ts, 11, 1))
+>a : Symbol(a, Decl(readonlyRestParameters.ts, 0, 12))
+>b : Symbol(b, Decl(readonlyRestParameters.ts, 0, 22))
+}
+
+function f1(...args: readonly string[]) {
+>f1 : Symbol(f1, Decl(readonlyRestParameters.ts, 4, 1))
+>args : Symbol(args, Decl(readonlyRestParameters.ts, 6, 12))
+
+    f0(...args);  // Error
+>f0 : Symbol(f0, Decl(readonlyRestParameters.ts, 0, 0))
+>args : Symbol(args, Decl(readonlyRestParameters.ts, 6, 12))
+
+    f1('abc', 'def');
+>f1 : Symbol(f1, Decl(readonlyRestParameters.ts, 4, 1))
+
+    f1('abc', ...args);
+>f1 : Symbol(f1, Decl(readonlyRestParameters.ts, 4, 1))
+>args : Symbol(args, Decl(readonlyRestParameters.ts, 6, 12))
+
+    f1(...args);
+>f1 : Symbol(f1, Decl(readonlyRestParameters.ts, 4, 1))
+>args : Symbol(args, Decl(readonlyRestParameters.ts, 6, 12))
+}
+
+function f2(...args: readonly [string, string]) {
+>f2 : Symbol(f2, Decl(readonlyRestParameters.ts, 11, 1))
+>args : Symbol(args, Decl(readonlyRestParameters.ts, 13, 12))
+
+    f0(...args);
+>f0 : Symbol(f0, Decl(readonlyRestParameters.ts, 0, 0))
+>args : Symbol(args, Decl(readonlyRestParameters.ts, 13, 12))
+
+    f1('abc', 'def');
+>f1 : Symbol(f1, Decl(readonlyRestParameters.ts, 4, 1))
+
+    f1('abc', ...args);
+>f1 : Symbol(f1, Decl(readonlyRestParameters.ts, 4, 1))
+>args : Symbol(args, Decl(readonlyRestParameters.ts, 13, 12))
+
+    f1(...args);
+>f1 : Symbol(f1, Decl(readonlyRestParameters.ts, 4, 1))
+>args : Symbol(args, Decl(readonlyRestParameters.ts, 13, 12))
+
+    f2('abc', 'def');
+>f2 : Symbol(f2, Decl(readonlyRestParameters.ts, 11, 1))
+
+    f2('abc', ...args);  // Error
+>f2 : Symbol(f2, Decl(readonlyRestParameters.ts, 11, 1))
+>args : Symbol(args, Decl(readonlyRestParameters.ts, 13, 12))
+
+    f2(...args);
+>f2 : Symbol(f2, Decl(readonlyRestParameters.ts, 11, 1))
+>args : Symbol(args, Decl(readonlyRestParameters.ts, 13, 12))
+}
+
+function f4(...args: readonly string[]) {
+>f4 : Symbol(f4, Decl(readonlyRestParameters.ts, 21, 1))
+>args : Symbol(args, Decl(readonlyRestParameters.ts, 23, 12))
+
+    args[0] = 'abc';  // Error
+>args : Symbol(args, Decl(readonlyRestParameters.ts, 23, 12))
+}
+

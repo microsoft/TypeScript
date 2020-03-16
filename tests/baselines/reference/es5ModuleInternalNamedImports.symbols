@@ -42,35 +42,35 @@ export module M {
 
     // Reexports
     export {M_V as v};
->M_V : Symbol(v, Decl(es5ModuleInternalNamedImports.ts, 21, 12))
+>M_V : Symbol(M_V, Decl(es5ModuleInternalNamedImports.ts, 2, 14))
 >v : Symbol(v, Decl(es5ModuleInternalNamedImports.ts, 21, 12))
 
     export {M_I as i};
->M_I : Symbol(i, Decl(es5ModuleInternalNamedImports.ts, 22, 12))
+>M_I : Symbol(M_I, Decl(es5ModuleInternalNamedImports.ts, 2, 23))
 >i : Symbol(i, Decl(es5ModuleInternalNamedImports.ts, 22, 12))
 
     export {M_C as c};
->M_C : Symbol(c, Decl(es5ModuleInternalNamedImports.ts, 23, 12))
+>M_C : Symbol(M_C, Decl(es5ModuleInternalNamedImports.ts, 4, 28))
 >c : Symbol(c, Decl(es5ModuleInternalNamedImports.ts, 23, 12))
 
     export {M_M as m};
->M_M : Symbol(m, Decl(es5ModuleInternalNamedImports.ts, 24, 12))
+>M_M : Symbol(M_M, Decl(es5ModuleInternalNamedImports.ts, 6, 24))
 >m : Symbol(m, Decl(es5ModuleInternalNamedImports.ts, 24, 12))
 
     export {M_MU as mu};
->M_MU : Symbol(mu, Decl(es5ModuleInternalNamedImports.ts, 25, 12))
+>M_MU : Symbol(M_MU, Decl(es5ModuleInternalNamedImports.ts, 8, 32))
 >mu : Symbol(mu, Decl(es5ModuleInternalNamedImports.ts, 25, 12))
 
     export {M_F as f};
->M_F : Symbol(f, Decl(es5ModuleInternalNamedImports.ts, 26, 12))
+>M_F : Symbol(M_F, Decl(es5ModuleInternalNamedImports.ts, 10, 26))
 >f : Symbol(f, Decl(es5ModuleInternalNamedImports.ts, 26, 12))
 
     export {M_E as e};
->M_E : Symbol(e, Decl(es5ModuleInternalNamedImports.ts, 27, 12))
+>M_E : Symbol(M_E, Decl(es5ModuleInternalNamedImports.ts, 12, 29))
 >e : Symbol(e, Decl(es5ModuleInternalNamedImports.ts, 27, 12))
 
     export {M_A as a};
->M_A : Symbol(a, Decl(es5ModuleInternalNamedImports.ts, 28, 12))
+>M_A : Symbol(M_A, Decl(es5ModuleInternalNamedImports.ts, 16, 29))
 >a : Symbol(a, Decl(es5ModuleInternalNamedImports.ts, 28, 12))
 
     import * as M2 from "M2";

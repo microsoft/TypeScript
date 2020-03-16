@@ -5,9 +5,9 @@ declare function f<T>(p: (t: T) => T): T;
 >t : T
 
 f(n => 3);
->f(n => 3) : {}
+>f(n => 3) : unknown
 >f : <T>(p: (t: T) => T) => T
->n => 3 : (n: {}) => number
->n : {}
+>n => 3 : (n: unknown) => number
+>n : unknown
 >3 : 3
 

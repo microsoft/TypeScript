@@ -15,6 +15,7 @@ var x = {
 
         return callback(this);
 >callback : Symbol(callback, Decl(collisionThisExpressionAndLocalVarInLambda.ts, 3, 14))
+>this : Symbol(globalThis)
     }
 }
 alert(x.doStuff(x => alert(x)));

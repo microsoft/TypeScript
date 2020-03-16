@@ -33,6 +33,23 @@ var b10: Indexed = { 0: { }, '1': { } }; // ok
 
 var b11: Indexed = { 0: { colour: "blue" } }; // nested object literal still errors
 
+// Repros inspired by #28752
+
+function test<T extends IFoo>() {
+    // No excess property checks on generic types
+    const obj1: T = { name: "test" };
+    // No excess property checks on intersections involving generics
+    const obj2: T & { prop: boolean } = { name: "test", prop: true };
+    // Excess property checks only on non-generic parts of unions
+    const obj3: T | { prop: boolean } = { name: "test", prop: true };
+    // Excess property checks only on non-generic parts of unions
+    const obj4: T & { prop: boolean } | { name: string } = { name: "test", prop: true };
+    // No excess property checks when union includes 'object' type
+    const obj5: object | { x: string } = { z: 'abc' }
+    // The 'object' type has no effect on intersections
+    const obj6: object & { x: string } = { z: 'abc' }
+}
+
 
 //// [objectLiteralExcessProperties.js]
 var b1 = { forword: "oops" };
@@ -46,3 +63,18 @@ var b8 = { couleur: "non" };
 var b9 = { forewarned: "still no" };
 var b10 = { 0: {}, '1': {} }; // ok
 var b11 = { 0: { colour: "blue" } }; // nested object literal still errors
+// Repros inspired by #28752
+function test() {
+    // No excess property checks on generic types
+    var obj1 = { name: "test" };
+    // No excess property checks on intersections involving generics
+    var obj2 = { name: "test", prop: true };
+    // Excess property checks only on non-generic parts of unions
+    var obj3 = { name: "test", prop: true };
+    // Excess property checks only on non-generic parts of unions
+    var obj4 = { name: "test", prop: true };
+    // No excess property checks when union includes 'object' type
+    var obj5 = { z: 'abc' };
+    // The 'object' type has no effect on intersections
+    var obj6 = { z: 'abc' };
+}

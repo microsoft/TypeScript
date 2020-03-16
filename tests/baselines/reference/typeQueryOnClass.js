@@ -72,14 +72,14 @@ var C = /** @class */ (function () {
         },
         set: function (x) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "sd", {
         get: function () {
             return 1;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C.prototype.baz = function (x) { return ''; };
@@ -89,14 +89,14 @@ var C = /** @class */ (function () {
         },
         set: function (x) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C.prototype, "id", {
         get: function () {
             return 1;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C.sa = 1;

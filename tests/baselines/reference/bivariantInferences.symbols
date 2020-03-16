@@ -24,8 +24,8 @@ declare const b: (string | number)[] | null[] | undefined[] | {}[];
 
 let x = a.equalsShallow(b);
 >x : Symbol(x, Decl(bivariantInferences.ts, 9, 3))
->a.equalsShallow : Symbol(equalsShallow, Decl(bivariantInferences.ts, 2, 20), Decl(bivariantInferences.ts, 2, 20), Decl(bivariantInferences.ts, 2, 20), Decl(bivariantInferences.ts, 2, 20))
+>a.equalsShallow : Symbol(Array.equalsShallow, Decl(bivariantInferences.ts, 2, 20), Decl(bivariantInferences.ts, 2, 20), Decl(bivariantInferences.ts, 2, 20), Decl(bivariantInferences.ts, 2, 20))
 >a : Symbol(a, Decl(bivariantInferences.ts, 6, 13))
->equalsShallow : Symbol(equalsShallow, Decl(bivariantInferences.ts, 2, 20), Decl(bivariantInferences.ts, 2, 20), Decl(bivariantInferences.ts, 2, 20), Decl(bivariantInferences.ts, 2, 20))
+>equalsShallow : Symbol(Array.equalsShallow, Decl(bivariantInferences.ts, 2, 20), Decl(bivariantInferences.ts, 2, 20), Decl(bivariantInferences.ts, 2, 20), Decl(bivariantInferences.ts, 2, 20))
 >b : Symbol(b, Decl(bivariantInferences.ts, 7, 13))
 

@@ -1,4 +1,4 @@
-// @target: esnext
+// @target: es2020
 // @declaration: true
 
 // Test BigInt functions

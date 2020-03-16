@@ -9,7 +9,7 @@ enum _this { // Error
 >_thisVal2 : _this._thisVal2
 }
 var f = () => this;
->f : () => any
->() => this : () => any
->this : any
+>f : () => typeof globalThis
+>() => this : () => typeof globalThis
+>this : typeof globalThis
 

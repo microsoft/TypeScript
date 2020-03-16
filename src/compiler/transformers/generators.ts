@@ -316,7 +316,7 @@ namespace ts {
             else if (inGeneratorFunctionBody) {
                 return visitJavaScriptInGeneratorFunctionBody(node);
             }
-            else if (transformFlags & TransformFlags.Generator) {
+            else if (isFunctionLikeDeclaration(node) && node.asteriskToken) {
                 return visitGenerator(node);
             }
             else if (transformFlags & TransformFlags.ContainsGenerator) {
@@ -587,7 +587,7 @@ namespace ts {
             transformAndEmitStatements(body.statements, statementOffset);
 
             const buildResult = build();
-            addStatementsAfterPrologue(statements, endLexicalEnvironment());
+            insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
             statements.push(createReturn(buildResult));
 
             // Restore previous generator state
@@ -667,28 +667,6 @@ namespace ts {
             }
         }
 
-        function isCompoundAssignment(kind: BinaryOperator): kind is CompoundAssignmentOperator {
-            return kind >= SyntaxKind.FirstCompoundAssignment
-                && kind <= SyntaxKind.LastCompoundAssignment;
-        }
-
-        function getOperatorForCompoundAssignment(kind: CompoundAssignmentOperator): BitwiseOperatorOrHigher {
-            switch (kind) {
-                case SyntaxKind.PlusEqualsToken: return SyntaxKind.PlusToken;
-                case SyntaxKind.MinusEqualsToken: return SyntaxKind.MinusToken;
-                case SyntaxKind.AsteriskEqualsToken: return SyntaxKind.AsteriskToken;
-                case SyntaxKind.AsteriskAsteriskEqualsToken: return SyntaxKind.AsteriskAsteriskToken;
-                case SyntaxKind.SlashEqualsToken: return SyntaxKind.SlashToken;
-                case SyntaxKind.PercentEqualsToken: return SyntaxKind.PercentToken;
-                case SyntaxKind.LessThanLessThanEqualsToken: return SyntaxKind.LessThanLessThanToken;
-                case SyntaxKind.GreaterThanGreaterThanEqualsToken: return SyntaxKind.GreaterThanGreaterThanToken;
-                case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken: return SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
-                case SyntaxKind.AmpersandEqualsToken: return SyntaxKind.AmpersandToken;
-                case SyntaxKind.BarEqualsToken: return SyntaxKind.BarToken;
-                case SyntaxKind.CaretEqualsToken: return SyntaxKind.CaretToken;
-            }
-        }
-
         /**
          * Visits a right-associative binary expression containing `yield`.
          *
@@ -748,7 +726,7 @@ namespace ts {
                             setTextRange(
                                 createBinary(
                                     cacheExpression(target),
-                                    getOperatorForCompoundAssignment(operator),
+                                    getNonAssignmentOperatorForCompoundAssignment(operator),
                                     visitNode(right, visitor, isExpression)
                                 ),
                                 node
@@ -936,7 +914,7 @@ namespace ts {
             //      x = %sent%;
 
             const resumeLabel = defineLabel();
-            const expression = visitNode(node.expression!, visitor, isExpression);
+            const expression = visitNode(node.expression, visitor, isExpression);
             if (node.asteriskToken) {
                 const iterator = (getEmitFlags(node.expression!) & EmitFlags.Iterator) === 0
                     ? createValuesHelper(context, expression, /*location*/ node)
@@ -1172,7 +1150,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function transformAndEmitStatements(statements: ReadonlyArray<Statement>, start = 0) {
+        function transformAndEmitStatements(statements: readonly Statement[], start = 0) {
             const numStatements = statements.length;
             for (let i = start; i < numStatements; i++) {
                 transformAndEmitStatement(statements[i]);
@@ -1262,7 +1240,7 @@ namespace ts {
             while (variablesWritten < numVariables) {
                 for (let i = variablesWritten; i < numVariables; i++) {
                     const variable = variables[i];
-                    if (containsYield(variable.initializer!) && pendingExpressions.length > 0) {
+                    if (containsYield(variable.initializer) && pendingExpressions.length > 0) {
                         break;
                     }
 
@@ -1283,7 +1261,7 @@ namespace ts {
             return setSourceMapRange(
                 createAssignment(
                     setSourceMapRange(<Identifier>getSynthesizedClone(node.name), node.name),
-                    visitNode(node.initializer!, visitor, isExpression)
+                    visitNode(node.initializer, visitor, isExpression)
                 ),
                 node
             );
@@ -1868,7 +1846,7 @@ namespace ts {
 
         function transformAndEmitThrowStatement(node: ThrowStatement): void {
             emitThrow(
-                visitNode(node.expression!, visitor, isExpression),
+                visitNode(node.expression, visitor, isExpression),
                 /*location*/ node
             );
         }
@@ -1975,12 +1953,11 @@ namespace ts {
         }
 
         function cacheExpression(node: Expression): Identifier {
-            let temp: Identifier;
             if (isGeneratedIdentifier(node) || getEmitFlags(node) & EmitFlags.HelperName) {
                 return <Identifier>node;
             }
 
-            temp = createTempVariable(hoistVariableDeclaration);
+            const temp = createTempVariable(hoistVariableDeclaration);
             emitAssignment(temp, node, /*location*/ node);
             return temp;
         }
@@ -2012,7 +1989,7 @@ namespace ts {
          */
         function markLabel(label: Label): void {
             Debug.assert(labelOffsets !== undefined, "No labels were defined.");
-            labelOffsets![label] = operations ? operations.length : 0;
+            labelOffsets[label] = operations ? operations.length : 0;
         }
 
         /**
@@ -2872,7 +2849,7 @@ namespace ts {
         function tryEnterOrLeaveBlock(operationIndex: number): void {
             if (blocks) {
                 for (; blockIndex < blockActions!.length && blockOffsets![blockIndex] <= operationIndex; blockIndex++) {
-                    const block = blocks[blockIndex];
+                    const block: CodeBlock = blocks[blockIndex];
                     const blockAction = blockActions![blockIndex];
                     switch (block.kind) {
                         case CodeBlockKind.Exception:
@@ -3176,7 +3153,7 @@ namespace ts {
     function createGeneratorHelper(context: TransformationContext, body: FunctionExpression) {
         context.requestEmitHelper(generatorHelper);
         return createCall(
-            getHelperName("__generator"),
+            getUnscopedHelperName("__generator"),
             /*typeArguments*/ undefined,
             [createThis(), body]);
     }
@@ -3240,8 +3217,9 @@ namespace ts {
     //                        entering a finally block.
     //
     // For examples of how these are used, see the comments in ./transformers/generators.ts
-    const generatorHelper: EmitHelper = {
+    export const generatorHelper: UnscopedEmitHelper = {
         name: "typescript:generator",
+        importName: "__generator",
         scoped: false,
         priority: 6,
         text: `

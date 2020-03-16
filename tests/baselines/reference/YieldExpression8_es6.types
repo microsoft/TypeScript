@@ -2,13 +2,13 @@
 yield(foo);
 >yield(foo) : any
 >yield : any
->foo : () => IterableIterator<typeof foo>
+>foo : () => Generator<typeof foo, void, unknown>
 
 function* foo() {
->foo : () => IterableIterator<typeof foo>
+>foo : () => Generator<typeof foo, void, unknown>
 
   yield(foo);
 >yield(foo) : any
->(foo) : () => IterableIterator<typeof foo>
->foo : () => IterableIterator<typeof foo>
+>(foo) : () => Generator<typeof foo, void, unknown>
+>foo : () => Generator<typeof foo, void, unknown>
 }

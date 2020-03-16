@@ -5,7 +5,7 @@ tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOpe
 tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndInvalidOperator.ts(15,10): error TS2365: Operator '+' cannot be applied to types 'Object' and 'null'.
 tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndInvalidOperator.ts(16,10): error TS2365: Operator '+' cannot be applied to types 'null' and 'void'.
 tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndInvalidOperator.ts(19,10): error TS2365: Operator '+' cannot be applied to types 'null' and 'Number'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndInvalidOperator.ts(20,10): error TS2365: Operator '+' cannot be applied to types 'null' and 'true'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndInvalidOperator.ts(20,10): error TS2365: Operator '+' cannot be applied to types 'null' and 'boolean'.
 tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndInvalidOperator.ts(21,10): error TS2365: Operator '+' cannot be applied to types 'null' and '{ a: string; }'.
 tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndInvalidOperator.ts(22,11): error TS2365: Operator '+' cannot be applied to types 'null' and 'void'.
 tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndInvalidOperator.ts(23,11): error TS2365: Operator '+' cannot be applied to types 'null' and '() => void'.
@@ -47,7 +47,7 @@ tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOpe
 !!! error TS2365: Operator '+' cannot be applied to types 'null' and 'Number'.
     var r8 = null + true;
              ~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'true'.
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'boolean'.
     var r9 = null + { a: '' };
              ~~~~~~~~~~~~~~~~
 !!! error TS2365: Operator '+' cannot be applied to types 'null' and '{ a: string; }'.

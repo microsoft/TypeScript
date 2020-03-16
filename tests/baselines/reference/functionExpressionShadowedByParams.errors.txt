@@ -1,4 +1,5 @@
-tests/cases/compiler/functionExpressionShadowedByParams.ts(3,4): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'Number' has no compatible call signatures.
+tests/cases/compiler/functionExpressionShadowedByParams.ts(3,4): error TS2349: This expression is not callable.
+  Type 'Number' has no call signatures.
 tests/cases/compiler/functionExpressionShadowedByParams.ts(10,9): error TS2339: Property 'apply' does not exist on type 'number'.
 
 
@@ -6,8 +7,9 @@ tests/cases/compiler/functionExpressionShadowedByParams.ts(10,9): error TS2339: 
     function b1(b1: number) {
        b1.toPrecision(2); // should not error
        b1(12); // should error
-       ~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'Number' has no compatible call signatures.
+       ~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'Number' has no call signatures.
     }
     
     

@@ -26,7 +26,7 @@ MyClass.prototype.optionalParam = function(required, notRequired) {
 >notRequired : string
 
     return this;
->this : MyClass
+>this : this
 
 };
 let pInst = new MyClass();

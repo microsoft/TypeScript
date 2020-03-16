@@ -1,0 +1,27 @@
+=== tests/cases/compiler/example.ts ===
+export default function add(a: number, b: number) {
+>add : Symbol(add, Decl(example.ts, 0, 0))
+>a : Symbol(a, Decl(example.ts, 0, 28))
+>b : Symbol(b, Decl(example.ts, 0, 38))
+
+    return a + b;
+>a : Symbol(a, Decl(example.ts, 0, 28))
+>b : Symbol(b, Decl(example.ts, 0, 38))
+}
+
+=== tests/cases/compiler/test.ts ===
+import * as example from './example';
+>example : Symbol(example, Decl(test.ts, 0, 6))
+
+declare function test<T>(object: T, method: keyof T): void;
+>test : Symbol(test, Decl(test.ts, 0, 37))
+>T : Symbol(T, Decl(test.ts, 2, 22))
+>object : Symbol(object, Decl(test.ts, 2, 25))
+>T : Symbol(T, Decl(test.ts, 2, 22))
+>method : Symbol(method, Decl(test.ts, 2, 35))
+>T : Symbol(T, Decl(test.ts, 2, 22))
+
+test(example, "default");
+>test : Symbol(test, Decl(test.ts, 0, 37))
+>example : Symbol(example, Decl(test.ts, 0, 6))
+

@@ -13,13 +13,13 @@ export { from "./t1"
 
 === tests/cases/compiler/t4.ts ===
 export { x as a from "./t1"
->x : Symbol(a, Decl(t4.ts, 0, 8))
+>x : Symbol(x, Decl(t1.ts, 0, 10))
 >a : Symbol(a, Decl(t4.ts, 0, 8))
 >from : Symbol(from, Decl(t4.ts, 0, 15))
 
 === tests/cases/compiler/t5.ts ===
 export { x as a, from "./t1"
->x : Symbol(a, Decl(t5.ts, 0, 8))
+>x : Symbol(x, Decl(t1.ts, 0, 10))
 >a : Symbol(a, Decl(t5.ts, 0, 8))
 >from : Symbol(from, Decl(t5.ts, 0, 16))
 

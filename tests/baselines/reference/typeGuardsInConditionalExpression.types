@@ -211,11 +211,11 @@ function foo8(x: number | string | boolean) {
 >typeof x === "boolean"        ? x // boolean        : x == 10 : boolean
 >typeof x === "boolean" : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : number | boolean
+>x : number | true
 >"boolean" : "boolean"
 
         ? x // boolean
->x : boolean
+>x : true
 
         : x == 10)); // boolean
 >x == 10 : boolean
@@ -286,7 +286,7 @@ function foo10(x: number | string | boolean) {
         && typeof x === "number"
 >typeof x === "number" : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : number | boolean
+>x : number | true
 >"number" : "number"
 
         && x.toString()); // x is number
@@ -326,7 +326,7 @@ function foo11(x: number | string | boolean) {
         && typeof x === "number"
 >typeof x === "number" : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : number | boolean
+>x : number | true
 >"number" : "number"
 
         && (x = 10) // assignment to x
@@ -379,7 +379,7 @@ function foo12(x: number | string | boolean) {
         && typeof x === "number"
 >typeof x === "number" : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : number | boolean
+>x : number | true
 >"number" : "number"
 
         && x); // x is number

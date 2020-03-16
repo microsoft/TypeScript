@@ -551,3 +551,293 @@ type C2<T, V, E> =
 >E : Symbol(E, Decl(conditionalTypes2.ts, 144, 13))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 144, 8))
 
+// Repro from #28654
+
+type MaybeTrue<T extends { b: boolean }> = true extends T["b"] ? "yes" : "no";
+>MaybeTrue : Symbol(MaybeTrue, Decl(conditionalTypes2.ts, 145, 63))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 149, 15))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 149, 26))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 149, 15))
+
+type T0 = MaybeTrue<{ b: never }>     // "no"
+>T0 : Symbol(T0, Decl(conditionalTypes2.ts, 149, 78))
+>MaybeTrue : Symbol(MaybeTrue, Decl(conditionalTypes2.ts, 145, 63))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 151, 21))
+
+type T1 = MaybeTrue<{ b: false }>;    // "no"
+>T1 : Symbol(T1, Decl(conditionalTypes2.ts, 151, 33))
+>MaybeTrue : Symbol(MaybeTrue, Decl(conditionalTypes2.ts, 145, 63))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 152, 21))
+
+type T2 = MaybeTrue<{ b: true }>;     // "yes"
+>T2 : Symbol(T2, Decl(conditionalTypes2.ts, 152, 34))
+>MaybeTrue : Symbol(MaybeTrue, Decl(conditionalTypes2.ts, 145, 63))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 153, 21))
+
+type T3 = MaybeTrue<{ b: boolean }>;  // "yes"
+>T3 : Symbol(T3, Decl(conditionalTypes2.ts, 153, 33))
+>MaybeTrue : Symbol(MaybeTrue, Decl(conditionalTypes2.ts, 145, 63))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 154, 21))
+
+// Repro from #28824
+
+type Union = 'a' | 'b';
+>Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
+
+type Product<A extends Union, B> = { f1: A, f2: B};
+>Product : Symbol(Product, Decl(conditionalTypes2.ts, 158, 23))
+>A : Symbol(A, Decl(conditionalTypes2.ts, 159, 13))
+>Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
+>B : Symbol(B, Decl(conditionalTypes2.ts, 159, 29))
+>f1 : Symbol(f1, Decl(conditionalTypes2.ts, 159, 36))
+>A : Symbol(A, Decl(conditionalTypes2.ts, 159, 13))
+>f2 : Symbol(f2, Decl(conditionalTypes2.ts, 159, 43))
+>B : Symbol(B, Decl(conditionalTypes2.ts, 159, 29))
+
+type ProductUnion = Product<'a', 0> | Product<'b', 1>;
+>ProductUnion : Symbol(ProductUnion, Decl(conditionalTypes2.ts, 159, 51))
+>Product : Symbol(Product, Decl(conditionalTypes2.ts, 158, 23))
+>Product : Symbol(Product, Decl(conditionalTypes2.ts, 158, 23))
+
+// {a: "b"; b: "a"}
+type UnionComplement = {
+>UnionComplement : Symbol(UnionComplement, Decl(conditionalTypes2.ts, 160, 54))
+
+  [K in Union]: Exclude<Union, K>
+>K : Symbol(K, Decl(conditionalTypes2.ts, 164, 3))
+>Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
+>K : Symbol(K, Decl(conditionalTypes2.ts, 164, 3))
+
+};
+type UCA = UnionComplement['a'];
+>UCA : Symbol(UCA, Decl(conditionalTypes2.ts, 165, 2))
+>UnionComplement : Symbol(UnionComplement, Decl(conditionalTypes2.ts, 160, 54))
+
+type UCB = UnionComplement['b'];
+>UCB : Symbol(UCB, Decl(conditionalTypes2.ts, 166, 32))
+>UnionComplement : Symbol(UnionComplement, Decl(conditionalTypes2.ts, 160, 54))
+
+// {a: "a"; b: "b"}
+type UnionComplementComplement = {
+>UnionComplementComplement : Symbol(UnionComplementComplement, Decl(conditionalTypes2.ts, 167, 32))
+
+  [K in Union]: Exclude<Union, Exclude<Union, K>>
+>K : Symbol(K, Decl(conditionalTypes2.ts, 171, 3))
+>Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
+>K : Symbol(K, Decl(conditionalTypes2.ts, 171, 3))
+
+};
+type UCCA = UnionComplementComplement['a'];
+>UCCA : Symbol(UCCA, Decl(conditionalTypes2.ts, 172, 2))
+>UnionComplementComplement : Symbol(UnionComplementComplement, Decl(conditionalTypes2.ts, 167, 32))
+
+type UCCB = UnionComplementComplement['b'];
+>UCCB : Symbol(UCCB, Decl(conditionalTypes2.ts, 173, 43))
+>UnionComplementComplement : Symbol(UnionComplementComplement, Decl(conditionalTypes2.ts, 167, 32))
+
+// {a: Product<'b', 1>; b: Product<'a', 0>}
+type ProductComplement = {
+>ProductComplement : Symbol(ProductComplement, Decl(conditionalTypes2.ts, 174, 43))
+
+  [K in Union]: Exclude<ProductUnion, { f1: K }>
+>K : Symbol(K, Decl(conditionalTypes2.ts, 178, 3))
+>Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>ProductUnion : Symbol(ProductUnion, Decl(conditionalTypes2.ts, 159, 51))
+>f1 : Symbol(f1, Decl(conditionalTypes2.ts, 178, 39))
+>K : Symbol(K, Decl(conditionalTypes2.ts, 178, 3))
+
+};
+type PCA = ProductComplement['a'];
+>PCA : Symbol(PCA, Decl(conditionalTypes2.ts, 179, 2))
+>ProductComplement : Symbol(ProductComplement, Decl(conditionalTypes2.ts, 174, 43))
+
+type PCB = ProductComplement['b'];
+>PCB : Symbol(PCB, Decl(conditionalTypes2.ts, 180, 34))
+>ProductComplement : Symbol(ProductComplement, Decl(conditionalTypes2.ts, 174, 43))
+
+// {a: Product<'a', 0>; b: Product<'b', 1>}
+type ProductComplementComplement = {
+>ProductComplementComplement : Symbol(ProductComplementComplement, Decl(conditionalTypes2.ts, 181, 34))
+
+  [K in Union]: Exclude<ProductUnion, Exclude<ProductUnion, { f1: K }>>
+>K : Symbol(K, Decl(conditionalTypes2.ts, 185, 3))
+>Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>ProductUnion : Symbol(ProductUnion, Decl(conditionalTypes2.ts, 159, 51))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>ProductUnion : Symbol(ProductUnion, Decl(conditionalTypes2.ts, 159, 51))
+>f1 : Symbol(f1, Decl(conditionalTypes2.ts, 185, 61))
+>K : Symbol(K, Decl(conditionalTypes2.ts, 185, 3))
+
+};
+type PCCA = ProductComplementComplement['a'];
+>PCCA : Symbol(PCCA, Decl(conditionalTypes2.ts, 186, 2))
+>ProductComplementComplement : Symbol(ProductComplementComplement, Decl(conditionalTypes2.ts, 181, 34))
+
+type PCCB = ProductComplementComplement['b'];
+>PCCB : Symbol(PCCB, Decl(conditionalTypes2.ts, 187, 45))
+>ProductComplementComplement : Symbol(ProductComplementComplement, Decl(conditionalTypes2.ts, 181, 34))
+
+// Repro from #31326
+
+type Hmm<T, U extends T> = U extends T ? { [K in keyof U]: number } : never;
+>Hmm : Symbol(Hmm, Decl(conditionalTypes2.ts, 188, 45))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 192, 9))
+>U : Symbol(U, Decl(conditionalTypes2.ts, 192, 11))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 192, 9))
+>U : Symbol(U, Decl(conditionalTypes2.ts, 192, 11))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 192, 9))
+>K : Symbol(K, Decl(conditionalTypes2.ts, 192, 44))
+>U : Symbol(U, Decl(conditionalTypes2.ts, 192, 11))
+
+type What = Hmm<{}, { a: string }>
+>What : Symbol(What, Decl(conditionalTypes2.ts, 192, 76))
+>Hmm : Symbol(Hmm, Decl(conditionalTypes2.ts, 188, 45))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 193, 21))
+
+const w: What = { a: 4 };
+>w : Symbol(w, Decl(conditionalTypes2.ts, 194, 5))
+>What : Symbol(What, Decl(conditionalTypes2.ts, 192, 76))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 194, 17))
+
+// Repro from #33568
+
+declare function save(_response: IRootResponse<string>): void;
+>save : Symbol(save, Decl(conditionalTypes2.ts, 194, 25))
+>_response : Symbol(_response, Decl(conditionalTypes2.ts, 198, 22))
+>IRootResponse : Symbol(IRootResponse, Decl(conditionalTypes2.ts, 206, 1))
+
+exportCommand(save);
+>exportCommand : Symbol(exportCommand, Decl(conditionalTypes2.ts, 200, 20))
+>save : Symbol(save, Decl(conditionalTypes2.ts, 194, 25))
+
+declare function exportCommand<TResponse>(functionToCall: IExportCallback<TResponse>): void;
+>exportCommand : Symbol(exportCommand, Decl(conditionalTypes2.ts, 200, 20))
+>TResponse : Symbol(TResponse, Decl(conditionalTypes2.ts, 202, 31))
+>functionToCall : Symbol(functionToCall, Decl(conditionalTypes2.ts, 202, 42))
+>IExportCallback : Symbol(IExportCallback, Decl(conditionalTypes2.ts, 202, 92))
+>TResponse : Symbol(TResponse, Decl(conditionalTypes2.ts, 202, 31))
+
+interface IExportCallback<TResponse> {
+>IExportCallback : Symbol(IExportCallback, Decl(conditionalTypes2.ts, 202, 92))
+>TResponse : Symbol(TResponse, Decl(conditionalTypes2.ts, 204, 26))
+
+	(response: IRootResponse<TResponse>): void;
+>response : Symbol(response, Decl(conditionalTypes2.ts, 205, 2))
+>IRootResponse : Symbol(IRootResponse, Decl(conditionalTypes2.ts, 206, 1))
+>TResponse : Symbol(TResponse, Decl(conditionalTypes2.ts, 204, 26))
+}
+
+type IRootResponse<TResponse> =
+>IRootResponse : Symbol(IRootResponse, Decl(conditionalTypes2.ts, 206, 1))
+>TResponse : Symbol(TResponse, Decl(conditionalTypes2.ts, 208, 19))
+
+	TResponse extends IRecord ? IRecordResponse<TResponse> : IResponse<TResponse>;
+>TResponse : Symbol(TResponse, Decl(conditionalTypes2.ts, 208, 19))
+>IRecord : Symbol(IRecord, Decl(conditionalTypes2.ts, 209, 79))
+>IRecordResponse : Symbol(IRecordResponse, Decl(conditionalTypes2.ts, 213, 1))
+>TResponse : Symbol(TResponse, Decl(conditionalTypes2.ts, 208, 19))
+>IResponse : Symbol(IResponse, Decl(conditionalTypes2.ts, 217, 2))
+>TResponse : Symbol(TResponse, Decl(conditionalTypes2.ts, 208, 19))
+
+interface IRecord {
+>IRecord : Symbol(IRecord, Decl(conditionalTypes2.ts, 209, 79))
+
+	readonly Id: string;
+>Id : Symbol(IRecord.Id, Decl(conditionalTypes2.ts, 211, 19))
+}
+
+declare type IRecordResponse<T extends IRecord> = IResponse<T> & {
+>IRecordResponse : Symbol(IRecordResponse, Decl(conditionalTypes2.ts, 213, 1))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 215, 29))
+>IRecord : Symbol(IRecord, Decl(conditionalTypes2.ts, 209, 79))
+>IResponse : Symbol(IResponse, Decl(conditionalTypes2.ts, 217, 2))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 215, 29))
+
+	sendRecord(): void;
+>sendRecord : Symbol(sendRecord, Decl(conditionalTypes2.ts, 215, 66))
+
+};
+
+declare type IResponse<T> = {
+>IResponse : Symbol(IResponse, Decl(conditionalTypes2.ts, 217, 2))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 219, 23))
+
+	sendValue(name: keyof GetAllPropertiesOfType<T, string>): void;
+>sendValue : Symbol(sendValue, Decl(conditionalTypes2.ts, 219, 29))
+>name : Symbol(name, Decl(conditionalTypes2.ts, 220, 11))
+>GetAllPropertiesOfType : Symbol(GetAllPropertiesOfType, Decl(conditionalTypes2.ts, 225, 28))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 219, 23))
+
+};
+
+declare type GetPropertyNamesOfType<T, RestrictToType> = {
+>GetPropertyNamesOfType : Symbol(GetPropertyNamesOfType, Decl(conditionalTypes2.ts, 221, 2))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 223, 36))
+>RestrictToType : Symbol(RestrictToType, Decl(conditionalTypes2.ts, 223, 38))
+
+	[PropertyName in Extract<keyof T, string>]: T[PropertyName] extends RestrictToType ? PropertyName : never
+>PropertyName : Symbol(PropertyName, Decl(conditionalTypes2.ts, 224, 2))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 223, 36))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 223, 36))
+>PropertyName : Symbol(PropertyName, Decl(conditionalTypes2.ts, 224, 2))
+>RestrictToType : Symbol(RestrictToType, Decl(conditionalTypes2.ts, 223, 38))
+>PropertyName : Symbol(PropertyName, Decl(conditionalTypes2.ts, 224, 2))
+
+}[Extract<keyof T, string>];
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 223, 36))
+
+declare type GetAllPropertiesOfType<T, RestrictToType> = Pick<
+>GetAllPropertiesOfType : Symbol(GetAllPropertiesOfType, Decl(conditionalTypes2.ts, 225, 28))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 227, 36))
+>RestrictToType : Symbol(RestrictToType, Decl(conditionalTypes2.ts, 227, 38))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+	T,
+>T : Symbol(T, Decl(conditionalTypes2.ts, 227, 36))
+
+	GetPropertyNamesOfType<Required<T>, RestrictToType>
+>GetPropertyNamesOfType : Symbol(GetPropertyNamesOfType, Decl(conditionalTypes2.ts, 221, 2))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 227, 36))
+>RestrictToType : Symbol(RestrictToType, Decl(conditionalTypes2.ts, 227, 38))
+
+>;
+
+// Repro from #33568
+
+declare function ff(x: Foo3<string>): void;
+>ff : Symbol(ff, Decl(conditionalTypes2.ts, 230, 2))
+>x : Symbol(x, Decl(conditionalTypes2.ts, 234, 20))
+>Foo3 : Symbol(Foo3, Decl(conditionalTypes2.ts, 235, 54))
+
+declare function gg<T>(f: (x: Foo3<T>) => void): void;
+>gg : Symbol(gg, Decl(conditionalTypes2.ts, 234, 43))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 235, 20))
+>f : Symbol(f, Decl(conditionalTypes2.ts, 235, 23))
+>x : Symbol(x, Decl(conditionalTypes2.ts, 235, 27))
+>Foo3 : Symbol(Foo3, Decl(conditionalTypes2.ts, 235, 54))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 235, 20))
+
+type Foo3<T> = T extends number ? { n: T } : { x: T };
+>Foo3 : Symbol(Foo3, Decl(conditionalTypes2.ts, 235, 54))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 236, 10))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 236, 10))
+>n : Symbol(n, Decl(conditionalTypes2.ts, 236, 35))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 236, 10))
+>x : Symbol(x, Decl(conditionalTypes2.ts, 236, 46))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 236, 10))
+
+gg(ff);
+>gg : Symbol(gg, Decl(conditionalTypes2.ts, 234, 43))
+>ff : Symbol(ff, Decl(conditionalTypes2.ts, 230, 2))
+

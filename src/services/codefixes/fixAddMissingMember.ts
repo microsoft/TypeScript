@@ -12,7 +12,7 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
-            const info = getInfo(context.sourceFile, context.span.start, context.program.getTypeChecker());
+            const info = getInfo(context.sourceFile, context.span.start, context.program.getTypeChecker(), context.program);
             if (!info) return undefined;
 
             if (info.kind === InfoKind.Enum) {
@@ -23,7 +23,7 @@ namespace ts.codefix {
             const { parentDeclaration, declSourceFile, inJs, makeStatic, token, call } = info;
             const methodCodeAction = call && getActionForMethodDeclaration(context, declSourceFile, parentDeclaration, token, call, makeStatic, inJs, context.preferences);
             const addMember = inJs && !isInterfaceDeclaration(parentDeclaration) ?
-                singleElementArray(getActionsForAddMissingMemberInJavascriptFile(context, declSourceFile, parentDeclaration, token.text, makeStatic)) :
+                singleElementArray(getActionsForAddMissingMemberInJavascriptFile(context, declSourceFile, parentDeclaration, token, makeStatic)) :
                 getActionsForAddMissingMemberInTypeScriptFile(context, declSourceFile, parentDeclaration, token, makeStatic);
             return concatenate(singleElementArray(methodCodeAction), addMember);
         },
@@ -37,7 +37,7 @@ namespace ts.codefix {
 
             return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
                 eachDiagnostic(context, errorCodes, diag => {
-                    const info = getInfo(diag.file, diag.start, checker);
+                    const info = getInfo(diag.file, diag.start, checker, context.program);
                     if (!info || !addToSeen(seen, getNodeId(info.parentDeclaration) + "#" + info.token.text)) {
                         return;
                     }
@@ -65,16 +65,16 @@ namespace ts.codefix {
                         const { parentDeclaration, declSourceFile, inJs, makeStatic, token, call } = info;
 
                         // Always prefer to add a method declaration if possible.
-                        if (call) {
+                        if (call && !isPrivateIdentifier(token)) {
                             addMethodDeclaration(context, changes, declSourceFile, parentDeclaration, token, call, makeStatic, inJs, preferences);
                         }
                         else {
                             if (inJs && !isInterfaceDeclaration(parentDeclaration)) {
-                                addMissingMemberInJs(changes, declSourceFile, parentDeclaration, token.text, makeStatic);
+                                addMissingMemberInJs(changes, declSourceFile, parentDeclaration, token, makeStatic);
                             }
                             else {
                                 const typeNode = getTypeNode(program.getTypeChecker(), parentDeclaration, token);
-                                addPropertyDeclaration(changes, declSourceFile, parentDeclaration, token.text, typeNode, makeStatic);
+                                addPropertyDeclaration(changes, declSourceFile, parentDeclaration, token.text, typeNode, makeStatic ? ModifierFlags.Static : 0);
                             }
                         }
                     }
@@ -83,7 +83,7 @@ namespace ts.codefix {
         },
     });
 
-    function getAllSupers(decl: ClassOrInterface | undefined, checker: TypeChecker): ReadonlyArray<ClassOrInterface> {
+    function getAllSupers(decl: ClassOrInterface | undefined, checker: TypeChecker): readonly ClassOrInterface[] {
         const res: ClassLikeDeclaration[] = [];
         while (decl) {
             const superElement = getClassExtendsHeritageElement(decl);
@@ -104,7 +104,7 @@ namespace ts.codefix {
     }
     interface ClassOrInterfaceInfo {
         readonly kind: InfoKind.ClassOrInterface;
-        readonly token: Identifier;
+        readonly token: Identifier | PrivateIdentifier;
         readonly parentDeclaration: ClassOrInterface;
         readonly makeStatic: boolean;
         readonly declSourceFile: SourceFile;
@@ -113,12 +113,12 @@ namespace ts.codefix {
     }
     type Info = EnumInfo | ClassOrInterfaceInfo;
 
-    function getInfo(tokenSourceFile: SourceFile, tokenPos: number, checker: TypeChecker): Info | undefined {
+    function getInfo(tokenSourceFile: SourceFile, tokenPos: number, checker: TypeChecker, program: Program): Info | undefined {
         // The identifier of the missing property. eg:
         // this.missing = 1;
         //      ^^^^^^^
         const token = getTokenAtPosition(tokenSourceFile, tokenPos);
-        if (!isIdentifier(token)) {
+        if (!isIdentifier(token) && !isPrivateIdentifier(token)) {
             return undefined;
         }
 
@@ -129,29 +129,47 @@ namespace ts.codefix {
         const { symbol } = leftExpressionType;
         if (!symbol || !symbol.declarations) return undefined;
 
+        const classDeclaration = find(symbol.declarations, isClassLike);
+        // Don't suggest adding private identifiers to anything other than a class.
+        if (!classDeclaration && isPrivateIdentifier(token)) {
+            return undefined;
+        }
+
         // Prefer to change the class instead of the interface if they are merged
-        const classOrInterface = find(symbol.declarations, isClassLike) || find(symbol.declarations, isInterfaceDeclaration);
-        if (classOrInterface) {
+        const classOrInterface = classDeclaration || find(symbol.declarations, isInterfaceDeclaration);
+        if (classOrInterface && !program.isSourceFileFromExternalLibrary(classOrInterface.getSourceFile())) {
             const makeStatic = ((leftExpressionType as TypeReference).target || leftExpressionType) !== checker.getDeclaredTypeOfSymbol(symbol);
+            if (makeStatic && (isPrivateIdentifier(token) || isInterfaceDeclaration(classOrInterface))) {
+                return undefined;
+            }
+
             const declSourceFile = classOrInterface.getSourceFile();
             const inJs = isSourceFileJS(declSourceFile);
             const call = tryCast(parent.parent, isCallExpression);
             return { kind: InfoKind.ClassOrInterface, token, parentDeclaration: classOrInterface, makeStatic, declSourceFile, inJs, call };
         }
+
         const enumDeclaration = find(symbol.declarations, isEnumDeclaration);
-        if (enumDeclaration) {
+        if (enumDeclaration && !isPrivateIdentifier(token) && !program.isSourceFileFromExternalLibrary(enumDeclaration.getSourceFile())) {
             return { kind: InfoKind.Enum, token, parentDeclaration: enumDeclaration };
         }
         return undefined;
     }
 
-    function getActionsForAddMissingMemberInJavascriptFile(context: CodeFixContext, declSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, makeStatic: boolean): CodeFixAction | undefined {
-        const changes = textChanges.ChangeTracker.with(context, t => addMissingMemberInJs(t, declSourceFile, classDeclaration, tokenName, makeStatic));
-        return changes.length === 0 ? undefined
-            : createCodeFixAction(fixName, changes, [makeStatic ? Diagnostics.Initialize_static_property_0 : Diagnostics.Initialize_property_0_in_the_constructor, tokenName], fixId, Diagnostics.Add_all_missing_members);
+    function getActionsForAddMissingMemberInJavascriptFile(context: CodeFixContext, declSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, token: Identifier | PrivateIdentifier, makeStatic: boolean): CodeFixAction | undefined {
+        const changes = textChanges.ChangeTracker.with(context, t => addMissingMemberInJs(t, declSourceFile, classDeclaration, token, makeStatic));
+        if (changes.length === 0) {
+            return undefined;
+        }
+
+        const diagnostic = makeStatic ? Diagnostics.Initialize_static_property_0 :
+            isPrivateIdentifier(token) ? Diagnostics.Declare_a_private_field_named_0 : Diagnostics.Initialize_property_0_in_the_constructor;
+
+        return createCodeFixAction(fixName, changes, [diagnostic, token.text], fixId, Diagnostics.Add_all_missing_members);
     }
 
-    function addMissingMemberInJs(changeTracker: textChanges.ChangeTracker, declSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, makeStatic: boolean): void {
+    function addMissingMemberInJs(changeTracker: textChanges.ChangeTracker, declSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, token: Identifier | PrivateIdentifier, makeStatic: boolean): void {
+        const tokenName = token.text;
         if (makeStatic) {
             if (classDeclaration.kind === SyntaxKind.ClassExpression) {
                 return;
@@ -159,6 +177,23 @@ namespace ts.codefix {
             const className = classDeclaration.name!.getText();
             const staticInitialization = initializePropertyToUndefined(createIdentifier(className), tokenName);
             changeTracker.insertNodeAfter(declSourceFile, classDeclaration, staticInitialization);
+        }
+        else if (isPrivateIdentifier(token)) {
+            const property = createProperty(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                tokenName,
+                /*questionToken*/ undefined,
+                /*type*/ undefined,
+                /*initializer*/ undefined);
+
+            const lastProp = getNodeToInsertPropertyAfter(classDeclaration);
+            if (lastProp) {
+                changeTracker.insertNodeAfter(declSourceFile, lastProp, property);
+            }
+            else {
+                changeTracker.insertNodeAtClassStart(declSourceFile, classDeclaration, property);
+            }
         }
         else {
             const classConstructor = getFirstConstructorWithBody(classDeclaration);
@@ -174,10 +209,19 @@ namespace ts.codefix {
         return createStatement(createAssignment(createPropertyAccess(obj, propertyName), createIdentifier("undefined")));
     }
 
-    function getActionsForAddMissingMemberInTypeScriptFile(context: CodeFixContext, declSourceFile: SourceFile, classDeclaration: ClassOrInterface, token: Identifier, makeStatic: boolean): CodeFixAction[] | undefined {
+    function getActionsForAddMissingMemberInTypeScriptFile(context: CodeFixContext, declSourceFile: SourceFile, classDeclaration: ClassOrInterface, token: Identifier | PrivateIdentifier, makeStatic: boolean): CodeFixAction[] | undefined {
         const typeNode = getTypeNode(context.program.getTypeChecker(), classDeclaration, token);
-        const addProp = createAddPropertyDeclarationAction(context, declSourceFile, classDeclaration, makeStatic, token.text, typeNode);
-        return makeStatic ? [addProp] : [addProp, createAddIndexSignatureAction(context, declSourceFile, classDeclaration, token.text, typeNode)];
+        const actions: CodeFixAction[] = [createAddPropertyDeclarationAction(context, declSourceFile, classDeclaration, token.text, typeNode, makeStatic ? ModifierFlags.Static : 0)];
+        if (makeStatic || isPrivateIdentifier(token)) {
+            return actions;
+        }
+
+        if (startsWithUnderscore(token.text)) {
+            actions.unshift(createAddPropertyDeclarationAction(context, declSourceFile, classDeclaration, token.text, typeNode, ModifierFlags.Private));
+        }
+
+        actions.push(createAddIndexSignatureAction(context, declSourceFile, classDeclaration, token.text, typeNode));
+        return actions;
     }
 
     function getTypeNode(checker: TypeChecker, classDeclaration: ClassOrInterface, token: Node) {
@@ -195,15 +239,18 @@ namespace ts.codefix {
         return typeNode || createKeywordTypeNode(SyntaxKind.AnyKeyword);
     }
 
-    function createAddPropertyDeclarationAction(context: CodeFixContext, declSourceFile: SourceFile, classDeclaration: ClassOrInterface, makeStatic: boolean, tokenName: string, typeNode: TypeNode): CodeFixAction {
-        const changes = textChanges.ChangeTracker.with(context, t => addPropertyDeclaration(t, declSourceFile, classDeclaration, tokenName, typeNode, makeStatic));
-        return createCodeFixAction(fixName, changes, [makeStatic ? Diagnostics.Declare_static_property_0 : Diagnostics.Declare_property_0, tokenName], fixId, Diagnostics.Add_all_missing_members);
+    function createAddPropertyDeclarationAction(context: CodeFixContext, declSourceFile: SourceFile, classDeclaration: ClassOrInterface, tokenName: string, typeNode: TypeNode, modifierFlags: ModifierFlags): CodeFixAction {
+        const changes = textChanges.ChangeTracker.with(context, t => addPropertyDeclaration(t, declSourceFile, classDeclaration, tokenName, typeNode, modifierFlags));
+        if (modifierFlags & ModifierFlags.Private) {
+            return createCodeFixActionWithoutFixAll(fixName, changes, [Diagnostics.Declare_private_property_0, tokenName]);
+        }
+        return createCodeFixAction(fixName, changes, [modifierFlags & ModifierFlags.Static ? Diagnostics.Declare_static_property_0 : Diagnostics.Declare_property_0, tokenName], fixId, Diagnostics.Add_all_missing_members);
     }
 
-    function addPropertyDeclaration(changeTracker: textChanges.ChangeTracker, declSourceFile: SourceFile, classDeclaration: ClassOrInterface, tokenName: string, typeNode: TypeNode, makeStatic: boolean): void {
+    function addPropertyDeclaration(changeTracker: textChanges.ChangeTracker, declSourceFile: SourceFile, classDeclaration: ClassOrInterface, tokenName: string, typeNode: TypeNode, modifierFlags: ModifierFlags): void {
         const property = createProperty(
             /*decorators*/ undefined,
-            /*modifiers*/ makeStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
+            /*modifiers*/ modifierFlags ? createNodeArray(createModifiersFromModifierFlags(modifierFlags)) : undefined,
             tokenName,
             /*questionToken*/ undefined,
             typeNode,
@@ -247,19 +294,21 @@ namespace ts.codefix {
 
         const changes = textChanges.ChangeTracker.with(context, t => t.insertNodeAtClassStart(declSourceFile, classDeclaration, indexSignature));
         // No fixId here because code-fix-all currently only works on adding individual named properties.
-        return createCodeFixActionNoFixId(fixName, changes, [Diagnostics.Add_index_signature_for_property_0, tokenName]);
+        return createCodeFixActionWithoutFixAll(fixName, changes, [Diagnostics.Add_index_signature_for_property_0, tokenName]);
     }
 
     function getActionForMethodDeclaration(
         context: CodeFixContext,
         declSourceFile: SourceFile,
         classDeclaration: ClassOrInterface,
-        token: Identifier,
+        token: Identifier | PrivateIdentifier,
         callExpression: CallExpression,
         makeStatic: boolean,
         inJs: boolean,
         preferences: UserPreferences,
     ): CodeFixAction | undefined {
+        // Private methods are not implemented yet.
+        if (isPrivateIdentifier(token)) { return undefined; }
         const changes = textChanges.ChangeTracker.with(context, t => addMethodDeclaration(context, t, declSourceFile, classDeclaration, token, callExpression, makeStatic, inJs, preferences));
         return createCodeFixAction(fixName, changes, [makeStatic ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0, token.text], fixId, Diagnostics.Add_all_missing_members);
     }
@@ -275,7 +324,7 @@ namespace ts.codefix {
         inJs: boolean,
         preferences: UserPreferences,
     ): void {
-        const methodDeclaration = createMethodFromCallExpression(context, callExpression, token.text, inJs, makeStatic, preferences, !isInterfaceDeclaration(typeDecl));
+        const methodDeclaration = createMethodFromCallExpression(context, callExpression, token.text, inJs, makeStatic, preferences, typeDecl);
         const containingMethodDeclaration = getAncestor(callExpression, SyntaxKind.MethodDeclaration);
 
         if (containingMethodDeclaration && containingMethodDeclaration.parent === typeDecl) {
@@ -304,6 +353,9 @@ namespace ts.codefix {
             enumDeclaration.modifiers,
             enumDeclaration.name,
             concatenate(enumDeclaration.members, singleElementArray(enumMember))
-        ));
+        ), {
+            leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
+            trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude
+        });
     }
 }

@@ -1,0 +1,25 @@
+tests/cases/conformance/es6/modules/multipleDefaultExports05.ts(1,22): error TS2528: A module cannot have multiple default exports.
+tests/cases/conformance/es6/modules/multipleDefaultExports05.ts(1,22): error TS2528: A module cannot have multiple default exports.
+tests/cases/conformance/es6/modules/multipleDefaultExports05.ts(3,22): error TS2528: A module cannot have multiple default exports.
+tests/cases/conformance/es6/modules/multipleDefaultExports05.ts(5,22): error TS2528: A module cannot have multiple default exports.
+
+
+==== tests/cases/conformance/es6/modules/multipleDefaultExports05.ts (4 errors) ====
+    export default class AA1 {}
+                         ~~~
+!!! error TS2528: A module cannot have multiple default exports.
+!!! related TS2753 tests/cases/conformance/es6/modules/multipleDefaultExports05.ts:3:22: Another export default is here.
+                         ~~~
+!!! error TS2528: A module cannot have multiple default exports.
+!!! related TS2753 tests/cases/conformance/es6/modules/multipleDefaultExports05.ts:5:22: Another export default is here.
+    
+    export default class BB1 {}
+                         ~~~
+!!! error TS2528: A module cannot have multiple default exports.
+!!! related TS2752 tests/cases/conformance/es6/modules/multipleDefaultExports05.ts:1:22: The first export default is here.
+    
+    export default class CC1 {}
+                         ~~~
+!!! error TS2528: A module cannot have multiple default exports.
+!!! related TS2752 tests/cases/conformance/es6/modules/multipleDefaultExports05.ts:1:22: The first export default is here.
+    

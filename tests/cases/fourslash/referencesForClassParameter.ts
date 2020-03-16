@@ -7,7 +7,7 @@
 ////class p { }
 ////
 ////class foo {
-////    constructor (public [|{| "isWriteAccess": true, "isDefinition": true |}p|]: any) {
+////    constructor ([|public [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}p|]: any|]) {
 ////    }
 ////
 ////    public f(p) {
@@ -19,4 +19,4 @@
 ////var n = new foo(undefined);
 ////n.[|{| "isWriteAccess": true |}p|] = null;
 
-verify.singleReferenceGroup("(property) foo.p: any");
+verify.singleReferenceGroup("(property) foo.p: any", "p");

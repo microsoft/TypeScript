@@ -10,7 +10,8 @@ namespace ts.OutliningElementsCollector {
     function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
         let depthRemaining = 40;
         let current = 0;
-        const statements = sourceFile.statements;
+        // Includes the EOF Token so that comments which aren't attached to statements are included
+        const statements = [...sourceFile.statements, sourceFile.endOfFileToken];
         const n = statements.length;
         while (current < n) {
             while (current < n && !isAnyImportSyntax(statements[current])) {
@@ -33,15 +34,26 @@ namespace ts.OutliningElementsCollector {
             if (depthRemaining === 0) return;
             cancellationToken.throwIfCancellationRequested();
 
-            if (isDeclaration(n)) {
+            if (isDeclaration(n) || n.kind === SyntaxKind.EndOfFileToken) {
                 addOutliningForLeadingCommentsForNode(n, sourceFile, cancellationToken, out);
+            }
+
+            if (isFunctionExpressionAssignedToVariable(n)) {
+                addOutliningForLeadingCommentsForNode(n.parent.parent.parent, sourceFile, cancellationToken, out);
             }
 
             const span = getOutliningSpanForNode(n, sourceFile);
             if (span) out.push(span);
 
             depthRemaining--;
-            if (isIfStatement(n) && n.elseStatement && isIfStatement(n.elseStatement)) {
+            if (isCallExpression(n)) {
+                depthRemaining++;
+                visitNonImportNode(n.expression);
+                depthRemaining--;
+                n.arguments.forEach(visitNonImportNode);
+                n.typeArguments?.forEach(visitNonImportNode);
+            }
+            else if (isIfStatement(n) && n.elseStatement && isIfStatement(n.elseStatement)) {
                 // Consider an 'else if' to be on the same depth as the 'if'.
                 visitNonImportNode(n.expression);
                 visitNonImportNode(n.thenStatement);
@@ -54,14 +66,21 @@ namespace ts.OutliningElementsCollector {
             }
             depthRemaining++;
         }
+
+        function isFunctionExpressionAssignedToVariable(n: Node) {
+            if (!isFunctionExpression(n) && !isArrowFunction(n)) {
+                return false;
+            }
+            const ancestor = findAncestor(n, isVariableStatement);
+            return !!ancestor && getSingleInitializerOfVariableStatementOrPropertyDeclaration(ancestor) === n;
+        }
     }
 
     function addRegionOutliningSpans(sourceFile: SourceFile, out: Push<OutliningSpan>): void {
         const regions: OutliningSpan[] = [];
         const lineStarts = sourceFile.getLineStarts();
-        for (let i = 0; i < lineStarts.length; i++) {
-            const currentLineStart = lineStarts[i];
-            const lineEnd = i + 1 === lineStarts.length ? sourceFile.getEnd() : lineStarts[i + 1] - 1;
+        for (const currentLineStart of lineStarts) {
+            const lineEnd = sourceFile.getLineEndOfPosition(currentLineStart);
             const lineText = sourceFile.text.substring(currentLineStart, lineEnd);
             const result = isRegionDelimiter(lineText);
             if (!result || isInComment(sourceFile, currentLineStart)) {
@@ -141,8 +160,8 @@ namespace ts.OutliningElementsCollector {
     function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan | undefined {
         switch (n.kind) {
             case SyntaxKind.Block:
-                if (isFunctionBlock(n)) {
-                    return spanForNode(n.parent, /*autoCollapse*/ n.parent.kind !== SyntaxKind.ArrowFunction);
+                if (isFunctionLike(n.parent)) {
+                    return functionSpan(n.parent, n as Block, sourceFile);
                 }
                 // Check if the block is standalone, or 'attached' to some parent statement.
                 // If the latter, we want to collapse the block, but consider its hint span
@@ -164,7 +183,8 @@ namespace ts.OutliningElementsCollector {
                             return spanForNode(n.parent);
                         }
                         else if (tryStatement.finallyBlock === n) {
-                            return spanForNode(findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile)!);
+                            const node = findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile);
+                            if (node) return spanForNode(node);
                         }
                         // falls through
                     default:
@@ -175,25 +195,40 @@ namespace ts.OutliningElementsCollector {
             case SyntaxKind.ModuleBlock:
                 return spanForNode(n.parent);
             case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.CaseBlock:
                 return spanForNode(n);
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.DefaultClause:
+                return spanForNodeArray((n as CaseClause | DefaultClause).statements);
             case SyntaxKind.ObjectLiteralExpression:
                 return spanForObjectOrArrayLiteral(n);
             case SyntaxKind.ArrayLiteralExpression:
                 return spanForObjectOrArrayLiteral(n, SyntaxKind.OpenBracketToken);
             case SyntaxKind.JsxElement:
                 return spanForJSXElement(<JsxElement>n);
+            case SyntaxKind.JsxFragment:
+                return spanForJSXFragment(<JsxFragment>n);
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxOpeningElement:
                 return spanForJSXAttributes((<JsxOpeningLikeElement>n).attributes);
+            case SyntaxKind.TemplateExpression:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                return spanForTemplateLiteral(<TemplateExpression | NoSubstitutionTemplateLiteral>n);
         }
 
         function spanForJSXElement(node: JsxElement): OutliningSpan | undefined {
             const textSpan = createTextSpanFromBounds(node.openingElement.getStart(sourceFile), node.closingElement.getEnd());
             const tagName = node.openingElement.tagName.getText(sourceFile);
             const bannerText = "<" + tagName + ">...</" + tagName + ">";
+            return createOutliningSpan(textSpan, OutliningSpanKind.Code, textSpan, /*autoCollapse*/ false, bannerText);
+        }
+
+        function spanForJSXFragment(node: JsxFragment): OutliningSpan | undefined {
+            const textSpan = createTextSpanFromBounds(node.openingFragment.getStart(sourceFile), node.closingFragment.getEnd());
+            const bannerText = "<>...</>";
             return createOutliningSpan(textSpan, OutliningSpanKind.Code, textSpan, /*autoCollapse*/ false, bannerText);
         }
 
@@ -205,23 +240,42 @@ namespace ts.OutliningElementsCollector {
             return createOutliningSpanFromBounds(node.getStart(sourceFile), node.getEnd(), OutliningSpanKind.Code);
         }
 
-        function spanForObjectOrArrayLiteral(node: Node, open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken): OutliningSpan | undefined {
-            // If the block has no leading keywords and is inside an array literal,
-            // we only want to collapse the span of the block.
-            // Otherwise, the collapsed section will include the end of the previous line.
-            return spanForNode(node, /*autoCollapse*/ false, /*useFullStart*/ !isArrayLiteralExpression(node.parent), open);
-        }
-
-        function spanForNode(hintSpanNode: Node, autoCollapse = false, useFullStart = true, open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken): OutliningSpan | undefined {
-            const openToken = findChildOfKind(n, open, sourceFile);
-            const close = open === SyntaxKind.OpenBraceToken ? SyntaxKind.CloseBraceToken : SyntaxKind.CloseBracketToken;
-            const closeToken = findChildOfKind(n, close, sourceFile);
-            if (!openToken || !closeToken) {
+        function spanForTemplateLiteral(node: TemplateExpression | NoSubstitutionTemplateLiteral) {
+            if (node.kind === SyntaxKind.NoSubstitutionTemplateLiteral && node.text.length === 0) {
                 return undefined;
             }
-            const textSpan = createTextSpanFromBounds(useFullStart ? openToken.getFullStart() : openToken.getStart(sourceFile), closeToken.getEnd());
-            return createOutliningSpan(textSpan, OutliningSpanKind.Code, createTextSpanFromNode(hintSpanNode, sourceFile), autoCollapse);
+            return createOutliningSpanFromBounds(node.getStart(sourceFile), node.getEnd(), OutliningSpanKind.Code);
         }
+
+        function spanForObjectOrArrayLiteral(node: Node, open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken): OutliningSpan | undefined {
+            // If the block has no leading keywords and is inside an array literal or call expression,
+            // we only want to collapse the span of the block.
+            // Otherwise, the collapsed section will include the end of the previous line.
+            return spanForNode(node, /*autoCollapse*/ false, /*useFullStart*/ !isArrayLiteralExpression(node.parent) && !isCallExpression(node.parent), open);
+        }
+
+        function spanForNode(hintSpanNode: Node, autoCollapse = false, useFullStart = true, open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken, close: SyntaxKind = open === SyntaxKind.OpenBraceToken ? SyntaxKind.CloseBraceToken : SyntaxKind.CloseBracketToken): OutliningSpan | undefined {
+            const openToken = findChildOfKind(n, open, sourceFile);
+            const closeToken = findChildOfKind(n, close, sourceFile);
+            return openToken && closeToken && spanBetweenTokens(openToken, closeToken, hintSpanNode, sourceFile, autoCollapse, useFullStart);
+        }
+
+        function spanForNodeArray(nodeArray: NodeArray<Node>): OutliningSpan | undefined {
+            return nodeArray.length ? createOutliningSpan(createTextSpanFromRange(nodeArray), OutliningSpanKind.Code) : undefined;
+        }
+    }
+
+    function functionSpan(node: FunctionLike, body: Block, sourceFile: SourceFile): OutliningSpan | undefined {
+        const openToken = isNodeArrayMultiLine(node.parameters, sourceFile)
+            ? findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile)
+            : findChildOfKind(body, SyntaxKind.OpenBraceToken, sourceFile);
+        const closeToken = findChildOfKind(body, SyntaxKind.CloseBraceToken, sourceFile);
+        return openToken && closeToken && spanBetweenTokens(openToken, closeToken, node, sourceFile, /*autoCollapse*/ node.kind !== SyntaxKind.ArrowFunction);
+    }
+
+    function spanBetweenTokens(openToken: Node, closeToken: Node, hintSpanNode: Node, sourceFile: SourceFile, autoCollapse = false, useFullStart = true): OutliningSpan {
+        const textSpan = createTextSpanFromBounds(useFullStart ? openToken.getFullStart() : openToken.getStart(sourceFile), closeToken.getEnd());
+        return createOutliningSpan(textSpan, OutliningSpanKind.Code, createTextSpanFromNode(hintSpanNode, sourceFile), autoCollapse);
     }
 
     function createOutliningSpan(textSpan: TextSpan, kind: OutliningSpanKind, hintSpan: TextSpan = textSpan, autoCollapse = false, bannerText = "..."): OutliningSpan {

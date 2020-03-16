@@ -21,12 +21,12 @@ export { c };
 >c : Symbol(c, Decl(server.ts, 10, 8))
 
 export { c as c2 };
->c : Symbol(c2, Decl(server.ts, 11, 8))
+>c : Symbol(c, Decl(server.ts, 0, 0))
 >c2 : Symbol(c2, Decl(server.ts, 11, 8))
 
 export { i, m as instantiatedModule };
 >i : Symbol(i, Decl(server.ts, 12, 8))
->m : Symbol(instantiatedModule, Decl(server.ts, 12, 11))
+>m : Symbol(m, Decl(server.ts, 3, 1))
 >instantiatedModule : Symbol(instantiatedModule, Decl(server.ts, 12, 11))
 
 export { uninstantiated };

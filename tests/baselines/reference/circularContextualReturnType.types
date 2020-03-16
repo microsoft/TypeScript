@@ -3,9 +3,9 @@
 
 Object.freeze({
 >Object.freeze({    foo() {        return Object.freeze('a');    },}) : Readonly<{ foo(): string; }>
->Object.freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
->freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
 >{    foo() {        return Object.freeze('a');    },} : { foo(): string; }
 
     foo() {
@@ -13,9 +13,9 @@ Object.freeze({
 
         return Object.freeze('a');
 >Object.freeze('a') : string
->Object.freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
->freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
 >'a' : "a"
 
     },

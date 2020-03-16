@@ -1,20 +1,18 @@
 // @ts-check
 const stream = require("stream");
-const Vinyl = require("./vinyl");
+const Vinyl = require("vinyl");
 const ts = require("../../lib/typescript");
 const fs = require("fs");
 const { base64VLQFormatEncode } = require("./sourcemaps");
 
-module.exports = exports = prepend;
-
 /**
- * @param {string | ((file: Vinyl) => string)} data
+ * @param {string | ((file: import("vinyl")) => string)} data
  */
 function prepend(data) {
     return new stream.Transform({
         objectMode: true,
         /**
-         * @param {string | Buffer | Vinyl} input
+         * @param {string | Buffer | import("vinyl")} input
          * @param {(error: Error, data?: any) => void} cb
          */
         transform(input, _, cb) {
@@ -56,11 +54,11 @@ function prepend(data) {
 exports.prepend = prepend;
 
 /**
- * @param {string | ((file: Vinyl) => string)} file
+ * @param {string | ((file: import("vinyl")) => string)} file
  */
 function prependFile(file) {
     const data = typeof file === "string" ? fs.readFileSync(file, "utf8") :
         vinyl => fs.readFileSync(file(vinyl), "utf8");
     return prepend(data)
 }
-exports.file = prependFile;
+exports.prependFile = prependFile;

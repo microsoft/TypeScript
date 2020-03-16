@@ -27,7 +27,7 @@ import { T } from "./exportT";
 >T : Symbol(T, Decl(user.ts, 15, 8))
 
 export { T as T4 };
->T : Symbol(T4, Decl(user.ts, 16, 8))
+>T : Symbol(T, Decl(user.ts, 15, 8))
 >T4 : Symbol(T4, Decl(user.ts, 16, 8))
 
 === /exportT.ts ===

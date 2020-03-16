@@ -7,6 +7,7 @@ module a {
 }
 var f = () => this;
 >f : Symbol(f, Decl(collisionThisExpressionAndAliasInGlobal.ts, 3, 3))
+>this : Symbol(globalThis)
 
 import _this = a; // Error
 >_this : Symbol(_this, Decl(collisionThisExpressionAndAliasInGlobal.ts, 3, 19))

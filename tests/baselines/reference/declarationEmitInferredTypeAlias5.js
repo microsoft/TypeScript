@@ -17,6 +17,7 @@ var obj = true;
 //// [1.js]
 "use strict";
 exports.__esModule = true;
+exports.v = void 0;
 //let v2: Z.Data;
 var v = "str" || true;
 exports.v = v;

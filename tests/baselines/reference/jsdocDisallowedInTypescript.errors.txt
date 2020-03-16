@@ -3,7 +3,7 @@ tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(4,15): error TS8020
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(4,32): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(7,20): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(10,18): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(11,12): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(11,18): error TS2554: Expected 1 arguments, but got 2.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(13,14): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(14,11): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(15,8): error TS8020: JSDoc types can only be used inside documentation comments.
@@ -38,7 +38,7 @@ tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(22,17): error TS802
                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8020: JSDoc types can only be used inside documentation comments.
         return f(12, 'hullo');
-               ~~~~~~~~~~~~~~
+                     ~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
     }
     var whatevs: * = 1001;

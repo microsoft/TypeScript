@@ -1,5 +1,5 @@
 maxDepthExceeded/root.ts(3,1): error TS2322: Type '"10"' is not assignable to type 'number'.
-maxDepthExceeded/root.ts(4,4): error TS2540: Cannot assign to 'rel' because it is a constant or a read-only property.
+maxDepthExceeded/root.ts(4,4): error TS2540: Cannot assign to 'rel' because it is a read-only property.
 
 
 ==== maxDepthExceeded/tsconfig.json (0 errors) ====
@@ -36,7 +36,7 @@ maxDepthExceeded/root.ts(4,4): error TS2540: Cannot assign to 'rel' because it i
 !!! error TS2322: Type '"10"' is not assignable to type 'number'.
     m1.rel = 42; // Error: Should be boolean
        ~~~
-!!! error TS2540: Cannot assign to 'rel' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'rel' because it is a read-only property.
     
     m1.f2.person.age = "10"; // OK if stopped at 2 modules: person will be "any".
     

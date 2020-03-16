@@ -7,9 +7,9 @@
 ////    export var x;
 ////}
 ////
-////import [|{| "isWriteAccess": true, "isDefinition": true |}globalAlias|] = globalModule;
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}globalAlias|] = globalModule;|]
 
 // @Filename: referencesForGlobals_2.ts
 ////var m = [|globalAlias|];
 
-verify.singleReferenceGroup("(alias) namespace globalAlias\nimport globalAlias = globalModule");
+verify.singleReferenceGroup("(alias) namespace globalAlias\nimport globalAlias = globalModule", "globalAlias");

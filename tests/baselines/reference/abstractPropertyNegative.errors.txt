@@ -6,7 +6,7 @@ tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstra
 tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'readonlyProp' from class 'B'.
 tests/cases/compiler/abstractPropertyNegative.ts(15,5): error TS1244: Abstract methods can only appear within an abstract class.
 tests/cases/compiler/abstractPropertyNegative.ts(16,37): error TS1005: '{' expected.
-tests/cases/compiler/abstractPropertyNegative.ts(19,3): error TS2540: Cannot assign to 'ro' because it is a constant or a read-only property.
+tests/cases/compiler/abstractPropertyNegative.ts(19,3): error TS2540: Cannot assign to 'ro' because it is a read-only property.
 tests/cases/compiler/abstractPropertyNegative.ts(25,5): error TS2416: Property 'num' in type 'WrongTypePropertyImpl' is not assignable to the same property in base type 'WrongTypeProperty'.
   Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/abstractPropertyNegative.ts(31,9): error TS2416: Property 'num' in type 'WrongTypeAccessorImpl' is not assignable to the same property in base type 'WrongTypeAccessor'.
@@ -56,7 +56,7 @@ tests/cases/compiler/abstractPropertyNegative.ts(41,18): error TS2676: Accessors
     let c = new C();
     c.ro = "error: lhs of assignment can't be readonly";
       ~~
-!!! error TS2540: Cannot assign to 'ro' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'ro' because it is a read-only property.
     
     abstract class WrongTypeProperty {
         abstract num: number;

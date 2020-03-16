@@ -1,0 +1,28 @@
+tests/cases/conformance/interfaces/declarationMerging/mergedInheritedMembersSatisfyAbstractBase.ts(19,11): error TS2320: Interface 'IncorrectlyExtends' cannot simultaneously extend types 'BaseClass' and 'IncorrectGetters'.
+  Named property 'bar' of types 'BaseClass' and 'IncorrectGetters' are not identical.
+
+
+==== tests/cases/conformance/interfaces/declarationMerging/mergedInheritedMembersSatisfyAbstractBase.ts (1 errors) ====
+    abstract class BaseClass {
+      abstract bar: number;
+    }
+    
+    class Broken extends BaseClass {}
+    
+    // declaration merging should satisfy abstract bar
+    interface IGetters {
+      bar: number;
+    }
+    interface Broken extends IGetters {}
+    
+    new Broken().bar
+    
+    class IncorrectlyExtends extends BaseClass {}
+    interface IncorrectGetters {
+      bar: string;
+    }
+    interface IncorrectlyExtends extends IncorrectGetters {}
+              ~~~~~~~~~~~~~~~~~~
+!!! error TS2320: Interface 'IncorrectlyExtends' cannot simultaneously extend types 'BaseClass' and 'IncorrectGetters'.
+!!! error TS2320:   Named property 'bar' of types 'BaseClass' and 'IncorrectGetters' are not identical.
+    

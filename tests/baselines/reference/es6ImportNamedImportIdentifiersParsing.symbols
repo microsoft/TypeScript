@@ -6,14 +6,11 @@ import { default } from "somemodule"; // Error - as this is keyword that is not 
 >default : Symbol(default, Decl(es6ImportNamedImportIdentifiersParsing.ts, 1, 8))
 
 import { yield as default } from "somemodule"; // error to use default as binding name
->yield : Symbol(default, Decl(es6ImportNamedImportIdentifiersParsing.ts, 2, 8))
 >default : Symbol(default, Decl(es6ImportNamedImportIdentifiersParsing.ts, 2, 8))
 
 import { default as yield } from "somemodule"; // no error 
->default : Symbol(yield, Decl(es6ImportNamedImportIdentifiersParsing.ts, 3, 8))
 >yield : Symbol(yield, Decl(es6ImportNamedImportIdentifiersParsing.ts, 3, 8))
 
 import { default as default } from "somemodule"; // default as is ok, error of default binding name
->default : Symbol(default, Decl(es6ImportNamedImportIdentifiersParsing.ts, 4, 8))
 >default : Symbol(default, Decl(es6ImportNamedImportIdentifiersParsing.ts, 4, 8))
 

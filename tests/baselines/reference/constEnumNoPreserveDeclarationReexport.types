@@ -1,0 +1,47 @@
+=== tests/cases/compiler/ConstEnum.d.ts ===
+export const enum MyConstEnum {
+>MyConstEnum : MyConstEnum
+
+    Foo,
+>Foo : MyConstEnum
+
+    Bar
+>Bar : MyConstEnum
+}
+=== tests/cases/compiler/ImportExport.d.ts ===
+import { MyConstEnum } from './ConstEnum';
+>MyConstEnum : typeof MyConstEnum
+
+export default MyConstEnum;
+>MyConstEnum : MyConstEnum
+
+=== tests/cases/compiler/ReExport.d.ts ===
+export { MyConstEnum as default } from './ConstEnum';
+>MyConstEnum : typeof import("tests/cases/compiler/ConstEnum").MyConstEnum
+>default : typeof import("tests/cases/compiler/ConstEnum").MyConstEnum
+
+=== tests/cases/compiler/usages.ts ===
+import {MyConstEnum} from "./ConstEnum";
+>MyConstEnum : typeof MyConstEnum
+
+import AlsoEnum from "./ImportExport";
+>AlsoEnum : typeof MyConstEnum
+
+import StillEnum from "./ReExport";
+>StillEnum : typeof MyConstEnum
+
+MyConstEnum.Foo;
+>MyConstEnum.Foo : MyConstEnum
+>MyConstEnum : typeof MyConstEnum
+>Foo : MyConstEnum
+
+AlsoEnum.Foo;
+>AlsoEnum.Foo : MyConstEnum
+>AlsoEnum : typeof MyConstEnum
+>Foo : MyConstEnum
+
+StillEnum.Foo;
+>StillEnum.Foo : MyConstEnum
+>StillEnum : typeof MyConstEnum
+>Foo : MyConstEnum
+

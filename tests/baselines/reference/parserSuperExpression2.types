@@ -6,10 +6,8 @@ class C {
 >M : () => void
 
     super<T>(0);
->super<T>(0) : any
+>super<T>(0) : void
 >super : any
->super : any
-> : any
 >0 : 0
   }
 }

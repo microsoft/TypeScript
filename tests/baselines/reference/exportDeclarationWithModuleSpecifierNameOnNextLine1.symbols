@@ -14,14 +14,14 @@ No type information for this code.    "./t1";
 No type information for this code.
 No type information for this code.=== tests/cases/compiler/t4.ts ===
 export { x as a } from
->x : Symbol(a, Decl(t4.ts, 0, 8))
+>x : Symbol(x, Decl(t1.ts, 0, 10))
 >a : Symbol(a, Decl(t4.ts, 0, 8))
 
     "./t1";
 
 === tests/cases/compiler/t5.ts ===
 export { x as a, } from
->x : Symbol(a, Decl(t5.ts, 0, 8))
+>x : Symbol(x, Decl(t1.ts, 0, 10))
 >a : Symbol(a, Decl(t5.ts, 0, 8))
 
     "./t1";

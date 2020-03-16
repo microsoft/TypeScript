@@ -105,9 +105,9 @@
 >(...numbers) => numbers.every(n => n > 0) : (numbers_0: number, numbers_1: number, numbers_2: number) => boolean
 >numbers : [number, number, number]
 >numbers.every(n => n > 0) : boolean
->numbers.every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean
+>numbers.every : (callbackfn: (value: number, index: number, array: number[]) => unknown, thisArg?: any) => boolean
 >numbers : [number, number, number]
->every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean
+>every : (callbackfn: (value: number, index: number, array: number[]) => unknown, thisArg?: any) => boolean
 >n => n > 0 : (n: number) => boolean
 >n : number
 >n > 0 : boolean
@@ -123,9 +123,9 @@
 >(...mixed) => mixed.every(n => !!n) : (mixed_0: number, mixed_1: string, mixed_2: string) => boolean
 >mixed : [number, string, string]
 >mixed.every(n => !!n) : boolean
->mixed.every : (callbackfn: (value: string | number, index: number, array: (string | number)[]) => boolean, thisArg?: any) => boolean
+>mixed.every : (callbackfn: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any) => boolean
 >mixed : [number, string, string]
->every : (callbackfn: (value: string | number, index: number, array: (string | number)[]) => boolean, thisArg?: any) => boolean
+>every : (callbackfn: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any) => boolean
 >n => !!n : (n: string | number) => boolean
 >n : string | number
 >!!n : boolean
@@ -141,9 +141,9 @@
 >(...noNumbers) => noNumbers.some(n => n > 0) : () => boolean
 >noNumbers : []
 >noNumbers.some(n => n > 0) : boolean
->noNumbers.some : (callbackfn: (value: never, index: number, array: never[]) => boolean, thisArg?: any) => boolean
+>noNumbers.some : (callbackfn: (value: never, index: number, array: never[]) => unknown, thisArg?: any) => boolean
 >noNumbers : []
->some : (callbackfn: (value: never, index: number, array: never[]) => boolean, thisArg?: any) => boolean
+>some : (callbackfn: (value: never, index: number, array: never[]) => unknown, thisArg?: any) => boolean
 >n => n > 0 : (n: never) => boolean
 >n : never
 >n > 0 : boolean

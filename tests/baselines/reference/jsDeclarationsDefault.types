@@ -1,0 +1,68 @@
+=== tests/cases/conformance/jsdoc/declarations/index1.js ===
+export default 12;
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/jsdoc/declarations/index2.js ===
+export default function foo() {
+>foo : () => typeof foo
+
+    return foo;
+>foo : () => typeof foo
+}
+export const x = foo;
+>x : () => typeof foo
+>foo : () => typeof foo
+
+export { foo as bar };
+>foo : () => typeof foo
+>bar : () => typeof foo
+
+=== tests/cases/conformance/jsdoc/declarations/index3.js ===
+export default class Foo {
+>Foo : Foo
+
+    a = /** @type {Foo} */(null);
+>a : Foo
+>(null) : Foo
+>null : null
+
+};
+export const X = Foo;
+>X : typeof Foo
+>Foo : typeof Foo
+
+export { Foo as Bar };
+>Foo : typeof Foo
+>Bar : typeof Foo
+
+=== tests/cases/conformance/jsdoc/declarations/index4.js ===
+import Fab from "./index3";
+>Fab : typeof Fab
+
+class Bar extends Fab {
+>Bar : Bar
+>Fab : Fab
+
+    x = /** @type {Bar} */(null);
+>x : Bar
+>(null) : Bar
+>null : null
+}
+export default Bar;
+>Bar : Bar
+
+=== tests/cases/conformance/jsdoc/declarations/index5.js ===
+// merge type alias and const (OK)
+No type information for this code.export default 12;
+No type information for this code./**
+No type information for this code. * @typedef {string | number} default
+No type information for this code. */
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/jsdoc/declarations/index6.js ===
+// merge type alias and function (OK)
+export default function func() {};
+>func : () => void
+
+/**
+ * @typedef {string | number} default
+ */
+

@@ -352,6 +352,14 @@ declare function assign<T>(o: T, a: RecursivePartial<T>): void;
 var a = {o: 1, b: 2, c: [{a: 1, c: '213'}]}
 assign(a, {o: 2, c: {0: {a: 2, c: '213123'}}})
 
+// Repros from #23843
+
+type Weird1 = (<U extends boolean>(a: U) => never) extends 
+    (<U extends true>(a: U) => never) ? never : never;
+
+type Weird2 = (<U extends boolean>(a: U) => U) extends 
+    (<U extends true>(a: U) => infer T) ? T : never;
+
 
 //// [conditionalTypes1.js]
 "use strict";
@@ -715,3 +723,5 @@ declare var a: {
         c: string;
     }[];
 };
+declare type Weird1 = (<U extends boolean>(a: U) => never) extends (<U extends true>(a: U) => never) ? never : never;
+declare type Weird2 = (<U extends boolean>(a: U) => U) extends (<U extends true>(a: U) => infer T) ? T : never;

@@ -1,0 +1,76 @@
+=== tests/cases/conformance/expressions/optionalChaining/elementAccessChain/elementAccessChain.3.ts ===
+declare const obj: any;
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+
+obj?.["a"]++;
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+
+obj?.a["b"]++;
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+
+obj?.["a"]--;
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+
+obj?.a["b"]--;
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+
+++obj?.["a"];
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+
+++obj?.a["b"];
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+
+--obj?.["a"];
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+
+--obj?.a["b"];
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+
+obj?.["a"] = 1;
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+
+obj?.a["b"] = 1;
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+
+obj?.["a"] += 1;
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+
+obj?.a["b"] += 1;
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+
+for (obj?.["a"] in {});
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+
+for (obj?.a["b"] in {});
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+
+for (obj?.["a"] of []);
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+
+for (obj?.a["b"] of []);
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+
+({ a: obj?.["a"] } = { a: 1 });
+>a : Symbol(a, Decl(elementAccessChain.3.ts, 22, 2))
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+>a : Symbol(a, Decl(elementAccessChain.3.ts, 22, 22))
+
+({ a: obj?.a["b"] } = { a: 1 });
+>a : Symbol(a, Decl(elementAccessChain.3.ts, 23, 2))
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+>a : Symbol(a, Decl(elementAccessChain.3.ts, 23, 23))
+
+({ ...obj?.["a"] } = { a: 1 });
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+>a : Symbol(a, Decl(elementAccessChain.3.ts, 24, 22))
+
+({ ...obj?.a["b"] } = { a: 1 });
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+>a : Symbol(a, Decl(elementAccessChain.3.ts, 25, 23))
+
+[...obj?.["a"]] = [];
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+
+[...obj?.a["b"]] = [];
+>obj : Symbol(obj, Decl(elementAccessChain.3.ts, 0, 13))
+

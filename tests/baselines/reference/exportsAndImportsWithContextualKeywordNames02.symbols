@@ -3,7 +3,7 @@ let as = 100;
 >as : Symbol(as, Decl(t1.ts, 0, 3))
 
 export { as as return, as };
->as : Symbol(return, Decl(t1.ts, 2, 8))
+>as : Symbol(as, Decl(t1.ts, 0, 3))
 >return : Symbol(return, Decl(t1.ts, 2, 8))
 >as : Symbol(as, Decl(t1.ts, 2, 22))
 
@@ -25,7 +25,7 @@ var y = as.return;
 
 === tests/cases/conformance/es6/modules/t3.ts ===
 import { as as as } from "./t1";
->as : Symbol(as, Decl(t3.ts, 0, 8))
+>as : Symbol(as, Decl(t1.ts, 2, 22))
 >as : Symbol(as, Decl(t3.ts, 0, 8))
 
 === tests/cases/conformance/es6/modules/t4.ts ===

@@ -1,5 +1,5 @@
 tests/cases/compiler/recursiveBaseCheck6.ts(1,7): error TS2506: 'S18' is referenced directly or indirectly in its own base expression.
-tests/cases/compiler/recursiveBaseCheck6.ts(2,13): error TS2339: Property 'blah' does not exist on type 'S18<{}>'.
+tests/cases/compiler/recursiveBaseCheck6.ts(2,13): error TS2339: Property 'blah' does not exist on type 'S18<unknown>'.
 
 
 ==== tests/cases/compiler/recursiveBaseCheck6.ts (2 errors) ====
@@ -8,4 +8,4 @@ tests/cases/compiler/recursiveBaseCheck6.ts(2,13): error TS2339: Property 'blah'
 !!! error TS2506: 'S18' is referenced directly or indirectly in its own base expression.
     (new S18()).blah;
                 ~~~~
-!!! error TS2339: Property 'blah' does not exist on type 'S18<{}>'.
+!!! error TS2339: Property 'blah' does not exist on type 'S18<unknown>'.

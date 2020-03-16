@@ -6,7 +6,7 @@ function f(x: { y: string } | undefined): { y: string } {
 >y : string
 
     return { y: 123, ...x } // y: string | number
->{ y: 123, ...x } : { y: number; } | { y: string; }
+>{ y: 123, ...x } : { y: string | number; }
 >y : number
 >123 : 123
 >x : { y: string; } | undefined

@@ -58,21 +58,21 @@ var __assign = (this && this.__assign) || function () {
 };
 function f(definiteBoolean, definiteString, optionalString, optionalNumber, undefinedString, undefinedNumber) {
     // optional
-    var optionalUnionStops = __assign({}, definiteBoolean, definiteString, optionalNumber);
-    var optionalUnionDuplicates = __assign({}, definiteBoolean, definiteString, optionalString, optionalNumber);
-    var allOptional = __assign({}, optionalString, optionalNumber);
+    var optionalUnionStops = __assign(__assign(__assign({}, definiteBoolean), definiteString), optionalNumber);
+    var optionalUnionDuplicates = __assign(__assign(__assign(__assign({}, definiteBoolean), definiteString), optionalString), optionalNumber);
+    var allOptional = __assign(__assign({}, optionalString), optionalNumber);
     // undefined
-    var undefinedUnionStops = __assign({}, definiteBoolean, definiteString, undefinedNumber);
-    var undefinedUnionDuplicates = __assign({}, definiteBoolean, definiteString, undefinedString, undefinedNumber);
-    var allUndefined = __assign({}, undefinedString, undefinedNumber);
-    var undefinedWithOptionalContinues = __assign({}, definiteBoolean, undefinedString, optionalNumber);
+    var undefinedUnionStops = __assign(__assign(__assign({}, definiteBoolean), definiteString), undefinedNumber);
+    var undefinedUnionDuplicates = __assign(__assign(__assign(__assign({}, definiteBoolean), definiteString), undefinedString), undefinedNumber);
+    var allUndefined = __assign(__assign({}, undefinedString), undefinedNumber);
+    var undefinedWithOptionalContinues = __assign(__assign(__assign({}, definiteBoolean), undefinedString), optionalNumber);
 }
 var m = { title: "The Matrix", yearReleased: 1999 };
 // should error here because title: undefined is not assignable to string
-var x = __assign({}, m, { title: undefined });
+var x = __assign(__assign({}, m), { title: undefined });
 function g(fields, partialFields, nearlyPartialFields) {
     // ok, undefined is stripped from optional properties when spread
-    fields = __assign({}, fields, partialFields);
+    fields = __assign(__assign({}, fields), partialFields);
     // error: not optional, undefined remains
-    fields = __assign({}, fields, nearlyPartialFields);
+    fields = __assign(__assign({}, fields), nearlyPartialFields);
 }

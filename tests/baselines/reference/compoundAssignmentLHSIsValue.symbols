@@ -51,9 +51,11 @@ function foo() {
 }
 
 this *= value;
+>this : Symbol(globalThis)
 >value : Symbol(value, Decl(compoundAssignmentLHSIsValue.ts, 1, 3))
 
 this += value;
+>this : Symbol(globalThis)
 >value : Symbol(value, Decl(compoundAssignmentLHSIsValue.ts, 1, 3))
 
 // identifiers: module, class, enum, function
@@ -216,9 +218,11 @@ foo() += value;
 
 // parentheses, the containted expression is value
 (this) *= value;
+>this : Symbol(globalThis)
 >value : Symbol(value, Decl(compoundAssignmentLHSIsValue.ts, 1, 3))
 
 (this) += value;
+>this : Symbol(globalThis)
 >value : Symbol(value, Decl(compoundAssignmentLHSIsValue.ts, 1, 3))
 
 (M) *= value;

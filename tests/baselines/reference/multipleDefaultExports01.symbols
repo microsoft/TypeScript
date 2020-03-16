@@ -1,11 +1,11 @@
 === tests/cases/conformance/es6/modules/m1.ts ===
 export default class foo {
->foo : Symbol(foo, Decl(m1.ts, 0, 0))
+>foo : Symbol(bar, Decl(m1.ts, 2, 1), Decl(m1.ts, 0, 0))
 
 }
 
 export default function bar() {
->bar : Symbol(bar, Decl(m1.ts, 2, 1))
+>bar : Symbol(bar, Decl(m1.ts, 2, 1), Decl(m1.ts, 0, 0))
 
 }
 

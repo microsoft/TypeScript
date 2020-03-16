@@ -1,0 +1,39 @@
+=== tests/cases/compiler/omitTypeTestErrors01.ts ===
+interface Foo {
+    a: string;
+>a : string
+
+    b: number;
+>b : number
+
+    c: boolean;
+>c : boolean
+}
+
+export type Bar = Omit<Foo, "c">;
+>Bar : Pick<Foo, "a" | "b">
+
+export type Baz = Omit<Foo, "b" | "c">;
+>Baz : Pick<Foo, "a">
+
+export function getBarC(bar: Bar) {
+>getBarC : (bar: Pick<Foo, "a" | "b">) => any
+>bar : Pick<Foo, "a" | "b">
+
+    return bar.c;
+>bar.c : any
+>bar : Pick<Foo, "a" | "b">
+>c : any
+}
+
+export function getBazB(baz: Baz) {
+>getBazB : (baz: Pick<Foo, "a">) => any
+>baz : Pick<Foo, "a">
+
+    return baz.b;
+>baz.b : any
+>baz : Pick<Foo, "a">
+>b : any
+}
+
+

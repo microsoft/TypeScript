@@ -1,0 +1,70 @@
+=== tests/cases/compiler/monorepo/pkg1/dist/index.d.ts ===
+export * from './types';
+No type information for this code.=== tests/cases/compiler/monorepo/pkg1/dist/types.d.ts ===
+export declare type A = {
+>A : Symbol(A, Decl(types.d.ts, 0, 0))
+
+    id: string;
+>id : Symbol(id, Decl(types.d.ts, 0, 25))
+
+};
+export declare type B = {
+>B : Symbol(B, Decl(types.d.ts, 2, 2))
+
+    id: number;
+>id : Symbol(id, Decl(types.d.ts, 3, 25))
+
+};
+export declare type IdType = A | B;
+>IdType : Symbol(IdType, Decl(types.d.ts, 5, 2))
+>A : Symbol(A, Decl(types.d.ts, 0, 0))
+>B : Symbol(B, Decl(types.d.ts, 2, 2))
+
+export declare class MetadataAccessor<T, D extends IdType = IdType> {
+>MetadataAccessor : Symbol(MetadataAccessor, Decl(types.d.ts, 6, 35))
+>T : Symbol(T, Decl(types.d.ts, 7, 38))
+>D : Symbol(D, Decl(types.d.ts, 7, 40))
+>IdType : Symbol(IdType, Decl(types.d.ts, 5, 2))
+>IdType : Symbol(IdType, Decl(types.d.ts, 5, 2))
+
+    readonly key: string;
+>key : Symbol(MetadataAccessor.key, Decl(types.d.ts, 7, 69))
+
+    private constructor();
+    toString(): string;
+>toString : Symbol(MetadataAccessor.toString, Decl(types.d.ts, 9, 26))
+
+    static create<T, D extends IdType = IdType>(key: string): MetadataAccessor<T, D>;
+>create : Symbol(MetadataAccessor.create, Decl(types.d.ts, 10, 23))
+>T : Symbol(T, Decl(types.d.ts, 11, 18))
+>D : Symbol(D, Decl(types.d.ts, 11, 20))
+>IdType : Symbol(IdType, Decl(types.d.ts, 5, 2))
+>IdType : Symbol(IdType, Decl(types.d.ts, 5, 2))
+>key : Symbol(key, Decl(types.d.ts, 11, 48))
+>MetadataAccessor : Symbol(MetadataAccessor, Decl(types.d.ts, 6, 35))
+>T : Symbol(T, Decl(types.d.ts, 11, 18))
+>D : Symbol(D, Decl(types.d.ts, 11, 20))
+}
+=== tests/cases/compiler/monorepo/pkg2/dist/index.d.ts ===
+import "./secondary";
+No type information for this code.export * from './types';
+No type information for this code.=== tests/cases/compiler/monorepo/pkg2/dist/types.d.ts ===
+export {MetadataAccessor} from '@raymondfeng/pkg1';
+>MetadataAccessor : Symbol(MetadataAccessor, Decl(types.d.ts, 0, 8))
+
+=== tests/cases/compiler/monorepo/pkg2/dist/secondary.d.ts ===
+export {IdType} from '@raymondfeng/pkg1';
+>IdType : Symbol(IdType, Decl(secondary.d.ts, 0, 8))
+
+=== tests/cases/compiler/monorepo/pkg3/src/index.ts ===
+export * from './keys';
+No type information for this code.=== tests/cases/compiler/monorepo/pkg3/src/keys.ts ===
+import {MetadataAccessor} from "@raymondfeng/pkg2";
+>MetadataAccessor : Symbol(MetadataAccessor, Decl(keys.ts, 0, 8))
+
+export const ADMIN = MetadataAccessor.create<boolean>('1');
+>ADMIN : Symbol(ADMIN, Decl(keys.ts, 2, 12))
+>MetadataAccessor.create : Symbol(MetadataAccessor.create, Decl(types.d.ts, 10, 23))
+>MetadataAccessor : Symbol(MetadataAccessor, Decl(keys.ts, 0, 8))
+>create : Symbol(MetadataAccessor.create, Decl(types.d.ts, 10, 23))
+

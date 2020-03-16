@@ -7,6 +7,9 @@
 ////        function biz() {
 ////            var z = 10;
 ////        }
+////        function qux() {
+////            // A function with an empty body should not be top level
+////        }
 ////    }
 ////}
 ////
@@ -45,6 +48,10 @@ verify.navigationTree({
                                     "kind": "var"
                                 }
                             ]
+                        },
+                        {
+                            "text": "qux",
+                            "kind": "function"
                         },
                         {
                             "text": "y",
@@ -111,10 +118,26 @@ verify.navigationBar([
                 "kind": "function"
             },
             {
+                "text": "qux",
+                "kind": "function"
+            },
+            {
                 "text": "y",
                 "kind": "var"
             }
         ],
         "indent": 2
-    }
+    },
+    {
+        "text": "biz",
+        "kind": "function",
+        "childItems": [
+            {
+                "text": "z",
+                "kind": "var"
+            }
+        ],
+        "indent": 3
+    },
+
 ]);

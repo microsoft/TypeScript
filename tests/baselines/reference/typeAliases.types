@@ -183,22 +183,22 @@ f15(E.x).toLowerCase();
 >toLowerCase : () => string
 
 type StringAndBoolean = [string, boolean]
->StringAndBoolean : [string, boolean]
+>StringAndBoolean : StringAndBoolean
 
 declare function f16(s: StringAndBoolean): string;
->f16 : (s: [string, boolean]) => string
->s : [string, boolean]
+>f16 : (s: StringAndBoolean) => string
+>s : StringAndBoolean
 
 var x: [string, boolean];
 >x : [string, boolean]
 
 f16(x);
 >f16(x) : string
->f16 : (s: [string, boolean]) => string
+>f16 : (s: StringAndBoolean) => string
 >x : [string, boolean]
 
 var y: StringAndBoolean = ["1", false];
->y : [string, boolean]
+>y : StringAndBoolean
 >["1", false] : [string, false]
 >"1" : "1"
 >false : false
@@ -207,7 +207,7 @@ y[0].toLowerCase();
 >y[0].toLowerCase() : string
 >y[0].toLowerCase : () => string
 >y[0] : string
->y : [string, boolean]
+>y : StringAndBoolean
 >0 : 0
 >toLowerCase : () => string
 

@@ -44,5 +44,5 @@ exports["default"] = Form;
 
 //// [index.d.ts]
 /// <reference types="react" />
-declare const Form: import("create-emotion-styled/types/react").StyledOtherComponent<{}, import("react").DetailedHTMLProps<import("react").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>;
+declare const Form: import("create-emotion-styled").StyledOtherComponent<{}, import("react").DetailedHTMLProps<import("react").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>;
 export default Form;

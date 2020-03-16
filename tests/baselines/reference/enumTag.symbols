@@ -1,7 +1,7 @@
 === tests/cases/conformance/jsdoc/a.js ===
 /** @enum {string} */
 const Target = {
->Target : Symbol(Target, Decl(a.js, 1, 5))
+>Target : Symbol(Target, Decl(a.js, 1, 5), Decl(a.js, 0, 4))
 
     START: "start",
 >START : Symbol(START, Decl(a.js, 1, 16))
@@ -21,7 +21,7 @@ const Target = {
 }
 /** @enum number */
 const Second = {
->Second : Symbol(Second, Decl(a.js, 10, 5))
+>Second : Symbol(Second, Decl(a.js, 10, 5), Decl(a.js, 9, 4))
 
     MISTAKE: "end",
 >MISTAKE : Symbol(MISTAKE, Decl(a.js, 10, 16))
@@ -35,7 +35,7 @@ const Second = {
 }
 /** @enum {function(number): number} */
 const Fs = {
->Fs : Symbol(Fs, Decl(a.js, 17, 5))
+>Fs : Symbol(Fs, Decl(a.js, 17, 5), Decl(a.js, 16, 4))
 
     ADD1: n => n + 1,
 >ADD1 : Symbol(ADD1, Decl(a.js, 17, 12))
@@ -82,17 +82,17 @@ function consume(t,s,f) {
     var v = Target.START
 >v : Symbol(v, Decl(a.js, 35, 7))
 >Target.START : Symbol(START, Decl(a.js, 1, 16))
->Target : Symbol(Target, Decl(a.js, 1, 5))
+>Target : Symbol(Target, Decl(a.js, 1, 5), Decl(a.js, 0, 4))
 >START : Symbol(START, Decl(a.js, 1, 16))
 
     v = Target.UNKNOWN // error, can't find 'UNKNOWN'
 >v : Symbol(v, Decl(a.js, 35, 7))
->Target : Symbol(Target, Decl(a.js, 1, 5))
+>Target : Symbol(Target, Decl(a.js, 1, 5), Decl(a.js, 0, 4))
 
     v = Second.MISTAKE // meh..ok, I guess?
 >v : Symbol(v, Decl(a.js, 35, 7))
 >Second.MISTAKE : Symbol(MISTAKE, Decl(a.js, 10, 16))
->Second : Symbol(Second, Decl(a.js, 10, 5))
+>Second : Symbol(Second, Decl(a.js, 10, 5), Decl(a.js, 9, 4))
 >MISTAKE : Symbol(MISTAKE, Decl(a.js, 10, 16))
 
     v = 'something else' // allowed, like Typescript's classic enums and unlike its string enums
@@ -105,14 +105,14 @@ function ff(s) {
 
     // element access with arbitrary string is an error only with noImplicitAny
     if (!Target[s]) {
->Target : Symbol(Target, Decl(a.js, 1, 5))
+>Target : Symbol(Target, Decl(a.js, 1, 5), Decl(a.js, 0, 4))
 >s : Symbol(s, Decl(a.js, 41, 12))
 
         return null
     }
     else {
         return Target[s]
->Target : Symbol(Target, Decl(a.js, 1, 5))
+>Target : Symbol(Target, Decl(a.js, 1, 5), Decl(a.js, 0, 4))
 >s : Symbol(s, Decl(a.js, 41, 12))
     }
 }

@@ -1,0 +1,35 @@
+=== tests/cases/compiler/unionExcessPropsWithPartialMember.ts ===
+interface A {
+>A : Symbol(A, Decl(unionExcessPropsWithPartialMember.ts, 0, 0))
+
+    unused?: string;
+>unused : Symbol(A.unused, Decl(unionExcessPropsWithPartialMember.ts, 0, 13))
+
+    x: string;
+>x : Symbol(A.x, Decl(unionExcessPropsWithPartialMember.ts, 1, 20))
+}
+
+interface B {
+>B : Symbol(B, Decl(unionExcessPropsWithPartialMember.ts, 3, 1))
+
+    x: string;
+>x : Symbol(B.x, Decl(unionExcessPropsWithPartialMember.ts, 5, 13))
+
+    y: string;
+>y : Symbol(B.y, Decl(unionExcessPropsWithPartialMember.ts, 6, 14))
+}
+
+declare var ab: A | B;
+>ab : Symbol(ab, Decl(unionExcessPropsWithPartialMember.ts, 10, 11))
+>A : Symbol(A, Decl(unionExcessPropsWithPartialMember.ts, 0, 0))
+>B : Symbol(B, Decl(unionExcessPropsWithPartialMember.ts, 3, 1))
+
+declare var a: A;
+>a : Symbol(a, Decl(unionExcessPropsWithPartialMember.ts, 11, 11))
+>A : Symbol(A, Decl(unionExcessPropsWithPartialMember.ts, 0, 0))
+
+ab = {...a, y: (null as any as string | undefined)}; // Should be allowed, since `y` is missing on `A`
+>ab : Symbol(ab, Decl(unionExcessPropsWithPartialMember.ts, 10, 11))
+>a : Symbol(a, Decl(unionExcessPropsWithPartialMember.ts, 11, 11))
+>y : Symbol(y, Decl(unionExcessPropsWithPartialMember.ts, 13, 11))
+

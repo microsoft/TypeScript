@@ -31,7 +31,7 @@
 ////Foo./*valueMemberOfFoo*/;
 
 const warnings = (names: ReadonlyArray<string>): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> =>
-    names.map(name => ({ name, kind: "warning" }));
+    names.map(name => ({ name, kind: "warning", sortText: completion.SortText.JavascriptIdentifiers }));
 
 verify.completions(
     {

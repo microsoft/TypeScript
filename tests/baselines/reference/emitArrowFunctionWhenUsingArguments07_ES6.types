@@ -4,9 +4,9 @@ function f(arguments) {
 >arguments : any
 
     var a = (arguments) => () => arguments;
->a : (arguments: any) => () => IArguments
->(arguments) => () => arguments : (arguments: any) => () => IArguments
+>a : (arguments: any) => () => any
+>(arguments) => () => arguments : (arguments: any) => () => any
 >arguments : any
->() => arguments : () => IArguments
->arguments : IArguments
+>() => arguments : () => any
+>arguments : any
 }

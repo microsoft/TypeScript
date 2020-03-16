@@ -1,0 +1,58 @@
+=== tests/cases/conformance/types/spread/spreadTypeVariable.ts ===
+function f1<T extends number>(arg: T) {
+>f1 : <T extends number>(arg: T) => any
+>arg : T
+
+  return { ...arg };
+>{ ...arg } : any
+>arg : T
+}
+
+function f2<T extends string[]>(arg: T) {
+>f2 : <T extends string[]>(arg: T) => T
+>arg : T
+
+  return { ...arg }
+>{ ...arg } : T
+>arg : T
+}
+
+function f3<T extends number | string[]>(arg: T) {
+>f3 : <T extends number | string[]>(arg: T) => any
+>arg : T
+
+  return { ...arg }
+>{ ...arg } : any
+>arg : T
+}
+
+function f4<T extends number | { [key: string]: any }>(arg: T) {
+>f4 : <T extends number | { [key: string]: any; }>(arg: T) => any
+>key : string
+>arg : T
+
+  return { ...arg }
+>{ ...arg } : any
+>arg : T
+}
+
+function f5<T extends string[] | { [key: string]: any }>(arg: T) {
+>f5 : <T extends string[] | { [key: string]: any; }>(arg: T) => T
+>key : string
+>arg : T
+
+  return { ...arg }
+>{ ...arg } : T
+>arg : T
+}
+
+function f6<T>(arg: T) {
+>f6 : <T>(arg: T) => T
+>arg : T
+
+  return { ...arg }
+>{ ...arg } : T
+>arg : T
+}
+
+

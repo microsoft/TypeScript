@@ -89,7 +89,7 @@ var D = /** @class */ (function () {
         get: function () {
             return this.x;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return D;

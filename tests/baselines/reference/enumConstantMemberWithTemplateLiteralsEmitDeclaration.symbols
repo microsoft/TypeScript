@@ -1,0 +1,88 @@
+=== tests/cases/conformance/enums/enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts ===
+enum T1 {
+>T1 : Symbol(T1, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 0, 0))
+
+    a = `1`
+>a : Symbol(T1.a, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 0, 9))
+}
+
+enum T2 {
+>T2 : Symbol(T2, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 2, 1))
+
+    a = `1`,
+>a : Symbol(T2.a, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 4, 9))
+
+    b = "2",
+>b : Symbol(T2.b, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 5, 12))
+
+    c = 3
+>c : Symbol(T2.c, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 6, 12))
+}
+
+enum T3 {
+>T3 : Symbol(T3, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 8, 1))
+
+    a = `1` + `1`
+>a : Symbol(T3.a, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 10, 9))
+}
+
+enum T4 {
+>T4 : Symbol(T4, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 12, 1))
+
+    a = `1`,
+>a : Symbol(T4.a, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 14, 9))
+
+    b = `1` + `1`,
+>b : Symbol(T4.b, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 15, 12))
+
+    c = `1` + "2",
+>c : Symbol(T4.c, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 16, 18))
+
+    d = "2" + `1`,
+>d : Symbol(T4.d, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 17, 18))
+
+    e = "2" + `1` + `1`
+>e : Symbol(T4.e, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 18, 18))
+}
+
+enum T5 {
+>T5 : Symbol(T5, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 20, 1))
+
+    a = `1`,
+>a : Symbol(T5.a, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 22, 9))
+
+    b = `1` + `2`,
+>b : Symbol(T5.b, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 23, 12))
+
+    c = `1` + `2` + `3`,
+>c : Symbol(T5.c, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 24, 18))
+
+    d = 1
+>d : Symbol(T5.d, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 25, 24))
+}
+
+enum T6 {
+>T6 : Symbol(T6, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 27, 1))
+
+    a = 1,
+>a : Symbol(T6.a, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 29, 9))
+
+    b = `12`.length
+>b : Symbol(T6.b, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 30, 10))
+>`12`.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+
+declare enum T7 {
+>T7 : Symbol(T7, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 32, 1))
+
+    a = `1`,
+>a : Symbol(T7.a, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 34, 17))
+
+    b = `1` + `1`,
+>b : Symbol(T7.b, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 35, 12))
+
+    c = "2" + `1`
+>c : Symbol(T7.c, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 36, 18))
+}
+

@@ -3,13 +3,15 @@ tests/cases/compiler/intTypeCheck.ts(71,6): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/intTypeCheck.ts(85,5): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/intTypeCheck.ts(99,5): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
   Type 'Object' is missing the following properties from type 'i1': p, p3, p6
-tests/cases/compiler/intTypeCheck.ts(100,16): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/intTypeCheck.ts(100,20): error TS2351: This expression is not constructable.
+  Type 'i1' has no construct signatures.
 tests/cases/compiler/intTypeCheck.ts(101,5): error TS2739: Type 'Base' is missing the following properties from type 'i1': p, p3, p6
 tests/cases/compiler/intTypeCheck.ts(103,5): error TS2739: Type '() => void' is missing the following properties from type 'i1': p, p3, p6
 tests/cases/compiler/intTypeCheck.ts(106,5): error TS2322: Type 'boolean' is not assignable to type 'i1'.
 tests/cases/compiler/intTypeCheck.ts(106,20): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(106,21): error TS2693: 'i1' only refers to a type, but is being used as a value here.
-tests/cases/compiler/intTypeCheck.ts(107,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/intTypeCheck.ts(107,21): error TS2351: This expression is not constructable.
+  Type '{}' has no construct signatures.
 tests/cases/compiler/intTypeCheck.ts(112,5): error TS2322: Type '{}' is not assignable to type 'i2'.
   Type '{}' provides no match for the signature '(): any'.
 tests/cases/compiler/intTypeCheck.ts(113,5): error TS2322: Type 'Object' is not assignable to type 'i2'.
@@ -21,7 +23,8 @@ tests/cases/compiler/intTypeCheck.ts(115,5): error TS2322: Type 'Base' is not as
 tests/cases/compiler/intTypeCheck.ts(120,5): error TS2322: Type 'boolean' is not assignable to type 'i2'.
 tests/cases/compiler/intTypeCheck.ts(120,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(120,22): error TS2693: 'i2' only refers to a type, but is being used as a value here.
-tests/cases/compiler/intTypeCheck.ts(121,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/intTypeCheck.ts(121,21): error TS2351: This expression is not constructable.
+  Type '{}' has no construct signatures.
 tests/cases/compiler/intTypeCheck.ts(126,5): error TS2322: Type '{}' is not assignable to type 'i3'.
   Type '{}' provides no match for the signature 'new (): any'.
 tests/cases/compiler/intTypeCheck.ts(127,5): error TS2322: Type 'Object' is not assignable to type 'i3'.
@@ -34,22 +37,27 @@ tests/cases/compiler/intTypeCheck.ts(131,5): error TS2322: Type '() => void' is 
 tests/cases/compiler/intTypeCheck.ts(134,5): error TS2322: Type 'boolean' is not assignable to type 'i3'.
 tests/cases/compiler/intTypeCheck.ts(134,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(134,22): error TS2693: 'i3' only refers to a type, but is being used as a value here.
-tests/cases/compiler/intTypeCheck.ts(135,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/compiler/intTypeCheck.ts(142,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/intTypeCheck.ts(135,21): error TS2351: This expression is not constructable.
+  Type '{}' has no construct signatures.
+tests/cases/compiler/intTypeCheck.ts(142,21): error TS2351: This expression is not constructable.
+  Type 'i4' has no construct signatures.
 tests/cases/compiler/intTypeCheck.ts(148,5): error TS2322: Type 'boolean' is not assignable to type 'i4'.
 tests/cases/compiler/intTypeCheck.ts(148,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(148,22): error TS2693: 'i4' only refers to a type, but is being used as a value here.
-tests/cases/compiler/intTypeCheck.ts(149,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/intTypeCheck.ts(149,21): error TS2351: This expression is not constructable.
+  Type '{}' has no construct signatures.
 tests/cases/compiler/intTypeCheck.ts(154,5): error TS2739: Type '{}' is missing the following properties from type 'i5': p, p3, p6
 tests/cases/compiler/intTypeCheck.ts(155,5): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
   Type 'Object' is missing the following properties from type 'i5': p, p3, p6
-tests/cases/compiler/intTypeCheck.ts(156,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/intTypeCheck.ts(156,21): error TS2351: This expression is not constructable.
+  Type 'i5' has no construct signatures.
 tests/cases/compiler/intTypeCheck.ts(157,5): error TS2739: Type 'Base' is missing the following properties from type 'i5': p, p3, p6
 tests/cases/compiler/intTypeCheck.ts(159,5): error TS2739: Type '() => void' is missing the following properties from type 'i5': p, p3, p6
 tests/cases/compiler/intTypeCheck.ts(162,5): error TS2322: Type 'boolean' is not assignable to type 'i5'.
 tests/cases/compiler/intTypeCheck.ts(162,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(162,22): error TS2693: 'i5' only refers to a type, but is being used as a value here.
-tests/cases/compiler/intTypeCheck.ts(163,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/intTypeCheck.ts(163,21): error TS2351: This expression is not constructable.
+  Type '{}' has no construct signatures.
 tests/cases/compiler/intTypeCheck.ts(168,5): error TS2322: Type '{}' is not assignable to type 'i6'.
   Type '{}' provides no match for the signature '(): any'.
 tests/cases/compiler/intTypeCheck.ts(169,5): error TS2322: Type 'Object' is not assignable to type 'i6'.
@@ -63,7 +71,8 @@ tests/cases/compiler/intTypeCheck.ts(173,5): error TS2322: Type '() => void' is 
 tests/cases/compiler/intTypeCheck.ts(176,5): error TS2322: Type 'boolean' is not assignable to type 'i6'.
 tests/cases/compiler/intTypeCheck.ts(176,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(176,22): error TS2693: 'i6' only refers to a type, but is being used as a value here.
-tests/cases/compiler/intTypeCheck.ts(177,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/intTypeCheck.ts(177,21): error TS2351: This expression is not constructable.
+  Type '{}' has no construct signatures.
 tests/cases/compiler/intTypeCheck.ts(182,5): error TS2322: Type '{}' is not assignable to type 'i7'.
   Type '{}' provides no match for the signature 'new (): any'.
 tests/cases/compiler/intTypeCheck.ts(183,5): error TS2322: Type 'Object' is not assignable to type 'i7'.
@@ -76,12 +85,15 @@ tests/cases/compiler/intTypeCheck.ts(187,5): error TS2322: Type '() => void' is 
 tests/cases/compiler/intTypeCheck.ts(190,5): error TS2322: Type 'boolean' is not assignable to type 'i7'.
 tests/cases/compiler/intTypeCheck.ts(190,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(190,22): error TS2693: 'i7' only refers to a type, but is being used as a value here.
-tests/cases/compiler/intTypeCheck.ts(191,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/compiler/intTypeCheck.ts(198,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/intTypeCheck.ts(191,21): error TS2351: This expression is not constructable.
+  Type '{}' has no construct signatures.
+tests/cases/compiler/intTypeCheck.ts(198,21): error TS2351: This expression is not constructable.
+  Type 'i8' has no construct signatures.
 tests/cases/compiler/intTypeCheck.ts(204,5): error TS2322: Type 'boolean' is not assignable to type 'i8'.
 tests/cases/compiler/intTypeCheck.ts(204,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(204,22): error TS2693: 'i8' only refers to a type, but is being used as a value here.
-tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/intTypeCheck.ts(205,21): error TS2351: This expression is not constructable.
+  Type '{}' has no construct signatures.
 
 
 ==== tests/cases/compiler/intTypeCheck.ts (63 errors) ====
@@ -194,8 +206,9 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
 !!! error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
 !!! error TS2696:   Type 'Object' is missing the following properties from type 'i1': p, p3, p6
     var obj3: i1 = new obj0;
-                   ~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+                       ~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'i1' has no construct signatures.
     var obj4: i1 = new Base;
         ~~~~
 !!! error TS2739: Type 'Base' is missing the following properties from type 'i1': p, p3, p6
@@ -213,8 +226,9 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
                         ~~
 !!! error TS2693: 'i1' only refers to a type, but is being used as a value here.
     var obj10: i1 = new {};
-                    ~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+                        ~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type '{}' has no construct signatures.
     //
     // Call signatures
     //
@@ -247,8 +261,9 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
                          ~~
 !!! error TS2693: 'i2' only refers to a type, but is being used as a value here.
     var obj21: i2 = new {};
-                    ~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+                        ~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type '{}' has no construct signatures.
     //
     // Construct Signatures
     //
@@ -282,8 +297,9 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
                          ~~
 !!! error TS2693: 'i3' only refers to a type, but is being used as a value here.
     var obj32: i3 = new {};
-                    ~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+                        ~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type '{}' has no construct signatures.
     //
     // Index Signatures
     //
@@ -291,8 +307,9 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj34: i4 = {};
     var obj35: i4 = new Object();
     var obj36: i4 = new obj33;
-                    ~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+                        ~~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'i4' has no construct signatures.
     var obj37: i4 = new Base;
     var obj38: i4 = null;
     var obj39: i4 = function () { };
@@ -306,8 +323,9 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
                          ~~
 !!! error TS2693: 'i4' only refers to a type, but is being used as a value here.
     var obj43: i4 = new {};
-                    ~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+                        ~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type '{}' has no construct signatures.
     //
     // Interface Derived I1
     //
@@ -320,8 +338,9 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
 !!! error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
 !!! error TS2696:   Type 'Object' is missing the following properties from type 'i5': p, p3, p6
     var obj47: i5 = new obj44;
-                    ~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+                        ~~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'i5' has no construct signatures.
     var obj48: i5 = new Base;
         ~~~~~
 !!! error TS2739: Type 'Base' is missing the following properties from type 'i5': p, p3, p6
@@ -339,8 +358,9 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
                          ~~
 !!! error TS2693: 'i5' only refers to a type, but is being used as a value here.
     var obj54: i5 = new {};
-                    ~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+                        ~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type '{}' has no construct signatures.
     //
     // Interface Derived I2
     //
@@ -376,8 +396,9 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
                          ~~
 !!! error TS2693: 'i6' only refers to a type, but is being used as a value here.
     var obj65: i6 = new {};
-                    ~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+                        ~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type '{}' has no construct signatures.
     //
     // Interface Derived I3
     //
@@ -411,8 +432,9 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
                          ~~
 !!! error TS2693: 'i7' only refers to a type, but is being used as a value here.
     var obj76: i7 = new {};
-                    ~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+                        ~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type '{}' has no construct signatures.
     //
     // Interface Derived I4
     //
@@ -420,8 +442,9 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj78: i8 = {};
     var obj79: i8 = new Object();
     var obj80: i8 = new obj77;
-                    ~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+                        ~~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'i8' has no construct signatures.
     var obj81: i8 = new Base;
     var obj82: i8 = null;
     var obj83: i8 = function () { };
@@ -435,5 +458,6 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
                          ~~
 !!! error TS2693: 'i8' only refers to a type, but is being used as a value here.
     var obj87: i8 = new {};
-                    ~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+                        ~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type '{}' has no construct signatures.

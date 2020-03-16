@@ -78,6 +78,5 @@ class SomeDerived<T> extends SomeBase<number, string, T> {
     constructor() {
         super<number, string, T> `hello world`;
 >super : Symbol(SomeBase, Decl(taggedTemplatesWithTypeArguments2.ts, 27, 10))
->T : Symbol(T, Decl(taggedTemplatesWithTypeArguments2.ts, 33, 18))
     }
 }

@@ -25,8 +25,14 @@
 ////
 ////    }|]
 ////}|]
+////// class expressions
+//// (new class[| {
+////     bla()[| {
+////
+////     }|]
+//// }|])
 ////switch(1)[| {
-//// case 1: break;
+//// case 1:[| break;|]
 ////}|]
 ////
 ////var array =[| [
@@ -96,5 +102,18 @@
 //////outline after a deeply nested node
 ////class AfterNestedNodes[| {
 ////}|]
+////// function arguments
+////function f(x: number[], y: number[])[| {
+////    return 3;
+////}|]
+////f(
+//////  single line array literal span won't render in VS
+////    [|[0]|],
+////    [|[
+////        1,
+////        2
+////    ]|]
+////);
+
 
 verify.outliningSpansInCurrentFile(test.ranges(), "code");

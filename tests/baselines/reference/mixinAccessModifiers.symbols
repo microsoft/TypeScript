@@ -328,3 +328,82 @@ class C6 extends Mix(Public, Public2) {
 	}
 }
 
+class ProtectedGeneric<T> {
+>ProtectedGeneric : Symbol(ProtectedGeneric, Decl(mixinAccessModifiers.ts, 105, 1))
+>T : Symbol(T, Decl(mixinAccessModifiers.ts, 107, 23))
+
+	private privateMethod() {}
+>privateMethod : Symbol(ProtectedGeneric.privateMethod, Decl(mixinAccessModifiers.ts, 107, 27))
+
+	protected protectedMethod() {}
+>protectedMethod : Symbol(ProtectedGeneric.protectedMethod, Decl(mixinAccessModifiers.ts, 108, 27))
+}
+
+class ProtectedGeneric2<T> {
+>ProtectedGeneric2 : Symbol(ProtectedGeneric2, Decl(mixinAccessModifiers.ts, 110, 1))
+>T : Symbol(T, Decl(mixinAccessModifiers.ts, 112, 24))
+
+	private privateMethod() {}
+>privateMethod : Symbol(ProtectedGeneric2.privateMethod, Decl(mixinAccessModifiers.ts, 112, 28))
+
+	protected protectedMethod() {}
+>protectedMethod : Symbol(ProtectedGeneric2.protectedMethod, Decl(mixinAccessModifiers.ts, 113, 27))
+}
+
+function f7(x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) {
+>f7 : Symbol(f7, Decl(mixinAccessModifiers.ts, 115, 1))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 117, 12))
+>ProtectedGeneric : Symbol(ProtectedGeneric, Decl(mixinAccessModifiers.ts, 105, 1))
+>ProtectedGeneric : Symbol(ProtectedGeneric, Decl(mixinAccessModifiers.ts, 105, 1))
+
+	x.privateMethod(); // Error, private constituent makes method inaccessible
+>x.privateMethod : Symbol(ProtectedGeneric.privateMethod, Decl(mixinAccessModifiers.ts, 107, 27))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 117, 12))
+>privateMethod : Symbol(ProtectedGeneric.privateMethod, Decl(mixinAccessModifiers.ts, 107, 27))
+
+	x.protectedMethod(); // Error, protected when all constituents are protected
+>x.protectedMethod : Symbol(ProtectedGeneric.protectedMethod, Decl(mixinAccessModifiers.ts, 108, 27))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 117, 12))
+>protectedMethod : Symbol(ProtectedGeneric.protectedMethod, Decl(mixinAccessModifiers.ts, 108, 27))
+}
+
+function f8(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric2<{a:void;b:void;}>) {
+>f8 : Symbol(f8, Decl(mixinAccessModifiers.ts, 120, 1))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 122, 12))
+>ProtectedGeneric : Symbol(ProtectedGeneric, Decl(mixinAccessModifiers.ts, 105, 1))
+>a : Symbol(a, Decl(mixinAccessModifiers.ts, 122, 33))
+>ProtectedGeneric2 : Symbol(ProtectedGeneric2, Decl(mixinAccessModifiers.ts, 110, 1))
+>a : Symbol(a, Decl(mixinAccessModifiers.ts, 122, 65))
+>b : Symbol(b, Decl(mixinAccessModifiers.ts, 122, 72))
+
+	x.privateMethod(); // Error, private constituent makes method inaccessible
+>x.privateMethod : Symbol(privateMethod, Decl(mixinAccessModifiers.ts, 107, 27), Decl(mixinAccessModifiers.ts, 112, 28))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 122, 12))
+>privateMethod : Symbol(privateMethod, Decl(mixinAccessModifiers.ts, 107, 27), Decl(mixinAccessModifiers.ts, 112, 28))
+
+	x.protectedMethod(); // Error, protected when all constituents are protected
+>x.protectedMethod : Symbol(protectedMethod, Decl(mixinAccessModifiers.ts, 108, 27), Decl(mixinAccessModifiers.ts, 113, 27))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 122, 12))
+>protectedMethod : Symbol(protectedMethod, Decl(mixinAccessModifiers.ts, 108, 27), Decl(mixinAccessModifiers.ts, 113, 27))
+}
+
+function f9(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric<{a:void;b:void;}>) {
+>f9 : Symbol(f9, Decl(mixinAccessModifiers.ts, 125, 1))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 127, 12))
+>ProtectedGeneric : Symbol(ProtectedGeneric, Decl(mixinAccessModifiers.ts, 105, 1))
+>a : Symbol(a, Decl(mixinAccessModifiers.ts, 127, 33))
+>ProtectedGeneric : Symbol(ProtectedGeneric, Decl(mixinAccessModifiers.ts, 105, 1))
+>a : Symbol(a, Decl(mixinAccessModifiers.ts, 127, 64))
+>b : Symbol(b, Decl(mixinAccessModifiers.ts, 127, 71))
+
+	x.privateMethod(); // Error, private constituent makes method inaccessible
+>x.privateMethod : Symbol(ProtectedGeneric.privateMethod, Decl(mixinAccessModifiers.ts, 107, 27), Decl(mixinAccessModifiers.ts, 107, 27))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 127, 12))
+>privateMethod : Symbol(ProtectedGeneric.privateMethod, Decl(mixinAccessModifiers.ts, 107, 27), Decl(mixinAccessModifiers.ts, 107, 27))
+
+	x.protectedMethod(); // Error, protected when all constituents are protected
+>x.protectedMethod : Symbol(ProtectedGeneric.protectedMethod, Decl(mixinAccessModifiers.ts, 108, 27), Decl(mixinAccessModifiers.ts, 108, 27))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 127, 12))
+>protectedMethod : Symbol(ProtectedGeneric.protectedMethod, Decl(mixinAccessModifiers.ts, 108, 27), Decl(mixinAccessModifiers.ts, 108, 27))
+}
+

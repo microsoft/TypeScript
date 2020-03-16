@@ -20,7 +20,7 @@ import * as set from "./t1";
 
 === tests/cases/conformance/es6/modules/t3.ts ===
 import { set as yield } from "./t1";
->set : Symbol(yield, Decl(t3.ts, 0, 8))
+>set : Symbol(set, Decl(t1.ts, 6, 8))
 >yield : Symbol(yield, Decl(t3.ts, 0, 8))
 
 === tests/cases/conformance/es6/modules/t4.ts ===

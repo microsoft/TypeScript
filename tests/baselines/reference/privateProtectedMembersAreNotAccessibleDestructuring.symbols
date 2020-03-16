@@ -49,7 +49,7 @@ let k = new K();
 >k : Symbol(k, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 15, 3))
 >K : Symbol(K, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 0, 0))
 
-let { priv } = k; // error 
+let { priv } = k; // error
 >priv : Symbol(priv, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 16, 5))
 >k : Symbol(k, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 15, 3))
 
@@ -61,12 +61,21 @@ let { privateMethod } = k; // error
 >privateMethod : Symbol(privateMethod, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 18, 5))
 >k : Symbol(k, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 15, 3))
 
-let { priv: a, prot: b, privateMethod: f } = k; // error
+let { priv: a, prot: b, privateMethod: pm } = k; // error
 >priv : Symbol(K.priv, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 0, 9))
 >a : Symbol(a, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 19, 5))
 >prot : Symbol(K.prot, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 1, 17))
 >b : Symbol(b, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 19, 14))
 >privateMethod : Symbol(K.privateMethod, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 2, 19))
->f : Symbol(f, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 19, 23))
+>pm : Symbol(pm, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 19, 23))
 >k : Symbol(k, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 15, 3))
+
+function f({ priv, prot, privateMethod }: K) {
+>f : Symbol(f, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 19, 48))
+>priv : Symbol(priv, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 20, 12))
+>prot : Symbol(prot, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 20, 18))
+>privateMethod : Symbol(privateMethod, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 20, 24))
+>K : Symbol(K, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 0, 0))
+
+}
 

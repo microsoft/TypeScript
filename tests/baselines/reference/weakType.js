@@ -55,12 +55,12 @@ type Weak = {
         b?: number
     }
 }
-declare let unknown: {
+declare let propertiesWrong: {
     properties: {
         wrong: string
     }
 }
-let weak: Weak & Spoiler = unknown
+let weak: Weak & Spoiler = propertiesWrong
 
 
 
@@ -89,4 +89,4 @@ var K = /** @class */ (function () {
     return K;
 }());
 var ctor = K;
-var weak = unknown;
+var weak = propertiesWrong;

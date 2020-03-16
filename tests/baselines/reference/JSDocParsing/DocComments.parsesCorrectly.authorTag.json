@@ -1,0 +1,45 @@
+{
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 112,
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
+    "tags": {
+        "0": {
+            "kind": "JSDocAuthorTag",
+            "pos": 7,
+            "end": 50,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 8,
+                "end": 14,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "author"
+            },
+            "comment": "John Doe <john.doe@example.com>"
+        },
+        "1": {
+            "kind": "JSDocAuthorTag",
+            "pos": 50,
+            "end": 110,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 51,
+                "end": 57,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "author"
+            },
+            "comment": "John Doe <john.doe@example.com> unexpected comment"
+        },
+        "length": 2,
+        "pos": 7,
+        "end": 110
+    }
+}

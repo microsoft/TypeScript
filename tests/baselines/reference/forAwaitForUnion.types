@@ -8,3 +8,4 @@ async function f<T>(source: Iterable<T> | AsyncIterable<T>) {
 >source : Iterable<T> | AsyncIterable<T>
     }
 }
+

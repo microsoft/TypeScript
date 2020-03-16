@@ -73,3 +73,8 @@ interface R {
 interface S {
     [u: "foo" | "bar"]: A;
 }
+
+type Key = string;
+interface T {
+    [key: Key]
+}

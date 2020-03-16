@@ -12,4 +12,4 @@
 ////
 //// hello/**/
 
-verify.completions({ includes: "helloWorld" });
+verify.completions({ includes: { name: "helloWorld", sortText: completion.SortText.JavascriptIdentifiers } });

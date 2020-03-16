@@ -15,7 +15,7 @@ export default class SomeClass {
 
 === tests/cases/compiler/b.ts ===
 import {default as Def} from "./a"
->default : Symbol(Def, Decl(b.ts, 0, 8))
+>default : Symbol(Def, Decl(a.ts, 2, 1))
 >Def : Symbol(Def, Decl(b.ts, 0, 8))
 
 let a = Def.E.one;

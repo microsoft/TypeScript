@@ -124,17 +124,17 @@ app2({
 
 
 type ActionsArray<State> = ((state: State) => State)[];
->ActionsArray : ((state: State) => State)[]
+>ActionsArray : ActionsArray<State>
 >state : State
 
 declare function app3<State, Actions extends ActionsArray<State>>(obj: Options<State, Actions>): void;
->app3 : <State, Actions extends ((state: State) => State)[]>(obj: Options<State, Actions>) => void
+>app3 : <State, Actions extends ActionsArray<State>>(obj: Options<State, Actions>) => void
 >obj : Options<State, Actions>
 
 app3({
 >app3({    state: 100,    actions: [        s => s // Should be typed number => number    ],    view: (s, a) => undefined as any,}) : void
->app3 : <State, Actions extends ((state: State) => State)[]>(obj: Options<State, Actions>) => void
->{    state: 100,    actions: [        s => s // Should be typed number => number    ],    view: (s, a) => undefined as any,} : { state: number; actions: ((s: number) => number)[]; view: (s: number, a: ((state: number) => number)[]) => any; }
+>app3 : <State, Actions extends ActionsArray<State>>(obj: Options<State, Actions>) => void
+>{    state: 100,    actions: [        s => s // Should be typed number => number    ],    view: (s, a) => undefined as any,} : { state: number; actions: ((s: number) => number)[]; view: (s: number, a: ActionsArray<number>) => any; }
 
     state: 100,
 >state : number
@@ -151,10 +151,10 @@ app3({
 
     ],
     view: (s, a) => undefined as any,
->view : (s: number, a: ((state: number) => number)[]) => any
->(s, a) => undefined as any : (s: number, a: ((state: number) => number)[]) => any
+>view : (s: number, a: ActionsArray<number>) => any
+>(s, a) => undefined as any : (s: number, a: ActionsArray<number>) => any
 >s : number
->a : ((state: number) => number)[]
+>a : ActionsArray<number>
 >undefined as any : any
 >undefined : undefined
 

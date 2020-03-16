@@ -1,0 +1,67 @@
+=== tests/cases/compiler/returnTypeInferenceNotTooBroad.ts ===
+type Signs = { kind: 'a'; a: 3; } | { kind: 'b'; b: 2; } | { kind: 'c'; c: 1; };
+>Signs : Symbol(Signs, Decl(returnTypeInferenceNotTooBroad.ts, 0, 0))
+>kind : Symbol(kind, Decl(returnTypeInferenceNotTooBroad.ts, 0, 14))
+>a : Symbol(a, Decl(returnTypeInferenceNotTooBroad.ts, 0, 25))
+>kind : Symbol(kind, Decl(returnTypeInferenceNotTooBroad.ts, 0, 37))
+>b : Symbol(b, Decl(returnTypeInferenceNotTooBroad.ts, 0, 48))
+>kind : Symbol(kind, Decl(returnTypeInferenceNotTooBroad.ts, 0, 60))
+>c : Symbol(c, Decl(returnTypeInferenceNotTooBroad.ts, 0, 71))
+
+interface Opts<T> {
+>Opts : Symbol(Opts, Decl(returnTypeInferenceNotTooBroad.ts, 0, 80))
+>T : Symbol(T, Decl(returnTypeInferenceNotTooBroad.ts, 1, 15))
+
+    low?: number;
+>low : Symbol(Opts.low, Decl(returnTypeInferenceNotTooBroad.ts, 1, 19))
+
+    sign?: T
+>sign : Symbol(Opts.sign, Decl(returnTypeInferenceNotTooBroad.ts, 2, 17))
+>T : Symbol(T, Decl(returnTypeInferenceNotTooBroad.ts, 1, 15))
+}
+interface Wrapper<T> {
+>Wrapper : Symbol(Wrapper, Decl(returnTypeInferenceNotTooBroad.ts, 4, 1))
+>T : Symbol(T, Decl(returnTypeInferenceNotTooBroad.ts, 5, 18))
+}
+declare function sepsis<T extends Signs>(opts: Opts<T>): Wrapper<T>;
+>sepsis : Symbol(sepsis, Decl(returnTypeInferenceNotTooBroad.ts, 6, 1))
+>T : Symbol(T, Decl(returnTypeInferenceNotTooBroad.ts, 7, 24))
+>Signs : Symbol(Signs, Decl(returnTypeInferenceNotTooBroad.ts, 0, 0))
+>opts : Symbol(opts, Decl(returnTypeInferenceNotTooBroad.ts, 7, 41))
+>Opts : Symbol(Opts, Decl(returnTypeInferenceNotTooBroad.ts, 0, 80))
+>T : Symbol(T, Decl(returnTypeInferenceNotTooBroad.ts, 7, 24))
+>Wrapper : Symbol(Wrapper, Decl(returnTypeInferenceNotTooBroad.ts, 4, 1))
+>T : Symbol(T, Decl(returnTypeInferenceNotTooBroad.ts, 7, 24))
+
+declare function unwrap<T>(w: Wrapper<T>): T;
+>unwrap : Symbol(unwrap, Decl(returnTypeInferenceNotTooBroad.ts, 7, 68))
+>T : Symbol(T, Decl(returnTypeInferenceNotTooBroad.ts, 8, 24))
+>w : Symbol(w, Decl(returnTypeInferenceNotTooBroad.ts, 8, 27))
+>Wrapper : Symbol(Wrapper, Decl(returnTypeInferenceNotTooBroad.ts, 4, 1))
+>T : Symbol(T, Decl(returnTypeInferenceNotTooBroad.ts, 8, 24))
+>T : Symbol(T, Decl(returnTypeInferenceNotTooBroad.ts, 8, 24))
+
+export const y = sepsis({ low: 1, sign: { kind: 'a', a: 3 }});
+>y : Symbol(y, Decl(returnTypeInferenceNotTooBroad.ts, 9, 12))
+>sepsis : Symbol(sepsis, Decl(returnTypeInferenceNotTooBroad.ts, 6, 1))
+>low : Symbol(low, Decl(returnTypeInferenceNotTooBroad.ts, 9, 25))
+>sign : Symbol(sign, Decl(returnTypeInferenceNotTooBroad.ts, 9, 33))
+>kind : Symbol(kind, Decl(returnTypeInferenceNotTooBroad.ts, 9, 41))
+>a : Symbol(a, Decl(returnTypeInferenceNotTooBroad.ts, 9, 52))
+
+// $ExpectType { kind: "a"; a: 3; }
+export const yun = unwrap(y);
+>yun : Symbol(yun, Decl(returnTypeInferenceNotTooBroad.ts, 11, 12))
+>unwrap : Symbol(unwrap, Decl(returnTypeInferenceNotTooBroad.ts, 7, 68))
+>y : Symbol(y, Decl(returnTypeInferenceNotTooBroad.ts, 9, 12))
+
+// $ExpectType { kind: "a"; a: 3; }
+export const yone = unwrap(sepsis({ low: 1, sign: { kind: 'a', a: 3 }}));
+>yone : Symbol(yone, Decl(returnTypeInferenceNotTooBroad.ts, 13, 12))
+>unwrap : Symbol(unwrap, Decl(returnTypeInferenceNotTooBroad.ts, 7, 68))
+>sepsis : Symbol(sepsis, Decl(returnTypeInferenceNotTooBroad.ts, 6, 1))
+>low : Symbol(low, Decl(returnTypeInferenceNotTooBroad.ts, 13, 35))
+>sign : Symbol(sign, Decl(returnTypeInferenceNotTooBroad.ts, 13, 43))
+>kind : Symbol(kind, Decl(returnTypeInferenceNotTooBroad.ts, 13, 51))
+>a : Symbol(a, Decl(returnTypeInferenceNotTooBroad.ts, 13, 62))
+

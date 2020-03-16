@@ -6,7 +6,7 @@ console.log("a" in { "a": true });
 >log : (message?: any, ...optionalParams: any[]) => void
 >"a" in { "a": true } : boolean
 >"a" : "a"
->{ "a": true } : { "a": boolean; }
+>{ "a": true } : { a: boolean; }
 >"a" : boolean
 >true : true
 

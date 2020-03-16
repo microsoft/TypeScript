@@ -1,0 +1,181 @@
+=== tests/cases/compiler/commentsAfterSpread.ts ===
+const identity = (a) => a;
+>identity : Symbol(identity, Decl(commentsAfterSpread.ts, 0, 5))
+>a : Symbol(a, Decl(commentsAfterSpread.ts, 0, 18))
+>a : Symbol(a, Decl(commentsAfterSpread.ts, 0, 18))
+
+const a = {
+>a : Symbol(a, Decl(commentsAfterSpread.ts, 2, 5))
+
+  .../*#__PURE__*/identity({
+>identity : Symbol(identity, Decl(commentsAfterSpread.ts, 0, 5))
+
+    b: 1
+>b : Symbol(b, Decl(commentsAfterSpread.ts, 3, 28))
+
+  })
+};
+
+const b = {
+>b : Symbol(b, Decl(commentsAfterSpread.ts, 8, 5))
+
+  ...
+  /*#__PURE__*/identity({
+>identity : Symbol(identity, Decl(commentsAfterSpread.ts, 0, 5))
+
+    b: 1
+>b : Symbol(b, Decl(commentsAfterSpread.ts, 10, 25))
+
+  })
+};
+
+const c = {
+>c : Symbol(c, Decl(commentsAfterSpread.ts, 15, 5))
+
+  ...
+  /*#__PURE__*/
+  identity({
+>identity : Symbol(identity, Decl(commentsAfterSpread.ts, 0, 5))
+
+    b: 1
+>b : Symbol(b, Decl(commentsAfterSpread.ts, 18, 12))
+
+  })
+};
+
+const d = {
+>d : Symbol(d, Decl(commentsAfterSpread.ts, 23, 5))
+
+  .../*#__PURE__*/
+  identity({
+>identity : Symbol(identity, Decl(commentsAfterSpread.ts, 0, 5))
+
+    b: 1
+>b : Symbol(b, Decl(commentsAfterSpread.ts, 25, 12))
+
+  })
+};
+
+function e (.../* comment e */args) {
+>e : Symbol(e, Decl(commentsAfterSpread.ts, 28, 2))
+>args : Symbol(args, Decl(commentsAfterSpread.ts, 30, 12))
+
+  const [ea, eb] = [.../* comment eab */args];
+>ea : Symbol(ea, Decl(commentsAfterSpread.ts, 31, 9))
+>eb : Symbol(eb, Decl(commentsAfterSpread.ts, 31, 12))
+>args : Symbol(args, Decl(commentsAfterSpread.ts, 30, 12))
+
+  return args.length;
+>args.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(commentsAfterSpread.ts, 30, 12))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+}
+
+function f (
+>f : Symbol(f, Decl(commentsAfterSpread.ts, 33, 1))
+
+  first,
+>first : Symbol(first, Decl(commentsAfterSpread.ts, 35, 12))
+
+  .../* comment f */rest
+>rest : Symbol(rest, Decl(commentsAfterSpread.ts, 36, 8))
+
+) {
+  return rest.length;
+>rest.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>rest : Symbol(rest, Decl(commentsAfterSpread.ts, 36, 8))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+}
+
+function g (
+>g : Symbol(g, Decl(commentsAfterSpread.ts, 40, 1))
+
+  first,
+>first : Symbol(first, Decl(commentsAfterSpread.ts, 42, 12))
+
+  .../* comment g */
+  rest
+>rest : Symbol(rest, Decl(commentsAfterSpread.ts, 43, 8))
+
+) {
+  const [ga, gb] = [.../* comment gab */
+>ga : Symbol(ga, Decl(commentsAfterSpread.ts, 47, 9))
+>gb : Symbol(gb, Decl(commentsAfterSpread.ts, 47, 12))
+
+    rest
+>rest : Symbol(rest, Decl(commentsAfterSpread.ts, 43, 8))
+
+  ]
+  return rest.length;
+>rest.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>rest : Symbol(rest, Decl(commentsAfterSpread.ts, 43, 8))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+}
+
+const h = (.../* comment h */args) => args.length;
+>h : Symbol(h, Decl(commentsAfterSpread.ts, 53, 5))
+>args : Symbol(args, Decl(commentsAfterSpread.ts, 53, 11))
+>args.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(commentsAfterSpread.ts, 53, 11))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+const i = (
+>i : Symbol(i, Decl(commentsAfterSpread.ts, 55, 5))
+
+  first, .../* comment i */rest
+>first : Symbol(first, Decl(commentsAfterSpread.ts, 55, 11))
+>rest : Symbol(rest, Decl(commentsAfterSpread.ts, 56, 8))
+
+) => rest.length;
+>rest.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>rest : Symbol(rest, Decl(commentsAfterSpread.ts, 56, 8))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+const j = (
+>j : Symbol(j, Decl(commentsAfterSpread.ts, 59, 5))
+
+  first,
+>first : Symbol(first, Decl(commentsAfterSpread.ts, 59, 11))
+
+  .../* comment j */
+  rest
+>rest : Symbol(rest, Decl(commentsAfterSpread.ts, 60, 8))
+
+) => rest.length;
+>rest.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>rest : Symbol(rest, Decl(commentsAfterSpread.ts, 60, 8))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+function k ({
+>k : Symbol(k, Decl(commentsAfterSpread.ts, 63, 17))
+
+  first,
+>first : Symbol(first, Decl(commentsAfterSpread.ts, 65, 13))
+
+  .../* comment k */rest
+>rest : Symbol(rest, Decl(commentsAfterSpread.ts, 66, 8))
+
+}) {
+  const { ka, kb, .../* comment kr */remaining } = rest;
+>ka : Symbol(ka, Decl(commentsAfterSpread.ts, 69, 9))
+>kb : Symbol(kb, Decl(commentsAfterSpread.ts, 69, 13))
+>remaining : Symbol(remaining, Decl(commentsAfterSpread.ts, 69, 17))
+>rest : Symbol(rest, Decl(commentsAfterSpread.ts, 66, 8))
+
+  const {
+    kc,
+>kc : Symbol(kc, Decl(commentsAfterSpread.ts, 70, 9))
+
+    kd,
+>kd : Symbol(kd, Decl(commentsAfterSpread.ts, 71, 7))
+
+    .../* comment kr2 */
+    remaining2
+>remaining2 : Symbol(remaining2, Decl(commentsAfterSpread.ts, 72, 7))
+
+  } = rest;
+>rest : Symbol(rest, Decl(commentsAfterSpread.ts, 66, 8))
+
+  return { .../* comment return k */ remaining };
+>remaining : Symbol(remaining, Decl(commentsAfterSpread.ts, 69, 17))
+}

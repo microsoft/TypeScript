@@ -34,7 +34,7 @@ export type key = "ar" | "bg";
 import { Locale, CustomLocale, key as LocaleKey } from "./locale";
 >Locale : Symbol(Locale, Decl(instance.d.ts, 0, 8))
 >CustomLocale : Symbol(CustomLocale, Decl(instance.d.ts, 0, 16))
->key : Symbol(LocaleKey, Decl(instance.d.ts, 0, 30))
+>key : Symbol(LocaleKey, Decl(locale.d.ts, 11, 2))
 >LocaleKey : Symbol(LocaleKey, Decl(instance.d.ts, 0, 30))
 
 export interface FlatpickrFn {

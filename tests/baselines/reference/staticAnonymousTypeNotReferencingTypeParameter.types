@@ -319,9 +319,9 @@ class ListWrapper {
 >index : number
 >value : T
 >list.splice(index, 0, value) : T[]
->list.splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>list.splice : { (start: number, deleteCount: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >list : T[]
->splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>splice : { (start: number, deleteCount: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >index : number
 >0 : 0
 >value : T
@@ -341,9 +341,9 @@ class ListWrapper {
 
     list.splice(index, 1);
 >list.splice(index, 1) : T[]
->list.splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>list.splice : { (start: number, deleteCount: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >list : T[]
->splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>splice : { (start: number, deleteCount: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >index : number
 >1 : 1
 
@@ -380,9 +380,9 @@ class ListWrapper {
 
       list.splice(index, 1);
 >list.splice(index, 1) : T[]
->list.splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>list.splice : { (start: number, deleteCount: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >list : T[]
->splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>splice : { (start: number, deleteCount: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >index : number
 >1 : 1
     }
@@ -410,9 +410,9 @@ class ListWrapper {
 
       list.splice(index, 1);
 >list.splice(index, 1) : T[]
->list.splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>list.splice : { (start: number, deleteCount: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >list : T[]
->splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>splice : { (start: number, deleteCount: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >index : number
 >1 : 1
 
@@ -543,9 +543,9 @@ class ListWrapper {
 >from : number
 >length : number
 >l.splice(from, length) : T[]
->l.splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>l.splice : { (start: number, deleteCount: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >l : T[]
->splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>splice : { (start: number, deleteCount: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >from : number
 >length : number
 
@@ -594,9 +594,9 @@ class ListWrapper {
 >ListWrapper : typeof ListWrapper
 >l : T[]
 >JSON.stringify(l) : string
->JSON.stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
+>JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
 >JSON : JSON
->stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
+>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
 >l : T[]
 
   static maximum<T>(dit: typeof ListWrapper, list: T[], predicate: (t: T) => number): T {

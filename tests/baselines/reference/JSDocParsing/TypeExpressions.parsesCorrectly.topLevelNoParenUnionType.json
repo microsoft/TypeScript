@@ -3,18 +3,24 @@
     "pos": 1,
     "end": 14,
     "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "types": {
         "0": {
             "kind": "NumberKeyword",
             "pos": 1,
             "end": 7,
-            "flags": "JSDoc"
+            "flags": "JSDoc",
+            "modifierFlagsCache": 0,
+            "transformFlags": 0
         },
         "1": {
             "kind": "StringKeyword",
             "pos": 8,
             "end": 14,
-            "flags": "JSDoc"
+            "flags": "JSDoc",
+            "modifierFlagsCache": 0,
+            "transformFlags": 0
         },
         "length": 2,
         "pos": 1,

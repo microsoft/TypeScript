@@ -1,0 +1,65 @@
+=== tests/cases/compiler/returnTypeInferenceNotTooBroad.ts ===
+type Signs = { kind: 'a'; a: 3; } | { kind: 'b'; b: 2; } | { kind: 'c'; c: 1; };
+>Signs : Signs
+>kind : "a"
+>a : 3
+>kind : "b"
+>b : 2
+>kind : "c"
+>c : 1
+
+interface Opts<T> {
+    low?: number;
+>low : number
+
+    sign?: T
+>sign : T
+}
+interface Wrapper<T> {
+}
+declare function sepsis<T extends Signs>(opts: Opts<T>): Wrapper<T>;
+>sepsis : <T extends Signs>(opts: Opts<T>) => Wrapper<T>
+>opts : Opts<T>
+
+declare function unwrap<T>(w: Wrapper<T>): T;
+>unwrap : <T>(w: Wrapper<T>) => T
+>w : Wrapper<T>
+
+export const y = sepsis({ low: 1, sign: { kind: 'a', a: 3 }});
+>y : Wrapper<{ kind: "a"; a: 3; }>
+>sepsis({ low: 1, sign: { kind: 'a', a: 3 }}) : Wrapper<{ kind: "a"; a: 3; }>
+>sepsis : <T extends Signs>(opts: Opts<T>) => Wrapper<T>
+>{ low: 1, sign: { kind: 'a', a: 3 }} : { low: number; sign: { kind: "a"; a: 3; }; }
+>low : number
+>1 : 1
+>sign : { kind: "a"; a: 3; }
+>{ kind: 'a', a: 3 } : { kind: "a"; a: 3; }
+>kind : "a"
+>'a' : "a"
+>a : 3
+>3 : 3
+
+// $ExpectType { kind: "a"; a: 3; }
+export const yun = unwrap(y);
+>yun : { kind: "a"; a: 3; }
+>unwrap(y) : { kind: "a"; a: 3; }
+>unwrap : <T>(w: Wrapper<T>) => T
+>y : Wrapper<{ kind: "a"; a: 3; }>
+
+// $ExpectType { kind: "a"; a: 3; }
+export const yone = unwrap(sepsis({ low: 1, sign: { kind: 'a', a: 3 }}));
+>yone : { kind: "a"; a: 3; }
+>unwrap(sepsis({ low: 1, sign: { kind: 'a', a: 3 }})) : { kind: "a"; a: 3; }
+>unwrap : <T>(w: Wrapper<T>) => T
+>sepsis({ low: 1, sign: { kind: 'a', a: 3 }}) : Wrapper<{ kind: "a"; a: 3; }>
+>sepsis : <T extends Signs>(opts: Opts<T>) => Wrapper<T>
+>{ low: 1, sign: { kind: 'a', a: 3 }} : { low: number; sign: { kind: "a"; a: 3; }; }
+>low : number
+>1 : 1
+>sign : { kind: "a"; a: 3; }
+>{ kind: 'a', a: 3 } : { kind: "a"; a: 3; }
+>kind : "a"
+>'a' : "a"
+>a : 3
+>3 : 3
+

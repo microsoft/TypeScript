@@ -1,5 +1,5 @@
-tests/cases/conformance/salsa/enums.js(2,10): error TS2540: Cannot assign to 'DESC' because it is a constant or a read-only property.
-tests/cases/conformance/salsa/enums.js(3,10): error TS2540: Cannot assign to 'ASC' because it is a constant or a read-only property.
+tests/cases/conformance/salsa/enums.js(2,10): error TS2540: Cannot assign to 'DESC' because it is a read-only property.
+tests/cases/conformance/salsa/enums.js(3,10): error TS2540: Cannot assign to 'ASC' because it is a read-only property.
 
 
 ==== tests/cases/conformance/salsa/lovefield-ts.d.ts (0 errors) ====
@@ -12,8 +12,8 @@ tests/cases/conformance/salsa/enums.js(3,10): error TS2540: Cannot assign to 'AS
     lf.Order = {}
     lf.Order.DESC = 0;
              ~~~~
-!!! error TS2540: Cannot assign to 'DESC' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'DESC' because it is a read-only property.
     lf.Order.ASC = 1;
              ~~~
-!!! error TS2540: Cannot assign to 'ASC' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'ASC' because it is a read-only property.
     

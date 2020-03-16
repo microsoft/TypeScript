@@ -11,13 +11,16 @@ class C {
 }
 
 //// [computedPropertyNamesWithStaticProperty.js]
-class C {
-    get [C.staticProp]() {
-        return "hello";
+let C = /** @class */ (() => {
+    class C {
+        get [C.staticProp]() {
+            return "hello";
+        }
+        set [C.staticProp](x) {
+            var y = x;
+        }
+        [C.staticProp]() { }
     }
-    set [C.staticProp](x) {
-        var y = x;
-    }
-    [C.staticProp]() { }
-}
-C.staticProp = 10;
+    C.staticProp = 10;
+    return C;
+})();
