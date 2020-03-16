@@ -65,13 +65,17 @@ exports.Foo4 = 10;
 
 Output::
 >> Screen clear
-12:00:23 AM - Starting compilation in watch mode...
+[[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 
-a/b/globalFile3.ts(1,1): error TS1208: All files must be modules when the '--isolatedModules' flag is provided.
+[96ma/b/globalFile3.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1208: [0mAll files must be modules when the '--isolatedModules' flag is provided.
+
+[7m1[0m interface GlobalFoo { age: number }
+[7m [0m [91m~~~~~~~~~[0m
 
 
-12:00:34 AM - Found 1 error. Watching for file changes.
+[[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
@@ -135,13 +139,17 @@ exports.Foo = Foo;
 
 Output::
 >> Screen clear
-12:00:38 AM - File change detected. Starting incremental compilation...
+[[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
 
-a/b/globalFile3.ts(1,1): error TS1208: All files must be modules when the '--isolatedModules' flag is provided.
+[96ma/b/globalFile3.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1208: [0mAll files must be modules when the '--isolatedModules' flag is provided.
+
+[7m1[0m interface GlobalFoo { age: number }
+[7m [0m [91m~~~~~~~~~[0m
 
 
-12:00:42 AM - Found 1 error. Watching for file changes.
+[[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]

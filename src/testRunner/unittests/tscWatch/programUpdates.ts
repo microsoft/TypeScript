@@ -984,7 +984,6 @@ declare const eval: any`
                     scenario,
                     subScenario: `should not trigger recompilation because of program emit/${subScenario}`,
                     commandLineArgs: ["-w", "-p", `${projectRoot}/tsconfig.json`],
-                    maxNumberOfFilesToIterateForInvalidation: 1,
                     sys: () => {
                         const file1: File = {
                             path: `${projectRoot}/file1.ts`,

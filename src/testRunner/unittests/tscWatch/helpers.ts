@@ -33,15 +33,13 @@ namespace ts.tscWatch {
 
     export type Watch = WatchOfConfigFile<EmitAndSemanticDiagnosticsBuilderProgram> | WatchOfFilesAndCompilerOptions<EmitAndSemanticDiagnosticsBuilderProgram>;
 
-    export function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, optionsToExtend?: CompilerOptions, watchOptionsToExtend?: WatchOptions, maxNumberOfFilesToIterateForInvalidation?: number) {
+    export function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, optionsToExtend?: CompilerOptions, watchOptionsToExtend?: WatchOptions) {
         const compilerHost = createWatchCompilerHostOfConfigFile(configFileName, optionsToExtend || {}, watchOptionsToExtend, host);
-        compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
         return createWatchProgram(compilerHost);
     }
 
-    export function createWatchOfFilesAndCompilerOptions(rootFiles: string[], host: WatchedSystem, options: CompilerOptions = {}, watchOptions?: WatchOptions, maxNumberOfFilesToIterateForInvalidation?: number) {
+    export function createWatchOfFilesAndCompilerOptions(rootFiles: string[], host: WatchedSystem, options: CompilerOptions = {}, watchOptions?: WatchOptions) {
         const compilerHost = createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, watchOptions, host);
-        compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
         return createWatchProgram(compilerHost);
     }
 
@@ -269,7 +267,7 @@ namespace ts.tscWatch {
 
     export function getDiagnosticModuleNotFoundOfFile(program: Program, file: File, moduleName: string) {
         const quotedModuleName = `"${moduleName}"`;
-        return getDiagnosticOfFileFromProgram(program, file.path, file.content.indexOf(quotedModuleName), quotedModuleName.length, Diagnostics.Cannot_find_module_0, moduleName);
+        return getDiagnosticOfFileFromProgram(program, file.path, file.content.indexOf(quotedModuleName), quotedModuleName.length, Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, moduleName);
     }
 
     export type TscWatchCompileChange = (
@@ -284,11 +282,10 @@ namespace ts.tscWatch {
         scenario: string;
         subScenario: string;
         commandLineArgs: readonly string[];
-        changes: TscWatchCompileChange[];
+        changes: readonly TscWatchCompileChange[];
     }
     export interface TscWatchCompile extends TscWatchCompileBase {
         sys: () => WatchedSystem;
-        maxNumberOfFilesToIterateForInvalidation?: number;
     }
 
     export type SystemSnap = ReturnType<WatchedSystem["snap"]>;
@@ -308,7 +305,6 @@ namespace ts.tscWatch {
                 sys,
                 cb,
                 commandLineArgs,
-                input.maxNumberOfFilesToIterateForInvalidation
             );
             runWatchBaseline({
                 scenario,

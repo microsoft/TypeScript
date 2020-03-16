@@ -2760,5 +2760,9 @@ namespace ts {
         return symbol.name;
     }
 
+    export function startsWithUnderscore(name: string): boolean {
+        return name.charCodeAt(0) === CharacterCodes._;
+    }
+
     // #endregion
 }

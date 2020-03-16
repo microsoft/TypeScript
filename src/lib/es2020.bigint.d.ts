@@ -268,6 +268,9 @@ interface BigInt64Array {
     /** Returns a string representation of the array. */
     toString(): string;
 
+    /** Returns the primitive value of the specified object. */
+    valueOf(): BigInt64Array;
+
     /** Yields each value in the array. */
     values(): IterableIterator<bigint>;
 
@@ -536,6 +539,9 @@ interface BigUint64Array {
 
     /** Returns a string representation of the array. */
     toString(): string;
+
+    /** Returns the primitive value of the specified object. */
+    valueOf(): BigUint64Array;
 
     /** Yields each value in the array. */
     values(): IterableIterator<bigint>;

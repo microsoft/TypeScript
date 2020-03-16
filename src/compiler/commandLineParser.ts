@@ -58,7 +58,8 @@ namespace ts {
         ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
         ["esnext.intl", "lib.esnext.intl.d.ts"],
         ["esnext.bigint", "lib.es2020.bigint.d.ts"],
-        ["esnext.string", "lib.esnext.string.d.ts"]
+        ["esnext.string", "lib.esnext.string.d.ts"],
+        ["esnext.promise", "lib.esnext.promise.d.ts"]
     ];
 
     /**

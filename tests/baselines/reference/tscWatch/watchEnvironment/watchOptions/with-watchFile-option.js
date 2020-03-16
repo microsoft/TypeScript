@@ -32,11 +32,11 @@ var y = 1;
 
 Output::
 >> Screen clear
-12:00:17 AM - Starting compilation in watch mode...
+[[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:22 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]

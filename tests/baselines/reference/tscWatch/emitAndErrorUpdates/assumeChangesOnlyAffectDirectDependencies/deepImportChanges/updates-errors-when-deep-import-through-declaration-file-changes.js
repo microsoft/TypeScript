@@ -45,11 +45,11 @@ console.log(b.c.d);
 
 Output::
 >> Screen clear
-12:00:25 AM - Starting compilation in watch mode...
+[[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:28 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts","/user/username/projects/myproject/c.d.ts"]
@@ -101,11 +101,11 @@ export class C
 
 Output::
 >> Screen clear
-12:00:32 AM - File change detected. Starting incremental compilation...
+[[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:33 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:33 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts","/user/username/projects/myproject/c.d.ts"]

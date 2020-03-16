@@ -716,6 +716,69 @@ namespace ts.projectSystem {
             assert.isFalse(event.event.endsWith("Diag"), JSON.stringify(event));
         }
     }
+    export function projectLoadingStartEvent(projectName: string, reason: string, seq?: number): protocol.ProjectLoadingStartEvent {
+        return {
+            seq: seq || 0,
+            type: "event",
+            event: server.ProjectLoadingStartEvent,
+            body: { projectName, reason }
+        };
+    }
+
+    export function projectLoadingFinishEvent(projectName: string, seq?: number): protocol.ProjectLoadingFinishEvent {
+        return {
+            seq: seq || 0,
+            type: "event",
+            event: server.ProjectLoadingFinishEvent,
+            body: { projectName }
+        };
+    }
+
+    export function projectInfoTelemetryEvent(seq?: number): protocol.TelemetryEvent {
+        return telemetryEvent(server.ProjectInfoTelemetryEvent, "", seq);
+    }
+
+    function telemetryEvent(telemetryEventName: string, payload: any, seq?: number): protocol.TelemetryEvent {
+        return {
+            seq: seq || 0,
+            type: "event",
+            event: "telemetry",
+            body: {
+                telemetryEventName,
+                payload
+            }
+        };
+    }
+
+    export function configFileDiagEvent(triggerFile: string, configFile: string, diagnostics: protocol.DiagnosticWithFileName[], seq?: number): protocol.ConfigFileDiagnosticEvent {
+        return {
+            seq: seq || 0,
+            type: "event",
+            event: server.ConfigFileDiagEvent,
+            body: {
+                triggerFile,
+                configFile,
+                diagnostics
+            }
+        };
+    }
+
+    export function checkEvents(session: TestSession, expectedEvents: protocol.Event[]) {
+        const events = session.events;
+        assert.equal(events.length, expectedEvents.length, `Actual:: ${JSON.stringify(session.events, /*replacer*/ undefined, " ")}`);
+        expectedEvents.forEach((expectedEvent, index) => {
+            if (expectedEvent.event === "telemetry") {
+                // Ignore payload
+                const { body, ...actual } = events[index] as protocol.TelemetryEvent;
+                const { body: expectedBody, ...expected } = expectedEvent as protocol.TelemetryEvent;
+                assert.deepEqual(actual, expected, `Expected ${JSON.stringify(expectedEvent)} at ${index} in ${JSON.stringify(events)}`);
+                assert.equal(body.telemetryEventName, expectedBody.telemetryEventName, `Expected ${JSON.stringify(expectedEvent)} at ${index} in ${JSON.stringify(events)}`);
+            }
+            else {
+                checkNthEvent(session, expectedEvent, index, index === expectedEvents.length);
+            }
+        });
+    }
 
     export function checkNthEvent(session: TestSession, expectedEvent: protocol.Event, index: number, isMostRecent: boolean) {
         const events = session.events;

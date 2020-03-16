@@ -29,11 +29,11 @@ exports.__esModule = true;
 
 Output::
 >> Screen clear
-12:00:29 AM - Starting compilation in watch mode...
+[[90m12:00:29 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:32 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/src/file1.ts"]
@@ -79,11 +79,11 @@ Change:: Pending updates because of file1.js creation
 
 Output::
 >> Screen clear
-12:00:33 AM - File change detected. Starting incremental compilation...
+[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:34 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/src/file1.ts"]
@@ -128,13 +128,17 @@ Change:: Remove directory node_modules
 
 Output::
 >> Screen clear
-12:00:38 AM - File change detected. Starting incremental compilation...
+[[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
 
-user/username/projects/myproject/src/file1.ts(1,19): error TS2307: Cannot find module 'file2'.
+[96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module 'file2' or its corresponding type declarations.
+
+[7m1[0m import { x } from "file2";
+[7m [0m [91m                  ~~~~~~~[0m
 
 
-12:00:42 AM - Found 1 error. Watching for file changes.
+[[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/myproject/src/file1.ts"]
@@ -173,13 +177,17 @@ Change:: Pending directory watchers and program update
 
 Output::
 >> Screen clear
-12:00:43 AM - File change detected. Starting incremental compilation...
+[[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
 
 
-user/username/projects/myproject/src/file1.ts(1,19): error TS2307: Cannot find module 'file2'.
+[96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module 'file2' or its corresponding type declarations.
+
+[7m1[0m import { x } from "file2";
+[7m [0m [91m                  ~~~~~~~[0m
 
 
-12:00:44 AM - Found 1 error. Watching for file changes.
+[[90m12:00:44 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/myproject/src/file1.ts"]
@@ -331,11 +339,11 @@ Change:: Pending updates
 
 Output::
 >> Screen clear
-12:00:51 AM - File change detected. Starting incremental compilation...
+[[90m12:00:51 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:55 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:55 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/src/file1.ts"]

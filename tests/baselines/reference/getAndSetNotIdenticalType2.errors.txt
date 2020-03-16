@@ -4,7 +4,7 @@ tests/cases/compiler/getAndSetNotIdenticalType2.ts(8,9): error TS1056: Accessors
 tests/cases/compiler/getAndSetNotIdenticalType2.ts(8,9): error TS2380: 'get' and 'set' accessor must have the same type.
 tests/cases/compiler/getAndSetNotIdenticalType2.ts(9,9): error TS2322: Type 'A<string>' is not assignable to type 'A<T>'.
   Type 'string' is not assignable to type 'T'.
-    'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 
 
 ==== tests/cases/compiler/getAndSetNotIdenticalType2.ts (5 errors) ====
@@ -28,7 +28,7 @@ tests/cases/compiler/getAndSetNotIdenticalType2.ts(9,9): error TS2322: Type 'A<s
             ~~~~~~~~~
 !!! error TS2322: Type 'A<string>' is not assignable to type 'A<T>'.
 !!! error TS2322:   Type 'string' is not assignable to type 'T'.
-!!! error TS2322:     'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
         }
     }
     

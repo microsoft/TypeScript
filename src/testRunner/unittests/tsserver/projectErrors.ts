@@ -959,7 +959,7 @@ console.log(blabla);`
                 createDiagnostic(
                     span.start,
                     span.end,
-                    Diagnostics.Cannot_find_module_0,
+                    Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations,
                     ["@angular/core"]
                 )
             ];
