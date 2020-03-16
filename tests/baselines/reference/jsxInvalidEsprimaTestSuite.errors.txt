@@ -75,13 +75,9 @@ tests/cases/conformance/jsx/5.tsx(1,2): error TS17008: JSX element 'a' has no co
 tests/cases/conformance/jsx/5.tsx(1,5): error TS1005: '</' expected.
 tests/cases/conformance/jsx/6.tsx(1,4): error TS17002: Expected corresponding JSX closing tag for 'a'.
 tests/cases/conformance/jsx/7.tsx(1,13): error TS1002: Unterminated string literal.
-tests/cases/conformance/jsx/8.tsx(1,3): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/8.tsx(1,6): error TS17002: Expected corresponding JSX closing tag for 'a'.
-tests/cases/conformance/jsx/9.tsx(1,3): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/9.tsx(1,5): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/9.tsx(1,11): error TS1005: '>' expected.
-tests/cases/conformance/jsx/9.tsx(1,12): error TS2304: Cannot find name 'b'.
-tests/cases/conformance/jsx/9.tsx(1,16): error TS1109: Expression expected.
+tests/cases/conformance/jsx/8.tsx(1,6): error TS17002: Expected corresponding JSX closing tag for 'a:b'.
+tests/cases/conformance/jsx/9.tsx(1,2): error TS2304: Cannot find name 'a:b'.
+tests/cases/conformance/jsx/9.tsx(1,10): error TS2304: Cannot find name 'a:b'.
 
 
 ==== tests/cases/conformance/jsx/1.tsx (3 errors) ====
@@ -128,24 +124,16 @@ tests/cases/conformance/jsx/9.tsx(1,16): error TS1109: Expression expected.
     <a foo="bar;
                 
 !!! error TS1002: Unterminated string literal.
-==== tests/cases/conformance/jsx/8.tsx (2 errors) ====
+==== tests/cases/conformance/jsx/8.tsx (1 errors) ====
     <a:b></b>;
-      ~
-!!! error TS1003: Identifier expected.
          ~~~~
-!!! error TS17002: Expected corresponding JSX closing tag for 'a'.
-==== tests/cases/conformance/jsx/9.tsx (5 errors) ====
+!!! error TS17002: Expected corresponding JSX closing tag for 'a:b'.
+==== tests/cases/conformance/jsx/9.tsx (2 errors) ====
     <a:b.c></a:b.c>;
-      ~
-!!! error TS1003: Identifier expected.
-        ~
-!!! error TS1003: Identifier expected.
-              ~
-!!! error TS1005: '>' expected.
-               ~
-!!! error TS2304: Cannot find name 'b'.
-                   ~
-!!! error TS1109: Expression expected.
+     ~~~
+!!! error TS2304: Cannot find name 'a:b'.
+             ~~~
+!!! error TS2304: Cannot find name 'a:b'.
 ==== tests/cases/conformance/jsx/10.tsx (6 errors) ====
     <a.b:c></a.b:c>;
      ~
