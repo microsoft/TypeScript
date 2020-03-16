@@ -224,6 +224,7 @@ interface PromiseConstructor {
      * @returns A new Promise.
      */
     all<TAll>(values: Iterable<TAll | PromiseLike<TAll>>): Promise<TAll[]>;
+    // all<TAll>(values: Iterable<TAll>): Promise<(awaited TAll)[]>;
 
     /**
      * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
@@ -232,6 +233,7 @@ interface PromiseConstructor {
      * @returns A new Promise.
      */
     race<T>(values: Iterable<T | PromiseLike<T>>): Promise<T>;
+    // race<T>(values: Iterable<T>): Promise<awaited T>;
 }
 
 declare namespace Reflect {
