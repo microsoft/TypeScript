@@ -3,3 +3,19 @@ await x;
 >await x : any
 >x : any
 
+const arr = [Promise.resolve()];
+>arr : Promise<void>[]
+>[Promise.resolve()] : Promise<void>[]
+>Promise.resolve() : Promise<void>
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise : PromiseConstructor
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+
+for await (const item of arr) {
+>item : void
+>arr : Promise<void>[]
+
+  item;
+>item : void
+}
+
