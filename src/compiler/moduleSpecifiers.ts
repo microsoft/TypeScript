@@ -188,9 +188,9 @@ namespace ts.moduleSpecifiers {
         preferSymlinks: boolean,
         cb: (fileName: string) => T | undefined
     ): T | undefined {
-        const redirects = redirectTargetsMap.get(importedFileName);
-        const importedFileNames = redirects ? [...redirects, importedFileName] : [importedFileName];
         const cwd = host.getCurrentDirectory ? host.getCurrentDirectory() : "";
+        const redirects = redirectTargetsMap.get(toPath(importedFileName, cwd, getCanonicalFileName));
+        const importedFileNames = redirects ? [...redirects, importedFileName] : [importedFileName];
         const targets = importedFileNames.map(f => getNormalizedAbsolutePath(f, cwd));
         if (!preferSymlinks) {
             const result = forEach(targets, cb);

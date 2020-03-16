@@ -96,6 +96,14 @@ var featureOne = action("feature-one");
 exports.actions = { featureOne: featureOne };
 
 
+//// [/user/username/projects/myproject/plugin-one/index.d.ts]
+export declare const actions: {
+    featureOne: import("typescript-fsa").ActionCreator<{
+        route: string;
+    }>;
+};
+
+
 
 Output::
 ======== Resolving module 'plugin-two' from '/user/username/projects/myproject/plugin-one/index.ts'. ========
@@ -210,12 +218,6 @@ Resolving real path for '/user/username/projects/myProject/plugin-two/node_modul
 
 ======== Module name 'typescript-fsa' was successfully resolved to '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.d.ts' with Package ID 'typescript-fsa/index.d.ts@3.0.0-beta-2'. ========
 
-[96mplugin-one/index.ts[0m:[93m5[0m:[93m14[0m - [91merror[0m[90m TS2742: [0mThe inferred type of 'actions' cannot be named without a reference to 'plugin-two/node_modules/typescript-fsa'. This is likely not portable. A type annotation is necessary.
-
-[7m5[0m export const actions = { featureOne };
-[7m [0m [91m             ~~~~~~~[0m
-
-
 /a/lib/lib.d.ts
 
 /user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.d.ts
@@ -225,9 +227,6 @@ Resolving real path for '/user/username/projects/myProject/plugin-two/node_modul
 /user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts
 
 /user/username/projects/myproject/plugin-one/index.ts
-
-
-Found 1 error.
 
 
 
@@ -246,4 +245,4 @@ FsWatches::
 
 FsWatchesRecursive::
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
