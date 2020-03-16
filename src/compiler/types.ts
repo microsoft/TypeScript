@@ -3187,8 +3187,7 @@ namespace ts {
         file: Path;
     }
 
-    // TODO: This should implement TypeCheckerHost but that's an internal type.
-    export interface Program extends ScriptReferenceHost, ModuleSpecifierResolutionHost {
+    export interface Program extends ScriptReferenceHost {
         getCurrentDirectory(): string;
         /**
          * Get a list of root file names that were passed to a 'createProgram'
@@ -3288,6 +3287,10 @@ namespace ts {
         /*@internal*/ getProgramBuildInfo?(): ProgramBuildInfo | undefined;
         /*@internal*/ emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
         /*@internal*/ getProbableSymlinks(): ReadonlyMap<string>;
+    }
+
+    /*@internal*/
+    export interface Program extends TypeCheckerHost, ModuleSpecifierResolutionHost {
     }
 
     /* @internal */
@@ -6420,6 +6423,7 @@ namespace ts {
         getCurrentDirectory?(): string;
     }
 
+    /*@internal*/
     export interface ModuleSpecifierResolutionHost extends GetEffectiveTypeRootsHost {
         useCaseSensitiveFileNames?(): boolean;
         fileExists?(path: string): boolean;
