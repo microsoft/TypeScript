@@ -178,40 +178,70 @@ namespace ts.moduleSpecifiers {
         );
     }
 
+    export function forEachFileNameOfModule<T>(
+        files: readonly SourceFile[],
+        importingFileName: string,
+        importedFileName: string,
+        getCanonicalFileName: GetCanonicalFileName,
+        host: ModuleSpecifierResolutionHost,
+        redirectTargetsMap: RedirectTargetsMap,
+        preferSymlinks: boolean,
+        cb: (fileName: string) => T | undefined
+    ): T | undefined {
+        const redirects = redirectTargetsMap.get(importedFileName);
+        const importedFileNames = redirects ? [...redirects, importedFileName] : [importedFileName];
+        const cwd = host.getCurrentDirectory ? host.getCurrentDirectory() : "";
+        const targets = importedFileNames.map(f => getNormalizedAbsolutePath(f, cwd));
+        if (!preferSymlinks) {
+            const result = forEach(targets, cb);
+            if (result) return result;
+        }
+        const links = host.getProbableSymlinks
+            ? host.getProbableSymlinks(files)
+            : discoverProbableSymlinks(files, getCanonicalFileName, cwd);
+
+        const compareStrings = (!host.useCaseSensitiveFileNames || host.useCaseSensitiveFileNames()) ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
+        const result = forEachEntry(links, (resolved, path) => {
+            if (startsWithDirectory(importingFileName, resolved, getCanonicalFileName)) {
+                return undefined; // Don't want to a package to globally import from itself
+            }
+
+            const target = find(targets, t => compareStrings(t.slice(0, resolved.length + 1), resolved + "/") === Comparison.EqualTo);
+            if (target === undefined) return undefined;
+
+            const relative = getRelativePathFromDirectory(resolved, target, getCanonicalFileName);
+            const option = resolvePath(path, relative);
+            if (!host.fileExists || host.fileExists(option)) {
+                const result = cb(option);
+                if (result) return result;
+            }
+        });
+        return result ||
+            (preferSymlinks ? forEach(targets, cb) : undefined);
+    }
+
     /**
      * Looks for existing imports that use symlinks to this module.
      * Symlinks will be returned first so they are preferred over the real path.
      */
     function getAllModulePaths(files: readonly SourceFile[], importingFileName: string, importedFileName: string, getCanonicalFileName: GetCanonicalFileName, host: ModuleSpecifierResolutionHost, redirectTargetsMap: RedirectTargetsMap): readonly string[] {
-        const redirects = redirectTargetsMap.get(importedFileName);
-        const importedFileNames = redirects ? [...redirects, importedFileName] : [importedFileName];
         const cwd = host.getCurrentDirectory ? host.getCurrentDirectory() : "";
-        const targets = importedFileNames.map(f => getNormalizedAbsolutePath(f, cwd));
-        const links = host.getProbableSymlinks
-            ? host.getProbableSymlinks(files)
-            : discoverProbableSymlinks(files, getCanonicalFileName, cwd);
-
-        const result: string[] = [];
-        const compareStrings = (!host.useCaseSensitiveFileNames || host.useCaseSensitiveFileNames()) ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
-        links.forEach((resolved, path) => {
-            if (startsWithDirectory(importingFileName, resolved, getCanonicalFileName)) {
-                return; // Don't want to a package to globally import from itself
+        const allFileNames = createMap<string>();
+        forEachFileNameOfModule(
+            files,
+            importingFileName,
+            importedFileName,
+            getCanonicalFileName,
+            host,
+            redirectTargetsMap,
+            /*preferSymlinks*/ true,
+            path => {
+                // dont return value, so we collect everything
+                allFileNames.set(path, getCanonicalFileName(path));
             }
-
-            const target = find(targets, t => compareStrings(t.slice(0, resolved.length + 1), resolved + "/") === Comparison.EqualTo);
-            if (target === undefined) return;
-
-            const relative = getRelativePathFromDirectory(resolved, target, getCanonicalFileName);
-            const option = resolvePath(path, relative);
-            if (!host.fileExists || host.fileExists(option)) {
-                result.push(option);
-            }
-        });
-        result.push(...targets);
-        if (result.length < 2) return result;
+        );
 
         // Sort by paths closest to importing file Name directory
-        const allFileNames = arrayToMap(result, identity, getCanonicalFileName);
         const sortedPaths: string[] = [];
         for (
             let directory = getDirectoryPath(toPath(importingFileName, cwd, getCanonicalFileName));

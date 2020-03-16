@@ -786,9 +786,9 @@ namespace ts.codefix {
         cb: (module: Symbol) => void,
     ) {
         let filteredCount = 0;
-        const packageJson = filterByPackageJson && createAutoImportFilter(from, program, host);
+        const moduleSpecifierResolutionHost = createModuleSpecifierResolutionHost(program, host);
+        const packageJson = filterByPackageJson && createAutoImportFilter(from, program, host, moduleSpecifierResolutionHost);
         const allSourceFiles = program.getSourceFiles();
-        const globalTypingsCache = host.getGlobalTypingsCacheLocation && host.getGlobalTypingsCacheLocation();
         forEachExternalModule(program.getTypeChecker(), allSourceFiles, (module, sourceFile) => {
             if (sourceFile === undefined) {
                 if (!packageJson || packageJson.allowsImportingAmbientModule(module, allSourceFiles)) {
@@ -800,7 +800,7 @@ namespace ts.codefix {
             }
             else if (sourceFile &&
                 sourceFile !== from &&
-                isImportablePath(from.fileName, sourceFile.fileName, hostGetCanonicalFileName(host), globalTypingsCache)
+                isImportableFile(program, from, sourceFile, moduleSpecifierResolutionHost)
             ) {
                 if (!packageJson || packageJson.allowsImportingSourceFile(sourceFile, allSourceFiles)) {
                     cb(module);
@@ -824,6 +824,32 @@ namespace ts.codefix {
                 cb(checker.getMergedSymbol(sourceFile.symbol), sourceFile);
             }
         }
+    }
+
+    function isImportableFile(
+        program: Program,
+        from: SourceFile,
+        to: SourceFile,
+        moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost
+    ) {
+        const getCanonicalFileName = hostGetCanonicalFileName(moduleSpecifierResolutionHost);
+        const globalTypingsCache = moduleSpecifierResolutionHost.getGlobalTypingsCacheLocation?.();
+        return !!moduleSpecifiers.forEachFileNameOfModule(
+            program.getSourceFiles(),
+            from.fileName,
+            to.fileName,
+            hostGetCanonicalFileName(moduleSpecifierResolutionHost),
+            moduleSpecifierResolutionHost,
+            program.redirectTargetsMap,
+            /*preferSymlinks*/ false,
+            toPath => {
+                const toFile = program.getSourceFile(toPath);
+                // Determine to import using toPath only if toPath is what we were looking at
+                // or there doesnt exist the file in the program by the symlink
+                return (toFile === to || !toFile) &&
+                    isImportablePath(from.fileName, toPath, getCanonicalFileName, globalTypingsCache);
+            }
+        );
     }
 
     /**
@@ -870,12 +896,10 @@ namespace ts.codefix {
         return !isStringANonContextualKeyword(res) ? res || "_" : `_${res}`;
     }
 
-    function createAutoImportFilter(fromFile: SourceFile, program: Program, host: LanguageServiceHost) {
-        const packageJsons = host.getPackageJsonsVisibleToFile && host.getPackageJsonsVisibleToFile(fromFile.fileName) || getPackageJsonsVisibleToFile(fromFile.fileName, host);
-        const dependencyGroups = PackageJsonDependencyGroup.Dependencies | PackageJsonDependencyGroup.DevDependencies | PackageJsonDependencyGroup.OptionalDependencies;
+    function createModuleSpecifierResolutionHost(program: Program, host: LanguageServiceHost): ModuleSpecifierResolutionHost {
         // Mix in `getProbablySymlinks` from Program when host doesn't have it
         // in order for non-Project hosts to have a symlinks cache.
-        const moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost = {
+        return {
             directoryExists: maybeBind(host, host.directoryExists),
             fileExists: maybeBind(host, host.fileExists),
             getCurrentDirectory: maybeBind(host, host.getCurrentDirectory),
@@ -884,9 +908,14 @@ namespace ts.codefix {
             getProbableSymlinks: maybeBind(host, host.getProbableSymlinks) || program.getProbableSymlinks,
             getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
         };
+    }
+
+    function createAutoImportFilter(fromFile: SourceFile, program: Program, host: LanguageServiceHost, moduleSpecifierResolutionHost = createModuleSpecifierResolutionHost(program, host)) {
+        const packageJsons = host.getPackageJsonsVisibleToFile && host.getPackageJsonsVisibleToFile(fromFile.fileName) || getPackageJsonsVisibleToFile(fromFile.fileName, host);
+        const dependencyGroups = PackageJsonDependencyGroup.Dependencies | PackageJsonDependencyGroup.DevDependencies | PackageJsonDependencyGroup.OptionalDependencies;
 
         let usesNodeCoreModules: boolean | undefined;
-        return { allowsImportingAmbientModule, allowsImportingSourceFile, allowsImportingSpecifier };
+        return { allowsImportingAmbientModule, allowsImportingSourceFile, allowsImportingSpecifier, moduleSpecifierResolutionHost };
 
         function moduleSpecifierIsCoveredByPackageJson(specifier: string) {
             const packageName = getNodeModuleRootSpecifier(specifier);
