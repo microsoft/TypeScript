@@ -1,4 +1,4 @@
-// @noEmit: true
+// @emitDeclarationOnly: true
 // @allowJs: true
 // @checkJs: true
 // @Filename: cb_nested.js
@@ -18,4 +18,3 @@
 function eachPerson(callback) {
     callback({ name: "Empty" });
 }
-
