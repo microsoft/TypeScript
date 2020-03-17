@@ -424,14 +424,14 @@ namespace n1 {
 >"wat" : "wat"
     }
     declare let f1: (cb: typeof Foo.f1) => void;
->f1 : (cb: (x: Animal) => Animal) => void
+>f1 : (cb: typeof Foo.f1) => void
 >cb : (x: Animal) => Animal
 >Foo.f1 : (x: Animal) => Animal
 >Foo : typeof Foo
 >f1 : (x: Animal) => Animal
 
     declare let f2: (cb: typeof Foo.f2) => void;
->f2 : (cb: (x: Dog) => Animal) => void
+>f2 : (cb: typeof Foo.f2) => void
 >cb : (x: Dog) => Animal
 >Foo.f2 : (x: Dog) => Animal
 >Foo : typeof Foo
@@ -457,11 +457,11 @@ namespace n2 {
 >x : Input
 
     declare let f1: (cb: BivariantHack<Animal, Animal>) => void;
->f1 : (cb: (x: Animal) => Animal) => void
+>f1 : (cb: BivariantHack<Animal, Animal>) => void
 >cb : (x: Animal) => Animal
 
     declare let f2: (cb: BivariantHack<Dog, Animal>) => void;
->f2 : (cb: (x: Dog) => Animal) => void
+>f2 : (cb: BivariantHack<Dog, Animal>) => void
 >cb : (x: Dog) => Animal
 
     f1 = f2;

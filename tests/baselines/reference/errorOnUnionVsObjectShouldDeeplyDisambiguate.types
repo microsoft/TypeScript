@@ -35,7 +35,7 @@ interface Stuff {
   }
   
   function foo(): Stuff | string {
->foo : () => string | Stuff
+>foo : () => Stuff | string
 
     return {
 >{      a() { return [123] },      b: () => "hello",      c: () => "hello",      d: () => "hello",      e: () => "hello",      f: () => "hello",      g: () => "hello",      h: () => "hello",      i: () => "hello",      j: () => "hello",      k: () => 123    } : { a(): number[]; b: () => string; c: () => string; d: () => string; e: () => string; f: () => string; g: () => string; h: () => string; i: () => string; j: () => string; k: () => number; }

@@ -216,7 +216,7 @@ declare class Context {
      * @param {HookHandler=} handle
      * @returns {State}
      */
-    construct(input: Input, handle?: (arg: Context) => void): State;
+    construct(input: Input, handle?: HookHandler | undefined): State;
 }
 declare namespace Context {
     export { Timer, Hook, HookHandler, Input, State };
@@ -255,7 +255,7 @@ export = Hook;
 /**
  * @param {HookHandler} handle
  */
-declare function Hook(handle: (arg: import("./context")) => void): void;
+declare function Hook(handle: HookHandler): void;
 declare class Hook {
     /**
      * @typedef {(arg: import("./context")) => void} HookHandler
@@ -263,7 +263,7 @@ declare class Hook {
     /**
      * @param {HookHandler} handle
      */
-    constructor(handle: (arg: import("./context")) => void);
+    constructor(handle: HookHandler);
     handle: (arg: import("./context")) => void;
 }
 declare namespace Hook {

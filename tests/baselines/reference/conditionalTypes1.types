@@ -135,14 +135,14 @@ type T15 = Extract<Options, { q: "a" }>;  // never
 >q : "a"
 
 declare function f5<T extends Options, K extends string>(p: K): Extract<T, { k: K }>;
->f5 : <T extends Options, K extends string>(p: K) => Extract<T, { k: K; }>
+>f5 : <T extends Options, K extends string>(p: K) => Extract<T, {    k: K;}>
 >p : K
 >k : K
 
 let x0 = f5("a");  // { k: "a", a: number }
 >x0 : { k: "a"; a: number; }
 >f5("a") : { k: "a"; a: number; }
->f5 : <T extends Options, K extends string>(p: K) => Extract<T, { k: K; }>
+>f5 : <T extends Options, K extends string>(p: K) => Extract<T, {    k: K;}>
 >"a" : "a"
 
 type OptionsOfKind<K extends Options["k"]> = Extract<Options, { k: K }>;
@@ -245,7 +245,7 @@ type T31 = NonFunctionProperties<Part>;
 >T31 : Pick<Part, "id" | "name" | "subparts">
 
 function f7<T>(x: T, y: FunctionProperties<T>, z: NonFunctionProperties<T>) {
->f7 : <T>(x: T, y: Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>, z: Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>) => void
+>f7 : <T>(x: T, y: FunctionProperties<T>, z: NonFunctionProperties<T>) => void
 >x : T
 >y : Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>
 >z : Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>
@@ -282,7 +282,7 @@ function f7<T>(x: T, y: FunctionProperties<T>, z: NonFunctionProperties<T>) {
 }
 
 function f8<T>(x: keyof T, y: FunctionPropertyNames<T>, z: NonFunctionPropertyNames<T>) {
->f8 : <T>(x: keyof T, y: { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T], z: { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]) => void
+>f8 : <T>(x: keyof T, y: FunctionPropertyNames<T>, z: NonFunctionPropertyNames<T>) => void
 >x : keyof T
 >y : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
 >z : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
@@ -334,7 +334,7 @@ type DeepReadonlyObject<T> = {
 };
 
 function f10(part: DeepReadonly<Part>) {
->f10 : (part: DeepReadonlyObject<Part>) => void
+>f10 : (part: DeepReadonly<Part>) => void
 >part : DeepReadonlyObject<Part>
 
     let name: string = part.name;
@@ -788,8 +788,8 @@ type Baz<T> = Foo<T>;
 >Baz : Foo<T>
 
 const convert2 = <T>(value: Foo<T>): Baz<T> => value;
->convert2 : <T>(value: Foo<T>) => Foo<T>
-><T>(value: Foo<T>): Baz<T> => value : <T>(value: Foo<T>) => Foo<T>
+>convert2 : <T>(value: Foo<T>) => Baz<T>
+><T>(value: Foo<T>): Baz<T> => value : <T>(value: Foo<T>) => Baz<T>
 >value : Foo<T>
 >value : Foo<T>
 

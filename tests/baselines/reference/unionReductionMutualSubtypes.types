@@ -15,7 +15,7 @@ declare const val: ReturnVal;
 >val : ReturnVal
 
 function run(options: { something?(b?: string): void }) {
->run : (options: { something?(b?: string | undefined): void; }) => void
+>run : (options: {    something?(b?: string): void;}) => void
 >options : { something?(b?: string | undefined): void; }
 >something : ((b?: string | undefined) => void) | undefined
 >b : string | undefined

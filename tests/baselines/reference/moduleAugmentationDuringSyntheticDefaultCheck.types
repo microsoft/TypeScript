@@ -6,7 +6,7 @@ import moment = require("moment-timezone");
 
 === tests/cases/compiler/node_modules/moment/index.d.ts ===
 declare function moment(): moment.Moment;
->moment : () => import("tests/cases/compiler/node_modules/moment/index.d.ts").Moment
+>moment : () => moment.Moment
 >moment : any
 
 declare namespace moment {
@@ -16,7 +16,7 @@ declare namespace moment {
   }
 }
 export = moment;
->moment : () => import("tests/cases/compiler/node_modules/moment/index.d.ts").Moment
+>moment : () => moment.Moment
 
 === tests/cases/compiler/node_modules/moment-timezone/index.d.ts ===
 import * as moment from 'moment';
@@ -26,7 +26,7 @@ export = moment;
 >moment : { default: () => moment.Moment; }
 
 declare module "moment" {
->"moment" : () => Moment
+>"moment" : () => moment.Moment
 
     interface Moment {
         tz(): string;
@@ -35,10 +35,10 @@ declare module "moment" {
 }
 === tests/cases/compiler/idx.ts ===
 import * as _moment from "moment";
->_moment : { default: () => _moment.Moment; }
+>_moment : { default: () => moment.Moment; }
 
 declare module "moment" {
->"moment" : () => Moment
+>"moment" : () => moment.Moment
 
     interface Moment {
         strftime(pattern: string): string;
@@ -47,7 +47,7 @@ declare module "moment" {
     }
 }
 declare module "moment-timezone" {
->"moment-timezone" : { default: () => Moment; }
+>"moment-timezone" : { default: () => moment.Moment; }
 
     interface Moment {
         strftime(pattern: string): string;

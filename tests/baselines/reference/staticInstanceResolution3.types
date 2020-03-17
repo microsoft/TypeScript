@@ -5,11 +5,11 @@ import WinJS = require('./staticInstanceResolution3_0');
 
 WinJS.Promise.timeout(10);
 >WinJS.Promise.timeout(10) : WinJS.Promise
->WinJS.Promise.timeout : (delay: number) => WinJS.Promise
+>WinJS.Promise.timeout : (delay: number) => Promise
 >WinJS.Promise : typeof WinJS.Promise
 >WinJS : typeof WinJS
 >Promise : typeof WinJS.Promise
->timeout : (delay: number) => WinJS.Promise
+>timeout : (delay: number) => Promise
 >10 : 10
 
 === tests/cases/compiler/staticInstanceResolution3_0.ts ===

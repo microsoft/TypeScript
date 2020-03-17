@@ -35,7 +35,7 @@ type Value<V extends string = string> = Record<"val", V>;
 >Value : Record<"val", V>
 
 declare function value<V extends string>(val: V): Value<V>;
->value : <V extends string>(val: V) => Record<"val", V>
+>value : <V extends string>(val: V) => Value<V>
 >val : V
 
 declare function ensureNoDuplicates<
@@ -56,11 +56,11 @@ const noError = ensureNoDuplicates({main: value("test"), alternate: value("test2
 >{main: value("test"), alternate: value("test2")} : { main: Record<"val", "test">; alternate: Record<"val", "test2">; }
 >main : Record<"val", "test">
 >value("test") : Record<"val", "test">
->value : <V extends string>(val: V) => Record<"val", V>
+>value : <V extends string>(val: V) => Value<V>
 >"test" : "test"
 >alternate : Record<"val", "test2">
 >value("test2") : Record<"val", "test2">
->value : <V extends string>(val: V) => Record<"val", V>
+>value : <V extends string>(val: V) => Value<V>
 >"test2" : "test2"
 
 const shouldBeNoError = ensureNoDuplicates({main: value("test")});
@@ -70,7 +70,7 @@ const shouldBeNoError = ensureNoDuplicates({main: value("test")});
 >{main: value("test")} : { main: Record<"val", "test">; }
 >main : Record<"val", "test">
 >value("test") : Record<"val", "test">
->value : <V extends string>(val: V) => Record<"val", V>
+>value : <V extends string>(val: V) => Value<V>
 >"test" : "test"
 
 const shouldBeError = ensureNoDuplicates({main: value("dup"), alternate: value("dup")});
@@ -80,11 +80,11 @@ const shouldBeError = ensureNoDuplicates({main: value("dup"), alternate: value("
 >{main: value("dup"), alternate: value("dup")} : { main: Record<"val", "dup">; alternate: Record<"val", "dup">; }
 >main : Record<"val", "dup">
 >value("dup") : Record<"val", "dup">
->value : <V extends string>(val: V) => Record<"val", V>
+>value : <V extends string>(val: V) => Value<V>
 >"dup" : "dup"
 >alternate : Record<"val", "dup">
 >value("dup") : Record<"val", "dup">
->value : <V extends string>(val: V) => Record<"val", V>
+>value : <V extends string>(val: V) => Value<V>
 >"dup" : "dup"
 
 // Repro from #26448

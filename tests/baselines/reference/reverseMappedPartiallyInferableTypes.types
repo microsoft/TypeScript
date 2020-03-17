@@ -45,7 +45,7 @@ export type PropsDefinition<T> = RecordPropsDefinition<T>;
 
 
 declare function extend<T>({ props }: { props: PropsDefinition<T> }):  PropsDefinition<T>;
->extend : <T>({ props }: { props: RecordPropsDefinition<T>; }) => RecordPropsDefinition<T>
+>extend : <T>({ props }: {    props: PropsDefinition<T>;}) => PropsDefinition<T>
 >props : RecordPropsDefinition<T>
 >props : RecordPropsDefinition<T>
 
@@ -57,7 +57,7 @@ interface MyType {
 const r = extend({
 >r : RecordPropsDefinition<{ notResolved: MyType; explicit: MyType; }>
 >extend({    props: {        notResolved: {            type: Object as PropType<MyType>,            validator: x => {                return x.valid;            }        },        explicit: {            type: Object as PropType<MyType>,            validator: (x: MyType) => {                return x.valid;            }        }    }}) : RecordPropsDefinition<{ notResolved: MyType; explicit: MyType; }>
->extend : <T>({ props }: { props: RecordPropsDefinition<T>; }) => RecordPropsDefinition<T>
+>extend : <T>({ props }: { props: RecordPropsDefinition<T>; }) => PropsDefinition<T>
 >{    props: {        notResolved: {            type: Object as PropType<MyType>,            validator: x => {                return x.valid;            }        },        explicit: {            type: Object as PropType<MyType>,            validator: (x: MyType) => {                return x.valid;            }        }    }} : { props: { notResolved: { type: Prop<MyType>; validator: (x: MyType) => boolean; }; explicit: { type: Prop<MyType>; validator: (x: MyType) => boolean; }; }; }
 
     props: {

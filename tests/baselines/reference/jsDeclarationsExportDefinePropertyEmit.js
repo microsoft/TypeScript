@@ -148,7 +148,7 @@ export namespace f {
 export function g(a: {
     x: string;
 }, b: {
-    y: () => void;
+    y: typeof module.exports.b;
 }): void;
 /**
  * @param {{x: string}} a
@@ -157,9 +157,86 @@ export function g(a: {
 export function h(a: {
     x: string;
 }, b: {
-    y: () => void;
+    y: typeof module.exports.b;
 }): void;
 export function i(): void;
 export function ii(): void;
 export function jj(): void;
 export function j(): void;
+declare var module: {
+    "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import(".");
+};
+declare namespace __tests_cases_conformance_jsdoc_declarations_index_ { }
+export {};
+
+
+//// [DtsFileErrors]
+
+
+out/index.d.ts(38,22): error TS2339: Property 'exports' does not exist on type '{ "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("out/index"); }'.
+out/index.d.ts(47,22): error TS2339: Property 'exports' does not exist on type '{ "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("out/index"); }'.
+
+
+==== ./out/index.d.ts (2 errors) ====
+    export function a(): void;
+    export function b(): void;
+    export namespace b {
+        export const cat: string;
+    }
+    /**
+     * @param {number} a
+     * @param {number} b
+     * @return {string}
+     */
+    export function d(a: number, b: number): string;
+    /**
+     * @template T,U
+     * @param {T} a
+     * @param {U} b
+     * @return {T & U}
+     */
+    export function e<T, U>(a: T, b: U): T & U;
+    /**
+     * @template T
+     * @param {T} a
+     */
+    export function f<T>(a: T): T;
+    export namespace f {
+        /**
+         * @template T
+         * @param {T} a
+         */
+        export function self<T>(a: T): T;
+    }
+    /**
+     * @param {{x: string}} a
+     * @param {{y: typeof module.exports.b}} b
+     */
+    export function g(a: {
+        x: string;
+    }, b: {
+        y: typeof module.exports.b;
+                         ~~~~~~~
+!!! error TS2339: Property 'exports' does not exist on type '{ "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("out/index"); }'.
+    }): void;
+    /**
+     * @param {{x: string}} a
+     * @param {{y: typeof module.exports.b}} b
+     */
+    export function h(a: {
+        x: string;
+    }, b: {
+        y: typeof module.exports.b;
+                         ~~~~~~~
+!!! error TS2339: Property 'exports' does not exist on type '{ "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("out/index"); }'.
+    }): void;
+    export function i(): void;
+    export function ii(): void;
+    export function jj(): void;
+    export function j(): void;
+    declare var module: {
+        "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import(".");
+    };
+    declare namespace __tests_cases_conformance_jsdoc_declarations_index_ { }
+    export {};
+    

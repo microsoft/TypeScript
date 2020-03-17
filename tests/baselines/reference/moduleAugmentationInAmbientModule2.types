@@ -11,9 +11,9 @@ let x: Observable;
 x.foo().x;
 >x.foo().x : number
 >x.foo() : import("M").Cls
->x.foo : () => import("M").Cls
+>x.foo : () => Cls
 >x : Observable
->foo : () => import("M").Cls
+>foo : () => Cls
 >x : number
 
 === tests/cases/compiler/O.d.ts ===

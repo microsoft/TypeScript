@@ -63,9 +63,9 @@ declare var x:O.I;
 var e:string=x.g(new O.A()); // matches overload but bad assignment
 >e : string
 >x.g(new O.A()) : O.C
->x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): C; (c: O.C): string; }
 >x : O.I
->g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): C; (c: O.C): string; }
 >new O.A() : O.A
 >O.A : typeof O.A
 >O : typeof O
@@ -91,13 +91,13 @@ y=x.f("nope"); // can't assign number to string
 var z:string=x.g(x.g(3,3)); // good
 >z : string
 >x.g(x.g(3,3)) : string
->x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): C; (c: O.C): string; }
 >x : O.I
->g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): C; (c: O.C): string; }
 >x.g(3,3) : number
->x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): C; (c: O.C): string; }
 >x : O.I
->g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): C; (c: O.C): string; }
 >3 : 3
 >3 : 3
 
@@ -105,9 +105,9 @@ z=x.g(2,2,2); // no match
 >z=x.g(2,2,2) : never
 >z : string
 >x.g(2,2,2) : never
->x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): C; (c: O.C): string; }
 >x : O.I
->g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): C; (c: O.C): string; }
 >2 : 2
 >2 : 2
 >2 : 2
@@ -116,17 +116,17 @@ z=x.g(); // no match
 >z=x.g() : never
 >z : string
 >x.g() : never
->x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): C; (c: O.C): string; }
 >x : O.I
->g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): C; (c: O.C): string; }
 
 z=x.g(new O.B()); // ambiguous (up and down conversion)
 >z=x.g(new O.B()) : O.C
 >z : string
 >x.g(new O.B()) : O.C
->x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): C; (c: O.C): string; }
 >x : O.I
->g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): C; (c: O.C): string; }
 >new O.B() : O.B
 >O.B : typeof O.B
 >O : typeof O
@@ -153,9 +153,9 @@ z=x.h("hello",0); // good
 >0 : 0
 
 var v=x.g;
->v : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
->x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>v : { (n1: number, n2: number): number; (n: number): string; (a: O.A): C; (c: O.C): string; }
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): C; (c: O.C): string; }
 >x : O.I
->g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): C; (c: O.C): string; }
 
 

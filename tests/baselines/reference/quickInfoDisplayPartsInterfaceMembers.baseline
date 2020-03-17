@@ -506,7 +506,7 @@
         },
         {
           "text": "I",
-          "kind": "interfaceName"
+          "kind": "text"
         }
       ],
       "documentation": []

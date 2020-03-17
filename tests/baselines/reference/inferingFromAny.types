@@ -18,7 +18,7 @@ declare function f3<T, U>(t: [T, U]): [T, U];
 >t : [T, U]
 
 declare function f4<T>(x: { bar: T; baz: T }): T;
->f4 : <T>(x: { bar: T; baz: T; }) => T
+>f4 : <T>(x: {    bar: T;    baz: T;}) => T
 >x : { bar: T; baz: T; }
 >bar : T
 >baz : T
@@ -47,12 +47,12 @@ declare function f9<T>(x: new () => T): T;
 >x : new () => T
 
 declare function f10<T>(x: { [x: string]: T }): T;
->f10 : <T>(x: { [x: string]: T; }) => T
+>f10 : <T>(x: {    [x: string]: T;}) => T
 >x : { [x: string]: T; }
 >x : string
 
 declare function f11<T>(x: { [x: number]: T }): T;
->f11 : <T>(x: { [x: number]: T; }) => T
+>f11 : <T>(x: {    [x: number]: T;}) => T
 >x : { [x: number]: T; }
 >x : number
 
@@ -65,7 +65,7 @@ declare function f13<T, U>(x: T & U): [T, U];
 >x : T & U
 
 declare function f14<T, U>(x: { a: T | U, b: U & T }): [T, U];
->f14 : <T, U>(x: { a: T | U; b: U & T; }) => [T, U]
+>f14 : <T, U>(x: {    a: T | U;    b: U & T;}) => [T, U]
 >x : { a: T | U; b: U & T; }
 >a : T | U
 >b : U & T
@@ -80,11 +80,11 @@ declare function f16<T>(x: Partial<T>): T;
 >x : Partial<T>
 
 declare function f17<T, K>(x: {[P in keyof T]: K}): T;
->f17 : <T, K>(x: { [P in keyof T]: K; }) => T
+>f17 : <T, K>(x: {    [P in keyof T]: K;}) => T
 >x : { [P in keyof T]: K; }
 
 declare function f18<T, K extends keyof T>(x: {[P in K]: T[P]}): T;
->f18 : <T, K extends keyof T>(x: { [P in K]: T[P]; }) => T
+>f18 : <T, K extends keyof T>(x: {    [P in K]: T[P];}) => T
 >x : { [P in K]: T[P]; }
 
 declare function f19<T, K extends keyof T>(k: K, x: T[K]): T;

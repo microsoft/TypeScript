@@ -56,11 +56,36 @@ export declare type DOMNode = Node;
 //// [custom.d.ts]
 export declare type Node = {};
 //// [index.d.ts]
-declare type Constructor = new (...args: any[]) => any;
 export declare const mixin: (Base: Constructor) => {
     new (...args: any[]): {
         [x: string]: any;
-        get(domNode: globalThis.Node): void;
+        get(domNode: DOMNode): void;
     };
 };
-export {};
+
+
+//// [DtsFileErrors]
+
+
+tests/cases/compiler/index.d.ts(1,36): error TS2304: Cannot find name 'Constructor'.
+tests/cases/compiler/index.d.ts(4,22): error TS2304: Cannot find name 'DOMNode'.
+
+
+==== tests/cases/compiler/dom.d.ts (0 errors) ====
+    export declare type DOMNode = Node;
+    
+==== tests/cases/compiler/custom.d.ts (0 errors) ====
+    export declare type Node = {};
+    
+==== tests/cases/compiler/index.d.ts (2 errors) ====
+    export declare const mixin: (Base: Constructor) => {
+                                       ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Constructor'.
+        new (...args: any[]): {
+            [x: string]: any;
+            get(domNode: DOMNode): void;
+                         ~~~~~~~
+!!! error TS2304: Cannot find name 'DOMNode'.
+        };
+    };
+    

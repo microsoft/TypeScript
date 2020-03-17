@@ -88,14 +88,14 @@ if1(c1);
 
 
 function of1(n: { a: { a: string; }; b: string; }): number;
->of1 : { (n: { a: { a: string; }; b: string; }): number; (s: { c: { b: string; }; d: string; }): string; }
+>of1 : { (n: {    a: {        a: string;    };    b: string;}): number; (s: { c: { b: string; }; d: string; }): string; }
 >n : { a: { a: string; }; b: string; }
 >a : { a: string; }
 >a : string
 >b : string
 
 function of1(s: { c: { b: string; }; d: string; }): string;
->of1 : { (n: { a: { a: string; }; b: string; }): number; (s: { c: { b: string; }; d: string; }): string; }
+>of1 : { (n: { a: { a: string; }; b: string; }): number; (s: {    c: {        b: string;    };    d: string;}): string; }
 >s : { c: { b: string; }; d: string; }
 >c : { b: string; }
 >b : string

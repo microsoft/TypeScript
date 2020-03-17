@@ -66,7 +66,7 @@ f2(() => {
 });
 
 function f3(a: { a: number; b: number; }) { }
->f3 : (a: { a: number; b: number; }) => void
+>f3 : (a: {    a: number;    b: number;}) => void
 >a : { a: number; b: number; }
 >a : number
 >b : number

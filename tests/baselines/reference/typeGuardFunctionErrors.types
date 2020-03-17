@@ -40,7 +40,7 @@ function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {
 }
 
 function hasMissingIsKeyword(): x {
->hasMissingIsKeyword : () => any
+>hasMissingIsKeyword : () => x
 
     return true;
 >true : true
@@ -155,7 +155,7 @@ if (hasNoTypeGuard(a)) {
 
 // Type predicate type is not assignable
 declare function acceptingDifferentSignatureTypeGuardFunction(p1: (p1) => p1 is B);
->acceptingDifferentSignatureTypeGuardFunction : (p1: (p1: any) => p1 is B) => any
+>acceptingDifferentSignatureTypeGuardFunction : (p1: (p1) => p1 is B) => any
 >p1 : (p1: any) => p1 is B
 >p1 : any
 
@@ -226,13 +226,13 @@ var b1: b is A;
 >A : any
 
 function b2(a: b is A) {};
->b2 : (a: any, is: any, A: any) => void
+>b2 : (a: b, is: any, A: any) => void
 >a : any
 >is : any
 >A : any
 
 function b3(): A | b is A {
->b3 : () => any
+>b3 : () => A | b
 >is : any
 >A : typeof A
 

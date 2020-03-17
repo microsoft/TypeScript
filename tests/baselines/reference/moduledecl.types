@@ -449,9 +449,9 @@ function foo() {
 
     return mAmbient.foo();
 >mAmbient.foo() : mAmbient.C
->mAmbient.foo : () => mAmbient.C
+>mAmbient.foo : () => C
 >mAmbient : typeof mAmbient
->foo : () => mAmbient.C
+>foo : () => C
 }
 
 var cVar = new mAmbient.C();
@@ -480,11 +480,11 @@ function m3foo() {
 
     return mAmbient.m3.foo();
 >mAmbient.m3.foo() : mAmbient.m3.C
->mAmbient.m3.foo : () => mAmbient.m3.C
+>mAmbient.m3.foo : () => C
 >mAmbient.m3 : typeof mAmbient.m3
 >mAmbient : typeof mAmbient
 >m3 : typeof mAmbient.m3
->foo : () => mAmbient.m3.C
+>foo : () => C
 }
 
 var m3cVar = new mAmbient.m3.C();

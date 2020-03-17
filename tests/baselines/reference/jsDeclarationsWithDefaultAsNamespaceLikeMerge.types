@@ -18,12 +18,12 @@ export declare function createNamespacedHelpers(): NamespacedMappers;
 
 === /index.js ===
 import { createNamespacedHelpers } from './helper'
->createNamespacedHelpers : () => import("/helper").NamespacedMappers
+>createNamespacedHelpers : () => NamespacedMappers
 
 const { mapState } = createNamespacedHelpers()
 >mapState : import("/helper").Mapper<import("/helper").Computed>
 >createNamespacedHelpers() : import("/helper").NamespacedMappers
->createNamespacedHelpers : () => import("/helper").NamespacedMappers
+>createNamespacedHelpers : () => NamespacedMappers
 
 export default {
 >{    computed: {        ...mapState(['panels'])    }} : { computed: { panels: import("/helper").Computed; }; }

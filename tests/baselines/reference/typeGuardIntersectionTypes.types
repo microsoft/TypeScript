@@ -92,7 +92,7 @@ function isB(toTest: any): toTest is B {
 
 // a function that turns an A into an A & B
 function union(a: A): A & B | null {
->union : (a: A) => (A & B) | null
+>union : (a: A) => A & B | null
 >a : A
 >null : null
 

@@ -38,7 +38,7 @@ function foo() {
 >baz : <implements, protected>() => void
 
     function barn(cb: (private, public, package) => void) { }
->barn : (cb: (private: any, public: any, package: any) => void) => void
+>barn : (cb: (private, public, package) => void) => void
 >cb : (private: any, public: any, package: any) => void
 >private : any
 >public : any
@@ -63,18 +63,18 @@ function foo() {
 >public : any
 
     function foo(x: private.x) { }
->foo : (x: any) => void
+>foo : (x: private.x) => void
 >x : any
 >private : any
 
     function foo1(x: private.package.x) { }
->foo1 : (x: any) => void
+>foo1 : (x: private.package.x) => void
 >x : any
 >private : any
 >package : any
 
     function foo2(x: private.package.protected) { }
->foo2 : (x: any) => void
+>foo2 : (x: private.package.protected) => void
 >x : any
 >private : any
 >package : any

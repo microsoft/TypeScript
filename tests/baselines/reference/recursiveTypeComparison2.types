@@ -32,9 +32,9 @@ declare module Bacon {
 >b : U
 
         withStateMachine<U, V>(initState: U, f: (state: U, event: Event<T>) => StateValue<U, V>): EventStream<V>;
->withStateMachine : <U, V>(initState: U, f: (state: U, event: Event<T>) => any) => EventStream<V>
+>withStateMachine : <U, V>(initState: U, f: (state: U, event: Event<T>) => StateValue<U, V>) => EventStream<V>
 >initState : U
->f : (state: U, event: Event<T>) => any
+>f : (state: U, event: Event<T>) => StateValue<U, V>
 >state : U
 >event : Event<T>
 
@@ -78,7 +78,7 @@ var stuck: Bacon.Bus<number> = new Bacon.Bus();
 >stuck : Bacon.Bus<number>
 >Bacon : any
 >new Bacon.Bus() : Bacon.Bus<number>
->Bacon.Bus : new <T>() => Bacon.Bus<T>
+>Bacon.Bus : new <T>() => Bus<T>
 >Bacon : typeof Bacon
->Bus : new <T>() => Bacon.Bus<T>
+>Bus : new <T>() => Bus<T>
 

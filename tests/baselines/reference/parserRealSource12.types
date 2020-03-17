@@ -9,7 +9,7 @@ module TypeScript {
 
     export interface IAstWalker {
         walk(ast: AST, parent: AST): AST;
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >ast : any
 >parent : any
 
@@ -93,7 +93,7 @@ module TypeScript {
         }
 
         public walk(ast: AST, parent: AST): AST {
->walk : (ast: any, parent: any) => any
+>walk : (ast: AST, parent: AST) => AST
 >ast : any
 >parent : any
 
@@ -226,7 +226,7 @@ module TypeScript {
         }
 
         public walk(ast: AST, pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any): AST {
->walk : (ast: any, pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any) => any
+>walk : (ast: AST, pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any) => AST
 >ast : any
 >pre : IAstWalkCallback
 >post : IAstWalkCallback
@@ -235,7 +235,7 @@ module TypeScript {
 
             return this.getWalker(pre, post, options, state).walk(ast, null)
 >this.getWalker(pre, post, options, state).walk(ast, null) : any
->this.getWalker(pre, post, options, state).walk : (ast: any, parent: any) => any
+>this.getWalker(pre, post, options, state).walk : (ast: any, parent: any) => AST
 >this.getWalker(pre, post, options, state) : IAstWalker
 >this.getWalker : (pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any) => IAstWalker
 >this : this
@@ -244,7 +244,7 @@ module TypeScript {
 >post : IAstWalkCallback
 >options : AstWalkOptions
 >state : any
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >ast : any
 >null : null
         }
@@ -1744,7 +1744,7 @@ module TypeScript {
 >ChildrenWalkers : typeof ChildrenWalkers
 
         export function walkNone(preAst: ASTList, parent: AST, walker: IAstWalker): void {
->walkNone : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -1753,7 +1753,7 @@ module TypeScript {
         }
 
         export function walkListChildren(preAst: ASTList, parent: AST, walker: IAstWalker): void {
->walkListChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkListChildren : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -1799,9 +1799,9 @@ module TypeScript {
 >members : any
 >i : number
 >walker.walk(preAst.members[i], preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.members[i] : any
 >preAst.members : any
 >preAst : any
@@ -1836,9 +1836,9 @@ module TypeScript {
 >members : any
 >i : number
 >walker.walk(preAst.members[i], preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.members[i] : any
 >preAst.members : any
 >preAst : any
@@ -1851,7 +1851,7 @@ module TypeScript {
         }
 
         export function walkUnaryExpressionChildren(preAst: UnaryExpression, parent: AST, walker: IAstWalker): void {
->walkUnaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -1867,9 +1867,9 @@ module TypeScript {
 >preAst : any
 >castTerm : any
 >walker.walk(preAst.castTerm, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.castTerm : any
 >preAst : any
 >castTerm : any
@@ -1886,9 +1886,9 @@ module TypeScript {
 >preAst : any
 >operand : any
 >walker.walk(preAst.operand, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.operand : any
 >preAst : any
 >operand : any
@@ -1897,7 +1897,7 @@ module TypeScript {
         }
 
         export function walkBinaryExpressionChildren(preAst: BinaryExpression, parent: AST, walker: IAstWalker): void {
->walkBinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -1920,9 +1920,9 @@ module TypeScript {
 >preAst : any
 >operand2 : any
 >walker.walk(preAst.operand2, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.operand2 : any
 >preAst : any
 >operand2 : any
@@ -1947,9 +1947,9 @@ module TypeScript {
 >preAst : any
 >operand1 : any
 >walker.walk(preAst.operand1, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.operand1 : any
 >preAst : any
 >operand1 : any
@@ -1967,9 +1967,9 @@ module TypeScript {
 >preAst : any
 >operand1 : any
 >walker.walk(preAst.operand1, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.operand1 : any
 >preAst : any
 >operand1 : any
@@ -1994,9 +1994,9 @@ module TypeScript {
 >preAst : any
 >operand2 : any
 >walker.walk(preAst.operand2, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.operand2 : any
 >preAst : any
 >operand2 : any
@@ -2006,7 +2006,7 @@ module TypeScript {
         }
 
         export function walkTypeReferenceChildren(preAst: TypeReference, parent: AST, walker: IAstWalker): void {
->walkTypeReferenceChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkTypeReferenceChildren : (preAst: TypeReference, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -2022,9 +2022,9 @@ module TypeScript {
 >preAst : any
 >term : any
 >walker.walk(preAst.term, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.term : any
 >preAst : any
 >term : any
@@ -2033,7 +2033,7 @@ module TypeScript {
         }
 
         export function walkCallExpressionChildren(preAst: CallExpression, parent: AST, walker: IAstWalker): void {
->walkCallExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkCallExpressionChildren : (preAst: CallExpression, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -2052,9 +2052,9 @@ module TypeScript {
 >preAst : any
 >target : any
 >walker.walk(preAst.target, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.target : any
 >preAst : any
 >target : any
@@ -2079,9 +2079,9 @@ module TypeScript {
 >arguments : any
 ><ASTList> walker.walk(preAst.arguments, preAst) : any
 >walker.walk(preAst.arguments, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.arguments : any
 >preAst : any
 >arguments : any
@@ -2108,9 +2108,9 @@ module TypeScript {
 >preAst : any
 >target : any
 >walker.walk(preAst.target, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.target : any
 >preAst : any
 >target : any
@@ -2119,7 +2119,7 @@ module TypeScript {
         }
 
         export function walkTrinaryExpressionChildren(preAst: ConditionalExpression, parent: AST, walker: IAstWalker): void {
->walkTrinaryExpressionChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkTrinaryExpressionChildren : (preAst: ConditionalExpression, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -2135,9 +2135,9 @@ module TypeScript {
 >preAst : any
 >operand1 : any
 >walker.walk(preAst.operand1, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.operand1 : any
 >preAst : any
 >operand1 : any
@@ -2161,9 +2161,9 @@ module TypeScript {
 >preAst : any
 >operand2 : any
 >walker.walk(preAst.operand2, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.operand2 : any
 >preAst : any
 >operand2 : any
@@ -2187,9 +2187,9 @@ module TypeScript {
 >preAst : any
 >operand3 : any
 >walker.walk(preAst.operand3, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.operand3 : any
 >preAst : any
 >operand3 : any
@@ -2198,7 +2198,7 @@ module TypeScript {
         }
 
         export function walkFuncDeclChildren(preAst: FuncDecl, parent: AST, walker: IAstWalker): void {
->walkFuncDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkFuncDeclChildren : (preAst: FuncDecl, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -2215,9 +2215,9 @@ module TypeScript {
 >name : any
 ><Identifier>walker.walk(preAst.name, preAst) : any
 >walker.walk(preAst.name, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.name : any
 >preAst : any
 >name : any
@@ -2253,9 +2253,9 @@ module TypeScript {
 >arguments : any
 ><ASTList>walker.walk(preAst.arguments, preAst) : any
 >walker.walk(preAst.arguments, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.arguments : any
 >preAst : any
 >arguments : any
@@ -2279,9 +2279,9 @@ module TypeScript {
 >preAst : any
 >returnTypeAnnotation : any
 >walker.walk(preAst.returnTypeAnnotation, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.returnTypeAnnotation : any
 >preAst : any
 >returnTypeAnnotation : any
@@ -2317,9 +2317,9 @@ module TypeScript {
 >bod : any
 ><ASTList>walker.walk(preAst.bod, preAst) : any
 >walker.walk(preAst.bod, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.bod : any
 >preAst : any
 >bod : any
@@ -2328,7 +2328,7 @@ module TypeScript {
         }
 
         export function walkBoundDeclChildren(preAst: BoundDecl, parent: AST, walker: IAstWalker): void {
->walkBoundDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBoundDeclChildren : (preAst: BoundDecl, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -2345,9 +2345,9 @@ module TypeScript {
 >id : any
 ><Identifier>walker.walk(preAst.id, preAst) : any
 >walker.walk(preAst.id, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.id : any
 >preAst : any
 >id : any
@@ -2364,9 +2364,9 @@ module TypeScript {
 >preAst : any
 >init : any
 >walker.walk(preAst.init, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.init : any
 >preAst : any
 >init : any
@@ -2391,9 +2391,9 @@ module TypeScript {
 >preAst : any
 >typeExpr : any
 >walker.walk(preAst.typeExpr, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.typeExpr : any
 >preAst : any
 >typeExpr : any
@@ -2402,7 +2402,7 @@ module TypeScript {
         }
 
         export function walkReturnStatementChildren(preAst: ReturnStatement, parent: AST, walker: IAstWalker): void {
->walkReturnStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkReturnStatementChildren : (preAst: ReturnStatement, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -2418,9 +2418,9 @@ module TypeScript {
 >preAst : any
 >returnExpression : any
 >walker.walk(preAst.returnExpression, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.returnExpression : any
 >preAst : any
 >returnExpression : any
@@ -2429,7 +2429,7 @@ module TypeScript {
         }
 
         export function walkForStatementChildren(preAst: ForStatement, parent: AST, walker: IAstWalker): void {
->walkForStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkForStatementChildren : (preAst: ForStatement, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -2445,9 +2445,9 @@ module TypeScript {
 >preAst : any
 >init : any
 >walker.walk(preAst.init, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.init : any
 >preAst : any
 >init : any
@@ -2471,9 +2471,9 @@ module TypeScript {
 >preAst : any
 >cond : any
 >walker.walk(preAst.cond, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.cond : any
 >preAst : any
 >cond : any
@@ -2497,9 +2497,9 @@ module TypeScript {
 >preAst : any
 >incr : any
 >walker.walk(preAst.incr, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.incr : any
 >preAst : any
 >incr : any
@@ -2523,9 +2523,9 @@ module TypeScript {
 >preAst : any
 >body : any
 >walker.walk(preAst.body, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.body : any
 >preAst : any
 >body : any
@@ -2534,7 +2534,7 @@ module TypeScript {
         }
 
         export function walkForInStatementChildren(preAst: ForInStatement, parent: AST, walker: IAstWalker): void {
->walkForInStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkForInStatementChildren : (preAst: ForInStatement, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -2545,9 +2545,9 @@ module TypeScript {
 >preAst : any
 >lval : any
 >walker.walk(preAst.lval, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.lval : any
 >preAst : any
 >lval : any
@@ -2566,9 +2566,9 @@ module TypeScript {
 >preAst : any
 >obj : any
 >walker.walk(preAst.obj, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.obj : any
 >preAst : any
 >obj : any
@@ -2592,9 +2592,9 @@ module TypeScript {
 >preAst : any
 >body : any
 >walker.walk(preAst.body, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.body : any
 >preAst : any
 >body : any
@@ -2603,7 +2603,7 @@ module TypeScript {
         }
 
         export function walkIfStatementChildren(preAst: IfStatement, parent: AST, walker: IAstWalker): void {
->walkIfStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkIfStatementChildren : (preAst: IfStatement, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -2614,9 +2614,9 @@ module TypeScript {
 >preAst : any
 >cond : any
 >walker.walk(preAst.cond, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.cond : any
 >preAst : any
 >cond : any
@@ -2640,9 +2640,9 @@ module TypeScript {
 >preAst : any
 >thenBod : any
 >walker.walk(preAst.thenBod, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.thenBod : any
 >preAst : any
 >thenBod : any
@@ -2666,9 +2666,9 @@ module TypeScript {
 >preAst : any
 >elseBod : any
 >walker.walk(preAst.elseBod, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.elseBod : any
 >preAst : any
 >elseBod : any
@@ -2677,7 +2677,7 @@ module TypeScript {
         }
 
         export function walkWhileStatementChildren(preAst: WhileStatement, parent: AST, walker: IAstWalker): void {
->walkWhileStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkWhileStatementChildren : (preAst: WhileStatement, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -2688,9 +2688,9 @@ module TypeScript {
 >preAst : any
 >cond : any
 >walker.walk(preAst.cond, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.cond : any
 >preAst : any
 >cond : any
@@ -2714,9 +2714,9 @@ module TypeScript {
 >preAst : any
 >body : any
 >walker.walk(preAst.body, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.body : any
 >preAst : any
 >body : any
@@ -2725,7 +2725,7 @@ module TypeScript {
         }
 
         export function walkDoWhileStatementChildren(preAst: DoWhileStatement, parent: AST, walker: IAstWalker): void {
->walkDoWhileStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkDoWhileStatementChildren : (preAst: DoWhileStatement, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -2736,9 +2736,9 @@ module TypeScript {
 >preAst : any
 >cond : any
 >walker.walk(preAst.cond, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.cond : any
 >preAst : any
 >cond : any
@@ -2762,9 +2762,9 @@ module TypeScript {
 >preAst : any
 >body : any
 >walker.walk(preAst.body, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.body : any
 >preAst : any
 >body : any
@@ -2773,7 +2773,7 @@ module TypeScript {
         }
 
         export function walkBlockChildren(preAst: Block, parent: AST, walker: IAstWalker): void {
->walkBlockChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkBlockChildren : (preAst: Block, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -2790,9 +2790,9 @@ module TypeScript {
 >statements : any
 ><ASTList>walker.walk(preAst.statements, preAst) : any
 >walker.walk(preAst.statements, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.statements : any
 >preAst : any
 >statements : any
@@ -2801,7 +2801,7 @@ module TypeScript {
         }
 
         export function walkCaseStatementChildren(preAst: CaseStatement, parent: AST, walker: IAstWalker): void {
->walkCaseStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkCaseStatementChildren : (preAst: CaseStatement, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -2817,9 +2817,9 @@ module TypeScript {
 >preAst : any
 >expr : any
 >walker.walk(preAst.expr, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.expr : any
 >preAst : any
 >expr : any
@@ -2844,9 +2844,9 @@ module TypeScript {
 >body : any
 ><ASTList>walker.walk(preAst.body, preAst) : any
 >walker.walk(preAst.body, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.body : any
 >preAst : any
 >body : any
@@ -2855,7 +2855,7 @@ module TypeScript {
         }
 
         export function walkSwitchStatementChildren(preAst: SwitchStatement, parent: AST, walker: IAstWalker): void {
->walkSwitchStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkSwitchStatementChildren : (preAst: SwitchStatement, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -2871,9 +2871,9 @@ module TypeScript {
 >preAst : any
 >val : any
 >walker.walk(preAst.val, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.val : any
 >preAst : any
 >val : any
@@ -2899,9 +2899,9 @@ module TypeScript {
 >caseList : any
 ><ASTList>walker.walk(preAst.caseList, preAst) : any
 >walker.walk(preAst.caseList, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.caseList : any
 >preAst : any
 >caseList : any
@@ -2910,7 +2910,7 @@ module TypeScript {
         }
 
         export function walkTryChildren(preAst: Try, parent: AST, walker: IAstWalker): void {
->walkTryChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkTryChildren : (preAst: Try, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -2926,9 +2926,9 @@ module TypeScript {
 >preAst : any
 >body : any
 >walker.walk(preAst.body, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.body : any
 >preAst : any
 >body : any
@@ -2937,7 +2937,7 @@ module TypeScript {
         }
 
         export function walkTryCatchChildren(preAst: TryCatch, parent: AST, walker: IAstWalker): void {
->walkTryCatchChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkTryCatchChildren : (preAst: TryCatch, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -2954,9 +2954,9 @@ module TypeScript {
 >tryNode : any
 ><Try>walker.walk(preAst.tryNode, preAst) : any
 >walker.walk(preAst.tryNode, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.tryNode : any
 >preAst : any
 >tryNode : any
@@ -2982,9 +2982,9 @@ module TypeScript {
 >catchNode : any
 ><Catch>walker.walk(preAst.catchNode, preAst) : any
 >walker.walk(preAst.catchNode, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.catchNode : any
 >preAst : any
 >catchNode : any
@@ -2993,7 +2993,7 @@ module TypeScript {
         }
 
         export function walkTryFinallyChildren(preAst: TryFinally, parent: AST, walker: IAstWalker): void {
->walkTryFinallyChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkTryFinallyChildren : (preAst: TryFinally, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -3009,9 +3009,9 @@ module TypeScript {
 >preAst : any
 >tryNode : any
 >walker.walk(preAst.tryNode, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.tryNode : any
 >preAst : any
 >tryNode : any
@@ -3036,9 +3036,9 @@ module TypeScript {
 >finallyNode : any
 ><Finally>walker.walk(preAst.finallyNode, preAst) : any
 >walker.walk(preAst.finallyNode, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.finallyNode : any
 >preAst : any
 >finallyNode : any
@@ -3047,7 +3047,7 @@ module TypeScript {
         }
 
         export function walkFinallyChildren(preAst: Finally, parent: AST, walker: IAstWalker): void {
->walkFinallyChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkFinallyChildren : (preAst: Finally, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -3063,9 +3063,9 @@ module TypeScript {
 >preAst : any
 >body : any
 >walker.walk(preAst.body, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.body : any
 >preAst : any
 >body : any
@@ -3074,7 +3074,7 @@ module TypeScript {
         }
 
         export function walkCatchChildren(preAst: Catch, parent: AST, walker: IAstWalker): void {
->walkCatchChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkCatchChildren : (preAst: Catch, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -3091,9 +3091,9 @@ module TypeScript {
 >param : any
 ><VarDecl>walker.walk(preAst.param, preAst) : any
 >walker.walk(preAst.param, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.param : any
 >preAst : any
 >param : any
@@ -3118,9 +3118,9 @@ module TypeScript {
 >preAst : any
 >body : any
 >walker.walk(preAst.body, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.body : any
 >preAst : any
 >body : any
@@ -3129,7 +3129,7 @@ module TypeScript {
         }
 
         export function walkRecordChildren(preAst: NamedDeclaration, parent: AST, walker: IAstWalker): void {
->walkRecordChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkRecordChildren : (preAst: NamedDeclaration, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -3141,9 +3141,9 @@ module TypeScript {
 >name : any
 ><Identifier>walker.walk(preAst.name, preAst) : any
 >walker.walk(preAst.name, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.name : any
 >preAst : any
 >name : any
@@ -3167,9 +3167,9 @@ module TypeScript {
 >members : any
 ><ASTList>walker.walk(preAst.members, preAst) : any
 >walker.walk(preAst.members, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.members : any
 >preAst : any
 >members : any
@@ -3179,7 +3179,7 @@ module TypeScript {
         }
 
         export function walkNamedTypeChildren(preAst: TypeDeclaration, parent: AST, walker: IAstWalker): void {
->walkNamedTypeChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkNamedTypeChildren : (preAst: TypeDeclaration, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -3193,7 +3193,7 @@ module TypeScript {
         }
 
         export function walkClassDeclChildren(preAst: ClassDeclaration, parent: AST, walker: IAstWalker): void {
->walkClassDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkClassDeclChildren : (preAst: ClassDeclaration, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -3223,9 +3223,9 @@ module TypeScript {
 >extendsList : any
 ><ASTList>walker.walk(preAst.extendsList, preAst) : any
 >walker.walk(preAst.extendsList, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.extendsList : any
 >preAst : any
 >extendsList : any
@@ -3250,9 +3250,9 @@ module TypeScript {
 >implementsList : any
 ><ASTList>walker.walk(preAst.implementsList, preAst) : any
 >walker.walk(preAst.implementsList, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.implementsList : any
 >preAst : any
 >implementsList : any
@@ -3261,7 +3261,7 @@ module TypeScript {
         }
 
         export function walkScriptChildren(preAst: Script, parent: AST, walker: IAstWalker): void {
->walkScriptChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkScriptChildren : (preAst: Script, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -3278,9 +3278,9 @@ module TypeScript {
 >bod : any
 ><ASTList>walker.walk(preAst.bod, preAst) : any
 >walker.walk(preAst.bod, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.bod : any
 >preAst : any
 >bod : any
@@ -3289,7 +3289,7 @@ module TypeScript {
         }
 
         export function walkTypeDeclChildren(preAst: InterfaceDeclaration, parent: AST, walker: IAstWalker): void {
->walkTypeDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkTypeDeclChildren : (preAst: InterfaceDeclaration, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -3320,9 +3320,9 @@ module TypeScript {
 >extendsList : any
 ><ASTList>walker.walk(preAst.extendsList, preAst) : any
 >walker.walk(preAst.extendsList, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.extendsList : any
 >preAst : any
 >extendsList : any
@@ -3347,9 +3347,9 @@ module TypeScript {
 >implementsList : any
 ><ASTList>walker.walk(preAst.implementsList, preAst) : any
 >walker.walk(preAst.implementsList, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.implementsList : any
 >preAst : any
 >implementsList : any
@@ -3358,7 +3358,7 @@ module TypeScript {
         }
 
         export function walkModuleDeclChildren(preAst: ModuleDeclaration, parent: AST, walker: IAstWalker): void {
->walkModuleDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkModuleDeclChildren : (preAst: ModuleDeclaration, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -3372,7 +3372,7 @@ module TypeScript {
         }
 
         export function walkImportDeclChildren(preAst: ImportDeclaration, parent: AST, walker: IAstWalker): void {
->walkImportDeclChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkImportDeclChildren : (preAst: ImportDeclaration, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -3389,9 +3389,9 @@ module TypeScript {
 >id : any
 ><Identifier>walker.walk(preAst.id, preAst) : any
 >walker.walk(preAst.id, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.id : any
 >preAst : any
 >id : any
@@ -3408,9 +3408,9 @@ module TypeScript {
 >preAst : any
 >alias : any
 >walker.walk(preAst.alias, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.alias : any
 >preAst : any
 >alias : any
@@ -3419,7 +3419,7 @@ module TypeScript {
         }
 
         export function walkWithStatementChildren(preAst: WithStatement, parent: AST, walker: IAstWalker): void {
->walkWithStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkWithStatementChildren : (preAst: WithStatement, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -3435,9 +3435,9 @@ module TypeScript {
 >preAst : any
 >expr : any
 >walker.walk(preAst.expr, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.expr : any
 >preAst : any
 >expr : any
@@ -3461,9 +3461,9 @@ module TypeScript {
 >preAst : any
 >body : any
 >walker.walk(preAst.body, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.body : any
 >preAst : any
 >body : any
@@ -3472,7 +3472,7 @@ module TypeScript {
         }
 
         export function walkLabelChildren(preAst: Label, parent: AST, walker: IAstWalker): void {
->walkLabelChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkLabelChildren : (preAst: Label, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -3481,7 +3481,7 @@ module TypeScript {
         }
 
         export function walkLabeledStatementChildren(preAst: LabeledStatement, parent: AST, walker: IAstWalker): void {
->walkLabeledStatementChildren : (preAst: any, parent: any, walker: IAstWalker) => void
+>walkLabeledStatementChildren : (preAst: LabeledStatement, parent: AST, walker: IAstWalker) => void
 >preAst : any
 >parent : any
 >walker : IAstWalker
@@ -3493,9 +3493,9 @@ module TypeScript {
 >labels : any
 ><ASTList>walker.walk(preAst.labels, preAst) : any
 >walker.walk(preAst.labels, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.labels : any
 >preAst : any
 >labels : any
@@ -3514,9 +3514,9 @@ module TypeScript {
 >preAst : any
 >stmt : any
 >walker.walk(preAst.stmt, preAst) : any
->walker.walk : (ast: any, parent: any) => any
+>walker.walk : (ast: any, parent: any) => AST
 >walker : IAstWalker
->walk : (ast: any, parent: any) => any
+>walk : (ast: any, parent: any) => AST
 >preAst.stmt : any
 >preAst : any
 >stmt : any

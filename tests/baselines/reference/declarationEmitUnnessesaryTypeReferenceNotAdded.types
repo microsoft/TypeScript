@@ -1,6 +1,6 @@
 === /index.ts ===
 import minimist = require('minimist');
->minimist : (x: any) => minimist.ParsedArgs
+>minimist : (x: any) => thing.ParsedArgs
 
 import process = require('process');
 >process : any
@@ -11,7 +11,7 @@ export default function parseArgs(): minimist.ParsedArgs {
 
   return minimist(process.argv.slice(2));
 >minimist(process.argv.slice(2)) : minimist.ParsedArgs
->minimist : (x: any) => minimist.ParsedArgs
+>minimist : (x: any) => thing.ParsedArgs
 >process.argv.slice(2) : any
 >process.argv.slice : any
 >process.argv : any

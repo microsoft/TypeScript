@@ -6,17 +6,17 @@ type B = {b: string}
 >b : string
 
 const flowtypes = <A>(b: B) => {
->flowtypes : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
-><A>(b: B) => {  type Combined = A & B  const combined = (fn: (combined: Combined) => void) => null  const literal = (fn: (aPlusB: A & B) => void) => null  return {combined, literal}} : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
+>flowtypes : <A>(b: B) => { combined: (fn: (combined: Combined) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
+><A>(b: B) => {  type Combined = A & B  const combined = (fn: (combined: Combined) => void) => null  const literal = (fn: (aPlusB: A & B) => void) => null  return {combined, literal}} : <A>(b: B) => { combined: (fn: (combined: Combined) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
 >b : B
 
   type Combined = A & B
 >Combined : A & B
 
   const combined = (fn: (combined: Combined) => void) => null
->combined : (fn: (combined: A & B) => void) => any
->(fn: (combined: Combined) => void) => null : (fn: (combined: A & B) => void) => any
->fn : (combined: A & B) => void
+>combined : (fn: (combined: Combined) => void) => any
+>(fn: (combined: Combined) => void) => null : (fn: (combined: Combined) => void) => any
+>fn : (combined: Combined) => void
 >combined : A & B
 >null : null
 
@@ -82,7 +82,7 @@ combined(comb => {
 // Repro from #19091
 
 declare function f<T>(a: T): { a: typeof a };
->f : <T>(a: T) => { a: T; }
+>f : <T>(a: T) => {    a: typeof a;}
 >a : T
 >a : T
 >a : T
@@ -91,7 +91,7 @@ let n: number = f(2).a;
 >n : number
 >f(2).a : number
 >f(2) : { a: number; }
->f : <T>(a: T) => { a: T; }
+>f : <T>(a: T) => {    a: typeof a;}
 >2 : 2
 >a : number
 

@@ -7,7 +7,7 @@ var y: asdf;
 >y : any
 
 function foo(x: asdf, y: number): asdf { }
->foo : (x: any, y: number) => any
+>foo : (x: asdf, y: number) => asdf
 >x : any
 >y : number
 

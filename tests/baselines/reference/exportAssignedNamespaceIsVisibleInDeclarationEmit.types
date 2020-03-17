@@ -11,10 +11,10 @@ export = Foo;
 
 === tests/cases/compiler/index.ts ===
 import { f } from "./thing";
->f : () => import("tests/cases/compiler/thing").Bar
+>f : () => Bar
 
 export const thing = f();
 >thing : import("tests/cases/compiler/thing").Bar
 >f() : import("tests/cases/compiler/thing").Bar
->f : () => import("tests/cases/compiler/thing").Bar
+>f : () => Bar
 

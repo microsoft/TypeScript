@@ -68,5 +68,40 @@ declare global {
         someProp: number;
     }
 }
-import * as model from "./model";
 export declare const func: (account: model.Account, acc2: model.Acc) => void;
+
+
+//// [DtsFileErrors]
+
+
+tests/cases/compiler/index.d.ts(9,38): error TS2503: Cannot find namespace 'model'.
+tests/cases/compiler/index.d.ts(9,59): error TS2503: Cannot find namespace 'model'.
+
+
+==== tests/cases/compiler/model/index.d.ts (0 errors) ====
+    export * from "./account";
+    
+==== /.src/tests/cases/compiler/model/account.d.ts (0 errors) ====
+    export interface Account {
+        myAccNum: number;
+    }
+    interface Account2 {
+        myAccNum: number;
+    }
+    export { Account2 as Acc };
+    
+==== tests/cases/compiler/index.d.ts (2 errors) ====
+    declare global {
+        interface Account {
+            someProp: number;
+        }
+        interface Acc {
+            someProp: number;
+        }
+    }
+    export declare const func: (account: model.Account, acc2: model.Acc) => void;
+                                         ~~~~~
+!!! error TS2503: Cannot find namespace 'model'.
+                                                              ~~~~~
+!!! error TS2503: Cannot find namespace 'model'.
+    

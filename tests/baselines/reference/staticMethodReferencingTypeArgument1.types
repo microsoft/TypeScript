@@ -17,7 +17,7 @@ module Editor {
         }
 
         static MakeHead(): List<T> {
->MakeHead : () => List<any>
+>MakeHead : () => List<T>
 
             var entry: List<T> = new List<T>(true, null); // can't access T here
 >entry : List<any>

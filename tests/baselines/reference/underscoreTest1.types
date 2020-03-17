@@ -1232,9 +1232,9 @@ _.chain([1, 2, 3, 200])
 >_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; }) : Underscore.ChainedArray<number>
 >_.chain([1, 2, 3, 200])    .filter : (iterator: Iterator_<number, boolean>, context?: any) => Underscore.ChainedArray<number>
 >_.chain([1, 2, 3, 200]) : Underscore.ChainedArray<number>
->_.chain : { <T>(list: T[]): Underscore.ChainedArray<T>; <T>(list: Dictionary<T>): Underscore.ChainedDictionary<T>; <T>(obj: T): Underscore.ChainedObject<T>; }
+>_.chain : { <T>(list: T[]): ChainedArray<T>; <T>(list: Dictionary<T>): ChainedDictionary<T>; <T>(obj: T): ChainedObject<T>; }
 >_ : Underscore.Static
->chain : { <T>(list: T[]): Underscore.ChainedArray<T>; <T>(list: Dictionary<T>): Underscore.ChainedDictionary<T>; <T>(obj: T): Underscore.ChainedObject<T>; }
+>chain : { <T>(list: T[]): ChainedArray<T>; <T>(list: Dictionary<T>): ChainedDictionary<T>; <T>(obj: T): ChainedObject<T>; }
 >[1, 2, 3, 200] : number[]
 >1 : 1
 >2 : 2
@@ -1500,9 +1500,9 @@ _.isUndefined((<any>null).missingVariable);
 var underscore = _.noConflict();
 >underscore : Underscore.Static
 >_.noConflict() : Underscore.Static
->_.noConflict : () => Underscore.Static
+>_.noConflict : () => Static
 >_ : Underscore.Static
->noConflict : () => Underscore.Static
+>noConflict : () => Static
 
 var moe2 = { name: 'moe' };
 >moe2 : { name: string; }

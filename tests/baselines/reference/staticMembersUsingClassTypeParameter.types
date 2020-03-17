@@ -7,7 +7,7 @@ class C<T> {
 >x : any
 
     static f(x: T) {}
->f : (x: any) => void
+>f : (x: T) => void
 >x : any
 }
 
@@ -18,7 +18,7 @@ class C2<T, U> {
 >x : any
 
     static f(x: U) { }
->f : (x: any) => void
+>f : (x: U) => void
 >x : any
 }
 
@@ -29,6 +29,6 @@ class C3<T extends Date> {
 >x : any
 
     static f(x: T) { }
->f : (x: any) => void
+>f : (x: T) => void
 >x : any
 }

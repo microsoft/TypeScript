@@ -6,9 +6,9 @@ let re = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/u;
 let result = re.exec("2015-01-02");
 >result : RegExpExecArray
 >re.exec("2015-01-02") : RegExpExecArray
->re.exec : (string: string) => RegExpExecArray
+>re.exec : (string: string) => RegExpExecArray | null
 >re : RegExp
->exec : (string: string) => RegExpExecArray
+>exec : (string: string) => RegExpExecArray | null
 >"2015-01-02" : "2015-01-02"
 
 let date = result[0];
@@ -65,9 +65,9 @@ let foo = "foo".match(/(?<bar>foo)/)!.groups.foo;
 >"foo".match(/(?<bar>foo)/)!.groups : { [key: string]: string; }
 >"foo".match(/(?<bar>foo)/)! : RegExpMatchArray
 >"foo".match(/(?<bar>foo)/) : RegExpMatchArray
->"foo".match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match](string: string): RegExpMatchArray; }): RegExpMatchArray; }
+>"foo".match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
 >"foo" : "foo"
->match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match](string: string): RegExpMatchArray; }): RegExpMatchArray; }
+>match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
 >/(?<bar>foo)/ : RegExp
 >groups : { [key: string]: string; }
 >foo : string

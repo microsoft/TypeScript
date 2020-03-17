@@ -36,9 +36,9 @@ const Ctor = ns.default;
 export const MyComp = Ctor.extends({foo: "bar"});
 >MyComp : import("tests/cases/compiler/node_modules/mod/ctor").ExtendedCtor<import("tests/cases/compiler/node_modules/mod/ctor").Ctor>
 >Ctor.extends({foo: "bar"}) : import("tests/cases/compiler/node_modules/mod/ctor").ExtendedCtor<import("tests/cases/compiler/node_modules/mod/ctor").Ctor>
->Ctor.extends : <T>(x: T) => import("tests/cases/compiler/node_modules/mod/ctor").ExtendedCtor<T extends unknown ? import("tests/cases/compiler/node_modules/mod/ctor").Ctor : undefined>
+>Ctor.extends : <T>(x: T) => ExtendedCtor<T extends unknown ? Ctor : undefined>
 >Ctor : import("tests/cases/compiler/node_modules/mod/ctor").CtorConstructor
->extends : <T>(x: T) => import("tests/cases/compiler/node_modules/mod/ctor").ExtendedCtor<T extends unknown ? import("tests/cases/compiler/node_modules/mod/ctor").Ctor : undefined>
+>extends : <T>(x: T) => ExtendedCtor<T extends unknown ? Ctor : undefined>
 >{foo: "bar"} : { foo: string; }
 >foo : string
 >"bar" : "bar"

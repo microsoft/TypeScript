@@ -5,7 +5,7 @@ const kindCache: { [kind: string]: boolean } = {};
 >{} : {}
 
 function register(kind: string): void | never {
->register : (kind: string) => void
+>register : (kind: string) => void | never
 >kind : string
 
   if (kindCache[kind]) {
@@ -33,7 +33,7 @@ function ClassFactory<TKind extends string>(kind: TKind) {
 
   register(kind);
 >register(kind) : void
->register : (kind: string) => void
+>register : (kind: string) => void | never
 >kind : TKind
 
   return class {

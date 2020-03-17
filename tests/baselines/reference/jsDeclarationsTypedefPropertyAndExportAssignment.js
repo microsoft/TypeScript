@@ -145,20 +145,20 @@ declare class MainThreadTasks {
      * @param {TaskGroup} x
      * @param {TaskNode} y
      */
-    constructor(x: import("./module.js").TaskGroup, y: TaskNode);
+    constructor(x: TaskGroup, y: TaskNode);
 }
 declare namespace MainThreadTasks {
     export { TaskGroup, TaskNode, PriorTaskData };
 }
-type TaskNode = {
-    children: TaskNode[];
-    parent: TaskNode;
-    group: import("./module.js").TaskGroup;
-};
 type TaskGroup = {
     id: "parseHTML" | "styleLayout";
     label: string;
     traceEventNames: string[];
+};
+type TaskNode = {
+    children: TaskNode[];
+    parent: TaskNode;
+    group: import("./module.js").TaskGroup;
 };
 type PriorTaskData = {
     timers: Map<string, TaskNode>;

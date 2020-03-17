@@ -3,7 +3,7 @@ class foo<T> {
 >foo : foo<T>
 
     static get Foo(): () => T { return null; }
->Foo : () => any
+>Foo : () => T
 >null : null
 
     static set Bar(v: { v: T }) { }

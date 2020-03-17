@@ -26,9 +26,9 @@ var x: A.B = A.B.createB();
 >x : A.B
 >A : any
 >A.B.createB() : A.B
->A.B.createB : () => A.B
+>A.B.createB : () => B
 >A.B : typeof A.B
 >A : typeof A
 >B : typeof A.B
->createB : () => A.B
+>createB : () => B
 

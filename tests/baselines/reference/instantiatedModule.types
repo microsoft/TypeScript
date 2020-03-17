@@ -104,9 +104,9 @@ var o: M2.Point = a2.Origin();
 >o : M2.Point
 >M2 : any
 >a2.Origin() : M2.Point
->a2.Origin : () => M2.Point
+>a2.Origin : () => Point
 >a2 : typeof M2.Point
->Origin : () => M2.Point
+>Origin : () => Point
 
 var p2: { x: number; y: number }
 >p2 : { x: number; y: number; }

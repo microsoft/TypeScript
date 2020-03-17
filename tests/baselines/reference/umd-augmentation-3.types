@@ -24,9 +24,9 @@ let p: m.Point = v.translate(5, 5);
 >p : m.Point
 >m : any
 >v.translate(5, 5) : m.Vector
->v.translate : (dx: number, dy: number) => m.Vector
+>v.translate : (dx: number, dy: number) => Vector
 >v : m.Vector
->translate : (dx: number, dy: number) => m.Vector
+>translate : (dx: number, dy: number) => Vector
 >5 : 5
 >5 : 5
 
@@ -34,9 +34,9 @@ p = v.reverse();
 >p = v.reverse() : m.Point
 >p : m.Point
 >v.reverse() : m.Point
->v.reverse : () => m.Point
+>v.reverse : () => Math2d.Point
 >v : m.Vector
->reverse : () => m.Point
+>reverse : () => Math2d.Point
 
 var t = p.x;
 >t : number
@@ -99,7 +99,7 @@ declare module 'math2d' {
 	// Add a method to the class
 	interface Vector {
 		reverse(): Math2d.Point;
->reverse : () => Point
+>reverse : () => Math2d.Point
 >Math2d : any
 	}
 }

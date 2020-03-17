@@ -30,9 +30,9 @@ declare global {
 === tests/cases/compiler/src/components/TabBar.js ===
 export default React.createClass({
 >React.createClass({  render() {    return (      null    );  }}) : import("tests/cases/compiler/react").ClassicComponentClass
->React.createClass : (spec: any) => import("tests/cases/compiler/react").ClassicComponentClass
+>React.createClass : (spec: any) => ClassicComponentClass
 >React : typeof import("tests/cases/compiler/react")
->createClass : (spec: any) => import("tests/cases/compiler/react").ClassicComponentClass
+>createClass : (spec: any) => ClassicComponentClass
 >{  render() {    return (      null    );  }} : { render(): any; }
 
   render() {

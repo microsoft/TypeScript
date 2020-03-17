@@ -9,9 +9,9 @@ import model = require("./greeter")
 var el = document.getElementById('content');
 >el : HTMLElement
 >document.getElementById('content') : HTMLElement
->document.getElementById : (elementId: string) => HTMLElement
+>document.getElementById : (elementId: string) => HTMLElement | null
 >document : Document
->getElementById : (elementId: string) => HTMLElement
+>getElementById : (elementId: string) => HTMLElement | null
 >'content' : "content"
 
 var greeter = new model.Greeter(el);

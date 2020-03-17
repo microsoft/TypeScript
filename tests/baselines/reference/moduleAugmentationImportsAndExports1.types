@@ -49,8 +49,8 @@ let b = a.foo().n;
 >b : number
 >a.foo().n : number
 >a.foo() : import("tests/cases/compiler/f2").B
->a.foo : () => import("tests/cases/compiler/f2").B
+>a.foo : () => B
 >a : A
->foo : () => import("tests/cases/compiler/f2").B
+>foo : () => B
 >n : number
 

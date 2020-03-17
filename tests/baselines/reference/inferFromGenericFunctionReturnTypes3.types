@@ -28,7 +28,7 @@ function wrap<T>(value: T): Wrap<T> {
 }
 
 function wrappedFoo(): Wrap<'foo'> {
->wrappedFoo : () => Wrap<"foo">
+>wrappedFoo : () => Wrap<'foo'>
 
     return wrap('foo');
 >wrap('foo') : Wrap<"foo">
@@ -37,7 +37,7 @@ function wrappedFoo(): Wrap<'foo'> {
 }
 
 function wrapBar(value: 'bar'): Wrap<'bar'> {
->wrapBar : (value: "bar") => Wrap<"bar">
+>wrapBar : (value: 'bar') => Wrap<'bar'>
 >value : "bar"
 
     return { value };
@@ -46,7 +46,7 @@ function wrapBar(value: 'bar'): Wrap<'bar'> {
 }
 
 function wrappedBar(): Wrap<'bar'> {
->wrappedBar : () => Wrap<"bar">
+>wrappedBar : () => Wrap<'bar'>
 
     const value = 'bar';
 >value : "bar"
@@ -55,13 +55,13 @@ function wrappedBar(): Wrap<'bar'> {
     const inferred = wrapBar(value);
 >inferred : Wrap<"bar">
 >wrapBar(value) : Wrap<"bar">
->wrapBar : (value: "bar") => Wrap<"bar">
+>wrapBar : (value: "bar") => Wrap<'bar'>
 >value : "bar"
 
     const literal = wrapBar('bar');
 >literal : Wrap<"bar">
 >wrapBar('bar') : Wrap<"bar">
->wrapBar : (value: "bar") => Wrap<"bar">
+>wrapBar : (value: "bar") => Wrap<'bar'>
 >'bar' : "bar"
 
     const value2: string = 'bar';
@@ -71,7 +71,7 @@ function wrappedBar(): Wrap<'bar'> {
     const literal2 = wrapBar(value2);  // Error
 >literal2 : Wrap<"bar">
 >wrapBar(value2) : Wrap<"bar">
->wrapBar : (value: "bar") => Wrap<"bar">
+>wrapBar : (value: "bar") => Wrap<'bar'>
 >value2 : string
 
     return wrap(value);
@@ -81,7 +81,7 @@ function wrappedBar(): Wrap<'bar'> {
 }
 
 function wrappedBaz(): Wrap<'baz'> {
->wrappedBaz : () => Wrap<"baz">
+>wrappedBaz : () => Wrap<'baz'>
 
     const value: 'baz' = 'baz';
 >value : "baz"
@@ -520,7 +520,7 @@ class ClassWithConvert<T> {
 >val : T
 
   convert(converter: { to: (v: T) => T; }) { }
->convert : (converter: { to: (v: T) => T; }) => void
+>convert : (converter: {    to: (v: T) => T;}) => void
 >converter : { to: (v: T) => T; }
 >to : (v: T) => T
 >v : T

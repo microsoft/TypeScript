@@ -279,9 +279,9 @@ module Harness {
             var bugs = content.match(/\bbug (\d+)/i);
 >bugs : RegExpMatchArray
 >content.match(/\bbug (\d+)/i) : RegExpMatchArray
->content.match : (regexp: string | RegExp) => RegExpMatchArray
+>content.match : (regexp: string | RegExp) => RegExpMatchArray | null
 >content : string
->match : (regexp: string | RegExp) => RegExpMatchArray
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
 >/\bbug (\d+)/i : RegExp
 
             if (bugs) {
@@ -2258,7 +2258,7 @@ module Harness {
 >[] : undefined[]
 
         var timeFunction: (
->timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: () => void) => void) => void
+>timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: {    (): void;}) => void) => void
 
             benchmark: Benchmark,
 >benchmark : Benchmark
@@ -2270,7 +2270,7 @@ module Harness {
 >name : string
 
             f?: (bench?: { (): void; }) => void
->f : (bench?: () => void) => void
+>f : (bench?: {    (): void;}) => void
 >bench : () => void
 
         ) => void;
@@ -2652,7 +2652,7 @@ module Harness {
 
             /** create file gets the whole path to create, so this works as expected with the --out parameter */
             public createFile(s: string, useUTF8?: boolean): ITextWriter {
->createFile : (s: string, useUTF8?: boolean) => any
+>createFile : (s: string, useUTF8?: boolean) => ITextWriter
 >s : string
 >useUTF8 : boolean
 
@@ -2725,7 +2725,7 @@ module Harness {
 >{} : {}
 
             public toArray(): { filename: string; file: WriterAggregator; }[] {
->toArray : () => { filename: string; file: WriterAggregator; }[]
+>toArray : () => {    filename: string;    file: WriterAggregator;}[]
 >filename : string
 >file : WriterAggregator
 
@@ -2864,7 +2864,7 @@ module Harness {
         }
 
         export function makeDefaultCompilerForTest(c?: TypeScript.TypeScriptCompiler) {
->makeDefaultCompilerForTest : (c?: any) => any
+>makeDefaultCompilerForTest : (c?: TypeScript.TypeScriptCompiler) => any
 >c : any
 >TypeScript : any
 
@@ -4120,7 +4120,7 @@ module Harness {
             }
 
             private getTypeInfoName(ast : TypeScript.AST) {
->getTypeInfoName : (ast: any) => string
+>getTypeInfoName : (ast: TypeScript.AST) => string
 >ast : any
 >TypeScript : any
 
@@ -4471,7 +4471,7 @@ module Harness {
           * @param references the set of referenced files used by the given code
           */
         export function generateDeclFile(code: string, verifyNoDeclFile: boolean, unitName?: string, compilationContext?: Harness.Compiler.CompilationContext, references?: TypeScript.IFileReference[]): string {
->generateDeclFile : (code: string, verifyNoDeclFile: boolean, unitName?: string, compilationContext?: CompilationContext, references?: any[]) => string
+>generateDeclFile : (code: string, verifyNoDeclFile: boolean, unitName?: string, compilationContext?: Harness.Compiler.CompilationContext, references?: TypeScript.IFileReference[]) => string
 >code : string
 >verifyNoDeclFile : boolean
 >unitName : string
@@ -4847,11 +4847,11 @@ module Harness {
                         var match = errorLines[i].match(/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/);
 >match : RegExpMatchArray
 >errorLines[i].match(/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/) : RegExpMatchArray
->errorLines[i].match : (regexp: string | RegExp) => RegExpMatchArray
+>errorLines[i].match : (regexp: string | RegExp) => RegExpMatchArray | null
 >errorLines[i] : string
 >errorLines : string[]
 >i : number
->match : (regexp: string | RegExp) => RegExpMatchArray
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
 >/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/ : RegExp
 
                         if (match) {
@@ -5114,7 +5114,7 @@ module Harness {
         }
 
         export function addUnit(code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) {
->addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: any[]) => any
+>addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) => any
 >code : string
 >unitName : string
 >isResident : boolean
@@ -5250,11 +5250,11 @@ module Harness {
         }
 
         export function compileFile(path: string, callback: (res: CompilerResult) => void , settingsCallback?: (settings?: TypeScript.CompilationSettings) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
->compileFile : (path: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: any) => void, context?: CompilationContext, references?: any[]) => void
+>compileFile : (path: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >path : string
 >callback : (res: CompilerResult) => void
 >res : CompilerResult
->settingsCallback : (settings?: any) => void
+>settingsCallback : (settings?: TypeScript.CompilationSettings) => void
 >settings : any
 >TypeScript : any
 >context : CompilationContext
@@ -5272,9 +5272,9 @@ module Harness {
 >filename : string
 >path.match(/[^\/]*$/)[0] : string
 >path.match(/[^\/]*$/) : RegExpMatchArray
->path.match : (regexp: string | RegExp) => RegExpMatchArray
+>path.match : (regexp: string | RegExp) => RegExpMatchArray | null
 >path : string
->match : (regexp: string | RegExp) => RegExpMatchArray
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
 >/[^\/]*$/ : RegExp
 >0 : 0
 
@@ -5296,12 +5296,12 @@ module Harness {
         }
 
         export function compileUnit(code: string, filename: string, callback: (res: CompilerResult) => void , settingsCallback?: (settings?: TypeScript.CompilationSettings) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
->compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: any) => void, context?: CompilationContext, references?: any[]) => void
+>compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >code : string
 >filename : string
 >callback : (res: CompilerResult) => void
 >res : CompilerResult
->settingsCallback : (settings?: any) => void
+>settingsCallback : (settings?: TypeScript.CompilationSettings) => void
 >settings : any
 >TypeScript : any
 >context : CompilationContext
@@ -5432,10 +5432,10 @@ module Harness {
         }
 
         export function compileUnits(units: TestCaseParser.TestUnitData[], callback: (res: Compiler.CompilerResult) => void , settingsCallback?: () => void ) {
->compileUnits : (units: TestCaseParser.TestUnitData[], callback: (res: CompilerResult) => void, settingsCallback?: () => void) => void
+>compileUnits : (units: TestCaseParser.TestUnitData[], callback: (res: Compiler.CompilerResult) => void, settingsCallback?: () => void) => void
 >units : TestCaseParser.TestUnitData[]
 >TestCaseParser : any
->callback : (res: CompilerResult) => void
+>callback : (res: Compiler.CompilerResult) => void
 >res : CompilerResult
 >Compiler : any
 >settingsCallback : () => void
@@ -5454,13 +5454,13 @@ module Harness {
 >unitName : string
 >switchToForwardSlashes(lastUnit.name).match(/[^\/]*$/)[0] : string
 >switchToForwardSlashes(lastUnit.name).match(/[^\/]*$/) : RegExpMatchArray
->switchToForwardSlashes(lastUnit.name).match : (regexp: string | RegExp) => RegExpMatchArray
+>switchToForwardSlashes(lastUnit.name).match : (regexp: string | RegExp) => RegExpMatchArray | null
 >switchToForwardSlashes(lastUnit.name) : string
 >switchToForwardSlashes : (path: string) => string
 >lastUnit.name : string
 >lastUnit : TestCaseParser.TestUnitData
 >name : string
->match : (regexp: string | RegExp) => RegExpMatchArray
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
 >/[^\/]*$/ : RegExp
 >0 : 0
 
@@ -5516,7 +5516,7 @@ module Harness {
         }
 
         export function emit(ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) {
->emit : (ioHost: any, usePullEmitter?: boolean) => void
+>emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) => void
 >ioHost : any
 >TypeScript : any
 >usePullEmitter : boolean
@@ -5531,10 +5531,10 @@ module Harness {
         }
 
         export function compileString(code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
->compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext, references?: any[]) => void
+>compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >code : string
 >unitName : string
->callback : (res: CompilerResult) => void
+>callback : (res: Compiler.CompilerResult) => void
 >res : CompilerResult
 >Compiler : any
 >context : CompilationContext
@@ -5662,9 +5662,9 @@ module Harness {
 >new CompilerResult(stdout.toArray(), errors, scripts) : CompilerResult
 >CompilerResult : typeof CompilerResult
 >stdout.toArray() : { filename: string; file: WriterAggregator; }[]
->stdout.toArray : () => { filename: string; file: WriterAggregator; }[]
+>stdout.toArray : () => {    filename: string;    file: WriterAggregator;}[]
 >stdout : EmitterIOHost
->toArray : () => { filename: string; file: WriterAggregator; }[]
+>toArray : () => {    filename: string;    file: WriterAggregator;}[]
 >errors : any
 >scripts : any[]
         }
@@ -5877,7 +5877,7 @@ module Harness {
 
         /** Given a test file containing // @Filename directives, return an array of named units of code to be added to an existing compiler instance */
         export function makeUnitsFromTest(code: string, filename: string): { settings: CompilerSetting[]; testUnitData: TestUnitData[]; } {
->makeUnitsFromTest : (code: string, filename: string) => { settings: CompilerSetting[]; testUnitData: TestUnitData[]; }
+>makeUnitsFromTest : (code: string, filename: string) => {    settings: CompilerSetting[];    testUnitData: TestUnitData[];}
 >code : string
 >filename : string
 >settings : CompilerSetting[]
@@ -5958,9 +5958,9 @@ module Harness {
                     var isRef = line.match(/reference\spath='(\w*_?\w*\.?d?\.ts)'/);
 >isRef : RegExpMatchArray
 >line.match(/reference\spath='(\w*_?\w*\.?d?\.ts)'/) : RegExpMatchArray
->line.match : (regexp: string | RegExp) => RegExpMatchArray
+>line.match : (regexp: string | RegExp) => RegExpMatchArray | null
 >line : string
->match : (regexp: string | RegExp) => RegExpMatchArray
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
 >/reference\spath='(\w*_?\w*\.?d?\.ts)'/ : RegExp
 
                     if (isRef) {
@@ -6409,7 +6409,7 @@ module Harness {
         }
 
         public getEditRangeSinceVersion(version: number): TypeScript.ScriptEditRange {
->getEditRangeSinceVersion : (version: number) => any
+>getEditRangeSinceVersion : (version: number) => TypeScript.ScriptEditRange
 >version : number
 >TypeScript : any
 
@@ -6922,13 +6922,13 @@ module Harness {
             var range = this.scripts[scriptIndex].getEditRangeSinceVersion(scriptVersion);
 >range : any
 >this.scripts[scriptIndex].getEditRangeSinceVersion(scriptVersion) : any
->this.scripts[scriptIndex].getEditRangeSinceVersion : (version: number) => any
+>this.scripts[scriptIndex].getEditRangeSinceVersion : (version: number) => TypeScript.ScriptEditRange
 >this.scripts[scriptIndex] : ScriptInfo
 >this.scripts : ScriptInfo[]
 >this : this
 >scripts : ScriptInfo[]
 >scriptIndex : number
->getEditRangeSinceVersion : (version: number) => any
+>getEditRangeSinceVersion : (version: number) => TypeScript.ScriptEditRange
 >scriptVersion : number
 
             var result = (range.minChar + "," + range.limChar + "," + range.delta);
@@ -6958,7 +6958,7 @@ module Harness {
          *  To access the non-shim (i.e. actual) language service, use the "ls.languageService" property.
          */
         public getLanguageService(): Services.ILanguageServiceShim {
->getLanguageService : () => any
+>getLanguageService : () => Services.ILanguageServiceShim
 >Services : any
 
             var ls = new Services.TypeScriptServicesFactory().createLanguageServiceShim(this);
@@ -6992,7 +6992,7 @@ module Harness {
 
         /** Parse file given its source text */
         public parseSourceText(fileName: string, sourceText: TypeScript.ISourceText): TypeScript.Script {
->parseSourceText : (fileName: string, sourceText: any) => any
+>parseSourceText : (fileName: string, sourceText: TypeScript.ISourceText) => TypeScript.Script
 >fileName : string
 >sourceText : any
 >TypeScript : any
@@ -7056,9 +7056,9 @@ module Harness {
 
             return this.parseSourceText(fileName, sourceText);
 >this.parseSourceText(fileName, sourceText) : any
->this.parseSourceText : (fileName: string, sourceText: any) => any
+>this.parseSourceText : (fileName: string, sourceText: any) => TypeScript.Script
 >this : this
->parseSourceText : (fileName: string, sourceText: any) => any
+>parseSourceText : (fileName: string, sourceText: any) => TypeScript.Script
 >fileName : string
 >sourceText : any
         }
@@ -7144,7 +7144,7 @@ module Harness {
          * @param col 0 based index
         */
         public positionToZeroBasedLineCol(fileName: string, position: number): TypeScript.ILineCol {
->positionToZeroBasedLineCol : (fileName: string, position: number) => any
+>positionToZeroBasedLineCol : (fileName: string, position: number) => TypeScript.ILineCol
 >fileName : string
 >position : number
 >TypeScript : any
@@ -7205,7 +7205,7 @@ module Harness {
 
         /** Verify that applying edits to sourceFileName result in the content of the file baselineFileName */
         public checkEdits(sourceFileName: string, baselineFileName: string, edits: Services.TextEdit[]) {
->checkEdits : (sourceFileName: string, baselineFileName: string, edits: any[]) => void
+>checkEdits : (sourceFileName: string, baselineFileName: string, edits: Services.TextEdit[]) => void
 >sourceFileName : string
 >baselineFileName : string
 >edits : any[]
@@ -7252,7 +7252,7 @@ module Harness {
 
         /** Apply an array of text edits to a string, and return the resulting string. */
         public applyEdits(content: string, edits: Services.TextEdit[]): string {
->applyEdits : (content: string, edits: any[]) => string
+>applyEdits : (content: string, edits: Services.TextEdit[]) => string
 >content : string
 >edits : any[]
 >Services : any
@@ -7265,9 +7265,9 @@ module Harness {
 >edits = this.normalizeEdits(edits) : any[]
 >edits : any[]
 >this.normalizeEdits(edits) : any[]
->this.normalizeEdits : (edits: any[]) => any[]
+>this.normalizeEdits : (edits: any[]) => Services.TextEdit[]
 >this : this
->normalizeEdits : (edits: any[]) => any[]
+>normalizeEdits : (edits: any[]) => Services.TextEdit[]
 >edits : any[]
 
             for (var i = edits.length - 1; i >= 0; i--) {
@@ -7331,7 +7331,7 @@ module Harness {
 
         /** Normalize an array of edits by removing overlapping entries and sorting entries on the minChar position. */
         private normalizeEdits(edits: Services.TextEdit[]): Services.TextEdit[] {
->normalizeEdits : (edits: any[]) => any[]
+>normalizeEdits : (edits: Services.TextEdit[]) => Services.TextEdit[]
 >edits : any[]
 >Services : any
 >Services : any
@@ -7342,7 +7342,7 @@ module Harness {
 >[] : undefined[]
 
             function mapEdits(edits: Services.TextEdit[]): { edit: Services.TextEdit; index: number; }[] {
->mapEdits : (edits: any[]) => { edit: any; index: number; }[]
+>mapEdits : (edits: Services.TextEdit[]) => {    edit: Services.TextEdit;    index: number;}[]
 >edits : any[]
 >Services : any
 >edit : any
@@ -7386,7 +7386,7 @@ module Harness {
 >mapEdits(edits).sort(function (a, b) {                var result = a.edit.minChar - b.edit.minChar;                if (result == 0)                    result = a.index - b.index;                return result;            }) : { edit: any; index: number; }[]
 >mapEdits(edits).sort : (compareFn?: (a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number) => { edit: any; index: number; }[]
 >mapEdits(edits) : { edit: any; index: number; }[]
->mapEdits : (edits: any[]) => { edit: any; index: number; }[]
+>mapEdits : (edits: any[]) => {    edit: Services.TextEdit;    index: number;}[]
 >edits : any[]
 >sort : (compareFn?: (a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number) => { edit: any; index: number; }[]
 >function (a, b) {                var result = a.edit.minChar - b.edit.minChar;                if (result == 0)                    result = a.index - b.index;                return result;            } : (a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number
@@ -7696,9 +7696,9 @@ module Harness {
 >path : string
 >path.match(/[^\/]*$/)[0] : string
 >path.match(/[^\/]*$/) : RegExpMatchArray
->path.match : (regexp: string | RegExp) => RegExpMatchArray
+>path.match : (regexp: string | RegExp) => RegExpMatchArray | null
 >path : string
->match : (regexp: string | RegExp) => RegExpMatchArray
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
 >/[^\/]*$/ : RegExp
 >0 : 0
 >callback : (error: Error, result: any) => void

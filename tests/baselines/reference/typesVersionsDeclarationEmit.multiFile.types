@@ -20,18 +20,18 @@ export function fb(): B;
 
 === tests/cases/conformance/declarationEmit/main.ts ===
 import { fa } from "ext";
->fa : () => import("tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index").A
+>fa : () => A
 
 import { fb } from "ext/other";
->fb : () => import("tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/other").B
+>fb : () => B
 
 export const va = fa();
 >va : import("tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index").A
 >fa() : import("tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index").A
->fa : () => import("tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index").A
+>fa : () => A
 
 export const vb = fb();
 >vb : import("tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/other").B
 >fb() : import("tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/other").B
->fb : () => import("tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/other").B
+>fb : () => B
 

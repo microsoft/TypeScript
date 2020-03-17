@@ -76,7 +76,33 @@ export declare class ThingB {
 export { ThingA } from "./ThingA";
 export { ThingB } from "./ThingB";
 //// [Test.d.ts]
-import * as things from "./Things";
 export declare class Test {
     method: (input: things.ThingA) => void;
 }
+
+
+//// [DtsFileErrors]
+
+
+tests/cases/compiler/Test.d.ts(2,21): error TS2503: Cannot find namespace 'things'.
+
+
+==== tests/cases/compiler/ThingA.d.ts (0 errors) ====
+    export declare class ThingA {
+    }
+    
+==== tests/cases/compiler/ThingB.d.ts (0 errors) ====
+    export declare class ThingB {
+    }
+    
+==== tests/cases/compiler/Things.d.ts (0 errors) ====
+    export { ThingA } from "./ThingA";
+    export { ThingB } from "./ThingB";
+    
+==== tests/cases/compiler/Test.d.ts (1 errors) ====
+    export declare class Test {
+        method: (input: things.ThingA) => void;
+                        ~~~~~~
+!!! error TS2503: Cannot find namespace 'things'.
+    }
+    

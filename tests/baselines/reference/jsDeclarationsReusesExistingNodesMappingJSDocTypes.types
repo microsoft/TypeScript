@@ -26,7 +26,7 @@ export const e = null;
 
 /** @type {function(string, number): object} */
 export const f = null;
->f : (arg0: string, arg1: number) => any
+>f : (arg0: string, arg1: number) => object
 >null : null
 
 /** @type {function(new: object, string, number)} */

@@ -39,5 +39,24 @@ export interface ThingB {
 //// [things.d.ts]
 export * from "./thingB";
 //// [index.d.ts]
-import * as things from "./things";
 export declare const thing2: (param: things.ThingB) => any;
+
+
+//// [DtsFileErrors]
+
+
+tests/cases/compiler/index.d.ts(1,38): error TS2503: Cannot find namespace 'things'.
+
+
+==== tests/cases/compiler/thingB.d.ts (0 errors) ====
+    export interface ThingB {
+    }
+    
+==== tests/cases/compiler/things.d.ts (0 errors) ====
+    export * from "./thingB";
+    
+==== tests/cases/compiler/index.d.ts (1 errors) ====
+    export declare const thing2: (param: things.ThingB) => any;
+                                         ~~~~~~
+!!! error TS2503: Cannot find namespace 'things'.
+    

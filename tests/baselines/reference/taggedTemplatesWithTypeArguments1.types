@@ -1,6 +1,6 @@
 === tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts ===
 declare function f<T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>): void;
->f : <T>(strs: TemplateStringsArray, ...callbacks: ((x: T) => any)[]) => void
+>f : <T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>) => void
 >strs : TemplateStringsArray
 >callbacks : ((x: T) => any)[]
 >x : T
@@ -95,10 +95,10 @@ export const b = g<Stuff, number, string, boolean> `
 `;
 
 declare let obj: {
->obj : { prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }; }
+>obj : { prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => {    returnedObjProp: T;}; }
 
     prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => {
->prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
+>prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => {    returnedObjProp: T;}
 >strs : TemplateStringsArray
 >x : (input: T) => T
 >input : T
@@ -111,8 +111,8 @@ declare let obj: {
 export let c = obj["prop"]<Stuff> `${(input) => ({ ...input })}`
 >c : { returnedObjProp: Stuff; }
 >obj["prop"]<Stuff> `${(input) => ({ ...input })}` : { returnedObjProp: Stuff; }
->obj["prop"] : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
->obj : { prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }; }
+>obj["prop"] : <T>(strs: TemplateStringsArray, x: (input: T) => T) => {    returnedObjProp: T;}
+>obj : { prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => {    returnedObjProp: T;}; }
 >"prop" : "prop"
 >`${(input) => ({ ...input })}` : string
 >(input) => ({ ...input }) : (input: Stuff) => { x: number; y: string; z: boolean; }
@@ -146,9 +146,9 @@ c = obj.prop<Stuff> `${(input) => ({ ...input })}`
 >c = obj.prop<Stuff> `${(input) => ({ ...input })}` : { returnedObjProp: Stuff; }
 >c : { returnedObjProp: Stuff; }
 >obj.prop<Stuff> `${(input) => ({ ...input })}` : { returnedObjProp: Stuff; }
->obj.prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
->obj : { prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }; }
->prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
+>obj.prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => {    returnedObjProp: T;}
+>obj : { prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => {    returnedObjProp: T;}; }
+>prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => {    returnedObjProp: T;}
 >`${(input) => ({ ...input })}` : string
 >(input) => ({ ...input }) : (input: Stuff) => { x: number; y: string; z: boolean; }
 >input : Stuff

@@ -977,25 +977,25 @@ export declare module "use_glo_M1_public" {
 >use_glo_M2_public : any
 
     export var use_glo_M2_public_v1_public: { new (): use_glo_M2_public.c1; };
->use_glo_M2_public_v1_public : new () => any
+>use_glo_M2_public_v1_public : new () => use_glo_M2_public.c1
 >use_glo_M2_public : any
 
     export var use_glo_M2_public_v2_public: use_glo_M2_public;
 >use_glo_M2_public_v2_public : any
 
     export var use_glo_M2_public_v3_public: () => use_glo_M2_public.c1;
->use_glo_M2_public_v3_public : () => any
+>use_glo_M2_public_v3_public : () => use_glo_M2_public.c1
 >use_glo_M2_public : any
 
     var use_glo_M2_public_v1_private: { new (): use_glo_M2_public.c1; };
->use_glo_M2_public_v1_private : new () => any
+>use_glo_M2_public_v1_private : new () => use_glo_M2_public.c1
 >use_glo_M2_public : any
 
     var use_glo_M2_public_v2_private: use_glo_M2_public;
 >use_glo_M2_public_v2_private : any
 
     var use_glo_M2_public_v3_private: () => use_glo_M2_public.c1;
->use_glo_M2_public_v3_private : () => any
+>use_glo_M2_public_v3_private : () => use_glo_M2_public.c1
 >use_glo_M2_public : any
 
     module m2 {
@@ -1051,25 +1051,25 @@ declare module "use_glo_M3_private" {
 >use_glo_M4_private : any
 
     export var use_glo_M4_private_v1_public: { new (): use_glo_M4_private.c1; };
->use_glo_M4_private_v1_public : new () => any
+>use_glo_M4_private_v1_public : new () => use_glo_M4_private.c1
 >use_glo_M4_private : any
 
     export var use_glo_M4_private_v2_public: use_glo_M4_private;
 >use_glo_M4_private_v2_public : any
 
     export var use_glo_M4_private_v3_public: () => use_glo_M4_private.c1;
->use_glo_M4_private_v3_public : () => any
+>use_glo_M4_private_v3_public : () => use_glo_M4_private.c1
 >use_glo_M4_private : any
 
     var use_glo_M4_private_v1_private: { new (): use_glo_M4_private.c1; };
->use_glo_M4_private_v1_private : new () => any
+>use_glo_M4_private_v1_private : new () => use_glo_M4_private.c1
 >use_glo_M4_private : any
 
     var use_glo_M4_private_v2_private: use_glo_M4_private;
 >use_glo_M4_private_v2_private : any
 
     var use_glo_M4_private_v3_private: () => use_glo_M4_private.c1;
->use_glo_M4_private_v3_private : () => any
+>use_glo_M4_private_v3_private : () => use_glo_M4_private.c1
 >use_glo_M4_private : any
 
     module m2 {

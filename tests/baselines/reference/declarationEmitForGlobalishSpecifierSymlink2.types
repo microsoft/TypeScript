@@ -15,12 +15,12 @@ import * as _whatever from "p2";
 >_whatever : typeof _whatever
 
 import { getA } from "typescript-fsa";
->getA : () => import("/cache/typescript-fsa/index").A
+>getA : () => A
 
 export const a = getA();
 >a : import("/cache/typescript-fsa/index").A
 >getA() : import("/cache/typescript-fsa/index").A
->getA : () => import("/cache/typescript-fsa/index").A
+>getA : () => A
 
 === /p2/index.d.ts ===
 export const a: import("typescript-fsa").A;

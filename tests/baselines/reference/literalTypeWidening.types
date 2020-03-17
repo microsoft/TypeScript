@@ -357,7 +357,7 @@ let x = onMouseOver();
 // Repro from #23649
 
 export function Set<K extends string>(...keys: K[]): Record<K, true | undefined> {
->Set : <K extends string>(...keys: K[]) => Record<K, true>
+>Set : <K extends string>(...keys: K[]) => Record<K, true | undefined>
 >keys : K[]
 >true : true
 
@@ -404,7 +404,7 @@ type Obj = { code: LangCode }
 const langCodeSet = Set('fr', 'en', 'es', 'it', 'nl')
 >langCodeSet : Record<"fr" | "en" | "es" | "it" | "nl", true>
 >Set('fr', 'en', 'es', 'it', 'nl') : Record<"fr" | "en" | "es" | "it" | "nl", true>
->Set : <K extends string>(...keys: K[]) => Record<K, true>
+>Set : <K extends string>(...keys: K[]) => Record<K, true | undefined>
 >'fr' : "fr"
 >'en' : "en"
 >'es' : "es"

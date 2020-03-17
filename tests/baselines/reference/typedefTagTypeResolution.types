@@ -7,7 +7,7 @@
  * @return {T}
  */
 function f(x) {
->f : <U>(x: U) => any
+>f : <U>(x: U) => T
 >x : U
 
     return x;

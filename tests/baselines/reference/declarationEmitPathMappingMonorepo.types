@@ -16,7 +16,7 @@ declare module "@ts-bug/a" {
   
 === tests/cases/compiler/packages/b/src/index.ts ===
 import { a } from "@ts-bug/a";
->a : (text: string) => import("@ts-bug/a").AText
+>a : (text: string) => AText
 
 export function b(text: string) {
 >b : (text: string) => import("@ts-bug/a").AText
@@ -24,6 +24,6 @@ export function b(text: string) {
 
   return a(text);
 >a(text) : import("@ts-bug/a").AText
->a : (text: string) => import("@ts-bug/a").AText
+>a : (text: string) => AText
 >text : string
 }

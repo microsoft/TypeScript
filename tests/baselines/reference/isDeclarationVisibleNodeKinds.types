@@ -32,7 +32,7 @@ module schema {
 >schema : typeof schema
 
      export function createValidator3(schema: any): number | { new <T>(data: T): T; }  {
->createValidator3 : (schema: any) => number | (new <T>(data: T) => T)
+>createValidator3 : (schema: any) => number | {    new <T>(data: T): T;}
 >schema : any
 >data : T
 
@@ -46,7 +46,7 @@ module schema {
 >schema : typeof schema
 
      export function createValidator4(schema: any): { new <T>(data: T): T; }[] {
->createValidator4 : (schema: any) => (new <T>(data: T) => T)[]
+>createValidator4 : (schema: any) => {    new <T>(data: T): T;}[]
 >schema : any
 >data : T
 
@@ -61,7 +61,7 @@ module schema {
 >schema : typeof schema
 
     export function createValidator5(schema: any): { new <T>(data: T): T } {
->createValidator5 : (schema: any) => new <T>(data: T) => T
+>createValidator5 : (schema: any) => {    new <T>(data: T): T;}
 >schema : any
 >data : T
 
@@ -103,7 +103,7 @@ module schema {
 >schema : typeof schema
 
     export function createValidator8(schema: any): Array<{ <T>(data: T) : T}> {
->createValidator8 : (schema: any) => (<T>(data: T) => T)[]
+>createValidator8 : (schema: any) => Array<{    <T>(data: T): T;}>
 >schema : any
 >data : T
 

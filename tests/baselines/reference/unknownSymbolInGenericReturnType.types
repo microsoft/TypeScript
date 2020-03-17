@@ -3,9 +3,9 @@ class Linq {
 >Linq : Linq
 
     public static select<T, S>(values: T[], func: (v: T) => A): any[] {
->select : <T, S>(values: T[], func: (v: T) => any) => any[]
+>select : <T, S>(values: T[], func: (v: T) => A) => any[]
 >values : T[]
->func : (v: T) => any
+>func : (v: T) => A
 >v : T
 
         var result = new Array(values.length);
@@ -33,7 +33,7 @@ class Linq {
 >result : any[]
 >i : number
 >func(values[i]) : any
->func : (v: T) => any
+>func : (v: T) => A
 >values[i] : T
 >values : T[]
 >i : number

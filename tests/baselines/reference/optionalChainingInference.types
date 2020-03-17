@@ -1,7 +1,7 @@
 === tests/cases/conformance/expressions/optionalChaining/optionalChainingInference.ts ===
 // https://github.com/microsoft/TypeScript/issues/34579
 declare function unbox<T>(box: { value: T | undefined }): T;
->unbox : <T>(box: { value: T; }) => T
+>unbox : <T>(box: {    value: T | undefined;}) => T
 >box : { value: T; }
 >value : T
 

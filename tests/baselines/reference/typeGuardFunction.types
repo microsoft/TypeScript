@@ -168,7 +168,7 @@ acceptingBoolean(isA(a));
 
 // Type predicates with different parameter name.
 declare function acceptingTypeGuardFunction(p1: (item) => item is A);
->acceptingTypeGuardFunction : (p1: (item: any) => item is A) => any
+>acceptingTypeGuardFunction : (p1: (item) => item is A) => any
 >p1 : (item: any) => item is A
 >item : any
 

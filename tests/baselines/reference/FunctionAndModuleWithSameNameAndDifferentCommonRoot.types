@@ -33,12 +33,12 @@ module B {
 
 === tests/cases/conformance/internalModules/DeclarationMerging/test.ts ===
 var fn: () => { x: number; y: number };
->fn : () => { x: number; y: number; }
+>fn : () => {    x: number;    y: number;}
 >x : number
 >y : number
 
 var fn = A.Point;
->fn : () => { x: number; y: number; }
+>fn : () => {    x: number;    y: number;}
 >A.Point : () => { x: number; y: number; }
 >A : typeof A
 >Point : () => { x: number; y: number; }

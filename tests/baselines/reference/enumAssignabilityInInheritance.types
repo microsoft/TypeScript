@@ -113,19 +113,19 @@ var r4 = foo5(E.A);
 >A : E
 
 declare function foo6(x: { bar: number }): { bar: number };
->foo6 : { (x: { bar: number; }): { bar: number; }; (x: E): E; }
+>foo6 : { (x: {    bar: number;}): {    bar: number;}; (x: E): E; }
 >x : { bar: number; }
 >bar : number
 >bar : number
 
 declare function foo6(x: E): E;
->foo6 : { (x: { bar: number; }): { bar: number; }; (x: E): E; }
+>foo6 : { (x: { bar: number; }): {    bar: number;}; (x: E): E; }
 >x : E
 
 var r4 = foo6(E.A);
 >r4 : E
 >foo6(E.A) : E
->foo6 : { (x: { bar: number; }): { bar: number; }; (x: E): E; }
+>foo6 : { (x: { bar: number; }): {    bar: number;}; (x: E): E; }
 >E.A : E
 >E : typeof E
 >A : E
@@ -206,19 +206,19 @@ var r4 = foo10(E.A);
 >A : E
 
 declare function foo11(x: (x) => number): (x) => number;
->foo11 : { (x: (x: any) => number): (x: any) => number; (x: E): E; }
+>foo11 : { (x: (x) => number): (x) => number; (x: E): E; }
 >x : (x: any) => number
 >x : any
 >x : any
 
 declare function foo11(x: E): E;
->foo11 : { (x: (x: any) => number): (x: any) => number; (x: E): E; }
+>foo11 : { (x: (x: any) => number): (x) => number; (x: E): E; }
 >x : E
 
 var r4 = foo11(E.A);
 >r4 : E
 >foo11(E.A) : E
->foo11 : { (x: (x: any) => number): (x: any) => number; (x: E): E; }
+>foo11 : { (x: (x: any) => number): (x) => number; (x: E): E; }
 >E.A : E
 >E : typeof E
 >A : E

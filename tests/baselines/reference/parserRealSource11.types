@@ -89,7 +89,7 @@ module TypeScript {
 >isCompoundStatement : () => boolean
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => any
+>typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : any
 
             switch (this.nodeType) {
@@ -212,7 +212,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -477,7 +477,7 @@ module TypeScript {
         }
 
         public print(context: PrintContext) {
->print : (context: any) => void
+>print : (context: PrintContext) => void
 >context : any
 
             context.startLine();
@@ -636,7 +636,7 @@ module TypeScript {
         }
 
         public addToControlFlow(context: ControlFlowContext): void {
->addToControlFlow : (context: any) => void
+>addToControlFlow : (context: ControlFlowContext) => void
 >context : any
 
             // by default, AST adds itself to current basic block and does not check its children
@@ -660,7 +660,7 @@ module TypeScript {
         }
 
         public netFreeUses(container: Symbol, freeUses: StringHashTable) {
->netFreeUses : (container: Symbol, freeUses: any) => void
+>netFreeUses : (container: Symbol, freeUses: StringHashTable) => void
 >container : Symbol
 >freeUses : any
         }
@@ -852,7 +852,7 @@ module TypeScript {
         }
 
         public addToControlFlow(context: ControlFlowContext) {
->addToControlFlow : (context: any) => void
+>addToControlFlow : (context: ControlFlowContext) => void
 >context : any
 
             var len = this.members.length;
@@ -1001,7 +1001,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -1036,7 +1036,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => this
+>typeCheck : (typeFlow: TypeFlow) => this
 >typeFlow : any
 
             var len = this.members.length;
@@ -1223,7 +1223,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => any
+>typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : any
 
             return typeFlow.typeCheckName(this);
@@ -1235,7 +1235,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -1250,7 +1250,7 @@ module TypeScript {
         }
 
         public static fromToken(token: Token): Identifier {
->fromToken : (token: any) => Identifier
+>fromToken : (token: Token) => Identifier
 >token : any
 
             return new Identifier(token.getText(), (<IdentifierToken>token).hasEscapeSequence);
@@ -1287,7 +1287,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -1322,7 +1322,7 @@ module TypeScript {
 >":" : ":"
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => this
+>typeCheck : (typeFlow: TypeFlow) => this
 >typeFlow : any
 
             this.type = typeFlow.voidType;
@@ -1339,7 +1339,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -1457,7 +1457,7 @@ module TypeScript {
         }
 
         public addToControlFlow(context: ControlFlowContext): void {
->addToControlFlow : (context: any) => void
+>addToControlFlow : (context: ControlFlowContext) => void
 >context : any
 
             super.addToControlFlow(context);
@@ -1486,7 +1486,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => any
+>typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : any
 
             switch (this.nodeType) {
@@ -1813,7 +1813,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -2306,7 +2306,7 @@ module TypeScript {
 >null : null
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => any
+>typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : any
 
             if (this.nodeType == NodeType.New) {
@@ -2336,7 +2336,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -2425,7 +2425,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => any
+>typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : any
 
             switch (this.nodeType) {
@@ -2869,7 +2869,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -3258,7 +3258,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => any
+>typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : any
 
             return typeFlow.typeCheckQMark(this);
@@ -3270,7 +3270,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -3381,7 +3381,7 @@ module TypeScript {
 >false : false
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => this
+>typeCheck : (typeFlow: TypeFlow) => this
 >typeFlow : any
 
             this.type = typeFlow.doubleType;
@@ -3410,7 +3410,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -3554,7 +3554,7 @@ module TypeScript {
         }
         
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => this
+>typeCheck : (typeFlow: TypeFlow) => this
 >typeFlow : any
 
             this.type = typeFlow.regexType;
@@ -3571,7 +3571,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -3636,7 +3636,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -3682,7 +3682,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => this
+>typeCheck : (typeFlow: TypeFlow) => this
 >typeFlow : any
 
             this.type = typeFlow.stringType;
@@ -3764,7 +3764,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -3926,7 +3926,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => any
+>typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : any
 
             return typeFlow.typeCheckImportDecl(this);
@@ -4104,7 +4104,7 @@ module TypeScript {
 >Property : any
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => any
+>typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : any
 
             return typeFlow.typeCheckBoundDecl(this);
@@ -4178,7 +4178,7 @@ module TypeScript {
 >Static : any
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -4255,7 +4255,7 @@ module TypeScript {
 >null : null
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -4645,7 +4645,7 @@ module TypeScript {
         }
 
         public buildControlFlow(): ControlFlowContext {
->buildControlFlow : () => any
+>buildControlFlow : () => ControlFlowContext
 
             var entry = new BasicBlock();
 >entry : any
@@ -4665,8 +4665,8 @@ module TypeScript {
 >exit : any
 
             var controlFlowPrefix = (ast: AST, parent: AST, walker: IAstWalker) => {
->controlFlowPrefix : (ast: AST, parent: AST, walker: any) => AST
->(ast: AST, parent: AST, walker: IAstWalker) => {                ast.addToControlFlow(walker.state);                return ast;            } : (ast: AST, parent: AST, walker: any) => AST
+>controlFlowPrefix : (ast: AST, parent: AST, walker: IAstWalker) => AST
+>(ast: AST, parent: AST, walker: IAstWalker) => {                ast.addToControlFlow(walker.state);                return ast;            } : (ast: AST, parent: AST, walker: IAstWalker) => AST
 >ast : AST
 >parent : AST
 >walker : any
@@ -4718,7 +4718,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => any
+>typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : any
 
             return typeFlow.typeCheckFunction(this);
@@ -4730,7 +4730,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -5133,7 +5133,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => any
+>typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : any
 
             return typeFlow.typeCheckScript(this);
@@ -5327,7 +5327,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -5544,7 +5544,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => any
+>typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : any
 
             return typeFlow.typeCheckModule(this);
@@ -5556,7 +5556,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -5719,7 +5719,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => any
+>typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : any
 
             return typeFlow.typeCheckClass(this);
@@ -5731,7 +5731,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -5774,7 +5774,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => any
+>typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : any
 
             return typeFlow.typeCheckInterface(this);
@@ -5786,7 +5786,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -5831,7 +5831,7 @@ module TypeScript {
 >isLoop : () => boolean
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => this
+>typeCheck : (typeFlow: TypeFlow) => this
 >typeFlow : any
 
             this.type = typeFlow.voidType;
@@ -5865,7 +5865,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -5953,7 +5953,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => this
+>typeCheck : (typeFlow: TypeFlow) => this
 >typeFlow : any
 
             typeFlow.typeCheck(this.labels);
@@ -5983,7 +5983,7 @@ module TypeScript {
         }
 
         public addToControlFlow(context: ControlFlowContext): void {
->addToControlFlow : (context: any) => void
+>addToControlFlow : (context: ControlFlowContext) => void
 >context : any
 
             var beforeBB = context.current;
@@ -6032,7 +6032,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -6165,7 +6165,7 @@ module TypeScript {
         }
 
         public addToControlFlow(context: ControlFlowContext) {
->addToControlFlow : (context: any) => void
+>addToControlFlow : (context: ControlFlowContext) => void
 >context : any
 
             var afterIfNeeded = new BasicBlock();
@@ -6244,7 +6244,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => this
+>typeCheck : (typeFlow: TypeFlow) => this
 >typeFlow : any
 
             if (!typeFlow.checker.styleSettings.emptyBlocks) {
@@ -6333,7 +6333,7 @@ module TypeScript {
         }
 
         public setResolvedTarget(parser: Parser, stmt: Statement): boolean {
->setResolvedTarget : (parser: any, stmt: Statement) => boolean
+>setResolvedTarget : (parser: Parser, stmt: Statement) => boolean
 >parser : any
 >stmt : Statement
 
@@ -6413,7 +6413,7 @@ module TypeScript {
         }
 
         public addToControlFlow(context: ControlFlowContext): void {
->addToControlFlow : (context: any) => void
+>addToControlFlow : (context: ControlFlowContext) => void
 >context : any
 
             super.addToControlFlow(context);
@@ -6442,7 +6442,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -6551,7 +6551,7 @@ module TypeScript {
 >true : true
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -6641,7 +6641,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => any
+>typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : any
 
             return typeFlow.typeCheckWhile(this);
@@ -6653,7 +6653,7 @@ module TypeScript {
         }
 
         public addToControlFlow(context: ControlFlowContext): void {
->addToControlFlow : (context: any) => void
+>addToControlFlow : (context: ControlFlowContext) => void
 >context : any
 
             var loopHeader = context.current;
@@ -6839,7 +6839,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -6961,7 +6961,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => any
+>typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : any
 
             return typeFlow.typeCheckDoWhile(this);
@@ -6973,7 +6973,7 @@ module TypeScript {
         }
 
         public addToControlFlow(context: ControlFlowContext): void {
->addToControlFlow : (context: any) => void
+>addToControlFlow : (context: ControlFlowContext) => void
 >context : any
 
             var loopHeader = context.current;
@@ -7141,7 +7141,7 @@ module TypeScript {
 >true : true
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -7272,7 +7272,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => any
+>typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : any
 
             return typeFlow.typeCheckIf(this);
@@ -7284,7 +7284,7 @@ module TypeScript {
         }
 
         public addToControlFlow(context: ControlFlowContext): void {
->addToControlFlow : (context: any) => void
+>addToControlFlow : (context: ControlFlowContext) => void
 >context : any
 
             this.cond.addToControlFlow(context);
@@ -7530,7 +7530,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -7615,7 +7615,7 @@ module TypeScript {
         }
 
         public addToControlFlow(context: ControlFlowContext): void {
->addToControlFlow : (context: any) => void
+>addToControlFlow : (context: ControlFlowContext) => void
 >context : any
 
             super.addToControlFlow(context);
@@ -7633,7 +7633,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => any
+>typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : any
 
             return typeFlow.typeCheckReturn(this);
@@ -8017,7 +8017,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -8145,7 +8145,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => any
+>typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : any
 
             if (typeFlow.checker.styleSettings.forin) {
@@ -8186,7 +8186,7 @@ module TypeScript {
         }
 
         public addToControlFlow(context: ControlFlowContext): void {
->addToControlFlow : (context: any) => void
+>addToControlFlow : (context: ControlFlowContext) => void
 >context : any
 
             if (this.lval) {
@@ -8361,7 +8361,7 @@ module TypeScript {
 >true : true
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -8540,7 +8540,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => any
+>typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : any
 
             return typeFlow.typeCheckFor(this);
@@ -8552,7 +8552,7 @@ module TypeScript {
         }
 
         public addToControlFlow(context: ControlFlowContext): void {
->addToControlFlow : (context: any) => void
+>addToControlFlow : (context: ControlFlowContext) => void
 >context : any
 
             if (this.init) {
@@ -8858,7 +8858,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -8939,7 +8939,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => any
+>typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : any
 
             return typeFlow.typeCheckWith(this);
@@ -8983,7 +8983,7 @@ module TypeScript {
 >true : true
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -9163,7 +9163,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => this
+>typeCheck : (typeFlow: TypeFlow) => this
 >typeFlow : any
 
             var len = this.caseList.members.length;
@@ -9248,7 +9248,7 @@ module TypeScript {
 
         // if there are break statements that match this switch, then just link cond block with block after switch
         public addToControlFlow(context: ControlFlowContext) {
->addToControlFlow : (context: any) => void
+>addToControlFlow : (context: ControlFlowContext) => void
 >context : any
 
             var condBlock = context.current;
@@ -9417,7 +9417,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -9505,7 +9505,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => this
+>typeCheck : (typeFlow: TypeFlow) => this
 >typeFlow : any
 
             this.expr = typeFlow.typeCheck(this.expr);
@@ -9546,7 +9546,7 @@ module TypeScript {
         // TODO: more reasoning about unreachable cases (such as duplicate literals as case expressions)
         // for now, assume all cases are reachable, regardless of whether some cases fall through
         public addToControlFlow(context: ControlFlowContext) {
->addToControlFlow : (context: any) => void
+>addToControlFlow : (context: ControlFlowContext) => void
 >context : any
 
             var execBlock = new BasicBlock();
@@ -9676,7 +9676,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -9688,7 +9688,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => this
+>typeCheck : (typeFlow: TypeFlow) => this
 >typeFlow : any
 
             var prevInTCTR = typeFlow.inTypeRefTypeCheck;
@@ -9812,7 +9812,7 @@ module TypeScript {
 >true : true
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -9859,7 +9859,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => this
+>typeCheck : (typeFlow: TypeFlow) => this
 >typeFlow : any
 
             this.tryNode = typeFlow.typeCheck(this.tryNode);
@@ -9903,7 +9903,7 @@ module TypeScript {
         }
 
         public addToControlFlow(context: ControlFlowContext) {
->addToControlFlow : (context: any) => void
+>addToControlFlow : (context: ControlFlowContext) => void
 >context : any
 
             var afterFinally = new BasicBlock();
@@ -10049,7 +10049,7 @@ module TypeScript {
 >true : true
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -10112,7 +10112,7 @@ module TypeScript {
         }
 
         public addToControlFlow(context: ControlFlowContext) {
->addToControlFlow : (context: any) => void
+>addToControlFlow : (context: ControlFlowContext) => void
 >context : any
 
             var beforeTry = context.current;
@@ -10259,7 +10259,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => this
+>typeCheck : (typeFlow: TypeFlow) => this
 >typeFlow : any
 
             this.tryNode = <Try>typeFlow.typeCheck(this.tryNode);
@@ -10320,7 +10320,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -10377,7 +10377,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => this
+>typeCheck : (typeFlow: TypeFlow) => this
 >typeFlow : any
 
             this.body = typeFlow.typeCheck(this.body);
@@ -10398,7 +10398,7 @@ module TypeScript {
         }
 
         public addToControlFlow(context: ControlFlowContext) {
->addToControlFlow : (context: any) => void
+>addToControlFlow : (context: ControlFlowContext) => void
 >context : any
 
             if (this.body) {
@@ -10478,7 +10478,7 @@ module TypeScript {
 >null : null
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -10580,7 +10580,7 @@ module TypeScript {
         }
 
         public addToControlFlow(context: ControlFlowContext) {
->addToControlFlow : (context: any) => void
+>addToControlFlow : (context: ControlFlowContext) => void
 >context : any
 
             if (this.param) {
@@ -10653,7 +10653,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => this
+>typeCheck : (typeFlow: TypeFlow) => this
 >typeFlow : any
 
             var prevScope = typeFlow.scope;
@@ -10914,7 +10914,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean
@@ -10971,7 +10971,7 @@ module TypeScript {
         }
 
         public addToControlFlow(context: ControlFlowContext) {
->addToControlFlow : (context: any) => void
+>addToControlFlow : (context: ControlFlowContext) => void
 >context : any
 
             if (this.body) {
@@ -11009,7 +11009,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: any) => this
+>typeCheck : (typeFlow: TypeFlow) => this
 >typeFlow : any
 
             this.body = typeFlow.typeCheck(this.body);
@@ -11151,7 +11151,7 @@ module TypeScript {
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
->emit : (emitter: any, tokenId: any, startLine: boolean) => void
+>emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : any
 >tokenId : any
 >startLine : boolean

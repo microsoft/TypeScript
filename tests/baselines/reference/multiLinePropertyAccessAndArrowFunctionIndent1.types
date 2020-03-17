@@ -10,7 +10,7 @@ return this.edit(role)
 
     .then((role: Role) =>
 >then : any
->(role: Role) =>        this.roleService.add(role)            .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data) : (role: any) => any
+>(role: Role) =>        this.roleService.add(role)            .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data) : (role: Role) => any
 >role : any
 
         this.roleService.add(role)
@@ -26,7 +26,7 @@ return this.edit(role)
 
             .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data));
 >then : any
->(data: ng.IHttpPromiseCallbackArg<Role>) => data.data : (data: any) => any
+>(data: ng.IHttpPromiseCallbackArg<Role>) => data.data : (data: ng.IHttpPromiseCallbackArg<Role>) => any
 >data : any
 >ng : any
 >data.data : any

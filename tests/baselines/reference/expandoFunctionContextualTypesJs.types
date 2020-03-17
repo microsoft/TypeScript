@@ -59,7 +59,7 @@ const check = MyComponent2;
  * @param {{ props: MyComponentProps }} p 
  */
 function expectLiteral(p) {}
->expectLiteral : (p: { props: { color: "red" | "blue"; }; }) => void
+>expectLiteral : (p: {    props: MyComponentProps;}) => void
 >p : { props: { color: "red" | "blue"; }; }
 
 function foo() {

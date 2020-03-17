@@ -10,7 +10,7 @@ var y: Y = <Y>undefined;
 >undefined : undefined
 
 function destructure<a, r>(
->destructure : <a, r>(something: Y | a, haveValue: (value: a) => r, haveY: (value: Y) => r) => r
+>destructure : <a, r>(something: a | Y, haveValue: (value: a) => r, haveY: (value: Y) => r) => r
 
     something: a | Y,
 >something : Y | a
@@ -123,7 +123,7 @@ type Maybe<T> = T | void;
 >Maybe : Maybe<T>
 
 function get<U>(x: U | void): U {
->get : <U>(x: void | U) => U
+>get : <U>(x: U | void) => U
 >x : void | U
 
    return null; // just an example

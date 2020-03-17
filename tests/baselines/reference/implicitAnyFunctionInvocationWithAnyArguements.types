@@ -36,13 +36,13 @@ function testFunctionExprC2(eq: (v1: any, v2: any) => number) { };
 >v2 : any
 
 function testObjLiteral(objLit: { v: any; w: any }) { }; 
->testObjLiteral : (objLit: { v: any; w: any; }) => void
+>testObjLiteral : (objLit: {    v: any;    w: any;}) => void
 >objLit : { v: any; w: any; }
 >v : any
 >w : any
 
 function testFuncLiteral(funcLit: (y2) => number) { };
->testFuncLiteral : (funcLit: (y2: any) => number) => void
+>testFuncLiteral : (funcLit: (y2) => number) => void
 >funcLit : (y2: any) => number
 >y2 : any
 

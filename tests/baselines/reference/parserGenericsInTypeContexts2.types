@@ -25,12 +25,12 @@ var v6: K<X<T>, Y<Z<T>>>[];
 
 
 function f1(a: E<X<T>, Y<Z<T>>>) {
->f1 : (a: any) => void
+>f1 : (a: E<X<T>, Y<Z<T>>>) => void
 >a : any
 }
 
 function f2(): F<X<T>, Y<Z<T>>> {
->f2 : () => any
+>f2 : () => F<X<T>, Y<Z<T>>>
 }
 
 

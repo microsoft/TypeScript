@@ -1,8 +1,8 @@
 === tests/cases/compiler/functionTypesLackingReturnTypes.ts ===
 // Error (no '=>')
 function f(x: ()) {
->f : (x: () => any) => void
->x : () => any
+>f : (x: () => ) => void
+>x : () => 
 }
 
 // Error (no '=>')

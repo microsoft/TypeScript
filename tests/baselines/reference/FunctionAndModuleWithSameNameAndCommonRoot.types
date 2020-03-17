@@ -33,12 +33,12 @@ module A {
 
 === tests/cases/conformance/internalModules/DeclarationMerging/test.ts ===
 var fn: () => { x: number; y: number };
->fn : () => { x: number; y: number; }
+>fn : () => {    x: number;    y: number;}
 >x : number
 >y : number
 
 var fn = A.Point;
->fn : () => { x: number; y: number; }
+>fn : () => {    x: number;    y: number;}
 >A.Point : typeof A.Point
 >A : typeof A
 >Point : typeof A.Point
@@ -93,12 +93,12 @@ module B {
 }
 
 var fn: () => { x: number; y: number };
->fn : () => { x: number; y: number; }
+>fn : () => {    x: number;    y: number;}
 >x : number
 >y : number
 
 var fn = B.Point;  // not expected to be an error. bug 840000: [corelang] Function of fundule not assignalbe as expected
->fn : () => { x: number; y: number; }
+>fn : () => {    x: number;    y: number;}
 >B.Point : typeof B.Point
 >B : typeof B
 >Point : typeof B.Point

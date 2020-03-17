@@ -11,6 +11,6 @@ export declare function foo(): X.foo;
 >X : any
 
 export declare function bar(): X.bar; // error
->bar : () => any
+>bar : () => X.bar
 >X : any
 

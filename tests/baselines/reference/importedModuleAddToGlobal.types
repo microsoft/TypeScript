@@ -30,7 +30,7 @@ module C {
 >A : any
 
     function hello(): b.B { return null; }
->hello : () => any
+>hello : () => b.B
 >b : any
 >null : null
 }

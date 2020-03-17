@@ -4,7 +4,7 @@ export class Foo {}
 
 === tests/cases/compiler/file2.ts ===
 export function foo(): import("./file1").Foo {
->foo : () => import("tests/cases/compiler/file1").Foo
+>foo : () => import("./file1").Foo
 
     return null as any;
 >null as any : any
@@ -12,13 +12,13 @@ export function foo(): import("./file1").Foo {
 }
 === tests/cases/compiler/file3.ts ===
 import {foo} from "./file2";
->foo : () => import("tests/cases/compiler/file1").Foo
+>foo : () => import(xport fun).Foo
 
 export function bar() {
 >bar : () => import("tests/cases/compiler/file1").Foo
 
     return foo();
 >foo() : import("tests/cases/compiler/file1").Foo
->foo : () => import("tests/cases/compiler/file1").Foo
+>foo : () => import(xport fun).Foo
 }
 

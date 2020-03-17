@@ -1,6 +1,6 @@
 === tests/cases/compiler/forInStrictNullChecksNoError.ts ===
 function f(x: { [key: string]: number; } | null | undefined) {
->f : (x: { [key: string]: number; } | null | undefined) => void
+>f : (x: {    [key: string]: number;} | null | undefined) => void
 >x : { [key: string]: number; } | null | undefined
 >key : string
 >null : null

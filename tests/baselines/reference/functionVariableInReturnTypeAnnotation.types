@@ -1,6 +1,6 @@
 === tests/cases/compiler/functionVariableInReturnTypeAnnotation.ts ===
 function bar(): typeof b {
->bar : () => any
+>bar : () => typeof b
 >b : any
 
     var b = 1;

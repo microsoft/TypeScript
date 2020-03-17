@@ -6,7 +6,7 @@ module TypeScript {
 >MemberName : MemberName<A, B, C>
 
         static create<A,B,C>(arg1: any, arg2?: any, arg3?: any): MemberName {
->create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => any
+>create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => MemberName
 >arg1 : any
 >arg2 : any
 >arg3 : any
@@ -33,7 +33,7 @@ module TypeScript {
 >null : null
 
         public toString<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean) {
->toString : <A, B, C>(scopeSymbol?: any, useConstraintInName?: boolean) => any
+>toString : <A, B, C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean) => any
 >scopeSymbol : any
 >useConstraintInName : boolean
 
@@ -53,7 +53,7 @@ module TypeScript {
 >s : any
         }
         public getScopedNameEx<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) {
->getScopedNameEx : <A, B, C>(scopeSymbol?: any, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
+>getScopedNameEx : <A, B, C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
 >scopeSymbol : any
 >useConstraintInName : boolean
 >getPrettyTypeName : boolean
@@ -115,9 +115,9 @@ module TypeScript {
 
                 return MemberName.create(elementMemberName, "", "[]");
 >MemberName.create(elementMemberName, "", "[]") : any
->MemberName.create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => any
+>MemberName.create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => MemberName
 >MemberName : typeof MemberName
->create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => any
+>create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => MemberName
 >elementMemberName : any
 >"" : ""
 >"[]" : "[]"

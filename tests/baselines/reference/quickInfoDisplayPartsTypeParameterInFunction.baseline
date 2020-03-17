@@ -54,7 +54,7 @@
         },
         {
           "text": "U",
-          "kind": "typeParameterName"
+          "kind": "text"
         },
         {
           "text": ")",
@@ -155,7 +155,7 @@
         },
         {
           "text": "U",
-          "kind": "typeParameterName"
+          "kind": "text"
         },
         {
           "text": ")",
@@ -305,7 +305,7 @@
         },
         {
           "text": "U",
-          "kind": "typeParameterName"
+          "kind": "text"
         },
         {
           "text": ")",
@@ -524,7 +524,7 @@
         },
         {
           "text": "U",
-          "kind": "typeParameterName"
+          "kind": "text"
         },
         {
           "text": ")",
@@ -641,7 +641,7 @@
         },
         {
           "text": "U",
-          "kind": "typeParameterName"
+          "kind": "text"
         },
         {
           "text": ")",
@@ -823,7 +823,7 @@
         },
         {
           "text": "U",
-          "kind": "typeParameterName"
+          "kind": "text"
         },
         {
           "text": ")",

@@ -85,7 +85,7 @@ type ChangeOptions = ConfigurableStartEnd & InsertOptions;
 >ChangeOptions : ChangeOptions
 
 function del(options: ConfigurableStartEnd = {},
->del : (options?: ConfigurableStartEnd, error?: { error?: number; }) => void
+>del : (options?: ConfigurableStartEnd, error?: {    error?: number;}) => void
 >options : ConfigurableStartEnd
 >{} : {}
 

@@ -27,17 +27,17 @@
      name: ko.observable("Bob"),
 >name : ko.Observable<string>
 >ko.observable("Bob") : ko.Observable<string>
->ko.observable : <T>(value: T) => ko.Observable<T>
+>ko.observable : <T>(value: T) => Observable<T>
 >ko : typeof ko
->observable : <T>(value: T) => ko.Observable<T>
+>observable : <T>(value: T) => Observable<T>
 >"Bob" : "Bob"
 
      age: ko.observable(37)
 >age : ko.Observable<number>
 >ko.observable(37) : ko.Observable<number>
->ko.observable : <T>(value: T) => ko.Observable<T>
+>ko.observable : <T>(value: T) => Observable<T>
 >ko : typeof ko
->observable : <T>(value: T) => ko.Observable<T>
+>observable : <T>(value: T) => Observable<T>
 >37 : 37
  }
  var x_v = o.name().length

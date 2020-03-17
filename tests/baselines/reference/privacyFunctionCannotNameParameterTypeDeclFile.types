@@ -527,19 +527,19 @@ export function createExportedWidget3() {
 
     return Widgets1.createWidget3();
 >Widgets1.createWidget3() : Widgets1.Widget3
->Widgets1.createWidget3 : () => Widgets1.Widget3
+>Widgets1.createWidget3 : () => Widget3
 >Widgets1 : typeof Widgets1
->createWidget3 : () => Widgets1.Widget3
+>createWidget3 : () => Widget3
 }
 export function createExportedWidget4() {
 >createExportedWidget4 : () => Widgets1.SpecializedGlobalWidget.Widget4
 
     return Widgets1.SpecializedGlobalWidget.createWidget4();
 >Widgets1.SpecializedGlobalWidget.createWidget4() : Widgets1.SpecializedGlobalWidget.Widget4
->Widgets1.SpecializedGlobalWidget.createWidget4 : () => Widgets1.SpecializedGlobalWidget.Widget4
+>Widgets1.SpecializedGlobalWidget.createWidget4 : () => Widget4
 >Widgets1.SpecializedGlobalWidget : typeof Widgets1.SpecializedGlobalWidget
 >Widgets1 : typeof Widgets1
 >SpecializedGlobalWidget : typeof Widgets1.SpecializedGlobalWidget
->createWidget4 : () => Widgets1.SpecializedGlobalWidget.Widget4
+>createWidget4 : () => Widget4
 }
 

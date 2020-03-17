@@ -23,7 +23,7 @@ export function doSomething_Actual<T extends {
 >x : { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
 }
 export declare function doSomething_Expected<T extends {
->doSomething_Expected : <T extends { prop: string; }>(a: T) => { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
+>doSomething_Expected : <T extends { prop: string; }>(a: T) => {    [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P];}
 
     prop: string;
 >prop : string
@@ -47,7 +47,7 @@ a = {} // should be fine, equivalent to below
 export let b = doSomething_Expected({ prop: "test" });
 >b : { prop?: string; }
 >doSomething_Expected({ prop: "test" }) : { prop?: string; }
->doSomething_Expected : <T extends { prop: string; }>(a: T) => { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
+>doSomething_Expected : <T extends { prop: string; }>(a: T) => {    [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P];}
 >{ prop: "test" } : { prop: string; }
 >prop : string
 >"test" : "test"

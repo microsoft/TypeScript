@@ -15,7 +15,7 @@ var a: { x: I };
 >x : any
 
 var b: { (x: I): I };
->b : (x: any) => any
+>b : (x: I) => I
 >x : any
 
 var d: { [x: I]: I };
@@ -23,22 +23,22 @@ var d: { [x: I]: I };
 >x : any
 
 var e = (x: I) => { var y: I; return y; }
->e : (x: any) => any
->(x: I) => { var y: I; return y; } : (x: any) => any
+>e : (x: I) => any
+>(x: I) => { var y: I; return y; } : (x: I) => any
 >x : any
 >y : any
 >y : any
 
 function f(x: I): I { var y: I; return y; }
->f : (x: any) => any
+>f : (x: I) => I
 >x : any
 >y : any
 >y : any
 
 var g = function f(x: I): I { var y: I; return y; }
->g : (x: any) => any
->function f(x: I): I { var y: I; return y; } : (x: any) => any
->f : (x: any) => any
+>g : (x: I) => I
+>function f(x: I): I { var y: I; return y; } : (x: I) => I
+>f : (x: I) => I
 >x : any
 >y : any
 >y : any

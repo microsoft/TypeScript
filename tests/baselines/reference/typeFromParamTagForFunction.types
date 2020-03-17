@@ -93,7 +93,7 @@ const { C } = require("./c-ext");
 
 /** @param {C} p */
 function c(p) { p.x; }
->c : (p: import("tests/cases/conformance/salsa/c-ext").C) => void
+>c : (p: C) => void
 >p : import("tests/cases/conformance/salsa/c-ext").C
 >p.x : number
 >p : import("tests/cases/conformance/salsa/c-ext").C
@@ -151,7 +151,7 @@ const { E } = require("./e-ext");
 
 /** @param {E} p */
 function e(p) { p.x; }
->e : (p: import("tests/cases/conformance/salsa/e-ext").E) => void
+>e : (p: E) => void
 >p : import("tests/cases/conformance/salsa/e-ext").E
 >p.x : number
 >p : import("tests/cases/conformance/salsa/e-ext").E

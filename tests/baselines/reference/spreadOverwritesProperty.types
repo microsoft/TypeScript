@@ -31,7 +31,7 @@ var unused3 = { b: 1, ...abq }
 >abq : { a: number; b?: number; }
 
 function g(obj: { x: number | undefined }) {
->g : (obj: { x: number; }) => { x: number; }
+>g : (obj: {    x: number | undefined;}) => { x: number; }
 >obj : { x: number; }
 >x : number
 
@@ -42,7 +42,7 @@ function g(obj: { x: number | undefined }) {
 >obj : { x: number; }
 }
 function h(obj: { x: number }) {
->h : (obj: { x: number; }) => { x: number; }
+>h : (obj: {    x: number;}) => { x: number; }
 >obj : { x: number; }
 >x : number
 
