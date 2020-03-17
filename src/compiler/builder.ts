@@ -201,6 +201,7 @@ namespace ts {
                 state.affectedFilesPendingEmit = oldState!.affectedFilesPendingEmit.slice();
                 state.affectedFilesPendingEmitKind = cloneMapOrUndefined(oldState!.affectedFilesPendingEmitKind);
                 state.affectedFilesPendingEmitIndex = oldState!.affectedFilesPendingEmitIndex;
+                state.seenAffectedFiles = createMap();
             }
         }
 
@@ -247,8 +248,8 @@ namespace ts {
         if (oldCompilerOptions && compilerOptionsAffectEmit(compilerOptions, oldCompilerOptions)) {
             // Add all files to affectedFilesPendingEmit since emit changed
             newProgram.getSourceFiles().forEach(f => addToAffectedFilesPendingEmit(state, f.resolvedPath, BuilderFileEmit.Full));
-            Debug.assert(state.seenAffectedFiles === undefined);
-            state.seenAffectedFiles = createMap<true>();
+            Debug.assert(!state.seenAffectedFiles || !state.seenAffectedFiles.size);
+            state.seenAffectedFiles = state.seenAffectedFiles || createMap<true>();
         }
 
         state.emittedBuildInfo = !state.changedFilesSet.size && !state.affectedFilesPendingEmit;

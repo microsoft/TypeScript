@@ -25,11 +25,11 @@ label: while (1) { }
 
 Output::
 >> Screen clear
-12:00:13 AM - Starting compilation in watch mode...
+[[90m12:00:13 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:16 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:16 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a.ts","/a/lib/lib.d.ts"]
@@ -66,13 +66,17 @@ Change:: Disable  allowUnsusedLabels
 
 Output::
 >> Screen clear
-12:00:19 AM - File change detected. Starting incremental compilation...
+[[90m12:00:19 AM[0m] File change detected. Starting incremental compilation...
 
 
-a.ts(1,1): error TS7028: Unused label.
+[96ma.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS7028: [0mUnused label.
+
+[7m1[0m label: while (1) {}
+[7m [0m [91m~~~~~[0m
 
 
-12:00:20 AM - Found 1 error. Watching for file changes.
+[[90m12:00:20 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/a.ts","/a/lib/lib.d.ts"]
@@ -109,11 +113,11 @@ Change:: Enable  allowUnsusedLabels
 
 Output::
 >> Screen clear
-12:00:23 AM - File change detected. Starting incremental compilation...
+[[90m12:00:23 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:24 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:24 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a.ts","/a/lib/lib.d.ts"]

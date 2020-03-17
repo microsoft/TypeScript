@@ -3753,6 +3753,14 @@ namespace ts {
         };
     }
 
+    export function hostUsesCaseSensitiveFileNames(host: { useCaseSensitiveFileNames?(): boolean; }): boolean {
+        return host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : false;
+    }
+
+    export function hostGetCanonicalFileName(host: { useCaseSensitiveFileNames?(): boolean; }): GetCanonicalFileName {
+        return createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host));
+    }
+
     export interface ResolveModuleNameResolutionHost {
         getCanonicalFileName(p: string): string;
         getCommonSourceDirectory(): string;
@@ -4424,6 +4432,13 @@ namespace ts {
 
     export function isPropertyAccessEntityNameExpression(node: Node): node is PropertyAccessEntityNameExpression {
         return isPropertyAccessExpression(node) && isEntityNameExpression(node.expression);
+    }
+
+    export function isConstructorAccessExpression(expr: Expression): expr is AccessExpression {
+        return (
+            isPropertyAccessExpression(expr) && idText(expr.name) === "constructor" ||
+            isElementAccessExpression(expr) && isStringLiteralLike(expr.argumentExpression) && expr.argumentExpression.text === "constructor"
+        );
     }
 
     export function tryGetPropertyAccessOrIdentifierToString(expr: Expression): string | undefined {
@@ -6267,7 +6282,7 @@ namespace ts {
     export function isValidTypeOnlyAliasUseSite(useSite: Node): boolean {
         return !!(useSite.flags & NodeFlags.Ambient)
             || isPartOfTypeQuery(useSite)
-            || isFirstIdentifierOfNonEmittingHeritageClause(useSite)
+            || isIdentifierInNonEmittingHeritageClause(useSite)
             || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
             || !isExpressionNode(useSite);
     }
@@ -6290,10 +6305,20 @@ namespace ts {
         return containerKind === SyntaxKind.InterfaceDeclaration || containerKind === SyntaxKind.TypeLiteral;
     }
 
-    /** Returns true for the first identifier of 1) an `implements` clause, and 2) an `extends` clause of an interface. */
-    function isFirstIdentifierOfNonEmittingHeritageClause(node: Node): boolean {
-        // Number of parents to climb from identifier is 2 for `implements I`, 3 for `implements x.I`
-        const heritageClause = tryCast(node.parent.parent, isHeritageClause) ?? tryCast(node.parent.parent?.parent, isHeritageClause);
+    /** Returns true for an identifier in 1) an `implements` clause, and 2) an `extends` clause of an interface. */
+    function isIdentifierInNonEmittingHeritageClause(node: Node): boolean {
+        if (node.kind !== SyntaxKind.Identifier) return false;
+        const heritageClause = findAncestor(node.parent, parent => {
+            switch (parent.kind) {
+                case SyntaxKind.HeritageClause:
+                    return true;
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ExpressionWithTypeArguments:
+                    return false;
+                default:
+                    return "quit";
+            }
+        }) as HeritageClause | undefined;
         return heritageClause?.token === SyntaxKind.ImplementsKeyword || heritageClause?.parent.kind === SyntaxKind.InterfaceDeclaration;
     }
 }

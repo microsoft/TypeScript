@@ -1,6 +1,8 @@
 error TS6053: File 'a.ts' not found.
 error TS6054: File 'a.t' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts'.
+error TS6231: Could not resolve the path 'a' with the extensions: '.ts', '.tsx', '.d.ts'.
 
 
 !!! error TS6053: File 'a.ts' not found.
 !!! error TS6054: File 'a.t' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts'.
+!!! error TS6231: Could not resolve the path 'a' with the extensions: '.ts', '.tsx', '.d.ts'.

@@ -37,11 +37,11 @@ T.bar();
 
 Output::
 >> Screen clear
-12:00:15 AM - Starting compilation in watch mode...
+[[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:20 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:20 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/file1.ts"]
@@ -81,13 +81,17 @@ export function bar() { };
 
 Output::
 >> Screen clear
-12:00:25 AM - File change detected. Starting incremental compilation...
+[[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
 
 
-a/b/file1.ts(1,20): error TS2307: Cannot find module './moduleFile'.
+[96ma/b/file1.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS2307: [0mCannot find module './moduleFile' or its corresponding type declarations.
+
+[7m1[0m import * as T from "./moduleFile"; T.bar();
+[7m [0m [91m                   ~~~~~~~~~~~~~~[0m
 
 
-12:00:29 AM - Found 1 error. Watching for file changes.
+[[90m12:00:29 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/a/b/file1.ts"]
@@ -132,11 +136,11 @@ exports.bar = bar;
 
 Output::
 >> Screen clear
-12:00:33 AM - File change detected. Starting incremental compilation...
+[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:39 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:39 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/file1.ts"]

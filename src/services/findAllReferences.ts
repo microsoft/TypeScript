@@ -1174,16 +1174,16 @@ namespace ts.FindAllReferences {
         }
 
         /** Used as a quick check for whether a symbol is used at all in a file (besides its definition). */
-        export function isSymbolReferencedInFile(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile): boolean {
-            return eachSymbolReferenceInFile(definition, checker, sourceFile, () => true) || false;
+        export function isSymbolReferencedInFile(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile, searchContainer: Node = sourceFile): boolean {
+            return eachSymbolReferenceInFile(definition, checker, sourceFile, () => true, searchContainer) || false;
         }
 
-        export function eachSymbolReferenceInFile<T>(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile, cb: (token: Identifier) => T): T | undefined {
+        export function eachSymbolReferenceInFile<T>(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile, cb: (token: Identifier) => T, searchContainer: Node = sourceFile): T | undefined {
             const symbol = isParameterPropertyDeclaration(definition.parent, definition.parent.parent)
                 ? first(checker.getSymbolsOfParameterPropertyDeclaration(definition.parent, definition.text))
                 : checker.getSymbolAtLocation(definition);
             if (!symbol) return undefined;
-            for (const token of getPossibleSymbolReferenceNodes(sourceFile, symbol.name)) {
+            for (const token of getPossibleSymbolReferenceNodes(sourceFile, symbol.name, searchContainer)) {
                 if (!isIdentifier(token) || token === definition || token.escapedText !== definition.escapedText) continue;
                 const referenceSymbol: Symbol = checker.getSymbolAtLocation(token)!; // See GH#19955 for why the type annotation is necessary
                 if (referenceSymbol === symbol

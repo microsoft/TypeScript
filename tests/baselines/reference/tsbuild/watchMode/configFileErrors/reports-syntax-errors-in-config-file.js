@@ -32,13 +32,17 @@ interface Array<T> { length: number; [n: number]: T; }
 
 Output::
 >> Screen clear
-12:00:23 AM - Starting compilation in watch mode...
+[[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 
-tsconfig.json(7,9): error TS1005: ',' expected.
+[96mtsconfig.json[0m:[93m7[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
+
+[7m7[0m         "b.ts"
+[7m [0m [91m        ~~~~~~[0m
 
 
-12:00:24 AM - Found 1 error. Watching for file changes.
+[[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
@@ -81,13 +85,17 @@ Change:: reports syntax errors after change to config file
 
 Output::
 >> Screen clear
-12:00:28 AM - File change detected. Starting incremental compilation...
+[[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
 
-tsconfig.json(8,9): error TS1005: ',' expected.
+[96mtsconfig.json[0m:[93m8[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
+
+[7m8[0m         "b.ts"
+[7m [0m [91m        ~~~~~~[0m
 
 
-12:00:29 AM - Found 1 error. Watching for file changes.
+[[90m12:00:29 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
@@ -121,13 +129,17 @@ export function fooBar() { }
 
 Output::
 >> Screen clear
-12:00:33 AM - File change detected. Starting incremental compilation...
+[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
 
-tsconfig.json(8,9): error TS1005: ',' expected.
+[96mtsconfig.json[0m:[93m8[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
+
+[7m8[0m         "b.ts"
+[7m [0m [91m        ~~~~~~[0m
 
 
-12:00:34 AM - Found 1 error. Watching for file changes.
+[[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
@@ -159,13 +171,17 @@ Change:: reports error when there is no change to tsconfig file
 
 Output::
 >> Screen clear
-12:00:38 AM - File change detected. Starting incremental compilation...
+[[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
 
-tsconfig.json(8,9): error TS1005: ',' expected.
+[96mtsconfig.json[0m:[93m8[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
+
+[7m8[0m         "b.ts"
+[7m [0m [91m        ~~~~~~[0m
 
 
-12:00:39 AM - Found 1 error. Watching for file changes.
+[[90m12:00:39 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
@@ -257,11 +273,11 @@ export declare function bar(): void;
 
 Output::
 >> Screen clear
-12:00:43 AM - File change detected. Starting incremental compilation...
+[[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:54 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:54 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]

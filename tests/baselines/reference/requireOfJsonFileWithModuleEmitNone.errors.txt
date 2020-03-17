@@ -1,6 +1,6 @@
 error TS5070: Option '--resolveJsonModule' cannot be specified without 'node' module resolution strategy.
 tests/cases/compiler/file1.ts(1,1): error TS1148: Cannot use imports, exports, or module augmentations when '--module' is 'none'.
-tests/cases/compiler/file1.ts(1,20): error TS2307: Cannot find module './b.json'.
+tests/cases/compiler/file1.ts(1,20): error TS2307: Cannot find module './b.json' or its corresponding type declarations.
 
 
 !!! error TS5070: Option '--resolveJsonModule' cannot be specified without 'node' module resolution strategy.
@@ -9,7 +9,7 @@ tests/cases/compiler/file1.ts(1,20): error TS2307: Cannot find module './b.json'
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1148: Cannot use imports, exports, or module augmentations when '--module' is 'none'.
                        ~~~~~~~~~~
-!!! error TS2307: Cannot find module './b.json'.
+!!! error TS2307: Cannot find module './b.json' or its corresponding type declarations.
     
 ==== tests/cases/compiler/b.json (0 errors) ====
     {

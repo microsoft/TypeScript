@@ -25,13 +25,14 @@ myapp.component("hello");
 
 Output::
 >> Screen clear
-12:00:23 AM - Starting compilation in watch mode...
+[[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 
-error TS2688: Cannot find type definition file for '@myapp/ts-types'.
+[91merror[0m[90m TS2688: [0mCannot find type definition file for '@myapp/ts-types'.
 
 
-12:00:26 AM - Found 1 error. Watching for file changes.
+[[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/myproject/lib/app.ts"]
@@ -75,11 +76,11 @@ declare namespace myapp {
 
 Output::
 >> Screen clear
-12:00:39 AM - File change detected. Starting incremental compilation...
+[[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:43 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:43 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/lib/app.ts"]

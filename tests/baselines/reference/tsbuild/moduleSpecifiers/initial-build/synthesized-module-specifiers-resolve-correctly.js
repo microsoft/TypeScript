@@ -1,23 +1,23 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc -b /src --verbose
-12:00:00 AM - Projects in this build: 
+[[90m12:00:00 AM[0m] Projects in this build: 
     * src/solution/common/tsconfig.json
     * src/solution/sub-project/tsconfig.json
     * src/solution/sub-project-2/tsconfig.json
     * src/solution/tsconfig.json
     * src/tsconfig.json
 
-12:00:00 AM - Project 'src/solution/common/tsconfig.json' is out of date because output file 'src/lib/solution/common/nominal.js' does not exist
+[[90m12:00:00 AM[0m] Project 'src/solution/common/tsconfig.json' is out of date because output file 'src/lib/solution/common/nominal.js' does not exist
 
-12:00:00 AM - Building project '/src/solution/common/tsconfig.json'...
+[[90m12:00:00 AM[0m] Building project '/src/solution/common/tsconfig.json'...
 
-12:00:00 AM - Project 'src/solution/sub-project/tsconfig.json' is out of date because output file 'src/lib/solution/sub-project/index.js' does not exist
+[[90m12:00:00 AM[0m] Project 'src/solution/sub-project/tsconfig.json' is out of date because output file 'src/lib/solution/sub-project/index.js' does not exist
 
-12:00:00 AM - Building project '/src/solution/sub-project/tsconfig.json'...
+[[90m12:00:00 AM[0m] Building project '/src/solution/sub-project/tsconfig.json'...
 
-12:00:00 AM - Project 'src/solution/sub-project-2/tsconfig.json' is out of date because output file 'src/lib/solution/sub-project-2/index.js' does not exist
+[[90m12:00:00 AM[0m] Project 'src/solution/sub-project-2/tsconfig.json' is out of date because output file 'src/lib/solution/sub-project-2/index.js' does not exist
 
-12:00:00 AM - Building project '/src/solution/sub-project-2/tsconfig.json'...
+[[90m12:00:00 AM[0m] Building project '/src/solution/sub-project-2/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
