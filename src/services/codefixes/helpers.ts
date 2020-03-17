@@ -16,22 +16,10 @@ namespace ts.codefix {
         }
     }
 
-    function getModuleSpecifierResolverHost(context: TypeConstructionContext): SymbolTracker["moduleResolverHost"] {
-        return {
-            directoryExists: context.host.directoryExists ? d => context.host.directoryExists!(d) : undefined,
-            fileExists: context.host.fileExists ? f => context.host.fileExists!(f) : undefined,
-            getCurrentDirectory: context.host.getCurrentDirectory ? () => context.host.getCurrentDirectory() : undefined,
-            readFile: context.host.readFile ? f => context.host.readFile!(f) : undefined,
-            useCaseSensitiveFileNames: context.host.useCaseSensitiveFileNames ? () => context.host.useCaseSensitiveFileNames!() : undefined,
-            getSourceFiles: () => context.program.getSourceFiles(),
-            getCommonSourceDirectory: () => context.program.getCommonSourceDirectory(),
-        };
-    }
-
     export function getNoopSymbolTrackerWithResolver(context: TypeConstructionContext): SymbolTracker {
         return {
             trackSymbol: noop,
-            moduleResolverHost: getModuleSpecifierResolverHost(context),
+            moduleResolverHost: getModuleSpecifierResolverHost(context.program, context.host),
         };
     }
 

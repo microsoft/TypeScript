@@ -41,11 +41,9 @@ namespace ts.moduleSpecifiers {
         importingSourceFileName: Path,
         toFileName: string,
         host: ModuleSpecifierResolutionHost,
-        files: readonly SourceFile[],
-        redirectTargetsMap: RedirectTargetsMap,
         oldImportSpecifier: string,
     ): string | undefined {
-        const res = getModuleSpecifierWorker(compilerOptions, importingSourceFileName, toFileName, host, files, redirectTargetsMap, getPreferencesForUpdate(compilerOptions, oldImportSpecifier));
+        const res = getModuleSpecifierWorker(compilerOptions, importingSourceFileName, toFileName, host, getPreferencesForUpdate(compilerOptions, oldImportSpecifier));
         if (res === oldImportSpecifier) return undefined;
         return res;
     }
@@ -57,11 +55,9 @@ namespace ts.moduleSpecifiers {
         importingSourceFileName: Path,
         toFileName: string,
         host: ModuleSpecifierResolutionHost,
-        files: readonly SourceFile[],
         preferences: UserPreferences = {},
-        redirectTargetsMap: RedirectTargetsMap,
     ): string {
-        return getModuleSpecifierWorker(compilerOptions, importingSourceFileName, toFileName, host, files, redirectTargetsMap, getPreferences(preferences, compilerOptions, importingSourceFile));
+        return getModuleSpecifierWorker(compilerOptions, importingSourceFileName, toFileName, host, getPreferences(preferences, compilerOptions, importingSourceFile));
     }
 
     export function getNodeModulesPackageName(
@@ -69,11 +65,9 @@ namespace ts.moduleSpecifiers {
         importingSourceFileName: Path,
         nodeModulesFileName: string,
         host: ModuleSpecifierResolutionHost,
-        files: readonly SourceFile[],
-        redirectTargetsMap: RedirectTargetsMap,
     ): string | undefined {
         const info = getInfo(importingSourceFileName, host);
-        const modulePaths = getAllModulePaths(files, importingSourceFileName, nodeModulesFileName, info.getCanonicalFileName, host, redirectTargetsMap);
+        const modulePaths = getAllModulePaths(importingSourceFileName, nodeModulesFileName, host);
         return firstDefined(modulePaths,
             moduleFileName => tryGetModuleNameAsNodeModule(moduleFileName, info, host, compilerOptions, /*packageNameOnly*/ true));
     }
@@ -83,12 +77,10 @@ namespace ts.moduleSpecifiers {
         importingSourceFileName: Path,
         toFileName: string,
         host: ModuleSpecifierResolutionHost,
-        files: readonly SourceFile[],
-        redirectTargetsMap: RedirectTargetsMap,
         preferences: Preferences
     ): string {
         const info = getInfo(importingSourceFileName, host);
-        const modulePaths = getAllModulePaths(files, importingSourceFileName, toFileName, info.getCanonicalFileName, host, redirectTargetsMap);
+        const modulePaths = getAllModulePaths(importingSourceFileName, toFileName, host);
         return firstDefined(modulePaths, moduleFileName => tryGetModuleNameAsNodeModule(moduleFileName, info, host, compilerOptions)) ||
             getLocalModuleSpecifier(toFileName, info, compilerOptions, preferences);
     }
@@ -99,16 +91,14 @@ namespace ts.moduleSpecifiers {
         compilerOptions: CompilerOptions,
         importingSourceFile: SourceFile,
         host: ModuleSpecifierResolutionHost,
-        files: readonly SourceFile[],
         userPreferences: UserPreferences,
-        redirectTargetsMap: RedirectTargetsMap,
     ): readonly string[] {
         const ambient = tryGetModuleNameFromAmbientModule(moduleSymbol);
         if (ambient) return [ambient];
 
         const info = getInfo(importingSourceFile.path, host);
         const moduleSourceFile = getSourceFileOfNode(moduleSymbol.valueDeclaration || getNonAugmentationDeclaration(moduleSymbol));
-        const modulePaths = getAllModulePaths(files, importingSourceFile.path, moduleSourceFile.originalFileName, info.getCanonicalFileName, host, redirectTargetsMap);
+        const modulePaths = getAllModulePaths(importingSourceFile.path, moduleSourceFile.originalFileName, host);
 
         const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
         const global = mapDefined(modulePaths, moduleFileName => tryGetModuleNameAsNodeModule(moduleFileName, info, host, compilerOptions));
@@ -179,26 +169,24 @@ namespace ts.moduleSpecifiers {
     }
 
     export function forEachFileNameOfModule<T>(
-        files: readonly SourceFile[],
         importingFileName: string,
         importedFileName: string,
-        getCanonicalFileName: GetCanonicalFileName,
         host: ModuleSpecifierResolutionHost,
-        redirectTargetsMap: RedirectTargetsMap,
         preferSymlinks: boolean,
         cb: (fileName: string) => T | undefined
     ): T | undefined {
-        const redirects = redirectTargetsMap.get(importedFileName);
-        const importedFileNames = redirects ? [...redirects, importedFileName] : [importedFileName];
-        const cwd = host.getCurrentDirectory ? host.getCurrentDirectory() : "";
+        const getCanonicalFileName = hostGetCanonicalFileName(host);
+        const cwd = host.getCurrentDirectory();
+        const redirects = host.redirectTargetsMap.get(toPath(importedFileName, cwd, getCanonicalFileName)) || emptyArray;
+        const importedFileNames = [importedFileName, ...redirects];
         const targets = importedFileNames.map(f => getNormalizedAbsolutePath(f, cwd));
         if (!preferSymlinks) {
             const result = forEach(targets, cb);
             if (result) return result;
         }
         const links = host.getProbableSymlinks
-            ? host.getProbableSymlinks(files)
-            : discoverProbableSymlinks(files, getCanonicalFileName, cwd);
+            ? host.getProbableSymlinks(host.getSourceFiles())
+            : discoverProbableSymlinks(host.getSourceFiles(), getCanonicalFileName, cwd);
 
         const compareStrings = (!host.useCaseSensitiveFileNames || host.useCaseSensitiveFileNames()) ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
         const result = forEachEntry(links, (resolved, path) => {
@@ -224,20 +212,20 @@ namespace ts.moduleSpecifiers {
      * Looks for existing imports that use symlinks to this module.
      * Symlinks will be returned first so they are preferred over the real path.
      */
-    function getAllModulePaths(files: readonly SourceFile[], importingFileName: string, importedFileName: string, getCanonicalFileName: GetCanonicalFileName, host: ModuleSpecifierResolutionHost, redirectTargetsMap: RedirectTargetsMap): readonly string[] {
-        const cwd = host.getCurrentDirectory ? host.getCurrentDirectory() : "";
+    function getAllModulePaths(importingFileName: string, importedFileName: string, host: ModuleSpecifierResolutionHost): readonly string[] {
+        const cwd = host.getCurrentDirectory();
+        const getCanonicalFileName = hostGetCanonicalFileName(host);
         const allFileNames = createMap<string>();
+        let importedFileFromNodeModules = false;
         forEachFileNameOfModule(
-            files,
             importingFileName,
             importedFileName,
-            getCanonicalFileName,
             host,
-            redirectTargetsMap,
             /*preferSymlinks*/ true,
             path => {
                 // dont return value, so we collect everything
                 allFileNames.set(path, getCanonicalFileName(path));
+                importedFileFromNodeModules = importedFileFromNodeModules || pathContainsNodeModules(path);
             }
         );
 
@@ -251,7 +239,10 @@ namespace ts.moduleSpecifiers {
             let pathsInDirectory: string[] | undefined;
             allFileNames.forEach((canonicalFileName, fileName) => {
                 if (startsWith(canonicalFileName, directoryStart)) {
-                    (pathsInDirectory || (pathsInDirectory = [])).push(fileName);
+                    // If the importedFile is from node modules, use only paths in node_modules folder as option
+                    if (!importedFileFromNodeModules || pathContainsNodeModules(fileName)) {
+                        (pathsInDirectory || (pathsInDirectory = [])).push(fileName);
+                    }
                     allFileNames.delete(fileName);
                 }
             });

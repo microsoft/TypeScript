@@ -3099,8 +3099,8 @@ namespace ts {
         function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol;
         function resolveExternalModuleSymbol(moduleSymbol: Symbol | undefined, dontResolveAlias?: boolean): Symbol | undefined;
         function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol {
-            if (moduleSymbol) {
-                const exportEquals = resolveSymbol(moduleSymbol.exports!.get(InternalSymbolName.ExportEquals), dontResolveAlias);
+            if (moduleSymbol?.exports) {
+                const exportEquals = resolveSymbol(moduleSymbol.exports.get(InternalSymbolName.ExportEquals), dontResolveAlias);
                 const exported = getCommonJsExportEquals(getMergedSymbol(exportEquals), getMergedSymbol(moduleSymbol));
                 return getMergedSymbol(exported) || moduleSymbol;
             }
@@ -4070,9 +4070,10 @@ namespace ts {
                     tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: noop, moduleResolverHost: flags! & NodeBuilderFlags.DoNotIncludeSymbolChain ? {
                         getCommonSourceDirectory: (host as Program).getCommonSourceDirectory ? () => (host as Program).getCommonSourceDirectory() : () => "",
                         getSourceFiles: () => host.getSourceFiles(),
-                        getCurrentDirectory: maybeBind(host, host.getCurrentDirectory),
+                        getCurrentDirectory: () => host.getCurrentDirectory(),
                         getProbableSymlinks: maybeBind(host, host.getProbableSymlinks),
-                        useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames)
+                        useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
+                        redirectTargetsMap: host.redirectTargetsMap,
                     } : undefined },
                     encounteredError: false,
                     visitedTypes: undefined,
@@ -5037,9 +5038,7 @@ namespace ts {
                         specifierCompilerOptions,
                         contextFile,
                         moduleResolverHost,
-                        host.getSourceFiles(),
                         { importModuleSpecifierPreference: isBundle ? "non-relative" : "relative" },
-                        host.redirectTargetsMap,
                     ));
                     links.specifierCache = links.specifierCache || createMap();
                     links.specifierCache.set(contextFile.path, specifier);
@@ -6459,7 +6458,7 @@ namespace ts {
                                     const getCanonicalFileName = createGetCanonicalFileName(!!host.useCaseSensitiveFileNames);
                                     const resolverHost = {
                                         getCanonicalFileName,
-                                        getCurrentDirectory: context.tracker.moduleResolverHost.getCurrentDirectory ? () => context.tracker.moduleResolverHost!.getCurrentDirectory!() : () => "",
+                                        getCurrentDirectory: () => context.tracker.moduleResolverHost!.getCurrentDirectory(),
                                         getCommonSourceDirectory: () => context.tracker.moduleResolverHost!.getCommonSourceDirectory()
                                     };
                                     const newName = getResolvedExternalModuleName(resolverHost, targetFile);
@@ -12905,65 +12904,82 @@ namespace ts {
         }
 
         function getConditionalType(root: ConditionalRoot, mapper: TypeMapper | undefined): Type {
-            const checkType = instantiateType(root.checkType, mapper);
-            const extendsType = instantiateType(root.extendsType, mapper);
-            if (checkType === wildcardType || extendsType === wildcardType) {
-                return wildcardType;
+            let result;
+            let extraTypes: Type[] | undefined;
+            // We loop here for an immediately nested conditional type in the false position, effectively treating
+            // types of the form 'A extends B ? X : C extends D ? Y : E extends F ? Z : ...' as a single construct for
+            // purposes of resolution. This means such types aren't subject to the instatiation depth limiter.
+            while (true) {
+                const checkType = instantiateType(root.checkType, mapper);
+                const checkTypeInstantiable = isGenericObjectType(checkType) || isGenericIndexType(checkType);
+                const extendsType = instantiateType(root.extendsType, mapper);
+                if (checkType === wildcardType || extendsType === wildcardType) {
+                    return wildcardType;
+                }
+                let combinedMapper: TypeMapper | undefined;
+                if (root.inferTypeParameters) {
+                    const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
+                    // We skip inference of the possible `infer` types unles the `extendsType` _is_ an infer type
+                    // if it was, it's trivial to say that extendsType = checkType, however such a pattern is used to
+                    // "reset" the type being build up during constraint calculation and avoid making an apparently "infinite" constraint
+                    // so in those cases we refain from performing inference and retain the uninfered type parameter
+                    if (!checkTypeInstantiable || !some(root.inferTypeParameters, t => t === extendsType)) {
+                        // We don't want inferences from constraints as they may cause us to eagerly resolve the
+                        // conditional type instead of deferring resolution. Also, we always want strict function
+                        // types rules (i.e. proper contravariance) for inferences.
+                        inferTypes(context.inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+                    }
+                    combinedMapper = mergeTypeMappers(mapper, context.mapper);
+                }
+                // Instantiate the extends type including inferences for 'infer T' type parameters
+                const inferredExtendsType = combinedMapper ? instantiateType(root.extendsType, combinedMapper) : extendsType;
+                // We attempt to resolve the conditional type only when the check and extends types are non-generic
+                if (!checkTypeInstantiable && !isGenericObjectType(inferredExtendsType) && !isGenericIndexType(inferredExtendsType)) {
+                    // Return falseType for a definitely false extends check. We check an instantiations of the two
+                    // types with type parameters mapped to the wildcard type, the most permissive instantiations
+                    // possible (the wildcard type is assignable to and from all types). If those are not related,
+                    // then no instantiations will be and we can just return the false branch type.
+                    if (!(inferredExtendsType.flags & TypeFlags.AnyOrUnknown) && (checkType.flags & TypeFlags.Any || !isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType)))) {
+                        // Return union of trueType and falseType for 'any' since it matches anything
+                        if (checkType.flags & TypeFlags.Any) {
+                            (extraTypes || (extraTypes = [])).push(instantiateTypeWithoutDepthIncrease(root.trueType, combinedMapper || mapper));
+                        }
+                        // If falseType is an immediately nested conditional type that isn't distributive or has an
+                        // identical checkType, switch to that type and loop.
+                        const falseType = root.falseType;
+                        if (falseType.flags & TypeFlags.Conditional) {
+                            const newRoot = (<ConditionalType>falseType).root;
+                            if (newRoot.node.parent === root.node && (!newRoot.isDistributive || newRoot.checkType === root.checkType)) {
+                                root = newRoot;
+                                continue;
+                            }
+                        }
+                        result = instantiateTypeWithoutDepthIncrease(falseType, mapper);
+                        break;
+                    }
+                    // Return trueType for a definitely true extends check. We check instantiations of the two
+                    // types with type parameters mapped to their restrictive form, i.e. a form of the type parameter
+                    // that has no constraint. This ensures that, for example, the type
+                    //   type Foo<T extends { x: any }> = T extends { x: string } ? string : number
+                    // doesn't immediately resolve to 'string' instead of being deferred.
+                    if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown || isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(inferredExtendsType))) {
+                        result = instantiateTypeWithoutDepthIncrease(root.trueType, combinedMapper || mapper);
+                        break;
+                    }
+                }
+                // Return a deferred type for a check that is neither definitely true nor definitely false
+                const erasedCheckType = getActualTypeVariable(checkType);
+                result = <ConditionalType>createType(TypeFlags.Conditional);
+                result.root = root;
+                result.checkType = erasedCheckType;
+                result.extendsType = extendsType;
+                result.mapper = mapper;
+                result.combinedMapper = combinedMapper;
+                result.aliasSymbol = root.aliasSymbol;
+                result.aliasTypeArguments = instantiateTypes(root.aliasTypeArguments, mapper!); // TODO: GH#18217
+                break;
             }
-            const checkTypeInstantiable = isGenericObjectType(checkType) || isGenericIndexType(checkType);
-            let combinedMapper: TypeMapper | undefined;
-            if (root.inferTypeParameters) {
-                const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
-                // We skip inference of the possible `infer` types unles the `extendsType` _is_ an infer type
-                // if it was, it's trivial to say that extendsType = checkType, however such a pattern is used to
-                // "reset" the type being build up during constraint calculation and avoid making an apparently "infinite" constraint
-                // so in those cases we refain from performing inference and retain the uninfered type parameter
-                if (!checkTypeInstantiable || !some(root.inferTypeParameters, t => t === extendsType)) {
-                    // We don't want inferences from constraints as they may cause us to eagerly resolve the
-                    // conditional type instead of deferring resolution. Also, we always want strict function
-                    // types rules (i.e. proper contravariance) for inferences.
-                    inferTypes(context.inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
-                }
-                combinedMapper = mergeTypeMappers(mapper, context.mapper);
-            }
-            // Instantiate the extends type including inferences for 'infer T' type parameters
-            const inferredExtendsType = combinedMapper ? instantiateType(root.extendsType, combinedMapper) : extendsType;
-            // We attempt to resolve the conditional type only when the check and extends types are non-generic
-            if (!checkTypeInstantiable && !isGenericObjectType(inferredExtendsType) && !isGenericIndexType(inferredExtendsType)) {
-                if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown) {
-                    return instantiateType(root.trueType, combinedMapper || mapper);
-                }
-                // Return union of trueType and falseType for 'any' since it matches anything
-                if (checkType.flags & TypeFlags.Any) {
-                    return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), instantiateType(root.falseType, mapper)]);
-                }
-                // Return falseType for a definitely false extends check. We check an instantiations of the two
-                // types with type parameters mapped to the wildcard type, the most permissive instantiations
-                // possible (the wildcard type is assignable to and from all types). If those are not related,
-                // then no instantiations will be and we can just return the false branch type.
-                if (!isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType))) {
-                    return instantiateType(root.falseType, mapper);
-                }
-                // Return trueType for a definitely true extends check. We check instantiations of the two
-                // types with type parameters mapped to their restrictive form, i.e. a form of the type parameter
-                // that has no constraint. This ensures that, for example, the type
-                //   type Foo<T extends { x: any }> = T extends { x: string } ? string : number
-                // doesn't immediately resolve to 'string' instead of being deferred.
-                if (isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(inferredExtendsType))) {
-                    return instantiateType(root.trueType, combinedMapper || mapper);
-                }
-            }
-            // Return a deferred type for a check that is neither definitely true nor definitely false
-            const erasedCheckType = getActualTypeVariable(checkType);
-            const result = <ConditionalType>createType(TypeFlags.Conditional);
-            result.root = root;
-            result.checkType = erasedCheckType;
-            result.extendsType = extendsType;
-            result.mapper = mapper;
-            result.combinedMapper = combinedMapper;
-            result.aliasSymbol = root.aliasSymbol;
-            result.aliasTypeArguments = instantiateTypes(root.aliasTypeArguments, mapper!); // TODO: GH#18217
-            return result;
+            return extraTypes ? getUnionType(append(extraTypes, result)) : result;
         }
 
         function getTrueTypeFromConditionalType(type: ConditionalType) {
@@ -13942,6 +13958,17 @@ namespace ts {
             instantiationDepth++;
             const result = instantiateTypeWorker(type, mapper);
             instantiationDepth--;
+            return result;
+        }
+
+        /**
+         * This can be used to avoid the penalty on instantiation depth for types which result from immediate
+         * simplification. It essentially removes the depth increase done in `instantiateType`.
+         */
+        function instantiateTypeWithoutDepthIncrease(type: Type, mapper: TypeMapper | undefined) {
+            instantiationDepth--;
+            const result = instantiateType(type, mapper);
+            instantiationDepth++;
             return result;
         }
 
@@ -22720,8 +22747,8 @@ namespace ts {
             // Grammar checking
             checkGrammarObjectLiteralExpression(node, inDestructuringPattern);
 
-            let propertiesTable: SymbolTable;
-            const allPropertiesTable = createSymbolTable();
+            const allPropertiesTable = strictNullChecks ? createSymbolTable() : undefined;
+            let propertiesTable = createSymbolTable();
             let propertiesArray: Symbol[] = [];
             let spread: Type = emptyObjectType;
 
@@ -22737,7 +22764,6 @@ namespace ts {
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
-            propertiesTable = createSymbolTable();
 
             let offset = 0;
             for (let i = 0; i < node.properties.length; i++) {
@@ -22803,7 +22829,7 @@ namespace ts {
                     prop.type = type;
                     prop.target = member;
                     member = prop;
-                    allPropertiesTable.set(prop.escapedName, prop);
+                    allPropertiesTable?.set(prop.escapedName, prop);
                 }
                 else if (memberDecl.kind === SyntaxKind.SpreadAssignment) {
                     if (languageVersion < ScriptTarget.ES2015) {
@@ -22821,16 +22847,9 @@ namespace ts {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return errorType;
                     }
-                    for (const right of getPropertiesOfType(type)) {
-                        const rightType = getTypeOfSymbol(right);
-                        const left = allPropertiesTable.get(right.escapedName);
-                        if (strictNullChecks &&
-                            left &&
-                            !maybeTypeOfKind(rightType, TypeFlags.Nullable)) {
-                            error(left.valueDeclaration, Diagnostics._0_is_specified_more_than_once_so_this_usage_will_be_overwritten, unescapeLeadingUnderscores(left.escapedName));
-                        }
+                    if (allPropertiesTable) {
+                        checkSpreadPropOverrides(type, allPropertiesTable, memberDecl);
                     }
-
                     spread = getSpreadType(spread, type, node.symbol, objectFlags, inConstContext);
                     offset = i + 1;
                     continue;
@@ -23001,6 +23020,7 @@ namespace ts {
          */
         function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, checkMode: CheckMode | undefined) {
             const attributes = openingLikeElement.attributes;
+            const allAttributesTable = strictNullChecks ? createSymbolTable() : undefined;
             let attributesTable = createSymbolTable();
             let spread: Type = emptyJsxObjectType;
             let hasSpreadAnyType = false;
@@ -23024,6 +23044,7 @@ namespace ts {
                     attributeSymbol.type = exprType;
                     attributeSymbol.target = member;
                     attributesTable.set(attributeSymbol.escapedName, attributeSymbol);
+                    allAttributesTable?.set(attributeSymbol.escapedName, attributeSymbol);
                     if (attributeDecl.name.escapedText === jsxChildrenPropertyName) {
                         explicitlySpecifyChildrenAttribute = true;
                     }
@@ -23040,6 +23061,9 @@ namespace ts {
                     }
                     if (isValidSpreadType(exprType)) {
                         spread = getSpreadType(spread, exprType, attributes.symbol, objectFlags, /*readonly*/ false);
+                        if (allAttributesTable) {
+                            checkSpreadPropOverrides(exprType, allAttributesTable, attributeDecl);
+                        }
                     }
                     else {
                         typeToIntersect = typeToIntersect ? getIntersectionType([typeToIntersect, exprType]) : exprType;
@@ -23122,6 +23146,16 @@ namespace ts {
                 }
             }
             return childrenTypes;
+        }
+
+        function checkSpreadPropOverrides(type: Type, props: SymbolTable, spread: SpreadAssignment | JsxSpreadAttribute) {
+            for (const right of getPropertiesOfType(type)) {
+                const left = props.get(right.escapedName);
+                if (left && !maybeTypeOfKind(getTypeOfSymbol(right), TypeFlags.Nullable)) {
+                    const diagnostic = error(left.valueDeclaration, Diagnostics._0_is_specified_more_than_once_so_this_usage_will_be_overwritten, unescapeLeadingUnderscores(left.escapedName));
+                    addRelatedInfo(diagnostic, createDiagnosticForNode(spread, Diagnostics.This_spread_always_overwrites_this_property));
+                }
+            }
         }
 
         /**

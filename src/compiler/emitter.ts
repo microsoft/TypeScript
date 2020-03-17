@@ -794,7 +794,6 @@ namespace ts {
             isEmitBlocked: returnFalse,
             readFile: f => host.readFile(f),
             fileExists: f => host.fileExists(f),
-            directoryExists: host.directoryExists && (f => host.directoryExists!(f)),
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             getProgramBuildInfo: returnUndefined,
             getSourceFileFromReference: returnUndefined,
