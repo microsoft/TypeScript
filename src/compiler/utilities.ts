@@ -3753,6 +3753,14 @@ namespace ts {
         };
     }
 
+    export function hostUsesCaseSensitiveFileNames(host: { useCaseSensitiveFileNames?(): boolean; }): boolean {
+        return host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : false;
+    }
+
+    export function hostGetCanonicalFileName(host: { useCaseSensitiveFileNames?(): boolean; }): GetCanonicalFileName {
+        return createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host));
+    }
+
     export interface ResolveModuleNameResolutionHost {
         getCanonicalFileName(p: string): string;
         getCommonSourceDirectory(): string;

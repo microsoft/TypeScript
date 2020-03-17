@@ -2907,6 +2907,10 @@
         "category": "Error",
         "code": 2784
     },
+    "This spread always overwrites this property.": {
+        "category": "Error",
+        "code": 2785
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -4320,6 +4324,10 @@
         "category": "Error",
         "code": 6230
     },
+    "Could not resolve the path '{0}' with the extensions: {1}.": {
+        "category": "Error",
+        "code": 6231
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -5516,6 +5524,30 @@
     "Wrap invalid character in an expression container": {
         "category": "Message",
         "code": 95101
+    },
+    "Add '@class' tag": {
+        "category": "Message",
+        "code": 95102
+    },
+    "Add '@this' tag": {
+        "category": "Message",
+        "code": 95103
+    },
+    "Add 'this' parameter.": {
+        "category": "Message",
+        "code": 95104
+    },
+    "Convert function expression '{0}' to arrow function": {
+        "category": "Message",
+        "code": 95105
+    },
+    "Convert function declaration '{0}' to arrow function": {
+        "category": "Message",
+        "code": 95106
+    },
+    "Fix all implicit-'this' errors": {
+        "category": "Message",
+        "code": 95107
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
