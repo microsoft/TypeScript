@@ -177,8 +177,8 @@ namespace ts.moduleSpecifiers {
     ): T | undefined {
         const getCanonicalFileName = hostGetCanonicalFileName(host);
         const cwd = host.getCurrentDirectory();
-        const redirects = host.redirectTargetsMap.get(toPath(importedFileName, cwd, getCanonicalFileName));
-        const importedFileNames = redirects ? [...redirects, importedFileName] : [importedFileName];
+        const redirects = host.redirectTargetsMap.get(toPath(importedFileName, cwd, getCanonicalFileName)) || emptyArray;
+        const importedFileNames = [importedFileName, ...redirects];
         const targets = importedFileNames.map(f => getNormalizedAbsolutePath(f, cwd));
         if (!preferSymlinks) {
             const result = forEach(targets, cb);
@@ -216,6 +216,7 @@ namespace ts.moduleSpecifiers {
         const cwd = host.getCurrentDirectory();
         const getCanonicalFileName = hostGetCanonicalFileName(host);
         const allFileNames = createMap<string>();
+        let importedFileFromNodeModules = false;
         forEachFileNameOfModule(
             importingFileName,
             importedFileName,
@@ -224,6 +225,7 @@ namespace ts.moduleSpecifiers {
             path => {
                 // dont return value, so we collect everything
                 allFileNames.set(path, getCanonicalFileName(path));
+                importedFileFromNodeModules = importedFileFromNodeModules || pathContainsNodeModules(path);
             }
         );
 
@@ -237,7 +239,10 @@ namespace ts.moduleSpecifiers {
             let pathsInDirectory: string[] | undefined;
             allFileNames.forEach((canonicalFileName, fileName) => {
                 if (startsWith(canonicalFileName, directoryStart)) {
-                    (pathsInDirectory || (pathsInDirectory = [])).push(fileName);
+                    // If the importedFile is from node modules, use only paths in node_modules folder as option
+                    if (!importedFileFromNodeModules || pathContainsNodeModules(fileName)) {
+                        (pathsInDirectory || (pathsInDirectory = [])).push(fileName);
+                    }
                     allFileNames.delete(fileName);
                 }
             });

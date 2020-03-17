@@ -374,7 +374,7 @@ namespace ts {
 
                         // omit references to files from node_modules (npm may disambiguate module
                         // references when installing this package, making the path is unreliable).
-                        if (startsWith(fileName, "node_modules/") || fileName.indexOf("/node_modules/") !== -1) {
+                        if (startsWith(fileName, "node_modules/") || pathContainsNodeModules(fileName)) {
                             return;
                         }
 

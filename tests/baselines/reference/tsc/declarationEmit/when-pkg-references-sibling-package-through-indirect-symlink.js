@@ -62,11 +62,6 @@ var pkg2_1 = require("@raymondfeng/pkg2");
 exports.ADMIN = pkg2_1.MetadataAccessor.create('1');
 
 
-//// [/user/username/projects/myproject/pkg3/dist/keys.d.ts]
-import { MetadataAccessor } from "@raymondfeng/pkg2";
-export declare const ADMIN: MetadataAccessor<boolean, import("../../pkg1/dist").IdType>;
-
-
 //// [/user/username/projects/myproject/pkg3/dist/index.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -89,6 +84,12 @@ export * from './keys';
 
 
 Output::
+[96mpkg3/src/keys.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2742: [0mThe inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
+
+[7m2[0m export const ADMIN = MetadataAccessor.create<boolean>('1');
+[7m [0m [91m             ~~~~~[0m
+
+
 /a/lib/lib.d.ts
 
 /user/username/projects/myproject/pkg1/dist/types.d.ts
@@ -102,6 +103,9 @@ Output::
 /user/username/projects/myproject/pkg3/src/keys.ts
 
 /user/username/projects/myproject/pkg3/src/index.ts
+
+
+Found 1 error.
 
 
 
@@ -122,4 +126,4 @@ FsWatches::
 
 FsWatchesRecursive::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
