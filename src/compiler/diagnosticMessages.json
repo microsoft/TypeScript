@@ -4324,6 +4324,10 @@
         "category": "Error",
         "code": 6230
     },
+    "Could not resolve the path '{0}' with the extensions: {1}.": {
+        "category": "Error",
+        "code": 6231
+    },
 
     "Projects to reference": {
         "category": "Message",
