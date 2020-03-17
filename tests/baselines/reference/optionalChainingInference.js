@@ -33,20 +33,19 @@ const v8: number = unbox(b8);
 
 
 //// [optionalChainingInference.js]
-var _a, _b, _c, _d, _e, _f, _g, _h;
-var b1 = { value: (_a = su) === null || _a === void 0 ? void 0 : _a.length };
+var b1 = { value: su === null || su === void 0 ? void 0 : su.length };
 var v1 = unbox(b1);
-var b2 = { value: (_b = su) === null || _b === void 0 ? void 0 : _b.length };
+var b2 = { value: su === null || su === void 0 ? void 0 : su.length };
 var v2 = unbox(b2);
-var b3 = { value: (_c = su) === null || _c === void 0 ? void 0 : _c.length };
+var b3 = { value: su === null || su === void 0 ? void 0 : su.length };
 var v3 = unbox(b3);
-var b4 = { value: (_d = fnu) === null || _d === void 0 ? void 0 : _d() };
+var b4 = { value: fnu === null || fnu === void 0 ? void 0 : fnu() };
 var v4 = unbox(b4);
-var b5 = { value: (_e = su) === null || _e === void 0 ? void 0 : _e["length"] };
+var b5 = { value: su === null || su === void 0 ? void 0 : su["length"] };
 var v5 = unbox(b5);
-var b6 = { value: (_f = osu) === null || _f === void 0 ? void 0 : _f.prop.length };
+var b6 = { value: osu === null || osu === void 0 ? void 0 : osu.prop.length };
 var v6 = unbox(b6);
-var b7 = { value: (_g = osu) === null || _g === void 0 ? void 0 : _g.prop["length"] };
+var b7 = { value: osu === null || osu === void 0 ? void 0 : osu.prop["length"] };
 var v7 = unbox(b7);
-var b8 = { value: (_h = ofnu) === null || _h === void 0 ? void 0 : _h.prop() };
+var b8 = { value: ofnu === null || ofnu === void 0 ? void 0 : ofnu.prop() };
 var v8 = unbox(b8);

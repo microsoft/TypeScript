@@ -565,3 +565,41 @@ function foo() {
     }
 }
 
+// Repro from #35070
+
+type O = {
+>O : Symbol(O, Decl(exhaustiveSwitchStatements1.ts, 220, 1))
+
+    a: number,
+>a : Symbol(a, Decl(exhaustiveSwitchStatements1.ts, 224, 10))
+
+    b: number
+>b : Symbol(b, Decl(exhaustiveSwitchStatements1.ts, 225, 14))
+
+};
+type K = keyof O | 'c';
+>K : Symbol(K, Decl(exhaustiveSwitchStatements1.ts, 227, 2))
+>O : Symbol(O, Decl(exhaustiveSwitchStatements1.ts, 220, 1))
+
+function ff(o: O, k: K) {
+>ff : Symbol(ff, Decl(exhaustiveSwitchStatements1.ts, 228, 23))
+>o : Symbol(o, Decl(exhaustiveSwitchStatements1.ts, 229, 12))
+>O : Symbol(O, Decl(exhaustiveSwitchStatements1.ts, 220, 1))
+>k : Symbol(k, Decl(exhaustiveSwitchStatements1.ts, 229, 17))
+>K : Symbol(K, Decl(exhaustiveSwitchStatements1.ts, 227, 2))
+
+    switch(k) {
+>k : Symbol(k, Decl(exhaustiveSwitchStatements1.ts, 229, 17))
+
+        case 'c':
+            k = 'a';
+>k : Symbol(k, Decl(exhaustiveSwitchStatements1.ts, 229, 17))
+    }
+    k === 'c';  // Error
+>k : Symbol(k, Decl(exhaustiveSwitchStatements1.ts, 229, 17))
+
+    return o[k];
+>o : Symbol(o, Decl(exhaustiveSwitchStatements1.ts, 229, 12))
+>k : Symbol(k, Decl(exhaustiveSwitchStatements1.ts, 229, 17))
+}
+

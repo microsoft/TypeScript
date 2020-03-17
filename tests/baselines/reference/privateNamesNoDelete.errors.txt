@@ -1,0 +1,13 @@
+tests/cases/conformance/classes/members/privateNames/privateNamesNoDelete.ts(4,16): error TS18011: The operand of a 'delete' operator cannot be a private identifier.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNamesNoDelete.ts (1 errors) ====
+    class A {
+        #v = 1;
+        constructor() {
+            delete this.#v; // Error: The operand of a delete operator cannot be a private name.
+                   ~~~~~~~
+!!! error TS18011: The operand of a 'delete' operator cannot be a private identifier.
+        }
+    }
+    

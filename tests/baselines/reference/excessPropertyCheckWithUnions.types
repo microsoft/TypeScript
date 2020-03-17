@@ -312,3 +312,55 @@ const obj: Union = {
 
 };
 
+// Repro from #34611
+
+interface IValue {
+  value: string
+>value : string
+}
+
+interface StringKeys { 
+    [propertyName: string]: IValue;
+>propertyName : string
+
+};
+
+interface NumberKeys {
+    [propertyName: number]: IValue;
+>propertyName : number
+}
+
+type ObjectDataSpecification = StringKeys | NumberKeys;
+>ObjectDataSpecification : ObjectDataSpecification
+
+
+const dataSpecification: ObjectDataSpecification = {  // Error
+>dataSpecification : ObjectDataSpecification
+>{  // Error    foo: "asdfsadffsd"} : { foo: string; }
+
+    foo: "asdfsadffsd"
+>foo : string
+>"asdfsadffsd" : "asdfsadffsd"
+
+};
+
+// Repro from #34611
+
+const obj1: { [x: string]: number } | { [x: number]: number } = { a: 'abc' };  // Error
+>obj1 : { [x: string]: number; } | { [x: number]: number; }
+>x : string
+>x : number
+>{ a: 'abc' } : { a: string; }
+>a : string
+>'abc' : "abc"
+
+const obj2: { [x: string]: number } | { a: number } = { a: 5, c: 'abc' };  // Error
+>obj2 : { [x: string]: number; } | { a: number; }
+>x : string
+>a : number
+>{ a: 5, c: 'abc' } : { a: number; c: string; }
+>a : number
+>5 : 5
+>c : string
+>'abc' : "abc"
+

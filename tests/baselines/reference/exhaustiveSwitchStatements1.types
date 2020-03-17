@@ -662,3 +662,45 @@ function foo() {
     }
 }
 
+// Repro from #35070
+
+type O = {
+>O : O
+
+    a: number,
+>a : number
+
+    b: number
+>b : number
+
+};
+type K = keyof O | 'c';
+>K : K
+
+function ff(o: O, k: K) {
+>ff : (o: O, k: K) => number
+>o : O
+>k : K
+
+    switch(k) {
+>k : K
+
+        case 'c':
+>'c' : "c"
+
+            k = 'a';
+>k = 'a' : "a"
+>k : K
+>'a' : "a"
+    }
+    k === 'c';  // Error
+>k === 'c' : boolean
+>k : "a" | "b"
+>'c' : "c"
+
+    return o[k];
+>o[k] : number
+>o : O
+>k : "a" | "b"
+}
+

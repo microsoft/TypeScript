@@ -1,6 +1,6 @@
 === tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck56.ts ===
 function* g() {
->g : () => Generator<never, void, unknown>
+>g : () => Generator<number, void, unknown>
 
     var x = class C {
 >x : typeof C

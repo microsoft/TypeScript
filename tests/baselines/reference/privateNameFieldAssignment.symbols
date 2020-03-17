@@ -1,0 +1,146 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameFieldAssignment.ts ===
+class A {
+>A : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+
+    #field = 0;
+>#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+
+    constructor() {
+        this.#field = 1;
+>this.#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+
+        this.#field += 2;
+>this.#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+
+        this.#field -= 3;
+>this.#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+
+        this.#field /= 4;
+>this.#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+
+        this.#field *= 5;
+>this.#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+
+        this.#field **= 6;
+>this.#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+
+        this.#field %= 7;
+>this.#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+
+        this.#field <<= 8;
+>this.#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+
+        this.#field >>= 9;
+>this.#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+
+        this.#field >>>= 10;
+>this.#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+
+        this.#field &= 11;
+>this.#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+
+        this.#field |= 12;
+>this.#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+
+        this.#field ^= 13;
+>this.#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+
+        A.getInstance().#field = 1;
+>A.getInstance().#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>A.getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+>A : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+>getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+
+        A.getInstance().#field += 2;
+>A.getInstance().#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>A.getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+>A : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+>getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+
+        A.getInstance().#field -= 3;
+>A.getInstance().#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>A.getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+>A : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+>getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+
+        A.getInstance().#field /= 4;
+>A.getInstance().#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>A.getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+>A : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+>getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+
+        A.getInstance().#field *= 5;
+>A.getInstance().#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>A.getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+>A : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+>getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+
+        A.getInstance().#field **= 6;
+>A.getInstance().#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>A.getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+>A : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+>getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+
+        A.getInstance().#field %= 7;
+>A.getInstance().#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>A.getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+>A : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+>getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+
+        A.getInstance().#field <<= 8;
+>A.getInstance().#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>A.getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+>A : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+>getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+
+        A.getInstance().#field >>= 9;
+>A.getInstance().#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>A.getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+>A : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+>getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+
+        A.getInstance().#field >>>= 10;
+>A.getInstance().#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>A.getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+>A : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+>getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+
+        A.getInstance().#field &= 11;
+>A.getInstance().#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>A.getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+>A : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+>getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+
+        A.getInstance().#field |= 12;
+>A.getInstance().#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>A.getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+>A : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+>getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+
+        A.getInstance().#field ^= 13;
+>A.getInstance().#field : Symbol(A.#field, Decl(privateNameFieldAssignment.ts, 0, 9))
+>A.getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+>A : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+>getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+    }
+    static getInstance() {
+>getInstance : Symbol(A.getInstance, Decl(privateNameFieldAssignment.ts, 29, 5))
+
+        return new A();
+>A : Symbol(A, Decl(privateNameFieldAssignment.ts, 0, 0))
+    }
+}
+

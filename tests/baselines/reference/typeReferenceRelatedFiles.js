@@ -22,6 +22,7 @@ export function f() {
 //// [main.js]
 "use strict";
 exports.__esModule = true;
+exports.f = void 0;
 function f() {
     return {};
 }

@@ -1,11 +1,11 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc --b /src --verbose
-12:01:00 AM - Projects in this build: 
+[[90m12:01:00 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-12:01:00 AM - Project 'src/tsconfig.json' is out of date because output file 'src/obj/bar.js' does not exist
+[[90m12:01:00 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/obj/bar.js' does not exist
 
-12:01:00 AM - Building project '/src/tsconfig.json'...
+[[90m12:01:00 AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -35,6 +35,7 @@ export declare class LazyAction<TAction extends (...args: any[]) => any, TModule
 //// [/src/obj/bundling.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.LazyAction = exports.LazyModule = void 0;
 var LazyModule = /** @class */ (function () {
     function LazyModule(importCallback) {
         this.importCallback = importCallback;
@@ -58,6 +59,7 @@ export declare const lazyBar: LazyAction<(param: string) => void, typeof import(
 //// [/src/obj/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.lazyBar = void 0;
 var bundling_1 = require("./bundling");
 var lazyModule = new bundling_1.LazyModule(function () {
     return Promise.resolve().then(function () { return require('./lazyIndex'); });
@@ -73,7 +75,7 @@ export { default as bar } from './bar';
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var bar_1 = require("./bar");
-exports.bar = bar_1.default;
+Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return bar_1.default; } });
 
 
 //// [/src/obj/tsconfig.tsbuildinfo]

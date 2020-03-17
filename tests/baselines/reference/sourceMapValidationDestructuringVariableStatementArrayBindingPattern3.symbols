@@ -65,7 +65,7 @@ let multiRobotAInfo: (string | [string, string])[];
 >multiSkillB : Symbol(multiSkillB, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts, 14, 3))
 >getMultiRobotB : Symbol(getMultiRobotB, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts, 51, 1))
 
-[, multiSkillB] = ["roomba", ["vaccum", "mopping"]];
+[, multiSkillB] = ["roomba", ["vacuum", "mopping"]];
 >multiSkillB : Symbol(multiSkillB, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts, 14, 3))
 
 [numberB] = robotB;

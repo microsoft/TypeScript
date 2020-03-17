@@ -10,6 +10,7 @@ export const Foo = (opts: {
 //// [declarationEmitOptionalMethod.js]
 "use strict";
 exports.__esModule = true;
+exports.Foo = void 0;
 exports.Foo = function (opts) { return ({}); };
 
 

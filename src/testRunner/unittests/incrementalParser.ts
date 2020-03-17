@@ -1,8 +1,4 @@
 namespace ts {
-    // make clear this is a global mutation!
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
-    ts.disableIncrementalParsing = false;
-
     function withChange(text: IScriptSnapshot, start: number, length: number, newText: string): { text: IScriptSnapshot; textChangeRange: TextChangeRange; } {
         const contents = getSnapshotText(text);
         const newContents = contents.substr(0, start) + newText + contents.substring(start + length);

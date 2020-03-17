@@ -2,7 +2,7 @@
 FROM node:10
 RUN apt-get update
 RUN apt-get install libsecret-1-dev libx11-dev libxkbfile-dev -y
-RUN npm i -g yarn
+RUN npm i -g yarn --force
 RUN git clone https://github.com/microsoft/vscode.git /vscode
 WORKDIR /vscode
 RUN git pull

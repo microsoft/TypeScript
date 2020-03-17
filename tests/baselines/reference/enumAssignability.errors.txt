@@ -14,10 +14,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssi
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(43,9): error TS2322: Type 'E' is not assignable to type '<T>(x: T) => T'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(45,9): error TS2322: Type 'E' is not assignable to type 'String'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(48,9): error TS2322: Type 'E' is not assignable to type 'T'.
-  'E' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'E'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(49,9): error TS2322: Type 'E' is not assignable to type 'U'.
-  'E' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+  'U' could be instantiated with an arbitrary type which could be unrelated to 'E'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(50,9): error TS2322: Type 'E' is not assignable to type 'V'.
+  'V' could be instantiated with an arbitrary type which could be unrelated to 'E'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(51,13): error TS2322: Type 'E' is not assignable to type 'A'.
   'E' is assignable to the constraint of type 'A', but 'A' could be instantiated with a different subtype of constraint 'Number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(52,13): error TS2322: Type 'E' is not assignable to type 'B'.
@@ -105,14 +106,15 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssi
             x = e;
             ~
 !!! error TS2322: Type 'E' is not assignable to type 'T'.
-!!! error TS2322:   'E' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'E'.
             y = e;
             ~
 !!! error TS2322: Type 'E' is not assignable to type 'U'.
-!!! error TS2322:   'E' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'E'.
             z = e;
             ~
 !!! error TS2322: Type 'E' is not assignable to type 'V'.
+!!! error TS2322:   'V' could be instantiated with an arbitrary type which could be unrelated to 'E'.
             var a: A = e;
                 ~
 !!! error TS2322: Type 'E' is not assignable to type 'A'.

@@ -453,7 +453,7 @@ namespace ts {
 
                 function stripInternalOfThird(fs: vfs.FileSystem) {
                     replaceText(fs, sources[project.third][source.config], `"declaration": true,`, `"declaration": true,
-"stripInternal": true`);
+    "stripInternal": true,`);
                 }
 
                 function stripInternalScenario(fs: vfs.FileSystem, removeCommentsDisabled?: boolean, jsDocStyle?: boolean) {

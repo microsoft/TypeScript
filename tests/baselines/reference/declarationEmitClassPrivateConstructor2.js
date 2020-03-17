@@ -14,6 +14,7 @@ export class ExportedClass2 {
 //// [declarationEmitClassPrivateConstructor2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ExportedClass2 = exports.ExportedClass1 = void 0;
 var ExportedClass1 = /** @class */ (function () {
     function ExportedClass1(data) {
         this.data = data;

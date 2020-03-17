@@ -1,0 +1,58 @@
+=== tests/cases/conformance/salsa/propertyAssignmentUseParentType3.ts ===
+// don't use the parent type if it's a function declaration (#33741)
+
+function foo1(): number {
+>foo1 : typeof foo1
+
+    return 123;
+>123 : 123
+}
+foo1.toFixed = "";
+>foo1.toFixed = "" : ""
+>foo1.toFixed : string
+>foo1 : typeof foo1
+>toFixed : string
+>"" : ""
+
+function foo2(): any[] {
+>foo2 : typeof foo2
+
+    return [];
+>[] : undefined[]
+}
+foo2.join = "";
+>foo2.join = "" : ""
+>foo2.join : string
+>foo2 : typeof foo2
+>join : string
+>"" : ""
+
+function foo3(): string {
+>foo3 : typeof foo3
+
+    return "";
+>"" : ""
+}
+foo3.trim = "";
+>foo3.trim = "" : ""
+>foo3.trim : string
+>foo3 : typeof foo3
+>trim : string
+>"" : ""
+
+function foo4(): ({x: number}) {
+>foo4 : typeof foo4
+>x : number
+
+    return {x: 123};
+>{x: 123} : { x: number; }
+>x : number
+>123 : 123
+}
+foo4.x = "456";
+>foo4.x = "456" : "456"
+>foo4.x : string
+>foo4 : typeof foo4
+>x : string
+>"456" : "456"
+

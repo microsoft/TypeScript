@@ -25,24 +25,6 @@ var j = require("./obj.json");
 module.exports = j;
 
 
-//// [obj.d.ts]
-export declare const x: number;
-export declare const y: number;
-export declare namespace obj {
-    export const items: ({
-        x: number;
-        y?: undefined;
-        err?: undefined;
-    } | {
-        x: number;
-        y: number;
-        err?: undefined;
-    } | {
-        x: number;
-        err: boolean;
-        y?: undefined;
-    })[];
-}
 //// [index.d.ts]
 export = j;
 declare const j: {

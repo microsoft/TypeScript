@@ -20,6 +20,7 @@ export class Example<Z extends CustomDocument> {
 //// [subclassWithPolymorphicThisIsAssignable.js]
 "use strict";
 exports.__esModule = true;
+exports.Example = void 0;
 var Example = /** @class */ (function () {
     function Example() {
         // types of increment not compatible??

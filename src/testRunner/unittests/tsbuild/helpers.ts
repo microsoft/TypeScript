@@ -186,40 +186,20 @@ interface Symbol {
         }
     }
 
-    export function generateSourceMapBaselineFiles(fs: vfs.FileSystem, mapFileNames: Iterator<string>) {
+    export function generateSourceMapBaselineFiles(sys: System & { writtenFiles: Map<any>; }) {
+        const mapFileNames = mapDefinedIterator(sys.writtenFiles.keys(), f => f.endsWith(".map") ? f : undefined);
         while (true) {
             const { value: mapFile, done } = mapFileNames.next();
             if (done) break;
-            const text = Harness.SourceMapRecorder.getSourceMapRecordWithVFS(fs, mapFile);
-            fs.writeFileSync(`${mapFile}.baseline.txt`, text);
+            const text = Harness.SourceMapRecorder.getSourceMapRecordWithSystem(sys, mapFile);
+            sys.writeFile(`${mapFile}.baseline.txt`, text);
         }
     }
 
-    // [tsbuildinfo, js, dts]
-    export type BuildInfoSectionBaselineFiles = [string, string | undefined, string | undefined];
-    function generateBuildInfoSectionBaselineFiles(fs: vfs.FileSystem, buildInfoFileNames: readonly BuildInfoSectionBaselineFiles[]) {
-        for (const [file, jsFile, dtsFile] of buildInfoFileNames) {
-            if (!fs.existsSync(file)) continue;
-
-            const buildInfo = getBuildInfo(fs.readFileSync(file, "utf8"));
-            const bundle = buildInfo.bundle;
-            if (!bundle || (!length(bundle.js && bundle.js.sections) && !length(bundle.dts && bundle.dts.sections))) continue;
-
-            // Write the baselines:
-            const baselineRecorder = new Harness.Compiler.WriterAggregator();
-            generateBundleFileSectionInfo(fs, baselineRecorder, bundle.js, jsFile);
-            generateBundleFileSectionInfo(fs, baselineRecorder, bundle.dts, dtsFile);
-            baselineRecorder.Close();
-
-            const text = baselineRecorder.lines.join("\r\n");
-            fs.writeFileSync(`${file}.baseline.txt`, text, "utf8");
-        }
-    }
-
-    function generateBundleFileSectionInfo(fs: vfs.FileSystem, baselineRecorder: Harness.Compiler.WriterAggregator, bundleFileInfo: BundleFileInfo | undefined, outFile: string | undefined) {
+    function generateBundleFileSectionInfo(sys: System, originalReadCall: System["readFile"], baselineRecorder: Harness.Compiler.WriterAggregator, bundleFileInfo: BundleFileInfo | undefined, outFile: string | undefined) {
         if (!length(bundleFileInfo && bundleFileInfo.sections) && !outFile) return; // Nothing to baseline
 
-        const content = outFile && fs.existsSync(outFile) ? fs.readFileSync(outFile, "utf8") : "";
+        const content = outFile && sys.fileExists(outFile) ? originalReadCall.call(sys, outFile, "utf8")! : "";
         baselineRecorder.WriteLine("======================================================================");
         baselineRecorder.WriteLine(`File:: ${outFile}`);
         for (const section of bundleFileInfo ? bundleFileInfo.sections : emptyArray) {
@@ -256,23 +236,28 @@ interface Symbol {
     }
 
     export function baselineBuildInfo(
-        configs: readonly ParsedCommandLine[],
-        fs: vfs.FileSystem,
-        writtenFiles: Map<true>
+        options: CompilerOptions,
+        sys: System & { writtenFiles: Map<any>; },
+        originalReadCall?: System["readFile"]
     ) {
-        let expectedBuildInfoFiles: BuildInfoSectionBaselineFiles[] | undefined;
-        for (const { options } of configs) {
-            const out = options.outFile || options.out;
-            if (out) {
-                const { jsFilePath, declarationFilePath, buildInfoPath } = getOutputPathsForBundle(options, /*forceDts*/ false);
-                if (buildInfoPath && writtenFiles.has(buildInfoPath)) {
-                    (expectedBuildInfoFiles || (expectedBuildInfoFiles = [])).push(
-                        [buildInfoPath, jsFilePath, declarationFilePath]
-                    );
-                }
-            }
-        }
-        if (expectedBuildInfoFiles) generateBuildInfoSectionBaselineFiles(fs, expectedBuildInfoFiles);
+        const out = options.outFile || options.out;
+        if (!out) return;
+        const { buildInfoPath, jsFilePath, declarationFilePath } = getOutputPathsForBundle(options, /*forceDts*/ false);
+        if (!buildInfoPath || !sys.writtenFiles.has(buildInfoPath)) return;
+        if (!sys.fileExists(buildInfoPath)) return;
+
+        const buildInfo = getBuildInfo((originalReadCall || sys.readFile).call(sys, buildInfoPath, "utf8")!);
+        const bundle = buildInfo.bundle;
+        if (!bundle || (!length(bundle.js && bundle.js.sections) && !length(bundle.dts && bundle.dts.sections))) return;
+
+        // Write the baselines:
+        const baselineRecorder = new Harness.Compiler.WriterAggregator();
+        generateBundleFileSectionInfo(sys, originalReadCall || sys.readFile, baselineRecorder, bundle.js, jsFilePath);
+        generateBundleFileSectionInfo(sys, originalReadCall || sys.readFile, baselineRecorder, bundle.dts, declarationFilePath);
+        baselineRecorder.Close();
+
+        const text = baselineRecorder.lines.join("\r\n");
+        sys.writeFile(`${buildInfoPath}.baseline.txt`, text);
     }
 
     export interface TscIncremental {

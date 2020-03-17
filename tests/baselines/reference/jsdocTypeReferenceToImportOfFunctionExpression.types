@@ -1,0 +1,58 @@
+=== tests/cases/conformance/jsdoc/MC.js ===
+const MW = require("./MW");
+>MW : typeof import("tests/cases/conformance/jsdoc/MW")
+>require("./MW") : typeof import("tests/cases/conformance/jsdoc/MW")
+>require : any
+>"./MW" : "./MW"
+
+/** @typedef {number} Meyerhauser */
+
+/** @class */
+module.exports = function MC() {
+>module.exports = function MC() {    /** @type {any} */    var x = {}    return new MW(x);} : typeof MC
+>module.exports : typeof MC
+>module : { "\"tests/cases/conformance/jsdoc/MC\"": typeof MC; }
+>exports : typeof MC
+>function MC() {    /** @type {any} */    var x = {}    return new MW(x);} : typeof MC
+>MC : typeof MC
+
+    /** @type {any} */
+    var x = {}
+>x : any
+>{} : {}
+
+    return new MW(x);
+>new MW(x) : import("tests/cases/conformance/jsdoc/MW")
+>MW : typeof import("tests/cases/conformance/jsdoc/MW")
+>x : any
+
+};
+
+=== tests/cases/conformance/jsdoc/MW.js ===
+/** @typedef {import("./MC")} MC */
+
+class MW {
+>MW : MW
+
+  /**
+   * @param {MC} compiler the compiler
+   */
+  constructor(compiler) {
+>compiler : typeof MC
+
+    this.compiler = compiler;
+>this.compiler = compiler : typeof MC
+>this.compiler : typeof MC
+>this : this
+>compiler : typeof MC
+>compiler : typeof MC
+  }
+}
+
+module.exports = MW;
+>module.exports = MW : typeof MW
+>module.exports : typeof MW
+>module : { "\"tests/cases/conformance/jsdoc/MW\"": typeof MW; }
+>exports : typeof MW
+>MW : typeof MW
+

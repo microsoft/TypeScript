@@ -14,4 +14,5 @@ export const o: O = { b: '' }
 //// [indexedAccessRetainsIndexSignature.js]
 "use strict";
 exports.__esModule = true;
+exports.o = void 0;
 exports.o = { b: '' };

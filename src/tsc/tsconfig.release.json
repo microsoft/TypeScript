@@ -11,6 +11,7 @@
         "incremental": true
     },
     "references": [
-        { "path": "../compiler/tsconfig.release.json", "prepend": true }
+        { "path": "../compiler/tsconfig.release.json", "prepend": true },
+        { "path": "../executeCommandLine/tsconfig.release.json", "prepend": true }
     ]
 }

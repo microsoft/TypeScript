@@ -3,12 +3,10 @@ Standard output:
 
 > xterm@X.X.X build /xtermjs
 > tsc -b ./tsconfig.all.json
-src/browser/Clipboard.ts(85,5): error TS2322: Type 'null' is not assignable to type 'string'.
-src/browser/Clipboard.ts(86,5): error TS2322: Type 'null' is not assignable to type 'string'.
-src/browser/Clipboard.ts(87,5): error TS2322: Type 'null' is not assignable to type 'string'.
-src/browser/Clipboard.ts(88,5): error TS2322: Type 'null' is not assignable to type 'string'.
-src/browser/Clipboard.ts(89,5): error TS2322: Type 'null' is not assignable to type 'string'.
-src/browser/Clipboard.ts(90,5): error TS2322: Type 'null' is not assignable to type 'string'.
+node_modules/@types/ws/index.d.ts(44,39): error TS2694: Namespace '"url"' has no exported member 'URL'.
+node_modules/@types/ws/index.d.ts(45,39): error TS2694: Namespace '"url"' has no exported member 'URL'.
+node_modules/@types/ws/index.d.ts(44,39): error TS2694: Namespace '"url"' has no exported member 'URL'.
+node_modules/@types/ws/index.d.ts(45,39): error TS2694: Namespace '"url"' has no exported member 'URL'.
 
 
 

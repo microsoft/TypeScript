@@ -1,22 +1,22 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc --b /src/tsconfig.json --verbose
-12:00:00 AM - Projects in this build: 
+[[90m12:00:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/animals/tsconfig.json
     * src/zoo/tsconfig.json
     * src/tsconfig.json
 
-12:00:00 AM - Project 'src/core/tsconfig.json' is out of date because output file 'src/lib/core/utilities.js' does not exist
+[[90m12:00:00 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/lib/core/utilities.js' does not exist
 
-12:00:00 AM - Building project '/src/core/tsconfig.json'...
+[[90m12:00:00 AM[0m] Building project '/src/core/tsconfig.json'...
 
-12:00:00 AM - Project 'src/animals/tsconfig.json' is out of date because output file 'src/lib/animals/animal.js' does not exist
+[[90m12:00:00 AM[0m] Project 'src/animals/tsconfig.json' is out of date because output file 'src/lib/animals/animal.js' does not exist
 
-12:00:00 AM - Building project '/src/animals/tsconfig.json'...
+[[90m12:00:00 AM[0m] Building project '/src/animals/tsconfig.json'...
 
-12:00:00 AM - Project 'src/zoo/tsconfig.json' is out of date because output file 'src/lib/zoo/zoo.js' does not exist
+[[90m12:00:00 AM[0m] Project 'src/zoo/tsconfig.json' is out of date because output file 'src/lib/zoo/zoo.js' does not exist
 
-12:00:00 AM - Building project '/src/zoo/tsconfig.json'...
+[[90m12:00:00 AM[0m] Building project '/src/zoo/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -45,6 +45,7 @@ export declare function createDog(): Dog;
 //// [/src/lib/animals/dog.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createDog = void 0;
 var utilities_1 = require("../core/utilities");
 function createDog() {
     return ({
@@ -68,9 +69,10 @@ export { createDog, Dog };
 //// [/src/lib/animals/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createDog = void 0;
 var animal_1 = require("./animal");
 var dog_1 = require("./dog");
-exports.createDog = dog_1.createDog;
+Object.defineProperty(exports, "createDog", { enumerable: true, get: function () { return dog_1.createDog; } });
 
 
 //// [/src/lib/animals/tsconfig.tsbuildinfo]
@@ -89,7 +91,7 @@ exports.createDog = dog_1.createDog;
         "version": "-5382672599-import Animal from './animal';\r\n\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n",
         "signature": "4477582546-import Animal from './animal';\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n"
       },
-      "../../core/utilities.ts": {
+      "../core/utilities.d.ts": {
         "version": "-8177343116-export declare function makeRandomName(): string;\r\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\r\n",
         "signature": "-8177343116-export declare function makeRandomName(): string;\r\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\r\n"
       },
@@ -136,7 +138,7 @@ exports.createDog = dog_1.createDog;
       "../../animals/animal.ts",
       "../../animals/dog.ts",
       "../../animals/index.ts",
-      "../../core/utilities.ts"
+      "../core/utilities.d.ts"
     ]
   },
   "version": "FakeTSVersion"
@@ -187,6 +189,7 @@ export declare function lastElementOf<T>(arr: T[]): T | undefined;
 //// [/src/lib/core/utilities.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.lastElementOf = exports.makeRandomName = void 0;
 function makeRandomName() {
     return "Bob!?! ";
 }
@@ -207,15 +210,15 @@ exports.lastElementOf = lastElementOf;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
       },
-      "../../animals/animal.ts": {
+      "../animals/animal.d.ts": {
         "version": "13427676350-export declare type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n",
         "signature": "13427676350-export declare type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n"
       },
-      "../../animals/dog.ts": {
+      "../animals/dog.d.ts": {
         "version": "10854678623-import Animal from '.';\r\nexport interface Dog extends Animal {\r\n    woof(): void;\r\n    name: string;\r\n}\r\nexport declare function createDog(): Dog;\r\n",
         "signature": "10854678623-import Animal from '.';\r\nexport interface Dog extends Animal {\r\n    woof(): void;\r\n    name: string;\r\n}\r\nexport declare function createDog(): Dog;\r\n"
       },
-      "../../animals/index.ts": {
+      "../animals/index.d.ts": {
         "version": "4477582546-import Animal from './animal';\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n",
         "signature": "4477582546-import Animal from './animal';\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n"
       },
@@ -239,35 +242,35 @@ exports.lastElementOf = lastElementOf;
       "configFilePath": "../../zoo/tsconfig.json"
     },
     "referencedMap": {
-      "../../animals/dog.ts": [
-        "../animals/index.d.ts"
-      ],
-      "../../animals/index.ts": [
-        "../animals/animal.d.ts",
-        "../animals/dog.d.ts"
-      ],
       "../../zoo/zoo.ts": [
         "../animals/index.d.ts"
+      ],
+      "../animals/dog.d.ts": [
+        "../animals/index.d.ts"
+      ],
+      "../animals/index.d.ts": [
+        "../animals/animal.d.ts",
+        "../animals/dog.d.ts"
       ]
     },
     "exportedModulesMap": {
-      "../../animals/dog.ts": [
-        "../animals/index.d.ts"
-      ],
-      "../../animals/index.ts": [
-        "../animals/animal.d.ts",
-        "../animals/dog.d.ts"
-      ],
       "../../zoo/zoo.ts": [
         "../animals/index.d.ts"
+      ],
+      "../animals/dog.d.ts": [
+        "../animals/index.d.ts"
+      ],
+      "../animals/index.d.ts": [
+        "../animals/animal.d.ts",
+        "../animals/dog.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
       "../../../lib/lib.d.ts",
-      "../../animals/animal.ts",
-      "../../animals/dog.ts",
-      "../../animals/index.ts",
-      "../../zoo/zoo.ts"
+      "../../zoo/zoo.ts",
+      "../animals/animal.d.ts",
+      "../animals/dog.d.ts",
+      "../animals/index.d.ts"
     ]
   },
   "version": "FakeTSVersion"
@@ -281,6 +284,7 @@ export declare function createZoo(): Array<Dog>;
 //// [/src/lib/zoo/zoo.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createZoo = void 0;
 var index_1 = require("../animals/index");
 function createZoo() {
     return [

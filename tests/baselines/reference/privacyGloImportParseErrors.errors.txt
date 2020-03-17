@@ -2,9 +2,9 @@ tests/cases/compiler/privacyGloImportParseErrors.ts(22,5): error TS2668: 'export
 tests/cases/compiler/privacyGloImportParseErrors.ts(22,27): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
 tests/cases/compiler/privacyGloImportParseErrors.ts(30,20): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
 tests/cases/compiler/privacyGloImportParseErrors.ts(59,37): error TS1147: Import declarations in a namespace cannot reference a module.
-tests/cases/compiler/privacyGloImportParseErrors.ts(59,37): error TS2307: Cannot find module 'm1_M3_public'.
+tests/cases/compiler/privacyGloImportParseErrors.ts(59,37): error TS2307: Cannot find module 'm1_M3_public' or its corresponding type declarations.
 tests/cases/compiler/privacyGloImportParseErrors.ts(69,37): error TS1147: Import declarations in a namespace cannot reference a module.
-tests/cases/compiler/privacyGloImportParseErrors.ts(69,37): error TS2307: Cannot find module 'm1_M4_private'.
+tests/cases/compiler/privacyGloImportParseErrors.ts(69,37): error TS2307: Cannot find module 'm1_M4_private' or its corresponding type declarations.
 tests/cases/compiler/privacyGloImportParseErrors.ts(81,43): error TS1147: Import declarations in a namespace cannot reference a module.
 tests/cases/compiler/privacyGloImportParseErrors.ts(82,43): error TS1147: Import declarations in a namespace cannot reference a module.
 tests/cases/compiler/privacyGloImportParseErrors.ts(121,38): error TS1147: Import declarations in a namespace cannot reference a module.
@@ -85,7 +85,7 @@ tests/cases/compiler/privacyGloImportParseErrors.ts(149,29): error TS1147: Impor
                                         ~~~~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
                                         ~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'm1_M3_public'.
+!!! error TS2307: Cannot find module 'm1_M3_public' or its corresponding type declarations.
         export var m1_im3_private_v1_public = m1_im3_private.c1;
         export var m1_im3_private_v2_public = new m1_im3_private.c1();
         export var m1_im3_private_v3_public = m1_im3_private.f1;
@@ -99,7 +99,7 @@ tests/cases/compiler/privacyGloImportParseErrors.ts(149,29): error TS1147: Impor
                                         ~~~~~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
                                         ~~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'm1_M4_private'.
+!!! error TS2307: Cannot find module 'm1_M4_private' or its corresponding type declarations.
         export var m1_im4_private_v1_public = m1_im4_private.c1;
         export var m1_im4_private_v2_public = new m1_im4_private.c1();
         export var m1_im4_private_v3_public = m1_im4_private.f1;

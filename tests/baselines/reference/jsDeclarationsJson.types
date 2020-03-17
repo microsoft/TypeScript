@@ -1,7 +1,7 @@
 === tests/cases/conformance/jsdoc/declarations/index.js ===
 const j = require("./obj.json");
 >j : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { x: number; err: boolean; y?: undefined; })[]; }; }
->require("./obj.json") : { x: number; y: number; obj: { items: ({ x: number; } | { x: number; y: number; } | { x: number; err: boolean; })[]; }; }
+>require("./obj.json") : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { x: number; err: boolean; y?: undefined; })[]; }; }
 >require : any
 >"./obj.json" : "./obj.json"
 

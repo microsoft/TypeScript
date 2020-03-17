@@ -338,7 +338,7 @@ var exportTests;
             get: function () {
                 return new C2_private();
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         C3_public.prototype.getC1_public = function () {
@@ -350,7 +350,7 @@ var exportTests;
             get: function () {
                 return new C1_public();
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return C3_public;

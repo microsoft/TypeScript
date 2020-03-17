@@ -26,5 +26,46 @@ namespace ts.projectSystem {
             const items2 = session.executeCommand(localFunctionNavToRequst).response as protocol.NavtoItem[];
             assert.isTrue(containsNavToItem(items2, "foo", "function"), `Cannot find function symbol "foo".`);
         });
+
+        it("should de-duplicate symbols", () => {
+            const configFile1: File = {
+                path: "/a/tsconfig.json",
+                content: `{
+    "compilerOptions": {
+        "composite": true
+    }
+}`
+            };
+            const file1: File = {
+                path: "/a/index.ts",
+                content: "export const abcdef = 1;"
+            };
+            const configFile2: File = {
+                path: "/b/tsconfig.json",
+                content: `{
+    "compilerOptions": {
+        "composite": true
+    },
+    "references": [
+        { "path": "../a" }
+    ]
+}`
+            };
+            const file2: File = {
+                path: "/b/index.ts",
+                content: `import a = require("../a");
+export const ghijkl = a.abcdef;`
+            };
+            const host = createServerHost([configFile1, file1, configFile2, file2]);
+            const session = createSession(host);
+            openFilesForSession([file1, file2], session);
+
+            const request = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { searchValue: "abcdef", file: file1.path });
+            const items = session.executeCommand(request).response as protocol.NavtoItem[];
+            assert.strictEqual(items.length, 1);
+            const item = items[0];
+            assert.strictEqual(item.name, "abcdef");
+            assert.strictEqual(item.file, file1.path);
+        });
     });
 }
