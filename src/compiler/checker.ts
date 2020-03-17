@@ -4066,9 +4066,10 @@ namespace ts {
                     tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: noop, moduleResolverHost: flags! & NodeBuilderFlags.DoNotIncludeSymbolChain ? {
                         getCommonSourceDirectory: (host as Program).getCommonSourceDirectory ? () => (host as Program).getCommonSourceDirectory() : () => "",
                         getSourceFiles: () => host.getSourceFiles(),
-                        getCurrentDirectory: maybeBind(host, host.getCurrentDirectory),
+                        getCurrentDirectory: () => host.getCurrentDirectory(),
                         getProbableSymlinks: maybeBind(host, host.getProbableSymlinks),
-                        useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames)
+                        useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
+                        redirectTargetsMap: host.redirectTargetsMap,
                     } : undefined },
                     encounteredError: false,
                     visitedTypes: undefined,
@@ -5028,9 +5029,7 @@ namespace ts {
                         specifierCompilerOptions,
                         contextFile,
                         moduleResolverHost,
-                        host.getSourceFiles(),
                         { importModuleSpecifierPreference: isBundle ? "non-relative" : "relative" },
-                        host.redirectTargetsMap,
                     ));
                     links.specifierCache = links.specifierCache || createMap();
                     links.specifierCache.set(contextFile.path, specifier);
@@ -6450,7 +6449,7 @@ namespace ts {
                                     const getCanonicalFileName = createGetCanonicalFileName(!!host.useCaseSensitiveFileNames);
                                     const resolverHost = {
                                         getCanonicalFileName,
-                                        getCurrentDirectory: context.tracker.moduleResolverHost.getCurrentDirectory ? () => context.tracker.moduleResolverHost!.getCurrentDirectory!() : () => "",
+                                        getCurrentDirectory: () => context.tracker.moduleResolverHost!.getCurrentDirectory(),
                                         getCommonSourceDirectory: () => context.tracker.moduleResolverHost!.getCommonSourceDirectory()
                                     };
                                     const newName = getResolvedExternalModuleName(resolverHost, targetFile);

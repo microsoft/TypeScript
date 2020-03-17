@@ -374,7 +374,7 @@ namespace ts.codefix {
         const { allowsImportingSpecifier } = createAutoImportFilter(sourceFile, program, host);
 
         const choicesForEachExportingModule = flatMap(moduleSymbols, ({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }) =>
-            moduleSpecifiers.getModuleSpecifiers(moduleSymbol, compilerOptions, sourceFile, host, program.getSourceFiles(), preferences, program.redirectTargetsMap)
+            moduleSpecifiers.getModuleSpecifiers(moduleSymbol, compilerOptions, sourceFile, createModuleSpecifierResolutionHost(program, host) , preferences)
                 .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
                     // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
                     exportedSymbolIsTypeOnly && isJs
@@ -788,10 +788,9 @@ namespace ts.codefix {
         let filteredCount = 0;
         const moduleSpecifierResolutionHost = createModuleSpecifierResolutionHost(program, host);
         const packageJson = filterByPackageJson && createAutoImportFilter(from, program, host, moduleSpecifierResolutionHost);
-        const allSourceFiles = program.getSourceFiles();
-        forEachExternalModule(program.getTypeChecker(), allSourceFiles, (module, sourceFile) => {
+        forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), (module, sourceFile) => {
             if (sourceFile === undefined) {
-                if (!packageJson || packageJson.allowsImportingAmbientModule(module, allSourceFiles)) {
+                if (!packageJson || packageJson.allowsImportingAmbientModule(module)) {
                     cb(module);
                 }
                 else if (packageJson) {
@@ -802,7 +801,7 @@ namespace ts.codefix {
                 sourceFile !== from &&
                 isImportableFile(program, from, sourceFile, moduleSpecifierResolutionHost)
             ) {
-                if (!packageJson || packageJson.allowsImportingSourceFile(sourceFile, allSourceFiles)) {
+                if (!packageJson || packageJson.allowsImportingSourceFile(sourceFile)) {
                     cb(module);
                 }
                 else if (packageJson) {
@@ -835,12 +834,9 @@ namespace ts.codefix {
         const getCanonicalFileName = hostGetCanonicalFileName(moduleSpecifierResolutionHost);
         const globalTypingsCache = moduleSpecifierResolutionHost.getGlobalTypingsCacheLocation?.();
         return !!moduleSpecifiers.forEachFileNameOfModule(
-            program.getSourceFiles(),
             from.fileName,
             to.fileName,
-            hostGetCanonicalFileName(moduleSpecifierResolutionHost),
             moduleSpecifierResolutionHost,
-            program.redirectTargetsMap,
             /*preferSymlinks*/ false,
             toPath => {
                 const toFile = program.getSourceFile(toPath);
@@ -896,20 +892,6 @@ namespace ts.codefix {
         return !isStringANonContextualKeyword(res) ? res || "_" : `_${res}`;
     }
 
-    function createModuleSpecifierResolutionHost(program: Program, host: LanguageServiceHost): ModuleSpecifierResolutionHost {
-        // Mix in `getProbablySymlinks` from Program when host doesn't have it
-        // in order for non-Project hosts to have a symlinks cache.
-        return {
-            directoryExists: maybeBind(host, host.directoryExists),
-            fileExists: maybeBind(host, host.fileExists),
-            getCurrentDirectory: maybeBind(host, host.getCurrentDirectory),
-            readFile: maybeBind(host, host.readFile),
-            useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
-            getProbableSymlinks: maybeBind(host, host.getProbableSymlinks) || program.getProbableSymlinks,
-            getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
-        };
-    }
-
     function createAutoImportFilter(fromFile: SourceFile, program: Program, host: LanguageServiceHost, moduleSpecifierResolutionHost = createModuleSpecifierResolutionHost(program, host)) {
         const packageJsons = host.getPackageJsonsVisibleToFile && host.getPackageJsonsVisibleToFile(fromFile.fileName) || getPackageJsonsVisibleToFile(fromFile.fileName, host);
         const dependencyGroups = PackageJsonDependencyGroup.Dependencies | PackageJsonDependencyGroup.DevDependencies | PackageJsonDependencyGroup.OptionalDependencies;
@@ -927,13 +909,13 @@ namespace ts.codefix {
             return false;
         }
 
-        function allowsImportingAmbientModule(moduleSymbol: Symbol, allSourceFiles: readonly SourceFile[]): boolean {
+        function allowsImportingAmbientModule(moduleSymbol: Symbol): boolean {
             if (!packageJsons.length) {
                 return true;
             }
 
             const declaringSourceFile = moduleSymbol.valueDeclaration.getSourceFile();
-            const declaringNodeModuleName = getNodeModulesPackageNameFromFileName(declaringSourceFile.fileName, allSourceFiles);
+            const declaringNodeModuleName = getNodeModulesPackageNameFromFileName(declaringSourceFile.fileName);
             if (typeof declaringNodeModuleName === "undefined") {
                 return true;
             }
@@ -947,12 +929,12 @@ namespace ts.codefix {
                 || moduleSpecifierIsCoveredByPackageJson(declaredModuleSpecifier);
         }
 
-        function allowsImportingSourceFile(sourceFile: SourceFile, allSourceFiles: readonly SourceFile[]): boolean {
+        function allowsImportingSourceFile(sourceFile: SourceFile): boolean {
             if (!packageJsons.length) {
                 return true;
             }
 
-            const moduleSpecifier = getNodeModulesPackageNameFromFileName(sourceFile.fileName, allSourceFiles);
+            const moduleSpecifier = getNodeModulesPackageNameFromFileName(sourceFile.fileName);
             if (!moduleSpecifier) {
                 return true;
             }
@@ -991,7 +973,7 @@ namespace ts.codefix {
             return false;
         }
 
-        function getNodeModulesPackageNameFromFileName(importedFileName: string, allSourceFiles: readonly SourceFile[]): string | undefined {
+        function getNodeModulesPackageNameFromFileName(importedFileName: string): string | undefined {
             if (!stringContains(importedFileName, "node_modules")) {
                 return undefined;
             }
@@ -1000,8 +982,7 @@ namespace ts.codefix {
                 fromFile.path,
                 importedFileName,
                 moduleSpecifierResolutionHost,
-                allSourceFiles,
-                program.redirectTargetsMap);
+            );
 
             if (!specifier) {
                 return undefined;
