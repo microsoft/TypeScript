@@ -8,9 +8,6 @@
 ////function f() {
 ////    this.x = 1;
 ////}
-////function g() {
-////    this;
-////}
 ////class C {
 ////    m() {
 ////        function h() {
@@ -28,12 +25,6 @@ verify.codeFixAll({
  */
 function f() {
     this.x = 1;
-}
-/**
- * @this {any}
- */
-function g() {
-    this;
 }
 class C {
     m() {

@@ -25,7 +25,6 @@ namespace ts.codefix {
         const fn = getThisContainer(token, /*includeArrowFunctions*/ false);
         if (!isFunctionDeclaration(fn) && !isFunctionExpression(fn)) return undefined;
 
-        // TODO: Flip this conditional
         if (!isSourceFile(getThisContainer(fn, /*includeArrowFunctions*/ false))) { // 'this' is defined outside, convert to arrow function
             const fnKeyword = Debug.assertDefined(findChildOfKind(fn, SyntaxKind.FunctionKeyword, sourceFile));
             const { name } = fn;
@@ -53,13 +52,10 @@ namespace ts.codefix {
                 return [Diagnostics.Convert_function_declaration_0_to_arrow_function, name!.text];
             }
         }
-        // TODO: inline this conditional after the above is flipped
-        else { // No outer 'this', must add a jsdoc tag / parameter
-            if (isSourceFileJS(sourceFile)) {
-                const addClassTag = isPropertyAccessExpression(token.parent) && isAssignmentExpression(token.parent.parent);
-                addJSDocTags(changes, sourceFile, fn, [addClassTag ? createJSDocClassTag() : createJSDocThisTag(createJSDocTypeExpression(createKeywordTypeNode(SyntaxKind.AnyKeyword)))]);
-                return addClassTag ? Diagnostics.Add_class_tag : Diagnostics.Add_this_tag;
-            }
+        // No outer 'this', add a @class tag if in a JS constructor function
+        else if (isSourceFileJS(sourceFile) && isPropertyAccessExpression(token.parent) && isAssignmentExpression(token.parent.parent)) {
+            addJSDocTags(changes, sourceFile, fn, [createJSDocClassTag()]);
+            return Diagnostics.Add_class_tag;
         }
     }
 }
