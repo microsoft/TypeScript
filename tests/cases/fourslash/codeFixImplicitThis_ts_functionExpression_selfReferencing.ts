@@ -11,4 +11,7 @@
 ////    }
 ////}
 
-verify.codeFixAvailable([]);
+// note that no implicitThis fix is available, only a inferFromUsage one:
+verify.codeFixAvailable([{
+    description: "Infer 'this' type of 'g' from usage",
+}]);

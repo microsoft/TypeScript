@@ -12,9 +12,6 @@
 ////        };
 ////    }
 ////}
-////function h() {
-////    this;
-////}
 
 verify.codeFixAll({
     fixId: "fixImplicitThis",
@@ -29,8 +26,5 @@ verify.codeFixAll({
             this;
         };
     }
-}
-function h(this: any) {
-    this;
 }`,
 });
