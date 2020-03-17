@@ -1702,7 +1702,7 @@ namespace ts {
     }
 
     export function createModuleSpecifierResolutionHost(program: Program, host: LanguageServiceHost): ModuleSpecifierResolutionHost {
-        // Mix in `getProbablySymlinks` from Program when host doesn't have it
+        // Mix in `getProbableSymlinks` from Program when host doesn't have it
         // in order for non-Project hosts to have a symlinks cache.
         return {
             fileExists: maybeBind(host, host.fileExists),
