@@ -139,6 +139,16 @@ class Derived extends Test {
     }
 }
 
+function f11(items: Test[]) {
+    for (let item of items) {
+        if (item.isTest2()) {
+            item.z;
+        }
+        item.assertIsTest2();
+        item.z;
+    }
+}
+
 // Invalid constructs
 
 declare let Q1: new (x: unknown) => x is string;
@@ -161,6 +171,24 @@ function f20(x: unknown) {
     t1.assert(typeof x === "string");  // Error
     const t2: Test = new Test();
     t2.assert(typeof x === "string");
+}
+
+// Repro from #35940
+
+interface Thing {
+    good: boolean;
+    isGood(): asserts this is GoodThing;
+}
+
+interface GoodThing {
+    good: true;
+}
+
+function example1(things: Thing[]) {
+    for (let thing of things) {
+        thing.isGood();
+        thing.good;
+    }
 }
 
 
@@ -319,6 +347,16 @@ var Derived = /** @class */ (function (_super) {
     };
     return Derived;
 }(Test));
+function f11(items) {
+    for (var _i = 0, items_1 = items; _i < items_1.length; _i++) {
+        var item = items_1[_i];
+        if (item.isTest2()) {
+            item.z;
+        }
+        item.assertIsTest2();
+        item.z;
+    }
+}
 function f20(x) {
     var assert = function (value) { };
     assert(typeof x === "string"); // Error
@@ -328,6 +366,13 @@ function f20(x) {
     t1.assert(typeof x === "string"); // Error
     var t2 = new Test();
     t2.assert(typeof x === "string");
+}
+function example1(things) {
+    for (var _i = 0, things_1 = things; _i < things_1.length; _i++) {
+        var thing = things_1[_i];
+        thing.isGood();
+        thing.good;
+    }
 }
 
 
@@ -362,6 +407,7 @@ declare class Derived extends Test {
     foo(x: unknown): void;
     baz(x: number): void;
 }
+declare function f11(items: Test[]): void;
 declare let Q1: new (x: unknown) => x is string;
 declare let Q2: new (x: boolean) => asserts x;
 declare let Q3: new (x: unknown) => asserts x is string;
@@ -372,3 +418,11 @@ declare class Wat {
     set p2(x: asserts this is string);
 }
 declare function f20(x: unknown): void;
+interface Thing {
+    good: boolean;
+    isGood(): asserts this is GoodThing;
+}
+interface GoodThing {
+    good: true;
+}
+declare function example1(things: Thing[]): void;
