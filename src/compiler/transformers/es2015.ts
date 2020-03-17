@@ -62,9 +62,9 @@ namespace ts {
     }
 
     const enum Jump {
-        Break = 1 << 1,
-        Continue = 1 << 2,
-        Return = 1 << 3
+        Break       = 1 << 1,
+        Continue    = 1 << 2,
+        Return      = 1 << 3
     }
 
     interface ConvertedLoopState {
@@ -1597,7 +1597,7 @@ namespace ts {
             if (!isPrivateIdentifier(propertyName) && context.getCompilerOptions().useDefineForClassFields) {
                 const name = isComputedPropertyName(propertyName) ? propertyName.expression
                     : isIdentifier(propertyName) ? createStringLiteral(unescapeLeadingUnderscores(propertyName.escapedText))
-                        : propertyName;
+                    : propertyName;
                 e = createObjectDefinePropertyCall(receiver, name, createPropertyDescriptor({ value: memberFunction, enumerable: false, writable: true, configurable: true }));
             }
             else {
@@ -2418,28 +2418,28 @@ namespace ts {
             const forStatement = setTextRange(
                 createFor(
                     /*initializer*/ setEmitFlags(
-                    setTextRange(
-                        createVariableDeclarationList([
-                            setTextRange(createVariableDeclaration(counter, /*type*/ undefined, createLiteral(0)), moveRangePos(node.expression, -1)),
-                            setTextRange(createVariableDeclaration(rhsReference, /*type*/ undefined, expression), node.expression)
-                        ]),
+                        setTextRange(
+                            createVariableDeclarationList([
+                                setTextRange(createVariableDeclaration(counter, /*type*/ undefined, createLiteral(0)), moveRangePos(node.expression, -1)),
+                                setTextRange(createVariableDeclaration(rhsReference, /*type*/ undefined, expression), node.expression)
+                            ]),
+                            node.expression
+                        ),
+                        EmitFlags.NoHoisting
+                    ),
+                    /*condition*/ setTextRange(
+                        createLessThan(
+                            counter,
+                            createPropertyAccess(rhsReference, "length")
+                        ),
                         node.expression
                     ),
-                    EmitFlags.NoHoisting
-                ),
-                    /*condition*/ setTextRange(
-                    createLessThan(
-                        counter,
-                        createPropertyAccess(rhsReference, "length")
-                    ),
-                    node.expression
-                ),
                     /*incrementor*/ setTextRange(createPostfixIncrement(counter), node.expression),
                     /*statement*/ convertForOfStatementHead(
-                    node,
-                    createElementAccess(rhsReference, counter),
-                    convertedLoopBodyStatements
-                )
+                        node,
+                        createElementAccess(rhsReference, counter),
+                        convertedLoopBodyStatements
+                    )
                 ),
                 /*location*/ node
             );
@@ -2472,22 +2472,22 @@ namespace ts {
                 setTextRange(
                     createFor(
                         /*initializer*/ setEmitFlags(
-                        setTextRange(
-                            createVariableDeclarationList([
-                                setTextRange(createVariableDeclaration(iterator, /*type*/ undefined, initializer), node.expression),
-                                createVariableDeclaration(result, /*type*/ undefined, next)
-                            ]),
-                            node.expression
+                            setTextRange(
+                                createVariableDeclarationList([
+                                    setTextRange(createVariableDeclaration(iterator, /*type*/ undefined, initializer), node.expression),
+                                    createVariableDeclaration(result, /*type*/ undefined, next)
+                                ]),
+                                node.expression
+                            ),
+                            EmitFlags.NoHoisting
                         ),
-                        EmitFlags.NoHoisting
-                    ),
                         /*condition*/ createLogicalNot(createPropertyAccess(result, "done")),
                         /*incrementor*/ createAssignment(result, next),
                         /*statement*/ convertForOfStatementHead(
-                        node,
-                        createPropertyAccess(result, "value"),
-                        convertedLoopBodyStatements
-                    )
+                            node,
+                            createPropertyAccess(result, "value"),
+                            convertedLoopBodyStatements
+                        )
                     ),
                     /*location*/ node
                 ),
@@ -2520,42 +2520,42 @@ namespace ts {
                 createBlock([
                     createTry(
                         /*tryBlock*/ createBlock([
-                        setEmitFlags(
-                            createIf(
-                                createLogicalAnd(
-                                    createLogicalAnd(
-                                        result,
-                                        createLogicalNot(
-                                            createPropertyAccess(result, "done")
-                                        )
-                                    ),
-                                    createAssignment(
-                                        returnMethod,
-                                        createPropertyAccess(iterator, "return")
-                                    )
-                                ),
-                                createExpressionStatement(
-                                    createFunctionCall(returnMethod, iterator, [])
-                                )
-                            ),
-                            EmitFlags.SingleLine
-                        ),
-                    ]),
-                        /*catchClause*/ undefined,
-                        /*finallyBlock*/ setEmitFlags(
-                        createBlock([
                             setEmitFlags(
                                 createIf(
-                                    errorRecord,
-                                    createThrow(
-                                        createPropertyAccess(errorRecord, "error")
+                                    createLogicalAnd(
+                                        createLogicalAnd(
+                                            result,
+                                            createLogicalNot(
+                                                createPropertyAccess(result, "done")
+                                            )
+                                        ),
+                                        createAssignment(
+                                            returnMethod,
+                                            createPropertyAccess(iterator, "return")
+                                        )
+                                    ),
+                                    createExpressionStatement(
+                                        createFunctionCall(returnMethod, iterator, [])
                                     )
                                 ),
                                 EmitFlags.SingleLine
-                            )
+                            ),
                         ]),
-                        EmitFlags.SingleLine
-                    )
+                        /*catchClause*/ undefined,
+                        /*finallyBlock*/ setEmitFlags(
+                            createBlock([
+                                setEmitFlags(
+                                    createIf(
+                                        errorRecord,
+                                        createThrow(
+                                            createPropertyAccess(errorRecord, "error")
+                                        )
+                                    ),
+                                    EmitFlags.SingleLine
+                                )
+                            ]),
+                            EmitFlags.SingleLine
+                        )
                     )
                 ])
             );
