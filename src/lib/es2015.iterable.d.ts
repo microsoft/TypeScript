@@ -203,7 +203,7 @@ interface PromiseConstructor {
      * @param values An array of Promises.
      * @returns A new Promise.
      */
-    all<TAll>(values: Iterable<TAll | PromiseLike<TAll>>): Promise<(awaited TAll)[]>;
+    all<T>(values: Iterable<T | PromiseLike<T>>): Promise<(awaited T)[]>;
 
     /**
      * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved

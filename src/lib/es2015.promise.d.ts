@@ -100,6 +100,9 @@ interface PromiseConstructor {
      */
     all<T>(values: readonly (T | PromiseLike<T>)[]): Promise<(awaited T)[]>;
 
+    // see: lib.es2015.iterable.d.ts
+    // all<T>(values: Iterable<T | PromiseLike<T>>): Promise<(awaited T)[]>;
+
     /**
      * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
      * or rejected.
@@ -108,13 +111,8 @@ interface PromiseConstructor {
      */
     race<T>(values: readonly (T | PromiseLike<T>)[]): Promise<awaited T>;
 
-    /**
-     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
-     * or rejected.
-     * @param values An iterable of Promises.
-     * @returns A new Promise.
-     */
-    race<T>(values: Iterable<T | PromiseLike<T>>): Promise<awaited T>;
+    // see: lib.es2015.iterable.d.ts
+    // race<T>(values: Iterable<T | PromiseLike<T>>): Promise<awaited T>;
 
     /**
      * Creates a new rejected promise for the provided reason.
