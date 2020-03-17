@@ -418,7 +418,7 @@ namespace ts.projectSystem {
             });
 
             describe("resolution when resolution cache size", () => {
-                function verifyWithMaxCacheLimit(limitHit: boolean, useSlashRootAsSomeNotRootFolderInUserDirectory: boolean) {
+                function verifyWithMaxCacheLimit(useSlashRootAsSomeNotRootFolderInUserDirectory: boolean) {
                     const rootFolder = useSlashRootAsSomeNotRootFolderInUserDirectory ? "/user/username/rootfolder/otherfolder/" : "/";
                     const file1: File = {
                         path: rootFolder + "a/b/project/file1.ts",
@@ -451,9 +451,6 @@ namespace ts.projectSystem {
                     checkNumberOfProjects(projectService, { configuredProjects: 1 });
                     const project = projectService.configuredProjects.get(configFile.path)!;
                     verifyProject();
-                    if (limitHit) {
-                        (project as ResolutionCacheHost).maxNumberOfFilesToIterateForInvalidation = 1;
-                    }
 
                     file3.content += "export class d {}";
                     host.reloadFS(projectFiles);
@@ -495,20 +492,12 @@ namespace ts.projectSystem {
                     }
                 }
 
-                it("limit not hit and project is not at root level", () => {
-                    verifyWithMaxCacheLimit(/*limitHit*/ false, /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ true);
+                it("project is not at root level", () => {
+                    verifyWithMaxCacheLimit(/*useSlashRootAsSomeNotRootFolderInUserDirectory*/ true);
                 });
 
-                it("limit hit and project is not at root level", () => {
-                    verifyWithMaxCacheLimit(/*limitHit*/ true, /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ true);
-                });
-
-                it("limit not hit and project is at root level", () => {
-                    verifyWithMaxCacheLimit(/*limitHit*/ false, /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ false);
-                });
-
-                it("limit hit and project is at root level", () => {
-                    verifyWithMaxCacheLimit(/*limitHit*/ true, /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ false);
+                it("project is at root level", () => {
+                    verifyWithMaxCacheLimit(/*useSlashRootAsSomeNotRootFolderInUserDirectory*/ false);
                 });
             });
         }

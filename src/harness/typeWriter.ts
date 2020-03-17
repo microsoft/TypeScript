@@ -21,6 +21,19 @@ namespace Harness {
         type?: string;
     }
 
+    function* forEachASTNode(node: ts.Node) {
+        const work = [node];
+        while (work.length) {
+            const elem = work.pop()!;
+            yield elem;
+
+            const resChildren: ts.Node[] = [];
+            // push onto work queue in reverse order to maintain preorder traversal
+            ts.forEachChild(elem, c => { resChildren.unshift(c); });
+            work.push(...resChildren);
+        }
+    }
+
     export class TypeWriterWalker {
         currentSourceFile!: ts.SourceFile;
 
@@ -53,19 +66,15 @@ namespace Harness {
         }
 
         private *visitNode(node: ts.Node, isSymbolWalk: boolean): IterableIterator<TypeWriterResult> {
-            if (ts.isExpressionNode(node) || node.kind === ts.SyntaxKind.Identifier || ts.isDeclarationName(node)) {
-                const result = this.writeTypeOrSymbol(node, isSymbolWalk);
-                if (result) {
-                    yield result;
-                }
-            }
-
-            const children: ts.Node[] = [];
-            ts.forEachChild(node, child => void children.push(child));
-            for (const child of children) {
-                const gen = this.visitNode(child, isSymbolWalk);
-                for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
-                    yield value;
+            const gen = forEachASTNode(node);
+            let res = gen.next();
+            for (; !res.done; res = gen.next()) {
+                const {value: node} = res;
+                if (ts.isExpressionNode(node) || node.kind === ts.SyntaxKind.Identifier || ts.isDeclarationName(node)) {
+                    const result = this.writeTypeOrSymbol(node, isSymbolWalk);
+                    if (result) {
+                        yield result;
+                    }
                 }
             }
         }

@@ -252,7 +252,7 @@ namespace ts {
                 value = inlineExpressions(append(pendingExpressions, value));
                 pendingExpressions = undefined;
             }
-            pendingDeclarations.push({ pendingExpressions, name: <BindingName>target, value, location, original });
+            pendingDeclarations.push({ pendingExpressions, name: target, value, location, original });
         }
     }
 
@@ -325,7 +325,7 @@ namespace ts {
                     && !(element.transformFlags & (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
                     && !(getTargetOfBindingOrAssignmentElement(element)!.transformFlags & (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
                     && !isComputedPropertyName(propertyName)) {
-                    bindingElements = append(bindingElements, element);
+                    bindingElements = append(bindingElements, visitNode(element, flattenContext.visitor));
                 }
                 else {
                     if (bindingElements) {

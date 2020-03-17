@@ -168,6 +168,30 @@ namespace ts {
                 const expectedCoalescedImports = sortedImports;
                 assertListEqual(actualCoalescedImports, expectedCoalescedImports);
             });
+
+            it("Combine type-only imports separately from other imports", () => {
+                const sortedImports = parseImports(
+                    `import type { x } from "lib";`,
+                    `import type { y } from "lib";`,
+                    `import { z } from "lib";`);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+                const expectedCoalescedImports = parseImports(
+                    `import { z } from "lib";`,
+                    `import type { x, y } from "lib";`);
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
+            });
+
+            it("Do not combine type-only default, namespace, or named imports with each other", () => {
+                const sortedImports = parseImports(
+                    `import type { x } from "lib";`,
+                    `import type * as y from "lib";`,
+                    `import type z from "lib";`);
+                // Default import could be rewritten as a named import to combine with `x`,
+                // but seems of debatable merit.
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+                const expectedCoalescedImports = actualCoalescedImports;
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
+            });
         });
 
         describe("Coalesce exports", () => {
@@ -238,6 +262,25 @@ namespace ts {
                 const expectedCoalescedExports = parseExports(
                     `export * from "lib";`,
                     `export { x as a, y, z as b } from "lib";`);
+                assertListEqual(actualCoalescedExports, expectedCoalescedExports);
+            });
+
+            it("Keep type-only exports separate", () => {
+                const sortedExports = parseExports(
+                    `export { x };`,
+                    `export type { y };`);
+                const actualCoalescedExports = OrganizeImports.coalesceExports(sortedExports);
+                const expectedCoalescedExports = sortedExports;
+                assertListEqual(actualCoalescedExports, expectedCoalescedExports);
+            });
+
+            it("Combine type-only exports", () => {
+                const sortedExports = parseExports(
+                    `export type { x };`,
+                    `export type { y };`);
+                const actualCoalescedExports = OrganizeImports.coalesceExports(sortedExports);
+                const expectedCoalescedExports = parseExports(
+                    `export type { x, y };`);
                 assertListEqual(actualCoalescedExports, expectedCoalescedExports);
             });
         });
@@ -424,6 +467,18 @@ D();
                 },
                 libFile);
             /* eslint-enable no-template-curly-in-string */
+
+            testOrganizeImports("TypeOnly",
+                {
+                    path: "/test.ts",
+                    content: `
+import { X } from "lib";
+import type Y from "lib";
+import { Z } from "lib";
+import type { A, B } from "lib";
+
+export { A, B, X, Y, Z };`
+                });
 
             testOrganizeImports("CoalesceMultipleModules",
                 {

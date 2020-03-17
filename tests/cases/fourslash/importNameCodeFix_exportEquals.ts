@@ -16,9 +16,9 @@ verify.codeFixAll({
     fixId: "fixMissingImport",
     fixAllDescription: "Add all missing imports",
     newFileContent:
-`import a = require("./a");
+`import { b } from "./a";
 
-import type { b } from "./a";
+import a = require("./a");
 
 a;
 let x: b;`,

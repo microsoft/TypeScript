@@ -431,10 +431,16 @@ namespace ts.server {
         if (initialLocation) {
             const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation!);
             if (defaultDefinition) {
+                const getGeneratedDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition.fileName) ?
+                    defaultDefinition :
+                    defaultProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(defaultDefinition));
+                const getSourceDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition.fileName) ?
+                    defaultDefinition :
+                    defaultProject.getLanguageService().getSourceMapper().tryGetSourcePosition(defaultDefinition));
                 projectService.loadAncestorProjectTree(seenProjects);
                 projectService.forEachEnabledProject(project => {
                     if (!addToSeen(seenProjects, project)) return;
-                    const definition = mapDefinitionInProject(defaultDefinition, defaultProject, project);
+                    const definition = mapDefinitionInProject(defaultDefinition, project, getGeneratedDefinition, getSourceDefinition);
                     if (definition) {
                         toDo = callbackProjectAndLocation<TLocation>({ project, location: definition as TLocation }, projectService, toDo, seenProjects, cb);
                     }
@@ -443,21 +449,25 @@ namespace ts.server {
         }
 
         while (toDo && toDo.length) {
-            toDo = callbackProjectAndLocation(Debug.assertDefined(toDo.pop()), projectService, toDo, seenProjects, cb);
+            toDo = callbackProjectAndLocation(Debug.checkDefined(toDo.pop()), projectService, toDo, seenProjects, cb);
         }
     }
 
-    function mapDefinitionInProject(definition: DocumentPosition | undefined, definingProject: Project, project: Project): DocumentPosition | undefined {
+    function mapDefinitionInProject(
+        definition: DocumentPosition,
+        project: Project,
+        getGeneratedDefinition: () => DocumentPosition | undefined,
+        getSourceDefinition: () => DocumentPosition | undefined
+    ): DocumentPosition | undefined {
         // If the definition is actually from the project, definition is correct as is
-        if (!definition ||
-            project.containsFile(toNormalizedPath(definition.fileName)) &&
+        if (project.containsFile(toNormalizedPath(definition.fileName)) &&
             !isLocationProjectReferenceRedirect(project, definition)) {
             return definition;
         }
-        const mappedDefinition = definingProject.isSourceOfProjectReferenceRedirect(definition.fileName) ?
-            definition :
-            definingProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(definition);
-        return mappedDefinition && project.containsFile(toNormalizedPath(mappedDefinition.fileName)) ? mappedDefinition : undefined;
+        const generatedDefinition = getGeneratedDefinition();
+        if (generatedDefinition && project.containsFile(toNormalizedPath(generatedDefinition.fileName))) return generatedDefinition;
+        const sourceDefinition = getSourceDefinition();
+        return sourceDefinition && project.containsFile(toNormalizedPath(sourceDefinition.fileName)) ? sourceDefinition : undefined;
     }
 
     function isLocationProjectReferenceRedirect(project: Project, location: DocumentPosition | undefined) {
@@ -591,6 +601,8 @@ namespace ts.server {
         protected projectService: ProjectService;
         private changeSeq = 0;
 
+        private updateGraphDurationMs: number | undefined;
+
         private currentRequestId!: number;
         private errorCheck: MultistepOperation;
 
@@ -648,11 +660,21 @@ namespace ts.server {
                 syntaxOnly: opts.syntaxOnly,
             };
             this.projectService = new ProjectService(settings);
+            this.projectService.setPerformanceEventHandler(this.performanceEventHandler.bind(this));
             this.gcTimer = new GcTimer(this.host, /*delay*/ 7000, this.logger);
         }
 
         private sendRequestCompletedEvent(requestId: number): void {
             this.event<protocol.RequestCompletedEventBody>({ request_seq: requestId }, "requestCompleted");
+        }
+
+        private performanceEventHandler(event: PerformanceEvent) {
+            switch (event.kind) {
+                case "UpdateGraph": {
+                    this.updateGraphDurationMs = (this.updateGraphDurationMs || 0) + event.durationMs;
+                    break;
+                }
+            }
         }
 
         private defaultEventHandler(event: ProjectServiceEvent) {
@@ -707,10 +729,8 @@ namespace ts.server {
             this.projectService.logger.info(`got projects updated in background, updating diagnostics for ${openFiles}`);
             if (openFiles.length) {
                 if (!this.suppressDiagnosticEvents && !this.noGetErrOnBackgroundUpdate) {
-                    const checkList = this.createCheckList(openFiles);
-
                     // For now only queue error checking for open files. We can change this to include non open files as well
-                    this.errorCheck.startNew(next => this.updateErrorCheck(next, checkList, 100, /*requireOpen*/ true));
+                    this.errorCheck.startNew(next => this.updateErrorCheck(next, openFiles, 100, /*requireOpen*/ true));
                 }
 
                 // Send project changed event
@@ -795,7 +815,13 @@ namespace ts.server {
                 command: cmdName,
                 request_seq: reqSeq,
                 success,
+                performanceData: !this.updateGraphDurationMs
+                    ? undefined
+                    : {
+                        updateGraphDurationMs: this.updateGraphDurationMs,
+                    },
             };
+
             if (success) {
                 let metadata: unknown;
                 if (isArray(info)) {
@@ -852,20 +878,37 @@ namespace ts.server {
         }
 
         /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
-        private updateErrorCheck(next: NextStep, checkList: PendingErrorCheck[], ms: number, requireOpen = true) {
+        private updateErrorCheck(next: NextStep, checkList: readonly string[] | readonly PendingErrorCheck[], ms: number, requireOpen = true) {
             Debug.assert(!this.suppressDiagnosticEvents); // Caller's responsibility
 
             const seq = this.changeSeq;
             const followMs = Math.min(ms, 200);
 
             let index = 0;
+            const goNext = () => {
+                index++;
+                if (checkList.length > index) {
+                    next.delay(followMs, checkOne);
+                }
+            };
             const checkOne = () => {
                 if (this.changeSeq !== seq) {
                     return;
                 }
 
-                const { fileName, project } = checkList[index];
-                index++;
+                let item: string | PendingErrorCheck | undefined = checkList[index];
+                if (isString(item)) {
+                    // Find out project for the file name
+                    item = this.toPendingErrorCheck(item);
+                    if (!item) {
+                        // Ignore file if there is no project for the file
+                        goNext();
+                        return;
+                    }
+                }
+
+                const { fileName, project } = item;
+
                 // Ensure the project is upto date before checking if this file is present in the project
                 updateProjectIfDirty(project);
                 if (!project.containsFile(fileName, requireOpen)) {
@@ -883,11 +926,6 @@ namespace ts.server {
                         return;
                     }
 
-                    const goNext = () => {
-                        if (checkList.length > index) {
-                            next.delay(followMs, checkOne);
-                        }
-                    };
                     if (this.getPreferences(fileName).disableSuggestions) {
                         goNext();
                     }
@@ -1043,7 +1081,7 @@ namespace ts.server {
         private getDefinitionAndBoundSpan(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
-            const scriptInfo = Debug.assertDefined(project.getScriptInfo(file));
+            const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
 
             const unmappedDefinitionAndBoundSpan = project.getLanguageService().getDefinitionAndBoundSpan(file, position);
 
@@ -1307,7 +1345,7 @@ namespace ts.server {
             if (!simplifiedResult) return locations;
 
             const defaultProject = this.getDefaultProject(args);
-            const renameInfo: protocol.RenameInfo = this.mapRenameInfo(defaultProject.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: this.getPreferences(file).allowRenameOfImportPath }), Debug.assertDefined(this.projectService.getScriptInfo(file)));
+            const renameInfo: protocol.RenameInfo = this.mapRenameInfo(defaultProject.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: this.getPreferences(file).allowRenameOfImportPath }), Debug.checkDefined(this.projectService.getScriptInfo(file)));
             return { info: renameInfo, locs: this.toSpanGroups(locations) };
         }
 
@@ -1327,7 +1365,7 @@ namespace ts.server {
             for (const { fileName, textSpan, contextSpan, originalContextSpan: _2, originalTextSpan: _, originalFileName: _1, ...prefixSuffixText } of locations) {
                 let group = map.get(fileName);
                 if (!group) map.set(fileName, group = { file: fileName, locs: [] });
-                const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(fileName));
+                const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(fileName));
                 group.locs.push({ ...toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo), ...prefixSuffixText });
             }
             return arrayFrom(map.values());
@@ -1354,7 +1392,7 @@ namespace ts.server {
             const symbolName = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
             const refs: readonly protocol.ReferencesResponseItem[] = flatMap(references, referencedSymbol =>
                 referencedSymbol.references.map(({ fileName, textSpan, contextSpan, isWriteAccess, isDefinition }): protocol.ReferencesResponseItem => {
-                    const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(fileName));
+                    const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(fileName));
                     const span = toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo);
                     const lineSpan = scriptInfo.lineToTextSpan(span.start.line - 1);
                     const lineText = scriptInfo.getSnapshot().getText(lineSpan.start, textSpanEnd(lineSpan)).replace(/\r|\n/g, "");
@@ -1709,12 +1747,10 @@ namespace ts.server {
             }
         }
 
-        private createCheckList(fileNames: string[]): PendingErrorCheck[] {
-            return mapDefined<string, PendingErrorCheck>(fileNames, uncheckedFileName => {
-                const fileName = toNormalizedPath(uncheckedFileName);
-                const project = this.projectService.tryGetDefaultProjectForFile(fileName);
-                return project && { fileName, project };
-            });
+        private toPendingErrorCheck(uncheckedFileName: string): PendingErrorCheck | undefined {
+            const fileName = toNormalizedPath(uncheckedFileName);
+            const project = this.projectService.tryGetDefaultProjectForFile(fileName);
+            return project && { fileName, project };
         }
 
         private getDiagnostics(next: NextStep, delay: number, fileNames: string[]): void {
@@ -1722,9 +1758,8 @@ namespace ts.server {
                 return;
             }
 
-            const checkList = this.createCheckList(fileNames);
-            if (checkList.length > 0) {
-                this.updateErrorCheck(next, checkList, delay);
+            if (fileNames.length > 0) {
+                this.updateErrorCheck(next, fileNames, delay);
             }
         }
 
@@ -1867,7 +1902,7 @@ namespace ts.server {
                     a.fileName === b.fileName &&
                     a.isCaseSensitive === b.isCaseSensitive &&
                     a.kind === b.kind &&
-                    a.kindModifiers === b.containerName &&
+                    a.kindModifiers === b.kindModifiers &&
                     a.matchKind === b.matchKind &&
                     a.name === b.name &&
                     a.textSpan.start === b.textSpan.start &&
@@ -1893,7 +1928,7 @@ namespace ts.server {
                 const { startPosition, endPosition } = this.getStartAndEndPosition(args, scriptInfo);
                 textRange = { pos: startPosition, end: endPosition };
             }
-            return Debug.assertDefined(position === undefined ? textRange : position);
+            return Debug.checkDefined(position === undefined ? textRange : position);
 
             function getPosition(loc: protocol.FileLocationRequestArgs) {
                 return loc.position !== undefined ? loc.position : scriptInfo.lineOffsetToPosition(loc.line, loc.offset);
@@ -2120,7 +2155,7 @@ namespace ts.server {
         private getSmartSelectionRange(args: protocol.SelectionRangeRequestArgs, simplifiedResult: boolean) {
             const { locations } = args;
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
-            const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(file));
+            const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(file));
 
             return map(locations, location => {
                 const pos = this.getPosition(location, scriptInfo);
@@ -2139,15 +2174,18 @@ namespace ts.server {
             return result;
         }
 
-        private toProtocolCallHierarchyItem(item: CallHierarchyItem, scriptInfo?: ScriptInfo): protocol.CallHierarchyItem {
+        private getScriptInfoFromProjectService(file: string) {
+            const normalizedFile = toNormalizedPath(file);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(normalizedFile);
             if (!scriptInfo) {
-                const file = toNormalizedPath(item.file);
-                scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
-                if (!scriptInfo) {
-                    this.projectService.logErrorForScriptInfoNotFound(file);
-                    return Errors.ThrowNoProject();
-                }
+                this.projectService.logErrorForScriptInfoNotFound(normalizedFile);
+                return Errors.ThrowNoProject();
             }
+            return scriptInfo;
+        }
+
+        private toProtocolCallHierarchyItem(item: CallHierarchyItem): protocol.CallHierarchyItem {
+            const scriptInfo = this.getScriptInfoFromProjectService(item.file);
             return {
                 name: item.name,
                 kind: item.kind,
@@ -2157,7 +2195,8 @@ namespace ts.server {
             };
         }
 
-        private toProtocolCallHierarchyIncomingCall(incomingCall: CallHierarchyIncomingCall, scriptInfo: ScriptInfo): protocol.CallHierarchyIncomingCall {
+        private toProtocolCallHierarchyIncomingCall(incomingCall: CallHierarchyIncomingCall): protocol.CallHierarchyIncomingCall {
+            const scriptInfo = this.getScriptInfoFromProjectService(incomingCall.from.file);
             return {
                 from: this.toProtocolCallHierarchyItem(incomingCall.from),
                 fromSpans: incomingCall.fromSpans.map(fromSpan => toProtocolTextSpan(fromSpan, scriptInfo))
@@ -2177,35 +2216,27 @@ namespace ts.server {
             if (scriptInfo) {
                 const position = this.getPosition(args, scriptInfo);
                 const result = project.getLanguageService().prepareCallHierarchy(file, position);
-                return result && mapOneOrMany(result, item => this.toProtocolCallHierarchyItem(item, scriptInfo));
+                return result && mapOneOrMany(result, item => this.toProtocolCallHierarchyItem(item));
             }
             return undefined;
         }
 
         private provideCallHierarchyIncomingCalls(args: protocol.FileLocationRequestArgs): protocol.CallHierarchyIncomingCall[] {
             const { file, project } = this.getFileAndProject(args);
-            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
-            if (!scriptInfo) {
-                this.projectService.logErrorForScriptInfoNotFound(file);
-                return Errors.ThrowNoProject();
-            }
+            const scriptInfo = this.getScriptInfoFromProjectService(file);
             const incomingCalls = project.getLanguageService().provideCallHierarchyIncomingCalls(file, this.getPosition(args, scriptInfo));
-            return incomingCalls.map(call => this.toProtocolCallHierarchyIncomingCall(call, scriptInfo));
+            return incomingCalls.map(call => this.toProtocolCallHierarchyIncomingCall(call));
         }
 
         private provideCallHierarchyOutgoingCalls(args: protocol.FileLocationRequestArgs): protocol.CallHierarchyOutgoingCall[] {
             const { file, project } = this.getFileAndProject(args);
-            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
-            if (!scriptInfo) {
-                this.projectService.logErrorForScriptInfoNotFound(file);
-                return Errors.ThrowNoProject();
-            }
+            const scriptInfo = this.getScriptInfoFromProjectService(file);
             const outgoingCalls = project.getLanguageService().provideCallHierarchyOutgoingCalls(file, this.getPosition(args, scriptInfo));
             return outgoingCalls.map(call => this.toProtocolCallHierarchyOutgoingCall(call, scriptInfo));
         }
 
         getCanonicalFileName(fileName: string) {
-            const name = this.host.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
+            const name = this.host.useCaseSensitiveFileNames ? fileName : toFileNameLowerCase(fileName);
             return normalizePath(name);
         }
 
@@ -2240,7 +2271,7 @@ namespace ts.server {
                 return this.requiredResponse(/*response*/ true);
             },
             [CommandNames.SynchronizeProjectList]: (request: protocol.SynchronizeProjectListRequest) => {
-                const result = this.projectService.synchronizeProjectList(request.arguments.knownProjects);
+                const result = this.projectService.synchronizeProjectList(request.arguments.knownProjects, request.arguments.includeProjectReferenceRedirectInfo);
                 if (!result.some(p => p.projectErrors && p.projectErrors.length !== 0)) {
                     return this.requiredResponse(result);
                 }
@@ -2269,7 +2300,7 @@ namespace ts.server {
                     request.arguments.changedFiles && mapIterator(arrayIterator(request.arguments.changedFiles), file => ({
                         fileName: file.fileName,
                         changes: mapDefinedIterator(arrayReverseIterator(file.textChanges), change => {
-                            const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(file.fileName));
+                            const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(file.fileName));
                             const start = scriptInfo.lineOffsetToPosition(change.start.line, change.start.offset);
                             const end = scriptInfo.lineOffsetToPosition(change.end.line, change.end.offset);
                             return start >= 0 ? { span: { start, length: end - start }, newText: change.newText } : undefined;
@@ -2623,6 +2654,9 @@ namespace ts.server {
 
         public onMessage(message: string) {
             this.gcTimer.scheduleCollect();
+
+            this.updateGraphDurationMs = undefined;
+
             let start: number[] | undefined;
             if (this.logger.hasLevel(LogLevel.requestTime)) {
                 start = this.hrtime();

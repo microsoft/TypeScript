@@ -65,6 +65,7 @@ var y = 20;
 
 Output::
 
+
 Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
 Program options: {"incremental":true,"project":"/users/username/projects/project/tsconfig.json","configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program files::
@@ -130,6 +131,7 @@ var z = 10;
 
 
 Output::
+
 
 Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
 Program options: {"incremental":true,"project":"/users/username/projects/project/tsconfig.json","configFilePath":"/users/username/projects/project/tsconfig.json"}

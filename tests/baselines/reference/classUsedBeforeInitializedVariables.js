@@ -74,14 +74,14 @@ var Test = /** @class */ (function () {
                 get: function () {
                     return true;
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             }),
             _b);
         this.withinObjectLiteralSetterName = (_c = {},
             Object.defineProperty(_c, this.withinObjectLiteralSetterName, {
                 set: function (_) { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             }),
             _c);

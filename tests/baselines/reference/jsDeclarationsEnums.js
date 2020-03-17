@@ -67,6 +67,7 @@ export const enum L {
 // Pretty much all of this should be an error, (since enums are forbidden in js),
 // but we should be able to synthesize declarations from the symbols regardless
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.K = exports.I = exports.H = exports.G = exports.F = exports.FF = exports.EE = exports.E = exports.D = exports.C = exports.B = exports.A = void 0;
 var A;
 (function (A) {
 })(A = exports.A || (exports.A = {}));

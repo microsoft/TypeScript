@@ -6,6 +6,6 @@
 ////}
 
 verify.codeFix({
-    description: "Remove declaration for: 'greeting'",
+    description: "Remove unused declaration for: 'greeting'",
     newRangeContent: "",
 });

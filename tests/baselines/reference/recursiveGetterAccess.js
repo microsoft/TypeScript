@@ -11,7 +11,7 @@ var MyClass = /** @class */ (function () {
     }
     Object.defineProperty(MyClass.prototype, "testProp", {
         get: function () { return this.testProp; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return MyClass;

@@ -1,4 +1,4 @@
 === tests/cases/conformance/classes/members/privateNames/privateNameNotAllowedOutsideClass.ts ===
 const #foo = 3;
-No type information for this code.
-No type information for this code.
+>#foo : Symbol(#foo, Decl(privateNameNotAllowedOutsideClass.ts, 0, 5))
+

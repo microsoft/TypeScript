@@ -16,6 +16,7 @@ lib.math.add(3, 4); // Shouldnt be error
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.add = void 0;
     function add(a, b) { return a + b; }
     exports.add = add;
 });

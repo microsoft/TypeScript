@@ -37,6 +37,7 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/user/username/projects/myproject/c.js]
 "use strict";
 exports.__esModule = true;
+exports.C = void 0;
 var C = /** @class */ (function () {
     function C() {
         this.d = 1;
@@ -55,6 +56,7 @@ export declare class C {
 //// [/user/username/projects/myproject/b.js]
 "use strict";
 exports.__esModule = true;
+exports.B = void 0;
 var c_1 = require("./c");
 var B = /** @class */ (function () {
     function B() {
@@ -87,11 +89,11 @@ export {};
 
 Output::
 >> Screen clear
-12:00:25 AM - Starting compilation in watch mode...
+[[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:38 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
@@ -110,23 +112,23 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/a.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
 /user/username/projects/myproject/b.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
 /user/username/projects/myproject/c.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/c.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -141,6 +143,7 @@ export class C
 //// [/user/username/projects/myproject/c.js]
 "use strict";
 exports.__esModule = true;
+exports.C = void 0;
 var C = /** @class */ (function () {
     function C() {
         this.d2 = 1;
@@ -161,11 +164,11 @@ export declare class C {
 
 Output::
 >> Screen clear
-12:00:42 AM - File change detected. Starting incremental compilation...
+[[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:55 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:55 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
@@ -182,22 +185,22 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/a.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
 /user/username/projects/myproject/b.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
 /user/username/projects/myproject/c.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/c.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

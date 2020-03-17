@@ -149,11 +149,11 @@ export { C } from "./c";
 
 Output::
 >> Screen clear
-12:00:27 AM - Starting compilation in watch mode...
+[[90m12:00:27 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:38 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/users/username/projects/project/a.ts","/users/username/projects/project/b.ts","/users/username/projects/project/c.ts","/users/username/projects/project/index.ts"]
@@ -174,25 +174,25 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /users/username/projects/project/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
 /users/username/projects/project/a.ts:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/a.ts","pollingInterval":250}
 /users/username/projects/project/b.ts:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/b.ts","pollingInterval":250}
 /users/username/projects/project/c.ts:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/c.ts","pollingInterval":250}
 /users/username/projects/project/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/index.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /users/username/projects/project/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/users/username/projects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /users/username/projects/project:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -297,11 +297,11 @@ export interface A {
 
 Output::
 >> Screen clear
-12:00:42 AM - Starting compilation in watch mode...
+[[90m12:00:42 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:58 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:58 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/users/username/projects/project/a.ts","/users/username/projects/project/b.ts","/users/username/projects/project/c.ts","/users/username/projects/project/index.ts"]
@@ -321,24 +321,24 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /users/username/projects/project/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
 /users/username/projects/project/a.ts:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/a.ts","pollingInterval":250}
 /users/username/projects/project/b.ts:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/b.ts","pollingInterval":250}
 /users/username/projects/project/c.ts:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/c.ts","pollingInterval":250}
 /users/username/projects/project/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/users/username/projects/project/index.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /users/username/projects/project/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/users/username/projects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /users/username/projects/project:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

@@ -18,7 +18,7 @@ namespace ts.codefix {
 
             const fixes: CodeFixAction[] = [
                 // fixId unnecessary because adding `// @ts-nocheck` even once will ignore every error in the file.
-                createCodeFixActionNoFixId(
+                createCodeFixActionWithoutFixAll(
                     fixName,
                     [createFileTextChanges(sourceFile.fileName, [
                         createTextChange(sourceFile.checkJsDirective

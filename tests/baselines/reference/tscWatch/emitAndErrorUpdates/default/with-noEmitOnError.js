@@ -41,13 +41,22 @@ declare const console: { log(msg: any): void; };
 
 Output::
 >> Screen clear
-12:00:31 AM - Starting compilation in watch mode...
+[[90m12:00:31 AM[0m] Starting compilation in watch mode...
 
 
-src/main.ts(4,1): error TS1005: ',' expected.
+[96msrc/main.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS1005: [0m',' expected.
+
+[7m4[0m ;
+[7m [0m [91m~[0m
+
+  [96msrc/main.ts[0m:[93m2[0m:[93m11[0m
+    [7m2[0m const a = {
+    [7m [0m [96m          ~[0m
+    The parser expected to find a '}' to match the '{' token here.
 
 
-12:00:32 AM - Found 1 error. Watching for file changes.
+[[90m12:00:32 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
@@ -66,23 +75,23 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
 /user/username/projects/noemitonerror/src/main.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
 /user/username/projects/noemitonerror/src/other.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/noEmitOnError/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/noemitonerror:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -116,11 +125,11 @@ console.log("hi");
 
 Output::
 >> Screen clear
-12:00:36 AM - File change detected. Starting incremental compilation...
+[[90m12:00:36 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:53 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:53 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
@@ -136,22 +145,22 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
 /user/username/projects/noemitonerror/src/main.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
 /user/username/projects/noemitonerror/src/other.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/noEmitOnError/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/noemitonerror:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

@@ -599,3 +599,39 @@ const Component = registerComponent('test-component', {
 	}
 });
 
+// Repro from #36147
+
+class MyThrowable {
+>MyThrowable : Symbol(MyThrowable, Decl(neverReturningFunctions1.ts, 230, 3))
+
+    throw(): never {
+>throw : Symbol(MyThrowable.throw, Decl(neverReturningFunctions1.ts, 234, 19))
+
+        throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+class SuperThrowable extends MyThrowable {
+>SuperThrowable : Symbol(SuperThrowable, Decl(neverReturningFunctions1.ts, 238, 1))
+>MyThrowable : Symbol(MyThrowable, Decl(neverReturningFunctions1.ts, 230, 3))
+
+    err(msg: string): never {
+>err : Symbol(SuperThrowable.err, Decl(neverReturningFunctions1.ts, 240, 42))
+>msg : Symbol(msg, Decl(neverReturningFunctions1.ts, 241, 8))
+
+        super.throw()
+>super.throw : Symbol(MyThrowable.throw, Decl(neverReturningFunctions1.ts, 234, 19))
+>super : Symbol(MyThrowable, Decl(neverReturningFunctions1.ts, 230, 3))
+>throw : Symbol(MyThrowable.throw, Decl(neverReturningFunctions1.ts, 234, 19))
+    }
+    ok(): never {
+>ok : Symbol(SuperThrowable.ok, Decl(neverReturningFunctions1.ts, 243, 5))
+
+        this.throw()
+>this.throw : Symbol(MyThrowable.throw, Decl(neverReturningFunctions1.ts, 234, 19))
+>this : Symbol(SuperThrowable, Decl(neverReturningFunctions1.ts, 238, 1))
+>throw : Symbol(MyThrowable.throw, Decl(neverReturningFunctions1.ts, 234, 19))
+    }
+}
+

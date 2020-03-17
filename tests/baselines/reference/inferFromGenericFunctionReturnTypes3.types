@@ -461,7 +461,7 @@ declare function foldLeft<U>(z: U, f: (acc: U, t: boolean) => U): U;
 
 let res: boolean = foldLeft(true, (acc, t) => acc && t);  // Error
 >res : boolean
->foldLeft(true, (acc, t) => acc && t) : any
+>foldLeft(true, (acc, t) => acc && t) : true
 >foldLeft : <U>(z: U, f: (acc: U, t: boolean) => U) => U
 >true : true
 >(acc, t) => acc && t : (acc: true, t: boolean) => boolean
@@ -486,22 +486,22 @@ declare function bar<T>(f: () => T[]): T[];
 
 let x: Foo[] = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]);  // Error
 >x : Foo[]
->bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]) : any
+>bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]) : { state: State.A; }[]
 >bar : <T>(f: () => T[]) => T[]
 >() => !!true ? [{ state: State.A }] : [{ state: State.B }] : () => { state: State.A; }[] | { state: State.B; }[]
->!!true ? [{ state: State.A }] : [{ state: State.B }] : { state: State; }[]
+>!!true ? [{ state: State.A }] : [{ state: State.B }] : { state: State.A; }[] | { state: State.B; }[]
 >!!true : true
 >!true : false
 >true : true
->[{ state: State.A }] : { state: State; }[]
->{ state: State.A } : { state: State; }
->state : State
+>[{ state: State.A }] : { state: State.A; }[]
+>{ state: State.A } : { state: State.A; }
+>state : State.A
 >State.A : State.A
 >State : typeof State
 >A : State.A
->[{ state: State.B }] : { state: State; }[]
->{ state: State.B } : { state: State; }
->state : State
+>[{ state: State.B }] : { state: State.B; }[]
+>{ state: State.B } : { state: State.B; }
+>state : State.B
 >State.B : State.B
 >State : typeof State
 >B : State.B

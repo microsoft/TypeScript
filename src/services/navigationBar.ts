@@ -17,7 +17,7 @@ namespace ts.NavigationBar {
 
     /**
      * Maximum amount of characters to return
-     * The amount was choosen arbitrarily.
+     * The amount was chosen arbitrarily.
      */
     const maxLength = 150;
 
@@ -307,6 +307,7 @@ namespace ts.NavigationBar {
                 addNodeWithRecursiveChild(node, getInteriorModule(<ModuleDeclaration>node).body);
                 break;
 
+            case SyntaxKind.ExportAssignment:
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.IndexSignature:
@@ -681,6 +682,9 @@ namespace ts.NavigationBar {
                 return isExternalModule(sourceFile)
                     ? `"${escapeString(getBaseFileName(removeFileExtension(normalizePath(sourceFile.fileName))))}"`
                     : "<global>";
+            case SyntaxKind.ExportAssignment:
+                return isExportAssignment(node) && node.isExportEquals ? InternalSymbolName.ExportEquals : InternalSymbolName.Default;
+
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:

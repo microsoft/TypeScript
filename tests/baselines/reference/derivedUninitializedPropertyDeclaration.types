@@ -150,3 +150,47 @@ class K extends J {
 >r : 5 | 4
 }
 
+// #35327
+class L {
+>L : L
+
+    a: any;
+>a : any
+
+    constructor(arg: any) {
+>arg : any
+
+        this.a = arg;
+>this.a = arg : any
+>this.a : any
+>this : this
+>a : any
+>arg : any
+    }
+}
+class M extends L {
+>M : M
+>L : L
+
+    declare a: number;
+>a : number
+
+    constructor(arg: number) {
+>arg : number
+
+        super(arg);
+>super(arg) : void
+>super : typeof L
+>arg : number
+
+        console.log(this.a);  // should be OK, M.a is ambient
+>console.log(this.a) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>this.a : number
+>this : this
+>a : number
+    }
+}
+

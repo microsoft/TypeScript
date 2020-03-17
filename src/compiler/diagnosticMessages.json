@@ -863,7 +863,7 @@
         "category": "Error",
         "code": 1300
     },
-    "'await' expression is only allowed within an async function.": {
+    "'await' expressions are only allowed within async functions and at the top levels of modules.": {
         "category": "Error",
         "code": 1308
     },
@@ -1059,11 +1059,11 @@
         "category": "Error",
         "code": 1360
     },
-    "Type-only {0} must reference a type, but '{1}' is a value.": {
+    "'{0}' cannot be used as a value because it was imported using 'import type'.": {
         "category": "Error",
         "code": 1361
     },
-    "Enum '{0}' cannot be used as a value because only its type has been imported.": {
+    "'{0}' cannot be used as a value because it was exported using 'export type'.": {
         "category": "Error",
         "code": 1362
     },
@@ -1085,7 +1085,7 @@
     },
     "Split all invalid type-only imports": {
         "category": "Message",
-        "code": 1377
+        "code": 1367
     },
     "Specify emit/checking behavior for imports that are only used for types": {
         "category": "Message",
@@ -1099,13 +1099,9 @@
         "category": "Error",
         "code": 1370
     },
-    "This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValue' is set to 'error'.": {
+    "This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.": {
         "category": "Error",
         "code": 1371
-    },
-    "This import may be converted to a type-only import.": {
-        "category": "Suggestion",
-        "code": 1372
     },
     "Convert to type-only import": {
         "category": "Message",
@@ -1115,9 +1111,41 @@
         "category": "Message",
         "code": 1374
     },
-    "'await' outside of an async function is only allowed at the top level of a module when '--module' is 'esnext' or 'system' and '--target' is 'es2017' or higher.": {
+    "'await' expressions are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.": {
         "category": "Error",
         "code": 1375
+    },
+    "'{0}' was imported here.": {
+        "category": "Message",
+        "code": 1376
+    },
+    "'{0}' was exported here.": {
+        "category": "Message",
+        "code": 1377
+    },
+    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.": {
+        "category": "Error",
+        "code": 1378
+    },
+    "An import alias cannot reference a declaration that was exported using 'export type'.": {
+        "category": "Error",
+        "code": 1379
+    },
+    "An import alias cannot reference a declaration that was imported using 'import type'.": {
+        "category": "Error",
+        "code": 1380
+    },
+    "Unexpected token. Did you mean `{'}'}` or `&rbrace;`?": {
+        "category": "Error",
+        "code": 1381
+    },
+    "Unexpected token. Did you mean `{'>'}` or `&gt;`?": {
+        "category": "Error",
+        "code": 1382
+    },
+    "Only named exports may use 'export type'.": {
+        "category": "Error",
+        "code": 1383
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -1177,7 +1205,7 @@
         "category": "Error",
         "code": 2306
     },
-    "Cannot find module '{0}'.": {
+    "Cannot find module '{0}' or its corresponding type declarations.": {
         "category": "Error",
         "code": 2307
     },
@@ -1765,6 +1793,14 @@
         "category": "Error",
         "code": 2458
     },
+    "Module '{0}' declares '{1}' locally, but it is not exported.": {
+        "category": "Error",
+        "code": 2459
+    },
+    "Module '{0}' declares '{1}' locally, but it is exported as '{2}'.": {
+        "category": "Error",
+        "code": 2460
+    },
     "Type '{0}' is not an array type.": {
         "category": "Error",
         "code": 2461
@@ -2209,6 +2245,10 @@
         "category": "Error",
         "code": 2577
     },
+    "Unused '@ts-expect-error' directive.": {
+        "category": "Error",
+        "code": 2578
+    },
     "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.": {
         "category": "Error",
         "code": 2580
@@ -2328,6 +2368,10 @@
     "Module '{0}' has no exported member '{1}'. Did you mean to use 'import {1} from {0}' instead?": {
         "category": "Error",
         "code": 2614
+    },
+    "Type of property '{0}' circularly references itself in mapped type '{1}'.": {
+        "category": "Error",
+        "code": 2615
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
@@ -2659,7 +2703,7 @@
         "category": "Error",
         "code": 2733
     },
-    "It is highly likely that you are missing a semicolon.": {
+    "Are you missing a semicolon?": {
         "category": "Error",
         "code": 2734
     },
@@ -2719,7 +2763,7 @@
         "category": "Error",
         "code": 2748
     },
-    "'{0}' refers to a value, but is being used as a type here.": {
+    "'{0}' refers to a value, but is being used as a type here. Did you mean 'typeof {0}'?": {
         "category": "Error",
         "code": 2749
     },
@@ -2850,6 +2894,22 @@
     "The left-hand side of a 'for...of' statement may not be an optional property access.": {
         "category": "Error",
         "code": 2781
+    },
+    "'{0}' needs an explicit type annotation.": {
+        "category": "Message",
+        "code": 2782
+    },
+    "'{0}' is specified more than once, so this usage will be overwritten.": {
+        "category": "Error",
+        "code": 2783
+    },
+    "'get' and 'set' accessors cannot declare 'this' parameters.": {
+        "category": "Error",
+        "code": 2784
+    },
+    "This spread always overwrites this property.": {
+        "category": "Error",
+        "code": 2785
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3389,6 +3449,10 @@
         "category": "Error",
         "code": 5081
     },
+    "'{0}' could be instantiated with an arbitrary type which could be unrelated to '{1}'.": {
+        "category": "Error",
+        "code": 5082
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -3602,7 +3666,7 @@
         "category": "Message",
         "code": 6061
     },
-    "Option '{0}' can only be specified in 'tsconfig.json' file.": {
+    "Option '{0}' can only be specified in 'tsconfig.json' file or set to 'null' on command line.": {
         "category": "Error",
         "code": 6064
     },
@@ -4252,9 +4316,17 @@
         "category": "Message",
         "code": 6228
     },
-    "Could not resolve the path '{0}' with the extensions: {1}.": {
+    "Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.": {
         "category": "Error",
         "code": 6229
+    },
+    "Option '{0}' can only be specified in 'tsconfig.json' file or set to 'false' or 'null' on command line.": {
+        "category": "Error",
+        "code": 6230
+    },
+    "Could not resolve the path '{0}' with the extensions: {1}.": {
+        "category": "Error",
+        "code": 6231
     },
 
     "Projects to reference": {
@@ -4925,7 +4997,7 @@
         "category": "Message",
         "code": 90003
     },
-    "Remove declaration for: '{0}'": {
+    "Remove unused declaration for: '{0}'": {
         "category": "Message",
         "code": 90004
     },
@@ -5048,6 +5120,14 @@
     "Add parameter name": {
         "category": "Message",
         "code": 90034
+    },
+    "Declare private property '{0}'": {
+        "category": "Message",
+        "code": 90035
+    },
+    "Declare a private field named '{0}'.": {
+        "category": "Message",
+        "code": 90053
     },
     "Convert function to an ES2015 class": {
         "category": "Message",
@@ -5305,6 +5385,14 @@
         "category": "Message",
         "code": 95066
     },
+    "Add missing call parentheses": {
+        "category": "Message",
+        "code": 95067
+    },
+    "Add all missing call parentheses": {
+        "category": "Message",
+        "code": 95068
+    },
     "Add 'unknown' conversion for non-overlapping types": {
         "category": "Message",
         "code": 95069
@@ -5417,6 +5505,50 @@
         "category": "Message",
         "code": 95096
     },
+    "Add 'export {}' to make this file into a module": {
+        "category": "Message",
+        "code": 95097
+    },
+    "Set the 'target' option in your configuration file to '{0}'": {
+        "category": "Message",
+        "code": 95098
+    },
+    "Set the 'module' option in your configuration file to '{0}'": {
+        "category": "Message",
+        "code": 95099
+    },
+    "Convert invalid character to its html entity code": {
+        "category": "Message",
+        "code": 95100
+    },
+    "Wrap invalid character in an expression container": {
+        "category": "Message",
+        "code": 95101
+    },
+    "Add '@class' tag": {
+        "category": "Message",
+        "code": 95102
+    },
+    "Add '@this' tag": {
+        "category": "Message",
+        "code": 95103
+    },
+    "Add 'this' parameter.": {
+        "category": "Message",
+        "code": 95104
+    },
+    "Convert function expression '{0}' to arrow function": {
+        "category": "Message",
+        "code": 95105
+    },
+    "Convert function declaration '{0}' to arrow function": {
+        "category": "Message",
+        "code": 95106
+    },
+    "Fix all implicit-'this' errors": {
+        "category": "Message",
+        "code": 95107
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -5429,10 +5561,6 @@
     "JSX expressions may not use the comma operator. Did you mean to write an array?": {
         "category": "Error",
         "code": 18007
-    },
-    "'#!' can only be used at the start of a file.": {
-        "category": "Error",
-        "code": 18008
     },
     "Private identifiers cannot be used as parameters": {
         "category": "Error",

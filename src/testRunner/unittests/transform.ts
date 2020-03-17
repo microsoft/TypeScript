@@ -101,7 +101,7 @@ namespace ts {
             return transformSourceFile(`let a!: () => void`, [
                 context => file => visitNode(file, function visitor(node: Node): VisitResult<Node> {
                     if (node.kind === SyntaxKind.VoidKeyword) {
-                        return createIdentifier("undefined");
+                        return createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
                     }
                     return visitEachChild(node, visitor, context);
                 })

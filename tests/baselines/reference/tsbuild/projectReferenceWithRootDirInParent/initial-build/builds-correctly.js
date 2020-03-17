@@ -21,6 +21,7 @@ export declare const b = 0;
 //// [/src/dist/main/b.js]
 "use strict";
 exports.__esModule = true;
+exports.b = void 0;
 exports.b = 0;
 
 
@@ -71,6 +72,7 @@ export declare const Other = 0;
 //// [/src/dist/other/other.js]
 "use strict";
 exports.__esModule = true;
+exports.Other = void 0;
 exports.Other = 0;
 
 

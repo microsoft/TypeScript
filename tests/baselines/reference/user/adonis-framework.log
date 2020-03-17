@@ -24,6 +24,7 @@ node_modules/adonis-framework/src/Encryption/index.js(71,34): error TS2769: No o
     Argument of type 'string' is not assignable to parameter of type 'undefined'.
   Overload 2 of 4, '(data: string, input_encoding: "utf8" | "ascii" | "binary" | undefined, output_encoding: HexBase64BinaryEncoding): string', gave the following error.
     Argument of type 'string' is not assignable to parameter of type '"utf8" | "ascii" | "binary" | undefined'.
+node_modules/adonis-framework/src/Encryption/index.js(77,27): error TS2322: Type 'string' is not assignable to type 'Buffer'.
 node_modules/adonis-framework/src/Encryption/index.js(77,50): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/adonis-framework/src/Encryption/index.js(85,23): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
 node_modules/adonis-framework/src/Encryption/index.js(87,15): error TS2304: Cannot find name 'Mixed'.
@@ -32,6 +33,8 @@ node_modules/adonis-framework/src/Encryption/index.js(101,62): error TS2769: No 
     Argument of type 'string' is not assignable to parameter of type 'Utf8AsciiBinaryEncoding'.
   Overload 2 of 4, '(data: string, input_encoding: "base64" | "binary" | "hex" | undefined, output_encoding: Utf8AsciiBinaryEncoding): string', gave the following error.
     Argument of type 'string' is not assignable to parameter of type 'Utf8AsciiBinaryEncoding'.
+node_modules/adonis-framework/src/Encryption/index.js(102,5): error TS2322: Type 'string' is not assignable to type 'Buffer & string'.
+  Type 'string' is not assignable to type 'Buffer'.
 node_modules/adonis-framework/src/Encryption/index.js(114,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Encryption/index.js(119,23): error TS2554: Expected 2 arguments, but got 1.
 node_modules/adonis-framework/src/Encryption/index.js(183,15): error TS2304: Cannot find name 'Mixed'.

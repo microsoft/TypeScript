@@ -24,6 +24,7 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/user/username/projects/myproject/logger.js]
 "use strict";
 exports.__esModule = true;
+exports.logger = void 0;
 var logger = /** @class */ (function () {
     function logger() {
     }
@@ -42,11 +43,11 @@ new logger_1.logger();
 
 Output::
 >> Screen clear
-12:00:23 AM - Starting compilation in watch mode...
+[[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:28 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/another.ts","/user/username/projects/myproject/logger.ts"]
@@ -63,21 +64,21 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/another.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/another.ts","pollingInterval":250}
 /user/username/projects/myproject/logger.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/logger.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -87,13 +88,17 @@ Change:: Change name of file from logger to Logger
 
 Output::
 >> Screen clear
-12:00:32 AM - File change detected. Starting incremental compilation...
+[[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
 
-user/username/projects/myproject/another.ts(1,24): error TS1149: File name '/user/username/projects/myproject/logger.ts' differs from already included file name '/user/username/projects/myproject/Logger.ts' only in casing.
+[96muser/username/projects/myproject/another.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1149: [0mFile name '/user/username/projects/myproject/logger.ts' differs from already included file name '/user/username/projects/myproject/Logger.ts' only in casing.
+
+[7m1[0m import { logger } from "./logger"; new logger();
+[7m [0m [91m                       ~~~~~~~~~~[0m
 
 
-12:00:33 AM - Found 1 error. Watching for file changes.
+[[90m12:00:33 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/myproject/Logger.ts","/user/username/projects/myproject/another.ts"]
@@ -107,20 +112,20 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/another.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/another.ts","pollingInterval":250}
 /user/username/projects/myproject/logger.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/logger.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

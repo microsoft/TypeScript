@@ -60,25 +60,25 @@
     >[primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]
     >:=> (line 9, col 24) to (line 9, col 105)
 --------------------------------
-10 >let [nameMC = "noName" ] = ["roomba", ["vaccum", "mopping"]];
+10 >let [nameMC = "noName" ] = ["roomba", ["vacuum", "mopping"]];
 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (453 to 514)  SpanInfo: {"start":458,"length":17}
     >nameMC = "noName"
     >:=> (line 10, col 5) to (line 10, col 22)
 --------------------------------
-11 >let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vaccum", "mopping"]];
+11 >let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vacuum", "mopping"]];
     ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (515 to 538)  SpanInfo: {"start":520,"length":18}
     >nameMC2 = "noName"
     >:=> (line 11, col 5) to (line 11, col 23)
-11 >let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vaccum", "mopping"]];
+11 >let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vacuum", "mopping"]];
                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (539 to 566)  SpanInfo: {"start":541,"length":25}
     >primarySkillC = "noSkill"
     >:=> (line 11, col 26) to (line 11, col 51)
-11 >let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vaccum", "mopping"]];
+11 >let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vacuum", "mopping"]];
                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (567 to 595)  SpanInfo: {"start":568,"length":27}
     >secondarySkillC = "noSkill"
     >:=> (line 11, col 53) to (line 11, col 80)
-11 >let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vaccum", "mopping"]];
+11 >let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vacuum", "mopping"]];
                                                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (596 to 658)  SpanInfo: {"start":540,"length":81}
     >[primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]
     >:=> (line 11, col 25) to (line 11, col 106)

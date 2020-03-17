@@ -15,4 +15,5 @@ declare const a: A;
 >A : Symbol(A, Decl(c.ts, 0, 8))
 
 new A();
+>A : Symbol(A, Decl(c.ts, 0, 8))
 

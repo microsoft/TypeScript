@@ -3,13 +3,13 @@ Standard output:
 lib/adapters/http.js(13,19): error TS2732: Cannot find module './../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
 lib/adapters/http.js(84,22): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
   Type 'null' is not assignable to type 'string'.
-lib/adapters/http.js(124,17): error TS2531: Object is possibly 'null'.
-lib/adapters/http.js(124,40): error TS2531: Object is possibly 'null'.
-lib/adapters/http.js(223,23): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
-lib/adapters/http.js(229,44): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
-lib/adapters/http.js(235,13): error TS2322: Type 'string' is not assignable to type 'Buffer'.
-lib/adapters/http.js(247,40): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
-lib/adapters/http.js(276,42): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
+lib/adapters/http.js(121,17): error TS2531: Object is possibly 'null'.
+lib/adapters/http.js(121,40): error TS2531: Object is possibly 'null'.
+lib/adapters/http.js(220,23): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
+lib/adapters/http.js(226,44): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
+lib/adapters/http.js(232,13): error TS2322: Type 'string' is not assignable to type 'Buffer'.
+lib/adapters/http.js(244,40): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
+lib/adapters/http.js(273,42): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
 lib/adapters/xhr.js(64,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
 lib/adapters/xhr.js(76,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
 lib/adapters/xhr.js(83,51): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.

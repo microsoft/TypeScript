@@ -24,11 +24,11 @@ interface Array<T> { length: number; [n: number]: T; }
 
 Output::
 >> Screen clear
-12:00:19 AM - Starting compilation in watch mode...
+[[90m12:00:19 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:22 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/username/project/src/file1.ts"]
@@ -43,17 +43,17 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/username/project/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/username/project/tsconfig.json","pollingInterval":250}
 /a/username/project/src/file1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/username/project/src/file1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /a/username/project/node_modules/@types:
-  {"pollingInterval":500}
+  {"fileName":"/a/username/project/node_modules/@types","pollingInterval":500}
 /a/username/project:
-  {"pollingInterval":500}
+  {"fileName":"/a/username/project","pollingInterval":500}
 /a/username/project/src:
-  {"pollingInterval":500}
+  {"fileName":"/a/username/project/src","pollingInterval":500}
 
 FsWatches::
 
@@ -73,11 +73,11 @@ Change:: Rename file1 to file2
 
 Output::
 >> Screen clear
-12:00:26 AM - File change detected. Starting incremental compilation...
+[[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:29 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/username/project/src/file2.ts"]
@@ -91,17 +91,17 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/username/project/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/username/project/tsconfig.json","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /a/username/project/node_modules/@types:
-  {"pollingInterval":500}
+  {"fileName":"/a/username/project/node_modules/@types","pollingInterval":500}
 /a/username/project:
-  {"pollingInterval":500}
+  {"fileName":"/a/username/project","pollingInterval":500}
 /a/username/project/src:
-  {"pollingInterval":500}
+  {"fileName":"/a/username/project/src","pollingInterval":500}
 /a/username/project/src/file2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/username/project/src/file2.ts","pollingInterval":250}
 
 FsWatches::
 

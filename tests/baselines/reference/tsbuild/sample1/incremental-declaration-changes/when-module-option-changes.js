@@ -1,11 +1,11 @@
 //// [/lib/incremental-declaration-changesOutput.txt]
 /lib/tsc --b /src/core --verbose
-12:04:00 AM - Projects in this build: 
+[[90m12:04:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
 
-12:04:00 AM - Project 'src/core/tsconfig.json' is out of date because oldest output 'src/core/anotherModule.js' is older than newest input 'src/core/tsconfig.json'
+[[90m12:04:00 AM[0m] Project 'src/core/tsconfig.json' is out of date because oldest output 'src/core/anotherModule.js' is older than newest input 'src/core/tsconfig.json'
 
-12:04:00 AM - Building project '/src/core/tsconfig.json'...
+[[90m12:04:00 AM[0m] Building project '/src/core/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -14,6 +14,7 @@ exitCode:: ExitStatus.Success
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.World = void 0;
     exports.World = "hello";
 });
 
@@ -22,6 +23,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.multiply = exports.leftPad = exports.someString = void 0;
     exports.someString = "HELLO WORLD";
     function leftPad(s, n) { return s + n; }
     exports.leftPad = leftPad;

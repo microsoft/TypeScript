@@ -10,7 +10,7 @@ namespace ts.codefix {
             : getLocaleSpecificMessage(diag);
     }
 
-    export function createCodeFixActionNoFixId(fixName: string, changes: FileTextChanges[], description: DiagnosticAndArguments) {
+    export function createCodeFixActionWithoutFixAll(fixName: string, changes: FileTextChanges[], description: DiagnosticAndArguments) {
         return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, /*fixId*/ undefined, /*fixAllDescription*/ undefined);
     }
 
@@ -38,8 +38,24 @@ namespace ts.codefix {
         return arrayFrom(errorCodeToFixes.keys());
     }
 
+    function removeFixIdIfFixAllUnavailable(registration: CodeFixRegistration, diagnostics: Diagnostic[]) {
+        const { errorCodes } = registration;
+        let maybeFixableDiagnostics = 0;
+        for (const diag of diagnostics) {
+            if (contains(errorCodes, diag.code)) maybeFixableDiagnostics++;
+            if (maybeFixableDiagnostics > 1) break;
+        }
+
+        const fixAllUnavailable = maybeFixableDiagnostics < 2;
+        return ({ fixId, fixAllDescription, ...action }: CodeFixAction): CodeFixAction => {
+            return fixAllUnavailable ? action : { ...action, fixId, fixAllDescription };
+        };
+    }
+
     export function getFixes(context: CodeFixContext): readonly CodeFixAction[] {
-        return flatMap(errorCodeToFixes.get(String(context.errorCode)) || emptyArray, f => f.getCodeActions(context));
+        const diagnostics = getDiagnostics(context);
+        const registrations = errorCodeToFixes.get(String(context.errorCode));
+        return flatMap(registrations, f => map(f.getCodeActions(context), removeFixIdIfFixAllUnavailable(f, diagnostics)));
     }
 
     export function getAllFixes(context: CodeFixAllContext): CombinedCodeActions {
@@ -65,11 +81,15 @@ namespace ts.codefix {
         return createCombinedCodeActions(changes, commands.length === 0 ? undefined : commands);
     }
 
-    export function eachDiagnostic({ program, sourceFile, cancellationToken }: CodeFixAllContext, errorCodes: readonly number[], cb: (diag: DiagnosticWithLocation) => void): void {
-        for (const diag of program.getSemanticDiagnostics(sourceFile, cancellationToken).concat(computeSuggestionDiagnostics(sourceFile, program, cancellationToken))) {
+    export function eachDiagnostic(context: CodeFixAllContext, errorCodes: readonly number[], cb: (diag: DiagnosticWithLocation) => void): void {
+        for (const diag of getDiagnostics(context)) {
             if (contains(errorCodes, diag.code)) {
                 cb(diag as DiagnosticWithLocation);
             }
         }
+    }
+
+    function getDiagnostics({ program, sourceFile, cancellationToken }: CodeFixContextBase) {
+        return program.getSemanticDiagnostics(sourceFile, cancellationToken).concat(computeSuggestionDiagnostics(sourceFile, program, cancellationToken));
     }
 }
