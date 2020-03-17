@@ -915,34 +915,20 @@ namespace ts.textChanges {
 
         /** Note: this may mutate `nodeIn`. */
         function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
-            // Emitter doesn't handle JSDoc, so generate that here.
-            if (isJSDocTag(nodeIn)) {
-                switch (nodeIn.kind) {
-                    case SyntaxKind.JSDocClassTag:
-                        return "@class";
-                    case SyntaxKind.JSDocThisTag:
-                        const { typeExpression } = nodeIn as JSDocThisTag;
-                        return typeExpression ? `@this {${getNonformattedText(typeExpression.type, sourceFile, newLineCharacter).text}}` : "@this";
-                    default:
-                        return Debug.fail(); // TODO (if this is needed)
-                }
+            const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter);
+            if (validate) validate(node, text);
+            const formatOptions = getFormatCodeSettingsForWriting(formatContext, sourceFile);
+            const initialIndentation =
+                indentation !== undefined
+                ? indentation
+                : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
+            if (delta === undefined) {
+                delta = formatting.SmartIndenter.shouldIndentChildNode(formatContext.options, nodeIn) ? (formatOptions.indentSize || 0) : 0;
             }
-            else {
-                const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter);
-                if (validate) validate(node, text);
-                const formatOptions = getFormatCodeSettingsForWriting(formatContext, sourceFile);
-                const initialIndentation =
-                    indentation !== undefined
-                        ? indentation
-                        : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
-                if (delta === undefined) {
-                    delta = formatting.SmartIndenter.shouldIndentChildNode(formatContext.options, nodeIn) ? (formatOptions.indentSize || 0) : 0;
-                }
 
-                const file: SourceFileLike = { text, getLineAndCharacterOfPosition(pos) { return getLineAndCharacterOfPosition(this, pos); } };
-                const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, { ...formatContext, options: formatOptions });
-                return applyChanges(text, changes);
-            }
+            const file: SourceFileLike = { text, getLineAndCharacterOfPosition(pos) { return getLineAndCharacterOfPosition(this, pos); } };
+            const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, { ...formatContext, options: formatOptions });
+            return applyChanges(text, changes);
         }
 
         /** Note: output node may be mutated input node. */
