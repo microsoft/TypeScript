@@ -27,7 +27,7 @@
 
 verify.codeFix({
     description: "Infer 'this' type of 'returnThisMember' from usage",
-    index: 1,
+    index: 0,
     newFileContent: `/**
  * @this {any}
  */
