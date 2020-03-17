@@ -3187,8 +3187,7 @@ namespace ts {
         file: Path;
     }
 
-    // TODO: This should implement TypeCheckerHost but that's an internal type.
-    export interface Program extends ScriptReferenceHost, ModuleSpecifierResolutionHost {
+    export interface Program extends ScriptReferenceHost {
         getCurrentDirectory(): string;
         /**
          * Get a list of root file names that were passed to a 'createProgram'
@@ -3288,6 +3287,10 @@ namespace ts {
         /*@internal*/ getProgramBuildInfo?(): ProgramBuildInfo | undefined;
         /*@internal*/ emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
         /*@internal*/ getProbableSymlinks(): ReadonlyMap<string>;
+    }
+
+    /*@internal*/
+    export interface Program extends TypeCheckerHost, ModuleSpecifierResolutionHost {
     }
 
     /* @internal */
@@ -6420,14 +6423,19 @@ namespace ts {
         getCurrentDirectory?(): string;
     }
 
-    export interface ModuleSpecifierResolutionHost extends GetEffectiveTypeRootsHost {
+    /*@internal*/
+    export interface ModuleSpecifierResolutionHost {
         useCaseSensitiveFileNames?(): boolean;
         fileExists?(path: string): boolean;
+        getCurrentDirectory(): string;
         readFile?(path: string): string | undefined;
         /* @internal */
         getProbableSymlinks?(files: readonly SourceFile[]): ReadonlyMap<string>;
         /* @internal */
         getGlobalTypingsCacheLocation?(): string | undefined;
+
+        getSourceFiles(): readonly SourceFile[];
+        readonly redirectTargetsMap: RedirectTargetsMap;
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally
@@ -6441,7 +6449,7 @@ namespace ts {
         reportPrivateInBaseOfClassExpression?(propertyName: string): void;
         reportInaccessibleUniqueSymbolError?(): void;
         reportLikelyUnsafeImportRequiredError?(specifier: string): void;
-        moduleResolverHost?: ModuleSpecifierResolutionHost & { getSourceFiles(): readonly SourceFile[], getCommonSourceDirectory(): string };
+        moduleResolverHost?: ModuleSpecifierResolutionHost & { getCommonSourceDirectory(): string };
         trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
         trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
     }

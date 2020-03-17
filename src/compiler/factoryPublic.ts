@@ -2467,6 +2467,12 @@ namespace ts {
     }
 
     /* @internal */
+    export function createJSDocClassTag(): JSDocClassTag {
+        return createJSDocTag<JSDocClassTag>(SyntaxKind.JSDocClassTag, "class");
+    }
+
+
+    /* @internal */
     export function createJSDocComment(comment?: string | undefined, tags?: NodeArray<JSDocTag> | undefined) {
         const node = createSynthesizedNode(SyntaxKind.JSDocComment) as JSDoc;
         node.comment = comment;

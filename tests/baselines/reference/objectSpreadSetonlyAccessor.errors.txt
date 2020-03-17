@@ -6,4 +6,5 @@ tests/cases/conformance/types/spread/objectSpreadSetonlyAccessor.ts(2,34): error
     const o2: { foo: undefined } = { foo: 1, ... { set foo(_v: number) { } } }
                                      ~~~~~~
 !!! error TS2783: 'foo' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 tests/cases/conformance/types/spread/objectSpreadSetonlyAccessor.ts:2:42: This spread always overwrites this property.
     
