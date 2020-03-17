@@ -2396,6 +2396,8 @@ namespace ts {
         return checker.getTypeAtLocation(caseClause.parent.parent.expression);
     }
 
+    export const ANONYMOUS = "anonymous function";
+
     export function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, program: Program, host: LanguageServiceHost): TypeNode | undefined {
         const checker = program.getTypeChecker();
         let typeIsAccessible = true;

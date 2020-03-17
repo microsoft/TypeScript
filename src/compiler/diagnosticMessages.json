@@ -5517,6 +5517,30 @@
         "category": "Message",
         "code": 95101
     },
+    "Add '@class' tag": {
+        "category": "Message",
+        "code": 95102
+    },
+    "Add '@this' tag": {
+        "category": "Message",
+        "code": 95103
+    },
+    "Add 'this' parameter.": {
+        "category": "Message",
+        "code": 95104
+    },
+    "Convert function expression '{0}' to arrow function": {
+        "category": "Message",
+        "code": 95105
+    },
+    "Convert function declaration '{0}' to arrow function": {
+        "category": "Message",
+        "code": 95106
+    },
+    "Fix all implicit-'this' errors": {
+        "category": "Message",
+        "code": 95107
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
