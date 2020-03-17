@@ -320,9 +320,7 @@ namespace ts {
         const moduleKind = getEmitModuleKind(compilerOptions);
         const allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
         const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
-        // TODO(rbuckton): Uncomment this after a full user-test run
-        // const strictAwaitedTypes = getStrictOptionValue(compilerOptions, "strictAwaitedTypes");
-        const strictAwaitedTypes = compilerOptions.strictAwaitedTypes;
+        const strictAwaitedTypes = getStrictOptionValue(compilerOptions, "strictAwaitedTypes");
         const strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
         const strictBindCallApply = getStrictOptionValue(compilerOptions, "strictBindCallApply");
         const strictPropertyInitialization = getStrictOptionValue(compilerOptions, "strictPropertyInitialization");
