@@ -342,9 +342,9 @@ class Interesting {
 >Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		}) : Promise<DooDad>
 >Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1) | null | undefined, onrejected?: ((reason: any) => TResult2) | null | undefined) => Promise<awaited TResult1 | awaited TResult2>
 >Promise.resolve() : Promise<void>
->Promise.resolve : { <T>(value: T): Promise<awaited T>; (): Promise<void>; }
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<awaited T>; (): Promise<void>; }
 >Promise : PromiseConstructor
->resolve : { <T>(value: T): Promise<awaited T>; (): Promise<void>; }
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<awaited T>; (): Promise<void>; }
 >then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1) | null | undefined, onrejected?: ((reason: any) => TResult2) | null | undefined) => Promise<awaited TResult1 | awaited TResult2>
 >() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		} : () => "SOMETHING" | "ELSE"
 
@@ -369,9 +369,9 @@ class Interesting {
 >Promise.resolve().then(() => {			return 'ELSE';		}) : Promise<DooDad>
 >Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1) | null | undefined, onrejected?: ((reason: any) => TResult2) | null | undefined) => Promise<awaited TResult1 | awaited TResult2>
 >Promise.resolve() : Promise<void>
->Promise.resolve : { <T>(value: T): Promise<awaited T>; (): Promise<void>; }
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<awaited T>; (): Promise<void>; }
 >Promise : PromiseConstructor
->resolve : { <T>(value: T): Promise<awaited T>; (): Promise<void>; }
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<awaited T>; (): Promise<void>; }
 >then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1) | null | undefined, onrejected?: ((reason: any) => TResult2) | null | undefined) => Promise<awaited TResult1 | awaited TResult2>
 >() => {			return 'ELSE';		} : () => "ELSE"
 
@@ -388,9 +388,9 @@ class Interesting {
 >Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		}) : Promise<DooDad>
 >Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1) | null | undefined, onrejected?: ((reason: any) => TResult2) | null | undefined) => Promise<awaited TResult1 | awaited TResult2>
 >Promise.resolve() : Promise<void>
->Promise.resolve : { <T>(value: T): Promise<awaited T>; (): Promise<void>; }
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<awaited T>; (): Promise<void>; }
 >Promise : PromiseConstructor
->resolve : { <T>(value: T): Promise<awaited T>; (): Promise<void>; }
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<awaited T>; (): Promise<void>; }
 >then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1) | null | undefined, onrejected?: ((reason: any) => TResult2) | null | undefined) => Promise<awaited TResult1 | awaited TResult2>
 >() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		} : () => "SOMETHING"
 

@@ -11,9 +11,9 @@ class A {
         await Promise.resolve();
 >await Promise.resolve() : void
 >Promise.resolve() : Promise<void>
->Promise.resolve : { <T>(value: T): Promise<awaited T>; (): Promise<void>; }
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<awaited T>; (): Promise<void>; }
 >Promise : PromiseConstructor
->resolve : { <T>(value: T): Promise<awaited T>; (): Promise<void>; }
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<awaited T>; (): Promise<void>; }
 
         const obj = { ["a"]: () => this }; // computed property name after `await` triggers case
 >obj : { a: () => this; }

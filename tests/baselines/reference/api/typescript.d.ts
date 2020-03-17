@@ -2720,6 +2720,7 @@ declare namespace ts {
         sourceMap?: boolean;
         sourceRoot?: string;
         strict?: boolean;
+        strictAwaitedTypes?: boolean;
         strictFunctionTypes?: boolean;
         strictBindCallApply?: boolean;
         strictNullChecks?: boolean;

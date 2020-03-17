@@ -835,9 +835,9 @@ const fn30: Fn = pipe(
 const promise = Promise.resolve(1);
 >promise : Promise<number>
 >Promise.resolve(1) : Promise<number>
->Promise.resolve : { <T>(value: T): Promise<awaited T>; (): Promise<void>; }
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<awaited T>; (): Promise<void>; }
 >Promise : PromiseConstructor
->resolve : { <T>(value: T): Promise<awaited T>; (): Promise<void>; }
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<awaited T>; (): Promise<void>; }
 >1 : 1
 
 promise.then(

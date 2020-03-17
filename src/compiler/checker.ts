@@ -320,6 +320,9 @@ namespace ts {
         const moduleKind = getEmitModuleKind(compilerOptions);
         const allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
         const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
+        // TODO(rbuckton): Uncomment this after a full user-test run
+        // const strictAwaitedTypes = getStrictOptionValue(compilerOptions, "strictAwaitedTypes");
+        const strictAwaitedTypes = compilerOptions.strictAwaitedTypes;
         const strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
         const strictBindCallApply = getStrictOptionValue(compilerOptions, "strictBindCallApply");
         const strictPropertyInitialization = getStrictOptionValue(compilerOptions, "strictPropertyInitialization");
@@ -16058,6 +16061,13 @@ namespace ts {
                     }
                 }
                 else if (source.flags & TypeFlags.Awaited) {
+                    // In non-strictAwaitedTypes, an `awaited S` is related to `T` if `S` is related to `T`.
+                    if (!strictAwaitedTypes) {
+                        if (result = isRelatedTo((<AwaitedType>source).awaitedType, target, /*reportErrors*/ false)) {
+                            return result;
+                        }
+                    }
+
                     // An `awaited S` is related to `T` if `awaited C` is related to `T`, where `C` is the
                     // constraint of `S`:
                     //

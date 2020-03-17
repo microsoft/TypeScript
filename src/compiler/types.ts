@@ -5209,6 +5209,7 @@ namespace ts {
         sourceMap?: boolean;
         sourceRoot?: string;
         strict?: boolean;
+        strictAwaitedTypes?: boolean;  // Always combine with strict property
         strictFunctionTypes?: boolean;  // Always combine with strict property
         strictBindCallApply?: boolean;  // Always combine with strict property
         strictNullChecks?: boolean;  // Always combine with strict property

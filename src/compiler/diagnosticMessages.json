@@ -4320,6 +4320,10 @@
         "category": "Error",
         "code": 6230
     },
+    "Enable strict checking of awaited type assignability.": {
+        "category": "Message",
+        "code": 6231
+    },
 
     "Projects to reference": {
         "category": "Message",
