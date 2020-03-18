@@ -54,6 +54,7 @@
 //// const baz5: ((() => number) | (() => A)) = () => {
 ////     bar: '1'
 //// }
+//// const baz6: () => number = () => { 1 }
 //// 
 //// const test: { a: () => A } = { a: () => { bar: '1' } }
 
@@ -114,8 +115,7 @@ const baz4: ((() => number) | (() => A)) = () => {
 const baz5: ((() => number) | (() => A)) = () => {
     return { bar: '1' }
 }
+const baz6: () => number = () => { return 1 }
 
-const test: { a: () => A } = { a: () => {
-    return { bar: '1' }
-} }`,
+const test: { a: () => A } = { a: () => { return { bar: '1' } } }`,
 });

@@ -19,12 +19,14 @@ namespace ts.codefix {
         kind: FixKind.MissingReturnStatement;
         declaration: FunctionLikeDeclaration;
         expression: Expression;
+        statement: Statement;
     }
 
     interface MissingParenInfo {
         kind: FixKind.MissingParentheses;
         declaration: ArrowFunction;
         expression: Expression;
+        statement: Statement;
     }
 
     type Info = MissingReturnInfo | MissingParenInfo;
@@ -39,7 +41,7 @@ namespace ts.codefix {
 
             if (info.kind === FixKind.MissingReturnStatement) {
                 return append(
-                    [getActionForfixAddReturnStatement(context, info.declaration, info.expression)],
+                    [getActionForfixAddReturnStatement(context, info.expression, info.statement)],
                     isArrowFunction(info.declaration) ? getActionForfixRemoveBlockBodyBrace(context, info.declaration, info.expression): undefined);
             }
             else {
@@ -52,7 +54,7 @@ namespace ts.codefix {
 
             switch (context.fixId) {
                 case fixIdAddReturnStatement:
-                    addReturnStatement(changes, diag.file, info.declaration, info.expression);
+                    addReturnStatement(changes, diag.file, info.expression, info.statement);
                     break;
                 case fixIdRemoveBlockBodyBrace:
                     if (!isArrowFunction(info.declaration)) return undefined;
@@ -95,7 +97,8 @@ namespace ts.codefix {
             return {
                 declaration,
                 kind: FixKind.MissingReturnStatement,
-                expression: firstStatement.expression
+                expression: firstStatement.expression,
+                statement: firstStatement
             };
         }
         else if (isLabeledStatement(firstStatement) && isExpressionStatement(firstStatement.statement)) {
@@ -104,11 +107,13 @@ namespace ts.codefix {
                 return isArrowFunction(declaration) ? {
                     declaration,
                     kind: FixKind.MissingParentheses,
-                    expression: node
+                    expression: node,
+                    statement: firstStatement
                 } : {
                         declaration,
                         kind: FixKind.MissingReturnStatement,
-                        expression: node
+                        expression: node,
+                        statement: firstStatement
                     };
             }
         }
@@ -120,7 +125,8 @@ namespace ts.codefix {
                     return {
                         declaration,
                         kind: FixKind.MissingReturnStatement,
-                        expression: node
+                        expression: node,
+                        statement: firstStatement
                     };
                 }
             }
@@ -176,8 +182,8 @@ namespace ts.codefix {
         }
     }
 
-    function addReturnStatement(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: FunctionLikeDeclaration, expression: Expression) {
-        changes.replaceNode(sourceFile, declaration.body!, createBlock([createReturn(expression)]));
+    function addReturnStatement(changes: textChanges.ChangeTracker, sourceFile: SourceFile, expression: Expression, statement: Statement) {
+        changes.replaceNode(sourceFile, statement, createReturn(expression));
     }
 
     function removeBlockBodyBrace(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: ArrowFunction, expression: Expression, withParen: boolean) {
@@ -188,8 +194,8 @@ namespace ts.codefix {
         changes.replaceNode(sourceFile, declaration.body, createParen(expression));
     }
 
-    function getActionForfixAddReturnStatement(context: CodeFixContext, declaration: FunctionLikeDeclaration, expression: Expression) {
-        const changes = textChanges.ChangeTracker.with(context, t => addReturnStatement(t, context.sourceFile, declaration, expression));
+    function getActionForfixAddReturnStatement(context: CodeFixContext, expression: Expression, statement: Statement) {
+        const changes = textChanges.ChangeTracker.with(context, t => addReturnStatement(t, context.sourceFile, expression, statement));
         return createCodeFixAction(fixId, changes, Diagnostics.Add_a_return_statement, fixIdAddReturnStatement, Diagnostics.Add_all_missing_return_statement);
     }
 
