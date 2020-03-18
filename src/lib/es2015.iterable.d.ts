@@ -200,7 +200,7 @@ interface PromiseConstructor {
     /**
      * Creates a Promise that is resolved with an array of results when all of the provided Promises
      * resolve, or rejected when any Promise is rejected.
-     * @param values An array of Promises.
+     * @param values An iterable of Promises.
      * @returns A new Promise.
      */
     all<T>(values: Iterable<T | PromiseLike<T>>): Promise<(awaited T)[]>;
@@ -208,7 +208,7 @@ interface PromiseConstructor {
     /**
      * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
      * or rejected.
-     * @param values An array of Promises.
+     * @param values An iterable of Promises.
      * @returns A new Promise.
      */
     race<T>(values: Iterable<T | PromiseLike<T>>): Promise<awaited T>;
