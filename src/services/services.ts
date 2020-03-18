@@ -283,6 +283,12 @@ namespace ts {
         }
     }
 
+    enum ContextualDocumentationType {
+        None = "None",
+        GetAccessor = "GetAccessor",
+        SetAccessor = "SetAccessor"
+    }
+
     class SymbolObject implements Symbol {
         flags: SymbolFlags;
         escapedName: __String;
@@ -292,6 +298,8 @@ namespace ts {
         // Undefined is used to indicate the value has not been computed. If, after computing, the
         // symbol has no doc comment, then the empty array will be returned.
         documentationComment?: SymbolDisplayPart[];
+
+        contextualDocumentationComment?: Map<SymbolDisplayPart[]>;
 
         // Undefined is used to indicate the value has not been computed. If, after computing, the
         // symbol has no JSDoc tags, then the empty array will be returned.
@@ -328,6 +336,27 @@ namespace ts {
                 this.documentationComment = getDocumentationComment(this.declarations, checker);
             }
             return this.documentationComment;
+        }
+
+        getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
+            switch (context?.kind) {
+                case SyntaxKind.GetAccessor:
+                    return this.getContextualDocumentationCommentCached(ContextualDocumentationType.GetAccessor, filter(this.declarations, isGetAccessor), checker);
+                case SyntaxKind.SetAccessor:
+                    return this.getContextualDocumentationCommentCached(ContextualDocumentationType.SetAccessor, filter(this.declarations, isSetAccessor), checker);
+                default:
+                    return this.getDocumentationComment(checker);
+            }
+        }
+
+        getContextualDocumentationCommentCached(type: ContextualDocumentationType, declarations: Declaration[], checker: TypeChecker | undefined): SymbolDisplayPart[] {
+            if (!this.contextualDocumentationComment) {
+                this.contextualDocumentationComment = createMultiMap<SymbolDisplayPart>();
+            }
+            if (!this.contextualDocumentationComment.has(type)) {
+                this.contextualDocumentationComment.set(type, getDocumentationComment(declarations, checker));
+            }
+            return this.contextualDocumentationComment.get(type)!;
         }
 
         getJsDocTags(): JSDocTagInfo[] {
