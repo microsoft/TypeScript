@@ -342,5 +342,9 @@ namespace ts {
                 assert.equal(last!.kind, SyntaxKind.EndOfFileToken);
             });
         });
+        describe("getStart of node with JSDoc but no parent pointers", () => {
+            const root = createSourceFile("foo.ts", "/** */var a = true;", ScriptTarget.ES5, /*setParentNodes*/ false);
+            root.statements[0].getStart(root, /*includeJsdocComment*/ true);
+        });
     });
 }

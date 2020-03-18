@@ -1569,6 +1569,10 @@
         "category": "Error",
         "code": 2397
     },
+    "'constructor' cannot be used as a parameter property name.": {
+        "category": "Error",
+        "code": 2398
+    },
     "Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.": {
         "category": "Error",
         "code": 2399
@@ -4324,9 +4328,13 @@
         "category": "Error",
         "code": 6230
     },
+    "Could not resolve the path '{0}' with the extensions: {1}.": {
+        "category": "Error",
+        "code": 6231
+    },
     "Enable strict checking of awaited type assignability.": {
         "category": "Message",
-        "code": 6231
+        "code": 6232
     },
 
     "Projects to reference": {
