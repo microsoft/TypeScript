@@ -12,6 +12,6 @@
 ////|]}
 
 // Disable checking for next line
-verify.rangeAfterCodeFix(`//    @ts-ignore
+verify.rangeAfterCodeFix(`//    @ts-expect-error
     x();`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
 

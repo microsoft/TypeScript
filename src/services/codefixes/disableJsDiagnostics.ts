@@ -29,7 +29,7 @@ namespace ts.codefix {
             ];
 
             if (textChanges.isValidLocationToAddComment(sourceFile, span.start)) {
-                fixes.unshift(createCodeFixAction(fixName, textChanges.ChangeTracker.with(context, t => makeChange(t, sourceFile, span.start)), Diagnostics.Ignore_this_error_message, fixId, Diagnostics.Add_ts_ignore_to_all_error_messages));
+                fixes.unshift(createCodeFixAction(fixName, textChanges.ChangeTracker.with(context, t => makeChange(t, sourceFile, span.start)), Diagnostics.Ignore_this_error_message, fixId, Diagnostics.Add_ts_expect_error_to_all_error_messages));
             }
 
             return fixes;
@@ -47,9 +47,9 @@ namespace ts.codefix {
 
     function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, seenLines?: Map<true>) {
         const { line: lineNumber } = getLineAndCharacterOfPosition(sourceFile, position);
-        // Only need to add `// @ts-ignore` for a line once.
+        // Only need to add `// @ts-expect-error` for a line once.
         if (!seenLines || addToSeen(seenLines, lineNumber)) {
-            changes.insertCommentBeforeLine(sourceFile, lineNumber, position, " @ts-ignore");
+            changes.insertCommentBeforeLine(sourceFile, lineNumber, position, " @ts-expect-error");
         }
     }
 }

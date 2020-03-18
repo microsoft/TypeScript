@@ -9,11 +9,11 @@
 ////}
 
 verify.codeFix({
-    description: "Ignore this error message",
+    description: ts.Diagnostics.Ignore_this_error_message.message,
     index: 0,
     newFileContent:
 `{
-    // @ts-ignore
+    // @ts-expect-error
     a;
 }`,
 });

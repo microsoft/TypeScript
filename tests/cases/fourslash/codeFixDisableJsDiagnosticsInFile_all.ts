@@ -11,11 +11,11 @@
 
 verify.codeFixAll({
     fixId: "disableJsDiagnostics",
-    fixAllDescription: "Add '@ts-ignore' to all error messages",
+    fixAllDescription: ts.Diagnostics.Add_ts_expect_error_to_all_error_messages.message,
     newFileContent:
 `let x = "";
-// @ts-ignore
+// @ts-expect-error
 x = 1; x = true;
-// @ts-ignore
+// @ts-expect-error
 x = [];`,
 });

@@ -5277,7 +5277,7 @@
         "category": "Message",
         "code": 95041
     },
-    "Add '@ts-ignore' to all error messages": {
+    "Add '@ts-expect-error' to all error messages": {
         "category": "Message",
         "code": 95042
     },

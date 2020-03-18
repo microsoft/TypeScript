@@ -54,7 +54,7 @@ verify.codeFix({
     return (
       <div>
         {
-// @ts-ignore
+// @ts-expect-error
         doesNotExist}
       </div>
     );
@@ -70,7 +70,7 @@ verify.codeFix({
     return (
       <div>
         Aleph{
-// @ts-ignore
+// @ts-expect-error
         doesNotExist}Bet
       </div>
     );
@@ -86,7 +86,7 @@ verify.codeFix({
     return (
       <div>
         <
-// @ts-ignore
+// @ts-expect-error
         DoesNotExist />
       </div>
     );
