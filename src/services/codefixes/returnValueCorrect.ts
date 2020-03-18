@@ -3,7 +3,6 @@ namespace ts.codefix {
     const fixId = "returnValueCorrect";
     const fixIdAddReturnStatement = "fixAddReturnStatement";
     const fixIdRemoveBlockBodyBrace = "fixRemoveBlockBodyBrace";
-    const fixIdReplaceBraceWithParen = "fixReplaceBraceWithParen";
     const fixIdWrapTheBlockWithParen = "fixWrapTheBlockWithParen";
     const errorCodes = [
         Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value.code,
@@ -32,19 +31,16 @@ namespace ts.codefix {
 
     registerCodeFix({
         errorCodes,
-        fixIds: [fixIdAddReturnStatement, fixIdRemoveBlockBodyBrace, fixIdReplaceBraceWithParen, fixIdWrapTheBlockWithParen],
+        fixIds: [fixIdAddReturnStatement, fixIdRemoveBlockBodyBrace, fixIdWrapTheBlockWithParen],
         getCodeActions: context => {
             const { program, sourceFile, span: { start }, errorCode } = context;
             const info = getInfo(program.getTypeChecker(), sourceFile, start, errorCode);
             if (!info) return undefined;
 
             if (info.kind === FixKind.MissingReturnStatement) {
-                return concatenate(
+                return append(
                     [getActionForfixAddReturnStatement(context, info.declaration, info.expression)],
-                    isArrowFunction(info.declaration) ? [
-                        getActionForfixRemoveBlockBodyBrace(context, info.declaration, info.expression),
-                        getActionForfixReplaceBraceWithParen(context, info.declaration, info.expression)
-                    ] : undefined);
+                    isArrowFunction(info.declaration) ? getActionForfixRemoveBlockBodyBrace(context, info.declaration, info.expression): undefined);
             }
             else {
                 return [getActionForfixWrapTheBlockWithParen(context, info.declaration, info.expression)];
@@ -61,10 +57,6 @@ namespace ts.codefix {
                 case fixIdRemoveBlockBodyBrace:
                     if (!isArrowFunction(info.declaration)) return undefined;
                     removeBlockBodyBrace(changes, diag.file, info.declaration, info.expression, /* withParen */ false);
-                    break;
-                case fixIdReplaceBraceWithParen:
-                    if (!isArrowFunction(info.declaration)) return undefined;
-                    removeBlockBodyBrace(changes, diag.file, info.declaration, info.expression, /* withParen */ true);
                     break;
                 case fixIdWrapTheBlockWithParen:
                     if (!isArrowFunction(info.declaration)) return undefined;
@@ -204,11 +196,6 @@ namespace ts.codefix {
     function getActionForfixRemoveBlockBodyBrace(context: CodeFixContext, declaration: ArrowFunction, expression: Expression) {
         const changes = textChanges.ChangeTracker.with(context, t => removeBlockBodyBrace(t, context.sourceFile, declaration, expression, /* withParen */ false));
         return createCodeFixAction(fixId, changes, Diagnostics.Remove_block_body_braces, fixIdRemoveBlockBodyBrace, Diagnostics.Correct_all_return_expressions);
-    }
-
-    function getActionForfixReplaceBraceWithParen(context: CodeFixContext, declaration: ArrowFunction, expression: Expression) {
-        const changes = textChanges.ChangeTracker.with(context, t => removeBlockBodyBrace(t, context.sourceFile, declaration, expression, /* withParen */ true));
-        return createCodeFixAction(fixId, changes, Diagnostics.Replace_braces_with_parentheses, fixIdReplaceBraceWithParen, Diagnostics.Correct_all_return_expressions);
     }
 
     function getActionForfixWrapTheBlockWithParen(context: CodeFixContext, declaration: ArrowFunction, expression: Expression) {

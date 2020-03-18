@@ -5505,17 +5505,13 @@
         "category": "Message",
         "code": 95103
     },
-    "Replace braces with parentheses": {
+    "Wrap this block with parentheses": {
         "category": "Message",
         "code": 95104
     },
-    "Wrap this block with parentheses": {
-        "category": "Message",
-        "code": 95105
-    },
     "Correct all return expressions": {
         "category": "Message",
-        "code": 95106
+        "code": 95105
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
