@@ -190,16 +190,16 @@ namespace ts.codefix {
 
     function getActionForfixAddReturnStatement(context: CodeFixContext, declaration: FunctionLikeDeclaration, expression: Expression) {
         const changes = textChanges.ChangeTracker.with(context, t => addReturnStatement(t, context.sourceFile, declaration, expression));
-        return createCodeFixAction(fixId, changes, Diagnostics.Add_a_return_statement, fixIdAddReturnStatement, Diagnostics.Correct_all_return_expressions);
+        return createCodeFixAction(fixId, changes, Diagnostics.Add_a_return_statement, fixIdAddReturnStatement, Diagnostics.Add_all_missing_return_statement);
     }
 
     function getActionForfixRemoveBlockBodyBrace(context: CodeFixContext, declaration: ArrowFunction, expression: Expression) {
         const changes = textChanges.ChangeTracker.with(context, t => removeBlockBodyBrace(t, context.sourceFile, declaration, expression, /* withParen */ false));
-        return createCodeFixAction(fixId, changes, Diagnostics.Remove_block_body_braces, fixIdRemoveBlockBodyBrace, Diagnostics.Correct_all_return_expressions);
+        return createCodeFixAction(fixId, changes, Diagnostics.Remove_block_body_braces, fixIdRemoveBlockBodyBrace, Diagnostics.Remove_all_incorrect_body_block_braces);
     }
 
     function getActionForfixWrapTheBlockWithParen(context: CodeFixContext, declaration: ArrowFunction, expression: Expression) {
         const changes = textChanges.ChangeTracker.with(context, t => wrapBlockWithParen(t, context.sourceFile, declaration, expression));
-        return createCodeFixAction(fixId, changes, Diagnostics.Wrap_this_block_with_parentheses, fixIdWrapTheBlockWithParen, Diagnostics.Correct_all_return_expressions);
+        return createCodeFixAction(fixId, changes, Diagnostics.Wrap_this_object_literal_with_parentheses, fixIdWrapTheBlockWithParen, Diagnostics.Wrap_all_object_literal_with_parentheses);
     }
 }

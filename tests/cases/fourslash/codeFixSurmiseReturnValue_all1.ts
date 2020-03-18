@@ -59,7 +59,7 @@
 
 verify.codeFixAll({
     fixId: "fixAddReturnStatement",
-    fixAllDescription: "Correct all return expressions",
+    fixAllDescription: "Add all missing return statement",
     newFileContent:
 `interface A {
     bar: string

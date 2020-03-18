@@ -59,7 +59,7 @@
 
 verify.codeFixAll({
     fixId: "fixRemoveBlockBodyBrace",
-    fixAllDescription: "Correct all return expressions",
+    fixAllDescription: "Remove all incorrect body block braces",
     newFileContent:
 `interface A {
     bar: string

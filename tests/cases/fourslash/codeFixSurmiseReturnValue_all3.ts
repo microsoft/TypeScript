@@ -59,7 +59,7 @@
 
 verify.codeFixAll({
     fixId: "fixWrapTheBlockWithParen",
-    fixAllDescription: "Correct all return expressions",
+    fixAllDescription: "Wrap all object literal with parentheses",
     newFileContent:
 `interface A {
     bar: string
