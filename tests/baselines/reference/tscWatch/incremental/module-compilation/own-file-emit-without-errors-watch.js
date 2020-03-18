@@ -76,11 +76,11 @@ define(["require", "exports"], function (require, exports) {
 
 Output::
 >> Screen clear
-12:00:23 AM - Starting compilation in watch mode...
+[[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:30 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
@@ -166,11 +166,11 @@ define(["require", "exports"], function (require, exports) {
 
 Output::
 >> Screen clear
-12:00:34 AM - Starting compilation in watch mode...
+[[90m12:00:34 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:41 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:41 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]

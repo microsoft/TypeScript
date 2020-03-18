@@ -1,13 +1,20 @@
 //// [/lib/incremental-declaration-changesOutput.txt]
 /lib/tsc --b /src --verbose
-12:04:00 AM - Projects in this build: 
+[[90m12:04:00 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-12:04:00 AM - Project 'src/tsconfig.json' is out of date because oldest output 'src/obj/bar.js' is older than newest input 'src/bar.ts'
+[[90m12:04:00 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/obj/bar.js' is older than newest input 'src/bar.ts'
 
-12:04:00 AM - Building project '/src/tsconfig.json'...
+[[90m12:04:00 AM[0m] Building project '/src/tsconfig.json'...
 
-src/lazyIndex.ts(4,5): error TS2554: Expected 0 arguments, but got 1.
+[96msrc/lazyIndex.ts[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS2554: [0mExpected 0 arguments, but got 1.
+
+[7m4[0m bar("hello");
+[7m [0m [91m    ~~~~~~~[0m
+
+
+Found 1 error.
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 

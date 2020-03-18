@@ -14,9 +14,9 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(30,9): error TS23
   Type 'string | undefined' is not assignable to type 'string'.
     Type 'undefined' is not assignable to type 'string'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(103,5): error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>' is not assignable to type 'T'.
-  'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(104,5): error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>' is not assignable to type 'T'.
-  'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(106,5): error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>' is not assignable to type 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>'.
   Type 'T[keyof T] extends Function ? keyof T : never' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(108,5): error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>' is not assignable to type 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>'.
@@ -40,12 +40,13 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(137,10): error TS
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(159,5): error TS2322: Type 'ZeroOf<T>' is not assignable to type 'T'.
   'ZeroOf<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
     Type '0 | (T extends string ? "" : false)' is not assignable to type 'T'.
-      Type '0' is not assignable to type 'T'.
-        '0' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
-          Type '"" | 0' is not assignable to type 'T'.
-            '"" | 0' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
-              Type '""' is not assignable to type 'T'.
-                '""' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to '0 | (T extends string ? "" : false)'.
+        Type '0' is not assignable to type 'T'.
+          '0' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
+            Type '"" | 0' is not assignable to type 'T'.
+              '"" | 0' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
+                Type '""' is not assignable to type 'T'.
+                  '""' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(160,5): error TS2322: Type 'T' is not assignable to type 'ZeroOf<T>'.
   Type 'string | number' is not assignable to type 'ZeroOf<T>'.
     Type 'string' is not assignable to type 'ZeroOf<T>'.
@@ -181,11 +182,11 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
         x = y;  // Error
         ~
 !!! error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>' is not assignable to type 'T'.
-!!! error TS2322:   'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>'.
         x = z;  // Error
         ~
 !!! error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>' is not assignable to type 'T'.
-!!! error TS2322:   'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>'.
         y = x;
         y = z;  // Error
         ~
@@ -275,12 +276,13 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
 !!! error TS2322: Type 'ZeroOf<T>' is not assignable to type 'T'.
 !!! error TS2322:   'ZeroOf<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
 !!! error TS2322:     Type '0 | (T extends string ? "" : false)' is not assignable to type 'T'.
-!!! error TS2322:       Type '0' is not assignable to type 'T'.
-!!! error TS2322:         '0' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
-!!! error TS2322:           Type '"" | 0' is not assignable to type 'T'.
-!!! error TS2322:             '"" | 0' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
-!!! error TS2322:               Type '""' is not assignable to type 'T'.
-!!! error TS2322:                 '""' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
+!!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to '0 | (T extends string ? "" : false)'.
+!!! error TS2322:         Type '0' is not assignable to type 'T'.
+!!! error TS2322:           '0' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
+!!! error TS2322:             Type '"" | 0' is not assignable to type 'T'.
+!!! error TS2322:               '"" | 0' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
+!!! error TS2322:                 Type '""' is not assignable to type 'T'.
+!!! error TS2322:                   '""' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
         y = x;  // Error
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'ZeroOf<T>'.
