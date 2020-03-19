@@ -15,6 +15,6 @@
 
 goTo.marker('1');
 verify.quickInfoExists();
-verify.quickInfoIs('function f(p1: "literal", p2: "literal", p3: "other1" | "other2", p4: number | "literal", p5: true | 12): string', 'I am documentation');
+verify.quickInfoIs('function f(p1: \'literal\', p2: "literal", p3: \'other1\' | \'other2\', p4: \'literal\' | number, p5: 12 | true): string', 'I am documentation');
 
 verify.completions({ marker: "2", exact: ["other1", "other2"] });

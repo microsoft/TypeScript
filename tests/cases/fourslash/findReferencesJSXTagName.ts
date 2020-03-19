@@ -12,7 +12,7 @@
 ////    <div style|]={{ fontFamily: "sans-serif" }}></div>;
 
 const [r0Def, r0, r1Def, r1, r2Def, r2] = test.ranges();
-const imports = { definition: "(alias) const SubmissionComp: (submission: any) => any\nimport SubmissionComp", ranges: [r0, r1] };
-const def = { definition: "const SubmissionComp: (submission: any) => any", ranges: [r2] };
+const imports = { definition: "(alias) const SubmissionComp: (submission: SubmissionProps) => any\nimport SubmissionComp", ranges: [r0, r1] };
+const def = { definition: "const SubmissionComp: (submission: SubmissionProps) => any", ranges: [r2] };
 verify.referenceGroups([r0, r1], [imports, def]);
 verify.referenceGroups(r2, [def, imports]);
