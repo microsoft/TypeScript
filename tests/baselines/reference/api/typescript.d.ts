@@ -3394,7 +3394,7 @@ declare namespace ts {
     /** Optionally, get the shebang */
     function getShebang(text: string): string | undefined;
     function isIdentifierStart(ch: number, languageVersion: ScriptTarget | undefined): boolean;
-    function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined): boolean;
+    function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant): boolean;
     function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant?: LanguageVariant, textInitial?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner;
 }
 declare namespace ts {
