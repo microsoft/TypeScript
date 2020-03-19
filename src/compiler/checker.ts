@@ -16040,6 +16040,8 @@ namespace ts {
                         }
                     }
                     else {
+                        // conditionals aren't related to one another via distributive constraint as it is much too inaccurate and allows way
+                        // more assignments than are desirable (since it maps the source check type to its constraint, it loses information)
                         const distributiveConstraint = getConstraintOfDistributiveConditionalType(<ConditionalType>source);
                         if (distributiveConstraint) {
                             if (result = isRelatedTo(distributiveConstraint, target, reportErrors)) {
@@ -16047,12 +16049,14 @@ namespace ts {
                                 return result;
                             }
                         }
-                        const defaultConstraint = getDefaultConstraintOfConditionalType(<ConditionalType>source);
-                        if (defaultConstraint) {
-                            if (result = isRelatedTo(defaultConstraint, target, reportErrors)) {
-                                resetErrorInfo(saveErrorInfo);
-                                return result;
-                            }
+                    }
+                    // conditionals _can_ be related to one another via normal constraint, as, eg, `A extends B ? O : never` should be assignable to `O`
+                    // when `O` is a conditional (`never` is trivially aissgnable to `O`, as is `O`!).
+                    const defaultConstraint = getDefaultConstraintOfConditionalType(<ConditionalType>source);
+                    if (defaultConstraint) {
+                        if (result = isRelatedTo(defaultConstraint, target, reportErrors)) {
+                            resetErrorInfo(saveErrorInfo);
+                            return result;
                         }
                     }
                 }
