@@ -27,7 +27,7 @@ import * as passport from "passport";
 >passport : passport.PassportStatic
 
 import { Passport } from "passport";
->Passport : new () => Passport
+>Passport : new () => passport.Passport
 
 let p: Passport = passport.use();
 >p : Passport

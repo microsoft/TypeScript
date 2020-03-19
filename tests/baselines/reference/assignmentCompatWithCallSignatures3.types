@@ -128,7 +128,7 @@ var a17: {
 
 };
 var a18: {
->a18 : { (x: {    (a: number): number;    (a: string): string;}): any[]; (x: {    (a: boolean): boolean;    (a: Date): Date;}): any[]; }
+>a18 : { (x: { (a: number): number; (a: string): string; }): any[]; (x: { (a: boolean): boolean; (a: Date): Date; }): any[]; }
 
     (x: {
 >x : { (a: number): number; (a: string): string; }
@@ -328,14 +328,14 @@ var b12: <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>;
 >y : T
 
 a12 = b12; // ok
->a12 = b12 : <T extends Base[]>(x: Base[], y: T) => Array<Derived>
->a12 : (x: Base[], y: Derived2[]) => Array<Derived>
->b12 : <T extends Base[]>(x: Base[], y: T) => Array<Derived>
+>a12 = b12 : <T extends Base[]>(x: Base[], y: T) => Derived[]
+>a12 : (x: Base[], y: Derived2[]) => Derived[]
+>b12 : <T extends Base[]>(x: Base[], y: T) => Derived[]
 
 b12 = a12; // ok
->b12 = a12 : (x: Base[], y: Derived2[]) => Array<Derived>
->b12 : <T extends Base[]>(x: Base[], y: T) => Array<Derived>
->a12 : (x: Base[], y: Derived2[]) => Array<Derived>
+>b12 = a12 : (x: Base[], y: Derived2[]) => Derived[]
+>b12 : <T extends Base[]>(x: Base[], y: T) => Derived[]
+>a12 : (x: Base[], y: Derived2[]) => Derived[]
 
 var b13: <T extends Array<Derived>>(x: Array<Base>, y: T) => T; 
 >b13 : <T extends Derived[]>(x: Array<Base>, y: T) => T
@@ -344,16 +344,16 @@ var b13: <T extends Array<Derived>>(x: Array<Base>, y: T) => T;
 
 a13 = b13; // ok
 >a13 = b13 : <T extends Derived[]>(x: Base[], y: T) => T
->a13 : (x: Base[], y: Derived[]) => Array<Derived>
+>a13 : (x: Base[], y: Derived[]) => Derived[]
 >b13 : <T extends Derived[]>(x: Base[], y: T) => T
 
 b13 = a13; // ok
->b13 = a13 : (x: Base[], y: Derived[]) => Array<Derived>
+>b13 = a13 : (x: Base[], y: Derived[]) => Derived[]
 >b13 : <T extends Derived[]>(x: Base[], y: T) => T
->a13 : (x: Base[], y: Derived[]) => Array<Derived>
+>a13 : (x: Base[], y: Derived[]) => Derived[]
 
 var b14: <T>(x: { a: T; b: T }) => T; 
->b14 : <T>(x: {    a: T;    b: T;}) => T
+>b14 : <T>(x: { a: T; b: T; }) => T
 >x : { a: T; b: T; }
 >a : T
 >b : T

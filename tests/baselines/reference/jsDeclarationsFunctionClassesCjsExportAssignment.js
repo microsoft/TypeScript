@@ -225,15 +225,15 @@ declare namespace Context {
  * Input type definition
  */
 type Input = {
-    timer: import("./timer");
-    hook: import("./hook");
+    timer: Timer;
+    hook: Hook;
 };
 /**
  * State type definition
  */
 type State = {
-    timer: import("./timer");
-    hook: import("./hook");
+    timer: Timer;
+    hook: Hook;
 };
 /**
  * Imports

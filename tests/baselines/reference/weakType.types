@@ -148,7 +148,7 @@ type Weak = {
     }
 }
 declare let propertiesWrong: {
->propertiesWrong : { properties: { wrong: string; }; }
+>propertiesWrong : { properties: {    wrong: string;}; }
 
     properties: {
 >properties : { wrong: string; }

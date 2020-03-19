@@ -647,7 +647,7 @@ declare type Foo<T> = T extends string ? boolean : number;
 declare type Bar<T> = T extends string ? boolean : number;
 declare const convert: <U>(value: Foo<U>) => Bar<U>;
 declare type Baz<T> = Foo<T>;
-declare const convert2: <T>(value: Foo<T>) => Baz<T>;
+declare const convert2: <T>(value: Foo<T>) => Foo<T>;
 declare function f31<T>(): void;
 declare function f32<T, U>(): void;
 declare function f33<T, U>(): void;

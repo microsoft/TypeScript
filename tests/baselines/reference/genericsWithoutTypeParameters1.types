@@ -35,7 +35,7 @@ function foo2(x: C<I>, y: I<C>) { }
 >y : I<any>
 
 var x: { a: C } = { a: new C<number>() };
->x : { a: any; }
+>x : { a: C; }
 >a : any
 >{ a: new C<number>() } : { a: C<number>; }
 >a : C<number>
@@ -43,7 +43,7 @@ var x: { a: C } = { a: new C<number>() };
 >C : typeof C
 
 var x2: { a: I } = { a: { bar() { return 1 } } };
->x2 : { a: any; }
+>x2 : { a: I; }
 >a : any
 >{ a: { bar() { return 1 } } } : { a: { bar(): number; }; }
 >a : { bar(): number; }

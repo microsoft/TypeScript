@@ -65,7 +65,7 @@ new GenericComponent({ initialValues: 12, nextValues: val => 12 });
 // #22149
 
 declare function useStringOrNumber<T extends string | number>(t: T, useIt: T extends string ? ((s: string) => void) : ((n: number) => void)): void;
->useStringOrNumber : <T extends string | number>(t: T, useIt: T extends string ? ((s: string) => void) : ((n: number) => void)) => void
+>useStringOrNumber : <T extends string | number>(t: T, useIt: T extends string ? (s: string) => void : (n: number) => void) => void
 >t : T
 >useIt : T extends string ? (s: string) => void : (n: number) => void
 >s : string
@@ -232,7 +232,7 @@ type CreateElementChildren<P> =
   : unknown;
 
 declare function createElement<P extends {}>(
->createElement : <P extends {}>(type: ComponentClass<P>, ...children: CreateElementChildren<P>) => any
+>createElement : <P extends {}>(type: ComponentClass<P>, ...children: P extends { children?: infer C | undefined; } ? C extends any[] ? C : C[] : unknown) => any
 
   type: ComponentClass<P>,
 >type : ComponentClass<P>
@@ -243,7 +243,7 @@ declare function createElement<P extends {}>(
 ): any;
 
 declare function createElement2<P extends {}>(
->createElement2 : <P extends {}>(type: ComponentClass<P>, child: CreateElementChildren<P>) => any
+>createElement2 : <P extends {}>(type: ComponentClass<P>, child: P extends { children?: infer C | undefined; } ? C extends any[] ? C : C[] : unknown) => any
 
   type: ComponentClass<P>,
 >type : ComponentClass<P>

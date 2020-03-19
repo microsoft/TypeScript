@@ -4642,7 +4642,7 @@ namespace ts {
                         propertyTypeNode = createElidedInformationPlaceholder(context);
                     }
                     else {
-                        propertyTypeNode = propertyType ? typeToTypeNodeHelper(propertyType, context) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                        propertyTypeNode = propertyType ? serializeTypeForDeclaration(context, propertyType, propertySymbol, saveEnclosingDeclaration) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
                     }
                     context.flags = savedFlags;
 
@@ -5344,7 +5344,10 @@ namespace ts {
                     // try to reuse the existing annotation
                     const existing = getEffectiveTypeAnnotationNode(declWithExistingAnnotation)!;
                     if (getTypeFromTypeNode(existing) === type) {
-                        return serializeExistingTypeNode(context, existing, includePrivateSymbol, bundled);
+                        const result = serializeExistingTypeNode(context, existing, includePrivateSymbol, bundled);
+                        if (result) {
+                            return result;
+                        }
                     }
                 }
                 const oldFlags = context.flags;
@@ -5359,8 +5362,11 @@ namespace ts {
 
             function serializeReturnTypeForSignature(context: NodeBuilderContext, type: Type, signature: Signature, includePrivateSymbol?: (s: Symbol) => void, bundled?: boolean) {
                 const annotation = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
-                if (annotation && getTypeFromTypeNode(annotation) === type) {
-                    return serializeExistingTypeNode(context, annotation, includePrivateSymbol, bundled);
+                if ((!context.enclosingDeclaration || !!findAncestor(annotation, n => n === context.enclosingDeclaration)) && annotation && getTypeFromTypeNode(annotation) === type) {
+                    const result = serializeExistingTypeNode(context, annotation, includePrivateSymbol, bundled);
+                    if (result) {
+                        return result;
+                    }
                 }
                 return typeToTypeNodeHelper(type, context);
             }
@@ -5369,7 +5375,11 @@ namespace ts {
                 if (cancellationToken && cancellationToken.throwIfCancellationRequested) {
                     cancellationToken.throwIfCancellationRequested();
                 }
+                let hadError = false;
                 const transformed = visitNode(existing, visitExistingNodeTreeSymbols);
+                if (hadError) {
+                    return undefined;
+                }
                 return transformed === existing ? getMutableClone(existing) : transformed;
 
                 function visitExistingNodeTreeSymbols<T extends Node>(node: T): Node {
@@ -5451,6 +5461,9 @@ namespace ts {
                         const leftmost = getFirstIdentifier(node);
                         const sym = resolveEntityName(leftmost, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveALias*/ true);
                         if (sym) {
+                            if (isSymbolAccessible(sym, context.enclosingDeclaration, SymbolFlags.All, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
+                                hadError = true;
+                            }
                             includePrivateSymbol?.(sym);
                             if (isIdentifier(node) && sym.flags & SymbolFlags.TypeParameter) {
                                 const name = typeParameterToName(getDeclaredTypeOfSymbol(sym), context);

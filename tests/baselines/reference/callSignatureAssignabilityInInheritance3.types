@@ -79,7 +79,7 @@ module Errors {
 >b : number
 
             a16: {
->a16 : { (x: {    (a: number): number;    (a?: number): number;}): number[]; (x: {    (a: boolean): boolean;    (a?: boolean): boolean;}): boolean[]; }
+>a16 : { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }
 
                 // type of parameter is overload set which means we can't do inference based on this type
                 (x: {
@@ -104,7 +104,7 @@ module Errors {
                 }): boolean[];
             };
             a17: {
->a17 : { (x: {    <T extends Derived>(a: T): T;    <T extends Base>(a: T): T;}): any[]; (x: {    <T extends Derived2>(a: T): T;    <T extends Base>(a: T): T;}): any[]; }
+>a17 : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }
 
                 (x: {
 >x : { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }
@@ -183,7 +183,7 @@ module Errors {
 
         interface I6 extends A {
             a15: <T>(x: { a: T; b: T }) => T; // error, T is {} which isn't an acceptable return type
->a15 : <T>(x: {    a: T;    b: T;}) => T
+>a15 : <T>(x: { a: T; b: T; }) => T
 >x : { a: T; b: T; }
 >a : T
 >b : T
@@ -191,7 +191,7 @@ module Errors {
 
         interface I7 extends A {
             a15: <T extends Base>(x: { a: T; b: T }) => number; // error, T defaults to Base, which is not compatible with number or string
->a15 : <T extends Base>(x: {    a: T;    b: T;}) => number
+>a15 : <T extends Base>(x: { a: T; b: T; }) => number
 >x : { a: T; b: T; }
 >a : T
 >b : T

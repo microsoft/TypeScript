@@ -11,7 +11,7 @@ var c: I;
 >c : any
 
 var a: { x: I };
->a : { x: any; }
+>a : { x: I; }
 >x : any
 
 var b: { (x: I): I };

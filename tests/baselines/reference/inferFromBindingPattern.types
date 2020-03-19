@@ -23,7 +23,7 @@ let { x: x3 } = f3();  // string
 >x : any
 >x3 : string
 >f3() : { x: string; }
->f3 : <T extends string>() => {    x: T;}
+>f3 : <T extends string>() => { x: T; }
 
 // Repro from #30379
 

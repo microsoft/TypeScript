@@ -9,10 +9,10 @@ export function createNamed(): Named {
 }
 === tests/cases/compiler/a.ts ===
 import { createNamed } from "./b";
->createNamed : () => Named
+>createNamed : () => import("tests/cases/compiler/b").Named
 
 export const Value = createNamed();
 >Value : import("tests/cases/compiler/b").Named
 >createNamed() : import("tests/cases/compiler/b").Named
->createNamed : () => Named
+>createNamed : () => import("tests/cases/compiler/b").Named
 

@@ -28,6 +28,6 @@ export default class MyComponent {
     static create = make(MyComponent);
 >create : Things<Props, MyComponent>
 >make(MyComponent) : Things<Props, MyComponent>
->make : <P, CTor>(x: new () => CTor & {    props: P;}) => Things<P, CTor>
+>make : <P, CTor>(x: new () => CTor & { props: P; }) => Things<P, CTor>
 >MyComponent : typeof MyComponent
 }

@@ -1,6 +1,6 @@
 === tests/cases/compiler/innerTypeCheckOfLambdaArgument.ts ===
 function takesCallback(callback: (n) =>any) {
->takesCallback : (callback: (n) => any) => void
+>takesCallback : (callback: (n: any) => any) => void
 >callback : (n: any) => any
 >n : any
 

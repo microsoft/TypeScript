@@ -13,7 +13,7 @@ function f(x: { y: string } | undefined): { y: string } {
 }
 f(undefined)
 >f(undefined) : { y: string; }
->f : (x: { y: string; } | undefined) => {    y: string;}
+>f : (x: { y: string; } | undefined) => { y: string; }
 >undefined : undefined
 
 

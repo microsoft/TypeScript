@@ -21,7 +21,7 @@ function f2() { // Inferred return type
 >prop12 : X<(<Tany>() => Tany)>
 }
 function f3(): X< <Tany>() => Tany> { // written with space before type argument
->f3 : () => X<<Tany>() => Tany>
+>f3 : () => X<(<Tany>() => Tany)>
 
     return prop11;
 >prop11 : X<(<Tany>() => Tany)>

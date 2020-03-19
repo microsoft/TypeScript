@@ -33,7 +33,7 @@ function ClassFactory<TKind extends string>(kind: TKind) {
 
   register(kind);
 >register(kind) : void
->register : (kind: string) => void | never
+>register : (kind: string) => void
 >kind : TKind
 
   return class {

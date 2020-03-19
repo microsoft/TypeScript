@@ -99,7 +99,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
     c3({ b: true });   // Error, implied type is { b: number|string }. 
          ~
 !!! error TS2322: Type 'true' is not assignable to type 'string | number'.
-!!! related TS6500 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts:29:20: The expected type comes from property 'b' which is declared here on type '{ b: string | number; }'
+!!! related TS6500 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts:29:20: The expected type comes from property 'b' which is declared here on type '{ b: number | string; }'
     c5([1, 2, false, true]);   // Error, implied type is [any, any, [[any]]]
               ~~~~~
 !!! error TS2322: Type 'false' is not assignable to type '[[any]]'.

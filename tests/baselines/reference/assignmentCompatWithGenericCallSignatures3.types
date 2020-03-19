@@ -14,7 +14,7 @@ var g: <T>(x: T) => <S>(y: S) => I<T, S>
 >y : S
 
 var h: <T>(x: T) => <S>(y: S) => { <U>(f: (x: T) => (y: S) => U): U }
->h : <T>(x: T) => <S>(y: S) => {    <U>(f: (x: T) => (y: S) => U): U;}
+>h : <T>(x: T) => <S>(y: S) => <U>(f: (x: T) => (y: S) => U) => U
 >x : T
 >y : S
 >f : (x: T) => (y: S) => U
@@ -22,7 +22,7 @@ var h: <T>(x: T) => <S>(y: S) => { <U>(f: (x: T) => (y: S) => U): U }
 >y : S
 
 g = h // ok
->g = h : <T>(x: T) => <S>(y: S) => {    <U>(f: (x: T) => (y: S) => U): U;}
+>g = h : <T>(x: T) => <S>(y: S) => <U>(f: (x: T) => (y: S) => U) => U
 >g : <T>(x: T) => <S>(y: S) => I<T, S>
->h : <T>(x: T) => <S>(y: S) => {    <U>(f: (x: T) => (y: S) => U): U;}
+>h : <T>(x: T) => <S>(y: S) => <U>(f: (x: T) => (y: S) => U) => U
 

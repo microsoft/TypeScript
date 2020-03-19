@@ -36,15 +36,15 @@ import { T, Q } from "./lib";
 >Q : any
 
 import { create } from "./bbb";
->create : <T>() => () => INode<T>
+>create : <T>() => () => import("tests/cases/compiler/bbb").INode<T>
 
 export const fun = create<T>();
 >fun : () => import("tests/cases/compiler/bbb").INode<import("tests/cases/compiler/lib").G<import("tests/cases/compiler/lib").E>>
 >create<T>() : () => import("tests/cases/compiler/bbb").INode<import("tests/cases/compiler/lib").G<import("tests/cases/compiler/lib").E>>
->create : <T>() => () => INode<T>
+>create : <T>() => () => import("tests/cases/compiler/bbb").INode<T>
 
 export const fun2 = create<Q>();
 >fun2 : () => import("tests/cases/compiler/bbb").INode<import("tests/cases/compiler/lib").G<import("tests/cases/compiler/lib").E.A>>
 >create<Q>() : () => import("tests/cases/compiler/bbb").INode<import("tests/cases/compiler/lib").G<import("tests/cases/compiler/lib").E.A>>
->create : <T>() => () => INode<T>
+>create : <T>() => () => import("tests/cases/compiler/bbb").INode<T>
 

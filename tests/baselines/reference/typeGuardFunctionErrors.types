@@ -155,7 +155,7 @@ if (hasNoTypeGuard(a)) {
 
 // Type predicate type is not assignable
 declare function acceptingDifferentSignatureTypeGuardFunction(p1: (p1) => p1 is B);
->acceptingDifferentSignatureTypeGuardFunction : (p1: (p1) => p1 is B) => any
+>acceptingDifferentSignatureTypeGuardFunction : (p1: (p1: any) => p1 is B) => any
 >p1 : (p1: any) => p1 is B
 >p1 : any
 

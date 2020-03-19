@@ -541,9 +541,9 @@ module TypeScriptAllInOne {
 >retVal : number
 >xx.Foo() ? 0 : 1 : 0 | 1
 >xx.Foo() : any
->xx.Foo : () => bool
+>xx.Foo : () => any
 >xx : IF
->Foo : () => bool
+>Foo : () => any
 >0 : 0
 >1 : 1
 

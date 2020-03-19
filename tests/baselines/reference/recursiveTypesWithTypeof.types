@@ -46,8 +46,8 @@ var f3: any;
 // None of these declarations should have any errors!
 // Truly recursive types
 var g: { x: typeof g; };
->g : { x: any; }
->x : { x: any; }
+>g : { x: typeof g; }
+>x : { x: typeof g; }
 >g : { x: any; }
 
 var g: typeof g.x;
@@ -61,21 +61,21 @@ var h: () => typeof h;
 >h : () => typeof h
 
 var h = h();
->h : () => typeof h
->h() : () => typeof h
->h : () => typeof h
+>h : () => any
+>h() : () => any
+>h : () => any
 
 var i: (x: typeof i) => typeof x;
->i : (x: typeof i) => typeof x
->x : (x: typeof i) => typeof x
->i : (x: any) => typeof x
+>i : (x: typeof i) => any
+>x : (x: typeof i) => any
+>i : (x: any) => any
 >x : (x: any) => typeof x
 
 var i = i(i);
->i : (x: any) => typeof x
->i(i) : (x: any) => typeof x
->i : (x: any) => typeof x
->i : (x: any) => typeof x
+>i : (x: any) => any
+>i(i) : (x: any) => any
+>i : (x: any) => any
+>i : (x: any) => any
 
 var j: <T extends typeof j>(x: T) => T;
 >j : <T extends any>(x: T) => T
@@ -94,21 +94,21 @@ var h2: new () => typeof h2;
 >h2 : new () => typeof h2
 
 var h2 = new h2();
->h2 : new () => typeof h2
->new h2() : new () => typeof h2
->h2 : new () => typeof h2
+>h2 : new () => any
+>new h2() : new () => any
+>h2 : new () => any
 
 var i2: new (x: typeof i2) => typeof x;
->i2 : new (x: typeof i2) => typeof x
->x : new (x: typeof i2) => typeof x
->i2 : new (x: any) => typeof x
+>i2 : new (x: typeof i2) => any
+>x : new (x: typeof i2) => any
+>i2 : new (x: any) => any
 >x : new (x: any) => typeof x
 
 var i2 = new i2(i2);
->i2 : new (x: any) => typeof x
->new i2(i2) : new (x: any) => typeof x
->i2 : new (x: any) => typeof x
->i2 : new (x: any) => typeof x
+>i2 : new (x: any) => any
+>new i2(i2) : new (x: any) => any
+>i2 : new (x: any) => any
+>i2 : new (x: any) => any
 
 var j2: new <T extends typeof j2>(x: T) => T;
 >j2 : new <T extends any>(x: T) => T
@@ -144,8 +144,8 @@ var k = k[''];
 // Hybrid - contains type literals as well as type arguments
 // These two are recursive
 var hy1: { x: typeof hy1 }[];
->hy1 : { x: any[]; }[]
->x : { x: any[]; }[]
+>hy1 : { x: typeof hy1; }[]
+>x : { x: typeof hy1; }[]
 >hy1 : { x: any[]; }[]
 
 var hy1 = hy1[0].x;
@@ -157,8 +157,8 @@ var hy1 = hy1[0].x;
 >x : { x: any[]; }[]
 
 var hy2: { x: Array<typeof hy2> };
->hy2 : { x: any[]; }
->x : { x: any[]; }[]
+>hy2 : { x: Array<typeof hy2>; }
+>x : { x: Array<typeof hy2>; }[]
 >hy2 : { x: any[]; }
 
 var hy2 = hy2.x[0];

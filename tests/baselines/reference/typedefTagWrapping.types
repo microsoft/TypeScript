@@ -71,14 +71,14 @@ function check(obj) {
  */
 function use1(func, bool, str, num) {
 >use1 : (func: StringOrNumber1, bool: boolean, str: string, num: number) => string | number
->func : (arg0: boolean, arg1: string, arg2: number) => (string | number)
+>func : (arg0: boolean, arg1: string, arg2: number) => string | number
 >bool : boolean
 >str : string
 >num : number
 
   return func(bool, str, num)
 >func(bool, str, num) : string | number
->func : (arg0: boolean, arg1: string, arg2: number) => (string | number)
+>func : (arg0: boolean, arg1: string, arg2: number) => string | number
 >bool : boolean
 >str : string
 >num : number
@@ -103,14 +103,14 @@ function use1(func, bool, str, num) {
  */
 function use2(func, bool, str, num) {
 >use2 : (func: StringOrNumber2, bool: boolean, str: string, num: number) => string | number
->func : (arg0: boolean, arg1: string, arg2: number) => (string | number)
+>func : (arg0: boolean, arg1: string, arg2: number) => string | number
 >bool : boolean
 >str : string
 >num : number
 
   return func(bool, str, num)
 >func(bool, str, num) : string | number
->func : (arg0: boolean, arg1: string, arg2: number) => (string | number)
+>func : (arg0: boolean, arg1: string, arg2: number) => string | number
 >bool : boolean
 >str : string
 >num : number

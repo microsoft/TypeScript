@@ -22,21 +22,21 @@ type D = A<[string]>;  // "true"
 
 // Error, "false" not handled
 type E<T> = { true: 'true' }[ObjectHasKey<T, '1'>];
->E : { true: "true"; }[({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["1"]]
+>E : { true: 'true'; }[({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["1"]]
 >true : "true"
 
 type Juxtapose<T> = ({ true: 'otherwise' } & { [k: string]: 'true' })[ObjectHasKey<T, '1'>];
->Juxtapose : ({ true: "otherwise"; } & { [k: string]: "true"; })[({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["1"]]
+>Juxtapose : ({ true: 'otherwise'; } & { [k: string]: "true"; })[({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["1"]]
 >true : "otherwise"
 >k : string
 
 // Error, "otherwise" is missing
 type DeepError<T> = { true: 'true' }[Juxtapose<T>];
->DeepError : { true: "true"; }[({ true: "otherwise"; } & { [k: string]: "true"; })[({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["1"]]]
+>DeepError : { true: 'true'; }[({ true: "otherwise"; } & { [k: string]: "true"; })[({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["1"]]]
 >true : "true"
 
 type DeepOK<T> = { true: 'true', otherwise: 'false' }[Juxtapose<T>];
->DeepOK : { true: "true"; otherwise: "false"; }[({ true: "otherwise"; } & { [k: string]: "true"; })[({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["1"]]]
+>DeepOK : { true: 'true'; otherwise: 'false'; }[({ true: "otherwise"; } & { [k: string]: "true"; })[({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["1"]]]
 >true : "true"
 >otherwise : "false"
 

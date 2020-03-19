@@ -48,6 +48,6 @@ lf.Transaction.prototype.begin = function(scope) {};
 >Transaction : typeof Transaction
 >prototype : any
 >begin : any
->function(scope) {} : (scope: Array<lf.schema.Table>) => IThenable
+>function(scope) {} : (scope: Array<lf.schema.Table>) => any
 >scope : any[]
 

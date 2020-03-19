@@ -79,7 +79,7 @@ module Errors {
 >b : number
 
         var a16: {
->a16 : { new (x: {    new (a: number): number;    new (a?: number): number;}): number[]; new (x: {    new (a: boolean): boolean;    new (a?: boolean): boolean;}): boolean[]; }
+>a16 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
 
                 new (x: {
 >x : { new (a: number): number; new (a?: number): number; }
@@ -103,7 +103,7 @@ module Errors {
                 }): boolean[];
             };
         var a17: {
->a17 : { new (x: {    new <T extends Derived>(a: T): T;    new <T extends Base>(a: T): T;}): any[]; new (x: {    new <T extends Derived2>(a: T): T;    new <T extends Base>(a: T): T;}): any[]; }
+>a17 : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
 
                 new (x: {
 >x : { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }
@@ -213,16 +213,16 @@ module Errors {
 
         a12 = b12; // ok
 >a12 = b12 : new <T extends Derived2[]>(x: Base[], y: Base[]) => T
->a12 : new (x: Base[], y: Derived2[]) => Array<Derived>
+>a12 : new (x: Base[], y: Derived2[]) => Derived[]
 >b12 : new <T extends Derived2[]>(x: Base[], y: Base[]) => T
 
         b12 = a12; // ok
->b12 = a12 : new (x: Base[], y: Derived2[]) => Array<Derived>
+>b12 = a12 : new (x: Base[], y: Derived2[]) => Derived[]
 >b12 : new <T extends Derived2[]>(x: Base[], y: Base[]) => T
->a12 : new (x: Base[], y: Derived2[]) => Array<Derived>
+>a12 : new (x: Base[], y: Derived2[]) => Derived[]
 
         var b15: new <T>(x: { a: T; b: T }) => T; 
->b15 : new <T>(x: {    a: T;    b: T;}) => T
+>b15 : new <T>(x: { a: T; b: T; }) => T
 >x : { a: T; b: T; }
 >a : T
 >b : T
@@ -238,7 +238,7 @@ module Errors {
 >a15 : new (x: { a: string; b: number; }) => number
 
         var b15a: new <T extends Base>(x: { a: T; b: T }) => number; 
->b15a : new <T extends Base>(x: {    a: T;    b: T;}) => number
+>b15a : new <T extends Base>(x: { a: T; b: T; }) => number
 >x : { a: T; b: T; }
 >a : T
 >b : T

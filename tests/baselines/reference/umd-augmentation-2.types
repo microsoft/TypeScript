@@ -22,9 +22,9 @@ let p: Math2d.Point = v.translate(5, 5);
 >p : Math2d.Point
 >Math2d : any
 >v.translate(5, 5) : Math2d.Vector
->v.translate : (dx: number, dy: number) => Vector
+>v.translate : (dx: number, dy: number) => Math2d.Vector
 >v : Math2d.Vector
->translate : (dx: number, dy: number) => Vector
+>translate : (dx: number, dy: number) => Math2d.Vector
 >5 : 5
 >5 : 5
 

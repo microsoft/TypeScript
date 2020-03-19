@@ -3,7 +3,7 @@ var x1: this;
 >x1 : any
 
 var x2: { a: this };
->x2 : { a: any; }
+>x2 : { a: this; }
 >a : any
 
 var x3: this[];
@@ -22,7 +22,7 @@ function f1(x: this): this {
 
 interface I1 {
     a: { x: this };
->a : { x: any; }
+>a : { x: this; }
 >x : any
 
     b: { (): this };
@@ -45,7 +45,7 @@ class C1 {
 >C1 : C1
 
     a: { x: this };
->a : { x: any; }
+>a : { x: this; }
 >x : any
 
     b: { (): this };

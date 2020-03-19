@@ -30,8 +30,8 @@ class testClass2<T> {
 >testClass2 : testClass2<T>
 }
 var tc2 = new testClass2<{ x: V }>(); // error: could not find symbol V
->tc2 : testClass2<{ x: any; }>
->new testClass2<{ x: V }>() : testClass2<{ x: any; }>
+>tc2 : testClass2<{ x: V; }>
+>new testClass2<{ x: V }>() : testClass2<{ x: V; }>
 >testClass2 : typeof testClass2
 >x : any
 
@@ -51,12 +51,12 @@ class testClass3 {
 >null : null
 
     set a(value: Foo<{ x: V }>) { } // error: could not find symbol V
->a : Foo<{ x: any; }>
->value : Foo<{ x: any; }>
+>a : Foo<{ x: V; }>
+>value : Foo<{ x: V; }>
 >x : any
 
     property: Foo<{ x: V }>; // error: could not find symbol V
->property : Foo<{ x: any; }>
+>property : Foo<{ x: V; }>
 >x : any
 }
 
@@ -71,13 +71,13 @@ function testFunction1(): Foo<{ x: V }> { return null; } // error: could not fin
 // in paramter types
 function testFunction2(p: Foo<{ x: V }>) { }// error: could not find symbol V
 >testFunction2 : (p: Foo<{    x: V;}>) => void
->p : Foo<{ x: any; }>
+>p : Foo<{ x: V; }>
 >x : any
 
 
 // in var type annotation
 var f: Foo<{ x: V }>; // error: could not find symbol V
->f : Foo<{ x: any; }>
+>f : Foo<{ x: V; }>
 >x : any
 
 
@@ -93,7 +93,7 @@ class testClass6<T> {
 >testClass6 : testClass6<T>
 
     method<M extends { x: V }>(): void { } // error: could not find symbol V
->method : <M extends { x: any; }>() => void
+>method : <M extends { x: V; }>() => void
 >x : any
 }
 
@@ -107,7 +107,7 @@ interface testInterface1 {
 // in extends clause
 class testClass7 extends Foo<{ x: V }> { } // error: could not find symbol V
 >testClass7 : testClass7
->Foo : Foo<{ x: any; }>
+>Foo : Foo<{ x: V; }>
 >x : any
 
 
@@ -120,7 +120,7 @@ class testClass8 implements IFoo<{ x: V }> { } // error: could not find symbol V
 // in signatures
 interface testInterface2 {
     new (a: Foo<{ x: V }>): Foo<{ x: V }>; //2x: error: could not find symbol V
->a : Foo<{ x: any; }>
+>a : Foo<{ x: V; }>
 >x : any
 >x : any
 
@@ -130,12 +130,12 @@ interface testInterface2 {
 
     method(a: Foo<{ x: V }>): Foo<{ x: V }>; //2x: error: could not find symbol V
 >method : (a: Foo<{    x: V;}>) => Foo<{    x: V;}>
->a : Foo<{ x: any; }>
+>a : Foo<{ x: V; }>
 >x : any
 >x : any
 
     property: Foo<{ x: V }>; // error: could not find symbol V
->property : Foo<{ x: any; }>
+>property : Foo<{ x: V; }>
 >x : any
 }
 

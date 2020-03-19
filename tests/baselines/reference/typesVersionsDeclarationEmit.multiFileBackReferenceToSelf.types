@@ -19,7 +19,7 @@ import { fa } from "ext";
 >fa : any
 
 import { fb } from "ext/other";
->fb : () => B
+>fb : () => import("tests/cases/conformance/declarationEmit/node_modules/ext/other").B
 
 export const va = fa();
 >va : any
@@ -29,5 +29,5 @@ export const va = fa();
 export const vb = fb();
 >vb : import("tests/cases/conformance/declarationEmit/node_modules/ext/other").B
 >fb() : import("tests/cases/conformance/declarationEmit/node_modules/ext/other").B
->fb : () => B
+>fb : () => import("tests/cases/conformance/declarationEmit/node_modules/ext/other").B
 
