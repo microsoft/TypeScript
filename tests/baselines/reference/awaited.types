@@ -369,7 +369,7 @@ f4(makePromise(1), makePromise("a")).then(x => x);
 >x : string | number
 
 async function f5<U>(u: Promise<U>) {
->f5 : <U>(u: Promise<U>) => Promise<awaited U>
+>f5 : <U>(u: Promise<U>) => Promise<U>
 >u : Promise<U>
 
     return await u;
@@ -380,7 +380,7 @@ f5(makePromise(1)).then(x => x);
 >f5(makePromise(1)).then(x => x) : Promise<number>
 >f5(makePromise(1)).then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>
 >f5(makePromise(1)) : Promise<number>
->f5 : <U>(u: Promise<U>) => Promise<awaited U>
+>f5 : <U>(u: Promise<U>) => Promise<U>
 >makePromise(1) : Promise<number>
 >makePromise : <T>(x: T) => Promise<T>
 >1 : 1
@@ -391,21 +391,21 @@ f5(makePromise(1)).then(x => x);
 
 f5(makePromise(makePromise(1))).then(x => x);
 >f5(makePromise(makePromise(1))).then(x => x) : Promise<number>
->f5(makePromise(makePromise(1))).then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>
->f5(makePromise(makePromise(1))) : Promise<number>
->f5 : <U>(u: Promise<U>) => Promise<awaited U>
+>f5(makePromise(makePromise(1))).then : <TResult1 = Promise<number>, TResult2 = never>(onfulfilled?: (value: number) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>
+>f5(makePromise(makePromise(1))) : Promise<Promise<number>>
+>f5 : <U>(u: Promise<U>) => Promise<U>
 >makePromise(makePromise(1)) : Promise<Promise<number>>
 >makePromise : <T>(x: T) => Promise<T>
 >makePromise(1) : Promise<number>
 >makePromise : <T>(x: T) => Promise<T>
 >1 : 1
->then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>
+>then : <TResult1 = Promise<number>, TResult2 = never>(onfulfilled?: (value: number) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>
 >x => x : (x: number) => number
 >x : number
 >x : number
 
 async function f6<U>(u: Promise<Promise<U>>) {
->f6 : <U>(u: Promise<Promise<U>>) => Promise<awaited U>
+>f6 : <U>(u: Promise<Promise<U>>) => Promise<U>
 >u : Promise<Promise<U>>
 
     return await u;

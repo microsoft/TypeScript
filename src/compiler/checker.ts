@@ -18357,8 +18357,8 @@ namespace ts {
                     priority = savePriority;
                 }
                 else if (target.flags & TypeFlags.Awaited) {
-                    const targetTypes = [(<AwaitedType>target).awaitedType, createPromiseLikeType((<AwaitedType>target).awaitedType)];
-                    inferToMultipleTypes(source, targetTypes, target.flags);
+                    inferFromTypes(source, (<AwaitedType>target).awaitedType);
+                    inferFromTypes(source, createPromiseLikeType((<AwaitedType>target).awaitedType));
                 }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     inferToMultipleTypes(source, (<UnionOrIntersectionType>target).types, target.flags);
@@ -26716,7 +26716,7 @@ namespace ts {
             const globalPromiseType = getGlobalPromiseType(/*reportErrors*/ true);
             if (globalPromiseType !== emptyGenericType) {
                 // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
-                promisedType = getAwaitedType(promisedType) || unknownType;
+                promisedType = unwrapAwaitedType(getAwaitedType(promisedType) || unknownType);
                 return createTypeReference(globalPromiseType, [promisedType]);
             }
 
@@ -26728,7 +26728,7 @@ namespace ts {
             const globalPromiseLikeType = getGlobalPromiseLikeType(/*reportErrors*/ true);
             if (globalPromiseLikeType !== emptyGenericType) {
                 // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
-                promisedType = getAwaitedType(promisedType) || unknownType;
+                promisedType = unwrapAwaitedType(getAwaitedType(promisedType) || unknownType);
                 return createTypeReference(globalPromiseLikeType, [promisedType]);
             }
 
