@@ -30225,6 +30225,9 @@ namespace ts {
          *   - The type has no base constraint,
          *   - OR The base constraint of the type is `any`, `unknown`, `object`, or the empty object `{}`,
          *   - OR The base constraint has a callable `then` member.
+         * This behavior is not entirely sound, as a `T extends { x: any }` could be instantiated with a
+         * subtype that has a callable `then`, however this is unlikely in practice and this slightly more unsound
+         * behavior is much more developer friendly.
          */
         function isGenericAwaitableType(type: Type): boolean {
             if (isGenericObjectType(type)) {
