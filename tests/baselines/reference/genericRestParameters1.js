@@ -321,7 +321,7 @@ declare let x24: string | number;
 declare let x30: string;
 declare let x31: string | number;
 declare let x32: string | number;
-declare function bind<T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T): (...rest: U_1) => V;
+declare function bind<T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T): (...rest: U) => V;
 declare const f20: (x: number, y: string, z: boolean) => string[];
 declare const f21: (y: string, z: boolean) => string[];
 declare const f22: (z: boolean) => string[];
