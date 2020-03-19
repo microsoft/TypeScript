@@ -5472,7 +5472,8 @@ namespace ts {
                         const leftmost = getFirstIdentifier(node);
                         const sym = resolveEntityName(leftmost, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveALias*/ true);
                         if (sym) {
-                            if (isSymbolAccessible(sym, context.enclosingDeclaration, SymbolFlags.All, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
+                            if ((isInJSFile(node) && (isExportsIdentifier(node) || isModuleExportsAccessExpression(node))) ||
+                                isSymbolAccessible(sym, context.enclosingDeclaration, SymbolFlags.All, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
                                 hadError = true;
                             }
                             else {

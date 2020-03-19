@@ -137,7 +137,10 @@ export namespace f {
 export function g(a: {
     x: string;
 }, b: {
-    y: typeof module.exports.b;
+    y: {
+        (): void;
+        cat: string;
+    };
 }): void;
 /**
  * @param {{x: string}} a
@@ -146,7 +149,10 @@ export function g(a: {
 export function h(a: {
     x: string;
 }, b: {
-    y: typeof module.exports.b;
+    y: {
+        (): void;
+        cat: string;
+    };
 }): void;
 export function i(): void;
 export function ii(): void;
@@ -159,63 +165,3 @@ declare var module: {
 };
 declare namespace __tests_cases_conformance_jsdoc_declarations_index_ { }
 export {};
-
-
-//// [DtsFileErrors]
-
-
-out/index.d.ts(24,22): error TS2339: Property 'exports' does not exist on type '{ "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("out/index"); }'.
-out/index.d.ts(33,22): error TS2339: Property 'exports' does not exist on type '{ "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("out/index"); }'.
-
-
-==== ./out/index.d.ts (2 errors) ====
-    export function a(): void;
-    export function b(): void;
-    export namespace b {
-        export const cat: string;
-    }
-    export function c(): void;
-    export namespace c {
-        export { Cls };
-    }
-    export function d(a: number, b: number): string;
-    export function e<T, U>(a: T, b: U): T & U;
-    export function f<T>(a: T): T;
-    export namespace f {
-        import self = f;
-        export { self };
-    }
-    /**
-     * @param {{x: string}} a
-     * @param {{y: typeof module.exports.b}} b
-     */
-    export function g(a: {
-        x: string;
-    }, b: {
-        y: typeof module.exports.b;
-                         ~~~~~~~
-!!! error TS2339: Property 'exports' does not exist on type '{ "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("out/index"); }'.
-    }): void;
-    /**
-     * @param {{x: string}} a
-     * @param {{y: typeof module.exports.b}} b
-     */
-    export function h(a: {
-        x: string;
-    }, b: {
-        y: typeof module.exports.b;
-                         ~~~~~~~
-!!! error TS2339: Property 'exports' does not exist on type '{ "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("out/index"); }'.
-    }): void;
-    export function i(): void;
-    export function ii(): void;
-    export function jj(): void;
-    export function j(): void;
-    declare class Cls {
-    }
-    declare var module: {
-        "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import(".");
-    };
-    declare namespace __tests_cases_conformance_jsdoc_declarations_index_ { }
-    export {};
-    
