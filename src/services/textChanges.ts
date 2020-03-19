@@ -42,6 +42,10 @@ namespace ts.textChanges {
          * include all trivia between the node and the previous token
          */
         IncludeAll,
+        /**
+         * Only delete trivia one the same line as getStart()
+         */
+        StartLineOnly,
     }
 
     export enum TrailingTriviaOption {
@@ -161,6 +165,9 @@ namespace ts.textChanges {
         const { leadingTriviaOption } = options;
         if (leadingTriviaOption === LeadingTriviaOption.Exclude) {
             return node.getStart(sourceFile);
+        }
+        if (leadingTriviaOption === LeadingTriviaOption.StartLineOnly) {
+            return getLineStartPositionForPosition(node.getStart(sourceFile), sourceFile);
         }
         const fullStart = node.getFullStart();
         const start = node.getStart(sourceFile);
@@ -1372,7 +1379,7 @@ namespace ts.textChanges {
                     break;
 
                 case SyntaxKind.VariableStatement:
-                    deleteNode(changes, sourceFile, gp);
+                    deleteNode(changes, sourceFile, gp, { leadingTriviaOption: LeadingTriviaOption.StartLineOnly });
                     break;
 
                 default:
