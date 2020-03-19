@@ -4545,7 +4545,8 @@ namespace ts {
                         parseErrorAtRange(openingTag, Diagnostics.JSX_fragment_has_no_corresponding_closing_tag);
                     }
                     else {
-                        // We want the error to span only property identifier "Foo.Bar" e.g in < Foo.Bar >...
+                        // We want the error span to cover only 'Foo.Bar' in < Foo.Bar >
+
                         const tag = openingTag.tagName as any;
                         let start = tag.pos;
                         if (tag.kind === SyntaxKind.PropertyAccessExpression){
