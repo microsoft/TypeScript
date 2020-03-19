@@ -18131,7 +18131,7 @@ namespace ts {
         }
 
         function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, contravariant = false) {
-            let symbolStack: Symbol[];
+            let symbolOrTypeStack: (Symbol | Type)[];
             let visited: Map<number>;
             let bivariant = false;
             let propagationType: Type;
@@ -18570,15 +18570,15 @@ namespace ts {
                 // its symbol with the instance side which would lead to false positives.
                 const isNonConstructorObject = target.flags & TypeFlags.Object &&
                     !(getObjectFlags(target) & ObjectFlags.Anonymous && target.symbol && target.symbol.flags & SymbolFlags.Class);
-                const symbol = isNonConstructorObject ? target.symbol : undefined;
-                if (symbol) {
-                    if (contains(symbolStack, symbol)) {
+                const symbolOrType = isNonConstructorObject ? isTupleType(target) ? target.target : target.symbol : undefined;
+                if (symbolOrType) {
+                    if (contains(symbolOrTypeStack, symbolOrType)) {
                         inferencePriority = InferencePriority.Circularity;
                         return;
                     }
-                    (symbolStack || (symbolStack = [])).push(symbol);
+                    (symbolOrTypeStack || (symbolOrTypeStack = [])).push(symbolOrType);
                     inferFromObjectTypesWorker(source, target);
-                    symbolStack.pop();
+                    symbolOrTypeStack.pop();
                 }
                 else {
                     inferFromObjectTypesWorker(source, target);
