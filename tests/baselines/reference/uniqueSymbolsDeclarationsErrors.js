@@ -103,6 +103,9 @@ exports.ClassWithPrivateNamedAccessors = ClassWithPrivateNamedAccessors;
 
 //// [uniqueSymbolsDeclarationsErrors.d.ts]
 declare const s: unique symbol;
+interface I {
+    readonly readonlyType: unique symbol;
+}
 export declare const obj: {
     method1(p: typeof s): typeof s;
     method2(p: I["readonlyType"]): I["readonlyType"];
@@ -145,67 +148,3 @@ export declare class ClassWithPrivateNamedAccessors {
     static set [s](v: any);
 }
 export {};
-
-
-//// [DtsFileErrors]
-
-
-tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsErrors.d.ts(4,16): error TS2304: Cannot find name 'I'.
-tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsErrors.d.ts(4,36): error TS2304: Cannot find name 'I'.
-tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsErrors.d.ts(9,20): error TS2304: Cannot find name 'I'.
-tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsErrors.d.ts(9,40): error TS2304: Cannot find name 'I'.
-
-
-==== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsErrors.d.ts (4 errors) ====
-    declare const s: unique symbol;
-    export declare const obj: {
-        method1(p: typeof s): typeof s;
-        method2(p: I["readonlyType"]): I["readonlyType"];
-                   ~
-!!! error TS2304: Cannot find name 'I'.
-                                       ~
-!!! error TS2304: Cannot find name 'I'.
-    };
-    export declare const classExpression: {
-        new (): {
-            method1(p: typeof s): typeof s;
-            method2(p: I["readonlyType"]): I["readonlyType"];
-                       ~
-!!! error TS2304: Cannot find name 'I'.
-                                           ~
-!!! error TS2304: Cannot find name 'I'.
-        };
-    };
-    export declare function funcInferredReturnType(obj: {
-        method(p: typeof s): void;
-    }): {
-        method(p: typeof s): void;
-    };
-    export interface InterfaceWithPrivateNamedProperties {
-        [s]: any;
-    }
-    export interface InterfaceWithPrivateNamedMethods {
-        [s](): any;
-    }
-    export declare type TypeLiteralWithPrivateNamedProperties = {
-        [s]: any;
-    };
-    export declare type TypeLiteralWithPrivateNamedMethods = {
-        [s](): any;
-    };
-    export declare class ClassWithPrivateNamedProperties {
-        [s]: any;
-        static [s]: any;
-    }
-    export declare class ClassWithPrivateNamedMethods {
-        [s](): void;
-        static [s](): void;
-    }
-    export declare class ClassWithPrivateNamedAccessors {
-        get [s](): any;
-        set [s](v: any);
-        static get [s](): any;
-        static set [s](v: any);
-    }
-    export {};
-    

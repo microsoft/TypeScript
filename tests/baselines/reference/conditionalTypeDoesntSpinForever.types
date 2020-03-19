@@ -38,7 +38,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >name : any
 
       name: <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {name: TYPE}>
->name : <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {    name: TYPE;}>
+>name : <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>
 >t : TYPE
 >name : TYPE
     }
@@ -174,7 +174,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >record : any
 
       identifier: <TYPE extends Partial<SO_FAR["record"]>>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>
->identifier : <TYPE extends Partial<SO_FAR["record"]>>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {    identifier: TYPE;}>
+>identifier : <TYPE extends Partial<SO_FAR["record"]>>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>
 >t : TYPE
 >identifier : TYPE
 
@@ -234,7 +234,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >record : any
 
       record: <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {record: TYPE}>
->record : <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {    record: TYPE;}>
+>record : <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>
 >t : TYPE
 >record : TYPE
     }

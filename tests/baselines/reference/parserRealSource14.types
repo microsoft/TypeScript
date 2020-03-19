@@ -4215,7 +4215,7 @@ module TypeScript {
 >getAstWalkerFactory : any
 >walk : any
 >script : any
->pre : (cur: any, parent: any, walker: any) => TypeScript.AST
+>pre : (cur: any, parent: any, walker: any) => any
 
         return bestOffset;
 >bestOffset : number
@@ -4285,9 +4285,9 @@ module TypeScript {
 
             path.pop();
 >path.pop() : any
->path.pop : () => TypeScript.AST
+>path.pop : () => any
 >path : AstPath
->pop : () => TypeScript.AST
+>pop : () => any
 
             return cur;
 >cur : any

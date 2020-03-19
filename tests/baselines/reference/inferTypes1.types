@@ -324,7 +324,7 @@ type Example = {
 >customClass : MyClass
 
     obj: {
->obj : { prop: "property"; clz: MyClass; nested: { attr: Date; }; }
+>obj : { prop: "property"; clz: MyClass; nested: {    attr: Date;}; }
 
         prop: "property",
 >prop : "property"

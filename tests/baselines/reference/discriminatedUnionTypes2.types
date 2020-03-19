@@ -363,7 +363,7 @@ type RuntimeValue =
 
 function foo1(x: RuntimeValue & { type: 'number' }) {
 >foo1 : (x: RuntimeValue & {    type: 'number';}) => void
->x : { type: "number"; value: number; } & { type: "number"; }
+>x : { type: "number"; value: number; } & { type: 'number'; }
 >type : "number"
 
     if (x.type === 'number') {
@@ -388,7 +388,7 @@ function foo1(x: RuntimeValue & { type: 'number' }) {
 
 function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
 >foo2 : (x: RuntimeValue & ({    type: 'number';} | {    type: 'string';})) => void
->x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
+>x : ({ type: "number"; value: number; } & { type: 'number'; }) | ({ type: "string"; value: string; } & { type: 'string'; })
 >type : "number"
 >type : "string"
 

@@ -42,13 +42,13 @@ export default function styled(tag: string): (o: object) => StyledOtherComponent
 
 === tests/cases/compiler/index.ts ===
 import styled from "react-emotion"
->styled : (tag: string) => (o: object) => StyledOtherComponent<{}, StyledOtherComponentList[], any>
+>styled : (tag: string) => (o: object) => import("tests/cases/compiler/node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("tests/cases/compiler/node_modules/react/index").DetailedHTMLProps<import("tests/cases/compiler/node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
 
 const Form = styled('div')({ color: "red" })
 >Form : import("tests/cases/compiler/node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("tests/cases/compiler/node_modules/react/index").DetailedHTMLProps<import("tests/cases/compiler/node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
 >styled('div')({ color: "red" }) : import("tests/cases/compiler/node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("tests/cases/compiler/node_modules/react/index").DetailedHTMLProps<import("tests/cases/compiler/node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
->styled('div') : (o: object) => StyledOtherComponent<{}, StyledOtherComponentList[], any>
->styled : (tag: string) => (o: object) => StyledOtherComponent<{}, StyledOtherComponentList[], any>
+>styled('div') : (o: object) => import("tests/cases/compiler/node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("tests/cases/compiler/node_modules/react/index").DetailedHTMLProps<import("tests/cases/compiler/node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
+>styled : (tag: string) => (o: object) => import("tests/cases/compiler/node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("tests/cases/compiler/node_modules/react/index").DetailedHTMLProps<import("tests/cases/compiler/node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
 >'div' : "div"
 >{ color: "red" } : { color: string; }
 >color : string

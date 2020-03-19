@@ -13,7 +13,7 @@ var c: C;
 >c : any
 
 var a: { x: C };
->a : { x: any; }
+>a : { x: C; }
 >x : any
 
 var b: { (x: C): C };

@@ -7,7 +7,7 @@ class foo<T> {
 >null : null
 
     static set Bar(v: { v: T }) { }
->Bar : { v: any; }
->v : { v: any; }
+>Bar : { v: T; }
+>v : { v: T; }
 >v : any
 } 

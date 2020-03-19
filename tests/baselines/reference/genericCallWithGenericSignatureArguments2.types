@@ -275,7 +275,7 @@ module TU {
     var r7 = foo3(E.A, (x) => E.A, (x) => F.A);
 >r7 : (x: E) => E
 >foo3(E.A, (x) => E.A, (x) => F.A) : (x: E) => E
->foo3 : <T>(x: T, a: (x: T) => T, b: (x: any) => U) => (x: T) => T
+>foo3 : <T>(x: T, a: (x: T) => T, b: (x: any) => any) => (x: T) => T
 >E.A : E
 >E : typeof E
 >A : E

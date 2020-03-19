@@ -22,9 +22,9 @@ export var d4 = m4.d;
 export var f4 = m4.foo();
 >f4 : m4.d
 >m4.foo() : m4.d
->m4.foo : () => d
+>m4.foo : () => m4.d
 >m4 : typeof m4
->foo : () => d
+>foo : () => m4.d
 
 export module m1 {
 >m1 : typeof m1
@@ -44,9 +44,9 @@ export module m1 {
     export var f2 = m4.foo();
 >f2 : m4.d
 >m4.foo() : m4.d
->m4.foo : () => d
+>m4.foo : () => m4.d
 >m4 : typeof m4
->foo : () => d
+>foo : () => m4.d
 
     var x3 = m4.x;
 >x3 : m4.d
@@ -63,9 +63,9 @@ export module m1 {
     var f3 = m4.foo();
 >f3 : m4.d
 >m4.foo() : m4.d
->m4.foo : () => d
+>m4.foo : () => m4.d
 >m4 : typeof m4
->foo : () => d
+>foo : () => m4.d
 }
 
 //Emit global only usage
@@ -81,9 +81,9 @@ export var useGlo_m4_d4 = glo_m4.d;
 export var useGlo_m4_f4 = glo_m4.foo();
 >useGlo_m4_f4 : glo_m4.d
 >glo_m4.foo() : glo_m4.d
->glo_m4.foo : () => d
+>glo_m4.foo : () => glo_m4.d
 >glo_m4 : typeof glo_m4
->foo : () => d
+>foo : () => glo_m4.d
 
 //Emit even when used just in function type
 import fncOnly_m4 = require("./importDecl_require2");
@@ -92,9 +92,9 @@ import fncOnly_m4 = require("./importDecl_require2");
 export var useFncOnly_m4_f4 = fncOnly_m4.foo();
 >useFncOnly_m4_f4 : fncOnly_m4.d
 >fncOnly_m4.foo() : fncOnly_m4.d
->fncOnly_m4.foo : () => d
+>fncOnly_m4.foo : () => fncOnly_m4.d
 >fncOnly_m4 : typeof fncOnly_m4
->foo : () => d
+>foo : () => fncOnly_m4.d
 
 // only used privately no need to emit
 import private_m4 = require("./importDecl_require3");
@@ -118,9 +118,9 @@ export module usePrivate_m4_m1 {
     var f3 = private_m4.foo();
 >f3 : private_m4.d
 >private_m4.foo() : private_m4.d
->private_m4.foo : () => d
+>private_m4.foo : () => private_m4.d
 >private_m4 : typeof private_m4
->foo : () => d
+>foo : () => private_m4.d
 }
 
 // Do not emit unused import
@@ -153,9 +153,9 @@ export var useMultiImport_m4_d4 = multiImport_m4.d;
 export var useMultiImport_m4_f4 = multiImport_m4.foo();
 >useMultiImport_m4_f4 : m4.d
 >multiImport_m4.foo() : m4.d
->multiImport_m4.foo : () => d
+>multiImport_m4.foo : () => m4.d
 >multiImport_m4 : typeof m4
->foo : () => d
+>foo : () => m4.d
 
 === tests/cases/compiler/importDecl_require.ts ===
 export class d {

@@ -42,7 +42,7 @@ function testObjLiteral(objLit: { v: any; w: any }) { };
 >w : any
 
 function testFuncLiteral(funcLit: (y2) => number) { };
->testFuncLiteral : (funcLit: (y2) => number) => void
+>testFuncLiteral : (funcLit: (y2: any) => number) => void
 >funcLit : (y2: any) => number
 >y2 : any
 

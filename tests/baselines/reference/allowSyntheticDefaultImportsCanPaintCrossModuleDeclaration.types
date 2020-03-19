@@ -15,10 +15,10 @@ export declare function styled(): Color;
 
 === tests/cases/compiler/file2.ts ===
 import { styled }  from "./file1";
->styled : () => Color
+>styled : () => import("tests/cases/compiler/color").default
 
 export const A = styled();
 >A : import("tests/cases/compiler/color").default
 >styled() : import("tests/cases/compiler/color").default
->styled : () => Color
+>styled : () => import("tests/cases/compiler/color").default
 

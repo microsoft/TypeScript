@@ -12,7 +12,7 @@ function minimalExample1() {
 >kind : "bluray"
 
     function foo(x: Disc[]) {
->foo : (x: Disc[]) => void
+>foo : (x: ({ kind: "hddvd"; } | { kind: "bluray"; })[]) => void
 >x : ({ kind: "hddvd"; } | { kind: "bluray"; })[]
     }
 

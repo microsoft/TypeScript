@@ -69,7 +69,7 @@ export function makeNewChannel<T extends ChannelType>(type: T): NewChannel<Chann
 const newTextChannel = makeNewChannel('text');
 >newTextChannel : NewChannel<TextChannel>
 >makeNewChannel('text') : NewChannel<TextChannel>
->makeNewChannel : <T extends "text" | "email">(type: T) => NewChannel<ChannelOfType<T>>
+>makeNewChannel : <T extends "text" | "email">(type: T) => NewChannel<ChannelOfType<T, TextChannel> | ChannelOfType<T, EmailChannel>>
 >'text' : "text"
 
 // This should work
@@ -83,7 +83,7 @@ newTextChannel.phoneNumber = '613-555-1234';
 const newTextChannel2 : NewChannel<TextChannel> = makeNewChannel('text');
 >newTextChannel2 : NewChannel<TextChannel>
 >makeNewChannel('text') : NewChannel<TextChannel>
->makeNewChannel : <T extends "text" | "email">(type: T) => NewChannel<ChannelOfType<T>>
+>makeNewChannel : <T extends "text" | "email">(type: T) => NewChannel<ChannelOfType<T, TextChannel> | ChannelOfType<T, EmailChannel>>
 >'text' : "text"
 
 // Compare with this, which ofc works.

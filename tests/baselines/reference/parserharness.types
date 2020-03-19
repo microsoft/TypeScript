@@ -279,9 +279,9 @@ module Harness {
             var bugs = content.match(/\bbug (\d+)/i);
 >bugs : RegExpMatchArray
 >content.match(/\bbug (\d+)/i) : RegExpMatchArray
->content.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>content.match : (regexp: string | RegExp) => RegExpMatchArray
 >content : string
->match : (regexp: string | RegExp) => RegExpMatchArray | null
+>match : (regexp: string | RegExp) => RegExpMatchArray
 >/\bbug (\d+)/i : RegExp
 
             if (bugs) {
@@ -4847,11 +4847,11 @@ module Harness {
                         var match = errorLines[i].match(/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/);
 >match : RegExpMatchArray
 >errorLines[i].match(/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/) : RegExpMatchArray
->errorLines[i].match : (regexp: string | RegExp) => RegExpMatchArray | null
+>errorLines[i].match : (regexp: string | RegExp) => RegExpMatchArray
 >errorLines[i] : string
 >errorLines : string[]
 >i : number
->match : (regexp: string | RegExp) => RegExpMatchArray | null
+>match : (regexp: string | RegExp) => RegExpMatchArray
 >/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/ : RegExp
 
                         if (match) {
@@ -5272,9 +5272,9 @@ module Harness {
 >filename : string
 >path.match(/[^\/]*$/)[0] : string
 >path.match(/[^\/]*$/) : RegExpMatchArray
->path.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>path.match : (regexp: string | RegExp) => RegExpMatchArray
 >path : string
->match : (regexp: string | RegExp) => RegExpMatchArray | null
+>match : (regexp: string | RegExp) => RegExpMatchArray
 >/[^\/]*$/ : RegExp
 >0 : 0
 
@@ -5454,13 +5454,13 @@ module Harness {
 >unitName : string
 >switchToForwardSlashes(lastUnit.name).match(/[^\/]*$/)[0] : string
 >switchToForwardSlashes(lastUnit.name).match(/[^\/]*$/) : RegExpMatchArray
->switchToForwardSlashes(lastUnit.name).match : (regexp: string | RegExp) => RegExpMatchArray | null
+>switchToForwardSlashes(lastUnit.name).match : (regexp: string | RegExp) => RegExpMatchArray
 >switchToForwardSlashes(lastUnit.name) : string
 >switchToForwardSlashes : (path: string) => string
 >lastUnit.name : string
 >lastUnit : TestCaseParser.TestUnitData
 >name : string
->match : (regexp: string | RegExp) => RegExpMatchArray | null
+>match : (regexp: string | RegExp) => RegExpMatchArray
 >/[^\/]*$/ : RegExp
 >0 : 0
 
@@ -5662,9 +5662,9 @@ module Harness {
 >new CompilerResult(stdout.toArray(), errors, scripts) : CompilerResult
 >CompilerResult : typeof CompilerResult
 >stdout.toArray() : { filename: string; file: WriterAggregator; }[]
->stdout.toArray : () => {    filename: string;    file: WriterAggregator;}[]
+>stdout.toArray : () => { filename: string; file: WriterAggregator; }[]
 >stdout : EmitterIOHost
->toArray : () => {    filename: string;    file: WriterAggregator;}[]
+>toArray : () => { filename: string; file: WriterAggregator; }[]
 >errors : any
 >scripts : any[]
         }
@@ -5958,9 +5958,9 @@ module Harness {
                     var isRef = line.match(/reference\spath='(\w*_?\w*\.?d?\.ts)'/);
 >isRef : RegExpMatchArray
 >line.match(/reference\spath='(\w*_?\w*\.?d?\.ts)'/) : RegExpMatchArray
->line.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>line.match : (regexp: string | RegExp) => RegExpMatchArray
 >line : string
->match : (regexp: string | RegExp) => RegExpMatchArray | null
+>match : (regexp: string | RegExp) => RegExpMatchArray
 >/reference\spath='(\w*_?\w*\.?d?\.ts)'/ : RegExp
 
                     if (isRef) {
@@ -6237,7 +6237,7 @@ module Harness {
 >version : number
 
         public editRanges: { length: number; editRange: TypeScript.ScriptEditRange; }[] = [];
->editRanges : { length: number; editRange: any; }[]
+>editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >length : number
 >editRange : any
 >TypeScript : any
@@ -6922,13 +6922,13 @@ module Harness {
             var range = this.scripts[scriptIndex].getEditRangeSinceVersion(scriptVersion);
 >range : any
 >this.scripts[scriptIndex].getEditRangeSinceVersion(scriptVersion) : any
->this.scripts[scriptIndex].getEditRangeSinceVersion : (version: number) => TypeScript.ScriptEditRange
+>this.scripts[scriptIndex].getEditRangeSinceVersion : (version: number) => any
 >this.scripts[scriptIndex] : ScriptInfo
 >this.scripts : ScriptInfo[]
 >this : this
 >scripts : ScriptInfo[]
 >scriptIndex : number
->getEditRangeSinceVersion : (version: number) => TypeScript.ScriptEditRange
+>getEditRangeSinceVersion : (version: number) => any
 >scriptVersion : number
 
             var result = (range.minChar + "," + range.limChar + "," + range.delta);
@@ -7056,9 +7056,9 @@ module Harness {
 
             return this.parseSourceText(fileName, sourceText);
 >this.parseSourceText(fileName, sourceText) : any
->this.parseSourceText : (fileName: string, sourceText: any) => TypeScript.Script
+>this.parseSourceText : (fileName: string, sourceText: any) => any
 >this : this
->parseSourceText : (fileName: string, sourceText: any) => TypeScript.Script
+>parseSourceText : (fileName: string, sourceText: any) => any
 >fileName : string
 >sourceText : any
         }
@@ -7265,9 +7265,9 @@ module Harness {
 >edits = this.normalizeEdits(edits) : any[]
 >edits : any[]
 >this.normalizeEdits(edits) : any[]
->this.normalizeEdits : (edits: any[]) => Services.TextEdit[]
+>this.normalizeEdits : (edits: any[]) => any[]
 >this : this
->normalizeEdits : (edits: any[]) => Services.TextEdit[]
+>normalizeEdits : (edits: any[]) => any[]
 >edits : any[]
 
             for (var i = edits.length - 1; i >= 0; i--) {
@@ -7386,7 +7386,7 @@ module Harness {
 >mapEdits(edits).sort(function (a, b) {                var result = a.edit.minChar - b.edit.minChar;                if (result == 0)                    result = a.index - b.index;                return result;            }) : { edit: any; index: number; }[]
 >mapEdits(edits).sort : (compareFn?: (a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number) => { edit: any; index: number; }[]
 >mapEdits(edits) : { edit: any; index: number; }[]
->mapEdits : (edits: any[]) => {    edit: Services.TextEdit;    index: number;}[]
+>mapEdits : (edits: any[]) => { edit: any; index: number; }[]
 >edits : any[]
 >sort : (compareFn?: (a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number) => { edit: any; index: number; }[]
 >function (a, b) {                var result = a.edit.minChar - b.edit.minChar;                if (result == 0)                    result = a.index - b.index;                return result;            } : (a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number
@@ -7696,9 +7696,9 @@ module Harness {
 >path : string
 >path.match(/[^\/]*$/)[0] : string
 >path.match(/[^\/]*$/) : RegExpMatchArray
->path.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>path.match : (regexp: string | RegExp) => RegExpMatchArray
 >path : string
->match : (regexp: string | RegExp) => RegExpMatchArray | null
+>match : (regexp: string | RegExp) => RegExpMatchArray
 >/[^\/]*$/ : RegExp
 >0 : 0
 >callback : (error: Error, result: any) => void

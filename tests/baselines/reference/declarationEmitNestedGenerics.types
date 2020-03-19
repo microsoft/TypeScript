@@ -11,7 +11,7 @@ function f<T>(p: T) {
 >null : null
 
     return g;
->g : <T>(x: T) => typeof p
+>g : <T>(x: T) => T
 }
 
 function g<T>(x: T) {

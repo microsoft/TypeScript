@@ -115,9 +115,9 @@ module TypeScript {
 
                 return MemberName.create(elementMemberName, "", "[]");
 >MemberName.create(elementMemberName, "", "[]") : any
->MemberName.create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => MemberName
+>MemberName.create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => any
 >MemberName : typeof MemberName
->create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => MemberName
+>create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => any
 >elementMemberName : any
 >"" : ""
 >"[]" : "[]"

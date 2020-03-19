@@ -10,10 +10,10 @@ export default class Something {}
 === tests/cases/compiler/main.ts ===
 import Thing, { getSomething } from "./root";
 >Thing : typeof Thing
->getSomething : () => Something
+>getSomething : () => Thing
 
 export const instance = getSomething();
 >instance : Thing
 >getSomething() : Thing
->getSomething : () => Something
+>getSomething : () => Thing
 

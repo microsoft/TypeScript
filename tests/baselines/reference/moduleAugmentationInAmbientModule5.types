@@ -11,9 +11,9 @@ let y = x.getA().x;
 >y : number
 >x.getA().x : number
 >x.getA() : import("A").A
->x.getA : () => A
+>x.getA : () => import("A").A
 >x : number[]
->getA : () => A
+>getA : () => import("A").A
 >x : number
 
 === tests/cases/compiler/array.d.ts ===

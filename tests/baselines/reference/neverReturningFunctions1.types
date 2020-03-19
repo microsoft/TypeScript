@@ -62,7 +62,7 @@ function f03(x: string) {
 }
 
 function f11(x: string | undefined, fail: (message?: string) => never) {
->f11 : (x: string | undefined, fail: (message?: string) => never) => void
+>f11 : (x: string | undefined, fail: (message?: string | undefined) => never) => void
 >x : string | undefined
 >fail : (message?: string | undefined) => never
 >message : string | undefined
@@ -82,7 +82,7 @@ function f11(x: string | undefined, fail: (message?: string) => never) {
 }
 
 function f12(x: number, fail: (message?: string) => never): number {
->f12 : (x: number, fail: (message?: string) => never) => number
+>f12 : (x: number, fail: (message?: string | undefined) => never) => number
 >x : number
 >fail : (message?: string | undefined) => never
 >message : string | undefined
@@ -103,7 +103,7 @@ function f12(x: number, fail: (message?: string) => never): number {
 }
 
 function f13(x: string, fail: (message?: string) => never) {
->f13 : (x: string, fail: (message?: string) => never) => void
+>f13 : (x: string, fail: (message?: string | undefined) => never) => void
 >x : string
 >fail : (message?: string | undefined) => never
 >message : string | undefined

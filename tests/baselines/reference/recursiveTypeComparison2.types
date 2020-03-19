@@ -78,7 +78,7 @@ var stuck: Bacon.Bus<number> = new Bacon.Bus();
 >stuck : Bacon.Bus<number>
 >Bacon : any
 >new Bacon.Bus() : Bacon.Bus<number>
->Bacon.Bus : new <T>() => Bus<T>
+>Bacon.Bus : new <T>() => Bacon.Bus<T>
 >Bacon : typeof Bacon
->Bus : new <T>() => Bus<T>
+>Bus : new <T>() => Bacon.Bus<T>
 

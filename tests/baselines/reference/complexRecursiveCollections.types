@@ -416,12 +416,12 @@ declare module Immutable {
 >value : this
 
     merge(...collections: Array<Collection<K, V> | {[key: string]: V}>): this;
->merge : (...collections: Array<Collection<K, V> | {    [key: string]: V;}>) => this
+>merge : (...collections: (Collection<K, V> | { [key: string]: V; })[]) => this
 >collections : (Collection<K, V> | { [key: string]: V; })[]
 >key : string
 
     mergeWith(merger: (oldVal: V, newVal: V, key: K) => V, ...collections: Array<Collection<K, V> | {[key: string]: V}>): this;
->mergeWith : (merger: (oldVal: V, newVal: V, key: K) => V, ...collections: Array<Collection<K, V> | {    [key: string]: V;}>) => this
+>mergeWith : (merger: (oldVal: V, newVal: V, key: K) => V, ...collections: (Collection<K, V> | { [key: string]: V; })[]) => this
 >merger : (oldVal: V, newVal: V, key: K) => V
 >oldVal : V
 >newVal : V
@@ -430,12 +430,12 @@ declare module Immutable {
 >key : string
 
     mergeDeep(...collections: Array<Collection<K, V> | {[key: string]: V}>): this;
->mergeDeep : (...collections: Array<Collection<K, V> | {    [key: string]: V;}>) => this
+>mergeDeep : (...collections: (Collection<K, V> | { [key: string]: V; })[]) => this
 >collections : (Collection<K, V> | { [key: string]: V; })[]
 >key : string
 
     mergeDeepWith(merger: (oldVal: V, newVal: V, key: K) => V, ...collections: Array<Collection<K, V> | {[key: string]: V}>): this;
->mergeDeepWith : (merger: (oldVal: V, newVal: V, key: K) => V, ...collections: Array<Collection<K, V> | {    [key: string]: V;}>) => this
+>mergeDeepWith : (merger: (oldVal: V, newVal: V, key: K) => V, ...collections: (Collection<K, V> | { [key: string]: V; })[]) => this
 >merger : (oldVal: V, newVal: V, key: K) => V
 >oldVal : V
 >newVal : V
@@ -494,11 +494,11 @@ declare module Immutable {
 
     // Sequence algorithms
     concat<KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Map<K | KC, V | VC>;
->concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Map<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): Map<K | string, V | C>; }
+>concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Map<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): Map<string | K, V | C>; }
 >collections : Iterable<[KC, VC]>[]
 
     concat<C>(...collections: Array<{[key: string]: C}>): Map<K | string, V | C>;
->concat : { <KC, VC>(...collections: Iterable<[KC, VC]>[]): Map<K | KC, V | VC>; <C>(...collections: Array<{    [key: string]: C;}>): Map<K | string, V | C>; }
+>concat : { <KC, VC>(...collections: Iterable<[KC, VC]>[]): Map<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): Map<K | string, V | C>; }
 >collections : { [key: string]: C; }[]
 >key : string
 
@@ -579,11 +579,11 @@ declare module Immutable {
   export interface OrderedMap<K, V> extends Map<K, V> {
     // Sequence algorithms
     concat<KC, VC>(...collections: Array<Iterable<[KC, VC]>>): OrderedMap<K | KC, V | VC>;
->concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): OrderedMap<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): OrderedMap<K | string, V | C>; }
+>concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): OrderedMap<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): OrderedMap<string | K, V | C>; }
 >collections : Iterable<[KC, VC]>[]
 
     concat<C>(...collections: Array<{[key: string]: C}>): OrderedMap<K | string, V | C>;
->concat : { <KC, VC>(...collections: Iterable<[KC, VC]>[]): OrderedMap<K | KC, V | VC>; <C>(...collections: Array<{    [key: string]: C;}>): OrderedMap<K | string, V | C>; }
+>concat : { <KC, VC>(...collections: Iterable<[KC, VC]>[]): OrderedMap<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): OrderedMap<K | string, V | C>; }
 >collections : { [key: string]: C; }[]
 >key : string
 
@@ -651,7 +651,7 @@ declare module Immutable {
 >iter : Collection<T, any>
 
     function fromKeys(obj: {[key: string]: any}): Set<string>;
->fromKeys : { <T>(iter: Collection<T, any>): Set<T>; (obj: {    [key: string]: any;}): Set<string>; }
+>fromKeys : { <T>(iter: Collection<T, any>): Set<T>; (obj: { [key: string]: any; }): Set<string>; }
 >obj : { [key: string]: any; }
 >key : string
 
@@ -773,7 +773,7 @@ declare module Immutable {
 >iter : Collection<T, any>
 
     function fromKeys(obj: {[key: string]: any}): OrderedSet<string>;
->fromKeys : { <T>(iter: Collection<T, any>): OrderedSet<T>; (obj: {    [key: string]: any;}): OrderedSet<string>; }
+>fromKeys : { <T>(iter: Collection<T, any>): OrderedSet<T>; (obj: { [key: string]: any; }): OrderedSet<string>; }
 >obj : { [key: string]: any; }
 >key : string
   }
@@ -1095,7 +1095,7 @@ declare module Immutable {
 
       // Conversion to JavaScript types
       toJS(): { [K in keyof T]: any };
->toJS : () => {    [K in keyof T]: any;}
+>toJS : () => { [K in keyof T]: any; }
 
       toJSON(): T;
 >toJSON : () => T
@@ -1149,22 +1149,22 @@ declare module Immutable {
 
     export module Keyed {}
     export function Keyed<K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>;
->Keyed : { <K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>; <V>(obj: { [key: string]: V; }): Seq.Keyed<string, V>; <K, V>(): Seq.Keyed<K, V>; (): Seq.Keyed<any, any>; }
+>Keyed : { <K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>; <V>(obj: { [key: string]: V; }): Keyed<string, V>; <K, V>(): Keyed<K, V>; (): Keyed<any, any>; }
 >collection : Iterable<[K, V]>
 >Seq : any
 
     export function Keyed<V>(obj: {[key: string]: V}): Seq.Keyed<string, V>;
->Keyed : { <K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>; <V>(obj: {    [key: string]: V;}): Seq.Keyed<string, V>; <K, V>(): Seq.Keyed<K, V>; (): Seq.Keyed<any, any>; }
+>Keyed : { <K, V>(collection: Iterable<[K, V]>): Keyed<K, V>; <V>(obj: { [key: string]: V; }): Seq.Keyed<string, V>; <K, V>(): Keyed<K, V>; (): Keyed<any, any>; }
 >obj : { [key: string]: V; }
 >key : string
 >Seq : any
 
     export function Keyed<K, V>(): Seq.Keyed<K, V>;
->Keyed : { <K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>; <V>(obj: { [key: string]: V; }): Seq.Keyed<string, V>; <K, V>(): Seq.Keyed<K, V>; (): Seq.Keyed<any, any>; }
+>Keyed : { <K, V>(collection: Iterable<[K, V]>): Keyed<K, V>; <V>(obj: { [key: string]: V; }): Keyed<string, V>; <K, V>(): Seq.Keyed<K, V>; (): Keyed<any, any>; }
 >Seq : any
 
     export function Keyed(): Seq.Keyed<any, any>;
->Keyed : { <K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>; <V>(obj: { [key: string]: V; }): Seq.Keyed<string, V>; <K, V>(): Seq.Keyed<K, V>; (): Seq.Keyed<any, any>; }
+>Keyed : { <K, V>(collection: Iterable<[K, V]>): Keyed<K, V>; <V>(obj: { [key: string]: V; }): Keyed<string, V>; <K, V>(): Keyed<K, V>; (): Seq.Keyed<any, any>; }
 >Seq : any
 
     export interface Keyed<K, V> extends Seq<K, V>, Collection.Keyed<K, V> {
@@ -1174,19 +1174,19 @@ declare module Immutable {
 >toJS : () => Object
 
       toJSON(): { [key: string]: V };
->toJSON : () => {    [key: string]: V;}
+>toJSON : () => { [key: string]: V; }
 >key : string
 
       toSeq(): this;
 >toSeq : () => this
 
       concat<KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Seq.Keyed<K | KC, V | VC>;
->concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Seq.Keyed<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): Seq.Keyed<K | string, V | C>; }
+>concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Seq.Keyed<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): Keyed<string | K, V | C>; }
 >collections : Iterable<[KC, VC]>[]
 >Seq : any
 
       concat<C>(...collections: Array<{[key: string]: C}>): Seq.Keyed<K | string, V | C>;
->concat : { <KC, VC>(...collections: Iterable<[KC, VC]>[]): Seq.Keyed<K | KC, V | VC>; <C>(...collections: Array<{    [key: string]: C;}>): Seq.Keyed<K | string, V | C>; }
+>concat : { <KC, VC>(...collections: Iterable<[KC, VC]>[]): Keyed<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): Seq.Keyed<K | string, V | C>; }
 >collections : { [key: string]: C; }[]
 >key : string
 >Seq : any
@@ -1237,7 +1237,7 @@ declare module Immutable {
 >Seq : any
 
       filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
->filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq.Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
+>filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
 >predicate : (value: V, key: K, iter: this) => any
 >value : V
 >key : K
@@ -1310,7 +1310,7 @@ declare module Immutable {
 >Seq : any
 
       filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
->filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Seq.Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
+>filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
 >predicate : (value: T, index: number, iter: this) => any
 >value : T
 >index : number
@@ -1383,7 +1383,7 @@ declare module Immutable {
 >Seq : any
 
       filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
->filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Seq.Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
+>filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
 >predicate : (value: T, key: never, iter: this) => any
 >value : T
 >key : never
@@ -1493,12 +1493,12 @@ declare module Immutable {
 
     export module Keyed {}
     export function Keyed<K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>;
->Keyed : { <K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>; <V>(obj: { [key: string]: V; }): Collection.Keyed<string, V>; }
+>Keyed : { <K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>; <V>(obj: { [key: string]: V; }): Keyed<string, V>; }
 >collection : Iterable<[K, V]>
 >Collection : any
 
     export function Keyed<V>(obj: {[key: string]: V}): Collection.Keyed<string, V>;
->Keyed : { <K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>; <V>(obj: {    [key: string]: V;}): Collection.Keyed<string, V>; }
+>Keyed : { <K, V>(collection: Iterable<[K, V]>): Keyed<K, V>; <V>(obj: { [key: string]: V; }): Collection.Keyed<string, V>; }
 >obj : { [key: string]: V; }
 >key : string
 >Collection : any
@@ -1508,7 +1508,7 @@ declare module Immutable {
 >toJS : () => Object
 
       toJSON(): { [key: string]: V };
->toJSON : () => {    [key: string]: V;}
+>toJSON : () => { [key: string]: V; }
 >key : string
 
       toSeq(): Seq.Keyed<K, V>;
@@ -1520,12 +1520,12 @@ declare module Immutable {
 >flip : () => this
 
       concat<KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Collection.Keyed<K | KC, V | VC>;
->concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Collection.Keyed<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): Collection.Keyed<K | string, V | C>; }
+>concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Collection.Keyed<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): Keyed<string | K, V | C>; }
 >collections : Iterable<[KC, VC]>[]
 >Collection : any
 
       concat<C>(...collections: Array<{[key: string]: C}>): Collection.Keyed<K | string, V | C>;
->concat : { <KC, VC>(...collections: Iterable<[KC, VC]>[]): Collection.Keyed<K | KC, V | VC>; <C>(...collections: Array<{    [key: string]: C;}>): Collection.Keyed<K | string, V | C>; }
+>concat : { <KC, VC>(...collections: Iterable<[KC, VC]>[]): Keyed<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): Collection.Keyed<K | string, V | C>; }
 >collections : { [key: string]: C; }[]
 >key : string
 >Collection : any
@@ -1576,7 +1576,7 @@ declare module Immutable {
 >Collection : any
 
       filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
->filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection.Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
+>filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
 >predicate : (value: V, key: K, iter: this) => any
 >value : V
 >key : K
@@ -1604,7 +1604,7 @@ declare module Immutable {
 
       // Reading values
       get<NSV>(index: number, notSetValue: NSV): T | NSV;
->get : { <NSV>(index: number, notSetValue: NSV): T | NSV; (index: number): T | undefined; }
+>get : { <NSV>(index: number, notSetValue: NSV): T | NSV; (index: number): T; }
 >index : number
 >notSetValue : NSV
 
@@ -1642,7 +1642,7 @@ declare module Immutable {
 >Collection : any
 
       zipWith<U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): Collection.Indexed<Z>;
->zipWith : { <U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): Collection.Indexed<Z>; <U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Collection.Indexed<Z>; <Z>(zipper: (...any: any[]) => Z, ...collections: Collection<any, any>[]): Collection.Indexed<Z>; }
+>zipWith : { <U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): Collection.Indexed<Z>; <U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Indexed<Z>; <Z>(zipper: (...any: any[]) => Z, ...collections: Collection<any, any>[]): Indexed<Z>; }
 >zipper : (value: T, otherValue: U) => Z
 >value : T
 >otherValue : U
@@ -1650,7 +1650,7 @@ declare module Immutable {
 >Collection : any
 
       zipWith<U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Collection.Indexed<Z>;
->zipWith : { <U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): Collection.Indexed<Z>; <U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Collection.Indexed<Z>; <Z>(zipper: (...any: any[]) => Z, ...collections: Collection<any, any>[]): Collection.Indexed<Z>; }
+>zipWith : { <U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): Indexed<Z>; <U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Collection.Indexed<Z>; <Z>(zipper: (...any: any[]) => Z, ...collections: Collection<any, any>[]): Indexed<Z>; }
 >zipper : (value: T, otherValue: U, thirdValue: V) => Z
 >value : T
 >otherValue : U
@@ -1660,7 +1660,7 @@ declare module Immutable {
 >Collection : any
 
       zipWith<Z>(zipper: (...any: Array<any>) => Z, ...collections: Array<Collection<any, any>>): Collection.Indexed<Z>;
->zipWith : { <U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): Collection.Indexed<Z>; <U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Collection.Indexed<Z>; <Z>(zipper: (...any: Array<any>) => Z, ...collections: Array<Collection<any, any>>): Collection.Indexed<Z>; }
+>zipWith : { <U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): Indexed<Z>; <U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Indexed<Z>; <Z>(zipper: (...any: Array<any>) => Z, ...collections: Array<Collection<any, any>>): Collection.Indexed<Z>; }
 >zipper : (...any: Array<any>) => Z
 >any : any[]
 >collections : Collection<any, any>[]
@@ -1725,7 +1725,7 @@ declare module Immutable {
 >Collection : any
 
       filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
->filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Collection.Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
+>filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
 >predicate : (value: T, index: number, iter: this) => any
 >value : T
 >index : number
@@ -1789,7 +1789,7 @@ declare module Immutable {
 >Collection : any
 
       filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
->filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Collection.Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
+>filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
 >predicate : (value: T, key: never, iter: this) => any
 >value : T
 >key : never
@@ -1829,7 +1829,7 @@ declare module Immutable {
 
     // Reading values
     get<NSV>(key: K, notSetValue: NSV): V | NSV;
->get : { <NSV>(key: K, notSetValue: NSV): V | NSV; (key: K): V | undefined; }
+>get : { <NSV>(key: K, notSetValue: NSV): V | NSV; (key: K): V; }
 >key : K
 >notSetValue : NSV
 
@@ -1873,18 +1873,18 @@ declare module Immutable {
 
     // Conversion to JavaScript types
     toJS(): Array<any> | { [key: string]: any };
->toJS : () => Array<any> | {    [key: string]: any;}
+>toJS : () => any[] | { [key: string]: any; }
 >key : string
 
     toJSON(): Array<V> | { [key: string]: V };
->toJSON : () => Array<V> | {    [key: string]: V;}
+>toJSON : () => V[] | { [key: string]: V; }
 >key : string
 
     toArray(): Array<V>;
 >toArray : () => Array<V>
 
     toObject(): { [key: string]: V };
->toObject : () => {    [key: string]: V;}
+>toObject : () => { [key: string]: V; }
 >key : string
 
     // Conversion to Collections

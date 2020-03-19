@@ -33,7 +33,7 @@ class Linq {
 >result : any[]
 >i : number
 >func(values[i]) : any
->func : (v: T) => A
+>func : (v: T) => any
 >values[i] : T
 >values : T[]
 >i : number

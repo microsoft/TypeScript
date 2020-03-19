@@ -201,9 +201,9 @@ module Formatting {
             var result = this.GetIndentationEditsWorker(token, nextToken, node, sameLineIndent);
 >result : any
 >this.GetIndentationEditsWorker(token, nextToken, node, sameLineIndent) : any
->this.GetIndentationEditsWorker : (token: any, nextToken: any, node: any, sameLineIndent: boolean) => List_TextEditInfo
+>this.GetIndentationEditsWorker : (token: any, nextToken: any, node: any, sameLineIndent: boolean) => any
 >this : this
->GetIndentationEditsWorker : (token: any, nextToken: any, node: any, sameLineIndent: boolean) => List_TextEditInfo
+>GetIndentationEditsWorker : (token: any, nextToken: any, node: any, sameLineIndent: boolean) => any
 >token : any
 >nextToken : any
 >node : any
@@ -349,9 +349,9 @@ module Formatting {
 >indentationInfo = this.GetSpecialCaseIndentation(token, node) : any
 >indentationInfo : any
 >this.GetSpecialCaseIndentation(token, node) : any
->this.GetSpecialCaseIndentation : (token: any, node: any) => IndentationInfo
+>this.GetSpecialCaseIndentation : (token: any, node: any) => any
 >this : this
->GetSpecialCaseIndentation : (token: any, node: any) => IndentationInfo
+>GetSpecialCaseIndentation : (token: any, node: any) => any
 >token : any
 >node : any
 
@@ -486,9 +486,9 @@ module Formatting {
 >indentationInfo = this.ApplyIndentationDeltaFromParent(token, node) : any
 >indentationInfo : any
 >this.ApplyIndentationDeltaFromParent(token, node) : any
->this.ApplyIndentationDeltaFromParent : (token: any, node: any) => IndentationInfo
+>this.ApplyIndentationDeltaFromParent : (token: any, node: any) => any
 >this : this
->ApplyIndentationDeltaFromParent : (token: any, node: any) => IndentationInfo
+>ApplyIndentationDeltaFromParent : (token: any, node: any) => any
 >token : any
 >node : any
                     }
@@ -504,9 +504,9 @@ module Formatting {
                 var edit = this.GetIndentEdit(indentationInfo, token.Span.startPosition(), sameLineIndent);
 >edit : any
 >this.GetIndentEdit(indentationInfo, token.Span.startPosition(), sameLineIndent) : any
->this.GetIndentEdit : (indentInfo: any, tokenStartPosition: number, sameLineIndent: boolean) => TextEditInfo
+>this.GetIndentEdit : (indentInfo: any, tokenStartPosition: number, sameLineIndent: boolean) => any
 >this : this
->GetIndentEdit : (indentInfo: any, tokenStartPosition: number, sameLineIndent: boolean) => TextEditInfo
+>GetIndentEdit : (indentInfo: any, tokenStartPosition: number, sameLineIndent: boolean) => any
 >indentationInfo : any
 >token.Span.startPosition() : any
 >token.Span.startPosition : any
@@ -549,9 +549,9 @@ module Formatting {
                         var commentEdits = this.GetCommentIndentationEdits(token);
 >commentEdits : any
 >this.GetCommentIndentationEdits(token) : any
->this.GetCommentIndentationEdits : (token: any) => List_TextEditInfo
+>this.GetCommentIndentationEdits : (token: any) => any
 >this : this
->GetCommentIndentationEdits : (token: any) => List_TextEditInfo
+>GetCommentIndentationEdits : (token: any) => any
 >token : any
 
                         commentEdits.foreach((item) => {
@@ -682,9 +682,9 @@ module Formatting {
                     var commentIndentationInfo = this.ApplyIndentationDelta2(lineIndent, commentFirstLineIndentationDelta);
 >commentIndentationInfo : any
 >this.ApplyIndentationDelta2(lineIndent, commentFirstLineIndentationDelta) : any
->this.ApplyIndentationDelta2 : (currentIndent: string, delta: number) => IndentationInfo
+>this.ApplyIndentationDelta2 : (currentIndent: string, delta: number) => any
 >this : this
->ApplyIndentationDelta2 : (currentIndent: string, delta: number) => IndentationInfo
+>ApplyIndentationDelta2 : (currentIndent: string, delta: number) => any
 >lineIndent : string
 >commentFirstLineIndentationDelta : number
 
@@ -704,9 +704,9 @@ module Formatting {
                         var commentIndentationEdit = this.GetIndentEdit(commentIndentationInfo, tokenStartPosition, false);
 >commentIndentationEdit : any
 >this.GetIndentEdit(commentIndentationInfo, tokenStartPosition, false) : any
->this.GetIndentEdit : (indentInfo: any, tokenStartPosition: number, sameLineIndent: boolean) => TextEditInfo
+>this.GetIndentEdit : (indentInfo: any, tokenStartPosition: number, sameLineIndent: boolean) => any
 >this : this
->GetIndentEdit : (indentInfo: any, tokenStartPosition: number, sameLineIndent: boolean) => TextEditInfo
+>GetIndentEdit : (indentInfo: any, tokenStartPosition: number, sameLineIndent: boolean) => any
 >commentIndentationInfo : any
 >tokenStartPosition : any
 >false : false
@@ -848,9 +848,9 @@ module Formatting {
 >indentationInfo = this.GetSpecialCaseIndentationForLCurly(node) : any
 >indentationInfo : any
 >this.GetSpecialCaseIndentationForLCurly(node) : any
->this.GetSpecialCaseIndentationForLCurly : (node: any) => IndentationInfo
+>this.GetSpecialCaseIndentationForLCurly : (node: any) => any
 >this : this
->GetSpecialCaseIndentationForLCurly : (node: any) => IndentationInfo
+>GetSpecialCaseIndentationForLCurly : (node: any) => any
 >node : any
 
                     return indentationInfo;
@@ -967,9 +967,9 @@ module Formatting {
 
                     return this.GetSpecialCaseIndentationForSemicolon(token, node);
 >this.GetSpecialCaseIndentationForSemicolon(token, node) : any
->this.GetSpecialCaseIndentationForSemicolon : (token: any, node: any) => IndentationInfo
+>this.GetSpecialCaseIndentationForSemicolon : (token: any, node: any) => any
 >this : this
->GetSpecialCaseIndentationForSemicolon : (token: any, node: any) => IndentationInfo
+>GetSpecialCaseIndentationForSemicolon : (token: any, node: any) => any
 >token : any
 >node : any
 
@@ -980,9 +980,9 @@ module Formatting {
 
                     return this.GetSpecialCaseIndentationForComment(token, node);
 >this.GetSpecialCaseIndentationForComment(token, node) : any
->this.GetSpecialCaseIndentationForComment : (token: any, node: any) => IndentationInfo
+>this.GetSpecialCaseIndentationForComment : (token: any, node: any) => any
 >this : this
->GetSpecialCaseIndentationForComment : (token: any, node: any) => IndentationInfo
+>GetSpecialCaseIndentationForComment : (token: any, node: any) => any
 >token : any
 >node : any
 
@@ -1261,9 +1261,9 @@ module Formatting {
 >indentationInfo = this.ApplyIndentationDeltaFromParent(token, node) : any
 >indentationInfo : any
 >this.ApplyIndentationDeltaFromParent(token, node) : any
->this.ApplyIndentationDeltaFromParent : (token: any, node: any) => IndentationInfo
+>this.ApplyIndentationDeltaFromParent : (token: any, node: any) => any
 >this : this
->ApplyIndentationDeltaFromParent : (token: any, node: any) => IndentationInfo
+>ApplyIndentationDeltaFromParent : (token: any, node: any) => any
 >token : any
 >node : any
                 }
@@ -1911,9 +1911,9 @@ module Formatting {
 >indentationInfo = this.ApplyIndentationDelta1(token.Span.startPosition(), parentIndentationDeltaSize) : any
 >indentationInfo : any
 >this.ApplyIndentationDelta1(token.Span.startPosition(), parentIndentationDeltaSize) : any
->this.ApplyIndentationDelta1 : (tokenStartPosition: number, delta: number) => IndentationInfo
+>this.ApplyIndentationDelta1 : (tokenStartPosition: number, delta: number) => any
 >this : this
->ApplyIndentationDelta1 : (tokenStartPosition: number, delta: number) => IndentationInfo
+>ApplyIndentationDelta1 : (tokenStartPosition: number, delta: number) => any
 >token.Span.startPosition() : any
 >token.Span.startPosition : any
 >token.Span : any
@@ -1972,9 +1972,9 @@ module Formatting {
             // Calculate new indentation from current-indentation and delta
             return this.ApplyIndentationDelta2(currentIndent, delta);
 >this.ApplyIndentationDelta2(currentIndent, delta) : any
->this.ApplyIndentationDelta2 : (currentIndent: string, delta: number) => IndentationInfo
+>this.ApplyIndentationDelta2 : (currentIndent: string, delta: number) => any
 >this : this
->ApplyIndentationDelta2 : (currentIndent: string, delta: number) => IndentationInfo
+>ApplyIndentationDelta2 : (currentIndent: string, delta: number) => any
 >currentIndent : any
 >delta : number
         }

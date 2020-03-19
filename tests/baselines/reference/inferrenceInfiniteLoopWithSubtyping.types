@@ -13,7 +13,7 @@ export class EnumTypeComposer {
 >EnumTypeComposer : EnumTypeComposer
 
   public setFields(fields: { [name: string]: { [key: string]: any } }): this;
->setFields : (fields: {    [name: string]: {        [key: string]: any;    };}) => this
+>setFields : (fields: { [name: string]: { [key: string]: any; }; }) => this
 >fields : { [name: string]: { [key: string]: any; }; }
 >name : string
 >key : string
@@ -28,7 +28,7 @@ export class ObjectTypeComposer<TSource, TContext> {
 
   public addResolver<TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition> }): this;
 >addResolver : <TResolverSource>(opts: {    type?: Thunk<ComposeOutputTypeDefinition>;}) => this
->opts : { type?: Thunk<Readonly<ObjectTypeComposer<any, any>> | Readonly<EnumTypeComposer>>; }
+>opts : { type?: Thunk<ComposeOutputTypeDefinition>; }
 >type : Thunk<Readonly<ObjectTypeComposer<any, any>> | Readonly<EnumTypeComposer>>
 }
 
@@ -36,10 +36,10 @@ export class Resolver {
 >Resolver : Resolver
 
   public wrapArgs<NewContext>(
->wrapArgs : <NewContext>(cb: () => {    [argName: string]: Thunk<Readonly<EnumTypeComposer>>;}) => void
+>wrapArgs : <NewContext>(cb: () => { [argName: string]: Thunk<Readonly<EnumTypeComposer>>; }) => void
 
     cb: () => {
->cb : () => {    [argName: string]: Thunk<Readonly<EnumTypeComposer>>;}
+>cb : () => { [argName: string]: Thunk<Readonly<EnumTypeComposer>>; }
 
       [argName: string]: Thunk<Readonly<EnumTypeComposer>>;
 >argName : string

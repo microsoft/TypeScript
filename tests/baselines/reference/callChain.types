@@ -114,26 +114,26 @@ declare const o3: { b: ((...args: any[]) => { c: string }) | undefined };
 o3.b?.().c;
 >o3.b?.().c : string | undefined
 >o3.b?.() : { c: string; } | undefined
->o3.b : ((...args: any[]) => {    c: string;}) | undefined
->o3 : { b: ((...args: any[]) => {    c: string;}) | undefined; }
->b : ((...args: any[]) => {    c: string;}) | undefined
+>o3.b : ((...args: any[]) => { c: string; }) | undefined
+>o3 : { b: ((...args: any[]) => { c: string; }) | undefined; }
+>b : ((...args: any[]) => { c: string; }) | undefined
 >c : string | undefined
 
 o3.b?.(1).c;
 >o3.b?.(1).c : string | undefined
 >o3.b?.(1) : { c: string; } | undefined
->o3.b : ((...args: any[]) => {    c: string;}) | undefined
->o3 : { b: ((...args: any[]) => {    c: string;}) | undefined; }
->b : ((...args: any[]) => {    c: string;}) | undefined
+>o3.b : ((...args: any[]) => { c: string; }) | undefined
+>o3 : { b: ((...args: any[]) => { c: string; }) | undefined; }
+>b : ((...args: any[]) => { c: string; }) | undefined
 >1 : 1
 >c : string | undefined
 
 o3.b?.(...[1, 2]).c;
 >o3.b?.(...[1, 2]).c : string | undefined
 >o3.b?.(...[1, 2]) : { c: string; } | undefined
->o3.b : ((...args: any[]) => {    c: string;}) | undefined
->o3 : { b: ((...args: any[]) => {    c: string;}) | undefined; }
->b : ((...args: any[]) => {    c: string;}) | undefined
+>o3.b : ((...args: any[]) => { c: string; }) | undefined
+>o3 : { b: ((...args: any[]) => { c: string; }) | undefined; }
+>b : ((...args: any[]) => { c: string; }) | undefined
 >...[1, 2] : number
 >[1, 2] : number[]
 >1 : 1
@@ -143,9 +143,9 @@ o3.b?.(...[1, 2]).c;
 o3.b?.(1, ...[2, 3], 4).c;
 >o3.b?.(1, ...[2, 3], 4).c : string | undefined
 >o3.b?.(1, ...[2, 3], 4) : { c: string; } | undefined
->o3.b : ((...args: any[]) => {    c: string;}) | undefined
->o3 : { b: ((...args: any[]) => {    c: string;}) | undefined; }
->b : ((...args: any[]) => {    c: string;}) | undefined
+>o3.b : ((...args: any[]) => { c: string; }) | undefined
+>o3 : { b: ((...args: any[]) => { c: string; }) | undefined; }
+>b : ((...args: any[]) => { c: string; }) | undefined
 >1 : 1
 >...[2, 3] : number
 >[2, 3] : number[]
@@ -157,26 +157,26 @@ o3.b?.(1, ...[2, 3], 4).c;
 o3.b?.()["c"];
 >o3.b?.()["c"] : string | undefined
 >o3.b?.() : { c: string; } | undefined
->o3.b : ((...args: any[]) => {    c: string;}) | undefined
->o3 : { b: ((...args: any[]) => {    c: string;}) | undefined; }
->b : ((...args: any[]) => {    c: string;}) | undefined
+>o3.b : ((...args: any[]) => { c: string; }) | undefined
+>o3 : { b: ((...args: any[]) => { c: string; }) | undefined; }
+>b : ((...args: any[]) => { c: string; }) | undefined
 >"c" : "c"
 
 o3.b?.(1)["c"];
 >o3.b?.(1)["c"] : string | undefined
 >o3.b?.(1) : { c: string; } | undefined
->o3.b : ((...args: any[]) => {    c: string;}) | undefined
->o3 : { b: ((...args: any[]) => {    c: string;}) | undefined; }
->b : ((...args: any[]) => {    c: string;}) | undefined
+>o3.b : ((...args: any[]) => { c: string; }) | undefined
+>o3 : { b: ((...args: any[]) => { c: string; }) | undefined; }
+>b : ((...args: any[]) => { c: string; }) | undefined
 >1 : 1
 >"c" : "c"
 
 o3.b?.(...[1, 2])["c"];
 >o3.b?.(...[1, 2])["c"] : string | undefined
 >o3.b?.(...[1, 2]) : { c: string; } | undefined
->o3.b : ((...args: any[]) => {    c: string;}) | undefined
->o3 : { b: ((...args: any[]) => {    c: string;}) | undefined; }
->b : ((...args: any[]) => {    c: string;}) | undefined
+>o3.b : ((...args: any[]) => { c: string; }) | undefined
+>o3 : { b: ((...args: any[]) => { c: string; }) | undefined; }
+>b : ((...args: any[]) => { c: string; }) | undefined
 >...[1, 2] : number
 >[1, 2] : number[]
 >1 : 1
@@ -186,9 +186,9 @@ o3.b?.(...[1, 2])["c"];
 o3.b?.(1, ...[2, 3], 4)["c"];
 >o3.b?.(1, ...[2, 3], 4)["c"] : string | undefined
 >o3.b?.(1, ...[2, 3], 4) : { c: string; } | undefined
->o3.b : ((...args: any[]) => {    c: string;}) | undefined
->o3 : { b: ((...args: any[]) => {    c: string;}) | undefined; }
->b : ((...args: any[]) => {    c: string;}) | undefined
+>o3.b : ((...args: any[]) => { c: string; }) | undefined
+>o3 : { b: ((...args: any[]) => { c: string; }) | undefined; }
+>b : ((...args: any[]) => { c: string; }) | undefined
 >1 : 1
 >...[2, 3] : number
 >[2, 3] : number[]
@@ -200,16 +200,16 @@ o3.b?.(1, ...[2, 3], 4)["c"];
 o3["b"]?.().c;
 >o3["b"]?.().c : string | undefined
 >o3["b"]?.() : { c: string; } | undefined
->o3["b"] : ((...args: any[]) => {    c: string;}) | undefined
->o3 : { b: ((...args: any[]) => {    c: string;}) | undefined; }
+>o3["b"] : ((...args: any[]) => { c: string; }) | undefined
+>o3 : { b: ((...args: any[]) => { c: string; }) | undefined; }
 >"b" : "b"
 >c : string | undefined
 
 o3["b"]?.(1).c;
 >o3["b"]?.(1).c : string | undefined
 >o3["b"]?.(1) : { c: string; } | undefined
->o3["b"] : ((...args: any[]) => {    c: string;}) | undefined
->o3 : { b: ((...args: any[]) => {    c: string;}) | undefined; }
+>o3["b"] : ((...args: any[]) => { c: string; }) | undefined
+>o3 : { b: ((...args: any[]) => { c: string; }) | undefined; }
 >"b" : "b"
 >1 : 1
 >c : string | undefined
@@ -217,8 +217,8 @@ o3["b"]?.(1).c;
 o3["b"]?.(...[1, 2]).c;
 >o3["b"]?.(...[1, 2]).c : string | undefined
 >o3["b"]?.(...[1, 2]) : { c: string; } | undefined
->o3["b"] : ((...args: any[]) => {    c: string;}) | undefined
->o3 : { b: ((...args: any[]) => {    c: string;}) | undefined; }
+>o3["b"] : ((...args: any[]) => { c: string; }) | undefined
+>o3 : { b: ((...args: any[]) => { c: string; }) | undefined; }
 >"b" : "b"
 >...[1, 2] : number
 >[1, 2] : number[]
@@ -229,8 +229,8 @@ o3["b"]?.(...[1, 2]).c;
 o3["b"]?.(1, ...[2, 3], 4).c;
 >o3["b"]?.(1, ...[2, 3], 4).c : string | undefined
 >o3["b"]?.(1, ...[2, 3], 4) : { c: string; } | undefined
->o3["b"] : ((...args: any[]) => {    c: string;}) | undefined
->o3 : { b: ((...args: any[]) => {    c: string;}) | undefined; }
+>o3["b"] : ((...args: any[]) => { c: string; }) | undefined
+>o3 : { b: ((...args: any[]) => { c: string; }) | undefined; }
 >"b" : "b"
 >1 : 1
 >...[2, 3] : number
@@ -262,5 +262,5 @@ declare const o5: <T>() => undefined | (() => void);
 o5<number>()?.();
 >o5<number>()?.() : void | undefined
 >o5<number>() : (() => void) | undefined
->o5 : <T>() => undefined | (() => void)
+>o5 : <T>() => (() => void) | undefined
 

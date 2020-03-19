@@ -103,9 +103,13 @@ export declare var simpleExample: {
 };
 export declare var circularReference: {
     new (): {
-        tags(c: C): C;
+        tags(c: any): any;
     };
-    getTags(c: C): C;
+    getTags(c: {
+        tags(c: any): any;
+    }): {
+        tags(c: any): any;
+    };
 };
 export declare class FooItem {
     foo(): void;
@@ -131,60 +135,3 @@ declare const Test_base: {
 export declare class Test extends Test_base {
 }
 export {};
-
-
-//// [DtsFileErrors]
-
-
-tests/cases/compiler/emitClassExpressionInDeclarationFile.d.ts(9,17): error TS2304: Cannot find name 'C'.
-tests/cases/compiler/emitClassExpressionInDeclarationFile.d.ts(9,21): error TS2304: Cannot find name 'C'.
-tests/cases/compiler/emitClassExpressionInDeclarationFile.d.ts(11,16): error TS2304: Cannot find name 'C'.
-tests/cases/compiler/emitClassExpressionInDeclarationFile.d.ts(11,20): error TS2304: Cannot find name 'C'.
-
-
-==== tests/cases/compiler/emitClassExpressionInDeclarationFile.d.ts (4 errors) ====
-    export declare var simpleExample: {
-        new (): {
-            tags(): void;
-        };
-        getTags(): void;
-    };
-    export declare var circularReference: {
-        new (): {
-            tags(c: C): C;
-                    ~
-!!! error TS2304: Cannot find name 'C'.
-                        ~
-!!! error TS2304: Cannot find name 'C'.
-        };
-        getTags(c: C): C;
-                   ~
-!!! error TS2304: Cannot find name 'C'.
-                       ~
-!!! error TS2304: Cannot find name 'C'.
-    };
-    export declare class FooItem {
-        foo(): void;
-        name?: string;
-    }
-    export declare type Constructor<T> = new (...args: any[]) => T;
-    export declare function WithTags<T extends Constructor<FooItem>>(Base: T): {
-        new (...args: any[]): {
-            tags(): void;
-            foo(): void;
-            name?: string;
-        };
-        getTags(): void;
-    } & T;
-    declare const Test_base: {
-        new (...args: any[]): {
-            tags(): void;
-            foo(): void;
-            name?: string;
-        };
-        getTags(): void;
-    } & typeof FooItem;
-    export declare class Test extends Test_base {
-    }
-    export {};
-    

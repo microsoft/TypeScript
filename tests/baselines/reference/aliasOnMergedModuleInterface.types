@@ -8,9 +8,9 @@ var z: foo;
 
 z.bar("hello"); // This should be ok
 >z.bar("hello") : foo.A
->z.bar : (name: string) => B.A
+>z.bar : (name: string) => foo.A
 >z : foo
->bar : (name: string) => B.A
+>bar : (name: string) => foo.A
 >"hello" : "hello"
 
 var x: foo.A = foo.bar("hello"); // foo.A should be ok but foo.bar should be error

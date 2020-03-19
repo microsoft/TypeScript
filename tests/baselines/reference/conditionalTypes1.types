@@ -142,7 +142,7 @@ declare function f5<T extends Options, K extends string>(p: K): Extract<T, { k: 
 let x0 = f5("a");  // { k: "a", a: number }
 >x0 : { k: "a"; a: number; }
 >f5("a") : { k: "a"; a: number; }
->f5 : <T extends Options, K extends string>(p: K) => Extract<T, {    k: K;}>
+>f5 : <T extends Options, K extends string>(p: K) => Extract<T, { k: K; }>
 >"a" : "a"
 
 type OptionsOfKind<K extends Options["k"]> = Extract<Options, { k: K }>;
@@ -788,8 +788,8 @@ type Baz<T> = Foo<T>;
 >Baz : Foo<T>
 
 const convert2 = <T>(value: Foo<T>): Baz<T> => value;
->convert2 : <T>(value: Foo<T>) => Baz<T>
-><T>(value: Foo<T>): Baz<T> => value : <T>(value: Foo<T>) => Baz<T>
+>convert2 : <T>(value: Foo<T>) => Foo<T>
+><T>(value: Foo<T>): Baz<T> => value : <T>(value: Foo<T>) => Foo<T>
 >value : Foo<T>
 >value : Foo<T>
 

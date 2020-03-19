@@ -32,10 +32,10 @@ interface Square {
 
 interface Subshape {
     "0": {
->"0" : { sub: { under: { shape: Shape; }; }; }
+>"0" : { sub: {    under: {        shape: Shape;    };}; }
 
         sub: {
->sub : { under: { shape: Shape; }; }
+>sub : { under: {    shape: Shape;}; }
 
             under: {
 >under : { shape: Shape; }

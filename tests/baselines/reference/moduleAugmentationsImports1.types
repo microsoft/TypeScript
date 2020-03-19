@@ -81,9 +81,9 @@ let b = a.getB().x.toFixed();
 >a.getB().x.toFixed : (fractionDigits?: number) => string
 >a.getB().x : number
 >a.getB() : import("tests/cases/compiler/b").B
->a.getB : () => B
+>a.getB : () => import("tests/cases/compiler/b").B
 >a : A
->getB : () => B
+>getB : () => import("tests/cases/compiler/b").B
 >x : number
 >toFixed : (fractionDigits?: number) => string
 
@@ -93,9 +93,9 @@ let c = a.getCls().y.toLowerCase();
 >a.getCls().y.toLowerCase : () => string
 >a.getCls().y : string
 >a.getCls() : import("C").Cls
->a.getCls : () => Cls
+>a.getCls : () => import("C").Cls
 >a : A
->getCls : () => Cls
+>getCls : () => import("C").Cls
 >y : string
 >toLowerCase : () => string
 

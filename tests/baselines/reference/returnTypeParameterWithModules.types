@@ -40,9 +40,9 @@ module M2 {
 
         A.reduce(arguments, compose2);
 >A.reduce(arguments, compose2) : unknown[]
->A.reduce : <A>(ar: any, f: any, e?: any) => Array<A>
+>A.reduce : <A>(ar: any, f: any, e?: any) => A[]
 >A : typeof A
->reduce : <A>(ar: any, f: any, e?: any) => Array<A>
+>reduce : <A>(ar: any, f: any, e?: any) => A[]
 >arguments : IArguments
 >compose2 : <B, C, D>(g: (x: B) => C, f: (x: D) => B) => (x: D) => C
 
