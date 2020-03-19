@@ -1,5 +1,4 @@
 // @jsx: react
-
 import React from "react";
 
 let Foo = {
