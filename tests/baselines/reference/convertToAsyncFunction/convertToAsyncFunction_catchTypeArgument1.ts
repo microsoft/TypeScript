@@ -15,14 +15,10 @@ type APIResponse<T> = { success: true, data: T } | { success: false };
 async function get() {
     try {
         return Promise
-            .resolve<APIResponse<{
-                email: string;
-            }>>({ success: true, data: { email: "" } });
+            .resolve<APIResponse<{ email: string; }>>({ success: true, data: { email: "" } });
     }
     catch (e) {
-        const result: APIResponse<{
-            email: string;
-        }> = ({ success: false });
+        const result: APIResponse<{ email: string; }> = ({ success: false });
         return result;
     }
 }
