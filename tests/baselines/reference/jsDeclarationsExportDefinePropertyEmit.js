@@ -163,8 +163,3 @@ export function i(): void;
 export function ii(): void;
 export function jj(): void;
 export function j(): void;
-declare var module: {
-    "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import(".");
-};
-declare namespace __tests_cases_conformance_jsdoc_declarations_index_ { }
-export {};

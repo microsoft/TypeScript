@@ -5470,10 +5470,13 @@ namespace ts {
 
                     if (isEntityName(node) || isEntityNameExpression(node)) {
                         const leftmost = getFirstIdentifier(node);
+                        if (isInJSFile(node) && (isExportsIdentifier(leftmost) || isModuleExportsAccessExpression(leftmost.parent) || (isQualifiedName(leftmost.parent) && isModuleIdentifier(leftmost.parent.left) && isExportsIdentifier(leftmost.parent.right)))) {
+                            hadError = true;
+                            return node;
+                        }
                         const sym = resolveEntityName(leftmost, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveALias*/ true);
                         if (sym) {
-                            if ((isInJSFile(node) && (isExportsIdentifier(node) || isModuleExportsAccessExpression(node))) ||
-                                isSymbolAccessible(sym, context.enclosingDeclaration, SymbolFlags.All, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
+                            if (isSymbolAccessible(sym, context.enclosingDeclaration, SymbolFlags.All, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
                                 hadError = true;
                             }
                             else {
