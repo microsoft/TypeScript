@@ -358,7 +358,7 @@ namespace ts.server {
         getEmitOutput(file: string): EmitOutput {
             const request = this.processRequest<protocol.EmitOutputRequest>(protocol.CommandTypes.EmitOutput, { file });
             const response = this.processResponse<protocol.EmitOutputResponse>(request);
-            return response.body;
+            return response.body as EmitOutput;
         }
 
         getSyntacticDiagnostics(file: string): DiagnosticWithLocation[] {
