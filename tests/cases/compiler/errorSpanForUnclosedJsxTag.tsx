@@ -1,5 +1,5 @@
 // @jsx: react
-import React from "react";
+declare const React: any
 
 let Foo = {
   Bar() {}

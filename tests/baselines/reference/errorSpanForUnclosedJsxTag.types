@@ -1,5 +1,5 @@
 === tests/cases/compiler/errorSpanForUnclosedJsxTag.tsx ===
-import React from "react";
+declare const React: any
 >React : any
 
 let Foo = {
