@@ -5483,12 +5483,10 @@ namespace ts {
                                 context.tracker?.trackSymbol?.(sym, context.enclosingDeclaration, SymbolFlags.All);
                                 includePrivateSymbol?.(sym);
                             }
-                            if (isIdentifier(node) && sym.flags & SymbolFlags.TypeParameter) {
-                                const name = typeParameterToName(getDeclaredTypeOfSymbol(sym), context);
-                                if (idText(name) !== idText(node)) {
-                                    return name;
-                                }
-                                return node;
+                            if (isIdentifier(node)) {
+                                const name = sym.flags & SymbolFlags.TypeParameter ? typeParameterToName(getDeclaredTypeOfSymbol(sym), context) : getMutableClone(node);
+                                name.symbol = sym; // for quickinfo, which uses identifier symbol information
+                                return setEmitFlags(setOriginalNode(name, node), EmitFlags.NoAsciiEscaping);
                             }
                         }
                     }

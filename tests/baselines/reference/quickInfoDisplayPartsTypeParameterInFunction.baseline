@@ -54,7 +54,7 @@
         },
         {
           "text": "U",
-          "kind": "text"
+          "kind": "typeParameterName"
         },
         {
           "text": ")",
@@ -524,7 +524,7 @@
         },
         {
           "text": "U",
-          "kind": "text"
+          "kind": "typeParameterName"
         },
         {
           "text": ")",
