@@ -409,11 +409,20 @@ namespace ts {
     }
 
     /* @internal */
+    export function computeLineAndCharacterOfPosition(lineStarts: readonly number[], position: number): LineAndCharacter {
+        const lineNumber = computeLineOfPosition(lineStarts, position);
+        return {
+            line: lineNumber,
+            character: position - lineStarts[lineNumber]
+        };
+    }
+
     /**
+     * @internal
      * We assume the first line starts at position 0 and 'position' is non-negative.
      */
-    export function computeLineAndCharacterOfPosition(lineStarts: readonly number[], position: number): LineAndCharacter {
-        let lineNumber = binarySearch(lineStarts, position, identity, compareValues);
+    export function computeLineOfPosition(lineStarts: readonly number[], position: number, lowerBound?: number) {
+        let lineNumber = binarySearch(lineStarts, position, identity, compareValues, lowerBound);
         if (lineNumber < 0) {
             // If the actual position was not found,
             // the binary search returns the 2's-complement of the next line start
@@ -425,10 +434,19 @@ namespace ts {
             lineNumber = ~lineNumber - 1;
             Debug.assert(lineNumber !== -1, "position cannot precede the beginning of the file");
         }
-        return {
-            line: lineNumber,
-            character: position - lineStarts[lineNumber]
-        };
+        return lineNumber;
+    }
+
+    /** @internal */
+    export function getLinesBetweenPositions(sourceFile: SourceFileLike, pos1: number, pos2: number) {
+        if (pos1 === pos2) return 0;
+        const lineStarts = getLineStarts(sourceFile);
+        const lower = Math.min(pos1, pos2);
+        const isNegative = lower === pos2;
+        const upper = isNegative ? pos1 : pos2;
+        const lowerLine = computeLineOfPosition(lineStarts, lower);
+        const upperLine = computeLineOfPosition(lineStarts, upper, lowerLine);
+        return isNegative ? lowerLine - upperLine : upperLine - lowerLine;
     }
 
     export function getLineAndCharacterOfPosition(sourceFile: SourceFileLike, position: number): LineAndCharacter {

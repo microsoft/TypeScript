@@ -12,9 +12,9 @@ class Base {
 
         console.log(x.#prop);
 >console.log(x.#prop) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >x.#prop : number
 >x : Derived
     }
@@ -29,9 +29,9 @@ class Derived extends Base {
 
         console.log(x.#prop);
 >console.log(x.#prop) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >x.#prop : any
 >x : Derived
     }
