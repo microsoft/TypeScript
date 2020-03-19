@@ -953,8 +953,8 @@ function bar() {
                 // Change file1 get affected file list
                 verifyLocalEdit(file1, "hello", "world");
 
-                // Change file1 get affected file list
-                verifyLocalEdit(file2, "world", "hello", /*returnsAllFilesAsAffected*/ true);
+                // Change file2 get affected file list = will return only file2 if --declaration otherwise all files
+                verifyLocalEdit(file2, "world", "hello", /*returnsAllFilesAsAffected*/ !declaration);
 
                 function verifyFileSave(file: File) {
                     const response = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
