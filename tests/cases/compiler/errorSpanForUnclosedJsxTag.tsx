@@ -1,3 +1,4 @@
+// @jsx: react
 let Foo = {
   Bar() {}
 }

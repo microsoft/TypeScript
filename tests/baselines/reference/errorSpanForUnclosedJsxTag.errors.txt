@@ -1,6 +1,6 @@
-tests/cases/compiler/errorSpanForUnclosedJsxTag.tsx(7,9): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+tests/cases/compiler/errorSpanForUnclosedJsxTag.tsx(7,14): error TS2304: Cannot find name 'React'.
 tests/cases/compiler/errorSpanForUnclosedJsxTag.tsx(7,14): error TS17008: JSX element 'Foo.Bar' has no corresponding closing tag.
-tests/cases/compiler/errorSpanForUnclosedJsxTag.tsx(9,9): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+tests/cases/compiler/errorSpanForUnclosedJsxTag.tsx(9,13): error TS2304: Cannot find name 'React'.
 tests/cases/compiler/errorSpanForUnclosedJsxTag.tsx(9,13): error TS17008: JSX element 'Baz' has no corresponding closing tag.
 tests/cases/compiler/errorSpanForUnclosedJsxTag.tsx(9,23): error TS1005: '</' expected.
 
@@ -13,14 +13,14 @@ tests/cases/compiler/errorSpanForUnclosedJsxTag.tsx(9,23): error TS1005: '</' ex
     let Baz = () => {}
     
     let x = <    Foo.Bar >Hello
-            ~~~~~~~~~~~~~~
-!!! error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+                 ~~~~~~~
+!!! error TS2304: Cannot find name 'React'.
                  ~~~~~~~
 !!! error TS17008: JSX element 'Foo.Bar' has no corresponding closing tag.
     
     let y = <   Baz >Hello
-            ~~~~~~~~~
-!!! error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+                ~~~
+!!! error TS2304: Cannot find name 'React'.
                 ~~~
 !!! error TS17008: JSX element 'Baz' has no corresponding closing tag.
                           

@@ -14,6 +14,6 @@ var Foo = {
     Bar: function () { }
 };
 var Baz = function () { };
-var x = <Foo.Bar>Hello
-
-let y = <Baz>Hello</></>;
+var x = React.createElement(Foo.Bar, null,
+    "Hello let y = ",
+    React.createElement(Baz, null, "Hello"));
