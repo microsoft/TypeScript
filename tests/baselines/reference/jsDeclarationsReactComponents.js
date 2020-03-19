@@ -205,18 +205,6 @@ export default TabbedShowLayout;
  */
 declare const TabbedShowLayout: React.SFC;
 import React from "react";
-//// [jsDeclarationsReactComponents3.d.ts]
-export default TabbedShowLayout;
-/**
- * @type {{defaultProps: {tabs: string}} & ((props?: {elem: string}) => JSX.Element)}
- */
-declare const TabbedShowLayout: {
-    defaultProps: {
-        tabs: string;
-    };
-} & ((props?: {
-    elem: string;
-} | undefined) => JSX.Element);
 //// [jsDeclarationsReactComponents4.d.ts]
 export default TabbedShowLayout;
 declare function TabbedShowLayout(prop: {

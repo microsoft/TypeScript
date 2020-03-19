@@ -1,0 +1,54 @@
+tests/cases/compiler/declarationEmitPromise.ts(5,23): error TS4060: Return type of exported function has or is using private name 'a'.
+tests/cases/compiler/declarationEmitPromise.ts(5,23): error TS4060: Return type of exported function has or is using private name 'b'.
+tests/cases/compiler/declarationEmitPromise.ts(5,23): error TS4060: Return type of exported function has or is using private name 'c'.
+tests/cases/compiler/declarationEmitPromise.ts(5,23): error TS4060: Return type of exported function has or is using private name 'd'.
+tests/cases/compiler/declarationEmitPromise.ts(5,23): error TS4060: Return type of exported function has or is using private name 'e'.
+tests/cases/compiler/declarationEmitPromise.ts(14,23): error TS4060: Return type of exported function has or is using private name 'a'.
+tests/cases/compiler/declarationEmitPromise.ts(14,23): error TS4060: Return type of exported function has or is using private name 'b'.
+tests/cases/compiler/declarationEmitPromise.ts(14,23): error TS4060: Return type of exported function has or is using private name 'c'.
+tests/cases/compiler/declarationEmitPromise.ts(14,23): error TS4060: Return type of exported function has or is using private name 'd'.
+tests/cases/compiler/declarationEmitPromise.ts(14,23): error TS4060: Return type of exported function has or is using private name 'e'.
+
+
+==== tests/cases/compiler/declarationEmitPromise.ts (10 errors) ====
+    export class bluebird<T> {
+        static all: Array<bluebird<any>>;
+    }
+    
+    export async function runSampleWorks<A, B, C, D, E>(
+                          ~~~~~~~~~~~~~~
+!!! error TS4060: Return type of exported function has or is using private name 'a'.
+                          ~~~~~~~~~~~~~~
+!!! error TS4060: Return type of exported function has or is using private name 'b'.
+                          ~~~~~~~~~~~~~~
+!!! error TS4060: Return type of exported function has or is using private name 'c'.
+                          ~~~~~~~~~~~~~~
+!!! error TS4060: Return type of exported function has or is using private name 'd'.
+                          ~~~~~~~~~~~~~~
+!!! error TS4060: Return type of exported function has or is using private name 'e'.
+        a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) {
+        let result = await (bluebird.all as any)([a, b, c, d, e].filter(el => !!el));
+        let func = <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>
+            f.apply(this, result);
+        let rfunc: typeof func & {} = func as any; // <- This is the only difference
+        return rfunc
+    }
+    
+    export async function runSampleBreaks<A, B, C, D, E>(
+                          ~~~~~~~~~~~~~~~
+!!! error TS4060: Return type of exported function has or is using private name 'a'.
+                          ~~~~~~~~~~~~~~~
+!!! error TS4060: Return type of exported function has or is using private name 'b'.
+                          ~~~~~~~~~~~~~~~
+!!! error TS4060: Return type of exported function has or is using private name 'c'.
+                          ~~~~~~~~~~~~~~~
+!!! error TS4060: Return type of exported function has or is using private name 'd'.
+                          ~~~~~~~~~~~~~~~
+!!! error TS4060: Return type of exported function has or is using private name 'e'.
+        a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) {
+        let result = await (bluebird.all as any)([a, b, c, d, e].filter(el => !!el));
+        let func = <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>
+            f.apply(this, result);
+        let rfunc: typeof func = func as any; // <- This is the only difference
+        return rfunc
+    }

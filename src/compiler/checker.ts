@@ -5339,14 +5339,16 @@ namespace ts {
              * so a `unique symbol` is returned when appropriate for the input symbol, rather than `typeof sym`
              */
             function serializeTypeForDeclaration(context: NodeBuilderContext, type: Type, symbol: Symbol, enclosingDeclaration: Node | undefined, includePrivateSymbol?: (s: Symbol) => void, bundled?: boolean) {
-                const declWithExistingAnnotation = getDeclarationWithTypeAnnotation(symbol, enclosingDeclaration);
-                if (declWithExistingAnnotation && !isFunctionLikeDeclaration(declWithExistingAnnotation)) {
-                    // try to reuse the existing annotation
-                    const existing = getEffectiveTypeAnnotationNode(declWithExistingAnnotation)!;
-                    if (getTypeFromTypeNode(existing) === type) {
-                        const result = serializeExistingTypeNode(context, existing, includePrivateSymbol, bundled);
-                        if (result) {
-                            return result;
+                if (enclosingDeclaration) {
+                    const declWithExistingAnnotation = getDeclarationWithTypeAnnotation(symbol, enclosingDeclaration);
+                    if (declWithExistingAnnotation && !isFunctionLikeDeclaration(declWithExistingAnnotation)) {
+                        // try to reuse the existing annotation
+                        const existing = getEffectiveTypeAnnotationNode(declWithExistingAnnotation)!;
+                        if (getTypeFromTypeNode(existing) === type) {
+                            const result = serializeExistingTypeNode(context, existing, includePrivateSymbol, bundled);
+                            if (result) {
+                                return result;
+                            }
                         }
                     }
                 }
@@ -5361,11 +5363,13 @@ namespace ts {
             }
 
             function serializeReturnTypeForSignature(context: NodeBuilderContext, type: Type, signature: Signature, includePrivateSymbol?: (s: Symbol) => void, bundled?: boolean) {
-                const annotation = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
-                if ((!context.enclosingDeclaration || !!findAncestor(annotation, n => n === context.enclosingDeclaration)) && annotation && getTypeFromTypeNode(annotation) === type) {
-                    const result = serializeExistingTypeNode(context, annotation, includePrivateSymbol, bundled);
-                    if (result) {
-                        return result;
+                if (context.enclosingDeclaration) {
+                    const annotation = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
+                    if (!!findAncestor(annotation, n => n === context.enclosingDeclaration) && annotation && getTypeFromTypeNode(annotation) === type) {
+                        const result = serializeExistingTypeNode(context, annotation, includePrivateSymbol, bundled);
+                        if (result) {
+                            return result;
+                        }
                     }
                 }
                 return typeToTypeNodeHelper(type, context);
@@ -5464,6 +5468,7 @@ namespace ts {
                             if (isSymbolAccessible(sym, context.enclosingDeclaration, SymbolFlags.All, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
                                 hadError = true;
                             }
+                            context.tracker?.trackSymbol?.(sym, context.enclosingDeclaration, SymbolFlags.All);
                             includePrivateSymbol?.(sym);
                             if (isIdentifier(node) && sym.flags & SymbolFlags.TypeParameter) {
                                 const name = typeParameterToName(getDeclaredTypeOfSymbol(sym), context);
