@@ -1,4 +1,7 @@
 === tests/cases/compiler/errorSpanForUnclosedJsxTag.tsx ===
+import React from "react";
+>React : any
+
 let Foo = {
 >Foo : { Bar(): void; }
 >{  Bar() {}} : { Bar(): void; }
