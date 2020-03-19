@@ -1479,6 +1479,7 @@ namespace ts {
                 getLibFileFromReference: program.getLibFileFromReference,
                 isSourceFileFromExternalLibrary,
                 getResolvedProjectReferenceToRedirect,
+                getProjectReferenceRedirect,
                 isSourceOfProjectReferenceRedirect,
                 getProbableSymlinks,
                 writeFile: writeFileCallback || (

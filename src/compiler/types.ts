@@ -6438,6 +6438,8 @@ namespace ts {
 
         getSourceFiles(): readonly SourceFile[];
         readonly redirectTargetsMap: RedirectTargetsMap;
+        getProjectReferenceRedirect(fileName: string): string | undefined;
+        isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally

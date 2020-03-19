@@ -4070,6 +4070,8 @@ namespace ts {
                         getProbableSymlinks: maybeBind(host, host.getProbableSymlinks),
                         useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
                         redirectTargetsMap: host.redirectTargetsMap,
+                        getProjectReferenceRedirect: fileName => host.getProjectReferenceRedirect(fileName),
+                        isSourceOfProjectReferenceRedirect: fileName => host.isSourceOfProjectReferenceRedirect(fileName)
                     } : undefined },
                     encounteredError: false,
                     visitedTypes: undefined,
