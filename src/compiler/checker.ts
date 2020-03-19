@@ -10701,7 +10701,9 @@ namespace ts {
         }
 
         function getSignatureOfTypeTag(node: SignatureDeclaration | JSDocSignature) {
-            const typeTag = isInJSFile(node) ? getJSDocTypeTag(node) : undefined;
+            // should be attached to a function declaration or expression
+            if (!(isInJSFile(node) && isFunctionLikeDeclaration(node))) return undefined;
+            const typeTag = getJSDocTypeTag(node);
             const signature = typeTag && typeTag.typeExpression && getSingleCallSignature(getTypeFromTypeNode(typeTag.typeExpression));
             return signature && getErasedSignature(signature);
         }
