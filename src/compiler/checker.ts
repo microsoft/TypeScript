@@ -20641,7 +20641,10 @@ namespace ts {
                         }
                         if (strictNullChecks && assumeTrue && optionalChainContainsReference(predicateArgument, reference) &&
                             !(getTypeFacts(predicate.type) & TypeFacts.EQUndefined)) {
-                            return getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
+                            type = getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
+                        }
+                        if (isMatchingReferenceDiscriminant(predicateArgument, declaredType)) {
+                            return narrowTypeByDiscriminant(type, predicateArgument as AccessExpression, t => getNarrowedType(t, predicate.type!, assumeTrue, isTypeSubtypeOf));
                         }
                     }
                 }
