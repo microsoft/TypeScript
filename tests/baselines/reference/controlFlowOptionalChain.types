@@ -1988,16 +1988,16 @@ function someFunction(someOptionalObject: SomeObject | undefined): void {
 
         console.log(someOptionalObject);
 >console.log(someOptionalObject) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >someOptionalObject : SomeObject | undefined
 
         console.log(someOptionalObject.someProperty);  // Error
 >console.log(someOptionalObject.someProperty) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >someOptionalObject.someProperty : unknown
 >someOptionalObject : SomeObject | undefined
 >someProperty : unknown
@@ -2066,9 +2066,9 @@ while (arr[i]?.tag === "left") {
 
         console.log("I should ALSO be reachable");
 >console.log("I should ALSO be reachable") : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >"I should ALSO be reachable" : "I should ALSO be reachable"
     }
 }

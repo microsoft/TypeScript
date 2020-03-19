@@ -151,8 +151,8 @@ const comp = ctor({ common: "ok", ref: x => console.log(x) });
 >x => console.log(x) : (x: any) => void
 >x : any
 >console.log(x) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >x : any
 

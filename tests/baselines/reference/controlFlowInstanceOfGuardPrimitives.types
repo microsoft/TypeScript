@@ -10,9 +10,9 @@ function distinguish(thing: string | number | Date) {
 
         console.log("Aha!! It's a Date in " + thing.getFullYear());
 >console.log("Aha!! It's a Date in " + thing.getFullYear()) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >"Aha!! It's a Date in " + thing.getFullYear() : string
 >"Aha!! It's a Date in " : "Aha!! It's a Date in "
 >thing.getFullYear() : number
@@ -28,9 +28,9 @@ function distinguish(thing: string | number | Date) {
 
         console.log("Aha!! It's a string of length " + thing.length);
 >console.log("Aha!! It's a string of length " + thing.length) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >"Aha!! It's a string of length " + thing.length : string
 >"Aha!! It's a string of length " : "Aha!! It's a string of length "
 >thing.length : number
@@ -40,9 +40,9 @@ function distinguish(thing: string | number | Date) {
     } else {
         console.log("Aha!! It's the number " + thing.toPrecision(3));
 >console.log("Aha!! It's the number " + thing.toPrecision(3)) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >"Aha!! It's the number " + thing.toPrecision(3) : string
 >"Aha!! It's the number " : "Aha!! It's the number "
 >thing.toPrecision(3) : string

@@ -3017,6 +3017,13 @@ namespace ts.server {
             // At this point if file is part of any any configured or external project, then it would be present in the containing projects
             // So if it still doesnt have any containing projects, it needs to be part of inferred project
             if (info.isOrphan()) {
+                // Even though this info did not belong to any of the configured projects, send the config file diag
+                if (isArray(retainProjects)) {
+                    retainProjects.forEach(project => this.sendConfigFileDiagEvent(project, info.fileName));
+                }
+                else if (retainProjects) {
+                    this.sendConfigFileDiagEvent(retainProjects, info.fileName);
+                }
                 Debug.assert(this.openFiles.has(info.path));
                 this.assignOrphanScriptInfoToInferredProject(info, this.openFiles.get(info.path));
             }
