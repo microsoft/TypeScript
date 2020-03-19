@@ -149,29 +149,29 @@ exports.session = {
 
 Output::
 >> Screen clear
-12:00:35 AM - Starting compilation in watch mode...
+[[90m12:00:35 AM[0m] Starting compilation in watch mode...
 
 
-12:00:36 AM - Projects in this build: 
+[[90m12:00:36 AM[0m] Projects in this build: 
     * src/pure/tsconfig.json
     * src/main/tsconfig.json
     * src/tsconfig.json
 
 
-12:00:37 AM - Project 'src/pure/tsconfig.json' is out of date because output file 'out/pure/index.js' does not exist
+[[90m12:00:37 AM[0m] Project 'src/pure/tsconfig.json' is out of date because output file 'out/pure/index.js' does not exist
 
 
-12:00:38 AM - Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
+[[90m12:00:38 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
 
-12:00:54 AM - Project 'src/main/tsconfig.json' is out of date because output file 'out/main/index.js' does not exist
+[[90m12:00:54 AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'out/main/index.js' does not exist
 
 
-12:00:55 AM - Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
+[[90m12:00:55 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
 
+[[90m12:01:01 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:01 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/reexport/src/pure/index.ts","/user/username/projects/reexport/src/pure/session.ts"]
@@ -289,25 +289,34 @@ export interface Session {
 
 Output::
 >> Screen clear
-12:01:05 AM - File change detected. Starting incremental compilation...
+[[90m12:01:05 AM[0m] File change detected. Starting incremental compilation...
 
 
-12:01:06 AM - Project 'src/pure/tsconfig.json' is out of date because oldest output 'out/pure/index.js' is older than newest input 'src/pure/session.ts'
+[[90m12:01:06 AM[0m] Project 'src/pure/tsconfig.json' is out of date because oldest output 'out/pure/index.js' is older than newest input 'src/pure/session.ts'
 
 
-12:01:07 AM - Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
+[[90m12:01:07 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
 
-12:01:23 AM - Project 'src/main/tsconfig.json' is out of date because oldest output 'out/main/index.js' is older than newest input 'src/pure/tsconfig.json'
+[[90m12:01:23 AM[0m] Project 'src/main/tsconfig.json' is out of date because oldest output 'out/main/index.js' is older than newest input 'src/pure/tsconfig.json'
 
 
-12:01:24 AM - Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
+[[90m12:01:24 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
 
-src/main/index.ts(3,14): error TS2741: Property 'bar' is missing in type '{ foo: number; }' but required in type 'Session'.
+[96msrc/main/index.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2741: [0mProperty 'bar' is missing in type '{ foo: number; }' but required in type 'Session'.
+
+[7m3[0m export const session: Session = {
+[7m [0m [91m             ~~~~~~~[0m
+
+  [96mout/pure/session.d.ts[0m:[93m3[0m:[93m5[0m
+    [7m3[0m     bar: number;
+    [7m [0m [96m    ~~~[0m
+    'bar' is declared here.
 
 
-12:01:25 AM - Found 1 error. Watching for file changes.
+[[90m12:01:25 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/reexport/src/pure/index.ts","/user/username/projects/reexport/src/pure/session.ts"]
@@ -423,26 +432,26 @@ export interface Session {
 
 Output::
 >> Screen clear
-12:01:29 AM - File change detected. Starting incremental compilation...
+[[90m12:01:29 AM[0m] File change detected. Starting incremental compilation...
 
 
-12:01:30 AM - Project 'src/pure/tsconfig.json' is out of date because oldest output 'out/pure/index.js' is older than newest input 'src/pure/session.ts'
+[[90m12:01:30 AM[0m] Project 'src/pure/tsconfig.json' is out of date because oldest output 'out/pure/index.js' is older than newest input 'src/pure/session.ts'
 
 
-12:01:31 AM - Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
+[[90m12:01:31 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
 
-12:01:47 AM - Failed to parse file 'src/main/tsconfig.json': Semantic errors.
+[[90m12:01:47 AM[0m] Failed to parse file 'src/main/tsconfig.json': Semantic errors.
 
 
-12:01:48 AM - Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
+[[90m12:01:48 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
 
-12:01:50 AM - Updating unchanged output timestamps of project '/user/username/projects/reexport/src/main/tsconfig.json'...
+[[90m12:01:50 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
 
+[[90m12:01:51 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:51 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/reexport/src/pure/index.ts","/user/username/projects/reexport/src/pure/session.ts"]

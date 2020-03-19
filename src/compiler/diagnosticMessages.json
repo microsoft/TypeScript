@@ -1205,7 +1205,7 @@
         "category": "Error",
         "code": 2306
     },
-    "Cannot find module '{0}'.": {
+    "Cannot find module '{0}' or its corresponding type declarations.": {
         "category": "Error",
         "code": 2307
     },
@@ -1568,6 +1568,10 @@
     "Declaration name conflicts with built-in global identifier '{0}'.": {
         "category": "Error",
         "code": 2397
+    },
+    "'constructor' cannot be used as a parameter property name.": {
+        "category": "Error",
+        "code": 2398
     },
     "Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.": {
         "category": "Error",
@@ -2245,6 +2249,10 @@
         "category": "Error",
         "code": 2577
     },
+    "Unused '@ts-expect-error' directive.": {
+        "category": "Error",
+        "code": 2578
+    },
     "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.": {
         "category": "Error",
         "code": 2580
@@ -2759,7 +2767,7 @@
         "category": "Error",
         "code": 2748
     },
-    "'{0}' refers to a value, but is being used as a type here.": {
+    "'{0}' refers to a value, but is being used as a type here. Did you mean 'typeof {0}'?": {
         "category": "Error",
         "code": 2749
     },
@@ -2902,6 +2910,10 @@
     "'get' and 'set' accessors cannot declare 'this' parameters.": {
         "category": "Error",
         "code": 2784
+    },
+    "This spread always overwrites this property.": {
+        "category": "Error",
+        "code": 2785
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3440,6 +3452,10 @@
     "Cannot find a tsconfig.json file at the current directory: {0}.": {
         "category": "Error",
         "code": 5081
+    },
+    "'{0}' could be instantiated with an arbitrary type which could be unrelated to '{1}'.": {
+        "category": "Error",
+        "code": 5082
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -4312,6 +4328,10 @@
         "category": "Error",
         "code": 6230
     },
+    "Could not resolve the path '{0}' with the extensions: {1}.": {
+        "category": "Error",
+        "code": 6231
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -5105,6 +5125,10 @@
         "category": "Message",
         "code": 90034
     },
+    "Declare private property '{0}'": {
+        "category": "Message",
+        "code": 90035
+    },
     "Declare a private field named '{0}'.": {
         "category": "Message",
         "code": 90053
@@ -5365,6 +5389,14 @@
         "category": "Message",
         "code": 95066
     },
+    "Add missing call parentheses": {
+        "category": "Message",
+        "code": 95067
+    },
+    "Add all missing call parentheses": {
+        "category": "Message",
+        "code": 95068
+    },
     "Add 'unknown' conversion for non-overlapping types": {
         "category": "Message",
         "code": 95069
@@ -5493,9 +5525,41 @@
         "category": "Message",
         "code": 95100
     },
-    "Wrap invalid character in an expression container": {
+    "Convert all invalid characters to HTML entity code": {
         "category": "Message",
         "code": 95101
+    },
+    "Add '@class' tag": {
+        "category": "Message",
+        "code": 95102
+    },
+    "Add '@this' tag": {
+        "category": "Message",
+        "code": 95103
+    },
+    "Add 'this' parameter.": {
+        "category": "Message",
+        "code": 95104
+    },
+    "Convert function expression '{0}' to arrow function": {
+        "category": "Message",
+        "code": 95105
+    },
+    "Convert function declaration '{0}' to arrow function": {
+        "category": "Message",
+        "code": 95106
+    },
+    "Fix all implicit-'this' errors": {
+        "category": "Message",
+        "code": 95107
+    },
+    "Wrap invalid character in an expression container": {
+        "category": "Message",
+        "code": 95108
+    },
+    "Wrap all invalid characters in an expression container": {
+        "category": "Message",
+        "code": 95109
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

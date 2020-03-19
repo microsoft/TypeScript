@@ -2467,6 +2467,12 @@ namespace ts {
     }
 
     /* @internal */
+    export function createJSDocClassTag(): JSDocClassTag {
+        return createJSDocTag<JSDocClassTag>(SyntaxKind.JSDocClassTag, "class");
+    }
+
+
+    /* @internal */
     export function createJSDocComment(comment?: string | undefined, tags?: NodeArray<JSDocTag> | undefined) {
         const node = createSynthesizedNode(SyntaxKind.JSDocComment) as JSDoc;
         node.comment = comment;
@@ -3558,6 +3564,12 @@ namespace ts {
         const emit = getOrCreateEmitNode(original);
         emit.leadingComments = undefined;
         emit.trailingComments = undefined;
+        return node;
+    }
+
+    /** @internal */
+    export function ignoreSourceNewlines<T extends Node>(node: T): T {
+        getOrCreateEmitNode(node).flags |= EmitFlags.IgnoreSourceNewlines;
         return node;
     }
 

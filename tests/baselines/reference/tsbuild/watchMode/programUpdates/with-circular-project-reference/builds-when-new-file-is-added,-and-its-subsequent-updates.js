@@ -292,11 +292,11 @@ export declare const m: typeof mod;
 
 Output::
 >> Screen clear
-12:00:39 AM - Starting compilation in watch mode...
+[[90m12:00:39 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:01:04 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:04 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/index.ts"]
@@ -429,7 +429,7 @@ export declare const newFileConst = 30;
 
 Output::
 >> Screen clear
-12:01:07 AM - File change detected. Starting incremental compilation...
+[[90m12:01:07 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -526,8 +526,8 @@ Change:: Build Tests
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
 
 Output::
+[[90m12:01:18 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:18 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/sample1/tests/index.ts"]
@@ -640,7 +640,7 @@ export declare class someClass2 {
 
 Output::
 >> Screen clear
-12:01:22 AM - File change detected. Starting incremental compilation...
+[[90m12:01:22 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -737,8 +737,8 @@ Change:: Build Tests
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
 
 Output::
+[[90m12:01:35 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:35 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/sample1/tests/index.ts"]

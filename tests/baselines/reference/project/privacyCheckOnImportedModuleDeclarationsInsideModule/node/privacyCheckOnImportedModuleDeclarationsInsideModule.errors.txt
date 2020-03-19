@@ -1,7 +1,7 @@
 testGlo.ts(2,39): error TS1147: Import declarations in a namespace cannot reference a module.
-testGlo.ts(2,39): error TS2307: Cannot find module 'mExported'.
+testGlo.ts(2,39): error TS2307: Cannot find module 'mExported' or its corresponding type declarations.
 testGlo.ts(21,35): error TS1147: Import declarations in a namespace cannot reference a module.
-testGlo.ts(21,35): error TS2307: Cannot find module 'mNonExported'.
+testGlo.ts(21,35): error TS2307: Cannot find module 'mNonExported' or its corresponding type declarations.
 
 
 ==== testGlo.ts (4 errors) ====
@@ -10,7 +10,7 @@ testGlo.ts(21,35): error TS2307: Cannot find module 'mNonExported'.
                                           ~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
                                           ~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'mExported'.
+!!! error TS2307: Cannot find module 'mExported' or its corresponding type declarations.
         export var c1 = new mExported.me.class1;
         export function f1() {
             return new mExported.me.class1();
@@ -33,7 +33,7 @@ testGlo.ts(21,35): error TS2307: Cannot find module 'mNonExported'.
                                       ~~~~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
                                       ~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'mNonExported'.
+!!! error TS2307: Cannot find module 'mNonExported' or its corresponding type declarations.
         export var c3 = new mNonExported.mne.class1;
         export function f3() {
             return new mNonExported.mne.class1();

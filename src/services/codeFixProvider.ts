@@ -90,6 +90,10 @@ namespace ts.codefix {
     }
 
     function getDiagnostics({ program, sourceFile, cancellationToken }: CodeFixContextBase) {
-        return program.getSemanticDiagnostics(sourceFile, cancellationToken).concat(computeSuggestionDiagnostics(sourceFile, program, cancellationToken));
+        return [
+            ...program.getSemanticDiagnostics(sourceFile, cancellationToken),
+            ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
+            ...computeSuggestionDiagnostics(sourceFile, program, cancellationToken)
+        ];
     }
 }

@@ -1,18 +1,18 @@
-decl.ts(1,26): error TS2307: Cannot find module './foo/bar.tx'.
-decl.ts(2,26): error TS2307: Cannot find module 'baz'.
-decl.ts(3,26): error TS2307: Cannot find module './baz'.
+decl.ts(1,26): error TS2307: Cannot find module './foo/bar.tx' or its corresponding type declarations.
+decl.ts(2,26): error TS2307: Cannot find module 'baz' or its corresponding type declarations.
+decl.ts(3,26): error TS2307: Cannot find module './baz' or its corresponding type declarations.
 
 
 ==== decl.ts (3 errors) ====
     import modErr  = require("./foo/bar.tx");
                              ~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module './foo/bar.tx'.
+!!! error TS2307: Cannot find module './foo/bar.tx' or its corresponding type declarations.
     import modErr1 = require("baz");
                              ~~~~~
-!!! error TS2307: Cannot find module 'baz'.
+!!! error TS2307: Cannot find module 'baz' or its corresponding type declarations.
     import modErr2 = require("./baz");
                              ~~~~~~~
-!!! error TS2307: Cannot find module './baz'.
+!!! error TS2307: Cannot find module './baz' or its corresponding type declarations.
     
     //import modErr1 = require("\bar");
     

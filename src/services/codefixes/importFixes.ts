@@ -374,7 +374,7 @@ namespace ts.codefix {
         const { allowsImportingSpecifier } = createAutoImportFilter(sourceFile, program, host);
 
         const choicesForEachExportingModule = flatMap(moduleSymbols, ({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }) =>
-            moduleSpecifiers.getModuleSpecifiers(moduleSymbol, compilerOptions, sourceFile, host, program.getSourceFiles(), preferences, program.redirectTargetsMap)
+            moduleSpecifiers.getModuleSpecifiers(moduleSymbol, compilerOptions, sourceFile, createModuleSpecifierResolutionHost(program, host) , preferences)
                 .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
                     // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
                     exportedSymbolIsTypeOnly && isJs
@@ -786,12 +786,11 @@ namespace ts.codefix {
         cb: (module: Symbol) => void,
     ) {
         let filteredCount = 0;
-        const packageJson = filterByPackageJson && createAutoImportFilter(from, program, host);
-        const allSourceFiles = program.getSourceFiles();
-        const globalTypingsCache = host.getGlobalTypingsCacheLocation && host.getGlobalTypingsCacheLocation();
-        forEachExternalModule(program.getTypeChecker(), allSourceFiles, (module, sourceFile) => {
+        const moduleSpecifierResolutionHost = createModuleSpecifierResolutionHost(program, host);
+        const packageJson = filterByPackageJson && createAutoImportFilter(from, program, host, moduleSpecifierResolutionHost);
+        forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), (module, sourceFile) => {
             if (sourceFile === undefined) {
-                if (!packageJson || packageJson.allowsImportingAmbientModule(module, allSourceFiles)) {
+                if (!packageJson || packageJson.allowsImportingAmbientModule(module)) {
                     cb(module);
                 }
                 else if (packageJson) {
@@ -800,9 +799,9 @@ namespace ts.codefix {
             }
             else if (sourceFile &&
                 sourceFile !== from &&
-                isImportablePath(from.fileName, sourceFile.fileName, hostGetCanonicalFileName(host), globalTypingsCache)
+                isImportableFile(program, from, sourceFile, moduleSpecifierResolutionHost)
             ) {
-                if (!packageJson || packageJson.allowsImportingSourceFile(sourceFile, allSourceFiles)) {
+                if (!packageJson || packageJson.allowsImportingSourceFile(sourceFile)) {
                     cb(module);
                 }
                 else if (packageJson) {
@@ -824,6 +823,29 @@ namespace ts.codefix {
                 cb(checker.getMergedSymbol(sourceFile.symbol), sourceFile);
             }
         }
+    }
+
+    function isImportableFile(
+        program: Program,
+        from: SourceFile,
+        to: SourceFile,
+        moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost
+    ) {
+        const getCanonicalFileName = hostGetCanonicalFileName(moduleSpecifierResolutionHost);
+        const globalTypingsCache = moduleSpecifierResolutionHost.getGlobalTypingsCacheLocation?.();
+        return !!moduleSpecifiers.forEachFileNameOfModule(
+            from.fileName,
+            to.fileName,
+            moduleSpecifierResolutionHost,
+            /*preferSymlinks*/ false,
+            toPath => {
+                const toFile = program.getSourceFile(toPath);
+                // Determine to import using toPath only if toPath is what we were looking at
+                // or there doesnt exist the file in the program by the symlink
+                return (toFile === to || !toFile) &&
+                    isImportablePath(from.fileName, toPath, getCanonicalFileName, globalTypingsCache);
+            }
+        );
     }
 
     /**
@@ -870,23 +892,12 @@ namespace ts.codefix {
         return !isStringANonContextualKeyword(res) ? res || "_" : `_${res}`;
     }
 
-    function createAutoImportFilter(fromFile: SourceFile, program: Program, host: LanguageServiceHost) {
+    function createAutoImportFilter(fromFile: SourceFile, program: Program, host: LanguageServiceHost, moduleSpecifierResolutionHost = createModuleSpecifierResolutionHost(program, host)) {
         const packageJsons = host.getPackageJsonsVisibleToFile && host.getPackageJsonsVisibleToFile(fromFile.fileName) || getPackageJsonsVisibleToFile(fromFile.fileName, host);
         const dependencyGroups = PackageJsonDependencyGroup.Dependencies | PackageJsonDependencyGroup.DevDependencies | PackageJsonDependencyGroup.OptionalDependencies;
-        // Mix in `getProbablySymlinks` from Program when host doesn't have it
-        // in order for non-Project hosts to have a symlinks cache.
-        const moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost = {
-            directoryExists: maybeBind(host, host.directoryExists),
-            fileExists: maybeBind(host, host.fileExists),
-            getCurrentDirectory: maybeBind(host, host.getCurrentDirectory),
-            readFile: maybeBind(host, host.readFile),
-            useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
-            getProbableSymlinks: maybeBind(host, host.getProbableSymlinks) || program.getProbableSymlinks,
-            getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
-        };
 
         let usesNodeCoreModules: boolean | undefined;
-        return { allowsImportingAmbientModule, allowsImportingSourceFile, allowsImportingSpecifier };
+        return { allowsImportingAmbientModule, allowsImportingSourceFile, allowsImportingSpecifier, moduleSpecifierResolutionHost };
 
         function moduleSpecifierIsCoveredByPackageJson(specifier: string) {
             const packageName = getNodeModuleRootSpecifier(specifier);
@@ -898,13 +909,13 @@ namespace ts.codefix {
             return false;
         }
 
-        function allowsImportingAmbientModule(moduleSymbol: Symbol, allSourceFiles: readonly SourceFile[]): boolean {
+        function allowsImportingAmbientModule(moduleSymbol: Symbol): boolean {
             if (!packageJsons.length) {
                 return true;
             }
 
             const declaringSourceFile = moduleSymbol.valueDeclaration.getSourceFile();
-            const declaringNodeModuleName = getNodeModulesPackageNameFromFileName(declaringSourceFile.fileName, allSourceFiles);
+            const declaringNodeModuleName = getNodeModulesPackageNameFromFileName(declaringSourceFile.fileName);
             if (typeof declaringNodeModuleName === "undefined") {
                 return true;
             }
@@ -918,12 +929,12 @@ namespace ts.codefix {
                 || moduleSpecifierIsCoveredByPackageJson(declaredModuleSpecifier);
         }
 
-        function allowsImportingSourceFile(sourceFile: SourceFile, allSourceFiles: readonly SourceFile[]): boolean {
+        function allowsImportingSourceFile(sourceFile: SourceFile): boolean {
             if (!packageJsons.length) {
                 return true;
             }
 
-            const moduleSpecifier = getNodeModulesPackageNameFromFileName(sourceFile.fileName, allSourceFiles);
+            const moduleSpecifier = getNodeModulesPackageNameFromFileName(sourceFile.fileName);
             if (!moduleSpecifier) {
                 return true;
             }
@@ -962,7 +973,7 @@ namespace ts.codefix {
             return false;
         }
 
-        function getNodeModulesPackageNameFromFileName(importedFileName: string, allSourceFiles: readonly SourceFile[]): string | undefined {
+        function getNodeModulesPackageNameFromFileName(importedFileName: string): string | undefined {
             if (!stringContains(importedFileName, "node_modules")) {
                 return undefined;
             }
@@ -971,8 +982,7 @@ namespace ts.codefix {
                 fromFile.path,
                 importedFileName,
                 moduleSpecifierResolutionHost,
-                allSourceFiles,
-                program.redirectTargetsMap);
+            );
 
             if (!specifier) {
                 return undefined;

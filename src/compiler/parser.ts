@@ -915,6 +915,7 @@ namespace ts {
 
         function clearState() {
             // Clear out the text the scanner is pointing at, so it doesn't keep anything alive unnecessarily.
+            scanner.clearCommentDirectives();
             scanner.setText("");
             scanner.setOnError(undefined);
 
@@ -948,6 +949,7 @@ namespace ts {
 
             setExternalModuleIndicator(sourceFile);
 
+            sourceFile.commentDirectives = scanner.getCommentDirectives();
             sourceFile.nodeCount = nodeCount;
             sourceFile.identifierCount = identifierCount;
             sourceFile.identifiers = identifiers;
@@ -1398,7 +1400,7 @@ namespace ts {
 
         function createNodeWithJSDoc(kind: SyntaxKind, pos?: number): Node {
             const node = createNode(kind, pos);
-            if (scanner.getTokenFlags() & TokenFlags.PrecedingJSDocComment) {
+            if (scanner.getTokenFlags() & TokenFlags.PrecedingJSDocComment && (kind !== SyntaxKind.ExpressionStatement || token() !== SyntaxKind.OpenParenToken)) {
                 addJSDocComment(<HasJSDoc>node);
             }
             return node;
@@ -4543,7 +4545,11 @@ namespace ts {
                         parseErrorAtRange(openingTag, Diagnostics.JSX_fragment_has_no_corresponding_closing_tag);
                     }
                     else {
-                        parseErrorAtRange(openingTag.tagName, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTag.tagName));
+                        // We want the error span to cover only 'Foo.Bar' in < Foo.Bar >
+                        // or to cover only 'Foo' in < Foo >
+                        const tag = openingTag.tagName;
+                        const start = skipTrivia(sourceText, tag.pos);
+                        parseErrorAt(start, tag.end, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTag.tagName));
                     }
                     return undefined;
                 case SyntaxKind.LessThanSlashToken:
@@ -5108,13 +5114,22 @@ namespace ts {
 
         function parseObjectLiteralExpression(): ObjectLiteralExpression {
             const node = <ObjectLiteralExpression>createNode(SyntaxKind.ObjectLiteralExpression);
+            const openBracePosition = scanner.getTokenPos();
             parseExpected(SyntaxKind.OpenBraceToken);
             if (scanner.hasPrecedingLineBreak()) {
                 node.multiLine = true;
             }
 
             node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimiter*/ true);
-            parseExpected(SyntaxKind.CloseBraceToken);
+            if (!parseExpected(SyntaxKind.CloseBraceToken)) {
+                const lastError = lastOrUndefined(parseDiagnostics);
+                if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                    addRelatedInfo(
+                        lastError,
+                        createFileDiagnostic(sourceFile, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
+                    );
+                }
+            }
             return finishNode(node);
         }
 
@@ -5467,7 +5482,7 @@ namespace ts {
             // Avoiding having to do the lookahead for a labeled statement by just trying to parse
             // out an expression, seeing if it is identifier and then seeing if it is followed by
             // a colon.
-            const node = <ExpressionStatement | LabeledStatement>createNodeWithJSDoc(SyntaxKind.Unknown);
+            const node = <ExpressionStatement | LabeledStatement>createNodeWithJSDoc(token() === SyntaxKind.Identifier ? SyntaxKind.Unknown : SyntaxKind.ExpressionStatement);
             const expression = allowInAnd(parseExpression);
             if (expression.kind === SyntaxKind.Identifier && parseOptional(SyntaxKind.ColonToken)) {
                 node.kind = SyntaxKind.LabeledStatement;

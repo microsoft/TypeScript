@@ -7011,6 +7011,9 @@
       <Item ItemId=";Only_named_exports_may_use_export_type_1383" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Only named exports may use 'export type'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['export type' を使用できるのは名前付きエクスポートのみです。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10878,6 +10881,9 @@
       <Item ItemId=";Type_of_property_0_circularly_references_itself_in_mapped_type_1_2615" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type of property '{0}' circularly references itself in mapped type '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[マップされた型 '{1}' で、プロパティ '{0}' の型によってそれ自体が循環参照されています。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -11393,6 +11399,15 @@
           <Val><![CDATA[Unused label.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[未使用のラベル。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Unused_ts_expect_error_directive_2578" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Unused '@ts-expect-error' directive.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['@ts-expect-error' ディレクティブが使用されていません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11991,12 +12006,9 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";_0_refers_to_a_value_but_is_being_used_as_a_type_here_2749" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";_0_refers_to_a_value_but_is_being_used_as_a_type_here_Did_you_mean_typeof_0_2749" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA['{0}' refers to a value, but is being used as a type here.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' は値を参照しますが、ここでは型として使用されています。]]></Val>
-          </Tgt>
+          <Val><![CDATA['{0}' refers to a value, but is being used as a type here. Did you mean 'typeof {0}'?]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12329,6 +12341,15 @@
           <Val><![CDATA['get' and 'set' accessor must have the same type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['get' アクセサーと 'set' アクセサーは同じ型でなければなりません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";get_and_set_accessors_cannot_declare_this_parameters_2784" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['get' and 'set' accessors cannot declare 'this' parameters.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['get' および 'set' アクセサーでは 'this' パラメーターを宣言できません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

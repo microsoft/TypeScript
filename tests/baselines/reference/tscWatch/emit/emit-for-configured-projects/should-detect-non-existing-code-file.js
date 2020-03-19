@@ -30,15 +30,23 @@ exports.x = Foo();
 
 Output::
 >> Screen clear
-12:00:15 AM - Starting compilation in watch mode...
+[[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
 
-a/b/referenceFile1.ts(1,22): error TS6053: File '/a/b/moduleFile2.ts' not found.
+[96ma/b/referenceFile1.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/a/b/moduleFile2.ts' not found.
 
-a/b/referenceFile1.ts(2,16): error TS2304: Cannot find name 'Foo'.
+[7m1[0m /// <reference path="./moduleFile2.ts" />
+[7m [0m [91m                     ~~~~~~~~~~~~~~~~[0m
 
 
-12:00:18 AM - Found 2 errors. Watching for file changes.
+[96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
+
+[7m2[0m export var x = Foo();
+[7m [0m [91m               ~~~[0m
+
+
+[[90m12:00:18 AM[0m] Found 2 errors. Watching for file changes.
+
 
 
 Program root files: ["/a/b/referenceFile1.ts"]
@@ -89,17 +97,29 @@ exports.yy = Foo();
 
 Output::
 >> Screen clear
-12:00:21 AM - File change detected. Starting incremental compilation...
+[[90m12:00:21 AM[0m] File change detected. Starting incremental compilation...
 
 
-a/b/referenceFile1.ts(1,22): error TS6053: File '/a/b/moduleFile2.ts' not found.
+[96ma/b/referenceFile1.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/a/b/moduleFile2.ts' not found.
 
-a/b/referenceFile1.ts(2,16): error TS2304: Cannot find name 'Foo'.
+[7m1[0m /// <reference path="./moduleFile2.ts" />
+[7m [0m [91m                     ~~~~~~~~~~~~~~~~[0m
 
-a/b/referenceFile1.ts(2,38): error TS2304: Cannot find name 'Foo'.
+
+[96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
+
+[7m2[0m export var x = Foo();export var yy = Foo();
+[7m [0m [91m               ~~~[0m
 
 
-12:00:25 AM - Found 3 errors. Watching for file changes.
+[96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m38[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
+
+[7m2[0m export var x = Foo();export var yy = Foo();
+[7m [0m [91m                                     ~~~[0m
+
+
+[[90m12:00:25 AM[0m] Found 3 errors. Watching for file changes.
+
 
 
 Program root files: ["/a/b/referenceFile1.ts"]
@@ -147,15 +167,23 @@ exports.Foo4 = 10;
 
 Output::
 >> Screen clear
-12:00:28 AM - File change detected. Starting incremental compilation...
+[[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
 
-a/b/referenceFile1.ts(2,16): error TS2304: Cannot find name 'Foo'.
+[96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
 
-a/b/referenceFile1.ts(2,38): error TS2304: Cannot find name 'Foo'.
+[7m2[0m export var x = Foo();export var yy = Foo();
+[7m [0m [91m               ~~~[0m
 
 
-12:00:34 AM - Found 2 errors. Watching for file changes.
+[96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m38[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
+
+[7m2[0m export var x = Foo();export var yy = Foo();
+[7m [0m [91m                                     ~~~[0m
+
+
+[[90m12:00:34 AM[0m] Found 2 errors. Watching for file changes.
+
 
 
 Program root files: ["/a/b/moduleFile2.ts","/a/b/referenceFile1.ts"]
