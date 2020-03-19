@@ -3567,6 +3567,12 @@ namespace ts {
         return node;
     }
 
+    /** @internal */
+    export function ignoreSourceNewlines<T extends Node>(node: T): T {
+        getOrCreateEmitNode(node).flags |= EmitFlags.IgnoreSourceNewlines;
+        return node;
+    }
+
     /**
      * Gets the constant value to emit for an expression.
      */

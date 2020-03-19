@@ -3306,7 +3306,7 @@ namespace FourSlash {
         }
 
         public moveToNewFile(options: FourSlashInterface.MoveToNewFileOptions): void {
-            assert(this.getRanges().length === 1);
+            assert(this.getRanges().length === 1, "Must have exactly one fourslash range (source enclosed between '[|' and '|]' delimiters) in the source file");
             const range = this.getRanges()[0];
             const refactor = ts.find(this.getApplicableRefactors(range, { allowTextChangesInNewFiles: true }), r => r.name === "Move to a new file")!;
             assert(refactor.actions.length === 1);
