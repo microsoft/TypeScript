@@ -5468,8 +5468,10 @@ namespace ts {
                             if (isSymbolAccessible(sym, context.enclosingDeclaration, SymbolFlags.All, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
                                 hadError = true;
                             }
-                            context.tracker?.trackSymbol?.(sym, context.enclosingDeclaration, SymbolFlags.All);
-                            includePrivateSymbol?.(sym);
+                            else {
+                                context.tracker?.trackSymbol?.(sym, context.enclosingDeclaration, SymbolFlags.All);
+                                includePrivateSymbol?.(sym);
+                            }
                             if (isIdentifier(node) && sym.flags & SymbolFlags.TypeParameter) {
                                 const name = typeParameterToName(getDeclaredTypeOfSymbol(sym), context);
                                 if (idText(name) !== idText(node)) {
