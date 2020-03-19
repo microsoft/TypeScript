@@ -60,6 +60,7 @@
         "codefixes/convertToEs6Module.ts",
         "codefixes/correctQualifiedNameToIndexedAccessType.ts",
         "codefixes/convertToTypeOnlyExport.ts",
+        "codefixes/convertToTypeOnlyImport.ts",
         "codefixes/fixClassIncorrectlyImplementsInterface.ts",
         "codefixes/importFixes.ts",
         "codefixes/fixImplicitThis.ts",
