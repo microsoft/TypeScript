@@ -15340,11 +15340,23 @@ namespace ts {
              * * Ternary.False if they are not related.
              */
             function isRelatedTo(originalSource: Type, originalTarget: Type, reportErrors = false, headMessage?: DiagnosticMessage, intersectionState = IntersectionState.None): Ternary {
+                // Before normalization: if `source` is type reference (ergo an object), and `target` is primitive,
+                // skip all the checks we don't need and just return `isSimpleTypeRelatedTo` result
+                if (getObjectFlags(originalSource) & ObjectFlags.Reference && originalTarget.flags & TypeFlags.Primitive) {
+                    if (isSimpleTypeRelatedTo(originalSource, originalTarget, relation, reportErrors ? reportError : undefined)) {
+                        return Ternary.True;
+                    }
+                    else {
+                        reportErrorResults(originalSource, originalTarget, Ternary.False, /*isComparingJsxAttributes*/ true);
+                        return Ternary.False;
+                    }
+                }
+
                 // Normalize the source and target types: Turn fresh literal types into regular literal types,
                 // turn deferred type references into regular type references, simplify indexed access and
                 // conditional types, and resolve substitution types to either the substitution (on the source
                 // side) or the type variable (on the target side).
-                let source = getNormalizedType(originalSource, /*writing*/ false);
+                const source = getNormalizedType(originalSource, /*writing*/ false);
                 let target = getNormalizedType(originalTarget, /*writing*/ true);
 
                 if (source === target) return Ternary.True;
@@ -15476,45 +15488,48 @@ namespace ts {
                         }
                     }
                 }
+                reportErrorResults(source, target, result, isComparingJsxAttributes);
+                return result;
 
-                if (!result && reportErrors) {
-                    source = originalSource.aliasSymbol ? originalSource : source;
-                    target = originalTarget.aliasSymbol ? originalTarget : target;
-                    let maybeSuppress = overrideNextErrorInfo > 0;
-                    if (maybeSuppress) {
-                        overrideNextErrorInfo--;
-                    }
-                    if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
-                        const currentError = errorInfo;
-                        tryElaborateArrayLikeErrors(source, target, reportErrors);
-                        if (errorInfo !== currentError) {
-                            maybeSuppress = !!errorInfo;
+                function reportErrorResults(source: Type, target: Type, result: Ternary, isComparingJsxAttributes: boolean) {
+                    if (!result && reportErrors) {
+                        source = originalSource.aliasSymbol ? originalSource : source;
+                        target = originalTarget.aliasSymbol ? originalTarget : target;
+                        let maybeSuppress = overrideNextErrorInfo > 0;
+                        if (maybeSuppress) {
+                            overrideNextErrorInfo--;
                         }
-                    }
-                    if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Primitive) {
-                        tryElaborateErrorsForPrimitivesAndObjects(source, target);
-                    }
-                    else if (source.symbol && source.flags & TypeFlags.Object && globalObjectType === source) {
-                        reportError(Diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead);
-                    }
-                    else if (isComparingJsxAttributes && target.flags & TypeFlags.Intersection) {
-                        const targetTypes = (target as IntersectionType).types;
-                        const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes, errorNode);
-                        const intrinsicClassAttributes = getJsxType(JsxNames.IntrinsicClassAttributes, errorNode);
-                        if (intrinsicAttributes !== errorType && intrinsicClassAttributes !== errorType &&
-                            (contains(targetTypes, intrinsicAttributes) || contains(targetTypes, intrinsicClassAttributes))) {
-                            // do not report top error
+                        if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
+                            const currentError = errorInfo;
+                            tryElaborateArrayLikeErrors(source, target, reportErrors);
+                            if (errorInfo !== currentError) {
+                                maybeSuppress = !!errorInfo;
+                            }
+                        }
+                        if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Primitive) {
+                            tryElaborateErrorsForPrimitivesAndObjects(source, target);
+                        }
+                        else if (source.symbol && source.flags & TypeFlags.Object && globalObjectType === source) {
+                            reportError(Diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead);
+                        }
+                        else if (isComparingJsxAttributes && target.flags & TypeFlags.Intersection) {
+                            const targetTypes = (target as IntersectionType).types;
+                            const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes, errorNode);
+                            const intrinsicClassAttributes = getJsxType(JsxNames.IntrinsicClassAttributes, errorNode);
+                            if (intrinsicAttributes !== errorType && intrinsicClassAttributes !== errorType &&
+                                (contains(targetTypes, intrinsicAttributes) || contains(targetTypes, intrinsicClassAttributes))) {
+                                // do not report top error
+                                return result;
+                            }
+                        }
+                        if (!headMessage && maybeSuppress) {
+                            lastSkippedInfo = [source, target];
+                            // Used by, eg, missing property checking to replace the top-level message with a more informative one
                             return result;
                         }
+                        reportRelationError(headMessage, source, target);
                     }
-                    if (!headMessage && maybeSuppress) {
-                        lastSkippedInfo = [source, target];
-                        // Used by, eg, missing property checking to replace the top-level message with a more informative one
-                        return result;
-                    }
-                    reportRelationError(headMessage, source, target);
                 }
-                return result;
             }
 
             function isIdenticalTo(source: Type, target: Type): Ternary {
