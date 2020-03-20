@@ -4620,6 +4620,9 @@ namespace ts {
                     if (reservedInNestedScopes) {
                         reserveNameInNestedScopes(name);
                     }
+                    else {
+                        generatedNames.set(name, true);
+                    }
                     return name;
                 }
             }
@@ -4634,6 +4637,9 @@ namespace ts {
                     if (isUniqueName(name)) {
                         if (reservedInNestedScopes) {
                             reserveNameInNestedScopes(name);
+                        }
+                        else {
+                            generatedNames.set(name, true);
                         }
                         return name;
                     }
