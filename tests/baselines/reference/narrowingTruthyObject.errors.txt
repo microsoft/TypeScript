@@ -20,6 +20,12 @@ tests/cases/compiler/narrowingTruthyObject.ts(3,9): error TS2531: Object is poss
         if (x && b && typeof x === 'object') {
             x.toString();
         }
+        if (x && b && b && typeof x === 'object') {
+            x.toString();
+        }
+        if (b && b && x && b && b && typeof x === 'object') {
+            x.toString();
+        }
     }
     
     // Repro from #36870

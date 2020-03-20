@@ -15,6 +15,12 @@ function foo(x: unknown, b: boolean) {
     if (x && b && typeof x === 'object') {
         x.toString();
     }
+    if (x && b && b && typeof x === 'object') {
+        x.toString();
+    }
+    if (b && b && x && b && b && typeof x === 'object') {
+        x.toString();
+    }
 }
 
 // Repro from #36870
@@ -40,6 +46,12 @@ function foo(x, b) {
         x.toString();
     }
     if (x && b && typeof x === 'object') {
+        x.toString();
+    }
+    if (x && b && b && typeof x === 'object') {
+        x.toString();
+    }
+    if (b && b && x && b && b && typeof x === 'object') {
         x.toString();
     }
 }
