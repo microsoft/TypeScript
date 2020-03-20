@@ -829,7 +829,15 @@ namespace ts {
 
             if (projectReferences) {
                 if (!resolvedProjectReferences) {
-                    resolvedProjectReferences = projectReferences.map(parseProjectReferenceConfigFile);
+                    resolvedProjectReferences = projectReferences.map(ref => {
+                        if (ref.outDirRelative && ref.originalPath && options.outDir) {
+                            // The ref.path was created when the tsconfig was parsed by parseJsonConfigFileContent
+                            // At that time, we didn't yet know the outDir of this compilation (it may be a command-line argument)
+                            // So we now overwrite the ref.path.
+                            ref.path = ts.getNormalizedAbsolutePath(ref.originalPath, options.outDir);
+                        }
+                        return ref;
+                    }).map(parseProjectReferenceConfigFile);
                 }
                 if (rootNames.length) {
                     for (const parsedRef of resolvedProjectReferences) {

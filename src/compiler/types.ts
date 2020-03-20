@@ -5093,6 +5093,8 @@ namespace ts {
         prepend?: boolean;
         /** True if it is intended that this reference form a circularity */
         circular?: boolean;
+        /** True if the 'originalPath' should be interpreted relative to the outDir of this compilation */
+        outDirRelative?: boolean;
     }
 
     export enum WatchFileKind {

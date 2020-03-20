@@ -2374,6 +2374,7 @@ namespace ts {
                         }
                         else {
                             (projectReferences || (projectReferences = [])).push({
+                                // NB: this doesn't honor the outDirRelative setting because we don't yet know the effective outDir
                                 path: getNormalizedAbsolutePath(ref.path, basePath),
                                 originalPath: ref.path,
                                 prepend: ref.prepend,
