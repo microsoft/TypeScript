@@ -18947,10 +18947,11 @@ namespace ts {
             return false;
         }
 
-        function containsTruthyCheck(source: Node, target: Node) {
+        // Given a source x, check if target matches x or is an && operation with an operand that matches x.
+        function containsTruthyCheck(source: Node, target: Node): boolean {
             return isMatchingReference(source, target) ||
                 (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken &&
-                (isMatchingReference(source, (<BinaryExpression>target).left) || isMatchingReference(source, (<BinaryExpression>target).right)));
+                (containsTruthyCheck(source, (<BinaryExpression>target).left) || containsTruthyCheck(source, (<BinaryExpression>target).right)));
         }
 
         function getAccessedPropertyName(access: AccessExpression): __String | undefined {
@@ -20350,7 +20351,8 @@ namespace ts {
                     return type;
                 }
                 if (assumeTrue && type.flags & TypeFlags.Unknown && literal.text === "object") {
-                    // The pattern x && typeof x === 'object', where x is of type unknown, narrows x to type object.
+                    // The pattern x && typeof x === 'object', where x is of type unknown, narrows x to type object. We don't
+                    // need to check for the reverse typeof x === 'object' && x since that already narrows correctly.
                     if (typeOfExpr.parent.parent.kind === SyntaxKind.BinaryExpression) {
                         const expr = <BinaryExpression>typeOfExpr.parent.parent;
                         if (expr.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken && expr.right === typeOfExpr.parent && containsTruthyCheck(reference, expr.left)) {
