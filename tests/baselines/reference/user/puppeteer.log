@@ -30,8 +30,8 @@ lib/FrameManager.js(668,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/JSHandle.js(32,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/JSHandle.js(146,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/JSHandle.js(237,29): error TS2503: Cannot find namespace 'Protocol'.
-lib/Launcher.js(179,17): error TS1003: Identifier expected.
-lib/Launcher.js(357,17): error TS1003: Identifier expected.
+lib/Launcher.js(181,17): error TS1003: Identifier expected.
+lib/Launcher.js(359,17): error TS1003: Identifier expected.
 lib/NetworkManager.js(32,30): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(159,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(178,15): error TS2503: Cannot find namespace 'Protocol'.
@@ -56,11 +56,11 @@ lib/Page.js(93,33): error TS2345: Argument of type 'CDPSession' is not assignabl
                 Type 'string | number | symbol' is not assignable to type 'symbol'.
                   Type 'string' is not assignable to type 'symbol'.
 lib/Page.js(94,42): error TS2345: Argument of type 'Worker' is not assignable to parameter of type 'Worker'.
-  Type 'Worker' is missing the following properties from type 'Worker': onmessage, postMessage, terminate, addEventListener, and 3 more.
+  Type 'Worker' is missing the following properties from type 'Worker': onmessage, onmessageerror, postMessage, terminate, and 4 more.
 lib/Page.js(142,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(217,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(385,20): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(448,7): error TS2740: Type '(...args: any[]) => Promise<any>' is missing the following properties from type 'Window': applicationCache, clientInformation, closed, customElements, and 222 more.
+lib/Page.js(448,7): error TS2740: Type '(...args: any[]) => Promise<any>' is missing the following properties from type 'Window': applicationCache, clientInformation, closed, customElements, and 221 more.
 lib/Page.js(458,9): error TS2349: This expression is not callable.
   Type 'Window' has no call signatures.
 lib/Page.js(494,15): error TS2503: Cannot find namespace 'Protocol'.
