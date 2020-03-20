@@ -1,0 +1,8 @@
+=== tests/cases/compiler/missingCloseBraceInJsxExpression.tsx ===
+let el = <div>{'hello'</div>
+>el : any
+><div>{'hello'</div> : any
+>div : any
+>'hello' : "hello"
+>div : any
+

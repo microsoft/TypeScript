@@ -21,9 +21,11 @@ tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(18,69): error TS1381: Unexpe
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(18,76): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(21,1): error TS1005: ':' expected.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(21,1): error TS1005: '</' expected.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(21,1): error TS1005: '</' expected.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(21,1): error TS1005: '</' expected.
 
 
-==== tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx (23 errors) ====
+==== tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx (25 errors) ====
     declare var createElement: any;
     
     class foo {}
@@ -36,6 +38,7 @@ tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(21,1): error TS1005: '</' ex
 !!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
                     ~
 !!! error TS1005: '}' expected.
+!!! related TS1007 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx:6:11: The parser expected to find a '}' to match the '{' token here.
                                   ~
 !!! error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
     
@@ -50,6 +53,7 @@ tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(21,1): error TS1005: '</' ex
 !!! error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
                                    ~
 !!! error TS1005: '}' expected.
+!!! related TS1007 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx:10:16: The parser expected to find a '}' to match the '{' token here.
     
     x = <foo test={<foo>{}}>hello</foo>;
                           ~
@@ -58,6 +62,7 @@ tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(21,1): error TS1005: '</' ex
 !!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
                                        ~
 !!! error TS1005: '}' expected.
+!!! related TS1007 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx:12:15: The parser expected to find a '}' to match the '{' token here.
     
     x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;
                     ~~~
@@ -70,6 +75,7 @@ tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(21,1): error TS1005: '</' ex
 !!! error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
                                                 ~
 !!! error TS1005: '}' expected.
+!!! related TS1007 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx:14:30: The parser expected to find a '}' to match the '{' token here.
     
     x = <foo>x</foo>, x = <foo/>;
     
@@ -89,5 +95,12 @@ tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(21,1): error TS1005: '</' ex
     
     
 !!! error TS1005: ':' expected.
+!!! related TS1007 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx:18:17: The parser expected to find a '}' to match the '{' token here.
+    
+!!! error TS1005: '</' expected.
+!!! related TS1007 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx:14:15: The parser expected to find a '}' to match the '{' token here.
+    
+!!! error TS1005: '</' expected.
+!!! related TS1007 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx:18:6: The parser expected to find a '}' to match the '{' token here.
     
 !!! error TS1005: '</' expected.

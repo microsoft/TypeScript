@@ -1,0 +1,13 @@
+=== tests/cases/compiler/missingCloseBraceInJsxAttributeExpression.tsx ===
+let el = <input prop={'abc' />
+>el : any
+><input prop={'abc' /> : any
+>input : any
+>prop : boolean
+>'abc' /> : boolean
+>'abc' / : number
+>'abc' : "abc"
+> : any
+
+> : any
+

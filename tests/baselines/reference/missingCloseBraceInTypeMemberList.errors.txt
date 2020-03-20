@@ -1,0 +1,10 @@
+tests/cases/compiler/missingCloseBraceInTypeMemberList.ts(3,1): error TS1005: '}' expected.
+
+
+==== tests/cases/compiler/missingCloseBraceInTypeMemberList.ts (1 errors) ====
+    type ITest = {
+      num: number;
+    
+    
+!!! error TS1005: '}' expected.
+!!! related TS1007 tests/cases/compiler/missingCloseBraceInTypeMemberList.ts:1:14: The parser expected to find a '}' to match the '{' token here.

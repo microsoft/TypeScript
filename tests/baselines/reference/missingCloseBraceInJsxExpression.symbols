@@ -1,0 +1,4 @@
+=== tests/cases/compiler/missingCloseBraceInJsxExpression.tsx ===
+let el = <div>{'hello'</div>
+>el : Symbol(el, Decl(missingCloseBraceInJsxExpression.tsx, 0, 3))
+

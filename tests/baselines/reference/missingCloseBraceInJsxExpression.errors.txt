@@ -1,0 +1,9 @@
+tests/cases/compiler/missingCloseBraceInJsxExpression.tsx(1,23): error TS1005: '}' expected.
+
+
+==== tests/cases/compiler/missingCloseBraceInJsxExpression.tsx (1 errors) ====
+    let el = <div>{'hello'</div>
+                          ~~
+!!! error TS1005: '}' expected.
+!!! related TS1007 tests/cases/compiler/missingCloseBraceInJsxExpression.tsx:1:15: The parser expected to find a '}' to match the '{' token here.
+    

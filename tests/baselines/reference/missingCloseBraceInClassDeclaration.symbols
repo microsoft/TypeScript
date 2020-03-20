@@ -1,0 +1,17 @@
+=== tests/cases/compiler/missingCloseBraceInClassDeclaration.ts ===
+class TestCls {
+>TestCls : Symbol(TestCls, Decl(missingCloseBraceInClassDeclaration.ts, 0, 0))
+
+  prop = 0;
+>prop : Symbol(TestCls.prop, Decl(missingCloseBraceInClassDeclaration.ts, 0, 15))
+
+  method() {
+>method : Symbol(TestCls.method, Decl(missingCloseBraceInClassDeclaration.ts, 1, 11))
+
+    return this.prop;
+>this.prop : Symbol(TestCls.prop, Decl(missingCloseBraceInClassDeclaration.ts, 0, 15))
+>this : Symbol(TestCls, Decl(missingCloseBraceInClassDeclaration.ts, 0, 0))
+>prop : Symbol(TestCls.prop, Decl(missingCloseBraceInClassDeclaration.ts, 0, 15))
+  }
+
+

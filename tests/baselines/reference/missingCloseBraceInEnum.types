@@ -1,0 +1,14 @@
+=== tests/cases/compiler/missingCloseBraceInEnum.ts ===
+enum Colors {
+>Colors : Colors
+
+  Red,
+>Red : Colors.Red
+
+  Green,
+>Green : Colors.Green
+
+  Blue,
+>Blue : Colors.Blue
+
+

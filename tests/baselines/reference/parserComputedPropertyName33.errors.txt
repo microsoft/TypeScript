@@ -15,6 +15,7 @@ tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedP
 !!! error TS2304: Cannot find name 'e2'.
                ~
 !!! error TS1005: ';' expected.
+!!! related TS1007 tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName33.ts:1:9: The parser expected to find a '}' to match the '{' token here.
     }
     ~
 !!! error TS1128: Declaration or statement expected.

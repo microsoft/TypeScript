@@ -1,0 +1,7 @@
+=== tests/cases/compiler/missingCloseBraceInModuleBlock.ts ===
+module "dummy" {
+>"dummy" : typeof import("dummy")
+
+  interface Dummy {}
+
+

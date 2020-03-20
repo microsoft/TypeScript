@@ -1,0 +1,14 @@
+=== tests/cases/compiler/missingCloseBraceInEnum.ts ===
+enum Colors {
+>Colors : Symbol(Colors, Decl(missingCloseBraceInEnum.ts, 0, 0))
+
+  Red,
+>Red : Symbol(Colors.Red, Decl(missingCloseBraceInEnum.ts, 0, 13))
+
+  Green,
+>Green : Symbol(Colors.Green, Decl(missingCloseBraceInEnum.ts, 1, 6))
+
+  Blue,
+>Blue : Symbol(Colors.Blue, Decl(missingCloseBraceInEnum.ts, 2, 8))
+
+

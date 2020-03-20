@@ -1,0 +1,5 @@
+=== tests/cases/compiler/missingCloseBraceInJsxAttributeExpression.tsx ===
+let el = <input prop={'abc' />
+>el : Symbol(el, Decl(missingCloseBraceInJsxAttributeExpression.tsx, 0, 3))
+>prop : Symbol(prop, Decl(missingCloseBraceInJsxAttributeExpression.tsx, 0, 15))
+

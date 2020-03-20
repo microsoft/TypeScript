@@ -1,0 +1,2 @@
+type ITest = {
+  num: number;

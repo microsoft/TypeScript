@@ -10,6 +10,7 @@ tests/cases/compiler/classMemberWithMissingIdentifier.ts(3,1): error TS1128: Dec
 !!! error TS1146: Declaration expected.
                ~
 !!! error TS1005: ';' expected.
+!!! related TS1007 tests/cases/compiler/classMemberWithMissingIdentifier.ts:1:9: The parser expected to find a '}' to match the '{' token here.
     }
     ~
 !!! error TS1128: Declaration or statement expected.

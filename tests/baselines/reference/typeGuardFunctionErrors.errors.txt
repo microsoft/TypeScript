@@ -285,6 +285,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
 !!! error TS2304: Cannot find name 'p1'.
                             ~~
 !!! error TS1005: ';' expected.
+!!! related TS1007 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:118:14: The parser expected to find a '}' to match the '{' token here.
                                ~
 !!! error TS1005: ';' expected.
     }

@@ -1,0 +1,7 @@
+=== tests/cases/compiler/missingCloseBraceInTypeMemberList.ts ===
+type ITest = {
+>ITest : Symbol(ITest, Decl(missingCloseBraceInTypeMemberList.ts, 0, 0))
+
+  num: number;
+>num : Symbol(num, Decl(missingCloseBraceInTypeMemberList.ts, 0, 14))
+

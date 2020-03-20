@@ -1308,6 +1308,23 @@ namespace ts {
             return false;
         }
 
+        function parseExpectedCloseToken(closeTokenKind: SyntaxKind, openTokenKind: SyntaxKind, openTokenPos: number, shouldAdvance = true): boolean {
+            if (!parseExpected(closeTokenKind, /*diagnosticMessage*/ undefined, shouldAdvance)) {
+                const lastError = lastOrUndefined(parseDiagnostics);
+                if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                    const openTokenStr = tokenToString(openTokenKind)!;
+                    const closeTokenStr = tokenToString(closeTokenKind)!;
+                    addRelatedInfo(
+                        lastError,
+                        createFileDiagnostic(sourceFile, openTokenPos, openTokenStr.length,
+                                             Diagnostics.The_parser_expected_to_find_a_0_to_match_the_1_token_here, closeTokenStr, openTokenStr)
+                    );
+                }
+                return false;
+            }
+            return true;
+        }
+
         function parseExpectedJSDoc(kind: JSDocSyntaxKind) {
             if (token() === kind) {
                 nextTokenJSDoc();
@@ -2988,9 +3005,10 @@ namespace ts {
 
         function parseObjectTypeMembers(): NodeArray<TypeElement> {
             let members: NodeArray<TypeElement>;
+            const openBracePosition = scanner.getTokenPos();
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 members = parseList(ParsingContext.TypeMembers, parseTypeMember);
-                parseExpected(SyntaxKind.CloseBraceToken);
+                parseExpectedCloseToken(SyntaxKind.CloseBraceToken, SyntaxKind.OpenBraceToken, openBracePosition);
             }
             else {
                 members = createMissingList<TypeElement>();
@@ -4654,6 +4672,7 @@ namespace ts {
         function parseJsxExpression(inExpressionContext: boolean): JsxExpression | undefined {
             const node = <JsxExpression>createNode(SyntaxKind.JsxExpression);
 
+            const openBracePosition = scanner.getTokenPos();
             if (!parseExpected(SyntaxKind.OpenBraceToken)) {
                 return undefined;
             }
@@ -4666,10 +4685,10 @@ namespace ts {
                 node.expression = parseExpression();
             }
             if (inExpressionContext) {
-                parseExpected(SyntaxKind.CloseBraceToken);
+                parseExpectedCloseToken(SyntaxKind.CloseBraceToken, SyntaxKind.OpenBraceToken, openBracePosition);
             }
             else {
-                if (parseExpected(SyntaxKind.CloseBraceToken, /*message*/ undefined, /*shouldAdvance*/ false)) {
+                if (parseExpectedCloseToken(SyntaxKind.CloseBraceToken, SyntaxKind.OpenBraceToken, openBracePosition, /*shouldAdvance*/ false)) {
                     scanJsxText();
                 }
             }
@@ -5143,15 +5162,7 @@ namespace ts {
             }
 
             node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimiter*/ true);
-            if (!parseExpected(SyntaxKind.CloseBraceToken)) {
-                const lastError = lastOrUndefined(parseDiagnostics);
-                if (lastError && lastError.code === Diagnostics._0_expected.code) {
-                    addRelatedInfo(
-                        lastError,
-                        createFileDiagnostic(sourceFile, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
-                    );
-                }
-            }
+            parseExpectedCloseToken(SyntaxKind.CloseBraceToken, SyntaxKind.OpenBraceToken, openBracePosition);
             return finishNode(node);
         }
 
@@ -5239,15 +5250,7 @@ namespace ts {
                 }
 
                 node.statements = parseList(ParsingContext.BlockStatements, parseStatement);
-                if (!parseExpected(SyntaxKind.CloseBraceToken)) {
-                    const lastError = lastOrUndefined(parseDiagnostics);
-                    if (lastError && lastError.code === Diagnostics._0_expected.code) {
-                        addRelatedInfo(
-                            lastError,
-                            createFileDiagnostic(sourceFile, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
-                        );
-                    }
-                }
+                parseExpectedCloseToken(SyntaxKind.CloseBraceToken, SyntaxKind.OpenBraceToken, openBracePosition);
             }
             else {
                 node.statements = createMissingList<Statement>();
@@ -6287,11 +6290,12 @@ namespace ts {
             node.typeParameters = parseTypeParameters();
             node.heritageClauses = parseHeritageClauses();
 
+            const openBracePosition = scanner.getTokenPos();
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 // ClassTail[Yield,Await] : (Modified) See 14.5
                 //      ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
                 node.members = parseClassMembers();
-                parseExpected(SyntaxKind.CloseBraceToken);
+                parseExpectedCloseToken(SyntaxKind.CloseBraceToken, SyntaxKind.OpenBraceToken, openBracePosition);
             }
             else {
                 node.members = createMissingList<ClassElement>();
@@ -6392,9 +6396,10 @@ namespace ts {
             node.kind = SyntaxKind.EnumDeclaration;
             parseExpected(SyntaxKind.EnumKeyword);
             node.name = parseIdentifier();
+            const openBracePosition = scanner.getTokenPos();
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 node.members = doOutsideOfYieldAndAwaitContext(() => parseDelimitedList(ParsingContext.EnumMembers, parseEnumMember));
-                parseExpected(SyntaxKind.CloseBraceToken);
+                parseExpectedCloseToken(SyntaxKind.CloseBraceToken, SyntaxKind.OpenBraceToken, openBracePosition);
             }
             else {
                 node.members = createMissingList<EnumMember>();
@@ -6404,9 +6409,10 @@ namespace ts {
 
         function parseModuleBlock(): ModuleBlock {
             const node = <ModuleBlock>createNode(SyntaxKind.ModuleBlock);
+            const openBracePosition = scanner.getTokenPos();
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 node.statements = parseList(ParsingContext.BlockStatements, parseStatement);
-                parseExpected(SyntaxKind.CloseBraceToken);
+                parseExpectedCloseToken(SyntaxKind.CloseBraceToken, SyntaxKind.OpenBraceToken, openBracePosition);
             }
             else {
                 node.statements = createMissingList<Statement>();
