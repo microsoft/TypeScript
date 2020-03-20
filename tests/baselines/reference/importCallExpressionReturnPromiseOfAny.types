@@ -66,9 +66,9 @@ const p2 = import(whatToLoad ? getSpecifier() : "defaulPath") as Promise<typeof 
 
 p1.then(zero => {
 >p1.then(zero => {    return zero.foo();  // ok, zero is any}) : Promise<any>
->p1.then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>
+>p1.then : { <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1, onrejected?: (reason: any) => TResult2): Promise<awaited TResult1 | awaited TResult2>; <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<awaited TResult1 | awaited TResult2>; }
 >p1 : Promise<any>
->then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>
+>then : { <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1, onrejected?: (reason: any) => TResult2): Promise<awaited TResult1 | awaited TResult2>; <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<awaited TResult1 | awaited TResult2>; }
 >zero => {    return zero.foo();  // ok, zero is any} : (zero: any) => any
 >zero : any
 

@@ -4,7 +4,7 @@ interface Promise<T> {
 >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(optionalFunctionArgAssignability.ts, 0, 18))
 
     then<U>(onFulfill?: (value: T) => U, onReject?: (reason: any) => U): Promise<U>;
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(optionalFunctionArgAssignability.ts, 0, 22))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(optionalFunctionArgAssignability.ts, 0, 22))
 >U : Symbol(U, Decl(optionalFunctionArgAssignability.ts, 1, 9))
 >onFulfill : Symbol(onFulfill, Decl(optionalFunctionArgAssignability.ts, 1, 12))
 >value : Symbol(value, Decl(optionalFunctionArgAssignability.ts, 1, 25))

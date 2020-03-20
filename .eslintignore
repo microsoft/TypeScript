@@ -7,3 +7,6 @@
 /src/lib/es5.d.ts
 /src/lib/es2015.iterable.d.ts
 /src/lib/es2015.promise.d.ts
+/src/lib/es2018.promise.d.ts
+/src/lib/es2020.promise.d.ts
+/src/lib/esnext.promise.d.ts

@@ -4,7 +4,7 @@ interface Promise<T> {
 >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promisesWithConstraints.ts, 0, 18))
 
     then<U>(cb: (x: T) => Promise<U>): Promise<U>;
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisesWithConstraints.ts, 0, 22))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(promisesWithConstraints.ts, 0, 22))
 >U : Symbol(U, Decl(promisesWithConstraints.ts, 1, 9))
 >cb : Symbol(cb, Decl(promisesWithConstraints.ts, 1, 12))
 >x : Symbol(x, Decl(promisesWithConstraints.ts, 1, 17))
