@@ -205,14 +205,6 @@ namespace ts {
             description: Diagnostics.Generates_a_CPU_profile
         },
         {
-            name: "incremental",
-            shortName: "i",
-            type: "boolean",
-            category: Diagnostics.Basic_Options,
-            description: Diagnostics.Enable_incremental_compilation,
-            transpileOptionValue: undefined
-        },
-        {
             name: "assumeChangesOnlyAffectDirectDependencies",
             type: "boolean",
             affectsSemanticDiagnostics: true,

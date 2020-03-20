@@ -25,7 +25,6 @@ interface Array<T> { length: number; [n: number]: T; }
 
     /* Basic Options */
     // "incremental": true,
-    // "incremental": true,
     "target": "es5",
     "module": "amd",
     // "lib": [],
