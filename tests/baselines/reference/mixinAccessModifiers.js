@@ -158,8 +158,8 @@ var Private = /** @class */ (function () {
 var Private2 = /** @class */ (function () {
     function Private2() {
         var args = [];
-        for (var _a = 0; _a < arguments.length; _a++) {
-            args[_a] = arguments[_a];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
         }
     }
     return Private2;
@@ -167,8 +167,8 @@ var Private2 = /** @class */ (function () {
 var Protected = /** @class */ (function () {
     function Protected() {
         var args = [];
-        for (var _b = 0; _b < arguments.length; _b++) {
-            args[_b] = arguments[_b];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
         }
     }
     return Protected;
@@ -176,8 +176,8 @@ var Protected = /** @class */ (function () {
 var Protected2 = /** @class */ (function () {
     function Protected2() {
         var args = [];
-        for (var _c = 0; _c < arguments.length; _c++) {
-            args[_c] = arguments[_c];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
         }
     }
     return Protected2;
@@ -185,8 +185,8 @@ var Protected2 = /** @class */ (function () {
 var Public = /** @class */ (function () {
     function Public() {
         var args = [];
-        for (var _d = 0; _d < arguments.length; _d++) {
-            args[_d] = arguments[_d];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
         }
     }
     return Public;
@@ -194,8 +194,8 @@ var Public = /** @class */ (function () {
 var Public2 = /** @class */ (function () {
     function Public2() {
         var args = [];
-        for (var _e = 0; _e < arguments.length; _e++) {
-            args[_e] = arguments[_e];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
         }
     }
     return Public2;

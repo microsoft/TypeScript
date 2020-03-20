@@ -101,8 +101,8 @@ var c1 = /** @class */ (function () {
 var c12 = /** @class */ (function () {
     function c12(arguments) {
         var rest = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            rest[_a - 1] = arguments[_a];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rest[_i - 1] = arguments[_i];
         }
         var arguments = 10; // no error
     }
@@ -117,8 +117,8 @@ var c1NoError = /** @class */ (function () {
 var c2 = /** @class */ (function () {
     function c2() {
         var restParameters = [];
-        for (var _b = 0; _b < arguments.length; _b++) {
-            restParameters[_b] = arguments[_b];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            restParameters[_i] = arguments[_i];
         }
         var arguments = 10; // no error
     }
@@ -133,8 +133,8 @@ var c2NoError = /** @class */ (function () {
 var c3 = /** @class */ (function () {
     function c3(arguments) {
         var restParameters = [];
-        for (var _c = 1; _c < arguments.length; _c++) {
-            restParameters[_c - 1] = arguments[_c];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            restParameters[_i - 1] = arguments[_i];
         }
         this.arguments = arguments;
         var arguments = 10; // no error
@@ -151,8 +151,8 @@ var c3NoError = /** @class */ (function () {
 var c5 = /** @class */ (function () {
     function c5(i) {
         var arguments = [];
-        for (var _d = 1; _d < arguments.length; _d++) {
-            arguments[_d - 1] = arguments[_d];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            arguments[_i - 1] = arguments[_i];
         }
         var arguments; // no error
     }
@@ -161,8 +161,8 @@ var c5 = /** @class */ (function () {
 var c52 = /** @class */ (function () {
     function c52(arguments) {
         var rest = [];
-        for (var _e = 1; _e < arguments.length; _e++) {
-            rest[_e - 1] = arguments[_e];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rest[_i - 1] = arguments[_i];
         }
         var arguments; // no error
     }

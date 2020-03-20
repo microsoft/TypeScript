@@ -76,36 +76,36 @@ function a1() {
 }
 function a2() {
     var a = [];
-    for (var _a = 0; _a < arguments.length; _a++) {
-        a[_a] = arguments[_a];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        a[_i] = arguments[_i];
     }
 }
 function a3() {
     var a = [];
-    for (var _b = 0; _b < arguments.length; _b++) {
-        a[_b] = arguments[_b];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        a[_i] = arguments[_i];
     }
 }
 function a4() {
     var a = [];
-    for (var _c = 0; _c < arguments.length; _c++) {
-        a[_c] = arguments[_c];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        a[_i] = arguments[_i];
     }
 }
 function a5() {
     var a = [];
-    for (var _d = 0; _d < arguments.length; _d++) {
-        a[_d] = arguments[_d];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        a[_i] = arguments[_i];
     }
 }
-function a9(_e) {
-    var _f = __read(_e, 3), a = _f[0], b = _f[1], _g = __read(_f[2], 1), _h = __read(_g[0], 1), c = _h[0];
+function a9(_a) {
+    var _b = __read(_a, 3), a = _b[0], b = _b[1], _c = __read(_b[2], 1), _d = __read(_c[0], 1), c = _d[0];
 }
-function a10(_j) {
-    var _k = __read(_j), a = _k[0], b = _k[1], _l = __read(_k[2], 1), _m = __read(_l[0], 1), c = _m[0], x = _k.slice(3);
+function a10(_e) {
+    var _f = __read(_e), a = _f[0], b = _f[1], _g = __read(_f[2], 1), _h = __read(_g[0], 1), c = _h[0], x = _f.slice(3);
 }
-function a11(_o) {
-    var _p = __read(_o), a = _p[0], b = _p[1], c = _p[2], x = _p.slice(3);
+function a11(_j) {
+    var _k = __read(_j), a = _k[0], b = _k[1], c = _k[2], x = _k.slice(3);
 }
 var array = [1, 2, 3];
 var array2 = [true, false, "hello"];
@@ -119,8 +119,8 @@ a11([1, 2]); // Parameter type is number[]
 // Rest parameter with generic
 function foo() {
     var a = [];
-    for (var _q = 0; _q < arguments.length; _q++) {
-        a[_q] = arguments[_q];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        a[_i] = arguments[_i];
     }
 }
 foo("hello", 1, 2);
@@ -132,8 +132,8 @@ var E;
 })(E || (E = {}));
 function foo1() {
     var a = [];
-    for (var _r = 0; _r < arguments.length; _r++) {
-        a[_r] = arguments[_r];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        a[_i] = arguments[_i];
     }
 }
 foo1(1, 2, 3, E.a);

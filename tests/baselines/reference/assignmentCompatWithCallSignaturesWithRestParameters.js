@@ -58,8 +58,8 @@ a = function () {
 }; // ok, same number of required params
 a = function () {
     var args = [];
-    for (var _a = 0; _a < arguments.length; _a++) {
-        args[_a] = arguments[_a];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
     }
     return 1;
 }; // error, type mismatch
@@ -71,8 +71,8 @@ var a2;
 a2 = function () { return 1; }; // ok, fewer required params
 a2 = function () {
     var args = [];
-    for (var _b = 0; _b < arguments.length; _b++) {
-        args[_b] = arguments[_b];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
     }
     return 1;
 }; // ok, fewer required params
@@ -80,15 +80,15 @@ a2 = function (x) { return 1; }; // ok, fewer required params
 a2 = function (x) { return 1; }; // ok, same number of required params
 a2 = function (x) {
     var args = [];
-    for (var _c = 1; _c < arguments.length; _c++) {
-        args[_c - 1] = arguments[_c];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        args[_i - 1] = arguments[_i];
     }
     return 1;
 }; // ok, same number of required params
 a2 = function (x) {
     var args = [];
-    for (var _d = 1; _d < arguments.length; _d++) {
-        args[_d - 1] = arguments[_d];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        args[_i - 1] = arguments[_i];
     }
     return 1;
 }; // should be type mismatch error
@@ -102,8 +102,8 @@ a3 = function (x, y) { return 1; }; // ok, all present params match
 a3 = function (x, y, z) { return 1; }; // error
 a3 = function (x) {
     var z = [];
-    for (var _e = 1; _e < arguments.length; _e++) {
-        z[_e - 1] = arguments[_e];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        z[_i - 1] = arguments[_i];
     }
     return 1;
 }; // error
@@ -116,8 +116,8 @@ a4 = function (x, y) { return 1; }; // error, second param has type mismatch
 a4 = function (x, y) { return 1; }; // ok, same number of required params with matching types
 a4 = function (x) {
     var args = [];
-    for (var _f = 1; _f < arguments.length; _f++) {
-        args[_f - 1] = arguments[_f];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        args[_i - 1] = arguments[_i];
     }
     return 1;
 }; // error, rest params have type mismatch

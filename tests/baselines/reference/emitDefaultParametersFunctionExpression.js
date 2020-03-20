@@ -26,29 +26,29 @@ var lambda3 = function (x, y) {
 var lambda4 = function (y) {
     if (y === void 0) { y = "hello"; }
     var rest = [];
-    for (var _a = 1; _a < arguments.length; _a++) {
-        rest[_a - 1] = arguments[_a];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        rest[_i - 1] = arguments[_i];
     }
 };
 var x = function (str) {
     if (str === void 0) { str = "hello"; }
     var rest = [];
-    for (var _b = 1; _b < arguments.length; _b++) {
-        rest[_b - 1] = arguments[_b];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        rest[_i - 1] = arguments[_i];
     }
 };
 var y = (function (num, boo) {
     if (num === void 0) { num = 10; }
     if (boo === void 0) { boo = false; }
     var rest = [];
-    for (var _c = 2; _c < arguments.length; _c++) {
-        rest[_c - 2] = arguments[_c];
+    for (var _i = 2; _i < arguments.length; _i++) {
+        rest[_i - 2] = arguments[_i];
     }
 })();
 var z = (function (num, boo) {
     if (boo === void 0) { boo = false; }
     var rest = [];
-    for (var _d = 2; _d < arguments.length; _d++) {
-        rest[_d - 2] = arguments[_d];
+    for (var _i = 2; _i < arguments.length; _i++) {
+        rest[_i - 2] = arguments[_i];
     }
 })(10);

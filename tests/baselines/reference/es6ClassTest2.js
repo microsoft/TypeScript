@@ -249,8 +249,8 @@ var SplatMonster = /** @class */ (function () {
     }
     SplatMonster.prototype.roar = function (name) {
         var args = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            args[_a - 1] = arguments[_a];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args[_i - 1] = arguments[_i];
         }
     };
     return SplatMonster;

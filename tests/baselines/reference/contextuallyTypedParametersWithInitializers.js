@@ -183,20 +183,20 @@ g6(function (x) {
 g6(function (x) { return 0; }); // Implicit any error
 g6(function () {
     var x = [];
-    for (var _l = 0; _l < arguments.length; _l++) {
-        x[_l] = arguments[_l];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        x[_i] = arguments[_i];
     }
     return 0;
 }); // []
 // Repro from #28816
 function id(input) { return input; }
-function getFoo(_m) {
-    var _o = _m.foo, foo = _o === void 0 ? 42 : _o;
+function getFoo(_l) {
+    var _m = _l.foo, foo = _m === void 0 ? 42 : _m;
     return foo;
 }
 var newGetFoo = id(getFoo);
-var newGetFoo2 = id(function getFoo(_p) {
-    var _q = _p.foo, foo = _q === void 0 ? 42 : _q;
+var newGetFoo2 = id(function getFoo(_o) {
+    var _p = _o.foo, foo = _p === void 0 ? 42 : _p;
     return foo;
 });
 function add(x, y) {

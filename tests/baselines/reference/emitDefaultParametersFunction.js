@@ -21,7 +21,7 @@ function bar(y) {
 function bar1(y) {
     if (y === void 0) { y = 10; }
     var rest = [];
-    for (var _a = 1; _a < arguments.length; _a++) {
-        rest[_a - 1] = arguments[_a];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        rest[_i - 1] = arguments[_i];
     }
 }

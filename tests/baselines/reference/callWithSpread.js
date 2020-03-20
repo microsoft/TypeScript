@@ -112,16 +112,16 @@ xa[1].foo(1, 2, "abc");
 var C = /** @class */ (function () {
     function C(x, y) {
         var z = [];
-        for (var _h = 2; _h < arguments.length; _h++) {
-            z[_h - 2] = arguments[_h];
+        for (var _i = 2; _i < arguments.length; _i++) {
+            z[_i - 2] = arguments[_i];
         }
         this.foo(x, y);
         this.foo.apply(this, __spreadArrays([x, y], z));
     }
     C.prototype.foo = function (x, y) {
         var z = [];
-        for (var _j = 2; _j < arguments.length; _j++) {
-            z[_j - 2] = arguments[_j];
+        for (var _i = 2; _i < arguments.length; _i++) {
+            z[_i - 2] = arguments[_i];
         }
     };
     return C;

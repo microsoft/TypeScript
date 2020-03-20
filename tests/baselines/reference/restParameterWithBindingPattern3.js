@@ -30,29 +30,29 @@ function a() {
 }
 function b() {
     var _d = [];
-    for (var _e = 0; _e < arguments.length; _e++) {
-        _d[_e] = arguments[_e];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        _d[_i] = arguments[_i];
     }
-    var _f = _d.slice(0), foo = _f === void 0 ? [] : _f;
+    var _e = _d.slice(0), foo = _e === void 0 ? [] : _e;
 }
 function c() {
-    var _g = [];
-    for (var _h = 0; _h < arguments.length; _h++) {
-        _g[_h] = arguments[_h];
+    var _f = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        _f[_i] = arguments[_i];
     }
-    var a = _g[0], length = _g.length, d = _g[3];
+    var a = _f[0], length = _f.length, d = _f[3];
 }
 function d() {
-    var _j = [];
-    for (var _k = 0; _k < arguments.length; _k++) {
-        _j[_k] = arguments[_k];
+    var _g = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        _g[_i] = arguments[_i];
     }
-    var a = _j[0], d = _j[3];
+    var a = _g[0], d = _g[3];
 }
 function e() {
-    var _l = [];
-    for (var _m = 0; _m < arguments.length; _m++) {
-        _l[_m] = arguments[_m];
+    var _h = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        _h[_i] = arguments[_i];
     }
-    var _o = _l[0], a = _o === void 0 ? 1 : _o, _p = _l[1], b = _p === void 0 ? true : _p, rest = __rest(_l, [0, 1]);
+    var _j = _h[0], a = _j === void 0 ? 1 : _j, _k = _h[1], b = _k === void 0 ? true : _k, rest = __rest(_h, [0, 1]);
 }

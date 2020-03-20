@@ -23,8 +23,8 @@ for (var _2 in []) { }
 var _ns;
 (function (_ns) {
     var _;
-    for (var _b = 0, _c = []; _b < _c.length; _b++) {
-        var _3 = _c[_b];
+    for (var _i = 0, _b = []; _i < _b.length; _i++) {
+        var _3 = _b[_i];
     }
     for (var _4 in []) { }
 })(_ns || (_ns = {}));

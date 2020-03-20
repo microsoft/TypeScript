@@ -14,8 +14,8 @@ for (var _i = 0, _a = []; _i < _a.length; _i++) {
     var v = _a[_i];
     v;
     function foo() {
-        for (var _b = 0, _c = []; _b < _c.length; _b++) {
-            var v_1 = _c[_b];
+        for (var _i = 0, _b = []; _i < _b.length; _i++) {
+            var v_1 = _b[_i];
             v_1;
         }
     }

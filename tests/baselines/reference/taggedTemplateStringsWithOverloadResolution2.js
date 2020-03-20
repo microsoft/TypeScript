@@ -33,8 +33,8 @@ var a = foo1(__makeTemplateObject(["", ""], ["", ""]), 1);
 var b = foo1([], 1);
 function foo2() {
     var stuff = [];
-    for (var _a = 0; _a < arguments.length; _a++) {
-        stuff[_a] = arguments[_a];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        stuff[_i] = arguments[_i];
     }
     return undefined;
 }

@@ -112,15 +112,15 @@ function f(x, y) {
 }
 function f2() {
     var x = [];
-    for (var _u = 0; _u < arguments.length; _u++) {
-        x[_u] = arguments[_u];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        x[_i] = arguments[_i];
     }
 }
 var B = /** @class */ (function () {
     function B(x, y) {
         var z = [];
-        for (var _v = 2; _v < arguments.length; _v++) {
-            z[_v - 2] = arguments[_v];
+        for (var _i = 2; _i < arguments.length; _i++) {
+            z[_i - 2] = arguments[_i];
         }
     }
     return B;

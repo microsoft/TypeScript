@@ -66,40 +66,40 @@ let eleven = (o => o.a(11))({ a: function(n) { return n; } });
 })(5, 6, 7);
 (function () {
     var mixed = [];
-    for (var _a = 0; _a < arguments.length; _a++) {
-        mixed[_a] = arguments[_a];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        mixed[_i] = arguments[_i];
     }
     return mixed.every(function (n) { return !!n; });
 })(5, 'oops', 'oh no');
 (function () {
     var noNumbers = [];
-    for (var _b = 0; _b < arguments.length; _b++) {
-        noNumbers[_b] = arguments[_b];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        noNumbers[_i] = arguments[_i];
     }
     return noNumbers.some(function (n) { return n > 0; });
 })();
 (function (first) {
     var rest = [];
-    for (var _c = 1; _c < arguments.length; _c++) {
-        rest[_c - 1] = arguments[_c];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        rest[_i - 1] = arguments[_i];
     }
     return first ? [] : rest.map(function (n) { return n > 0; });
 })(8, 9, 10);
 // destructuring parameters (with defaults too!)
-(function (_d) {
-    var q = _d.q;
+(function (_a) {
+    var q = _a.q;
     return q;
 })({ q: 13 });
-(function (_e) {
-    var _f = _e.p, p = _f === void 0 ? 14 : _f;
+(function (_b) {
+    var _c = _b.p, p = _c === void 0 ? 14 : _c;
     return p;
 })({ p: 15 });
-(function (_g) {
-    var _h = (_g === void 0 ? { r: 18 } : _g).r, r = _h === void 0 ? 17 : _h;
+(function (_d) {
+    var _e = (_d === void 0 ? { r: 18 } : _d).r, r = _e === void 0 ? 17 : _e;
     return r;
 })({ r: 19 });
-(function (_j) {
-    var _k = (_j === void 0 ? { u: 23 } : _j).u, u = _k === void 0 ? 22 : _k;
+(function (_f) {
+    var _g = (_f === void 0 ? { u: 23 } : _f).u, u = _g === void 0 ? 22 : _g;
     return u;
 })();
 // contextually typed parameters.

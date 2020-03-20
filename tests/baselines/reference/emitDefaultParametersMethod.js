@@ -38,8 +38,8 @@ var C = /** @class */ (function () {
     C.prototype.boo = function (t) {
         if (t === void 0) { t = false; }
         var rest = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            rest[_a - 1] = arguments[_a];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rest[_i - 1] = arguments[_i];
         }
     };
     return C;
@@ -54,8 +54,8 @@ var E = /** @class */ (function () {
     function E(y) {
         if (y === void 0) { y = "hello"; }
         var rest = [];
-        for (var _b = 1; _b < arguments.length; _b++) {
-            rest[_b - 1] = arguments[_b];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rest[_i - 1] = arguments[_i];
         }
     }
     return E;

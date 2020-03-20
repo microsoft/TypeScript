@@ -39,8 +39,8 @@ function f4() {
 }
 function f5() {
     var _arg = [];
-    for (var _e = 0; _e < arguments.length; _e++) {
-        _arg[_e] = arguments[_e];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        _arg[_i] = arguments[_i];
     }
 }
 function f6(arg, _arg) {

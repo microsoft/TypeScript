@@ -80,14 +80,14 @@ function hoistingWithAwait() {
         function z() {
             var b0, b1 = 1;
         }
-        var a0, a1, c0, c1, a, b, _b, y_2, c;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var a0, a1, c0, c1, a, b, _i, y_2, c;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     a1 = 1;
                     return [4 /*yield*/, 0];
                 case 1:
-                    _c.sent();
+                    _b.sent();
                     if (true) {
                         c1 = 1;
                     }
@@ -95,8 +95,8 @@ function hoistingWithAwait() {
                     }
                     for (b in y) {
                     }
-                    for (_b = 0, y_2 = y; _b < y_2.length; _b++) {
-                        c = y_2[_b];
+                    for (_i = 0, y_2 = y; _i < y_2.length; _i++) {
+                        c = y_2[_i];
                     }
                     return [2 /*return*/];
             }

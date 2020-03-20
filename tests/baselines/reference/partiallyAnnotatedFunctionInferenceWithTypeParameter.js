@@ -81,13 +81,13 @@ testRest(function (t1, t2, t3) { });
 testRest(function (t1, t2, t3) { });
 testRest(function (t2) {
     var t3 = [];
-    for (var _a = 1; _a < arguments.length; _a++) {
-        t3[_a - 1] = arguments[_a];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        t3[_i - 1] = arguments[_i];
     }
 });
 testRest(function (t2) {
     var t3 = [];
-    for (var _b = 1; _b < arguments.length; _b++) {
-        t3[_b - 1] = arguments[_b];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        t3[_i - 1] = arguments[_i];
     }
 });

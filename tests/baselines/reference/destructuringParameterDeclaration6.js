@@ -46,23 +46,23 @@ function a5() {
 while () { }
 function a6() {
     var public = [];
-    for (var _d = 0; _d < arguments.length; _d++) {
-        public[_d] = arguments[_d];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        public[_i] = arguments[_i];
     }
 }
 function a7() {
     var a = [];
-    for (var _e = 0; _e < arguments.length; _e++) {
-        a[_e] = arguments[_e];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        a[_i] = arguments[_i];
     }
 }
 a({ "while": 1 });
 // No Error
-function b1(_f) {
-    var x = _f.public;
+function b1(_d) {
+    var x = _d.public;
 }
-function b2(_g) {
-    var y = _g["while"];
+function b2(_e) {
+    var y = _e["while"];
 }
 b1({ public: 1 });
 b2({ "while": 1 });

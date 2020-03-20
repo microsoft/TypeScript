@@ -20,14 +20,14 @@ function f(array) {
 }
 function g(array) {
     var args = [];
-    for (var _a = 1; _a < arguments.length; _a++) {
-        args[_a - 1] = arguments[_a];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        args[_i - 1] = arguments[_i];
     }
 }
 function h(nonarray) {
     var args = [];
-    for (var _b = 1; _b < arguments.length; _b++) {
-        args[_b - 1] = arguments[_b];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        args[_i - 1] = arguments[_i];
     }
 }
 function i(array, opt) { }

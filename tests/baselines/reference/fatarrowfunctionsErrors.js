@@ -35,7 +35,7 @@ var x2 = function (a) { };
 var x3 = function (a) { };
 var x4 = function () {
     var a = [];
-    for (var _a = 0; _a < arguments.length; _a++) {
-        a[_a] = arguments[_a];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        a[_i] = arguments[_i];
     }
 };

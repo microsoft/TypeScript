@@ -4620,9 +4620,6 @@ namespace ts {
                     if (reservedInNestedScopes) {
                         reserveNameInNestedScopes(name);
                     }
-                    else {
-                        generatedNames.set(name, true);
-                    }
                     return name;
                 }
             }

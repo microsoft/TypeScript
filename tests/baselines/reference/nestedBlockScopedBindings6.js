@@ -103,8 +103,8 @@ function a1() {
         x = x + 1;
         (function () { return x; });
     };
-    for (var _b = 0, _c = [1]; _b < _c.length; _b++) {
-        var x = _c[_b];
+    for (var _i = 0, _b = [1]; _i < _b.length; _i++) {
+        var x = _b[_i];
         _loop_1(x);
     }
     for (var x = void 0;;) {
@@ -112,8 +112,8 @@ function a1() {
     }
 }
 function a2() {
-    for (var _d = 0, _e = [1]; _d < _e.length; _d++) {
-        var x = _e[_d];
+    for (var _i = 0, _c = [1]; _i < _c.length; _i++) {
+        var x = _c[_i];
         x = x + 1;
     }
     var _loop_2 = function (x) {
@@ -132,8 +132,8 @@ function a3() {
         x = x + 1;
         (function () { return x; });
     };
-    for (var _f = 0, _g = [1]; _f < _g.length; _f++) {
-        var x = _g[_f];
+    for (var _i = 0, _d = [1]; _i < _d.length; _i++) {
+        var x = _d[_i];
         _loop_3(x);
     }
     var _loop_4 = function (x) {
@@ -152,8 +152,8 @@ function a4() {
         x = x + 1;
         (function () { return x; });
     };
-    for (var _h = 0, _j = [1]; _h < _j.length; _h++) {
-        var x = _j[_h];
+    for (var _i = 0, _e = [1]; _i < _e.length; _i++) {
+        var x = _e[_i];
         _loop_5(x);
     }
     switch (1) {
@@ -163,8 +163,8 @@ function a4() {
     }
 }
 function a5() {
-    for (var _k = 0, _l = [1]; _k < _l.length; _k++) {
-        var x = _l[_k];
+    for (var _i = 0, _f = [1]; _i < _f.length; _i++) {
+        var x = _f[_i];
         x = x + 1;
     }
     switch (1) {
@@ -175,8 +175,8 @@ function a5() {
     }
 }
 function a6() {
-    for (var _m = 0, _o = [1]; _m < _o.length; _m++) {
-        var x = _o[_m];
+    for (var _i = 0, _g = [1]; _i < _g.length; _i++) {
+        var x = _g[_i];
         x = x + 1;
     }
     switch (1) {
@@ -190,8 +190,8 @@ function a7() {
         x = x + 1;
         (function () { return x; });
     };
-    for (var _p = 0, _q = [1]; _p < _q.length; _p++) {
-        var x = _q[_p];
+    for (var _i = 0, _h = [1]; _i < _h.length; _i++) {
+        var x = _h[_i];
         _loop_6(x);
     }
     switch (1) {

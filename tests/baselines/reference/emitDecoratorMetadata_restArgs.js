@@ -36,8 +36,8 @@ var A = /** @class */ (function () {
     }
     A.prototype.method = function () {
         var args = [];
-        for (var _a = 0; _a < arguments.length; _a++) {
-            args[_a] = arguments[_a];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
         }
     };
     __decorate([
@@ -55,14 +55,14 @@ var A = /** @class */ (function () {
 var B = /** @class */ (function () {
     function B() {
         var args = [];
-        for (var _b = 0; _b < arguments.length; _b++) {
-            args[_b] = arguments[_b];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
         }
     }
     B.prototype.method = function () {
         var args = [];
-        for (var _c = 0; _c < arguments.length; _c++) {
-            args[_c] = arguments[_c];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
         }
     };
     __decorate([

@@ -96,8 +96,8 @@ var Bar = /** @class */ (function () {
     }
     Bar.prototype.yoha = function (yoha) {
         var bar = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            bar[_a - 1] = arguments[_a];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            bar[_i - 1] = arguments[_i];
         }
     };
     __decorate([
