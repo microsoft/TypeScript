@@ -92,17 +92,17 @@ var SubD = /** @class */ (function (_super) {
 function d0(_a) {
     var x = (_a === void 0 ? { x: new Class() } : _a).x;
 }
-function d1(_a) {
-    var x = _a.x;
+function d1(_b) {
+    var x = _b.x;
 }
-function d2(_a) {
-    var x = _a.x;
+function d2(_c) {
+    var x = _c.x;
 }
-function d3(_a) {
-    var y = _a.y;
+function d3(_d) {
+    var y = _d.y;
 }
-function d4(_a) {
-    var y = (_a === void 0 ? { y: new D() } : _a).y;
+function d4(_e) {
+    var y = (_e === void 0 ? { y: new D() } : _e).y;
 }
 var obj = new Class();
 d0({ x: 1 });

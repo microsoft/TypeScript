@@ -205,18 +205,18 @@ const fieldNameA = "fieldName1";
 const fieldNameB = "fieldName2";
 const fieldNameC = "fieldName3";
 let A = /** @class */ (() => {
-    var _a, _b, _c, _d;
+    var _1, _2, _3, _4;
     class A {
         constructor() {
             this["property2"] = 2;
             this[Symbol.iterator] = null;
             this["property4"] = 2;
             this[Symbol.match] = null;
-            this[_b] = null;
-            this[_d] = null;
+            this[_2] = null;
+            this[_4] = null;
         }
     }
-    foo(), _a = foo(), _b = foo(), _c = fieldNameB, _d = fieldNameC;
+    foo(), _1 = foo(), _2 = foo(), _3 = fieldNameB, _4 = fieldNameC;
     __decorate([
         x
     ], A.prototype, "property", void 0);
@@ -231,16 +231,16 @@ let A = /** @class */ (() => {
     ], A.prototype, Symbol.iterator, void 0);
     __decorate([
         x
-    ], A.prototype, _a, void 0);
+    ], A.prototype, _1, void 0);
     __decorate([
         x
-    ], A.prototype, _b, void 0);
+    ], A.prototype, _2, void 0);
     __decorate([
         x
-    ], A.prototype, _c, void 0);
+    ], A.prototype, _3, void 0);
     __decorate([
         x
-    ], A.prototype, _d, void 0);
+    ], A.prototype, _4, void 0);
     return A;
 })();
 void (_a = class B {
@@ -260,17 +260,17 @@ void (_a = class B {
     _h = fieldNameC,
     _a);
 let C = /** @class */ (() => {
-    var _a, _b, _c, _d;
+    var _1, _2, _3, _4;
     class C {
         constructor() {
             this["property2"] = 2;
             this[Symbol.iterator] = null;
             this["property4"] = 2;
             this[Symbol.match] = null;
-            this[_b] = null;
-            this[_d] = null;
+            this[_2] = null;
+            this[_4] = null;
         }
-        [(foo(), _a = foo(), _b = foo(), _c = fieldNameB, _d = fieldNameC, "some" + "method")]() { }
+        [(foo(), _1 = foo(), _2 = foo(), _3 = fieldNameB, _4 = fieldNameC, "some" + "method")]() { }
     }
     __decorate([
         x
@@ -286,16 +286,16 @@ let C = /** @class */ (() => {
     ], C.prototype, Symbol.iterator, void 0);
     __decorate([
         x
-    ], C.prototype, _a, void 0);
+    ], C.prototype, _1, void 0);
     __decorate([
         x
-    ], C.prototype, _b, void 0);
+    ], C.prototype, _2, void 0);
     __decorate([
         x
-    ], C.prototype, _c, void 0);
+    ], C.prototype, _3, void 0);
     __decorate([
         x
-    ], C.prototype, _d, void 0);
+    ], C.prototype, _4, void 0);
     return C;
 })();
 void class D {
@@ -310,19 +310,19 @@ void class D {
     [(foo(), _j = foo(), _k = foo(), _l = fieldNameB, _m = fieldNameC, "some" + "method")]() { }
 };
 let E = /** @class */ (() => {
-    var _a, _b, _c, _d;
+    var _1, _2, _3, _4;
     class E {
         constructor() {
             this["property2"] = 2;
             this[Symbol.iterator] = null;
             this["property4"] = 2;
             this[Symbol.match] = null;
-            this[_b] = null;
-            this[_d] = null;
+            this[_2] = null;
+            this[_4] = null;
         }
-        [(foo(), _a = foo(), _b = foo(), "some" + "method")]() { }
+        [(foo(), _1 = foo(), _2 = foo(), "some" + "method")]() { }
     }
-    _c = fieldNameB, _d = fieldNameC;
+    _3 = fieldNameB, _4 = fieldNameC;
     __decorate([
         x
     ], E.prototype, "property", void 0);
@@ -337,16 +337,16 @@ let E = /** @class */ (() => {
     ], E.prototype, Symbol.iterator, void 0);
     __decorate([
         x
-    ], E.prototype, _a, void 0);
+    ], E.prototype, _1, void 0);
     __decorate([
         x
-    ], E.prototype, _b, void 0);
+    ], E.prototype, _2, void 0);
     __decorate([
         x
-    ], E.prototype, _c, void 0);
+    ], E.prototype, _3, void 0);
     __decorate([
         x
-    ], E.prototype, _d, void 0);
+    ], E.prototype, _4, void 0);
     return E;
 })();
 void (_b = class F {
@@ -364,20 +364,20 @@ void (_b = class F {
     _r = fieldNameC,
     _b);
 let G = /** @class */ (() => {
-    var _a, _b, _c, _d;
+    var _1, _2, _3, _4;
     class G {
         constructor() {
             this["property2"] = 2;
             this[Symbol.iterator] = null;
             this["property4"] = 2;
             this[Symbol.match] = null;
-            this[_b] = null;
-            this[_d] = null;
+            this[_2] = null;
+            this[_4] = null;
         }
-        [(foo(), _a = foo(), _b = foo(), "some" + "method")]() { }
-        [(_c = fieldNameB, "some" + "method2")]() { }
+        [(foo(), _1 = foo(), _2 = foo(), "some" + "method")]() { }
+        [(_3 = fieldNameB, "some" + "method2")]() { }
     }
-    _d = fieldNameC;
+    _4 = fieldNameC;
     __decorate([
         x
     ], G.prototype, "property", void 0);
@@ -392,16 +392,16 @@ let G = /** @class */ (() => {
     ], G.prototype, Symbol.iterator, void 0);
     __decorate([
         x
-    ], G.prototype, _a, void 0);
+    ], G.prototype, _1, void 0);
     __decorate([
         x
-    ], G.prototype, _b, void 0);
+    ], G.prototype, _2, void 0);
     __decorate([
         x
-    ], G.prototype, _c, void 0);
+    ], G.prototype, _3, void 0);
     __decorate([
         x
-    ], G.prototype, _d, void 0);
+    ], G.prototype, _4, void 0);
     return G;
 })();
 void (_c = class H {
@@ -419,20 +419,20 @@ void (_c = class H {
     _v = fieldNameC,
     _c);
 let I = /** @class */ (() => {
-    var _a, _b, _c, _d, _e;
+    var _1, _2, _3, _4, _5;
     class I {
         constructor() {
             this["property2"] = 2;
             this[Symbol.iterator] = null;
             this["property4"] = 2;
             this[Symbol.match] = null;
-            this[_b] = null;
-            this[_e] = null;
+            this[_2] = null;
+            this[_5] = null;
         }
-        [(foo(), _a = foo(), _b = foo(), _c = "some" + "method")]() { }
-        [(_d = fieldNameB, "some" + "method2")]() { }
+        [(foo(), _1 = foo(), _2 = foo(), _3 = "some" + "method")]() { }
+        [(_4 = fieldNameB, "some" + "method2")]() { }
     }
-    _e = fieldNameC;
+    _5 = fieldNameC;
     __decorate([
         x
     ], I.prototype, "property", void 0);
@@ -447,19 +447,19 @@ let I = /** @class */ (() => {
     ], I.prototype, Symbol.iterator, void 0);
     __decorate([
         x
-    ], I.prototype, _a, void 0);
+    ], I.prototype, _1, void 0);
     __decorate([
         x
-    ], I.prototype, _b, void 0);
+    ], I.prototype, _2, void 0);
     __decorate([
         x
-    ], I.prototype, _c, null);
+    ], I.prototype, _3, null);
     __decorate([
         x
-    ], I.prototype, _d, void 0);
+    ], I.prototype, _4, void 0);
     __decorate([
         x
-    ], I.prototype, _e, void 0);
+    ], I.prototype, _5, void 0);
     return I;
 })();
 void (_d = class J {

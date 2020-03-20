@@ -92,20 +92,20 @@ var f10 = function (_a) {
     var _b = _a.foo, foo = _b === void 0 ? 42 : _b;
     return foo;
 };
-var f11 = id1(function (_a) {
-    var _b = _a.foo, foo = _b === void 0 ? 42 : _b;
+var f11 = id1(function (_c) {
+    var _d = _c.foo, foo = _d === void 0 ? 42 : _d;
     return foo;
 });
-var f12 = id2(function (_a) {
-    var _b = _a.foo, foo = _b === void 0 ? 42 : _b;
+var f12 = id2(function (_e) {
+    var _f = _e.foo, foo = _f === void 0 ? 42 : _f;
     return foo;
 });
-var f13 = id3(function (_a) {
-    var _b = _a.foo, foo = _b === void 0 ? 42 : _b;
+var f13 = id3(function (_g) {
+    var _h = _g.foo, foo = _h === void 0 ? 42 : _h;
     return foo;
 });
-var f14 = id4(function (_a) {
-    var _b = _a.foo, foo = _b === void 0 ? 42 : _b;
+var f14 = id4(function (_j) {
+    var _k = _j.foo, foo = _k === void 0 ? 42 : _k;
     return foo;
 });
 var f20 = function (foo) {
@@ -183,20 +183,20 @@ g6(function (x) {
 g6(function (x) { return 0; }); // Implicit any error
 g6(function () {
     var x = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i] = arguments[_i];
+    for (var _l = 0; _l < arguments.length; _l++) {
+        x[_l] = arguments[_l];
     }
     return 0;
 }); // []
 // Repro from #28816
 function id(input) { return input; }
-function getFoo(_a) {
-    var _b = _a.foo, foo = _b === void 0 ? 42 : _b;
+function getFoo(_m) {
+    var _o = _m.foo, foo = _o === void 0 ? 42 : _o;
     return foo;
 }
 var newGetFoo = id(getFoo);
-var newGetFoo2 = id(function getFoo(_a) {
-    var _b = _a.foo, foo = _b === void 0 ? 42 : _b;
+var newGetFoo2 = id(function getFoo(_p) {
+    var _q = _p.foo, foo = _q === void 0 ? 42 : _q;
     return foo;
 });
 function add(x, y) {

@@ -25,14 +25,14 @@ function f4(s, s2) { }
 function f5(s, n) { }
 function f6(s) {
     var n = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        n[_i - 1] = arguments[_i];
+    for (var _a = 1; _a < arguments.length; _a++) {
+        n[_a - 1] = arguments[_a];
     }
 }
 function f7(s) {
     var sRest = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        sRest[_i - 1] = arguments[_i];
+    for (var _b = 1; _b < arguments.length; _b++) {
+        sRest[_b - 1] = arguments[_b];
     }
 }
 var fUnion;

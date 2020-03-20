@@ -30,8 +30,8 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 function foo(_a) {
     var _b = _a.x, a = _b[0], b = _b[1], _c = _a.y, c = _c.c, d = _c.d, e = _c.e;
 }
-function bar(_a) {
-    var _b = _a.x, a = _b[0], _c = _b[1], b = _c === void 0 ? 10 : _c, _d = _a.y, c = _d.c, d = _d.d, _e = _d.e, e = _e === void 0 ? { f: 1 } : _e;
+function bar(_d) {
+    var _e = _d.x, a = _e[0], _f = _e[1], b = _f === void 0 ? 10 : _f, _g = _d.y, c = _g.c, d = _g.d, _h = _g.e, e = _h === void 0 ? { f: 1 } : _h;
 }
 function baz(x) { }
 var o = { x: ["string", 1], y: { c: true, d: "world", e: 3 } };

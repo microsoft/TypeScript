@@ -52,13 +52,13 @@ function a() {
         switch (_d.label) {
             case 0:
                 _loop_1 = function (i) {
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
+                    return __generator(this, function (_e) {
+                        switch (_e.label) {
                             case 0:
                                 (function () { return i; })();
                                 return [4 /*yield*/, i];
                             case 1:
-                                _a.sent();
+                                _e.sent();
                                 return [2 /*return*/];
                         }
                     });

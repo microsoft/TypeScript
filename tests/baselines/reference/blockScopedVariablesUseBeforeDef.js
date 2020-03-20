@@ -185,14 +185,14 @@ function foo10() {
 }
 function foo11() {
     function f() {
-        var _a;
-        var y = (_a = /** @class */ (function () {
+        var _b;
+        var y = (_b = /** @class */ (function () {
                 function class_3() {
                 }
                 return class_3;
             }()),
-            _a.a = x,
-            _a);
+            _b.a = x,
+            _b);
     }
     var x;
 }

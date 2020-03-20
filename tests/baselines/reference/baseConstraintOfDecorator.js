@@ -62,8 +62,8 @@ function classExtender2(superClass, _instanceModifier) {
         __extends(decoratorFunc, _super);
         function decoratorFunc() {
             var args = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i] = arguments[_i];
+            for (var _a = 0; _a < arguments.length; _a++) {
+                args[_a] = arguments[_a];
             }
             var _this = _super.apply(this, args) || this;
             _instanceModifier(_this, args);

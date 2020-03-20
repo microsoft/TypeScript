@@ -14,5 +14,5 @@ class Base {
 }
 class Derived extends Base {
     method1() { var _a; return (_a = super.method) === null || _a === void 0 ? void 0 : _a.call(this); }
-    method2() { var _a; return (_a = super["method"]) === null || _a === void 0 ? void 0 : _a.call(this); }
+    method2() { var _b; return (_b = super["method"]) === null || _b === void 0 ? void 0 : _b.call(this); }
 }

@@ -226,8 +226,8 @@ var c1 = /** @class */ (function () {
     };
     c1.prototype.privateFooWithRestParameters = function (a) {
         var rests = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rests[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            rests[_a - 1] = arguments[_a];
         }
         return a + rests.join("");
     };
@@ -245,8 +245,8 @@ var c1 = /** @class */ (function () {
     };
     c1.staticFooWithRestParameters = function (a) {
         var rests = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rests[_i - 1] = arguments[_i];
+        for (var _b = 1; _b < arguments.length; _b++) {
+            rests[_b - 1] = arguments[_b];
         }
         return a + rests.join("");
     };
@@ -264,8 +264,8 @@ var c1 = /** @class */ (function () {
     };
     c1.privateStaticFooWithRestParameters = function (a) {
         var rests = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rests[_i - 1] = arguments[_i];
+        for (var _c = 1; _c < arguments.length; _c++) {
+            rests[_c - 1] = arguments[_c];
         }
         return a + rests.join("");
     };
@@ -309,8 +309,8 @@ var c2 = /** @class */ (function () {
     };
     c2.prototype.privateFooWithRestParameters = function (a) {
         var rests = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rests[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            rests[_a - 1] = arguments[_a];
         }
         return a + rests.join("");
     };
@@ -328,8 +328,8 @@ var c2 = /** @class */ (function () {
     };
     c2.staticFooWithRestParameters = function (a) {
         var rests = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rests[_i - 1] = arguments[_i];
+        for (var _b = 1; _b < arguments.length; _b++) {
+            rests[_b - 1] = arguments[_b];
         }
         return a + rests.join("");
     };
@@ -347,8 +347,8 @@ var c2 = /** @class */ (function () {
     };
     c2.privateStaticFooWithRestParameters = function (a) {
         var rests = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rests[_i - 1] = arguments[_i];
+        for (var _c = 1; _c < arguments.length; _c++) {
+            rests[_c - 1] = arguments[_c];
         }
         return a + rests.join("");
     };

@@ -12,19 +12,19 @@ trans(function (_a) {
     var a = _a.a;
     return a;
 });
-trans(function (_a) {
-    var b = _a[0], c = _a[1];
+trans(function (_b) {
+    var b = _b[0], c = _b[1];
     return 'foo';
 });
-trans(function (_a) {
-    var _b = _a.d, e = _b[0], f = _b[1];
+trans(function (_c) {
+    var _d = _c.d, e = _d[0], f = _d[1];
     return 'foo';
 });
-trans(function (_a) {
-    var g = _a[0].g, h = _a[1].h;
+trans(function (_e) {
+    var g = _e[0].g, h = _e[1].h;
     return 'foo';
 });
-trans(function (_a) {
-    var a = _a.a, _b = _a.b, b = _b === void 0 ? 10 : _b;
+trans(function (_f) {
+    var a = _f.a, _g = _f.b, b = _g === void 0 ? 10 : _g;
     return a;
 });

@@ -74,10 +74,10 @@ function countEverything() {
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    providerA = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                    providerA = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_c) {
                         return [2 /*return*/, []];
                     }); }); };
-                    providerB = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                    providerB = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_d) {
                         return [2 /*return*/, []];
                     }); }); };
                     return [4 /*yield*/, Promise.all([

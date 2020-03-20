@@ -31,8 +31,8 @@ var Foo2 = /** @class */ (function () {
 var Foo3 = /** @class */ (function () {
     function Foo3() {
         var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
+        for (var _a = 0; _a < arguments.length; _a++) {
+            args[_a] = arguments[_a];
         }
         this.args = args;
     }

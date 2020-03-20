@@ -28,11 +28,11 @@ function propertyAccess0() {
 }
 function propertyAccess1() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
-                    y = (_a.sent()).a;
+                    y = (_b.sent()).a;
                     return [2 /*return*/];
             }
         });
@@ -40,11 +40,11 @@ function propertyAccess1() {
 }
 function callExpression0() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0: return [4 /*yield*/, x(y, z)];
                 case 1:
-                    _a.sent();
+                    _c.sent();
                     return [2 /*return*/];
             }
         });

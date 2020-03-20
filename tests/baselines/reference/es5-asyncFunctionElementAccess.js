@@ -29,11 +29,11 @@ function elementAccess0() {
 }
 function elementAccess1() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
-                    z = (_a.sent())[y];
+                    z = (_b.sent())[y];
                     return [2 /*return*/];
             }
         });
@@ -41,14 +41,14 @@ function elementAccess1() {
 }
 function elementAccess2() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _c;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
                 case 0:
-                    _a = x;
+                    _c = x;
                     return [4 /*yield*/, y];
                 case 1:
-                    z = _a[_b.sent()];
+                    z = _c[_d.sent()];
                     return [2 /*return*/];
             }
         });

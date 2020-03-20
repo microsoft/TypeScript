@@ -55,22 +55,22 @@ function foo(_a) {
     });
 }
 exports.foo = foo;
-function foo2(_a) {
-    var _b, foo, _c;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
+function foo2(_d) {
+    var _e, foo, _f;
+    return __generator(this, function (_g) {
+        switch (_g.label) {
             case 0:
-                _b = _a.foo;
-                if (!(_b === void 0)) return [3 /*break*/, 2];
+                _e = _d.foo;
+                if (!(_e === void 0)) return [3 /*break*/, 2];
                 return [4 /*yield*/, "a"];
             case 1:
-                _c = _d.sent();
+                _f = _g.sent();
                 return [3 /*break*/, 3];
             case 2:
-                _c = _b;
-                _d.label = 3;
+                _f = _e;
+                _g.label = 3;
             case 3:
-                foo = _c;
+                foo = _f;
                 return [2 /*return*/];
         }
     });

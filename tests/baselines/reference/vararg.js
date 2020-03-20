@@ -58,14 +58,14 @@ var M;
         };
         C.prototype.fnope = function (x) {
             var rest = [];
-            for (var _i = 1; _i < arguments.length; _i++) {
-                rest[_i - 1] = arguments[_i];
+            for (var _a = 1; _a < arguments.length; _a++) {
+                rest[_a - 1] = arguments[_a];
             }
         };
         C.prototype.fonly = function () {
             var rest = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                rest[_i] = arguments[_i];
+            for (var _b = 0; _b < arguments.length; _b++) {
+                rest[_b] = arguments[_b];
             }
             builder = "";
             for (var i = 0; i < rest.length; i++) {

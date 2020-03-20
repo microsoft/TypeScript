@@ -28,20 +28,20 @@ function conditional0() {
 }
 function conditional1() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
                     if (!x) return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
                 case 1:
-                    _a = _b.sent();
+                    _b = _c.sent();
                     return [3 /*break*/, 3];
                 case 2:
-                    _a = z;
-                    _b.label = 3;
+                    _b = z;
+                    _c.label = 3;
                 case 3:
-                    a = _a;
+                    a = _b;
                     return [2 /*return*/];
             }
         });
@@ -49,19 +49,19 @@ function conditional1() {
 }
 function conditional2() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _d;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
                     if (!x) return [3 /*break*/, 1];
-                    _a = y;
+                    _d = y;
                     return [3 /*break*/, 3];
                 case 1: return [4 /*yield*/, z];
                 case 2:
-                    _a = _b.sent();
-                    _b.label = 3;
+                    _d = _e.sent();
+                    _e.label = 3;
                 case 3:
-                    a = _a;
+                    a = _d;
                     return [2 /*return*/];
             }
         });

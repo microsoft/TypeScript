@@ -61,8 +61,8 @@ var c1 = /** @class */ (function () {
     };
     c1.prototype.foo1 = function (arguments) {
         var rest = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rest[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            rest[_a - 1] = arguments[_a];
         }
         var arguments = 10; // no error
     };
@@ -71,15 +71,15 @@ var c1 = /** @class */ (function () {
     };
     c1.prototype.f4 = function (i) {
         var arguments = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            arguments[_i - 1] = arguments[_i];
+        for (var _b = 1; _b < arguments.length; _b++) {
+            arguments[_b - 1] = arguments[_b];
         }
         var arguments; // no error
     };
     c1.prototype.f41 = function (arguments) {
         var rest = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rest[_i - 1] = arguments[_i];
+        for (var _c = 1; _c < arguments.length; _c++) {
+            rest[_c - 1] = arguments[_c];
         }
         var arguments; // no error
     };
@@ -93,8 +93,8 @@ var c3 = /** @class */ (function () {
     }
     c3.prototype.foo = function () {
         var restParameters = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            restParameters[_i] = arguments[_i];
+        for (var _d = 0; _d < arguments.length; _d++) {
+            restParameters[_d] = arguments[_d];
         }
         var arguments = 10; // no error
     };

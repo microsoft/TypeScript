@@ -152,7 +152,7 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPatternDefaultV
 1 >Emitted(6, 1) Source(13, 1) + SourceIndex(0)
 2 >Emitted(6, 2) Source(13, 2) + SourceIndex(0)
 ---
->>>function foo2(_a) {
+>>>function foo2(_c) {
 1->
 2 >^^^^^^^^^
 3 >         ^^^^
@@ -171,7 +171,7 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPatternDefaultV
 4 >Emitted(7, 15) Source(14, 15) + SourceIndex(0)
 5 >Emitted(7, 17) Source(14, 82) + SourceIndex(0)
 ---
->>>    var _b = _a === void 0 ? {} : _a, _c = _b.name, nameB = _c === void 0 ? "<NoName>" : _c, _d = _b.skill, skillB = _d === void 0 ? "noSkill" : _d;
+>>>    var _d = _c === void 0 ? {} : _c, _e = _d.name, nameB = _e === void 0 ? "<NoName>" : _e, _f = _d.skill, skillB = _f === void 0 ? "noSkill" : _f;
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                    ^^
@@ -240,7 +240,7 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPatternDefaultV
 1 >Emitted(10, 1) Source(16, 1) + SourceIndex(0)
 2 >Emitted(10, 2) Source(16, 2) + SourceIndex(0)
 ---
->>>function foo3(_a) {
+>>>function foo3(_g) {
 1->
 2 >^^^^^^^^^
 3 >         ^^^^
@@ -259,7 +259,7 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPatternDefaultV
 4 >Emitted(11, 15) Source(17, 15) + SourceIndex(0)
 5 >Emitted(11, 17) Source(17, 48) + SourceIndex(0)
 ---
->>>    var _b = (_a === void 0 ? {} : _a).name, name = _b === void 0 ? "<NoName>" : _b;
+>>>    var _h = (_g === void 0 ? {} : _g).name, name = _h === void 0 ? "<NoName>" : _h;
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                           ^^

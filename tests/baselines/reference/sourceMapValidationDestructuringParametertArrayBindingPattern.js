@@ -39,16 +39,16 @@ function foo1(_a) {
     var nameA = _a[1];
     console.log(nameA);
 }
-function foo2(_a) {
-    var numberB = _a[0];
+function foo2(_b) {
+    var numberB = _b[0];
     console.log(numberB);
 }
-function foo3(_a) {
-    var numberA2 = _a[0], nameA2 = _a[1], skillA2 = _a[2];
+function foo3(_c) {
+    var numberA2 = _c[0], nameA2 = _c[1], skillA2 = _c[2];
     console.log(nameA2);
 }
-function foo4(_a) {
-    var numberA3 = _a[0], robotAInfo = _a.slice(1);
+function foo4(_d) {
+    var numberA3 = _d[0], robotAInfo = _d.slice(1);
     console.log(robotAInfo);
 }
 foo1(robotA);

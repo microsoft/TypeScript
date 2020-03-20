@@ -300,8 +300,8 @@ function foo0_c(x) {
         (function () { return x_10 + a; });
     };
     var arguments_11 = arguments;
-    for (var _i = 0, _a = []; _i < _a.length; _i++) {
-        var x_10 = _a[_i];
+    for (var _b = 0, _c = []; _b < _c.length; _b++) {
+        var x_10 = _c[_b];
         _loop_11(x_10);
     }
 }

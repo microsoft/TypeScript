@@ -9,14 +9,14 @@ function baz({a2, b2: {b1, c1}}: { a2: number, b2: { b1: boolean, c1: string } }
 function foo(_a) {
     var a = _a[0], b = _a[1], c = _a[2];
 }
-function far(_a) {
-    var a = _a[0], b = _a[1][0], c = _a[2][0][0];
+function far(_b) {
+    var a = _b[0], b = _b[1][0], c = _b[2][0][0];
 }
-function bar(_a) {
-    var a1 = _a.a1, b1 = _a.b1, c1 = _a.c1;
+function bar(_c) {
+    var a1 = _c.a1, b1 = _c.b1, c1 = _c.c1;
 }
-function baz(_a) {
-    var a2 = _a.a2, _b = _a.b2, b1 = _b.b1, c1 = _b.c1;
+function baz(_d) {
+    var a2 = _d.a2, _e = _d.b2, b1 = _e.b1, c1 = _e.c1;
 }
 
 

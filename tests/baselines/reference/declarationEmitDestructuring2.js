@@ -8,14 +8,14 @@ function h1([a, [b], [[c]], {x = 10, y = [1, 2, 3], z: {a1, b1}}]){ }
 function f(_a) {
     var _b = _a === void 0 ? { x: 10, y: [2, 4, 6, 8] } : _a, _c = _b.x, x = _c === void 0 ? 10 : _c, _d = _b.y, _e = _d === void 0 ? [1, 2, 3, 4] : _d, a = _e[0], b = _e[1], c = _e[2], d = _e[3];
 }
-function g(_a) {
-    var _b = _a === void 0 ? [1, 2, 3, 4] : _a, a = _b[0], b = _b[1], c = _b[2], d = _b[3];
+function g(_f) {
+    var _g = _f === void 0 ? [1, 2, 3, 4] : _f, a = _g[0], b = _g[1], c = _g[2], d = _g[3];
 }
-function h(_a) {
-    var a = _a[0], b = _a[1][0], c = _a[2][0][0], _b = _a[3], _c = _b.x, x = _c === void 0 ? 10 : _c, _d = _b.y, a = _d[0], b = _d[1], c = _d[2], _e = _b.z, a1 = _e.a1, b1 = _e.b1;
+function h(_h) {
+    var a = _h[0], b = _h[1][0], c = _h[2][0][0], _j = _h[3], _k = _j.x, x = _k === void 0 ? 10 : _k, _l = _j.y, a = _l[0], b = _l[1], c = _l[2], _m = _j.z, a1 = _m.a1, b1 = _m.b1;
 }
-function h1(_a) {
-    var a = _a[0], b = _a[1][0], c = _a[2][0][0], _b = _a[3], _c = _b.x, x = _c === void 0 ? 10 : _c, _d = _b.y, y = _d === void 0 ? [1, 2, 3] : _d, _e = _b.z, a1 = _e.a1, b1 = _e.b1;
+function h1(_o) {
+    var a = _o[0], b = _o[1][0], c = _o[2][0][0], _p = _o[3], _q = _p.x, x = _q === void 0 ? 10 : _q, _r = _p.y, y = _r === void 0 ? [1, 2, 3] : _r, _s = _p.z, a1 = _s.a1, b1 = _s.b1;
 }
 
 

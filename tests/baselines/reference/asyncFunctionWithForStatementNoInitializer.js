@@ -76,7 +76,7 @@ function test1() {
 function test2() {
     return __awaiter(this, void 0, void 0, function () {
         var i, limit;
-        return __generator(this, function (_a) {
+        return __generator(this, function (_b) {
             i = 0;
             limit = 10;
             for (i = 1; i < limit; ++i) {
@@ -88,7 +88,7 @@ function test2() {
 function test3() {
     return __awaiter(this, void 0, void 0, function () {
         var i;
-        return __generator(this, function (_a) {
+        return __generator(this, function (_c) {
             i = 0;
             for (;; ++i) {
             }
@@ -98,7 +98,7 @@ function test3() {
 }
 function test4() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
+        return __generator(this, function (_d) {
             for (;;) {
             }
             return [2 /*return*/];

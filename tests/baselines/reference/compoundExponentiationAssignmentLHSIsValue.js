@@ -148,18 +148,18 @@ _a = Math.pow(['', ''], value), '' = _a[0], '' = _a[1];
 var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        var _a;
+        var _b;
         var _this = _super.call(this) || this;
-        (_a = _super.prototype). = Math.pow(_a., value);
+        (_b = _super.prototype). = Math.pow(_b., value);
         return _this;
     }
     Derived.prototype.foo = function () {
-        var _a;
-        (_a = _super.prototype). = Math.pow(_a., value);
+        var _c;
+        (_c = _super.prototype). = Math.pow(_c., value);
     };
     Derived.sfoo = function () {
-        var _a;
-        (_a = _super). = Math.pow(_a., value);
+        var _d;
+        (_d = _super). = Math.pow(_d., value);
     };
     return Derived;
 }(C));

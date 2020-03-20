@@ -48,33 +48,33 @@ function a0() {
 } // Error, rest parameter must be array type
 function a1() {
     var x = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i] = arguments[_i];
+    for (var _a = 0; _a < arguments.length; _a++) {
+        x[_a] = arguments[_a];
     }
 }
 function a2() {
     var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i] = arguments[_i];
+    for (var _b = 0; _b < arguments.length; _b++) {
+        a[_b] = arguments[_b];
     }
 } // Error, rest parameter must be array type
 function a3() {
     var b = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        b[_i] = arguments[_i];
+    for (var _c = 0; _c < arguments.length; _c++) {
+        b[_c] = arguments[_c];
     }
 } // Error, can't be optional
 function a4() {
     var b = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        b[_i] = arguments[_i];
+    for (var _d = 0; _d < arguments.length; _d++) {
+        b[_d] = arguments[_d];
     }
 } // Error, can't have initializer
-function a5(_a) {
-    var a = _a[0], b = _a[1], c = _a[2][0][0];
+function a5(_e) {
+    var a = _e[0], b = _e[1], c = _e[2][0][0];
 }
-function a6(_a) {
-    var a = _a[0], b = _a[1], c = _a[2], x = _a.slice(3);
+function a6(_f) {
+    var a = _f[0], b = _f[1], c = _f[2], x = _f.slice(3);
 }
 a1(1, 2, "hello", true); // Error, parameter type is (number|string)[]
 a1.apply(void 0, array2); // Error parameter type is (number|string)[]
@@ -85,8 +85,8 @@ var temp = [1, 2, 3];
 var C = /** @class */ (function () {
     function C() {
         var temp = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            temp[_i] = arguments[_i];
+        for (var _g = 0; _g < arguments.length; _g++) {
+            temp[_g] = arguments[_g];
         }
         this.temp = temp;
     } // Error, rest parameter can't have properties
@@ -95,8 +95,8 @@ var C = /** @class */ (function () {
 // Rest parameter with generic
 function foo1() {
     var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i] = arguments[_i];
+    for (var _h = 0; _h < arguments.length; _h++) {
+        a[_h] = arguments[_h];
     }
 }
 foo1(1, 2, "string", E1.a, E.b); // Error

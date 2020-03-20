@@ -75,17 +75,17 @@ function getFoo2() {
         _a;
 }
 function getFoo3() {
-    var _a;
-    return _a = /** @class */ (function () {
+    var _b;
+    return _b = /** @class */ (function () {
             function class_3() {
             }
             return class_3;
         }()),
-        _a.method1 = function (arg) {
+        _b.method1 = function (arg) {
             arg.numProp = 10;
         },
-        _a.method2 = function (arg) {
+        _b.method2 = function (arg) {
             arg.strProp = "hello";
         },
-        _a;
+        _b;
 }

@@ -28,8 +28,8 @@ var context_1 = require("./context");
 exports.context = (_a = {},
     _a[context_1.Key] = 'bar',
     _a);
-exports.withContext = function (_a) {
-    var _b = context_1.Key, value = _a[_b];
+exports.withContext = function (_b) {
+    var _c = context_1.Key, value = _b[_c];
     return value;
 };
 

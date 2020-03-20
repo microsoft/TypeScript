@@ -17,7 +17,7 @@ function bar() {
                 });
             });
         }
-        return __generator(this, function (_a) {
+        return __generator(this, function (_b) {
             return [2 /*return*/];
         });
     });

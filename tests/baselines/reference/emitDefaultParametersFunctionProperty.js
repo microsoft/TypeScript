@@ -25,8 +25,8 @@ var obj2 = {
     func4: function (x, z, y) {
         if (y === void 0) { y = "hello"; }
         var rest = [];
-        for (var _i = 3; _i < arguments.length; _i++) {
-            rest[_i - 3] = arguments[_i];
+        for (var _a = 3; _a < arguments.length; _a++) {
+            rest[_a - 3] = arguments[_a];
         }
     },
 };

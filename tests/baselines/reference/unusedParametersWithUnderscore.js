@@ -28,8 +28,8 @@ function f(a, _b, c, ___, d, e___, _f) {
 function f2(_c) {
     var _a = _c._a, __b = _c.__b;
 }
-function f3(_c) {
-    var _a = _c[0], __b = _c[2];
+function f3(_d) {
+    var _a = _d[0], __b = _d[2];
 }
 function f4() {
     var arg = [];
@@ -39,8 +39,8 @@ function f4() {
 }
 function f5() {
     var _arg = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        _arg[_i] = arguments[_i];
+    for (var _e = 0; _e < arguments.length; _e++) {
+        _arg[_e] = arguments[_e];
     }
 }
 function f6(arg, _arg) {

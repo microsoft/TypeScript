@@ -69,11 +69,11 @@ function f3(obj) {
     }
 }
 function f4() {
-    var _a, _b;
+    var _b, _c;
     var x;
     (x = 0..x); // Error
     (x = 0["x"]); // Error
-    (_a = 0, _b = "x" + "", x = _a[_b]); // Errpr
+    (_b = 0, _c = "x" + "", x = _b[_c]); // Errpr
 }
 var _a = ["foo"], key = _a[0], value = _a[1];
 value.toUpperCase(); // Error

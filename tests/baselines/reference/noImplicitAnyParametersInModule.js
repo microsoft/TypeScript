@@ -68,8 +68,8 @@ var M;
     // Implicit-'any'/'any[]' errors for x and r.
     function m_f7(x) {
         var r = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            r[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            r[_a - 1] = arguments[_a];
         }
     }
     function m_f8(x3, y3) { }
@@ -84,16 +84,16 @@ var M;
     // Implicit-'any[]' errors for r.
     var m_f13 = function () {
         var r = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            r[_i] = arguments[_i];
+        for (var _b = 0; _b < arguments.length; _b++) {
+            r[_b] = arguments[_b];
         }
         return "";
     };
     // Implicit-'any'/'any[]' errors for x and r.
     var m_f14 = function (x) {
         var r = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            r[_i - 1] = arguments[_i];
+        for (var _c = 1; _c < arguments.length; _c++) {
+            r[_c - 1] = arguments[_c];
         }
         return "";
     };

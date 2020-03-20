@@ -56,8 +56,8 @@ var A = /** @class */ (function () {
         var a = _newTarget;
         var b = function () { return _newTarget; };
     }
-    A.c = function _a() {
-        var _newTarget = this && this instanceof _a ? this.constructor : void 0;
+    A.c = function _b() {
+        var _newTarget = this && this instanceof _b ? this.constructor : void 0;
         return _newTarget;
     };
     return A;

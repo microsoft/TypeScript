@@ -35,12 +35,12 @@ function foo1(_a) {
     var _b = _a === void 0 ? ["name", ["skill1", "skill2"]] : _a, _c = _b[1], skillA = _c === void 0 ? ["noSkill", "noSkill"] : _c;
     console.log(skillA);
 }
-function foo2(_a) {
-    var _b = (_a === void 0 ? ["name", ["skill1", "skill2"]] : _a)[0], nameMB = _b === void 0 ? "noName" : _b;
+function foo2(_d) {
+    var _e = (_d === void 0 ? ["name", ["skill1", "skill2"]] : _d)[0], nameMB = _e === void 0 ? "noName" : _e;
     console.log(nameMB);
 }
-function foo3(_a) {
-    var _b = _a[0], nameMA = _b === void 0 ? "noName" : _b, _c = _a[1], _d = _c === void 0 ? ["noSkill", "noSkill"] : _c, _e = _d[0], primarySkillA = _e === void 0 ? "primary" : _e, _f = _d[1], secondarySkillA = _f === void 0 ? "secondary" : _f;
+function foo3(_f) {
+    var _g = _f[0], nameMA = _g === void 0 ? "noName" : _g, _h = _f[1], _j = _h === void 0 ? ["noSkill", "noSkill"] : _h, _k = _j[0], primarySkillA = _k === void 0 ? "primary" : _k, _l = _j[1], secondarySkillA = _l === void 0 ? "secondary" : _l;
     console.log(nameMA);
 }
 foo1(robotA);

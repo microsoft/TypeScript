@@ -36,12 +36,12 @@ function foo1(_a) {
     var nameA = _a.name;
     console.log(nameA);
 }
-function foo2(_a) {
-    var nameB = _a.name, skillB = _a.skill;
+function foo2(_b) {
+    var nameB = _b.name, skillB = _b.skill;
     console.log(nameB);
 }
-function foo3(_a) {
-    var name = _a.name;
+function foo3(_c) {
+    var name = _c.name;
     console.log(name);
 }
 foo1(robotA);

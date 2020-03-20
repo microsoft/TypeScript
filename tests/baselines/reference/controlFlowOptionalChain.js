@@ -1064,8 +1064,8 @@ function getArea(shape) {
     }
 }
 function extractCoordinates(f) {
-    var _a;
-    if (((_a = f.geometry) === null || _a === void 0 ? void 0 : _a.type) !== 'test') {
+    var _w;
+    if (((_w = f.geometry) === null || _w === void 0 ? void 0 : _w.type) !== 'test') {
         return [];
     }
     return f.geometry.coordinates;

@@ -14,8 +14,8 @@ var [a_x1, a_x2, a_x3, a_y, a_z] = [a.x1, a.x2, a.x3, a.y, a.z];
 
 //// [destructuringParameterProperties5.js]
 var C1 = /** @class */ (function () {
-    function C1(_a) {
-        var _b = _a[0], x1 = _b.x1, x2 = _b.x2, x3 = _b.x3, y = _a[1], z = _a[2];
+    function C1(_b) {
+        var _c = _b[0], x1 = _c.x1, x2 = _c.x2, x3 = _c.x3, y = _b[1], z = _b[2];
         var foo = x1 || x2 || x3 || y || z;
         var bar = this.x1 || this.x2 || this.x3 || this.y || this.z;
     }

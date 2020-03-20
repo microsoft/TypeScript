@@ -100,8 +100,8 @@ var ClassA = /** @class */ (function () {
     }
     ClassA.prototype.foo = function () {
         var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
+        for (var _a = 0; _a < arguments.length; _a++) {
+            args[_a] = arguments[_a];
         }
     };
     __decorate([

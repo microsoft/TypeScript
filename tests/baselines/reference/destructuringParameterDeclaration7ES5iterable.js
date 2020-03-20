@@ -33,10 +33,10 @@ var __read = (this && this.__read) || function (o, n) {
 function foo(_a, _b) {
     var foo = _b.foo, bar = _b.bar;
 }
-function baz(_a, _b) {
-    var foo = _b.foo, bar = _b.bar;
+function baz(_c, _d) {
+    var foo = _d.foo, bar = _d.bar;
 }
-function one(_a, _b) { }
-function two(_a, _b) {
-    var _c = __read(_b, 3), a = _c[0], b = _c[1], c = _c[2];
+function one(_e, _f) { }
+function two(_g, _h) {
+    var _j = __read(_h, 3), a = _j[0], b = _j[1], c = _j[2];
 }

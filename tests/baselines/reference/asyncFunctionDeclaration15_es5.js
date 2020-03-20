@@ -31,121 +31,121 @@ function fn1() {
     }); });
 } // valid: Promise<void>
 function fn2() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_b) {
         return [2 /*return*/];
     }); });
 } // error
 function fn3() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_c) {
         return [2 /*return*/];
     }); });
 } // error
 function fn4() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_d) {
         return [2 /*return*/];
     }); });
 } // error
 function fn5() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_e) {
         return [2 /*return*/];
     }); });
 } // error
 function fn6() {
-    return __awaiter(this, void 0, Thenable, function () { return __generator(this, function (_a) {
+    return __awaiter(this, void 0, Thenable, function () { return __generator(this, function (_f) {
         return [2 /*return*/];
     }); });
 } // error
 function fn7() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_g) {
         return [2 /*return*/];
     }); });
 } // valid: Promise<void>
 function fn8() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_h) {
         return [2 /*return*/, 1];
     }); });
 } // valid: Promise<number>
 function fn9() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_j) {
         return [2 /*return*/, null];
     }); });
 } // valid: Promise<any>
 function fn10() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_k) {
         return [2 /*return*/, undefined];
     }); });
 } // valid: Promise<any>
 function fn11() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_l) {
         return [2 /*return*/, a];
     }); });
 } // valid: Promise<any>
 function fn12() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_m) {
         return [2 /*return*/, obj];
     }); });
 } // valid: Promise<{ then: string; }>
 function fn13() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_o) {
         return [2 /*return*/, thenable];
     }); });
 } // error
 function fn14() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        switch (_a.label) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_p) {
+        switch (_p.label) {
             case 0: return [4 /*yield*/, 1];
             case 1:
-                _a.sent();
+                _p.sent();
                 return [2 /*return*/];
         }
     }); });
 } // valid: Promise<void>
 function fn15() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        switch (_a.label) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_q) {
+        switch (_q.label) {
             case 0: return [4 /*yield*/, null];
             case 1:
-                _a.sent();
+                _q.sent();
                 return [2 /*return*/];
         }
     }); });
 } // valid: Promise<void>
 function fn16() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        switch (_a.label) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_r) {
+        switch (_r.label) {
             case 0: return [4 /*yield*/, undefined];
             case 1:
-                _a.sent();
+                _r.sent();
                 return [2 /*return*/];
         }
     }); });
 } // valid: Promise<void>
 function fn17() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        switch (_a.label) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_s) {
+        switch (_s.label) {
             case 0: return [4 /*yield*/, a];
             case 1:
-                _a.sent();
+                _s.sent();
                 return [2 /*return*/];
         }
     }); });
 } // valid: Promise<void>
 function fn18() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        switch (_a.label) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_t) {
+        switch (_t.label) {
             case 0: return [4 /*yield*/, obj];
             case 1:
-                _a.sent();
+                _t.sent();
                 return [2 /*return*/];
         }
     }); });
 } // valid: Promise<void>
 function fn19() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        switch (_a.label) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_u) {
+        switch (_u.label) {
             case 0: return [4 /*yield*/, thenable];
             case 1:
-                _a.sent();
+                _u.sent();
                 return [2 /*return*/];
         }
     }); });

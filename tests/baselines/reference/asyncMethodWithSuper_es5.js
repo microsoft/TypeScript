@@ -91,7 +91,7 @@ var B = /** @class */ (function (_super) {
     B.prototype.advanced = function () {
         return __awaiter(this, void 0, void 0, function () {
             var f, a, b;
-            return __generator(this, function (_a) {
+            return __generator(this, function (_b) {
                 f = function () { };
                 // call with property access
                 _super.prototype.x.call(this);

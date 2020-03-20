@@ -163,7 +163,7 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPattern.t
 1 >Emitted(5, 1) Source(15, 1) + SourceIndex(0)
 2 >Emitted(5, 2) Source(15, 2) + SourceIndex(0)
 ---
->>>function foo2(_a) {
+>>>function foo2(_c) {
 1->
 2 >^^^^^^^^^
 3 >         ^^^^
@@ -182,7 +182,7 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPattern.t
 4 >Emitted(6, 15) Source(16, 15) + SourceIndex(0)
 5 >Emitted(6, 17) Source(16, 91) + SourceIndex(0)
 ---
->>>    var nameC = _a.name, _b = _a.skills, primaryB = _b.primary, secondaryB = _b.secondary;
+>>>    var nameC = _c.name, _d = _c.skills, primaryB = _d.primary, secondaryB = _d.secondary;
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^
 3 >                       ^^
@@ -245,7 +245,7 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPattern.t
 1 >Emitted(9, 1) Source(18, 1) + SourceIndex(0)
 2 >Emitted(9, 2) Source(18, 2) + SourceIndex(0)
 ---
->>>function foo3(_a) {
+>>>function foo3(_e) {
 1->
 2 >^^^^^^^^^
 3 >         ^^^^
@@ -264,7 +264,7 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPattern.t
 4 >Emitted(10, 15) Source(19, 15) + SourceIndex(0)
 5 >Emitted(10, 17) Source(19, 32) + SourceIndex(0)
 ---
->>>    var skills = _a.skills;
+>>>    var skills = _e.skills;
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^
 3 >                          ^^^^^^^->

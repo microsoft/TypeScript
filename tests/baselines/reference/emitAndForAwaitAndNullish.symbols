@@ -1,0 +1,57 @@
+=== tests/cases/compiler/emitAndForAwaitAndNullish.ts ===
+async function* getIterator() {
+>getIterator : Symbol(getIterator, Decl(emitAndForAwaitAndNullish.ts, 0, 0))
+
+    yield { member: 1 };
+>member : Symbol(member, Decl(emitAndForAwaitAndNullish.ts, 1, 11))
+
+    yield { member: 2 };
+>member : Symbol(member, Decl(emitAndForAwaitAndNullish.ts, 2, 11))
+
+    yield { member: 3 };
+>member : Symbol(member, Decl(emitAndForAwaitAndNullish.ts, 3, 11))
+}
+async function* outerIterator() {
+>outerIterator : Symbol(outerIterator, Decl(emitAndForAwaitAndNullish.ts, 4, 1))
+
+    var _a, _b;
+>_a : Symbol(_a, Decl(emitAndForAwaitAndNullish.ts, 6, 7))
+>_b : Symbol(_b, Decl(emitAndForAwaitAndNullish.ts, 6, 11))
+
+    for await (const row of getIterator()) {
+>row : Symbol(row, Decl(emitAndForAwaitAndNullish.ts, 7, 20))
+>getIterator : Symbol(getIterator, Decl(emitAndForAwaitAndNullish.ts, 0, 0))
+
+        // This line causes a name collision with by setting a variable `_b`,
+        // which is also used to hold the iterator above:
+        if (((_a = row.member) !== null && _a !== void 0 ? _a : null) === ((_b = row.member) !== null && _b !== void 0 ? _b : null)) {
+>_a : Symbol(_a, Decl(emitAndForAwaitAndNullish.ts, 6, 7))
+>row.member : Symbol(member, Decl(emitAndForAwaitAndNullish.ts, 1, 11))
+>row : Symbol(row, Decl(emitAndForAwaitAndNullish.ts, 7, 20))
+>member : Symbol(member, Decl(emitAndForAwaitAndNullish.ts, 1, 11))
+>_a : Symbol(_a, Decl(emitAndForAwaitAndNullish.ts, 6, 7))
+>_a : Symbol(_a, Decl(emitAndForAwaitAndNullish.ts, 6, 7))
+>_b : Symbol(_b, Decl(emitAndForAwaitAndNullish.ts, 6, 11))
+>row.member : Symbol(member, Decl(emitAndForAwaitAndNullish.ts, 1, 11))
+>row : Symbol(row, Decl(emitAndForAwaitAndNullish.ts, 7, 20))
+>member : Symbol(member, Decl(emitAndForAwaitAndNullish.ts, 1, 11))
+>_b : Symbol(_b, Decl(emitAndForAwaitAndNullish.ts, 6, 11))
+>_b : Symbol(_b, Decl(emitAndForAwaitAndNullish.ts, 6, 11))
+
+            yield row;
+>row : Symbol(row, Decl(emitAndForAwaitAndNullish.ts, 7, 20))
+        }
+    }
+}
+async function main() {
+>main : Symbol(main, Decl(emitAndForAwaitAndNullish.ts, 14, 1))
+
+    for await (const row of outerIterator()) {
+>row : Symbol(row, Decl(emitAndForAwaitAndNullish.ts, 16, 20))
+>outerIterator : Symbol(outerIterator, Decl(emitAndForAwaitAndNullish.ts, 4, 1))
+
+    }
+}
+main();
+>main : Symbol(main, Decl(emitAndForAwaitAndNullish.ts, 14, 1))
+

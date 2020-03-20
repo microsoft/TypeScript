@@ -60,8 +60,8 @@ var fResult2 = f(world);
 var fResult3 = f(helloOrWorld);
 function g() {
     var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
+    for (var _a = 0; _a < arguments.length; _a++) {
+        args[_a] = arguments[_a];
     }
     return undefined;
 }

@@ -36,9 +36,9 @@ class Derived extends Base {
         const _super = Object.create(null, {
             method: { get: () => super.method }
         });
-        var _a;
+        var _b;
         return __awaiter(this, void 0, void 0, function* () {
-            return (_a = _super.method) === null || _a === void 0 ? void 0 : _a.call(this);
+            return (_b = _super.method) === null || _b === void 0 ? void 0 : _b.call(this);
         });
     }
 }

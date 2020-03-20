@@ -54,11 +54,11 @@ function empty() {
 }
 function singleAwait() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
-                    _a.sent();
+                    _b.sent();
                     return [2 /*return*/];
             }
         });

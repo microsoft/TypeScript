@@ -36,12 +36,12 @@ function foo1(_a) {
     var _b = (_a === void 0 ? {} : _a).name, nameA = _b === void 0 ? "<NoName>" : _b;
     console.log(nameA);
 }
-function foo2(_a) {
-    var _b = _a === void 0 ? {} : _a, _c = _b.name, nameB = _c === void 0 ? "<NoName>" : _c, _d = _b.skill, skillB = _d === void 0 ? "noSkill" : _d;
+function foo2(_c) {
+    var _d = _c === void 0 ? {} : _c, _e = _d.name, nameB = _e === void 0 ? "<NoName>" : _e, _f = _d.skill, skillB = _f === void 0 ? "noSkill" : _f;
     console.log(nameB);
 }
-function foo3(_a) {
-    var _b = (_a === void 0 ? {} : _a).name, name = _b === void 0 ? "<NoName>" : _b;
+function foo3(_g) {
+    var _h = (_g === void 0 ? {} : _g).name, name = _h === void 0 ? "<NoName>" : _h;
     console.log(name);
 }
 foo1(robotA);

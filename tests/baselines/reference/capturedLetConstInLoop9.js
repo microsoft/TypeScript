@@ -178,16 +178,16 @@ for (var x = 0; x < 1; ++x) {
 }
 function foo() {
     var _loop_3 = function (a) {
-        var _a;
+        var _b;
         if (a === 1) {
             return "break";
         }
         if (a === 2) {
             return "break-l0";
         }
-        for (var _i = 0, _b = []; _i < _b.length; _i++) {
-            var b = _b[_i];
-            _a = [{ x: 1, y: 2 }][0], x = _a.x, z = _a.y;
+        for (var _c = 0, _d = []; _c < _d.length; _c++) {
+            var b = _d[_c];
+            _b = [{ x: 1, y: 2 }][0], x = _b.x, z = _b.y;
             if (b === 1) {
                 break;
             }
@@ -200,8 +200,8 @@ function foo() {
             return { value: 50 };
         }
         var _loop_4 = function (b) {
-            var _a;
-            _a = [{ x1: 1, y: arguments_1.length }][0], x1 = _a.x1, z1 = _a.y;
+            var _g;
+            _g = [{ x1: 1, y: arguments_1.length }][0], x1 = _g.x1, z1 = _g.y;
             if (b === 1) {
                 return "break";
             }
@@ -211,8 +211,8 @@ function foo() {
             (function () { return b; });
             return { value: 100 };
         };
-        for (var _c = 0, _d = []; _c < _d.length; _c++) {
-            var b = _d[_c];
+        for (var _e = 0, _f = []; _e < _f.length; _e++) {
+            var b = _f[_e];
             var state_2 = _loop_4(b);
             if (typeof state_2 === "object")
                 return state_2;
@@ -242,8 +242,8 @@ function foo() {
     use(z1);
 }
 function foo2() {
-    for (var _i = 0, _a = []; _i < _a.length; _i++) {
-        var x = _a[_i];
+    for (var _h = 0, _j = []; _h < _j.length; _h++) {
+        var x = _j[_h];
         if (x === 1) {
             break;
         }
@@ -262,8 +262,8 @@ function foo2() {
             case 1: break;
             case 2: continue;
         }
-        for (var _b = 0, _c = []; _b < _c.length; _b++) {
-            var y = _c[_b];
+        for (var _k = 0, _l = []; _k < _l.length; _k++) {
+            var y = _l[_k];
             switch (y) {
                 case 1: break;
                 case 2: continue;
@@ -293,8 +293,8 @@ function foo3() {
         (function () { return y + z + arguments.length; });
     };
     var arguments_2 = arguments;
-    for (var _i = 0, _a = []; _i < _a.length; _i++) {
-        var y = _a[_i];
+    for (var _m = 0, _o = []; _m < _o.length; _m++) {
+        var y = _o[_m];
         _loop_6(y);
     }
 }

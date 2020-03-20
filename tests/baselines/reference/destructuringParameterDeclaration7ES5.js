@@ -17,10 +17,10 @@ function two([], [a, b, c]: number[]) {}
 function foo(_a, _b) {
     var foo = _b.foo, bar = _b.bar;
 }
-function baz(_a, _b) {
-    var foo = _b.foo, bar = _b.bar;
+function baz(_c, _d) {
+    var foo = _d.foo, bar = _d.bar;
 }
-function one(_a, _b) { }
-function two(_a, _b) {
-    var a = _b[0], b = _b[1], c = _b[2];
+function one(_e, _f) { }
+function two(_g, _h) {
+    var a = _h[0], b = _h[1], c = _h[2];
 }

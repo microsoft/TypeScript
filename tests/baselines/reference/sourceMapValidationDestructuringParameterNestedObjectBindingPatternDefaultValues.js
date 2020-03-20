@@ -50,12 +50,12 @@ function foo1(_a) {
     var _b = (_a === void 0 ? robotA : _a).skills, _c = _b === void 0 ? { primary: "SomeSkill", secondary: "someSkill" } : _b, _d = _c.primary, primaryA = _d === void 0 ? "primary" : _d, _e = _c.secondary, secondaryA = _e === void 0 ? "secondary" : _e;
     console.log(primaryA);
 }
-function foo2(_a) {
-    var _b = _a === void 0 ? robotA : _a, _c = _b.name, nameC = _c === void 0 ? "name" : _c, _d = _b.skills, _e = _d === void 0 ? { primary: "SomeSkill", secondary: "someSkill" } : _d, _f = _e.primary, primaryB = _f === void 0 ? "primary" : _f, _g = _e.secondary, secondaryB = _g === void 0 ? "secondary" : _g;
+function foo2(_f) {
+    var _g = _f === void 0 ? robotA : _f, _h = _g.name, nameC = _h === void 0 ? "name" : _h, _j = _g.skills, _k = _j === void 0 ? { primary: "SomeSkill", secondary: "someSkill" } : _j, _l = _k.primary, primaryB = _l === void 0 ? "primary" : _l, _m = _k.secondary, secondaryB = _m === void 0 ? "secondary" : _m;
     console.log(secondaryB);
 }
-function foo3(_a) {
-    var _b = (_a === void 0 ? robotA : _a).skills, skills = _b === void 0 ? { primary: "SomeSkill", secondary: "someSkill" } : _b;
+function foo3(_o) {
+    var _p = (_o === void 0 ? robotA : _o).skills, skills = _p === void 0 ? { primary: "SomeSkill", secondary: "someSkill" } : _p;
     console.log(skills.primary);
 }
 foo1(robotA);

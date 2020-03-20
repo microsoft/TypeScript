@@ -127,7 +127,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 1 >Emitted(5, 1) Source(9, 1) + SourceIndex(0)
 2 >Emitted(5, 2) Source(9, 2) + SourceIndex(0)
 ---
->>>function foo2(_a) {
+>>>function foo2(_d) {
 1->
 2 >^^^^^^^^^
 3 >         ^^^^
@@ -147,7 +147,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 4 >Emitted(6, 15) Source(11, 15) + SourceIndex(0)
 5 >Emitted(6, 17) Source(11, 60) + SourceIndex(0)
 ---
->>>    var _b = (_a === void 0 ? [-1, "name", "skill"] : _a)[0], numberB = _b === void 0 ? -1 : _b;
+>>>    var _e = (_d === void 0 ? [-1, "name", "skill"] : _d)[0], numberB = _e === void 0 ? -1 : _e;
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                            ^^
@@ -198,7 +198,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 1 >Emitted(9, 1) Source(13, 1) + SourceIndex(0)
 2 >Emitted(9, 2) Source(13, 2) + SourceIndex(0)
 ---
->>>function foo3(_a) {
+>>>function foo3(_f) {
 1->
 2 >^^^^^^^^^
 3 >         ^^^^
@@ -218,7 +218,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 4 >Emitted(10, 15) Source(15, 15) + SourceIndex(0)
 5 >Emitted(10, 17) Source(15, 97) + SourceIndex(0)
 ---
->>>    var _b = _a === void 0 ? [-1, "name", "skill"] : _a, _c = _b[0], numberA2 = _c === void 0 ? -1 : _c, _d = _b[1], nameA2 = _d === void 0 ? "name" : _d, _e = _b[2], skillA2 = _e === void 0 ? "skill" : _e;
+>>>    var _g = _f === void 0 ? [-1, "name", "skill"] : _f, _h = _g[0], numberA2 = _h === void 0 ? -1 : _h, _j = _g[1], nameA2 = _j === void 0 ? "name" : _j, _k = _g[2], skillA2 = _k === void 0 ? "skill" : _k;
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                       ^^
@@ -299,7 +299,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 1 >Emitted(13, 1) Source(17, 1) + SourceIndex(0)
 2 >Emitted(13, 2) Source(17, 2) + SourceIndex(0)
 ---
->>>function foo4(_a) {
+>>>function foo4(_l) {
 1->
 2 >^^^^^^^^^
 3 >         ^^^^
@@ -319,7 +319,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 4 >Emitted(14, 15) Source(19, 15) + SourceIndex(0)
 5 >Emitted(14, 17) Source(19, 76) + SourceIndex(0)
 ---
->>>    var _b = _a === void 0 ? [-1, "name", "skill"] : _a, _c = _b[0], numberA3 = _c === void 0 ? -1 : _c, robotAInfo = _b.slice(1);
+>>>    var _m = _l === void 0 ? [-1, "name", "skill"] : _l, _o = _m[0], numberA3 = _o === void 0 ? -1 : _o, robotAInfo = _m.slice(1);
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                       ^^

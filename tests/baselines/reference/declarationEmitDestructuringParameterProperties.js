@@ -24,14 +24,14 @@ var C1 = /** @class */ (function () {
     return C1;
 }());
 var C2 = /** @class */ (function () {
-    function C2(_a) {
-        var x = _a[0], y = _a[1], z = _a[2];
+    function C2(_b) {
+        var x = _b[0], y = _b[1], z = _b[2];
     }
     return C2;
 }());
 var C3 = /** @class */ (function () {
-    function C3(_a) {
-        var x = _a.x, y = _a.y, z = _a.z;
+    function C3(_c) {
+        var x = _c.x, y = _c.y, z = _c.z;
     }
     return C3;
 }());

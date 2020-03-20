@@ -267,8 +267,8 @@ var r10arg1 = function () {
 };
 var r10arg2 = function () {
     var x = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i] = arguments[_i];
+    for (var _a = 0; _a < arguments.length; _a++) {
+        x[_a] = arguments[_a];
     }
     return null;
 };

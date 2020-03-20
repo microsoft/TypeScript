@@ -78,21 +78,21 @@ function rest1(a) {
     'use strict';
     if (a === void 0) { a = 1; }
     var args = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        args[_i - 1] = arguments[_i];
+    for (var _a = 1; _a < arguments.length; _a++) {
+        args[_a - 1] = arguments[_a];
     }
 }
 function paramDefault(param) {
     'use strict';
     if (param === void 0) { param = 1; }
 }
-function objectBindingPattern(_a) {
+function objectBindingPattern(_b) {
     'use strict';
-    var foo = _a.foo;
+    var foo = _b.foo;
 }
-function arrayBindingPattern(_a) {
+function arrayBindingPattern(_c) {
     'use strict';
-    var foo = _a[0];
+    var foo = _c[0];
 }
 function manyParameter(a, b) {
     "use strict";

@@ -27,8 +27,8 @@ function foo1(_a) {
     var x = _a[0];
     return undefined;
 }
-function foo2(_a) {
-    var x = _a[0];
+function foo2(_b) {
+    var x = _b[0];
     return undefined;
 }
 var x1 = foo1([{ a: "str" }]);

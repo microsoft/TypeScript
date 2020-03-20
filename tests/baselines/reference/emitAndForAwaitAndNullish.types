@@ -1,0 +1,93 @@
+=== tests/cases/compiler/emitAndForAwaitAndNullish.ts ===
+async function* getIterator() {
+>getIterator : () => AsyncGenerator<{ member: number; }, void, unknown>
+
+    yield { member: 1 };
+>yield { member: 1 } : any
+>{ member: 1 } : { member: number; }
+>member : number
+>1 : 1
+
+    yield { member: 2 };
+>yield { member: 2 } : any
+>{ member: 2 } : { member: number; }
+>member : number
+>2 : 2
+
+    yield { member: 3 };
+>yield { member: 3 } : any
+>{ member: 3 } : { member: number; }
+>member : number
+>3 : 3
+}
+async function* outerIterator() {
+>outerIterator : () => AsyncGenerator<{ member: number; }, void, unknown>
+
+    var _a, _b;
+>_a : any
+>_b : any
+
+    for await (const row of getIterator()) {
+>row : { member: number; }
+>getIterator() : AsyncGenerator<{ member: number; }, void, unknown>
+>getIterator : () => AsyncGenerator<{ member: number; }, void, unknown>
+
+        // This line causes a name collision with by setting a variable `_b`,
+        // which is also used to hold the iterator above:
+        if (((_a = row.member) !== null && _a !== void 0 ? _a : null) === ((_b = row.member) !== null && _b !== void 0 ? _b : null)) {
+>((_a = row.member) !== null && _a !== void 0 ? _a : null) === ((_b = row.member) !== null && _b !== void 0 ? _b : null) : boolean
+>((_a = row.member) !== null && _a !== void 0 ? _a : null) : any
+>(_a = row.member) !== null && _a !== void 0 ? _a : null : any
+>(_a = row.member) !== null && _a !== void 0 : boolean
+>(_a = row.member) !== null : boolean
+>(_a = row.member) : number
+>_a = row.member : number
+>_a : any
+>row.member : number
+>row : { member: number; }
+>member : number
+>null : null
+>_a !== void 0 : boolean
+>_a : any
+>void 0 : undefined
+>0 : 0
+>_a : any
+>null : null
+>((_b = row.member) !== null && _b !== void 0 ? _b : null) : any
+>(_b = row.member) !== null && _b !== void 0 ? _b : null : any
+>(_b = row.member) !== null && _b !== void 0 : boolean
+>(_b = row.member) !== null : boolean
+>(_b = row.member) : number
+>_b = row.member : number
+>_b : any
+>row.member : number
+>row : { member: number; }
+>member : number
+>null : null
+>_b !== void 0 : boolean
+>_b : any
+>void 0 : undefined
+>0 : 0
+>_b : any
+>null : null
+
+            yield row;
+>yield row : any
+>row : { member: number; }
+        }
+    }
+}
+async function main() {
+>main : () => Promise<void>
+
+    for await (const row of outerIterator()) {
+>row : { member: number; }
+>outerIterator() : AsyncGenerator<{ member: number; }, void, unknown>
+>outerIterator : () => AsyncGenerator<{ member: number; }, void, unknown>
+
+    }
+}
+main();
+>main() : Promise<void>
+>main : () => Promise<void>
+

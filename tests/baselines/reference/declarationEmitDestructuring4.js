@@ -16,15 +16,15 @@ function baz4({} = { x: 10 }) { }
 // we will not make any modification and will emit
 // the similar binding pattern users' have written
 function baz(_a) { }
-function baz1(_a) {
-    _a = [1, 2, 3];
+function baz1(_b) {
+    _b = [1, 2, 3];
 }
-function baz2(_a) {
-    var _b = (_a === void 0 ? [[1, 2, 3]] : _a)[0];
+function baz2(_c) {
+    var _d = (_c === void 0 ? [[1, 2, 3]] : _c)[0];
 }
-function baz3(_a) { }
-function baz4(_a) {
-    _a = { x: 10 };
+function baz3(_e) { }
+function baz4(_f) {
+    _f = { x: 10 };
 }
 
 

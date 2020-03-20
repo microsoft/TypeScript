@@ -44,11 +44,11 @@ function fn1() {
                 case 0:
                     ar = [];
                     _loop_1 = function (i) {
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
                                 case 0: return [4 /*yield*/, 1];
                                 case 1:
-                                    _a.sent();
+                                    _b.sent();
                                     ar.push(function () { return i; });
                                     return [2 /*return*/];
                             }
@@ -73,31 +73,31 @@ function fn1() {
 function fn2() {
     return __awaiter(this, void 0, void 0, function () {
         var ar, _loop_2, i, state_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
                     ar = [];
                     _loop_2 = function (i) {
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
+                        return __generator(this, function (_d) {
+                            switch (_d.label) {
                                 case 0: return [4 /*yield*/, 1];
                                 case 1:
-                                    _a.sent();
+                                    _d.sent();
                                     ar.push(function () { return i; });
                                     return [2 /*return*/, "break"];
                             }
                         });
                     };
                     i = 0;
-                    _a.label = 1;
+                    _c.label = 1;
                 case 1:
                     if (!(i < 1)) return [3 /*break*/, 4];
                     return [5 /*yield**/, _loop_2(i)];
                 case 2:
-                    state_1 = _a.sent();
+                    state_1 = _c.sent();
                     if (state_1 === "break")
                         return [3 /*break*/, 4];
-                    _a.label = 3;
+                    _c.label = 3;
                 case 3:
                     i++;
                     return [3 /*break*/, 1];
@@ -109,29 +109,29 @@ function fn2() {
 function fn3() {
     return __awaiter(this, void 0, void 0, function () {
         var ar, _loop_3, i;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
                     ar = [];
                     _loop_3 = function (i) {
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
+                        return __generator(this, function (_f) {
+                            switch (_f.label) {
                                 case 0: return [4 /*yield*/, 1];
                                 case 1:
-                                    _a.sent();
+                                    _f.sent();
                                     ar.push(function () { return i; });
                                     return [2 /*return*/, "continue"];
                             }
                         });
                     };
                     i = 0;
-                    _a.label = 1;
+                    _e.label = 1;
                 case 1:
                     if (!(i < 1)) return [3 /*break*/, 4];
                     return [5 /*yield**/, _loop_3(i)];
                 case 2:
-                    _a.sent();
-                    _a.label = 3;
+                    _e.sent();
+                    _e.label = 3;
                 case 3:
                     i++;
                     return [3 /*break*/, 1];
@@ -143,31 +143,31 @@ function fn3() {
 function fn4() {
     return __awaiter(this, void 0, void 0, function () {
         var ar, _loop_4, i, state_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        return __generator(this, function (_g) {
+            switch (_g.label) {
                 case 0:
                     ar = [];
                     _loop_4 = function (i) {
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
+                        return __generator(this, function (_h) {
+                            switch (_h.label) {
                                 case 0: return [4 /*yield*/, 1];
                                 case 1:
-                                    _a.sent();
+                                    _h.sent();
                                     ar.push(function () { return i; });
                                     return [2 /*return*/, { value: 1 }];
                             }
                         });
                     };
                     i = 0;
-                    _a.label = 1;
+                    _g.label = 1;
                 case 1:
                     if (!(i < 1)) return [3 /*break*/, 4];
                     return [5 /*yield**/, _loop_4(i)];
                 case 2:
-                    state_2 = _a.sent();
+                    state_2 = _g.sent();
                     if (typeof state_2 === "object")
                         return [2 /*return*/, state_2.value];
-                    _a.label = 3;
+                    _g.label = 3;
                 case 3:
                     i++;
                     return [3 /*break*/, 1];

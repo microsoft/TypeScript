@@ -16,15 +16,15 @@ function foo() {
 foo(); // ok
 function foo2(a) {
     var b = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        b[_i - 1] = arguments[_i];
+    for (var _a = 1; _a < arguments.length; _a++) {
+        b[_a - 1] = arguments[_a];
     }
 }
 foo2(); // should be an error
 function foo3(a) {
     var b = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        b[_i - 1] = arguments[_i];
+    for (var _b = 1; _b < arguments.length; _b++) {
+        b[_b - 1] = arguments[_b];
     }
 }
 foo3(); // error but shouldn't be

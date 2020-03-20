@@ -34,6 +34,6 @@ var Derived = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Derived.prototype.method1 = function () { var _a; return (_a = _super.prototype.method) === null || _a === void 0 ? void 0 : _a.call(this); };
-    Derived.prototype.method2 = function () { var _a; return (_a = _super.prototype["method"]) === null || _a === void 0 ? void 0 : _a.call(this); };
+    Derived.prototype.method2 = function () { var _b; return (_b = _super.prototype["method"]) === null || _b === void 0 ? void 0 : _b.call(this); };
     return Derived;
 }(Base));

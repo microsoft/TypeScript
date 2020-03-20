@@ -26,8 +26,8 @@ var f1NoError = function (_i) {
 };
 var f2 = function () {
     var restParameters = [];
-    for (var _a = 0; _a < arguments.length; _a++) {
-        restParameters[_a] = arguments[_a];
+    for (var _b = 0; _b < arguments.length; _b++) {
+        restParameters[_b] = arguments[_b];
     }
     var _i = 10; // No Error
 };

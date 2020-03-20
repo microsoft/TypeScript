@@ -39,28 +39,28 @@ var x = 0;
 (_a = a.x, x = _a === void 0 ? 1 : _a);
 // Repro from #26235
 function f1(options) {
-    var _a;
-    var _b = options || {}, color = _b.color, width = _b.width;
-    (_a = options || {}, color = _a.color, width = _a.width);
+    var _b;
+    var _c = options || {}, color = _c.color, width = _c.width;
+    (_b = options || {}, color = _b.color, width = _b.width);
     var x1 = (options || {}).color;
     var x2 = (options || {})["color"];
 }
 function f2(options) {
-    var _a;
-    var _b = options || [], str = _b[0], num = _b[1];
-    _a = options || [], str = _a[0], num = _a[1];
+    var _d;
+    var _e = options || [], str = _e[0], num = _e[1];
+    _d = options || [], str = _d[0], num = _d[1];
     var x1 = (options || {})[0];
 }
 function f3(options) {
-    var _a;
-    var _b = options || {}, color = _b.color, width = _b.width;
-    (_a = options || {}, color = _a.color, width = _a.width);
+    var _f;
+    var _g = options || {}, color = _g.color, width = _g.width;
+    (_f = options || {}, color = _f.color, width = _f.width);
     var x1 = (options || {}).color;
     var x2 = (options || {})["color"];
 }
 function f4(options) {
-    var _a;
-    var _b = options || [], str = _b[0], num = _b[1];
-    _a = options || [], str = _a[0], num = _a[1];
+    var _h;
+    var _j = options || [], str = _j[0], num = _j[1];
+    _h = options || [], str = _h[0], num = _h[1];
     var x1 = (options || {})[0];
 }

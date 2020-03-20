@@ -53,8 +53,8 @@ function f1() {
 }
 function f2() {
     var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
+    for (var _a = 0; _a < arguments.length; _a++) {
+        args[_a] = arguments[_a];
     }
     f0.apply(void 0, args);
     f1('abc', 'def');
@@ -66,8 +66,8 @@ function f2() {
 }
 function f4() {
     var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
+    for (var _b = 0; _b < arguments.length; _b++) {
+        args[_b] = arguments[_b];
     }
     args[0] = 'abc'; // Error
 }

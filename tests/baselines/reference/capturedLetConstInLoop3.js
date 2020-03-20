@@ -352,8 +352,8 @@ function foo0_c(x) {
         (function () { return x_11 + v; });
     };
     var v;
-    for (var _i = 0, _a = []; _i < _a.length; _i++) {
-        var x_11 = _a[_i];
+    for (var _b = 0, _c = []; _b < _c.length; _b++) {
+        var x_11 = _c[_b];
         _loop_11(x_11);
     }
     use(v);

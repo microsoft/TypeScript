@@ -51,8 +51,8 @@ function TodoList(_a) {
     var todos = _a.todos;
     return React.createElement("div", null, React.createElement(Todo, { key: todos[0].id, todo: todos[0].todo }));
 }
-function TodoListNoError(_a) {
-    var todos = _a.todos;
+function TodoListNoError(_b) {
+    var todos = _b.todos;
     // any is not checked
     return React.createElement("div", null, React.createElement(Todo, { key: todos[0].id, todo: todos[0].todo }));
 }

@@ -42,16 +42,16 @@ function forStatement0() {
 }
 function forStatement1() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
-                    _a.sent();
-                    _a.label = 2;
+                    _b.sent();
+                    _b.label = 2;
                 case 2:
                     if (!y) return [3 /*break*/, 4];
                     a;
-                    _a.label = 3;
+                    _b.label = 3;
                 case 3:
                     z;
                     return [3 /*break*/, 2];
@@ -62,16 +62,16 @@ function forStatement1() {
 }
 function forStatement2() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
                     x;
-                    _a.label = 1;
+                    _c.label = 1;
                 case 1: return [4 /*yield*/, y];
                 case 2:
-                    if (!_a.sent()) return [3 /*break*/, 4];
+                    if (!_c.sent()) return [3 /*break*/, 4];
                     a;
-                    _a.label = 3;
+                    _c.label = 3;
                 case 3:
                     z;
                     return [3 /*break*/, 1];
@@ -82,18 +82,18 @@ function forStatement2() {
 }
 function forStatement3() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        return __generator(this, function (_d) {
+            switch (_d.label) {
                 case 0:
                     x;
-                    _a.label = 1;
+                    _d.label = 1;
                 case 1:
                     if (!y) return [3 /*break*/, 4];
                     a;
-                    _a.label = 2;
+                    _d.label = 2;
                 case 2: return [4 /*yield*/, z];
                 case 3:
-                    _a.sent();
+                    _d.sent();
                     return [3 /*break*/, 1];
                 case 4: return [2 /*return*/];
             }
@@ -102,17 +102,17 @@ function forStatement3() {
 }
 function forStatement4() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
                     x;
-                    _a.label = 1;
+                    _e.label = 1;
                 case 1:
                     if (!y) return [3 /*break*/, 4];
                     return [4 /*yield*/, a];
                 case 2:
-                    _a.sent();
-                    _a.label = 3;
+                    _e.sent();
+                    _e.label = 3;
                 case 3:
                     z;
                     return [3 /*break*/, 1];
@@ -124,7 +124,7 @@ function forStatement4() {
 function forStatement5() {
     return __awaiter(this, void 0, void 0, function () {
         var b;
-        return __generator(this, function (_a) {
+        return __generator(this, function (_f) {
             for (; y; z) {
                 a;
             }
@@ -135,7 +135,7 @@ function forStatement5() {
 function forStatement6() {
     return __awaiter(this, void 0, void 0, function () {
         var c;
-        return __generator(this, function (_a) {
+        return __generator(this, function (_g) {
             for (c = x; y; z) {
                 a;
             }

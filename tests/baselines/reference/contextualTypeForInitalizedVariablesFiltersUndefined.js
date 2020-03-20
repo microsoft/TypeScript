@@ -11,7 +11,7 @@ var fInferred = function (_a) {
     return a;
 };
 // const fInferred: ({ a }?: { a?: number; }) => number
-var fAnnotated = function (_a) {
-    var _b = (_a === void 0 ? {} : _a).a, a = _b === void 0 ? 0 : _b;
+var fAnnotated = function (_c) {
+    var _d = (_c === void 0 ? {} : _c).a, a = _d === void 0 ? 0 : _d;
     return a;
 };

@@ -21,8 +21,8 @@ var C = /** @class */ (function () {
     Object.defineProperty(C, "X", {
         set: function () {
             var v2 = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                v2[_i] = arguments[_i];
+            for (var _a = 0; _a < arguments.length; _a++) {
+                v2[_a] = arguments[_a];
             }
         },
         enumerable: false,

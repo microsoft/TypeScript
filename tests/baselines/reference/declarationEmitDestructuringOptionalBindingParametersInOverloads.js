@@ -17,8 +17,8 @@ function foo() {
 }
 function foo2() {
     var rest = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        rest[_i] = arguments[_i];
+    for (var _a = 0; _a < arguments.length; _a++) {
+        rest[_a] = arguments[_a];
     }
 }
 

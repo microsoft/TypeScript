@@ -9,17 +9,17 @@ function bar2([,,z, , , ]) { }
 function baz(_a) {
     var z = _a[1];
 }
-function foo(_a) {
-    var b = _a[1];
+function foo(_b) {
+    var b = _b[1];
 }
-function bar(_a) {
-    var z = _a[0];
+function bar(_c) {
+    var z = _c[0];
 }
-function bar1(_a) {
-    var _b = _a === void 0 ? [1, 3, 4, 6, 7] : _a, z = _b[0];
+function bar1(_d) {
+    var _e = _d === void 0 ? [1, 3, 4, 6, 7] : _d, z = _e[0];
 }
-function bar2(_a) {
-    var z = _a[2];
+function bar2(_f) {
+    var z = _f[2];
 }
 
 

@@ -100,8 +100,8 @@ function insertInterface(callbackType) {
     }
 }
 function insertInterface2(callbackType) {
-    for (var _i = 0, _a = callbackType.members; _i < _a.length; _i++) {
-        var memberType = _a[_i];
+    for (var _b = 0, _c = callbackType.members; _b < _c.length; _b++) {
+        var memberType = _c[_b];
         if (memberType.type === "operation") {
             memberType.idlType.origin; // string
         }

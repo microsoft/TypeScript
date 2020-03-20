@@ -469,8 +469,8 @@ function foo0_c(x) {
         }
     };
     var v;
-    for (var _i = 0, _a = []; _i < _a.length; _i++) {
-        var x_11 = _a[_i];
+    for (var _b = 0, _c = []; _b < _c.length; _b++) {
+        var x_11 = _c[_b];
         var state_11 = _loop_11(x_11);
         if (typeof state_11 === "object")
             return state_11.value;

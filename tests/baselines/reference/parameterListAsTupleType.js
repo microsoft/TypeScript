@@ -44,8 +44,8 @@ var C = /** @class */ (function () {
 var D = /** @class */ (function () {
     function D(a) {
         var rest = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rest[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            rest[_a - 1] = arguments[_a];
         }
     }
     return D;

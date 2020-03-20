@@ -66,7 +66,7 @@ function f2() {
         out_y_2 = y;
     };
     var out_x_2, out_y_2;
-    for (var _a = [{ a: 1, b: { c: 2 } }][0], x = _a.a, y = _a.b.c; x < y; ++x, --y) {
+    for (var _b = [{ a: 1, b: { c: 2 } }][0], x = _b.a, y = _b.b.c; x < y; ++x, --y) {
         var state_2 = _loop_2(x, y);
         x = out_x_2;
         y = out_y_2;

@@ -54,8 +54,8 @@ var c1 = /** @class */ (function () {
     };
     c1.prototype.f4 = function (_i) {
         var rest = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            rest[_a - 1] = arguments[_a];
+        for (var _b = 1; _b < arguments.length; _b++) {
+            rest[_b - 1] = arguments[_b];
         }
         var _i; // no error
     };
@@ -69,8 +69,8 @@ var c3 = /** @class */ (function () {
     }
     c3.prototype.foo = function () {
         var restParameters = [];
-        for (var _a = 0; _a < arguments.length; _a++) {
-            restParameters[_a] = arguments[_a];
+        for (var _c = 0; _c < arguments.length; _c++) {
+            restParameters[_c] = arguments[_c];
         }
         var _i = 10; // no error
     };

@@ -69,15 +69,15 @@ var A = /** @class */ (function () {
                 var b = function () { return y; };
                 this_2.bar(b());
             };
-            for (var _i = 0, _a = [1]; _i < _a.length; _i++) {
-                var y = _a[_i];
+            for (var _d = 0, _e = [1]; _d < _e.length; _d++) {
+                var y = _e[_d];
                 _loop_3(y);
             }
             this_2.bar(a());
         };
         var this_2 = this;
-        for (var _i = 0, _a = [1]; _i < _a.length; _i++) {
-            var x = _a[_i];
+        for (var _b = 0, _c = [1]; _b < _c.length; _b++) {
+            var x = _c[_b];
             _loop_2(x);
         }
     };
@@ -89,14 +89,14 @@ var A = /** @class */ (function () {
                 var b = function () { return y; };
                 this_3.bar(b());
             };
-            for (var _i = 0, _a = [1]; _i < _a.length; _i++) {
-                var y = _a[_i];
+            for (var _h = 0, _j = [1]; _h < _j.length; _h++) {
+                var y = _j[_h];
                 _loop_5(y);
             }
         };
         var this_3 = this;
-        for (var _i = 0, _a = [1]; _i < _a.length; _i++) {
-            var x = _a[_i];
+        for (var _f = 0, _g = [1]; _f < _g.length; _f++) {
+            var x = _g[_f];
             _loop_4(x);
         }
     };
@@ -112,8 +112,8 @@ var B = /** @class */ (function () {
                 var f = function () { return x; };
                 _this.bar(f());
             };
-            for (var _i = 0, _a = [0]; _i < _a.length; _i++) {
-                var x = _a[_i];
+            for (var _k = 0, _l = [0]; _k < _l.length; _k++) {
+                var x = _l[_k];
                 _loop_6(x);
             }
         };

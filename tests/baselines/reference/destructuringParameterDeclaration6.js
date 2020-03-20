@@ -29,10 +29,10 @@ b2({ while: 1 });
 function a(_a) {
     var  = _a["while"];
 }
-function a1(_a) {
-    var public = _a.public;
+function a1(_b) {
+    var public = _b.public;
 }
-function a4(_a) { }
+function a4(_c) { }
 while (, )
     for (, public; ; )
         ;
@@ -46,23 +46,23 @@ function a5() {
 while () { }
 function a6() {
     var public = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        public[_i] = arguments[_i];
+    for (var _d = 0; _d < arguments.length; _d++) {
+        public[_d] = arguments[_d];
     }
 }
 function a7() {
     var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i] = arguments[_i];
+    for (var _e = 0; _e < arguments.length; _e++) {
+        a[_e] = arguments[_e];
     }
 }
 a({ "while": 1 });
 // No Error
-function b1(_a) {
-    var x = _a.public;
+function b1(_f) {
+    var x = _f.public;
 }
-function b2(_a) {
-    var y = _a["while"];
+function b2(_g) {
+    var y = _g["while"];
 }
 b1({ public: 1 });
 b2({ "while": 1 });

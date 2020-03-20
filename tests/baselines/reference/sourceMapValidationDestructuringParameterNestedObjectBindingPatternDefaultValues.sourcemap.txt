@@ -196,7 +196,7 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 1 >Emitted(5, 1) Source(21, 1) + SourceIndex(0)
 2 >Emitted(5, 2) Source(21, 2) + SourceIndex(0)
 ---
->>>function foo2(_a) {
+>>>function foo2(_f) {
 1->
 2 >^^^^^^^^^
 3 >         ^^^^
@@ -222,7 +222,7 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 4 >Emitted(6, 15) Source(23, 5) + SourceIndex(0)
 5 >Emitted(6, 17) Source(29, 22) + SourceIndex(0)
 ---
->>>    var _b = _a === void 0 ? robotA : _a, _c = _b.name, nameC = _c === void 0 ? "name" : _c, _d = _b.skills, _e = _d === void 0 ? { primary: "SomeSkill", secondary: "someSkill" } : _d, _f = _e.primary, primaryB = _f === void 0 ? "primary" : _f, _g = _e.secondary, secondaryB = _g === void 0 ? "secondary" : _g;
+>>>    var _g = _f === void 0 ? robotA : _f, _h = _g.name, nameC = _h === void 0 ? "name" : _h, _j = _g.skills, _k = _j === void 0 ? { primary: "SomeSkill", secondary: "someSkill" } : _j, _l = _k.primary, primaryB = _l === void 0 ? "primary" : _l, _m = _k.secondary, secondaryB = _m === void 0 ? "secondary" : _m;
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                        ^^
@@ -331,7 +331,7 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 1 >Emitted(9, 1) Source(31, 1) + SourceIndex(0)
 2 >Emitted(9, 2) Source(31, 2) + SourceIndex(0)
 ---
->>>function foo3(_a) {
+>>>function foo3(_o) {
 1->
 2 >^^^^^^^^^
 3 >         ^^^^
@@ -350,7 +350,7 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 4 >Emitted(10, 15) Source(32, 15) + SourceIndex(0)
 5 >Emitted(10, 17) Source(32, 93) + SourceIndex(0)
 ---
->>>    var _b = (_a === void 0 ? robotA : _a).skills, skills = _b === void 0 ? { primary: "SomeSkill", secondary: "someSkill" } : _b;
+>>>    var _p = (_o === void 0 ? robotA : _o).skills, skills = _p === void 0 ? { primary: "SomeSkill", secondary: "someSkill" } : _p;
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^^

@@ -47,20 +47,20 @@ var foo2 = function () { return "bar"; };
 var _q = { bar: "bar" }, _r = foo2(), bar3 = _q[_r];
 var _s = [{ bar: "bar" }], _t = foo, bar4 = _s[0][_t];
 var _u = [{ bar: "bar" }], _v = foo2(), bar5 = _u[0][_v];
-function f1(_a) {
-    var x = _a["bar"];
+function f1(_0) {
+    var x = _0["bar"];
 }
-function f2(_a) {
-    var _b = foo, x = _a[_b];
+function f2(_1) {
+    var _2 = foo, x = _1[_2];
 }
-function f3(_a) {
-    var _b = foo2(), x = _a[_b];
+function f3(_3) {
+    var _4 = foo2(), x = _3[_4];
 }
-function f4(_a) {
-    var _b = foo, x = _a[0][_b];
+function f4(_5) {
+    var _6 = foo, x = _5[0][_6];
 }
-function f5(_a) {
-    var _b = foo2(), x = _a[0][_b];
+function f5(_7) {
+    var _8 = foo2(), x = _7[0][_8];
 }
 // report errors on type errors in computed properties used in destructuring
 var _w = [{ bar: "bar" }], _x = foo(), bar6 = _w[0][_x];

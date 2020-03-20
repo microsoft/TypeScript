@@ -64,6 +64,6 @@ var priv = k.priv; // error
 var prot = k.prot; // error
 var privateMethod = k.privateMethod; // error
 var a = k.priv, b = k.prot, pm = k.privateMethod; // error
-function f(_a) {
-    var priv = _a.priv, prot = _a.prot, privateMethod = _a.privateMethod;
+function f(_c) {
+    var priv = _c.priv, prot = _c.prot, privateMethod = _c.privateMethod;
 }

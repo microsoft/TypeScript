@@ -206,74 +206,74 @@ function f1() {
     var z;
 }
 function f2() {
-    var _a = { x: 5, y: "hello" }; // Error, no x and y in target
+    var _e = { x: 5, y: "hello" }; // Error, no x and y in target
     var x = { x: 5, y: "hello" }.x; // Error, no y in target
     var y = { x: 5, y: "hello" }.y; // Error, no x in target
-    var _b = { x: 5, y: "hello" }, x = _b.x, y = _b.y;
+    var _f = { x: 5, y: "hello" }, x = _f.x, y = _f.y;
     var x;
     var y;
     var a = { x: 5, y: "hello" }.x; // Error, no y in target
     var b = { x: 5, y: "hello" }.y; // Error, no x in target
-    var _c = { x: 5, y: "hello" }, a = _c.x, b = _c.y;
+    var _g = { x: 5, y: "hello" }, a = _g.x, b = _g.y;
     var a;
     var b;
 }
 function f3() {
-    var _a = [1, ["hello", [true]]], x = _a[0], _b = _a[1], y = _b[0], z = _b[1][0];
+    var _h = [1, ["hello", [true]]], x = _h[0], _j = _h[1], y = _j[0], z = _j[1][0];
     var x;
     var y;
     var z;
 }
 function f4() {
-    var _a = { a: 1, b: { a: "hello", b: { a: true } } }, x = _a.a, _b = _a.b, y = _b.a, z = _b.b.a;
+    var _k = { a: 1, b: { a: "hello", b: { a: true } } }, x = _k.a, _l = _k.b, y = _l.a, z = _l.b.a;
     var x;
     var y;
     var z;
 }
 function f6() {
-    var _a = [1, "hello"], _b = _a[0], x = _b === void 0 ? 0 : _b, _c = _a[1], y = _c === void 0 ? "" : _c;
+    var _m = [1, "hello"], _o = _m[0], x = _o === void 0 ? 0 : _o, _p = _m[1], y = _p === void 0 ? "" : _p;
     var x;
     var y;
 }
 function f7() {
-    var _a = [1, "hello"], _b = _a[0], x = _b === void 0 ? 0 : _b, _c = _a[1], y = _c === void 0 ? 1 : _c; // Error, initializer for y must be string
+    var _q = [1, "hello"], _r = _q[0], x = _r === void 0 ? 0 : _r, _s = _q[1], y = _s === void 0 ? 1 : _s; // Error, initializer for y must be string
     var x;
     var y;
 }
 function f8() {
-    var _a = [], a = _a[0], b = _a[1], c = _a[2]; // Error, [] is an empty tuple
-    var _b = [1], d = _b[0], e = _b[1], f = _b[2]; // Error, [1] is a tuple
+    var _t = [], a = _t[0], b = _t[1], c = _t[2]; // Error, [] is an empty tuple
+    var _u = [1], d = _u[0], e = _u[1], f = _u[2]; // Error, [1] is a tuple
 }
 function f9() {
-    var _a = {}, a = _a[0], b = _a[1]; // Error, not array type
-    var _b = { 0: 10, 1: 20 }, c = _b[0], d = _b[1]; // Error, not array type
-    var _c = [10, 20], e = _c[0], f = _c[1];
+    var _v = {}, a = _v[0], b = _v[1]; // Error, not array type
+    var _w = { 0: 10, 1: 20 }, c = _w[0], d = _w[1]; // Error, not array type
+    var _x = [10, 20], e = _x[0], f = _x[1];
 }
 function f10() {
-    var _a = {}, a = _a.a, b = _a.b; // Error
-    var _b = [], a = _b.a, b = _b.b; // Error
+    var _y = {}, a = _y.a, b = _y.b; // Error
+    var _z = [], a = _z.a, b = _z.b; // Error
 }
 function f11() {
-    var _a = { x: 10, y: "hello" }, a = _a.x, b = _a.y;
-    var _b = { 0: 10, 1: "hello" }, a = _b[0], b = _b[1];
-    var _c = { "<": 10, ">": "hello" }, a = _c["<"], b = _c[">"];
-    var _d = [10, "hello"], a = _d[0], b = _d[1];
+    var _0 = { x: 10, y: "hello" }, a = _0.x, b = _0.y;
+    var _1 = { 0: 10, 1: "hello" }, a = _1[0], b = _1[1];
+    var _2 = { "<": 10, ">": "hello" }, a = _2["<"], b = _2[">"];
+    var _3 = [10, "hello"], a = _3[0], b = _3[1];
     var a;
     var b;
 }
 function f12() {
-    var _a = [1, ["hello", { x: 5, y: true }]], a = _a[0], _b = _a[1], _c = _b === void 0 ? ["abc", { x: 10, y: false }] : _b, b = _c[0], _d = _c[1], x = _d.x, c = _d.y;
+    var _4 = [1, ["hello", { x: 5, y: true }]], a = _4[0], _5 = _4[1], _6 = _5 === void 0 ? ["abc", { x: 10, y: false }] : _5, b = _6[0], _7 = _6[1], x = _7.x, c = _7.y;
     var a;
     var b;
     var x;
     var c;
 }
 function f13() {
-    var _a = [1, "hello"], x = _a[0], y = _a[1];
-    var _b = [[x, y], { x: x, y: y }], a = _b[0], b = _b[1];
+    var _8 = [1, "hello"], x = _8[0], y = _8[1];
+    var _9 = [[x, y], { x: x, y: y }], a = _9[0], b = _9[1];
 }
-function f14(_a) {
-    var _b = _a[0], a = _b === void 0 ? 1 : _b, _c = _a[1], _d = _c[0], b = _d === void 0 ? "hello" : _d, _e = _c[1], x = _e.x, _f = _e.y, c = _f === void 0 ? false : _f;
+function f14(_10) {
+    var _11 = _10[0], a = _11 === void 0 ? 1 : _11, _12 = _10[1], _13 = _12[0], b = _13 === void 0 ? "hello" : _13, _14 = _12[1], x = _14.x, _15 = _14.y, c = _15 === void 0 ? false : _15;
     var a;
     var b;
     var c;
@@ -283,8 +283,8 @@ f14([2, ["abc", { x: 0 }]]);
 f14([2, ["abc", { y: false }]]); // Error, no x
 var M;
 (function (M) {
-    var _a;
-    _a = [1, 2], M.a = _a[0], M.b = _a[1];
+    var _16;
+    _16 = [1, 2], M.a = _16[0], M.b = _16[1];
 })(M || (M = {}));
 function f15() {
     var a = "hello";
@@ -293,34 +293,34 @@ function f15() {
     return { a: a, b: b, c: c };
 }
 function f16() {
-    var _a = f15(), a = _a.a, b = _a.b, c = _a.c;
+    var _17 = f15(), a = _17.a, b = _17.b, c = _17.c;
 }
-function f17(_a) {
-    var _b = _a.a, a = _b === void 0 ? "" : _b, _c = _a.b, b = _c === void 0 ? 0 : _c, _d = _a.c, c = _d === void 0 ? false : _d;
+function f17(_18) {
+    var _19 = _18.a, a = _19 === void 0 ? "" : _19, _20 = _18.b, b = _20 === void 0 ? 0 : _20, _21 = _18.c, c = _21 === void 0 ? false : _21;
 }
 f17({});
 f17({ a: "hello" });
 f17({ c: true });
 f17(f15());
 function f18() {
-    var _a, _b, _c, _d, _e, _f, _g;
+    var _22, _23, _24, _25, _26, _27, _28;
     var a;
     var b;
     var aa;
-    (_a = { a: a, b: b }, a = _a.a, b = _a.b);
-    (_b = { b: b, a: a }, a = _b.a, b = _b.b);
-    _c = [a, b], aa[0] = _c[0], b = _c[1];
-    _d = [b, a], a = _d[0], b = _d[1]; // Error
-    _e = [2, "def"], _f = _e[0], a = _f === void 0 ? 1 : _f, _g = _e[1], b = _g === void 0 ? "abc" : _g;
+    (_22 = { a: a, b: b }, a = _22.a, b = _22.b);
+    (_23 = { b: b, a: a }, a = _23.a, b = _23.b);
+    _24 = [a, b], aa[0] = _24[0], b = _24[1];
+    _25 = [b, a], a = _25[0], b = _25[1]; // Error
+    _26 = [2, "def"], _27 = _26[0], a = _27 === void 0 ? 1 : _27, _28 = _26[1], b = _28 === void 0 ? "abc" : _28;
 }
 function f19() {
-    var _a, _b, _c, _d, _e, _f;
+    var _29, _30, _31, _32, _33, _34;
     var a, b;
-    _a = [1, 2], a = _a[0], b = _a[1];
-    _b = [b, a], a = _b[0], b = _b[1];
-    (_c = { b: b, a: a }, a = _c.a, b = _c.b);
-    _d = [[2, 3]][0], _e = _d === void 0 ? [1, 2] : _d, a = _e[0], b = _e[1];
-    var x = (_f = [1, 2], a = _f[0], b = _f[1], _f);
+    _29 = [1, 2], a = _29[0], b = _29[1];
+    _30 = [b, a], a = _30[0], b = _30[1];
+    (_31 = { b: b, a: a }, a = _31.a, b = _31.b);
+    _32 = [[2, 3]][0], _33 = _32 === void 0 ? [1, 2] : _32, a = _33[0], b = _33[1];
+    var x = (_34 = [1, 2], a = _34[0], b = _34[1], _34);
 }
 function f20(v) {
     var x;

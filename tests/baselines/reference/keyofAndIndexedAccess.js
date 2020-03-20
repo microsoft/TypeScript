@@ -987,8 +987,8 @@ function onChangeGenericFunction(handler) {
 }
 // Repro from #13285
 function updateIds(obj, idFields, idMapping) {
-    for (var _i = 0, idFields_1 = idFields; _i < idFields_1.length; _i++) {
-        var idField = idFields_1[_i];
+    for (var _b = 0, idFields_1 = idFields; _b < idFields_1.length; _b++) {
+        var idField = idFields_1[_b];
         var newId = idMapping[obj[idField]];
         if (newId) {
             obj[idField] = newId;

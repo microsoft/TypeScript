@@ -18,15 +18,15 @@
 });
 (function () {
     var arg = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i] = arguments[_i];
+    for (var _a = 0; _a < arguments.length; _a++) {
+        arg[_a] = arguments[_a];
     }
     return 103;
 });
 (function () {
     var arg = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i] = arguments[_i];
+    for (var _b = 0; _b < arguments.length; _b++) {
+        arg[_b] = arguments[_b];
     }
     return 104;
 });

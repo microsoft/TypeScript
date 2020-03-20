@@ -147,7 +147,7 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPattern.ts
 1 >Emitted(6, 1) Source(13, 1) + SourceIndex(0)
 2 >Emitted(6, 2) Source(13, 2) + SourceIndex(0)
 ---
->>>function foo2(_a) {
+>>>function foo2(_b) {
 1->
 2 >^^^^^^^^^
 3 >         ^^^^
@@ -166,7 +166,7 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPattern.ts
 4 >Emitted(7, 15) Source(14, 15) + SourceIndex(0)
 5 >Emitted(7, 17) Source(14, 52) + SourceIndex(0)
 ---
->>>    var nameB = _a.name, skillB = _a.skill;
+>>>    var nameB = _b.name, skillB = _b.skill;
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^
 3 >                       ^^
@@ -217,7 +217,7 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPattern.ts
 1 >Emitted(10, 1) Source(16, 1) + SourceIndex(0)
 2 >Emitted(10, 2) Source(16, 2) + SourceIndex(0)
 ---
->>>function foo3(_a) {
+>>>function foo3(_c) {
 1->
 2 >^^^^^^^^^
 3 >         ^^^^
@@ -236,7 +236,7 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPattern.ts
 4 >Emitted(11, 15) Source(17, 15) + SourceIndex(0)
 5 >Emitted(11, 17) Source(17, 30) + SourceIndex(0)
 ---
->>>    var name = _a.name;
+>>>    var name = _c.name;
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^
 3 >                      ^->

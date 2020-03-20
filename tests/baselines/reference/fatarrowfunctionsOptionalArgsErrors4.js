@@ -62,8 +62,8 @@ foo(function (a) { return 110; }, (function (a) { return 111; }), function (a) {
 }, function (a, b) {
     if (b === void 0) { b = 0; }
     var c = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        c[_i - 2] = arguments[_i];
+    for (var _a = 2; _a < arguments.length; _a++) {
+        c[_a - 2] = arguments[_a];
     }
     return 120;
 }, function (a) { return function (b) { return function (c) { return 121; }; }; }, false ? function (a) { return 0; } : function (b) { return 122; });

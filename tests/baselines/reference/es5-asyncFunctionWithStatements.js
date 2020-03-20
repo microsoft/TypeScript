@@ -44,18 +44,18 @@ function withStatement0() {
 }
 function withStatement1() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
-                    _a = _b.sent();
-                    _b.label = 2;
+                    _b = _c.sent();
+                    _c.label = 2;
                 case 2:
-                    with (_a) {
+                    with (_b) {
                         y;
                     }
-                    _b.label = 3;
+                    _c.label = 3;
                 case 3: return [2 /*return*/];
             }
         });
@@ -63,22 +63,22 @@ function withStatement1() {
 }
 function withStatement2() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _d;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
-                    _a = x;
-                    _b.label = 1;
-                case 1: with (_a) {
+                    _d = x;
+                    _e.label = 1;
+                case 1: with (_d) {
                     a;
                     return [4 /*yield*/, y];
                 }
                 case 2:
-                    with (_a) {
-                        _b.sent();
+                    with (_d) {
+                        _e.sent();
                         b;
                     }
-                    _b.label = 3;
+                    _e.label = 3;
                 case 3: return [2 /*return*/];
             }
         });
@@ -86,31 +86,31 @@ function withStatement2() {
 }
 function withStatement3() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var _f, _g;
+        return __generator(this, function (_h) {
+            switch (_h.label) {
                 case 0:
-                    _a = x;
-                    _c.label = 1;
+                    _f = x;
+                    _h.label = 1;
                 case 1:
-                    with (_a) {
-                        _b = z;
+                    with (_f) {
+                        _g = z;
                     }
-                    _c.label = 2;
-                case 2: with (_a) {
-                    with (_b) {
+                    _h.label = 2;
+                case 2: with (_f) {
+                    with (_g) {
                         a;
                         return [4 /*yield*/, y];
                     }
                 }
                 case 3:
-                    with (_a) {
-                        with (_b) {
-                            _c.sent();
+                    with (_f) {
+                        with (_g) {
+                            _h.sent();
                             b;
                         }
                     }
-                    _c.label = 4;
+                    _h.label = 4;
                 case 4: return [2 /*return*/];
             }
         });

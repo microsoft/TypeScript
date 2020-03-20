@@ -21,16 +21,16 @@ async function* test(x: Promise<string>) {
 async function* test(x) {
     var _a, _b, _c, _d, _e;
     let C = /** @class */ (() => {
-        var _e, _f, _g, _h;
+        var _f, _g, _h, _j;
         class C {
             constructor() {
-                this[_e] = await x;
-                this[_g] = yield 2;
+                this[_f] = await x;
+                this[_h] = yield 2;
             }
         }
-        _e = await x, _f = await x, _g = yield 1, _h = yield 3;
-        C[_f] = await x;
-        C[_h] = yield 4;
+        _f = await x, _g = await x, _h = yield 1, _j = yield 3;
+        C[_g] = await x;
+        C[_j] = yield 4;
         return C;
     })();
     return _e = class {

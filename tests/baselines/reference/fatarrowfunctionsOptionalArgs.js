@@ -180,8 +180,8 @@ foo(
 (function (arg1, arg2) { return 17; });
 (function (arg1) {
     var arg2 = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        arg2[_i - 1] = arguments[_i];
+    for (var _a = 1; _a < arguments.length; _a++) {
+        arg2[_a - 1] = arguments[_a];
     }
     return 18;
 });
@@ -202,8 +202,8 @@ foo(
 (function (arg) { return 27; });
 (function () {
     var arg = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i] = arguments[_i];
+    for (var _b = 0; _b < arguments.length; _b++) {
+        arg[_b] = arguments[_b];
     }
     return 28;
 });
@@ -225,8 +225,8 @@ false ? function (arg) {
 } : null;
 false ? function () {
     var arg = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i] = arguments[_i];
+    for (var _c = 0; _c < arguments.length; _c++) {
+        arg[_c] = arguments[_c];
     }
     return 48;
 } : null;
@@ -246,8 +246,8 @@ false ? (function (arg) {
 }) : null;
 false ? (function () {
     var arg = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i] = arguments[_i];
+    for (var _d = 0; _d < arguments.length; _d++) {
+        arg[_d] = arguments[_d];
     }
     return 58;
 }) : null;
@@ -267,8 +267,8 @@ false ? null : function (arg) {
 };
 false ? null : function () {
     var arg = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i] = arguments[_i];
+    for (var _e = 0; _e < arguments.length; _e++) {
+        arg[_e] = arguments[_e];
     }
     return 68;
 };
@@ -293,8 +293,8 @@ false ? null : function () {
 (function (arg) { return 95; }) instanceof Function;
 (function () {
     var arg = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i] = arguments[_i];
+    for (var _f = 0; _f < arguments.length; _f++) {
+        arg[_f] = arguments[_f];
     }
     return 96;
 }) instanceof Function;
@@ -325,36 +325,36 @@ false ? null : function () {
 });
 (function () {
     var arg = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i] = arguments[_i];
+    for (var _g = 0; _g < arguments.length; _g++) {
+        arg[_g] = arguments[_g];
     }
     return 0;
 }) + '' + (function () {
     var arg = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i] = arguments[_i];
+    for (var _h = 0; _h < arguments.length; _h++) {
+        arg[_h] = arguments[_h];
     }
     return 107;
 });
 (function (arg1, arg2) { return 0; }) + '' + (function (arg1, arg2) { return 108; });
 (function (arg1) {
     var arg2 = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        arg2[_i - 1] = arguments[_i];
+    for (var _j = 1; _j < arguments.length; _j++) {
+        arg2[_j - 1] = arguments[_j];
     }
     return 0;
 }) + '' + (function (arg1) {
     var arg2 = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        arg2[_i - 1] = arguments[_i];
+    for (var _k = 1; _k < arguments.length; _k++) {
+        arg2[_k - 1] = arguments[_k];
     }
     return 108;
 });
 // Function Parameters
 function foo() {
     var arg = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i] = arguments[_i];
+    for (var _l = 0; _l < arguments.length; _l++) {
+        arg[_l] = arguments[_l];
     }
 }
 foo(function (a) { return 110; }, (function (a) { return 111; }), function (a) {
@@ -370,15 +370,15 @@ foo(function (a) { return 110; }, (function (a) { return 111; }), function (a) {
     return 118;
 }, function () {
     var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i] = arguments[_i];
+    for (var _m = 0; _m < arguments.length; _m++) {
+        a[_m] = arguments[_m];
     }
     return 119;
 }, function (a, b) {
     if (b === void 0) { b = 0; }
     var c = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        c[_i - 2] = arguments[_i];
+    for (var _o = 2; _o < arguments.length; _o++) {
+        c[_o - 2] = arguments[_o];
     }
     return 120;
 }, function (a) { return function (b) { return function (c) { return 121; }; }; }, false ? function (a) { return 0; } : function (b) { return 122; });

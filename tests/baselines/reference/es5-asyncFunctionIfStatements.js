@@ -33,17 +33,17 @@ function ifStatement1() {
 }
 function ifStatement2() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     if (!x) return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
                 case 1:
-                    _a.sent();
+                    _b.sent();
                     return [3 /*break*/, 3];
                 case 2:
                     z;
-                    _a.label = 3;
+                    _b.label = 3;
                 case 3: return [2 /*return*/];
             }
         });
@@ -51,16 +51,16 @@ function ifStatement2() {
 }
 function ifStatement3() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
                     if (!x) return [3 /*break*/, 1];
                     y;
                     return [3 /*break*/, 3];
                 case 1: return [4 /*yield*/, z];
                 case 2:
-                    _a.sent();
-                    _a.label = 3;
+                    _c.sent();
+                    _c.label = 3;
                 case 3: return [2 /*return*/];
             }
         });

@@ -106,12 +106,12 @@ function a1(_a) {
     var a = _a[0], b = _a[1], c = _a[2][0][0];
 }
 function a2(o) { }
-function a3(_a) {
-    var j = _a.j, k = _a.k, _b = _a.l, m = _b.m, n = _b.n, _c = _a.q, a = _c[0], b = _c[1], c = _c[2];
+function a3(_b) {
+    var j = _b.j, k = _b.k, _c = _b.l, m = _c.m, n = _c.n, _d = _b.q, a = _d[0], b = _d[1], c = _d[2];
 }
 ;
-function a4(_a) {
-    var x = _a.x, a = _a.a;
+function a4(_e) {
+    var x = _e.x, a = _e.a;
 }
 a1([1, 2, [["world"]]]);
 a1([1, 2, [["world"]], 3]);
@@ -126,14 +126,14 @@ function b2(z, o) {
     if (z === void 0) { z = null; }
     if (o === void 0) { o = { x: 0, y: undefined }; }
 }
-function b3(_a) {
-    var _b = (_a === void 0 ? { z: { x: "hi", y: { j: 1 } } } : _a).z, x = _b.x, j = _b.y.j;
+function b3(_f) {
+    var _g = (_f === void 0 ? { z: { x: "hi", y: { j: 1 } } } : _f).z, x = _g.x, j = _g.y.j;
 }
-function b6(_a) {
-    var _b = _a === void 0 ? [undefined, null, undefined] : _a, a = _b[0], z = _b[1], y = _b[2];
+function b6(_h) {
+    var _j = _h === void 0 ? [undefined, null, undefined] : _h, a = _j[0], z = _j[1], y = _j[2];
 }
-function b7(_a) {
-    var _b = _a === void 0 ? [[undefined], undefined, [[undefined, undefined]]] : _a, a = _b[0][0], b = _b[1], _c = _b[2][0], c = _c[0], d = _c[1];
+function b7(_k) {
+    var _l = _k === void 0 ? [[undefined], undefined, [[undefined, undefined]]] : _k, a = _l[0][0], b = _l[1], _m = _l[2][0], c = _m[0], d = _m[1];
 }
 b1([1, 2, 3]); // z is widen to the type any[]
 b2("string", { x: 200, y: "string" });
@@ -145,23 +145,23 @@ var Foo;
 (function (Foo) {
     Foo[Foo["a"] = 0] = "a";
 })(Foo || (Foo = {}));
-function c0(_a) {
-    var _b = _a.z, x = _b.x, j = _b.y.j;
+function c0(_o) {
+    var _p = _o.z, x = _p.x, j = _p.y.j;
 }
-function c1(_a) {
-    var z = (_a === void 0 ? { z: 10 } : _a).z;
+function c1(_q) {
+    var z = (_q === void 0 ? { z: 10 } : _q).z;
 }
-function c2(_a) {
-    var _b = _a.z, z = _b === void 0 ? 10 : _b;
+function c2(_r) {
+    var _s = _r.z, z = _s === void 0 ? 10 : _s;
 }
-function c3(_a) {
-    var b = (_a === void 0 ? { b: "hello" } : _a).b;
+function c3(_t) {
+    var b = (_t === void 0 ? { b: "hello" } : _t).b;
 }
-function c5(_a) {
-    var a = _a[0], b = _a[1], c = _a[2][0][0];
+function c5(_u) {
+    var a = _u[0], b = _u[1], c = _u[2][0][0];
 }
-function c6(_a) {
-    var a = _a[0], b = _a[1], _b = _a[2][0][0], c = _b === void 0 ? 1 : _b;
+function c6(_v) {
+    var a = _v[0], b = _v[1], _w = _v[2][0][0], c = _w === void 0 ? 1 : _w;
 }
 c0({ z: { x: 1, y: { j: "world" } } }); // Implied type is { z: {x: any, y: {j: any}} }
 c0({ z: { x: "string", y: { j: true } } }); // Implied type is { z: {x: any, y: {j: any}} }
@@ -183,44 +183,44 @@ var C2 = /** @class */ (function () {
     }
     C2.prototype.d3 = function () { };
     C2.prototype.d4 = function () { };
-    C2.prototype.e0 = function (_a) {
-        var a = _a[0], b = _a[1], c = _a[2];
+    C2.prototype.e0 = function (_x) {
+        var a = _x[0], b = _x[1], c = _x[2];
     };
     return C2;
 }());
 var C3 = /** @class */ (function () {
     function C3() {
     }
-    C3.prototype.d3 = function (_a) {
-        var a = _a[0], b = _a[1], c = _a[2];
+    C3.prototype.d3 = function (_y) {
+        var a = _y[0], b = _y[1], c = _y[2];
     };
-    C3.prototype.d4 = function (_a) {
-        var x = _a.x, y = _a.y, z = _a.z;
+    C3.prototype.d4 = function (_z) {
+        var x = _z.x, y = _z.y, z = _z.z;
     };
-    C3.prototype.e0 = function (_a) {
-        var a = _a[0], b = _a[1], c = _a[2];
+    C3.prototype.e0 = function (_0) {
+        var a = _0[0], b = _0[1], c = _0[2];
     };
     return C3;
 }());
-function d5(_a) {
-    var _b = _a === void 0 ? { x: 1, y: 2 } : _a, x = _b.x, y = _b.y;
+function d5(_1) {
+    var _2 = _1 === void 0 ? { x: 1, y: 2 } : _1, x = _2.x, y = _2.y;
 }
 d5(); // Parameter is optional as its declaration included an initializer
 // Destructuring parameter declarations do not permit type annotations on the individual binding patterns,
 // as such annotations would conflict with the already established meaning of colons in object literals.
 // Type annotations must instead be written on the top- level parameter declaration
-function e1(_a) {
-    var number = _a.x;
+function e1(_3) {
+    var number = _3.x;
 } // x has type any NOT number
-function e2(_a) {
-    var x = _a.x;
+function e2(_4) {
+    var x = _4.x;
 } // x is type number
-function e3(_a) {
-    var x = _a.x;
+function e3(_5) {
+    var x = _5.x;
 } // x is an optional with type number
-function e4(_a) {
-    var _b = _a.x, number = _b[0], string = _b[1], any = _b[2];
+function e4(_6) {
+    var _7 = _6.x, number = _7[0], string = _7[1], any = _7[2];
 } // x has type [any, any, any]
-function e5(_a) {
-    var _b = _a.x, a = _b[0], b = _b[1], c = _b[2];
+function e5(_8) {
+    var _9 = _8.x, a = _9[0], b = _9[1], c = _9[2];
 } // x has type [any, any, any]

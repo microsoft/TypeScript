@@ -39,16 +39,16 @@ function foo1(_a) {
     var skillA = _a[1];
     console.log(skillA);
 }
-function foo2(_a) {
-    var nameMB = _a[0];
+function foo2(_b) {
+    var nameMB = _b[0];
     console.log(nameMB);
 }
-function foo3(_a) {
-    var nameMA = _a[0], _b = _a[1], primarySkillA = _b[0], secondarySkillA = _b[1];
+function foo3(_c) {
+    var nameMA = _c[0], _d = _c[1], primarySkillA = _d[0], secondarySkillA = _d[1];
     console.log(nameMA);
 }
-function foo4(_a) {
-    var multiRobotAInfo = _a.slice(0);
+function foo4(_e) {
+    var multiRobotAInfo = _e.slice(0);
     console.log(multiRobotAInfo);
 }
 foo1(robotA);

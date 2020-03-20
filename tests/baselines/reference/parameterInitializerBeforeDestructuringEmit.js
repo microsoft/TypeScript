@@ -40,11 +40,11 @@ function foobar(_a) {
     opts.baz(bar);
 }
 var C = /** @class */ (function () {
-    function C(_a) {
+    function C(_c) {
         "use strict";
         "Some other prologue";
-        if (_a === void 0) { _a = {}; }
-        var _b = _a.bar, bar = _b === void 0 ? {} : _b, opts = __rest(_a, ["bar"]);
+        if (_c === void 0) { _c = {}; }
+        var _d = _c.bar, bar = _d === void 0 ? {} : _d, opts = __rest(_c, ["bar"]);
         opts.baz(bar);
     }
     return C;

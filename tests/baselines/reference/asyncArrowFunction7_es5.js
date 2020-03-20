@@ -14,7 +14,7 @@ var bar = function () { return __awaiter(_this, void 0, void 0, function () {
         foo = function (a) {
             if (a === void 0) { a = yield ; }
             return __awaiter(_this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
+                return __generator(this, function (_b) {
                     return [2 /*return*/];
                 });
             });

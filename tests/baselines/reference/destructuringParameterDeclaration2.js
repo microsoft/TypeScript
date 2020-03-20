@@ -82,34 +82,34 @@ function b1(z, o) {
     if (z === void 0) { z = null; }
     if (o === void 0) { o = { x: 0, y: undefined }; }
 }
-function b2(_a) {
-    var _b = _a === void 0 ? [undefined, null, undefined] : _a, a = _b[0], z = _b[1], y = _b[2];
+function b2(_b) {
+    var _c = _b === void 0 ? [undefined, null, undefined] : _b, a = _c[0], z = _c[1], y = _c[2];
 }
-function b3(_a) {
-    var _b = _a === void 0 ? [[undefined], undefined, [[undefined, undefined]]] : _a, a = _b[0][0], b = _b[1], _c = _b[2][0], c = _c[0], d = _c[1];
+function b3(_d) {
+    var _e = _d === void 0 ? [[undefined], undefined, [[undefined, undefined]]] : _d, a = _e[0][0], b = _e[1], _f = _e[2][0], c = _f[0], d = _f[1];
 }
 b1("string", { x: "string", y: true }); // Error
 // If the declaration specifies a binding pattern, the parameter type is the implied type of that binding pattern (section 5.1.3)
-function c0(_a) {
-    var _b = _a.z, x = _b.x, j = _b.y.j;
+function c0(_g) {
+    var _h = _g.z, x = _h.x, j = _h.y.j;
 }
-function c1(_a) {
-    var z = (_a === void 0 ? { z: 10 } : _a).z;
+function c1(_j) {
+    var z = (_j === void 0 ? { z: 10 } : _j).z;
 }
-function c2(_a) {
-    var _b = _a.z, z = _b === void 0 ? 10 : _b;
+function c2(_k) {
+    var _l = _k.z, z = _l === void 0 ? 10 : _l;
 }
-function c3(_a) {
-    var b = (_a === void 0 ? { b: "hello" } : _a).b;
+function c3(_m) {
+    var b = (_m === void 0 ? { b: "hello" } : _m).b;
 }
-function c4(_a, z) {
-    var z = _a[0];
+function c4(_o, z) {
+    var z = _o[0];
 } // Error Duplicate identifier
-function c5(_a) {
-    var a = _a[0], b = _a[1], c = _a[2][0][0];
+function c5(_p) {
+    var a = _p[0], b = _p[1], c = _p[2][0][0];
 }
-function c6(_a) {
-    var a = _a[0], b = _a[1], _b = _a[2][0][0], c = _b === void 0 ? 1 : _b;
+function c6(_q) {
+    var a = _q[0], b = _q[1], _r = _q[2][0][0], c = _r === void 0 ? 1 : _r;
 }
 c0({ z: 1 }); // Error, implied type is { z: {x: any, y: {j: any}} }
 c1({}); // Error, implied type is {z:number}?
@@ -121,29 +121,29 @@ c6([1, 2, [["string"]]]); // Error, implied type is [any, any, [[number]]]  // U
 // A parameter can be marked optional by following its name or binding pattern with a question mark (?)
 // or by including an initializer.  Initializers (including binding property or element initializers) are
 // permitted only when the parameter list occurs in conjunction with a function body
-function d1(_a) {
-    var a = _a[0], b = _a[1], c = _a[2];
+function d1(_s) {
+    var a = _s[0], b = _s[1], c = _s[2];
 } // Error, binding pattern can't be optional in implementation signature
-function d2(_a) {
-    var x = _a.x, y = _a.y, z = _a.z;
+function d2(_t) {
+    var x = _t.x, y = _t.y, z = _t.z;
 } // Error, binding pattern can't be optional in implementation signature
 var C4 = /** @class */ (function () {
     function C4() {
     }
-    C4.prototype.d3 = function (_a) {
-        var a = _a[0], b = _a[1], c = _a[2];
+    C4.prototype.d3 = function (_u) {
+        var a = _u[0], b = _u[1], c = _u[2];
     }; // Error, binding pattern can't be optional in implementation signature
-    C4.prototype.d4 = function (_a) {
-        var x = _a.x, y = _a.y, c = _a.c;
+    C4.prototype.d4 = function (_v) {
+        var x = _v.x, y = _v.y, c = _v.c;
     };
-    C4.prototype.e0 = function (_a) {
-        var a = _a[0], b = _a[1], q = _a[2];
+    C4.prototype.e0 = function (_w) {
+        var a = _w[0], b = _w[1], q = _w[2];
     };
     return C4;
 }());
 // Destructuring parameter declarations do not permit type annotations on the individual binding patterns,
 // as such annotations would conflict with the already established meaning of colons in object literals.
 // Type annotations must instead be written on the top- level parameter declaration
-function e0(_a) {
-    var _b = _a.x, number = _b[0], number = _b[1], number = _b[2];
+function e0(_x) {
+    var _y = _x.x, number = _y[0], number = _y[1], number = _y[2];
 } // error, duplicate identifier;

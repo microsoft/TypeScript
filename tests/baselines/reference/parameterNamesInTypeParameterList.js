@@ -31,8 +31,8 @@ function f1(_a) {
     var a = _a.a;
     a.b;
 }
-function f2(_a) {
-    var a = _a[0];
+function f2(_b) {
+    var a = _b[0];
     a.b;
 }
 var A = /** @class */ (function () {
@@ -41,12 +41,12 @@ var A = /** @class */ (function () {
     A.prototype.m0 = function (a) {
         a.b;
     };
-    A.prototype.m1 = function (_a) {
-        var a = _a.a;
+    A.prototype.m1 = function (_c) {
+        var a = _c.a;
         a.b;
     };
-    A.prototype.m2 = function (_a) {
-        var a = _a[0];
+    A.prototype.m2 = function (_d) {
+        var a = _d[0];
         a.b;
     };
     return A;

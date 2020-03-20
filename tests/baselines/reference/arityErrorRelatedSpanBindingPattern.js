@@ -12,8 +12,8 @@ bar("", 0);
 function foo(a, b, _a) {
     var c = _a.c;
 }
-function bar(a, b, _a) {
-    var c = _a[0];
+function bar(a, b, _b) {
+    var c = _b[0];
 }
 foo("", 0);
 bar("", 0);

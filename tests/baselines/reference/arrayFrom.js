@@ -53,18 +53,18 @@ var result4 = Array.from(inputB, function (_a) {
 });
 var result5 = Array.from(inputALike);
 var result6 = Array.from(inputALike); // expect error
-var result7 = Array.from(inputALike, function (_a) {
-    var a = _a.a;
+var result7 = Array.from(inputALike, function (_b) {
+    var a = _b.a;
     return ({ b: a });
 });
 var result8 = Array.from(inputARand);
-var result9 = Array.from(inputARand, function (_a) {
-    var a = _a.a;
+var result9 = Array.from(inputARand, function (_c) {
+    var a = _c.a;
     return ({ b: a });
 });
 var result10 = Array.from(new Set());
-var result11 = Array.from(inputASet, function (_a) {
-    var a = _a.a;
+var result11 = Array.from(inputASet, function (_d) {
+    var a = _d.a;
     return ({ b: a });
 });
 // if this is written inline, the compiler seems to infer

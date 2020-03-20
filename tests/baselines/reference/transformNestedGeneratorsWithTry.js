@@ -73,16 +73,16 @@ function a() {
                     b = function b() {
                         return __awaiter(this, void 0, Bluebird, function () {
                             var error_2;
-                            return __generator(this, function (_a) {
-                                switch (_a.label) {
+                            return __generator(this, function (_b) {
+                                switch (_b.label) {
                                     case 0:
-                                        _a.trys.push([0, 2, , 3]);
+                                        _b.trys.push([0, 2, , 3]);
                                         return [4 /*yield*/, Bluebird.resolve()];
                                     case 1:
-                                        _a.sent(); // -- remove this and it compiles
+                                        _b.sent(); // -- remove this and it compiles
                                         return [3 /*break*/, 3];
                                     case 2:
-                                        error_2 = _a.sent();
+                                        error_2 = _b.sent();
                                         return [3 /*break*/, 3];
                                     case 3: return [2 /*return*/];
                                 }

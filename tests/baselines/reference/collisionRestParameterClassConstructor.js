@@ -87,8 +87,8 @@ var c1NoError = /** @class */ (function () {
 var c2 = /** @class */ (function () {
     function c2() {
         var restParameters = [];
-        for (var _a = 0; _a < arguments.length; _a++) {
-            restParameters[_a] = arguments[_a];
+        for (var _b = 0; _b < arguments.length; _b++) {
+            restParameters[_b] = arguments[_b];
         }
         var _i = 10; // no error
     }
@@ -103,8 +103,8 @@ var c2NoError = /** @class */ (function () {
 var c3 = /** @class */ (function () {
     function c3(_i) {
         var restParameters = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            restParameters[_a - 1] = arguments[_a];
+        for (var _c = 1; _c < arguments.length; _c++) {
+            restParameters[_c - 1] = arguments[_c];
         }
         this._i = _i;
         var _i = 10; // no error
@@ -121,8 +121,8 @@ var c3NoError = /** @class */ (function () {
 var c5 = /** @class */ (function () {
     function c5(_i) {
         var rest = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            rest[_a - 1] = arguments[_a];
+        for (var _d = 1; _d < arguments.length; _d++) {
+            rest[_d - 1] = arguments[_d];
         }
         var _i; // no error
     }

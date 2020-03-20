@@ -122,7 +122,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 1 >Emitted(5, 1) Source(9, 1) + SourceIndex(0)
 2 >Emitted(5, 2) Source(9, 2) + SourceIndex(0)
 ---
->>>function foo2(_a) {
+>>>function foo2(_b) {
 1->
 2 >^^^^^^^^^
 3 >         ^^^^
@@ -142,7 +142,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 4 >Emitted(6, 15) Source(11, 15) + SourceIndex(0)
 5 >Emitted(6, 17) Source(11, 30) + SourceIndex(0)
 ---
->>>    var nameMB = _a[0];
+>>>    var nameMB = _b[0];
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^
 3 >                      ^^^->
@@ -188,7 +188,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 1 >Emitted(9, 1) Source(13, 1) + SourceIndex(0)
 2 >Emitted(9, 2) Source(13, 2) + SourceIndex(0)
 ---
->>>function foo3(_a) {
+>>>function foo3(_c) {
 1->
 2 >^^^^^^^^^
 3 >         ^^^^
@@ -208,7 +208,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 4 >Emitted(10, 15) Source(15, 15) + SourceIndex(0)
 5 >Emitted(10, 17) Source(15, 64) + SourceIndex(0)
 ---
->>>    var nameMA = _a[0], _b = _a[1], primarySkillA = _b[0], secondarySkillA = _b[1];
+>>>    var nameMA = _c[0], _d = _c[1], primarySkillA = _d[0], secondarySkillA = _d[1];
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^
 3 >                      ^^
@@ -271,7 +271,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 1 >Emitted(13, 1) Source(17, 1) + SourceIndex(0)
 2 >Emitted(13, 2) Source(17, 2) + SourceIndex(0)
 ---
->>>function foo4(_a) {
+>>>function foo4(_e) {
 1->
 2 >^^^^^^^^^
 3 >         ^^^^
@@ -291,7 +291,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 4 >Emitted(14, 15) Source(19, 15) + SourceIndex(0)
 5 >Emitted(14, 17) Source(19, 42) + SourceIndex(0)
 ---
->>>    var multiRobotAInfo = _a.slice(0);
+>>>    var multiRobotAInfo = _e.slice(0);
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->

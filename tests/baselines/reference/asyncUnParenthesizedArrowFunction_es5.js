@@ -11,9 +11,9 @@ var x = function (i) { return __awaiter(_this, void 0, void 0, function () { ret
         case 1: return [2 /*return*/, _a.sent()];
     }
 }); }); };
-var x1 = function (i) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-    switch (_a.label) {
+var x1 = function (i) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_b) {
+    switch (_b.label) {
         case 0: return [4 /*yield*/, someOtherFunction(i)];
-        case 1: return [2 /*return*/, _a.sent()];
+        case 1: return [2 /*return*/, _b.sent()];
     }
 }); }); };

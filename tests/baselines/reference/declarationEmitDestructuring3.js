@@ -8,8 +8,8 @@ function foo([x, ...y] = [1, "string", true]) { }
 function bar(_a) {
     var x = _a[0], z = _a[1], w = _a.slice(2);
 }
-function foo(_a) {
-    var _b = _a === void 0 ? [1, "string", true] : _a, x = _b[0], y = _b.slice(1);
+function foo(_b) {
+    var _c = _b === void 0 ? [1, "string", true] : _b, x = _c[0], y = _c.slice(1);
 }
 
 

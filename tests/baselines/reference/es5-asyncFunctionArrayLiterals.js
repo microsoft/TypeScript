@@ -48,14 +48,14 @@ function arrayLiteral0() {
 }
 function arrayLiteral1() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
-                    _a = [y];
+                    _b = [y];
                     return [4 /*yield*/, z];
                 case 1:
-                    x = _a.concat([_b.sent()]);
+                    x = _b.concat([_c.sent()]);
                     return [2 /*return*/];
             }
         });
@@ -63,11 +63,11 @@ function arrayLiteral1() {
 }
 function arrayLiteral2() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        return __generator(this, function (_d) {
+            switch (_d.label) {
                 case 0: return [4 /*yield*/, y];
                 case 1:
-                    x = __spreadArrays.apply(void 0, [(_a.sent()), [z]]);
+                    x = __spreadArrays.apply(void 0, [(_d.sent()), [z]]);
                     return [2 /*return*/];
             }
         });
@@ -75,14 +75,14 @@ function arrayLiteral2() {
 }
 function arrayLiteral3() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _e;
+        return __generator(this, function (_f) {
+            switch (_f.label) {
                 case 0:
-                    _a = [y];
+                    _e = [y];
                     return [4 /*yield*/, z];
                 case 1:
-                    x = __spreadArrays.apply(void 0, _a.concat([[_b.sent()]]));
+                    x = __spreadArrays.apply(void 0, _e.concat([[_f.sent()]]));
                     return [2 /*return*/];
             }
         });
@@ -90,11 +90,11 @@ function arrayLiteral3() {
 }
 function arrayLiteral4() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        return __generator(this, function (_g) {
+            switch (_g.label) {
                 case 0: return [4 /*yield*/, y];
                 case 1:
-                    x = __spreadArrays.apply(void 0, [[_a.sent()], z]);
+                    x = __spreadArrays.apply(void 0, [[_g.sent()], z]);
                     return [2 /*return*/];
             }
         });
@@ -102,14 +102,14 @@ function arrayLiteral4() {
 }
 function arrayLiteral5() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _h;
+        return __generator(this, function (_j) {
+            switch (_j.label) {
                 case 0:
-                    _a = [[y]];
+                    _h = [[y]];
                     return [4 /*yield*/, z];
                 case 1:
-                    x = __spreadArrays.apply(void 0, _a.concat([(_b.sent())]));
+                    x = __spreadArrays.apply(void 0, _h.concat([(_j.sent())]));
                     return [2 /*return*/];
             }
         });
@@ -117,14 +117,14 @@ function arrayLiteral5() {
 }
 function arrayLiteral6() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _k;
+        return __generator(this, function (_l) {
+            switch (_l.label) {
                 case 0:
-                    _a = [y];
+                    _k = [y];
                     return [4 /*yield*/, z];
                 case 1:
-                    x = _a.concat([_b.sent(), a]);
+                    x = _k.concat([_l.sent(), a]);
                     return [2 /*return*/];
             }
         });
@@ -132,15 +132,15 @@ function arrayLiteral6() {
 }
 function arrayLiteral7() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _m;
+        return __generator(this, function (_o) {
+            switch (_o.label) {
                 case 0: return [4 /*yield*/, y];
                 case 1:
-                    _a = [_b.sent(), z];
+                    _m = [_o.sent(), z];
                     return [4 /*yield*/, a];
                 case 2:
-                    x = _a.concat([_b.sent()]);
+                    x = _m.concat([_o.sent()]);
                     return [2 /*return*/];
             }
         });

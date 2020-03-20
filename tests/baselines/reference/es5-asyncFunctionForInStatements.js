@@ -50,22 +50,22 @@ function forInStatement0() {
 }
 function forInStatement1() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _i;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var _b, _c, _i;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
                 case 0:
-                    _a = [];
+                    _b = [];
                     return [4 /*yield*/, y];
                 case 1:
-                    for (_b in _c.sent())
-                        _a.push(_b);
+                    for (_c in _d.sent())
+                        _b.push(_c);
                     _i = 0;
-                    _c.label = 2;
+                    _d.label = 2;
                 case 2:
-                    if (!(_i < _a.length)) return [3 /*break*/, 4];
-                    x = _a[_i];
+                    if (!(_i < _b.length)) return [3 /*break*/, 4];
+                    x = _b[_i];
                     z;
-                    _c.label = 3;
+                    _d.label = 3;
                 case 3:
                     _i++;
                     return [3 /*break*/, 2];
@@ -76,24 +76,24 @@ function forInStatement1() {
 }
 function forInStatement2() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _i;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var _e, _f, _g;
+        return __generator(this, function (_h) {
+            switch (_h.label) {
                 case 0:
-                    _a = [];
-                    for (_b in y)
-                        _a.push(_b);
-                    _i = 0;
-                    _c.label = 1;
+                    _e = [];
+                    for (_f in y)
+                        _e.push(_f);
+                    _g = 0;
+                    _h.label = 1;
                 case 1:
-                    if (!(_i < _a.length)) return [3 /*break*/, 4];
-                    x = _a[_i];
+                    if (!(_g < _e.length)) return [3 /*break*/, 4];
+                    x = _e[_g];
                     return [4 /*yield*/, z];
                 case 2:
-                    _c.sent();
-                    _c.label = 3;
+                    _h.sent();
+                    _h.label = 3;
                 case 3:
-                    _i++;
+                    _g++;
                     return [3 /*break*/, 1];
                 case 4: return [2 /*return*/];
             }
@@ -102,24 +102,24 @@ function forInStatement2() {
 }
 function forInStatement3() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _i;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var _j, _k, _l;
+        return __generator(this, function (_m) {
+            switch (_m.label) {
                 case 0:
-                    _a = [];
-                    for (_b in y)
-                        _a.push(_b);
-                    _i = 0;
-                    _c.label = 1;
+                    _j = [];
+                    for (_k in y)
+                        _j.push(_k);
+                    _l = 0;
+                    _m.label = 1;
                 case 1:
-                    if (!(_i < _a.length)) return [3 /*break*/, 4];
+                    if (!(_l < _j.length)) return [3 /*break*/, 4];
                     return [4 /*yield*/, x];
                 case 2:
-                    (_c.sent()).a = _a[_i];
+                    (_m.sent()).a = _j[_l];
                     z;
-                    _c.label = 3;
+                    _m.label = 3;
                 case 3:
-                    _i++;
+                    _l++;
                     return [3 /*break*/, 1];
                 case 4: return [2 /*return*/];
             }
@@ -128,24 +128,24 @@ function forInStatement3() {
 }
 function forInStatement4() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _i;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var _o, _p, _q;
+        return __generator(this, function (_r) {
+            switch (_r.label) {
                 case 0:
-                    _a = [];
+                    _o = [];
                     return [4 /*yield*/, y];
                 case 1:
-                    for (_b in _c.sent())
-                        _a.push(_b);
-                    _i = 0;
-                    _c.label = 2;
+                    for (_p in _r.sent())
+                        _o.push(_p);
+                    _q = 0;
+                    _r.label = 2;
                 case 2:
-                    if (!(_i < _a.length)) return [3 /*break*/, 4];
-                    x.a = _a[_i];
+                    if (!(_q < _o.length)) return [3 /*break*/, 4];
+                    x.a = _o[_q];
                     z;
-                    _c.label = 3;
+                    _r.label = 3;
                 case 3:
-                    _i++;
+                    _q++;
                     return [3 /*break*/, 2];
                 case 4: return [2 /*return*/];
             }
@@ -154,24 +154,24 @@ function forInStatement4() {
 }
 function forInStatement5() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _i;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var _s, _t, _u;
+        return __generator(this, function (_v) {
+            switch (_v.label) {
                 case 0:
-                    _a = [];
-                    for (_b in y)
-                        _a.push(_b);
-                    _i = 0;
-                    _c.label = 1;
+                    _s = [];
+                    for (_t in y)
+                        _s.push(_t);
+                    _u = 0;
+                    _v.label = 1;
                 case 1:
-                    if (!(_i < _a.length)) return [3 /*break*/, 4];
-                    x.a = _a[_i];
+                    if (!(_u < _s.length)) return [3 /*break*/, 4];
+                    x.a = _s[_u];
                     return [4 /*yield*/, z];
                 case 2:
-                    _c.sent();
-                    _c.label = 3;
+                    _v.sent();
+                    _v.label = 3;
                 case 3:
-                    _i++;
+                    _u++;
                     return [3 /*break*/, 1];
                 case 4: return [2 /*return*/];
             }
@@ -181,7 +181,7 @@ function forInStatement5() {
 function forInStatement6() {
     return __awaiter(this, void 0, void 0, function () {
         var a;
-        return __generator(this, function (_a) {
+        return __generator(this, function (_w) {
             for (a in y) {
                 z;
             }
@@ -191,24 +191,24 @@ function forInStatement6() {
 }
 function forInStatement7() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _i, b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var _x, _y, _z, b;
+        return __generator(this, function (_0) {
+            switch (_0.label) {
                 case 0:
-                    _a = [];
+                    _x = [];
                     return [4 /*yield*/, y];
                 case 1:
-                    for (_b in _c.sent())
-                        _a.push(_b);
-                    _i = 0;
-                    _c.label = 2;
+                    for (_y in _0.sent())
+                        _x.push(_y);
+                    _z = 0;
+                    _0.label = 2;
                 case 2:
-                    if (!(_i < _a.length)) return [3 /*break*/, 4];
-                    b = _a[_i];
+                    if (!(_z < _x.length)) return [3 /*break*/, 4];
+                    b = _x[_z];
                     z;
-                    _c.label = 3;
+                    _0.label = 3;
                 case 3:
-                    _i++;
+                    _z++;
                     return [3 /*break*/, 2];
                 case 4: return [2 /*return*/];
             }
@@ -217,24 +217,24 @@ function forInStatement7() {
 }
 function forInStatement8() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _i, c;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var _1, _2, _3, c;
+        return __generator(this, function (_4) {
+            switch (_4.label) {
                 case 0:
-                    _a = [];
-                    for (_b in y)
-                        _a.push(_b);
-                    _i = 0;
-                    _c.label = 1;
+                    _1 = [];
+                    for (_2 in y)
+                        _1.push(_2);
+                    _3 = 0;
+                    _4.label = 1;
                 case 1:
-                    if (!(_i < _a.length)) return [3 /*break*/, 4];
-                    c = _a[_i];
+                    if (!(_3 < _1.length)) return [3 /*break*/, 4];
+                    c = _1[_3];
                     return [4 /*yield*/, z];
                 case 2:
-                    _c.sent();
-                    _c.label = 3;
+                    _4.sent();
+                    _4.label = 3;
                 case 3:
-                    _i++;
+                    _3++;
                     return [3 /*break*/, 1];
                 case 4: return [2 /*return*/];
             }

@@ -13,8 +13,8 @@ System.register([], function (exports_1, context_1) {
         execute: function () {
             exports_1("x", x = (_a = [1, 2, 3], _a[0])), exports_1("y", y = _a[1]), exports_1("z", z = _a[2]);
             exports_1("z0", z0 = (_b = { a: true, b: { c: "123" } }, _b.a)), exports_1("z1", z1 = _b.b.c);
-            for (var _i = 0, _a = [[1]]; _i < _a.length; _i++) {
-                exports_1("x", x = _a[_i][0]);
+            for (var _i = 0, _c = [[1]]; _i < _c.length; _i++) {
+                exports_1("x", x = _c[_i][0]);
             }
         }
     };

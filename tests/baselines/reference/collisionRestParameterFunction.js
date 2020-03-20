@@ -47,8 +47,8 @@ function f1NoError(_i) {
 }
 function f3() {
     var restParameters = [];
-    for (var _a = 0; _a < arguments.length; _a++) {
-        restParameters[_a] = arguments[_a];
+    for (var _b = 0; _b < arguments.length; _b++) {
+        restParameters[_b] = arguments[_b];
     }
     var _i = 10; // no error
 }
@@ -57,8 +57,8 @@ function f3NoError() {
 }
 function f4(_i) {
     var rest = [];
-    for (var _a = 1; _a < arguments.length; _a++) {
-        rest[_a - 1] = arguments[_a];
+    for (var _c = 1; _c < arguments.length; _c++) {
+        rest[_c - 1] = arguments[_c];
     }
 }
 function f4NoError(_i) {

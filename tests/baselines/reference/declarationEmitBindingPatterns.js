@@ -10,10 +10,10 @@ var k = function (_a) {
     var _b = _a.x, z = _b === void 0 ? 'y' : _b;
 };
 var a;
-function f(_a, _b, _c) {
-    _a = a;
-    _b = a;
-    var _d = (_c === void 0 ? a : _c).p, _e = _d === void 0 ? a : _d;
+function f(_c, _d, _e) {
+    _c = a;
+    _d = a;
+    var _f = (_e === void 0 ? a : _e).p, _g = _f === void 0 ? a : _f;
 }
 
 

@@ -37,12 +37,12 @@ function foo1(_a) {
     var _b = _a.skills, primaryA = _b.primary, secondaryA = _b.secondary;
     console.log(primaryA);
 }
-function foo2(_a) {
-    var nameC = _a.name, _b = _a.skills, primaryB = _b.primary, secondaryB = _b.secondary;
+function foo2(_c) {
+    var nameC = _c.name, _d = _c.skills, primaryB = _d.primary, secondaryB = _d.secondary;
     console.log(secondaryB);
 }
-function foo3(_a) {
-    var skills = _a.skills;
+function foo3(_e) {
+    var skills = _e.skills;
     console.log(skills.primary);
 }
 foo1(robotA);

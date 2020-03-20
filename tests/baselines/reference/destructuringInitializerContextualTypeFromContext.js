@@ -53,11 +53,11 @@ var Parent = function (_a) {
     var children = _a.children, _b = _a.name, name = _b === void 0 ? "Artemis" : _b, props = __rest(_a, ["children", "name"]);
     return Child(__assign({ name: name }, props));
 };
-var Child = function (_a) {
-    var children = _a.children, _b = _a.name, name = _b === void 0 ? "Artemis" : _b, props = __rest(_a, ["children", "name"]);
+var Child = function (_c) {
+    var children = _c.children, _d = _c.name, name = _d === void 0 ? "Artemis" : _d, props = __rest(_c, ["children", "name"]);
     return "name: " + name + " props: " + JSON.stringify(props);
 };
-f(function (_a) {
-    var _1 = _a[0], _b = _a[1], _2 = _b === void 0 ? undefined : _b;
+f(function (_e) {
+    var _1 = _e[0], _f = _e[1], _2 = _f === void 0 ? undefined : _f;
     return undefined;
 });

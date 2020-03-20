@@ -113,8 +113,8 @@ var C = /** @class */ (function () {
         // Implicit-'any'/'any[]' errors for x, r.
         this.pub_f14 = function (x) {
             var r = [];
-            for (var _i = 1; _i < arguments.length; _i++) {
-                r[_i - 1] = arguments[_i];
+            for (var _a = 1; _a < arguments.length; _a++) {
+                r[_a - 1] = arguments[_a];
             }
             return "";
         };
@@ -129,16 +129,16 @@ var C = /** @class */ (function () {
         // Implicit-'any[]' error for r.
         this.priv_f13 = function () {
             var r = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                r[_i] = arguments[_i];
+            for (var _b = 0; _b < arguments.length; _b++) {
+                r[_b] = arguments[_b];
             }
             return "";
         };
         // Implicit-'any'/'any[]' errors for x, r.
         this.priv_f14 = function (x) {
             var r = [];
-            for (var _i = 1; _i < arguments.length; _i++) {
-                r[_i - 1] = arguments[_i];
+            for (var _c = 1; _c < arguments.length; _c++) {
+                r[_c - 1] = arguments[_c];
             }
             return "";
         };
@@ -156,15 +156,15 @@ var C = /** @class */ (function () {
     // Implicit-'any[]' errors for r.
     C.prototype.pub_f6 = function () {
         var r = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            r[_i] = arguments[_i];
+        for (var _d = 0; _d < arguments.length; _d++) {
+            r[_d] = arguments[_d];
         }
     };
     // Implicit-'any'/'any[]' errors for x, r.
     C.prototype.pub_f7 = function (x) {
         var r = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            r[_i - 1] = arguments[_i];
+        for (var _e = 1; _e < arguments.length; _e++) {
+            r[_e - 1] = arguments[_e];
         }
     };
     C.prototype.pub_f8 = function (x3, y3) { };
@@ -182,15 +182,15 @@ var C = /** @class */ (function () {
     // Implicit-'any[]' errors for r.
     C.prototype.priv_f6 = function () {
         var r = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            r[_i] = arguments[_i];
+        for (var _f = 0; _f < arguments.length; _f++) {
+            r[_f] = arguments[_f];
         }
     };
     // Implicit-'any'/'any[]' errors for x, r.
     C.prototype.priv_f7 = function (x) {
         var r = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            r[_i - 1] = arguments[_i];
+        for (var _g = 1; _g < arguments.length; _g++) {
+            r[_g - 1] = arguments[_g];
         }
     };
     C.prototype.priv_f8 = function (x3, y3) { };

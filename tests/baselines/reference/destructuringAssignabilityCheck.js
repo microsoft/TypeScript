@@ -20,12 +20,12 @@ const []: {} = {}
 "use strict";
 var _a = {}; // should be error
 var _b = undefined; // error correctly
-(function (_a) { return 0; })({}); // should be error
-(function (_a) { return 0; })(undefined); // should be error
-function foo(_a) {
+(function (_e) { return 0; })({}); // should be error
+(function (_f) { return 0; })(undefined); // should be error
+function foo(_g) {
     return 0;
 }
-function bar(_a) {
+function bar(_h) {
     return 0;
 }
 var _c = 1;

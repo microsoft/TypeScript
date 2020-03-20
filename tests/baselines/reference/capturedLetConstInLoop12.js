@@ -35,8 +35,8 @@
     "use strict";
     var _loop_2 = function (i) {
         (function () {
-            var _a;
-            return (_a = { a: i + 1 }, i = _a.a, _a);
+            var _b;
+            return (_b = { a: i + 1 }, i = _b.a, _b);
         })();
         out_i_2 = i;
     };
