@@ -18947,6 +18947,12 @@ namespace ts {
             return false;
         }
 
+        function containsTruthyCheck(source: Node, target: Node) {
+            return isMatchingReference(source, target) ||
+                (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken &&
+                (isMatchingReference(source, (<BinaryExpression>target).left) || isMatchingReference(source, (<BinaryExpression>target).right)));
+        }
+
         function getAccessedPropertyName(access: AccessExpression): __String | undefined {
             return access.kind === SyntaxKind.PropertyAccessExpression ? access.name.escapedText :
                 isStringOrNumericLiteralLike(access.argumentExpression) ? escapeLeadingUnderscores(access.argumentExpression.text) :
@@ -20343,15 +20349,22 @@ namespace ts {
                 if (type.flags & TypeFlags.Any && literal.text === "function") {
                     return type;
                 }
+                if (assumeTrue && type.flags & TypeFlags.Unknown && literal.text === "object") {
+                    // The pattern x && typeof x === 'object', where x is of type unknown, narrows x to type object.
+                    if (typeOfExpr.parent.parent.kind === SyntaxKind.BinaryExpression) {
+                        const expr = <BinaryExpression>typeOfExpr.parent.parent;
+                        if (expr.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken && expr.right === typeOfExpr.parent && containsTruthyCheck(reference, expr.left)) {
+                            return nonPrimitiveType;
+                        }
+                    }
+                    return getUnionType([nonPrimitiveType, nullType]);
+                }
                 const facts = assumeTrue ?
                     typeofEQFacts.get(literal.text) || TypeFacts.TypeofEQHostObject :
                     typeofNEFacts.get(literal.text) || TypeFacts.TypeofNEHostObject;
                 return getTypeWithFacts(assumeTrue ? mapType(type, narrowTypeForTypeof) : type, facts);
 
                 function narrowTypeForTypeof(type: Type) {
-                    if (type.flags & TypeFlags.Unknown && literal.text === "object") {
-                        return getUnionType([nonPrimitiveType, nullType]);
-                    }
                     // We narrow a non-union type to an exact primitive type if the non-union type
                     // is a supertype of that primitive type. For example, type 'any' can be narrowed
                     // to one of the primitive types.
