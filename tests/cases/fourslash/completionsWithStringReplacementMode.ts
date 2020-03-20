@@ -12,7 +12,7 @@ for (let i = 0 ; i < 3; ++i) {
             { name: "foo", replacementSpan: test.ranges()[i] },
             { name: "bar", replacementSpan: test.ranges()[i] },
         ], preferences: {
-            stringLiteralReplacementMode: true,
+            provideStringLiteralReplacementSpan: true,
         } 
     });
 }

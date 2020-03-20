@@ -6718,7 +6718,7 @@ namespace ts {
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
-        readonly stringLiteralReplacementMode?: boolean;
+        readonly provideStringLiteralReplacementSpan?: boolean;
     }
 
     /** Represents a bigint literal value without requiring bigint support */

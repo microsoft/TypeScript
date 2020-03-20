@@ -475,7 +475,7 @@ namespace ts.Completions {
                 recommendedCompletion,
                 propertyAccessToConvert,
                 isJsxInitializer,
-                preferences
+                preferences,
             );
             if (!entry) {
                 continue;
