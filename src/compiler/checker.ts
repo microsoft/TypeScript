@@ -18488,10 +18488,32 @@ namespace ts {
                 return typeVariable;
             }
 
+            function isPromiseForType(promiseType: Type, promisedType: Type) {
+                return isThenableType(promiseType) && unwrapAwaitedType(getPromisedTypeOfPromise(promiseType) ?? errorType) === promisedType;
+            }
+
             function inferToMultipleTypes(source: Type, targets: Type[], targetFlags: TypeFlags) {
                 let typeVariableCount = 0;
                 if (targetFlags & TypeFlags.Union) {
                     let nakedTypeVariable: Type | undefined;
+                    for (const t of targets) {
+                        if (getInferenceInfoForType(t)) {
+                            nakedTypeVariable = t;
+                            typeVariableCount++;
+                        }
+                    }
+                    // To better support backwards compatibility with the new `awaited` type, we detect a target
+                    // union of exactly `T | PromiseLike<T>` (for any compatible `PromiseLike`). When encountered,
+                    // we infer from source to the type parameter `T`, where each type of source is mapped to extract
+                    // the promised type of any promise (e.g., `string | Promise<number>` becomes `string | number`).
+                    if (typeVariableCount === 1 && targets.length === 2) {
+                        for (const t of targets) {
+                            if (!getInferenceInfoForType(t) && isPromiseForType(t, nakedTypeVariable!)) {
+                                inferFromTypes(mapType(source, s => getPromisedTypeOfPromise(s) ?? s), nakedTypeVariable!);
+                                return;
+                            }
+                        }
+                    }
                     const sources = source.flags & TypeFlags.Union ? (<UnionType>source).types : [source];
                     const matched = new Array<boolean>(sources.length);
                     let inferenceCircularity = false;
@@ -18500,11 +18522,7 @@ namespace ts {
                     // equal priority (i.e. of equal quality) to what we would infer for a naked type
                     // parameter.
                     for (const t of targets) {
-                        if (getInferenceInfoForType(t)) {
-                            nakedTypeVariable = t;
-                            typeVariableCount++;
-                        }
-                        else {
+                        if (!getInferenceInfoForType(t)) {
                             for (let i = 0; i < sources.length; i++) {
                                 const saveInferencePriority = inferencePriority;
                                 inferencePriority = InferencePriority.MaxValue;

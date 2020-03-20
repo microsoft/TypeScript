@@ -1063,13 +1063,8 @@ namespace ts.codefix {
             const genericSigs = checker.getSignaturesOfType(genericType, SignatureKind.Call);
             const usageSigs = checker.getSignaturesOfType(usageType, SignatureKind.Call);
             // allow for multiple overloads of `then`.
-            if (genericSigs.length >= 1 && genericSigs.length <= 2 && usageSigs.length === 1) {
-                const types: Type[] = [];
-                types.push(...inferFromSignatures(genericSigs[0], usageSigs[0], typeParameter));
-                if (genericSigs.length === 2) {
-                    types.push(...inferFromSignatures(genericSigs[1], usageSigs[0], typeParameter));
-                }
-                return types;
+            if (genericSigs.length === 1 && usageSigs.length === 1) {
+                return inferFromSignatures(genericSigs[0], usageSigs[0], typeParameter);
             }
             return [];
         }

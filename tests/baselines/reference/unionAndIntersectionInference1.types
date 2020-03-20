@@ -190,12 +190,12 @@ const createTestAsync = (): Promise<ITest> => Promise.resolve().then(() => ({ na
 >createTestAsync : () => Promise<ITest>
 >(): Promise<ITest> => Promise.resolve().then(() => ({ name: 'test' })) : () => Promise<ITest>
 >Promise.resolve().then(() => ({ name: 'test' })) : Promise<ITest | { name: "test"; }>
->Promise.resolve().then : { <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1, onrejected?: (reason: any) => TResult2): Promise<awaited TResult1 | awaited TResult2>; <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<awaited TResult1 | awaited TResult2>; }
+>Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
 >Promise.resolve() : Promise<void>
 >Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<awaited T>; (): Promise<void>; }
 >Promise : PromiseConstructor
 >resolve : { <T>(value: T | PromiseLike<T>): Promise<awaited T>; (): Promise<void>; }
->then : { <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1, onrejected?: (reason: any) => TResult2): Promise<awaited TResult1 | awaited TResult2>; <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<awaited TResult1 | awaited TResult2>; }
+>then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
 >() => ({ name: 'test' }) : () => { name: "test"; }
 >({ name: 'test' }) : { name: "test"; }
 >{ name: 'test' } : { name: "test"; }

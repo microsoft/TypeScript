@@ -214,11 +214,11 @@ const createTestAsync = (): Promise<ITest> => Promise.resolve().then(() => ({ na
 >createTestAsync : Symbol(createTestAsync, Decl(unionAndIntersectionInference1.ts, 79, 5))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >ITest : Symbol(ITest, Decl(unionAndIntersectionInference1.ts, 71, 18))
->Promise.resolve().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Promise.resolve().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 >name : Symbol(name, Decl(unionAndIntersectionInference1.ts, 79, 77))
 
 const createTest = (): ITest => {

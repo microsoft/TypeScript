@@ -121,9 +121,9 @@ declare var console: any;
 >console : Symbol(console, Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 51, 11))
 
 out().then(() => {
->out().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>out().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 >out : Symbol(out, Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 44, 37))
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 
     console.log("Yea!");
 >console : Symbol(console, Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 51, 11))

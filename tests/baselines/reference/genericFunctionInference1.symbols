@@ -926,9 +926,9 @@ const promise = Promise.resolve(1);
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 promise.then(
->promise.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>promise.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 >promise : Symbol(promise, Decl(genericFunctionInference1.ts, 194, 5))
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 
     pipe(
 >pipe : Symbol(pipe, Decl(genericFunctionInference1.ts, 0, 0), Decl(genericFunctionInference1.ts, 0, 84), Decl(genericFunctionInference1.ts, 1, 104))

@@ -13,9 +13,9 @@ function foo(x: Promise<any>) {
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 
     x.then(value => {
->x.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(2.ts, 0, 13))
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(2.ts, 1, 11))
 
         let b = new value.B();

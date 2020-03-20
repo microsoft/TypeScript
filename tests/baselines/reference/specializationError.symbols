@@ -4,7 +4,7 @@ interface Promise<T> {
 >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(specializationError.ts, 0, 18))
 
     then<U>(value: T): void;
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(specializationError.ts, 0, 22))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(specializationError.ts, 0, 22))
 >U : Symbol(U, Decl(specializationError.ts, 1, 9))
 >value : Symbol(value, Decl(specializationError.ts, 1, 12))
 >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(specializationError.ts, 0, 18))

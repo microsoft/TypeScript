@@ -199,7 +199,7 @@ declare function f0<U>(u: U): Promise<awaited U>;
 declare function f1<U, V>(u: U, v: V): Promise<awaited U | awaited V>;
 declare function f2<U>(u: U): Promise<awaited U>;
 declare function f3<U, V>(u: U, v: V): Promise<awaited U | awaited V>;
-declare function f4<U, V>(u: U, v: V): Promise<awaited U | awaited V>;
+declare function f4<U, V>(u: U, v: V): Promise<awaited V | awaited U>;
 declare function f5<U>(u: Promise<U>): Promise<U>;
 declare function f6<U>(u: Promise<Promise<U>>): Promise<U>;
 declare let v0: number;
