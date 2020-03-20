@@ -151,14 +151,6 @@ namespace ts {
             description: Diagnostics.Whether_to_keep_outdated_console_output_in_watch_mode_instead_of_clearing_the_screen,
         },
         {
-          name: "incremental",
-          shortName: "i",
-          type: "boolean",
-          category: Diagnostics.Basic_Options,
-          description: Diagnostics.Enable_incremental_compilation,
-          transpileOptionValue: undefined
-        },
-        {
             name: "listFiles",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
@@ -203,6 +195,14 @@ namespace ts {
             paramType: Diagnostics.FILE_OR_DIRECTORY,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Generates_a_CPU_profile
+        },
+        {
+            name: "incremental",
+            shortName: "i",
+            type: "boolean",
+            category: Diagnostics.Basic_Options,
+            description: Diagnostics.Enable_incremental_compilation,
+            transpileOptionValue: undefined
         },
         {
             name: "assumeChangesOnlyAffectDirectDependencies",
