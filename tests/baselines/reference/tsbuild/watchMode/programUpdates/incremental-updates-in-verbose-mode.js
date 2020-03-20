@@ -104,6 +104,7 @@ export function run() {
 //// [/user/username/projects/sample1/core/anotherModule.js]
 "use strict";
 exports.__esModule = true;
+exports.World = void 0;
 exports.World = "hello";
 
 
@@ -117,6 +118,7 @@ export declare const World = "hello";
 //// [/user/username/projects/sample1/core/index.js]
 "use strict";
 exports.__esModule = true;
+exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
 exports.leftPad = leftPad;
@@ -170,11 +172,12 @@ export declare function multiply(a: number, b: number): number;
 }
 
 //// [/user/username/projects/sample1/logic/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
 
 //// [/user/username/projects/sample1/logic/index.js]
 "use strict";
 exports.__esModule = true;
+exports.m = exports.getSecondsInDay = void 0;
 var c = require("../core/index");
 function getSecondsInDay() {
     return c.multiply(10, 15);
@@ -244,6 +247,7 @@ export declare const m: typeof mod;
 //// [/user/username/projects/sample1/tests/index.js]
 "use strict";
 exports.__esModule = true;
+exports.m = void 0;
 var c = require("../core/index");
 var logic = require("../logic/index");
 c.leftPad("", 10);
@@ -322,35 +326,35 @@ export declare const m: typeof mod;
 
 Output::
 >> Screen clear
-12:00:45 AM - Starting compilation in watch mode...
+[[90m12:00:45 AM[0m] Starting compilation in watch mode...
 
 
-12:00:46 AM - Projects in this build: 
+[[90m12:00:46 AM[0m] Projects in this build: 
     * sample1/core/tsconfig.json
     * sample1/logic/tsconfig.json
     * sample1/tests/tsconfig.json
 
 
-12:00:47 AM - Project 'sample1/core/tsconfig.json' is out of date because output file 'sample1/core/anotherModule.js' does not exist
+[[90m12:00:47 AM[0m] Project 'sample1/core/tsconfig.json' is out of date because output file 'sample1/core/anotherModule.js' does not exist
 
 
-12:00:48 AM - Building project '/user/username/projects/sample1/core/tsconfig.json'...
+[[90m12:00:48 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
 
-12:01:03 AM - Project 'sample1/logic/tsconfig.json' is out of date because output file 'sample1/logic/index.js' does not exist
+[[90m12:01:03 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because output file 'sample1/logic/index.js' does not exist
 
 
-12:01:04 AM - Building project '/user/username/projects/sample1/logic/tsconfig.json'...
+[[90m12:01:04 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
 
-12:01:13 AM - Project 'sample1/tests/tsconfig.json' is out of date because output file 'sample1/tests/index.js' does not exist
+[[90m12:01:13 AM[0m] Project 'sample1/tests/tsconfig.json' is out of date because output file 'sample1/tests/index.js' does not exist
 
 
-12:01:14 AM - Building project '/user/username/projects/sample1/tests/tsconfig.json'...
+[[90m12:01:14 AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
 
+[[90m12:01:21 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:21 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/index.ts"]
@@ -397,27 +401,27 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/core/anothermodule.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
 /user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/logic/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
 /user/username/projects/sample1/tests/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/tests/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/sample1/logic:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -434,11 +438,12 @@ export const m = mod;
 function someFn() { }
 
 //// [/user/username/projects/sample1/logic/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC;AAErB,SAAS,MAAM,KAAK,CAAC"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC;AAErB,SAAS,MAAM,KAAK,CAAC"}
 
 //// [/user/username/projects/sample1/logic/index.js]
 "use strict";
 exports.__esModule = true;
+exports.m = exports.getSecondsInDay = void 0;
 var c = require("../core/index");
 function getSecondsInDay() {
     return c.multiply(10, 15);
@@ -507,23 +512,23 @@ function someFn() { }
 
 Output::
 >> Screen clear
-12:01:25 AM - File change detected. Starting incremental compilation...
+[[90m12:01:25 AM[0m] File change detected. Starting incremental compilation...
 
 
-12:01:26 AM - Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/index.js' is older than newest input 'sample1/core'
+[[90m12:01:26 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/index.js' is older than newest input 'sample1/core'
 
 
-12:01:27 AM - Building project '/user/username/projects/sample1/logic/tsconfig.json'...
+[[90m12:01:27 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
 
-12:01:40 AM - Project 'sample1/tests/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:01:40 AM[0m] Project 'sample1/tests/tsconfig.json' is up to date with .d.ts files from its dependencies
 
 
-12:01:42 AM - Updating output timestamps of project '/user/username/projects/sample1/tests/tsconfig.json'...
+[[90m12:01:42 AM[0m] Updating output timestamps of project '/user/username/projects/sample1/tests/tsconfig.json'...
 
 
+[[90m12:01:43 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:43 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]
@@ -539,27 +544,27 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/core/anothermodule.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
 /user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/logic/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
 /user/username/projects/sample1/tests/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/tests/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/sample1/logic:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -576,11 +581,12 @@ export const m = mod;
 export function someFn() { }
 
 //// [/user/username/projects/sample1/logic/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC;AAErB,SAAgB,MAAM,KAAK,CAAC;AAA5B,wBAA4B"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC;AAErB,SAAgB,MAAM,KAAK,CAAC;AAA5B,wBAA4B"}
 
 //// [/user/username/projects/sample1/logic/index.js]
 "use strict";
 exports.__esModule = true;
+exports.someFn = exports.m = exports.getSecondsInDay = void 0;
 var c = require("../core/index");
 function getSecondsInDay() {
     return c.multiply(10, 15);
@@ -717,23 +723,23 @@ export declare function someFn(): void;
 
 Output::
 >> Screen clear
-12:01:47 AM - File change detected. Starting incremental compilation...
+[[90m12:01:47 AM[0m] File change detected. Starting incremental compilation...
 
 
-12:01:48 AM - Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/index.js' is older than newest input 'sample1/core'
+[[90m12:01:48 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/index.js' is older than newest input 'sample1/core'
 
 
-12:01:49 AM - Building project '/user/username/projects/sample1/logic/tsconfig.json'...
+[[90m12:01:49 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
 
-12:02:02 AM - Project 'sample1/tests/tsconfig.json' is out of date because oldest output 'sample1/tests/index.js' is older than newest input 'sample1/logic/tsconfig.json'
+[[90m12:02:02 AM[0m] Project 'sample1/tests/tsconfig.json' is out of date because oldest output 'sample1/tests/index.js' is older than newest input 'sample1/logic/tsconfig.json'
 
 
-12:02:03 AM - Building project '/user/username/projects/sample1/tests/tsconfig.json'...
+[[90m12:02:03 AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
 
+[[90m12:02:13 AM[0m] Found 0 errors. Watching for file changes.
 
-12:02:13 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]
@@ -762,26 +768,26 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/core/anothermodule.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
 /user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/logic/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
 /user/username/projects/sample1/tests/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/tests/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/sample1/logic:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

@@ -9,7 +9,7 @@
 //// }
 
 verify.importFixAtPosition([
-`import type { XXX } from "./module";
+`import { XXX } from "./module";
 
 let t: XXX.I;`
 ]);

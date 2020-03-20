@@ -149,54 +149,55 @@ declare const console: { log(msg: any): void; };
 
 Output::
 >> Screen clear
-12:00:46 AM - Starting compilation in watch mode...
+[[90m12:00:46 AM[0m] Starting compilation in watch mode...
 
 
-12:00:47 AM - Projects in this build: 
+[[90m12:00:47 AM[0m] Projects in this build: 
     * animals/tsconfig.json
     * zoo/tsconfig.json
     * core/tsconfig.json
     * tsconfig.json
 
 
-error TS6202: Project references may not form a circular graph. Cycle detected: /user/username/projects/demo/tsconfig.json
+[91merror[0m[90m TS6202: [0mProject references may not form a circular graph. Cycle detected: /user/username/projects/demo/tsconfig.json
 /user/username/projects/demo/core/tsconfig.json
 /user/username/projects/demo/zoo/tsconfig.json
 /user/username/projects/demo/animals/tsconfig.json
 
 
-12:00:48 AM - Found 1 error. Watching for file changes.
+[[90m12:00:48 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 WatchedFiles::
 /user/username/projects/demo/animals/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/animals/animal.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/animal.ts","pollingInterval":250}
 /user/username/projects/demo/animals/dog.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/dog.ts","pollingInterval":250}
 /user/username/projects/demo/animals/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/index.ts","pollingInterval":250}
 /user/username/projects/demo/zoo/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/zoo/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/zoo/zoo.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/zoo/zoo.ts","pollingInterval":250}
 /user/username/projects/demo/core/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/core/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/core/utilities.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/core/utilities.ts","pollingInterval":250}
 /user/username/projects/demo/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/tsconfig.json","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/demo/animals:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/animals","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/demo/zoo:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/zoo","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/demo/core:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -214,6 +215,7 @@ Change:: Fix error
 //// [/user/username/projects/demo/lib/core/utilities.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.lastElementOf = exports.makeRandomName = void 0;
 function makeRandomName() {
     return "Bob!?! ";
 }
@@ -284,9 +286,10 @@ export default interface Animal {
 //// [/user/username/projects/demo/lib/animals/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createDog = void 0;
 var animal_1 = require("./animal");
 var dog_1 = require("./dog");
-exports.createDog = dog_1.createDog;
+Object.defineProperty(exports, "createDog", { enumerable: true, get: function () { return dog_1.createDog; } });
 
 
 //// [/user/username/projects/demo/lib/animals/index.d.ts]
@@ -299,6 +302,7 @@ export { createDog, Dog };
 //// [/user/username/projects/demo/lib/animals/dog.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createDog = void 0;
 var utilities_1 = require("../core/utilities");
 function createDog() {
     return ({
@@ -394,6 +398,7 @@ export declare function createDog(): Dog;
 //// [/user/username/projects/demo/lib/zoo/zoo.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createZoo = void 0;
 var index_1 = require("../animals/index");
 function createZoo() {
     return [
@@ -486,29 +491,29 @@ export declare function createZoo(): Array<Dog>;
 
 Output::
 >> Screen clear
-12:00:52 AM - File change detected. Starting incremental compilation...
+[[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
 
 
-12:00:53 AM - Project 'core/tsconfig.json' is out of date because output file 'lib/core/utilities.js' does not exist
+[[90m12:00:53 AM[0m] Project 'core/tsconfig.json' is out of date because output file 'lib/core/utilities.js' does not exist
 
 
-12:00:54 AM - Building project '/user/username/projects/demo/core/tsconfig.json'...
+[[90m12:00:54 AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
 
 
-12:01:06 AM - Project 'animals/tsconfig.json' is out of date because output file 'lib/animals/animal.js' does not exist
+[[90m12:01:06 AM[0m] Project 'animals/tsconfig.json' is out of date because output file 'lib/animals/animal.js' does not exist
 
 
-12:01:07 AM - Building project '/user/username/projects/demo/animals/tsconfig.json'...
+[[90m12:01:07 AM[0m] Building project '/user/username/projects/demo/animals/tsconfig.json'...
 
 
-12:01:25 AM - Project 'zoo/tsconfig.json' is out of date because output file 'lib/zoo/zoo.js' does not exist
+[[90m12:01:25 AM[0m] Project 'zoo/tsconfig.json' is out of date because output file 'lib/zoo/zoo.js' does not exist
 
 
-12:01:26 AM - Building project '/user/username/projects/demo/zoo/tsconfig.json'...
+[[90m12:01:26 AM[0m] Building project '/user/username/projects/demo/zoo/tsconfig.json'...
 
 
+[[90m12:01:36 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:36 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/demo/core/utilities.ts"]
@@ -555,32 +560,32 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/demo/animals/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/animals/animal.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/animal.ts","pollingInterval":250}
 /user/username/projects/demo/animals/dog.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/dog.ts","pollingInterval":250}
 /user/username/projects/demo/animals/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/animals/index.ts","pollingInterval":250}
 /user/username/projects/demo/zoo/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/zoo/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/zoo/zoo.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/zoo/zoo.ts","pollingInterval":250}
 /user/username/projects/demo/core/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/core/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/core/utilities.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/core/utilities.ts","pollingInterval":250}
 /user/username/projects/demo/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/demo/tsconfig.json","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/demo/animals:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/animals","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/demo/zoo:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/zoo","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/demo/core:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

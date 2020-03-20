@@ -23,12 +23,11 @@ interface Array<T> { length: number; [n: number]: T; }
 
 
 Output::
-
-12:00:13 AM - Starting compilation in watch mode...
-
+[[90m12:00:13 AM[0m] Starting compilation in watch mode...
 
 
-12:00:16 AM - Found 0 errors. Watching for file changes.
+[[90m12:00:16 AM[0m] Found 0 errors. Watching for file changes.
+
 
 
 Program root files: ["/f.ts","/a/lib/lib.d.ts"]
@@ -43,17 +42,17 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/tsconfig.json","pollingInterval":250}
 /f.ts:
-  {"pollingInterval":250}
+  {"fileName":"/f.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -68,12 +67,11 @@ Change:: Comment added to file f
 
 
 Output::
-
-12:00:19 AM - File change detected. Starting incremental compilation...
-
+[[90m12:00:19 AM[0m] File change detected. Starting incremental compilation...
 
 
-12:00:23 AM - Found 0 errors. Watching for file changes.
+[[90m12:00:23 AM[0m] Found 0 errors. Watching for file changes.
+
 
 
 Program root files: ["/f.ts","/a/lib/lib.d.ts"]
@@ -87,16 +85,16 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/tsconfig.json","pollingInterval":250}
 /f.ts:
-  {"pollingInterval":250}
+  {"fileName":"/f.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

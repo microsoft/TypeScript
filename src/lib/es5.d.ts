@@ -966,7 +966,7 @@ declare var Error: ErrorConstructor;
 interface EvalError extends Error {
 }
 
-interface EvalErrorConstructor {
+interface EvalErrorConstructor extends ErrorConstructor {
     new(message?: string): EvalError;
     (message?: string): EvalError;
     readonly prototype: EvalError;
@@ -977,7 +977,7 @@ declare var EvalError: EvalErrorConstructor;
 interface RangeError extends Error {
 }
 
-interface RangeErrorConstructor {
+interface RangeErrorConstructor extends ErrorConstructor {
     new(message?: string): RangeError;
     (message?: string): RangeError;
     readonly prototype: RangeError;
@@ -988,7 +988,7 @@ declare var RangeError: RangeErrorConstructor;
 interface ReferenceError extends Error {
 }
 
-interface ReferenceErrorConstructor {
+interface ReferenceErrorConstructor extends ErrorConstructor {
     new(message?: string): ReferenceError;
     (message?: string): ReferenceError;
     readonly prototype: ReferenceError;
@@ -999,7 +999,7 @@ declare var ReferenceError: ReferenceErrorConstructor;
 interface SyntaxError extends Error {
 }
 
-interface SyntaxErrorConstructor {
+interface SyntaxErrorConstructor extends ErrorConstructor {
     new(message?: string): SyntaxError;
     (message?: string): SyntaxError;
     readonly prototype: SyntaxError;
@@ -1010,7 +1010,7 @@ declare var SyntaxError: SyntaxErrorConstructor;
 interface TypeError extends Error {
 }
 
-interface TypeErrorConstructor {
+interface TypeErrorConstructor extends ErrorConstructor {
     new(message?: string): TypeError;
     (message?: string): TypeError;
     readonly prototype: TypeError;
@@ -1021,7 +1021,7 @@ declare var TypeError: TypeErrorConstructor;
 interface URIError extends Error {
 }
 
-interface URIErrorConstructor {
+interface URIErrorConstructor extends ErrorConstructor {
     new(message?: string): URIError;
     (message?: string): URIError;
     readonly prototype: URIError;
@@ -1254,7 +1254,7 @@ interface Array<T> {
      * @param start The zero-based location in the array from which to start removing elements.
      * @param deleteCount The number of elements to remove.
      */
-    splice(start: number, deleteCount?: number): T[];
+    splice(start: number, deleteCount: number): T[];
     /**
      * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
      * @param start The zero-based location in the array from which to start removing elements.
@@ -1378,7 +1378,7 @@ declare type PropertyDecorator = (target: Object, propertyKey: string | symbol) 
 declare type MethodDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
 declare type ParameterDecorator = (target: Object, propertyKey: string | symbol, parameterIndex: number) => void;
 
-declare type PromiseConstructorLike = new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>;
+declare type PromiseConstructorLike = new <T>(executor: (resolve: (value?: T | PromiseLike<T> | awaited T) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>;
 
 interface PromiseLike<T> {
     /**
@@ -1387,7 +1387,7 @@ interface PromiseLike<T> {
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): PromiseLike<TResult1 | TResult2>;
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: awaited T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): PromiseLike<awaited TResult1 | awaited TResult2>;
 }
 
 /**
@@ -1400,14 +1400,14 @@ interface Promise<T> {
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: awaited T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<awaited TResult1 | awaited TResult2>;
 
     /**
      * Attaches a callback for only the rejection of the Promise.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of the callback.
      */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<awaited T | awaited TResult>;
 }
 
 interface ArrayLike<T> {
@@ -1920,6 +1920,9 @@ interface Int8Array {
      */
     toString(): string;
 
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Int8Array;
+
     [index: number]: number;
 }
 interface Int8ArrayConstructor {
@@ -2198,6 +2201,9 @@ interface Uint8Array {
      * Returns a string representation of an array.
      */
     toString(): string;
+
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Uint8Array;
 
     [index: number]: number;
 }
@@ -2478,6 +2484,9 @@ interface Uint8ClampedArray {
      */
     toString(): string;
 
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Uint8ClampedArray;
+
     [index: number]: number;
 }
 
@@ -2754,6 +2763,9 @@ interface Int16Array {
      * Returns a string representation of an array.
      */
     toString(): string;
+
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Int16Array;
 
     [index: number]: number;
 }
@@ -3035,6 +3047,9 @@ interface Uint16Array {
      */
     toString(): string;
 
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Uint16Array;
+
     [index: number]: number;
 }
 
@@ -3314,6 +3329,9 @@ interface Int32Array {
      */
     toString(): string;
 
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Int32Array;
+
     [index: number]: number;
 }
 
@@ -3591,6 +3609,9 @@ interface Uint32Array {
      * Returns a string representation of an array.
      */
     toString(): string;
+
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Uint32Array;
 
     [index: number]: number;
 }
@@ -3871,6 +3892,9 @@ interface Float32Array {
      */
     toString(): string;
 
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Float32Array;
+
     [index: number]: number;
 }
 
@@ -4141,6 +4165,9 @@ interface Float64Array {
     subarray(begin?: number, end?: number): Float64Array;
 
     toString(): string;
+
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Float64Array;
 
     [index: number]: number;
 }

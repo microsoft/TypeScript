@@ -7,9 +7,9 @@ function logLength<T extends string, U extends string>(arg: { [K in U]: T }[U]):
 
     console.log(arg.length);
 >console.log(arg.length) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >arg.length : number
 >arg : { [K in U]: T; }[U]
 >length : number
@@ -18,7 +18,7 @@ function logLength<T extends string, U extends string>(arg: { [K in U]: T }[U]):
 >arg : { [K in U]: T; }[U]
 }
 logLength(42);  // error
->logLength(42) : any
+>logLength(42) : string
 >logLength : <T extends string, U extends string>(arg: { [K in U]: T; }[U]) => T
 >42 : 42
 
@@ -26,9 +26,9 @@ let z;
 >z : any
 
 z = logLength(42);  // no error; T is inferred as `any`
->z = logLength(42) : any
+>z = logLength(42) : string
 >z : any
->logLength(42) : any
+>logLength(42) : string
 >logLength : <T extends string, U extends string>(arg: { [K in U]: T; }[U]) => T
 >42 : 42
 
@@ -38,9 +38,9 @@ function logFirstLength<T extends string[], U extends string>(arg: { [K in U]: T
 
     console.log(arg[0].length);
 >console.log(arg[0].length) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >arg[0].length : number
 >arg[0] : string
 >arg : { [K in U]: T; }[U]
@@ -51,7 +51,7 @@ function logFirstLength<T extends string[], U extends string>(arg: { [K in U]: T
 >arg : { [K in U]: T; }[U]
 }
 logFirstLength([42]);  // error
->logFirstLength([42]) : any
+>logFirstLength([42]) : string[]
 >logFirstLength : <T extends string[], U extends string>(arg: { [K in U]: T; }[U]) => T
 >[42] : number[]
 >42 : 42
@@ -65,14 +65,14 @@ zz.push(logLength(42));  // no error; T is inferred as `any`
 >zz.push : (...items: any[]) => number
 >zz : any[]
 >push : (...items: any[]) => number
->logLength(42) : any
+>logLength(42) : string
 >logLength : <T extends string, U extends string>(arg: { [K in U]: T; }[U]) => T
 >42 : 42
 
 zz = logFirstLength([42]);  // no error; T is inferred as `any[]`
->zz = logFirstLength([42]) : any
+>zz = logFirstLength([42]) : string[]
 >zz : any[]
->logFirstLength([42]) : any
+>logFirstLength([42]) : string[]
 >logFirstLength : <T extends string[], U extends string>(arg: { [K in U]: T; }[U]) => T
 >[42] : number[]
 >42 : 42

@@ -46,6 +46,7 @@ export function fooToBar(
 //// [emptyObjectNotSubtypeOfIndexSignatureContainingObject1.js]
 "use strict";
 exports.__esModule = true;
+exports.fooToBar = void 0;
 // In lodash.d.ts this function has many overloads, but this seems to be the problematic one.
 function mapValues(obj, callback) {
     return null;

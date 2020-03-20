@@ -1,4 +1,4 @@
-tests/cases/compiler/test.ts(2,19): error TS2307: Cannot find module './missingModule'.
+tests/cases/compiler/test.ts(2,19): error TS2307: Cannot find module './missingModule' or its corresponding type declarations.
 
 
 ==== tests/cases/compiler/existingModule.ts (0 errors) ====
@@ -8,7 +8,7 @@ tests/cases/compiler/test.ts(2,19): error TS2307: Cannot find module './missingM
     import {x} from './existingModule';
     import {foo} from './missingModule';
                       ~~~~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module './missingModule'.
+!!! error TS2307: Cannot find module './missingModule' or its corresponding type declarations.
     
     declare function use(a: any): void;
     

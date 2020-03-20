@@ -35,6 +35,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.ShortDetails = void 0;
 var ShortDetails = /** @class */ (function (_super) {
     __extends(ShortDetails, _super);
     function ShortDetails() {

@@ -401,7 +401,7 @@ export class A {
         verifyTscWatch({
             scenario,
             subScenario: "deleted files affect project structure",
-            commandLineArgs: ["-w", "/a/b/f1.ts"],
+            commandLineArgs: ["-w", "/a/b/f1.ts", "--noImplicitAny"],
             sys: () => {
                 const file1 = {
                     path: "/a/b/f1.ts",
@@ -429,7 +429,7 @@ export class A {
         verifyTscWatch({
             scenario,
             subScenario: "deleted files affect project structure-2",
-            commandLineArgs: ["-w", "/a/b/f1.ts", "/a/c/f3.ts"],
+            commandLineArgs: ["-w", "/a/b/f1.ts", "/a/c/f3.ts", "--noImplicitAny"],
             sys: () => {
                 const file1 = {
                     path: "/a/b/f1.ts",
@@ -497,13 +497,13 @@ export class A {
             };
             const host = createWatchedSystem([file1, file2, file3]);
             const watch = createWatchOfFilesAndCompilerOptions([file2.path, file3.path], host);
-            checkProgramActualFiles(watch(), [file2.path, file3.path]);
+            checkProgramActualFiles(watch.getCurrentProgram().getProgram(), [file2.path, file3.path]);
 
             const watch2 = createWatchOfFilesAndCompilerOptions([file1.path], host);
-            checkProgramActualFiles(watch2(), [file1.path, file2.path, file3.path]);
+            checkProgramActualFiles(watch2.getCurrentProgram().getProgram(), [file1.path, file2.path, file3.path]);
 
             // Previous program shouldnt be updated
-            checkProgramActualFiles(watch(), [file2.path, file3.path]);
+            checkProgramActualFiles(watch.getCurrentProgram().getProgram(), [file2.path, file3.path]);
             host.checkTimeoutQueueLength(0);
         });
 
@@ -937,7 +937,7 @@ declare const eval: any`
             };
             const host = createWatchedSystem([f, libFile]);
             const watch = createWatchOfFilesAndCompilerOptions([f.path], host, { allowNonTsExtensions: true });
-            checkProgramActualFiles(watch(), [f.path, libFile.path]);
+            checkProgramActualFiles(watch.getCurrentProgram().getProgram(), [f.path, libFile.path]);
         });
 
         verifyTscWatch({
@@ -984,7 +984,6 @@ declare const eval: any`
                     scenario,
                     subScenario: `should not trigger recompilation because of program emit/${subScenario}`,
                     commandLineArgs: ["-w", "-p", `${projectRoot}/tsconfig.json`],
-                    maxNumberOfFilesToIterateForInvalidation: 1,
                     sys: () => {
                         const file1: File = {
                             path: `${projectRoot}/file1.ts`,
@@ -1086,8 +1085,7 @@ export function two() {
         });
 
         function changeParameterTypeOfBFile(sys: WatchedSystem, parameterName: string, toType: string) {
-            const oldContent = sys.readFile(`${projectRoot}/b.ts`)!;
-            sys.writeFile(`${projectRoot}/b.ts`, oldContent.replace(new RegExp(`${parameterName}\: [a-z]*`), `${parameterName}: ${toType}`));
+            replaceFileText(sys, `${projectRoot}/b.ts`, new RegExp(`${parameterName}\: [a-z]*`), `${parameterName}: ${toType}`);
             sys.runQueuedTimeoutCallbacks();
             return `Changed ${parameterName} type to ${toType}`;
         }
@@ -1160,6 +1158,39 @@ foo().hello`
                     sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: {} }));
                     sys.runQueuedTimeoutCallbacks();
                     return "Disable strict";
+                },
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "updates errors when noErrorTruncation changes",
+            commandLineArgs: ["-w"],
+            sys: () => {
+                const aFile: File = {
+                    path: `${projectRoot}/a.ts`,
+                    content: `declare var v: {
+    reallyLongPropertyName1: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName2: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName3: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName4: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName5: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName6: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName7: string | number | boolean | object | symbol | bigint;
+};
+v === 'foo';`
+                };
+                const config: File = {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({ compilerOptions: {} })
+                };
+                return createWatchedSystem([aFile, config, libFile], { currentDirectory: projectRoot });
+            },
+            changes: [
+                sys => {
+                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { noErrorTruncation: true } }));
+                    sys.runQueuedTimeoutCallbacks();
+                    return "Enable noErrorTruncation";
                 },
             ]
         });

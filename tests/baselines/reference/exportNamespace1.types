@@ -1,0 +1,19 @@
+=== tests/cases/conformance/externalModules/typeOnly/a.ts ===
+export class A {}
+>A : A
+
+=== tests/cases/conformance/externalModules/typeOnly/b.ts ===
+export type { A } from './a';
+>A : import("tests/cases/conformance/externalModules/typeOnly/a").A
+
+=== tests/cases/conformance/externalModules/typeOnly/c.ts ===
+export * from './b';
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/externalModules/typeOnly/d.ts ===
+import { A } from './c';
+>A : typeof A
+
+new A(); // Error
+>new A() : A
+>A : typeof A
+

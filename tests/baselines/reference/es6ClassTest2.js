@@ -203,7 +203,7 @@ var GetSetMonster = /** @class */ (function () {
         get: function () {
             return this._health > 0;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(GetSetMonster.prototype, "health", {
@@ -214,7 +214,7 @@ var GetSetMonster = /** @class */ (function () {
             }
             this._health = value;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return GetSetMonster;

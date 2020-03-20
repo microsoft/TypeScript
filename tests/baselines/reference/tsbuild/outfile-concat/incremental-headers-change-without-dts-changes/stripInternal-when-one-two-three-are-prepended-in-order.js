@@ -1,25 +1,25 @@
 //// [/lib/incremental-headers-change-without-dts-changesOutput.txt]
 /lib/tsc --b /src/third --verbose
-12:12:00 AM - Projects in this build: 
+[[90m12:12:00 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-12:12:00 AM - Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
+[[90m12:12:00 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
 
-12:12:00 AM - Building project '/src/first/tsconfig.json'...
+[[90m12:12:00 AM[0m] Building project '/src/first/tsconfig.json'...
 
-12:12:00 AM - Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+[[90m12:12:00 AM[0m] Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
 
-12:12:00 AM - Updating output of project '/src/second/tsconfig.json'...
+[[90m12:12:00 AM[0m] Updating output of project '/src/second/tsconfig.json'...
 
-12:12:00 AM - Updating unchanged output timestamps of project '/src/second/tsconfig.json'...
+[[90m12:12:00 AM[0m] Updating unchanged output timestamps of project '/src/second/tsconfig.json'...
 
-12:12:00 AM - Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
+[[90m12:12:00 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
 
-12:12:00 AM - Updating output of project '/src/third/tsconfig.json'...
+[[90m12:12:00 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
-12:12:00 AM - Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
+[[90m12:12:00 AM[0m] Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 readFiles:: {
@@ -882,7 +882,7 @@ sourceFile:../second/second_part2.ts
         },
         {
           "pos": 110,
-          "end": 3162,
+          "end": 3163,
           "kind": "text"
         }
       ]
@@ -958,7 +958,7 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-text: (110-3162)
+text: (110-3163)
 var N;
 (function (N) {
     function f() {
@@ -973,7 +973,7 @@ var normalC = (function () {
     Object.defineProperty(normalC.prototype, "c", {
         get: function () { return 10; },
         set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -1839,20 +1839,20 @@ sourceFile:../../third_part1.ts
       "sections": [
         {
           "pos": 0,
-          "end": 3162,
+          "end": 3163,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
               "pos": 0,
-              "end": 3162,
+              "end": 3163,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 3162,
-          "end": 3198,
+          "pos": 3163,
+          "end": 3199,
           "kind": "text"
         }
       ]
@@ -1887,9 +1887,9 @@ sourceFile:../../third_part1.ts
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-3162):: ../../../2/second-output.js texts:: 1
+prepend: (0-3163):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-3162)
+text: (0-3163)
 var s = "Hello, world";
 console.log(s);
 console.log(f());
@@ -1910,7 +1910,7 @@ var normalC = (function () {
     Object.defineProperty(normalC.prototype, "c", {
         get: function () { return 10; },
         set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -2000,7 +2000,7 @@ var C = (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (3162-3198)
+text: (3163-3199)
 var c = new C();
 c.doSomething();
 

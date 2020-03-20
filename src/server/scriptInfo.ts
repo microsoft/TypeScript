@@ -273,6 +273,8 @@ namespace ts.server {
     /*@internal*/
     export function isDynamicFileName(fileName: NormalizedPath) {
         return fileName[0] === "^" ||
+            ((stringContains(fileName, "walkThroughSnippet:/") || stringContains(fileName, "untitled:/")) &&
+                getBaseFileName(fileName)[0] === "^") ||
             (stringContains(fileName, ":^") && !stringContains(fileName, directorySeparator));
     }
 
@@ -555,6 +557,8 @@ namespace ts.server {
         }
 
         getLatestVersion() {
+            // Ensure we have updated snapshot to give back latest version
+            this.textStorage.getSnapshot();
             return this.textStorage.getVersion();
         }
 

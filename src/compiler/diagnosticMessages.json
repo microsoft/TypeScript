@@ -1055,11 +1055,15 @@
         "category": "Error",
         "code": 1359
     },
-    "Type-only {0} must reference a type, but '{1}' is a value.": {
+    "Did you mean to parenthesize this function type?": {
+        "category": "Error",
+        "code": 1360
+    },
+    "'{0}' cannot be used as a value because it was imported using 'import type'.": {
         "category": "Error",
         "code": 1361
     },
-    "Enum '{0}' cannot be used as a value because only its type has been imported.": {
+    "'{0}' cannot be used as a value because it was exported using 'export type'.": {
         "category": "Error",
         "code": 1362
     },
@@ -1099,10 +1103,6 @@
         "category": "Error",
         "code": 1371
     },
-    "This import may be converted to a type-only import.": {
-        "category": "Suggestion",
-        "code": 1372
-    },
     "Convert to type-only import": {
         "category": "Message",
         "code": 1373
@@ -1115,10 +1115,39 @@
         "category": "Error",
         "code": 1375
     },
-    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.": {
-        "category": "Error",
+    "'{0}' was imported here.": {
+        "category": "Message",
         "code": 1376
     },
+    "'{0}' was exported here.": {
+        "category": "Message",
+        "code": 1377
+    },
+    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.": {
+        "category": "Error",
+        "code": 1378
+    },
+    "An import alias cannot reference a declaration that was exported using 'export type'.": {
+        "category": "Error",
+        "code": 1379
+    },
+    "An import alias cannot reference a declaration that was imported using 'import type'.": {
+        "category": "Error",
+        "code": 1380
+    },
+    "Unexpected token. Did you mean `{'}'}` or `&rbrace;`?": {
+        "category": "Error",
+        "code": 1381
+    },
+    "Unexpected token. Did you mean `{'>'}` or `&gt;`?": {
+        "category": "Error",
+        "code": 1382
+    },
+    "Only named exports may use 'export type'.": {
+        "category": "Error",
+        "code": 1383
+    },
+
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
@@ -1176,7 +1205,7 @@
         "category": "Error",
         "code": 2306
     },
-    "Cannot find module '{0}'.": {
+    "Cannot find module '{0}' or its corresponding type declarations.": {
         "category": "Error",
         "code": 2307
     },
@@ -1539,6 +1568,10 @@
     "Declaration name conflicts with built-in global identifier '{0}'.": {
         "category": "Error",
         "code": 2397
+    },
+    "'constructor' cannot be used as a parameter property name.": {
+        "category": "Error",
+        "code": 2398
     },
     "Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.": {
         "category": "Error",
@@ -2216,6 +2249,10 @@
         "category": "Error",
         "code": 2577
     },
+    "Unused '@ts-expect-error' directive.": {
+        "category": "Error",
+        "code": 2578
+    },
     "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.": {
         "category": "Error",
         "code": 2580
@@ -2335,6 +2372,10 @@
     "Module '{0}' has no exported member '{1}'. Did you mean to use 'import {1} from {0}' instead?": {
         "category": "Error",
         "code": 2614
+    },
+    "Type of property '{0}' circularly references itself in mapped type '{1}'.": {
+        "category": "Error",
+        "code": 2615
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
@@ -2666,7 +2707,7 @@
         "category": "Error",
         "code": 2733
     },
-    "It is highly likely that you are missing a semicolon.": {
+    "Are you missing a semicolon?": {
         "category": "Error",
         "code": 2734
     },
@@ -2726,7 +2767,7 @@
         "category": "Error",
         "code": 2748
     },
-    "'{0}' refers to a value, but is being used as a type here.": {
+    "'{0}' refers to a value, but is being used as a type here. Did you mean 'typeof {0}'?": {
         "category": "Error",
         "code": 2749
     },
@@ -2861,6 +2902,18 @@
     "'{0}' needs an explicit type annotation.": {
         "category": "Message",
         "code": 2782
+    },
+    "'{0}' is specified more than once, so this usage will be overwritten.": {
+        "category": "Error",
+        "code": 2783
+    },
+    "'get' and 'set' accessors cannot declare 'this' parameters.": {
+        "category": "Error",
+        "code": 2784
+    },
+    "This spread always overwrites this property.": {
+        "category": "Error",
+        "code": 2785
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3400,6 +3453,10 @@
         "category": "Error",
         "code": 5081
     },
+    "'{0}' could be instantiated with an arbitrary type which could be unrelated to '{1}'.": {
+        "category": "Error",
+        "code": 5082
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -3613,7 +3670,7 @@
         "category": "Message",
         "code": 6061
     },
-    "Option '{0}' can only be specified in 'tsconfig.json' file.": {
+    "Option '{0}' can only be specified in 'tsconfig.json' file or set to 'null' on command line.": {
         "category": "Error",
         "code": 6064
     },
@@ -4262,6 +4319,18 @@
     "Synchronously call callbacks and update the state of directory watchers on platforms that don't support recursive watching natively.": {
         "category": "Message",
         "code": 6228
+    },
+    "Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.": {
+        "category": "Error",
+        "code": 6229
+    },
+    "Option '{0}' can only be specified in 'tsconfig.json' file or set to 'false' or 'null' on command line.": {
+        "category": "Error",
+        "code": 6230
+    },
+    "Could not resolve the path '{0}' with the extensions: {1}.": {
+        "category": "Error",
+        "code": 6231
     },
 
     "Projects to reference": {
@@ -5056,6 +5125,14 @@
         "category": "Message",
         "code": 90034
     },
+    "Declare private property '{0}'": {
+        "category": "Message",
+        "code": 90035
+    },
+    "Declare a private field named '{0}'.": {
+        "category": "Message",
+        "code": 90053
+    },
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001
@@ -5312,6 +5389,14 @@
         "category": "Message",
         "code": 95066
     },
+    "Add missing call parentheses": {
+        "category": "Message",
+        "code": 95067
+    },
+    "Add all missing call parentheses": {
+        "category": "Message",
+        "code": 95068
+    },
     "Add 'unknown' conversion for non-overlapping types": {
         "category": "Message",
         "code": 95069
@@ -5435,6 +5520,46 @@
     "Set the 'module' option in your configuration file to '{0}'": {
         "category": "Message",
         "code": 95099
+    },
+    "Convert invalid character to its html entity code": {
+        "category": "Message",
+        "code": 95100
+    },
+    "Convert all invalid characters to HTML entity code": {
+        "category": "Message",
+        "code": 95101
+    },
+    "Add '@class' tag": {
+        "category": "Message",
+        "code": 95102
+    },
+    "Add '@this' tag": {
+        "category": "Message",
+        "code": 95103
+    },
+    "Add 'this' parameter.": {
+        "category": "Message",
+        "code": 95104
+    },
+    "Convert function expression '{0}' to arrow function": {
+        "category": "Message",
+        "code": 95105
+    },
+    "Convert function declaration '{0}' to arrow function": {
+        "category": "Message",
+        "code": 95106
+    },
+    "Fix all implicit-'this' errors": {
+        "category": "Message",
+        "code": 95107
+    },
+    "Wrap invalid character in an expression container": {
+        "category": "Message",
+        "code": 95108
+    },
+    "Wrap all invalid characters in an expression container": {
+        "category": "Message",
+        "code": 95109
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

@@ -26,11 +26,11 @@ namespace ts.formatting {
         }
 
         public updateContext(currentRange: TextRangeWithKind, currentTokenParent: Node, nextRange: TextRangeWithKind, nextTokenParent: Node, commonParent: Node) {
-            this.currentTokenSpan = Debug.assertDefined(currentRange);
-            this.currentTokenParent = Debug.assertDefined(currentTokenParent);
-            this.nextTokenSpan = Debug.assertDefined(nextRange);
-            this.nextTokenParent = Debug.assertDefined(nextTokenParent);
-            this.contextNode = Debug.assertDefined(commonParent);
+            this.currentTokenSpan = Debug.checkDefined(currentRange);
+            this.currentTokenParent = Debug.checkDefined(currentTokenParent);
+            this.nextTokenSpan = Debug.checkDefined(nextRange);
+            this.nextTokenParent = Debug.checkDefined(nextTokenParent);
+            this.contextNode = Debug.checkDefined(commonParent);
 
             // drop cached results
             this.contextNodeAllOnSameLine = undefined;

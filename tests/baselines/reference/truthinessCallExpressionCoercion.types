@@ -41,9 +41,9 @@ function onlyErrorsWhenUnusedInBody() {
 
         console.log('test');
 >console.log('test') : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >'test' : "test"
     }
     
@@ -52,9 +52,9 @@ function onlyErrorsWhenUnusedInBody() {
 
         console.log(test);
 >console.log(test) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >test : () => boolean
     }
 

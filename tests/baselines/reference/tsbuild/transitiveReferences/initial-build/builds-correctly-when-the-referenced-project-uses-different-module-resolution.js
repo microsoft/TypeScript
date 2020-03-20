@@ -21,6 +21,7 @@ export declare class A {
 //// [/src/a.js]
 "use strict";
 exports.__esModule = true;
+exports.A = void 0;
 var A = /** @class */ (function () {
     function A() {
     }
@@ -37,6 +38,7 @@ export declare const b: A;
 //// [/src/b.js]
 "use strict";
 exports.__esModule = true;
+exports.b = void 0;
 var a_1 = require("a");
 exports.b = new a_1.A();
 

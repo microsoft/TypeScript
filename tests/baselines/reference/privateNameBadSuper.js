@@ -15,9 +15,9 @@ class B {
 ;
 class A extends B {
     constructor() {
-        _x.set(this, void 0);
         void 0; // Error: 'super' call must  come first
         super();
+        _x.set(this, void 0);
     }
 }
 _x = new WeakMap();

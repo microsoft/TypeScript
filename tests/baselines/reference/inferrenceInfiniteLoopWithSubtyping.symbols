@@ -1,0 +1,95 @@
+=== tests/cases/compiler/graphql-compose.d.ts ===
+export type ObjMapReadOnly<T> = Readonly<{ [key: string]: Readonly<T> }>;
+>ObjMapReadOnly : Symbol(ObjMapReadOnly, Decl(graphql-compose.d.ts, 0, 0))
+>T : Symbol(T, Decl(graphql-compose.d.ts, 0, 27))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(graphql-compose.d.ts, 0, 44))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(graphql-compose.d.ts, 0, 27))
+
+export type Thunk<T> = (() => T) | T;
+>Thunk : Symbol(Thunk, Decl(graphql-compose.d.ts, 0, 73))
+>T : Symbol(T, Decl(graphql-compose.d.ts, 1, 18))
+>T : Symbol(T, Decl(graphql-compose.d.ts, 1, 18))
+>T : Symbol(T, Decl(graphql-compose.d.ts, 1, 18))
+
+export type ComposeOutputTypeDefinition = Readonly<ObjectTypeComposer<any, any> | EnumTypeComposer>;
+>ComposeOutputTypeDefinition : Symbol(ComposeOutputTypeDefinition, Decl(graphql-compose.d.ts, 1, 37))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>ObjectTypeComposer : Symbol(ObjectTypeComposer, Decl(graphql-compose.d.ts, 7, 1))
+>EnumTypeComposer : Symbol(EnumTypeComposer, Decl(graphql-compose.d.ts, 3, 100))
+
+export class EnumTypeComposer {
+>EnumTypeComposer : Symbol(EnumTypeComposer, Decl(graphql-compose.d.ts, 3, 100))
+
+  public setFields(fields: { [name: string]: { [key: string]: any } }): this;
+>setFields : Symbol(EnumTypeComposer.setFields, Decl(graphql-compose.d.ts, 5, 31))
+>fields : Symbol(fields, Decl(graphql-compose.d.ts, 6, 19))
+>name : Symbol(name, Decl(graphql-compose.d.ts, 6, 30))
+>key : Symbol(key, Decl(graphql-compose.d.ts, 6, 48))
+}
+
+export class ObjectTypeComposer<TSource, TContext> {
+>ObjectTypeComposer : Symbol(ObjectTypeComposer, Decl(graphql-compose.d.ts, 7, 1))
+>TSource : Symbol(TSource, Decl(graphql-compose.d.ts, 9, 32))
+>TContext : Symbol(TContext, Decl(graphql-compose.d.ts, 9, 40))
+
+  public setFields(fields: ObjMapReadOnly<Resolver>): this;
+>setFields : Symbol(ObjectTypeComposer.setFields, Decl(graphql-compose.d.ts, 9, 52))
+>fields : Symbol(fields, Decl(graphql-compose.d.ts, 10, 19))
+>ObjMapReadOnly : Symbol(ObjMapReadOnly, Decl(graphql-compose.d.ts, 0, 0))
+>Resolver : Symbol(Resolver, Decl(graphql-compose.d.ts, 13, 1))
+
+  public addResolver<TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition> }): this;
+>addResolver : Symbol(ObjectTypeComposer.addResolver, Decl(graphql-compose.d.ts, 10, 59))
+>TResolverSource : Symbol(TResolverSource, Decl(graphql-compose.d.ts, 12, 21))
+>opts : Symbol(opts, Decl(graphql-compose.d.ts, 12, 38))
+>type : Symbol(type, Decl(graphql-compose.d.ts, 12, 45))
+>Thunk : Symbol(Thunk, Decl(graphql-compose.d.ts, 0, 73))
+>ComposeOutputTypeDefinition : Symbol(ComposeOutputTypeDefinition, Decl(graphql-compose.d.ts, 1, 37))
+}
+
+export class Resolver {
+>Resolver : Symbol(Resolver, Decl(graphql-compose.d.ts, 13, 1))
+
+  public wrapArgs<NewContext>(
+>wrapArgs : Symbol(Resolver.wrapArgs, Decl(graphql-compose.d.ts, 15, 23))
+>NewContext : Symbol(NewContext, Decl(graphql-compose.d.ts, 16, 18))
+
+    cb: () => {
+>cb : Symbol(cb, Decl(graphql-compose.d.ts, 16, 30))
+
+      [argName: string]: Thunk<Readonly<EnumTypeComposer>>;
+>argName : Symbol(argName, Decl(graphql-compose.d.ts, 18, 7))
+>Thunk : Symbol(Thunk, Decl(graphql-compose.d.ts, 0, 73))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>EnumTypeComposer : Symbol(EnumTypeComposer, Decl(graphql-compose.d.ts, 3, 100))
+    }
+  ): void;
+
+  public wrapType(cb: () => ComposeOutputTypeDefinition): void;
+>wrapType : Symbol(Resolver.wrapType, Decl(graphql-compose.d.ts, 20, 10))
+>cb : Symbol(cb, Decl(graphql-compose.d.ts, 22, 18))
+>ComposeOutputTypeDefinition : Symbol(ComposeOutputTypeDefinition, Decl(graphql-compose.d.ts, 1, 37))
+}
+
+
+=== tests/cases/compiler/app.ts ===
+import { ObjectTypeComposer } from './graphql-compose';
+>ObjectTypeComposer : Symbol(ObjectTypeComposer, Decl(app.ts, 0, 8))
+
+declare const User: ObjectTypeComposer<any, any>;
+>User : Symbol(User, Decl(app.ts, 2, 13))
+>ObjectTypeComposer : Symbol(ObjectTypeComposer, Decl(app.ts, 0, 8))
+
+User.addResolver({
+>User.addResolver : Symbol(ObjectTypeComposer.addResolver, Decl(graphql-compose.d.ts, 10, 59))
+>User : Symbol(User, Decl(app.ts, 2, 13))
+>addResolver : Symbol(ObjectTypeComposer.addResolver, Decl(graphql-compose.d.ts, 10, 59))
+
+  type: User, // `User as any` fix the problem
+>type : Symbol(type, Decl(app.ts, 4, 18))
+>User : Symbol(User, Decl(app.ts, 2, 13))
+
+});
+

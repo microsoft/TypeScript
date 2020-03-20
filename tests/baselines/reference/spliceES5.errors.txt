@@ -1,0 +1,11 @@
+tests/cases/compiler/spliceES5.ts(2,16): error TS2555: Expected at least 2 arguments, but got 1.
+
+
+==== tests/cases/compiler/spliceES5.ts (1 errors) ====
+    // see #32638
+    var arr1 = [0].splice(0)
+                   ~~~~~~~~~
+!!! error TS2555: Expected at least 2 arguments, but got 1.
+!!! related TS6210 /.ts/lib.es5.d.ts:1277:27: An argument for 'deleteCount' was not provided.
+    var arr2 = [0].splice(0, 1)
+    

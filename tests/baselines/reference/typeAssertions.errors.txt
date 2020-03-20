@@ -7,7 +7,7 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(37,13): err
   Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(38,13): error TS2352: Conversion of type 'SomeBase' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Property 'q' is missing in type 'SomeBase' but required in type 'SomeOther'.
-tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,5): error TS2749: 'numOrStr' refers to a value, but is being used as a type here.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,5): error TS2749: 'numOrStr' refers to a value, but is being used as a type here. Did you mean 'typeof numOrStr'?
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,14): error TS1005: '>' expected.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,14): error TS2304: Cannot find name 'is'.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,17): error TS1005: ')' expected.
@@ -15,7 +15,7 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,17): err
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,48): error TS1005: ';' expected.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(45,2): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,32): error TS2749: 'numOrStr' refers to a value, but is being used as a type here.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,32): error TS2749: 'numOrStr' refers to a value, but is being used as a type here. Did you mean 'typeof numOrStr'?
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,41): error TS1005: ')' expected.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,41): error TS2304: Cannot find name 'is'.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,44): error TS1005: ';' expected.
@@ -86,7 +86,7 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): err
     var str: string;
     if(<numOrStr is string>(numOrStr === undefined)) { // Error
         ~~~~~~~~
-!!! error TS2749: 'numOrStr' refers to a value, but is being used as a type here.
+!!! error TS2749: 'numOrStr' refers to a value, but is being used as a type here. Did you mean 'typeof numOrStr'?
                  ~~
 !!! error TS1005: '>' expected.
                  ~~
@@ -105,7 +105,7 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): err
     
     if((numOrStr === undefined) as numOrStr is string) { // Error
                                    ~~~~~~~~
-!!! error TS2749: 'numOrStr' refers to a value, but is being used as a type here.
+!!! error TS2749: 'numOrStr' refers to a value, but is being used as a type here. Did you mean 'typeof numOrStr'?
                                             ~~
 !!! error TS1005: ')' expected.
                                             ~~

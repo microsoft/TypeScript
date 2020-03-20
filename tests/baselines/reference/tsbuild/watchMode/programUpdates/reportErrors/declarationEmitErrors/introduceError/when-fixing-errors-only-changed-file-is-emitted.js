@@ -27,6 +27,7 @@ export class myClass { }
 //// [/user/username/projects/solution/app/fileWithError.js]
 "use strict";
 exports.__esModule = true;
+exports.myClassWithError = void 0;
 exports.myClassWithError = /** @class */ (function () {
     function myClassWithError() {
     }
@@ -46,6 +47,7 @@ export declare var myClassWithError: {
 //// [/user/username/projects/solution/app/fileWithoutError.js]
 "use strict";
 exports.__esModule = true;
+exports.myClass = void 0;
 var myClass = /** @class */ (function () {
     function myClass() {
     }
@@ -95,11 +97,11 @@ export declare class myClass {
 
 Output::
 >> Screen clear
-12:00:25 AM - Starting compilation in watch mode...
+[[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:36 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/solution/app/fileWithError.ts","/user/username/projects/solution/app/fileWithoutError.ts"]
@@ -116,17 +118,17 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/solution/app/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/tsconfig.json","pollingInterval":250}
 /user/username/projects/solution/app/filewitherror.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/fileWithError.ts","pollingInterval":250}
 /user/username/projects/solution/app/filewithouterror.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/fileWithoutError.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/solution/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -141,13 +143,17 @@ export var myClassWithError = class {
 
 Output::
 >> Screen clear
-12:00:40 AM - File change detected. Starting incremental compilation...
+[[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
 
 
-app/fileWithError.ts(1,12): error TS4094: Property 'p' of exported class expression may not be private or protected.
+[96mapp/fileWithError.ts[0m:[93m1[0m:[93m12[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+
+[7m1[0m export var myClassWithError = class {
+[7m [0m [91m           ~~~~~~~~~~~~~~~~[0m
 
 
-12:00:41 AM - Found 1 error. Watching for file changes.
+[[90m12:00:41 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/solution/app/fileWithError.ts","/user/username/projects/solution/app/fileWithoutError.ts"]
@@ -162,17 +168,17 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/solution/app/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/tsconfig.json","pollingInterval":250}
 /user/username/projects/solution/app/filewitherror.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/fileWithError.ts","pollingInterval":250}
 /user/username/projects/solution/app/filewithouterror.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/fileWithoutError.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/solution/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -192,11 +198,11 @@ export var myClassWithError = class {
 
 Output::
 >> Screen clear
-12:00:45 AM - File change detected. Starting incremental compilation...
+[[90m12:00:45 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:56 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:56 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/solution/app/fileWithError.ts","/user/username/projects/solution/app/fileWithoutError.ts"]
@@ -211,16 +217,16 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/solution/app/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/tsconfig.json","pollingInterval":250}
 /user/username/projects/solution/app/filewitherror.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/fileWithError.ts","pollingInterval":250}
 /user/username/projects/solution/app/filewithouterror.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/fileWithoutError.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/solution/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

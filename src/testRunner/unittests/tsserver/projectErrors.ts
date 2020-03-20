@@ -382,7 +382,7 @@ namespace ts.projectSystem {
                 }
             });
 
-            host.runQueuedImmediateCallbacks();
+            host.checkTimeoutQueueLengthAndRun(1);
             assert.isFalse(hasError());
             checkCompleteEvent(session, 1, expectedSequenceId);
             session.clearMessages();
@@ -608,6 +608,10 @@ declare module '@custom/plugin' {
                 path: "/a/b/test.ts",
                 content: "let x = 10"
             };
+            const file3: File = {
+                path: "/a/b/test2.ts",
+                content: "let xy = 10"
+            };
             const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
@@ -618,9 +622,20 @@ declare module '@custom/plugin' {
                     "files": ["app.ts"]
                 }`
             };
-            const serverEventManager = new TestServerEventManager([file, file2, libFile, configFile]);
+            const serverEventManager = new TestServerEventManager([file, file2, file3, libFile, configFile]);
             openFilesForSession([file2], serverEventManager.session);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file2.path, [
+                getUnknownCompilerOptionDiagnostic(configFile, "foo"),
+                getUnknownCompilerOptionDiagnostic(configFile, "allowJS", "allowJs")
+            ]);
+            openFilesForSession([file], serverEventManager.session);
+            // We generate only if project is created when opening file from the project
             serverEventManager.hasZeroEvent("configFileDiag");
+            openFilesForSession([file3], serverEventManager.session);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file3.path, [
+                getUnknownCompilerOptionDiagnostic(configFile, "foo"),
+                getUnknownCompilerOptionDiagnostic(configFile, "allowJS", "allowJs")
+            ]);
         });
 
         it("are not generated when the config file has errors but suppressDiagnosticEvents is true", () => {
@@ -651,6 +666,10 @@ declare module '@custom/plugin' {
                 path: "/a/b/test.ts",
                 content: "let x = 10"
             };
+            const file3: File = {
+                path: "/a/b/test2.ts",
+                content: "let xy = 10"
+            };
             const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
@@ -658,9 +677,14 @@ declare module '@custom/plugin' {
                 }`
             };
 
-            const serverEventManager = new TestServerEventManager([file, file2, libFile, configFile]);
+            const serverEventManager = new TestServerEventManager([file, file2, file3, libFile, configFile]);
             openFilesForSession([file2], serverEventManager.session);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file2.path, emptyArray);
+            openFilesForSession([file], serverEventManager.session);
+            // We generate only if project is created when opening file from the project
             serverEventManager.hasZeroEvent("configFileDiag");
+            openFilesForSession([file3], serverEventManager.session);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file3.path, emptyArray);
         });
 
         it("contains the project reference errors", () => {
@@ -944,6 +968,11 @@ console.log(blabla);`
                 path: `${tscWatch.projectRoot}/tsconfig.json`,
                 content: "{}"
             };
+            // Move things from staging to node_modules without triggering watch
+            const moduleFile: File = {
+                path: `${tscWatch.projectRoot}/node_modules/@angular/core/index.d.ts`,
+                content: `export const y = 10;`
+            };
             const projectFiles = [main, libFile, config];
             const host = createServerHost(projectFiles);
             const session = createSession(host, { canUseEvents: true });
@@ -954,7 +983,7 @@ console.log(blabla);`
                 createDiagnostic(
                     span.start,
                     span.end,
-                    Diagnostics.Cannot_find_module_0,
+                    Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations,
                     ["@angular/core"]
                 )
             ];
@@ -983,11 +1012,6 @@ console.log(blabla);`
             verifyWhileNpmInstall({ timeouts: 0, semantic: moduleNotFoundErr });
 
             filesAndFoldersToAdd = [];
-            // Move things from staging to node_modules without triggering watch
-            const moduleFile: File = {
-                path: `${tscWatch.projectRoot}/node_modules/@angular/core/index.d.ts`,
-                content: `export const y = 10;`
-            };
             host.ensureFileOrFolder(moduleFile, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true, /*ignoreParentWatch*/ true);
             // Since we added/removed in .staging no timeout
             verifyWhileNpmInstall({ timeouts: 0, semantic: moduleNotFoundErr });

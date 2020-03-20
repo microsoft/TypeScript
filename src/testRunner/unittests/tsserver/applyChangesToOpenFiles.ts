@@ -29,7 +29,11 @@ ${file.content}`;
             assert.equal(Number(project.getProjectVersion()), expected);
         }
 
-        function verify(applyChangesToOpen: (session: TestSession) => void) {
+        interface Verify {
+            applyChangesToOpen: (session: TestSession) => void;
+            openFile1Again: (session: TestSession) => void;
+        }
+        function verify({ applyChangesToOpen, openFile1Again }: Verify) {
             const host = createServerHost([app, file3, commonFile1, commonFile2, libFile, configFile]);
             const session = createSession(host);
             session.executeCommandSeq<protocol.OpenRequest>({
@@ -65,11 +69,22 @@ ${file.content}`;
             verifyText(service, commonFile2.path, fileContentWithComment(commonFile2));
             verifyText(service, app.path, "let zzz = 10;let zz = 10;let z = 1;");
             verifyText(service, file3.path, file3.content);
+
+            // Open file1 again
+            openFile1Again(session);
+            assert.isTrue(service.getScriptInfo(commonFile1.path)!.isScriptOpen());
+
+            // Verify that file1 contents are changed
+            verifyProjectVersion(project, 4);
+            verifyText(service, commonFile1.path, commonFile1.content);
+            verifyText(service, commonFile2.path, fileContentWithComment(commonFile2));
+            verifyText(service, app.path, "let zzz = 10;let zz = 10;let z = 1;");
+            verifyText(service, file3.path, file3.content);
         }
 
         it("with applyChangedToOpenFiles request", () => {
-            verify(session =>
-                session.executeCommandSeq<protocol.ApplyChangedToOpenFilesRequest>({
+            verify({
+                applyChangesToOpen: session => session.executeCommandSeq<protocol.ApplyChangedToOpenFilesRequest>({
                     command: protocol.CommandTypes.ApplyChangedToOpenFiles,
                     arguments: {
                         openFiles: [
@@ -101,13 +116,22 @@ ${file.content}`;
                             file3.path
                         ]
                     }
-                })
-            );
+                }),
+                openFile1Again: session => session.executeCommandSeq<protocol.ApplyChangedToOpenFilesRequest>({
+                    command: protocol.CommandTypes.ApplyChangedToOpenFiles,
+                    arguments: {
+                        openFiles: [{
+                            fileName: commonFile1.path,
+                            content: commonFile1.content
+                        }]
+                    }
+                }),
+            });
         });
 
         it("with updateOpen request", () => {
-            verify(session =>
-                session.executeCommandSeq<protocol.UpdateOpenRequest>({
+            verify({
+                applyChangesToOpen: session => session.executeCommandSeq<protocol.UpdateOpenRequest>({
                     command: protocol.CommandTypes.UpdateOpen,
                     arguments: {
                         openFiles: [
@@ -141,8 +165,17 @@ ${file.content}`;
                             file3.path
                         ]
                     }
-                })
-            );
+                }),
+                openFile1Again: session => session.executeCommandSeq<protocol.UpdateOpenRequest>({
+                    command: protocol.CommandTypes.UpdateOpen,
+                    arguments: {
+                        openFiles: [{
+                            file: commonFile1.path,
+                            fileContent: commonFile1.content
+                        }]
+                    }
+                }),
+            });
         });
     });
 }

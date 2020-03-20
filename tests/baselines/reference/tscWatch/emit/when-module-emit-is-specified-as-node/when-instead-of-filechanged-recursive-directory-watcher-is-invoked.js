@@ -32,11 +32,11 @@ var z = 10;
 
 Output::
 >> Screen clear
-12:00:21 AM - Starting compilation in watch mode...
+[[90m12:00:21 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:31 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:31 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/rootFolder/project/Scripts/Javascript.js","/a/rootFolder/project/Scripts/TypeScript.ts"]
@@ -53,21 +53,21 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/rootfolder/project/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/rootFolder/project/tsconfig.json","pollingInterval":250}
 /a/rootfolder/project/scripts/javascript.js:
-  {"pollingInterval":250}
+  {"fileName":"/a/rootFolder/project/Scripts/Javascript.js","pollingInterval":250}
 /a/rootfolder/project/scripts/typescript.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/rootFolder/project/Scripts/TypeScript.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/rootfolder/project/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/rootFolder/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/rootfolder/project/scripts:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/rootfolder/project/scripts","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -84,11 +84,11 @@ var zz30 = 100;
 
 Output::
 >> Screen clear
-12:00:34 AM - File change detected. Starting incremental compilation...
+[[90m12:00:34 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:41 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:41 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/rootFolder/project/Scripts/Javascript.js","/a/rootFolder/project/Scripts/TypeScript.ts"]
@@ -105,20 +105,20 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/rootfolder/project/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/rootFolder/project/tsconfig.json","pollingInterval":250}
 /a/rootfolder/project/scripts/javascript.js:
-  {"pollingInterval":250}
+  {"fileName":"/a/rootFolder/project/Scripts/Javascript.js","pollingInterval":250}
 /a/rootfolder/project/scripts/typescript.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/rootFolder/project/Scripts/TypeScript.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/rootfolder/project/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/rootFolder/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/rootfolder/project/scripts:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/rootfolder/project/scripts","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

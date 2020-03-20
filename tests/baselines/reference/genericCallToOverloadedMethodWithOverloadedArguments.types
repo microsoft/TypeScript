@@ -49,8 +49,8 @@ module m2 {
 >numPromise : Promise<number>
 
     var newPromise = numPromise.then(testFunction);
->newPromise : any
->numPromise.then(testFunction) : any
+>newPromise : Promise<string>
+>numPromise.then(testFunction) : Promise<string>
 >numPromise.then : <U>(cb: (x: number) => Promise<U>) => Promise<U>
 >numPromise : Promise<number>
 >then : <U>(cb: (x: number) => Promise<U>) => Promise<U>
@@ -123,8 +123,8 @@ module m4 {
 >numPromise : Promise<number>
 
     var newPromise = numPromise.then(testFunction);
->newPromise : any
->numPromise.then(testFunction) : any
+>newPromise : Promise<string>
+>numPromise.then(testFunction) : Promise<string>
 >numPromise.then : { <U>(cb: (x: number) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
 >numPromise : Promise<number>
 >then : { <U>(cb: (x: number) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
@@ -171,8 +171,8 @@ module m5 {
 >numPromise : Promise<number>
 
     var newPromise = numPromise.then(testFunction);
->newPromise : any
->numPromise.then(testFunction) : any
+>newPromise : Promise<string>
+>numPromise.then(testFunction) : Promise<string>
 >numPromise.then : { <U>(cb: (x: number) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>; }
 >numPromise : Promise<number>
 >then : { <U>(cb: (x: number) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>; }
@@ -214,8 +214,8 @@ module m6 {
 >numPromise : Promise<number>
 
     var newPromise = numPromise.then(testFunction);
->newPromise : any
->numPromise.then(testFunction) : any
+>newPromise : Promise<boolean>
+>numPromise.then(testFunction) : Promise<boolean>
 >numPromise.then : { <U>(cb: (x: number) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
 >numPromise : Promise<number>
 >then : { <U>(cb: (x: number) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }

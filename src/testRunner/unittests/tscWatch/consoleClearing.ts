@@ -49,10 +49,11 @@ namespace ts.tscWatch {
                     subScenario: "when preserveWatchOutput is true in config file/createWatchOfConfigFile",
                     commandLineArgs: ["--w", "-p", configFile.path],
                     sys,
-                    getPrograms: () => [[watch(), watch.getBuilderProgram()]],
+                    getPrograms: () => [[watch.getCurrentProgram().getProgram(), watch.getCurrentProgram()]],
                     changes: [
                         makeChangeToFile
-                    ]
+                    ],
+                    watchOrSolution: watch
                 });
             });
             verifyTscWatch({

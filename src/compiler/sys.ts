@@ -398,7 +398,7 @@ namespace ts {
 
             return {
                 close: () => {
-                    const watcher = Debug.assertDefined(cache.get(path));
+                    const watcher = Debug.checkDefined(cache.get(path));
                     callbacksCache.remove(path, callback);
                     watcher.refCount--;
                     if (watcher.refCount) return;
@@ -525,7 +525,7 @@ namespace ts {
             return {
                 dirName,
                 close: () => {
-                    const directoryWatcher = Debug.assertDefined(cache.get(dirPath));
+                    const directoryWatcher = Debug.checkDefined(cache.get(dirPath));
                     if (callbackToAdd) callbackCache.remove(dirPath, callbackToAdd);
                     directoryWatcher.refCount--;
 
@@ -772,7 +772,7 @@ namespace ts {
 
         function watchFile(fileName: string, callback: FileWatcherCallback, pollingInterval: PollingInterval, options: WatchOptions | undefined): FileWatcher {
             options = updateOptionsForWatchFile(options, useNonPollingWatchers);
-            const watchFileKind = Debug.assertDefined(options.watchFile);
+            const watchFileKind = Debug.checkDefined(options.watchFile);
             switch (watchFileKind) {
                 case WatchFileKind.FixedPollingInterval:
                     return pollingWatchFile(fileName, callback, PollingInterval.Low, /*options*/ undefined);
@@ -874,7 +874,7 @@ namespace ts {
         function nonRecursiveWatchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean, options: WatchOptions | undefined): FileWatcher {
             Debug.assert(!recursive);
             options = updateOptionsForWatchDirectory(options);
-            const watchDirectoryKind = Debug.assertDefined(options.watchDirectory);
+            const watchDirectoryKind = Debug.checkDefined(options.watchDirectory);
             switch (watchDirectoryKind) {
                 case WatchDirectoryKind.FixedPollingInterval:
                     return pollingWatchFile(
@@ -1004,14 +1004,14 @@ namespace ts {
         writeFloatBE(value: number, offset: number): number;
         writeDoubleLE(value: number, offset: number): number;
         writeDoubleBE(value: number, offset: number): number;
-        readBigUInt64BE(offset?: number): bigint;
-        readBigUInt64LE(offset?: number): bigint;
-        readBigInt64BE(offset?: number): bigint;
-        readBigInt64LE(offset?: number): bigint;
-        writeBigInt64BE(value: bigint, offset?: number): number;
-        writeBigInt64LE(value: bigint, offset?: number): number;
-        writeBigUInt64BE(value: bigint, offset?: number): number;
-        writeBigUInt64LE(value: bigint, offset?: number): number;
+        readBigUInt64BE?(offset?: number): bigint;
+        readBigUInt64LE?(offset?: number): bigint;
+        readBigInt64BE?(offset?: number): bigint;
+        readBigInt64LE?(offset?: number): bigint;
+        writeBigInt64BE?(value: bigint, offset?: number): number;
+        writeBigInt64LE?(value: bigint, offset?: number): number;
+        writeBigUInt64BE?(value: bigint, offset?: number): number;
+        writeBigUInt64LE?(value: bigint, offset?: number): number;
         fill(value: string | Uint8Array | number, offset?: number, end?: number, encoding?: BufferEncoding): this;
         indexOf(value: string | number | Uint8Array, byteOffset?: number, encoding?: BufferEncoding): number;
         lastIndexOf(value: string | number | Uint8Array, byteOffset?: number, encoding?: BufferEncoding): number;
@@ -1106,31 +1106,6 @@ namespace ts {
         }
         return parseInt(version.substring(1, dot));
     }
-
-    declare const ChakraHost: {
-        args: string[];
-        currentDirectory: string;
-        executingFile: string;
-        newLine?: string;
-        useCaseSensitiveFileNames?: boolean;
-        echo(s: string): void;
-        quit(exitCode?: number): void;
-        fileExists(path: string): boolean;
-        deleteFile(path: string): boolean;
-        getModifiedTime(path: string): Date;
-        setModifiedTime(path: string, time: Date): void;
-        directoryExists(path: string): boolean;
-        createDirectory(path: string): void;
-        resolvePath(path: string): string;
-        readFile(path: string): string | undefined;
-        writeFile(path: string, contents: string): void;
-        getDirectories(path: string): string[];
-        readDirectory(path: string, extensions?: readonly string[], basePaths?: readonly string[], excludeEx?: string, includeFileEx?: string, includeDirEx?: string): string[];
-        watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
-        watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
-        realpath(path: string): string;
-        getEnvironmentVariable?(name: string): string;
-    };
 
     // TODO: GH#18217 this is used as if it's certainly defined in many places.
     // eslint-disable-next-line prefer-const
@@ -1737,50 +1712,8 @@ namespace ts {
             }
         }
 
-        function getChakraSystem(): System {
-            const realpath = ChakraHost.realpath && ((path: string) => ChakraHost.realpath(path));
-            return {
-                newLine: ChakraHost.newLine || "\r\n",
-                args: ChakraHost.args,
-                useCaseSensitiveFileNames: !!ChakraHost.useCaseSensitiveFileNames,
-                write: ChakraHost.echo,
-                readFile(path: string, _encoding?: string) {
-                    // encoding is automatically handled by the implementation in ChakraHost
-                    return ChakraHost.readFile(path);
-                },
-                writeFile(path: string, data: string, writeByteOrderMark?: boolean) {
-                    // If a BOM is required, emit one
-                    if (writeByteOrderMark) {
-                        data = byteOrderMarkIndicator + data;
-                    }
-
-                    ChakraHost.writeFile(path, data);
-                },
-                resolvePath: ChakraHost.resolvePath,
-                fileExists: ChakraHost.fileExists,
-                deleteFile: ChakraHost.deleteFile,
-                getModifiedTime: ChakraHost.getModifiedTime,
-                setModifiedTime: ChakraHost.setModifiedTime,
-                directoryExists: ChakraHost.directoryExists,
-                createDirectory: ChakraHost.createDirectory,
-                getExecutingFilePath: () => ChakraHost.executingFile,
-                getCurrentDirectory: () => ChakraHost.currentDirectory,
-                getDirectories: ChakraHost.getDirectories,
-                getEnvironmentVariable: ChakraHost.getEnvironmentVariable || (() => ""),
-                readDirectory(path, extensions, excludes, includes, _depth) {
-                    const pattern = getFileMatcherPatterns(path, excludes, includes, !!ChakraHost.useCaseSensitiveFileNames, ChakraHost.currentDirectory);
-                    return ChakraHost.readDirectory(path, extensions, pattern.basePaths, pattern.excludePattern, pattern.includeFilePattern, pattern.includeDirectoryPattern);
-                },
-                exit: ChakraHost.quit,
-                realpath
-            };
-        }
-
         let sys: System | undefined;
-        if (typeof ChakraHost !== "undefined") {
-            sys = getChakraSystem();
-        }
-        else if (typeof process !== "undefined" && process.nextTick && !process.browser && typeof require !== "undefined") {
+        if (typeof process !== "undefined" && process.nextTick && !process.browser && typeof require !== "undefined") {
             // process and process.nextTick checks if current environment is node-like
             // process.browser check excludes webpack and browserify
             sys = getNodeSystem();
@@ -1794,9 +1727,9 @@ namespace ts {
 
     if (sys && sys.getEnvironmentVariable) {
         setCustomPollingValues(sys);
-        Debug.currentAssertionLevel = /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))
+        Debug.setAssertionLevel(/^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))
             ? AssertionLevel.Normal
-            : AssertionLevel.None;
+            : AssertionLevel.None);
     }
     if (sys && sys.debugMode) {
         Debug.isDebugging = true;
