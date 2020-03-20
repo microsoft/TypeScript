@@ -8,8 +8,20 @@ namespace ts.Completions.StringCompletions {
         if (isInString(sourceFile, position, contextToken)) {
             if (!contextToken || !isStringLiteralLike(contextToken)) return undefined;
             const entries = getStringLiteralCompletionEntries(sourceFile, contextToken, position, checker, options, host);
-            return convertStringLiteralCompletions(entries, sourceFile, checker, log, preferences);
+            const completeInfo = convertStringLiteralCompletions(entries, sourceFile, checker, log, preferences);
+            if (completeInfo && preferences.stringLiteralReplacementMode) {
+                completeInfo.entries = completeInfo.entries.map(entry => addReplacementSpansForCompletionEntry(contextToken, entry));
+            }
+            return completeInfo;
         }
+    }
+
+    function addReplacementSpansForCompletionEntry(contextToken: Node, entry: CompletionEntry): CompletionEntry {
+        if (entry.replacementSpan) return entry;
+        return {
+            ...entry,
+            replacementSpan: createTextSpanFromNode(contextToken)
+        };
     }
 
     function convertStringLiteralCompletions(completion: StringLiteralCompletion | undefined, sourceFile: SourceFile, checker: TypeChecker, log: Log, preferences: UserPreferences): CompletionInfo | undefined {
