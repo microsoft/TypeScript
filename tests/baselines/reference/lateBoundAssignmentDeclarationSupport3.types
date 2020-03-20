@@ -36,7 +36,7 @@ Object.defineProperty(module.exports, _sym, { value: "ok" });
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3")
->module : { "tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3"); }
+>module : { "\"tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3\"": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3"); }
 >exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3")
 >_sym : unique symbol
 >{ value: "ok" } : { value: string; }
@@ -49,7 +49,7 @@ Object.defineProperty(module.exports, _str, { value: "ok" });
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3")
->module : { "tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3"); }
+>module : { "\"tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3\"": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3"); }
 >exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3")
 >_str : "my-fake-sym"
 >{ value: "ok" } : { value: string; }
@@ -60,7 +60,7 @@ module.exports.S = _sym;
 >module.exports.S = _sym : unique symbol
 >module.exports.S : unique symbol
 >module.exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3")
->module : { "tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3"); }
+>module : { "\"tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3\"": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3"); }
 >exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3")
 >S : unique symbol
 >_sym : unique symbol

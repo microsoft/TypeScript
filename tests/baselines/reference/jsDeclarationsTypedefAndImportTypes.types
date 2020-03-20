@@ -18,7 +18,7 @@ class Conn {
 module.exports = Conn;
 >module.exports = Conn : typeof Conn
 >module.exports : typeof Conn
->module : { "tests/cases/conformance/jsdoc/declarations/conn": typeof Conn; }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/conn\"": typeof Conn; }
 >exports : typeof Conn
 >Conn : typeof Conn
 
@@ -58,7 +58,7 @@ class Wrap {
 module.exports = {
 >module.exports = {    Wrap} : { Wrap: typeof Wrap; }
 >module.exports : { Wrap: typeof Wrap; }
->module : { "tests/cases/conformance/jsdoc/declarations/usage": { Wrap: typeof Wrap; }; }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/usage\"": { Wrap: typeof Wrap; }; }
 >exports : { Wrap: typeof Wrap; }
 >{    Wrap} : { Wrap: typeof Wrap; }
 

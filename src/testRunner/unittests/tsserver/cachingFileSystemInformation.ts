@@ -14,8 +14,9 @@ namespace ts.projectSystem {
             readDirectory = "readDirectory"
         }
         type CalledMaps = CalledMapsWithSingleArg | CalledMapsWithFiveArgs;
+        type CalledWithFiveArgs = [readonly string[], readonly string[], readonly string[], number];
         function createCallsTrackingHost(host: TestServerHost) {
-            const calledMaps: Record<CalledMapsWithSingleArg, MultiMap<true>> & Record<CalledMapsWithFiveArgs, MultiMap<[readonly string[], readonly string[], readonly string[], number]>> = {
+            const calledMaps: Record<CalledMapsWithSingleArg, MultiMap<true>> & Record<CalledMapsWithFiveArgs, MultiMap<CalledWithFiveArgs>> = {
                 fileExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.fileExists),
                 directoryExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.directoryExists),
                 getDirectories: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.getDirectories),
@@ -65,11 +66,11 @@ namespace ts.projectSystem {
             }
 
             function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: Map<number>) {
-                TestFSWithWatch.checkMultiMapKeyCount(callback, calledMaps[callback], expectedKeys);
+                TestFSWithWatch.checkMap<true | CalledWithFiveArgs>(callback, calledMaps[callback], expectedKeys);
             }
 
             function verifyCalledOnEachEntryNTimes(callback: CalledMaps, expectedKeys: readonly string[], nTimes: number) {
-                TestFSWithWatch.checkMultiMapKeyCount(callback, calledMaps[callback], expectedKeys, nTimes);
+                TestFSWithWatch.checkMap<true | CalledWithFiveArgs>(callback, calledMaps[callback], expectedKeys, nTimes);
             }
 
             function verifyNoHostCalls() {
@@ -239,8 +240,8 @@ namespace ts.projectSystem {
             let diags = project.getLanguageService().getSemanticDiagnostics(root.path);
             assert.equal(diags.length, 1);
             const diag = diags[0];
-            assert.equal(diag.code, Diagnostics.Cannot_find_module_0.code);
-            assert.equal(flattenDiagnosticMessageText(diag.messageText, "\n"), "Cannot find module 'bar'.");
+            assert.equal(diag.code, Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations.code);
+            assert.equal(flattenDiagnosticMessageText(diag.messageText, "\n"), "Cannot find module 'bar' or its corresponding type declarations.");
             callsTrackingHost.verifyCalledOn(CalledMapsWithSingleArg.fileExists, imported.path);
 
 
@@ -473,8 +474,8 @@ namespace ts.projectSystem {
 
                 const project = service.configuredProjects.get(tsconfig.path)!;
                 checkProjectActualFiles(project, files.map(f => f.path));
-                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file1.path).map(diag => diag.messageText), ["Cannot find module 'debug'."]);
-                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file2.path).map(diag => diag.messageText), ["Cannot find module 'debug'."]);
+                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file1.path).map(diag => diag.messageText), ["Cannot find module 'debug' or its corresponding type declarations."]);
+                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file2.path).map(diag => diag.messageText), ["Cannot find module 'debug' or its corresponding type declarations."]);
 
                 const debugTypesFile: File = {
                     path: `${projectLocation}/node_modules/debug/index.d.ts`,
@@ -681,7 +682,7 @@ namespace ts.projectSystem {
 
             const project = service.configuredProjects.get(tsconfig.path)!;
             checkProjectActualFiles(project, files.map(f => f.path));
-            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), ["Cannot find module 'debug'."]);
+            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), ["Cannot find module 'debug' or its corresponding type declarations."]);
 
             const debugTypesFile: File = {
                 path: `${projectLocation}/node_modules/@types/debug/index.d.ts`,
@@ -689,10 +690,10 @@ namespace ts.projectSystem {
             };
             files.push(debugTypesFile);
             // Do not invoke recursive directory watcher for anything other than node_module/@types
-            const invoker = host.invokeWatchedDirectoriesRecursiveCallback;
-            host.invokeWatchedDirectoriesRecursiveCallback = (fullPath, relativePath) => {
+            const invoker = host.invokeFsWatchesRecursiveCallbacks;
+            host.invokeFsWatchesRecursiveCallbacks = (fullPath, eventName, entryFullPath) => {
                 if (fullPath.endsWith("@types")) {
-                    invoker.call(host, fullPath, relativePath);
+                    invoker.call(host, fullPath, eventName, entryFullPath);
                 }
             };
             host.reloadFS(files);

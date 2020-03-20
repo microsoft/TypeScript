@@ -1,23 +1,23 @@
 //// [/lib/incremental-declaration-doesnt-changeOutput.txt]
 /lib/tsc --b /src/third --verbose
-12:04:00 AM - Projects in this build: 
+[[90m12:04:00 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-12:04:00 AM - Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
+[[90m12:04:00 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
 
-12:04:00 AM - Building project '/src/first/tsconfig.json'...
+[[90m12:04:00 AM[0m] Building project '/src/first/tsconfig.json'...
 
-12:04:00 AM - Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.js'
+[[90m12:04:00 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.js'
 
-12:04:00 AM - Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+[[90m12:04:00 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
 
-12:04:00 AM - Updating output of project '/src/third/tsconfig.json'...
+[[90m12:04:00 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
-12:04:00 AM - Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
+[[90m12:04:00 AM[0m] Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
 
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/first/bin/first-output.d.ts] file written with same contents
@@ -311,7 +311,7 @@ var normalC = /** @class */ (function () {
     Object.defineProperty(normalC.prototype, "c", {
         /*@internal*/ get: function () { return 10; },
         /*@internal*/ set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -835,7 +835,7 @@ sourceFile:../../../second/second_part1.ts
 6 >Emitted(21, 45) Source(18, 40) + SourceIndex(3)
 7 >Emitted(21, 46) Source(18, 41) + SourceIndex(3)
 ---
->>>        enumerable: true,
+>>>        enumerable: false,
 >>>        configurable: true
 >>>    });
 1 >^^^^^^^
@@ -2192,20 +2192,20 @@ sourceFile:../../third_part1.ts
         },
         {
           "pos": 127,
-          "end": 3543,
+          "end": 3544,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
               "pos": 127,
-              "end": 3543,
+              "end": 3544,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 3543,
-          "end": 3579,
+          "pos": 3544,
+          "end": 3580,
           "kind": "text"
         }
       ]
@@ -2265,9 +2265,9 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (127-3543):: ../../../2/second-output.js texts:: 1
+prepend: (127-3544):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (127-3543)
+text: (127-3544)
 var N;
 (function (N) {
     function f() {
@@ -2282,7 +2282,7 @@ var normalC = /** @class */ (function () {
     Object.defineProperty(normalC.prototype, "c", {
         /*@internal*/ get: function () { return 10; },
         /*@internal*/ set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -2372,7 +2372,7 @@ var C = /** @class */ (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (3543-3579)
+text: (3544-3580)
 var c = new C();
 c.doSomething();
 

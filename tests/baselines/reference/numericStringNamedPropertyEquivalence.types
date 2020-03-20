@@ -26,7 +26,7 @@ interface I {
 }
 
 var a: {
->a : { "1": number; }
+>a : { 1: number; }
 
     "1": number;
 >"1" : number
@@ -36,8 +36,8 @@ var a: {
 }
 
 var b = {
->b : { "0": string; }
->{    "0": '',    0: ''} : { "0": string; }
+>b : { 0: string; }
+>{    "0": '',    0: ''} : { 0: string; }
 
     "0": '',
 >"0" : string

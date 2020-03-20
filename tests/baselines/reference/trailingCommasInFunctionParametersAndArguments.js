@@ -50,7 +50,7 @@ var X = /** @class */ (function () {
     Object.defineProperty(X.prototype, "x", {
         // See trailingCommasInGetter.ts
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return X;

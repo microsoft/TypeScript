@@ -593,3 +593,114 @@ function test4(value: 1 | 2) {
 >x : string
 }
 
+// Repro from #34661
+
+enum Animal { DOG, CAT }
+>Animal : Animal
+>DOG : Animal.DOG
+>CAT : Animal.CAT
+
+declare const zoo: { animal: Animal } | undefined;
+>zoo : { animal: Animal; } | undefined
+>animal : Animal
+
+function expression(): Animal {
+>expression : () => Animal
+
+    switch (zoo?.animal ?? Animal.DOG) {
+>zoo?.animal ?? Animal.DOG : Animal
+>zoo?.animal : Animal | undefined
+>zoo : { animal: Animal; } | undefined
+>animal : Animal | undefined
+>Animal.DOG : Animal.DOG
+>Animal : typeof Animal
+>DOG : Animal.DOG
+
+        case Animal.DOG: return Animal.DOG
+>Animal.DOG : Animal.DOG
+>Animal : typeof Animal
+>DOG : Animal.DOG
+>Animal.DOG : Animal.DOG
+>Animal : typeof Animal
+>DOG : Animal.DOG
+
+        case Animal.CAT: return Animal.CAT
+>Animal.CAT : Animal.CAT
+>Animal : typeof Animal
+>CAT : Animal.CAT
+>Animal.CAT : Animal.CAT
+>Animal : typeof Animal
+>CAT : Animal.CAT
+    }
+}
+
+// Repro from #34840
+
+function foo() {
+>foo : () => void
+
+    const foo: number | undefined = 0;
+>foo : number | undefined
+>0 : 0
+
+    while (true) {
+>true : true
+
+        const stats = foo;
+>stats : number
+>foo : number
+
+        switch (stats) {
+>stats : number
+
+            case 1: break;
+>1 : 1
+
+            case 2: break;
+>2 : 2
+        }
+    }
+}
+
+// Repro from #35070
+
+type O = {
+>O : O
+
+    a: number,
+>a : number
+
+    b: number
+>b : number
+
+};
+type K = keyof O | 'c';
+>K : K
+
+function ff(o: O, k: K) {
+>ff : (o: O, k: K) => number
+>o : O
+>k : K
+
+    switch(k) {
+>k : K
+
+        case 'c':
+>'c' : "c"
+
+            k = 'a';
+>k = 'a' : "a"
+>k : K
+>'a' : "a"
+    }
+    k === 'c';  // Error
+>k === 'c' : boolean
+>k : "a" | "b"
+>'c' : "c"
+
+    return o[k];
+>o[k] : number
+>o : O
+>k : "a" | "b"
+}
+

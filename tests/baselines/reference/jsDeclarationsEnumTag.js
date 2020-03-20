@@ -51,6 +51,7 @@ export function ff(s) {
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ff = exports.consume = exports.Fs = exports.Second = exports.Target = void 0;
 /** @enum {string} */
 exports.Target = {
     START: "start",

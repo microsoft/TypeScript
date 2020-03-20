@@ -1,25 +1,25 @@
 //// [/lib/incremental-declaration-changesOutput.txt]
 /lib/tsc --b /src/tests --verbose
-12:04:00 AM - Projects in this build: 
+[[90m12:04:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-12:04:00 AM - Project 'src/core/tsconfig.json' is out of date because oldest output 'src/core/anotherModule.js' is older than newest input 'src/core/index.ts'
+[[90m12:04:00 AM[0m] Project 'src/core/tsconfig.json' is out of date because oldest output 'src/core/anotherModule.js' is older than newest input 'src/core/index.ts'
 
-12:04:00 AM - Building project '/src/core/tsconfig.json'...
+[[90m12:04:00 AM[0m] Building project '/src/core/tsconfig.json'...
 
-12:04:00 AM - Updating unchanged output timestamps of project '/src/core/tsconfig.json'...
+[[90m12:04:00 AM[0m] Updating unchanged output timestamps of project '/src/core/tsconfig.json'...
 
-12:04:00 AM - Project 'src/logic/tsconfig.json' is out of date because oldest output 'src/logic/index.js' is older than newest input 'src/core'
+[[90m12:04:00 AM[0m] Project 'src/logic/tsconfig.json' is out of date because oldest output 'src/logic/index.js' is older than newest input 'src/core'
 
-12:04:00 AM - Building project '/src/logic/tsconfig.json'...
+[[90m12:04:00 AM[0m] Building project '/src/logic/tsconfig.json'...
 
-12:04:00 AM - Project 'src/tests/tsconfig.json' is out of date because oldest output 'src/tests/index.js' is older than newest input 'src/core'
+[[90m12:04:00 AM[0m] Project 'src/tests/tsconfig.json' is out of date because oldest output 'src/tests/index.js' is older than newest input 'src/core'
 
-12:04:00 AM - Building project '/src/tests/tsconfig.json'...
+[[90m12:04:00 AM[0m] Building project '/src/tests/tsconfig.json'...
 
-exitCode:: 0
+exitCode:: ExitStatus.Success
 readFiles:: {
  "/src/tests/tsconfig.json": 1,
  "/src/core/tsconfig.json": 1,
@@ -187,6 +187,7 @@ sourceFile:index.ts
 //// [/src/core/index.js]
 "use strict";
 exports.__esModule = true;
+exports.someClass = exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
 exports.leftPad = leftPad;
@@ -259,11 +260,11 @@ export class someClass { }
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
       },
-      "../core/index.ts": {
+      "../core/index.d.ts": {
         "version": "-2069755619-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClass {\r\n}\r\n//# sourceMappingURL=index.d.ts.map",
         "signature": "-2069755619-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClass {\r\n}\r\n//# sourceMappingURL=index.d.ts.map"
       },
-      "../core/anothermodule.ts": {
+      "../core/anothermodule.d.ts": {
         "version": "7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map",
         "signature": "7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map"
       },
@@ -293,8 +294,8 @@ export class someClass { }
     },
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
-      "../core/anothermodule.ts",
-      "../core/index.ts",
+      "../core/anothermodule.d.ts",
+      "../core/index.d.ts",
       "./index.ts"
     ]
   },
@@ -311,15 +312,15 @@ export class someClass { }
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
       },
-      "../core/index.ts": {
+      "../core/index.d.ts": {
         "version": "-2069755619-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClass {\r\n}\r\n//# sourceMappingURL=index.d.ts.map",
         "signature": "-2069755619-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClass {\r\n}\r\n//# sourceMappingURL=index.d.ts.map"
       },
-      "../core/anothermodule.ts": {
+      "../core/anothermodule.d.ts": {
         "version": "7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map",
         "signature": "7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map"
       },
-      "../logic/index.ts": {
+      "../logic/index.d.ts": {
         "version": "-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n",
         "signature": "-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n"
       },
@@ -336,7 +337,7 @@ export class someClass { }
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "../logic/index.ts": [
+      "../logic/index.d.ts": [
         "../core/anothermodule.d.ts"
       ],
       "./index.ts": [
@@ -346,7 +347,7 @@ export class someClass { }
       ]
     },
     "exportedModulesMap": {
-      "../logic/index.ts": [
+      "../logic/index.d.ts": [
         "../core/anothermodule.d.ts"
       ],
       "./index.ts": [
@@ -355,9 +356,9 @@ export class someClass { }
     },
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
-      "../core/anothermodule.ts",
-      "../core/index.ts",
-      "../logic/index.ts",
+      "../core/anothermodule.d.ts",
+      "../core/index.d.ts",
+      "../logic/index.d.ts",
       "./index.ts"
     ]
   },

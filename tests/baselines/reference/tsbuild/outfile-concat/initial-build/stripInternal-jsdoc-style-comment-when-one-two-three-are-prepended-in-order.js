@@ -1,23 +1,23 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc --b /src/third --verbose
-12:01:00 AM - Projects in this build: 
+[[90m12:01:00 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-12:01:00 AM - Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.js' does not exist
+[[90m12:01:00 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.js' does not exist
 
-12:01:00 AM - Building project '/src/first/tsconfig.json'...
+[[90m12:01:00 AM[0m] Building project '/src/first/tsconfig.json'...
 
-12:01:00 AM - Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.js' does not exist
+[[90m12:01:00 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.js' does not exist
 
-12:01:00 AM - Building project '/src/second/tsconfig.json'...
+[[90m12:01:00 AM[0m] Building project '/src/second/tsconfig.json'...
 
-12:01:00 AM - Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.js' does not exist
+[[90m12:01:00 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.js' does not exist
 
-12:01:00 AM - Building project '/src/third/tsconfig.json'...
+[[90m12:01:00 AM[0m] Building project '/src/third/tsconfig.json'...
 
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/2/second-output.d.ts]
@@ -917,7 +917,7 @@ var normalC = (function () {
     Object.defineProperty(normalC.prototype, "c", {
         get: function () { return 10; },
         set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -1388,7 +1388,7 @@ sourceFile:../second/second_part1.ts
 4 >Emitted(20, 31) Source(18, 41) + SourceIndex(3)
 5 >Emitted(20, 32) Source(18, 42) + SourceIndex(3)
 ---
->>>        enumerable: true,
+>>>        enumerable: false,
 >>>        configurable: true
 >>>    });
 1 >^^^^^^^
@@ -2616,7 +2616,7 @@ sourceFile:../second/second_part2.ts
         },
         {
           "pos": 110,
-          "end": 3162,
+          "end": 3163,
           "kind": "text"
         }
       ]
@@ -2697,7 +2697,7 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-text: (110-3162)
+text: (110-3163)
 var N;
 (function (N) {
     function f() {
@@ -2712,7 +2712,7 @@ var normalC = (function () {
     Object.defineProperty(normalC.prototype, "c", {
         get: function () { return 10; },
         set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -3638,7 +3638,7 @@ var normalC = (function () {
     Object.defineProperty(normalC.prototype, "c", {
         get: function () { return 10; },
         set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -4111,7 +4111,7 @@ sourceFile:../../../second/second_part1.ts
 4 >Emitted(20, 31) Source(18, 41) + SourceIndex(3)
 5 >Emitted(20, 32) Source(18, 42) + SourceIndex(3)
 ---
->>>        enumerable: true,
+>>>        enumerable: false,
 >>>        configurable: true
 >>>    });
 1 >^^^^^^^
@@ -5378,20 +5378,20 @@ sourceFile:../../third_part1.ts
       "sections": [
         {
           "pos": 0,
-          "end": 3162,
+          "end": 3163,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
               "pos": 0,
-              "end": 3162,
+              "end": 3163,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 3162,
-          "end": 3198,
+          "pos": 3163,
+          "end": 3199,
           "kind": "text"
         }
       ]
@@ -5426,9 +5426,9 @@ sourceFile:../../third_part1.ts
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-3162):: ../../../2/second-output.js texts:: 1
+prepend: (0-3163):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-3162)
+text: (0-3163)
 var s = "Hello, world";
 console.log(s);
 console.log(f());
@@ -5449,7 +5449,7 @@ var normalC = (function () {
     Object.defineProperty(normalC.prototype, "c", {
         get: function () { return 10; },
         set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -5539,7 +5539,7 @@ var C = (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (3162-3198)
+text: (3163-3199)
 var c = new C();
 c.doSomething();
 
@@ -5583,7 +5583,7 @@ declare var c: C;
     "sourceMap": true,
     "declarationMap": true,
     "declaration": true,
-"stripInternal": true
+    "stripInternal": true,
     "outFile": "./thirdjs/output/third-output.js",
     "skipDefaultLibCheck": true
   },

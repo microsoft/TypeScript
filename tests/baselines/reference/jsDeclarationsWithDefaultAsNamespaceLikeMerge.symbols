@@ -1,0 +1,53 @@
+=== /helper.d.ts ===
+type Computed = () => any;
+>Computed : Symbol(Computed, Decl(helper.d.ts, 0, 0))
+
+interface Mapper<R> {
+>Mapper : Symbol(Mapper, Decl(helper.d.ts, 0, 26))
+>R : Symbol(R, Decl(helper.d.ts, 1, 17))
+
+    <Key extends string>(map: Key[]): { [K in Key]: R };
+>Key : Symbol(Key, Decl(helper.d.ts, 2, 5))
+>map : Symbol(map, Decl(helper.d.ts, 2, 25))
+>Key : Symbol(Key, Decl(helper.d.ts, 2, 5))
+>K : Symbol(K, Decl(helper.d.ts, 2, 41))
+>Key : Symbol(Key, Decl(helper.d.ts, 2, 5))
+>R : Symbol(R, Decl(helper.d.ts, 1, 17))
+
+    <Map extends Record<string, string>>(map: Map): { [K in keyof Map]: R };
+>Map : Symbol(Map, Decl(helper.d.ts, 3, 5))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(map, Decl(helper.d.ts, 3, 41))
+>Map : Symbol(Map, Decl(helper.d.ts, 3, 5))
+>K : Symbol(K, Decl(helper.d.ts, 3, 55))
+>Map : Symbol(Map, Decl(helper.d.ts, 3, 5))
+>R : Symbol(R, Decl(helper.d.ts, 1, 17))
+}
+interface NamespacedMappers {
+>NamespacedMappers : Symbol(NamespacedMappers, Decl(helper.d.ts, 4, 1))
+
+    mapState: Mapper<Computed>;
+>mapState : Symbol(NamespacedMappers.mapState, Decl(helper.d.ts, 5, 29))
+>Mapper : Symbol(Mapper, Decl(helper.d.ts, 0, 26))
+>Computed : Symbol(Computed, Decl(helper.d.ts, 0, 0))
+}
+export declare function createNamespacedHelpers(): NamespacedMappers;
+>createNamespacedHelpers : Symbol(createNamespacedHelpers, Decl(helper.d.ts, 7, 1))
+>NamespacedMappers : Symbol(NamespacedMappers, Decl(helper.d.ts, 4, 1))
+
+=== /index.js ===
+import { createNamespacedHelpers } from './helper'
+>createNamespacedHelpers : Symbol(createNamespacedHelpers, Decl(index.js, 0, 8))
+
+const { mapState } = createNamespacedHelpers()
+>mapState : Symbol(mapState, Decl(index.js, 1, 7))
+>createNamespacedHelpers : Symbol(createNamespacedHelpers, Decl(index.js, 0, 8))
+
+export default {
+    computed: {
+>computed : Symbol(computed, Decl(index.js, 2, 16))
+
+        ...mapState(['panels'])
+>mapState : Symbol(mapState, Decl(index.js, 1, 7))
+    }
+}

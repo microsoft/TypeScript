@@ -24,9 +24,9 @@ tests/cases/conformance/jsx/file.tsx(55,68): error TS2769: No overload matches t
     Type 'true' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(56,12): error TS2769: No overload matches this call.
   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
-    Property 'onClick' is missing in type '{ data-format: true; }' but required in type 'ButtonProps'.
+    Property 'onClick' is missing in type '{ "data-format": true; }' but required in type 'ButtonProps'.
   Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
-    Property 'to' is missing in type '{ data-format: true; }' but required in type 'LinkProps'.
+    Property 'to' is missing in type '{ "data-format": true; }' but required in type 'LinkProps'.
   Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
     Type 'true' is not assignable to type 'string'.
 
@@ -124,9 +124,9 @@ tests/cases/conformance/jsx/file.tsx(56,12): error TS2769: No overload matches t
                ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
-!!! error TS2769:     Property 'onClick' is missing in type '{ data-format: true; }' but required in type 'ButtonProps'.
+!!! error TS2769:     Property 'onClick' is missing in type '{ "data-format": true; }' but required in type 'ButtonProps'.
 !!! error TS2769:   Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
-!!! error TS2769:     Property 'to' is missing in type '{ data-format: true; }' but required in type 'LinkProps'.
+!!! error TS2769:     Property 'to' is missing in type '{ "data-format": true; }' but required in type 'LinkProps'.
 !!! error TS2769:   Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
 !!! error TS2769:     Type 'true' is not assignable to type 'string'.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:9:5: 'onClick' is declared here.

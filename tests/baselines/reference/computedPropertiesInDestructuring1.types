@@ -116,7 +116,7 @@ let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
 ({["bar"]: bar2} = {bar: "bar"});
 >({["bar"]: bar2} = {bar: "bar"}) : { bar: string; }
 >{["bar"]: bar2} = {bar: "bar"} : { bar: string; }
->{["bar"]: bar2} : { ["bar"]: string; }
+>{["bar"]: bar2} : { bar: string; }
 >["bar"] : string
 >"bar" : "bar"
 >bar2 : string

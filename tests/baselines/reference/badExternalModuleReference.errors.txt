@@ -1,10 +1,10 @@
-tests/cases/compiler/badExternalModuleReference.ts(1,21): error TS2307: Cannot find module 'garbage'.
+tests/cases/compiler/badExternalModuleReference.ts(1,21): error TS2307: Cannot find module 'garbage' or its corresponding type declarations.
 
 
 ==== tests/cases/compiler/badExternalModuleReference.ts (1 errors) ====
     import a1 = require("garbage");
                         ~~~~~~~~~
-!!! error TS2307: Cannot find module 'garbage'.
+!!! error TS2307: Cannot find module 'garbage' or its corresponding type declarations.
     export declare var a: {
         test1: a1.connectModule;
         (): a1.connectExport;

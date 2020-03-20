@@ -126,6 +126,7 @@ declare namespace FourSlashInterface {
         newLineCharacter?: string;
         convertTabsToSpaces?: boolean;
         indentStyle?: IndentStyle;
+        trimTrailingWhitespace?: boolean;
     }
     interface FormatCodeOptions extends EditorOptions {
         InsertSpaceAfterCommaDelimiter: boolean;
@@ -226,7 +227,7 @@ declare namespace FourSlashInterface {
         jsxClosingTag(map: { [markerName: string]: { readonly newText: string } | undefined }): void;
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFix(options: {
-            description: string,
+            description: string | [string, ...(string | number)[]] | DiagnosticIgnoredInterpolations,
             newFileContent?: NewFileContent,
             newRangeContent?: string,
             errorCode?: number,
@@ -236,6 +237,7 @@ declare namespace FourSlashInterface {
             commands?: {}[],
         });
         codeFixAvailable(options?: ReadonlyArray<VerifyCodeFixAvailableOptions> | string): void;
+        codeFixAllAvailable(fixName: string): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
@@ -297,7 +299,7 @@ declare namespace FourSlashInterface {
         singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[] | string): void;
         rangesAreOccurrences(isWriteAccess?: boolean, ranges?: Range[]): void;
         rangesWithSameTextAreRenameLocations(...texts: string[]): void;
-        rangesAreRenameLocations(options?: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: Range[] });
+        rangesAreRenameLocations(options?: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: Range[], providePrefixAndSuffixTextForRename?: boolean });
         findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]): void;
         noSignatureHelp(...markers: (string | Marker)[]): void;
         noSignatureHelpForTriggerReason(triggerReason: SignatureHelpTriggerReason, ...markers: (string | Marker)[]): void
@@ -310,11 +312,13 @@ declare namespace FourSlashInterface {
         baselineCurrentFileBreakpointLocations(): void;
         baselineCurrentFileNameOrDottedNameSpans(): void;
         baselineGetEmitOutput(insertResultsIntoVfs?: boolean): void;
+        baselineSyntacticDiagnostics(): void;
+        baselineSyntacticAndSemanticDiagnostics(): void;
         getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void;
         baselineQuickInfo(): void;
         baselineSmartSelection(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
-        outliningSpansInCurrentFile(spans: Range[]): void;
+        outliningSpansInCurrentFile(spans: Range[], kind?: "comment" | "region" | "code" | "imports"): void;
         outliningHintSpansInCurrentFile(spans: Range[]): void;
         todoCommentsInCurrentFile(descriptors: string[]): void;
         matchingBracePositionInCurrentFile(bracePosition: number, expectedMatchPosition: number): void;
@@ -328,6 +332,7 @@ declare namespace FourSlashInterface {
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: FormatCodeOptions): void;
         getAndApplyCodeFix(errorCode?: number, index?: number): void;
         importFixAtPosition(expectedTextArray: string[], errorCode?: number, options?: UserPreferences): void;
+        importFixModuleSpecifiers(marker: string, moduleSpecifiers: string[]): void;
 
         navigationBar(json: any, options?: { checkSpans?: boolean }): void;
         navigationTree(json: any, options?: { checkSpans?: boolean }): void;
@@ -355,6 +360,7 @@ declare namespace FourSlashInterface {
         renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range, allowRenameOfImportPath?: boolean): void;
         renameInfoFailed(message?: string, allowRenameOfImportPath?: boolean): void;
         renameLocations(startRanges: ArrayOrSingle<Range>, options: RenameLocationsOptions): void;
+        baselineRename(marker: string, options: RenameOptions): void;
 
         /** Verify the quick info available at the current marker. */
         quickInfoIs(expectedText: string, expectedDocumentation?: string): void;
@@ -380,6 +386,7 @@ declare namespace FourSlashInterface {
             readonly newFileContents: { readonly [fileName: string]: string };
             readonly preferences?: UserPreferences;
         }): void;
+        baselineCallHierarchy(): void;
         moveToNewFile(options: {
             readonly newFileContents: { readonly [fileName: string]: string };
             readonly preferences?: UserPreferences;
@@ -428,6 +435,7 @@ declare namespace FourSlashInterface {
         printNavigationBar(): void;
         printNavigationItems(searchValue?: string): void;
         printScriptLexicalStructureItems(): void;
+        printOutliningSpans(): void;
         printReferences(): void;
         printContext(): void;
     }
@@ -583,7 +591,8 @@ declare namespace FourSlashInterface {
         readonly quotePreference?: "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeInsertTextCompletions?: boolean;
-        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly includeAutomaticOptionalChainCompletions?: boolean;
+        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
     }
     interface CompletionsOptions {
@@ -604,6 +613,7 @@ declare namespace FourSlashInterface {
         readonly replacementSpan?: Range;
         readonly hasAction?: boolean;
         readonly isRecommended?: boolean;
+        readonly isFromUncheckedFile?: boolean;
         readonly kind?: string;
         readonly kindModifiers?: string;
         readonly sortText?: completion.SortText;
@@ -715,8 +725,13 @@ declare namespace FourSlashInterface {
         readonly ranges: ReadonlyArray<RenameLocationOptions>;
         readonly providePrefixAndSuffixTextForRename?: boolean;
     };
+
+    type RenameOptions = { readonly findInStrings?: boolean, readonly findInComments?: boolean, readonly providePrefixAndSuffixTextForRename?: boolean };
     type RenameLocationOptions = Range | { readonly range: Range, readonly prefixText?: string, readonly suffixText?: string };
+    type DiagnosticIgnoredInterpolations = { template: string }
 }
+/** Wraps a diagnostic message to be compared ignoring interpolated strings */
+declare function ignoreInterpolations(diagnostic: string | ts.DiagnosticMessage): FourSlashInterface.DiagnosticIgnoredInterpolations;
 declare function verifyOperationIsCancelled(f: any): void;
 declare var test: FourSlashInterface.test_;
 declare var plugins: FourSlashInterface.plugins;

@@ -714,7 +714,7 @@ namespace ts.projectSystem {
 
             const expectedEmittedFileName = "/a/b/f1.js";
             assert.isTrue(host.fileExists(expectedEmittedFileName));
-            assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nexports.__esModule = true;\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
+            assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nexports.__esModule = true;\r\nexports.Foo = void 0;\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
         });
 
         it("shoud not emit js files in external projects", () => {
@@ -799,23 +799,104 @@ namespace ts.projectSystem {
                 assert.isTrue(stringContains(content, str), `Expected "${content}" to have "${str}"`);
             }
         });
+
+        describe("compile on save emit with and without richResponse", () => {
+            it("without rich Response", () => {
+                verify(/*richRepsonse*/ undefined);
+            });
+            it("with rich Response set to false", () => {
+                verify(/*richRepsonse*/ false);
+            });
+            it("with rich Repsonse", () => {
+                verify(/*richRepsonse*/ true);
+            });
+
+            function verify(richResponse: boolean | undefined) {
+                const config: File = {
+                    path: `${tscWatch.projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({
+                        compileOnSave: true,
+                        compilerOptions: {
+                            outDir: "test",
+                            noEmitOnError: true,
+                            declaration: true,
+                        },
+                        exclude: ["node_modules"]
+                    })
+                };
+                const file1: File = {
+                    path: `${tscWatch.projectRoot}/file1.ts`,
+                    content: "const x = 1;"
+                };
+                const file2: File = {
+                    path: `${tscWatch.projectRoot}/file2.ts`,
+                    content: "const y = 2;"
+                };
+                const host = createServerHost([file1, file2, config, libFile]);
+                const session = createSession(host);
+                openFilesForSession([file1], session);
+
+                const affectedFileResponse = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                    arguments: { file: file1.path }
+                }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
+                assert.deepEqual(affectedFileResponse, [
+                    { fileNames: [file1.path, file2.path], projectFileName: config.path, projectUsesOutFile: false }
+                ]);
+                const file1SaveResponse = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                    arguments: { file: file1.path, richResponse }
+                }).response;
+                if (richResponse) {
+                    assert.deepEqual(file1SaveResponse, { emitSkipped: false, diagnostics: emptyArray });
+                }
+                else {
+                    assert.isTrue(file1SaveResponse);
+                }
+                assert.strictEqual(host.readFile(`${tscWatch.projectRoot}/test/file1.d.ts`), "declare const x = 1;\n");
+                const file2SaveResponse = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                    arguments: { file: file2.path, richResponse }
+                }).response;
+                if (richResponse) {
+                    assert.deepEqual(file2SaveResponse, {
+                        emitSkipped: true,
+                        diagnostics: [{
+                            start: undefined,
+                            end: undefined,
+                            fileName: undefined,
+                            text: formatStringFromArgs(Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file.message, [`${tscWatch.projectRoot}/test/file1.d.ts`]),
+                            code: Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file.code,
+                            category: diagnosticCategoryName(Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file),
+                            reportsUnnecessary: undefined,
+                            relatedInformation: undefined,
+                            source: undefined
+                        }]
+                    });
+                }
+                else {
+                    assert.isFalse(file2SaveResponse);
+                }
+                assert.isFalse(host.fileExists(`${tscWatch.projectRoot}/test/file2.d.ts`));
+            }
+        });
     });
 
     describe("unittests:: tsserver:: compileOnSave:: CompileOnSaveAffectedFileListRequest with and without projectFileName in request", () => {
         const core: File = {
-            path: `${projectRoot}/core/core.ts`,
+            path: `${tscWatch.projectRoot}/core/core.ts`,
             content: "let z = 10;"
         };
         const app1: File = {
-            path: `${projectRoot}/app1/app.ts`,
+            path: `${tscWatch.projectRoot}/app1/app.ts`,
             content: "let x = 10;"
         };
         const app2: File = {
-            path: `${projectRoot}/app2/app.ts`,
+            path: `${tscWatch.projectRoot}/app2/app.ts`,
             content: "let y = 10;"
         };
         const app1Config: File = {
-            path: `${projectRoot}/app1/tsconfig.json`,
+            path: `${tscWatch.projectRoot}/app1/tsconfig.json`,
             content: JSON.stringify({
                 files: ["app.ts", "../core/core.ts"],
                 compilerOptions: { outFile: "build/output.js" },
@@ -823,7 +904,7 @@ namespace ts.projectSystem {
             })
         };
         const app2Config: File = {
-            path: `${projectRoot}/app2/tsconfig.json`,
+            path: `${tscWatch.projectRoot}/app2/tsconfig.json`,
             content: JSON.stringify({
                 files: ["app.ts", "../core/core.ts"],
                 compilerOptions: { outFile: "build/output.js" },

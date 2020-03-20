@@ -9,7 +9,7 @@
 ////}
 
 verify.codeFix({
-    description: "Remove declaration for: 'arg'",
+    description: "Remove unused declaration for: 'arg'",
     newFileContent:
 `export class Example {
     constructor() {

@@ -1,24 +1,26 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc --b /src/core --verbose
-12:01:00 AM - Projects in this build: 
+[[90m12:01:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
 
-12:01:00 AM - Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.js' does not exist
+[[90m12:01:00 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.js' does not exist
 
-12:01:00 AM - Building project '/src/core/tsconfig.json'...
+[[90m12:01:00 AM[0m] Building project '/src/core/tsconfig.json'...
 
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/core/anotherModule.js]
 "use strict";
 exports.__esModule = true;
+exports.World = void 0;
 exports.World = "hello";
 
 
 //// [/src/core/index.js]
 "use strict";
 exports.__esModule = true;
+exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
 exports.leftPad = leftPad;

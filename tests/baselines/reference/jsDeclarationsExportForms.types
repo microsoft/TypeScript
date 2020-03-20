@@ -52,7 +52,7 @@ const ns = require("./cls");
 module.exports = { ns };
 >module.exports = { ns } : { ns: typeof import("tests/cases/conformance/jsdoc/declarations/cls"); }
 >module.exports : { ns: typeof import("tests/cases/conformance/jsdoc/declarations/cls"); }
->module : { "tests/cases/conformance/jsdoc/declarations/cjs": { ns: typeof import("tests/cases/conformance/jsdoc/declarations/cls"); }; }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/cjs\"": { ns: typeof import("tests/cases/conformance/jsdoc/declarations/cls"); }; }
 >exports : { ns: typeof import("tests/cases/conformance/jsdoc/declarations/cls"); }
 >{ ns } : { ns: typeof import("tests/cases/conformance/jsdoc/declarations/cls"); }
 >ns : typeof import("tests/cases/conformance/jsdoc/declarations/cls")
@@ -67,7 +67,7 @@ const ns = require("./cls");
 module.exports = ns;
 >module.exports = ns : typeof import("tests/cases/conformance/jsdoc/declarations/cls")
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/cls")
->module : { "tests/cases/conformance/jsdoc/declarations/cjs2": typeof import("tests/cases/conformance/jsdoc/declarations/cls"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/cjs2\"": typeof import("tests/cases/conformance/jsdoc/declarations/cls"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/cls")
 >ns : typeof import("tests/cases/conformance/jsdoc/declarations/cls")
 
@@ -82,7 +82,7 @@ module.exports.ns = ns;
 >module.exports.ns = ns : typeof import("tests/cases/conformance/jsdoc/declarations/cls")
 >module.exports.ns : typeof import("tests/cases/conformance/jsdoc/declarations/cls")
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/cjs3")
->module : { "tests/cases/conformance/jsdoc/declarations/cjs3": typeof import("tests/cases/conformance/jsdoc/declarations/cjs3"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/cjs3\"": typeof import("tests/cases/conformance/jsdoc/declarations/cjs3"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/cjs3")
 >ns : typeof import("tests/cases/conformance/jsdoc/declarations/cls")
 >ns : typeof import("tests/cases/conformance/jsdoc/declarations/cls")
@@ -98,7 +98,7 @@ module.exports.names = ns;
 >module.exports.names = ns : typeof import("tests/cases/conformance/jsdoc/declarations/cls")
 >module.exports.names : typeof import("tests/cases/conformance/jsdoc/declarations/cls")
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/cjs4")
->module : { "tests/cases/conformance/jsdoc/declarations/cjs4": typeof import("tests/cases/conformance/jsdoc/declarations/cjs4"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/cjs4\"": typeof import("tests/cases/conformance/jsdoc/declarations/cjs4"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/cjs4")
 >names : typeof import("tests/cases/conformance/jsdoc/declarations/cls")
 >ns : typeof import("tests/cases/conformance/jsdoc/declarations/cls")

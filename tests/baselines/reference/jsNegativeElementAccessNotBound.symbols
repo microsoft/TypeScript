@@ -1,0 +1,7 @@
+=== tests/cases/compiler/jsNegativeELementAccessNotBound.js ===
+var indexMap = {};
+>indexMap : Symbol(indexMap, Decl(jsNegativeELementAccessNotBound.js, 0, 3))
+
+indexMap[-1] = 0;
+>indexMap : Symbol(indexMap, Decl(jsNegativeELementAccessNotBound.js, 0, 3))
+

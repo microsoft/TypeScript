@@ -1,6 +1,6 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/project/.tsbuildinfo]
@@ -37,6 +37,7 @@ exitCode:: 0
 //// [/src/project/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
 exports.x = 10;
 
 

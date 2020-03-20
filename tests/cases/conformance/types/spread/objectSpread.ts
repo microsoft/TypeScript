@@ -8,23 +8,14 @@ let addAfter: { a: number, b: string, c: boolean } =
     { ...o, c: false }
 let addBefore: { a: number, b: string, c: boolean } =
     { c: false, ...o }
-// Note: ignore still changes the order that properties are printed
-let ignore: { a: number, b: string } =
-    { b: 'ignored', ...o }
 let override: { a: number, b: string } =
     { ...o, b: 'override' }
 let nested: { a: number, b: boolean, c: string } =
     { ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' }
 let combined: { a: number, b: string, c: boolean } =
     { ...o, ...o2 }
-let combinedBefore: { a: number, b: string, c: boolean } =
-    { b: 'ok', ...o, ...o2 }
-let combinedMid: { a: number, b: string, c: boolean } =
-    { ...o, b: 'ok', ...o2 }
 let combinedAfter: { a: number, b: string, c: boolean } =
     { ...o, ...o2, b: 'ok' }
-let combinedNested: { a: number, b: boolean, c: string, d: string } =
-    { ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } }
 let combinedNestedChangeType: { a: number, b: boolean, c: number } =
     { ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 }
 let propertyNested: { a: { a: number, b: string } } =
@@ -92,8 +83,6 @@ cplus.plus();
 // new field's type conflicting with existing field is OK
 let changeTypeAfter: { a: string, b: string } =
     { ...o, a: 'wrong type?' }
-let changeTypeBefore: { a: number, b: string } =
-    { a: 'wrong type?', ...o };
 let changeTypeBoth: { a: string, b: number } =
     { ...o, ...swap };
 
@@ -110,8 +99,6 @@ function container(
     // computed property
     let computedFirst: { a: number, b: string, "before everything": number } =
         { ['before everything']: 12, ...o, b: 'yes' }
-    let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number } =
-        { ...o, ['in the middle']: 13, b: 'maybe?', ...o2 }
     let computedAfter: { a: number, b: string, "at the end": number } =
         { ...o, b: 'yeah', ['at the end']: 14 }
 }

@@ -85,8 +85,8 @@ namespace ts.projectSystem {
     }
 
     describe("unittests:: tsserver:: with project references and error reporting", () => {
-        const dependecyLocation = `${projectRoot}/dependency`;
-        const usageLocation = `${projectRoot}/usage`;
+        const dependecyLocation = `${tscWatch.projectRoot}/dependency`;
+        const usageLocation = `${tscWatch.projectRoot}/usage`;
 
         function verifyErrorsUsingGeterr({ allFiles, openFiles, expectedGetErr }: VerifyScenario) {
             it("verifies the errors in open file", () => {
@@ -353,7 +353,7 @@ fnErr();
                             { line: 4, offset: 5 },
                             { line: 4, offset: 10 },
                             Diagnostics.Module_0_has_no_exported_member_1,
-                            [`"../dependency/fns"`, "fnErr"],
+                            [`"../decls/fns"`, "fnErr"],
                             "error",
                         )
                     ],

@@ -135,7 +135,7 @@ namespace ts {
                             const lastTemplateStackToken = lastOrUndefined(templateStack);
 
                             if (lastTemplateStackToken === SyntaxKind.TemplateHead) {
-                                token = scanner.reScanTemplateToken();
+                                token = scanner.reScanTemplateToken(/* isTaggedTemplate */ false);
 
                                 // Only pop on a TemplateTail; a TemplateMiddle indicates there is more for us.
                                 if (token === SyntaxKind.TemplateTail) {
@@ -499,8 +499,10 @@ namespace ts {
         return { spans, endOfLineState: EndOfLineState.None };
 
         function pushClassification(start: number, end: number, type: ClassificationType): void {
+            const length = end - start;
+            Debug.assert(length > 0, `Classification had non-positive length of ${length}`);
             spans.push(start);
-            spans.push(end - start);
+            spans.push(length);
             spans.push(type);
         }
     }

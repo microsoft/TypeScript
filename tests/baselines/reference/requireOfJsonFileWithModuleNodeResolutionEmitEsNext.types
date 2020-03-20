@@ -1,10 +1,10 @@
 === tests/cases/compiler/file1.ts ===
 import * as b  from './b.json';
->b : { "a": boolean; "b": string; }
+>b : { a: boolean; b: string; }
 
 === tests/cases/compiler/b.json ===
 {
->{    "a": true,    "b": "hello"} : { "a": boolean; "b": string; }
+>{    "a": true,    "b": "hello"} : { a: boolean; b: string; }
 
     "a": true,
 >"a" : boolean

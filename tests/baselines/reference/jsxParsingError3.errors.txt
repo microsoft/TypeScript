@@ -1,0 +1,46 @@
+tests/cases/conformance/jsx/Error1.tsx(1,15): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+tests/cases/conformance/jsx/Error2.tsx(1,15): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+tests/cases/conformance/jsx/Error3.tsx(1,22): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+tests/cases/conformance/jsx/Error4.tsx(1,22): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+tests/cases/conformance/jsx/Error5.tsx(1,15): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+tests/cases/conformance/jsx/Error6.tsx(1,15): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+
+
+==== tests/cases/conformance/jsx/file.tsx (0 errors) ====
+    declare module JSX {
+      interface Element {}
+      interface IntrinsicElements {
+        [s: string]: any;
+      }
+    }
+    
+==== tests/cases/conformance/jsx/Error1.tsx (1 errors) ====
+    let x1 = <div>}</div>;
+                  ~
+!!! error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    
+==== tests/cases/conformance/jsx/Error2.tsx (1 errors) ====
+    let x2 = <div>></div>;
+                  ~
+!!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+    
+==== tests/cases/conformance/jsx/Error3.tsx (1 errors) ====
+    let x3 = <div>{"foo"}}</div>;
+                         ~
+!!! error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    
+==== tests/cases/conformance/jsx/Error4.tsx (1 errors) ====
+    let x4 = <div>{"foo"}></div>;
+                         ~
+!!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+    
+==== tests/cases/conformance/jsx/Error5.tsx (1 errors) ====
+    let x5 = <div>}{"foo"}</div>;
+                  ~
+!!! error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    
+==== tests/cases/conformance/jsx/Error6.tsx (1 errors) ====
+    let x6 = <div>>{"foo"}</div>;
+                  ~
+!!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+    

@@ -71,6 +71,23 @@ namespace ts.projectSystem {
             assert.lengthOf(project.getPackageJsonsVisibleToFile("/a.ts" as Path), 1);
             assert.lengthOf(project.getPackageJsonsVisibleToFile("/src/b.ts" as Path), 2);
         });
+
+        it("handles errors in json parsing of package.json", () => {
+            const packageJsonContent = `{ "mod" }`;
+            const { project, host } = setup([tsConfig, { path: packageJson.path, content: packageJsonContent }]);
+            project.getPackageJsonsVisibleToFile("/src/whatever/blah.ts" as Path);
+            const packageJsonInfo = project.packageJsonCache.getInDirectory("/" as Path)!;
+            assert.isUndefined(packageJsonInfo);
+
+            host.writeFile(packageJson.path, packageJson.content);
+            project.getPackageJsonsVisibleToFile("/src/whatever/blah.ts" as Path);
+            const packageJsonInfo2 = project.packageJsonCache.getInDirectory("/" as Path)!;
+            assert.ok(packageJsonInfo2);
+            assert.ok(packageJsonInfo2.dependencies);
+            assert.ok(packageJsonInfo2.devDependencies);
+            assert.ok(packageJsonInfo2.peerDependencies);
+            assert.ok(packageJsonInfo2.optionalDependencies);
+        });
     });
 
     function setup(files: readonly File[] = [tsConfig, packageJson]) {

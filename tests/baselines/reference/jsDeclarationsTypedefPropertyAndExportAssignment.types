@@ -31,7 +31,7 @@ class MainThreadTasks {
 module.exports = MainThreadTasks;
 >module.exports = MainThreadTasks : typeof MainThreadTasks
 >module.exports : typeof MainThreadTasks
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof MainThreadTasks; }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof MainThreadTasks; }
 >exports : typeof MainThreadTasks
 >MainThreadTasks : typeof MainThreadTasks
 
@@ -88,7 +88,7 @@ const taskNameToGroup = {};
 module.exports = {
 >module.exports = {    taskGroups,    taskNameToGroup,} : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: { [x: string]: TaskGroup; }; }
 >module.exports : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: { [x: string]: TaskGroup; }; }
->module : { "tests/cases/conformance/jsdoc/declarations/module": { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: { [x: string]: TaskGroup; }; }; }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/module\"": { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: { [x: string]: TaskGroup; }; }; }
 >exports : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: { [x: string]: TaskGroup; }; }
 >{    taskGroups,    taskNameToGroup,} : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: { [x: string]: TaskGroup; }; }
 

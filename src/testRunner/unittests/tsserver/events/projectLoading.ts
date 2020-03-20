@@ -1,15 +1,15 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoadingFinish events", () => {
         const aTs: File = {
-            path: `${projects}/a/a.ts`,
+            path: `${tscWatch.projects}/a/a.ts`,
             content: "export class A { }"
         };
         const configA: File = {
-            path: `${projects}/a/tsconfig.json`,
+            path: `${tscWatch.projects}/a/tsconfig.json`,
             content: "{}"
         };
-        const bTsPath = `${projects}/b/b.ts`;
-        const configBPath = `${projects}/b/tsconfig.json`;
+        const bTsPath = `${tscWatch.projects}/b/b.ts`;
+        const configBPath = `${tscWatch.projects}/b/tsconfig.json`;
         const files = [libFile, aTs, configA];
 
         function verifyProjectLoadingStartAndFinish(createSession: (host: TestServerHost) => {
@@ -83,14 +83,14 @@ namespace ts.projectSystem {
 
                 function verify(disableSourceOfProjectReferenceRedirect?: true) {
                     const aDTs: File = {
-                        path: `${projects}/a/a.d.ts`,
+                        path: `${tscWatch.projects}/a/a.d.ts`,
                         content: `export declare class A {
 }
 //# sourceMappingURL=a.d.ts.map
 `
                     };
                     const aDTsMap: File = {
-                        path: `${projects}/a/a.d.ts.map`,
+                        path: `${tscWatch.projects}/a/a.d.ts.map`,
                         content: `{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["./a.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;CAAI"}`
                     };
                     const bTs: File = {
@@ -133,7 +133,7 @@ namespace ts.projectSystem {
             });
 
             describe("with external projects and config files ", () => {
-                const projectFileName = `${projects}/a/project.csproj`;
+                const projectFileName = `${tscWatch.projects}/a/project.csproj`;
 
                 function createSession(lazyConfiguredProjectsFromExternalProject: boolean) {
                     const { session, service, verifyEvent: verifyEventWorker, getNumberOfEvents } = createSessionToVerifyEvent(files);

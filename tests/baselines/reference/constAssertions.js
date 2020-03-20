@@ -143,7 +143,7 @@ declare let vc1: "abc";
 declare let a1: readonly [];
 declare let a2: readonly [1, 2, 3];
 declare let a3: readonly [10, "hello", true];
-declare let a4: readonly (1 | 2 | 3)[];
+declare let a4: readonly [1, 2, 3];
 declare let a5: number[];
 declare let a6: readonly number[];
 declare let a7: number[];
@@ -159,14 +159,14 @@ declare let o1: {
 declare let o2: {
     readonly [x: string]: 1 | 2 | 3 | (() => void) | 4;
     readonly a: 1;
-    readonly 'b': 2;
-    readonly ['c']: 3;
+    readonly b: 2;
+    readonly c: 3;
     readonly d: () => void;
 };
 declare let o3: {
     readonly a: 1;
-    readonly 'b': 2;
-    readonly ['c']: 3;
+    readonly b: 2;
+    readonly c: 3;
     readonly d: () => void;
     readonly x: 10;
     readonly y: 20;

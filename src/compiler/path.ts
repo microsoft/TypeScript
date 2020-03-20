@@ -852,4 +852,8 @@ namespace ts {
             directory = parentPath;
         }
     }
+
+    export function isNodeModulesDirectory(dirPath: Path) {
+        return endsWith(dirPath, "/node_modules");
+    }
 }

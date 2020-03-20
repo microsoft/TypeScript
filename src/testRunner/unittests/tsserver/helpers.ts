@@ -241,7 +241,7 @@ namespace ts.projectSystem {
                 }
                 return true;
             });
-            return Debug.assertDefined(eventData);
+            return Debug.checkDefined(eventData);
         }
 
         hasZeroEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"]) {
@@ -276,7 +276,7 @@ namespace ts.projectSystem {
                 configFileName: "tsconfig.json",
                 projectType: "configured",
                 languageServiceEnabled: true,
-                version,
+                version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                 ...partial,
             });
         }
@@ -495,8 +495,8 @@ namespace ts.projectSystem {
         checkArray(`ScriptInfos files: ${additionInfo || ""}`, arrayFrom(projectService.filenameToScriptInfo.values(), info => info.fileName), expectedFiles);
     }
 
-    export function protocolLocationFromSubstring(str: string, substring: string): protocol.Location {
-        const start = str.indexOf(substring);
+    export function protocolLocationFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): protocol.Location {
+        const start = nthIndexOf(str, substring, options ? options.index : 0);
         Debug.assert(start !== -1);
         return protocolToLocation(str)(start);
     }
@@ -587,8 +587,8 @@ namespace ts.projectSystem {
         return createTextSpan(start, substring.length);
     }
 
-    export function protocolFileLocationFromSubstring(file: File, substring: string): protocol.FileLocationRequestArgs {
-        return { file: file.path, ...protocolLocationFromSubstring(file.content, substring) };
+    export function protocolFileLocationFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): protocol.FileLocationRequestArgs {
+        return { file: file.path, ...protocolLocationFromSubstring(file.content, substring, options) };
     }
 
     export interface SpanFromSubstringOptions {
@@ -664,7 +664,7 @@ namespace ts.projectSystem {
         session.executeCommand(makeSessionRequest(command, args));
     }
 
-    export function openFilesForSession(files: readonly (File | { readonly file: File | string, readonly projectRootPath: string })[], session: server.Session): void {
+    export function openFilesForSession(files: readonly (File | { readonly file: File | string, readonly projectRootPath: string, content?: string })[], session: server.Session): void {
         for (const file of files) {
             session.executeCommand(makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open,
                 "projectRootPath" in file ? { file: typeof file.file === "string" ? file.file : file.file.path, projectRootPath: file.projectRootPath } : { file: file.path })); // eslint-disable-line no-in-operator
@@ -716,6 +716,69 @@ namespace ts.projectSystem {
             assert.isFalse(event.event.endsWith("Diag"), JSON.stringify(event));
         }
     }
+    export function projectLoadingStartEvent(projectName: string, reason: string, seq?: number): protocol.ProjectLoadingStartEvent {
+        return {
+            seq: seq || 0,
+            type: "event",
+            event: server.ProjectLoadingStartEvent,
+            body: { projectName, reason }
+        };
+    }
+
+    export function projectLoadingFinishEvent(projectName: string, seq?: number): protocol.ProjectLoadingFinishEvent {
+        return {
+            seq: seq || 0,
+            type: "event",
+            event: server.ProjectLoadingFinishEvent,
+            body: { projectName }
+        };
+    }
+
+    export function projectInfoTelemetryEvent(seq?: number): protocol.TelemetryEvent {
+        return telemetryEvent(server.ProjectInfoTelemetryEvent, "", seq);
+    }
+
+    function telemetryEvent(telemetryEventName: string, payload: any, seq?: number): protocol.TelemetryEvent {
+        return {
+            seq: seq || 0,
+            type: "event",
+            event: "telemetry",
+            body: {
+                telemetryEventName,
+                payload
+            }
+        };
+    }
+
+    export function configFileDiagEvent(triggerFile: string, configFile: string, diagnostics: protocol.DiagnosticWithFileName[], seq?: number): protocol.ConfigFileDiagnosticEvent {
+        return {
+            seq: seq || 0,
+            type: "event",
+            event: server.ConfigFileDiagEvent,
+            body: {
+                triggerFile,
+                configFile,
+                diagnostics
+            }
+        };
+    }
+
+    export function checkEvents(session: TestSession, expectedEvents: protocol.Event[]) {
+        const events = session.events;
+        assert.equal(events.length, expectedEvents.length, `Actual:: ${JSON.stringify(session.events, /*replacer*/ undefined, " ")}`);
+        expectedEvents.forEach((expectedEvent, index) => {
+            if (expectedEvent.event === "telemetry") {
+                // Ignore payload
+                const { body, ...actual } = events[index] as protocol.TelemetryEvent;
+                const { body: expectedBody, ...expected } = expectedEvent as protocol.TelemetryEvent;
+                assert.deepEqual(actual, expected, `Expected ${JSON.stringify(expectedEvent)} at ${index} in ${JSON.stringify(events)}`);
+                assert.equal(body.telemetryEventName, expectedBody.telemetryEventName, `Expected ${JSON.stringify(expectedEvent)} at ${index} in ${JSON.stringify(events)}`);
+            }
+            else {
+                checkNthEvent(session, expectedEvent, index, index === expectedEvents.length);
+            }
+        });
+    }
 
     export function checkNthEvent(session: TestSession, expectedEvent: protocol.Event, index: number, isMostRecent: boolean) {
         const events = session.events;
@@ -732,14 +795,15 @@ namespace ts.projectSystem {
 
     export interface MakeReferenceItem extends DocumentSpanFromSubstring {
         isDefinition: boolean;
+        isWriteAccess?: boolean;
         lineText: string;
     }
 
-    export function makeReferenceItem({ isDefinition, lineText, ...rest }: MakeReferenceItem): protocol.ReferencesResponseItem {
+    export function makeReferenceItem({ isDefinition, isWriteAccess, lineText, ...rest }: MakeReferenceItem): protocol.ReferencesResponseItem {
         return {
             ...protocolFileSpanWithContextFromSubstring(rest),
             isDefinition,
-            isWriteAccess: isDefinition,
+            isWriteAccess: isWriteAccess === undefined ? isDefinition : isWriteAccess,
             lineText,
         };
     }

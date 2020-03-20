@@ -1,7 +1,7 @@
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts(19,17): error TS2345: Argument of type 'C' is not assignable to parameter of type 'D'.
   Property 'y' is missing in type 'C' but required in type 'D'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts(30,24): error TS2345: Argument of type 'C' is not assignable to parameter of type 'T'.
-  'C' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'C'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts (2 errors) ====
@@ -41,7 +41,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObj
         var r5 = foo<T, U>(c, d); // error
                            ~
 !!! error TS2345: Argument of type 'C' is not assignable to parameter of type 'T'.
-!!! error TS2345:   'C' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2345:   'T' could be instantiated with an arbitrary type which could be unrelated to 'C'.
     }
     
     

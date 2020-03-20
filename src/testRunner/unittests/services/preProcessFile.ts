@@ -530,6 +530,65 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 isLibFile: false
             });
         });
+
+        it("Correctly handles dynamic imports with template literals", () => {
+            test("const m1 = import('mod1');" + "\n" +
+            "const m2 = import(`mod2`);" + "\n" +
+            "Promise.all([import('mod3'), import(`mod4`)]);" + "\n" +
+            "import(/* webpackChunkName: 'module5' */ `mod5`);" + "\n",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ false,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [
+                    { fileName: "mod1", pos: 18, end: 22 },
+                    { fileName: "mod2", pos: 45, end: 49 },
+                    { fileName: "mod3", pos: 74, end: 78 },
+                    { fileName: "mod4", pos: 90, end: 94 },
+                    { fileName: "mod5", pos: 142, end: 146 }
+                ],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+        });
+
+        it("Correctly handles require calls with template literals in JS files", () => {
+            test("const m1 = require(`mod1`);" + "\n" +
+            "f(require(`mod2`));" + "\n" +
+            "const a = { x: require(`mod3`) };" + "\n",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ true,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [
+                    { fileName: "mod1", pos: 19, end: 23 },
+                    { fileName: "mod2", pos: 38, end: 42 },
+                    { fileName: "mod3", pos: 71, end: 75 }
+                ],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+        });
+
+        it("Correctly handles dependency lists in define(modName, [deplist]) calls with template literals in JS files", () => {
+            test("define(`mod`, [`mod1`, `mod2`], (m1, m2) => {});",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ true,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [
+                    { fileName: "mod1", pos: 15, end: 19 },
+                    { fileName: "mod2", pos: 23, end: 27 },
+                ],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+        });
     });
 });
-

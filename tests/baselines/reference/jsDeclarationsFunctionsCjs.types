@@ -3,7 +3,7 @@ module.exports.a = function a() {}
 >module.exports.a = function a() {} : () => void
 >module.exports.a : () => void
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >a : () => void
 >function a() {} : () => void
@@ -13,7 +13,7 @@ module.exports.b = function b() {}
 >module.exports.b = function b() {} : { (): void; cat: string; }
 >module.exports.b : { (): void; cat: string; }
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >b : { (): void; cat: string; }
 >function b() {} : { (): void; cat: string; }
@@ -24,7 +24,7 @@ module.exports.b.cat = "cat";
 >module.exports.b.cat : string
 >module.exports.b : { (): void; cat: string; }
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >b : { (): void; cat: string; }
 >cat : string
@@ -34,7 +34,7 @@ module.exports.c = function c() {}
 >module.exports.c = function c() {} : { (): void; Cls: typeof Cls; }
 >module.exports.c : { (): void; Cls: typeof Cls; }
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >c : { (): void; Cls: typeof Cls; }
 >function c() {} : { (): void; Cls: typeof Cls; }
@@ -45,7 +45,7 @@ module.exports.c.Cls = class {}
 >module.exports.c.Cls : typeof Cls
 >module.exports.c : { (): void; Cls: typeof Cls; }
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >c : { (): void; Cls: typeof Cls; }
 >Cls : typeof Cls
@@ -60,7 +60,7 @@ module.exports.d = function d(a, b) { return /** @type {*} */(null); }
 >module.exports.d = function d(a, b) { return /** @type {*} */(null); } : (a: number, b: number) => string
 >module.exports.d : (a: number, b: number) => string
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >d : (a: number, b: number) => string
 >function d(a, b) { return /** @type {*} */(null); } : (a: number, b: number) => string
@@ -80,7 +80,7 @@ module.exports.e = function e(a, b) { return /** @type {*} */(null); }
 >module.exports.e = function e(a, b) { return /** @type {*} */(null); } : <T, U>(a: T, b: U) => T & U
 >module.exports.e : <T, U>(a: T, b: U) => T & U
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >e : <T, U>(a: T, b: U) => T & U
 >function e(a, b) { return /** @type {*} */(null); } : <T, U>(a: T, b: U) => T & U
@@ -98,7 +98,7 @@ module.exports.f = function f(a) {
 >module.exports.f = function f(a) {    return a;} : { <T>(a: T): T; self: any; }
 >module.exports.f : { <T>(a: T): T; self: any; }
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >f : { <T>(a: T): T; self: any; }
 >function f(a) {    return a;} : { <T>(a: T): T; self: any; }
@@ -113,13 +113,13 @@ module.exports.f.self = module.exports.f;
 >module.exports.f.self : { <T>(a: T): T; self: any; }
 >module.exports.f : { <T>(a: T): T; self: any; }
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >f : { <T>(a: T): T; self: any; }
 >self : { <T>(a: T): T; self: any; }
 >module.exports.f : { <T>(a: T): T; self: any; }
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >f : { <T>(a: T): T; self: any; }
 
@@ -147,7 +147,7 @@ module.exports.g = g;
 >module.exports.g = g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
 >module.exports.g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
 >g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
@@ -176,7 +176,7 @@ module.exports.h = hh;
 >module.exports.h = hh : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
 >module.exports.h : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >h : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
 >hh : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
@@ -185,7 +185,7 @@ module.exports.i = function i() {}
 >module.exports.i = function i() {} : () => void
 >module.exports.i : () => void
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >i : () => void
 >function i() {} : () => void
@@ -195,12 +195,12 @@ module.exports.ii = module.exports.i;
 >module.exports.ii = module.exports.i : () => void
 >module.exports.ii : () => void
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >ii : () => void
 >module.exports.i : () => void
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >i : () => void
 
@@ -209,12 +209,12 @@ module.exports.jj = module.exports.j;
 >module.exports.jj = module.exports.j : () => void
 >module.exports.jj : () => void
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >jj : () => void
 >module.exports.j : () => void
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >j : () => void
 
@@ -222,7 +222,7 @@ module.exports.j = function j() {}
 >module.exports.j = function j() {} : () => void
 >module.exports.j : () => void
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >j : () => void
 >function j() {} : () => void

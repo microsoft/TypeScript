@@ -5,7 +5,7 @@ Object.defineProperty(module.exports, "a", { value: function a() {} });
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >"a" : "a"
 >{ value: function a() {} } : { value: () => void; }
@@ -19,7 +19,7 @@ Object.defineProperty(module.exports, "b", { value: function b() {} });
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >"b" : "b"
 >{ value: function b() {} } : { value: () => void; }
@@ -34,7 +34,7 @@ Object.defineProperty(module.exports.b, "cat", { value: "cat" });
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports.b : () => void
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >b : () => void
 >"cat" : "cat"
@@ -60,7 +60,7 @@ Object.defineProperty(module.exports, "d", { value: d });
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >"d" : "d"
 >{ value: d } : { value: (a: number, b: number) => string; }
@@ -87,7 +87,7 @@ Object.defineProperty(module.exports, "e", { value: e });
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >"e" : "e"
 >{ value: e } : { value: <T, U>(a: T, b: U) => T & U; }
@@ -111,7 +111,7 @@ Object.defineProperty(module.exports, "f", { value: f });
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >"f" : "f"
 >{ value: f } : { value: <T>(a: T) => T; }
@@ -125,7 +125,7 @@ Object.defineProperty(module.exports.f, "self", { value: module.exports.f });
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports.f : <T>(a: T) => T
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >f : <T>(a: T) => T
 >"self" : "self"
@@ -133,7 +133,7 @@ Object.defineProperty(module.exports.f, "self", { value: module.exports.f });
 >value : <T>(a: T) => T
 >module.exports.f : <T>(a: T) => T
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >f : <T>(a: T) => T
 
@@ -162,7 +162,7 @@ Object.defineProperty(module.exports, "g", { value: g });
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >"g" : "g"
 >{ value: g } : { value: (a: { x: string; }, b: { y: () => void; }) => void; }
@@ -195,7 +195,7 @@ Object.defineProperty(module.exports, "h", { value: hh });
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >"h" : "h"
 >{ value: hh } : { value: (a: { x: string; }, b: { y: () => void; }) => void; }
@@ -208,7 +208,7 @@ Object.defineProperty(module.exports, "i", { value: function i(){} });
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >"i" : "i"
 >{ value: function i(){} } : { value: () => void; }
@@ -222,14 +222,14 @@ Object.defineProperty(module.exports, "ii", { value: module.exports.i });
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >"ii" : "ii"
 >{ value: module.exports.i } : { value: () => void; }
 >value : () => void
 >module.exports.i : () => void
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >i : () => void
 
@@ -240,14 +240,14 @@ Object.defineProperty(module.exports, "jj", { value: module.exports.j });
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >"jj" : "jj"
 >{ value: module.exports.j } : { value: () => void; }
 >value : () => void
 >module.exports.j : () => void
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >j : () => void
 
@@ -257,7 +257,7 @@ Object.defineProperty(module.exports, "j", { value: function j() {} });
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >"j" : "j"
 >{ value: function j() {} } : { value: () => void; }

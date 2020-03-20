@@ -67,7 +67,7 @@ module M {
 }
 
 module M {
->M : typeof M
+>M : typeof globalThis.M
 
 	var M = 100;
 >M : number
