@@ -1697,6 +1697,12 @@ interface ShadowRootInit {
     mode: ShadowRootMode;
 }
 
+interface ShareData {
+    text?: string;
+    title?: string;
+    url?: string;
+}
+
 interface SpeechSynthesisErrorEventInit extends SpeechSynthesisEventInit {
     error: SpeechSynthesisErrorCode;
 }
@@ -10733,6 +10739,7 @@ interface Navigator extends MSFileSaver, MSNavigatorDoNotTrack, NavigatorAutomat
     msLaunchUri(uri: string, successCallback?: MSLaunchUriCallback, noHandlerCallback?: MSLaunchUriCallback): void;
     requestMediaKeySystemAccess(keySystem: string, supportedConfigurations: MediaKeySystemConfiguration[]): Promise<MediaKeySystemAccess>;
     sendBeacon(url: string, data?: BodyInit | null): boolean;
+    share(data?: ShareData): Promise<void>;
     vibrate(pattern: number | number[]): boolean;
 }
 
@@ -19225,7 +19232,7 @@ interface BlobCallback {
 }
 
 interface CustomElementConstructor {
-    new (): HTMLElement;
+    new (...params:[]): HTMLElement;
 }
 
 interface DecodeErrorCallback {
