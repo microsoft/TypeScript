@@ -148,10 +148,10 @@ declare var console: any;
 
 out().then(() => {
 >out().then(() => {    console.log("Yea!");}) : Promise<void>
->out().then : <TResult1 = unknown, TResult2 = never>(onfulfilled?: (value: unknown) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>out().then : <TResult1 = unknown, TResult2 = never>(onfulfilled?: (value: unknown) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
 >out() : Promise<unknown>
 >out : () => Promise<unknown>
->then : <TResult1 = unknown, TResult2 = never>(onfulfilled?: (value: unknown) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>then : <TResult1 = unknown, TResult2 = never>(onfulfilled?: (value: unknown) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
 >() => {    console.log("Yea!");} : () => void
 
     console.log("Yea!");

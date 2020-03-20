@@ -1,7 +1,15 @@
 tests/cases/conformance/dynamicImport/1.ts(4,5): error TS2322: Type 'Promise<typeof import("tests/cases/conformance/dynamicImport/defaultPath")>' is not assignable to type 'Promise<typeof import("tests/cases/conformance/dynamicImport/anotherModule")>'.
-  Property 'D' is missing in type 'typeof import("tests/cases/conformance/dynamicImport/defaultPath")' but required in type 'typeof import("tests/cases/conformance/dynamicImport/anotherModule")'.
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = typeof import("tests/cases/conformance/dynamicImport/defaultPath"), TResult2 = never>(onfulfilled?: (value: typeof import("tests/cases/conformance/dynamicImport/defaultPath")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>' is not assignable to type '<TResult1 = typeof import("tests/cases/conformance/dynamicImport/anotherModule"), TResult2 = never>(onfulfilled?: (value: typeof import("tests/cases/conformance/dynamicImport/anotherModule")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'typeof import("tests/cases/conformance/dynamicImport/defaultPath")' is not assignable to type 'typeof import("tests/cases/conformance/dynamicImport/anotherModule")'.
 tests/cases/conformance/dynamicImport/1.ts(5,10): error TS2352: Conversion of type 'Promise<typeof import("tests/cases/conformance/dynamicImport/defaultPath")>' to type 'Promise<typeof import("tests/cases/conformance/dynamicImport/anotherModule")>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-  Property 'D' is missing in type 'typeof import("tests/cases/conformance/dynamicImport/defaultPath")' but required in type 'typeof import("tests/cases/conformance/dynamicImport/anotherModule")'.
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = typeof import("tests/cases/conformance/dynamicImport/defaultPath"), TResult2 = never>(onfulfilled?: (value: typeof import("tests/cases/conformance/dynamicImport/defaultPath")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>' is not comparable to type '<TResult1 = typeof import("tests/cases/conformance/dynamicImport/anotherModule"), TResult2 = never>(onfulfilled?: (value: typeof import("tests/cases/conformance/dynamicImport/anotherModule")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'typeof import("tests/cases/conformance/dynamicImport/defaultPath")' is not comparable to type 'typeof import("tests/cases/conformance/dynamicImport/anotherModule")'.
 
 
 ==== tests/cases/conformance/dynamicImport/anotherModule.ts (0 errors) ====
@@ -17,12 +25,18 @@ tests/cases/conformance/dynamicImport/1.ts(5,10): error TS2352: Conversion of ty
     let p1: Promise<typeof anotherModule> = import("./defaultPath");
         ~~
 !!! error TS2322: Type 'Promise<typeof import("tests/cases/conformance/dynamicImport/defaultPath")>' is not assignable to type 'Promise<typeof import("tests/cases/conformance/dynamicImport/anotherModule")>'.
-!!! error TS2322:   Property 'D' is missing in type 'typeof import("tests/cases/conformance/dynamicImport/defaultPath")' but required in type 'typeof import("tests/cases/conformance/dynamicImport/anotherModule")'.
-!!! related TS2728 tests/cases/conformance/dynamicImport/anotherModule.ts:1:14: 'D' is declared here.
+!!! error TS2322:   Types of property 'then' are incompatible.
+!!! error TS2322:     Type '<TResult1 = typeof import("tests/cases/conformance/dynamicImport/defaultPath"), TResult2 = never>(onfulfilled?: (value: typeof import("tests/cases/conformance/dynamicImport/defaultPath")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>' is not assignable to type '<TResult1 = typeof import("tests/cases/conformance/dynamicImport/anotherModule"), TResult2 = never>(onfulfilled?: (value: typeof import("tests/cases/conformance/dynamicImport/anotherModule")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>'.
+!!! error TS2322:       Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+!!! error TS2322:         Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2322:           Type 'typeof import("tests/cases/conformance/dynamicImport/defaultPath")' is not assignable to type 'typeof import("tests/cases/conformance/dynamicImport/anotherModule")'.
     let p2 = import("./defaultPath") as Promise<typeof anotherModule>;
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type 'Promise<typeof import("tests/cases/conformance/dynamicImport/defaultPath")>' to type 'Promise<typeof import("tests/cases/conformance/dynamicImport/anotherModule")>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-!!! error TS2352:   Property 'D' is missing in type 'typeof import("tests/cases/conformance/dynamicImport/defaultPath")' but required in type 'typeof import("tests/cases/conformance/dynamicImport/anotherModule")'.
-!!! related TS2728 tests/cases/conformance/dynamicImport/anotherModule.ts:1:14: 'D' is declared here.
+!!! error TS2352:   Types of property 'then' are incompatible.
+!!! error TS2352:     Type '<TResult1 = typeof import("tests/cases/conformance/dynamicImport/defaultPath"), TResult2 = never>(onfulfilled?: (value: typeof import("tests/cases/conformance/dynamicImport/defaultPath")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>' is not comparable to type '<TResult1 = typeof import("tests/cases/conformance/dynamicImport/anotherModule"), TResult2 = never>(onfulfilled?: (value: typeof import("tests/cases/conformance/dynamicImport/anotherModule")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>'.
+!!! error TS2352:       Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+!!! error TS2352:         Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2352:           Type 'typeof import("tests/cases/conformance/dynamicImport/defaultPath")' is not comparable to type 'typeof import("tests/cases/conformance/dynamicImport/anotherModule")'.
     let p3: Promise<any> = import("./defaultPath");
     

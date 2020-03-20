@@ -1,5 +1,9 @@
 tests/cases/compiler/promisesWithConstraints.ts(15,1): error TS2322: Type 'Promise<Foo>' is not assignable to type 'Promise<Bar>'.
-  Property 'y' is missing in type 'Foo' but required in type 'Bar'.
+  Types of property 'then' are incompatible.
+    Type '{ <TResult1 = Foo, TResult2 = never>(onfulfilled?: (value: Foo) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<awaited TResult1 | awaited TResult2>; <U>(cb: (x: Foo) => Promise<U>): Promise<U>; }' is not assignable to type '{ <TResult1 = Bar, TResult2 = never>(onfulfilled?: (value: Bar) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<awaited TResult1 | awaited TResult2>; <U>(cb: (x: Bar) => Promise<U>): Promise<U>; }'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'Foo' is not assignable to type 'Bar'.
 tests/cases/compiler/promisesWithConstraints.ts(20,1): error TS2322: Type 'CPromise<Foo>' is not assignable to type 'CPromise<Bar>'.
   Type 'Foo' is not assignable to type 'Bar'.
 
@@ -22,8 +26,11 @@ tests/cases/compiler/promisesWithConstraints.ts(20,1): error TS2322: Type 'CProm
     b = a; // ok
     ~
 !!! error TS2322: Type 'Promise<Foo>' is not assignable to type 'Promise<Bar>'.
-!!! error TS2322:   Property 'y' is missing in type 'Foo' but required in type 'Bar'.
-!!! related TS2728 tests/cases/compiler/promisesWithConstraints.ts:10:20: 'y' is declared here.
+!!! error TS2322:   Types of property 'then' are incompatible.
+!!! error TS2322:     Type '{ <TResult1 = Foo, TResult2 = never>(onfulfilled?: (value: Foo) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<awaited TResult1 | awaited TResult2>; <U>(cb: (x: Foo) => Promise<U>): Promise<U>; }' is not assignable to type '{ <TResult1 = Bar, TResult2 = never>(onfulfilled?: (value: Bar) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<awaited TResult1 | awaited TResult2>; <U>(cb: (x: Bar) => Promise<U>): Promise<U>; }'.
+!!! error TS2322:       Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+!!! error TS2322:         Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2322:           Type 'Foo' is not assignable to type 'Bar'.
     
     var a2: CPromise<Foo>;
     var b2: CPromise<Bar>;
