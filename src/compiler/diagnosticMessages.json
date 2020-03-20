@@ -5561,7 +5561,10 @@
         "category": "Message",
         "code": 95109
     },
-
+    "Visit https://aka.ms/tsconfig.json to read more about this file": {
+        "category": "Message",
+        "code": 95110
+    },
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
         "code": 18004
@@ -5649,9 +5652,5 @@
     "An optional chain cannot contain private identifiers.": {
         "category": "Error",
         "code": 18030
-    },
-    "Overview of all Compiler Options: https://www.typescriptlang.org/docs/handbook/compiler-options.html": {
-        "category": "Message",
-        "code": 18031
     }
 }

@@ -21,7 +21,7 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/user/username/projects/myproject/tsconfig.json]
 {
   "compilerOptions": {
-    /* Overview of all Compiler Options: https://www.typescriptlang.org/docs/handbook/compiler-options.html */
+    /* Visit https://aka.ms/tsconfig.json to read more about this file */
 
     /* Basic Options */
     // "incremental": true,
