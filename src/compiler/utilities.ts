@@ -5449,7 +5449,6 @@ namespace ts {
         | "noImplicitAny"
         | "noImplicitThis"
         | "strictNullChecks"
-        | "strictAwaitedTypes"
         | "strictFunctionTypes"
         | "strictBindCallApply"
         | "strictPropertyInitialization"

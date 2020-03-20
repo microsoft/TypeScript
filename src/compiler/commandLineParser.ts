@@ -528,15 +528,6 @@ namespace ts {
             description: Diagnostics.Enable_strict_null_checks
         },
         {
-            name: "strictAwaitedTypes",
-            type: "boolean",
-            affectsSemanticDiagnostics: true,
-            strictFlag: true,
-            showInSimplifiedHelpView: false,
-            category: Diagnostics.Strict_Type_Checking_Options,
-            description: Diagnostics.Enable_strict_checking_of_awaited_type_assignability
-        },
-        {
             name: "strictFunctionTypes",
             type: "boolean",
             affectsSemanticDiagnostics: true,
