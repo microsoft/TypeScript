@@ -292,10 +292,12 @@ namespace ts {
          * This should be called whenever it is safe to commit the state of the builder
          */
         export function updateSignaturesFromCache(state: BuilderState, signatureCache: Map<string>) {
-            signatureCache.forEach((signature, path) => {
-                state.fileInfos.get(path)!.signature = signature;
-                state.hasCalledUpdateShapeSignature.set(path, true);
-            });
+            signatureCache.forEach((signature, path) => updateSignatureOfFile(state, signature, path as Path));
+        }
+
+        export function updateSignatureOfFile(state: BuilderState, signature: string | undefined, path: Path) {
+            state.fileInfos.get(path)!.signature = signature;
+            state.hasCalledUpdateShapeSignature.set(path, true);
         }
 
         /**
