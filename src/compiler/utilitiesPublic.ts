@@ -1379,6 +1379,10 @@ namespace ts {
         return node.kind === SyntaxKind.ImportDeclaration;
     }
 
+    export function isImportLikeDeclaration(node: Node): node is ImportLikeDeclaration {
+        return node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.ImportEqualsDeclaration;
+    }
+
     export function isImportClause(node: Node): node is ImportClause {
         return node.kind === SyntaxKind.ImportClause;
     }

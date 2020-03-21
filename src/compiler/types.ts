@@ -2479,6 +2479,8 @@ namespace ts {
         moduleSpecifier: Expression;
     }
 
+    export type ImportLikeDeclaration = ImportDeclaration | ImportEqualsDeclaration;
+
     export type NamedImportBindings = NamespaceImport | NamedImports;
     export type NamedExportBindings = NamespaceExport | NamedExports;
 

@@ -43,7 +43,8 @@ namespace ts.textChanges {
          */
         IncludeAll,
         /**
-         * Only delete trivia one the same line as getStart()
+         * Only delete trivia on the same line as getStart().
+         * Used to avoid deleting leading comments
          */
         StartLineOnly,
     }
@@ -1256,10 +1257,11 @@ namespace ts.textChanges {
                 }
 
                 case SyntaxKind.ImportDeclaration:
-                    const isFirstImport = sourceFile.imports.length && node === first(sourceFile.imports).parent || node === find(sourceFile.statements, isImportDeclaration);
+                case SyntaxKind.ImportEqualsDeclaration:
+                    const isFirstImport = sourceFile.imports.length && node === first(sourceFile.imports).parent || node === find(sourceFile.statements, isImportLikeDeclaration);
+                    // For first import, leave header comment in place, otherwise only delete JSDoc comments
                     deleteNode(changes, sourceFile, node,
-                        // For first import, leave header comment in place
-                        isFirstImport ? { leadingTriviaOption: LeadingTriviaOption.Exclude } : undefined);
+                        { leadingTriviaOption: isFirstImport ? LeadingTriviaOption.Exclude : hasJSDocNodes(node) ? LeadingTriviaOption.IncludeAll : LeadingTriviaOption.StartLineOnly });
                     break;
 
                 case SyntaxKind.BindingElement:
@@ -1301,6 +1303,11 @@ namespace ts.textChanges {
 
                 case SyntaxKind.FunctionKeyword:
                     deleteNode(changes, sourceFile, node, { leadingTriviaOption: LeadingTriviaOption.Exclude });
+                    break;
+
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.FunctionDeclaration:
+                    deleteNode(changes, sourceFile, node, { leadingTriviaOption: hasJSDocNodes(node) ? LeadingTriviaOption.IncludeAll : LeadingTriviaOption.StartLineOnly });
                     break;
 
                 default:
@@ -1379,7 +1386,7 @@ namespace ts.textChanges {
                     break;
 
                 case SyntaxKind.VariableStatement:
-                    deleteNode(changes, sourceFile, gp, { leadingTriviaOption: LeadingTriviaOption.StartLineOnly });
+                    deleteNode(changes, sourceFile, gp, { leadingTriviaOption: hasJSDocNodes(gp) ? LeadingTriviaOption.IncludeAll : LeadingTriviaOption.StartLineOnly });
                     break;
 
                 default:
