@@ -39,5 +39,5 @@ interface PromiseConstructor {
      * @param values An array or iterable of Promises.
      * @returns A new Promise.
      */
-    any<T>(values: (T | PromiseLike<T>)[] | Iterable<T | PromiseLike<T>>): Promise<T>
+    any<T>(values: (T | PromiseLike<T>)[] | Iterable<T | PromiseLike<T>>): Promise<awaited T>
 }

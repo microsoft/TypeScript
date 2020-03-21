@@ -1407,7 +1407,7 @@ interface PromiseLike<T> {
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: awaited T) => TResult1) | undefined | null, onrejected?: ((reason: any) => TResult2) | undefined | null): PromiseLike<awaited TResult1 | awaited TResult2>;
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: awaited T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): PromiseLike<awaited TResult1 | awaited TResult2>;
 }
 
 /**
@@ -1420,14 +1420,14 @@ interface Promise<T> {
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: awaited T) => TResult1) | undefined | null, onrejected?: ((reason: any) => TResult2) | undefined | null): Promise<awaited TResult1 | awaited TResult2>;
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: awaited T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<awaited TResult1 | awaited TResult2>;
 
     /**
      * Attaches a callback for only the rejection of the Promise.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of the callback.
      */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult) | undefined | null): Promise<awaited T | awaited TResult>;
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<awaited T | awaited TResult>;
 }
 
 interface ArrayLike<T> {
