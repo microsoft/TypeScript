@@ -15361,9 +15361,9 @@ namespace ts {
              * * Ternary.False if they are not related.
              */
             function isRelatedTo(originalSource: Type, originalTarget: Type, reportErrors = false, headMessage?: DiagnosticMessage, intersectionState = IntersectionState.None): Ternary {
-                // Before normalization: if `source` is type reference (ergo an object), and `target` is primitive,
+                // Before normalization: if `source` is type an object type, and `target` is primitive,
                 // skip all the checks we don't need and just return `isSimpleTypeRelatedTo` result
-                if (getObjectFlags(originalSource) & ObjectFlags.Reference && originalTarget.flags & TypeFlags.Primitive) {
+                if (originalSource.flags & TypeFlags.Object && originalTarget.flags & TypeFlags.Primitive) {
                     if (isSimpleTypeRelatedTo(originalSource, originalTarget, relation, reportErrors ? reportError : undefined)) {
                         return Ternary.True;
                     }
