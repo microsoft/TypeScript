@@ -257,11 +257,11 @@ module TU {
 >A : F.A
 
     function foo3<T>(x: T, a: (x: T) => T, b: (x: U) => U) {
->foo3 : <T>(x: T, a: (x: T) => T, b: (x: U) => U) => (x: T) => T
+>foo3 : <T>(x: T, a: (x: T) => T, b: (x: any) => any) => (x: T) => T
 >x : T
 >a : (x: T) => T
 >x : T
->b : (x: U) => U
+>b : (x: any) => any
 >x : any
 
         var r: (x: T) => T;

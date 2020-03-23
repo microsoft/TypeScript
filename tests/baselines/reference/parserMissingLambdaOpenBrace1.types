@@ -3,7 +3,7 @@ class C {
 >C : C
 
     where(filter: Iterator<T, boolean>): Query<T> {
->where : (filter: Iterator<T, boolean>) => Query<T>
+>where : (filter: any) => any
 >filter : any
 
         return fromDoWhile(test =>

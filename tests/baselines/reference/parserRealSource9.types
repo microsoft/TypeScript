@@ -14,7 +14,7 @@ module TypeScript {
 >checker : any
 
         public resolveBaseTypeLinks(typeLinks: TypeLink[], scope: SymbolScope) {
->resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: SymbolScope) => any[]
+>resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: any) => any[]
 >typeLinks : any[]
 >scope : any
 
@@ -117,7 +117,7 @@ module TypeScript {
         }
 
         public resolveBases(scope: SymbolScope, type: Type) {
->resolveBases : (scope: SymbolScope, type: Type) => void
+>resolveBases : (scope: any, type: any) => void
 >scope : any
 >type : any
 
@@ -342,7 +342,7 @@ module TypeScript {
         }
 
         public resolveSignatureGroup(signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) {
->resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
+>resolveSignatureGroup : (signatureGroup: any, scope: any, instanceType: any) => void
 >signatureGroup : any
 >scope : any
 >instanceType : any
@@ -511,7 +511,7 @@ module TypeScript {
         }
 
         public bindType(scope: SymbolScope, type: Type, instanceType: Type): void {
->bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
+>bindType : (scope: any, type: any, instanceType: any) => void
 >scope : any
 >type : any
 >instanceType : any
@@ -791,7 +791,7 @@ module TypeScript {
         }
 
         public bindSymbol(scope: SymbolScope, symbol: Symbol) {
->bindSymbol : (scope: SymbolScope, symbol: Symbol) => void
+>bindSymbol : (scope: any, symbol: Symbol) => void
 >scope : any
 >symbol : Symbol
 
@@ -1110,7 +1110,7 @@ module TypeScript {
         }
 
         public bind(scope: SymbolScope, table: IHashTable) {
->bind : (scope: SymbolScope, table: IHashTable) => void
+>bind : (scope: any, table: any) => void
 >scope : any
 >table : any
 

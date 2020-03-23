@@ -13,11 +13,11 @@ var c: C;
 >c : any
 
 var a: { x: C };
->a : { x: C; }
+>a : { x: any; }
 >x : any
 
 var b: { (x: C): C };
->b : (x: C) => C
+>b : (x: any) => any
 >x : any
 
 var d: { [x: C]: C };
@@ -25,22 +25,22 @@ var d: { [x: C]: C };
 >x : any
 
 var e = (x: C) => { var y: C; return y; }
->e : (x: C) => any
->(x: C) => { var y: C; return y; } : (x: C) => any
+>e : (x: any) => any
+>(x: C) => { var y: C; return y; } : (x: any) => any
 >x : any
 >y : any
 >y : any
 
 function f(x: C): C { var y: C; return y; }
->f : (x: C) => C
+>f : (x: any) => any
 >x : any
 >y : any
 >y : any
 
 var g = function f(x: C): C { var y: C; return y; }
->g : (x: C) => C
->function f(x: C): C { var y: C; return y; } : (x: C) => C
->f : (x: C) => C
+>g : (x: any) => any
+>function f(x: C): C { var y: C; return y; } : (x: any) => any
+>f : (x: any) => any
 >x : any
 >y : any
 >y : any

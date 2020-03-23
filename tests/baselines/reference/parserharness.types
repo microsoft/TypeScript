@@ -2652,7 +2652,7 @@ module Harness {
 
             /** create file gets the whole path to create, so this works as expected with the --out parameter */
             public createFile(s: string, useUTF8?: boolean): ITextWriter {
->createFile : (s: string, useUTF8?: boolean) => ITextWriter
+>createFile : (s: string, useUTF8?: boolean) => any
 >s : string
 >useUTF8 : boolean
 
@@ -2864,7 +2864,7 @@ module Harness {
         }
 
         export function makeDefaultCompilerForTest(c?: TypeScript.TypeScriptCompiler) {
->makeDefaultCompilerForTest : (c?: TypeScript.TypeScriptCompiler) => any
+>makeDefaultCompilerForTest : (c?: any) => any
 >c : any
 >TypeScript : any
 
@@ -4120,7 +4120,7 @@ module Harness {
             }
 
             private getTypeInfoName(ast : TypeScript.AST) {
->getTypeInfoName : (ast: TypeScript.AST) => string
+>getTypeInfoName : (ast: any) => string
 >ast : any
 >TypeScript : any
 
@@ -5250,11 +5250,11 @@ module Harness {
         }
 
         export function compileFile(path: string, callback: (res: CompilerResult) => void , settingsCallback?: (settings?: TypeScript.CompilationSettings) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
->compileFile : (path: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
+>compileFile : (path: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: any) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >path : string
 >callback : (res: CompilerResult) => void
 >res : CompilerResult
->settingsCallback : (settings?: TypeScript.CompilationSettings) => void
+>settingsCallback : (settings?: any) => void
 >settings : any
 >TypeScript : any
 >context : CompilationContext
@@ -5296,12 +5296,12 @@ module Harness {
         }
 
         export function compileUnit(code: string, filename: string, callback: (res: CompilerResult) => void , settingsCallback?: (settings?: TypeScript.CompilationSettings) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
->compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
+>compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: any) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >code : string
 >filename : string
 >callback : (res: CompilerResult) => void
 >res : CompilerResult
->settingsCallback : (settings?: TypeScript.CompilationSettings) => void
+>settingsCallback : (settings?: any) => void
 >settings : any
 >TypeScript : any
 >context : CompilationContext
@@ -5516,7 +5516,7 @@ module Harness {
         }
 
         export function emit(ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) {
->emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) => void
+>emit : (ioHost: any, usePullEmitter?: boolean) => void
 >ioHost : any
 >TypeScript : any
 >usePullEmitter : boolean
@@ -6237,7 +6237,7 @@ module Harness {
 >version : number
 
         public editRanges: { length: number; editRange: TypeScript.ScriptEditRange; }[] = [];
->editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
+>editRanges : { length: number; editRange: any; }[]
 >length : number
 >editRange : any
 >TypeScript : any
@@ -6409,7 +6409,7 @@ module Harness {
         }
 
         public getEditRangeSinceVersion(version: number): TypeScript.ScriptEditRange {
->getEditRangeSinceVersion : (version: number) => TypeScript.ScriptEditRange
+>getEditRangeSinceVersion : (version: number) => any
 >version : number
 >TypeScript : any
 
@@ -6958,7 +6958,7 @@ module Harness {
          *  To access the non-shim (i.e. actual) language service, use the "ls.languageService" property.
          */
         public getLanguageService(): Services.ILanguageServiceShim {
->getLanguageService : () => Services.ILanguageServiceShim
+>getLanguageService : () => any
 >Services : any
 
             var ls = new Services.TypeScriptServicesFactory().createLanguageServiceShim(this);
@@ -6992,7 +6992,7 @@ module Harness {
 
         /** Parse file given its source text */
         public parseSourceText(fileName: string, sourceText: TypeScript.ISourceText): TypeScript.Script {
->parseSourceText : (fileName: string, sourceText: TypeScript.ISourceText) => TypeScript.Script
+>parseSourceText : (fileName: string, sourceText: any) => any
 >fileName : string
 >sourceText : any
 >TypeScript : any
@@ -7144,7 +7144,7 @@ module Harness {
          * @param col 0 based index
         */
         public positionToZeroBasedLineCol(fileName: string, position: number): TypeScript.ILineCol {
->positionToZeroBasedLineCol : (fileName: string, position: number) => TypeScript.ILineCol
+>positionToZeroBasedLineCol : (fileName: string, position: number) => any
 >fileName : string
 >position : number
 >TypeScript : any

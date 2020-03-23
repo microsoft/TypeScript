@@ -50,11 +50,11 @@ module TypeScript {
 >EnclosingScopeContext : EnclosingScopeContext
 
         public scopeGetter: () => SymbolScope = null;
->scopeGetter : () => SymbolScope
+>scopeGetter : () => any
 >null : null
 
         public objectLiteralScopeGetter: () => SymbolScope = null;
->objectLiteralScopeGetter : () => SymbolScope
+>objectLiteralScopeGetter : () => any
 >null : null
 
         public scopeStartAST: AST = null;
@@ -105,7 +105,7 @@ module TypeScript {
         }
 
         public getScope(): SymbolScope {
->getScope : () => SymbolScope
+>getScope : () => any
 
             return this.scopeGetter();
 >this.scopeGetter() : any
@@ -115,7 +115,7 @@ module TypeScript {
         }
 
         public getObjectLiteralScope(): SymbolScope {
->getObjectLiteralScope : () => SymbolScope
+>getObjectLiteralScope : () => any
 
             return this.objectLiteralScopeGetter();
 >this.objectLiteralScopeGetter() : any
@@ -145,7 +145,7 @@ module TypeScript {
         }
 
         public getScriptFragmentStartAST(): AST {
->getScriptFragmentStartAST : () => AST
+>getScriptFragmentStartAST : () => any
 
             return this.scopeStartAST;
 >this.scopeStartAST : any
@@ -166,7 +166,7 @@ module TypeScript {
         }
 
         public getScriptFragment(): Script {
->getScriptFragment : () => Script
+>getScriptFragment : () => any
 
             if (this.scriptFragment == null) {
 >this.scriptFragment == null : boolean
@@ -234,7 +234,7 @@ module TypeScript {
     }
 
     export function preFindMemberScope(ast: AST, parent: AST, walker: IAstWalker) {
->preFindMemberScope : (ast: AST, parent: AST, walker: IAstWalker) => any
+>preFindMemberScope : (ast: any, parent: any, walker: any) => any
 >ast : any
 >parent : any
 >walker : any
@@ -328,7 +328,7 @@ module TypeScript {
     }
 
     export function pushTypeCollectionScope(container: Symbol,
->pushTypeCollectionScope : (container: Symbol, valueMembers: ScopedMembers, ambientValueMembers: ScopedMembers, enclosedTypes: ScopedMembers, ambientEnclosedTypes: ScopedMembers, context: TypeCollectionContext, thisType: Type, classType: Type, moduleDecl: ModuleDeclaration) => void
+>pushTypeCollectionScope : (container: Symbol, valueMembers: any, ambientValueMembers: any, enclosedTypes: any, ambientEnclosedTypes: any, context: TypeCollectionContext, thisType: any, classType: any, moduleDecl: any) => void
 >container : Symbol
 
         valueMembers: ScopedMembers,
@@ -422,7 +422,7 @@ module TypeScript {
     }
 
     export function preFindEnclosingScope(ast: AST, parent: AST, walker: IAstWalker) {
->preFindEnclosingScope : (ast: AST, parent: AST, walker: IAstWalker) => any
+>preFindEnclosingScope : (ast: any, parent: any, walker: any) => any
 >ast : any
 >parent : any
 >walker : any
@@ -859,7 +859,7 @@ module TypeScript {
     // Return "null" if the enclosing scope can't be found.
     //
     export function findEnclosingScopeAt(logger: ILogger, script: Script, text: ISourceText, pos: number, isMemberCompletion: boolean): EnclosingScopeContext {
->findEnclosingScopeAt : (logger: ILogger, script: Script, text: ISourceText, pos: number, isMemberCompletion: boolean) => EnclosingScopeContext
+>findEnclosingScopeAt : (logger: any, script: any, text: any, pos: number, isMemberCompletion: boolean) => EnclosingScopeContext
 >logger : any
 >script : any
 >text : any

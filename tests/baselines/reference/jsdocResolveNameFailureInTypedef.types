@@ -3,7 +3,7 @@
  * @param {Ty} x
  */
 function f(x) {}
->f : (x: Ty) => void
+>f : (x: any) => void
 >x : any
 
 /**

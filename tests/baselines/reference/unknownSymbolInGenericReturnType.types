@@ -3,9 +3,9 @@ class Linq {
 >Linq : Linq
 
     public static select<T, S>(values: T[], func: (v: T) => A): any[] {
->select : <T, S>(values: T[], func: (v: T) => A) => any[]
+>select : <T, S>(values: T[], func: (v: T) => any) => any[]
 >values : T[]
->func : (v: T) => A
+>func : (v: T) => any
 >v : T
 
         var result = new Array(values.length);

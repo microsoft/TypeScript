@@ -50,7 +50,7 @@ declare module "./f1" {
 
     interface A {
         foo(): B;
->foo : () => B
+>foo : () => any
 
         bar(): I;
 >bar : () => I

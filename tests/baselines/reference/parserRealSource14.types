@@ -144,7 +144,7 @@ module TypeScript {
         }
 
         public pop(): TypeScript.AST {
->pop : () => TypeScript.AST
+>pop : () => any
 >TypeScript : any
 
             var head = this.ast();
@@ -185,7 +185,7 @@ module TypeScript {
         }
 
         public push(ast: TypeScript.AST) {
->push : (ast: TypeScript.AST) => void
+>push : (ast: any) => void
 >ast : any
 >TypeScript : any
 
@@ -282,7 +282,7 @@ module TypeScript {
         }
 
         public nodeType(): TypeScript.NodeType {
->nodeType : () => TypeScript.NodeType
+>nodeType : () => any
 >TypeScript : any
 
             if (this.ast() == null)
@@ -372,7 +372,7 @@ module TypeScript {
         }
 
         public get(index: number): TypeScript.AST {
->get : (index: number) => TypeScript.AST
+>get : (index: number) => any
 >index : number
 >TypeScript : any
 
@@ -3756,7 +3756,7 @@ module TypeScript {
     }
 
     export function isValidAstNode(ast: TypeScript.ASTSpan): boolean {
->isValidAstNode : (ast: TypeScript.ASTSpan) => boolean
+>isValidAstNode : (ast: any) => boolean
 >ast : any
 >TypeScript : any
 
@@ -3830,7 +3830,7 @@ module TypeScript {
     /// Return the stack of AST nodes containing "position"
     ///
     export function getAstPathToPosition(script: TypeScript.AST, pos: number, options = GetAstPathOptions.Default): TypeScript.AstPath {
->getAstPathToPosition : (script: TypeScript.AST, pos: number, options?: GetAstPathOptions) => TypeScript.AstPath
+>getAstPathToPosition : (script: any, pos: number, options?: GetAstPathOptions) => TypeScript.AstPath
 >script : any
 >TypeScript : any
 >pos : number
@@ -3919,8 +3919,8 @@ module TypeScript {
         }
 
         var pre = function (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) {
->pre : (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) => any
->function (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) {            if (isValidAstNode(cur)) {                // Add "cur" to the stack if it contains our position                // For "identifier" nodes, we need a special case: A position equal to "limChar" is                // valid, since the position corresponds to a caret position (in between characters)                // For example:                //  bar                //  0123                // If "position == 3", the caret is at the "right" of the "r" character, which should be considered valid                var inclusive =                    hasFlag(options, GetAstPathOptions.EdgeInclusive) ||                    cur.nodeType === TypeScript.NodeType.Name ||                    pos === script.limChar; // Special "EOF" case                var minChar = cur.minChar;                var limChar = cur.limChar + (inclusive ? 1 : 0)                if (pos >= minChar && pos < limChar) {                    // TODO: Since AST is sometimes not correct wrt to position, only add "cur" if it's better                    //       than top of the stack.                    var previous = ctx.path.ast();                    if (previous == null || (cur.minChar >= previous.minChar && cur.limChar <= previous.limChar)) {                        ctx.path.push(cur);                    }                    else {                        //logger.log("TODO: Ignoring node because minChar, limChar not better than previous node in stack");                    }                }                // The AST walker skips comments, but we might be in one, so check the pre/post comments for this node manually                if (pos < limChar) {                    lookInComments(cur.preComments);                }                if (pos >= minChar) {                    lookInComments(cur.postComments);                }                if (!hasFlag(options, GetAstPathOptions.DontPruneSearchBasedOnPosition)) {                    // Don't go further down the tree if pos is outside of [minChar, limChar]                    walker.options.goChildren = (minChar <= pos && pos <= limChar);                }            }            return cur;        } : (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) => any
+>pre : (cur: any, parent: any, walker: any) => any
+>function (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) {            if (isValidAstNode(cur)) {                // Add "cur" to the stack if it contains our position                // For "identifier" nodes, we need a special case: A position equal to "limChar" is                // valid, since the position corresponds to a caret position (in between characters)                // For example:                //  bar                //  0123                // If "position == 3", the caret is at the "right" of the "r" character, which should be considered valid                var inclusive =                    hasFlag(options, GetAstPathOptions.EdgeInclusive) ||                    cur.nodeType === TypeScript.NodeType.Name ||                    pos === script.limChar; // Special "EOF" case                var minChar = cur.minChar;                var limChar = cur.limChar + (inclusive ? 1 : 0)                if (pos >= minChar && pos < limChar) {                    // TODO: Since AST is sometimes not correct wrt to position, only add "cur" if it's better                    //       than top of the stack.                    var previous = ctx.path.ast();                    if (previous == null || (cur.minChar >= previous.minChar && cur.limChar <= previous.limChar)) {                        ctx.path.push(cur);                    }                    else {                        //logger.log("TODO: Ignoring node because minChar, limChar not better than previous node in stack");                    }                }                // The AST walker skips comments, but we might be in one, so check the pre/post comments for this node manually                if (pos < limChar) {                    lookInComments(cur.preComments);                }                if (pos >= minChar) {                    lookInComments(cur.postComments);                }                if (!hasFlag(options, GetAstPathOptions.DontPruneSearchBasedOnPosition)) {                    // Don't go further down the tree if pos is outside of [minChar, limChar]                    walker.options.goChildren = (minChar <= pos && pos <= limChar);                }            }            return cur;        } : (cur: any, parent: any, walker: any) => any
 >cur : any
 >TypeScript : any
 >parent : any
@@ -4131,7 +4131,7 @@ module TypeScript {
     // This is used when "position" might be inside a comment or string, etc.
     //
     export function getTokenizationOffset(script: TypeScript.Script, position: number): number {
->getTokenizationOffset : (script: TypeScript.Script, position: number) => number
+>getTokenizationOffset : (script: any, position: number) => number
 >script : any
 >TypeScript : any
 >position : number
@@ -4141,8 +4141,8 @@ module TypeScript {
 >0 : 0
 
         var pre = (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker): TypeScript.AST => {
->pre : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
->(cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker): TypeScript.AST => {            if (TypeScript.isValidAstNode(cur)) {                // Did we find a closer offset?                if (cur.minChar <= position) {                    bestOffset = max(bestOffset, cur.minChar);                }                // Stop the walk if this node is not related to "minChar"                if (cur.minChar > position || cur.limChar < bestOffset) {                    walker.options.goChildren = false;                }            }            return cur;        } : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
+>pre : (cur: any, parent: any, walker: any) => any
+>(cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker): TypeScript.AST => {            if (TypeScript.isValidAstNode(cur)) {                // Did we find a closer offset?                if (cur.minChar <= position) {                    bestOffset = max(bestOffset, cur.minChar);                }                // Stop the walk if this node is not related to "minChar"                if (cur.minChar > position || cur.limChar < bestOffset) {                    walker.options.goChildren = false;                }            }            return cur;        } : (cur: any, parent: any, walker: any) => any
 >cur : any
 >TypeScript : any
 >parent : any
@@ -4225,17 +4225,17 @@ module TypeScript {
     /// Simple function to Walk an AST using a simple callback function.
     ///
     export function walkAST(ast: TypeScript.AST, callback: (path: AstPath, walker: TypeScript.IAstWalker) => void ): void {
->walkAST : (ast: TypeScript.AST, callback: (path: AstPath, walker: TypeScript.IAstWalker) => void) => void
+>walkAST : (ast: any, callback: (path: AstPath, walker: any) => void) => void
 >ast : any
 >TypeScript : any
->callback : (path: AstPath, walker: TypeScript.IAstWalker) => void
+>callback : (path: AstPath, walker: any) => void
 >path : AstPath
 >walker : any
 >TypeScript : any
 
         var pre = function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {
->pre : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => any
->function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {            var path: TypeScript.AstPath = walker.state;            path.push(cur);            callback(path, walker);            return cur;        } : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => any
+>pre : (cur: any, parent: any, walker: any) => any
+>function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {            var path: TypeScript.AstPath = walker.state;            path.push(cur);            callback(path, walker);            return cur;        } : (cur: any, parent: any, walker: any) => any
 >cur : any
 >TypeScript : any
 >parent : any
@@ -4267,8 +4267,8 @@ module TypeScript {
 >cur : any
         }
         var post = function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {
->post : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => any
->function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {            var path: TypeScript.AstPath = walker.state;            path.pop();            return cur;        } : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => any
+>post : (cur: any, parent: any, walker: any) => any
+>function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {            var path: TypeScript.AstPath = walker.state;            path.pop();            return cur;        } : (cur: any, parent: any, walker: any) => any
 >cur : any
 >TypeScript : any
 >parent : any

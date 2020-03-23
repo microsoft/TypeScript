@@ -40,7 +40,7 @@ function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {
 }
 
 function hasMissingIsKeyword(): x {
->hasMissingIsKeyword : () => x
+>hasMissingIsKeyword : () => any
 
     return true;
 >true : true
@@ -226,7 +226,7 @@ var b1: b is A;
 >A : any
 
 function b2(a: b is A) {};
->b2 : (a: b, is: any, A: any) => void
+>b2 : (a: any, is: any, A: any) => void
 >a : any
 >is : any
 >A : any

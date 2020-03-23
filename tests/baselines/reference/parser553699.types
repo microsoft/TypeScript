@@ -4,7 +4,7 @@ class Foo {
 
   constructor() { }
   public banana (x: public) { }
->banana : (x: public) => void
+>banana : (x: any) => void
 >x : any
 }
 

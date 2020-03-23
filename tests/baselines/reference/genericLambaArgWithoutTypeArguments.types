@@ -13,7 +13,7 @@ function foo(a) {
 foo((arg: Foo) => { return arg.x; });
 >foo((arg: Foo) => { return arg.x; }) : any
 >foo : (a: any) => any
->(arg: Foo) => { return arg.x; } : (arg: Foo) => any
+>(arg: Foo) => { return arg.x; } : (arg: any) => any
 >arg : any
 >arg.x : any
 >arg : any

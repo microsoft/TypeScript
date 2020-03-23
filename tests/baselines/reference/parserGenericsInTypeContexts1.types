@@ -25,12 +25,12 @@ var v6: K<T>[];
 
 
 function f1(a: E<T>) {
->f1 : (a: E<T>) => void
+>f1 : (a: any) => void
 >a : any
 }
 
 function f2(): F<T> {
->f2 : () => F<T>
+>f2 : () => any
 }
 
 

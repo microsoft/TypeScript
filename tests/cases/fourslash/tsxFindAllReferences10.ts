@@ -30,4 +30,4 @@
 //// let opt = <MainButton goTo="goTo" />;
 //// let opt = <MainButton wrong />;
 
-verify.singleReferenceGroup("(method) ButtonProps.onClick(event?: React.MouseEvent<HTMLButtonElement>): void", "onClick");
+verify.singleReferenceGroup("(method) ButtonProps.onClick(event?: any): void", "onClick");

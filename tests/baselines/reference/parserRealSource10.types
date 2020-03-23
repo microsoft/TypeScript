@@ -611,7 +611,7 @@ module TypeScript {
     }
 
     function setTokenInfo(tokenId: TokenID, reservation: number, binopPrecedence: number,
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
 >tokenId : TokenID
 >reservation : number
 >binopPrecedence : number

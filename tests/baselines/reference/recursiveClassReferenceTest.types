@@ -24,7 +24,7 @@ declare module Sample.Thing {
 	export interface ICodeThing {
   
   		getDomNode(): Element;
->getDomNode : () => Element
+>getDomNode : () => any
 		
 		addWidget(widgetId:string, widget:IWidget);
 >addWidget : (widgetId: string, widget: IWidget) => any

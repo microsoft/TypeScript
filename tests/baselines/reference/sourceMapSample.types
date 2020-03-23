@@ -29,7 +29,7 @@ module Foo.Bar {
 
 
     function foo(greeting: string): Foo.Bar.Greeter {
->foo : (greeting: string) => Foo.Bar.Greeter
+>foo : (greeting: string) => any
 >greeting : string
 >Foo : any
 >Bar : any

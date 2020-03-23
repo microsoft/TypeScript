@@ -28,54 +28,54 @@ class Three<T, U, V>{
 }
 
 function A1(): One { return null; }
->A1 : () => One
+>A1 : () => any
 >null : null
 
 function A2(): Two { return null; }
->A2 : () => Two
+>A2 : () => any
 >null : null
 
 function A3(): Three { return null; }
->A3 : () => Three
+>A3 : () => any
 >null : null
 
 function B1(): Two<number> { return null; }
->B1 : () => Two<number>
+>B1 : () => any
 >null : null
 
 function B2(): Three<string> { return null; }
->B2 : () => Three<string>
+>B2 : () => any
 >null : null
 
 function B3(): Three<string, number> { return null; }
->B3 : () => Three<string, number>
+>B3 : () => any
 >null : null
 
 class C {
 >C : C
 
     A1(): One { return null; }
->A1 : () => One
+>A1 : () => any
 >null : null
 
     A2(): Two { return null; }
->A2 : () => Two
+>A2 : () => any
 >null : null
 
     A3(): Three { return null; }
->A3 : () => Three
+>A3 : () => any
 >null : null
 
     B1(): Two<number> { return null; }
->B1 : () => Two<number>
+>B1 : () => any
 >null : null
 
     B2(): Three<string> { return null; }
->B2 : () => Three<string>
+>B2 : () => any
 >null : null
 
     B3(): Three<string, number> { return null; }
->B3 : () => Three<string, number>
+>B3 : () => any
 >null : null
 }
 
@@ -83,23 +83,23 @@ class D<T> {
 >D : D<T>
 
     A2(): Two<T> { return null; }
->A2 : () => Two<T>
+>A2 : () => any
 >null : null
 
     A3(): Three<T> { return null; }
->A3 : () => Three<T>
+>A3 : () => any
 >null : null
 
     B1(): Two<T> { return null; }
->B1 : () => Two<T>
+>B1 : () => any
 >null : null
 
     B2(): Three<T> { return null; }
->B2 : () => Three<T>
+>B2 : () => any
 >null : null
 
     B3(): Three<string, T> { return null; }
->B3 : () => Three<string, T>
+>B3 : () => any
 >null : null
 }
 
@@ -119,7 +119,7 @@ class X<T>
 >X : X<T>
 {
     p1: () => X;
->p1 : () => X
+>p1 : () => any
 
     p2: { [idx: number]: X }
 >p2 : { [idx: number]: any; }
@@ -135,7 +135,7 @@ class X<T>
 >p5 : any
 
     p6: () => Y;
->p6 : () => Y
+>p6 : () => any
 
     p7: { [idx: number]: Y }
 >p7 : { [idx: number]: any; }
@@ -152,10 +152,10 @@ class X<T>
 }
 
 declare var a: {
->a : { p1: () => X; p2: { [idx: number]: any; }; p3: X[]; p4: I<X>; p5: X; p6: () => Y; p7: { [idx: number]: any; }; p8: Y[]; p9: I<Y>; pa: Y; }
+>a : { p1: () => X; p2: { [idx: number]: any; }; p3: X[]; p4: I<X>; p5: any; p6: () => Y; p7: { [idx: number]: any; }; p8: Y[]; p9: I<Y>; pa: any; }
 
     p1: () => X;
->p1 : () => X
+>p1 : () => any
 
     p2: { [idx: number]: X }
 >p2 : { [idx: number]: any; }
@@ -171,7 +171,7 @@ declare var a: {
 >p5 : any
 
     p6: () => Y;
->p6 : () => Y
+>p6 : () => any
 
     p7: { [idx: number]: Y }
 >p7 : { [idx: number]: any; }
