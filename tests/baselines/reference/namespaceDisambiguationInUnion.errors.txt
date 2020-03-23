@@ -1,0 +1,23 @@
+tests/cases/compiler/namespaceDisambiguationInUnion.ts(10,7): error TS2322: Type '{ type: string; }' is not assignable to type 'Foo.Yep | Bar.Yep'.
+  Type '{ type: string; }' is not assignable to type 'Yep'.
+    Types of property 'type' are incompatible.
+      Type 'string' is not assignable to type '"bar.yep"'.
+
+
+==== tests/cases/compiler/namespaceDisambiguationInUnion.ts (1 errors) ====
+    namespace Foo {
+      export type Yep = { type: "foo.yep" };
+    }
+    
+    namespace Bar {
+      export type Yep = { type: "bar.yep" };
+    }
+    
+    const x = { type: "wat.nup" };
+    const val: Foo.Yep | Bar.Yep = x;
+          ~~~
+!!! error TS2322: Type '{ type: string; }' is not assignable to type 'Foo.Yep | Bar.Yep'.
+!!! error TS2322:   Type '{ type: string; }' is not assignable to type 'Yep'.
+!!! error TS2322:     Types of property 'type' are incompatible.
+!!! error TS2322:       Type 'string' is not assignable to type '"bar.yep"'.
+    

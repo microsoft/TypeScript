@@ -1,0 +1,25 @@
+=== tests/cases/compiler/namespaceDisambiguationInUnion.ts ===
+namespace Foo {
+  export type Yep = { type: "foo.yep" };
+>Yep : Yep
+>type : "foo.yep"
+}
+
+namespace Bar {
+  export type Yep = { type: "bar.yep" };
+>Yep : Yep
+>type : "bar.yep"
+}
+
+const x = { type: "wat.nup" };
+>x : { type: string; }
+>{ type: "wat.nup" } : { type: string; }
+>type : string
+>"wat.nup" : "wat.nup"
+
+const val: Foo.Yep | Bar.Yep = x;
+>val : Foo.Yep | Bar.Yep
+>Foo : any
+>Bar : any
+>x : { type: string; }
+
