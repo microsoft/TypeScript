@@ -1,0 +1,499 @@
+=== tests/cases/conformance/types/awaited/awaited.ts ===
+// simple
+declare const p0: Promise<number>;
+>p0 : Promise<number>
+
+p0.then(x => x);
+>p0.then(x => x) : Promise<number>
+>p0.then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>p0 : Promise<number>
+>then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+declare const p1: Promise<Promise<number>>;
+>p1 : Promise<Promise<number>>
+
+p1.then(x => x);
+>p1.then(x => x) : Promise<number>
+>p1.then : <TResult1 = Promise<number>, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>p1 : Promise<Promise<number>>
+>then : <TResult1 = Promise<number>, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+declare const p2: Promise<number | Promise<number>>;
+>p2 : Promise<number | Promise<number>>
+
+p2.then(x => x);
+>p2.then(x => x) : Promise<number>
+>p2.then : <TResult1 = number | Promise<number>, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>p2 : Promise<number | Promise<number>>
+>then : <TResult1 = number | Promise<number>, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+// generics
+declare const f: boolean;
+>f : boolean
+
+declare function makePromise<T>(x: T): Promise<T>;
+>makePromise : <T>(x: T) => Promise<T>
+>x : T
+
+makePromise(1).then(x => x);
+>makePromise(1).then(x => x) : Promise<number>
+>makePromise(1).then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>makePromise(1) : Promise<number>
+>makePromise : <T>(x: T) => Promise<T>
+>1 : 1
+>then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+makePromise("a").then(x => x);
+>makePromise("a").then(x => x) : Promise<string>
+>makePromise("a").then : <TResult1 = string, TResult2 = never>(onfulfilled?: (value: string) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>makePromise("a") : Promise<string>
+>makePromise : <T>(x: T) => Promise<T>
+>"a" : "a"
+>then : <TResult1 = string, TResult2 = never>(onfulfilled?: (value: string) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: string) => string
+>x : string
+>x : string
+
+makePromise({ a: 1 }).then(x => x);
+>makePromise({ a: 1 }).then(x => x) : Promise<{ a: number; }>
+>makePromise({ a: 1 }).then : <TResult1 = { a: number; }, TResult2 = never>(onfulfilled?: (value: { a: number; }) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>makePromise({ a: 1 }) : Promise<{ a: number; }>
+>makePromise : <T>(x: T) => Promise<T>
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+>then : <TResult1 = { a: number; }, TResult2 = never>(onfulfilled?: (value: { a: number; }) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: { a: number; }) => { a: number; }
+>x : { a: number; }
+>x : { a: number; }
+
+makePromise(f ? 1 : "a").then(x => x);
+>makePromise(f ? 1 : "a").then(x => x) : Promise<string | number>
+>makePromise(f ? 1 : "a").then : <TResult1 = string | number, TResult2 = never>(onfulfilled?: (value: string | number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>makePromise(f ? 1 : "a") : Promise<string | number>
+>makePromise : <T>(x: T) => Promise<T>
+>f ? 1 : "a" : 1 | "a"
+>f : boolean
+>1 : 1
+>"a" : "a"
+>then : <TResult1 = string | number, TResult2 = never>(onfulfilled?: (value: string | number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: string | number) => string | number
+>x : string | number
+>x : string | number
+
+function f0<U>(u: U) {
+>f0 : <U>(u: U) => Promise<awaited U>
+>u : U
+
+    return makePromise(u).then(x => x);
+>makePromise(u).then(x => x) : Promise<awaited U>
+>makePromise(u).then : <TResult1 = U, TResult2 = never>(onfulfilled?: (value: awaited U) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>makePromise(u) : Promise<U>
+>makePromise : <T>(x: T) => Promise<T>
+>u : U
+>then : <TResult1 = U, TResult2 = never>(onfulfilled?: (value: awaited U) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: awaited U) => awaited U
+>x : awaited U
+>x : awaited U
+}
+f0(1).then(x => x);
+>f0(1).then(x => x) : Promise<number>
+>f0(1).then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>f0(1) : Promise<number>
+>f0 : <U>(u: U) => Promise<awaited U>
+>1 : 1
+>then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+f0("a").then(x => x);
+>f0("a").then(x => x) : Promise<string>
+>f0("a").then : <TResult1 = string, TResult2 = never>(onfulfilled?: (value: string) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>f0("a") : Promise<string>
+>f0 : <U>(u: U) => Promise<awaited U>
+>"a" : "a"
+>then : <TResult1 = string, TResult2 = never>(onfulfilled?: (value: string) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: string) => string
+>x : string
+>x : string
+
+f0(f ? 1 : "a").then(x => x);
+>f0(f ? 1 : "a").then(x => x) : Promise<string | number>
+>f0(f ? 1 : "a").then : <TResult1 = string | number, TResult2 = never>(onfulfilled?: (value: string | number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>f0(f ? 1 : "a") : Promise<string | number>
+>f0 : <U>(u: U) => Promise<awaited U>
+>f ? 1 : "a" : 1 | "a"
+>f : boolean
+>1 : 1
+>"a" : "a"
+>then : <TResult1 = string | number, TResult2 = never>(onfulfilled?: (value: string | number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: string | number) => string | number
+>x : string | number
+>x : string | number
+
+f0(makePromise(1)).then(x => x);
+>f0(makePromise(1)).then(x => x) : Promise<number>
+>f0(makePromise(1)).then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>f0(makePromise(1)) : Promise<number>
+>f0 : <U>(u: U) => Promise<awaited U>
+>makePromise(1) : Promise<number>
+>makePromise : <T>(x: T) => Promise<T>
+>1 : 1
+>then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+function f1<U, V>(u: U, v: V) {
+>f1 : <U, V>(u: U, v: V) => Promise<awaited U | awaited V>
+>u : U
+>v : V
+
+    return makePromise(u).then(x => {
+>makePromise(u).then(x => {        if (f) return x;        return makePromise(v).then(x => x);    }) : Promise<awaited U | awaited V>
+>makePromise(u).then : <TResult1 = U, TResult2 = never>(onfulfilled?: (value: awaited U) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>makePromise(u) : Promise<U>
+>makePromise : <T>(x: T) => Promise<T>
+>u : U
+>then : <TResult1 = U, TResult2 = never>(onfulfilled?: (value: awaited U) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => {        if (f) return x;        return makePromise(v).then(x => x);    } : (x: awaited U) => awaited U | Promise<awaited V>
+>x : awaited U
+
+        if (f) return x;
+>f : boolean
+>x : awaited U
+
+        return makePromise(v).then(x => x);
+>makePromise(v).then(x => x) : Promise<awaited V>
+>makePromise(v).then : <TResult1 = V, TResult2 = never>(onfulfilled?: (value: awaited V) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>makePromise(v) : Promise<V>
+>makePromise : <T>(x: T) => Promise<T>
+>v : V
+>then : <TResult1 = V, TResult2 = never>(onfulfilled?: (value: awaited V) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: awaited V) => awaited V
+>x : awaited V
+>x : awaited V
+
+    });
+}
+f1(1, "a").then(x => x);
+>f1(1, "a").then(x => x) : Promise<string | number>
+>f1(1, "a").then : <TResult1 = string | number, TResult2 = never>(onfulfilled?: (value: string | number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>f1(1, "a") : Promise<string | number>
+>f1 : <U, V>(u: U, v: V) => Promise<awaited U | awaited V>
+>1 : 1
+>"a" : "a"
+>then : <TResult1 = string | number, TResult2 = never>(onfulfilled?: (value: string | number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: string | number) => string | number
+>x : string | number
+>x : string | number
+
+f1(makePromise(1), makePromise("a")).then(x => x);
+>f1(makePromise(1), makePromise("a")).then(x => x) : Promise<string | number>
+>f1(makePromise(1), makePromise("a")).then : <TResult1 = string | number, TResult2 = never>(onfulfilled?: (value: string | number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>f1(makePromise(1), makePromise("a")) : Promise<string | number>
+>f1 : <U, V>(u: U, v: V) => Promise<awaited U | awaited V>
+>makePromise(1) : Promise<number>
+>makePromise : <T>(x: T) => Promise<T>
+>1 : 1
+>makePromise("a") : Promise<string>
+>makePromise : <T>(x: T) => Promise<T>
+>"a" : "a"
+>then : <TResult1 = string | number, TResult2 = never>(onfulfilled?: (value: string | number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: string | number) => string | number
+>x : string | number
+>x : string | number
+
+function f2<U>(u: U) {
+>f2 : <U>(u: U) => Promise<awaited U>
+>u : U
+
+    return makePromise(u).then(x => {
+>makePromise(u).then(x => {        if (f) return x;        return Promise.reject("b");    }) : Promise<awaited U>
+>makePromise(u).then : <TResult1 = U, TResult2 = never>(onfulfilled?: (value: awaited U) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>makePromise(u) : Promise<U>
+>makePromise : <T>(x: T) => Promise<T>
+>u : U
+>then : <TResult1 = U, TResult2 = never>(onfulfilled?: (value: awaited U) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => {        if (f) return x;        return Promise.reject("b");    } : (x: awaited U) => awaited U | Promise<never>
+>x : awaited U
+
+        if (f) return x;
+>f : boolean
+>x : awaited U
+
+        return Promise.reject("b");
+>Promise.reject("b") : Promise<never>
+>Promise.reject : <T = never>(reason?: any) => Promise<awaited T>
+>Promise : PromiseConstructor
+>reject : <T = never>(reason?: any) => Promise<awaited T>
+>"b" : "b"
+
+    });
+}
+f2(1).then(x => x);
+>f2(1).then(x => x) : Promise<number>
+>f2(1).then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>f2(1) : Promise<number>
+>f2 : <U>(u: U) => Promise<awaited U>
+>1 : 1
+>then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+f2(makePromise(1)).then(x => x);
+>f2(makePromise(1)).then(x => x) : Promise<number>
+>f2(makePromise(1)).then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>f2(makePromise(1)) : Promise<number>
+>f2 : <U>(u: U) => Promise<awaited U>
+>makePromise(1) : Promise<number>
+>makePromise : <T>(x: T) => Promise<T>
+>1 : 1
+>then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+function f3<U, V>(u: U, v: V) {
+>f3 : <U, V>(u: U, v: V) => Promise<awaited U | awaited V>
+>u : U
+>v : V
+
+    return makePromise(u).catch(x => v);
+>makePromise(u).catch(x => v) : Promise<awaited U | awaited V>
+>makePromise(u).catch : <TResult = never>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<awaited TResult | awaited U>
+>makePromise(u) : Promise<U>
+>makePromise : <T>(x: T) => Promise<T>
+>u : U
+>catch : <TResult = never>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<awaited TResult | awaited U>
+>x => v : (x: any) => V
+>x : any
+>v : V
+}
+f3(1, "a").then(x => x);
+>f3(1, "a").then(x => x) : Promise<string | number>
+>f3(1, "a").then : <TResult1 = string | number, TResult2 = never>(onfulfilled?: (value: string | number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>f3(1, "a") : Promise<string | number>
+>f3 : <U, V>(u: U, v: V) => Promise<awaited U | awaited V>
+>1 : 1
+>"a" : "a"
+>then : <TResult1 = string | number, TResult2 = never>(onfulfilled?: (value: string | number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: string | number) => string | number
+>x : string | number
+>x : string | number
+
+f3(makePromise(1), makePromise("a")).then(x => x);
+>f3(makePromise(1), makePromise("a")).then(x => x) : Promise<string | number>
+>f3(makePromise(1), makePromise("a")).then : <TResult1 = string | number, TResult2 = never>(onfulfilled?: (value: string | number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>f3(makePromise(1), makePromise("a")) : Promise<string | number>
+>f3 : <U, V>(u: U, v: V) => Promise<awaited U | awaited V>
+>makePromise(1) : Promise<number>
+>makePromise : <T>(x: T) => Promise<T>
+>1 : 1
+>makePromise("a") : Promise<string>
+>makePromise : <T>(x: T) => Promise<T>
+>"a" : "a"
+>then : <TResult1 = string | number, TResult2 = never>(onfulfilled?: (value: string | number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: string | number) => string | number
+>x : string | number
+>x : string | number
+
+function f4<U, V>(u: U, v: V) {
+>f4 : <U, V>(u: U, v: V) => Promise<awaited V | awaited U>
+>u : U
+>v : V
+
+    return makePromise(u).catch(x => {
+>makePromise(u).catch(x => {        if (f) return v;        return Promise.reject("b");    }) : Promise<awaited V | awaited U>
+>makePromise(u).catch : <TResult = never>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<awaited TResult | awaited U>
+>makePromise(u) : Promise<U>
+>makePromise : <T>(x: T) => Promise<T>
+>u : U
+>catch : <TResult = never>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<awaited TResult | awaited U>
+>x => {        if (f) return v;        return Promise.reject("b");    } : (x: any) => Promise<never> | V
+>x : any
+
+        if (f) return v;
+>f : boolean
+>v : V
+
+        return Promise.reject("b");
+>Promise.reject("b") : Promise<never>
+>Promise.reject : <T = never>(reason?: any) => Promise<awaited T>
+>Promise : PromiseConstructor
+>reject : <T = never>(reason?: any) => Promise<awaited T>
+>"b" : "b"
+
+    });
+}
+f4(1, "a").then(x => x);
+>f4(1, "a").then(x => x) : Promise<string | number>
+>f4(1, "a").then : <TResult1 = string | number, TResult2 = never>(onfulfilled?: (value: string | number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>f4(1, "a") : Promise<string | number>
+>f4 : <U, V>(u: U, v: V) => Promise<awaited V | awaited U>
+>1 : 1
+>"a" : "a"
+>then : <TResult1 = string | number, TResult2 = never>(onfulfilled?: (value: string | number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: string | number) => string | number
+>x : string | number
+>x : string | number
+
+f4(makePromise(1), makePromise("a")).then(x => x);
+>f4(makePromise(1), makePromise("a")).then(x => x) : Promise<string | number>
+>f4(makePromise(1), makePromise("a")).then : <TResult1 = string | number, TResult2 = never>(onfulfilled?: (value: string | number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>f4(makePromise(1), makePromise("a")) : Promise<string | number>
+>f4 : <U, V>(u: U, v: V) => Promise<awaited V | awaited U>
+>makePromise(1) : Promise<number>
+>makePromise : <T>(x: T) => Promise<T>
+>1 : 1
+>makePromise("a") : Promise<string>
+>makePromise : <T>(x: T) => Promise<T>
+>"a" : "a"
+>then : <TResult1 = string | number, TResult2 = never>(onfulfilled?: (value: string | number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: string | number) => string | number
+>x : string | number
+>x : string | number
+
+async function f5<U>(u: Promise<U>) {
+>f5 : <U>(u: Promise<U>) => Promise<U>
+>u : Promise<U>
+
+    return await u;
+>await u : awaited U
+>u : Promise<U>
+}
+f5(makePromise(1)).then(x => x);
+>f5(makePromise(1)).then(x => x) : Promise<number>
+>f5(makePromise(1)).then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>f5(makePromise(1)) : Promise<number>
+>f5 : <U>(u: Promise<U>) => Promise<U>
+>makePromise(1) : Promise<number>
+>makePromise : <T>(x: T) => Promise<T>
+>1 : 1
+>then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+f5(makePromise(makePromise(1))).then(x => x);
+>f5(makePromise(makePromise(1))).then(x => x) : Promise<number>
+>f5(makePromise(makePromise(1))).then : <TResult1 = Promise<number>, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>f5(makePromise(makePromise(1))) : Promise<Promise<number>>
+>f5 : <U>(u: Promise<U>) => Promise<U>
+>makePromise(makePromise(1)) : Promise<Promise<number>>
+>makePromise : <T>(x: T) => Promise<T>
+>makePromise(1) : Promise<number>
+>makePromise : <T>(x: T) => Promise<T>
+>1 : 1
+>then : <TResult1 = Promise<number>, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+async function f6<U>(u: Promise<Promise<U>>) {
+>f6 : <U>(u: Promise<Promise<U>>) => Promise<U>
+>u : Promise<Promise<U>>
+
+    return await u;
+>await u : awaited U
+>u : Promise<Promise<U>>
+}
+
+// assignability
+let v0: number;
+>v0 : number
+
+let v1: awaited number;
+>v1 : number
+
+let v2: awaited Promise<number>;
+>v2 : number
+
+v0 = v1;
+>v0 = v1 : number
+>v0 : number
+>v1 : number
+
+v0 = v2;
+>v0 = v2 : number
+>v0 : number
+>v2 : number
+
+v1 = v0;
+>v1 = v0 : number
+>v1 : number
+>v0 : number
+
+v1 = v2;
+>v1 = v2 : number
+>v1 : number
+>v2 : number
+
+v2 = v0;
+>v2 = v0 : number
+>v2 : number
+>v0 : number
+
+v2 = v1;
+>v2 = v1 : number
+>v2 : number
+>v1 : number
+
+function f7<U>() {
+>f7 : <U>() => void
+
+    let v0: awaited U;
+>v0 : awaited U
+
+    let v1: awaited Promise<U>;
+>v1 : awaited U
+
+    v0 = v1;
+>v0 = v1 : awaited U
+>v0 : awaited U
+>v1 : awaited U
+
+    v1 = v0;
+>v1 = v0 : awaited U
+>v1 : awaited U
+>v0 : awaited U
+}
+
+async function f8<U>() {
+>f8 : <U>() => Promise<void>
+
+    let pu: Promise<U>;
+>pu : Promise<U>
+
+    let v0: awaited U;
+>v0 : awaited U
+
+    let v1: awaited Promise<U>;
+>v1 : awaited U
+
+    v0 = await pu;
+>v0 = await pu : awaited U
+>v0 : awaited U
+>await pu : awaited U
+>pu : Promise<U>
+
+    v1 = await pu;
+>v1 = await pu : awaited U
+>v1 : awaited U
+>await pu : awaited U
+>pu : Promise<U>
+}

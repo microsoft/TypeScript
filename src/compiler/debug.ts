@@ -64,7 +64,7 @@ namespace ts {
                 stackCrawlMark || failBadSyntaxKind);
         }
 
-        export function assert(expression: boolean, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: AnyFunction): asserts expression {
+        export function assert(expression: unknown, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: AnyFunction): asserts expression {
             if (!expression) {
                 message = message ? `False expression: ${message}` : "False expression.";
                 if (verboseDebugInfo) {

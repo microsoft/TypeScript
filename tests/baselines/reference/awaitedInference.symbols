@@ -1,0 +1,67 @@
+=== tests/cases/conformance/types/awaited/awaitedInference.ts ===
+declare function foo<T>(f: () => PromiseLike<T>, x: T): void;
+>foo : Symbol(foo, Decl(awaitedInference.ts, 0, 0))
+>T : Symbol(T, Decl(awaitedInference.ts, 0, 21))
+>f : Symbol(f, Decl(awaitedInference.ts, 0, 24))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(awaitedInference.ts, 0, 21))
+>x : Symbol(x, Decl(awaitedInference.ts, 0, 48))
+>T : Symbol(T, Decl(awaitedInference.ts, 0, 21))
+
+declare const nullOrNumber: number | null;
+>nullOrNumber : Symbol(nullOrNumber, Decl(awaitedInference.ts, 1, 13))
+
+foo(async () => nullOrNumber, null);
+>foo : Symbol(foo, Decl(awaitedInference.ts, 0, 0))
+>nullOrNumber : Symbol(nullOrNumber, Decl(awaitedInference.ts, 1, 13))
+
+type UnwrapAwaited<T> = T extends awaited infer Inner ? Inner : T;
+>UnwrapAwaited : Symbol(UnwrapAwaited, Decl(awaitedInference.ts, 2, 36))
+>T : Symbol(T, Decl(awaitedInference.ts, 4, 19))
+>T : Symbol(T, Decl(awaitedInference.ts, 4, 19))
+>Inner : Symbol(Inner, Decl(awaitedInference.ts, 4, 47))
+>Inner : Symbol(Inner, Decl(awaitedInference.ts, 4, 47))
+>T : Symbol(T, Decl(awaitedInference.ts, 4, 19))
+
+type Result1 = UnwrapAwaited<awaited Promise<number>>; // number
+>Result1 : Symbol(Result1, Decl(awaitedInference.ts, 4, 66))
+>UnwrapAwaited : Symbol(UnwrapAwaited, Decl(awaitedInference.ts, 2, 36))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+type Result2 = UnwrapAwaited<awaited Promise<number> | number>; // number
+>Result2 : Symbol(Result2, Decl(awaitedInference.ts, 5, 54))
+>UnwrapAwaited : Symbol(UnwrapAwaited, Decl(awaitedInference.ts, 2, 36))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+function f<T>() {
+>f : Symbol(f, Decl(awaitedInference.ts, 6, 63))
+>T : Symbol(T, Decl(awaitedInference.ts, 7, 11))
+
+    type Result1 = UnwrapAwaited<T>; // UnwrapAwaited<T>
+>Result1 : Symbol(Result1, Decl(awaitedInference.ts, 7, 17))
+>UnwrapAwaited : Symbol(UnwrapAwaited, Decl(awaitedInference.ts, 2, 36))
+>T : Symbol(T, Decl(awaitedInference.ts, 7, 11))
+
+    type Result2 = UnwrapAwaited<awaited T>; // UnwrapAwaited<awaited T>
+>Result2 : Symbol(Result2, Decl(awaitedInference.ts, 8, 36))
+>UnwrapAwaited : Symbol(UnwrapAwaited, Decl(awaitedInference.ts, 2, 36))
+>T : Symbol(T, Decl(awaitedInference.ts, 7, 11))
+
+    return null as any as [Result1, Result2];
+>Result1 : Symbol(Result1, Decl(awaitedInference.ts, 7, 17))
+>Result2 : Symbol(Result2, Decl(awaitedInference.ts, 8, 36))
+}
+const x = f<number>(); // number
+>x : Symbol(x, Decl(awaitedInference.ts, 12, 5))
+>f : Symbol(f, Decl(awaitedInference.ts, 6, 63))
+
+const y = f<Promise<number>>(); // number ?
+>y : Symbol(y, Decl(awaitedInference.ts, 13, 5))
+>f : Symbol(f, Decl(awaitedInference.ts, 6, 63))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+const z = f<Promise<number> | number>(); // number ?
+>z : Symbol(z, Decl(awaitedInference.ts, 14, 5))
+>f : Symbol(f, Decl(awaitedInference.ts, 6, 63))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+

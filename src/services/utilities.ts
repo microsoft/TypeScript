@@ -1705,14 +1705,16 @@ namespace ts {
         // Mix in `getProbableSymlinks` from Program when host doesn't have it
         // in order for non-Project hosts to have a symlinks cache.
         return {
-            fileExists: maybeBind(host, host.fileExists),
+            fileExists: fileName => program.fileExists(fileName),
             getCurrentDirectory: () => host.getCurrentDirectory(),
             readFile: maybeBind(host, host.readFile),
             useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
             getProbableSymlinks: maybeBind(host, host.getProbableSymlinks) || (() => program.getProbableSymlinks()),
             getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
             getSourceFiles: () => program.getSourceFiles(),
-            redirectTargetsMap: program.redirectTargetsMap
+            redirectTargetsMap: program.redirectTargetsMap,
+            getProjectReferenceRedirect: fileName => program.getProjectReferenceRedirect(fileName),
+            isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName),
         };
     }
 

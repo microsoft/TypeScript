@@ -809,7 +809,7 @@ namespace ts {
 
         const useSourceOfProjectReferenceRedirect = !!host.useSourceOfProjectReferenceRedirect?.() &&
             !options.disableSourceOfProjectReferenceRedirect;
-        const onProgramCreateComplete = updateHostForUseSourceOfProjectReferenceRedirect({
+        const { onProgramCreateComplete, fileExists } = updateHostForUseSourceOfProjectReferenceRedirect({
             compilerHost: host,
             useSourceOfProjectReferenceRedirect,
             toPath,
@@ -970,6 +970,7 @@ namespace ts {
             forEachResolvedProjectReference,
             isSourceOfProjectReferenceRedirect,
             emitBuildInfo,
+            fileExists,
             getProbableSymlinks,
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
         };
@@ -1479,6 +1480,7 @@ namespace ts {
                 getLibFileFromReference: program.getLibFileFromReference,
                 isSourceFileFromExternalLibrary,
                 getResolvedProjectReferenceToRedirect,
+                getProjectReferenceRedirect,
                 isSourceOfProjectReferenceRedirect,
                 getProbableSymlinks,
                 writeFile: writeFileCallback || (
@@ -3482,20 +3484,9 @@ namespace ts {
         const originalGetDirectories = host.compilerHost.getDirectories;
         const originalRealpath = host.compilerHost.realpath;
 
+        if (!host.useSourceOfProjectReferenceRedirect) return { onProgramCreateComplete: noop, fileExists };
 
-        if (!host.useSourceOfProjectReferenceRedirect) return noop;
-
-        // This implementation of fileExists checks if the file being requested is
-        // .d.ts file for the referenced Project.
-        // If it is it returns true irrespective of whether that file exists on host
-        host.compilerHost.fileExists = (file) => {
-            if (originalFileExists.call(host.compilerHost, file)) return true;
-            if (!host.getResolvedProjectReferences()) return false;
-            if (!isDeclarationFileName(file)) return false;
-
-            // Project references go to source file instead of .d.ts file
-            return fileOrDirectoryExistsUsingSource(file, /*isFile*/ true);
-        };
+        host.compilerHost.fileExists = fileExists;
 
         if (originalDirectoryExists) {
             // This implementation of directoryExists checks if the directory being requested is
@@ -3547,14 +3538,25 @@ namespace ts {
                 originalRealpath.call(host.compilerHost, s);
         }
 
-        return onProgramCreateComplete;
-
+        return { onProgramCreateComplete, fileExists };
 
         function onProgramCreateComplete() {
             host.compilerHost.fileExists = originalFileExists;
             host.compilerHost.directoryExists = originalDirectoryExists;
             host.compilerHost.getDirectories = originalGetDirectories;
             // DO not revert realpath as it could be used later
+        }
+
+        // This implementation of fileExists checks if the file being requested is
+        // .d.ts file for the referenced Project.
+        // If it is it returns true irrespective of whether that file exists on host
+        function fileExists(file: string) {
+            if (originalFileExists.call(host.compilerHost, file)) return true;
+            if (!host.getResolvedProjectReferences()) return false;
+            if (!isDeclarationFileName(file)) return false;
+
+            // Project references go to source file instead of .d.ts file
+            return fileOrDirectoryExistsUsingSource(file, /*isFile*/ true);
         }
 
         function fileExistsIfProjectReferenceDts(file: string) {

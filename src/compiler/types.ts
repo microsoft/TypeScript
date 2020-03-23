@@ -107,6 +107,7 @@ namespace ts {
         | SyntaxKind.YieldKeyword
         | SyntaxKind.AsyncKeyword
         | SyntaxKind.AwaitKeyword
+        | SyntaxKind.AwaitedKeyword
         | SyntaxKind.OfKeyword;
 
     export type JsxTokenSyntaxKind =
@@ -261,6 +262,7 @@ namespace ts {
         AnyKeyword,
         AsyncKeyword,
         AwaitKeyword,
+        AwaitedKeyword,
         BooleanKeyword,
         ConstructorKeyword,
         DeclareKeyword,
@@ -1318,7 +1320,7 @@ namespace ts {
 
     export interface TypeOperatorNode extends TypeNode {
         kind: SyntaxKind.TypeOperator;
-        operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword;
+        operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.AwaitedKeyword;
         type: TypeNode;
     }
 
@@ -3287,6 +3289,10 @@ namespace ts {
         /*@internal*/ getProgramBuildInfo?(): ProgramBuildInfo | undefined;
         /*@internal*/ emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
         /*@internal*/ getProbableSymlinks(): ReadonlyMap<string>;
+        /**
+         * This implementation handles file exists to be true if file is source of project reference redirect when program is created using useSourceOfProjectReferenceRedirect
+         */
+        /*@internal*/ fileExists(fileName: string): boolean;
     }
 
     /*@internal*/
@@ -4341,6 +4347,7 @@ namespace ts {
         Conditional     = 1 << 24,  // T extends U ? X : Y
         Substitution    = 1 << 25,  // Type parameter substitution
         NonPrimitive    = 1 << 26,  // intrinsic object type
+        Awaited         = 1 << 27,  // awaited T
 
         /* @internal */
         AnyOrUnknown = Any | Unknown,
@@ -4370,7 +4377,7 @@ namespace ts {
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
         TypeVariable = TypeParameter | IndexedAccess,
-        InstantiableNonPrimitive = TypeVariable | Conditional | Substitution,
+        InstantiableNonPrimitive = TypeVariable | Conditional | Substitution | Awaited,
         InstantiablePrimitive = Index,
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
@@ -4813,6 +4820,11 @@ namespace ts {
     export interface SubstitutionType extends InstantiableType {
         baseType: Type;     // Target type
         substitute: Type;   // Type to substitute for type parameter
+    }
+
+    // awaited T (TypeFlags.Awaited)
+    export interface AwaitedType extends InstantiableType {
+        awaitedType: Type;
     }
 
     /* @internal */
@@ -6428,16 +6440,16 @@ namespace ts {
     /*@internal*/
     export interface ModuleSpecifierResolutionHost {
         useCaseSensitiveFileNames?(): boolean;
-        fileExists?(path: string): boolean;
+        fileExists(path: string): boolean;
         getCurrentDirectory(): string;
         readFile?(path: string): string | undefined;
-        /* @internal */
         getProbableSymlinks?(files: readonly SourceFile[]): ReadonlyMap<string>;
-        /* @internal */
         getGlobalTypingsCacheLocation?(): string | undefined;
 
         getSourceFiles(): readonly SourceFile[];
         readonly redirectTargetsMap: RedirectTargetsMap;
+        getProjectReferenceRedirect(fileName: string): string | undefined;
+        isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally

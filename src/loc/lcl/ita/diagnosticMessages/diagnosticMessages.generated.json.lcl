@@ -1014,11 +1014,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_all_missing_call_parentheses_95068" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add all missing call parentheses]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aggiungere tutte le parentesi mancanti nelle chiamate]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_all_missing_imports_95064" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add all missing imports]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aggiungi tutte le importazioni mancanti]]></Val>
+            <Val><![CDATA[Aggiungere tutte le importazioni mancanti]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1054,7 +1063,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'await']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aggiungi 'await']]></Val>
+            <Val><![CDATA[Aggiungere 'await']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1063,7 +1072,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'await' to initializer for '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aggiungi 'await' all'inizializzatore per '{0}']]></Val>
+            <Val><![CDATA[Aggiungere 'await' all'inizializzatore per '{0}']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1072,7 +1081,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'await' to initializers]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aggiungi 'await' agli inizializzatori]]></Val>
+            <Val><![CDATA[Aggiungere 'await' agli inizializzatori]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1086,11 +1095,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_class_tag_95102" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add '@class' tag]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aggiungere il tag '@class']]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_const_to_all_unresolved_variables_95082" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add 'const' to all unresolved variables]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aggiungi 'const' a tutte le variabili non risolte]]></Val>
+            <Val><![CDATA[Aggiungere 'const' a tutte le variabili non risolte]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1099,7 +1117,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'const' to unresolved variable]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aggiungi 'const' alla variabile non risolta]]></Val>
+            <Val><![CDATA[Aggiungere 'const' alla variabile non risolta]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1108,7 +1126,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add default import '{0}' to existing import declaration from "{1}"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aggiungi l'importazione predefinita '{0}' alla dichiarazione di importazione esistente restituita da "{1}"]]></Val>
+            <Val><![CDATA[Aggiungere l'importazione predefinita '{0}' alla dichiarazione di importazione esistente restituita da "{1}"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1135,7 +1153,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'export {}' to make this file into a module]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aggiungi 'export {}' per creare questo file in un modulo]]></Val>
+            <Val><![CDATA[Aggiungere 'export {}' per creare questo file in un modulo]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1170,11 +1188,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_missing_call_parentheses_95067" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add missing call parentheses]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aggiungere le parentesi mancanti nelle chiamate]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_missing_enum_member_0_95063" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add missing enum member '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aggiungi il membro di enumerazione mancante '{0}']]></Val>
+            <Val><![CDATA[Aggiungere il membro di enumerazione mancante '{0}']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1183,7 +1210,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add missing 'new' operator to all calls]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aggiungi l'operatore mancante 'new' a tutte le chiamate]]></Val>
+            <Val><![CDATA[Aggiungere l'operatore mancante 'new' a tutte le chiamate]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1192,7 +1219,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add missing 'new' operator to call]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aggiungi l'operatore mancante 'new' alla chiamata]]></Val>
+            <Val><![CDATA[Aggiungere l'operatore mancante 'new' alla chiamata]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1222,7 +1249,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add names to all parameters without names]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aggiungi i nomi a tutti i parametri senza nomi]]></Val>
+            <Val><![CDATA[Aggiungere i nomi a tutti i parametri senza nomi]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1240,7 +1267,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add parameter name]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aggiungi il nome del parametro]]></Val>
+            <Val><![CDATA[Aggiungere il nome del parametro]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1250,6 +1277,24 @@
           <Val><![CDATA[Add qualifier to all unresolved variables matching a member name]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Aggiungere il qualificatore a tutte le variabili non risolte corrispondenti a un nome di membro]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_this_parameter_95104" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add 'this' parameter.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aggiungere il parametro 'this'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_this_tag_95103" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add '@this' tag]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aggiungere il tag '@this']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1294,7 +1339,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'unknown' conversion for non-overlapping types]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aggiungi la conversione 'unknown' per i tipi non sovrapposti]]></Val>
+            <Val><![CDATA[Aggiungere la conversione 'unknown' per i tipi non sovrapposti]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1303,7 +1348,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'unknown' to all conversions of non-overlapping types]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aggiungi 'unknown' a tutte le conversioni di tipi non sovrapposti]]></Val>
+            <Val><![CDATA[Aggiungere 'unknown' a tutte le conversioni di tipi non sovrapposti]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1978,7 +2023,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Annotate with type from JSDoc]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Annota con tipo di JSDoc]]></Val>
+            <Val><![CDATA[Annotare con tipo di JSDoc]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1987,7 +2032,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Annotate with types from JSDoc]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Annota con tipi di JSDoc]]></Val>
+            <Val><![CDATA[Annotare con tipi di JSDoc]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2460,20 +2505,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_module_0_2307" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Cannot find module '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Il modulo '{0}' non è stato trovato.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Cannot_find_module_0_Consider_using_resolveJsonModule_to_import_module_with_json_extension_2732" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Non è possibile trovare il modulo '{0}'. Provare a usare '--resolveJsonModule' per importare il modulo con estensione '.json']]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Cannot_find_module_0_or_its_corresponding_type_declarations_2307" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot find module '{0}' or its corresponding type declarations.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Non è possibile trovare il modulo '{0}' o le relative dichiarazioni di tipo corrispondenti.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3274,7 +3319,16 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert all imports not used as a value to type-only imports]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Converti tutte le importazioni non usate come valore in importazioni solo di tipi]]></Val>
+            <Val><![CDATA[Convertire tutte le importazioni non usate come valore in importazioni solo di tipi]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_all_invalid_characters_to_HTML_entity_code_95101" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert all invalid characters to HTML entity code]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Convertire tutti i caratteri non validi nel codice entità HTML]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3283,7 +3337,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert all re-exported types to type-only exports]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Converti tutti i tipi riesportati in esportazioni solo di tipi]]></Val>
+            <Val><![CDATA[Convertire tutti i tipi riesportati in esportazioni solo di tipi]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3301,7 +3355,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert all to async functions]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Converti tutto in funzioni asincrone]]></Val>
+            <Val><![CDATA[Convertire tutto in funzioni asincrone]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3310,7 +3364,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert all to bigint numeric literals]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Converti tutto in valori letterali numerici bigint]]></Val>
+            <Val><![CDATA[Convertire tutto in valori letterali numerici bigint]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3328,7 +3382,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert 'const' to 'let']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Converti 'const' in 'let']]></Val>
+            <Val><![CDATA[Convertire 'const' in 'let']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3337,7 +3391,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert default export to named export]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Converti l'esportazione predefinita nell'esportazione denominata]]></Val>
+            <Val><![CDATA[Convertire l'esportazione predefinita nell'esportazione denominata]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3347,6 +3401,24 @@
           <Val><![CDATA[Convert function '{0}' to class]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Converti la funzione '{0}' in classe]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_function_declaration_0_to_arrow_function_95106" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert function declaration '{0}' to arrow function]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Convertire la dichiarazione di funzione '{0}' nella funzione arrow]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_function_expression_0_to_arrow_function_95105" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert function expression '{0}' to arrow function]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Convertire l'espressione di funzione '{0}' nella funzione arrow]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3364,7 +3436,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert invalid character to its html entity code]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Converti il carattere non valido nel relativo codice entità HTML]]></Val>
+            <Val><![CDATA[Convertire il carattere non valido nel relativo codice entità HTML]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3373,7 +3445,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert named export to default export]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Converti l'esportazione denominata nell'esportazione predefinita]]></Val>
+            <Val><![CDATA[Convertire l'esportazione denominata nell'esportazione predefinita]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3400,7 +3472,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert parameters to destructured object]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Converti i parametri nell'oggetto destrutturato]]></Val>
+            <Val><![CDATA[Convertire i parametri nell'oggetto destrutturato]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3418,7 +3490,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert to ES6 module]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Converti in modulo ES6]]></Val>
+            <Val><![CDATA[Convertire nel modulo ES6]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3427,7 +3499,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert to a bigint numeric literal]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Converti in un valore letterale numerico bigint]]></Val>
+            <Val><![CDATA[Convertire in un valore letterale numerico bigint]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3436,7 +3508,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert to async function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Converti nella funzione asincrona]]></Val>
+            <Val><![CDATA[Convertire nella funzione asincrona]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3445,7 +3517,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert to default import]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Converti nell'importazione predefinita]]></Val>
+            <Val><![CDATA[Convertire nell'importazione predefinita]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3454,7 +3526,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert to template string]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Converti nella stringa di modello]]></Val>
+            <Val><![CDATA[Convertire nella stringa di modello]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3463,7 +3535,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert to type-only export]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Converti nell'esportazione solo di tipi]]></Val>
+            <Val><![CDATA[Convertire nell'esportazione solo di tipi]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3472,7 +3544,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert to type-only import]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Converti nell'importazione solo di tipi]]></Val>
+            <Val><![CDATA[Convertire nell'importazione solo di tipi]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3491,6 +3563,15 @@
           <Val><![CDATA[Could not find a declaration file for module '{0}'. '{1}' implicitly has an 'any' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Non è stato trovato alcun file di dichiarazione per il modulo '{0}'. A '{1}' è assegnato implicitamente un tipo 'any'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Could_not_resolve_the_path_0_with_the_extensions_Colon_1_6231" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Could not resolve the path '{0}' with the extensions: {1}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Non è stato possibile risolvere il percorso '{0}' con le estensioni: {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3579,6 +3660,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Declare method '{0}'.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Declare_private_property_0_90035" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declare private property '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Dichiarare la proprietà privata '{0}']]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4258,7 +4348,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enable strict checking of property initialization in classes.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Abilita il controllo tassativo dell'inizializzazione delle proprietà nelle classi.]]></Val>
+            <Val><![CDATA[Abilitare il controllo tassativo dell'inizializzazione delle proprietà nelle classi.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4276,7 +4366,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enable the 'experimentalDecorators' option in your configuration file]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Abilita l'opzione 'experimentalDecorators' nel file di configurazione]]></Val>
+            <Val><![CDATA[Abilitare l'opzione 'experimentalDecorators' nel file di configurazione]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4285,7 +4375,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enable the '--jsx' flag in your configuration file]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Abilita il flag '--jsx' nel file di configurazione]]></Val>
+            <Val><![CDATA[Abilitare il flag '--jsx' nel file di configurazione]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4771,7 +4861,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Extract to interface]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Estrai nell'interfaccia]]></Val>
+            <Val><![CDATA[Estrarre nell'interfaccia]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4780,7 +4870,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Extract to type alias]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Estrai nell'alias di tipo]]></Val>
+            <Val><![CDATA[Estrarre nell'alias di tipo]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4789,7 +4879,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Extract to typedef]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Estrai in typedef]]></Val>
+            <Val><![CDATA[Estrarre in typedef]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4798,7 +4888,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Extract type]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Estrai il tipo]]></Val>
+            <Val><![CDATA[Estrarre il tipo]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4993,7 +5083,16 @@
         <Str Cat="Text">
           <Val><![CDATA[Fix all expressions possibly missing 'await']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Correggi tutte le espressioni in cui potrebbe mancare 'await']]></Val>
+            <Val><![CDATA[Correggere tutte le espressioni in cui potrebbe mancare 'await']]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Fix_all_implicit_this_errors_95107" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Fix all implicit-'this' errors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Correggere tutti gli errori relativi a 'this' implicito]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5290,7 +5389,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Have recompiles in '--incremental' and '--watch' assume that changes within a file will only affect files directly depending on it.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Impostare le ricompilazioni in '--incremental' e '--watch' in modo che le modifiche all'interno di un file interessino solo sui file che dipendono direttamente da esso.]]></Val>
+            <Val><![CDATA[Impostare le ricompilazioni in '--incremental' e '--watch' in modo che le modifiche all'interno di un file interessino solo i file che dipendono direttamente da esso.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5437,7 +5536,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La conversione implicita di un valore 'symbol' in 'string ' non riuscirà in fase di esecuzione. Provare a eseguire il wrapping di questa espressione in 'String(...)'.]]></Val>
+            <Val><![CDATA[La conversione implicita di un valore 'symbol' in 'string' non riuscirà in fase di esecuzione. Provare a eseguire il wrapping di questa espressione in 'String(...)'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5497,7 +5596,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Import default '{0}' from module "{1}"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Importa l'elemento '{0}' predefinito dal modulo "{1}"]]></Val>
+            <Val><![CDATA[Importare l'elemento '{0}' predefinito dal modulo "{1}"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5638,7 +5737,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Infer 'this' type of '{0}' from usage]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Deriva il tipo 'this' di '{0}' dall'utilizzo]]></Val>
+            <Val><![CDATA[Derivare il tipo 'this' di '{0}' dall'utilizzo]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5737,7 +5836,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Install '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Installa '{0}']]></Val>
+            <Val><![CDATA[Installare '{0}']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6991,7 +7090,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Only emit '.d.ts' declaration files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Crea solo i file di dichiarazione '.d.ts'.]]></Val>
+            <Val><![CDATA[Creare solo i file di dichiarazione '.d.ts'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7633,7 +7732,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Prefix all incorrect property declarations with 'declare']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aggiungi 'declare' come prefisso a tutte le dichiarazioni di proprietà non corrette]]></Val>
+            <Val><![CDATA[Aggiungere 'declare' come prefisso a tutte le dichiarazioni di proprietà non corrette]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7651,7 +7750,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Prefix with 'declare']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aggiungi 'declare' come prefisso]]></Val>
+            <Val><![CDATA[Aggiungere 'declare' come prefisso]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7714,7 +7813,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Private identifiers are not allowed in variable declarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Gli identificatori privati non sono consentiti nelle dichiarazioni di variabile.]]></Val>
+            <Val><![CDATA[Gli identificatori privati non sono consentiti nelle dichiarazioni di variabili.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8410,7 +8509,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove all unnecessary uses of 'await']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Rimuovi tutti gli utilizzi non necessari di 'await']]></Val>
+            <Val><![CDATA[Rimuovere tutti gli utilizzi non necessari di 'await']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8464,7 +8563,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove template tag]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Rimuovi il tag template]]></Val>
+            <Val><![CDATA[Rimuovere il tag template]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8473,7 +8572,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove type parameters]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Rimuovi i parametri di tipo]]></Val>
+            <Val><![CDATA[Rimuovere i parametri di tipo]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8482,7 +8581,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove unnecessary 'await']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Rimuovi l'elemento 'await' non necessario]]></Val>
+            <Val><![CDATA[Rimuovere l'elemento 'await' non necessario]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8500,7 +8599,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove unused declaration for: '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Rimuovi la dichiarazione inutilizzata per: '{0}']]></Val>
+            <Val><![CDATA[Rimuovere la dichiarazione inutilizzata per: '{0}']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8527,7 +8626,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Replace all unused 'infer' with 'unknown']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Sostituisci tutti gli elementi 'infer' con 'unknown']]></Val>
+            <Val><![CDATA[Sostituire tutti gli elementi 'infer' inutilizzati con 'unknown']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8545,7 +8644,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Replace 'infer {0}' with 'unknown']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Sostituisci 'infer {0}' con 'unknown']]></Val>
+            <Val><![CDATA[Sostituire 'infer {0}' con 'unknown']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9052,7 +9151,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Set the 'module' option in your configuration file to '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Imposta l'opzione 'module' nel file di configurazione su '{0}']]></Val>
+            <Val><![CDATA[Impostare l'opzione 'module' nel file di configurazione su '{0}']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9061,7 +9160,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Set the 'target' option in your configuration file to '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Imposta l'opzione 'target' nel file di configurazione su '{0}']]></Val>
+            <Val><![CDATA[Impostare l'opzione 'target' nel file di configurazione su '{0}']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9178,7 +9277,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Specifica la versione di destinazione di ECMAScript: 'ES3' (impostazione predefinita), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020' o 'ESNEXT'.]]></Val>
+            <Val><![CDATA[Specificare la versione di destinazione di ECMAScript: 'ES3' (impostazione predefinita), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020' o 'ESNEXT'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9196,7 +9295,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify emit/checking behavior for imports that are only used for types]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Specifica il comportamento di creazione/controllo per le importazioni usate solo per i tipi]]></Val>
+            <Val><![CDATA[Specificare il comportamento di creazione/controllo per le importazioni usate solo per i tipi]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9205,7 +9304,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify file to store incremental compilation information]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Specifica il file per l'archiviazione delle informazioni di compilazione incrementale]]></Val>
+            <Val><![CDATA[Specificare il file per l'archiviazione delle informazioni di compilazione incrementale]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9223,7 +9322,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Specifica il tipo di generazione del codice del modulo: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'.]]></Val>
+            <Val><![CDATA[Specificare il tipo di generazione del codice del modulo: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9241,7 +9340,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify strategy for creating a polling watch when it fails to create using file system events: 'FixedInterval' (default), 'PriorityInterval', 'DynamicPriority'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Specifica la strategia per la creazione di un'espressione di controllo di polling quando non viene creata con eventi del file system: 'FixedInterval' (impostazione predefinita), 'PriorityInterval', 'DynamicPriority'.]]></Val>
+            <Val><![CDATA[Specificare la strategia per la creazione di un'espressione di controllo di polling quando non viene creata con eventi del file system: 'FixedInterval' (impostazione predefinita), 'PriorityInterval', 'DynamicPriority'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9250,7 +9349,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify strategy for watching directory on platforms that don't support recursive watching natively: 'UseFsEvents' (default), 'FixedPollingInterval', 'DynamicPriorityPolling'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Specifica la strategia per il controllo della directory in piattaforme che non supportano il controllo ricorsivo in modo nativo: 'UseFsEvents' (impostazione predefinita), 'FixedPollingInterval', 'DynamicPriorityPolling'.]]></Val>
+            <Val><![CDATA[Specificare la strategia per il controllo della directory in piattaforme che non supportano il controllo ricorsivo in modo nativo: 'UseFsEvents' (impostazione predefinita), 'FixedPollingInterval', 'DynamicPriorityPolling'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9259,7 +9358,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify strategy for watching file: 'FixedPollingInterval' (default), 'PriorityPollingInterval', 'DynamicPriorityPolling', 'UseFsEvents', 'UseFsEventsOnParentDirectory'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Specifica la strategia per il controllo del file: 'FixedPollingInterval' (impostazione predefinita), 'PriorityPollingInterval', 'DynamicPriorityPolling', 'UseFsEvents', 'UseFsEventsOnParentDirectory'.]]></Val>
+            <Val><![CDATA[Specificare la strategia per il controllo del file: 'FixedPollingInterval' (impostazione predefinita), 'PriorityPollingInterval', 'DynamicPriorityPolling', 'UseFsEvents', 'UseFsEventsOnParentDirectory'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9313,7 +9412,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Split all invalid type-only imports]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dividi tutte le importazioni solo di tipi non valide]]></Val>
+            <Val><![CDATA[Dividere tutte le importazioni solo di tipi non valide]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9322,7 +9421,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Split into two separate import declarations]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dividi in due dichiarazioni di importazione separate]]></Val>
+            <Val><![CDATA[Dividere in due dichiarazioni di importazione separate]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10379,6 +10478,15 @@
           <Val><![CDATA[This parameter is not allowed with 'use strict' directive.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Questo parametro non è consentito con la direttiva 'use strict'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_spread_always_overwrites_this_property_2785" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This spread always overwrites this property.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Questo spread sovrascrive sempre questa proprietà.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11592,11 +11700,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Wrap_invalid_character_in_an_expression_container_95101" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Wrap_all_invalid_characters_in_an_expression_container_95109" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Wrap all invalid characters in an expression container]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Eseguire il wrapping di tutti i caratteri non validi in un contenitore di espressioni]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Wrap_invalid_character_in_an_expression_container_95108" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Wrap invalid character in an expression container]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Esegui il wrapping del carattere non valido in un contenitore di espressioni]]></Val>
+            <Val><![CDATA[Eseguire il wrapping del carattere non valido in un contenitore di espressioni]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11678,6 +11795,15 @@
           <Val><![CDATA['{0}' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of '{1}' is '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[I componenti di '{0}' non accettano testo come elementi figlio. Il tipo di testo in JSX è 'string ', ma il tipo previsto di '{1}' è '{2}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_could_be_instantiated_with_an_arbitrary_type_which_could_be_unrelated_to_1_5082" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' could be instantiated with an arbitrary type which could be unrelated to '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Non è stato possibile creare un'istanza di '{0}' con un tipo arbitrario che potrebbe non essere correlato a '{1}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12006,11 +12132,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";_0_refers_to_a_value_but_is_being_used_as_a_type_here_2749" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";_0_refers_to_a_value_but_is_being_used_as_a_type_here_Did_you_mean_typeof_0_2749" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA['{0}' refers to a value, but is being used as a type here.]]></Val>
+          <Val><![CDATA['{0}' refers to a value, but is being used as a type here. Did you mean 'typeof {0}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' fa riferimento a un valore, ma qui viene usato come tipo.]]></Val>
+            <Val><![CDATA['{0}' fa riferimento a un valore, ma qui viene usato come tipo. Si intendeva 'typeof {0}'?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12237,6 +12363,15 @@
           <Prev Cat="Text">
             <Val><![CDATA['const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";constructor_cannot_be_used_as_a_parameter_property_name_2398" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['constructor' cannot be used as a parameter property name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Non è possibile usare 'constructor' come nome di proprietà di un parametro.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>

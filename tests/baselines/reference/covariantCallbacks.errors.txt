@@ -1,7 +1,11 @@
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts(12,5): error TS2322: Type 'P<A>' is not assignable to type 'P<B>'.
   Property 'b' is missing in type 'A' but required in type 'B'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts(17,5): error TS2322: Type 'Promise<A>' is not assignable to type 'Promise<B>'.
-  Type 'A' is not assignable to type 'B'.
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = A, TResult2 = never>(onfulfilled?: ((value: A) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<awaited TResult1 | awaited TResult2>' is not assignable to type '<TResult1 = B, TResult2 = never>(onfulfilled?: ((value: B) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<awaited TResult1 | awaited TResult2>'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'A' is not assignable to type 'B'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts(30,5): error TS2322: Type 'AList1' is not assignable to type 'BList1'.
   Types of property 'forEach' are incompatible.
     Type '(cb: (item: A) => void) => void' is not assignable to type '(cb: (item: B) => void) => void'.
@@ -48,7 +52,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covarian
         b = a;  // Error
         ~
 !!! error TS2322: Type 'Promise<A>' is not assignable to type 'Promise<B>'.
-!!! error TS2322:   Type 'A' is not assignable to type 'B'.
+!!! error TS2322:   Types of property 'then' are incompatible.
+!!! error TS2322:     Type '<TResult1 = A, TResult2 = never>(onfulfilled?: ((value: A) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<awaited TResult1 | awaited TResult2>' is not assignable to type '<TResult1 = B, TResult2 = never>(onfulfilled?: ((value: B) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<awaited TResult1 | awaited TResult2>'.
+!!! error TS2322:       Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+!!! error TS2322:         Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2322:           Type 'A' is not assignable to type 'B'.
     }
     
     interface AList1 {
