@@ -83,6 +83,10 @@
         "category": "Error",
         "code": 1024
     },
+    "An index signature cannot have a trailing comma.": {
+        "category": "Error",
+        "code": 1025
+    },
     "Accessibility modifier already seen.": {
         "category": "Error",
         "code": 1028
