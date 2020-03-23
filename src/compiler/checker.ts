@@ -15498,7 +15498,7 @@ namespace ts {
                 //   declare let wrong: { a: { y: string } };
                 //   let weak: { a?: { x?: number } } & { c?: string } = wrong;  // Nested weak object type
                 //
-                //   function goo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
+                //   function foo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
                 //     x = y;  // Mismatched property in source intersection
                 //   }
                 if (result && !(intersectionState & IntersectionState.ExcessCheck) && (
