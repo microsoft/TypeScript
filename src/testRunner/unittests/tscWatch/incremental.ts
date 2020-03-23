@@ -265,5 +265,16 @@ export interface A {
 }
 `)
         });
+
+        verifyIncrementalWatchEmit({
+            subScenario: "when file with ambient global declaration file is deleted",
+            files: () => [
+                { path: libFile.path, content: libContent },
+                { path: `${project}/globals.d.ts`, content: `declare namespace Config { const value: string;} ` },
+                { path: `${project}/index.ts`, content: `console.log(Config.value);` },
+                { path: configFile.path, content: JSON.stringify({ compilerOptions: { incremental: true, } }) }
+            ],
+            modifyFs: host => host.deleteFile(`${project}/globals.d.ts`)
+        });
     });
 }
