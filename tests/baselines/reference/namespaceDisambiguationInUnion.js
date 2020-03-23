@@ -8,9 +8,14 @@ namespace Bar {
 }
 
 const x = { type: "wat.nup" };
-const val: Foo.Yep | Bar.Yep = x;
+const val1: Foo.Yep | Bar.Yep = x;
+
+const y = [{ type: "a" }, { type: "b" }];
+const val2: [Foo.Yep, Bar.Yep] = y;
 
 
 //// [namespaceDisambiguationInUnion.js]
 var x = { type: "wat.nup" };
-var val = x;
+var val1 = x;
+var y = [{ type: "a" }, { type: "b" }];
+var val2 = y;

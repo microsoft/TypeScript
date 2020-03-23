@@ -17,9 +17,25 @@ const x = { type: "wat.nup" };
 >type : string
 >"wat.nup" : "wat.nup"
 
-const val: Foo.Yep | Bar.Yep = x;
->val : Foo.Yep | Bar.Yep
+const val1: Foo.Yep | Bar.Yep = x;
+>val1 : Foo.Yep | Bar.Yep
 >Foo : any
 >Bar : any
 >x : { type: string; }
+
+const y = [{ type: "a" }, { type: "b" }];
+>y : { type: string; }[]
+>[{ type: "a" }, { type: "b" }] : { type: string; }[]
+>{ type: "a" } : { type: string; }
+>type : string
+>"a" : "a"
+>{ type: "b" } : { type: string; }
+>type : string
+>"b" : "b"
+
+const val2: [Foo.Yep, Bar.Yep] = y;
+>val2 : [Foo.Yep, Bar.Yep]
+>Foo : any
+>Bar : any
+>y : { type: string; }[]
 
