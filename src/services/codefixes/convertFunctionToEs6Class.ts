@@ -48,7 +48,10 @@ namespace ts.codefix {
             return undefined;
         }
 
-        copyLeadingComments(ctorDeclaration, newClassDeclaration, sourceFile);
+        if (hasJSDocNodes(ctorDeclaration))
+        {
+            copyLeadingComments(ctorDeclaration, newClassDeclaration, sourceFile);
+        }
 
         // Because the preceding node could be touched, we need to insert nodes before delete nodes.
         changes.insertNodeAfter(sourceFile, precedingNode!, newClassDeclaration);
