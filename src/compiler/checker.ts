@@ -15363,7 +15363,7 @@ namespace ts {
             function isRelatedTo(originalSource: Type, originalTarget: Type, reportErrors = false, headMessage?: DiagnosticMessage, intersectionState = IntersectionState.None): Ternary {
                 // Before normalization: if `source` is type reference (ergo an object), and `target` is primitive,
                 // skip all the checks we don't need and just return `isSimpleTypeRelatedTo` result
-                if (!(originalSource.flags & TypeFlags.UnionOrIntersection) && getObjectFlags(originalSource) & ObjectFlags.Reference && originalTarget.flags & TypeFlags.Primitive) {
+                if (getObjectFlags(originalSource) & ObjectFlags.Reference && originalTarget.flags & TypeFlags.Primitive) {
                     if (isSimpleTypeRelatedTo(originalSource, originalTarget, relation, reportErrors ? reportError : undefined)) {
                         return Ternary.True;
                     }
