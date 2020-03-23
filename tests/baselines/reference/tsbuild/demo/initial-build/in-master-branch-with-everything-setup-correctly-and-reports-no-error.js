@@ -242,35 +242,35 @@ exports.lastElementOf = lastElementOf;
       "configFilePath": "../../zoo/tsconfig.json"
     },
     "referencedMap": {
-      "../../zoo/zoo.ts": [
-        "../animals/index.d.ts"
-      ],
       "../animals/dog.d.ts": [
         "../animals/index.d.ts"
       ],
       "../animals/index.d.ts": [
         "../animals/animal.d.ts",
         "../animals/dog.d.ts"
+      ],
+      "../../zoo/zoo.ts": [
+        "../animals/index.d.ts"
       ]
     },
     "exportedModulesMap": {
-      "../../zoo/zoo.ts": [
-        "../animals/index.d.ts"
-      ],
       "../animals/dog.d.ts": [
         "../animals/index.d.ts"
       ],
       "../animals/index.d.ts": [
         "../animals/animal.d.ts",
         "../animals/dog.d.ts"
+      ],
+      "../../zoo/zoo.ts": [
+        "../animals/index.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
       "../../../lib/lib.d.ts",
-      "../../zoo/zoo.ts",
       "../animals/animal.d.ts",
       "../animals/dog.d.ts",
-      "../animals/index.d.ts"
+      "../animals/index.d.ts",
+      "../../zoo/zoo.ts"
     ]
   },
   "version": "FakeTSVersion"

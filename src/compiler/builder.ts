@@ -710,37 +710,39 @@ namespace ts {
         };
         if (state.referencedMap) {
             const referencedMap: MapLike<string[]> = {};
-            state.referencedMap.forEach((value, key) => {
-                referencedMap[relativeToBuildInfo(key)] = arrayFrom(value.keys(), relativeToBuildInfo);
-            });
+            for (const key of arrayFrom(state.referencedMap.keys()).sort()) {
+                referencedMap[relativeToBuildInfo(key)] = arrayFrom(state.referencedMap.get(key)!.keys(), relativeToBuildInfo).sort();
+            }
             result.referencedMap = referencedMap;
         }
 
         if (state.exportedModulesMap) {
             const exportedModulesMap: MapLike<string[]> = {};
-            state.exportedModulesMap.forEach((value, key) => {
+            for (const key of arrayFrom(state.exportedModulesMap.keys()).sort()) {
                 const newValue = state.currentAffectedFilesExportedModulesMap && state.currentAffectedFilesExportedModulesMap.get(key);
                 // Not in temporary cache, use existing value
-                if (newValue === undefined) exportedModulesMap[relativeToBuildInfo(key)] = arrayFrom(value.keys(), relativeToBuildInfo);
+                if (newValue === undefined) exportedModulesMap[relativeToBuildInfo(key)] = arrayFrom(state.exportedModulesMap.get(key)!.keys(), relativeToBuildInfo).sort();
                 // Value in cache and has updated value map, use that
-                else if (newValue) exportedModulesMap[relativeToBuildInfo(key)] = arrayFrom(newValue.keys(), relativeToBuildInfo);
-            });
+                else if (newValue) exportedModulesMap[relativeToBuildInfo(key)] = arrayFrom(newValue.keys(), relativeToBuildInfo).sort();
+            }
             result.exportedModulesMap = exportedModulesMap;
         }
 
         if (state.semanticDiagnosticsPerFile) {
             const semanticDiagnosticsPerFile: ProgramBuildInfoDiagnostic[] = [];
-            // Currently not recording actual errors since those mean no emit for tsc --build
-            state.semanticDiagnosticsPerFile.forEach((value, key) => semanticDiagnosticsPerFile.push(
-                value.length ?
-                    [
-                        relativeToBuildInfo(key),
-                        state.hasReusableDiagnostic ?
-                            value as readonly ReusableDiagnostic[] :
-                            convertToReusableDiagnostics(value as readonly Diagnostic[], relativeToBuildInfo)
-                    ] :
-                    relativeToBuildInfo(key)
-            ));
+            for (const key of arrayFrom(state.semanticDiagnosticsPerFile.keys()).sort()) {
+                const value = state.semanticDiagnosticsPerFile.get(key)!;
+                semanticDiagnosticsPerFile.push(
+                    value.length ?
+                        [
+                            relativeToBuildInfo(key),
+                            state.hasReusableDiagnostic ?
+                                value as readonly ReusableDiagnostic[] :
+                                convertToReusableDiagnostics(value as readonly Diagnostic[], relativeToBuildInfo)
+                        ] :
+                        relativeToBuildInfo(key)
+                );
+            }
             result.semanticDiagnosticsPerFile = semanticDiagnosticsPerFile;
         }
 

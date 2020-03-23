@@ -109,8 +109,8 @@ exports.__esModule = true;
     },
     "semanticDiagnosticsPerFile": [
       "../../../../lib/lib.d.ts",
-      "../../../solution/sub-project/index.ts",
-      "../common/nominal.d.ts"
+      "../common/nominal.d.ts",
+      "../../../solution/sub-project/index.ts"
     ]
   },
   "version": "FakeTSVersion"
@@ -166,26 +166,26 @@ exports.getVar = getVar;
       "configFilePath": "../../../solution/sub-project-2/tsconfig.json"
     },
     "referencedMap": {
-      "../../../solution/sub-project-2/index.ts": [
-        "../sub-project/index.d.ts"
-      ],
       "../sub-project/index.d.ts": [
         "../common/nominal.d.ts"
+      ],
+      "../../../solution/sub-project-2/index.ts": [
+        "../sub-project/index.d.ts"
       ]
     },
     "exportedModulesMap": {
-      "../../../solution/sub-project-2/index.ts": [
+      "../sub-project/index.d.ts": [
         "../common/nominal.d.ts"
       ],
-      "../sub-project/index.d.ts": [
+      "../../../solution/sub-project-2/index.ts": [
         "../common/nominal.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
       "../../../../lib/lib.d.ts",
-      "../../../solution/sub-project-2/index.ts",
       "../common/nominal.d.ts",
-      "../sub-project/index.d.ts"
+      "../sub-project/index.d.ts",
+      "../../../solution/sub-project-2/index.ts"
     ]
   },
   "version": "FakeTSVersion"

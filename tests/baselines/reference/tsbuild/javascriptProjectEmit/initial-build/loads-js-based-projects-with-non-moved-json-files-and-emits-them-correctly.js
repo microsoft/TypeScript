@@ -134,8 +134,8 @@ exports.getVar = getVar;
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
-      "../../src/sub-project-2/index.js",
-      "../sub-project/index.d.ts"
+      "../sub-project/index.d.ts",
+      "../../src/sub-project-2/index.js"
     ]
   },
   "version": "FakeTSVersion"
