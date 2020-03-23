@@ -40,7 +40,5 @@ verify.completions({
         { name: "login.openEmailAppErrorTitle", replacementSpan: test.ranges()[0] },
         { name: "login.openEmailAppErrorDescription", replacementSpan: test.ranges()[0] },
         { name: "login.openEmailAppErrorConfirm", replacementSpan: test.ranges()[0] },
-    ], preferences: {
-        provideStringLiteralReplacementSpan: true,
-    } 
+    ]
 });

@@ -11,8 +11,6 @@ for (let i = 0 ; i < 3; ++i) {
         exact: [
             { name: "foo", replacementSpan: test.ranges()[i] },
             { name: "bar", replacementSpan: test.ranges()[i] },
-        ], preferences: {
-            provideStringLiteralReplacementSpan: true,
-        } 
+        ]
     });
 }

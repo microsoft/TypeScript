@@ -224,6 +224,7 @@ namespace ts.Completions {
             const uniqueNames = getCompletionEntriesFromSymbols(
                 symbols,
                 entries,
+                /* contextToken */ undefined,
                 location,
                 sourceFile,
                 typeChecker,
@@ -247,6 +248,7 @@ namespace ts.Completions {
             getCompletionEntriesFromSymbols(
                 symbols,
                 entries,
+                /* contextToken */ undefined,
                 location,
                 sourceFile,
                 typeChecker,
@@ -329,6 +331,7 @@ namespace ts.Completions {
     function createCompletionEntry(
         symbol: Symbol,
         sortText: SortText,
+        contextToken: Node | undefined,
         location: Node | undefined,
         sourceFile: SourceFile,
         typeChecker: TypeChecker,
@@ -341,7 +344,7 @@ namespace ts.Completions {
         preferences: UserPreferences,
     ): CompletionEntry | undefined {
         let insertText: string | undefined;
-        let replacementSpan: TextSpan | undefined;
+        let replacementSpan = contextToken && createTextSpanFromNode(contextToken);
 
         const insertQuestionDot = origin && originIsNullableMember(origin);
         const useBraces = origin && originIsSymbolMember(origin) || needsConvertPropertyAccess;
@@ -433,6 +436,7 @@ namespace ts.Completions {
     export function getCompletionEntriesFromSymbols(
         symbols: readonly Symbol[],
         entries: Push<CompletionEntry>,
+        contextToken: Node | undefined,
         location: Node | undefined,
         sourceFile: SourceFile,
         typeChecker: TypeChecker,
@@ -466,6 +470,7 @@ namespace ts.Completions {
             const entry = createCompletionEntry(
                 symbol,
                 symbolToSortTextMap && symbolToSortTextMap[getSymbolId(symbol)] || SortText.LocationPriority,
+                contextToken,
                 location,
                 sourceFile,
                 typeChecker,

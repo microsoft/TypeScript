@@ -24,6 +24,7 @@ namespace ts.Completions.StringCompletions {
                 getCompletionEntriesFromSymbols(
                     completion.symbols,
                     entries,
+                    contextToken,
                     sourceFile,
                     sourceFile,
                     checker,
@@ -32,27 +33,21 @@ namespace ts.Completions.StringCompletions {
                     CompletionKind.String,
                     preferences
                 ); // Target will not be used, so arbitrary
-                if (preferences.provideStringLiteralReplacementSpan) {
-                    addReplacementSpansForCompletionEntry(contextToken, entries);
-                }
                 return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: completion.hasIndexSignature, entries };
             }
             case StringLiteralCompletionKind.Types: {
-                const entries = completion.types.map(type => ({ name: type.value, kindModifiers: ScriptElementKindModifier.none, kind: ScriptElementKind.string, sortText: "0" }));
-                if (preferences.provideStringLiteralReplacementSpan) {
-                    addReplacementSpansForCompletionEntry(contextToken, entries);
-                }
+                const entries = completion.types.map(type => ({
+                    name: type.value,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    kind: ScriptElementKind.string,
+                    sortText: "0",
+                    replacementSpan: createTextSpanFromNode(contextToken)
+                }));
                 return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, entries };
             }
             default:
                 return Debug.assertNever(completion);
         }
-    }
-
-    function addReplacementSpansForCompletionEntry(contextToken: Node, entries: CompletionEntry[]): void {
-        entries.filter(entry => !entry.replacementSpan).forEach(entry => {
-            entry.replacementSpan = createTextSpanFromNode(contextToken);
-        });
     }
 
     export function getStringLiteralCompletionDetails(name: string, sourceFile: SourceFile, position: number, contextToken: Node | undefined, checker: TypeChecker, options: CompilerOptions, host: LanguageServiceHost, cancellationToken: CancellationToken) {
