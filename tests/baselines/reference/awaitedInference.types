@@ -53,3 +53,17 @@ const z = f<Promise<number> | number>(); // number ?
 >f<Promise<number> | number>() : [number | Promise<number>, number]
 >f : <T>() => [UnwrapAwaited<T>, UnwrapAwaited<awaited T>]
 
+// https://github.com/microsoft/TypeScript/issues/37526
+function f1<T>(a: T): Promise<awaited T> {
+>f1 : <T>(a: T) => Promise<awaited T>
+>a : T
+
+    return new Promise(r => r(a));
+>new Promise(r => r(a)) : Promise<T>
+>Promise : PromiseConstructor
+>r => r(a) : (r: (value?: T | awaited T | PromiseLike<T>) => void) => void
+>r : (value?: T | awaited T | PromiseLike<T>) => void
+>r(a) : void
+>r : (value?: T | awaited T | PromiseLike<T>) => void
+>a : T
+}

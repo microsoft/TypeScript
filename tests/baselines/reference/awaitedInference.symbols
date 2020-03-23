@@ -26,12 +26,12 @@ type UnwrapAwaited<T> = T extends awaited infer Inner ? Inner : T;
 type Result1 = UnwrapAwaited<awaited Promise<number>>; // number
 >Result1 : Symbol(Result1, Decl(awaitedInference.ts, 4, 66))
 >UnwrapAwaited : Symbol(UnwrapAwaited, Decl(awaitedInference.ts, 2, 36))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 type Result2 = UnwrapAwaited<awaited Promise<number> | number>; // number
 >Result2 : Symbol(Result2, Decl(awaitedInference.ts, 5, 54))
 >UnwrapAwaited : Symbol(UnwrapAwaited, Decl(awaitedInference.ts, 2, 36))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 function f<T>() {
 >f : Symbol(f, Decl(awaitedInference.ts, 6, 63))
@@ -58,10 +58,25 @@ const x = f<number>(); // number
 const y = f<Promise<number>>(); // number ?
 >y : Symbol(y, Decl(awaitedInference.ts, 13, 5))
 >f : Symbol(f, Decl(awaitedInference.ts, 6, 63))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 const z = f<Promise<number> | number>(); // number ?
 >z : Symbol(z, Decl(awaitedInference.ts, 14, 5))
 >f : Symbol(f, Decl(awaitedInference.ts, 6, 63))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
+// https://github.com/microsoft/TypeScript/issues/37526
+function f1<T>(a: T): Promise<awaited T> {
+>f1 : Symbol(f1, Decl(awaitedInference.ts, 14, 40))
+>T : Symbol(T, Decl(awaitedInference.ts, 17, 12))
+>a : Symbol(a, Decl(awaitedInference.ts, 17, 15))
+>T : Symbol(T, Decl(awaitedInference.ts, 17, 12))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>T : Symbol(T, Decl(awaitedInference.ts, 17, 12))
+
+    return new Promise(r => r(a));
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>r : Symbol(r, Decl(awaitedInference.ts, 18, 23))
+>r : Symbol(r, Decl(awaitedInference.ts, 18, 23))
+>a : Symbol(a, Decl(awaitedInference.ts, 17, 15))
+}

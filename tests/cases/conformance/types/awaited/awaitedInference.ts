@@ -1,3 +1,5 @@
+// @lib: es2015
+
 declare function foo<T>(f: () => PromiseLike<T>, x: T): void;
 declare const nullOrNumber: number | null;
 foo(async () => nullOrNumber, null);
@@ -13,3 +15,8 @@ function f<T>() {
 const x = f<number>(); // number
 const y = f<Promise<number>>(); // number ?
 const z = f<Promise<number> | number>(); // number ?
+
+// https://github.com/microsoft/TypeScript/issues/37526
+function f1<T>(a: T): Promise<awaited T> {
+    return new Promise(r => r(a));
+}

@@ -15,6 +15,11 @@ const x = f<number>(); // number
 const y = f<Promise<number>>(); // number ?
 const z = f<Promise<number> | number>(); // number ?
 
+// https://github.com/microsoft/TypeScript/issues/37526
+function f1<T>(a: T): Promise<awaited T> {
+    return new Promise(r => r(a));
+}
+
 //// [awaitedInference.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -62,3 +67,7 @@ function f() {
 var x = f(); // number
 var y = f(); // number ?
 var z = f(); // number ?
+// https://github.com/microsoft/TypeScript/issues/37526
+function f1(a) {
+    return new Promise(function (r) { return r(a); });
+}
