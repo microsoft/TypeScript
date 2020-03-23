@@ -759,6 +759,7 @@ namespace ts {
             getLibFileFromReference: notImplemented,
             isSourceFileFromExternalLibrary: returnFalse,
             getResolvedProjectReferenceToRedirect: returnUndefined,
+            getProjectReferenceRedirect: returnUndefined,
             isSourceOfProjectReferenceRedirect: returnFalse,
             writeFile: (name, text, writeByteOrderMark) => {
                 switch (name) {
