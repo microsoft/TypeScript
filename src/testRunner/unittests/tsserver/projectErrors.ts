@@ -493,6 +493,48 @@ declare module '@custom/plugin' {
                 });
             }
         });
+
+        describe("when semantic error returns includes global error", () => {
+            const file: File = {
+                path: `${tscWatch.projectRoot}/ui.ts`,
+                content: `const x = async (_action: string) => {
+};`
+            };
+            const config: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: "{}"
+            };
+            function expectedDiagnostics(): GetErrDiagnostics {
+                const span = protocolTextSpanFromSubstring(file.content, `async (_action: string) => {`);
+                return {
+                    file,
+                    syntax: [],
+                    semantic: [
+                        createDiagnostic(span.start, span.end, Diagnostics.An_async_function_or_method_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option, [], "error"),
+                    ],
+                    suggestion: []
+                };
+            }
+            verifyGetErrScenario({
+                allFiles: () => [libFile, file, config],
+                openFiles: () => [file],
+                expectedGetErr: () => [expectedDiagnostics()],
+                expectedGetErrForProject: () => [{
+                    project: file.path,
+                    errors: [
+                        expectedDiagnostics(),
+                    ]
+                }],
+                expectedSyncDiagnostics: () => [
+                    syncDiagnostics(expectedDiagnostics(), config.path),
+                ],
+                expectedConfigFileDiagEvents: () => [{
+                    triggerFile: file.path,
+                    configFileName: config.path,
+                    diagnostics: emptyArray
+                }]
+            });
+        });
     });
 
     describe("unittests:: tsserver:: Project Errors for Configure file diagnostics events", () => {
