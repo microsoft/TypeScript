@@ -13,7 +13,7 @@ function rej(err){
 // ==ASYNC FUNCTION::Convert to async function==
 
 async function f():Promise<void> {
-    let result: any;
+    let result;
     try {
         result = await fetch('https://typescriptlang.org');
     }

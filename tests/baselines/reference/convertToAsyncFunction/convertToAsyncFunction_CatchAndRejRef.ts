@@ -16,7 +16,7 @@ function catch_err(err){
 
 async function f():Promise<void> {
     try {
-        let result: any;
+        let result;
         try {
             result = await fetch('https://typescriptlang.org');
         }

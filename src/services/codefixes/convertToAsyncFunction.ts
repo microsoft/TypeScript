@@ -333,8 +333,9 @@ namespace ts.codefix {
             //   }
             //   /* on fulfilled */
             const onRejectedArgumentName = getArgBindingName(onRejected, transformer);
-            const onFulfilledArgType = onFulfilledArgumentName && !transformer.isInJSFile ? transformer.checker.typeToTypeNode(transformer.checker.getTypeAtLocation(getNode(onFulfilledArgumentName))) : undefined;
-            const onFulfilledArgVariableDeclaration = createVariableOrAssignmentOrExpressionStatement(onFulfilledArgumentName, /*rightHandSide*/ undefined, onFulfilledArgType);
+            const onFulfilledArgType = onFulfilledArgumentName && !transformer.isInJSFile && transformer.checker.getTypeAtLocation(getNode(onFulfilledArgumentName));
+            const onFulfilledArgTypeNode = onFulfilledArgType && !(onFulfilledArgType.flags & TypeFlags.Any) ? transformer.checker.typeToTypeNode(onFulfilledArgType) : undefined;
+            const onFulfilledArgVariableDeclaration = createVariableOrAssignmentOrExpressionStatement(onFulfilledArgumentName, /*rightHandSide*/ undefined, onFulfilledArgTypeNode);
             const onFulfilledBody = getTransformationBody(onFulfilled, prevArgName, onFulfilledArgumentName, node, transformer);
             const tryBlock = createBlock(transformExpression(node.expression, transformer, onFulfilledArgumentName));
             const onRejectedBody = ensureReturnOrThrow(getTransformationBody(onRejected, prevArgName, onRejectedArgumentName, node, transformer));
