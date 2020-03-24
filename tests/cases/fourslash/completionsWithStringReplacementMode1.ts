@@ -19,7 +19,7 @@
 ////     (_: 'login.openEmailAppErrorConfirm', __?: {}): string;
 //// }
 //// const f: TFunction = (() => {}) as any;
-//// f([|'login./**/'|])
+//// f('[|login./**/|]')
 
 verify.completions({
     marker: "",

@@ -41,7 +41,7 @@ namespace ts.Completions.StringCompletions {
                     kindModifiers: ScriptElementKindModifier.none,
                     kind: ScriptElementKind.string,
                     sortText: "0",
-                    replacementSpan: createTextSpanFromNode(contextToken)
+                    replacementSpan: getReplacementSpanForContextToken(contextToken)
                 }));
                 return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, entries };
             }

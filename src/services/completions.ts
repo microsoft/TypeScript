@@ -344,7 +344,7 @@ namespace ts.Completions {
         preferences: UserPreferences,
     ): CompletionEntry | undefined {
         let insertText: string | undefined;
-        let replacementSpan = contextToken && createTextSpanFromNode(contextToken);
+        let replacementSpan = getReplacementSpanForContextToken(contextToken);
 
         const insertQuestionDot = origin && originIsNullableMember(origin);
         const useBraces = origin && originIsSymbolMember(origin) || needsConvertPropertyAccess;
