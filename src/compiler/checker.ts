@@ -18471,9 +18471,6 @@ namespace ts {
                     if (i < variances.length && (variances[i] & VarianceFlags.VarianceMask) === VarianceFlags.Contravariant) {
                         inferFromContravariantTypes(sourceTypes[i], targetTypes[i]);
                     }
-                    else if (variances[i] & VarianceFlags.Awaited) {
-                        inferFromTypes(unwrapAwaitedType(sourceTypes[i]), targetTypes[i]);
-                    }
                     else {
                         inferFromTypes(sourceTypes[i], targetTypes[i]);
                     }
