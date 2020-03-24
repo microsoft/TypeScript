@@ -16,13 +16,14 @@ function catch_err(err){
 
 async function f():Promise<void> {
     try {
+        let result: any;
         try {
-            const result = await fetch('https://typescriptlang.org');
-            return res(result);
+            result = await fetch('https://typescriptlang.org');
         }
         catch (rejection) {
             return rej(rejection);
         }
+        return res(result);
     }
     catch (err) {
         return catch_err(err);

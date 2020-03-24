@@ -13,13 +13,14 @@ function rej(err){
 // ==ASYNC FUNCTION::Convert to async function==
 
 async function f():Promise<void> {
+    let result: any;
     try {
-        const result = await fetch('https://typescriptlang.org');
-        return res(result);
+        result = await fetch('https://typescriptlang.org');
     }
     catch (err) {
         return rej(err);
     }
+    return res(result);
 }
 function res(result){
     console.log(result);

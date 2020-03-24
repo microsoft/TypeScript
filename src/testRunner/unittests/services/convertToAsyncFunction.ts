@@ -1427,5 +1427,34 @@ function [#|get|]() {
         .catch<APIResponse<{ email: string }>>(() => ({ success: false }));
 }
 `);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_twoArgumentThen", `
+function [#|fSync|]() {
+    return Promise.resolve(0).then(x => {
+        console.log(x); // note: added to illustrate refactor
+        throw new Error('Failure!');
+    }, () => null);
+};
+`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_twoArgumentThen_onRejectedNoReturn", `
+function [#|fSync|]() {
+    return Promise.resolve(0).then(x => {
+        console.log(x); // note: added to illustrate refactor
+        throw new Error('Failure!');
+    }, () => {});
+};
+`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_twoArgumentThen_onRejectedThrow", `
+function [#|fSync|]() {
+    return Promise.resolve(0).then(x => {
+        console.log(x); // note: added to illustrate refactor
+        throw new Error('Failure!');
+    }, () => {
+        throw new Error('Thrown from onRejected');
+    });
+};
+`);
     });
 }

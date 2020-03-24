@@ -9,9 +9,9 @@
     async function f() {
         try {
             await Promise.resolve();
-            return 1;
         }
         catch (e) {
             return "a";
         }
+        return 1;
     }

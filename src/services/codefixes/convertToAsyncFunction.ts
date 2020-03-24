@@ -282,7 +282,7 @@ namespace ts.codefix {
             // We are about to write a 'let' variable declaration, but `transformExpression` for both
             // the try block and catch block will assign to this name. Setting this flag indicates
             // that future assignments should be written as `name = value` instead of `const name = value`.
-            possibleNameForVarDecl.hasBeenDeclared = true;
+            setHasBeenDeclared(possibleNameForVarDecl);
         }
 
         const tryBlock = createBlock(transformExpression(node.expression, transformer, possibleNameForVarDecl));
@@ -319,20 +319,41 @@ namespace ts.codefix {
     function transformThen(node: CallExpression, transformer: Transformer, prevArgName?: SynthBindingName): readonly Statement[] {
         const [onFulfilled, onRejected] = node.arguments;
         const onFulfilledArgumentName = getArgBindingName(onFulfilled, transformer);
-        const transformationBody = getTransformationBody(onFulfilled, prevArgName, onFulfilledArgumentName, node, transformer);
-
         if (onRejected) {
+            // From:
+            //   x().then(onFulfilledArg => { /* on fulfilled */ }, onRejectedArg => { /* on rejected */ })
+            //
+            // To:
+            //   let onFulfilledArg;
+            //   try {
+            //     onFulfilledArg = await x();
+            //   } catch (onRejectedArg) {
+            //     /* on rejected */
+            //     return;
+            //   }
+            //   /* on fulfilled */
             const onRejectedArgumentName = getArgBindingName(onRejected, transformer);
-            const tryBlock = createBlock(transformExpression(node.expression, transformer, onFulfilledArgumentName).concat(transformationBody));
-            const transformationBody2 = getTransformationBody(onRejected, prevArgName, onRejectedArgumentName, node, transformer);
+            const onFulfilledArgType = onFulfilledArgumentName && !transformer.isInJSFile ? transformer.checker.typeToTypeNode(transformer.checker.getTypeAtLocation(getNode(onFulfilledArgumentName))) : undefined;
+            const onFulfilledArgVariableDeclaration = createVariableOrAssignmentOrExpressionStatement(onFulfilledArgumentName, /*rightHandSide*/ undefined, onFulfilledArgType);
+            const onFulfilledBody = getTransformationBody(onFulfilled, prevArgName, onFulfilledArgumentName, node, transformer);
+            const tryBlock = createBlock(transformExpression(node.expression, transformer, onFulfilledArgumentName));
+            const onRejectedBody = ensureReturnOrThrow(getTransformationBody(onRejected, prevArgName, onRejectedArgumentName, node, transformer));
             const catchArg = onRejectedArgumentName ? isSynthIdentifier(onRejectedArgumentName) ? onRejectedArgumentName.identifier.text : onRejectedArgumentName.bindingPattern : "e";
             const catchVariableDeclaration = createVariableDeclaration(catchArg);
-            const catchClause = createCatchClause(catchVariableDeclaration, createBlock(transformationBody2));
-
-            return [createTry(tryBlock, catchClause, /* finallyBlock */ undefined)];
+            const catchClause = createCatchClause(catchVariableDeclaration, createBlock(onRejectedBody));
+            return onFulfilledArgVariableDeclaration.concat(createTry(tryBlock, catchClause, /* finallyBlock */ undefined), onFulfilledBody);
         }
 
+        const transformationBody = getTransformationBody(onFulfilled, prevArgName, onFulfilledArgumentName, node, transformer);
         return transformExpression(node.expression, transformer, onFulfilledArgumentName).concat(transformationBody);
+    }
+
+    function ensureReturnOrThrow(statements: readonly Statement[]): readonly Statement[] {
+        const lastStatement = lastOrUndefined(statements);
+        if (lastStatement?.kind !== SyntaxKind.ReturnStatement && lastStatement?.kind !== SyntaxKind.ThrowStatement) {
+            return statements.concat(createReturn());
+        }
+        return statements;
     }
 
     /**
@@ -346,17 +367,19 @@ namespace ts.codefix {
         return createVariableOrAssignmentOrExpressionStatement(prevArgName, createAwait(node), /*typeAnnotation*/ undefined);
     }
 
-    function createVariableOrAssignmentOrExpressionStatement(variableName: SynthBindingName | undefined, rightHandSide: Expression, typeAnnotation: TypeNode | undefined): readonly Statement[] {
+    function createVariableOrAssignmentOrExpressionStatement(variableName: SynthBindingName | undefined, rightHandSide: Expression | undefined, typeAnnotation: TypeNode | undefined): readonly Statement[] {
         if (!variableName || isEmptyBindingName(variableName)) {
             // if there's no argName to assign to, there still might be side effects
-            return [createExpressionStatement(rightHandSide)];
+            return rightHandSide ? [createExpressionStatement(rightHandSide)] : emptyArray;
         }
 
         if (isSynthIdentifier(variableName) && variableName.hasBeenDeclared) {
             // if the variable has already been declared, we don't need "let" or "const"
+            Debug.assertIsDefined(rightHandSide);
             return [createExpressionStatement(createAssignment(getSynthesizedDeepClone(variableName.identifier), rightHandSide))];
         }
 
+        setHasBeenDeclared(variableName);
         return [
             createVariableStatement(
                 /*modifiers*/ undefined,
@@ -365,7 +388,7 @@ namespace ts.codefix {
                         getSynthesizedDeepClone(getNode(variableName)),
                         typeAnnotation,
                         rightHandSide)],
-                    NodeFlags.Const))];
+                    rightHandSide ? NodeFlags.Const : NodeFlags.Let))];
     }
 
     function maybeAnnotateAndReturn(expressionToReturn: Expression | undefined, typeAnnotation: TypeNode | undefined): readonly Statement[] {
@@ -587,6 +610,18 @@ namespace ts.codefix {
             return !bindingName.identifier.text;
         }
         return every(bindingName.elements, isEmptyBindingName);
+    }
+
+    function setHasBeenDeclared(bindingName: SynthBindingName) {
+        if (isSynthIdentifier(bindingName)) {
+            setIdentifierHasBeenDeclared(bindingName);
+        }
+        else {
+            bindingName.elements.forEach(setHasBeenDeclared);
+        }
+        function setIdentifierHasBeenDeclared(identifier: SynthIdentifier) {
+            identifier.hasBeenDeclared = true;
+        }
     }
 
     function getNode(bindingName: SynthBindingName) {

@@ -7,13 +7,15 @@ function /*[#|*/f/*|]*/():Promise<void> {
 
 async function f():Promise<void> {
     try {
+        let result: Response;
         try {
-            const result = await fetch('https://typescriptlang.org');
-            console.log(result);
+            result = await fetch('https://typescriptlang.org');
         }
         catch (rejection) {
             console.log("rejected:", rejection);
+            return;
         }
+        console.log(result);
     }
     catch (err) {
         console.log(err);
