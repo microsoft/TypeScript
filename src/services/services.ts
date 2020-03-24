@@ -340,13 +340,13 @@ namespace ts {
                         this.contextualGetAccessorDocumentationComment = emptyArray;
                         this.contextualGetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isGetAccessor), checker);
                     }
-                    return this.contextualGetAccessorDocumentationComment
+                    return this.contextualGetAccessorDocumentationComment;
                 case SyntaxKind.SetAccessor:
                     if (!this.contextualSetAccessorDocumentationComment) {
                         this.contextualSetAccessorDocumentationComment = emptyArray;
                         this.contextualSetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
                     }
-                    return this.contextualSetAccessorDocumentationComment
+                    return this.contextualSetAccessorDocumentationComment;
                 default:
                     return this.getDocumentationComment(checker);
             }
