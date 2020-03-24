@@ -283,12 +283,6 @@ namespace ts {
         }
     }
 
-    enum ContextualDocumentationType {
-        None = "None",
-        GetAccessor = "GetAccessor",
-        SetAccessor = "SetAccessor"
-    }
-
     class SymbolObject implements Symbol {
         flags: SymbolFlags;
         escapedName: __String;
@@ -299,7 +293,8 @@ namespace ts {
         // symbol has no doc comment, then the empty array will be returned.
         documentationComment?: SymbolDisplayPart[];
 
-        contextualDocumentationComment?: Map<SymbolDisplayPart[]>;
+        contextualGetAccessorDocumentationComment?: SymbolDisplayPart[];
+        contextualSetAccessorDocumentationComment?: SymbolDisplayPart[];
 
         // Undefined is used to indicate the value has not been computed. If, after computing, the
         // symbol has no JSDoc tags, then the empty array will be returned.
@@ -341,22 +336,20 @@ namespace ts {
         getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
             switch (context?.kind) {
                 case SyntaxKind.GetAccessor:
-                    return this.getContextualDocumentationCommentCached(ContextualDocumentationType.GetAccessor, filter(this.declarations, isGetAccessor), checker);
+                    if (!this.contextualGetAccessorDocumentationComment) {
+                        this.contextualGetAccessorDocumentationComment = emptyArray;
+                        this.contextualGetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isGetAccessor), checker);
+                    }
+                    return this.contextualGetAccessorDocumentationComment
                 case SyntaxKind.SetAccessor:
-                    return this.getContextualDocumentationCommentCached(ContextualDocumentationType.SetAccessor, filter(this.declarations, isSetAccessor), checker);
+                    if (!this.contextualSetAccessorDocumentationComment) {
+                        this.contextualSetAccessorDocumentationComment = emptyArray;
+                        this.contextualSetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
+                    }
+                    return this.contextualSetAccessorDocumentationComment
                 default:
                     return this.getDocumentationComment(checker);
             }
-        }
-
-        getContextualDocumentationCommentCached(type: ContextualDocumentationType, declarations: Declaration[], checker: TypeChecker | undefined): SymbolDisplayPart[] {
-            if (!this.contextualDocumentationComment) {
-                this.contextualDocumentationComment = createMultiMap<SymbolDisplayPart>();
-            }
-            if (!this.contextualDocumentationComment.has(type)) {
-                this.contextualDocumentationComment.set(type, getDocumentationComment(declarations, checker));
-            }
-            return this.contextualDocumentationComment.get(type)!;
         }
 
         getJsDocTags(): JSDocTagInfo[] {
