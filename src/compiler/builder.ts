@@ -710,27 +710,27 @@ namespace ts {
         };
         if (state.referencedMap) {
             const referencedMap: MapLike<string[]> = {};
-            for (const key of arrayFrom(state.referencedMap.keys()).sort()) {
-                referencedMap[relativeToBuildInfo(key)] = arrayFrom(state.referencedMap.get(key)!.keys(), relativeToBuildInfo).sort();
+            for (const key of arrayFrom(state.referencedMap.keys()).sort(compareStringsCaseSensitive)) {
+                referencedMap[relativeToBuildInfo(key)] = arrayFrom(state.referencedMap.get(key)!.keys(), relativeToBuildInfo).sort(compareStringsCaseSensitive);
             }
             result.referencedMap = referencedMap;
         }
 
         if (state.exportedModulesMap) {
             const exportedModulesMap: MapLike<string[]> = {};
-            for (const key of arrayFrom(state.exportedModulesMap.keys()).sort()) {
+            for (const key of arrayFrom(state.exportedModulesMap.keys()).sort(compareStringsCaseSensitive)) {
                 const newValue = state.currentAffectedFilesExportedModulesMap && state.currentAffectedFilesExportedModulesMap.get(key);
                 // Not in temporary cache, use existing value
-                if (newValue === undefined) exportedModulesMap[relativeToBuildInfo(key)] = arrayFrom(state.exportedModulesMap.get(key)!.keys(), relativeToBuildInfo).sort();
+                if (newValue === undefined) exportedModulesMap[relativeToBuildInfo(key)] = arrayFrom(state.exportedModulesMap.get(key)!.keys(), relativeToBuildInfo).sort(compareStringsCaseSensitive);
                 // Value in cache and has updated value map, use that
-                else if (newValue) exportedModulesMap[relativeToBuildInfo(key)] = arrayFrom(newValue.keys(), relativeToBuildInfo).sort();
+                else if (newValue) exportedModulesMap[relativeToBuildInfo(key)] = arrayFrom(newValue.keys(), relativeToBuildInfo).sort(compareStringsCaseSensitive);
             }
             result.exportedModulesMap = exportedModulesMap;
         }
 
         if (state.semanticDiagnosticsPerFile) {
             const semanticDiagnosticsPerFile: ProgramBuildInfoDiagnostic[] = [];
-            for (const key of arrayFrom(state.semanticDiagnosticsPerFile.keys()).sort()) {
+            for (const key of arrayFrom(state.semanticDiagnosticsPerFile.keys()).sort(compareStringsCaseSensitive)) {
                 const value = state.semanticDiagnosticsPerFile.get(key)!;
                 semanticDiagnosticsPerFile.push(
                     value.length ?
