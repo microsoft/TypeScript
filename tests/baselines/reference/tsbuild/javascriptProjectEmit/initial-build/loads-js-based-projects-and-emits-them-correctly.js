@@ -38,8 +38,8 @@ module.exports = {};
     "referencedMap": {},
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../src/common/nominal.js",
-      "../lib.d.ts"
+      "../lib.d.ts",
+      "../../src/common/nominal.js"
     ]
   },
   "version": "FakeTSVersion"
@@ -98,9 +98,9 @@ exports.__esModule = true;
     },
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../src/sub-project/index.js",
       "../common/nominal.d.ts",
-      "../lib.d.ts"
+      "../lib.d.ts",
+      "../../src/sub-project/index.js"
     ]
   },
   "version": "FakeTSVersion"
@@ -163,9 +163,9 @@ exports.getVar = getVar;
     },
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../src/sub-project-2/index.js",
       "../lib.d.ts",
-      "../sub-project/index.d.ts"
+      "../sub-project/index.d.ts",
+      "../../src/sub-project-2/index.js"
     ]
   },
   "version": "FakeTSVersion"

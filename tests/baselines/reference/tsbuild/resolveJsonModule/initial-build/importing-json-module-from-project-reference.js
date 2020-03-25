@@ -61,8 +61,8 @@ console.log(foo_json_1.foo);
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
-      "../strings/foo.json",
-      "./index.ts"
+      "./index.ts",
+      "../strings/foo.json"
     ]
   },
   "version": "FakeTSVersion"
