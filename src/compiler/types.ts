@@ -1935,6 +1935,7 @@ namespace ts {
         | PropertyAccessChain
         | ElementAccessChain
         | CallChain
+        | NonNullChain
         ;
 
     /* @internal */
@@ -2027,6 +2028,10 @@ namespace ts {
     export interface NonNullExpression extends LeftHandSideExpression {
         kind: SyntaxKind.NonNullExpression;
         expression: Expression;
+    }
+
+    export interface NonNullChain extends NonNullExpression {
+        _optionalChainBrand: any;
     }
 
     // NOTE: MetaProperty is really a MemberExpression, but we consider it a PrimaryExpression
