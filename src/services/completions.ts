@@ -727,6 +727,7 @@ namespace ts.Completions {
     export const enum CompletionKind {
         ObjectPropertyDeclaration,
         Global,
+        Local,
         PropertyAccess,
         MemberLike,
         String,
@@ -1271,6 +1272,7 @@ namespace ts.Completions {
         function tryGetGlobalSymbols(): boolean {
             const result: GlobalsSearch = tryGetObjectLikeCompletionSymbols()
                 || tryGetImportOrExportClauseCompletionSymbols()
+                || tryGetLocalNamedExportCompletionSymbols()
                 || tryGetConstructorCompletion()
                 || tryGetClassLikeCompletionSymbols()
                 || tryGetJsxCompletionSymbols()
@@ -1881,8 +1883,6 @@ namespace ts.Completions {
          *      export { | };
          *
          * Relevant symbols are stored in the captured 'symbols' variable.
-         *
-         * @returns true if 'symbols' was successfully populated; false otherwise.
          */
         function tryGetImportOrExportClauseCompletionSymbols(): GlobalsSearch {
             // `import { |` or `import { a as 0, | }`
@@ -1894,13 +1894,38 @@ namespace ts.Completions {
             // try to show exported member for imported module
             const { moduleSpecifier } = namedImportsOrExports.kind === SyntaxKind.NamedImports ? namedImportsOrExports.parent.parent : namedImportsOrExports.parent;
             const moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(moduleSpecifier!); // TODO: GH#18217
-            if (!moduleSpecifierSymbol) return GlobalsSearch.Fail;
+            if (!moduleSpecifierSymbol) return GlobalsSearch.Continue;
 
             completionKind = CompletionKind.MemberLike;
             isNewIdentifierLocation = false;
             const exports = typeChecker.getExportsAndPropertiesOfModule(moduleSpecifierSymbol);
             const existing = arrayToSet<ImportOrExportSpecifier>(namedImportsOrExports.elements, n => isCurrentlyEditingNode(n) ? undefined : (n.propertyName || n.name).escapedText);
             symbols = exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.get(e.escapedName));
+            return GlobalsSearch.Success;
+        }
+
+        function tryGetLocalNamedExportCompletionSymbols(): GlobalsSearch {
+            const namedExports = contextToken.kind === SyntaxKind.OpenBraceToken || contextToken.kind === SyntaxKind.CommaToken
+                ? tryCast(contextToken.parent, isNamedExports)
+                : undefined;
+
+            if (!namedExports) {
+                return GlobalsSearch.Continue;
+            }
+
+            const localsBlock = namedExports.parent.parent;
+            if (localsBlock.kind !== SyntaxKind.SourceFile && localsBlock.kind !== SyntaxKind.ModuleBlock) {
+                return GlobalsSearch.Fail;
+            }
+
+            const localsContainer = localsBlock.kind === SyntaxKind.ModuleBlock ? localsBlock.parent : localsBlock;
+            completionKind = CompletionKind.Local;
+            isNewIdentifierLocation = false;
+            localsContainer.locals?.forEach((symbol, name) => {
+                if (!localsContainer.symbol.exports?.has(name)) {
+                    symbols.push(symbol);
+                }
+            });
             return GlobalsSearch.Success;
         }
 
@@ -2435,6 +2460,7 @@ namespace ts.Completions {
                 // Don't add a completion for a name starting with a space. See https://github.com/Microsoft/TypeScript/pull/20547
                 return name.charCodeAt(0) === CharacterCodes.space ? undefined : { name, needsConvertPropertyAccess: true };
             case CompletionKind.None:
+            case CompletionKind.Local:
             case CompletionKind.String:
                 return validNameResult;
             default:
