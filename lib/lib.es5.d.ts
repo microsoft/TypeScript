@@ -940,6 +940,15 @@ interface RegExp {
 
     /** Returns a Boolean value indicating the state of the multiline flag (m) used with a regular expression. Default is false. Read-only. */
     readonly multiline: boolean;
+    
+    /** Returns a Boolean value indicating whether or not the "s" flag is used with a regular expression. Default is false. Read-only. */
+    readonly dotAll: boolean;
+    
+    /** Returns a Boolean value reflects whether or not the search is sticky (searches in strings only from the index indicated by the lastIndex property of this regular expression). Default is false. Read-only. */
+    readonly sticky: boolean;
+    
+    /** Returns a Boolean value indicates whether or not the "u" flag is used with a regular expression. Default is false. Read-only. */
+    readonly unicode: boolean;
 
     lastIndex: number;
 
@@ -964,7 +973,11 @@ interface RegExpConstructor {
     $7: string;
     $8: string;
     $9: string;
+    input: string;
     lastMatch: string;
+    lastParen: string;
+    leftContext: string;
+    rightContext: string;
 }
 
 declare var RegExp: RegExpConstructor;
