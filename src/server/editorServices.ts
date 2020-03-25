@@ -1974,7 +1974,7 @@ namespace ts.server {
             // Read updated contents from disk
             const configFilename = normalizePath(project.getConfigFilePath());
 
-            const configFileContent = this.host.readFile(configFilename)!; // TODO: GH#18217
+            const configFileContent = this.host.readFile(configFilename) || "";
 
             const result = parseJsonText(configFilename, configFileContent);
             if (!result.endOfFileToken) {
