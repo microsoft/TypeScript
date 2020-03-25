@@ -1378,8 +1378,13 @@ declare type PropertyDecorator = (target: Object, propertyKey: string | symbol) 
 declare type MethodDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
 declare type ParameterDecorator = (target: Object, propertyKey: string | symbol, parameterIndex: number) => void;
 
-declare type PromiseConstructorLike = new <T>(executor: (resolve: (value?: T | PromiseLike<T> | awaited T) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>;
+declare type PromiseConstructorLike = new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>;
 
+/**
+ * A "Promise-like" is an object that has a callable `then` method that accepts fulfillment and rejection handlers.
+ * A "Promise-like" implementation may or may not be compatible with native ES2015 or Promise/A+, but provides a similar-
+ * enough implementation that a native of Promise/A+ -compatible promise implementation could adopt its result.
+ */
 interface PromiseLike<T> {
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1387,11 +1392,11 @@ interface PromiseLike<T> {
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: awaited T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): PromiseLike<awaited TResult1 | awaited TResult2>;
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T | awaited T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): PromiseLike<TResult1 | TResult2>;
 }
 
 /**
- * Represents the completion of an asynchronous operation
+ * Represents the completion of an asynchronous operation.
  */
 interface Promise<T> {
     /**

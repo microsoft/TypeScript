@@ -22,22 +22,6 @@ function fn1<T>(p0: Promise<T>, p1: Promise<Promise<T>>, p2: Promise<awaited T>)
 declare let pl0: PromiseLike<number>;
 declare let pl1: PromiseLike<PromiseLike<number>>;
 declare let pl2: PromiseLike<awaited number>;
-pl0 = pl1;
-pl0 = pl2;
-pl1 = pl0;
-pl1 = pl2;
-pl2 = pl0;
-pl2 = pl1;
-
-function fn2<T>(pl0: PromiseLike<T>, pl1: PromiseLike<PromiseLike<T>>, pl2: PromiseLike<awaited T>) {
-    pl0 = pl1;
-    pl0 = pl2;
-    pl1 = pl0;
-    pl1 = pl2;
-    pl2 = pl0;
-    pl2 = pl1;
-}
-
 pl0 = p0;
 pl0 = p1;
 pl0 = p2;

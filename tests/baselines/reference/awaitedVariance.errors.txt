@@ -1,8 +1,8 @@
-tests/cases/conformance/types/awaited/awaitedVariance.ts(74,1): error TS2322: Type 'C<Promise<number>>' is not assignable to type 'C<number>'.
+tests/cases/conformance/types/awaited/awaitedVariance.ts(58,1): error TS2322: Type 'C<Promise<number>>' is not assignable to type 'C<number>'.
   Types of property 'x' are incompatible.
     Type 'number' is not assignable to type '{ _tag: string; } & number'.
       Type 'number' is not assignable to type '{ _tag: string; }'.
-tests/cases/conformance/types/awaited/awaitedVariance.ts(84,1): error TS2322: Type 'D<Promise<number>>' is not assignable to type 'D<number>'.
+tests/cases/conformance/types/awaited/awaitedVariance.ts(68,1): error TS2322: Type 'D<Promise<number>>' is not assignable to type 'D<number>'.
   Types of property 'a' are incompatible.
     Type 'C<Promise<number>>' is not assignable to type 'C<number>'.
 
@@ -30,22 +30,6 @@ tests/cases/conformance/types/awaited/awaitedVariance.ts(84,1): error TS2322: Ty
     declare let pl0: PromiseLike<number>;
     declare let pl1: PromiseLike<PromiseLike<number>>;
     declare let pl2: PromiseLike<awaited number>;
-    pl0 = pl1;
-    pl0 = pl2;
-    pl1 = pl0;
-    pl1 = pl2;
-    pl2 = pl0;
-    pl2 = pl1;
-    
-    function fn2<T>(pl0: PromiseLike<T>, pl1: PromiseLike<PromiseLike<T>>, pl2: PromiseLike<awaited T>) {
-        pl0 = pl1;
-        pl0 = pl2;
-        pl1 = pl0;
-        pl1 = pl2;
-        pl2 = pl0;
-        pl2 = pl1;
-    }
-    
     pl0 = p0;
     pl0 = p1;
     pl0 = p2;
