@@ -145,18 +145,24 @@ namespace ts {
         }
 
         // ensure all chained calls are valid
-        let currentNode = node.expression;
+        let seenThen = node.expression.name.escapedText === "then";
+        let currentNode: Node = node.expression;
         while (isPromiseHandler(currentNode) || isPropertyAccessExpression(currentNode)) {
-            if (isCallExpression(currentNode) && !currentNode.arguments.every(isFixablePromiseArgument)) {
+            if (isCallExpression(currentNode) && (!currentNode.arguments.every(isFixablePromiseArgument) || isThenCallWithTwoArguments(currentNode) && seenThen)) {
                 return false;
             }
+            seenThen = seenThen || isPromiseHandler(currentNode) && currentNode.expression.name.escapedText === "then";
             currentNode = currentNode.expression;
         }
         return true;
     }
 
-    function isPromiseHandler(node: Node): node is CallExpression {
+    function isPromiseHandler(node: Node): node is CallExpression & { expression: PropertyAccessExpression } {
         return isCallExpression(node) && (hasPropertyAccessExpressionWithName(node, "then") || hasPropertyAccessExpressionWithName(node, "catch"));
+    }
+
+    function isThenCallWithTwoArguments(node: CallExpression) {
+        return hasPropertyAccessExpressionWithName(node, "then") && node.arguments.length > 1;
     }
 
     // should be kept up to date with getTransformationBody in convertToAsyncFunction.ts

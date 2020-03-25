@@ -5,7 +5,7 @@ function /*[#|*/fSync/*|]*/() {
         console.log(x); // note: added to illustrate refactor
         throw new Error('Failure!');
     }, () => {});
-};
+}
 
 // ==ASYNC FUNCTION::Convert to async function==
 
@@ -19,4 +19,4 @@ async function fSync() {
     }
     console.log(x); // note: added to illustrate refactor
     throw new Error('Failure!');
-};
+}

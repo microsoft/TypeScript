@@ -1434,7 +1434,7 @@ function [#|fSync|]() {
         console.log(x); // note: added to illustrate refactor
         throw new Error('Failure!');
     }, () => null);
-};
+}
 `);
 
         _testConvertToAsyncFunction("convertToAsyncFunction_twoArgumentThen_onRejectedNoReturn", `
@@ -1443,7 +1443,7 @@ function [#|fSync|]() {
         console.log(x); // note: added to illustrate refactor
         throw new Error('Failure!');
     }, () => {});
-};
+}
 `);
 
         _testConvertToAsyncFunction("convertToAsyncFunction_twoArgumentThen_onRejectedThrow", `
@@ -1454,7 +1454,20 @@ function [#|fSync|]() {
     }, () => {
         throw new Error('Thrown from onRejected');
     });
-};
+}
+`);
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_twoArgumentThen_chainedThen", `
+function [#|fSync|]() {
+    return Promise.resolve(0).then(x => {
+        console.log(x); // note: added to illustrate refactor
+        throw new Error('Failure!');
+    }, () => {
+        throw new Error('Thrown from onRejected');
+    }).then(() => {
+        return 0;
+    });
+}
 `);
     });
 }
