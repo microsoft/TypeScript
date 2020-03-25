@@ -1685,8 +1685,6 @@ namespace ts {
                     bindEach(node.typeArguments);
                     bindEach(node.arguments);
                     break;
-                case SyntaxKind.NonNullExpression:
-                    break;
             }
         }
 
