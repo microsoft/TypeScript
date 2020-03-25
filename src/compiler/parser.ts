@@ -5199,8 +5199,11 @@ namespace ts {
             const node = <NewExpression>createNode(SyntaxKind.NewExpression, fullStart);
             node.expression = expression;
             node.typeArguments = typeArguments;
-            if (node.typeArguments || token() === SyntaxKind.OpenParenToken) {
+            if (token() === SyntaxKind.OpenParenToken) {
                 node.arguments = parseArgumentList();
+            }
+            else if(node.typeArguments) {
+                parseErrorAtCurrentToken(Diagnostics.A_new_expression_with_type_arguments_must_always_be_followed_by_a_parenthesized_argument_list);
             }
             return finishNode(node);
         }

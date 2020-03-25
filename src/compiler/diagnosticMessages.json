@@ -1147,6 +1147,10 @@
         "category": "Error",
         "code": 1383
     },
+    "A 'new' expression with type arguments must always be followed by a parenthesized argument list.": {
+        "category": "Error",
+        "code": 1384
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
