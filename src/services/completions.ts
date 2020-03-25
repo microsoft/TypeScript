@@ -1904,6 +1904,15 @@ namespace ts.Completions {
             return GlobalsSearch.Success;
         }
 
+        /**
+         * Adds local declarations for completions in named exports:
+         *
+         *   export { | };
+         *
+         * Does not check for the absence of a module specifier (`export {} from "./other"`)
+         * because `tryGetImportOrExportClauseCompletionSymbols` runs first and handles that,
+         * preventing this function from running.
+         */
         function tryGetLocalNamedExportCompletionSymbols(): GlobalsSearch {
             const namedExports = contextToken.kind === SyntaxKind.OpenBraceToken || contextToken.kind === SyntaxKind.CommaToken
                 ? tryCast(contextToken.parent, isNamedExports)
