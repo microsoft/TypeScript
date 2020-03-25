@@ -1112,7 +1112,7 @@ namespace ts {
      * Determines whether a node is the outermost `OptionalChain` in an ECMAScript `OptionalExpression`:
      *
      * 1. For `a?.b.c`, the outermost chain is `a?.b.c` (`c` is the end of the chain starting at `a?.`)
-     * 2. For `a?.b!`, the outermost chain is `a?.b!` (`c` is the end of the chain starting at `a?.`)
+     * 2. For `a?.b!`, the outermost chain is `a?.b` (`b` is the end of the chain starting at `a?.`)
      * 3. For `(a?.b.c).d`, the outermost chain is `a?.b.c` (`c` is the end of the chain starting at `a?.` since parens end the chain)
      * 4. For `a?.b.c?.d`, both `a?.b.c` and `a?.b.c?.d` are outermost (`c` is the end of the chain starting at `a?.`, and `d` is
      *   the end of the chain starting at `c?.`)
