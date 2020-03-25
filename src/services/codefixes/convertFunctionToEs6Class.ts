@@ -48,8 +48,8 @@ namespace ts.codefix {
             return undefined;
         }
 
-        if (hasJSDocNodes(ctorDeclaration))
-        {
+        // Deleting a declaration only deletes JSDoc style comments, so only copy those to the new node.
+        if (hasJSDocNodes(ctorDeclaration)) {
             copyLeadingComments(ctorDeclaration, newClassDeclaration, sourceFile);
         }
 
