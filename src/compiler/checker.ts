@@ -22808,6 +22808,15 @@ namespace ts {
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
 
+            // Spreads may cause an early bail; ensure computed names are always checked (this is cached)
+            // As otherwise they may not be checked until exports for the type at this position are retrieved,
+            // which may never occur.
+            for (const elem of node.properties) {
+                if (elem.name && isComputedPropertyName(elem.name) && !isWellKnownSymbolSyntactically(elem.name)) {
+                    checkComputedPropertyName(elem.name);
+                }
+            }
+
             let offset = 0;
             for (let i = 0; i < node.properties.length; i++) {
                 const memberDecl = node.properties[i];
