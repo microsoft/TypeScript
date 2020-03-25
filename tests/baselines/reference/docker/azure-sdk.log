@@ -8,38 +8,19 @@ Executing a maximum of ?simultaneous processes...
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
 XX of XX: [@azure/core-auth] completed successfully in ? seconds
 XX of XX: [@azure/logger] completed successfully in ? seconds
-XX of XX: [@azure/core-http] completed successfully in ? seconds
 XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
-XX of XX: [@azure/identity] completed successfully in ? seconds
-XX of XX: [@azure/core-amqp] completed successfully in ? seconds
-XX of XX: [@azure/core-lro] completed successfully in ? seconds
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/core-http@X.X.X build:tsc: `tsc -p tsconfig.es.json`
+npm ERR! Exit status 2
+npm ERR! 
+npm ERR! Failed at the @azure/core-http@X.X.X build:tsc script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
+ERROR: "build:tsc" exited with 2.
 XX of XX: [@azure/core-paging] completed successfully in ? seconds
-XX of XX: [@azure/test-utils-recorder] completed successfully in ? seconds
 XX of XX: [@azure/eslint-plugin-azure-sdk] completed successfully in ? seconds
-XX of XX: [@azure/event-hubs] completed successfully in ? seconds
-XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
-npm ERR! code ELIFECYCLE
-npm ERR! errno 2
-npm ERR! @azure/keyvault-keys@X.X.X extract-api: `tsc -p . && api-extractor run --local`
-npm ERR! Exit status 2
-npm ERR! 
-npm ERR! Failed at the @azure/keyvault-keys@X.X.X extract-api script.
-npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
-npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
-npm ERR! code ELIFECYCLE
-npm ERR! errno 2
-npm ERR! @azure/keyvault-secrets@X.X.X extract-api: `tsc -p . && api-extractor run --local`
-npm ERR! Exit status 2
-npm ERR! 
-npm ERR! Failed at the @azure/keyvault-secrets@X.X.X extract-api script.
-npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
-npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
-XX of XX: [@azure/storage-blob] completed successfully in ? seconds
-XX of XX: [@azure/ai-text-analytics] completed successfully in ? seconds
-XX of XX: [@azure/app-configuration] completed successfully in ? seconds
-XX of XX: [@azure/core-arm] completed successfully in ? seconds
 XX of XX: [@azure/core-tracing] completed successfully in ? seconds
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
@@ -49,40 +30,15 @@ os-name (imported by dist-esm/utils/user-agent.js)
 Use output.globals to specify browser global variable names corresponding to external modules
 os-name (guessing 'osName')
 created dist/index.js in ?s
-XX of XX: [@azure/eventhubs-checkpointstore-blob] completed successfully in ? seconds
-XX of XX: [@azure/service-bus] completed successfully in ? seconds
-XX of XX: [@azure/storage-file-datalake] completed successfully in ? seconds
-XX of XX: [@azure/storage-file-share] completed successfully in ? seconds
-XX of XX: [@azure/storage-queue] completed successfully in ? seconds
-XX of XX: [@azure/template] completed successfully in ? seconds
-XX of XX: [testhub] completed successfully in ? seconds
-SUCCESS (25)
+SUCCESS (7)
 ================================
 @azure/abort-controller (? seconds)
 @azure/core-auth (? seconds)
 @azure/logger (? seconds)
-@azure/core-http (? seconds)
 @azure/core-asynciterator-polyfill (? seconds)
-@azure/identity (? seconds)
-@azure/core-amqp (? seconds)
-@azure/core-lro (? seconds)
 @azure/core-paging (? seconds)
-@azure/test-utils-recorder (? seconds)
 @azure/eslint-plugin-azure-sdk (? seconds)
-@azure/event-hubs (? seconds)
-@azure/event-processor-host (? seconds)
-@azure/storage-blob (? seconds)
-@azure/ai-text-analytics (? seconds)
-@azure/app-configuration (? seconds)
-@azure/core-arm (? seconds)
 @azure/core-tracing (? seconds)
-@azure/eventhubs-checkpointstore-blob (? seconds)
-@azure/service-bus (? seconds)
-@azure/storage-file-datalake (? seconds)
-@azure/storage-file-share (? seconds)
-@azure/storage-queue (? seconds)
-@azure/template (? seconds)
-testhub (? seconds)
 ================================
 SUCCESS WITH WARNINGS (1)
 ================================
@@ -96,32 +52,53 @@ Use output.globals to specify browser global variable names corresponding to ext
 os-name (guessing 'osName')
 created dist/index.js in ?s
 ================================
-BLOCKED (1)
+BLOCKED (19)
 ================================
+@azure/core-lro
+@azure/test-utils-recorder
+@azure/event-hubs
+@azure/keyvault-keys
+@azure/keyvault-secrets
+@azure/storage-blob
+@azure/ai-text-analytics
+@azure/app-configuration
+@azure/core-arm
+@azure/eventhubs-checkpointstore-blob
+@azure/identity
 @azure/keyvault-certificates
+@azure/search
+@azure/service-bus
+@azure/storage-file-datalake
+@azure/storage-file-share
+@azure/storage-queue
+@azure/template
+testhub
 ================================
-FAILURE (2)
+FAILURE (3)
 ================================
-@azure/keyvault-keys ( ? seconds)
+@azure/core-http (? seconds)
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/keyvault-keys@X.X.X extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! @azure/core-http@X.X.X build:tsc: `tsc -p tsconfig.es.json`
 npm ERR! Exit status 2
 npm ERR!
-npm ERR! Failed at the @azure/keyvault-keys@X.X.X extract-api script.
+npm ERR! Failed at the @azure/core-http@X.X.X build:tsc script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
-@azure/keyvault-secrets ( ? seconds)
-npm ERR! code ELIFECYCLE
-npm ERR! errno 2
-npm ERR! @azure/keyvault-secrets@X.X.X extract-api: `tsc -p . && api-extractor run --local`
-npm ERR! Exit status 2
-npm ERR!
-npm ERR! Failed at the @azure/keyvault-secrets@X.X.X extract-api script.
-npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
-npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
+ERROR: "build:tsc" exited with 2.
+@azure/core-amqp (? seconds)
+>>> @azure/core-amqp
+tsc -p . && rollup -c 2>&1
+src/util/utils.ts(213,42): error TS2345: Argument of type '(result: T) => T' is not assignable to parameter of type '(value: awaited T) => T | PromiseLike<T>'.
+  Types of parameters 'result' and 'value' are incompatible.
+    Type 'awaited T' is not assignable to type 'T'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'awaited T'.
+@azure/event-processor-host (? seconds)
+>>> @azure/event-processor-host
+tsc -p . && rollup -c 2>&1 && npm run extract-api
+src/util/utils.ts(135,7): error TS2322: Type 'awaited T' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'awaited T'.
 ================================
 Error: Project(s) failed
 rush rebuild - Errors! ( ? seconds)
@@ -130,9 +107,29 @@ rush rebuild - Errors! ( ? seconds)
 
 Standard error:
 
-XX of XX: [@azure/keyvault-keys] failed!
-XX of XX: [@azure/keyvault-certificates] blocked by [@azure/keyvault-keys]!
-XX of XX: [@azure/keyvault-secrets] failed!
+XX of XX: [@azure/core-http] failed!
+XX of XX: [@azure/ai-text-analytics] blocked by [@azure/core-http]!
+XX of XX: [@azure/app-configuration] blocked by [@azure/core-http]!
+XX of XX: [@azure/core-arm] blocked by [@azure/core-http]!
+XX of XX: [@azure/core-lro] blocked by [@azure/core-http]!
+XX of XX: [@azure/keyvault-certificates] blocked by [@azure/core-http]!
+XX of XX: [@azure/keyvault-keys] blocked by [@azure/core-http]!
+XX of XX: [@azure/keyvault-secrets] blocked by [@azure/core-http]!
+XX of XX: [@azure/storage-blob] blocked by [@azure/core-http]!
+XX of XX: [@azure/eventhubs-checkpointstore-blob] blocked by [@azure/core-http]!
+XX of XX: [@azure/storage-file-datalake] blocked by [@azure/core-http]!
+XX of XX: [@azure/identity] blocked by [@azure/core-http]!
+XX of XX: [@azure/search] blocked by [@azure/core-http]!
+XX of XX: [@azure/service-bus] blocked by [@azure/core-http]!
+XX of XX: [@azure/storage-file-share] blocked by [@azure/core-http]!
+XX of XX: [@azure/storage-queue] blocked by [@azure/core-http]!
+XX of XX: [@azure/template] blocked by [@azure/core-http]!
+XX of XX: [@azure/test-utils-recorder] blocked by [@azure/core-http]!
+XX of XX: [@azure/core-amqp] failed!
+XX of XX: [@azure/event-hubs] blocked by [@azure/core-amqp]!
+XX of XX: [@azure/event-processor-host] failed!
+XX of XX: [testhub] blocked by [@azure/event-processor-host]!
 XX of XX: [@azure/cosmos] completed with warnings in ? seconds
-[@azure/keyvault-keys] Returned error code: 2
-[@azure/keyvault-secrets] Returned error code: 2
+[@azure/core-http] Returned error code: 1
+[@azure/core-amqp] Returned error code: 2
+[@azure/event-processor-host] Returned error code: 2

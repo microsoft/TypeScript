@@ -1,0 +1,13 @@
+Exit Code: 1
+Standard output:
+node_modules/@types/bluebird/index.d.ts(61,3): error TS2416: Property 'then' in type 'Bluebird<R>' is not assignable to the same property in base type 'PromiseLike<R>'.
+  Type '{ <U>(onFulfill?: ((value: R) => Resolvable<U>) | undefined, onReject?: ((error: any) => Resolvable<U>) | undefined): Bluebird<U>; <TResult1 = R, TResult2 = never>(onfulfilled?: ((value: R) => Resolvable<...>) | ... 1 more ... | undefined, onrejected?: ((reason: any) => Resolvable<...>) | ... 1 more ... | undefined)...' is not assignable to type '<TResult1 = R, TResult2 = never>(onfulfilled?: ((value: awaited R) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<...>) | null | undefined) => PromiseLike<...>'.
+    Types of parameters 'onFulfill' and 'onfulfilled' are incompatible.
+      Type '((value: awaited R) => any) | null | undefined' is not assignable to type '((value: R) => any) | undefined'.
+        Type 'null' is not assignable to type '((value: R) => any) | undefined'.
+node_modules/@types/bluebird/index.d.ts(62,3): error TS2416: Property 'then' in type 'Bluebird<R>' is not assignable to the same property in base type 'PromiseLike<R>'.
+  Type '{ <U>(onFulfill?: ((value: R) => Resolvable<U>) | undefined, onReject?: ((error: any) => Resolvable<U>) | undefined): Bluebird<U>; <TResult1 = R, TResult2 = never>(onfulfilled?: ((value: R) => Resolvable<...>) | ... 1 more ... | undefined, onrejected?: ((reason: any) => Resolvable<...>) | ... 1 more ... | undefined)...' is not assignable to type '<TResult1 = R, TResult2 = never>(onfulfilled?: ((value: awaited R) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<...>) | null | undefined) => PromiseLike<...>'.
+
+
+
+Standard error:

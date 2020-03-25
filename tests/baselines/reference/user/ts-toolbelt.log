@@ -1,0 +1,9 @@
+Exit Code: 1
+Standard output:
+../../../../node_modules/@types/jquery/misc.d.ts(1205,15): error TS2430: Interface 'PromiseBase<TR, TJ, TN, UR, UJ, UN, VR, VJ, VN, SR, SJ, SN>' incorrectly extends interface '_Promise<TR>'.
+  Types of property 'then' are incompatible.
+    Type '{ <ARD = never, AJD = never, AND = never, BRD = never, BJD = never, BND = never, CRD = never, CJD = never, CND = never, RRD = never, RJD = never, RND = never, ARF = never, AJF = never, ANF = never, BRF = never, BJF = never, BNF = never, CRF = never, CJF = never, CNF = never, RRF = never, RJF = never, RNF = never, AR...' is not assignable to type '<TResult1 = TR, TResult2 = never>(onfulfilled?: ((value: TR) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<...>) | null | undefined) => _Promise<...>'.
+
+
+
+Standard error:

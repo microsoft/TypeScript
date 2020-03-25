@@ -1,0 +1,26 @@
+Exit Code: 1
+Standard output:
+src/Task.ts(47,68): error TS2345: Argument of type 'awaited A' is not assignable to parameter of type 'A'.
+  'A' could be instantiated with an arbitrary type which could be unrelated to 'awaited A'.
+src/Task.ts(121,35): error TS2345: Argument of type '(a: A) => B' is not assignable to parameter of type '(value: awaited A) => B | PromiseLike<B>'.
+  Types of parameters 'a' and 'value' are incompatible.
+    Type 'awaited A' is not assignable to type 'A'.
+      'A' could be instantiated with an arbitrary type which could be unrelated to 'awaited A'.
+src/Task.ts(123,72): error TS2345: Argument of type 'awaited A' is not assignable to parameter of type 'A'.
+  'A' could be instantiated with an arbitrary type which could be unrelated to 'awaited A'.
+src/Task.ts(124,44): error TS2345: Argument of type 'awaited A' is not assignable to parameter of type 'A'.
+  'A' could be instantiated with an arbitrary type which could be unrelated to 'awaited A'.
+src/Task.ts(136,59): error TS2345: Argument of type 'awaited A' is not assignable to parameter of type 'A'.
+  'A' could be instantiated with an arbitrary type which could be unrelated to 'awaited A'.
+src/TaskEither.ts(160,16): error TS2322: Type 'Promise<Left<never> | Left<E> | Right<A> | Right<awaited A>>' is not assignable to type 'Promise<Either<E, A>>'.
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = Left<never> | Left<E> | Right<A> | Right<awaited A>, TResult2 = never>(onfulfilled?: ((value: Left<never> | Left<E> | Right<A> | Right<awaited A>) => TResult1 | PromiseLike<...>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<...>) | ... 1 more ... | undefined) => Promise<...>' is not assignable to type '<TResult1 = Either<E, A>, TResult2 = never>(onfulfilled?: ((value: Either<E, A>) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<...>) | ... 1 more ... | undefined) => Promise<...>'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'Left<never> | Left<E> | Right<A> | Right<awaited A>' is not assignable to type 'Either<E, A>'.
+            Type 'Right<awaited A>' is not assignable to type 'Either<E, A>'.
+              Type 'Right<awaited A>' is not assignable to type 'Right<A>'.
+
+
+
+Standard error:

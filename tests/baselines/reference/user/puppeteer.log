@@ -14,7 +14,11 @@ lib/Accessibility.js(403,7): error TS2322: Type 'string | number | true' is not 
 lib/Accessibility.js(409,22): error TS2503: Cannot find namespace 'Protocol'.
 lib/Browser.js(109,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Browser.js(116,58): error TS2322: Type 'Promise<CDPSession>' is not assignable to type 'Promise<Puppeteer.CDPSession>'.
-  Type 'CDPSession' is not assignable to type 'Puppeteer.CDPSession'.
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = CDPSession, TResult2 = never>(onfulfilled?: (value: CDPSession) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<...>) => Promise<...>' is not assignable to type '<TResult1 = Puppeteer.CDPSession, TResult2 = never>(onfulfilled?: (value: Puppeteer.CDPSession) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<...>) => Promise<...>'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'CDPSession' is not assignable to type 'Puppeteer.CDPSession'.
 lib/Browser.js(141,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Connection.js(149,14): error TS2503: Cannot find namespace 'Protocol'.
 lib/Coverage.js(115,15): error TS2503: Cannot find namespace 'Protocol'.
@@ -30,6 +34,8 @@ lib/FrameManager.js(668,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/JSHandle.js(32,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/JSHandle.js(146,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/JSHandle.js(237,29): error TS2503: Cannot find namespace 'Protocol'.
+lib/Launcher.js(181,17): error TS1003: Identifier expected.
+lib/Launcher.js(359,17): error TS1003: Identifier expected.
 lib/NetworkManager.js(32,30): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(159,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(178,15): error TS2503: Cannot find namespace 'Protocol'.
@@ -54,11 +60,11 @@ lib/Page.js(93,33): error TS2345: Argument of type 'CDPSession' is not assignabl
                 Type 'string | number | symbol' is not assignable to type 'symbol'.
                   Type 'string' is not assignable to type 'symbol'.
 lib/Page.js(94,42): error TS2345: Argument of type 'Worker' is not assignable to parameter of type 'Worker'.
-  Type 'Worker' is missing the following properties from type 'Worker': onmessage, postMessage, terminate, addEventListener, and 3 more.
+  Type 'Worker' is missing the following properties from type 'Worker': onmessage, onmessageerror, postMessage, terminate, and 4 more.
 lib/Page.js(142,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(217,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(385,20): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(448,7): error TS2740: Type '(...args: any[]) => Promise<any>' is missing the following properties from type 'Window': applicationCache, clientInformation, closed, customElements, and 222 more.
+lib/Page.js(448,7): error TS2740: Type '(...args: any[]) => Promise<any>' is missing the following properties from type 'Window': applicationCache, clientInformation, closed, customElements, and 221 more.
 lib/Page.js(458,9): error TS2349: This expression is not callable.
   Type 'Window' has no call signatures.
 lib/Page.js(494,15): error TS2503: Cannot find namespace 'Protocol'.
@@ -69,11 +75,17 @@ lib/Page.js(552,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(605,14): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(941,19): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(1352,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/PipeTransport.js(19,17): error TS1003: Identifier expected.
 lib/Target.js(23,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Target.js(87,7): error TS2322: Type 'Promise<Worker | Worker>' is not assignable to type 'Promise<Worker>'.
-  Type 'Worker | Worker' is not assignable to type 'Worker'.
-    Type 'Worker' is not assignable to type 'Worker'. Two different types with this name exist, but they are unrelated.
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = Worker | Worker, TResult2 = never>(onfulfilled?: (value: Worker | Worker) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<...>) => Promise<...>' is not assignable to type '<TResult1 = Worker, TResult2 = never>(onfulfilled?: (value: Worker) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<...>'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'Worker | Worker' is not assignable to type 'Worker'.
+            Type 'Worker' is not assignable to type 'Worker'. Two different types with this name exist, but they are unrelated.
 lib/Target.js(135,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/WebSocketTransport.js(19,17): error TS1003: Identifier expected.
 lib/WebSocketTransport.js(32,72): error TS2345: Argument of type 'import("/puppeteer/puppeteer/node_modules/@types/ws/index")' is not assignable to parameter of type 'WebSocket'.
   Property 'dispatchEvent' is missing in type 'import("/puppeteer/puppeteer/node_modules/@types/ws/index")' but required in type 'WebSocket'.
 lib/Worker.js(25,50): error TS2503: Cannot find namespace 'Protocol'.

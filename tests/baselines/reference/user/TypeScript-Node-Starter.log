@@ -1,0 +1,16 @@
+Exit Code: 1
+Standard output:
+node_modules/@types/bluebird/index.d.ts(61,3): error TS2416: Property 'then' in type 'Bluebird<R>' is not assignable to the same property in base type 'PromiseLike<R>'.
+  Type '{ <U>(onFulfill?: (value: R) => Resolvable<U>, onReject?: (error: any) => Resolvable<U>): Bluebird<U>; <TResult1 = R, TResult2 = never>(onfulfilled?: (value: R) => Resolvable<TResult1>, onrejected?: (reason: any) => Resolvable<...>): Bluebird<...>; }' is not assignable to type '<TResult1 = R, TResult2 = never>(onfulfilled?: (value: awaited R) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<...>'.
+    Types of parameters 'onFulfill' and 'onfulfilled' are incompatible.
+      Types of parameters 'value' and 'value' are incompatible.
+        Type 'R' is not assignable to type 'awaited R'.
+node_modules/@types/bluebird/index.d.ts(62,3): error TS2416: Property 'then' in type 'Bluebird<R>' is not assignable to the same property in base type 'PromiseLike<R>'.
+  Type '{ <U>(onFulfill?: (value: R) => Resolvable<U>, onReject?: (error: any) => Resolvable<U>): Bluebird<U>; <TResult1 = R, TResult2 = never>(onfulfilled?: (value: R) => Resolvable<TResult1>, onrejected?: (reason: any) => Resolvable<...>): Bluebird<...>; }' is not assignable to type '<TResult1 = R, TResult2 = never>(onfulfilled?: (value: awaited R) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<...>'.
+node_modules/@types/jquery/misc.d.ts(1205,15): error TS2430: Interface 'PromiseBase<TR, TJ, TN, UR, UJ, UN, VR, VJ, VN, SR, SJ, SN>' incorrectly extends interface '_Promise<TR>'.
+  Types of property 'then' are incompatible.
+    Type '{ <ARD = never, AJD = never, AND = never, BRD = never, BJD = never, BND = never, CRD = never, CJD = never, CND = never, RRD = never, RJD = never, RND = never, ARF = never, AJF = never, ANF = never, BRF = never, BJF = never, BNF = never, CRF = never, CJF = never, CNF = never, RRF = never, RJF = never, RNF = never, AR...' is not assignable to type '<TResult1 = TR, TResult2 = never>(onfulfilled?: (value: TR) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => _Promise<...>'.
+
+
+
+Standard error:

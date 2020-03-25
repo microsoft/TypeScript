@@ -85,8 +85,6 @@ node_modules/lodash/_cloneArrayBuffer.js(11,20): error TS2351: This expression i
   Type 'Function' has no construct signatures.
 node_modules/lodash/_cloneBuffer.js(4,69): error TS2339: Property 'nodeType' does not exist on type '(buffer: Buffer, isDeep?: boolean | undefined) => Buffer'.
 node_modules/lodash/_cloneBuffer.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ "\"../../../tests/cases/user/lodash/node_modules/lodash/_cloneBuffer\"": (buffer: Buffer, isDeep?: boolean | undefined) => Buffer; }'.
-node_modules/lodash/_cloneBuffer.js(29,56): error TS2351: This expression is not constructable.
-  Type 'Function' has no construct signatures.
 node_modules/lodash/_createAggregator.js(19,60): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/_createCompounder.js(20,24): error TS2554: Expected 3 arguments, but got 1.
 node_modules/lodash/_createCtor.js(19,26): error TS2351: This expression is not constructable.
