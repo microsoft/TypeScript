@@ -157,7 +157,7 @@ export interface RouteComponentProps { route: string }
 >route : string
 
 declare function withRouter<
->withRouter : <P extends RouteComponentProps, C extends ComponentType<P>>(component: (C & FunctionComponent<P>) | (C & ComponentClass<P>)) => ComponentClass<Pick<P, Exclude<keyof P, "route">>>
+>withRouter : <P extends RouteComponentProps, C extends ComponentType<P>>(component: (C & FunctionComponent<P>) | (C & ComponentClass<P>)) => ComponentClass<Omit<P, "route", Exclude<keyof P, "route">>>
 
   P extends RouteComponentProps,
   C extends ComponentType<P>
@@ -174,8 +174,8 @@ declare const MyComponent: ComponentType<Props>;
 >MyComponent : ComponentType<Props>
 
 withRouter(MyComponent);
->withRouter(MyComponent) : ComponentClass<Pick<Props, "username">>
->withRouter : <P extends RouteComponentProps, C extends ComponentType<P>>(component: (C & FunctionComponent<P>) | (C & ComponentClass<P>)) => ComponentClass<Pick<P, Exclude<keyof P, "route">>>
+>withRouter(MyComponent) : ComponentClass<Omit<Props, "route", "username">>
+>withRouter : <P extends RouteComponentProps, C extends ComponentType<P>>(component: (C & FunctionComponent<P>) | (C & ComponentClass<P>)) => ComponentClass<Omit<P, "route", Exclude<keyof P, "route">>>
 >MyComponent : ComponentType<Props>
 
 // Repro from #33490
