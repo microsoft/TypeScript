@@ -68,6 +68,7 @@ namespace ts {
         export interface FileInfo {
             readonly version: string;
             signature: string | undefined;
+            affectsGlobalScope: boolean;
         }
         /**
          * Referenced files with values for the keys as referenced file's path to be true
@@ -225,7 +226,7 @@ namespace ts {
                         }
                     }
                 }
-                fileInfos.set(sourceFile.resolvedPath, { version, signature: oldInfo && oldInfo.signature });
+                fileInfos.set(sourceFile.resolvedPath, { version, signature: oldInfo && oldInfo.signature, affectsGlobalScope: isFileAffectingGlobalScope(sourceFile) });
             }
 
             return {
@@ -488,14 +489,14 @@ namespace ts {
         /**
          * Gets all files of the program excluding the default library file
          */
-        function getAllFilesExcludingDefaultLibraryFile(state: BuilderState, programOfThisState: Program, firstSourceFile: SourceFile): readonly SourceFile[] {
+        export function getAllFilesExcludingDefaultLibraryFile(state: BuilderState, programOfThisState: Program, firstSourceFile: SourceFile | undefined): readonly SourceFile[] {
             // Use cached result
             if (state.allFilesExcludingDefaultLibraryFile) {
                 return state.allFilesExcludingDefaultLibraryFile;
             }
 
             let result: SourceFile[] | undefined;
-            addSourceFile(firstSourceFile);
+            if (firstSourceFile) addSourceFile(firstSourceFile);
             for (const sourceFile of programOfThisState.getSourceFiles()) {
                 if (sourceFile !== firstSourceFile) {
                     addSourceFile(sourceFile);
