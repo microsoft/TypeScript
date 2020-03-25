@@ -1242,10 +1242,9 @@ namespace ts {
         }
 
         function parseResponseFile(fileName: string) {
-            const text = readFile ? readFile(fileName) : sys.readFile(fileName);
-
-            if (!text) {
-                errors.push(createCompilerDiagnostic(Diagnostics.File_0_not_found, fileName));
+            const text = tryReadFile(fileName, readFile || (fileName => sys.readFile(fileName)));
+            if (!isString(text)) {
+                errors.push(text);
                 return;
             }
 
@@ -1466,18 +1465,9 @@ namespace ts {
         extendedConfigCache?: Map<ExtendedConfigCacheEntry>,
         watchOptionsToExtend?: WatchOptions
     ): ParsedCommandLine | undefined {
-        let configFileText: string | undefined;
-        try {
-            configFileText = host.readFile(configFileName);
-        }
-        catch (e) {
-            const error = createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, configFileName, e.message);
-            host.onUnRecoverableConfigFileDiagnostic(error);
-            return undefined;
-        }
-        if (!configFileText) {
-            const error = createCompilerDiagnostic(Diagnostics.File_0_not_found, configFileName);
-            host.onUnRecoverableConfigFileDiagnostic(error);
+        const configFileText = tryReadFile(configFileName, fileName => host.readFile(fileName));
+        if (!isString(configFileText)) {
+            host.onUnRecoverableConfigFileDiagnostic(configFileText);
             return undefined;
         }
 
@@ -1530,7 +1520,8 @@ namespace ts {
         return isString(textOrDiagnostic) ? parseJsonText(fileName, textOrDiagnostic) : <TsConfigSourceFile>{ parseDiagnostics: [textOrDiagnostic] };
     }
 
-    function tryReadFile(fileName: string, readFile: (path: string) => string | undefined): string | Diagnostic {
+    /*@internal*/
+    export function tryReadFile(fileName: string, readFile: (path: string) => string | undefined): string | Diagnostic {
         let text: string | undefined;
         try {
             text = readFile(fileName);
@@ -1538,7 +1529,7 @@ namespace ts {
         catch (e) {
             return createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message);
         }
-        return text === undefined ? createCompilerDiagnostic(Diagnostics.The_specified_path_does_not_exist_Colon_0, fileName) : text;
+        return text === undefined ? createCompilerDiagnostic(Diagnostics.Cannot_read_file_0, fileName) : text;
     }
 
     function commandLineOptionsToMap(options: readonly CommandLineOption[]) {
