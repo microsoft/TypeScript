@@ -5202,7 +5202,7 @@ namespace ts {
             if (token() === SyntaxKind.OpenParenToken) {
                 node.arguments = parseArgumentList();
             }
-            else if(node.typeArguments) {
+            else if (node.typeArguments) {
                 parseErrorAt(fullStart, scanner.getStartPos(), Diagnostics.A_new_expression_with_type_arguments_must_always_be_followed_by_a_parenthesized_argument_list);
             }
             return finishNode(node);
