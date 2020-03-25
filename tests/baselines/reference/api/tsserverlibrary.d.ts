@@ -1492,7 +1492,6 @@ declare namespace ts {
         /** If this is not a StringLiteral it will be a grammar error. */
         moduleSpecifier: Expression;
     }
-    export type ImportLikeDeclaration = ImportDeclaration | ImportEqualsDeclaration;
     export type NamedImportBindings = NamespaceImport | NamedImports;
     export type NamedExportBindings = NamespaceExport | NamedExports;
     export interface ImportClause extends NamedDeclaration {
@@ -3693,7 +3692,6 @@ declare namespace ts {
     function isNamespaceExportDeclaration(node: Node): node is NamespaceExportDeclaration;
     function isImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration;
     function isImportDeclaration(node: Node): node is ImportDeclaration;
-    function isImportLikeDeclaration(node: Node): node is ImportLikeDeclaration;
     function isImportClause(node: Node): node is ImportClause;
     function isNamespaceImport(node: Node): node is NamespaceImport;
     function isNamespaceExport(node: Node): node is NamespaceExport;
