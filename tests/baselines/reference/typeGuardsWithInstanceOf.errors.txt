@@ -1,0 +1,14 @@
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts(7,20): error TS2339: Property 'global' does not exist on type 'never'.
+
+
+==== tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts (1 errors) ====
+    interface I { global: string; }
+    var result: I;
+    var result2: I;
+    
+    if (!(result instanceof RegExp)) {
+        result = result2;
+    } else if (!result.global) {
+                       ~~~~~~
+!!! error TS2339: Property 'global' does not exist on type 'never'.
+    }

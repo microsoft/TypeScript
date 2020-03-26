@@ -191,6 +191,10 @@ namespace FourSlashInterface {
             this.state.verifyCodeFixAvailable(this.negative, options);
         }
 
+        public codeFixAllAvailable(fixName: string) {
+            this.state.verifyCodeFixAllAvailable(this.negative, fixName);
+        }
+
         public applicableRefactorAvailableAtMarker(markerName: string) {
             this.state.verifyApplicableRefactorAvailableAtMarker(this.negative, markerName);
         }
@@ -512,6 +516,10 @@ namespace FourSlashInterface {
             this.state.verifyRenameLocations(startRanges, options);
         }
 
+        public baselineRename(marker: string, options: RenameOptions) {
+            this.state.baselineRename(marker, options);
+        }
+
         public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: FourSlash.TextSpan,
             displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: ts.JSDocTagInfo[]) {
             this.state.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation, tags);
@@ -541,9 +549,14 @@ namespace FourSlashInterface {
             this.state.getEditsForFileRename(options);
         }
 
+        public baselineCallHierarchy() {
+            this.state.baselineCallHierarchy();
+        }
+
         public moveToNewFile(options: MoveToNewFileOptions): void {
             this.state.moveToNewFile(options);
         }
+
         public noMoveToNewFile(): void {
             this.state.noMoveToNewFile();
         }
@@ -884,7 +897,7 @@ namespace FourSlashInterface {
         const res: ExpectedCompletionEntryObject[] = [];
         for (let i = ts.SyntaxKind.FirstKeyword; i <= ts.SyntaxKind.LastKeyword; i++) {
             res.push({
-                name: ts.Debug.assertDefined(ts.tokenToString(i)),
+                name: ts.Debug.checkDefined(ts.tokenToString(i)),
                 kind: "keyword",
                 sortText: SortText.GlobalsOrKeywords
             });
@@ -893,7 +906,7 @@ namespace FourSlashInterface {
         export const keywords: readonly ExpectedCompletionEntryObject[] = keywordsWithUndefined.filter(k => k.name !== "undefined");
 
         export const typeKeywords: readonly ExpectedCompletionEntryObject[] =
-            ["false", "null", "true", "void", "any", "boolean", "keyof", "never", "readonly", "number", "object", "string", "symbol", "undefined", "unique", "unknown", "bigint"].map(keywordEntry);
+            ["false", "null", "true", "void", "asserts", "any", "boolean", "keyof", "never", "readonly", "number", "object", "string", "symbol", "undefined", "unique", "unknown", "bigint"].map(keywordEntry);
 
         const globalTypeDecls: readonly ExpectedCompletionEntryObject[] = [
             interfaceEntry("Symbol"),
@@ -1049,7 +1062,7 @@ namespace FourSlashInterface {
         }
 
         export const classElementKeywords: readonly ExpectedCompletionEntryObject[] =
-            ["private", "protected", "public", "static", "abstract", "async", "constructor", "get", "readonly", "set"].map(keywordEntry);
+            ["private", "protected", "public", "static", "abstract", "async", "constructor", "declare", "get", "readonly", "set"].map(keywordEntry);
 
         export const classElementInJsKeywords = getInJsKeywords(classElementKeywords);
 
@@ -1143,6 +1156,8 @@ namespace FourSlashInterface {
             "let",
             "package",
             "yield",
+            "as",
+            "asserts",
             "any",
             "async",
             "await",
@@ -1342,6 +1357,8 @@ namespace FourSlashInterface {
             "let",
             "package",
             "yield",
+            "as",
+            "asserts",
             "any",
             "async",
             "await",
@@ -1467,6 +1484,7 @@ namespace FourSlashInterface {
         readonly replacementSpan?: FourSlash.Range;
         readonly hasAction?: boolean; // If not specified, will assert that this is false.
         readonly isRecommended?: boolean; // If not specified, will assert that this is false.
+        readonly isFromUncheckedFile?: boolean; // If not specified, won't assert about this
         readonly kind?: string; // If not specified, won't assert about this
         readonly kindModifiers?: string; // Must be paired with 'kind'
         readonly text?: string;
@@ -1547,7 +1565,7 @@ namespace FourSlashInterface {
     }
 
     export interface VerifyCodeFixOptions extends NewContentOptions {
-        readonly description: string | DiagnosticIgnoredInterpolations;
+        readonly description: string | [string, ...(string | number)[]] | DiagnosticIgnoredInterpolations;
         readonly errorCode?: number;
         readonly index?: number;
         readonly preferences?: ts.UserPreferences;
@@ -1609,4 +1627,9 @@ namespace FourSlashInterface {
         template: string
     };
     export type RenameLocationOptions = FourSlash.Range | { readonly range: FourSlash.Range, readonly prefixText?: string, readonly suffixText?: string };
+    export interface RenameOptions {
+        readonly findInStrings?: boolean;
+        readonly findInComments?: boolean;
+        readonly providePrefixAndSuffixTextForRename?: boolean;
+    };
 }

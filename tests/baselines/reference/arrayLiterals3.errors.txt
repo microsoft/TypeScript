@@ -5,7 +5,6 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(11,51): erro
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(17,5): error TS2322: Type '[number, number, string, boolean]' is not assignable to type '[number, number]'.
   Types of property 'length' are incompatible.
     Type '4' is not assignable to type '2'.
-tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(32,5): error TS2739: Type '(number[] | string[])[]' is missing the following properties from type 'tup': 0, 1
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(33,5): error TS2739: Type 'number[]' is missing the following properties from type '[number, number, number]': 0, 1, 2
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error TS2322: Type '(string | number)[]' is not assignable to type 'myArray'.
   The types returned by 'pop()' are incompatible between these types.
@@ -13,7 +12,7 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
       Type 'string' is not assignable to type 'Number'.
 
 
-==== tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts (8 errors) ====
+==== tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts (7 errors) ====
     // Each element expression in a non-empty array literal is processed as follows:
     //    - If the array literal contains no spread elements, and if the array literal is contextually typed (section 4.19)
     //      by a type T and T has a property with the numeric name N, where N is the index of the element expression in the array literal,
@@ -58,8 +57,6 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
     interface myArray extends Array<Number> { }
     interface myArray2 extends Array<Number|String> { }
     var c0: tup = [...temp2];                         // Error
-        ~~
-!!! error TS2739: Type '(number[] | string[])[]' is missing the following properties from type 'tup': 0, 1
     var c1: [number, number, number] = [...temp1];    // Error cannot assign number[] to [number, number, number]
         ~~
 !!! error TS2739: Type 'number[]' is missing the following properties from type '[number, number, number]': 0, 1, 2

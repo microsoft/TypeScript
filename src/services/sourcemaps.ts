@@ -181,6 +181,9 @@ namespace ts {
             return undefined;
         }
 
+        // Dont support sourcemaps that contain inlined sources
+        if (map.sourcesContent && map.sourcesContent.some(isString)) return undefined;
+
         return createDocumentPositionMapper(host, map, mapFileName);
     }
 

@@ -111,16 +111,14 @@ namespace ts {
         // TODO: GH#18217 Optional methods are frequently asserted
         createDirectory?(path: string): void;
         writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
-        onCachedDirectoryStructureHostCreate?(host: CachedDirectoryStructureHost): void;
     }
 
     export interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
+        /** Instead of using output d.ts file from project reference, use its source file */
+        useSourceOfProjectReferenceRedirect?(): boolean;
+
         /** If provided, callback to invoke after every new program creation */
         afterProgramCreate?(program: T): void;
-
-        // Only for testing
-        /*@internal*/
-        maxNumberOfFilesToIterateForInvalidation?: number;
     }
 
     /**
@@ -247,9 +245,6 @@ namespace ts {
         let hasChangedConfigFileParsingErrors = false;
 
         const cachedDirectoryStructureHost = configFileName === undefined ? undefined : createCachedDirectoryStructureHost(host, currentDirectory, useCaseSensitiveFileNames);
-        if (cachedDirectoryStructureHost && host.onCachedDirectoryStructureHostCreate) {
-            host.onCachedDirectoryStructureHostCreate(cachedDirectoryStructureHost);
-        }
         const directoryStructureHost: DirectoryStructureHost = cachedDirectoryStructureHost || host;
         const parseConfigFileHost = parseConfigHostFromCompilerHostLike(host, directoryStructureHost);
 
@@ -288,6 +283,7 @@ namespace ts {
         // Members for ResolutionCacheHost
         compilerHost.toPath = toPath;
         compilerHost.getCompilationSettings = () => compilerOptions;
+        compilerHost.useSourceOfProjectReferenceRedirect = maybeBind(host, host.useSourceOfProjectReferenceRedirect);
         compilerHost.watchDirectoryOfFailedLookupLocation = (dir, cb, flags) => watchDirectory(host, dir, cb, flags, watchOptions, WatchType.FailedLookupLocations);
         compilerHost.watchTypeRootsDirectory = (dir, cb, flags) => watchDirectory(host, dir, cb, flags, watchOptions, WatchType.TypeRoots);
         compilerHost.getCachedDirectoryStructureHost = () => cachedDirectoryStructureHost;
@@ -297,7 +293,6 @@ namespace ts {
             scheduleProgramUpdate();
         };
         compilerHost.fileIsOpen = returnFalse;
-        compilerHost.maxNumberOfFilesToIterateForInvalidation = host.maxNumberOfFilesToIterateForInvalidation;
         compilerHost.getCurrentProgram = getCurrentProgram;
         compilerHost.writeLog = writeLog;
 
@@ -324,8 +319,8 @@ namespace ts {
         watchConfigFileWildCardDirectories();
 
         return configFileName ?
-            { getCurrentProgram: getCurrentBuilderProgram, getProgram: synchronizeProgram, close } :
-            { getCurrentProgram: getCurrentBuilderProgram, getProgram: synchronizeProgram, updateRootFileNames, close };
+            { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, close } :
+            { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, updateRootFileNames, close };
 
         function close() {
             resolutionCache.clear();
@@ -380,7 +375,7 @@ namespace ts {
                 createNewProgram(hasInvalidatedResolution);
             }
 
-            if (host.afterProgramCreate) {
+            if (host.afterProgramCreate && program !== builderProgram) {
                 host.afterProgramCreate(builderProgram);
             }
 
@@ -399,6 +394,7 @@ namespace ts {
             resolutionCache.startCachingPerDirectoryResolution();
             compilerHost.hasInvalidatedResolution = hasInvalidatedResolution;
             compilerHost.hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames;
+            hasChangedAutomaticTypeDirectiveNames = false;
             builderProgram = createProgram(rootFileNames, compilerOptions, compilerHost, builderProgram, configFileParsingDiagnostics, projectReferences);
             resolutionCache.finishCachingPerDirectoryResolution();
 
@@ -450,7 +446,7 @@ namespace ts {
             // If file is missing on host from cache, we can definitely say file doesnt exist
             // otherwise we need to ensure from the disk
             if (isFileMissingOnHost(sourceFilesCache.get(path))) {
-                return true;
+                return false;
             }
 
             return directoryStructureHost.fileExists(fileName);
@@ -556,7 +552,7 @@ namespace ts {
                 host.clearTimeout(timerToUpdateProgram);
             }
             writeLog("Scheduling update");
-            timerToUpdateProgram = host.setTimeout(updateProgram, 250);
+            timerToUpdateProgram = host.setTimeout(updateProgramWithWatchStatus, 250);
         }
 
         function scheduleProgramReload() {
@@ -565,10 +561,13 @@ namespace ts {
             scheduleProgramUpdate();
         }
 
-        function updateProgram() {
+        function updateProgramWithWatchStatus() {
             timerToUpdateProgram = undefined;
             reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
+            updateProgram();
+        }
 
+        function updateProgram() {
             switch (reloadLevel) {
                 case ConfigFileProgramReloadLevel.Partial:
                     perfLogger.logStartUpdateProgram("PartialConfigReload");
@@ -584,6 +583,7 @@ namespace ts {
                     break;
             }
             perfLogger.logStopUpdateProgram("Done");
+            return getCurrentBuilderProgram();
         }
 
         function reloadFileNamesFromConfigFile() {
@@ -687,15 +687,16 @@ namespace ts {
                 fileOrDirectory => {
                     Debug.assert(!!configFileName);
 
-                    const fileOrDirectoryPath = toPath(fileOrDirectory);
+                    let fileOrDirectoryPath: Path | undefined = toPath(fileOrDirectory);
 
-                    // Since the file existance changed, update the sourceFiles cache
+                    // Since the file existence changed, update the sourceFiles cache
                     if (cachedDirectoryStructureHost) {
                         cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
                     }
                     nextSourceFileVersion(fileOrDirectoryPath);
 
-                    if (isPathIgnored(fileOrDirectoryPath)) return;
+                    fileOrDirectoryPath = removeIgnoredPath(fileOrDirectoryPath);
+                    if (!fileOrDirectoryPath) return;
 
                     // If the the added or created file or directory is not supported file name, ignore the file
                     // But when watched directory is added/removed, we need to reload the file list

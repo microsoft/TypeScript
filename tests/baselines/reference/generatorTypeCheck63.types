@@ -50,14 +50,14 @@ export interface State extends StrategicState {
 
 export const Nothing: Strategy<State> = strategy("Nothing", function* (state: State) {
 >Nothing : Strategy<State>
->strategy("Nothing", function* (state: State) {    yield 1;    return state;}) : any
+>strategy("Nothing", function* (state: State) {    yield 1;    return state;}) : (a: State) => IterableIterator<State>
 >strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T>) => (a: T) => IterableIterator<T>
 >"Nothing" : "Nothing"
 >function* (state: State) {    yield 1;    return state;} : (state: State) => Generator<number, State, undefined>
 >state : State
 
     yield 1;
->yield 1 : any
+>yield 1 : undefined
 >1 : 1
 
     return state;

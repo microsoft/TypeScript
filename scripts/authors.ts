@@ -111,6 +111,8 @@ namespace Commands {
     };
     listKnownAuthors.description = "List known authors as listed in .mailmap file.";
 
+
+
     export const listAuthors: Command = (...specs: string[]) => {
         const cmd = "git shortlog -se " + specs.join(" ");
         console.log(cmd);
@@ -145,6 +147,7 @@ namespace Commands {
                 .map(lookupAuthor)
                 .filter(a => !!a)
                 .map(getAuthorName);
+
             const unknownAuthors = authors
                 .filter(a => !lookupAuthor(a))
                 .map(a => `${a.name} <${a.email}>`);
@@ -162,6 +165,16 @@ namespace Commands {
                 console.log("=====================");
                 deduplicate(unknownAuthors).sort(sortAuthors).forEach(log);
             }
+
+
+            const allAuthors = deduplicate([...knownAuthors, ...unknownAuthors].map(a => a.split("<")[0].trim())).sort(sortAuthors);
+            if (allAuthors.length) {
+                console.log("\r\n");
+                console.log("Revised Authors.md: ");
+                console.log("=====================");
+                allAuthors.forEach(name => console.log(" - " + name));
+            }
+
         }
     };
     listAuthors.description = "List known and unknown authors for a given spec, e.g. 'node authors.js listAuthors origin/release-2.6..origin/release-2.7'";

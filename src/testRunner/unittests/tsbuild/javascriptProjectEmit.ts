@@ -212,7 +212,7 @@ namespace ts {
                     {
                         "extends": "../tsconfig.base.json",
                         "compilerOptions": {
-                            "outDir": null
+                            "outDir": null,
                             "composite": true
                         },
                         "include": ["index.ts", "obj.json"]

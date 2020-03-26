@@ -11,7 +11,7 @@ var C = /** @class */ (function () {
         set: function (a) {
             if (a === void 0) { a = 1; }
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

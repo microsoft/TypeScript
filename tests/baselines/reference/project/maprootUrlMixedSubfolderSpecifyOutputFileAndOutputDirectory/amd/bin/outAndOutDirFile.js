@@ -11,6 +11,7 @@ function m1_f1() {
 define("ref/m2", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.m2_f1 = exports.m2_instance1 = exports.m2_c1 = exports.m2_a1 = void 0;
     exports.m2_a1 = 10;
     var m2_c1 = /** @class */ (function () {
         function m2_c1() {

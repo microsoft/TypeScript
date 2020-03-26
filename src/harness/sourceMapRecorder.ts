@@ -322,11 +322,11 @@ namespace Harness.SourceMapRecorder {
         return sourceMapRecorder.lines.join("\r\n");
     }
 
-    export function getSourceMapRecordWithVFS(fs: vfs.FileSystem, sourceMapFile: string) {
+    export function getSourceMapRecordWithSystem(sys: ts.System, sourceMapFile: string) {
         const sourceMapRecorder = new Compiler.WriterAggregator();
         let prevSourceFile: documents.TextDocument | undefined;
         const files = ts.createMap<documents.TextDocument>();
-        const sourceMap = ts.tryParseRawSourceMap(fs.readFileSync(sourceMapFile, "utf8"));
+        const sourceMap = ts.tryParseRawSourceMap(sys.readFile(sourceMapFile, "utf8")!);
         if (sourceMap) {
             const mapDirectory = ts.getDirectoryPath(sourceMapFile);
             const sourceRoot = sourceMap.sourceRoot ? ts.getNormalizedAbsolutePath(sourceMap.sourceRoot, mapDirectory) : mapDirectory;
@@ -359,7 +359,7 @@ namespace Harness.SourceMapRecorder {
         function getFile(path: string) {
             const existing = files.get(path);
             if (existing) return existing;
-            const value = new documents.TextDocument(path, fs.readFileSync(path, "utf8"));
+            const value = new documents.TextDocument(path, sys.readFile(path, "utf8")!);
             files.set(path, value);
             return value;
         }

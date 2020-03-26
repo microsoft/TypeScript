@@ -32,7 +32,7 @@ var stooges = [
 ];
 
 f(stooges); // Should throw
->f(stooges) : any
+>f(stooges) : unknown
 >f : <T extends unknown = unknown>(x: { [x: string]: T; }) => T
 >stooges : { name: string; age: number; }[]
 

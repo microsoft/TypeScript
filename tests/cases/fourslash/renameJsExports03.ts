@@ -3,7 +3,7 @@
 // @allowJs: true
 // @Filename: a.js
 ////[|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}A|] {
-////    [|[|{| "contextRangeIndex": 2 |}constructor|]() { }|]
+////    [|[|{| "contextRangeIndex": 2, "isDefinition": true |}constructor|]() { }|]
 ////}|]
 ////[|module.exports = [|{| "contextRangeIndex": 4 |}A|];|]
 

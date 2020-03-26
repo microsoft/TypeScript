@@ -1,0 +1,46 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts ===
+class C<T> {
+>C : C<T>
+
+    #foo: T;
+>#foo : T
+
+    bar(x: C<T>) { return x.#foo; }          // OK
+>bar : (x: C<T>) => T
+>x : C<T>
+>x.#foo : T
+>x : C<T>
+
+    baz(x: C<number>) { return x.#foo; }     // OK
+>baz : (x: C<number>) => number
+>x : C<number>
+>x.#foo : number
+>x : C<number>
+
+    quux(x: C<string>) { return x.#foo; }    // OK
+>quux : (x: C<string>) => string
+>x : C<string>
+>x.#foo : string
+>x : C<string>
+}
+
+declare let a: C<number>;
+>a : C<number>
+
+declare let b: C<string>;
+>b : C<string>
+
+a.#foo;                                   // Error
+>a.#foo : any
+>a : C<number>
+
+a = b;                                    // Error
+>a = b : C<string>
+>a : C<number>
+>b : C<string>
+
+b = a;                                    // Error
+>b = a : C<number>
+>b : C<string>
+>a : C<number>
+

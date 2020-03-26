@@ -1,0 +1,33 @@
+=== /defs.d.ts ===
+interface A {
+    mNumber(): number;
+>mNumber : () => number
+}
+=== /a.js ===
+/** @implements A */
+class B {
+>B : B
+
+    mNumber() {
+>mNumber : () => number
+
+        return 0;
+>0 : 0
+    }
+}
+/** @implements {A} */
+class B2 {
+>B2 : B2
+
+    mNumber() {
+>mNumber : () => string
+
+        return "";
+>"" : ""
+    }
+}
+/** @implements A */
+class B3 {
+>B3 : B3
+}
+

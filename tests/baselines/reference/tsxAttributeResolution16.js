@@ -40,6 +40,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.AddressComp = void 0;
 var React = require("react");
 var AddressComp = /** @class */ (function (_super) {
     __extends(AddressComp, _super);
