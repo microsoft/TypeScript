@@ -2377,6 +2377,7 @@ declare namespace ts.server.protocol {
         newLineCharacter?: string;
         convertTabsToSpaces?: boolean;
         indentStyle?: IndentStyle | ts.IndentStyle;
+        trimTrailingWhitespace?: boolean;
     }
     interface FormatCodeSettings extends EditorSettings {
         insertSpaceAfterCommaDelimiter?: boolean;

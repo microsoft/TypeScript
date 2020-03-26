@@ -118,6 +118,12 @@ namespace ts.server {
         return (watch as GeneratedFileWatcher).generatedFilePath !== undefined;
     }
 
+    /*@internal*/
+    export interface EmitResult {
+        emitSkipped: boolean;
+        diagnostics: readonly Diagnostic[];
+    }
+
     export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
         private rootFiles: ScriptInfo[] = [];
         private rootFilesMap = createMap<ProjectRootFile>();
@@ -587,19 +593,28 @@ namespace ts.server {
         /**
          * Returns true if emit was conducted
          */
-        emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean {
+        emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): EmitResult {
             if (!this.languageServiceEnabled || !this.shouldEmitFile(scriptInfo)) {
-                return false;
+                return { emitSkipped: true, diagnostics: emptyArray };
             }
-            const { emitSkipped, outputFiles } = this.getLanguageService(/*ensureSynchronized*/ false).getEmitOutput(scriptInfo.fileName);
+            const { emitSkipped, diagnostics, outputFiles } = this.getLanguageService().getEmitOutput(scriptInfo.fileName);
             if (!emitSkipped) {
                 for (const outputFile of outputFiles) {
                     const outputFileAbsoluteFileName = getNormalizedAbsolutePath(outputFile.name, this.currentDirectory);
                     writeFile(outputFileAbsoluteFileName, outputFile.text, outputFile.writeByteOrderMark);
                 }
+
+                // Update the signature
+                if (this.builderState && getEmitDeclarations(this.compilerOptions)) {
+                    const dtsFiles = outputFiles.filter(f => fileExtensionIs(f.name, Extension.Dts));
+                    if (dtsFiles.length === 1) {
+                        const sourceFile = this.program!.getSourceFile(scriptInfo.fileName)!;
+                        BuilderState.updateSignatureOfFile(this.builderState, this.projectService.host.createHash!(dtsFiles[0].text), sourceFile.resolvedPath);
+                    }
+                }
             }
 
-            return !emitSkipped;
+            return { emitSkipped, diagnostics };
         }
 
         enableLanguageService() {

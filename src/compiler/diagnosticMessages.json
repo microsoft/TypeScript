@@ -1147,6 +1147,10 @@
         "category": "Error",
         "code": 1383
     },
+    "A 'new' expression with type arguments must always be followed by a parenthesized argument list.": {
+        "category": "Error",
+        "code": 1384
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -3457,6 +3461,10 @@
         "category": "Error",
         "code": 5082
     },
+    "Cannot read file '{0}'.": {
+        "category": "Error",
+        "code": 5083
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -5525,7 +5533,7 @@
         "category": "Message",
         "code": 95100
     },
-    "Wrap invalid character in an expression container": {
+    "Convert all invalid characters to HTML entity code": {
         "category": "Message",
         "code": 95101
     },
@@ -5553,29 +5561,37 @@
         "category": "Message",
         "code": 95107
     },
-    "Add a return statement": {
+    "Wrap invalid character in an expression container": {
         "category": "Message",
         "code": 95108
     },
-    "Remove block body braces": {
+    "Wrap all invalid characters in an expression container": {
         "category": "Message",
         "code": 95109
     },
-    "Wrap the following body with parentheses which should be an object literal": {
+    "Add a return statement": {
         "category": "Message",
         "code": 95110
     },
-    "Add all missing return statement": {
+    "Remove block body braces": {
         "category": "Message",
         "code": 95111
     },
-    "Remove all incorrect body block braces": {
+    "Wrap the following body with parentheses which should be an object literal": {
         "category": "Message",
         "code": 95112
     },
-    "Wrap all object literal with parentheses": {
+    "Add all missing return statement": {
         "category": "Message",
         "code": 95113
+    },
+    "Remove all incorrect body block braces": {
+        "category": "Message",
+        "code": 95114
+    },
+    "Wrap all object literal with parentheses": {
+        "category": "Message",
+        "code": 95115
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

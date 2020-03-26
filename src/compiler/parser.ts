@@ -4545,7 +4545,11 @@ namespace ts {
                         parseErrorAtRange(openingTag, Diagnostics.JSX_fragment_has_no_corresponding_closing_tag);
                     }
                     else {
-                        parseErrorAtRange(openingTag.tagName, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTag.tagName));
+                        // We want the error span to cover only 'Foo.Bar' in < Foo.Bar >
+                        // or to cover only 'Foo' in < Foo >
+                        const tag = openingTag.tagName;
+                        const start = skipTrivia(sourceText, tag.pos);
+                        parseErrorAt(start, tag.end, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTag.tagName));
                     }
                     return undefined;
                 case SyntaxKind.LessThanSlashToken:
@@ -4754,12 +4758,34 @@ namespace ts {
                 && lookAhead(nextTokenIsIdentifierOrKeywordOrOpenBracketOrTemplate);
         }
 
+        function tryReparseOptionalChain(node: Expression) {
+            if (node.flags & NodeFlags.OptionalChain) {
+                return true;
+            }
+            // check for an optional chain in a non-null expression
+            if (isNonNullExpression(node)) {
+                let expr = node.expression;
+                while (isNonNullExpression(expr) && !(expr.flags & NodeFlags.OptionalChain)) {
+                    expr = expr.expression;
+                }
+                if (expr.flags & NodeFlags.OptionalChain) {
+                    // this is part of an optional chain. Walk down from `node` to `expression` and set the flag.
+                    while (isNonNullExpression(node)) {
+                        node.flags |= NodeFlags.OptionalChain;
+                        node = node.expression;
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
         function parsePropertyAccessExpressionRest(expression: LeftHandSideExpression, questionDotToken: QuestionDotToken | undefined) {
             const propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
             propertyAccess.expression = expression;
             propertyAccess.questionDotToken = questionDotToken;
             propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true);
-            if (questionDotToken || expression.flags & NodeFlags.OptionalChain) {
+            if (questionDotToken || tryReparseOptionalChain(expression)) {
                 propertyAccess.flags |= NodeFlags.OptionalChain;
                 if (isPrivateIdentifier(propertyAccess.name)) {
                     parseErrorAtRange(propertyAccess.name, Diagnostics.An_optional_chain_cannot_contain_private_identifiers);
@@ -4785,7 +4811,7 @@ namespace ts {
             }
 
             parseExpected(SyntaxKind.CloseBracketToken);
-            if (questionDotToken || expression.flags & NodeFlags.OptionalChain) {
+            if (questionDotToken || tryReparseOptionalChain(expression)) {
                 indexedAccess.flags |= NodeFlags.OptionalChain;
             }
             return finishNode(indexedAccess);
@@ -4872,7 +4898,7 @@ namespace ts {
                         callExpr.questionDotToken = questionDotToken;
                         callExpr.typeArguments = typeArguments;
                         callExpr.arguments = parseArgumentList();
-                        if (questionDotToken || expression.flags & NodeFlags.OptionalChain) {
+                        if (questionDotToken || tryReparseOptionalChain(expression)) {
                             callExpr.flags |= NodeFlags.OptionalChain;
                         }
                         expression = finishNode(callExpr);
@@ -4884,7 +4910,7 @@ namespace ts {
                     callExpr.expression = expression;
                     callExpr.questionDotToken = questionDotToken;
                     callExpr.arguments = parseArgumentList();
-                    if (questionDotToken || expression.flags & NodeFlags.OptionalChain) {
+                    if (questionDotToken || tryReparseOptionalChain(expression)) {
                         callExpr.flags |= NodeFlags.OptionalChain;
                     }
                     expression = finishNode(callExpr);
@@ -5194,8 +5220,11 @@ namespace ts {
             const node = <NewExpression>createNode(SyntaxKind.NewExpression, fullStart);
             node.expression = expression;
             node.typeArguments = typeArguments;
-            if (node.typeArguments || token() === SyntaxKind.OpenParenToken) {
+            if (token() === SyntaxKind.OpenParenToken) {
                 node.arguments = parseArgumentList();
+            }
+            else if (node.typeArguments) {
+                parseErrorAt(fullStart, scanner.getStartPos(), Diagnostics.A_new_expression_with_type_arguments_must_always_be_followed_by_a_parenthesized_argument_list);
             }
             return finishNode(node);
         }

@@ -11,9 +11,9 @@ function f(x: { [key: string]: number; } | null | undefined) {
 
         console.log(x[key]);  // 2
 >console.log(x[key]) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >x[key] : number
 >x : { [key: string]: number; }
 >key : string

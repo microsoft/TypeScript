@@ -1410,7 +1410,7 @@ namespace ts {
                 return true;
             }
             if (isUsedInFunctionOrInstanceProperty(usage, declaration, container)) {
-                if (compilerOptions.target === ScriptTarget.ESNext && !!compilerOptions.useDefineForClassFields) {
+                if (compilerOptions.target === ScriptTarget.ESNext && !!compilerOptions.useDefineForClassFields && getContainingClass(declaration)) {
                     return (isPropertyDeclaration(declaration) || isParameterPropertyDeclaration(declaration, declaration.parent)) &&
                         !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage, /*stopAtAnyPropertyDeclaration*/ true);
                 }
@@ -4008,7 +4008,7 @@ namespace ts {
             printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ sourceFile, writer);
             const result = writer.getText();
 
-            const maxLength = noTruncation ? undefined : defaultMaximumTruncationLength * 2;
+            const maxLength = noTruncation ? noTruncationMaximumTruncationLength * 2 : defaultMaximumTruncationLength * 2;
             if (maxLength && result && result.length >= maxLength) {
                 return result.substr(0, maxLength - "...".length) + "...";
             }
@@ -4068,6 +4068,9 @@ namespace ts {
                         getProbableSymlinks: maybeBind(host, host.getProbableSymlinks),
                         useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
                         redirectTargetsMap: host.redirectTargetsMap,
+                        getProjectReferenceRedirect: fileName => host.getProjectReferenceRedirect(fileName),
+                        isSourceOfProjectReferenceRedirect: fileName => host.isSourceOfProjectReferenceRedirect(fileName),
+                        fileExists: fileName => host.fileExists(fileName),
                     } : undefined },
                     encounteredError: false,
                     visitedTypes: undefined,
@@ -4081,7 +4084,7 @@ namespace ts {
 
             function checkTruncationLength(context: NodeBuilderContext): boolean {
                 if (context.truncating) return context.truncating;
-                return context.truncating = !(context.flags & NodeBuilderFlags.NoTruncation) && context.approximateLength > defaultMaximumTruncationLength;
+                return context.truncating = context.approximateLength > ((context.flags & NodeBuilderFlags.NoTruncation) ? noTruncationMaximumTruncationLength : defaultMaximumTruncationLength);
             }
 
             function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode {
@@ -7264,7 +7267,7 @@ namespace ts {
                 // [Symbol.iterator] or next). This may be because we accessed properties from anyType,
                 // or it may have led to an error inside getElementTypeOfIterable.
                 const forOfStatement = declaration.parent.parent;
-                return checkRightHandSideOfForOf(forOfStatement.expression, forOfStatement.awaitModifier) || anyType;
+                return checkRightHandSideOfForOf(forOfStatement) || anyType;
             }
 
             if (isBindingPattern(declaration.parent)) {
@@ -10699,7 +10702,9 @@ namespace ts {
         }
 
         function getSignatureOfTypeTag(node: SignatureDeclaration | JSDocSignature) {
-            const typeTag = isInJSFile(node) ? getJSDocTypeTag(node) : undefined;
+            // should be attached to a function declaration or expression
+            if (!(isInJSFile(node) && isFunctionLikeDeclaration(node))) return undefined;
+            const typeTag = getJSDocTypeTag(node);
             const signature = typeTag && typeTag.typeExpression && getSingleCallSignature(getTypeFromTypeNode(typeTag.typeExpression));
             return signature && getErasedSignature(signature);
         }
@@ -16038,6 +16043,8 @@ namespace ts {
                         }
                     }
                     else {
+                        // conditionals aren't related to one another via distributive constraint as it is much too inaccurate and allows way
+                        // more assignments than are desirable (since it maps the source check type to its constraint, it loses information)
                         const distributiveConstraint = getConstraintOfDistributiveConditionalType(<ConditionalType>source);
                         if (distributiveConstraint) {
                             if (result = isRelatedTo(distributiveConstraint, target, reportErrors)) {
@@ -16045,12 +16052,14 @@ namespace ts {
                                 return result;
                             }
                         }
-                        const defaultConstraint = getDefaultConstraintOfConditionalType(<ConditionalType>source);
-                        if (defaultConstraint) {
-                            if (result = isRelatedTo(defaultConstraint, target, reportErrors)) {
-                                resetErrorInfo(saveErrorInfo);
-                                return result;
-                            }
+                    }
+                    // conditionals _can_ be related to one another via normal constraint, as, eg, `A extends B ? O : never` should be assignable to `O`
+                    // when `O` is a conditional (`never` is trivially aissgnable to `O`, as is `O`!).
+                    const defaultConstraint = getDefaultConstraintOfConditionalType(<ConditionalType>source);
+                    if (defaultConstraint) {
+                        if (result = isRelatedTo(defaultConstraint, target, reportErrors)) {
+                            resetErrorInfo(saveErrorInfo);
+                            return result;
                         }
                     }
                 }
@@ -18125,7 +18134,7 @@ namespace ts {
         }
 
         function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, contravariant = false) {
-            let symbolStack: Symbol[];
+            let symbolOrTypeStack: (Symbol | Type)[];
             let visited: Map<number>;
             let bivariant = false;
             let propagationType: Type;
@@ -18564,15 +18573,15 @@ namespace ts {
                 // its symbol with the instance side which would lead to false positives.
                 const isNonConstructorObject = target.flags & TypeFlags.Object &&
                     !(getObjectFlags(target) & ObjectFlags.Anonymous && target.symbol && target.symbol.flags & SymbolFlags.Class);
-                const symbol = isNonConstructorObject ? target.symbol : undefined;
-                if (symbol) {
-                    if (contains(symbolStack, symbol)) {
+                const symbolOrType = isNonConstructorObject ? isTupleType(target) ? target.target : target.symbol : undefined;
+                if (symbolOrType) {
+                    if (contains(symbolOrTypeStack, symbolOrType)) {
                         inferencePriority = InferencePriority.Circularity;
                         return;
                     }
-                    (symbolStack || (symbolStack = [])).push(symbol);
+                    (symbolOrTypeStack || (symbolOrTypeStack = [])).push(symbolOrType);
                     inferFromObjectTypesWorker(source, target);
-                    symbolStack.pop();
+                    symbolOrTypeStack.pop();
                 }
                 else {
                     inferFromObjectTypesWorker(source, target);
@@ -18936,6 +18945,13 @@ namespace ts {
             return false;
         }
 
+        // Given a source x, check if target matches x or is an && operation with an operand that matches x.
+        function containsTruthyCheck(source: Node, target: Node): boolean {
+            return isMatchingReference(source, target) ||
+                (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken &&
+                (containsTruthyCheck(source, (<BinaryExpression>target).left) || containsTruthyCheck(source, (<BinaryExpression>target).right)));
+        }
+
         function getAccessedPropertyName(access: AccessExpression): __String | undefined {
             return access.kind === SyntaxKind.PropertyAccessExpression ? access.name.escapedText :
                 isStringOrNumericLiteralLike(access.argumentExpression) ? escapeLeadingUnderscores(access.argumentExpression.text) :
@@ -19202,7 +19218,7 @@ namespace ts {
                 case SyntaxKind.ForInStatement:
                     return stringType;
                 case SyntaxKind.ForOfStatement:
-                    return checkRightHandSideOfForOf((<ForOfStatement>parent).expression, (<ForOfStatement>parent).awaitModifier) || errorType;
+                    return checkRightHandSideOfForOf(<ForOfStatement>parent) || errorType;
                 case SyntaxKind.BinaryExpression:
                     return getAssignedTypeOfBinaryExpression(<BinaryExpression>parent);
                 case SyntaxKind.DeleteExpression:
@@ -19246,7 +19262,7 @@ namespace ts {
                 return stringType;
             }
             if (node.parent.parent.kind === SyntaxKind.ForOfStatement) {
-                return checkRightHandSideOfForOf(node.parent.parent.expression, node.parent.parent.awaitModifier) || errorType;
+                return checkRightHandSideOfForOf(node.parent.parent) || errorType;
             }
             return errorType;
         }
@@ -19511,11 +19527,10 @@ namespace ts {
             return isLengthPushOrUnshift || isElementAssignment;
         }
 
-        function isDeclarationWithExplicitTypeAnnotation(declaration: Declaration | undefined) {
-            return !!(declaration && (
-                declaration.kind === SyntaxKind.VariableDeclaration || declaration.kind === SyntaxKind.Parameter ||
+        function isDeclarationWithExplicitTypeAnnotation(declaration: Declaration) {
+            return (declaration.kind === SyntaxKind.VariableDeclaration || declaration.kind === SyntaxKind.Parameter ||
                 declaration.kind === SyntaxKind.PropertyDeclaration || declaration.kind === SyntaxKind.PropertySignature) &&
-                getEffectiveTypeAnnotationNode(declaration as VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature));
+                !!getEffectiveTypeAnnotationNode(declaration as VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature);
         }
 
         function getExplicitTypeOfSymbol(symbol: Symbol, diagnostic?: Diagnostic) {
@@ -19523,11 +19538,20 @@ namespace ts {
                 return getTypeOfSymbol(symbol);
             }
             if (symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property)) {
-                if (isDeclarationWithExplicitTypeAnnotation(symbol.valueDeclaration)) {
-                    return getTypeOfSymbol(symbol);
-                }
-                if (diagnostic && symbol.valueDeclaration) {
-                    addRelatedInfo(diagnostic, createDiagnosticForNode(symbol.valueDeclaration, Diagnostics._0_needs_an_explicit_type_annotation, symbolToString(symbol)));
+                const declaration = symbol.valueDeclaration;
+                if (declaration) {
+                    if (isDeclarationWithExplicitTypeAnnotation(declaration)) {
+                        return getTypeOfSymbol(symbol);
+                    }
+                    if (isVariableDeclaration(declaration) && declaration.parent.parent.kind === SyntaxKind.ForOfStatement) {
+                        const expressionType = getTypeOfDottedName(declaration.parent.parent.expression, /*diagnostic*/ undefined);
+                        if (expressionType) {
+                            return getForOfIterationType(declaration.parent.parent, expressionType);
+                        }
+                    }
+                    if (diagnostic) {
+                        addRelatedInfo(diagnostic, createDiagnosticForNode(declaration, Diagnostics._0_needs_an_explicit_type_annotation, symbolToString(symbol)));
+                    }
                 }
             }
         }
@@ -20324,15 +20348,23 @@ namespace ts {
                 if (type.flags & TypeFlags.Any && literal.text === "function") {
                     return type;
                 }
+                if (assumeTrue && type.flags & TypeFlags.Unknown && literal.text === "object") {
+                    // The pattern x && typeof x === 'object', where x is of type unknown, narrows x to type object. We don't
+                    // need to check for the reverse typeof x === 'object' && x since that already narrows correctly.
+                    if (typeOfExpr.parent.parent.kind === SyntaxKind.BinaryExpression) {
+                        const expr = <BinaryExpression>typeOfExpr.parent.parent;
+                        if (expr.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken && expr.right === typeOfExpr.parent && containsTruthyCheck(reference, expr.left)) {
+                            return nonPrimitiveType;
+                        }
+                    }
+                    return getUnionType([nonPrimitiveType, nullType]);
+                }
                 const facts = assumeTrue ?
                     typeofEQFacts.get(literal.text) || TypeFacts.TypeofEQHostObject :
                     typeofNEFacts.get(literal.text) || TypeFacts.TypeofNEHostObject;
                 return getTypeWithFacts(assumeTrue ? mapType(type, narrowTypeForTypeof) : type, facts);
 
                 function narrowTypeForTypeof(type: Type) {
-                    if (type.flags & TypeFlags.Unknown && literal.text === "object") {
-                        return getUnionType([nonPrimitiveType, nullType]);
-                    }
                     // We narrow a non-union type to an exact primitive type if the non-union type
                     // is a supertype of that primitive type. For example, type 'any' can be narrowed
                     // to one of the primitive types.
@@ -20631,7 +20663,10 @@ namespace ts {
                         }
                         if (strictNullChecks && assumeTrue && optionalChainContainsReference(predicateArgument, reference) &&
                             !(getTypeFacts(predicate.type) & TypeFacts.EQUndefined)) {
-                            return getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
+                            type = getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
+                        }
+                        if (isMatchingReferenceDiscriminant(predicateArgument, declaredType)) {
+                            return narrowTypeByDiscriminant(type, predicateArgument as AccessExpression, t => getNarrowedType(t, predicate.type!, assumeTrue, isTypeSubtypeOf));
                         }
                     }
                 }
@@ -22698,6 +22733,15 @@ namespace ts {
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
+
+            // Spreads may cause an early bail; ensure computed names are always checked (this is cached)
+            // As otherwise they may not be checked until exports for the type at this position are retrieved,
+            // which may never occur.
+            for (const elem of node.properties) {
+                if (elem.name && isComputedPropertyName(elem.name) && !isWellKnownSymbolSyntactically(elem.name)) {
+                    checkComputedPropertyName(elem.name);
+                }
+            }
 
             let offset = 0;
             for (let i = 0; i < node.properties.length; i++) {
@@ -26385,8 +26429,15 @@ namespace ts {
             return targetType;
         }
 
+        function checkNonNullChain(node: NonNullChain) {
+            const leftType = checkExpression(node.expression);
+            const nonOptionalType = getOptionalExpressionType(leftType, node.expression);
+            return propagateOptionalTypeMarker(getNonNullableType(nonOptionalType), node, nonOptionalType !== leftType);
+        }
+
         function checkNonNullAssertion(node: NonNullExpression) {
-            return getNonNullableType(checkExpression(node.expression));
+            return node.flags & NodeFlags.OptionalChain ? checkNonNullChain(node as NonNullChain) :
+                getNonNullableType(checkExpression(node.expression));
         }
 
         function checkMetaProperty(node: MetaProperty): Type {
@@ -30055,9 +30106,9 @@ namespace ts {
          * @param type The type of the promise.
          * @remarks The "promised type" of a type is the type of the "value" parameter of the "onfulfilled" callback.
          */
-        function getPromisedTypeOfPromise(promise: Type, errorNode?: Node): Type | undefined {
+        function getPromisedTypeOfPromise(type: Type, errorNode?: Node): Type | undefined {
             //
-            //  { // promise
+            //  { // type
             //      then( // thenFunction
             //          onfulfilled: ( // onfulfilledParameterType
             //              value: T // valueParameterType
@@ -30066,20 +30117,20 @@ namespace ts {
             //  }
             //
 
-            if (isTypeAny(promise)) {
+            if (isTypeAny(type)) {
                 return undefined;
             }
 
-            const typeAsPromise = <PromiseOrAwaitableType>promise;
+            const typeAsPromise = <PromiseOrAwaitableType>type;
             if (typeAsPromise.promisedTypeOfPromise) {
                 return typeAsPromise.promisedTypeOfPromise;
             }
 
-            if (isReferenceToType(promise, getGlobalPromiseType(/*reportErrors*/ false))) {
-                return typeAsPromise.promisedTypeOfPromise = getTypeArguments(<GenericType>promise)[0];
+            if (isReferenceToType(type, getGlobalPromiseType(/*reportErrors*/ false))) {
+                return typeAsPromise.promisedTypeOfPromise = getTypeArguments(<GenericType>type)[0];
             }
 
-            const thenFunction = getTypeOfPropertyOfType(promise, "then" as __String)!; // TODO: GH#18217
+            const thenFunction = getTypeOfPropertyOfType(type, "then" as __String)!; // TODO: GH#18217
             if (isTypeAny(thenFunction)) {
                 return undefined;
             }
@@ -30120,32 +30171,49 @@ namespace ts {
             return awaitedType || errorType;
         }
 
+        /**
+         * Determines whether a type has a callable `then` member.
+         */
+        function isThenableType(type: Type): boolean {
+            const thenFunction = getTypeOfPropertyOfType(type, "then" as __String);
+            return !!thenFunction && getSignaturesOfType(getTypeWithFacts(thenFunction, TypeFacts.NEUndefinedOrNull), SignatureKind.Call).length > 0;
+        }
+
+        /**
+         * Gets the "awaited type" of a type.
+         *
+         * The "awaited type" of an expression is its "promised type" if the expression is a
+         * Promise-like type; otherwise, it is the type of the expression. If the "promised
+         * type" is itself a Promise-like, the "promised type" is recursively unwrapped until a
+         * non-promise type is found.
+         *
+         * This is used to reflect the runtime behavior of the `await` keyword.
+         */
         function getAwaitedType(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, arg0?: string | number): Type | undefined {
+            if (isTypeAny(type)) {
+                return type;
+            }
+
             const typeAsAwaitable = <PromiseOrAwaitableType>type;
             if (typeAsAwaitable.awaitedTypeOfType) {
                 return typeAsAwaitable.awaitedTypeOfType;
             }
 
-            if (isTypeAny(type)) {
-                return typeAsAwaitable.awaitedTypeOfType = type;
-            }
+            // For a union, get a union of the awaited types of each constituent.
+            //
+            return typeAsAwaitable.awaitedTypeOfType =
+                mapType(type, errorNode ? constituentType => getAwaitedTypeWorker(constituentType, errorNode, diagnosticMessage, arg0) : getAwaitedTypeWorker);
+        }
 
-            if (type.flags & TypeFlags.Union) {
-                let types: Type[] | undefined;
-                for (const constituentType of (<UnionType>type).types) {
-                    types = append<Type>(types, getAwaitedType(constituentType, errorNode, diagnosticMessage, arg0));
-                }
-
-                if (!types) {
-                    return undefined;
-                }
-
-                return typeAsAwaitable.awaitedTypeOfType = getUnionType(types);
+        function getAwaitedTypeWorker(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, arg0?: string | number): Type | undefined {
+            const typeAsAwaitable = <PromiseOrAwaitableType>type;
+            if (typeAsAwaitable.awaitedTypeOfType) {
+                return typeAsAwaitable.awaitedTypeOfType;
             }
 
             const promisedType = getPromisedTypeOfPromise(type);
             if (promisedType) {
-                if (type.id === promisedType.id || awaitedTypeStack.indexOf(promisedType.id) >= 0) {
+                if (type.id === promisedType.id || awaitedTypeStack.lastIndexOf(promisedType.id) >= 0) {
                     // Verify that we don't have a bad actor in the form of a promise whose
                     // promised type is the same as the promise type, or a mutually recursive
                     // promise. If so, we return undefined as we cannot guess the shape. If this
@@ -30159,6 +30227,7 @@ namespace ts {
                     //          onfulfilled: (value: BadPromise) => any,
                     //          onrejected: (error: any) => any): BadPromise;
                     //  }
+                    //
                     // The above interface will pass the PromiseLike check, and return a
                     // promised type of `BadPromise`. Since this is a self reference, we
                     // don't want to keep recursing ad infinitum.
@@ -30199,8 +30268,8 @@ namespace ts {
 
             // The type was not a promise, so it could not be unwrapped any further.
             // As long as the type does not have a callable "then" property, it is
-            // safe to return the type; otherwise, an error will be reported in
-            // the call to getNonThenableType and we will return undefined.
+            // safe to return the type; otherwise, an error is reported and we return
+            // undefined.
             //
             // An example of a non-promise "thenable" might be:
             //
@@ -30212,8 +30281,7 @@ namespace ts {
             // of a runtime problem. If the user wants to return this value from an async
             // function, they would need to wrap it in some other value. If they want it to
             // be treated as a promise, they can cast to <any>.
-            const thenFunction = getTypeOfPropertyOfType(type, "then" as __String);
-            if (thenFunction && getSignaturesOfType(thenFunction, SignatureKind.Call).length > 0) {
+            if (isThenableType(type)) {
                 if (errorNode) {
                     if (!diagnosticMessage) return Debug.fail();
                     error(errorNode, diagnosticMessage, arg0);
@@ -30612,6 +30680,10 @@ namespace ts {
                     }
                 }
             }
+        }
+
+        function checkJSDocPropertyTag(node: JSDocPropertyTag) {
+            checkSourceElement(node.typeExpression);
         }
 
         function checkJSDocFunctionType(node: JSDocFunctionType): void {
@@ -31583,7 +31655,7 @@ namespace ts {
             }
             else {
                 const varExpr = node.initializer;
-                const iteratedType = checkRightHandSideOfForOf(node.expression, node.awaitModifier);
+                const iteratedType = checkRightHandSideOfForOf(node);
 
                 // There may be a destructuring assignment on the left side
                 if (varExpr.kind === SyntaxKind.ArrayLiteralExpression || varExpr.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -31675,10 +31747,13 @@ namespace ts {
             }
         }
 
-        function checkRightHandSideOfForOf(rhsExpression: Expression, awaitModifier: AwaitKeywordToken | undefined): Type {
-            const expressionType = checkNonNullExpression(rhsExpression);
-            const use = awaitModifier ? IterationUse.ForAwaitOf : IterationUse.ForOf;
-            return checkIteratedTypeOrElementType(use, expressionType, undefinedType, rhsExpression);
+        function checkRightHandSideOfForOf(statement: ForOfStatement): Type {
+            return getForOfIterationType(statement, checkNonNullExpression(statement.expression));
+        }
+
+        function getForOfIterationType(statement: ForOfStatement, expressionType: Type) {
+            const use = statement.awaitModifier ? IterationUse.ForAwaitOf : IterationUse.ForOf;
+            return checkIteratedTypeOrElementType(use, expressionType, undefinedType, statement.expression);
         }
 
         function checkIteratedTypeOrElementType(use: IterationUse, inputType: Type, sentType: Type, errorNode: Node | undefined): Type {
@@ -34140,6 +34215,8 @@ namespace ts {
                     return checkJSDocTypeTag(node as JSDocTypeTag);
                 case SyntaxKind.JSDocParameterTag:
                     return checkJSDocParameterTag(node as JSDocParameterTag);
+                case SyntaxKind.JSDocPropertyTag:
+                    return checkJSDocPropertyTag(node as JSDocPropertyTag);
                 case SyntaxKind.JSDocFunctionType:
                     checkJSDocFunctionType(node as JSDocFunctionType);
                     // falls through
@@ -35044,7 +35121,7 @@ namespace ts {
             //     for ( { a } of elems) {
             //     }
             if (expr.parent.kind === SyntaxKind.ForOfStatement) {
-                const iteratedType = checkRightHandSideOfForOf((<ForOfStatement>expr.parent).expression, (<ForOfStatement>expr.parent).awaitModifier);
+                const iteratedType = checkRightHandSideOfForOf(<ForOfStatement>expr.parent);
                 return checkDestructuringAssignment(expr, iteratedType || errorType);
             }
             // If this is from "for" initializer

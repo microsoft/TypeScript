@@ -149,9 +149,11 @@ node_modules/npm/lib/config/core.js(19,1): error TS2323: Cannot redeclare export
 node_modules/npm/lib/config/core.js(77,7): error TS2323: Cannot redeclare exported variable 'loaded'.
 node_modules/npm/lib/config/core.js(87,3): error TS2323: Cannot redeclare exported variable 'usingBuiltin'.
 node_modules/npm/lib/config/core.js(88,12): error TS2323: Cannot redeclare exported variable 'rootConf'.
+node_modules/npm/lib/config/core.js(88,31): error TS2554: Expected 1 arguments, but got 0.
 node_modules/npm/lib/config/core.js(95,6): error TS2339: Property 'on' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(98,6): error TS2339: Property 'on' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(105,8): error TS2339: Property 'usingBuiltin' does not exist on type 'Conf'.
+node_modules/npm/lib/config/core.js(107,8): error TS2554: Expected 1 arguments, but got 0.
 node_modules/npm/lib/config/core.js(128,41): error TS2551: Property 'localPrefix' does not exist on type 'Conf'. Did you mean 'loadPrefix'?
 node_modules/npm/lib/config/core.js(130,35): error TS2339: Property 'get' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(131,15): error TS2339: Property 'get' does not exist on type 'Conf'.
@@ -349,6 +351,7 @@ node_modules/npm/lib/install.js(186,17): error TS2339: Property 'prefix' does no
 node_modules/npm/lib/install.js(190,22): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(192,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(200,36): error TS2339: Property 'prefix' does not exist on type 'typeof EventEmitter'.
+node_modules/npm/lib/install.js(203,3): error TS2555: Expected at least 4 arguments, but got 3.
 node_modules/npm/lib/install.js(224,24): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(226,19): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(227,20): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -400,6 +403,7 @@ node_modules/npm/lib/install/action/extract.js(39,40): error TS2339: Property 'l
 node_modules/npm/lib/install/action/extract.js(81,9): error TS2322: Type 'string' is not assignable to type 'any[]'.
 node_modules/npm/lib/install/action/global-install.js(9,37): error TS2339: Property 'globalDir' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/action/global-install.js(10,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
+node_modules/npm/lib/install/action/global-install.js(11,17): error TS2555: Expected at least 4 arguments, but got 3.
 node_modules/npm/lib/install/action/global-install.js(14,9): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/action/global-link.js(7,7): error TS2339: Property 'link' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/action/refresh-package-json.js(31,43): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -787,6 +791,7 @@ node_modules/npm/lib/uninstall.js(31,21): error TS2339: Property 'config' does n
 node_modules/npm/lib/uninstall.js(32,32): error TS2339: Property 'globalDir' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/uninstall.js(33,19): error TS2339: Property 'prefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/uninstall.js(43,31): error TS2339: Property 'localPrefix' does not exist on type 'typeof EventEmitter'.
+node_modules/npm/lib/uninstall.js(53,5): error TS2555: Expected at least 4 arguments, but got 3.
 node_modules/npm/lib/unpublish.js(17,7): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/unpublish.js(23,31): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/unpublish.js(26,11): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
@@ -800,6 +805,7 @@ node_modules/npm/lib/unpublish.js(97,70): error TS2339: Property 'registry' does
 node_modules/npm/lib/update.js(10,41): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/update.js(17,25): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/update.js(25,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
+node_modules/npm/lib/update.js(69,19): error TS2555: Expected at least 1 arguments, but got 0.
 node_modules/npm/lib/utils/completion/file-completion.js(11,15): error TS2345: Argument of type '(er: any) => any' is not assignable to parameter of type 'string | number | Options | undefined'.
   Value of type '(er: any) => any' has no properties in common with type 'Options'. Did you mean to call it?
 node_modules/npm/lib/utils/completion/installed-deep.js(9,19): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -954,10 +960,10 @@ node_modules/npm/scripts/index-build.js(23,22): error TS2531: Object is possibly
 node_modules/npm/scripts/index-build.js(24,15): error TS2531: Object is possibly 'null'.
 node_modules/npm/scripts/index-build.js(24,22): error TS2531: Object is possibly 'null'.
 node_modules/npm/scripts/publish-tag.js(2,36): error TS2732: Cannot find module '../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
-node_modules/npm/test/broken-under-nyc-and-travis/lifecycle-path.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/broken-under-nyc-and-travis/lifecycle-path.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/broken-under-nyc-and-travis/lifecycle-path.js(18,23): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-node_modules/npm/test/broken-under-nyc-and-travis/whoami.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/broken-under-nyc-and-travis/whoami.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/common-tap.js(5,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/common-tap.js(10,3): error TS2741: Property '__promisify__' is missing in type '(...args: any[]) => void' but required in type 'typeof setImmediate'.
 node_modules/npm/test/common-tap.js(10,36): error TS2322: Type '(...args: any[]) => void' is not assignable to type '(callback: (...args: any[]) => void, ...args: any[]) => Immediate'.
@@ -967,253 +973,253 @@ node_modules/npm/test/common-tap.js(12,28): error TS2345: Argument of type 'any[
 node_modules/npm/test/common-tap.js(175,17): error TS2339: Property '_storage' does not exist on type 'Environment'.
 node_modules/npm/test/common-tap.js(181,31): error TS2339: Property '_storage' does not exist on type 'Environment'.
 node_modules/npm/test/common-tap.js(192,12): error TS2339: Property '_storage' does not exist on type 'Environment'.
-node_modules/npm/test/need-npm5-update/belongs-in-pacote/add-remote-git-get-resolved.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/belongs-in-pacote/add-remote-git-get-resolved.js(4,19): error TS2307: Cannot find module '../../lib/npm.js'.
-node_modules/npm/test/need-npm5-update/belongs-in-pacote/add-remote-git-get-resolved.js(5,22): error TS2307: Cannot find module '../common-tap.js'.
-node_modules/npm/test/need-npm5-update/belongs-in-pacote/add-remote-git-get-resolved.js(25,27): error TS2307: Cannot find module '../../lib/cache/add-remote-git.js'.
-node_modules/npm/test/need-npm5-update/belongs-in-pacote/git-races.js(6,25): error TS2307: Cannot find module 'deep-equal'.
-node_modules/npm/test/need-npm5-update/belongs-in-pacote/git-races.js(10,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/need-npm5-update/belongs-in-pacote/git-races.js(13,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/ignore-shrinkwrap.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/need-npm5-update/ignore-shrinkwrap.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/legacy-array-bin.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/legacy-array-bin.js(11,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/need-npm5-update/legacy-dir-bin.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/legacy-dir-bin.js(11,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/need-npm5-update/legacy-npm-self-install.js(2,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/need-npm5-update/belongs-in-pacote/add-remote-git-get-resolved.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/belongs-in-pacote/add-remote-git-get-resolved.js(4,19): error TS2307: Cannot find module '../../lib/npm.js' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/belongs-in-pacote/add-remote-git-get-resolved.js(5,22): error TS2307: Cannot find module '../common-tap.js' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/belongs-in-pacote/add-remote-git-get-resolved.js(25,27): error TS2307: Cannot find module '../../lib/cache/add-remote-git.js' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/belongs-in-pacote/git-races.js(6,25): error TS2307: Cannot find module 'deep-equal' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/belongs-in-pacote/git-races.js(10,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/belongs-in-pacote/git-races.js(13,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/ignore-shrinkwrap.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/ignore-shrinkwrap.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/legacy-array-bin.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/legacy-array-bin.js(11,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/legacy-dir-bin.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/legacy-dir-bin.js(11,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/legacy-npm-self-install.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/need-npm5-update/legacy-npm-self-install.js(12,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/need-npm5-update/legacy-npm-self-install.js(34,42): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'string[]'.
   Type 'IArguments' is missing the following properties from type 'string[]': pop, push, concat, join, and 26 more.
 node_modules/npm/test/need-npm5-update/legacy-npm-self-install.js(48,3): error TS2322: Type 'null' is not assignable to type 'string | undefined'.
 node_modules/npm/test/need-npm5-update/legacy-npm-self-install.js(49,3): error TS2322: Type 'null' is not assignable to type 'string | undefined'.
-node_modules/npm/test/need-npm5-update/legacy-optional-deps.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/legacy-optional-deps.js(8,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/need-npm5-update/legacy-optional-deps.js(12,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/need-npm5-update/legacy-shrinkwrap.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/legacy-shrinkwrap.js(6,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/need-npm5-update/lifecycle-signal.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/move-no-clobber-dest-node-modules.js(3,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/need-npm5-update/legacy-optional-deps.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/legacy-optional-deps.js(8,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/legacy-optional-deps.js(12,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/legacy-shrinkwrap.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/legacy-shrinkwrap.js(6,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/lifecycle-signal.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/move-no-clobber-dest-node-modules.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/need-npm5-update/move-no-clobber-dest-node-modules.js(11,48): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'string[]'.
-node_modules/npm/test/need-npm5-update/need-only-update-save-optional/update-save.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/need-npm5-update/need-only-update-save-optional/update-save.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/need-only-update-save-optional/update-save.js(10,22): error TS2307: Cannot find module '../common-tap.js'.
-node_modules/npm/test/need-npm5-update/need-outdated/update-symlink.js(4,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/need-npm5-update/need-outdated/update-symlink.js(6,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/need-outdated/update-symlink.js(8,22): error TS2307: Cannot find module '../common-tap.js'.
-node_modules/npm/test/need-npm5-update/outdated-depth-deep.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/outdated-depth-deep.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
+node_modules/npm/test/need-npm5-update/need-only-update-save-optional/update-save.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/need-only-update-save-optional/update-save.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/need-only-update-save-optional/update-save.js(10,22): error TS2307: Cannot find module '../common-tap.js' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/need-outdated/update-symlink.js(4,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/need-outdated/update-symlink.js(6,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/need-outdated/update-symlink.js(8,22): error TS2307: Cannot find module '../common-tap.js' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/outdated-depth-deep.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/outdated-depth-deep.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/need-npm5-update/outdated-depth-deep.js(69,52): error TS2769: No overload matches this call.
   Overload 1 of 2, '(...items: ConcatArray<string>[]): string[]', gave the following error.
     Type 'number' is not assignable to type 'string'.
   Overload 2 of 2, '(...items: (string | ConcatArray<string>)[]): string[]', gave the following error.
     Type 'number' is not assignable to type 'string'.
-node_modules/npm/test/need-npm5-update/outdated-depth-integer.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/outdated-depth-integer.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
+node_modules/npm/test/need-npm5-update/outdated-depth-integer.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/outdated-depth-integer.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/need-npm5-update/outdated-depth-integer.js(55,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/need-npm5-update/outdated-depth-integer.js(62,11): error TS2339: Property 'install' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/need-npm5-update/outdated-depth-integer.js(64,13): error TS2339: Property 'outdated' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/need-npm5-update/outdated-include-devdependencies.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/need-npm5-update/outdated-include-devdependencies.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/need-npm5-update/outdated-include-devdependencies.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/outdated-include-devdependencies.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/need-npm5-update/outdated-include-devdependencies.js(38,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/need-npm5-update/outdated-include-devdependencies.js(39,11): error TS2339: Property 'outdated' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/need-npm5-update/outdated-local.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/outdated-local.js(6,18): error TS2307: Cannot find module 'npm-registry-mock'.
+node_modules/npm/test/need-npm5-update/outdated-local.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/outdated-local.js(6,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/need-npm5-update/outdated-local.js(107,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/need-npm5-update/outdated-local.js(114,13): error TS2339: Property 'install' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/need-npm5-update/outdated-local.js(117,15): error TS2339: Property 'outdated' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/need-npm5-update/outdated-new-versions.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/need-npm5-update/outdated-new-versions.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/need-npm5-update/outdated-new-versions.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/outdated-new-versions.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/need-npm5-update/outdated-new-versions.js(42,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/need-npm5-update/outdated-new-versions.js(43,11): error TS2339: Property 'outdated' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/need-npm5-update/outdated-notarget.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/outdated-notarget.js(12,18): error TS2307: Cannot find module 'npm-registry-mock'.
+node_modules/npm/test/need-npm5-update/outdated-notarget.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/outdated-notarget.js(12,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/need-npm5-update/outdated-notarget.js(18,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/need-npm5-update/outdated-notarget.js(19,11): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/need-npm5-update/outdated-private.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/outdated-private.js(6,18): error TS2307: Cannot find module 'npm-registry-mock'.
+node_modules/npm/test/need-npm5-update/outdated-private.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/outdated-private.js(6,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/need-npm5-update/outdated-private.js(58,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/need-npm5-update/outdated-private.js(65,13): error TS2339: Property 'install' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/need-npm5-update/outdated-private.js(68,15): error TS2339: Property 'outdated' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/need-npm5-update/outdated-symlink.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/need-npm5-update/outdated-symlink.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/need-npm5-update/outdated-symlink.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/outdated-symlink.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/need-npm5-update/outdated-symlink.js(13,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
-node_modules/npm/test/need-npm5-update/peer-deps-invalid.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/need-npm5-update/peer-deps-invalid.js(8,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/need-npm5-update/peer-deps-invalid.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/peer-deps-invalid.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/need-npm5-update/peer-deps-invalid.js(74,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/need-npm5-update/peer-deps-invalid.js(80,13): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/need-npm5-update/peer-deps-toplevel.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/peer-deps-toplevel.js(4,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/need-npm5-update/peer-deps-toplevel.js(5,21): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/need-npm5-update/peer-deps-toplevel.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/peer-deps-toplevel.js(4,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/peer-deps-toplevel.js(5,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/need-npm5-update/peer-deps-toplevel.js(8,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
-node_modules/npm/test/need-npm5-update/peer-deps-without-package-json.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/need-npm5-update/peer-deps-without-package-json.js(8,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/need-npm5-update/peer-deps-without-package-json.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/peer-deps-without-package-json.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/need-npm5-update/peer-deps-without-package-json.js(50,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/need-npm5-update/peer-deps-without-package-json.js(54,11): error TS2339: Property 'install' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/need-npm5-update/rm-linked.js(5,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/shrinkwrap-complete-except-dev.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/shrinkwrap-complete-except-dev.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/need-npm5-update/shrinkwrap-complete-except-dev.js(6,21): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/need-npm5-update/rm-linked.js(5,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/shrinkwrap-complete-except-dev.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/shrinkwrap-complete-except-dev.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/shrinkwrap-complete-except-dev.js(6,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/need-npm5-update/shrinkwrap-complete-except-dev.js(9,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
-node_modules/npm/test/need-npm5-update/shrinkwrap-dev-dep-cycle.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/shrinkwrap-dev-dep-cycle.js(5,21): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/need-npm5-update/shrinkwrap-dev-dep-cycle.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/need-npm5-update/shrinkwrap-dev-dep-cycle.js(5,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/need-npm5-update/shrinkwrap-dev-dep-cycle.js(76,23): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
-node_modules/npm/test/network/git-cache-locking.js(1,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/network/git-cache-locking.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/network/git-cache-locking.js(9,53): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
-node_modules/npm/test/network/git-cache-no-hooks.js(1,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/network/legacy-bundled-git.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/network/legacy-bundled-git.js(11,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/network/legacy-url-dep.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/network/legacy-url-dep.js(10,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/network/registry.js(5,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/network/git-cache-no-hooks.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/network/legacy-bundled-git.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/network/legacy-bundled-git.js(11,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/network/legacy-url-dep.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/network/legacy-url-dep.js(10,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/network/registry.js(5,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/network/registry.js(29,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/00-check-mock-dep.js(12,20): error TS2732: Cannot find module 'npm-registry-mock/package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
 node_modules/npm/test/tap/00-check-mock-dep.js(13,19): error TS2732: Cannot find module '../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
-node_modules/npm/test/tap/00-verify-bundle-deps.js(1,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/00-verify-bundle-deps.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/00-verify-bundle-deps.js(3,24): error TS2732: Cannot find module '../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
-node_modules/npm/test/tap/00-verify-ls-ok.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/00-verify-no-scoped.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/404-parent.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/404-parent.js(10,18): error TS2307: Cannot find module 'npm-registry-mock'.
+node_modules/npm/test/tap/00-verify-ls-ok.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/00-verify-no-scoped.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/404-parent.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/404-parent.js(10,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/tap/404-parent.js(47,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/404-parent.js(50,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/404-parent.js(53,11): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/404-private-registry-scoped.js(1,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/404-private-registry-scoped.js(6,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/404-private-registry.js(1,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/404-private-registry.js(6,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/access.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/access.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/404-private-registry-scoped.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/404-private-registry-scoped.js(6,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/404-private-registry.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/404-private-registry.js(6,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/access.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/access.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/access.js(19,15): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
   Type '(er: any) => void' has no properties in common with type 'Options'.
-node_modules/npm/test/tap/add-named-update-protocol-port.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/add-named-update-protocol-port.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/add-remote-git-file.js(10,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/add-named-update-protocol-port.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/add-named-update-protocol-port.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/add-remote-git-file.js(10,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/add-remote-git-file.js(56,18): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/add-remote-git-file.js(57,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/add-remote-git-file.js(58,7): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/add-remote-git-file.js(59,9): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/add-remote-git-file.js(86,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/add-remote-git-shrinkwrap.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/add-remote-git-shrinkwrap.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/add-remote-git-shrinkwrap.js(104,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/add-remote-git-submodule.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/add-remote-git-submodule.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/add-remote-git-submodule.js(45,7): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/add-remote-git-submodule.js(53,7): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/add-remote-git-submodule.js(87,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/add-remote-git.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/add-remote-git.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/add-remote-git.js(48,7): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/add-remote-git.js(71,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/adduser-always-auth.js(4,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/adduser-always-auth.js(6,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/adduser-legacy-auth.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/adduser-legacy-auth.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/adduser-always-auth.js(4,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/adduser-always-auth.js(6,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/adduser-legacy-auth.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/adduser-legacy-auth.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/adduser-legacy-auth.js(45,15): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
   Type '(er: any) => void' has no properties in common with type 'Options'.
-node_modules/npm/test/tap/adduser-oauth.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/adduser-oauth.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/adduser-saml.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/adduser-saml.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/all-package-metadata-cache-stream-unit.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/all-package-metadata-cache-stream-unit.js(9,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/all-package-metadata-entry-stream-unit.js(5,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/all-package-metadata-entry-stream-unit.js(9,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/all-package-metadata-entry-stream-unit.js(11,21): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/tap/adduser-oauth.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/adduser-oauth.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/adduser-saml.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/adduser-saml.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/all-package-metadata-cache-stream-unit.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/all-package-metadata-cache-stream-unit.js(9,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/all-package-metadata-entry-stream-unit.js(5,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/all-package-metadata-entry-stream-unit.js(9,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/all-package-metadata-entry-stream-unit.js(11,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/tap/all-package-metadata-entry-stream-unit.js(33,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/all-package-metadata-update-stream-unit.js(5,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/all-package-metadata-update-stream-unit.js(9,18): error TS2307: Cannot find module 'npm-registry-mock'.
+node_modules/npm/test/tap/all-package-metadata-update-stream-unit.js(5,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/all-package-metadata-update-stream-unit.js(9,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/tap/all-package-metadata-update-stream-unit.js(31,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/all-package-metadata-write-stream-unit.js(5,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/all-package-metadata-write-stream-unit.js(5,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/all-package-metadata-write-stream-unit.js(34,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/all-package-metadata-write-stream-unit.js(66,33): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/npm/test/tap/all-package-metadata-write-stream-unit.js(98,33): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/npm/test/tap/all-package-metadata-write-stream-unit.js(121,33): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
-node_modules/npm/test/tap/all-package-metadata.js(5,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/all-package-metadata.js(11,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/all-package-metadata.js(13,21): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/tap/all-package-metadata.js(5,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/all-package-metadata.js(11,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/all-package-metadata.js(13,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/tap/all-package-metadata.js(36,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/all-package-metadata.js(38,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/all-package-metadata.js(39,33): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/all-package-metadata.js(73,31): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/npm/test/tap/all-package-metadata.js(117,31): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/npm/test/tap/all-package-metadata.js(175,31): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
-node_modules/npm/test/tap/anon-cli-metrics.js(5,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/anon-cli-metrics.js(6,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/anon-cli-metrics.js(7,21): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/tap/anon-cli-metrics.js(5,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/anon-cli-metrics.js(6,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/anon-cli-metrics.js(7,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/tap/anon-cli-metrics.js(10,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
-node_modules/npm/test/tap/auto-prune.js(3,22): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/auto-prune.js(4,20): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/auto-prune.js(5,23): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/tap/auto-prune.js(3,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/auto-prune.js(4,20): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/auto-prune.js(5,23): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/tap/auto-prune.js(8,49): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
-node_modules/npm/test/tap/bearer-token-check.js(9,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/bin.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/bitbucket-https-url-with-creds-package.js(10,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/bitbucket-https-url-with-creds-package.js(12,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/bitbucket-https-url-with-creds.js(10,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/bitbucket-https-url-with-creds.js(12,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/bitbucket-shortcut-package.js(10,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/bitbucket-shortcut-package.js(12,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/bitbucket-shortcut.js(10,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/bitbucket-shortcut.js(12,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/bugs.js(4,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/bugs.js(6,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/build-already-built.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/build-already-built.js(9,29): error TS2307: Cannot find module 'require-inject'.
+node_modules/npm/test/tap/bearer-token-check.js(9,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/bin.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/bitbucket-https-url-with-creds-package.js(10,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/tap/bitbucket-https-url-with-creds-package.js(12,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/bitbucket-https-url-with-creds.js(10,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/tap/bitbucket-https-url-with-creds.js(12,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/bitbucket-shortcut-package.js(10,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/tap/bitbucket-shortcut-package.js(12,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/bitbucket-shortcut.js(10,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/tap/bitbucket-shortcut.js(12,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/bugs.js(4,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/bugs.js(6,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/build-already-built.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/build-already-built.js(9,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
 node_modules/npm/test/tap/build-already-built.js(23,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/build-already-built.js(33,22): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/builtin-config.js(14,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/bundled-dependencies-nonarray.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/bundled-dependencies.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/bundled-dependencies.js(12,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/bundled-no-add-to-move.js(2,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/builtin-config.js(14,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/bundled-dependencies-nonarray.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/bundled-dependencies.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/bundled-dependencies.js(12,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/bundled-no-add-to-move.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/bundled-no-add-to-move.js(42,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/bundled-transitive-deps.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/bundled-transitive-deps.js(5,21): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/tap/bundled-transitive-deps.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/bundled-transitive-deps.js(5,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/tap/bundled-transitive-deps.js(74,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/cache-add-unpublished.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/cache-shasum-fork.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/cache-shasum-fork.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/check-cpu-reqs.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/check-engine-reqs.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/check-install-self.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/check-os-reqs.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/check-permissions.js(4,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/cache-add-unpublished.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/cache-shasum-fork.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/cache-shasum-fork.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/check-cpu-reqs.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/check-engine-reqs.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/check-install-self.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/check-os-reqs.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/check-permissions.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/check-permissions.js(26,7): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
 node_modules/npm/test/tap/check-permissions.js(42,7): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
-node_modules/npm/test/tap/ci-header.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/ci-header.js(4,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/ci-header.js(5,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/ci.js(7,33): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/ci.js(10,23): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/ci.js(11,22): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/ci-header.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/ci-header.js(4,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/ci-header.js(5,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/ci.js(7,33): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/ci.js(10,23): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/ci.js(11,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/circular-dep.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
-node_modules/npm/test/tap/circular-dep.js(6,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/circular-dep.js(9,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/config-basic.js(1,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/circular-dep.js(6,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/circular-dep.js(9,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/config-basic.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/config-basic.js(81,12): error TS2531: Object is possibly 'null'.
 node_modules/npm/test/tap/config-basic.js(81,29): error TS2339: Property 'list' does not exist on type 'Conf'.
 node_modules/npm/test/tap/config-basic.js(82,24): error TS2531: Object is possibly 'null'.
-node_modules/npm/test/tap/config-builtin.js(1,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/config-builtin.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/config-builtin.js(60,12): error TS2531: Object is possibly 'null'.
 node_modules/npm/test/tap/config-builtin.js(60,29): error TS2339: Property 'list' does not exist on type 'Conf'.
 node_modules/npm/test/tap/config-builtin.js(61,13): error TS2531: Object is possibly 'null'.
-node_modules/npm/test/tap/config-certfile.js(5,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/config-credentials.js(1,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/config-edit.js(6,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/config-certfile.js(5,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/config-credentials.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/config-edit.js(6,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/config-edit.js(27,25): error TS2554: Expected 1-2 arguments, but got 3.
-node_modules/npm/test/tap/config-envReplace.js(6,22): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/config-list.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/config-malformed.js(1,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/config-meta.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/config-envReplace.js(6,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/config-list.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/config-malformed.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/config-meta.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/config-meta.js(63,9): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-node_modules/npm/test/tap/config-new-cafile.js(5,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/config-private.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/config-project.js(1,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/config-new-cafile.js(5,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/config-private.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/config-project.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/config-project.js(59,12): error TS2531: Object is possibly 'null'.
 node_modules/npm/test/tap/config-project.js(59,29): error TS2339: Property 'list' does not exist on type 'Conf'.
 node_modules/npm/test/tap/config-project.js(60,13): error TS2531: Object is possibly 'null'.
-node_modules/npm/test/tap/config-save.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/correct-mkdir.js(1,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/correct-mkdir.js(4,29): error TS2307: Cannot find module 'require-inject'.
+node_modules/npm/test/tap/config-save.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/correct-mkdir.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/correct-mkdir.js(4,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
 node_modules/npm/test/tap/correct-mkdir.js(14,23): error TS2339: Property 'uid' does not exist on type 'Process'.
 node_modules/npm/test/tap/correct-mkdir.js(96,3): error TS2322: Type '999' is not assignable to type 'string | undefined'.
 node_modules/npm/test/tap/correct-mkdir.js(97,3): error TS2322: Type '999' is not assignable to type 'string | undefined'.
@@ -1221,44 +1227,44 @@ node_modules/npm/test/tap/correct-mkdir.js(114,16): error TS2532: Object is poss
 node_modules/npm/test/tap/correct-mkdir.js(115,16): error TS2532: Object is possibly 'undefined'.
 node_modules/npm/test/tap/correct-mkdir.js(131,3): error TS2322: Type '999' is not assignable to type 'string | undefined'.
 node_modules/npm/test/tap/correct-mkdir.js(132,3): error TS2322: Type '999' is not assignable to type 'string | undefined'.
-node_modules/npm/test/tap/cruft-test.js(6,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/debug-logs.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/debug-logs.js(4,21): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/tap/cruft-test.js(6,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/debug-logs.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/debug-logs.js(4,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/tap/debug-logs.js(9,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
-node_modules/npm/test/tap/dedupe-scoped.js(6,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/dedupe-scoped.js(6,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/dedupe.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
-node_modules/npm/test/tap/dedupe.js(6,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/dedupe.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/deprecate.js(1,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/deprecate.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/dist-tag.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/dist-tag.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/dedupe.js(6,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/dedupe.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/deprecate.js(1,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/deprecate.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/dist-tag.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/dist-tag.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/dist-tag.js(49,15): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
   Type '(er: any) => void' has no properties in common with type 'Options'.
-node_modules/npm/test/tap/do-not-remove-other-bins.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/doctor.js(5,20): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/doctor.js(9,23): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/doctor.js(10,22): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/do-not-remove-other-bins.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/doctor.js(5,20): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/doctor.js(9,23): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/doctor.js(10,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/doctor.js(66,11): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/doctor.js(82,7): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/doctor.js(86,34): error TS2339: Property 'version' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/extraneous-dep-cycle-ls-ok.js(5,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/extraneous-dep-cycle-ls-ok.js(5,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/false-name.js(12,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
-node_modules/npm/test/tap/false-name.js(15,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/false-name.js(17,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/fetch-package-metadata.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/fetch-package-metadata.js(9,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/false-name.js(15,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/false-name.js(17,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/fetch-package-metadata.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/fetch-package-metadata.js(9,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/fetch-package-metadata.js(36,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/full-warning-messages.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/gently-rm-cmdshims.js(4,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/full-warning-messages.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/gently-rm-cmdshims.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/gently-rm-cmdshims.js(107,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/gently-rm-linked-module.js(6,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/gently-rm-linked-module.js(8,21): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/tap/gently-rm-linked-module.js(6,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/gently-rm-linked-module.js(8,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/tap/gently-rm-linked-module.js(12,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
-node_modules/npm/test/tap/gently-rm-overeager.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/gently-rm-symlinked-global-dir.js(5,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/get.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/get.js(6,18): error TS2307: Cannot find module 'npm-registry-mock'.
+node_modules/npm/test/tap/gently-rm-overeager.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/gently-rm-symlinked-global-dir.js(5,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/get.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/get.js(6,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/tap/get.js(40,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/get.js(50,9): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/get.js(54,9): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
@@ -1269,176 +1275,176 @@ node_modules/npm/test/tap/get.js(70,9): error TS2339: Property 'registry' does n
 node_modules/npm/test/tap/get.js(80,7): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/get.js(86,7): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/get.js(92,7): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/gist-short-shortcut-package.js(7,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/gist-short-shortcut-package.js(9,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/gist-short-shortcut.js(7,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/gist-short-shortcut.js(9,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/gist-shortcut-package.js(7,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/gist-shortcut-package.js(9,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/gist-shortcut.js(7,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/gist-shortcut.js(9,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/git-dependency-install-link.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/git-dependency-install-link.js(9,18): error TS2307: Cannot find module 'npm-registry-mock'.
+node_modules/npm/test/tap/gist-short-shortcut-package.js(7,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/tap/gist-short-shortcut-package.js(9,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/gist-short-shortcut.js(7,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/tap/gist-short-shortcut.js(9,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/gist-shortcut-package.js(7,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/tap/gist-shortcut-package.js(9,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/gist-shortcut.js(7,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/tap/gist-shortcut.js(9,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/git-dependency-install-link.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/git-dependency-install-link.js(9,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/tap/git-dependency-install-link.js(125,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/git-npmignore.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/git-npmignore.js(12,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/git-prepare.js(8,22): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/git-prepare.js(9,20): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/git-prepare.js(19,21): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/tap/git-npmignore.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/git-npmignore.js(12,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/git-prepare.js(8,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/git-prepare.js(9,20): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/git-prepare.js(19,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/tap/git-prepare.js(131,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/github-shortcut-package.js(7,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/github-shortcut-package.js(9,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/github-shortcut.js(10,31): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/github-shortcut.js(12,22): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/gitlab-shortcut-package.js(7,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/gitlab-shortcut-package.js(9,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/gitlab-shortcut.js(7,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/gitlab-shortcut.js(9,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/global-prefix-set-in-userconfig.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/graceful-restart.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/help.js(1,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/ignore-install-link.js(6,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/ignore-scripts.js(6,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/init-create.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/init-create.js(3,29): error TS2307: Cannot find module 'require-inject'.
+node_modules/npm/test/tap/github-shortcut-package.js(7,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/tap/github-shortcut-package.js(9,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/github-shortcut.js(10,31): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/tap/github-shortcut.js(12,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/gitlab-shortcut-package.js(7,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/tap/gitlab-shortcut-package.js(9,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/gitlab-shortcut.js(7,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/tap/gitlab-shortcut.js(9,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/global-prefix-set-in-userconfig.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/graceful-restart.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/help.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/ignore-install-link.js(6,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/ignore-scripts.js(6,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/init-create.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/init-create.js(3,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
 node_modules/npm/test/tap/init-create.js(25,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/init-create.js(42,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/init-create.js(47,16): error TS2339: Property 'parseArgs' does not exist on type '() => Promise<void>'.
 node_modules/npm/test/tap/init-create.js(53,16): error TS2339: Property 'parseArgs' does not exist on type '() => Promise<void>'.
 node_modules/npm/test/tap/init-create.js(68,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/init-create.js(74,16): error TS2339: Property 'parseArgs' does not exist on type '() => Promise<void>'.
-node_modules/npm/test/tap/init-interrupt.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/init-interrupt.js(8,29): error TS2307: Cannot find module 'require-inject'.
+node_modules/npm/test/tap/init-interrupt.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/init-interrupt.js(8,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
 node_modules/npm/test/tap/init-interrupt.js(28,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/install-actions.js(4,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/install-actions.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/install-actions.js(13,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/install-actions.js(108,27): error TS2345: Argument of type '{ path: string; package: { dependencies: { b: string; }; optionalDependencies: { a: string; }; }; children: ({ name: string; path: string; package: { scripts: { postinstall: string; }; dependencies: { b: string; }; }; isTop: boolean; } | { ...; })[]; requires: ({ ...; } | { ...; })[]; isTop: boolean; }' is not assignable to parameter of type '{ name: string; path: string; package: { scripts: { postinstall: string; }; dependencies: { b: string; }; }; isTop: boolean; }'.
   Property 'name' is missing in type '{ path: string; package: { dependencies: { b: string; }; optionalDependencies: { a: string; }; }; children: ({ name: string; path: string; package: { scripts: { postinstall: string; }; dependencies: { b: string; }; }; isTop: boolean; } | { ...; })[]; requires: ({ ...; } | { ...; })[]; isTop: boolean; }' but required in type '{ name: string; path: string; package: { scripts: { postinstall: string; }; dependencies: { b: string; }; }; isTop: boolean; }'.
-node_modules/npm/test/tap/install-at-locally.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-bad-dep-format.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-bad-man.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-bin-null.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/install-at-locally.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-bad-dep-format.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-bad-man.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-bin-null.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/install-cli-only-development.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
-node_modules/npm/test/tap/install-cli-only-development.js(8,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/install-cli-only-development.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/install-cli-only-production.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
-node_modules/npm/test/tap/install-cli-only-production.js(8,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/install-cli-only-production.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/install-cli-only-shrinkwrap.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
-node_modules/npm/test/tap/install-cli-only-shrinkwrap.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-cli-production-nosave.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/install-cli-production-nosave.js(8,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/install-cli-only-shrinkwrap.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-cli-production-nosave.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/install-cli-production-nosave.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/install-cli-production.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
-node_modules/npm/test/tap/install-cli-production.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-cli-unicode.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/install-cli-unicode.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-contributors-count.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-contributors-count.js(4,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/install-duplicate-deps-warning.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/install-duplicate-deps-warning.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-from-local.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-into-likenamed-folder.js(6,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-link-scripts.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-local-dep-cycle.js(6,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-man.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-noargs-dev.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/install-noargs-dev.js(8,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/install-cli-production.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-cli-unicode.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/install-cli-unicode.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-contributors-count.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-contributors-count.js(4,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/install-duplicate-deps-warning.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/install-duplicate-deps-warning.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-from-local.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-into-likenamed-folder.js(6,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-link-scripts.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-local-dep-cycle.js(6,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-man.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-noargs-dev.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/install-noargs-dev.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/install-noargs-dev.js(56,32): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/npm/test/tap/install-noargs-dev.js(83,32): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
-node_modules/npm/test/tap/install-order.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-package-json-order.js(1,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-package-lock-only.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-package-lock-only.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/install-package-lock-only.js(6,21): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/tap/install-order.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-package-json-order.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-package-lock-only.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-package-lock-only.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/install-package-lock-only.js(6,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/tap/install-package-lock-only.js(9,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
-node_modules/npm/test/tap/install-parse-error.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-parse-error.js(4,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/install-property-conflicts.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-report-just-installed.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-report-just-installed.js(4,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/install-save-consistent-newlines.js(7,20): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/install-save-consistent-newlines.js(10,22): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-save-exact.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/install-save-exact.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-save-local.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-save-prefix.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/install-save-prefix.js(8,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/install-parse-error.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-parse-error.js(4,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/install-property-conflicts.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-report-just-installed.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-report-just-installed.js(4,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/install-save-consistent-newlines.js(7,20): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/install-save-consistent-newlines.js(10,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-save-exact.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/install-save-exact.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-save-local.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-save-prefix.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/install-save-prefix.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/install-save-prefix.js(46,23): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/npm/test/tap/install-save-prefix.js(78,23): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/npm/test/tap/install-save-prefix.js(110,23): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/npm/test/tap/install-save-prefix.js(142,23): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/npm/test/tap/install-scoped-already-installed.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
-node_modules/npm/test/tap/install-scoped-already-installed.js(8,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/install-scoped-already-installed.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/install-scoped-link.js(4,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
-node_modules/npm/test/tap/install-scoped-link.js(9,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-scoped-with-bundled-dependency.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-scoped-with-bundled-dependency.js(4,21): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/tap/install-scoped-link.js(9,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-scoped-with-bundled-dependency.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-scoped-with-bundled-dependency.js(4,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/tap/install-scoped-with-bundled-dependency.js(7,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
-node_modules/npm/test/tap/install-scoped-with-peer-dependency.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-shrinkwrapped-git.js(9,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/install-scoped-with-peer-dependency.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-shrinkwrapped-git.js(9,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/install-shrinkwrapped-git.js(56,12): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/install-shrinkwrapped-git.js(60,12): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/install-shrinkwrapped-git.js(65,12): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/install-shrinkwrapped-git.js(106,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/install-test-cli-without-package-lock.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/install-test-cli-without-package-lock.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/install-windows-newlines.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
-node_modules/npm/test/tap/install-windows-newlines.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-with-dev-dep-duplicate.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/install-with-dev-dep-duplicate.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/invalid-cmd-exit-code.js(1,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/invalid-dep-version-filtering.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/invalid-dep-version-filtering.js(4,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/invalid-dep-version-filtering.js(6,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/is-fs-access-available.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/is-fs-access-available.js(4,29): error TS2307: Cannot find module 'require-inject'.
+node_modules/npm/test/tap/install-windows-newlines.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/install-with-dev-dep-duplicate.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/install-with-dev-dep-duplicate.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/invalid-cmd-exit-code.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/invalid-dep-version-filtering.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/invalid-dep-version-filtering.js(4,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/invalid-dep-version-filtering.js(6,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/is-fs-access-available.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/is-fs-access-available.js(4,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
 node_modules/npm/test/tap/is-fs-access-available.js(6,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
-node_modules/npm/test/tap/is-registry.js(2,22): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/it.js(6,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/it.js(9,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/legacy-ignore-nested-nm.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/legacy-ignore-nested-nm.js(12,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/legacy-missing-bindir.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/legacy-missing-bindir.js(12,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/legacy-no-auth-leak.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/legacy-no-auth-leak.js(6,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/legacy-platform-all.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/legacy-platform-all.js(10,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/legacy-platform.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/legacy-platform.js(10,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/legacy-private.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/legacy-private.js(10,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/legacy-test-package.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/legacy-test-package.js(11,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/lifecycle-INIT_CWD.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/lifecycle-order.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/link.js(5,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/local-args-relative-to-cwd.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/local-args-relative-to-cwd.js(5,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/locker.js(1,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/is-registry.js(2,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/it.js(6,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/it.js(9,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/legacy-ignore-nested-nm.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/legacy-ignore-nested-nm.js(12,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/legacy-missing-bindir.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/legacy-missing-bindir.js(12,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/legacy-no-auth-leak.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/legacy-no-auth-leak.js(6,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/legacy-platform-all.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/legacy-platform-all.js(10,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/legacy-platform.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/legacy-platform.js(10,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/legacy-private.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/legacy-private.js(10,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/legacy-test-package.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/legacy-test-package.js(11,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/lifecycle-INIT_CWD.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/lifecycle-order.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/link.js(5,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/local-args-relative-to-cwd.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/local-args-relative-to-cwd.js(5,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/locker.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/locker.js(31,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/locker.js(61,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/lockfile-http-deps.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/lockfile-http-deps.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/lockfile-http-deps.js(6,21): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/tap/lockfile-http-deps.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/lockfile-http-deps.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/lockfile-http-deps.js(6,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/tap/lockfile-http-deps.js(9,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/lockfile-http-deps.js(81,35): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
-node_modules/npm/test/tap/logout-scoped.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/logout-scoped.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/logout.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/logout.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/ls-depth-cli.js(6,37): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/ls-depth-cli.js(9,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/ls-depth-unmet.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/ls-depth-unmet.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/ls-env.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/ls-env.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/ls-l-depth-0.js(6,37): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/ls-l-depth-0.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/ls-no-results.js(1,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/ls-production-and-dev.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/ls-production-and-dev.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/ls-top-errors.js(5,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/ls.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/ls.js(9,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/map-to-registry.js(1,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/logout-scoped.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/logout-scoped.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/logout.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/logout.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/ls-depth-cli.js(6,37): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/ls-depth-cli.js(9,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/ls-depth-unmet.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/ls-depth-unmet.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/ls-env.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/ls-env.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/ls-l-depth-0.js(6,37): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/ls-l-depth-0.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/ls-no-results.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/ls-production-and-dev.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/ls-production-and-dev.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/ls-top-errors.js(5,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/ls.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/ls.js(9,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/map-to-registry.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/map-to-registry.js(14,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/map-to-registry.js(23,28): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/map-to-registry.js(38,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -1460,74 +1466,74 @@ node_modules/npm/test/tap/map-to-registry.js(101,11): error TS2339: Property 'co
 node_modules/npm/test/tap/map-to-registry.js(123,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/map-to-registry.js(143,9): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/map-to-registry.js(146,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/nerf-dart.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/nested-extraneous.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/no-global-warns.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/no-scan-full-global-dir.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/no-scan-full-global-dir.js(5,29): error TS2307: Cannot find module 'require-inject'.
+node_modules/npm/test/tap/nerf-dart.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/nested-extraneous.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/no-global-warns.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/no-scan-full-global-dir.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/no-scan-full-global-dir.js(5,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
 node_modules/npm/test/tap/no-scan-full-global-dir.js(28,6): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/test/tap/no-scan-full-global-dir.js(34,6): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/test/tap/no-scan-full-global-dir.js(43,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/noargs-install-config-save.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/noargs-install-config-save.js(8,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/node-modules-path-munge.js(2,17): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/normalize-package-explode.js(2,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/noargs-install-config-save.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/noargs-install-config-save.js(8,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/node-modules-path-munge.js(2,17): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/normalize-package-explode.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/normalize-package-explode.js(16,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/npm-api-not-loaded-error.js(1,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/npm-api-not-loaded-error.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/npm-api-not-loaded-error.js(16,9): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/npm-api-not-loaded-error.js(26,9): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/npm-api-not-loaded-error.js(34,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/npm-api-not-loaded-error.js(37,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/npm-api-not-loaded-error.js(38,9): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/npm-api-not-loaded-error.js(39,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/onload.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/optional-metadep-rollback-collision.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/optional-metadep-rollback-collision.js(17,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/outdated-bad-read-tree.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/outdated-bad-read-tree.js(3,29): error TS2307: Cannot find module 'require-inject'.
+node_modules/npm/test/tap/onload.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/optional-metadep-rollback-collision.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/optional-metadep-rollback-collision.js(17,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/outdated-bad-read-tree.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/outdated-bad-read-tree.js(3,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
 node_modules/npm/test/tap/outdated-bad-read-tree.js(7,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/outdated-color.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/outdated-color.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/outdated-depth.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/outdated-depth.js(8,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/outdated-color.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/outdated-color.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/outdated-depth.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/outdated-depth.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/outdated-depth.js(48,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/outdated-depth.js(54,13): error TS2339: Property 'install' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/outdated-depth.js(56,15): error TS2339: Property 'outdated' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/outdated-git.js(3,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/outdated-git.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/outdated-git.js(35,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/outdated-git.js(36,9): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/outdated-json.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/outdated-json.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/outdated-long.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/outdated-long.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/outdated-json.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/outdated-json.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/outdated-long.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/outdated-long.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/outdated-long.js(63,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
   Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 26 more.
 node_modules/npm/test/tap/outdated-long.js(66,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/outdated-long.js(74,13): error TS2339: Property 'install' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/outdated-long.js(76,15): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/outdated-long.js(77,15): error TS2339: Property 'outdated' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/outdated.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/outdated.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/outdated.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/outdated.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/outdated.js(92,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/outdated.js(100,13): error TS2339: Property 'install' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/outdated.js(103,39): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
 node_modules/npm/test/tap/outdated.js(105,15): error TS2339: Property 'outdated' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/override-bundled.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/owner.js(1,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/owner.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/pack-files-and-ignores.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/pack-files-and-ignores.js(12,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/pack-scoped.js(2,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/override-bundled.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/owner.js(1,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/owner.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/pack-files-and-ignores.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/pack-files-and-ignores.js(12,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/pack-scoped.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/pack-scoped.js(24,15): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
   Type '(er: any) => void' has no properties in common with type 'Options'.
 node_modules/npm/test/tap/pack-scoped.js(25,17): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
   Type '(er: any) => void' has no properties in common with type 'Options'.
 node_modules/npm/test/tap/pack-scoped.js(26,15): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
   Type '(er: any) => void' has no properties in common with type 'Options'.
-node_modules/npm/test/tap/pack.js(5,22): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/peer-deps.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/peer-deps.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/pick-manifest-from-registry-metadata.js(2,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/pack.js(5,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/peer-deps.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/peer-deps.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/pick-manifest-from-registry-metadata.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/pick-manifest-from-registry-metadata.js(21,11): error TS2532: Object is possibly 'undefined'.
 node_modules/npm/test/tap/pick-manifest-from-registry-metadata.js(22,11): error TS2532: Object is possibly 'undefined'.
 node_modules/npm/test/tap/pick-manifest-from-registry-metadata.js(24,11): error TS2532: Object is possibly 'undefined'.
@@ -1544,26 +1550,26 @@ node_modules/npm/test/tap/pick-manifest-from-registry-metadata.js(116,11): error
 node_modules/npm/test/tap/pick-manifest-from-registry-metadata.js(117,11): error TS2532: Object is possibly 'undefined'.
 node_modules/npm/test/tap/pick-manifest-from-registry-metadata.js(136,11): error TS2532: Object is possibly 'undefined'.
 node_modules/npm/test/tap/pick-manifest-from-registry-metadata.js(137,11): error TS2532: Object is possibly 'undefined'.
-node_modules/npm/test/tap/ping.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/ping.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/prepare.js(3,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/ping.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/ping.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/prepare.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/prepare.js(16,15): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
   Type '(er: any) => void' has no properties in common with type 'Options'.
 node_modules/npm/test/tap/prepare.js(17,17): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
   Type '(er: any) => void' has no properties in common with type 'Options'.
 node_modules/npm/test/tap/prepare.js(18,15): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
   Type '(er: any) => void' has no properties in common with type 'Options'.
-node_modules/npm/test/tap/prepublish-only.js(4,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/prepublish-only.js(5,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/prepublish-only.js(6,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/prepublish.js(3,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/prepublish-only.js(4,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/prepublish-only.js(5,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/prepublish-only.js(6,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/prepublish.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/prepublish.js(16,15): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
   Type '(er: any) => void' has no properties in common with type 'Options'.
 node_modules/npm/test/tap/prepublish.js(17,17): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
   Type '(er: any) => void' has no properties in common with type 'Options'.
 node_modules/npm/test/tap/prepublish.js(18,15): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
   Type '(er: any) => void' has no properties in common with type 'Options'.
-node_modules/npm/test/tap/process-logger.js(2,22): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/process-logger.js(2,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/process-logger.js(7,61): error TS2554: Expected 1-3 arguments, but got 4.
 node_modules/npm/test/tap/process-logger.js(8,37): error TS2769: No overload matches this call.
   The last overload gave the following error.
@@ -1574,55 +1580,55 @@ node_modules/npm/test/tap/process-logger.js(9,37): error TS2769: No overload mat
 node_modules/npm/test/tap/process-logger.js(10,37): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '"log"' is not assignable to parameter of type 'Signals'.
-node_modules/npm/test/tap/progress-config.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/progress-config.js(12,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/prune-dev-dep-cycle.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/prune-dev-dep-cycle.js(5,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/prune-dev-dep-with-bins.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/prune-dev-dep-with-bins.js(5,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/prune-with-dev-dep-duplicate.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/prune-with-dev-dep-duplicate.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/prune-with-only-dev-deps.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/prune-with-only-dev-deps.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/prune.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/prune.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/publish-access-scoped.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/publish-access-scoped.js(7,18): error TS2307: Cannot find module 'npm-registry-mock'.
+node_modules/npm/test/tap/progress-config.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/progress-config.js(12,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/tap/prune-dev-dep-cycle.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/prune-dev-dep-cycle.js(5,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/prune-dev-dep-with-bins.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/prune-dev-dep-with-bins.js(5,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/prune-with-dev-dep-duplicate.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/prune-with-dev-dep-duplicate.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/prune-with-only-dev-deps.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/prune-with-only-dev-deps.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/prune.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/prune.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/publish-access-scoped.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/publish-access-scoped.js(7,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/tap/publish-access-scoped.js(31,35): error TS2345: Argument of type '() => void' is not assignable to parameter of type 'string | number | Options | undefined'.
   Type '() => void' has no properties in common with type 'Options'.
-node_modules/npm/test/tap/publish-access-unscoped-restricted-fails.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/publish-access-unscoped.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/publish-access-unscoped.js(7,18): error TS2307: Cannot find module 'npm-registry-mock'.
+node_modules/npm/test/tap/publish-access-unscoped-restricted-fails.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/publish-access-unscoped.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/publish-access-unscoped.js(7,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/tap/publish-access-unscoped.js(31,35): error TS2345: Argument of type '() => void' is not assignable to parameter of type 'string | number | Options | undefined'.
   Type '() => void' has no properties in common with type 'Options'.
-node_modules/npm/test/tap/publish-config.js(4,22): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/publish-invalid-semver-tag.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/publish-invalid-semver-tag.js(8,18): error TS2307: Cannot find module 'npm-registry-mock'.
+node_modules/npm/test/tap/publish-config.js(4,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/publish-invalid-semver-tag.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/publish-invalid-semver-tag.js(8,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/tap/publish-invalid-semver-tag.js(37,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/publish-invalid-semver-tag.js(53,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/publish-invalid-semver-tag.js(54,7): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/publish-invalid-semver-tag.js(64,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/publish-invalid-semver-tag.js(65,7): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/publish-scoped.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/publish-scoped.js(8,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/publish.js(8,33): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/publish.js(11,22): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/publish-scoped.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/publish-scoped.js(8,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/publish.js(8,33): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/publish.js(11,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/publish.js(56,47): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type 'number' is not assignable to parameter of type 'string | RegExp'.
 node_modules/npm/test/tap/publish.js(117,45): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type 'number' is not assignable to parameter of type 'string | RegExp'.
-node_modules/npm/test/tap/pwd-prefix.js(5,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/referer.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/repo.js(2,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/repo.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/retry-on-stale-cache.js(3,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/retry-on-stale-cache.js(4,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/pwd-prefix.js(5,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/referer.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/repo.js(2,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/repo.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/retry-on-stale-cache.js(3,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/retry-on-stale-cache.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/retry-on-stale-cache.js(6,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
-node_modules/npm/test/tap/retry-on-stale-cache.js(7,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/run-script-filter-private.js(6,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/run-script.js(5,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/retry-on-stale-cache.js(7,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/run-script-filter-private.js(6,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/run-script.js(5,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/run-script.js(213,18): error TS2769: No overload matches this call.
   Overload 1 of 3, '(pattern: string | RegExp, flags?: string | undefined): RegExp', gave the following error.
     Argument of type 'string | undefined' is not assignable to parameter of type 'string | RegExp'.
@@ -1643,164 +1649,165 @@ node_modules/npm/test/tap/run-script.js(256,18): error TS2769: No overload match
   Overload 3 of 3, '(pattern: string, flags?: string | undefined): RegExp', gave the following error.
     Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
       Type 'undefined' is not assignable to type 'string'.
-node_modules/npm/test/tap/save-optional.js(3,22): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/save-optional.js(4,20): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/save-optional.js(5,23): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/tap/save-optional.js(3,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/save-optional.js(4,20): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/save-optional.js(5,23): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/tap/save-optional.js(70,30): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
-node_modules/npm/test/tap/scope-header.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/scope-header.js(4,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/scope-header.js(5,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/scripts-whitespace-windows.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/scope-header.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/scope-header.js(4,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/scope-header.js(5,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/scripts-whitespace-windows.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/scripts-whitespace-windows.js(38,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
-node_modules/npm/test/tap/search.all-package-search.js(3,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/search.all-package-search.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/search.all-package-search.js(8,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/search.esearch.js(4,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/search.esearch.js(9,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/search.all-package-search.js(3,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/search.all-package-search.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/search.all-package-search.js(8,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/search.esearch.js(4,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/search.esearch.js(9,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/search.esearch.js(33,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/search.js(3,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/search.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/search.js(8,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/semver-doc.js(1,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/shared-linked.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/shared-linked.js(4,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/shared-linked.js(9,18): error TS2307: Cannot find module 'npm-registry-mock'.
+node_modules/npm/test/tap/search.js(3,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/search.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/search.js(8,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/semver-doc.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/shared-linked.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/shared-linked.js(4,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/shared-linked.js(9,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/tap/shared-linked.js(10,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
-node_modules/npm/test/tap/shrinkwrap-_auth.js(12,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/shrinkwrap-default-dev.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/shrinkwrap-default-dev.js(5,21): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/tap/shrinkwrap-_auth.js(12,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-default-dev.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-default-dev.js(5,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/tap/shrinkwrap-default-dev.js(8,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/shrinkwrap-default-dev.js(85,28): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
-node_modules/npm/test/tap/shrinkwrap-dev-dependency.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/shrinkwrap-dev-dependency.js(8,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/shrinkwrap-dev-dependency.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-dev-dependency.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/shrinkwrap-dev-dependency.js(78,36): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
-node_modules/npm/test/tap/shrinkwrap-empty-deps.js(6,20): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/shrinkwrap-empty-deps.js(10,22): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/shrinkwrap-empty-deps.js(6,20): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-empty-deps.js(10,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/shrinkwrap-empty-deps.js(52,24): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
-node_modules/npm/test/tap/shrinkwrap-extra-metadata.js(6,20): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/shrinkwrap-extra-metadata.js(11,22): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/shrinkwrap-extra-metadata.js(6,20): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-extra-metadata.js(11,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/shrinkwrap-extra-metadata.js(52,38): error TS2339: Property 'lockfileVersion' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/shrinkwrap-extra-metadata.js(55,24): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
-node_modules/npm/test/tap/shrinkwrap-global-auth.js(8,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/shrinkwrap-global-auth.js(12,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/shrinkwrap-lifecycle-cwd.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/shrinkwrap-lifecycle-cwd.js(4,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/shrinkwrap-lifecycle-cwd.js(5,21): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/tap/shrinkwrap-global-auth.js(8,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-global-auth.js(12,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-lifecycle-cwd.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-lifecycle-cwd.js(4,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-lifecycle-cwd.js(5,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/tap/shrinkwrap-lifecycle-cwd.js(8,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
-node_modules/npm/test/tap/shrinkwrap-lifecycle.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/shrinkwrap-local-dependency.js(1,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/shrinkwrap-local-dependency.js(6,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/shrinkwrap-nested.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/shrinkwrap-nested.js(4,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/shrinkwrap-optional-dependency.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/shrinkwrap-optional-dependency.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/shrinkwrap-optional-platform.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/shrinkwrap-optional-platform.js(4,21): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/tap/shrinkwrap-lifecycle.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-local-dependency.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-local-dependency.js(6,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-nested.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-nested.js(4,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-optional-dependency.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-optional-dependency.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-optional-platform.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-optional-platform.js(4,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/tap/shrinkwrap-optional-platform.js(7,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
-node_modules/npm/test/tap/shrinkwrap-optional-property.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/shrinkwrap-optional-property.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/shrinkwrap-prod-dependency-also.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/shrinkwrap-prod-dependency-also.js(8,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/shrinkwrap-optional-property.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-optional-property.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-prod-dependency-also.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-prod-dependency-also.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/shrinkwrap-prod-dependency-also.js(43,38): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
-node_modules/npm/test/tap/shrinkwrap-prod-dependency.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/shrinkwrap-prod-dependency.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/shrinkwrap-resolve-conflict.js(9,22): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/shrinkwrap-resolve-conflict.js(10,23): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/shrinkwrap-save-dev-with-existing-deps.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/shrinkwrap-prod-dependency.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-prod-dependency.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-resolve-conflict.js(9,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-resolve-conflict.js(10,23): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-save-dev-with-existing-deps.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/shrinkwrap-save-dev-with-existing-deps.js(90,33): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
-node_modules/npm/test/tap/shrinkwrap-save-with-existing-dev-deps.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/shrinkwrap-save-with-existing-dev-deps.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/shrinkwrap-save-with-existing-dev-deps.js(72,33): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
-node_modules/npm/test/tap/shrinkwrap-scoped-auth.js(8,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/shrinkwrap-scoped-auth.js(12,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/shrinkwrap-shared-dev-dependency.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/shrinkwrap-shared-dev-dependency.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/shrinkwrap-scoped-auth.js(8,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-scoped-auth.js(12,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-shared-dev-dependency.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-shared-dev-dependency.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/shrinkwrap-shared-dev-dependency.js(69,30): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
-node_modules/npm/test/tap/shrinkwrap-version-match.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/shrinkwrap-version-match.js(3,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/sorted-package-json.js(1,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/sorted-package-json.js(10,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/spawn-enoent-help.js(2,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/shrinkwrap-version-match.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/shrinkwrap-version-match.js(3,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
+node_modules/npm/test/tap/sorted-package-json.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/sorted-package-json.js(10,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/spawn-enoent-help.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/spawn-enoent-help.js(28,20): error TS2339: Property 'cooked' does not exist on type 'Global'.
-node_modules/npm/test/tap/spawn-enoent.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/spec-local-specifiers.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/spec-local-specifiers.js(6,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/spec-local-specifiers.js(7,21): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/tap/spawn-enoent.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/spec-local-specifiers.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/spec-local-specifiers.js(6,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/spec-local-specifiers.js(7,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/tap/spec-local-specifiers.js(38,21): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
-node_modules/npm/test/tap/splat-with-only-prerelease-to-latest.js(4,20): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/splat-with-only-prerelease-to-latest.js(9,22): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/splat-with-only-prerelease-to-latest.js(4,20): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/splat-with-only-prerelease-to-latest.js(9,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/splat-with-only-prerelease-to-latest.js(62,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/splat-with-only-prerelease-to-latest.js(76,14): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/splat-with-only-prerelease-to-latest.js(85,9): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/splat-with-only-prerelease-to-latest.js(86,16): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/startstop.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/symlink-cycle.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/tag-version-prefix.js(8,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/startstop.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/symlink-cycle.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/tag-version-prefix.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/tag-version-prefix.js(24,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/tagged-version-matching.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/tagged-version-matching.js(4,21): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/tap/tagged-version-matching.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/tagged-version-matching.js(4,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/tap/tagged-version-matching.js(8,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
-node_modules/npm/test/tap/team.js(1,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/team.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/test-run-ls.js(2,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/team.js(1,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/team.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/test-run-ls.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/test-run-ls.js(5,26): error TS2732: Cannot find module '../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
-node_modules/npm/test/tap/tree-style.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/umask-lifecycle.js(6,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/uninstall-in-reverse.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/uninstall-in-reverse.js(3,29): error TS2307: Cannot find module 'require-inject'.
+node_modules/npm/test/tap/tree-style.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/umask-lifecycle.js(6,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/uninstall-in-reverse.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/uninstall-in-reverse.js(3,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/tap/uninstall-in-reverse.js(28,14): error TS2555: Expected at least 4 arguments, but got 3.
 node_modules/npm/test/tap/uninstall-link-clean.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
-node_modules/npm/test/tap/uninstall-link-clean.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/uninstall-package.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/uninstall-package.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/uninstall-save.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/uninstall-save.js(8,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/uninstall-link-clean.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/uninstall-package.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/uninstall-package.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/uninstall-save.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/uninstall-save.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/uninstall-save.js(42,21): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
-node_modules/npm/test/tap/unit-child-path.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/unit-deps-earliestInstallable.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/unit-deps-earliestInstallable.js(3,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/unit-deps-removeObsoleteDep.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/unit-deps-removeObsoleteDep.js(3,29): error TS2307: Cannot find module 'require-inject'.
+node_modules/npm/test/tap/unit-child-path.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/unit-deps-earliestInstallable.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/unit-deps-earliestInstallable.js(3,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/tap/unit-deps-removeObsoleteDep.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/unit-deps-removeObsoleteDep.js(3,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
 node_modules/npm/test/tap/unit-deps-removeObsoleteDep.js(32,26): error TS2345: Argument of type '{ requires: { requiredBy: never[]; }[]; }' is not assignable to parameter of type 'never'.
 node_modules/npm/test/tap/unit-deps-removeObsoleteDep.js(40,26): error TS2345: Argument of type '{ requires: { requiredBy: { isTop: boolean; }[]; }[]; }' is not assignable to parameter of type '{ isTop: boolean; }'.
   Property 'isTop' is missing in type '{ requires: { requiredBy: { isTop: boolean; }[]; }[]; }' but required in type '{ isTop: boolean; }'.
-node_modules/npm/test/tap/unit-deps-replaceModule.js(2,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/unit-deps-replaceModule.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/unit-deps-replaceModule.js(6,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/unit-module-name.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/unit-package-id.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/unit-token-validate-cidr.js(2,22): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/unit-token-validate-cidr.js(3,31): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/unpack-foreign-tarball.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/unpublish-config.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/unsupported.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/update-examples.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/update-examples.js(6,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/update-examples.js(10,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/update-path.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/update-path.js(3,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/upgrade-lifecycles.js(3,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/upgrade-lifecycles.js(4,21): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/tap/unit-module-name.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/unit-package-id.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/unit-token-validate-cidr.js(2,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/unit-token-validate-cidr.js(3,31): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/tap/unpack-foreign-tarball.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/unpublish-config.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/unsupported.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/update-examples.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/update-examples.js(6,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/update-examples.js(10,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/tap/update-path.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/update-path.js(3,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/tap/upgrade-lifecycles.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/upgrade-lifecycles.js(4,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/tap/upgrade-lifecycles.js(7,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
-node_modules/npm/test/tap/url-dependencies.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/url-dependencies.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/verify-no-lifecycle-on-repo.js(6,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/verify-no-lifecycle-on-repo.js(7,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/version-allow-same-version.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/url-dependencies.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/url-dependencies.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/verify-no-lifecycle-on-repo.js(6,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/verify-no-lifecycle-on-repo.js(7,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/tap/version-allow-same-version.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/version-allow-same-version.js(24,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-allow-same-version.js(41,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/version-commit-hooks-default.js(1,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/version-commit-hooks-default.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/version-commit-hooks-default.js(9,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-commit-hooks-default.js(10,16): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/version-commit-hooks.js(8,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/version-commit-hooks.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/version-commit-hooks.js(19,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-commit-hooks.js(23,16): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-commit-hooks.js(29,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-commit-hooks.js(30,9): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-commit-hooks.js(45,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-commit-hooks.js(46,9): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/version-consistent-newlines.js(4,22): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/version-consistent-newlines.js(11,31): error TS2307: Cannot find module 'require-inject'.
+node_modules/npm/test/tap/version-consistent-newlines.js(4,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/version-consistent-newlines.js(11,31): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
 node_modules/npm/test/tap/version-consistent-newlines.js(20,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-consistent-newlines.js(46,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/version-from-git.js(8,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/version-from-git.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/version-from-git.js(25,9): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-from-git.js(26,9): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-from-git.js(54,9): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -1819,44 +1826,44 @@ node_modules/npm/test/tap/version-from-git.js(173,9): error TS2339: Property 'co
 node_modules/npm/test/tap/version-from-git.js(174,9): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-from-git.js(202,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-from-git.js(213,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/version-git-not-clean.js(2,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/version-git-not-clean.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/version-git-not-clean.js(17,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-git-not-clean.js(42,17): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/version-lifecycle.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/version-lifecycle.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/version-lifecycle.js(28,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-lifecycle.js(50,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-lifecycle.js(72,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-lifecycle.js(98,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/version-message-config.js(8,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/version-message-config.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/version-message-config.js(24,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/version-no-git.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/version-no-git.js(9,29): error TS2307: Cannot find module 'require-inject'.
+node_modules/npm/test/tap/version-no-git.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/version-no-git.js(9,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
 node_modules/npm/test/tap/version-no-git.js(17,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/version-no-package.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/version-no-tags.js(2,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/version-no-package.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/version-no-tags.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/version-no-tags.js(17,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-no-tags.js(34,13): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-no-tags.js(35,13): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/version-sub-directory-shrinkwrap.js(8,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/version-sub-directory-shrinkwrap.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/version-sub-directory-shrinkwrap.js(25,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-sub-directory-shrinkwrap.js(36,9): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-sub-directory-shrinkwrap.js(37,9): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-sub-directory-shrinkwrap.js(41,36): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/npm/test/tap/version-sub-directory-shrinkwrap.js(43,33): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
-node_modules/npm/test/tap/version-sub-directory.js(8,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/version-sub-directory.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/version-sub-directory.js(24,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-sub-directory.js(35,9): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-sub-directory.js(36,9): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/version-update-shrinkwrap.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/version-update-shrinkwrap.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/version-update-shrinkwrap.js(17,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-update-shrinkwrap.js(18,9): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-update-shrinkwrap.js(31,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-update-shrinkwrap.js(42,9): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-update-shrinkwrap.js(73,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-update-shrinkwrap.js(84,9): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/test/tap/view.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/view.js(12,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/zz-cleanup.js(2,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/view.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/view.js(12,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/zz-cleanup.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 
 
 

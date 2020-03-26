@@ -759,6 +759,7 @@ namespace ts {
             getLibFileFromReference: notImplemented,
             isSourceFileFromExternalLibrary: returnFalse,
             getResolvedProjectReferenceToRedirect: returnUndefined,
+            getProjectReferenceRedirect: returnUndefined,
             isSourceOfProjectReferenceRedirect: returnFalse,
             writeFile: (name, text, writeByteOrderMark) => {
                 switch (name) {
@@ -841,6 +842,7 @@ namespace ts {
         let tempFlags: TempFlags; // TempFlags for the current name generation scope.
         let reservedNamesStack: Map<true>[]; // Stack of TempFlags reserved in enclosing name generation scopes.
         let reservedNames: Map<true>; // TempFlags to reserve in nested name generation scopes.
+        let preserveSourceNewlines = printerOptions.preserveSourceNewlines; // Can be overridden inside nodes with the `IgnoreSourceNewlines` emit flag.
 
         let writer: EmitTextWriter;
         let ownWriter: EmitTextWriter; // Reusable `EmitTextWriter` for basic printing.
@@ -1163,8 +1165,12 @@ namespace ts {
         function pipelineEmit(emitHint: EmitHint, node: Node) {
             const savedLastNode = lastNode;
             const savedLastSubstitution = lastSubstitution;
+            const savedPreserveSourceNewlines = preserveSourceNewlines;
             lastNode = node;
             lastSubstitution = undefined;
+            if (preserveSourceNewlines && !!(getEmitFlags(node) & EmitFlags.IgnoreSourceNewlines)) {
+                preserveSourceNewlines = false;
+            }
 
             const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, emitHint, node);
             pipelinePhase(emitHint, node);
@@ -1174,6 +1180,7 @@ namespace ts {
             const substitute = lastSubstitution;
             lastNode = savedLastNode;
             lastSubstitution = savedLastSubstitution;
+            preserveSourceNewlines = savedPreserveSourceNewlines;
 
             return substitute || node;
         }
@@ -2273,10 +2280,10 @@ namespace ts {
         function emitPropertyAccessExpression(node: PropertyAccessExpression) {
             const expression = cast(emitExpression(node.expression), isExpression);
             const token = node.questionDotToken || createNode(SyntaxKind.DotToken, node.expression.end, node.name.pos) as DotToken;
-            const indentBeforeDot = needsIndentation(node, node.expression, token);
-            const indentAfterDot = needsIndentation(node, token, node.name);
+            const linesBeforeDot = getLinesBetweenNodes(node, node.expression, token);
+            const linesAfterDot = getLinesBetweenNodes(node, token, node.name);
 
-            increaseIndentIf(indentBeforeDot, /*writeSpaceIfNotIndenting*/ false);
+            writeLinesAndIndent(linesBeforeDot, /*writeSpaceIfNotIndenting*/ false);
 
             const shouldEmitDotDot =
                 token.kind !== SyntaxKind.QuestionDotToken &&
@@ -2294,9 +2301,9 @@ namespace ts {
             else {
                 emitTokenWithComment(token.kind, node.expression.end, writePunctuation, node);
             }
-            increaseIndentIf(indentAfterDot, /*writeSpaceIfNotIndenting*/ false);
+            writeLinesAndIndent(linesAfterDot, /*writeSpaceIfNotIndenting*/ false);
             emit(node.name);
-            decreaseIndentIf(indentBeforeDot, indentAfterDot);
+            decreaseIndentIf(linesBeforeDot, linesAfterDot);
         }
 
         // 1..toString is a valid property access, emit a dot after the literal
@@ -2358,7 +2365,16 @@ namespace ts {
 
         function emitParenthesizedExpression(node: ParenthesizedExpression) {
             const openParenPos = emitTokenWithComment(SyntaxKind.OpenParenToken, node.pos, writePunctuation, node);
+            const leadingNewlines = preserveSourceNewlines && getLeadingLineTerminatorCount(node, [node.expression], ListFormat.None);
+            if (leadingNewlines) {
+                writeLinesAndIndent(leadingNewlines, /*writeLinesIfNotIndenting*/ false);
+            }
             emitExpression(node.expression);
+            const trailingNewlines = preserveSourceNewlines && getClosingLineTerminatorCount(node, [node.expression], ListFormat.None);
+            if (trailingNewlines) {
+                writeLine(trailingNewlines);
+            }
+            decreaseIndentIf(leadingNewlines);
             emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression ? node.expression.end : openParenPos, writePunctuation, node);
         }
 
@@ -2461,20 +2477,20 @@ namespace ts {
                     }
                     case EmitBinaryExpressionState.EmitRight: {
                         const isCommaOperator = node.operatorToken.kind !== SyntaxKind.CommaToken;
-                        const indentBeforeOperator = needsIndentation(node, node.left, node.operatorToken);
-                        const indentAfterOperator = needsIndentation(node, node.operatorToken, node.right);
-                        increaseIndentIf(indentBeforeOperator, isCommaOperator);
+                        const linesBeforeOperator = getLinesBetweenNodes(node, node.left, node.operatorToken);
+                        const linesAfterOperator = getLinesBetweenNodes(node, node.operatorToken, node.right);
+                        writeLinesAndIndent(linesBeforeOperator, isCommaOperator);
                         emitLeadingCommentsOfPosition(node.operatorToken.pos);
                         writeTokenNode(node.operatorToken, node.operatorToken.kind === SyntaxKind.InKeyword ? writeKeyword : writeOperator);
                         emitTrailingCommentsOfPosition(node.operatorToken.end, /*prefixSpace*/ true); // Binary operators should have a space before the comment starts
-                        increaseIndentIf(indentAfterOperator, /*writeSpaceIfNotIndenting*/ true);
+                        writeLinesAndIndent(linesAfterOperator, /*writeSpaceIfNotIndenting*/ true);
                         maybePipelineEmitExpression(node.right);
                         break;
                     }
                     case EmitBinaryExpressionState.FinishEmit: {
-                        const indentBeforeOperator = needsIndentation(node, node.left, node.operatorToken);
-                        const indentAfterOperator = needsIndentation(node, node.operatorToken, node.right);
-                        decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
+                        const linesBeforeOperator = getLinesBetweenNodes(node, node.left, node.operatorToken);
+                        const linesAfterOperator = getLinesBetweenNodes(node, node.operatorToken, node.right);
+                        decreaseIndentIf(linesBeforeOperator, linesAfterOperator);
                         stackIndex--;
                         break;
                     }
@@ -2518,23 +2534,23 @@ namespace ts {
         }
 
         function emitConditionalExpression(node: ConditionalExpression) {
-            const indentBeforeQuestion = needsIndentation(node, node.condition, node.questionToken);
-            const indentAfterQuestion = needsIndentation(node, node.questionToken, node.whenTrue);
-            const indentBeforeColon = needsIndentation(node, node.whenTrue, node.colonToken);
-            const indentAfterColon = needsIndentation(node, node.colonToken, node.whenFalse);
+            const linesBeforeQuestion = getLinesBetweenNodes(node, node.condition, node.questionToken);
+            const linesAfterQuestion = getLinesBetweenNodes(node, node.questionToken, node.whenTrue);
+            const linesBeforeColon = getLinesBetweenNodes(node, node.whenTrue, node.colonToken);
+            const linesAfterColon = getLinesBetweenNodes(node, node.colonToken, node.whenFalse);
 
             emitExpression(node.condition);
-            increaseIndentIf(indentBeforeQuestion, /*writeSpaceIfNotIndenting*/ true);
+            writeLinesAndIndent(linesBeforeQuestion, /*writeSpaceIfNotIndenting*/ true);
             emit(node.questionToken);
-            increaseIndentIf(indentAfterQuestion, /*writeSpaceIfNotIndenting*/ true);
+            writeLinesAndIndent(linesAfterQuestion, /*writeSpaceIfNotIndenting*/ true);
             emitExpression(node.whenTrue);
-            decreaseIndentIf(indentBeforeQuestion, indentAfterQuestion);
+            decreaseIndentIf(linesBeforeQuestion, linesAfterQuestion);
 
-            increaseIndentIf(indentBeforeColon, /*writeSpaceIfNotIndenting*/ true);
+            writeLinesAndIndent(linesBeforeColon, /*writeSpaceIfNotIndenting*/ true);
             emit(node.colonToken);
-            increaseIndentIf(indentAfterColon, /*writeSpaceIfNotIndenting*/ true);
+            writeLinesAndIndent(linesAfterColon, /*writeSpaceIfNotIndenting*/ true);
             emitExpression(node.whenFalse);
-            decreaseIndentIf(indentBeforeColon, indentAfterColon);
+            decreaseIndentIf(linesBeforeColon, linesAfterColon);
         }
 
         function emitTemplateExpression(node: TemplateExpression) {
@@ -2929,14 +2945,14 @@ namespace ts {
                 return false;
             }
 
-            if (shouldWriteLeadingLineTerminator(body, body.statements, ListFormat.PreserveLines)
-                || shouldWriteClosingLineTerminator(body, body.statements, ListFormat.PreserveLines)) {
+            if (getLeadingLineTerminatorCount(body, body.statements, ListFormat.PreserveLines)
+                || getClosingLineTerminatorCount(body, body.statements, ListFormat.PreserveLines)) {
                 return false;
             }
 
             let previousStatement: Statement | undefined;
             for (const statement of body.statements) {
-                if (shouldWriteSeparatingLineTerminator(previousStatement, statement, ListFormat.PreserveLines)) {
+                if (getSeparatingLineTerminatorCount(previousStatement, statement, ListFormat.PreserveLines) > 0) {
                     return false;
                 }
 
@@ -3996,7 +4012,7 @@ namespace ts {
 
             if (isEmpty) {
                 // Write a line terminator if the parent node was multi-line
-                if (format & ListFormat.MultiLine) {
+                if (format & ListFormat.MultiLine && !(preserveSourceNewlines && rangeIsOnSingleLine(parentNode, currentSourceFile!))) {
                     writeLine();
                 }
                 else if (format & ListFormat.SpaceBetweenBraces && !(format & ListFormat.NoSpaceIfEmpty)) {
@@ -4007,8 +4023,9 @@ namespace ts {
                 // Write the opening line terminator or leading whitespace.
                 const mayEmitInterveningComments = (format & ListFormat.NoInterveningComments) === 0;
                 let shouldEmitInterveningComments = mayEmitInterveningComments;
-                if (shouldWriteLeadingLineTerminator(parentNode, children!, format)) { // TODO: GH#18217
-                    writeLine();
+                const leadingLineTerminatorCount = getLeadingLineTerminatorCount(parentNode, children!, format); // TODO: GH#18217
+                if (leadingLineTerminatorCount) {
+                    writeLine(leadingLineTerminatorCount);
                     shouldEmitInterveningComments = false;
                 }
                 else if (format & ListFormat.SpaceBetweenBraces) {
@@ -4047,7 +4064,8 @@ namespace ts {
                         recordBundleFileInternalSectionEnd(previousSourceFileTextKind);
 
                         // Write either a line terminator or whitespace to separate the elements.
-                        if (shouldWriteSeparatingLineTerminator(previousSibling, child, format)) {
+                        const separatingLineTerminatorCount = getSeparatingLineTerminatorCount(previousSibling, child, format);
+                        if (separatingLineTerminatorCount > 0) {
                             // If a synthesized node in a single-line list starts on a new
                             // line, we should increase the indent.
                             if ((format & (ListFormat.LinesMask | ListFormat.Indented)) === ListFormat.SingleLine) {
@@ -4055,7 +4073,7 @@ namespace ts {
                                 shouldDecreaseIndentAfterEmit = true;
                             }
 
-                            writeLine();
+                            writeLine(separatingLineTerminatorCount);
                             shouldEmitInterveningComments = false;
                         }
                         else if (previousSibling && format & ListFormat.SpaceBetweenSiblings) {
@@ -4110,8 +4128,9 @@ namespace ts {
                 recordBundleFileInternalSectionEnd(previousSourceFileTextKind);
 
                 // Write the closing line terminator or closing whitespace.
-                if (shouldWriteClosingLineTerminator(parentNode, children!, format)) {
-                    writeLine();
+                const closingLineTerminatorCount = getClosingLineTerminatorCount(parentNode, children!, format);
+                if (closingLineTerminatorCount) {
+                    writeLine(closingLineTerminatorCount);
                 }
                 else if (format & ListFormat.SpaceBetweenBraces) {
                     writeSpace();
@@ -4181,8 +4200,10 @@ namespace ts {
             writer.writeProperty(s);
         }
 
-        function writeLine() {
-            writer.writeLine();
+        function writeLine(count = 1) {
+            for (let i = 0; i < count; i++) {
+                writer.writeLine(i > 0);
+            }
         }
 
         function increaseIndent() {
@@ -4238,10 +4259,10 @@ namespace ts {
             }
         }
 
-        function increaseIndentIf(value: boolean, writeSpaceIfNotIndenting: boolean) {
-            if (value) {
+        function writeLinesAndIndent(lineCount: number, writeSpaceIfNotIndenting: boolean) {
+            if (lineCount) {
                 increaseIndent();
-                writeLine();
+                writeLine(lineCount);
             }
             else if (writeSpaceIfNotIndenting) {
                 writeSpace();
@@ -4252,7 +4273,7 @@ namespace ts {
         // previous indent values to be considered at a time.  This also allows caller to just
         // call this once, passing in all their appropriate indent values, instead of needing
         // to call this helper function multiple times.
-        function decreaseIndentIf(value1: boolean, value2: boolean) {
+        function decreaseIndentIf(value1: boolean | number | undefined, value2?: boolean | number) {
             if (value1) {
                 decreaseIndent();
             }
@@ -4261,75 +4282,119 @@ namespace ts {
             }
         }
 
-        function shouldWriteLeadingLineTerminator(parentNode: TextRange, children: NodeArray<Node>, format: ListFormat) {
-            if (format & ListFormat.MultiLine) {
-                return true;
-            }
-
-            if (format & ListFormat.PreserveLines) {
+        function getLeadingLineTerminatorCount(parentNode: TextRange, children: readonly Node[], format: ListFormat): number {
+            if (format & ListFormat.PreserveLines || preserveSourceNewlines) {
                 if (format & ListFormat.PreferNewLine) {
-                    return true;
+                    return 1;
                 }
 
                 const firstChild = children[0];
                 if (firstChild === undefined) {
-                    return !rangeIsOnSingleLine(parentNode, currentSourceFile!);
+                    return rangeIsOnSingleLine(parentNode, currentSourceFile!) ? 0 : 1;
                 }
-                else if (positionIsSynthesized(parentNode.pos) || nodeIsSynthesized(firstChild)) {
-                    return synthesizedNodeStartsOnNewLine(firstChild, format);
+                if (firstChild.kind === SyntaxKind.JsxText) {
+                    // JsxText will be written with its leading whitespace, so don't add more manually.
+                    return 0;
                 }
-                else {
-                    return !rangeStartPositionsAreOnSameLine(parentNode, firstChild, currentSourceFile!);
+                if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(firstChild) && (!firstChild.parent || firstChild.parent === parentNode)) {
+                    if (preserveSourceNewlines) {
+                        return getEffectiveLines(
+                            includeComments => getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(
+                                firstChild.pos,
+                                currentSourceFile!,
+                                includeComments));
+                    }
+                    return rangeStartPositionsAreOnSameLine(parentNode, firstChild, currentSourceFile!) ? 0 : 1;
+                }
+                if (synthesizedNodeStartsOnNewLine(firstChild, format)) {
+                    return 1;
                 }
             }
-            else {
-                return false;
-            }
+            return format & ListFormat.MultiLine ? 1 : 0;
         }
 
-        function shouldWriteSeparatingLineTerminator(previousNode: Node | undefined, nextNode: Node, format: ListFormat) {
-            if (format & ListFormat.MultiLine) {
-                return true;
-            }
-            else if (format & ListFormat.PreserveLines) {
+        function getSeparatingLineTerminatorCount(previousNode: Node | undefined, nextNode: Node, format: ListFormat): number {
+            if (format & ListFormat.PreserveLines || preserveSourceNewlines) {
                 if (previousNode === undefined || nextNode === undefined) {
-                    return false;
+                    return 0;
                 }
-                else if (nodeIsSynthesized(previousNode) || nodeIsSynthesized(nextNode)) {
-                    return synthesizedNodeStartsOnNewLine(previousNode, format) || synthesizedNodeStartsOnNewLine(nextNode, format);
+                if (nextNode.kind === SyntaxKind.JsxText) {
+                    // JsxText will be written with its leading whitespace, so don't add more manually.
+                    return 0;
                 }
-                else {
-                    return !rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode, currentSourceFile!);
+                else if (!nodeIsSynthesized(previousNode) && !nodeIsSynthesized(nextNode) && previousNode.parent === nextNode.parent) {
+                    if (preserveSourceNewlines) {
+                        return getEffectiveLines(
+                            includeComments => getLinesBetweenRangeEndAndRangeStart(
+                                previousNode,
+                                nextNode,
+                                currentSourceFile!,
+                                includeComments));
+                    }
+                    return rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode, currentSourceFile!) ? 0 : 1;
+                }
+                else if (synthesizedNodeStartsOnNewLine(previousNode, format) || synthesizedNodeStartsOnNewLine(nextNode, format)) {
+                    return 1;
                 }
             }
-            else {
-                return getStartsOnNewLine(nextNode);
+            else if (getStartsOnNewLine(nextNode)) {
+                return 1;
             }
+            return format & ListFormat.MultiLine ? 1 : 0;
         }
 
-        function shouldWriteClosingLineTerminator(parentNode: TextRange, children: NodeArray<Node>, format: ListFormat) {
-            if (format & ListFormat.MultiLine) {
-                return (format & ListFormat.NoTrailingNewLine) === 0;
-            }
-            else if (format & ListFormat.PreserveLines) {
+        function getClosingLineTerminatorCount(parentNode: TextRange, children: readonly Node[], format: ListFormat): number {
+            if (format & ListFormat.PreserveLines || preserveSourceNewlines) {
                 if (format & ListFormat.PreferNewLine) {
-                    return true;
+                    return 1;
                 }
 
                 const lastChild = lastOrUndefined(children);
                 if (lastChild === undefined) {
-                    return !rangeIsOnSingleLine(parentNode, currentSourceFile!);
+                    return rangeIsOnSingleLine(parentNode, currentSourceFile!) ? 0 : 1;
                 }
-                else if (positionIsSynthesized(parentNode.pos) || nodeIsSynthesized(lastChild)) {
-                    return synthesizedNodeStartsOnNewLine(lastChild, format);
+                if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild) && (!lastChild.parent || lastChild.parent === parentNode)) {
+                    if (preserveSourceNewlines) {
+                        return getEffectiveLines(
+                            includeComments => getLinesBetweenPositionAndNextNonWhitespaceCharacter(
+                                lastChild.end,
+                                currentSourceFile!,
+                                includeComments));
+                    }
+                    return rangeEndPositionsAreOnSameLine(parentNode, lastChild, currentSourceFile!) ? 0 : 1;
                 }
-                else {
-                    return !rangeEndPositionsAreOnSameLine(parentNode, lastChild, currentSourceFile!);
+                if (synthesizedNodeStartsOnNewLine(lastChild, format)) {
+                    return 1;
                 }
             }
-            else {
-                return false;
+            if (format & ListFormat.MultiLine && !(format & ListFormat.NoTrailingNewLine)) {
+                return 1;
             }
+            return 0;
+        }
+
+        function getEffectiveLines(getLineDifference: (includeComments: boolean) => number) {
+            // If 'preserveSourceNewlines' is disabled, we should never call this function
+            // because it could be more expensive than alternative approximations.
+            Debug.assert(!!preserveSourceNewlines);
+            // We start by measuring the line difference from a position to its adjacent comments,
+            // so that this is counted as a one-line difference, not two:
+            //
+            //   node1;
+            //   // NODE2 COMMENT
+            //   node2;
+            const lines = getLineDifference(/*includeComments*/ true);
+            if (lines === 0) {
+                // However, if the line difference considering comments was 0, we might have this:
+                //
+                //   node1; // NODE2 COMMENT
+                //   node2;
+                //
+                // in which case we should be ignoring node2's comment, so this too is counted as
+                // a one-line difference, not zero.
+                return getLineDifference(/*includeComments*/ false);
+            }
+            return lines;
         }
 
         function synthesizedNodeStartsOnNewLine(node: Node, format: ListFormat) {
@@ -4345,9 +4410,9 @@ namespace ts {
             return (format & ListFormat.PreferNewLine) !== 0;
         }
 
-        function needsIndentation(parent: Node, node1: Node, node2: Node): boolean {
+        function getLinesBetweenNodes(parent: Node, node1: Node, node2: Node): number {
             if (getEmitFlags(parent) & EmitFlags.NoIndentation) {
-                return false;
+                return 0;
             }
 
             parent = skipSynthesizedParentheses(parent);
@@ -4356,13 +4421,22 @@ namespace ts {
 
             // Always use a newline for synthesized code if the synthesizer desires it.
             if (getStartsOnNewLine(node2)) {
-                return true;
+                return 1;
             }
 
-            return !nodeIsSynthesized(parent)
-                && !nodeIsSynthesized(node1)
-                && !nodeIsSynthesized(node2)
-                && !rangeEndIsOnSameLineAsRangeStart(node1, node2, currentSourceFile!);
+            if (!nodeIsSynthesized(parent) && !nodeIsSynthesized(node1) && !nodeIsSynthesized(node2)) {
+                if (preserveSourceNewlines) {
+                    return getEffectiveLines(
+                        includeComments => getLinesBetweenRangeEndAndRangeStart(
+                            node1,
+                            node2,
+                            currentSourceFile!,
+                            includeComments));
+                }
+                return rangeEndIsOnSameLineAsRangeStart(node1, node2, currentSourceFile!) ? 0 : 1;
+            }
+
+            return 0;
         }
 
         function isEmptyBlock(block: BlockLike) {

@@ -177,8 +177,9 @@ namespace ts.moduleSpecifiers {
     ): T | undefined {
         const getCanonicalFileName = hostGetCanonicalFileName(host);
         const cwd = host.getCurrentDirectory();
+        const referenceRedirect = host.isSourceOfProjectReferenceRedirect(importedFileName) ? host.getProjectReferenceRedirect(importedFileName) : undefined;
         const redirects = host.redirectTargetsMap.get(toPath(importedFileName, cwd, getCanonicalFileName)) || emptyArray;
-        const importedFileNames = [importedFileName, ...redirects];
+        const importedFileNames = [...(referenceRedirect ? [referenceRedirect] : emptyArray), importedFileName, ...redirects];
         const targets = importedFileNames.map(f => getNormalizedAbsolutePath(f, cwd));
         if (!preferSymlinks) {
             const result = forEach(targets, cb);
@@ -318,33 +319,30 @@ namespace ts.moduleSpecifiers {
             return undefined;
         }
 
-        let packageJsonContent: any | undefined;
-        const packageRootPath = moduleFileName.substring(0, parts.packageRootIndex);
+        // Simplify the full file path to something that can be resolved by Node.
+
+        let moduleSpecifier = moduleFileName;
         if (!packageNameOnly) {
-            const packageJsonPath = combinePaths(packageRootPath, "package.json");
-            packageJsonContent = host.fileExists(packageJsonPath)
-                ? JSON.parse(host.readFile(packageJsonPath)!)
-                : undefined;
-            const versionPaths = packageJsonContent && packageJsonContent.typesVersions
-                ? getPackageJsonTypesVersionsPaths(packageJsonContent.typesVersions)
-                : undefined;
-            if (versionPaths) {
-                const subModuleName = moduleFileName.slice(parts.packageRootIndex + 1);
-                const fromPaths = tryGetModuleNameFromPaths(
-                    removeFileExtension(subModuleName),
-                    removeExtensionAndIndexPostFix(subModuleName, Ending.Minimal, options),
-                    versionPaths.paths
-                );
-                if (fromPaths !== undefined) {
-                    moduleFileName = combinePaths(moduleFileName.slice(0, parts.packageRootIndex), fromPaths);
+            let packageRootIndex = parts.packageRootIndex;
+            let moduleFileNameForExtensionless: string | undefined;
+            while (true) {
+                // If the module could be imported by a directory name, use that directory's name
+                const { moduleFileToTry, packageRootPath } = tryDirectoryWithPackageJson(packageRootIndex);
+                if (packageRootPath) {
+                    moduleSpecifier = packageRootPath;
+                    break;
+                }
+                if (!moduleFileNameForExtensionless) moduleFileNameForExtensionless = moduleFileToTry;
+
+                // try with next level of directory
+                packageRootIndex = moduleFileName.indexOf(directorySeparator, packageRootIndex + 1);
+                if (packageRootIndex === -1) {
+                    moduleSpecifier = getExtensionlessFileName(moduleFileNameForExtensionless);
+                    break;
                 }
             }
         }
 
-        // Simplify the full file path to something that can be resolved by Node.
-
-        // If the module could be imported by a directory name, use that directory's name
-        const moduleSpecifier = packageNameOnly ? moduleFileName : getDirectoryOrExtensionlessFileName(moduleFileName);
         const globalTypingsCacheLocation = host.getGlobalTypingsCacheLocation && host.getGlobalTypingsCacheLocation();
         // Get a path that's relative to node_modules or the importing file's path
         // if node_modules folder is in this folder or any of its parent folders, no need to keep it.
@@ -359,18 +357,40 @@ namespace ts.moduleSpecifiers {
         // For classic resolution, only allow importing from node_modules/@types, not other node_modules
         return getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs && packageName === nodeModulesDirectoryName ? undefined : packageName;
 
-        function getDirectoryOrExtensionlessFileName(path: string): string {
-            // If the file is the main module, it can be imported by the package name
-            if (packageJsonContent) {
+        function tryDirectoryWithPackageJson(packageRootIndex: number) {
+            const packageRootPath = moduleFileName.substring(0, packageRootIndex);
+            const packageJsonPath = combinePaths(packageRootPath, "package.json");
+            let moduleFileToTry = moduleFileName;
+            if (host.fileExists(packageJsonPath)) {
+                const packageJsonContent = JSON.parse(host.readFile!(packageJsonPath)!);
+                const versionPaths = packageJsonContent.typesVersions
+                    ? getPackageJsonTypesVersionsPaths(packageJsonContent.typesVersions)
+                    : undefined;
+                if (versionPaths) {
+                    const subModuleName = moduleFileName.slice(packageRootPath.length + 1);
+                    const fromPaths = tryGetModuleNameFromPaths(
+                        removeFileExtension(subModuleName),
+                        removeExtensionAndIndexPostFix(subModuleName, Ending.Minimal, options),
+                        versionPaths.paths
+                    );
+                    if (fromPaths !== undefined) {
+                        moduleFileToTry = combinePaths(packageRootPath, fromPaths);
+                    }
+                }
+
+                // If the file is the main module, it can be imported by the package name
                 const mainFileRelative = packageJsonContent.typings || packageJsonContent.types || packageJsonContent.main;
                 if (isString(mainFileRelative)) {
                     const mainExportFile = toPath(mainFileRelative, packageRootPath, getCanonicalFileName);
-                    if (removeFileExtension(mainExportFile) === removeFileExtension(getCanonicalFileName(path))) {
-                        return packageRootPath;
+                    if (removeFileExtension(mainExportFile) === removeFileExtension(getCanonicalFileName(moduleFileToTry))) {
+                        return { packageRootPath, moduleFileToTry };
                     }
                 }
             }
+            return { moduleFileToTry };
+        }
 
+        function getExtensionlessFileName(path: string): string {
             // We still have a file name - remove the extension
             const fullModulePathWithoutExtension = removeFileExtension(path);
 

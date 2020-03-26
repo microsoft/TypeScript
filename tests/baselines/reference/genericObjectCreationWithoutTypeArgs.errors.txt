@@ -1,4 +1,4 @@
-tests/cases/compiler/genericObjectCreationWithoutTypeArgs.ts(6,26): error TS1005: '(' expected.
+tests/cases/compiler/genericObjectCreationWithoutTypeArgs.ts(6,9): error TS1384: A 'new' expression with type arguments must always be followed by a parenthesized argument list.
 
 
 ==== tests/cases/compiler/genericObjectCreationWithoutTypeArgs.ts (1 errors) ====
@@ -8,8 +8,8 @@ tests/cases/compiler/genericObjectCreationWithoutTypeArgs.ts(6,26): error TS1005
     
     var x1 = new SS<number>(); // OK
     var x2 = new SS < number>;   // Correctly give error 
-                             ~
-!!! error TS1005: '(' expected.
+            ~~~~~~~~~~~~~~~~~
+!!! error TS1384: A 'new' expression with type arguments must always be followed by a parenthesized argument list.
     var x3 = new SS();         // OK
     var x4 = new SS;           // Should be allowed, but currently give error ('supplied parameters do not match any signature of the call target')
     

@@ -25,14 +25,16 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(114,5): error TS2
   Type 'string | number | symbol' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
     Type 'string' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(115,5): error TS2322: Type 'T[keyof T] extends Function ? never : keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-  Type 'keyof T' is not assignable to type 'never'.
-    Type 'string | number | symbol' is not assignable to type 'never'.
-      Type 'string' is not assignable to type 'never'.
+  Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
+    Type 'keyof T' is not assignable to type 'never'.
+      Type 'string | number | symbol' is not assignable to type 'never'.
+        Type 'string' is not assignable to type 'never'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(116,5): error TS2322: Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
   Type 'string | number | symbol' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
     Type 'string' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(117,5): error TS2322: Type 'T[keyof T] extends Function ? keyof T : never' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-  Type 'keyof T' is not assignable to type 'never'.
+  Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
+    Type 'keyof T' is not assignable to type 'never'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(134,10): error TS2540: Cannot assign to 'id' because it is a read-only property.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(135,5): error TS2542: Index signature in type 'DeepReadonlyArray<Part>' only permits reading.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(136,22): error TS2540: Cannot assign to 'id' because it is a read-only property.
@@ -52,7 +54,9 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(160,5): error TS2
     Type 'string' is not assignable to type 'ZeroOf<T>'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(263,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'Foo<T & U>'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to type 'T94<U>'.
-  Type 'boolean' is not assignable to type 'true'.
+  Type 'number | boolean' is not assignable to type 'T94<U>'.
+    Type 'number' is not assignable to type 'T94<U>'.
+      Type 'boolean' is not assignable to type 'true'.
 
 
 ==== tests/cases/conformance/types/conditional/conditionalTypes1.ts (22 errors) ====
@@ -210,9 +214,10 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
         y = z;  // Error
         ~
 !!! error TS2322: Type 'T[keyof T] extends Function ? never : keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-!!! error TS2322:   Type 'keyof T' is not assignable to type 'never'.
-!!! error TS2322:     Type 'string | number | symbol' is not assignable to type 'never'.
-!!! error TS2322:       Type 'string' is not assignable to type 'never'.
+!!! error TS2322:   Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
+!!! error TS2322:     Type 'keyof T' is not assignable to type 'never'.
+!!! error TS2322:       Type 'string | number | symbol' is not assignable to type 'never'.
+!!! error TS2322:         Type 'string' is not assignable to type 'never'.
         z = x;  // Error
         ~
 !!! error TS2322: Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
@@ -221,7 +226,8 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
         z = y;  // Error
         ~
 !!! error TS2322: Type 'T[keyof T] extends Function ? keyof T : never' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-!!! error TS2322:   Type 'keyof T' is not assignable to type 'never'.
+!!! error TS2322:   Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
+!!! error TS2322:     Type 'keyof T' is not assignable to type 'never'.
     }
     
     type DeepReadonly<T> =
@@ -421,7 +427,9 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
     const f45 = <U>(value: T95<U>): T94<U> => value;  // Error
                                               ~~~~~
 !!! error TS2322: Type 'T95<U>' is not assignable to type 'T94<U>'.
-!!! error TS2322:   Type 'boolean' is not assignable to type 'true'.
+!!! error TS2322:   Type 'number | boolean' is not assignable to type 'T94<U>'.
+!!! error TS2322:     Type 'number' is not assignable to type 'T94<U>'.
+!!! error TS2322:       Type 'boolean' is not assignable to type 'true'.
     
     // Repro from #21863
     

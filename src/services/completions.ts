@@ -232,6 +232,7 @@ namespace ts.Completions {
                 completionKind,
                 preferences,
                 propertyAccessToConvert,
+                completionData.isJsxIdentifierExpected,
                 isJsxInitializer,
                 recommendedCompletion,
                 symbolToOriginInfoMap,
@@ -255,6 +256,7 @@ namespace ts.Completions {
                 completionKind,
                 preferences,
                 propertyAccessToConvert,
+                completionData.isJsxIdentifierExpected,
                 isJsxInitializer,
                 recommendedCompletion,
                 symbolToOriginInfoMap,
@@ -441,6 +443,7 @@ namespace ts.Completions {
         kind: CompletionKind,
         preferences: UserPreferences,
         propertyAccessToConvert?: PropertyAccessExpression,
+        jsxIdentifierExpected?: boolean,
         isJsxInitializer?: IsJsxInitializer,
         recommendedCompletion?: Symbol,
         symbolToOriginInfoMap?: SymbolOriginInfoMap,
@@ -454,7 +457,7 @@ namespace ts.Completions {
         const uniques = createMap<true>();
         for (const symbol of symbols) {
             const origin = symbolToOriginInfoMap ? symbolToOriginInfoMap[getSymbolId(symbol)] : undefined;
-            const info = getCompletionEntryDisplayNameForSymbol(symbol, target, origin, kind);
+            const info = getCompletionEntryDisplayNameForSymbol(symbol, target, origin, kind, !!jsxIdentifierExpected);
             if (!info) {
                 continue;
             }
@@ -564,7 +567,7 @@ namespace ts.Completions {
         // completion entry.
         return firstDefined(symbols, (symbol): SymbolCompletion | undefined => {
             const origin = symbolToOriginInfoMap[getSymbolId(symbol)];
-            const info = getCompletionEntryDisplayNameForSymbol(symbol, compilerOptions.target!, origin, completionKind);
+            const info = getCompletionEntryDisplayNameForSymbol(symbol, compilerOptions.target!, origin, completionKind, completionData.isJsxIdentifierExpected);
             return info && info.name === entryId.name && getSourceFromOrigin(origin) === entryId.source
                 ? { type: "symbol" as const, symbol, location, symbolToOriginInfoMap, previousToken, isJsxInitializer, isTypeOnlyLocation }
                 : undefined;
@@ -716,6 +719,8 @@ namespace ts.Completions {
         readonly insideJsDocTagTypeExpression: boolean;
         readonly symbolToSortTextMap: SymbolSortTextMap;
         readonly isTypeOnlyLocation: boolean;
+        /** In JSX tag name and attribute names, identifiers like "my-tag" or "aria-name" is valid identifier. */
+        readonly isJsxIdentifierExpected: boolean;
     }
     type Request = { readonly kind: CompletionDataKind.JsDocTagName | CompletionDataKind.JsDocTag } | { readonly kind: CompletionDataKind.JsDocParameterName, tag: JSDocParameterTag };
 
@@ -895,6 +900,7 @@ namespace ts.Completions {
         let isRightOfOpenTag = false;
         let isStartingCloseTag = false;
         let isJsxInitializer: IsJsxInitializer = false;
+        let isJsxIdentifierExpected = false;
 
         let location = getTouchingPropertyName(sourceFile, position);
         if (contextToken) {
@@ -975,11 +981,12 @@ namespace ts.Completions {
                         if (!binaryExpressionMayBeOpenTag(parent as BinaryExpression)) {
                             break;
                         }
-                        // falls through
+                    // falls through
 
                     case SyntaxKind.JsxSelfClosingElement:
                     case SyntaxKind.JsxElement:
                     case SyntaxKind.JsxOpeningElement:
+                        isJsxIdentifierExpected = true;
                         if (contextToken.kind === SyntaxKind.LessThanToken) {
                             isRightOfOpenTag = true;
                             location = contextToken;
@@ -992,6 +999,7 @@ namespace ts.Completions {
                                 isJsxInitializer = true;
                                 break;
                             case SyntaxKind.Identifier:
+                                isJsxIdentifierExpected = true;
                                 // For `<div x=[|f/**/|]`, `parent` will be `x` and `previousToken.parent` will be `f` (which is its own JsxAttribute)
                                 // Note for `<div someBool f>` we don't want to treat this as a jsx inializer, instead it's the attribute name.
                                 if (parent !== previousToken.parent &&
@@ -1066,7 +1074,8 @@ namespace ts.Completions {
             isJsxInitializer,
             insideJsDocTagTypeExpression,
             symbolToSortTextMap,
-            isTypeOnlyLocation: isTypeOnly
+            isTypeOnlyLocation: isTypeOnly,
+            isJsxIdentifierExpected,
         };
 
         type JSDocTagWithTypeExpression = JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag;
@@ -1130,9 +1139,9 @@ namespace ts.Completions {
                             let insertQuestionDot = false;
                             if (type.isNullableType()) {
                                 const canCorrectToQuestionDot =
-                                isRightOfDot &&
-                                !isRightOfQuestionDot &&
-                                preferences.includeAutomaticOptionalChainCompletions !== false;
+                                    isRightOfDot &&
+                                    !isRightOfQuestionDot &&
+                                    preferences.includeAutomaticOptionalChainCompletions !== false;
 
                                 if (canCorrectToQuestionDot || isRightOfQuestionDot) {
                                     type = type.getNonNullableType();
@@ -1447,8 +1456,8 @@ namespace ts.Completions {
             return insideJsDocTagTypeExpression
                 || !isContextTokenValueLocation(contextToken) &&
                 (isPossiblyTypeArgumentPosition(contextToken, sourceFile, typeChecker)
-                 || isPartOfTypeNode(location)
-                 || isContextTokenTypeLocation(contextToken));
+                    || isPartOfTypeNode(location)
+                    || isContextTokenTypeLocation(contextToken));
         }
 
         function isContextTokenValueLocation(contextToken: Node) {
@@ -2150,7 +2159,6 @@ namespace ts.Completions {
                 case SyntaxKind.ImportKeyword:
                 case SyntaxKind.LetKeyword:
                 case SyntaxKind.ConstKeyword:
-                case SyntaxKind.YieldKeyword:
                 case SyntaxKind.TypeKeyword:  // type htm|
                     return true;
 
@@ -2191,7 +2199,6 @@ namespace ts.Completions {
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.StaticKeyword:
                 case SyntaxKind.VarKeyword:
-                case SyntaxKind.YieldKeyword:
                     return true;
                 case SyntaxKind.AsyncKeyword:
                     return isPropertyDeclaration(contextToken.parent);
@@ -2399,6 +2406,7 @@ namespace ts.Completions {
         target: ScriptTarget,
         origin: SymbolOriginInfo | undefined,
         kind: CompletionKind,
+        jsxIdentifierExpected: boolean,
     ): CompletionEntryDisplayNameForSymbol | undefined {
         const name = originIsExport(origin) ? getNameForExportedSymbol(symbol, target) : symbol.name;
         if (name === undefined
@@ -2411,7 +2419,7 @@ namespace ts.Completions {
         }
 
         const validNameResult: CompletionEntryDisplayNameForSymbol = { name, needsConvertPropertyAccess: false };
-        if (isIdentifierText(name, target) || symbol.valueDeclaration && isPrivateIdentifierPropertyDeclaration(symbol.valueDeclaration)) {
+        if (isIdentifierText(name, target, jsxIdentifierExpected ? LanguageVariant.JSX : LanguageVariant.Standard) || symbol.valueDeclaration && isPrivateIdentifierPropertyDeclaration(symbol.valueDeclaration)) {
             return validNameResult;
         }
         switch (kind) {

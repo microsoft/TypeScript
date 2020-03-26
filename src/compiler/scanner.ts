@@ -308,14 +308,14 @@ namespace ts {
         return languageVersion! >= ScriptTarget.ES2015 ?
             lookupInUnicodeMap(code, unicodeESNextIdentifierStart) :
             languageVersion! === ScriptTarget.ES5 ? lookupInUnicodeMap(code, unicodeES5IdentifierStart) :
-            lookupInUnicodeMap(code, unicodeES3IdentifierStart);
+                lookupInUnicodeMap(code, unicodeES3IdentifierStart);
     }
 
     function isUnicodeIdentifierPart(code: number, languageVersion: ScriptTarget | undefined) {
         return languageVersion! >= ScriptTarget.ES2015 ?
             lookupInUnicodeMap(code, unicodeESNextIdentifierPart) :
             languageVersion! === ScriptTarget.ES5 ? lookupInUnicodeMap(code, unicodeES5IdentifierPart) :
-            lookupInUnicodeMap(code, unicodeES3IdentifierPart);
+                lookupInUnicodeMap(code, unicodeES3IdentifierPart);
     }
 
     function makeReverseMap(source: Map<number>): string[] {
@@ -349,7 +349,7 @@ namespace ts {
                     if (text.charCodeAt(pos) === CharacterCodes.lineFeed) {
                         pos++;
                     }
-                    // falls through
+                // falls through
                 case CharacterCodes.lineFeed:
                     result.push(lineStart);
                     lineStart = pos;
@@ -409,11 +409,20 @@ namespace ts {
     }
 
     /* @internal */
+    export function computeLineAndCharacterOfPosition(lineStarts: readonly number[], position: number): LineAndCharacter {
+        const lineNumber = computeLineOfPosition(lineStarts, position);
+        return {
+            line: lineNumber,
+            character: position - lineStarts[lineNumber]
+        };
+    }
+
     /**
+     * @internal
      * We assume the first line starts at position 0 and 'position' is non-negative.
      */
-    export function computeLineAndCharacterOfPosition(lineStarts: readonly number[], position: number): LineAndCharacter {
-        let lineNumber = binarySearch(lineStarts, position, identity, compareValues);
+    export function computeLineOfPosition(lineStarts: readonly number[], position: number, lowerBound?: number) {
+        let lineNumber = binarySearch(lineStarts, position, identity, compareValues, lowerBound);
         if (lineNumber < 0) {
             // If the actual position was not found,
             // the binary search returns the 2's-complement of the next line start
@@ -425,10 +434,19 @@ namespace ts {
             lineNumber = ~lineNumber - 1;
             Debug.assert(lineNumber !== -1, "position cannot precede the beginning of the file");
         }
-        return {
-            line: lineNumber,
-            character: position - lineStarts[lineNumber]
-        };
+        return lineNumber;
+    }
+
+    /** @internal */
+    export function getLinesBetweenPositions(sourceFile: SourceFileLike, pos1: number, pos2: number) {
+        if (pos1 === pos2) return 0;
+        const lineStarts = getLineStarts(sourceFile);
+        const lower = Math.min(pos1, pos2);
+        const isNegative = lower === pos2;
+        const upper = isNegative ? pos1 : pos2;
+        const lowerLine = computeLineOfPosition(lineStarts, lower);
+        const upperLine = computeLineOfPosition(lineStarts, upper, lowerLine);
+        return isNegative ? lowerLine - upperLine : upperLine - lowerLine;
     }
 
     export function getLineAndCharacterOfPosition(sourceFile: SourceFileLike, position: number): LineAndCharacter {
@@ -503,8 +521,8 @@ namespace ts {
             case CharacterCodes.formFeed:
             case CharacterCodes.space:
             case CharacterCodes.slash:
-                // starts of normal trivia
-                // falls through
+            // starts of normal trivia
+            // falls through
             case CharacterCodes.lessThan:
             case CharacterCodes.bar:
             case CharacterCodes.equals:
@@ -533,7 +551,7 @@ namespace ts {
                     if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
                         pos++;
                     }
-                    // falls through
+                // falls through
                 case CharacterCodes.lineFeed:
                     pos++;
                     if (stopAfterLineBreak) {
@@ -715,7 +733,7 @@ namespace ts {
                     if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
                         pos++;
                     }
-                    // falls through
+                // falls through
                 case CharacterCodes.lineFeed:
                     pos++;
                     if (trailing) {
@@ -849,21 +867,23 @@ namespace ts {
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierStart(ch, languageVersion);
     }
 
-    export function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined): boolean {
+    export function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant): boolean {
         return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
             ch >= CharacterCodes._0 && ch <= CharacterCodes._9 || ch === CharacterCodes.$ || ch === CharacterCodes._ ||
+            // "-" and ":" are valid in JSX Identifiers
+            (identifierVariant === LanguageVariant.JSX ? (ch === CharacterCodes.minus || ch === CharacterCodes.colon) : false) ||
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
 
     /* @internal */
-    export function isIdentifierText(name: string, languageVersion: ScriptTarget | undefined): boolean {
+    export function isIdentifierText(name: string, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant): boolean {
         let ch = codePointAt(name, 0);
         if (!isIdentifierStart(ch, languageVersion)) {
             return false;
         }
 
         for (let i = charSize(ch); i < name.length; i += charSize(ch)) {
-            if (!isIdentifierPart(ch = codePointAt(name, i), languageVersion)) {
+            if (!isIdentifierPart(ch = codePointAt(name, i), languageVersion, identifierVariant)) {
                 return false;
             }
         }
@@ -1005,7 +1025,7 @@ namespace ts {
             return result + text.substring(start, pos);
         }
 
-        function scanNumber(): {type: SyntaxKind, value: string} {
+        function scanNumber(): { type: SyntaxKind, value: string } {
             const start = pos;
             const mainFragment = scanNumberFragment();
             let decimalFragment: string | undefined;
@@ -1352,7 +1372,7 @@ namespace ts {
                     if (pos < end && text.charCodeAt(pos) === CharacterCodes.lineFeed) {
                         pos++;
                     }
-                    // falls through
+                // falls through
                 case CharacterCodes.lineFeed:
                 case CharacterCodes.lineSeparator:
                 case CharacterCodes.paragraphSeparator:
@@ -1818,10 +1838,10 @@ namespace ts {
                             tokenFlags |= TokenFlags.Octal;
                             return token = SyntaxKind.NumericLiteral;
                         }
-                        // This fall-through is a deviation from the EcmaScript grammar. The grammar says that a leading zero
-                        // can only be followed by an octal digit, a dot, or the end of the number literal. However, we are being
-                        // permissive and allowing decimal digits of the form 08* and 09* (which many browsers also do).
-                        // falls through
+                    // This fall-through is a deviation from the EcmaScript grammar. The grammar says that a leading zero
+                    // can only be followed by an octal digit, a dot, or the end of the number literal. However, we are being
+                    // permissive and allowing decimal digits of the form 08* and 09* (which many browsers also do).
+                    // falls through
                     case CharacterCodes._1:
                     case CharacterCodes._2:
                     case CharacterCodes._3:
@@ -1860,8 +1880,8 @@ namespace ts {
                             return pos += 2, token = SyntaxKind.LessThanEqualsToken;
                         }
                         if (languageVariant === LanguageVariant.JSX &&
-                                text.charCodeAt(pos + 1) === CharacterCodes.slash &&
-                                text.charCodeAt(pos + 2) !== CharacterCodes.asterisk) {
+                            text.charCodeAt(pos + 1) === CharacterCodes.slash &&
+                            text.charCodeAt(pos + 2) !== CharacterCodes.asterisk) {
                             return pos += 2, token = SyntaxKind.LessThanSlashToken;
                         }
                         pos++;

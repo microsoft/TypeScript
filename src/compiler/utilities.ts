@@ -7,6 +7,7 @@ namespace ts {
     export const externalHelpersModuleNameText = "tslib";
 
     export const defaultMaximumTruncationLength = 160;
+    export const noTruncationMaximumTruncationLength = 1_000_000;
 
     export function getDeclarationOfKind<T extends Declaration>(symbol: Symbol, kind: T["kind"]): T | undefined {
         const declarations = symbol.declarations;
@@ -2673,11 +2674,7 @@ namespace ts {
     export function skipParentheses(node: Expression): Expression;
     export function skipParentheses(node: Node): Node;
     export function skipParentheses(node: Node): Node {
-        while (node.kind === SyntaxKind.ParenthesizedExpression) {
-            node = (node as ParenthesizedExpression).expression;
-        }
-
-        return node;
+        return skipOuterExpressions(node, OuterExpressionKinds.Parentheses);
     }
 
     function skipParenthesesUp(node: Node): Node {
@@ -3633,8 +3630,8 @@ namespace ts {
             }
         }
 
-        function writeLine() {
-            if (!lineStart) {
+        function writeLine(force?: boolean) {
+            if (!lineStart || force) {
                 output += newLine;
                 lineCount++;
                 linePos = output.length;
@@ -3913,12 +3910,13 @@ namespace ts {
         }
     }
 
-    export function getLineOfLocalPosition(currentSourceFile: SourceFile, pos: number) {
-        return getLineAndCharacterOfPosition(currentSourceFile, pos).line;
+    export function getLineOfLocalPosition(sourceFile: SourceFile, pos: number) {
+        const lineStarts = getLineStarts(sourceFile);
+        return computeLineOfPosition(lineStarts, pos);
     }
 
     export function getLineOfLocalPositionFromLineMap(lineMap: readonly number[], pos: number) {
-        return computeLineAndCharacterOfPosition(lineMap, pos).line;
+        return computeLineOfPosition(lineMap, pos);
     }
 
     export function getFirstConstructorWithBody(node: ClassLikeDeclaration): ConstructorDeclaration & { body: FunctionBody } | undefined {
@@ -4743,7 +4741,10 @@ namespace ts {
     }
 
     export function rangeStartPositionsAreOnSameLine(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
-        return positionsAreOnSameLine(getStartPositionOfRange(range1, sourceFile), getStartPositionOfRange(range2, sourceFile), sourceFile);
+        return positionsAreOnSameLine(
+            getStartPositionOfRange(range1, sourceFile, /*includeComments*/ false),
+            getStartPositionOfRange(range2, sourceFile, /*includeComments*/ false),
+            sourceFile);
     }
 
     export function rangeEndPositionsAreOnSameLine(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
@@ -4751,11 +4752,20 @@ namespace ts {
     }
 
     export function rangeStartIsOnSameLineAsRangeEnd(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
-        return positionsAreOnSameLine(getStartPositionOfRange(range1, sourceFile), range2.end, sourceFile);
+        return positionsAreOnSameLine(getStartPositionOfRange(range1, sourceFile, /*includeComments*/ false), range2.end, sourceFile);
     }
 
     export function rangeEndIsOnSameLineAsRangeStart(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
-        return positionsAreOnSameLine(range1.end, getStartPositionOfRange(range2, sourceFile), sourceFile);
+        return positionsAreOnSameLine(range1.end, getStartPositionOfRange(range2, sourceFile, /*includeComments*/ false), sourceFile);
+    }
+
+    export function getLinesBetweenRangeEndAndRangeStart(range1: TextRange, range2: TextRange, sourceFile: SourceFile, includeSecondRangeComments: boolean) {
+        const range2Start = getStartPositionOfRange(range2, sourceFile, includeSecondRangeComments);
+        return getLinesBetweenPositions(sourceFile, range1.end, range2Start);
+    }
+
+    export function getLinesBetweenRangeEndPositions(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
+        return getLinesBetweenPositions(sourceFile, range1.end, range2.end);
     }
 
     export function isNodeArrayMultiLine(list: NodeArray<Node>, sourceFile: SourceFile): boolean {
@@ -4763,12 +4773,30 @@ namespace ts {
     }
 
     export function positionsAreOnSameLine(pos1: number, pos2: number, sourceFile: SourceFile) {
-        return pos1 === pos2 ||
-            getLineOfLocalPosition(sourceFile, pos1) === getLineOfLocalPosition(sourceFile, pos2);
+        return getLinesBetweenPositions(sourceFile, pos1, pos2) === 0;
     }
 
-    export function getStartPositionOfRange(range: TextRange, sourceFile: SourceFile) {
-        return positionIsSynthesized(range.pos) ? -1 : skipTrivia(sourceFile.text, range.pos);
+    export function getStartPositionOfRange(range: TextRange, sourceFile: SourceFile, includeComments: boolean) {
+        return positionIsSynthesized(range.pos) ? -1 : skipTrivia(sourceFile.text, range.pos, /*stopAfterLineBreak*/ false, includeComments);
+    }
+
+    export function getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(pos: number, sourceFile: SourceFile, includeComments?: boolean) {
+        const startPos = skipTrivia(sourceFile.text, pos, /*stopAfterLineBreak*/ false, includeComments);
+        const prevPos = getPreviousNonWhitespacePosition(startPos, sourceFile);
+        return getLinesBetweenPositions(sourceFile, prevPos || 0, startPos);
+    }
+
+    export function getLinesBetweenPositionAndNextNonWhitespaceCharacter(pos: number, sourceFile: SourceFile, includeComments?: boolean) {
+        const nextPos = skipTrivia(sourceFile.text, pos, /*stopAfterLineBreak*/ false, includeComments);
+        return getLinesBetweenPositions(sourceFile, pos, nextPos);
+    }
+
+    function getPreviousNonWhitespacePosition(pos: number, sourceFile: SourceFile) {
+        while (pos-- > 0) {
+            if (!isWhiteSpaceLike(sourceFile.text.charCodeAt(pos))) {
+                return pos;
+            }
+        }
     }
 
     /**
@@ -5445,7 +5473,15 @@ namespace ts {
         return !!(options.incremental || options.composite);
     }
 
-    export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictBindCallApply" | "strictPropertyInitialization" | "alwaysStrict";
+    export type StrictOptionName =
+        | "noImplicitAny"
+        | "noImplicitThis"
+        | "strictNullChecks"
+        | "strictFunctionTypes"
+        | "strictBindCallApply"
+        | "strictPropertyInitialization"
+        | "alwaysStrict"
+        ;
 
     export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
         return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];

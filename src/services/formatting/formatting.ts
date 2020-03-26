@@ -70,7 +70,7 @@ namespace ts.formatting {
          * Formatter calls this function when rule adds or deletes new lines from the text
          * so indentation scope can adjust values of indentation and delta.
          */
-        recomputeIndentation(lineAddedByFormatting: boolean): void;
+        recomputeIndentation(lineAddedByFormatting: boolean, parent: Node): void;
     }
 
     export function formatOnEnter(position: number, sourceFile: SourceFile, formatContext: FormatContext): TextChange[] {
@@ -567,8 +567,8 @@ namespace ts.formatting {
                     !suppressDelta && shouldAddDelta(line, kind, container) ? indentation + getDelta(container) : indentation,
                 getIndentation: () => indentation,
                 getDelta,
-                recomputeIndentation: lineAdded => {
-                    if (node.parent && SmartIndenter.shouldIndentChildNode(options, node.parent, node, sourceFile)) {
+                recomputeIndentation: (lineAdded, parent) => {
+                    if (SmartIndenter.shouldIndentChildNode(options, parent, node, sourceFile)) {
                         indentation += lineAdded ? options.indentSize! : -options.indentSize!;
                         delta = SmartIndenter.shouldIndentChildNode(options, node) ? options.indentSize! : 0;
                     }
@@ -996,7 +996,7 @@ namespace ts.formatting {
                             // Handle the case where the next line is moved to be the end of this line.
                             // In this case we don't indent the next line in the next pass.
                             if (currentParent.getStart(sourceFile) === currentItem.pos) {
-                                dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ false);
+                                dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ false, contextNode);
                             }
                             break;
                         case LineAction.LineAdded:
@@ -1004,7 +1004,7 @@ namespace ts.formatting {
                             // In this case we indent token2 in the next pass but we set
                             // sameLineIndent flag to notify the indenter that the indentation is within the line.
                             if (currentParent.getStart(sourceFile) === currentItem.pos) {
-                                dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ true);
+                                dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ true, contextNode);
                             }
                             break;
                         default:
