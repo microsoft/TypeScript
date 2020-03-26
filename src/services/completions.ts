@@ -727,7 +727,6 @@ namespace ts.Completions {
     export const enum CompletionKind {
         ObjectPropertyDeclaration,
         Global,
-        Local,
         PropertyAccess,
         MemberLike,
         String,
@@ -1928,7 +1927,7 @@ namespace ts.Completions {
             }
 
             const localsContainer = localsBlock.kind === SyntaxKind.ModuleBlock ? localsBlock.parent : localsBlock;
-            completionKind = CompletionKind.Local;
+            completionKind = CompletionKind.None;
             isNewIdentifierLocation = false;
             localsContainer.locals?.forEach((symbol, name) => {
                 symbols.push(symbol);
@@ -2470,7 +2469,6 @@ namespace ts.Completions {
                 // Don't add a completion for a name starting with a space. See https://github.com/Microsoft/TypeScript/pull/20547
                 return name.charCodeAt(0) === CharacterCodes.space ? undefined : { name, needsConvertPropertyAccess: true };
             case CompletionKind.None:
-            case CompletionKind.Local:
             case CompletionKind.String:
                 return validNameResult;
             default:
