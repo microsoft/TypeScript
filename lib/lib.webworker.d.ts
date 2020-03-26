@@ -888,7 +888,7 @@ interface CanvasTransform {
 }
 
 /** The Client interface represents an executable context such as a Worker, or a SharedWorker. Window clients are represented by the more-specific WindowClient. You can get Client/WindowClient objects from methods such as Clients.matchAll() and Clients.get(). */
-interface xClient {
+interface Client {
     readonly frameType: FrameType;
     readonly id: string;
     readonly type: ClientTypes;
