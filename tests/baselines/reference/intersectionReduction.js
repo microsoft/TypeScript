@@ -37,6 +37,7 @@ type C = { kind: 'c', foo: number };
 
 declare let ab: A & B;
 ab.kind;  // Error
+ab = 42;
 
 declare let x: A | (B & C);  // A
 let a: A = x;
@@ -111,6 +112,7 @@ const f4 = (t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)):
 
 //// [intersectionReduction.js]
 ab.kind; // Error
+ab = 42;
 var a = x;
 var r1 = f10(a1); // unknown
 var r2 = f10(a2); // string

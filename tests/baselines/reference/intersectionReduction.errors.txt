@@ -1,9 +1,12 @@
 tests/cases/conformance/types/intersection/intersectionReduction.ts(38,4): error TS2339: Property 'kind' does not exist on type 'never'.
-tests/cases/conformance/types/intersection/intersectionReduction.ts(80,1): error TS2322: Type 'any' is not assignable to type 'never'.
+  The type 'never' was reduced from the intersection 'A & B'. Each type of that intersection has properties that conflict, so values of that type can never exist.
+tests/cases/conformance/types/intersection/intersectionReduction.ts(39,1): error TS2322: Type '42' is not assignable to type 'never'.
+  The type 'never' was reduced from the intersection 'A & B'. Each type of that intersection has properties that conflict, so values of that type can never exist.
 tests/cases/conformance/types/intersection/intersectionReduction.ts(81,1): error TS2322: Type 'any' is not assignable to type 'never'.
+tests/cases/conformance/types/intersection/intersectionReduction.ts(82,1): error TS2322: Type 'any' is not assignable to type 'never'.
 
 
-==== tests/cases/conformance/types/intersection/intersectionReduction.ts (3 errors) ====
+==== tests/cases/conformance/types/intersection/intersectionReduction.ts (4 errors) ====
     declare const sym1: unique symbol;
     declare const sym2: unique symbol;
     
@@ -44,6 +47,11 @@ tests/cases/conformance/types/intersection/intersectionReduction.ts(81,1): error
     ab.kind;  // Error
        ~~~~
 !!! error TS2339: Property 'kind' does not exist on type 'never'.
+!!! error TS2339:   The type 'never' was reduced from the intersection 'A & B'. Each type of that intersection has properties that conflict, so values of that type can never exist.
+    ab = 42;
+    ~~
+!!! error TS2322: Type '42' is not assignable to type 'never'.
+!!! error TS2322:   The type 'never' was reduced from the intersection 'A & B'. Each type of that intersection has properties that conflict, so values of that type can never exist.
     
     declare let x: A | (B & C);  // A
     let a: A = x;

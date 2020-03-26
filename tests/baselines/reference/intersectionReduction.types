@@ -111,6 +111,11 @@ ab.kind;  // Error
 >ab : never
 >kind : any
 
+ab = 42;
+>ab = 42 : 42
+>ab : never
+>42 : 42
+
 declare let x: A | (B & C);  // A
 >x : A
 
