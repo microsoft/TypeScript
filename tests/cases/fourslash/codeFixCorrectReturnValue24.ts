@@ -7,6 +7,6 @@ verify.codeFix({
     description: "Add a return statement",
     index: 0,
     newFileContent: 
-    `function Foo (a: () => number) { a() }
+`function Foo (a: () => number) { a() }
 Foo(() => { /* leading */ return 1 /* trailing */ })`
 })

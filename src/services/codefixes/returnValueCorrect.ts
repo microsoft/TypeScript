@@ -171,7 +171,12 @@ namespace ts.codefix {
 
     function addReturnStatement(changes: textChanges.ChangeTracker, sourceFile: SourceFile, expression: Expression, statement: Statement) {
         suppressLeadingAndTrailingTrivia(expression);
-        changes.replaceNode(sourceFile, statement, createReturn(expression));
+        const probablyNeedSemi = probablyUsesSemicolons(sourceFile);
+        changes.replaceNode(sourceFile, statement, createReturn(expression), {
+            leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
+            trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude,
+            suffix: probablyNeedSemi ? ";" : undefined
+        });
     }
 
     function removeBlockBodyBrace(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: ArrowFunction, expression: Expression, commentSource: Node, withParen: boolean) {
