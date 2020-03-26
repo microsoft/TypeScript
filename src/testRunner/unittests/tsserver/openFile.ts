@@ -149,11 +149,7 @@ bar();`
             const host = createServerHost([file, libFile]);
             const session = createSession(host, { canUseEvents: true, });
             openFilesForSession([file], session);
-            verifyGetErrRequest({
-                session,
-                host,
-                expected: [{ file, syntax: [], semantic: [], suggestion: [] },]
-            });
+            verifyGetErrRequestNoErrors({ session, host, files: [file] });
 
             // Remove first ts-ignore and check only first error is reported
             const tsIgnoreComment = `// @ts-ignore`;
@@ -171,7 +167,6 @@ bar();`
                 }
             });
             const locationOfY = protocolTextSpanFromSubstring(file.content, "y");
-            const locationOfZ = protocolTextSpanFromSubstring(file.content, "z");
             verifyGetErrRequest({
                 session,
                 host,
@@ -181,7 +176,6 @@ bar();`
                         syntax: [],
                         semantic: [
                             createDiagnostic(locationOfY.start, locationOfY.end, Diagnostics.Type_0_is_not_assignable_to_type_1, ["10", "string"]),
-                            createDiagnostic(locationOfZ.start, locationOfZ.end, Diagnostics.Type_0_is_not_assignable_to_type_1, ["10", "string"]) // This should not be reported
                         ],
                         suggestion: []
                     },
@@ -201,18 +195,7 @@ bar();`
                     }]
                 }
             });
-            verifyGetErrRequest({
-                session,
-                host,
-                expected: [{
-                    file,
-                    syntax: [],
-                    semantic: [
-                        createDiagnostic(locationOfZ.start, locationOfZ.end, Diagnostics.Type_0_is_not_assignable_to_type_1, ["10", "string"]) // This should not be reported
-                    ],
-                    suggestion: []
-                },]
-            });
+            verifyGetErrRequestNoErrors({ session, host, files: [file] });
         });
     });
 }

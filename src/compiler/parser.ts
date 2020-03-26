@@ -7752,7 +7752,6 @@ namespace ts {
             const incrementalSourceFile = <IncrementalNode><Node>sourceFile;
             Debug.assert(!incrementalSourceFile.hasBeenIncrementallyParsed);
             incrementalSourceFile.hasBeenIncrementallyParsed = true;
-
             const oldText = sourceFile.text;
             const syntaxCursor = createSyntaxCursor(sourceFile);
 
@@ -7805,8 +7804,66 @@ namespace ts {
             // will immediately bail out of walking any subtrees when we can see that their parents
             // are already correct.
             const result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /*setParentNodes*/ true, sourceFile.scriptKind);
-
+            result.commentDirectives = getNewCommentDirectives(
+                sourceFile.commentDirectives,
+                result.commentDirectives,
+                changeRange.span.start,
+                textSpanEnd(changeRange.span),
+                delta,
+                oldText,
+                newText,
+                aggressiveChecks
+            );
             return result;
+        }
+
+        function getNewCommentDirectives(
+            oldDirectives: CommentDirective[] | undefined,
+            newDirectives: CommentDirective[] | undefined,
+            changeStart: number,
+            changeRangeOldEnd: number,
+            delta: number,
+            oldText: string,
+            newText: string,
+            aggressiveChecks: boolean
+        ): CommentDirective[] | undefined {
+            if (!oldDirectives) return newDirectives;
+            let commentDirectives: CommentDirective[] | undefined;
+            let addedNewlyScannedDirectives = false;
+            for (const directive of oldDirectives) {
+                const { range, type } = directive;
+                // Range before the change
+                if (range.end < changeStart) {
+                    commentDirectives = append(commentDirectives, directive);
+                }
+                else if (range.pos > changeRangeOldEnd) {
+                    addNewlyScannedDirectives();
+                    // Node is entirely past the change range.  We need to move both its pos and
+                    // end, forward or backward appropriately.
+                    const updatedDirective: CommentDirective = {
+                        range: { pos: range.pos + delta, end: range.end + delta },
+                        type
+                    };
+                    commentDirectives = append(commentDirectives, updatedDirective);
+                    if (aggressiveChecks) {
+                        Debug.assert(oldText.substring(range.pos, range.end) === newText.substring(updatedDirective.range.pos, updatedDirective.range.end));
+                    }
+                }
+                // Ignore ranges that fall in change range
+            }
+            addNewlyScannedDirectives();
+            return commentDirectives;
+
+            function addNewlyScannedDirectives() {
+                if (addedNewlyScannedDirectives) return;
+                addedNewlyScannedDirectives = true;
+                if (!commentDirectives) {
+                    commentDirectives = newDirectives;
+                }
+                else if (newDirectives) {
+                    commentDirectives.push(...newDirectives);
+                }
+            }
         }
 
         function moveElementEntirelyPastChangeRange(element: IncrementalElement, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
