@@ -4102,7 +4102,9 @@ namespace ts {
                     return undefined!; // TODO: GH#18217
                 }
 
-                type = getReducedType(type);
+                if (!(context.flags & NodeBuilderFlags.PreserveVacuousIntersections)) {
+                    type = getReducedType(type);
+                }
 
                 if (type.flags & TypeFlags.Any) {
                     context.approximateLength += 3;
@@ -15528,6 +15530,10 @@ namespace ts {
                             return result;
                         }
                     }
+                    else if (getObjectFlags(originalTarget) & ObjectFlags.IsNeverIntersection) {
+                        const intersectionString = typeToString(originalTarget, /*enclosingDeclaration*/ undefined, TypeFormatFlags.PreserveVacuousIntersections);
+                        errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.The_type_never_was_reduced_from_the_intersection_0_Each_type_of_that_intersection_has_properties_that_conflict_so_values_of_that_type_can_never_exist, intersectionString);
+                    }
                     if (!headMessage && maybeSuppress) {
                         lastSkippedInfo = [source, target];
                         // Used by, eg, missing property checking to replace the top-level message with a more informative one
@@ -24098,6 +24104,10 @@ namespace ts {
                         relatedInfo = suggestion.valueDeclaration && createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestedName);
                     }
                     else {
+                        if (getObjectFlags(containingType) & ObjectFlags.IsNeverIntersection) {
+                            const intersectionString = typeToString(containingType, /*enclosingDeclaration*/ undefined, TypeFormatFlags.PreserveVacuousIntersections);
+                            errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.The_type_never_was_reduced_from_the_intersection_0_Each_type_of_that_intersection_has_properties_that_conflict_so_values_of_that_type_can_never_exist, intersectionString);
+                        }
                         errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
                     }
                 }

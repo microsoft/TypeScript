@@ -5653,5 +5653,9 @@
     "An optional chain cannot contain private identifiers.": {
         "category": "Error",
         "code": 18030
+    },
+    "The type 'never' was reduced from the intersection '{0}'. Each type of that intersection has properties that conflict, so values of that type can never exist.": {
+        "category": "Error",
+        "code": 18031
     }
 }
