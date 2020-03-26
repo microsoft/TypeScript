@@ -38,6 +38,7 @@ type C = { kind: 'c', foo: number };
 
 declare let ab: A & B;
 ab.kind;  // Error
+ab = 42;
 
 declare let x: A | (B & C);  // A
 let a: A = x;
