@@ -3461,6 +3461,10 @@
         "category": "Error",
         "code": 5082
     },
+    "Cannot read file '{0}'.": {
+        "category": "Error",
+        "code": 5083
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
