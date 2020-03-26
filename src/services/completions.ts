@@ -1889,11 +1889,11 @@ namespace ts.Completions {
                 ? tryCast(contextToken.parent, isNamedImportsOrExports) : undefined;
             if (!namedImportsOrExports) return GlobalsSearch.Continue;
 
-            // cursor is in an import clause
-            // try to show exported member for imported module
+            // try to show exported member for imported/re-exported module
             const { moduleSpecifier } = namedImportsOrExports.kind === SyntaxKind.NamedImports ? namedImportsOrExports.parent.parent : namedImportsOrExports.parent;
-            const moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(moduleSpecifier!); // TODO: GH#18217
-            if (!moduleSpecifierSymbol) return GlobalsSearch.Continue;
+            if (!moduleSpecifier) return namedImportsOrExports.kind === SyntaxKind.NamedImports ? GlobalsSearch.Fail : GlobalsSearch.Continue;
+            const moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(moduleSpecifier); // TODO: GH#18217
+            if (!moduleSpecifierSymbol) return GlobalsSearch.Fail;
 
             completionKind = CompletionKind.MemberLike;
             isNewIdentifierLocation = false;
@@ -1913,7 +1913,7 @@ namespace ts.Completions {
          * preventing this function from running.
          */
         function tryGetLocalNamedExportCompletionSymbols(): GlobalsSearch {
-            const namedExports = contextToken.kind === SyntaxKind.OpenBraceToken || contextToken.kind === SyntaxKind.CommaToken
+            const namedExports = contextToken && (contextToken.kind === SyntaxKind.OpenBraceToken || contextToken.kind === SyntaxKind.CommaToken)
                 ? tryCast(contextToken.parent, isNamedExports)
                 : undefined;
 
@@ -1921,17 +1921,12 @@ namespace ts.Completions {
                 return GlobalsSearch.Continue;
             }
 
-            const localsBlock = namedExports.parent.parent;
-            if (localsBlock.kind !== SyntaxKind.SourceFile && localsBlock.kind !== SyntaxKind.ModuleBlock) {
-                return GlobalsSearch.Fail;
-            }
-
-            const localsContainer = localsBlock.kind === SyntaxKind.ModuleBlock ? localsBlock.parent : localsBlock;
+            const localsContainer = findAncestor(namedExports, or(isSourceFile, isModuleDeclaration))!;
             completionKind = CompletionKind.None;
             isNewIdentifierLocation = false;
             localsContainer.locals?.forEach((symbol, name) => {
                 symbols.push(symbol);
-                if (localsContainer.symbol.exports?.has(name)) {
+                if (localsContainer.symbol?.exports?.has(name)) {
                     symbolToSortTextMap[getSymbolId(symbol)] = SortText.OptionalMember;
                 }
             });
