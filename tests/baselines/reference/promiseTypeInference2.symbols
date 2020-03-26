@@ -1,0 +1,67 @@
+=== tests/cases/compiler/promiseTypeInference2.ts ===
+const p1 = Promise.resolve(null);
+>p1 : Symbol(p1, Decl(promiseTypeInference2.ts, 0, 5))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+const p2 = p1.then(() => 100);
+>p2 : Symbol(p2, Decl(promiseTypeInference2.ts, 1, 5))
+>p1.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>p1 : Symbol(p1, Decl(promiseTypeInference2.ts, 0, 5))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+
+const p3 = p1.then(() => Promise.resolve(100));
+>p3 : Symbol(p3, Decl(promiseTypeInference2.ts, 2, 5))
+>p1.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>p1 : Symbol(p1, Decl(promiseTypeInference2.ts, 0, 5))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+declare const p4: Promise<number> | Promise<string>;
+>p4 : Symbol(p4, Decl(promiseTypeInference2.ts, 4, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const p5 = Promise.resolve(p4);
+>p5 : Symbol(p5, Decl(promiseTypeInference2.ts, 5, 5))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>p4 : Symbol(p4, Decl(promiseTypeInference2.ts, 4, 13))
+
+declare const p6: PromiseLike<number> & { x: 1 } | PromiseLike<string> & { x: 2 };
+>p6 : Symbol(p6, Decl(promiseTypeInference2.ts, 7, 13))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(promiseTypeInference2.ts, 7, 41))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(promiseTypeInference2.ts, 7, 74))
+
+const p7 = Promise.resolve(p6);
+>p7 : Symbol(p7, Decl(promiseTypeInference2.ts, 8, 5))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>p6 : Symbol(p6, Decl(promiseTypeInference2.ts, 7, 13))
+
+declare function resolve<T>(value: T | PromiseLike<T> & { x: 1 } | PromiseLike<T> & { x: 2 }): Promise<T>;
+>resolve : Symbol(resolve, Decl(promiseTypeInference2.ts, 8, 31))
+>T : Symbol(T, Decl(promiseTypeInference2.ts, 10, 25))
+>value : Symbol(value, Decl(promiseTypeInference2.ts, 10, 28))
+>T : Symbol(T, Decl(promiseTypeInference2.ts, 10, 25))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(promiseTypeInference2.ts, 10, 25))
+>x : Symbol(x, Decl(promiseTypeInference2.ts, 10, 57))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(promiseTypeInference2.ts, 10, 25))
+>x : Symbol(x, Decl(promiseTypeInference2.ts, 10, 85))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>T : Symbol(T, Decl(promiseTypeInference2.ts, 10, 25))
+
+const p8 = resolve(p6);
+>p8 : Symbol(p8, Decl(promiseTypeInference2.ts, 11, 5))
+>resolve : Symbol(resolve, Decl(promiseTypeInference2.ts, 8, 31))
+>p6 : Symbol(p6, Decl(promiseTypeInference2.ts, 7, 13))
+

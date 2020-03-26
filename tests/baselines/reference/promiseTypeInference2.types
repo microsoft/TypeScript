@@ -1,0 +1,67 @@
+=== tests/cases/compiler/promiseTypeInference2.ts ===
+const p1 = Promise.resolve(null);
+>p1 : Promise<any>
+>Promise.resolve(null) : Promise<any>
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise : PromiseConstructor
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>null : null
+
+const p2 = p1.then(() => 100);
+>p2 : Promise<number>
+>p1.then(() => 100) : Promise<number>
+>p1.then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>p1 : Promise<any>
+>then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>() => 100 : () => number
+>100 : 100
+
+const p3 = p1.then(() => Promise.resolve(100));
+>p3 : Promise<number>
+>p1.then(() => Promise.resolve(100)) : Promise<number>
+>p1.then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>p1 : Promise<any>
+>then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>() => Promise.resolve(100) : () => Promise<number>
+>Promise.resolve(100) : Promise<number>
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise : PromiseConstructor
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>100 : 100
+
+declare const p4: Promise<number> | Promise<string>;
+>p4 : Promise<number> | Promise<string>
+
+const p5 = Promise.resolve(p4);
+>p5 : Promise<string | number>
+>Promise.resolve(p4) : Promise<string | number>
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise : PromiseConstructor
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>p4 : Promise<number> | Promise<string>
+
+declare const p6: PromiseLike<number> & { x: 1 } | PromiseLike<string> & { x: 2 };
+>p6 : (PromiseLike<number> & { x: 1; }) | (PromiseLike<string> & { x: 2; })
+>x : 1
+>x : 2
+
+const p7 = Promise.resolve(p6);
+>p7 : Promise<string | number>
+>Promise.resolve(p6) : Promise<string | number>
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise : PromiseConstructor
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>p6 : (PromiseLike<number> & { x: 1; }) | (PromiseLike<string> & { x: 2; })
+
+declare function resolve<T>(value: T | PromiseLike<T> & { x: 1 } | PromiseLike<T> & { x: 2 }): Promise<T>;
+>resolve : <T>(value: T | (PromiseLike<T> & { x: 1; }) | (PromiseLike<T> & { x: 2; })) => Promise<T>
+>value : T | (PromiseLike<T> & { x: 1; }) | (PromiseLike<T> & { x: 2; })
+>x : 1
+>x : 2
+
+const p8 = resolve(p6);
+>p8 : Promise<string | number>
+>resolve(p6) : Promise<string | number>
+>resolve : <T>(value: T | (PromiseLike<T> & { x: 1; }) | (PromiseLike<T> & { x: 2; })) => Promise<T>
+>p6 : (PromiseLike<number> & { x: 1; }) | (PromiseLike<string> & { x: 2; })
+
