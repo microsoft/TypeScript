@@ -1931,8 +1931,9 @@ namespace ts.Completions {
             completionKind = CompletionKind.Local;
             isNewIdentifierLocation = false;
             localsContainer.locals?.forEach((symbol, name) => {
-                if (!localsContainer.symbol.exports?.has(name)) {
-                    symbols.push(symbol);
+                symbols.push(symbol);
+                if (localsContainer.symbol.exports?.has(name)) {
+                    symbolToSortTextMap[getSymbolId(symbol)] = SortText.OptionalMember;
                 }
             });
             return GlobalsSearch.Success;
@@ -2335,7 +2336,7 @@ namespace ts.Completions {
             }
         }
 
-        // Set SortText to OptionalMember if it is an optinoal member
+        // Set SortText to OptionalMember if it is an optional member
         function setSortTextToOptionalMember() {
             symbols.forEach(m => {
                 if (m.flags & SymbolFlags.Optional) {

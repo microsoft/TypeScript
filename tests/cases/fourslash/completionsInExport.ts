@@ -9,9 +9,30 @@ verify.completions({
   exact: ["a", "T"]
 });
 
-edit.insert("a");
-
+// Deprioritize 'a' since it has been exported already.
+// (Keep it in the list because you can still do 'a as b'.)
+edit.insert("a, ");
 verify.completions({
-  marker: "",
-  exact: ["T"]
+  exact: [{ name: "a", sortText: completion.SortText.OptionalMember }, "T"]
+});
+
+// No completions for new name
+edit.insert("T as ");
+verify.completions({
+  exact: []
+});
+
+// 'T' still hasn't been exported by name
+edit.insert("U, ");
+verify.completions({
+  exact: [{ name: "a", sortText: completion.SortText.OptionalMember }, "T"]
+});
+
+// 'a' and 'T' are back to the same priority
+edit.insert("T, ");
+verify.completions({
+  exact: [
+    { name: "a", sortText: completion.SortText.OptionalMember },
+    { name: "T", sortText: completion.SortText.OptionalMember }
+  ]
 });
