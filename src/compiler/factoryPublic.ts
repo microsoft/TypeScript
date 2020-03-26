@@ -2057,6 +2057,7 @@ namespace ts {
             : node;
     }
 
+    /* @internal */
     export function updateFunctionLikeBody(declaration: FunctionLikeDeclaration, body: Block): FunctionLikeDeclaration {
         switch (declaration.kind) {
             case SyntaxKind.FunctionDeclaration:
