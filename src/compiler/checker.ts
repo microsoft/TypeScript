@@ -686,7 +686,6 @@ namespace ts {
         const literalTypes = createMap<LiteralType>();
         const indexedAccessTypes = createMap<IndexedAccessType>();
         const substitutionTypes = createMap<SubstitutionType>();
-        const awaitedTypes = createMap<AwaitedType>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties = createMap<Symbol>() as UnderscoreEscapedMap<Symbol>;
 
@@ -4270,11 +4269,6 @@ namespace ts {
                     const indexTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).indexType, context);
                     context.approximateLength += 2;
                     return createIndexedAccessTypeNode(objectTypeNode, indexTypeNode);
-                }
-                if (type.flags & TypeFlags.Awaited) {
-                    const awaitedTypeNode = typeToTypeNodeHelper((<AwaitedType>type).awaitedType, context);
-                    context.approximateLength += 9;
-                    return createTypeOperatorNode(SyntaxKind.AwaitedKeyword, awaitedTypeNode);
                 }
                 if (type.flags & TypeFlags.Conditional) {
                     const checkTypeNode = typeToTypeNodeHelper((<ConditionalType>type).checkType, context);
@@ -10124,10 +10118,6 @@ namespace ts {
                     constraintDepth--;
                     return result;
                 }
-                if (t.flags & TypeFlags.Awaited) {
-                    const basePromiseType = getBaseConstraint((<AwaitedType>t).awaitedType);
-                    return basePromiseType ? getAwaitedType(basePromiseType) : undefined;
-                }
                 if (t.flags & TypeFlags.Substitution) {
                     return getBaseConstraint((<SubstitutionType>t).substitute);
                 }
@@ -12460,9 +12450,6 @@ namespace ts {
                     case SyntaxKind.ReadonlyKeyword:
                         links.resolvedType = getTypeFromTypeNode(node.type);
                         break;
-                    case SyntaxKind.AwaitedKeyword:
-                        links.resolvedType = getAwaitedType(getTypeFromTypeNode(node.type)) ?? unknownType;
-                        break;
                     default:
                         throw Debug.assertNever(node.operator);
                 }
@@ -14021,9 +14008,6 @@ namespace ts {
             }
             if (flags & TypeFlags.Conditional) {
                 return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers((<ConditionalType>type).mapper, mapper));
-            }
-            if (flags & TypeFlags.Awaited) {
-                return getAwaitedType(instantiateType((<AwaitedType>type).awaitedType, mapper)) ?? unknownType;
             }
             if (flags & TypeFlags.Substitution) {
                 const maybeVariable = instantiateType((<SubstitutionType>type).baseType, mapper);
@@ -15832,8 +15816,7 @@ namespace ts {
                 if (outofbandVarianceMarkerHandler) {
                     originalHandler = outofbandVarianceMarkerHandler;
                     outofbandVarianceMarkerHandler = onlyUnreliable => {
-                        propagatingVarianceFlags |=
-                            onlyUnreliable ? RelationComparisonResult.ReportsUnreliable : RelationComparisonResult.ReportsUnmeasurable;
+                        propagatingVarianceFlags |= onlyUnreliable ? RelationComparisonResult.ReportsUnreliable : RelationComparisonResult.ReportsUnmeasurable;
                         return originalHandler!(onlyUnreliable);
                     };
                 }
@@ -15964,17 +15947,6 @@ namespace ts {
                         }
                     }
                 }
-                else if (target.flags & TypeFlags.Awaited && source.flags & TypeFlags.Awaited) {
-                    const targetType = (<AwaitedType>target).awaitedType;
-                    const sourceType = instantiateType((<AwaitedType>source).awaitedType, makeFunctionTypeMapper(reportUnreliableMarkers));
-                    // An `awaited S` is related to an `awaited T` if `S` is related to `T`:
-                    //
-                    //  S <: T ⇒ awaited S <: awaited T
-                    //
-                    if (result = isRelatedTo(sourceType, targetType, reportErrors)) {
-                        return result;
-                    }
-                }
                 else if (isGenericMappedType(target)) {
                     // A source type T is related to a target type { [P in X]: T[P] }
                     const template = getTemplateTypeFromMappedType(target);
@@ -16089,21 +16061,6 @@ namespace ts {
                     if (defaultConstraint) {
                         if (result = isRelatedTo(defaultConstraint, target, reportErrors)) {
                             resetErrorInfo(saveErrorInfo);
-                            return result;
-                        }
-                    }
-                }
-                else if (source.flags & TypeFlags.Awaited) {
-                    // An `awaited S` is related to `T` if `awaited C` is related to `T`, where `C` is the
-                    // constraint of `S`:
-                    //
-                    //  S <: C ^ awaited C <: T ⇒ awaited S <: T
-                    //
-                    // For example `awaited Promise<number>` is assignable to `number`.
-                    const constraint = getConstraintOfType((<AwaitedType>source).awaitedType);
-                    const awaitedConstraint = constraint && getAwaitedType(constraint);
-                    if (awaitedConstraint) {
-                        if (result = isRelatedTo(awaitedConstraint, target, reportErrors)) {
                             return result;
                         }
                     }
@@ -16988,11 +16945,13 @@ namespace ts {
                         variance = VarianceFlags.Independent;
                     }
                     outofbandVarianceMarkerHandler = oldHandler;
-                    if (unmeasurable) {
-                        variance |= VarianceFlags.Unmeasurable;
-                    }
-                    if (unreliable) {
-                        variance |= VarianceFlags.Unreliable;
+                    if (unmeasurable || unreliable) {
+                        if (unmeasurable) {
+                            variance |= VarianceFlags.Unmeasurable;
+                        }
+                        if (unreliable) {
+                            variance |= VarianceFlags.Unreliable;
+                        }
                     }
                     variances.push(variance);
                 }
@@ -18347,19 +18306,12 @@ namespace ts {
                     inferFromTypes(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target));
                     inferFromTypes(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target));
                 }
-                else if (source.flags & TypeFlags.Awaited && target.flags & TypeFlags.Awaited) {
-                    inferFromTypes((<AwaitedType>source).awaitedType, (<AwaitedType>target).awaitedType);
-                }
                 else if (target.flags & TypeFlags.Conditional) {
                     const savePriority = priority;
                     priority |= contravariant ? InferencePriority.ContravariantConditional : 0;
                     const targetTypes = [getTrueTypeFromConditionalType(<ConditionalType>target), getFalseTypeFromConditionalType(<ConditionalType>target)];
                     inferToMultipleTypes(source, targetTypes, target.flags);
                     priority = savePriority;
-                }
-                else if (target.flags & TypeFlags.Awaited) {
-                    inferFromTypes(source, (<AwaitedType>target).awaitedType);
-                    inferFromTypes(source, createPromiseLikeType((<AwaitedType>target).awaitedType));
                 }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     inferToMultipleTypes(source, (<UnionOrIntersectionType>target).types, target.flags);
@@ -18489,32 +18441,10 @@ namespace ts {
                 return typeVariable;
             }
 
-            function isPromiseForType(promiseType: Type, promisedType: Type) {
-                return isThenableType(promiseType) && unwrapAwaitedType(getPromisedTypeOfPromise(promiseType) ?? errorType) === promisedType;
-            }
-
             function inferToMultipleTypes(source: Type, targets: Type[], targetFlags: TypeFlags) {
                 let typeVariableCount = 0;
                 if (targetFlags & TypeFlags.Union) {
                     let nakedTypeVariable: Type | undefined;
-                    for (const t of targets) {
-                        if (getInferenceInfoForType(t)) {
-                            nakedTypeVariable = t;
-                            typeVariableCount++;
-                        }
-                    }
-                    // To better support backwards compatibility with the new `awaited` type, we detect a target
-                    // union of exactly `T | PromiseLike<T>` (for any compatible `PromiseLike`). When encountered,
-                    // we infer from source to the type parameter `T`, where each type of source is mapped to extract
-                    // the promised type of any promise (e.g., `string | Promise<number>` becomes `string | number`).
-                    if (typeVariableCount === 1 && targets.length === 2) {
-                        for (const t of targets) {
-                            if (!getInferenceInfoForType(t) && isPromiseForType(t, nakedTypeVariable!)) {
-                                inferFromTypes(mapType(source, s => getPromisedTypeOfPromise(s) ?? s), nakedTypeVariable!);
-                                return;
-                            }
-                        }
-                    }
                     const sources = source.flags & TypeFlags.Union ? (<UnionType>source).types : [source];
                     const matched = new Array<boolean>(sources.length);
                     let inferenceCircularity = false;
@@ -18523,7 +18453,11 @@ namespace ts {
                     // equal priority (i.e. of equal quality) to what we would infer for a naked type
                     // parameter.
                     for (const t of targets) {
-                        if (!getInferenceInfoForType(t)) {
+                        if (getInferenceInfoForType(t)) {
+                            nakedTypeVariable = t;
+                            typeVariableCount++;
+                        }
+                        else {
                             for (let i = 0; i < sources.length; i++) {
                                 const saveInferencePriority = inferencePriority;
                                 inferencePriority = InferencePriority.MaxValue;
@@ -21840,10 +21774,7 @@ namespace ts {
                 const contextualReturnType = getContextualReturnType(func);
                 if (contextualReturnType) {
                     if (functionFlags & FunctionFlags.Async) { // Async function
-                        let contextualAwaitedType = getAwaitedTypeOfPromise(contextualReturnType);
-                        if (contextualAwaitedType && contextualAwaitedType.flags & TypeFlags.Awaited) {
-                            contextualAwaitedType = (<AwaitedType>contextualAwaitedType).awaitedType;
-                        }
+                        const contextualAwaitedType = getAwaitedTypeOfPromise(contextualReturnType);
                         return contextualAwaitedType && getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
                     }
                     return contextualReturnType; // Regular function
@@ -21855,10 +21786,7 @@ namespace ts {
         function getContextualTypeForAwaitOperand(node: AwaitExpression): Type | undefined {
             const contextualType = getContextualType(node);
             if (contextualType) {
-                let contextualAwaitedType = getAwaitedType(contextualType);
-                if (contextualAwaitedType && contextualAwaitedType.flags & TypeFlags.Awaited) {
-                    contextualAwaitedType = (<AwaitedType>contextualAwaitedType).awaitedType;
-                }
+                const contextualAwaitedType = getAwaitedType(contextualType);
                 return contextualAwaitedType && getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
             }
             return undefined;
@@ -26768,7 +26696,7 @@ namespace ts {
             const globalPromiseType = getGlobalPromiseType(/*reportErrors*/ true);
             if (globalPromiseType !== emptyGenericType) {
                 // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
-                promisedType = unwrapAwaitedType(getAwaitedType(promisedType) || unknownType);
+                promisedType = getAwaitedType(promisedType) || unknownType;
                 return createTypeReference(globalPromiseType, [promisedType]);
             }
 
@@ -26780,7 +26708,7 @@ namespace ts {
             const globalPromiseLikeType = getGlobalPromiseLikeType(/*reportErrors*/ true);
             if (globalPromiseLikeType !== emptyGenericType) {
                 // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
-                promisedType = unwrapAwaitedType(getAwaitedType(promisedType) || unknownType);
+                promisedType = getAwaitedType(promisedType) || unknownType;
                 return createTypeReference(globalPromiseLikeType, [promisedType]);
             }
 
@@ -30191,9 +30119,8 @@ namespace ts {
                 return typeAsPromise.promisedTypeOfPromise;
             }
 
-            if (isReferenceToType(type, getGlobalPromiseType(/*reportErrors*/ false)) ||
-                isReferenceToType(type, getGlobalPromiseLikeType(/*reportErrors*/ false))) {
-                return typeAsPromise.promisedTypeOfPromise = getAwaitedType(getTypeArguments(<GenericType>type)[0], errorNode);
+            if (isReferenceToType(type, getGlobalPromiseType(/*reportErrors*/ false))) {
+                return typeAsPromise.promisedTypeOfPromise = getTypeArguments(<GenericType>type)[0];
             }
 
             const thenFunction = getTypeOfPropertyOfType(type, "then" as __String)!; // TODO: GH#18217
@@ -30238,62 +30165,11 @@ namespace ts {
         }
 
         /**
-         * Gets or creates an `awaited T` type for a generic type.
-         *
-         * The "awaited type" of a generic type cannot be determined until it is instantiated. As
-         * a result, an `AwaitedType` for the generic type is created that can be instantiated
-         * or related later.
-         */
-        function getAwaitedTypeForGenericType(type: InstantiableType) {
-            const typeId = "" + type.id;
-            let awaitedType = awaitedTypes.get(typeId);
-            if (!awaitedType) {
-                awaitedType = <AwaitedType>createType(TypeFlags.Awaited);
-                awaitedType.awaitedType = type;
-                awaitedTypes.set(typeId, awaitedType);
-            }
-            return awaitedType;
-        }
-
-        function unwrapAwaitedType(type: Type): Type {
-            return type.flags & TypeFlags.Union ?
-                mapType(type, unwrapAwaitedType) :
-                type.flags & TypeFlags.Awaited ? (<AwaitedType>type).awaitedType : type;
-        }
-
-        /**
          * Determines whether a type has a callable `then` member.
          */
         function isThenableType(type: Type): boolean {
             const thenFunction = getTypeOfPropertyOfType(type, "then" as __String);
             return !!thenFunction && getSignaturesOfType(getTypeWithFacts(thenFunction, TypeFacts.NEUndefinedOrNull), SignatureKind.Call).length > 0;
-        }
-
-        /**
-         * Determines whether a type is a generic type whose base constraint could possibly resolve to a different
-         * type when awaited. A type is a generic "thenable" type when all of the following conditions are met:
-         * - The type is a generic object type,
-         * - AND one of the following conditions are met
-         *   - The type has no base constraint,
-         *   - OR The base constraint of the type is `any`, `unknown`, `object`, or the empty object `{}`,
-         *   - OR The base constraint has a callable `then` member.
-         * This behavior is not entirely sound, as a `T extends { x: any }` could be instantiated with a
-         * subtype that has a callable `then`, however this is unlikely in practice and this slightly more unsound
-         * behavior is much more developer friendly.
-         */
-        function isGenericAwaitableType(type: Type): boolean {
-            if (isGenericObjectType(type)) {
-                if (type.flags & TypeFlags.Intersection) {
-                    return some((type as IntersectionType).types, isGenericAwaitableType);
-                }
-                const baseConstraint = getBaseConstraintOfType(type);
-                return !baseConstraint ||
-                    !!(baseConstraint.flags & (TypeFlags.AnyOrUnknown | TypeFlags.NonPrimitive)) ||
-                    baseConstraint === emptyObjectType ||
-                    baseConstraint === emptyGenericType ||
-                    isThenableType(baseConstraint);
-            }
-            return false;
         }
 
         /**
@@ -30304,21 +30180,10 @@ namespace ts {
          * type" is itself a Promise-like, the "promised type" is recursively unwrapped until a
          * non-promise type is found.
          *
-         * This is used to reflect the runtime behavior of the `await` keyword and the `awaited T`
-         * type.
+         * This is used to reflect the runtime behavior of the `await` keyword.
          */
         function getAwaitedType(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, arg0?: string | number): Type | undefined {
             if (isTypeAny(type)) {
-                return type;
-            }
-
-            // If the type is already an awaited type, return it.
-            //
-            // For example:
-            //
-            //   awaited T -> awaited T
-            //
-            if (type.flags & TypeFlags.Awaited) {
                 return type;
             }
 
@@ -30329,41 +30194,11 @@ namespace ts {
 
             // For a union, get a union of the awaited types of each constituent.
             //
-            // For example:
-            //
-            //   awaited (number | string)          -> number | string
-            //   awaited (number | Promise<string>) -> number | string
-            //   awaited (T | string)               -> awaited T | string
-            //   awaited (T | Promise<string>)      -> awaited T | string
-            //   awaited (T | Promise<never>)       -> awaited T
-            //   awaited (T | U)                    -> awaited T | awaited U
-            //
             return typeAsAwaitable.awaitedTypeOfType =
                 mapType(type, errorNode ? constituentType => getAwaitedTypeWorker(constituentType, errorNode, diagnosticMessage, arg0) : getAwaitedTypeWorker);
         }
 
         function getAwaitedTypeWorker(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, arg0?: string | number): Type | undefined {
-            // If the type is already an awaited type, return it.
-            //
-            // For example:
-            //
-            //   awaited T -> awaited T
-            //
-            if (type.flags & TypeFlags.Awaited) {
-                return type;
-            }
-
-            // We cannot resolve the awaited type for a type variable until it is instantiated. As
-            // such, we create an `awaited T` type that can either be instantiated or related later.
-            //
-            // For example:
-            //
-            //   T -> awaited T
-            //
-            if (isGenericAwaitableType(type)) {
-                return getAwaitedTypeForGenericType(<TypeVariable>type);
-            }
-
             const typeAsAwaitable = <PromiseOrAwaitableType>type;
             if (typeAsAwaitable.awaitedTypeOfType) {
                 return typeAsAwaitable.awaitedTypeOfType;
@@ -32602,7 +32437,7 @@ namespace ts {
             const isGenerator = !!(functionFlags & FunctionFlags.Generator);
             const isAsync = !!(functionFlags & FunctionFlags.Async);
             return isGenerator ? getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, isAsync) || errorType :
-                isAsync ? unwrapAwaitedType(getAwaitedType(returnType) || errorType) :
+                isAsync ? getPromisedTypeOfPromise(returnType) || errorType :
                 returnType;
         }
 
@@ -32641,7 +32476,7 @@ namespace ts {
                 else if (getReturnTypeFromAnnotation(func)) {
                     const unwrappedReturnType = unwrapReturnType(returnType, functionFlags);
                     const unwrappedExprType = functionFlags & FunctionFlags.Async
-                        ? unwrapAwaitedType(checkAwaitedType(exprType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member))
+                        ? checkAwaitedType(exprType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
                         : exprType;
                     if (unwrappedReturnType) {
                         // If the function has a return type, but promisedType is
