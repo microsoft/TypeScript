@@ -255,7 +255,21 @@ interface String { charAt: any; }
 interface Array<T> {}`
     };
 
-    function testConvertToAsyncFunction(caption: string, text: string, baselineFolder: string, includeLib?: boolean, expectFailure = false, onlyProvideAction = false) {
+    type WithSkipAndOnly<T extends any[]> = ((...args: T) => void) & {
+        skip: (...args: T) => void;
+        only: (...args: T) => void;
+    };
+
+    function createTestWrapper<T extends any[]>(fn: (it: Mocha.PendingTestFunction, ...args: T) => void): WithSkipAndOnly<T> {
+        wrapped.skip = (...args: T) => fn(it.skip, ...args);
+        wrapped.only = (...args: T) => fn(it.only, ...args);
+        return wrapped;
+        function wrapped(...args: T) {
+            return fn(it, ...args);
+        }
+    }
+
+    function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: string, text: string, baselineFolder: string, includeLib?: boolean, expectFailure = false, onlyProvideAction = false) {
         const t = extractTest(text);
         const selectionRange = t.ranges.get("selection")!;
         if (!selectionRange) {
@@ -343,7 +357,19 @@ interface Array<T> {}`
         }
     }
 
-    describe("unittests:: services:: convertToAsyncFunctions", () => {
+    const _testConvertToAsyncFunction = createTestWrapper((it, caption: string, text: string) => {
+        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", /*includeLib*/ true);
+    });
+
+    const _testConvertToAsyncFunctionFailed = createTestWrapper((it, caption: string, text: string) => {
+        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", /*includeLib*/ true, /*expectFailure*/ true);
+    });
+
+    const _testConvertToAsyncFunctionFailedSuggestion = createTestWrapper((it, caption: string, text: string) => {
+        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", /*includeLib*/ true, /*expectFailure*/ true, /*onlyProvideAction*/ true);
+    });
+
+    describe("unittests:: services:: convertToAsyncFunction", () => {
         _testConvertToAsyncFunction("convertToAsyncFunction_basic", `
 function [#|f|](): Promise<void>{
     return fetch('https://typescriptlang.org').then(result => { console.log(result) });
@@ -1352,17 +1378,54 @@ function foo() {
     })
 }
 `);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_thenTypeArgument1", `
+type APIResponse<T> = { success: true, data: T } | { success: false };
+
+function wrapResponse<T>(response: T): APIResponse<T> {
+    return { success: true, data: response };
+}
+
+function [#|get|]() {
+    return Promise.resolve(undefined!).then<APIResponse<{ email: string }>>(wrapResponse);
+}
+`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_thenTypeArgument2", `
+type APIResponse<T> = { success: true, data: T } | { success: false };
+
+function wrapResponse<T>(response: T): APIResponse<T> {
+    return { success: true, data: response };
+}
+
+function [#|get|]() {
+    return Promise.resolve(undefined!).then<APIResponse<{ email: string }>>(d => wrapResponse(d));
+}
+`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_thenTypeArgument3", `
+type APIResponse<T> = { success: true, data: T } | { success: false };
+
+function wrapResponse<T>(response: T): APIResponse<T> {
+    return { success: true, data: response };
+}
+
+function [#|get|]() {
+    return Promise.resolve(undefined!).then<APIResponse<{ email: string }>>(d => {
+        console.log(d);
+        return wrapResponse(d);
     });
+}
+`);
 
-    function _testConvertToAsyncFunction(caption: string, text: string) {
-        testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", /*includeLib*/ true);
-    }
+        _testConvertToAsyncFunction("convertToAsyncFunction_catchTypeArgument1", `
+type APIResponse<T> = { success: true, data: T } | { success: false };
 
-    function _testConvertToAsyncFunctionFailed(caption: string, text: string) {
-        testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", /*includeLib*/ true, /*expectFailure*/ true);
-    }
-
-    function _testConvertToAsyncFunctionFailedSuggestion(caption: string, text: string) {
-        testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", /*includeLib*/ true, /*expectFailure*/ true, /*onlyProvideAction*/ true);
-    }
+function [#|get|]() {
+    return Promise
+        .resolve<APIResponse<{ email: string }>>({ success: true, data: { email: "" } })
+        .catch<APIResponse<{ email: string }>>(() => ({ success: false }));
+}
+`);
+    });
 }

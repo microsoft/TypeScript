@@ -939,8 +939,8 @@ namespace ts {
     }
 
     export function createTypeOperatorNode(type: TypeNode): TypeOperatorNode;
-    export function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.AwaitedKeyword, type: TypeNode): TypeOperatorNode;
-    export function createTypeOperatorNode(operatorOrType: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.AwaitedKeyword | TypeNode, type?: TypeNode) {
+    export function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword, type: TypeNode): TypeOperatorNode;
+    export function createTypeOperatorNode(operatorOrType: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword | TypeNode, type?: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.TypeOperator) as TypeOperatorNode;
         node.operator = typeof operatorOrType === "number" ? operatorOrType : SyntaxKind.KeyOfKeyword;
         node.type = parenthesizeElementTypeMember(typeof operatorOrType === "number" ? type! : operatorOrType);
@@ -1076,10 +1076,8 @@ namespace ts {
     }
 
     export function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier | PrivateIdentifier) {
-        if (isOptionalChain(node) && isIdentifier(node.name) && isIdentifier(name)) {
-            // Not sure why this cast was necessary: the previous line should already establish that node.name is an identifier
-            const theNode = node as (typeof node & { name: Identifier });
-            return updatePropertyAccessChain(theNode, expression, node.questionDotToken, name);
+        if (isPropertyAccessChain(node)) {
+            return updatePropertyAccessChain(node, expression, node.questionDotToken, cast(name, isIdentifier));
         }
         // Because we are updating existed propertyAccess we want to inherit its emitFlags
         // instead of using the default from createPropertyAccess
@@ -1653,8 +1651,25 @@ namespace ts {
     }
 
     export function updateNonNullExpression(node: NonNullExpression, expression: Expression) {
+        if (isNonNullChain(node)) {
+            return updateNonNullChain(node, expression);
+        }
         return node.expression !== expression
             ? updateNode(createNonNullExpression(expression), node)
+            : node;
+    }
+
+    export function createNonNullChain(expression: Expression) {
+        const node = <NonNullChain>createSynthesizedNode(SyntaxKind.NonNullExpression);
+        node.flags |= NodeFlags.OptionalChain;
+        node.expression = parenthesizeForAccess(expression);
+        return node;
+    }
+
+    export function updateNonNullChain(node: NonNullChain, expression: Expression) {
+        Debug.assert(!!(node.flags & NodeFlags.OptionalChain), "Cannot update a NonNullExpression using updateNonNullChain. Use updateNonNullExpression instead.");
+        return node.expression !== expression
+            ? updateNode(createNonNullChain(expression), node)
             : node;
     }
 

@@ -1014,6 +1014,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_all_missing_call_parentheses_95068" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add all missing call parentheses]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[見つからない呼び出しのかっこをすべて追加します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_all_missing_imports_95064" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add all missing imports]]></Val>
@@ -1082,6 +1091,15 @@
           <Val><![CDATA[Add braces to arrow function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[アロー関数に中かっこを追加します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_class_tag_95102" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add '@class' tag]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['@class' タグの追加]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1170,6 +1188,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_missing_call_parentheses_95067" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add missing call parentheses]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[見つからない呼び出しのかっこを追加します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_missing_enum_member_0_95063" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add missing enum member '{0}']]></Val>
@@ -1250,6 +1277,24 @@
           <Val><![CDATA[Add qualifier to all unresolved variables matching a member name]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[メンバー名と一致するすべての未解決の変数に修飾子を追加します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_this_parameter_95104" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add 'this' parameter.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['this' パラメーターを追加します。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_this_tag_95103" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add '@this' tag]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['@this' タグの追加]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2460,20 +2505,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_module_0_2307" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Cannot find module '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[モジュール '{0}' が見つかりません。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Cannot_find_module_0_Consider_using_resolveJsonModule_to_import_module_with_json_extension_2732" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[モジュール '{0}' が見つかりません。'--resolveJsonModule ' を使用して'.json' 拡張子を持つモジュールをインポートすることを検討してください]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Cannot_find_module_0_or_its_corresponding_type_declarations_2307" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot find module '{0}' or its corresponding type declarations.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[モジュール '{0}' またはそれに対応する型宣言が見つかりません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3279,6 +3324,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_all_invalid_characters_to_HTML_entity_code_95101" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert all invalid characters to HTML entity code]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[すべての無効な文字を HTML エンティティ コードに変換する]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_all_re_exported_types_to_type_only_exports_1365" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert all re-exported types to type-only exports]]></Val>
@@ -3347,6 +3401,24 @@
           <Val><![CDATA[Convert function '{0}' to class]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[関数 '{0}' をクラスに変換します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_function_declaration_0_to_arrow_function_95106" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert function declaration '{0}' to arrow function]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[関数宣言 '{0}' をアロー関数に変換する]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_function_expression_0_to_arrow_function_95105" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert function expression '{0}' to arrow function]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[関数の式 '{0}' をアロー関数に変換する]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3495,6 +3567,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Could_not_resolve_the_path_0_with_the_extensions_Colon_1_6231" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Could not resolve the path '{0}' with the extensions: {1}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[次の拡張子を持つパス '{0}' を解決できませんでした: {1}。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Could_not_write_file_0_Colon_1_5033" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Could not write file '{0}': {1}.]]></Val>
@@ -3579,6 +3660,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Declare method '{0}'.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Declare_private_property_0_90035" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declare private property '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[プライベート プロパティ '{0}' を宣言します]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4998,6 +5088,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Fix_all_implicit_this_errors_95107" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Fix all implicit-'this' errors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[すべての暗黙的な 'this' エラーを修正する]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Found_0_errors_6217" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Found {0} errors.]]></Val>
@@ -6310,7 +6409,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Member '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[メンバー '{0}' の型は暗黙的に '{1}' になっていますが、使い方からより良い方を推論できます。]]></Val>
+            <Val><![CDATA[メンバー '{0}' の型は暗黙的に '{1}' ですが、使い方からより良い型を推論する場合があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7939,7 +8038,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' implicitly has type 'any', but a better type for its get accessor may be inferred from usage.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プロパティ '{0}' の型は暗黙的に 'any' になっていますが、その get アクセサーのより良い型を使い方から推論できます。]]></Val>
+            <Val><![CDATA[プロパティ '{0}' の型は暗黙的に 'any' ですが、その get アクセサーのために、使い方からより良い型を推論する場合があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8731,7 +8830,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Rest parameter '{0}' implicitly has an 'any[]5D;' type, but a better type may be inferred from usage.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[rest パラメーター '{0}' の型は暗黙的に 'any[]5D;' 型になっていますが、使い方からより良い型を推論できます。]]></Val>
+            <Val><![CDATA[rest パラメーター '{0}' の型は暗黙的に 'any[]5D;' 型ですが、使い方からより良い型を推論する場合があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10383,6 +10482,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_spread_always_overwrites_this_property_2785" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This spread always overwrites this property.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[このスプレッドは、常にこのプロパティを上書きします。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found_2354" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This syntax requires an imported helper but module '{0}' cannot be found.]]></Val>
@@ -11592,7 +11700,16 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Wrap_invalid_character_in_an_expression_container_95101" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Wrap_all_invalid_characters_in_an_expression_container_95109" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Wrap all invalid characters in an expression container]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[式のコンテナー内のすべての無効な文字をラップする]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Wrap_invalid_character_in_an_expression_container_95108" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Wrap invalid character in an expression container]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
@@ -11678,6 +11795,15 @@
           <Val><![CDATA['{0}' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of '{1}' is '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' コンポーネントには、テキストを子要素として指定できません。JSX のテキストには 'string' 型が含まれていますが、'{1}' の予期された型は '{2}' です。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_could_be_instantiated_with_an_arbitrary_type_which_could_be_unrelated_to_1_5082" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' could be instantiated with an arbitrary type which could be unrelated to '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{1}' に関連しない可能性のある任意の型で '{0}' をインスタンス化できます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12009,6 +12135,9 @@
       <Item ItemId=";_0_refers_to_a_value_but_is_being_used_as_a_type_here_Did_you_mean_typeof_0_2749" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' refers to a value, but is being used as a type here. Did you mean 'typeof {0}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' は値を参照していますが、ここでは型として使用されています。'typeof {0}' を意図していましたか?]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12234,6 +12363,15 @@
           <Prev Cat="Text">
             <Val><![CDATA['const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";constructor_cannot_be_used_as_a_parameter_property_name_2398" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['constructor' cannot be used as a parameter property name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['constructor' をパラメーターのプロパティ名として使用することはできません。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>

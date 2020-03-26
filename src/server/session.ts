@@ -856,7 +856,7 @@ namespace ts.server {
         private semanticCheck(file: NormalizedPath, project: Project) {
             const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
                 ? emptyArray
-                : project.getLanguageService().getSemanticDiagnostics(file);
+                : project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file);
             this.sendDiagnosticsEvent(file, project, diags, "semanticDiag");
         }
 
@@ -1234,7 +1234,7 @@ namespace ts.server {
             if (configFile) {
                 return this.getConfigFileDiagnostics(configFile, project!, !!args.includeLinePosition); // TODO: GH#18217
             }
-            return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSemanticDiagnostics(file), !!args.includeLinePosition);
+            return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file), !!args.includeLinePosition);
         }
 
         private getSuggestionDiagnosticsSync(args: protocol.SuggestionDiagnosticsSyncRequestArgs): readonly protocol.Diagnostic[] | readonly protocol.DiagnosticWithLinePosition[] {

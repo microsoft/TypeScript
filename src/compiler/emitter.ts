@@ -4296,7 +4296,7 @@ namespace ts {
                     // JsxText will be written with its leading whitespace, so don't add more manually.
                     return 0;
                 }
-                if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(firstChild) && firstChild.parent === parentNode) {
+                if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(firstChild) && (!firstChild.parent || firstChild.parent === parentNode)) {
                     if (preserveSourceNewlines) {
                         return getEffectiveLines(
                             includeComments => getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(
@@ -4353,7 +4353,7 @@ namespace ts {
                 if (lastChild === undefined) {
                     return rangeIsOnSingleLine(parentNode, currentSourceFile!) ? 0 : 1;
                 }
-                if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild) && lastChild.parent === parentNode) {
+                if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild) && (!lastChild.parent || lastChild.parent === parentNode)) {
                     if (preserveSourceNewlines) {
                         return getEffectiveLines(
                             includeComments => getLinesBetweenPositionAndNextNonWhitespaceCharacter(

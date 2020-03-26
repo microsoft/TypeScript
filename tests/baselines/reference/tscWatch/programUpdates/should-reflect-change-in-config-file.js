@@ -80,13 +80,14 @@ Change:: Change config
                         "files": ["/a/b/commonFile1.ts"]
                     }
 
+//// [/a/b/commonFile1.js] file written with same contents
 
 Output::
 >> Screen clear
 [[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
 
 
-[[90m12:00:27 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -97,6 +98,7 @@ Program files::
 /a/b/commonFile1.ts
 
 Semantic diagnostics in builder refreshed for::
+/a/b/commonFile1.ts
 
 WatchedFiles::
 /a/b/tsconfig.json:

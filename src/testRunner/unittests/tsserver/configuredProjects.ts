@@ -1233,4 +1233,27 @@ declare var console: {
             checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
         });
     });
+
+    describe("unittests:: tsserver:: ConfiguredProjects:: when reading tsconfig file fails", () => {
+        it("should be tolerated without crashing the server", () => {
+            const configFile = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: ""
+            };
+            const file1 = {
+                path: `${tscWatch.projectRoot}/file1.ts`,
+                content: "let t = 10;"
+            };
+
+            const host = createServerHost([file1, configFile]);
+            const projectService = createProjectService(host);
+            const originalReadFile = host.readFile;
+            host.readFile = f => {
+                return f === configFile.path ?
+                    undefined :
+                    originalReadFile.call(host, f);
+            };
+            projectService.openClientFile(file1.path);
+        });
+    });
 }

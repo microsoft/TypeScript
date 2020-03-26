@@ -1043,9 +1043,6 @@ namespace ts.codefix {
             else if (genericType.flags & TypeFlags.UnionOrIntersection) {
                 return flatMap((genericType as UnionOrIntersectionType).types, t => inferTypeParameters(t, usageType, typeParameter));
             }
-            else if (genericType.flags & TypeFlags.Awaited) {
-                return inferTypeParameters((<AwaitedType>genericType).awaitedType, usageType, typeParameter);
-            }
             else if (getObjectFlags(genericType) & ObjectFlags.Reference && getObjectFlags(usageType) & ObjectFlags.Reference) {
                 // this is wrong because we need a reference to the targetType to, so we can check that it's also a reference
                 const genericArgs = checker.getTypeArguments(genericType as TypeReference);
@@ -1062,7 +1059,6 @@ namespace ts.codefix {
             }
             const genericSigs = checker.getSignaturesOfType(genericType, SignatureKind.Call);
             const usageSigs = checker.getSignaturesOfType(usageType, SignatureKind.Call);
-            // allow for multiple overloads of `then`.
             if (genericSigs.length === 1 && usageSigs.length === 1) {
                 return inferFromSignatures(genericSigs[0], usageSigs[0], typeParameter);
             }
