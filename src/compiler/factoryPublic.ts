@@ -939,8 +939,8 @@ namespace ts {
     }
 
     export function createTypeOperatorNode(type: TypeNode): TypeOperatorNode;
-    export function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.AwaitedKeyword, type: TypeNode): TypeOperatorNode;
-    export function createTypeOperatorNode(operatorOrType: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.AwaitedKeyword | TypeNode, type?: TypeNode) {
+    export function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword, type: TypeNode): TypeOperatorNode;
+    export function createTypeOperatorNode(operatorOrType: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword | TypeNode, type?: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.TypeOperator) as TypeOperatorNode;
         node.operator = typeof operatorOrType === "number" ? operatorOrType : SyntaxKind.KeyOfKeyword;
         node.type = parenthesizeElementTypeMember(typeof operatorOrType === "number" ? type! : operatorOrType);
