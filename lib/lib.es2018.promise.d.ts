@@ -28,5 +28,5 @@ interface Promise<T> {
      * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
      * @returns A Promise for the completion of the callback.
      */
-    finally(onfinally?: (() => void | PromiseLike<void>) | undefined | null): Promise<awaited T>
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>
 }
