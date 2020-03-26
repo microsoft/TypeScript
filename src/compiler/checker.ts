@@ -9656,6 +9656,7 @@ namespace ts {
                 if (isTypeUsableAsPropertyName(t)) {
                     const propName = getPropertyNameFromType(t);
                     const modifiersProp = getPropertyOfType(modifiersType, propName);
+                    const templateProp = (templateType.flags & TypeFlags.IndexedAccess) && getPropertyOfType((<IndexedAccessType>templateType).objectType, propName);
                     const isOptional = !!(templateModifiers & MappedTypeModifiers.IncludeOptional ||
                         !(templateModifiers & MappedTypeModifiers.ExcludeOptional) && modifiersProp && modifiersProp.flags & SymbolFlags.Optional);
                     const isReadonly = !!(templateModifiers & MappedTypeModifiers.IncludeReadonly ||
@@ -9663,12 +9664,12 @@ namespace ts {
                     const stripOptional = strictNullChecks && !isOptional && modifiersProp && modifiersProp.flags & SymbolFlags.Optional;
                     const prop = <MappedSymbol>createSymbol(SymbolFlags.Property | (isOptional ? SymbolFlags.Optional : 0), propName,
                         CheckFlags.Mapped | (isReadonly ? CheckFlags.Readonly : 0) | (stripOptional ? CheckFlags.StripOptional : 0));
+
                     prop.mappedType = type;
                     prop.mapper = templateMapper;
-                    if (modifiersProp) {
-                        prop.syntheticOrigin = modifiersProp;
-                        prop.declarations = modifiersProp.declarations;
-                    }
+
+                    prop.syntheticOrigin = templateProp || modifiersProp;
+                    prop.declarations = templateProp && templateProp.declarations || modifiersProp && modifiersProp.declarations || undefined!;
                     prop.nameType = t;
                     members.set(propName, prop);
                 }
