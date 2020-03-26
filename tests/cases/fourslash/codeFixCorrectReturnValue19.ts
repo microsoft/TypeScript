@@ -14,7 +14,7 @@
 //// var x = <Comp t={() => { bar: '1' }} />;
 
 verify.codeFixAvailable([
-    { description: 'Wrap this object literal with parentheses' },
+    { description: 'Wrap the following body with parentheses which should be an object literal' },
     { description: `Infer type of 'props' from usage` },
     { description: 'Remove unused label' },
 ]);

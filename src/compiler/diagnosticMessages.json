@@ -5561,7 +5561,7 @@
         "category": "Message",
         "code": 95109
     },
-    "Wrap this object literal with parentheses": {
+    "Wrap the following body with parentheses which should be an object literal": {
         "category": "Message",
         "code": 95110
     },

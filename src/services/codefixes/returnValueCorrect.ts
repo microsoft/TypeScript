@@ -10,23 +10,25 @@ namespace ts.codefix {
         Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code
     ];
 
-    enum FixKind {
+    enum ProblemKind {
         MissingReturnStatement,
         MissingParentheses
     }
 
     interface MissingReturnInfo {
-        kind: FixKind.MissingReturnStatement;
+        kind: ProblemKind.MissingReturnStatement;
         declaration: FunctionLikeDeclaration;
         expression: Expression;
         statement: Statement;
+        commentSource: Node;
     }
 
     interface MissingParenInfo {
-        kind: FixKind.MissingParentheses;
+        kind: ProblemKind.MissingParentheses;
         declaration: ArrowFunction;
         expression: Expression;
         statement: Statement;
+        commentSource: Node;
     }
 
     type Info = MissingReturnInfo | MissingParenInfo;
@@ -39,10 +41,10 @@ namespace ts.codefix {
             const info = getInfo(program.getTypeChecker(), sourceFile, start, errorCode);
             if (!info) return undefined;
 
-            if (info.kind === FixKind.MissingReturnStatement) {
+            if (info.kind === ProblemKind.MissingReturnStatement) {
                 return append(
                     [getActionForfixAddReturnStatement(context, info.expression, info.statement)],
-                    isArrowFunction(info.declaration) ? getActionForfixRemoveBlockBodyBrace(context, info.declaration, info.expression): undefined);
+                    isArrowFunction(info.declaration) ? getActionForfixRemoveBlockBodyBrace(context, info.declaration, info.expression, info.commentSource): undefined);
             }
             else {
                 return [getActionForfixWrapTheBlockWithParen(context, info.declaration, info.expression)];
@@ -58,7 +60,7 @@ namespace ts.codefix {
                     break;
                 case fixIdRemoveBlockBodyBrace:
                     if (!isArrowFunction(info.declaration)) return undefined;
-                    removeBlockBodyBrace(changes, diag.file, info.declaration, info.expression, /* withParen */ false);
+                    removeBlockBodyBrace(changes, diag.file, info.declaration, info.expression, info.commentSource, /* withParen */ false);
                     break;
                 case fixIdWrapTheBlockWithParen:
                     if (!isArrowFunction(info.declaration)) return undefined;
@@ -70,25 +72,6 @@ namespace ts.codefix {
         }),
     });
 
-    function updateFunctionLikeBody(declaration: FunctionLikeDeclaration, body: Block): FunctionLikeDeclaration {
-        switch (declaration.kind) {
-            case SyntaxKind.FunctionDeclaration:
-                return createFunctionDeclaration(declaration.decorators, declaration.modifiers, declaration.asteriskToken, declaration.name, declaration.typeParameters, declaration.parameters, declaration.type, body);
-            case SyntaxKind.MethodDeclaration:
-                return createMethod(declaration.decorators, declaration.modifiers, declaration.asteriskToken, declaration.name, declaration.questionToken, declaration.typeParameters, declaration.parameters, declaration.type, body);
-            case SyntaxKind.GetAccessor:
-                return createGetAccessor(declaration.decorators, declaration.modifiers, declaration.name, declaration.parameters, declaration.type, body);
-            case SyntaxKind.SetAccessor:
-                return createSetAccessor(declaration.decorators, declaration.modifiers, declaration.name, declaration.parameters, body);
-            case SyntaxKind.Constructor:
-                return createConstructor(declaration.decorators, declaration.modifiers, declaration.parameters, body);
-            case SyntaxKind.FunctionExpression:
-                return createFunctionExpression(declaration.modifiers, declaration.asteriskToken, declaration.name, declaration.typeParameters, declaration.parameters, declaration.type, body);
-            case SyntaxKind.ArrowFunction:
-                return createArrowFunction(declaration.modifiers, declaration.typeParameters, declaration.parameters, declaration.type, declaration.equalsGreaterThanToken, body);
-        }
-    }
-
     function getFixInfo(checker: TypeChecker, declaration: FunctionLikeDeclaration, expectType: Type, isFunctionType: boolean): Info | undefined {
         if (!declaration.body || !isBlock(declaration.body) || length(declaration.body.statements) !== 1) return undefined;
 
@@ -96,9 +79,10 @@ namespace ts.codefix {
         if (isExpressionStatement(firstStatement) && checkFixedAssignableTo(checker, declaration, firstStatement.expression, expectType, isFunctionType)) {
             return {
                 declaration,
-                kind: FixKind.MissingReturnStatement,
+                kind: ProblemKind.MissingReturnStatement,
                 expression: firstStatement.expression,
-                statement: firstStatement
+                statement: firstStatement,
+                commentSource: firstStatement.expression
             };
         }
         else if (isLabeledStatement(firstStatement) && isExpressionStatement(firstStatement.statement)) {
@@ -106,14 +90,16 @@ namespace ts.codefix {
             if (checkFixedAssignableTo(checker, declaration, node, expectType, isFunctionType)) {
                 return isArrowFunction(declaration) ? {
                     declaration,
-                    kind: FixKind.MissingParentheses,
+                    kind: ProblemKind.MissingParentheses,
                     expression: node,
-                    statement: firstStatement
+                    statement: firstStatement,
+                    commentSource: firstStatement.statement.expression
                 } : {
                         declaration,
-                        kind: FixKind.MissingReturnStatement,
+                        kind: ProblemKind.MissingReturnStatement,
                         expression: node,
-                        statement: firstStatement
+                        statement: firstStatement,
+                        commentSource: firstStatement.statement.expression
                     };
             }
         }
@@ -124,9 +110,10 @@ namespace ts.codefix {
                 if (checkFixedAssignableTo(checker, declaration, node, expectType, isFunctionType)) {
                     return {
                         declaration,
-                        kind: FixKind.MissingReturnStatement,
+                        kind: ProblemKind.MissingReturnStatement,
                         expression: node,
-                        statement: firstStatement
+                        statement: firstStatement,
+                        commentSource: firstBlockStatement
                     };
                 }
             }
@@ -183,11 +170,16 @@ namespace ts.codefix {
     }
 
     function addReturnStatement(changes: textChanges.ChangeTracker, sourceFile: SourceFile, expression: Expression, statement: Statement) {
+        suppressLeadingAndTrailingTrivia(expression);
         changes.replaceNode(sourceFile, statement, createReturn(expression));
     }
 
-    function removeBlockBodyBrace(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: ArrowFunction, expression: Expression, withParen: boolean) {
-        changes.replaceNode(sourceFile, declaration.body, (withParen || needsParentheses(expression)) ? createParen(expression) : expression);
+    function removeBlockBodyBrace(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: ArrowFunction, expression: Expression, commentSource: Node, withParen: boolean) {
+        const newBody = (withParen || needsParentheses(expression)) ? createParen(expression) : expression;
+        suppressLeadingAndTrailingTrivia(commentSource);
+        copyComments(commentSource, newBody);
+
+        changes.replaceNode(sourceFile, declaration.body, newBody);
     }
 
     function wrapBlockWithParen(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: ArrowFunction, expression: Expression) {
@@ -199,13 +191,13 @@ namespace ts.codefix {
         return createCodeFixAction(fixId, changes, Diagnostics.Add_a_return_statement, fixIdAddReturnStatement, Diagnostics.Add_all_missing_return_statement);
     }
 
-    function getActionForfixRemoveBlockBodyBrace(context: CodeFixContext, declaration: ArrowFunction, expression: Expression) {
-        const changes = textChanges.ChangeTracker.with(context, t => removeBlockBodyBrace(t, context.sourceFile, declaration, expression, /* withParen */ false));
+    function getActionForfixRemoveBlockBodyBrace(context: CodeFixContext, declaration: ArrowFunction, expression: Expression, commentSource: Node) {
+        const changes = textChanges.ChangeTracker.with(context, t => removeBlockBodyBrace(t, context.sourceFile, declaration, expression, commentSource, /* withParen */ false));
         return createCodeFixAction(fixId, changes, Diagnostics.Remove_block_body_braces, fixIdRemoveBlockBodyBrace, Diagnostics.Remove_all_incorrect_body_block_braces);
     }
 
     function getActionForfixWrapTheBlockWithParen(context: CodeFixContext, declaration: ArrowFunction, expression: Expression) {
         const changes = textChanges.ChangeTracker.with(context, t => wrapBlockWithParen(t, context.sourceFile, declaration, expression));
-        return createCodeFixAction(fixId, changes, Diagnostics.Wrap_this_object_literal_with_parentheses, fixIdWrapTheBlockWithParen, Diagnostics.Wrap_all_object_literal_with_parentheses);
+        return createCodeFixAction(fixId, changes, Diagnostics.Wrap_the_following_body_with_parentheses_which_should_be_an_object_literal, fixIdWrapTheBlockWithParen, Diagnostics.Wrap_all_object_literal_with_parentheses);
     }
 }

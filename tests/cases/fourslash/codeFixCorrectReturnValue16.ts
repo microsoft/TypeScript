@@ -8,6 +8,6 @@
 //// Foo(() => { bar: '1' })
 
 verify.codeFixAvailable([
-    { description: 'Wrap this object literal with parentheses' },
+    { description: 'Wrap the following body with parentheses which should be an object literal' },
     { description: 'Remove unused label' },
 ]);
