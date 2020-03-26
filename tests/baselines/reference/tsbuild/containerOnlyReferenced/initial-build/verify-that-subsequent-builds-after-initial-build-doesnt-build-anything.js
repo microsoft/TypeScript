@@ -1,23 +1,23 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc --b /src --verbose
-12:01:00 AM - Projects in this build: 
+[[90m12:01:00 AM[0m] Projects in this build: 
     * src/src/folder/tsconfig.json
     * src/src/folder2/tsconfig.json
     * src/src/tsconfig.json
     * src/tests/tsconfig.json
     * src/tsconfig.json
 
-12:01:00 AM - Project 'src/src/folder/tsconfig.json' is out of date because output file 'src/src/folder/index.js' does not exist
+[[90m12:01:00 AM[0m] Project 'src/src/folder/tsconfig.json' is out of date because output file 'src/src/folder/index.js' does not exist
 
-12:01:00 AM - Building project '/src/src/folder/tsconfig.json'...
+[[90m12:01:00 AM[0m] Building project '/src/src/folder/tsconfig.json'...
 
-12:01:00 AM - Project 'src/src/folder2/tsconfig.json' is out of date because output file 'src/src/folder2/index.js' does not exist
+[[90m12:01:00 AM[0m] Project 'src/src/folder2/tsconfig.json' is out of date because output file 'src/src/folder2/index.js' does not exist
 
-12:01:00 AM - Building project '/src/src/folder2/tsconfig.json'...
+[[90m12:01:00 AM[0m] Building project '/src/src/folder2/tsconfig.json'...
 
-12:01:00 AM - Project 'src/tests/tsconfig.json' is out of date because output file 'src/tests/index.js' does not exist
+[[90m12:01:00 AM[0m] Project 'src/tests/tsconfig.json' is out of date because output file 'src/tests/index.js' does not exist
 
-12:01:00 AM - Building project '/src/tests/tsconfig.json'...
+[[90m12:01:00 AM[0m] Building project '/src/tests/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -39,11 +39,13 @@ exports.x = 10;
     "fileInfos": {
       "../../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
       },
       "./index.ts": {
         "version": "-10726455937-export const x = 10;",
-        "signature": "-6057683066-export declare const x = 10;\r\n"
+        "signature": "-6057683066-export declare const x = 10;\r\n",
+        "affectsGlobalScope": false
       }
     },
     "options": {
@@ -77,11 +79,13 @@ exports.x = 10;
     "fileInfos": {
       "../../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
       },
       "./index.ts": {
         "version": "-10726455937-export const x = 10;",
-        "signature": "-6057683066-export declare const x = 10;\r\n"
+        "signature": "-6057683066-export declare const x = 10;\r\n",
+        "affectsGlobalScope": false
       }
     },
     "options": {
@@ -115,11 +119,13 @@ exports.x = 10;
     "fileInfos": {
       "../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
       },
       "./index.ts": {
         "version": "-10726455937-export const x = 10;",
-        "signature": "-6057683066-export declare const x = 10;\r\n"
+        "signature": "-6057683066-export declare const x = 10;\r\n",
+        "affectsGlobalScope": false
       }
     },
     "options": {

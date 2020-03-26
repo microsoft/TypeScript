@@ -141,15 +141,18 @@ export declare function multiply(a: number, b: number): number;
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
       },
       "./anothermodule.ts": {
         "version": "-2676574883-export const World = \"hello\";\r\n",
-        "signature": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map"
+        "signature": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",
+        "affectsGlobalScope": false
       },
       "./index.ts": {
         "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
-        "signature": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map"
+        "signature": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map",
+        "affectsGlobalScope": false
       }
     },
     "options": {
@@ -200,19 +203,23 @@ export declare const m: typeof mod;
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
       },
       "../core/index.d.ts": {
         "version": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map",
-        "signature": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map"
+        "signature": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map",
+        "affectsGlobalScope": false
       },
       "../core/anothermodule.d.ts": {
         "version": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",
-        "signature": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map"
+        "signature": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",
+        "affectsGlobalScope": false
       },
       "./index.ts": {
         "version": "-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n",
-        "signature": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"
+        "signature": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
+        "affectsGlobalScope": false
       }
     },
     "options": {
@@ -269,23 +276,28 @@ export declare const m: typeof mod;
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
       },
       "../core/index.d.ts": {
         "version": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map",
-        "signature": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map"
+        "signature": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map",
+        "affectsGlobalScope": false
       },
       "../core/anothermodule.d.ts": {
         "version": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",
-        "signature": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map"
+        "signature": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",
+        "affectsGlobalScope": false
       },
       "../logic/index.d.ts": {
         "version": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
-        "signature": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"
+        "signature": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
+        "affectsGlobalScope": false
       },
       "./index.ts": {
         "version": "12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n",
-        "signature": "2702201019-import * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"
+        "signature": "2702201019-import * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
+        "affectsGlobalScope": false
       }
     },
     "options": {
@@ -328,12 +340,11 @@ export declare const m: typeof mod;
 
 
 Output::
-
-12:00:45 AM - Starting compilation in watch mode...
-
+[[90m12:00:45 AM[0m] Starting compilation in watch mode...
 
 
-12:01:14 AM - Found 0 errors. Watching for file changes.
+[[90m12:01:14 AM[0m] Found 0 errors. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/index.ts"]
@@ -418,14 +429,17 @@ let y: string = 10;
 
 
 Output::
-
-12:01:18 AM - File change detected. Starting incremental compilation...
-
-
-sample1/logic/index.ts(8,5): error TS2322: Type '10' is not assignable to type 'string'.
+[[90m12:01:18 AM[0m] File change detected. Starting incremental compilation...
 
 
-12:01:19 AM - Found 1 error. Watching for file changes.
+[96msample1/logic/index.ts[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS2322: [0mType '10' is not assignable to type 'string'.
+
+[7m8[0m let y: string = 10;
+[7m [0m [91m    ~[0m
+
+
+[[90m12:01:19 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]
@@ -476,16 +490,23 @@ let x: string = 10;
 
 
 Output::
-
-12:01:23 AM - File change detected. Starting incremental compilation...
-
-
-sample1/core/index.ts(5,5): error TS2322: Type '10' is not assignable to type 'string'.
-
-sample1/logic/index.ts(8,5): error TS2322: Type '10' is not assignable to type 'string'.
+[[90m12:01:23 AM[0m] File change detected. Starting incremental compilation...
 
 
-12:01:24 AM - Found 2 errors. Watching for file changes.
+[96msample1/core/index.ts[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS2322: [0mType '10' is not assignable to type 'string'.
+
+[7m5[0m let x: string = 10;
+[7m [0m [91m    ~[0m
+
+
+[96msample1/logic/index.ts[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS2322: [0mType '10' is not assignable to type 'string'.
+
+[7m8[0m let y: string = 10;
+[7m [0m [91m    ~[0m
+
+
+[[90m12:01:24 AM[0m] Found 2 errors. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/index.ts"]

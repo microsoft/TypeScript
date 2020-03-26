@@ -3,8 +3,8 @@ namespace ts {
     export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean,
         cancellationToken?: CancellationToken, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitOutput {
         const outputFiles: OutputFile[] = [];
-        const emitResult = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers, forceDtsEmit);
-        return { outputFiles, emitSkipped: emitResult.emitSkipped, exportedModulesFromDeclarationEmit: emitResult.exportedModulesFromDeclarationEmit };
+        const { emitSkipped, diagnostics, exportedModulesFromDeclarationEmit } = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers, forceDtsEmit);
+        return { outputFiles, emitSkipped, diagnostics, exportedModulesFromDeclarationEmit };
 
         function writeFile(fileName: string, text: string, writeByteOrderMark: boolean) {
             outputFiles.push({ name: fileName, writeByteOrderMark, text });
@@ -68,6 +68,7 @@ namespace ts {
         export interface FileInfo {
             readonly version: string;
             signature: string | undefined;
+            affectsGlobalScope: boolean;
         }
         /**
          * Referenced files with values for the keys as referenced file's path to be true
@@ -225,7 +226,7 @@ namespace ts {
                         }
                     }
                 }
-                fileInfos.set(sourceFile.resolvedPath, { version, signature: oldInfo && oldInfo.signature });
+                fileInfos.set(sourceFile.resolvedPath, { version, signature: oldInfo && oldInfo.signature, affectsGlobalScope: isFileAffectingGlobalScope(sourceFile) });
             }
 
             return {
@@ -292,10 +293,12 @@ namespace ts {
          * This should be called whenever it is safe to commit the state of the builder
          */
         export function updateSignaturesFromCache(state: BuilderState, signatureCache: Map<string>) {
-            signatureCache.forEach((signature, path) => {
-                state.fileInfos.get(path)!.signature = signature;
-                state.hasCalledUpdateShapeSignature.set(path, true);
-            });
+            signatureCache.forEach((signature, path) => updateSignatureOfFile(state, signature, path as Path));
+        }
+
+        export function updateSignatureOfFile(state: BuilderState, signature: string | undefined, path: Path) {
+            state.fileInfos.get(path)!.signature = signature;
+            state.hasCalledUpdateShapeSignature.set(path, true);
         }
 
         /**
@@ -486,14 +489,14 @@ namespace ts {
         /**
          * Gets all files of the program excluding the default library file
          */
-        function getAllFilesExcludingDefaultLibraryFile(state: BuilderState, programOfThisState: Program, firstSourceFile: SourceFile): readonly SourceFile[] {
+        export function getAllFilesExcludingDefaultLibraryFile(state: BuilderState, programOfThisState: Program, firstSourceFile: SourceFile | undefined): readonly SourceFile[] {
             // Use cached result
             if (state.allFilesExcludingDefaultLibraryFile) {
                 return state.allFilesExcludingDefaultLibraryFile;
             }
 
             let result: SourceFile[] | undefined;
-            addSourceFile(firstSourceFile);
+            if (firstSourceFile) addSourceFile(firstSourceFile);
             for (const sourceFile of programOfThisState.getSourceFiles()) {
                 if (sourceFile !== firstSourceFile) {
                     addSourceFile(sourceFile);

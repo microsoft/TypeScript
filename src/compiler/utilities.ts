@@ -7,6 +7,7 @@ namespace ts {
     export const externalHelpersModuleNameText = "tslib";
 
     export const defaultMaximumTruncationLength = 160;
+    export const noTruncationMaximumTruncationLength = 1_000_000;
 
     export function getDeclarationOfKind<T extends Declaration>(symbol: Symbol, kind: T["kind"]): T | undefined {
         const declarations = symbol.declarations;
@@ -470,6 +471,34 @@ namespace ts {
             text.charCodeAt(start + 2) === CharacterCodes.exclamation;
     }
 
+    export function createCommentDirectivesMap(sourceFile: SourceFile, commentDirectives: CommentDirective[]): CommentDirectivesMap {
+        const directivesByLine = createMapFromEntries(
+            commentDirectives.map(commentDirective => ([
+                `${getLineAndCharacterOfPosition(sourceFile, commentDirective.range.pos).line}`,
+                commentDirective,
+            ]))
+        );
+
+        const usedLines = createMap<boolean>();
+
+        return { getUnusedExpectations, markUsed };
+
+        function getUnusedExpectations() {
+            return arrayFrom(directivesByLine.entries())
+                .filter(([line, directive]) => directive.type === CommentDirectiveType.ExpectError && !usedLines.get(line))
+                .map(([_, directive]) => directive);
+        }
+
+        function markUsed(line: number) {
+            if (!directivesByLine.has(`${line}`)) {
+                return false;
+            }
+
+            usedLines.set(`${line}`, true);
+            return true;
+        }
+    }
+
     export function getTokenPosOfNode(node: Node, sourceFile?: SourceFileLike, includeJsDoc?: boolean): number {
         // With nodes that have no width (i.e. 'Missing' nodes), we actually *don't*
         // want to skip trivia because this will launch us forward to the next token.
@@ -482,7 +511,7 @@ namespace ts {
         }
 
         if (includeJsDoc && hasJSDocNodes(node)) {
-            return getTokenPosOfNode(node.jsDoc![0]);
+            return getTokenPosOfNode(node.jsDoc![0], sourceFile);
         }
 
         // For a syntax list, it is possible that one of its children has JSDocComment nodes, while
@@ -911,6 +940,17 @@ namespace ts {
             category: messageChain.category,
             messageText: messageChain.next ? messageChain : messageChain.messageText,
             relatedInformation
+        };
+    }
+
+    export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRange, message: DiagnosticMessage): DiagnosticWithLocation {
+        return {
+            file: sourceFile,
+            start: range.pos,
+            length: range.end - range.pos,
+            code: message.code,
+            category: message.category,
+            messageText: message.message,
         };
     }
 
@@ -2634,11 +2674,7 @@ namespace ts {
     export function skipParentheses(node: Expression): Expression;
     export function skipParentheses(node: Node): Node;
     export function skipParentheses(node: Node): Node {
-        while (node.kind === SyntaxKind.ParenthesizedExpression) {
-            node = (node as ParenthesizedExpression).expression;
-        }
-
-        return node;
+        return skipOuterExpressions(node, OuterExpressionKinds.Parentheses);
     }
 
     function skipParenthesesUp(node: Node): Node {
@@ -3594,8 +3630,8 @@ namespace ts {
             }
         }
 
-        function writeLine() {
-            if (!lineStart) {
+        function writeLine(force?: boolean) {
+            if (!lineStart || force) {
                 output += newLine;
                 lineCount++;
                 linePos = output.length;
@@ -3712,6 +3748,14 @@ namespace ts {
                 writer.decreaseIndent();
             },
         };
+    }
+
+    export function hostUsesCaseSensitiveFileNames(host: { useCaseSensitiveFileNames?(): boolean; }): boolean {
+        return host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : false;
+    }
+
+    export function hostGetCanonicalFileName(host: { useCaseSensitiveFileNames?(): boolean; }): GetCanonicalFileName {
+        return createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host));
     }
 
     export interface ResolveModuleNameResolutionHost {
@@ -3866,12 +3910,13 @@ namespace ts {
         }
     }
 
-    export function getLineOfLocalPosition(currentSourceFile: SourceFile, pos: number) {
-        return getLineAndCharacterOfPosition(currentSourceFile, pos).line;
+    export function getLineOfLocalPosition(sourceFile: SourceFile, pos: number) {
+        const lineStarts = getLineStarts(sourceFile);
+        return computeLineOfPosition(lineStarts, pos);
     }
 
     export function getLineOfLocalPositionFromLineMap(lineMap: readonly number[], pos: number) {
-        return computeLineAndCharacterOfPosition(lineMap, pos).line;
+        return computeLineOfPosition(lineMap, pos);
     }
 
     export function getFirstConstructorWithBody(node: ClassLikeDeclaration): ConstructorDeclaration & { body: FunctionBody } | undefined {
@@ -4387,6 +4432,13 @@ namespace ts {
         return isPropertyAccessExpression(node) && isEntityNameExpression(node.expression);
     }
 
+    export function isConstructorAccessExpression(expr: Expression): expr is AccessExpression {
+        return (
+            isPropertyAccessExpression(expr) && idText(expr.name) === "constructor" ||
+            isElementAccessExpression(expr) && isStringLiteralLike(expr.argumentExpression) && expr.argumentExpression.text === "constructor"
+        );
+    }
+
     export function tryGetPropertyAccessOrIdentifierToString(expr: Expression): string | undefined {
         if (isPropertyAccessExpression(expr)) {
             const baseStr = tryGetPropertyAccessOrIdentifierToString(expr.expression);
@@ -4689,7 +4741,10 @@ namespace ts {
     }
 
     export function rangeStartPositionsAreOnSameLine(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
-        return positionsAreOnSameLine(getStartPositionOfRange(range1, sourceFile), getStartPositionOfRange(range2, sourceFile), sourceFile);
+        return positionsAreOnSameLine(
+            getStartPositionOfRange(range1, sourceFile, /*includeComments*/ false),
+            getStartPositionOfRange(range2, sourceFile, /*includeComments*/ false),
+            sourceFile);
     }
 
     export function rangeEndPositionsAreOnSameLine(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
@@ -4697,11 +4752,20 @@ namespace ts {
     }
 
     export function rangeStartIsOnSameLineAsRangeEnd(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
-        return positionsAreOnSameLine(getStartPositionOfRange(range1, sourceFile), range2.end, sourceFile);
+        return positionsAreOnSameLine(getStartPositionOfRange(range1, sourceFile, /*includeComments*/ false), range2.end, sourceFile);
     }
 
     export function rangeEndIsOnSameLineAsRangeStart(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
-        return positionsAreOnSameLine(range1.end, getStartPositionOfRange(range2, sourceFile), sourceFile);
+        return positionsAreOnSameLine(range1.end, getStartPositionOfRange(range2, sourceFile, /*includeComments*/ false), sourceFile);
+    }
+
+    export function getLinesBetweenRangeEndAndRangeStart(range1: TextRange, range2: TextRange, sourceFile: SourceFile, includeSecondRangeComments: boolean) {
+        const range2Start = getStartPositionOfRange(range2, sourceFile, includeSecondRangeComments);
+        return getLinesBetweenPositions(sourceFile, range1.end, range2Start);
+    }
+
+    export function getLinesBetweenRangeEndPositions(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
+        return getLinesBetweenPositions(sourceFile, range1.end, range2.end);
     }
 
     export function isNodeArrayMultiLine(list: NodeArray<Node>, sourceFile: SourceFile): boolean {
@@ -4709,12 +4773,30 @@ namespace ts {
     }
 
     export function positionsAreOnSameLine(pos1: number, pos2: number, sourceFile: SourceFile) {
-        return pos1 === pos2 ||
-            getLineOfLocalPosition(sourceFile, pos1) === getLineOfLocalPosition(sourceFile, pos2);
+        return getLinesBetweenPositions(sourceFile, pos1, pos2) === 0;
     }
 
-    export function getStartPositionOfRange(range: TextRange, sourceFile: SourceFile) {
-        return positionIsSynthesized(range.pos) ? -1 : skipTrivia(sourceFile.text, range.pos);
+    export function getStartPositionOfRange(range: TextRange, sourceFile: SourceFile, includeComments: boolean) {
+        return positionIsSynthesized(range.pos) ? -1 : skipTrivia(sourceFile.text, range.pos, /*stopAfterLineBreak*/ false, includeComments);
+    }
+
+    export function getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(pos: number, sourceFile: SourceFile, includeComments?: boolean) {
+        const startPos = skipTrivia(sourceFile.text, pos, /*stopAfterLineBreak*/ false, includeComments);
+        const prevPos = getPreviousNonWhitespacePosition(startPos, sourceFile);
+        return getLinesBetweenPositions(sourceFile, prevPos || 0, startPos);
+    }
+
+    export function getLinesBetweenPositionAndNextNonWhitespaceCharacter(pos: number, sourceFile: SourceFile, includeComments?: boolean) {
+        const nextPos = skipTrivia(sourceFile.text, pos, /*stopAfterLineBreak*/ false, includeComments);
+        return getLinesBetweenPositions(sourceFile, pos, nextPos);
+    }
+
+    function getPreviousNonWhitespacePosition(pos: number, sourceFile: SourceFile) {
+        while (pos-- > 0) {
+            if (!isWhiteSpaceLike(sourceFile.text.charCodeAt(pos))) {
+                return pos;
+            }
+        }
     }
 
     /**
@@ -5050,10 +5132,6 @@ namespace ts {
             default:
                 return false;
         }
-    }
-
-    export function getDotOrQuestionDotToken(node: PropertyAccessExpression) {
-        return node.questionDotToken || createNode(SyntaxKind.DotToken, node.expression.end, node.name.pos) as DotToken;
     }
 
     export function isNamedImportsOrExports(node: Node): node is NamedImportsOrExports {
@@ -5395,7 +5473,15 @@ namespace ts {
         return !!(options.incremental || options.composite);
     }
 
-    export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictBindCallApply" | "strictPropertyInitialization" | "alwaysStrict";
+    export type StrictOptionName =
+        | "noImplicitAny"
+        | "noImplicitThis"
+        | "strictNullChecks"
+        | "strictFunctionTypes"
+        | "strictBindCallApply"
+        | "strictPropertyInitialization"
+        | "alwaysStrict"
+        ;
 
     export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
         return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];
@@ -6232,7 +6318,7 @@ namespace ts {
     export function isValidTypeOnlyAliasUseSite(useSite: Node): boolean {
         return !!(useSite.flags & NodeFlags.Ambient)
             || isPartOfTypeQuery(useSite)
-            || isFirstIdentifierOfNonEmittingHeritageClause(useSite)
+            || isIdentifierInNonEmittingHeritageClause(useSite)
             || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
             || !isExpressionNode(useSite);
     }
@@ -6255,10 +6341,20 @@ namespace ts {
         return containerKind === SyntaxKind.InterfaceDeclaration || containerKind === SyntaxKind.TypeLiteral;
     }
 
-    /** Returns true for the first identifier of 1) an `implements` clause, and 2) an `extends` clause of an interface. */
-    function isFirstIdentifierOfNonEmittingHeritageClause(node: Node): boolean {
-        // Number of parents to climb from identifier is 2 for `implements I`, 3 for `implements x.I`
-        const heritageClause = tryCast(node.parent.parent, isHeritageClause) ?? tryCast(node.parent.parent?.parent, isHeritageClause);
+    /** Returns true for an identifier in 1) an `implements` clause, and 2) an `extends` clause of an interface. */
+    function isIdentifierInNonEmittingHeritageClause(node: Node): boolean {
+        if (node.kind !== SyntaxKind.Identifier) return false;
+        const heritageClause = findAncestor(node.parent, parent => {
+            switch (parent.kind) {
+                case SyntaxKind.HeritageClause:
+                    return true;
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ExpressionWithTypeArguments:
+                    return false;
+                default:
+                    return "quit";
+            }
+        }) as HeritageClause | undefined;
         return heritageClause?.token === SyntaxKind.ImplementsKeyword || heritageClause?.parent.kind === SyntaxKind.InterfaceDeclaration;
     }
 }

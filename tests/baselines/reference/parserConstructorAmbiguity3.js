@@ -2,4 +2,4 @@
 new Date<A>
 
 //// [parserConstructorAmbiguity3.js]
-new Date();
+new Date;

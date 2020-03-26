@@ -1,4 +1,4 @@
-describe("Public APIs", () => {
+describe("unittests:: Public APIs", () => {
     function verifyApi(fileName: string) {
         const builtFile = `built/local/${fileName}`;
         const api = `api/${fileName}`;
@@ -32,7 +32,7 @@ describe("Public APIs", () => {
     });
 });
 
-describe("Public APIs:: token to string", () => {
+describe("unittests:: Public APIs:: token to string", () => {
     function assertDefinedTokenToString(initial: ts.SyntaxKind, last: ts.SyntaxKind) {
         for (let t = initial; t <= last; t++) {
             assert.isDefined(ts.tokenToString(t), `Expected tokenToString defined for ${ts.Debug.formatSyntaxKind(t)}`);
@@ -47,13 +47,13 @@ describe("Public APIs:: token to string", () => {
     });
 });
 
-describe("Public APIs:: createPrivateIdentifier", () => {
+describe("unittests:: Public APIs:: createPrivateIdentifier", () => {
     it("throws when name doesn't start with #", () => {
         assert.throw(() => ts.createPrivateIdentifier("not"), "Debug Failure. First character of private identifier must be #: not");
     });
 });
 
-describe("Public APIs:: isPropertyName", () => {
+describe("unittests:: Public APIs:: isPropertyName", () => {
     it("checks if a PrivateIdentifier is a valid property name", () => {
         const prop = ts.createPrivateIdentifier("#foo");
         assert.isTrue(ts.isPropertyName(prop), "PrivateIdentifier must be a valid property name.");

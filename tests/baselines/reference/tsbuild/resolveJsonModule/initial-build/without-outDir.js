@@ -1,11 +1,11 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc --b src/tsconfig_withFiles.json --verbose
-12:01:00 AM - Projects in this build: 
+[[90m12:01:00 AM[0m] Projects in this build: 
     * src/tsconfig_withFiles.json
 
-12:01:00 AM - Project 'src/tsconfig_withFiles.json' is out of date because output file 'src/src/index.js' does not exist
+[[90m12:01:00 AM[0m] Project 'src/tsconfig_withFiles.json' is out of date because output file 'src/src/index.js' does not exist
 
-12:01:00 AM - Building project '/src/tsconfig_withFiles.json'...
+[[90m12:01:00 AM[0m] Building project '/src/tsconfig_withFiles.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -48,15 +48,18 @@ exports["default"] = hello_json_1["default"].hello;
     "fileInfos": {
       "../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
       },
       "./src/hello.json": {
         "version": "6651571919-{\n  \"hello\": \"world\"\n}",
-        "signature": "-4341462827-export declare const hello: string;\r\n"
+        "signature": "-4341462827-export declare const hello: string;\r\n",
+        "affectsGlobalScope": true
       },
       "./src/index.ts": {
         "version": "-27703454282-import hello from \"./hello.json\"\n\nexport default hello.hello",
-        "signature": "-1680156224-declare const _default: string;\r\nexport default _default;\r\n"
+        "signature": "-1680156224-declare const _default: string;\r\nexport default _default;\r\n",
+        "affectsGlobalScope": false
       }
     },
     "options": {

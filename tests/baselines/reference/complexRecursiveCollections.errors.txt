@@ -1,15 +1,15 @@
 tests/cases/compiler/immutable.ts(341,22): error TS2430: Interface 'Keyed<K, V>' incorrectly extends interface 'Collection<K, V>'.
   The types returned by 'toSeq()' are incompatible between these types.
     Type 'Keyed<K, V>' is not assignable to type 'this'.
-      'Keyed<K, V>' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'Keyed<K, V>'.
+      'this' could be instantiated with an arbitrary type which could be unrelated to 'Keyed<K, V>'.
 tests/cases/compiler/immutable.ts(359,22): error TS2430: Interface 'Indexed<T>' incorrectly extends interface 'Collection<number, T>'.
   The types returned by 'toSeq()' are incompatible between these types.
     Type 'Indexed<T>' is not assignable to type 'this'.
-      'Indexed<T>' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'Indexed<T>'.
+      'this' could be instantiated with an arbitrary type which could be unrelated to 'Indexed<T>'.
 tests/cases/compiler/immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends interface 'Collection<never, T>'.
   The types returned by 'toSeq()' are incompatible between these types.
     Type 'Set<T>' is not assignable to type 'this'.
-      'Set<T>' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'Set<T>'.
+      'this' could be instantiated with an arbitrary type which could be unrelated to 'Set<T>'.
 
 
 ==== tests/cases/compiler/complex.ts (0 errors) ====
@@ -379,7 +379,7 @@ tests/cases/compiler/immutable.ts(391,22): error TS2430: Interface 'Set<T>' inco
 !!! error TS2430: Interface 'Keyed<K, V>' incorrectly extends interface 'Collection<K, V>'.
 !!! error TS2430:   The types returned by 'toSeq()' are incompatible between these types.
 !!! error TS2430:     Type 'Keyed<K, V>' is not assignable to type 'this'.
-!!! error TS2430:       'Keyed<K, V>' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'Keyed<K, V>'.
+!!! error TS2430:       'this' could be instantiated with an arbitrary type which could be unrelated to 'Keyed<K, V>'.
           toJS(): Object;
           toJSON(): { [key: string]: V };
           toSeq(): Seq.Keyed<K, V>;
@@ -402,7 +402,7 @@ tests/cases/compiler/immutable.ts(391,22): error TS2430: Interface 'Set<T>' inco
 !!! error TS2430: Interface 'Indexed<T>' incorrectly extends interface 'Collection<number, T>'.
 !!! error TS2430:   The types returned by 'toSeq()' are incompatible between these types.
 !!! error TS2430:     Type 'Indexed<T>' is not assignable to type 'this'.
-!!! error TS2430:       'Indexed<T>' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'Indexed<T>'.
+!!! error TS2430:       'this' could be instantiated with an arbitrary type which could be unrelated to 'Indexed<T>'.
           toJS(): Array<any>;
           toJSON(): Array<T>;
           // Reading values
@@ -439,7 +439,7 @@ tests/cases/compiler/immutable.ts(391,22): error TS2430: Interface 'Set<T>' inco
 !!! error TS2430: Interface 'Set<T>' incorrectly extends interface 'Collection<never, T>'.
 !!! error TS2430:   The types returned by 'toSeq()' are incompatible between these types.
 !!! error TS2430:     Type 'Set<T>' is not assignable to type 'this'.
-!!! error TS2430:       'Set<T>' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'Set<T>'.
+!!! error TS2430:       'this' could be instantiated with an arbitrary type which could be unrelated to 'Set<T>'.
           toJS(): Array<any>;
           toJSON(): Array<T>;
           toSeq(): Seq.Set<T>;

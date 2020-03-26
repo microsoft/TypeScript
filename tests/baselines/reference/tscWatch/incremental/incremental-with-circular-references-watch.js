@@ -75,23 +75,28 @@ export { C } from "./c";
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
       },
       "./c.ts": {
         "version": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n",
-        "signature": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n"
+        "signature": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n",
+        "affectsGlobalScope": false
       },
       "./b.ts": {
         "version": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n",
-        "signature": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n"
+        "signature": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n",
+        "affectsGlobalScope": false
       },
       "./a.ts": {
         "version": "-9690779495-import { B } from \"./b\";\nexport interface A {\n    b: B;\n}\n",
-        "signature": "-9690779495-import { B } from \"./b\";\nexport interface A {\n    b: B;\n}\n"
+        "signature": "-9690779495-import { B } from \"./b\";\nexport interface A {\n    b: B;\n}\n",
+        "affectsGlobalScope": false
       },
       "./index.ts": {
         "version": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n",
-        "signature": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n"
+        "signature": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n",
+        "affectsGlobalScope": false
       }
     },
     "options": {
@@ -149,11 +154,11 @@ export { C } from "./c";
 
 Output::
 >> Screen clear
-12:00:27 AM - Starting compilation in watch mode...
+[[90m12:00:27 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:38 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/users/username/projects/project/a.ts","/users/username/projects/project/b.ts","/users/username/projects/project/c.ts","/users/username/projects/project/index.ts"]
@@ -223,23 +228,28 @@ export interface A {
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
       },
       "./c.ts": {
         "version": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n",
-        "signature": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n"
+        "signature": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n",
+        "affectsGlobalScope": false
       },
       "./b.ts": {
         "version": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n",
-        "signature": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n"
+        "signature": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n",
+        "affectsGlobalScope": false
       },
       "./a.ts": {
         "version": "-7623824316-import { B } from \"./b\";\nexport interface A {\n    b: B;\n    foo: any;\n}\n",
-        "signature": "-7623824316-import { B } from \"./b\";\nexport interface A {\n    b: B;\n    foo: any;\n}\n"
+        "signature": "-7623824316-import { B } from \"./b\";\nexport interface A {\n    b: B;\n    foo: any;\n}\n",
+        "affectsGlobalScope": false
       },
       "./index.ts": {
         "version": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n",
-        "signature": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n"
+        "signature": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n",
+        "affectsGlobalScope": false
       }
     },
     "options": {
@@ -297,11 +307,11 @@ export interface A {
 
 Output::
 >> Screen clear
-12:00:42 AM - Starting compilation in watch mode...
+[[90m12:00:42 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:58 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:58 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/users/username/projects/project/a.ts","/users/username/projects/project/b.ts","/users/username/projects/project/c.ts","/users/username/projects/project/index.ts"]

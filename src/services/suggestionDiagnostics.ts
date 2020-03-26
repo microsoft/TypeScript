@@ -133,7 +133,7 @@ namespace ts {
         return !!forEachReturnStatement(body, isReturnStatementWithFixablePromiseHandler);
     }
 
-    export function isReturnStatementWithFixablePromiseHandler(node: Node): node is ReturnStatement {
+    export function isReturnStatementWithFixablePromiseHandler(node: Node): node is ReturnStatement & { expression: CallExpression } {
         return isReturnStatement(node) && !!node.expression && isFixablePromiseHandler(node.expression);
     }
 

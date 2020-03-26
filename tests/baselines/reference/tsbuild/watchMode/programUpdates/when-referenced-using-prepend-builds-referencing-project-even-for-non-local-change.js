@@ -175,11 +175,11 @@ declare function bar(): number;
 
 Output::
 >> Screen clear
-12:00:29 AM - Starting compilation in watch mode...
+[[90m12:00:29 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:46 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:46 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/sample1/core/index.ts"]
@@ -285,7 +285,7 @@ declare function myFunc(): number;
 
 Output::
 >> Screen clear
-12:00:50 AM - File change detected. Starting incremental compilation...
+[[90m12:00:50 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -420,8 +420,8 @@ declare function bar(): number;
 
 
 Output::
+[[90m12:01:15 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:15 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]
@@ -515,7 +515,7 @@ declare function myFunc(): number;
 
 Output::
 >> Screen clear
-12:01:19 AM - File change detected. Starting incremental compilation...
+[[90m12:01:19 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -645,8 +645,8 @@ declare function bar(): number;
 
 
 Output::
+[[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:42 AM - Found 0 errors. Watching for file changes.
 
 
 WatchedFiles::

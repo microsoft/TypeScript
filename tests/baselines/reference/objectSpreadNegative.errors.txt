@@ -10,6 +10,7 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,36): error TS230
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,53): error TS2300: Duplicate identifier 'b'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(32,7): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(37,7): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(37,7): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(39,14): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(41,53): error TS2783: 'd' is specified more than once, so this usage will be overwritten.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(43,7): error TS2783: 'a' is specified more than once, so this usage will be overwritten.
@@ -26,7 +27,7 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(69,9): error TS2339
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(74,11): error TS2339: Property 'a' does not exist on type '{}'.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (22 errors) ====
+==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (23 errors) ====
     let o = { a: 1, b: 'no' }
     
     /// private propagates
@@ -70,6 +71,7 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(74,11): error TS233
     let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
                        ~~~~~~~~
 !!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 tests/cases/conformance/types/spread/objectSpreadNegative.ts:28:30: This spread always overwrites this property.
                                        ~
 !!! error TS2300: Duplicate identifier 'b'.
                                                         ~
@@ -80,6 +82,7 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(74,11): error TS233
         { b: 'ignored', ...o }
           ~~~~~~~~~~~~
 !!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 tests/cases/conformance/types/spread/objectSpreadNegative.ts:32:21: This spread always overwrites this property.
     
     let o3 = { a: 1, b: 'no' }
     let o4 = { b: 'yes', c: true }
@@ -87,22 +90,30 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(74,11): error TS233
         { b: 'ok', ...o3, ...o4 }
           ~~~~~~~
 !!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 tests/cases/conformance/types/spread/objectSpreadNegative.ts:37:16: This spread always overwrites this property.
+          ~~~~~~~
+!!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 tests/cases/conformance/types/spread/objectSpreadNegative.ts:37:23: This spread always overwrites this property.
     let combinedMid: { a: number, b: string, c: boolean } =
         { ...o3, b: 'ok', ...o4 }
                  ~~~~~~~
 !!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 tests/cases/conformance/types/spread/objectSpreadNegative.ts:39:23: This spread always overwrites this property.
     let combinedNested: { a: number, b: boolean, c: string, d: string } =
         { ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } }
                                                         ~~~~~~~~~~~~~~~~~
 !!! error TS2783: 'd' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 tests/cases/conformance/types/spread/objectSpreadNegative.ts:41:72: This spread always overwrites this property.
     let changeTypeBefore: { a: number, b: string } =
         { a: 'wrong type?', ...o3 };
           ~~~~~~~~~~~~~~~~
 !!! error TS2783: 'a' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 tests/cases/conformance/types/spread/objectSpreadNegative.ts:43:25: This spread always overwrites this property.
     let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number } =
         { ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 }
                                         ~~~~~~~~~~~
 !!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 tests/cases/conformance/types/spread/objectSpreadNegative.ts:45:50: This spread always overwrites this property.
     
     // primitives are not allowed, except for falsy ones
     let spreadNum = { ...12 };

@@ -1,20 +1,20 @@
 Exit Code: 1
 Standard output:
 node_modules/adonis-framework/lib/util.js(24,13): error TS2304: Cannot find name 'Mixed'.
-node_modules/adonis-framework/providers/ConfigProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
-node_modules/adonis-framework/providers/EncryptionProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
-node_modules/adonis-framework/providers/EnvProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
-node_modules/adonis-framework/providers/EventProvider.js(12,33): error TS2307: Cannot find module 'adonis-fold'.
-node_modules/adonis-framework/providers/HashProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
-node_modules/adonis-framework/providers/HelpersProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
-node_modules/adonis-framework/providers/MiddlewareProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
-node_modules/adonis-framework/providers/RequestProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
-node_modules/adonis-framework/providers/ResponseProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
-node_modules/adonis-framework/providers/RouteProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
-node_modules/adonis-framework/providers/ServerProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
-node_modules/adonis-framework/providers/SessionProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
-node_modules/adonis-framework/providers/StaticProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
-node_modules/adonis-framework/providers/ViewProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
+node_modules/adonis-framework/providers/ConfigProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/EncryptionProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/EnvProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/EventProvider.js(12,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/HashProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/HelpersProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/MiddlewareProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/RequestProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/ResponseProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/RouteProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/ServerProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/SessionProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/StaticProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/ViewProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
 node_modules/adonis-framework/src/Config/index.js(37,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Config/index.js(39,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Config/index.js(58,15): error TS2304: Cannot find name 'Mixed'.
@@ -46,7 +46,7 @@ node_modules/adonis-framework/src/Encryption/index.js(223,15): error TS2304: Can
 node_modules/adonis-framework/src/Env/index.js(54,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Env/index.js(56,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Env/index.js(80,15): error TS2304: Cannot find name 'Mixed'.
-node_modules/adonis-framework/src/Event/index.js(13,21): error TS2307: Cannot find module 'adonis-fold'.
+node_modules/adonis-framework/src/Event/index.js(13,21): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
 node_modules/adonis-framework/src/Event/index.js(128,12): error TS2740: Type '() => {}[]' is missing the following properties from type 'any[]': pop, push, concat, join, and 27 more.
 node_modules/adonis-framework/src/Event/index.js(153,25): error TS2339: Property 'wildcard' does not exist on type 'EventEmitter2'.
 node_modules/adonis-framework/src/Event/index.js(188,17): error TS2304: Cannot find name 'Spread'.
@@ -90,7 +90,7 @@ node_modules/adonis-framework/src/Helpers/index.js(240,45): error TS2345: Argume
 node_modules/adonis-framework/src/Helpers/index.js(256,45): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Helpers/index.js(330,23): error TS2532: Object is possibly 'undefined'.
-node_modules/adonis-framework/src/Middleware/index.js(13,21): error TS2307: Cannot find module 'adonis-fold'.
+node_modules/adonis-framework/src/Middleware/index.js(13,21): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
 node_modules/adonis-framework/src/Middleware/index.js(230,20): error TS8024: JSDoc '@param' tag has name 'Middleware', but there is no parameter with that name.
 node_modules/adonis-framework/src/Request/index.js(64,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Request/index.js(66,15): error TS2304: Cannot find name 'Mixed'.
@@ -167,7 +167,7 @@ node_modules/adonis-framework/src/Route/resource.js(290,40): error TS2345: Argum
 node_modules/adonis-framework/src/Route/resource.js(296,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(314,62): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
 node_modules/adonis-framework/src/Server/helpers.js(17,29): error TS8024: JSDoc '@param' tag has name 'appNamespace', but there is no parameter with that name.
-node_modules/adonis-framework/src/Server/index.js(17,21): error TS2307: Cannot find module 'adonis-fold'.
+node_modules/adonis-framework/src/Server/index.js(17,21): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
 node_modules/adonis-framework/src/Server/index.js(54,29): error TS2554: Expected 4 arguments, but got 3.
 node_modules/adonis-framework/src/Server/index.js(137,25): error TS8024: JSDoc '@param' tag has name 'handlers', but there is no parameter with that name.
 node_modules/adonis-framework/src/Server/index.js(252,15): error TS2304: Cannot find name 'instance'.
@@ -183,7 +183,7 @@ node_modules/adonis-framework/src/Session/Drivers/File/index.js(79,15): error TS
 node_modules/adonis-framework/src/Session/Drivers/Redis/index.js(23,14): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 node_modules/adonis-framework/src/Session/Drivers/Redis/index.js(59,15): error TS2322: Type 'Generator<any, any, any>' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/Session/Drivers/Redis/index.js(72,15): error TS2322: Type 'Generator<any, any, any>' is not assignable to type 'boolean'.
-node_modules/adonis-framework/src/Session/SessionManager.js(13,21): error TS2307: Cannot find module 'adonis-fold'.
+node_modules/adonis-framework/src/Session/SessionManager.js(13,21): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
 node_modules/adonis-framework/src/Session/SessionManager.js(69,22): error TS2339: Property 'drivers' does not exist on type 'Function'.
 node_modules/adonis-framework/src/Session/SessionManager.js(69,49): error TS2339: Property 'drivers' does not exist on type 'Function'.
 node_modules/adonis-framework/src/Session/SessionManager.js(71,76): error TS2339: Property 'drivers' does not exist on type 'Function'.
@@ -227,7 +227,7 @@ node_modules/adonis-framework/src/View/Form/index.js(601,51): error TS2345: Argu
   Type 'number' is not assignable to type 'string | any[]'.
 node_modules/adonis-framework/src/View/index.js(50,23): error TS8024: JSDoc '@param' tag has name 'template_path', but there is no parameter with that name.
 node_modules/adonis-framework/src/View/index.js(113,15): error TS2304: Cannot find name 'Mixed'.
-node_modules/adonis-framework/src/View/services.js(10,21): error TS2307: Cannot find module 'adonis-fold'.
+node_modules/adonis-framework/src/View/services.js(10,21): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
 node_modules/adonis-framework/src/View/services.js(25,23): error TS8024: JSDoc '@param' tag has name 'lexer', but there is no parameter with that name.
 node_modules/adonis-framework/src/View/services.js(34,22): error TS2339: Property 'CallExtensionAsync' does not exist on type 'Function'.
 

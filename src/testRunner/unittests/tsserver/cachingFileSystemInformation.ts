@@ -240,8 +240,8 @@ namespace ts.projectSystem {
             let diags = project.getLanguageService().getSemanticDiagnostics(root.path);
             assert.equal(diags.length, 1);
             const diag = diags[0];
-            assert.equal(diag.code, Diagnostics.Cannot_find_module_0.code);
-            assert.equal(flattenDiagnosticMessageText(diag.messageText, "\n"), "Cannot find module 'bar'.");
+            assert.equal(diag.code, Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations.code);
+            assert.equal(flattenDiagnosticMessageText(diag.messageText, "\n"), "Cannot find module 'bar' or its corresponding type declarations.");
             callsTrackingHost.verifyCalledOn(CalledMapsWithSingleArg.fileExists, imported.path);
 
 
@@ -474,8 +474,8 @@ namespace ts.projectSystem {
 
                 const project = service.configuredProjects.get(tsconfig.path)!;
                 checkProjectActualFiles(project, files.map(f => f.path));
-                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file1.path).map(diag => diag.messageText), ["Cannot find module 'debug'."]);
-                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file2.path).map(diag => diag.messageText), ["Cannot find module 'debug'."]);
+                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file1.path).map(diag => diag.messageText), ["Cannot find module 'debug' or its corresponding type declarations."]);
+                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file2.path).map(diag => diag.messageText), ["Cannot find module 'debug' or its corresponding type declarations."]);
 
                 const debugTypesFile: File = {
                     path: `${projectLocation}/node_modules/debug/index.d.ts`,
@@ -682,7 +682,7 @@ namespace ts.projectSystem {
 
             const project = service.configuredProjects.get(tsconfig.path)!;
             checkProjectActualFiles(project, files.map(f => f.path));
-            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), ["Cannot find module 'debug'."]);
+            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), ["Cannot find module 'debug' or its corresponding type declarations."]);
 
             const debugTypesFile: File = {
                 path: `${projectLocation}/node_modules/@types/debug/index.d.ts`,

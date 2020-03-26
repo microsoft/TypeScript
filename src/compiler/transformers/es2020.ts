@@ -42,9 +42,11 @@ namespace ts {
       }
 
       function flattenChain(chain: OptionalChain) {
+          Debug.assertNotNode(chain, isNonNullChain);
           const links: OptionalChain[] = [chain];
           while (!chain.questionDotToken && !isTaggedTemplateExpression(chain)) {
-              chain = cast(chain.expression, isOptionalChain);
+              chain = cast(skipPartiallyEmittedExpressions(chain.expression), isOptionalChain);
+              Debug.assertNotNode(chain, isNonNullChain);
               links.unshift(chain);
           }
           return { expression: chain.expression, chain: links };
