@@ -611,6 +611,10 @@
         "category": "Error",
         "code": 1194
     },
+    "'export *' does not re-export a default.": {
+        "category": "Error",
+        "code": 1195
+    },
     "Catch clause variable cannot have a type annotation.": {
         "category": "Error",
         "code": 1196
@@ -3460,6 +3464,10 @@
     "'{0}' could be instantiated with an arbitrary type which could be unrelated to '{1}'.": {
         "category": "Error",
         "code": 5082
+    },
+    "Cannot read file '{0}'.": {
+        "category": "Error",
+        "code": 5083
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {

@@ -128,5 +128,74 @@ namespace ts.projectSystem {
                 assert.equal(project.getCurrentProgram()?.getSourceFile(aFile.path)!.text, aFileContent);
             }
         });
+
+        it("when file makes edits to add/remove comment directives, they are handled correcrly", () => {
+            const file: File = {
+                path: `${tscWatch.projectRoot}/file.ts`,
+                content: `const x = 10;
+function foo() {
+    // @ts-ignore
+    let y: string = x;
+    return y;
+}
+function bar() {
+    // @ts-ignore
+    let z : string = x;
+    return z;
+}
+foo();
+bar();`
+            };
+            const host = createServerHost([file, libFile]);
+            const session = createSession(host, { canUseEvents: true, });
+            openFilesForSession([file], session);
+            verifyGetErrRequestNoErrors({ session, host, files: [file] });
+
+            // Remove first ts-ignore and check only first error is reported
+            const tsIgnoreComment = `// @ts-ignore`;
+            const locationOfTsIgnore = protocolTextSpanFromSubstring(file.content, tsIgnoreComment);
+            session.executeCommandSeq<protocol.UpdateOpenRequest>({
+                command: protocol.CommandTypes.UpdateOpen,
+                arguments: {
+                    changedFiles: [{
+                        fileName: file.path,
+                        textChanges: [{
+                            newText: "             ",
+                            ...locationOfTsIgnore
+                        }]
+                    }]
+                }
+            });
+            const locationOfY = protocolTextSpanFromSubstring(file.content, "y");
+            verifyGetErrRequest({
+                session,
+                host,
+                expected: [
+                    {
+                        file,
+                        syntax: [],
+                        semantic: [
+                            createDiagnostic(locationOfY.start, locationOfY.end, Diagnostics.Type_0_is_not_assignable_to_type_1, ["10", "string"]),
+                        ],
+                        suggestion: []
+                    },
+                ]
+            });
+
+            // Revert the change and no errors should be reported
+            session.executeCommandSeq<protocol.UpdateOpenRequest>({
+                command: protocol.CommandTypes.UpdateOpen,
+                arguments: {
+                    changedFiles: [{
+                        fileName: file.path,
+                        textChanges: [{
+                            newText: tsIgnoreComment,
+                            ...locationOfTsIgnore
+                        }]
+                    }]
+                }
+            });
+            verifyGetErrRequestNoErrors({ session, host, files: [file] });
+        });
     });
 }

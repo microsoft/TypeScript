@@ -146,7 +146,7 @@ Output::
 [[90m12:00:37 AM[0m] Starting compilation in watch mode...
 
 
-[91merror[0m[90m TS6053: [0mFile '/user/username/projects/sample1/logic/tsconfig.json' not found.
+[91merror[0m[90m TS5083: [0mCannot read file '/user/username/projects/sample1/logic/tsconfig.json'.
 
 
 [[90m12:00:52 AM[0m] Found 1 error. Watching for file changes.
