@@ -781,4 +781,5 @@ declare namespace completion {
     export const statementKeywordsWithTypes: ReadonlyArray<Entry>;
     export const statementKeywords: ReadonlyArray<Entry>;
     export const statementInJsKeywords: ReadonlyArray<Entry>;
+    export const thisTypeSource: string;
 }

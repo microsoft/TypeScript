@@ -1460,6 +1460,8 @@ namespace FourSlashInterface {
                 undefinedVarEntry,
                 ...globalInJsKeywords];
         }
+
+        export const thisTypeSource = "" + ts.Completions.SymbolOriginInfoKind.ThisType;
     }
 
     export interface ReferenceGroup {

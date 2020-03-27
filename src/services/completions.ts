@@ -11,7 +11,7 @@ namespace ts.Completions {
     }
     export type Log = (message: string) => void;
 
-    const enum SymbolOriginInfoKind {
+    export const enum SymbolOriginInfoKind {
         ThisType            = 1 << 0,
         SymbolMember        = 1 << 1,
         Export              = 1 << 2,
@@ -430,7 +430,12 @@ namespace ts.Completions {
     }
 
     function getSourceFromOrigin(origin: SymbolOriginInfo | undefined): string | undefined {
-        return origin && originIsExport(origin) ? stripQuotes(origin.moduleSymbol.name) : undefined;
+        if (originIsExport(origin)) {
+            return stripQuotes(origin.moduleSymbol.name);
+        }
+        if (origin?.kind === SymbolOriginInfoKind.ThisType) {
+            return "" + SymbolOriginInfoKind.ThisType;
+        }
     }
 
     export function getCompletionEntriesFromSymbols(
