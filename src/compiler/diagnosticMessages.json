@@ -2317,6 +2317,22 @@
         "category": "Error",
         "code": 2594
     },
+    "'{0}' can only be imported by using a default import.": {
+        "category": "Error",
+        "code": 2595
+    },
+    "'{0}' can only be imported by turning on the 'esModuleInterop' flag and using a default import.": {
+        "category": "Error",
+        "code": 2596
+    },
+    "'{0}' can only be imported by using a 'require' call or by using a default import.": {
+        "category": "Error",
+        "code": 2597
+    },
+    "'{0}' can only be imported by using a 'require' call or by turning on the 'esModuleInterop' flag and using a default import.": {
+        "category": "Error",
+        "code": 2598
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2380,6 +2396,14 @@
     "Type of property '{0}' circularly references itself in mapped type '{1}'.": {
         "category": "Error",
         "code": 2615
+    },
+    "'{0}' can only be imported by using 'import {1} = require({2})' or a default import.": {
+        "category": "Error",
+        "code": 2616
+    },
+    "'{0}' can only be imported by using 'import {1} = require({2})' or by turning on the 'esModuleInterop' flag and using a default import.": {
+        "category": "Error",
+        "code": 2617
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
