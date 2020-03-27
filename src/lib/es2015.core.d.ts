@@ -213,13 +213,13 @@ interface NumberConstructor {
      * number. Only finite values of the type number, result in true.
      * @param number A numeric value.
      */
-    isFinite(number: number): boolean;
+    isFinite(number: unknown): boolean;
 
     /**
      * Returns true if the value passed is an integer, false otherwise.
      * @param number A numeric value.
      */
-    isInteger(number: number): boolean;
+    isInteger(number: unknown): boolean;
 
     /**
      * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a
@@ -227,13 +227,13 @@ interface NumberConstructor {
      * to a number. Only values of the type number, that are also NaN, result in true.
      * @param number A numeric value.
      */
-    isNaN(number: number): boolean;
+    isNaN(number: unknown): boolean;
 
     /**
      * Returns true if the value passed is a safe integer.
      * @param number A numeric value.
      */
-    isSafeInteger(number: number): boolean;
+    isSafeInteger(number: unknown): boolean;
 
     /**
      * The value of the largest integer n such that n and n + 1 are both exactly representable as
