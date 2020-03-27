@@ -1271,6 +1271,7 @@ namespace ts.Completions {
         function tryGetGlobalSymbols(): boolean {
             const result: GlobalsSearch = tryGetObjectLikeCompletionSymbols()
                 || tryGetImportOrExportClauseCompletionSymbols()
+                || tryGetLocalNamedExportCompletionSymbols()
                 || tryGetConstructorCompletion()
                 || tryGetClassLikeCompletionSymbols()
                 || tryGetJsxCompletionSymbols()
@@ -1881,8 +1882,6 @@ namespace ts.Completions {
          *      export { | };
          *
          * Relevant symbols are stored in the captured 'symbols' variable.
-         *
-         * @returns true if 'symbols' was successfully populated; false otherwise.
          */
         function tryGetImportOrExportClauseCompletionSymbols(): GlobalsSearch {
             // `import { |` or `import { a as 0, | }`
@@ -1890,10 +1889,10 @@ namespace ts.Completions {
                 ? tryCast(contextToken.parent, isNamedImportsOrExports) : undefined;
             if (!namedImportsOrExports) return GlobalsSearch.Continue;
 
-            // cursor is in an import clause
-            // try to show exported member for imported module
+            // try to show exported member for imported/re-exported module
             const { moduleSpecifier } = namedImportsOrExports.kind === SyntaxKind.NamedImports ? namedImportsOrExports.parent.parent : namedImportsOrExports.parent;
-            const moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(moduleSpecifier!); // TODO: GH#18217
+            if (!moduleSpecifier) return namedImportsOrExports.kind === SyntaxKind.NamedImports ? GlobalsSearch.Fail : GlobalsSearch.Continue;
+            const moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(moduleSpecifier); // TODO: GH#18217
             if (!moduleSpecifierSymbol) return GlobalsSearch.Fail;
 
             completionKind = CompletionKind.MemberLike;
@@ -1901,6 +1900,36 @@ namespace ts.Completions {
             const exports = typeChecker.getExportsAndPropertiesOfModule(moduleSpecifierSymbol);
             const existing = arrayToSet<ImportOrExportSpecifier>(namedImportsOrExports.elements, n => isCurrentlyEditingNode(n) ? undefined : (n.propertyName || n.name).escapedText);
             symbols = exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.get(e.escapedName));
+            return GlobalsSearch.Success;
+        }
+
+        /**
+         * Adds local declarations for completions in named exports:
+         *
+         *   export { | };
+         *
+         * Does not check for the absence of a module specifier (`export {} from "./other"`)
+         * because `tryGetImportOrExportClauseCompletionSymbols` runs first and handles that,
+         * preventing this function from running.
+         */
+        function tryGetLocalNamedExportCompletionSymbols(): GlobalsSearch {
+            const namedExports = contextToken && (contextToken.kind === SyntaxKind.OpenBraceToken || contextToken.kind === SyntaxKind.CommaToken)
+                ? tryCast(contextToken.parent, isNamedExports)
+                : undefined;
+
+            if (!namedExports) {
+                return GlobalsSearch.Continue;
+            }
+
+            const localsContainer = findAncestor(namedExports, or(isSourceFile, isModuleDeclaration))!;
+            completionKind = CompletionKind.None;
+            isNewIdentifierLocation = false;
+            localsContainer.locals?.forEach((symbol, name) => {
+                symbols.push(symbol);
+                if (localsContainer.symbol?.exports?.has(name)) {
+                    symbolToSortTextMap[getSymbolId(symbol)] = SortText.OptionalMember;
+                }
+            });
             return GlobalsSearch.Success;
         }
 
@@ -2299,7 +2328,7 @@ namespace ts.Completions {
             }
         }
 
-        // Set SortText to OptionalMember if it is an optinoal member
+        // Set SortText to OptionalMember if it is an optional member
         function setSortTextToOptionalMember() {
             symbols.forEach(m => {
                 if (m.flags & SymbolFlags.Optional) {
