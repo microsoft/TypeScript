@@ -298,7 +298,7 @@ namespace ts.Completions {
     function getJSCompletionEntries(
         sourceFile: SourceFile,
         position: number,
-        uniqueNames: Map<true>,
+        uniqueNames: Map<boolean>,
         target: ScriptTarget,
         entries: Push<CompletionEntry>): void {
         getNameTable(sourceFile).forEach((pos, name) => {
@@ -307,7 +307,8 @@ namespace ts.Completions {
                 return;
             }
             const realName = unescapeLeadingUnderscores(name);
-            if (addToSeen(uniqueNames, realName) && isIdentifierText(realName, target)) {
+            if (!uniqueNames.has(realName) && isIdentifierText(realName, target)) {
+                uniqueNames.set(realName, true);
                 entries.push({
                     name: realName,
                     kind: ScriptElementKind.warning,
@@ -448,13 +449,13 @@ namespace ts.Completions {
         recommendedCompletion?: Symbol,
         symbolToOriginInfoMap?: SymbolOriginInfoMap,
         symbolToSortTextMap?: SymbolSortTextMap,
-    ): Map<true> {
+    ): Map<boolean> {
         const start = timestamp();
         // Tracks unique names.
-        // We don't set this for global variables or completions from external module exports, because we can have multiple of those.
-        // Based on the order we add things we will always see locals first, then globals, then module exports.
+        // Value is set to false for global variables or completions from external module exports, because we can have multiple of those;
+        // true otherwise. Based on the order we add things we will always see locals first, then globals, then module exports.
         // So adding a completion for a local will prevent us from adding completions for external module exports sharing the same name.
-        const uniques = createMap<true>();
+        const uniques = createMap<boolean>();
         for (const symbol of symbols) {
             const origin = symbolToOriginInfoMap ? symbolToOriginInfoMap[getSymbolId(symbol)] : undefined;
             const info = getCompletionEntryDisplayNameForSymbol(symbol, target, origin, kind, !!jsxIdentifierExpected);
@@ -462,7 +463,7 @@ namespace ts.Completions {
                 continue;
             }
             const { name, needsConvertPropertyAccess } = info;
-            if (uniques.has(name)) {
+            if (uniques.get(name)) {
                 continue;
             }
 
@@ -484,10 +485,9 @@ namespace ts.Completions {
                 continue;
             }
 
-            // Latter case tests whether this is a global variable.
-            if (!origin && !(symbol.parent === undefined && !some(symbol.declarations, d => d.getSourceFile() === location!.getSourceFile()))) { // TODO: GH#18217
-                uniques.set(name, true);
-            }
+            /** True for locals; false for globals, module exports from other files, `this.` completions. */
+            const shouldShadowLaterSymbols = !origin && !(symbol.parent === undefined && !some(symbol.declarations, d => d.getSourceFile() === location!.getSourceFile()));
+            uniques.set(name, shouldShadowLaterSymbols);
 
             entries.push(entry);
         }
@@ -1358,7 +1358,7 @@ namespace ts.Completions {
             // Need to insert 'this.' before properties of `this` type, so only do that if `includeInsertTextCompletions`
             if (preferences.includeCompletionsWithInsertText && scopeNode.kind !== SyntaxKind.SourceFile) {
                 const thisType = typeChecker.tryGetThisTypeAt(scopeNode, /*includeGlobalThis*/ false);
-                if (thisType) {
+                if (thisType && !isProbablyGlobalType(thisType, sourceFile, typeChecker)) {
                     for (const symbol of getPropertiesForCompletion(thisType, typeChecker)) {
                         symbolToOriginInfoMap[getSymbolId(symbol)] = { kind: SymbolOriginInfoKind.ThisType };
                         symbols.push(symbol);
@@ -2694,13 +2694,22 @@ namespace ts.Completions {
         }
     }
 
-    function isNonGlobalDeclaration(declaration: Declaration) {
-        const sourceFile = declaration.getSourceFile();
-        // If the file is not a module, the declaration is global
-        if (!sourceFile.externalModuleIndicator && !sourceFile.commonJsModuleIndicator) {
-            return false;
+    /** Determines if a type is exactly the same type resolved by the global 'self', 'global', or 'globalThis'. */
+    function isProbablyGlobalType(type: Type, sourceFile: SourceFile, checker: TypeChecker) {
+        // The type of `self` and `window` is the same in lib.dom.d.ts, but `window` does not exist in
+        // lib.webworker.d.ts, so checking against `self` is also a check against `window` when it exists.
+        const selfSymbol = checker.resolveName("self", /*location*/ undefined, SymbolFlags.Value, /*excludeGlobals*/ false);
+        if (selfSymbol && checker.getTypeOfSymbolAtLocation(selfSymbol, sourceFile) === type) {
+            return true;
         }
-        // If the file is a module written in TypeScript, it still might be in a `declare global` augmentation
-        return isInJSFile(declaration) || !findAncestor(declaration, isGlobalScopeAugmentation);
+        const globalSymbol = checker.resolveName("global", /*location*/ undefined, SymbolFlags.Value, /*excludeGlobals*/ false);
+        if (globalSymbol && checker.getTypeOfSymbolAtLocation(globalSymbol, sourceFile) === type) {
+            return true;
+        }
+        const globalThisSymbol = checker.resolveName("globalThis", /*location*/ undefined, SymbolFlags.Value, /*excludeGlobals*/ false);
+        if (globalThisSymbol && checker.getTypeOfSymbolAtLocation(globalThisSymbol, sourceFile) === type) {
+            return true;
+        }
+        return false;
     }
 }

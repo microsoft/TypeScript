@@ -322,6 +322,14 @@ namespace FourSlash {
                 if (!resolvedResult.isLibFile) {
                     this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
                         Harness.Compiler.getDefaultLibrarySourceFile()!.text, /*isRootFile*/ false);
+
+                    compilationOptions.lib?.forEach(fileName => {
+                        const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
+                        ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
+                        if (libFile) {
+                            this.languageServiceAdapterHost.addScript(fileName, libFile.text, /*isRootFile*/ false);
+                        }
+                    });
                 }
             }
             else {
@@ -334,6 +342,14 @@ namespace FourSlash {
                 if (!compilationOptions.noLib) {
                     this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
                         Harness.Compiler.getDefaultLibrarySourceFile()!.text, /*isRootFile*/ false);
+
+                    compilationOptions.lib?.forEach(fileName => {
+                        const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
+                        ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
+                        if (libFile) {
+                            this.languageServiceAdapterHost.addScript(fileName, libFile.text, /*isRootFile*/ false);
+                        }
+                    });
                 }
             }
 
