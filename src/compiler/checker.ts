@@ -1407,7 +1407,7 @@ namespace ts {
                 return true;
             }
 
-            if (!!(usage.flags & NodeFlags.JSDoc) || isInTypeQuery(usage)) {
+            if (!!(usage.flags & NodeFlags.JSDoc) || isInTypeQuery(usage) || usageInTypeDeclaration()) {
                 return true;
             }
             if (isUsedInFunctionOrInstanceProperty(usage, declaration)) {
@@ -1420,6 +1420,10 @@ namespace ts {
                 }
             }
             return false;
+
+            function usageInTypeDeclaration() {
+                return !!findAncestor(usage, node => isInterfaceDeclaration(node) || isTypeAliasDeclaration(node));
+            }
 
             function isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration: VariableDeclaration, usage: Node): boolean {
                 switch (declaration.parent.parent.kind) {
