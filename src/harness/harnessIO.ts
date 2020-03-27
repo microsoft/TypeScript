@@ -847,10 +847,26 @@ namespace Harness {
                     result.maps.forEach(sourceMap => {
                         if (sourceMapCode) sourceMapCode += "\r\n";
                         sourceMapCode += fileOutput(sourceMap, harnessSettings);
+                        if (!options.inlineSourceMap) {
+                            sourceMapCode += createSourceMapPreviewLink(sourceMap.text, result);
+                        }
                     });
                 }
                 Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ".js.map"), sourceMapCode);
             }
+        }
+
+        function createSourceMapPreviewLink(sourcemap: string, result: compiler.CompilationResult) {
+            const sourcemapJSON = JSON.parse(sourcemap);
+            const outputJSFile = result.outputs.find(td => td.file.endsWith(sourcemapJSON.file));
+            if (!outputJSFile) return "";
+
+            const sourceTDs = ts.map(sourcemapJSON.sources, (s: string) => result.inputs.find(td => td.file.endsWith(s)));
+            const anyUnfoundSources = ts.contains(sourceTDs, /*value*/ undefined);
+            if (anyUnfoundSources) return "";
+
+            const hash = "#base64," + ts.map([outputJSFile.text, sourcemap].concat(sourceTDs.map(td => td!.text)), (s) => ts.convertToBase64(decodeURIComponent(encodeURIComponent(s)))).join(",");
+            return "\n//// https://sokra.github.io/source-map-visualization" + hash + "\n";
         }
 
         export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: compiler.CompilationResult, tsConfigFiles: readonly TestFile[], toBeCompiled: readonly TestFile[], otherFiles: readonly TestFile[], harnessSettings: TestCaseParser.CompilerSettings) {
@@ -1128,6 +1144,16 @@ namespace Harness {
         const optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*([^\r\n]*)/gm;  // multiple matches on multiple lines
         const linkRegex = /^[\/]{2}\s*@link\s*:\s*([^\r\n]*)\s*->\s*([^\r\n]*)/gm;  // multiple matches on multiple lines
 
+        export function parseSymlinkFromTest(line: string, symlinks: vfs.FileSet | undefined) {
+            const linkMetaData = linkRegex.exec(line);
+            linkRegex.lastIndex = 0;
+            if (!linkMetaData) return undefined;
+
+            if (!symlinks) symlinks = {};
+            symlinks[linkMetaData[2].trim()] = new vfs.Symlink(linkMetaData[1].trim());
+            return symlinks;
+        }
+
         export function extractCompilerSettings(content: string): CompilerSettings {
             const opts: CompilerSettings = {};
 
@@ -1163,11 +1189,9 @@ namespace Harness {
 
             for (const line of lines) {
                 let testMetaData: RegExpExecArray | null;
-                const linkMetaData = linkRegex.exec(line);
-                linkRegex.lastIndex = 0;
-                if (linkMetaData) {
-                    if (!symlinks) symlinks = {};
-                    symlinks[linkMetaData[2].trim()] = new vfs.Symlink(linkMetaData[1].trim());
+                const possiblySymlinks = parseSymlinkFromTest(line, symlinks);
+                if (possiblySymlinks) {
+                    symlinks = possiblySymlinks;
                 }
                 else if (testMetaData = optionRegex.exec(line)) {
                     // Comment line, check for global/file @options and record them

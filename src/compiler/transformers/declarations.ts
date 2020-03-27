@@ -351,9 +351,7 @@ namespace ts {
                             toPath(outputFilePath, host.getCurrentDirectory(), host.getCanonicalFileName),
                             toPath(declFileName, host.getCurrentDirectory(), host.getCanonicalFileName),
                             host,
-                            host.getSourceFiles(),
                             /*preferences*/ undefined,
-                            host.redirectTargetsMap
                         );
                         if (!pathIsRelative(specifier)) {
                             // If some compiler option/symlink/whatever allows access to the file containing the ambient module declaration
@@ -376,7 +374,7 @@ namespace ts {
 
                         // omit references to files from node_modules (npm may disambiguate module
                         // references when installing this package, making the path is unreliable).
-                        if (startsWith(fileName, "node_modules/") || fileName.indexOf("/node_modules/") !== -1) {
+                        if (startsWith(fileName, "node_modules/") || pathContainsNodeModules(fileName)) {
                             return;
                         }
 

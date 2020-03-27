@@ -1,0 +1,23 @@
+tests/cases/compiler/errorSpanForUnclosedJsxTag.tsx(9,14): error TS17008: JSX element 'Foo.Bar' has no corresponding closing tag.
+tests/cases/compiler/errorSpanForUnclosedJsxTag.tsx(11,13): error TS17008: JSX element 'Baz' has no corresponding closing tag.
+tests/cases/compiler/errorSpanForUnclosedJsxTag.tsx(11,23): error TS1005: '</' expected.
+
+
+==== tests/cases/compiler/errorSpanForUnclosedJsxTag.tsx (3 errors) ====
+    declare const React: any
+    
+    let Foo = {
+      Bar() {}
+    }
+    
+    let Baz = () => {}
+    
+    let x = <    Foo.Bar >Hello
+                 ~~~~~~~
+!!! error TS17008: JSX element 'Foo.Bar' has no corresponding closing tag.
+    
+    let y = <   Baz >Hello
+                ~~~
+!!! error TS17008: JSX element 'Baz' has no corresponding closing tag.
+                          
+!!! error TS1005: '</' expected.

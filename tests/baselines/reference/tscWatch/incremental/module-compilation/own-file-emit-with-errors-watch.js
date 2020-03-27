@@ -25,6 +25,7 @@ export const y: string = 20;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.x = void 0;
     exports.x = 10;
 });
 
@@ -33,6 +34,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.y = void 0;
     exports.y = 20;
 });
 
@@ -43,15 +45,18 @@ define(["require", "exports"], function (require, exports) {
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
       },
       "./file1.ts": {
         "version": "-10726455937-export const x = 10;",
-        "signature": "-6821242887-export declare const x = 10;\n"
+        "signature": "-6821242887-export declare const x = 10;\n",
+        "affectsGlobalScope": false
       },
       "./file2.ts": {
         "version": "-13939690350-export const y: string = 20;",
-        "signature": "-7924398419-export declare const y: string;\n"
+        "signature": "-7924398419-export declare const y: string;\n",
+        "affectsGlobalScope": false
       }
     },
     "options": {
@@ -86,13 +91,17 @@ define(["require", "exports"], function (require, exports) {
 
 Output::
 >> Screen clear
-12:00:23 AM - Starting compilation in watch mode...
+[[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 
-file2.ts(1,14): error TS2322: Type '20' is not assignable to type 'string'.
+[96mfile2.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType '20' is not assignable to type 'string'.
+
+[7m1[0m export const y: string = 20;
+[7m [0m [91m             ~[0m
 
 
-12:00:30 AM - Found 1 error. Watching for file changes.
+[[90m12:00:30 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
@@ -136,6 +145,7 @@ export const z = 10;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.z = void 0;
     exports.z = 10;
 });
 
@@ -146,15 +156,18 @@ define(["require", "exports"], function (require, exports) {
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
       },
       "./file1.ts": {
         "version": "-12438487295-export const z = 10;",
-        "signature": "-7483702853-export declare const z = 10;\n"
+        "signature": "-7483702853-export declare const z = 10;\n",
+        "affectsGlobalScope": false
       },
       "./file2.ts": {
         "version": "-13939690350-export const y: string = 20;",
-        "signature": "-7924398419-export declare const y: string;\n"
+        "signature": "-7924398419-export declare const y: string;\n",
+        "affectsGlobalScope": false
       }
     },
     "options": {
@@ -189,13 +202,17 @@ define(["require", "exports"], function (require, exports) {
 
 Output::
 >> Screen clear
-12:00:34 AM - Starting compilation in watch mode...
+[[90m12:00:34 AM[0m] Starting compilation in watch mode...
 
 
-file2.ts(1,14): error TS2322: Type '20' is not assignable to type 'string'.
+[96mfile2.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType '20' is not assignable to type 'string'.
+
+[7m1[0m export const y: string = 20;
+[7m [0m [91m             ~[0m
 
 
-12:00:41 AM - Found 1 error. Watching for file changes.
+[[90m12:00:41 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]

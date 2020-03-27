@@ -1675,7 +1675,7 @@ namespace ts {
             }
 
             properties.push(
-                createPropertyAssignment("enumerable", createTrue()),
+                createPropertyAssignment("enumerable", getAccessor || setAccessor ? createFalse() : createTrue()),
                 createPropertyAssignment("configurable", createTrue())
             );
 

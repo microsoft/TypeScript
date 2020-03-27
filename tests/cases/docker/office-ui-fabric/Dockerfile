@@ -1,5 +1,6 @@
 FROM node:current
 ENV CI=true
+ENV TF_BUILD=true
 RUN npm install -g yarn lerna --force
 RUN git clone https://github.com/OfficeDev/office-ui-fabric-react.git /office-ui-fabric-react
 WORKDIR /office-ui-fabric-react

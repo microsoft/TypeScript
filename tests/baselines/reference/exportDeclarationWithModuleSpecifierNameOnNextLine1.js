@@ -22,6 +22,7 @@ export { x as a, } from
 //// [t1.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 exports.x = "x";
 //// [t2.js]
 "use strict";

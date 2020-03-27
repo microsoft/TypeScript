@@ -19,7 +19,7 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 
 //// [a.js]
 import { __decorate as __decorate_1 } from "tslib";
-const A = /** @class */ (() => {
+let A = /** @class */ (() => {
     let A = class A {
     };
     A = __decorate_1([

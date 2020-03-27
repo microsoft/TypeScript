@@ -22,6 +22,9 @@ const copyright = "CopyrightNotice.txt";
 const cleanTasks = [];
 
 const buildScripts = () => buildProject("scripts");
+task("scripts", buildScripts);
+task("scripts").description = "Builds files in the 'scripts' folder.";
+
 const cleanScripts = () => cleanProject("scripts");
 cleanTasks.push(cleanScripts);
 

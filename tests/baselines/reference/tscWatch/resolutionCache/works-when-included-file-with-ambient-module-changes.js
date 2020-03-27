@@ -35,13 +35,17 @@ exports.__esModule = true;
 
 Output::
 >> Screen clear
-12:00:15 AM - Starting compilation in watch mode...
+[[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
 
-foo.ts(2,21): error TS2307: Cannot find module 'fs'.
+[96mfoo.ts[0m:[93m2[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module 'fs' or its corresponding type declarations.
+
+[7m2[0m import * as fs from "fs";
+[7m [0m [91m                    ~~~~[0m
 
 
-12:00:18 AM - Found 1 error. Watching for file changes.
+[[90m12:00:18 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/a/b/foo.ts","/a/b/bar.d.ts"]
@@ -95,11 +99,11 @@ declare module "fs" {
 
 Output::
 >> Screen clear
-12:00:21 AM - File change detected. Starting incremental compilation...
+[[90m12:00:21 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:25 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:25 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/foo.ts","/a/b/bar.d.ts"]

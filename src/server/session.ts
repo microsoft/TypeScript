@@ -85,9 +85,9 @@ namespace ts.server {
         return { line: lineAndCharacter.line + 1, offset: lineAndCharacter.character + 1 };
     }
 
-    function formatConfigFileDiag(diag: Diagnostic, includeFileName: true): protocol.DiagnosticWithFileName;
-    function formatConfigFileDiag(diag: Diagnostic, includeFileName: false): protocol.Diagnostic;
-    function formatConfigFileDiag(diag: Diagnostic, includeFileName: boolean): protocol.Diagnostic | protocol.DiagnosticWithFileName {
+    function formatDiagnosticToProtocol(diag: Diagnostic, includeFileName: true): protocol.DiagnosticWithFileName;
+    function formatDiagnosticToProtocol(diag: Diagnostic, includeFileName: false): protocol.Diagnostic;
+    function formatDiagnosticToProtocol(diag: Diagnostic, includeFileName: boolean): protocol.Diagnostic | protocol.DiagnosticWithFileName {
         const start = (diag.file && convertToLocation(getLineAndCharacterOfPosition(diag.file, diag.start!)))!; // TODO: GH#18217
         const end = (diag.file && convertToLocation(getLineAndCharacterOfPosition(diag.file, diag.start! + diag.length!)))!; // TODO: GH#18217
         const text = flattenDiagnosticMessageText(diag.messageText, "\n");
@@ -431,10 +431,16 @@ namespace ts.server {
         if (initialLocation) {
             const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation!);
             if (defaultDefinition) {
+                const getGeneratedDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition.fileName) ?
+                    defaultDefinition :
+                    defaultProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(defaultDefinition));
+                const getSourceDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition.fileName) ?
+                    defaultDefinition :
+                    defaultProject.getLanguageService().getSourceMapper().tryGetSourcePosition(defaultDefinition));
                 projectService.loadAncestorProjectTree(seenProjects);
                 projectService.forEachEnabledProject(project => {
                     if (!addToSeen(seenProjects, project)) return;
-                    const definition = mapDefinitionInProject(defaultDefinition, defaultProject, project);
+                    const definition = mapDefinitionInProject(defaultDefinition, project, getGeneratedDefinition, getSourceDefinition);
                     if (definition) {
                         toDo = callbackProjectAndLocation<TLocation>({ project, location: definition as TLocation }, projectService, toDo, seenProjects, cb);
                     }
@@ -447,17 +453,21 @@ namespace ts.server {
         }
     }
 
-    function mapDefinitionInProject(definition: DocumentPosition | undefined, definingProject: Project, project: Project): DocumentPosition | undefined {
+    function mapDefinitionInProject(
+        definition: DocumentPosition,
+        project: Project,
+        getGeneratedDefinition: () => DocumentPosition | undefined,
+        getSourceDefinition: () => DocumentPosition | undefined
+    ): DocumentPosition | undefined {
         // If the definition is actually from the project, definition is correct as is
-        if (!definition ||
-            project.containsFile(toNormalizedPath(definition.fileName)) &&
+        if (project.containsFile(toNormalizedPath(definition.fileName)) &&
             !isLocationProjectReferenceRedirect(project, definition)) {
             return definition;
         }
-        const mappedDefinition = definingProject.isSourceOfProjectReferenceRedirect(definition.fileName) ?
-            definition :
-            definingProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(definition);
-        return mappedDefinition && project.containsFile(toNormalizedPath(mappedDefinition.fileName)) ? mappedDefinition : undefined;
+        const generatedDefinition = getGeneratedDefinition();
+        if (generatedDefinition && project.containsFile(toNormalizedPath(generatedDefinition.fileName))) return generatedDefinition;
+        const sourceDefinition = getSourceDefinition();
+        return sourceDefinition && project.containsFile(toNormalizedPath(sourceDefinition.fileName)) ? sourceDefinition : undefined;
     }
 
     function isLocationProjectReferenceRedirect(project: Project, location: DocumentPosition | undefined) {
@@ -689,7 +699,7 @@ namespace ts.server {
                     break;
                 case ConfigFileDiagEvent:
                     const { triggerFile, configFileName: configFile, diagnostics } = event.data;
-                    const bakedDiags = map(diagnostics, diagnostic => formatConfigFileDiag(diagnostic, /*includeFileName*/ true));
+                    const bakedDiags = map(diagnostics, diagnostic => formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ true));
                     this.event<protocol.ConfigFileDiagnosticEventBody>({
                         triggerFile,
                         configFile,
@@ -846,7 +856,7 @@ namespace ts.server {
         private semanticCheck(file: NormalizedPath, project: Project) {
             const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
                 ? emptyArray
-                : project.getLanguageService().getSemanticDiagnostics(file);
+                : project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file);
             this.sendDiagnosticsEvent(file, project, diags, "semanticDiag");
         }
 
@@ -988,7 +998,7 @@ namespace ts.server {
                 this.convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnosticsForConfigFile) :
                 map(
                     diagnosticsForConfigFile,
-                    diagnostic => formatConfigFileDiag(diagnostic, /*includeFileName*/ false)
+                    diagnostic => formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ false)
                 );
         }
 
@@ -999,8 +1009,10 @@ namespace ts.server {
                 length: d.length!, // TODO: GH#18217
                 category: diagnosticCategoryName(d),
                 code: d.code,
+                source: d.source,
                 startLocation: (d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start!)))!, // TODO: GH#18217
                 endLocation: (d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start! + d.length!)))!, // TODO: GH#18217
+                reportsUnnecessary: d.reportsUnnecessary,
                 relatedInformation: map(d.relatedInformation, formatRelatedInformation)
             }));
         }
@@ -1098,11 +1110,20 @@ namespace ts.server {
             };
         }
 
-        private getEmitOutput(args: protocol.FileRequestArgs): EmitOutput {
+        private getEmitOutput(args: protocol.EmitOutputRequestArgs): EmitOutput | protocol.EmitOutput {
             const { file, project } = this.getFileAndProject(args);
-            return project.shouldEmitFile(project.getScriptInfo(file)) ?
-                project.getLanguageService().getEmitOutput(file) :
-                { emitSkipped: true, outputFiles: [] };
+            if (!project.shouldEmitFile(project.getScriptInfo(file))) {
+                return { emitSkipped: true, outputFiles: [], diagnostics: [] };
+            }
+            const result = project.getLanguageService().getEmitOutput(file);
+            return args.richResponse ?
+                {
+                    ...result,
+                    diagnostics: args.includeLinePosition ?
+                        this.convertToDiagnosticsWithLinePositionFromDiagnosticFile(result.diagnostics) :
+                        result.diagnostics.map(d => formatDiagnosticToProtocol(d, /*includeFileName*/ true))
+                } :
+                result;
         }
 
         private mapDefinitionInfo(definitions: readonly DefinitionInfo[], project: Project): readonly protocol.FileSpanWithContext[] {
@@ -1213,7 +1234,7 @@ namespace ts.server {
             if (configFile) {
                 return this.getConfigFileDiagnostics(configFile, project!, !!args.includeLinePosition); // TODO: GH#18217
             }
-            return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSemanticDiagnostics(file), !!args.includeLinePosition);
+            return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file), !!args.includeLinePosition);
         }
 
         private getSuggestionDiagnosticsSync(args: protocol.SuggestionDiagnosticsSyncRequestArgs): readonly protocol.Diagnostic[] | readonly protocol.DiagnosticWithLinePosition[] {
@@ -1698,16 +1719,24 @@ namespace ts.server {
             );
         }
 
-        private emitFile(args: protocol.CompileOnSaveEmitFileRequestArgs) {
+        private emitFile(args: protocol.CompileOnSaveEmitFileRequestArgs): boolean | protocol.EmitResult | EmitResult {
             const { file, project } = this.getFileAndProject(args);
             if (!project) {
                 Errors.ThrowNoProject();
             }
             if (!project.languageServiceEnabled) {
-                return false;
+                return args.richResponse ? { emitSkipped: true, diagnostics: [] } : false;
             }
             const scriptInfo = project.getScriptInfo(file)!;
-            return project.emitFile(scriptInfo, (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark));
+            const { emitSkipped, diagnostics } = project.emitFile(scriptInfo, (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark));
+            return args.richResponse ?
+                {
+                    emitSkipped,
+                    diagnostics: args.includeLinePosition ?
+                        this.convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnostics) :
+                        diagnostics.map(d => formatDiagnosticToProtocol(d, /*includeFileName*/ true))
+                } :
+                !emitSkipped;
         }
 
         private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean): protocol.SignatureHelpItems | SignatureHelpItems | undefined {

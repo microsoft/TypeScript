@@ -29,6 +29,7 @@ class C {
 //// [0.js]
 "use strict";
 exports.__esModule = true;
+exports.foo = exports.B = void 0;
 var B = /** @class */ (function () {
     function B() {
     }
@@ -41,6 +42,7 @@ exports.foo = foo;
 //// [1.js]
 "use strict";
 exports.__esModule = true;
+exports.backup = void 0;
 function backup() { return "backup"; }
 exports.backup = backup;
 //// [2.js]

@@ -226,7 +226,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['const' 判斷提示只可套用至列舉成員，或字串、數字、布林值、陣列，以及物件常值的參考。]]></Val>
+            <Val><![CDATA['const' 判斷提示只可套用至列舉成員、字串、數字、布林值、陣列或物件常值的參考。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -244,7 +244,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[環境內容中的 'const' 初始設定式必須為字串或數字常值，或常值列舉參考。]]></Val>
+            <Val><![CDATA[環境內容中的 'const' 初始設定式必須為字串、數字常值或常值列舉參考。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -436,7 +436,7 @@
         <Str Cat="Text">
           <Val><![CDATA['A label is not allowed here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['不允許在此使用標籤。]]></Val>
+            <Val><![CDATA[此處不允許標籤。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -541,7 +541,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would update timestamps for output of project '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[非 DRY 組建將會更新專案 '{0}' 之輸出的時間戳記]]></Val>
+            <Val><![CDATA[非 DRY 組建將會更新專案 '{0}' 輸出的時間戳記]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -622,7 +622,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A required element cannot follow an optional element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[必要元素不可置於選擇性元素之後。]]></Val>
+            <Val><![CDATA[必要項目不可接在選擇性項目後面。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -679,7 +679,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest element must be last in a tuple type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[REST 元素必須保持為 Tuple 類型。]]></Val>
+            <Val><![CDATA[其餘項目必須是元組類型中的最後一項。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -688,7 +688,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest element type must be an array type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[REST 元素類型必須為陣列類型。]]></Val>
+            <Val><![CDATA[其餘項目類型必須為陣列類型。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -814,7 +814,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[當類別包含已初始化的屬性、參數屬性，或私人識別碼時，'super' 呼叫必須為建構函式中的第一個陳述式。]]></Val>
+            <Val><![CDATA[當類別包含已初始化的屬性、參數屬性或私人識別碼時，'super' 呼叫必須為建構函式中的第一個陳述式。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.]]></Val>
@@ -871,7 +871,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A type-only import can specify a default import or named bindings, but not both.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[僅限類型的匯入可以指定預設的匯入或具名繫結，但不能同時指定兩者。]]></Val>
+            <Val><![CDATA[僅限類型的匯入可以指定預設匯入或具名繫結，但不能同時指定兩者。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1014,6 +1014,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_all_missing_call_parentheses_95068" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add all missing call parentheses]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[新增所有缺少的呼叫括號]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_all_missing_imports_95064" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add all missing imports]]></Val>
@@ -1082,6 +1091,15 @@
           <Val><![CDATA[Add braces to arrow function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[將大括號新增至箭號函式]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_class_tag_95102" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add '@class' tag]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[新增 '@class' 標籤]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1170,6 +1188,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_missing_call_parentheses_95067" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add missing call parentheses]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[新增缺少的呼叫括號]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_missing_enum_member_0_95063" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add missing enum member '{0}']]></Val>
@@ -1183,7 +1210,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add missing 'new' operator to all calls]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[新增缺少的 'new' 運算子至所有呼叫]]></Val>
+            <Val><![CDATA[將缺少的 'new' 運算子新增至所有呼叫]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1192,7 +1219,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add missing 'new' operator to call]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[新增缺少的 'new' 運算子至呼叫]]></Val>
+            <Val><![CDATA[缺少的 'new' 運算子新增至呼叫]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1222,7 +1249,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add names to all parameters without names]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[新增名稱至所有沒有名稱的參數]]></Val>
+            <Val><![CDATA[將名稱新增至所有沒有名稱的參數]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1250,6 +1277,24 @@
           <Val><![CDATA[Add qualifier to all unresolved variables matching a member name]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[對所有比對成員名稱的未解析變數新增限定詞]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_this_parameter_95104" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add 'this' parameter.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[新增 'this' 參數。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_this_tag_95103" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add '@this' tag]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[新增 '@this' 標籤]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1303,7 +1348,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'unknown' to all conversions of non-overlapping types]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[新增 'unknown' 至所有非重疊類型的轉換]]></Val>
+            <Val><![CDATA[將 'unknown' 新增至非重疊類型的所有轉換]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1393,7 +1438,7 @@
         <Str Cat="Text">
           <Val><![CDATA[All type parameters are unused]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[所有類型參數皆未使用]]></Val>
+            <Val><![CDATA[所有型別參數皆未使用]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1411,7 +1456,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Allow accessing UMD globals from modules.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[允許從模組存取全域 UMD。]]></Val>
+            <Val><![CDATA[允許從模組存取 UMD 全域。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1483,7 +1528,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An accessibility modifier cannot be used with a private identifier.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[協助工具修飾元不可與私人識別碼同時使用。]]></Val>
+            <Val><![CDATA[協助工具修飾元不可搭配私人識別碼使用。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1537,7 +1582,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[算術運算元必須為 'any'、'number'、'bigint'，或列舉類型。]]></Val>
+            <Val><![CDATA[算術運算元必須屬於 'any'、'number'、'bigint' 或列舉類型。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1618,7 +1663,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An enum member name must be followed by a ',', '=', or '}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[列舉成員名稱之後必須為 ','、' = ' 或 '} '。]]></Val>
+            <Val><![CDATA[列舉成員名稱必須尾隨 ','、'=' 或 '}'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1681,7 +1726,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An expression of type 'void' cannot be tested for truthiness]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[無法為 'void' 類型的運算式測試真實性]]></Val>
+            <Val><![CDATA[無法對 'void' 類型的運算式測試真實性]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1699,7 +1744,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An identifier or keyword cannot immediately follow a numeric literal.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[識別碼或關鍵字不可直接置於數字常值之後。]]></Val>
+            <Val><![CDATA[識別碼或關鍵字不可直接接在數字常值後面。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1852,7 +1897,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An index signature parameter type must be either 'string' or 'number'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[索引簽章參數類型必須為 'string' 或 'number' 其一。]]></Val>
+            <Val><![CDATA[索引簽章參數類型必須為 'string' 或 'number'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1870,7 +1915,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An interface can only extend an object type or intersection of object types with statically known members.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[介面只能透過靜態已知成員延伸物件類型或物件類型的交集。]]></Val>
+            <Val><![CDATA[介面只能延伸物件類型或具有靜態已知成員的物件類型交集。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1933,7 +1978,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An optional chain cannot contain private identifiers.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[選擇性鏈不能包含私人識別碼。]]></Val>
+            <Val><![CDATA[選擇性鏈結不能包含私人識別碼。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1942,7 +1987,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An outer value of 'this' is shadowed by this container.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['this' 的外部值已被此容器遮蔽。]]></Val>
+            <Val><![CDATA[此容器已陰影 'this' 的外部值。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1996,7 +2041,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Another export default is here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[其他匯出預設為此處。]]></Val>
+            <Val><![CDATA[其他匯出預設位於此處。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2005,7 +2050,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Are you missing a semicolon?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[您是否缺少分號?]]></Val>
+            <Val><![CDATA[缺少分號嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2053,7 +2098,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Assertions require every name in the call target to be declared with an explicit type annotation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[判斷提示要求呼叫目標中的每個名稱都必須以明確的類型註釋宣告。]]></Val>
+            <Val><![CDATA[判斷提示要求必須以明確的型別註解宣告呼叫目標中的每個名稱。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2116,7 +2161,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Base constructor return type '{0}' is not an object type or intersection of object types with statically known members.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[基底建構函式傳回類型 '{0}' 並非具有靜態已知成員的物件類型或物件類型的交集。]]></Val>
+            <Val><![CDATA[基底建構函式傳回型別 '{0}' 不是物件類型或具有靜態已知成員的物件類型交集。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2206,7 +2251,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Build option '{0}' requires a value of type {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[組建選項 '{0}' 需要類型 {1} 的值。]]></Val>
+            <Val><![CDATA[組建選項 '{0}' 需要 {1} 類型的值。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2236,7 +2281,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Call signature return types '{0}' and '{1}' are incompatible.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[呼叫簽章傳回類型 '{0}' 與 '{1}' 不相容。]]></Val>
+            <Val><![CDATA[呼叫簽章傳回型別 '{0}' 與 '{1}' 不相容。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2254,7 +2299,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Call signatures with no arguments have incompatible return types '{0}' and '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[不具引數的呼叫簽章傳回類型 '{0}' 與 '{1}' 不相容。]]></Val>
+            <Val><![CDATA[無引數呼叫簽章的傳回型別 '{0}' 與 '{1}' 不相容。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2308,7 +2353,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot assign to '{0}' because it is a constant.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[無法指派至 '{0}'，因為其為常數。]]></Val>
+            <Val><![CDATA[因為 '{0}' 為常數，所以無法指派至 '{0}'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2317,7 +2362,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot assign to '{0}' because it is a read-only property.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[無法指派至 '{0}'，因為其為唯讀屬性。]]></Val>
+            <Val><![CDATA[因為 '{0}' 為唯讀屬性，所以無法指派至 '{0}'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2371,7 +2416,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot delegate iteration to value because the 'next' method of its iterator expects type '{1}', but the containing generator will always send '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[無法將反覆項目委派給值，因為其迭代器的 'next' 方法需要類型 '{1}'，但所包含的產生器僅永遠傳送 '{0}'。]]></Val>
+            <Val><![CDATA[因為值的迭代器 'next' 方法需要類型 '{1}'，但所包含的產生器永遠會傳送 '{0}'，所以無法將反覆項目委派給值。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2407,7 +2452,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find a tsconfig.json file at the current directory: {0}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[在目前的目錄中找不到 tsconfig.json 檔案: '{0}'。]]></Val>
+            <Val><![CDATA[在目前的目錄中找不到 tsconfig.json 檔案: {0}。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2460,20 +2505,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_module_0_2307" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Cannot find module '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[找不到模組 '{0}'。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Cannot_find_module_0_Consider_using_resolveJsonModule_to_import_module_with_json_extension_2732" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[找不到模組 '{0}'。請考慮使用 '--resolveJsonModule' 以匯入副檔名為 '.json' 的模組]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Cannot_find_module_0_or_its_corresponding_type_declarations_2307" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot find module '{0}' or its corresponding type declarations.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[找不到模組 '{0}' 或其對應的型別宣告。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2518,7 +2563,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[找不到名稱 '{0}'。您需要變更您的目標程式庫嗎? 請嘗試將 `lib` 編譯器選項變更為 es2015 或更新版本。]]></Val>
+            <Val><![CDATA[找不到名稱 '{0}'。需要變更您的目標程式庫嗎? 請嘗試將 `lib` 編譯器選項變更為 es2015 或更新版本。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2527,7 +2572,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[找不到名稱 '{0}'。您需要變更您的目標程式庫嗎? 請嘗試將 `lib` 編譯器選項變更以包含 'dom'。]]></Val>
+            <Val><![CDATA[找不到名稱 '{0}'。需要變更您的目標程式庫嗎? 請嘗試將 `lib` 編譯器選項變更為包含 'dom'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2536,7 +2581,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[找不到名稱 '{0}'。您需要安裝 Test Runner 的類型定義嗎? 請嘗試 `npm i @types/jest` 或 `npm i @types/mocha`。]]></Val>
+            <Val><![CDATA[找不到名稱 '{0}'。需要安裝測試執行器的類型定義嗎? 請嘗試 `npm i @types/jest` 或 `npm i @types/mocha`。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2545,7 +2590,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[找不到名稱 '{0}'。您需要安裝 Test Runner 的類型定義嗎? 請嘗試 `npm i @types/jest` 或 `npm i @types/mocha`，然後將 `jest` 或 `mocha` 新增至您在 tsconfig 中的類型欄位。]]></Val>
+            <Val><![CDATA[找不到名稱 '{0}'。需要安裝測試執行器的類型定義嗎? 請嘗試 `npm i @types/jest` 或 `npm i @types/mocha`，然後將 `jest` 或 `mocha` 新增至 tsconfig 中的類型欄位。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2554,7 +2599,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery`.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[找不到名稱 '{0}'。您需要安裝 jQuery 的類型定義嗎? 請嘗試 `npm i @types/jquery`。]]></Val>
+            <Val><![CDATA[找不到名稱 '{0}'。需要安裝 jQuery 的類型定義嗎? 請嘗試 `npm i @types/jquery`。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2563,7 +2608,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery` and then add `jquery` to the types field in your tsconfig.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[找不到名稱 '{0}'。您需要安裝 jQuery 的類型定義嗎? 請嘗試 `npm i @types/jquery`，然後將 `jquery` 新增至您在 tsconfig 中的類型欄位。]]></Val>
+            <Val><![CDATA[找不到名稱 '{0}'。您需要安裝 jQuery 的類型定義嗎? 請嘗試 `npm i @types/jquery`，然後將 `jquery` 新增至 tsconfig 中的類型欄位。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2572,7 +2617,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[找不到名稱 '{0}'。您需要安裝節點的類型定義嗎? 請嘗試 `npm i @types/node`。]]></Val>
+            <Val><![CDATA[找不到名稱 '{0}'。需要安裝節點的類型定義嗎? 請嘗試 `npm i @types/node`。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2581,7 +2626,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[找不到名稱 '{0}'。您需要安裝節點的類型定義嗎? 請嘗試 `npm i @types/node`，然後將 `node` 新增至您在 tsconfig 中的類型欄位。]]></Val>
+            <Val><![CDATA[找不到名稱 '{0}'。需要安裝節點的類型定義嗎? 請嘗試 `npm i @types/node`，然後將 `node` 新增至 tsconfig 中的類型欄位。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2671,7 +2716,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot iterate value because the 'next' method of its iterator expects type '{1}', but array destructuring will always send '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[無法逐一查看值，因為其迭代器的 'next' 方法需要類型 '{1}'，但陣列解構一律僅傳送 '{0}'。]]></Val>
+            <Val><![CDATA[因為值的迭代器 'next' 方法需要類型 '{1}'，但陣列解構永遠會傳送 '{0}'，所以無法逐一查看值。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2680,7 +2725,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot iterate value because the 'next' method of its iterator expects type '{1}', but array spread will always send '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[無法逐一查看值，因為其迭代器的 'next' 方法需要類型 '{1}'，但陣列擴張一律僅傳送 '{0}'。]]></Val>
+            <Val><![CDATA[因為值的迭代器 'next' 方法需要類型 '{1}'，但陣列擴張永遠會傳送 '{0}'，所以無法逐一查看值。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2689,7 +2734,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot iterate value because the 'next' method of its iterator expects type '{1}', but for-of will always send '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[無法逐一查看值，因為其迭代器的 'next' 方法需要類型 '{1}'，但 for-of 一律僅傳送 '{0}'。]]></Val>
+            <Val><![CDATA[因為值的迭代器 'next' 方法需要類型 '{1}'，但 for-of 永遠會傳送 '{0}'，所以無法逐一查看值。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2749,7 +2794,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot update output of project '{0}' because there was error reading file '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[無法更新專案 '{0}' 的輸出，因為讀取檔案 '{1}' 時發生錯誤]]></Val>
+            <Val><![CDATA[因為讀取檔案 '{1}' 時發生錯誤，所以無法更新專案 '{0}' 的輸出]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2794,7 +2839,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot write file '{0}' because it will overwrite '.tsbuildinfo' file generated by referenced project '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[無法寫入檔案 '{0}'，因為其會覆寫所參考專案 '{1}' 產生的 '.tsbuildinfo' 檔案]]></Val>
+            <Val><![CDATA[因為檔案 '{0}' 會覆寫所參考專案 '{1}' 產生的 '.tsbuildinfo' 檔案，所以無法寫入該檔案]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3103,7 +3148,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Compiler reserves name '{0}' when emitting private identifier downlevel.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[對舊版發出私人識別碼時，編譯器會保留名稱 '{0}'。]]></Val>
+            <Val><![CDATA[在下層發出私人識別碼時，編譯器會保留名稱 '{0}'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3121,7 +3166,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Composite projects may not disable incremental compilation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[複合專案可能不會停用累加式編譯。]]></Val>
+            <Val><![CDATA[複合專案可能不會停用累加編譯。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3175,7 +3220,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Construct signature return types '{0}' and '{1}' are incompatible.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[建構簽章傳回類型 '{0}' 與 '{1}' 不相容。]]></Val>
+            <Val><![CDATA[建構簽章傳回型別 '{0}' 與 '{1}' 不相容。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3193,7 +3238,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Construct signatures with no arguments have incompatible return types '{0}' and '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[不具引數的建構簽章傳回類型 '{0}' 與 '{1}' 不相容。]]></Val>
+            <Val><![CDATA[無引數建構簽章的傳回型別 '{0}' 與 '{1}' 不相容。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3247,7 +3292,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Conversion of type '{0}' to type '{1}' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[將類型 '{0}' 轉換至類型 '{1}' 可能會發生錯誤，因為這兩個類型彼此並未充分重疊。如果此動作是特意的，請先將運算式轉換為 'unknown'。]]></Val>
+            <Val><![CDATA[將類型 '{0}' 轉換為類型 '{1}' 可能會發生錯誤，原因是這兩個類型彼此並未充分重疊。如果是故意轉換的，請先將運算式轉換為 'unknown'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3274,7 +3319,16 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert all imports not used as a value to type-only imports]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[將所有未做為值使用的匯入轉換為僅限類型的匯入]]></Val>
+            <Val><![CDATA[將所有未作為值使用的匯入轉換為僅限類型的匯入]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_all_invalid_characters_to_HTML_entity_code_95101" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert all invalid characters to HTML entity code]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[將所有無效字元轉換為 HTML 實體代碼]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3347,6 +3401,24 @@
           <Val><![CDATA[Convert function '{0}' to class]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[將函式 '{0}' 轉換為類別]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_function_declaration_0_to_arrow_function_95106" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert function declaration '{0}' to arrow function]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[將函式宣告 '{0}' 轉換為箭號函式]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_function_expression_0_to_arrow_function_95105" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert function expression '{0}' to arrow function]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[將函式運算式 '{0}' 轉換為箭號函式]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3495,6 +3567,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Could_not_resolve_the_path_0_with_the_extensions_Colon_1_6231" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Could not resolve the path '{0}' with the extensions: {1}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[無法解析具有下列延伸模組的路徑 '{0}': {1}。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Could_not_write_file_0_Colon_1_5033" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Could not write file '{0}': {1}.]]></Val>
@@ -3520,7 +3601,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此檔案的宣告發出必須使用私人名稱 '{0}'。明確的類型註釋可能會解除封鎖宣告發出。]]></Val>
+            <Val><![CDATA[此檔案的宣告發出必須使用私人名稱 '{0}'。明確的型別註解可能會解除封鎖宣告發出。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3529,7 +3610,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Declaration emit for this file requires using private name '{0}' from module '{1}'. An explicit type annotation may unblock declaration emit.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此檔案的宣告發出必須使用來自模組 '{1}' 的私人名稱 '{0}'。明確的類型註釋可能會解除封鎖宣告發出。]]></Val>
+            <Val><![CDATA[此檔案的宣告發出必須使用來自模組 '{1}' 的私人名稱 '{0}'。明確的型別註解可能會解除封鎖宣告發出。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3579,6 +3660,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Declare method '{0}'.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Declare_private_property_0_90035" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declare private property '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[宣告私人屬性 '{0}']]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3649,7 +3739,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Definite assignment assertions can only be used along with a type annotation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[明確的指派判斷提示只可與類型註釋同時使用。]]></Val>
+            <Val><![CDATA[明確的指派判斷提示只可搭配型別註解使用。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3658,7 +3748,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Definitions of the following identifiers conflict with those in another file: {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[下列識別碼的定義與其他檔案中的定義相衝突: {0}]]></Val>
+            <Val><![CDATA[下列識別碼的定義與其他檔案中的定義衝突: {0}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3712,7 +3802,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Did you forget to use 'await'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[您是不是忘記使用 'await'?]]></Val>
+            <Val><![CDATA[忘了要使用 'await' 嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3721,7 +3811,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Did you mean '{0}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[您是不是指 '{0}'?]]></Val>
+            <Val><![CDATA[您指 '{0}' 嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3730,7 +3820,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Did you mean for '{0}' to be constrained to type 'new (...args: any[]5D;) => {1}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[您是不是要將 '{0}' 限制為類型 'new (...args: any[]5D;) => {1}'?]]></Val>
+            <Val><![CDATA[您是要將 '{0}' 限制為類型 'new (...args: any[]5D;) => {1}' 嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3739,7 +3829,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Did you mean to call this expression?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[您是不是要呼叫此運算式?]]></Val>
+            <Val><![CDATA[您是要呼叫此運算式嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3748,7 +3838,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Did you mean to mark this function as 'async'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[您是不是要將此函式標記為 'async'?]]></Val>
+            <Val><![CDATA[您是要將此函式標記為 'async' 嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3757,7 +3847,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Did you mean to parenthesize this function type?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[您是不是要將此函式類型置入括號?]]></Val>
+            <Val><![CDATA[您是要為此函式類型加上括號?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3766,7 +3856,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Did you mean to use 'new' with this expression?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[您是不是要對此運算式使用 'new'?]]></Val>
+            <Val><![CDATA[您是要對此運算式使用 'new' 嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3814,7 +3904,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Disable solution searching for this project.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[停用為此專案搜尋解決方案。]]></Val>
+            <Val><![CDATA[停用此專案的解決方案搜尋。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3832,7 +3922,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Disable use of source files instead of declaration files from referenced projects.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[停用原始程式檔，而非參考專案中的宣告檔案。]]></Val>
+            <Val><![CDATA[停用來源檔案，而非所參考專案中的宣告檔案。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4069,7 +4159,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Duplicate property '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[重複的屬性: '{0}'。]]></Val>
+            <Val><![CDATA[屬性 '{0}' 重複。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4123,7 +4213,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Each member of the union type '{0}' has construct signatures, but none of those signatures are compatible with each other.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[等位型別 '{0}' 的每個成員都具有建構簽章，但這些簽章並未彼此相容。]]></Val>
+            <Val><![CDATA[等位型別 '{0}' 的每個成員都有建構簽章，但這些簽章都互不相容。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4132,7 +4222,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Each member of the union type '{0}' has signatures, but none of those signatures are compatible with each other.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[等位型別 '{0}' 的每個成員都具有簽章，但這些簽章並未彼此相容。]]></Val>
+            <Val><![CDATA[等位型別 '{0}' 的每個成員都有簽章，但這些簽章都互不相容。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4141,7 +4231,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Element implicitly has an 'any' type because expression of type '{0}' can't be used to index type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[元素隱含 'any' 類型，因為類型 '{0}' 的運算式無法用於索引類型 '{1}'。]]></Val>
+            <Val><![CDATA[因為 '{0}' 類型的運算式無法用於索引類型 '{1}'，所以項目隱含 'any' 類型。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4168,7 +4258,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Element implicitly has an 'any' type because type '{0}' has no index signature. Did you mean to call '{1}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[元素隱含 'any' 類型，因為類型 '{0}' 不具有索引簽章。您是不是要呼叫 '{1}'?]]></Val>
+            <Val><![CDATA[因為類型 '{0}' 沒有索引簽章，所以項目隱含 'any' 類型。您是要呼叫 '{1}' 嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4240,7 +4330,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enable strict 'bind', 'call', and 'apply' methods on functions.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[在函式中啟用 strict 'bind'、'call' 以及 'apply' 方法。]]></Val>
+            <Val><![CDATA[對函式啟用嚴格的 'bind'、'call' 及 'apply' 方法。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4405,7 +4495,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum type '{0}' circularly references itself.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[列舉類型 '{0}' 會循環參考其本身。]]></Val>
+            <Val><![CDATA[列舉類型 '{0}' 會循環參考自身。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4540,7 +4630,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[裝飾項目的實驗性支援功能可能在未來版本中變更。您可以在 'tsconfig' 或 'jsconfig' 中設定 'experimentalDecorators' 選項以移除此警告。]]></Val>
+            <Val><![CDATA[裝飾項目的實驗性支援是未來版本中可能會變更的功能。在 'tsconfig' 或 'jsconfig' 中設定 'experimentalDecorators' 選項可移除此警告。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option to remove this warning.]]></Val>
@@ -4681,7 +4771,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expression produces a union type that is too complex to represent.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[運算式產生過於複雜而無法表示的等位型別。]]></Val>
+            <Val><![CDATA[運算式產生的等位型別過於複雜而無法表示。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4771,7 +4861,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Extract to interface]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[解壓縮至介面]]></Val>
+            <Val><![CDATA[擷取至介面]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4780,7 +4870,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Extract to type alias]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[解壓縮至類型別名]]></Val>
+            <Val><![CDATA[擷取至類型別名]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4789,7 +4879,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Extract to typedef]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[解壓縮至 typedef]]></Val>
+            <Val><![CDATA[擷取至 typedef]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4798,7 +4888,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Extract type]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[解壓縮類型]]></Val>
+            <Val><![CDATA[擷取類型]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4861,7 +4951,7 @@
         <Str Cat="Text">
           <Val><![CDATA[File '{0}' has an unsupported extension. The only supported extensions are {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[不支援檔案 '{0}' 的副檔名。支援的副檔名為 {1}。]]></Val>
+            <Val><![CDATA[不支援檔案 '{0}' 的副檔名。支援的副檔名只有 {1}。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4879,7 +4969,7 @@
         <Str Cat="Text">
           <Val><![CDATA[File '{0}' is a JavaScript file. Did you mean to enable the 'allowJs' option?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[檔案 '{0}' 為 JavaScript 檔案。您是不是要啟用 'allowJs' 選項?]]></Val>
+            <Val><![CDATA[檔案 '{0}' 為 JavaScript 檔案。您是要啟用 'allowJs' 選項嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4897,7 +4987,7 @@
         <Str Cat="Text">
           <Val><![CDATA[File '{0}' is not listed within the file list of project '{1}'. Projects must list all files or use an 'include' pattern.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[檔案 '{0}' 不在專案 '{1}' 的檔案清單內。專案必須列出所有檔案，或使用 'include' 模式。]]></Val>
+            <Val><![CDATA[檔案 '{0}' 未列於專案 '{1}' 的檔案清單內。專案必須列出所有檔案，或使用 'include' 模式。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4994,6 +5084,15 @@
           <Val><![CDATA[Fix all expressions possibly missing 'await']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[修正所有可能缺少 'await' 的運算式]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Fix_all_implicit_this_errors_95107" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Fix all implicit-'this' errors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[修正所有隱含 'this' 的錯誤]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5137,7 +5236,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Function type, which lacks return-type annotation, implicitly has an '{0}' return type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[函式類型缺少傳回類型註釋，且隱含 '{0}' 傳回類型。]]></Val>
+            <Val><![CDATA[缺少傳回型別註解的函式類型隱含 '{0}' 傳回型別。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5191,7 +5290,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Generator implicitly has yield type '{0}' because it does not yield any values. Consider supplying a return type annotation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[產生器隱含 yield 類型 '{0}'，因為其沒有產生任何值。請考慮提供傳回類型註釋。]]></Val>
+            <Val><![CDATA[因為產生器未產生任何值，所以其隱含產生類型 '{0}'。請考慮提供傳回型別註解。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5290,7 +5389,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Have recompiles in '--incremental' and '--watch' assume that changes within a file will only affect files directly depending on it.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[於 '--incremental' 與 '--watch' 中重新編譯時，假設檔案中的變更只會直接影響與其相關的檔案。]]></Val>
+            <Val><![CDATA[於 '--incremental' 與 '--watch' 中重新編譯時，會假設檔案中的變更只會影響直接相依於重新編譯的檔案。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5338,7 +5437,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Identifier expected. '{0}' is a reserved word that cannot be used here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[必須為識別碼。'{0}' 為保留字，不可用於此處。]]></Val>
+            <Val><![CDATA[必須為識別碼。'{0}' 為保留字，此處不可使用。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5365,7 +5464,7 @@
         <Str Cat="Text">
           <Val><![CDATA[If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}`]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[如果 '{0}' 套件公開此模組，請考慮傳送提取要求以修改 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}`]]></Val>
+            <Val><![CDATA[如果 '{0}' 套件的確公開了此模組，請考慮傳送提取要求以修改 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}`]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5437,7 +5536,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[在執行階段中無法將 'symbol' 隱含轉換為 'string' 。請考慮將此運算式包裝在 'String(...)' 中。]]></Val>
+            <Val><![CDATA[在執行階段中無法將 'symbol' 隱含轉換為 'string'。請考慮將此運算式包裝在 'String(...)' 中。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5497,7 +5596,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Import default '{0}' from module "{1}"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[從模組 "{1}" 匯入預設的 '{0}']]></Val>
+            <Val><![CDATA[從模組 "{1}" 匯入預設 '{0}']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5920,7 +6019,7 @@
         <Str Cat="Text">
           <Val><![CDATA[JSDoc type '{0}' circularly references itself.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JSDoc 類型 '{0}' 會循環參考其本身。]]></Val>
+            <Val><![CDATA[JSDoc 類型 '{0}' 會循環參考自身。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6052,7 +6151,7 @@
         <Str Cat="Text">
           <Val><![CDATA[JSX expressions may not use the comma operator. Did you mean to write an array?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JSX 運算式不可使用逗號運算子。您是不是要寫入陣列?]]></Val>
+            <Val><![CDATA[JSX 運算式不可使用逗號運算子。您是要寫入陣列嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6310,7 +6409,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Member '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[成員 '{0}' 隱含 '{1}' 類型，但可從使用方式推斷出更適合的類型。]]></Val>
+            <Val><![CDATA[成員 '{0}' 隱含 '{1}' 類型，但可從使用方式推斷更適合的類型。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6391,7 +6490,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' declares '{1}' locally, but it is exported as '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[模組 '{0}' 在本機宣告 '{1}'，但其匯出為 '{2}'。]]></Val>
+            <Val><![CDATA[模組 '{0}' 區域性地宣告 '{1}'，但卻將該模組匯出為 '{2}'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6400,7 +6499,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' declares '{1}' locally, but it is not exported.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[模組 '{0}' 在本機宣告 '{1}'，但未匯出。]]></Val>
+            <Val><![CDATA[模組 '{0}' 區域性地宣告 '{1}'，但並未匯出該模組。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6409,7 +6508,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' does not refer to a type, but is used as a type here. Did you mean 'typeof import('{0}')'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[模組 '{0}' 不適用於類型，但在此處做為類型使用。您是不是指 'typeof import('{0}')'?]]></Val>
+            <Val><![CDATA[模組 '{0}' 不是類型，但在此處卻作為類型使用。您是指 'typeof import('{0}')' 嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6445,7 +6544,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' has no default export. Did you mean to use 'import { {1} } from {0}' instead?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[模組 '{0}' 沒有預設匯出。您是不是要改用 'import { {1} } from {0}'? ]]></Val>
+            <Val><![CDATA[模組 '{0}' 沒有預設匯出。您是要改用 'import { {1} } from {0}' 嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6472,7 +6571,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' has no exported member '{1}'. Did you mean to use 'import {1} from {0}' instead?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[模組 '{0}' 沒有匯出的成員 '{1}'。您是不是要改用 'import {1} from {0}'? ]]></Val>
+            <Val><![CDATA[模組 '{0}' 沒有匯出的成員 '{1}'。您是要改用 'import {1} from {0}' 嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6667,7 +6766,7 @@
         <Str Cat="Text">
           <Val><![CDATA[No constituent of type '{0}' is callable.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[無法呼叫任何 '{0}' 類型的組成。]]></Val>
+            <Val><![CDATA[無法呼叫 '{0}' 類型的任何構件。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6676,7 +6775,7 @@
         <Str Cat="Text">
           <Val><![CDATA[No constituent of type '{0}' is constructable.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[無法建構任何 '{0}' 類型的組成。]]></Val>
+            <Val><![CDATA[無法建構 '{0}' 類型的任何構件。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6685,7 +6784,7 @@
         <Str Cat="Text">
           <Val><![CDATA[No index signature with a parameter of type '{0}' was found on type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[在類型 '{1}' 中找不到任何具有類型為 '{0}' 之參數的索引簽章。]]></Val>
+            <Val><![CDATA[在類型 '{1}' 中找不到任何具有 '{0}' 類型之參數的索引簽章。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6703,7 +6802,7 @@
         <Str Cat="Text">
           <Val><![CDATA[No overload expects {0} arguments, but overloads do exist that expect either {1} or {2} arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[沒有任何多載需要 {0} 引數，但部分多載需要 {1} 或 {2} 引數。]]></Val>
+            <Val><![CDATA[沒有任何多載需要 {0} 引數，但有多載需要 {1} 或 {2} 引數。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6712,7 +6811,7 @@
         <Str Cat="Text">
           <Val><![CDATA[No overload expects {0} type arguments, but overloads do exist that expect either {1} or {2} type arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[沒有任何多載需要 {0} 類型引數，但部分多載需要 {1} 或 {2} 類型引數。]]></Val>
+            <Val><![CDATA[沒有任何多載需要 {0} 類型引數，但有多載需要 {1} 或 {2} 類型引數。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6730,7 +6829,7 @@
         <Str Cat="Text">
           <Val><![CDATA[No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[在縮寫屬性 '{0}' 的範圍中不存在任何值。請宣告一個值或提供初始設定式。]]></Val>
+            <Val><![CDATA[速記屬性 '{0}' 的範圍中不存在任何值。請宣告一個值或提供初始設定式。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6766,7 +6865,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Non-simple parameter declared here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[非簡易參數於此處宣告。]]></Val>
+            <Val><![CDATA[非簡易參數已宣告於此處。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6784,7 +6883,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Not all constituents of type '{0}' are callable.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[無法呼叫所有 '{0}' 類型的組成。]]></Val>
+            <Val><![CDATA['{0}' 類型的構件並非都可呼叫。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6793,7 +6892,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Not all constituents of type '{0}' are constructable.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[無法建構所有 '{0}' 類型的組成。]]></Val>
+            <Val><![CDATA['{0}' 類型的構件並非都可構建。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7008,6 +7107,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Only_named_exports_may_use_export_type_1383" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Only named exports may use 'export type'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[只有具名的匯出可以使用「匯出類型」。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword_2340" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Only public and protected methods of the base class are accessible via the 'super' keyword.]]></Val>
@@ -7035,11 +7143,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Option_0_can_only_be_specified_in_tsconfig_json_file_6064" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_null_on_command_line_6230" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Option '{0}' can only be specified in 'tsconfig.json' file.]]></Val>
+          <Val><![CDATA[Option '{0}' can only be specified in 'tsconfig.json' file or set to 'false' or 'null' on command line.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[只能在 'tsconfig.json' 檔案中指定選項 '{0}'。]]></Val>
+            <Val><![CDATA[只能在 'tsconfig.json' 檔案中指定 '{0}' 選項，或在命令列上將其設定為 'false' 或 'null'。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line_6064" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Option '{0}' can only be specified in 'tsconfig.json' file or set to 'null' on command line.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[只能在 'tsconfig.json' 檔案中指定 '{0}' 選項，或在命令列上將其設定為 'null'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7057,7 +7174,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Option '{0}' cannot be specified when option 'target' is 'ES3'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[當選項 'target' 為 'ES3' 時，則無法指定選項 '{0}'。]]></Val>
+            <Val><![CDATA[當選項 'target' 為 'ES3' 時，無法指定選項 '{0}'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7111,7 +7228,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Option '--incremental' can only be specified using tsconfig, emitting to single file or when option `--tsBuildInfoFile` is specified.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[只有在使用 tsconfig、發出至單一檔案，或指定選項 `--tsBuildInfoFile` 時才可指定選項 '--incremental'。]]></Val>
+            <Val><![CDATA[只有在使用 tsconfig、發出至單一檔案，或指定選項 `--tsBuildInfoFile` 時，才可指定選項 '--incremental'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7210,7 +7327,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Overload {0} of {1}, '{2}', gave the following error.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{1}、'{2}' 的多載 {0} 發生下列錯誤。]]></Val>
+            <Val><![CDATA[{1} 的多載 {0}，'{2}'，發生下列錯誤。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7282,7 +7399,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[參數 '{0}' 隱含 '{1}' 類型，但可從使用方式推斷出更適合的類型。]]></Val>
+            <Val><![CDATA[參數 '{0}' 隱含 '{1}' 類型，但可從使用方式推斷更適合的類型。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7300,7 +7417,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of accessor has or is using name '{1}' from external module '{2}' but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[存取子的參數 '{0}' 具有 (或正在使用) 外部模組 '{2}' 中的名稱 '{1}'，但無法命名。]]></Val>
+            <Val><![CDATA[存取子的參數 '{0}' 具有 (或正在使用) 來自外部模組 '{2}' 的名稱 '{1}'，但無法予以命名。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7309,7 +7426,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of accessor has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[存取子的參數 '{0}' 具有 (或正在使用) 私人模組 '{2}' 中的名稱 '{1}'。]]></Val>
+            <Val><![CDATA[存取子的參數 '{0}' 具有 (或正在使用) 來自私人模組 '{2}' 的名稱 '{1}'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7525,7 +7642,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter has a name but no type. Did you mean '{0}: {1}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[參數具有名稱但沒有類型。您是不是指 '{0}: {1}'?]]></Val>
+            <Val><![CDATA[參數具有名稱但沒有類型。您是指 '{0}: {1}' 嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7534,7 +7651,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter modifiers can only be used in TypeScript files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[參數修飾詞只可用於 TypeScript 檔案中。]]></Val>
+            <Val><![CDATA[參數修飾元只可用於 TypeScript 檔案中。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7615,7 +7732,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Prefix all incorrect property declarations with 'declare']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[將 'declare' 前置於所有不正確的屬性宣告]]></Val>
+            <Val><![CDATA[在所有不正確屬性宣告的開頭放置 'declare']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7633,7 +7750,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Prefix with 'declare']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[使用 'declare' 做為前置詞]]></Val>
+            <Val><![CDATA[在開頭放置 'declare']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7678,7 +7795,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Print the final configuration instead of building.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[列印而非建置最終設定。]]></Val>
+            <Val><![CDATA[列印而非建置最終組態。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7696,7 +7813,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Private identifiers are not allowed in variable declarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[變數宣告中不允許使用私人識別碼。]]></Val>
+            <Val><![CDATA[變數宣告中不允許私人識別碼。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7705,7 +7822,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Private identifiers are not allowed outside class bodies.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[類別主體外不允許使用私人識別碼。]]></Val>
+            <Val><![CDATA[不允許私人識別碼位於類別主體外。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7723,7 +7840,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Private identifiers cannot be used as parameters]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[私人識別碼不可用做為參數]]></Val>
+            <Val><![CDATA[私人識別碼不可用作參數]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7732,7 +7849,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Private or protected member '{0}' cannot be accessed on a type parameter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[無法在類型參數上存取私人或受保護的成員 '{0}'。]]></Val>
+            <Val><![CDATA[無法在型別參數上存取私人或受保護的成員 '{0}'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7750,7 +7867,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' can't be built because its dependency '{1}' was not built]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[無法建置專案 '{0}'，因為未建置該專案的相依性 '{1}']]></Val>
+            <Val><![CDATA[因為未建置專案 '{0}' 的相依性 '{1}'，所以無法建置該專案]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7786,7 +7903,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' is out of date because output for it was generated with version '{1}' that differs with current version '{2}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[專案 '{0}' 已過期，因為該專案的輸出是使用版本 '{1}' 所產生，該版本與目前版本 '{2}' 不相同]]></Val>
+            <Val><![CDATA[因為專案 '{0}' 的輸出使用版本 '{1}' 產生而成，與目前的版本 '{2}' 不同，所以該專案已過期]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7795,7 +7912,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' is out of date because output of its dependency '{1}' has changed]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[專案 '{0}' 已過期，因為該專案的相依性 '{1}' 輸出已變更]]></Val>
+            <Val><![CDATA[因為專案 '{0}' 的相依性 '{1}' 輸出已變更，所以該專案已過期]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7960,7 +8077,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' in type '{1}' refers to a different member that cannot be accessed from within type '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[類型 '{1}' 中的屬性 '{0}' 適用於不同成員，該成員無法從類型 '{2}' 中存取。]]></Val>
+            <Val><![CDATA[類型 '{1}' 中的屬性 '{0}' 是無法從類型 '{2}' 中存取的其他成員。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7969,7 +8086,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' is a static member of type '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[屬性 '{0}' 為類型 '{1}' 的靜態成員]]></Val>
+            <Val><![CDATA[屬性 '{0}' 為 '{1}' 類型的靜態成員]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7996,7 +8113,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' is incompatible with rest element type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[屬性 '{0}' 與 REST 元素類型不相容。]]></Val>
+            <Val><![CDATA[屬性 '{0}' 與其餘項目類型不相容。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8014,7 +8131,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' is missing in type '{1}' but required in type '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[屬性 '{0}' 在類型 '{2}' 中為必要屬性，但其不存在於類型 '{1}' 中。]]></Val>
+            <Val><![CDATA[類型 '{1}' 缺少屬性 '{0}'，但類型 '{2}' 必須有該屬性。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8023,7 +8140,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' is not accessible outside class '{1}' because it has a private identifier.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[無法在類別 '{1}' 外存取屬性 '{0}'，因為該屬性具有私人識別碼。]]></Val>
+            <Val><![CDATA[因為屬性 '{0}' 具有私人識別碼，所以無法在類別 '{1}' 外存取該屬性。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8104,7 +8221,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' is used before its initialization.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[屬性 '{0}' 已於初始化前使用。]]></Val>
+            <Val><![CDATA[將屬性 '{0}' 初始化前已使用該屬性。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8167,7 +8284,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' was also declared here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[屬性 '{0}' 也可於此處宣告。]]></Val>
+            <Val><![CDATA[屬性 '{0}' 也已定義於此處。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8176,7 +8293,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' will overwrite the base property in '{1}'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[屬性 '{0}' 將會覆寫 '{1}' 中的基底屬性。如果此動作為特意的，請新增初始設定式。否則，請新增 'declare' 修飾詞或移除多餘的宣告。]]></Val>
+            <Val><![CDATA[屬性 '{0}' 將會覆寫 '{1}' 中的基底屬性。如果是故意覆寫的，請新增初始設定式。否則，請新增 'declare' 修飾元或移除多餘的宣告。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8338,7 +8455,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Qualified name '{0}' is not allowed without a leading '@param {object} {1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[限定名稱 '{0}' 必須以 '@param {object} {1}' 為開頭。]]></Val>
+            <Val><![CDATA[限定名稱 '{0}' 必須以 '@param {object} {1}' 開頭。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8365,7 +8482,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Re-exporting a type when the '--isolatedModules' flag is provided requires using 'export type'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[當提供 '--isolatedModules' 旗標時，重新匯出類型便需要使用 'export type'。]]></Val>
+            <Val><![CDATA[提供 '--isolatedModules' 旗標時，必須使用 'export type' 重新匯出類型。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8392,7 +8509,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove all unnecessary uses of 'await']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[移除所有對 'await' 不必要的使用]]></Val>
+            <Val><![CDATA[移除所有不必要的 'await' 使用方式]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8455,7 +8572,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove type parameters]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[移除類型參數]]></Val>
+            <Val><![CDATA[移除型別參數]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8482,7 +8599,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove unused declaration for: '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[移除未使用的宣告: '{0}']]></Val>
+            <Val><![CDATA[移除下列項目未使用的宣告: '{0}']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8713,7 +8830,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Rest parameter '{0}' implicitly has an 'any[]5D;' type, but a better type may be inferred from usage.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Rest 參數 '{0}' 隱含 'any []5D;' 類型，但可從使用方式推斷更適合的類型。]]></Val>
+            <Val><![CDATA[其餘參數 '{0}' 隱含 'any[]5D;' 類型，但可從使用方式推斷更適合的類型。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8722,7 +8839,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Rest signatures are incompatible.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[REST 簽章不相容。]]></Val>
+            <Val><![CDATA[其餘簽章不相容。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8740,7 +8857,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type annotation circularly references itself.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[傳回類型註釋會循環參考其本身。]]></Val>
+            <Val><![CDATA[傳回型別註解會循環參考自身。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9124,7 +9241,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Skipping build of project '{0}' because its dependency '{1}' was not built]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[正在跳過專案 '{0}' 的組建，因為未建置該專案的相依性 '{1}']]></Val>
+            <Val><![CDATA[因為未建置專案 '{0}' 的相依性 '{1}'，所以正在跳過該專案的組建]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9187,7 +9304,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify file to store incremental compilation information]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[指定要儲存累加式編譯資訊的檔案]]></Val>
+            <Val><![CDATA[指定要儲存累加編譯資訊的檔案]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9223,7 +9340,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify strategy for creating a polling watch when it fails to create using file system events: 'FixedInterval' (default), 'PriorityInterval', 'DynamicPriority'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[指定當無法使用下列檔案系統事件建立時，用來建立輪詢監看的策略: 'FixedInterval' (預設)、'PriorityInterval'、'DynamicPriority'。]]></Val>
+            <Val><![CDATA[指定當無法使用下列檔案系統事件建立時，建立輪詢監看的策略: 'FixedInterval' (預設)、'PriorityInterval'、'DynamicPriority'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9232,7 +9349,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify strategy for watching directory on platforms that don't support recursive watching natively: 'UseFsEvents' (default), 'FixedPollingInterval', 'DynamicPriorityPolling'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[指定在不支援原生遞迴監看的平台上，要使用的監看目錄策略: 'UseFsEvents' (預設)、'FixedPollingInterval'、'DynamicPriorityPolling'。]]></Val>
+            <Val><![CDATA[指定在不支援原生遞迴監看的平台上，監看目錄的策略: 'UseFsEvents' (預設)、'FixedPollingInterval'、'DynamicPriorityPolling'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9304,7 +9421,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Split into two separate import declarations]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[分割為兩個不同的匯入宣告]]></Val>
+            <Val><![CDATA[分割為兩個獨立的匯入宣告]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9442,7 +9559,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Substitution '{0}' in pattern '{1}' can have at most one '*' character.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[模式 '{1}' 中的替代 '{0}' 最多可以具有一個 '*' 字元。]]></Val>
+            <Val><![CDATA[模式 '{1}' 中的替代 '{0}' 最多可有一個 '*' 字元。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9514,7 +9631,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Synchronously call callbacks and update the state of directory watchers on platforms that don't support recursive watching natively.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[呼叫回呼，並同時更新不支援原生遞迴監看之平台上的目錄監控程式狀態。]]></Val>
+            <Val><![CDATA[呼叫回呼，並更新不支援原生遞迴監看之平台上的目錄監控程式狀態。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9528,11 +9645,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Tag_0_expects_at_least_1_arguments_but_the_JSX_factory_2_provides_at_most_3_6229" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[標籤 '{0}' 至少需要 '{1}' 個引數，但 JSX factory '{2}' 最多只提供 '{3}' 個。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Tagged_template_expressions_are_not_permitted_in_an_optional_chain_1358" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Tagged template expressions are not permitted in an optional chain.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[選擇性鏈中不允許已標記的範本運算式。]]></Val>
+            <Val><![CDATA[選擇性鏈結中不允許已標記的範本運算式。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9541,7 +9667,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The '{0}' modifier can only be used in TypeScript files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 修飾詞只可用於 TypeScript 檔案中。]]></Val>
+            <Val><![CDATA['{0}' 修飾元只可用於 TypeScript 檔案中。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9631,7 +9757,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The containing arrow function captures the global value of 'this'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[包含箭號函式會擷取 'this' 的全域值。]]></Val>
+            <Val><![CDATA[包含的箭號函式會擷取 'this' 的全域值。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9658,7 +9784,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The declaration of '{0}' that you probably intended to use is defined here]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[您要使用的 '{0}' 宣告是在此處定義]]></Val>
+            <Val><![CDATA[您可能要使用的 '{0}' 宣告定義於此處]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9667,7 +9793,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The expected type comes from property '{0}' which is declared here on type '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[必要的類型來自屬性 '{0}'，該屬性於類型 '{1}' 上宣告]]></Val>
+            <Val><![CDATA[所需類型來自屬性 '{0}'，該屬性宣告於此處的類型 '{1}' 上]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9676,7 +9802,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The expected type comes from the return type of this signature.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[必要的類型來自此簽章的傳回類型。]]></Val>
+            <Val><![CDATA[所需類型來自此簽章的傳回型別。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9685,7 +9811,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The expected type comes from this index signature.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[必要的類型來自此索引簽章。]]></Val>
+            <Val><![CDATA[所需類型來自此索引簽章。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9742,7 +9868,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The implementation signature is declared here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[實作簽章於此處宣告。]]></Val>
+            <Val><![CDATA[實作簽章宣告於此處。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9760,7 +9886,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The inferred type of '{0}' cannot be named without a reference to '{1}'. This is likely not portable. A type annotation is necessary.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 的推斷類型無法在未參考 '{1}' 的情況下命名。其可能非可攜式。需要類型註釋。]]></Val>
+            <Val><![CDATA['{0}' 的推斷類型無法在沒有 '{1}' 參考的情況下命名。其可能非可攜式。必須有型別註解。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9787,7 +9913,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The last overload is declared here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[最後一個多載於此處宣告。]]></Val>
+            <Val><![CDATA[最後一個多載宣告於此處。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9868,7 +9994,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[算術運算的左側必須為類型 'any'、'number'、'bigint' 或列舉類型。]]></Val>
+            <Val><![CDATA[算術運算的左側內容必須屬於 'any'、'number'、'bigint' 或列舉類型。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9985,7 +10111,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The parser expected to find a '}' to match the '{' token here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[剖析器需在此處找到與 '{' 語彙基元相符的 '}'。]]></Val>
+            <Val><![CDATA[剖析器需找到可與此處 '{' 語彙基元搭配的 '}'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9994,7 +10120,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The property '{0}' cannot be accessed on type '{1}' within this class because it is shadowed by another private identifier with the same spelling.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[無法在此類別內的類型 '{1}' 中存取屬性 '{0}'，因為其被另一個具有相同拼寫的私人識別碼遮蔽。]]></Val>
+            <Val><![CDATA[無法在此類別內的類型 '{1}' 上存取屬性 '{0}'，原因是另一個拼字相同的私人識別碼已將其陰影。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10057,7 +10183,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[算術運算的右側必須為類型 'any'、'number'、'bigint' 或列舉類型。]]></Val>
+            <Val><![CDATA[算術運算的右側內容必須屬於 'any'、'number'、'bigint' 或列舉類型。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10087,7 +10213,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The shadowing declaration of '{0}' is defined here]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 的遮蔽宣告於此處定義]]></Val>
+            <Val><![CDATA['{0}' 的陰影宣告定義於此處]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10117,7 +10243,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The target of an object rest assignment may not be an optional property access.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[物件 REST 指派的目標不可為選擇性屬性存取。]]></Val>
+            <Val><![CDATA[物件其餘指派的目標不可為選擇性屬性存取。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10153,7 +10279,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The type '{0}' is 'readonly' and cannot be assigned to the mutable type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[類型 '{0}' 為 'readonly'，且無法指派給可變類型 '{1}'。]]></Val>
+            <Val><![CDATA[類型 '{0}' 為 'readonly'，因此無法指派給可變動的類型 '{1}'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10171,7 +10297,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The type of a function declaration must match the function's signature.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[函式宣告的類型必須符合函式的簽章。]]></Val>
+            <Val><![CDATA[函式宣告的類型必須與函式的簽章相符。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10180,7 +10306,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The type returned by the '{0}()' method of an async iterator must be a promise for a type with a 'value' property.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[非同步迭代器的 '{0}()' 方法所傳回的類型，對具有 'value' 屬性的類型必須為 Promise。]]></Val>
+            <Val><![CDATA[非同步迭代器 '{0}()' 方法所傳回的類型，對具有 'value' 屬性的類型必須為 Promise。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10189,7 +10315,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The type returned by the '{0}()' method of an iterator must have a 'value' property.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[迭代器之 '{0}()' 方法所傳回的類型必須具有 'value' 屬性。]]></Val>
+            <Val><![CDATA[迭代器 '{0}()' 方法所傳回的類型必須具有 'value' 屬性。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10243,7 +10369,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This JSX tag's '{0}' prop expects a single child of type '{1}', but multiple children were provided.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此 JSX 標籤的 '{0}' 屬性需要具有單一子系的類型 '{1}'，但提供了多個子系。]]></Val>
+            <Val><![CDATA[此 JSX 標籤的 '{0}' 屬性只能有一個 '{1}' 類型的子系，但提供的子系卻有多個。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10252,7 +10378,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This JSX tag's '{0}' prop expects type '{1}' which requires multiple children, but only a single child was provided.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此 JSX 標籤的 '{0}' 屬性需要具有多個子系的類型 '{1}'，但僅提供單一子系。]]></Val>
+            <Val><![CDATA[此 JSX 標籤的 '{0}' 屬性需要必須有多個子系的類型 '{1}'，但僅提供的子系只有一個。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10261,7 +10387,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This condition will always return '{0}' since the types '{1}' and '{2}' have no overlap.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此條件會一律傳回 '{0}'，因為類型 '{1}' 與 '{2}' 並未重疊。]]></Val>
+            <Val><![CDATA[因為類型 '{1}' 與 '{2}' 未重疊，所以此條件永遠會傳回 '{0}'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10270,7 +10396,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This condition will always return true since the function is always defined. Did you mean to call it instead?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此條件會一律傳回 True，因為函式永遠具有定義。您要改為呼叫該條件嗎?]]></Val>
+            <Val><![CDATA[因為永遠會定義函式，所以此條件永遠會傳回 true。您是要改為呼叫該條件嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10306,7 +10432,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此匯入不可做為值使用，且必須使用 'import type'，因為 'importsNotUsedAsValues' 設定為 'error'。]]></Val>
+            <Val><![CDATA[因為 'importsNotUsedAsValues' 設定為 'error'，所以此匯入永遠不會作為值使用，而且必須使用 'import type'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10324,7 +10450,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This module can only be referenced with ECMAScript imports/exports by turning on the '{0}' flag and referencing its default export.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此模組只能透過 ECMAScript 匯入/匯出來參考，方法為開啟 '{0}' 旗標並參考其預設匯出。]]></Val>
+            <Val><![CDATA[只能以 ECMAScript 匯入/匯出來參考此模組，方法為開啟 '{0}' 旗標並參考其預設匯出。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10333,7 +10459,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This module is declared with using 'export =', and can only be used with a default import when using the '{0}' flag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此模組使用 'export =' 宣告，而且在使用 '{0}' 旗標時，其只能與預設匯入一起使用。]]></Val>
+            <Val><![CDATA[此模組使用 'export =' 宣告，而且在使用 '{0}' 旗標時，只能搭配預設匯入使用。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10351,7 +10477,16 @@
         <Str Cat="Text">
           <Val><![CDATA[This parameter is not allowed with 'use strict' directive.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此參數不允許使用 'use strict' 指示詞。]]></Val>
+            <Val><![CDATA[不允許此參數搭配 'use strict' 指示詞使用。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_spread_always_overwrites_this_property_2785" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This spread always overwrites this property.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[此展開會永遠覆寫此屬性。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10378,7 +10513,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[只有在 'module' 選項設定為 'esnext' 或 'system'，且 'target' 選項設定為 'es2017' 或更新版本時，才允許最上層的 'await' 運算式。]]></Val>
+            <Val><![CDATA[只有在 'module' 選項設定為 'esnext' 或 'system'，而且 'target' 選項設定為 'es2017' 或更高版本時，才允許最上層的 'await' 運算式。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10387,7 +10522,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[在 .d.ts 檔案中的最上層宣告必須以 'declare' 或 'export' 修飾詞開頭。]]></Val>
+            <Val><![CDATA[.d.ts 檔案中的最上層宣告必須以 'declare' 或 'export' 修飾元開頭。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10444,7 +10579,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Tuple type '{0}' of length '{1}' has no element at index '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{1}' 長度的 Tuple 類型 '{0}' 在索引 '{2}' 中不具有元素。]]></Val>
+            <Val><![CDATA[長度為 '{1}' 的元組類型 '{0}' 在索引 '{2}' 沒有項目。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10453,7 +10588,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Tuple type arguments circularly reference themselves.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tuple 類型引數會循環參考其本身。]]></Val>
+            <Val><![CDATA[元組類型引數會循環參考自身。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10489,7 +10624,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' has no call signatures.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[類型 '{0}' 不具有任何呼叫簽章。]]></Val>
+            <Val><![CDATA[類型 '{0}' 沒有任何呼叫簽章。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10498,7 +10633,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' has no construct signatures.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[類型 '{0}' 不具有任何建構簽章。]]></Val>
+            <Val><![CDATA[類型 '{0}' 沒有任何建構簽章。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10720,7 +10855,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type annotations can only be used in TypeScript files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[類型註釋只可用於 TypeScript 檔案中。]]></Val>
+            <Val><![CDATA[型別註解只可用於 TypeScript 檔案中。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10774,7 +10909,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type arguments for '{0}' circularly reference themselves.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 的類型引數會循環參考其本身。]]></Val>
+            <Val><![CDATA['{0}' 的類型引數會循環參考自身。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10810,7 +10945,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type instantiation is excessively deep and possibly infinite.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[類型執行個體化的深度過深，而且其深度可能為無限。]]></Val>
+            <Val><![CDATA[類型具現化過深，可能會有無限深度。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10851,6 +10986,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Type_of_property_0_circularly_references_itself_in_mapped_type_1_2615" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type of property '{0}' circularly references itself in mapped type '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[屬性 '{0}' 的類型在對應的類型 '{1}' 中會循環參考自己。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Type_of_yield_operand_in_an_async_generator_must_either_be_a_valid_promise_or_must_not_contain_a_cal_1321" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.]]></Val>
@@ -10864,7 +11008,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[類型源自此匯入。無法呼叫或建構命名空間樣式的匯入，且可能在執行階段導致失敗。請考慮改用預設匯入或於此處必要的匯入。]]></Val>
+            <Val><![CDATA[類型源自此匯入。無法呼叫或建構命名空間樣式的匯入，而且可能會在執行階段導致失敗。請考慮改用預設匯入或此處要求的匯入。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10936,7 +11080,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of exported mapped object type is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[已匯出對應物件類型的類型參數 '{0}' 正在使用私人名稱 '{1}'。]]></Val>
+            <Val><![CDATA[已匯出對應物件類型的型別參數 '{0}' 正在使用私人名稱 '{1}'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10990,7 +11134,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter declarations can only be used in TypeScript files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[類型參數宣告只可用於 TypeScript 檔案中。]]></Val>
+            <Val><![CDATA[型別參數宣告只可用於 TypeScript 檔案中。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10999,7 +11143,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter defaults can only reference previously declared type parameters.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[類型參數預設只能參考先前宣告的類型參數。]]></Val>
+            <Val><![CDATA[型別參數預設只能參考先前宣告的型別參數。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11182,7 +11326,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Unexpected token. Did you mean `{'>'}` or `&gt;`?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未預期的語彙基元。您是不是指 `{'>'}` 或 `&gt;`?]]></Val>
+            <Val><![CDATA[未預期的語彙基元。您是指 `{'>'}` 或 `&gt;` 嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11191,7 +11335,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Unexpected token. Did you mean `{'}'}` or `&rbrace;`?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未預期的語彙基元。您是不是指 `{'}'}` 或 `&rbrace;`?]]></Val>
+            <Val><![CDATA[未預期的語彙基元。您是指 `{'}'}` 或 `&rbrace;` 嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11218,7 +11362,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Unknown build option '{0}'. Did you mean '{1}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未知的組建選項 '{0}'。您是不是指 '{1}'?]]></Val>
+            <Val><![CDATA[未知的組建選項 '{0}'。您是指 '{1}' 嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11236,7 +11380,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Unknown compiler option '{0}'. Did you mean '{1}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未知的編譯器選項 '{0}'。您是不是指 '{1}'?]]></Val>
+            <Val><![CDATA[未知的編譯器選項 '{0}'。您是指 '{1}' 嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11263,7 +11407,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Unknown type acquisition option '{0}'. Did you mean '{1}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未知的類型擷取選項 '{0}'。您是不是指 '{1}'?]]></Val>
+            <Val><![CDATA[未知的類型擷取選項 '{0}'。您是指 '{1}' 嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11281,7 +11425,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Unknown watch option '{0}'. Did you mean '{1}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未知的監看選項 '{0}'。您是不是指 '{1}'?]]></Val>
+            <Val><![CDATA[未知的監看選項 '{0}'。您是指 '{1}' 嗎?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11363,6 +11507,15 @@
           <Val><![CDATA[Unused label.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[未使用的標籤。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Unused_ts_expect_error_directive_2578" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Unused '@ts-expect-error' directive.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[未使用的 '@ts-expect-error' 指示詞。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11461,7 +11614,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Variable '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[變數 '{0}' 隱含 '{1}' 類型，但可從使用方式推斷出更適合的類型。]]></Val>
+            <Val><![CDATA[變數 '{0}' 隱含 '{1}' 類型，但可從使用方式推斷更適合的類型。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11470,7 +11623,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Variable '{0}' implicitly has type '{1}' in some locations, but a better type may be inferred from usage.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[變數 '{0}' 在某些位置隱含類型 '{1}'，但可從使用方式推斷出更適合的類型。]]></Val>
+            <Val><![CDATA[變數 '{0}' 在某些位置隱含類型 '{1}'，但可從使用方式推斷更適合的類型。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11533,7 +11686,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Watch option '{0}' requires a value of type {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[監看選項 '{0}' 需要類型 {1} 的值。]]></Val>
+            <Val><![CDATA[監看選項 '{0}' 需要 {1} 類型的值。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11547,11 +11700,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Wrap_invalid_character_in_an_expression_container_95101" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Wrap_all_invalid_characters_in_an_expression_container_95109" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Wrap all invalid characters in an expression container]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[將所有無效字元包裝在運算式容器中]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Wrap_invalid_character_in_an_expression_container_95108" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Wrap invalid character in an expression container]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[包裝運算式容器中的無效字元]]></Val>
+            <Val><![CDATA[包裝在運算式容器中的字元無效]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11596,7 +11758,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' and '{1}' operations cannot be mixed without parentheses.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 與 '{1}' 作業無法在沒有括弧的情況下同時使用。]]></Val>
+            <Val><![CDATA['{0}' 與 '{1}' 作業無法在沒有括號的情況下同時使用。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11614,7 +11776,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' cannot be used as a value because it was exported using 'export type'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 不能作為值，因為其是使用 'export type' 匯出。]]></Val>
+            <Val><![CDATA[因為 '{0}' 是使用 'export type' 匯出的，所以無法作為值使用。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11623,7 +11785,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' cannot be used as a value because it was imported using 'import type'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 不能作為值，因為其是使用 'import type' 匯入。]]></Val>
+            <Val><![CDATA[因為 '{0}' 是使用 'import type' 匯入的，所以無法作為值使用。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11632,7 +11794,16 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of '{1}' is '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 元件不接受文字做為子元素。JSX 中的文字具有類型 'string'，但 '{1}' 的需要類型為 '{2}'。]]></Val>
+            <Val><![CDATA['{0}' 元件不接受文字作為子項目。JSX 中的文字具有類型 'string'，但 '{1}' 需要的類型為 '{2}'。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_could_be_instantiated_with_an_arbitrary_type_which_could_be_unrelated_to_1_5082" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' could be instantiated with an arbitrary type which could be unrelated to '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 可以使用與 '{1}' 無關的任意類型來具現化。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11659,7 +11830,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' implicitly has an '{1}' return type, but a better type may be inferred from usage.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 隱含 '{1}' 傳回類型，但可從使用方式推斷出更適合的類型。]]></Val>
+            <Val><![CDATA['{0}' 隱含 '{1}' 傳回型別，但可從使用方式推斷更適合的類型。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11695,7 +11866,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' is assignable to the constraint of type '{1}', but '{1}' could be instantiated with a different subtype of constraint '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 可指派給類型 '{1}' 的條件約束，但 '{1}' 可能是以不同的條件約束 '{2}' 子類型來執行個體化。]]></Val>
+            <Val><![CDATA['{0}' 可指派給 '{1}' 類型的條件約束，但可能會將 '{1}' 以不同的條件約束 '{2}' 子類型來具現化。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11722,7 +11893,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' is declared here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 於此處宣告。]]></Val>
+            <Val><![CDATA['{0}' 宣告於此處。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11731,7 +11902,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' is defined as a property in class '{1}', but is overridden here in '{2}' as an accessor.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 在類別 '{1}' 中定義為屬性，但在 '{2}' 中會被覆寫為存取子。]]></Val>
+            <Val><![CDATA['{0}' 在類別 '{1}' 中定義為屬性，但在此處的 '{2}' 中卻覆寫為存取子。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11740,7 +11911,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' is defined as an accessor in class '{1}', but is overridden here in '{2}' as an instance property.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 在類別 '{1}' 中定義為存取子，但會在 '{2}' 中會被覆寫為屬性。]]></Val>
+            <Val><![CDATA['{0}' 在類別 '{1}' 中定義為存取子，但在此處的 '{2}' 中卻覆寫為執行個體屬性。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11776,7 +11947,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' is specified more than once, so this usage will be overwritten.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 被指定了一次以上，因此將覆寫此使用方式。]]></Val>
+            <Val><![CDATA[多次指定 '{0}'，因此將會覆寫此使用方式。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11902,7 +12073,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' modifier cannot be used with a private identifier]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 修飾元無法與私人識別碼同時使用]]></Val>
+            <Val><![CDATA['{0}' 修飾元不可搭配私人識別碼使用]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11920,7 +12091,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' needs an explicit type annotation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 需要明確的類型註釋。]]></Val>
+            <Val><![CDATA['{0}' 需要明確的型別註解。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11947,7 +12118,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 只適用於類型，但在此處做為值使用。您需要變更您的目標程式庫嗎? 嘗試將 `lib` 編譯器選項變更為 es2015 或更新版本。]]></Val>
+            <Val><![CDATA['{0}' 只是類型，但在此處卻作為值使用。需要變更您的目標程式庫嗎? 請嘗試將 `lib` 編譯器選項變更為 es2015 或更新版本。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11961,11 +12132,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";_0_refers_to_a_value_but_is_being_used_as_a_type_here_2749" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";_0_refers_to_a_value_but_is_being_used_as_a_type_here_Did_you_mean_typeof_0_2749" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA['{0}' refers to a value, but is being used as a type here.]]></Val>
+          <Val><![CDATA['{0}' refers to a value, but is being used as a type here. Did you mean 'typeof {0}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 只適用於值，但在此處做為類型使用。]]></Val>
+            <Val><![CDATA['{0}' 為值，但在此處卻作為類型使用。您是否是指 'typeof {0}'?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11992,7 +12163,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' was also declared here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 也已於此處宣告。]]></Val>
+            <Val><![CDATA['{0}' 也已宣告於此處。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12001,7 +12172,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' was exported here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 已於此處匯出。]]></Val>
+            <Val><![CDATA['{0}' 已匯出到此處。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12010,7 +12181,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' was imported here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 已於此處匯入。]]></Val>
+            <Val><![CDATA['{0}' 已匯入到此處。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12028,7 +12199,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}', which lacks return-type annotation, implicitly has an '{1}' yield type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[缺少傳回類型註釋的 '{0}' 隱含了 '{1}' yield 類型。]]></Val>
+            <Val><![CDATA[缺少傳回型別註解的 '{0}' 隱含 '{1}' 產生類型。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12055,7 +12226,7 @@
         <Str Cat="Text">
           <Val><![CDATA['await' expressions are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[當檔案為模組時，'await' 運算式只允許位於檔案的最上層，但是此檔案沒有匯入或匯出。請考慮新增空白的 'export {}'，使這個檔案成為模組。]]></Val>
+            <Val><![CDATA[當檔案為模組時，只允許 'await' 運算式位於檔案的最上層，但是此檔案沒有匯入或匯出。請考慮新增空白的 'export {}'，使這個檔案成為模組。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12064,7 +12235,7 @@
         <Str Cat="Text">
           <Val><![CDATA['await' expressions are only allowed within async functions and at the top levels of modules.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['await' 運算式只允許在非同步函式與模組的最上層中執行。]]></Val>
+            <Val><![CDATA[只允許在非同步函式中與模組的最上層使用 'await' 運算式。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12103,7 +12274,7 @@
         <Str Cat="Text">
           <Val><![CDATA['#!' can only be used at the start of a file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['#!' 只能於檔案開頭使用。]]></Val>
+            <Val><![CDATA['#!' 只能用於檔案開頭。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12178,7 +12349,7 @@
         <Str Cat="Text">
           <Val><![CDATA[const enum member initializers can only contain literal values and other computed enum values.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[常數列舉成員初始設定式只能包含常值與其他計算的列舉值。]]></Val>
+            <Val><![CDATA[常數列舉成員初始設定式只能包含常值與其他計算列舉值。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12192,6 +12363,15 @@
           <Prev Cat="Text">
             <Val><![CDATA['const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";constructor_cannot_be_used_as_a_parameter_property_name_2398" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['constructor' cannot be used as a parameter property name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['constructor' 不能作為參數屬性名稱使用。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12299,6 +12479,15 @@
           <Val><![CDATA['get' and 'set' accessor must have the same type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[get' 和 'set' 存取子的類型必須相同。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";get_and_set_accessors_cannot_declare_this_parameters_2784" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['get' and 'set' accessors cannot declare 'this' parameters.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['get' 和 'set' 存取子不可宣告 'this' 參數。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12424,7 +12613,7 @@
         <Str Cat="Text">
           <Val><![CDATA['package.json' has a 'typesVersions' entry '{0}' that is not a valid semver range.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['package.json' 具有 'typesVersions' 項目 '{0}'，此非有效的 SemVer 範圍。]]></Val>
+            <Val><![CDATA['package.json' 具有 'typesVersions' 項目 '{0}'，其非有效的 SemVer 範圍。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12433,7 +12622,7 @@
         <Str Cat="Text">
           <Val><![CDATA['package.json' has a 'typesVersions' entry '{0}' that matches compiler version '{1}', looking for a pattern to match module name '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['package.json' 具有符合編譯器版本 '{1}' 的 'typesVersions' 項目 '{0}'，正在尋找符合模組名稱 '{2}' 的模式。]]></Val>
+            <Val><![CDATA['package.json' 具有符合編譯器版本 '{1}' 的 'typesVersions' 項目 '{0}'，要尋找符合模組名稱 '{2}' 的模式。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12442,7 +12631,7 @@
         <Str Cat="Text">
           <Val><![CDATA['package.json' has a 'typesVersions' field with version-specific path mappings.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['package. json' 具有限定版本路徑對應的 'typesVersions' 欄位。]]></Val>
+            <Val><![CDATA['package.json' 具有限定版本路徑對應的 'typesVersions' 欄位。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12469,7 +12658,7 @@
         <Str Cat="Text">
           <Val><![CDATA['readonly' type modifier is only permitted on array and tuple literal types.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['readonly' 類型修飾詞只允許用於陣列與 Tuple 常值類型。]]></Val>
+            <Val><![CDATA['readonly' 類型修飾元只可用於陣列與元組常值類型。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12679,7 +12868,7 @@
         <Str Cat="Text">
           <Val><![CDATA['use strict' directive used here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['use strict' 指示詞於此處使用。]]></Val>
+            <Val><![CDATA['use strict' 指示詞已用於此處。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

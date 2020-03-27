@@ -1014,6 +1014,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_all_missing_call_parentheses_95068" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add all missing call parentheses]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[見つからない呼び出しのかっこをすべて追加します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_all_missing_imports_95064" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add all missing imports]]></Val>
@@ -1082,6 +1091,15 @@
           <Val><![CDATA[Add braces to arrow function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[アロー関数に中かっこを追加します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_class_tag_95102" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add '@class' tag]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['@class' タグの追加]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1170,6 +1188,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_missing_call_parentheses_95067" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add missing call parentheses]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[見つからない呼び出しのかっこを追加します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_missing_enum_member_0_95063" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add missing enum member '{0}']]></Val>
@@ -1250,6 +1277,24 @@
           <Val><![CDATA[Add qualifier to all unresolved variables matching a member name]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[メンバー名と一致するすべての未解決の変数に修飾子を追加します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_this_parameter_95104" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add 'this' parameter.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['this' パラメーターを追加します。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_this_tag_95103" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add '@this' tag]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['@this' タグの追加]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1618,7 +1663,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An enum member name must be followed by a ',', '=', or '}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[列挙型メンバー名の後ろには、','、'='、'}' のいずれかを指定する必要があります。]]></Val>
+            <Val><![CDATA[列挙型メンバー名の後には、','、'='、'}' のいずれかを指定する必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2062,7 +2107,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Assertions require the call target to be an identifier or qualified name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[アサーションでは、呼び出し元が識別子または修飾名である必要があります。]]></Val>
+            <Val><![CDATA[アサーションでは、呼び出し先が識別子または修飾名である必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2460,20 +2505,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_module_0_2307" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Cannot find module '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[モジュール '{0}' が見つかりません。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Cannot_find_module_0_Consider_using_resolveJsonModule_to_import_module_with_json_extension_2732" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[モジュール '{0}' が見つかりません。'--resolveJsonModule ' を使用して'.json' 拡張子を持つモジュールをインポートすることを検討してください]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Cannot_find_module_0_or_its_corresponding_type_declarations_2307" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot find module '{0}' or its corresponding type declarations.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[モジュール '{0}' またはそれに対応する型宣言が見つかりません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3279,6 +3324,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_all_invalid_characters_to_HTML_entity_code_95101" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert all invalid characters to HTML entity code]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[すべての無効な文字を HTML エンティティ コードに変換する]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_all_re_exported_types_to_type_only_exports_1365" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert all re-exported types to type-only exports]]></Val>
@@ -3347,6 +3401,24 @@
           <Val><![CDATA[Convert function '{0}' to class]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[関数 '{0}' をクラスに変換します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_function_declaration_0_to_arrow_function_95106" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert function declaration '{0}' to arrow function]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[関数宣言 '{0}' をアロー関数に変換する]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_function_expression_0_to_arrow_function_95105" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert function expression '{0}' to arrow function]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[関数の式 '{0}' をアロー関数に変換する]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3495,6 +3567,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Could_not_resolve_the_path_0_with_the_extensions_Colon_1_6231" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Could not resolve the path '{0}' with the extensions: {1}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[次の拡張子を持つパス '{0}' を解決できませんでした: {1}。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Could_not_write_file_0_Colon_1_5033" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Could not write file '{0}': {1}.]]></Val>
@@ -3579,6 +3660,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Declare method '{0}'.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Declare_private_property_0_90035" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declare private property '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[プライベート プロパティ '{0}' を宣言します]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4998,6 +5088,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Fix_all_implicit_this_errors_95107" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Fix all implicit-'this' errors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[すべての暗黙的な 'this' エラーを修正する]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Found_0_errors_6217" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Found {0} errors.]]></Val>
@@ -5365,7 +5464,7 @@
         <Str Cat="Text">
           <Val><![CDATA[If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}`]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' パッケージが実際にこのモジュールを公開する場合は、pull request を送信して 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}' を修正することを検討してください。]]></Val>
+            <Val><![CDATA['{0}' パッケージが実際にこのモジュールを公開する場合は、pull request を送信して 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}' を修正することを検討してください]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6310,7 +6409,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Member '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[メンバー '{0}' の型は暗黙的に '{1}' になっていますが、使い方からより良い方を推論できます。]]></Val>
+            <Val><![CDATA[メンバー '{0}' の型は暗黙的に '{1}' ですが、使い方からより良い型を推論する場合があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7008,6 +7107,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Only_named_exports_may_use_export_type_1383" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Only named exports may use 'export type'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['export type' を使用できるのは名前付きエクスポートのみです。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword_2340" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Only public and protected methods of the base class are accessible via the 'super' keyword.]]></Val>
@@ -7035,11 +7143,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Option_0_can_only_be_specified_in_tsconfig_json_file_6064" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_null_on_command_line_6230" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Option '{0}' can only be specified in 'tsconfig.json' file.]]></Val>
+          <Val><![CDATA[Option '{0}' can only be specified in 'tsconfig.json' file or set to 'false' or 'null' on command line.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[オプション '{0}' は 'tsconfig.json' ファイルにのみ指定できます。]]></Val>
+            <Val><![CDATA[オプション '{0}' は、'tsconfig.json' ファイルで指定することか、コマンド ラインで 'false' または 'null' に設定することしかできません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line_6064" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Option '{0}' can only be specified in 'tsconfig.json' file or set to 'null' on command line.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[オプション '{0}' は、'tsconfig.json' ファイルで指定することか、コマンド ラインで 'null' に設定することしかできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7210,7 +7327,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Overload {0} of {1}, '{2}', gave the following error.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{1} のうち {0}、'{2}' のオーバーロードにより、次のエラーが発生しました。]]></Val>
+            <Val><![CDATA[{1}、'{2}' の {0} のオーバーロードにより、次のエラーが発生しました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7651,7 +7768,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Print names of files that are part of the compilation and then stop processing.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[コンパイルの一部であるファイルの名前の表示を実行してから、処理を停止します。]]></Val>
+            <Val><![CDATA[コンパイルの一部であるファイルの名前を出力してから、処理を停止します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7678,7 +7795,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Print the final configuration instead of building.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ビルドを実行するのではなく、最終的な構成を表示します。]]></Val>
+            <Val><![CDATA[ビルドを実行するのではなく、最終的な構成を出力します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7921,7 +8038,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' implicitly has type 'any', but a better type for its get accessor may be inferred from usage.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プロパティ '{0}' の型は暗黙的に 'any' になっていますが、その get アクセサーのより良い型を使い方から推論できます。]]></Val>
+            <Val><![CDATA[プロパティ '{0}' の型は暗黙的に 'any' ですが、その get アクセサーのために、使い方からより良い型を推論する場合があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8713,7 +8830,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Rest parameter '{0}' implicitly has an 'any[]5D;' type, but a better type may be inferred from usage.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[rest パラメーター '{0}' の型は暗黙的に 'any[]5D;' 型になっていますが、使い方からより良い型を推論できます。]]></Val>
+            <Val><![CDATA[rest パラメーター '{0}' の型は暗黙的に 'any[]5D;' 型ですが、使い方からより良い型を推論する場合があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9160,7 +9277,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ECMAScript のターゲット バージョンを指定します。'ES3' (既定値)、'ES5'、'ES2015'、'ES2016'、'ES2017'、'ES2018'、'ES2019'、'ES2020'、'ESNEXT']]></Val>
+            <Val><![CDATA[ECMAScript のターゲット バージョンを指定します: 'ES3' (既定値)、'ES5'、'ES2015'、'ES2016'、'ES2017'、'ES2018'、'ES2019'、'ES2020'、'ESNEXT'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9205,7 +9322,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[モジュール コードの生成を指定します。'none'、'commonjs'、'amd'、'system'、'umd'、'es2015'、'es2020、'ESNext'。]]></Val>
+            <Val><![CDATA[モジュール コードの生成を指定します: 'none'、'commonjs'、'amd'、'system'、'umd'、'es2015'、'es2020、'ESNext'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9223,7 +9340,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify strategy for creating a polling watch when it fails to create using file system events: 'FixedInterval' (default), 'PriorityInterval', 'DynamicPriority'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ファイル システムのイベントを使用して作成できなかった場合に、ポーリング監視を作成する方法を指定します。'FixedInterval' (既定)、'PriorityInterval'、'DynamicPriority'。]]></Val>
+            <Val><![CDATA[ファイル システムのイベントを使用して作成できなかった場合に、ポーリング監視を作成する方法を指定します: 'FixedInterval' (既定)、'PriorityInterval'、'DynamicPriority'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9232,7 +9349,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify strategy for watching directory on platforms that don't support recursive watching natively: 'UseFsEvents' (default), 'FixedPollingInterval', 'DynamicPriorityPolling'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[再帰的な監視をサポートしていないプラットフォーム上のディレクトリを監視する方法を指定します。'UseFsEvents' (既定)、'FixedPollingInterval'、'DynamicPriorityPolling'。]]></Val>
+            <Val><![CDATA[再帰的な監視をネイティブでサポートしていないプラットフォーム上のディレクトリを監視する方法を指定します: 'UseFsEvents' (既定)、'FixedPollingInterval'、'DynamicPriorityPolling'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9241,7 +9358,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify strategy for watching file: 'FixedPollingInterval' (default), 'PriorityPollingInterval', 'DynamicPriorityPolling', 'UseFsEvents', 'UseFsEventsOnParentDirectory'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ファイルの監視方法を指定します。'FixedPollingInterval' (既定)、'PriorityPollingInterval'、'DynamicPriorityPolling'、'UseFsEvents'、'UseFsEventsOnParentDirectory'。]]></Val>
+            <Val><![CDATA[ファイルの監視方法を指定します: 'FixedPollingInterval' (既定)、'PriorityPollingInterval'、'DynamicPriorityPolling'、'UseFsEvents'、'UseFsEventsOnParentDirectory'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9524,6 +9641,15 @@
           <Val><![CDATA[Syntax: {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[構文: {0}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Tag_0_expects_at_least_1_arguments_but_the_JSX_factory_2_provides_at_most_3_6229" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[タグ '{0}' には少なくとも '{1}' 個の引数が必要ですが、JSX ファクトリ '{2}' で提供されるのは最大 '{3}' 個です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9868,7 +9994,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[算術演算の左辺には、'any' 型、'number' 型、'bigint' 型または列挙型を指定する必要があります。]]></Val>
+            <Val><![CDATA[算術演算の左辺には、'any' 型、'number' 型、'bigint' 型、または列挙型を指定する必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9985,7 +10111,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The parser expected to find a '}' to match the '{' token here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[パーサーは、'{' トークンに一致する '}' を予期していました。]]></Val>
+            <Val><![CDATA[パーサーは、ここで '{' トークンに一致する '}' を予期していました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10057,7 +10183,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[算術演算の右辺には、'any' 型、'number' 型、'bigint' 型または列挙型を指定する必要があります。]]></Val>
+            <Val><![CDATA[算術演算の右辺には、'any' 型、'number' 型、'bigint' 型、または列挙型を指定する必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10171,7 +10297,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The type of a function declaration must match the function's signature.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[関数宣言の型は、関数のシグネチャと一致する必要があります。]]></Val>
+            <Val><![CDATA[関数の宣言の型は、関数のシグネチャと一致する必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10356,6 +10482,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_spread_always_overwrites_this_property_2785" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This spread always overwrites this property.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[このスプレッドは、常にこのプロパティを上書きします。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found_2354" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This syntax requires an imported helper but module '{0}' cannot be found.]]></Val>
@@ -10525,7 +10660,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is missing the following properties from type '{1}': {2}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型 '{0}' には 型 '{1}': {2} からの次のプロパティがありません]]></Val>
+            <Val><![CDATA[型 '{0}' には 型 '{1}' からの次のプロパティがありません: {2}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10534,7 +10669,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is missing the following properties from type '{1}': {2}, and {3} more.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型 '{0}' には 型 '{1}': {2}、{3} などからの次のプロパティがありません]]></Val>
+            <Val><![CDATA[型 '{0}' には 型 '{1}' からの次のプロパティがありません: {2}、{3} など。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10851,6 +10986,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Type_of_property_0_circularly_references_itself_in_mapped_type_1_2615" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type of property '{0}' circularly references itself in mapped type '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[マップされた型 '{1}' で、プロパティ '{0}' の型によってそれ自体が循環参照されています。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Type_of_yield_operand_in_an_async_generator_must_either_be_a_valid_promise_or_must_not_contain_a_cal_1321" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.]]></Val>
@@ -10864,7 +11008,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型はこのインポートから生成されます。名前空間スタイルのインポートは、呼び出すこともコンストラクトすることもできず、実行時にエラーが発生します。代わりに、既定のインポートまたはインポートの要求を使用することを検討してください。]]></Val>
+            <Val><![CDATA[型はこのインポートで生成されます。名前空間スタイルのインポートは、呼び出すこともコンストラクトすることもできず、実行時にエラーが発生します。代わりに、ここで既定のインポートまたはインポートの要求を使用することを検討してください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11367,6 +11511,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Unused_ts_expect_error_directive_2578" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Unused '@ts-expect-error' directive.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['@ts-expect-error' ディレクティブが使用されていません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Updating_output_of_project_0_6373" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Updating output of project '{0}'...]]></Val>
@@ -11547,7 +11700,16 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Wrap_invalid_character_in_an_expression_container_95101" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Wrap_all_invalid_characters_in_an_expression_container_95109" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Wrap all invalid characters in an expression container]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[式のコンテナー内のすべての無効な文字をラップする]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Wrap_invalid_character_in_an_expression_container_95108" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Wrap invalid character in an expression container]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
@@ -11633,6 +11795,15 @@
           <Val><![CDATA['{0}' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of '{1}' is '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' コンポーネントには、テキストを子要素として指定できません。JSX のテキストには 'string' 型が含まれていますが、'{1}' の予期された型は '{2}' です。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_could_be_instantiated_with_an_arbitrary_type_which_could_be_unrelated_to_1_5082" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' could be instantiated with an arbitrary type which could be unrelated to '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{1}' に関連しない可能性のある任意の型で '{0}' をインスタンス化できます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11961,11 +12132,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";_0_refers_to_a_value_but_is_being_used_as_a_type_here_2749" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";_0_refers_to_a_value_but_is_being_used_as_a_type_here_Did_you_mean_typeof_0_2749" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA['{0}' refers to a value, but is being used as a type here.]]></Val>
+          <Val><![CDATA['{0}' refers to a value, but is being used as a type here. Did you mean 'typeof {0}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' は値を参照しますが、ここでは型として使用されています。]]></Val>
+            <Val><![CDATA['{0}' は値を参照していますが、ここでは型として使用されています。'typeof {0}' を意図していましたか?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12178,7 +12349,7 @@
         <Str Cat="Text">
           <Val><![CDATA[const enum member initializers can only contain literal values and other computed enum values.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[定数列挙型メンバーの初期化子には、リテラル値および他の計算された列挙型の値のみを含めることができます。]]></Val>
+            <Val><![CDATA[const 列挙型メンバーの初期化子には、リテラル値および他の計算された列挙型の値のみを含めることができます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12192,6 +12363,15 @@
           <Prev Cat="Text">
             <Val><![CDATA['const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";constructor_cannot_be_used_as_a_parameter_property_name_2398" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['constructor' cannot be used as a parameter property name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['constructor' をパラメーターのプロパティ名として使用することはできません。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12299,6 +12479,15 @@
           <Val><![CDATA['get' and 'set' accessor must have the same type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['get' アクセサーと 'set' アクセサーは同じ型でなければなりません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";get_and_set_accessors_cannot_declare_this_parameters_2784" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['get' and 'set' accessors cannot declare 'this' parameters.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['get' および 'set' アクセサーでは 'this' パラメーターを宣言できません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

@@ -13,7 +13,7 @@ var test = /** @class */ (function () {
     Object.defineProperty(test.prototype, "p2", {
         get: function () {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return test;

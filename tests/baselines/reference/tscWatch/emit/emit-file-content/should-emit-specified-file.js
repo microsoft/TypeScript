@@ -27,6 +27,7 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/a/b/f1.js]
 "use strict";
 exports.__esModule = true;
+exports.Foo = void 0;
 function Foo() { return 10; }
 exports.Foo = Foo;
 
@@ -34,6 +35,7 @@ exports.Foo = Foo;
 //// [/a/b/f2.js]
 "use strict";
 exports.__esModule = true;
+exports.y = void 0;
 var f1_1 = require("./f1");
 exports.y = f1_1.Foo();
 
@@ -48,11 +50,11 @@ var x = f2_1.y;
 
 Output::
 >> Screen clear
-12:00:19 AM - Starting compilation in watch mode...
+[[90m12:00:19 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:26 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/f1.ts","/a/b/f2.ts","/a/b/f3.ts"]
@@ -99,6 +101,7 @@ export function Foo() { return 10; }export function foo2() { return 2; }
 //// [/a/b/f1.js]
 "use strict";
 exports.__esModule = true;
+exports.foo2 = exports.Foo = void 0;
 function Foo() { return 10; }
 exports.Foo = Foo;
 function foo2() { return 2; }
@@ -109,11 +112,11 @@ exports.foo2 = foo2;
 
 Output::
 >> Screen clear
-12:00:29 AM - File change detected. Starting incremental compilation...
+[[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:36 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/f1.ts","/a/b/f2.ts","/a/b/f3.ts"]

@@ -8,9 +8,9 @@ export var b = foo;
 //// [privacyCheckTypeOfFunction.js]
 "use strict";
 exports.__esModule = true;
+exports.b = exports.x = void 0;
 function foo() {
 }
-exports.x = void 0;
 exports.b = foo;
 
 

@@ -14,6 +14,7 @@ export { MyConstEnum as default } from './ConstEnum';
 //// [ConstEnum.js]
 "use strict";
 exports.__esModule = true;
+exports.MyConstEnum = void 0;
 var MyConstEnum;
 (function (MyConstEnum) {
     MyConstEnum[MyConstEnum["Foo"] = 0] = "Foo";

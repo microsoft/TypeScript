@@ -700,19 +700,21 @@ namespace ts.FindAllReferences {
                 }
             });
 
-            for (const decl of symbol.declarations) {
-                switch (decl.kind) {
-                    case SyntaxKind.SourceFile:
-                        // Don't include the source file itself. (This may not be ideal behavior, but awkward to include an entire file as a reference.)
-                        break;
-                    case SyntaxKind.ModuleDeclaration:
-                        if (sourceFilesSet.has(decl.getSourceFile().fileName)) {
-                            references.push(nodeEntry((decl as ModuleDeclaration).name));
-                        }
-                        break;
-                    default:
-                        // This may be merged with something.
-                        Debug.assert(!!(symbol.flags & SymbolFlags.Transient), "Expected a module symbol to be declared by a SourceFile or ModuleDeclaration.");
+            if (symbol.declarations) {
+                for (const decl of symbol.declarations) {
+                    switch (decl.kind) {
+                        case SyntaxKind.SourceFile:
+                            // Don't include the source file itself. (This may not be ideal behavior, but awkward to include an entire file as a reference.)
+                            break;
+                        case SyntaxKind.ModuleDeclaration:
+                            if (sourceFilesSet.has(decl.getSourceFile().fileName)) {
+                                references.push(nodeEntry((decl as ModuleDeclaration).name));
+                            }
+                            break;
+                        default:
+                            // This may be merged with something.
+                            Debug.assert(!!(symbol.flags & SymbolFlags.Transient), "Expected a module symbol to be declared by a SourceFile or ModuleDeclaration.");
+                    }
                 }
             }
 
@@ -1075,6 +1077,8 @@ namespace ts.FindAllReferences {
 
         // Go to the symbol we imported from and find references for it.
         function searchForImportedSymbol(symbol: Symbol, state: State): void {
+            if (!symbol.declarations) return;
+
             for (const declaration of symbol.declarations) {
                 const exportingFile = declaration.getSourceFile();
                 // Need to search in the file even if it's not in the search-file set, because it might export the symbol.
@@ -1170,16 +1174,16 @@ namespace ts.FindAllReferences {
         }
 
         /** Used as a quick check for whether a symbol is used at all in a file (besides its definition). */
-        export function isSymbolReferencedInFile(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile): boolean {
-            return eachSymbolReferenceInFile(definition, checker, sourceFile, () => true) || false;
+        export function isSymbolReferencedInFile(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile, searchContainer: Node = sourceFile): boolean {
+            return eachSymbolReferenceInFile(definition, checker, sourceFile, () => true, searchContainer) || false;
         }
 
-        export function eachSymbolReferenceInFile<T>(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile, cb: (token: Identifier) => T): T | undefined {
+        export function eachSymbolReferenceInFile<T>(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile, cb: (token: Identifier) => T, searchContainer: Node = sourceFile): T | undefined {
             const symbol = isParameterPropertyDeclaration(definition.parent, definition.parent.parent)
                 ? first(checker.getSymbolsOfParameterPropertyDeclaration(definition.parent, definition.text))
                 : checker.getSymbolAtLocation(definition);
             if (!symbol) return undefined;
-            for (const token of getPossibleSymbolReferenceNodes(sourceFile, symbol.name)) {
+            for (const token of getPossibleSymbolReferenceNodes(sourceFile, symbol.name, searchContainer)) {
                 if (!isIdentifier(token) || token === definition || token.escapedText !== definition.escapedText) continue;
                 const referenceSymbol: Symbol = checker.getSymbolAtLocation(token)!; // See GH#19955 for why the type annotation is necessary
                 if (referenceSymbol === symbol
@@ -1554,7 +1558,7 @@ namespace ts.FindAllReferences {
          */
         function findOwnConstructorReferences(classSymbol: Symbol, sourceFile: SourceFile, addNode: (node: Node) => void): void {
             const constructorSymbol = getClassConstructorSymbol(classSymbol);
-            if (constructorSymbol) {
+            if (constructorSymbol && constructorSymbol.declarations) {
                 for (const decl of constructorSymbol.declarations) {
                     const ctrKeyword = findChildOfKind(decl, SyntaxKind.ConstructorKeyword, sourceFile)!;
                     Debug.assert(decl.kind === SyntaxKind.Constructor && !!ctrKeyword);
@@ -1586,7 +1590,7 @@ namespace ts.FindAllReferences {
         /** Find references to `super` in the constructor of an extending class.  */
         function findSuperConstructorAccesses(classDeclaration: ClassLikeDeclaration, addNode: (node: Node) => void): void {
             const constructor = getClassConstructorSymbol(classDeclaration.symbol);
-            if (!constructor) {
+            if (!(constructor && constructor.declarations)) {
                 return;
             }
 
@@ -1722,7 +1726,7 @@ namespace ts.FindAllReferences {
             // Set the key so that we don't infinitely recurse
             cachedResults.set(key, false);
 
-            const inherits = symbol.declarations.some(declaration =>
+            const inherits = !!symbol.declarations && symbol.declarations.some(declaration =>
                 getAllSuperTypeNodes(declaration).some(typeReference => {
                     const type = checker.getTypeAtLocation(typeReference);
                     return !!type && !!type.symbol && explicitlyInheritsFrom(type.symbol, parent, cachedResults, checker);

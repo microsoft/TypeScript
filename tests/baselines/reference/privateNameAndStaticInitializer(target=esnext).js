@@ -8,7 +8,7 @@ class A {
 
 
 //// [privateNameAndStaticInitializer.js]
-const A = /** @class */ (() => {
+let A = /** @class */ (() => {
     class A {
         constructor() {
             this.#foo = 1;

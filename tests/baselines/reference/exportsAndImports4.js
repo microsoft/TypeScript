@@ -45,6 +45,7 @@ exports.default = "hello";
 //// [t3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.f2 = exports.f1 = exports.e2 = exports.e1 = exports.d = exports.c = exports.b = exports.a = void 0;
 var a = require("./t1");
 exports.a = a;
 a.default;

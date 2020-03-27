@@ -1,10 +1,10 @@
-tests/cases/conformance/async/es6/asyncAwaitIsolatedModules_es6.ts(1,27): error TS2307: Cannot find module 'missing'.
+tests/cases/conformance/async/es6/asyncAwaitIsolatedModules_es6.ts(1,27): error TS2307: Cannot find module 'missing' or its corresponding type declarations.
 
 
 ==== tests/cases/conformance/async/es6/asyncAwaitIsolatedModules_es6.ts (1 errors) ====
     import { MyPromise } from "missing";
                               ~~~~~~~~~
-!!! error TS2307: Cannot find module 'missing'.
+!!! error TS2307: Cannot find module 'missing' or its corresponding type declarations.
     
     declare var p: Promise<number>;
     declare var mp: MyPromise<number>;
