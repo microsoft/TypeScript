@@ -837,6 +837,16 @@ namespace ts.projectSystem {
         checkAllErrors({ ...request, expectedSequenceId });
     }
 
+    export interface VerifyGetErrRequestNoErrors extends VerifyGetErrRequestBase {
+        files: readonly (string | File)[];
+    }
+    export function verifyGetErrRequestNoErrors(request: VerifyGetErrRequestNoErrors) {
+        verifyGetErrRequest({
+            ...request,
+            expected: request.files.map(file => ({ file, syntax: [], semantic: [], suggestion: [] }))
+        });
+    }
+
     export interface CheckAllErrors extends VerifyGetErrRequest {
         expectedSequenceId: number;
     }

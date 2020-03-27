@@ -1487,13 +1487,7 @@ function foo() {
                     project,
                     [aConfig.path, aTest.path, bFoo.path, bBar.path, libFile.path]
                 );
-                verifyGetErrRequest({
-                    host,
-                    session,
-                    expected: [
-                        { file: aTest, syntax: [], semantic: [], suggestion: [] }
-                    ]
-                });
+                verifyGetErrRequestNoErrors({ session, host, files: [aTest] });
                 session.executeCommandSeq<protocol.UpdateOpenRequest>({
                     command: protocol.CommandTypes.UpdateOpen,
                     arguments: {
@@ -1507,13 +1501,7 @@ function foo() {
                         }]
                     }
                 });
-                verifyGetErrRequest({
-                    host,
-                    session,
-                    expected: [
-                        { file: aTest, syntax: [], semantic: [], suggestion: [] }
-                    ]
-                });
+                verifyGetErrRequestNoErrors({ session, host, files: [aTest] });
             }
 
             function config(packageName: string, extraOptions: CompilerOptions, references?: string[]): File {
@@ -1937,13 +1925,7 @@ foo;`
                 assert.equal(service.findDefaultConfiguredProject(info), project);
 
                 // Verify errors
-                verifyGetErrRequest({
-                    session,
-                    host,
-                    expected: [
-                        { file: main, syntax: [], semantic: [], suggestion: [] },
-                    ]
-                });
+                verifyGetErrRequestNoErrors({ session, host, files: [main] });
 
                 // Verify collection of script infos
                 service.openClientFile(dummyFile.path);
