@@ -52,6 +52,11 @@ namespace ts.Completions {
         return !!(origin.kind & SymbolOriginInfoKind.Nullable);
     }
 
+    interface UniqueNameSet {
+        add(name: string): void;
+        has(name: string): boolean;
+    }
+
     /**
      * Map from symbol id -> SymbolOriginInfo.
      * Only populated for symbols that come from other modules.
@@ -298,7 +303,7 @@ namespace ts.Completions {
     function getJSCompletionEntries(
         sourceFile: SourceFile,
         position: number,
-        uniqueNames: Map<boolean>,
+        uniqueNames: UniqueNameSet,
         target: ScriptTarget,
         entries: Push<CompletionEntry>): void {
         getNameTable(sourceFile).forEach((pos, name) => {
@@ -308,7 +313,7 @@ namespace ts.Completions {
             }
             const realName = unescapeLeadingUnderscores(name);
             if (!uniqueNames.has(realName) && isIdentifierText(realName, target)) {
-                uniqueNames.set(realName, true);
+                uniqueNames.add(realName);
                 entries.push({
                     name: realName,
                     kind: ScriptElementKind.warning,
@@ -454,7 +459,7 @@ namespace ts.Completions {
         recommendedCompletion?: Symbol,
         symbolToOriginInfoMap?: SymbolOriginInfoMap,
         symbolToSortTextMap?: SymbolSortTextMap,
-    ): Map<boolean> {
+    ): UniqueNameSet {
         const start = timestamp();
         // Tracks unique names.
         // Value is set to false for global variables or completions from external module exports, because we can have multiple of those;
@@ -498,7 +503,14 @@ namespace ts.Completions {
         }
 
         log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (timestamp() - start));
-        return uniques;
+
+        // Prevent consumers of this map from having to worry about
+        // the boolean value. Externally, it should be seen as the
+        // set of all names.
+        return {
+            has: name => uniques.has(name),
+            add: name => uniques.set(name, true),
+        };
     }
 
     function getLabelCompletionAtPosition(node: BreakOrContinueStatement): CompletionInfo | undefined {
