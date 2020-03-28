@@ -1662,6 +1662,14 @@ namespace ts {
             }
         }
 
+        function bindJSDocFunctionTag(node: JSDocFunctionTag) {
+            bindEachChild(node);
+            const host = getHostVariableDeclaratioinFromJSDoc(node);
+            if (host) {
+                addDeclarationToSymbol(host.symbol, host, SymbolFlags.Function);
+            }
+        }
+
         function bindOptionalExpression(node: Expression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
             doWithConditionalBranches(bind, node, trueTarget, falseTarget);
             if (!isOptionalChain(node) || isOutermostOptionalChain(node)) {
@@ -2589,6 +2597,8 @@ namespace ts {
                     return bindAnonymousTypeWorker(node as TypeLiteralNode | MappedTypeNode | JSDocTypeLiteral);
                 case SyntaxKind.JSDocClassTag:
                     return bindJSDocClassTag(node as JSDocClassTag);
+                case SyntaxKind.JSDocFunctionTag:
+                    return bindJSDocFunctionTag(node as JSDocFunctionTag);
                 case SyntaxKind.ObjectLiteralExpression:
                     return bindObjectLiteralExpression(<ObjectLiteralExpression>node);
                 case SyntaxKind.FunctionExpression:

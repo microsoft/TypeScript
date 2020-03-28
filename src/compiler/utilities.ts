@@ -2510,6 +2510,12 @@ namespace ts {
         return host && isFunctionLike(host) ? host : undefined;
     }
 
+    export function getHostVariableDeclaratioinFromJSDoc(node: Node): VariableDeclaration | undefined {
+        const host = getJSDocHost(node);
+        const decl = getSingleVariableOfVariableStatement(host) || host;
+        return decl && isVariableDeclaration(decl) ? decl : undefined;
+    }
+
     export function getEffectiveJSDocHost(node: Node): Node | undefined {
         const host = getJSDocHost(node);
         const decl = getSourceOfDefaultedAssignment(host) ||

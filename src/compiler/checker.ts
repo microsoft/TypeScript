@@ -7299,6 +7299,7 @@ namespace ts {
                 return addOptionality(declaredType, isOptional);
             }
 
+            // HERE
             if ((noImplicitAny || isInJSFile(declaration)) &&
                 declaration.kind === SyntaxKind.VariableDeclaration && !isBindingPattern(declaration.name) &&
                 !(getCombinedModifierFlags(declaration) & ModifierFlags.Export) && !(declaration.flags & NodeFlags.Ambient)) {
@@ -7818,6 +7819,9 @@ namespace ts {
                      || isPropertySignature(declaration)
                      || isVariableDeclaration(declaration)
                      || isBindingElement(declaration)) {
+                if (isVariableDeclaration(declaration) && symbol.flags & SymbolFlags.Function) {
+                    return getTypeOfFuncClassEnumModule(symbol);
+                }
                 type = getWidenedTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true);
             }
             // getTypeOfSymbol dispatches some JS merges incorrectly because their symbol flags are not mutually exclusive.

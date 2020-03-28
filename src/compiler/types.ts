@@ -472,6 +472,7 @@ namespace ts {
         JSDocTag,
         JSDocAugmentsTag,
         JSDocImplementsTag,
+        JSDocFunctionTag,
         JSDocAuthorTag,
         JSDocClassTag,
         JSDocPublicTag,
@@ -2669,6 +2670,10 @@ namespace ts {
     export interface JSDocImplementsTag extends JSDocTag {
         kind: SyntaxKind.JSDocImplementsTag;
         class: ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression };
+    }
+
+    export interface JSDocFunctionTag extends JSDocTag {
+        kind: SyntaxKind.JSDocFunctionTag;
     }
 
     export interface JSDocAuthorTag extends JSDocTag {
