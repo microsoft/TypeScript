@@ -10992,6 +10992,7 @@ interface IDBFactory {
     cmp(first: any, second: any): number;
     deleteDatabase(name: string): IDBOpenDBRequest;
     open(name: string, version?: number): IDBOpenDBRequest;
+    databases(): Promise<IDBDatabase[]>
 }
 
 declare var IDBFactory: {

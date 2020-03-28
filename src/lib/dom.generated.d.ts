@@ -9378,6 +9378,10 @@ interface IDBFactory {
      * Attempts to open a connection to the named database with the current version, or 1 if it does not already exist. If the request is successful request's result will be the connection.
      */
     open(name: string, version?: number): IDBOpenDBRequest;
+    /**
+     * Returns all the existing indexed databases
+     */
+    databases(): Promise<IDBDatabase[]>
 }
 
 declare var IDBFactory: {
