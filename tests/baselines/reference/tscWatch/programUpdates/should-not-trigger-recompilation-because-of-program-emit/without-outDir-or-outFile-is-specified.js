@@ -23,68 +23,68 @@ interface Array<T> { length: number; [n: number]: T; }
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 
-    /* Basic Options */                       /* Enable incremental compilation */
-    // "incremental": true,                   /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'. */
-    "target": "es5",                          /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */
-    "module": "amd",                          /* Specify library files to be included in the compilation. */
-    // "lib": [],                             /* Allow javascript files to be compiled. */
-    // "allowJs": true,                       /* Report errors in .js files. */
-    // "checkJs": true,                       /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
-    // "jsx": "preserve",                     /* Generates corresponding '.d.ts' file. */
-    // "declaration": true,                   /* Generates a sourcemap for each corresponding '.d.ts' file. */
-    // "declarationMap": true,                /* Generates corresponding '.map' file. */
-    // "sourceMap": true,                     /* Concatenate and emit output to single file. */
-    // "outFile": "./",                       /* Redirect output structure to the directory. */
-    // "outDir": "./",                        /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
-    // "rootDir": "./",                       /* Enable project compilation */
-    // "composite": true,                     /* Specify file to store incremental compilation information */
-    // "tsBuildInfoFile": "./",               /* Do not emit comments to output. */
-    // "removeComments": true,                /* Do not emit outputs. */
-    // "noEmit": true,                        /* Import emit helpers from 'tslib'. */
-    // "importHelpers": true,                 /* Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'. */
-    // "downlevelIteration": true,            /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
-    // "isolatedModules": true,
+    /* Basic Options */
+    // "incremental": true,                   /* Enable incremental compilation */
+    "target": "es5",                          /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'. */
+    "module": "amd",                          /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */
+    // "lib": [],                             /* Specify library files to be included in the compilation. */
+    // "allowJs": true,                       /* Allow javascript files to be compiled. */
+    // "checkJs": true,                       /* Report errors in .js files. */
+    // "jsx": "preserve",                     /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
+    // "declaration": true,                   /* Generates corresponding '.d.ts' file. */
+    // "declarationMap": true,                /* Generates a sourcemap for each corresponding '.d.ts' file. */
+    // "sourceMap": true,                     /* Generates corresponding '.map' file. */
+    // "outFile": "./",                       /* Concatenate and emit output to single file. */
+    // "outDir": "./",                        /* Redirect output structure to the directory. */
+    // "rootDir": "./",                       /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+    // "composite": true,                     /* Enable project compilation */
+    // "tsBuildInfoFile": "./",               /* Specify file to store incremental compilation information */
+    // "removeComments": true,                /* Do not emit comments to output. */
+    // "noEmit": true,                        /* Do not emit outputs. */
+    // "importHelpers": true,                 /* Import emit helpers from 'tslib'. */
+    // "downlevelIteration": true,            /* Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'. */
+    // "isolatedModules": true,               /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
 
-    /* Strict Type-Checking Options */        /* Raise error on expressions and declarations with an implied 'any' type. */
-    "strict": true,                           /* Enable strict null checks. */
-    // "noImplicitAny": true,                 /* Enable strict checking of function types. */
-    // "strictNullChecks": true,              /* Enable strict 'bind', 'call', and 'apply' methods on functions. */
-    // "strictFunctionTypes": true,           /* Enable strict checking of property initialization in classes. */
-    // "strictBindCallApply": true,           /* Raise error on 'this' expressions with an implied 'any' type. */
-    // "strictPropertyInitialization": true,  /* Parse in strict mode and emit "use strict" for each source file. */
-    // "noImplicitThis": true,
-    // "alwaysStrict": true,                  /* Report errors on unused locals. */
+    /* Strict Type-Checking Options */
+    "strict": true,                           /* Enable all strict type-checking options. */
+    // "noImplicitAny": true,                 /* Raise error on expressions and declarations with an implied 'any' type. */
+    // "strictNullChecks": true,              /* Enable strict null checks. */
+    // "strictFunctionTypes": true,           /* Enable strict checking of function types. */
+    // "strictBindCallApply": true,           /* Enable strict 'bind', 'call', and 'apply' methods on functions. */
+    // "strictPropertyInitialization": true,  /* Enable strict checking of property initialization in classes. */
+    // "noImplicitThis": true,                /* Raise error on 'this' expressions with an implied 'any' type. */
+    // "alwaysStrict": true,                  /* Parse in strict mode and emit "use strict" for each source file. */
 
-    /* Additional Checks */                   /* Report error when not all code paths in function return a value. */
-    // "noUnusedLocals": true,                /* Report errors for fallthrough cases in switch statement. */
-    // "noUnusedParameters": true,
-    // "noImplicitReturns": true,             /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
-    // "noFallthroughCasesInSwitch": true,    /* Base directory to resolve non-absolute module names. */
+    /* Additional Checks */
+    // "noUnusedLocals": true,                /* Report errors on unused locals. */
+    // "noUnusedParameters": true,            /* Report errors on unused parameters. */
+    // "noImplicitReturns": true,             /* Report error when not all code paths in function return a value. */
+    // "noFallthroughCasesInSwitch": true,    /* Report errors for fallthrough cases in switch statement. */
 
-    /* Module Resolution Options */           /* List of root folders whose combined content represents the structure of the project at runtime. */
-    // "moduleResolution": "node",            /* List of folders to include type definitions from. */
-    // "baseUrl": "./",                       /* Type declaration files to be included in compilation. */
-    // "paths": {},                           /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
-    // "rootDirs": [],                        /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
-    // "typeRoots": [],                       /* Do not resolve the real path of symlinks. */
-    // "types": [],                           /* Allow accessing UMD globals from modules. */
-    // "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,                  /* Specify the location where debugger should locate TypeScript files instead of source locations. */
-    // "preserveSymlinks": true,              /* Specify the location where debugger should locate map files instead of generated locations. */
-    // "allowUmdGlobalAccess": true,          /* Emit a single file with source maps instead of having a separate file. */
+    /* Module Resolution Options */
+    // "moduleResolution": "node",            /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
+    // "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
+    // "paths": {},                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
+    // "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
+    // "typeRoots": [],                       /* List of folders to include type definitions from. */
+    // "types": [],                           /* Type declaration files to be included in compilation. */
+    // "allowSyntheticDefaultImports": true,  /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
+    "esModuleInterop": true,                  /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
+    // "preserveSymlinks": true,              /* Do not resolve the real path of symlinks. */
+    // "allowUmdGlobalAccess": true,          /* Allow accessing UMD globals from modules. */
 
     /* Source Map Options */
-    // "sourceRoot": "",                      /* Enables experimental support for ES7 decorators. */
-    // "mapRoot": "",                         /* Enables experimental support for emitting type metadata for decorators. */
-    // "inlineSourceMap": true,
-    // "inlineSources": true,                 /* Disallow inconsistently-cased references to the same file. */
+    // "sourceRoot": "",                      /* Specify the location where debugger should locate TypeScript files instead of source locations. */
+    // "mapRoot": "",                         /* Specify the location where debugger should locate map files instead of generated locations. */
+    // "inlineSourceMap": true,               /* Emit a single file with source maps instead of having a separate file. */
+    // "inlineSources": true,                 /* Emit the source alongside the sourcemaps within a single file; requires '--inlineSourceMap' or '--sourceMap' to be set. */
 
-    /* Experimental Options */undefined
-    // "experimentalDecorators": true,undefined
-    // "emitDecoratorMetadata": true,undefined
+    /* Experimental Options */
+    // "experimentalDecorators": true,        /* Enables experimental support for ES7 decorators. */
+    // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
 
-    /* Advanced Options */undefined
-    "forceConsistentCasingInFileNames": trueundefined
+    /* Advanced Options */
+    "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
   }
 }
 
@@ -113,42 +113,12 @@ Output::
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
 
-[96mtsconfig.json[0m:[93m61[0m:[93m31[0m - [91merror[0m[90m TS1136: [0mProperty assignment expected.
-
-[7m61[0m     /* Experimental Options */undefined
-[7m  [0m [91m                              ~~~~~~~~~[0m
-
-
-[96mtsconfig.json[0m:[93m65[0m:[93m27[0m - [91merror[0m[90m TS1005: [0m',' expected.
-
-[7m65[0m     /* Advanced Options */undefined
-[7m  [0m [91m                          ~~~~~~~~~[0m
-
-
-[96mtsconfig.json[0m:[93m65[0m:[93m27[0m - [91merror[0m[90m TS1136: [0mProperty assignment expected.
-
-[7m65[0m     /* Advanced Options */undefined
-[7m  [0m [91m                          ~~~~~~~~~[0m
-
-
-[96mtsconfig.json[0m:[93m66[0m:[93m5[0m - [91merror[0m[90m TS1005: [0m',' expected.
-
-[7m66[0m     "forceConsistentCasingInFileNames": trueundefined
-[7m  [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-
-
-[96mtsconfig.json[0m:[93m66[0m:[93m41[0m - [91merror[0m[90m TS5024: [0mCompiler option 'forceConsistentCasingInFileNames' requires a value of type boolean.
-
-[7m66[0m     "forceConsistentCasingInFileNames": trueundefined
-[7m  [0m [91m                                        ~~~~~~~~~~~~~[0m
-
-
-[[90m12:00:30 AM[0m] Found 5 errors. Watching for file changes.
+[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/file1.ts","/user/username/projects/myproject/src/file2.ts"]
-Program options: {"target":1,"module":2,"strict":true,"esModuleInterop":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"target":1,"module":2,"strict":true,"esModuleInterop":true,"forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/file1.ts
