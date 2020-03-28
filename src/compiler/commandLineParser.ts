@@ -2110,7 +2110,7 @@ namespace ts {
             // Skip options which do not have a category or have category `Command_line_Options`
             return category !== undefined
                 && category !== Diagnostics.Command_line_Options
-                && (category !== Diagnostics.Advanced_Options || compilerOptionsMap.has(name));;
+                && (category !== Diagnostics.Advanced_Options || compilerOptionsMap.has(name));
         }
 
         function writeConfigurations() {
@@ -2128,9 +2128,11 @@ namespace ts {
             let marginLength = 0;
             let seenKnownKeys = 0;
             const nameColumn: string[] = [];
+            const descriptionColumn: string[] = [];
             categorizedOptions.forEach((options, category) => {
                 if (nameColumn.length !== 0) {
                     nameColumn.push("");
+                    descriptionColumn.push("");
                 }
                 nameColumn.push(`/* ${category} */`);
                 for (const option of options) {
@@ -2142,6 +2144,7 @@ namespace ts {
                         optionName = `// "${option.name}": ${JSON.stringify(getDefaultValueForOption(option))},`;
                     }
                     nameColumn.push(optionName);
+                    descriptionColumn.push(`/* ${option.description && getLocaleSpecificMessage(option.description) || option.name} */`);
                     marginLength = Math.max(optionName.length, marginLength);
                 }
             });
@@ -2154,8 +2157,10 @@ namespace ts {
             result.push(`${tab}${tab}/* ${getLocaleSpecificMessage(Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_json_to_read_more_about_this_file)} */`);
             result.push("");
             // Print out each row, aligning all the descriptions on the same column.
-            for (const optionName of nameColumn) {
-                result.push(optionName && `${tab}${tab}${optionName}`);
+            for (let i = 0; i < nameColumn.length; i++) {
+                const optionName = nameColumn[i];
+                const description = descriptionColumn[i];
+                result.push(optionName && `${tab}${tab}${optionName}${description && (makePadding(marginLength - optionName.length + 2) + description)}`);
             }
             if (fileNames.length) {
                 result.push(`${tab}},`);
