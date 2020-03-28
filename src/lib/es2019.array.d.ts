@@ -22,28 +22,7 @@ interface ReadonlyArray<T> {
      *
      * @param depth The maximum recursion depth
      */
-    flat<U>(this:
-        ReadonlyArray<U[][][][]> |
-
-        ReadonlyArray<ReadonlyArray<U[][][]>> |
-        ReadonlyArray<ReadonlyArray<U[][]>[]> |
-        ReadonlyArray<ReadonlyArray<U[]>[][]> |
-        ReadonlyArray<ReadonlyArray<U>[][][]> |
-
-        ReadonlyArray<ReadonlyArray<ReadonlyArray<U[][]>>> |
-        ReadonlyArray<ReadonlyArray<ReadonlyArray<U>[][]>> |
-        ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>[][]> |
-        ReadonlyArray<ReadonlyArray<ReadonlyArray<U>[]>[]> |
-        ReadonlyArray<ReadonlyArray<ReadonlyArray<U[]>>[]> |
-        ReadonlyArray<ReadonlyArray<ReadonlyArray<U[]>[]>> |
-
-        ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U[]>>>> |
-        ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U>[]>>> |
-        ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>[]>> |
-        ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>>[]> |
-
-        ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>>>>,
-        depth: 4): U[];
+    flat<U>(this: ReadonlyArray< ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>>>>>>>, depth: 7): U[];
 
     /**
      * Returns a new array with all sub-array elements concatenated into it recursively up to the
@@ -51,19 +30,7 @@ interface ReadonlyArray<T> {
      *
      * @param depth The maximum recursion depth
      */
-    flat<U>(this:
-        ReadonlyArray<U[][][]> |
-
-        ReadonlyArray<ReadonlyArray<U>[][]> |
-        ReadonlyArray<ReadonlyArray<U[]>[]> |
-        ReadonlyArray<ReadonlyArray<U[][]>> |
-
-        ReadonlyArray<ReadonlyArray<ReadonlyArray<U[]>>> |
-        ReadonlyArray<ReadonlyArray<ReadonlyArray<U>[]>> |
-        ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>[]> |
-
-        ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>>>,
-        depth: 3): U[];
+    flat<U>(this: ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>>>>>>, depth: 6): U[];
 
     /**
      * Returns a new array with all sub-array elements concatenated into it recursively up to the
@@ -71,14 +38,7 @@ interface ReadonlyArray<T> {
      *
      * @param depth The maximum recursion depth
      */
-    flat<U>(this:
-        ReadonlyArray<U[][]> |
-
-        ReadonlyArray<ReadonlyArray<U[]>> |
-        ReadonlyArray<ReadonlyArray<U>[]> |
-
-        ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>>,
-        depth: 2): U[];
+    flat<U>(this: ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>>>>>, depth: 5): U[];
 
     /**
      * Returns a new array with all sub-array elements concatenated into it recursively up to the
@@ -86,11 +46,7 @@ interface ReadonlyArray<T> {
      *
      * @param depth The maximum recursion depth
      */
-    flat<U>(this:
-        ReadonlyArray<U[]> |
-        ReadonlyArray<ReadonlyArray<U>>,
-        depth?: 1
-    ): U[];
+    flat<U>(this: ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>>>>, depth: 4): U[];
 
     /**
      * Returns a new array with all sub-array elements concatenated into it recursively up to the
@@ -98,10 +54,31 @@ interface ReadonlyArray<T> {
      *
      * @param depth The maximum recursion depth
      */
-    flat<U>(this:
-        ReadonlyArray<U>,
-        depth: 0
-    ): U[];
+    flat<U>(this: ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>>>, depth: 3): U[];
+
+    /**
+     * Returns a new array with all sub-array elements concatenated into it recursively up to the
+     * specified depth.
+     *
+     * @param depth The maximum recursion depth
+     */
+    flat<U>(this: ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>>, depth: 2): U[];
+
+    /**
+     * Returns a new array with all sub-array elements concatenated into it recursively up to the
+     * specified depth.
+     *
+     * @param depth The maximum recursion depth
+     */
+    flat<U>(this: ReadonlyArray<ReadonlyArray<U>>, depth?: 1): U[];
+
+    /**
+     * Returns a new array with all sub-array elements concatenated into it recursively up to the
+     * specified depth.
+     *
+     * @param depth The maximum recursion depth
+     */
+    flat<U>(this: ReadonlyArray<U>, depth: 0): U[];
 
     /**
      * Returns a new array with all sub-array elements concatenated into it recursively up to the
@@ -135,7 +112,7 @@ interface Array<T> {
      *
      * @param depth The maximum recursion depth
      */
-    flat<U>(this: U[][][][][][][][], depth: 7): U[];
+    flat<U>(this: Array<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>>>>>>>, depth: 7): U[];
 
     /**
      * Returns a new array with all sub-array elements concatenated into it recursively up to the
@@ -143,7 +120,7 @@ interface Array<T> {
      *
      * @param depth The maximum recursion depth
      */
-    flat<U>(this: U[][][][][][][], depth: 6): U[];
+    flat<U>(this: Array<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>>>>>>, depth: 6): U[];
 
     /**
      * Returns a new array with all sub-array elements concatenated into it recursively up to the
@@ -151,7 +128,7 @@ interface Array<T> {
      *
      * @param depth The maximum recursion depth
      */
-    flat<U>(this: U[][][][][][], depth: 5): U[];
+    flat<U>(this: Array<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>>>>>, depth: 5): U[];
 
     /**
      * Returns a new array with all sub-array elements concatenated into it recursively up to the
@@ -159,7 +136,7 @@ interface Array<T> {
      *
      * @param depth The maximum recursion depth
      */
-    flat<U>(this: U[][][][][], depth: 4): U[];
+    flat<U>(this: Array<ReadonlyArray<ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>>>>, depth: 4): U[];
 
     /**
      * Returns a new array with all sub-array elements concatenated into it recursively up to the
@@ -167,7 +144,7 @@ interface Array<T> {
      *
      * @param depth The maximum recursion depth
      */
-    flat<U>(this: U[][][][], depth: 3): U[];
+    flat<U>(this: Array<ReadonlyArray<ReadonlyArray<ReadonlyArray<U>>>>, depth: 3): U[];
 
     /**
      * Returns a new array with all sub-array elements concatenated into it recursively up to the
@@ -175,7 +152,7 @@ interface Array<T> {
      *
      * @param depth The maximum recursion depth
      */
-    flat<U>(this: U[][][], depth: 2): U[];
+    flat<U>(this: Array<ReadonlyArray<ReadonlyArray<U>>>, depth: 2): U[];
 
     /**
      * Returns a new array with all sub-array elements concatenated into it recursively up to the
@@ -183,7 +160,7 @@ interface Array<T> {
      *
      * @param depth The maximum recursion depth
      */
-    flat<U>(this: U[][], depth?: 1): U[];
+    flat<U>(this: Array<ReadonlyArray<U>>, depth?: 1): U[];
 
     /**
      * Returns a new array with all sub-array elements concatenated into it recursively up to the
@@ -191,7 +168,7 @@ interface Array<T> {
      *
      * @param depth The maximum recursion depth
      */
-    flat<U>(this: U[], depth: 0): U[];
+    flat<U>(this: Array<U>, depth: 0): U[];
 
     /**
      * Returns a new array with all sub-array elements concatenated into it recursively up to the
