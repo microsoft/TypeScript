@@ -9404,7 +9404,6 @@ interface IDBFactory {
     databases(): Promise<IDBDatabase[]>
 }
 
-
 declare var IDBFactory: {
     prototype: IDBFactory;
     new(): IDBFactory;
