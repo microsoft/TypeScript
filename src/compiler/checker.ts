@@ -2551,7 +2551,7 @@ namespace ts {
                                 );
                             }
                             else {
-                                reportNonExportedMember(name, declarationName, moduleSymbol, moduleName);
+                                reportNonExportedMember(node, name, declarationName, moduleSymbol, moduleName);
                             }
                         }
                     }
@@ -2560,24 +2560,47 @@ namespace ts {
             }
         }
 
-        function reportNonExportedMember(name: Identifier, declarationName: string, moduleSymbol: Symbol, moduleName: string): void {
+        function reportNonExportedMember(node: ImportDeclaration | ExportDeclaration, name: Identifier, declarationName: string, moduleSymbol: Symbol, moduleName: string): void {
             const localSymbol = moduleSymbol.valueDeclaration.locals?.get(name.escapedText);
             const exports = moduleSymbol.exports;
-
             if (localSymbol) {
-                const exportedSymbol = exports && !exports.has(InternalSymbolName.ExportEquals)
-                    ? find(symbolsToArray(exports), symbol => !!getSymbolIfSameReference(symbol, localSymbol))
-                    : undefined;
-                const diagnostic = exportedSymbol
-                    ? error(name, Diagnostics.Module_0_declares_1_locally_but_it_is_exported_as_2, moduleName, declarationName, symbolToString(exportedSymbol))
-                    : error(name, Diagnostics.Module_0_declares_1_locally_but_it_is_not_exported, moduleName, declarationName);
+                const exportedEqualsSymbol = exports?.get(InternalSymbolName.ExportEquals);
+                if (exportedEqualsSymbol) {
+                    getSymbolIfSameReference(exportedEqualsSymbol, localSymbol) ? reportInvalidImportEqualsExportMember(node, name, declarationName, moduleName) :
+                        error(name, Diagnostics.Module_0_has_no_exported_member_1, moduleName, declarationName);
+                }
+                else {
+                    const exportedSymbol = exports ? find(symbolsToArray(exports), symbol => !!getSymbolIfSameReference(symbol, localSymbol)) : undefined;
+                    const diagnostic = exportedSymbol ? error(name, Diagnostics.Module_0_declares_1_locally_but_it_is_exported_as_2, moduleName, declarationName, symbolToString(exportedSymbol)) :
+                        error(name, Diagnostics.Module_0_declares_1_locally_but_it_is_not_exported, moduleName, declarationName);
 
-                addRelatedInfo(diagnostic,
-                    ...map(localSymbol.declarations, (decl, index) =>
-                        createDiagnosticForNode(decl, index === 0 ? Diagnostics._0_is_declared_here : Diagnostics.and_here, declarationName)));
+                    addRelatedInfo(diagnostic,
+                        ...map(localSymbol.declarations, (decl, index) =>
+                            createDiagnosticForNode(decl, index === 0 ? Diagnostics._0_is_declared_here : Diagnostics.and_here, declarationName)));
+                }
             }
             else {
                 error(name, Diagnostics.Module_0_has_no_exported_member_1, moduleName, declarationName);
+            }
+        }
+
+        function reportInvalidImportEqualsExportMember(node: ImportDeclaration | ExportDeclaration, name: Identifier, declarationName: string, moduleName: string) {
+            if (moduleKind >= ModuleKind.ES2015) {
+                const message = compilerOptions.esModuleInterop ? Diagnostics._0_can_only_be_imported_by_using_a_default_import :
+                    Diagnostics._0_can_only_be_imported_by_turning_on_the_esModuleInterop_flag_and_using_a_default_import;
+                error(name, message, declarationName);
+            }
+            else {
+                if (isInJSFile(node)) {
+                    const message = compilerOptions.esModuleInterop ? Diagnostics._0_can_only_be_imported_by_using_a_require_call_or_by_using_a_default_import :
+                        Diagnostics._0_can_only_be_imported_by_using_a_require_call_or_by_turning_on_the_esModuleInterop_flag_and_using_a_default_import;
+                    error(name, message, declarationName);
+                }
+                else {
+                    const message = compilerOptions.esModuleInterop ? Diagnostics._0_can_only_be_imported_by_using_import_1_require_2_or_a_default_import :
+                        Diagnostics._0_can_only_be_imported_by_using_import_1_require_2_or_by_turning_on_the_esModuleInterop_flag_and_using_a_default_import;
+                    error(name, message, declarationName, declarationName, moduleName);
+                }
             }
         }
 
