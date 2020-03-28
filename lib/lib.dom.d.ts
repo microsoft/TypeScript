@@ -9399,7 +9399,7 @@ interface IDBFactory {
      */
     open(name: string, version?: number): IDBOpenDBRequest;
     /**
-     * 
+     * Returns all the existing indexed databases
      */
     databases(): Promise<IDBDatabase[]>
 }
