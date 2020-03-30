@@ -1,14 +1,9 @@
+//// [tests/cases/compiler/jsEmitIntersectionProperty.ts] ////
+
+//// [globals.d.ts]
 // #37015 - test asserts lack of crash
 
-// @allowJs: true
-// @checkJs: true
-// @declaration: true
-// @emitDeclarationOnly: true
-// @incremental: true
-// @tsBuildInfoFile: .tsbuildinfo
-// @noTypesAndSymbols: true
 
-// @Filename: globals.d.ts
 
 declare class CoreObject {
   static extend<
@@ -34,8 +29,14 @@ declare class EmberObject extends CoreObject.extend(Observable) {}
 declare class CoreView extends EmberObject.extend({}) {}
 declare class Component extends CoreView.extend({}) {}
 
-// @Filename: index.js
-
+//// [index.js]
 export class MyComponent extends Component {
   
+}
+
+
+
+
+//// [index.d.ts]
+export class MyComponent extends Component {
 }
