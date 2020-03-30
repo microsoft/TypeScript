@@ -115,7 +115,7 @@ interface PromiseConstructor {
 
     /**
      * Creates a new resolved promise for the provided value.
-     * @param value A promise.
+     * @param value A promise or a non-promise value.
      * @returns A promise whose internal state matches the provided promise.
      */
     resolve<T>(value: T | PromiseLike<T>): Promise<T>;

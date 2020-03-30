@@ -1,67 +1,1179 @@
 === tests/cases/compiler/promiseTypeInference2.ts ===
-const p1 = Promise.resolve(null);
->p1 : Symbol(p1, Decl(promiseTypeInference2.ts, 0, 5))
->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+declare const P: Promise<void>;
+>P : Symbol(P, Decl(promiseTypeInference2.ts, 0, 13))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
-const p2 = p1.then(() => 100);
->p2 : Symbol(p2, Decl(promiseTypeInference2.ts, 1, 5))
->p1.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
->p1 : Symbol(p1, Decl(promiseTypeInference2.ts, 0, 5))
+declare const a: number;
+>a : Symbol(a, Decl(promiseTypeInference2.ts, 1, 13))
+
+declare const b: Promise<number>;
+>b : Symbol(b, Decl(promiseTypeInference2.ts, 2, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+declare const c: Promise<number> | Promise<string>;
+>c : Symbol(c, Decl(promiseTypeInference2.ts, 3, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+declare const d: Promise<number> | string;
+>d : Symbol(d, Decl(promiseTypeInference2.ts, 4, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+declare const e: Promise<number> | string | boolean;
+>e : Symbol(e, Decl(promiseTypeInference2.ts, 5, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+declare const f: number | string;
+>f : Symbol(f, Decl(promiseTypeInference2.ts, 6, 13))
+
+declare const g: PromiseBase<string, Error, number, object, string, boolean, any, Element, never, never, never, never>;
+>g : Symbol(g, Decl(promiseTypeInference2.ts, 7, 13))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+// native promise inference
+P.then(() => a); // Promise<number>
+>P.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(promiseTypeInference2.ts, 0, 13))
 >then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(promiseTypeInference2.ts, 1, 13))
 
-const p3 = p1.then(() => Promise.resolve(100));
->p3 : Symbol(p3, Decl(promiseTypeInference2.ts, 2, 5))
->p1.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
->p1 : Symbol(p1, Decl(promiseTypeInference2.ts, 0, 5))
+P.then(() => b); // Promise<number>
+>P.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(promiseTypeInference2.ts, 0, 13))
 >then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(promiseTypeInference2.ts, 2, 13))
+
+P.then(() => c); // Promise<string | number>
+>P.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(promiseTypeInference2.ts, 0, 13))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>c : Symbol(c, Decl(promiseTypeInference2.ts, 3, 13))
+
+P.then(() => d); // Promise<string | number>
+>P.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(promiseTypeInference2.ts, 0, 13))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>d : Symbol(d, Decl(promiseTypeInference2.ts, 4, 13))
+
+P.then(() => e); // Promise<string | number | boolean>
+>P.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(promiseTypeInference2.ts, 0, 13))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(promiseTypeInference2.ts, 5, 13))
+
+P.then(() => f); // Promise<string | number>
+>P.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(promiseTypeInference2.ts, 0, 13))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(promiseTypeInference2.ts, 6, 13))
+
+P.then(() => g); // Promise<string>
+>P.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(promiseTypeInference2.ts, 0, 13))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>g : Symbol(g, Decl(promiseTypeInference2.ts, 7, 13))
+
+Promise.resolve(a); // Promise<number>
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>a : Symbol(a, Decl(promiseTypeInference2.ts, 1, 13))
 
-declare const p4: Promise<number> | Promise<string>;
->p4 : Symbol(p4, Decl(promiseTypeInference2.ts, 4, 13))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-
-const p5 = Promise.resolve(p4);
->p5 : Symbol(p5, Decl(promiseTypeInference2.ts, 5, 5))
+Promise.resolve(b); // Promise<number>
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p4 : Symbol(p4, Decl(promiseTypeInference2.ts, 4, 13))
+>b : Symbol(b, Decl(promiseTypeInference2.ts, 2, 13))
 
-declare const p6: PromiseLike<number> & { x: 1 } | PromiseLike<string> & { x: 2 };
->p6 : Symbol(p6, Decl(promiseTypeInference2.ts, 7, 13))
->PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
->x : Symbol(x, Decl(promiseTypeInference2.ts, 7, 41))
->PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
->x : Symbol(x, Decl(promiseTypeInference2.ts, 7, 74))
-
-const p7 = Promise.resolve(p6);
->p7 : Symbol(p7, Decl(promiseTypeInference2.ts, 8, 5))
+Promise.resolve(c); // Promise<string | number>
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p6 : Symbol(p6, Decl(promiseTypeInference2.ts, 7, 13))
+>c : Symbol(c, Decl(promiseTypeInference2.ts, 3, 13))
 
-declare function resolve<T>(value: T | PromiseLike<T> & { x: 1 } | PromiseLike<T> & { x: 2 }): Promise<T>;
->resolve : Symbol(resolve, Decl(promiseTypeInference2.ts, 8, 31))
->T : Symbol(T, Decl(promiseTypeInference2.ts, 10, 25))
->value : Symbol(value, Decl(promiseTypeInference2.ts, 10, 28))
->T : Symbol(T, Decl(promiseTypeInference2.ts, 10, 25))
->PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(promiseTypeInference2.ts, 10, 25))
->x : Symbol(x, Decl(promiseTypeInference2.ts, 10, 57))
->PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(promiseTypeInference2.ts, 10, 25))
->x : Symbol(x, Decl(promiseTypeInference2.ts, 10, 85))
+Promise.resolve(d); // Promise<string | number>
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->T : Symbol(T, Decl(promiseTypeInference2.ts, 10, 25))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>d : Symbol(d, Decl(promiseTypeInference2.ts, 4, 13))
 
-const p8 = resolve(p6);
->p8 : Symbol(p8, Decl(promiseTypeInference2.ts, 11, 5))
->resolve : Symbol(resolve, Decl(promiseTypeInference2.ts, 8, 31))
->p6 : Symbol(p6, Decl(promiseTypeInference2.ts, 7, 13))
+Promise.resolve(e); // Promise<string | number | boolean>
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>e : Symbol(e, Decl(promiseTypeInference2.ts, 5, 13))
+
+Promise.resolve(f); // Promise<string | number>
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>f : Symbol(f, Decl(promiseTypeInference2.ts, 6, 13))
+
+Promise.resolve(g); // Promise<string>
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>g : Symbol(g, Decl(promiseTypeInference2.ts, 7, 13))
+
+// userland promise inference with more complex fulfillment types
+g.then(() => a); // PromiseBase<number, ...>
+>g.then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>g : Symbol(g, Decl(promiseTypeInference2.ts, 7, 13))
+>then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>a : Symbol(a, Decl(promiseTypeInference2.ts, 1, 13))
+
+g.then(() => b); // PromiseBase<number, ...>
+>g.then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>g : Symbol(g, Decl(promiseTypeInference2.ts, 7, 13))
+>then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>b : Symbol(b, Decl(promiseTypeInference2.ts, 2, 13))
+
+g.then(() => c); // PromiseBase<string | number, ...>
+>g.then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>g : Symbol(g, Decl(promiseTypeInference2.ts, 7, 13))
+>then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>c : Symbol(c, Decl(promiseTypeInference2.ts, 3, 13))
+
+g.then(() => d); // PromiseBase<string | number, ...>
+>g.then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>g : Symbol(g, Decl(promiseTypeInference2.ts, 7, 13))
+>then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>d : Symbol(d, Decl(promiseTypeInference2.ts, 4, 13))
+
+g.then(() => e); // PromiseBase<string | number | boolean, ...>
+>g.then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>g : Symbol(g, Decl(promiseTypeInference2.ts, 7, 13))
+>then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>e : Symbol(e, Decl(promiseTypeInference2.ts, 5, 13))
+
+g.then(() => f); // PromiseBase<string | number, ...>
+>g.then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>g : Symbol(g, Decl(promiseTypeInference2.ts, 7, 13))
+>then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>f : Symbol(f, Decl(promiseTypeInference2.ts, 6, 13))
+
+// adapted from DefinitelyTyped: /types/jquery/jquery-tests.ts
+g.then(() => g).then(
+>g.then(() => g).then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>g.then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>g : Symbol(g, Decl(promiseTypeInference2.ts, 7, 13))
+>then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>g : Symbol(g, Decl(promiseTypeInference2.ts, 7, 13))
+>then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+
+    (tr, ur, vr) => {
+>tr : Symbol(tr, Decl(promiseTypeInference2.ts, 36, 5))
+>ur : Symbol(ur, Decl(promiseTypeInference2.ts, 36, 8))
+>vr : Symbol(vr, Decl(promiseTypeInference2.ts, 36, 12))
+
+        tr; // string
+>tr : Symbol(tr, Decl(promiseTypeInference2.ts, 36, 5))
+
+        ur; // object
+>ur : Symbol(ur, Decl(promiseTypeInference2.ts, 36, 8))
+
+        vr; // any
+>vr : Symbol(vr, Decl(promiseTypeInference2.ts, 36, 12))
+
+    },
+    (tj, uj, vj) => {
+>tj : Symbol(tj, Decl(promiseTypeInference2.ts, 41, 5))
+>uj : Symbol(uj, Decl(promiseTypeInference2.ts, 41, 8))
+>vj : Symbol(vj, Decl(promiseTypeInference2.ts, 41, 12))
+
+        tj; // Error
+>tj : Symbol(tj, Decl(promiseTypeInference2.ts, 41, 5))
+
+        uj; // string
+>uj : Symbol(uj, Decl(promiseTypeInference2.ts, 41, 8))
+
+        vj; // Element
+>vj : Symbol(vj, Decl(promiseTypeInference2.ts, 41, 12))
+
+    },
+    (tn, un, vn) => {
+>tn : Symbol(tn, Decl(promiseTypeInference2.ts, 46, 5))
+>un : Symbol(un, Decl(promiseTypeInference2.ts, 46, 8))
+>vn : Symbol(vn, Decl(promiseTypeInference2.ts, 46, 12))
+
+        tn; // number
+>tn : Symbol(tn, Decl(promiseTypeInference2.ts, 46, 5))
+
+        un; // boolean
+>un : Symbol(un, Decl(promiseTypeInference2.ts, 46, 8))
+
+        vn; // never
+>vn : Symbol(vn, Decl(promiseTypeInference2.ts, 46, 12))
+
+    });
+
+// JQuery's PromiseBase
+interface Thenable<T> extends PromiseLike<T> {}
+>Thenable : Symbol(Thenable, Decl(promiseTypeInference2.ts, 50, 7))
+>T : Symbol(T, Decl(promiseTypeInference2.ts, 53, 19))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(promiseTypeInference2.ts, 53, 19))
+
+interface PromiseBase<
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+
+    TR, TJ, TN,
+>TR : Symbol(TR, Decl(promiseTypeInference2.ts, 54, 22))
+>TJ : Symbol(TJ, Decl(promiseTypeInference2.ts, 55, 7))
+>TN : Symbol(TN, Decl(promiseTypeInference2.ts, 55, 11))
+
+    UR, UJ, UN,
+>UR : Symbol(UR, Decl(promiseTypeInference2.ts, 55, 15))
+>UJ : Symbol(UJ, Decl(promiseTypeInference2.ts, 56, 7))
+>UN : Symbol(UN, Decl(promiseTypeInference2.ts, 56, 11))
+
+    VR, VJ, VN,
+>VR : Symbol(VR, Decl(promiseTypeInference2.ts, 56, 15))
+>VJ : Symbol(VJ, Decl(promiseTypeInference2.ts, 57, 7))
+>VN : Symbol(VN, Decl(promiseTypeInference2.ts, 57, 11))
+
+    SR, SJ, SN
+>SR : Symbol(SR, Decl(promiseTypeInference2.ts, 57, 15))
+>SJ : Symbol(SJ, Decl(promiseTypeInference2.ts, 58, 7))
+>SN : Symbol(SN, Decl(promiseTypeInference2.ts, 58, 11))
+
+> {
+    then<ARD = never, AJD = never, AND = never,
+>then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>ARD : Symbol(ARD, Decl(promiseTypeInference2.ts, 60, 9))
+>AJD : Symbol(AJD, Decl(promiseTypeInference2.ts, 60, 21))
+>AND : Symbol(AND, Decl(promiseTypeInference2.ts, 60, 34))
+
+        BRD = never, BJD = never, BND = never,
+>BRD : Symbol(BRD, Decl(promiseTypeInference2.ts, 60, 47))
+>BJD : Symbol(BJD, Decl(promiseTypeInference2.ts, 61, 20))
+>BND : Symbol(BND, Decl(promiseTypeInference2.ts, 61, 33))
+
+        CRD = never, CJD = never, CND = never,
+>CRD : Symbol(CRD, Decl(promiseTypeInference2.ts, 61, 46))
+>CJD : Symbol(CJD, Decl(promiseTypeInference2.ts, 62, 20))
+>CND : Symbol(CND, Decl(promiseTypeInference2.ts, 62, 33))
+
+        RRD = never, RJD = never, RND = never,
+>RRD : Symbol(RRD, Decl(promiseTypeInference2.ts, 62, 46))
+>RJD : Symbol(RJD, Decl(promiseTypeInference2.ts, 63, 20))
+>RND : Symbol(RND, Decl(promiseTypeInference2.ts, 63, 33))
+
+        ARF = never, AJF = never, ANF = never,
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 63, 46))
+>AJF : Symbol(AJF, Decl(promiseTypeInference2.ts, 64, 20))
+>ANF : Symbol(ANF, Decl(promiseTypeInference2.ts, 64, 33))
+
+        BRF = never, BJF = never, BNF = never,
+>BRF : Symbol(BRF, Decl(promiseTypeInference2.ts, 64, 46))
+>BJF : Symbol(BJF, Decl(promiseTypeInference2.ts, 65, 20))
+>BNF : Symbol(BNF, Decl(promiseTypeInference2.ts, 65, 33))
+
+        CRF = never, CJF = never, CNF = never,
+>CRF : Symbol(CRF, Decl(promiseTypeInference2.ts, 65, 46))
+>CJF : Symbol(CJF, Decl(promiseTypeInference2.ts, 66, 20))
+>CNF : Symbol(CNF, Decl(promiseTypeInference2.ts, 66, 33))
+
+        RRF = never, RJF = never, RNF = never,
+>RRF : Symbol(RRF, Decl(promiseTypeInference2.ts, 66, 46))
+>RJF : Symbol(RJF, Decl(promiseTypeInference2.ts, 67, 20))
+>RNF : Symbol(RNF, Decl(promiseTypeInference2.ts, 67, 33))
+
+        ARP = never, AJP = never, ANP = never,
+>ARP : Symbol(ARP, Decl(promiseTypeInference2.ts, 67, 46))
+>AJP : Symbol(AJP, Decl(promiseTypeInference2.ts, 68, 20))
+>ANP : Symbol(ANP, Decl(promiseTypeInference2.ts, 68, 33))
+
+        BRP = never, BJP = never, BNP = never,
+>BRP : Symbol(BRP, Decl(promiseTypeInference2.ts, 68, 46))
+>BJP : Symbol(BJP, Decl(promiseTypeInference2.ts, 69, 20))
+>BNP : Symbol(BNP, Decl(promiseTypeInference2.ts, 69, 33))
+
+        CRP = never, CJP = never, CNP = never,
+>CRP : Symbol(CRP, Decl(promiseTypeInference2.ts, 69, 46))
+>CJP : Symbol(CJP, Decl(promiseTypeInference2.ts, 70, 20))
+>CNP : Symbol(CNP, Decl(promiseTypeInference2.ts, 70, 33))
+
+        RRP = never, RJP = never, RNP = never>(
+>RRP : Symbol(RRP, Decl(promiseTypeInference2.ts, 70, 46))
+>RJP : Symbol(RJP, Decl(promiseTypeInference2.ts, 71, 20))
+>RNP : Symbol(RNP, Decl(promiseTypeInference2.ts, 71, 33))
+
+            doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => PromiseBase<ARD, AJD, AND,
+>doneFilter : Symbol(doneFilter, Decl(promiseTypeInference2.ts, 71, 47))
+>t : Symbol(t, Decl(promiseTypeInference2.ts, 72, 25))
+>TR : Symbol(TR, Decl(promiseTypeInference2.ts, 54, 22))
+>u : Symbol(u, Decl(promiseTypeInference2.ts, 72, 31))
+>UR : Symbol(UR, Decl(promiseTypeInference2.ts, 55, 15))
+>v : Symbol(v, Decl(promiseTypeInference2.ts, 72, 38))
+>VR : Symbol(VR, Decl(promiseTypeInference2.ts, 56, 15))
+>s : Symbol(s, Decl(promiseTypeInference2.ts, 72, 45))
+>SR : Symbol(SR, Decl(promiseTypeInference2.ts, 57, 15))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARD : Symbol(ARD, Decl(promiseTypeInference2.ts, 60, 9))
+>AJD : Symbol(AJD, Decl(promiseTypeInference2.ts, 60, 21))
+>AND : Symbol(AND, Decl(promiseTypeInference2.ts, 60, 34))
+
+                BRD, BJD, BND,
+>BRD : Symbol(BRD, Decl(promiseTypeInference2.ts, 60, 47))
+>BJD : Symbol(BJD, Decl(promiseTypeInference2.ts, 61, 20))
+>BND : Symbol(BND, Decl(promiseTypeInference2.ts, 61, 33))
+
+                CRD, CJD, CND,
+>CRD : Symbol(CRD, Decl(promiseTypeInference2.ts, 61, 46))
+>CJD : Symbol(CJD, Decl(promiseTypeInference2.ts, 62, 20))
+>CND : Symbol(CND, Decl(promiseTypeInference2.ts, 62, 33))
+
+                RRD, RJD, RND> | Thenable<ARD> | ARD,
+>RRD : Symbol(RRD, Decl(promiseTypeInference2.ts, 62, 46))
+>RJD : Symbol(RJD, Decl(promiseTypeInference2.ts, 63, 20))
+>RND : Symbol(RND, Decl(promiseTypeInference2.ts, 63, 33))
+>Thenable : Symbol(Thenable, Decl(promiseTypeInference2.ts, 50, 7))
+>ARD : Symbol(ARD, Decl(promiseTypeInference2.ts, 60, 9))
+>ARD : Symbol(ARD, Decl(promiseTypeInference2.ts, 60, 9))
+
+            failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => PromiseBase<ARF, AJF, ANF,
+>failFilter : Symbol(failFilter, Decl(promiseTypeInference2.ts, 75, 53))
+>t : Symbol(t, Decl(promiseTypeInference2.ts, 76, 25))
+>TJ : Symbol(TJ, Decl(promiseTypeInference2.ts, 55, 7))
+>u : Symbol(u, Decl(promiseTypeInference2.ts, 76, 31))
+>UJ : Symbol(UJ, Decl(promiseTypeInference2.ts, 56, 7))
+>v : Symbol(v, Decl(promiseTypeInference2.ts, 76, 38))
+>VJ : Symbol(VJ, Decl(promiseTypeInference2.ts, 57, 7))
+>s : Symbol(s, Decl(promiseTypeInference2.ts, 76, 45))
+>SJ : Symbol(SJ, Decl(promiseTypeInference2.ts, 58, 7))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 63, 46))
+>AJF : Symbol(AJF, Decl(promiseTypeInference2.ts, 64, 20))
+>ANF : Symbol(ANF, Decl(promiseTypeInference2.ts, 64, 33))
+
+                BRF, BJF, BNF,
+>BRF : Symbol(BRF, Decl(promiseTypeInference2.ts, 64, 46))
+>BJF : Symbol(BJF, Decl(promiseTypeInference2.ts, 65, 20))
+>BNF : Symbol(BNF, Decl(promiseTypeInference2.ts, 65, 33))
+
+                CRF, CJF, CNF,
+>CRF : Symbol(CRF, Decl(promiseTypeInference2.ts, 65, 46))
+>CJF : Symbol(CJF, Decl(promiseTypeInference2.ts, 66, 20))
+>CNF : Symbol(CNF, Decl(promiseTypeInference2.ts, 66, 33))
+
+                RRF, RJF, RNF> | Thenable<ARF> | ARF,
+>RRF : Symbol(RRF, Decl(promiseTypeInference2.ts, 66, 46))
+>RJF : Symbol(RJF, Decl(promiseTypeInference2.ts, 67, 20))
+>RNF : Symbol(RNF, Decl(promiseTypeInference2.ts, 67, 33))
+>Thenable : Symbol(Thenable, Decl(promiseTypeInference2.ts, 50, 7))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 63, 46))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 63, 46))
+
+            progressFilter: (t: TN, u: UN, v: VN, ...s: SN[]) => PromiseBase<ARP, AJP, ANP,
+>progressFilter : Symbol(progressFilter, Decl(promiseTypeInference2.ts, 79, 53))
+>t : Symbol(t, Decl(promiseTypeInference2.ts, 80, 29))
+>TN : Symbol(TN, Decl(promiseTypeInference2.ts, 55, 11))
+>u : Symbol(u, Decl(promiseTypeInference2.ts, 80, 35))
+>UN : Symbol(UN, Decl(promiseTypeInference2.ts, 56, 11))
+>v : Symbol(v, Decl(promiseTypeInference2.ts, 80, 42))
+>VN : Symbol(VN, Decl(promiseTypeInference2.ts, 57, 11))
+>s : Symbol(s, Decl(promiseTypeInference2.ts, 80, 49))
+>SN : Symbol(SN, Decl(promiseTypeInference2.ts, 58, 11))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARP : Symbol(ARP, Decl(promiseTypeInference2.ts, 67, 46))
+>AJP : Symbol(AJP, Decl(promiseTypeInference2.ts, 68, 20))
+>ANP : Symbol(ANP, Decl(promiseTypeInference2.ts, 68, 33))
+
+                BRP, BJP, BNP,
+>BRP : Symbol(BRP, Decl(promiseTypeInference2.ts, 68, 46))
+>BJP : Symbol(BJP, Decl(promiseTypeInference2.ts, 69, 20))
+>BNP : Symbol(BNP, Decl(promiseTypeInference2.ts, 69, 33))
+
+                CRP, CJP, CNP,
+>CRP : Symbol(CRP, Decl(promiseTypeInference2.ts, 69, 46))
+>CJP : Symbol(CJP, Decl(promiseTypeInference2.ts, 70, 20))
+>CNP : Symbol(CNP, Decl(promiseTypeInference2.ts, 70, 33))
+
+                RRP, RJP, RNP> | Thenable<ANP> | ANP): PromiseBase<ARD | ARF | ARP, AJD | AJF | AJP, AND | ANF | ANP,
+>RRP : Symbol(RRP, Decl(promiseTypeInference2.ts, 70, 46))
+>RJP : Symbol(RJP, Decl(promiseTypeInference2.ts, 71, 20))
+>RNP : Symbol(RNP, Decl(promiseTypeInference2.ts, 71, 33))
+>Thenable : Symbol(Thenable, Decl(promiseTypeInference2.ts, 50, 7))
+>ANP : Symbol(ANP, Decl(promiseTypeInference2.ts, 68, 33))
+>ANP : Symbol(ANP, Decl(promiseTypeInference2.ts, 68, 33))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARD : Symbol(ARD, Decl(promiseTypeInference2.ts, 60, 9))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 63, 46))
+>ARP : Symbol(ARP, Decl(promiseTypeInference2.ts, 67, 46))
+>AJD : Symbol(AJD, Decl(promiseTypeInference2.ts, 60, 21))
+>AJF : Symbol(AJF, Decl(promiseTypeInference2.ts, 64, 20))
+>AJP : Symbol(AJP, Decl(promiseTypeInference2.ts, 68, 20))
+>AND : Symbol(AND, Decl(promiseTypeInference2.ts, 60, 34))
+>ANF : Symbol(ANF, Decl(promiseTypeInference2.ts, 64, 33))
+>ANP : Symbol(ANP, Decl(promiseTypeInference2.ts, 68, 33))
+
+        BRD | BRF | BRP, BJD | BJF | BJP, BND | BNF | BNP,
+>BRD : Symbol(BRD, Decl(promiseTypeInference2.ts, 60, 47))
+>BRF : Symbol(BRF, Decl(promiseTypeInference2.ts, 64, 46))
+>BRP : Symbol(BRP, Decl(promiseTypeInference2.ts, 68, 46))
+>BJD : Symbol(BJD, Decl(promiseTypeInference2.ts, 61, 20))
+>BJF : Symbol(BJF, Decl(promiseTypeInference2.ts, 65, 20))
+>BJP : Symbol(BJP, Decl(promiseTypeInference2.ts, 69, 20))
+>BND : Symbol(BND, Decl(promiseTypeInference2.ts, 61, 33))
+>BNF : Symbol(BNF, Decl(promiseTypeInference2.ts, 65, 33))
+>BNP : Symbol(BNP, Decl(promiseTypeInference2.ts, 69, 33))
+
+        CRD | CRF | CRP, CJD | CJF | CJP, CND | CNF | CNP,
+>CRD : Symbol(CRD, Decl(promiseTypeInference2.ts, 61, 46))
+>CRF : Symbol(CRF, Decl(promiseTypeInference2.ts, 65, 46))
+>CRP : Symbol(CRP, Decl(promiseTypeInference2.ts, 69, 46))
+>CJD : Symbol(CJD, Decl(promiseTypeInference2.ts, 62, 20))
+>CJF : Symbol(CJF, Decl(promiseTypeInference2.ts, 66, 20))
+>CJP : Symbol(CJP, Decl(promiseTypeInference2.ts, 70, 20))
+>CND : Symbol(CND, Decl(promiseTypeInference2.ts, 62, 33))
+>CNF : Symbol(CNF, Decl(promiseTypeInference2.ts, 66, 33))
+>CNP : Symbol(CNP, Decl(promiseTypeInference2.ts, 70, 33))
+
+        RRD | RRF | RRP, RJD | RJF | RJP, RND | RNF | RNP>;
+>RRD : Symbol(RRD, Decl(promiseTypeInference2.ts, 62, 46))
+>RRF : Symbol(RRF, Decl(promiseTypeInference2.ts, 66, 46))
+>RRP : Symbol(RRP, Decl(promiseTypeInference2.ts, 70, 46))
+>RJD : Symbol(RJD, Decl(promiseTypeInference2.ts, 63, 20))
+>RJF : Symbol(RJF, Decl(promiseTypeInference2.ts, 67, 20))
+>RJP : Symbol(RJP, Decl(promiseTypeInference2.ts, 71, 20))
+>RND : Symbol(RND, Decl(promiseTypeInference2.ts, 63, 33))
+>RNF : Symbol(RNF, Decl(promiseTypeInference2.ts, 67, 33))
+>RNP : Symbol(RNP, Decl(promiseTypeInference2.ts, 71, 33))
+
+    then<ARF = never, AJF = never, ANF = never,
+>then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 87, 9))
+>AJF : Symbol(AJF, Decl(promiseTypeInference2.ts, 87, 21))
+>ANF : Symbol(ANF, Decl(promiseTypeInference2.ts, 87, 34))
+
+        BRF = never, BJF = never, BNF = never,
+>BRF : Symbol(BRF, Decl(promiseTypeInference2.ts, 87, 47))
+>BJF : Symbol(BJF, Decl(promiseTypeInference2.ts, 88, 20))
+>BNF : Symbol(BNF, Decl(promiseTypeInference2.ts, 88, 33))
+
+        CRF = never, CJF = never, CNF = never,
+>CRF : Symbol(CRF, Decl(promiseTypeInference2.ts, 88, 46))
+>CJF : Symbol(CJF, Decl(promiseTypeInference2.ts, 89, 20))
+>CNF : Symbol(CNF, Decl(promiseTypeInference2.ts, 89, 33))
+
+        RRF = never, RJF = never, RNF = never,
+>RRF : Symbol(RRF, Decl(promiseTypeInference2.ts, 89, 46))
+>RJF : Symbol(RJF, Decl(promiseTypeInference2.ts, 90, 20))
+>RNF : Symbol(RNF, Decl(promiseTypeInference2.ts, 90, 33))
+
+        ARP = never, AJP = never, ANP = never,
+>ARP : Symbol(ARP, Decl(promiseTypeInference2.ts, 90, 46))
+>AJP : Symbol(AJP, Decl(promiseTypeInference2.ts, 91, 20))
+>ANP : Symbol(ANP, Decl(promiseTypeInference2.ts, 91, 33))
+
+        BRP = never, BJP = never, BNP = never,
+>BRP : Symbol(BRP, Decl(promiseTypeInference2.ts, 91, 46))
+>BJP : Symbol(BJP, Decl(promiseTypeInference2.ts, 92, 20))
+>BNP : Symbol(BNP, Decl(promiseTypeInference2.ts, 92, 33))
+
+        CRP = never, CJP = never, CNP = never,
+>CRP : Symbol(CRP, Decl(promiseTypeInference2.ts, 92, 46))
+>CJP : Symbol(CJP, Decl(promiseTypeInference2.ts, 93, 20))
+>CNP : Symbol(CNP, Decl(promiseTypeInference2.ts, 93, 33))
+
+        RRP = never, RJP = never, RNP = never>(
+>RRP : Symbol(RRP, Decl(promiseTypeInference2.ts, 93, 46))
+>RJP : Symbol(RJP, Decl(promiseTypeInference2.ts, 94, 20))
+>RNP : Symbol(RNP, Decl(promiseTypeInference2.ts, 94, 33))
+
+            doneFilter: null,
+>doneFilter : Symbol(doneFilter, Decl(promiseTypeInference2.ts, 94, 47))
+
+            failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => PromiseBase<ARF, AJF, ANF,
+>failFilter : Symbol(failFilter, Decl(promiseTypeInference2.ts, 95, 29))
+>t : Symbol(t, Decl(promiseTypeInference2.ts, 96, 25))
+>TJ : Symbol(TJ, Decl(promiseTypeInference2.ts, 55, 7))
+>u : Symbol(u, Decl(promiseTypeInference2.ts, 96, 31))
+>UJ : Symbol(UJ, Decl(promiseTypeInference2.ts, 56, 7))
+>v : Symbol(v, Decl(promiseTypeInference2.ts, 96, 38))
+>VJ : Symbol(VJ, Decl(promiseTypeInference2.ts, 57, 7))
+>s : Symbol(s, Decl(promiseTypeInference2.ts, 96, 45))
+>SJ : Symbol(SJ, Decl(promiseTypeInference2.ts, 58, 7))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 87, 9))
+>AJF : Symbol(AJF, Decl(promiseTypeInference2.ts, 87, 21))
+>ANF : Symbol(ANF, Decl(promiseTypeInference2.ts, 87, 34))
+
+                BRF, BJF, BNF,
+>BRF : Symbol(BRF, Decl(promiseTypeInference2.ts, 87, 47))
+>BJF : Symbol(BJF, Decl(promiseTypeInference2.ts, 88, 20))
+>BNF : Symbol(BNF, Decl(promiseTypeInference2.ts, 88, 33))
+
+                CRF, CJF, CNF,
+>CRF : Symbol(CRF, Decl(promiseTypeInference2.ts, 88, 46))
+>CJF : Symbol(CJF, Decl(promiseTypeInference2.ts, 89, 20))
+>CNF : Symbol(CNF, Decl(promiseTypeInference2.ts, 89, 33))
+
+                RRF, RJF, RNF> | Thenable<ARF> | ARF,
+>RRF : Symbol(RRF, Decl(promiseTypeInference2.ts, 89, 46))
+>RJF : Symbol(RJF, Decl(promiseTypeInference2.ts, 90, 20))
+>RNF : Symbol(RNF, Decl(promiseTypeInference2.ts, 90, 33))
+>Thenable : Symbol(Thenable, Decl(promiseTypeInference2.ts, 50, 7))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 87, 9))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 87, 9))
+
+            progressFilter: (t: TN, u: UN, v: VN, ...s: SN[]) => PromiseBase<ARP, AJP, ANP,
+>progressFilter : Symbol(progressFilter, Decl(promiseTypeInference2.ts, 99, 53))
+>t : Symbol(t, Decl(promiseTypeInference2.ts, 100, 29))
+>TN : Symbol(TN, Decl(promiseTypeInference2.ts, 55, 11))
+>u : Symbol(u, Decl(promiseTypeInference2.ts, 100, 35))
+>UN : Symbol(UN, Decl(promiseTypeInference2.ts, 56, 11))
+>v : Symbol(v, Decl(promiseTypeInference2.ts, 100, 42))
+>VN : Symbol(VN, Decl(promiseTypeInference2.ts, 57, 11))
+>s : Symbol(s, Decl(promiseTypeInference2.ts, 100, 49))
+>SN : Symbol(SN, Decl(promiseTypeInference2.ts, 58, 11))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARP : Symbol(ARP, Decl(promiseTypeInference2.ts, 90, 46))
+>AJP : Symbol(AJP, Decl(promiseTypeInference2.ts, 91, 20))
+>ANP : Symbol(ANP, Decl(promiseTypeInference2.ts, 91, 33))
+
+                BRP, BJP, BNP,
+>BRP : Symbol(BRP, Decl(promiseTypeInference2.ts, 91, 46))
+>BJP : Symbol(BJP, Decl(promiseTypeInference2.ts, 92, 20))
+>BNP : Symbol(BNP, Decl(promiseTypeInference2.ts, 92, 33))
+
+                CRP, CJP, CNP,
+>CRP : Symbol(CRP, Decl(promiseTypeInference2.ts, 92, 46))
+>CJP : Symbol(CJP, Decl(promiseTypeInference2.ts, 93, 20))
+>CNP : Symbol(CNP, Decl(promiseTypeInference2.ts, 93, 33))
+
+                RRP, RJP, RNP> | Thenable<ANP> | ANP): PromiseBase<ARF | ARP, AJF | AJP, ANF | ANP,
+>RRP : Symbol(RRP, Decl(promiseTypeInference2.ts, 93, 46))
+>RJP : Symbol(RJP, Decl(promiseTypeInference2.ts, 94, 20))
+>RNP : Symbol(RNP, Decl(promiseTypeInference2.ts, 94, 33))
+>Thenable : Symbol(Thenable, Decl(promiseTypeInference2.ts, 50, 7))
+>ANP : Symbol(ANP, Decl(promiseTypeInference2.ts, 91, 33))
+>ANP : Symbol(ANP, Decl(promiseTypeInference2.ts, 91, 33))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 87, 9))
+>ARP : Symbol(ARP, Decl(promiseTypeInference2.ts, 90, 46))
+>AJF : Symbol(AJF, Decl(promiseTypeInference2.ts, 87, 21))
+>AJP : Symbol(AJP, Decl(promiseTypeInference2.ts, 91, 20))
+>ANF : Symbol(ANF, Decl(promiseTypeInference2.ts, 87, 34))
+>ANP : Symbol(ANP, Decl(promiseTypeInference2.ts, 91, 33))
+
+        BRF | BRP, BJF | BJP, BNF | BNP,
+>BRF : Symbol(BRF, Decl(promiseTypeInference2.ts, 87, 47))
+>BRP : Symbol(BRP, Decl(promiseTypeInference2.ts, 91, 46))
+>BJF : Symbol(BJF, Decl(promiseTypeInference2.ts, 88, 20))
+>BJP : Symbol(BJP, Decl(promiseTypeInference2.ts, 92, 20))
+>BNF : Symbol(BNF, Decl(promiseTypeInference2.ts, 88, 33))
+>BNP : Symbol(BNP, Decl(promiseTypeInference2.ts, 92, 33))
+
+        CRF | CRP, CJF | CJP, CNF | CNP,
+>CRF : Symbol(CRF, Decl(promiseTypeInference2.ts, 88, 46))
+>CRP : Symbol(CRP, Decl(promiseTypeInference2.ts, 92, 46))
+>CJF : Symbol(CJF, Decl(promiseTypeInference2.ts, 89, 20))
+>CJP : Symbol(CJP, Decl(promiseTypeInference2.ts, 93, 20))
+>CNF : Symbol(CNF, Decl(promiseTypeInference2.ts, 89, 33))
+>CNP : Symbol(CNP, Decl(promiseTypeInference2.ts, 93, 33))
+
+        RRF | RRP, RJF | RJP, RNF | RNP>;
+>RRF : Symbol(RRF, Decl(promiseTypeInference2.ts, 89, 46))
+>RRP : Symbol(RRP, Decl(promiseTypeInference2.ts, 93, 46))
+>RJF : Symbol(RJF, Decl(promiseTypeInference2.ts, 90, 20))
+>RJP : Symbol(RJP, Decl(promiseTypeInference2.ts, 94, 20))
+>RNF : Symbol(RNF, Decl(promiseTypeInference2.ts, 90, 33))
+>RNP : Symbol(RNP, Decl(promiseTypeInference2.ts, 94, 33))
+
+    then<ARD = never, AJD = never, AND = never,
+>then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>ARD : Symbol(ARD, Decl(promiseTypeInference2.ts, 107, 9))
+>AJD : Symbol(AJD, Decl(promiseTypeInference2.ts, 107, 21))
+>AND : Symbol(AND, Decl(promiseTypeInference2.ts, 107, 34))
+
+        BRD = never, BJD = never, BND = never,
+>BRD : Symbol(BRD, Decl(promiseTypeInference2.ts, 107, 47))
+>BJD : Symbol(BJD, Decl(promiseTypeInference2.ts, 108, 20))
+>BND : Symbol(BND, Decl(promiseTypeInference2.ts, 108, 33))
+
+        CRD = never, CJD = never, CND = never,
+>CRD : Symbol(CRD, Decl(promiseTypeInference2.ts, 108, 46))
+>CJD : Symbol(CJD, Decl(promiseTypeInference2.ts, 109, 20))
+>CND : Symbol(CND, Decl(promiseTypeInference2.ts, 109, 33))
+
+        RRD = never, RJD = never, RND = never,
+>RRD : Symbol(RRD, Decl(promiseTypeInference2.ts, 109, 46))
+>RJD : Symbol(RJD, Decl(promiseTypeInference2.ts, 110, 20))
+>RND : Symbol(RND, Decl(promiseTypeInference2.ts, 110, 33))
+
+        ARP = never, AJP = never, ANP = never,
+>ARP : Symbol(ARP, Decl(promiseTypeInference2.ts, 110, 46))
+>AJP : Symbol(AJP, Decl(promiseTypeInference2.ts, 111, 20))
+>ANP : Symbol(ANP, Decl(promiseTypeInference2.ts, 111, 33))
+
+        BRP = never, BJP = never, BNP = never,
+>BRP : Symbol(BRP, Decl(promiseTypeInference2.ts, 111, 46))
+>BJP : Symbol(BJP, Decl(promiseTypeInference2.ts, 112, 20))
+>BNP : Symbol(BNP, Decl(promiseTypeInference2.ts, 112, 33))
+
+        CRP = never, CJP = never, CNP = never,
+>CRP : Symbol(CRP, Decl(promiseTypeInference2.ts, 112, 46))
+>CJP : Symbol(CJP, Decl(promiseTypeInference2.ts, 113, 20))
+>CNP : Symbol(CNP, Decl(promiseTypeInference2.ts, 113, 33))
+
+        RRP = never, RJP = never, RNP = never>(
+>RRP : Symbol(RRP, Decl(promiseTypeInference2.ts, 113, 46))
+>RJP : Symbol(RJP, Decl(promiseTypeInference2.ts, 114, 20))
+>RNP : Symbol(RNP, Decl(promiseTypeInference2.ts, 114, 33))
+
+            doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => PromiseBase<ARD, AJD, AND,
+>doneFilter : Symbol(doneFilter, Decl(promiseTypeInference2.ts, 114, 47))
+>t : Symbol(t, Decl(promiseTypeInference2.ts, 115, 25))
+>TR : Symbol(TR, Decl(promiseTypeInference2.ts, 54, 22))
+>u : Symbol(u, Decl(promiseTypeInference2.ts, 115, 31))
+>UR : Symbol(UR, Decl(promiseTypeInference2.ts, 55, 15))
+>v : Symbol(v, Decl(promiseTypeInference2.ts, 115, 38))
+>VR : Symbol(VR, Decl(promiseTypeInference2.ts, 56, 15))
+>s : Symbol(s, Decl(promiseTypeInference2.ts, 115, 45))
+>SR : Symbol(SR, Decl(promiseTypeInference2.ts, 57, 15))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARD : Symbol(ARD, Decl(promiseTypeInference2.ts, 107, 9))
+>AJD : Symbol(AJD, Decl(promiseTypeInference2.ts, 107, 21))
+>AND : Symbol(AND, Decl(promiseTypeInference2.ts, 107, 34))
+
+                BRD, BJD, BND,
+>BRD : Symbol(BRD, Decl(promiseTypeInference2.ts, 107, 47))
+>BJD : Symbol(BJD, Decl(promiseTypeInference2.ts, 108, 20))
+>BND : Symbol(BND, Decl(promiseTypeInference2.ts, 108, 33))
+
+                CRD, CJD, CND,
+>CRD : Symbol(CRD, Decl(promiseTypeInference2.ts, 108, 46))
+>CJD : Symbol(CJD, Decl(promiseTypeInference2.ts, 109, 20))
+>CND : Symbol(CND, Decl(promiseTypeInference2.ts, 109, 33))
+
+                RRD, RJD, RND> | Thenable<ARD> | ARD,
+>RRD : Symbol(RRD, Decl(promiseTypeInference2.ts, 109, 46))
+>RJD : Symbol(RJD, Decl(promiseTypeInference2.ts, 110, 20))
+>RND : Symbol(RND, Decl(promiseTypeInference2.ts, 110, 33))
+>Thenable : Symbol(Thenable, Decl(promiseTypeInference2.ts, 50, 7))
+>ARD : Symbol(ARD, Decl(promiseTypeInference2.ts, 107, 9))
+>ARD : Symbol(ARD, Decl(promiseTypeInference2.ts, 107, 9))
+
+            failFilter: null,
+>failFilter : Symbol(failFilter, Decl(promiseTypeInference2.ts, 118, 53))
+
+            progressFilter: (t: TN, u: UN, v: VN, ...s: SN[]) => PromiseBase<ARP, AJP, ANP,
+>progressFilter : Symbol(progressFilter, Decl(promiseTypeInference2.ts, 119, 29))
+>t : Symbol(t, Decl(promiseTypeInference2.ts, 120, 29))
+>TN : Symbol(TN, Decl(promiseTypeInference2.ts, 55, 11))
+>u : Symbol(u, Decl(promiseTypeInference2.ts, 120, 35))
+>UN : Symbol(UN, Decl(promiseTypeInference2.ts, 56, 11))
+>v : Symbol(v, Decl(promiseTypeInference2.ts, 120, 42))
+>VN : Symbol(VN, Decl(promiseTypeInference2.ts, 57, 11))
+>s : Symbol(s, Decl(promiseTypeInference2.ts, 120, 49))
+>SN : Symbol(SN, Decl(promiseTypeInference2.ts, 58, 11))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARP : Symbol(ARP, Decl(promiseTypeInference2.ts, 110, 46))
+>AJP : Symbol(AJP, Decl(promiseTypeInference2.ts, 111, 20))
+>ANP : Symbol(ANP, Decl(promiseTypeInference2.ts, 111, 33))
+
+                BRP, BJP, BNP,
+>BRP : Symbol(BRP, Decl(promiseTypeInference2.ts, 111, 46))
+>BJP : Symbol(BJP, Decl(promiseTypeInference2.ts, 112, 20))
+>BNP : Symbol(BNP, Decl(promiseTypeInference2.ts, 112, 33))
+
+                CRP, CJP, CNP,
+>CRP : Symbol(CRP, Decl(promiseTypeInference2.ts, 112, 46))
+>CJP : Symbol(CJP, Decl(promiseTypeInference2.ts, 113, 20))
+>CNP : Symbol(CNP, Decl(promiseTypeInference2.ts, 113, 33))
+
+                RRP, RJP, RNP> | Thenable<ANP> | ANP): PromiseBase<ARD | ARP, AJD | AJP, AND | ANP,
+>RRP : Symbol(RRP, Decl(promiseTypeInference2.ts, 113, 46))
+>RJP : Symbol(RJP, Decl(promiseTypeInference2.ts, 114, 20))
+>RNP : Symbol(RNP, Decl(promiseTypeInference2.ts, 114, 33))
+>Thenable : Symbol(Thenable, Decl(promiseTypeInference2.ts, 50, 7))
+>ANP : Symbol(ANP, Decl(promiseTypeInference2.ts, 111, 33))
+>ANP : Symbol(ANP, Decl(promiseTypeInference2.ts, 111, 33))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARD : Symbol(ARD, Decl(promiseTypeInference2.ts, 107, 9))
+>ARP : Symbol(ARP, Decl(promiseTypeInference2.ts, 110, 46))
+>AJD : Symbol(AJD, Decl(promiseTypeInference2.ts, 107, 21))
+>AJP : Symbol(AJP, Decl(promiseTypeInference2.ts, 111, 20))
+>AND : Symbol(AND, Decl(promiseTypeInference2.ts, 107, 34))
+>ANP : Symbol(ANP, Decl(promiseTypeInference2.ts, 111, 33))
+
+        BRD | BRP, BJD | BJP, BND | BNP,
+>BRD : Symbol(BRD, Decl(promiseTypeInference2.ts, 107, 47))
+>BRP : Symbol(BRP, Decl(promiseTypeInference2.ts, 111, 46))
+>BJD : Symbol(BJD, Decl(promiseTypeInference2.ts, 108, 20))
+>BJP : Symbol(BJP, Decl(promiseTypeInference2.ts, 112, 20))
+>BND : Symbol(BND, Decl(promiseTypeInference2.ts, 108, 33))
+>BNP : Symbol(BNP, Decl(promiseTypeInference2.ts, 112, 33))
+
+        CRD | CRP, CJD | CJP, CND | CNP,
+>CRD : Symbol(CRD, Decl(promiseTypeInference2.ts, 108, 46))
+>CRP : Symbol(CRP, Decl(promiseTypeInference2.ts, 112, 46))
+>CJD : Symbol(CJD, Decl(promiseTypeInference2.ts, 109, 20))
+>CJP : Symbol(CJP, Decl(promiseTypeInference2.ts, 113, 20))
+>CND : Symbol(CND, Decl(promiseTypeInference2.ts, 109, 33))
+>CNP : Symbol(CNP, Decl(promiseTypeInference2.ts, 113, 33))
+
+        RRD | RRP, RJD | RJP, RND | RNP>;
+>RRD : Symbol(RRD, Decl(promiseTypeInference2.ts, 109, 46))
+>RRP : Symbol(RRP, Decl(promiseTypeInference2.ts, 113, 46))
+>RJD : Symbol(RJD, Decl(promiseTypeInference2.ts, 110, 20))
+>RJP : Symbol(RJP, Decl(promiseTypeInference2.ts, 114, 20))
+>RND : Symbol(RND, Decl(promiseTypeInference2.ts, 110, 33))
+>RNP : Symbol(RNP, Decl(promiseTypeInference2.ts, 114, 33))
+
+    then<ARP = never, AJP = never, ANP = never,
+>then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>ARP : Symbol(ARP, Decl(promiseTypeInference2.ts, 127, 9))
+>AJP : Symbol(AJP, Decl(promiseTypeInference2.ts, 127, 21))
+>ANP : Symbol(ANP, Decl(promiseTypeInference2.ts, 127, 34))
+
+        BRP = never, BJP = never, BNP = never,
+>BRP : Symbol(BRP, Decl(promiseTypeInference2.ts, 127, 47))
+>BJP : Symbol(BJP, Decl(promiseTypeInference2.ts, 128, 20))
+>BNP : Symbol(BNP, Decl(promiseTypeInference2.ts, 128, 33))
+
+        CRP = never, CJP = never, CNP = never,
+>CRP : Symbol(CRP, Decl(promiseTypeInference2.ts, 128, 46))
+>CJP : Symbol(CJP, Decl(promiseTypeInference2.ts, 129, 20))
+>CNP : Symbol(CNP, Decl(promiseTypeInference2.ts, 129, 33))
+
+        RRP = never, RJP = never, RNP = never>(
+>RRP : Symbol(RRP, Decl(promiseTypeInference2.ts, 129, 46))
+>RJP : Symbol(RJP, Decl(promiseTypeInference2.ts, 130, 20))
+>RNP : Symbol(RNP, Decl(promiseTypeInference2.ts, 130, 33))
+
+            doneFilter: null,
+>doneFilter : Symbol(doneFilter, Decl(promiseTypeInference2.ts, 130, 47))
+
+            failFilter: null,
+>failFilter : Symbol(failFilter, Decl(promiseTypeInference2.ts, 131, 29))
+
+            progressFilter?: (t: TN, u: UN, v: VN, ...s: SN[]) => PromiseBase<ARP, AJP, ANP,
+>progressFilter : Symbol(progressFilter, Decl(promiseTypeInference2.ts, 132, 29))
+>t : Symbol(t, Decl(promiseTypeInference2.ts, 133, 30))
+>TN : Symbol(TN, Decl(promiseTypeInference2.ts, 55, 11))
+>u : Symbol(u, Decl(promiseTypeInference2.ts, 133, 36))
+>UN : Symbol(UN, Decl(promiseTypeInference2.ts, 56, 11))
+>v : Symbol(v, Decl(promiseTypeInference2.ts, 133, 43))
+>VN : Symbol(VN, Decl(promiseTypeInference2.ts, 57, 11))
+>s : Symbol(s, Decl(promiseTypeInference2.ts, 133, 50))
+>SN : Symbol(SN, Decl(promiseTypeInference2.ts, 58, 11))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARP : Symbol(ARP, Decl(promiseTypeInference2.ts, 127, 9))
+>AJP : Symbol(AJP, Decl(promiseTypeInference2.ts, 127, 21))
+>ANP : Symbol(ANP, Decl(promiseTypeInference2.ts, 127, 34))
+
+                BRP, BJP, BNP,
+>BRP : Symbol(BRP, Decl(promiseTypeInference2.ts, 127, 47))
+>BJP : Symbol(BJP, Decl(promiseTypeInference2.ts, 128, 20))
+>BNP : Symbol(BNP, Decl(promiseTypeInference2.ts, 128, 33))
+
+                CRP, CJP, CNP,
+>CRP : Symbol(CRP, Decl(promiseTypeInference2.ts, 128, 46))
+>CJP : Symbol(CJP, Decl(promiseTypeInference2.ts, 129, 20))
+>CNP : Symbol(CNP, Decl(promiseTypeInference2.ts, 129, 33))
+
+                RRP, RJP, RNP> | Thenable<ANP> | ANP): PromiseBase<ARP, AJP, ANP,
+>RRP : Symbol(RRP, Decl(promiseTypeInference2.ts, 129, 46))
+>RJP : Symbol(RJP, Decl(promiseTypeInference2.ts, 130, 20))
+>RNP : Symbol(RNP, Decl(promiseTypeInference2.ts, 130, 33))
+>Thenable : Symbol(Thenable, Decl(promiseTypeInference2.ts, 50, 7))
+>ANP : Symbol(ANP, Decl(promiseTypeInference2.ts, 127, 34))
+>ANP : Symbol(ANP, Decl(promiseTypeInference2.ts, 127, 34))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARP : Symbol(ARP, Decl(promiseTypeInference2.ts, 127, 9))
+>AJP : Symbol(AJP, Decl(promiseTypeInference2.ts, 127, 21))
+>ANP : Symbol(ANP, Decl(promiseTypeInference2.ts, 127, 34))
+
+        BRP, BJP, BNP,
+>BRP : Symbol(BRP, Decl(promiseTypeInference2.ts, 127, 47))
+>BJP : Symbol(BJP, Decl(promiseTypeInference2.ts, 128, 20))
+>BNP : Symbol(BNP, Decl(promiseTypeInference2.ts, 128, 33))
+
+        CRP, CJP, CNP,
+>CRP : Symbol(CRP, Decl(promiseTypeInference2.ts, 128, 46))
+>CJP : Symbol(CJP, Decl(promiseTypeInference2.ts, 129, 20))
+>CNP : Symbol(CNP, Decl(promiseTypeInference2.ts, 129, 33))
+
+        RRP, RJP, RNP>;
+>RRP : Symbol(RRP, Decl(promiseTypeInference2.ts, 129, 46))
+>RJP : Symbol(RJP, Decl(promiseTypeInference2.ts, 130, 20))
+>RNP : Symbol(RNP, Decl(promiseTypeInference2.ts, 130, 33))
+
+    then<ARD = never, AJD = never, AND = never,
+>then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>ARD : Symbol(ARD, Decl(promiseTypeInference2.ts, 140, 9))
+>AJD : Symbol(AJD, Decl(promiseTypeInference2.ts, 140, 21))
+>AND : Symbol(AND, Decl(promiseTypeInference2.ts, 140, 34))
+
+        BRD = never, BJD = never, BND = never,
+>BRD : Symbol(BRD, Decl(promiseTypeInference2.ts, 140, 47))
+>BJD : Symbol(BJD, Decl(promiseTypeInference2.ts, 141, 20))
+>BND : Symbol(BND, Decl(promiseTypeInference2.ts, 141, 33))
+
+        CRD = never, CJD = never, CND = never,
+>CRD : Symbol(CRD, Decl(promiseTypeInference2.ts, 141, 46))
+>CJD : Symbol(CJD, Decl(promiseTypeInference2.ts, 142, 20))
+>CND : Symbol(CND, Decl(promiseTypeInference2.ts, 142, 33))
+
+        RRD = never, RJD = never, RND = never,
+>RRD : Symbol(RRD, Decl(promiseTypeInference2.ts, 142, 46))
+>RJD : Symbol(RJD, Decl(promiseTypeInference2.ts, 143, 20))
+>RND : Symbol(RND, Decl(promiseTypeInference2.ts, 143, 33))
+
+        ARF = never, AJF = never, ANF = never,
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 143, 46))
+>AJF : Symbol(AJF, Decl(promiseTypeInference2.ts, 144, 20))
+>ANF : Symbol(ANF, Decl(promiseTypeInference2.ts, 144, 33))
+
+        BRF = never, BJF = never, BNF = never,
+>BRF : Symbol(BRF, Decl(promiseTypeInference2.ts, 144, 46))
+>BJF : Symbol(BJF, Decl(promiseTypeInference2.ts, 145, 20))
+>BNF : Symbol(BNF, Decl(promiseTypeInference2.ts, 145, 33))
+
+        CRF = never, CJF = never, CNF = never,
+>CRF : Symbol(CRF, Decl(promiseTypeInference2.ts, 145, 46))
+>CJF : Symbol(CJF, Decl(promiseTypeInference2.ts, 146, 20))
+>CNF : Symbol(CNF, Decl(promiseTypeInference2.ts, 146, 33))
+
+        RRF = never, RJF = never, RNF = never>(
+>RRF : Symbol(RRF, Decl(promiseTypeInference2.ts, 146, 46))
+>RJF : Symbol(RJF, Decl(promiseTypeInference2.ts, 147, 20))
+>RNF : Symbol(RNF, Decl(promiseTypeInference2.ts, 147, 33))
+
+            doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => PromiseBase<ARD, AJD, AND,
+>doneFilter : Symbol(doneFilter, Decl(promiseTypeInference2.ts, 147, 47))
+>t : Symbol(t, Decl(promiseTypeInference2.ts, 148, 25))
+>TR : Symbol(TR, Decl(promiseTypeInference2.ts, 54, 22))
+>u : Symbol(u, Decl(promiseTypeInference2.ts, 148, 31))
+>UR : Symbol(UR, Decl(promiseTypeInference2.ts, 55, 15))
+>v : Symbol(v, Decl(promiseTypeInference2.ts, 148, 38))
+>VR : Symbol(VR, Decl(promiseTypeInference2.ts, 56, 15))
+>s : Symbol(s, Decl(promiseTypeInference2.ts, 148, 45))
+>SR : Symbol(SR, Decl(promiseTypeInference2.ts, 57, 15))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARD : Symbol(ARD, Decl(promiseTypeInference2.ts, 140, 9))
+>AJD : Symbol(AJD, Decl(promiseTypeInference2.ts, 140, 21))
+>AND : Symbol(AND, Decl(promiseTypeInference2.ts, 140, 34))
+
+                BRD, BJD, BND,
+>BRD : Symbol(BRD, Decl(promiseTypeInference2.ts, 140, 47))
+>BJD : Symbol(BJD, Decl(promiseTypeInference2.ts, 141, 20))
+>BND : Symbol(BND, Decl(promiseTypeInference2.ts, 141, 33))
+
+                CRD, CJD, CND,
+>CRD : Symbol(CRD, Decl(promiseTypeInference2.ts, 141, 46))
+>CJD : Symbol(CJD, Decl(promiseTypeInference2.ts, 142, 20))
+>CND : Symbol(CND, Decl(promiseTypeInference2.ts, 142, 33))
+
+                RRD, RJD, RND> | Thenable<ARD> | ARD,
+>RRD : Symbol(RRD, Decl(promiseTypeInference2.ts, 142, 46))
+>RJD : Symbol(RJD, Decl(promiseTypeInference2.ts, 143, 20))
+>RND : Symbol(RND, Decl(promiseTypeInference2.ts, 143, 33))
+>Thenable : Symbol(Thenable, Decl(promiseTypeInference2.ts, 50, 7))
+>ARD : Symbol(ARD, Decl(promiseTypeInference2.ts, 140, 9))
+>ARD : Symbol(ARD, Decl(promiseTypeInference2.ts, 140, 9))
+
+            failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => PromiseBase<ARF, AJF, ANF,
+>failFilter : Symbol(failFilter, Decl(promiseTypeInference2.ts, 151, 53))
+>t : Symbol(t, Decl(promiseTypeInference2.ts, 152, 25))
+>TJ : Symbol(TJ, Decl(promiseTypeInference2.ts, 55, 7))
+>u : Symbol(u, Decl(promiseTypeInference2.ts, 152, 31))
+>UJ : Symbol(UJ, Decl(promiseTypeInference2.ts, 56, 7))
+>v : Symbol(v, Decl(promiseTypeInference2.ts, 152, 38))
+>VJ : Symbol(VJ, Decl(promiseTypeInference2.ts, 57, 7))
+>s : Symbol(s, Decl(promiseTypeInference2.ts, 152, 45))
+>SJ : Symbol(SJ, Decl(promiseTypeInference2.ts, 58, 7))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 143, 46))
+>AJF : Symbol(AJF, Decl(promiseTypeInference2.ts, 144, 20))
+>ANF : Symbol(ANF, Decl(promiseTypeInference2.ts, 144, 33))
+
+                BRF, BJF, BNF,
+>BRF : Symbol(BRF, Decl(promiseTypeInference2.ts, 144, 46))
+>BJF : Symbol(BJF, Decl(promiseTypeInference2.ts, 145, 20))
+>BNF : Symbol(BNF, Decl(promiseTypeInference2.ts, 145, 33))
+
+                CRF, CJF, CNF,
+>CRF : Symbol(CRF, Decl(promiseTypeInference2.ts, 145, 46))
+>CJF : Symbol(CJF, Decl(promiseTypeInference2.ts, 146, 20))
+>CNF : Symbol(CNF, Decl(promiseTypeInference2.ts, 146, 33))
+
+                RRF, RJF, RNF> | Thenable<ARF> | ARF,
+>RRF : Symbol(RRF, Decl(promiseTypeInference2.ts, 146, 46))
+>RJF : Symbol(RJF, Decl(promiseTypeInference2.ts, 147, 20))
+>RNF : Symbol(RNF, Decl(promiseTypeInference2.ts, 147, 33))
+>Thenable : Symbol(Thenable, Decl(promiseTypeInference2.ts, 50, 7))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 143, 46))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 143, 46))
+
+            progressFilter?: null): PromiseBase<ARD | ARF, AJD | AJF, AND | ANF,
+>progressFilter : Symbol(progressFilter, Decl(promiseTypeInference2.ts, 155, 53))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARD : Symbol(ARD, Decl(promiseTypeInference2.ts, 140, 9))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 143, 46))
+>AJD : Symbol(AJD, Decl(promiseTypeInference2.ts, 140, 21))
+>AJF : Symbol(AJF, Decl(promiseTypeInference2.ts, 144, 20))
+>AND : Symbol(AND, Decl(promiseTypeInference2.ts, 140, 34))
+>ANF : Symbol(ANF, Decl(promiseTypeInference2.ts, 144, 33))
+
+        BRD | BRF, BJD | BJF, BND | BNF,
+>BRD : Symbol(BRD, Decl(promiseTypeInference2.ts, 140, 47))
+>BRF : Symbol(BRF, Decl(promiseTypeInference2.ts, 144, 46))
+>BJD : Symbol(BJD, Decl(promiseTypeInference2.ts, 141, 20))
+>BJF : Symbol(BJF, Decl(promiseTypeInference2.ts, 145, 20))
+>BND : Symbol(BND, Decl(promiseTypeInference2.ts, 141, 33))
+>BNF : Symbol(BNF, Decl(promiseTypeInference2.ts, 145, 33))
+
+        CRD | CRF, CJD | CJF, CND | CNF,
+>CRD : Symbol(CRD, Decl(promiseTypeInference2.ts, 141, 46))
+>CRF : Symbol(CRF, Decl(promiseTypeInference2.ts, 145, 46))
+>CJD : Symbol(CJD, Decl(promiseTypeInference2.ts, 142, 20))
+>CJF : Symbol(CJF, Decl(promiseTypeInference2.ts, 146, 20))
+>CND : Symbol(CND, Decl(promiseTypeInference2.ts, 142, 33))
+>CNF : Symbol(CNF, Decl(promiseTypeInference2.ts, 146, 33))
+
+        RRD | RRF, RJD | RJF, RND | RNF>;
+>RRD : Symbol(RRD, Decl(promiseTypeInference2.ts, 142, 46))
+>RRF : Symbol(RRF, Decl(promiseTypeInference2.ts, 146, 46))
+>RJD : Symbol(RJD, Decl(promiseTypeInference2.ts, 143, 20))
+>RJF : Symbol(RJF, Decl(promiseTypeInference2.ts, 147, 20))
+>RND : Symbol(RND, Decl(promiseTypeInference2.ts, 143, 33))
+>RNF : Symbol(RNF, Decl(promiseTypeInference2.ts, 147, 33))
+
+    then<ARF = never, AJF = never, ANF = never,
+>then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 160, 9))
+>AJF : Symbol(AJF, Decl(promiseTypeInference2.ts, 160, 21))
+>ANF : Symbol(ANF, Decl(promiseTypeInference2.ts, 160, 34))
+
+        BRF = never, BJF = never, BNF = never,
+>BRF : Symbol(BRF, Decl(promiseTypeInference2.ts, 160, 47))
+>BJF : Symbol(BJF, Decl(promiseTypeInference2.ts, 161, 20))
+>BNF : Symbol(BNF, Decl(promiseTypeInference2.ts, 161, 33))
+
+        CRF = never, CJF = never, CNF = never,
+>CRF : Symbol(CRF, Decl(promiseTypeInference2.ts, 161, 46))
+>CJF : Symbol(CJF, Decl(promiseTypeInference2.ts, 162, 20))
+>CNF : Symbol(CNF, Decl(promiseTypeInference2.ts, 162, 33))
+
+        RRF = never, RJF = never, RNF = never>(
+>RRF : Symbol(RRF, Decl(promiseTypeInference2.ts, 162, 46))
+>RJF : Symbol(RJF, Decl(promiseTypeInference2.ts, 163, 20))
+>RNF : Symbol(RNF, Decl(promiseTypeInference2.ts, 163, 33))
+
+            doneFilter: null,
+>doneFilter : Symbol(doneFilter, Decl(promiseTypeInference2.ts, 163, 47))
+
+            failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => PromiseBase<ARF, AJF, ANF,
+>failFilter : Symbol(failFilter, Decl(promiseTypeInference2.ts, 164, 29))
+>t : Symbol(t, Decl(promiseTypeInference2.ts, 165, 25))
+>TJ : Symbol(TJ, Decl(promiseTypeInference2.ts, 55, 7))
+>u : Symbol(u, Decl(promiseTypeInference2.ts, 165, 31))
+>UJ : Symbol(UJ, Decl(promiseTypeInference2.ts, 56, 7))
+>v : Symbol(v, Decl(promiseTypeInference2.ts, 165, 38))
+>VJ : Symbol(VJ, Decl(promiseTypeInference2.ts, 57, 7))
+>s : Symbol(s, Decl(promiseTypeInference2.ts, 165, 45))
+>SJ : Symbol(SJ, Decl(promiseTypeInference2.ts, 58, 7))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 160, 9))
+>AJF : Symbol(AJF, Decl(promiseTypeInference2.ts, 160, 21))
+>ANF : Symbol(ANF, Decl(promiseTypeInference2.ts, 160, 34))
+
+                BRF, BJF, BNF,
+>BRF : Symbol(BRF, Decl(promiseTypeInference2.ts, 160, 47))
+>BJF : Symbol(BJF, Decl(promiseTypeInference2.ts, 161, 20))
+>BNF : Symbol(BNF, Decl(promiseTypeInference2.ts, 161, 33))
+
+                CRF, CJF, CNF,
+>CRF : Symbol(CRF, Decl(promiseTypeInference2.ts, 161, 46))
+>CJF : Symbol(CJF, Decl(promiseTypeInference2.ts, 162, 20))
+>CNF : Symbol(CNF, Decl(promiseTypeInference2.ts, 162, 33))
+
+                RRF, RJF, RNF> | Thenable<ARF> | ARF,
+>RRF : Symbol(RRF, Decl(promiseTypeInference2.ts, 162, 46))
+>RJF : Symbol(RJF, Decl(promiseTypeInference2.ts, 163, 20))
+>RNF : Symbol(RNF, Decl(promiseTypeInference2.ts, 163, 33))
+>Thenable : Symbol(Thenable, Decl(promiseTypeInference2.ts, 50, 7))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 160, 9))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 160, 9))
+
+            progressFilter?: null): PromiseBase<ARF, AJF, ANF,
+>progressFilter : Symbol(progressFilter, Decl(promiseTypeInference2.ts, 168, 53))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 160, 9))
+>AJF : Symbol(AJF, Decl(promiseTypeInference2.ts, 160, 21))
+>ANF : Symbol(ANF, Decl(promiseTypeInference2.ts, 160, 34))
+
+        BRF, BJF, BNF,
+>BRF : Symbol(BRF, Decl(promiseTypeInference2.ts, 160, 47))
+>BJF : Symbol(BJF, Decl(promiseTypeInference2.ts, 161, 20))
+>BNF : Symbol(BNF, Decl(promiseTypeInference2.ts, 161, 33))
+
+        CRF, CJF, CNF,
+>CRF : Symbol(CRF, Decl(promiseTypeInference2.ts, 161, 46))
+>CJF : Symbol(CJF, Decl(promiseTypeInference2.ts, 162, 20))
+>CNF : Symbol(CNF, Decl(promiseTypeInference2.ts, 162, 33))
+
+        RRF, RJF, RNF>;
+>RRF : Symbol(RRF, Decl(promiseTypeInference2.ts, 162, 46))
+>RJF : Symbol(RJF, Decl(promiseTypeInference2.ts, 163, 20))
+>RNF : Symbol(RNF, Decl(promiseTypeInference2.ts, 163, 33))
+
+    then<ARD = never, AJD = never, AND = never,
+>then : Symbol(PromiseBase.then, Decl(promiseTypeInference2.ts, 59, 3), Decl(promiseTypeInference2.ts, 86, 59), Decl(promiseTypeInference2.ts, 106, 41), Decl(promiseTypeInference2.ts, 126, 41), Decl(promiseTypeInference2.ts, 139, 23) ... and 2 more)
+>ARD : Symbol(ARD, Decl(promiseTypeInference2.ts, 173, 9))
+>AJD : Symbol(AJD, Decl(promiseTypeInference2.ts, 173, 21))
+>AND : Symbol(AND, Decl(promiseTypeInference2.ts, 173, 34))
+
+        BRD = never, BJD = never, BND = never,
+>BRD : Symbol(BRD, Decl(promiseTypeInference2.ts, 173, 47))
+>BJD : Symbol(BJD, Decl(promiseTypeInference2.ts, 174, 20))
+>BND : Symbol(BND, Decl(promiseTypeInference2.ts, 174, 33))
+
+        CRD = never, CJD = never, CND = never,
+>CRD : Symbol(CRD, Decl(promiseTypeInference2.ts, 174, 46))
+>CJD : Symbol(CJD, Decl(promiseTypeInference2.ts, 175, 20))
+>CND : Symbol(CND, Decl(promiseTypeInference2.ts, 175, 33))
+
+        RRD = never, RJD = never, RND = never>(
+>RRD : Symbol(RRD, Decl(promiseTypeInference2.ts, 175, 46))
+>RJD : Symbol(RJD, Decl(promiseTypeInference2.ts, 176, 20))
+>RND : Symbol(RND, Decl(promiseTypeInference2.ts, 176, 33))
+
+            doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => PromiseBase<ARD, AJD, AND,
+>doneFilter : Symbol(doneFilter, Decl(promiseTypeInference2.ts, 176, 47))
+>t : Symbol(t, Decl(promiseTypeInference2.ts, 177, 25))
+>TR : Symbol(TR, Decl(promiseTypeInference2.ts, 54, 22))
+>u : Symbol(u, Decl(promiseTypeInference2.ts, 177, 31))
+>UR : Symbol(UR, Decl(promiseTypeInference2.ts, 55, 15))
+>v : Symbol(v, Decl(promiseTypeInference2.ts, 177, 38))
+>VR : Symbol(VR, Decl(promiseTypeInference2.ts, 56, 15))
+>s : Symbol(s, Decl(promiseTypeInference2.ts, 177, 45))
+>SR : Symbol(SR, Decl(promiseTypeInference2.ts, 57, 15))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARD : Symbol(ARD, Decl(promiseTypeInference2.ts, 173, 9))
+>AJD : Symbol(AJD, Decl(promiseTypeInference2.ts, 173, 21))
+>AND : Symbol(AND, Decl(promiseTypeInference2.ts, 173, 34))
+
+                BRD, BJD, BND,
+>BRD : Symbol(BRD, Decl(promiseTypeInference2.ts, 173, 47))
+>BJD : Symbol(BJD, Decl(promiseTypeInference2.ts, 174, 20))
+>BND : Symbol(BND, Decl(promiseTypeInference2.ts, 174, 33))
+
+                CRD, CJD, CND,
+>CRD : Symbol(CRD, Decl(promiseTypeInference2.ts, 174, 46))
+>CJD : Symbol(CJD, Decl(promiseTypeInference2.ts, 175, 20))
+>CND : Symbol(CND, Decl(promiseTypeInference2.ts, 175, 33))
+
+                RRD, RJD, RND> | Thenable<ARD> | ARD,
+>RRD : Symbol(RRD, Decl(promiseTypeInference2.ts, 175, 46))
+>RJD : Symbol(RJD, Decl(promiseTypeInference2.ts, 176, 20))
+>RND : Symbol(RND, Decl(promiseTypeInference2.ts, 176, 33))
+>Thenable : Symbol(Thenable, Decl(promiseTypeInference2.ts, 50, 7))
+>ARD : Symbol(ARD, Decl(promiseTypeInference2.ts, 173, 9))
+>ARD : Symbol(ARD, Decl(promiseTypeInference2.ts, 173, 9))
+
+            failFilter?: null,
+>failFilter : Symbol(failFilter, Decl(promiseTypeInference2.ts, 180, 53))
+
+            progressFilter?: null): PromiseBase<ARD, AJD, AND,
+>progressFilter : Symbol(progressFilter, Decl(promiseTypeInference2.ts, 181, 30))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARD : Symbol(ARD, Decl(promiseTypeInference2.ts, 173, 9))
+>AJD : Symbol(AJD, Decl(promiseTypeInference2.ts, 173, 21))
+>AND : Symbol(AND, Decl(promiseTypeInference2.ts, 173, 34))
+
+        BRD, BJD, BND,
+>BRD : Symbol(BRD, Decl(promiseTypeInference2.ts, 173, 47))
+>BJD : Symbol(BJD, Decl(promiseTypeInference2.ts, 174, 20))
+>BND : Symbol(BND, Decl(promiseTypeInference2.ts, 174, 33))
+
+        CRD, CJD, CND,
+>CRD : Symbol(CRD, Decl(promiseTypeInference2.ts, 174, 46))
+>CJD : Symbol(CJD, Decl(promiseTypeInference2.ts, 175, 20))
+>CND : Symbol(CND, Decl(promiseTypeInference2.ts, 175, 33))
+
+        RRD, RJD, RND>;
+>RRD : Symbol(RRD, Decl(promiseTypeInference2.ts, 175, 46))
+>RJD : Symbol(RJD, Decl(promiseTypeInference2.ts, 176, 20))
+>RND : Symbol(RND, Decl(promiseTypeInference2.ts, 176, 33))
+
+    catch<ARF = never, AJF = never, ANF = never,
+>catch : Symbol(PromiseBase.catch, Decl(promiseTypeInference2.ts, 185, 23))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 186, 10))
+>AJF : Symbol(AJF, Decl(promiseTypeInference2.ts, 186, 22))
+>ANF : Symbol(ANF, Decl(promiseTypeInference2.ts, 186, 35))
+
+        BRF = never, BJF = never, BNF = never,
+>BRF : Symbol(BRF, Decl(promiseTypeInference2.ts, 186, 48))
+>BJF : Symbol(BJF, Decl(promiseTypeInference2.ts, 187, 20))
+>BNF : Symbol(BNF, Decl(promiseTypeInference2.ts, 187, 33))
+
+        CRF = never, CJF = never, CNF = never,
+>CRF : Symbol(CRF, Decl(promiseTypeInference2.ts, 187, 46))
+>CJF : Symbol(CJF, Decl(promiseTypeInference2.ts, 188, 20))
+>CNF : Symbol(CNF, Decl(promiseTypeInference2.ts, 188, 33))
+
+        RRF = never, RJF = never, RNF = never>(
+>RRF : Symbol(RRF, Decl(promiseTypeInference2.ts, 188, 46))
+>RJF : Symbol(RJF, Decl(promiseTypeInference2.ts, 189, 20))
+>RNF : Symbol(RNF, Decl(promiseTypeInference2.ts, 189, 33))
+
+            failFilter?: ((t: TJ, u: UJ, v: VJ, ...s: SJ[]) => PromiseBase<ARF, AJF, ANF,
+>failFilter : Symbol(failFilter, Decl(promiseTypeInference2.ts, 189, 47))
+>t : Symbol(t, Decl(promiseTypeInference2.ts, 190, 27))
+>TJ : Symbol(TJ, Decl(promiseTypeInference2.ts, 55, 7))
+>u : Symbol(u, Decl(promiseTypeInference2.ts, 190, 33))
+>UJ : Symbol(UJ, Decl(promiseTypeInference2.ts, 56, 7))
+>v : Symbol(v, Decl(promiseTypeInference2.ts, 190, 40))
+>VJ : Symbol(VJ, Decl(promiseTypeInference2.ts, 57, 7))
+>s : Symbol(s, Decl(promiseTypeInference2.ts, 190, 47))
+>SJ : Symbol(SJ, Decl(promiseTypeInference2.ts, 58, 7))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 186, 10))
+>AJF : Symbol(AJF, Decl(promiseTypeInference2.ts, 186, 22))
+>ANF : Symbol(ANF, Decl(promiseTypeInference2.ts, 186, 35))
+
+                BRF, BJF, BNF,
+>BRF : Symbol(BRF, Decl(promiseTypeInference2.ts, 186, 48))
+>BJF : Symbol(BJF, Decl(promiseTypeInference2.ts, 187, 20))
+>BNF : Symbol(BNF, Decl(promiseTypeInference2.ts, 187, 33))
+
+                CRF, CJF, CNF,
+>CRF : Symbol(CRF, Decl(promiseTypeInference2.ts, 187, 46))
+>CJF : Symbol(CJF, Decl(promiseTypeInference2.ts, 188, 20))
+>CNF : Symbol(CNF, Decl(promiseTypeInference2.ts, 188, 33))
+
+                RRF, RJF, RNF> | Thenable<ARF> | ARF) | null): PromiseBase<ARF, AJF, ANF,
+>RRF : Symbol(RRF, Decl(promiseTypeInference2.ts, 188, 46))
+>RJF : Symbol(RJF, Decl(promiseTypeInference2.ts, 189, 20))
+>RNF : Symbol(RNF, Decl(promiseTypeInference2.ts, 189, 33))
+>Thenable : Symbol(Thenable, Decl(promiseTypeInference2.ts, 50, 7))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 186, 10))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 186, 10))
+>PromiseBase : Symbol(PromiseBase, Decl(promiseTypeInference2.ts, 53, 47))
+>ARF : Symbol(ARF, Decl(promiseTypeInference2.ts, 186, 10))
+>AJF : Symbol(AJF, Decl(promiseTypeInference2.ts, 186, 22))
+>ANF : Symbol(ANF, Decl(promiseTypeInference2.ts, 186, 35))
+
+        BRF, BJF, BNF,
+>BRF : Symbol(BRF, Decl(promiseTypeInference2.ts, 186, 48))
+>BJF : Symbol(BJF, Decl(promiseTypeInference2.ts, 187, 20))
+>BNF : Symbol(BNF, Decl(promiseTypeInference2.ts, 187, 33))
+
+        CRF, CJF, CNF,
+>CRF : Symbol(CRF, Decl(promiseTypeInference2.ts, 187, 46))
+>CJF : Symbol(CJF, Decl(promiseTypeInference2.ts, 188, 20))
+>CNF : Symbol(CNF, Decl(promiseTypeInference2.ts, 188, 33))
+
+        RRF, RJF, RNF>;
+>RRF : Symbol(RRF, Decl(promiseTypeInference2.ts, 188, 46))
+>RJF : Symbol(RJF, Decl(promiseTypeInference2.ts, 189, 20))
+>RNF : Symbol(RNF, Decl(promiseTypeInference2.ts, 189, 33))
+}
 

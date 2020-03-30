@@ -230,13 +230,18 @@ namespace ts {
         }
 
         function releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey): void {
-            const bucket = Debug.checkDefined(buckets.get(key));
-            const entry = bucket.get(path)!;
-            entry.languageServiceRefCount--;
+            try {
+                const bucket = Debug.checkDefined(buckets.get(key));
+                const entry = bucket.get(path)!;
+                entry.languageServiceRefCount--;
 
-            Debug.assert(entry.languageServiceRefCount >= 0);
-            if (entry.languageServiceRefCount === 0) {
-                bucket.delete(path);
+                Debug.assert(entry.languageServiceRefCount >= 0);
+                if (entry.languageServiceRefCount === 0) {
+                    bucket.delete(path);
+                }
+            }
+            catch (e) {
+                throw new Error(`${e.message}\npath: ${path}\nkey: ${key}\nhas key: ${buckets.has(key)}\nhas bucket: ${!!buckets.get(key)}\nhas entry: ${buckets.get(key)?.has(path)}\npaths in bucket: ${JSON.stringify([...arrayFrom((buckets.get(key) ?? createMap()).keys())])}`);
             }
         }
 
