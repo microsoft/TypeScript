@@ -852,32 +852,33 @@ namespace ts.Completions {
         let isInSnippetScope = false;
         if (insideComment) {
             if (hasDocComment(sourceFile, position)) {
-                if (sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
-                    // The current position is next to the '@' sign, when no tag name being provided yet.
-                    // Provide a full list of tag names
-                    return { kind: CompletionDataKind.JsDocTagName };
-                }
-                else {
-                    // When completion is requested without "@", we will have check to make sure that
-                    // there are no comments prefix the request position. We will only allow "*" and space.
-                    // e.g
-                    //   /** |c| /*
-                    //
-                    //   /**
-                    //     |c|
-                    //    */
-                    //
-                    //   /**
-                    //    * |c|
-                    //    */
-                    //
-                    //   /**
-                    //    *         |c|
-                    //    */
-                    const lineStart = getLineStartPositionForPosition(position, sourceFile);
-                    if (!(sourceFile.text.substring(lineStart, position).match(/[^\*|\s|(/\*\*)]/))) {
-                        return { kind: CompletionDataKind.JsDocTag };
-                    }
+                // When completion is requested without "@", we will have check to make sure that
+                // there are no comments prefix the request position. We will only allow "*" and space.
+                // e.g
+                //   /** |c| /*
+                //
+                //   /**
+                //     |c|
+                //    */
+                //
+                //   /**
+                //    * |c|
+                //    */
+                //
+                //   /**
+                //    *         |c|
+                //    */
+                const lineStart = getLineStartPositionForPosition(position, sourceFile);
+                // jsdoc tag will be listed if there is more than one whitespace after "*"
+                const match = /^\s*(?:[*\s]+(?=\s)|\/\*\*)?\s+(@)?$/.exec(
+                    sourceFile.text.substring(lineStart, position)
+                );
+                if (match) {
+                    return {
+                        // The current position is next to the '@' sign, when no tag name being provided yet.
+                        // Provide a full list of tag names
+                        kind: match[1] ? CompletionDataKind.JsDocTagName: CompletionDataKind.JsDocTag
+                    };
                 }
             }
 
