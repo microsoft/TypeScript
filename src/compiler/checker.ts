@@ -1252,6 +1252,15 @@ namespace ts {
                         patternAmbientModuleAugmentations.set((moduleName as StringLiteral).text, merged);
                     }
                     else {
+                        if (mainModule.exports?.get(InternalSymbolName.ExportStar) && moduleAugmentation.symbol.exports && moduleAugmentation.symbol.exports.size) {
+                            // We may need to merge the module augmentation's exports into the target symbols of the resolved exports
+                            const resolvedExports = getResolvedMembersOrExportsOfSymbol(mainModule, MembersOrExportsResolutionKind.resolvedExports);
+                            for (const [key, value] of arrayFrom(moduleAugmentation.symbol.exports.entries())) {
+                                if (resolvedExports.has(key) && !mainModule.exports.has(key)) {
+                                    mergeSymbol(resolvedExports.get(key)!, value);
+                                }
+                            }
+                        }
                         mergeSymbol(mainModule, moduleAugmentation.symbol);
                     }
                 }
