@@ -4432,13 +4432,6 @@ namespace ts {
         return isPropertyAccessExpression(node) && isEntityNameExpression(node.expression);
     }
 
-    export function isConstructorAccessExpression(expr: Expression): expr is AccessExpression {
-        return (
-            isPropertyAccessExpression(expr) && idText(expr.name) === "constructor" ||
-            isElementAccessExpression(expr) && isStringLiteralLike(expr.argumentExpression) && expr.argumentExpression.text === "constructor"
-        );
-    }
-
     export function tryGetPropertyAccessOrIdentifierToString(expr: Expression): string | undefined {
         if (isPropertyAccessExpression(expr)) {
             const baseStr = tryGetPropertyAccessOrIdentifierToString(expr.expression);
