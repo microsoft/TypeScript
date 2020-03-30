@@ -2108,6 +2108,7 @@ namespace ts {
 
         function isAllowedOption({ category, name }: CommandLineOption): boolean {
             // Skip options which do not have a category or have category `Command_line_Options`
+            // Exclude all possible `Advanced_Options` in tsconfig.json which were NOT defined in command line
             return category !== undefined
                 && category !== Diagnostics.Command_line_Options
                 && (category !== Diagnostics.Advanced_Options || compilerOptionsMap.has(name));
