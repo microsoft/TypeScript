@@ -1,0 +1,18 @@
+/a.js(3,15): error TS2304: Cannot find name 'sting'.
+
+
+==== /a.js (1 errors) ====
+    /**
+     * @typedef MyType
+     * @property {sting} [x]
+                  ~~~~~
+!!! error TS2304: Cannot find name 'sting'.
+     */
+    
+    /** @param {MyType} p  */
+    export function f(p) { }
+    
+==== /b.js (0 errors) ====
+    import { f } from "./a.js"
+    f({ x: 42 })
+    

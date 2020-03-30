@@ -10,7 +10,7 @@ tests/cases/compiler/intersectionsOfLargeUnions2.ts(31,15): error TS2536: Type '
         interface ElementTagNameMap {
                   ~~~~~~~~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'ElementTagNameMap'.
-!!! related TS6203 /.ts/lib.dom.d.ts:19593:6: 'ElementTagNameMap' was also declared here.
+!!! related TS6203 /.ts/lib.dom.d.ts:19412:6: 'ElementTagNameMap' was also declared here.
             [index: number]: HTMLElement
         }
     

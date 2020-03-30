@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w /a/b/f1.ts
+/a/lib/tsc.js -w /a/b/f1.ts --noImplicitAny
 //// [/a/b/f1.ts]
 export * from "./f2"
 
@@ -63,15 +63,15 @@ __exportStar(require("./f2"), exports);
 
 Output::
 >> Screen clear
-12:00:19 AM - Starting compilation in watch mode...
+[[90m12:00:19 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:26 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/f1.ts"]
-Program options: {"watch":true}
+Program options: {"watch":true,"noImplicitAny":true}
 Program files::
 /a/lib/lib.d.ts
 /a/c/f3.ts
@@ -107,17 +107,21 @@ Change:: Delete f2
 
 Output::
 >> Screen clear
-12:00:28 AM - File change detected. Starting incremental compilation...
+[[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
 
-a/b/f1.ts(1,15): error TS2307: Cannot find module './f2'.
+[96ma/b/f1.ts[0m:[93m1[0m:[93m15[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module './f2'. '/a/b/f2.js' implicitly has an 'any' type.
+
+[7m1[0m export * from "./f2"
+[7m [0m [91m              ~~~~~~[0m
 
 
-12:00:32 AM - Found 1 error. Watching for file changes.
+[[90m12:00:32 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/a/b/f1.ts"]
-Program options: {"watch":true}
+Program options: {"watch":true,"noImplicitAny":true}
 Program files::
 /a/lib/lib.d.ts
 /a/b/f1.ts
@@ -130,11 +134,11 @@ WatchedFiles::
   {"fileName":"/a/b/f1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/f2.ts:
-  {"fileName":"/a/b/f2.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
+/a:
+  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

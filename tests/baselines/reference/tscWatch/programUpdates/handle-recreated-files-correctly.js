@@ -32,11 +32,11 @@ var y = 1;
 
 Output::
 >> Screen clear
-12:00:17 AM - Starting compilation in watch mode...
+[[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:22 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
@@ -73,15 +73,16 @@ exitCode:: ExitStatus.undefined
 
 Change:: delete file2
 
+//// [/a/b/commonFile1.js] file written with same contents
 //// [/a/b/commonFile2.ts] deleted
 
 Output::
 >> Screen clear
-12:00:24 AM - File change detected. Starting incremental compilation...
+[[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:25 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/commonFile1.ts"]
@@ -91,6 +92,7 @@ Program files::
 /a/b/commonFile1.ts
 
 Semantic diagnostics in builder refreshed for::
+/a/b/commonFile1.ts
 
 WatchedFiles::
 /a/b/tsconfig.json:
@@ -120,11 +122,11 @@ let y = 1
 
 Output::
 >> Screen clear
-12:00:28 AM - File change detected. Starting incremental compilation...
+[[90m12:00:31 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:35 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]

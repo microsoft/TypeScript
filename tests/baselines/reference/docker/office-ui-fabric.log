@@ -32,6 +32,15 @@ Standard output:
 @uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
 @uifabric/example-data: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/example-data/lib/index.d.ts'
 @uifabric/example-data: Done in ?s.
+@fluentui/keyboard-key: yarn run vX.X.X
+@fluentui/keyboard-key: $ just-scripts build
+@fluentui/keyboard-key: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@fluentui/keyboard-key: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/keyboard-key/tsconfig.json
+@fluentui/keyboard-key: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/keyboard-key/tsconfig.json"
+@fluentui/keyboard-key: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/keyboard-key/tsconfig.json
+@fluentui/keyboard-key: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/keyboard-key/tsconfig.json"
+@fluentui/keyboard-key: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/keyboard-key/lib/index.d.ts'
+@fluentui/keyboard-key: Done in ?s.
 @uifabric/migration: yarn run vX.X.X
 @uifabric/migration: $ just-scripts build
 @uifabric/migration: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
@@ -70,10 +79,10 @@ Standard output:
 @fluentui/docs: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
 @fluentui/docs: [XX:XX:XX] Working directory changed to /office-ui-fabric-react
 @fluentui/docs: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/gulpfile.ts
-@fluentui/docs: DocToccing single file "/office-ui-fabric-react/.github/CONTRIBUTING.md" for github.com.
-@fluentui/docs: ==================
 @fluentui/docs: > @fluentui/ability-attributes@X.X.X schema /office-ui-fabric-react/packages/fluentui/ability-attributes
 @fluentui/docs: > allyschema -c "process.env.NODE_ENV !== 'production'" schema.json > ./src/schema.ts
+@fluentui/docs: DocToccing single file "/office-ui-fabric-react/.github/CONTRIBUTING.md" for github.com.
+@fluentui/docs: ==================
 @fluentui/docs: "/office-ui-fabric-react/.github/CONTRIBUTING.md" will be updated
 @fluentui/docs: Everything is OK.
 @fluentui/docs: DocToccing single file "/office-ui-fabric-react/.github/setup-local-development.md" for github.com.
@@ -106,6 +115,168 @@ Standard output:
 @fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx
 @fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx(64,31):
 @fluentui/docs: TS2538: Type 'undefined' cannot be used as an index type.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Avatar/Avatar.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Avatar/Avatar.tsx(153,1):
+@fluentui/docs: TS2322: Type '{ name: PropTypes.Requireable<string>; image: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; label: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; ... 12 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<AvatarProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Box/Box.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Box/Box.tsx(69,1):
+@fluentui/docs: TS2322: Type '{ styles: PropTypes.Requireable<object>; variables: PropTypes.Requireable<object>; design: PropTypes.Requireable<PropTypes.InferProps<{ position: PropTypes.Requireable<string>; display: PropTypes.Requireable<...>; ... 19 more ...; maxHeight: PropTypes.Requireable<...>; }>>; ... 5 more ...; accessibility: PropTypes.R...' is not assignable to type 'WeakValidationMap<WithAsProp<BoxProps>>'.
+@fluentui/docs:   The types of 'design[nominalTypeHack].position' are incompatible between these types.
+@fluentui/docs:     Type 'string' is not assignable to type 'PositionProperty'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Button/Button.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Button/Button.tsx(249,1):
+@fluentui/docs: TS2322: Type '{ circular: PropTypes.Requireable<boolean>; disabled: PropTypes.Requireable<boolean>; fluid: PropTypes.Requireable<boolean>; icon: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; ... 18 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ButtonProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Button/ButtonContent.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Button/ButtonContent.tsx(59,1):
+@fluentui/docs: TS2322: Type '{ size: Requireable<"medium" | "large" | "small" | "larger" | "smaller" | "smallest" | "largest">; styles: Requireable<object>; variables: Requireable<object>; ... 6 more ...; accessibility: Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ButtonContentProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Chat/Chat.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Chat/Chat.tsx(105,1):
+@fluentui/docs: TS2322: Type '{ items: PropTypes.Requireable<ShorthandValue<ChatItemProps & { kind?: never; }>[]>; styles: PropTypes.Requireable<object>; ... 7 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ChatProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Chat/ChatItem.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Chat/ChatItem.tsx(150,1):
+@fluentui/docs: TS2322: Type '{ attached: PropTypes.Requireable<boolean | "bottom" | "top">; gutter: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; ... 10 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ChatItemProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Chat/ChatMessage.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Chat/ChatMessage.tsx(364,1):
+@fluentui/docs: TS2322: Type '{ actionMenu: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; attached: PropTypes.Requireable<boolean | "bottom" | "top">; ... 20 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ChatMessageProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Checkbox/Checkbox.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Checkbox/Checkbox.tsx(200,1):
+@fluentui/docs: TS2322: Type '{ checked: PropTypes.Requireable<boolean>; defaultChecked: PropTypes.Requireable<boolean>; disabled: PropTypes.Requireable<boolean>; indicator: PropTypes.Requireable<...>; ... 13 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<CheckboxProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Dropdown/DropdownItem.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Dropdown/DropdownItem.tsx(178,1):
+@fluentui/docs: TS2322: Type '{ accessibilityItemProps: PropTypes.Requireable<object>; active: PropTypes.Requireable<boolean>; content: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; ... 14 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<DropdownItemProps & { as?: any; } & { index: number; }>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Flex/Flex.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Flex/Flex.tsx(124,1):
+@fluentui/docs: TS2322: Type '{ inline: PropTypes.Requireable<boolean>; column: PropTypes.Requireable<boolean>; wrap: PropTypes.Requireable<boolean>; hAlign: PropTypes.Requireable<"stretch" | "center" | "end" | "start">; ... 14 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<FlexProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Flex/FlexItem.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Flex/FlexItem.tsx(122,1):
+@fluentui/docs: TS2322: Type '{ children: PropTypes.Requireable<PropTypes.ReactElementLike | ((...args: any[]) => any)>; align: PropTypes.Requireable<"stretch" | "center" | "end" | "start" | "baseline" | "auto">; ... 11 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<FlexItemProps>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Icon/Icon.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Icon/Icon.tsx(133,1):
+@fluentui/docs: TS2322: Type '{ bordered: PropTypes.Requireable<boolean>; circular: PropTypes.Requireable<boolean>; disabled: PropTypes.Requireable<boolean>; name: PropTypes.Validator<string>; ... 12 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<IconProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Image/Image.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Image/Image.tsx(94,1):
+@fluentui/docs: TS2322: Type '{ avatar: PropTypes.Requireable<boolean>; circular: PropTypes.Requireable<boolean>; fluid: PropTypes.Requireable<boolean>; styles: PropTypes.Requireable<object>; ... 7 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ImageProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Label/Label.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Label/Label.tsx(178,1):
+@fluentui/docs: TS2322: Type '{ circular: PropTypes.Requireable<boolean>; icon: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; iconPosition: PropTypes.Requireable<"end" | "start">; ... 11 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<LabelProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/List/List.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/List/List.tsx(186,1):
+@fluentui/docs: TS2322: Type '{ debug: PropTypes.Requireable<boolean>; items: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; selectable: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; ... 16 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ListProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/List/ListItem.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/List/ListItem.tsx(244,1):
+@fluentui/docs: TS2322: Type '{ contentMedia: PropTypes.Requireable<any>; content: PropTypes.Requireable<any>; debug: PropTypes.Requireable<boolean>; header: PropTypes.Requireable<any>; ... 18 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<ListItemProps & { as?: any; } & { index: number; }>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Provider/Provider.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Provider/Provider.tsx(210,3):
+@fluentui/docs: TS2322: Type 'Requireable<InferProps<{ siteVariables: Requireable<object>; componentVariables: Requireable<object>; componentStyles: Requireable<object>; fontFaces: Requireable<InferProps<...>[]>; staticStyles: Requireable<...>; animations: Requireable<...>; }>>' is not assignable to type 'Validator<ThemeInput<any>>'.
+@fluentui/docs:   The types of '[nominalTypeHack].componentStyles' are incompatible between these types.
+@fluentui/docs:     Type 'object' is not assignable to type 'ThemeComponentStylesInput<any>'.
+@fluentui/docs:       Type 'object' is not assignable to type 'Record<string, ComponentSlotStylesInput<{}, {}>>'.
+@fluentui/docs:         Index signature is missing in type '{}'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Slider/Slider.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Slider/Slider.tsx(276,1):
+@fluentui/docs: TS2322: Type '{ defaultValue: PropTypes.Requireable<AnimationIterationCountProperty>; fluid: PropTypes.Requireable<boolean>; getA11yValueMessageOnChange: PropTypes.Requireable<...>; ... 16 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<SliderProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Status/Status.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Status/Status.tsx(85,1):
+@fluentui/docs: TS2322: Type '{ color: PropTypes.Requireable<string>; icon: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; size: PropTypes.Requireable<"medium" | "large" | ... 4 more ... | "largest">; ... 8 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<StatusProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Table/TableCell.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Table/TableCell.tsx(126,1):
+@fluentui/docs: TS2322: Type '{ content: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; truncateContent: PropTypes.Requireable<boolean>; styles: PropTypes.Requireable<...>; ... 6 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<TableCellProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Text/Text.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Text/Text.tsx(166,1):
+@fluentui/docs: TS2322: Type '{ atMention: PropTypes.Requireable<any>; disabled: PropTypes.Requireable<boolean>; error: PropTypes.Requireable<boolean>; important: PropTypes.Requireable<boolean>; ... 15 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<TextProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarCustomItem.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarCustomItem.tsx(119,1):
+@fluentui/docs: TS2322: Type '{ fitted: PropTypes.Requireable<boolean | "horizontally" | "vertically">; focusable: PropTypes.Requireable<boolean>; onFocus: PropTypes.Requireable<(...args: any[]) => any>; ... 9 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ToolbarCustomItemProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarDivider.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarDivider.tsx(63,1):
+@fluentui/docs: TS2322: Type '{ styles: PropTypes.Requireable<object>; variables: PropTypes.Requireable<object>; design: PropTypes.Requireable<PropTypes.InferProps<{ position: PropTypes.Requireable<string>; display: PropTypes.Requireable<...>; ... 19 more ...; maxHeight: PropTypes.Requireable<...>; }>>; ... 5 more ...; accessibility: PropTypes.R...' is not assignable to type 'WeakValidationMap<WithAsProp<ToolbarDividerProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarItem.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarItem.tsx(362,1):
+@fluentui/docs: TS2322: Type '{ active: PropTypes.Requireable<boolean>; disabled: PropTypes.Requireable<boolean>; icon: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; ... 16 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ToolbarItemProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarMenu.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarMenu.tsx(168,1):
+@fluentui/docs: TS2322: Type '{ items: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; onItemClick: PropTypes.Requireable<(...args: any[]) => any>; submenu: PropTypes.Requireable<...>; ... 9 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ToolbarMenuProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarMenuDivider.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarMenuDivider.tsx(63,1):
+@fluentui/docs: TS2322: Type '{ styles: PropTypes.Requireable<object>; variables: PropTypes.Requireable<object>; design: PropTypes.Requireable<PropTypes.InferProps<{ position: PropTypes.Requireable<string>; display: PropTypes.Requireable<...>; ... 19 more ...; maxHeight: PropTypes.Requireable<...>; }>>; ... 5 more ...; accessibility: PropTypes.R...' is not assignable to type 'WeakValidationMap<WithAsProp<ToolbarMenuDividerProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarMenuItem.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarMenuItem.tsx(440,1):
+@fluentui/docs: TS2322: Type '{ active: PropTypes.Requireable<boolean>; activeIndicator: PropTypes.Requireable<PropTypes.ReactNodeLike>; defaultMenuOpen: PropTypes.Requireable<boolean>; ... 19 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ToolbarMenuItemProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarMenuRadioGroup.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarMenuRadioGroup.tsx(152,1):
+@fluentui/docs: TS2322: Type '{ activeIndex: PropTypes.Requireable<number>; items: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; onItemClick: PropTypes.Requireable<(...args: any[]) => any>; ... 9 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ToolbarMenuRadioGroupProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarRadioGroup.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarRadioGroup.tsx(163,1):
+@fluentui/docs: TS2322: Type '{ activeIndex: PropTypes.Requireable<number>; items: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; styles: PropTypes.Requireable<object>; ... 7 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ToolbarRadioGroupProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Tooltip/TooltipContent.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Tooltip/TooltipContent.tsx(108,1):
+@fluentui/docs: TS2322: Type '{ placement: PropTypes.Requireable<Popper.Placement>; pointing: PropTypes.Requireable<boolean>; pointerRef: PropTypes.Requireable<((...args: any[]) => any) | { current: any; }>; ... 8 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<TooltipContentProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Tree/TreeItem.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Tree/TreeItem.tsx(243,1):
+@fluentui/docs: TS2322: Type '{ contentRef: PropTypes.Requireable<((...args: any[]) => any) | { current: any; }>; id: PropTypes.Validator<string>; index: PropTypes.Requireable<number>; ... 19 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<TreeItemProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Tree/TreeTitle.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Tree/TreeTitle.tsx(129,1):
+@fluentui/docs: TS2322: Type '{ hasSubtree: PropTypes.Requireable<boolean>; index: PropTypes.Requireable<number>; level: PropTypes.Requireable<number>; onClick: PropTypes.Requireable<(...args: any[]) => any>; ... 10 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<TreeTitleProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
 @fluentui/docs: Child HtmlWebpackCompiler:
 @fluentui/docs:     Entrypoint HtmlWebpackPlugin_0 = __child-HtmlWebpackPlugin_0
 @fluentui/docs: [XX:XX:XX] Webpack compiler encountered errors.
@@ -117,9 +288,10 @@ Standard error:
 info cli using local version of lerna
 @fluentui/ability-attributes: npm WARN lifecycle The node binary used for scripts is  but npm is using /usr/local/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
 @uifabric/example-data: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@fluentui/keyboard-key: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/set-version: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @fluentui/docs: npm WARN lifecycle The node binary used for scripts is  but npm is using /usr/local/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
-@fluentui/docs: @fluentui/react: You are running Fela in production mode. This limits your ability to edit styles in browsers development tools. To enable development mode please paste `window.localStorage.felaDevMode = true` to your browsers console and reload the page.
+@fluentui/docs: @fluentui/react-northstar: You are running Fela in production mode. This limits your ability to edit styles in browsers development tools. To enable development mode please paste `window.localStorage.felaDevMode = true` to your browsers console and reload the page.
 @fluentui/docs: [XX:XX:XX] 'build:docs:webpack' errored after 
 @fluentui/docs: [XX:XX:XX] Error in plugin 'webpack'
 @fluentui/docs: Message:
@@ -129,7 +301,137 @@ info cli using local version of lerna
 @fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx(34,22):
 @fluentui/docs: TS2345: Argument of type 'number' is not assignable to parameter of type '(prevState: undefined) => undefined'.,/office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx
 @fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/docs/src/prototypes/VirtualizedTree/VirtualizedTree.tsx(64,31):
-@fluentui/docs: TS2538: Type 'undefined' cannot be used as an index type.
+@fluentui/docs: TS2538: Type 'undefined' cannot be used as an index type.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Avatar/Avatar.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Avatar/Avatar.tsx(153,1):
+@fluentui/docs: TS2322: Type '{ name: PropTypes.Requireable<string>; image: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; label: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; ... 12 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<AvatarProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Box/Box.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Box/Box.tsx(69,1):
+@fluentui/docs: TS2322: Type '{ styles: PropTypes.Requireable<object>; variables: PropTypes.Requireable<object>; design: PropTypes.Requireable<PropTypes.InferProps<{ position: PropTypes.Requireable<string>; display: PropTypes.Requireable<...>; ... 19 more ...; maxHeight: PropTypes.Requireable<...>; }>>; ... 5 more ...; accessibility: PropTypes.R...' is not assignable to type 'WeakValidationMap<WithAsProp<BoxProps>>'.
+@fluentui/docs:   The types of 'design[nominalTypeHack].position' are incompatible between these types.
+@fluentui/docs:     Type 'string' is not assignable to type 'PositionProperty'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Button/Button.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Button/Button.tsx(249,1):
+@fluentui/docs: TS2322: Type '{ circular: PropTypes.Requireable<boolean>; disabled: PropTypes.Requireable<boolean>; fluid: PropTypes.Requireable<boolean>; icon: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; ... 18 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ButtonProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Button/ButtonContent.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Button/ButtonContent.tsx(59,1):
+@fluentui/docs: TS2322: Type '{ size: Requireable<"medium" | "large" | "small" | "larger" | "smaller" | "smallest" | "largest">; styles: Requireable<object>; variables: Requireable<object>; ... 6 more ...; accessibility: Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ButtonContentProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Chat/Chat.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Chat/Chat.tsx(105,1):
+@fluentui/docs: TS2322: Type '{ items: PropTypes.Requireable<ShorthandValue<ChatItemProps & { kind?: never; }>[]>; styles: PropTypes.Requireable<object>; ... 7 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ChatProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Chat/ChatItem.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Chat/ChatItem.tsx(150,1):
+@fluentui/docs: TS2322: Type '{ attached: PropTypes.Requireable<boolean | "bottom" | "top">; gutter: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; ... 10 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ChatItemProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Chat/ChatMessage.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Chat/ChatMessage.tsx(364,1):
+@fluentui/docs: TS2322: Type '{ actionMenu: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; attached: PropTypes.Requireable<boolean | "bottom" | "top">; ... 20 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ChatMessageProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Checkbox/Checkbox.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Checkbox/Checkbox.tsx(200,1):
+@fluentui/docs: TS2322: Type '{ checked: PropTypes.Requireable<boolean>; defaultChecked: PropTypes.Requireable<boolean>; disabled: PropTypes.Requireable<boolean>; indicator: PropTypes.Requireable<...>; ... 13 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<CheckboxProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Dropdown/DropdownItem.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Dropdown/DropdownItem.tsx(178,1):
+@fluentui/docs: TS2322: Type '{ accessibilityItemProps: PropTypes.Requireable<object>; active: PropTypes.Requireable<boolean>; content: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; ... 14 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<DropdownItemProps & { as?: any; } & { index: number; }>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Flex/Flex.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Flex/Flex.tsx(124,1):
+@fluentui/docs: TS2322: Type '{ inline: PropTypes.Requireable<boolean>; column: PropTypes.Requireable<boolean>; wrap: PropTypes.Requireable<boolean>; hAlign: PropTypes.Requireable<"stretch" | "center" | "end" | "start">; ... 14 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<FlexProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Flex/FlexItem.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Flex/FlexItem.tsx(122,1):
+@fluentui/docs: TS2322: Type '{ children: PropTypes.Requireable<PropTypes.ReactElementLike | ((...args: any[]) => any)>; align: PropTypes.Requireable<"stretch" | "center" | "end" | "start" | "baseline" | "auto">; ... 11 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<FlexItemProps>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Icon/Icon.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Icon/Icon.tsx(133,1):
+@fluentui/docs: TS2322: Type '{ bordered: PropTypes.Requireable<boolean>; circular: PropTypes.Requireable<boolean>; disabled: PropTypes.Requireable<boolean>; name: PropTypes.Validator<string>; ... 12 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<IconProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Image/Image.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Image/Image.tsx(94,1):
+@fluentui/docs: TS2322: Type '{ avatar: PropTypes.Requireable<boolean>; circular: PropTypes.Requireable<boolean>; fluid: PropTypes.Requireable<boolean>; styles: PropTypes.Requireable<object>; ... 7 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ImageProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Label/Label.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Label/Label.tsx(178,1):
+@fluentui/docs: TS2322: Type '{ circular: PropTypes.Requireable<boolean>; icon: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; iconPosition: PropTypes.Requireable<"end" | "start">; ... 11 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<LabelProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/List/List.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/List/List.tsx(186,1):
+@fluentui/docs: TS2322: Type '{ debug: PropTypes.Requireable<boolean>; items: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; selectable: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; ... 16 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ListProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/List/ListItem.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/List/ListItem.tsx(244,1):
+@fluentui/docs: TS2322: Type '{ contentMedia: PropTypes.Requireable<any>; content: PropTypes.Requireable<any>; debug: PropTypes.Requireable<boolean>; header: PropTypes.Requireable<any>; ... 18 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<ListItemProps & { as?: any; } & { index: number; }>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Provider/Provider.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Provider/Provider.tsx(210,3):
+@fluentui/docs: TS2322: Type 'Requireable<InferProps<{ siteVariables: Requireable<object>; componentVariables: Requireable<object>; componentStyles: Requireable<object>; fontFaces: Requireable<InferProps<...>[]>; staticStyles: Requireable<...>; animations: Requireable<...>; }>>' is not assignable to type 'Validator<ThemeInput<any>>'.
+@fluentui/docs:   The types of '[nominalTypeHack].componentStyles' are incompatible between these types.
+@fluentui/docs:     Type 'object' is not assignable to type 'ThemeComponentStylesInput<any>'.
+@fluentui/docs:       Type 'object' is not assignable to type 'Record<string, ComponentSlotStylesInput<{}, {}>>'.
+@fluentui/docs:         Index signature is missing in type '{}'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Slider/Slider.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Slider/Slider.tsx(276,1):
+@fluentui/docs: TS2322: Type '{ defaultValue: PropTypes.Requireable<AnimationIterationCountProperty>; fluid: PropTypes.Requireable<boolean>; getA11yValueMessageOnChange: PropTypes.Requireable<...>; ... 16 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<SliderProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Status/Status.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Status/Status.tsx(85,1):
+@fluentui/docs: TS2322: Type '{ color: PropTypes.Requireable<string>; icon: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; size: PropTypes.Requireable<"medium" | "large" | ... 4 more ... | "largest">; ... 8 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<StatusProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Table/TableCell.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Table/TableCell.tsx(126,1):
+@fluentui/docs: TS2322: Type '{ content: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; truncateContent: PropTypes.Requireable<boolean>; styles: PropTypes.Requireable<...>; ... 6 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<TableCellProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Text/Text.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Text/Text.tsx(166,1):
+@fluentui/docs: TS2322: Type '{ atMention: PropTypes.Requireable<any>; disabled: PropTypes.Requireable<boolean>; error: PropTypes.Requireable<boolean>; important: PropTypes.Requireable<boolean>; ... 15 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<TextProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarCustomItem.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarCustomItem.tsx(119,1):
+@fluentui/docs: TS2322: Type '{ fitted: PropTypes.Requireable<boolean | "horizontally" | "vertically">; focusable: PropTypes.Requireable<boolean>; onFocus: PropTypes.Requireable<(...args: any[]) => any>; ... 9 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ToolbarCustomItemProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarDivider.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarDivider.tsx(63,1):
+@fluentui/docs: TS2322: Type '{ styles: PropTypes.Requireable<object>; variables: PropTypes.Requireable<object>; design: PropTypes.Requireable<PropTypes.InferProps<{ position: PropTypes.Requireable<string>; display: PropTypes.Requireable<...>; ... 19 more ...; maxHeight: PropTypes.Requireable<...>; }>>; ... 5 more ...; accessibility: PropTypes.R...' is not assignable to type 'WeakValidationMap<WithAsProp<ToolbarDividerProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarItem.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarItem.tsx(362,1):
+@fluentui/docs: TS2322: Type '{ active: PropTypes.Requireable<boolean>; disabled: PropTypes.Requireable<boolean>; icon: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; ... 16 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ToolbarItemProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarMenu.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarMenu.tsx(168,1):
+@fluentui/docs: TS2322: Type '{ items: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; onItemClick: PropTypes.Requireable<(...args: any[]) => any>; submenu: PropTypes.Requireable<...>; ... 9 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ToolbarMenuProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarMenuDivider.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarMenuDivider.tsx(63,1):
+@fluentui/docs: TS2322: Type '{ styles: PropTypes.Requireable<object>; variables: PropTypes.Requireable<object>; design: PropTypes.Requireable<PropTypes.InferProps<{ position: PropTypes.Requireable<string>; display: PropTypes.Requireable<...>; ... 19 more ...; maxHeight: PropTypes.Requireable<...>; }>>; ... 5 more ...; accessibility: PropTypes.R...' is not assignable to type 'WeakValidationMap<WithAsProp<ToolbarMenuDividerProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarMenuItem.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarMenuItem.tsx(440,1):
+@fluentui/docs: TS2322: Type '{ active: PropTypes.Requireable<boolean>; activeIndicator: PropTypes.Requireable<PropTypes.ReactNodeLike>; defaultMenuOpen: PropTypes.Requireable<boolean>; ... 19 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ToolbarMenuItemProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarMenuRadioGroup.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarMenuRadioGroup.tsx(152,1):
+@fluentui/docs: TS2322: Type '{ activeIndex: PropTypes.Requireable<number>; items: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; onItemClick: PropTypes.Requireable<(...args: any[]) => any>; ... 9 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ToolbarMenuRadioGroupProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarRadioGroup.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Toolbar/ToolbarRadioGroup.tsx(163,1):
+@fluentui/docs: TS2322: Type '{ activeIndex: PropTypes.Requireable<number>; items: (props: Record<string, any>, propName: string, componentName: string, ...args: any[]) => any; styles: PropTypes.Requireable<object>; ... 7 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<ToolbarRadioGroupProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Tooltip/TooltipContent.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Tooltip/TooltipContent.tsx(108,1):
+@fluentui/docs: TS2322: Type '{ placement: PropTypes.Requireable<Popper.Placement>; pointing: PropTypes.Requireable<boolean>; pointerRef: PropTypes.Requireable<((...args: any[]) => any) | { current: any; }>; ... 8 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<TooltipContentProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Tree/TreeItem.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Tree/TreeItem.tsx(243,1):
+@fluentui/docs: TS2322: Type '{ contentRef: PropTypes.Requireable<((...args: any[]) => any) | { current: any; }>; id: PropTypes.Validator<string>; index: PropTypes.Requireable<number>; ... 19 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<TreeItemProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.,/office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Tree/TreeTitle.tsx
+@fluentui/docs: ERROR in /office-ui-fabric-react/packages/fluentui/react-northstar/src/components/Tree/TreeTitle.tsx(129,1):
+@fluentui/docs: TS2322: Type '{ hasSubtree: PropTypes.Requireable<boolean>; index: PropTypes.Requireable<number>; level: PropTypes.Requireable<number>; onClick: PropTypes.Requireable<(...args: any[]) => any>; ... 10 more ...; accessibility: PropTypes.Requireable<...>; }' is not assignable to type 'WeakValidationMap<WithAsProp<TreeTitleProps>>'.
+@fluentui/docs:   Types of property 'design' are incompatible.
+@fluentui/docs:     Type 'Requireable<InferProps<{ position: Requireable<string>; display: Requireable<string>; top: Requireable<string>; right: Requireable<string>; bottom: Requireable<...>; ... 16 more ...; maxHeight: Requireable<...>; }>>' is not assignable to type 'Validator<ComponentDesignProp>'.
 @fluentui/docs: Details:
 @fluentui/docs:     domainThrown: true
 @fluentui/docs: [XX:XX:XX] 'build:docs' errored after 

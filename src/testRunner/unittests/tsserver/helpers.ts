@@ -716,6 +716,69 @@ namespace ts.projectSystem {
             assert.isFalse(event.event.endsWith("Diag"), JSON.stringify(event));
         }
     }
+    export function projectLoadingStartEvent(projectName: string, reason: string, seq?: number): protocol.ProjectLoadingStartEvent {
+        return {
+            seq: seq || 0,
+            type: "event",
+            event: server.ProjectLoadingStartEvent,
+            body: { projectName, reason }
+        };
+    }
+
+    export function projectLoadingFinishEvent(projectName: string, seq?: number): protocol.ProjectLoadingFinishEvent {
+        return {
+            seq: seq || 0,
+            type: "event",
+            event: server.ProjectLoadingFinishEvent,
+            body: { projectName }
+        };
+    }
+
+    export function projectInfoTelemetryEvent(seq?: number): protocol.TelemetryEvent {
+        return telemetryEvent(server.ProjectInfoTelemetryEvent, "", seq);
+    }
+
+    function telemetryEvent(telemetryEventName: string, payload: any, seq?: number): protocol.TelemetryEvent {
+        return {
+            seq: seq || 0,
+            type: "event",
+            event: "telemetry",
+            body: {
+                telemetryEventName,
+                payload
+            }
+        };
+    }
+
+    export function configFileDiagEvent(triggerFile: string, configFile: string, diagnostics: protocol.DiagnosticWithFileName[], seq?: number): protocol.ConfigFileDiagnosticEvent {
+        return {
+            seq: seq || 0,
+            type: "event",
+            event: server.ConfigFileDiagEvent,
+            body: {
+                triggerFile,
+                configFile,
+                diagnostics
+            }
+        };
+    }
+
+    export function checkEvents(session: TestSession, expectedEvents: protocol.Event[]) {
+        const events = session.events;
+        assert.equal(events.length, expectedEvents.length, `Actual:: ${JSON.stringify(session.events, /*replacer*/ undefined, " ")}`);
+        expectedEvents.forEach((expectedEvent, index) => {
+            if (expectedEvent.event === "telemetry") {
+                // Ignore payload
+                const { body, ...actual } = events[index] as protocol.TelemetryEvent;
+                const { body: expectedBody, ...expected } = expectedEvent as protocol.TelemetryEvent;
+                assert.deepEqual(actual, expected, `Expected ${JSON.stringify(expectedEvent)} at ${index} in ${JSON.stringify(events)}`);
+                assert.equal(body.telemetryEventName, expectedBody.telemetryEventName, `Expected ${JSON.stringify(expectedEvent)} at ${index} in ${JSON.stringify(events)}`);
+            }
+            else {
+                checkNthEvent(session, expectedEvent, index, index === expectedEvents.length);
+            }
+        });
+    }
 
     export function checkNthEvent(session: TestSession, expectedEvent: protocol.Event, index: number, isMostRecent: boolean) {
         const events = session.events;
@@ -743,5 +806,220 @@ namespace ts.projectSystem {
             isWriteAccess: isWriteAccess === undefined ? isDefinition : isWriteAccess,
             lineText,
         };
+    }
+
+    export interface GetErrDiagnostics {
+        file: string | File;
+        syntax?: protocol.Diagnostic[];
+        semantic?: protocol.Diagnostic[];
+        suggestion?: protocol.Diagnostic[];
+    }
+    export interface VerifyGetErrRequestBase {
+        session: TestSession;
+        host: TestServerHost;
+        onErrEvent?: () => void;
+        existingTimeouts?: number;
+    }
+    export interface VerifyGetErrRequest extends VerifyGetErrRequestBase {
+        expected: readonly GetErrDiagnostics[];
+    }
+    export function verifyGetErrRequest(request: VerifyGetErrRequest) {
+        const { session, expected } = request;
+        session.clearMessages();
+        const expectedSequenceId = session.getNextSeq();
+        session.executeCommandSeq<protocol.GeterrRequest>({
+            command: protocol.CommandTypes.Geterr,
+            arguments: {
+                delay: 0,
+                files: expected.map(f => filePath(f.file))
+            }
+        });
+        checkAllErrors({ ...request, expectedSequenceId });
+    }
+
+    export interface VerifyGetErrRequestNoErrors extends VerifyGetErrRequestBase {
+        files: readonly (string | File)[];
+    }
+    export function verifyGetErrRequestNoErrors(request: VerifyGetErrRequestNoErrors) {
+        verifyGetErrRequest({
+            ...request,
+            expected: request.files.map(file => ({ file, syntax: [], semantic: [], suggestion: [] }))
+        });
+    }
+
+    export interface CheckAllErrors extends VerifyGetErrRequest {
+        expectedSequenceId: number;
+    }
+    function checkAllErrors({ expected, expectedSequenceId, ...rest }: CheckAllErrors) {
+        for (let i = 0; i < expected.length; i++) {
+            checkErrorsInFile({
+                ...rest,
+                expected: expected[i],
+                expectedSequenceId: i === expected.length - 1 ? expectedSequenceId : undefined,
+            });
+        }
+    }
+
+    function filePath(file: string | File) {
+        return isString(file) ? file : file.path;
+    }
+    interface CheckErrorsInFile extends VerifyGetErrRequestBase {
+        expected: GetErrDiagnostics;
+        expectedSequenceId?: number;
+    }
+    function checkErrorsInFile({
+        session, host, onErrEvent, existingTimeouts, expectedSequenceId,
+        expected: { file, syntax, semantic, suggestion },
+    }: CheckErrorsInFile) {
+        onErrEvent = onErrEvent || noop;
+        if (existingTimeouts !== undefined) {
+            host.checkTimeoutQueueLength(existingTimeouts + 1);
+            host.runQueuedTimeoutCallbacks(host.getNextTimeoutId() - 1);
+        }
+        else {
+            host.checkTimeoutQueueLengthAndRun(1);
+        }
+        if (syntax) {
+            onErrEvent();
+            checkErrorMessage(session, "syntaxDiag", { file: filePath(file), diagnostics: syntax });
+        }
+        if (semantic) {
+            session.clearMessages();
+
+            host.runQueuedImmediateCallbacks(1);
+            onErrEvent();
+            checkErrorMessage(session, "semanticDiag", { file: filePath(file), diagnostics: semantic });
+        }
+        if (suggestion) {
+            session.clearMessages();
+
+            host.runQueuedImmediateCallbacks(1);
+            onErrEvent();
+            checkErrorMessage(session, "suggestionDiag", { file: filePath(file), diagnostics: suggestion });
+        }
+        if (expectedSequenceId !== undefined) {
+            checkCompleteEvent(session, syntax || semantic || suggestion ? 2 : 1, expectedSequenceId);
+        }
+        session.clearMessages();
+    }
+
+    function verifyErrorsUsingGeterr({ allFiles, openFiles, expectedGetErr }: VerifyGetErrScenario) {
+        it("verifies the errors in open file", () => {
+            const host = createServerHost([...allFiles(), libFile]);
+            const session = createSession(host, { canUseEvents: true, });
+            openFilesForSession(openFiles(), session);
+
+            verifyGetErrRequest({ session, host, expected: expectedGetErr() });
+        });
+    }
+
+    function verifyErrorsUsingGeterrForProject({ allFiles, openFiles, expectedGetErrForProject }: VerifyGetErrScenario) {
+        it("verifies the errors in projects", () => {
+            const host = createServerHost([...allFiles(), libFile]);
+            const session = createSession(host, { canUseEvents: true, });
+            openFilesForSession(openFiles(), session);
+
+            session.clearMessages();
+            for (const expected of expectedGetErrForProject()) {
+                const expectedSequenceId = session.getNextSeq();
+                session.executeCommandSeq<protocol.GeterrForProjectRequest>({
+                    command: protocol.CommandTypes.GeterrForProject,
+                    arguments: {
+                        delay: 0,
+                        file: expected.project
+                    }
+                });
+
+                checkAllErrors({ session, host, expected: expected.errors, expectedSequenceId });
+            }
+        });
+    }
+
+    function verifyErrorsUsingSyncMethods({ allFiles, openFiles, expectedSyncDiagnostics }: VerifyGetErrScenario) {
+        it("verifies the errors using sync commands", () => {
+            const host = createServerHost([...allFiles(), libFile]);
+            const session = createSession(host);
+            openFilesForSession(openFiles(), session);
+            for (const { file, project, syntax, semantic, suggestion } of expectedSyncDiagnostics()) {
+                const actualSyntax = session.executeCommandSeq<protocol.SyntacticDiagnosticsSyncRequest>({
+                    command: protocol.CommandTypes.SyntacticDiagnosticsSync,
+                    arguments: {
+                        file: filePath(file),
+                        projectFileName: project
+                    }
+                }).response as protocol.Diagnostic[];
+                assert.deepEqual(actualSyntax, syntax, `Syntax diagnostics for file: ${filePath(file)}, project: ${project}`);
+                const actualSemantic = session.executeCommandSeq<protocol.SemanticDiagnosticsSyncRequest>({
+                    command: protocol.CommandTypes.SemanticDiagnosticsSync,
+                    arguments: {
+                        file: filePath(file),
+                        projectFileName: project
+                    }
+                }).response as protocol.Diagnostic[];
+                assert.deepEqual(actualSemantic, semantic, `Semantic diagnostics for file: ${filePath(file)}, project: ${project}`);
+                const actualSuggestion = session.executeCommandSeq<protocol.SuggestionDiagnosticsSyncRequest>({
+                    command: protocol.CommandTypes.SuggestionDiagnosticsSync,
+                    arguments: {
+                        file: filePath(file),
+                        projectFileName: project
+                    }
+                }).response as protocol.Diagnostic[];
+                assert.deepEqual(actualSuggestion, suggestion, `Suggestion diagnostics for file: ${filePath(file)}, project: ${project}`);
+            }
+        });
+    }
+
+    function verifyConfigFileErrors({ allFiles, openFiles, expectedConfigFileDiagEvents }: VerifyGetErrScenario) {
+        it("verify config file errors", () => {
+            const host = createServerHost([...allFiles(), libFile]);
+            const { session, events } = createSessionWithEventTracking<server.ConfigFileDiagEvent>(host, server.ConfigFileDiagEvent);
+
+            for (const file of openFiles()) {
+                session.executeCommandSeq<protocol.OpenRequest>({
+                    command: protocol.CommandTypes.Open,
+                    arguments: { file: file.path }
+                });
+            }
+
+            assert.deepEqual(events, expectedConfigFileDiagEvents().map(data => ({
+                eventName: server.ConfigFileDiagEvent,
+                data
+            })));
+        });
+    }
+
+    export interface GetErrForProjectDiagnostics {
+        project: string;
+        errors: readonly GetErrDiagnostics[];
+    }
+    export interface SyncDiagnostics extends GetErrDiagnostics {
+        project?: string;
+    }
+    export interface VerifyGetErrScenario {
+        allFiles: () => readonly File[];
+        openFiles: () => readonly File[];
+        expectedGetErr: () => readonly GetErrDiagnostics[];
+        expectedGetErrForProject: () => readonly GetErrForProjectDiagnostics[];
+        expectedSyncDiagnostics: () => readonly SyncDiagnostics[];
+        expectedConfigFileDiagEvents: () => readonly server.ConfigFileDiagEvent["data"][];
+    }
+    export function verifyGetErrScenario(scenario: VerifyGetErrScenario) {
+        verifyErrorsUsingGeterr(scenario);
+        verifyErrorsUsingGeterrForProject(scenario);
+        verifyErrorsUsingSyncMethods(scenario);
+        verifyConfigFileErrors(scenario);
+    }
+
+    export function emptyDiagnostics(file: File): GetErrDiagnostics {
+        return {
+            file,
+            syntax: emptyArray,
+            semantic: emptyArray,
+            suggestion: emptyArray
+        };
+    }
+
+    export function syncDiagnostics(diagnostics: GetErrDiagnostics, project: string): SyncDiagnostics {
+        return { project, ...diagnostics };
     }
 }
