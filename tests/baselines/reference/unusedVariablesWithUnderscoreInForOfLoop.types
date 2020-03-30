@@ -12,9 +12,9 @@ function f() {
 
         console.log(b);
 >console.log(b) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >b : string | number
     }
 
@@ -28,9 +28,9 @@ function f() {
 
         console.log(a);
 >console.log(a) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >a : string | number
     }
 
