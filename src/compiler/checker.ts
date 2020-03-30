@@ -31620,8 +31620,31 @@ namespace ts {
             const functionIsUsedInBody = forEachChild(body, function check(childNode): boolean | undefined {
                 if (isIdentifier(childNode)) {
                     const childSymbol = getSymbolAtLocation(childNode);
-                    if (childSymbol && childSymbol.id === testedFunctionSymbol.id) {
-                        return true;
+                    if (childSymbol && childSymbol === testedFunctionSymbol) {
+                        // If the test was a simple identifier, the above check is sufficient
+                        if (isIdentifier(ifStatement.expression)) {
+                            return true;
+                        }
+                        // Otherwise we need to ensure the symbol is called on the same target
+                        let testedExpression = testedNode.parent;
+                        let childExpression = childNode.parent;
+                        while (testedExpression && childExpression) {
+
+                            if (isIdentifier(testedExpression) && isIdentifier(childExpression)) {
+                                return getSymbolAtLocation(testedExpression) === getSymbolAtLocation(childExpression);
+                            }
+
+                            if (isPropertyAccessExpression(testedExpression) && isPropertyAccessExpression(childExpression)) {
+                                if (getSymbolAtLocation(testedExpression.name) !== getSymbolAtLocation(childExpression.name)) {
+                                    return false;
+                                }
+                                childExpression = childExpression.expression;
+                                testedExpression = testedExpression.expression;
+                            }
+                            else {
+                                return false;
+                            }
+                        }
                     }
                 }
 
