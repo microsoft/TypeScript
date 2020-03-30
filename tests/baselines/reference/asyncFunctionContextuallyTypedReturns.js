@@ -1,7 +1,7 @@
 //// [asyncFunctionContextuallyTypedReturns.ts]
 declare function f(cb: (v: boolean) => [0] | PromiseLike<[0]>): void;
-f(v => v ? [0] : Promise.reject()); // ok
-f(async v => v ? [0] : Promise.reject()); // error
+f(v => v ? [0] : Promise.reject());
+f(async v => v ? [0] : Promise.reject());
 
 declare function g(cb: (v: boolean) => "contextuallyTypable" | PromiseLike<"contextuallyTypable">): void;
 g(v => v ? "contextuallyTypable" : Promise.reject());
@@ -24,8 +24,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-f(v => v ? [0] : Promise.reject()); // ok
-f((v) => __awaiter(void 0, void 0, void 0, function* () { return v ? [0] : Promise.reject(); })); // error
+f(v => v ? [0] : Promise.reject());
+f((v) => __awaiter(void 0, void 0, void 0, function* () { return v ? [0] : Promise.reject(); }));
 g(v => v ? "contextuallyTypable" : Promise.reject());
 g((v) => __awaiter(void 0, void 0, void 0, function* () { return v ? "contextuallyTypable" : Promise.reject(); }));
 h(v => v ? (abc) => { } : Promise.reject());

@@ -1,8 +1,8 @@
 // @target: es6
 // @strict: true
 declare function f(cb: (v: boolean) => [0] | PromiseLike<[0]>): void;
-f(v => v ? [0] : Promise.reject()); // ok
-f(async v => v ? [0] : Promise.reject()); // error
+f(v => v ? [0] : Promise.reject());
+f(async v => v ? [0] : Promise.reject());
 
 declare function g(cb: (v: boolean) => "contextuallyTypable" | PromiseLike<"contextuallyTypable">): void;
 g(v => v ? "contextuallyTypable" : Promise.reject());

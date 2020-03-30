@@ -4,7 +4,7 @@ declare function f(cb: (v: boolean) => [0] | PromiseLike<[0]>): void;
 >cb : (v: boolean) => [0] | PromiseLike<[0]>
 >v : boolean
 
-f(v => v ? [0] : Promise.reject()); // ok
+f(v => v ? [0] : Promise.reject());
 >f(v => v ? [0] : Promise.reject()) : void
 >f : (cb: (v: boolean) => [0] | PromiseLike<[0]>) => void
 >v => v ? [0] : Promise.reject() : (v: boolean) => [0] | Promise<[0]>
@@ -18,7 +18,7 @@ f(v => v ? [0] : Promise.reject()); // ok
 >Promise : PromiseConstructor
 >reject : <T = never>(reason?: any) => Promise<T>
 
-f(async v => v ? [0] : Promise.reject()); // error
+f(async v => v ? [0] : Promise.reject());
 >f(async v => v ? [0] : Promise.reject()) : void
 >f : (cb: (v: boolean) => [0] | PromiseLike<[0]>) => void
 >async v => v ? [0] : Promise.reject() : (v: boolean) => Promise<[0] | [0]>

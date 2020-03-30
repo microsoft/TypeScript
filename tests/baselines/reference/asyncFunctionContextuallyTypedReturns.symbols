@@ -5,7 +5,7 @@ declare function f(cb: (v: boolean) => [0] | PromiseLike<[0]>): void;
 >v : Symbol(v, Decl(asyncFunctionContextuallyTypedReturns.ts, 0, 24))
 >PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
 
-f(v => v ? [0] : Promise.reject()); // ok
+f(v => v ? [0] : Promise.reject());
 >f : Symbol(f, Decl(asyncFunctionContextuallyTypedReturns.ts, 0, 0))
 >v : Symbol(v, Decl(asyncFunctionContextuallyTypedReturns.ts, 1, 2))
 >v : Symbol(v, Decl(asyncFunctionContextuallyTypedReturns.ts, 1, 2))
@@ -13,7 +13,7 @@ f(v => v ? [0] : Promise.reject()); // ok
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
 
-f(async v => v ? [0] : Promise.reject()); // error
+f(async v => v ? [0] : Promise.reject());
 >f : Symbol(f, Decl(asyncFunctionContextuallyTypedReturns.ts, 0, 0))
 >v : Symbol(v, Decl(asyncFunctionContextuallyTypedReturns.ts, 2, 7))
 >v : Symbol(v, Decl(asyncFunctionContextuallyTypedReturns.ts, 2, 7))
