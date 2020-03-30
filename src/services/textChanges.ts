@@ -43,10 +43,14 @@ namespace ts.textChanges {
          */
         IncludeAll,
         /**
+         * Include attached JSDoc comments
+         */
+        JSDoc,
+        /**
          * Only delete trivia on the same line as getStart().
          * Used to avoid deleting leading comments
          */
-        StartLineOnly,
+        StartLine,
     }
 
     export enum TrailingTriviaOption {
@@ -167,8 +171,14 @@ namespace ts.textChanges {
         if (leadingTriviaOption === LeadingTriviaOption.Exclude) {
             return node.getStart(sourceFile);
         }
-        if (leadingTriviaOption === LeadingTriviaOption.StartLineOnly) {
+        if (leadingTriviaOption === LeadingTriviaOption.StartLine) {
             return getLineStartPositionForPosition(node.getStart(sourceFile), sourceFile);
+        }
+        if (leadingTriviaOption === LeadingTriviaOption.JSDoc) {
+            const JSDocComments = getJSDocCommentRanges(node, sourceFile.text);
+            if (JSDocComments?.length) {
+                return getLineStartPositionForPosition(JSDocComments[0].pos, sourceFile);
+            }
         }
         const fullStart = node.getFullStart();
         const start = node.getStart(sourceFile);
@@ -1261,7 +1271,7 @@ namespace ts.textChanges {
                     const isFirstImport = sourceFile.imports.length && node === first(sourceFile.imports).parent || node === find(sourceFile.statements, isAnyImportSyntax);
                     // For first import, leave header comment in place, otherwise only delete JSDoc comments
                     deleteNode(changes, sourceFile, node,
-                        { leadingTriviaOption: isFirstImport ? LeadingTriviaOption.Exclude : hasJSDocNodes(node) ? LeadingTriviaOption.IncludeAll : LeadingTriviaOption.StartLineOnly });
+                        { leadingTriviaOption: isFirstImport ? LeadingTriviaOption.Exclude : hasJSDocNodes(node) ? LeadingTriviaOption.JSDoc : LeadingTriviaOption.StartLine });
                     break;
 
                 case SyntaxKind.BindingElement:
@@ -1307,7 +1317,7 @@ namespace ts.textChanges {
 
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.FunctionDeclaration:
-                    deleteNode(changes, sourceFile, node, { leadingTriviaOption: hasJSDocNodes(node) ? LeadingTriviaOption.IncludeAll : LeadingTriviaOption.StartLineOnly });
+                    deleteNode(changes, sourceFile, node, { leadingTriviaOption: hasJSDocNodes(node) ? LeadingTriviaOption.JSDoc : LeadingTriviaOption.StartLine });
                     break;
 
                 default:
@@ -1386,7 +1396,7 @@ namespace ts.textChanges {
                     break;
 
                 case SyntaxKind.VariableStatement:
-                    deleteNode(changes, sourceFile, gp, { leadingTriviaOption: hasJSDocNodes(gp) ? LeadingTriviaOption.IncludeAll : LeadingTriviaOption.StartLineOnly });
+                    deleteNode(changes, sourceFile, gp, { leadingTriviaOption: hasJSDocNodes(gp) ? LeadingTriviaOption.JSDoc : LeadingTriviaOption.StartLine });
                     break;
 
                 default:
