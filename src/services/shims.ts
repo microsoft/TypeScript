@@ -1051,7 +1051,10 @@ namespace ts {
         public getEmitOutput(fileName: string): string {
             return this.forwardJSONCall(
                 `getEmitOutput('${fileName}')`,
-                () => this.languageService.getEmitOutput(fileName)
+                () => {
+                    const { diagnostics, ...rest } = this.languageService.getEmitOutput(fileName);
+                    return { ...rest, diagnostics: this.realizeDiagnostics(diagnostics) };
+                }
             );
         }
 

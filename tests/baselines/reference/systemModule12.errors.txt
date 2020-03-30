@@ -1,9 +1,9 @@
-tests/cases/compiler/systemModule12.ts(2,15): error TS2307: Cannot find module 'file1'.
+tests/cases/compiler/systemModule12.ts(2,15): error TS2307: Cannot find module 'file1' or its corresponding type declarations.
 
 
 ==== tests/cases/compiler/systemModule12.ts (1 errors) ====
     ///<amd-module name='NamedModule'/>
     import n from 'file1'
                   ~~~~~~~
-!!! error TS2307: Cannot find module 'file1'.
+!!! error TS2307: Cannot find module 'file1' or its corresponding type declarations.
     

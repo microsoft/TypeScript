@@ -26,18 +26,22 @@ exports.m = common_1["default"];
     "fileInfos": {
       "../../lib/lib.d.ts": {
         "version": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
-        "signature": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n"
+        "signature": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
+        "affectsGlobalScope": true
       },
       "../../src/common/obj.json": {
-        "version": "2151907832-{\n    \"val\": 42\n}"
+        "version": "2151907832-{\n    \"val\": 42\n}",
+        "affectsGlobalScope": true
       },
       "../../src/common/index.d.ts": {
         "version": "-4085459678-import x = require(\"./obj.json\");\r\nexport = x;\r\n",
-        "signature": "-4085459678-import x = require(\"./obj.json\");\r\nexport = x;\r\n"
+        "signature": "-4085459678-import x = require(\"./obj.json\");\r\nexport = x;\r\n",
+        "affectsGlobalScope": false
       },
       "../../src/sub-project/index.js": {
         "version": "-14684157955-import mod from '../common';\n\nexport const m = mod;\n",
-        "signature": "-15768184370-export const m: {\r\n    val: number;\r\n};\r\n"
+        "signature": "-15768184370-export const m: {\r\n    val: number;\r\n};\r\n",
+        "affectsGlobalScope": false
       }
     },
     "options": {
@@ -103,15 +107,18 @@ exports.getVar = getVar;
     "fileInfos": {
       "../../lib/lib.d.ts": {
         "version": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
-        "signature": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n"
+        "signature": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
+        "affectsGlobalScope": true
       },
       "../sub-project/index.d.ts": {
         "version": "-15768184370-export const m: {\r\n    val: number;\r\n};\r\n",
-        "signature": "-15768184370-export const m: {\r\n    val: number;\r\n};\r\n"
+        "signature": "-15768184370-export const m: {\r\n    val: number;\r\n};\r\n",
+        "affectsGlobalScope": false
       },
       "../../src/sub-project-2/index.js": {
         "version": "13545386800-import { m } from '../sub-project/index';\n\nconst variable = {\n    key: m,\n};\n\nexport function getVar() {\n    return variable;\n}\n",
-        "signature": "-2686589794-export function getVar(): {\r\n    key: {\r\n        val: number;\r\n    };\r\n};\r\n"
+        "signature": "-2686589794-export function getVar(): {\r\n    key: {\r\n        val: number;\r\n    };\r\n};\r\n",
+        "affectsGlobalScope": false
       }
     },
     "options": {
@@ -134,8 +141,8 @@ exports.getVar = getVar;
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
-      "../../src/sub-project-2/index.js",
-      "../sub-project/index.d.ts"
+      "../sub-project/index.d.ts",
+      "../../src/sub-project-2/index.js"
     ]
   },
   "version": "FakeTSVersion"
@@ -158,15 +165,18 @@ module.exports = x;
     "fileInfos": {
       "../../lib/lib.d.ts": {
         "version": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
-        "signature": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n"
+        "signature": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
+        "affectsGlobalScope": true
       },
       "./obj.json": {
         "version": "2151907832-{\n    \"val\": 42\n}",
-        "signature": "-6323167306-export declare const val: number;\r\n"
+        "signature": "-6323167306-export declare const val: number;\r\n",
+        "affectsGlobalScope": true
       },
       "./index.ts": {
         "version": "-5032674136-import x = require(\"./obj.json\");\nexport = x;\n",
-        "signature": "-4085459678-import x = require(\"./obj.json\");\r\nexport = x;\r\n"
+        "signature": "-4085459678-import x = require(\"./obj.json\");\r\nexport = x;\r\n",
+        "affectsGlobalScope": false
       }
     },
     "options": {

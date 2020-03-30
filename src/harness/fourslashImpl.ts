@@ -26,6 +26,8 @@ namespace FourSlash {
 
         files: FourSlashFile[];
 
+        symlinks: vfs.FileSet | undefined;
+
         // A mapping from marker names to name/position pairs
         markerPositions: ts.Map<Marker>;
 
@@ -340,6 +342,10 @@ namespace FourSlash {
                     this.languageServiceAdapterHost.vfs.mkdirpSync(vpath.dirname(link));
                     this.languageServiceAdapterHost.vfs.symlinkSync(file.fileName, link);
                 });
+            }
+
+            if (testData.symlinks) {
+                this.languageServiceAdapterHost.vfs.apply(testData.symlinks);
             }
 
             this.formatCodeSettings = ts.testFormatSettings;
@@ -3300,7 +3306,7 @@ namespace FourSlash {
         }
 
         public moveToNewFile(options: FourSlashInterface.MoveToNewFileOptions): void {
-            assert(this.getRanges().length === 1);
+            assert(this.getRanges().length === 1, "Must have exactly one fourslash range (source enclosed between '[|' and '|]' delimiters) in the source file");
             const range = this.getRanges()[0];
             const refactor = ts.find(this.getApplicableRefactors(range, { allowTextChangesInNewFiles: true }), r => r.name === "Move to a new file")!;
             assert(refactor.actions.length === 1);
@@ -3767,6 +3773,7 @@ namespace FourSlash {
         const files: FourSlashFile[] = [];
         // Global options
         const globalOptions: { [s: string]: string; } = {};
+        let symlinks: vfs.FileSet | undefined;
         // Marker positions
 
         // Split up the input file by line
@@ -3815,32 +3822,38 @@ namespace FourSlash {
                 throw new Error("Three-slash line in the middle of four-slash region at line " + i);
             }
             else if (line.substr(0, 2) === "//") {
-                // Comment line, check for global/file @options and record them
-                const match = optionRegex.exec(line.substr(2));
-                if (match) {
-                    const key = match[1].toLowerCase();
-                    const value = match[2];
-                    if (!ts.contains(fileMetadataNames, key)) {
-                        // Check if the match is already existed in the global options
-                        if (globalOptions[key] !== undefined) {
-                            throw new Error(`Global option '${key}' already exists`);
+                const possiblySymlinks = Harness.TestCaseParser.parseSymlinkFromTest(line, symlinks);
+                if (possiblySymlinks) {
+                    symlinks = possiblySymlinks;
+                }
+                else {
+                    // Comment line, check for global/file @options and record them
+                    const match = optionRegex.exec(line.substr(2));
+                    if (match) {
+                        const key = match[1].toLowerCase();
+                        const value = match[2];
+                        if (!ts.contains(fileMetadataNames, key)) {
+                            // Check if the match is already existed in the global options
+                            if (globalOptions[key] !== undefined) {
+                                throw new Error(`Global option '${key}' already exists`);
+                            }
+                            globalOptions[key] = value;
                         }
-                        globalOptions[key] = value;
-                    }
-                    else {
-                        switch (key) {
-                            case MetadataOptionNames.fileName:
-                                // Found an @FileName directive, if this is not the first then create a new subfile
-                                nextFile();
-                                currentFileName = ts.isRootedDiskPath(value) ? value : basePath + "/" + value;
-                                currentFileOptions[key] = value;
-                                break;
-                            case MetadataOptionNames.symlink:
-                                currentFileSymlinks = ts.append(currentFileSymlinks, value);
-                                break;
-                            default:
-                                // Add other fileMetadata flag
-                                currentFileOptions[key] = value;
+                        else {
+                            switch (key) {
+                                case MetadataOptionNames.fileName:
+                                    // Found an @FileName directive, if this is not the first then create a new subfile
+                                    nextFile();
+                                    currentFileName = ts.isRootedDiskPath(value) ? value : basePath + "/" + value;
+                                    currentFileOptions[key] = value;
+                                    break;
+                                case MetadataOptionNames.symlink:
+                                    currentFileSymlinks = ts.append(currentFileSymlinks, value);
+                                    break;
+                                default:
+                                    // Add other fileMetadata flag
+                                    currentFileOptions[key] = value;
+                            }
                         }
                     }
                 }
@@ -3870,6 +3883,7 @@ namespace FourSlash {
             markers,
             globalOptions,
             files,
+            symlinks,
             ranges
         };
     }

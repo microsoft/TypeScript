@@ -392,81 +392,153 @@ class Derived extends Test {
     }
 }
 
+function f11(items: Test[]) {
+>f11 : Symbol(f11, Decl(assertionTypePredicates1.ts, 138, 1))
+>items : Symbol(items, Decl(assertionTypePredicates1.ts, 140, 13))
+>Test : Symbol(Test, Decl(assertionTypePredicates1.ts, 88, 1))
+
+    for (let item of items) {
+>item : Symbol(item, Decl(assertionTypePredicates1.ts, 141, 12))
+>items : Symbol(items, Decl(assertionTypePredicates1.ts, 140, 13))
+
+        if (item.isTest2()) {
+>item.isTest2 : Symbol(Test.isTest2, Decl(assertionTypePredicates1.ts, 94, 5))
+>item : Symbol(item, Decl(assertionTypePredicates1.ts, 141, 12))
+>isTest2 : Symbol(Test.isTest2, Decl(assertionTypePredicates1.ts, 94, 5))
+
+            item.z;
+>item.z : Symbol(Test2.z, Decl(assertionTypePredicates1.ts, 125, 26))
+>item : Symbol(item, Decl(assertionTypePredicates1.ts, 141, 12))
+>z : Symbol(Test2.z, Decl(assertionTypePredicates1.ts, 125, 26))
+        }
+        item.assertIsTest2();
+>item.assertIsTest2 : Symbol(Test.assertIsTest2, Decl(assertionTypePredicates1.ts, 97, 5))
+>item : Symbol(item, Decl(assertionTypePredicates1.ts, 141, 12))
+>assertIsTest2 : Symbol(Test.assertIsTest2, Decl(assertionTypePredicates1.ts, 97, 5))
+
+        item.z;
+>item.z : Symbol(Test2.z, Decl(assertionTypePredicates1.ts, 125, 26))
+>item : Symbol(item, Decl(assertionTypePredicates1.ts, 141, 12))
+>z : Symbol(Test2.z, Decl(assertionTypePredicates1.ts, 125, 26))
+    }
+}
+
 // Invalid constructs
 
 declare let Q1: new (x: unknown) => x is string;
->Q1 : Symbol(Q1, Decl(assertionTypePredicates1.ts, 142, 11))
->x : Symbol(x, Decl(assertionTypePredicates1.ts, 142, 21))
->x : Symbol(x, Decl(assertionTypePredicates1.ts, 142, 21))
+>Q1 : Symbol(Q1, Decl(assertionTypePredicates1.ts, 152, 11))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 152, 21))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 152, 21))
 
 declare let Q2: new (x: boolean) => asserts x;
->Q2 : Symbol(Q2, Decl(assertionTypePredicates1.ts, 143, 11))
->x : Symbol(x, Decl(assertionTypePredicates1.ts, 143, 21))
->x : Symbol(x, Decl(assertionTypePredicates1.ts, 143, 21))
+>Q2 : Symbol(Q2, Decl(assertionTypePredicates1.ts, 153, 11))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 153, 21))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 153, 21))
 
 declare let Q3: new (x: unknown) => asserts x is string;
->Q3 : Symbol(Q3, Decl(assertionTypePredicates1.ts, 144, 11))
->x : Symbol(x, Decl(assertionTypePredicates1.ts, 144, 21))
->x : Symbol(x, Decl(assertionTypePredicates1.ts, 144, 21))
+>Q3 : Symbol(Q3, Decl(assertionTypePredicates1.ts, 154, 11))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 154, 21))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 154, 21))
 
 declare class Wat {
->Wat : Symbol(Wat, Decl(assertionTypePredicates1.ts, 144, 56))
+>Wat : Symbol(Wat, Decl(assertionTypePredicates1.ts, 154, 56))
 
     get p1(): this is string;
->p1 : Symbol(Wat.p1, Decl(assertionTypePredicates1.ts, 146, 19), Decl(assertionTypePredicates1.ts, 147, 29))
+>p1 : Symbol(Wat.p1, Decl(assertionTypePredicates1.ts, 156, 19), Decl(assertionTypePredicates1.ts, 157, 29))
 
     set p1(x: this is string);
->p1 : Symbol(Wat.p1, Decl(assertionTypePredicates1.ts, 146, 19), Decl(assertionTypePredicates1.ts, 147, 29))
->x : Symbol(x, Decl(assertionTypePredicates1.ts, 148, 11))
+>p1 : Symbol(Wat.p1, Decl(assertionTypePredicates1.ts, 156, 19), Decl(assertionTypePredicates1.ts, 157, 29))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 158, 11))
 
     get p2(): asserts this is string;
->p2 : Symbol(Wat.p2, Decl(assertionTypePredicates1.ts, 148, 30), Decl(assertionTypePredicates1.ts, 149, 37))
+>p2 : Symbol(Wat.p2, Decl(assertionTypePredicates1.ts, 158, 30), Decl(assertionTypePredicates1.ts, 159, 37))
 
     set p2(x: asserts this is string);
->p2 : Symbol(Wat.p2, Decl(assertionTypePredicates1.ts, 148, 30), Decl(assertionTypePredicates1.ts, 149, 37))
->x : Symbol(x, Decl(assertionTypePredicates1.ts, 150, 11))
+>p2 : Symbol(Wat.p2, Decl(assertionTypePredicates1.ts, 158, 30), Decl(assertionTypePredicates1.ts, 159, 37))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 160, 11))
 }
 
 function f20(x: unknown) {
->f20 : Symbol(f20, Decl(assertionTypePredicates1.ts, 151, 1))
->x : Symbol(x, Decl(assertionTypePredicates1.ts, 153, 13))
+>f20 : Symbol(f20, Decl(assertionTypePredicates1.ts, 161, 1))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 163, 13))
 
     const assert = (value: unknown): asserts value => {}
->assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 154, 9))
->value : Symbol(value, Decl(assertionTypePredicates1.ts, 154, 20))
->value : Symbol(value, Decl(assertionTypePredicates1.ts, 154, 20))
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 164, 9))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 164, 20))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 164, 20))
 
     assert(typeof x === "string");  // Error
->assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 154, 9))
->x : Symbol(x, Decl(assertionTypePredicates1.ts, 153, 13))
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 164, 9))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 163, 13))
 
     const a = [assert];
->a : Symbol(a, Decl(assertionTypePredicates1.ts, 156, 9))
->assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 154, 9))
+>a : Symbol(a, Decl(assertionTypePredicates1.ts, 166, 9))
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 164, 9))
 
     a[0](typeof x === "string");  // Error
->a : Symbol(a, Decl(assertionTypePredicates1.ts, 156, 9))
->x : Symbol(x, Decl(assertionTypePredicates1.ts, 153, 13))
+>a : Symbol(a, Decl(assertionTypePredicates1.ts, 166, 9))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 163, 13))
 
     const t1 = new Test();
->t1 : Symbol(t1, Decl(assertionTypePredicates1.ts, 158, 9))
+>t1 : Symbol(t1, Decl(assertionTypePredicates1.ts, 168, 9))
 >Test : Symbol(Test, Decl(assertionTypePredicates1.ts, 88, 1))
 
     t1.assert(typeof x === "string");  // Error
 >t1.assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 90, 12))
->t1 : Symbol(t1, Decl(assertionTypePredicates1.ts, 158, 9))
+>t1 : Symbol(t1, Decl(assertionTypePredicates1.ts, 168, 9))
 >assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 90, 12))
->x : Symbol(x, Decl(assertionTypePredicates1.ts, 153, 13))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 163, 13))
 
     const t2: Test = new Test();
->t2 : Symbol(t2, Decl(assertionTypePredicates1.ts, 160, 9))
+>t2 : Symbol(t2, Decl(assertionTypePredicates1.ts, 170, 9))
 >Test : Symbol(Test, Decl(assertionTypePredicates1.ts, 88, 1))
 >Test : Symbol(Test, Decl(assertionTypePredicates1.ts, 88, 1))
 
     t2.assert(typeof x === "string");
 >t2.assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 90, 12))
->t2 : Symbol(t2, Decl(assertionTypePredicates1.ts, 160, 9))
+>t2 : Symbol(t2, Decl(assertionTypePredicates1.ts, 170, 9))
 >assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 90, 12))
->x : Symbol(x, Decl(assertionTypePredicates1.ts, 153, 13))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 163, 13))
+}
+
+// Repro from #35940
+
+interface Thing {
+>Thing : Symbol(Thing, Decl(assertionTypePredicates1.ts, 172, 1))
+
+    good: boolean;
+>good : Symbol(Thing.good, Decl(assertionTypePredicates1.ts, 176, 17))
+
+    isGood(): asserts this is GoodThing;
+>isGood : Symbol(Thing.isGood, Decl(assertionTypePredicates1.ts, 177, 18))
+>GoodThing : Symbol(GoodThing, Decl(assertionTypePredicates1.ts, 179, 1))
+}
+
+interface GoodThing {
+>GoodThing : Symbol(GoodThing, Decl(assertionTypePredicates1.ts, 179, 1))
+
+    good: true;
+>good : Symbol(GoodThing.good, Decl(assertionTypePredicates1.ts, 181, 21))
+}
+
+function example1(things: Thing[]) {
+>example1 : Symbol(example1, Decl(assertionTypePredicates1.ts, 183, 1))
+>things : Symbol(things, Decl(assertionTypePredicates1.ts, 185, 18))
+>Thing : Symbol(Thing, Decl(assertionTypePredicates1.ts, 172, 1))
+
+    for (let thing of things) {
+>thing : Symbol(thing, Decl(assertionTypePredicates1.ts, 186, 12))
+>things : Symbol(things, Decl(assertionTypePredicates1.ts, 185, 18))
+
+        thing.isGood();
+>thing.isGood : Symbol(Thing.isGood, Decl(assertionTypePredicates1.ts, 177, 18))
+>thing : Symbol(thing, Decl(assertionTypePredicates1.ts, 186, 12))
+>isGood : Symbol(Thing.isGood, Decl(assertionTypePredicates1.ts, 177, 18))
+
+        thing.good;
+>thing.good : Symbol(good, Decl(assertionTypePredicates1.ts, 176, 17), Decl(assertionTypePredicates1.ts, 181, 21))
+>thing : Symbol(thing, Decl(assertionTypePredicates1.ts, 186, 12))
+>good : Symbol(good, Decl(assertionTypePredicates1.ts, 176, 17), Decl(assertionTypePredicates1.ts, 181, 21))
+    }
 }
 

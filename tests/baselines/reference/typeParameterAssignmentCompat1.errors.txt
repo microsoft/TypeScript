@@ -1,6 +1,6 @@
 tests/cases/compiler/typeParameterAssignmentCompat1.ts(8,5): error TS2322: Type 'Foo<U>' is not assignable to type 'Foo<T>'.
   Type 'U' is not assignable to type 'T'.
-    'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 tests/cases/compiler/typeParameterAssignmentCompat1.ts(9,5): error TS2322: Type 'Foo<T>' is not assignable to type 'Foo<U>'.
 tests/cases/compiler/typeParameterAssignmentCompat1.ts(16,9): error TS2322: Type 'Foo<U>' is not assignable to type 'Foo<T>'.
 tests/cases/compiler/typeParameterAssignmentCompat1.ts(17,9): error TS2322: Type 'Foo<T>' is not assignable to type 'Foo<U>'.
@@ -18,7 +18,7 @@ tests/cases/compiler/typeParameterAssignmentCompat1.ts(17,9): error TS2322: Type
         ~
 !!! error TS2322: Type 'Foo<U>' is not assignable to type 'Foo<T>'.
 !!! error TS2322:   Type 'U' is not assignable to type 'T'.
-!!! error TS2322:     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
         return x;
         ~~~~~~~~~
 !!! error TS2322: Type 'Foo<T>' is not assignable to type 'Foo<U>'.

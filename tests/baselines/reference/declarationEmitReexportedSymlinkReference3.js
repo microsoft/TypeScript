@@ -65,8 +65,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./keys"), exports);
 
 
-//// [keys.d.ts]
-import { MetadataAccessor } from "@raymondfeng/pkg2";
-export declare const ADMIN: MetadataAccessor<boolean, import("../../pkg1/dist").IdType>;
 //// [index.d.ts]
 export * from './keys';

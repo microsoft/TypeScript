@@ -338,8 +338,18 @@ namespace ts.textChanges {
             });
         }
 
+        public insertFirstParameter(sourceFile: SourceFile, parameters: NodeArray<ParameterDeclaration>, newParam: ParameterDeclaration): void {
+            const p0 = firstOrUndefined(parameters);
+            if (p0) {
+                this.insertNodeBefore(sourceFile, p0, newParam);
+            }
+            else {
+                this.insertNodeAt(sourceFile, parameters.pos, newParam);
+            }
+        }
+
         public insertNodeBefore(sourceFile: SourceFile, before: Node, newNode: Node, blankLineBetween = false): void {
-            this.insertNodeAt(sourceFile, getAdjustedStartPosition(sourceFile, before, {}), newNode, this.getOptionsForInsertNodeBefore(before, blankLineBetween));
+            this.insertNodeAt(sourceFile, getAdjustedStartPosition(sourceFile, before, {}), newNode, this.getOptionsForInsertNodeBefore(before, newNode, blankLineBetween));
         }
 
         public insertModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
@@ -426,7 +436,7 @@ namespace ts.textChanges {
             this.insertNodesAt(sourceFile, start, typeParameters, { prefix: "<", suffix: ">" });
         }
 
-        private getOptionsForInsertNodeBefore(before: Node, doubleNewlines: boolean): InsertNodeOptions {
+        private getOptionsForInsertNodeBefore(before: Node, inserted: Node, doubleNewlines: boolean): InsertNodeOptions {
             if (isStatement(before) || isClassElement(before)) {
                 return { suffix: doubleNewlines ? this.newLineCharacter + this.newLineCharacter : this.newLineCharacter };
             }
@@ -434,7 +444,7 @@ namespace ts.textChanges {
                 return { suffix: ", " };
             }
             else if (isParameter(before)) {
-                return {};
+                return isParameter(inserted) ? { suffix: ", " } : {};
             }
             else if (isStringLiteral(before) && isImportDeclaration(before.parent) || isNamedImports(before)) {
                 return { suffix: ", " };
@@ -889,7 +899,9 @@ namespace ts.textChanges {
                 : format(change.node);
             // strip initial indentation (spaces or tabs) if text will be inserted in the middle of the line
             const noIndent = (options.preserveLeadingWhitespace || options.indentation !== undefined || getLineStartPositionForPosition(pos, sourceFile) === pos) ? text : text.replace(/^\s+/, "");
-            return (options.prefix || "") + noIndent + (options.suffix || "");
+            return (options.prefix || "") + noIndent
+                 + ((!options.suffix || endsWith(noIndent, options.suffix))
+                    ? "" : options.suffix);
         }
 
         function getFormatCodeSettingsForWriting({ options }: formatting.FormatContext, sourceFile: SourceFile): FormatCodeSettings {
@@ -923,7 +935,7 @@ namespace ts.textChanges {
         export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string, node: Node } {
             const writer = createWriter(newLineCharacter);
             const newLine = newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
-            createPrinter({ newLine, neverAsciiEscape: true }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
+            createPrinter({ newLine, neverAsciiEscape: true, preserveSourceNewlines: true }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
             return { text: writer.getText(), node: assignPositionsToNode(node) };
         }
     }
@@ -1052,8 +1064,8 @@ namespace ts.textChanges {
             writer.writeSymbol(s, sym);
             setLastNonTriviaPosition(s, /*force*/ false);
         }
-        function writeLine(): void {
-            writer.writeLine();
+        function writeLine(force?: boolean): void {
+            writer.writeLine(force);
         }
         function increaseIndent(): void {
             writer.increaseIndent();
@@ -1276,15 +1288,23 @@ namespace ts.textChanges {
                     deleteImportBinding(changes, sourceFile, node as NamespaceImport);
                     break;
 
+                case SyntaxKind.SemicolonToken:
+                    deleteNode(changes, sourceFile, node, { trailingTriviaOption: TrailingTriviaOption.Exclude });
+                    break;
+
+                case SyntaxKind.FunctionKeyword:
+                    deleteNode(changes, sourceFile, node, { leadingTriviaOption: LeadingTriviaOption.Exclude });
+                    break;
+
                 default:
                     if (isImportClause(node.parent) && node.parent.name === node) {
                         deleteDefaultImport(changes, sourceFile, node.parent);
                     }
-                    else if (isCallLikeExpression(node.parent)) {
+                    else if (isCallExpression(node.parent) && contains(node.parent.arguments, node)) {
                         deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
                     }
                     else {
-                        deleteNode(changes, sourceFile, node, node.kind === SyntaxKind.SemicolonToken ? { trailingTriviaOption: TrailingTriviaOption.Exclude } : undefined);
+                        deleteNode(changes, sourceFile, node);
                     }
             }
         }

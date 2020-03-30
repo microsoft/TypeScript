@@ -502,6 +502,38 @@ class Derived extends Test {
     }
 }
 
+function f11(items: Test[]) {
+>f11 : (items: Test[]) => void
+>items : Test[]
+
+    for (let item of items) {
+>item : Test
+>items : Test[]
+
+        if (item.isTest2()) {
+>item.isTest2() : boolean
+>item.isTest2 : () => this is Test2
+>item : Test
+>isTest2 : () => this is Test2
+
+            item.z;
+>item.z : number
+>item : Test2
+>z : number
+        }
+        item.assertIsTest2();
+>item.assertIsTest2() : void
+>item.assertIsTest2 : () => asserts this is Test2
+>item : Test
+>assertIsTest2 : () => asserts this is Test2
+
+        item.z;
+>item.z : number
+>item : Test2
+>z : number
+    }
+}
+
 // Invalid constructs
 
 declare let Q1: new (x: unknown) => x is string;
@@ -595,5 +627,42 @@ function f20(x: unknown) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : unknown
 >"string" : "string"
+}
+
+// Repro from #35940
+
+interface Thing {
+    good: boolean;
+>good : boolean
+
+    isGood(): asserts this is GoodThing;
+>isGood : () => asserts this is GoodThing
+}
+
+interface GoodThing {
+    good: true;
+>good : true
+>true : true
+}
+
+function example1(things: Thing[]) {
+>example1 : (things: Thing[]) => void
+>things : Thing[]
+
+    for (let thing of things) {
+>thing : Thing
+>things : Thing[]
+
+        thing.isGood();
+>thing.isGood() : void
+>thing.isGood : () => asserts this is GoodThing
+>thing : Thing
+>isGood : () => asserts this is GoodThing
+
+        thing.good;
+>thing.good : true
+>thing : Thing & GoodThing
+>good : true
+    }
 }
 

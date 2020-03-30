@@ -53,10 +53,10 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(105,9): error
     'Extract<keyof T, string>' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(108,5): error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
   Type 'T' is not assignable to type 'U'.
-    'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+    'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(111,5): error TS2322: Type 'T[J]' is not assignable to type 'U[J]'.
   Type 'T' is not assignable to type 'U'.
-    'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+    'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(114,5): error TS2322: Type 'T[K]' is not assignable to type 'T[J]'.
   Type 'K' is not assignable to type 'J'.
     'K' is assignable to the constraint of type 'J', but 'J' could be instantiated with a different subtype of constraint 'string'.
@@ -68,7 +68,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(114,5): error
                 'string' is assignable to the constraint of type 'J', but 'J' could be instantiated with a different subtype of constraint 'string'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(117,5): error TS2322: Type 'T[K]' is not assignable to type 'U[J]'.
   Type 'T' is not assignable to type 'U'.
-    'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+    'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(122,5): error TS2322: Type '42' is not assignable to type 'keyof T'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(123,5): error TS2322: Type '"hello"' is not assignable to type 'keyof T'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(140,5): error TS2322: Type '42' is not assignable to type 'T[K]'.
@@ -272,14 +272,14 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(142,5): error
         ~~
 !!! error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
-!!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
     
         tj = uj;
         uj = tj; // error
         ~~
 !!! error TS2322: Type 'T[J]' is not assignable to type 'U[J]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
-!!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
     
         tk = tj;
         tj = tk; // error
@@ -299,7 +299,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(142,5): error
         ~~
 !!! error TS2322: Type 'T[K]' is not assignable to type 'U[J]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
-!!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
     }
     
     // The constraint of 'keyof T' is 'keyof T'
