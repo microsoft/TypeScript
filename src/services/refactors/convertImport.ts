@@ -13,7 +13,7 @@ namespace ts.refactor {
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === actionNameNamespaceToNamed || actionName === actionNameNamedToNamespace, "Unexpected action name");
-            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, t, Debug.assertDefined(getImportToConvert(context), "Context must provide an import to convert")));
+            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, t, Debug.checkDefined(getImportToConvert(context), "Context must provide an import to convert")));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
     });

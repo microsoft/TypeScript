@@ -1,5 +1,5 @@
 internal2.ts(2,21): error TS1147: Import declarations in a namespace cannot reference a module.
-internal2.ts(2,21): error TS2307: Cannot find module 'external2'.
+internal2.ts(2,21): error TS2307: Cannot find module 'external2' or its corresponding type declarations.
 
 
 ==== internal2.ts (2 errors) ====
@@ -8,7 +8,7 @@ internal2.ts(2,21): error TS2307: Cannot find module 'external2'.
     	                   ~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
     	                   ~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'external2'.
+!!! error TS2307: Cannot find module 'external2' or its corresponding type declarations.
     	export var a = g.square(5);
     	export var b = "foo";
     }

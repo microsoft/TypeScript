@@ -614,6 +614,7 @@ namespace ts {
         private namedDeclarations: Map<Declaration[]> | undefined;
         public ambientModuleNames!: string[];
         public checkJsDirective: CheckJsDirective | undefined;
+        public errorExpectations: TextRange[] | undefined;
         public possiblyContainDynamicImport?: boolean;
         public pragmas!: PragmaMap;
         public localJsxFactory: EntityName | undefined;
@@ -980,11 +981,6 @@ namespace ts {
             return names;
         }
 
-        public getVersion(path: Path): string {
-            const file = this.getHostFileInformation(path);
-            return (file && file.version)!; // TODO: GH#18217
-        }
-
         public getScriptSnapshot(path: Path): IScriptSnapshot {
             const file = this.getHostFileInformation(path);
             return (file && file.scriptSnapshot)!; // TODO: GH#18217
@@ -1228,7 +1224,7 @@ namespace ts {
             const projectReferences = hostCache.getProjectReferences();
 
             // If the program is already up-to-date, we can reuse it
-            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), path => hostCache!.getVersion(path), fileExists, hasInvalidatedResolution, !!host.hasChangedAutomaticTypeDirectiveNames, projectReferences)) {
+            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), (_path, fileName) => host.getScriptVersion(fileName), fileExists, hasInvalidatedResolution, !!host.hasChangedAutomaticTypeDirectiveNames, projectReferences)) {
                 return;
             }
 
@@ -1261,7 +1257,7 @@ namespace ts {
                     return host.getDirectories ? host.getDirectories(path) : [];
                 },
                 readDirectory(path, extensions, exclude, include, depth) {
-                    Debug.assertDefined(host.readDirectory, "'LanguageServiceHost.readDirectory' must be implemented to correctly process 'projectReferences'");
+                    Debug.checkDefined(host.readDirectory, "'LanguageServiceHost.readDirectory' must be implemented to correctly process 'projectReferences'");
                     return host.readDirectory!(path, extensions, exclude, include, depth);
                 },
                 onReleaseOldSourceFile,
@@ -1278,12 +1274,10 @@ namespace ts {
             if (host.resolveTypeReferenceDirectives) {
                 compilerHost.resolveTypeReferenceDirectives = (...args) => host.resolveTypeReferenceDirectives!(...args);
             }
-            if (host.setResolvedProjectReferenceCallbacks) {
-                compilerHost.setResolvedProjectReferenceCallbacks = callbacks => host.setResolvedProjectReferenceCallbacks!(callbacks);
-            }
             if (host.useSourceOfProjectReferenceRedirect) {
                 compilerHost.useSourceOfProjectReferenceRedirect = () => host.useSourceOfProjectReferenceRedirect!();
             }
+            host.setCompilerHost?.(compilerHost);
 
             const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
             const options: CreateProgramOptions = {
@@ -1380,7 +1374,7 @@ namespace ts {
                         // We do not support the scenario where a host can modify a registered
                         // file's script kind, i.e. in one project some file is treated as ".ts"
                         // and in another as ".js"
-                        Debug.assertEqual(hostFileInformation.scriptKind, oldSourceFile.scriptKind, "Registered script kind should match new script kind.", path);
+                        Debug.assertEqual(hostFileInformation.scriptKind, oldSourceFile.scriptKind, "Registered script kind should match new script kind.");
 
                         return documentRegistry.updateDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
                     }
@@ -1411,8 +1405,10 @@ namespace ts {
 
         function dispose(): void {
             if (program) {
+                // Use paths to ensure we are using correct key and paths as document registry could bre created with different current directory than host
+                const key = documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions());
                 forEach(program.getSourceFiles(), f =>
-                    documentRegistry.releaseDocument(f.fileName, program.getCompilerOptions()));
+                    documentRegistry.releaseDocumentWithKey(f.resolvedPath, key));
                 program = undefined!; // TODO: GH#18217
             }
             host = undefined!;
@@ -1490,9 +1486,9 @@ namespace ts {
             );
         }
 
-        function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol | undefined {
+        function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string, preferences: UserPreferences = emptyOptions): Symbol | undefined {
             synchronizeHostData();
-            return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host);
+            return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host, preferences);
         }
 
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined {
@@ -2227,6 +2223,7 @@ namespace ts {
             getEditsForRefactor,
             toLineColumnOffset: sourceMapper.toLineColumnOffset,
             getSourceMapper: () => sourceMapper,
+            clearSourceMapperCache: () => sourceMapper.clearCache(),
             prepareCallHierarchy,
             provideCallHierarchyIncomingCalls,
             provideCallHierarchyOutgoingCalls

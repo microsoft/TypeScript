@@ -87,6 +87,7 @@
         "mocha-fivemat-progress-reporter": "latest",
         "ms": "latest",
         "node-fetch": "^2.6.0",
+        "playwright": "latest",
         "plugin-error": "latest",
         "pretty-hrtime": "^1.0.3",
         "prex": "^0.4.3",
@@ -96,7 +97,6 @@
         "through2": "latest",
         "travis-fold": "latest",
         "typescript": "next",
-        "playwright": "latest",
         "vinyl": "latest",
         "vinyl-sourcemaps-apply": "latest",
         "xml2js": "^0.4.19"

@@ -25,11 +25,13 @@ export const y = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.x = void 0;
     exports.x = 10;
 });
 define("file2", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.y = void 0;
     exports.y = 20;
 });
 
@@ -46,7 +48,7 @@ define("file2", ["require", "exports"], function (require, exports) {
       "sections": [
         {
           "pos": 0,
-          "end": 286,
+          "end": 334,
           "kind": "text"
         }
       ]
@@ -59,15 +61,17 @@ define("file2", ["require", "exports"], function (require, exports) {
 ======================================================================
 File:: /users/username/projects/project/out.js
 ----------------------------------------------------------------------
-text: (0-286)
+text: (0-334)
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.x = void 0;
     exports.x = 10;
 });
 define("file2", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.y = void 0;
     exports.y = 20;
 });
 
@@ -76,11 +80,11 @@ define("file2", ["require", "exports"], function (require, exports) {
 
 Output::
 >> Screen clear
-12:00:23 AM - Starting compilation in watch mode...
+[[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:28 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]

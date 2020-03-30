@@ -13,7 +13,7 @@ namespace ts.refactor {
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === actionNameDefaultToNamed || actionName === actionNameNamedToDefault, "Unexpected action name");
-            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, Debug.assertDefined(getInfo(context), "context must have info"), t, context.cancellationToken));
+            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, Debug.checkDefined(getInfo(context), "context must have info"), t, context.cancellationToken));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         },
     });
@@ -78,10 +78,10 @@ namespace ts.refactor {
 
     function changeExport(exportingSourceFile: SourceFile, { wasDefault, exportNode, exportName }: Info, changes: textChanges.ChangeTracker, checker: TypeChecker): void {
         if (wasDefault) {
-            changes.delete(exportingSourceFile, Debug.assertDefined(findModifier(exportNode, SyntaxKind.DefaultKeyword), "Should find a default keyword in modifier list"));
+            changes.delete(exportingSourceFile, Debug.checkDefined(findModifier(exportNode, SyntaxKind.DefaultKeyword), "Should find a default keyword in modifier list"));
         }
         else {
-            const exportKeyword = Debug.assertDefined(findModifier(exportNode, SyntaxKind.ExportKeyword), "Should find an export keyword in modifier list");
+            const exportKeyword = Debug.checkDefined(findModifier(exportNode, SyntaxKind.ExportKeyword), "Should find an export keyword in modifier list");
             switch (exportNode.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassDeclaration:
@@ -92,7 +92,7 @@ namespace ts.refactor {
                     // If 'x' isn't used in this file, `export const x = 0;` --> `export default 0;`
                     if (!FindAllReferences.Core.isSymbolReferencedInFile(exportName, checker, exportingSourceFile)) {
                         // We checked in `getInfo` that an initializer exists.
-                        changes.replaceNode(exportingSourceFile, exportNode, createExportDefault(Debug.assertDefined(first(exportNode.declarationList.declarations).initializer, "Initializer was previously known to be present")));
+                        changes.replaceNode(exportingSourceFile, exportNode, createExportDefault(Debug.checkDefined(first(exportNode.declarationList.declarations).initializer, "Initializer was previously known to be present")));
                         break;
                     }
                     // falls through
@@ -111,7 +111,7 @@ namespace ts.refactor {
 
     function changeImports(program: Program, { wasDefault, exportName, exportingModuleSymbol }: Info, changes: textChanges.ChangeTracker, cancellationToken: CancellationToken | undefined): void {
         const checker = program.getTypeChecker();
-        const exportSymbol = Debug.assertDefined(checker.getSymbolAtLocation(exportName), "Export name should resolve to a symbol");
+        const exportSymbol = Debug.checkDefined(checker.getSymbolAtLocation(exportName), "Export name should resolve to a symbol");
         FindAllReferences.Core.eachExportReference(program.getSourceFiles(), checker, cancellationToken, exportSymbol, exportingModuleSymbol, exportName.text, wasDefault, ref => {
             const importingSourceFile = ref.getSourceFile();
             if (wasDefault) {

@@ -85,9 +85,9 @@ namespace ts.server {
         return { line: lineAndCharacter.line + 1, offset: lineAndCharacter.character + 1 };
     }
 
-    function formatConfigFileDiag(diag: Diagnostic, includeFileName: true): protocol.DiagnosticWithFileName;
-    function formatConfigFileDiag(diag: Diagnostic, includeFileName: false): protocol.Diagnostic;
-    function formatConfigFileDiag(diag: Diagnostic, includeFileName: boolean): protocol.Diagnostic | protocol.DiagnosticWithFileName {
+    function formatDiagnosticToProtocol(diag: Diagnostic, includeFileName: true): protocol.DiagnosticWithFileName;
+    function formatDiagnosticToProtocol(diag: Diagnostic, includeFileName: false): protocol.Diagnostic;
+    function formatDiagnosticToProtocol(diag: Diagnostic, includeFileName: boolean): protocol.Diagnostic | protocol.DiagnosticWithFileName {
         const start = (diag.file && convertToLocation(getLineAndCharacterOfPosition(diag.file, diag.start!)))!; // TODO: GH#18217
         const end = (diag.file && convertToLocation(getLineAndCharacterOfPosition(diag.file, diag.start! + diag.length!)))!; // TODO: GH#18217
         const text = flattenDiagnosticMessageText(diag.messageText, "\n");
@@ -431,10 +431,16 @@ namespace ts.server {
         if (initialLocation) {
             const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation!);
             if (defaultDefinition) {
+                const getGeneratedDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition.fileName) ?
+                    defaultDefinition :
+                    defaultProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(defaultDefinition));
+                const getSourceDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition.fileName) ?
+                    defaultDefinition :
+                    defaultProject.getLanguageService().getSourceMapper().tryGetSourcePosition(defaultDefinition));
                 projectService.loadAncestorProjectTree(seenProjects);
                 projectService.forEachEnabledProject(project => {
                     if (!addToSeen(seenProjects, project)) return;
-                    const definition = mapDefinitionInProject(defaultDefinition, defaultProject, project);
+                    const definition = mapDefinitionInProject(defaultDefinition, project, getGeneratedDefinition, getSourceDefinition);
                     if (definition) {
                         toDo = callbackProjectAndLocation<TLocation>({ project, location: definition as TLocation }, projectService, toDo, seenProjects, cb);
                     }
@@ -443,21 +449,25 @@ namespace ts.server {
         }
 
         while (toDo && toDo.length) {
-            toDo = callbackProjectAndLocation(Debug.assertDefined(toDo.pop()), projectService, toDo, seenProjects, cb);
+            toDo = callbackProjectAndLocation(Debug.checkDefined(toDo.pop()), projectService, toDo, seenProjects, cb);
         }
     }
 
-    function mapDefinitionInProject(definition: DocumentPosition | undefined, definingProject: Project, project: Project): DocumentPosition | undefined {
+    function mapDefinitionInProject(
+        definition: DocumentPosition,
+        project: Project,
+        getGeneratedDefinition: () => DocumentPosition | undefined,
+        getSourceDefinition: () => DocumentPosition | undefined
+    ): DocumentPosition | undefined {
         // If the definition is actually from the project, definition is correct as is
-        if (!definition ||
-            project.containsFile(toNormalizedPath(definition.fileName)) &&
+        if (project.containsFile(toNormalizedPath(definition.fileName)) &&
             !isLocationProjectReferenceRedirect(project, definition)) {
             return definition;
         }
-        const mappedDefinition = definingProject.isSourceOfProjectReferenceRedirect(definition.fileName) ?
-            definition :
-            definingProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(definition);
-        return mappedDefinition && project.containsFile(toNormalizedPath(mappedDefinition.fileName)) ? mappedDefinition : undefined;
+        const generatedDefinition = getGeneratedDefinition();
+        if (generatedDefinition && project.containsFile(toNormalizedPath(generatedDefinition.fileName))) return generatedDefinition;
+        const sourceDefinition = getSourceDefinition();
+        return sourceDefinition && project.containsFile(toNormalizedPath(sourceDefinition.fileName)) ? sourceDefinition : undefined;
     }
 
     function isLocationProjectReferenceRedirect(project: Project, location: DocumentPosition | undefined) {
@@ -689,7 +699,7 @@ namespace ts.server {
                     break;
                 case ConfigFileDiagEvent:
                     const { triggerFile, configFileName: configFile, diagnostics } = event.data;
-                    const bakedDiags = map(diagnostics, diagnostic => formatConfigFileDiag(diagnostic, /*includeFileName*/ true));
+                    const bakedDiags = map(diagnostics, diagnostic => formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ true));
                     this.event<protocol.ConfigFileDiagnosticEventBody>({
                         triggerFile,
                         configFile,
@@ -846,7 +856,7 @@ namespace ts.server {
         private semanticCheck(file: NormalizedPath, project: Project) {
             const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
                 ? emptyArray
-                : project.getLanguageService().getSemanticDiagnostics(file);
+                : project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file);
             this.sendDiagnosticsEvent(file, project, diags, "semanticDiag");
         }
 
@@ -988,7 +998,7 @@ namespace ts.server {
                 this.convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnosticsForConfigFile) :
                 map(
                     diagnosticsForConfigFile,
-                    diagnostic => formatConfigFileDiag(diagnostic, /*includeFileName*/ false)
+                    diagnostic => formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ false)
                 );
         }
 
@@ -999,8 +1009,10 @@ namespace ts.server {
                 length: d.length!, // TODO: GH#18217
                 category: diagnosticCategoryName(d),
                 code: d.code,
+                source: d.source,
                 startLocation: (d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start!)))!, // TODO: GH#18217
                 endLocation: (d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start! + d.length!)))!, // TODO: GH#18217
+                reportsUnnecessary: d.reportsUnnecessary,
                 relatedInformation: map(d.relatedInformation, formatRelatedInformation)
             }));
         }
@@ -1071,7 +1083,7 @@ namespace ts.server {
         private getDefinitionAndBoundSpan(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
-            const scriptInfo = Debug.assertDefined(project.getScriptInfo(file));
+            const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
 
             const unmappedDefinitionAndBoundSpan = project.getLanguageService().getDefinitionAndBoundSpan(file, position);
 
@@ -1098,11 +1110,20 @@ namespace ts.server {
             };
         }
 
-        private getEmitOutput(args: protocol.FileRequestArgs): EmitOutput {
+        private getEmitOutput(args: protocol.EmitOutputRequestArgs): EmitOutput | protocol.EmitOutput {
             const { file, project } = this.getFileAndProject(args);
-            return project.shouldEmitFile(project.getScriptInfo(file)) ?
-                project.getLanguageService().getEmitOutput(file) :
-                { emitSkipped: true, outputFiles: [] };
+            if (!project.shouldEmitFile(project.getScriptInfo(file))) {
+                return { emitSkipped: true, outputFiles: [], diagnostics: [] };
+            }
+            const result = project.getLanguageService().getEmitOutput(file);
+            return args.richResponse ?
+                {
+                    ...result,
+                    diagnostics: args.includeLinePosition ?
+                        this.convertToDiagnosticsWithLinePositionFromDiagnosticFile(result.diagnostics) :
+                        result.diagnostics.map(d => formatDiagnosticToProtocol(d, /*includeFileName*/ true))
+                } :
+                result;
         }
 
         private mapDefinitionInfo(definitions: readonly DefinitionInfo[], project: Project): readonly protocol.FileSpanWithContext[] {
@@ -1213,7 +1234,7 @@ namespace ts.server {
             if (configFile) {
                 return this.getConfigFileDiagnostics(configFile, project!, !!args.includeLinePosition); // TODO: GH#18217
             }
-            return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSemanticDiagnostics(file), !!args.includeLinePosition);
+            return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file), !!args.includeLinePosition);
         }
 
         private getSuggestionDiagnosticsSync(args: protocol.SuggestionDiagnosticsSyncRequestArgs): readonly protocol.Diagnostic[] | readonly protocol.DiagnosticWithLinePosition[] {
@@ -1335,7 +1356,7 @@ namespace ts.server {
             if (!simplifiedResult) return locations;
 
             const defaultProject = this.getDefaultProject(args);
-            const renameInfo: protocol.RenameInfo = this.mapRenameInfo(defaultProject.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: this.getPreferences(file).allowRenameOfImportPath }), Debug.assertDefined(this.projectService.getScriptInfo(file)));
+            const renameInfo: protocol.RenameInfo = this.mapRenameInfo(defaultProject.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: this.getPreferences(file).allowRenameOfImportPath }), Debug.checkDefined(this.projectService.getScriptInfo(file)));
             return { info: renameInfo, locs: this.toSpanGroups(locations) };
         }
 
@@ -1355,7 +1376,7 @@ namespace ts.server {
             for (const { fileName, textSpan, contextSpan, originalContextSpan: _2, originalTextSpan: _, originalFileName: _1, ...prefixSuffixText } of locations) {
                 let group = map.get(fileName);
                 if (!group) map.set(fileName, group = { file: fileName, locs: [] });
-                const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(fileName));
+                const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(fileName));
                 group.locs.push({ ...toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo), ...prefixSuffixText });
             }
             return arrayFrom(map.values());
@@ -1382,7 +1403,7 @@ namespace ts.server {
             const symbolName = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
             const refs: readonly protocol.ReferencesResponseItem[] = flatMap(references, referencedSymbol =>
                 referencedSymbol.references.map(({ fileName, textSpan, contextSpan, isWriteAccess, isDefinition }): protocol.ReferencesResponseItem => {
-                    const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(fileName));
+                    const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(fileName));
                     const span = toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo);
                     const lineSpan = scriptInfo.lineToTextSpan(span.start.line - 1);
                     const lineText = scriptInfo.getSnapshot().getText(lineSpan.start, textSpanEnd(lineSpan)).replace(/\r|\n/g, "");
@@ -1698,16 +1719,24 @@ namespace ts.server {
             );
         }
 
-        private emitFile(args: protocol.CompileOnSaveEmitFileRequestArgs) {
+        private emitFile(args: protocol.CompileOnSaveEmitFileRequestArgs): boolean | protocol.EmitResult | EmitResult {
             const { file, project } = this.getFileAndProject(args);
             if (!project) {
                 Errors.ThrowNoProject();
             }
             if (!project.languageServiceEnabled) {
-                return false;
+                return args.richResponse ? { emitSkipped: true, diagnostics: [] } : false;
             }
             const scriptInfo = project.getScriptInfo(file)!;
-            return project.emitFile(scriptInfo, (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark));
+            const { emitSkipped, diagnostics } = project.emitFile(scriptInfo, (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark));
+            return args.richResponse ?
+                {
+                    emitSkipped,
+                    diagnostics: args.includeLinePosition ?
+                        this.convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnostics) :
+                        diagnostics.map(d => formatDiagnosticToProtocol(d, /*includeFileName*/ true))
+                } :
+                !emitSkipped;
         }
 
         private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean): protocol.SignatureHelpItems | SignatureHelpItems | undefined {
@@ -1892,7 +1921,7 @@ namespace ts.server {
                     a.fileName === b.fileName &&
                     a.isCaseSensitive === b.isCaseSensitive &&
                     a.kind === b.kind &&
-                    a.kindModifiers === b.containerName &&
+                    a.kindModifiers === b.kindModifiers &&
                     a.matchKind === b.matchKind &&
                     a.name === b.name &&
                     a.textSpan.start === b.textSpan.start &&
@@ -1918,7 +1947,7 @@ namespace ts.server {
                 const { startPosition, endPosition } = this.getStartAndEndPosition(args, scriptInfo);
                 textRange = { pos: startPosition, end: endPosition };
             }
-            return Debug.assertDefined(position === undefined ? textRange : position);
+            return Debug.checkDefined(position === undefined ? textRange : position);
 
             function getPosition(loc: protocol.FileLocationRequestArgs) {
                 return loc.position !== undefined ? loc.position : scriptInfo.lineOffsetToPosition(loc.line, loc.offset);
@@ -2145,7 +2174,7 @@ namespace ts.server {
         private getSmartSelectionRange(args: protocol.SelectionRangeRequestArgs, simplifiedResult: boolean) {
             const { locations } = args;
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
-            const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(file));
+            const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(file));
 
             return map(locations, location => {
                 const pos = this.getPosition(location, scriptInfo);
@@ -2290,7 +2319,7 @@ namespace ts.server {
                     request.arguments.changedFiles && mapIterator(arrayIterator(request.arguments.changedFiles), file => ({
                         fileName: file.fileName,
                         changes: mapDefinedIterator(arrayReverseIterator(file.textChanges), change => {
-                            const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(file.fileName));
+                            const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(file.fileName));
                             const start = scriptInfo.lineOffsetToPosition(change.start.line, change.start.offset);
                             const end = scriptInfo.lineOffsetToPosition(change.end.line, change.end.offset);
                             return start >= 0 ? { span: { start, length: end - start }, newText: change.newText } : undefined;

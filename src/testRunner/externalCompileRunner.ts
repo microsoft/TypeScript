@@ -89,9 +89,9 @@ namespace Harness {
                     Baseline.runBaseline(`${cls.kind()}/${directoryName}.log`, cls.report(cp.spawnSync(`node`, args, { cwd, timeout, shell: true }), cwd));
 
                     function exec(command: string, args: string[], options: { cwd: string, timeout?: number }): void {
-                        const res = cp.spawnSync(command, args, { timeout, shell: true, stdio, ...options });
+                        const res = cp.spawnSync(isWorker ? `${command} 2>&1` : command, args, { shell: true, stdio, ...options });
                         if (res.status !== 0) {
-                            throw new Error(`${command} ${args.join(" ")} for ${directoryName} failed: ${res.stderr && res.stderr.toString()}`);
+                            throw new Error(`${command} ${args.join(" ")} for ${directoryName} failed: ${res.stdout && res.stdout.toString()}`);
                         }
                     }
                 });
@@ -146,12 +146,12 @@ ${stripAbsoluteImportPaths(result.stderr.toString().replace(/\r\n/g, "\n"))}`;
         }
 
         private timeout = 1_200_000; // 20 minutes;
-        private exec(command: string, args: string[], options: { cwd: string, timeout?: number }): void {
+        private exec(command: string, args: string[], options: { cwd: string }): void {
             const cp: typeof import("child_process") = require("child_process");
             const stdio = isWorker ? "pipe" : "inherit";
-            const res = cp.spawnSync(command, args, { timeout: this.timeout, shell: true, stdio, ...options });
+            const res = cp.spawnSync(isWorker ? `${command} 2>&1` : command, args, { timeout: this.timeout, shell: true, stdio, ...options });
             if (res.status !== 0) {
-                throw new Error(`${command} ${args.join(" ")} for ${options.cwd} failed: ${res.stderr && res.stderr.toString()}`);
+                throw new Error(`${command} ${args.join(" ")} for ${options.cwd} failed: ${res.stdout && res.stdout.toString()}`);
             }
         }
         report(result: ExecResult) {
@@ -208,7 +208,8 @@ ${sanitizeDockerfileOutput(result.stderr.toString())}`;
         return result.replace(/^.*(\] (Starting)|(Finished)).*$/gm, "") // "gulp" task start/end messages (nondeterministic order)
             .replace(/^.*(\] . (finished)|(started)).*$/gm, "") // "just" task start/end messages (nondeterministic order)
             .replace(/^.*\] Respawned to PID: \d+.*$/gm, "") // PID of child is OS and system-load dependent (likely stableish in a container but still dangerous)
-            .replace(/\n+/g, "\n");
+            .replace(/\n+/g, "\n")
+            .replace(/\/tmp\/yarn--.*?\/node/g, "");
     }
 
     function sanitizeTimestamps(result: string): string {

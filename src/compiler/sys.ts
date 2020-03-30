@@ -398,7 +398,7 @@ namespace ts {
 
             return {
                 close: () => {
-                    const watcher = Debug.assertDefined(cache.get(path));
+                    const watcher = Debug.checkDefined(cache.get(path));
                     callbacksCache.remove(path, callback);
                     watcher.refCount--;
                     if (watcher.refCount) return;
@@ -525,7 +525,7 @@ namespace ts {
             return {
                 dirName,
                 close: () => {
-                    const directoryWatcher = Debug.assertDefined(cache.get(dirPath));
+                    const directoryWatcher = Debug.checkDefined(cache.get(dirPath));
                     if (callbackToAdd) callbackCache.remove(dirPath, callbackToAdd);
                     directoryWatcher.refCount--;
 
@@ -772,7 +772,7 @@ namespace ts {
 
         function watchFile(fileName: string, callback: FileWatcherCallback, pollingInterval: PollingInterval, options: WatchOptions | undefined): FileWatcher {
             options = updateOptionsForWatchFile(options, useNonPollingWatchers);
-            const watchFileKind = Debug.assertDefined(options.watchFile);
+            const watchFileKind = Debug.checkDefined(options.watchFile);
             switch (watchFileKind) {
                 case WatchFileKind.FixedPollingInterval:
                     return pollingWatchFile(fileName, callback, PollingInterval.Low, /*options*/ undefined);
@@ -874,7 +874,7 @@ namespace ts {
         function nonRecursiveWatchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean, options: WatchOptions | undefined): FileWatcher {
             Debug.assert(!recursive);
             options = updateOptionsForWatchDirectory(options);
-            const watchDirectoryKind = Debug.assertDefined(options.watchDirectory);
+            const watchDirectoryKind = Debug.checkDefined(options.watchDirectory);
             switch (watchDirectoryKind) {
                 case WatchDirectoryKind.FixedPollingInterval:
                     return pollingWatchFile(
@@ -1004,14 +1004,14 @@ namespace ts {
         writeFloatBE(value: number, offset: number): number;
         writeDoubleLE(value: number, offset: number): number;
         writeDoubleBE(value: number, offset: number): number;
-        readBigUInt64BE(offset?: number): bigint;
-        readBigUInt64LE(offset?: number): bigint;
-        readBigInt64BE(offset?: number): bigint;
-        readBigInt64LE(offset?: number): bigint;
-        writeBigInt64BE(value: bigint, offset?: number): number;
-        writeBigInt64LE(value: bigint, offset?: number): number;
-        writeBigUInt64BE(value: bigint, offset?: number): number;
-        writeBigUInt64LE(value: bigint, offset?: number): number;
+        readBigUInt64BE?(offset?: number): bigint;
+        readBigUInt64LE?(offset?: number): bigint;
+        readBigInt64BE?(offset?: number): bigint;
+        readBigInt64LE?(offset?: number): bigint;
+        writeBigInt64BE?(value: bigint, offset?: number): number;
+        writeBigInt64LE?(value: bigint, offset?: number): number;
+        writeBigUInt64BE?(value: bigint, offset?: number): number;
+        writeBigUInt64LE?(value: bigint, offset?: number): number;
         fill(value: string | Uint8Array | number, offset?: number, end?: number, encoding?: BufferEncoding): this;
         indexOf(value: string | number | Uint8Array, byteOffset?: number, encoding?: BufferEncoding): number;
         lastIndexOf(value: string | number | Uint8Array, byteOffset?: number, encoding?: BufferEncoding): number;
@@ -1231,7 +1231,7 @@ namespace ts {
                 enableCPUProfiler,
                 disableCPUProfiler,
                 realpath,
-                debugMode: some(<string[]>process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
+                debugMode: !!process.env.NODE_INSPECTOR_IPC || some(<string[]>process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
                 tryEnableSourceMapsForHost() {
                     try {
                         require("source-map-support").install();
@@ -1727,9 +1727,9 @@ namespace ts {
 
     if (sys && sys.getEnvironmentVariable) {
         setCustomPollingValues(sys);
-        Debug.currentAssertionLevel = /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))
+        Debug.setAssertionLevel(/^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))
             ? AssertionLevel.Normal
-            : AssertionLevel.None;
+            : AssertionLevel.None);
     }
     if (sys && sys.debugMode) {
         Debug.isDebugging = true;

@@ -857,10 +857,25 @@ namespace ts.server.protocol {
     }
 
     /** @internal */
-    export interface EmitOutputRequest extends FileRequest {}
+    export interface EmitOutputRequest extends FileRequest {
+        command: CommandTypes.EmitOutput;
+        arguments: EmitOutputRequestArgs;
+    }
+    /** @internal */
+    export interface EmitOutputRequestArgs extends FileRequestArgs {
+        includeLinePosition?: boolean;
+        /** if true - return response as object with emitSkipped and diagnostics */
+        richResponse?: boolean;
+    }
     /** @internal */
     export interface EmitOutputResponse extends Response {
-        readonly body: EmitOutput;
+        readonly body: EmitOutput | ts.EmitOutput;
+    }
+    /** @internal */
+    export interface EmitOutput {
+        outputFiles: OutputFile[];
+        emitSkipped: boolean;
+        diagnostics: Diagnostic[] | DiagnosticWithLinePosition[];
     }
 
     /**
@@ -1808,6 +1823,18 @@ namespace ts.server.protocol {
          * if true - then file should be recompiled even if it does not have any changes.
          */
         forced?: boolean;
+        includeLinePosition?: boolean;
+        /** if true - return response as object with emitSkipped and diagnostics */
+        richResponse?: boolean;
+    }
+
+    export interface CompileOnSaveEmitFileResponse extends Response {
+        body: boolean | EmitResult;
+    }
+
+    export interface EmitResult {
+        emitSkipped: boolean;
+        diagnostics: Diagnostic[] | DiagnosticWithLinePosition[];
     }
 
     /**
@@ -3089,6 +3116,7 @@ namespace ts.server.protocol {
         newLineCharacter?: string;
         convertTabsToSpaces?: boolean;
         indentStyle?: IndentStyle | ts.IndentStyle;
+        trimTrailingWhitespace?: boolean;
     }
 
     export interface FormatCodeSettings extends EditorSettings {
@@ -3131,6 +3159,8 @@ namespace ts.server.protocol {
          */
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
+        /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
+        readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;

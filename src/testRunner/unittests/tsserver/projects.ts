@@ -1291,7 +1291,7 @@ namespace ts.projectSystem {
             verifyFile2InfoIsOrphan();
 
             function verifyFile2InfoIsOrphan() {
-                const info = Debug.assertDefined(service.getScriptInfoForPath(file2.path as Path));
+                const info = Debug.checkDefined(service.getScriptInfoForPath(file2.path as Path));
                 assert.equal(info.containingProjects.length, 0);
             }
         });
@@ -1558,13 +1558,10 @@ namespace ts.projectSystem {
             host.reloadFS(files);
             host.checkTimeoutQueueLength(2);
 
-            verifyGetErrRequest({
+            verifyGetErrRequestNoErrors({
                 session,
                 host,
-                expected: [
-                    { file: fileB, syntax: [], semantic: [], suggestion: [] },
-                    { file: fileSubA, syntax: [], semantic: [], suggestion: [] },
-                ],
+                files: [fileB, fileSubA],
                 existingTimeouts: 2,
                 onErrEvent: () => assert.isFalse(hasErrorMsg())
             });
@@ -1589,6 +1586,35 @@ namespace ts.projectSystem {
             catch (e) {
                 assert.isTrue(e.message.indexOf("Debug Failure. False expression: Found script Info still attached to project") === 0);
             }
+        });
+        it("does not look beyond node_modules folders for default configured projects", () => {
+            const rootFilePath = server.asNormalizedPath("/project/index.ts");
+            const rootProjectPath = server.asNormalizedPath("/project/tsconfig.json");
+            const nodeModulesFilePath1 = server.asNormalizedPath("/project/node_modules/@types/a/index.d.ts");
+            const nodeModulesProjectPath1 = server.asNormalizedPath("/project/node_modules/@types/a/tsconfig.json");
+            const nodeModulesFilePath2 = server.asNormalizedPath("/project/node_modules/@types/b/index.d.ts");
+            const serverHost = createServerHost([
+                { path: rootFilePath, content: "import 'a'; import 'b';" },
+                { path: rootProjectPath, content: "{}" },
+                { path: nodeModulesFilePath1, content: "{}" },
+                { path: nodeModulesProjectPath1, content: "{}" },
+                { path: nodeModulesFilePath2, content: "{}" },
+            ]);
+            const projectService = createProjectService(serverHost, { useSingleInferredProject: true });
+
+            const openRootFileResult = projectService.openClientFile(rootFilePath);
+            assert.strictEqual(openRootFileResult.configFileName?.toString(), rootProjectPath);
+
+            const openNodeModulesFileResult1 = projectService.openClientFile(nodeModulesFilePath1);
+            assert.strictEqual(openNodeModulesFileResult1.configFileName?.toString(), nodeModulesProjectPath1);
+
+            const openNodeModulesFileResult2 = projectService.openClientFile(nodeModulesFilePath2);
+            assert.isUndefined(openNodeModulesFileResult2.configFileName);
+
+            const rootProject = projectService.findProject(rootProjectPath)!;
+            checkProjectActualFiles(rootProject, [rootProjectPath, rootFilePath, nodeModulesFilePath1, nodeModulesFilePath2]);
+
+            checkNumberOfInferredProjects(projectService, 0);
         });
     });
 }

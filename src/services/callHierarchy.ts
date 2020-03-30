@@ -78,7 +78,7 @@ namespace ts.CallHierarchy {
         if (isSourceFile(node)) return node;
         if (isNamedDeclaration(node)) return node.name;
         if (isConstNamedExpression(node)) return node.parent.name;
-        return Debug.assertDefined(node.modifiers && find(node.modifiers, isDefaultModifier));
+        return Debug.checkDefined(node.modifiers && find(node.modifiers, isDefaultModifier));
     }
 
     function isDefaultModifier(node: Node) {
@@ -105,7 +105,7 @@ namespace ts.CallHierarchy {
         }
 
         const declName = isConstNamedExpression(node) ? node.parent.name :
-            Debug.assertDefined(getNameOfDeclaration(node), "Expected call hierarchy item to have a name");
+            Debug.checkDefined(getNameOfDeclaration(node), "Expected call hierarchy item to have a name");
 
         let text =
             isIdentifier(declName) ? idText(declName) :

@@ -24,9 +24,9 @@ let b: B;
 
 console.log(a, b);
 >console.log(a, b) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >a : A
 >b : B
 
@@ -44,9 +44,9 @@ let b: named.B;
 
 console.log(a, b);
 >console.log(a, b) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >a : Default
 >b : named.B
 
@@ -64,9 +64,9 @@ let b: Default;
 
 console.log(a, b);
 >console.log(a, b) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >a : typeof A
 >b : Default
 
@@ -103,9 +103,9 @@ let d: D.Two = C.Two;
 
 console.log(c, d);
 >console.log(c, d) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >c : C.Two
 >d : C.Two
 
@@ -122,9 +122,9 @@ let d: C.Two;
 
 console.log(c, d);
 >console.log(c, d) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >c : C
 >d : C.Two
 

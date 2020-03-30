@@ -22,7 +22,7 @@ function foo(y, x, z) {
             }
             Object.defineProperty(class_1.prototype, x, {
                 get: function () { return x; },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             class_1.prototype[z] = function () { return z; };

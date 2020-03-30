@@ -677,7 +677,7 @@ namespace ts.refactor.extractSymbol {
             case SyntaxKind.FunctionDeclaration:
                 return scope.name
                     ? `function '${scope.name.text}'`
-                    : "anonymous function";
+                    : ANONYMOUS;
             case SyntaxKind.ArrowFunction:
                 return "arrow function";
             case SyntaxKind.MethodDeclaration:
@@ -1382,7 +1382,7 @@ namespace ts.refactor.extractSymbol {
                 }
 
                 // There must be at least one statement since we started in one.
-                return Debug.assertDefined(prevStatement, "prevStatement failed to get set");
+                return Debug.checkDefined(prevStatement, "prevStatement failed to get set");
             }
 
             Debug.assert(curr !== scope, "Didn't encounter a block-like before encountering scope");

@@ -351,7 +351,7 @@ namespace ts.codefix {
         addJSDocTags(changes, sourceFile, signature, paramTags);
     }
 
-    function addJSDocTags(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
+    export function addJSDocTags(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
         const comments = mapDefined(parent.jsDoc, j => j.comment);
         const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
         const unmergedNewTags = newTags.filter(newTag => !oldTags || !oldTags.some((tag, i) => {
@@ -1031,7 +1031,7 @@ namespace ts.codefix {
             usage.properties.forEach((propUsage, name) => {
                 const genericPropertyType = checker.getTypeOfPropertyOfType(generic, name as string);
                 Debug.assert(!!genericPropertyType, "generic should have all the properties of its reference.");
-                types.push(...inferTypeParameters(genericPropertyType!, combineFromUsage(propUsage), singleTypeParameter));
+                types.push(...inferTypeParameters(genericPropertyType, combineFromUsage(propUsage), singleTypeParameter));
             });
             return builtinConstructors[type.symbol.escapedName as string](combineTypes(types));
         }

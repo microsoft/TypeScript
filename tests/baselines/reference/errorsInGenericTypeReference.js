@@ -115,7 +115,7 @@ var testClass3 = /** @class */ (function () {
     Object.defineProperty(testClass3.prototype, "a", {
         set: function (value) { } // error: could not find symbol V
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return testClass3;

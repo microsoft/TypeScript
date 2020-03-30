@@ -1,6 +1,6 @@
-tests/cases/conformance/jsx/file.tsx(9,14): error TS2784: 'Foo' cannot be used as a JSX component.
+tests/cases/conformance/jsx/file.tsx(9,14): error TS2786: 'Foo' cannot be used as a JSX component.
   Its return type 'undefined' is not a valid JSX element.
-tests/cases/conformance/jsx/file.tsx(10,12): error TS2784: 'Greet' cannot be used as a JSX component.
+tests/cases/conformance/jsx/file.tsx(10,12): error TS2786: 'Greet' cannot be used as a JSX component.
   Its return type 'undefined' is not a valid JSX element.
 
 
@@ -15,9 +15,9 @@ tests/cases/conformance/jsx/file.tsx(10,12): error TS2784: 'Greet' cannot be use
     // Error
     const foo = <Foo />;
                  ~~~
-!!! error TS2784: 'Foo' cannot be used as a JSX component.
-!!! error TS2784:   Its return type 'undefined' is not a valid JSX element.
+!!! error TS2786: 'Foo' cannot be used as a JSX component.
+!!! error TS2786:   Its return type 'undefined' is not a valid JSX element.
     const G = <Greet />;
                ~~~~~
-!!! error TS2784: 'Greet' cannot be used as a JSX component.
-!!! error TS2784:   Its return type 'undefined' is not a valid JSX element.
+!!! error TS2786: 'Greet' cannot be used as a JSX component.
+!!! error TS2786:   Its return type 'undefined' is not a valid JSX element.

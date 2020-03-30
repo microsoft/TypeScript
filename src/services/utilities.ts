@@ -1355,7 +1355,7 @@ namespace ts {
     export function getPossibleGenericSignatures(called: Expression, typeArgumentCount: number, checker: TypeChecker): readonly Signature[] {
         let type = checker.getTypeAtLocation(called);
         if (isOptionalChain(called.parent)) {
-            type = removeOptionality(type, !!called.parent.questionDotToken, /*isOptionalChain*/ true);
+            type = removeOptionality(type, isOptionalChainRoot(called.parent), /*isOptionalChain*/ true);
         }
 
         const signatures = isNewExpression(called.parent) ? type.getConstructSignatures() : type.getCallSignatures();
@@ -1691,6 +1691,9 @@ namespace ts {
             : isPrivateIdentifier(name) ? idText(name) : getTextOfIdentifierOrLiteral(name);
     }
 
+    export function programContainsModules(program: Program): boolean {
+        return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!(s.externalModuleIndicator || s.commonJsModuleIndicator));
+    }
     export function programContainsEs6Modules(program: Program): boolean {
         return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
     }
@@ -1698,12 +1701,28 @@ namespace ts {
         return !!compilerOptions.module || compilerOptions.target! >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
     }
 
-    export function hostUsesCaseSensitiveFileNames(host: { useCaseSensitiveFileNames?(): boolean; }): boolean {
-        return host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : false;
+    export function createModuleSpecifierResolutionHost(program: Program, host: LanguageServiceHost): ModuleSpecifierResolutionHost {
+        // Mix in `getProbableSymlinks` from Program when host doesn't have it
+        // in order for non-Project hosts to have a symlinks cache.
+        return {
+            fileExists: fileName => program.fileExists(fileName),
+            getCurrentDirectory: () => host.getCurrentDirectory(),
+            readFile: maybeBind(host, host.readFile),
+            useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
+            getProbableSymlinks: maybeBind(host, host.getProbableSymlinks) || (() => program.getProbableSymlinks()),
+            getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
+            getSourceFiles: () => program.getSourceFiles(),
+            redirectTargetsMap: program.redirectTargetsMap,
+            getProjectReferenceRedirect: fileName => program.getProjectReferenceRedirect(fileName),
+            isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName),
+        };
     }
 
-    export function hostGetCanonicalFileName(host: { useCaseSensitiveFileNames?(): boolean; }): GetCanonicalFileName {
-        return createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host));
+    export function getModuleSpecifierResolverHost(program: Program, host: LanguageServiceHost): SymbolTracker["moduleResolverHost"] {
+        return {
+            ...createModuleSpecifierResolutionHost(program, host),
+            getCommonSourceDirectory: () => program.getCommonSourceDirectory(),
+        };
     }
 
     export function makeImportIfNecessary(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string, quotePreference: QuotePreference): ImportDeclaration | undefined {
@@ -1832,7 +1851,8 @@ namespace ts {
     }
 
     export function insertImport(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDecl: Statement, blankLineBetween: boolean): void {
-        const lastImportDeclaration = findLast(sourceFile.statements, isAnyImportSyntax);
+        const importKindPredicate = importDecl.kind === SyntaxKind.VariableStatement ? isRequireVariableDeclarationStatement : isAnyImportSyntax;
+        const lastImportDeclaration = findLast(sourceFile.statements, statement => importKindPredicate(statement));
         if (lastImportDeclaration) {
             changes.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl);
         }
@@ -2147,11 +2167,13 @@ namespace ts {
             const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
             if (renameInfo && renameInfo.text !== (node.name || node.propertyName).getText()) {
-                clone = createBindingElement(
-                    node.dotDotDotToken,
-                    node.propertyName || node.name,
-                    renameInfo,
-                    node.initializer);
+                clone = setOriginalNode(
+                    createBindingElement(
+                        node.dotDotDotToken,
+                        node.propertyName || node.name,
+                        renameInfo,
+                        node.initializer),
+                    node);
             }
         }
         else if (renameMap && checker && isIdentifier(node)) {
@@ -2159,7 +2181,7 @@ namespace ts {
             const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
             if (renameInfo) {
-                clone = createIdentifier(renameInfo.text);
+                clone = setOriginalNode(createIdentifier(renameInfo.text), node);
             }
         }
 
@@ -2343,9 +2365,6 @@ namespace ts {
     }
 
     export function quote(text: string, preferences: UserPreferences): string {
-        if (/^\d+$/.test(text)) {
-            return text;
-        }
         // Editors can pass in undefined or empty string - we want to infer the preference in those cases.
         const quotePreference = preferences.quotePreference || "auto";
         const quoted = JSON.stringify(text);
@@ -2393,6 +2412,8 @@ namespace ts {
         return checker.getTypeAtLocation(caseClause.parent.parent.expression);
     }
 
+    export const ANONYMOUS = "anonymous function";
+
     export function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, program: Program, host: LanguageServiceHost): TypeNode | undefined {
         const checker = program.getTypeChecker();
         let typeIsAccessible = true;
@@ -2404,14 +2425,7 @@ namespace ts {
             reportInaccessibleThisError: notAccessible,
             reportPrivateInBaseOfClassExpression: notAccessible,
             reportInaccessibleUniqueSymbolError: notAccessible,
-            moduleResolverHost: {
-                readFile: host.readFile,
-                fileExists: host.fileExists,
-                directoryExists: host.directoryExists,
-                getSourceFiles: program.getSourceFiles,
-                getCurrentDirectory: program.getCurrentDirectory,
-                getCommonSourceDirectory: program.getCommonSourceDirectory,
-            }
+            moduleResolverHost: getModuleSpecifierResolverHost(program, host)
         });
         return typeIsAccessible ? res : undefined;
     }
@@ -2752,9 +2766,13 @@ namespace ts {
         if (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default) {
             // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
             return firstDefined(symbol.declarations, d => isExportAssignment(d) && isIdentifier(d.expression) ? d.expression.text : undefined)
-                || codefix.moduleSymbolToValidIdentifier(Debug.assertDefined(symbol.parent), scriptTarget);
+                || codefix.moduleSymbolToValidIdentifier(Debug.checkDefined(symbol.parent), scriptTarget);
         }
         return symbol.name;
+    }
+
+    export function startsWithUnderscore(name: string): boolean {
+        return name.charCodeAt(0) === CharacterCodes._;
     }
 
     // #endregion
