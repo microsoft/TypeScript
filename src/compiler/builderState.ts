@@ -3,8 +3,8 @@ namespace ts {
     export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean,
         cancellationToken?: CancellationToken, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitOutput {
         const outputFiles: OutputFile[] = [];
-        const emitResult = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers, forceDtsEmit);
-        return { outputFiles, emitSkipped: emitResult.emitSkipped, exportedModulesFromDeclarationEmit: emitResult.exportedModulesFromDeclarationEmit };
+        const { emitSkipped, diagnostics, exportedModulesFromDeclarationEmit } = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers, forceDtsEmit);
+        return { outputFiles, emitSkipped, diagnostics, exportedModulesFromDeclarationEmit };
 
         function writeFile(fileName: string, text: string, writeByteOrderMark: boolean) {
             outputFiles.push({ name: fileName, writeByteOrderMark, text });
@@ -68,6 +68,7 @@ namespace ts {
         export interface FileInfo {
             readonly version: string;
             signature: string | undefined;
+            affectsGlobalScope: boolean;
         }
         /**
          * Referenced files with values for the keys as referenced file's path to be true
@@ -128,7 +129,7 @@ namespace ts {
                 }
             }
 
-            const sourceFileDirectory = getDirectoryPath(sourceFile.path);
+            const sourceFileDirectory = getDirectoryPath(sourceFile.resolvedPath);
             // Handle triple slash references
             if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
                 for (const referencedFile of sourceFile.referencedFiles) {
@@ -210,22 +211,22 @@ namespace ts {
 
             // Create the reference map, and set the file infos
             for (const sourceFile of newProgram.getSourceFiles()) {
-                const version = Debug.assertDefined(sourceFile.version, "Program intended to be used with Builder should have source files with versions set");
-                const oldInfo = useOldState ? oldState!.fileInfos.get(sourceFile.path) : undefined;
+                const version = Debug.checkDefined(sourceFile.version, "Program intended to be used with Builder should have source files with versions set");
+                const oldInfo = useOldState ? oldState!.fileInfos.get(sourceFile.resolvedPath) : undefined;
                 if (referencedMap) {
                     const newReferences = getReferencedFiles(newProgram, sourceFile, getCanonicalFileName);
                     if (newReferences) {
-                        referencedMap.set(sourceFile.path, newReferences);
+                        referencedMap.set(sourceFile.resolvedPath, newReferences);
                     }
                     // Copy old visible to outside files map
                     if (useOldState) {
-                        const exportedModules = oldState!.exportedModulesMap!.get(sourceFile.path);
+                        const exportedModules = oldState!.exportedModulesMap!.get(sourceFile.resolvedPath);
                         if (exportedModules) {
-                            exportedModulesMap!.set(sourceFile.path, exportedModules);
+                            exportedModulesMap!.set(sourceFile.resolvedPath, exportedModules);
                         }
                     }
                 }
-                fileInfos.set(sourceFile.path, { version, signature: oldInfo && oldInfo.signature });
+                fileInfos.set(sourceFile.resolvedPath, { version, signature: oldInfo && oldInfo.signature, affectsGlobalScope: isFileAffectingGlobalScope(sourceFile) });
             }
 
             return {
@@ -292,10 +293,12 @@ namespace ts {
          * This should be called whenever it is safe to commit the state of the builder
          */
         export function updateSignaturesFromCache(state: BuilderState, signatureCache: Map<string>) {
-            signatureCache.forEach((signature, path) => {
-                state.fileInfos.get(path)!.signature = signature;
-                state.hasCalledUpdateShapeSignature.set(path, true);
-            });
+            signatureCache.forEach((signature, path) => updateSignatureOfFile(state, signature, path as Path));
+        }
+
+        export function updateSignatureOfFile(state: BuilderState, signature: string | undefined, path: Path) {
+            state.fileInfos.get(path)!.signature = signature;
+            state.hasCalledUpdateShapeSignature.set(path, true);
         }
 
         /**
@@ -306,11 +309,11 @@ namespace ts {
             Debug.assert(!exportedModulesMapCache || !!state.exportedModulesMap, "Compute visible to outside map only if visibleToOutsideReferencedMap present in the state");
 
             // If we have cached the result for this file, that means hence forth we should assume file shape is uptodate
-            if (state.hasCalledUpdateShapeSignature.has(sourceFile.path) || cacheToUpdateSignature.has(sourceFile.path)) {
+            if (state.hasCalledUpdateShapeSignature.has(sourceFile.resolvedPath) || cacheToUpdateSignature.has(sourceFile.resolvedPath)) {
                 return false;
             }
 
-            const info = state.fileInfos.get(sourceFile.path);
+            const info = state.fileInfos.get(sourceFile.resolvedPath);
             if (!info) return Debug.fail();
 
             const prevSignature = info.signature;
@@ -319,8 +322,8 @@ namespace ts {
                 latestSignature = sourceFile.version;
                 if (exportedModulesMapCache && latestSignature !== prevSignature) {
                     // All the references in this file are exported
-                    const references = state.referencedMap ? state.referencedMap.get(sourceFile.path) : undefined;
-                    exportedModulesMapCache.set(sourceFile.path, references || false);
+                    const references = state.referencedMap ? state.referencedMap.get(sourceFile.resolvedPath) : undefined;
+                    exportedModulesMapCache.set(sourceFile.resolvedPath, references || false);
                 }
             }
             else {
@@ -348,7 +351,7 @@ namespace ts {
                 }
 
             }
-            cacheToUpdateSignature.set(sourceFile.path, latestSignature);
+            cacheToUpdateSignature.set(sourceFile.resolvedPath, latestSignature);
 
             return !prevSignature || latestSignature !== prevSignature;
         }
@@ -358,13 +361,13 @@ namespace ts {
          */
         function updateExportedModules(sourceFile: SourceFile, exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined, exportedModulesMapCache: ComputingExportedModulesMap) {
             if (!exportedModulesFromDeclarationEmit) {
-                exportedModulesMapCache.set(sourceFile.path, false);
+                exportedModulesMapCache.set(sourceFile.resolvedPath, false);
                 return;
             }
 
             let exportedModules: Map<true> | undefined;
             exportedModulesFromDeclarationEmit.forEach(symbol => addExportedModule(getReferencedFileFromImportedModuleSymbol(symbol)));
-            exportedModulesMapCache.set(sourceFile.path, exportedModules || false);
+            exportedModulesMapCache.set(sourceFile.resolvedPath, exportedModules || false);
 
             function addExportedModule(exportedModulePath: Path | undefined) {
                 if (exportedModulePath) {
@@ -411,7 +414,7 @@ namespace ts {
 
             // Get the references, traversing deep from the referenceMap
             const seenMap = createMap<true>();
-            const queue = [sourceFile.path];
+            const queue = [sourceFile.resolvedPath];
             while (queue.length) {
                 const path = queue.pop()!;
                 if (!seenMap.has(path)) {
@@ -486,14 +489,14 @@ namespace ts {
         /**
          * Gets all files of the program excluding the default library file
          */
-        function getAllFilesExcludingDefaultLibraryFile(state: BuilderState, programOfThisState: Program, firstSourceFile: SourceFile): readonly SourceFile[] {
+        export function getAllFilesExcludingDefaultLibraryFile(state: BuilderState, programOfThisState: Program, firstSourceFile: SourceFile | undefined): readonly SourceFile[] {
             // Use cached result
             if (state.allFilesExcludingDefaultLibraryFile) {
                 return state.allFilesExcludingDefaultLibraryFile;
             }
 
             let result: SourceFile[] | undefined;
-            addSourceFile(firstSourceFile);
+            if (firstSourceFile) addSourceFile(firstSourceFile);
             for (const sourceFile of programOfThisState.getSourceFiles()) {
                 if (sourceFile !== firstSourceFile) {
                     addSourceFile(sourceFile);
@@ -541,7 +544,7 @@ namespace ts {
             const seenFileNamesMap = createMap<SourceFile>();
 
             // Start with the paths this file was referenced by
-            seenFileNamesMap.set(sourceFileWithUpdatedShape.path, sourceFileWithUpdatedShape);
+            seenFileNamesMap.set(sourceFileWithUpdatedShape.resolvedPath, sourceFileWithUpdatedShape);
             const queue = getReferencedByPaths(state, sourceFileWithUpdatedShape.resolvedPath);
             while (queue.length > 0) {
                 const currentPath = queue.pop()!;

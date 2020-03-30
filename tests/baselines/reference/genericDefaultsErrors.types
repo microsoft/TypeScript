@@ -22,7 +22,7 @@ f11(); // ok
 >f11 : <T, U, V = number>() => void
 
 f11<1>(); // error
->f11<1>() : any
+>f11<1>() : void
 >f11 : <T, U, V = number>() => void
 
 f11<1, 2>(); // ok
@@ -34,7 +34,7 @@ f11<1, 2, 3>(); // ok
 >f11 : <T, U, V = number>() => void
 
 f11<1, 2, 3, 4>(); // error
->f11<1, 2, 3, 4>() : any
+>f11<1, 2, 3, 4>() : void
 >f11 : <T, U, V = number>() => void
 
 declare function f12<T, U = T>(a?: U): void;
@@ -46,7 +46,7 @@ f12<number>(); // ok
 >f12 : <T, U = T>(a?: U) => void
 
 f12<number>("a"); // error
->f12<number>("a") : any
+>f12<number>("a") : void
 >f12 : <T, U = T>(a?: U) => void
 >"a" : "a"
 

@@ -25,6 +25,7 @@ bb.a.a; // Property 'a' does not exist on type 'Required<{ b?: 1; x: 1; }>'.
 //// [requiredMappedTypeModifierTrumpsVariance.js]
 "use strict";
 exports.__esModule = true;
+exports.BB = exports.AA = exports.B = exports.A = void 0;
 var a = { a: 1, x: 1 };
 var b = { b: 1, x: 1 };
 exports.A = a;

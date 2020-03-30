@@ -1,13 +1,21 @@
 /* @internal */
 namespace ts {
-    // NOTE: Due to how the project-reference merging ends up working, `T` isn't considered referenced until `Map` merges with the definition
-    // in src/compiler/core.ts
-    // @ts-ignore
-    export interface Map<T> {
-        // full type defined in ~/src/compiler/core.ts
+    interface IteratorShim<T> {
+        next(): { value: T, done?: false } | { value: never, done: true };
     }
-
-    export function createMapShim(): new <T>() => Map<T> {
+    interface MapShim<T> {
+        readonly size: number;
+        get(key: string): T | undefined;
+        set(key: string, value: T): this;
+        has(key: string): boolean;
+        delete(key: string): boolean;
+        clear(): void;
+        keys(): IteratorShim<string>;
+        values(): IteratorShim<T>;
+        entries(): IteratorShim<[string, T]>;
+        forEach(action: (value: T, key: string) => void): void;
+    }
+    export function createMapShim(): new <T>() => MapShim<T> {
         /** Create a MapLike with good performance. */
         function createDictionaryObject<T>(): Record<string, T> {
             const map = Object.create(/*prototype*/ null); // eslint-disable-line no-null/no-null
@@ -46,7 +54,7 @@ namespace ts {
                 this.selector = selector;
             }
 
-            public next(): { value: U, done: false } | { value: never, done: true } {
+            public next(): { value: U, done?: false } | { value: never, done: true } {
                 // Navigate to the next entry.
                 while (this.currentEntry) {
                     const skipNext = !!this.currentEntry.skipNext;
@@ -66,7 +74,7 @@ namespace ts {
             }
         }
 
-        return class <T> implements Map<T> {
+        return class <T> implements MapShim<T> {
             private data = createDictionaryObject<MapEntry<T>>();
             public size = 0;
 
@@ -183,15 +191,15 @@ namespace ts {
                 this.lastEntry = firstEntry;
             }
 
-            keys(): Iterator<string> {
+            keys(): IteratorShim<string> {
                 return new MapIterator(this.firstEntry, key => key);
             }
 
-            values(): Iterator<T> {
+            values(): IteratorShim<T> {
                 return new MapIterator(this.firstEntry, (_key, value) => value);
             }
 
-            entries(): Iterator<[string, T]> {
+            entries(): IteratorShim<[string, T]> {
                 return new MapIterator(this.firstEntry, (key, value) => [key, value] as [string, T]);
             }
 

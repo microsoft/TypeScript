@@ -19,7 +19,7 @@ verify.codeFix({
         "/dir/jsconfig.json":
 `{
     "compilerOptions": {
-        "experimentalDecorators": true,
+        "experimentalDecorators": true
     }
 }`,
     },

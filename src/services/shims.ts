@@ -271,6 +271,10 @@ namespace ts {
          */
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): string;
 
+        prepareCallHierarchy(fileName: string, position: number): string;
+        provideCallHierarchyIncomingCalls(fileName: string, position: number): string;
+        provideCallHierarchyOutgoingCalls(fileName: string, position: number): string;
+
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
     }
@@ -918,8 +922,8 @@ namespace ts {
                 () => {
                     const results = this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
                     // workaround for VS document highlighting issue - keep only items from the initial file
-                    const normalizedName = normalizeSlashes(fileName).toLowerCase();
-                    return filter(results, r => normalizeSlashes(r.fileName).toLowerCase() === normalizedName);
+                    const normalizedName = toFileNameLowerCase(normalizeSlashes(fileName));
+                    return filter(results, r => toFileNameLowerCase(normalizeSlashes(r.fileName)) === normalizedName);
                 });
         }
 
@@ -1020,11 +1024,37 @@ namespace ts {
             );
         }
 
+        /// CALL HIERARCHY
+
+        public prepareCallHierarchy(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `prepareCallHierarchy('${fileName}', ${position})`,
+                () => this.languageService.prepareCallHierarchy(fileName, position)
+            );
+        }
+
+        public provideCallHierarchyIncomingCalls(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `provideCallHierarchyIncomingCalls('${fileName}', ${position})`,
+                () => this.languageService.provideCallHierarchyIncomingCalls(fileName, position)
+            );
+        }
+
+        public provideCallHierarchyOutgoingCalls(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `provideCallHierarchyOutgoingCalls('${fileName}', ${position})`,
+                () => this.languageService.provideCallHierarchyOutgoingCalls(fileName, position)
+            );
+        }
+
         /// Emit
         public getEmitOutput(fileName: string): string {
             return this.forwardJSONCall(
                 `getEmitOutput('${fileName}')`,
-                () => this.languageService.getEmitOutput(fileName)
+                () => {
+                    const { diagnostics, ...rest } = this.languageService.getEmitOutput(fileName);
+                    return { ...rest, diagnostics: this.realizeDiagnostics(diagnostics) };
+                }
             );
         }
 

@@ -1,5 +1,5 @@
 tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts(4,16): error TS2664: Invalid module name in augmentation, module 'ext' cannot be found.
-tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts(9,22): error TS2307: Cannot find module 'ext'.
+tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts(9,22): error TS2307: Cannot find module 'ext' or its corresponding type declarations.
 
 
 ==== tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts (2 errors) ====
@@ -15,5 +15,5 @@ tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts(9,22): erro
     // Cannot resolve this ext module reference
     import ext = require("ext");
                          ~~~~~
-!!! error TS2307: Cannot find module 'ext'.
+!!! error TS2307: Cannot find module 'ext' or its corresponding type declarations.
     var x = ext;

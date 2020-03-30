@@ -37,7 +37,7 @@ namespace ts {
         }
         else {
             const expression = setTextRange(
-                isIdentifier(memberName)
+                (isIdentifier(memberName) || isPrivateIdentifier(memberName))
                     ? createPropertyAccess(target, memberName)
                     : createElementAccess(target, memberName),
                 memberName
@@ -278,6 +278,7 @@ namespace ts {
         name: "typescript:spread",
         importName: "__spread",
         scoped: false,
+        dependencies: [readHelper],
         text: `
             var __spread = (this && this.__spread) || function () {
                 for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
@@ -286,7 +287,6 @@ namespace ts {
     };
 
     export function createSpreadHelper(context: TransformationContext, argumentList: readonly Expression[], location?: TextRange) {
-        context.requestEmitHelper(readHelper);
         context.requestEmitHelper(spreadHelper);
         return setTextRange(
             createCall(
@@ -501,7 +501,7 @@ namespace ts {
         }
     }
 
-    export function createExpressionForPropertyName(memberName: PropertyName): Expression {
+    export function createExpressionForPropertyName(memberName: Exclude<PropertyName, PrivateIdentifier>): Expression {
         if (isIdentifier(memberName)) {
             return createLiteral(memberName);
         }
@@ -514,10 +514,13 @@ namespace ts {
     }
 
     export function createExpressionForObjectLiteralElementLike(node: ObjectLiteralExpression, property: ObjectLiteralElementLike, receiver: Expression): Expression | undefined {
+        if (property.name && isPrivateIdentifier(property.name)) {
+            Debug.failBadSyntaxKind(property.name, "Private identifiers are not allowed in object literals.");
+        }
         switch (property.kind) {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
-                return createExpressionForAccessorDeclaration(node.properties, property, receiver, !!node.multiLine);
+                return createExpressionForAccessorDeclaration(node.properties, property as typeof property & { name: Exclude<PropertyName, PrivateIdentifier>; }, receiver, !!node.multiLine);
             case SyntaxKind.PropertyAssignment:
                 return createExpressionForPropertyAssignment(property, receiver);
             case SyntaxKind.ShorthandPropertyAssignment:
@@ -527,7 +530,7 @@ namespace ts {
         }
     }
 
-    function createExpressionForAccessorDeclaration(properties: NodeArray<Declaration>, property: AccessorDeclaration, receiver: Expression, multiLine: boolean) {
+    function createExpressionForAccessorDeclaration(properties: NodeArray<Declaration>, property: AccessorDeclaration & { name: Exclude<PropertyName, PrivateIdentifier>; }, receiver: Expression, multiLine: boolean) {
         const { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(properties, property);
         if (property === firstAccessor) {
             const properties: ObjectLiteralElementLike[] = [];
@@ -563,7 +566,7 @@ namespace ts {
                 properties.push(setter);
             }
 
-            properties.push(createPropertyAssignment("enumerable", createTrue()));
+            properties.push(createPropertyAssignment("enumerable", getAccessor || setAccessor ? createFalse() : createTrue()));
             properties.push(createPropertyAssignment("configurable", createTrue()));
 
             const expression = setTextRange(
@@ -1332,9 +1335,11 @@ namespace ts {
 
     export const enum OuterExpressionKinds {
         Parentheses = 1 << 0,
-        Assertions = 1 << 1,
-        PartiallyEmittedExpressions = 1 << 2,
+        TypeAssertions = 1 << 1,
+        NonNullAssertions = 1 << 2,
+        PartiallyEmittedExpressions = 1 << 3,
 
+        Assertions = TypeAssertions | NonNullAssertions,
         All = Parentheses | Assertions | PartiallyEmittedExpressions
     }
 
@@ -1346,8 +1351,9 @@ namespace ts {
                 return (kinds & OuterExpressionKinds.Parentheses) !== 0;
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
+                return (kinds & OuterExpressionKinds.TypeAssertions) !== 0;
             case SyntaxKind.NonNullExpression:
-                return (kinds & OuterExpressionKinds.Assertions) !== 0;
+                return (kinds & OuterExpressionKinds.NonNullAssertions) !== 0;
             case SyntaxKind.PartiallyEmittedExpression:
                 return (kinds & OuterExpressionKinds.PartiallyEmittedExpressions) !== 0;
         }
@@ -1357,34 +1363,16 @@ namespace ts {
     export function skipOuterExpressions(node: Expression, kinds?: OuterExpressionKinds): Expression;
     export function skipOuterExpressions(node: Node, kinds?: OuterExpressionKinds): Node;
     export function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.All) {
-        let previousNode: Node;
-        do {
-            previousNode = node;
-            if (kinds & OuterExpressionKinds.Parentheses) {
-                node = skipParentheses(node);
-            }
-
-            if (kinds & OuterExpressionKinds.Assertions) {
-                node = skipAssertions(node);
-            }
-
-            if (kinds & OuterExpressionKinds.PartiallyEmittedExpressions) {
-                node = skipPartiallyEmittedExpressions(node);
-            }
+        while (isOuterExpression(node, kinds)) {
+            node = node.expression;
         }
-        while (previousNode !== node);
-
         return node;
     }
 
     export function skipAssertions(node: Expression): Expression;
     export function skipAssertions(node: Node): Node;
     export function skipAssertions(node: Node): Node {
-        while (isAssertionExpression(node) || node.kind === SyntaxKind.NonNullExpression) {
-            node = (<AssertionExpression | NonNullExpression>node).expression;
-        }
-
-        return node;
+        return skipOuterExpressions(node, OuterExpressionKinds.Assertions);
     }
 
     function updateOuterExpression(outerExpression: OuterExpression, expression: Expression) {
@@ -1509,8 +1497,7 @@ namespace ts {
             const moduleKind = getEmitModuleKind(compilerOptions);
             let create = (hasExportStarsToExportValues || (compilerOptions.esModuleInterop && hasImportStarOrImportDefault))
                 && moduleKind !== ModuleKind.System
-                && moduleKind !== ModuleKind.ES2015
-                && moduleKind !== ModuleKind.ESNext;
+                && moduleKind < ModuleKind.ES2015;
             if (!create) {
                 const helpers = getEmitHelpers(node);
                 if (helpers) {
@@ -1741,13 +1728,13 @@ namespace ts {
     /**
      * Gets the property name of a BindingOrAssignmentElement
      */
-    export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): PropertyName | undefined {
+    export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): Exclude<PropertyName, PrivateIdentifier> | undefined {
         const propertyName = tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement);
         Debug.assert(!!propertyName || isSpreadAssignment(bindingElement), "Invalid property name for binding element.");
         return propertyName;
     }
 
-    export function tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): PropertyName | undefined {
+    export function tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): Exclude<PropertyName, PrivateIdentifier> | undefined {
         switch (bindingElement.kind) {
             case SyntaxKind.BindingElement:
                 // `a` in `let { a: b } = ...`
@@ -1756,6 +1743,9 @@ namespace ts {
                 // `1` in `let { 1: b } = ...`
                 if (bindingElement.propertyName) {
                     const propertyName = bindingElement.propertyName;
+                    if (isPrivateIdentifier(propertyName)) {
+                        return Debug.failBadSyntaxKind(propertyName);
+                    }
                     return isComputedPropertyName(propertyName) && isStringOrNumericLiteral(propertyName.expression)
                         ? propertyName.expression
                         : propertyName;
@@ -1770,6 +1760,9 @@ namespace ts {
                 // `1` in `({ 1: b } = ...)`
                 if (bindingElement.name) {
                     const propertyName = bindingElement.name;
+                    if (isPrivateIdentifier(propertyName)) {
+                        return Debug.failBadSyntaxKind(propertyName);
+                    }
                     return isComputedPropertyName(propertyName) && isStringOrNumericLiteral(propertyName.expression)
                         ? propertyName.expression
                         : propertyName;
@@ -1779,14 +1772,15 @@ namespace ts {
 
             case SyntaxKind.SpreadAssignment:
                 // `a` in `({ ...a } = ...)`
+                if (bindingElement.name && isPrivateIdentifier(bindingElement.name)) {
+                    return Debug.failBadSyntaxKind(bindingElement.name);
+                }
                 return bindingElement.name;
         }
 
         const target = getTargetOfBindingOrAssignmentElement(bindingElement);
         if (target && isPropertyName(target)) {
-            return isComputedPropertyName(target) && isStringOrNumericLiteral(target.expression)
-                ? target.expression
-                : target;
+            return target;
         }
     }
 
@@ -1818,7 +1812,7 @@ namespace ts {
         if (isBindingElement(element)) {
             if (element.dotDotDotToken) {
                 Debug.assertNode(element.name, isIdentifier);
-                return setOriginalNode(setTextRange(createSpread(<Identifier>element.name), element), element);
+                return setOriginalNode(setTextRange(createSpread(element.name), element), element);
             }
             const expression = convertToAssignmentElementTarget(element.name);
             return element.initializer
@@ -1839,14 +1833,14 @@ namespace ts {
         if (isBindingElement(element)) {
             if (element.dotDotDotToken) {
                 Debug.assertNode(element.name, isIdentifier);
-                return setOriginalNode(setTextRange(createSpreadAssignment(<Identifier>element.name), element), element);
+                return setOriginalNode(setTextRange(createSpreadAssignment(element.name), element), element);
             }
             if (element.propertyName) {
                 const expression = convertToAssignmentElementTarget(element.name);
                 return setOriginalNode(setTextRange(createPropertyAssignment(element.propertyName, element.initializer ? createAssignment(expression, element.initializer) : expression), element), element);
             }
             Debug.assertNode(element.name, isIdentifier);
-            return setOriginalNode(setTextRange(createShorthandPropertyAssignment(<Identifier>element.name, element.initializer), element), element);
+            return setOriginalNode(setTextRange(createShorthandPropertyAssignment(element.name, element.initializer), element), element);
         }
         Debug.assertNode(element, isObjectLiteralElementLike);
         return <ObjectLiteralElementLike>element;

@@ -1,8 +1,11 @@
 /*@internal*/
 namespace ts {
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {
+        if (file && isJsonSourceFile(file)) {
+            return []; // No declaration diagnostics for json for now
+        }
         const compilerOptions = host.getCompilerOptions();
-        const result = transformNodes(resolver, host, compilerOptions, file ? [file] : host.getSourceFiles(), [transformDeclarations], /*allowDtsFiles*/ false);
+        const result = transformNodes(resolver, host, compilerOptions, file ? [file] : filter(host.getSourceFiles(), isSourceFileNotJson), [transformDeclarations], /*allowDtsFiles*/ false);
         return result.diagnostics;
     }
 
@@ -348,9 +351,7 @@ namespace ts {
                             toPath(outputFilePath, host.getCurrentDirectory(), host.getCanonicalFileName),
                             toPath(declFileName, host.getCurrentDirectory(), host.getCanonicalFileName),
                             host,
-                            host.getSourceFiles(),
                             /*preferences*/ undefined,
-                            host.redirectTargetsMap
                         );
                         if (!pathIsRelative(specifier)) {
                             // If some compiler option/symlink/whatever allows access to the file containing the ambient module declaration
@@ -373,7 +374,7 @@ namespace ts {
 
                         // omit references to files from node_modules (npm may disambiguate module
                         // references when installing this package, making the path is unreliable).
-                        if (startsWith(fileName, "node_modules/") || fileName.indexOf("/node_modules/") !== -1) {
+                        if (startsWith(fileName, "node_modules/") || pathContainsNodeModules(fileName)) {
                             return;
                         }
 
@@ -398,7 +399,7 @@ namespace ts {
             forEach(sourceFile.libReferenceDirectives, ref => {
                 const lib = host.getLibFileFromReference(ref);
                 if (lib) {
-                    ret.set(ref.fileName.toLocaleLowerCase(), true);
+                    ret.set(toFileNameLowerCase(ref.fileName), true);
                 }
             });
             return ret;
@@ -686,7 +687,8 @@ namespace ts {
                 return visibleDefaultBinding && updateImportDeclaration(decl, /*decorators*/ undefined, decl.modifiers, updateImportClause(
                     decl.importClause,
                     visibleDefaultBinding,
-                    /*namedBindings*/ undefined
+                    /*namedBindings*/ undefined,
+                    decl.importClause.isTypeOnly,
                 ), rewriteModuleSpecifier(decl, decl.moduleSpecifier));
             }
             if (decl.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
@@ -695,7 +697,8 @@ namespace ts {
                 return visibleDefaultBinding || namedBindings ? updateImportDeclaration(decl, /*decorators*/ undefined, decl.modifiers, updateImportClause(
                     decl.importClause,
                     visibleDefaultBinding,
-                    namedBindings
+                    namedBindings,
+                    decl.importClause.isTypeOnly,
                 ), rewriteModuleSpecifier(decl, decl.moduleSpecifier)) : undefined;
             }
             // Named imports (optionally with visible default)
@@ -708,7 +711,8 @@ namespace ts {
                     updateImportClause(
                         decl.importClause,
                         visibleDefaultBinding,
-                        bindingList && bindingList.length ? updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined
+                        bindingList && bindingList.length ? updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined,
+                        decl.importClause.isTypeOnly,
                     ),
                     rewriteModuleSpecifier(decl, decl.moduleSpecifier)
                 );
@@ -840,19 +844,20 @@ namespace ts {
                             ensureType(input, input.type)
                         ));
                     case SyntaxKind.Constructor: {
-                        const isPrivate = hasModifier(input, ModifierFlags.Private);
                         // A constructor declaration may not have a type annotation
                         const ctor = createSignatureDeclaration(
                             SyntaxKind.Constructor,
-                            isPrivate ? undefined : ensureTypeParams(input, input.typeParameters),
-                            // TODO: GH#18217
-                            isPrivate ? undefined! : updateParamsList(input, input.parameters, ModifierFlags.None),
+                            ensureTypeParams(input, input.typeParameters),
+                            updateParamsList(input, input.parameters, ModifierFlags.None),
                             /*type*/ undefined
                         );
                         ctor.modifiers = createNodeArray(ensureModifiers(input));
                         return cleanup(ctor);
                     }
                     case SyntaxKind.MethodDeclaration: {
+                        if (isPrivateIdentifier(input.name)) {
+                            return cleanup(/*returnValue*/ undefined);
+                        }
                         const sig = createSignatureDeclaration(
                             SyntaxKind.MethodSignature,
                             ensureTypeParams(input, input.typeParameters),
@@ -865,18 +870,23 @@ namespace ts {
                         return cleanup(sig);
                     }
                     case SyntaxKind.GetAccessor: {
-                        const isPrivate = hasModifier(input, ModifierFlags.Private);
+                        if (isPrivateIdentifier(input.name)) {
+                            return cleanup(/*returnValue*/ undefined);
+                        }
                         const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
                         return cleanup(updateGetAccessor(
                             input,
                             /*decorators*/ undefined,
                             ensureModifiers(input),
                             input.name,
-                            updateAccessorParamsList(input, isPrivate),
-                            !isPrivate ? ensureType(input, accessorType) : undefined,
+                            updateAccessorParamsList(input, hasModifier(input, ModifierFlags.Private)),
+                            ensureType(input, accessorType),
                             /*body*/ undefined));
                     }
                     case SyntaxKind.SetAccessor: {
+                        if (isPrivateIdentifier(input.name)) {
+                            return cleanup(/*returnValue*/ undefined);
+                        }
                         return cleanup(updateSetAccessor(
                             input,
                             /*decorators*/ undefined,
@@ -886,25 +896,34 @@ namespace ts {
                             /*body*/ undefined));
                     }
                     case SyntaxKind.PropertyDeclaration:
+                        if (isPrivateIdentifier(input.name)) {
+                            return cleanup(/*returnValue*/ undefined);
+                        }
                         return cleanup(updateProperty(
                             input,
                             /*decorators*/ undefined,
                             ensureModifiers(input),
                             input.name,
                             input.questionToken,
-                            !hasModifier(input, ModifierFlags.Private) ? ensureType(input, input.type) : undefined,
+                            ensureType(input, input.type),
                             ensureNoInitializer(input)
                         ));
                     case SyntaxKind.PropertySignature:
+                        if (isPrivateIdentifier(input.name)) {
+                            return cleanup(/*returnValue*/ undefined);
+                        }
                         return cleanup(updatePropertySignature(
                             input,
                             ensureModifiers(input),
                             input.name,
                             input.questionToken,
-                            !hasModifier(input, ModifierFlags.Private) ? ensureType(input, input.type) : undefined,
+                            ensureType(input, input.type),
                             ensureNoInitializer(input)
                         ));
                     case SyntaxKind.MethodSignature: {
+                        if (isPrivateIdentifier(input.name)) {
+                            return cleanup(/*returnValue*/ undefined);
+                        }
                         return cleanup(updateMethodSignature(
                             input,
                             ensureTypeParams(input, input.typeParameters),
@@ -1018,7 +1037,13 @@ namespace ts {
                     resultHasScopeMarker = true;
                     // Always visible if the parent node isn't dropped for being not visible
                     // Rewrite external module names if necessary
-                    return updateExportDeclaration(input, /*decorators*/ undefined, input.modifiers, input.exportClause, rewriteModuleSpecifier(input, input.moduleSpecifier));
+                    return updateExportDeclaration(
+                        input,
+                        /*decorators*/ undefined,
+                        input.modifiers,
+                        input.exportClause,
+                        rewriteModuleSpecifier(input, input.moduleSpecifier),
+                        input.isTypeOnly);
                 }
                 case SyntaxKind.ExportAssignment: {
                     // Always visible if the parent node isn't dropped for being not visible
@@ -1286,7 +1311,20 @@ namespace ts {
                         }));
                         getSymbolAccessibilityDiagnostic = oldDiag;
                     }
-                    const members = createNodeArray(concatenate(parameterProperties, visitNodes(input.members, visitDeclarationSubtree)));
+
+                    const hasPrivateIdentifier = some(input.members, member => !!member.name && isPrivateIdentifier(member.name));
+                    const privateIdentifier = hasPrivateIdentifier ? [
+                        createProperty(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            createPrivateIdentifier("#private"),
+                            /*questionToken*/ undefined,
+                            /*type*/ undefined,
+                            /*initializer*/ undefined
+                        )
+                    ] : undefined;
+                    const memberNodes = concatenate(concatenate(privateIdentifier, parameterProperties), visitNodes(input.members, visitDeclarationSubtree));
+                    const members = createNodeArray(memberNodes);
 
                     const extendsClause = getEffectiveBaseTypeNode(input);
                     if (extendsClause && !isEntityNameExpression(extendsClause.expression) && extendsClause.expression.kind !== SyntaxKind.NullKeyword) {

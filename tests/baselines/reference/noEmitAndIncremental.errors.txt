@@ -1,0 +1,20 @@
+/tsconfig.json(3,9): error TS5053: Option 'noEmit' cannot be specified with option 'incremental'.
+/tsconfig.json(4,9): error TS5053: Option 'noEmit' cannot be specified with option 'incremental'.
+
+
+==== /tsconfig.json (2 errors) ====
+    {
+        "compilerOptions": {
+            "noEmit": true,
+            ~~~~~~~~
+!!! error TS5053: Option 'noEmit' cannot be specified with option 'incremental'.
+            "incremental": true
+            ~~~~~~~~~~~~~
+!!! error TS5053: Option 'noEmit' cannot be specified with option 'incremental'.
+        }
+    }
+    
+    
+==== /a.ts (0 errors) ====
+    const x = 10;
+    

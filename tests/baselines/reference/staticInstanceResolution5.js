@@ -20,6 +20,7 @@ function z(w3: WinJS) { }
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.Promise = void 0;
     var Promise = /** @class */ (function () {
         function Promise() {
         }

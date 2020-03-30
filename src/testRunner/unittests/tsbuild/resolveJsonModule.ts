@@ -71,19 +71,10 @@ export default hello.hello`);
     });
 
     describe("unittests:: tsbuild:: with resolveJsonModule option on project importJsonFromProjectReference", () => {
-        let projFs: vfs.FileSystem;
-        before(() => {
-            projFs = loadProjectFromDisk("tests/projects/importJsonFromProjectReference");
-        });
-
-        after(() => {
-            projFs = undefined!; // Release the contents
-        });
-
         verifyTscIncrementalEdits({
             scenario: "resolveJsonModule",
             subScenario: "importing json module from project reference",
-            fs: () => projFs,
+            fs: () => loadProjectFromDisk("tests/projects/importJsonFromProjectReference"),
             commandLineArgs: ["--b", "src/tsconfig.json", "--verbose"],
             incrementalScenarios: [noChangeRun]
         });

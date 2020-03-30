@@ -5,7 +5,7 @@ namespace ts {
             subScenario: "when passing filename for buildinfo on commandline",
             fs: () => loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": utils.dedent`
+                "/src/project/tsconfig.json": Utils.dedent`
                     {
                         "compilerOptions": {
                             "target": "es5",
@@ -25,7 +25,7 @@ namespace ts {
             subScenario: "when passing rootDir from commandline",
             fs: () => loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": utils.dedent`
+                "/src/project/tsconfig.json": Utils.dedent`
                     {
                         "compilerOptions": {
                             "incremental": true,
@@ -60,7 +60,7 @@ namespace ts {
             subScenario: "when passing rootDir is in the tsconfig",
             fs: () => loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": utils.dedent`
+                "/src/project/tsconfig.json": Utils.dedent`
                     {
                         "compilerOptions": {
                             "incremental": true,
@@ -71,6 +71,22 @@ namespace ts {
             }),
             commandLineArgs: ["--p", "src/project"],
             incrementalScenarios: [noChangeRun]
+        });
+
+        verifyTscIncrementalEdits({
+            scenario: "incremental",
+            subScenario: "with noEmitOnError",
+            fs: () => loadProjectFromDisk("tests/projects/noEmitOnError"),
+            commandLineArgs: ["--incremental", "-p", "src"],
+            incrementalScenarios: [
+                {
+                    buildKind: BuildKind.IncrementalDtsUnchanged,
+                    modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+const a = {
+    lastName: 'sdsd'
+};`, "utf-8")
+                }
+            ]
         });
     });
 }

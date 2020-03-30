@@ -1,9 +1,7 @@
 tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts(21,33): error TS2322: Type '{ INVALID_PROP_NAME: string; ariaLabel: string; }' is not assignable to type 'ITestProps'.
   Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'ITestProps'.
-tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts(27,34): error TS2345: Argument of type '{ icon: { props: { INVALID_PROP_NAME: string; ariaLabel: string; }; }; }' is not assignable to parameter of type '(TestProps & { children?: number; }) | ({ props2: { x: number; }; } & { children?: number; })'.
-  The types of 'icon.props' are incompatible between these types.
-    Type '{ INVALID_PROP_NAME: string; ariaLabel: string; }' is not assignable to type 'ITestProps'.
-      Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'ITestProps'.
+tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts(27,34): error TS2322: Type '{ INVALID_PROP_NAME: string; ariaLabel: string; }' is not assignable to type 'ITestProps'.
+  Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'ITestProps'.
 
 
 ==== tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts (2 errors) ====
@@ -39,8 +37,7 @@ tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts(27,34
     
     TestComponent2({icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } }});
                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ icon: { props: { INVALID_PROP_NAME: string; ariaLabel: string; }; }; }' is not assignable to parameter of type '(TestProps & { children?: number; }) | ({ props2: { x: number; }; } & { children?: number; })'.
-!!! error TS2345:   The types of 'icon.props' are incompatible between these types.
-!!! error TS2345:     Type '{ INVALID_PROP_NAME: string; ariaLabel: string; }' is not assignable to type 'ITestProps'.
-!!! error TS2345:       Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'ITestProps'.
+!!! error TS2322: Type '{ INVALID_PROP_NAME: string; ariaLabel: string; }' is not assignable to type 'ITestProps'.
+!!! error TS2322:   Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'ITestProps'.
+!!! related TS6500 tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts:14:3: The expected type comes from property 'props' which is declared here on type 'NestedProp<ITestProps>'
     

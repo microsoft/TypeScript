@@ -2,6 +2,7 @@ tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts(5,2): error TS2416
   Type '(a: T) => void' is not assignable to type '(a: { a: number; }) => void'.
     Types of parameters 'a' and 'a' are incompatible.
       Type '{ a: number; }' is not assignable to type 'T'.
+        'T' could be instantiated with an arbitrary type which could be unrelated to '{ a: number; }'.
 tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts(8,5): error TS2322: Type 'X<{ a: string; }>' is not assignable to type 'I'.
   Types of property 'f' are incompatible.
     Type '(a: { a: string; }) => void' is not assignable to type '(a: { a: number; }) => void'.
@@ -22,6 +23,7 @@ tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts(8,5): error TS2322
 !!! error TS2416:   Type '(a: T) => void' is not assignable to type '(a: { a: number; }) => void'.
 !!! error TS2416:     Types of parameters 'a' and 'a' are incompatible.
 !!! error TS2416:       Type '{ a: number; }' is not assignable to type 'T'.
+!!! error TS2416:         'T' could be instantiated with an arbitrary type which could be unrelated to '{ a: number; }'.
     }
     var x = new X<{ a: string }>();
     var i: I = x; // Should not be allowed -- type of 'f' is incompatible with 'I'

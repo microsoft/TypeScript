@@ -1,0 +1,47 @@
+╭ name: foo
+├ kind: method
+├ file: /tests/cases/fourslash/callHierarchyInterfaceMethod.ts
+├ span:
+│ ╭ /tests/cases/fourslash/callHierarchyInterfaceMethod.ts:2:5-2:17
+│ │ 2:     foo(): void;
+│ │        ^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /tests/cases/fourslash/callHierarchyInterfaceMethod.ts:2:5-2:8
+│ │ 2:     foo(): void;
+│ │        ^^^
+│ ╰
+├ incoming:
+│ ╭ from:
+│ │ ╭ name: /tests/cases/fourslash/callHierarchyInterfaceMethod.ts
+│ │ ├ kind: script
+│ │ ├ file: /tests/cases/fourslash/callHierarchyInterfaceMethod.ts
+│ │ ├ span:
+│ │ │ ╭ /tests/cases/fourslash/callHierarchyInterfaceMethod.ts:1:1-7:11
+│ │ │ │ 1: interface I {
+│ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ 2:     foo(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ │ 4:
+│ │ │ │    ^
+│ │ │ │ 5: const obj: I = { foo() {} };
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:
+│ │ │ │    ^
+│ │ │ │ 7: obj.foo();
+│ │ │ │    ^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /tests/cases/fourslash/callHierarchyInterfaceMethod.ts:1:1-1:1
+│ │ │ │ 1: interface I {
+│ │ │ │    <
+│ │ │ ╰
+│ │ ╰ incoming: none
+│ ├ fromSpans:
+│ │ ╭ /tests/cases/fourslash/callHierarchyInterfaceMethod.ts:7:5-7:8
+│ │ │ 7: obj.foo();
+│ │ │        ^^^
+│ ╰ ╰
+╰ outgoing: none

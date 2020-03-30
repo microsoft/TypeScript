@@ -1,7 +1,7 @@
 namespace ts {
-    // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
-    // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "3.8";
+    // WARNING: The script `configurePrerelease.ts` uses a regexp to parse out these values.
+    // If changing the text in this section, be sure to test `configurePrerelease` too.
+    export const versionMajorMinor = "3.9";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 
@@ -45,6 +45,31 @@ namespace ts {
         // eslint-disable-next-line @typescript-eslint/prefer-function-type
         new <T>(): Map<T>;
     }
+
+    /**
+     * Returns the native Map implementation if it is available and compatible (i.e. supports iteration).
+     */
+    /* @internal */
+    export function tryGetNativeMap(): MapConstructor | undefined {
+        // Internet Explorer's Map doesn't support iteration, so don't use it.
+        // Natives
+        // NOTE: TS doesn't strictly allow in-line declares, but if we suppress the error, the declaration
+        // is still used for typechecking _and_ correctly elided, which is out goal, as this prevents us from
+        // needing to pollute an outer scope with a declaration of `Map` just to satisfy the checks in this function
+        //@ts-ignore
+        declare const Map: (new <T>() => Map<T>) | undefined;
+        // eslint-disable-next-line no-in-operator
+        return typeof Map !== "undefined" && "entries" in Map.prototype ? Map : undefined;
+    }
+
+    /* @internal */
+    export const Map: MapConstructor = tryGetNativeMap() || (() => {
+        // NOTE: createMapShim will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
+        if (typeof createMapShim === "function") {
+            return createMapShim();
+        }
+        throw new Error("TypeScript requires an environment that provides a compatible native Map implementation.");
+    })();
 
     /** ES6 Iterator type. */
     export interface Iterator<T> {

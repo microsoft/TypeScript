@@ -171,7 +171,7 @@ namespace ts.server.typingsInstaller {
             }
 
             // start watching files
-            this.watchFiles(req.projectName, discoverTypingsResult.filesToWatch, req.projectRootPath);
+            this.watchFiles(req.projectName, discoverTypingsResult.filesToWatch, req.projectRootPath, req.watchOptions);
 
             // install typings
             if (discoverTypingsResult.newTypingNames.length) {
@@ -399,7 +399,7 @@ namespace ts.server.typingsInstaller {
             }
         }
 
-        private watchFiles(projectName: string, files: string[], projectRootPath: Path) {
+        private watchFiles(projectName: string, files: string[], projectRootPath: Path, options: WatchOptions | undefined) {
             if (!files.length) {
                 // shut down existing watchers
                 this.closeWatchers(projectName);
@@ -439,7 +439,7 @@ namespace ts.server.typingsInstaller {
                             watchers.isInvoked = true;
                             this.sendResponse({ projectName, kind: ActionInvalidate });
                         }
-                    }, /*pollingInterval*/ 2000) :
+                    }, /*pollingInterval*/ 2000, options) :
                     this.installTypingHost.watchDirectory!(path, f => { // TODO: GH#18217
                         if (isLoggingEnabled) {
                             this.log.writeLine(`DirectoryWatcher:: Triggered with ${f} :: WatchInfo: ${path} recursive :: handler is already invoked '${watchers.isInvoked}'`);
@@ -453,7 +453,7 @@ namespace ts.server.typingsInstaller {
                             watchers.isInvoked = true;
                             this.sendResponse({ projectName, kind: ActionInvalidate });
                         }
-                    }, /*recursive*/ true);
+                    }, /*recursive*/ true, options);
 
                 watchers.set(canonicalPath, isLoggingEnabled ? {
                     close: () => {

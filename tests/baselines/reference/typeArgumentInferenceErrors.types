@@ -6,7 +6,7 @@ function someGenerics1<T, U>(n: T, m: number) { }
 >m : number
 
 someGenerics1<string, number>(3, 4); // Error
->someGenerics1<string, number>(3, 4) : any
+>someGenerics1<string, number>(3, 4) : void
 >someGenerics1 : <T, U>(n: T, m: number) => void
 >3 : 3
 >4 : 4
@@ -19,7 +19,7 @@ function someGenerics4<T, U>(n: T, f: (x: U) => void) { }
 >x : U
 
 someGenerics4<string, number>('', (x: string) => ''); // Error
->someGenerics4<string, number>('', (x: string) => '') : any
+>someGenerics4<string, number>('', (x: string) => '') : void
 >someGenerics4 : <T, U>(n: T, f: (x: U) => void) => void
 >'' : ""
 >(x: string) => '' : (x: string) => string
@@ -34,7 +34,7 @@ function someGenerics5<U, T>(n: T, f: (x: U) => void) { }
 >x : U
 
 someGenerics5<number, string>('', (x: string) => ''); // Error
->someGenerics5<number, string>('', (x: string) => '') : any
+>someGenerics5<number, string>('', (x: string) => '') : void
 >someGenerics5 : <U, T>(n: T, f: (x: U) => void) => void
 >'' : ""
 >(x: string) => '' : (x: string) => string
@@ -52,7 +52,7 @@ function someGenerics6<A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
 >c : A
 
 someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n); // Error
->someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n) : any
+>someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n) : void
 >someGenerics6 : <A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
 >(n: number) => n : (n: number) => number
 >n : number

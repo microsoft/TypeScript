@@ -1,4 +1,4 @@
-tests/cases/compiler/genericConstructExpressionWithoutArgs.ts(10,1): error TS1005: '(' expected.
+tests/cases/compiler/genericConstructExpressionWithoutArgs.ts(9,9): error TS1384: A 'new' expression with type arguments must always be followed by a parenthesized argument list.
 
 
 ==== tests/cases/compiler/genericConstructExpressionWithoutArgs.ts (1 errors) ====
@@ -11,6 +11,6 @@ tests/cases/compiler/genericConstructExpressionWithoutArgs.ts(10,1): error TS100
     
     var c = new C // C<any>
     var c2 = new C<number> // error, type params are actually part of the arg list so you need both
+            ~~~~~~~~~~~~~~
+!!! error TS1384: A 'new' expression with type arguments must always be followed by a parenthesized argument list.
     
-    
-!!! error TS1005: '(' expected.

@@ -1,4 +1,4 @@
-tests/cases/conformance/enums/awaitAndYield.ts(3,15): error TS1308: 'await' expression is only allowed within an async function.
+tests/cases/conformance/enums/awaitAndYield.ts(3,15): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 tests/cases/conformance/enums/awaitAndYield.ts(4,15): error TS1163: A 'yield' expression is only allowed in a generator body.
 
 
@@ -7,7 +7,7 @@ tests/cases/conformance/enums/awaitAndYield.ts(4,15): error TS1163: A 'yield' ex
         enum E {
             foo = await x,
                   ~~~~~
-!!! error TS1308: 'await' expression is only allowed within an async function.
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
             baz = yield 1,
                   ~~~~~
 !!! error TS1163: A 'yield' expression is only allowed in a generator body.

@@ -105,7 +105,7 @@ namespace ts {
 
         // Visit each original node.
         for (let i = 0; i < count; i++) {
-            const node = nodes[i + start];
+            const node: T = nodes[i + start];
             aggregateTransformFlags(node);
             const visited = node !== undefined ? visitor(node) : undefined;
             if (updated !== undefined || visited === undefined || visited !== node) {
@@ -459,18 +459,18 @@ namespace ts {
                 if (node.flags & NodeFlags.OptionalChain) {
                     return updatePropertyAccessChain(<PropertyAccessChain>node,
                         visitNode((<PropertyAccessChain>node).expression, visitor, isExpression),
-                        visitNode((<PropertyAccessChain>node).questionDotToken, visitor, isToken),
+                        visitNode((<PropertyAccessChain>node).questionDotToken, tokenVisitor, isToken),
                         visitNode((<PropertyAccessChain>node).name, visitor, isIdentifier));
                 }
                 return updatePropertyAccess(<PropertyAccessExpression>node,
                     visitNode((<PropertyAccessExpression>node).expression, visitor, isExpression),
-                    visitNode((<PropertyAccessExpression>node).name, visitor, isIdentifier));
+                    visitNode((<PropertyAccessExpression>node).name, visitor, isIdentifierOrPrivateIdentifier));
 
             case SyntaxKind.ElementAccessExpression:
                 if (node.flags & NodeFlags.OptionalChain) {
                     return updateElementAccessChain(<ElementAccessChain>node,
                         visitNode((<ElementAccessChain>node).expression, visitor, isExpression),
-                        visitNode((<ElementAccessChain>node).questionDotToken, visitor, isToken),
+                        visitNode((<ElementAccessChain>node).questionDotToken, tokenVisitor, isToken),
                         visitNode((<ElementAccessChain>node).argumentExpression, visitor, isExpression));
                 }
                 return updateElementAccess(<ElementAccessExpression>node,
@@ -481,7 +481,7 @@ namespace ts {
                 if (node.flags & NodeFlags.OptionalChain) {
                     return updateCallChain(<CallChain>node,
                         visitNode((<CallChain>node).expression, visitor, isExpression),
-                        visitNode((<CallChain>node).questionDotToken, visitor, isToken),
+                        visitNode((<CallChain>node).questionDotToken, tokenVisitor, isToken),
                         nodesVisitor((<CallChain>node).typeArguments, visitor, isTypeNode),
                         nodesVisitor((<CallChain>node).arguments, visitor, isExpression));
                 }
@@ -527,7 +527,7 @@ namespace ts {
                     nodesVisitor((<ArrowFunction>node).typeParameters, visitor, isTypeParameterDeclaration),
                     visitParameterList((<ArrowFunction>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<ArrowFunction>node).type, visitor, isTypeNode),
-                    visitNode((<ArrowFunction>node).equalsGreaterThanToken, visitor, isToken),
+                    visitNode((<ArrowFunction>node).equalsGreaterThanToken, tokenVisitor, isToken),
                     visitFunctionBody((<ArrowFunction>node).body, visitor, context));
 
             case SyntaxKind.DeleteExpression:
@@ -558,14 +558,14 @@ namespace ts {
                 return updateBinary(<BinaryExpression>node,
                     visitNode((<BinaryExpression>node).left, visitor, isExpression),
                     visitNode((<BinaryExpression>node).right, visitor, isExpression),
-                    visitNode((<BinaryExpression>node).operatorToken, visitor, isToken));
+                    visitNode((<BinaryExpression>node).operatorToken, tokenVisitor, isToken));
 
             case SyntaxKind.ConditionalExpression:
                 return updateConditional(<ConditionalExpression>node,
                     visitNode((<ConditionalExpression>node).condition, visitor, isExpression),
-                    visitNode((<ConditionalExpression>node).questionToken, visitor, isToken),
+                    visitNode((<ConditionalExpression>node).questionToken, tokenVisitor, isToken),
                     visitNode((<ConditionalExpression>node).whenTrue, visitor, isExpression),
-                    visitNode((<ConditionalExpression>node).colonToken, visitor, isToken),
+                    visitNode((<ConditionalExpression>node).colonToken, tokenVisitor, isToken),
                     visitNode((<ConditionalExpression>node).whenFalse, visitor, isExpression));
 
             case SyntaxKind.TemplateExpression:
@@ -659,7 +659,7 @@ namespace ts {
 
             case SyntaxKind.ForOfStatement:
                 return updateForOf(<ForOfStatement>node,
-                    visitNode((<ForOfStatement>node).awaitModifier, visitor, isToken),
+                    visitNode((<ForOfStatement>node).awaitModifier, tokenVisitor, isToken),
                     visitNode((<ForOfStatement>node).initializer, visitor, isForInitializer),
                     visitNode((<ForOfStatement>node).expression, visitor, isExpression),
                     visitNode((<ForOfStatement>node).statement, visitor, isStatement, liftToBlock));
@@ -792,11 +792,16 @@ namespace ts {
             case SyntaxKind.ImportClause:
                 return updateImportClause(<ImportClause>node,
                     visitNode((<ImportClause>node).name, visitor, isIdentifier),
-                    visitNode((<ImportClause>node).namedBindings, visitor, isNamedImportBindings));
+                    visitNode((<ImportClause>node).namedBindings, visitor, isNamedImportBindings),
+                    (node as ImportClause).isTypeOnly);
 
             case SyntaxKind.NamespaceImport:
                 return updateNamespaceImport(<NamespaceImport>node,
                     visitNode((<NamespaceImport>node).name, visitor, isIdentifier));
+
+            case SyntaxKind.NamespaceExport:
+                    return updateNamespaceExport(<NamespaceExport>node,
+                        visitNode((<NamespaceExport>node).name, visitor, isIdentifier));
 
             case SyntaxKind.NamedImports:
                 return updateNamedImports(<NamedImports>node,
@@ -817,8 +822,9 @@ namespace ts {
                 return updateExportDeclaration(<ExportDeclaration>node,
                     nodesVisitor((<ExportDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<ExportDeclaration>node).modifiers, visitor, isModifier),
-                    visitNode((<ExportDeclaration>node).exportClause, visitor, isNamedExports),
-                    visitNode((<ExportDeclaration>node).moduleSpecifier, visitor, isExpression));
+                    visitNode((<ExportDeclaration>node).exportClause, visitor, isNamedExportBindings),
+                    visitNode((<ExportDeclaration>node).moduleSpecifier, visitor, isExpression),
+                    (node as ExportDeclaration).isTypeOnly);
 
             case SyntaxKind.NamedExports:
                 return updateNamedExports(<NamedExports>node,

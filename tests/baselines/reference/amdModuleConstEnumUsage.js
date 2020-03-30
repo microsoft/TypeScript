@@ -18,6 +18,7 @@ export class User {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.CharCode = void 0;
     var CharCode;
     (function (CharCode) {
         CharCode[CharCode["A"] = 0] = "A";
@@ -28,6 +29,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.User = void 0;
     var User = /** @class */ (function () {
         function User() {
         }

@@ -358,18 +358,33 @@ export class cNew {}`);
             });
         });
 
+        const coreChanges: TscIncremental[] = [
+            {
+                buildKind: BuildKind.IncrementalDtsChange,
+                modifyFs: fs => appendText(fs, "/src/core/index.ts", `
+export class someClass { }`),
+            },
+            {
+                buildKind: BuildKind.IncrementalDtsUnchanged,
+                modifyFs: fs => appendText(fs, "/src/core/index.ts", `
+class someClass { }`),
+            }
+        ];
+
         describe("lists files", () => {
-            verifyTsc({
+            verifyTscIncrementalEdits({
                 scenario: "sample1",
                 subScenario: "listFiles",
                 fs: () => projFs,
                 commandLineArgs: ["--b", "/src/tests", "--listFiles"],
+                incrementalScenarios: coreChanges
             });
-            verifyTsc({
+            verifyTscIncrementalEdits({
                 scenario: "sample1",
                 subScenario: "listEmittedFiles",
                 fs: () => projFs,
                 commandLineArgs: ["--b", "/src/tests", "--listEmittedFiles"],
+                incrementalScenarios: coreChanges
             });
         });
 
@@ -382,16 +397,7 @@ export class cNew {}`);
                 baselineSourceMap: true,
                 baselineReadFileCalls: true,
                 incrementalScenarios: [
-                    {
-                        buildKind: BuildKind.IncrementalDtsChange,
-                        modifyFs: fs => appendText(fs, "/src/core/index.ts", `
-export class someClass { }`),
-                    },
-                    {
-                        buildKind: BuildKind.IncrementalDtsUnchanged,
-                        modifyFs: fs => appendText(fs, "/src/core/index.ts", `
-class someClass { }`),
-                    },
+                    ...coreChanges,
                     {
                         subScenario: "when logic config changes declaration dir",
                         buildKind: BuildKind.IncrementalDtsChange,

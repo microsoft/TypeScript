@@ -3,6 +3,7 @@ var x: "p" = "p"
 class A {
     a = this.y
     b
+    public c;
     ["computed"] = 13
     ;[x] = 14
     m() { }
@@ -11,8 +12,10 @@ class A {
     declare notEmitted;
 }
 class B {
+    public a;
 }
 class C extends B {
+    declare public a;
     z = this.ka
     constructor(public ka: number) {
         super()
@@ -57,6 +60,12 @@ var A = /** @class */ (function () {
             writable: true,
             value: void 0
         });
+        Object.defineProperty(this, "c", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
         Object.defineProperty(this, "computed", {
             enumerable: true,
             configurable: true,
@@ -87,6 +96,12 @@ var A = /** @class */ (function () {
 _a = x;
 var B = /** @class */ (function () {
     function B() {
+        Object.defineProperty(this, "a", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
     }
     return B;
 }());

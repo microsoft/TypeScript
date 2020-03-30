@@ -5,9 +5,9 @@ window.name = 1;
 >name : Symbol(Window.name, Decl(lib.dom.d.ts, --, --))
 
 window.console; // should not have error: Property 'console' does not exist on type 'typeof window'.
->window.console : Symbol(console, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>window.console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --), Decl(bug27099.js, 0, 0))
->console : Symbol(console, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 
 module.exports = 'anything';
 >module.exports : Symbol("tests/cases/conformance/salsa/bug27099", Decl(bug27099.js, 0, 0))
