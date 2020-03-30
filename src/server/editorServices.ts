@@ -1974,13 +1974,13 @@ namespace ts.server {
             // Read updated contents from disk
             const configFilename = normalizePath(project.getConfigFilePath());
 
-            const configFileContent = this.host.readFile(configFilename) || "";
-
-            const result = parseJsonText(configFilename, configFileContent);
+            const configFileContent = tryReadFile(configFilename, fileName => this.host.readFile(fileName));
+            const result = parseJsonText(configFilename, isString(configFileContent) ? configFileContent : "");
             if (!result.endOfFileToken) {
                 result.endOfFileToken = <EndOfFileToken>{ kind: SyntaxKind.EndOfFileToken };
             }
             const configFileErrors = result.parseDiagnostics as Diagnostic[];
+            if (!isString(configFileContent)) configFileErrors.push(configFileContent);
             const parsedCommandLine = parseJsonSourceFileConfigFileContent(
                 result,
                 project.getCachedDirectoryStructureHost(),

@@ -350,16 +350,7 @@ namespace ts.projectSystem {
             verifyErrorsInApp();
 
             function verifyErrorsInApp() {
-                verifyGetErrRequest({
-                    session,
-                    host,
-                    expected: [{
-                        file: app,
-                        syntax: [],
-                        semantic: [],
-                        suggestion: []
-                    }],
-                });
+                verifyGetErrRequestNoErrors({ session, host, files: [app] });
             }
         });
 
@@ -418,12 +409,7 @@ namespace ts.projectSystem {
             checkErrors([serverUtilities.path, app.path]);
 
             function checkErrors(openFiles: [string, string]) {
-                verifyGetErrRequest({
-                    session,
-                    host,
-                    expected: openFiles.map(file => ({ file, syntax: [], semantic: [], suggestion: [] })),
-                    existingTimeouts: 2
-                });
+                verifyGetErrRequestNoErrors({ session, host, files: openFiles, existingTimeouts: 2 });
             }
         });
 
@@ -961,18 +947,7 @@ console.log(blabla);`
             const { host, session, test } = createSessionForTest({
                 include: ["./src/*.ts", "./src/*.json"]
             });
-            verifyGetErrRequest({
-                session,
-                host,
-                expected: [
-                    {
-                        file: test,
-                        syntax: [],
-                        semantic: [],
-                        suggestion: []
-                    }
-                ]
-            });
+            verifyGetErrRequestNoErrors({ session, host, files: [test] });
         });
 
         it("should report error when json is not root file found by tsconfig", () => {
