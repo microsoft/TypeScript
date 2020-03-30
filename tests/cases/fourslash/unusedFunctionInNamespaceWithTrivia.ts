@@ -2,6 +2,7 @@
 
 // @noUnusedLocals: true
 //// [| namespace greeter {
+////   // Do not remove
 ////   /**
 ////    * JSDoc Comment
 ////    */
@@ -10,5 +11,6 @@
 //// } |]
 
 verify.rangeAfterCodeFix(`namespace greeter {
+    // Do not remove
  }`);
  

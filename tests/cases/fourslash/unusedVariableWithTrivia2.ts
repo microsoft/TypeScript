@@ -2,6 +2,7 @@
 
 // @noUnusedLocals: true
 ////[|namespace greeter {
+////    // Do not remove
 ////    /**
 ////     * JSDoc Comment
 ////     */
@@ -11,5 +12,6 @@
 verify.codeFix({
     description: "Remove unused declaration for: 'a'",
     newRangeContent: `namespace greeter {
+    // Do not remove
 }`
 });
