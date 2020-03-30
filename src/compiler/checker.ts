@@ -16039,7 +16039,7 @@ namespace ts {
                         newParam.mapper = distributionMapper;
                     }
 
-                    // TODO: Find a nice way to include potential conditional type breakdowns in error output, if those seems good (they usually don't)
+                    // TODO: Find a nice way to include potential conditional type breakdowns in error output, if they seem good (they usually don't)
                     let localResult: Ternary | undefined;
                     if (skipTrue || (localResult = isRelatedTo(source, instantiateType(getTrueTypeFromConditionalType(c), distributionMapper), /*reportErrors*/ false))) {
                         if (!skipFalse) {
