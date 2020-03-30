@@ -75,6 +75,7 @@ namespace ts {
                 checkRhs(SyntaxKind.PlusEqualsToken, /*expectParens*/ false);
                 checkRhs(SyntaxKind.BarBarToken, /*expectParens*/ true);
                 checkRhs(SyntaxKind.AmpersandAmpersandToken, /*expectParens*/ true);
+                checkRhs(SyntaxKind.QuestionQuestionToken, /*expectParens*/ true);
                 checkRhs(SyntaxKind.EqualsEqualsToken, /*expectParens*/ true);
             });
         });

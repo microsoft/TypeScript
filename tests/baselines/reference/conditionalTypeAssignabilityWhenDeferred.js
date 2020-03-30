@@ -121,6 +121,7 @@ function f4<Q extends (arg: any) => any>(
 //// [conditionalTypeAssignabilityWhenDeferred.js]
 "use strict";
 exports.__esModule = true;
+exports.func = void 0;
 function select(property, list, valueProp) { }
 function func(x, tipos) {
     select(x, tipos, "value");

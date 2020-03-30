@@ -1,3 +1,42 @@
+//// [/lib/incremental-declaration-changesOutput.txt]
+/lib/tsc --b /src/third --verbose
+[[90m12:04:00 AM[0m] Projects in this build: 
+    * src/first/tsconfig.json
+    * src/second/tsconfig.json
+    * src/third/tsconfig.json
+
+[[90m12:04:00 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
+
+[[90m12:04:00 AM[0m] Building project '/src/first/tsconfig.json'...
+
+[[90m12:04:00 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.js'
+
+[[90m12:04:00 AM[0m] Project 'src/third/tsconfig.json' is out of date because oldest output 'src/third/thirdjs/output/third-output.js' is older than newest input 'src/first'
+
+[[90m12:04:00 AM[0m] Building project '/src/third/tsconfig.json'...
+
+exitCode:: ExitStatus.Success
+readFiles:: {
+ "/src/third/tsconfig.json": 1,
+ "/src/first/tsconfig.json": 1,
+ "/src/second/tsconfig.json": 1,
+ "/src/first/first_PART1.ts": 1,
+ "/src/first/first_part2.ts": 1,
+ "/src/first/first_part3.ts": 1,
+ "/src/first/bin/first-output.d.ts": 2,
+ "/src/2/second-output.tsbuildinfo": 1,
+ "/src/2/second-output.d.ts": 1,
+ "/src/third/third_part1.ts": 1,
+ "/src/first/bin/first-output.tsbuildinfo": 1,
+ "/src/first/bin/first-output.js": 1,
+ "/src/2/second-output.js": 1,
+ "/src/first/bin/first-output.js.map": 1,
+ "/src/2/second-output.js.map": 1,
+ "/src/first/bin/first-output.d.ts.map": 1,
+ "/src/2/second-output.d.ts.map": 1,
+ "/src/third/thirdjs/output/third-output.d.ts": 1
+} 
+
 //// [/src/first/bin/first-output.d.ts]
 interface TheFirst {
     none: any;
@@ -685,7 +724,7 @@ var normalC = (function () {
     Object.defineProperty(normalC.prototype, "c", {
         get: function () { return 10; },
         set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -1158,7 +1197,7 @@ sourceFile:../../../second/second_part1.ts
 4 >Emitted(20, 31) Source(18, 40) + SourceIndex(3)
 5 >Emitted(20, 32) Source(18, 41) + SourceIndex(3)
 ---
->>>        enumerable: true,
+>>>        enumerable: false,
 >>>        configurable: true
 >>>    });
 1 >^^^^^^^
@@ -2438,20 +2477,20 @@ sourceFile:../../third_part1.ts
         },
         {
           "pos": 109,
-          "end": 3161,
+          "end": 3162,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
               "pos": 109,
-              "end": 3161,
+              "end": 3162,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 3161,
-          "end": 3197,
+          "pos": 3162,
+          "end": 3198,
           "kind": "text"
         }
       ]
@@ -2510,9 +2549,9 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (109-3161):: ../../../2/second-output.js texts:: 1
+prepend: (109-3162):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (109-3161)
+text: (109-3162)
 var N;
 (function (N) {
     function f() {
@@ -2527,7 +2566,7 @@ var normalC = (function () {
     Object.defineProperty(normalC.prototype, "c", {
         get: function () { return 10; },
         set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -2617,7 +2656,7 @@ var C = (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (3161-3197)
+text: (3162-3198)
 var c = new C();
 c.doSomething();
 

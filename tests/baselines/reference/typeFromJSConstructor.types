@@ -60,35 +60,35 @@ Installer.prototype.first = function () {
     this.arg = 'hi' // error
 >this.arg = 'hi' : "hi"
 >this.arg : number
->this : Installer
+>this : this
 >arg : number
 >'hi' : "hi"
 
     this.unknown = 'hi' // ok
 >this.unknown = 'hi' : "hi"
 >this.unknown : string | boolean | null
->this : Installer
+>this : this
 >unknown : string | boolean | null
 >'hi' : "hi"
 
     this.newProperty = 1 // ok: number | boolean
 >this.newProperty = 1 : 1
 >this.newProperty : number | boolean | undefined
->this : Installer
+>this : this
 >newProperty : number | boolean | undefined
 >1 : 1
 
     this.twice = undefined // ok
 >this.twice = undefined : undefined
 >this.twice : string | undefined
->this : Installer
+>this : this
 >twice : string | undefined
 >undefined : undefined
 
     this.twice = 'hi' // ok
 >this.twice = 'hi' : "hi"
 >this.twice : string | undefined
->this : Installer
+>this : this
 >twice : string | undefined
 >'hi' : "hi"
 }
@@ -104,35 +104,35 @@ Installer.prototype.second = function () {
     this.arg = false // error
 >this.arg = false : false
 >this.arg : number
->this : Installer
+>this : this
 >arg : number
 >false : false
 
     this.unknown = false // ok
 >this.unknown = false : false
 >this.unknown : string | boolean | null
->this : Installer
+>this : this
 >unknown : string | boolean | null
 >false : false
 
     this.newProperty = false // ok
 >this.newProperty = false : false
 >this.newProperty : number | boolean | undefined
->this : Installer
+>this : this
 >newProperty : number | boolean | undefined
 >false : false
 
     this.twice = null // error
 >this.twice = null : null
 >this.twice : string | undefined
->this : Installer
+>this : this
 >twice : string | undefined
 >null : null
 
     this.twice = false // error
 >this.twice = false : false
 >this.twice : string | undefined
->this : Installer
+>this : this
 >twice : string | undefined
 >false : false
 
@@ -140,7 +140,7 @@ Installer.prototype.second = function () {
 >this.twices.push(1) : number
 >this.twices.push : (...items: any[]) => number
 >this.twices : any[] | null
->this : Installer
+>this : this
 >twices : any[] | null
 >push : (...items: any[]) => number
 >1 : 1
@@ -148,7 +148,7 @@ Installer.prototype.second = function () {
     if (this.twices != null) {
 >this.twices != null : boolean
 >this.twices : any[] | null
->this : Installer
+>this : this
 >twices : any[] | null
 >null : null
 
@@ -156,7 +156,7 @@ Installer.prototype.second = function () {
 >this.twices.push('hi') : number
 >this.twices.push : (...items: any[]) => number
 >this.twices : any[]
->this : Installer
+>this : this
 >twices : any[]
 >push : (...items: any[]) => number
 >'hi' : "hi"

@@ -143,6 +143,7 @@ function f26(x: {}, y: unknown, z: any) {
     let o1 = { a: 42, ...x };  // { a: number }
     let o2 = { a: 42, ...x, ...y };  // unknown
     let o3 = { a: 42, ...x, ...y, ...z };  // any
+    let o4 = { a: 42, ...z }; // any
 }
 
 // Functions with unknown return type don't need return expressions
@@ -281,6 +282,7 @@ function f26(x, y, z) {
     var o1 = __assign({ a: 42 }, x); // { a: number }
     var o2 = __assign(__assign({ a: 42 }, x), y); // unknown
     var o3 = __assign(__assign(__assign({ a: 42 }, x), y), z); // any
+    var o4 = __assign({ a: 42 }, z); // any
 }
 // Functions with unknown return type don't need return expressions
 function f27() {

@@ -43,7 +43,7 @@ namespace ts {
                 text += source.substring(lastPos, pos);
                 activeRanges[activeRanges.length - 1].end = text.length;
                 const range = activeRanges.pop()!;
-                if (range.name in ranges) {
+                if (hasProperty(ranges, range.name)) {
                     throw new Error(`Duplicate name of range ${range.name}`);
                 }
                 ranges.set(range.name, range);

@@ -31,6 +31,7 @@ export default RenderString
 //// [my-component.js]
 "use strict";
 exports.__esModule = true;
+exports.MyComponent = void 0;
 function MyComponent(props) {
     return React.createElement("span", null, "my component");
 }

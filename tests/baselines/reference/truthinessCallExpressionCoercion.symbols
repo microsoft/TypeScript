@@ -1,0 +1,229 @@
+=== tests/cases/compiler/truthinessCallExpressionCoercion.ts ===
+function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
+>onlyErrorsWhenTestingNonNullableFunctionType : Symbol(onlyErrorsWhenTestingNonNullableFunctionType, Decl(truthinessCallExpressionCoercion.ts, 0, 0))
+>required : Symbol(required, Decl(truthinessCallExpressionCoercion.ts, 0, 54))
+>optional : Symbol(optional, Decl(truthinessCallExpressionCoercion.ts, 0, 78))
+
+    if (required) { // error
+>required : Symbol(required, Decl(truthinessCallExpressionCoercion.ts, 0, 54))
+    }
+
+    if (optional) { // ok
+>optional : Symbol(optional, Decl(truthinessCallExpressionCoercion.ts, 0, 78))
+    }
+
+    if (!!required) { // ok
+>required : Symbol(required, Decl(truthinessCallExpressionCoercion.ts, 0, 54))
+    }
+
+    if (required()) { // ok
+>required : Symbol(required, Decl(truthinessCallExpressionCoercion.ts, 0, 54))
+    }
+}
+
+function onlyErrorsWhenUnusedInBody() {
+>onlyErrorsWhenUnusedInBody : Symbol(onlyErrorsWhenUnusedInBody, Decl(truthinessCallExpressionCoercion.ts, 12, 1))
+
+    function test() { return Math.random() > 0.5; }
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion.ts, 14, 39))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    if (test) { // error
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion.ts, 14, 39))
+
+        console.log('test');
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+    }
+    
+    if (test) { // ok
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion.ts, 14, 39))
+
+        console.log(test);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion.ts, 14, 39))
+    }
+
+    if (test) { // ok
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion.ts, 14, 39))
+
+        test();
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion.ts, 14, 39))
+    }
+    
+    if (test) { // ok
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion.ts, 14, 39))
+
+        [() => null].forEach(() => {
+>[() => null].forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+
+            test();
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion.ts, 14, 39))
+
+        });
+    }
+    
+    if (test) { // error
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion.ts, 14, 39))
+
+        [() => null].forEach(test => {
+>[() => null].forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion.ts, 36, 29))
+
+            test();
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion.ts, 36, 29))
+
+        });
+    }
+}
+
+function checksPropertyAccess() {
+>checksPropertyAccess : Symbol(checksPropertyAccess, Decl(truthinessCallExpressionCoercion.ts, 40, 1))
+
+    const x = {
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion.ts, 43, 9))
+
+        foo: {
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 43, 15))
+
+            bar() { return true; }
+>bar : Symbol(bar, Decl(truthinessCallExpressionCoercion.ts, 44, 14))
+        }
+    }
+
+    if (x.foo.bar) { // error
+>x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion.ts, 44, 14))
+>x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 43, 15))
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion.ts, 43, 9))
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 43, 15))
+>bar : Symbol(bar, Decl(truthinessCallExpressionCoercion.ts, 44, 14))
+    }
+
+    if (x.foo.bar) { // ok
+>x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion.ts, 44, 14))
+>x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 43, 15))
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion.ts, 43, 9))
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 43, 15))
+>bar : Symbol(bar, Decl(truthinessCallExpressionCoercion.ts, 44, 14))
+
+        x.foo.bar;
+>x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion.ts, 44, 14))
+>x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 43, 15))
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion.ts, 43, 9))
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion.ts, 43, 15))
+>bar : Symbol(bar, Decl(truthinessCallExpressionCoercion.ts, 44, 14))
+    }
+}
+
+class Foo {
+>Foo : Symbol(Foo, Decl(truthinessCallExpressionCoercion.ts, 55, 1))
+
+    maybeIsUser?: () => boolean;
+>maybeIsUser : Symbol(Foo.maybeIsUser, Decl(truthinessCallExpressionCoercion.ts, 57, 11))
+
+    isUser() {
+>isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion.ts, 58, 32))
+
+        return true;
+    }
+
+    test() {
+>test : Symbol(Foo.test, Decl(truthinessCallExpressionCoercion.ts, 62, 5))
+
+        if (this.isUser) { // error
+>this.isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion.ts, 58, 32))
+>this : Symbol(Foo, Decl(truthinessCallExpressionCoercion.ts, 55, 1))
+>isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion.ts, 58, 32))
+        }
+
+        if (this.maybeIsUser) { // ok
+>this.maybeIsUser : Symbol(Foo.maybeIsUser, Decl(truthinessCallExpressionCoercion.ts, 57, 11))
+>this : Symbol(Foo, Decl(truthinessCallExpressionCoercion.ts, 55, 1))
+>maybeIsUser : Symbol(Foo.maybeIsUser, Decl(truthinessCallExpressionCoercion.ts, 57, 11))
+        }
+    }
+}
+
+// Test for GH-35557 where ids were not assigned for a symbol.
+function A(stats: StatsBase<any>) {
+>A : Symbol(A, Decl(truthinessCallExpressionCoercion.ts, 71, 1))
+>stats : Symbol(stats, Decl(truthinessCallExpressionCoercion.ts, 74, 11))
+>StatsBase : Symbol(StatsBase, Decl(truthinessCallExpressionCoercion.ts, 87, 1))
+
+    if (stats.isDirectory) { // err
+>stats.isDirectory : Symbol(StatsBase.isDirectory, Decl(truthinessCallExpressionCoercion.ts, 89, 24))
+>stats : Symbol(stats, Decl(truthinessCallExpressionCoercion.ts, 74, 11))
+>isDirectory : Symbol(StatsBase.isDirectory, Decl(truthinessCallExpressionCoercion.ts, 89, 24))
+
+        console.log(`[Directory] ${stats.ctime}`)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>stats.ctime : Symbol(StatsBase.ctime, Decl(truthinessCallExpressionCoercion.ts, 90, 27))
+>stats : Symbol(stats, Decl(truthinessCallExpressionCoercion.ts, 74, 11))
+>ctime : Symbol(StatsBase.ctime, Decl(truthinessCallExpressionCoercion.ts, 90, 27))
+    }
+}
+
+function B(a: Nested, b: Nested) {
+>B : Symbol(B, Decl(truthinessCallExpressionCoercion.ts, 78, 1))
+>a : Symbol(a, Decl(truthinessCallExpressionCoercion.ts, 80, 11))
+>Nested : Symbol(Nested, Decl(truthinessCallExpressionCoercion.ts, 92, 1))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion.ts, 80, 21))
+>Nested : Symbol(Nested, Decl(truthinessCallExpressionCoercion.ts, 92, 1))
+
+    if (a.stats.isDirectory) { // err
+>a.stats.isDirectory : Symbol(StatsBase.isDirectory, Decl(truthinessCallExpressionCoercion.ts, 89, 24))
+>a.stats : Symbol(Nested.stats, Decl(truthinessCallExpressionCoercion.ts, 94, 18))
+>a : Symbol(a, Decl(truthinessCallExpressionCoercion.ts, 80, 11))
+>stats : Symbol(Nested.stats, Decl(truthinessCallExpressionCoercion.ts, 94, 18))
+>isDirectory : Symbol(StatsBase.isDirectory, Decl(truthinessCallExpressionCoercion.ts, 89, 24))
+
+        b.stats.isDirectory(); 
+>b.stats.isDirectory : Symbol(StatsBase.isDirectory, Decl(truthinessCallExpressionCoercion.ts, 89, 24))
+>b.stats : Symbol(Nested.stats, Decl(truthinessCallExpressionCoercion.ts, 94, 18))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion.ts, 80, 21))
+>stats : Symbol(Nested.stats, Decl(truthinessCallExpressionCoercion.ts, 94, 18))
+>isDirectory : Symbol(StatsBase.isDirectory, Decl(truthinessCallExpressionCoercion.ts, 89, 24))
+    }
+    if (a.stats.isDirectory) { // ok
+>a.stats.isDirectory : Symbol(StatsBase.isDirectory, Decl(truthinessCallExpressionCoercion.ts, 89, 24))
+>a.stats : Symbol(Nested.stats, Decl(truthinessCallExpressionCoercion.ts, 94, 18))
+>a : Symbol(a, Decl(truthinessCallExpressionCoercion.ts, 80, 11))
+>stats : Symbol(Nested.stats, Decl(truthinessCallExpressionCoercion.ts, 94, 18))
+>isDirectory : Symbol(StatsBase.isDirectory, Decl(truthinessCallExpressionCoercion.ts, 89, 24))
+
+        a.stats.isDirectory();
+>a.stats.isDirectory : Symbol(StatsBase.isDirectory, Decl(truthinessCallExpressionCoercion.ts, 89, 24))
+>a.stats : Symbol(Nested.stats, Decl(truthinessCallExpressionCoercion.ts, 94, 18))
+>a : Symbol(a, Decl(truthinessCallExpressionCoercion.ts, 80, 11))
+>stats : Symbol(Nested.stats, Decl(truthinessCallExpressionCoercion.ts, 94, 18))
+>isDirectory : Symbol(StatsBase.isDirectory, Decl(truthinessCallExpressionCoercion.ts, 89, 24))
+    }
+} 
+
+interface StatsBase<T> {
+>StatsBase : Symbol(StatsBase, Decl(truthinessCallExpressionCoercion.ts, 87, 1))
+>T : Symbol(T, Decl(truthinessCallExpressionCoercion.ts, 89, 20))
+
+    isDirectory(): boolean;
+>isDirectory : Symbol(StatsBase.isDirectory, Decl(truthinessCallExpressionCoercion.ts, 89, 24))
+
+    ctime: number;
+>ctime : Symbol(StatsBase.ctime, Decl(truthinessCallExpressionCoercion.ts, 90, 27))
+}
+
+interface Nested {
+>Nested : Symbol(Nested, Decl(truthinessCallExpressionCoercion.ts, 92, 1))
+
+    stats: StatsBase<any>;
+>stats : Symbol(Nested.stats, Decl(truthinessCallExpressionCoercion.ts, 94, 18))
+>StatsBase : Symbol(StatsBase, Decl(truthinessCallExpressionCoercion.ts, 87, 1))
+}

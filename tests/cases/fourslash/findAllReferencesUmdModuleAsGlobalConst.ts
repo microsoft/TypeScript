@@ -39,7 +39,5 @@
 ////}
 
 const [r0Def, r0, r1Def, r1, r2Def, ...rest] = test.ranges();
-// GH#29533
-// TODO:: this should be var THREE: typeof import instead of module name as var but thats existing issue and repros with quickInfo too.
-verify.singleReferenceGroup(`module "/node_modules/@types/three/index"
-var "/node_modules/@types/three/index": typeof import("/node_modules/@types/three/index")`, [r0, r1, ...rest]);
+verify.singleReferenceGroup(`module THREE
+var THREE: typeof import("/node_modules/@types/three/index")`, [r0, r1, ...rest]);

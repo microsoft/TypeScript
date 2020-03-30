@@ -66,12 +66,12 @@ declare var y: string;
 >y : string
 
 onlyNullablePlease(y); // error as expected
->onlyNullablePlease(y) : any
+>onlyNullablePlease(y) : void
 >onlyNullablePlease : <T extends null extends T ? any : never>(value: T) => void
 >y : string
 
 onlyNullablePlease2(y); // error as expected
->onlyNullablePlease2(y) : any
+>onlyNullablePlease2(y) : void
 >onlyNullablePlease2 : <T extends [null] extends [T] ? any : never>(value: T) => void
 >y : string
 
@@ -260,7 +260,7 @@ class Foo2 {
 >method : () => void
 
     set(this, "prop", "hi"); // <-- type error
->set(this, "prop", "hi") : any
+>set(this, "prop", "hi") : Unwrap<this["prop"]>
 >set : <T, K extends keyof T>(obj: T, key: K, value: Unwrap<T[K]>) => Unwrap<T[K]>
 >this : this
 >"prop" : "prop"

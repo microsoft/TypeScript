@@ -1,0 +1,66 @@
+tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.js(1,12): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
+tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.js(8,12): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
+tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.js(9,13): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
+tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.js(15,12): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
+tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.js(22,12): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
+tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.js(23,13): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
+tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.js(30,21): error TS2322: Type 'number' is not assignable to type '() => Object'.
+
+
+==== tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.js (7 errors) ====
+    /** @type {Array} */
+               ~~~~~
+!!! error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
+    var notAnyArray = [5];
+    
+    /** @type {Array<number>} */
+    var numberArray = [5];
+    
+    /**
+     * @param {Array} arr
+               ~~~~~
+!!! error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
+     * @return {Array}
+                ~~~~~
+!!! error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
+     */
+    function returnNotAnyArray(arr) {
+      return arr;
+    }
+    
+    /** @type {Promise} */
+               ~~~~~~~
+!!! error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
+    var notAnyPromise = Promise.resolve(5);
+    
+    /** @type {Promise<number>} */
+    var numberPromise = Promise.resolve(5);
+    
+    /**
+     * @param {Promise} pr
+               ~~~~~~~
+!!! error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
+     * @return {Promise}
+                ~~~~~~~
+!!! error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
+     */
+    function returnNotAnyPromise(pr) {
+      return pr;
+    }
+    
+    /** @type {Object} */
+    var notAnyObject = {valueOf: 1}; // error since assigning to Object, not any.
+                        ~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type '() => Object'.
+    
+    /** @type {Object<string, number>} */
+    var paramedObject = {valueOf: 1};
+    
+    /**
+     * @param {Object} obj
+     * @return {Object}
+     */
+    function returnNotAnyObject(obj) {
+      return obj;
+    }
+    

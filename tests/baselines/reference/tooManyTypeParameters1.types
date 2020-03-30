@@ -3,7 +3,7 @@ function f<T>() { }
 >f : <T>() => void
 
 f<string, string>();
->f<string, string>() : any
+>f<string, string>() : void
 >f : <T>() => void
 
 var x = <T>() => {};
@@ -11,15 +11,15 @@ var x = <T>() => {};
 ><T>() => {} : <T>() => void
 
 x<number,number>();
->x<number,number>() : any
+>x<number,number>() : void
 >x : <T>() => void
 
 class C<T> {}
 >C : C<T>
 
 var c = new C<Date,Date>();
->c : any
->new C<Date,Date>() : any
+>c : C<Date>
+>new C<Date,Date>() : C<Date>
 >C : typeof C
 
 interface I<T> {}

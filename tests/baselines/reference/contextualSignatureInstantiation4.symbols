@@ -1,0 +1,79 @@
+=== tests/cases/compiler/contextualSignatureInstantiation4.ts ===
+// Repros from #32976
+
+declare class Banana<T extends string> { constructor(a: string, property: T) }
+>Banana : Symbol(Banana, Decl(contextualSignatureInstantiation4.ts, 0, 0))
+>T : Symbol(T, Decl(contextualSignatureInstantiation4.ts, 2, 21))
+>a : Symbol(a, Decl(contextualSignatureInstantiation4.ts, 2, 53))
+>property : Symbol(property, Decl(contextualSignatureInstantiation4.ts, 2, 63))
+>T : Symbol(T, Decl(contextualSignatureInstantiation4.ts, 2, 21))
+
+declare function fruitFactory1<TFruit>(Fruit: new (...args: any[]) => TFruit): TFruit
+>fruitFactory1 : Symbol(fruitFactory1, Decl(contextualSignatureInstantiation4.ts, 2, 78))
+>TFruit : Symbol(TFruit, Decl(contextualSignatureInstantiation4.ts, 4, 31))
+>Fruit : Symbol(Fruit, Decl(contextualSignatureInstantiation4.ts, 4, 39))
+>args : Symbol(args, Decl(contextualSignatureInstantiation4.ts, 4, 51))
+>TFruit : Symbol(TFruit, Decl(contextualSignatureInstantiation4.ts, 4, 31))
+>TFruit : Symbol(TFruit, Decl(contextualSignatureInstantiation4.ts, 4, 31))
+
+const banana1 = fruitFactory1(Banana) // Banana<any>
+>banana1 : Symbol(banana1, Decl(contextualSignatureInstantiation4.ts, 5, 5))
+>fruitFactory1 : Symbol(fruitFactory1, Decl(contextualSignatureInstantiation4.ts, 2, 78))
+>Banana : Symbol(Banana, Decl(contextualSignatureInstantiation4.ts, 0, 0))
+
+declare function fruitFactory2<TFruit>(Fruit: new (a: string, ...args: any[]) => TFruit): TFruit
+>fruitFactory2 : Symbol(fruitFactory2, Decl(contextualSignatureInstantiation4.ts, 5, 37))
+>TFruit : Symbol(TFruit, Decl(contextualSignatureInstantiation4.ts, 7, 31))
+>Fruit : Symbol(Fruit, Decl(contextualSignatureInstantiation4.ts, 7, 39))
+>a : Symbol(a, Decl(contextualSignatureInstantiation4.ts, 7, 51))
+>args : Symbol(args, Decl(contextualSignatureInstantiation4.ts, 7, 61))
+>TFruit : Symbol(TFruit, Decl(contextualSignatureInstantiation4.ts, 7, 31))
+>TFruit : Symbol(TFruit, Decl(contextualSignatureInstantiation4.ts, 7, 31))
+
+const banana2 = fruitFactory2(Banana) // Banana<any>
+>banana2 : Symbol(banana2, Decl(contextualSignatureInstantiation4.ts, 8, 5))
+>fruitFactory2 : Symbol(fruitFactory2, Decl(contextualSignatureInstantiation4.ts, 5, 37))
+>Banana : Symbol(Banana, Decl(contextualSignatureInstantiation4.ts, 0, 0))
+
+declare function fruitFactory3<TFruit>(Fruit: new (a: string, s: "foo", ...args: any[]) => TFruit): TFruit
+>fruitFactory3 : Symbol(fruitFactory3, Decl(contextualSignatureInstantiation4.ts, 8, 37))
+>TFruit : Symbol(TFruit, Decl(contextualSignatureInstantiation4.ts, 10, 31))
+>Fruit : Symbol(Fruit, Decl(contextualSignatureInstantiation4.ts, 10, 39))
+>a : Symbol(a, Decl(contextualSignatureInstantiation4.ts, 10, 51))
+>s : Symbol(s, Decl(contextualSignatureInstantiation4.ts, 10, 61))
+>args : Symbol(args, Decl(contextualSignatureInstantiation4.ts, 10, 71))
+>TFruit : Symbol(TFruit, Decl(contextualSignatureInstantiation4.ts, 10, 31))
+>TFruit : Symbol(TFruit, Decl(contextualSignatureInstantiation4.ts, 10, 31))
+
+const banana3 = fruitFactory3(Banana) // Banana<"foo">
+>banana3 : Symbol(banana3, Decl(contextualSignatureInstantiation4.ts, 11, 5))
+>fruitFactory3 : Symbol(fruitFactory3, Decl(contextualSignatureInstantiation4.ts, 8, 37))
+>Banana : Symbol(Banana, Decl(contextualSignatureInstantiation4.ts, 0, 0))
+
+declare function fruitFactory4<TFruit>(Fruit: new (a: string, ...args: "foo"[]) => TFruit): TFruit
+>fruitFactory4 : Symbol(fruitFactory4, Decl(contextualSignatureInstantiation4.ts, 11, 37))
+>TFruit : Symbol(TFruit, Decl(contextualSignatureInstantiation4.ts, 13, 31))
+>Fruit : Symbol(Fruit, Decl(contextualSignatureInstantiation4.ts, 13, 39))
+>a : Symbol(a, Decl(contextualSignatureInstantiation4.ts, 13, 51))
+>args : Symbol(args, Decl(contextualSignatureInstantiation4.ts, 13, 61))
+>TFruit : Symbol(TFruit, Decl(contextualSignatureInstantiation4.ts, 13, 31))
+>TFruit : Symbol(TFruit, Decl(contextualSignatureInstantiation4.ts, 13, 31))
+
+const banana4 = fruitFactory4(Banana) // Banana<"foo">
+>banana4 : Symbol(banana4, Decl(contextualSignatureInstantiation4.ts, 14, 5))
+>fruitFactory4 : Symbol(fruitFactory4, Decl(contextualSignatureInstantiation4.ts, 11, 37))
+>Banana : Symbol(Banana, Decl(contextualSignatureInstantiation4.ts, 0, 0))
+
+declare function fruitFactory5<TFruit>(Fruit: new (...args: "foo"[]) => TFruit): TFruit
+>fruitFactory5 : Symbol(fruitFactory5, Decl(contextualSignatureInstantiation4.ts, 14, 37))
+>TFruit : Symbol(TFruit, Decl(contextualSignatureInstantiation4.ts, 16, 31))
+>Fruit : Symbol(Fruit, Decl(contextualSignatureInstantiation4.ts, 16, 39))
+>args : Symbol(args, Decl(contextualSignatureInstantiation4.ts, 16, 51))
+>TFruit : Symbol(TFruit, Decl(contextualSignatureInstantiation4.ts, 16, 31))
+>TFruit : Symbol(TFruit, Decl(contextualSignatureInstantiation4.ts, 16, 31))
+
+const banana5 = fruitFactory5(Banana) // Banana<"foo">
+>banana5 : Symbol(banana5, Decl(contextualSignatureInstantiation4.ts, 17, 5))
+>fruitFactory5 : Symbol(fruitFactory5, Decl(contextualSignatureInstantiation4.ts, 14, 37))
+>Banana : Symbol(Banana, Decl(contextualSignatureInstantiation4.ts, 0, 0))
+

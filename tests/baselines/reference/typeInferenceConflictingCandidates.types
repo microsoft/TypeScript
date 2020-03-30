@@ -7,11 +7,11 @@ declare function g<T>(a: T, b: T, c: (t: T) => T): T;
 >t : T
 
 g("", 3, a => a);
->g("", 3, a => a) : any
+>g("", 3, a => a) : ""
 >g : <T>(a: T, b: T, c: (t: T) => T) => T
 >"" : ""
 >3 : 3
->a => a : (a: any) => any
->a : any
->a : any
+>a => a : (a: "") => ""
+>a : ""
+>a : ""
 

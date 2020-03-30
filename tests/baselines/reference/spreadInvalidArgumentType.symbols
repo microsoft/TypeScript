@@ -94,7 +94,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >o3 : Symbol(o3, Decl(spreadInvalidArgumentType.ts, 31, 7))
 >t : Symbol(t, Decl(spreadInvalidArgumentType.ts, 3, 7))
 
-    var o4 = { ...i };   // OK, index access
+    var o4 = { ...i };   // Error, index access
 >o4 : Symbol(o4, Decl(spreadInvalidArgumentType.ts, 32, 7))
 >i : Symbol(i, Decl(spreadInvalidArgumentType.ts, 5, 7))
 

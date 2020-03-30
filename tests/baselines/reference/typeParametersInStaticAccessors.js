@@ -10,12 +10,12 @@ var foo = /** @class */ (function () {
     }
     Object.defineProperty(foo, "Foo", {
         get: function () { return null; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(foo, "Bar", {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return foo;

@@ -1,3 +1,29 @@
+//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+/lib/tsc --b /src/third --verbose
+[[90m12:04:00 AM[0m] Projects in this build: 
+    * src/first/tsconfig.json
+    * src/second/tsconfig.json
+    * src/third/tsconfig.json
+
+[[90m12:04:00 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
+
+[[90m12:04:00 AM[0m] Building project '/src/first/tsconfig.json'...
+
+[[90m12:04:00 AM[0m] Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+
+[[90m12:04:00 AM[0m] Updating output of project '/src/second/tsconfig.json'...
+
+[[90m12:04:00 AM[0m] Updating unchanged output timestamps of project '/src/second/tsconfig.json'...
+
+[[90m12:04:00 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
+
+[[90m12:04:00 AM[0m] Updating output of project '/src/third/tsconfig.json'...
+
+[[90m12:04:00 AM[0m] Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
+
+exitCode:: ExitStatus.Success
+
+
 //// [/src/2/second-output.js]
 var s = "Hello, world";
 console.log(s);
@@ -20,7 +46,7 @@ var normalC = /** @class */ (function () {
     Object.defineProperty(normalC.prototype, "c", {
         /*@internal*/ get: function () { return 10; },
         /*@internal*/ set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -542,7 +568,7 @@ sourceFile:../second/second_part1.ts
 6 >Emitted(21, 45) Source(18, 40) + SourceIndex(3)
 7 >Emitted(21, 46) Source(18, 41) + SourceIndex(3)
 ---
->>>        enumerable: true,
+>>>        enumerable: false,
 >>>        configurable: true
 >>>    });
 1 >^^^^^^^
@@ -1847,7 +1873,7 @@ sourceFile:../second/second_part2.ts
         },
         {
           "pos": 127,
-          "end": 3543,
+          "end": 3544,
           "kind": "text"
         }
       ]
@@ -1879,32 +1905,32 @@ sourceFile:../second/second_part2.ts
         },
         {
           "pos": 234,
-          "end": 322,
+          "end": 339,
           "kind": "internal"
         },
         {
-          "pos": 324,
-          "end": 356,
+          "pos": 341,
+          "end": 373,
           "kind": "text"
         },
         {
-          "pos": 356,
-          "end": 748,
+          "pos": 373,
+          "end": 765,
           "kind": "internal"
         },
         {
-          "pos": 750,
-          "end": 753,
+          "pos": 767,
+          "end": 770,
           "kind": "text"
         },
         {
-          "pos": 753,
-          "end": 1166,
+          "pos": 770,
+          "end": 1183,
           "kind": "internal"
         },
         {
-          "pos": 1168,
-          "end": 1216,
+          "pos": 1185,
+          "end": 1233,
           "kind": "text"
         }
       ]
@@ -1929,7 +1955,7 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-text: (127-3543)
+text: (127-3544)
 var N;
 (function (N) {
     function f() {
@@ -1944,7 +1970,7 @@ var normalC = /** @class */ (function () {
     Object.defineProperty(normalC.prototype, "c", {
         /*@internal*/ get: function () { return 10; },
         /*@internal*/ set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -2060,18 +2086,19 @@ declare namespace N {
 declare class normalC {
 
 ----------------------------------------------------------------------
-internal: (234-322)
+internal: (234-339)
     constructor();
     prop: string;
     method(): void;
-    /*@internal*/ c: number;
+    get c(): number;
+    set c(val: number);
 ----------------------------------------------------------------------
-text: (324-356)
+text: (341-373)
 }
 declare namespace normalN {
 
 ----------------------------------------------------------------------
-internal: (356-748)
+internal: (373-765)
     class C {
     }
     function foo(): void;
@@ -2092,11 +2119,11 @@ internal: (356-748)
         c = 2
     }
 ----------------------------------------------------------------------
-text: (750-753)
+text: (767-770)
 }
 
 ----------------------------------------------------------------------
-internal: (753-1166)
+internal: (770-1183)
 declare class internalC {
 }
 declare function internalfoo(): void;
@@ -2117,13 +2144,16 @@ declare enum internalEnum {
     c = 2
 }
 ----------------------------------------------------------------------
-text: (1168-1216)
+text: (1185-1233)
 declare class C {
     doSomething(): void;
 }
 
 ======================================================================
 
+//// [/src/first/bin/first-output.d.ts] file written with same contents
+//// [/src/first/bin/first-output.d.ts.map] file written with same contents
+//// [/src/first/bin/first-output.d.ts.map.baseline.txt] file written with same contents
 //// [/src/first/bin/first-output.js]
 var s = "Hello, world";
 console.log(s);
@@ -2412,7 +2442,7 @@ var normalC = /** @class */ (function () {
     Object.defineProperty(normalC.prototype, "c", {
         /*@internal*/ get: function () { return 10; },
         /*@internal*/ set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -2936,7 +2966,7 @@ sourceFile:../../../second/second_part1.ts
 6 >Emitted(21, 45) Source(18, 40) + SourceIndex(3)
 7 >Emitted(21, 46) Source(18, 41) + SourceIndex(3)
 ---
->>>        enumerable: true,
+>>>        enumerable: false,
 >>>        configurable: true
 >>>    });
 1 >^^^^^^^
@@ -4280,20 +4310,20 @@ sourceFile:../../third_part1.ts
       "sections": [
         {
           "pos": 0,
-          "end": 3543,
+          "end": 3544,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
               "pos": 0,
-              "end": 3543,
+              "end": 3544,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 3543,
-          "end": 3579,
+          "pos": 3544,
+          "end": 3580,
           "kind": "text"
         }
       ]
@@ -4328,9 +4358,9 @@ sourceFile:../../third_part1.ts
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-3543):: ../../../2/second-output.js texts:: 1
+prepend: (0-3544):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-3543)
+text: (0-3544)
 var s = "Hello, world";
 console.log(s);
 console.log(s);
@@ -4352,7 +4382,7 @@ var normalC = /** @class */ (function () {
     Object.defineProperty(normalC.prototype, "c", {
         /*@internal*/ get: function () { return 10; },
         /*@internal*/ set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -4442,7 +4472,7 @@ var C = /** @class */ (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (3543-3579)
+text: (3544-3580)
 var c = new C();
 c.doSomething();
 

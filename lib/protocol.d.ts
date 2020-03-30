@@ -64,7 +64,10 @@ declare namespace ts.server.protocol {
         OrganizeImports = "organizeImports",
         GetEditsForFileRename = "getEditsForFileRename",
         ConfigurePlugin = "configurePlugin",
-        SelectionRange = "selectionRange"
+        SelectionRange = "selectionRange",
+        PrepareCallHierarchy = "prepareCallHierarchy",
+        ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
+        ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls"
     }
     /**
      * A TypeScript Server message
@@ -143,6 +146,16 @@ declare namespace ts.server.protocol {
          * Contains extra information that plugin can include to be passed on
          */
         metadata?: unknown;
+        /**
+         * Exposes information about the performance of this request-response pair.
+         */
+        performanceData?: PerformanceData;
+    }
+    interface PerformanceData {
+        /**
+         * Time spent updating the program graph, in milliseconds.
+         */
+        updateGraphDurationMs?: number;
     }
     /**
      * Arguments for FileRequest messages.
@@ -467,7 +480,7 @@ declare namespace ts.server.protocol {
         scope: OrganizeImportsScope;
     }
     interface OrganizeImportsResponse extends Response {
-        body: ReadonlyArray<FileCodeEdits>;
+        body: readonly FileCodeEdits[];
     }
     interface GetEditsForFileRenameRequest extends Request {
         command: CommandTypes.GetEditsForFileRename;
@@ -479,7 +492,7 @@ declare namespace ts.server.protocol {
         readonly newFilePath: string;
     }
     interface GetEditsForFileRenameResponse extends Response {
-        body: ReadonlyArray<FileCodeEdits>;
+        body: readonly FileCodeEdits[];
     }
     /**
      * Request for the available codefixes at a specific position.
@@ -526,7 +539,7 @@ declare namespace ts.server.protocol {
         /**
          * Errorcodes we want to get the fixes for.
          */
-        errorCodes: ReadonlyArray<number>;
+        errorCodes: readonly number[];
     }
     interface GetCombinedCodeFixRequestArgs {
         scope: GetCombinedCodeFixScope;
@@ -643,7 +656,7 @@ declare namespace ts.server.protocol {
     interface FileSpanWithContext extends FileSpan, TextSpanWithContext {
     }
     interface DefinitionInfoAndBoundSpan {
-        definitions: ReadonlyArray<FileSpanWithContext>;
+        definitions: readonly FileSpanWithContext[];
         textSpan: TextSpan;
     }
     /**
@@ -652,9 +665,11 @@ declare namespace ts.server.protocol {
     interface DefinitionResponse extends Response {
         body?: FileSpanWithContext[];
     }
-    interface DefinitionInfoAndBoundSpanReponse extends Response {
+    interface DefinitionInfoAndBoundSpanResponse extends Response {
         body?: DefinitionInfoAndBoundSpan;
     }
+    /** @deprecated Use `DefinitionInfoAndBoundSpanResponse` instead. */
+    type DefinitionInfoAndBoundSpanReponse = DefinitionInfoAndBoundSpanResponse;
     /**
      * Definition response message.  Gives text range for definition.
      */
@@ -781,7 +796,7 @@ declare namespace ts.server.protocol {
         /**
          * The file locations referencing the symbol.
          */
-        refs: ReadonlyArray<ReferencesResponseItem>;
+        refs: readonly ReferencesResponseItem[];
         /**
          * The name of the symbol.
          */
@@ -885,7 +900,7 @@ declare namespace ts.server.protocol {
         /**
          * An array of span groups (one per file) that refer to the item to be renamed.
          */
-        locs: ReadonlyArray<SpanGroup>;
+        locs: readonly SpanGroup[];
     }
     /**
      * Rename response message.
@@ -955,7 +970,17 @@ declare namespace ts.server.protocol {
      * For external projects, some of the project settings are sent together with
      * compiler settings.
      */
-    type ExternalProjectCompilerOptions = CompilerOptions & CompileOnSaveMixin;
+    type ExternalProjectCompilerOptions = CompilerOptions & CompileOnSaveMixin & WatchOptions;
+    interface FileWithProjectReferenceRedirectInfo {
+        /**
+         * Name of file
+         */
+        fileName: string;
+        /**
+         * True if the file is primarily included in a referenced project
+         */
+        isSourceOfProjectReferenceRedirect: boolean;
+    }
     /**
      * Represents a set of changes that happen in project
      */
@@ -963,15 +988,20 @@ declare namespace ts.server.protocol {
         /**
          * List of added files
          */
-        added: string[];
+        added: string[] | FileWithProjectReferenceRedirectInfo[];
         /**
          * List of removed files
          */
-        removed: string[];
+        removed: string[] | FileWithProjectReferenceRedirectInfo[];
         /**
          * List of updated files
          */
-        updated: string[];
+        updated: string[] | FileWithProjectReferenceRedirectInfo[];
+        /**
+         * List of files that have had their project reference redirect status updated
+         * Only provided when the synchronizeProjectList request has includeProjectReferenceRedirectInfo set to true
+         */
+        updatedRedirects?: FileWithProjectReferenceRedirectInfo[];
     }
     /**
      * Information found in a configure request.
@@ -995,6 +1025,31 @@ declare namespace ts.server.protocol {
          * The host's additional supported .js file extensions
          */
         extraFileExtensions?: FileExtensionInfo[];
+        watchOptions?: WatchOptions;
+    }
+    const enum WatchFileKind {
+        FixedPollingInterval = "FixedPollingInterval",
+        PriorityPollingInterval = "PriorityPollingInterval",
+        DynamicPriorityPolling = "DynamicPriorityPolling",
+        UseFsEvents = "UseFsEvents",
+        UseFsEventsOnParentDirectory = "UseFsEventsOnParentDirectory"
+    }
+    const enum WatchDirectoryKind {
+        UseFsEvents = "UseFsEvents",
+        FixedPollingInterval = "FixedPollingInterval",
+        DynamicPriorityPolling = "DynamicPriorityPolling"
+    }
+    const enum PollingWatchKind {
+        FixedInterval = "FixedInterval",
+        PriorityInterval = "PriorityInterval",
+        DynamicPriority = "DynamicPriority"
+    }
+    interface WatchOptions {
+        watchFile?: WatchFileKind | ts.WatchFileKind;
+        watchDirectory?: WatchDirectoryKind | ts.WatchDirectoryKind;
+        fallbackPolling?: PollingWatchKind | ts.PollingWatchKind;
+        synchronousWatchDirectory?: boolean;
+        [option: string]: CompilerOptionsValue | undefined;
     }
     /**
      *  Configure request; value of command field is "configure".  Specifies
@@ -1364,8 +1419,8 @@ declare namespace ts.server.protocol {
         commands?: {}[];
     }
     interface CombinedCodeActions {
-        changes: ReadonlyArray<FileCodeEdits>;
-        commands?: ReadonlyArray<{}>;
+        changes: readonly FileCodeEdits[];
+        commands?: readonly {}[];
     }
     interface CodeFixAction extends CodeAction {
         /** Short name to identify the fix, for use by telemetry. */
@@ -1406,7 +1461,7 @@ declare namespace ts.server.protocol {
         command: CommandTypes.Formatonkey;
         arguments: FormatOnKeyRequestArgs;
     }
-    type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<";
+    type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#";
     /**
      * Arguments for completions messages.
      */
@@ -1523,6 +1578,11 @@ declare namespace ts.server.protocol {
          * Then either that enum/class or a namespace containing it will be the recommended symbol.
          */
         isRecommended?: true;
+        /**
+         * If true, this completion was generated from traversing the name table of an unchecked JS file,
+         * and therefore may not be accurate.
+         */
+        isFromUncheckedFile?: true;
     }
     /**
      * Additional completion entry details, available on demand
@@ -1572,7 +1632,7 @@ declare namespace ts.server.protocol {
         readonly isGlobalCompletion: boolean;
         readonly isMemberCompletion: boolean;
         readonly isNewIdentifierLocation: boolean;
-        readonly entries: ReadonlyArray<CompletionEntry>;
+        readonly entries: readonly CompletionEntry[];
     }
     interface CompletionDetailsResponse extends Response {
         body?: CompletionEntryDetails[];
@@ -2251,7 +2311,7 @@ declare namespace ts.server.protocol {
         /**
          * list of packages to install
          */
-        packages: ReadonlyArray<string>;
+        packages: readonly string[];
     }
     interface BeginInstallTypesEventBody extends InstallTypesEventBody {
     }
@@ -2267,10 +2327,48 @@ declare namespace ts.server.protocol {
     interface NavTreeResponse extends Response {
         body?: NavigationTree;
     }
+    interface CallHierarchyItem {
+        name: string;
+        kind: ScriptElementKind;
+        file: string;
+        span: TextSpan;
+        selectionSpan: TextSpan;
+    }
+    interface CallHierarchyIncomingCall {
+        from: CallHierarchyItem;
+        fromSpans: TextSpan[];
+    }
+    interface CallHierarchyOutgoingCall {
+        to: CallHierarchyItem;
+        fromSpans: TextSpan[];
+    }
+    interface PrepareCallHierarchyRequest extends FileLocationRequest {
+        command: CommandTypes.PrepareCallHierarchy;
+    }
+    interface PrepareCallHierarchyResponse extends Response {
+        readonly body: CallHierarchyItem | CallHierarchyItem[];
+    }
+    interface ProvideCallHierarchyIncomingCallsRequest extends FileLocationRequest {
+        command: CommandTypes.ProvideCallHierarchyIncomingCalls;
+    }
+    interface ProvideCallHierarchyIncomingCallsResponse extends Response {
+        readonly body: CallHierarchyIncomingCall[];
+    }
+    interface ProvideCallHierarchyOutgoingCallsRequest extends FileLocationRequest {
+        command: CommandTypes.ProvideCallHierarchyOutgoingCalls;
+    }
+    interface ProvideCallHierarchyOutgoingCallsResponse extends Response {
+        readonly body: CallHierarchyOutgoingCall[];
+    }
     const enum IndentStyle {
         None = "None",
         Block = "Block",
         Smart = "Smart"
+    }
+    enum SemicolonPreference {
+        Ignore = "ignore",
+        Insert = "insert",
+        Remove = "remove"
     }
     interface EditorSettings {
         baseIndentSize?: number;
@@ -2279,6 +2377,7 @@ declare namespace ts.server.protocol {
         newLineCharacter?: string;
         convertTabsToSpaces?: boolean;
         indentStyle?: IndentStyle | ts.IndentStyle;
+        trimTrailingWhitespace?: boolean;
     }
     interface FormatCodeSettings extends EditorSettings {
         insertSpaceAfterCommaDelimiter?: boolean;
@@ -2297,6 +2396,7 @@ declare namespace ts.server.protocol {
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
         insertSpaceBeforeTypeAnnotation?: boolean;
+        semicolons?: SemicolonPreference;
     }
     interface UserPreferences {
         readonly disableSuggestions?: boolean;
@@ -2311,7 +2411,15 @@ declare namespace ts.server.protocol {
          * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
          */
         readonly includeCompletionsWithInsertText?: boolean;
-        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        /**
+         * Unless this option is `false`, or `includeCompletionsWithInsertText` is not enabled,
+         * member completion lists triggered with `.` will include entries on potentially-null and potentially-undefined
+         * values, with insertion text to replace preceding `.` tokens with `?.`.
+         */
+        readonly includeAutomaticOptionalChainCompletions?: boolean;
+        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
+        /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
+        readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
@@ -2380,6 +2488,7 @@ declare namespace ts.server.protocol {
         strictNullChecks?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
+        useDefineForClassFields?: boolean;
         target?: ScriptTarget | ts.ScriptTarget;
         traceResolution?: boolean;
         resolveJsonModule?: boolean;
@@ -2532,7 +2641,11 @@ declare namespace ts.server.protocol {
         string = "string"
     }
 
-    interface TypeAcquisition {
+    export interface TypeAcquisition {
+        /**
+         * @deprecated typingOptions.enableAutoDiscovery
+         * Use typeAcquisition.enable instead.
+         */
         enableAutoDiscovery?: boolean;
         enable?: boolean;
         include?: string[];
@@ -2540,11 +2653,13 @@ declare namespace ts.server.protocol {
         [option: string]: string[] | boolean | undefined;
     }
 
-    interface FileExtensionInfo {
+    export interface FileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
         scriptKind?: ScriptKind;
     }
+
+    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
 
     interface JSDocTagInfo {
         name: string;
@@ -2560,11 +2675,11 @@ declare namespace ts.server.protocol {
         [index: string]: T;
     }
 
-    interface PluginImport {
+    export interface PluginImport {
         name: string;
     }
 
-    interface ProjectReference {
+    export interface ProjectReference {
         /** A normalized path on disk */
         path: string;
         /** The path as the user originally wrote it */
@@ -2574,12 +2689,13 @@ declare namespace ts.server.protocol {
         /** True if it is intended that this reference form a circularity */
         circular?: boolean;
     }
-
-    type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
 }
 declare namespace ts {
     // these types are empty stubs for types from services and should not be used directly
     export type ScriptKind = never;
+    export type WatchFileKind = never;
+    export type WatchDirectoryKind = never;
+    export type PollingWatchKind = never;
     export type IndentStyle = never;
     export type JsxEmit = never;
     export type ModuleKind = never;

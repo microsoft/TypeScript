@@ -1,4 +1,4 @@
-tests/cases/compiler/undeclaredModuleError.ts(1,21): error TS2307: Cannot find module 'fs'.
+tests/cases/compiler/undeclaredModuleError.ts(1,21): error TS2307: Cannot find module 'fs' or its corresponding type declarations.
 tests/cases/compiler/undeclaredModuleError.ts(8,29): error TS2345: Argument of type '() => void' is not assignable to parameter of type '(stat: any, name: string) => boolean'.
   Type 'void' is not assignable to type 'boolean'.
 tests/cases/compiler/undeclaredModuleError.ts(11,41): error TS2304: Cannot find name 'IDoNotExist'.
@@ -7,7 +7,7 @@ tests/cases/compiler/undeclaredModuleError.ts(11,41): error TS2304: Cannot find 
 ==== tests/cases/compiler/undeclaredModuleError.ts (3 errors) ====
     import fs = require('fs');
                         ~~~~
-!!! error TS2307: Cannot find module 'fs'.
+!!! error TS2307: Cannot find module 'fs' or its corresponding type declarations.
     function readdir(path: string, accept: (stat: fs.Stats, name: string) => boolean, callback: (error: Error, results: { name: string; stat: fs.Stats; }[]) => void ) {}
     
     function join(...paths: string[]) {}

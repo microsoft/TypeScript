@@ -1,8 +1,8 @@
 === tests/cases/conformance/externalModules/a.ts ===
 /// <reference path="foo.d.ts" />
 export const x = Foo; // OK in value position because allowUmdGlobalAccess: true
->x : typeof Thing
->Foo : typeof Thing
+>x : typeof import("tests/cases/conformance/externalModules/foo")
+>Foo : typeof import("tests/cases/conformance/externalModules/foo")
 
 === tests/cases/conformance/externalModules/foo.d.ts ===
 declare class Thing {

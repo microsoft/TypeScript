@@ -135,7 +135,7 @@ namespace ts {
                             const lastTemplateStackToken = lastOrUndefined(templateStack);
 
                             if (lastTemplateStackToken === SyntaxKind.TemplateHead) {
-                                token = scanner.reScanTemplateToken();
+                                token = scanner.reScanTemplateToken(/* isTaggedTemplate */ false);
 
                                 // Only pop on a TemplateTail; a TemplateMiddle indicates there is more for us.
                                 if (token === SyntaxKind.TemplateTail) {
@@ -391,6 +391,7 @@ namespace ts {
             case SyntaxKind.PercentEqualsToken:
             case SyntaxKind.EqualsToken:
             case SyntaxKind.CommaToken:
+            case SyntaxKind.QuestionQuestionToken:
                 return true;
             default:
                 return false;
@@ -498,8 +499,10 @@ namespace ts {
         return { spans, endOfLineState: EndOfLineState.None };
 
         function pushClassification(start: number, end: number, type: ClassificationType): void {
+            const length = end - start;
+            Debug.assert(length > 0, `Classification had non-positive length of ${length}`);
             spans.push(start);
-            spans.push(end - start);
+            spans.push(length);
             spans.push(type);
         }
     }
@@ -771,6 +774,15 @@ namespace ts {
                 return false;
             }
 
+            // Limiting classification to exactly the elements and attributes
+            // defined in `ts.commentPragmas` would be excessive, but we can avoid
+            // some obvious false positives (e.g. in XML-like doc comments) by
+            // checking the element name.
+            // eslint-disable-next-line no-in-operator
+            if (!match[3] || !(match[3] in commentPragmas)) {
+                return false;
+            }
+
             let pos = start;
 
             pushCommentRange(pos, match[1].length); // ///
@@ -778,10 +790,6 @@ namespace ts {
 
             pushClassification(pos, match[2].length, ClassificationType.punctuation); // <
             pos += match[2].length;
-
-            if (!match[3]) {
-                return true;
-            }
 
             pushClassification(pos, match[3].length, ClassificationType.jsxSelfClosingTagName); // element name
             pos += match[3].length;
@@ -979,8 +987,7 @@ namespace ts {
                 return ClassificationType.bigintLiteral;
             }
             else if (tokenKind === SyntaxKind.StringLiteral) {
-                // TODO: GH#18217
-                return token!.parent.kind === SyntaxKind.JsxAttribute ? ClassificationType.jsxAttributeStringLiteralValue : ClassificationType.stringLiteral;
+                return token && token.parent.kind === SyntaxKind.JsxAttribute ? ClassificationType.jsxAttributeStringLiteralValue : ClassificationType.stringLiteral;
             }
             else if (tokenKind === SyntaxKind.RegularExpressionLiteral) {
                 // TODO: we should get another classification type for these literals.

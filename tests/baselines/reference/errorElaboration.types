@@ -35,3 +35,20 @@ function test(): {[A in "foo"]: A} {
 >"bar" : "bar"
 }
 
+// Repro for #32358
+
+const foo = { bar: 'a' };
+>foo : { bar: string; }
+>{ bar: 'a' } : { bar: string; }
+>bar : string
+>'a' : "a"
+
+const x = ({ [foo.bar]: c }) => undefined;
+>x : ({ [foo.bar]: c }: {}) => any
+>({ [foo.bar]: c }) => undefined : ({ [foo.bar]: c }: {}) => any
+>foo.bar : any
+>foo : (x: () => Container<Ref<number>>) => void
+>bar : any
+>c : any
+>undefined : undefined
+

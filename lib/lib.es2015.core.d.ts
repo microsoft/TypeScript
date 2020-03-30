@@ -1,14 +1,14 @@
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved. 
+Copyright (c) Microsoft Corporation. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0  
- 
+License at http://www.apache.org/licenses/LICENSE-2.0
+
 THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE, 
-MERCHANTABLITY OR NON-INFRINGEMENT. 
- 
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
@@ -62,6 +62,15 @@ interface Array<T> {
      * @param end If not specified, length of the this object is used as its default value.
      */
     copyWithin(target: number, start: number, end?: number): this;
+
+    /**
+     * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
+     * @param start The zero-based location in the array from which to start removing elements.
+     * @param deleteCount The number of elements to remove. If deleteCount is omitted, or if its value is equal to or larger
+     * than array.length - start (that is, if it is equal to or greater than the number of elements left in the array,
+     * starting at start), then all the elements from start to the end of the array will be deleted.
+     */
+    splice(start: number, deleteCount?: number): T[];
 }
 
 interface ArrayConstructor {
@@ -319,9 +328,9 @@ interface ObjectConstructor {
     getOwnPropertySymbols(o: any): symbol[];
 
     /**
-      * Returns the names of the enumerable string properties and methods of an object.
-      * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
-      */
+     * Returns the names of the enumerable string properties and methods of an object.
+     * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+     */
     keys(o: {}): string[];
 
     /**
@@ -332,7 +341,7 @@ interface ObjectConstructor {
     is(value1: any, value2: any): boolean;
 
     /**
-     * Sets the prototype of a specified object o to  object proto or null. Returns the object o.
+     * Sets the prototype of a specified object o to object proto or null. Returns the object o.
      * @param o The object to change its prototype.
      * @param proto The value of the new prototype or null.
      */
@@ -349,8 +358,8 @@ interface ReadonlyArray<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find<S extends T>(predicate: (this: void, value: T, index: number, obj: ReadonlyArray<T>) => value is S, thisArg?: any): S | undefined;
-    find(predicate: (value: T, index: number, obj: ReadonlyArray<T>) => unknown, thisArg?: any): T | undefined;
+    find<S extends T>(predicate: (this: void, value: T, index: number, obj: readonly T[]) => value is S, thisArg?: any): S | undefined;
+    find(predicate: (value: T, index: number, obj: readonly T[]) => unknown, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -361,7 +370,7 @@ interface ReadonlyArray<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: T, index: number, obj: ReadonlyArray<T>) => unknown, thisArg?: any): number;
+    findIndex(predicate: (value: T, index: number, obj: readonly T[]) => unknown, thisArg?: any): number;
 }
 
 interface RegExp {

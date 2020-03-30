@@ -15,6 +15,10 @@
         "category": "Error",
         "code": 1006
     },
+    "The parser expected to find a '}' to match the '{' token here.": {
+        "category": "Error",
+        "code": 1007
+    },
     "Trailing comma not allowed.": {
         "category": "Error",
         "code": 1009
@@ -71,7 +75,7 @@
         "category": "Error",
         "code": 1022
     },
-    "An index signature parameter type must be 'string' or 'number'.": {
+    "An index signature parameter type must be either 'string' or 'number'.": {
         "category": "Error",
         "code": 1023
     },
@@ -459,10 +463,6 @@
         "category": "Error",
         "code": 1149
     },
-    "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.": {
-        "category": "Error",
-        "code": 1150
-    },
     "'const' declarations must be initialized.": {
         "category": "Error",
         "code": 1155
@@ -611,6 +611,10 @@
         "category": "Error",
         "code": 1194
     },
+    "'export *' does not re-export a default.": {
+        "category": "Error",
+        "code": 1195
+    },
     "Catch clause variable cannot have a type annotation.": {
         "category": "Error",
         "code": 1196
@@ -639,7 +643,7 @@
         "category": "Error",
         "code": 1203
     },
-    "Cannot re-export a type when the '--isolatedModules' flag is provided.": {
+    "Re-exporting a type when the '--isolatedModules' flag is provided requires using 'export type'.": {
         "category": "Error",
         "code": 1205
     },
@@ -855,11 +859,15 @@
         "category": "Error",
         "code": 1260
     },
+    "Already included file name '{0}' differs from file name '{1}' only in casing.": {
+        "category": "Error",
+        "code": 1261
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
     },
-    "'await' expression is only allowed within an async function.": {
+    "'await' expressions are only allowed within async functions and at the top levels of modules.": {
         "category": "Error",
         "code": 1308
     },
@@ -907,7 +915,7 @@
         "category": "Error",
         "code": 1322
     },
-    "Dynamic import is only supported when '--module' flag is 'commonjs' or 'esNext'.": {
+    "Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', or 'umd'.": {
         "category": "Error",
         "code": 1323
     },
@@ -1039,6 +1047,143 @@
         "category": "Error",
         "code": 1356
     },
+    "An enum member name must be followed by a ',', '=', or '}'.": {
+        "category": "Error",
+        "code": 1357
+    },
+    "Tagged template expressions are not permitted in an optional chain.": {
+        "category": "Error",
+        "code": 1358
+    },
+    "Identifier expected. '{0}' is a reserved word that cannot be used here.": {
+        "category": "Error",
+        "code": 1359
+    },
+    "Did you mean to parenthesize this function type?": {
+        "category": "Error",
+        "code": 1360
+    },
+    "'{0}' cannot be used as a value because it was imported using 'import type'.": {
+        "category": "Error",
+        "code": 1361
+    },
+    "'{0}' cannot be used as a value because it was exported using 'export type'.": {
+        "category": "Error",
+        "code": 1362
+    },
+    "A type-only import can specify a default import or named bindings, but not both.": {
+        "category": "Error",
+        "code": 1363
+    },
+    "Convert to type-only export": {
+        "category": "Message",
+        "code": 1364
+    },
+    "Convert all re-exported types to type-only exports": {
+        "category": "Message",
+        "code": 1365
+    },
+    "Split into two separate import declarations": {
+        "category": "Message",
+        "code": 1366
+    },
+    "Split all invalid type-only imports": {
+        "category": "Message",
+        "code": 1367
+    },
+    "Specify emit/checking behavior for imports that are only used for types": {
+        "category": "Message",
+        "code": 1368
+    },
+    "Did you mean '{0}'?": {
+        "category": "Message",
+        "code": 1369
+    },
+    "Only ECMAScript imports may use 'import type'.": {
+        "category": "Error",
+        "code": 1370
+    },
+    "This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.": {
+        "category": "Error",
+        "code": 1371
+    },
+    "Convert to type-only import": {
+        "category": "Message",
+        "code": 1373
+    },
+    "Convert all imports not used as a value to type-only imports": {
+        "category": "Message",
+        "code": 1374
+    },
+    "'await' expressions are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.": {
+        "category": "Error",
+        "code": 1375
+    },
+    "'{0}' was imported here.": {
+        "category": "Message",
+        "code": 1376
+    },
+    "'{0}' was exported here.": {
+        "category": "Message",
+        "code": 1377
+    },
+    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.": {
+        "category": "Error",
+        "code": 1378
+    },
+    "An import alias cannot reference a declaration that was exported using 'export type'.": {
+        "category": "Error",
+        "code": 1379
+    },
+    "An import alias cannot reference a declaration that was imported using 'import type'.": {
+        "category": "Error",
+        "code": 1380
+    },
+    "Unexpected token. Did you mean `{'}'}` or `&rbrace;`?": {
+        "category": "Error",
+        "code": 1381
+    },
+    "Unexpected token. Did you mean `{'>'}` or `&gt;`?": {
+        "category": "Error",
+        "code": 1382
+    },
+    "Only named exports may use 'export type'.": {
+        "category": "Error",
+        "code": 1383
+    },
+    "A 'new' expression with type arguments must always be followed by a parenthesized argument list.": {
+        "category": "Error",
+        "code": 1384
+    },
+
+    "The types of '{0}' are incompatible between these types.": {
+        "category": "Error",
+        "code": 2200
+    },
+    "The types returned by '{0}' are incompatible between these types.": {
+        "category": "Error",
+        "code": 2201
+    },
+    "Call signature return types '{0}' and '{1}' are incompatible.": {
+        "category": "Error",
+        "code": 2202,
+        "elidedInCompatabilityPyramid": true
+    },
+    "Construct signature return types '{0}' and '{1}' are incompatible.": {
+        "category": "Error",
+        "code": 2203,
+        "elidedInCompatabilityPyramid": true
+    },
+    "Call signatures with no arguments have incompatible return types '{0}' and '{1}'.": {
+        "category": "Error",
+        "code": 2204,
+        "elidedInCompatabilityPyramid": true
+    },
+    "Construct signatures with no arguments have incompatible return types '{0}' and '{1}'.": {
+        "category": "Error",
+        "code": 2205,
+        "elidedInCompatabilityPyramid": true
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1068,7 +1213,7 @@
         "category": "Error",
         "code": 2306
     },
-    "Cannot find module '{0}'.": {
+    "Cannot find module '{0}' or its corresponding type declarations.": {
         "category": "Error",
         "code": 2307
     },
@@ -1212,7 +1357,7 @@
         "category": "Error",
         "code": 2342
     },
-    "This syntax requires an imported helper named '{1}', but module '{0}' has no exported member '{1}'.": {
+    "This syntax requires an imported helper named '{1}' which does not exist in '{0}'. Consider upgrading your version of '{0}'.": {
         "category": "Error",
         "code": 2343
     },
@@ -1344,7 +1489,7 @@
         "category": "Error",
         "code": 2375
     },
-    "A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.": {
+    "A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.": {
         "category": "Error",
         "code": 2376
     },
@@ -1431,6 +1576,10 @@
     "Declaration name conflicts with built-in global identifier '{0}'.": {
         "category": "Error",
         "code": 2397
+    },
+    "'constructor' cannot be used as a parameter property name.": {
+        "category": "Error",
+        "code": 2398
     },
     "Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.": {
         "category": "Error",
@@ -1523,10 +1672,6 @@
     "Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member accessor.": {
         "category": "Error",
         "code": 2423
-    },
-    "Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member property.": {
-        "category": "Error",
-        "code": 2424
     },
     "Class '{0}' defines instance member property '{1}', but extended class '{2}' defines it as instance member function.": {
         "category": "Error",
@@ -1659,6 +1804,14 @@
     "An AMD module cannot have multiple name assignments.": {
         "category": "Error",
         "code": 2458
+    },
+    "Module '{0}' declares '{1}' locally, but it is not exported.": {
+        "category": "Error",
+        "code": 2459
+    },
+    "Module '{0}' declares '{1}' locally, but it is exported as '{2}'.": {
+        "category": "Error",
+        "code": 2460
     },
     "Type '{0}' is not an array type.": {
         "category": "Error",
@@ -2104,6 +2257,10 @@
         "category": "Error",
         "code": 2577
     },
+    "Unused '@ts-expect-error' directive.": {
+        "category": "Error",
+        "code": 2578
+    },
     "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.": {
         "category": "Error",
         "code": 2580
@@ -2164,6 +2321,22 @@
         "category": "Error",
         "code": 2594
     },
+    "'{0}' can only be imported by using a default import.": {
+        "category": "Error",
+        "code": 2595
+    },
+    "'{0}' can only be imported by turning on the 'esModuleInterop' flag and using a default import.": {
+        "category": "Error",
+        "code": 2596
+    },
+    "'{0}' can only be imported by using a 'require' call or by using a default import.": {
+        "category": "Error",
+        "code": 2597
+    },
+    "'{0}' can only be imported by using a 'require' call or by turning on the 'esModuleInterop' flag and using a default import.": {
+        "category": "Error",
+        "code": 2598
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2204,6 +2377,39 @@
         "category": "Error",
         "code": 2609
     },
+    "'{0}' is defined as an accessor in class '{1}', but is overridden here in '{2}' as an instance property.": {
+        "category": "Error",
+        "code": 2610
+    },
+    "'{0}' is defined as a property in class '{1}', but is overridden here in '{2}' as an accessor.": {
+        "category": "Error",
+        "code": 2611
+    },
+    "Property '{0}' will overwrite the base property in '{1}'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.": {
+        "category": "Error",
+        "code": 2612
+    },
+    "Module '{0}' has no default export. Did you mean to use 'import { {1} } from {0}' instead?": {
+        "category": "Error",
+        "code": 2613
+    },
+    "Module '{0}' has no exported member '{1}'. Did you mean to use 'import {1} from {0}' instead?": {
+        "category": "Error",
+        "code": 2614
+    },
+    "Type of property '{0}' circularly references itself in mapped type '{1}'.": {
+        "category": "Error",
+        "code": 2615
+    },
+    "'{0}' can only be imported by using 'import {1} = require({2})' or a default import.": {
+        "category": "Error",
+        "code": 2616
+    },
+    "'{0}' can only be imported by using 'import {1} = require({2})' or by turning on the 'esModuleInterop' flag and using a default import.": {
+        "category": "Error",
+        "code": 2617
+    },
+
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
         "code": 2649
@@ -2409,11 +2615,11 @@
         "category": "Error",
         "code": 2702
     },
-    "The operand of a delete operator must be a property reference.": {
+    "The operand of a 'delete' operator must be a property reference.": {
         "category": "Error",
         "code": 2703
     },
-    "The operand of a delete operator cannot be a read-only property.": {
+    "The operand of a 'delete' operator cannot be a read-only property.": {
         "category": "Error",
         "code": 2704
     },
@@ -2533,7 +2739,7 @@
         "category": "Error",
         "code": 2733
     },
-    "It is highly likely that you are missing a semicolon.": {
+    "Are you missing a semicolon?": {
         "category": "Error",
         "code": 2734
     },
@@ -2545,7 +2751,7 @@
         "category": "Error",
         "code": 2736
     },
-    "BigInt literals are not available when targeting lower than ESNext.": {
+    "BigInt literals are not available when targeting lower than ES2020.": {
         "category": "Error",
         "code": 2737
     },
@@ -2593,7 +2799,7 @@
         "category": "Error",
         "code": 2748
     },
-    "'{0}' refers to a value, but is being used as a type here.": {
+    "'{0}' refers to a value, but is being used as a type here. Did you mean 'typeof {0}'?": {
         "category": "Error",
         "code": 2749
     },
@@ -2692,6 +2898,70 @@
     "Did you forget to use 'await'?": {
         "category": "Error",
         "code": 2773
+    },
+    "This condition will always return true since the function is always defined. Did you mean to call it instead?": {
+        "category": "Error",
+        "code": 2774
+    },
+    "Assertions require every name in the call target to be declared with an explicit type annotation.": {
+        "category": "Error",
+        "code": 2775
+    },
+    "Assertions require the call target to be an identifier or qualified name.": {
+        "category": "Error",
+        "code": 2776
+    },
+    "The operand of an increment or decrement operator may not be an optional property access.": {
+        "category": "Error",
+        "code": 2777
+    },
+    "The target of an object rest assignment may not be an optional property access.": {
+        "category": "Error",
+        "code": 2778
+    },
+    "The left-hand side of an assignment expression may not be an optional property access.": {
+        "category": "Error",
+        "code": 2779
+    },
+    "The left-hand side of a 'for...in' statement may not be an optional property access.": {
+        "category": "Error",
+        "code": 2780
+    },
+    "The left-hand side of a 'for...of' statement may not be an optional property access.": {
+        "category": "Error",
+        "code": 2781
+    },
+    "'{0}' needs an explicit type annotation.": {
+        "category": "Message",
+        "code": 2782
+    },
+    "'{0}' is specified more than once, so this usage will be overwritten.": {
+        "category": "Error",
+        "code": 2783
+    },
+    "'get' and 'set' accessors cannot declare 'this' parameters.": {
+        "category": "Error",
+        "code": 2784
+    },
+    "This spread always overwrites this property.": {
+        "category": "Error",
+        "code": 2785
+    },
+    "'{0}' cannot be used as a JSX component.": {
+        "category": "Error",
+        "code": 2786
+    },
+    "Its return type '{0}' is not a valid JSX element.": {
+        "category": "Error",
+        "code": 2787
+    },
+    "Its instance type '{0}' is not a valid JSX element.": {
+        "category": "Error",
+        "code": 2788
+    },
+    "Its element type '{0}' is not a valid JSX element.": {
+        "category": "Error",
+        "code": 2789
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2994,7 +3264,6 @@
         "category": "Error",
         "code": 4094
     },
-
     "Public static method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
         "category": "Error",
         "code": 4095
@@ -3039,6 +3308,26 @@
         "category": "Error",
         "code": 4105
     },
+    "Parameter '{0}' of accessor has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4106
+    },
+    "Parameter '{0}' of accessor has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4107
+    },
+    "Parameter '{0}' of accessor has or is using name '{1}' from external module '{2}' but cannot be named.": {
+        "category": "Error",
+        "code": 4108
+    },
+    "Type arguments for '{0}' circularly reference themselves.": {
+        "category": "Error",
+        "code": 4109
+    },
+    "Tuple type arguments circularly reference themselves.": {
+        "category": "Error",
+        "code": 4110
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -3068,6 +3357,10 @@
         "category": "Error",
         "code": 5024
     },
+    "Unknown compiler option '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 5025
+    },
     "Could not write file '{0}': {1}.": {
         "category": "Error",
         "code": 5033
@@ -3079,6 +3372,10 @@
     "Option 'isolatedModules' can only be used when either option '--module' is provided or option 'target' is 'ES2015' or higher.": {
         "category": "Error",
         "code": 5047
+    },
+    "Option '{0}' cannot be specified when option 'target' is 'ES3'.": {
+        "category": "Error",
+        "code": 5048
     },
     "Option '{0} can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
         "category": "Error",
@@ -3124,7 +3421,7 @@
         "category": "Error",
         "code": 5061
     },
-    "Substitution '{0}' in pattern '{1}' in can have at most one '*' character.": {
+    "Substitution '{0}' in pattern '{1}' can have at most one '*' character.": {
         "category": "Error",
         "code": 5062
     },
@@ -3179,6 +3476,38 @@
     "'{0}' is assignable to the constraint of type '{1}', but '{1}' could be instantiated with a different subtype of constraint '{2}'.": {
         "category": "Error",
         "code": 5075
+    },
+    "'{0}' and '{1}' operations cannot be mixed without parentheses.": {
+        "category": "Error",
+        "code": 5076
+    },
+    "Unknown build option '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 5077
+    },
+    "Unknown watch option '{0}'.": {
+        "category": "Error",
+        "code": 5078
+    },
+    "Unknown watch option '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 5079
+    },
+    "Watch option '{0}' requires a value of type {1}.": {
+        "category": "Error",
+        "code": 5080
+    },
+    "Cannot find a tsconfig.json file at the current directory: {0}.": {
+        "category": "Error",
+        "code": 5081
+    },
+    "'{0}' could be instantiated with an arbitrary type which could be unrelated to '{1}'.": {
+        "category": "Error",
+        "code": 5082
+    },
+    "Cannot read file '{0}'.": {
+        "category": "Error",
+        "code": 5083
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -3241,11 +3570,11 @@
         "category": "Message",
         "code": 6014
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'.": {
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'.": {
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'.": {
+    "Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'.": {
         "category": "Message",
         "code": 6016
     },
@@ -3365,7 +3694,7 @@
         "category": "Error",
         "code": 6053
     },
-    "File '{0}' has unsupported extension. The only supported extensions are {1}.": {
+    "File '{0}' has an unsupported extension. The only supported extensions are {1}.": {
         "category": "Error",
         "code": 6054
     },
@@ -3393,7 +3722,7 @@
         "category": "Message",
         "code": 6061
     },
-    "Option '{0}' can only be specified in 'tsconfig.json' file.": {
+    "Option '{0}' can only be specified in 'tsconfig.json' file or set to 'null' on command line.": {
         "category": "Error",
         "code": 6064
     },
@@ -3935,6 +4264,10 @@
         "category": "Message",
         "code": 6201
     },
+    "Project references may not form a circular graph. Cycle detected: {0}": {
+        "category": "Error",
+        "code": 6202
+    },
     "'{0}' was also declared here.": {
         "category": "Message",
         "code": 6203
@@ -4007,6 +4340,50 @@
         "category": "Message",
         "code": 6220
     },
+    "Disable use of source files instead of declaration files from referenced projects.": {
+        "category": "Message",
+        "code": 6221
+    },
+    "Emit class fields with Define instead of Set.": {
+        "category": "Message",
+        "code": 6222
+    },
+    "Generates a CPU profile.": {
+        "category": "Message",
+        "code": 6223
+    },
+    "Disable solution searching for this project.": {
+        "category": "Message",
+        "code": 6224
+    },
+    "Specify strategy for watching file: 'FixedPollingInterval' (default), 'PriorityPollingInterval', 'DynamicPriorityPolling', 'UseFsEvents', 'UseFsEventsOnParentDirectory'.": {
+        "category": "Message",
+        "code": 6225
+    },
+    "Specify strategy for watching directory on platforms that don't support recursive watching natively: 'UseFsEvents' (default), 'FixedPollingInterval', 'DynamicPriorityPolling'.": {
+        "category": "Message",
+        "code": 6226
+    },
+    "Specify strategy for creating a polling watch when it fails to create using file system events: 'FixedInterval' (default), 'PriorityInterval', 'DynamicPriority'.": {
+        "category": "Message",
+        "code": 6227
+    },
+    "Synchronously call callbacks and update the state of directory watchers on platforms that don't support recursive watching natively.": {
+        "category": "Message",
+        "code": 6228
+    },
+    "Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.": {
+        "category": "Error",
+        "code": 6229
+    },
+    "Option '{0}' can only be specified in 'tsconfig.json' file or set to 'false' or 'null' on command line.": {
+        "category": "Error",
+        "code": 6230
+    },
+    "Could not resolve the path '{0}' with the extensions: {1}.": {
+        "category": "Error",
+        "code": 6231
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -4016,10 +4393,7 @@
         "category": "Message",
         "code": 6302
     },
-    "Project references may not form a circular graph. Cycle detected: {0}": {
-        "category": "Error",
-        "code": 6202
-    },
+
     "Composite projects may not disable declaration emit.": {
         "category": "Error",
         "code": 6304
@@ -4172,6 +4546,18 @@
         "category": "Message",
         "code": 6381
     },
+    "Skipping build of project '{0}' because its dependency '{1}' was not built": {
+        "category": "Message",
+        "code": 6382
+    },
+    "Project '{0}' can't be built because its dependency '{1}' was not built": {
+        "category": "Message",
+        "code": 6383
+    },
+    "Have recompiles in '--incremental' and '--watch' assume that changes within a file will only affect files directly depending on it.": {
+        "category": "Message",
+        "code": 6384
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
@@ -4184,6 +4570,14 @@
     "The expected type comes from the return type of this signature.": {
         "category": "Message",
         "code": 6502
+    },
+    "Print names of files that are part of the compilation and then stop processing.": {
+        "category": "Message",
+        "code": 6503
+    },
+    "File '{0}' is a JavaScript file. Did you mean to enable the 'allowJs' option?": {
+        "category": "Error",
+        "code": 6504
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
@@ -4364,7 +4758,7 @@
         "category": "Error",
         "code": 7051
     },
-    "Element implicitly has an 'any' type because type '{0}' has no index signature. Did you mean to call '{1}' ?": {
+    "Element implicitly has an 'any' type because type '{0}' has no index signature. Did you mean to call '{1}'?": {
         "category": "Error",
         "code": 7052
     },
@@ -4389,59 +4783,51 @@
         "category": "Error",
         "code": 8001
     },
-    "'import ... =' can only be used in a .ts file.": {
+    "'import ... =' can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8002
     },
-    "'export=' can only be used in a .ts file.": {
+    "'export =' can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8003
     },
-    "'type parameter declarations' can only be used in a .ts file.": {
+    "Type parameter declarations can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8004
     },
-    "'implements clauses' can only be used in a .ts file.": {
+    "'implements' clauses can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8005
     },
-    "'interface declarations' can only be used in a .ts file.": {
+    "'{0}' declarations can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8006
     },
-    "'module declarations' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8007
-    },
-    "'type aliases' can only be used in a .ts file.": {
+    "Type aliases can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8008
     },
-    "'{0}' can only be used in a .ts file.": {
+    "The '{0}' modifier can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8009
     },
-    "'types' can only be used in a .ts file.": {
+    "Type annotations can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8010
     },
-    "'type arguments' can only be used in a .ts file.": {
+    "Type arguments can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8011
     },
-    "'parameter modifiers' can only be used in a .ts file.": {
+    "Parameter modifiers can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8012
     },
-    "'non-null assertions' can only be used in a .ts file.": {
+    "Non-null assertions can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8013
     },
-    "'enum declarations' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8015
-    },
-    "'type assertion expressions' can only be used in a .ts file.": {
+    "Type assertion expressions can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8016
     },
@@ -4521,6 +4907,14 @@
         "category": "Error",
         "code": 9004
     },
+    "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
+        "category": "Error",
+        "code": 9005
+    },
+    "Declaration emit for this file requires using private name '{0}' from module '{1}'. An explicit type annotation may unblock declaration emit.": {
+        "category": "Error",
+        "code": 9006
+    },
     "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",
         "code": 17000
@@ -4593,7 +4987,10 @@
         "category": "Error",
         "code": 17017
     },
-
+    "Unknown type acquisition option '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 17018
+    },
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
         "code": 18000
@@ -4639,6 +5036,10 @@
         "category": "Suggestion",
         "code": 80007
     },
+    "Numeric literals with absolute values equal to 2^53 or greater are too large to be represented accurately as integers.": {
+        "category": "Suggestion",
+        "code": 80008
+    },
 
     "Add missing 'super()' call": {
         "category": "Message",
@@ -4652,7 +5053,7 @@
         "category": "Message",
         "code": 90003
     },
-    "Remove declaration for: '{0}'": {
+    "Remove unused declaration for: '{0}'": {
         "category": "Message",
         "code": 90004
     },
@@ -4775,6 +5176,14 @@
     "Add parameter name": {
         "category": "Message",
         "code": 90034
+    },
+    "Declare private property '{0}'": {
+        "category": "Message",
+        "code": 90035
+    },
+    "Declare a private field named '{0}'.": {
+        "category": "Message",
+        "code": 90053
     },
     "Convert function to an ES2015 class": {
         "category": "Message",
@@ -5032,6 +5441,14 @@
         "category": "Message",
         "code": 95066
     },
+    "Add missing call parentheses": {
+        "category": "Message",
+        "code": 95067
+    },
+    "Add all missing call parentheses": {
+        "category": "Message",
+        "code": 95068
+    },
     "Add 'unknown' conversion for non-overlapping types": {
         "category": "Message",
         "code": 95069
@@ -5108,7 +5525,98 @@
         "category": "Message",
         "code": 95087
     },
-
+    "Enable the '--jsx' flag in your configuration file": {
+        "category": "Message",
+        "code": 95088
+    },
+    "Add 'await' to initializers": {
+        "category": "Message",
+        "code": 95089
+    },
+    "Extract to interface": {
+        "category": "Message",
+        "code": 95090
+    },
+    "Convert to a bigint numeric literal": {
+        "category": "Message",
+        "code": 95091
+    },
+    "Convert all to bigint numeric literals": {
+        "category": "Message",
+        "code": 95092
+    },
+    "Convert 'const' to 'let'": {
+        "category": "Message",
+        "code": 95093
+    },
+    "Prefix with 'declare'": {
+        "category": "Message",
+        "code": 95094
+    },
+    "Prefix all incorrect property declarations with 'declare'": {
+        "category": "Message",
+        "code": 95095
+    },
+    "Convert to template string": {
+        "category": "Message",
+        "code": 95096
+    },
+    "Add 'export {}' to make this file into a module": {
+        "category": "Message",
+        "code": 95097
+    },
+    "Set the 'target' option in your configuration file to '{0}'": {
+        "category": "Message",
+        "code": 95098
+    },
+    "Set the 'module' option in your configuration file to '{0}'": {
+        "category": "Message",
+        "code": 95099
+    },
+    "Convert invalid character to its html entity code": {
+        "category": "Message",
+        "code": 95100
+    },
+    "Convert all invalid characters to HTML entity code": {
+        "category": "Message",
+        "code": 95101
+    },
+    "Add '@class' tag": {
+        "category": "Message",
+        "code": 95102
+    },
+    "Add '@this' tag": {
+        "category": "Message",
+        "code": 95103
+    },
+    "Add 'this' parameter.": {
+        "category": "Message",
+        "code": 95104
+    },
+    "Convert function expression '{0}' to arrow function": {
+        "category": "Message",
+        "code": 95105
+    },
+    "Convert function declaration '{0}' to arrow function": {
+        "category": "Message",
+        "code": 95106
+    },
+    "Fix all implicit-'this' errors": {
+        "category": "Message",
+        "code": 95107
+    },
+    "Wrap invalid character in an expression container": {
+        "category": "Message",
+        "code": 95108
+    },
+    "Wrap all invalid characters in an expression container": {
+        "category": "Message",
+        "code": 95109
+    },
+    "Visit https://aka.ms/tsconfig.json to read more about this file": {
+        "category": "Message",
+        "code": 95110
+    },
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
         "code": 18004
@@ -5120,5 +5628,81 @@
     "JSX expressions may not use the comma operator. Did you mean to write an array?": {
         "category": "Error",
         "code": 18007
+    },
+    "Private identifiers cannot be used as parameters": {
+        "category": "Error",
+        "code": 18009
+    },
+    "An accessibility modifier cannot be used with a private identifier.": {
+        "category": "Error",
+        "code": 18010
+    },
+    "The operand of a 'delete' operator cannot be a private identifier.": {
+        "category": "Error",
+        "code": 18011
+    },
+    "'#constructor' is a reserved word.": {
+        "category": "Error",
+        "code": 18012
+    },
+    "Property '{0}' is not accessible outside class '{1}' because it has a private identifier.": {
+        "category": "Error",
+        "code": 18013
+    },
+    "The property '{0}' cannot be accessed on type '{1}' within this class because it is shadowed by another private identifier with the same spelling.": {
+        "category": "Error",
+        "code": 18014
+    },
+    "Property '{0}' in type '{1}' refers to a different member that cannot be accessed from within type '{2}'.": {
+        "category": "Error",
+        "code": 18015
+    },
+    "Private identifiers are not allowed outside class bodies.": {
+        "category": "Error",
+        "code": 18016
+    },
+    "The shadowing declaration of '{0}' is defined here": {
+        "category": "Error",
+        "code": 18017
+    },
+    "The declaration of '{0}' that you probably intended to use is defined here": {
+        "category": "Error",
+        "code": 18018
+    },
+    "'{0}' modifier cannot be used with a private identifier": {
+        "category": "Error",
+        "code": 18019
+    },
+    "A method cannot be named with a private identifier.": {
+        "category": "Error",
+        "code": 18022
+    },
+    "An accessor cannot be named with a private identifier.": {
+        "category": "Error",
+        "code": 18023
+    },
+    "An enum member cannot be named with a private identifier.": {
+        "category": "Error",
+        "code": 18024
+    },
+    "'#!' can only be used at the start of a file.": {
+        "category": "Error",
+        "code": 18026
+    },
+    "Compiler reserves name '{0}' when emitting private identifier downlevel.": {
+        "category": "Error",
+        "code": 18027
+    },
+    "Private identifiers are only available when targeting ECMAScript 2015 and higher.": {
+        "category": "Error",
+        "code": 18028
+    },
+    "Private identifiers are not allowed in variable declarations.": {
+        "category": "Error",
+        "code": 18029
+    },
+    "An optional chain cannot contain private identifiers.": {
+        "category": "Error",
+        "code": 18030
     }
 }

@@ -649,7 +649,7 @@ declare function toKeys<a>(values: a[], toKey: (value: a) => string): string[];
 >value : a
 
 toKeys(data, keyOf);  // Error
->toKeys(data, keyOf) : any
+>toKeys(data, keyOf) : string[]
 >toKeys : <a>(values: a[], toKey: (value: a) => string) => string[]
 >data : Data[]
 >keyOf : <a>(value: { key: a; }) => a

@@ -144,6 +144,7 @@ function f26(x: {}, y: unknown, z: any) {
     let o1 = { a: 42, ...x };  // { a: number }
     let o2 = { a: 42, ...x, ...y };  // unknown
     let o3 = { a: 42, ...x, ...y, ...z };  // any
+    let o4 = { a: 42, ...z }; // any
 }
 
 // Functions with unknown return type don't need return expressions

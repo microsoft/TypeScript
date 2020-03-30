@@ -27,6 +27,7 @@ class Bar {
 //// [yoha.js]
 "use strict";
 exports.__esModule = true;
+exports.Yoha = void 0;
 // https://github.com/Microsoft/TypeScript/issues/19799
 var Yoha = /** @class */ (function () {
     function Yoha() {
