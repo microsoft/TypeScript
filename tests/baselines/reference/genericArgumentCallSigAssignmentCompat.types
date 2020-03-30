@@ -27,11 +27,11 @@ declare var _: Underscore.Static;
 // No error, Call signatures of types '<T>(value: T) => T' and 'Underscore.Iterator<{}, boolean>' are compatible when instantiated with any.
 // Ideally, we would not have a generic signature here, because it should be instantiated with {} during inferential typing
 _.all([true, 1, null, 'yes'], _.identity);
->_.all([true, 1, null, 'yes'], _.identity) : any
+>_.all([true, 1, null, 'yes'], _.identity) : boolean
 >_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => boolean
 >_ : Underscore.Static
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => boolean
->[true, 1, null, 'yes'] : (string | number | boolean)[]
+>[true, 1, null, 'yes'] : (string | number | true)[]
 >true : true
 >1 : 1
 >null : null

@@ -1,45 +1,52 @@
 /* @internal */
 namespace ts {
     export namespace Debug {
-        export let currentAssertionLevel = AssertionLevel.None;
+        let currentAssertionLevel = AssertionLevel.None;
+
+        // eslint-disable-next-line prefer-const
         export let isDebugging = false;
+
+        type AssertionKeys = MatchingKeys<typeof Debug, AnyFunction>;
+
+        const assertionCache: Partial<Record<AssertionKeys, { level: AssertionLevel, assertion: AnyFunction }>> = {};
+
+        export function getAssertionLevel() {
+            return currentAssertionLevel;
+        }
+
+        export function setAssertionLevel(level: AssertionLevel) {
+            const prevAssertionLevel = currentAssertionLevel;
+            currentAssertionLevel = level;
+
+            if (level > prevAssertionLevel) {
+                // restore assertion functions for the current assertion level (see `shouldAssertFunction`).
+                for (const key of getOwnKeys(assertionCache) as AssertionKeys[]) {
+                    const cachedFunc = assertionCache[key];
+                    if (cachedFunc !== undefined && Debug[key] !== cachedFunc.assertion && level >= cachedFunc.level) {
+                        (Debug as any)[key] = cachedFunc;
+                        assertionCache[key] = undefined;
+                    }
+                }
+            }
+        }
 
         export function shouldAssert(level: AssertionLevel): boolean {
             return currentAssertionLevel >= level;
         }
 
-        export function assert(expression: boolean, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: AnyFunction): void {
-            if (!expression) {
-                if (verboseDebugInfo) {
-                    message += "\r\nVerbose Debug Information: " + (typeof verboseDebugInfo === "string" ? verboseDebugInfo : verboseDebugInfo());
-                }
-                fail(message ? "False expression: " + message : "False expression.", stackCrawlMark || assert);
+        /**
+         * Tests whether an assertion function should be executed. If it shouldn't, it is cached and replaced with `ts.noop`.
+         * Replaced assertion functions are restored when `Debug.setAssertionLevel` is set to a high enough level.
+         * @param level The minimum assertion level required.
+         * @param name The name of the current assertion function.
+         */
+        function shouldAssertFunction<K extends AssertionKeys>(level: AssertionLevel, name: K): boolean {
+            if (!shouldAssert(level)) {
+                assertionCache[name] = { level, assertion: Debug[name] };
+                (Debug as any)[name] = noop;
+                return false;
             }
-        }
-
-        export function assertEqual<T>(a: T, b: T, msg?: string, msg2?: string): void {
-            if (a !== b) {
-                const message = msg ? msg2 ? `${msg} ${msg2}` : msg : "";
-                fail(`Expected ${a} === ${b}. ${message}`);
-            }
-        }
-
-        export function assertLessThan(a: number, b: number, msg?: string): void {
-            if (a >= b) {
-                fail(`Expected ${a} < ${b}. ${msg || ""}`);
-            }
-        }
-
-        export function assertLessThanOrEqual(a: number, b: number): void {
-            if (a > b) {
-                fail(`Expected ${a} <= ${b}`);
-            }
-        }
-
-        export function assertGreaterThanOrEqual(a: number, b: number): void {
-            if (a < b) {
-                fail(`Expected ${a} >= ${b}`);
-            }
+            return true;
         }
 
         export function fail(message?: string, stackCrawlMark?: AnyFunction): never {
@@ -51,21 +58,161 @@ namespace ts {
             throw e;
         }
 
-        export function assertDefined<T>(value: T | null | undefined, message?: string): T {
-            if (value === undefined || value === null) return fail(message);
+        export function failBadSyntaxKind(node: Node, message?: string, stackCrawlMark?: AnyFunction): never {
+            return fail(
+                `${message || "Unexpected node."}\r\nNode ${formatSyntaxKind(node.kind)} was unexpected.`,
+                stackCrawlMark || failBadSyntaxKind);
+        }
+
+        export function assert(expression: unknown, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: AnyFunction): asserts expression {
+            if (!expression) {
+                message = message ? `False expression: ${message}` : "False expression.";
+                if (verboseDebugInfo) {
+                    message += "\r\nVerbose Debug Information: " + (typeof verboseDebugInfo === "string" ? verboseDebugInfo : verboseDebugInfo());
+                }
+                fail(message, stackCrawlMark || assert);
+            }
+        }
+
+        export function assertEqual<T>(a: T, b: T, msg?: string, msg2?: string, stackCrawlMark?: AnyFunction): void {
+            if (a !== b) {
+                const message = msg ? msg2 ? `${msg} ${msg2}` : msg : "";
+                fail(`Expected ${a} === ${b}. ${message}`, stackCrawlMark || assertEqual);
+            }
+        }
+
+        export function assertLessThan(a: number, b: number, msg?: string, stackCrawlMark?: AnyFunction): void {
+            if (a >= b) {
+                fail(`Expected ${a} < ${b}. ${msg || ""}`, stackCrawlMark || assertLessThan);
+            }
+        }
+
+        export function assertLessThanOrEqual(a: number, b: number, stackCrawlMark?: AnyFunction): void {
+            if (a > b) {
+                fail(`Expected ${a} <= ${b}`, stackCrawlMark || assertLessThanOrEqual);
+            }
+        }
+
+        export function assertGreaterThanOrEqual(a: number, b: number, stackCrawlMark?: AnyFunction): void {
+            if (a < b) {
+                fail(`Expected ${a} >= ${b}`, stackCrawlMark || assertGreaterThanOrEqual);
+            }
+        }
+
+        export function assertIsDefined<T>(value: T, message?: string, stackCrawlMark?: AnyFunction): asserts value is NonNullable<T> {
+            // eslint-disable-next-line no-null/no-null
+            if (value === undefined || value === null) {
+                fail(message, stackCrawlMark || assertIsDefined);
+            }
+        }
+
+        export function checkDefined<T>(value: T | null | undefined, message?: string, stackCrawlMark?: AnyFunction): T {
+            assertIsDefined(value, message, stackCrawlMark || checkDefined);
             return value;
         }
 
-        export function assertEachDefined<T, A extends ReadonlyArray<T>>(value: A, message?: string): A {
+        /**
+         * @deprecated Use `checkDefined` to check whether a value is defined inline. Use `assertIsDefined` to check whether
+         * a value is defined at the statement level.
+         */
+        export const assertDefined = checkDefined;
+
+        export function assertEachIsDefined<T extends Node>(value: NodeArray<T>, message?: string, stackCrawlMark?: AnyFunction): asserts value is NodeArray<T>;
+        export function assertEachIsDefined<T>(value: readonly T[], message?: string, stackCrawlMark?: AnyFunction): asserts value is readonly NonNullable<T>[];
+        export function assertEachIsDefined<T>(value: readonly T[], message?: string, stackCrawlMark?: AnyFunction) {
             for (const v of value) {
-                assertDefined(v, message);
+                assertIsDefined(v, message, stackCrawlMark || assertEachIsDefined);
             }
+        }
+
+        export function checkEachDefined<T, A extends readonly T[]>(value: A, message?: string, stackCrawlMark?: AnyFunction): A {
+            assertEachIsDefined(value, message, stackCrawlMark || checkEachDefined);
             return value;
         }
+
+        /**
+         * @deprecated Use `checkEachDefined` to check whether the elements of an array are defined inline. Use `assertEachIsDefined` to check whether
+         * the elements of an array are defined at the statement level.
+         */
+        export const assertEachDefined = checkEachDefined;
 
         export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
-            const detail = typeof member === "object" && "kind" in member && "pos" in member && formatSyntaxKind ? "SyntaxKind: " + formatSyntaxKind((member as Node).kind) : JSON.stringify(member);
+            const detail = typeof member === "object" && hasProperty(member, "kind") && hasProperty(member, "pos") && formatSyntaxKind ? "SyntaxKind: " + formatSyntaxKind((member as Node).kind) : JSON.stringify(member);
             return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
+        }
+
+        export function assertEachNode<T extends Node, U extends T>(nodes: NodeArray<T>, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is NodeArray<U>;
+        export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[], test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[];
+        export function assertEachNode(nodes: readonly Node[], test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction): void;
+        export function assertEachNode(nodes: readonly Node[], test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction) {
+            if (shouldAssertFunction(AssertionLevel.Normal, "assertEachNode")) {
+                assert(
+                    test === undefined || every(nodes, test),
+                    message || "Unexpected node.",
+                    () => `Node array did not pass test '${getFunctionName(test)}'.`,
+                    stackCrawlMark || assertEachNode);
+            }
+        }
+
+        export function assertNode<T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U;
+        export function assertNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
+        export function assertNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+            if (shouldAssertFunction(AssertionLevel.Normal, "assertNode")) {
+                assert(
+                    node !== undefined && (test === undefined || test(node)),
+                    message || "Unexpected node.",
+                    () => `Node ${formatSyntaxKind(node!.kind)} did not pass test '${getFunctionName(test!)}'.`,
+                    stackCrawlMark || assertNode);
+            }
+        }
+
+        export function assertNotNode<T extends Node, U extends T>(node: T | undefined, test: (node: Node) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is Exclude<T, U>;
+        export function assertNotNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
+        export function assertNotNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+            if (shouldAssertFunction(AssertionLevel.Normal, "assertNotNode")) {
+                assert(
+                    node === undefined || test === undefined || !test(node),
+                    message || "Unexpected node.",
+                    () => `Node ${formatSyntaxKind(node!.kind)} should not have passed test '${getFunctionName(test!)}'.`,
+                    stackCrawlMark || assertNotNode);
+            }
+        }
+
+        export function assertOptionalNode<T extends Node, U extends T>(node: T, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U;
+        export function assertOptionalNode<T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U | undefined;
+        export function assertOptionalNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
+        export function assertOptionalNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+            if (shouldAssertFunction(AssertionLevel.Normal, "assertOptionalNode")) {
+                assert(
+                    test === undefined || node === undefined || test(node),
+                    message || "Unexpected node.",
+                    () => `Node ${formatSyntaxKind(node!.kind)} did not pass test '${getFunctionName(test!)}'.`,
+                    stackCrawlMark || assertOptionalNode);
+            }
+        }
+
+        export function assertOptionalToken<T extends Node, K extends SyntaxKind>(node: T, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K }>;
+        export function assertOptionalToken<T extends Node, K extends SyntaxKind>(node: T | undefined, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K }> | undefined;
+        export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
+        export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+            if (shouldAssertFunction(AssertionLevel.Normal, "assertOptionalToken")) {
+                assert(
+                    kind === undefined || node === undefined || node.kind === kind,
+                    message || "Unexpected node.",
+                    () => `Node ${formatSyntaxKind(node!.kind)} was not a '${formatSyntaxKind(kind)}' token.`,
+                    stackCrawlMark || assertOptionalToken);
+            }
+        }
+
+        export function assertMissingNode(node: Node | undefined, message?: string, stackCrawlMark?: AnyFunction): asserts node is undefined;
+        export function assertMissingNode(node: Node | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+            if (shouldAssertFunction(AssertionLevel.Normal, "assertMissingNode")) {
+                assert(
+                    node === undefined,
+                    message || "Unexpected node.",
+                    () => `Node ${formatSyntaxKind(node!.kind)} was unexpected'.`,
+                    stackCrawlMark || assertMissingNode);
+            }
         }
 
         export function getFunctionName(func: AnyFunction) {
@@ -97,11 +244,13 @@ namespace ts {
             if (isFlags) {
                 let result = "";
                 let remainingFlags = value;
-                for (let i = members.length - 1; i >= 0 && remainingFlags !== 0; i--) {
-                    const [enumValue, enumName] = members[i];
-                    if (enumValue !== 0 && (remainingFlags & enumValue) === enumValue) {
+                for (const [enumValue, enumName] of members) {
+                    if (enumValue > value) {
+                        break;
+                    }
+                    if (enumValue !== 0 && enumValue & value) {
+                        result = `${result}${result ? "|" : ""}${enumName}`;
                         remainingFlags &= ~enumValue;
-                        result = `${enumName}${result ? "|" : ""}${result}`;
                     }
                 }
                 if (remainingFlags === 0) {
@@ -162,53 +311,41 @@ namespace ts {
             return formatEnum(flags, (<any>ts).ObjectFlags, /*isFlags*/ true);
         }
 
-        export function failBadSyntaxKind(node: Node, message?: string): never {
-            return fail(
-                `${message || "Unexpected node."}\r\nNode ${formatSyntaxKind(node.kind)} was unexpected.`,
-                failBadSyntaxKind);
+        let isDebugInfoEnabled = false;
+
+        interface ExtendedDebugModule {
+            init(_ts: typeof ts): void;
+            formatControlFlowGraph(flowNode: FlowNode): string;
         }
 
-        export const assertEachNode = shouldAssert(AssertionLevel.Normal)
-            ? (nodes: Node[], test: (node: Node) => boolean, message?: string): void => assert(
-                test === undefined || every(nodes, test),
-                message || "Unexpected node.",
-                () => `Node array did not pass test '${getFunctionName(test)}'.`,
-                assertEachNode)
-            : noop;
+        let extendedDebugModule: ExtendedDebugModule | undefined;
 
-        export const assertNode = shouldAssert(AssertionLevel.Normal)
-            ? (node: Node | undefined, test: ((node: Node | undefined) => boolean) | undefined, message?: string): void => assert(
-                test === undefined || test(node),
-                message || "Unexpected node.",
-                () => `Node ${formatSyntaxKind(node!.kind)} did not pass test '${getFunctionName(test!)}'.`,
-                assertNode)
-            : noop;
+        function extendedDebug() {
+            enableDebugInfo();
+            if (!extendedDebugModule) {
+                throw new Error("Debugging helpers could not be loaded.");
+            }
+            return extendedDebugModule;
+        }
 
-        export const assertOptionalNode = shouldAssert(AssertionLevel.Normal)
-            ? (node: Node, test: (node: Node) => boolean, message?: string): void => assert(
-                test === undefined || node === undefined || test(node),
-                message || "Unexpected node.",
-                () => `Node ${formatSyntaxKind(node.kind)} did not pass test '${getFunctionName(test)}'.`,
-                assertOptionalNode)
-            : noop;
+        export function printControlFlowGraph(flowNode: FlowNode) {
+            return console.log(formatControlFlowGraph(flowNode));
+        }
 
-        export const assertOptionalToken = shouldAssert(AssertionLevel.Normal)
-            ? (node: Node, kind: SyntaxKind, message?: string): void => assert(
-                kind === undefined || node === undefined || node.kind === kind,
-                message || "Unexpected node.",
-                () => `Node ${formatSyntaxKind(node.kind)} was not a '${formatSyntaxKind(kind)}' token.`,
-                assertOptionalToken)
-            : noop;
+        export function formatControlFlowGraph(flowNode: FlowNode) {
+            return extendedDebug().formatControlFlowGraph(flowNode);
+        }
 
-        export const assertMissingNode = shouldAssert(AssertionLevel.Normal)
-            ? (node: Node, message?: string): void => assert(
-                node === undefined,
-                message || "Unexpected node.",
-                () => `Node ${formatSyntaxKind(node.kind)} was unexpected'.`,
-                assertMissingNode)
-            : noop;
-
-        let isDebugInfoEnabled = false;
+        export function attachFlowNodeDebugInfo(flowNode: FlowNode) {
+            if (isDebugInfoEnabled) {
+                if (!("__debugFlowFlags" in flowNode)) { // eslint-disable-line no-in-operator
+                    Object.defineProperties(flowNode, {
+                        __debugFlowFlags: { get(this: FlowNode) { return formatEnum(this.flags, (ts as any).FlowFlags, /*isFlags*/ true); } },
+                        __debugToString: { value(this: FlowNode) { return formatControlFlowGraph(this); } }
+                    });
+                }
+            }
+        }
 
         /**
          * Injects debug information into frequently used types.
@@ -255,7 +392,23 @@ namespace ts {
                 }
             }
 
+            // attempt to load extended debugging information
+            try {
+                if (sys && sys.require) {
+                    const basePath = getDirectoryPath(resolvePath(sys.getExecutingFilePath()));
+                    const result = sys.require(basePath, "./compiler-debug") as RequireResult<ExtendedDebugModule>;
+                    if (!result.error) {
+                        result.module.init(ts);
+                        extendedDebugModule = result.module;
+                    }
+                }
+            }
+            catch {
+                // do nothing
+            }
+
             isDebugInfoEnabled = true;
         }
+
     }
 }

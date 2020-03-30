@@ -1,4 +1,4 @@
-main.ts(1,21): error TS2307: Cannot find module 'angular2/core'.
+main.ts(1,21): error TS2307: Cannot find module 'angular2/core' or its corresponding type declarations.
 
 
 ==== tsconfig.json (0 errors) ====
@@ -20,7 +20,7 @@ main.ts(1,21): error TS2307: Cannot find module 'angular2/core'.
 ==== main.ts (1 errors) ====
     import * as ng from "angular2/core";
                         ~~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'angular2/core'.
+!!! error TS2307: Cannot find module 'angular2/core' or its corresponding type declarations.
     
     declare function foo(...args: any[]);
     

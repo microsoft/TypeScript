@@ -2,20 +2,20 @@
 namespace ts.refactor {
     const refactorName = "Move to a new file";
     registerRefactor(refactorName, {
-        getAvailableActions(context): ReadonlyArray<ApplicableRefactorInfo> {
+        getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             if (!context.preferences.allowTextChangesInNewFiles || getStatementsToMove(context) === undefined) return emptyArray;
             const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);
             return [{ name: refactorName, description, actions: [{ name: refactorName, description }] }];
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === refactorName, "Wrong refactor invoked");
-            const statements = Debug.assertDefined(getStatementsToMove(context));
+            const statements = Debug.checkDefined(getStatementsToMove(context));
             const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, statements, t, context.host, context.preferences));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
     });
 
-    interface RangeToMove { readonly toMove: ReadonlyArray<Statement>; readonly afterLast: Statement | undefined; }
+    interface RangeToMove { readonly toMove: readonly Statement[]; readonly afterLast: Statement | undefined; }
     function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
         const { file } = context;
         const range = createTextRangeFromSpan(getRefactorContextSpan(context));
@@ -61,8 +61,8 @@ namespace ts.refactor {
         readonly afterLast: Statement | undefined;
     }
     interface ToMove {
-        readonly all: ReadonlyArray<Statement>;
-        readonly ranges: ReadonlyArray<StatementRange>;
+        readonly all: readonly Statement[];
+        readonly ranges: readonly StatementRange[];
     }
 
     // Filters imports out of the range of statements to move. Imports will be copied to the new file anyway, and may still be needed in the old file.
@@ -109,7 +109,7 @@ namespace ts.refactor {
 
     function getNewStatementsAndRemoveFromOldFile(
         oldFile: SourceFile, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, newModuleName: string, preferences: UserPreferences,
-    ): ReadonlyArray<Statement> {
+    ): readonly Statement[] {
         const checker = program.getTypeChecker();
 
         if (!oldFile.externalModuleIndicator && !oldFile.commonJsModuleIndicator) {
@@ -121,7 +121,7 @@ namespace ts.refactor {
         const quotePreference = getQuotePreference(oldFile, preferences);
         const importsFromNewFile = createOldFileImportsFromNewFile(usage.oldFileImportsFromNewFile, newModuleName, useEs6ModuleSyntax, quotePreference);
         if (importsFromNewFile) {
-            insertImport(changes, oldFile, importsFromNewFile);
+            insertImport(changes, oldFile, importsFromNewFile, /*blankLineBetween*/ true);
         }
 
         deleteUnusedOldImports(oldFile, toMove.all, changes, usage.unusedImportsFromOldFile, checker);
@@ -135,13 +135,13 @@ namespace ts.refactor {
         ];
     }
 
-    function deleteMovedStatements(sourceFile: SourceFile, moved: ReadonlyArray<StatementRange>, changes: textChanges.ChangeTracker) {
+    function deleteMovedStatements(sourceFile: SourceFile, moved: readonly StatementRange[], changes: textChanges.ChangeTracker) {
         for (const { first, afterLast } of moved) {
             changes.deleteNodeRangeExcludingEnd(sourceFile, first, afterLast);
         }
     }
 
-    function deleteUnusedOldImports(oldFile: SourceFile, toMove: ReadonlyArray<Statement>, changes: textChanges.ChangeTracker, toDelete: ReadonlySymbolSet, checker: TypeChecker) {
+    function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Statement[], changes: textChanges.ChangeTracker, toDelete: ReadonlySymbolSet, checker: TypeChecker) {
         for (const statement of oldFile.statements) {
             if (contains(toMove, statement)) continue;
             forEachImportInStatement(statement, i => deleteUnusedImports(oldFile, i, changes, name => toDelete.has(checker.getSymbolAtLocation(name)!)));
@@ -283,7 +283,7 @@ namespace ts.refactor {
         return makeImportOrRequire(defaultImport, imports, newFileNameWithExtension, useEs6Imports, quotePreference);
     }
 
-    function makeImportOrRequire(defaultImport: Identifier | undefined, imports: ReadonlyArray<string>, path: string, useEs6Imports: boolean, quotePreference: QuotePreference): Statement | undefined {
+    function makeImportOrRequire(defaultImport: Identifier | undefined, imports: readonly string[], path: string, useEs6Imports: boolean, quotePreference: QuotePreference): Statement | undefined {
         path = ensurePathIsNonModuleName(path);
         if (useEs6Imports) {
             const specifiers = imports.map(i => createImportSpecifier(/*propertyName*/ undefined, createIdentifier(i)));
@@ -306,11 +306,11 @@ namespace ts.refactor {
         return createCall(createIdentifier("require"), /*typeArguments*/ undefined, [moduleSpecifier]);
     }
 
-    function addExports(sourceFile: SourceFile, toMove: ReadonlyArray<Statement>, needExport: ReadonlySymbolSet, useEs6Exports: boolean): ReadonlyArray<Statement> {
+    function addExports(sourceFile: SourceFile, toMove: readonly Statement[], needExport: ReadonlySymbolSet, useEs6Exports: boolean): readonly Statement[] {
         return flatMap(toMove, statement => {
             if (isTopLevelDeclarationStatement(statement) &&
                 !isExported(sourceFile, statement, useEs6Exports) &&
-                forEachTopLevelDeclaration(statement, d => needExport.has(Debug.assertDefined(d.symbol)))) {
+                forEachTopLevelDeclaration(statement, d => needExport.has(Debug.checkDefined(d.symbol)))) {
                 const exports = addExport(statement, useEs6Exports);
                 if (exports) return exports;
             }
@@ -353,7 +353,7 @@ namespace ts.refactor {
                     changes.replaceNode(
                         sourceFile,
                         importDecl.importClause,
-                        updateImportClause(importDecl.importClause, name, /*namedBindings*/ undefined)
+                        updateImportClause(importDecl.importClause, name, /*namedBindings*/ undefined, importDecl.importClause.isTypeOnly)
                     );
                 }
                 else if (namedBindings.kind === SyntaxKind.NamedImports) {
@@ -398,7 +398,7 @@ namespace ts.refactor {
         checker: TypeChecker,
         useEs6ModuleSyntax: boolean,
         quotePreference: QuotePreference,
-    ): ReadonlyArray<SupportedImportStatement> {
+    ): readonly SupportedImportStatement[] {
         const copiedOldImports: SupportedImportStatement[] = [];
         for (const oldStatement of oldFile.statements) {
             forEachImportInStatement(oldStatement, i => {
@@ -459,7 +459,7 @@ namespace ts.refactor {
         // Subset of oldImportsNeededByNewFile that are will no longer be used in the old file.
         readonly unusedImportsFromOldFile: ReadonlySymbolSet;
     }
-    function getUsageInfo(oldFile: SourceFile, toMove: ReadonlyArray<Statement>, checker: TypeChecker): UsageInfo {
+    function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker: TypeChecker): UsageInfo {
         const movedSymbols = new SymbolSet();
         const oldImportsNeededByNewFile = new SymbolSet();
         const newFileImportsFromOldFile = new SymbolSet();
@@ -472,7 +472,7 @@ namespace ts.refactor {
 
         for (const statement of toMove) {
             forEachTopLevelDeclaration(statement, decl => {
-                movedSymbols.add(Debug.assertDefined(isExpressionStatement(decl) ? checker.getSymbolAtLocation(decl.expression.left) : decl.symbol, "Need a symbol here"));
+                movedSymbols.add(Debug.checkDefined(isExpressionStatement(decl) ? checker.getSymbolAtLocation(decl.expression.left) : decl.symbol, "Need a symbol here"));
             });
         }
         for (const statement of toMove) {
@@ -708,7 +708,7 @@ namespace ts.refactor {
     }
 
     function nameOfTopLevelDeclaration(d: TopLevelDeclaration): Identifier | undefined {
-        return isExpressionStatement(d) ? d.expression.left.name : tryCast(d.name, isIdentifier);
+        return isExpressionStatement(d) ? tryCast(d.expression.left.name, isIdentifier) : tryCast(d.name, isIdentifier);
     }
 
     function getTopLevelDeclarationStatement(d: TopLevelDeclaration): TopLevelDeclarationStatement {
@@ -743,7 +743,7 @@ namespace ts.refactor {
         }
     }
 
-    function addExport(decl: TopLevelDeclarationStatement, useEs6Exports: boolean): ReadonlyArray<Statement> | undefined {
+    function addExport(decl: TopLevelDeclarationStatement, useEs6Exports: boolean): readonly Statement[] | undefined {
         return useEs6Exports ? [addEs6Export(decl)] : addCommonjsExport(decl);
     }
     function addEs6Export(d: TopLevelDeclarationStatement): TopLevelDeclarationStatement {
@@ -771,10 +771,10 @@ namespace ts.refactor {
                 return Debug.assertNever(d, `Unexpected declaration kind ${(d as DeclarationStatement).kind}`);
         }
     }
-    function addCommonjsExport(decl: TopLevelDeclarationStatement): ReadonlyArray<Statement> | undefined {
+    function addCommonjsExport(decl: TopLevelDeclarationStatement): readonly Statement[] | undefined {
         return [decl, ...getNamesToExportInCommonJS(decl).map(createExportAssignment)];
     }
-    function getNamesToExportInCommonJS(decl: TopLevelDeclarationStatement): ReadonlyArray<string> {
+    function getNamesToExportInCommonJS(decl: TopLevelDeclarationStatement): readonly string[] {
         switch (decl.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ClassDeclaration:

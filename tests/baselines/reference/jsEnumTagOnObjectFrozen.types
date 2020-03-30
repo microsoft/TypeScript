@@ -1,6 +1,6 @@
 === tests/cases/compiler/usage.js ===
 const { Thing, useThing, cbThing } = require("./index");
->Thing : any
+>Thing : Readonly<{ a: string; b: string; }>
 >useThing : (x: string) => void
 >cbThing : (x: (x: string) => void) => void
 >require("./index") : typeof import("tests/cases/compiler/index")
@@ -10,9 +10,9 @@ const { Thing, useThing, cbThing } = require("./index");
 useThing(Thing.a);
 >useThing(Thing.a) : void
 >useThing : (x: string) => void
->Thing.a : error
->Thing : any
->a : any
+>Thing.a : string
+>Thing : Readonly<{ a: string; b: string; }>
+>a : string
 
 /**
  * @typedef {Object} LogEntry
@@ -66,9 +66,9 @@ const Thing = Object.freeze({
 
 exports.Thing = Thing;
 >exports.Thing = Thing : Readonly<{ a: string; b: string; }>
->exports.Thing : error
+>exports.Thing : Readonly<{ a: string; b: string; }>
 >exports : typeof import("tests/cases/compiler/index")
->Thing : any
+>Thing : Readonly<{ a: string; b: string; }>
 >Thing : Readonly<{ a: string; b: string; }>
 
 /**

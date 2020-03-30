@@ -95,6 +95,7 @@ module m4 {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.foo2 = exports.exports = exports.foo = exports.require = void 0;
     var require;
     (function (require) {
         var C = /** @class */ (function () {

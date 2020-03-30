@@ -347,6 +347,7 @@ export var tests: TestRunner = (function () {
 //// [duplicateLocalVariable1.js]
 "use strict";
 exports.__esModule = true;
+exports.tests = exports.TestRunner = exports.TestCase = void 0;
 / /;
 commonjs;
 var TestFileDir = ".\\TempTestFiles";

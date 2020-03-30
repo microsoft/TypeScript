@@ -103,9 +103,9 @@ var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
         var _this = this;
-        _this.s = 9;
         var x = 1; // Error
         _this = _super.call(this) || this;
+        _this.s = 9;
         "use strict";
         return _this;
     }

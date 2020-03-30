@@ -1,7 +1,7 @@
-tests/cases/compiler/amdDependencyCommentName4.ts(8,21): error TS2307: Cannot find module 'aliasedModule1'.
-tests/cases/compiler/amdDependencyCommentName4.ts(11,26): error TS2307: Cannot find module 'aliasedModule2'.
-tests/cases/compiler/amdDependencyCommentName4.ts(14,15): error TS2307: Cannot find module 'aliasedModule3'.
-tests/cases/compiler/amdDependencyCommentName4.ts(17,21): error TS2307: Cannot find module 'aliasedModule4'.
+tests/cases/compiler/amdDependencyCommentName4.ts(8,21): error TS2307: Cannot find module 'aliasedModule1' or its corresponding type declarations.
+tests/cases/compiler/amdDependencyCommentName4.ts(11,26): error TS2307: Cannot find module 'aliasedModule2' or its corresponding type declarations.
+tests/cases/compiler/amdDependencyCommentName4.ts(14,15): error TS2307: Cannot find module 'aliasedModule3' or its corresponding type declarations.
+tests/cases/compiler/amdDependencyCommentName4.ts(17,21): error TS2307: Cannot find module 'aliasedModule4' or its corresponding type declarations.
 
 
 ==== tests/cases/compiler/amdDependencyCommentName4.ts (4 errors) ====
@@ -14,22 +14,22 @@ tests/cases/compiler/amdDependencyCommentName4.ts(17,21): error TS2307: Cannot f
     
     import r1 = require("aliasedModule1");
                         ~~~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'aliasedModule1'.
+!!! error TS2307: Cannot find module 'aliasedModule1' or its corresponding type declarations.
     r1;
     
     import {p1, p2, p3} from "aliasedModule2";
                              ~~~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'aliasedModule2'.
+!!! error TS2307: Cannot find module 'aliasedModule2' or its corresponding type declarations.
     p1;
     
     import d from "aliasedModule3";
                   ~~~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'aliasedModule3'.
+!!! error TS2307: Cannot find module 'aliasedModule3' or its corresponding type declarations.
     d;
     
     import * as ns from "aliasedModule4";
                         ~~~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'aliasedModule4'.
+!!! error TS2307: Cannot find module 'aliasedModule4' or its corresponding type declarations.
     ns;
     
     import "unaliasedModule2";

@@ -9,7 +9,8 @@ var {while, return} = { while: 1, return: 2 };
 var {this, switch: { continue} } = { this: 1, switch: { continue: 2 }};
 var [debugger, if] = [1, 2];
 enum void {}
-
+function f(default: number) {}
+class C { m(null: string) {} }
 
 
 
@@ -38,3 +39,10 @@ if ()
 (function () {
 })( || ( = {}));
 void {};
+function f() { }
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.m = function (, string) { };
+    return C;
+}());

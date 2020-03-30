@@ -16,7 +16,7 @@ declare var x: ({
     "a-b"?: undefined;
 })[];
 declare var y: ({
-    ["a-b"]: string;
+    "a-b": string;
 } | {
     "a-b"?: undefined;
 })[];

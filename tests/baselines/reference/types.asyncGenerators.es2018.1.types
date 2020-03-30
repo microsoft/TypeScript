@@ -430,4 +430,13 @@ async function * awaitedType2() {
 >resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
 >1 : 1
 }
+async function * nextType1(): { next(...args: [] | [number | PromiseLike<number>]): any } {
+>nextType1 : () => { next(...args: [] | [number | PromiseLike<number>]): any; }
+>next : (...args: [] | [number | PromiseLike<number>]) => any
+>args : [] | [number | PromiseLike<number>]
+
+    const x = yield; // `number | PromiseLike<number>` (should not await TNext)
+>x : number | PromiseLike<number>
+>yield : number | PromiseLike<number>
+}
 

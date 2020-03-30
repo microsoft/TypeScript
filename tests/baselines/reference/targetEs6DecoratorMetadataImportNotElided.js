@@ -41,7 +41,7 @@ var MyComponent = /** @class */ (function () {
     Object.defineProperty(MyComponent.prototype, "ref", {
         get: function () { return this._ref; },
         set: function (value) { this._ref = value; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     __decorate([

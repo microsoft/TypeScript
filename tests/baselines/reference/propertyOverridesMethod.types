@@ -1,0 +1,17 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesMethod.ts ===
+class A {
+>A : A
+
+    m() { }
+>m : () => void
+}
+class B extends A {
+>B : B
+>A : A
+
+    m = () => 1
+>m : () => number
+>() => 1 : () => number
+>1 : 1
+}
+

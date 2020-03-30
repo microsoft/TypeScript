@@ -12,12 +12,14 @@ export function f() {
 //// [f1.js]
 "use strict";
 exports.__esModule = true;
+exports.f = void 0;
 function f() {
 }
 exports.f = f;
 //// [f2.js]
 "use strict";
 exports.__esModule = true;
+exports.f = void 0;
 function f() {
 }
 exports.f = f;

@@ -1,4 +1,6 @@
 namespace ts.tscWatch {
+    export const projects = `/user/username/projects`;
+    export const projectRoot = `${projects}/myproject`;
     export import WatchedSystem = TestFSWithWatch.TestServerHost;
     export type File = TestFSWithWatch.File;
     export type SymLink = TestFSWithWatch.SymLink;
@@ -21,35 +23,24 @@ namespace ts.tscWatch {
         content: "let y = 1"
     };
 
-    export function checkProgramActualFiles(program: Program, expectedFiles: ReadonlyArray<string>) {
+    export function checkProgramActualFiles(program: Program, expectedFiles: readonly string[]) {
         checkArray(`Program actual files`, program.getSourceFiles().map(file => file.fileName), expectedFiles);
     }
 
-    export function checkProgramRootFiles(program: Program, expectedFiles: ReadonlyArray<string>) {
+    export function checkProgramRootFiles(program: Program, expectedFiles: readonly string[]) {
         checkArray(`Program rootFileNames`, program.getRootFileNames(), expectedFiles);
     }
 
-    export interface Watch {
-        (): Program;
-        getBuilderProgram(): EmitAndSemanticDiagnosticsBuilderProgram;
-        close(): void;
+    export type Watch = WatchOfConfigFile<EmitAndSemanticDiagnosticsBuilderProgram> | WatchOfFilesAndCompilerOptions<EmitAndSemanticDiagnosticsBuilderProgram>;
+
+    export function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, optionsToExtend?: CompilerOptions, watchOptionsToExtend?: WatchOptions) {
+        const compilerHost = createWatchCompilerHostOfConfigFile(configFileName, optionsToExtend || {}, watchOptionsToExtend, host);
+        return createWatchProgram(compilerHost);
     }
 
-    export function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, optionsToExtend?: CompilerOptions, maxNumberOfFilesToIterateForInvalidation?: number) {
-        const compilerHost = createWatchCompilerHostOfConfigFile(configFileName, optionsToExtend || {}, host);
-        compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
-        const watch = createWatchProgram(compilerHost);
-        const result = (() => watch.getCurrentProgram().getProgram()) as Watch;
-        result.getBuilderProgram = () => watch.getCurrentProgram();
-        result.close = () => watch.close();
-        return result;
-    }
-
-    export function createWatchOfFilesAndCompilerOptions(rootFiles: string[], host: WatchedSystem, options: CompilerOptions = {}, maxNumberOfFilesToIterateForInvalidation?: number) {
-        const compilerHost = createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, host);
-        compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
-        const watch = createWatchProgram(compilerHost);
-        return () => watch.getCurrentProgram().getProgram();
+    export function createWatchOfFilesAndCompilerOptions(rootFiles: string[], host: WatchedSystem, options: CompilerOptions = {}, watchOptions?: WatchOptions) {
+        const compilerHost = createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, watchOptions, host);
+        return createWatchProgram(compilerHost);
     }
 
     const elapsedRegex = /^Elapsed:: [0-9]+ms/;
@@ -172,7 +163,7 @@ namespace ts.tscWatch {
         return hostOutputWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
     }
 
-    export function checkOutputErrorsInitial(host: WatchedSystem, errors: ReadonlyArray<Diagnostic> | ReadonlyArray<string>, disableConsoleClears?: boolean, logsBeforeErrors?: string[]) {
+    export function checkOutputErrorsInitial(host: WatchedSystem, errors: readonly Diagnostic[] | readonly string[], disableConsoleClears?: boolean, logsBeforeErrors?: string[]) {
         checkOutputErrors(
             host,
             [
@@ -185,7 +176,7 @@ namespace ts.tscWatch {
         );
     }
 
-    export function checkOutputErrorsIncremental(host: WatchedSystem, errors: ReadonlyArray<Diagnostic> | ReadonlyArray<string>, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
+    export function checkOutputErrorsIncremental(host: WatchedSystem, errors: readonly Diagnostic[] | readonly string[], disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
         checkOutputErrors(
             host,
             [
@@ -199,7 +190,7 @@ namespace ts.tscWatch {
         );
     }
 
-    export function checkOutputErrorsIncrementalWithExit(host: WatchedSystem, errors: ReadonlyArray<Diagnostic> | ReadonlyArray<string>, expectedExitCode: ExitStatus, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
+    export function checkOutputErrorsIncrementalWithExit(host: WatchedSystem, errors: readonly Diagnostic[] | readonly string[], expectedExitCode: ExitStatus, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
         checkOutputErrors(
             host,
             [
@@ -213,7 +204,7 @@ namespace ts.tscWatch {
         assert.equal(host.exitCode, expectedExitCode);
     }
 
-    export function checkNormalBuildErrors(host: WatchedSystem, errors: ReadonlyArray<Diagnostic> | ReadonlyArray<string>, reportErrorSummary?: boolean) {
+    export function checkNormalBuildErrors(host: WatchedSystem, errors: readonly Diagnostic[] | readonly string[], reportErrorSummary?: boolean) {
         checkOutputErrors(
             host,
             [
@@ -260,7 +251,7 @@ namespace ts.tscWatch {
     }
 
     export function getDiagnosticOfFileFromProgram(program: Program, filePath: string, start: number, length: number, message: DiagnosticMessage | DiagnosticMessageChain, ...args: (string | number)[]): Diagnostic {
-        return getDiagnosticOfFileFrom(program.getSourceFileByPath(toPath(filePath, program.getCurrentDirectory(), s => s.toLowerCase()))!,
+        return getDiagnosticOfFileFrom(program.getSourceFileByPath(toPath(filePath, program.getCurrentDirectory(), s => s.toLowerCase())),
             start, length, message, ...args);
     }
 
@@ -269,8 +260,170 @@ namespace ts.tscWatch {
         return getDiagnosticOfFile(program.getCompilerOptions().configFile!, configFile.content.indexOf(quotedOption), quotedOption.length, Diagnostics.Unknown_compiler_option_0, option);
     }
 
+    export function getUnknownDidYouMeanCompilerOption(program: Program, configFile: File, option: string, didYouMean: string) {
+        const quotedOption = `"${option}"`;
+        return getDiagnosticOfFile(program.getCompilerOptions().configFile!, configFile.content.indexOf(quotedOption), quotedOption.length, Diagnostics.Unknown_compiler_option_0_Did_you_mean_1, option, didYouMean);
+    }
+
     export function getDiagnosticModuleNotFoundOfFile(program: Program, file: File, moduleName: string) {
         const quotedModuleName = `"${moduleName}"`;
-        return getDiagnosticOfFileFromProgram(program, file.path, file.content.indexOf(quotedModuleName), quotedModuleName.length, Diagnostics.Cannot_find_module_0, moduleName);
+        return getDiagnosticOfFileFromProgram(program, file.path, file.content.indexOf(quotedModuleName), quotedModuleName.length, Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, moduleName);
+    }
+
+    export type TscWatchCompileChange = (
+        sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
+        programs: readonly CommandLineProgram[],
+        watchOrSolution: ReturnType<typeof executeCommandLine>
+    ) => string;
+    export interface TscWatchCheckOptions {
+        baselineSourceMap?: boolean;
+    }
+    export interface TscWatchCompileBase extends TscWatchCheckOptions {
+        scenario: string;
+        subScenario: string;
+        commandLineArgs: readonly string[];
+        changes: readonly TscWatchCompileChange[];
+    }
+    export interface TscWatchCompile extends TscWatchCompileBase {
+        sys: () => WatchedSystem;
+    }
+
+    export type SystemSnap = ReturnType<WatchedSystem["snap"]>;
+    function tscWatchCompile(input: TscWatchCompile) {
+        it("Generates files matching the baseline", () => {
+            const sys = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                fakes.patchHostForBuildInfoReadWrite(input.sys())
+            );
+            const {
+                scenario, subScenario,
+                commandLineArgs, changes,
+                baselineSourceMap
+            } = input;
+
+            if (!isWatch(commandLineArgs)) sys.exit = exitCode => sys.exitCode = exitCode;
+            const { cb, getPrograms } = commandLineCallbacks(sys);
+            const watchOrSolution = executeCommandLine(
+                sys,
+                cb,
+                commandLineArgs,
+            );
+            runWatchBaseline({
+                scenario,
+                subScenario,
+                commandLineArgs,
+                sys,
+                getPrograms,
+                baselineSourceMap,
+                changes,
+                watchOrSolution
+            });
+        });
+    }
+
+    export interface RunWatchBaseline extends TscWatchCompileBase {
+        sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles;
+        getPrograms: () => readonly CommandLineProgram[];
+        watchOrSolution: ReturnType<typeof executeCommandLine>;
+    }
+    export function runWatchBaseline({
+        scenario, subScenario, commandLineArgs,
+        getPrograms, sys,
+        baselineSourceMap,
+        changes, watchOrSolution
+    }: RunWatchBaseline) {
+        const baseline: string[] = [];
+        baseline.push(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}`);
+        let programs = watchBaseline({
+            baseline,
+            getPrograms,
+            sys,
+            oldSnap: undefined,
+            baselineSourceMap
+        });
+
+        for (const change of changes) {
+            const oldSnap = sys.snap();
+            const caption = change(sys, programs, watchOrSolution);
+            baseline.push(`Change:: ${caption}`, "");
+            programs = watchBaseline({
+                baseline,
+                getPrograms,
+                sys,
+                oldSnap,
+                baselineSourceMap
+            });
+        }
+        Harness.Baseline.runBaseline(`${isBuild(commandLineArgs) ?
+            isWatch(commandLineArgs) ? "tsbuild/watchMode" : "tsbuild" :
+            isWatch(commandLineArgs) ? "tscWatch" : "tsc"}/${scenario}/${subScenario.split(" ").join("-")}.js`, baseline.join("\r\n"));
+    }
+
+    function isWatch(commandLineArgs: readonly string[]) {
+        return forEach(commandLineArgs, arg => {
+            if (arg.charCodeAt(0) !== CharacterCodes.minus) return false;
+            const option = arg.slice(arg.charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
+            return option === "watch" || option === "w";
+        });
+    }
+
+    export interface WatchBaseline extends TscWatchCheckOptions {
+        baseline: string[];
+        sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles;
+        getPrograms: () => readonly CommandLineProgram[];
+        oldSnap: SystemSnap | undefined;
+    }
+    export function watchBaseline({ baseline, getPrograms, sys, oldSnap, baselineSourceMap }: WatchBaseline) {
+        if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
+        sys.diff(baseline, oldSnap);
+        sys.serializeOutput(baseline);
+        const programs = getPrograms();
+        for (const program of programs) {
+            baselineProgram(baseline, program);
+        }
+        sys.serializeWatches(baseline);
+        baseline.push(`exitCode:: ExitStatus.${ExitStatus[sys.exitCode as ExitStatus]}`, "");
+        sys.writtenFiles.forEach((value, key) => {
+            assert.equal(value, 1, `Expected to write file ${key} only once`);
+        });
+        sys.writtenFiles.clear();
+        return programs;
+    }
+
+    function baselineProgram(baseline: string[], [program, builderProgram]: CommandLineProgram) {
+        const options = program.getCompilerOptions();
+        baseline.push(`Program root files: ${JSON.stringify(program.getRootFileNames())}`);
+        baseline.push(`Program options: ${JSON.stringify(options)}`);
+        baseline.push("Program files::");
+        for (const file of program.getSourceFiles()) {
+            baseline.push(file.fileName);
+        }
+        baseline.push("");
+        if (!builderProgram) return;
+        const state = builderProgram.getState();
+        if (state.semanticDiagnosticsPerFile?.size) {
+            baseline.push("Semantic diagnostics in builder refreshed for::");
+            for (const file of program.getSourceFiles()) {
+                if (!state.semanticDiagnosticsFromOldState || !state.semanticDiagnosticsFromOldState.has(file.resolvedPath)) {
+                    baseline.push(file.fileName);
+                }
+            }
+        }
+        else {
+            baseline.push("No cached semantic diagnostics in the builder::");
+        }
+        baseline.push("");
+    }
+
+    export function verifyTscWatch(input: TscWatchCompile) {
+        describe(input.scenario, () => {
+            describe(input.subScenario, () => {
+                tscWatchCompile(input);
+            });
+        });
+    }
+
+    export function replaceFileText(sys: WatchedSystem, file: string, searchValue: string | RegExp, replaceValue: string) {
+        const content = Debug.checkDefined(sys.readFile(file));
+        sys.writeFile(file, content.replace(searchValue, replaceValue));
     }
 }

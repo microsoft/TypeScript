@@ -22,7 +22,7 @@ axios.m()
 module.exports = axios;
 >module.exports = axios : typeof Axios
 >module.exports : typeof Axios
->module : { "tests/cases/conformance/salsa/axios": typeof Axios; }
+>module : { "\"tests/cases/conformance/salsa/axios\"": typeof Axios; }
 >exports : typeof Axios
 >axios : Axios
 
@@ -30,7 +30,7 @@ module.exports.default = axios;
 >module.exports.default = axios : Axios
 >module.exports.default : Axios
 >module.exports : typeof Axios
->module : { "tests/cases/conformance/salsa/axios": typeof Axios; }
+>module : { "\"tests/cases/conformance/salsa/axios\"": typeof Axios; }
 >exports : typeof Axios
 >default : Axios
 >axios : Axios

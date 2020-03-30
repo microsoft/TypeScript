@@ -1,0 +1,13 @@
+=== tests/cases/conformance/jsdoc/declarations/source.js ===
+export class Thing {}
+>Thing : Symbol(Thing, Decl(source.js, 0, 0))
+
+export class OtherThing {}
+>OtherThing : Symbol(OtherThing, Decl(source.js, 0, 21))
+
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+export { Thing, OtherThing as default } from "./source";
+>Thing : Symbol(Thing, Decl(index.js, 0, 8))
+>OtherThing : Symbol(OtherThing, Decl(source.js, 0, 21))
+>default : Symbol(default, Decl(index.js, 0, 15))
+

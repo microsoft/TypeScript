@@ -1,0 +1,27 @@
+=== tests/cases/compiler/nestedCallbackErrorNotFlattened.ts ===
+type Cb<T> = {noAlias: () => T}["noAlias"]; // `"noAlias"` here prevents an alias symbol from being made
+>Cb : Symbol(Cb, Decl(nestedCallbackErrorNotFlattened.ts, 0, 0))
+>T : Symbol(T, Decl(nestedCallbackErrorNotFlattened.ts, 0, 8))
+>noAlias : Symbol(noAlias, Decl(nestedCallbackErrorNotFlattened.ts, 0, 14))
+>T : Symbol(T, Decl(nestedCallbackErrorNotFlattened.ts, 0, 8))
+
+// which means the comparison will definitely be structural, rather than by variance
+
+declare const x: Cb<Cb<Cb<Cb<number>>>>; // one more layer of `Cb` adn we'd get a `true` from the deeply-nested symbol check
+>x : Symbol(x, Decl(nestedCallbackErrorNotFlattened.ts, 3, 13))
+>Cb : Symbol(Cb, Decl(nestedCallbackErrorNotFlattened.ts, 0, 0))
+>Cb : Symbol(Cb, Decl(nestedCallbackErrorNotFlattened.ts, 0, 0))
+>Cb : Symbol(Cb, Decl(nestedCallbackErrorNotFlattened.ts, 0, 0))
+>Cb : Symbol(Cb, Decl(nestedCallbackErrorNotFlattened.ts, 0, 0))
+
+declare let y: Cb<Cb<Cb<Cb<string>>>>;
+>y : Symbol(y, Decl(nestedCallbackErrorNotFlattened.ts, 4, 11))
+>Cb : Symbol(Cb, Decl(nestedCallbackErrorNotFlattened.ts, 0, 0))
+>Cb : Symbol(Cb, Decl(nestedCallbackErrorNotFlattened.ts, 0, 0))
+>Cb : Symbol(Cb, Decl(nestedCallbackErrorNotFlattened.ts, 0, 0))
+>Cb : Symbol(Cb, Decl(nestedCallbackErrorNotFlattened.ts, 0, 0))
+
+y = x;
+>y : Symbol(y, Decl(nestedCallbackErrorNotFlattened.ts, 4, 11))
+>x : Symbol(x, Decl(nestedCallbackErrorNotFlattened.ts, 3, 13))
+

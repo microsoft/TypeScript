@@ -12,14 +12,12 @@ tests/cases/compiler/incompatibleTypes.ts(34,12): error TS2416: Property 'p1' in
 tests/cases/compiler/incompatibleTypes.ts(42,5): error TS2769: No overload matches this call.
   Overload 1 of 2, '(i: IFoo1): void', gave the following error.
     Argument of type 'C1' is not assignable to parameter of type 'IFoo1'.
-      Types of property 'p1' are incompatible.
-        Type '() => string' is not assignable to type '() => number'.
-          Type 'string' is not assignable to type 'number'.
+      The types returned by 'p1()' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
   Overload 2 of 2, '(i: IFoo2): void', gave the following error.
     Argument of type 'C1' is not assignable to parameter of type 'IFoo2'.
-      Types of property 'p1' are incompatible.
-        Type '() => string' is not assignable to type '(s: string) => number'.
-          Type 'string' is not assignable to type 'number'.
+      The types returned by 'p1(...)' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/incompatibleTypes.ts(49,7): error TS2769: No overload matches this call.
   Overload 1 of 2, '(n: { a: { a: string; }; b: string; }): number', gave the following error.
     Argument of type '{ e: number; f: number; }' is not assignable to parameter of type '{ a: { a: string; }; b: string; }'.
@@ -95,14 +93,12 @@ tests/cases/compiler/incompatibleTypes.ts(74,5): error TS2322: Type '(a: any) =>
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(i: IFoo1): void', gave the following error.
 !!! error TS2769:     Argument of type 'C1' is not assignable to parameter of type 'IFoo1'.
-!!! error TS2769:       Types of property 'p1' are incompatible.
-!!! error TS2769:         Type '() => string' is not assignable to type '() => number'.
-!!! error TS2769:           Type 'string' is not assignable to type 'number'.
+!!! error TS2769:       The types returned by 'p1()' are incompatible between these types.
+!!! error TS2769:         Type 'string' is not assignable to type 'number'.
 !!! error TS2769:   Overload 2 of 2, '(i: IFoo2): void', gave the following error.
 !!! error TS2769:     Argument of type 'C1' is not assignable to parameter of type 'IFoo2'.
-!!! error TS2769:       Types of property 'p1' are incompatible.
-!!! error TS2769:         Type '() => string' is not assignable to type '(s: string) => number'.
-!!! error TS2769:           Type 'string' is not assignable to type 'number'.
+!!! error TS2769:       The types returned by 'p1(...)' are incompatible between these types.
+!!! error TS2769:         Type 'string' is not assignable to type 'number'.
     
     
     function of1(n: { a: { a: string; }; b: string; }): number;

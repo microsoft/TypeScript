@@ -1,0 +1,21 @@
+=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator9.ts ===
+declare let f: null | ((x: string) => void);
+>f : Symbol(f, Decl(nullishCoalescingOperator9.ts, 0, 11))
+>x : Symbol(x, Decl(nullishCoalescingOperator9.ts, 0, 24))
+
+let g = f || (abc => { void abc.toLowerCase() })
+>g : Symbol(g, Decl(nullishCoalescingOperator9.ts, 2, 3))
+>f : Symbol(f, Decl(nullishCoalescingOperator9.ts, 0, 11))
+>abc : Symbol(abc, Decl(nullishCoalescingOperator9.ts, 2, 14))
+>abc.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>abc : Symbol(abc, Decl(nullishCoalescingOperator9.ts, 2, 14))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+let gg = f ?? (abc => { void abc.toLowerCase() })
+>gg : Symbol(gg, Decl(nullishCoalescingOperator9.ts, 3, 3))
+>f : Symbol(f, Decl(nullishCoalescingOperator9.ts, 0, 11))
+>abc : Symbol(abc, Decl(nullishCoalescingOperator9.ts, 3, 15))
+>abc.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>abc : Symbol(abc, Decl(nullishCoalescingOperator9.ts, 3, 15))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+

@@ -135,7 +135,7 @@ namespace ts {
 
     function createDiagnosticForConfigFile(json: any, start: number, length: number, diagnosticMessage: DiagnosticMessage, arg0: string) {
         const text = JSON.stringify(json);
-        const file = <SourceFile>{ // tslint:disable-line no-object-literal-type-assertion
+        const file = <SourceFile>{
             fileName: caseInsensitiveTsconfigPath,
             kind: SyntaxKind.SourceFile,
             text

@@ -8,6 +8,10 @@
 ////     const a = ' ''line1\
 ////         line2';
 //// }
+////
+//// f(() => { }, `unterminated backtick 1
+//// unterminated backtick 2
+//// unterminated backtick 3
 
 verify.navigationTree({
     "text": "<global>",
@@ -34,6 +38,10 @@ verify.navigationTree({
         {
             "text": "f(`line1line2line3`) callback",
             "kind": "function"
+        },
+        {
+            "text": "f(`unterminated backtick 1unterminated backtick 2unterminated backtick 3) callback",
+            "kind": "function"
         }
     ]
 });
@@ -53,6 +61,10 @@ verify.navigationBar([
             },
             {
                 "text": "f(`line1line2line3`) callback",
+                "kind": "function"
+            },
+            {
+                "text": "f(`unterminated backtick 1unterminated backtick 2unterminated backtick 3) callback",
                 "kind": "function"
             }
         ]
@@ -79,6 +91,11 @@ verify.navigationBar([
     },
     {
         "text": "f(`line1line2line3`) callback",
+        "kind": "function",
+        "indent": 1
+    },
+    {
+        "text": "f(`unterminated backtick 1unterminated backtick 2unterminated backtick 3) callback",
         "kind": "function",
         "indent": 1
     }

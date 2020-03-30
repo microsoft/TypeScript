@@ -1,0 +1,12 @@
+=== tests/cases/compiler/index.tsx ===
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(index.tsx, 0, 0))
+
+  interface IntrinsicElements extends Record<string, any> {}
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(index.tsx, 0, 23))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+}
+
+<a />;
+>a : Symbol(JSX.IntrinsicElements, Decl(index.tsx, 0, 23))
+

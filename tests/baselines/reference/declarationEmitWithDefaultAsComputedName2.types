@@ -29,8 +29,8 @@ import * as other2 from "./other";
 >other2 : typeof other2
 
 export const obj = {
->obj : { [other2.default.name]: number; }
->{    [other2.default.name]: 1} : { [other2.default.name]: number; }
+>obj : { foo: number; }
+>{    [other2.default.name]: 1} : { foo: number; }
 
     [other2.default.name]: 1
 >[other2.default.name] : number

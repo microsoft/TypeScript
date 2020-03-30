@@ -1,24 +1,21 @@
 Exit Code: 1
 Standard output:
-lib/adapters/http.js(12,19): error TS2732: Cannot find module './../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
-lib/adapters/http.js(85,22): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
-  Type 'undefined' is not assignable to type 'string'.
-lib/adapters/http.js(121,17): error TS2532: Object is possibly 'undefined'.
-lib/adapters/http.js(121,40): error TS2532: Object is possibly 'undefined'.
-lib/adapters/http.js(122,17): error TS2531: Object is possibly 'null'.
-lib/adapters/http.js(122,54): error TS2531: Object is possibly 'null'.
-lib/adapters/http.js(122,54): error TS2532: Object is possibly 'undefined'.
-lib/adapters/http.js(221,23): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
-lib/adapters/http.js(227,44): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
-lib/adapters/http.js(233,13): error TS2322: Type 'string' is not assignable to type 'Buffer'.
-lib/adapters/http.js(245,40): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
-lib/adapters/http.js(269,42): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
-lib/adapters/xhr.js(62,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
-lib/adapters/xhr.js(74,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
-lib/adapters/xhr.js(81,51): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
-lib/adapters/xhr.js(84,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
-lib/adapters/xhr.js(93,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
-lib/adapters/xhr.js(163,9): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
+lib/adapters/http.js(13,19): error TS2732: Cannot find module './../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
+lib/adapters/http.js(84,22): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+lib/adapters/http.js(121,17): error TS2531: Object is possibly 'null'.
+lib/adapters/http.js(121,40): error TS2531: Object is possibly 'null'.
+lib/adapters/http.js(225,23): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
+lib/adapters/http.js(231,44): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
+lib/adapters/http.js(237,13): error TS2322: Type 'string' is not assignable to type 'Buffer'.
+lib/adapters/http.js(249,40): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
+lib/adapters/http.js(278,42): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
+lib/adapters/xhr.js(64,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
+lib/adapters/xhr.js(76,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
+lib/adapters/xhr.js(83,51): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
+lib/adapters/xhr.js(86,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
+lib/adapters/xhr.js(99,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
+lib/adapters/xhr.js(169,9): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
 lib/axios.js(23,9): error TS2554: Expected 3 arguments, but got 2.
 lib/axios.js(25,3): error TS2739: Type '(...args: any[]) => any' is missing the following properties from type 'Axios': defaults, interceptors, request, getUri
 lib/axios.js(32,7): error TS2339: Property 'Axios' does not exist on type 'Axios'.
@@ -48,8 +45,8 @@ lib/core/enhanceError.js(37,20): error TS2339: Property 'config' does not exist 
 lib/core/enhanceError.js(38,18): error TS2339: Property 'code' does not exist on type 'Error'.
 lib/core/settle.js(20,7): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
 lib/helpers/cookies.js(16,56): error TS2551: Property 'toGMTString' does not exist on type 'Date'. Did you mean 'toUTCString'?
-lib/utils.js(248,20): error TS8029: JSDoc '@param' tag has name 'obj1', but there is no parameter with that name. It would match 'arguments' if it had an array type.
-lib/utils.js(272,20): error TS8029: JSDoc '@param' tag has name 'obj1', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+lib/utils.js(258,20): error TS8029: JSDoc '@param' tag has name 'obj1', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+lib/utils.js(282,20): error TS8029: JSDoc '@param' tag has name 'obj1', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 
 
 

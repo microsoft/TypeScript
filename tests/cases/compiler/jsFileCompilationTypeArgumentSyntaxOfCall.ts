@@ -1,3 +1,7 @@
 // @allowJs: true
-// @filename: a.js
+// @noTypesAndSymbols: true
+// @filename: a.jsx
 Foo<number>();
+Foo<number>``;
+<Foo<number>></Foo>;
+<Foo<number>/>;

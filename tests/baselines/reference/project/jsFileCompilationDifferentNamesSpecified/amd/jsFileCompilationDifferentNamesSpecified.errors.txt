@@ -1,7 +1,7 @@
-error TS6054: File 'DifferentNamesSpecified/b.js' has unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts'.
+error TS6504: File 'DifferentNamesSpecified/b.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
 
 
-!!! error TS6054: File 'DifferentNamesSpecified/b.js' has unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts'.
+!!! error TS6504: File 'DifferentNamesSpecified/b.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
 ==== DifferentNamesSpecified/tsconfig.json (0 errors) ====
     {
       "compilerOptions": { "out": "test.js" },

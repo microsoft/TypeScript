@@ -1,0 +1,27 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts ===
+class A {
+>A : Symbol(A, Decl(privateNamesIncompatibleModifiers.ts, 0, 0))
+
+    public #foo = 3;         // Error
+>#foo : Symbol(A.#foo, Decl(privateNamesIncompatibleModifiers.ts, 0, 9))
+
+    private #bar = 3;        // Error
+>#bar : Symbol(A.#bar, Decl(privateNamesIncompatibleModifiers.ts, 1, 20))
+
+    protected #baz = 3;      // Error
+>#baz : Symbol(A.#baz, Decl(privateNamesIncompatibleModifiers.ts, 2, 21))
+
+    readonly #qux = 3;       // OK
+>#qux : Symbol(A.#qux, Decl(privateNamesIncompatibleModifiers.ts, 3, 23))
+
+    declare #what: number;   // Error
+>#what : Symbol(A.#what, Decl(privateNamesIncompatibleModifiers.ts, 4, 22))
+}
+
+abstract class B {
+>B : Symbol(B, Decl(privateNamesIncompatibleModifiers.ts, 6, 1))
+
+    abstract #quux = 3;      // Error
+>#quux : Symbol(B.#quux, Decl(privateNamesIncompatibleModifiers.ts, 8, 18))
+}
+

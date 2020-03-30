@@ -1,0 +1,14 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/instanceMemberWithComputedPropertyName2.ts ===
+// https://github.com/microsoft/TypeScript/issues/33857
+"use strict";
+const x = 1;
+>x : Symbol(x, Decl(instanceMemberWithComputedPropertyName2.ts, 2, 5))
+
+class C {
+>C : Symbol(C, Decl(instanceMemberWithComputedPropertyName2.ts, 2, 12))
+
+    [x]: string;
+>[x] : Symbol(C[x], Decl(instanceMemberWithComputedPropertyName2.ts, 3, 9))
+>x : Symbol(x, Decl(instanceMemberWithComputedPropertyName2.ts, 2, 5))
+}
+

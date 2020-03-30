@@ -16,7 +16,7 @@ tests/cases/conformance/async/es5/asyncArrowFunction/asyncArrowFunction9_es5.ts(
 !!! error TS1005: ',' expected.
                                           ~~~~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'Promise' must be of type 'PromiseConstructor', but here has type 'any'.
-!!! related TS6203 /.ts/lib.es2015.promise.d.ts:152:13: 'Promise' was also declared here.
+!!! related TS6203 /.ts/lib.es2015.promise.d.ts:150:13: 'Promise' was also declared here.
                                                  ~
 !!! error TS1005: ',' expected.
                                                         ~~

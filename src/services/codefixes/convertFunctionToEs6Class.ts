@@ -186,7 +186,7 @@ namespace ts.codefix {
         }
     }
 
-    function getModifierKindFromSource(source: Node, kind: SyntaxKind): ReadonlyArray<Modifier> | undefined {
+    function getModifierKindFromSource(source: Node, kind: SyntaxKind): readonly Modifier[] | undefined {
         return filter(source.modifiers, modifier => modifier.kind === kind);
     }
 }
