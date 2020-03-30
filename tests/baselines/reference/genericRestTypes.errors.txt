@@ -33,3 +33,7 @@ tests/cases/compiler/genericRestTypes.ts(21,11): error TS2322: Type '(cb: (x: st
 !!! error TS2322:       Type '[string, ...T[number][]]' is not assignable to type 'never'.
     }
     
+    function assignmentWithComplexRest3<T extends any[]>() {
+        const fn1: (x: string, ...rest: T) => void = (x, ..._) => x;
+        const fn2: (...args: {x: "a"} & {x: "b"}) => void = fn1;
+    }

@@ -63,3 +63,22 @@ function assignmentWithComplexRest2<T extends any[]>() {
 >fn1 : (cb: (x: string, ...rest: T) => void) => void
 }
 
+function assignmentWithComplexRest3<T extends any[]>() {
+>assignmentWithComplexRest3 : <T extends any[]>() => void
+
+    const fn1: (x: string, ...rest: T) => void = (x, ..._) => x;
+>fn1 : (x: string, ...rest: T) => void
+>x : string
+>rest : T
+>(x, ..._) => x : (x: string, ..._: T) => string
+>x : string
+>_ : T
+>x : string
+
+    const fn2: (...args: {x: "a"} & {x: "b"}) => void = fn1;
+>fn2 : (...args: never) => void
+>args : never
+>x : "a"
+>x : "b"
+>fn1 : (x: string, ...rest: T) => void
+}

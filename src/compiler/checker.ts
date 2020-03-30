@@ -26639,7 +26639,7 @@ namespace ts {
 
         function getNonArrayRestType(signature: Signature) {
             const restType = getEffectiveRestType(signature);
-            return restType && !isArrayType(restType) && !isTypeAny(restType) && (restType.flags & TypeFlags.Never) === 0 ? restType : undefined;
+            return restType && !isArrayType(restType) && !isTypeAny(restType) && (getReducedType(restType).flags & TypeFlags.Never) === 0 ? restType : undefined;
         }
 
         function getTypeOfFirstParameterOfSignature(signature: Signature) {
@@ -29029,7 +29029,7 @@ namespace ts {
 
             // Only check rest parameter type if it's not a binding pattern. Since binding patterns are
             // not allowed in a rest parameter, we already have an error from checkGrammarParameterList.
-            if (node.dotDotDotToken && !isBindingPattern(node.name) && !isTypeAssignableTo(getTypeOfSymbol(node.symbol), anyReadonlyArrayType)) {
+            if (node.dotDotDotToken && !isBindingPattern(node.name) && !isTypeAssignableTo(getReducedType(getTypeOfSymbol(node.symbol)), anyReadonlyArrayType)) {
                 error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
             }
         }
