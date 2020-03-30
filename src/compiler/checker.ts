@@ -31013,6 +31013,18 @@ namespace ts {
             return tryCast(getRootDeclaration(node), isParameter);
         }
 
+        function isValidUnusedLocalDeclaration(declaration: Declaration): boolean {
+            if (isBindingElement(declaration) && isIdentifierThatStartsWithUnderscore(declaration.name)) {
+                return !!findAncestor(declaration.parent, ancestor =>
+                    isArrayBindingPattern(ancestor) || isVariableDeclaration(ancestor) || isVariableDeclarationList(ancestor) ? false :
+                        isForOfStatement(ancestor) ? true : "quit"
+                );
+            }
+
+            return isAmbientModule(declaration) ||
+                (isVariableDeclaration(declaration) && isForInOrOfStatement(declaration.parent.parent) || isImportedDeclaration(declaration)) && isIdentifierThatStartsWithUnderscore(declaration.name!);
+        }
+
         function checkUnusedLocalsAndParameters(nodeWithLocals: Node, addDiagnostic: AddUnusedDiagnostic): void {
             // Ideally we could use the ImportClause directly as a key, but must wait until we have full ES6 maps. So must store key along with value.
             const unusedImports = createMap<[ImportClause, ImportedDeclaration[]]>();
@@ -31026,8 +31038,7 @@ namespace ts {
                 }
 
                 for (const declaration of local.declarations) {
-                    if (isAmbientModule(declaration) ||
-                        (isVariableDeclaration(declaration) && isForInOrOfStatement(declaration.parent.parent) || isImportedDeclaration(declaration)) && isIdentifierThatStartsWithUnderscore(declaration.name!)) {
+                    if (isValidUnusedLocalDeclaration(declaration)) {
                         continue;
                     }
 
