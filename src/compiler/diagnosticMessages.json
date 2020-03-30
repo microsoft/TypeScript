@@ -2947,6 +2947,22 @@
         "category": "Error",
         "code": 2785
     },
+    "'{0}' cannot be used as a JSX component.": {
+        "category": "Error",
+        "code": 2786
+    },
+    "Its return type '{0}' is not a valid JSX element.": {
+        "category": "Error",
+        "code": 2787
+    },
+    "Its instance type '{0}' is not a valid JSX element.": {
+        "category": "Error",
+        "code": 2788
+    },
+    "Its element type '{0}' is not a valid JSX element.": {
+        "category": "Error",
+        "code": 2789
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
