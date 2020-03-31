@@ -845,6 +845,7 @@ namespace FourSlashInterface {
     }
     export namespace Completion {
         export import SortText = ts.Completions.SortText;
+        export import CompletionSource = ts.Completions.CompletionSource;
 
         const functionEntry = (name: string): ExpectedCompletionEntryObject => ({
             name,
@@ -1460,8 +1461,6 @@ namespace FourSlashInterface {
                 undefinedVarEntry,
                 ...globalInJsKeywords];
         }
-
-        export const thisTypeSource = "" + ts.Completions.SymbolOriginInfoKind.ThisType;
     }
 
     export interface ReferenceGroup {

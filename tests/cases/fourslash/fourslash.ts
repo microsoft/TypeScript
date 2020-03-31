@@ -753,6 +753,9 @@ declare namespace completion {
         AutoImportSuggestions = "5",
         JavascriptIdentifiers = "6"
     }
+    export const enum CompletionSource {
+        ThisProperty = "ThisProperty/"
+    }
     export const globalThisEntry: Entry;
     export const undefinedVarEntry: Entry;
     export const globals: ReadonlyArray<Entry>;
@@ -781,5 +784,4 @@ declare namespace completion {
     export const statementKeywordsWithTypes: ReadonlyArray<Entry>;
     export const statementKeywords: ReadonlyArray<Entry>;
     export const statementInJsKeywords: ReadonlyArray<Entry>;
-    export const thisTypeSource: string;
 }

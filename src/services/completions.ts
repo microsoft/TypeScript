@@ -11,7 +11,23 @@ namespace ts.Completions {
     }
     export type Log = (message: string) => void;
 
-    export const enum SymbolOriginInfoKind {
+    /**
+     * Special values for `CompletionInfo['source']` used to disambiguate
+     * completion items with the same `name`. (Each completion item must
+     * have a unique name/source combination, because those two fields
+     * comprise `CompletionEntryIdentifier` in `getCompletionEntryDetails`.
+     *
+     * When the completion item is an auto-import suggestion, the source
+     * is the module specifier of the suggestion. To avoid collisions,
+     * the values here should not be a module specifier we would ever
+     * generate for an auto-import.
+     */
+    export enum CompletionSource {
+        /** Completions that require `this.` insertion text */
+        ThisProperty = "ThisProperty/"
+    }
+
+    const enum SymbolOriginInfoKind {
         ThisType            = 1 << 0,
         SymbolMember        = 1 << 1,
         Export              = 1 << 2,
@@ -439,7 +455,7 @@ namespace ts.Completions {
             return stripQuotes(origin.moduleSymbol.name);
         }
         if (origin?.kind === SymbolOriginInfoKind.ThisType) {
-            return "" + SymbolOriginInfoKind.ThisType;
+            return CompletionSource.ThisProperty;
         }
     }
 

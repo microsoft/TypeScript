@@ -33,7 +33,7 @@ verify.completions({
       insertText: "this.foot",
       kind: "property",
       sortText: completion.SortText.SuggestedClassMembers,
-      source: completion.thisTypeSource,
+      source: completion.CompletionSource.ThisProperty,
       text: "(property) Service.foot: number"
     },
     {
@@ -41,7 +41,7 @@ verify.completions({
       insertText: "this.serve",
       kind: "method",
       sortText: completion.SortText.SuggestedClassMembers,
-      source: completion.thisTypeSource
+      source: completion.CompletionSource.ThisProperty
     },
     ...completion.insideMethodKeywords
   ],
