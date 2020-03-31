@@ -316,3 +316,38 @@ else {
 >var1 : C1
 }
 
+// Repro from #37660
+
+function foo(instance: Function | object) {
+>foo : (instance: object | Function) => number
+>instance : object | Function
+
+    if (typeof instance === 'function') {
+>typeof instance === 'function' : boolean
+>typeof instance : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>instance : object | Function
+>'function' : "function"
+
+        if (instance.prototype == null || instance.prototype.constructor == null) {
+>instance.prototype == null || instance.prototype.constructor == null : boolean
+>instance.prototype == null : boolean
+>instance.prototype : any
+>instance : Function
+>prototype : any
+>null : null
+>instance.prototype.constructor == null : boolean
+>instance.prototype.constructor : any
+>instance.prototype : any
+>instance : Function
+>prototype : any
+>constructor : any
+>null : null
+
+            return instance.length;
+>instance.length : number
+>instance : Function
+>length : number
+        }
+    }
+}
+

@@ -161,3 +161,13 @@ tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(115,10): error TS2339
         var1; // C1
     }
     
+    // Repro from #37660
+    
+    function foo(instance: Function | object) {
+        if (typeof instance === 'function') {
+            if (instance.prototype == null || instance.prototype.constructor == null) {
+                return instance.length;
+            }
+        }
+    }
+    
