@@ -23,14 +23,14 @@ declare var receiver: typeof tuple;
 // Repros from #32140
 
 const [oops1] = [1, 2, 3].reduce((accu, el) => accu.concat(el), []);
->oops1 : any
->[1, 2, 3].reduce((accu, el) => accu.concat(el), []) : number
->[1, 2, 3].reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>oops1 : undefined
+>[1, 2, 3].reduce((accu, el) => accu.concat(el), []) : []
+>[1, 2, 3].reduce : { <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; }
 >[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
->reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>reduce : { <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; }
 >(accu, el) => accu.concat(el) : (accu: [], el: number) => never[]
 >accu : []
 >el : number
@@ -39,17 +39,17 @@ const [oops1] = [1, 2, 3].reduce((accu, el) => accu.concat(el), []);
 >accu : []
 >concat : { (...items: ConcatArray<never>[]): never[]; (...items: ConcatArray<never>[]): never[]; }
 >el : number
->[] : never[]
+>[] : []
 
 const [oops2] = [1, 2, 3].reduce((acc: number[], e) => acc.concat(e), []);
 >oops2 : number
 >[1, 2, 3].reduce((acc: number[], e) => acc.concat(e), []) : number[]
->[1, 2, 3].reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>[1, 2, 3].reduce : { <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; }
 >[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
->reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>reduce : { <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; }
 >(acc: number[], e) => acc.concat(e) : (acc: number[], e: number) => number[]
 >acc : number[]
 >e : number
