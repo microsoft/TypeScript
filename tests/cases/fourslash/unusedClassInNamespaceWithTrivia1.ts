@@ -8,4 +8,5 @@
 //// } |]
 
 verify.rangeAfterCodeFix(`namespace greeter {
+   /* comment1 */
 }`);

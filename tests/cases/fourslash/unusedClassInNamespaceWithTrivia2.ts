@@ -2,11 +2,15 @@
 
 // @noUnusedLocals: true
 //// [| namespace greeter {
-////   // some legit comments
-////   function function1() {
-////   }/*1*/
+////   // Do not remove
+////   /**
+////    * JSDoc Comment
+////    */
+////   class /* comment2 */ class1 {
+////   }
 //// } |]
 
 verify.rangeAfterCodeFix(`namespace greeter {
-   // some legit comments
+   // Do not remove
 }`);
+ 

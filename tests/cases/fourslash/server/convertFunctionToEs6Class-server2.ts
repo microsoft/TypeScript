@@ -3,7 +3,9 @@
 
 /// <reference path="../fourslash.ts" />
 
-//// // Comment
+//// /**
+////  * JSDoc Comment
+////  */
 //// function fn() {
 ////     this.baz = 10;
 //// }
@@ -14,7 +16,9 @@
 verify.codeFix({
     description: "Convert function to an ES2015 class",
     newFileContent:
-`// Comment\r
+`/**\r
+ * JSDoc Comment\r
+ */\r
 class fn {\r
     constructor() {\r
         this.baz = 10;\r
