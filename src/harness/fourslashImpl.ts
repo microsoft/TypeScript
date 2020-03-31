@@ -322,6 +322,14 @@ namespace FourSlash {
                 if (!resolvedResult.isLibFile) {
                     this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
                         Harness.Compiler.getDefaultLibrarySourceFile()!.text, /*isRootFile*/ false);
+
+                    compilationOptions.lib?.forEach(fileName => {
+                        const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
+                        ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
+                        if (libFile) {
+                            this.languageServiceAdapterHost.addScript(fileName, libFile.text, /*isRootFile*/ false);
+                        }
+                    });
                 }
             }
             else {
@@ -334,6 +342,14 @@ namespace FourSlash {
                 if (!compilationOptions.noLib) {
                     this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
                         Harness.Compiler.getDefaultLibrarySourceFile()!.text, /*isRootFile*/ false);
+
+                    compilationOptions.lib?.forEach(fileName => {
+                        const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
+                        ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
+                        if (libFile) {
+                            this.languageServiceAdapterHost.addScript(fileName, libFile.text, /*isRootFile*/ false);
+                        }
+                    });
                 }
             }
 
@@ -879,19 +895,19 @@ namespace FourSlash {
                 }
             }
 
-            assert.equal(actual.hasAction, hasAction, `Expected 'hasAction' value '${actual.hasAction}' to equal '${hasAction}'`);
-            assert.equal(actual.isRecommended, isRecommended, `Expected 'isRecommended' value '${actual.isRecommended}' to equal '${isRecommended}'`);
-            assert.equal(actual.source, source, `Expected 'source' value '${actual.source}' to equal '${source}'`);
+            assert.equal(actual.hasAction, hasAction, `Expected 'hasAction' properties to match`);
+            assert.equal(actual.isRecommended, isRecommended, `Expected 'isRecommended' properties to match'`);
+            assert.equal(actual.source, source, `Expected 'source' values to match`);
             assert.equal(actual.sortText, sortText || ts.Completions.SortText.LocationPriority, this.messageAtLastKnownMarker(`Actual entry: ${JSON.stringify(actual)}`));
 
             if (text !== undefined) {
                 const actualDetails = this.getCompletionEntryDetails(actual.name, actual.source)!;
-                assert.equal(ts.displayPartsToString(actualDetails.displayParts), text);
-                assert.equal(ts.displayPartsToString(actualDetails.documentation), documentation || "");
+                assert.equal(ts.displayPartsToString(actualDetails.displayParts), text, "Expected 'text' property to match 'displayParts' string");
+                assert.equal(ts.displayPartsToString(actualDetails.documentation), documentation || "", "Expected 'documentation' property to match 'documentation' display parts string");
                 // TODO: GH#23587
                 // assert.equal(actualDetails.kind, actual.kind);
-                assert.equal(actualDetails.kindModifiers, actual.kindModifiers);
-                assert.equal(actualDetails.source && ts.displayPartsToString(actualDetails.source), sourceDisplay);
+                assert.equal(actualDetails.kindModifiers, actual.kindModifiers, "Expected 'kindModifiers' properties to match");
+                assert.equal(actualDetails.source && ts.displayPartsToString(actualDetails.source), sourceDisplay, "Expected 'sourceDisplay' property to match 'source' display parts string");
                 assert.deepEqual(actualDetails.tags, tags);
             }
             else {
