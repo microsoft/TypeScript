@@ -12387,6 +12387,11 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getAssignableIntersectionType(type1: Type, type2: Type) {
+            const type = getIntersectionType([type1, type2]);
+            return isTypeAssignableTo(type, type1) && isTypeAssignableTo(type, type2) ? type : neverType;
+        }
+
         function createIndexType(type: InstantiableType | UnionOrIntersectionType, stringsOnly: boolean) {
             const result = <IndexType>createType(TypeFlags.Index);
             result.type = type;
@@ -20678,7 +20683,7 @@ namespace ts {
                 return isTypeSubtypeOf(candidate, type) ? candidate :
                     isTypeAssignableTo(type, candidate) ? type :
                     isTypeAssignableTo(candidate, type) ? candidate :
-                    getIntersectionType([type, candidate]);
+                    getAssignableIntersectionType(type, candidate);
             }
 
             function narrowTypeByCallExpression(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
