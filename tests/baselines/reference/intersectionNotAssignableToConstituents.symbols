@@ -1,0 +1,155 @@
+=== tests/cases/compiler/intersectionNotAssignableToConstituents.ts ===
+class A { private x: unknown }
+>A : Symbol(A, Decl(intersectionNotAssignableToConstituents.ts, 0, 0))
+>x : Symbol(A.x, Decl(intersectionNotAssignableToConstituents.ts, 0, 9))
+
+class B { private x: unknown }
+>B : Symbol(B, Decl(intersectionNotAssignableToConstituents.ts, 0, 30))
+>x : Symbol(B.x, Decl(intersectionNotAssignableToConstituents.ts, 1, 9))
+
+function f1(node: A | B) {
+>f1 : Symbol(f1, Decl(intersectionNotAssignableToConstituents.ts, 1, 30))
+>node : Symbol(node, Decl(intersectionNotAssignableToConstituents.ts, 3, 12))
+>A : Symbol(A, Decl(intersectionNotAssignableToConstituents.ts, 0, 0))
+>B : Symbol(B, Decl(intersectionNotAssignableToConstituents.ts, 0, 30))
+
+  if (node instanceof A || node instanceof A) {
+>node : Symbol(node, Decl(intersectionNotAssignableToConstituents.ts, 3, 12))
+>A : Symbol(A, Decl(intersectionNotAssignableToConstituents.ts, 0, 0))
+>node : Symbol(node, Decl(intersectionNotAssignableToConstituents.ts, 3, 12))
+>A : Symbol(A, Decl(intersectionNotAssignableToConstituents.ts, 0, 0))
+
+    node;  // A
+>node : Symbol(node, Decl(intersectionNotAssignableToConstituents.ts, 3, 12))
+  }
+  else {
+    node;  // B
+>node : Symbol(node, Decl(intersectionNotAssignableToConstituents.ts, 3, 12))
+  }
+  node;  // A | B
+>node : Symbol(node, Decl(intersectionNotAssignableToConstituents.ts, 3, 12))
+}
+
+function f2(a: A, b: B, c: A & B) {
+>f2 : Symbol(f2, Decl(intersectionNotAssignableToConstituents.ts, 11, 1))
+>a : Symbol(a, Decl(intersectionNotAssignableToConstituents.ts, 13, 12))
+>A : Symbol(A, Decl(intersectionNotAssignableToConstituents.ts, 0, 0))
+>b : Symbol(b, Decl(intersectionNotAssignableToConstituents.ts, 13, 17))
+>B : Symbol(B, Decl(intersectionNotAssignableToConstituents.ts, 0, 30))
+>c : Symbol(c, Decl(intersectionNotAssignableToConstituents.ts, 13, 23))
+>A : Symbol(A, Decl(intersectionNotAssignableToConstituents.ts, 0, 0))
+>B : Symbol(B, Decl(intersectionNotAssignableToConstituents.ts, 0, 30))
+
+  a = b;  // Error
+>a : Symbol(a, Decl(intersectionNotAssignableToConstituents.ts, 13, 12))
+>b : Symbol(b, Decl(intersectionNotAssignableToConstituents.ts, 13, 17))
+
+  b = a;  // Error
+>b : Symbol(b, Decl(intersectionNotAssignableToConstituents.ts, 13, 17))
+>a : Symbol(a, Decl(intersectionNotAssignableToConstituents.ts, 13, 12))
+
+  a = c;  // Error (conflicting private fields)
+>a : Symbol(a, Decl(intersectionNotAssignableToConstituents.ts, 13, 12))
+>c : Symbol(c, Decl(intersectionNotAssignableToConstituents.ts, 13, 23))
+
+  b = c;  // Error (conflicting private fields)
+>b : Symbol(b, Decl(intersectionNotAssignableToConstituents.ts, 13, 17))
+>c : Symbol(c, Decl(intersectionNotAssignableToConstituents.ts, 13, 23))
+}
+
+// Repro from #37659
+
+abstract class ViewNode { }
+>ViewNode : Symbol(ViewNode, Decl(intersectionNotAssignableToConstituents.ts, 18, 1))
+
+abstract class ViewRefNode extends ViewNode { }
+>ViewRefNode : Symbol(ViewRefNode, Decl(intersectionNotAssignableToConstituents.ts, 22, 27))
+>ViewNode : Symbol(ViewNode, Decl(intersectionNotAssignableToConstituents.ts, 18, 1))
+
+abstract class ViewRefFileNode extends ViewRefNode { }
+>ViewRefFileNode : Symbol(ViewRefFileNode, Decl(intersectionNotAssignableToConstituents.ts, 23, 47))
+>ViewRefNode : Symbol(ViewRefNode, Decl(intersectionNotAssignableToConstituents.ts, 22, 27))
+
+class CommitFileNode extends ViewRefFileNode {
+>CommitFileNode : Symbol(CommitFileNode, Decl(intersectionNotAssignableToConstituents.ts, 24, 54))
+>ViewRefFileNode : Symbol(ViewRefFileNode, Decl(intersectionNotAssignableToConstituents.ts, 23, 47))
+
+  private _id: any;
+>_id : Symbol(CommitFileNode._id, Decl(intersectionNotAssignableToConstituents.ts, 26, 46))
+}
+
+class ResultsFileNode extends ViewRefFileNode {
+>ResultsFileNode : Symbol(ResultsFileNode, Decl(intersectionNotAssignableToConstituents.ts, 28, 1))
+>ViewRefFileNode : Symbol(ViewRefFileNode, Decl(intersectionNotAssignableToConstituents.ts, 23, 47))
+
+  private _id: any;
+>_id : Symbol(ResultsFileNode._id, Decl(intersectionNotAssignableToConstituents.ts, 30, 47))
+}
+
+class StashFileNode extends CommitFileNode { 
+>StashFileNode : Symbol(StashFileNode, Decl(intersectionNotAssignableToConstituents.ts, 32, 1))
+>CommitFileNode : Symbol(CommitFileNode, Decl(intersectionNotAssignableToConstituents.ts, 24, 54))
+
+  private _id2: any;
+>_id2 : Symbol(StashFileNode._id2, Decl(intersectionNotAssignableToConstituents.ts, 34, 44))
+}
+
+class StatusFileNode extends ViewNode {
+>StatusFileNode : Symbol(StatusFileNode, Decl(intersectionNotAssignableToConstituents.ts, 36, 1))
+>ViewNode : Symbol(ViewNode, Decl(intersectionNotAssignableToConstituents.ts, 18, 1))
+
+  private _id: any;
+>_id : Symbol(StatusFileNode._id, Decl(intersectionNotAssignableToConstituents.ts, 38, 39))
+}
+
+class Foo {
+>Foo : Symbol(Foo, Decl(intersectionNotAssignableToConstituents.ts, 40, 1))
+
+  private async foo(node: CommitFileNode | ResultsFileNode | StashFileNode) {
+>foo : Symbol(Foo.foo, Decl(intersectionNotAssignableToConstituents.ts, 42, 11))
+>node : Symbol(node, Decl(intersectionNotAssignableToConstituents.ts, 43, 20))
+>CommitFileNode : Symbol(CommitFileNode, Decl(intersectionNotAssignableToConstituents.ts, 24, 54))
+>ResultsFileNode : Symbol(ResultsFileNode, Decl(intersectionNotAssignableToConstituents.ts, 28, 1))
+>StashFileNode : Symbol(StashFileNode, Decl(intersectionNotAssignableToConstituents.ts, 32, 1))
+
+		if (
+			!(node instanceof CommitFileNode) &&
+>node : Symbol(node, Decl(intersectionNotAssignableToConstituents.ts, 43, 20))
+>CommitFileNode : Symbol(CommitFileNode, Decl(intersectionNotAssignableToConstituents.ts, 24, 54))
+
+			!(node instanceof StashFileNode) &&
+>node : Symbol(node, Decl(intersectionNotAssignableToConstituents.ts, 43, 20))
+>StashFileNode : Symbol(StashFileNode, Decl(intersectionNotAssignableToConstituents.ts, 32, 1))
+
+			!(node instanceof ResultsFileNode)
+>node : Symbol(node, Decl(intersectionNotAssignableToConstituents.ts, 43, 20))
+>ResultsFileNode : Symbol(ResultsFileNode, Decl(intersectionNotAssignableToConstituents.ts, 28, 1))
+
+		) {
+			return;
+		}
+
+		await this.bar(node);
+>this.bar : Symbol(Foo.bar, Decl(intersectionNotAssignableToConstituents.ts, 53, 2))
+>this : Symbol(Foo, Decl(intersectionNotAssignableToConstituents.ts, 40, 1))
+>bar : Symbol(Foo.bar, Decl(intersectionNotAssignableToConstituents.ts, 53, 2))
+>node : Symbol(node, Decl(intersectionNotAssignableToConstituents.ts, 43, 20))
+	}
+
+  private async bar(node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {}) {
+>bar : Symbol(Foo.bar, Decl(intersectionNotAssignableToConstituents.ts, 53, 2))
+>node : Symbol(node, Decl(intersectionNotAssignableToConstituents.ts, 55, 20))
+>CommitFileNode : Symbol(CommitFileNode, Decl(intersectionNotAssignableToConstituents.ts, 24, 54))
+>ResultsFileNode : Symbol(ResultsFileNode, Decl(intersectionNotAssignableToConstituents.ts, 28, 1))
+>StashFileNode : Symbol(StashFileNode, Decl(intersectionNotAssignableToConstituents.ts, 32, 1))
+>StatusFileNode : Symbol(StatusFileNode, Decl(intersectionNotAssignableToConstituents.ts, 36, 1))
+>options : Symbol(options, Decl(intersectionNotAssignableToConstituents.ts, 55, 92))
+
+    return Promise.resolve(undefined);
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>undefined : Symbol(undefined)
+  }
+}
+
