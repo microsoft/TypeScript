@@ -43,7 +43,7 @@ namespace ts {
                             right
                         )
                     )
-                )
+                );
 
             }
             Debug.fail("unexpected operator: " + operator.kind);
