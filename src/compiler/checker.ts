@@ -4100,7 +4100,7 @@ namespace ts {
                     flags: flags || NodeBuilderFlags.None,
                     // If no full tracker is provided, fake up a dummy one with a basic limited-functionality moduleResolverHost
                     tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: noop, moduleResolverHost: flags! & NodeBuilderFlags.DoNotIncludeSymbolChain ? {
-                        getCommonSourceDirectory: (host as Program).getCommonSourceDirectory ? () => (host as Program).getCommonSourceDirectory() : () => "",
+                        getCommonSourceDirectory: !!(host as Program).getCommonSourceDirectory ? () => (host as Program).getCommonSourceDirectory() : () => "",
                         getSourceFiles: () => host.getSourceFiles(),
                         getCurrentDirectory: () => host.getCurrentDirectory(),
                         getProbableSymlinks: maybeBind(host, host.getProbableSymlinks),
@@ -31033,7 +31033,7 @@ namespace ts {
                             ? rangeOfNode(parent)
                             // Include the `<>` in the error message
                             : rangeOfTypeParameters(parent.typeParameters!);
-                        const only = typeParameters.length === 1;
+                        const only = parent.typeParameters!.length === 1;
                         const message = only ? Diagnostics._0_is_declared_but_its_value_is_never_read : Diagnostics.All_type_parameters_are_unused;
                         const arg0 = only ? name : undefined;
                         addDiagnostic(typeParameter, UnusedKind.Parameter, createFileDiagnostic(getSourceFileOfNode(parent), range.pos, range.end - range.pos, message, arg0));
