@@ -2695,15 +2695,14 @@ namespace ts {
 
             let statementsLocation: TextRange | undefined;
             let blockLocation: TextRange | undefined;
-            const body = node.body!;
-            if (body) {
-                if (body.kind === SyntaxKind.ModuleBlock) {
-                    saveStateAndInvoke(body, body => addRange(statements, visitNodes((<ModuleBlock>body).statements, namespaceElementVisitor, isStatement)));
-                    statementsLocation = body.statements;
-                    blockLocation = body;
+            if (node.body) {
+                if (node.body.kind === SyntaxKind.ModuleBlock) {
+                    saveStateAndInvoke(node.body, body => addRange(statements, visitNodes((<ModuleBlock>body).statements, namespaceElementVisitor, isStatement)));
+                    statementsLocation = node.body.statements;
+                    blockLocation = node.body;
                 }
                 else {
-                    const result = visitModuleDeclaration(<ModuleDeclaration>body);
+                    const result = visitModuleDeclaration(<ModuleDeclaration>node.body);
                     if (result) {
                         if (isArray(result)) {
                             addRange(statements, result);
