@@ -1463,7 +1463,8 @@ namespace ts {
         optionsToExtend: CompilerOptions,
         host: ParseConfigFileHost,
         extendedConfigCache?: Map<ExtendedConfigCacheEntry>,
-        watchOptionsToExtend?: WatchOptions
+        watchOptionsToExtend?: WatchOptions,
+        extraFileExtensions?: readonly FileExtensionInfo[],
     ): ParsedCommandLine | undefined {
         const configFileText = tryReadFile(configFileName, fileName => host.readFile(fileName));
         if (!isString(configFileText)) {
@@ -1483,7 +1484,7 @@ namespace ts {
             optionsToExtend,
             getNormalizedAbsolutePath(configFileName, cwd),
             /*resolutionStack*/ undefined,
-            /*extraFileExtension*/ undefined,
+            extraFileExtensions,
             extendedConfigCache,
             watchOptionsToExtend
         );
