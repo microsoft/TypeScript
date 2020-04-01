@@ -2751,7 +2751,7 @@ namespace ts {
             //     })(hi = hello.hi || (hello.hi = {}));
             // })(hello || (hello = {}));
             // We only want to emit comment on the namespace which contains block body itself, not the containing namespaces.
-            if (!body || body.kind !== SyntaxKind.ModuleBlock) {
+            if (!node.body || node.body.kind !== SyntaxKind.ModuleBlock) {
                 setEmitFlags(block, getEmitFlags(block) | EmitFlags.NoComments);
             }
             return block;
