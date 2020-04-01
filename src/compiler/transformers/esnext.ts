@@ -1,10 +1,6 @@
 /*@internal*/
 namespace ts {
     export function transformESNext(context: TransformationContext) {
-        const {
-            hoistVariableDeclaration
-        } = context;
-
         return chainBundle(transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
@@ -37,14 +33,9 @@ namespace ts {
                 const nonAssignmentOperator = getNonAssignmentOperatorForCompoundAssignment(operator.kind);
                 const left = visitNode(binaryExpression.left, visitor, isExpression);
                 const right = visitNode(binaryExpression.right, visitor, isExpression);
-                let cond = left;
-                if (shouldCaptureInTempVariable(left)) {
-                    const temp = createTempVariable(hoistVariableDeclaration);
-                    cond = createAssignment(temp, left);
-                }
 
                 return createBinary(
-                    cond,
+                    left,
                     nonAssignmentOperator,
                     createParen(
                         createAssignment(

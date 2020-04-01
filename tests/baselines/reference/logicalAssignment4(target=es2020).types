@@ -1,0 +1,30 @@
+=== tests/cases/conformance/esnext/logicalAssignment/logicalAssignment4.ts ===
+function foo1(results: number[] | undefined) {
+>foo1 : (results: number[] | undefined) => void
+>results : number[] | undefined
+
+    (results ||= []).push(100);
+>(results ||= []).push(100) : number
+>(results ||= []).push : (...items: number[]) => number
+>(results ||= []) : number[]
+>results ||= [] : number[]
+>results : number[] | undefined
+>[] : never[]
+>push : (...items: number[]) => number
+>100 : 100
+}
+
+function foo2(results: number[] | undefined) {
+>foo2 : (results: number[] | undefined) => void
+>results : number[] | undefined
+
+    (results ??= []).push(100);
+>(results ??= []).push(100) : number
+>(results ??= []).push : (...items: number[]) => number
+>(results ??= []) : number[]
+>results ??= [] : number[]
+>results : number[] | undefined
+>[] : never[]
+>push : (...items: number[]) => number
+>100 : 100
+}
