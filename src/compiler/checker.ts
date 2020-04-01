@@ -4109,7 +4109,7 @@ namespace ts {
                     flags: flags || NodeBuilderFlags.None,
                     // If no full tracker is provided, fake up a dummy one with a basic limited-functionality moduleResolverHost
                     tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: noop, moduleResolverHost: flags! & NodeBuilderFlags.DoNotIncludeSymbolChain ? {
-                        getCommonSourceDirectory: (host as Program).getCommonSourceDirectory ? () => (host as Program).getCommonSourceDirectory() : () => "",
+                        getCommonSourceDirectory: !!(host as Program).getCommonSourceDirectory ? () => (host as Program).getCommonSourceDirectory() : () => "",
                         getSourceFiles: () => host.getSourceFiles(),
                         getCurrentDirectory: () => host.getCurrentDirectory(),
                         getProbableSymlinks: maybeBind(host, host.getProbableSymlinks),
@@ -5657,7 +5657,7 @@ namespace ts {
                         serializeEnum(symbol, symbolName, modifierFlags);
                     }
                     if (symbol.flags & SymbolFlags.Class) {
-                        if (symbol.flags & SymbolFlags.Property) {
+                        if (symbol.flags & SymbolFlags.Property && isBinaryExpression(symbol.valueDeclaration.parent) && isClassExpression(symbol.valueDeclaration.parent.right)) {
                             // Looks like a `module.exports.Sub = class {}` - if we serialize `symbol` as a class, the result will have no members,
                             // since the classiness is actually from the target of the effective alias the symbol is. yes. A BlockScopedVariable|Class|Property
                             // _really_ acts like an Alias, and none of a BlockScopedVariable, Class, or Property. This is the travesty of JS binding today.
@@ -20250,7 +20250,7 @@ namespace ts {
             }
 
             function narrowByInKeyword(type: Type, literal: LiteralExpression, assumeTrue: boolean) {
-                if (type.flags & (TypeFlags.Union | TypeFlags.Object) || isThisTypeParameter(type)) {
+                if (type.flags & (TypeFlags.Union | TypeFlags.Object | TypeFlags.Intersection) || isThisTypeParameter(type)) {
                     const propName = escapeLeadingUnderscores(literal.text);
                     return filterType(type, t => isTypePresencePossible(t, propName, assumeTrue));
                 }
@@ -20274,12 +20274,6 @@ namespace ts {
                         if (right.kind === SyntaxKind.TypeOfExpression && isStringLiteralLike(left)) {
                             return narrowTypeByTypeof(type, <TypeOfExpression>right, operator, left, assumeTrue);
                         }
-                        if (isConstructorAccessExpression(left)) {
-                            return narrowTypeByConstructor(type, left, operator, right, assumeTrue);
-                        }
-                        if (isConstructorAccessExpression(right)) {
-                            return narrowTypeByConstructor(type, right, operator, left, assumeTrue);
-                        }
                         if (isMatchingReference(reference, left)) {
                             return narrowTypeByEquality(type, operator, right, assumeTrue);
                         }
@@ -20299,6 +20293,12 @@ namespace ts {
                         }
                         if (isMatchingReferenceDiscriminant(right, declaredType)) {
                             return narrowTypeByDiscriminant(type, <AccessExpression>right, t => narrowTypeByEquality(t, operator, left, assumeTrue));
+                        }
+                        if (isMatchingConstructorReference(left)) {
+                            return narrowTypeByConstructor(type, operator, right, assumeTrue);
+                        }
+                        if (isMatchingConstructorReference(right)) {
+                            return narrowTypeByConstructor(type, operator, left, assumeTrue);
                         }
                         break;
                     case SyntaxKind.InstanceOfKeyword:
@@ -20573,15 +20573,16 @@ namespace ts {
                 return getTypeWithFacts(mapType(type, narrowTypeForTypeofSwitch(impliedType)), switchFacts);
             }
 
-            function narrowTypeByConstructor(type: Type, constructorAccessExpr: AccessExpression, operator: SyntaxKind, identifier: Expression, assumeTrue: boolean): Type {
+            function isMatchingConstructorReference(expr: Expression) {
+                return (isPropertyAccessExpression(expr) && idText(expr.name) === "constructor" ||
+                    isElementAccessExpression(expr) && isStringLiteralLike(expr.argumentExpression) && expr.argumentExpression.text === "constructor") &&
+                    isMatchingReference(reference, expr.expression);
+            }
+
+            function narrowTypeByConstructor(type: Type, operator: SyntaxKind, identifier: Expression, assumeTrue: boolean): Type {
                 // Do not narrow when checking inequality.
                 if (assumeTrue ? (operator !== SyntaxKind.EqualsEqualsToken && operator !== SyntaxKind.EqualsEqualsEqualsToken) : (operator !== SyntaxKind.ExclamationEqualsToken && operator !== SyntaxKind.ExclamationEqualsEqualsToken)) {
                     return type;
-                }
-
-                // In the case of `x.y`, a `x.constructor === T` type guard resets the narrowed type of `y` to its declared type.
-                if (!isMatchingReference(reference, constructorAccessExpr.expression)) {
-                    return declaredType;
                 }
 
                 // Get the type of the constructor identifier expression, if it is not a function then do not narrow.
@@ -30998,7 +30999,7 @@ namespace ts {
                             ? rangeOfNode(parent)
                             // Include the `<>` in the error message
                             : rangeOfTypeParameters(parent.typeParameters!);
-                        const only = typeParameters.length === 1;
+                        const only = parent.typeParameters!.length === 1;
                         const message = only ? Diagnostics._0_is_declared_but_its_value_is_never_read : Diagnostics.All_type_parameters_are_unused;
                         const arg0 = only ? name : undefined;
                         addDiagnostic(typeParameter, UnusedKind.Parameter, createFileDiagnostic(getSourceFileOfNode(parent), range.pos, range.end - range.pos, message, arg0));
@@ -31629,8 +31630,31 @@ namespace ts {
             const functionIsUsedInBody = forEachChild(body, function check(childNode): boolean | undefined {
                 if (isIdentifier(childNode)) {
                     const childSymbol = getSymbolAtLocation(childNode);
-                    if (childSymbol && childSymbol.id === testedFunctionSymbol.id) {
-                        return true;
+                    if (childSymbol && childSymbol === testedFunctionSymbol) {
+                        // If the test was a simple identifier, the above check is sufficient
+                        if (isIdentifier(condExpr)) {
+                            return true;
+                        }
+                        // Otherwise we need to ensure the symbol is called on the same target
+                        let testedExpression = testedNode.parent;
+                        let childExpression = childNode.parent;
+                        while (testedExpression && childExpression) {
+
+                            if (isIdentifier(testedExpression) && isIdentifier(childExpression)) {
+                                return getSymbolAtLocation(testedExpression) === getSymbolAtLocation(childExpression);
+                            }
+
+                            if (isPropertyAccessExpression(testedExpression) && isPropertyAccessExpression(childExpression)) {
+                                if (getSymbolAtLocation(testedExpression.name) !== getSymbolAtLocation(childExpression.name)) {
+                                    return false;
+                                }
+                                childExpression = childExpression.expression;
+                                testedExpression = testedExpression.expression;
+                            }
+                            else {
+                                return false;
+                            }
+                        }
                     }
                 }
 

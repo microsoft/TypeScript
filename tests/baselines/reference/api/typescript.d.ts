@@ -3860,7 +3860,7 @@ declare namespace ts {
     /**
      * Reads the config file, reports errors if any and exits if the config file cannot be found
      */
-    export function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost, extendedConfigCache?: Map<ExtendedConfigCacheEntry>, watchOptionsToExtend?: WatchOptions): ParsedCommandLine | undefined;
+    export function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost, extendedConfigCache?: Map<ExtendedConfigCacheEntry>, watchOptionsToExtend?: WatchOptions, extraFileExtensions?: readonly FileExtensionInfo[]): ParsedCommandLine | undefined;
     /**
      * Read tsconfig.json file
      * @param fileName The path to the config file
@@ -4785,6 +4785,7 @@ declare namespace ts {
         /** Options to extend */
         optionsToExtend?: CompilerOptions;
         watchOptionsToExtend?: WatchOptions;
+        extraFileExtensions?: readonly FileExtensionInfo[];
         /**
          * Used to generate source file names from the config file and its include, exclude, files rules
          * and also to cache the directory stucture
@@ -4812,7 +4813,7 @@ declare namespace ts {
     /**
      * Create the watch compiler host for either configFile or fileNames and its options
      */
-    function createWatchCompilerHost<T extends BuilderProgram>(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, watchOptionsToExtend?: WatchOptions): WatchCompilerHostOfConfigFile<T>;
+    function createWatchCompilerHost<T extends BuilderProgram>(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, watchOptionsToExtend?: WatchOptions, extraFileExtensions?: readonly FileExtensionInfo[]): WatchCompilerHostOfConfigFile<T>;
     function createWatchCompilerHost<T extends BuilderProgram>(rootFiles: string[], options: CompilerOptions, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, projectReferences?: readonly ProjectReference[], watchOptions?: WatchOptions): WatchCompilerHostOfFilesAndCompilerOptions<T>;
     /**
      * Creates the watch from the host for root files and compiler options

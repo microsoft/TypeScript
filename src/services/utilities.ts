@@ -2775,5 +2775,19 @@ namespace ts {
         return name.charCodeAt(0) === CharacterCodes._;
     }
 
+    export function isGlobalDeclaration(declaration: Declaration) {
+        return !isNonGlobalDeclaration(declaration);
+    }
+
+    export function isNonGlobalDeclaration(declaration: Declaration) {
+        const sourceFile = declaration.getSourceFile();
+        // If the file is not a module, the declaration is global
+        if (!sourceFile.externalModuleIndicator && !sourceFile.commonJsModuleIndicator) {
+            return false;
+        }
+        // If the file is a module written in TypeScript, it still might be in a `declare global` augmentation
+        return isInJSFile(declaration) || !findAncestor(declaration, isGlobalScopeAugmentation);
+    }
+
     // #endregion
 }
