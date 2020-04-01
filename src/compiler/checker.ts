@@ -813,8 +813,8 @@ namespace ts {
         };
 
         interface DuplicateInfoForSymbol {
-            readonly firstFileLocations: Node[];
-            readonly secondFileLocations: Node[];
+            readonly firstFileLocations: Declaration[];
+            readonly secondFileLocations: Declaration[];
             readonly isBlockScoped: boolean;
         }
         interface DuplicateInfoForFiles {
@@ -1172,26 +1172,30 @@ namespace ts {
             }
             return target;
 
-            function addDuplicateLocations(locs: Node[], symbol: Symbol): void {
+            function addDuplicateLocations(locs: Declaration[], symbol: Symbol): void {
                 for (const decl of symbol.declarations) {
-                    pushIfUnique(locs, (getExpandoInitializer(decl, /*isPrototypeAssignment*/ false) ? getNameOfExpando(decl) : getNameOfDeclaration(decl)) || decl);
+                    pushIfUnique(locs, decl);
                 }
             }
         }
 
         function addDuplicateDeclarationErrorsForSymbols(target: Symbol, message: DiagnosticMessage, symbolName: string, source: Symbol) {
             forEach(target.declarations, node => {
-                const errorNode = (getExpandoInitializer(node, /*isPrototypeAssignment*/ false) ? getNameOfExpando(node) : getNameOfDeclaration(node)) || node;
-                addDuplicateDeclarationError(errorNode, message, symbolName, source.declarations);
+                addDuplicateDeclarationError(node, message, symbolName, source.declarations);
             });
         }
 
-        function addDuplicateDeclarationError(errorNode: Node, message: DiagnosticMessage, symbolName: string, relatedNodes: readonly Node[] | undefined) {
+        function addDuplicateDeclarationError(node: Declaration, message: DiagnosticMessage, symbolName: string, relatedNodes: readonly Declaration[] | undefined) {
+            const errorNode = (getExpandoInitializer(node, /*isPrototypeAssignment*/ false) ? getNameOfExpando(node) : getNameOfDeclaration(node)) || node;
             const err = lookupOrIssueError(errorNode, message, symbolName);
             for (const relatedNode of relatedNodes || emptyArray) {
+                const adjustedNode = (getExpandoInitializer(relatedNode, /*isPrototypeAssignment*/ false) ? getNameOfExpando(relatedNode) : getNameOfDeclaration(relatedNode)) || relatedNode;
+                if (adjustedNode === errorNode) continue;
                 err.relatedInformation = err.relatedInformation || [];
-                if (length(err.relatedInformation) >= 5) continue;
-                addRelatedInfo(err, !length(err.relatedInformation) ? createDiagnosticForNode(relatedNode, Diagnostics._0_was_also_declared_here, symbolName) : createDiagnosticForNode(relatedNode, Diagnostics.and_here));
+                const leadingMessage = createDiagnosticForNode(adjustedNode, Diagnostics._0_was_also_declared_here, symbolName);
+                const followOnMessage = createDiagnosticForNode(adjustedNode, Diagnostics.and_here);
+                if (length(err.relatedInformation) >= 5 || some(err.relatedInformation, r => compareDiagnostics(r, followOnMessage) === Comparison.EqualTo || compareDiagnostics(r, leadingMessage) === Comparison.EqualTo)) continue;
+                addRelatedInfo(err, !length(err.relatedInformation) ? leadingMessage : followOnMessage);
             }
         }
 
@@ -1304,7 +1308,7 @@ namespace ts {
 
         function getSymbol(symbols: SymbolTable, name: __String, meaning: SymbolFlags): Symbol | undefined {
             if (meaning) {
-                const symbol = symbols.get(name);
+                const symbol = getMergedSymbol(symbols.get(name));
                 if (symbol) {
                     Debug.assert((getCheckFlags(symbol) & CheckFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
                     if (symbol.flags & meaning) {
@@ -7983,7 +7987,7 @@ namespace ts {
             let links = getSymbolLinks(symbol);
             const originalLinks = links;
             if (!links.type) {
-                const jsDeclaration = getDeclarationOfExpando(symbol.valueDeclaration);
+                const jsDeclaration = symbol.valueDeclaration && getDeclarationOfExpando(symbol.valueDeclaration);
                 if (jsDeclaration) {
                     const merged = mergeJSSymbols(symbol, getSymbolOfNode(jsDeclaration));
                     if (merged) {
@@ -8001,9 +8005,9 @@ namespace ts {
             if (symbol.flags & SymbolFlags.Module && isShorthandAmbientModuleSymbol(symbol)) {
                 return anyType;
             }
-            else if (declaration.kind === SyntaxKind.BinaryExpression ||
+            else if (declaration && (declaration.kind === SyntaxKind.BinaryExpression ||
                      isAccessExpression(declaration) &&
-                     declaration.parent.kind === SyntaxKind.BinaryExpression) {
+                     declaration.parent.kind === SyntaxKind.BinaryExpression)) {
                 return getWidenedTypeForAssignmentDeclaration(symbol);
             }
             else if (symbol.flags & SymbolFlags.ValueModule && declaration && isSourceFile(declaration) && declaration.commonJsModuleIndicator) {
@@ -28193,8 +28197,8 @@ namespace ts {
                             const name = prop.escapedName;
                             const symbol = resolveName(prop.valueDeclaration, name, SymbolFlags.Type, undefined, name, /*isUse*/ false);
                             if (symbol && symbol.declarations.some(isJSDocTypedefTag)) {
-                                grammarErrorOnNode(symbol.declarations[0], Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(name));
-                                return grammarErrorOnNode(prop.valueDeclaration, Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(name));
+                                addDuplicateDeclarationErrorsForSymbols(symbol, Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(name), prop);
+                                addDuplicateDeclarationErrorsForSymbols(prop, Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(name), symbol);
                             }
                         }
                     }
@@ -30000,7 +30004,7 @@ namespace ts {
                 // entirely unable to merge - a more helpful message like "Class declaration cannot implement overload list"
                 // might be warranted. :shrug:
                 forEach(declarations, declaration => {
-                    addDuplicateDeclarationError(getNameOfDeclaration(declaration) || declaration, Diagnostics.Duplicate_identifier_0, symbolName(symbol), filter(declarations, d => d !== declaration));
+                    addDuplicateDeclarationError(declaration, Diagnostics.Duplicate_identifier_0, symbolName(symbol), declarations);
                 });
             }
 
