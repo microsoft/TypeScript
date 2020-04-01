@@ -16024,15 +16024,9 @@ namespace ts {
                 }
                 else if (target.flags & TypeFlags.Conditional) {
                     const c = target as ConditionalType;
-                    let skipFalse = false;
-                    let skipTrue = false;
                     // Check if the conditional is always true or always false but still deferred for distribution purposes
-                    if (!isTypeAssignableTo(getPermissiveInstantiation(c.checkType), getPermissiveInstantiation(c.extendsType))) {
-                        skipTrue = true;
-                    }
-                    else if (isConditionalTypeAlwaysTrueDisregardingInferTypes(c)) {
-                        skipFalse = true;
-                    }
+                    const skipTrue = !isTypeAssignableTo(getPermissiveInstantiation(c.checkType), getPermissiveInstantiation(c.extendsType));
+                    const skipFalse = !skipTrue && isConditionalTypeAlwaysTrueDisregardingInferTypes(c);
 
                     // Instantiate with a replacement mapper if the conditional is distributive, replacing the check type with a clone of itself,
                     // this way {x: string | number, y: string | number} -> (T extends T ? { x: T, y: T } : never) appropriately _fails_ when
@@ -16048,9 +16042,9 @@ namespace ts {
 
                     // TODO: Find a nice way to include potential conditional type breakdowns in error output, if they seem good (they usually don't)
                     let localResult: Ternary | undefined;
-                    if (skipTrue || (localResult = isRelatedTo(source, instantiateType(getTrueTypeFromConditionalType(c), distributionMapper), /*reportErrors*/ false))) {
+                    if (skipTrue || (localResult = isRelatedTo(source, distributionMapper ? instantiateType(c.root.trueType, distributionMapper) : getTrueTypeFromConditionalType(c), /*reportErrors*/ false))) {
                         if (!skipFalse) {
-                            localResult = (localResult || Ternary.Maybe) & isRelatedTo(source, instantiateType(getFalseTypeFromConditionalType(c), distributionMapper), /*reportErrors*/ false);
+                            localResult = (localResult || Ternary.Maybe) & isRelatedTo(source, distributionMapper ? instantiateType(c.root.falseType, distributionMapper) : getFalseTypeFromConditionalType(c), /*reportErrors*/ false);
                         }
                     }
                     if (localResult) {
