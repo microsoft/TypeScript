@@ -1405,8 +1405,10 @@ namespace ts {
 
         function dispose(): void {
             if (program) {
+                // Use paths to ensure we are using correct key and paths as document registry could bre created with different current directory than host
+                const key = documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions());
                 forEach(program.getSourceFiles(), f =>
-                    documentRegistry.releaseDocument(f.fileName, program.getCompilerOptions()));
+                    documentRegistry.releaseDocumentWithKey(f.resolvedPath, key));
                 program = undefined!; // TODO: GH#18217
             }
             host = undefined!;

@@ -1,6 +1,6 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc -b bogus.json
-[91merror[0m[90m TS6053: [0mFile '/bogus.json' not found.
+[91merror[0m[90m TS5083: [0mCannot read file '/bogus.json'.
 
 
 Found 1 error.

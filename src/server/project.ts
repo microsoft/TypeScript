@@ -603,6 +603,15 @@ namespace ts.server {
                     const outputFileAbsoluteFileName = getNormalizedAbsolutePath(outputFile.name, this.currentDirectory);
                     writeFile(outputFileAbsoluteFileName, outputFile.text, outputFile.writeByteOrderMark);
                 }
+
+                // Update the signature
+                if (this.builderState && getEmitDeclarations(this.compilerOptions)) {
+                    const dtsFiles = outputFiles.filter(f => fileExtensionIs(f.name, Extension.Dts));
+                    if (dtsFiles.length === 1) {
+                        const sourceFile = this.program!.getSourceFile(scriptInfo.fileName)!;
+                        BuilderState.updateSignatureOfFile(this.builderState, this.projectService.host.createHash!(dtsFiles[0].text), sourceFile.resolvedPath);
+                    }
+                }
             }
 
             return { emitSkipped, diagnostics };

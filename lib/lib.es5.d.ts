@@ -1274,7 +1274,7 @@ interface Array<T> {
      * @param start The zero-based location in the array from which to start removing elements.
      * @param deleteCount The number of elements to remove.
      */
-    splice(start: number, deleteCount?: number): T[];
+    splice(start: number, deleteCount: number): T[];
     /**
      * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
      * @param start The zero-based location in the array from which to start removing elements.
@@ -1940,6 +1940,9 @@ interface Int8Array {
      */
     toString(): string;
 
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Int8Array;
+
     [index: number]: number;
 }
 interface Int8ArrayConstructor {
@@ -2218,6 +2221,9 @@ interface Uint8Array {
      * Returns a string representation of an array.
      */
     toString(): string;
+
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Uint8Array;
 
     [index: number]: number;
 }
@@ -2498,6 +2504,9 @@ interface Uint8ClampedArray {
      */
     toString(): string;
 
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Uint8ClampedArray;
+
     [index: number]: number;
 }
 
@@ -2774,6 +2783,9 @@ interface Int16Array {
      * Returns a string representation of an array.
      */
     toString(): string;
+
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Int16Array;
 
     [index: number]: number;
 }
@@ -3055,6 +3067,9 @@ interface Uint16Array {
      */
     toString(): string;
 
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Uint16Array;
+
     [index: number]: number;
 }
 
@@ -3334,6 +3349,9 @@ interface Int32Array {
      */
     toString(): string;
 
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Int32Array;
+
     [index: number]: number;
 }
 
@@ -3611,6 +3629,9 @@ interface Uint32Array {
      * Returns a string representation of an array.
      */
     toString(): string;
+
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Uint32Array;
 
     [index: number]: number;
 }
@@ -3891,6 +3912,9 @@ interface Float32Array {
      */
     toString(): string;
 
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Float32Array;
+
     [index: number]: number;
 }
 
@@ -4161,6 +4185,9 @@ interface Float64Array {
     subarray(begin?: number, end?: number): Float64Array;
 
     toString(): string;
+
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Float64Array;
 
     [index: number]: number;
 }

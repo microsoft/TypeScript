@@ -896,14 +896,7 @@ declare var console: {
             const host = createServerHost([barConfig, barIndex, fooConfig, fooIndex, barSymLink, lib2017, libDom]);
             const session = createSession(host, { canUseEvents: true, });
             openFilesForSession([fooIndex, barIndex], session);
-            verifyGetErrRequest({
-                session,
-                host,
-                expected: [
-                    { file: barIndex, syntax: [], semantic: [], suggestion: [] },
-                    { file: fooIndex, syntax: [], semantic: [], suggestion: [] },
-                ]
-            });
+            verifyGetErrRequestNoErrors({ session, host, files: [barIndex, fooIndex] });
         });
 
         it("when file name starts with ^", () => {
@@ -983,18 +976,12 @@ declare var console: {
                 }
                 const service = session.getProjectService();
                 checkProjectBeforeError(service);
-                verifyGetErrRequest({
+                verifyGetErrRequestNoErrors({
                     session,
                     host,
-                    expected: errorOnNewFileBeforeOldFile ?
-                        [
-                            { file: fooBar, syntax: [], semantic: [], suggestion: [] },
-                            { file: foo, syntax: [], semantic: [], suggestion: [] },
-                        ] :
-                        [
-                            { file: foo, syntax: [], semantic: [], suggestion: [] },
-                            { file: fooBar, syntax: [], semantic: [], suggestion: [] },
-                        ],
+                    files: errorOnNewFileBeforeOldFile ?
+                        [fooBar, foo] :
+                        [foo, fooBar],
                     existingTimeouts: 2
                 });
                 checkProjectAfterError(service);
@@ -1231,6 +1218,40 @@ declare var console: {
             const watchedRecursiveDirectories = getTypeRootsFromLocation(root + "/a/b/src");
             watchedRecursiveDirectories.push(`${root}/a/b/src/node_modules`, `${root}/a/b/node_modules`);
             checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
+        });
+    });
+
+    describe("unittests:: tsserver:: ConfiguredProjects:: when reading tsconfig file fails", () => {
+        it("should be tolerated without crashing the server", () => {
+            const configFile = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: ""
+            };
+            const file1 = {
+                path: `${tscWatch.projectRoot}/file1.ts`,
+                content: "let t = 10;"
+            };
+
+            const host = createServerHost([file1, libFile, configFile]);
+            const { session, events } = createSessionWithEventTracking<server.ConfigFileDiagEvent>(host, server.ConfigFileDiagEvent);
+            const originalReadFile = host.readFile;
+            host.readFile = f => {
+                return f === configFile.path ?
+                    undefined :
+                    originalReadFile.call(host, f);
+            };
+            openFilesForSession([file1], session);
+
+            assert.deepEqual(events, [{
+                eventName: server.ConfigFileDiagEvent,
+                data: {
+                    triggerFile: file1.path,
+                    configFileName: configFile.path,
+                    diagnostics: [
+                        createCompilerDiagnostic(Diagnostics.Cannot_read_file_0, configFile.path)
+                    ]
+                }
+            }]);
         });
     });
 }
