@@ -3441,7 +3441,7 @@ namespace ts {
     const doubleQuoteEscapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
     const singleQuoteEscapedCharsRegExp = /[\\\'\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
     // Template strings should be preserved as much as possible
-    const backtickQuoteEscapedCharsRegExp = /[\\\`]/g;
+    const backtickQuoteEscapedCharsRegExp = /[\\`]/g;
     const escapedCharsMap = createMapFromTemplate({
         "\t": "\\t",
         "\v": "\\v",
@@ -3465,8 +3465,9 @@ namespace ts {
     }
 
     function getReplacement(c: string, offset: number, input: string) {
-        if (c.charCodeAt(0) === CharacterCodes.nullCharacter) {
-            const lookAhead = input.charCodeAt(offset + c.length);
+        const charCode = c.charCodeAt(0);
+        if (charCode === CharacterCodes.nullCharacter) {
+            const lookAhead = input.charCodeAt(offset + 1);
             if (lookAhead >= CharacterCodes._0 && lookAhead <= CharacterCodes._9) {
                 // If the null character is followed by digits, print as a hex escape to prevent the result from parsing as an octal (which is forbidden in strict mode)
                 return "\\x00";

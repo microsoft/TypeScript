@@ -134,7 +134,6 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
             index++;
         }
 
-        text = escapeString(text);
         return [index, text, indexes];
     }
 
