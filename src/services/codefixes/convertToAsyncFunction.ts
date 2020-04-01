@@ -336,17 +336,17 @@ namespace ts.codefix {
     }
 
     /**
-     * Transforms the 'x' part of `x.then(...)`, or the 'y()' part of `y.catch(...)`, where 'x' and 'y()' are Promises.
+     * Transforms the 'x' part of `x.then(...)`, or the 'y()' part of `y().catch(...)`, where 'x' and 'y()' are Promises.
      */
     function transformPromiseExpressionOfPropertyAccess(node: Expression, transformer: Transformer, prevArgName?: SynthBindingName): readonly Statement[] {
         if (shouldReturn(node, transformer)) {
             return [createReturn(getSynthesizedDeepClone(node))];
         }
 
-        return createVariableOrAssignmentOrExpressionStatement(prevArgName, createAwait(node));
+        return createVariableOrAssignmentOrExpressionStatement(prevArgName, createAwait(node), /*typeAnnotation*/ undefined);
     }
 
-    function createVariableOrAssignmentOrExpressionStatement(variableName: SynthBindingName | undefined, rightHandSide: Expression): readonly Statement[] {
+    function createVariableOrAssignmentOrExpressionStatement(variableName: SynthBindingName | undefined, rightHandSide: Expression, typeAnnotation: TypeNode | undefined): readonly Statement[] {
         if (!variableName || isEmptyBindingName(variableName)) {
             // if there's no argName to assign to, there still might be side effects
             return [createExpressionStatement(rightHandSide)];
@@ -363,9 +363,20 @@ namespace ts.codefix {
                 createVariableDeclarationList([
                     createVariableDeclaration(
                         getSynthesizedDeepClone(getNode(variableName)),
-                        /*type*/ undefined,
+                        typeAnnotation,
                         rightHandSide)],
                     NodeFlags.Const))];
+    }
+
+    function maybeAnnotateAndReturn(expressionToReturn: Expression | undefined, typeAnnotation: TypeNode | undefined): readonly Statement[] {
+        if (typeAnnotation && expressionToReturn) {
+            const name = createOptimisticUniqueName("result");
+            return [
+                ...createVariableOrAssignmentOrExpressionStatement(createSynthIdentifier(name), expressionToReturn, typeAnnotation),
+                createReturn(name)
+            ];
+        }
+        return [createReturn(expressionToReturn)];
     }
 
     // should be kept up to date with isFixablePromiseArgument in suggestionDiagnostics.ts
@@ -382,7 +393,7 @@ namespace ts.codefix {
 
                 const synthCall = createCall(getSynthesizedDeepClone(func as Identifier), /*typeArguments*/ undefined, isSynthIdentifier(argName) ? [argName.identifier] : []);
                 if (shouldReturn(parent, transformer)) {
-                    return [createReturn(synthCall)];
+                    return maybeAnnotateAndReturn(synthCall, parent.typeArguments?.[0]);
                 }
 
                 const type = transformer.checker.getTypeAtLocation(func);
@@ -392,7 +403,7 @@ namespace ts.codefix {
                     return silentFail();
                 }
                 const returnType = callSignatures[0].getReturnType();
-                const varDeclOrAssignment = createVariableOrAssignmentOrExpressionStatement(prevArgName, createAwait(synthCall));
+                const varDeclOrAssignment = createVariableOrAssignmentOrExpressionStatement(prevArgName, createAwait(synthCall), parent.typeArguments?.[0]);
                 if (prevArgName) {
                     prevArgName.types.push(returnType);
                 }
@@ -409,10 +420,12 @@ namespace ts.codefix {
                     for (const statement of funcBody.statements) {
                         if (isReturnStatement(statement)) {
                             seenReturnStatement = true;
-                        }
-
-                        if (isReturnStatementWithFixablePromiseHandler(statement)) {
-                            refactoredStmts = refactoredStmts.concat(getInnerTransformationBody(transformer, [statement], prevArgName));
+                            if (isReturnStatementWithFixablePromiseHandler(statement)) {
+                                refactoredStmts = refactoredStmts.concat(getInnerTransformationBody(transformer, [statement], prevArgName));
+                            }
+                            else {
+                                refactoredStmts.push(...maybeAnnotateAndReturn(statement.expression, parent.typeArguments?.[0]));
+                            }
                         }
                         else {
                             refactoredStmts.push(statement);
@@ -440,14 +453,14 @@ namespace ts.codefix {
                     const rightHandSide = getSynthesizedDeepClone(funcBody);
                     const possiblyAwaitedRightHandSide = !!transformer.checker.getPromisedTypeOfPromise(returnType) ? createAwait(rightHandSide) : rightHandSide;
                     if (!shouldReturn(parent, transformer)) {
-                        const transformedStatement = createVariableOrAssignmentOrExpressionStatement(prevArgName, possiblyAwaitedRightHandSide);
+                        const transformedStatement = createVariableOrAssignmentOrExpressionStatement(prevArgName, possiblyAwaitedRightHandSide, /*typeAnnotation*/ undefined);
                         if (prevArgName) {
                             prevArgName.types.push(returnType);
                         }
                         return transformedStatement;
                     }
                     else {
-                        return [createReturn(possiblyAwaitedRightHandSide)];
+                        return maybeAnnotateAndReturn(possiblyAwaitedRightHandSide, parent.typeArguments?.[0]);
                     }
                 }
             }

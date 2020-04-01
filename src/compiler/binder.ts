@@ -833,6 +833,9 @@ namespace ts {
                 case SyntaxKind.CallExpression:
                     bindCallExpressionFlow(<CallExpression>node);
                     break;
+                case SyntaxKind.NonNullExpression:
+                    bindNonNullExpressionFlow(<NonNullExpression>node);
+                    break;
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
                 case SyntaxKind.JSDocEnumTag:
@@ -1668,15 +1671,17 @@ namespace ts {
         }
 
         function bindOptionalChainRest(node: OptionalChain) {
-            bind(node.questionDotToken);
             switch (node.kind) {
                 case SyntaxKind.PropertyAccessExpression:
+                    bind(node.questionDotToken);
                     bind(node.name);
                     break;
                 case SyntaxKind.ElementAccessExpression:
+                    bind(node.questionDotToken);
                     bind(node.argumentExpression);
                     break;
                 case SyntaxKind.CallExpression:
+                    bind(node.questionDotToken);
                     bindEach(node.typeArguments);
                     bindEach(node.arguments);
                     break;
@@ -1695,7 +1700,7 @@ namespace ts {
             // and build it's CFA graph as if it were the first condition (`a && ...`). Then we bind the rest
             // of the node as part of the "true" branch, and continue to do so as we ascend back up to the outermost
             // chain node. We then treat the entire node as the right side of the expression.
-            const preChainLabel = node.questionDotToken ? createBranchLabel() : undefined;
+            const preChainLabel = isOptionalChainRoot(node) ? createBranchLabel() : undefined;
             bindOptionalExpression(node.expression, preChainLabel || trueTarget, falseTarget);
             if (preChainLabel) {
                 currentFlow = finishFlowLabel(preChainLabel);
@@ -1718,7 +1723,7 @@ namespace ts {
             }
         }
 
-        function bindAccessExpressionFlow(node: AccessExpression) {
+        function bindNonNullExpressionFlow(node: NonNullExpression | NonNullChain) {
             if (isOptionalChain(node)) {
                 bindOptionalChainFlow(node);
             }
@@ -1727,7 +1732,16 @@ namespace ts {
             }
         }
 
-        function bindCallExpressionFlow(node: CallExpression) {
+        function bindAccessExpressionFlow(node: AccessExpression | PropertyAccessChain | ElementAccessChain) {
+            if (isOptionalChain(node)) {
+                bindOptionalChainFlow(node);
+            }
+            else {
+                bindEachChild(node);
+            }
+        }
+
+        function bindCallExpressionFlow(node: CallExpression | CallChain) {
             if (isOptionalChain(node)) {
                 bindOptionalChainFlow(node);
             }

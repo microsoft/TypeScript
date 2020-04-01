@@ -89,3 +89,21 @@ o1?.b ? 1 : 0;
 >1 : 1
 >0 : 0
 
+// GH#36031
+o2?.b!.c;
+>o2?.b!.c : string | undefined
+>o2?.b! : { c: string; } | undefined
+>o2?.b : { c: string; } | undefined
+>o2 : { b: { c: string; }; } | undefined
+>b : { c: string; } | undefined
+>c : string | undefined
+
+o2?.b!.c!;
+>o2?.b!.c! : string
+>o2?.b!.c : string | undefined
+>o2?.b! : { c: string; } | undefined
+>o2?.b : { c: string; } | undefined
+>o2 : { b: { c: string; }; } | undefined
+>b : { c: string; } | undefined
+>c : string | undefined
+

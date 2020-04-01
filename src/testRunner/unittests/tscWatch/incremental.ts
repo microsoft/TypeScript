@@ -164,15 +164,18 @@ namespace ts.tscWatch {
                     assert.equal(state.fileInfos.size, 3, "FileInfo size");
                     assert.deepEqual(state.fileInfos.get(libFile.path), {
                         version: system.createHash(libFile.content),
-                        signature: system.createHash(libFile.content)
+                        signature: system.createHash(libFile.content),
+                        affectsGlobalScope: true,
                     });
                     assert.deepEqual(state.fileInfos.get(file1.path), {
                         version: system.createHash(file1.content),
-                        signature: system.createHash(`${file1.content.replace("export ", "export declare ")}\n`)
+                        signature: system.createHash(`${file1.content.replace("export ", "export declare ")}\n`),
+                        affectsGlobalScope: false,
                     });
                     assert.deepEqual(state.fileInfos.get(file2.path), {
                         version: system.createHash(fileModified.content),
-                        signature: system.createHash("export declare const y: string;\n")
+                        signature: system.createHash("export declare const y: string;\n"),
+                        affectsGlobalScope: false,
                     });
 
                     assert.deepEqual(state.compilerOptions, {
@@ -264,6 +267,17 @@ export interface A {
     foo: any;
 }
 `)
+        });
+
+        verifyIncrementalWatchEmit({
+            subScenario: "when file with ambient global declaration file is deleted",
+            files: () => [
+                { path: libFile.path, content: libContent },
+                { path: `${project}/globals.d.ts`, content: `declare namespace Config { const value: string;} ` },
+                { path: `${project}/index.ts`, content: `console.log(Config.value);` },
+                { path: configFile.path, content: JSON.stringify({ compilerOptions: { incremental: true, } }) }
+            ],
+            modifyFs: host => host.deleteFile(`${project}/globals.d.ts`)
         });
     });
 }

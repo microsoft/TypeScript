@@ -48,7 +48,10 @@ namespace ts.codefix {
             return undefined;
         }
 
-        copyLeadingComments(ctorDeclaration, newClassDeclaration, sourceFile);
+        // Deleting a declaration only deletes JSDoc style comments, so only copy those to the new node.
+        if (hasJSDocNodes(ctorDeclaration)) {
+            copyLeadingComments(ctorDeclaration, newClassDeclaration, sourceFile);
+        }
 
         // Because the preceding node could be touched, we need to insert nodes before delete nodes.
         changes.insertNodeAfter(sourceFile, precedingNode!, newClassDeclaration);
