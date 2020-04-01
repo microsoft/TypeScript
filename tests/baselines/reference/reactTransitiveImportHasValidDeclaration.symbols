@@ -12,7 +12,7 @@ declare namespace React {
 >T : Symbol(T, Decl(index.d.ts, 2, 36), Decl(index.d.ts, 2, 29))
 }
 export = React;
->React : Symbol(React, Decl(index.d.ts, 0, 0))
+>React : Symbol(React, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 0))
 
 export as namespace React;
 >React : Symbol(React, Decl(index.d.ts, 4, 15))

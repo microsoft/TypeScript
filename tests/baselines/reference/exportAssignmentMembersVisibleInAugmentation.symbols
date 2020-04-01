@@ -1,6 +1,6 @@
 === /node_modules/foo/index.d.ts ===
 export = foo;
->foo : Symbol(foo, Decl(index.d.ts, 0, 13))
+>foo : Symbol(foo, Decl(index.d.ts, 0, 13), Decl(a.ts, 0, 27), Decl(b.ts, 0, 27))
 
 declare namespace foo {
 >foo : Symbol(foo, Decl(index.d.ts, 0, 13), Decl(a.ts, 0, 27), Decl(b.ts, 0, 27))
