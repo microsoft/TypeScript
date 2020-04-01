@@ -3220,6 +3220,9 @@ namespace ts {
                     case SyntaxKind.AmpersandEqualsToken:
                     case SyntaxKind.CaretEqualsToken:
                     case SyntaxKind.BarEqualsToken:
+                    case SyntaxKind.BarBarEqualsToken:
+                    case SyntaxKind.AmpersandAmpersandEqualsToken:
+                    case SyntaxKind.QuestionQuestionEqualsToken:
                         return Associativity.Right;
                 }
         }
@@ -3276,6 +3279,9 @@ namespace ts {
                     case SyntaxKind.AmpersandEqualsToken:
                     case SyntaxKind.CaretEqualsToken:
                     case SyntaxKind.BarEqualsToken:
+                    case SyntaxKind.BarBarEqualsToken:
+                    case SyntaxKind.AmpersandAmpersandEqualsToken:
+                    case SyntaxKind.QuestionQuestionEqualsToken:
                         return 3;
 
                     default:
@@ -3372,6 +3378,10 @@ namespace ts {
                 return 14;
             case SyntaxKind.AsteriskAsteriskToken:
                 return 15;
+            case SyntaxKind.BarBarEqualsToken:
+            case SyntaxKind.AmpersandAmpersandEqualsToken:
+            case SyntaxKind.QuestionQuestionEqualsToken:
+                return 16;
         }
 
         // -1 is lower than all other precedences.  Returning it will cause binary expression
@@ -4442,6 +4452,12 @@ namespace ts {
         return token === SyntaxKind.BarBarToken
             || token === SyntaxKind.AmpersandAmpersandToken
             || token === SyntaxKind.ExclamationToken;
+    }
+
+    export function isLogicalAssignmentOperator(token: SyntaxKind): boolean {
+        return token === SyntaxKind.BarBarEqualsToken
+            || token === SyntaxKind.AmpersandAmpersandEqualsToken
+            || token === SyntaxKind.QuestionQuestionEqualsToken;
     }
 
     export function isAssignmentOperator(token: SyntaxKind): boolean {

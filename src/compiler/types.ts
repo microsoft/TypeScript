@@ -203,6 +203,9 @@ namespace ts {
         GreaterThanGreaterThanGreaterThanEqualsToken,
         AmpersandEqualsToken,
         BarEqualsToken,
+        BarBarEqualsToken,
+        AmpersandAmpersandEqualsToken,
+        QuestionQuestionEqualsToken,
         CaretEqualsToken,
         // Identifiers and PrivateIdentifiers
         Identifier,
@@ -1597,6 +1600,9 @@ namespace ts {
         | SyntaxKind.LessThanLessThanEqualsToken
         | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken
         | SyntaxKind.GreaterThanGreaterThanEqualsToken
+        | SyntaxKind.BarBarEqualsToken
+        | SyntaxKind.AmpersandAmpersandEqualsToken
+        | SyntaxKind.QuestionQuestionEqualsToken
         ;
 
     // see: https://tc39.github.io/ecma262/#prod-AssignmentExpression
