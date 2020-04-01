@@ -880,6 +880,131 @@ namespace ts.projectSystem {
                 assert.isFalse(host.fileExists(`${tscWatch.projectRoot}/test/file2.d.ts`));
             }
         });
+
+        describe("compile on save in global files", () => {
+            describe("when program contains module", () => {
+                it("when d.ts emit is enabled", () => {
+                    verifyGlobalSave(/*declaration*/ true, /*hasModule*/ true);
+                });
+                it("when d.ts emit is not enabled", () => {
+                    verifyGlobalSave(/*declaration*/ false, /*hasModule*/ true);
+                });
+            });
+            describe("when program doesnt have module", () => {
+                it("when d.ts emit is enabled", () => {
+                    verifyGlobalSave(/*declaration*/ true, /*hasModule*/ false);
+                });
+                it("when d.ts emit is not enabled", () => {
+                    verifyGlobalSave(/*declaration*/ false, /*hasModule*/ false);
+                });
+            });
+            function verifyGlobalSave(declaration: boolean,hasModule: boolean) {
+                const config: File = {
+                    path: `${tscWatch.projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({
+                        compileOnSave: true,
+                        compilerOptions: {
+                            declaration,
+                            module: hasModule ? undefined : "none"
+                        },
+                    })
+                };
+                const file1: File = {
+                    path: `${tscWatch.projectRoot}/file1.ts`,
+                    content: `const x = 1;
+function foo() {
+    return "hello";
+}`
+                };
+                const file2: File = {
+                    path: `${tscWatch.projectRoot}/file2.ts`,
+                    content: `const y = 2;
+function bar() {
+    return "world";
+}`
+                };
+                const file3: File = {
+                    path: `${tscWatch.projectRoot}/file3.ts`,
+                    content: "const xy = 3;"
+                };
+                const module: File = {
+                    path: `${tscWatch.projectRoot}/module.ts`,
+                    content: "export const xyz = 4;"
+                };
+                const files = [file1, file2, file3, ...(hasModule ? [module] : emptyArray)];
+                const host = createServerHost([...files, config, libFile]);
+                const session = createSession(host);
+                openFilesForSession([file1, file2], session);
+
+                const affectedFileResponse = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                    arguments: { file: file1.path }
+                }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
+                assert.deepEqual(affectedFileResponse, [
+                    { fileNames: files.map(f => f.path), projectFileName: config.path, projectUsesOutFile: false }
+                ]);
+                verifyFileSave(file1);
+                verifyFileSave(file2);
+                verifyFileSave(file3);
+                if (hasModule) {
+                    verifyFileSave(module);
+                }
+
+                // Change file1 get affected file list
+                verifyLocalEdit(file1, "hello", "world");
+
+                // Change file2 get affected file list = will return only file2 if --declaration otherwise all files
+                verifyLocalEdit(file2, "world", "hello", /*returnsAllFilesAsAffected*/ !declaration);
+
+                function verifyFileSave(file: File) {
+                    const response = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                        command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                        arguments: { file: file.path }
+                    }).response;
+                    assert.isTrue(response);
+                    assert.strictEqual(
+                        host.readFile(changeExtension(file.path, ".js")),
+                        file === module ?
+                            `"use strict";\nexports.__esModule = true;\nexports.xyz = void 0;\nexports.xyz = 4;\n` :
+                            `${file.content.replace("const", "var")}\n`
+                    );
+                    if (declaration) {
+                        assert.strictEqual(
+                            host.readFile(changeExtension(file.path, ".d.ts")),
+                            (file.content.substr(0, file.content.indexOf(" {") === -1 ? file.content.length : file.content.indexOf(" {"))
+                                .replace("const ", "declare const ")
+                                .replace("function ", "declare function ")
+                                .replace(")", "): string;")) + "\n"
+                        );
+                    }
+                }
+
+                function verifyLocalEdit(file: File, oldText: string, newText: string, returnsAllFilesAsAffected?: boolean) {
+                    // Change file1 get affected file list
+                    session.executeCommandSeq<protocol.UpdateOpenRequest>({
+                        command: protocol.CommandTypes.UpdateOpen,
+                        arguments: {
+                            changedFiles: [{
+                                fileName: file.path,
+                                textChanges: [{
+                                    newText,
+                                    ...protocolTextSpanFromSubstring(file.content, oldText)
+                                }]
+                            }]
+                        }
+                    });
+                    const affectedFileResponse = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                        arguments: { file: file.path }
+                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
+                    assert.deepEqual(affectedFileResponse, [
+                        { fileNames: [file.path, ...(returnsAllFilesAsAffected ? files.filter(f => f !== file).map(f => f.path) : emptyArray)], projectFileName: config.path, projectUsesOutFile: false }
+                    ]);
+                    file.content = file.content.replace(oldText, newText);
+                    verifyFileSave(file);
+                }
+            }
+        });
     });
 
     describe("unittests:: tsserver:: compileOnSave:: CompileOnSaveAffectedFileListRequest with and without projectFileName in request", () => {
