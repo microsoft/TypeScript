@@ -12790,6 +12790,13 @@ namespace ts {
             return type[cache] = type;
         }
 
+        function isConditionalTypeAlwaysTrueDisregardingInferTypes(type: ConditionalType) {
+            const extendsInferParamMapper = type.root.inferTypeParameters && createTypeMapper(type.root.inferTypeParameters, map(type.root.inferTypeParameters, () => wildcardType));
+            const checkType = type.checkType;
+            const extendsType = type.extendsType;
+            return isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(instantiateType(extendsType, extendsInferParamMapper)));
+        }
+
         function getSimplifiedConditionalType(type: ConditionalType, writing: boolean) {
             const checkType = type.checkType;
             const extendsType = type.extendsType;
@@ -16023,7 +16030,7 @@ namespace ts {
                     if (!isTypeAssignableTo(getPermissiveInstantiation(c.checkType), getPermissiveInstantiation(c.extendsType))) {
                         skipTrue = true;
                     }
-                    else if (isTypeAssignableTo(getRestrictiveInstantiation(c.checkType), getRestrictiveInstantiation(c.extendsType))) {
+                    else if (isConditionalTypeAlwaysTrueDisregardingInferTypes(c)) {
                         skipFalse = true;
                     }
 
