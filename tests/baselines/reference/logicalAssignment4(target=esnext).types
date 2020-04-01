@@ -28,3 +28,66 @@ function foo2(results: number[] | undefined) {
 >push : (...items: number[]) => number
 >100 : 100
 }
+
+function foo3(results: number[] | undefined) {
+>foo3 : (results: number[] | undefined) => void
+>results : number[] | undefined
+
+    results ||= [];
+>results ||= [] : number[]
+>results : number[] | undefined
+>[] : never[]
+
+    results.push(100);
+>results.push(100) : number
+>results.push : (...items: number[]) => number
+>results : number[]
+>push : (...items: number[]) => number
+>100 : 100
+}
+
+function foo4(results: number[] | undefined) {
+>foo4 : (results: number[] | undefined) => void
+>results : number[] | undefined
+
+    results ||= [];
+>results ||= [] : number[]
+>results : number[] | undefined
+>[] : never[]
+
+    results.push(100);
+>results.push(100) : number
+>results.push : (...items: number[]) => number
+>results : number[]
+>push : (...items: number[]) => number
+>100 : 100
+}
+
+interface ThingWithOriginal {
+    name: string;
+>name : string
+
+    original?: ThingWithOriginal
+>original : ThingWithOriginal | undefined
+}
+function doSomethingWithAlias(thing?: ThingWithOriginal | undefined) {
+>doSomethingWithAlias : (thing?: ThingWithOriginal | undefined) => void
+>thing : ThingWithOriginal | undefined
+
+    if (thing &&= thing.original) {
+>thing &&= thing.original : ThingWithOriginal | undefined
+>thing : ThingWithOriginal | undefined
+>thing.original : ThingWithOriginal | undefined
+>thing : ThingWithOriginal
+>original : ThingWithOriginal | undefined
+
+        console.log(thing.name);
+>console.log(thing.name) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>thing.name : string
+>thing : ThingWithOriginal | undefined
+>name : string
+    }
+}

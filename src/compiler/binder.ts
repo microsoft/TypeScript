@@ -1041,6 +1041,17 @@ namespace ts {
             }
         }
 
+        function isLogicalAssignmentExpressioin(node: Node) {
+            while (true) {
+                if (isParenthesizedExpression(node)) {
+                    node = node.expression
+                }
+                else {
+                    return isBinaryExpression(node) && isLogicalAssignmentOperator(node.operatorToken.kind);
+                }
+            }
+        }
+
         function isTopLevelLogicalExpression(node: Node): boolean {
             while (isParenthesizedExpression(node.parent) ||
                 isPrefixUnaryExpression(node.parent) && node.parent.operator === SyntaxKind.ExclamationToken) {
@@ -1063,7 +1074,7 @@ namespace ts {
 
         function bindCondition(node: Expression | undefined, trueTarget: FlowLabel, falseTarget: FlowLabel) {
             doWithConditionalBranches(bind, node, trueTarget, falseTarget);
-            if (!node || !isLogicalExpression(node) && !(isOptionalChain(node) && isOutermostOptionalChain(node))) {
+            if (!node || !isLogicalAssignmentExpressioin(node) && !isLogicalExpression(node) && !(isOptionalChain(node) && isOutermostOptionalChain(node))) {
                 addAntecedent(trueTarget, createFlowCondition(FlowFlags.TrueCondition, currentFlow, node));
                 addAntecedent(falseTarget, createFlowCondition(FlowFlags.FalseCondition, currentFlow, node));
             }
@@ -1161,6 +1172,25 @@ namespace ts {
             bind(node.elseStatement);
             addAntecedent(postIfLabel, currentFlow);
             currentFlow = finishFlowLabel(postIfLabel);
+        }
+
+        function bindLogicalAssignmentExpression(node: BinaryExpression) {
+            const preRightLabel = createBranchLabel();
+            const postExpressionLabel = createBranchLabel();
+
+            if (node.operatorToken.kind === SyntaxKind.AmpersandAmpersandEqualsToken) {
+                bindCondition(node.left, preRightLabel, postExpressionLabel);
+            }
+            else {
+                bindCondition(node.left, postExpressionLabel, preRightLabel);
+            }
+
+            currentFlow = finishFlowLabel(preRightLabel);
+            bind(node.operatorToken);
+            bind(node.right);
+            bindAssignmentTargetFlow(node.left);
+
+            currentFlow = finishFlowLabel(postExpressionLabel);
         }
 
         function bindReturnOrThrow(node: ReturnStatement | ThrowStatement): void {
@@ -1450,6 +1480,10 @@ namespace ts {
         }
 
         function bindBinaryExpressionFlow(node: BinaryExpression) {
+            const flow = currentFlow
+            if (flow) {
+                
+            }
             const workStacks: {
                 expr: BinaryExpression[],
                 state: BindBinaryExpressionFlowState[],
@@ -1509,6 +1543,10 @@ namespace ts {
                             else {
                                 bindLogicalExpression(node, currentTrueTarget!, currentFalseTarget!);
                             }
+                            completeNode();
+                        }
+                        else if(isLogicalAssignmentOperator(operator)) {
+                            bindLogicalAssignmentExpression(node);
                             completeNode();
                         }
                         else {

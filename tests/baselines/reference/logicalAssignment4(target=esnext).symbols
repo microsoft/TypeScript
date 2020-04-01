@@ -18,3 +18,60 @@ function foo2(results: number[] | undefined) {
 >results : Symbol(results, Decl(logicalAssignment4.ts, 4, 14))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 }
+
+function foo3(results: number[] | undefined) {
+>foo3 : Symbol(foo3, Decl(logicalAssignment4.ts, 6, 1))
+>results : Symbol(results, Decl(logicalAssignment4.ts, 8, 14))
+
+    results ||= [];
+>results : Symbol(results, Decl(logicalAssignment4.ts, 8, 14))
+
+    results.push(100);
+>results.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>results : Symbol(results, Decl(logicalAssignment4.ts, 8, 14))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+}
+
+function foo4(results: number[] | undefined) {
+>foo4 : Symbol(foo4, Decl(logicalAssignment4.ts, 11, 1))
+>results : Symbol(results, Decl(logicalAssignment4.ts, 13, 14))
+
+    results ||= [];
+>results : Symbol(results, Decl(logicalAssignment4.ts, 13, 14))
+
+    results.push(100);
+>results.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>results : Symbol(results, Decl(logicalAssignment4.ts, 13, 14))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+}
+
+interface ThingWithOriginal {
+>ThingWithOriginal : Symbol(ThingWithOriginal, Decl(logicalAssignment4.ts, 16, 1))
+
+    name: string;
+>name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
+
+    original?: ThingWithOriginal
+>original : Symbol(ThingWithOriginal.original, Decl(logicalAssignment4.ts, 19, 17))
+>ThingWithOriginal : Symbol(ThingWithOriginal, Decl(logicalAssignment4.ts, 16, 1))
+}
+function doSomethingWithAlias(thing?: ThingWithOriginal | undefined) {
+>doSomethingWithAlias : Symbol(doSomethingWithAlias, Decl(logicalAssignment4.ts, 21, 1))
+>thing : Symbol(thing, Decl(logicalAssignment4.ts, 22, 30))
+>ThingWithOriginal : Symbol(ThingWithOriginal, Decl(logicalAssignment4.ts, 16, 1))
+
+    if (thing &&= thing.original) {
+>thing : Symbol(thing, Decl(logicalAssignment4.ts, 22, 30))
+>thing.original : Symbol(ThingWithOriginal.original, Decl(logicalAssignment4.ts, 19, 17))
+>thing : Symbol(thing, Decl(logicalAssignment4.ts, 22, 30))
+>original : Symbol(ThingWithOriginal.original, Decl(logicalAssignment4.ts, 19, 17))
+
+        console.log(thing.name);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>thing.name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
+>thing : Symbol(thing, Decl(logicalAssignment4.ts, 22, 30))
+>name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
+    }
+}

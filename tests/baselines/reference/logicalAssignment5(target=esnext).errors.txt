@@ -1,0 +1,51 @@
+tests/cases/conformance/esnext/logicalAssignment/logicalAssignment5.ts(12,12): error TS7006: Parameter 'a' implicitly has an 'any' type.
+tests/cases/conformance/esnext/logicalAssignment/logicalAssignment5.ts(13,5): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+tests/cases/conformance/esnext/logicalAssignment/logicalAssignment5.ts(17,12): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/esnext/logicalAssignment/logicalAssignment5.ts(22,12): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/esnext/logicalAssignment/logicalAssignment5.ts(27,27): error TS7006: Parameter 'a' implicitly has an 'any' type.
+tests/cases/conformance/esnext/logicalAssignment/logicalAssignment5.ts(28,5): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+
+
+==== tests/cases/conformance/esnext/logicalAssignment/logicalAssignment5.ts (6 errors) ====
+    function foo1 (f?: (a: number) => void) {
+        f ??= (a => a)
+        f(42)
+    }
+    
+    function foo2 (f?: (a: number) => void) {
+        f ||= (a => a)
+        f(42)
+    }
+    
+    function foo3 (f?: (a: number) => void) {
+        f &&= (a => a)
+               ~
+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
+        f(42)
+        ~
+!!! error TS2722: Cannot invoke an object which is possibly 'undefined'.
+    }
+    
+    function bar1 (f?: (a: number) => void) {
+        f ??= (f.toString(), (a => a))
+               ~
+!!! error TS2532: Object is possibly 'undefined'.
+        f(42)
+    }
+    
+    function bar2 (f?: (a: number) => void) {
+        f ||= (f.toString(), (a => a))
+               ~
+!!! error TS2532: Object is possibly 'undefined'.
+        f(42)
+    }
+    
+    function bar3 (f?: (a: number) => void) {
+        f &&= (f.toString(), (a => a))
+                              ~
+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
+        f(42)
+        ~
+!!! error TS2722: Cannot invoke an object which is possibly 'undefined'.
+    }
+    
