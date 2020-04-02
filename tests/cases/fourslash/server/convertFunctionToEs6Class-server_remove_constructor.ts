@@ -8,9 +8,7 @@
 ////     this.baz = 10;
 //// }
 //// fn.prototype = {
-////     bar: function () {
-////         console.log('hello world');
-////     }
+////     constructor: fn
 //// }
 
 verify.codeFix({
@@ -20,9 +18,6 @@ verify.codeFix({
 class fn {\r
     constructor() {\r
         this.baz = 10;\r
-    }\r
-    bar() {\r
-        console.log('hello world');\r
     }\r
 }\r
 `,

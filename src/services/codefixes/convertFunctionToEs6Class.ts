@@ -57,7 +57,12 @@ namespace ts.codefix {
             const memberElements: ClassElement[] = [];
             // all instance members are stored in the "member" array of symbol
             if (symbol.members) {
-                symbol.members.forEach(member => {
+                symbol.members.forEach((member, key) => {
+                    if (key === "constructor") {
+                        // fn.prototype.constructor = fn
+                        changes.delete(sourceFile, member.valueDeclaration.parent);
+                        return;
+                    }
                     const memberElement = createClassElement(member, /*modifiers*/ undefined);
                     if (memberElement) {
                         memberElements.push(...memberElement);
@@ -99,10 +104,19 @@ namespace ts.codefix {
                 // Right now the only thing we can convert are function expressions - other values shouldn't get
                 // transformed. We can update this once ES public class properties are available.
                 if (isPropertyAccessExpression(_target)) {
+                    if (isConstructorAssignment(_target)) return true;
                     return isFunctionLike(source);
                 }
                 else {
-                    return every(_target.properties, x => isPropertyAssignment(x) && isFunctionLike(x.initializer) && !!x.name);
+                    return every(_target.properties, x => {
+                        // a() {}
+                        if (isMethodDeclaration(x) || isGetOrSetAccessorDeclaration(x)) return true;
+                        // a: function() {}
+                        if (isPropertyAssignment(x) && isFunctionLike(x.initializer) && !!x.name) return true;
+                        // x.prototype.constructor = fn
+                        if (isConstructorAssignment(x)) return true;
+                        return false;
+                    });
                 }
             }
 
@@ -139,7 +153,15 @@ namespace ts.codefix {
                     case SyntaxKind.ObjectLiteralExpression: {
                         return map(
                             (<ObjectLiteralExpression>assignmentBinaryExpression.right).properties,
-                            property => createFunctionLikeExpressionMember(members, <FunctionExpression | ArrowFunction>(<PropertyAssignment>property).initializer, property.name!)
+                            property => {
+                                if (isMethodDeclaration(property) || isGetOrSetAccessorDeclaration(property)) {
+                                    // MethodDeclaration and AccessorDeclaration can appear in a class directly
+                                    return members.concat(property);
+                                }
+                                // Drop constructor assignments
+                                if (isConstructorAssignment(property)) return members;
+                                return createFunctionLikeExpressionMember(members, <FunctionExpression | ArrowFunction>(<PropertyAssignment>property).initializer, property.name!);
+                            }
                         ).reduce((x, y) => x.concat(y));
                     }
 
@@ -230,5 +252,11 @@ namespace ts.codefix {
 
     function getModifierKindFromSource(source: Node, kind: SyntaxKind): readonly Modifier[] | undefined {
         return filter(source.modifiers, modifier => modifier.kind === kind);
+    }
+
+    function isConstructorAssignment(x: ObjectLiteralElementLike | PropertyAccessExpression) {
+        if (!x.name) return false;
+        if (isIdentifier(x.name) && x.name.text === "constructor") return true;
+        return false;
     }
 }
