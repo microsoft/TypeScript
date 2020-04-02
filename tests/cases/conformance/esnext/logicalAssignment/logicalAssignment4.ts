@@ -16,7 +16,7 @@ function foo3(results: number[] | undefined) {
 }
 
 function foo4(results: number[] | undefined) {
-    results ||= [];
+    results ??= [];
     results.push(100);
 }
 

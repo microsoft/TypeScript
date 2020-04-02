@@ -16,7 +16,7 @@ tests/cases/conformance/esnext/logicalAssignment/logicalAssignment4.ts(25,21): e
     }
     
     function foo4(results: number[] | undefined) {
-        results ||= [];
+        results ??= [];
         results.push(100);
     }
     

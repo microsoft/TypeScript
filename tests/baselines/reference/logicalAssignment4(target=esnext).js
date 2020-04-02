@@ -13,7 +13,7 @@ function foo3(results: number[] | undefined) {
 }
 
 function foo4(results: number[] | undefined) {
-    results ||= [];
+    results ??= [];
     results.push(100);
 }
 
@@ -40,7 +40,7 @@ function foo3(results) {
     results.push(100);
 }
 function foo4(results) {
-    results ||= [];
+    results ??= [];
     results.push(100);
 }
 function doSomethingWithAlias(thing) {

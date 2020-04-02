@@ -36,7 +36,7 @@ function foo4(results: number[] | undefined) {
 >foo4 : Symbol(foo4, Decl(logicalAssignment4.ts, 11, 1))
 >results : Symbol(results, Decl(logicalAssignment4.ts, 13, 14))
 
-    results ||= [];
+    results ??= [];
 >results : Symbol(results, Decl(logicalAssignment4.ts, 13, 14))
 
     results.push(100);

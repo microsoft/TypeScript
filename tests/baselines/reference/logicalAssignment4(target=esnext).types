@@ -50,8 +50,8 @@ function foo4(results: number[] | undefined) {
 >foo4 : (results: number[] | undefined) => void
 >results : number[] | undefined
 
-    results ||= [];
->results ||= [] : number[]
+    results ??= [];
+>results ??= [] : number[]
 >results : number[] | undefined
 >[] : never[]
 
