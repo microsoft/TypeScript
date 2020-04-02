@@ -4651,6 +4651,8 @@ namespace ts {
     export interface UnionType extends UnionOrIntersectionType {
         /* @internal */
         resolvedReducedType: Type;
+        /* @internal */
+        regularType: UnionType;
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {

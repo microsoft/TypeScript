@@ -13457,9 +13457,13 @@ namespace ts {
             return type;
         }
 
+        function getRegularTypeOfUnion(type: UnionType) {
+            return type.regularType || (type.regularType = getUnionType(sameMap((<UnionType>type).types, getRegularTypeOfLiteralType)) as UnionType);
+        }
+
         function getRegularTypeOfLiteralType(type: Type): Type {
             return type.flags & TypeFlags.Literal ? (<LiteralType>type).regularType :
-                type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getRegularTypeOfLiteralType)) :
+                type.flags & TypeFlags.Union ? getRegularTypeOfUnion(<UnionType>type) :
                 type;
         }
 
