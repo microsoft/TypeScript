@@ -32,11 +32,11 @@ var y = 1;
 
 Output::
 >> Screen clear
-12:00:17 AM - Starting compilation in watch mode...
+[[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:22 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
@@ -55,18 +55,18 @@ WatchedFiles::
 
 FsWatches::
 /a/b/tsconfig.json:
-  {"fallbackPollingInterval":2000,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/tsconfig.json","fallbackPollingInterval":2000,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b/commonfile1.ts:
-  {"fallbackPollingInterval":250,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/commonFile1.ts","fallbackPollingInterval":250,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b/commonfile2.ts:
-  {"fallbackPollingInterval":250,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/commonFile2.ts","fallbackPollingInterval":250,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/lib/lib.d.ts:
-  {"fallbackPollingInterval":250,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/lib/lib.d.ts","fallbackPollingInterval":250,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 FsWatchesRecursive::
 /a/b/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

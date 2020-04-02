@@ -8,6 +8,8 @@ import type A from './a';
 >A : Symbol(A, Decl(b.ts, 0, 6))
 
 new A();
+>A : Symbol(A, Decl(b.ts, 0, 6))
+
 let a: A = { a: '' };
 >a : Symbol(a, Decl(b.ts, 2, 3))
 >A : Symbol(A, Decl(b.ts, 0, 6))

@@ -33,21 +33,6 @@ namespace ts {
         return options.pretty;
     }
 
-    function padLeft(s: string, length: number) {
-        while (s.length < length) {
-            s = " " + s;
-        }
-        return s;
-    }
-
-    function padRight(s: string, length: number) {
-        while (s.length < length) {
-            s = s + " ";
-        }
-
-        return s;
-    }
-
     function getOptionsForHelp(commandLine: ParsedCommandLine) {
         // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
         return !!commandLine.options.all ?
@@ -171,7 +156,6 @@ namespace ts {
         sys: System,
         cb: ExecuteCommandLineCallbacks,
         commandLine: ParsedCommandLine,
-        maxNumberOfFilesToIterateForInvalidation: number | undefined
     ) {
         let reportDiagnostic = createDiagnosticReporter(sys);
         if (commandLine.options.build) {
@@ -243,13 +227,12 @@ namespace ts {
         if (commandLine.fileNames.length === 0 && !configFileName) {
             if (commandLine.options.showConfig) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_current_directory_Colon_0, normalizePath(sys.getCurrentDirectory())));
-                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             else {
                 printVersion(sys);
                 printHelp(sys, getOptionsForHelp(commandLine));
-                return sys.exit(ExitStatus.Success);
             }
+            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
         const currentDirectory = sys.getCurrentDirectory();
@@ -287,7 +270,6 @@ namespace ts {
                     configParseResult,
                     commandLineOptions,
                     commandLine.watchOptions,
-                    maxNumberOfFilesToIterateForInvalidation
                 );
             }
             else if (isIncrementalCompilation(configParseResult.options)) {
@@ -327,7 +309,6 @@ namespace ts {
                     commandLine.fileNames,
                     commandLineOptions,
                     commandLine.watchOptions,
-                    maxNumberOfFilesToIterateForInvalidation
                 );
             }
             else if (isIncrementalCompilation(commandLineOptions)) {
@@ -362,7 +343,6 @@ namespace ts {
         system: System,
         cb: ExecuteCommandLineCallbacks,
         commandLineArgs: readonly string[],
-        maxNumberOfFilesToIterateForInvalidation?: number
     ) {
         if (isBuild(commandLineArgs)) {
             const { buildOptions, watchOptions, projects, errors } = parseBuildCommand(commandLineArgs.slice(1));
@@ -394,11 +374,10 @@ namespace ts {
                 system,
                 cb,
                 commandLine,
-                maxNumberOfFilesToIterateForInvalidation
             ));
         }
         else {
-            return executeCommandLineWorker(system, cb, commandLine, maxNumberOfFilesToIterateForInvalidation);
+            return executeCommandLineWorker(system, cb, commandLine);
         }
     }
 
@@ -572,10 +551,8 @@ namespace ts {
         sys: System,
         cb: ExecuteCommandLineCallbacks,
         watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>,
-        maxNumberOfFilesToIterateForInvalidation: number | undefined
     ) {
         updateCreateProgram(sys, watchCompilerHost);
-        watchCompilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
         const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
         watchCompilerHost.afterProgramCreate = builderProgram => {
             emitFilesUsingBuilder(builderProgram);
@@ -589,47 +566,43 @@ namespace ts {
     }
 
     function createWatchOfConfigFile(
-        sys: System,
+        system: System,
         cb: ExecuteCommandLineCallbacks,
         reportDiagnostic: DiagnosticReporter,
         configParseResult: ParsedCommandLine,
         optionsToExtend: CompilerOptions,
         watchOptionsToExtend: WatchOptions | undefined,
-        maxNumberOfFilesToIterateForInvalidation: number | undefined
     ) {
-        const watchCompilerHost = createWatchCompilerHostOfConfigFile(
-            configParseResult.options.configFilePath!,
+        const watchCompilerHost = createWatchCompilerHostOfConfigFile({
+            configFileName: configParseResult.options.configFilePath!,
             optionsToExtend,
             watchOptionsToExtend,
-            sys,
-            /*createProgram*/ undefined,
+            system,
             reportDiagnostic,
-            createWatchStatusReporter(sys, configParseResult.options)
-        ); // TODO: GH#18217
-        updateWatchCompilationHost(sys, cb, watchCompilerHost, maxNumberOfFilesToIterateForInvalidation);
+            reportWatchStatus: createWatchStatusReporter(system, configParseResult.options)
+        });
+        updateWatchCompilationHost(system, cb, watchCompilerHost);
         watchCompilerHost.configFileParsingResult = configParseResult;
         return createWatchProgram(watchCompilerHost);
     }
 
     function createWatchOfFilesAndCompilerOptions(
-        sys: System,
+        system: System,
         cb: ExecuteCommandLineCallbacks,
         reportDiagnostic: DiagnosticReporter,
         rootFiles: string[],
         options: CompilerOptions,
         watchOptions: WatchOptions | undefined,
-        maxNumberOfFilesToIterateForInvalidation: number | undefined
     ) {
-        const watchCompilerHost = createWatchCompilerHostOfFilesAndCompilerOptions(
+        const watchCompilerHost = createWatchCompilerHostOfFilesAndCompilerOptions({
             rootFiles,
             options,
             watchOptions,
-            sys,
-            /*createProgram*/ undefined,
+            system,
             reportDiagnostic,
-            createWatchStatusReporter(sys, options)
-        );
-        updateWatchCompilationHost(sys, cb, watchCompilerHost, maxNumberOfFilesToIterateForInvalidation);
+            reportWatchStatus: createWatchStatusReporter(system, options)
+        });
+        updateWatchCompilationHost(system, cb, watchCompilerHost);
         return createWatchProgram(watchCompilerHost);
     }
 
@@ -655,6 +628,7 @@ namespace ts {
             reportCountStatistic("Identifiers", program.getIdentifierCount());
             reportCountStatistic("Symbols", program.getSymbolCount());
             reportCountStatistic("Types", program.getTypeCount());
+            reportCountStatistic("Instantiations", program.getInstantiationCount());
 
             if (memoryUsed >= 0) {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");

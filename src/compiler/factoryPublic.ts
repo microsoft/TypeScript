@@ -218,6 +218,9 @@ namespace ts {
 
     // Private Identifiers
     export function createPrivateIdentifier(text: string): PrivateIdentifier {
+        if (text[0] !== "#") {
+            Debug.fail("First character of private identifier must be #: " + text);
+        }
         const node = createSynthesizedNode(SyntaxKind.PrivateIdentifier) as PrivateIdentifier;
         node.escapedText = escapeLeadingUnderscores(text);
         return node;
@@ -1073,10 +1076,8 @@ namespace ts {
     }
 
     export function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier | PrivateIdentifier) {
-        if (isOptionalChain(node) && isIdentifier(node.name) && isIdentifier(name)) {
-            // Not sure why this cast was necessary: the previous line should already establish that node.name is an identifier
-            const theNode = node as (typeof node & { name: Identifier });
-            return updatePropertyAccessChain(theNode, expression, node.questionDotToken, name);
+        if (isPropertyAccessChain(node)) {
+            return updatePropertyAccessChain(node, expression, node.questionDotToken, cast(name, isIdentifier));
         }
         // Because we are updating existed propertyAccess we want to inherit its emitFlags
         // instead of using the default from createPropertyAccess
@@ -1483,7 +1484,7 @@ namespace ts {
 
         let token = rawTextScanner.scan();
         if (token === SyntaxKind.CloseBracketToken) {
-            token = rawTextScanner.reScanTemplateToken();
+            token = rawTextScanner.reScanTemplateToken(/* isTaggedTemplate */ false);
         }
 
         if (rawTextScanner.isUnterminated()) {
@@ -1650,8 +1651,25 @@ namespace ts {
     }
 
     export function updateNonNullExpression(node: NonNullExpression, expression: Expression) {
+        if (isNonNullChain(node)) {
+            return updateNonNullChain(node, expression);
+        }
         return node.expression !== expression
             ? updateNode(createNonNullExpression(expression), node)
+            : node;
+    }
+
+    export function createNonNullChain(expression: Expression) {
+        const node = <NonNullChain>createSynthesizedNode(SyntaxKind.NonNullExpression);
+        node.flags |= NodeFlags.OptionalChain;
+        node.expression = parenthesizeForAccess(expression);
+        return node;
+    }
+
+    export function updateNonNullChain(node: NonNullChain, expression: Expression) {
+        Debug.assert(!!(node.flags & NodeFlags.OptionalChain), "Cannot update a NonNullExpression using updateNonNullChain. Use updateNonNullExpression instead.");
+        return node.expression !== expression
+            ? updateNode(createNonNullChain(expression), node)
             : node;
     }
 
@@ -2464,6 +2482,12 @@ namespace ts {
     }
 
     /* @internal */
+    export function createJSDocClassTag(): JSDocClassTag {
+        return createJSDocTag<JSDocClassTag>(SyntaxKind.JSDocClassTag, "class");
+    }
+
+
+    /* @internal */
     export function createJSDocComment(comment?: string | undefined, tags?: NodeArray<JSDocTag> | undefined) {
         const node = createSynthesizedNode(SyntaxKind.JSDocComment) as JSDoc;
         node.comment = comment;
@@ -2940,6 +2964,8 @@ namespace ts {
             importDefaultHelper,
             classPrivateFieldGetHelper,
             classPrivateFieldSetHelper,
+            createBindingHelper,
+            setModuleDefaultHelper
         ], helper => helper.name));
     }
 
@@ -2972,10 +2998,10 @@ namespace ts {
             if (textOrInputFiles.buildInfo && textOrInputFiles.buildInfo.bundle) {
                 node.oldFileOfCurrentEmit = textOrInputFiles.oldFileOfCurrentEmit;
                 Debug.assert(mapTextOrStripInternal === undefined || typeof mapTextOrStripInternal === "boolean");
-                stripInternal = mapTextOrStripInternal as boolean | undefined;
+                stripInternal = mapTextOrStripInternal;
                 bundleFileInfo = mapPathOrType === "js" ? textOrInputFiles.buildInfo.bundle.js : textOrInputFiles.buildInfo.bundle.dts;
                 if (node.oldFileOfCurrentEmit) {
-                    parseOldFileOfCurrentEmit(node, Debug.assertDefined(bundleFileInfo));
+                    parseOldFileOfCurrentEmit(node, Debug.checkDefined(bundleFileInfo));
                     return node;
                 }
             }
@@ -3194,13 +3220,13 @@ namespace ts {
             };
             node.javascriptPath = declarationTextOrJavascriptPath;
             node.javascriptMapPath = javascriptMapPath;
-            node.declarationPath = Debug.assertDefined(javascriptMapTextOrDeclarationPath);
+            node.declarationPath = Debug.checkDefined(javascriptMapTextOrDeclarationPath);
             node.declarationMapPath = declarationMapPath;
             node.buildInfoPath = declarationMapTextOrBuildInfoPath;
             Object.defineProperties(node, {
                 javascriptText: { get() { return definedTextGetter(declarationTextOrJavascriptPath); } },
                 javascriptMapText: { get() { return textGetter(javascriptMapPath); } }, // TODO:: if there is inline sourceMap in jsFile, use that
-                declarationText: { get() { return definedTextGetter(Debug.assertDefined(javascriptMapTextOrDeclarationPath)); } },
+                declarationText: { get() { return definedTextGetter(Debug.checkDefined(javascriptMapTextOrDeclarationPath)); } },
                 declarationMapText: { get() { return textGetter(declarationMapPath); } }, // TODO:: if there is inline sourceMap in dtsFile, use that
                 buildInfo: { get() { return getAndCacheBuildInfo(() => textGetter(declarationMapTextOrBuildInfoPath)); } }
             });
@@ -3553,6 +3579,12 @@ namespace ts {
         const emit = getOrCreateEmitNode(original);
         emit.leadingComments = undefined;
         emit.trailingComments = undefined;
+        return node;
+    }
+
+    /** @internal */
+    export function ignoreSourceNewlines<T extends Node>(node: T): T {
+        getOrCreateEmitNode(node).flags |= EmitFlags.IgnoreSourceNewlines;
         return node;
     }
 

@@ -10,7 +10,8 @@ namespace ts.OutliningElementsCollector {
     function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
         let depthRemaining = 40;
         let current = 0;
-        const statements = sourceFile.statements;
+        // Includes the EOF Token so that comments which aren't attached to statements are included
+        const statements = [...sourceFile.statements, sourceFile.endOfFileToken];
         const n = statements.length;
         while (current < n) {
             while (current < n && !isAnyImportSyntax(statements[current])) {
@@ -33,7 +34,7 @@ namespace ts.OutliningElementsCollector {
             if (depthRemaining === 0) return;
             cancellationToken.throwIfCancellationRequested();
 
-            if (isDeclaration(n)) {
+            if (isDeclaration(n) || n.kind === SyntaxKind.EndOfFileToken) {
                 addOutliningForLeadingCommentsForNode(n, sourceFile, cancellationToken, out);
             }
 
@@ -182,7 +183,8 @@ namespace ts.OutliningElementsCollector {
                             return spanForNode(n.parent);
                         }
                         else if (tryStatement.finallyBlock === n) {
-                            return spanForNode(findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile)!);
+                            const node = findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile);
+                            if (node) return spanForNode(node);
                         }
                         // falls through
                     default:
@@ -198,6 +200,9 @@ namespace ts.OutliningElementsCollector {
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.CaseBlock:
                 return spanForNode(n);
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.DefaultClause:
+                return spanForNodeArray((n as CaseClause | DefaultClause).statements);
             case SyntaxKind.ObjectLiteralExpression:
                 return spanForObjectOrArrayLiteral(n);
             case SyntaxKind.ArrayLiteralExpression:
@@ -253,6 +258,10 @@ namespace ts.OutliningElementsCollector {
             const openToken = findChildOfKind(n, open, sourceFile);
             const closeToken = findChildOfKind(n, close, sourceFile);
             return openToken && closeToken && spanBetweenTokens(openToken, closeToken, hintSpanNode, sourceFile, autoCollapse, useFullStart);
+        }
+
+        function spanForNodeArray(nodeArray: NodeArray<Node>): OutliningSpan | undefined {
+            return nodeArray.length ? createOutliningSpan(createTextSpanFromRange(nodeArray), OutliningSpanKind.Code) : undefined;
         }
     }
 

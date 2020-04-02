@@ -8,12 +8,12 @@ export type { A } from './a';
 
 === /c.ts ===
 import { A } from './b';
->A : any
+>A : typeof A
 
 declare const a: A;
->a : import("/a").A
+>a : A
 
 new A();
->new A() : any
->A : any
+>new A() : A
+>A : typeof A
 

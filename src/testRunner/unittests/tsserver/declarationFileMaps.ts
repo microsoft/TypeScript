@@ -26,9 +26,9 @@ namespace ts.projectSystem {
 
     function checkDeclarationFiles(file: File, session: TestSession, expectedFiles: readonly File[]): void {
         openFilesForSession([file], session);
-        const project = Debug.assertDefined(session.getProjectService().getDefaultProjectForFile(file.path as server.NormalizedPath, /*ensureProject*/ false));
+        const project = Debug.checkDefined(session.getProjectService().getDefaultProjectForFile(file.path as server.NormalizedPath, /*ensureProject*/ false));
         const program = project.getCurrentProgram()!;
-        const output = getFileEmitOutput(program, Debug.assertDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
+        const output = getFileEmitOutput(program, Debug.checkDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
         closeFilesForSession([file], session);
 
         Debug.assert(!output.emitSkipped);
@@ -653,6 +653,64 @@ namespace ts.projectSystem {
                 newFilePath: "/a/src/a1.ts",
             });
             assert.deepEqual<readonly protocol.FileCodeEdits[]>(response, []); // Should not change anything
+        });
+
+        it("does not jump to source if inlined sources", () => {
+            const aDtsInlinedSources: RawSourceMap = {
+                ...aDtsMapContent,
+                sourcesContent: [aTs.content]
+            };
+            const aDtsMapInlinedSources: File = {
+                path: aDtsMap.path,
+                content: JSON.stringify(aDtsInlinedSources)
+            };
+            const host = createServerHost([aTs, aDtsMapInlinedSources, aDts, bTs, bDtsMap, bDts, userTs, dummyFile]);
+            const session = createSession(host);
+
+            openFilesForSession([userTs], session);
+            const service = session.getProjectService();
+            // If config file then userConfig project and bConfig project since it is referenced
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+
+            // Inlined so does not jump to aTs
+            assert.deepEqual(
+                executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(
+                    session,
+                    protocol.CommandTypes.DefinitionAndBoundSpan,
+                    protocolFileLocationFromSubstring(userTs, "fnA()")
+                ),
+                {
+                    textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA"),
+                    definitions: [
+                        protocolFileSpanWithContextFromSubstring({
+                            file: aDts,
+                            text: "fnA",
+                            contextText: "export declare function fnA(): void;"
+                        })
+                    ],
+                }
+            );
+
+            // Not inlined, jumps to bTs
+            assert.deepEqual(
+                executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(
+                    session,
+                    protocol.CommandTypes.DefinitionAndBoundSpan,
+                    protocolFileLocationFromSubstring(userTs, "fnB()")
+                ),
+                {
+                    textSpan: protocolTextSpanFromSubstring(userTs.content, "fnB"),
+                    definitions: [
+                        protocolFileSpanWithContextFromSubstring({
+                            file: bTs,
+                            text: "fnB",
+                            contextText: "export function fnB() {}"
+                        })
+                    ],
+                }
+            );
+
+            verifySingleInferredProject(session);
         });
     });
 }

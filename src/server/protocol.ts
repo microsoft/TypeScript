@@ -237,11 +237,12 @@ namespace ts.server.protocol {
          */
         metadata?: unknown;
 
-        /* @internal */
+        /**
+         * Exposes information about the performance of this request-response pair.
+         */
         performanceData?: PerformanceData;
     }
 
-    /* @internal */
     export interface PerformanceData {
         /**
          * Time spent updating the program graph, in milliseconds.
@@ -856,10 +857,25 @@ namespace ts.server.protocol {
     }
 
     /** @internal */
-    export interface EmitOutputRequest extends FileRequest {}
+    export interface EmitOutputRequest extends FileRequest {
+        command: CommandTypes.EmitOutput;
+        arguments: EmitOutputRequestArgs;
+    }
+    /** @internal */
+    export interface EmitOutputRequestArgs extends FileRequestArgs {
+        includeLinePosition?: boolean;
+        /** if true - return response as object with emitSkipped and diagnostics */
+        richResponse?: boolean;
+    }
     /** @internal */
     export interface EmitOutputResponse extends Response {
-        readonly body: EmitOutput;
+        readonly body: EmitOutput | ts.EmitOutput;
+    }
+    /** @internal */
+    export interface EmitOutput {
+        outputFiles: OutputFile[];
+        emitSkipped: boolean;
+        diagnostics: Diagnostic[] | DiagnosticWithLinePosition[];
     }
 
     /**
@@ -1324,6 +1340,18 @@ namespace ts.server.protocol {
         lastFileExceededProgramSize?: string;
     }
 
+    export interface FileWithProjectReferenceRedirectInfo {
+        /**
+         * Name of file
+         */
+        fileName: string;
+
+        /**
+         * True if the file is primarily included in a referenced project
+         */
+        isSourceOfProjectReferenceRedirect: boolean;
+    }
+
     /**
      * Represents a set of changes that happen in project
      */
@@ -1331,15 +1359,20 @@ namespace ts.server.protocol {
         /**
          * List of added files
          */
-        added: string[];
+        added: string[] | FileWithProjectReferenceRedirectInfo[];
         /**
          * List of removed files
          */
-        removed: string[];
+        removed: string[] | FileWithProjectReferenceRedirectInfo[];
         /**
          * List of updated files
          */
-        updated: string[];
+        updated: string[] | FileWithProjectReferenceRedirectInfo[];
+        /**
+         * List of files that have had their project reference redirect status updated
+         * Only provided when the synchronizeProjectList request has includeProjectReferenceRedirectInfo set to true
+         */
+        updatedRedirects?: FileWithProjectReferenceRedirectInfo[];
     }
 
     /**
@@ -1357,8 +1390,10 @@ namespace ts.server.protocol {
         info?: ProjectVersionInfo;
         /**
          * List of files in project (might be omitted if current state of project can be computed using only information from 'changes')
+         * This property will have type FileWithProjectReferenceRedirectInfo[] if includeProjectReferenceRedirectInfo is set to true in
+         * the corresponding SynchronizeProjectList request; otherwise, it will have type string[].
          */
-        files?: string[];
+        files?: string[] | FileWithProjectReferenceRedirectInfo[];
         /**
          * Set of changes in project (omitted if the entire set of files in project should be replaced)
          */
@@ -1621,6 +1656,11 @@ namespace ts.server.protocol {
          * List of last known projects
          */
         knownProjects: ProjectVersionInfo[];
+        /**
+         * If true, response specifies whether or not each file in each project
+         * is a source from a project reference redirect
+         */
+        includeProjectReferenceRedirectInfo?: boolean;
     }
 
     /**
@@ -1783,6 +1823,18 @@ namespace ts.server.protocol {
          * if true - then file should be recompiled even if it does not have any changes.
          */
         forced?: boolean;
+        includeLinePosition?: boolean;
+        /** if true - return response as object with emitSkipped and diagnostics */
+        richResponse?: boolean;
+    }
+
+    export interface CompileOnSaveEmitFileResponse extends Response {
+        body: boolean | EmitResult;
+    }
+
+    export interface EmitResult {
+        emitSkipped: boolean;
+        diagnostics: Diagnostic[] | DiagnosticWithLinePosition[];
     }
 
     /**
@@ -1972,7 +2024,7 @@ namespace ts.server.protocol {
         arguments: FormatOnKeyRequestArgs;
     }
 
-    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<";
+    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#";
 
     /**
      * Arguments for completions messages.
@@ -2097,6 +2149,11 @@ namespace ts.server.protocol {
          * Then either that enum/class or a namespace containing it will be the recommended symbol.
          */
         isRecommended?: true;
+        /**
+         * If true, this completion was generated from traversing the name table of an unchecked JS file,
+         * and therefore may not be accurate.
+         */
+        isFromUncheckedFile?: true;
     }
 
     /**
@@ -3059,6 +3116,7 @@ namespace ts.server.protocol {
         newLineCharacter?: string;
         convertTabsToSpaces?: boolean;
         indentStyle?: IndentStyle | ts.IndentStyle;
+        trimTrailingWhitespace?: boolean;
     }
 
     export interface FormatCodeSettings extends EditorSettings {
@@ -3101,6 +3159,8 @@ namespace ts.server.protocol {
          */
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
+        /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
+        readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;

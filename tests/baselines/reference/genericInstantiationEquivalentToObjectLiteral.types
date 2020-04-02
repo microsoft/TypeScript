@@ -26,7 +26,7 @@ declare function f<T, U>(x: Pair<T, U>);
 >x : Pair<T, U>
 
 declare function f2<T, U>(x: { first: T; second: U; });
->f2 : <T, U>(x: { first: T; second: U; }) => any
+>f2 : <T, U>(x: {    first: T;    second: U;}) => any
 >x : { first: T; second: U; }
 >first : T
 >second : U

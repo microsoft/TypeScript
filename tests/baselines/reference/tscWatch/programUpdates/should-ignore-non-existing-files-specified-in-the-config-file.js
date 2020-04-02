@@ -34,13 +34,14 @@ var x = 1;
 
 Output::
 >> Screen clear
-12:00:17 AM - Starting compilation in watch mode...
+[[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
 
-error TS6053: File '/a/b/commonFile3.ts' not found.
+[91merror[0m[90m TS6053: [0mFile '/a/b/commonFile3.ts' not found.
 
 
-12:00:20 AM - Found 1 error. Watching for file changes.
+[[90m12:00:20 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile3.ts"]
@@ -53,18 +54,18 @@ No cached semantic diagnostics in the builder::
 
 WatchedFiles::
 /a/b/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
 /a/b/commonfile1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /a/b/commonfile3.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/commonfile3.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

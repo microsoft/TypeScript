@@ -20,7 +20,7 @@ type B = Omit<A, 'a'>;
 >B : Pick<A, "b" | "c" | "d">
 
 function f(x: B) {
->f : (x: Pick<A, "b" | "c" | "d">) => void
+>f : (x: B) => void
 >x : Pick<A, "b" | "c" | "d">
 
     const b = x.b;

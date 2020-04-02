@@ -1,0 +1,4 @@
+=== /a.ts ===
+const x = 10;
+>x : Symbol(x, Decl(a.ts, 0, 5))
+

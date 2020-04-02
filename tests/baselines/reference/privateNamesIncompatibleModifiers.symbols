@@ -13,12 +13,15 @@ class A {
 
     readonly #qux = 3;       // OK
 >#qux : Symbol(A.#qux, Decl(privateNamesIncompatibleModifiers.ts, 3, 23))
+
+    declare #what: number;   // Error
+>#what : Symbol(A.#what, Decl(privateNamesIncompatibleModifiers.ts, 4, 22))
 }
 
 abstract class B {
->B : Symbol(B, Decl(privateNamesIncompatibleModifiers.ts, 5, 1))
+>B : Symbol(B, Decl(privateNamesIncompatibleModifiers.ts, 6, 1))
 
     abstract #quux = 3;      // Error
->#quux : Symbol(B.#quux, Decl(privateNamesIncompatibleModifiers.ts, 7, 18))
+>#quux : Symbol(B.#quux, Decl(privateNamesIncompatibleModifiers.ts, 8, 18))
 }
 

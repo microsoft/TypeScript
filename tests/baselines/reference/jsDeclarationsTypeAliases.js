@@ -129,9 +129,7 @@ export type SomeType = number | {
  * @param {number} x
  * @returns {SomeType}
  */
-export function doTheThing(x: number): number | {
-    x: string;
-} | LocalThing | ExportedThing;
+export function doTheThing(x: number): SomeType;
 export class ExportedThing {
     z: string;
 }

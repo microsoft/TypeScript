@@ -1,6 +1,6 @@
 === tests/cases/compiler/input.ts ===
 export = exports;
->exports : import("tests/cases/compiler/input")
+>exports : exports
 
 declare class exports {
 >exports : exports

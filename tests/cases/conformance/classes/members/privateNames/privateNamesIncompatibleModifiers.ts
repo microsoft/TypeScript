@@ -6,6 +6,7 @@ class A {
     private #bar = 3;        // Error
     protected #baz = 3;      // Error
     readonly #qux = 3;       // OK
+    declare #what: number;   // Error
 }
 
 abstract class B {

@@ -78,10 +78,10 @@ let x1 = <OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true}} />
 >OverWriteAttr : typeof OverWriteAttr
 >overwrite : string
 >obj1 : { x: 2; }
->x : number
+>x : 3
 >3 : 3
->{y: true} : { y: boolean; }
->y : boolean
+>{y: true} : { y: true; }
+>y : true
 >true : true
 
 let x2 = <OverWriteAttr {...anyobj} x={3} />
@@ -98,8 +98,8 @@ let x3 = <OverWriteAttr overwrite="hi" {...obj1} {...{y: true}} />
 >OverWriteAttr : typeof OverWriteAttr
 >overwrite : string
 >obj1 : { x: 2; }
->{y: true} : { y: boolean; }
->y : boolean
+>{y: true} : { y: true; }
+>y : true
 >true : true
 
 
