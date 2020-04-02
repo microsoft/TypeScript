@@ -9,6 +9,7 @@ function Foo<T>() {
 }
 
 <>
+    {/* JsxSelfClosingElement */}
     <Foo<unknown> />
     <Foo<string> />
     <Foo<boolean> />
@@ -19,7 +20,20 @@ function Foo<T>() {
     <Foo<undefined> />
     <Foo<TypeProps> />
     <Foo<InterfaceProps> />
+
+    {/* JsxOpeningElement */}
+    <Foo<unknown>></Foo>
+    <Foo<string>></Foo>
+    <Foo<boolean>></Foo>
+    <Foo<object>></Foo>
+    <Foo<null>></Foo>
+    <Foo<any>></Foo>
+    <Foo<never>></Foo>
+    <Foo<undefined>></Foo>
+    <Foo<TypeProps>></Foo>
+    <Foo<InterfaceProps>></Foo>
 </>
+
 
 //// [foo.jsx]
 "use strict";
@@ -29,6 +43,7 @@ function Foo() {
     return null;
 }
 <>
+    
     <Foo />
     <Foo />
     <Foo />
@@ -39,4 +54,16 @@ function Foo() {
     <Foo />
     <Foo />
     <Foo />
+
+    
+    <Foo></Foo>
+    <Foo></Foo>
+    <Foo></Foo>
+    <Foo></Foo>
+    <Foo></Foo>
+    <Foo></Foo>
+    <Foo></Foo>
+    <Foo></Foo>
+    <Foo></Foo>
+    <Foo></Foo>
 </>;
