@@ -317,6 +317,16 @@ namespace ts {
         let constraintDepth = 0;
         let currentNode: Node | undefined;
 
+        interface ExpensiveStatement {
+            node: Node;
+            typeDelta: number;
+            symbolDelta: number;
+        }
+
+        let ignoreExpensiveStatement = true;
+        const maxExpensiveStatementCount = 5;
+        const expensiveStatements: ExpensiveStatement[] = [];
+
         const emptySymbols = createSymbolTable();
         const arrayVariances = [VarianceFlags.Covariant];
 
@@ -35656,7 +35666,39 @@ namespace ts {
                 const saveCurrentNode = currentNode;
                 currentNode = node;
                 instantiationCount = 0;
+
+                const oldTypeCount = typeCount;
+                const oldSymbolCount = symbolCount;
+
                 checkSourceElementWorker(node);
+
+                if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement) {
+                    if (ignoreExpensiveStatement) {
+                        // The first statement is unfairly blamed for a lot of lib types
+                        ignoreExpensiveStatement = false;
+                    }
+                    else {
+                        const typeDelta = typeCount - oldTypeCount;
+                        const symbolDelta = symbolCount - oldSymbolCount;
+                        const record = { node, typeDelta, symbolDelta };
+
+                        let i = 0;
+                        for (const record of expensiveStatements) {
+                            if (record.typeDelta < typeDelta) {
+                                break;
+                            }
+                            i++;
+                        }
+
+                        if (i < maxExpensiveStatementCount) {
+                            expensiveStatements.splice(i, 0, record);
+                            if (expensiveStatements.length > maxExpensiveStatementCount) {
+                                expensiveStatements.pop();
+                            }
+                        }
+                    }
+                }
+
                 currentNode = saveCurrentNode;
             }
         }
