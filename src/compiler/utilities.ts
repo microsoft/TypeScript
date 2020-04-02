@@ -2114,10 +2114,13 @@ namespace ts {
         return isIdentifier(node) && node.escapedText === "exports";
     }
 
+    export function isModuleIdentifier(node: Node) {
+        return isIdentifier(node) && node.escapedText === "module";
+    }
+
     export function isModuleExportsAccessExpression(node: Node): node is LiteralLikeElementAccessExpression & { expression: Identifier } {
         return (isPropertyAccessExpression(node) || isLiteralLikeElementAccess(node))
-            && isIdentifier(node.expression)
-            && node.expression.escapedText === "module"
+            && isModuleIdentifier(node.expression)
             && getElementOrPropertyAccessName(node) === "exports";
     }
 

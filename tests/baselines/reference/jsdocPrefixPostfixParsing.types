@@ -15,7 +15,7 @@
  * @param {...number?[]!} k - (number[] | null)[]
  */
 function f(x, y, z, a, b, c, e, f, g, h, i, j, k) {
->f : (x: number[], y: number[], z: number[], a: (number | null)[], b: number[] | null, c: number[] | null, e: number | null | undefined, f: number | null | undefined, g: number | null | undefined, h: number | null | undefined, i: number[] | undefined, j: number[] | null | undefined, k: (number | null)[] | undefined) => void
+>f : (x: number[], y: number[], z: (number[]), a: (number | null)[], b: number[] | null, c: (number[]) | null, e: ...?number, f: ...?number, g: ...?!number, h: ...!?number, i: ...number[], j: ...?!number[], k: ...!?number[]) => void
 >x : number[]
 >y : number[]
 >z : number[]

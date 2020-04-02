@@ -6,10 +6,10 @@ interface A {
 
 interface Large {
     something: {
->something : { another: { more: { thing: A; }; yetstill: { another: A; }; }; }
+>something : { another: {    more: {        thing: A;    };    yetstill: {        another: A;    };}; }
 
         another: {
->another : { more: { thing: A; }; yetstill: { another: A; }; }
+>another : { more: {    thing: A;}; yetstill: {    another: A;}; }
 
             more: {
 >more : { thing: A; }

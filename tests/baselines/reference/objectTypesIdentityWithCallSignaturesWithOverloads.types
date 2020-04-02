@@ -153,12 +153,12 @@ function foo2(x: any) { }
 >x : any
 
 function foo3(x: typeof a);
->foo3 : { (x: { foo(x: number): number; foo(x: string): string; }): any; (x: { foo(x: number): number; foo(x: string): string; }): any; }
+>foo3 : { (x: typeof a): any; (x: { foo(x: number): number; foo(x: string): string; }): any; }
 >x : { foo(x: number): number; foo(x: string): string; }
 >a : { foo(x: number): number; foo(x: string): string; }
 
 function foo3(x: typeof a); // error
->foo3 : { (x: { foo(x: number): number; foo(x: string): string; }): any; (x: { foo(x: number): number; foo(x: string): string; }): any; }
+>foo3 : { (x: { foo(x: number): number; foo(x: string): string; }): any; (x: typeof a): any; }
 >x : { foo(x: number): number; foo(x: string): string; }
 >a : { foo(x: number): number; foo(x: string): string; }
 
@@ -167,12 +167,12 @@ function foo3(x: any) { }
 >x : any
 
 function foo4(x: typeof b);
->foo4 : { (x: { foo(x: any): any; }): any; (x: { foo(x: any): any; }): any; }
+>foo4 : { (x: typeof b): any; (x: { foo(x: any): any; }): any; }
 >x : { foo(x: any): any; }
 >b : { foo(x: any): any; }
 
 function foo4(x: typeof b); // error
->foo4 : { (x: { foo(x: any): any; }): any; (x: { foo(x: any): any; }): any; }
+>foo4 : { (x: { foo(x: any): any; }): any; (x: typeof b): any; }
 >x : { foo(x: any): any; }
 >b : { foo(x: any): any; }
 
@@ -221,7 +221,7 @@ function foo7(x: A);
 >x : A
 
 function foo7(x: typeof a); // BUG 831930
->foo7 : { (x: A): any; (x: { foo(x: number): number; foo(x: string): string; }): any; }
+>foo7 : { (x: A): any; (x: typeof a): any; }
 >x : { foo(x: number): number; foo(x: string): string; }
 >a : { foo(x: number): number; foo(x: string): string; }
 
@@ -258,7 +258,7 @@ function foo10(x: B);
 >x : B
 
 function foo10(x: typeof a); // BUG 831930
->foo10 : { (x: B): any; (x: { foo(x: number): number; foo(x: string): string; }): any; }
+>foo10 : { (x: B): any; (x: typeof a): any; }
 >x : { foo(x: number): number; foo(x: string): string; }
 >a : { foo(x: number): number; foo(x: string): string; }
 
@@ -271,7 +271,7 @@ function foo11(x: B);
 >x : B
 
 function foo11(x: typeof b); // ok
->foo11 : { (x: B): any; (x: { foo(x: any): any; }): any; }
+>foo11 : { (x: B): any; (x: typeof b): any; }
 >x : { foo(x: any): any; }
 >b : { foo(x: any): any; }
 
@@ -308,7 +308,7 @@ function foo13(x: I);
 >x : I
 
 function foo13(x: typeof a);  // error
->foo13 : { (x: I): any; (x: { foo(x: number): number; foo(x: string): string; }): any; }
+>foo13 : { (x: I): any; (x: typeof a): any; }
 >x : { foo(x: number): number; foo(x: string): string; }
 >a : { foo(x: number): number; foo(x: string): string; }
 
@@ -321,7 +321,7 @@ function foo14(x: I);
 >x : I
 
 function foo14(x: typeof b); // ok
->foo14 : { (x: I): any; (x: { foo(x: any): any; }): any; }
+>foo14 : { (x: I): any; (x: typeof b): any; }
 >x : { foo(x: any): any; }
 >b : { foo(x: any): any; }
 

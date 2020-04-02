@@ -113,7 +113,7 @@ var r4 = foo5(E.A);
 >A : E
 
 declare function foo6(x: { bar: number }): { bar: number };
->foo6 : { (x: { bar: number; }): { bar: number; }; (x: E): E; }
+>foo6 : { (x: {    bar: number;}): {    bar: number;}; (x: E): E; }
 >x : { bar: number; }
 >bar : number
 >bar : number

@@ -14,7 +14,7 @@ function f() {
  * @returns {string=} This comment is not currently exposed
  */
 function f1() {
->f1 : () => string
+>f1 : () => string | undefined
 
     return "hello world";
 >"hello world" : "hello world"

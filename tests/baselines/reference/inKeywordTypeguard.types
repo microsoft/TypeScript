@@ -299,7 +299,7 @@ class UnreachableCodeDetection {
 }
 
 function positiveIntersectionTest(x: { a: string } & { b: string }) {
->positiveIntersectionTest : (x: { a: string; } & { b: string; }) => void
+>positiveIntersectionTest : (x: {    a: string;} & {    b: string;}) => void
 >x : { a: string; } & { b: string; }
 >a : string
 >b : string

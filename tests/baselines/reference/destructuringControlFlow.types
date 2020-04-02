@@ -1,6 +1,6 @@
 === tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts ===
 function f1(obj: { a?: string }) {
->f1 : (obj: { a?: string | undefined; }) => void
+>f1 : (obj: {    a?: string;}) => void
 >obj : { a?: string | undefined; }
 >a : string | undefined
 
@@ -95,7 +95,7 @@ function f2(obj: [number, string] | null[]) {
 }
 
 function f3(obj: { a?: number, b?: string }) {
->f3 : (obj: { a?: number | undefined; b?: string | undefined; }) => void
+>f3 : (obj: {    a?: number;    b?: string;}) => void
 >obj : { a?: number | undefined; b?: string | undefined; }
 >a : number | undefined
 >b : string | undefined

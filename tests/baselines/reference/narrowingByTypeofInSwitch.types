@@ -440,7 +440,7 @@ type R = { x: string, y: number }
 >y : number
 
 function exhaustiveChecks(x: number | string | L | R): string {
->exhaustiveChecks : (x: string | number | R | L) => string
+>exhaustiveChecks : (x: number | string | L | R) => string
 >x : string | number | R | L
 
     switch (typeof x) {
@@ -543,7 +543,7 @@ function multipleGeneric<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y,
 }
 
 function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X | Y): [X, number] | [Y, string] | [(X | Y)] {
->multipleGenericFuse : <X extends number | L, Y extends number | R>(xy: X | Y) => [X, number] | [Y, string] | [X | Y]
+>multipleGenericFuse : <X extends number | L, Y extends number | R>(xy: X | Y) => [X, number] | [Y, string] | [(X | Y)]
 >xy : X | Y
 
     switch (typeof xy) {
@@ -1017,7 +1017,7 @@ function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: key
 /* Both string literals and template literals */
 
 function multipleGenericFuseWithBoth<X extends L | number, Y extends R | number>(xy: X | Y): [X, number] | [Y, string] | [(X | Y)] {
->multipleGenericFuseWithBoth : <X extends number | L, Y extends number | R>(xy: X | Y) => [X, number] | [Y, string] | [X | Y]
+>multipleGenericFuseWithBoth : <X extends number | L, Y extends number | R>(xy: X | Y) => [X, number] | [Y, string] | [(X | Y)]
 >xy : X | Y
 
     switch (typeof xy) {

@@ -9,8 +9,8 @@ export type Baa<Y> = Baz<boolean, Y>;
 >Baa : Bar<boolean, string, Y>
 
 export const y = (x: Baa<number>) => 1
->y : (x: Bar<boolean, string, number>) => number
->(x: Baa<number>) => 1 : (x: Bar<boolean, string, number>) => number
+>y : (x: Baa<number>) => number
+>(x: Baa<number>) => 1 : (x: Baa<number>) => number
 >x : Bar<boolean, string, number>
 >1 : 1
 
