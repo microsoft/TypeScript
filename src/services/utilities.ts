@@ -96,7 +96,7 @@ namespace ts {
             || node.parent.kind === SyntaxKind.ExternalModuleReference
             || node.parent.kind === SyntaxKind.ImportSpecifier
             || node.parent.kind === SyntaxKind.ImportClause
-            || node.parent.kind === SyntaxKind.ImportEqualsDeclaration) {
+            || isImportEqualsDeclaration(node.parent) && node === node.parent.name) {
             return SemanticMeaning.All;
         }
         else if (isInRightSideOfInternalImportEqualsDeclaration(node)) {
