@@ -92,7 +92,11 @@ namespace ts {
         if (node.kind === SyntaxKind.SourceFile) {
             return SemanticMeaning.Value;
         }
-        else if (node.parent.kind === SyntaxKind.ExportAssignment || node.parent.kind === SyntaxKind.ExternalModuleReference) {
+        else if (node.parent.kind === SyntaxKind.ExportAssignment
+            || node.parent.kind === SyntaxKind.ExternalModuleReference
+            || node.parent.kind === SyntaxKind.ImportSpecifier
+            || node.parent.kind === SyntaxKind.ImportClause
+            || isImportEqualsDeclaration(node.parent) && node === node.parent.name) {
             return SemanticMeaning.All;
         }
         else if (isInRightSideOfInternalImportEqualsDeclaration(node)) {
