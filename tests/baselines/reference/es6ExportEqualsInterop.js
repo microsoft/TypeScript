@@ -300,6 +300,8 @@ var class_2 = require("class");
 __createBinding(exports, class_2, "a", "a9");
 var class_module_2 = require("class-module");
 __createBinding(exports, class_module_2, "a", "a0");
+// export-star
+__exportStar(require("interface"), exports);
 __exportStar(require("variable"), exports);
 __exportStar(require("interface-variable"), exports);
 __exportStar(require("module"), exports);

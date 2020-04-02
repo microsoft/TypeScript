@@ -13,6 +13,7 @@ export var foo = 42;
 //// [c.js]
 "use strict";
 exports.__esModule = true;
+exports.foo = void 0;
 exports.foo = 42;
 //// [b.js]
 "use strict";

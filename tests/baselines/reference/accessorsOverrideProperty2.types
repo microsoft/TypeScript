@@ -19,9 +19,9 @@ class Derived extends Base {
 >x : number
 >value : number
 >console.log(`x was set to ${value}`) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >`x was set to ${value}` : string
 >value : number
 }
@@ -33,9 +33,9 @@ const obj = new Derived(); // nothing printed
 
 console.log(obj.x); // 1
 >console.log(obj.x) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >obj.x : number
 >obj : Derived
 >x : number

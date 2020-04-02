@@ -13,4 +13,5 @@ exports.__esModule = true;
 //// [b.js]
 "use strict";
 exports.__esModule = true;
+exports.c = void 0;
 exports.c = '';

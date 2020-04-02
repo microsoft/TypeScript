@@ -1,7 +1,7 @@
 === tests/cases/conformance/salsa/bug26877.js ===
 /** @param {Emu.D} x */
 function ollKorrect(x) {
->ollKorrect : (x: D) => void
+>ollKorrect : (x: Emu.D) => void
 >x : D
 
     x._model

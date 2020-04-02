@@ -113,7 +113,7 @@ module m2 {
 }
 
 //// [es6ModuleClassDeclaration.js]
-const c = /** @class */ (() => {
+let c = /** @class */ (() => {
     class c {
         constructor() {
             this.x = 10;
@@ -133,7 +133,7 @@ const c = /** @class */ (() => {
     return c;
 })();
 export { c };
-const c2 = /** @class */ (() => {
+let c2 = /** @class */ (() => {
     class c2 {
         constructor() {
             this.x = 10;
@@ -156,7 +156,7 @@ new c();
 new c2();
 export var m1;
 (function (m1) {
-    const c3 = /** @class */ (() => {
+    let c3 = /** @class */ (() => {
         class c3 {
             constructor() {
                 this.x = 10;
@@ -176,7 +176,7 @@ export var m1;
         return c3;
     })();
     m1.c3 = c3;
-    const c4 = /** @class */ (() => {
+    let c4 = /** @class */ (() => {
         class c4 {
             constructor() {
                 this.x = 10;
@@ -202,7 +202,7 @@ export var m1;
 })(m1 || (m1 = {}));
 var m2;
 (function (m2) {
-    const c3 = /** @class */ (() => {
+    let c3 = /** @class */ (() => {
         class c3 {
             constructor() {
                 this.x = 10;
@@ -222,7 +222,7 @@ var m2;
         return c3;
     })();
     m2.c3 = c3;
-    const c4 = /** @class */ (() => {
+    let c4 = /** @class */ (() => {
         class c4 {
             constructor() {
                 this.x = 10;

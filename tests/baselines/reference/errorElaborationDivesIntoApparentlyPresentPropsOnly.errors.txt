@@ -1,5 +1,7 @@
 tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts(2,5): error TS2322: Type '{ a: string; b: number; c: number; }' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to '{ a: string; b: number; c: number; }'.
 tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts(6,5): error TS2322: Type '{ a: number; }' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to '{ a: number; }'.
 tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts(10,5): error TS2322: Type '{ a: string; }' is not assignable to type 'T'.
   '{ a: string; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{ a: string; }'.
 
@@ -9,12 +11,14 @@ tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts(10,5
         x = { a: "abc", b: 20, c: 30 };
         ~
 !!! error TS2322: Type '{ a: string; b: number; c: number; }' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to '{ a: string; b: number; c: number; }'.
     }
     
     function bar<T extends { a: string }>(x: T) {
         x = { a: 20 };
         ~
 !!! error TS2322: Type '{ a: number; }' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to '{ a: number; }'.
     }
     
     function baz<T extends { a: string }>(x: T) {

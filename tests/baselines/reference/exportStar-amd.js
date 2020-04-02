@@ -32,6 +32,7 @@ foo;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.y = exports.x = void 0;
     exports.x = 1;
     exports.y = 2;
 });
@@ -39,6 +40,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.foo = void 0;
     exports.default = "hello";
     function foo() { }
     exports.foo = foo;
@@ -47,6 +49,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.z = exports.y = exports.x = void 0;
     var x = "x";
     exports.x = x;
     var y = "y";

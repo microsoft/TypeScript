@@ -5,9 +5,9 @@ export interface StrategicState {
 }
 
 export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined>): (a: T) => IterableIterator<T | undefined> {
->strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T>) => (a: T) => IterableIterator<T>
+>strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined>) => (a: T) => IterableIterator<T | undefined>
 >stratName : string
->gen : (a: T) => IterableIterator<T>
+>gen : (a: T) => IterableIterator<T | undefined>
 >a : T
 >a : T
 

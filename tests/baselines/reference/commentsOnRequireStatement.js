@@ -19,10 +19,12 @@ export {subject1} from './1';
 //// [0.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.subject = void 0;
 exports.subject = 10;
 //// [1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.subject1 = void 0;
 exports.subject1 = 10;
 //// [2.js]
 "use strict";

@@ -12,6 +12,7 @@ import { foo, bar } from "./a";
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+exports.baz = exports.foo = void 0;
 //// [b.js]
 "use strict";
 exports.__esModule = true;

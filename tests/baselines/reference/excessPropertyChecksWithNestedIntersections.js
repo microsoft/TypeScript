@@ -75,13 +75,13 @@ test = { foo: true, bar: { foo: true, bar: true, boo: true } }
 "use strict";
 // https://github.com/Microsoft/TypeScript/issues/13813
 exports.__esModule = true;
+exports.myInstance = exports.photo = exports.obj = void 0;
 var a = { a: { x: 'hello' } }; // ok
 var b = { a: { x: 2 } }; // error - types of property x are incompatible
 var c = { a: { x: 'hello', y: 2 } }; // error - y does not exist in type A
 var d = { a: { x: 'hello' }, c: 5 }; // ok
 var e = { a: { x: 2 }, c: 5 }; // error - types of property x are incompatible
 var f = { a: { x: 'hello', y: 2 }, c: 5 }; // error - y does not exist in type A
-exports.obj = void 0;
 exports.photo = {
     id: 1,
     url: '',

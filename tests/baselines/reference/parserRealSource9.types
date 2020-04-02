@@ -14,7 +14,7 @@ module TypeScript {
 >checker : any
 
         public resolveBaseTypeLinks(typeLinks: TypeLink[], scope: SymbolScope) {
->resolveBaseTypeLinks : (typeLinks: any[], scope: any) => any[]
+>resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: any) => any[]
 >typeLinks : any[]
 >scope : any
 

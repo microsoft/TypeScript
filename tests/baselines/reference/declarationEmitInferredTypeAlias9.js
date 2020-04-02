@@ -9,6 +9,7 @@ export function returnSomeGlobalValue() {
 //// [declarationEmitInferredTypeAlias9.js]
 "use strict";
 exports.__esModule = true;
+exports.returnSomeGlobalValue = void 0;
 var x;
 function returnSomeGlobalValue() {
     return x;

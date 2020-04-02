@@ -15,6 +15,7 @@ new Foo3();
 //// [mod.js]
 "use strict";
 exports.__esModule = true;
+exports.Bar = void 0;
 var Foo = /** @class */ (function () {
     function Foo() {
     }

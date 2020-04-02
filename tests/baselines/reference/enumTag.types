@@ -76,7 +76,7 @@ const Fs = {
  * @param {Fs} f
  */
 function consume(t,s,f) {
->consume : (t: string, s: number, f: (arg0: number) => number) => void
+>consume : (t: Target, s: Second, f: Fs) => void
 >t : string
 >s : number
 >f : (arg0: number) => number

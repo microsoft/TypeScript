@@ -130,6 +130,7 @@ function f7() {
 "use strict";
 // Repro from #8513
 exports.__esModule = true;
+exports.fn = exports.isSome = exports.none = void 0;
 var cond;
 exports.none = { none: '' };
 function isSome(value) {

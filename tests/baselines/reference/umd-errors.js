@@ -34,5 +34,4 @@ export as namespace C2;
 //// [err5.js]
 "use strict";
 exports.__esModule = true;
-// Illegal, may not appear in implementation files
 exports.v = void 0;

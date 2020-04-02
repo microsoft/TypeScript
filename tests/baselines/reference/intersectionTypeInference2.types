@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/intersection/intersectionTypeInference2.ts ===
 declare function f<T>(x: { prop: T }): T;
->f : <T>(x: { prop: T; }) => T
+>f : <T>(x: {    prop: T;}) => T
 >x : { prop: T; }
 >prop : T
 
@@ -10,7 +10,7 @@ declare const a: { prop: string } & { prop: number };
 >prop : number
 
 declare const b: { prop: string & number };
->b : { prop: never; }
+>b : { prop: string & number; }
 >prop : never
 
 f(a);  // never

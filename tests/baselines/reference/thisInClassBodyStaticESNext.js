@@ -11,7 +11,7 @@ class Foo {
 
 //// [thisInClassBodyStaticESNext.js]
 // all are allowed with es-compliant class field emit
-const Foo = /** @class */ (() => {
+let Foo = /** @class */ (() => {
     class Foo {
         x = this;
         static t = this;

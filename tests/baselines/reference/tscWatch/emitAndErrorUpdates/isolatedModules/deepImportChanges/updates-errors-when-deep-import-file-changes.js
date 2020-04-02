@@ -37,6 +37,7 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/user/username/projects/myproject/c.js]
 "use strict";
 exports.__esModule = true;
+exports.C = void 0;
 var C = /** @class */ (function () {
     function C() {
         this.d = 1;
@@ -49,6 +50,7 @@ exports.C = C;
 //// [/user/username/projects/myproject/b.js]
 "use strict";
 exports.__esModule = true;
+exports.B = void 0;
 var c_1 = require("./c");
 var B = /** @class */ (function () {
     function B() {
@@ -70,11 +72,11 @@ console.log(b.c.d);
 
 Output::
 >> Screen clear
-12:00:25 AM - Starting compilation in watch mode...
+[[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:32 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
@@ -124,6 +126,7 @@ export class C
 //// [/user/username/projects/myproject/c.js]
 "use strict";
 exports.__esModule = true;
+exports.C = void 0;
 var C = /** @class */ (function () {
     function C() {
         this.d2 = 1;
@@ -136,13 +139,17 @@ exports.C = C;
 
 Output::
 >> Screen clear
-12:00:36 AM - File change detected. Starting incremental compilation...
+[[90m12:00:36 AM[0m] File change detected. Starting incremental compilation...
 
 
-a.ts(4,17): error TS2339: Property 'd' does not exist on type 'C'.
+[96ma.ts[0m:[93m4[0m:[93m17[0m - [91merror[0m[90m TS2339: [0mProperty 'd' does not exist on type 'C'.
+
+[7m4[0m console.log(b.c.d);
+[7m [0m [91m                ~[0m
 
 
-12:00:40 AM - Found 1 error. Watching for file changes.
+[[90m12:00:40 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]

@@ -1,5 +1,5 @@
-tests/cases/compiler/es6ImportNamedImportNoNamedExports_1.ts(1,10): error TS2459: Module '"./es6ImportNamedImportNoNamedExports_0"' declares 'a' locally, but it is not exported.
-tests/cases/compiler/es6ImportNamedImportNoNamedExports_1.ts(2,10): error TS2459: Module '"./es6ImportNamedImportNoNamedExports_0"' declares 'a' locally, but it is not exported.
+tests/cases/compiler/es6ImportNamedImportNoNamedExports_1.ts(1,10): error TS2617: 'a' can only be imported by using 'import a = require("./es6ImportNamedImportNoNamedExports_0")' or by turning on the 'esModuleInterop' flag and using a default import.
+tests/cases/compiler/es6ImportNamedImportNoNamedExports_1.ts(2,10): error TS2617: 'a' can only be imported by using 'import a = require("./es6ImportNamedImportNoNamedExports_0")' or by turning on the 'esModuleInterop' flag and using a default import.
 
 
 ==== tests/cases/compiler/es6ImportNamedImportNoNamedExports_0.ts (0 errors) ====
@@ -9,9 +9,7 @@ tests/cases/compiler/es6ImportNamedImportNoNamedExports_1.ts(2,10): error TS2459
 ==== tests/cases/compiler/es6ImportNamedImportNoNamedExports_1.ts (2 errors) ====
     import { a } from "./es6ImportNamedImportNoNamedExports_0";
              ~
-!!! error TS2459: Module '"./es6ImportNamedImportNoNamedExports_0"' declares 'a' locally, but it is not exported.
-!!! related TS2728 tests/cases/compiler/es6ImportNamedImportNoNamedExports_0.ts:1:5: 'a' is declared here.
+!!! error TS2617: 'a' can only be imported by using 'import a = require("./es6ImportNamedImportNoNamedExports_0")' or by turning on the 'esModuleInterop' flag and using a default import.
     import { a as x } from "./es6ImportNamedImportNoNamedExports_0";
              ~
-!!! error TS2459: Module '"./es6ImportNamedImportNoNamedExports_0"' declares 'a' locally, but it is not exported.
-!!! related TS2728 tests/cases/compiler/es6ImportNamedImportNoNamedExports_0.ts:1:5: 'a' is declared here.
+!!! error TS2617: 'a' can only be imported by using 'import a = require("./es6ImportNamedImportNoNamedExports_0")' or by turning on the 'esModuleInterop' flag and using a default import.

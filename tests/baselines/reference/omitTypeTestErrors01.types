@@ -17,7 +17,7 @@ export type Baz = Omit<Foo, "b" | "c">;
 >Baz : Pick<Foo, "a">
 
 export function getBarC(bar: Bar) {
->getBarC : (bar: Pick<Foo, "a" | "b">) => any
+>getBarC : (bar: Bar) => any
 >bar : Pick<Foo, "a" | "b">
 
     return bar.c;
@@ -27,7 +27,7 @@ export function getBarC(bar: Bar) {
 }
 
 export function getBazB(baz: Baz) {
->getBazB : (baz: Pick<Foo, "a">) => any
+>getBazB : (baz: Baz) => any
 >baz : Pick<Foo, "a">
 
     return baz.b;

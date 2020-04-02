@@ -20,6 +20,7 @@ export const a4 = null as { x : number } & InvalidKeys2<"a">;
 //// [parenthesisDoesNotBlockAliasSymbolCreation.js]
 "use strict";
 exports.__esModule = true;
+exports.a4 = exports.a3 = exports.a2 = exports.a = void 0;
 exports.a = null;
 exports.a2 = null;
 exports.a3 = null;

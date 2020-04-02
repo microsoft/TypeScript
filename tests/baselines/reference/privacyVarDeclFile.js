@@ -427,6 +427,7 @@ module publicModuleInGlobal {
 //// [privacyVarDeclFile_externalModule.js]
 "use strict";
 exports.__esModule = true;
+exports.publicModule = exports.publicVarWithPrivateModulePropertyTypes = exports.publicClassWithPrivateModulePropertyTypes = exports.publicVarWithPublicPropertyTypes = exports.publicVarWithPrivatePropertyTypes = exports.publicClassWithWithPublicPropertyTypes = exports.publicClassWithWithPrivatePropertyTypes = exports.publicClass = void 0;
 var privateClass = /** @class */ (function () {
     function privateClass() {
     }
@@ -460,8 +461,6 @@ var privateClassWithWithPublicPropertyTypes = /** @class */ (function () {
     }
     return privateClassWithWithPublicPropertyTypes;
 }());
-exports.publicVarWithPrivatePropertyTypes = void 0; // Error
-exports.publicVarWithPublicPropertyTypes = void 0;
 var privateVarWithPrivatePropertyTypes;
 var privateVarWithPublicPropertyTypes;
 var publicClassWithPrivateModulePropertyTypes = /** @class */ (function () {
@@ -470,7 +469,6 @@ var publicClassWithPrivateModulePropertyTypes = /** @class */ (function () {
     return publicClassWithPrivateModulePropertyTypes;
 }());
 exports.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
-exports.publicVarWithPrivateModulePropertyTypes = void 0; // Error
 var privateClassWithPrivateModulePropertyTypes = /** @class */ (function () {
     function privateClassWithPrivateModulePropertyTypes() {
     }

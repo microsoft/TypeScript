@@ -16,6 +16,7 @@ export enum Animals {
 //// [c.js]
 "use strict";
 exports.__esModule = true;
+exports.Animals = void 0;
 var Animals;
 (function (Animals) {
     Animals[Animals["Cat"] = 0] = "Cat";

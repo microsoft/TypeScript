@@ -314,7 +314,7 @@ async function* asyncGenFuncYieldConstCall() { yield constCall; }
 async function* asyncGenFuncYieldLetCall() { yield letCall; }
 async function* asyncGenFuncYieldVarCall() { yield varCall; }
 // classes
-const C = /** @class */ (() => {
+let C = /** @class */ (() => {
     class C {
         constructor() {
             this.readonlyCall = Symbol();
@@ -373,7 +373,7 @@ const o2 = {
     method5(p = s) { return p; },
 };
 // property initializers
-const C0 = /** @class */ (() => {
+let C0 = /** @class */ (() => {
     class C0 {
         constructor() {
             this.a = s;

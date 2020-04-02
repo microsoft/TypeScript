@@ -1,0 +1,45 @@
+=== tests/cases/compiler/typeGuardConstructorNarrowPrimitivesInUnion.ts ===
+// Union of primitives, number, arrays, and C1
+let var1: number | "hello" | "world" | true | false | number[] | string[];
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowPrimitivesInUnion.ts, 1, 3))
+
+if (var1.constructor === Number) {
+>var1.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowPrimitivesInUnion.ts, 1, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    var1; // number
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowPrimitivesInUnion.ts, 1, 3))
+}
+
+if (var1.constructor === String) {
+>var1.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowPrimitivesInUnion.ts, 1, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    var1; // "hello" | "world"
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowPrimitivesInUnion.ts, 1, 3))
+}
+
+if (var1.constructor === Boolean) {
+>var1.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowPrimitivesInUnion.ts, 1, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    var1; // boolean
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowPrimitivesInUnion.ts, 1, 3))
+}
+
+if (var1.constructor === Array) {
+>var1.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowPrimitivesInUnion.ts, 1, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    var1; // number[] | string[]
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowPrimitivesInUnion.ts, 1, 3))
+}
+

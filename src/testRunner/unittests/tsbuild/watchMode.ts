@@ -598,7 +598,7 @@ let x: string = 10;`);
                 }
 
                 function verifyDependencies(watch: Watch, filePath: string, expected: readonly string[]) {
-                    checkArray(`${filePath} dependencies`, watch.getBuilderProgram().getAllDependencies(watch().getSourceFile(filePath)!), expected);
+                    checkArray(`${filePath} dependencies`, watch.getCurrentProgram().getAllDependencies(watch.getCurrentProgram().getSourceFile(filePath)!), expected);
                 }
 
                 describe("on sample project", () => {
@@ -639,7 +639,7 @@ let x: string = 10;`);
 
                             host.checkTimeoutQueueLengthAndRun(1);
                             checkOutputErrorsIncremental(host, emptyArray);
-                            checkProgramActualFiles(watch(), expectedProgramFilesAfterEdit());
+                            checkProgramActualFiles(watch.getCurrentProgram().getProgram(), expectedProgramFilesAfterEdit());
 
                         });
 
@@ -739,7 +739,7 @@ export function gfoo() {
                         expectedWatchedDirectoriesRecursive: readonly string[],
                         dependencies: readonly [string, readonly string[]][],
                         expectedWatchedDirectories?: readonly string[]) {
-                        checkProgramActualFiles(watch(), expectedProgramFiles);
+                        checkProgramActualFiles(watch.getCurrentProgram().getProgram(), expectedProgramFiles);
                         verifyWatchesOfProject(host, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, expectedWatchedDirectories);
                         for (const [file, deps] of dependencies) {
                             verifyDependencies(watch, file, deps);
@@ -1130,6 +1130,38 @@ export function someFn() { }`);
                     return "Make dts change";
                 }
             ],
+        });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "works when noUnusedParameters changes to false",
+            commandLineArgs: ["-b", "-w"],
+            sys: () => {
+                const index: File = {
+                    path: `${projectRoot}/index.ts`,
+                    content: `const fn = (a: string, b: string) => b;`
+                };
+                const configFile: File = {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            noUnusedParameters: true
+                        }
+                    })
+                };
+                return createWatchedSystem([index, configFile, libFile], { currentDirectory: projectRoot });
+            },
+            changes: [
+                sys => {
+                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({
+                        compilerOptions: {
+                            noUnusedParameters: false
+                        }
+                    }));
+                    sys.runQueuedTimeoutCallbacks();
+                    return "Change tsconfig to set noUnusedParameters to false";
+                },
+            ]
         });
     });
 

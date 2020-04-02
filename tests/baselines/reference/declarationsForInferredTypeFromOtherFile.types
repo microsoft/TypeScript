@@ -4,7 +4,7 @@ export class Foo {}
 
 === tests/cases/compiler/file2.ts ===
 export function foo(): import("./file1").Foo {
->foo : () => import("tests/cases/compiler/file1").Foo
+>foo : () => import("./file1").Foo
 
     return null as any;
 >null as any : any

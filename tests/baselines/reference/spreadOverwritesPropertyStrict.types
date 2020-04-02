@@ -44,7 +44,7 @@ var unused5 = { ...abq, b: 1 } // ok
 >1 : 1
 
 function g(obj: { x: number | undefined }) {
->g : (obj: { x: number | undefined; }) => { x: number | undefined; }
+>g : (obj: {    x: number | undefined;}) => { x: number | undefined; }
 >obj : { x: number | undefined; }
 >x : number | undefined
 
@@ -55,7 +55,7 @@ function g(obj: { x: number | undefined }) {
 >obj : { x: number | undefined; }
 }
 function f(obj: { x: number } | undefined) {
->f : (obj: { x: number; } | undefined) => { x: number; }
+>f : (obj: {    x: number;} | undefined) => { x: number; }
 >obj : { x: number; } | undefined
 >x : number
 
@@ -66,7 +66,7 @@ function f(obj: { x: number } | undefined) {
 >obj : { x: number; } | undefined
 }
 function h(obj: { x: number } | { x: string }) {
->h : (obj: { x: number; } | { x: string; }) => { x: number; } | { x: string; }
+>h : (obj: {    x: number;} | {    x: string;}) => { x: number; } | { x: string; }
 >obj : { x: number; } | { x: string; }
 >x : number
 >x : string
@@ -76,5 +76,51 @@ function h(obj: { x: number } | { x: string }) {
 >x : number
 >1 : 1
 >obj : { x: number; } | { x: string; }
+}
+function i(b: boolean, t: { command: string, ok: string }) {
+>i : (b: boolean, t: {    command: string;    ok: string;}) => { command: string; ok: string; } | { command: string; }
+>b : boolean
+>t : { command: string; ok: string; }
+>command : string
+>ok : string
+
+    return { command: "hi", ...(b ? t : {}) } // ok
+>{ command: "hi", ...(b ? t : {}) } : { command: string; ok: string; } | { command: string; }
+>command : string
+>"hi" : "hi"
+>(b ? t : {}) : { command: string; ok: string; } | {}
+>b ? t : {} : { command: string; ok: string; } | {}
+>b : boolean
+>t : { command: string; ok: string; }
+>{} : {}
+}
+function j() {
+>j : () => { command: string; }
+
+    return { ...{ command: "hi" } , ...{ command: "bye" } } // ok
+>{ ...{ command: "hi" } , ...{ command: "bye" } } : { command: string; }
+>{ command: "hi" } : { command: string; }
+>command : string
+>"hi" : "hi"
+>{ command: "bye" } : { command: string; }
+>command : string
+>"bye" : "bye"
+}
+function k(t: { command: string, ok: string }) {
+>k : (t: {    command: string;    ok: string;}) => { command: string; ok: string; spoiler2: boolean; spoiler: boolean; }
+>t : { command: string; ok: string; }
+>command : string
+>ok : string
+
+    return { command: "hi", ...{ spoiler: true }, spoiler2: true, ...t } // error
+>{ command: "hi", ...{ spoiler: true }, spoiler2: true, ...t } : { command: string; ok: string; spoiler2: boolean; spoiler: boolean; }
+>command : string
+>"hi" : "hi"
+>{ spoiler: true } : { spoiler: boolean; }
+>spoiler : boolean
+>true : true
+>spoiler2 : boolean
+>true : true
+>t : { command: string; ok: string; }
 }
 

@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/union/discriminatedUnionTypes2.ts ===
 function f10(x : { kind: false, a: string } | { kind: true, b: string } | { kind: string, c: string }) {
->f10 : (x: { kind: false; a: string; } | { kind: true; b: string; } | { kind: string; c: string; }) => void
+>f10 : (x: {    kind: false;    a: string;} | {    kind: true;    b: string;} | {    kind: string;    c: string;}) => void
 >x : { kind: false; a: string; } | { kind: true; b: string; } | { kind: string; c: string; }
 >kind : false
 >false : false
@@ -44,7 +44,7 @@ function f10(x : { kind: false, a: string } | { kind: true, b: string } | { kind
 }
 
 function f11(x : { kind: false, a: string } | { kind: true, b: string } | { kind: string, c: string }) {
->f11 : (x: { kind: false; a: string; } | { kind: true; b: string; } | { kind: string; c: string; }) => void
+>f11 : (x: {    kind: false;    a: string;} | {    kind: true;    b: string;} | {    kind: string;    c: string;}) => void
 >x : { kind: false; a: string; } | { kind: true; b: string; } | { kind: string; c: string; }
 >kind : false
 >false : false
@@ -87,7 +87,7 @@ function f11(x : { kind: false, a: string } | { kind: true, b: string } | { kind
 }
 
 function f13(x: { a: null; b: string } | { a: string, c: number }) {
->f13 : (x: { a: null; b: string; } | { a: string; c: number; }) => void
+>f13 : (x: {    a: null;    b: string;} | {    a: string;    c: number;}) => void
 >x : { a: null; b: string; } | { a: string; c: number; }
 >a : null
 >null : null
@@ -108,7 +108,7 @@ function f13(x: { a: null; b: string } | { a: string, c: number }) {
 }
 
 function f14<T>(x: { a: 0; b: string } | { a: T, c: number }) {
->f14 : <T>(x: { a: 0; b: string; } | { a: T; c: number; }) => void
+>f14 : <T>(x: {    a: 0;    b: string;} | {    a: T;    c: number;}) => void
 >x : { a: 0; b: string; } | { a: T; c: number; }
 >a : 0
 >b : string
@@ -323,13 +323,13 @@ type abc = a | b | c;
 >abc : abc
 
 function f(problem: abc & (b | c)) {
->f : (problem: b | c | (a & b) | (a & c) | (b & c) | (c & b)) => void
->problem : b | c | (a & b) | (a & c) | (b & c) | (c & b)
+>f : (problem: abc & (b | c)) => void
+>problem : b | c
 
     if (problem.type === 'b') {
 >problem.type === 'b' : boolean
 >problem.type : "b" | "c"
->problem : b | c | (a & b) | (a & c) | (b & c) | (c & b)
+>problem : b | c
 >type : "b" | "c"
 >'b' : "b"
 
@@ -362,14 +362,14 @@ type RuntimeValue =
 >value : boolean
 
 function foo1(x: RuntimeValue & { type: 'number' }) {
->foo1 : (x: ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "number"; }) | ({ type: "boolean"; value: boolean; } & { type: "number"; })) => void
->x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "number"; }) | ({ type: "boolean"; value: boolean; } & { type: "number"; })
+>foo1 : (x: RuntimeValue & {    type: 'number';}) => void
+>x : { type: "number"; value: number; } & { type: 'number'; }
 >type : "number"
 
     if (x.type === 'number') {
 >x.type === 'number' : boolean
 >x.type : "number"
->x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "number"; }) | ({ type: "boolean"; value: boolean; } & { type: "number"; })
+>x : { type: "number"; value: number; } & { type: "number"; }
 >type : "number"
 >'number' : "number"
 
@@ -379,23 +379,23 @@ function foo1(x: RuntimeValue & { type: 'number' }) {
 >value : number
     }
     else {
-        x.value;  // Error, x is never
->x.value : any
->x : never
->value : any
+        x.value;  // number
+>x.value : number
+>x : { type: "number"; value: number; } & { type: "number"; }
+>value : number
     }
 }
 
 function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
->foo2 : (x: ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "number"; value: number; } & { type: "string"; }) | ({ type: "string"; value: string; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; }) | ({ type: "boolean"; value: boolean; } & { type: "number"; }) | ({ type: "boolean"; value: boolean; } & { type: "string"; })) => void
->x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "number"; value: number; } & { type: "string"; }) | ({ type: "string"; value: string; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; }) | ({ type: "boolean"; value: boolean; } & { type: "number"; }) | ({ type: "boolean"; value: boolean; } & { type: "string"; })
+>foo2 : (x: RuntimeValue & ({    type: 'number';} | {    type: 'string';})) => void
+>x : ({ type: "number"; value: number; } & { type: 'number'; }) | ({ type: "string"; value: string; } & { type: 'string'; })
 >type : "number"
 >type : "string"
 
     if (x.type === 'number') {
 >x.type === 'number' : boolean
 >x.type : "string" | "number"
->x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "number"; value: number; } & { type: "string"; }) | ({ type: "string"; value: string; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; }) | ({ type: "boolean"; value: boolean; } & { type: "number"; }) | ({ type: "boolean"; value: boolean; } & { type: "string"; })
+>x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
 >type : "string" | "number"
 >'number' : "number"
 

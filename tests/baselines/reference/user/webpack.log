@@ -1,21 +1,15 @@
 Exit Code: 1
 Standard output:
-lib/ContextModule.js(436,34): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/ContextModule.js(465,34): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/ContextModule.js(767,34): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/Dependency.js(139,29): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/ExternalModule.js(285,54): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/FileSystemInfo.js(373,4): error TS2345: Argument of type '({ type, context, path, expected }: { type: any; context: any; path: any; expected: any; }, callback: any) => void' is not assignable to parameter of type 'AsyncFunction<{ type: number; path: string; context?: string; expected?: string; }, Error>'.
-  Types of parameters '__0' and 'callback' are incompatible.
-    Type '(err?: Error, result?: { type: number; path: string; context?: string; expected?: string; }) => void' is missing the following properties from type '{ type: any; context: any; path: any; expected: any; }': type, context, path, expected
-lib/Module.js(625,34): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/dependencies/ExportsInfoDependency.js(81,9): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/dependencies/HarmonyExportImportedSpecifierDependency.js(575,40): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/dependencies/HarmonyImportDependency.js(195,37): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/dependencies/HarmonyImportDependency.js(197,36): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/dependencies/HarmonyImportDependency.js(203,19): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/dependencies/HarmonyImportSpecifierDependency.js(167,34): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/wasm/WasmChunkLoadingRuntimeModule.js(44,33): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
+lib/ExternalModule.js(305,28): error TS2554: Expected 1 arguments, but got 0.
+lib/Stats.js(68,31): error TS2554: Expected 3 arguments, but got 2.
+lib/library/SystemLibraryPlugin.js(127,35): error TS2554: Expected 1 arguments, but got 0.
+lib/optimize/ConcatenatedModule.js(205,32): error TS2554: Expected 1 arguments, but got 0.
+lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(36,15): error TS2304: Cannot find name 'Chunk'.
+lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(37,15): error TS2304: Cannot find name 'DependencyTemplates'.
+lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(38,15): error TS2304: Cannot find name 'RuntimeTemplate'.
+lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(39,15): error TS2304: Cannot find name 'ModuleGraph'.
+lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(40,15): error TS2304: Cannot find name 'ChunkGraph'.
+tooling/format-file-header.js(151,34): error TS2556: Expected 1-2 arguments, but got 0 or more.
 
 
 
