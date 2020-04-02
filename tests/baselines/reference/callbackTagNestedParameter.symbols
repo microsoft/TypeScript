@@ -21,4 +21,3 @@ function eachPerson(callback) {
 >name : Symbol(name, Decl(cb_nested.js, 14, 14))
 }
 
-

@@ -24,4 +24,3 @@ function eachPerson(callback) {
 >"Empty" : "Empty"
 }
 
-

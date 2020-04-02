@@ -1,4 +1,5 @@
 // @emitDeclarationOnly: true
+// @declaration: true
 // @allowJs: true
 // @checkJs: true
 // @Filename: cb_nested.js
