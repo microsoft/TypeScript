@@ -936,7 +936,7 @@
         "category": "Error",
         "code": 1325
     },
-    "Dynamic import cannot have type arguments": {
+    "Dynamic import cannot have type arguments.": {
         "category": "Error",
         "code": 1326
     },
@@ -1008,7 +1008,7 @@
         "category": "Error",
         "code": 1344
     },
-    "An expression of type 'void' cannot be tested for truthiness": {
+    "An expression of type 'void' cannot be tested for truthiness.": {
         "category": "Error",
         "code": 1345
     },
@@ -2270,7 +2270,7 @@
         "category": "Error",
         "code": 2575
     },
-    "Property '{0}' is a static member of type '{1}'": {
+    "Property '{0}' is a static member of type '{1}'.": {
         "category": "Error",
         "code": 2576
     },
@@ -2772,7 +2772,7 @@
         "category": "Error",
         "code": 2731
     },
-    "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension": {
+    "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension.": {
         "category": "Error",
         "code": 2732
     },
@@ -4354,7 +4354,7 @@
         "category": "Message",
         "code": 6204
     },
-    "All type parameters are unused": {
+    "All type parameters are unused.": {
         "category": "Error",
         "code": 6205
     },
@@ -5889,7 +5889,7 @@
         "category": "Error",
         "code": 18007
     },
-    "Private identifiers cannot be used as parameters": {
+    "Private identifiers cannot be used as parameters.": {
         "category": "Error",
         "code": 18009
     },
@@ -5929,7 +5929,7 @@
         "category": "Error",
         "code": 18018
     },
-    "'{0}' modifier cannot be used with a private identifier": {
+    "'{0}' modifier cannot be used with a private identifier.": {
         "category": "Error",
         "code": 18019
     },
