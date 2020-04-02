@@ -36,11 +36,6 @@ namespace ts.codefix {
         hasBeenDeclared: boolean;
     }
 
-    interface SymbolAndIdentifier {
-        readonly identifier: Identifier;
-        readonly symbol: Symbol;
-    }
-
     interface Transformer {
         readonly checker: TypeChecker;
         readonly synthNamesMap: Map<SynthIdentifier>; // keys are the symbol id of the identifier
@@ -139,12 +134,6 @@ namespace ts.codefix {
         return !!(nodeType && checker.getPromisedTypeOfPromise(nodeType));
     }
 
-    function isParameterOfPromiseCallback(node: Node, checker: TypeChecker): node is ParameterDeclaration {
-        return isParameter(node) && (
-            isPromiseReturningCallExpression(node.parent.parent, checker, "then") ||
-            isPromiseReturningCallExpression(node.parent.parent, checker, "catch"));
-    }
-
     function isPromiseTypedExpression(node: Node, checker: TypeChecker): node is Expression {
         if (!isExpression(node)) return false;
         return !!checker.getPromisedTypeOfPromise(checker.getTypeAtLocation(node));
@@ -160,7 +149,6 @@ namespace ts.codefix {
         It then checks for any collisions and renames them through getSynthesizedDeepClone
     */
     function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<SynthIdentifier>, sourceFile: SourceFile): FunctionLikeDeclaration {
-        const variableNames: SymbolAndIdentifier[] = [];
         const identsToRenameMap = createMap<Identifier>(); // key is the symbol id
         const collidingSymbolMap = createMultiMap<Symbol>();
         forEachChild(nodeToRename, function visit(node: Node) {
@@ -188,7 +176,6 @@ namespace ts.codefix {
                     const ident = firstParameter && isParameter(firstParameter.valueDeclaration) && tryCast(firstParameter.valueDeclaration.name, isIdentifier) || createOptimisticUniqueName("result");
                     const synthName = getNewNameIfConflict(ident, collidingSymbolMap);
                     synthNamesMap.set(symbolIdString, synthName);
-                    variableNames.push({ identifier: synthName.identifier, symbol });
                     collidingSymbolMap.add(ident.text, symbol);
                 }
                 // We only care about identifiers that are parameters, variable declarations, or binding elements
@@ -201,17 +188,12 @@ namespace ts.codefix {
                         const newName = getNewNameIfConflict(node, collidingSymbolMap);
                         identsToRenameMap.set(symbolIdString, newName.identifier);
                         synthNamesMap.set(symbolIdString, newName);
-                        variableNames.push({ identifier: newName.identifier, symbol });
                         collidingSymbolMap.add(originalName, symbol);
                     }
                     else {
                         const identifier = getSynthesizedDeepClone(node);
-                        identsToRenameMap.set(symbolIdString, identifier);
                         synthNamesMap.set(symbolIdString, createSynthIdentifier(identifier));
-                        if (isParameterOfPromiseCallback(node.parent, checker) || isVariableDeclaration(node.parent)) {
-                            variableNames.push({ identifier, symbol });
-                            collidingSymbolMap.add(originalName, symbol);
-                        }
+                        collidingSymbolMap.add(originalName, symbol);
                     }
                 }
             }
