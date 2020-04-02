@@ -2,7 +2,7 @@
 // explicit type annotation should cause `method` to have type 'x' | 'y'
 // both inside and outside `test`.
 function test({
->test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
+>test : ({ method, nested: { p } }: {    method?: 'x' | 'y';    nested?: {        p: 'a' | 'b';    };}) => void
 
     method = 'z',
 >method : "x" | "y"
@@ -18,7 +18,7 @@ function test({
 >method : "x" | "y"
 
     nested?: { p: 'a' | 'b' }
->nested : { p: "a" | "b"; }
+>nested : { p: 'a' | 'b'; }
 >p : "a" | "b"
 
 })

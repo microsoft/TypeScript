@@ -5617,6 +5617,31 @@
         "category": "Message",
         "code": 95110
     },
+    "Add a return statement": {
+        "category": "Message",
+        "code": 95111
+    },
+    "Remove block body braces": {
+        "category": "Message",
+        "code": 95112
+    },
+    "Wrap the following body with parentheses which should be an object literal": {
+        "category": "Message",
+        "code": 95113
+    },
+    "Add all missing return statement": {
+        "category": "Message",
+        "code": 95114
+    },
+    "Remove all incorrect body block braces": {
+        "category": "Message",
+        "code": 95115
+    },
+    "Wrap all object literal with parentheses": {
+        "category": "Message",
+        "code": 95116
+    },
+    
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
         "code": 18004

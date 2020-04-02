@@ -26,7 +26,7 @@ crunch.n
  * @param {ex.Crunch} wrap
  */
 function f(greatest, wrap) {
->f : (greatest: import("tests/cases/conformance/salsa/ex").Greatest, wrap: import("tests/cases/conformance/salsa/ex").Crunch) => void
+>f : (greatest: ex.Greatest, wrap: ex.Crunch) => void
 >greatest : import("tests/cases/conformance/salsa/ex").Greatest
 >wrap : import("tests/cases/conformance/salsa/ex").Crunch
 

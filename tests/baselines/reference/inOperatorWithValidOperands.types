@@ -80,7 +80,7 @@ function unionCase<T, U>(t: T | U) {
 }
 
 function unionCase2<T>(t: T | object) {
->unionCase2 : <T>(t: object | T) => void
+>unionCase2 : <T>(t: T | object) => void
 >t : object | T
 
     var rb5 = x in t;

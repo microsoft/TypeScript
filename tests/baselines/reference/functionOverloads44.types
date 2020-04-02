@@ -9,12 +9,12 @@ interface Cat extends Animal { cat }
 >cat : any
 
 function foo1(bar: { a:number }[]): Dog;
->foo1 : { (bar: { a: number; }[]): Dog; (bar: { a: string; }[]): Animal; }
+>foo1 : { (bar: {    a: number;}[]): Dog; (bar: { a: string; }[]): Animal; }
 >bar : { a: number; }[]
 >a : number
 
 function foo1(bar: { a:string }[]): Animal;
->foo1 : { (bar: { a: number; }[]): Dog; (bar: { a: string; }[]): Animal; }
+>foo1 : { (bar: { a: number; }[]): Dog; (bar: {    a: string;}[]): Animal; }
 >bar : { a: string; }[]
 >a : string
 
@@ -28,12 +28,12 @@ function foo1([x]: { a:number | string }[]): Dog {
 }
 
 function foo2(bar: { a:number }[]): Cat;
->foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog | Cat; }
+>foo2 : { (bar: {    a: number;}[]): Cat; (bar: { a: string; }[]): Dog | Cat; }
 >bar : { a: number; }[]
 >a : number
 
 function foo2(bar: { a:string }[]): Cat | Dog;
->foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog | Cat; }
+>foo2 : { (bar: { a: number; }[]): Cat; (bar: {    a: string;}[]): Cat | Dog; }
 >bar : { a: string; }[]
 >a : string
 

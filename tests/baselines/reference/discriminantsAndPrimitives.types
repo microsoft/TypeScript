@@ -18,7 +18,7 @@ interface Bar {
 }
 
 function f1(x: Foo | Bar | string) {
->f1 : (x: string | Foo | Bar) => void
+>f1 : (x: Foo | Bar | string) => void
 >x : string | Foo | Bar
 
     if (typeof x !== 'string') {
@@ -44,7 +44,7 @@ function f1(x: Foo | Bar | string) {
 }
 
 function f2(x: Foo | Bar | string | undefined) {
->f2 : (x: string | Foo | Bar | undefined) => void
+>f2 : (x: Foo | Bar | string | undefined) => void
 >x : string | Foo | Bar | undefined
 
     if (typeof x === "object") {
@@ -70,7 +70,7 @@ function f2(x: Foo | Bar | string | undefined) {
 }
 
 function f3(x: Foo | Bar | string | null) {
->f3 : (x: string | Foo | Bar | null) => void
+>f3 : (x: Foo | Bar | string | null) => void
 >x : string | Foo | Bar | null
 >null : null
 
@@ -99,7 +99,7 @@ function f3(x: Foo | Bar | string | null) {
 }
 
 function f4(x: Foo | Bar | string | number | null) {
->f4 : (x: string | number | Foo | Bar | null) => void
+>f4 : (x: Foo | Bar | string | number | null) => void
 >x : string | number | Foo | Bar | null
 >null : null
 

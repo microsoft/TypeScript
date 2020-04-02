@@ -12,7 +12,7 @@
  * @returns {boolean} The return.
  */
 function callIt(func, arg) {
->callIt : (func: (arg0: string) => boolean, arg: string) => boolean
+>callIt : (func: Type1, arg: string) => boolean
 >func : (arg0: string) => boolean
 >arg : string
 
@@ -37,7 +37,7 @@ function callIt(func, arg) {
  * @returns {string|number} The return.
  */
 function check(obj) {
->check : (obj: { num: number; str: string; boo: boolean; }) => string | number
+>check : (obj: Type2) => string | number
 >obj : { num: number; str: string; boo: boolean; }
 
   return obj.boo ? obj.num : obj.str;
@@ -70,7 +70,7 @@ function check(obj) {
  * @returns {string|number} The return.
  */
 function use1(func, bool, str, num) {
->use1 : (func: (arg0: boolean, arg1: string, arg2: number) => string | number, bool: boolean, str: string, num: number) => string | number
+>use1 : (func: StringOrNumber1, bool: boolean, str: string, num: number) => string | number
 >func : (arg0: boolean, arg1: string, arg2: number) => string | number
 >bool : boolean
 >str : string
@@ -102,7 +102,7 @@ function use1(func, bool, str, num) {
  * @returns {string|number} The return.
  */
 function use2(func, bool, str, num) {
->use2 : (func: (arg0: boolean, arg1: string, arg2: number) => string | number, bool: boolean, str: string, num: number) => string | number
+>use2 : (func: StringOrNumber2, bool: boolean, str: string, num: number) => string | number
 >func : (arg0: boolean, arg1: string, arg2: number) => string | number
 >bool : boolean
 >str : string
@@ -134,7 +134,7 @@ function use2(func, bool, str, num) {
  * @returns {string|number} The return.
  */
 function check5(obj) {
->check5 : (obj: { num: number; str: string; boo: boolean; }) => string | number
+>check5 : (obj: Type5) => string | number
 >obj : { num: number; str: string; boo: boolean; }
 
   return obj.boo ? obj.num : obj.str;
@@ -166,7 +166,7 @@ function check5(obj) {
  * @returns {*} The return.
  */
 function check6(obj) {
->check6 : (obj: { foo: any; bar: any; }) => any
+>check6 : (obj: Type6) => any
 >obj : { foo: any; bar: any; }
 
   return obj.foo;

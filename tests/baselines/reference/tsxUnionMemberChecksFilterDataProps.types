@@ -5,13 +5,13 @@ import React, { ReactElement } from "react";
 >ReactElement : any
 
 declare function NotHappy(props: ({ fixed?: boolean } | { value?: number })): ReactElement<any>;
->NotHappy : (props: { fixed?: boolean; } | { value?: number; }) => React.ReactElement<any>
+>NotHappy : (props: ({    fixed?: boolean;} | {    value?: number;})) => ReactElement<any>
 >props : { fixed?: boolean; } | { value?: number; }
 >fixed : boolean
 >value : number
 
 declare function Happy(props: { fixed?: boolean, value?: number }): ReactElement<any>;
->Happy : (props: { fixed?: boolean; value?: number; }) => React.ReactElement<any>
+>Happy : (props: {    fixed?: boolean;    value?: number;}) => ReactElement<any>
 >props : { fixed?: boolean; value?: number; }
 >fixed : boolean
 >value : number

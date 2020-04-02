@@ -55,7 +55,7 @@ export const updateIfChanged = <T>(t: T) => {
 >u : U
 >key as keyof U : keyof U
 >key : K
->(v: Value<K, U>) => {                    return update(Object.assign(Array.isArray(u) ? [] : {}, u, { [key]: v }));                } : (v: U[K]) => T
+>(v: Value<K, U>) => {                    return update(Object.assign(Array.isArray(u) ? [] : {}, u, { [key]: v }));                } : (v: Value<K, U>) => T
 >v : U[K]
 
                     return update(Object.assign(Array.isArray(u) ? [] : {}, u, { [key]: v }));

@@ -43,7 +43,7 @@ function f2<A extends string>(a: A) {
 }
 
 function f3(x: 'a' | 'b') {
->f3 : (x: "a" | "b") => { a: any; b: any; x: any; }
+>f3 : (x: 'a' | 'b') => { a: any; b: any; x: any; }
 >x : "a" | "b"
 
     return f2(x);

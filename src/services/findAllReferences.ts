@@ -216,7 +216,32 @@ namespace ts.FindAllReferences {
 
     export function getImplementationsAtPosition(program: Program, cancellationToken: CancellationToken, sourceFiles: readonly SourceFile[], sourceFile: SourceFile, position: number): ImplementationLocation[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position);
-        const referenceEntries = getImplementationReferenceEntries(program, cancellationToken, sourceFiles, node, position);
+        let referenceEntries: Entry[] | undefined;
+        const entries = getImplementationReferenceEntries(program, cancellationToken, sourceFiles, node, position);
+
+        if (
+            node.parent.kind === SyntaxKind.PropertyAccessExpression
+            || node.parent.kind === SyntaxKind.BindingElement
+            || node.parent.kind === SyntaxKind.ElementAccessExpression
+            || node.kind === SyntaxKind.SuperKeyword
+        ) {
+            referenceEntries = entries && [...entries];
+        }
+        else {
+            const queue = entries && [...entries];
+            const seenNodes = createMap<true>();
+            while (queue && queue.length) {
+                const entry = queue.shift() as NodeEntry;
+                if (!addToSeen(seenNodes, getNodeId(entry.node))) {
+                    continue;
+                }
+                referenceEntries = append(referenceEntries, entry);
+                const entries = getImplementationReferenceEntries(program, cancellationToken, sourceFiles, entry.node, entry.node.pos);
+                if (entries) {
+                    queue.push(...entries);
+                }
+            }
+        }
         const checker = program.getTypeChecker();
         return map(referenceEntries, entry => toImplementationLocation(entry, checker));
     }
