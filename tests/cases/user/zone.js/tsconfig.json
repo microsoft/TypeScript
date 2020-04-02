@@ -2,7 +2,7 @@
     "compilerOptions": {
         "strict": true,
         "lib": ["esnext", "dom"],
-        "types": []
+        "types": ["node"]
     },
     "files": [
         "index.ts",

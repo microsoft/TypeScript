@@ -83,6 +83,10 @@
         "category": "Error",
         "code": 1024
     },
+    "An index signature cannot have a trailing comma.": {
+        "category": "Error",
+        "code": 1025
+    },
     "Accessibility modifier already seen.": {
         "category": "Error",
         "code": 1028
@@ -610,6 +614,10 @@
     "Export declarations are not permitted in a namespace.": {
         "category": "Error",
         "code": 1194
+    },
+    "'export *' does not re-export a default.": {
+        "category": "Error",
+        "code": 1195
     },
     "Catch clause variable cannot have a type annotation.": {
         "category": "Error",
@@ -2317,6 +2325,22 @@
         "category": "Error",
         "code": 2594
     },
+    "'{0}' can only be imported by using a default import.": {
+        "category": "Error",
+        "code": 2595
+    },
+    "'{0}' can only be imported by turning on the 'esModuleInterop' flag and using a default import.": {
+        "category": "Error",
+        "code": 2596
+    },
+    "'{0}' can only be imported by using a 'require' call or by using a default import.": {
+        "category": "Error",
+        "code": 2597
+    },
+    "'{0}' can only be imported by using a 'require' call or by turning on the 'esModuleInterop' flag and using a default import.": {
+        "category": "Error",
+        "code": 2598
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2380,6 +2404,14 @@
     "Type of property '{0}' circularly references itself in mapped type '{1}'.": {
         "category": "Error",
         "code": 2615
+    },
+    "'{0}' can only be imported by using 'import {1} = require({2})' or a default import.": {
+        "category": "Error",
+        "code": 2616
+    },
+    "'{0}' can only be imported by using 'import {1} = require({2})' or by turning on the 'esModuleInterop' flag and using a default import.": {
+        "category": "Error",
+        "code": 2617
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
@@ -2918,6 +2950,22 @@
     "This spread always overwrites this property.": {
         "category": "Error",
         "code": 2785
+    },
+    "'{0}' cannot be used as a JSX component.": {
+        "category": "Error",
+        "code": 2786
+    },
+    "Its return type '{0}' is not a valid JSX element.": {
+        "category": "Error",
+        "code": 2787
+    },
+    "Its instance type '{0}' is not a valid JSX element.": {
+        "category": "Error",
+        "code": 2788
+    },
+    "Its element type '{0}' is not a valid JSX element.": {
+        "category": "Error",
+        "code": 2789
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -5569,31 +5617,35 @@
         "category": "Message",
         "code": 95109
     },
-    "Add a return statement": {
+    "Visit https://aka.ms/tsconfig.json to read more about this file": {
         "category": "Message",
         "code": 95110
     },
-    "Remove block body braces": {
+    "Add a return statement": {
         "category": "Message",
         "code": 95111
     },
-    "Wrap the following body with parentheses which should be an object literal": {
+    "Remove block body braces": {
         "category": "Message",
         "code": 95112
     },
-    "Add all missing return statement": {
+    "Wrap the following body with parentheses which should be an object literal": {
         "category": "Message",
         "code": 95113
     },
-    "Remove all incorrect body block braces": {
+    "Add all missing return statement": {
         "category": "Message",
         "code": 95114
     },
-    "Wrap all object literal with parentheses": {
+    "Remove all incorrect body block braces": {
         "category": "Message",
         "code": 95115
     },
-
+    "Wrap all object literal with parentheses": {
+        "category": "Message",
+        "code": 95116
+    },
+    
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
         "code": 18004

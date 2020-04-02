@@ -20,7 +20,7 @@ module TypeScript {
     }
 
     function getBaseTypeLinks(bases: ASTList, baseTypeLinks: TypeLink[]) {
->getBaseTypeLinks : (bases: any, baseTypeLinks: any[]) => any[]
+>getBaseTypeLinks : (bases: any, baseTypeLinks: TypeLink[]) => any[]
 >bases : any
 >baseTypeLinks : any[]
 

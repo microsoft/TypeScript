@@ -19,7 +19,7 @@ function a0(...x: [number, number, string]) { }  // Error, rest parameter must b
 >x : [number, number, string]
 
 function a1(...x: (number|string)[]) { }
->a1 : (...x: (string | number)[]) => void
+>a1 : (...x: (number | string)[]) => void
 >x : (string | number)[]
 
 function a2(...a: someArray) { }  // Error, rest parameter must be array type

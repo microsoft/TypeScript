@@ -263,7 +263,7 @@ type Tag = 0 | 1 | 2;
 >Tag : 0 | 1 | 2
 
 function f10(x: Tag) {
->f10 : (x: 0 | 1 | 2) => "a" | "b" | "c"
+>f10 : (x: Tag) => "a" | "b" | "c"
 >x : 0 | 1 | 2
 
     switch (x) {
@@ -284,7 +284,7 @@ function f10(x: Tag) {
 }
 
 function f11(x: Tag) {
->f11 : (x: 0 | 1 | 2) => "a" | "b" | "c"
+>f11 : (x: Tag) => "a" | "b" | "c"
 >x : 0 | 1 | 2
 
     switch (x) {
@@ -309,7 +309,7 @@ function f11(x: Tag) {
 }
 
 function f12(x: Tag) {
->f12 : (x: 0 | 1 | 2) => void
+>f12 : (x: Tag) => void
 >x : 0 | 1 | 2
 
     if (x) {
@@ -325,7 +325,7 @@ function f12(x: Tag) {
 }
 
 function f13(x: Tag) {
->f13 : (x: 0 | 1 | 2) => void
+>f13 : (x: Tag) => void
 >x : 0 | 1 | 2
 
     if (x === 0 || x === 2) {
@@ -365,7 +365,7 @@ function f14(x: 0 | 1 | 2, y: string) {
 }
 
 function f15(x: 0 | false, y: 1 | "one") {
->f15 : (x: false | 0, y: 1 | "one") => void
+>f15 : (x: 0 | false, y: 1 | "one") => void
 >x : false | 0
 >false : false
 >y : 1 | "one"

@@ -328,7 +328,7 @@ class ProtectedGeneric2<T> {
 }
 
 function f7(x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) {
->f7 : (x: ProtectedGeneric<{}>) => void
+>f7 : (x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) => void
 >x : ProtectedGeneric<{}>
 
 	x.privateMethod(); // Error, private constituent makes method inaccessible
@@ -345,7 +345,7 @@ function f7(x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) {
 }
 
 function f8(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric2<{a:void;b:void;}>) {
->f8 : (x: ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>) => void
+>f8 : (x: ProtectedGeneric<{    a: void;}> & ProtectedGeneric2<{    a: void;    b: void;}>) => void
 >x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>
 >a : void
 >a : void
@@ -365,7 +365,7 @@ function f8(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric2<{a:void;b:void;}
 }
 
 function f9(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric<{a:void;b:void;}>) {
->f9 : (x: ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>) => void
+>f9 : (x: ProtectedGeneric<{    a: void;}> & ProtectedGeneric<{    a: void;    b: void;}>) => void
 >x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>
 >a : void
 >a : void

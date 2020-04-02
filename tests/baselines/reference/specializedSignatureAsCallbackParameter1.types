@@ -35,7 +35,7 @@ x3(1, (x: 'hm') => 1);
 >x3(1, (x: 'hm') => 1) : any
 >x3 : { (a: number, cb: (x: number) => number): any; (a: string, cb: (x: number) => number): any; }
 >1 : 1
->(x: 'hm') => 1 : (x: "hm") => number
+>(x: 'hm') => 1 : (x: 'hm') => number
 >x : "hm"
 >1 : 1
 

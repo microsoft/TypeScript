@@ -16,7 +16,7 @@ class Base {
 >x : { foo: string; }
 
     protected b(a: typeof x) { }
->b : (a: { foo: string; }) => void
+>b : (a: typeof x) => void
 >a : { foo: string; }
 >x : { foo: string; }
 
@@ -30,7 +30,7 @@ class Base {
 >x : { foo: string; }
 
     protected d: (a: typeof x) => void ;
->d : (a: { foo: string; }) => void
+>d : (a: typeof x) => void
 >a : { foo: string; }
 >x : { foo: string; }
 
@@ -39,7 +39,7 @@ class Base {
 >x : { foo: string; }
 
     protected static s(a: typeof x) { }
->s : (a: { foo: string; }) => void
+>s : (a: typeof x) => void
 >a : { foo: string; }
 >x : { foo: string; }
 
@@ -53,7 +53,7 @@ class Base {
 >x : { foo: string; }
 
     protected static u: (a: typeof x) => void ;
->u : (a: { foo: string; }) => void
+>u : (a: typeof x) => void
 >a : { foo: string; }
 >x : { foo: string; }
 
@@ -72,7 +72,7 @@ class Derived extends Base {
 >y : { foo: string; bar: string; }
 
     b(a: typeof y) { }
->b : (a: { foo: string; bar: string; }) => void
+>b : (a: typeof y) => void
 >a : { foo: string; bar: string; }
 >y : { foo: string; bar: string; }
 
@@ -86,7 +86,7 @@ class Derived extends Base {
 >y : { foo: string; bar: string; }
 
     d: (a: typeof y) => void;
->d : (a: { foo: string; bar: string; }) => void
+>d : (a: typeof y) => void
 >a : { foo: string; bar: string; }
 >y : { foo: string; bar: string; }
 
@@ -95,7 +95,7 @@ class Derived extends Base {
 >y : { foo: string; bar: string; }
 
     static s(a: typeof y) { }
->s : (a: { foo: string; bar: string; }) => void
+>s : (a: typeof y) => void
 >a : { foo: string; bar: string; }
 >y : { foo: string; bar: string; }
 
@@ -109,7 +109,7 @@ class Derived extends Base {
 >y : { foo: string; bar: string; }
 
     static u: (a: typeof y) => void;
->u : (a: { foo: string; bar: string; }) => void
+>u : (a: typeof y) => void
 >a : { foo: string; bar: string; }
 >y : { foo: string; bar: string; }
 

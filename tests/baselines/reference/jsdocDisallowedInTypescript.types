@@ -8,7 +8,7 @@ var ara: Array.<number> = [1,2,3];
 >3 : 3
 
 function f(x: ?number, y: Array.<number>) {
->f : (x: number | null, y: number[]) => number
+>f : (x: number | null, y: Array<number>) => number
 >x : number | null
 >y : number[]
 
@@ -35,7 +35,7 @@ function hof(ctor: function(new: number, string)) {
 >'hi' : "hi"
 }
 function hof2(f: function(this: number, string): string) {
->hof2 : (f: (this: number, arg1: string) => string) => string
+>hof2 : (f: (args: number, arg1: string) => string) => string
 >f : (this: number, arg1: string) => string
 >this : number
 

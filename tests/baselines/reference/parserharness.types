@@ -2258,7 +2258,7 @@ module Harness {
 >[] : undefined[]
 
         var timeFunction: (
->timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: () => void) => void) => void
+>timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: {    (): void;}) => void) => void
 
             benchmark: Benchmark,
 >benchmark : Benchmark
@@ -2270,7 +2270,7 @@ module Harness {
 >name : string
 
             f?: (bench?: { (): void; }) => void
->f : (bench?: () => void) => void
+>f : (bench?: {    (): void;}) => void
 >bench : () => void
 
         ) => void;
@@ -2725,7 +2725,7 @@ module Harness {
 >{} : {}
 
             public toArray(): { filename: string; file: WriterAggregator; }[] {
->toArray : () => { filename: string; file: WriterAggregator; }[]
+>toArray : () => {    filename: string;    file: WriterAggregator;}[]
 >filename : string
 >file : WriterAggregator
 
@@ -4471,7 +4471,7 @@ module Harness {
           * @param references the set of referenced files used by the given code
           */
         export function generateDeclFile(code: string, verifyNoDeclFile: boolean, unitName?: string, compilationContext?: Harness.Compiler.CompilationContext, references?: TypeScript.IFileReference[]): string {
->generateDeclFile : (code: string, verifyNoDeclFile: boolean, unitName?: string, compilationContext?: CompilationContext, references?: any[]) => string
+>generateDeclFile : (code: string, verifyNoDeclFile: boolean, unitName?: string, compilationContext?: Harness.Compiler.CompilationContext, references?: TypeScript.IFileReference[]) => string
 >code : string
 >verifyNoDeclFile : boolean
 >unitName : string
@@ -5114,7 +5114,7 @@ module Harness {
         }
 
         export function addUnit(code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) {
->addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: any[]) => any
+>addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) => any
 >code : string
 >unitName : string
 >isResident : boolean
@@ -5250,7 +5250,7 @@ module Harness {
         }
 
         export function compileFile(path: string, callback: (res: CompilerResult) => void , settingsCallback?: (settings?: TypeScript.CompilationSettings) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
->compileFile : (path: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: any) => void, context?: CompilationContext, references?: any[]) => void
+>compileFile : (path: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: any) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >path : string
 >callback : (res: CompilerResult) => void
 >res : CompilerResult
@@ -5296,7 +5296,7 @@ module Harness {
         }
 
         export function compileUnit(code: string, filename: string, callback: (res: CompilerResult) => void , settingsCallback?: (settings?: TypeScript.CompilationSettings) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
->compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: any) => void, context?: CompilationContext, references?: any[]) => void
+>compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: any) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >code : string
 >filename : string
 >callback : (res: CompilerResult) => void
@@ -5432,10 +5432,10 @@ module Harness {
         }
 
         export function compileUnits(units: TestCaseParser.TestUnitData[], callback: (res: Compiler.CompilerResult) => void , settingsCallback?: () => void ) {
->compileUnits : (units: TestCaseParser.TestUnitData[], callback: (res: CompilerResult) => void, settingsCallback?: () => void) => void
+>compileUnits : (units: TestCaseParser.TestUnitData[], callback: (res: Compiler.CompilerResult) => void, settingsCallback?: () => void) => void
 >units : TestCaseParser.TestUnitData[]
 >TestCaseParser : any
->callback : (res: CompilerResult) => void
+>callback : (res: Compiler.CompilerResult) => void
 >res : CompilerResult
 >Compiler : any
 >settingsCallback : () => void
@@ -5531,10 +5531,10 @@ module Harness {
         }
 
         export function compileString(code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
->compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext, references?: any[]) => void
+>compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >code : string
 >unitName : string
->callback : (res: CompilerResult) => void
+>callback : (res: Compiler.CompilerResult) => void
 >res : CompilerResult
 >Compiler : any
 >context : CompilationContext
@@ -5877,7 +5877,7 @@ module Harness {
 
         /** Given a test file containing // @Filename directives, return an array of named units of code to be added to an existing compiler instance */
         export function makeUnitsFromTest(code: string, filename: string): { settings: CompilerSetting[]; testUnitData: TestUnitData[]; } {
->makeUnitsFromTest : (code: string, filename: string) => { settings: CompilerSetting[]; testUnitData: TestUnitData[]; }
+>makeUnitsFromTest : (code: string, filename: string) => {    settings: CompilerSetting[];    testUnitData: TestUnitData[];}
 >code : string
 >filename : string
 >settings : CompilerSetting[]
@@ -7205,7 +7205,7 @@ module Harness {
 
         /** Verify that applying edits to sourceFileName result in the content of the file baselineFileName */
         public checkEdits(sourceFileName: string, baselineFileName: string, edits: Services.TextEdit[]) {
->checkEdits : (sourceFileName: string, baselineFileName: string, edits: any[]) => void
+>checkEdits : (sourceFileName: string, baselineFileName: string, edits: Services.TextEdit[]) => void
 >sourceFileName : string
 >baselineFileName : string
 >edits : any[]
@@ -7252,7 +7252,7 @@ module Harness {
 
         /** Apply an array of text edits to a string, and return the resulting string. */
         public applyEdits(content: string, edits: Services.TextEdit[]): string {
->applyEdits : (content: string, edits: any[]) => string
+>applyEdits : (content: string, edits: Services.TextEdit[]) => string
 >content : string
 >edits : any[]
 >Services : any
@@ -7331,7 +7331,7 @@ module Harness {
 
         /** Normalize an array of edits by removing overlapping entries and sorting entries on the minChar position. */
         private normalizeEdits(edits: Services.TextEdit[]): Services.TextEdit[] {
->normalizeEdits : (edits: any[]) => any[]
+>normalizeEdits : (edits: Services.TextEdit[]) => Services.TextEdit[]
 >edits : any[]
 >Services : any
 >Services : any
@@ -7342,7 +7342,7 @@ module Harness {
 >[] : undefined[]
 
             function mapEdits(edits: Services.TextEdit[]): { edit: Services.TextEdit; index: number; }[] {
->mapEdits : (edits: any[]) => { edit: any; index: number; }[]
+>mapEdits : (edits: Services.TextEdit[]) => {    edit: Services.TextEdit;    index: number;}[]
 >edits : any[]
 >Services : any
 >edit : any

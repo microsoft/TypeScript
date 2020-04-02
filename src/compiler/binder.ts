@@ -3542,6 +3542,10 @@ namespace ts {
             case SyntaxKind.ElementAccessExpression:
                 return computeElementAccess(<ElementAccessExpression>node, subtreeFlags);
 
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.JsxOpeningElement:
+                return computeJsxOpeningLikeElement(<JsxOpeningLikeElement>node, subtreeFlags);
+
             default:
                 return computeOther(node, kind, subtreeFlags);
         }
@@ -3589,6 +3593,15 @@ namespace ts {
         }
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
         return transformFlags & ~TransformFlags.ArrayLiteralOrCallOrNewExcludes;
+    }
+
+    function computeJsxOpeningLikeElement(node: JsxOpeningLikeElement, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags | TransformFlags.AssertJsx;
+        if (node.typeArguments) {
+            transformFlags |= TransformFlags.AssertTypeScript;
+        }
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
     }
 
     function computeBinaryExpression(node: BinaryExpression, subtreeFlags: TransformFlags) {
@@ -4124,8 +4137,6 @@ namespace ts {
                 break;
 
             case SyntaxKind.JsxElement:
-            case SyntaxKind.JsxSelfClosingElement:
-            case SyntaxKind.JsxOpeningElement:
             case SyntaxKind.JsxText:
             case SyntaxKind.JsxClosingElement:
             case SyntaxKind.JsxFragment:

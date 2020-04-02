@@ -56,11 +56,12 @@ export declare type DOMNode = Node;
 //// [custom.d.ts]
 export declare type Node = {};
 //// [index.d.ts]
+import { DOMNode } from './dom';
 declare type Constructor = new (...args: any[]) => any;
 export declare const mixin: (Base: Constructor) => {
     new (...args: any[]): {
         [x: string]: any;
-        get(domNode: globalThis.Node): void;
+        get(domNode: DOMNode): void;
     };
 };
 export {};

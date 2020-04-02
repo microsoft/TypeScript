@@ -14,21 +14,21 @@ export module C {
 >null : null
 
     export function F2<T>(x: T): C.A<C.B> { return null; }
->F2 : <T>(x: T) => A<B>
+>F2 : <T>(x: T) => C.A<C.B>
 >x : T
 >C : any
 >C : any
 >null : null
 
     export function F3<T>(x: T): C.A<C.B>[] { return null; }
->F3 : <T>(x: T) => A<B>[]
+>F3 : <T>(x: T) => C.A<C.B>[]
 >x : T
 >C : any
 >C : any
 >null : null
 
     export function F4<T extends A<B>>(x: T): Array<C.A<C.B>> { return null; }
->F4 : <T extends A<B>>(x: T) => A<B>[]
+>F4 : <T extends A<B>>(x: T) => Array<C.A<C.B>>
 >x : T
 >C : any
 >C : any

@@ -2114,10 +2114,13 @@ namespace ts {
         return isIdentifier(node) && node.escapedText === "exports";
     }
 
+    export function isModuleIdentifier(node: Node) {
+        return isIdentifier(node) && node.escapedText === "module";
+    }
+
     export function isModuleExportsAccessExpression(node: Node): node is LiteralLikeElementAccessExpression & { expression: Identifier } {
         return (isPropertyAccessExpression(node) || isLiteralLikeElementAccess(node))
-            && isIdentifier(node.expression)
-            && node.expression.escapedText === "module"
+            && isModuleIdentifier(node.expression)
             && getElementOrPropertyAccessName(node) === "exports";
     }
 
@@ -4430,13 +4433,6 @@ namespace ts {
 
     export function isPropertyAccessEntityNameExpression(node: Node): node is PropertyAccessEntityNameExpression {
         return isPropertyAccessExpression(node) && isEntityNameExpression(node.expression);
-    }
-
-    export function isConstructorAccessExpression(expr: Expression): expr is AccessExpression {
-        return (
-            isPropertyAccessExpression(expr) && idText(expr.name) === "constructor" ||
-            isElementAccessExpression(expr) && isStringLiteralLike(expr.argumentExpression) && expr.argumentExpression.text === "constructor"
-        );
     }
 
     export function tryGetPropertyAccessOrIdentifierToString(expr: Expression): string | undefined {

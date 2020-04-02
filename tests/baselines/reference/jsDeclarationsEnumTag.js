@@ -108,7 +108,7 @@ exports.ff = ff;
  * @param {Second} s
  * @param {Fs} f
  */
-export function consume(t: string, s: number, f: (arg0: number) => number): void;
+export function consume(t: Target, s: Second, f: Fs): void;
 /** @param {string} s */
 export function ff(s: string): any;
 export type Target = string;
