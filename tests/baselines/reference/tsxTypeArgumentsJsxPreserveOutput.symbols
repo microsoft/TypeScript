@@ -18,6 +18,7 @@ function Foo<T>() {
 }
 
 <>
+    {/* JsxSelfClosingElement */}
     <Foo<unknown> />
 >Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
 
@@ -50,4 +51,48 @@ function Foo<T>() {
 >Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
 >InterfaceProps : Symbol(InterfaceProps, Decl(foo.tsx, 2, 36))
 
+    {/* JsxOpeningElement */}
+    <Foo<unknown>></Foo>
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<string>></Foo>
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<boolean>></Foo>
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<object>></Foo>
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<null>></Foo>
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<any>></Foo>
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<never>></Foo>
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<undefined>></Foo>
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<TypeProps>></Foo>
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>TypeProps : Symbol(TypeProps, Decl(foo.tsx, 0, 32))
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<InterfaceProps>></Foo>
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>InterfaceProps : Symbol(InterfaceProps, Decl(foo.tsx, 2, 36))
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
 </>
+
