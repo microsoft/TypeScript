@@ -4720,7 +4720,7 @@ namespace ts {
 
                     if (seenNames) {
                         // To avoid printing types like `[Foo, Foo]` or `Bar & Bar` where
-                        // occurrances of the same name actually come from different
+                        // occurrences of the same name actually come from different
                         // namespaces, go through the single-identifier type reference nodes
                         // we just generated, and see if any names were generated more than
                         // once while referring to different types. If so, regenerate the
