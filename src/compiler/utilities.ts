@@ -2594,7 +2594,7 @@ namespace ts {
             switch (parent.kind) {
                 case SyntaxKind.BinaryExpression:
                     const binaryOperator = (<BinaryExpression>parent).operatorToken.kind;
-                    return isAssignmentOperator(binaryOperator) && (<BinaryExpression>parent).left === node ?
+                    return isAssignmentOperator(binaryOperator) && !isLogicalAssignmentOperator(binaryOperator) && (<BinaryExpression>parent).left === node ?
                         binaryOperator === SyntaxKind.EqualsToken ? AssignmentKind.Definite : AssignmentKind.Compound :
                         AssignmentKind.None;
                 case SyntaxKind.PrefixUnaryExpression:

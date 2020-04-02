@@ -18,30 +18,30 @@ declare const c: A;
 
 (a.baz) &&= result.baz;
 >(a.baz) &&= result.baz : "" | 0 | 1 | 42 | undefined
->(a.baz) : string | number | undefined
->a.baz : string | number | undefined
+>(a.baz) : "" | 0 | 1 | 42 | undefined
+>a.baz : "" | 0 | 1 | 42 | undefined
 >a : A
->baz : string | number | undefined
+>baz : "" | 0 | 1 | 42 | undefined
 >result.baz : "" | 0 | 1 | 42 | undefined
 >result : A
 >baz : "" | 0 | 1 | 42 | undefined
 
 (b.baz) ||= result.baz;
->(b.baz) ||= result.baz : string | number | undefined
->(b.baz) : string | number | undefined
->b.baz : string | number | undefined
+>(b.baz) ||= result.baz : "" | 0 | 1 | 42 | undefined
+>(b.baz) : "" | 0 | 1 | 42 | undefined
+>b.baz : "" | 0 | 1 | 42 | undefined
 >b : A
->baz : string | number | undefined
+>baz : "" | 0 | 1 | 42 | undefined
 >result.baz : "" | 0 | 1 | 42 | undefined
 >result : A
 >baz : "" | 0 | 1 | 42 | undefined
 
 (c.baz) ??= result.baz;
->(c.baz) ??= result.baz : string | number | undefined
->(c.baz) : string | number | undefined
->c.baz : string | number | undefined
+>(c.baz) ??= result.baz : "" | 0 | 1 | 42 | undefined
+>(c.baz) : "" | 0 | 1 | 42 | undefined
+>c.baz : "" | 0 | 1 | 42 | undefined
 >c : A
->baz : string | number | undefined
+>baz : "" | 0 | 1 | 42 | undefined
 >result.baz : "" | 0 | 1 | 42 | undefined
 >result : A
 >baz : "" | 0 | 1 | 42 | undefined

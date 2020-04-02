@@ -30,34 +30,34 @@ declare const c: A
 
 a.baz &&= result.baz
 >a.baz &&= result.baz : "" | 0 | 1 | 42 | undefined
->a.baz : string | number | undefined
+>a.baz : "" | 0 | 1 | 42 | undefined
 >a : A
->baz : string | number | undefined
+>baz : "" | 0 | 1 | 42 | undefined
 >result.baz : "" | 0 | 1 | 42 | undefined
 >result : A
 >baz : "" | 0 | 1 | 42 | undefined
 
 b.baz ||= result.baz
->b.baz ||= result.baz : string | number | undefined
->b.baz : string | number | undefined
+>b.baz ||= result.baz : "" | 0 | 1 | 42 | undefined
+>b.baz : "" | 0 | 1 | 42 | undefined
 >b : A
->baz : string | number | undefined
+>baz : "" | 0 | 1 | 42 | undefined
 >result.baz : "" | 0 | 1 | 42 | undefined
 >result : A
 >baz : "" | 0 | 1 | 42 | undefined
 
 c.baz ??= result.baz
->c.baz ??= result.baz : string | number | undefined
->c.baz : string | number | undefined
+>c.baz ??= result.baz : "" | 0 | 1 | 42 | undefined
+>c.baz : "" | 0 | 1 | 42 | undefined
 >c : A
->baz : string | number | undefined
+>baz : "" | 0 | 1 | 42 | undefined
 >result.baz : "" | 0 | 1 | 42 | undefined
 >result : A
 >baz : "" | 0 | 1 | 42 | undefined
 
 a.foo["baz"] &&= result.foo.baz
 >a.foo["baz"] &&= result.foo.baz : "" | 0 | 1 | 42 | undefined
->a.foo["baz"] : string | number | undefined
+>a.foo["baz"] : "" | 0 | 1 | 42 | undefined
 >a.foo : { bar(): { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
 >a : A
 >foo : { bar(): { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
@@ -70,7 +70,7 @@ a.foo["baz"] &&= result.foo.baz
 
 b.foo["baz"] &&= result.foo.baz
 >b.foo["baz"] &&= result.foo.baz : "" | 0 | 1 | 42 | undefined
->b.foo["baz"] : string | number | undefined
+>b.foo["baz"] : "" | 0 | 1 | 42 | undefined
 >b.foo : { bar(): { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
 >b : A
 >foo : { bar(): { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
@@ -83,7 +83,7 @@ b.foo["baz"] &&= result.foo.baz
 
 c.foo["baz"] &&= result.foo.baz
 >c.foo["baz"] &&= result.foo.baz : "" | 0 | 1 | 42 | undefined
->c.foo["baz"] : string | number | undefined
+>c.foo["baz"] : "" | 0 | 1 | 42 | undefined
 >c.foo : { bar(): { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
 >c : A
 >foo : { bar(): { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
@@ -96,14 +96,14 @@ c.foo["baz"] &&= result.foo.baz
 
 a.foo.bar().baz &&= result.foo.bar().baz
 >a.foo.bar().baz &&= result.foo.bar().baz : "" | 0 | 1 | 42 | undefined
->a.foo.bar().baz : string | number | undefined
+>a.foo.bar().baz : "" | 0 | 1 | 42 | undefined
 >a.foo.bar() : { baz: "" | 0 | 1 | 42 | undefined; }
 >a.foo.bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
 >a.foo : { bar(): { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
 >a : A
 >foo : { bar(): { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
 >bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
->baz : string | number | undefined
+>baz : "" | 0 | 1 | 42 | undefined
 >result.foo.bar().baz : "" | 0 | 1 | 42 | undefined
 >result.foo.bar() : { baz: "" | 0 | 1 | 42 | undefined; }
 >result.foo.bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
@@ -114,15 +114,15 @@ a.foo.bar().baz &&= result.foo.bar().baz
 >baz : "" | 0 | 1 | 42 | undefined
 
 b.foo.bar().baz ||= result.foo.bar().baz
->b.foo.bar().baz ||= result.foo.bar().baz : string | number | undefined
->b.foo.bar().baz : string | number | undefined
+>b.foo.bar().baz ||= result.foo.bar().baz : "" | 0 | 1 | 42 | undefined
+>b.foo.bar().baz : "" | 0 | 1 | 42 | undefined
 >b.foo.bar() : { baz: "" | 0 | 1 | 42 | undefined; }
 >b.foo.bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
 >b.foo : { bar(): { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
 >b : A
 >foo : { bar(): { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
 >bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
->baz : string | number | undefined
+>baz : "" | 0 | 1 | 42 | undefined
 >result.foo.bar().baz : "" | 0 | 1 | 42 | undefined
 >result.foo.bar() : { baz: "" | 0 | 1 | 42 | undefined; }
 >result.foo.bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
@@ -133,15 +133,15 @@ b.foo.bar().baz ||= result.foo.bar().baz
 >baz : "" | 0 | 1 | 42 | undefined
 
 c.foo.bar().baz ??= result.foo.bar().baz
->c.foo.bar().baz ??= result.foo.bar().baz : string | number | undefined
->c.foo.bar().baz : string | number | undefined
+>c.foo.bar().baz ??= result.foo.bar().baz : "" | 0 | 1 | 42 | undefined
+>c.foo.bar().baz : "" | 0 | 1 | 42 | undefined
 >c.foo.bar() : { baz: "" | 0 | 1 | 42 | undefined; }
 >c.foo.bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
 >c.foo : { bar(): { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
 >c : A
 >foo : { bar(): { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
 >bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
->baz : string | number | undefined
+>baz : "" | 0 | 1 | 42 | undefined
 >result.foo.bar().baz : "" | 0 | 1 | 42 | undefined
 >result.foo.bar() : { baz: "" | 0 | 1 | 42 | undefined; }
 >result.foo.bar : () => { baz: "" | 0 | 1 | 42 | undefined; }

@@ -932,6 +932,9 @@ namespace ts {
                 case SyntaxKind.BinaryExpression:
                     switch ((<BinaryExpression>expr).operatorToken.kind) {
                         case SyntaxKind.EqualsToken:
+                        case SyntaxKind.BarBarEqualsToken:
+                        case SyntaxKind.AmpersandAmpersandEqualsToken:
+                        case SyntaxKind.QuestionQuestionEqualsToken:
                             return isNarrowableOperand((<BinaryExpression>expr).left);
                         case SyntaxKind.CommaToken:
                             return isNarrowableOperand((<BinaryExpression>expr).right);
@@ -1047,7 +1050,7 @@ namespace ts {
         function isLogicalAssignmentExpressioin(node: Node) {
             while (true) {
                 if (isParenthesizedExpression(node)) {
-                    node = node.expression
+                    node = node.expression;
                 }
                 else {
                     return isBinaryExpression(node) && isLogicalAssignmentOperator(node.operatorToken.kind);
@@ -1194,11 +1197,14 @@ namespace ts {
             else {
                 bindCondition(node.left, trueTarget, preRightLabel);
             }
-
             currentFlow = finishFlowLabel(preRightLabel);
             bind(node.operatorToken);
+
             doWithConditionalBranches(bind, node.right, trueTarget, falseTarget);
             bindAssignmentTargetFlow(node.left);
+
+            addAntecedent(trueTarget, createFlowCondition(FlowFlags.TrueCondition, currentFlow, node));
+            addAntecedent(falseTarget, createFlowCondition(FlowFlags.FalseCondition, currentFlow, node));
         }
 
         function bindReturnOrThrow(node: ReturnStatement | ThrowStatement): void {
@@ -1488,10 +1494,6 @@ namespace ts {
         }
 
         function bindBinaryExpressionFlow(node: BinaryExpression) {
-            const flow = currentFlow
-            if (flow) {
-                
-            }
             const workStacks: {
                 expr: BinaryExpression[],
                 state: BindBinaryExpressionFlowState[],

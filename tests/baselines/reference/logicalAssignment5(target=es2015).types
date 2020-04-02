@@ -51,8 +51,8 @@ function foo3 (f?: (a: number) => void) {
 >a : any
 
     f(42)
->f(42) : any
->f : undefined
+>f(42) : void
+>f : ((a: number) => void) | undefined
 >42 : 42
 }
 
@@ -126,8 +126,8 @@ function bar3 (f?: (a: number) => void) {
 >a : any
 
     f(42)
->f(42) : any
->f : undefined
+>f(42) : void
+>f : ((a: number) => void) | undefined
 >42 : 42
 }
 
