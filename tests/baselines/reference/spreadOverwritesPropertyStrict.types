@@ -124,3 +124,27 @@ function k(t: { command: string, ok: string }) {
 >t : { command: string; ok: string; }
 }
 
+function l(anyrequired: { a: any }) {
+>l : (anyrequired: {    a: any;}) => { a: any; }
+>anyrequired : { a: any; }
+>a : any
+
+    return { a: 'zzz', ...anyrequired } // error
+>{ a: 'zzz', ...anyrequired } : { a: any; }
+>a : string
+>'zzz' : "zzz"
+>anyrequired : { a: any; }
+}
+function m(anyoptional: { a?: any }) {
+>m : (anyoptional: {    a?: any;}) => { a: any; }
+>anyoptional : { a?: any; }
+>a : any
+
+    return { a: 'zzz', ...anyoptional } // ok
+>{ a: 'zzz', ...anyoptional } : { a: any; }
+>a : string
+>'zzz' : "zzz"
+>anyoptional : { a?: any; }
+}
+
+
