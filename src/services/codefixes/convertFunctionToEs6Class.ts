@@ -101,26 +101,27 @@ namespace ts.codefix {
             return memberElements;
 
             function shouldConvertDeclaration(_target: PropertyAccessExpression | ObjectLiteralExpression, source: Expression) {
-                // Right now the only thing we can convert are function expressions - other values shouldn't get
-                // transformed. We can update this once ES public class properties are available.
+                // Right now the only thing we can convert are function expressions, get/set accessors and methods
+                // other values like normal value fields ({a: 1}) shouldn't get transformed.
+                // We can update this once ES public class properties are available.
                 if (isPropertyAccessExpression(_target)) {
                     if (isConstructorAssignment(_target)) return true;
                     return isFunctionLike(source);
                 }
                 else {
-                    return every(_target.properties, x => {
+                    return every(_target.properties, property => {
                         // a() {}
-                        if (isMethodDeclaration(x) || isGetOrSetAccessorDeclaration(x)) return true;
+                        if (isMethodDeclaration(property) || isGetOrSetAccessorDeclaration(property)) return true;
                         // a: function() {}
-                        if (isPropertyAssignment(x) && isFunctionLike(x.initializer) && !!x.name) return true;
+                        if (isPropertyAssignment(property) && isFunctionExpression(property.initializer) && !!property.name) return true;
                         // x.prototype.constructor = fn
-                        if (isConstructorAssignment(x)) return true;
+                        if (isConstructorAssignment(property)) return true;
                         return false;
                     });
                 }
             }
 
-            function createClassElement(symbol: Symbol, modifiers: Modifier[] | undefined): ClassElement[] {
+            function createClassElement(symbol: Symbol, modifiers: Modifier[] | undefined): readonly ClassElement[] {
                 // Right now the only thing we can convert are function expressions, which are marked as methods
                 // or { x: y } type prototype assignments, which are marked as ObjectLiteral
                 const members: ClassElement[] = [];
@@ -130,8 +131,9 @@ namespace ts.codefix {
 
                 const memberDeclaration = symbol.valueDeclaration as PropertyAccessExpression | ObjectLiteralExpression;
                 const assignmentBinaryExpression = memberDeclaration.parent as BinaryExpression;
+                const assignmentExpr = assignmentBinaryExpression.right;
 
-                if (!shouldConvertDeclaration(memberDeclaration, assignmentBinaryExpression.right)) {
+                if (!shouldConvertDeclaration(memberDeclaration, assignmentExpr)) {
                     return members;
                 }
 
@@ -140,42 +142,42 @@ namespace ts.codefix {
                     ? assignmentBinaryExpression.parent : assignmentBinaryExpression;
                 changes.delete(sourceFile, nodeToDelete);
 
-                if (!assignmentBinaryExpression.right) {
+                if (!assignmentExpr) {
                     members.push(createProperty([], modifiers, symbol.name, /*questionToken*/ undefined,
                         /*type*/ undefined, /*initializer*/ undefined));
                     return members;
                 }
 
-                switch (assignmentBinaryExpression.right.kind) {
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.ArrowFunction:
-                        return createFunctionLikeExpressionMember(members, <FunctionExpression | ArrowFunction>assignmentBinaryExpression.right, (<PropertyAccessExpression>memberDeclaration).name);
-                    case SyntaxKind.ObjectLiteralExpression: {
-                        return map(
-                            (<ObjectLiteralExpression>assignmentBinaryExpression.right).properties,
-                            property => {
-                                if (isMethodDeclaration(property) || isGetOrSetAccessorDeclaration(property)) {
-                                    // MethodDeclaration and AccessorDeclaration can appear in a class directly
-                                    return members.concat(property);
-                                }
-                                // Drop constructor assignments
-                                if (isConstructorAssignment(property)) return members;
-                                return createFunctionLikeExpressionMember(members, <FunctionExpression | ArrowFunction>(<PropertyAssignment>property).initializer, property.name!);
+                // f.x = expr
+                if (isPropertyAccessExpression(memberDeclaration) && (isFunctionExpression(assignmentExpr) || isArrowFunction(assignmentExpr))) {
+                    return createFunctionLikeExpressionMember(members, assignmentExpr, memberDeclaration.name);
+                }
+                // f.prototype = { ... }
+                else if (isObjectLiteralExpression(assignmentExpr)) {
+                    return flatMap(
+                        assignmentExpr.properties,
+                        property => {
+                            if (isMethodDeclaration(property) || isGetOrSetAccessorDeclaration(property)) {
+                                // MethodDeclaration and AccessorDeclaration can appear in a class directly
+                                return members.concat(property);
                             }
-                        ).reduce((x, y) => x.concat(y));
-                    }
-
-                    default: {
-                        // Don't try to declare members in JavaScript files
-                        if (isSourceFileJS(sourceFile)) {
-                            return members;
+                            if (isPropertyAssignment(property) && isFunctionExpression(property.initializer)) {
+                                return createFunctionLikeExpressionMember(members, property.initializer, property.name);
+                            }
+                            // Drop constructor assignments
+                            if (isConstructorAssignment(property)) return members;
+                            return [];
                         }
-                        const prop = createProperty(/*decorators*/ undefined, modifiers, (<PropertyAccessExpression>memberDeclaration).name, /*questionToken*/ undefined,
-                            /*type*/ undefined, assignmentBinaryExpression.right);
-                        copyLeadingComments(assignmentBinaryExpression.parent, prop, sourceFile);
-                        members.push(prop);
-                        return members;
-                    }
+                    );
+                }
+                else {
+                    // Don't try to declare members in JavaScript files
+                    if (isSourceFileJS(sourceFile)) return members;
+                    if (!isPropertyAccessExpression(memberDeclaration)) return members;
+                    const prop = createProperty(/*decorators*/ undefined, modifiers, memberDeclaration.name, /*questionToken*/ undefined, /*type*/ undefined, assignmentExpr);
+                    copyLeadingComments(assignmentBinaryExpression.parent, prop, sourceFile);
+                    members.push(prop);
+                    return members;
                 }
 
                 type MethodName = Parameters<typeof createMethod>[3];
