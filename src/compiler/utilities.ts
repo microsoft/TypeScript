@@ -2114,10 +2114,13 @@ namespace ts {
         return isIdentifier(node) && node.escapedText === "exports";
     }
 
+    export function isModuleIdentifier(node: Node) {
+        return isIdentifier(node) && node.escapedText === "module";
+    }
+
     export function isModuleExportsAccessExpression(node: Node): node is LiteralLikeElementAccessExpression & { expression: Identifier } {
         return (isPropertyAccessExpression(node) || isLiteralLikeElementAccess(node))
-            && isIdentifier(node.expression)
-            && node.expression.escapedText === "module"
+            && isModuleIdentifier(node.expression)
             && getElementOrPropertyAccessName(node) === "exports";
     }
 
@@ -2152,7 +2155,7 @@ namespace ts {
 
     /** Any series of property and element accesses. */
     export function isBindableStaticAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticAccessExpression {
-        return isPropertyAccessExpression(node) && (!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword || isBindableStaticNameExpression(node.expression, /*excludeThisKeyword*/ true))
+        return isPropertyAccessExpression(node) && (!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword || isIdentifier(node.name) && isBindableStaticNameExpression(node.expression, /*excludeThisKeyword*/ true))
             || isBindableStaticElementAccessExpression(node, excludeThisKeyword);
     }
 
@@ -2674,11 +2677,7 @@ namespace ts {
     export function skipParentheses(node: Expression): Expression;
     export function skipParentheses(node: Node): Node;
     export function skipParentheses(node: Node): Node {
-        while (node.kind === SyntaxKind.ParenthesizedExpression) {
-            node = (node as ParenthesizedExpression).expression;
-        }
-
-        return node;
+        return skipOuterExpressions(node, OuterExpressionKinds.Parentheses);
     }
 
     function skipParenthesesUp(node: Node): Node {
@@ -4433,14 +4432,7 @@ namespace ts {
     }
 
     export function isPropertyAccessEntityNameExpression(node: Node): node is PropertyAccessEntityNameExpression {
-        return isPropertyAccessExpression(node) && isEntityNameExpression(node.expression);
-    }
-
-    export function isConstructorAccessExpression(expr: Expression): expr is AccessExpression {
-        return (
-            isPropertyAccessExpression(expr) && idText(expr.name) === "constructor" ||
-            isElementAccessExpression(expr) && isStringLiteralLike(expr.argumentExpression) && expr.argumentExpression.text === "constructor"
-        );
+        return isPropertyAccessExpression(node) && isIdentifier(node.name) && isEntityNameExpression(node.expression);
     }
 
     export function tryGetPropertyAccessOrIdentifierToString(expr: Expression): string | undefined {

@@ -107,7 +107,6 @@ namespace ts {
         | SyntaxKind.YieldKeyword
         | SyntaxKind.AsyncKeyword
         | SyntaxKind.AwaitKeyword
-        | SyntaxKind.AwaitedKeyword
         | SyntaxKind.OfKeyword;
 
     export type JsxTokenSyntaxKind =
@@ -262,7 +261,6 @@ namespace ts {
         AnyKeyword,
         AsyncKeyword,
         AwaitKeyword,
-        AwaitedKeyword,
         BooleanKeyword,
         ConstructorKeyword,
         DeclareKeyword,
@@ -1320,7 +1318,7 @@ namespace ts {
 
     export interface TypeOperatorNode extends TypeNode {
         kind: SyntaxKind.TypeOperator;
-        operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.AwaitedKeyword;
+        operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword;
         type: TypeNode;
     }
 
@@ -1935,6 +1933,7 @@ namespace ts {
         | PropertyAccessChain
         | ElementAccessChain
         | CallChain
+        | NonNullChain
         ;
 
     /* @internal */
@@ -2027,6 +2026,10 @@ namespace ts {
     export interface NonNullExpression extends LeftHandSideExpression {
         kind: SyntaxKind.NonNullExpression;
         expression: Expression;
+    }
+
+    export interface NonNullChain extends NonNullExpression {
+        _optionalChainBrand: any;
     }
 
     // NOTE: MetaProperty is really a MemberExpression, but we consider it a PrimaryExpression
@@ -3605,7 +3608,7 @@ namespace ts {
          * Does not include properties of primitive types.
          */
         /* @internal */ getAllPossiblePropertiesOfTypes(type: readonly Type[]): Symbol[];
-        /* @internal */ resolveName(name: string, location: Node, meaning: SymbolFlags, excludeGlobals: boolean): Symbol | undefined;
+        /* @internal */ resolveName(name: string, location: Node | undefined, meaning: SymbolFlags, excludeGlobals: boolean): Symbol | undefined;
         /* @internal */ getJsxNamespace(location?: Node): string;
 
         /**
@@ -3682,6 +3685,7 @@ namespace ts {
         OmitParameterModifiers                  = 1 << 13,  // Omit modifiers on parameters
         UseAliasDefinedOutsideCurrentScope      = 1 << 14,  // Allow non-visible aliases
         UseSingleQuotesForStringLiteralType     = 1 << 28,  // Use single quotes for string literal type
+        NoTypeReduction                         = 1 << 29,  // Don't call getReducedType
 
         // Error handling
         AllowThisInObjectLiteral                = 1 << 15,
@@ -3725,6 +3729,7 @@ namespace ts {
 
         UseAliasDefinedOutsideCurrentScope      = 1 << 14, // For a `type T = ... ` defined in a different file, write `T` instead of its value, even though `T` can't be accessed in the current scope.
         UseSingleQuotesForStringLiteralType     = 1 << 28, // Use single quotes for string literal type
+        NoTypeReduction                         = 1 << 29, // Don't call getReducedType
 
         // Error Handling
         AllowUniqueESSymbolType                 = 1 << 20, // This is bit 20 to align with the same bit in `NodeBuilderFlags`
@@ -3744,7 +3749,7 @@ namespace ts {
         NodeBuilderFlagsMask = NoTruncation | WriteArrayAsGenericType | UseStructuralFallback | WriteTypeArgumentsOfSignature |
             UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
             UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias |
-            UseSingleQuotesForStringLiteralType,
+            UseSingleQuotesForStringLiteralType | NoTypeReduction,
     }
 
     export const enum SymbolFormatFlags {
@@ -4347,7 +4352,6 @@ namespace ts {
         Conditional     = 1 << 24,  // T extends U ? X : Y
         Substitution    = 1 << 25,  // Type parameter substitution
         NonPrimitive    = 1 << 26,  // intrinsic object type
-        Awaited         = 1 << 27,  // awaited T
 
         /* @internal */
         AnyOrUnknown = Any | Unknown,
@@ -4377,7 +4381,7 @@ namespace ts {
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
         TypeVariable = TypeParameter | IndexedAccess,
-        InstantiableNonPrimitive = TypeVariable | Conditional | Substitution | Awaited,
+        InstantiableNonPrimitive = TypeVariable | Conditional | Substitution,
         InstantiablePrimitive = Index,
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
@@ -4649,6 +4653,8 @@ namespace ts {
     export interface UnionType extends UnionOrIntersectionType {
         /* @internal */
         resolvedReducedType: Type;
+        /* @internal */
+        regularType: UnionType;
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {
@@ -4820,11 +4826,6 @@ namespace ts {
     export interface SubstitutionType extends InstantiableType {
         baseType: Type;     // Target type
         substitute: Type;   // Type to substitute for type parameter
-    }
-
-    // awaited T (TypeFlags.Awaited)
-    export interface AwaitedType extends InstantiableType {
-        awaitedType: Type;
     }
 
     /* @internal */

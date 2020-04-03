@@ -2,7 +2,7 @@
 // Repro from #14837
 
 type Foo<T extends "true", B> = { "true": Foo<T, Foo<T, B>> }[T];
->Foo : { true: { true: { true: { true: { true: { true: { true: { true: { true: { true: { true: any[T]; }[T]; }[T]; }[T]; }[T]; }[T]; }[T]; }[T]; }[T]; }[T]; }[T]; }[T]
+>Foo : { true: Foo<T, Foo<T, B>>; }[T]
 >"true" : { true: { true: { true: { true: { true: { true: { true: { true: { true: { true: { true: any[T]; }[T]; }[T]; }[T]; }[T]; }[T]; }[T]; }[T]; }[T]; }[T]; }[T]; }[T]
 
 let f1: Foo<"true", {}>;

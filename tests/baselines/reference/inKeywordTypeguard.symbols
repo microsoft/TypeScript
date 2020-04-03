@@ -239,3 +239,26 @@ class UnreachableCodeDetection {
         }
     }
 }
+
+function positiveIntersectionTest(x: { a: string } & { b: string }) {
+>positiveIntersectionTest : Symbol(positiveIntersectionTest, Decl(inKeywordTypeguard.ts, 96, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 98, 34))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 98, 38))
+>b : Symbol(b, Decl(inKeywordTypeguard.ts, 98, 54))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 98, 34))
+
+        let s: string = x.a;
+>s : Symbol(s, Decl(inKeywordTypeguard.ts, 100, 11))
+>x.a : Symbol(a, Decl(inKeywordTypeguard.ts, 98, 38))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 98, 34))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 98, 38))
+
+    } else {
+        let n: never = x;
+>n : Symbol(n, Decl(inKeywordTypeguard.ts, 102, 11))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 98, 34))
+    }
+}
+

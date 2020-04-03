@@ -1,7 +1,7 @@
 Exit Code: 0
 Standard output:
 
-> @X.X.X-alpha.9 build /vue-next
+> @X.X.X-alpha.10 build /vue-next
 > node scripts/build.js "--types"
 Rolling up type definitions for compiler-core...
 Writing: /vue-next/temp/compiler-core.api.json
@@ -75,27 +75,27 @@ created packages/reactivity/dist/reactivity.global.prod.js in ?s
 /vue-next/packages/reactivity/src/index.ts → packages/reactivity/dist/reactivity.esm.prod.js...
 created packages/reactivity/dist/reactivity.esm.prod.js in ?s
 /vue-next/packages/runtime-core/src/index.ts → packages/runtime-core/dist/runtime-core.esm-bundler.js...
-[!] (plugin rpt2) Error: /vue-next/packages/runtime-core/src/apiOptions.ts(137,18): semantic error TS2344: Type 'Function & T[key]["get"]' does not satisfy the constraint '(...args: any) => any'.
+[!] (plugin rpt2) Error: /vue-next/packages/runtime-core/src/apiOptions.ts(143,18): semantic error TS2344: Type 'Function & T[key]["get"]' does not satisfy the constraint '(...args: any) => any'.
   Type 'Function' provides no match for the signature '(...args: any): any'.
 packages/runtime-core/src/apiOptions.ts
-Error: /vue-next/packages/runtime-core/src/apiOptions.ts(137,18): semantic error TS2344: Type 'Function & T[key]["get"]' does not satisfy the constraint '(...args: any) => any'.
+Error: /vue-next/packages/runtime-core/src/apiOptions.ts(143,18): semantic error TS2344: Type 'Function & T[key]["get"]' does not satisfy the constraint '(...args: any) => any'.
   Type 'Function' provides no match for the signature '(...args: any): any'.
-    at error (/vue-next/node_modules/rollup/dist/shared/node-entry.js:5400:30)
-    at throwPluginError (/vue-next/node_modules/rollup/dist/shared/node-entry.js:11878:12)
-    at Object.error (/vue-next/node_modules/rollup/dist/shared/node-entry.js:12912:24)
-    at Object.error (/vue-next/node_modules/rollup/dist/shared/node-entry.js:12081:38)
+    at error (/vue-next/node_modules/rollup/dist/shared/rollup.js:10120:30)
+    at throwPluginError (/vue-next/node_modules/rollup/dist/shared/rollup.js:16247:12)
+    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:17255:24)
+    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:16420:38)
     at RollupContext.error (/vue-next/node_modules/rollup-plugin-typescript2/src/rollupcontext.ts:37:18)
     at /vue-next/node_modules/rollup-plugin-typescript2/src/print-diagnostics.ts:41:11
     at arrayEach (/vue-next/node_modules/rollup-plugin-typescript2/node_modules/lodash/lodash.js:516:11)
     at forEach (/vue-next/node_modules/rollup-plugin-typescript2/node_modules/lodash/lodash.js:9342:14)
     at _.each (/vue-next/node_modules/rollup-plugin-typescript2/src/print-diagnostics.ts:9:2)
-    at Object.transform (/vue-next/node_modules/rollup-plugin-typescript2/src/index.ts:234:5)
-(node:17) UnhandledPromiseRejectionWarning: Error: Command failed with exit code 1 (EPERM): rollup -c --environment COMMIT:342d46d,NODE_ENV:production,TARGET:runtime-core,TYPES:true
+    at Object.transform (/vue-next/node_modules/rollup-plugin-typescript2/src/index.ts:242:5)
+(node:17) UnhandledPromiseRejectionWarning: Error: Command failed with exit code 1 (EPERM): rollup -c --environment COMMIT:94562da,NODE_ENV:production,TARGET:runtime-core,TYPES:true
     at makeError (/vue-next/node_modules/execa/lib/error.js:59:11)
     at handlePromise (/vue-next/node_modules/execa/index.js:112:26)
     at processTicksAndRejections (internal/process/task_queues.js:97:5)
-    at async build (/vue-next/scripts/build.js:72:3)
-    at async buildAll (/vue-next/scripts/build.js:51:5)
-    at async run (/vue-next/scripts/build.js:41:5)
+    at async build (/vue-next/scripts/build.js:71:3)
+    at async buildAll (/vue-next/scripts/build.js:50:5)
+    at async run (/vue-next/scripts/build.js:40:5)
 (node:17) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)
 (node:17) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.

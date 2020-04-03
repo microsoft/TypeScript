@@ -10,7 +10,7 @@
  * @returns {*} Returns the result of `func`.
  */
 function apply(func, thisArg, ...args) {
->apply : (func: Function, thisArg: any, ...args: any[]) => any
+>apply : (func: Function, thisArg: any, ...args: ...*) => any
 >func : Function
 >thisArg : any
 >args : any[]

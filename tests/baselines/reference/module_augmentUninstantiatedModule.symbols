@@ -9,7 +9,7 @@ declare module "foo" {
 >M : Symbol(M, Decl(module_augmentUninstantiatedModule.ts, 0, 22), Decl(module_augmentUninstantiatedModule.ts, 2, 6), Decl(module_augmentUninstantiatedModule.ts, 6, 22))
 
    export = M;
->M : Symbol(M, Decl(module_augmentUninstantiatedModule.ts, 0, 22), Decl(module_augmentUninstantiatedModule.ts, 2, 6))
+>M : Symbol(M, Decl(module_augmentUninstantiatedModule.ts, 0, 22), Decl(module_augmentUninstantiatedModule.ts, 2, 6), Decl(module_augmentUninstantiatedModule.ts, 6, 22))
 }
 
 declare module "bar" {

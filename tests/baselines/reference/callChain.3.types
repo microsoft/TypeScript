@@ -4,7 +4,7 @@ declare function absorb<T>(): T;
 
 declare const a: { m?<T>(obj: {x: T}): T } | undefined;
 >a : { m?<T>(obj: { x: T; }): T; } | undefined
->m : (<T>(obj: { x: T; }) => T) | undefined
+>m : (<T>(obj: {    x: T;}) => T) | undefined
 >obj : { x: T; }
 >x : T
 

@@ -5,7 +5,7 @@ type Maybe<T> = T | undefined;
 >Maybe : Maybe<T>
 
 declare function concatMaybe<T>(...args: (Maybe<T> | Maybe<T>[])[]): T[];
->concatMaybe : <T>(...args: (T | Maybe<T>[] | undefined)[]) => T[]
+>concatMaybe : <T>(...args: (Maybe<T> | Maybe<T>[])[]) => T[]
 >args : (T | Maybe<T>[] | undefined)[]
 
 concatMaybe([1, 2, 3], 4);
@@ -157,7 +157,7 @@ export interface RouteComponentProps { route: string }
 >route : string
 
 declare function withRouter<
->withRouter : <P extends RouteComponentProps, C extends ComponentType<P>>(component: (C & FunctionComponent<P>) | (C & ComponentClass<P>)) => ComponentClass<Pick<P, Exclude<keyof P, "route">>>
+>withRouter : <P extends RouteComponentProps, C extends ComponentType<P>>(component: C & ComponentType<P>) => ComponentClass<Omit<P, keyof RouteComponentProps>>
 
   P extends RouteComponentProps,
   C extends ComponentType<P>
@@ -187,7 +187,7 @@ type AB<T> = { a: T } | { b: T };
 
 // T & AB<U> normalizes to T & { a: U } | T & { b: U } below
 declare function foo<T, U>(obj: T & AB<U>): [T, U];
->foo : <T, U>(obj: (T & { a: U; }) | (T & { b: U; })) => [T, U]
+>foo : <T, U>(obj: T & AB<U>) => [T, U]
 >obj : (T & { a: U; }) | (T & { b: U; })
 
 declare let ab: AB<string>;

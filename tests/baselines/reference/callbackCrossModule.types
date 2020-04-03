@@ -24,7 +24,7 @@ function C() {
 === tests/cases/conformance/jsdoc/use.js ===
 /** @param {import('./mod1').Con} k */
 function f(k) {
->f : (k: import("tests/cases/conformance/jsdoc/mod1").Con) => any
+>f : (k: import('./mod1').Con) => any
 >k : import("tests/cases/conformance/jsdoc/mod1").Con
 
     if (1 === 2 - 1) {

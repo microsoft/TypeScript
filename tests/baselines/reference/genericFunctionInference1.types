@@ -28,7 +28,7 @@ declare function list<T>(a: T): T[];
 >a : T
 
 declare function box<V>(x: V): { value: V };
->box : <V>(x: V) => { value: V; }
+>box : <V>(x: V) => {    value: V;}
 >x : V
 >value : V
 
@@ -621,7 +621,7 @@ var z = identityM(x);
 // #3038
 
 export function keyOf<a>(value: { key: a; }): a {
->keyOf : <a>(value: { key: a; }) => a
+>keyOf : <a>(value: {    key: a;}) => a
 >value : { key: a; }
 >key : a
 
@@ -835,16 +835,16 @@ const fn30: Fn = pipe(
 const promise = Promise.resolve(1);
 >promise : Promise<number>
 >Promise.resolve(1) : Promise<number>
->Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<awaited T>; (): Promise<void>; }
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
 >Promise : PromiseConstructor
->resolve : { <T>(value: T | PromiseLike<T>): Promise<awaited T>; (): Promise<void>; }
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
 >1 : 1
 
 promise.then(
 >promise.then(    pipe(        x => x + 1,        x => x * 2,    ),) : Promise<number>
->promise.then : <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<awaited TResult1 | awaited TResult2>
+>promise.then : <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >promise : Promise<number>
->then : <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<awaited TResult1 | awaited TResult2>
+>then : <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 
     pipe(
 >pipe(        x => x + 1,        x => x * 2,    ) : (x: number) => number

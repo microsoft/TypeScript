@@ -42,6 +42,15 @@ namespace ts.textChanges {
          * include all trivia between the node and the previous token
          */
         IncludeAll,
+        /**
+         * Include attached JSDoc comments
+         */
+        JSDoc,
+        /**
+         * Only delete trivia on the same line as getStart().
+         * Used to avoid deleting leading comments
+         */
+        StartLine,
     }
 
     export enum TrailingTriviaOption {
@@ -161,6 +170,15 @@ namespace ts.textChanges {
         const { leadingTriviaOption } = options;
         if (leadingTriviaOption === LeadingTriviaOption.Exclude) {
             return node.getStart(sourceFile);
+        }
+        if (leadingTriviaOption === LeadingTriviaOption.StartLine) {
+            return getLineStartPositionForPosition(node.getStart(sourceFile), sourceFile);
+        }
+        if (leadingTriviaOption === LeadingTriviaOption.JSDoc) {
+            const JSDocComments = getJSDocCommentRanges(node, sourceFile.text);
+            if (JSDocComments?.length) {
+                return getLineStartPositionForPosition(JSDocComments[0].pos, sourceFile);
+            }
         }
         const fullStart = node.getFullStart();
         const start = node.getStart(sourceFile);
@@ -1249,10 +1267,11 @@ namespace ts.textChanges {
                 }
 
                 case SyntaxKind.ImportDeclaration:
-                    const isFirstImport = sourceFile.imports.length && node === first(sourceFile.imports).parent || node === find(sourceFile.statements, isImportDeclaration);
+                case SyntaxKind.ImportEqualsDeclaration:
+                    const isFirstImport = sourceFile.imports.length && node === first(sourceFile.imports).parent || node === find(sourceFile.statements, isAnyImportSyntax);
+                    // For first import, leave header comment in place, otherwise only delete JSDoc comments
                     deleteNode(changes, sourceFile, node,
-                        // For first import, leave header comment in place
-                        isFirstImport ? { leadingTriviaOption: LeadingTriviaOption.Exclude } : undefined);
+                        { leadingTriviaOption: isFirstImport ? LeadingTriviaOption.Exclude : hasJSDocNodes(node) ? LeadingTriviaOption.JSDoc : LeadingTriviaOption.StartLine });
                     break;
 
                 case SyntaxKind.BindingElement:
@@ -1294,6 +1313,11 @@ namespace ts.textChanges {
 
                 case SyntaxKind.FunctionKeyword:
                     deleteNode(changes, sourceFile, node, { leadingTriviaOption: LeadingTriviaOption.Exclude });
+                    break;
+
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.FunctionDeclaration:
+                    deleteNode(changes, sourceFile, node, { leadingTriviaOption: hasJSDocNodes(node) ? LeadingTriviaOption.JSDoc : LeadingTriviaOption.StartLine });
                     break;
 
                 default:
@@ -1372,7 +1396,7 @@ namespace ts.textChanges {
                     break;
 
                 case SyntaxKind.VariableStatement:
-                    deleteNode(changes, sourceFile, gp);
+                    deleteNode(changes, sourceFile, gp, { leadingTriviaOption: hasJSDocNodes(gp) ? LeadingTriviaOption.JSDoc : LeadingTriviaOption.StartLine });
                     break;
 
                 default:

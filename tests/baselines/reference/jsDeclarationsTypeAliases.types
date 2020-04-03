@@ -35,7 +35,7 @@ No type information for this code.=== tests/cases/conformance/jsdoc/declarations
  * @returns {SomeType}
  */
 function doTheThing(x) {
->doTheThing : (x: number) => number | { x: string; } | LocalThing | ExportedThing
+>doTheThing : (x: number) => SomeType
 >x : number
 
     return {x: ""+x};

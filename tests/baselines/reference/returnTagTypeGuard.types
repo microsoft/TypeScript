@@ -86,7 +86,7 @@ function isBoolean(value) {
 
 /** @param {boolean | number} val */
 function foo(val) {
->foo : (val: number | boolean) => void
+>foo : (val: boolean | number) => void
 >val : number | boolean
 
     if (isBoolean(val)) {

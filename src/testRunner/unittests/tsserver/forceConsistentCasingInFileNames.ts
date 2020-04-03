@@ -65,13 +65,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(service, { configuredProjects: 1 });
             const project = service.configuredProjects.get(tsconfig.path)!;
             checkProjectActualFiles(project, [loggerFile.path, anotherFile.path, libFile.path, tsconfig.path]);
-            verifyGetErrRequest({
-                host,
-                session,
-                expected: [
-                    { file: loggerFile.path, syntax: [], semantic: [], suggestion: [] }
-                ]
-            });
+            verifyGetErrRequestNoErrors({ session, host, files: [loggerFile] });
 
             const newLoggerPath = loggerFile.path.toLowerCase();
             host.renameFile(loggerFile.path, newLoggerPath);
@@ -97,14 +91,7 @@ namespace ts.projectSystem {
             });
 
             // Check errors in both files
-            verifyGetErrRequest({
-                host,
-                session,
-                expected: [
-                    { file: newLoggerPath, syntax: [], semantic: [], suggestion: [] },
-                    { file: anotherFile.path, syntax: [], semantic: [], suggestion: [] }
-                ]
-            });
+            verifyGetErrRequestNoErrors({ session, host, files: [newLoggerPath, anotherFile] });
         });
 
         it("when changing module name with different casing", () => {
@@ -130,13 +117,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(service, { configuredProjects: 1 });
             const project = service.configuredProjects.get(tsconfig.path)!;
             checkProjectActualFiles(project, [loggerFile.path, anotherFile.path, libFile.path, tsconfig.path]);
-            verifyGetErrRequest({
-                host,
-                session,
-                expected: [
-                    { file: anotherFile.path, syntax: [], semantic: [], suggestion: [] }
-                ]
-            });
+            verifyGetErrRequestNoErrors({ session, host, files: [anotherFile] });
 
             session.executeCommandSeq<protocol.UpdateOpenRequest>({
                 command: protocol.CommandTypes.UpdateOpen,

@@ -3830,7 +3830,7 @@ module TypeScript {
     /// Return the stack of AST nodes containing "position"
     ///
     export function getAstPathToPosition(script: TypeScript.AST, pos: number, options = GetAstPathOptions.Default): TypeScript.AstPath {
->getAstPathToPosition : (script: any, pos: number, options?: GetAstPathOptions) => AstPath
+>getAstPathToPosition : (script: any, pos: number, options?: GetAstPathOptions) => TypeScript.AstPath
 >script : any
 >TypeScript : any
 >pos : number
@@ -3841,8 +3841,8 @@ module TypeScript {
 >TypeScript : any
 
         var lookInComments = (comments: TypeScript.Comment[]) => {
->lookInComments : (comments: any[]) => void
->(comments: TypeScript.Comment[]) => {            if (comments && comments.length > 0) {                for (var i = 0; i < comments.length; i++) {                    var minChar = comments[i].minChar;                    var limChar = comments[i].limChar;                    if (!comments[i].isBlockComment) {                        limChar++; // For single line comments, include 1 more character (for the newline)                    }                    if (pos >= minChar && pos < limChar) {                        ctx.path.push(comments[i]);                    }                }            }        } : (comments: any[]) => void
+>lookInComments : (comments: TypeScript.Comment[]) => void
+>(comments: TypeScript.Comment[]) => {            if (comments && comments.length > 0) {                for (var i = 0; i < comments.length; i++) {                    var minChar = comments[i].minChar;                    var limChar = comments[i].limChar;                    if (!comments[i].isBlockComment) {                        limChar++; // For single line comments, include 1 more character (for the newline)                    }                    if (pos >= minChar && pos < limChar) {                        ctx.path.push(comments[i]);                    }                }            }        } : (comments: TypeScript.Comment[]) => void
 >comments : any[]
 >TypeScript : any
 

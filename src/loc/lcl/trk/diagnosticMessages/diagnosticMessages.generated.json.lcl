@@ -503,6 +503,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_new_expression_with_type_arguments_must_always_be_followed_by_a_parenthesized_argument_list_1384" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A 'new' expression with type arguments must always be followed by a parenthesized argument list.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tür bağımsız değişkenlerine sahip bir 'new' ifadesinin arkasından her zaman parantez içine alınmış bağımsız değişken listesi gelmelidir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_non_dry_build_would_build_project_0_6357" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would build project '{0}']]></Val>
@@ -998,6 +1007,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_a_return_statement_95111" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add a return statement]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_all_missing_async_modifiers_95041" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add all missing 'async' modifiers]]></Val>
@@ -1031,6 +1046,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Tüm eksik üyeleri ekle]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_all_missing_return_statement_95114" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add all missing return statement]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1091,6 +1112,9 @@
       <Item ItemId=";Add_class_tag_95102" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add '@class' tag]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['@class' etiketi ekle]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1274,12 +1298,18 @@
       <Item ItemId=";Add_this_parameter_95104" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add 'this' parameter.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['this' parametresini ekleyin.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_this_tag_95103" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add '@this' tag]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['@this' etiketi ekle]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1802,6 +1832,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Dizin imzası bir rest parametresine sahip olamaz.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_index_signature_cannot_have_a_trailing_comma_1025" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An index signature cannot have a trailing comma.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2732,6 +2768,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Cannot_read_file_0_5083" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot read file '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' dosyası okunamıyor.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Cannot_read_file_0_Colon_1_5012" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot read file '{0}': {1}.]]></Val>
@@ -3311,6 +3356,9 @@
       <Item ItemId=";Convert_all_invalid_characters_to_HTML_entity_code_95101" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert all invalid characters to HTML entity code]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tüm geçersiz karakterleri HTML varlık koduna dönüştür]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3389,12 +3437,18 @@
       <Item ItemId=";Convert_function_declaration_0_to_arrow_function_95106" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert function declaration '{0}' to arrow function]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' işlev bildirimini ok işlevine dönüştür]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Convert_function_expression_0_to_arrow_function_95105" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert function expression '{0}' to arrow function]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' işlev ifadesini ok işlevine dönüştür]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3545,6 +3599,9 @@
       <Item ItemId=";Could_not_resolve_the_path_0_with_the_extensions_Colon_1_6231" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Could not resolve the path '{0}' with the extensions: {1}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Uzantılara sahip '{0}' yolu çözümlenemedi: {1}.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5063,6 +5120,9 @@
       <Item ItemId=";Fix_all_implicit_this_errors_95107" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Fix all implicit-'this' errors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tüm örtük 'this' hatalarını onar]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5936,6 +5996,24 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['--reactNamespace' için geçersiz değer. '{0}' geçerli bir tanımlayıcı değil.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Its_element_type_0_is_not_a_valid_JSX_element_2789" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Its element type '{0}' is not a valid JSX element.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Its_instance_type_0_is_not_a_valid_JSX_element_2788" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Its instance type '{0}' is not a valid JSX element.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Its_return_type_0_is_not_a_valid_JSX_element_2787" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Its return type '{0}' is not a valid JSX element.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8474,6 +8552,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Remove_all_incorrect_body_block_braces_95115" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove all incorrect body block braces]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Remove_all_unnecessary_uses_of_await_95087" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove all unnecessary uses of 'await']]></Val>
@@ -8498,6 +8582,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Kullanılmayan tüm etiketleri kaldır]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_block_body_braces_95112" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove block body braces]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10454,6 +10544,9 @@
       <Item ItemId=";This_spread_always_overwrites_this_property_2785" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This spread always overwrites this property.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bu yayılma her zaman bu özelliğin üzerine yazar.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -11639,6 +11732,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_json_to_read_more_about_this_file_95110" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Visit https://aka.ms/tsconfig.json to read more about this file]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Watch_input_files_6005" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Watch input files.]]></Val>
@@ -11669,6 +11768,15 @@
       <Item ItemId=";Wrap_all_invalid_characters_in_an_expression_container_95109" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Wrap all invalid characters in an expression container]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Geçersiz tüm karakterleri bir ifade kapsayıcısında sarmalayın]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Wrap_all_object_literal_with_parentheses_95116" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Wrap all object literal with parentheses]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -11678,6 +11786,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Geçersiz karakteri bir ifade kapsayıcısında sarmalayın]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Wrap_the_following_body_with_parentheses_which_should_be_an_object_literal_95113" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Wrap the following body with parentheses which should be an object literal]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -11732,6 +11846,66 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' iki kez belirtildi. '{0}' özniteliğinin üzerine yazılacak.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_can_only_be_imported_by_turning_on_the_esModuleInterop_flag_and_using_a_default_import_2596" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' can only be imported by turning on the 'esModuleInterop' flag and using a default import.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' yalnızca 'esModuleInterop' bayrağı etkinleştirilip varsayılan içeri aktarma kullanılarak içeri aktarılabilir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_can_only_be_imported_by_using_a_default_import_2595" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' can only be imported by using a default import.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' yalnızca varsayılan içeri aktarma kullanılarak içeri aktarılabilir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_can_only_be_imported_by_using_a_require_call_or_by_turning_on_the_esModuleInterop_flag_and_using__2598" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' can only be imported by using a 'require' call or by turning on the 'esModuleInterop' flag and using a default import.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' yalnızca 'require' çağrısı kullanılarak veya 'esModuleInterop' bayrağı etkinleştirilip varsayılan içeri aktarma kullanılarak içeri aktarılabilir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_can_only_be_imported_by_using_a_require_call_or_by_using_a_default_import_2597" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' can only be imported by using a 'require' call or by using a default import.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' yalnızca 'require' çağrısı veya varsayılan içeri aktarma kullanılarak içeri aktarılabilir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_can_only_be_imported_by_using_import_1_require_2_or_a_default_import_2616" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' can only be imported by using 'import {1} = require({2})' or a default import.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' yalnızca 'import {1} = require({2})' veya varsayılan içeri aktarma kullanılarak içeri aktarılabilir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_can_only_be_imported_by_using_import_1_require_2_or_by_turning_on_the_esModuleInterop_flag_and_us_2617" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' can only be imported by using 'import {1} = require({2})' or by turning on the 'esModuleInterop' flag and using a default import.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' yalnızca 'import {1} = require({2})' kullanılarak veya 'esModuleInterop' bayrağı etkinleştirilip varsayılan içeri aktarma kullanılarak içeri aktarılabilir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_cannot_be_used_as_a_JSX_component_2786" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' cannot be used as a JSX component.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12099,7 +12273,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' refers to a value, but is being used as a type here. Did you mean 'typeof {0}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}', bir değere başvuruyor ancak burada bir tür olarak kullanılıyor. 'typeof {0}' kullanmak mı istediniz?]]></Val>
+            <Val><![CDATA['{0}' bir değere başvuruyor ancak burada tür olarak kullanılıyor. 'typeof {0}' kullanmak mı istediniz?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12332,6 +12506,9 @@
       <Item ItemId=";constructor_cannot_be_used_as_a_parameter_property_name_2398" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['constructor' cannot be used as a parameter property name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['constructor', parametre özellik adı olarak kullanılamaz.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12358,6 +12535,15 @@
           <Val><![CDATA[delete this - Project '{0}' is up to date because it was previously built]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[bunu silin - '{0}' projesi önceden derlenmiş olduğundan güncel]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";export_Asterisk_does_not_re_export_a_default_1195" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['export *' does not re-export a default.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['export *' varsayılanı yeniden dışarı aktarmaz.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
