@@ -6200,7 +6200,7 @@ namespace ts {
                     // Consider static members empty if symbol also has function or module meaning - function namespacey emit will handle statics
                     const staticMembers = flatMap(filter(
                             getPropertiesOfType(staticType),
-                        p => !(p.flags & SymbolFlags.Prototype) && p.escapedName !== "prototype" && p.valueDeclaration && isClassLike(p.valueDeclaration.parent)
+                            p => !(p.flags & SymbolFlags.Prototype) && p.escapedName !== "prototype" && p.valueDeclaration && isClassLike(p.valueDeclaration.parent)
                         ), p => serializePropertySymbolForClass(p, /*isStatic*/ true, staticBaseType));
                     const constructors = serializeSignatures(SignatureKind.Construct, staticType, baseTypes[0], SyntaxKind.Constructor) as ConstructorDeclaration[];
                     for (const c of constructors) {
