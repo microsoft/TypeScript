@@ -1,5 +1,5 @@
 tests/cases/conformance/es6/for-ofStatements/for-of39.ts(1,11): error TS2769: No overload matches this call.
-  Overload 1 of 3, '(iterable: Iterable<readonly [string, boolean]>): Map<string, boolean>', gave the following error.
+  Overload 1 of 3, '(iterable?: Iterable<readonly [string, boolean]>): Map<string, boolean>', gave the following error.
     Argument of type '([string, number] | [string, true])[]' is not assignable to parameter of type 'Iterable<readonly [string, boolean]>'.
       The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
         Type 'IteratorResult<[string, number] | [string, true], any>' is not assignable to type 'IteratorResult<readonly [string, boolean], any>'.
@@ -17,7 +17,7 @@ tests/cases/conformance/es6/for-ofStatements/for-of39.ts(1,11): error TS2769: No
     var map = new Map([["", true], ["", 0]]);
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
-!!! error TS2769:   Overload 1 of 3, '(iterable: Iterable<readonly [string, boolean]>): Map<string, boolean>', gave the following error.
+!!! error TS2769:   Overload 1 of 3, '(iterable?: Iterable<readonly [string, boolean]>): Map<string, boolean>', gave the following error.
 !!! error TS2769:     Argument of type '([string, number] | [string, true])[]' is not assignable to parameter of type 'Iterable<readonly [string, boolean]>'.
 !!! error TS2769:       The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
 !!! error TS2769:         Type 'IteratorResult<[string, number] | [string, true], any>' is not assignable to type 'IteratorResult<readonly [string, boolean], any>'.
