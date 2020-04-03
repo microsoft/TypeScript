@@ -1558,13 +1558,10 @@ namespace ts.projectSystem {
             host.reloadFS(files);
             host.checkTimeoutQueueLength(2);
 
-            verifyGetErrRequest({
+            verifyGetErrRequestNoErrors({
                 session,
                 host,
-                expected: [
-                    { file: fileB, syntax: [], semantic: [], suggestion: [] },
-                    { file: fileSubA, syntax: [], semantic: [], suggestion: [] },
-                ],
+                files: [fileB, fileSubA],
                 existingTimeouts: 2,
                 onErrEvent: () => assert.isFalse(hasErrorMsg())
             });

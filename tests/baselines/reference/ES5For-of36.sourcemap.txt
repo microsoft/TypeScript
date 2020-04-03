@@ -82,37 +82,58 @@ sourceFile:ES5For-of36.ts
 >>>        var _d = __read(_c.value, 2), _e = _d[0], a = _e === void 0 ? 0 : _e, _f = _d[1], b = _f === void 0 ? 1 : _f;
 1->^^^^^^^^
 2 >        ^^^^
-3 >            ^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                    ^^
-5 >                                      ^^^^^^^^^^
-6 >                                                ^^
-7 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
-8 >                                                                            ^^
-9 >                                                                              ^^^^^^^^^^
-10>                                                                                        ^^
-11>                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >            ^^^^^
+4 >                 ^^^^^^^^^^^^^^^^^^^
+5 >                                    ^^
+6 >                                      ^^^^^^^^^^
+7 >                                                ^^
+8 >                                                  ^
+9 >                                                   ^^^^^^^^^^^^^^^^^^^
+10>                                                                      ^
+11>                                                                       ^^^^^
+12>                                                                            ^^
+13>                                                                              ^^^^^^^^^^
+14>                                                                                        ^^
+15>                                                                                          ^
+16>                                                                                           ^^^^^^^^^^^^^^^^^^^
+17>                                                                                                              ^
+18>                                                                                                               ^^^^^
 1->
 2 >        
-3 >            [a = 0, b = 1]
-4 >                                    
-5 >                                      a = 0
-6 >                                                
-7 >                                                  a = 0
-8 >                                                                            , 
-9 >                                                                              b = 1
-10>                                                                                        
-11>                                                                                          b = 1
+3 >            
+4 >                 [a = 0, b = 1]
+5 >                                    
+6 >                                      a = 0
+7 >                                                
+8 >                                                  a
+9 >                                                    = 
+10>                                                                      0
+11>                                                                       
+12>                                                                            , 
+13>                                                                              b = 1
+14>                                                                                        
+15>                                                                                          b
+16>                                                                                            = 
+17>                                                                                                              1
+18>                                                                                                               
 1->Emitted(31, 9) Source(1, 10) + SourceIndex(0)
 2 >Emitted(31, 13) Source(1, 10) + SourceIndex(0)
-3 >Emitted(31, 37) Source(1, 24) + SourceIndex(0)
-4 >Emitted(31, 39) Source(1, 11) + SourceIndex(0)
-5 >Emitted(31, 49) Source(1, 16) + SourceIndex(0)
-6 >Emitted(31, 51) Source(1, 11) + SourceIndex(0)
-7 >Emitted(31, 77) Source(1, 16) + SourceIndex(0)
-8 >Emitted(31, 79) Source(1, 18) + SourceIndex(0)
-9 >Emitted(31, 89) Source(1, 23) + SourceIndex(0)
-10>Emitted(31, 91) Source(1, 18) + SourceIndex(0)
-11>Emitted(31, 117) Source(1, 23) + SourceIndex(0)
+3 >Emitted(31, 18) Source(1, 10) + SourceIndex(0)
+4 >Emitted(31, 37) Source(1, 24) + SourceIndex(0)
+5 >Emitted(31, 39) Source(1, 11) + SourceIndex(0)
+6 >Emitted(31, 49) Source(1, 16) + SourceIndex(0)
+7 >Emitted(31, 51) Source(1, 11) + SourceIndex(0)
+8 >Emitted(31, 52) Source(1, 12) + SourceIndex(0)
+9 >Emitted(31, 71) Source(1, 15) + SourceIndex(0)
+10>Emitted(31, 72) Source(1, 16) + SourceIndex(0)
+11>Emitted(31, 77) Source(1, 16) + SourceIndex(0)
+12>Emitted(31, 79) Source(1, 18) + SourceIndex(0)
+13>Emitted(31, 89) Source(1, 23) + SourceIndex(0)
+14>Emitted(31, 91) Source(1, 18) + SourceIndex(0)
+15>Emitted(31, 92) Source(1, 19) + SourceIndex(0)
+16>Emitted(31, 111) Source(1, 22) + SourceIndex(0)
+17>Emitted(31, 112) Source(1, 23) + SourceIndex(0)
+18>Emitted(31, 117) Source(1, 23) + SourceIndex(0)
 ---
 >>>        a;
 1 >^^^^^^^^

@@ -34,7 +34,7 @@ class AsyncLoader<TResult extends {}> {
 }
 
 function load(): Box<{ success: true } | ErrorResult> {
->load : () => Box<ErrorResult | { success: true; }>
+>load : () => Box<{    success: true;} | ErrorResult>
 >success : true
 >true : true
 

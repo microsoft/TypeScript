@@ -39,7 +39,7 @@ interface Constraint<A extends Runtype<any>> extends Runtype<A['witness']> {
 >underlying : A
 
   check: (x: A['witness']) => void,
->check : (x: A["witness"]) => void
+>check : (x: A['witness']) => void
 >x : A["witness"]
 }
 

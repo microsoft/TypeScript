@@ -239,6 +239,15 @@ interface IDBVersionChangeEventInit extends EventInit {
     oldVersion?: number;
 }
 
+interface ImageBitmapOptions {
+    colorSpaceConversion?: ColorSpaceConversion;
+    imageOrientation?: ImageOrientation;
+    premultiplyAlpha?: PremultiplyAlpha;
+    resizeHeight?: number;
+    resizeQuality?: ResizeQuality;
+    resizeWidth?: number;
+}
+
 interface ImageBitmapRenderingContextSettings {
     alpha?: boolean;
 }
@@ -774,7 +783,7 @@ interface CanvasFillStrokeStyles {
     fillStyle: string | CanvasGradient | CanvasPattern;
     strokeStyle: string | CanvasGradient | CanvasPattern;
     createLinearGradient(x0: number, y0: number, x1: number, y1: number): CanvasGradient;
-    createPattern(image: CanvasImageSource, repetition: string): CanvasPattern | null;
+    createPattern(image: CanvasImageSource, repetition: string | null): CanvasPattern | null;
     createRadialGradient(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number): CanvasGradient;
 }
 
@@ -943,40 +952,6 @@ interface ConcatParams extends Algorithm {
     privateInfo?: Uint8Array;
     publicInfo?: Uint8Array;
 }
-
-/** Provides access to the browser's debugging console (e.g. the Web Console in Firefox). The specifics of how it works varies from browser to browser, but there is a de facto set of features that are typically provided. */
-interface Console {
-    memory: any;
-    assert(condition?: boolean, message?: string, ...data: any[]): void;
-    clear(): void;
-    count(label?: string): void;
-    debug(message?: any, ...optionalParams: any[]): void;
-    dir(value?: any, ...optionalParams: any[]): void;
-    dirxml(value: any): void;
-    error(message?: any, ...optionalParams: any[]): void;
-    exception(message?: string, ...optionalParams: any[]): void;
-    group(groupTitle?: string, ...optionalParams: any[]): void;
-    groupCollapsed(groupTitle?: string, ...optionalParams: any[]): void;
-    groupEnd(): void;
-    info(message?: any, ...optionalParams: any[]): void;
-    log(message?: any, ...optionalParams: any[]): void;
-    markTimeline(label?: string): void;
-    profile(reportName?: string): void;
-    profileEnd(reportName?: string): void;
-    table(...tabularData: any[]): void;
-    time(label?: string): void;
-    timeEnd(label?: string): void;
-    timeStamp(label?: string): void;
-    timeline(label?: string): void;
-    timelineEnd(label?: string): void;
-    trace(message?: any, ...optionalParams: any[]): void;
-    warn(message?: any, ...optionalParams: any[]): void;
-}
-
-declare var Console: {
-    prototype: Console;
-    new(): Console;
-};
 
 /** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. */
 interface CountQueuingStrategy extends QueuingStrategy {
@@ -1284,12 +1259,24 @@ declare var DOMStringList: {
 
 interface DedicatedWorkerGlobalScopeEventMap extends WorkerGlobalScopeEventMap {
     "message": MessageEvent;
+    "messageerror": MessageEvent;
 }
 
 /** (the Worker global scope) is accessible through the self keyword. Some additional global functions, namespaces objects, and constructors, not typically associated with the worker global scope, but available on it, are listed in the JavaScript Reference. See also: Functions available to workers. */
 interface DedicatedWorkerGlobalScope extends WorkerGlobalScope, AnimationFrameProvider {
+    /**
+     * Returns dedicatedWorkerGlobal's name, i.e. the value given to the Worker constructor. Primarily useful for debugging.
+     */
+    readonly name: string;
     onmessage: ((this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any) | null;
+    onmessageerror: ((this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any) | null;
+    /**
+     * Aborts dedicatedWorkerGlobal.
+     */
     close(): void;
+    /**
+     * Clones message and transmits it to the Worker object associated with dedicatedWorkerGlobal. transfer can be passed as a list of objects that are to be transferred rather than cloned.
+     */
     postMessage(message: any, transfer: Transferable[]): void;
     postMessage(message: any, options?: PostMessageOptions): void;
     addEventListener<K extends keyof DedicatedWorkerGlobalScopeEventMap>(type: K, listener: (this: DedicatedWorkerGlobalScope, ev: DedicatedWorkerGlobalScopeEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2198,15 +2185,6 @@ declare var ImageBitmap: {
     new(): ImageBitmap;
 };
 
-interface ImageBitmapOptions {
-    colorSpaceConversion?: "none" | "default";
-    imageOrientation?: "none" | "flipY";
-    premultiplyAlpha?: "none" | "premultiply" | "default";
-    resizeHeight?: number;
-    resizeQuality?: "pixelated" | "low" | "medium" | "high";
-    resizeWidth?: number;
-}
-
 interface ImageBitmapRenderingContext {
     /**
      * Returns the canvas element that the context is bound to.
@@ -2338,10 +2316,6 @@ declare var NavigationPreloadManager: {
     new(): NavigationPreloadManager;
 };
 
-interface NavigatorBeacon {
-    sendBeacon(url: string, data?: Blob | Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer | FormData | string | null): boolean;
-}
-
 interface NavigatorConcurrentHardware {
     readonly hardwareConcurrency: number;
 }
@@ -2353,6 +2327,11 @@ interface NavigatorID {
     readonly platform: string;
     readonly product: string;
     readonly userAgent: string;
+}
+
+interface NavigatorLanguage {
+    readonly language: string;
+    readonly languages: ReadonlyArray<string>;
 }
 
 interface NavigatorOnLine {
@@ -3021,6 +3000,47 @@ declare var ServiceWorkerRegistration: {
     new(): ServiceWorkerRegistration;
 };
 
+interface SharedWorker extends EventTarget, AbstractWorker {
+    /**
+     * Returns sharedWorker's MessagePort object which can be used to communicate with the global environment.
+     */
+    readonly port: MessagePort;
+    addEventListener<K extends keyof AbstractWorkerEventMap>(type: K, listener: (this: SharedWorker, ev: AbstractWorkerEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof AbstractWorkerEventMap>(type: K, listener: (this: SharedWorker, ev: AbstractWorkerEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var SharedWorker: {
+    prototype: SharedWorker;
+    new(scriptURL: string, options?: string | WorkerOptions): SharedWorker;
+};
+
+interface SharedWorkerGlobalScopeEventMap extends WorkerGlobalScopeEventMap {
+    "connect": MessageEvent;
+}
+
+interface SharedWorkerGlobalScope extends WorkerGlobalScope {
+    /**
+     * Returns sharedWorkerGlobal's name, i.e. the value given to the SharedWorker constructor. Multiple SharedWorker objects can correspond to the same shared worker (and SharedWorkerGlobalScope), by reusing the same name.
+     */
+    readonly name: string;
+    onconnect: ((this: SharedWorkerGlobalScope, ev: MessageEvent) => any) | null;
+    /**
+     * Aborts sharedWorkerGlobal.
+     */
+    close(): void;
+    addEventListener<K extends keyof SharedWorkerGlobalScopeEventMap>(type: K, listener: (this: SharedWorkerGlobalScope, ev: SharedWorkerGlobalScopeEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof SharedWorkerGlobalScopeEventMap>(type: K, listener: (this: SharedWorkerGlobalScope, ev: SharedWorkerGlobalScopeEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var SharedWorkerGlobalScope: {
+    prototype: SharedWorkerGlobalScope;
+    new(): SharedWorkerGlobalScope;
+};
+
 interface StorageManager {
     estimate(): Promise<StorageEstimate>;
     persisted(): Promise<boolean>;
@@ -3033,24 +3053,24 @@ declare var StorageManager: {
 
 /** This Web Crypto API interface provides a number of low-level cryptographic functions. It is accessed via the Crypto.subtle properties available in a window context (via Window.crypto). */
 interface SubtleCrypto {
-    decrypt(algorithm: string | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams, key: CryptoKey, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<ArrayBuffer>;
-    deriveBits(algorithm: string | EcdhKeyDeriveParams | DhKeyDeriveParams | ConcatParams | HkdfCtrParams | Pbkdf2Params, baseKey: CryptoKey, length: number): PromiseLike<ArrayBuffer>;
-    deriveKey(algorithm: string | EcdhKeyDeriveParams | DhKeyDeriveParams | ConcatParams | HkdfCtrParams | Pbkdf2Params, baseKey: CryptoKey, derivedKeyType: string | AesDerivedKeyParams | HmacImportParams | ConcatParams | HkdfCtrParams | Pbkdf2Params, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
-    digest(algorithm: string | Algorithm, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<ArrayBuffer>;
-    encrypt(algorithm: string | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams, key: CryptoKey, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<ArrayBuffer>;
+    decrypt(algorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams, key: CryptoKey, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<ArrayBuffer>;
+    deriveBits(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | DhKeyDeriveParams | ConcatParams | HkdfCtrParams | Pbkdf2Params, baseKey: CryptoKey, length: number): PromiseLike<ArrayBuffer>;
+    deriveKey(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | DhKeyDeriveParams | ConcatParams | HkdfCtrParams | Pbkdf2Params, baseKey: CryptoKey, derivedKeyType: string | AesDerivedKeyParams | HmacImportParams | ConcatParams | HkdfCtrParams | Pbkdf2Params, extractable: boolean, keyUsages: KeyUsage[]): PromiseLike<CryptoKey>;
+    digest(algorithm: AlgorithmIdentifier, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<ArrayBuffer>;
+    encrypt(algorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams, key: CryptoKey, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<ArrayBuffer>;
     exportKey(format: "jwk", key: CryptoKey): PromiseLike<JsonWebKey>;
     exportKey(format: "raw" | "pkcs8" | "spki", key: CryptoKey): PromiseLike<ArrayBuffer>;
     exportKey(format: string, key: CryptoKey): PromiseLike<JsonWebKey | ArrayBuffer>;
-    generateKey(algorithm: string, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKeyPair | CryptoKey>;
-    generateKey(algorithm: RsaHashedKeyGenParams | EcKeyGenParams | DhKeyGenParams, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKeyPair>;
-    generateKey(algorithm: AesKeyGenParams | HmacKeyGenParams | Pbkdf2Params, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
-    importKey(format: "jwk", keyData: JsonWebKey, algorithm: string | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
-    importKey(format: "raw" | "pkcs8" | "spki", keyData: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, algorithm: string | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
-    importKey(format: string, keyData: JsonWebKey | Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, algorithm: string | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
-    sign(algorithm: string | RsaPssParams | EcdsaParams | AesCmacParams, key: CryptoKey, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<ArrayBuffer>;
-    unwrapKey(format: string, wrappedKey: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, unwrappingKey: CryptoKey, unwrapAlgorithm: string | Algorithm, unwrappedKeyAlgorithm: string | Algorithm, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
-    verify(algorithm: string | RsaPssParams | EcdsaParams | AesCmacParams, key: CryptoKey, signature: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<boolean>;
-    wrapKey(format: string, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgorithm: string | Algorithm): PromiseLike<ArrayBuffer>;
+    generateKey(algorithm: AlgorithmIdentifier, extractable: boolean, keyUsages: KeyUsage[]): PromiseLike<CryptoKeyPair | CryptoKey>;
+    generateKey(algorithm: RsaHashedKeyGenParams | EcKeyGenParams | DhKeyGenParams, extractable: boolean, keyUsages: KeyUsage[]): PromiseLike<CryptoKeyPair>;
+    generateKey(algorithm: AesKeyGenParams | HmacKeyGenParams | Pbkdf2Params, extractable: boolean, keyUsages: KeyUsage[]): PromiseLike<CryptoKey>;
+    importKey(format: "jwk", keyData: JsonWebKey, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: KeyUsage[]): PromiseLike<CryptoKey>;
+    importKey(format: "raw" | "pkcs8" | "spki", keyData: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: KeyUsage[]): PromiseLike<CryptoKey>;
+    importKey(format: string, keyData: JsonWebKey | Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: KeyUsage[]): PromiseLike<CryptoKey>;
+    sign(algorithm: AlgorithmIdentifier | RsaPssParams | EcdsaParams | AesCmacParams, key: CryptoKey, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<ArrayBuffer>;
+    unwrapKey(format: "raw" | "pkcs8" | "spki" | "jwk" | string, wrappedKey: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, unwrappingKey: CryptoKey, unwrapAlgorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams, unwrappedKeyAlgorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: KeyUsage[]): PromiseLike<CryptoKey>;
+    verify(algorithm: AlgorithmIdentifier | RsaPssParams | EcdsaParams | AesCmacParams, key: CryptoKey, signature: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<boolean>;
+    wrapKey(format: "raw" | "pkcs8" | "spki" | "jwk" | string, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams): PromiseLike<ArrayBuffer>;
 }
 
 declare var SubtleCrypto: {
@@ -5362,11 +5382,6 @@ declare var WebSocket: {
     readonly OPEN: number;
 };
 
-interface WindowBase64 {
-    atob(encodedString: string): string;
-    btoa(rawString: string): string;
-}
-
 /** This ServiceWorker API interface represents the scope of a service worker client that is a document in a browser context, controlled by an active worker. The service worker client independently selects and uses a service worker for its own loading and sub-resources. */
 interface WindowClient extends Client {
     readonly ancestorOrigins: ReadonlyArray<string>;
@@ -5381,22 +5396,19 @@ declare var WindowClient: {
     new(): WindowClient;
 };
 
-interface WindowConsole {
-    readonly console: Console;
-}
-
 interface WindowOrWorkerGlobalScope {
     readonly caches: CacheStorage;
     readonly crypto: Crypto;
     readonly indexedDB: IDBFactory;
+    readonly isSecureContext: boolean;
     readonly origin: string;
     readonly performance: Performance;
     atob(data: string): string;
     btoa(data: string): string;
     clearInterval(handle?: number): void;
     clearTimeout(handle?: number): void;
-    createImageBitmap(image: ImageBitmapSource): Promise<ImageBitmap>;
-    createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number): Promise<ImageBitmap>;
+    createImageBitmap(image: ImageBitmapSource, options?: ImageBitmapOptions): Promise<ImageBitmap>;
+    createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
     fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
     queueMicrotask(callback: VoidFunction): void;
     setInterval(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
@@ -5405,13 +5417,21 @@ interface WindowOrWorkerGlobalScope {
 
 interface WorkerEventMap extends AbstractWorkerEventMap {
     "message": MessageEvent;
+    "messageerror": MessageEvent;
 }
 
 /** This Web Workers API interface represents a background task that can be easily created and can send messages back to its creator. Creating a worker is as simple as calling the Worker() constructor and specifying a script to be run in the worker thread. */
 interface Worker extends EventTarget, AbstractWorker {
     onmessage: ((this: Worker, ev: MessageEvent) => any) | null;
+    onmessageerror: ((this: Worker, ev: MessageEvent) => any) | null;
+    /**
+     * Clones message and transmits it to worker's global environment. transfer can be passed as a list of objects that are to be transferred rather than cloned.
+     */
     postMessage(message: any, transfer: Transferable[]): void;
     postMessage(message: any, options?: PostMessageOptions): void;
+    /**
+     * Aborts worker's associated global environment.
+     */
     terminate(): void;
     addEventListener<K extends keyof WorkerEventMap>(type: K, listener: (this: Worker, ev: WorkerEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -5426,17 +5446,34 @@ declare var Worker: {
 
 interface WorkerGlobalScopeEventMap {
     "error": ErrorEvent;
+    "languagechange": Event;
+    "offline": Event;
+    "online": Event;
+    "rejectionhandled": PromiseRejectionEvent;
+    "unhandledrejection": PromiseRejectionEvent;
 }
 
 /** This Web Workers API interface is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop. */
-interface WorkerGlobalScope extends EventTarget, WindowConsole, WindowOrWorkerGlobalScope, WorkerUtils {
-    readonly caches: CacheStorage;
-    readonly isSecureContext: boolean;
+interface WorkerGlobalScope extends EventTarget, WindowOrWorkerGlobalScope {
+    /**
+     * Returns workerGlobal's WorkerLocation object.
+     */
     readonly location: WorkerLocation;
+    readonly navigator: WorkerNavigator;
     onerror: ((this: WorkerGlobalScope, ev: ErrorEvent) => any) | null;
-    readonly performance: Performance;
+    onlanguagechange: ((this: WorkerGlobalScope, ev: Event) => any) | null;
+    onoffline: ((this: WorkerGlobalScope, ev: Event) => any) | null;
+    ononline: ((this: WorkerGlobalScope, ev: Event) => any) | null;
+    onrejectionhandled: ((this: WorkerGlobalScope, ev: PromiseRejectionEvent) => any) | null;
+    onunhandledrejection: ((this: WorkerGlobalScope, ev: PromiseRejectionEvent) => any) | null;
+    /**
+     * Returns workerGlobal.
+     */
     readonly self: WorkerGlobalScope & typeof globalThis;
-    msWriteProfilerMark(profilerMarkName: string): void;
+    /**
+     * Fetches each URL in urls, executes them one-by-one in the order they are passed, and then returns (or throws if something went amiss).
+     */
+    importScripts(...urls: string[]): void;
     addEventListener<K extends keyof WorkerGlobalScopeEventMap>(type: K, listener: (this: WorkerGlobalScope, ev: WorkerGlobalScopeEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof WorkerGlobalScopeEventMap>(type: K, listener: (this: WorkerGlobalScope, ev: WorkerGlobalScopeEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -5468,7 +5505,7 @@ declare var WorkerLocation: {
 };
 
 /** A subset of the Navigator interface allowed to be accessed from a Worker. Such an object is initialized for each worker and is available via the WorkerGlobalScope.navigator property obtained by calling window.self.navigator. */
-interface WorkerNavigator extends NavigatorBeacon, NavigatorConcurrentHardware, NavigatorID, NavigatorOnLine, NavigatorStorage {
+interface WorkerNavigator extends NavigatorConcurrentHardware, NavigatorID, NavigatorLanguage, NavigatorOnLine, NavigatorStorage {
     readonly permissions: Permissions;
     readonly serviceWorker: ServiceWorkerContainer;
 }
@@ -5477,13 +5514,6 @@ declare var WorkerNavigator: {
     prototype: WorkerNavigator;
     new(): WorkerNavigator;
 };
-
-interface WorkerUtils extends WindowBase64 {
-    readonly indexedDB: IDBFactory;
-    readonly msIndexedDB: IDBFactory;
-    readonly navigator: WorkerNavigator;
-    importScripts(...urls: string[]): void;
-}
 
 /** This Streams API interface provides a standard abstraction for writing streaming data to a destination, known as a sink. This object comes with built-in backpressure and queuing. */
 interface WritableStream<W = any> {
@@ -5666,6 +5696,33 @@ declare var XMLHttpRequestUpload: {
 
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
+interface Console {
+    memory: any;
+    assert(condition?: boolean, ...data: any[]): void;
+    clear(): void;
+    count(label?: string): void;
+    countReset(label?: string): void;
+    debug(...data: any[]): void;
+    dir(item?: any, options?: any): void;
+    dirxml(...data: any[]): void;
+    error(...data: any[]): void;
+    exception(message?: string, ...optionalParams: any[]): void;
+    group(...data: any[]): void;
+    groupCollapsed(...data: any[]): void;
+    groupEnd(): void;
+    info(...data: any[]): void;
+    log(...data: any[]): void;
+    table(tabularData?: any, properties?: string[]): void;
+    time(label?: string): void;
+    timeEnd(label?: string): void;
+    timeLog(label?: string, ...data: any[]): void;
+    timeStamp(label?: string): void;
+    trace(...data: any[]): void;
+    warn(...data: any[]): void;
+}
+
+declare var console: Console;
+
 declare namespace WebAssembly {
     interface Global {
         value: any;
@@ -5767,12 +5824,12 @@ declare namespace WebAssembly {
     function validate(bytes: BufferSource): boolean;
 }
 
-interface EventHandlerNonNull {
-    (event: Event): any;
-}
-
 interface FrameRequestCallback {
     (time: number): void;
+}
+
+interface OnErrorEventHandlerNonNull {
+    (event: Event | string, source?: string, lineno?: number, colno?: number, error?: Error): any;
 }
 
 interface PerformanceObserverCallback {
@@ -5823,43 +5880,60 @@ interface WritableStreamErrorCallback {
     (reason: any): void | PromiseLike<void>;
 }
 
+/**
+ * Returns dedicatedWorkerGlobal's name, i.e. the value given to the Worker constructor. Primarily useful for debugging.
+ */
+declare var name: string;
 declare var onmessage: ((this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any) | null;
+declare var onmessageerror: ((this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any) | null;
+/**
+ * Aborts dedicatedWorkerGlobal.
+ */
 declare function close(): void;
+/**
+ * Clones message and transmits it to the Worker object associated with dedicatedWorkerGlobal. transfer can be passed as a list of objects that are to be transferred rather than cloned.
+ */
 declare function postMessage(message: any, transfer: Transferable[]): void;
 declare function postMessage(message: any, options?: PostMessageOptions): void;
 /**
  * Dispatches a synthetic event event to target and returns true if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.
  */
 declare function dispatchEvent(event: Event): boolean;
-declare var caches: CacheStorage;
-declare var isSecureContext: boolean;
+/**
+ * Returns workerGlobal's WorkerLocation object.
+ */
 declare var location: WorkerLocation;
+declare var navigator: WorkerNavigator;
 declare var onerror: ((this: DedicatedWorkerGlobalScope, ev: ErrorEvent) => any) | null;
-declare var performance: Performance;
+declare var onlanguagechange: ((this: DedicatedWorkerGlobalScope, ev: Event) => any) | null;
+declare var onoffline: ((this: DedicatedWorkerGlobalScope, ev: Event) => any) | null;
+declare var ononline: ((this: DedicatedWorkerGlobalScope, ev: Event) => any) | null;
+declare var onrejectionhandled: ((this: DedicatedWorkerGlobalScope, ev: PromiseRejectionEvent) => any) | null;
+declare var onunhandledrejection: ((this: DedicatedWorkerGlobalScope, ev: PromiseRejectionEvent) => any) | null;
+/**
+ * Returns workerGlobal.
+ */
 declare var self: WorkerGlobalScope & typeof globalThis;
-declare function msWriteProfilerMark(profilerMarkName: string): void;
+/**
+ * Fetches each URL in urls, executes them one-by-one in the order they are passed, and then returns (or throws if something went amiss).
+ */
+declare function importScripts(...urls: string[]): void;
 /**
  * Dispatches a synthetic event event to target and returns true if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.
  */
 declare function dispatchEvent(event: Event): boolean;
-declare var indexedDB: IDBFactory;
-declare var msIndexedDB: IDBFactory;
-declare var navigator: WorkerNavigator;
-declare function importScripts(...urls: string[]): void;
-declare function atob(encodedString: string): string;
-declare function btoa(rawString: string): string;
-declare var console: Console;
 declare var caches: CacheStorage;
 declare var crypto: Crypto;
 declare var indexedDB: IDBFactory;
+declare var isSecureContext: boolean;
 declare var origin: string;
 declare var performance: Performance;
 declare function atob(data: string): string;
 declare function btoa(data: string): string;
 declare function clearInterval(handle?: number): void;
 declare function clearTimeout(handle?: number): void;
-declare function createImageBitmap(image: ImageBitmapSource): Promise<ImageBitmap>;
-declare function createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number): Promise<ImageBitmap>;
+declare function createImageBitmap(image: ImageBitmapSource, options?: ImageBitmapOptions): Promise<ImageBitmap>;
+declare function createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
 declare function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 declare function queueMicrotask(callback: VoidFunction): void;
 declare function setInterval(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
@@ -5879,6 +5953,7 @@ type CanvasImageSource = ImageBitmap | OffscreenCanvas;
 type OffscreenRenderingContext = OffscreenCanvasRenderingContext2D | ImageBitmapRenderingContext | WebGLRenderingContext | WebGL2RenderingContext;
 type MessageEventSource = MessagePort | ServiceWorker;
 type ImageBitmapSource = CanvasImageSource | Blob | ImageData;
+type OnErrorEventHandler = OnErrorEventHandlerNonNull | null;
 type TimerHandler = string | Function;
 type PerformanceEntryList = PerformanceEntry[];
 type PushMessageDataInit = BufferSource | string;
@@ -5917,11 +5992,13 @@ type CanvasLineJoin = "bevel" | "miter" | "round";
 type CanvasTextAlign = "center" | "end" | "left" | "right" | "start";
 type CanvasTextBaseline = "alphabetic" | "bottom" | "hanging" | "ideographic" | "middle" | "top";
 type ClientTypes = "all" | "sharedworker" | "window" | "worker";
+type ColorSpaceConversion = "default" | "none";
 type EndingType = "native" | "transparent";
 type FrameType = "auxiliary" | "nested" | "none" | "top-level";
 type IDBCursorDirection = "next" | "nextunique" | "prev" | "prevunique";
 type IDBRequestReadyState = "done" | "pending";
 type IDBTransactionMode = "readonly" | "readwrite" | "versionchange";
+type ImageOrientation = "flipY" | "none";
 type ImageSmoothingQuality = "high" | "low" | "medium";
 type KeyFormat = "jwk" | "pkcs8" | "raw" | "spki";
 type KeyType = "private" | "public" | "secret";
@@ -5931,6 +6008,7 @@ type NotificationPermission = "default" | "denied" | "granted";
 type OffscreenRenderingContextId = "2d" | "bitmaprenderer" | "webgl" | "webgl2";
 type PermissionName = "accelerometer" | "ambient-light-sensor" | "background-sync" | "bluetooth" | "camera" | "clipboard" | "device-info" | "geolocation" | "gyroscope" | "magnetometer" | "microphone" | "midi" | "notifications" | "persistent-storage" | "push" | "speaker";
 type PermissionState = "denied" | "granted" | "prompt";
+type PremultiplyAlpha = "default" | "none" | "premultiply";
 type PushEncryptionKeyName = "auth" | "p256dh";
 type PushPermissionState = "denied" | "granted" | "prompt";
 type ReferrerPolicy = "" | "no-referrer" | "no-referrer-when-downgrade" | "origin" | "origin-when-cross-origin" | "same-origin" | "strict-origin" | "strict-origin-when-cross-origin" | "unsafe-url";
@@ -5939,6 +6017,7 @@ type RequestCredentials = "include" | "omit" | "same-origin";
 type RequestDestination = "" | "audio" | "audioworklet" | "document" | "embed" | "font" | "image" | "manifest" | "object" | "paintworklet" | "report" | "script" | "sharedworker" | "style" | "track" | "video" | "worker" | "xslt";
 type RequestMode = "cors" | "navigate" | "no-cors" | "same-origin";
 type RequestRedirect = "error" | "follow" | "manual";
+type ResizeQuality = "high" | "low" | "medium" | "pixelated";
 type ResponseType = "basic" | "cors" | "default" | "error" | "opaque" | "opaqueredirect";
 type ServiceWorkerState = "activated" | "activating" | "installed" | "installing" | "parsed" | "redundant";
 type ServiceWorkerUpdateViaCache = "all" | "imports" | "none";

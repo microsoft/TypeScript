@@ -7,9 +7,12 @@
 ////    #privatething = 1;
 ////    notSoPrivate = 1;
 ////}
-////new Prv()['/**/'];
+////new Prv()['[|/**/|]'];
 
 verify.completions({
     marker: "",
-    exact: ["notSoPrivate"]
+    exact: [{
+        name: "notSoPrivate",
+        replacementSpan: test.ranges()[0]
+    }]
 });

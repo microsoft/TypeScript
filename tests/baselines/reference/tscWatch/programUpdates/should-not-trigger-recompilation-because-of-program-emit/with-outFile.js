@@ -21,6 +21,8 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/user/username/projects/myproject/tsconfig.json]
 {
   "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig.json to read more about this file */
+
     /* Basic Options */
     // "incremental": true,                   /* Enable incremental compilation */
     "target": "es5",                          /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'. */

@@ -28,7 +28,7 @@ function wrap<T>(value: T): Wrap<T> {
 }
 
 function wrappedFoo(): Wrap<'foo'> {
->wrappedFoo : () => Wrap<"foo">
+>wrappedFoo : () => Wrap<'foo'>
 
     return wrap('foo');
 >wrap('foo') : Wrap<"foo">
@@ -37,7 +37,7 @@ function wrappedFoo(): Wrap<'foo'> {
 }
 
 function wrapBar(value: 'bar'): Wrap<'bar'> {
->wrapBar : (value: "bar") => Wrap<"bar">
+>wrapBar : (value: 'bar') => Wrap<'bar'>
 >value : "bar"
 
     return { value };
@@ -46,7 +46,7 @@ function wrapBar(value: 'bar'): Wrap<'bar'> {
 }
 
 function wrappedBar(): Wrap<'bar'> {
->wrappedBar : () => Wrap<"bar">
+>wrappedBar : () => Wrap<'bar'>
 
     const value = 'bar';
 >value : "bar"
@@ -81,7 +81,7 @@ function wrappedBar(): Wrap<'bar'> {
 }
 
 function wrappedBaz(): Wrap<'baz'> {
->wrappedBaz : () => Wrap<"baz">
+>wrappedBaz : () => Wrap<'baz'>
 
     const value: 'baz' = 'baz';
 >value : "baz"
@@ -250,7 +250,7 @@ function objectToMap(obj: any) {
 
 interface Person {
   phoneNumbers: {
->phoneNumbers : { __typename: "PhoneNumber"; }[]
+>phoneNumbers : { __typename: 'PhoneNumber'; }[]
 
     __typename: 'PhoneNumber';
 >__typename : "PhoneNumber"

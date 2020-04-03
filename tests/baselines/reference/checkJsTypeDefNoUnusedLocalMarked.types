@@ -22,7 +22,7 @@ export = Foo;
 /** @typedef {(foo: Foo) => string} FooFun */
 
 module.exports = /** @type {FooFun} */(void 0);
->module.exports = /** @type {FooFun} */(void 0) : (foo: typeof import("tests/cases/compiler/file")) => string
+>module.exports = /** @type {FooFun} */(void 0) : (foo: Foo) => string
 >module.exports : (foo: typeof import("tests/cases/compiler/file")) => string
 >module : { "\"tests/cases/compiler/something\"": (foo: typeof import("tests/cases/compiler/file")) => string; }
 >exports : (foo: typeof import("tests/cases/compiler/file")) => string

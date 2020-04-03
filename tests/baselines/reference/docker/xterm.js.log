@@ -1,22 +1,9 @@
-Exit Code: 2
+Exit Code: 0
 Standard output:
 
 > xterm@X.X.X build /xtermjs
 > tsc -b ./tsconfig.all.json
-node_modules/@types/ws/index.d.ts(44,39): error TS2694: Namespace '"url"' has no exported member 'URL'.
-node_modules/@types/ws/index.d.ts(45,39): error TS2694: Namespace '"url"' has no exported member 'URL'.
-node_modules/@types/ws/index.d.ts(44,39): error TS2694: Namespace '"url"' has no exported member 'URL'.
-node_modules/@types/ws/index.d.ts(45,39): error TS2694: Namespace '"url"' has no exported member 'URL'.
 
 
 
 Standard error:
-npm ERR! code ELIFECYCLE
-npm ERR! errno 2
-npm ERR! xterm@X.X.X build: `tsc -b ./tsconfig.all.json`
-npm ERR! Exit status 2
-npm ERR! 
-npm ERR! Failed at the xterm@X.X.X build script.
-npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
-npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log

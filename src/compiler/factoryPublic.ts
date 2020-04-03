@@ -2057,6 +2057,26 @@ namespace ts {
             : node;
     }
 
+    /* @internal */
+    export function updateFunctionLikeBody(declaration: FunctionLikeDeclaration, body: Block): FunctionLikeDeclaration {
+        switch (declaration.kind) {
+            case SyntaxKind.FunctionDeclaration:
+                return createFunctionDeclaration(declaration.decorators, declaration.modifiers, declaration.asteriskToken, declaration.name, declaration.typeParameters, declaration.parameters, declaration.type, body);
+            case SyntaxKind.MethodDeclaration:
+                return createMethod(declaration.decorators, declaration.modifiers, declaration.asteriskToken, declaration.name, declaration.questionToken, declaration.typeParameters, declaration.parameters, declaration.type, body);
+            case SyntaxKind.GetAccessor:
+                return createGetAccessor(declaration.decorators, declaration.modifiers, declaration.name, declaration.parameters, declaration.type, body);
+            case SyntaxKind.SetAccessor:
+                return createSetAccessor(declaration.decorators, declaration.modifiers, declaration.name, declaration.parameters, body);
+            case SyntaxKind.Constructor:
+                return createConstructor(declaration.decorators, declaration.modifiers, declaration.parameters, body);
+            case SyntaxKind.FunctionExpression:
+                return createFunctionExpression(declaration.modifiers, declaration.asteriskToken, declaration.name, declaration.typeParameters, declaration.parameters, declaration.type, body);
+            case SyntaxKind.ArrowFunction:
+                return createArrowFunction(declaration.modifiers, declaration.typeParameters, declaration.parameters, declaration.type, declaration.equalsGreaterThanToken, body);
+        }
+    }
+
     export function createClassDeclaration(
         decorators: readonly Decorator[] | undefined,
         modifiers: readonly Modifier[] | undefined,

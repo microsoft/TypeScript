@@ -26,8 +26,8 @@ Validator.prototype.num = 12
  * @param {Validator} state
  */
 var validateRegExpFlags = function(state) {
->validateRegExpFlags : (state: VFunc) => string
->function(state) {    return state.flags} : (state: VFunc) => string
+>validateRegExpFlags : (state: Validator) => string
+>function(state) {    return state.flags} : (state: Validator) => string
 >state : VFunc
 
     return state.flags

@@ -107,7 +107,7 @@ function funcReturnVarCall() { return varCall; }
 
 // function return value with type query
 function funcReturnConstCallWithTypeQuery(): typeof constCall { return constCall; }
->funcReturnConstCallWithTypeQuery : () => unique symbol
+>funcReturnConstCallWithTypeQuery : () => typeof constCall
 >constCall : unique symbol
 >constCall : unique symbol
 
@@ -129,7 +129,7 @@ function* genFuncYieldVarCall() { yield varCall; }
 
 // generator function yield with return type query
 function* genFuncYieldConstCallWithTypeQuery(): IterableIterator<typeof constCall> { yield constCall; }
->genFuncYieldConstCallWithTypeQuery : () => IterableIterator<unique symbol>
+>genFuncYieldConstCallWithTypeQuery : () => IterableIterator<typeof constCall>
 >constCall : unique symbol
 >yield constCall : undefined
 >constCall : unique symbol
@@ -432,12 +432,12 @@ declare function f<T>(x: T): T;
 >x : T
 
 declare function g(x: typeof s): void;
->g : { (x: unique symbol): void; (x: unique symbol): void; }
+>g : { (x: typeof s): void; (x: unique symbol): void; }
 >x : unique symbol
 >s : unique symbol
 
 declare function g(x: typeof N.s): void;
->g : { (x: unique symbol): void; (x: unique symbol): void; }
+>g : { (x: unique symbol): void; (x: typeof N.s): void; }
 >x : unique symbol
 >N.s : unique symbol
 >N : typeof N
@@ -795,23 +795,23 @@ class C1 {
 
 interface Context {
     method1(): typeof s;
->method1 : () => unique symbol
+>method1 : () => typeof s
 >s : unique symbol
 
     method2(): Promise<typeof s>;
->method2 : () => Promise<unique symbol>
+>method2 : () => Promise<typeof s>
 >s : unique symbol
 
     method3(): AsyncIterableIterator<typeof s>;
->method3 : () => AsyncIterableIterator<unique symbol>
+>method3 : () => AsyncIterableIterator<typeof s>
 >s : unique symbol
 
     method4(): IterableIterator<typeof s>;
->method4 : () => IterableIterator<unique symbol>
+>method4 : () => IterableIterator<typeof s>
 >s : unique symbol
 
     method5(p?: typeof s): typeof s;
->method5 : (p?: unique symbol) => unique symbol
+>method5 : (p?: typeof s) => typeof s
 >p : unique symbol
 >s : unique symbol
 >s : unique symbol
@@ -865,11 +865,11 @@ const o3: Context = {
 // allowed when not emitting declarations
 
 const o4 = {
->o4 : { method1(p: unique symbol): unique symbol; method2(p: unique symbol): unique symbol; }
->{    method1(p: typeof s): typeof s {        return p;    },    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : { method1(p: unique symbol): unique symbol; method2(p: unique symbol): unique symbol; }
+>o4 : { method1(p: typeof s): typeof s; method2(p: I["readonlyType"]): I["readonlyType"]; }
+>{    method1(p: typeof s): typeof s {        return p;    },    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : { method1(p: typeof s): typeof s; method2(p: I["readonlyType"]): I["readonlyType"]; }
 
     method1(p: typeof s): typeof s {
->method1 : (p: unique symbol) => unique symbol
+>method1 : (p: typeof s) => typeof s
 >p : unique symbol
 >s : unique symbol
 >s : unique symbol
@@ -879,7 +879,7 @@ const o4 = {
 
     },
     method2(p: I["readonlyType"]): I["readonlyType"] {
->method2 : (p: unique symbol) => unique symbol
+>method2 : (p: I["readonlyType"]) => I["readonlyType"]
 >p : unique symbol
 
         return p;
@@ -892,7 +892,7 @@ const ce0 = class {
 >class {    method1(p: typeof s): typeof s {        return p;    }    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : typeof ce0
 
     method1(p: typeof s): typeof s {
->method1 : (p: unique symbol) => unique symbol
+>method1 : (p: typeof s) => typeof s
 >p : unique symbol
 >s : unique symbol
 >s : unique symbol
@@ -901,7 +901,7 @@ const ce0 = class {
 >p : unique symbol
     }
     method2(p: I["readonlyType"]): I["readonlyType"] {
->method2 : (p: unique symbol) => unique symbol
+>method2 : (p: I["readonlyType"]) => I["readonlyType"]
 >p : unique symbol
 
         return p;
@@ -910,9 +910,9 @@ const ce0 = class {
 };
 
 function funcInferredReturnType(obj: { method(p: typeof s): void }) {
->funcInferredReturnType : (obj: { method(p: unique symbol): void; }) => { method(p: unique symbol): void; }
->obj : { method(p: unique symbol): void; }
->method : (p: unique symbol) => void
+>funcInferredReturnType : (obj: { method(p: typeof s): void; }) => { method(p: typeof s): void; }
+>obj : { method(p: typeof s): void; }
+>method : (p: typeof s) => void
 >p : unique symbol
 >s : unique symbol
 

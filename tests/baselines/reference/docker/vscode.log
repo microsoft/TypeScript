@@ -4,39 +4,39 @@ yarn run vX.X.X
 $ gulp compile --max_old_space_size=4095
 [XX:XX:XX] Node flags detected: --max_old_space_size=4095
 [XX:XX:XX] Using gulpfile /vscode/gulpfile.js
-[XX:XX:XX] Error: /vscode/src/vs/workbench/electron-browser/parts/titlebar/titlebarPart.ts(222,5): Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/electron-browser/parts/titlebar/titlebarPart.ts(225,7): Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/electron-browser/parts/titlebar/titlebarPart.ts(229,7): Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/search/common/searchModel.ts(609,21): Type 'FileMatch | FileMatch[]' must have a '[Symbol.iterator]()' method that returns an iterator.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/titlebar/titlebarPart.ts(470,5): Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/base/parts/quickinput/browser/quickInputList.ts(474,3): Type '"none" | null' is not assignable to type 'string'.
-  Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/base/browser/ui/splitview/splitview.ts(113,3): Type '"none" | null' is not assignable to type 'string'.
-  Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/editor/browser/controller/pointerHandler.ts(45,45): Property 'msTouchAction' does not exist on type 'CSSStyleDeclaration'. Did you mean 'touchAction'?
-[XX:XX:XX] Error: /vscode/src/vs/editor/browser/controller/pointerHandler.ts(46,45): Property 'msContentZooming' does not exist on type 'CSSStyleDeclaration'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/workbench.web.api.ts(249,25): Type 'readonly ICommand[] | undefined' must have a '[Symbol.iterator]()' method that returns an iterator.
-[XX:XX:XX] Error: /vscode/src/vs/base/browser/ui/splitview/splitview.ts(113,3): Type '"none" | null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/electron-browser/parts/titlebar/titlebarPart.ts(222,5): Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/electron-browser/parts/titlebar/titlebarPart.ts(225,7): Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/electron-browser/parts/titlebar/titlebarPart.ts(229,7): Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/search/common/searchModel.ts(609,21): Type 'FileMatch | FileMatch[]' must have a '[Symbol.iterator]()' method that returns an iterator.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/titlebar/titlebarPart.ts(470,5): Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/base/parts/quickinput/browser/quickInputList.ts(474,3): Type '"none" | null' is not assignable to type 'string'.
-  Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/base/browser/ui/splitview/splitview.ts(113,3): Type '"none" | null' is not assignable to type 'string'.
-  Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/editor/browser/controller/pointerHandler.ts(45,45): Property 'msTouchAction' does not exist on type 'CSSStyleDeclaration'. Did you mean 'touchAction'?
-[XX:XX:XX] Error: /vscode/src/vs/editor/browser/controller/pointerHandler.ts(46,45): Property 'msContentZooming' does not exist on type 'CSSStyleDeclaration'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/workbench.web.api.ts(249,25): Type 'readonly ICommand[] | undefined' must have a '[Symbol.iterator]()' method that returns an iterator.
-[XX:XX:XX] Error: /vscode/src/vs/base/browser/ui/splitview/splitview.ts(113,3): Type '"none" | null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/services/search/common/search.ts(617,20): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/webview/electron-browser/webviewCommands.ts(156,13): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/scm/browser/repositoryPane.ts(809,7): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/preferencesSearch.ts(522,18): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/workbench/api/common/extHostDebugService.ts(1075,7): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/workbench/api/common/extHostDebugService.ts(1087,7): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/workbench/api/common/extHostDebugService.ts(1093,7): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/editor/contrib/hover/hoverOperation.ts(146,7): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/editor/contrib/hover/hoverOperation.ts(160,7): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/base/browser/mouseEvent.ts(83,7): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/base/browser/mouseEvent.ts(89,7): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/base/browser/mouseEvent.ts(211,8): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/base/browser/mouseEvent.ts(219,8): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/workbench/services/search/common/search.ts(617,20): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/webview/electron-browser/webviewCommands.ts(156,13): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/scm/browser/repositoryPane.ts(809,7): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/preferencesSearch.ts(522,18): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/workbench/api/common/extHostDebugService.ts(1075,7): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/workbench/api/common/extHostDebugService.ts(1087,7): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/workbench/api/common/extHostDebugService.ts(1093,7): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/editor/contrib/hover/hoverOperation.ts(146,7): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/editor/contrib/hover/hoverOperation.ts(160,7): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/base/browser/mouseEvent.ts(83,7): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/base/browser/mouseEvent.ts(89,7): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/base/browser/mouseEvent.ts(211,8): This condition will always return true since the function is always defined. Did you mean to call it instead?
+[XX:XX:XX] Error: /vscode/src/vs/base/browser/mouseEvent.ts(219,8): This condition will always return true since the function is always defined. Did you mean to call it instead?
 info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
 
 
 
 Standard error:
 [XX:XX:XX] 'compile' errored after 
-[XX:XX:XX] Error: Found 10 errors
+[XX:XX:XX] Error: Found 13 errors
     at Stream.<anonymous> (/vscode/build/lib/reporter.js:75:29)
     at _end (/vscode/node_modules/through/index.js:65:9)
     at Stream.stream.end (/vscode/node_modules/through/index.js:74:5)

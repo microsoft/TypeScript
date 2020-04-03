@@ -115,7 +115,12 @@ exports.__esModule = true;
 /**
  * @return {keyof typeof variable}
  */
-export function getVar(): "key";
+export function getVar(): keyof typeof variable;
+declare namespace variable {
+    export const key: MyNominal;
+}
+import { MyNominal } from "../sub-project";
+export {};
 
 
 //// [/lib/sub-project-2/index.js]
@@ -150,7 +155,7 @@ exports.getVar = getVar;
       },
       "../../src/sub-project-2/index.js": {
         "version": "9520601400-import { MyNominal } from '../sub-project/index';\n\nconst variable = {\n    key: /** @type {MyNominal} */('value'),\n};\n\n/**\n * @return {keyof typeof variable}\n */\nexport function getVar() {\n    return 'key';\n}\n",
-        "signature": "-9866665538-/**\r\n * @return {keyof typeof variable}\r\n */\r\nexport function getVar(): \"key\";\r\n",
+        "signature": "-14896620483-/**\r\n * @return {keyof typeof variable}\r\n */\r\nexport function getVar(): keyof typeof variable;\r\ndeclare namespace variable {\r\n    export const key: MyNominal;\r\n}\r\nimport { MyNominal } from \"../sub-project\";\r\nexport {};\r\n",
         "affectsGlobalScope": false
       }
     },

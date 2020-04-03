@@ -67,7 +67,7 @@ const fn5 = <Params>(
 >params : Pick<Params, ExcludeWithDefault<keyof Params, never, never>>
 
 function fn6<T>(x: ExcludeWithDefault<T, never>) {
->fn6 : <T>(x: ExcludeWithDefault<T, never, never>) => void
+>fn6 : <T>(x: ExcludeWithDefault<T, never>) => void
 >x : ExcludeWithDefault<T, never, never>
 
     var y: T = x;
@@ -91,7 +91,7 @@ const fn7 = <Params>(
 >params : Pick<Params, ExtractWithDefault<keyof Params, keyof Params, never>>
 
 function fn8<T>(x: ExtractWithDefault<T, T>) {
->fn8 : <T>(x: ExtractWithDefault<T, T, never>) => void
+>fn8 : <T>(x: ExtractWithDefault<T, T>) => void
 >x : ExtractWithDefault<T, T, never>
 
     var y: T = x;

@@ -38,7 +38,7 @@ declare class Observable<T> implements Subscribable<T> {
 }
 
 function asObservable(input: string | ObservableInput<string>): Observable<string> {
->asObservable : (input: string | Subscribable<never> | Subscribable<string>) => Observable<string>
+>asObservable : (input: string | ObservableInput<string>) => Observable<string>
 >input : string | Subscribable<never> | Subscribable<string>
 
     return typeof input === 'string' ? of(input) : from(input)

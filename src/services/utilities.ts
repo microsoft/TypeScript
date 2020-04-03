@@ -92,7 +92,11 @@ namespace ts {
         if (node.kind === SyntaxKind.SourceFile) {
             return SemanticMeaning.Value;
         }
-        else if (node.parent.kind === SyntaxKind.ExportAssignment || node.parent.kind === SyntaxKind.ExternalModuleReference) {
+        else if (node.parent.kind === SyntaxKind.ExportAssignment
+            || node.parent.kind === SyntaxKind.ExternalModuleReference
+            || node.parent.kind === SyntaxKind.ImportSpecifier
+            || node.parent.kind === SyntaxKind.ImportClause
+            || isImportEqualsDeclaration(node.parent) && node === node.parent.name) {
             return SemanticMeaning.All;
         }
         else if (isInRightSideOfInternalImportEqualsDeclaration(node)) {
@@ -1600,8 +1604,25 @@ namespace ts {
         return !!range && shouldBeReference === tripleSlashDirectivePrefixRegex.test(sourceFile.text.substring(range.pos, range.end));
     }
 
+    export function getReplacementSpanForContextToken(contextToken: Node | undefined) {
+        if (!contextToken) return undefined;
+
+        switch (contextToken.kind) {
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                return createTextSpanFromStringLiteralLikeContent(<StringLiteralLike>contextToken);
+            default:
+                return createTextSpanFromNode(contextToken);
+        }
+    }
+
     export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile, endNode?: Node): TextSpan {
         return createTextSpanFromBounds(node.getStart(sourceFile), (endNode || node).getEnd());
+    }
+
+    export function createTextSpanFromStringLiteralLikeContent(node: StringLiteralLike) {
+        if (node.isUnterminated) return undefined;
+        return createTextSpanFromBounds(node.getStart() + 1, node.getEnd() - 1);
     }
 
     export function createTextRangeFromNode(node: Node, sourceFile: SourceFile): TextRange {
@@ -2252,6 +2273,27 @@ namespace ts {
         addEmitFlagsRecursively(node, EmitFlags.NoTrailingComments, getLastChild);
     }
 
+    export function copyComments(sourceNode: Node, targetNode: Node) {
+        const sourceFile = sourceNode.getSourceFile();
+        const text = sourceFile.text;
+        if (hasLeadingLineBreak(sourceNode, text)) {
+            copyLeadingComments(sourceNode, targetNode, sourceFile);
+        }
+        else {
+            copyTrailingAsLeadingComments(sourceNode, targetNode, sourceFile);
+        }
+        copyTrailingComments(sourceNode, targetNode, sourceFile);
+    }
+
+    function hasLeadingLineBreak(node: Node, text: string) {
+        const start = node.getFullStart();
+        const end = node.getStart();
+        for (let i = start; i < end; i++) {
+            if (text.charCodeAt(i) === CharacterCodes.lineFeed) return true;
+        }
+        return false;
+    }
+
     function addEmitFlagsRecursively(node: Node, flag: EmitFlags, getChild: (n: Node) => Node | undefined) {
         addEmitFlags(node, flag);
         const child = getChild(node);
@@ -2344,6 +2386,11 @@ namespace ts {
         if (idx === -1) idx = change.indexOf("." + name);
         if (idx === -1) idx = change.indexOf('"' + name);
         return idx === -1 ? -1 : idx + 1;
+    }
+
+    /* @internal */
+    export function needsParentheses(expression: Expression) {
+        return isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken || isObjectLiteralExpression(expression);
     }
 
     export function getContextualTypeFromParent(node: Expression, checker: TypeChecker): Type | undefined {
@@ -2773,6 +2820,20 @@ namespace ts {
 
     export function startsWithUnderscore(name: string): boolean {
         return name.charCodeAt(0) === CharacterCodes._;
+    }
+
+    export function isGlobalDeclaration(declaration: Declaration) {
+        return !isNonGlobalDeclaration(declaration);
+    }
+
+    export function isNonGlobalDeclaration(declaration: Declaration) {
+        const sourceFile = declaration.getSourceFile();
+        // If the file is not a module, the declaration is global
+        if (!sourceFile.externalModuleIndicator && !sourceFile.commonJsModuleIndicator) {
+            return false;
+        }
+        // If the file is a module written in TypeScript, it still might be in a `declare global` augmentation
+        return isInJSFile(declaration) || !findAncestor(declaration, isGlobalScopeAugmentation);
     }
 
     // #endregion

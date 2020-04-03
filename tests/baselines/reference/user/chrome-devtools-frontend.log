@@ -10234,6 +10234,7 @@ node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(323,3)
       Type 'T' is not assignable to type 'SecurityModel'.
 node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(375,25): error TS2694: Namespace 'Protocol' has no exported member 'Security'.
 node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(376,25): error TS2694: Namespace 'Protocol' has no exported member 'Network'.
+node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(377,23): error TS1099: Type argument list cannot be empty.
 node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(389,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(416,59): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(440,24): error TS2694: Namespace 'Protocol' has no exported member 'Security'.
@@ -10408,9 +10409,9 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(38,18):
 node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(62,16): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(78,21): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(79,19): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(82,29): error TS2339: Property 'style' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(83,29): error TS2339: Property 'style' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(84,29): error TS2339: Property 'style' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(82,29): error TS2339: Property 'style' does not exist on type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(83,29): error TS2339: Property 'style' does not exist on type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(84,29): error TS2339: Property 'style' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(87,24): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(88,24): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(89,24): error TS2339: Property 'style' does not exist on type 'Element'.
@@ -10419,11 +10420,11 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(91,24):
 node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(92,24): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(123,45): error TS2339: Property 'offsetWidth' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(123,85): error TS2339: Property 'offsetHeight' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(133,29): error TS2339: Property 'style' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(133,29): error TS2339: Property 'style' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(140,41): error TS2339: Property 'offsetWidth' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(141,42): error TS2339: Property 'offsetHeight' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(144,31): error TS2339: Property 'style' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(152,29): error TS2339: Property 'style' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(144,31): error TS2339: Property 'style' does not exist on type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/FontView.js(152,29): error TS2339: Property 'style' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/ImageView.js(38,18): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/source_frame/ImageView.js(52,88): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/source_frame/ImageView.js(58,36): error TS2339: Property 'createChild' does not exist on type 'Element'.

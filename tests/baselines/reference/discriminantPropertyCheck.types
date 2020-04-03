@@ -424,7 +424,7 @@ export function foo(obj: Obj) {
 }
 
 function onlyPlus(arg: '+') {
->onlyPlus : (arg: "+") => "+"
+>onlyPlus : (arg: '+') => "+"
 >arg : "+"
 
   return arg;
@@ -463,7 +463,7 @@ type TypeBar2 = { type: BarEnum.bar2 };
 >BarEnum : any
 
 function func3(value: Partial<UnionOfBar>) {
->func3 : (value: Partial<TypeBar1> | Partial<TypeBar2>) => void
+>func3 : (value: Partial<UnionOfBar>) => void
 >value : Partial<TypeBar1> | Partial<TypeBar2>
 
     if (value.type !== undefined) {
