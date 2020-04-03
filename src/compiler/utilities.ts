@@ -2155,7 +2155,7 @@ namespace ts {
 
     /** Any series of property and element accesses. */
     export function isBindableStaticAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticAccessExpression {
-        return isPropertyAccessExpression(node) && (!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword || isBindableStaticNameExpression(node.expression, /*excludeThisKeyword*/ true))
+        return isPropertyAccessExpression(node) && (!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword || isIdentifier(node.name) && isBindableStaticNameExpression(node.expression, /*excludeThisKeyword*/ true))
             || isBindableStaticElementAccessExpression(node, excludeThisKeyword);
     }
 
@@ -4432,7 +4432,7 @@ namespace ts {
     }
 
     export function isPropertyAccessEntityNameExpression(node: Node): node is PropertyAccessEntityNameExpression {
-        return isPropertyAccessExpression(node) && isEntityNameExpression(node.expression);
+        return isPropertyAccessExpression(node) && isIdentifier(node.name) && isEntityNameExpression(node.expression);
     }
 
     export function tryGetPropertyAccessOrIdentifierToString(expr: Expression): string | undefined {
