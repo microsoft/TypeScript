@@ -5969,7 +5969,10 @@ namespace ts {
                 }
 
                 function getNamespaceMembersForSerialization(symbol: Symbol) {
-                    return !symbol.exports ? [] : filter(arrayFrom((symbol.exports).values()), p => !((p.flags & SymbolFlags.Prototype) || (p.escapedName === "prototype")));
+                    return !symbol.exports ? [] :
+                        filter(
+                            arrayFrom(symbol.exports.values()),
+                            p => !(p.flags & SymbolFlags.Prototype || p.escapedName === "prototype" || p.valueDeclaration && isClassLike(p.valueDeclaration.parent)));
                 }
 
                 function isTypeOnlyNamespace(symbol: Symbol) {
@@ -6101,7 +6104,9 @@ namespace ts {
                     }
                     // Module symbol emit will take care of module-y members, provided it has exports
                     if (!(symbol.flags & (SymbolFlags.ValueModule | SymbolFlags.NamespaceModule) && !!symbol.exports && !!symbol.exports.size)) {
-                        const props = filter(getPropertiesOfType(type), p => !((p.flags & SymbolFlags.Prototype) || (p.escapedName === "prototype")));
+                        const props = filter(
+                            getPropertiesOfType(type),
+                            p => !(p.flags & SymbolFlags.Prototype || p.escapedName === "prototype" || p.valueDeclaration && isClassLike(p.valueDeclaration.parent)));
                         serializeAsNamespaceDeclaration(props, localName, modifierFlags, /*suppressNewPrivateContext*/ true);
                     }
                 }
@@ -6193,11 +6198,9 @@ namespace ts {
                         emptyArray;
                     const publicProperties = flatMap<Symbol, ClassElement>(publicSymbolProps, p => serializePropertySymbolForClass(p, /*isStatic*/ false, baseTypes[0]));
                     // Consider static members empty if symbol also has function or module meaning - function namespacey emit will handle statics
-                    const staticMembers = symbol.flags & (SymbolFlags.Function | SymbolFlags.ValueModule)
-                        ? []
-                        : flatMap(filter(
+                    const staticMembers = flatMap(filter(
                             getPropertiesOfType(staticType),
-                            p => !(p.flags & SymbolFlags.Prototype) && p.escapedName !== "prototype"
+                        p => !(p.flags & SymbolFlags.Prototype) && p.escapedName !== "prototype" && p.valueDeclaration && isClassLike(p.valueDeclaration.parent)
                         ), p => serializePropertySymbolForClass(p, /*isStatic*/ true, staticBaseType));
                     const constructors = serializeSignatures(SignatureKind.Construct, staticType, baseTypes[0], SyntaxKind.Constructor) as ConstructorDeclaration[];
                     for (const c of constructors) {
@@ -6361,7 +6364,7 @@ namespace ts {
                             includePrivateSymbol(referenced || target);
                         }
 
-                        // We disable the context's symbol traker for the duration of this name serialization
+                        // We disable the context's symbol tracker for the duration of this name serialization
                         // as, by virtue of being here, the name is required to print something, and we don't want to
                         // issue a visibility error on it. Only anonymous classes that an alias points at _would_ issue
                         // a visibility error here (as they're not visible within any scope), but we want to hoist them
@@ -6477,10 +6480,11 @@ namespace ts {
                             // need to be merged namespace members
                             return [];
                         }
-                        if (p.flags & SymbolFlags.Prototype || (baseType && getPropertyOfType(baseType, p.escapedName)
-                            && isReadonlySymbol(getPropertyOfType(baseType, p.escapedName)!) === isReadonlySymbol(p)
-                            && (p.flags & SymbolFlags.Optional) === (getPropertyOfType(baseType, p.escapedName)!.flags & SymbolFlags.Optional)
-                            && isTypeIdenticalTo(getTypeOfSymbol(p), getTypeOfPropertyOfType(baseType, p.escapedName)!))) {
+                        if (p.flags & SymbolFlags.Prototype ||
+                            (baseType && getPropertyOfType(baseType, p.escapedName)
+                             && isReadonlySymbol(getPropertyOfType(baseType, p.escapedName)!) === isReadonlySymbol(p)
+                             && (p.flags & SymbolFlags.Optional) === (getPropertyOfType(baseType, p.escapedName)!.flags & SymbolFlags.Optional)
+                             && isTypeIdenticalTo(getTypeOfSymbol(p), getTypeOfPropertyOfType(baseType, p.escapedName)!))) {
                             return [];
                         }
                         const flag = (modifierFlags & ~ModifierFlags.Async) | (isStatic ? ModifierFlags.Static : 0);
