@@ -2145,10 +2145,6 @@
         "category": "Error",
         "code": 2545
     },
-    "Property '{0}' has conflicting declarations and is inaccessible in type '{1}'.": {
-        "category": "Error",
-        "code": 2546
-    },
     "The type returned by the '{0}()' method of an async iterator must be a promise for a type with a 'value' property.": {
         "category": "Error",
         "code": 2547
@@ -5733,5 +5729,13 @@
     "An optional chain cannot contain private identifiers.": {
         "category": "Error",
         "code": 18030
+    },
+    "The intersection '{0}' was reduced to 'never' because property '{1}' has conflicting types in some constituents.": {
+        "category": "Error",
+        "code": 18031
+    },
+    "The intersection '{0}' was reduced to 'never' because property '{1}' exists in multiple constituents and is private in some.": {
+        "category": "Error",
+        "code": 18032
     }
 }

@@ -4148,7 +4148,9 @@ namespace ts {
                     return undefined!; // TODO: GH#18217
                 }
 
-                type = getReducedType(type);
+                if (!(context.flags & NodeBuilderFlags.NoTypeReduction)) {
+                    type = getReducedType(type);
+                }
 
                 if (type.flags & TypeFlags.Any) {
                     context.approximateLength += 3;
@@ -8460,17 +8462,20 @@ namespace ts {
                     error(baseTypeNode.expression, Diagnostics.No_base_constructor_has_the_specified_number_of_type_arguments);
                     return type.resolvedBaseTypes = emptyArray;
                 }
-                baseType = getReducedType(getReturnTypeOfSignature(constructors[0]));
+                baseType = getReturnTypeOfSignature(constructors[0]);
             }
 
             if (baseType === errorType) {
                 return type.resolvedBaseTypes = emptyArray;
             }
-            if (!isValidBaseType(baseType)) {
-                error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_an_object_type_or_intersection_of_object_types_with_statically_known_members, typeToString(baseType));
+            const reducedBaseType = getReducedType(baseType);
+            if (!isValidBaseType(reducedBaseType)) {
+                const elaboration = elaborateNeverIntersection(/*errorInfo*/ undefined, baseType);
+                const diagnostic = chainDiagnosticMessages(elaboration, Diagnostics.Base_constructor_return_type_0_is_not_an_object_type_or_intersection_of_object_types_with_statically_known_members, typeToString(reducedBaseType));
+                diagnostics.add(createDiagnosticForNodeFromMessageChain(baseTypeNode.expression, diagnostic));
                 return type.resolvedBaseTypes = emptyArray;
             }
-            if (type === baseType || hasBaseType(baseType, type)) {
+            if (type === reducedBaseType || hasBaseType(reducedBaseType, type)) {
                 error(type.symbol.valueDeclaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type,
                     typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
                 return type.resolvedBaseTypes = emptyArray;
@@ -8482,7 +8487,7 @@ namespace ts {
                 // partial instantiation of the members without the base types fully resolved
                 type.members = undefined;
             }
-            return type.resolvedBaseTypes = [baseType];
+            return type.resolvedBaseTypes = [reducedBaseType];
         }
 
         function areAllOuterTypeParametersApplied(type: Type): boolean { // TODO: GH#18217 Shouldn't this take an InterfaceType?
@@ -10457,7 +10462,7 @@ namespace ts {
             else if (type.flags & TypeFlags.Intersection) {
                 if (!((<IntersectionType>type).objectFlags & ObjectFlags.IsNeverIntersectionComputed)) {
                     (<IntersectionType>type).objectFlags |= ObjectFlags.IsNeverIntersectionComputed |
-                        (some(getPropertiesOfUnionOrIntersectionType(<IntersectionType>type), isDiscriminantWithNeverType) ? ObjectFlags.IsNeverIntersection : 0);
+                        (some(getPropertiesOfUnionOrIntersectionType(<IntersectionType>type), isNeverReducedProperty) ? ObjectFlags.IsNeverIntersection : 0);
                 }
                 return (<IntersectionType>type).objectFlags & ObjectFlags.IsNeverIntersection ? neverType : type;
             }
@@ -10476,10 +10481,37 @@ namespace ts {
             return reduced;
         }
 
+        function isNeverReducedProperty(prop: Symbol) {
+            return isDiscriminantWithNeverType(prop) || isConflictingPrivateProperty(prop);
+        }
+
         function isDiscriminantWithNeverType(prop: Symbol) {
+            // Return true for a synthetic non-optional property with non-uniform types, where at least one is
+            // a literal type and none is never, that reduces to never.
             return !(prop.flags & SymbolFlags.Optional) &&
                 (getCheckFlags(prop) & (CheckFlags.Discriminant | CheckFlags.HasNeverType)) === CheckFlags.Discriminant &&
                 !!(getTypeOfSymbol(prop).flags & TypeFlags.Never);
+        }
+
+        function isConflictingPrivateProperty(prop: Symbol) {
+            // Return true for a synthetic property with multiple declarations, at least one of which is private.
+            return !prop.valueDeclaration && !!(getCheckFlags(prop) & CheckFlags.ContainsPrivate);
+        }
+
+        function elaborateNeverIntersection(errorInfo: DiagnosticMessageChain | undefined, type: Type) {
+            if (getObjectFlags(type) & ObjectFlags.IsNeverIntersection) {
+                const neverProp = find(getPropertiesOfUnionOrIntersectionType(<IntersectionType>type), isDiscriminantWithNeverType);
+                if (neverProp) {
+                    return chainDiagnosticMessages(errorInfo, Diagnostics.The_intersection_0_was_reduced_to_never_because_property_1_has_conflicting_types_in_some_constituents,
+                        typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.NoTypeReduction), symbolToString(neverProp));
+                }
+                const privateProp = find(getPropertiesOfUnionOrIntersectionType(<IntersectionType>type), isConflictingPrivateProperty);
+                if (privateProp) {
+                    return chainDiagnosticMessages(errorInfo, Diagnostics.The_intersection_0_was_reduced_to_never_because_property_1_exists_in_multiple_constituents_and_is_private_in_some,
+                        typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.NoTypeReduction), symbolToString(privateProp));
+                }
+            }
+            return errorInfo;
         }
 
         /**
@@ -15609,6 +15641,9 @@ namespace ts {
                             return result;
                         }
                     }
+                    else {
+                        errorInfo = elaborateNeverIntersection(errorInfo, originalTarget);
+                    }
                     if (!headMessage && maybeSuppress) {
                         lastSkippedInfo = [source, target];
                         // Used by, eg, missing property checking to replace the top-level message with a more informative one
@@ -16490,14 +16525,7 @@ namespace ts {
                 const sourcePropFlags = getDeclarationModifierFlagsFromSymbol(sourceProp);
                 const targetPropFlags = getDeclarationModifierFlagsFromSymbol(targetProp);
                 if (sourcePropFlags & ModifierFlags.Private || targetPropFlags & ModifierFlags.Private) {
-                    const hasDifferingDeclarations = sourceProp.valueDeclaration !== targetProp.valueDeclaration;
-                    if (getCheckFlags(sourceProp) & CheckFlags.ContainsPrivate && hasDifferingDeclarations) {
-                        if (reportErrors) {
-                            reportError(Diagnostics.Property_0_has_conflicting_declarations_and_is_inaccessible_in_type_1, symbolToString(sourceProp), typeToString(source));
-                        }
-                        return Ternary.False;
-                    }
-                    if (hasDifferingDeclarations) {
+                    if (sourceProp.valueDeclaration !== targetProp.valueDeclaration) {
                         if (reportErrors) {
                             if (sourcePropFlags & ModifierFlags.Private && targetPropFlags & ModifierFlags.Private) {
                                 reportError(Diagnostics.Types_have_separate_declarations_of_a_private_property_0, symbolToString(targetProp));
@@ -23634,12 +23662,6 @@ namespace ts {
             const flags = getDeclarationModifierFlagsFromSymbol(prop);
             const errorNode = node.kind === SyntaxKind.QualifiedName ? node.right : node.kind === SyntaxKind.ImportType ? node : node.name;
 
-            if (getCheckFlags(prop) & CheckFlags.ContainsPrivate) {
-                // Synthetic property with private constituent property
-                error(errorNode, Diagnostics.Property_0_has_conflicting_declarations_and_is_inaccessible_in_type_1, symbolToString(prop), typeToString(type));
-                return false;
-            }
-
             if (isSuper) {
                 // TS 1.0 spec (April 2014): 4.8.2
                 // - In a constructor, instance member function, instance member accessor, or
@@ -24135,7 +24157,7 @@ namespace ts {
                         relatedInfo = suggestion.valueDeclaration && createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestedName);
                     }
                     else {
-                        errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
+                        errorInfo = chainDiagnosticMessages(elaborateNeverIntersection(errorInfo, containingType), Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
                     }
                 }
             }
