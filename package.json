@@ -58,7 +58,7 @@
         "@typescript-eslint/experimental-utils": "2.18.0",
         "@typescript-eslint/parser": "2.18.0",
         "async": "latest",
-        "azure-devops-node-api": "^8.0.0",
+        "azure-devops-node-api": "^10.1.0",
         "browser-resolve": "^1.11.2",
         "browserify": "latest",
         "chai": "latest",
