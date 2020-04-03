@@ -107,9 +107,6 @@ namespace ts {
         return aggregateTransformFlags(inlineExpressions(expressions!)) || createOmittedExpression();
 
         function emitExpression(expression: Expression) {
-            // NOTE: this completely disables source maps, but aligns with the behavior of
-            //       `emitAssignment` in the old emitter.
-            setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
             aggregateTransformFlags(expression);
             expressions = append(expressions, expression);
         }
@@ -234,9 +231,6 @@ namespace ts {
             );
             variable.original = original;
             setTextRange(variable, location);
-            if (isIdentifier(name)) {
-                setEmitFlags(variable, EmitFlags.NoNestedSourceMaps);
-            }
             aggregateTransformFlags(variable);
             declarations.push(variable);
         }
