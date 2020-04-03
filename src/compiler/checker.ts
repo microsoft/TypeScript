@@ -11858,6 +11858,8 @@ namespace ts {
                 case SyntaxKind.IndexedAccessType:
                 case SyntaxKind.ConditionalType:
                 case SyntaxKind.TypeOperator:
+                case SyntaxKind.ArrayType:
+                case SyntaxKind.TupleType:
                     return isResolvedByTypeAlias(parent);
                 case SyntaxKind.TypeAliasDeclaration:
                     return true;
