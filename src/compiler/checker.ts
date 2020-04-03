@@ -8470,7 +8470,7 @@ namespace ts {
             }
             const reducedBaseType = getReducedType(baseType);
             if (!isValidBaseType(reducedBaseType)) {
-                const elaboration = baseType.flags & TypeFlags.Intersection && reducedBaseType.flags & TypeFlags.Never ? elaborateNeverIntersection(/*errorInfo*/ undefined, <IntersectionType>baseType) : undefined;
+                const elaboration = elaborateNeverIntersection(/*errorInfo*/ undefined, baseType);
                 const diagnostic = chainDiagnosticMessages(elaboration, Diagnostics.Base_constructor_return_type_0_is_not_an_object_type_or_intersection_of_object_types_with_statically_known_members, typeToString(reducedBaseType));
                 diagnostics.add(createDiagnosticForNodeFromMessageChain(baseTypeNode.expression, diagnostic));
                 return type.resolvedBaseTypes = emptyArray;
@@ -10498,16 +10498,18 @@ namespace ts {
             return !prop.valueDeclaration && !!(getCheckFlags(prop) & CheckFlags.ContainsPrivate);
         }
 
-        function elaborateNeverIntersection(errorInfo: DiagnosticMessageChain | undefined, type: IntersectionType) {
-            const neverProp = find(getPropertiesOfUnionOrIntersectionType(type), isDiscriminantWithNeverType);
-            if (neverProp) {
-                return chainDiagnosticMessages(errorInfo, Diagnostics.The_intersection_0_was_reduced_to_never_because_property_1_has_conflicting_types_in_some_constituents,
-                    typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.NoTypeReduction), symbolToString(neverProp));
-            }
-            const privateProp = find(getPropertiesOfUnionOrIntersectionType(type), isConflictingPrivateProperty);
-            if (privateProp) {
-                return chainDiagnosticMessages(errorInfo, Diagnostics.The_intersection_0_was_reduced_to_never_because_property_1_exists_in_multiple_constituents_and_is_private_in_some,
-                    typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.NoTypeReduction), symbolToString(privateProp));
+        function elaborateNeverIntersection(errorInfo: DiagnosticMessageChain | undefined, type: Type) {
+            if (getObjectFlags(type) & ObjectFlags.IsNeverIntersection) {
+                const neverProp = find(getPropertiesOfUnionOrIntersectionType(<IntersectionType>type), isDiscriminantWithNeverType);
+                if (neverProp) {
+                    return chainDiagnosticMessages(errorInfo, Diagnostics.The_intersection_0_was_reduced_to_never_because_property_1_has_conflicting_types_in_some_constituents,
+                        typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.NoTypeReduction), symbolToString(neverProp));
+                }
+                const privateProp = find(getPropertiesOfUnionOrIntersectionType(<IntersectionType>type), isConflictingPrivateProperty);
+                if (privateProp) {
+                    return chainDiagnosticMessages(errorInfo, Diagnostics.The_intersection_0_was_reduced_to_never_because_property_1_exists_in_multiple_constituents_and_is_private_in_some,
+                        typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.NoTypeReduction), symbolToString(privateProp));
+                }
             }
             return errorInfo;
         }
@@ -15639,8 +15641,8 @@ namespace ts {
                             return result;
                         }
                     }
-                    else if (target.flags & TypeFlags.Never && originalTarget.flags & TypeFlags.Intersection) {
-                        errorInfo = elaborateNeverIntersection(errorInfo, <IntersectionType>originalTarget);
+                    else {
+                        errorInfo = elaborateNeverIntersection(errorInfo, originalTarget);
                     }
                     if (!headMessage && maybeSuppress) {
                         lastSkippedInfo = [source, target];
@@ -24154,10 +24156,7 @@ namespace ts {
                         relatedInfo = suggestion.valueDeclaration && createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestedName);
                     }
                     else {
-                        if (containingType.flags & TypeFlags.Intersection && getReducedType(containingType).flags & TypeFlags.Never) {
-                            errorInfo = elaborateNeverIntersection(errorInfo, <IntersectionType>containingType);
-                        }
-                        errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
+                        errorInfo = chainDiagnosticMessages(elaborateNeverIntersection(errorInfo, containingType), Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
                     }
                 }
             }
