@@ -68,7 +68,7 @@
         "eslint": "6.8.0",
         "eslint-formatter-autolinkable-stylish": "1.1.1",
         "eslint-plugin-import": "2.20.0",
-        "eslint-plugin-jsdoc": "21.0.0",
+        "eslint-plugin-jsdoc": "22.1.0",
         "eslint-plugin-no-null": "1.0.2",
         "fancy-log": "latest",
         "fs-extra": "^6.0.1",
