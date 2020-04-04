@@ -5969,10 +5969,7 @@ namespace ts {
                 }
 
                 function getNamespaceMembersForSerialization(symbol: Symbol) {
-                    return !symbol.exports ? [] :
-                        filter(
-                            arrayFrom(symbol.exports.values()),
-                            p => !(p.flags & SymbolFlags.Prototype || p.escapedName === "prototype" || p.valueDeclaration && isClassLike(p.valueDeclaration.parent)));
+                    return !symbol.exports ? [] : filter(arrayFrom(symbol.exports.values()), isNamespaceMember);
                 }
 
                 function isTypeOnlyNamespace(symbol: Symbol) {
@@ -6104,9 +6101,7 @@ namespace ts {
                     }
                     // Module symbol emit will take care of module-y members, provided it has exports
                     if (!(symbol.flags & (SymbolFlags.ValueModule | SymbolFlags.NamespaceModule) && !!symbol.exports && !!symbol.exports.size)) {
-                        const props = filter(
-                            getPropertiesOfType(type),
-                            p => !(p.flags & SymbolFlags.Prototype || p.escapedName === "prototype" || p.valueDeclaration && isClassLike(p.valueDeclaration.parent)));
+                        const props = filter(getPropertiesOfType(type), isNamespaceMember);
                         serializeAsNamespaceDeclaration(props, localName, modifierFlags, /*suppressNewPrivateContext*/ true);
                     }
                 }
@@ -6162,6 +6157,10 @@ namespace ts {
                     }
                 }
 
+                function isNamespaceMember(p: Symbol) {
+                    return !(p.flags & SymbolFlags.Prototype || p.escapedName === "prototype" || p.valueDeclaration && isClassLike(p.valueDeclaration.parent));
+                }
+
                 function serializeAsClass(symbol: Symbol, localName: string, modifierFlags: ModifierFlags) {
                     const localParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
                     const typeParamDecls = map(localParams, p => typeParameterToDeclaration(p, context));
@@ -6198,10 +6197,9 @@ namespace ts {
                         emptyArray;
                     const publicProperties = flatMap<Symbol, ClassElement>(publicSymbolProps, p => serializePropertySymbolForClass(p, /*isStatic*/ false, baseTypes[0]));
                     // Consider static members empty if symbol also has function or module meaning - function namespacey emit will handle statics
-                    const staticMembers = flatMap(filter(
-                            getPropertiesOfType(staticType),
-                            p => !(p.flags & SymbolFlags.Prototype) && p.escapedName !== "prototype" && p.valueDeclaration && isClassLike(p.valueDeclaration.parent)
-                        ), p => serializePropertySymbolForClass(p, /*isStatic*/ true, staticBaseType));
+                    const staticMembers = flatMap(
+                        filter(getPropertiesOfType(staticType), p => !(p.flags & SymbolFlags.Prototype) && p.escapedName !== "prototype" && !isNamespaceMember(p)),
+                        p => serializePropertySymbolForClass(p, /*isStatic*/ true, staticBaseType));
                     const constructors = serializeSignatures(SignatureKind.Construct, staticType, baseTypes[0], SyntaxKind.Constructor) as ConstructorDeclaration[];
                     for (const c of constructors) {
                         // A constructor's return type and type parameters are supposed to be controlled by the enclosing class declaration
