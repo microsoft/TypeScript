@@ -3737,6 +3737,7 @@ namespace ts {
         getTypeCount(): number;
         getInstantiationCount(): number;
         getRelationCacheSizes(): { assignable: number, identity: number, subtype: number, strictSubtype: number };
+        /* @internal */ getExpensiveStatements(): readonly ExpensiveStatement[];
 
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
         /* @internal */ getResolvedTypeReferenceDirectives(): ESMap<string, ResolvedTypeReferenceDirective | undefined>;
@@ -4070,6 +4071,7 @@ namespace ts {
         /* @internal */ getTypeCount(): number;
         /* @internal */ getInstantiationCount(): number;
         /* @internal */ getRelationCacheSizes(): { assignable: number, identity: number, subtype: number, strictSubtype: number };
+        /* @internal */ getExpensiveStatements(): readonly ExpensiveStatement[];
 
         /* @internal */ isArrayType(type: Type): boolean;
         /* @internal */ isTupleType(type: Type): boolean;
@@ -8067,5 +8069,12 @@ namespace ts {
     export interface PseudoBigInt {
         negative: boolean;
         base10Value: string;
+    }
+
+    /* @internal */
+    export interface ExpensiveStatement {
+        node: Node;
+        typeDelta: number;
+        symbolDelta: number;
     }
 }

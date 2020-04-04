@@ -954,6 +954,7 @@ namespace ts {
             getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
             getInstantiationCount: () => getDiagnosticsProducingTypeChecker().getInstantiationCount(),
             getRelationCacheSizes: () => getDiagnosticsProducingTypeChecker().getRelationCacheSizes(),
+            getExpensiveStatements: () => getDiagnosticsProducingTypeChecker().getExpensiveStatements(),
             getFileProcessingDiagnostics: () => fileProcessingDiagnostics,
             getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives,
             isSourceFileFromExternalLibrary,

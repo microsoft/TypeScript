@@ -333,12 +333,6 @@ namespace ts {
         const keyofStringsOnly = !!compilerOptions.keyofStringsOnly;
         const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : ObjectFlags.FreshLiteral;
 
-        interface ExpensiveStatement {
-            node: Node;
-            typeDelta: number;
-            symbolDelta: number;
-        }
-
         let ignoreExpensiveStatement = true;
         const maxExpensiveStatementCount = compilerOptions.expensiveStatements ?? 0;
         const expensiveStatements: ExpensiveStatement[] = [];
@@ -378,6 +372,7 @@ namespace ts {
                 subtype: subtypeRelation.size,
                 strictSubtype: strictSubtypeRelation.size,
             }),
+            getExpensiveStatements: () => expensiveStatements,
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
             isUnknownSymbol: symbol => symbol === unknownSymbol,

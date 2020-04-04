@@ -440,7 +440,7 @@ namespace ts {
                 createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
                 createWatchStatusReporter(sys, buildOptions)
             );
-            updateSolutionBuilderHost(sys, cb, buildHost);
+            updateSolutionBuilderHost(sys, reportDiagnostic, cb, buildHost);
             const builder = createSolutionBuilderWithWatch(buildHost, projects, buildOptions, watchOptions);
             builder.build();
             return builder;
@@ -453,7 +453,7 @@ namespace ts {
             createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
             createReportErrorSummary(sys, buildOptions)
         );
-        updateSolutionBuilderHost(sys, cb, buildHost);
+        updateSolutionBuilderHost(sys, reportDiagnostic, cb, buildHost);
         const builder = createSolutionBuilder(buildHost, projects, buildOptions);
         const exitStatus = buildOptions.clean ? builder.clean() : builder.build();
         return sys.exit(exitStatus);
@@ -492,7 +492,7 @@ namespace ts {
             s => sys.write(s + sys.newLine),
             createReportErrorSummary(sys, options)
         );
-        reportStatistics(sys, program);
+        reportStatistics(sys, program, reportDiagnostic);
         cb(program);
         return sys.exit(exitStatus);
     }
@@ -516,7 +516,7 @@ namespace ts {
             reportDiagnostic,
             reportErrorSummary: createReportErrorSummary(sys, options),
             afterProgramEmitAndDiagnostics: builderProgram => {
-                reportStatistics(sys, builderProgram.getProgram());
+                reportStatistics(sys, builderProgram.getProgram(), reportDiagnostic);
                 cb(builderProgram);
             }
         });
@@ -525,12 +525,13 @@ namespace ts {
 
     function updateSolutionBuilderHost(
         sys: System,
+        reportDiagnostic: DiagnosticReporter,
         cb: ExecuteCommandLineCallbacks,
         buildHost: SolutionBuilderHostBase<EmitAndSemanticDiagnosticsBuilderProgram>
     ) {
         updateCreateProgram(sys, buildHost);
         buildHost.afterProgramEmitAndDiagnostics = program => {
-            reportStatistics(sys, program.getProgram());
+            reportStatistics(sys, program.getProgram(), reportDiagnostic);
             cb(program);
         };
         buildHost.afterEmitBundle = cb;
@@ -549,6 +550,7 @@ namespace ts {
 
     function updateWatchCompilationHost(
         sys: System,
+        reportDiagnostic: DiagnosticReporter,
         cb: ExecuteCommandLineCallbacks,
         watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>,
     ) {
@@ -556,7 +558,7 @@ namespace ts {
         const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
         watchCompilerHost.afterProgramCreate = builderProgram => {
             emitFilesUsingBuilder(builderProgram);
-            reportStatistics(sys, builderProgram.getProgram());
+            reportStatistics(sys, builderProgram.getProgram(), reportDiagnostic);
             cb(builderProgram);
         };
     }
@@ -581,7 +583,7 @@ namespace ts {
             reportDiagnostic,
             reportWatchStatus: createWatchStatusReporter(system, configParseResult.options)
         });
-        updateWatchCompilationHost(system, cb, watchCompilerHost);
+        updateWatchCompilationHost(system, reportDiagnostic, cb, watchCompilerHost);
         watchCompilerHost.configFileParsingResult = configParseResult;
         return createWatchProgram(watchCompilerHost);
     }
@@ -602,7 +604,7 @@ namespace ts {
             reportDiagnostic,
             reportWatchStatus: createWatchStatusReporter(system, options)
         });
-        updateWatchCompilationHost(system, cb, watchCompilerHost);
+        updateWatchCompilationHost(system, reportDiagnostic, cb, watchCompilerHost);
         return createWatchProgram(watchCompilerHost);
     }
 
@@ -616,9 +618,21 @@ namespace ts {
         }
     }
 
-    function reportStatistics(sys: System, program: Program) {
+    function reportStatistics(sys: System, program: Program, reportDiagnostic: DiagnosticReporter) {
         let statistics: Statistic[];
         const compilerOptions = program.getCompilerOptions();
+
+        if (compilerOptions.expensiveStatements) {
+            for (const expensiveStatement of program.getExpensiveStatements()) {
+                reportDiagnostic(
+                    createDiagnosticForNode(
+                        expensiveStatement.node,
+                        Diagnostics.Checking_this_statement_may_result_in_the_creation_of_as_many_as_0_types_and_1_symbols,
+                        expensiveStatement.typeDelta,
+                        expensiveStatement.symbolDelta));
+            }
+        }
+
         if (canReportDiagnostics(sys, compilerOptions)) {
             statistics = [];
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
