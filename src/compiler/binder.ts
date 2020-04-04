@@ -905,9 +905,6 @@ namespace ts {
         function isNarrowingBinaryExpression(expr: BinaryExpression) {
             switch (expr.operatorToken.kind) {
                 case SyntaxKind.EqualsToken:
-                case SyntaxKind.BarBarEqualsToken:
-                case SyntaxKind.AmpersandAmpersandEqualsToken:
-                case SyntaxKind.QuestionQuestionEqualsToken:
                     return containsNarrowableReference(expr.left);
                 case SyntaxKind.EqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsToken:
@@ -932,9 +929,6 @@ namespace ts {
                 case SyntaxKind.BinaryExpression:
                     switch ((<BinaryExpression>expr).operatorToken.kind) {
                         case SyntaxKind.EqualsToken:
-                        case SyntaxKind.BarBarEqualsToken:
-                        case SyntaxKind.AmpersandAmpersandEqualsToken:
-                        case SyntaxKind.QuestionQuestionEqualsToken:
                             return isNarrowableOperand((<BinaryExpression>expr).left);
                         case SyntaxKind.CommaToken:
                             return isNarrowableOperand((<BinaryExpression>expr).right);
