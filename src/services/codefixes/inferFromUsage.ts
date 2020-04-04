@@ -785,12 +785,6 @@ namespace ts.codefix {
                     }
                     break;
 
-                case SyntaxKind.BarBarEqualsToken:
-                case SyntaxKind.QuestionQuestionEqualsToken:
-                case SyntaxKind.AmpersandAmpersandEqualsToken:
-                    // TODO: infer here
-                    break;
-
                 case SyntaxKind.AmpersandAmpersandToken:
                 case SyntaxKind.CommaToken:
                 case SyntaxKind.InstanceOfKeyword:

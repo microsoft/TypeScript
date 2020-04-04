@@ -28596,7 +28596,7 @@ namespace ts {
                         getUnionType([removeDefinitelyFalsyTypes(leftType), rightType], UnionReduction.Subtype) :
                         leftType;
                     if (operator === SyntaxKind.BarBarEqualsToken) {
-                        checkAssignmentOperator(resultType);
+                        checkAssignmentOperator(rightType);
                     }
                     return resultType;
                 }
@@ -28606,7 +28606,7 @@ namespace ts {
                         getUnionType([getNonNullableType(leftType), rightType], UnionReduction.Subtype) :
                         leftType;
                     if (operator === SyntaxKind.QuestionQuestionEqualsToken) {
-                        checkAssignmentOperator(resultType);
+                        checkAssignmentOperator(rightType);
                     }
                     return resultType;
                 }

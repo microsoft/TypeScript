@@ -18,7 +18,7 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.BinaryExpression:
                     const binaryExpression = <BinaryExpression>node;
-                    if (isLogicalAssignmentOperator(binaryExpression.operatorToken.kind)) {
+                    if (isLogicalOrCoalescingAssignmentOperator(binaryExpression.operatorToken.kind)) {
                         return transformLogicalAssignmentOperators(binaryExpression);
                     }
                     // falls through
@@ -29,7 +29,7 @@ namespace ts {
 
         function transformLogicalAssignmentOperators(binaryExpression: BinaryExpression): VisitResult<Node> {
             const operator = binaryExpression.operatorToken;
-            if (isCompoundAssignment(operator.kind) && isLogicalAssignmentOperator(operator.kind)) {
+            if (isCompoundAssignment(operator.kind) && isLogicalOrCoalescingAssignmentOperator(operator.kind)) {
                 const nonAssignmentOperator = getNonAssignmentOperatorForCompoundAssignment(operator.kind);
                 const left = visitNode(binaryExpression.left, visitor, isExpression);
                 const right = visitNode(binaryExpression.right, visitor, isExpression);

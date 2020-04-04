@@ -2594,7 +2594,7 @@ namespace ts {
             switch (parent.kind) {
                 case SyntaxKind.BinaryExpression:
                     const binaryOperator = (<BinaryExpression>parent).operatorToken.kind;
-                    return isAssignmentOperator(binaryOperator) && !isLogicalAssignmentOperator(binaryOperator) && (<BinaryExpression>parent).left === node ?
+                    return isAssignmentOperator(binaryOperator) && !isLogicalOrCoalescingAssignmentOperator(binaryOperator) && (<BinaryExpression>parent).left === node ?
                         binaryOperator === SyntaxKind.EqualsToken ? AssignmentKind.Definite : AssignmentKind.Compound :
                         AssignmentKind.None;
                 case SyntaxKind.PrefixUnaryExpression:
@@ -3378,10 +3378,6 @@ namespace ts {
                 return 14;
             case SyntaxKind.AsteriskAsteriskToken:
                 return 15;
-            case SyntaxKind.BarBarEqualsToken:
-            case SyntaxKind.AmpersandAmpersandEqualsToken:
-            case SyntaxKind.QuestionQuestionEqualsToken:
-                return 16;
         }
 
         // -1 is lower than all other precedences.  Returning it will cause binary expression
@@ -4454,7 +4450,7 @@ namespace ts {
             || token === SyntaxKind.ExclamationToken;
     }
 
-    export function isLogicalAssignmentOperator(token: SyntaxKind): boolean {
+    export function isLogicalOrCoalescingAssignmentOperator(token: SyntaxKind): boolean {
         return token === SyntaxKind.BarBarEqualsToken
             || token === SyntaxKind.AmpersandAmpersandEqualsToken
             || token === SyntaxKind.QuestionQuestionEqualsToken;
