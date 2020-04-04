@@ -4482,6 +4482,10 @@
         "category": "Error",
         "code": 6236
     },
+    "Heuristically reports statements that appear to contribute disproportionately to check time.": {
+        "category": "Message",
+        "code": 6237
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -5984,5 +5988,10 @@
     "Invalid value for 'jsxFragmentFactory'. '{0}' is not a valid identifier or qualified-name.": {
         "category": "Error",
         "code": 18035
+    },
+
+    "Checking this statement may result in the creation of as many as {0} types and {1} symbols.": {
+        "category": "Warning",
+        "code": 19000
     }
 }

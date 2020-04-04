@@ -5675,6 +5675,7 @@ namespace ts {
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
+        /*@internal*/ expensiveStatements?: number;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         /*@internal*/generateCpuProfile?: string;

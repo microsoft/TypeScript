@@ -219,6 +219,12 @@ namespace ts {
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.The_locale_used_when_displaying_messages_to_the_user_e_g_en_us
         },
+        {
+            name: "expensiveStatements",
+            type: "number",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Heuristically_reports_statements_that_appear_to_contribute_disproportionately_to_check_time
+        },
     ];
 
     /* @internal */

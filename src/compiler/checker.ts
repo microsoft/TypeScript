@@ -317,16 +317,6 @@ namespace ts {
         let constraintDepth = 0;
         let currentNode: Node | undefined;
 
-        interface ExpensiveStatement {
-            node: Node;
-            typeDelta: number;
-            symbolDelta: number;
-        }
-
-        let ignoreExpensiveStatement = true;
-        const maxExpensiveStatementCount = 5;
-        const expensiveStatements: ExpensiveStatement[] = [];
-
         const emptySymbols = createSymbolTable();
         const arrayVariances = [VarianceFlags.Covariant];
 
@@ -342,6 +332,16 @@ namespace ts {
         const noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
         const keyofStringsOnly = !!compilerOptions.keyofStringsOnly;
         const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : ObjectFlags.FreshLiteral;
+
+        interface ExpensiveStatement {
+            node: Node;
+            typeDelta: number;
+            symbolDelta: number;
+        }
+
+        let ignoreExpensiveStatement = true;
+        const maxExpensiveStatementCount = compilerOptions.expensiveStatements ?? 0;
+        const expensiveStatements: ExpensiveStatement[] = [];
 
         const emitResolver = createResolver();
         const nodeBuilder = createNodeBuilder();
