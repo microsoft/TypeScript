@@ -71,7 +71,7 @@
         "eslint-plugin-jsdoc": "21.0.0",
         "eslint-plugin-no-null": "1.0.2",
         "fancy-log": "latest",
-        "fs-extra": "^6.0.1",
+        "fs-extra": "^9.0.0",
         "glob": "latest",
         "gulp": "^4.0.0",
         "gulp-concat": "latest",
