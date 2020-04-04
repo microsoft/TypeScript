@@ -876,6 +876,7 @@ namespace ts.Completions {
                 }
                 else {
                     const lineStart = getLineStartPositionForPosition(position, sourceFile);
+                    // or !/[^/\s\*]/.test(sourceFile.text.substring(lineStart, position))
                     if (!(sourceFile.text.substring(lineStart, position).match(/[^\*|\s|(/\*\*)]/))) {
                         return { kind: CompletionDataKind.JsDocTag };
                     }
