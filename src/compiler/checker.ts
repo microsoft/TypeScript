@@ -8864,8 +8864,8 @@ namespace ts {
                 if (merged) {
                     // note:we overwrite links because we just cloned the symbol
                     symbol = links = merged;
-                } 
-                
+                }
+
                 const type = originalLinks.declaredType = links.declaredType = <InterfaceType>createObjectType(kind, symbol);
                 const outerTypeParameters = getOuterTypeParametersOfClassOrInterface(symbol);
                 const localTypeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
