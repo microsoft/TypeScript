@@ -1,0 +1,17 @@
+tests/cases/compiler/accessorAccidentalCallDiagnostic.ts(6,14): error TS2349: This expression is not callable.
+  Type 'Number' has no call signatures.
+
+
+==== tests/cases/compiler/accessorAccidentalCallDiagnostic.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/24554
+    class Test24554 {
+        get property(): number { return 1; }
+    }
+    function test24554(x: Test24554) {
+        return x.property();
+                 ~~~~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'Number' has no call signatures.
+!!! related TS6232 tests/cases/compiler/accessorAccidentalCallDiagnostic.ts:6:12: 'x.property' is a 'get' accessor; did you mean to use it without '()'?
+    }
+    

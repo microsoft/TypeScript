@@ -4384,6 +4384,10 @@
         "category": "Error",
         "code": 6231
     },
+    "'{0}' is a 'get' accessor; did you mean to use it without '()'?": {
+        "category": "Message",
+        "code": 6232
+    },
 
     "Projects to reference": {
         "category": "Message",
