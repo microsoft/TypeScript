@@ -754,6 +754,7 @@ declare namespace ts {
     export interface IndexSignatureDeclaration extends SignatureDeclarationBase, ClassElement, TypeElement {
         kind: SyntaxKind.IndexSignature;
         parent: ObjectTypeDeclaration;
+        staticModifier?: Token<SyntaxKind.StaticKeyword>;
     }
     export interface TypeNode extends Node {
         _typeNodeBrand: any;
