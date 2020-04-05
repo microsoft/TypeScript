@@ -2829,10 +2829,6 @@ namespace ts {
         }
 
         function isIndexSignature(): boolean {
-            return token() === SyntaxKind.StaticKeyword ? lookAhead(isNonStaticIndexSignature) : isNonStaticIndexSignature()
-        }
-
-        function isNonStaticIndexSignature(): boolean {
             return token() === SyntaxKind.OpenBracketToken && lookAhead(isUnambiguouslyIndexSignature);
         }
 
@@ -2893,7 +2889,6 @@ namespace ts {
 
         function parseIndexSignatureDeclaration(node: IndexSignatureDeclaration): IndexSignatureDeclaration {
             node.kind = SyntaxKind.IndexSignature;
-            node.staticModifier = parseOptionalToken(SyntaxKind.StaticKeyword);
             node.parameters = parseBracketedList(ParsingContext.Parameters, parseParameter, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
             node.type = parseTypeAnnotation();
             parseTypeMemberSemicolon();

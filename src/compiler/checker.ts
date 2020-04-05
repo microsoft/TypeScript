@@ -9938,7 +9938,8 @@ namespace ts {
                 }
                 else {
                     stringIndexInfo = baseConstructorIndexInfo;
-                    if (symbol.flags & SymbolFlags.Enum && (getDeclaredTypeOfSymbol(symbol).flags & TypeFlags.Enum || some(type.properties, prop => !!(getTypeOfSymbol(prop).flags & TypeFlags.NumberLike))) ) {
+                    if (symbol.flags & SymbolFlags.Enum && (getDeclaredTypeOfSymbol(symbol).flags & TypeFlags.Enum ||
+                        some(type.properties, prop => !!(getTypeOfSymbol(prop).flags & TypeFlags.NumberLike)))) {
                         numberIndexInfo = enumNumberIndexInfo;
                     }
                 }
@@ -9973,7 +9974,7 @@ namespace ts {
             const declaration = getIndexDeclarationOfIndexSymbol(indexSymbol, indexKind);
             if (!declaration) return undefined;
             return createIndexInfo(declaration.type ? getTypeFromTypeNode(declaration.type) : anyType,
-                    hasModifier(declaration, ModifierFlags.Readonly), declaration); 
+                hasModifier(declaration, ModifierFlags.Readonly), declaration);
         }
 
         function resolveReverseMappedTypeMembers(type: ReverseMappedType) {
