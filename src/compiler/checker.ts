@@ -12133,6 +12133,17 @@ namespace ts {
             }
         }
 
+        function removeRedundantIntersectionTypes(types: Type[]) {
+            let i = types.length;
+            while (i > 0) {
+                i--;
+                const t = types[i];
+                if (t.flags & TypeFlags.Intersection && some((<IntersectionType>t).types, c => containsType(types, c))) {
+                    orderedRemoveItemAt(types, i);
+                }
+            }
+        }
+
         // We sort and deduplicate the constituent types based on object identity. If the subtypeReduction
         // flag is specified we also reduce the constituent type set to only include types that aren't subtypes
         // of other types. Subtype reduction is expensive for large union types and is possible only when union
@@ -12157,6 +12168,9 @@ namespace ts {
                     case UnionReduction.Literal:
                         if (includes & (TypeFlags.Literal | TypeFlags.UniqueESSymbol)) {
                             removeRedundantLiteralTypes(typeSet, includes);
+                        }
+                        if (includes & TypeFlags.Intersection) {
+                            removeRedundantIntersectionTypes(typeSet);
                         }
                         break;
                     case UnionReduction.Subtype:
