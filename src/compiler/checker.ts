@@ -195,7 +195,7 @@ namespace ts {
         None = 0,
         Source = 1 << 0,
         Target = 1 << 1,
-        ExcessCheck = 1 << 2,
+        PropertyCheck = 1 << 2,
     }
 
     const enum MappedTypeModifiers {
@@ -15561,7 +15561,7 @@ namespace ts {
                 if (source.flags & TypeFlags.Union) {
                     result = relation === comparableRelation ?
                         someTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState) :
-                        eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState & IntersectionState.ExcessCheck);
+                        eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState);
                 }
                 else {
                     if (target.flags & TypeFlags.Union) {
@@ -15569,12 +15569,6 @@ namespace ts {
                     }
                     else if (target.flags & TypeFlags.Intersection) {
                         result = typeRelatedToEachType(getRegularTypeOfObjectLiteral(source), target as IntersectionType, reportErrors, IntersectionState.Target);
-                        if (result && (isPerformingExcessPropertyChecks || isPerformingCommonPropertyChecks) && !(intersectionState & IntersectionState.ExcessCheck)) {
-                            // Validate against excess props using the original `source`
-                            if (!propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, IntersectionState.ExcessCheck)) {
-                                return Ternary.False;
-                            }
-                        }
                     }
                     else if (source.flags & TypeFlags.Intersection) {
                         // Check to see if any constituents of the intersection are immediately related to the target.
@@ -15590,9 +15584,7 @@ namespace ts {
                         //
                         //    - For a primitive type or type parameter (such as 'number = A & B') there is no point in
                         //          breaking the intersection apart.
-                        if (!isNonGenericObjectType(target) || !every((<IntersectionType>source).types, t => isNonGenericObjectType(t) && !(getObjectFlags(t) & ObjectFlags.NonInferrableType))) {
-                            result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false, IntersectionState.Source);
-                        }
+                        result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false, IntersectionState.Source);
                     }
                     if (!result && (source.flags & TypeFlags.StructuredOrInstantiable || target.flags & TypeFlags.StructuredOrInstantiable)) {
                         if (result = recursiveTypeRelatedTo(source, target, reportErrors, intersectionState)) {
@@ -15623,6 +15615,23 @@ namespace ts {
                             }
                         }
                     }
+                }
+                // For certain combinations involving intersections and optional, excess, or mismatched properties we need
+                // an extra property check where the intersection is viewed as a single object. The following are motivating
+                // examples that all should be errors, but aren't without this extra property check:
+                //
+                //   let obj: { a: { x: string } } & { c: number } = { a: { x: 'hello', y: 2 }, c: 5 };  // Nested excess property
+                //
+                //   declare let wrong: { a: { y: string } };
+                //   let weak: { a?: { x?: number } } & { c?: string } = wrong;  // Nested weak object type
+                //
+                //   function foo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
+                //     x = y;  // Mismatched property in source intersection
+                //   }
+                if (result && (
+                    target.flags & TypeFlags.Intersection && (isPerformingExcessPropertyChecks || isPerformingCommonPropertyChecks) ||
+                    isNonGenericObjectType(target) && source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType && !some((<IntersectionType>source).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType)))) {
+                    result &= recursiveTypeRelatedTo(source, target, reportErrors, IntersectionState.PropertyCheck);
                 }
 
                 if (!result && reportErrors) {
@@ -16000,6 +16009,9 @@ namespace ts {
             }
 
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
+                if (intersectionState & IntersectionState.PropertyCheck) {
+                    return propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, IntersectionState.None);
+                }
                 const flags = source.flags & target.flags;
                 if (relation === identityRelation && !(flags & TypeFlags.Object)) {
                     if (flags & TypeFlags.Index) {
