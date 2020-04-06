@@ -361,6 +361,7 @@ namespace ts {
             const printerOptions: PrinterOptions = {
                 removeComments: compilerOptions.removeComments,
                 newLine: compilerOptions.newLine,
+                preserveSourceNewlines: true,
                 noEmitHelpers: compilerOptions.noEmitHelpers,
                 module: compilerOptions.module,
                 target: compilerOptions.target,
