@@ -15,4 +15,5 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
+
 foo1 = __spreadArrays(Array.isArray(foo2) ? foo2 : [foo2]);

@@ -61,6 +61,8 @@ var M;
         Color[Color["Blue"] = 1] = "Blue";
         Color[Color["Brown"] = 2] = "Brown";
     })(Color = M.Color || (M.Color = {}));
+
+
     function CompareEyes(a, b) {
         return a.color - b.color;
     }
@@ -75,12 +77,15 @@ var M;
         x[0] = { color: Color.Brown };
         x[1] = { color: Color.Blue };
         x[2] = { color: Color.Green };
+
         x = x.sort(CompareYeux); // parameter mismatch
         // type of z inferred from specialized array type
         var z = x.sort(CompareEyes); // ok
+
         for (var i = 0, len = z.length; i < len; i++) {
             result += ((Color._map[z[i].color]) + "\r\n");
         }
+
         var eeks = [];
         for (var j = z.length = 1; j >= 0; j--) {
             eeks[j] = z[j]; // nope: element assignment

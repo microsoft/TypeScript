@@ -33,20 +33,21 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Foo = /** @class */ (function () {
+})();var Foo = /** @class */ (function () {
     function Foo() {
-    }
-    Foo.prototype.bar = function () { };
+    }Foo.prototype.bar = function () { };
     return Foo;
 }());
 var Bar = /** @class */ (function (_super) {
     __extends(Bar, _super);
+
+
     function Bar() {
         var _this = _super.call(this) || this;
         _this.x = 2;
         return _this;
     }
+
     Bar.prototype.bar = function () {
         _super.prototype.bar.call(this);
         _super.prototype.bar.call(this);

@@ -18,6 +18,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
+
 takeTwo.apply(void 0, __spreadArrays(['a'], t2)); // error on ...t2
 takeTwo.apply(void 0, __spreadArrays(['a', 'b', 'c'], t2)); // error on 'c' and ...t2
 takeTwo.apply(void 0, __spreadArrays(['a', 'b'], t2, ['c'])); // error on ...t2 and 'c'

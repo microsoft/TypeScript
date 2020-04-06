@@ -15,11 +15,13 @@ for (; false;) {
 var x;
 var _loop_1 = function () {
     var x_1;
-    (function () { return x_1; });
+    (
+        function () { return x_1; });
 };
 for (; false;) {
     _loop_1();
 }
+
 var y;
 for (; false;) {
     var y_1 = void 0;

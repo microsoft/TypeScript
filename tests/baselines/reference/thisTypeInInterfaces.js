@@ -30,3 +30,6 @@ interface I3 {
 
 
 //// [thisTypeInInterfaces.js]
+
+
+

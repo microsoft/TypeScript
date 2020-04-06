@@ -200,8 +200,7 @@ var StaticName = /** @class */ (function () {
 }());
 var StaticNameFn = /** @class */ (function () {
     function StaticNameFn() {
-    }
-    StaticNameFn.name = function () { }; // error
+    }StaticNameFn.name = function () { }; // error
     StaticNameFn.prototype.name = function () { }; // ok
     return StaticNameFn;
 }());
@@ -213,8 +212,7 @@ var StaticLength = /** @class */ (function () {
 }());
 var StaticLengthFn = /** @class */ (function () {
     function StaticLengthFn() {
-    }
-    StaticLengthFn.length = function () { }; // error
+    }StaticLengthFn.length = function () { }; // error
     StaticLengthFn.prototype.length = function () { }; // ok
     return StaticLengthFn;
 }());
@@ -226,8 +224,7 @@ var StaticPrototype = /** @class */ (function () {
 }());
 var StaticPrototypeFn = /** @class */ (function () {
     function StaticPrototypeFn() {
-    }
-    StaticPrototypeFn.prototype = function () { }; // error
+    }StaticPrototypeFn.prototype = function () { }; // error
     StaticPrototypeFn.prototype.prototype = function () { }; // ok
     return StaticPrototypeFn;
 }());
@@ -239,8 +236,7 @@ var StaticCaller = /** @class */ (function () {
 }());
 var StaticCallerFn = /** @class */ (function () {
     function StaticCallerFn() {
-    }
-    StaticCallerFn.caller = function () { }; // error
+    }StaticCallerFn.caller = function () { }; // error
     StaticCallerFn.prototype.caller = function () { }; // ok
     return StaticCallerFn;
 }());
@@ -252,8 +248,7 @@ var StaticArguments = /** @class */ (function () {
 }());
 var StaticArgumentsFn = /** @class */ (function () {
     function StaticArgumentsFn() {
-    }
-    StaticArgumentsFn.arguments = function () { }; // error
+    }StaticArgumentsFn.arguments = function () { }; // error
     StaticArgumentsFn.prototype.arguments = function () { }; // ok
     return StaticArgumentsFn;
 }());
@@ -263,66 +258,91 @@ var StaticName_Anonymous = /** @class */ (function () {
     function class_1() {
     }
     return class_1;
-}());
+}())
+
+;
+
 var StaticNameFn_Anonymous = /** @class */ (function () {
     function StaticNameFn_Anonymous() {
-    }
-    StaticNameFn_Anonymous.name = function () { }; // error
+    }StaticNameFn_Anonymous.name = function () { }; // error
     StaticNameFn_Anonymous.prototype.name = function () { }; // ok
     return StaticNameFn_Anonymous;
-}());
+}())
+
+;
+
 // length
 var StaticLength_Anonymous = /** @class */ (function () {
     function class_2() {
     }
     return class_2;
-}());
+}())
+
+;
+
 var StaticLengthFn_Anonymous = /** @class */ (function () {
     function StaticLengthFn_Anonymous() {
-    }
-    StaticLengthFn_Anonymous.length = function () { }; // error
+    }StaticLengthFn_Anonymous.length = function () { }; // error
     StaticLengthFn_Anonymous.prototype.length = function () { }; // ok
     return StaticLengthFn_Anonymous;
-}());
+}())
+
+;
+
 // prototype
 var StaticPrototype_Anonymous = /** @class */ (function () {
     function class_3() {
     }
     return class_3;
-}());
+}())
+
+;
+
 var StaticPrototypeFn_Anonymous = /** @class */ (function () {
     function StaticPrototypeFn_Anonymous() {
-    }
-    StaticPrototypeFn_Anonymous.prototype = function () { }; // error
+    }StaticPrototypeFn_Anonymous.prototype = function () { }; // error
     StaticPrototypeFn_Anonymous.prototype.prototype = function () { }; // ok
     return StaticPrototypeFn_Anonymous;
-}());
+}())
+
+;
+
 // caller
 var StaticCaller_Anonymous = /** @class */ (function () {
     function class_4() {
     }
     return class_4;
-}());
+}())
+
+;
+
 var StaticCallerFn_Anonymous = /** @class */ (function () {
     function StaticCallerFn_Anonymous() {
-    }
-    StaticCallerFn_Anonymous.caller = function () { }; // error
+    }StaticCallerFn_Anonymous.caller = function () { }; // error
     StaticCallerFn_Anonymous.prototype.caller = function () { }; // ok
     return StaticCallerFn_Anonymous;
-}());
+}())
+
+;
+
 // arguments
 var StaticArguments_Anonymous = /** @class */ (function () {
     function class_5() {
     }
     return class_5;
-}());
+}())
+
+;
+
 var StaticArgumentsFn_Anonymous = /** @class */ (function () {
     function StaticArgumentsFn_Anonymous() {
-    }
-    StaticArgumentsFn_Anonymous.arguments = function () { }; // error
+    }StaticArgumentsFn_Anonymous.arguments = function () { }; // error
     StaticArgumentsFn_Anonymous.prototype.arguments = function () { }; // ok
     return StaticArgumentsFn_Anonymous;
-}());
+}())
+
+
+;
 // === Static properties on default exported classes ===
 // name
 var TestOnDefaultExportedClass_1;
@@ -337,8 +357,7 @@ var TestOnDefaultExportedClass_2;
 (function (TestOnDefaultExportedClass_2) {
     var StaticNameFn = /** @class */ (function () {
         function StaticNameFn() {
-        }
-        StaticNameFn.name = function () { }; // error
+        }StaticNameFn.name = function () { }; // error
         StaticNameFn.prototype.name = function () { }; // ok
         return StaticNameFn;
     }());
@@ -357,8 +376,7 @@ var TestOnDefaultExportedClass_4;
 (function (TestOnDefaultExportedClass_4) {
     var StaticLengthFn = /** @class */ (function () {
         function StaticLengthFn() {
-        }
-        StaticLengthFn.length = function () { }; // error
+        }StaticLengthFn.length = function () { }; // error
         StaticLengthFn.prototype.length = function () { }; // ok
         return StaticLengthFn;
     }());
@@ -378,8 +396,7 @@ var TestOnDefaultExportedClass_6;
 (function (TestOnDefaultExportedClass_6) {
     var StaticPrototypeFn = /** @class */ (function () {
         function StaticPrototypeFn() {
-        }
-        StaticPrototypeFn.prototype = function () { }; // error
+        }StaticPrototypeFn.prototype = function () { }; // error
         StaticPrototypeFn.prototype.prototype = function () { }; // ok
         return StaticPrototypeFn;
     }());
@@ -399,8 +416,7 @@ var TestOnDefaultExportedClass_8;
 (function (TestOnDefaultExportedClass_8) {
     var StaticCallerFn = /** @class */ (function () {
         function StaticCallerFn() {
-        }
-        StaticCallerFn.caller = function () { }; // error
+        }StaticCallerFn.caller = function () { }; // error
         StaticCallerFn.prototype.caller = function () { }; // ok
         return StaticCallerFn;
     }());
@@ -420,8 +436,7 @@ var TestOnDefaultExportedClass_10;
 (function (TestOnDefaultExportedClass_10) {
     var StaticArgumentsFn = /** @class */ (function () {
         function StaticArgumentsFn() {
-        }
-        StaticArgumentsFn.arguments = function () { }; // error
+        }StaticArgumentsFn.arguments = function () { }; // error
         StaticArgumentsFn.prototype.arguments = function () { }; // ok
         return StaticArgumentsFn;
     }());

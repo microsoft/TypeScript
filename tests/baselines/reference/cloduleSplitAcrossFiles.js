@@ -11,8 +11,7 @@ D.y;
 
 //// [cloduleSplitAcrossFiles_class.js]
 var D = /** @class */ (function () {
-    function D() {
-    }
+    function D() {}
     return D;
 }());
 //// [cloduleSplitAcrossFiles_module.js]

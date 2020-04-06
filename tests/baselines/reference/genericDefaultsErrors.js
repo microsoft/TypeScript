@@ -43,10 +43,22 @@ interface i10<T = number> {}
 interface SelfReference<T = SelfReference> {}
 
 //// [genericDefaultsErrors.js]
+
+
 f11(); // ok
 f11(); // error
 f11(); // ok
 f11(); // ok
 f11(); // error
+
 f12(); // ok
 f12("a"); // error
+
+
+
+
+
+
+
+
+

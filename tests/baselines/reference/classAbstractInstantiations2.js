@@ -64,16 +64,14 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var A = /** @class */ (function () {
+})();var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
 var B = /** @class */ (function () {
     function B() {
-    }
-    B.prototype.foo = function () { return this.bar(); };
+    }B.prototype.foo = function () { return this.bar(); };
     return B;
 }());
 new B; // error
@@ -83,38 +81,37 @@ new AA;
 function constructB(Factory) {
     new Factory; // error -- Factory is of type typeof B.
 }
+
 var BB = B;
 new BB; // error -- BB is of type typeof B.
 var x = C;
 new x; // okay -- undefined behavior at runtime
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);
+    __extends(C, _super);// okay -- undefined behavior at runtime
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(B)); // error -- not declared abstract
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);
+    __extends(D, _super);// error -- not declared abstract
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
 }(B)); // okay
 var E = /** @class */ (function (_super) {
-    __extends(E, _super);
+    __extends(E, _super);// okay
     function E() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
+    }// okay -- implements abstract method
     E.prototype.bar = function () { return 1; };
     return E;
 }(B));
 var F = /** @class */ (function (_super) {
-    __extends(F, _super);
-    function F() {
+    __extends(F, _super);function F() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    F.prototype.bar = function () { return 2; };
+    }F.prototype.bar = function () { return 2; };
     return F;
 }(B));
 var G = /** @class */ (function () {

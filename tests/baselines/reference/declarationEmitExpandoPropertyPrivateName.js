@@ -14,15 +14,14 @@ q.val = f();
 "use strict";
 exports.__esModule = true;
 exports.f = void 0;
-function f() { return null; }
-exports.f = f;
+function f() { return null; }exports.f = f;
 //// [b.js]
 "use strict";
 exports.__esModule = true;
 exports.q = void 0;
 var a_1 = require("./a");
-function q() { }
-exports.q = q;
+
+function q() { }exports.q = q;
 q.val = a_1.f();
 
 

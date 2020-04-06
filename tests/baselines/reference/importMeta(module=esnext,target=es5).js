@@ -90,6 +90,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 image = new Image();
                 image.src = URL.createObjectURL(blob);
                 image.width = image.height = size;
+
                 document.body.appendChild(image);
                 return [2 /*return*/];
         }
@@ -106,4 +107,5 @@ var globalC = import.import.import.malkovich;
 //// [assignmentTargets.js]
 export var foo = import.meta.blah = import.meta.blue = import.meta;
 import.meta = foo;
+
 var _a = import.meta.wellKnownProperty, a = _a.a, b = _a.b, c = _a.c;

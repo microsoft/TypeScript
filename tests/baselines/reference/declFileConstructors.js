@@ -105,64 +105,54 @@ var SimpleConstructor = /** @class */ (function () {
     function SimpleConstructor() {
     }
     return SimpleConstructor;
-}());
-exports.SimpleConstructor = SimpleConstructor;
+}());exports.SimpleConstructor = SimpleConstructor;
 var ConstructorWithParameters = /** @class */ (function () {
     /** This is comment for function signature*/
-    function ConstructorWithParameters(/** this is comment about a*/ a, 
-    /** this is comment for b*/
-    b) {
+    function ConstructorWithParameters(/** this is comment about a*/ a,
+        /** this is comment for b*/
+        b) {
         var d = a;
     }
     return ConstructorWithParameters;
-}());
-exports.ConstructorWithParameters = ConstructorWithParameters;
+}());exports.ConstructorWithParameters = ConstructorWithParameters;
 var ConstructorWithRestParamters = /** @class */ (function () {
-    function ConstructorWithRestParamters(a) {
-        var rests = [];
+    function ConstructorWithRestParamters(a) {var rests = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rests[_i - 1] = arguments[_i];
         }
         return a + rests.join("");
     }
     return ConstructorWithRestParamters;
-}());
-exports.ConstructorWithRestParamters = ConstructorWithRestParamters;
+}());exports.ConstructorWithRestParamters = ConstructorWithRestParamters;
 var ConstructorWithOverloads = /** @class */ (function () {
     function ConstructorWithOverloads(a) {
     }
     return ConstructorWithOverloads;
-}());
-exports.ConstructorWithOverloads = ConstructorWithOverloads;
+}());exports.ConstructorWithOverloads = ConstructorWithOverloads;
 var ConstructorWithPublicParameterProperty = /** @class */ (function () {
     function ConstructorWithPublicParameterProperty(x) {
         this.x = x;
     }
     return ConstructorWithPublicParameterProperty;
-}());
-exports.ConstructorWithPublicParameterProperty = ConstructorWithPublicParameterProperty;
+}());exports.ConstructorWithPublicParameterProperty = ConstructorWithPublicParameterProperty;
 var ConstructorWithPrivateParameterProperty = /** @class */ (function () {
     function ConstructorWithPrivateParameterProperty(x) {
         this.x = x;
     }
     return ConstructorWithPrivateParameterProperty;
-}());
-exports.ConstructorWithPrivateParameterProperty = ConstructorWithPrivateParameterProperty;
+}());exports.ConstructorWithPrivateParameterProperty = ConstructorWithPrivateParameterProperty;
 var ConstructorWithOptionalParameterProperty = /** @class */ (function () {
     function ConstructorWithOptionalParameterProperty(x) {
         this.x = x;
     }
     return ConstructorWithOptionalParameterProperty;
-}());
-exports.ConstructorWithOptionalParameterProperty = ConstructorWithOptionalParameterProperty;
+}());exports.ConstructorWithOptionalParameterProperty = ConstructorWithOptionalParameterProperty;
 var ConstructorWithParameterInitializer = /** @class */ (function () {
-    function ConstructorWithParameterInitializer(x) {
-        if (x === void 0) { x = "hello"; }
+    function ConstructorWithParameterInitializer(x) {if (x === void 0) { x = "hello"; }
         this.x = x;
     }
     return ConstructorWithParameterInitializer;
-}());
-exports.ConstructorWithParameterInitializer = ConstructorWithParameterInitializer;
+}());exports.ConstructorWithParameterInitializer = ConstructorWithParameterInitializer;
 //// [declFileConstructors_1.js]
 var GlobalSimpleConstructor = /** @class */ (function () {
     /** This comment should appear for foo*/
@@ -172,16 +162,15 @@ var GlobalSimpleConstructor = /** @class */ (function () {
 }());
 var GlobalConstructorWithParameters = /** @class */ (function () {
     /** This is comment for function signature*/
-    function GlobalConstructorWithParameters(/** this is comment about a*/ a, 
-    /** this is comment for b*/
-    b) {
+    function GlobalConstructorWithParameters(/** this is comment about a*/ a,
+        /** this is comment for b*/
+        b) {
         var d = a;
     }
     return GlobalConstructorWithParameters;
 }());
 var GlobalConstructorWithRestParamters = /** @class */ (function () {
-    function GlobalConstructorWithRestParamters(a) {
-        var rests = [];
+    function GlobalConstructorWithRestParamters(a) {var rests = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rests[_i - 1] = arguments[_i];
         }
@@ -213,8 +202,7 @@ var GlobalConstructorWithOptionalParameterProperty = /** @class */ (function () 
     return GlobalConstructorWithOptionalParameterProperty;
 }());
 var GlobalConstructorWithParameterInitializer = /** @class */ (function () {
-    function GlobalConstructorWithParameterInitializer(x) {
-        if (x === void 0) { x = "hello"; }
+    function GlobalConstructorWithParameterInitializer(x) {if (x === void 0) { x = "hello"; }
         this.x = x;
     }
     return GlobalConstructorWithParameterInitializer;

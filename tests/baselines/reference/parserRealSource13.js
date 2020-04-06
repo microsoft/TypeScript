@@ -154,15 +154,22 @@ var TypeScript;
 (function (TypeScript) {
     var AstWalkerWithDetailCallback;
     (function (AstWalkerWithDetailCallback) {
+
         function walk(script, callback) {
             var pre = function (cur, parent) {
                 walker.options.goChildren = AstWalkerCallback(true, cur, callback);
                 return cur;
-            };
+            }
+
+            ;
+
             var post = function (cur, parent) {
                 AstWalkerCallback(false, cur, callback);
                 return cur;
-            };
+            }
+
+            ;
+
             var walker = TypeScript.getAstWalkerFactory().getWalker(pre, post);
             walker.walk(script, null);
         }
@@ -174,9 +181,11 @@ var TypeScript;
             if (callback[callbackString]) {
                 return callback[callbackString](pre, ast);
             }
+
             if (callback.DefaultCallback) {
                 return callback.DefaultCallback(pre, ast);
             }
+
             return true;
         }
     })(AstWalkerWithDetailCallback = TypeScript.AstWalkerWithDetailCallback || (TypeScript.AstWalkerWithDetailCallback = {}));

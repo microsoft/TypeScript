@@ -13,8 +13,7 @@ class C {
 var id;
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype[0 + 1] = function () { };
+    }C.prototype[0 + 1] = function () { };
     C[function () { }] = function () { };
     Object.defineProperty(C.prototype, delete id, {
         get: function () { },

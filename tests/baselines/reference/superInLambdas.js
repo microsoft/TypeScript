@@ -80,23 +80,23 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var User = /** @class */ (function () {
+})();var User = /** @class */ (function () {
     function User() {
         this.name = "Bob";
-    }
-    User.prototype.sayHello = function () {
+    }User.prototype.sayHello = function () {
         //console.log("Hello, " + this.name);
     };
     return User;
 }());
 var RegisteredUser = /** @class */ (function (_super) {
     __extends(RegisteredUser, _super);
+
     function RegisteredUser() {
         var _this = _super.call(this) || this;
         _this.name = "Frank";
         // super call in a constructor
         _super.prototype.sayHello.call(_this);
+
         // super call in a lambda in a constructor 
         var x = function () { return _super.prototype.sayHello.call(_this); };
         return _this;
@@ -105,6 +105,7 @@ var RegisteredUser = /** @class */ (function (_super) {
         var _this = this;
         // super call in a method
         _super.prototype.sayHello.call(this);
+
         // super call in a lambda in a method
         var x = function () { return _super.prototype.sayHello.call(_this); };
     };
@@ -112,6 +113,7 @@ var RegisteredUser = /** @class */ (function (_super) {
 }(User));
 var RegisteredUser2 = /** @class */ (function (_super) {
     __extends(RegisteredUser2, _super);
+
     function RegisteredUser2() {
         var _this = _super.call(this) || this;
         _this.name = "Joe";
@@ -128,6 +130,7 @@ var RegisteredUser2 = /** @class */ (function (_super) {
 }(User));
 var RegisteredUser3 = /** @class */ (function (_super) {
     __extends(RegisteredUser3, _super);
+
     function RegisteredUser3() {
         var _this = _super.call(this) || this;
         _this.name = "Sam";
@@ -143,6 +146,7 @@ var RegisteredUser3 = /** @class */ (function (_super) {
 }(User));
 var RegisteredUser4 = /** @class */ (function (_super) {
     __extends(RegisteredUser4, _super);
+
     function RegisteredUser4() {
         var _this = _super.call(this) || this;
         _this.name = "Mark";

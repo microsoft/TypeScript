@@ -34,6 +34,7 @@ var E;
 var a;
 var b;
 var c;
+
 // operator **
 var r1 = Math.pow(c, a);
 var r2 = Math.pow(c, b);

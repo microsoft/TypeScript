@@ -31,6 +31,5 @@ export class A
         B() {
             return 42;
         }
-    }
-    exports.A = A;
+    }exports.A = A;
 });

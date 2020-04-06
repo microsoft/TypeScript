@@ -123,8 +123,7 @@ define(["require", "exports"], function (require, exports) {
             (function (SubSubModule1) {
                 var ClassA = /** @class */ (function () {
                     function ClassA() {
-                    }
-                    ClassA.prototype.AisIn1_1_1 = function () {
+                    }ClassA.prototype.AisIn1_1_1 = function () {
                         // Try all qualified names of this type
                         var a1;
                         a1.AisIn1_1_1();
@@ -153,8 +152,7 @@ define(["require", "exports"], function (require, exports) {
                 SubSubModule1.ClassA = ClassA;
                 var ClassB = /** @class */ (function () {
                     function ClassB() {
-                    }
-                    ClassB.prototype.BisIn1_1_1 = function () {
+                    }ClassB.prototype.BisIn1_1_1 = function () {
                         /** Exactly the same as above in AisIn1_1_1 **/
                         // Try all qualified names of this type
                         var a1;
@@ -225,23 +223,17 @@ define(["require", "exports"], function (require, exports) {
             (function (SubSubModule2) {
                 // No code here since these are the mirror of the above calls
                 var ClassA = /** @class */ (function () {
-                    function ClassA() {
-                    }
-                    ClassA.prototype.AisIn1_2_2 = function () { };
+                    function ClassA() {}ClassA.prototype.AisIn1_2_2 = function () { };
                     return ClassA;
                 }());
                 SubSubModule2.ClassA = ClassA;
                 var ClassB = /** @class */ (function () {
-                    function ClassB() {
-                    }
-                    ClassB.prototype.BisIn1_2_2 = function () { };
+                    function ClassB() {}ClassB.prototype.BisIn1_2_2 = function () { };
                     return ClassB;
                 }());
                 SubSubModule2.ClassB = ClassB;
                 var ClassC = /** @class */ (function () {
-                    function ClassC() {
-                    }
-                    ClassC.prototype.CisIn1_2_2 = function () { };
+                    function ClassC() {}ClassC.prototype.CisIn1_2_2 = function () { };
                     return ClassC;
                 }());
                 SubSubModule2.ClassC = ClassC;
@@ -249,15 +241,13 @@ define(["require", "exports"], function (require, exports) {
         })(SubModule2 = TopLevelModule1.SubModule2 || (TopLevelModule1.SubModule2 = {}));
         var ClassA = /** @class */ (function () {
             function ClassA() {
-            }
-            ClassA.prototype.AisIn1 = function () { };
+            }ClassA.prototype.AisIn1 = function () { };
             return ClassA;
         }());
         var NotExportedModule;
         (function (NotExportedModule) {
             var ClassA = /** @class */ (function () {
-                function ClassA() {
-                }
+                function ClassA() {}
                 return ClassA;
             }());
             NotExportedModule.ClassA = ClassA;
@@ -269,8 +259,7 @@ define(["require", "exports"], function (require, exports) {
         (function (SubModule3) {
             var ClassA = /** @class */ (function () {
                 function ClassA() {
-                }
-                ClassA.prototype.AisIn2_3 = function () { };
+                }ClassA.prototype.AisIn2_3 = function () { };
                 return ClassA;
             }());
             SubModule3.ClassA = ClassA;

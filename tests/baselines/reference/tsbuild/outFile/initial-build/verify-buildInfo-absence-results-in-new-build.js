@@ -29,8 +29,10 @@ exitCode:: ExitStatus.Success
 ======================================================================
 File:: /src/first/bin/first-output.js
 ----------------------------------------------------------------------
-text: (0-110)
+text: (0-114)
+
 var s = "Hello, world";
+
 console.log(s);
 console.log(f());
 function f() {
@@ -58,10 +60,12 @@ declare function f(): string;
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-110):: ../../../first/bin/first-output.js texts:: 1
+prepend: (0-114):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-110)
+text: (0-114)
+
 var s = "Hello, world";
+
 console.log(s);
 console.log(f());
 function f() {
@@ -69,20 +73,20 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (110-395):: ../../../2/second-output.js texts:: 1
+prepend: (114-395):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (110-395)
+text: (114-395)
 var N;
 (function (N) {
     function f() {
         console.log('testing');
     }
+
     f();
 })(N || (N = {}));
 var C = (function () {
     function C() {
-    }
-    C.prototype.doSomething = function () {
+    }C.prototype.doSomething = function () {
         console.log("something got done");
     };
     return C;

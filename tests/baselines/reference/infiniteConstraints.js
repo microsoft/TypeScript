@@ -53,7 +53,19 @@ type Conv<T, U = T> =
 "use strict";
 // Both of the following types trigger the recursion limiter in getImmediateBaseConstraint
 exports.__esModule = true;
+
 var out = myBug({ obj1: { a: "test" } });
+
+
+
+
 var noError = ensureNoDuplicates({ main: value("test"), alternate: value("test2") });
+
 var shouldBeNoError = ensureNoDuplicates({ main: value("test") });
+
 var shouldBeError = ensureNoDuplicates({ main: value("dup"), alternate: value("dup") });
+
+
+
+
+

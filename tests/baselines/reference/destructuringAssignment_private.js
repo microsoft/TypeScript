@@ -26,7 +26,9 @@ var C = /** @class */ (function () {
 var x;
 (x = [{ a: new C() }][0].a.x);
 (x = new C().o[0].a);
+
 var nameX = "x";
 (_a = [{ a: new C() }], _b = nameX, x = _a[0].a[_b]);
+
 var nameO = "o";
 (_c = new C(), _d = nameO, x = _c[_d][0].a);

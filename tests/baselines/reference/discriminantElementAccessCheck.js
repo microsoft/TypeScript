@@ -53,9 +53,12 @@ function SwitchWithTemplate(val: U) {
 }
 
 //// [discriminantElementAccessCheck.js]
+
+
 function assertNever(x) {
     return x;
 }
+
 function IfWithString(val) {
     if (val['kind'] === 'B') {
         return val.b;
@@ -64,6 +67,7 @@ function IfWithString(val) {
         return val.a;
     }
 }
+
 function SwitchWithString(val) {
     switch (val['kind']) {
         case 'A':
@@ -74,6 +78,7 @@ function SwitchWithString(val) {
             return assertNever(val);
     }
 }
+
 function IfWithTemplate(val) {
     if (val["kind"] === 'B') {
         return val.b;
@@ -82,6 +87,7 @@ function IfWithTemplate(val) {
         return val.a;
     }
 }
+
 function SwitchWithTemplate(val) {
     switch (val["kind"]) {
         case 'A':

@@ -8,6 +8,7 @@ class C {
 }
 
 //// [indexSignatureWithAccessibilityModifier.js]
+
 var C = /** @class */ (function () {
     function C() {
     }

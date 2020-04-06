@@ -45,12 +45,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var React = require("react");
+
+
 var Button = /** @class */ (function (_super) {
-    __extends(Button, _super);
-    function Button() {
+    __extends(Button, _super);function Button() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Button.prototype.render = function () {
+    }Button.prototype.render = function () {
         return (<div>My Button</div>);
     };
     return Button;
@@ -58,9 +58,11 @@ var Button = /** @class */ (function (_super) {
 function AnotherButton(p) {
     return <h1>Just Another Button</h1>;
 }
+
 function Comp(p) {
     return <div>{p.b}</div>;
 }
+
 // Error: whitespaces matters
 var k1 = <Comp a={10} b="hi"><Button />  <AnotherButton /></Comp>;
 var k2 = <Comp a={10} b="hi"><Button />

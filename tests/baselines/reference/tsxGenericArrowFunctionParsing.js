@@ -28,7 +28,9 @@ x5.isElement;
 
 
 //// [file.jsx]
+
 var T, T1, T2;
+
 // This is an element
 var x1 = <T>() => </T>;
 x1.isElement;

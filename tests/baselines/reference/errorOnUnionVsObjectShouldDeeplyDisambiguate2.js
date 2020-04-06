@@ -30,6 +30,7 @@ function foo(): Stuff | Date {
 }
 
 //// [errorOnUnionVsObjectShouldDeeplyDisambiguate2.js]
+
 function foo() {
     return {
         a: function () { return [123]; },
@@ -42,6 +43,7 @@ function foo() {
         h: function () { return "hello"; },
         i: function () { return "hello"; },
         j: function () { return "hello"; },
-        k: function () { return 123; }
+        k: function () { return 123;
+        }
     };
 }

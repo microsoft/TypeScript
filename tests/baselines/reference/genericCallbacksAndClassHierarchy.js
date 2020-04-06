@@ -52,8 +52,7 @@ var M;
     }());
     M.A = A;
     var B = /** @class */ (function (_super) {
-        __extends(B, _super);
-        function B() {
+        __extends(B, _super);function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
@@ -61,9 +60,9 @@ var M;
     M.B = B;
     var D = /** @class */ (function () {
         function D() {
-        }
-        D.prototype._subscribe = function (viewModel) {
+        }D.prototype._subscribe = function (viewModel) {
             var f = function (newValue) { };
+
             var v = viewModel.value;
             // both of these should work
             v.subscribe(f);

@@ -82,67 +82,59 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.fooWithTypeTypePredicateAndRestParam = exports.fooWithTypeTypePredicateAndGeneric = exports.fooWithTypePredicateAndMulitpleParams = exports.fooWithTypePredicate = exports.fooWithSingleOverload = exports.fooWithOverloads = exports.fooWithRestParameters = exports.fooWithParameters = exports.foo = void 0;
 /** This comment should appear for foo*/
 function foo() {
-}
-exports.foo = foo;
+}/** This comment should appear for foo*/ exports.foo = foo;
 /** This is comment for function signature*/
-function fooWithParameters(/** this is comment about a*/ a, 
-/** this is comment for b*/
-b) {
+function fooWithParameters(/** this is comment about a*/ a,
+    /** this is comment for b*/
+    b) {
     var d = a;
-}
-exports.fooWithParameters = fooWithParameters;
-function fooWithRestParameters(a) {
-    var rests = [];
+}exports.fooWithParameters = fooWithParameters;
+function fooWithRestParameters(a) {var rests = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         rests[_i - 1] = arguments[_i];
     }
     return a + rests.join("");
-}
-exports.fooWithRestParameters = fooWithRestParameters;
+}exports.fooWithRestParameters = fooWithRestParameters;
+
 function fooWithOverloads(a) {
     return a;
-}
-exports.fooWithOverloads = fooWithOverloads;
+}exports.fooWithOverloads = fooWithOverloads;
+
 function fooWithSingleOverload(a) {
     return a;
-}
-exports.fooWithSingleOverload = fooWithSingleOverload;
+}exports.fooWithSingleOverload = fooWithSingleOverload;
+
 function fooWithTypePredicate(a) {
     return true;
-}
-exports.fooWithTypePredicate = fooWithTypePredicate;
+}exports.fooWithTypePredicate = fooWithTypePredicate;
 function fooWithTypePredicateAndMulitpleParams(a, b, c) {
     return true;
-}
-exports.fooWithTypePredicateAndMulitpleParams = fooWithTypePredicateAndMulitpleParams;
+}exports.fooWithTypePredicateAndMulitpleParams = fooWithTypePredicateAndMulitpleParams;
 function fooWithTypeTypePredicateAndGeneric(a) {
     return true;
-}
-exports.fooWithTypeTypePredicateAndGeneric = fooWithTypeTypePredicateAndGeneric;
-function fooWithTypeTypePredicateAndRestParam(a) {
-    var rest = [];
+}exports.fooWithTypeTypePredicateAndGeneric = fooWithTypeTypePredicateAndGeneric;
+function fooWithTypeTypePredicateAndRestParam(a) {var rest = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         rest[_i - 1] = arguments[_i];
     }
     return true;
-}
-exports.fooWithTypeTypePredicateAndRestParam = fooWithTypeTypePredicateAndRestParam;
+}exports.fooWithTypeTypePredicateAndRestParam = fooWithTypeTypePredicateAndRestParam;
 /** This comment should appear for nonExportedFoo*/
 function nonExportedFoo() {
 }
 /** This is comment for function signature*/
-function nonExportedFooWithParameters(/** this is comment about a*/ a, 
-/** this is comment for b*/
-b) {
+function nonExportedFooWithParameters(/** this is comment about a*/ a,
+    /** this is comment for b*/
+    b) {
     var d = a;
 }
-function nonExportedFooWithRestParameters(a) {
-    var rests = [];
+function nonExportedFooWithRestParameters(a) {var rests = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         rests[_i - 1] = arguments[_i];
     }
     return a + rests.join("");
 }
+
 function nonExportedFooWithOverloads(a) {
     return a;
 }
@@ -151,13 +143,12 @@ function nonExportedFooWithOverloads(a) {
 function globalfoo() {
 }
 /** This is comment for function signature*/
-function globalfooWithParameters(/** this is comment about a*/ a, 
-/** this is comment for b*/
-b) {
+function globalfooWithParameters(/** this is comment about a*/ a,
+    /** this is comment for b*/
+    b) {
     var d = a;
 }
-function globalfooWithRestParameters(a) {
-    var rests = [];
+function globalfooWithRestParameters(a) {var rests = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         rests[_i - 1] = arguments[_i];
     }

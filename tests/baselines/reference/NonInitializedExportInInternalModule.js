@@ -40,9 +40,13 @@ var Inner;
     var ;
     let;
     var ;
+
+
+
+
+
     var A = /** @class */ (function () {
-        function A() {
-        }
+        function A() {}
         return A;
     }());
     var B;
@@ -59,8 +63,7 @@ var Inner;
     Inner.c1 = 'a';
     Inner.d1 = 1;
     var D = /** @class */ (function () {
-        function D() {
-        }
+        function D() {}
         return D;
     }());
     Inner.e1 = new D;

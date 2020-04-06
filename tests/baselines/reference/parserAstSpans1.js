@@ -235,14 +235,22 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var c1 = /** @class */ (function () {
     function c1() {
-    }
-    c1.prototype.i1_f1 = function () {
+    }c1.prototype.i1_f1 = function () {
     };
+
+
     c1.prototype.i1_nc_f1 = function () {
     };
+
+
+
     /** c1_f1*/
     c1.prototype.f1 = function () {
     };
+
+
+
+
     /** c1_nc_f1*/
     c1.prototype.nc_f1 = function () {
     };
@@ -330,6 +338,8 @@ var c3 = /** @class */ (function (_super) {
         _this.p1 = _super.prototype.c2_p1;
         return _this;
     }
+
+
     /** c3 f1*/
     c3.prototype.f1 = function () {
     };
@@ -369,13 +379,13 @@ c2_i.c2_nc_f1();
 c2_i.f1();
 c2_i.nc_f1();
 var c4 = /** @class */ (function (_super) {
-    __extends(c4, _super);
-    function c4() {
+    __extends(c4, _super);function c4() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return c4;
 }(c2));
 var c4_i = new c4(10);
+
 var i2_i;
 var i3_i;
 i2_i.i2_f1();
@@ -412,6 +422,7 @@ var c5 = /** @class */ (function () {
 }());
 var c6 = /** @class */ (function (_super) {
     __extends(c6, _super);
+
     function c6() {
         var _this = _super.call(this) || this;
         _this.d = _super.prototype.b;

@@ -13,3 +13,4 @@ declare module "m2" {
 }
 
 //// [exportSpecifierAndLocalMemberDeclaration.js]
+

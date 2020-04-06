@@ -40,8 +40,7 @@ function foo():string { return "a" };
 //// [overloadAssignmentCompat.js]
 // ok - overload signatures are assignment compatible with their implementation
 var Accessor = /** @class */ (function () {
-    function Accessor() {
-    }
+    function Accessor() {}
     return Accessor;
 }());
 function attr(nameOrMap, value) {
@@ -54,6 +53,7 @@ function attr(nameOrMap, value) {
         return "s";
     }
 }
+
 function attr2(nameOrMap, value) {
     if (nameOrMap && typeof nameOrMap === "object") {
         // handle map case
@@ -64,5 +64,6 @@ function attr2(nameOrMap, value) {
         return "s";
     }
 }
+
 function foo() { return "a"; }
 ;

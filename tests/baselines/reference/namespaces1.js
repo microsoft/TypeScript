@@ -10,5 +10,6 @@ var x: X.Y.Z;
 var x2: X.Y;
 
 //// [namespaces1.js]
+
 var x;
 var x2;

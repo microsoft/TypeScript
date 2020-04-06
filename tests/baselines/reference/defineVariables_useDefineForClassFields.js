@@ -4,6 +4,8 @@ const b = () => null
 a()
 
 //// [defineVariables_useDefineForClassFields.js]
-const a = () => b();
-const b = () => null;
+const a = () => b()
+;
+const b = () => null
+;
 a();

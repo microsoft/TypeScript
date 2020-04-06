@@ -14,4 +14,6 @@ export {};
 //// [comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.js]
 "use strict";
 exports.__esModule = true;
+
 var x = null;
+

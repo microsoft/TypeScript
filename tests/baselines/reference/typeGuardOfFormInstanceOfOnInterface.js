@@ -44,9 +44,11 @@ var r2: D1 | C2 = c2Ord1 instanceof c1 && c2Ord1; // C2 | D1
 //  - when true, narrows the type of x to the type of the 'prototype' property in C provided 
 //    it is a subtype of the type of x, or
 //  - when false, has no effect on the type of x.
+
 var str;
 var num;
 var strOrNum;
+
 var c1;
 var c2;
 var d1;

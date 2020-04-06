@@ -26,6 +26,8 @@ var Foo = /** @class */ (function () {
     return Foo;
 }());
 var f = new Foo();
+
+
 var Foo2 = /** @class */ (function () {
     function Foo2() {
         this.x = 1;
@@ -33,3 +35,6 @@ var Foo2 = /** @class */ (function () {
     return Foo2;
 }());
 var f2 = new Foo2();
+
+
+

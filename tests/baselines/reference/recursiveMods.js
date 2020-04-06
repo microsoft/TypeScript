@@ -30,25 +30,26 @@ exports.Foo = void 0;
 var Foo;
 (function (Foo) {
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         return C;
     }());
     Foo.C = C;
 })(Foo = exports.Foo || (exports.Foo = {}));
 (function (Foo) {
+
     function Bar() {
-        if (true) {
-            return Bar();
-        }
+        if (true) {return Bar();}
         return new Foo.C();
     }
+
     function Baz() {
         var c = Baz();
         return Bar();
     }
+
     function Gar() {
         var c = Baz();
         return;
     }
+
 })(Foo = exports.Foo || (exports.Foo = {}));

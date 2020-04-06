@@ -51,6 +51,7 @@ module clodule4 {
 
 //// [ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.js]
 // all expected to be errors
+
 var clodule1 = /** @class */ (function () {
     function clodule1() {
     }
@@ -66,6 +67,7 @@ var clodule2 = /** @class */ (function () {
 }());
 (function (clodule2) {
     var x;
+
     var D = /** @class */ (function () {
         function D() {
         }

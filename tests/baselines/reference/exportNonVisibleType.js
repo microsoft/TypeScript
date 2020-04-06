@@ -37,10 +37,13 @@ export = C1; // Should work, private type I1 of visible class C1 only used in pr
 
 //// [foo1.js]
 "use strict";
+
 var x = { a: "test", b: 42 };
 module.exports = x;
+
 //// [foo2.js]
 "use strict";
+
 var C1 = /** @class */ (function () {
     function C1() {
     }
@@ -49,6 +52,7 @@ var C1 = /** @class */ (function () {
 module.exports = C1;
 //// [foo3.js]
 "use strict";
+
 var C1 = /** @class */ (function () {
     function C1() {
     }

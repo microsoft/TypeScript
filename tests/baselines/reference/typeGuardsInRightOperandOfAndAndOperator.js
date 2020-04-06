@@ -87,6 +87,7 @@ function foo7(x) {
             && (typeof x === "number"
                 // change value of x
                 ? ((x = 10) && x.toString()) // x is number
+
                 // do not change value
                 : ((y = x) && x.toString()))); // x is boolean
 }

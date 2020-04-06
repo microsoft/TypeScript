@@ -54,8 +54,7 @@ System.register(["./foo"], function (exports_1, context_1) {
         ],
         execute: function () {
             Bar = /** @class */ (function (_super) {
-                __extends(Bar, _super);
-                function Bar() {
+                __extends(Bar, _super);function Bar() {
                     return _super !== null && _super.apply(this, arguments) || this;
                 }
                 return Bar;

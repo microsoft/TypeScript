@@ -14,8 +14,7 @@ export default a.D;
 exports.__esModule = true;
 exports.D = void 0;
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 exports.D = C;

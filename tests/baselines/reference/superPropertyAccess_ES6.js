@@ -36,16 +36,19 @@ class MyBase {
 class MyDerived extends MyBase {
     constructor() {
         super();
+
         const f1 = super.getValue();
         const f2 = super.value;
     }
 }
+
 var d = new MyDerived();
 var f3 = d.value;
 class A {
     get property() { return this._property; }
     set property(value) { this._property = value; }
 }
+
 class B extends A {
     set property(value) {
         super.property = value + " addition";

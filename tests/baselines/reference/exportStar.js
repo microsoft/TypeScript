@@ -39,17 +39,17 @@ exports.y = 2;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = void 0;
 exports.default = "hello";
-function foo() { }
-exports.foo = foo;
+function foo() { }exports.foo = foo;
 //// [t3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.z = exports.y = exports.x = void 0;
 var x = "x";
-exports.x = x;
-var y = "y";
-exports.y = y;
-var z = "z";
+
+
+exports.x = x;var y = "y";
+
+exports.y = y;var z = "z";
 exports.z = z;
 //// [t4.js]
 "use strict";

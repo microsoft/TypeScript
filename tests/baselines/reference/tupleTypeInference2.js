@@ -29,7 +29,17 @@ h2([[]] as [void[]]); // T: void
 // Repro from #22564
 f([undefined, '']); // T: never
 f([undefined, '']); // T: void
+
+
+
+
 g([[]]); // U: {}
+
+
 h([[]]); // U: {}
+
+
+
+
 h2([[]]); // T: never
 h2([[]]); // T: void

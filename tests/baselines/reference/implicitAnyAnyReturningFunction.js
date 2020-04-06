@@ -24,16 +24,18 @@ class C {
 function A() {
     return "";
 }
+
 function B() {
     var someLocal = {};
     return someLocal;
 }
+
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.A = function () {
+    }C.prototype.A = function () {
         return "";
     };
+
     C.prototype.B = function () {
         var someLocal = {};
         return someLocal;

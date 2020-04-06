@@ -29,15 +29,18 @@ class Bar<T extends string> {
 //// [variance.js]
 "use strict";
 // Test cases for parameter variances affected by conditional types.
+
 var foo = { prop: true };
 var x = foo;
 var y = foo;
 var z = x;
+
+
 // Repro from #30118
 var Bar = /** @class */ (function () {
     function Bar() {
-    }
-    Bar.prototype.cast = function (_name) { };
+    }Bar.prototype.cast = function (_name) { };
+
     Bar.prototype.pushThis = function () {
         Bar.instance.push(this);
     };

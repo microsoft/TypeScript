@@ -16,6 +16,7 @@ declare module "foo" {
 //// [es5ExportDefaultClassDeclaration4.js]
 
 
+
 //// [es5ExportDefaultClassDeclaration4.d.ts]
 declare module "foo" {
     var before: C;

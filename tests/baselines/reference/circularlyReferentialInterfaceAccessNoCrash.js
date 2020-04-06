@@ -12,3 +12,5 @@ type TupleElem = [['list', TupleElem[0][0]]];
 
 
 //// [circularlyReferentialInterfaceAccessNoCrash.js]
+
+

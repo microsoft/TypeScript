@@ -8,6 +8,7 @@ for (var key in a) {
 
 //// [nonPrimitiveIndexingWithForInSupressError.js]
 var a;
+
 for (var key in a) {
     var value = a[key];
 }

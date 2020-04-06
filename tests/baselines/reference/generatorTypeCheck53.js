@@ -7,10 +7,8 @@ function* g() {
 }
 
 //// [generatorTypeCheck53.js]
-class Foo {
-}
-class Baz {
-}
+class Foo {}
+class Baz {}
 function* g() {
     yield new Foo;
     yield* [new Baz];

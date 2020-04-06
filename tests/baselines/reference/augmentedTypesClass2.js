@@ -35,18 +35,17 @@ class c44 {
 // class then interface
 var c11 = /** @class */ (function () {
     function c11() {
-    }
-    c11.prototype.foo = function () {
+    }c11.prototype.foo = function () {
         return 1;
     };
     return c11;
 }());
+
 // class then class - covered
 // class then enum 
 var c33 = /** @class */ (function () {
     function c33() {
-    }
-    c33.prototype.foo = function () {
+    }c33.prototype.foo = function () {
         return 1;
     };
     return c33;
@@ -58,8 +57,7 @@ var c33 = /** @class */ (function () {
 // class then import
 var c44 = /** @class */ (function () {
     function c44() {
-    }
-    c44.prototype.foo = function () {
+    }c44.prototype.foo = function () {
         return 1;
     };
     return c44;

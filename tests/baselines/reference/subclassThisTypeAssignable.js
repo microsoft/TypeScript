@@ -31,10 +31,13 @@ const test9 = new C();
 
 
 //// [tile1.js]
+
+
+
+
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.view = function (v) { return 0; };
+    }C.prototype.view = function (v) { return 0; };
     return C;
 }());
 var test8 = new C();

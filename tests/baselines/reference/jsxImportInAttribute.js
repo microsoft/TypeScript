@@ -18,5 +18,6 @@ let x = Test; // emit test_1.default
 exports.__esModule = true;
 /// <reference path="component.d.ts" />
 var Test_1 = require("Test");
+
 var x = Test_1["default"]; // emit test_1.default
 <anything attr={Test_1["default"]}/>; // ?

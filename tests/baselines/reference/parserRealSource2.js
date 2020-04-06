@@ -277,6 +277,7 @@ module TypeScript {
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
+
     function hasFlag(val, flag) {
         return (val & flag) != 0;
     }
@@ -288,6 +289,8 @@ var TypeScript;
         ErrorRecoverySet[ErrorRecoverySet["SColon"] = 2] = "SColon";
         ErrorRecoverySet[ErrorRecoverySet["Asg"] = 4] = "Asg";
         ErrorRecoverySet[ErrorRecoverySet["BinOp"] = 8] = "BinOp";
+
+
         // AsgMod, AsgAdd, AsgSub, AsgLsh, AsgRsh, AsgRs2, AsgAnd, AsgXor, AsgOr, QMark, Mult, Div, 
         // Pct, GT, LT, And, Xor, Or
         ErrorRecoverySet[ErrorRecoverySet["RBrack"] = 16] = "RBrack";
@@ -316,6 +319,8 @@ var TypeScript;
         ErrorRecoverySet[ErrorRecoverySet["RLit"] = 134217728] = "RLit";
         ErrorRecoverySet[ErrorRecoverySet["Func"] = 268435456] = "Func";
         ErrorRecoverySet[ErrorRecoverySet["EOF"] = 536870912] = "EOF";
+
+
         // REVIEW: Name this something clearer.
         ErrorRecoverySet[ErrorRecoverySet["TypeScriptS"] = 1073741824] = "TypeScriptS";
         ErrorRecoverySet[ErrorRecoverySet["ExprStart"] = 520158210] = "ExprStart";
@@ -330,6 +335,7 @@ var TypeScript;
         AllowedElements[AllowedElements["InterfaceDeclarations"] = 16] = "InterfaceDeclarations";
         AllowedElements[AllowedElements["AmbientDeclarations"] = 1024] = "AmbientDeclarations";
         AllowedElements[AllowedElements["Properties"] = 2048] = "Properties";
+
         AllowedElements[AllowedElements["Global"] = 1052] = "Global";
         AllowedElements[AllowedElements["QuickParse"] = 3100] = "QuickParse";
     })(AllowedElements = TypeScript.AllowedElements || (TypeScript.AllowedElements = {}));
@@ -511,8 +517,11 @@ var TypeScript;
     // Compiler defaults to generating ES5-compliant code for
     //  - getters and setters
     TypeScript.codeGenTarget = CodeGenTarget.ES3;
+
     TypeScript.moduleGenTarget = ModuleGenTarget.Synchronous;
+
     TypeScript.optimizeModuleCodeGen = true;
+
     function flagsToString(e, flags) {
         var builder = "";
         for (var i = 1; i < (1 << 31); i = i << 1) {

@@ -96,40 +96,49 @@ const t2 = testSet.transform(
 
 
 //// [inferFromGenericFunctionReturnTypes2.js]
+
+
+
+
+
 var f1 = function (s) { return s.length; };
 var f2 = wrap(function (s) { return s.length; });
 var f3 = arrayize(wrap(function (s) { return s.length; }));
 var f4 = combine(wrap(function (s) { return s.length; }), wrap(function (n) { return n >= 10; }));
+
 foo(wrap(function (s) { return s.length; }));
+
 var a1 = ["a", "b"].map(function (s) { return s.length; });
 var a2 = ["a", "b"].map(wrap(function (s) { return s.length; }));
 var a3 = ["a", "b"].map(wrap(arrayize(function (s) { return s.length; })));
 var a4 = ["a", "b"].map(combine(wrap(function (s) { return s.length; }), wrap(function (n) { return n > 10; })));
 var a5 = ["a", "b"].map(combine(identity, wrap(function (s) { return s.length; })));
 var a6 = ["a", "b"].map(combine(wrap(function (s) { return s.length; }), identity));
+
 // This is a contrived class. We could do the same thing with Observables, etc.
 var SetOf = /** @class */ (function () {
     function SetOf() {
-    }
-    SetOf.prototype.add = function (a) {
+    }SetOf.prototype.add = function (a) {
         this._store.push(a);
     };
+
     SetOf.prototype.transform = function (transformer) {
         return transformer(this);
     };
+
     SetOf.prototype.forEach = function (fn) {
         this._store.forEach(function (a, i) { return fn(a, i); });
     };
     return SetOf;
 }());
 /* ... etc ... */
-function compose() {
-    var fns = [];
+function compose() {var fns = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         fns[_i] = arguments[_i];
     }
     return function (x) { return fns.reduce(function (prev, fn) { return fn(prev); }, x); };
 }
+
 function map(fn) {
     return function (a) {
         var b = new SetOf();
@@ -137,6 +146,7 @@ function map(fn) {
         return b;
     };
 }
+
 function filter(predicate) {
     return function (a) {
         var result = new SetOf();
@@ -147,9 +157,27 @@ function filter(predicate) {
         return result;
     };
 }
+
 var testSet = new SetOf();
 testSet.add(1);
 testSet.add(2);
 testSet.add(3);
-var t1 = testSet.transform(compose(filter(function (x) { return x % 1 === 0; }), map(function (x) { return x + x; }), map(function (x) { return x + '!!!'; }), map(function (x) { return x.toUpperCase(); })));
-var t2 = testSet.transform(compose(filter(function (x) { return x % 1 === 0; }), identity, map(function (x) { return x + '!!!'; }), map(function (x) { return x.toUpperCase(); })));
+var t1 = testSet.transform(
+compose(
+filter(function (x) { return x % 1 === 0; }),
+    map(function (x) { return x + x; }),
+    map(function (x) { return x + '!!!'; }),
+    map(function (x) { return x.toUpperCase(); })
+)
+)
+
+;
+
+
+var t2 = testSet.transform(
+compose(
+filter(function (x) { return x % 1 === 0; }), identity, map(function (x) { return x + '!!!'; }),
+    map(function (x) { return x.toUpperCase(); })
+)
+)
+;

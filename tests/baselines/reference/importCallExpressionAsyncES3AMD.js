@@ -82,12 +82,11 @@ define(["require", "exports"], function (require, exports) {
                 }
             });
         });
-    }
-    exports.fn = fn;
+    }exports.fn = fn;
+
     var cl1 = /** @class */ (function () {
         function cl1() {
-        }
-        cl1.prototype.m = function () {
+        }cl1.prototype.m = function () {
             return __awaiter(this, void 0, void 0, function () {
                 var req;
                 return __generator(this, function (_a) {
@@ -102,8 +101,7 @@ define(["require", "exports"], function (require, exports) {
             });
         };
         return cl1;
-    }());
-    exports.cl1 = cl1;
+    }());exports.cl1 = cl1;
     exports.obj = {
         m: function () { return __awaiter(void 0, void 0, void 0, function () {
             var req;
@@ -118,6 +116,7 @@ define(["require", "exports"], function (require, exports) {
             });
         }); }
     };
+
     var cl2 = /** @class */ (function () {
         function cl2() {
             var _this = this;
@@ -137,8 +136,7 @@ define(["require", "exports"], function (require, exports) {
             };
         }
         return cl2;
-    }());
-    exports.cl2 = cl2;
+    }());exports.cl2 = cl2;
     exports.l = function () { return __awaiter(void 0, void 0, void 0, function () {
         var req;
         return __generator(this, function (_a) {

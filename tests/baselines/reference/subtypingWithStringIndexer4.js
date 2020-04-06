@@ -42,14 +42,15 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
+
 var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
+    __extends(B, _super);function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
@@ -62,15 +63,13 @@ var Generics;
         return A;
     }());
     var B = /** @class */ (function (_super) {
-        __extends(B, _super);
-        function B() {
+        __extends(B, _super);function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
     }(A));
     var B3 = /** @class */ (function (_super) {
-        __extends(B3, _super);
-        function B3() {
+        __extends(B3, _super);function B3() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B3;

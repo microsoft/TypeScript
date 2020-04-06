@@ -44,16 +44,14 @@ module M {
 var M;
 (function (M) {
     var Foo = /** @class */ (function () {
-        function Foo() {
-        }
+        function Foo() {}
         return Foo;
     }());
     M.Foo = Foo;
     var S;
     (function (S) {
         var Bar = /** @class */ (function () {
-            function Bar() {
-            }
+            function Bar() {}
             return Bar;
         }());
         S.Bar = Bar;
@@ -68,6 +66,7 @@ var M;
     (function (S) {
         // Emit M.Foo
         M.Foo, <M.Foo />;
+
         // Emit S.Bar
         S.Bar, <S.Bar />;
     })(S = M.S || (M.S = {}));

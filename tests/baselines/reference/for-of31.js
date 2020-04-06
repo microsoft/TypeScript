@@ -22,8 +22,10 @@ class StringIterator {
             value: ""
         };
     }
+
     [Symbol.iterator]() {
         return this;
     }
 }
+
 for (var v of new StringIterator) { }

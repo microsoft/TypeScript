@@ -15,5 +15,8 @@ var _a;
 var x = (_a = {},
     _a[x] = string,
     _a.string = string,
-    _a);
+    _a)
+
+;
+
 var y;

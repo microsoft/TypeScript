@@ -11,10 +11,10 @@ export function foo () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = exports.test = void 0;
 exports.test = "test";
+
 function foo() {
     const x = { test: exports.test };
-}
-exports.foo = foo;
+}exports.foo = foo;
 
 
 //// [shorthandOfExportedEntity01_targetES2015_CommonJS.d.ts]

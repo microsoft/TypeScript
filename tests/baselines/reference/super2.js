@@ -67,31 +67,27 @@ var __extends = (this && this.__extends) || (function () {
 // Case 5
 var Base5 = /** @class */ (function () {
     function Base5() {
-    }
-    Base5.prototype.x = function () {
+    }Base5.prototype.x = function () {
         return "BaseX";
     };
+
     Base5.prototype.y = function () {
         return "BaseY";
     };
     return Base5;
 }());
 var Sub5 = /** @class */ (function (_super) {
-    __extends(Sub5, _super);
-    function Sub5() {
+    __extends(Sub5, _super);function Sub5() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Sub5.prototype.x = function () {
+    }Sub5.prototype.x = function () {
         return "SubX";
     };
     return Sub5;
 }(Base5));
 var SubSub5 = /** @class */ (function (_super) {
-    __extends(SubSub5, _super);
-    function SubSub5() {
+    __extends(SubSub5, _super);function SubSub5() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    SubSub5.prototype.x = function () {
+    }SubSub5.prototype.x = function () {
         return _super.prototype.x.call(this);
     };
     SubSub5.prototype.y = function () {
@@ -102,28 +98,23 @@ var SubSub5 = /** @class */ (function (_super) {
 // Case 6
 var Base6 = /** @class */ (function () {
     function Base6() {
-    }
-    Base6.prototype.x = function () {
+    }Base6.prototype.x = function () {
         return "BaseX";
     };
     return Base6;
 }());
 var Sub6 = /** @class */ (function (_super) {
-    __extends(Sub6, _super);
-    function Sub6() {
+    __extends(Sub6, _super);function Sub6() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Sub6.prototype.y = function () {
+    }Sub6.prototype.y = function () {
         return "SubY";
     };
     return Sub6;
 }(Base6));
 var SubSub6 = /** @class */ (function (_super) {
-    __extends(SubSub6, _super);
-    function SubSub6() {
+    __extends(SubSub6, _super);function SubSub6() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    SubSub6.prototype.y = function () {
+    }SubSub6.prototype.y = function () {
         return _super.prototype.y.call(this);
     };
     return SubSub6;

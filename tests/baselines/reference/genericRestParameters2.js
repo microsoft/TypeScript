@@ -88,6 +88,9 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
+
+
+
 f10(42, "hello");
 f10(42, "hello", true);
 f10(42, "hello", true, false);
@@ -124,10 +127,13 @@ f13.apply(void 0, __spreadArrays([42], t2));
 f13.apply(void 0, __spreadArrays([42, "hello"], t3));
 f13.apply(void 0, __spreadArrays([42, "hello", true], t4));
 f13.apply(void 0, __spreadArrays([42, "hello", true], t4, [false], t3));
+
+
 f20.apply(void 0, t1);
 f20.apply(void 0, __spreadArrays([42], t2));
 f20.apply(void 0, __spreadArrays([42, "hello"], t3));
 f20.apply(void 0, __spreadArrays([42, "hello"], t2, [true]));
+
 
 
 //// [genericRestParameters2.d.ts]

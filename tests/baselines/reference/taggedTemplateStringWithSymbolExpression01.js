@@ -13,5 +13,7 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
 };
+
 var x;
+
 var result = foo(__makeTemplateObject(["", ""], ["", ""]), x);

@@ -104,27 +104,29 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;
-function f(x, y) {
-    var z = [];
+function f(x, y) {var z = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         z[_i - 2] = arguments[_i];
     }
 }
-function f2() {
-    var x = [];
+
+function f2() {var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
     }
 }
+
+
 var B = /** @class */ (function () {
-    function B(x, y) {
-        var z = [];
+    function B(x, y) {var z = [];
         for (var _i = 2; _i < arguments.length; _i++) {
             z[_i - 2] = arguments[_i];
         }
     }
     return B;
 }());
+
+
 var a;
 var b;
 var c;
@@ -137,6 +139,7 @@ var i;
 new f(1, 2, "string");
 new (f.bind.apply(f, __spreadArrays([void 0, 1, 2], a)))();
 new (f.bind.apply(f, __spreadArrays([void 0, 1, 2], a, ["string"])))();
+
 // Multiple spreads arguments
 new (f2.bind.apply(f2, __spreadArrays([void 0], a, a)))();
 new (f.bind.apply(f, __spreadArrays([void 0, 1, 2], a, a)))();

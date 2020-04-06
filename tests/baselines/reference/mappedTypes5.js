@@ -81,12 +81,42 @@ function f(p, r, pr, rp) {
     var d3 = pr;
     var d4 = rp;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function doit() {
     var previous = Object.create(null);
     var current = Object.create(null);
     var args1 = { previous: previous, current: current };
     var args2 = { previous: previous, current: current };
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 function doit2() {
     var previous = Object.create(null);
     var current = Object.create(null);

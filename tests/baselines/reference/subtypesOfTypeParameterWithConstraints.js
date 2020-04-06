@@ -182,35 +182,32 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var C3 = /** @class */ (function () {
     function C3() {
     }
     return C3;
 }());
 var D1 = /** @class */ (function (_super) {
-    __extends(D1, _super);
-    function D1() {
+    __extends(D1, _super);function D1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D1;
 }(C3));
 var D2 = /** @class */ (function (_super) {
-    __extends(D2, _super);
-    function D2() {
+    __extends(D2, _super);function D2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D2;
 }(C3));
 var D3 = /** @class */ (function (_super) {
-    __extends(D3, _super);
-    function D3() {
+    __extends(D3, _super);function D3() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D3;
 }(C3));
 var D4 = /** @class */ (function (_super) {
-    __extends(D4, _super);
-    function D4() {
+    __extends(D4, _super);function D4() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D4;
@@ -219,22 +216,19 @@ var D4 = /** @class */ (function (_super) {
 // test if T is subtype of T, U, V
 // should all work
 var D5 = /** @class */ (function (_super) {
-    __extends(D5, _super);
-    function D5() {
+    __extends(D5, _super);function D5() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D5;
 }(C3));
 var D6 = /** @class */ (function (_super) {
-    __extends(D6, _super);
-    function D6() {
+    __extends(D6, _super);function D6() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D6;
 }(C3));
 var D7 = /** @class */ (function (_super) {
-    __extends(D7, _super);
-    function D7() {
+    __extends(D7, _super);function D7() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D7;
@@ -242,22 +236,19 @@ var D7 = /** @class */ (function (_super) {
 // test if U is a subtype of T, U, V
 // only a subtype of V and itself
 var D8 = /** @class */ (function (_super) {
-    __extends(D8, _super);
-    function D8() {
+    __extends(D8, _super);function D8() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D8;
 }(C3));
 var D9 = /** @class */ (function (_super) {
-    __extends(D9, _super);
-    function D9() {
+    __extends(D9, _super);function D9() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D9;
 }(C3));
 var D10 = /** @class */ (function (_super) {
-    __extends(D10, _super);
-    function D10() {
+    __extends(D10, _super);function D10() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D10;
@@ -265,22 +256,19 @@ var D10 = /** @class */ (function (_super) {
 // test if V is a subtype of T, U, V
 // only a subtype of itself
 var D11 = /** @class */ (function (_super) {
-    __extends(D11, _super);
-    function D11() {
+    __extends(D11, _super);function D11() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D11;
 }(C3));
 var D12 = /** @class */ (function (_super) {
-    __extends(D12, _super);
-    function D12() {
+    __extends(D12, _super);function D12() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D12;
 }(C3));
 var D13 = /** @class */ (function (_super) {
-    __extends(D13, _super);
-    function D13() {
+    __extends(D13, _super);function D13() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D13;
@@ -289,29 +277,25 @@ var D13 = /** @class */ (function (_super) {
 // test if T is subtype of T, U, V, Date
 // should all work
 var D14 = /** @class */ (function (_super) {
-    __extends(D14, _super);
-    function D14() {
+    __extends(D14, _super);function D14() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D14;
 }(C3));
 var D15 = /** @class */ (function (_super) {
-    __extends(D15, _super);
-    function D15() {
+    __extends(D15, _super);function D15() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D15;
 }(C3));
 var D16 = /** @class */ (function (_super) {
-    __extends(D16, _super);
-    function D16() {
+    __extends(D16, _super);function D16() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D16;
 }(C3));
 var D17 = /** @class */ (function (_super) {
-    __extends(D17, _super);
-    function D17() {
+    __extends(D17, _super);function D17() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D17;
@@ -319,29 +303,25 @@ var D17 = /** @class */ (function (_super) {
 // test if U is a subtype of T, U, V, Date
 // only a subtype of V, Date and itself
 var D18 = /** @class */ (function (_super) {
-    __extends(D18, _super);
-    function D18() {
+    __extends(D18, _super);function D18() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D18;
 }(C3));
 var D19 = /** @class */ (function (_super) {
-    __extends(D19, _super);
-    function D19() {
+    __extends(D19, _super);function D19() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D19;
 }(C3));
 var D20 = /** @class */ (function (_super) {
-    __extends(D20, _super);
-    function D20() {
+    __extends(D20, _super);function D20() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D20;
 }(C3));
 var D21 = /** @class */ (function (_super) {
-    __extends(D21, _super);
-    function D21() {
+    __extends(D21, _super);function D21() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D21;
@@ -349,29 +329,25 @@ var D21 = /** @class */ (function (_super) {
 // test if V is a subtype of T, U, V, Date
 // only a subtype of itself and Date
 var D22 = /** @class */ (function (_super) {
-    __extends(D22, _super);
-    function D22() {
+    __extends(D22, _super);function D22() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D22;
 }(C3));
 var D23 = /** @class */ (function (_super) {
-    __extends(D23, _super);
-    function D23() {
+    __extends(D23, _super);function D23() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D23;
 }(C3));
 var D24 = /** @class */ (function (_super) {
-    __extends(D24, _super);
-    function D24() {
+    __extends(D24, _super);function D24() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D24;
 }(C3));
 var D25 = /** @class */ (function (_super) {
-    __extends(D25, _super);
-    function D25() {
+    __extends(D25, _super);function D25() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D25;
@@ -379,29 +355,25 @@ var D25 = /** @class */ (function (_super) {
 // test if Date is a subtype of T, U, V, Date
 // only a subtype of itself
 var D26 = /** @class */ (function (_super) {
-    __extends(D26, _super);
-    function D26() {
+    __extends(D26, _super);function D26() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D26;
 }(C3));
 var D27 = /** @class */ (function (_super) {
-    __extends(D27, _super);
-    function D27() {
+    __extends(D27, _super);function D27() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D27;
 }(C3));
 var D28 = /** @class */ (function (_super) {
-    __extends(D28, _super);
-    function D28() {
+    __extends(D28, _super);function D28() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D28;
 }(C3));
 var D29 = /** @class */ (function (_super) {
-    __extends(D29, _super);
-    function D29() {
+    __extends(D29, _super);function D29() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D29;

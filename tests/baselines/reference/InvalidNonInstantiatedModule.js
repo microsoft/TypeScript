@@ -9,5 +9,7 @@ var x: typeof M; // Error only a namespace
 
 
 //// [InvalidNonInstantiatedModule.js]
+
 var m = M; // Error, not instantiated can not be used as var
+
 var x; // Error only a namespace

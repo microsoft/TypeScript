@@ -27,9 +27,7 @@ let ca: Computed.A = 1; // error, Computed.A isn't a literal type because Comput
 //// [enumAssignmentCompat5.js]
 var E;
 (function (E) {
-    E[E["A"] = 0] = "A";
-    E[E["B"] = 1] = "B";
-    E[E["C"] = 2] = "C";
+    E[E["A"] = 0] = "A";E[E["B"] = 1] = "B";E[E["C"] = 2] = "C";
 })(E || (E = {}));
 var Computed;
 (function (Computed) {
@@ -48,3 +46,6 @@ var c = n; // ok
 c = n; // ok
 c = 4; // ok
 var ca = 1; // error, Computed.A isn't a literal type because Computed has no enum literals
+
+
+

@@ -34,15 +34,20 @@ prop = getProperty3(obj, s);
 function getProperty2(obj, key) {
     return obj[key];
 }
+
 function getProperty3(obj, key) {
     return obj[key];
 }
 const s = Symbol();
 const obj = {};
+
 let prop;
 // should work
 prop = getProperty2(obj, 'first');
+
 prop = getProperty3(obj, 'first');
+
 // Should fail
 prop = getProperty2(obj, s);
+
 prop = getProperty3(obj, s);

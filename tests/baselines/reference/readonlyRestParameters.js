@@ -41,8 +41,8 @@ function f0(a, b) {
     f1(a, b);
     f2(a, b);
 }
-function f1() {
-    var args = [];
+
+function f1() {var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
     }
@@ -51,8 +51,8 @@ function f1() {
     f1.apply(void 0, __spreadArrays(['abc'], args));
     f1.apply(void 0, args);
 }
-function f2() {
-    var args = [];
+
+function f2() {var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
     }
@@ -64,8 +64,8 @@ function f2() {
     f2.apply(void 0, __spreadArrays(['abc'], args)); // Error
     f2.apply(void 0, args);
 }
-function f4() {
-    var args = [];
+
+function f4() {var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
     }

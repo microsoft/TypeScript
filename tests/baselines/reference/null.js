@@ -39,3 +39,5 @@ function g() {
     return 3;
 }
 var w = { x: null, y: 3 };
+
+

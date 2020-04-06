@@ -22,9 +22,9 @@ x = <foo>x</foo>, x = <foo/>;
 
 
 //// [jsxAndTypeAssertion.jsx]
+
 var foo = /** @class */ (function () {
-    function foo() {
-    }
+    function foo() {}
     return foo;
 }());
 var x;
@@ -41,7 +41,11 @@ x = <foo test={<foo>}>hello{<foo>}</foo>};
 x = <foo>x</foo>, x = <foo />;
 
 <foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>
+
+
     :
+
+
 }
 
     

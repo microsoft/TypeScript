@@ -29,12 +29,10 @@ define(["require", "exports"], function (require, exports) {
     exports.require = exports.exports = void 0;
     function exports() {
         return 1;
-    }
-    exports.exports = exports;
+    }exports.exports = exports;
     function require() {
         return "require";
-    }
-    exports.require = require;
+    }exports.require = require;
     var m1;
     (function (m1) {
         function exports() {

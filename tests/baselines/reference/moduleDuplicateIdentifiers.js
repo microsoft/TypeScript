@@ -46,6 +46,8 @@ exports.__esModule = true;
 exports.Utensils = exports.Pot = exports.Kettle = exports.FooBar = exports.Foo = void 0;
 exports.Foo = 2;
 exports.Foo = 42; // Should error
+
+
 var FooBar;
 (function (FooBar) {
     FooBar.member1 = 2;
@@ -58,15 +60,13 @@ var Kettle = /** @class */ (function () {
         this.member1 = 2;
     }
     return Kettle;
-}());
-exports.Kettle = Kettle;
+}());exports.Kettle = Kettle;
 var Kettle = /** @class */ (function () {
     function Kettle() {
         this.member2 = 42;
     }
     return Kettle;
-}());
-exports.Kettle = Kettle;
+}());exports.Kettle = Kettle;
 exports.Pot = 2;
 exports.Pot = 42; // Shouldn't error
 var Utensils;

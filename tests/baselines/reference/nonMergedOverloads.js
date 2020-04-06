@@ -10,6 +10,6 @@ export function f() {
 exports.__esModule = true;
 exports.f = void 0;
 var f = 10;
+
 function f() {
-}
-exports.f = f;
+}exports.f = f;

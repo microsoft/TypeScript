@@ -89,8 +89,7 @@ declare class c6NoError {
 //// [collisionArgumentsClassConstructor.js]
 // Constructors
 var c1 = /** @class */ (function () {
-    function c1(i) {
-        var arguments = [];
+    function c1(i) {var arguments = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             arguments[_i - 1] = arguments[_i];
         }
@@ -99,8 +98,7 @@ var c1 = /** @class */ (function () {
     return c1;
 }());
 var c12 = /** @class */ (function () {
-    function c12(arguments) {
-        var rest = [];
+    function c12(arguments) {var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rest[_i - 1] = arguments[_i];
         }
@@ -115,8 +113,7 @@ var c1NoError = /** @class */ (function () {
     return c1NoError;
 }());
 var c2 = /** @class */ (function () {
-    function c2() {
-        var restParameters = [];
+    function c2() {var restParameters = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             restParameters[_i] = arguments[_i];
         }
@@ -131,8 +128,7 @@ var c2NoError = /** @class */ (function () {
     return c2NoError;
 }());
 var c3 = /** @class */ (function () {
-    function c3(arguments) {
-        var restParameters = [];
+    function c3(arguments) {var restParameters = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             restParameters[_i - 1] = arguments[_i];
         }
@@ -148,9 +144,9 @@ var c3NoError = /** @class */ (function () {
     }
     return c3NoError;
 }());
+
 var c5 = /** @class */ (function () {
-    function c5(i) {
-        var arguments = [];
+    function c5(i) {var arguments = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             arguments[_i - 1] = arguments[_i];
         }
@@ -159,8 +155,7 @@ var c5 = /** @class */ (function () {
     return c5;
 }());
 var c52 = /** @class */ (function () {
-    function c52(arguments) {
-        var rest = [];
+    function c52(arguments) {var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rest[_i - 1] = arguments[_i];
         }
@@ -174,3 +169,4 @@ var c5NoError = /** @class */ (function () {
     }
     return c5NoError;
 }());
+

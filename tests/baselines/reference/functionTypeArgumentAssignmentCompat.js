@@ -14,7 +14,10 @@ console.log(s);
 
 
 //// [functionTypeArgumentAssignmentCompat.js]
-var f;
+var f
+
+;
+
 var g = function () { return []; };
 f = g;
 var s = f("str").toUpperCase();

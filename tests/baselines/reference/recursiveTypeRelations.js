@@ -46,8 +46,7 @@ var Query = /** @class */ (function () {
     }
     return Query;
 }());
-function css(styles) {
-    var classNames = [];
+function css(styles) {var classNames = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         classNames[_i - 1] = arguments[_i];
     }
@@ -67,5 +66,4 @@ function css(styles) {
         }
     });
     return "";
-}
-exports.css = css;
+}exports.css = css;

@@ -21,13 +21,14 @@ export function speak<TPet extends Pet>(pet: TPet, voice: (pet: TPet) => string)
 // Repro from #10811
 exports.__esModule = true;
 exports.speak = void 0;
+
 function isPet(pet) {
     return typeof pet.name === "string";
 }
+
 function speak(pet, voice) {
     if (!isPet(pet)) {
         throw new Error("Expected \"pet\" to be a Pet");
     }
     return voice(pet);
-}
-exports.speak = speak;
+}exports.speak = speak;

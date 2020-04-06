@@ -40,21 +40,19 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var Base = /** @class */ (function () {
-    function Base() {
-    }
+    function Base() {}
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);
-    function Derived() {
+    __extends(Derived, _super);function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived;
 }(Base));
 var Derived2 = /** @class */ (function (_super) {
-    __extends(Derived2, _super);
-    function Derived2() {
+    __extends(Derived2, _super);function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived2;
@@ -62,14 +60,18 @@ var Derived2 = /** @class */ (function (_super) {
 var base;
 var derived;
 var derived2;
+
 var r2 = true ? 1 : '';
 var r9 = true ? derived : derived2;
+
 function foo(t, u) {
     return true ? t : u;
 }
+
 function foo2(t, u) {
     return true ? t : u; // Ok because BCT(T, U) = U
 }
+
 function foo3(t, u) {
     return true ? t : u;
 }

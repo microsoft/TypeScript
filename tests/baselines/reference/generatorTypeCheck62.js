@@ -40,6 +40,7 @@ export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: S
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Nothing3 = exports.Nothing2 = exports.Nothing1 = exports.strategy = void 0;
+
 function strategy(stratName, gen) {
     return function* (state) {
         for (const next of gen(state)) {
@@ -49,14 +50,18 @@ function strategy(stratName, gen) {
             yield next;
         }
     };
-}
-exports.strategy = strategy;
+}exports.strategy = strategy;
+
+
+
 exports.Nothing1 = strategy("Nothing", function* (state) {
     return state;
 });
+
 exports.Nothing2 = strategy("Nothing", function* (state) {
     yield state;
 });
+
 exports.Nothing3 = strategy("Nothing", function* (state) {
     yield;
     return state;

@@ -13,15 +13,13 @@ let Bar = 42
 
 //// [file1.js]
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 var Bar = 3;
 //// [file2.js]
 var Bar = /** @class */ (function () {
-    function Bar() {
-    }
+    function Bar() {}
     return Bar;
 }());
 //// [file3.js]

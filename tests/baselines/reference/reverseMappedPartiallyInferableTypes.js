@@ -99,6 +99,8 @@ const obj3 = id({
 "use strict";
 // Repro from #30505
 exports.__esModule = true;
+
+
 var r = extend({
     props: {
         notResolved: {
@@ -114,17 +116,21 @@ var r = extend({
             }
         }
     }
-});
+})
+
+;
 r.explicit;
 r.notResolved;
 r.explicit.required;
 r.notResolved.required;
+
 // All properties have inferable types
 var obj1 = id({
     foo: {
         contents: ""
     }
 });
+
 // Some properties have inferable types
 var obj2 = id({
     foo: {
@@ -134,6 +140,7 @@ var obj2 = id({
         }
     }
 });
+
 // No properties have inferable types
 var obj3 = id({
     foo: {

@@ -23,16 +23,13 @@ y2 = ext;
 exports.__esModule = true;
 exports.C = void 0;
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
-}());
-exports.C = C;
+}());exports.C = C;
 //// [typeofAmbientExternalModules_1.js]
 "use strict";
 var D = /** @class */ (function () {
-    function D() {
-    }
+    function D() {}
     return D;
 }());
 module.exports = D;
@@ -43,6 +40,7 @@ exports.__esModule = true;
 ///<reference path='typeofAmbientExternalModules_1.ts'/>
 var ext = require("./typeofAmbientExternalModules_0");
 var exp = require("./typeofAmbientExternalModules_1");
+
 var y1 = ext;
 y1 = exp;
 var y2 = exp;

@@ -45,20 +45,21 @@ var y1 = 1; // error
 // function then function
 function y2() { } // error
 function y2() { } // error
+
 function y2a() { } // error
-var y2a = function () { }; // error
+var y2a = function () { }
+
+
+; // error
 // function then class
 function y3() { } // error
 var y3 = /** @class */ (function () {
-    function y3() {
-    }
+    function y3() {}
     return y3;
 }()); // error
 function y3a() { } // error
 var y3a = /** @class */ (function () {
-    function y3a() {
-    }
-    y3a.prototype.foo = function () { };
+    function y3a() {}y3a.prototype.foo = function () { };
     return y3a;
 }()); // error
 // function then enum
@@ -69,14 +70,13 @@ function y4() { } // error
 // function then internal module
 function y5() { }
 function y5a() { }
-(function (y5a) {
-    var y = 2;
-})(y5a || (y5a = {})); // should be an error
+(function (y5a) {var y = 2;})(y5a || (y5a = {})); // should be an error
 function y5b() { }
-(function (y5b) {
-    y5b.y = 3;
-})(y5b || (y5b = {})); // should be an error
+(function (y5b) {y5b.y = 3;})(y5b || (y5b = {})); // should be an error
 function y5c() { }
+
+
+
 // function then import, messes with other errors
 //function y6() { }
 //import y6 = require('');

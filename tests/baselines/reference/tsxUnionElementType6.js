@@ -27,15 +27,19 @@ let d = <SFC2AndEmptyComp data-prop />;
 "use strict";
 exports.__esModule = true;
 var React = require("react");
+
 function EmptySFC1() {
     return React.createElement("div", null, "Hi");
 }
+
 function EmptySFC2() {
     return React.createElement("div", null, "Hello");
 }
+
 function SFC2(prop) {
     return React.createElement("h1", null, "World");
 }
+
 var EmptySFCComp = EmptySFC1 || EmptySFC2;
 var SFC2AndEmptyComp = SFC2 || EmptySFC1;
 // Error
@@ -43,3 +47,4 @@ var a = React.createElement(EmptySFCComp, { x: true });
 var b = React.createElement(SFC2AndEmptyComp, { x: "hi" });
 var c = React.createElement(SFC2AndEmptyComp, null);
 var d = React.createElement(SFC2AndEmptyComp, { "data-prop": true });
+

@@ -112,43 +112,63 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 /// <reference path="react16.d.ts" />
 var react_1 = __importDefault(require("react"));
+
 // Simple calls from real usecases
 function test1() {
+
+
+
     function test(t) {
         var z = t.getValue("bar"); // Should be fine
     }
 }
+
 function test2() {
+
     var messages = {
         foo: function (options) { return "Foo"; },
         bar: function (options) { return "Bar"; }
     };
+
     var test1 = function (type) {
-        return messages[type]({ a: "A", b: 0 });
-    };
+        return messages[type]({ a: "A", b: 0 });};
 }
+
 function test3(items) {
     items.forEach(function (item) { return console.log(item); });
 }
-function test4(arg1, arg2, arg3, arg4, arg5, arg6) {
+
+function test4(
+arg1,
+    arg2,
+    arg3,
+    arg4,
+    arg5,
+    arg6) {
     arg1();
     arg1({ x: 0, y: 0 });
     arg1({ x: 0, y: 0 }, { x: 1, y: 1 });
+
     arg2({ x: 0 }, { x: 0 });
+
     arg3({ x: 0 });
     arg3({ x: 0 }, { x: 0, y: 0 });
     arg3({ x: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 });
+
     arg4();
     arg4({ x: 0, y: 0 });
     arg4({ x: 0, y: 0 }, { x: 0 });
+
     arg5();
     arg5({ x: 0, y: 0 });
     arg5({ x: 0, y: 0 }, { x: 0 });
+
     arg6();
     arg6({ x: 0, y: 0 });
     arg6({ x: 0, y: 0 }, { x: 0, y: 0 });
     arg6({ x: 0, y: 0 }, { x: 0, y: 0 }, { y: 0 });
 }
+
 // JSX Tag names
 function test5() {
     // Pair of non-like intrinsics
@@ -156,14 +176,18 @@ function test5() {
         var Tag = url ? 'a' : 'button';
         return react_1["default"].createElement(Tag, null, "test");
     }
+
     // Union of all intrinsics and components of `any`
     function App(props) {
         var Comp = props.component;
         return (react_1["default"].createElement(Comp, null));
     }
+
     // custom components with non-subset props
     function render2() {
+
         var C = null;
+
         var a = react_1["default"].createElement(C, { p: true });
     }
 }

@@ -41,6 +41,7 @@ for(;;) {
 // All errors
 // naked break not allowed
 break;
+
 // non-existent label
 ONE: for (;;)
     break TWO;
@@ -48,8 +49,10 @@ ONE: for (;;)
 TWO: for (;;) {
     var x = function () {
         break TWO;
-    };
+    }
+    ;
 }
+
 THREE: for (;;) {
     var fn = function () {
         break THREE;

@@ -14,6 +14,7 @@ async function callExpression0() {
 }
 
 //// [es5-asyncFunctionPropertyAccess.js]
+
 function propertyAccess0() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -26,6 +27,7 @@ function propertyAccess0() {
         });
     });
 }
+
 function propertyAccess1() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -38,6 +40,7 @@ function propertyAccess1() {
         });
     });
 }
+
 function callExpression0() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {

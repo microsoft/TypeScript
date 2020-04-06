@@ -25,6 +25,7 @@ var Obj3: Obj3type;
 
 
 //// [file.jsx]
+
 var Obj1;
 <Obj1 x={10}/>; // OK
 var Obj2;

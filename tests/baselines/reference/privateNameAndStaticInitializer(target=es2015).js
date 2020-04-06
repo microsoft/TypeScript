@@ -10,11 +10,11 @@ class A {
 //// [privateNameAndStaticInitializer.js]
 let A = /** @class */ (() => {
     var _foo, _prop;
-    class A {
-        constructor() {
+    class A {constructor() {
             _foo.set(this, 1);
             _prop.set(this, 2);
         }
+
     }
     _foo = new WeakMap(), _prop = new WeakMap();
     A.inst = new A();

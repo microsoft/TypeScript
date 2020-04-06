@@ -15,10 +15,10 @@ class C {
 //// [staticMemberAssignsToConstructorFunctionMembers.js]
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.foo = function () {
+    }C.foo = function () {
         C.foo = function () { };
     };
+
     C.bar = function (x) {
         C.bar = function () { }; // error
         C.bar = function (x) { return x; }; // ok

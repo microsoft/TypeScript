@@ -8,6 +8,7 @@ var d: boolean = x;
 
 //// [validBooleanAssignments.js]
 var x = true;
+
 var a = x;
 var b = x;
 var c = x;

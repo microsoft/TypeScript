@@ -28,8 +28,7 @@ foo();
     exports.B = void 0;
     class B {
         print() { return "I am B"; }
-    }
-    exports.B = B;
+    }exports.B = B;
 });
 //// [2.js]
 (function (factory) {
@@ -44,8 +43,7 @@ foo();
     "use strict";
     var __syncRequire = typeof module === "object" && typeof module.exports === "object";
     async function foo() {
-        class C extends (await (__syncRequire ? Promise.resolve().then(() => require("./0")) : new Promise((resolve_1, reject_1) => { require(["./0"], resolve_1, reject_1); }))).B {
-        }
+        class C extends (await (__syncRequire ? Promise.resolve().then(() => require("./0")) : new Promise((resolve_1, reject_1) => { require(["./0"], resolve_1, reject_1); }))).B {}
         var c = new C();
         c.print();
     }

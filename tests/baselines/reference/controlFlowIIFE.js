@@ -82,6 +82,7 @@ function f1() {
         }();
     }
 }
+
 function f2() {
     let x = getStringOrNumber();
     if (typeof x === "string") {
@@ -97,6 +98,7 @@ function f3() {
         let n = (z => x.length + y + z)(y = 1);
     }
 }
+
 // Repros from #8381
 let maybeNumber;
 (function () {
@@ -121,6 +123,7 @@ function f4() {
     })();
     v;
 }
+
 function f5() {
     let v;
     (function* () {
@@ -129,6 +132,7 @@ function f5() {
     })();
     v; // still undefined
 }
+
 function f6() {
     let v;
     (async function () {

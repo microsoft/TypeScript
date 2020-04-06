@@ -30,32 +30,28 @@ sourceFile:tests/cases/compiler/ref/a.ts
 >>>        execute: function () {
 >>>            A = /** @class */ (function () {
 1 >^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^^^->
 1 >
 1 >Emitted(21, 13) Source(1, 1) + SourceIndex(0)
 ---
->>>                function A() {
+>>>                function A() {}
 1->^^^^^^^^^^^^^^^^
-2 >                ^^->
+2 >                ^^^^^^^^^^^^^^
+3 >                              ^
 1->
+2 >                export class A { 
+3 >                              }
 1->Emitted(22, 17) Source(1, 1) + SourceIndex(0)
----
->>>                }
-1->^^^^^^^^^^^^^^^^
-2 >                ^
-3 >                 ^^^^^^^^^->
-1->export class A { 
-2 >                }
-1->Emitted(23, 17) Source(1, 18) + SourceIndex(0)
-2 >Emitted(23, 18) Source(1, 19) + SourceIndex(0)
+2 >Emitted(22, 31) Source(1, 18) + SourceIndex(0)
+3 >Emitted(22, 32) Source(1, 19) + SourceIndex(0)
 ---
 >>>                return A;
-1->^^^^^^^^^^^^^^^^
+1 >^^^^^^^^^^^^^^^^
 2 >                ^^^^^^^^
-1->
+1 >
 2 >                }
-1->Emitted(24, 17) Source(1, 18) + SourceIndex(0)
-2 >Emitted(24, 25) Source(1, 19) + SourceIndex(0)
+1 >Emitted(23, 17) Source(1, 18) + SourceIndex(0)
+2 >Emitted(23, 25) Source(1, 19) + SourceIndex(0)
 ---
 >>>            }());
 1 >^^^^^^^^^^^^
@@ -67,10 +63,10 @@ sourceFile:tests/cases/compiler/ref/a.ts
 2 >            }
 3 >             
 4 >             export class A { }
-1 >Emitted(25, 13) Source(1, 18) + SourceIndex(0)
-2 >Emitted(25, 14) Source(1, 19) + SourceIndex(0)
-3 >Emitted(25, 14) Source(1, 1) + SourceIndex(0)
-4 >Emitted(25, 18) Source(1, 19) + SourceIndex(0)
+1 >Emitted(24, 13) Source(1, 18) + SourceIndex(0)
+2 >Emitted(24, 14) Source(1, 19) + SourceIndex(0)
+3 >Emitted(24, 14) Source(1, 1) + SourceIndex(0)
+4 >Emitted(24, 18) Source(1, 19) + SourceIndex(0)
 ---
 >>>            exports_1("A", A);
 >>>        }
@@ -79,8 +75,8 @@ sourceFile:tests/cases/compiler/ref/a.ts
 1->
   >
 2 >        
-1->Emitted(27, 9) Source(2, 1) + SourceIndex(0)
-2 >Emitted(27, 10) Source(2, 2) + SourceIndex(0)
+1->Emitted(26, 9) Source(2, 1) + SourceIndex(0)
+2 >Emitted(26, 10) Source(2, 2) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:all.js
@@ -101,24 +97,22 @@ sourceFile:tests/cases/compiler/b.ts
 >>>        execute: function () {
 >>>            B = /** @class */ (function (_super) {
 1 >^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >import {A} from "./ref/a";
   >
-1 >Emitted(41, 13) Source(2, 1) + SourceIndex(1)
+1 >Emitted(40, 13) Source(2, 1) + SourceIndex(1)
 ---
->>>                __extends(B, _super);
+>>>                __extends(B, _super);function B() {
 1->^^^^^^^^^^^^^^^^
 2 >                ^^^^^^^^^^^^^^^^^^^^^
+3 >                                     
+4 >                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->export class B extends 
 2 >                A
-1->Emitted(42, 17) Source(2, 24) + SourceIndex(1)
-2 >Emitted(42, 38) Source(2, 25) + SourceIndex(1)
----
->>>                function B() {
-1 >^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-1 >Emitted(43, 17) Source(2, 1) + SourceIndex(1)
+3 >                                     
+1->Emitted(41, 17) Source(2, 24) + SourceIndex(1)
+2 >Emitted(41, 38) Source(2, 25) + SourceIndex(1)
+3 >Emitted(41, 38) Source(2, 1) + SourceIndex(1)
 ---
 >>>                    return _super !== null && _super.apply(this, arguments) || this;
 >>>                }
@@ -127,16 +121,16 @@ sourceFile:tests/cases/compiler/b.ts
 3 >                 ^^^^^^^^^->
 1->export class B extends A { 
 2 >                }
-1->Emitted(45, 17) Source(2, 28) + SourceIndex(1)
-2 >Emitted(45, 18) Source(2, 29) + SourceIndex(1)
+1->Emitted(43, 17) Source(2, 28) + SourceIndex(1)
+2 >Emitted(43, 18) Source(2, 29) + SourceIndex(1)
 ---
 >>>                return B;
 1->^^^^^^^^^^^^^^^^
 2 >                ^^^^^^^^
 1->
 2 >                }
-1->Emitted(46, 17) Source(2, 28) + SourceIndex(1)
-2 >Emitted(46, 25) Source(2, 29) + SourceIndex(1)
+1->Emitted(44, 17) Source(2, 28) + SourceIndex(1)
+2 >Emitted(44, 25) Source(2, 29) + SourceIndex(1)
 ---
 >>>            }(a_1.A));
 1 >^^^^^^^^^^^^
@@ -152,12 +146,12 @@ sourceFile:tests/cases/compiler/b.ts
 4 >             export class B extends 
 5 >              A
 6 >                    { }
-1 >Emitted(47, 13) Source(2, 28) + SourceIndex(1)
-2 >Emitted(47, 14) Source(2, 29) + SourceIndex(1)
-3 >Emitted(47, 14) Source(2, 1) + SourceIndex(1)
-4 >Emitted(47, 15) Source(2, 24) + SourceIndex(1)
-5 >Emitted(47, 20) Source(2, 25) + SourceIndex(1)
-6 >Emitted(47, 23) Source(2, 29) + SourceIndex(1)
+1 >Emitted(45, 13) Source(2, 28) + SourceIndex(1)
+2 >Emitted(45, 14) Source(2, 29) + SourceIndex(1)
+3 >Emitted(45, 14) Source(2, 1) + SourceIndex(1)
+4 >Emitted(45, 15) Source(2, 24) + SourceIndex(1)
+5 >Emitted(45, 20) Source(2, 25) + SourceIndex(1)
+6 >Emitted(45, 23) Source(2, 29) + SourceIndex(1)
 ---
 >>>            exports_2("B", B);
 >>>        }
@@ -165,8 +159,8 @@ sourceFile:tests/cases/compiler/b.ts
 2 >        ^
 1->
 2 >        
-1->Emitted(49, 9) Source(2, 29) + SourceIndex(1)
-2 >Emitted(49, 10) Source(2, 30) + SourceIndex(1)
+1->Emitted(47, 9) Source(2, 29) + SourceIndex(1)
+2 >Emitted(47, 10) Source(2, 30) + SourceIndex(1)
 ---
 >>>    };
 >>>});

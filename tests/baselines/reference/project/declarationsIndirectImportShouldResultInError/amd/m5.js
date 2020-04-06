@@ -4,6 +4,6 @@ define(["require", "exports", "m4"], function (require, exports, m4) {
     exports.foo2 = void 0;
     function foo2() {
         return new m4.d();
-    }
+    }// Emit used
     exports.foo2 = foo2;
 });

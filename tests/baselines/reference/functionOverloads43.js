@@ -18,7 +18,9 @@ function foo(_a) {
     if (x) {
         return x.a;
     }
+
     return undefined;
 }
+
 var x = foo([{ a: "str" }]);
 var y = foo([{ a: 100 }]);

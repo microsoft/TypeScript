@@ -41,6 +41,7 @@ const elem6 = <obj. MemberClassComponent />;
 
 //// [jsxComponentTypeErrors.jsx]
 "use strict";
+
 function FunctionComponent(_a) {
     var type = _a.type;
     return {
@@ -57,19 +58,21 @@ var ClassComponent = /** @class */ (function () {
     return ClassComponent;
 }());
 var MixedComponent = Math.random() ? FunctionComponent : ClassComponent;
+
 var elem1 = <FunctionComponent type="abc"/>;
 var elem2 = <FunctionComponent />;
 var elem3 = <ClassComponent />;
 var elem4 = <MixedComponent />;
+
 var obj = {
     MemberFunctionComponent: function () {
         return {};
     },
     MemberClassComponent: /** @class */ (function () {
-        function MemberClassComponent() {
-        }
+        function MemberClassComponent() {}
         return MemberClassComponent;
     }())
 };
+
 var elem5 = <obj.MemberFunctionComponent />;
 var elem6 = <obj.MemberClassComponent />;

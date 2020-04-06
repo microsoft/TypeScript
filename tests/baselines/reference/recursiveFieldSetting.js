@@ -20,6 +20,7 @@ class Recursive3 {
 
 //// [recursiveFieldSetting.js]
 // #32721
+
 var Recursive1 = /** @class */ (function () {
     function Recursive1(parent) {
         this.parent = parent;

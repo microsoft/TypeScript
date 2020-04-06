@@ -14,7 +14,8 @@ var v = (_a = {},
     _a[+1] = {},
     _a[~1] = {},
     _a[!1] = {},
-    _a);
+    _a)
+;
 
 
 //// [computedPropertyNamesDeclarationEmit6_ES5.d.ts]

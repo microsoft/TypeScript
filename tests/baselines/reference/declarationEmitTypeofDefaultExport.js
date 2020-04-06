@@ -12,8 +12,7 @@ export default a.default;
 "use strict";
 exports.__esModule = true;
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 exports["default"] = C;

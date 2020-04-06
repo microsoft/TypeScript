@@ -31,19 +31,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
+
 var MyClass = /** @class */ (function () {
     function MyClass() {
-    }
-    MyClass.prototype.doIt = function (data) { };
+    }MyClass.prototype.doIt = function (data) { };
     return MyClass;
 }());
 var MySubClass = /** @class */ (function (_super) {
-    __extends(MySubClass, _super);
-    function MySubClass() {
+    __extends(MySubClass, _super);function MySubClass() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return MySubClass;
 }(MyClass));
 function fn(arg) { }
 ;
+
 fn(MySubClass);

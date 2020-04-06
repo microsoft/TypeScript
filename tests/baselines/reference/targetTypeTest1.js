@@ -84,6 +84,7 @@ function EF1(a, b) { return a + b; }
 var x = EF1(1, 2);
 // Point.origin declared as type Point
 Point.origin = new Point(0, 0);
+
 // Point.prototype declared as type Point
 // this inferred as Point because of obj.prop assignment
 // dx, dy, and return type inferred using target typing
@@ -104,10 +105,12 @@ Point.prototype = {
 z = function (a) {
     a;
 };
+
 function C(a, b) {
     this.a = a;
     this.b = b;
 }
+
 C.prototype =
     { a: 0,
         b: 0,

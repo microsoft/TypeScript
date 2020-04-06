@@ -14,6 +14,7 @@ const enum E2 {
 //// [constEnumDeclarations.js]
 
 
+
 //// [constEnumDeclarations.d.ts]
 declare const enum E {
     A = 1,

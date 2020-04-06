@@ -32,12 +32,10 @@ exports.wu = void 0;
 function wu(CC) {
     var WU = /** @class */ (function () {
         function WU() {
-        }
-        WU.prototype.m = function () {
+        }WU.prototype.m = function () {
             g(CC);
             return React.createElement(CC, __assign({}, null));
         };
         return WU;
     }());
-}
-exports.wu = wu;
+}exports.wu = wu;

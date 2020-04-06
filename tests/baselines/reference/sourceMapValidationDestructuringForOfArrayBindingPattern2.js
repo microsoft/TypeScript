@@ -102,6 +102,9 @@ for ([...multiRobotAInfo] of [multiRobotA, multiRobotB]) {
 
 //// [sourceMapValidationDestructuringForOfArrayBindingPattern2.js]
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w;
+
+
+
 var robotA = [1, "mower", "mowing"];
 var robotB = [2, "trimmer", "trimming"];
 var robots = [robotA, robotB];
@@ -118,6 +121,7 @@ var nameA, primarySkillA, secondarySkillA;
 var numberB, nameB;
 var numberA2, nameA2, skillA2, nameMA;
 var numberA3, robotAInfo, multiRobotAInfo;
+
 for (var _i = 0, robots_1 = robots; _i < robots_1.length; _i++) {
     _a = robots_1[_i], nameA = _a[1];
     console.log(nameA);
@@ -142,6 +146,7 @@ for (var _4 = 0, _5 = [multiRobotA, multiRobotB]; _4 < _5.length; _4++) {
     _h = _5[_4], _j = _h[1], primarySkillA = _j[0], secondarySkillA = _j[1];
     console.log(primarySkillA);
 }
+
 for (var _6 = 0, robots_2 = robots; _6 < robots_2.length; _6++) {
     numberB = robots_2[_6][0];
     console.log(numberB);
@@ -166,6 +171,7 @@ for (var _14 = 0, _15 = [multiRobotA, multiRobotB]; _14 < _15.length; _14++) {
     nameB = _15[_14][0];
     console.log(nameB);
 }
+
 for (var _16 = 0, robots_3 = robots; _16 < robots_3.length; _16++) {
     _k = robots_3[_16], numberA2 = _k[0], nameA2 = _k[1], skillA2 = _k[2];
     console.log(nameA2);
@@ -190,6 +196,7 @@ for (var _24 = 0, _25 = [multiRobotA, multiRobotB]; _24 < _25.length; _24++) {
     _s = _25[_24], nameMA = _s[0], _t = _s[1], primarySkillA = _t[0], secondarySkillA = _t[1];
     console.log(nameMA);
 }
+
 for (var _26 = 0, robots_4 = robots; _26 < robots_4.length; _26++) {
     _u = robots_4[_26], numberA3 = _u[0], robotAInfo = _u.slice(1);
     console.log(numberA3);

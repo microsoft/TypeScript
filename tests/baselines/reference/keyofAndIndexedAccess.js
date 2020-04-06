@@ -678,15 +678,13 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
         for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
             r[k] = a[j];
     return r;
-};
-var Shape = /** @class */ (function () {
+};var Shape = /** @class */ (function () {
     function Shape() {
     }
     return Shape;
 }());
 var TaggedShape = /** @class */ (function (_super) {
-    __extends(TaggedShape, _super);
-    function TaggedShape() {
+    __extends(TaggedShape, _super);function TaggedShape() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return TaggedShape;
@@ -701,12 +699,65 @@ var Options = /** @class */ (function () {
     }
     return Options;
 }());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function getProperty(obj, key) {
     return obj[key];
 }
+
 function setProperty(obj, key, value) {
     obj[key] = value;
 }
+
 function f10(shape) {
     var name = getProperty(shape, "name"); // string
     var widthOrHeight = getProperty(shape, cond ? "width" : "height"); // number
@@ -715,24 +766,27 @@ function f10(shape) {
     setProperty(shape, cond ? "width" : "height", 10);
     setProperty(shape, cond ? "name" : "visible", true); // Technically not safe
 }
+
 function f11(a) {
     var len = getProperty(a, "length"); // number
     setProperty(a, "length", len);
 }
+
 function f12(t) {
     var len = getProperty(t, "length");
     var s2 = getProperty(t, "0"); // Shape
     var b2 = getProperty(t, "1"); // boolean
 }
+
 function f13(foo, bar) {
     var x = getProperty(foo, "x"); // any
     var y = getProperty(foo, "100"); // any
     var z = getProperty(foo, bar); // any
 }
+
 var Component = /** @class */ (function () {
     function Component() {
-    }
-    Component.prototype.getProperty = function (key) {
+    }Component.prototype.getProperty = function (key) {
         return this.props[key];
     };
     Component.prototype.setProperty = function (key, value) {
@@ -748,31 +802,38 @@ function f20(component) {
     component.setProperty(cond ? "width" : "height", 10);
     component.setProperty(cond ? "name" : "visible", true); // Technically not safe
 }
+
 function pluck(array, key) {
     return array.map(function (x) { return x[key]; });
 }
+
 function f30(shapes) {
     var names = pluck(shapes, "name"); // string[]
     var widths = pluck(shapes, "width"); // number[]
     var nameOrVisibles = pluck(shapes, cond ? "name" : "visible"); // (string | boolean)[]
 }
+
 function f31(key) {
     var shape = { name: "foo", width: 5, height: 10, visible: true };
     return shape[key]; // Shape[K]
 }
+
 function f32(key) {
     var shape = { name: "foo", width: 5, height: 10, visible: true };
     return shape[key]; // Shape[K]
 }
+
 function f33(shape, key) {
     var name = getProperty(shape, "name");
     var prop = getProperty(shape, key);
     return prop;
 }
+
 function f34(ts) {
     var tag1 = f33(ts, "tag");
     var tag2 = getProperty(ts, "tag");
 }
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -785,64 +846,77 @@ function f40(c) {
     var y = c["y"];
     var z = c["z"];
 }
+
 function f50(k, s) {
     var x1 = s;
     var x2 = k;
 }
+
 function f51(k, s) {
     var x1 = s;
     var x2 = k;
 }
+
 function f52(obj, k, s, n) {
     var x1 = obj[s];
     var x2 = obj[n];
     var x3 = obj[k];
 }
+
 function f53(obj, k, s, n) {
     var x1 = obj[s];
     var x2 = obj[n];
     var x3 = obj[k];
 }
+
 function f54(obj, key) {
     for (var s in obj[key]) {
     }
     var b = "foo" in obj[key];
 }
+
 function f55(obj, key) {
     for (var s in obj[key]) {
     }
     var b = "foo" in obj[key];
 }
+
 function f60(source, target) {
     for (var k in source) {
         target[k] = source[k];
     }
 }
+
 function f70(func) {
     func('a', 'a');
     func('a', 'b');
     func('a', 'c');
 }
+
 function f71(func) {
     var x = func({ a: 1, b: "hello" }, { c: true });
     x.a; // number | undefined
     x.b; // string | undefined
     x.c; // boolean | undefined
 }
+
 function f72(func) {
     var a = func({ a: 1, b: "hello" }, { c: true }, 'a'); // number
     var b = func({ a: 1, b: "hello" }, { c: true }, 'b'); // string
     var c = func({ a: 1, b: "hello" }, { c: true }, 'c'); // boolean
 }
+
 function f73(func) {
     var a = func({ a: 1, b: "hello" }, { c: true }, 'a'); // number
     var b = func({ a: 1, b: "hello" }, { c: true }, 'b'); // string
     var c = func({ a: 1, b: "hello" }, { c: true }, 'c'); // boolean
 }
+
 function f74(func) {
     var a = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a'); // number
     var b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b'); // string | boolean
 }
+
 function f80(obj) {
     var a1 = obj.a; // { x: any }
     var a2 = obj['a']; // { x: any }
@@ -851,24 +925,28 @@ function f80(obj) {
     var x2 = obj['a']['x']; // any
     var x3 = obj['a']['x']; // T["a"]["x"]
 }
+
 function f81(obj) {
     return obj['a']['x'];
 }
+
 function f82() {
     var x1 = f81({ a: { x: "hello" } }); // string
     var x2 = f81({ a: { x: 42 } }); // number
 }
+
 function f83(obj, key) {
     return obj[key]['x'];
 }
+
 function f84() {
     var x1 = f83({ foo: { x: "hello" } }, "foo"); // string
     var x2 = f83({ bar: { x: 42 } }, "bar"); // number
 }
+
 var C1 = /** @class */ (function () {
     function C1() {
-    }
-    C1.prototype.get = function (key) {
+    }C1.prototype.get = function (key) {
         return this[key];
     };
     C1.prototype.set = function (key, value) {
@@ -897,23 +975,25 @@ function f90(x1, x2, x3) {
     x2.length;
     x3.length;
 }
+
 function f91(x, y, z) {
     var a;
     a = x;
     a = y;
     a = z;
 }
+
 function f92(x, y, z) {
     var a;
     a = x;
     a = y;
     a = z;
 }
+
 // Repros from #12011
 var Base = /** @class */ (function () {
     function Base() {
-    }
-    Base.prototype.get = function (prop) {
+    }Base.prototype.get = function (prop) {
         return this[prop];
     };
     Base.prototype.set = function (prop, value) {
@@ -923,6 +1003,7 @@ var Base = /** @class */ (function () {
 }());
 var Person = /** @class */ (function (_super) {
     __extends(Person, _super);
+
     function Person(parts) {
         var _this = _super.call(this) || this;
         _this.set("parts", parts);
@@ -942,8 +1023,7 @@ var OtherPerson = /** @class */ (function () {
     };
     return OtherPerson;
 }());
-function path(obj) {
-    var keys = [];
+function path(obj) {var keys = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         keys[_i - 1] = arguments[_i];
     }
@@ -954,39 +1034,92 @@ function path(obj) {
     }
     return result;
 }
+
+
+
+
+
+
+
 function f1(thing) {
     var x1 = path(thing, 'a'); // { x: number, y: string }
     var x2 = path(thing, 'a', 'y'); // string
     var x3 = path(thing, 'b'); // boolean
     var x4 = path.apply(void 0, __spreadArrays([thing], ['a', 'x'])); // any
 }
+
 // Repro from comment in #12114
 var assignTo2 = function (object, key1, key2) {
-    return function (value) { return object[key1][key2] = value; };
-};
-var empty = one(function () { }); // inferred as {}, expected
+    return function (value) { return object[key1][key2] = value; };};
+
+var empty = one(function () { })
+
+; // inferred as {}, expected
+
+
 var hashOfEmpty1 = on({ test: function () { } }); // {}
 var hashOfEmpty2 = on({ test: function (x) { } }); // { test: boolean }
+
+
+
+
+
 var c1 = new Component1({
     data: {
         hello: ""
     }
 });
 c1.get("hello");
+
+
+
 function f(p) {
     var a;
     a[p].add; // any
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var result = dispatchMethod("someMethod", ["hello", 35]);
+
+
+
+
 var MyThingy;
+
 function addToMyThingy(key) {
     MyThingy[key].push("a");
 }
+
+
+
+
+
+
+
 function onChangeGenericFunction(handler) {
     handler.onChange('preset');
 }
+
 // Repro from #13285
-function updateIds(obj, idFields, idMapping) {
+function updateIds(
+obj,
+    idFields,
+    idMapping
+) {
     for (var _i = 0, idFields_1 = idFields; _i < idFields_1.length; _i++) {
         var idField = idFields_1[_i];
         var newId = idMapping[obj[idField]];
@@ -996,11 +1129,18 @@ function updateIds(obj, idFields, idMapping) {
     }
     return obj;
 }
+
 // Repro from #13285
-function updateIds2(obj, key, stringMap) {
+function updateIds2(
+obj,
+    key,
+    stringMap
+) {
     var x = obj[key];
     stringMap[x]; // Should be OK.
 }
+
+
 // Repro from #13604
 var A = /** @class */ (function () {
     function A() {
@@ -1008,11 +1148,9 @@ var A = /** @class */ (function () {
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
+    __extends(B, _super);function B() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    B.prototype.f = function (p) {
+    }B.prototype.f = function (p) {
         p.x;
     };
     return B;
@@ -1020,8 +1158,7 @@ var B = /** @class */ (function (_super) {
 // Repro from #13749
 var Form = /** @class */ (function () {
     function Form() {
-    }
-    Form.prototype.set = function (prop, value) {
+    }Form.prototype.set = function (prop, value) {
         this.childFormFactories[prop](value);
     };
     return Form;
@@ -1033,6 +1170,8 @@ var SampleClass = /** @class */ (function () {
     }
     return SampleClass;
 }());
+
+
 var AnotherSampleClass = /** @class */ (function (_super) {
     __extends(AnotherSampleClass, _super);
     function AnotherSampleClass(props) {
@@ -1041,6 +1180,7 @@ var AnotherSampleClass = /** @class */ (function (_super) {
         _this = _super.call(this, merge(props, foo)) || this;
         return _this;
     }
+
     AnotherSampleClass.prototype.brokenMethod = function () {
         this.props.foo.concat;
     };
@@ -1062,34 +1202,49 @@ var Flag;
 function getFlagsFromSimpleRecord(record, flags) {
     return record[flags[0]];
 }
+
+
 function getFlagsFromDynamicRecord(record, flags) {
     return record[flags[0]];
 }
+
+
+
 function fn(o, k) {
     take(o[k]);
     take(o[k]);
 }
+
 // Repro from #23133
 var Unbounded = /** @class */ (function () {
     function Unbounded() {
-    }
-    Unbounded.prototype.foo = function (x) {
+    }Unbounded.prototype.foo = function (x) {
         var y = x;
     };
     return Unbounded;
 }());
+
+
+
+
+
+
+
 function ff1(dd, k1, k2) {
     return dd[k1][k2];
 }
+
 function ff2(dd, k1, k2) {
     var d = dd[k1];
     return d[k2];
 }
+
 // Repro from #26409
 var cf1 = function (t, k) {
     var s = t[k];
     t.cool;
 };
+
 var cf2 = function (t, k) {
     var s = t[k];
     t.cool;

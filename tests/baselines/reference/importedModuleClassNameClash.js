@@ -10,9 +10,9 @@ class foo { }
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+
     var foo = /** @class */ (function () {
-        function foo() {
-        }
+        function foo() {}
         return foo;
     }());
 });

@@ -33,6 +33,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 // Original test intent:
 // Errors on '_this' should be reported in derived constructors,
 // even if 'super()' is not called.

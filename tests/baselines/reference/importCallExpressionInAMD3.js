@@ -20,15 +20,13 @@ define(["require", "exports"], function (require, exports) {
     exports.B = void 0;
     class B {
         print() { return "I am B"; }
-    }
-    exports.B = B;
+    }exports.B = B;
 });
 //// [2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
     async function foo() {
-        class C extends (await new Promise((resolve_1, reject_1) => { require(["./0"], resolve_1, reject_1); })).B {
-        }
+        class C extends (await new Promise((resolve_1, reject_1) => { require(["./0"], resolve_1, reject_1); })).B {}
         var c = new C();
         c.print();
     }

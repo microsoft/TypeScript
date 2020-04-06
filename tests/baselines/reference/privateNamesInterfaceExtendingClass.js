@@ -22,15 +22,15 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
     return value;
 };
 var _prop;
-class C {
-    constructor() {
+class C {constructor() {
         _prop.set(this, void 0);
-    }
-    func(x) {
+    }func(x) {
         __classPrivateFieldSet(x, _prop, 123);
     }
 }
 _prop = new WeakMap();
+
 function func(x) {
     x. = 123;
 }
+

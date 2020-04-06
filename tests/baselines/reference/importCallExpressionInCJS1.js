@@ -20,8 +20,7 @@ function foo() {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = void 0;
-function foo() { return "foo"; }
-exports.foo = foo;
+function foo() { return "foo"; }exports.foo = foo;
 //// [1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -32,6 +31,7 @@ p1.then(zero => {
     return zero.foo();
 });
 exports.p2 = Promise.resolve().then(() => require("./0"));
+
 function foo() {
     const p2 = Promise.resolve().then(() => require("./0"));
 }

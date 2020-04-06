@@ -15,6 +15,7 @@ function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, a
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
     exports.__esModule = true;
+
     // Error
     function Baz(arg1, arg2) {
         var a0 = <OverloadComponent a={arg1.b}/>;

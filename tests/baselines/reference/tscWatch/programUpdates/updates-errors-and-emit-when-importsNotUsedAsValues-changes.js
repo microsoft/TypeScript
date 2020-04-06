@@ -27,19 +27,16 @@ interface Array<T> { length: number; [n: number]: T; }
 exports.__esModule = true;
 exports.C = void 0;
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
-}());
-exports.C = C;
+}());exports.C = C;
 
 
 //// [/user/username/projects/myproject/b.js]
 "use strict";
 exports.__esModule = true;
 exports.f = void 0;
-function f(p) { return p; }
-exports.f = f;
+function f(p) { return p; }exports.f = f;
 
 
 
@@ -144,8 +141,7 @@ Change:: Set to "error"
 exports.__esModule = true;
 exports.f = void 0;
 require("./a");
-function f(p) { return p; }
-exports.f = f;
+function f(p) { return p; }exports.f = f;
 
 
 

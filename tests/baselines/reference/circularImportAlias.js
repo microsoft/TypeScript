@@ -38,8 +38,7 @@ var B;
 (function (B) {
     B.a = A;
     var D = /** @class */ (function (_super) {
-        __extends(D, _super);
-        function D() {
+        __extends(D, _super);function D() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return D;
@@ -49,8 +48,7 @@ var B;
 var A;
 (function (A) {
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         return C;
     }());
     A.C = C;
@@ -58,3 +56,5 @@ var A;
 })(A || (A = {}));
 var c;
 var c = new B.a.C();
+
+

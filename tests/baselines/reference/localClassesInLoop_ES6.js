@@ -14,8 +14,8 @@ use(data[0]() === data[1]());
 "use strict";
 var data = [];
 for (let x = 0; x < 2; ++x) {
-    class C {
-    }
+    class C {}
     data.push(() => C);
 }
+
 use(data[0]() === data[1]());

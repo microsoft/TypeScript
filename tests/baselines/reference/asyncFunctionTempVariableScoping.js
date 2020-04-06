@@ -53,15 +53,16 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 var _this = this;
-(function (_a) { return __awaiter(_this, void 0, void 0, function () {
-    var _b;
-    var foo = _a.foo, bar = _a.bar, rest = __rest(_a, ["foo", "bar"]);
-    return __generator(this, function (_c) {
-        switch (_c.label) {
-            case 0:
-                _b = bar;
-                return [4 /*yield*/, foo];
-            case 1: return [2 /*return*/, _b.apply(void 0, [_c.sent()])];
-        }
-    });
-}); });
+(
+
+    function (_a) { return __awaiter(_this, void 0, void 0, function () {
+        var _b;
+        var foo = _a.foo, bar = _a.bar, rest = __rest(_a, ["foo", "bar"]);
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _b = bar;return [4 /*yield*/, foo];
+                case 1: return [2 /*return*/, _b.apply(void 0, [_c.sent()])];
+            }
+        });
+    }); });

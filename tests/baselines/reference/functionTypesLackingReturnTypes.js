@@ -16,9 +16,14 @@ var i: { new () }
 // Error (no '=>')
 function f(x) {
 }
+
 // Error (no '=>')
 var g;
+
 // Okay
-var h;
+var h
+
+;
+
 // Okay
 var i;

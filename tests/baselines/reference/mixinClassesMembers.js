@@ -112,6 +112,10 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
+
+
+
 function f1() {
     var x1 = new Mixed1("hello");
     var x2 = new Mixed1(42);
@@ -123,18 +127,21 @@ function f1() {
     var x8 = new Mixed4(42);
     var x9 = new Mixed5();
 }
+
 function f2() {
     var x = new Mixed1("hello");
     x.a;
     x.p;
     Mixed1.p;
 }
+
 function f3() {
     var x = new Mixed2("hello");
     x.a;
     x.p;
     Mixed2.p;
 }
+
 function f4() {
     var x = new Mixed3("hello");
     x.a;
@@ -143,6 +150,7 @@ function f4() {
     Mixed3.p;
     Mixed3.f();
 }
+
 function f5() {
     var x = new Mixed4("hello");
     x.a;
@@ -151,6 +159,7 @@ function f5() {
     Mixed4.p;
     Mixed4.f();
 }
+
 function f6() {
     var x = new Mixed5();
     x.p;
@@ -158,6 +167,7 @@ function f6() {
     Mixed5.p;
     Mixed5.f();
 }
+
 var C2 = /** @class */ (function (_super) {
     __extends(C2, _super);
     function C2() {

@@ -18,6 +18,7 @@ function test1(x) {
         x;
     }
 }
+
 function test2(x) {
     if (x instanceof Object) {
         x;

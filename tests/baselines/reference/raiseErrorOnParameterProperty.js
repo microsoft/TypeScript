@@ -15,3 +15,4 @@ var C1 = /** @class */ (function () {
     return C1;
 }());
 var c1 = new C1(0);
+

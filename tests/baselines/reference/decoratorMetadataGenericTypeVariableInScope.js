@@ -23,8 +23,7 @@ exports.__esModule = true;
 exports.C = void 0;
 // Unused, but could collide with the named type argument below.
 var TypeVariable = /** @class */ (function () {
-    function TypeVariable() {
-    }
+    function TypeVariable() {}
     return TypeVariable;
 }());
 var C = /** @class */ (function () {

@@ -34,8 +34,7 @@ interface Array<T> { length: number; [n: number]: T; }
 "use strict";
 exports.__esModule = true;
 exports.Foo = void 0;
-function Foo() { }
-exports.Foo = Foo;
+function Foo() { }exports.Foo = Foo;
 ;
 
 
@@ -125,8 +124,7 @@ export var T: number;export function Foo() { };
 "use strict";
 exports.__esModule = true;
 exports.Foo = exports.T = void 0;
-function Foo() { }
-exports.Foo = Foo;
+function Foo() { }exports.Foo = Foo;
 ;
 
 
@@ -138,8 +136,7 @@ import {Foo} from "./moduleFile1"; let y = Foo();
 //// [/a/b/file1Consumer3.js]
 "use strict";
 exports.__esModule = true;
-var moduleFile1_1 = require("./moduleFile1");
-var y = moduleFile1_1.Foo();
+var moduleFile1_1 = require("./moduleFile1");var y = moduleFile1_1.Foo();
 
 
 

@@ -12,5 +12,7 @@ const tag = <div></div>;
 exports.__esModule = true;
 /// <reference path="react16.d.ts" />
 var React = require("react");
+
 require("./App.css"); // doesn't actually exist
+
 var tag = React.createElement("div", null);

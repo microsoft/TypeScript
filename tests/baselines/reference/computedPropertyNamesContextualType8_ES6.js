@@ -10,6 +10,7 @@ var o: I = {
 }
 
 //// [computedPropertyNamesContextualType8_ES6.js]
+
 var o = {
     ["" + "foo"]: "",
     ["" + "bar"]: 0

@@ -11,8 +11,7 @@ class C {
 // once caused stack overflow
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.x = function () {
+    }C.x = function () {
         var r = this;
         return this;
     };

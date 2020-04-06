@@ -31,6 +31,9 @@ var array1 = [true, 2, 3]; // Contextual type by the numeric index type of the c
 var tup = [1, 2, 3, 4];
 var tup1 = [1, 2, 3, "string"];
 var tup2 = [1, 2, 3, "string"]; // Error
+
+
+
 // In a contextually typed array literal expression containing one or more spread elements,
 // an element expression at index N is contextually typed by the numeric index type of the contextual type, if any.
 var spr = __spreadArrays([1, 2, 3], array);

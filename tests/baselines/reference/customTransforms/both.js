@@ -3,15 +3,14 @@
 function f1() { }
 //@after
 var c = /** @class */ (function () {
-    function c() {
-    }
+    function c() {}
     return c;
 }());
-(function () { });
+(function () { }
+);
 //@after
 var e;
-(function (e) {
-})(e || (e = {}));
+(function (e) {})(e || (e = {}));
 // leading
 /*@before*/
 function f2() { } // trailing

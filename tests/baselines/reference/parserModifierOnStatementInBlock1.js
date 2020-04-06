@@ -10,5 +10,4 @@ exports.__esModule = true;
 exports.foo = void 0;
 function foo() {
     export var x = this;
-}
-exports.foo = foo;
+}exports.foo = foo;

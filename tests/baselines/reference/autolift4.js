@@ -50,11 +50,13 @@ var Point = /** @class */ (function () {
 }());
 var Point3D = /** @class */ (function (_super) {
     __extends(Point3D, _super);
+
     function Point3D(x, y, z, m) {
         var _this = _super.call(this, x, y) || this;
         _this.z = z;
         return _this;
     }
+
     Point3D.prototype.getDist = function () {
         return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.m);
     };

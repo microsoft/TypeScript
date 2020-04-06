@@ -36,8 +36,7 @@ define("_apply", ["require", "exports"], function (require, exports) {
      * @param {...*} args The arguments to invoke `func` with.
      * @returns {*} Returns the result of `func`.
      */
-    function apply(func, thisArg) {
-        var args = [];
+    function apply(func, thisArg) {var args = [];
         for (var _i = 2; _i < arguments.length; _i++) {
             args[_i - 2] = arguments[_i];
         }
@@ -50,5 +49,6 @@ define("_apply", ["require", "exports"], function (require, exports) {
         }
         return func.apply(thisArg, args);
     }
+
     exports["default"] = apply;
 });

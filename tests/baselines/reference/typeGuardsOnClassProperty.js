@@ -35,11 +35,11 @@ if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }
 // the type guard to have an effect
 var D = /** @class */ (function () {
     function D() {
-    }
-    D.prototype.getData = function () {
+    }D.prototype.getData = function () {
         var data = this.data;
         return typeof data === "string" ? data : data.join(" ");
     };
+
     D.prototype.getData1 = function () {
         return typeof this.data === "string" ? this.data : this.data.join(" ");
     };
@@ -48,7 +48,9 @@ var D = /** @class */ (function () {
 var o = {
     prop1: "string",
     prop2: true
-};
+}
+
+;
 if (typeof o.prop1 === "string" && o.prop1.toLowerCase()) { }
 var prop1 = o.prop1;
 if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }

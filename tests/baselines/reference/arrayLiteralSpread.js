@@ -30,8 +30,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
         for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
             r[k] = a[j];
     return r;
-};
-function f0() {
+};function f0() {
     var a = [1, 2, 3];
     var a1 = __spreadArrays(a);
     var a2 = __spreadArrays([1], a);
@@ -42,11 +41,13 @@ function f0() {
     var a7 = __spreadArrays([1], a, [2], a);
     var a8 = __spreadArrays(a, a, a);
 }
+
 function f1() {
     var a = [1, 2, 3];
     var b = __spreadArrays(["hello"], a, [true]);
     var b;
 }
+
 function f2() {
     var a = [];
     var b = [5];

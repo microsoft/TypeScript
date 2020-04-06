@@ -5,6 +5,5 @@ interface & { }
 
 
 //// [interfaceNaming1.js]
-interface;
-{ }
+interface;{ }
 interface & {};

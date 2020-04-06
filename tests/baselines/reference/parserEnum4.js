@@ -8,5 +8,4 @@
 exports.__esModule = true;
 exports.SignatureFlags = void 0;
 var SignatureFlags;
-(function (SignatureFlags) {
-})(SignatureFlags = exports.SignatureFlags || (exports.SignatureFlags = {}));
+(function (SignatureFlags) {})(SignatureFlags = exports.SignatureFlags || (exports.SignatureFlags = {}));

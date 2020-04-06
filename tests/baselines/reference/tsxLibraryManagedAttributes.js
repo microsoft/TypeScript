@@ -140,9 +140,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
+
+
+
+
 var Component = /** @class */ (function (_super) {
-    __extends(Component, _super);
-    function Component() {
+    __extends(Component, _super);function Component() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Component.propTypes = {
@@ -162,7 +166,7 @@ var d = <Component bar="yes" baz="yo" bat="ohno"/>; // Error, baz not a valid pr
 var e = <Component foo={12} bar={null} baz="cool"/>; // bar is nullable/undefinable since it's not marked `isRequired`
 var f = <Component foo={12} bar="yeah" baz={null}/>; // Error, baz is _not_ nullable/undefinable since it's marked `isRequired`
 var JustPropTypes = /** @class */ (function (_super) {
-    __extends(JustPropTypes, _super);
+    __extends(JustPropTypes, _super);// Error, baz is _not_ nullable/undefinable since it's marked `isRequired`
     function JustPropTypes() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
@@ -177,7 +181,7 @@ var h = <JustPropTypes foo="no"/>; // error, wrong type
 var i = <JustPropTypes foo={null} bar="ok"/>;
 var j = <JustPropTypes foo={12} bar={null}/>; // error, bar is required
 var JustDefaultProps = /** @class */ (function (_super) {
-    __extends(JustDefaultProps, _super);
+    __extends(JustDefaultProps, _super);// error, bar is required
     function JustDefaultProps() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
@@ -189,9 +193,9 @@ var JustDefaultProps = /** @class */ (function (_super) {
 var k = <JustDefaultProps foo={12}/>;
 var l = <JustDefaultProps foo={12} bar="ok"/>; // error, no prop named bar
 var m = <JustDefaultProps foo="no"/>; // error, wrong type
+
 var BothWithSpecifiedGeneric = /** @class */ (function (_super) {
-    __extends(BothWithSpecifiedGeneric, _super);
-    function BothWithSpecifiedGeneric() {
+    __extends(BothWithSpecifiedGeneric, _super);function BothWithSpecifiedGeneric() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     BothWithSpecifiedGeneric.propTypes = {
@@ -211,7 +215,7 @@ var q = <BothWithSpecifiedGeneric bar="yes" baz={12} bat="ohno"/>; // Error, baz
 var r = <BothWithSpecifiedGeneric foo="no" bar={null} baz={0}/>; // bar is nullable/undefinable since it's not marked `isRequired`
 var s = <BothWithSpecifiedGeneric foo="eh" bar="yeah" baz={null}/>; // Error, baz is _not_ nullable/undefinable since it's marked `isRequired`
 var JustPropTypesWithSpecifiedGeneric = /** @class */ (function (_super) {
-    __extends(JustPropTypesWithSpecifiedGeneric, _super);
+    __extends(JustPropTypesWithSpecifiedGeneric, _super);// Error, baz is _not_ nullable/undefinable since it's marked `isRequired`
     function JustPropTypesWithSpecifiedGeneric() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
@@ -226,7 +230,7 @@ var u = <JustPropTypesWithSpecifiedGeneric foo={12}/>; // error, wrong type
 var v = <JustPropTypesWithSpecifiedGeneric foo={null} bar="ok"/>; // generic overrides propTypes required-ness, null isn't valid
 var w = <JustPropTypesWithSpecifiedGeneric foo="cool" bar={null}/>; // error, bar is required
 var JustDefaultPropsWithSpecifiedGeneric = /** @class */ (function (_super) {
-    __extends(JustDefaultPropsWithSpecifiedGeneric, _super);
+    __extends(JustDefaultPropsWithSpecifiedGeneric, _super);// error, bar is required
     function JustDefaultPropsWithSpecifiedGeneric() {
         return _super !== null && _super.apply(this, arguments) || this;
     }

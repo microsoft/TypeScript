@@ -107,29 +107,25 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var SomeBase = /** @class */ (function () {
+})();var SomeBase = /** @class */ (function () {
     function SomeBase() {
     }
     return SomeBase;
 }());
 var SomeDerived1 = /** @class */ (function (_super) {
-    __extends(SomeDerived1, _super);
-    function SomeDerived1() {
+    __extends(SomeDerived1, _super);function SomeDerived1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return SomeDerived1;
 }(SomeBase));
 var SomeDerived2 = /** @class */ (function (_super) {
-    __extends(SomeDerived2, _super);
-    function SomeDerived2() {
+    __extends(SomeDerived2, _super);function SomeDerived2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return SomeDerived2;
 }(SomeBase));
 var SomeDerived3 = /** @class */ (function (_super) {
-    __extends(SomeDerived3, _super);
-    function SomeDerived3() {
+    __extends(SomeDerived3, _super);function SomeDerived3() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return SomeDerived3;
@@ -142,8 +138,10 @@ fn1({}); // Error
 function fn2() { return undefined; }
 var d = fn2(0, undefined);
 var d;
+
 // Generic and non - generic overload where generic overload is the only candidate when called without type arguments
 var s = fn2(0, '');
+
 // Generic and non - generic overload where non - generic overload is the only candidate when called with type arguments
 fn2('', 0); // Error
 // Generic and non - generic overload where non - generic overload is the only candidate when called without type arguments
@@ -153,12 +151,16 @@ var s = fn3(3);
 var s = fn3('', 3, '');
 var n = fn3(5, 5, 5);
 var n;
+
 // Generic overloads with differing arity called with type arguments matching each overload type parameter count
 var s = fn3(4);
 var s = fn3('', '', '');
 var n = fn3('', '', 3);
+
 // Generic overloads with differing arity called with type argument count that doesn't match any overload
 fn3(); // Error
+
+
 function fn4() { }
 fn4('', 3);
 fn4(3, ''); // Error
@@ -177,3 +179,4 @@ fn4(null, true); // Error
 function fn5() { return undefined; }
 var n = fn5(function (n) { return n.toFixed(); });
 var s = fn5(function (n) { return n.substr(0); });
+

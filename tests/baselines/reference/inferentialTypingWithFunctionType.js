@@ -5,4 +5,5 @@ declare function identity<V>(y: V): V;
 var s = map("", identity);
 
 //// [inferentialTypingWithFunctionType.js]
+
 var s = map("", identity);

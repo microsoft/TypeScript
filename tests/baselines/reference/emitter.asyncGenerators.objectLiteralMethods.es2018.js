@@ -83,4 +83,5 @@ const o7 = {
     async *f() {
         return 1;
     }
-};
+}
+;

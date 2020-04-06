@@ -60,23 +60,28 @@ exports.x = 1;
 exports.__esModule = true;
 // all mutations below are illegal and should be fixed
 var stuff = require("./f1");
+
 var n = 'baz';
 stuff.x = 0;
 stuff['x'] = 1;
 stuff.blah = 2;
 stuff[n] = 3;
+
 stuff.x++;
 stuff['x']++;
 stuff['blah']++;
 stuff[n]++;
+
 (stuff.x) = 0;
 (stuff['x']) = 1;
 (stuff.blah) = 2;
 (stuff[n]) = 3;
+
 (stuff.x)++;
 (stuff['x'])++;
 (stuff['blah'])++;
 (stuff[n])++;
+
 for (stuff.x in []) { }
 for (var _i = 0, _a = []; _i < _a.length; _i++) {
     stuff.x = _a[_i];
@@ -109,3 +114,5 @@ for ((stuff[n]) in []) { }
 for (var _p = 0, _q = []; _p < _q.length; _p++) {
     (stuff[n]) = _q[_p];
 }
+
+

@@ -22,7 +22,23 @@ function incrementIdx(max) {
     var idx = Math.floor(Math.random() * max);
     return idx;
 }
+
 var array1 = [1, 2, 3, 4, 5];
-(_a = array1)[_b = incrementIdx(array1.length)] = Math.pow(_a[_b], 3);
-(_e = array1)[_f = incrementIdx(array1.length)] = Math.pow(_e[_f], (_c = array1)[_d = incrementIdx(array1.length)] = Math.pow(_c[_d], 2));
-(_g = array1)[_h = incrementIdx(array1.length)] = Math.pow(_g[_h], Math.pow(array1[incrementIdx(array1.length)], 2));
+
+(
+
+    _a = array1)[_b = incrementIdx(array1.length)] = Math.pow(
+
+_a[_b], 3);
+
+(
+
+    _e = array1)[_f = incrementIdx(array1.length)] = Math.pow(
+
+_e[_f], (_c = array1)[_d = incrementIdx(array1.length)] = Math.pow(_c[_d], 2));
+
+(
+
+    _g = array1)[_h = incrementIdx(array1.length)] = Math.pow(
+
+_g[_h], Math.pow(array1[incrementIdx(array1.length)], 2));

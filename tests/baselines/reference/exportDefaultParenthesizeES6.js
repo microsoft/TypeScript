@@ -2,5 +2,4 @@
 export default (class Foo {} as any);
 
 //// [classexpr.js]
-export default (class Foo {
-});
+export default (class Foo {});

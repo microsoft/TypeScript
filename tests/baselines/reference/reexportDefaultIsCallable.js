@@ -30,8 +30,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 var reexporter_1 = __importDefault(require("./reexporter"));
 var Mine = /** @class */ (function (_super) {
-    __extends(Mine, _super);
-    function Mine() {
+    __extends(Mine, _super);function Mine() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Mine;

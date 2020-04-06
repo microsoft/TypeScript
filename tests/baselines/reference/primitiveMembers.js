@@ -44,36 +44,34 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var x = 5;
+})();var x = 5;
 var r = /yo/;
 r.source;
+
 x.toBAZ();
 x.toString();
 var n = 0;
 var N;
 n = N; // should not work, as 'number' has a different brand
 N = n; // should work
-var o = {};
+var o = {}
+;
 var f = function (x) { return x.length; };
 var r2 = /./g;
 var n2 = 34;
 var s = "yo";
 var b = true;
+
 var n3 = 5 || {};
+
+
 var baz = /** @class */ (function () {
-    function baz() {
-    }
-    baz.prototype.bar = function () { };
-    ;
+    function baz() {}baz.prototype.bar = function () { };;
     return baz;
 }());
 var foo = /** @class */ (function (_super) {
-    __extends(foo, _super);
-    function foo() {
+    __extends(foo, _super);function foo() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    foo.prototype.bar = function () { return undefined; };
-    ;
+    }foo.prototype.bar = function () { return undefined; };;
     return foo;
 }(baz));

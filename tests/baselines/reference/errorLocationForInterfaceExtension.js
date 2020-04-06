@@ -6,3 +6,4 @@ interface x extends string { }
 
 //// [errorLocationForInterfaceExtension.js]
 var n = '';
+

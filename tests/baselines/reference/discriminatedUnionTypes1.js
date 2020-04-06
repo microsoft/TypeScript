@@ -143,6 +143,11 @@ function f8(m: Message) {
 }
 
 //// [discriminatedUnionTypes1.js]
+
+
+
+
+
 function area1(s) {
     if (s.kind === "square") {
         return s.size * s.size;
@@ -157,6 +162,7 @@ function area1(s) {
         return 0;
     }
 }
+
 function area2(s) {
     switch (s.kind) {
         case "square": return s.size * s.size;
@@ -164,9 +170,11 @@ function area2(s) {
         case "circle": return Math.PI * s.radius * s.radius;
     }
 }
+
 function assertNever(x) {
     throw new Error("Unexpected object: " + x);
 }
+
 function area3(s) {
     switch (s.kind) {
         case "square": return s.size * s.size;
@@ -175,6 +183,7 @@ function area3(s) {
         default: return assertNever(s);
     }
 }
+
 function area4(s) {
     switch (s.kind) {
         case "square": return s.size * s.size;
@@ -183,6 +192,12 @@ function area4(s) {
     }
     return assertNever(s);
 }
+
+
+
+
+
+
 function f1(m) {
     if (m.kind === "A") {
         m; // { kind: "A", x: string }
@@ -194,22 +209,26 @@ function f1(m) {
         m; // { kind: "B" | "C", y: number }
     }
 }
+
 function f2(m) {
     if (m.kind === "A") {
         return;
     }
     m; // { kind: "B" | "C", y: number } | { kind: "D" }
 }
+
 function f3(m) {
     if (m.kind === "X") {
         m; // never
     }
 }
+
 function f4(m, x) {
     if (m.kind == x) {
         m; // { kind: "A", x: string } | { kind: "D" }
     }
 }
+
 function f5(m) {
     switch (m.kind) {
         case "A":
@@ -219,20 +238,25 @@ function f5(m) {
             m; // { kind: "D" }
             break;
         default:
-            m; // { kind: "B" | "C", y: number }
+            m;
+        // { kind: "B" | "C", y: number }
     }
 }
+
 function f6(m) {
     switch (m.kind) {
         case "A":
-            m; // { kind: "A", x: string }
+            m;
+        // { kind: "A", x: string }
         case "D":
             m; // { kind: "A", x: string } | { kind: "D" }
             break;
         default:
-            m; // { kind: "B" | "C", y: number }
+            m;
+        // { kind: "B" | "C", y: number }
     }
 }
+
 function f7(m) {
     switch (m.kind) {
         case "A":
@@ -241,6 +265,7 @@ function f7(m) {
     }
     m; // { kind: "B" | "C", y: number } | { kind: "D" }
 }
+
 function f8(m) {
     switch (m.kind) {
         case "A":

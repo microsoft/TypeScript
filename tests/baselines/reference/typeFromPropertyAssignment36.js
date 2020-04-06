@@ -80,6 +80,7 @@ function f(b) {
     }
     d.e = 12;
     d.e;
+
     if (b) {
         d.q = false;
     }
@@ -110,6 +111,7 @@ function d() {
 }
 d.e = 12;
 d.e;
+
 if (!!false) {
     d.q = false;
 }
@@ -135,6 +137,7 @@ if (!!false) {
     g.expando = 1;
 }
 g.expando; // error
+
 if (!!false) {
     g.both = 'hi';
 }

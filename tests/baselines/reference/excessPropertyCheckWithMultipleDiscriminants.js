@@ -62,12 +62,27 @@ const c: DisjointDiscriminants = {
 
 //// [excessPropertyCheckWithMultipleDiscriminants.js]
 // Repro from #32657
+
+
+
+
+
+
+
+
 var foo = {
     type: "number",
     value: 10,
     multipleOf: 5,
     format: "what?"
-};
+}
+
+
+;
+
+
+
+
 // This has excess error because variant three is the only applicable case.
 var a = {
     p1: 'left',
@@ -75,6 +90,7 @@ var a = {
     p3: 42,
     p4: "hello"
 };
+
 // This has no excess error because variant one and three are both applicable.
 var b = {
     p1: 'left',
@@ -82,6 +98,7 @@ var b = {
     p3: 42,
     p4: "hello"
 };
+
 // This has excess error because variant two is the only applicable case
 var c = {
     p1: 'right',

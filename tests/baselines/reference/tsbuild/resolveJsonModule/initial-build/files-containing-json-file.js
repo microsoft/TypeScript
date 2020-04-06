@@ -21,6 +21,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 var hello_json_1 = __importDefault(require("./hello.json"));
+
 exports["default"] = hello_json_1["default"].hello;
 
 

@@ -23,11 +23,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var MyModule;
 (function (MyModule) {
+
     function inject(target, key) { }
     MyModule.inject = inject;
     var Leg = /** @class */ (function () {
-        function Leg() {
-        }
+        function Leg() {}
         return Leg;
     }());
     MyModule.Leg = Leg;

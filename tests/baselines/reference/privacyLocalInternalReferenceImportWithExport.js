@@ -221,7 +221,10 @@ var import_public;
     import_public.im_public_e_private = m_private.e_private;
     import_public.im_public_f_private = m_private.f_private;
     import_public.im_public_v_private = m_private.v_private;
+
     import_public.im_public_mi_private = m_private.mi_private;
+
+
     // Usage of privacy error imports
     var privateUse_im_public_c_private = new import_public.im_public_c_private();
     import_public.publicUse_im_public_c_private = new import_public.im_public_c_private();
@@ -232,15 +235,22 @@ var import_public;
     var privateUse_im_public_v_private = import_public.im_public_v_private;
     import_public.publicUse_im_public_v_private = import_public.im_public_v_private;
     var privateUse_im_public_i_private;
+
     var privateUse_im_public_mi_private = new import_public.im_public_mi_private.c();
     import_public.publicUse_im_public_mi_private = new import_public.im_public_mi_private.c();
     var privateUse_im_public_mu_private;
+
+
+
     // No Privacy errors - importing public elements
     import_public.im_public_c_public = m_public.c_public;
     import_public.im_public_e_public = m_public.e_public;
     import_public.im_public_f_public = m_public.f_public;
     import_public.im_public_v_public = m_public.v_public;
+
     import_public.im_public_mi_public = m_public.mi_public;
+
+
     // Usage of above
     var privateUse_im_public_c_public = new import_public.im_public_c_public();
     import_public.publicUse_im_public_c_public = new import_public.im_public_c_public();
@@ -251,6 +261,7 @@ var import_public;
     var privateUse_im_public_v_public = import_public.im_public_v_public;
     import_public.publicUse_im_public_v_public = import_public.im_public_v_public;
     var privateUse_im_public_i_public;
+
     var privateUse_im_public_mi_public = new import_public.im_public_mi_public.c();
     import_public.publicUse_im_public_mi_public = new import_public.im_public_mi_public.c();
     var privateUse_im_public_mu_public;
@@ -262,7 +273,10 @@ var import_private;
     import_private.im_private_e_private = m_private.e_private;
     import_private.im_private_f_private = m_private.f_private;
     import_private.im_private_v_private = m_private.v_private;
+
     import_private.im_private_mi_private = m_private.mi_private;
+
+
     // Usage of above decls
     var privateUse_im_private_c_private = new import_private.im_private_c_private();
     import_private.publicUse_im_private_c_private = new import_private.im_private_c_private();
@@ -273,15 +287,21 @@ var import_private;
     var privateUse_im_private_v_private = import_private.im_private_v_private;
     import_private.publicUse_im_private_v_private = import_private.im_private_v_private;
     var privateUse_im_private_i_private;
+
     var privateUse_im_private_mi_private = new import_private.im_private_mi_private.c();
     import_private.publicUse_im_private_mi_private = new import_private.im_private_mi_private.c();
     var privateUse_im_private_mu_private;
+
+
     // No privacy Error - importing public elements
     import_private.im_private_c_public = m_public.c_public;
     import_private.im_private_e_public = m_public.e_public;
     import_private.im_private_f_public = m_public.f_public;
     import_private.im_private_v_public = m_public.v_public;
+
     import_private.im_private_mi_public = m_public.mi_public;
+
+
     // Usage of no privacy error imports
     var privateUse_im_private_c_public = new import_private.im_private_c_public();
     import_private.publicUse_im_private_c_public = new import_private.im_private_c_public();
@@ -292,6 +312,7 @@ var import_private;
     var privateUse_im_private_v_public = import_private.im_private_v_public;
     import_private.publicUse_im_private_v_public = import_private.im_private_v_public;
     var privateUse_im_private_i_public;
+
     var privateUse_im_private_mi_public = new import_private.im_private_mi_public.c();
     import_private.publicUse_im_private_mi_public = new import_private.im_private_mi_public.c();
     var privateUse_im_private_mu_public;

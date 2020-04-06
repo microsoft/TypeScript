@@ -27,6 +27,7 @@ f12345("a", "b", "c");  // error
 
 
 //// [unionTypeCallSignatures4.js]
+
 var f12;
 f12("a");
 f12("a", "b");

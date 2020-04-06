@@ -18,8 +18,7 @@ class After {
 //// [scopeCheckStaticInitializer.js]
 var X = /** @class */ (function () {
     function X() {
-    }
-    X.method = function () { };
+    }X.method = function () { };
     X.illegalBeforeProperty = X.data;
     X.okBeforeMethod = X.method;
     X.illegal2 = After.data;
@@ -29,9 +28,7 @@ var X = /** @class */ (function () {
 }());
 var After = /** @class */ (function () {
     function After() {
-    }
-    After.method = function () { };
-    ;
+    }After.method = function () { };;
     After.data = 12;
     return After;
 }());

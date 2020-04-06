@@ -30,9 +30,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
-var t1_1 = require("./t1");
-__createBinding(exports, t1_1, "x");
-__createBinding(exports, t1_1, "from");
+var t1_1 = require("./t1");__createBinding(exports, t1_1, "x");__createBinding(exports, t1_1, "from");
 //// [t3.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -43,8 +41,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
-var t1_1 = require("./t1");
-__createBinding(exports, t1_1, "from");
+var t1_1 = require("./t1");__createBinding(exports, t1_1, "from");
 //// [t4.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -55,9 +52,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
-var t1_1 = require("./t1");
-__createBinding(exports, t1_1, "x", "a");
-__createBinding(exports, t1_1, "from");
+var t1_1 = require("./t1");__createBinding(exports, t1_1, "x", "a");__createBinding(exports, t1_1, "from");
 //// [t5.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -68,6 +63,4 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
-var t1_1 = require("./t1");
-__createBinding(exports, t1_1, "x", "a");
-__createBinding(exports, t1_1, "from");
+var t1_1 = require("./t1");__createBinding(exports, t1_1, "x", "a");__createBinding(exports, t1_1, "from");

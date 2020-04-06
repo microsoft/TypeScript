@@ -17,6 +17,7 @@ var r6 = foo<Object[]>([1, '']); // Object[]
 function foo(t) {
     return t;
 }
+
 var r = foo([1, 2]); // number[]
 var r = foo([1, 2]); // number[]
 var ra = foo([1, 2]); // any[]

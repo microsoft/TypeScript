@@ -12,5 +12,5 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
-var constructor;
-(function () { });
+var constructor;(function () { }
+);

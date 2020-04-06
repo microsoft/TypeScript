@@ -14,6 +14,7 @@ var b =~;
 //// [bitwiseNotOperatorInvalidOperations.js]
 // Unary operator ~
 var q;
+
 // operand before ~
 var a = q;
 ~; //expect error

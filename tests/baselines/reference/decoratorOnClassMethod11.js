@@ -19,8 +19,8 @@ var M;
 (function (M) {
     var C = /** @class */ (function () {
         function C() {
-        }
-        C.prototype.decorator = function (target, key) { };
+        }C.prototype.decorator = function (target, key) { };
+
         C.prototype.method = function () { };
         __decorate([
             this.decorator

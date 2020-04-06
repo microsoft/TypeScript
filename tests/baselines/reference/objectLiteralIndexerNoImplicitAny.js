@@ -8,6 +8,7 @@ var x: I = {
 }
 
 //// [objectLiteralIndexerNoImplicitAny.js]
+
 var x = {
     p: null
 };

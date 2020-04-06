@@ -106,22 +106,70 @@ function foo(so: any) {
 }
 
 //// [intersectionTypeNormalization.js]
+
+
+
+
+
+
 var x;
 var x;
 var x;
+
+
+
+
+
+
+
 var y;
 var y;
 var y;
+
+
+
+
+
+
+
+
 var z;
 var z;
 var z;
 var z;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function getValueAsString(value) {
     if (value.kind === 'int') {
         return '' + value.num;
     }
     return value.str;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 function foo(so) {
     var val = so;
     var isGenre = val.genreId;

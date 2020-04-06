@@ -51,15 +51,13 @@ var A = /** @class */ (function () {
         var _newTarget = this.constructor;
         this.d = function _a() {
             var _newTarget = this && this instanceof _a ? this.constructor : void 0;
-            return _newTarget;
-        };
+            return _newTarget;};
         var a = _newTarget;
         var b = function () { return _newTarget; };
     }
     A.c = function _a() {
         var _newTarget = this && this instanceof _a ? this.constructor : void 0;
-        return _newTarget;
-    };
+        return _newTarget;};
     return A;
 }());
 var B = /** @class */ (function (_super) {
@@ -78,14 +76,18 @@ function f1() {
     var g = _newTarget;
     var h = function () { return _newTarget; };
 }
+
 var f2 = function f2() {
     var _newTarget = this && this instanceof f2 ? this.constructor : void 0;
     var i = _newTarget;
     var j = function () { return _newTarget; };
-};
+}
+
+;
+
 var O = {
     k: function k() {
         var _newTarget = this && this instanceof k ? this.constructor : void 0;
-        return _newTarget;
-    }
+        return _newTarget;}
 };
+

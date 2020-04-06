@@ -11,8 +11,7 @@ class A {
 //// [unusedTypeParameterInMethod2.js]
 var A = /** @class */ (function () {
     function A() {
-    }
-    A.prototype.f1 = function () {
+    }A.prototype.f1 = function () {
         var a;
         var b;
         a;

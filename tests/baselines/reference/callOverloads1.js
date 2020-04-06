@@ -21,11 +21,12 @@ Foo();
 var Foo = /** @class */ (function () {
     function Foo(x) {
         // WScript.Echo("Constructor function has executed");
-    }
+    }// error
     Foo.prototype.bar1 = function () { };
     return Foo;
 }());
 function F1(a) { return a; }
+
 var f1 = new Foo("hey");
 f1.bar1();
 Foo();

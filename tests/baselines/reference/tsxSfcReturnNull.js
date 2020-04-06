@@ -15,9 +15,11 @@ define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
     exports.__esModule = true;
     var Foo = function (props) { return null; };
+
     function Greet(x) {
         return null;
     }
+
     var foo = <Foo />;
     var G = <Greet />;
 });

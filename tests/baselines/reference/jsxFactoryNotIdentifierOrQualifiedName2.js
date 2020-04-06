@@ -60,11 +60,13 @@ var Element;
     }
     Element.isElement = isElement;
     function createElement(args) {
+
         return {};
     }
     Element.createElement = createElement;
 })(Element = exports.Element || (exports.Element = {}));
 exports.createElement = Element.createElement;
+
 function toCamelCase(text) {
     return text[0].toLowerCase() + text.substring(1);
 }
@@ -72,6 +74,7 @@ function toCamelCase(text) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 let c;
+
 class A {
     view() {
         return [

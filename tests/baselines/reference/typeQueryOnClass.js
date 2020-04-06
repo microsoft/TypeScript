@@ -64,7 +64,11 @@ var C = /** @class */ (function () {
         this.ia = 1;
         this.ib = function () { return _this.ia; };
     }
+
+
+
     C.foo = function (x) { };
+
     C.bar = function (x) { };
     Object.defineProperty(C, "sc", {
         get: function () {
@@ -104,13 +108,16 @@ var C = /** @class */ (function () {
     return C;
 }());
 var c;
+
 // BUG 820454
 var r1;
 var r2;
+
 var D = /** @class */ (function () {
     function D(y) {
         this.y = y;
     }
+
     D.prototype.foo = function () { };
     return D;
 }());

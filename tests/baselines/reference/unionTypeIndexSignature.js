@@ -26,6 +26,7 @@ anyVar = unionOfTypesWithAndWithoutStringSignature1[10]; // any
 //// [unionTypeIndexSignature.js]
 var numOrDate;
 var anyVar;
+
 // If each type in U has a string index signature, 
 // U has a string index signature of a union type of the types of the string index signatures from each type in U.
 var unionOfDifferentReturnType;

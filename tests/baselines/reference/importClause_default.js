@@ -13,8 +13,7 @@ let a: A = { a: '' };
 "use strict";
 exports.__esModule = true;
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 exports["default"] = A;

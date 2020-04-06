@@ -16,6 +16,7 @@ var v1;
     l1;
     let l1;
 }
+
 var v1;
 {
     v1;

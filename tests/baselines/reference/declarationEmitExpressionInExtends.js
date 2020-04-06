@@ -26,16 +26,17 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var x;
+})();var x
+
+;
+
 var Q = /** @class */ (function () {
     function Q() {
     }
     return Q;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
+    __extends(B, _super);function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;

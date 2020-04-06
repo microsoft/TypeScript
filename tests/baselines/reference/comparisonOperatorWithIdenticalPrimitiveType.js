@@ -82,15 +82,14 @@ var rh7 = undefined !== undefined;
 //// [comparisonOperatorWithIdenticalPrimitiveType.js]
 var E;
 (function (E) {
-    E[E["a"] = 0] = "a";
-    E[E["b"] = 1] = "b";
-    E[E["c"] = 2] = "c";
+    E[E["a"] = 0] = "a";E[E["b"] = 1] = "b";E[E["c"] = 2] = "c";
 })(E || (E = {}));
 var a;
 var b;
 var c;
 var d;
 var e;
+
 // operator <
 var ra1 = a < a;
 var ra2 = b < b;
@@ -99,6 +98,7 @@ var ra4 = d < d;
 var ra5 = e < e;
 var ra6 = null < null;
 var ra7 = undefined < undefined;
+
 // operator >
 var rb1 = a > a;
 var rb2 = b > b;
@@ -107,6 +107,7 @@ var rb4 = d > d;
 var rb5 = e > e;
 var rb6 = null > null;
 var rb7 = undefined > undefined;
+
 // operator <=
 var rc1 = a <= a;
 var rc2 = b <= b;
@@ -115,6 +116,7 @@ var rc4 = d <= d;
 var rc5 = e <= e;
 var rc6 = null <= null;
 var rc7 = undefined <= undefined;
+
 // operator >=
 var rd1 = a >= a;
 var rd2 = b >= b;
@@ -123,6 +125,7 @@ var rd4 = d >= d;
 var rd5 = e >= e;
 var rd6 = null >= null;
 var rd7 = undefined >= undefined;
+
 // operator ==
 var re1 = a == a;
 var re2 = b == b;
@@ -131,6 +134,7 @@ var re4 = d == d;
 var re5 = e == e;
 var re6 = null == null;
 var re7 = undefined == undefined;
+
 // operator !=
 var rf1 = a != a;
 var rf2 = b != b;
@@ -139,6 +143,7 @@ var rf4 = d != d;
 var rf5 = e != e;
 var rf6 = null != null;
 var rf7 = undefined != undefined;
+
 // operator ===
 var rg1 = a === a;
 var rg2 = b === b;
@@ -147,6 +152,7 @@ var rg4 = d === d;
 var rg5 = e === e;
 var rg6 = null === null;
 var rg7 = undefined === undefined;
+
 // operator !==
 var rh1 = a !== a;
 var rh2 = b !== b;

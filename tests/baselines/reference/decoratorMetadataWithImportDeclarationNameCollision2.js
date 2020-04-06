@@ -29,12 +29,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.db = void 0;
 var db = /** @class */ (function () {
     function db() {
-    }
-    db.prototype.doSomething = function () {
+    }db.prototype.doSomething = function () {
     };
     return db;
-}());
-exports.db = db;
+}());exports.db = db;
 //// [service.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

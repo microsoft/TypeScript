@@ -146,11 +146,13 @@ var _loop_1 = function (x) {
         var x_2;
         (function () { return x_2; });
     }
+
     try { }
     catch (e) {
         var x_3;
         (function () { return x_3; });
     }
+
     switch (x_1) {
         case 1:
             var x_4;
@@ -164,10 +166,10 @@ var _loop_1 = function (x) {
     while (1 == 1) {
         _loop_2();
     }
+
     var A = /** @class */ (function () {
         function A() {
-        }
-        A.prototype.m = function () {
+        }A.prototype.m = function () {
             return x_1 + 1;
         };
         return A;
@@ -176,15 +178,19 @@ var _loop_1 = function (x) {
 for (var x = 0; x < 1; ++x) {
     _loop_1(x);
 }
+
+
 function foo() {
     var _loop_3 = function (a) {
         var _a;
         if (a === 1) {
             return "break";
         }
+
         if (a === 2) {
             return "break-l0";
         }
+
         for (var _i = 0, _b = []; _i < _b.length; _i++) {
             var b = _b[_i];
             _a = [{ x: 1, y: 2 }][0], x = _a.x, z = _a.y;
@@ -205,10 +211,16 @@ function foo() {
             if (b === 1) {
                 return "break";
             }
+
             if (b === 2) {
                 return "break-l0";
             }
-            (function () { return b; });
+
+            (
+
+                function () { return b;
+                }
+            );
             return { value: 100 };
         };
         for (var _c = 0, _d = []; _c < _d.length; _c++) {
@@ -222,7 +234,12 @@ function foo() {
                 case "break-l0": return state_2;
             }
         }
-        (function () { return a; });
+
+
+        (
+
+
+            function () { return a; });
     };
     var arguments_1 = arguments, x, z, x1, z1;
     l0: for (var _i = 0, _a = []; _i < _a.length; _i++) {
@@ -241,6 +258,7 @@ function foo() {
     use(x1);
     use(z1);
 }
+
 function foo2() {
     for (var _i = 0, _a = []; _i < _a.length; _i++) {
         var x = _a[_i];
@@ -250,6 +268,7 @@ function foo2() {
         else if (x === 2) {
             continue;
         }
+
         while (1 === 1) {
             if (x) {
                 break;
@@ -258,6 +277,7 @@ function foo2() {
                 continue;
             }
         }
+
         switch (x) {
             case 1: break;
             case 2: continue;
@@ -271,6 +291,7 @@ function foo2() {
         }
     }
 }
+
 var C = /** @class */ (function () {
     function C(N) {
         this.N = N;

@@ -40,13 +40,19 @@ var Component = /** @class */ (function () {
         var _this = this;
         this.thumbYElementRef = function (ref) {
             typeof _this.props.thumbYProps.elementRef === 'function' && _this.props.thumbYProps.elementRef(ref);
+
             typeof (_this.props.thumbYProps.elementRef) === 'function' && _this.props.thumbYProps.elementRef(ref);
+
             typeof ((_this.props).thumbYProps.elementRef) === 'function' && _this.props.thumbYProps.elementRef(ref);
             typeof _this.props.thumbXProps.elementRef === 'function' && _this.props.thumbXProps.elementRef(ref);
+
             typeof _this.props.thumbXProps.elementRef === 'function' && (_this.props).thumbXProps.elementRef(ref);
+
             typeof _this.props.thumbXProps.elementRef === 'function' && (_this.props.thumbXProps).elementRef(ref);
             typeof _this.props.thumbXProps.elementRef === 'function' && ((_this.props).thumbXProps).elementRef(ref);
+
             typeof (_this.props.thumbXProps).elementRef === 'function' && ((_this.props).thumbXProps).elementRef(ref);
+
             typeof _this.props.thumbXProps.elementRef === 'function' && ((_this.props).thumbXProps).elementRef(ref);
         };
     }

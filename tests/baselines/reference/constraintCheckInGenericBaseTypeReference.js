@@ -36,8 +36,7 @@ var __extends = (this && this.__extends) || (function () {
 // No errors
 var Constraint = /** @class */ (function () {
     function Constraint() {
-    }
-    Constraint.prototype.method = function () { };
+    }Constraint.prototype.method = function () { };
     return Constraint;
 }());
 var GenericBase = /** @class */ (function () {
@@ -46,16 +45,14 @@ var GenericBase = /** @class */ (function () {
     return GenericBase;
 }());
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);
-    function Derived() {
+    __extends(Derived, _super);function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived;
 }(GenericBase));
 var TypeArg = /** @class */ (function () {
     function TypeArg() {
-    }
-    TypeArg.prototype.method = function () {
+    }TypeArg.prototype.method = function () {
         Container.People.items;
     };
     return TypeArg;

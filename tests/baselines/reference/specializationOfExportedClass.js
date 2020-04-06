@@ -11,9 +11,9 @@ var x = new M.C<string>();
 //// [specializationOfExportedClass.js]
 var M;
 (function (M) {
+
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         return C;
     }());
     M.C = C;

@@ -58,21 +58,18 @@ define("ref/a", ["require", "exports"], function (require, exports) {
         function A() {
         }
         return A;
-    }());
-    exports.A = A;
+    }());exports.A = A;
 });
 define("b", ["require", "exports", "ref/a"], function (require, exports, a_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.B = void 0;
     var B = /** @class */ (function (_super) {
-        __extends(B, _super);
-        function B() {
+        __extends(B, _super);function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
-    }(a_1.A));
-    exports.B = B;
+    }(a_1.A));exports.B = B;
 });
 //# sourceMappingURL=all.js.map
 

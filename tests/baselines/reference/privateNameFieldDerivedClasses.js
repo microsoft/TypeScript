@@ -21,11 +21,9 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     return privateMap.get(receiver);
 };
 var _prop;
-class Base {
-    constructor() {
+class Base {constructor() {
         _prop.set(this, 123);
-    }
-    static method(x) {
+    }static method(x) {
         console.log(__classPrivateFieldGet(x, _prop));
     }
 }
@@ -35,3 +33,4 @@ class Derived extends Base {
         console.log(x.);
     }
 }
+

@@ -36,39 +36,35 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Abstract = /** @class */ (function () {
+})();var Abstract = /** @class */ (function () {
     function Abstract() {
     }
     return Abstract;
 }());
 var Concrete = /** @class */ (function (_super) {
-    __extends(Concrete, _super);
-    function Concrete() {
+    __extends(Concrete, _super);function Concrete() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Concrete;
 }(Abstract));
 function Mixin(Base) {
     return /** @class */ (function (_super) {
-        __extends(class_1, _super);
-        function class_1() {
+        __extends(class_1, _super);function class_1() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return class_1;
     }(Base));
 }
+
 var Empty = /** @class */ (function () {
     function Empty() {
     }
     return Empty;
 }());
 var CrashTrigger = /** @class */ (function (_super) {
-    __extends(CrashTrigger, _super);
-    function CrashTrigger() {
+    __extends(CrashTrigger, _super);function CrashTrigger() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    CrashTrigger.prototype.trigger = function () {
+    }CrashTrigger.prototype.trigger = function () {
         new Concrete();
     };
     return CrashTrigger;

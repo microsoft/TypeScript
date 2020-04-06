@@ -28,6 +28,7 @@ i = x;
 
 //// [invalidBooleanAssignments.js]
 var x = true;
+
 var a = x;
 var b = x;
 var c = x;
@@ -37,19 +38,19 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 var e = x;
+
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var f = x;
+
 var g = x;
+
 var h = x;
 var h2 = x; // no error
 var M;
-(function (M) {
-    M.a = 1;
-})(M || (M = {}));
+(function (M) {M.a = 1;})(M || (M = {}));
 M = x;
 function i(a) {
     a = x;

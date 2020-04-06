@@ -23,9 +23,14 @@ let x2 = <MyComp a="hi"/>
 "use strict";
 exports.__esModule = true;
 var React = require("react");
+
+
+
 // Error
 var x1 = <MyComp />;
+
 // OK
 var x = <MyComp a={10} b="hi"/>;
+
 // Error
 var x2 = <MyComp a="hi"/>;

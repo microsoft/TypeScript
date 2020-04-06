@@ -22,6 +22,7 @@ if (true) {
     var obj1 = { x0: x0_1 };
     var obj2 = { x0: x0_1 };
 }
+
 var x, y, z;
 if (true) {
     var x_1 = { x: 0 }.x;

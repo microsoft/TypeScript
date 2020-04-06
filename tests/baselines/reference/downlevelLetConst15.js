@@ -56,6 +56,7 @@ use(y);
 
 //// [downlevelLetConst15.js]
 'use strict';
+
 var x = 10;
 var z0, z1, z2, z3;
 {

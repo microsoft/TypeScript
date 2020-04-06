@@ -21,8 +21,7 @@ function test() {
 var Foo = /** @class */ (function () {
     function Foo() {
         this.x = "hello";
-    }
-    Foo.prototype.bar = function () {
+    }Foo.prototype.bar = function () {
         function inner() {
             var _this = this;
             this.y = "hi"; // 'this' should be not type to 'Foo' either

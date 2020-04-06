@@ -96,6 +96,7 @@ System.register([], function (exports_1, context_1) {
                             image = new Image();
                             image.src = URL.createObjectURL(blob);
                             image.width = image.height = size;
+
                             document.body.appendChild(image);
                             return [2 /*return*/];
                     }
@@ -142,6 +143,7 @@ System.register([], function (exports_1, context_1) {
         execute: function () {
             exports_1("foo", foo = context_1.meta.blah = context_1.meta.blue = context_1.meta);
             context_1.meta = foo;
+
             _a = context_1.meta.wellKnownProperty, a = _a.a, b = _a.b, c = _a.c;
         }
     };

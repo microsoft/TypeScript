@@ -28,6 +28,7 @@ var DatasourceCommandWidgetElement = /** @class */ (function () {
         else {
             this._commandBased = false;
         }
+
         if (this._commandBased = (target instanceof DatasourceCommandWidgetElement)) {
             this._commandElement = target.commandElement;
         }

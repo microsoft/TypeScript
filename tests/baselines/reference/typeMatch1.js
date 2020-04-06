@@ -24,21 +24,22 @@ C==C;
 
 
 //// [typeMatch1.js]
-var x1;
+
+var x1
+;
 var x2 = x1;
 var i;
 var i2;
 var x3 = i;
 var x4 = i2;
 var x5 = i2;
+
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var D = /** @class */ (function () {
-    function D() {
-    }
+    function D() {}
     return D;
 }());
 var x6 = new C();

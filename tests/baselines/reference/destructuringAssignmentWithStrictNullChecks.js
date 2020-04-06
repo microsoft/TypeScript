@@ -14,6 +14,5 @@ var __rest = (this && this.__rest) || function (s, e) {
                 t[p[i]] = s[p[i]];
         }
     return t;
-};
-var bar;
+};var bar;
 (bar = __rest({}, []));

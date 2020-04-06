@@ -62,6 +62,7 @@ function f() {
     var z;
     var x = 10;
     var y = 3;
+
     L1: for (var i = 0; i < 19; i++) {
         if (y == 7) {
             continue L1;

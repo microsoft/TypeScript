@@ -20,8 +20,7 @@ exports.__esModule = true;
 exports.foo = void 0;
 function foo() {
     return new Object();
-}
-exports.foo = foo;
+}exports.foo = foo;
 
 
 //// [app.d.ts]

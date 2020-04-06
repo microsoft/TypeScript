@@ -120,10 +120,65 @@ type Res3 = Example<never>;  // never
 
 //// [indexingTypesWithNever.js]
 "use strict";
+
 // Should be never
 var result3 = genericFn1({ c: "ctest", d: "dtest" });
+
+
 // Should be never
 var result4 = genericFn2({ e: "etest", f: "ftest" });
+
+
 // Should be never
 var result5 = genericFn3({ g: "gtest", h: "htest" }, "g", "h"); // 'g' & 'h' will reduce to never
+
+
+
 var result6 = obj[key];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

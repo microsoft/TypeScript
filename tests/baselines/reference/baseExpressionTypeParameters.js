@@ -28,6 +28,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 function base() {
     var Base = /** @class */ (function () {
         function Base() {
@@ -36,15 +37,15 @@ function base() {
     }());
     return Base;
 }
+
 var Gen = /** @class */ (function (_super) {
-    __extends(Gen, _super);
-    function Gen() {
+    __extends(Gen, _super);function Gen() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Gen;
 }(base())); // Error, T not in scope
 var Spec = /** @class */ (function (_super) {
-    __extends(Spec, _super);
+    __extends(Spec, _super);// Error, T not in scope
     function Spec() {
         return _super !== null && _super.apply(this, arguments) || this;
     }

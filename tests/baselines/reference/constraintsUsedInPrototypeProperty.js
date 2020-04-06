@@ -4,8 +4,7 @@ Foo.prototype; // Foo<any, any, any>
 
 //// [constraintsUsedInPrototypeProperty.js]
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 Foo.prototype; // Foo<any, any, any>

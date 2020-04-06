@@ -22,8 +22,7 @@ var obj: { f: () => any; };
 //// [thisInObjectLiterals.js]
 var MyClass = /** @class */ (function () {
     function MyClass() {
-    }
-    MyClass.prototype.fn = function () {
+    }MyClass.prototype.fn = function () {
         //type of 'this' in an object literal is the containing scope's this
         var t = { x: this, y: this.t };
         var t;

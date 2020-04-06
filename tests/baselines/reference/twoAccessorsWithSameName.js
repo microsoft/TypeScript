@@ -72,11 +72,13 @@ var x = {
     get x() {
         return 1;
     },
+
     // error
     get x() {
         return 1;
     }
 };
+
 var y = {
     get x() {
         return 1;

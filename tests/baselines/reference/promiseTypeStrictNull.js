@@ -229,18 +229,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+
 function A() {
     return __awaiter(this, void 0, void 0, function* () {
         const a = yield p;
         return a;
     });
 }
+
 function B() {
     return __awaiter(this, void 0, void 0, function* () {
         const a = yield p;
         return 1;
     });
 }
+
 function C() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -252,6 +255,7 @@ function C() {
         }
     });
 }
+
 function D() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -262,6 +266,7 @@ function D() {
         }
     });
 }
+
 function E() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -273,6 +278,7 @@ function E() {
         }
     });
 }
+
 function F() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -284,6 +290,7 @@ function F() {
         }
     });
 }
+
 function G() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -295,6 +302,7 @@ function G() {
         }
     });
 }
+
 function H() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -306,6 +314,7 @@ function H() {
         }
     });
 }
+
 function I() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -320,6 +329,7 @@ function I() {
 // addresses github issue #4903:
 const p00 = p.catch();
 const p01 = p.then();
+
 const p10 = p.catch(undefined);
 const p11 = p.catch(null);
 const p12 = p.catch(() => 1);
@@ -330,6 +340,7 @@ const p16 = p.catch(() => { });
 const p17 = p.catch(() => { throw 1; });
 const p18 = p.catch(() => Promise.reject(1));
 const p19 = p.catch(() => Promise.resolve(1));
+
 const p20 = p.then(undefined);
 const p21 = p.then(null);
 const p22 = p.then(() => 1);
@@ -340,6 +351,7 @@ const p26 = p.then(() => { });
 const p27 = p.then(() => { throw 1; });
 const p28 = p.then(() => Promise.resolve(1));
 const p29 = p.then(() => Promise.reject(1));
+
 const p30 = p.then(undefined, undefined);
 const p31 = p.then(undefined, null);
 const p32 = p.then(undefined, () => 1);
@@ -350,6 +362,7 @@ const p36 = p.then(undefined, () => { });
 const p37 = p.then(undefined, () => { throw 1; });
 const p38 = p.then(undefined, () => Promise.resolve(1));
 const p39 = p.then(undefined, () => Promise.reject(1));
+
 const p40 = p.then(null, undefined);
 const p41 = p.then(null, null);
 const p42 = p.then(null, () => 1);
@@ -360,6 +373,7 @@ const p46 = p.then(null, () => { });
 const p47 = p.then(null, () => { throw 1; });
 const p48 = p.then(null, () => Promise.resolve(1));
 const p49 = p.then(null, () => Promise.reject(1));
+
 const p50 = p.then(() => "1", undefined);
 const p51 = p.then(() => "1", null);
 const p52 = p.then(() => "1", () => 1);
@@ -370,6 +384,7 @@ const p56 = p.then(() => "1", () => { });
 const p57 = p.then(() => "1", () => { throw 1; });
 const p58 = p.then(() => "1", () => Promise.resolve(1));
 const p59 = p.then(() => "1", () => Promise.reject(1));
+
 const p60 = p.then(() => x, undefined);
 const p61 = p.then(() => x, null);
 const p62 = p.then(() => x, () => 1);
@@ -380,6 +395,7 @@ const p66 = p.then(() => x, () => { });
 const p67 = p.then(() => x, () => { throw 1; });
 const p68 = p.then(() => x, () => Promise.resolve(1));
 const p69 = p.then(() => x, () => Promise.reject(1));
+
 const p70 = p.then(() => undefined, undefined);
 const p71 = p.then(() => undefined, null);
 const p72 = p.then(() => undefined, () => 1);
@@ -390,6 +406,7 @@ const p76 = p.then(() => undefined, () => { });
 const p77 = p.then(() => undefined, () => { throw 1; });
 const p78 = p.then(() => undefined, () => Promise.resolve(1));
 const p79 = p.then(() => undefined, () => Promise.reject(1));
+
 const p80 = p.then(() => null, undefined);
 const p81 = p.then(() => null, null);
 const p82 = p.then(() => null, () => 1);
@@ -400,6 +417,7 @@ const p86 = p.then(() => null, () => { });
 const p87 = p.then(() => null, () => { throw 1; });
 const p88 = p.then(() => null, () => Promise.resolve(1));
 const p89 = p.then(() => null, () => Promise.reject(1));
+
 const p90 = p.then(() => { }, undefined);
 const p91 = p.then(() => { }, null);
 const p92 = p.then(() => { }, () => 1);
@@ -410,6 +428,7 @@ const p96 = p.then(() => { }, () => { });
 const p97 = p.then(() => { }, () => { throw 1; });
 const p98 = p.then(() => { }, () => Promise.resolve(1));
 const p99 = p.then(() => { }, () => Promise.reject(1));
+
 const pa0 = p.then(() => { throw 1; }, undefined);
 const pa1 = p.then(() => { throw 1; }, null);
 const pa2 = p.then(() => { throw 1; }, () => 1);
@@ -420,6 +439,7 @@ const pa6 = p.then(() => { throw 1; }, () => { });
 const pa7 = p.then(() => { throw 1; }, () => { throw 1; });
 const pa8 = p.then(() => { throw 1; }, () => Promise.resolve(1));
 const pa9 = p.then(() => { throw 1; }, () => Promise.reject(1));
+
 const pb0 = p.then(() => Promise.resolve("1"), undefined);
 const pb1 = p.then(() => Promise.resolve("1"), null);
 const pb2 = p.then(() => Promise.resolve("1"), () => 1);
@@ -430,6 +450,7 @@ const pb6 = p.then(() => Promise.resolve("1"), () => { });
 const pb7 = p.then(() => Promise.resolve("1"), () => { throw 1; });
 const pb8 = p.then(() => Promise.resolve("1"), () => Promise.resolve(1));
 const pb9 = p.then(() => Promise.resolve("1"), () => Promise.reject(1));
+
 const pc0 = p.then(() => Promise.reject("1"), undefined);
 const pc1 = p.then(() => Promise.reject("1"), null);
 const pc2 = p.then(() => Promise.reject("1"), () => 1);

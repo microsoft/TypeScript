@@ -20,6 +20,8 @@ function foo(x, y) {
     return x, y;
 }
 var resultIsString = foo(1, "123"); //error here
+
+
 //TypeParameters
 function foo1() {
     var x;

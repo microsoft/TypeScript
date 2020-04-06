@@ -25,14 +25,14 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Base = /** @class */ (function () {
-    function Base(a) {
-    }
+})();var Base = /** @class */ (function () {
+    function Base(a) {}
     return Base;
 }());
 var Foo = /** @class */ (function (_super) {
     __extends(Foo, _super);
+
+
     function Foo() {
         var _this = _super.call(this, _this) || this;
         _this.x = 0;

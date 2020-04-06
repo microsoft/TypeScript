@@ -27,9 +27,9 @@ var _bar;
 exports. = 1; // Error (outside class body)
 function A() { }
 A.prototype. = 2; // Error (outside class body)
-class B {
-}
+class B {}
 B. = 3; // Error (outside class body)
+
 class C {
     constructor() {
         _bar.set(this, 6);

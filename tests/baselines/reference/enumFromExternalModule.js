@@ -23,4 +23,5 @@ var Mode;
 exports.__esModule = true;
 ///<reference path='enumFromExternalModule_0.ts'/>
 var f = require("./enumFromExternalModule_0");
+
 var x = f.Mode.Open;

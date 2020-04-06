@@ -9,9 +9,10 @@ const c: C = a;
 
 //// [privateNamesUnique-4.js]
 var _something;
-class A1 {
-}
+class A1 {}
+
 class C {
+
     constructor() {
         _something.set(this, void 0);
     }

@@ -5,7 +5,6 @@ abstract class A {
 
 //// [classAbstractConstructor.js]
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());

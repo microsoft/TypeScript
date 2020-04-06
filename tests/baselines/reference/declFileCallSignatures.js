@@ -67,7 +67,17 @@ interface IGlobalCallSignatureWithOwnTypeParametes {
 //// [declFileCallSignatures_0.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+
+
+
+
+
 //// [declFileCallSignatures_1.js]
+
+
+
+
+
 
 
 //// [declFileCallSignatures_0.d.ts]

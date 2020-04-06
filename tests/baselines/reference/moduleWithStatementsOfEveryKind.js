@@ -75,25 +75,22 @@ var __extends = (this && this.__extends) || (function () {
 var A;
 (function (A_1) {
     var A = /** @class */ (function () {
-        function A() {
-        }
+        function A() {}
         return A;
     }());
     var AA = /** @class */ (function () {
-        function AA() {
-        }
+        function AA() {}
         return AA;
     }());
+
     var B = /** @class */ (function (_super) {
-        __extends(B, _super);
-        function B() {
+        __extends(B, _super);function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
     }(AA));
     var BB = /** @class */ (function (_super) {
-        __extends(BB, _super);
-        function BB() {
+        __extends(BB, _super);function BB() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return BB;
@@ -101,15 +98,13 @@ var A;
     var Module;
     (function (Module) {
         var A = /** @class */ (function () {
-            function A() {
-            }
+            function A() {}
             return A;
         }());
     })(Module || (Module = {}));
     var Color;
     (function (Color) {
-        Color[Color["Blue"] = 0] = "Blue";
-        Color[Color["Red"] = 1] = "Red";
+        Color[Color["Blue"] = 0] = "Blue";Color[Color["Red"] = 1] = "Red";
     })(Color || (Color = {}));
     var x = 12;
     function F(s) {
@@ -118,34 +113,33 @@ var A;
     var array = null;
     var fn = function (s) {
         return 'hello ' + s;
-    };
+    }
+    ;
     var ol = { s: 'hello', id: 2, isvalid: true };
+
 })(A || (A = {}));
 var Y;
 (function (Y) {
     var A = /** @class */ (function () {
-        function A() {
-        }
+        function A() {}
         return A;
     }());
     Y.A = A;
     var AA = /** @class */ (function () {
-        function AA() {
-        }
+        function AA() {}
         return AA;
     }());
     Y.AA = AA;
+
     var B = /** @class */ (function (_super) {
-        __extends(B, _super);
-        function B() {
+        __extends(B, _super);function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
     }(AA));
     Y.B = B;
     var BB = /** @class */ (function (_super) {
-        __extends(BB, _super);
-        function BB() {
+        __extends(BB, _super);function BB() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return BB;
@@ -154,15 +148,13 @@ var Y;
     var Module;
     (function (Module) {
         var A = /** @class */ (function () {
-            function A() {
-            }
+            function A() {}
             return A;
         }());
     })(Module = Y.Module || (Y.Module = {}));
     var Color;
     (function (Color) {
-        Color[Color["Blue"] = 0] = "Blue";
-        Color[Color["Red"] = 1] = "Red";
+        Color[Color["Blue"] = 0] = "Blue";Color[Color["Red"] = 1] = "Red";
     })(Color = Y.Color || (Y.Color = {}));
     Y.x = 12;
     function F(s) {
@@ -174,4 +166,5 @@ var Y;
         return 'hello ' + s;
     };
     Y.ol = { s: 'hello', id: 2, isvalid: true };
+
 })(Y || (Y = {}));

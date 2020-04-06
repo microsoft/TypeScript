@@ -14,8 +14,7 @@ a.foo();
 //// [classOrder1.js]
 var A = /** @class */ (function () {
     function A() {
-    }
-    A.prototype.foo = function () {
+    }A.prototype.foo = function () {
         /*WScript.Echo("Here!");*/
     };
     return A;

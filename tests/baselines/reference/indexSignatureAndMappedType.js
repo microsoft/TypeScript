@@ -41,14 +41,24 @@ function f1(x, y) {
     x = y;
     y = x; // Error
 }
+
 function f2(x, y) {
     x = y;
     y = x;
 }
+
 function f3(x, y) {
     x = y; // Error
     y = x; // Error
 }
+
+
+
+
+
+
+
+
 
 
 //// [indexSignatureAndMappedType.d.ts]

@@ -50,15 +50,13 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var B = /** @class */ (function () {
+})();var B = /** @class */ (function () {
     function B() {
     }
     return B;
 }());
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);
-    function C() {
+    __extends(C, _super);function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(C.prototype, "y", {
@@ -76,17 +74,18 @@ var C = /** @class */ (function (_super) {
     });
     C.foo = function () { return this.x; };
     C.bar = function () { this.foo(); };
+
     C.prototype.bar = function () {
         var D = /** @class */ (function () {
             function D() {
-            }
-            D.prototype.foo = function () {
+            }D.prototype.foo = function () {
                 var c = new C();
                 var c1 = c.y;
                 var c2 = c.x;
                 var c3 = c.foo;
                 var c4 = c.bar;
                 var c5 = c.z; // error
+
                 var sc1 = C.x;
                 var sc2 = C.y;
                 var sc3 = C.foo;
@@ -98,8 +97,7 @@ var C = /** @class */ (function (_super) {
     return C;
 }(B));
 var E = /** @class */ (function (_super) {
-    __extends(E, _super);
-    function E() {
+    __extends(E, _super);function E() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return E;

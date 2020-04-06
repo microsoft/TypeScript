@@ -6,7 +6,6 @@ class C {
 //// [parserMemberFunctionDeclaration1.js]
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.Foo = function () { };
+    }C.prototype.Foo = function () { };
     return C;
 }());

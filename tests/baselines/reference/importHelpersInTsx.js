@@ -37,4 +37,5 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var x = React.createElement("span", __assign({}, o));
+var x = React.createElement("span", __assign({}, o))
+;

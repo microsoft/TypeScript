@@ -4,11 +4,9 @@ class C {
 }
 
 //// [symbolDeclarationEmit2.js]
-class C {
-    constructor() {
+class C {constructor() {
         this[Symbol.toPrimitive] = "";
-    }
-}
+    }}
 
 
 //// [symbolDeclarationEmit2.d.ts]

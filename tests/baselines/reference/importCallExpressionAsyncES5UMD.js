@@ -91,12 +91,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 }
             });
         });
-    }
-    exports.fn = fn;
+    }exports.fn = fn;
+
     var cl1 = /** @class */ (function () {
         function cl1() {
-        }
-        cl1.prototype.m = function () {
+        }cl1.prototype.m = function () {
             return __awaiter(this, void 0, void 0, function () {
                 var req;
                 return __generator(this, function (_a) {
@@ -111,8 +110,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             });
         };
         return cl1;
-    }());
-    exports.cl1 = cl1;
+    }());exports.cl1 = cl1;
     exports.obj = {
         m: function () { return __awaiter(void 0, void 0, void 0, function () {
             var req;
@@ -127,6 +125,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             });
         }); }
     };
+
     var cl2 = /** @class */ (function () {
         function cl2() {
             var _this = this;
@@ -146,8 +145,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             };
         }
         return cl2;
-    }());
-    exports.cl2 = cl2;
+    }());exports.cl2 = cl2;
     exports.l = function () { return __awaiter(void 0, void 0, void 0, function () {
         var req;
         return __generator(this, function (_a) {

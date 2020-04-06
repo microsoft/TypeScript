@@ -32,12 +32,15 @@ const b4 = serialNo === serialNo;
 
 
 //// [operatorsAndIntersectionTypes.js]
+
 function createGuid() {
     return "21EC2020-3AEA-4069-A2DD-08002B30309D";
 }
+
 function createSerialNo() {
     return 12345;
 }
+
 var map1 = {};
 var guid = createGuid();
 map1[guid] = 123; // Can with tagged string

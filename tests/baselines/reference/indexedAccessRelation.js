@@ -38,21 +38,18 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 var Component = /** @class */ (function () {
     function Component() {
-    }
-    Component.prototype.setState = function (state) { };
+    }Component.prototype.setState = function (state) { };
     return Component;
 }());
+
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 var Comp = /** @class */ (function (_super) {
-    __extends(Comp, _super);
-    function Comp() {
+    __extends(Comp, _super);function Comp() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Comp.prototype.foo = function (a) {
+    }Comp.prototype.foo = function (a) {
         this.setState({ a: a });
     };
     return Comp;

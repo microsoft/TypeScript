@@ -24,11 +24,14 @@ export const works2 = fn<MakeItWork>(x => x);
 exports.__esModule = true;
 exports.works2 = exports.works1 = exports.fail2 = exports.fail1 = void 0;
 var module_1 = require("module");
+
 exports.fail1 = module_1.fn(function (x) { return x; });
 exports.fail2 = module_1.fn(function (x) {
     return x;
 });
+
 exports.works1 = module_1.fn(function (x) { return x; });
+
 exports.works2 = module_1.fn(function (x) { return x; });
 
 

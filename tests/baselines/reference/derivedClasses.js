@@ -43,13 +43,10 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Red = /** @class */ (function (_super) {
-    __extends(Red, _super);
-    function Red() {
+})();var Red = /** @class */ (function (_super) {
+    __extends(Red, _super);function Red() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Red.prototype.shade = function () {
+    }Red.prototype.shade = function () {
         var _this = this;
         var getHue = function () { return _this.hue(); };
         return getHue() + " red";
@@ -58,17 +55,14 @@ var Red = /** @class */ (function (_super) {
 }(Color));
 var Color = /** @class */ (function () {
     function Color() {
-    }
-    Color.prototype.shade = function () { return "some shade"; };
+    }Color.prototype.shade = function () { return "some shade"; };
     Color.prototype.hue = function () { return "some hue"; };
     return Color;
 }());
 var Blue = /** @class */ (function (_super) {
-    __extends(Blue, _super);
-    function Blue() {
+    __extends(Blue, _super);function Blue() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Blue.prototype.shade = function () {
+    }Blue.prototype.shade = function () {
         var _this = this;
         var getHue = function () { return _this.hue(); };
         return getHue() + " blue";

@@ -106,10 +106,10 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var a = /** @class */ (function () {
+})();var a = /** @class */ (function () {
     function a(ns) {
     }
+
     a.prototype.pgF = function () { };
     Object.defineProperty(a.prototype, "d", {
         get: function () {
@@ -142,8 +142,7 @@ var a = /** @class */ (function () {
     return a;
 }());
 var b = /** @class */ (function (_super) {
-    __extends(b, _super);
-    function b() {
+    __extends(b, _super);function b() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return b;
@@ -167,8 +166,7 @@ var m2;
     var m3;
     (function (m3) {
         var c = /** @class */ (function (_super) {
-            __extends(c, _super);
-            function c() {
+            __extends(c, _super);function c() {
                 return _super !== null && _super.apply(this, arguments) || this;
             }
             return c;
@@ -183,8 +181,7 @@ var m2;
     })(m3 = m2.m3 || (m2.m3 = {}));
 })(m2 || (m2 = {}));
 var c = /** @class */ (function (_super) {
-    __extends(c, _super);
-    function c() {
+    __extends(c, _super);function c() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return c;
@@ -194,18 +191,17 @@ var ib2 = /** @class */ (function () {
     }
     return ib2;
 }());
+
 var d = /** @class */ (function () {
     function d() {
-    }
-    d.prototype.foo = function (ns) {
+    }d.prototype.foo = function (ns) {
         return ns.toString();
     };
     return d;
 }());
 var e = /** @class */ (function () {
     function e() {
-    }
-    e.prototype.foo = function (ns) {
+    }e.prototype.foo = function (ns) {
         return ns.toString();
     };
     return e;

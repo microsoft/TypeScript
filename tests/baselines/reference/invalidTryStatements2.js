@@ -26,11 +26,13 @@ function fn() {
     }
     catch (x) { } // error missing try
     finally { } // potential error; can be absorbed by the 'catch'
+
     try { }
     finally { // error missing finally
      } // error missing finally
     ; // error missing finally
 }
+
 function fn2() {
     try {
     }
@@ -38,14 +40,18 @@ function fn2() {
     try {
     }
     catch (x) { } // error missing try
+
     try { }
     finally { } // statement is here, so the 'catch' clause above doesn't absorb errors from the 'finally' clause below
+
     try {
     }
     finally { } // error missing try
+
     try {
     }
     catch (x) { } // error missing try
+
     try { }
     catch () { } // error missing catch binding
 }

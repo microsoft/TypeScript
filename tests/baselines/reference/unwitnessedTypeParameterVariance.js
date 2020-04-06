@@ -28,8 +28,16 @@ b = a;
 "use strict";
 // Repros from #33872
 exports.__esModule = true;
+
+
+
 function foo() {
-    var unk = { read: function (origin) { return unk; } };
+    var unk = { read: function (origin) { return unk; } }
+    ;
     var x = unk;
 }
+
+
+
+
 b = a;

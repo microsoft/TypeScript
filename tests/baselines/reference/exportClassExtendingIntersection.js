@@ -40,11 +40,9 @@ const AnotherMixedClass = MyMixin(MyExtendedClass);
 exports.__esModule = true;
 exports.MyBaseClass = void 0;
 var MyBaseClass = /** @class */ (function () {
-    function MyBaseClass(value) {
-    }
+    function MyBaseClass(value) {}
     return MyBaseClass;
-}());
-exports.MyBaseClass = MyBaseClass;
+}());exports.MyBaseClass = MyBaseClass;
 //// [MixinClass.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -62,16 +60,15 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 exports.MyMixin = void 0;
+
 function MyMixin(base) {
     return /** @class */ (function (_super) {
-        __extends(class_1, _super);
-        function class_1() {
+        __extends(class_1, _super);function class_1() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return class_1;
     }(base));
-}
-exports.MyMixin = MyMixin;
+}exports.MyMixin = MyMixin;
 //// [FinalClass.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -91,20 +88,21 @@ exports.__esModule = true;
 exports.MyExtendedClass = void 0;
 var BaseClass_1 = require("./BaseClass");
 var MixinClass_1 = require("./MixinClass");
+
 var MyExtendedClass = /** @class */ (function (_super) {
-    __extends(MyExtendedClass, _super);
-    function MyExtendedClass() {
+    __extends(MyExtendedClass, _super);function MyExtendedClass() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return MyExtendedClass;
-}(MixinClass_1.MyMixin(BaseClass_1.MyBaseClass)));
-exports.MyExtendedClass = MyExtendedClass;
+}(MixinClass_1.MyMixin(BaseClass_1.MyBaseClass)));exports.MyExtendedClass = MyExtendedClass;
 //// [Main.js]
 "use strict";
 exports.__esModule = true;
 var FinalClass_1 = require("./FinalClass");
 var MixinClass_1 = require("./MixinClass");
+
 var myExtendedClass = new FinalClass_1.MyExtendedClass('string');
+
 var AnotherMixedClass = MixinClass_1.MyMixin(FinalClass_1.MyExtendedClass);
 
 

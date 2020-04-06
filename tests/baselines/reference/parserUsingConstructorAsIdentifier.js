@@ -70,6 +70,7 @@ function derive(baseClass, constructor, instanceMembers, staticMembers) {
         return define(constructor, instanceMembers, staticMembers);
     }
 }
+
 function mix(constructor) {
     constructor = constructor || function () { };
     var i, len;

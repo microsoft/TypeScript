@@ -84,6 +84,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var _this = this;
+
 function f0() {
     return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
         return [2 /*return*/];
@@ -99,21 +100,27 @@ function f3() {
         return [2 /*return*/];
     }); });
 }
+
 var f4 = function () {
     return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
         return [2 /*return*/];
     }); });
-};
+}
+;
 var f5 = function () {
     return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
         return [2 /*return*/];
     }); });
-};
+}
+;
 var f6 = function () {
     return __awaiter(this, void 0, MyPromise, function () { return __generator(this, function (_a) {
         return [2 /*return*/];
     }); });
-};
+}
+
+;
+
 var f7 = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
     return [2 /*return*/];
 }); }); };
@@ -135,6 +142,7 @@ var f12 = function () { return __awaiter(_this, void 0, void 0, function () { re
 var f13 = function () { return __awaiter(_this, void 0, MyPromise, function () { return __generator(this, function (_a) {
     return [2 /*return*/, p];
 }); }); };
+
 var o = {
     m1: function () {
         return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
@@ -152,10 +160,10 @@ var o = {
         }); });
     }
 };
+
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.m1 = function () {
+    }C.prototype.m1 = function () {
         return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
             return [2 /*return*/];
         }); });

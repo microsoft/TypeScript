@@ -250,6 +250,7 @@ for (let x of []) {
         continue;
     }
 }
+
 for (let x in []) {
     (function () { return x; });
     (() => x);
@@ -260,6 +261,8 @@ for (let x in []) {
         continue;
     }
 }
+
+
 for (let x = 0; x < 1; ++x) {
     (function () { return x; });
     (() => x);
@@ -270,6 +273,7 @@ for (let x = 0; x < 1; ++x) {
         continue;
     }
 }
+
 while (1 === 1) {
     let x;
     (function () { return x; });
@@ -281,6 +285,7 @@ while (1 === 1) {
         continue;
     }
 }
+
 do {
     let x;
     (function () { return x; });
@@ -292,6 +297,7 @@ do {
         continue;
     }
 } while (1 === 1);
+
 for (let y = 0; y < 1; ++y) {
     let x = 1;
     (function () { return x; });
@@ -303,6 +309,7 @@ for (let y = 0; y < 1; ++y) {
         continue;
     }
 }
+
 for (let x = 0, y = 1; x < 1; ++x) {
     (function () { return x + y; });
     (() => x + y);
@@ -313,6 +320,7 @@ for (let x = 0, y = 1; x < 1; ++x) {
         continue;
     }
 }
+
 while (1 === 1) {
     let x, y;
     (function () { return x + y; });
@@ -324,6 +332,7 @@ while (1 === 1) {
         continue;
     }
 }
+
 do {
     let x, y;
     (function () { return x + y; });
@@ -335,6 +344,7 @@ do {
         continue;
     }
 } while (1 === 1);
+
 for (let y = 0; y < 1; ++y) {
     let x = 1;
     (function () { return x + y; });
@@ -346,6 +356,7 @@ for (let y = 0; y < 1; ++y) {
         continue;
     }
 }
+
 // ====const
 for (const x of []) {
     (function () { return x; });
@@ -357,6 +368,7 @@ for (const x of []) {
         continue;
     }
 }
+
 for (const x in []) {
     (function () { return x; });
     (() => x);
@@ -367,6 +379,8 @@ for (const x in []) {
         continue;
     }
 }
+
+
 for (const x = 0; x < 1;) {
     (function () { return x; });
     (() => x);
@@ -377,6 +391,7 @@ for (const x = 0; x < 1;) {
         continue;
     }
 }
+
 while (1 === 1) {
     const x = 1;
     (function () { return x; });
@@ -388,6 +403,7 @@ while (1 === 1) {
         continue;
     }
 }
+
 do {
     const x = 1;
     (function () { return x; });
@@ -399,6 +415,7 @@ do {
         continue;
     }
 } while (1 === 1);
+
 for (const y = 0; y < 1;) {
     const x = 1;
     (function () { return x; });
@@ -410,6 +427,7 @@ for (const y = 0; y < 1;) {
         continue;
     }
 }
+
 for (const x = 0, y = 1; x < 1;) {
     (function () { return x + y; });
     (() => x + y);
@@ -420,6 +438,7 @@ for (const x = 0, y = 1; x < 1;) {
         continue;
     }
 }
+
 while (1 === 1) {
     const x = 1, y = 1;
     (function () { return x + y; });
@@ -431,6 +450,7 @@ while (1 === 1) {
         continue;
     }
 }
+
 do {
     const x = 1, y = 1;
     (function () { return x + y; });
@@ -442,6 +462,7 @@ do {
         continue;
     }
 } while (1 === 1);
+
 for (const y = 0; y < 1;) {
     const x = 1;
     (function () { return x + y; });
@@ -453,3 +474,4 @@ for (const y = 0; y < 1;) {
         continue;
     }
 }
+

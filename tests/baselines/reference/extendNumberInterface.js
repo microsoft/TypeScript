@@ -11,6 +11,7 @@ var c: string = x['doStuff']();
 var d: string = x['doOtherStuff']('hm');
 
 //// [extendNumberInterface.js]
+
 var x = 1;
 var a = x.doStuff();
 var b = x.doOtherStuff('hm');

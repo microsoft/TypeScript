@@ -23,5 +23,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 var rest2;
 var rest2 = __rest(undefinedUnion, []);
+
+
 var rest3;
 var rest3 = __rest(nullUnion, []);

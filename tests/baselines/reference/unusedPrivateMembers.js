@@ -67,9 +67,9 @@ class Test6 {
 //// [unusedPrivateMembers.js]
 var Test1 = /** @class */ (function () {
     function Test1() {
-    }
-    Test1.prototype.initializeInternal = function () {
+    }Test1.prototype.initializeInternal = function () {
     };
+
     Test1.prototype.test = function () {
         var x = new Test1();
         x.initializeInternal();
@@ -79,8 +79,7 @@ var Test1 = /** @class */ (function () {
 var Test2 = /** @class */ (function () {
     function Test2() {
         this.p = 0;
-    }
-    Test2.prototype.test = function () {
+    }Test2.prototype.test = function () {
         var x = new Test2();
         x.p;
     };
@@ -120,8 +119,7 @@ var Test4 = /** @class */ (function () {
 }());
 var Test5 = /** @class */ (function () {
     function Test5() {
-    }
-    Test5.prototype.test = function () {
+    }Test5.prototype.test = function () {
         var x = new Test5();
         x.p;
     };

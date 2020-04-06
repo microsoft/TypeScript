@@ -30,16 +30,17 @@ var f3: {
 
 //// [functionLiteralForOverloads2.js]
 // basic uses of function literals with constructor overloads
+
 var C = /** @class */ (function () {
-    function C(x) {
-    }
+    function C(x) {}
     return C;
 }());
 var D = /** @class */ (function () {
-    function D(x) {
-    }
+    function D(x) {}
     return D;
 }());
 var f = C;
+
 var f2 = C;
+
 var f3 = D;

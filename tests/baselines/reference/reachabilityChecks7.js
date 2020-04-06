@@ -44,25 +44,32 @@ function f1() {
     return __awaiter(this, void 0, void 0, function* () {
     });
 }
+
 let x = function () {
     return __awaiter(this, void 0, void 0, function* () {
     });
-};
+}
+
+;
+
 // async function with which promised type is void - return can be omitted
 function f2() {
     return __awaiter(this, void 0, void 0, function* () {
     });
 }
+
 function f3(x) {
     return __awaiter(this, void 0, void 0, function* () {
         if (x)
             return 10;
     });
 }
+
 function f4() {
     return __awaiter(this, void 0, void 0, function* () {
     });
 }
+
 function voidFunc() {
 }
 function calltoVoidFunc(x) {

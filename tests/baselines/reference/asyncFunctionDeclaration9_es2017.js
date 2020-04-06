@@ -5,5 +5,6 @@ async function foo(): Promise<void> {
 
 //// [asyncFunctionDeclaration9_es2017.js]
 async function foo() {
-    var v = { [await ]: foo };
+    var v = { [await ]: foo }
+    ;
 }

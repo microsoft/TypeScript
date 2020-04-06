@@ -65,27 +65,59 @@ var r2 = d.foo(2); // error
 //// [memberFunctionsWithPublicPrivateOverloads.js]
 var C = /** @class */ (function () {
     function C() {
-    }
+    }// error
     C.prototype.foo = function (x, y) { };
+
+
+
+
     C.prototype.bar = function (x, y) { };
+
+
     C.foo = function (x, y) { };
+
+
     C.prototype.baz = function (x, y) { };
+
+
+
+
     C.bar = function (x, y) { };
+
+
+
+
     C.baz = function (x, y) { };
     return C;
 }());
 var D = /** @class */ (function () {
     function D() {
-    }
+    }// error
     D.prototype.foo = function (x, y) { };
+
+
+
+
     D.prototype.bar = function (x, y) { };
+
+
     D.prototype.baz = function (x, y) { };
+
+
     D.foo = function (x, y) { };
+
+
+
+
     D.bar = function (x, y) { };
+
+
+
     D.baz = function (x, y) { };
     return D;
 }());
 var c;
 var r = c.foo(1); // error
+
 var d;
 var r2 = d.foo(2); // error

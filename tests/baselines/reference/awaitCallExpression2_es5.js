@@ -21,8 +21,7 @@ function func() {
             switch (_b.label) {
                 case 0:
                     before();
-                    _a = fn;
-                    return [4 /*yield*/, p];
+                    _a = fn;return [4 /*yield*/, p];
                 case 1:
                     b = _a.apply(void 0, [_b.sent(), a, a]);
                     after();

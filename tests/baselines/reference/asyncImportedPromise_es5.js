@@ -27,13 +27,11 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Task = void 0;
 var Task = /** @class */ (function (_super) {
-    __extends(Task, _super);
-    function Task() {
+    __extends(Task, _super);function Task() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Task;
-}(Promise));
-exports.Task = Task;
+}(Promise));exports.Task = Task;
 //// [test.js]
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -76,8 +74,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var task_1 = require("./task");
 var Test = /** @class */ (function () {
     function Test() {
-    }
-    Test.prototype.example = function () {
+    }Test.prototype.example = function () {
         return __awaiter(this, void 0, task_1.Task, function () { return __generator(this, function (_a) {
             return [2 /*return*/];
         }); });

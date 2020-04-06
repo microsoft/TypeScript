@@ -16,11 +16,9 @@ var r: string = s.foo;
 exports.__esModule = true;
 exports.Super = void 0;
 var Super = /** @class */ (function () {
-    function Super() {
-    }
+    function Super() {}
     return Super;
-}());
-exports.Super = Super;
+}());exports.Super = Super;
 //// [importUsedInExtendsList1_1.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -40,8 +38,7 @@ exports.__esModule = true;
 ///<reference path='importUsedInExtendsList1_require.ts'/>
 var foo = require("./importUsedInExtendsList1_require");
 var Sub = /** @class */ (function (_super) {
-    __extends(Sub, _super);
-    function Sub() {
+    __extends(Sub, _super);function Sub() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Sub;

@@ -81,6 +81,7 @@ function foo<T, U/* extends T*/, V/* extends U*/>(t: T, u: U, v: V) {
 //// [comparisonOperatorWithTypeParameter.js]
 var a;
 var b;
+
 function foo(t, u, v) {
     // errors
     var ra1 = t < u;
@@ -91,6 +92,7 @@ function foo(t, u, v) {
     var ra6 = t != u;
     var ra7 = t === u;
     var ra8 = t !== u;
+
     var rb1 = u < t;
     var rb2 = u > t;
     var rb3 = u <= t;
@@ -99,6 +101,7 @@ function foo(t, u, v) {
     var rb6 = u != t;
     var rb7 = u === t;
     var rb8 = u !== t;
+
     var rc1 = t < v;
     var rc2 = t > v;
     var rc3 = t <= v;
@@ -107,6 +110,7 @@ function foo(t, u, v) {
     var rc6 = t != v;
     var rc7 = t === v;
     var rc8 = t !== v;
+
     var rd1 = v < t;
     var rd2 = v > t;
     var rd3 = v <= t;
@@ -115,6 +119,7 @@ function foo(t, u, v) {
     var rd6 = v != t;
     var rd7 = v === t;
     var rd8 = v !== t;
+
     // ok
     var re1 = t < a;
     var re2 = t > a;
@@ -124,6 +129,7 @@ function foo(t, u, v) {
     var re6 = t != a;
     var re7 = t === a;
     var re8 = t !== a;
+
     var rf1 = a < t;
     var rf2 = a > t;
     var rf3 = a <= t;
@@ -132,6 +138,7 @@ function foo(t, u, v) {
     var rf6 = a != t;
     var rf7 = a === t;
     var rf8 = a !== t;
+
     var rg1 = t < b;
     var rg2 = t > b;
     var rg3 = t <= b;
@@ -140,6 +147,7 @@ function foo(t, u, v) {
     var rg6 = t != b;
     var rg7 = t === b;
     var rg8 = t !== b;
+
     var rh1 = b < t;
     var rh2 = b > t;
     var rh3 = b <= t;

@@ -63,6 +63,7 @@ export class ClassWithPrivateNamedAccessors {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClassWithPrivateNamedAccessors = exports.ClassWithPrivateNamedMethods = exports.ClassWithPrivateNamedProperties = exports.funcInferredReturnType = exports.classExpression = exports.obj = void 0;
+
 // not allowed when emitting declarations
 exports.obj = {
     method1(p) {
@@ -72,6 +73,7 @@ exports.obj = {
         return p;
     }
 };
+
 exports.classExpression = class {
     method1(p) {
         return p;
@@ -80,25 +82,35 @@ exports.classExpression = class {
         return p;
     }
 };
+
 function funcInferredReturnType(obj) {
     return obj;
-}
-exports.funcInferredReturnType = funcInferredReturnType;
+}exports.funcInferredReturnType = funcInferredReturnType;
+
+
+
+
+
+
+
+
+
+
+
 class ClassWithPrivateNamedProperties {
-}
-exports.ClassWithPrivateNamedProperties = ClassWithPrivateNamedProperties;
+}exports.ClassWithPrivateNamedProperties = ClassWithPrivateNamedProperties;
+
 class ClassWithPrivateNamedMethods {
     [s]() { }
     static [s]() { }
-}
-exports.ClassWithPrivateNamedMethods = ClassWithPrivateNamedMethods;
+}exports.ClassWithPrivateNamedMethods = ClassWithPrivateNamedMethods;
+
 class ClassWithPrivateNamedAccessors {
     get [s]() { return undefined; }
     set [s](v) { }
     static get [s]() { return undefined; }
     static set [s](v) { }
-}
-exports.ClassWithPrivateNamedAccessors = ClassWithPrivateNamedAccessors;
+}exports.ClassWithPrivateNamedAccessors = ClassWithPrivateNamedAccessors;
 
 
 //// [uniqueSymbolsDeclarationsErrors.d.ts]

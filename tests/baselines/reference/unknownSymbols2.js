@@ -40,10 +40,12 @@ var M;
     }
     else if (qwerty) {
     }
+
     try {
     }
     catch (asdf) { // no error
     }
+
     switch (asdf) {
         case qwerty:
             break;

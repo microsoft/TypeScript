@@ -7,21 +7,15 @@ c.c;
 
 
 //// [classExpressionES63.js]
-let C = class extends class extends class {
-    constructor() {
+let C = class extends class extends class {constructor() {
         this.a = 1;
-    }
-} {
-    constructor() {
+    }} {constructor() {
         super(...arguments);
         this.b = 2;
-    }
-} {
-    constructor() {
+    }} {constructor() {
         super(...arguments);
         this.c = 3;
-    }
-};
+    }};
 let c = new C();
 c.a;
 c.b;

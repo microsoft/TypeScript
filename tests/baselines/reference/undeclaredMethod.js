@@ -17,8 +17,7 @@ var M;
 (function (M) {
     var C = /** @class */ (function () {
         function C() {
-        }
-        C.prototype.salt = function () { };
+        }C.prototype.salt = function () { };
         return C;
     }());
     M.C = C;

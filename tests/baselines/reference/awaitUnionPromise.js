@@ -58,12 +58,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+
 var AsyncEnumeratorDone = /** @class */ (function () {
-    function AsyncEnumeratorDone() {
-    }
+    function AsyncEnumeratorDone() {}
     return AsyncEnumeratorDone;
 }());
 ;
+
 function main() {
     return __awaiter(this, void 0, void 0, function () {
         var x, a, b, c, d;

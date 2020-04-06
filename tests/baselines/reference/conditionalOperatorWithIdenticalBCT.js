@@ -63,22 +63,19 @@ var __extends = (this && this.__extends) || (function () {
 })();
 //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have identical best common type
 var X = /** @class */ (function () {
-    function X() {
-    }
+    function X() {}
     return X;
 }());
 ;
 var A = /** @class */ (function (_super) {
-    __extends(A, _super);
-    function A() {
+    __extends(A, _super);function A() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return A;
 }(X));
 ;
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
+    __extends(B, _super);function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
@@ -96,6 +93,7 @@ true ? {} : 1;
 true ? { a: 1 } : { a: 2, b: 'string' };
 var result2 = true ? {} : 1;
 var result3 = true ? { a: 1 } : { a: 2, b: 'string' };
+
 //Contextually typed
 var resultIsX1 = true ? x : a;
 var result4 = true ? function (m) { return m.propertyX; } : function (n) { return n.propertyA; };
@@ -108,12 +106,15 @@ true ? 1 : {};
 true ? { a: 2, b: 'string' } : { a: 1 };
 var result6 = true ? 1 : {};
 var result7 = true ? { a: 2, b: 'string' } : { a: 1 };
+
 //Contextually typed
 var resultIsX2 = true ? x : a;
 var result8 = true ? function (m) { return m.propertyA; } : function (n) { return n.propertyX; };
+
 //Result = Cond ? Expr1 : Expr2,  Result is supertype
 //Contextually typed
 var resultIsX3 = true ? a : b;
 var result10 = true ? function (m) { return m.propertyX1; } : function (n) { return n.propertyX2; };
+
 //Expr1 and Expr2 are literals
 var result11 = true ? 1 : 'string';

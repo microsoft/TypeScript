@@ -7,6 +7,7 @@ f<number, string, number>();
 
 //// [callWithWrongNumberOfTypeArguments.js]
 function f() { }
+
 f();
 f();
 f();

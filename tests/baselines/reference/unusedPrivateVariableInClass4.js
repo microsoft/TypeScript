@@ -12,8 +12,7 @@ class greeter {
 //// [unusedPrivateVariableInClass4.js]
 var greeter = /** @class */ (function () {
     function greeter() {
-    }
-    greeter.prototype.method1 = function () {
+    }greeter.prototype.method1 = function () {
         this.x;
     };
     return greeter;

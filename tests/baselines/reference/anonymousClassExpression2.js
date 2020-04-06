@@ -25,16 +25,14 @@ while (0) {
 while (0) {
     var A = /** @class */ (function () {
         function A() {
-        }
-        A.prototype.methodA = function () {
+        }A.prototype.methodA = function () {
             this; //note: a this reference of some kind is required to trigger the bug
         };
         return A;
     }());
     var B = /** @class */ (function () {
         function B() {
-        }
-        B.prototype.methodB = function () {
+        }B.prototype.methodB = function () {
             this.methodA; // error
             this.methodB; // ok
         };

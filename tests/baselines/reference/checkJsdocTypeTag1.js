@@ -45,8 +45,10 @@ var props = {};
 // @ts-check
 /** @type {String} */
 var S = "hello world";
+
 /** @type {number} */
 var n = 10;
+
 /** @type {*} */
 var anyT = 2;
 anyT = "hello";
@@ -69,6 +71,7 @@ x2(0);
  * @type {object}
  */
 var props = {};
+
 /**
  * @type {Object}
  */

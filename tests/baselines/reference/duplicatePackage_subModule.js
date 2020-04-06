@@ -31,4 +31,5 @@ const o: Foo = a.o;
 "use strict";
 exports.__esModule = true;
 var a = require("a");
+
 var o = a.o;

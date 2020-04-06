@@ -17,5 +17,7 @@ var stuck: Property<number> = p;
 
 //// [recursiveTypeComparison.js]
 // Before fix this would take an exceeding long time to complete (#1170)
+
+
 var p;
 var stuck = p;

@@ -43,8 +43,7 @@ System.register([], function (exports_1, context_1) {
         execute: function () {
             let;
             A = /** @class */ (function () {
-                function A() {
-                }
+                function A() {}
                 return A;
             }());
             (function (B) {
@@ -59,8 +58,7 @@ System.register([], function (exports_1, context_1) {
             exports_1("c1", c1 = 'a');
             exports_1("d1", d1 = 1);
             D = /** @class */ (function () {
-                function D() {
-                }
+                function D() {}
                 return D;
             }());
             exports_1("e1", e1 = new D);

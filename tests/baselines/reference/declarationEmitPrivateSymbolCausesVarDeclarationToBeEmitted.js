@@ -11,12 +11,12 @@ export class User {
 exports.__esModule = true;
 exports.User = void 0;
 var _data = Symbol('data');
+
 var User = /** @class */ (function () {
     function User() {
     }
     return User;
-}());
-exports.User = User;
+}());exports.User = User;
 ;
 
 

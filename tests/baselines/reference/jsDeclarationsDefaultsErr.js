@@ -47,8 +47,7 @@ exports.default = Cls;
 Object.defineProperty(exports, "__esModule", { value: true });
 // merge type alias and class (error message improvement needed, see #32368)
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 exports.default = C;

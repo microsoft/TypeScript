@@ -21,6 +21,7 @@ function ff() {
 
 //// [controlFlowIteration.js]
 var cond;
+
 function ff() {
     var x;
     while (true) {

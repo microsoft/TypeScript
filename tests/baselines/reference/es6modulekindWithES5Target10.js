@@ -7,3 +7,5 @@ namespace N {
 export = N; // Error
 
 //// [es6modulekindWithES5Target10.js]
+
+

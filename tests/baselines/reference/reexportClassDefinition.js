@@ -20,14 +20,14 @@ class x extends foo2.x {}
 //// [foo1.js]
 "use strict";
 var x = /** @class */ (function () {
-    function x() {
-    }
+    function x() {}
     return x;
 }());
 module.exports = x;
 //// [foo2.js]
 "use strict";
 var foo1 = require("./foo1");
+
 module.exports = {
     x: foo1
 };
@@ -49,8 +49,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 var foo2 = require("./foo2");
 var x = /** @class */ (function (_super) {
-    __extends(x, _super);
-    function x() {
+    __extends(x, _super);function x() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return x;

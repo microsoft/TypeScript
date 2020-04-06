@@ -11,8 +11,7 @@ someFunc.someProp = 'yo';
 exports.__esModule = true;
 function someFunc() {
     return 'hello!';
-}
-exports["default"] = someFunc;
+}exports["default"] = someFunc;
 someFunc.someProp = 'yo';
 
 

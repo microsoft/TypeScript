@@ -100,6 +100,7 @@ fexp(0);
 // arrow function paramter
 var farrow = function (a) {
 };
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -129,7 +130,10 @@ var E = /** @class */ (function () {
         configurable: true
     });
     return class_1;
-}());
+}())
+
+;
+
 var o = {
     // Object literal method declaration paramter
     method: function (a) {
@@ -142,18 +146,22 @@ o;
 // in a for..in statment
 for (var i in o) {
 }
+
 // in a for..of statment
 for (var _i = 0, _a = [1, 2, 3]; _i < _a.length; _i++) {
     var i = _a[_i];
 }
+
 // in a for. statment
 for (var i = 0, n = void 0; i < 10; i++) {
 }
+
 // in a block
 var condition = false;
 if (condition) {
     var c = 0;
 }
+
 // in try/catch/finally
 try {
     var a = 0;
@@ -169,5 +177,6 @@ var N;
 (function (N) {
     var x;
 })(N || (N = {}));
-for (var x = void 0, z = (void 0).z; (x); )
+for (var x = void 0,
+    z = (void 0).z; (x); )
     ;

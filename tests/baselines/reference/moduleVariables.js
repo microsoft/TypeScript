@@ -18,6 +18,7 @@ module M {
 
 
 //// [moduleVariables.js]
+
 var x = 1;
 var M;
 (function (M) {

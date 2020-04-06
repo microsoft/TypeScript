@@ -32,8 +32,7 @@ var Model = /** @class */ (function () {
     function Model() {
     }
     return Model;
-}());
-exports.Model = Model;
+}());exports.Model = Model;
 //// [aliasUsageInTypeArgumentOfExtendsClause_moduleA.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -53,13 +52,11 @@ exports.__esModule = true;
 exports.VisualizationModel = void 0;
 var Backbone = require("./aliasUsageInTypeArgumentOfExtendsClause_backbone");
 var VisualizationModel = /** @class */ (function (_super) {
-    __extends(VisualizationModel, _super);
-    function VisualizationModel() {
+    __extends(VisualizationModel, _super);function VisualizationModel() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return VisualizationModel;
-}(Backbone.Model));
-exports.VisualizationModel = VisualizationModel;
+}(Backbone.Model));exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInTypeArgumentOfExtendsClause_main.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -83,8 +80,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);
-    function D() {
+    __extends(D, _super);function D() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.x = moduleA;
         return _this;

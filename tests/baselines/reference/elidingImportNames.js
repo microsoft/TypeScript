@@ -32,3 +32,4 @@ var b = a;
 var x;
 var a2 = require("./elidingImportNames_main1"); // alias not used in typeof
 var b2 = a2;
+

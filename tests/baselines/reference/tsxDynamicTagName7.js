@@ -36,17 +36,16 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.Text = void 0;
 var React = require("react");
+
 var Text = /** @class */ (function (_super) {
-    __extends(Text, _super);
-    function Text() {
+    __extends(Text, _super);function Text() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this._tagName = 'div';
         return _this;
-    }
-    Text.prototype.render = function () {
-        return (<this /> // this should be an error
+    }Text.prototype.render = function () {
+        return (
+            <this /> // this should be an error
         );
     };
     return Text;
-}(React.Component));
-exports.Text = Text;
+}(React.Component));exports.Text = Text;

@@ -34,11 +34,12 @@ Entity.y;
 Object.defineProperty(exports, "__esModule", { value: true });
 function Decl() {
     return 0;
-}
-exports.default = Decl;
+}exports.default = Decl;
+
 (function (Decl) {
     Decl.x = 10;
     Decl.y = 20;
+
 })(Decl = exports.Decl || (exports.Decl = {}));
 //// [m2.js]
 "use strict";

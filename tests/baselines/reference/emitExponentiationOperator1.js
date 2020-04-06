@@ -38,23 +38,29 @@ Math.pow((-1), 2);
 Math.pow(1, Math.pow(2, 3));
 Math.pow(1, Math.pow(2, -3));
 Math.pow(1, -(Math.pow(2, 3)));
-Math.pow((-(Math.pow(1, 2))), 3);
-Math.pow((-(Math.pow(1, 2))), -3);
+Math.pow(
+(-(Math.pow(1, 2))), 3);
+Math.pow(
+(-(Math.pow(1, 2))), -3);
+
 Math.pow(1, 2) + 3;
 Math.pow(1, 2) - 3;
 Math.pow(1, 2) * 3;
 Math.pow(1, 2) / 3;
 Math.pow(1, 2) % 3;
+
 Math.pow(1, -2) + 3;
 Math.pow(1, -2) - 3;
 Math.pow(1, -2) * 3;
 Math.pow(1, -2) / 3;
 Math.pow(1, -2) % 3;
+
 2 + Math.pow(3, 3);
 2 - Math.pow(3, 3);
 2 * Math.pow(3, 3);
 2 / Math.pow(3, 3);
 2 % Math.pow(3, 3);
+
 Math.pow((2 + 3), 4);
 Math.pow((2 - 3), 4);
 Math.pow((2 * 3), 4);

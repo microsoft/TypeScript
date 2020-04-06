@@ -40,10 +40,10 @@ function f(b) {
     if (b) {
         Foo = (_a = /** @class */ (function () {
                 function Foo() {
-                }
-                Foo.x = function () {
+                }Foo.x = function () {
                     new Foo();
                 };
+
                 Foo.prototype.m = function () {
                     new Foo();
                 };
@@ -56,10 +56,10 @@ function f(b) {
     else {
         var Foo_1 = /** @class */ (function () {
             function Foo() {
-            }
-            Foo.x = function () {
+            }Foo.x = function () {
                 new Foo();
             };
+
             Foo.prototype.m = function () {
                 new Foo();
             };

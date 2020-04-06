@@ -79,8 +79,7 @@ var x = <div>one</div> /* intervening comment */ <div>two</div>;;
 //// [2.jsx]
 <a />;
 //// [3.jsx]
- < ;
-a /  > ;
+ < ;a /  > ;
 //// [4.jsx]
 <a b d/>;
 //// [5.jsx]
@@ -92,26 +91,19 @@ a /  > ;
 //// [8.jsx]
 <a b></b>;
 //// [9.jsx]
-<a b c></a>;
-b.c > ;
+<a b c></a>;b.c > ;
 //// [10.jsx]
-<a.b c></a.b>;
-c > ;
+<a.b c></a.b>;c > ;
 //// [11.jsx]
 <a.b.c></a>;
 //// [12.jsx]
- < .a > ;
-a > ;
+ < .a > ;a > ;
 //// [13.jsx]
 <a.></a.>;
 //// [14.jsx]
-<a />;
-[foo] > ;
-a[foo] > ;
+<a />;[foo] > ;a[foo] > ;
 //// [15.jsx]
-<a />;
-['foo'] > ;
-a['foo'] > ;
+<a />;['foo'] > ;a['foo'] > ;
 //// [16.jsx]
 <a><a />;</>;
 //// [17.jsx]
@@ -127,22 +119,13 @@ var x = <div>one</div> /* intervening comment */, /* intervening comment */ <div
 //// [21.jsx]
 <span className="a" id="b"/>;
 //// [22.jsx]
-<div className/>;
-"app" > ;
+<div className/>;"app" > ;
 //// [23.jsx]
 <div {...props}/>;
 //// [24.jsx]
-<div>stuff</div>;
-{
-    props;
-}
- > ;
+<div>stuff</div>;{props;} > ;
 //// [25.jsx]
-<div {...props}>stuff</div>;
-{
-    props;
-}
- > ;
+<div {...props}>stuff</div>;{props;} > ;
 //// [26.jsx]
 <a>></a>;
 //// [27.jsx]

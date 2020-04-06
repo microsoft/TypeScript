@@ -30,5 +30,6 @@ exports.z1 = exports.a;
 //// [es6ImportNamedImportMergeErrors_1.js]
 "use strict";
 exports.__esModule = true;
+
 var x = 10;
 var x44 = 10;

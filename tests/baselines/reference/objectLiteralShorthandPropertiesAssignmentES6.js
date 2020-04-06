@@ -17,6 +17,7 @@ var person3: { name: string; id: number } = bar("Hello", 5);
 //// [objectLiteralShorthandPropertiesAssignmentES6.js]
 var id = 10000;
 var name = "my name";
+
 var person = { name, id };
 function foo(obj) { }
 ;

@@ -42,22 +42,28 @@ define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
     exports.__esModule = true;
     exports.NoOverload1 = exports.NoOverload = exports.MainButton = void 0;
+
+
+
     function MainButton(props) {
         var linkProps = props;
         if (linkProps.goTo) {
             return this._buildMainLink(props);
         }
+
         return this._buildMainButton(props);
-    }
-    exports.MainButton = MainButton;
+    }exports.MainButton = MainButton;
+
     var b0 = <MainButton {...{ onClick: function (k) { console.log(k); } }} extra/>; // k has type "left" | "right"
     var b2 = <MainButton onClick={function (k) { console.log(k); }} extra/>; // k has type "left" | "right"
     var b3 = <MainButton {...{ goTo: "home" }} extra/>; // goTo has type"home" | "contact"
     var b4 = <MainButton goTo="home" extra/>; // goTo has type "home" | "contact"
-    function NoOverload(buttonProps) { return undefined; }
+
+    function NoOverload(buttonProps) { return undefined; }// goTo has type "home" | "contact"
     exports.NoOverload = NoOverload;
     var c1 = <NoOverload {...{ onClick: function (k) { console.log(k); } }} extra/>; // k has type any
-    function NoOverload1(linkProps) { return undefined; }
+
+    function NoOverload1(linkProps) { return undefined; }// k has type any
     exports.NoOverload1 = NoOverload1;
     var d1 = <NoOverload1 {...{ goTo: "home" }} extra/>; // goTo has type "home" | "contact"
 });

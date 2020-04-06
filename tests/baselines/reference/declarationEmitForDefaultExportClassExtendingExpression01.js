@@ -36,18 +36,19 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+
+
 var A = /** @class */ (function () {
     function A() {
-    }
-    A.prototype.getGreeting = function () {
+    }A.prototype.getGreeting = function () {
         return 'hello';
     };
     return A;
 }());
 var getGreeterBase = function () { return A; };
+
 var default_1 = /** @class */ (function (_super) {
-    __extends(default_1, _super);
-    function default_1() {
+    __extends(default_1, _super);function default_1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return default_1;

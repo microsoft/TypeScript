@@ -31,38 +31,31 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Control = /** @class */ (function () {
+})();var Control = /** @class */ (function () {
     function Control() {
     }
     return Control;
 }());
 var Button = /** @class */ (function (_super) {
-    __extends(Button, _super);
-    function Button() {
+    __extends(Button, _super);function Button() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Button.prototype.select = function () { };
+    }Button.prototype.select = function () { };
     return Button;
 }(Control));
 var TextBox = /** @class */ (function (_super) {
-    __extends(TextBox, _super);
-    function TextBox() {
+    __extends(TextBox, _super);function TextBox() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    TextBox.prototype.select = function () { };
+    }TextBox.prototype.select = function () { };
     return TextBox;
 }(Control));
 var Image = /** @class */ (function (_super) {
-    __extends(Image, _super);
-    function Image() {
+    __extends(Image, _super);function Image() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Image;
 }(Control));
 var Location = /** @class */ (function () {
     function Location() {
-    }
-    Location.prototype.select = function () { };
+    }Location.prototype.select = function () { };
     return Location;
 }());

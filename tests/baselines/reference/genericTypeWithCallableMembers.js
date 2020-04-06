@@ -13,6 +13,7 @@ class C<T extends Constructable> {
 
 
 //// [genericTypeWithCallableMembers.js]
+
 var C = /** @class */ (function () {
     function C(data, data2) {
         this.data = data;

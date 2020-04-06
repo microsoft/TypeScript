@@ -94,13 +94,19 @@ var __extends = (this && this.__extends) || (function () {
 })();
 // @ts-check
 var W = /** @type {string} */ ( /** @type {*} */(4));
+
 var W = /** @type {string} */ (4); // Error
+
+
 /** @type {*} */
 var a;
+
 /** @type {string} */
 var s;
+
 var a = /** @type {*} */ ("" + 4);
 var s = "" + /** @type {*} */ (4);
+
 var SomeBase = /** @class */ (function () {
     function SomeBase() {
         this.p = 42;
@@ -134,14 +140,18 @@ var someFakeClass = new SomeFakeClass();
 someBase = /** @type {SomeBase} */ (someDerived);
 someBase = /** @type {SomeBase} */ (someBase);
 someBase = /** @type {SomeBase} */ (someOther); // Error
+
 someDerived = /** @type {SomeDerived} */ (someDerived);
 someDerived = /** @type {SomeDerived} */ (someBase);
 someDerived = /** @type {SomeDerived} */ (someOther); // Error
+
 someOther = /** @type {SomeOther} */ (someDerived); // Error
 someOther = /** @type {SomeOther} */ (someBase); // Error
 someOther = /** @type {SomeOther} */ (someOther);
+
 someFakeClass = someBase;
 someFakeClass = someDerived;
+
 someBase = someFakeClass; // Error
 someBase = /** @type {SomeBase} */ (someFakeClass);
 // Type assertion cannot be a type-predicate type

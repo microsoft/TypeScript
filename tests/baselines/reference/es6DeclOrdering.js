@@ -24,6 +24,7 @@ var Bar = /** @class */ (function () {
     //public bar() { }
     Bar.prototype.foo = function () {
         return this._store.length;
+
     };
     return Bar;
 }());

@@ -65,8 +65,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+
 class SomeAbstractClass extends SomeBaseClass {
 }
+
 class SomeClass extends SomeAbstractClass {
     baz(context) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -74,3 +76,13 @@ class SomeClass extends SomeAbstractClass {
         });
     }
 }
+
+
+
+
+
+
+
+
+
+

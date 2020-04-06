@@ -34,6 +34,7 @@ describe("my test suite", function () {
         var a = $(".thing");
     });
 });
+
 suite("another suite", function () {
     test("everything else", function () {
         console.log(process.env);
@@ -41,12 +42,14 @@ suite("another suite", function () {
         var x = require("fs");
         var y = Buffer.from([]);
         var z = module.exports;
+
         var a = new Map();
         var b = new Set();
         var c = new WeakMap();
         var d = new WeakSet();
         var e = Symbol();
         var f = Promise.resolve(0);
+
         var i = null;
         var j = null;
         var k = null;

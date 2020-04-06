@@ -71,12 +71,12 @@ var ErrClass1 = /** @class */ (function () {
     return ErrClass1;
 }());
 var BaseErrClass = /** @class */ (function () {
-    function BaseErrClass(t) {
-    }
+    function BaseErrClass(t) {}
     return BaseErrClass;
 }());
 var ClassWithNoInitializer = /** @class */ (function (_super) {
     __extends(ClassWithNoInitializer, _super);
+
     //'this' in optional super call
     function ClassWithNoInitializer() {
         var _this = _super.call(this, _this) || this;
@@ -86,6 +86,7 @@ var ClassWithNoInitializer = /** @class */ (function (_super) {
 }(BaseErrClass));
 var ClassWithInitializer = /** @class */ (function (_super) {
     __extends(ClassWithInitializer, _super);
+
     //'this' in required super call
     function ClassWithInitializer() {
         var _this = _super.call(this, _this) || this;
@@ -104,8 +105,9 @@ var M;
 //'this' as a type argument
 function genericFunc(x) { }
 genericFunc(undefined); // Should be an error
+
 var ErrClass3 = /** @class */ (function (_super) {
-    __extends(ErrClass3, _super);
+    __extends(ErrClass3, _super);// Should be an error
     function ErrClass3() {
         return _super !== null && _super.apply(this, arguments) || this;
     }

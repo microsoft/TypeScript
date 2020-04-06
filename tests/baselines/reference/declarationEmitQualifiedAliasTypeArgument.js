@@ -32,7 +32,9 @@ export const fun2 = create<Q>();
 exports.__esModule = true;
 exports.fun2 = exports.fun = void 0;
 var bbb_1 = require("./bbb");
+
 exports.fun = bbb_1.create();
+
 exports.fun2 = bbb_1.create();
 
 

@@ -37,8 +37,7 @@ class A {
         ({ a: this.#field = 1, b: [this.#field = 1] } = { b: [] });
         [this.#field = 2] = [];
         [this.otherObject.#field = 2] = [];
-    }
-    #field;
+    }#field;
     testObject() {
         return { x: 10, y: 6 };
     }

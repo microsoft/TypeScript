@@ -25,6 +25,9 @@ f1.bar2();
 var Foo = /** @class */ (function () {
     function Foo(x) {
     }
+
+
+
     Foo.prototype.bar1 = function () { };
     Foo.prototype.bar2 = function () { };
     return Foo;

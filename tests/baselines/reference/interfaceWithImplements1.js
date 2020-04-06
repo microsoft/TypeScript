@@ -5,3 +5,4 @@ interface IBar implements IFoo {
 }
 
 //// [interfaceWithImplements1.js]
+

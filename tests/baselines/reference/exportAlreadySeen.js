@@ -28,8 +28,7 @@ var M;
     var N;
     (function (N) {
         var C = /** @class */ (function () {
-            function C() {
-            }
+            function C() {}
             return C;
         }());
         N.C = C;

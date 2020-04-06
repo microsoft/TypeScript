@@ -61,24 +61,28 @@ z: typeof M.n;
 // typeof  operator on number type
 var NUMBER;
 var NUMBER1 = [1, 2];
+
 function foo() { return 1; }
+
 var A = /** @class */ (function () {
     function A() {
-    }
-    A.foo = function () { return 1; };
+    }A.foo = function () { return 1; };
     return A;
 }());
 var M;
 (function (M) {
 })(M || (M = {}));
 var objA = new A();
+
 // number type var
 var ResultIsString1 = typeof NUMBER;
 var ResultIsString2 = typeof NUMBER1;
+
 // number type literal
 var ResultIsString3 = typeof 1;
 var ResultIsString4 = typeof { x: 1, y: 2 };
 var ResultIsString5 = typeof { x: 1, y: function (n) { return n; } };
+
 // number type expressions
 var ResultIsString6 = typeof objA.a;
 var ResultIsString7 = typeof M.n;
@@ -86,6 +90,7 @@ var ResultIsString8 = typeof NUMBER1[0];
 var ResultIsString9 = typeof foo();
 var ResultIsString10 = typeof A.foo();
 var ResultIsString11 = typeof (NUMBER + NUMBER);
+
 // multiple typeof  operators
 var ResultIsString12 = typeof typeof NUMBER;
 var ResultIsString13 = typeof typeof typeof (NUMBER + NUMBER);

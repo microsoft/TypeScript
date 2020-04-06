@@ -34,13 +34,11 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var C1 = /** @class */ (function () {
-        function C1() {
-        }
+        function C1() {}
         return C1;
     }());
     var Test1 = /** @class */ (function (_super) {
-        __extends(Test1, _super);
-        function Test1() {
+        __extends(Test1, _super);function Test1() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Test1;

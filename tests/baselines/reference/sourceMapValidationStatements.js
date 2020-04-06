@@ -139,15 +139,18 @@ function f() {
         case 0: {
             x++;
             break;
+
         }
         case 1: {
             x--;
             break;
+
         }
         default: {
             x *= 2;
             x = 50;
             break;
+
         }
     }
     while (x < 10) {

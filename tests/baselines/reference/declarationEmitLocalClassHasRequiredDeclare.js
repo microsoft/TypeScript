@@ -19,9 +19,9 @@ export class Y { }
 "use strict";
 exports.__esModule = true;
 exports.Y = exports.A = void 0;
+
 var X = /** @class */ (function () {
-    function X() {
-    }
+    function X() {}
     return X;
 }());
 var A = /** @class */ (function () {
@@ -31,12 +31,11 @@ var A = /** @class */ (function () {
     return A;
 }());
 exports.A = A;
+
 var Y = /** @class */ (function () {
-    function Y() {
-    }
+    function Y() {}
     return Y;
-}());
-exports.Y = Y;
+}());exports.Y = Y;
 
 
 //// [declarationEmitLocalClassHasRequiredDeclare.d.ts]

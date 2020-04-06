@@ -24,12 +24,15 @@ var E;
     E[E["x"] = 0] = "x";
 })(E || (E = {}));
 var a;
+
 extractIndexer((_a = {},
     _a[a] = "",
     _a)); // Should return string
+
 extractIndexer((_b = {},
     _b[E.x] = "",
     _b)); // Should return string
+
 extractIndexer((_c = {},
     _c["" || 0] = "",
     _c)); // Should return any (widened form of undefined)

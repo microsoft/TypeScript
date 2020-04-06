@@ -48,10 +48,10 @@ type ItemType3 = true.typeof(nodes.item(0));
 
 
 //// [string.js]
+
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.foo = function () {
+    }C.prototype.foo = function () {
         var x;
         typeof (this.foo);
     };
@@ -60,10 +60,10 @@ var C = /** @class */ (function () {
 var nodes = document.getElementsByTagName("li");
 typeof (nodes.item(0));
 //// [number.js]
+
 var C2 = /** @class */ (function () {
     function C2() {
-    }
-    C2.prototype.foo = function () {
+    }C2.prototype.foo = function () {
         var x;
         typeof (this.foo);
     };
@@ -72,10 +72,10 @@ var C2 = /** @class */ (function () {
 var nodes2 = document.getElementsByTagName("li");
 typeof (nodes.item(0));
 //// [boolean.js]
+
 var C3 = /** @class */ (function () {
     function C3() {
-    }
-    C3.prototype.foo = function () {
+    }C3.prototype.foo = function () {
         var x;
         typeof (this.foo);
     };

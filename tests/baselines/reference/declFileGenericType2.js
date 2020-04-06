@@ -62,6 +62,7 @@ var templa;
     (function (dom) {
         var mvc;
         (function (mvc) {
+
             var AbstractElementController = /** @class */ (function (_super) {
                 __extends(AbstractElementController, _super);
                 function AbstractElementController() {
@@ -83,6 +84,7 @@ var templa;
             (function (composite) {
                 var AbstractCompositeElementController = /** @class */ (function (_super) {
                     __extends(AbstractCompositeElementController, _super);
+
                     function AbstractCompositeElementController() {
                         var _this = _super.call(this) || this;
                         _this._controllers = [];

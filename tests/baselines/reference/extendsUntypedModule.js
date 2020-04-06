@@ -33,10 +33,9 @@ exports.__esModule = true;
 exports.A = void 0;
 var foo_1 = require("foo");
 var A = /** @class */ (function (_super) {
-    __extends(A, _super);
+    __extends(A, _super);// error: unused
     function A() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return A;
-}(foo_1["default"]));
-exports.A = A;
+}(foo_1["default"]));exports.A = A;

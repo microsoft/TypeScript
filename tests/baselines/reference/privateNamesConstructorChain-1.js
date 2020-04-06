@@ -24,11 +24,9 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _foo, _bar;
 let Parent = /** @class */ (() => {
     var _foo_1, _bar;
-    class Parent {
-        constructor() {
+    class Parent {constructor() {
             _foo_1.set(this, 3);
-        }
-        accessChildProps() {
+        }accessChildProps() {
             __classPrivateFieldGet(new Child(), _foo_1); // OK (`#foo` was added when `Parent`'s constructor was called on `child`)
             __classPrivateFieldGet(Child, _bar); // Error: not found
         }
@@ -38,6 +36,7 @@ let Parent = /** @class */ (() => {
     return Parent;
 })();
 class Child extends Parent {
+
     constructor() {
         super(...arguments);
         _foo.set(this, "foo"); // OK (Child's #foo does not conflict, as `Parent`'s `#foo` is not accessible)

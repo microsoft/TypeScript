@@ -8,7 +8,6 @@ static public() {}
 //// [parserAccessibilityAfterStatic11.js]
 var Outer = /** @class */ (function () {
     function Outer() {
-    }
-    Outer.public = function () { };
+    }Outer.public = function () { };
     return Outer;
 }());

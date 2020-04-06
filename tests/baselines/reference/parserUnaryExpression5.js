@@ -2,5 +2,4 @@
 ++ delete foo.bar
 
 //// [parserUnaryExpression5.js]
-++;
-delete foo.bar;
+++;delete foo.bar;

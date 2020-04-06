@@ -46,8 +46,7 @@ function _super() {
 }
 var Foo = /** @class */ (function () {
     function Foo() {
-    }
-    Foo.prototype.x = function () {
+    }Foo.prototype.x = function () {
         function _super() {
         }
     };
@@ -56,11 +55,9 @@ var Foo = /** @class */ (function () {
     return Foo;
 }());
 var b = /** @class */ (function (_super_1) {
-    __extends(b, _super_1);
-    function b() {
+    __extends(b, _super_1);function b() {
         return _super_1 !== null && _super_1.apply(this, arguments) || this;
-    }
-    b.prototype.foo = function () {
+    }b.prototype.foo = function () {
         function _super() {
         }
     };
@@ -69,15 +66,14 @@ var b = /** @class */ (function (_super_1) {
     return b;
 }(Foo));
 var c = /** @class */ (function (_super_1) {
-    __extends(c, _super_1);
-    function c() {
+    __extends(c, _super_1);function c() {
         return _super_1 !== null && _super_1.apply(this, arguments) || this;
-    }
-    c.prototype.foo = function () {
+    }c.prototype.foo = function () {
         var x = function () {
             function _super() {
             }
-        };
+        }
+        ;
     };
     c.prototype._super = function () {
     };

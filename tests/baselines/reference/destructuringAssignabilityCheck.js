@@ -22,11 +22,17 @@ var _a = {}; // should be error
 var _b = undefined; // error correctly
 (function (_a) { return 0; })({}); // should be error
 (function (_a) { return 0; })(undefined); // should be error
+
 function foo(_a) {
     return 0;
 }
 function bar(_a) {
     return 0;
 }
-var _c = 1;
-var _d = {};
+
+var _c = 1
+
+;
+
+var _d = {}
+;

@@ -52,12 +52,12 @@ var __extends = (this && this.__extends) || (function () {
 var _this = this;
 exports.__esModule = true;
 var React = require("react");
+
+
 var Poisoned = /** @class */ (function (_super) {
-    __extends(Poisoned, _super);
-    function Poisoned() {
+    __extends(Poisoned, _super);function Poisoned() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Poisoned.prototype.render = function () {
+    }Poisoned.prototype.render = function () {
         return <div>Hello</div>;
     };
     return Poisoned;
@@ -66,14 +66,14 @@ var obj = {
     x: "hello world",
     y: 2
 };
+
 // OK
 var p = <Poisoned {...obj}/>;
+
 var EmptyProp = /** @class */ (function (_super) {
-    __extends(EmptyProp, _super);
-    function EmptyProp() {
+    __extends(EmptyProp, _super);function EmptyProp() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    EmptyProp.prototype.render = function () {
+    }EmptyProp.prototype.render = function () {
         return <div>Default hi</div>;
     };
     return EmptyProp;
@@ -82,6 +82,7 @@ var EmptyProp = /** @class */ (function (_super) {
 var j;
 var e1 = <EmptyProp {...{}}/>;
 var e2 = <EmptyProp {...j}/>;
-var e3 = <EmptyProp {...{ ref: function (input) { _this.textInput = input; } }}/>;
+var e3 = <EmptyProp {...{ ref: function (input) { _this.textInput = input; } }}/>
+;
 var e4 = <EmptyProp data-prop/>;
 var e5 = <EmptyProp {...{ "data-prop": true }}/>;

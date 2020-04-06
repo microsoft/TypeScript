@@ -22,6 +22,7 @@ export function getFooValueFrom<T extends "./a" | "./b">(v: T): import(T).Foo["a
 export function getFooFrom(v) {
     return undefined;
 }
+
 export function getFooValueFrom(v) {
     return undefined;
 }

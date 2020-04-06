@@ -42,10 +42,8 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var C = /** @class */ (function () {
-    function C(x, y) {
-    }
+})();var C = /** @class */ (function () {
+    function C(x, y) {}
     return C;
 }());
 var ELoc = /** @class */ (function (_super) {
@@ -60,14 +58,14 @@ var ELocVar = /** @class */ (function (_super) {
     function ELocVar(x) {
         return _super.call(this, 0, loc) || this;
     }
+
     ELocVar.prototype.m = function () {
         var loc = 10;
     };
     return ELocVar;
 }(C));
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);
-    function D(z) {
+    __extends(D, _super);function D(z) {
         var _this = _super.call(this, _this.z) || this;
         _this.z = z;
         return _this;
@@ -75,8 +73,7 @@ var D = /** @class */ (function (_super) {
     return D;
 }(C)); // too few params
 var E = /** @class */ (function (_super) {
-    __extends(E, _super);
-    function E(z) {
+    __extends(E, _super);function E(z) {
         var _this = _super.call(this, 0, _this.z) || this;
         _this.z = z;
         return _this;
@@ -84,8 +81,7 @@ var E = /** @class */ (function (_super) {
     return E;
 }(C));
 var F = /** @class */ (function (_super) {
-    __extends(F, _super);
-    function F(z) {
+    __extends(F, _super);function F(z) {
         var _this = _super.call(this, "hello", _this.z) || this;
         _this.z = z;
         return _this;

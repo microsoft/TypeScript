@@ -44,8 +44,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var A = /** @class */ (function () {
+})();var A = /** @class */ (function () {
     function A() {
     }
     return A;
@@ -53,8 +52,7 @@ var A = /** @class */ (function () {
 function B1() {
     // class expression can use T
     return /** @class */ (function (_super) {
-        __extends(class_1, _super);
-        function class_1() {
+        __extends(class_1, _super);function class_1() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return class_1;
@@ -63,8 +61,7 @@ function B1() {
 var B2 = /** @class */ (function () {
     function B2() {
         this.anon = /** @class */ (function (_super) {
-            __extends(class_2, _super);
-            function class_2() {
+            __extends(class_2, _super);function class_2() {
                 return _super !== null && _super.apply(this, arguments) || this;
             }
             return class_2;
@@ -74,8 +71,7 @@ var B2 = /** @class */ (function () {
 }());
 function B3() {
     return /** @class */ (function (_super) {
-        __extends(Inner, _super);
-        function Inner() {
+        __extends(Inner, _super);function Inner() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Inner;
@@ -83,23 +79,20 @@ function B3() {
 }
 // extends can call B
 var K = /** @class */ (function (_super) {
-    __extends(K, _super);
-    function K() {
+    __extends(K, _super);function K() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return K;
 }(B1()));
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);
-    function C() {
+    __extends(C, _super);function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }((new B2().anon)));
 var b3Number = B3();
 var S = /** @class */ (function (_super) {
-    __extends(S, _super);
-    function S() {
+    __extends(S, _super);function S() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return S;

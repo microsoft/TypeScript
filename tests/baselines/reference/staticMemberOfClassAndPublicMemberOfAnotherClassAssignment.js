@@ -28,14 +28,12 @@ c = a;
 //// [staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.js]
 var B = /** @class */ (function () {
     function B() {
-    }
-    B.prototype.prop = function () { };
+    }B.prototype.prop = function () { };
     return B;
 }());
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prop = function () { };
+    }C.prop = function () { };
     return C;
 }());
 var a = new B();

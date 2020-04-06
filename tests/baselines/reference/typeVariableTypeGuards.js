@@ -98,6 +98,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var A = /** @class */ (function () {
     function A(props) {
         this.props = props;
@@ -107,6 +108,7 @@ var A = /** @class */ (function () {
     };
     return A;
 }());
+
 var Monkey = /** @class */ (function () {
     function Monkey(a) {
         this.a = a;
@@ -118,12 +120,11 @@ var Monkey = /** @class */ (function () {
     };
     return Monkey;
 }());
+
 var BigMonkey = /** @class */ (function (_super) {
-    __extends(BigMonkey, _super);
-    function BigMonkey() {
+    __extends(BigMonkey, _super);function BigMonkey() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    BigMonkey.prototype.render = function () {
+    }BigMonkey.prototype.render = function () {
         if (this.a) {
             this.a.color;
         }
@@ -137,6 +138,7 @@ function f1(obj) {
         obj();
     }
 }
+
 function f2(obj) {
     if (obj) {
         obj.x;
@@ -144,6 +146,7 @@ function f2(obj) {
         obj();
     }
 }
+
 function f3(obj) {
     if (obj) {
         obj.x;
@@ -151,11 +154,13 @@ function f3(obj) {
         obj();
     }
 }
+
 function f4(obj, x) {
     if (obj) {
         obj[x].length;
     }
 }
+
 function f5(obj, key) {
     if (obj) {
         obj[key];

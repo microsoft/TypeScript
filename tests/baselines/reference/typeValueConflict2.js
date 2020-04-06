@@ -46,8 +46,7 @@ var M2;
     var M1 = 0;
     // Should error.  M1 should bind to the variable, not to the module.
     var B = /** @class */ (function (_super) {
-        __extends(B, _super);
-        function B() {
+        __extends(B, _super);function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
@@ -57,8 +56,7 @@ var M3;
 (function (M3) {
     // Shouldn't error
     var B = /** @class */ (function (_super) {
-        __extends(B, _super);
-        function B() {
+        __extends(B, _super);function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;

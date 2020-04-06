@@ -14,11 +14,14 @@ class B extends A {
 }
 
 //// [emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1ES6.js]
-class A {
-    constructor() {
+class A {constructor() {
         this.blub = 6;
     }
+
+
 }
+
+
 class B extends A {
     constructor(x) {
         "use strict";

@@ -8,8 +8,7 @@ class Dummy {
 //// [unusedSingleParameterInMethodDeclaration.js]
 var Dummy = /** @class */ (function () {
     function Dummy() {
-    }
-    Dummy.prototype.greeter = function (person) {
+    }Dummy.prototype.greeter = function (person) {
         var unused = 20;
     };
     return Dummy;

@@ -32,22 +32,22 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Based = /** @class */ (function () {
-    function Based() {
-    }
+})();var Based = /** @class */ (function () {
+    function Based() {}
     return Based;
 }());
 var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
+
     function Derived() {
         var _this = this;
         (function () {
             _this; // No error
         });
-        (function () {
-            _this; // No error
-        });
+        (
+            function () {
+                _this; // No error
+            });
         (function () {
             _this; // No error
         })();

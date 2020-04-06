@@ -24,17 +24,24 @@ let b = <SFC2AndEmptyComp x />
 "use strict";
 exports.__esModule = true;
 var React = require("react");
+
 function EmptySFC1() {
     return React.createElement("div", null, "hello");
 }
+
 function EmptySFC2() {
     return React.createElement("div", null, "Hello");
 }
+
 function SFC2(prop) {
     return React.createElement("h1", null, "World");
 }
+
 var EmptySFCComp = EmptySFC1 || EmptySFC2;
 var SFC2AndEmptyComp = SFC2 || EmptySFC1;
-var a = React.createElement(EmptySFCComp, null);
-var a1 = React.createElement(EmptySFCComp, { "data-prop": true });
+
+var a = React.createElement(EmptySFCComp, null)
+;
+var a1 = React.createElement(EmptySFCComp, { "data-prop": true })
+;
 var b = React.createElement(SFC2AndEmptyComp, { x: true });

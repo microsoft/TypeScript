@@ -38,16 +38,16 @@ async function forInStatement8() {
 }
 
 //// [es5-asyncFunctionForInStatements.js]
+
 function forInStatement0() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            for (x in y) {
-                z;
-            }
+            for (x in y) {z;}
             return [2 /*return*/];
         });
     });
 }
+
 function forInStatement1() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _i;
@@ -74,6 +74,7 @@ function forInStatement1() {
         });
     });
 }
+
 function forInStatement2() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _i;
@@ -100,6 +101,7 @@ function forInStatement2() {
         });
     });
 }
+
 function forInStatement3() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _i;
@@ -126,6 +128,7 @@ function forInStatement3() {
         });
     });
 }
+
 function forInStatement4() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _i;
@@ -152,6 +155,7 @@ function forInStatement4() {
         });
     });
 }
+
 function forInStatement5() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _i;
@@ -178,17 +182,17 @@ function forInStatement5() {
         });
     });
 }
+
 function forInStatement6() {
     return __awaiter(this, void 0, void 0, function () {
         var a;
         return __generator(this, function (_a) {
-            for (a in y) {
-                z;
-            }
+            for (a in y) {z;}
             return [2 /*return*/];
         });
     });
 }
+
 function forInStatement7() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _i, b;
@@ -215,6 +219,7 @@ function forInStatement7() {
         });
     });
 }
+
 function forInStatement8() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _i, c;

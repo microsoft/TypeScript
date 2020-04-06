@@ -25,9 +25,12 @@ function foo(things: Val[]): void {
 //// [controlFlowDestructuringLoop.js]
 "use strict";
 // Repro from #28758
+
+
 function isNumVal(x) {
     return typeof x.val === 'number';
 }
+
 function foo(things) {
     for (var _i = 0, things_1 = things; _i < things_1.length; _i++) {
         var thing = things_1[_i];

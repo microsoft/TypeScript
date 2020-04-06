@@ -18,13 +18,14 @@ export class Bet implements Aleph {
 exports.__esModule = true;
 exports.Bet = exports.a = void 0;
 exports.a = 1 + {}; // This is an error, ofc, `Operator '+' cannot be applied to types '1' and '{}'`, which will be suppressed by the `nocheck` comment
+
+
 var Bet = /** @class */ (function () {
     function Bet() {
         this.q = "lol"; // And so will this implements error
     }
     return Bet;
-}());
-exports.Bet = Bet;
+}());exports.Bet = Bet;
 
 
 //// [file.d.ts]

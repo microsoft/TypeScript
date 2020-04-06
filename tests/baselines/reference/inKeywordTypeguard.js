@@ -108,13 +108,11 @@ function positiveIntersectionTest(x: { a: string } & { b: string }) {
 
 //// [inKeywordTypeguard.js]
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());
 function negativeClassesTest(x) {
@@ -125,6 +123,7 @@ function negativeClassesTest(x) {
         x.a = "1";
     }
 }
+
 function positiveClassesTest(x) {
     if ("a" in x) {
         x.b = "1";
@@ -133,14 +132,13 @@ function positiveClassesTest(x) {
         x.a = "1";
     }
 }
+
 var AWithOptionalProp = /** @class */ (function () {
-    function AWithOptionalProp() {
-    }
+    function AWithOptionalProp() {}
     return AWithOptionalProp;
 }());
 var BWithOptionalProp = /** @class */ (function () {
-    function BWithOptionalProp() {
-    }
+    function BWithOptionalProp() {}
     return BWithOptionalProp;
 }());
 function positiveTestClassesWithOptionalProperties(x) {
@@ -151,16 +149,15 @@ function positiveTestClassesWithOptionalProperties(x) {
         x.b = "1";
     }
 }
+
 var AWithMethod = /** @class */ (function () {
     function AWithMethod() {
-    }
-    AWithMethod.prototype.a = function () { return ""; };
+    }AWithMethod.prototype.a = function () { return ""; };
     return AWithMethod;
 }());
 var BWithMethod = /** @class */ (function () {
     function BWithMethod() {
-    }
-    BWithMethod.prototype.b = function () { return ""; };
+    }BWithMethod.prototype.b = function () { return ""; };
     return BWithMethod;
 }());
 function negativeTestClassesWithMembers(x) {
@@ -171,6 +168,7 @@ function negativeTestClassesWithMembers(x) {
     else {
     }
 }
+
 function negativeTestClassesWithMemberMissingInBothClasses(x) {
     if ("c" in x) {
         x.a();
@@ -181,14 +179,13 @@ function negativeTestClassesWithMemberMissingInBothClasses(x) {
         x.b();
     }
 }
+
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var D = /** @class */ (function () {
-    function D() {
-    }
+    function D() {}
     return D;
 }());
 function negativeMultipleClassesTest(x) {
@@ -199,9 +196,9 @@ function negativeMultipleClassesTest(x) {
         x.a = "1";
     }
 }
+
 var ClassWithUnionProp = /** @class */ (function () {
-    function ClassWithUnionProp() {
-    }
+    function ClassWithUnionProp() {}
     return ClassWithUnionProp;
 }());
 function negativePropTest(x) {
@@ -212,10 +209,10 @@ function negativePropTest(x) {
         var z = x.prop.a;
     }
 }
+
 var NegativeClassTest = /** @class */ (function () {
     function NegativeClassTest() {
-    }
-    NegativeClassTest.prototype.inThis = function () {
+    }NegativeClassTest.prototype.inThis = function () {
         if ("a" in this.prop) {
             var z = this.prop.b;
         }
@@ -227,8 +224,7 @@ var NegativeClassTest = /** @class */ (function () {
 }());
 var UnreachableCodeDetection = /** @class */ (function () {
     function UnreachableCodeDetection() {
-    }
-    UnreachableCodeDetection.prototype.inThis = function () {
+    }UnreachableCodeDetection.prototype.inThis = function () {
         if ("a" in this) {
         }
         else {

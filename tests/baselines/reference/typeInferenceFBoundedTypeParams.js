@@ -25,6 +25,7 @@ fold(
 
 //// [typeInferenceFBoundedTypeParams.js]
 // Example from #6037
+
 function fold(values, result, fold) {
     for (var _i = 0, values_1 = values; _i < values_1.length; _i++) {
         var value = values_1[_i];
@@ -32,8 +33,16 @@ function fold(values, result, fold) {
     }
     return result;
 }
+
 function append(values, value) {
     values.push(value);
     return values;
 }
-fold([1, 2, 3], [], function (result, value) { return append(result, ["", ""]); });
+
+fold([1, 2, 3], [],
+    function (result, value) { return append(
+    result,
+        ["", ""]
+    );
+    }
+);

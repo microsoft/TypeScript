@@ -59,30 +59,31 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Doing = /** @class */ (function () {
+})();var Doing = /** @class */ (function () {
     function Doing() {
-    }
-    Doing.staticMethod = function () {
+    }Doing.staticMethod = function () {
     };
     return Doing;
 }());
 var Other = /** @class */ (function (_super) {
-    __extends(Other, _super);
-    function Other() {
+    __extends(Other, _super);function Other() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     // in static method
     Other.staticMethod = function () {
         _super.staticMethod.call(this);
     };
+
     // in a lambda inside a static method
     Other.lambdaInsideAStaticMethod = function () {
         var _this = this;
-        (function () {
-            _super.staticMethod.call(_this);
-        });
+        (
+            function () {
+                _super.staticMethod.call(_this);
+            }
+        );
     };
+
     // in an object literal inside a static method
     Other.objectLiteralInsideAStaticMethod = function () {
         var _this = this;
@@ -107,8 +108,7 @@ var Other = /** @class */ (function (_super) {
         configurable: true
     });
     // in static method
-    Other.initializerInAStaticMethod = function (a) {
-        if (a === void 0) { a = _super.staticMethod.call(this); }
+    Other.initializerInAStaticMethod = function (a) {if (a === void 0) { a = _super.staticMethod.call(this); }
         _super.staticMethod.call(this);
     };
     return Other;

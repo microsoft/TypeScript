@@ -43,8 +43,7 @@ var C = /** @class */ (function () {
         this.d = 1;
     }
     return C;
-}());
-exports.C = C;
+}());exports.C = C;
 
 
 //// [/user/username/projects/myproject/b.js]
@@ -57,8 +56,7 @@ var B = /** @class */ (function () {
         this.c = new c_1.C();
     }
     return B;
-}());
-exports.B = B;
+}());exports.B = B;
 
 
 //// [/user/username/projects/myproject/a.js]
@@ -132,8 +130,7 @@ var C = /** @class */ (function () {
         this.d2 = 1;
     }
     return C;
-}());
-exports.C = C;
+}());exports.C = C;
 
 
 

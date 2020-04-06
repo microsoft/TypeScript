@@ -22,18 +22,15 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Base = /** @class */ (function () {
+})();var Base = /** @class */ (function () {
     function Base() {
     }
     return Base;
 }());
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);
-    function D() {
+    __extends(D, _super);function D() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    D.prototype.myMethod = function () {
+    }D.prototype.myMethod = function () {
         this.options;
     };
     return D;

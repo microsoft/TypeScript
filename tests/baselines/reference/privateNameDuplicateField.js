@@ -8,8 +8,7 @@ class A {
 //// [privateNameDuplicateField.js]
 "use strict";
 var _foo, _foo_1;
-class A {
-    constructor() {
+class A {constructor() {
         _foo_1.set(this, "foo");
         _foo_1.set(this, "foo");
     }

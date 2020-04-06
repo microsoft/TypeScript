@@ -46,11 +46,9 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Base = /** @class */ (function () {
+})();var Base = /** @class */ (function () {
     function Base() {
-    }
-    Base.fn = function () {
+    }Base.fn = function () {
         return '';
     };
     Object.defineProperty(Base, "a", {
@@ -64,11 +62,9 @@ var Base = /** @class */ (function () {
 // BUG 847404
 // should be error
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);
-    function Derived() {
+    __extends(Derived, _super);function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Derived.fn = function () {
+    }Derived.fn = function () {
         return '';
     };
     Object.defineProperty(Derived, "a", {
@@ -81,8 +77,10 @@ var Derived = /** @class */ (function (_super) {
 }(Base));
 var r = Base.x; // ok
 var r2 = Derived.x; // error
+
 var r3 = Base.fn(); // ok
 var r4 = Derived.fn(); // error
+
 var r5 = Base.a; // ok
 Base.a = 2; // ok
 var r6 = Derived.a; // error

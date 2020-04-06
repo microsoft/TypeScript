@@ -54,8 +54,7 @@ enum E {
 // The first case here (BugExhibition<T>) caused a crash. Try with different permutations of features.
 var BugExhibition = /** @class */ (function () {
     function BugExhibition() {
-    }
-    BugExhibition.prototype.exhibitBug = function () {
+    }BugExhibition.prototype.exhibitBug = function () {
         function localFunction() { }
         var x;
         x = localFunction;
@@ -79,8 +78,7 @@ var BugExhibition2 = /** @class */ (function () {
 }());
 var BugExhibition3 = /** @class */ (function () {
     function BugExhibition3() {
-    }
-    BugExhibition3.prototype.exhibitBug = function () {
+    }BugExhibition3.prototype.exhibitBug = function () {
         function localGenericFunction(u) { }
         var x;
         x = localGenericFunction;
@@ -89,8 +87,7 @@ var BugExhibition3 = /** @class */ (function () {
 }());
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.exhibit = function () {
+    }C.prototype.exhibit = function () {
         var funcExpr = function (u) { };
         var x;
         x = funcExpr;

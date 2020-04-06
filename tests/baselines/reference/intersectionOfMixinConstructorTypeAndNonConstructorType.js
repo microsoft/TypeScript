@@ -7,4 +7,5 @@ new x();
 
 //// [intersectionOfMixinConstructorTypeAndNonConstructorType.js]
 // Repro for #17388
+
 new x();

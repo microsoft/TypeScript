@@ -20,15 +20,12 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a.js]
-class C {
-    get prop() { return 1; }
-}
+class C {get prop() { return 1; }}
 class D extends C {
     constructor() {
         super(...arguments);
         this.prop = 1;
-    }
-}
+    }}
 
 
 
@@ -73,9 +70,7 @@ Change:: Enable useDefineForClassFields
 {"compilerOptions":{"target":"es6","useDefineForClassFields":true}}
 
 //// [/a.js]
-class C {
-    get prop() { return 1; }
-}
+class C {get prop() { return 1; }}
 class D extends C {
     constructor() {
         super(...arguments);
@@ -85,8 +80,7 @@ class D extends C {
             writable: true,
             value: 1
         });
-    }
-}
+    }}
 
 
 

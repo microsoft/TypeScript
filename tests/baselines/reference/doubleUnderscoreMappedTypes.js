@@ -25,12 +25,20 @@ const partial: Partial<Properties> = {
 
 
 //// [doubleUnderscoreMappedTypes.js]
+
 // As expected, I can make an object satisfying this interface
 var ok = {
     property1: "",
     __property2: ""
 };
+
+
+
 var k = "__property2"; // ok
+
+
+
+
 // And should work with partial
 var partial = {
     property1: "",

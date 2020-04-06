@@ -21,8 +21,7 @@ exports.el = void 0;
  * @module A
  */
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 /**
@@ -30,6 +29,7 @@ var A = /** @class */ (function () {
  * @type {module:A}
  */
 exports.el = null;
+
 exports.default = A;
 
 

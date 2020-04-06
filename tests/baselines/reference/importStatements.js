@@ -58,6 +58,7 @@ var C;
 var D;
 (function (D) {
     var a = A;
+
     var p = new a.Point(1, 1);
 })(D || (D = {}));
 var E;

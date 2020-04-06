@@ -43,11 +43,9 @@ let d = a.baz().b;
 exports.__esModule = true;
 exports.A = void 0;
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
-}());
-exports.A = A;
+}());exports.A = A;
 //// [f2.js]
 "use strict";
 exports.__esModule = true;
@@ -56,17 +54,20 @@ var B = /** @class */ (function () {
     function B() {
     }
     return B;
-}());
-exports.B = B;
+}());exports.B = B;
 //// [f3.js]
 "use strict";
 exports.__esModule = true;
 var f1_1 = require("./f1");
 f1_1.A.prototype.foo = function () { return undefined; };
+
+
+
 //// [f4.js]
 "use strict";
 exports.__esModule = true;
 require("./f3");
+
 var a;
 var b = a.foo().n;
 var c = a.bar().a;

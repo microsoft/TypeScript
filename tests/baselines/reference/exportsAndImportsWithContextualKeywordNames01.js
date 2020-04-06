@@ -25,9 +25,12 @@ exports.get = exports.set = void 0;
 var set = {
     set foo(x) {
     }
-};
-exports.set = set;
-var get = 10;
+}
+;
+
+
+exports.set = set;var get = 10;
+
 exports.get = get;
 //// [t2.js]
 "use strict";

@@ -11,8 +11,7 @@ exit()
 "use strict";
 exports.__esModule = true;
 exports.exist = void 0;
-function exist() { }
-exports.exist = exist;
+function exist() { }exports.exist = exist;
 //// [sample.js]
 "use strict";
 exports.__esModule = true;

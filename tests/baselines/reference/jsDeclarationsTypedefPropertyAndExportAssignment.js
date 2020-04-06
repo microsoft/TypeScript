@@ -75,14 +75,17 @@ var taskGroups = {
         label: 'Style & Layout'
     }
 };
+
 /** @type {Object<string, TaskGroup>} */
 var taskNameToGroup = {};
+
 module.exports = {
     taskGroups: taskGroups,
     taskNameToGroup: taskNameToGroup
 };
 //// [index.js]
 var _a = require('./module.js'), taskGroups = _a.taskGroups, taskNameToGroup = _a.taskNameToGroup;
+
 /** @typedef {import('./module.js').TaskGroup} TaskGroup */
 /**
  * @typedef TaskNode
@@ -96,8 +99,7 @@ var MainThreadTasks = /** @class */ (function () {
      * @param {TaskGroup} x
      * @param {TaskNode} y
      */
-    function MainThreadTasks(x, y) {
-    }
+    function MainThreadTasks(x, y) {}
     return MainThreadTasks;
 }());
 module.exports = MainThreadTasks;

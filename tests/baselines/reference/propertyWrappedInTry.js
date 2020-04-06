@@ -21,15 +21,18 @@ class Foo {
 
 //// [propertyWrappedInTry.js]
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
-try {
-    bar = someInitThatMightFail();
+try {bar = someInitThatMightFail();
+
 }
 catch (e) { }
-baz();
-{
+
+
+
+baz();{
+
     return this.bar; // doesn't get rewritten to Foo.bar.
+
 }

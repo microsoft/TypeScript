@@ -43,6 +43,7 @@ class Sub extends Base {
         });
     }
 }
+
 class Test extends Base {
     // @ts-ignore
     constructor(p) {

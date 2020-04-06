@@ -12,10 +12,10 @@ class A {
 }
 
 //// [checkSwitchStatementIfCaseTypeIsString.js]
+
 var A = /** @class */ (function () {
     function A() {
-    }
-    A.prototype.doIt = function (x) {
+    }A.prototype.doIt = function (x) {
         var _this = this;
         x.forEach(function (v) {
             switch (v) {

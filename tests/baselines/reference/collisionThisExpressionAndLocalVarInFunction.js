@@ -8,9 +8,11 @@ function x() {
 }
 
 //// [collisionThisExpressionAndLocalVarInFunction.js]
-var console;
+var console
+;
 function x() {
     var _this_1 = this;
     var _this = 5;
-    (function (x) { console.log(_this_1.x); });
+    (
+        function (x) { console.log(_this_1.x); });
 }

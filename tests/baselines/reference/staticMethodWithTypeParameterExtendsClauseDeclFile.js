@@ -34,12 +34,10 @@ var publicClass = /** @class */ (function () {
     function publicClass() {
     }
     return publicClass;
-}());
-exports.publicClass = publicClass;
+}());exports.publicClass = publicClass;
 var publicClassWithWithPrivateTypeParameters = /** @class */ (function () {
     function publicClassWithWithPrivateTypeParameters() {
-    }
-    publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod1 = function () {
+    }publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod1 = function () {
     };
     publicClassWithWithPrivateTypeParameters.prototype.myPrivateMethod1 = function () {
     };
@@ -52,8 +50,7 @@ var publicClassWithWithPrivateTypeParameters = /** @class */ (function () {
     publicClassWithWithPrivateTypeParameters.prototype.myPublicMethod = function () {
     };
     return publicClassWithWithPrivateTypeParameters;
-}());
-exports.publicClassWithWithPrivateTypeParameters = publicClassWithWithPrivateTypeParameters;
+}());exports.publicClassWithWithPrivateTypeParameters = publicClassWithWithPrivateTypeParameters;
 
 
 //// [staticMethodWithTypeParameterExtendsClauseDeclFile.d.ts]

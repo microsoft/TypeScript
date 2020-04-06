@@ -11,11 +11,11 @@ class A {
 
 //// [privateNamesAndDecorators.js]
 var _foo;
+
 var A = /** @class */ (function () {
     function A() {
         _foo.set(this, 1);
-    }
-    A.prototype. = function () { };
+    }A.prototype. = function () { };
     return A;
 }());
 _foo = new WeakMap();

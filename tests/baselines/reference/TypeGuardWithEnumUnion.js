@@ -39,9 +39,7 @@ function f2(x: Color | string | string[]) {
 //// [TypeGuardWithEnumUnion.js]
 var Color;
 (function (Color) {
-    Color[Color["R"] = 0] = "R";
-    Color[Color["G"] = 1] = "G";
-    Color[Color["B"] = 2] = "B";
+    Color[Color["R"] = 0] = "R";Color[Color["G"] = 1] = "G";Color[Color["B"] = 2] = "B";
 })(Color || (Color = {}));
 function f1(x) {
     if (typeof x === "number") {
@@ -53,6 +51,7 @@ function f1(x) {
         var z;
     }
 }
+
 function f2(x) {
     if (typeof x === "object") {
         var y = x;

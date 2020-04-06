@@ -18,6 +18,7 @@ var _b = [1, 2, 3], _c = _b[0], a1 = _c === void 0 ? 10 : _c, _d = _b[1], b1 = _
 var _f = [1, 2, 3], _g = _f[0], a2 = _g === void 0 ? undefined : _g, _h = _f[1], b2 = _h === void 0 ? undefined : _h, _j = _f[2], c2 = _j === void 0 ? undefined : _j; // no error
 var _k = [1, 2, 3], _l = _k[0], a3 = _l === void 0 ? undefined : _l, _m = _k[1], b3 = _m === void 0 ? null : _m, _o = _k[2], c3 = _o === void 0 ? undefined : _o; // no error
 var a4 = [undefined][0], b4 = [null][0], c4 = undefined, d4 = null; // no error
+
 var _p = { x: 1, y: 2, z: 3 }, x = _p.x, y = _p.y, z = _p.z; // no error
 var _q = { x1: 1, y1: 2, z1: 3 }, _r = _q.x1, x1 = _r === void 0 ? 10 : _r, _s = _q.y1, y1 = _s === void 0 ? 10 : _s, _t = _q.z1, z1 = _t === void 0 ? 10 : _t; // no error
 var _u = { x2: 1, y2: 2, z2: 3 }, _v = _u.x2, x2 = _v === void 0 ? undefined : _v, _w = _u.y2, y2 = _w === void 0 ? undefined : _w, _x = _u.z2, z2 = _x === void 0 ? undefined : _x; // no error

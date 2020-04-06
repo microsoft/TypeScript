@@ -7,4 +7,5 @@ f<number,string>.
 //// [genericCallWithoutArgs.js]
 function f(x, y) {
 }
+
 f();

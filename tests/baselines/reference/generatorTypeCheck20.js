@@ -7,10 +7,8 @@ function* g(): IterableIterator<Foo> {
 }
 
 //// [generatorTypeCheck20.js]
-class Foo {
-}
-class Baz {
-}
+class Foo {}
+class Baz {}
 function* g() {
     yield;
     yield* [new Baz];

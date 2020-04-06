@@ -45,14 +45,11 @@ fooLength + 1;
 var A;
 (function (A) {
     var B = /** @class */ (function () {
-        function B(b) {
-        }
+        function B(b) {}
         return B;
     }());
     A.B = B;
-    (function (B) {
-        B.b = 0;
-    })(B = A.B || (A.B = {}));
+    (function (B) {B.b = 0;})(B = A.B || (A.B = {}));
 })(A || (A = {}));
 module.exports = A.B;
 //// [b.js]
@@ -66,7 +63,9 @@ var foobar_1 = require("foobar");
 var X2 = require("foobarx");
 var x = foobar_1.X;
 var x2 = X2;
+
 var B = require("./a");
 var b = new B(B.b);
+
 var fooLength = require("./b");
 fooLength + 1;

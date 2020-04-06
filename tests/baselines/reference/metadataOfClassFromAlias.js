@@ -22,8 +22,7 @@ var SomeClass = /** @class */ (function () {
     function SomeClass() {
     }
     return SomeClass;
-}());
-exports.SomeClass = SomeClass;
+}());exports.SomeClass = SomeClass;
 //// [test.js]
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {

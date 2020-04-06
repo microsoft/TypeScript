@@ -2,5 +2,4 @@
 /regexp/ \ ;
 
 //// [parserSkippedTokens13.js]
-/regexp/;
-;
+/regexp/;;

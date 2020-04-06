@@ -12,8 +12,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
         for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
             r[k] = a[j];
     return r;
-};
-var additional = [];
+};var additional = [];
 for (var _i = 0, _a = [1, 2, 3]; _i < _a.length; _i++) {
     var subcomponent = _a[_i];
     additional = __spreadArrays(additional, [subcomponent]);

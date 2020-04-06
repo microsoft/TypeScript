@@ -11,8 +11,7 @@ class List<T> {
 //// [staticOffOfInstance2.js]
 var List = /** @class */ (function () {
     function List() {
-    }
-    List.prototype.Blah = function () {
+    }List.prototype.Blah = function () {
         this.Foo(); // no error
         List.Foo();
     };

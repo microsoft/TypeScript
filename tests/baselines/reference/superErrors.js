@@ -64,24 +64,24 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-function foo() {
+})();function foo() {
     // super in a non class context
     var x = _super.;
     var y = function () { return _super.; };
     var z = function () { return function () { return function () { return _super.; }; }; };
 }
+
 var User = /** @class */ (function () {
     function User() {
         this.name = "Bob";
-    }
-    User.prototype.sayHello = function () {
+    }User.prototype.sayHello = function () {
         //console.log("Hello, " + this.name);
     };
     return User;
 }());
 var RegisteredUser = /** @class */ (function (_super) {
     __extends(RegisteredUser, _super);
+
     function RegisteredUser() {
         var _this = _super.call(this) || this;
         _this.name = "Frank";
@@ -89,11 +89,13 @@ var RegisteredUser = /** @class */ (function (_super) {
         function inner() {
             _super.sayHello.call(this);
         }
+
         // super call in a lambda in an inner function in a constructor 
         function inner2() {
             var _this = this;
             var x = function () { return _super.sayHello.call(_this); };
         }
+
         // super call in a lambda in a function expression in a constructor 
         (function () { return function () { return _super.; }; })();
         return _this;
@@ -101,11 +103,13 @@ var RegisteredUser = /** @class */ (function (_super) {
     RegisteredUser.prototype.sayHello = function () {
         // super call in a method
         _super.prototype.sayHello.call(this);
+
         // super call in a lambda in an inner function in a method
         function inner() {
             var _this = this;
             var x = function () { return _super.sayHello.call(_this); };
         }
+
         // super call in a lambda in a function expression in a constructor 
         (function () { return function () { return _super.; }; })();
     };

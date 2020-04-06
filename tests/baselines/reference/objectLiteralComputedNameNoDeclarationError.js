@@ -14,7 +14,10 @@ exports.__esModule = true;
 exports.Baa = void 0;
 var Foo = {
     BANANA: 'banana'
-};
+}
+
+;
+
 exports.Baa = (_a = {},
     _a[Foo.BANANA] = 1,
     _a);

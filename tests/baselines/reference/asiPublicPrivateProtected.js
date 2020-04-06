@@ -44,45 +44,39 @@ class ClassWithThreeMembers {
 public;
 var NonPublicClass = /** @class */ (function () {
     function NonPublicClass() {
-    }
-    NonPublicClass.prototype.s = function () {
+    }NonPublicClass.prototype.s = function () {
     };
     return NonPublicClass;
 }());
 var NonPublicClass2 = /** @class */ (function () {
     function NonPublicClass2() {
-    }
-    NonPublicClass2.prototype.nonPublicFunction = function () {
+    }NonPublicClass2.prototype.nonPublicFunction = function () {
     };
     return NonPublicClass2;
 }());
 private;
 var NonPrivateClass = /** @class */ (function () {
     function NonPrivateClass() {
-    }
-    NonPrivateClass.prototype.s = function () {
+    }NonPrivateClass.prototype.s = function () {
     };
     return NonPrivateClass;
 }());
 var NonPrivateClass2 = /** @class */ (function () {
     function NonPrivateClass2() {
-    }
-    NonPrivateClass2.prototype.nonPrivateFunction = function () {
+    }NonPrivateClass2.prototype.nonPrivateFunction = function () {
     };
     return NonPrivateClass2;
 }());
 protected;
 var NonProtectedClass = /** @class */ (function () {
     function NonProtectedClass() {
-    }
-    NonProtectedClass.prototype.s = function () {
+    }NonProtectedClass.prototype.s = function () {
     };
     return NonProtectedClass;
 }());
 var NonProtectedClass2 = /** @class */ (function () {
     function NonProtectedClass2() {
-    }
-    NonProtectedClass2.prototype.nonProtectedFunction = function () {
+    }NonProtectedClass2.prototype.nonProtectedFunction = function () {
     };
     return NonProtectedClass2;
 }());

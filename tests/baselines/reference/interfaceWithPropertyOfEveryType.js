@@ -44,8 +44,7 @@ var a: Foo = {
 
 //// [interfaceWithPropertyOfEveryType.js]
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 function f1() { }
@@ -57,6 +56,7 @@ var E;
 (function (E) {
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
+
 var a = {
     a: 1,
     b: '',

@@ -49,12 +49,16 @@ var E;
 (function (E) {
     var x = 1;
 })(E || (E = {}));
+
+
 var y0 = E2[1];
 var name = "A";
 var y1 = E2[name];
 var y2 = E2["" + name];
+
 var x = E2;
 var y = [E2];
+
 function foo(t) {
 }
 foo(E2);

@@ -51,8 +51,7 @@ i.explicitThis = function(m) {
 //// [looseThisTypeInFunctions.js]
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.explicitThis = function (m) {
+    }C.prototype.explicitThis = function (m) {
         return this.n + m;
     };
     C.prototype.implicitThis = function (m) {
@@ -78,7 +77,8 @@ var o2 = {
     explicitThis: function (m) {
         return m + this.n.length; // error, this.n: number, no member 'length'
     }
-};
+}
+;
 var x = i.explicitThis;
 var n = x(12); // callee:void doesn't match this:I
 var u;

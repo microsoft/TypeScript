@@ -29,8 +29,7 @@ export = Adder;
 "use strict";
 var Adder = /** @class */ (function () {
     function Adder() {
-    }
-    Adder.prototype.add = function (a, b) {
+    }Adder.prototype.add = function (a, b) {
     };
     return Adder;
 }());
@@ -38,9 +37,11 @@ module.exports = Adder;
 //// [Math.js]
 "use strict";
 var Adder = require("./Adder");
+
 var Math = {
     Adder: Adder
 };
+
 module.exports = Math;
 //// [Drawing.js]
 "use strict";

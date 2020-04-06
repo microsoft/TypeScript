@@ -625,13 +625,84 @@ var __assign = (this && this.__assign) || function () {
 exports.__esModule = true;
 exports.createReactSingleSelect = void 0;
 var React = require("react");
-function createReactSingleSelect(WrappedComponent) {
+
+
+
+
+
+
+
+
+
+
+
+
+function createReactSingleSelect(
+WrappedComponent
+) {
     return function (props) {
-        return (React.createElement(ReactSelectClass, __assign({}, props, { multi: false, autosize: false, value: props.value, onChange: function (value) {
-                if (props.onChange) {
-                    props.onChange(value === null ? undefined : value);
-                }
-            } })));
+        return (
+            React.createElement(ReactSelectClass, __assign({}, props, { multi: false, autosize: false, value: props.value, onChange: function (value) {
+                    if (props.onChange) {
+                        props.onChange(value === null ? undefined : value);
+                    }
+                } }))
+        );
     };
-}
-exports.createReactSingleSelect = createReactSingleSelect;
+}exports.createReactSingleSelect = createReactSingleSelect;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

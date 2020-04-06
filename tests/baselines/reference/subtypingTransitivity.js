@@ -32,22 +32,19 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var B = /** @class */ (function () {
+})();var B = /** @class */ (function () {
     function B() {
     }
     return B;
 }());
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);
-    function D() {
+    __extends(D, _super);function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
 }(B));
 var D2 = /** @class */ (function (_super) {
-    __extends(D2, _super);
-    function D2() {
+    __extends(D2, _super);function D2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D2;

@@ -201,19 +201,32 @@ var i2_i;
 var i3_i;
 var c = /** @class */ (function () {
     function c() {
-    }
-    c.prototype.prop1 = function (aorb) {
+    }c.prototype.prop1 = function (aorb) {
         return 10;
     };
+
+
+
     c.prototype.prop2 = function (aorb) {
         return 10;
     };
+
+
+
     c.prototype.prop3 = function (aorb) {
         return 10;
     };
+
+
+
+
     c.prototype.prop4 = function (aorb) {
         return 10;
     };
+
+
+
+
     /** Prop5 implementaion*/
     c.prototype.prop5 = function (aorb) {
         return 10;
@@ -248,6 +261,7 @@ var c5 = /** @class */ (function () {
     return c5;
 }());
 var c_i = new c();
+
 var c1_i_1 = new c1(10);
 var c1_i_2 = new c1("hello");
 var c2_i_1 = new c2(10);

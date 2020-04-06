@@ -16,3 +16,4 @@ module A {
 
 
 //// [ExportInterfaceWithInaccessibleTypeInIndexerTypeAnnotations.js]
+

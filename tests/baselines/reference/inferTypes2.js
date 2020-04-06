@@ -29,12 +29,19 @@ exports.__esModule = true;
 exports.bar2 = exports.bar = void 0;
 function bar(obj) {
     return foo(obj);
-}
-exports.bar = bar;
+}exports.bar = bar;
+
+
+
 function bar2(obj) {
     return foo2(obj);
-}
-exports.bar2 = bar2;
+}exports.bar2 = bar2;
+
+
+
+
+
+
 var a = null;
 var b = a;
 

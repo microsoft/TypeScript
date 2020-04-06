@@ -8,8 +8,7 @@ var x: (...y: string[]) => void = function (.../*3*/y) {
 };
 
 //// [contextuallyTypingRestParameters.js]
-var x = function () {
-    var y = [];
+var x = function () {var y = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         y[_i] = arguments[_i];
     }

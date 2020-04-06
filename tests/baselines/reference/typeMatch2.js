@@ -57,22 +57,20 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-function f1() {
+})();function f1() {
     var a = { x: 1, y: 2 };
     a = {}; // error
     a = { x: 1 }; // error
     a = { x: 1, y: 2, z: 3 };
     a = { x: 1, z: 3 }; // error
 }
+
 var Animal = /** @class */ (function () {
-    function Animal() {
-    }
+    function Animal() {}
     return Animal;
 }());
 var Giraffe = /** @class */ (function (_super) {
-    __extends(Giraffe, _super);
-    function Giraffe() {
+    __extends(Giraffe, _super);function Giraffe() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Giraffe;
@@ -89,6 +87,7 @@ function f2() {
     xa = xb; // Should be ok
     xb = xa; // Not ok
 }
+
 function f4() {
     var _any = 0;
     var i = 5;
@@ -106,3 +105,5 @@ function f4() {
     mf(_any);
     zf(_any);
 }
+
+

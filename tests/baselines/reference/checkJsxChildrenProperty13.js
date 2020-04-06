@@ -44,12 +44,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var React = require("react");
+
+
 var Button = /** @class */ (function (_super) {
-    __extends(Button, _super);
-    function Button() {
+    __extends(Button, _super);function Button() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Button.prototype.render = function () {
+    }Button.prototype.render = function () {
         // Error children are specified twice
         return (<InnerButton {...this.props} children="hi">
             <div>Hello World</div>
@@ -57,12 +57,11 @@ var Button = /** @class */ (function (_super) {
     };
     return Button;
 }(React.Component));
+
 var InnerButton = /** @class */ (function (_super) {
-    __extends(InnerButton, _super);
-    function InnerButton() {
+    __extends(InnerButton, _super);function InnerButton() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    InnerButton.prototype.render = function () {
+    }InnerButton.prototype.render = function () {
         return (<button>Hello</button>);
     };
     return InnerButton;

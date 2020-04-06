@@ -39,42 +39,34 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var A = /** @class */ (function () {
+})();var A = /** @class */ (function () {
     function A() {
-    }
-    A.prototype.foo = function () { return 1; };
+    }A.prototype.foo = function () { return 1; };
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
+    __extends(B, _super);function B() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    B.prototype.bar = function () { _super.prototype.foo.call(this); };
+    }B.prototype.bar = function () { _super.prototype.foo.call(this); };
     B.prototype.baz = function () { return this.foo; };
     return B;
 }(A));
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);
-    function C() {
+    __extends(C, _super);function C() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    C.prototype.foo = function () { return 2; };
+    }C.prototype.foo = function () { return 2; };
     C.prototype.qux = function () { return _super.prototype.foo.call(this) || _super.prototype.foo; }; // 2 errors, foo is abstract
     C.prototype.norf = function () { return _super.prototype.bar.call(this); };
     return C;
 }(B));
 var AA = /** @class */ (function () {
     function AA() {
-    }
-    AA.prototype.foo = function () { return 1; };
+    }AA.prototype.foo = function () { return 1; };
     AA.prototype.bar = function () { return this.foo(); };
     return AA;
 }());
 var BB = /** @class */ (function (_super) {
-    __extends(BB, _super);
-    function BB() {
+    __extends(BB, _super);function BB() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return BB;

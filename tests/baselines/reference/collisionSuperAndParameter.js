@@ -75,21 +75,21 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Foo = /** @class */ (function () {
+})();var Foo = /** @class */ (function () {
     function Foo() {
-    }
-    Foo.prototype.a = function () {
+    }Foo.prototype.a = function () {
         var _this = this;
         var lamda = function (_super) {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
-        };
+        }
+        ;
     };
     Foo.prototype.b = function (_super) {
         var _this = this;
         var lambda = function () {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
-        };
+        }
+        ;
     };
     Object.defineProperty(Foo.prototype, "c", {
         set: function (_super) {
@@ -101,6 +101,25 @@ var Foo = /** @class */ (function () {
 }());
 var Foo2 = /** @class */ (function (_super_1) {
     __extends(Foo2, _super_1);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     function Foo2(_super) {
         var _this = _super_1.call(this) || this;
         _this.prop4 = {
@@ -108,18 +127,19 @@ var Foo2 = /** @class */ (function (_super_1) {
             }
         };
         return _this;
-    }
-    Foo2.prototype.x = function () {
+    }Foo2.prototype.x = function () {
         var _this = this;
         var lamda = function (_super) {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
-        };
+        }
+        ;
     };
     Foo2.prototype.y = function (_super) {
         var _this = this;
         var lambda = function () {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
-        };
+        }
+        ;
     };
     Object.defineProperty(Foo2.prototype, "z", {
         set: function (_super) {
@@ -129,16 +149,20 @@ var Foo2 = /** @class */ (function (_super_1) {
     });
     return Foo2;
 }(Foo));
+
 var Foo4 = /** @class */ (function (_super_1) {
     __extends(Foo4, _super_1);
+
     function Foo4(_super) {
         return _super_1.call(this) || this;
     }
+
     Foo4.prototype.y = function (_super) {
         var _this = this;
         var lambda = function () {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
-        };
+        }
+        ;
     };
     return Foo4;
 }(Foo));

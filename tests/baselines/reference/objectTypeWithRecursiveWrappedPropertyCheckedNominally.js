@@ -54,6 +54,7 @@ function foo2<T extends U, U extends MyList<number>>(t: T, u: U) {
 
 //// [objectTypeWithRecursiveWrappedPropertyCheckedNominally.js]
 // Types with infinitely expanding recursive types are type checked nominally
+
 var List = /** @class */ (function () {
     function List() {
     }
@@ -66,10 +67,12 @@ var MyList = /** @class */ (function () {
 }());
 var list1 = new List();
 var list2 = new List();
+
 var myList1 = new MyList();
 var myList2 = new MyList();
 list1 = myList1; // error, not nominally equal
 list1 = myList2; // error, type mismatch
+
 list2 = myList1; // error, not nominally equal
 list2 = myList2; // error, type mismatch
 var rList1 = new List();
@@ -85,6 +88,7 @@ function foo(t, u) {
     b = t; // error
     b = u; // ok
 }
+
 function foo2(t, u) {
     t = u; // error
     u = t; // was error, ok after constraint made illegal, doesn't matter

@@ -31,6 +31,7 @@ var s;
 var t1 = 10;
 var t2 = 10;
 var s;
+
 // Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
 // With templateHead
 "hello " + (Math.pow(-t1, t2) - t1);
@@ -39,12 +40,14 @@ var s;
 "hello " + Math.pow(!t1, Math.pow(t2, --t1));
 "hello " + Math.pow(typeof t1, Math.pow(t2, t1));
 "hello " + (1 + Math.pow(typeof t1, Math.pow(t2, t1)));
+
 "hello " + (Math.pow(-t1, t2) - t1) + (Math.pow(-t1, t2) - t1);
 "hello " + (Math.pow(-++t1, t2) - t1) + (Math.pow(-++t1, t2) - t1);
 "hello " + (Math.pow(-t1++, t2) - t1) + (Math.pow(-t1++, t2) - t1);
 "hello " + Math.pow(!t1, Math.pow(t2, --t1)) + Math.pow(!t1, Math.pow(t2, --t1));
 "hello " + Math.pow(typeof t1, Math.pow(t2, t1)) + Math.pow(typeof t1, Math.pow(t2, t1));
 "hello " + (1 + Math.pow(typeof t1, Math.pow(t2, t1))) + (1 + Math.pow(typeof t1, Math.pow(t2, t1)));
+
 "hello " + (Math.pow(-t1, t2) - t1) + " hello world " + (Math.pow(-t1, t2) - t1);
 "hello " + (Math.pow(-++t1, t2) - t1) + " hello world " + (Math.pow(-++t1, t2) - t1);
 "hello " + (Math.pow(-t1++, t2) - t1) + " hello world " + (Math.pow(-t1++, t2) - t1);

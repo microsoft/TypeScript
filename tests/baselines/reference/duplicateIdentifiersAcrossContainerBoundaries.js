@@ -56,8 +56,7 @@ declare module N {
 var M;
 (function (M) {
     var I = /** @class */ (function () {
-        function I() {
-        }
+        function I() {}
         return I;
     }());
     M.I = I;
@@ -68,8 +67,7 @@ var M;
 })(M || (M = {}));
 (function (M) {
     var f = /** @class */ (function () {
-        function f() {
-        }
+        function f() {}
         return f;
     }()); // error
     M.f = f;
@@ -79,16 +77,14 @@ var M;
 })(M || (M = {}));
 (function (M) {
     var g = /** @class */ (function () {
-        function g() {
-        }
+        function g() {}
         return g;
     }()); // no error
     M.g = g;
 })(M || (M = {}));
 (function (M) {
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         return C;
     }());
     M.C = C;

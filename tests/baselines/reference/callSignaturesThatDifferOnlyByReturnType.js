@@ -29,5 +29,11 @@ var a2: {
 }
 
 //// [callSignaturesThatDifferOnlyByReturnType.js]
-var a;
+
+
+
+var a
+
+;
+
 var a2;

@@ -6,5 +6,6 @@
 //// [sourceMapValidationLambdaSpanningMultipleLines.js]
 (function (item) {
     return item;
-});
+}
+);
 //# sourceMappingURL=sourceMapValidationLambdaSpanningMultipleLines.js.map

@@ -14,23 +14,26 @@ var f2NoError = () => {
 }
 
 //// [collisionRestParameterArrowFunctions.js]
-var f1 = function (_i) {
-    var restParameters = [];
+var f1 = function (_i) {var restParameters = [];
     for (var _a = 1; _a < arguments.length; _a++) {
         restParameters[_a - 1] = arguments[_a];
     }
     var _i = 10; // no error
-};
+}
+;
 var f1NoError = function (_i) {
     var _i = 10; // no error
-};
-var f2 = function () {
-    var restParameters = [];
+}
+
+;
+
+var f2 = function () {var restParameters = [];
     for (var _a = 0; _a < arguments.length; _a++) {
         restParameters[_a] = arguments[_a];
     }
     var _i = 10; // No Error
-};
+}
+;
 var f2NoError = function () {
     var _i = 10; // no error
 };

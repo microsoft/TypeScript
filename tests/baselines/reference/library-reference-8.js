@@ -21,3 +21,4 @@ var x: string = alpha.a + beta.b;
 /// <reference types="alpha" />
 /// <reference types="beta" />
 var x = alpha.a + beta.b;
+

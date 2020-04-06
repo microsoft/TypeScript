@@ -6,7 +6,6 @@ class C {
 
 //// [parserParameterList17.js]
 var C = /** @class */ (function () {
-    function C(a, b) {
-    }
+    function C(a, b) {}
     return C;
 }());

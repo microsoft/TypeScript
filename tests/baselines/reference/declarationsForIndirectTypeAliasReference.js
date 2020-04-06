@@ -36,6 +36,9 @@ function doSome(arg1: string,
 //// [b.js]
 "use strict";
 exports.__esModule = true;
+
+
+
 //// [a.js]
 "use strict";
 exports.__esModule = true;
@@ -43,14 +46,16 @@ exports.doSome = void 0;
 var MAP = {
     a: "a"
 };
+
 var MAP2 = {
     a: "a"
 };
-function doSome(arg1, arg2, arg3) {
+
+function doSome(arg1,
+    arg2,
+    arg3) {
     if (arg2 === void 0) { arg2 = MAP; }
-    if (arg3 === void 0) { arg3 = MAP2; }
-}
-exports.doSome = doSome;
+    if (arg3 === void 0) { arg3 = MAP2; }}exports.doSome = doSome;
 
 
 //// [b.d.ts]

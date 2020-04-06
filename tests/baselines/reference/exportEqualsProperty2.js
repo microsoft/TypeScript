@@ -25,6 +25,7 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
+
 module.exports = C.B;
 //// [b.js]
 "use strict";

@@ -13,6 +13,7 @@ foo({
 });
 
 //// [symbolProperty21.js]
+
 foo({
     [Symbol.isConcatSpreadable]: "",
     [Symbol.toPrimitive]: 0,

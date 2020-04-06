@@ -42,6 +42,7 @@ while (true) {
 // All errors
 // naked continue not allowed
 continue;
+
 // non-existent label
 ONE: while (true)
     continue TWO;
@@ -49,8 +50,10 @@ ONE: while (true)
 TWO: while (true) {
     var x = function () {
         continue TWO;
-    };
+    }
+    ;
 }
+
 THREE: while (true) {
     var fn = function () {
         continue THREE;

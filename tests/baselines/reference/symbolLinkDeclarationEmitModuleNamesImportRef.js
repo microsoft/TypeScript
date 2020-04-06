@@ -25,10 +25,10 @@ export function getStyles() {
 exports.__esModule = true;
 exports.getStyles = void 0;
 var package_a_1 = require("package-a");
+
 function getStyles() {
     return package_a_1.styles;
-}
-exports.getStyles = getStyles;
+}exports.getStyles = getStyles;
 
 
 //// [index.d.ts]

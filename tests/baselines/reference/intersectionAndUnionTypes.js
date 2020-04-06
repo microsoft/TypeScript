@@ -40,6 +40,7 @@ cod = y;  // Ok
 
 
 //// [intersectionAndUnionTypes.js]
+
 var a;
 var b;
 var c;
@@ -54,6 +55,7 @@ a = anb; // Ok
 b = anb; // Ok
 anb = a;
 anb = b;
+
 x = anb; // Ok
 x = aob;
 x = cnd; // Ok
@@ -62,6 +64,7 @@ anb = x;
 aob = x;
 cnd = x;
 cod = x;
+
 y = anb;
 y = aob;
 y = cnd;

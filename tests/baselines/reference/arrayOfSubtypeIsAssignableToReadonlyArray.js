@@ -32,22 +32,18 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var A = /** @class */ (function () {
-    function A() {
-    }
+})();var A = /** @class */ (function () {
+    function A() {}
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
+    __extends(B, _super);function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);
-    function C() {
+    __extends(C, _super);function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
@@ -56,6 +52,7 @@ rra = ara;
 rrb = arb; // OK, Array<B> is assignable to ReadonlyArray<A>
 rra = arb;
 rrb = ara; // error: 'A' is not assignable to 'B'
+
 rra = cra;
 rra = crb; // OK, C<B> is assignable to ReadonlyArray<A>
 rrb = crb;

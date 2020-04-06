@@ -30,6 +30,7 @@ function tryCatch() {
         // do stuff...
     }
     catch (err) { // err is implicitly 'any' and cannot be annotated
+
         if (isFooError(err)) {
             err.dontPanic(); // OK
             err.doPanic(); // ERROR: Property 'doPanic' does not exist on type '{...}'

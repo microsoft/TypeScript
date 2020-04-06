@@ -21,16 +21,14 @@ class WITDialogs {
 //// [crashInresolveReturnStatement.js]
 var WorkItemToolbar = /** @class */ (function () {
     function WorkItemToolbar() {
-    }
-    WorkItemToolbar.prototype.onToolbarItemClick = function () {
+    }WorkItemToolbar.prototype.onToolbarItemClick = function () {
         WITDialogs.createCopyOfWorkItem();
     };
     return WorkItemToolbar;
 }());
 var CreateCopyOfWorkItemDialog = /** @class */ (function () {
     function CreateCopyOfWorkItemDialog() {
-    }
-    CreateCopyOfWorkItemDialog.prototype.getDialogResult = function () {
+    }CreateCopyOfWorkItemDialog.prototype.getDialogResult = function () {
         return null;
     };
     return CreateCopyOfWorkItemDialog;
@@ -39,8 +37,7 @@ function createWorkItemDialog(dialogType) {
 }
 var WITDialogs = /** @class */ (function () {
     function WITDialogs() {
-    }
-    WITDialogs.createCopyOfWorkItem = function () {
+    }WITDialogs.createCopyOfWorkItem = function () {
         createWorkItemDialog(CreateCopyOfWorkItemDialog);
     };
     return WITDialogs;

@@ -15,3 +15,4 @@ function qux(bar) {
     (foo = bar.value);
     var x = function () { return bar; };
 }
+

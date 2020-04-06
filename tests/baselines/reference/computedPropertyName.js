@@ -52,10 +52,13 @@ const o = {
 };
 class C {
 }
+
 class D {
+
     constructor() {
         this[_a] = 0; // Error
     }
+
 }
 _a = onInit;
 class E {
@@ -63,5 +66,7 @@ class E {
 }
 class F {
 }
+
 class G {
 }
+

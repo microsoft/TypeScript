@@ -21,13 +21,16 @@ class A {
 //// [genericStaticAnyTypeFunction.js]
 var A = /** @class */ (function () {
     function A() {
-    }
-    A.one = function (source, value) {
+    }A.one = function (source, value) {
+
         return source;
+
     };
     A.goo = function () { return 0; };
+
     A.two = function (source) {
         return this.one(source, 42); // should not error
+
     };
     return A;
 }());

@@ -96,13 +96,11 @@ var __extends = (this && this.__extends) || (function () {
 var Y;
 (function (Y) {
     var A = /** @class */ (function () {
-        function A() {
-        }
+        function A() {}
         return A;
     }());
     var BB = /** @class */ (function (_super) {
-        __extends(BB, _super);
-        function BB() {
+        __extends(BB, _super);function BB() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return BB;
@@ -111,13 +109,12 @@ var Y;
 var Y2;
 (function (Y2) {
     var AA = /** @class */ (function () {
-        function AA() {
-        }
+        function AA() {}
         return AA;
     }());
+
     var B = /** @class */ (function (_super) {
-        __extends(B, _super);
-        function B() {
+        __extends(B, _super);function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
@@ -128,8 +125,7 @@ var Y3;
     var Module;
     (function (Module) {
         var A = /** @class */ (function () {
-            function A() {
-            }
+            function A() {}
             return A;
         }());
     })(Module || (Module = {}));
@@ -138,20 +134,17 @@ var Y4;
 (function (Y4) {
     var Color;
     (function (Color) {
-        Color[Color["Blue"] = 0] = "Blue";
-        Color[Color["Red"] = 1] = "Red";
+        Color[Color["Blue"] = 0] = "Blue";Color[Color["Red"] = 1] = "Red";
     })(Color || (Color = {}));
 })(Y4 || (Y4 = {}));
 var YY;
 (function (YY) {
     var A = /** @class */ (function () {
-        function A() {
-        }
+        function A() {}
         return A;
     }());
     var BB = /** @class */ (function (_super) {
-        __extends(BB, _super);
-        function BB() {
+        __extends(BB, _super);function BB() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return BB;
@@ -160,13 +153,12 @@ var YY;
 var YY2;
 (function (YY2) {
     var AA = /** @class */ (function () {
-        function AA() {
-        }
+        function AA() {}
         return AA;
     }());
+
     var B = /** @class */ (function (_super) {
-        __extends(B, _super);
-        function B() {
+        __extends(B, _super);function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
@@ -177,8 +169,7 @@ var YY3;
     var Module;
     (function (Module) {
         var A = /** @class */ (function () {
-            function A() {
-            }
+            function A() {}
             return A;
         }());
     })(Module || (Module = {}));
@@ -187,20 +178,17 @@ var YY4;
 (function (YY4) {
     var Color;
     (function (Color) {
-        Color[Color["Blue"] = 0] = "Blue";
-        Color[Color["Red"] = 1] = "Red";
+        Color[Color["Blue"] = 0] = "Blue";Color[Color["Red"] = 1] = "Red";
     })(Color || (Color = {}));
 })(YY4 || (YY4 = {}));
 var YYY;
 (function (YYY) {
     var A = /** @class */ (function () {
-        function A() {
-        }
+        function A() {}
         return A;
     }());
     var BB = /** @class */ (function (_super) {
-        __extends(BB, _super);
-        function BB() {
+        __extends(BB, _super);function BB() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return BB;
@@ -209,13 +197,12 @@ var YYY;
 var YYY2;
 (function (YYY2) {
     var AA = /** @class */ (function () {
-        function AA() {
-        }
+        function AA() {}
         return AA;
     }());
+
     var B = /** @class */ (function (_super) {
-        __extends(B, _super);
-        function B() {
+        __extends(B, _super);function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
@@ -226,8 +213,7 @@ var YYY3;
     var Module;
     (function (Module) {
         var A = /** @class */ (function () {
-            function A() {
-            }
+            function A() {}
             return A;
         }());
     })(Module || (Module = {}));
@@ -236,7 +222,6 @@ var YYY4;
 (function (YYY4) {
     var Color;
     (function (Color) {
-        Color[Color["Blue"] = 0] = "Blue";
-        Color[Color["Red"] = 1] = "Red";
+        Color[Color["Blue"] = 0] = "Blue";Color[Color["Red"] = 1] = "Red";
     })(Color || (Color = {}));
 })(YYY4 || (YYY4 = {}));

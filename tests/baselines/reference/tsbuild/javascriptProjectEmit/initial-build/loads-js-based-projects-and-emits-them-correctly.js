@@ -130,13 +130,13 @@ exports.getVar = void 0;
 var variable = {
     key: /** @type {MyNominal} */ ('value')
 };
+
 /**
  * @return {keyof typeof variable}
  */
 function getVar() {
     return 'key';
-}
-exports.getVar = getVar;
+}exports.getVar = getVar;
 
 
 //// [/lib/sub-project-2/tsconfig.tsbuildinfo]

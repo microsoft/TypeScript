@@ -10,6 +10,5 @@ define(["require", "exports"], function (require, exports) {
     exports.foo = void 0;
     function* foo() {
         yield;
-    }
-    exports.foo = foo;
+    }exports.foo = foo;
 });

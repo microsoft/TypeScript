@@ -45,6 +45,8 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
+
+
 // good
 all.apply(void 0, ns);
 weird.apply(void 0, ns);
@@ -52,9 +54,12 @@ weird.apply(void 0, mixed);
 weird.apply(void 0, tuple);
 prefix.apply(void 0, __spreadArrays(["a"], ns));
 rest.apply(void 0, __spreadArrays(["d"], ns));
+
+
 // extra arguments
 normal.apply(void 0, __spreadArrays(["g"], ns));
 thunk.apply(void 0, ns);
+
 // bad
 all.apply(void 0, mixed);
 all.apply(void 0, tuple);

@@ -20,15 +20,13 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var AbstractGreeter = /** @class */ (function () {
+})();var AbstractGreeter = /** @class */ (function () {
     function AbstractGreeter() {
     }
     return AbstractGreeter;
 }());
 var Greeter = /** @class */ (function (_super) {
-    __extends(Greeter, _super);
-    function Greeter() {
+    __extends(Greeter, _super);function Greeter() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.a = 10;
         _this.nameA = "Ten";

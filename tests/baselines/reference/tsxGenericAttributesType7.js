@@ -14,9 +14,13 @@ const decorator1 = function <U extends {x: string}>(props: U) {
 "use strict";
 exports.__esModule = true;
 var React = require("react");
+
 var decorator = function (props) {
     return <Component {...props}/>;
-};
+}
+
+;
+
 var decorator1 = function (props) {
     return <Component {...props} x="hi"/>;
 };

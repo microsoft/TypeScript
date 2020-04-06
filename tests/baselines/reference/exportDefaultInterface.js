@@ -15,6 +15,7 @@ a.value.toExponential();
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+
 var a;
 a.value.toExponential();
 //// [b.js]

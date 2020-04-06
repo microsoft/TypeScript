@@ -95,6 +95,7 @@ var NoBase = /** @class */ (function () {
         //super call in class member initializer with no base type
         this.p = _this = _super.call(this) || this;
     }
+
     //super call in class member function with no base type
     NoBase.prototype.fn = function () {
         _this = _super.call(this) || this;
@@ -132,8 +133,7 @@ var NoBase = /** @class */ (function () {
     return NoBase;
 }());
 var Base = /** @class */ (function () {
-    function Base() {
-    }
+    function Base() {}
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {
@@ -152,14 +152,12 @@ var OtherBase = /** @class */ (function () {
     return OtherBase;
 }());
 var OtherDerived = /** @class */ (function (_super) {
-    __extends(OtherDerived, _super);
-    function OtherDerived() {
+    __extends(OtherDerived, _super);function OtherDerived() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         //super call in class member initializer of derived type
         _this.t = _this = _super.call(this) || this;
         return _this;
-    }
-    OtherDerived.prototype.fn = function () {
+    }OtherDerived.prototype.fn = function () {
         //super call in class member function of derived type
         _this = _super.call(this) || this;
     };

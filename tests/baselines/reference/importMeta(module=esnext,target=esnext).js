@@ -43,10 +43,13 @@ const { a, b, c } = import.meta.wellKnownProperty;
 (async () => {
     const response = await fetch(new URL("../hamsters.jpg", import.meta.url).toString());
     const blob = await response.blob();
+
     const size = import.meta.scriptElement.dataset.size || 300;
+
     const image = new Image();
     image.src = URL.createObjectURL(blob);
     image.width = image.height = size;
+
     document.body.appendChild(image);
 })();
 //// [moduleLookingFile01.js]

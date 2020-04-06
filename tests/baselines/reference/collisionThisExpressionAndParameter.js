@@ -96,8 +96,7 @@ declare function f4(_this: string); // no code gen - no error
 //// [collisionThisExpressionAndParameter.js]
 var Foo = /** @class */ (function () {
     function Foo() {
-    }
-    Foo.prototype.x = function () {
+    }Foo.prototype.x = function () {
         var _this = 10; // Local var. No this capture in x(), so no conflict.
         function inner(_this) {
             var _this_1 = this;
@@ -108,14 +107,17 @@ var Foo = /** @class */ (function () {
         var _this_1 = this;
         var lamda = function (_this) {
             return function (x) { return _this_1; }; // New scope.  So should inject new _this capture
-        };
+        }
+        ;
     };
     Foo.prototype.z = function (_this) {
         var _this_1 = this;
         var lambda = function () {
             return function (x) { return _this_1; }; // New scope.  So should inject new _this capture
-        };
+        }
+        ;
     };
+
     Foo.prototype.x1 = function () {
         var _this = 10; // Local var. No this capture in x(), so no conflict.
         function inner(_this) {
@@ -123,11 +125,13 @@ var Foo = /** @class */ (function () {
     };
     Foo.prototype.y1 = function () {
         var lamda = function (_this) {
-        };
+        }
+        ;
     };
     Foo.prototype.z1 = function (_this) {
         var lambda = function () {
-        };
+        }
+        ;
     };
     return Foo;
 }());
@@ -137,33 +141,48 @@ var Foo1 = /** @class */ (function () {
         var x2 = {
             doStuff: function (callback) { return function () {
                 return callback(_this_1);
-            }; }
-        };
+            };
+            }
+        }
+        ;
     }
     return Foo1;
 }());
+
 function f1(_this) {
     var _this_1 = this;
-    (function (x) { console.log(_this_1.x); });
+    (
+        function (x) { console.log(_this_1.x); });
 }
+
+
 var Foo3 = /** @class */ (function () {
     function Foo3(_this) {
         var _this_1 = this;
         var x2 = {
             doStuff: function (callback) { return function () {
                 return callback(_this_1);
-            }; }
-        };
+            };
+            }
+        }
+        ;
     }
+
+
     Foo3.prototype.z = function (_this) {
         var _this_1 = this;
         var lambda = function () {
             return function (x) { return _this_1; }; // New scope.  So should inject new _this capture
-        };
+        }
+        ;
     };
     return Foo3;
 }());
+
 function f3(_this) {
     var _this_1 = this;
-    (function (x) { console.log(_this_1.x); });
+    (
+        function (x) { console.log(_this_1.x); });
 }
+
+

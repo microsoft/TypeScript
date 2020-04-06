@@ -307,6 +307,7 @@ module bigModule {
 
 //// [convertKeywordsYes.js]
 // reserved ES5 future in strict mode
+
 var constructor = 0;
 var any = 0;
 var boolean = 0;
@@ -325,7 +326,26 @@ var string = 0;
 var get = 0;
 var yield = 0;
 var declare = 0;
-function bigGeneric(c, a, b2, i, i2, l, m, n, p, p2, p3, p4, s, s2, s3, g, y, d) { }
+
+function bigGeneric(c,
+    a,
+    b2,
+    i,
+    i2,
+    l,
+    m,
+    n,
+    p,
+    p2,
+    p3,
+    p4,
+    s,
+    s2,
+    s3,
+    g,
+    y,
+    d) { }
+
 var bigObject = {
     constructor: 0,
     any: 0,
@@ -350,6 +370,7 @@ var bigObject = {
     "class": 0,
     "continue": 0,
     "const": 0,
+
     "debugger": 0,
     declare: 0,
     "default": 0,
@@ -364,6 +385,7 @@ var bigObject = {
     "for": 0,
     "function": 0,
     "if": 0,
+
     "import": 0,
     "in": 0,
     "instanceof": 0,
@@ -382,6 +404,8 @@ var bigObject = {
     "while": 0,
     "with": 0
 };
+
+
 var bigClass = /** @class */ (function () {
     function bigClass() {
         this["constructor"] = 0;
@@ -466,6 +490,7 @@ var bigEnum;
     bigEnum[bigEnum["class"] = 20] = "class";
     bigEnum[bigEnum["continue"] = 21] = "continue";
     bigEnum[bigEnum["const"] = 22] = "const";
+
     bigEnum[bigEnum["debugger"] = 23] = "debugger";
     bigEnum[bigEnum["declare"] = 24] = "declare";
     bigEnum[bigEnum["default"] = 25] = "default";
@@ -480,6 +505,7 @@ var bigEnum;
     bigEnum[bigEnum["for"] = 34] = "for";
     bigEnum[bigEnum["function"] = 35] = "function";
     bigEnum[bigEnum["if"] = 36] = "if";
+
     bigEnum[bigEnum["import"] = 37] = "import";
     bigEnum[bigEnum["in"] = 38] = "in";
     bigEnum[bigEnum["instanceof"] = 39] = "instanceof";
@@ -501,73 +527,59 @@ var bigEnum;
 var bigModule;
 (function (bigModule) {
     var constructor = /** @class */ (function () {
-        function constructor() {
-        }
+        function constructor() {}
         return constructor;
     }());
     var implements = /** @class */ (function () {
-        function implements() {
-        }
+        function implements() {}
         return implements;
     }());
     var interface = /** @class */ (function () {
-        function interface() {
-        }
+        function interface() {}
         return interface;
     }());
     var let = /** @class */ (function () {
-        function let() {
-        }
+        function let() {}
         return let;
     }());
     var module = /** @class */ (function () {
-        function module() {
-        }
+        function module() {}
         return module;
     }());
     var package = /** @class */ (function () {
-        function package() {
-        }
+        function package() {}
         return package;
     }());
     var private = /** @class */ (function () {
-        function private() {
-        }
+        function private() {}
         return private;
     }());
     var protected = /** @class */ (function () {
-        function protected() {
-        }
+        function protected() {}
         return protected;
     }());
     var public = /** @class */ (function () {
-        function public() {
-        }
+        function public() {}
         return public;
     }());
     var set = /** @class */ (function () {
-        function set() {
-        }
+        function set() {}
         return set;
     }());
     var static = /** @class */ (function () {
-        function static() {
-        }
+        function static() {}
         return static;
     }());
     var get = /** @class */ (function () {
-        function get() {
-        }
+        function get() {}
         return get;
     }());
     var yield = /** @class */ (function () {
-        function yield() {
-        }
+        function yield() {}
         return yield;
     }());
     var declare = /** @class */ (function () {
-        function declare() {
-        }
+        function declare() {}
         return declare;
     }());
 })(bigModule || (bigModule = {}));

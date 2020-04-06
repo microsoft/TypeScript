@@ -52,17 +52,33 @@ function test<T extends IFoo>() {
 
 
 //// [objectLiteralExcessProperties.js]
+
+
 var b1 = { forword: "oops" };
+
 var b2 = { foreward: "nope" };
+
 var b3 = [{ foreword: "hello" }, { forwards: "back" }];
+
 var b4 = { foreword: "hi", colour: "blue" };
+
 var b5 = { foreward: "hi", color: "blue" };
+
 var b6 = { foreword: "hi", color: "blue", price: 10.99 };
+
 var b7 = { foreword: "hi", price: 10.99 };
+
 var b8 = { couleur: "non" };
+
 var b9 = { forewarned: "still no" };
+
+
 var b10 = { 0: {}, '1': {} }; // ok
+
 var b11 = { 0: { colour: "blue" } }; // nested object literal still errors
+
+
+
 // Repros inspired by #28752
 function test() {
     // No excess property checks on generic types
@@ -74,7 +90,9 @@ function test() {
     // Excess property checks only on non-generic parts of unions
     var obj4 = { name: "test", prop: true };
     // No excess property checks when union includes 'object' type
-    var obj5 = { z: 'abc' };
+    var obj5 = { z: 'abc' }
+    ;
     // The 'object' type has no effect on intersections
-    var obj6 = { z: 'abc' };
+    var obj6 = { z: 'abc' }
+    ;
 }

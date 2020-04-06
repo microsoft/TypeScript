@@ -46,8 +46,11 @@ Math.pow(+1, 2);
 Math.pow(1, Math.pow(-2, 3));
 Math.pow(1, Math.pow(-2, -3));
 Math.pow(-1, Math.pow(-2, -3));
-Math.pow(-(Math.pow(1, 2)), 3);
+Math.pow(
+-(Math.pow(1, 2)), 3);
+
 var temp = 10;
+
 Math.pow(-++temp, 3);
 Math.pow(+--temp, 3);
 Math.pow(-temp++, 3);
@@ -56,6 +59,7 @@ Math.pow(1, Math.pow(-++temp, 3));
 Math.pow(1, Math.pow(+--temp, 3));
 Math.pow(1, Math.pow(-temp++, 3));
 Math.pow(1, Math.pow(+temp--, 3));
+
 Math.pow(-3, temp++);
 Math.pow(-3, temp--);
 Math.pow(-3, ++temp);
@@ -72,3 +76,5 @@ Math.pow(+3, Math.pow(temp++, 2));
 Math.pow(+3, Math.pow(temp--, 2));
 Math.pow(+3, Math.pow(++temp, 2));
 Math.pow(+3, Math.pow(--temp, 2));
+
+

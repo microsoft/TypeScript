@@ -202,18 +202,24 @@ baz(makeFoo(Enum.A), makeFoo(Enum.A));
 
 //// [inferFromGenericFunctionReturnTypes3.js]
 // Repros from #5487
+
 function truePromise() {
     return Promise.resolve(true);
 }
+
+
 function wrap(value) {
     return { value };
 }
+
 function wrappedFoo() {
     return wrap('foo');
 }
+
 function wrapBar(value) {
     return { value };
 }
+
 function wrappedBar() {
     const value = 'bar';
     const inferred = wrapBar(value);
@@ -222,17 +228,25 @@ function wrappedBar() {
     const literal2 = wrapBar(value2); // Error
     return wrap(value);
 }
+
 function wrappedBaz() {
     const value = 'baz';
     return wrap(value);
 }
+
+
 let a = [];
 a = [1, 2, 3, 4, 5].map(v => ({ type: 'folder' }));
 // Repro from #11312
-let arr = [[1, 2]];
+let arr = [[1, 2]]
+
+;
+
 let mappedArr = arr.map(([x, y]) => {
     return [x, y];
-});
+})
+
+;
 // Repro from #13594
 export var DiagnosticSeverity;
 (function (DiagnosticSeverity) {
@@ -241,6 +255,7 @@ export var DiagnosticSeverity;
     DiagnosticSeverity.Information = 3;
     DiagnosticSeverity.Hint = 4;
 })(DiagnosticSeverity || (DiagnosticSeverity = {}));
+
 function bug() {
     let values = [];
     return values.map((value) => {
@@ -250,11 +265,13 @@ function bug() {
         };
     });
 }
+
 // Repro from #22870
 function objectToMap(obj) {
     return new Map(Object.keys(obj).map(key => [key, obj[key]]));
 }
 ;
+
 function createPerson() {
     return {
         phoneNumbers: [1].map(() => ({
@@ -262,21 +279,48 @@ function createPerson() {
         }))
     };
 }
+
+
+
+
+
+
+
+
+
 let zz = box({ type: 'draw' });
+
+
+
 let yy = box('draw');
+
 export function ok(value) {
     return {
         kind: "OK",
         value: value
     };
 }
+
 let result = ok(["hello", 12]);
+
+
 const a3 = ['a', 'b'].map(name => {
     return {
         code: 'mapped',
         name,
     };
 });
+
+
+
+
+
+
+
+
+
+
+
 const f1 = () => {
     return Promise.all([
         {
@@ -290,23 +334,23 @@ const f1 = () => {
         }
     ]);
 };
+
 let res = foldLeft(true, (acc, t) => acc && t); // Error
 var State;
 (function (State) {
-    State[State["A"] = 0] = "A";
-    State[State["B"] = 1] = "B";
+    State[State["A"] = 0] = "A";State[State["B"] = 1] = "B";
 })(State || (State = {}));
 let x = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]); // Error
 // Repros from #31443
 var Enum;
 (function (Enum) {
-    Enum[Enum["A"] = 0] = "A";
-    Enum[Enum["B"] = 1] = "B";
+    Enum[Enum["A"] = 0] = "A";Enum[Enum["B"] = 1] = "B";
 })(Enum || (Enum = {}));
 class ClassWithConvert {
     constructor(val) { }
     convert(converter) { }
 }
+
 function fn(arg, f) { }
 fn(new ClassWithConvert(Enum.A), () => new ClassWithConvert(Enum.A));
 baz(makeFoo(Enum.A), makeFoo(Enum.A));

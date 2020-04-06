@@ -22,6 +22,9 @@ b2 = a2; // was error
 
 
 //// [promisesWithConstraints.js]
+
+
+
 var a;
 var b;
 a = b; // ok

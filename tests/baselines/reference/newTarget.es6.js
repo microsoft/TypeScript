@@ -51,14 +51,19 @@ class B extends A {
         const f = () => new.target;
     }
 }
+
 function f1() {
     const g = new.target;
     const h = () => new.target;
 }
+
 const f2 = function () {
     const i = new.target;
     const j = () => new.target;
-};
+}
+
+;
+
 const O = {
     k: function () { return new.target; }
 };

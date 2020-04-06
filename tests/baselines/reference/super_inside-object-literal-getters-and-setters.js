@@ -54,20 +54,17 @@ var ObjectLiteral;
         test: function () {
             return _super._foo;
         }
-    };
+    }
+    ;
 })(ObjectLiteral || (ObjectLiteral = {}));
 var F = /** @class */ (function () {
-    function F() {
-    }
-    F.prototype.test = function () { return ""; };
+    function F() {}F.prototype.test = function () { return ""; };
     return F;
 }());
 var SuperObjectTest = /** @class */ (function (_super) {
-    __extends(SuperObjectTest, _super);
-    function SuperObjectTest() {
+    __extends(SuperObjectTest, _super);function SuperObjectTest() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    SuperObjectTest.prototype.testing = function () {
+    }SuperObjectTest.prototype.testing = function () {
         var test = {
             get F() {
                 return _super.test.call(this);

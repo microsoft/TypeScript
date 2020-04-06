@@ -6,6 +6,5 @@ define(["require", "exports"], function (require, exports) {
         function B() {
         }
         return B;
-    }());
-    exports.B = B;
+    }());exports.B = B;
 });

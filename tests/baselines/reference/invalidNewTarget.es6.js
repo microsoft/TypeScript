@@ -29,6 +29,7 @@ const a = new.target;
 const b = () => new.target;
 let C = /** @class */ (() => {
     class C {
+
         constructor() {
             this.f = () => new.target;
         }
@@ -36,6 +37,9 @@ let C = /** @class */ (() => {
         c() { return new.target; }
         get d() { return new.target; }
         set e(_) { _ = new.target; }
+
+
+
         static [new.target]() { }
         static g() { return new.target; }
         static get h() { return new.target; }

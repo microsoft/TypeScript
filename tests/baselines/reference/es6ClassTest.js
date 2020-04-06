@@ -97,11 +97,8 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Bar = /** @class */ (function () {
-    function Bar(n) {
-    }
-    Bar.prototype.prop1 = function (x) {
+})();var Bar = /** @class */ (function () {
+    function Bar(n) {}Bar.prototype.prop1 = function (x) {
         return x;
     };
     return Bar;
@@ -109,8 +106,20 @@ var Bar = /** @class */ (function () {
 // new-style class
 var Foo = /** @class */ (function (_super) {
     __extends(Foo, _super);
-    function Foo(x, y, z) {
-        if (z === void 0) { z = 0; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function Foo(x, y, z) {if (z === void 0) { z = 0; }
         var _this = _super.call(this, x) || this;
         _this.y = y;
         _this.z = z;
@@ -119,13 +128,17 @@ var Foo = /** @class */ (function (_super) {
         _this.x = x;
         _this.gar = 5;
         return _this;
-    }
-    Foo.prototype.bar = function () { return 0; };
+    }Foo.prototype.bar = function () { return 0; };
+
+
     Foo.prototype.boo = function (x) { return x; };
     Foo.statVal = 0;
     return Foo;
 }(Bar));
 var f = new Foo();
+
+
+
 //class GetSetMonster {
 //  // attack(target) {
 //  //     WScript.Echo("Attacks " + target);

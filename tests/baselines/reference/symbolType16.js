@@ -7,5 +7,6 @@ var sym: symbol;
 sym.newSymbolProp;
 
 //// [symbolType16.js]
+
 var sym;
 sym.newSymbolProp;

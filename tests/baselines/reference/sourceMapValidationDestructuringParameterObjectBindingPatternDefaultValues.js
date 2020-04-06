@@ -32,6 +32,7 @@ foo3({ name: "Edger", skill: "cutting edges" });
 //// [sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.js]
 var hello = "hello";
 var robotA = { name: "mower", skill: "mowing" };
+
 function foo1(_a) {
     var _b = (_a === void 0 ? {} : _a).name, nameA = _b === void 0 ? "<NoName>" : _b;
     console.log(nameA);
@@ -46,8 +47,10 @@ function foo3(_a) {
 }
 foo1(robotA);
 foo1({ name: "Edger", skill: "cutting edges" });
+
 foo2(robotA);
 foo2({ name: "Edger", skill: "cutting edges" });
+
 foo3(robotA);
 foo3({ name: "Edger", skill: "cutting edges" });
 //# sourceMappingURL=sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.js.map

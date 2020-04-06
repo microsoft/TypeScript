@@ -44,8 +44,12 @@ exports.c = exports.Aleph = exports.foo = void 0;
  * @param {number} a
  * @param {string} b
  */
-function foo(a, b) { }
-exports.foo = foo;
+function foo(a, b) { }/**
+ * Foos a bar together using an `a` and a `b`
+ * @param {number} a
+ * @param {string} b
+ */ exports.foo = foo;
+
 /**
  * Legacy - DO NOT USE
  */
@@ -61,14 +65,14 @@ var Aleph = /** @class */ (function () {
          */
         this.field = b;
     }
+
     /**
      * Doesn't actually do anything
      * @returns {void}
      */
     Aleph.prototype.doIt = function () { };
     return Aleph;
-}());
-exports.Aleph = Aleph;
+}());exports.Aleph = Aleph;
 /**
  * Not the speed of light
  */

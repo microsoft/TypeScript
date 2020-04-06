@@ -47,13 +47,29 @@ export function fooToBar(
 "use strict";
 exports.__esModule = true;
 exports.fooToBar = void 0;
+
+
+
+
+
+
+
+
+
+
 // In lodash.d.ts this function has many overloads, but this seems to be the problematic one.
-function mapValues(obj, callback) {
+function mapValues(
+obj,
+    callback
+) {
     return null;
 }
-function fooToBar(foos) {
+
+
+function fooToBar(
+foos
+) {
     var result = foos == null ? {} : mapValues(foos, function (f) { return f.foo; });
     // This line _should_ fail, because `result` is not the right type.
     return result;
-}
-exports.fooToBar = fooToBar;
+}exports.fooToBar = fooToBar;

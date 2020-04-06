@@ -32,14 +32,20 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+
 var o1;
 var o1 = __assign({}, undefinedUnion);
+
 var o2;
 var o2 = __assign({}, nullUnion);
+
 var o3;
 var o3 = __assign(__assign({}, undefinedUnion), nullUnion);
 var o3 = __assign(__assign({}, nullUnion), undefinedUnion);
+
 var o4;
 var o4 = __assign(__assign({}, undefinedUnion), undefinedUnion);
+
 var o5;
 var o5 = __assign(__assign({}, nullUnion), nullUnion);
+

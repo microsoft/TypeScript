@@ -28,8 +28,7 @@ export {MyClass};
 Object.defineProperty(exports, "__esModule", { value: true });
 var db = /** @class */ (function () {
     function db() {
-    }
-    db.prototype.doSomething = function () {
+    }db.prototype.doSomething = function () {
     };
     return db;
 }());

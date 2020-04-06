@@ -8,8 +8,7 @@ class c {
 //// [out.js]
 var c = /** @class */ (function () {
     function c() {
-    }
-    c.prototype.method = function (a) {
+    }c.prototype.method = function (a) {
         var _this = this;
         var x = function (a) { return _this.method(a); };
     };

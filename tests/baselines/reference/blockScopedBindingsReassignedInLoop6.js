@@ -53,6 +53,7 @@ function f1() {
             break;
     }
 }
+
 function f2() {
     var _loop_2 = function (x, y) {
         var a = function () { return x++ + y++; };
@@ -76,3 +77,8 @@ function f2() {
             break;
     }
 }
+
+
+
+
+

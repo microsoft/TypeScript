@@ -6,8 +6,7 @@ new b();
 
 //// [newAbstractInstance.js]
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());
 new b();

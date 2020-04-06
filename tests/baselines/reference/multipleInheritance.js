@@ -51,8 +51,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var B1 = /** @class */ (function () {
+})();var B1 = /** @class */ (function () {
     function B1() {
     }
     return B1;
@@ -63,29 +62,25 @@ var B2 = /** @class */ (function () {
     return B2;
 }());
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);
-    function C() {
+    __extends(C, _super);function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(B1));
 var D1 = /** @class */ (function (_super) {
-    __extends(D1, _super);
-    function D1() {
+    __extends(D1, _super);function D1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D1;
 }(B1));
 var D2 = /** @class */ (function (_super) {
-    __extends(D2, _super);
-    function D2() {
+    __extends(D2, _super);function D2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D2;
 }(B2));
 var E = /** @class */ (function (_super) {
-    __extends(E, _super);
-    function E() {
+    __extends(E, _super);function E() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return E;
@@ -96,8 +91,7 @@ var N = /** @class */ (function () {
     return N;
 }());
 var ND = /** @class */ (function (_super) {
-    __extends(ND, _super);
-    function ND() {
+    __extends(ND, _super);function ND() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return ND;
@@ -105,16 +99,13 @@ var ND = /** @class */ (function (_super) {
 var Good = /** @class */ (function () {
     function Good() {
         this.f = function () { return 0; };
-    }
-    Good.prototype.g = function () { return 0; };
+    }Good.prototype.g = function () { return 0; };
     return Good;
 }());
 var Baad = /** @class */ (function (_super) {
-    __extends(Baad, _super);
-    function Baad() {
+    __extends(Baad, _super);function Baad() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Baad.prototype.f = function () { return 0; };
+    }Baad.prototype.f = function () { return 0; };
     Baad.prototype.g = function (n) { return 0; };
     return Baad;
 }(Good));

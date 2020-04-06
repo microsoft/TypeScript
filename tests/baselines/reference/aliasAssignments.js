@@ -21,8 +21,7 @@ var someClass = /** @class */ (function () {
     function someClass() {
     }
     return someClass;
-}());
-exports.someClass = someClass;
+}());exports.someClass = someClass;
 //// [aliasAssignments_1.js]
 "use strict";
 exports.__esModule = true;

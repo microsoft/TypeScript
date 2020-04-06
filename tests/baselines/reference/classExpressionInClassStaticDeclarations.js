@@ -21,8 +21,7 @@ var C = /** @class */ (function () {
     function C() {
     }
     C.D = /** @class */ (function (_super) {
-        __extends(class_1, _super);
-        function class_1() {
+        __extends(class_1, _super);function class_1() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return class_1;

@@ -50,6 +50,7 @@ var g = /** @class */ (function () {
 // Just the name
 var k = new c() || new m.c();
 var l = new c() || new m.c();
+
 var x = new g() || new m.g() || (function () { return new c(); });
 var y = new g() || new m.g() || (function () { return new c(); });
 

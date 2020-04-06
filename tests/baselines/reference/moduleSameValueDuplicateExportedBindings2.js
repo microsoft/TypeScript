@@ -33,8 +33,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
-var c_1 = require("./c");
-__createBinding(exports, c_1, "Animals");
+var c_1 = require("./c");__createBinding(exports, c_1, "Animals");
 //// [a.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {

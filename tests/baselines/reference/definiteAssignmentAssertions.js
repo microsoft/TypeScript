@@ -100,6 +100,7 @@ var C3 = /** @class */ (function () {
     }
     return C3;
 }());
+
 // Definite assignment assertion not permitted on abstract property
 var C5 = /** @class */ (function () {
     function C5() {
@@ -113,6 +114,7 @@ function f1() {
     var a;
     var b = a;
 }
+
 function f2() {
     var x;
     if (typeof x === "string") {
@@ -122,20 +124,24 @@ function f2() {
         var n = x;
     }
 }
+
 function f3() {
     var x;
     var g = function () {
         x = 1;
-    };
+    }
+    ;
     g();
     var y = x;
 }
+
 // Definite assignment assertion requires type annotation and no initializer
 function f4() {
     var a;
     var b = 1;
     var c = 1;
 }
+
 
 
 //// [definiteAssignmentAssertions.d.ts]

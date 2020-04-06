@@ -11,4 +11,5 @@ var v = {
     f: function (a) { return 0; } /*t1*/,
     g: (function (a) { return 0; }) /*t2*/,
     h: (function (a) { return 0; } /*t3*/)
-};
+}
+;

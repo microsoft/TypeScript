@@ -75,23 +75,28 @@ var __values = (this && this.__values) || function(o) {
         }
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-};
-(function () {
+};(function () {
     var a;
+
     var _a = a;
     var _b = a;
     var _c = a;
+
     var _d = __read(a, 0);
     var _e = __read(a, 0);
     var _f = __read(a, 0);
+
     var _g = a, _h = __read(a, 0);
     var _j = a, _k = __read(a, 0);
     var _l = a, _m = __read(a, 0);
+
     var _o = a.p1, _p = __read(a.p2, 0);
     var _q = a.p1, _r = __read(a.p2, 0);
     var _s = a.p1, _t = __read(a.p2, 0);
+
     for (var _u = {}, _v = {}; false; void 0) {
     }
+
     function f(_a, _b, _c) {
         _a = a;
         _b = a;
@@ -100,10 +105,10 @@ var __values = (this && this.__values) || function(o) {
             _a = a;
             _b = a;
             var _d = (_c === void 0 ? a : _c).p, _e = _d === void 0 ? a : _d;
-            return a;
-        };
+            return a;};
     }
 })();
+
 (function () {
     var e_1, _a, e_2, _b, e_3, _c, e_4, _d, e_5, _e, e_6, _f;
     var ns = [];

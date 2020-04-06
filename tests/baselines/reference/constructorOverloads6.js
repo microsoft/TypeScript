@@ -25,6 +25,8 @@ f1.bar1();
 
 
 //// [constructorOverloads6.js]
+
+
 var f1 = new Foo("hey");
 var f2 = new Foo(0);
 var f3 = new Foo(f1);

@@ -23,13 +23,11 @@ define(["require", "exports"], function (require, exports) {
     exports.Promise = void 0;
     var Promise = /** @class */ (function () {
         function Promise() {
-        }
-        Promise.timeout = function (delay) {
+        }Promise.timeout = function (delay) {
             return null;
         };
         return Promise;
-    }());
-    exports.Promise = Promise;
+    }());exports.Promise = Promise;
 });
 //// [staticInstanceResolution5_1.js]
 define(["require", "exports"], function (require, exports) {
@@ -37,6 +35,7 @@ define(["require", "exports"], function (require, exports) {
     exports.__esModule = true;
     // these 3 should be errors
     var x = function (w1) { };
-    var y = function (w2) { };
+    var y = function (w2) { }
+    ;
     function z(w3) { }
 });

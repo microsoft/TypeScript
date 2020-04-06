@@ -9,8 +9,7 @@ class C {
 //// [methodSignatureDeclarationEmit1.js]
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.foo = function (a) {
+    }C.prototype.foo = function (a) {
     };
     return C;
 }());

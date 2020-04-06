@@ -17,8 +17,7 @@ var r: string = m.foo;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var T = /** @class */ (function () {
-        function T() {
-        }
+        function T() {}
         return T;
     }());
     return T;
@@ -41,8 +40,7 @@ define(["require", "exports", "exportAssignmentOfGenericType1_0"], function (req
     "use strict";
     exports.__esModule = true;
     var M = /** @class */ (function (_super) {
-        __extends(M, _super);
-        function M() {
+        __extends(M, _super);function M() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return M;

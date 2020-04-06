@@ -53,6 +53,7 @@ function test3(isError = true) {
         }
     });
 }
+
 // Should not be an error, Promise<any>, currently **not** working
 function test4(isError = true) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -61,6 +62,7 @@ function test4(isError = true) {
         }
     });
 }
+
 // should not be error, Promise<any> currently working correctly 
 function test5(isError = true) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -69,6 +71,8 @@ function test5(isError = true) {
         }
     });
 }
+
+
 // should be error, currently reported correctly 
 function test6(isError = true) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -77,6 +81,7 @@ function test6(isError = true) {
         }
     });
 }
+
 // infered to be Promise<void>, should not be an error, currently reported correctly 
 function test7(isError = true) {
     return __awaiter(this, void 0, void 0, function* () {

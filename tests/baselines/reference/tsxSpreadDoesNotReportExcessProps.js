@@ -42,12 +42,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 var react_1 = __importDefault(require("react"));
+
 var MyComponent = /** @class */ (function (_super) {
-    __extends(MyComponent, _super);
-    function MyComponent() {
+    __extends(MyComponent, _super);function MyComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    MyComponent.prototype.render = function () {
+    }MyComponent.prototype.render = function () {
         return (react_1["default"].createElement("div", __assign({}, this.props, { className: "ok" })));
     };
     return MyComponent;

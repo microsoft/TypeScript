@@ -15,6 +15,7 @@ class E<T> {
 
 //// [staticIndexers.js]
 // static indexers not allowed
+
 var C = /** @class */ (function () {
     function C() {
     }

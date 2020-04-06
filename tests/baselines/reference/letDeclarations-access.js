@@ -38,7 +38,10 @@ x.toString();
 
 
 //// [letDeclarations-access.js]
-let x = 0;
+let x = 0
+
+;
+
 // No errors
 x = 1;
 x += 2;
@@ -52,16 +55,22 @@ x >>>= 9;
 x &= 10;
 x |= 11;
 x ^= 12;
+
 x++;
 x--;
 ++x;
 --x;
+
 var a = x + 1;
 function f(v) { }
 f(x);
+
 if (x) { }
+
 x;
 (x);
+
 -x;
 +x;
+
 x.toString();

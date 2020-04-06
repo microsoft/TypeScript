@@ -12,6 +12,7 @@ class C<T> {
 }
 
 //// [genericInstanceOf.js]
+
 var C = /** @class */ (function () {
     function C(a, b) {
         this.a = a;

@@ -25,21 +25,19 @@ var e = <Dotted.Name />;
 
 
 //// [tsxElementResolution.jsx]
+
 var foundFirst = /** @class */ (function () {
-    function foundFirst() {
-    }
+    function foundFirst() {}
     return foundFirst;
 }());
 var Other = /** @class */ (function () {
-    function Other() {
-    }
+    function Other() {}
     return Other;
 }());
 var Dotted;
 (function (Dotted) {
     var Name = /** @class */ (function () {
-        function Name() {
-        }
+        function Name() {}
         return Name;
     }());
     Dotted.Name = Name;

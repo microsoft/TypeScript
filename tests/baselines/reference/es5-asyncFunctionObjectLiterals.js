@@ -51,6 +51,7 @@ async function objectLiteral6() {
 }
 
 //// [es5-asyncFunctionObjectLiterals.js]
+
 function objectLiteral0() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -68,6 +69,7 @@ function objectLiteral0() {
         });
     });
 }
+
 function objectLiteral1() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -86,6 +88,7 @@ function objectLiteral1() {
         });
     });
 }
+
 function objectLiteral2() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -103,6 +106,7 @@ function objectLiteral2() {
         });
     });
 }
+
 function objectLiteral3() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -111,8 +115,7 @@ function objectLiteral3() {
             switch (_c.label) {
                 case 0:
                     _b = {};
-                    _a = a;
-                    return [4 /*yield*/, y];
+                    _a = a;return [4 /*yield*/, y];
                 case 1:
                     x = (_b[_a] = _c.sent(),
                         _b.b = z,
@@ -122,6 +125,7 @@ function objectLiteral3() {
         });
     });
 }
+
 function objectLiteral4() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -139,6 +143,7 @@ function objectLiteral4() {
         });
     });
 }
+
 function objectLiteral5() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -157,6 +162,7 @@ function objectLiteral5() {
         });
     });
 }
+
 function objectLiteral6() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -167,8 +173,7 @@ function objectLiteral6() {
                     _b = {
                             a: y
                         };
-                    _a = b;
-                    return [4 /*yield*/, z];
+                    _a = b;return [4 /*yield*/, z];
                 case 1:
                     x = (_b[_a] = _c.sent(),
                         _b);

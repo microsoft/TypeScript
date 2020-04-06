@@ -182,16 +182,11 @@ aa = append(aa, 1);
 //// [literalTypes2.js]
 var E;
 (function (E) {
-    E[E["A"] = 0] = "A";
-    E[E["B"] = 1] = "B";
-    E[E["C"] = 2] = "C";
+    E[E["A"] = 0] = "A";E[E["B"] = 1] = "B";E[E["C"] = 2] = "C";
 })(E || (E = {}));
 var cond;
-function f1(p1, p2, p3, p4) {
-    if (p1 === void 0) { p1 = 1; }
-    if (p2 === void 0) { p2 = "abc"; }
-    if (p3 === void 0) { p3 = true; }
-    if (p4 === void 0) { p4 = E.A; }
+
+function f1(p1, p2, p3, p4) {if (p1 === void 0) { p1 = 1; }if (p2 === void 0) { p2 = "abc"; }if (p3 === void 0) { p3 = true; }if (p4 === void 0) { p4 = E.A; }
     var v1 = 1;
     var v2 = -123;
     var v3 = 3 + 4;
@@ -217,11 +212,8 @@ function f1(p1, p2, p3, p4) {
     var c7 = true;
     var c8 = E.A;
 }
-function f2(p1, p2, p3, p4) {
-    if (p1 === void 0) { p1 = 1; }
-    if (p2 === void 0) { p2 = "abc"; }
-    if (p3 === void 0) { p3 = true; }
-    if (p4 === void 0) { p4 = E.A; }
+
+function f2(p1, p2, p3, p4) {if (p1 === void 0) { p1 = 1; }if (p2 === void 0) { p2 = "abc"; }if (p3 === void 0) { p3 = true; }if (p4 === void 0) { p4 = E.A; }
     var v1 = 1;
     var v2 = -123;
     var v3 = "abc";
@@ -233,6 +225,7 @@ function f2(p1, p2, p3, p4) {
     var x4 = true;
     var x5 = E.A;
 }
+
 function f3() {
     var c1 = cond ? 1 : 2;
     var c2 = cond ? 1 : "two";
@@ -251,6 +244,7 @@ function f3() {
     var x7 = c7;
     var x8 = c8;
 }
+
 var C1 = /** @class */ (function () {
     function C1() {
         this.x1 = 1;
@@ -278,6 +272,7 @@ function f4() {
     var x1 = { a: 1, b: "foo" };
     var x2 = { a: 1, b: "foo" };
 }
+
 function f5() {
     var c1 = [1, "foo"];
     var c2 = [1, "foo"];
@@ -286,6 +281,7 @@ function f5() {
     var x2 = [1, "foo"];
     var x3 = [1, "foo"];
 }
+
 function f6() {
     var _a = { c1: false, c2: 1, c3: "bar" }, _b = _a.c1, c1 = _b === void 0 ? true : _b, _c = _a.c2, c2 = _c === void 0 ? 0 : _c, _d = _a.c3, c3 = _d === void 0 ? "foo" : _d;
     var _e = { x1: false, x2: 1, x3: "bar" }, _f = _e.x1, x1 = _f === void 0 ? true : _f, _g = _e.x2, x2 = _g === void 0 ? 0 : _g, _h = _e.x3, x3 = _h === void 0 ? "foo" : _h;
@@ -293,9 +289,11 @@ function f6() {
 function f10() {
     return "hello";
 }
+
 function f11() {
     return cond ? 1 : "two";
 }
+
 function f12() {
     if (cond) {
         return 1;
@@ -306,8 +304,7 @@ function f12() {
 }
 var C2 = /** @class */ (function () {
     function C2() {
-    }
-    C2.prototype.foo = function () {
+    }C2.prototype.foo = function () {
         return 0;
     };
     C2.prototype.bar = function () {
@@ -324,7 +321,10 @@ function f20() {
     var f6 = function () { return "bar"; };
     var f7 = function () { return "bar"; };
 }
+
+
 var a = [1, 2];
+
 var x1 = g1(1); // Type 1
 var x2 = g2(1, 1); // Type 1
 var x3 = g2(1, 2); // Type 1 | 2
@@ -336,13 +336,18 @@ var x8 = g6(a); // Type 1 | 2
 var x9 = g7(a); // Type (1 | 2)[]
 var x10 = g8(1, function (x) { return x; }); // Type number
 var x11 = g8(1, function (x) { return x + 1; }); // Type number
+
 function makeArray(x) {
     return [x];
 }
+
 function append(a, x) {
     var result = a.slice();
     result.push(x);
     return result;
 }
+
+
+
 var aa = makeArray(0);
 aa = append(aa, 1);

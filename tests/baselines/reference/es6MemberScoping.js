@@ -20,6 +20,7 @@ var Foo = /** @class */ (function () {
     function Foo(store) {
         this._store = store; // should be an error.
     }
+
     Foo.prototype.foo = function () {
         return this._store.length;
     };
@@ -27,7 +28,6 @@ var Foo = /** @class */ (function () {
 }());
 var Foo2 = /** @class */ (function () {
     function Foo2() {
-    }
-    Foo2.Foo2 = function () { return 0; }; // should not be an error
+    }Foo2.Foo2 = function () { return 0; }; // should not be an error
     return Foo2;
 }());

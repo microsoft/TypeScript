@@ -29,18 +29,15 @@ var X = /** @class */ (function () {
         this.a = a;
     }
     return X;
-}());
-exports.X = X;
+}());exports.X = X;
 function y() {
     return /** @class */ (function (_super) {
-        __extends(class_1, _super);
-        function class_1() {
+        __extends(class_1, _super);function class_1() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return class_1;
     }(X));
-}
-exports.y = y;
+}exports.y = y;
 
 
 //// [anonymousClassDeclarationDoesntPrintWithReadonly.d.ts]

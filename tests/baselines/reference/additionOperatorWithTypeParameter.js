@@ -42,8 +42,7 @@ function foo<T, U>(t: T, u: U) {
 // type parameter type is not a valid operand of addition operator
 var E;
 (function (E) {
-    E[E["a"] = 0] = "a";
-    E[E["b"] = 1] = "b";
+    E[E["a"] = 0] = "a";E[E["b"] = 1] = "b";
 })(E || (E = {}));
 function foo(t, u) {
     var a;
@@ -53,6 +52,7 @@ function foo(t, u) {
     var e;
     var g;
     var f;
+
     // type parameter as left operand
     var r1 = t + a; // ok, one operand is any
     var r2 = t + b;
@@ -61,6 +61,7 @@ function foo(t, u) {
     var r5 = t + e;
     var r6 = t + g;
     var r7 = t + f;
+
     // type parameter as right operand
     var r8 = a + t; // ok, one operand is any
     var r9 = b + t;
@@ -69,6 +70,7 @@ function foo(t, u) {
     var r12 = e + t;
     var r13 = g + t;
     var r14 = f + t;
+
     // other cases
     var r15 = t + null;
     var r16 = t + undefined;

@@ -6,8 +6,7 @@ define("subfolder/b", ["require", "exports"], function (require, exports) {
         function B() {
         }
         return B;
-    }());
-    exports.B = B;
+    }());exports.B = B;
 });
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -17,8 +16,7 @@ define("a", ["require", "exports"], function (require, exports) {
         function A() {
         }
         return A;
-    }());
-    exports.A = A;
+    }());exports.A = A;
 });
 define("subfolder/c", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -28,6 +26,5 @@ define("subfolder/c", ["require", "exports"], function (require, exports) {
         function C() {
         }
         return C;
-    }());
-    exports.C = C;
+    }());exports.C = C;
 });

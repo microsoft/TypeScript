@@ -13,5 +13,6 @@ exports.__esModule = true;
 exports["default"] = {
     uhoh: "another default"
 };
-function Foo() { }
-exports["default"] = Foo;
+
+function Foo() { }exports["default"] = Foo;
+

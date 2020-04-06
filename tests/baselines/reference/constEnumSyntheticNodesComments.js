@@ -19,9 +19,11 @@ function verify(a: En) {
 }
 
 //// [constEnumSyntheticNodesComments.js]
+
 function assert(x) {
     return x;
 }
+
 function verify(a) {
     switch (a) {
         case 0 /* A */:

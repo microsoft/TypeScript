@@ -28,11 +28,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 var hello_json_1 = __importDefault(require("./hello.json"));
+
 exports["default"] = hello_json_1["default"].hello;
 //# sourceMappingURL=index.js.map
 
 //// [/src/dist/src/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/index.ts"],"names":[],"mappings":";;;;;AAAA,4DAAgC;AAEhC,qBAAe,uBAAK,CAAC,KAAK,CAAA"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/index.ts"],"names":[],"mappings":";;;;;AAAA,4DAAgC;;AAEhC,qBAAe,uBAAK,CAAC,KAAK,CAAA"}
 
 //// [/src/dist/tsconfig_withFiles.tsbuildinfo]
 {

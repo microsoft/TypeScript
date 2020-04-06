@@ -78,16 +78,16 @@ async function whileStatement18() {
 }
 
 //// [es5-asyncFunctionWhileStatements.js]
+
 function whileStatement0() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            while (x) {
-                y;
-            }
+            while (x) {y;}
             return [2 /*return*/];
         });
     });
 }
+
 function whileStatement1() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -102,6 +102,7 @@ function whileStatement1() {
         });
     });
 }
+
 function whileStatement2() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -117,16 +118,16 @@ function whileStatement2() {
         });
     });
 }
+
 function whileStatement3() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            while (x) {
-                continue;
-            }
+            while (x) {continue;}
             return [2 /*return*/];
         });
     });
 }
+
 function whileStatement4() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -140,6 +141,7 @@ function whileStatement4() {
         });
     });
 }
+
 function whileStatement5() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -148,13 +150,13 @@ function whileStatement5() {
                     if (!x) return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
                 case 1:
-                    _a.sent();
-                    return [3 /*break*/, 0];
+                    _a.sent();return [3 /*break*/, 0];
                 case 2: return [2 /*return*/];
             }
         });
     });
 }
+
 function whileStatement6() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -162,8 +164,7 @@ function whileStatement6() {
                 case 0:
                     if (!x) return [3 /*break*/, 2];
                     if (1)
-                        return [3 /*break*/, 0];
-                    return [4 /*yield*/, y];
+                        return [3 /*break*/, 0];return [4 /*yield*/, y];
                 case 1:
                     _a.sent();
                     return [3 /*break*/, 0];
@@ -172,16 +173,16 @@ function whileStatement6() {
         });
     });
 }
+
 function whileStatement7() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            A: while (x) {
-                continue A;
-            }
+            A: while (x) {continue A;}
             return [2 /*return*/];
         });
     });
 }
+
 function whileStatement8() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -195,6 +196,7 @@ function whileStatement8() {
         });
     });
 }
+
 function whileStatement9() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -203,13 +205,13 @@ function whileStatement9() {
                     if (!x) return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
                 case 1:
-                    _a.sent();
-                    return [3 /*break*/, 0];
+                    _a.sent();return [3 /*break*/, 0];
                 case 2: return [2 /*return*/];
             }
         });
     });
 }
+
 function whileStatement10() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -217,8 +219,7 @@ function whileStatement10() {
                 case 0:
                     if (!x) return [3 /*break*/, 2];
                     if (1)
-                        return [3 /*break*/, 0];
-                    return [4 /*yield*/, y];
+                        return [3 /*break*/, 0];return [4 /*yield*/, y];
                 case 1:
                     _a.sent();
                     return [3 /*break*/, 0];
@@ -227,16 +228,16 @@ function whileStatement10() {
         });
     });
 }
+
 function whileStatement11() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            while (x) {
-                break;
-            }
+            while (x) {break;}
             return [2 /*return*/];
         });
     });
 }
+
 function whileStatement12() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -250,6 +251,7 @@ function whileStatement12() {
         });
     });
 }
+
 function whileStatement13() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -258,13 +260,13 @@ function whileStatement13() {
                     if (!x) return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
                 case 1:
-                    _a.sent();
-                    return [3 /*break*/, 2];
+                    _a.sent();return [3 /*break*/, 2];
                 case 2: return [2 /*return*/];
             }
         });
     });
 }
+
 function whileStatement14() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -272,8 +274,7 @@ function whileStatement14() {
                 case 0:
                     if (!x) return [3 /*break*/, 2];
                     if (1)
-                        return [3 /*break*/, 2];
-                    return [4 /*yield*/, y];
+                        return [3 /*break*/, 2];return [4 /*yield*/, y];
                 case 1:
                     _a.sent();
                     return [3 /*break*/, 0];
@@ -282,16 +283,16 @@ function whileStatement14() {
         });
     });
 }
+
 function whileStatement15() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            E: while (x) {
-                break E;
-            }
+            E: while (x) {break E;}
             return [2 /*return*/];
         });
     });
 }
+
 function whileStatement16() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -305,6 +306,7 @@ function whileStatement16() {
         });
     });
 }
+
 function whileStatement17() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -313,13 +315,13 @@ function whileStatement17() {
                     if (!x) return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
                 case 1:
-                    _a.sent();
-                    return [3 /*break*/, 2];
+                    _a.sent();return [3 /*break*/, 2];
                 case 2: return [2 /*return*/];
             }
         });
     });
 }
+
 function whileStatement18() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -327,8 +329,7 @@ function whileStatement18() {
                 case 0:
                     if (!x) return [3 /*break*/, 2];
                     if (1)
-                        return [3 /*break*/, 2];
-                    return [4 /*yield*/, y];
+                        return [3 /*break*/, 2];return [4 /*yield*/, y];
                 case 1:
                     _a.sent();
                     return [3 /*break*/, 0];

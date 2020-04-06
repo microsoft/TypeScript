@@ -7,4 +7,5 @@ x = y && (a => a);
 //// [contextuallyTypeLogicalAnd01.js]
 var x;
 var y = true;
+
 x = y && (function (a) { return a; });

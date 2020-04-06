@@ -91,16 +91,15 @@ exports.__esModule = true;
 exports.Data = void 0;
 var Data = /** @class */ (function () {
     function Data() {
-    }
-    Data.prototype.test = function () {
+    }Data.prototype.test = function () {
         var result = {
             title: "title"
-        };
+        }
+        ;
         return result;
     };
     return Data;
-}());
-exports.Data = Data;
+}());exports.Data = Data;
 
 
 //// [/user/username/projects/myproject/lib2/public.js]
@@ -129,8 +128,7 @@ var App = /** @class */ (function () {
         new public_1.Data().test();
     }
     return App;
-}());
-exports.App = App;
+}());exports.App = App;
 
 
 

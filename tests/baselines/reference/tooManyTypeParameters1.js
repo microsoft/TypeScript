@@ -14,12 +14,14 @@ var i: I<number,number>;
 //// [tooManyTypeParameters1.js]
 function f() { }
 f();
+
 var x = function () { };
 x();
+
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var c = new C();
+
 var i;

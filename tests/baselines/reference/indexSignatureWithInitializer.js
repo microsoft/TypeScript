@@ -9,6 +9,7 @@ class C {
 }
 
 //// [indexSignatureWithInitializer.js]
+
 var C = /** @class */ (function () {
     function C() {
     }

@@ -76,6 +76,7 @@ class A {
         }
     }
 }
+
 class B {
     foo() {
         let a = () => {
@@ -83,7 +84,8 @@ class B {
                 let f = () => x;
                 this.bar(f());
             }
-        };
+        }
+        ;
     }
     bar(a) {
     }

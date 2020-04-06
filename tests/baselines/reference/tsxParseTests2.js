@@ -8,4 +8,5 @@ var x = </**/div></div>;
 
 
 //// [file.jsx]
+
 var x = <div></div>;

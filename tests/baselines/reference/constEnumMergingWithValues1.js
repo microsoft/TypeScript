@@ -10,5 +10,6 @@ export = foo
 define(["require", "exports"], function (require, exports) {
     "use strict";
     function foo() { }
+
     return foo;
 });

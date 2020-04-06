@@ -20,12 +20,12 @@ class C {
 var C = /** @class */ (function () {
     function C() {
         this.x = 0;
-    }
-    C.prototype.m = function () {
+    }C.prototype.m = function () {
         var x;
         (x = this.x);
         return x;
     };
+
     C.prototype.f = function () {
         var f;
         (f = this.f);

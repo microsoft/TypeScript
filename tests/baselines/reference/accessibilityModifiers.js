@@ -48,8 +48,7 @@ class E {
 // No errors
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.privateMethod = function () { };
+    }C.privateMethod = function () { };
     Object.defineProperty(C, "privateGetter", {
         get: function () { return 0; },
         enumerable: false,
@@ -87,8 +86,7 @@ var C = /** @class */ (function () {
 // Errors, accessibility modifiers must precede static
 var D = /** @class */ (function () {
     function D() {
-    }
-    D.privateMethod = function () { };
+    }D.privateMethod = function () { };
     Object.defineProperty(D, "privateGetter", {
         get: function () { return 0; },
         enumerable: false,
@@ -126,8 +124,7 @@ var D = /** @class */ (function () {
 // Errors, multiple accessibility modifier
 var E = /** @class */ (function () {
     function E() {
-    }
-    E.prototype.method = function () { };
+    }E.prototype.method = function () { };
     Object.defineProperty(E.prototype, "getter", {
         get: function () { return 0; },
         enumerable: false,

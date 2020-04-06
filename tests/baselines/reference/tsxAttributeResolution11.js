@@ -31,10 +31,10 @@ var x = <MyComponent bar='world' />;
 //// [file.jsx]
 var MyComponent = /** @class */ (function () {
     function MyComponent() {
-    }
-    MyComponent.prototype.render = function () {
+    }MyComponent.prototype.render = function () {
     };
     return MyComponent;
 }());
 // Should be an OK
 var x = <MyComponent bar='world'/>;
+

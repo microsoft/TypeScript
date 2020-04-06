@@ -22,9 +22,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     var foo;
     (function (foo) {
-        foo[foo["red"] = 0] = "red";
-        foo[foo["green"] = 1] = "green";
-        foo[foo["blue"] = 2] = "blue";
+        foo[foo["red"] = 0] = "red";foo[foo["green"] = 1] = "green";foo[foo["blue"] = 2] = "blue";
     })(foo || (foo = {}));
     (function (foo) {
         foo.answer = 42;

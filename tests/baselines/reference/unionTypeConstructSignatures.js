@@ -74,6 +74,7 @@ strOrNum = new unionWithRestParameter3(); // error no call signature
 var numOrDate;
 var strOrBoolean;
 var strOrNum;
+
 // If each type in U has construct signatures and the sets of construct signatures are identical ignoring return types, 
 // U has the same set of construct signatures, but with return types that are unions of the return types of the respective construct signatures from each type in U.
 var unionOfDifferentReturnType;

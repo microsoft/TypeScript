@@ -19,8 +19,7 @@ var x = foo<void>();
 function foo() {
     var X = /** @class */ (function () {
         function X() {
-        }
-        X.prototype.m = function () {
+        }X.prototype.m = function () {
             return (function () {
                 var Y = /** @class */ (function () {
                     function Y() {

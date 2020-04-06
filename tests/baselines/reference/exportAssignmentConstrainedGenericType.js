@@ -17,8 +17,7 @@ var z: number = y.test.b;
 //// [foo_0.js]
 "use strict";
 var Foo = /** @class */ (function () {
-    function Foo(x) {
-    }
+    function Foo(x) {}
     return Foo;
 }());
 module.exports = Foo;

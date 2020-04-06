@@ -27,6 +27,7 @@ function createLink(func: (a: number)=>void) {
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
     exports.__esModule = true;
+
     // OK
     function Baz(arg1, arg2) {
         var a0 = <OverloadComponent {...arg1} a="hello" ignore-prop/>;
@@ -37,6 +38,7 @@ define(["require", "exports", "react"], function (require, exports, React) {
         var a5 = <OverloadComponent {...arg2} ignore-prop="hello" {...arg1}/>;
         var a6 = <OverloadComponent {...arg2} ignore-prop {...arg1}/>;
     }
+
     function createLink(func) {
         var o = <Link func={func}/>;
         var o1 = <Link func={function (a, b) { }}/>;

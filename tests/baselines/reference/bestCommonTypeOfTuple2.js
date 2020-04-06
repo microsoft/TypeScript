@@ -37,23 +37,19 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var D = /** @class */ (function () {
-    function D() {
-    }
+    function D() {}
     return D;
 }());
 var E = /** @class */ (function () {
-    function E() {
-    }
+    function E() {}
     return E;
 }());
 var F = /** @class */ (function (_super) {
-    __extends(F, _super);
-    function F() {
+    __extends(F, _super);function F() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return F;
@@ -65,8 +61,7 @@ var C1 = /** @class */ (function () {
     return C1;
 }());
 var D1 = /** @class */ (function (_super) {
-    __extends(D1, _super);
-    function D1() {
+    __extends(D1, _super);function D1() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.i = "bar";
         return _this;
@@ -77,7 +72,10 @@ var t1;
 var t2;
 var t3;
 var t4;
-var t5;
+var t5
+
+;
+
 var e11 = t1[4]; // base
 var e21 = t2[4]; // {}
 var e31 = t3[4]; // C1

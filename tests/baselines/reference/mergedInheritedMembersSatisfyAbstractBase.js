@@ -33,23 +33,20 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var BaseClass = /** @class */ (function () {
+})();var BaseClass = /** @class */ (function () {
     function BaseClass() {
     }
     return BaseClass;
 }());
 var Broken = /** @class */ (function (_super) {
-    __extends(Broken, _super);
-    function Broken() {
+    __extends(Broken, _super);function Broken() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Broken;
 }(BaseClass));
 new Broken().bar;
 var IncorrectlyExtends = /** @class */ (function (_super) {
-    __extends(IncorrectlyExtends, _super);
-    function IncorrectlyExtends() {
+    __extends(IncorrectlyExtends, _super);function IncorrectlyExtends() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return IncorrectlyExtends;

@@ -272,6 +272,7 @@ function funcInferredReturnType(obj: { method(p: typeof s): void }) {
 const constCall = Symbol();
 let letCall = Symbol();
 var varCall = Symbol();
+
 // declaration with type and call initializer
 const constTypeAndCall = Symbol();
 // declaration from initializer
@@ -290,6 +291,7 @@ var varInitToConstDeclAmbient = constType;
 // declaration from initializer with type query
 const constInitToConstCallWithTypeQuery = constCall;
 const constInitToConstDeclAmbientWithTypeQuery = constType;
+
 // assignment from any
 // https://github.com/Microsoft/TypeScript/issues/29108
 const fromAny = {};
@@ -306,16 +308,20 @@ function* genFuncYieldVarCall() { yield varCall; }
 // generator function yield with return type query
 function* genFuncYieldConstCallWithTypeQuery() { yield constCall; }
 // async function return inference
+
 async function asyncFuncReturnConstCall() { return constCall; }
 async function asyncFuncReturnLetCall() { return letCall; }
 async function asyncFuncReturnVarCall() { return varCall; }
+
 // async generator function yield inference
+
 async function* asyncGenFuncYieldConstCall() { yield constCall; }
 async function* asyncGenFuncYieldLetCall() { yield letCall; }
 async function* asyncGenFuncYieldVarCall() { yield varCall; }
 // classes
 let C = /** @class */ (() => {
     class C {
+
         constructor() {
             this.readonlyCall = Symbol();
             this.readwriteCall = Symbol();
@@ -340,9 +346,18 @@ const constInitToCReadonlyCallWithTypeQuery = c.readonlyCall;
 const constInitToCReadwriteCallWithTypeQuery = c.readwriteCall;
 const constInitToCReadonlyCallWithIndexedAccess = c.readonlyCall;
 const constInitToCReadwriteCallWithIndexedAccess = c.readwriteCall;
+
 const constInitToIReadonlyType = i.readonlyType;
 const constInitToIReadonlyTypeWithTypeQuery = i.readonlyType;
 const constInitToIReadonlyTypeWithIndexedAccess = i.readonlyType;
+
+
+
+
+
+
+
+
 const constInitToLReadonlyType = l.readonlyType;
 const constInitToLReadonlyNestedType = l.nested.readonlyNestedType;
 const constInitToLReadonlyTypeWithTypeQuery = l.readonlyType;
@@ -357,15 +372,18 @@ const arrayOfConstCall = [constCall];
 f(s);
 f(N.s);
 f(N["s"]);
+
 // array literal elements
 [s];
 [N.s];
 [N["s"]];
+
 // property assignments/methods
 const o2 = {
     a: s,
     b: N.s,
     c: N["s"],
+
     method1() { return s; },
     async method2() { return s; },
     async *method3() { yield s; },
@@ -375,6 +393,7 @@ const o2 = {
 // property initializers
 let C0 = /** @class */ (() => {
     class C0 {
+
         constructor() {
             this.a = s;
             this.b = N.s;
@@ -409,14 +428,17 @@ f(N["s"]);
 g(s);
 g(N.s);
 g(N["s"]);
+
 // falsy expressions
 s || "";
 N.s || "";
 N["s"] || "";
+
 // conditionals
 Math.random() * 2 ? s : "a";
 Math.random() * 2 ? N.s : "a";
 Math.random() * 2 ? N["s"] : "a";
+
 // computed property names
 ({
     [s]: "a",
@@ -425,6 +447,7 @@ Math.random() * 2 ? N["s"] : "a";
 class C1 {
 }
 N.s, N.s;
+
 const o3 = {
     method1() {
         return s; // return type should not widen due to contextual type
@@ -442,6 +465,7 @@ const o3 = {
         return p;
     },
 };
+
 // allowed when not emitting declarations
 const o4 = {
     method1(p) {
@@ -451,6 +475,7 @@ const o4 = {
         return p;
     }
 };
+
 const ce0 = class {
     method1(p) {
         return p;
@@ -459,6 +484,7 @@ const ce0 = class {
         return p;
     }
 };
+
 function funcInferredReturnType(obj) {
     return obj;
 }

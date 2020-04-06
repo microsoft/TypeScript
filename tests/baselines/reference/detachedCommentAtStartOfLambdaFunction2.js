@@ -14,8 +14,7 @@ class TestFile {
 //// [detachedCommentAtStartOfLambdaFunction2.js]
 var TestFile = /** @class */ (function () {
     function TestFile() {
-    }
-    TestFile.prototype.foo = function (message) {
+    }TestFile.prototype.foo = function (message) {
         var _this = this;
         return function () {
             /// <summary>Test summary</summary>
@@ -25,8 +24,7 @@ var TestFile = /** @class */ (function () {
             for (var _i = 0; _i < arguments.length; _i++) {
                 x[_i] = arguments[_i];
             }
-            return message + _this.name;
-        };
+            return message + _this.name;};
     };
     return TestFile;
 }());

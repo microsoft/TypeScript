@@ -60,14 +60,17 @@ switch ('') {
     case 'a':
         break;
 }
+
 ONE: switch ('') {
     case 'a':
         break ONE;
 }
+
 TWO: THREE: switch ('') {
     case 'a':
         break THREE;
 }
+
 FOUR: switch ('') {
     case 'a':
         FIVE: switch ('') {
@@ -75,6 +78,7 @@ FOUR: switch ('') {
                 break FOUR;
         }
 }
+
 switch ('') {
     case 'a':
         SIX: switch ('') {

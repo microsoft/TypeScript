@@ -46,17 +46,14 @@ console.log(c, d);
 exports.__esModule = true;
 exports.A = void 0;
 var default_1 = /** @class */ (function () {
-    function default_1() {
-    }
+    function default_1() {}
     return default_1;
 }());
 exports["default"] = default_1;
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
-}());
-exports.A = A;
+}());exports.A = A;
 //// [b.js]
 "use strict";
 exports.__esModule = true;

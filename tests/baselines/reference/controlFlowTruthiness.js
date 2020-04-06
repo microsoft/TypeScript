@@ -96,6 +96,7 @@ function f9<T extends object>(x: T) {
 }
 
 //// [controlFlowTruthiness.js]
+
 function f1() {
     var x = foo();
     if (x) {
@@ -105,6 +106,7 @@ function f1() {
         x; // string | undefined
     }
 }
+
 function f2() {
     var x;
     x = foo();
@@ -115,6 +117,7 @@ function f2() {
         x; // string | undefined
     }
 }
+
 function f3() {
     var x;
     if (x = foo()) {
@@ -124,6 +127,7 @@ function f3() {
         x; // string | undefined
     }
 }
+
 function f4() {
     var x;
     if (!(x = foo())) {
@@ -133,6 +137,7 @@ function f4() {
         x; // string
     }
 }
+
 function f5() {
     var x;
     var y;
@@ -145,6 +150,7 @@ function f5() {
         y; // string | undefined
     }
 }
+
 function f6() {
     var x;
     var y;
@@ -157,6 +163,7 @@ function f6() {
         y; // string | undefined
     }
 }
+
 function f7(x) {
     if (x) {
         x; // {}
@@ -165,6 +172,7 @@ function f7(x) {
         x; // {}
     }
 }
+
 function f8(x) {
     if (x) {
         x; // {}
@@ -173,6 +181,7 @@ function f8(x) {
         x; // {}
     }
 }
+
 function f9(x) {
     if (x) {
         x; // {}

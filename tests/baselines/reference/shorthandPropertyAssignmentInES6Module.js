@@ -24,6 +24,8 @@ exports.x = 1;
 Object.defineProperty(exports, "__esModule", { value: true });
 const existingModule_1 = require("./existingModule");
 const missingModule_1 = require("./missingModule");
+
 const test = { x: existingModule_1.x, foo: missingModule_1.foo };
+
 use(existingModule_1.x);
 use(missingModule_1.foo);

@@ -91,37 +91,44 @@ module NumbersAndStrings {
 var JustStrings;
 (function (JustStrings) {
     var S = /** @class */ (function () {
-        function S() {
-        }
+        function S() {}
         return S;
     }());
     var T = /** @class */ (function () {
-        function T() {
-        }
+        function T() {}
         return T;
     }());
     var s;
     var t;
+
     var s2;
     var t2;
-    var a;
-    var b;
+
+    var a
+    ;
+    var b
+
+    ;
+
     var a2 = { '1.0': '' };
     var b2 = { '1': '' };
     s = t;
     t = s;
     s = s2; // ok
     s = a2;
+
     s2 = t2;
     t2 = s2;
     s2 = t;
     s2 = b;
     s2 = a2;
+
     a = b;
     b = a;
     a = s;
     a = s2;
     a = a2;
+
     a2 = b2;
     b2 = a2;
     a2 = b; // ok
@@ -131,38 +138,45 @@ var JustStrings;
 var NumbersAndStrings;
 (function (NumbersAndStrings) {
     var S = /** @class */ (function () {
-        function S() {
-        }
+        function S() {}
         return S;
     }());
     var T = /** @class */ (function () {
-        function T() {
-        }
+        function T() {}
         return T;
     }());
     var s;
     var t;
+
     var s2;
     var t2;
-    var a;
-    var b;
+
+    var a
+    ;
+    var b
+
+    ;
+
     var a2 = { '1.0': '' };
     var b2 = { 1.: '' };
     s = t; // ok
     t = s; // ok
     s = s2; // ok
     s = a2; // error
+
     s2 = t2; // ok
     t2 = s2; // ok
     s2 = t; // ok
     s2 = b; // ok
     s2 = a2; // error
+
     a = b; // error
     b = a; // error
     a = s; // error
     a = s2; // error
     a = a2; // error
     a = b2; // error
+
     a2 = b2; // error
     b2 = a2; // error
     a2 = b; // error

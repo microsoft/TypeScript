@@ -12,10 +12,10 @@ class A {
 function foo(a) {
     return "";
 }
+
 var A = /** @class */ (function () {
     function A() {
-    }
-    A.prototype[foo(a)] = function (a) {
+    }A.prototype[foo(a)] = function (a) {
     };
     return A;
 }());

@@ -22,8 +22,7 @@ var A;
     var M;
     (function (M) {
         var C = /** @class */ (function () {
-            function C() {
-            }
+            function C() {}
             return C;
         }());
     })(M = A.M || (A.M = {}));
@@ -33,8 +32,7 @@ var B;
     var M;
     (function (M) {
         var D = /** @class */ (function () {
-            function D() {
-            }
+            function D() {}
             return D;
         }());
         M.D = D;

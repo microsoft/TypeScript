@@ -156,6 +156,11 @@ function bar(e: A.B.C.E): number {
 }
 
 //// [constEnums.js]
+
+
+
+
+
 var A2;
 (function (A2) {
     var B;
@@ -168,24 +173,29 @@ var A2;
     })(B = A2.B || (A2.B = {}));
 })(A2 || (A2 = {}));
 var I2 = A2.B;
+
 function foo0(e) {
     if (e === 1 /* V1 */) {
     }
     else if (e === 101 /* V2 */) {
     }
 }
+
 function foo1(e) {
     if (e === 10 /* V1 */) {
     }
     else if (e === 110 /* V2 */) {
     }
 }
+
 function foo2(e) {
     if (e === 10 /* V1 */) {
     }
     else if (e === 110 /* V2 */) {
     }
 }
+
+
 function foo(x) {
     switch (x) {
         case 0 /* A */:
@@ -219,6 +229,7 @@ function foo(x) {
             break;
     }
 }
+
 function bar(e) {
     switch (e) {
         case 1 /* V1 */: return 1;

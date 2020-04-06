@@ -32,19 +32,15 @@ exports.__esModule = true;
 exports.foo = exports.B = void 0;
 var B = /** @class */ (function () {
     function B() {
-    }
-    B.prototype.print = function () { return "I am B"; };
+    }B.prototype.print = function () { return "I am B"; };
     return B;
-}());
-exports.B = B;
-function foo() { return "foo"; }
-exports.foo = foo;
+}());exports.B = B;
+function foo() { return "foo"; }exports.foo = foo;
 //// [1.js]
 "use strict";
 exports.__esModule = true;
 exports.backup = void 0;
-function backup() { return "backup"; }
-exports.backup = backup;
+function backup() { return "backup"; }exports.backup = backup;
 //// [2.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -85,8 +81,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var C = /** @class */ (function () {
     function C() {
         this.myModule = Promise.resolve().then(function () { return require("./0"); });
-    }
-    C.prototype.method = function () {
+    }C.prototype.method = function () {
         var _this = this;
         var loadAsync = Promise.resolve().then(function () { return require("./0"); });
         this.myModule.then(function (Zero) {

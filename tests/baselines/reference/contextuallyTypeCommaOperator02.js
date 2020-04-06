@@ -8,6 +8,7 @@ x = (100, a => {
 
 //// [contextuallyTypeCommaOperator02.js]
 var x;
+
 x = (100, function (a) {
     var b = a;
     return b;

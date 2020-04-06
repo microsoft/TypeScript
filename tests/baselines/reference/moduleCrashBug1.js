@@ -24,10 +24,14 @@ var m : _modes;
 //// [moduleCrashBug1.js]
 var _modes;
 (function (_modes) {
+
     var Mode = /** @class */ (function () {
         function Mode() {
         }
         return Mode;
     }());
 })(_modes || (_modes = {}));
+
 var m;
+
+

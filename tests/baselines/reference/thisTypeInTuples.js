@@ -10,6 +10,7 @@ let c = t.slice(0, 1);
 
 
 //// [thisTypeInTuples.js]
+
 var t = [42, "hello"];
 var a = t.slice();
 var b = t.slice(1);

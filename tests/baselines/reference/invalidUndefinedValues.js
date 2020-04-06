@@ -40,8 +40,7 @@ var a;
 x = a;
 x = null;
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var b;
@@ -50,11 +49,10 @@ x = b;
 var c;
 x = c;
 var M;
-(function (M) {
-    M.x = 1;
-})(M || (M = {}));
+(function (M) {M.x = 1;})(M || (M = {}));
 x = M;
 x = { f: function () { } };
+
 function f(a) {
     x = a;
 }

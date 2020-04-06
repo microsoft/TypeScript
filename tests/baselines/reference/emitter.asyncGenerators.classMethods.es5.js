@@ -99,11 +99,9 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function fulfill(value) { resume("next", value); }
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-};
-var C1 = /** @class */ (function () {
+};var C1 = /** @class */ (function () {
     function C1() {
-    }
-    C1.prototype.f = function () {
+    }C1.prototype.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
             return __generator(this, function (_a) {
                 return [2 /*return*/];
@@ -151,11 +149,9 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function fulfill(value) { resume("next", value); }
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-};
-var C2 = /** @class */ (function () {
+};var C2 = /** @class */ (function () {
     function C2() {
-    }
-    C2.prototype.f = function () {
+    }C2.prototype.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
             var x;
             return __generator(this, function (_a) {
@@ -210,11 +206,9 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function fulfill(value) { resume("next", value); }
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-};
-var C3 = /** @class */ (function () {
+};var C3 = /** @class */ (function () {
     function C3() {
-    }
-    C3.prototype.f = function () {
+    }C3.prototype.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
             var x;
             return __generator(this, function (_a) {
@@ -292,11 +286,9 @@ var __values = (this && this.__values) || function(o) {
         }
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-};
-var C4 = /** @class */ (function () {
+};var C4 = /** @class */ (function () {
     function C4() {
-    }
-    C4.prototype.f = function () {
+    }C4.prototype.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
             var x;
             return __generator(this, function (_a) {
@@ -374,11 +366,9 @@ var __values = (this && this.__values) || function(o) {
         }
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-};
-var C5 = /** @class */ (function () {
+};var C5 = /** @class */ (function () {
     function C5() {
-    }
-    C5.prototype.f = function () {
+    }C5.prototype.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
             var x;
             return __generator(this, function (_a) {
@@ -441,11 +431,9 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function fulfill(value) { resume("next", value); }
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-};
-var C6 = /** @class */ (function () {
+};var C6 = /** @class */ (function () {
     function C6() {
-    }
-    C6.prototype.f = function () {
+    }C6.prototype.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
             var x;
             return __generator(this, function (_a) {
@@ -499,11 +487,9 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function fulfill(value) { resume("next", value); }
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-};
-var C7 = /** @class */ (function () {
+};var C7 = /** @class */ (function () {
     function C7() {
-    }
-    C7.prototype.f = function () {
+    }C7.prototype.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -554,11 +540,9 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function fulfill(value) { resume("next", value); }
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-};
-var C8 = /** @class */ (function () {
+};var C8 = /** @class */ (function () {
     function C8() {
-    }
-    C8.prototype.g = function () {
+    }C8.prototype.g = function () {
     };
     C8.prototype.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
@@ -622,19 +606,15 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function fulfill(value) { resume("next", value); }
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-};
-var B9 = /** @class */ (function () {
+};var B9 = /** @class */ (function () {
     function B9() {
-    }
-    B9.prototype.g = function () { };
+    }B9.prototype.g = function () { };
     return B9;
 }());
 var C9 = /** @class */ (function (_super) {
-    __extends(C9, _super);
-    function C9() {
+    __extends(C9, _super);function C9() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    C9.prototype.f = function () {
+    }C9.prototype.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
             return __generator(this, function (_a) {
                 _super.prototype.g.call(this);

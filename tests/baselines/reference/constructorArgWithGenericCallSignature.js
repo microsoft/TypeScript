@@ -18,8 +18,7 @@ var test = new Test.MyClass(func); // Should be OK
 var Test;
 (function (Test) {
     var MyClass = /** @class */ (function () {
-        function MyClass(func) {
-        }
+        function MyClass(func) {}
         return MyClass;
     }());
     Test.MyClass = MyClass;

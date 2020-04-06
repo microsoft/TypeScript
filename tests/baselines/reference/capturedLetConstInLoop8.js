@@ -145,6 +145,7 @@ function foo() {
                 if (y == 1) {
                     return "continue-l0";
                 }
+
                 if (x == 2) {
                     return "continue";
                 }
@@ -211,6 +212,7 @@ function foo() {
         }
     }
 }
+
 function foo_c() {
     l0: for (var z = 0; z < 1;) {
         var _loop_3 = function (x) {
@@ -229,6 +231,7 @@ function foo_c() {
                 if (y == 1) {
                     return "continue-l0";
                 }
+
                 if (x == 2) {
                     return "continue";
                 }

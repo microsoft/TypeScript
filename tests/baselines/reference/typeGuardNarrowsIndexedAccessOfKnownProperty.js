@@ -84,6 +84,7 @@ export function g(pair: [number, string?]): string {
 "use strict";
 exports.__esModule = true;
 exports.g = void 0;
+
 function area(s) {
     switch (s['dash-ok']) {
         case "square": return s['square-size'] * s['square-size'];
@@ -98,27 +99,41 @@ function subarea(s) {
         case "circle": return Math.PI * s[0].sub.under["shape"].radius * s[0]["sub"].under.shape["radius"];
     }
 }
+
+
+
+
+
+
+
+
+
+
 function check(z, c) {
     z[0]; // fine, typescript sees "xx" | "yy"
     switch (z[0]) {
         case "xx":
-            var xx = z[1]; // should be number
+            var xx = z[1]
+            ; // should be number
             break;
         case "yy":
-            var yy = z[1]; // should be string
+            var yy = z[1]
+            ; // should be string
             break;
     }
     c[0]; // fine, typescript sees "xx" | "yy"
     switch (c[0]) {
         case "aa":
-            var aa = c[1]; // should be number
+            var aa = c[1]
+            ; // should be number
             break;
         case "bb":
-            var bb = c[1]; // should be string
+            var bb = c[1]
+            ; // should be string
             break;
     }
 }
+
 function g(pair) {
     return pair[1] ? pair[1] : 'nope';
-}
-exports.g = g;
+}exports.g = g;

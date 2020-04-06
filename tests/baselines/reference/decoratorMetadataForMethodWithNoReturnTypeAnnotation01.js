@@ -17,6 +17,7 @@ class MyClass {
 var MyClass = /** @class */ (function () {
     function MyClass(test, test2) {
     }
+
     MyClass.prototype.doSomething = function () {
     };
     __decorate([

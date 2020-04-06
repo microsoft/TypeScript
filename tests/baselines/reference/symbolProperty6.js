@@ -9,8 +9,7 @@ class C {
 }
 
 //// [symbolProperty6.js]
-class C {
-    constructor() {
+class C {constructor() {
         this[Symbol.iterator] = 0;
     }
     [Symbol.toPrimitive]() { }

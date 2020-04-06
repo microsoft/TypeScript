@@ -76,27 +76,31 @@ var fp1: () =>any = a => 0;
 
 
 //// [incompatibleTypes.js]
+
 var C1 = /** @class */ (function () {
     function C1() {
-    }
+    }// incompatible on the return type
     C1.prototype.p1 = function () {
         return "s";
     };
     return C1;
 }());
+
 var C2 = /** @class */ (function () {
     function C2() {
-    }
+    }// incompatible on the param type
     C2.prototype.p1 = function (n) {
         return 0;
     };
     return C2;
 }());
+
 var C3 = /** @class */ (function () {
     function C3() {
     }
     return C3;
 }());
+
 var C4 = /** @class */ (function () {
     function C4() {
     }
@@ -108,15 +112,23 @@ var c2;
 if1(c1);
 function of1(a) { return null; }
 of1({ e: 0, f: 0 });
+
 function foo(fn) {
 }
+
 function bar() {
     var map;
     foo(function () {
         map = {};
     });
 }
+
 var o1 = { e: 0, f: 0 };
+
 var a1 = [{ e: 0, f: 0 }, { e: 0, f: 0 }, { e: 0, g: 0 }];
+
+
+
 var i1c1 = 5;
+
 var fp1 = function (a) { return 0; };

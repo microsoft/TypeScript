@@ -15,10 +15,12 @@ declare module 'moo' {
 
 //// [declFileImportedTypeUseInTypeArgPosition.js]
 var List = /** @class */ (function () {
-    function List() {
-    }
+    function List() {}
     return List;
 }());
+
+
+
 
 
 //// [declFileImportedTypeUseInTypeArgPosition.d.ts]

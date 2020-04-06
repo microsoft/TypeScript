@@ -112,6 +112,7 @@ let MultiplyByTwo = /** @class */ (() => {
     ], MultiplyByTwo.prototype, "multiplied", null);
     return MultiplyByTwo;
 })();
+
 let A = /** @class */ (() => {
     let A = class A {
         bar() { }

@@ -103,22 +103,29 @@ function f16<T extends String, U extends T>(x: any) { }
 //// [stringLiteralTypeIsSubtypeOfString.js]
 // string literal types are subtypes of string, any
 function f1(x) { }
+
 function f2(x) { }
+
 function f3(x) { }
+
 function f4(x) { }
+
 function f5(x) { }
+
 function f6(x) { }
+
 function f7(x) { }
+
 function f8(x) { }
+
 function f9(x) { }
+
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.toString = function () { return null; };
+    }C.prototype.toString = function () { return null; };
     C.prototype.charAt = function (pos) { return null; };
     C.prototype.charCodeAt = function (index) { return null; };
-    C.prototype.concat = function () {
-        var strings = [];
+    C.prototype.concat = function () {var strings = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             strings[_i] = arguments[_i];
         }
@@ -138,18 +145,25 @@ var C = /** @class */ (function () {
     C.prototype.toUpperCase = function () { return null; };
     C.prototype.toLocaleUpperCase = function () { return null; };
     C.prototype.trim = function () { return null; };
+
     C.prototype.substr = function (from, length) { return null; };
     C.prototype.valueOf = function () { return null; };
     return C;
 }());
 function f10(x) { }
+
+
 function f11(x) { }
+
 function f12(x) { }
+
 function f13(x) { }
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 function f14(x) { }
+
 function f15(x) { }
+
 function f16(x) { }

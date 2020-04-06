@@ -27,8 +27,7 @@ abstract class B {
 //// [classAbstractOverloads.js]
 var A = /** @class */ (function () {
     function A() {
-    }
-    A.prototype.baz = function () { };
+    }A.prototype.baz = function () { };
     return A;
 }());
 var B = /** @class */ (function () {

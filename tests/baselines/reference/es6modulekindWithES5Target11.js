@@ -21,6 +21,8 @@ var C = /** @class */ (function () {
     }
     C_1 = C;
     C.x = function () { return C_1.y; };
+
+
     C.prototype.method = function () { };
     var C_1;
     C.y = 1;

@@ -22,7 +22,5 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
-var b_1 = require("./b");
-__createBinding(exports, b_1, "b");
-var b_2 = require("./b");
-__createBinding(exports, b_2, "default");
+var b_1 = require("./b");__createBinding(exports, b_1, "b");
+var b_2 = require("./b");__createBinding(exports, b_2, "default");

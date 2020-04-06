@@ -39,11 +39,13 @@ function fee() {
     t.blah; // Error
     t.toString; // ok
 }
+
 function fee2() {
     var t;
     t.blah; // ok
     t.toString; // ok
 }
+
 function f(x) {
     x.children;
     x();
@@ -51,10 +53,16 @@ function f(x) {
     x[100];
     x['hello'];
 }
+
+
+
+
+
+
+
 var MyClass = /** @class */ (function () {
     function MyClass() {
-    }
-    MyClass.displayTree1 = function (tree) {
+    }MyClass.displayTree1 = function (tree) {
         // error "Property 'children' does not exist on type 'T'"
         tree.children;
     };

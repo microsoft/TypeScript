@@ -60,28 +60,40 @@ test(
 //// [contextSensitiveReturnTypeInference.js]
 "use strict";
 // Repro from #34849
+
+
 var DEPS = {
     foo: 1
 };
-test(function (deps, data) { return ({
+
+test(
+function (deps, data) { return ({
     fn1: function () { return deps.foo; },
     fn2: data.bar
 }); }, DEPS);
-test(function (deps, data) { return ({
+
+test(
+function (deps, data) { return ({
     fn1: function () { return deps.foo; },
     fn2: data.bar
 }); }, DEPS);
-test(function (deps, data) { return ({
+
+test(
+function (deps, data) { return ({
     fn1: function () { return deps.foo; },
     fn2: data.bar
 }); }, DEPS);
-test(function (deps, data) {
+
+test(
+function (deps, data) {
     return {
         fn1: function () { return deps.foo; },
         fn2: data.bar
     };
 }, DEPS);
-test(function (deps) { return ({
+
+test(
+function (deps) { return ({
     fn1: function () { return deps.foo; },
     fn2: 1
 }); }, DEPS);

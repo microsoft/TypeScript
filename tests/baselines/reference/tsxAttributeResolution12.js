@@ -46,8 +46,14 @@ var t2 = <TestMod.Test />;
 
 
 //// [file.jsx]
+
+
+
+
 // Errors correctly
 var T = TestMod.Test;
 var t1 = <T />;
+
 // Should error
 var t2 = <TestMod.Test />;
+

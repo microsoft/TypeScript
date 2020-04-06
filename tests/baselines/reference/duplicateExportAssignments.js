@@ -50,8 +50,7 @@ module.exports = x;
 "use strict";
 var x = 10;
 var y = /** @class */ (function () {
-    function y() {
-    }
+    function y() {}
     return y;
 }());
 ;

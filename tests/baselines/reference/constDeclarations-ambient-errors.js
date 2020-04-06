@@ -10,3 +10,4 @@ declare module M {
 }
 
 //// [constDeclarations-ambient-errors.js]
+

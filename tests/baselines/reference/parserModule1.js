@@ -38,8 +38,11 @@ exports.CompilerDiagnostics = void 0;
 var CompilerDiagnostics;
 (function (CompilerDiagnostics) {
     CompilerDiagnostics.debug = false;
+
     CompilerDiagnostics.diagnosticWriter = null;
+
     CompilerDiagnostics.analysisPass = 0;
+
     function Alert(output) {
         if (CompilerDiagnostics.diagnosticWriter) {
             CompilerDiagnostics.diagnosticWriter.Alert(output);

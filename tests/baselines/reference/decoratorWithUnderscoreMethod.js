@@ -25,8 +25,7 @@ function dec() {
 }
 var A = /** @class */ (function () {
     function A() {
-    }
-    A.prototype.__foo = function (bar) {
+    }A.prototype.__foo = function (bar) {
         // do something with bar
     };
     __decorate([

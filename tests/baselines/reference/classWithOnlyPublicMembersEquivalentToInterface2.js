@@ -29,10 +29,10 @@ i = c;
 
 //// [classWithOnlyPublicMembersEquivalentToInterface2.js]
 // no errors expected
+
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.y = function (a) { return null; };
+    }C.prototype.y = function (a) { return null; };
     Object.defineProperty(C.prototype, "z", {
         get: function () { return 1; },
         set: function (v) { },
@@ -41,6 +41,7 @@ var C = /** @class */ (function () {
     });
     return C;
 }());
+
 var c;
 var i;
 c = i;

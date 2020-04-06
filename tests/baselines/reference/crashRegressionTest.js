@@ -33,10 +33,12 @@ var MsPortal;
         var TemplateEngine;
         (function (TemplateEngine) {
             "use strict";
+
             var StringTemplate = /** @class */ (function () {
                 function StringTemplate(templateStorage) {
                     this._templateStorage = templateStorage;
                 }
+
                 StringTemplate.prototype.text = function (value) {
                     this._templateStorage.templateSources[this._name] = value;
                 };

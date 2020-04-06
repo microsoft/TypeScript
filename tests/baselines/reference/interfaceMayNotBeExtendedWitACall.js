@@ -7,3 +7,4 @@ interface blue extends color() { // error
 
 
 //// [interfaceMayNotBeExtendedWitACall.js]
+

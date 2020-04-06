@@ -22,6 +22,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 module.exports = C;
+
 //// [externalModuleExportingGenericClass_file1.js]
 "use strict";
 exports.__esModule = true;

@@ -47,18 +47,17 @@ var C = /** @class */ (function () {
         this.a = '';
         this.b = '';
         this.d = function () { return ''; };
-    }
-    C.prototype.c = function () { return ''; };
+    }C.prototype.c = function () { return ''; };
+
+
     C.f = function () { return ''; };
     C.g = function () { return ''; };
     return C;
 }());
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);
-    function D() {
+    __extends(D, _super);function D() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    D.prototype.method = function () {
+    }D.prototype.method = function () {
         // No errors
         var d = new D();
         var r1 = d.x;

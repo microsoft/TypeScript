@@ -29,12 +29,14 @@ var __rest = (this && this.__rest) || function (s, e) {
                 t[p[i]] = s[p[i]];
         }
     return t;
-};
-var o = { a: 1, b: 'no' };
+};var o = { a: 1, b: 'no' };
 var a = o.a;
+
 var b;
 var notAssignable;
 (b = o.b, o, notAssignable = __rest(o, ["b"]));
+
+
 function stillMustBeLast(_a) {
     var a = _a.a;
 }
@@ -42,5 +44,7 @@ function generic(t) {
     var x = t.x, rest = __rest(t, ["x"]);
     return rest;
 }
-var rest;
+
+var rest
+;
 (a = o.a, o, rest.b + rest.b = __rest(o, ["a"]));

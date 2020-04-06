@@ -26,17 +26,18 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);
+    __extends(C, _super);// type parameters cannot be used as base types
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(T));
 var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);
-    function C2() {
+    __extends(C2, _super);function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C2;
 }(U));
+

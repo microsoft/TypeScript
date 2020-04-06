@@ -34,9 +34,13 @@ var __assign = (this && this.__assign) || function () {
 };
 exports.__esModule = true;
 var React = require("react");
-var myHoc = function (ComposedComponent) {
+
+var myHoc = function (
+ComposedComponent) {
     var WrapperComponent = null;
+
     var props = null;
+
     // Expected no error, got none - good
     React.createElement(WrapperComponent, __assign({}, props, { myProp: '1000000' }));
     // Expected error, but got none - bad!

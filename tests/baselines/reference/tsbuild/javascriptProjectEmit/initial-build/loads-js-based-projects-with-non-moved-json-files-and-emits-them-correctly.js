@@ -17,6 +17,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 exports.m = void 0;
 var common_1 = __importDefault(require("../common"));
+
 exports.m = common_1["default"];
 
 
@@ -92,13 +93,14 @@ export function getVar(): {
 exports.__esModule = true;
 exports.getVar = void 0;
 var index_1 = require("../sub-project/index");
+
 var variable = {
     key: index_1.m
 };
+
 function getVar() {
     return variable;
-}
-exports.getVar = getVar;
+}exports.getVar = getVar;
 
 
 //// [/out/sub-project-2/tsconfig.tsbuildinfo]

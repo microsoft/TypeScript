@@ -37,14 +37,14 @@ function * loadModule(directories: string[]) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-class C {
-}
-exports.C = C;
+class C {}exports.C = C;
 //// [1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+
 Promise.resolve().then(() => require(`${directory}\${moduleFile}`));
 Promise.resolve().then(() => require(getSpecifier()));
+
 var p1 = Promise.resolve().then(() => require(ValidSomeCondition() ? "./0" : "externalModule"));
 var p1 = Promise.resolve().then(() => require(getSpecifier()));
 var p11 = Promise.resolve().then(() => require(getSpecifier()));
@@ -54,6 +54,7 @@ p1.then(zero => {
 });
 let j;
 var p3 = Promise.resolve().then(() => require(j = getSpecifier()));
+
 function* loadModule(directories) {
     for (const directory of directories) {
         const path = `${directory}\moduleFile`;

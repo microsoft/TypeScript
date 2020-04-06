@@ -14,8 +14,7 @@ var Bar = /** @class */ (function () {
         this.type = exports.FOO; // Should be widening literal "FOO" - so either `typeof "FOO"` or = "FOO"
     }
     return Bar;
-}());
-exports.Bar = Bar;
+}());exports.Bar = Bar;
 
 
 //// [declarationEmitConstantNoWidening.d.ts]

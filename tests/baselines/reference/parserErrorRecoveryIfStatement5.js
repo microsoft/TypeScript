@@ -12,15 +12,12 @@ class Foo {
 //// [parserErrorRecoveryIfStatement5.js]
 var Foo = /** @class */ (function () {
     function Foo() {
-    }
-    Foo.prototype.f1 = function () {
+    }Foo.prototype.f1 = function () {
         if (a.b) {
         }
-        f2();
-        {
+        f2();{
         }
-        f3();
-        {
+        f3();{
         }
     };
     return Foo;

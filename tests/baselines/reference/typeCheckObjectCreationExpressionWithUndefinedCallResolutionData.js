@@ -18,8 +18,7 @@ exports.foo = void 0;
 function foo() {
     var classes = undefined;
     return new classes(null);
-}
-exports.foo = foo;
+}exports.foo = foo;
 //// [file2.js]
 "use strict";
 exports.__esModule = true;

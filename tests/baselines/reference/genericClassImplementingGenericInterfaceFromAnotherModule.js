@@ -11,8 +11,7 @@ module bar {
 var bar;
 (function (bar) {
     var Foo = /** @class */ (function () {
-        function Foo() {
-        }
+        function Foo() {}
         return Foo;
     }());
     bar.Foo = Foo;

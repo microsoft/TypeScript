@@ -49,15 +49,20 @@ var r2: C2 | D1 = isC1(c2Ord1) && c2Ord1; // C2 | D1
 var str;
 var num;
 var strOrNum;
+
+
 function isC1(x) {
     return true;
 }
+
 function isC2(x) {
     return true;
 }
+
 function isD1(x) {
     return true;
 }
+
 var c1;
 var c2;
 var d1;

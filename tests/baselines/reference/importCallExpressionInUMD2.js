@@ -31,8 +31,7 @@ foo(import("./0"));
     exports.B = void 0;
     class B {
         print() { return "I am B"; }
-    }
-    exports.B = B;
+    }exports.B = B;
 });
 //// [2.js]
 (function (factory) {
@@ -53,5 +52,6 @@ foo(import("./0"));
             b.print();
         });
     }
+
     foo(__syncRequire ? Promise.resolve().then(() => require("./0")) : new Promise((resolve_1, reject_1) => { require(["./0"], resolve_1, reject_1); }));
 });

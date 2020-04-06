@@ -27,6 +27,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var Base = /** @class */ (function () {
     function Base() {
     }
@@ -34,8 +35,7 @@ var Base = /** @class */ (function () {
 }());
 // is String (S) a subtype of U extends String (T)? Would only be true if we used the apparent type of U (T)
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);
-    function Derived() {
+    __extends(Derived, _super);function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived;

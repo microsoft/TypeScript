@@ -19,15 +19,23 @@ const content = <my-element/>;
 "use strict";
 exports.__esModule = true;
 exports.createElement = void 0;
-function createElement(element, props) {
-    var children = [];
+function createElement(element, props) {var children = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         children[_i - 2] = arguments[_i];
     }
 }
+
+
+
+
+
+
+
 exports.createElement = createElement;
+
 //// [index.js]
 "use strict";
 exports.__esModule = true;
 var MyLib = require("./library");
+
 var content = MyLib.createElement("my-element", null);

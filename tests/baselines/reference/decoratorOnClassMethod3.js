@@ -14,8 +14,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.method = function () { };
+    }C.prototype.method = function () { };
     __decorate([
         dec
     ], C.prototype, "method", null);

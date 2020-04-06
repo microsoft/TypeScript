@@ -6,6 +6,7 @@ var x = function y() {
 
 //// [templateStringInFunctionExpressionES6.js]
 var x = function y() {
-    `abc${0}def`;
+    `abc${0}def`
+    ;
     return `abc${0}def`;
 };

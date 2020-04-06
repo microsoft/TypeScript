@@ -33,13 +33,11 @@ exports.__esModule = true;
 exports.BindingKey = void 0;
 var BindingKey = /** @class */ (function () {
     function BindingKey() {
-    }
-    BindingKey.create = function (ctor) {
+    }BindingKey.create = function (ctor) {
         return new BindingKey();
     };
     return BindingKey;
-}());
-exports.BindingKey = BindingKey;
+}());exports.BindingKey = BindingKey;
 //// [index.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -63,6 +61,7 @@ exports.__esModule = true;
 exports.__esModule = true;
 exports.CONTROLLER_CLASS = void 0;
 var context_1 = require("@loopback/context");
+
 exports.CONTROLLER_CLASS = context_1.BindingKey.create(null); // line in question
 
 

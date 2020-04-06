@@ -53,8 +53,7 @@ var TypeScript;
     (function (Parser) {
         var SyntaxCursor = /** @class */ (function () {
             function SyntaxCursor() {
-            }
-            SyntaxCursor.prototype.currentNode = function () {
+            }SyntaxCursor.prototype.currentNode = function () {
                 return null;
             };
             return SyntaxCursor;
@@ -66,8 +65,7 @@ var TypeScript;
     ;
     var PositionedElement = /** @class */ (function () {
         function PositionedElement() {
-        }
-        PositionedElement.prototype.childIndex = function (child) {
+        }PositionedElement.prototype.childIndex = function (child) {
             return TypeScript.Syntax.childIndex();
         };
         return PositionedElement;
@@ -83,9 +81,7 @@ var TypeScript;
 (function (TypeScript) {
     var SyntaxNode = /** @class */ (function () {
         function SyntaxNode() {
-        }
-        SyntaxNode.prototype.findToken = function (position, includeSkippedTokens) {
-            if (includeSkippedTokens === void 0) { includeSkippedTokens = false; }
+        }SyntaxNode.prototype.findToken = function (position, includeSkippedTokens) {if (includeSkippedTokens === void 0) { includeSkippedTokens = false; }
             var positionedToken = this.findTokenInternal(null, position, 0);
             return null;
         };
@@ -103,8 +99,7 @@ var TypeScript;
         Syntax.childIndex = childIndex;
         var VariableWidthTokenWithTrailingTrivia = /** @class */ (function () {
             function VariableWidthTokenWithTrailingTrivia() {
-            }
-            VariableWidthTokenWithTrailingTrivia.prototype.findTokenInternal = function (parent, position, fullStart) {
+            }VariableWidthTokenWithTrailingTrivia.prototype.findTokenInternal = function (parent, position, fullStart) {
                 return new TypeScript.PositionedToken(parent, this, fullStart);
             };
             return VariableWidthTokenWithTrailingTrivia;

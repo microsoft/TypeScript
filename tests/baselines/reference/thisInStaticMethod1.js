@@ -10,8 +10,7 @@ var x = foo.bar();
 //// [thisInStaticMethod1.js]
 var foo = /** @class */ (function () {
     function foo() {
-    }
-    foo.bar = function () {
+    }foo.bar = function () {
         return this.x;
     };
     foo.x = 3;

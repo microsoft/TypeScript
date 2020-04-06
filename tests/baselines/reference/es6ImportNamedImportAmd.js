@@ -59,16 +59,24 @@ define(["require", "exports", "es6ImportNamedImportAmd_0", "es6ImportNamedImport
     "use strict";
     exports.__esModule = true;
     var xxxx = es6ImportNamedImportAmd_0_1.a;
+
     var xxxx = es6ImportNamedImportAmd_0_2.a;
+
     var xxxx = es6ImportNamedImportAmd_0_3.x;
     var xxxx = es6ImportNamedImportAmd_0_3.a;
+
     var xxxx = es6ImportNamedImportAmd_0_4.x;
+
     var xxxx = es6ImportNamedImportAmd_0_5.m;
+
     var xxxx = es6ImportNamedImportAmd_0_6.a1;
     var xxxx = es6ImportNamedImportAmd_0_6.x1;
+
     var xxxx = es6ImportNamedImportAmd_0_7.a1;
     var xxxx = es6ImportNamedImportAmd_0_7.x1;
+
     var z111 = es6ImportNamedImportAmd_0_8.z1;
+
     var z2 = es6ImportNamedImportAmd_0_9.z2; // z2 shouldn't give redeclare error
 });
 

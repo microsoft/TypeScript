@@ -9,5 +9,6 @@ function* g() {
 function* g() {
     let x = {
         [yield 0]: 0
-    };
+    }
+    ;
 }

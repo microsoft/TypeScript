@@ -135,6 +135,7 @@ function foo3() {
     return foo3();
 }
 var r3 = foo3();
+
 function foo4(x) {
     return x;
 }
@@ -163,16 +164,19 @@ function foo7(x) {
     return typeof x;
 }
 var r7 = foo7(1);
+
 // object types
 function foo8(x) {
     return { x: x };
 }
 var r8 = foo8(1);
+
 function foo9(x) {
     var i;
     return i;
 }
 var r9 = foo9(1);
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -187,8 +191,7 @@ var M;
 (function (M) {
     M.x = 1;
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         return C;
     }());
     M.C = C;
@@ -197,22 +200,21 @@ function foo11() {
     return M;
 }
 var r11 = foo11();
+
 function foo12() {
     var i2;
     return i2;
 }
 var r12 = foo12();
 function m1() { return 1; }
-(function (m1) {
-    m1.y = 2;
-})(m1 || (m1 = {}));
+(function (m1) {m1.y = 2;})(m1 || (m1 = {}));
 function foo13() {
     return m1;
 }
 var r13 = foo13();
+
 var c1 = /** @class */ (function () {
-    function c1(x) {
-    }
+    function c1(x) {}
     return c1;
 }());
 (function (c1) {
@@ -226,9 +228,7 @@ var e1;
 (function (e1) {
     e1[e1["A"] = 0] = "A";
 })(e1 || (e1 = {}));
-(function (e1) {
-    e1.y = 1;
-})(e1 || (e1 = {}));
+(function (e1) {e1.y = 1;})(e1 || (e1 = {}));
 function foo15() {
     return e1;
 }

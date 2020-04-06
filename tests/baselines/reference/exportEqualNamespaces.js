@@ -16,6 +16,8 @@ export = server;
 //// [exportEqualNamespaces.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+
+
     var x = 5;
     var server = new Date();
     return server;

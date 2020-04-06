@@ -21,9 +21,11 @@ var GenericClass = /** @class */ (function () {
     return GenericClass;
 }());
 var genericObject = new GenericClass();
+
 function genericFunction(object, callback) {
     callback(object.payload);
 }
+
 genericFunction(genericObject, function (_a) {
     var greeting = _a.greeting;
     var s = greeting.toLocaleLowerCase(); // Greeting should be of type string

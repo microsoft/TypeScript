@@ -38,7 +38,6 @@ System.register([], function (exports_1, context_1) {
     }
     return {
         setters: [],
-        execute: function () {
-        }
+        execute: function () {}
     };
 });

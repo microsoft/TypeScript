@@ -38,8 +38,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var T5 = /** @class */ (function () {
+})();var T5 = /** @class */ (function () {
     function T5(bar) {
         this.bar = bar;
     }
@@ -47,6 +46,7 @@ var T5 = /** @class */ (function () {
 }());
 var T6 = /** @class */ (function (_super) {
     __extends(T6, _super);
+
     function T6() {
         var _this = 
         // Should error; base constructor has type T for first arg,

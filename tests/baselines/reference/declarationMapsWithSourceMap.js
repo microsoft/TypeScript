@@ -19,8 +19,7 @@ let x = c.doThing({a: 12});
 //// [bundle.js]
 var Foo = /** @class */ (function () {
     function Foo() {
-    }
-    Foo.prototype.doThing = function (x) {
+    }Foo.prototype.doThing = function (x) {
         return { b: x.a };
     };
     Foo.make = function () {

@@ -18,6 +18,7 @@ define(["require", "exports", "react"], function (require, exports, React) {
     function Greet(x) {
         return undefined;
     }
+
     // Error
     var foo = <Foo />;
     var G = <Greet />;

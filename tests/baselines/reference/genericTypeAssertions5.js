@@ -26,9 +26,13 @@ function foo2<T extends A>(x: T) {
 }
 
 //// [genericTypeAssertions5.js]
+
+
+
 var a;
 var b;
 var c;
+
 function foo2(x) {
     var y = x;
     y = a; // error: cannot convert A to T

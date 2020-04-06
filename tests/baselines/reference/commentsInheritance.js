@@ -170,11 +170,20 @@ var c1 = /** @class */ (function () {
     // i1_f1
     c1.prototype.i1_f1 = function () {
     };
+
+
     c1.prototype.i1_nc_f1 = function () {
     };
+
+
+
     /** c1_f1*/
     c1.prototype.f1 = function () {
     };
+
+
+
+
     /** c1_nc_f1*/
     c1.prototype.nc_f1 = function () {
     };
@@ -236,6 +245,8 @@ var c3 = /** @class */ (function (_super) {
     function c3() {
         return _super.call(this, 10) || this;
     }
+
+
     /** c3 f1*/
     c3.prototype.f1 = function () {
     };
@@ -263,8 +274,7 @@ var c3_i = new c3();
 // assign
 c2_i = c3_i;
 var c4 = /** @class */ (function (_super) {
-    __extends(c4, _super);
-    function c4() {
+    __extends(c4, _super);function c4() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return c4;

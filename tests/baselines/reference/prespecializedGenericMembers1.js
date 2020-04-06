@@ -24,18 +24,17 @@ var catBag = new CatBag(catThing);
 "use strict";
 exports.__esModule = true;
 exports.CatBag = exports.Cat = void 0;
+
 var Cat = /** @class */ (function () {
     function Cat() {
     }
     return Cat;
-}());
-exports.Cat = Cat;
+}());exports.Cat = Cat;
 var CatBag = /** @class */ (function () {
     function CatBag(cats) {
     }
     return CatBag;
-}());
-exports.CatBag = CatBag;
+}());exports.CatBag = CatBag;
 var cat = new Cat();
 var catThing = {
     barry: cat

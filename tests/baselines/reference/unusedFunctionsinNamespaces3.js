@@ -8,5 +8,6 @@ namespace Validation {
 var Validation;
 (function (Validation) {
     var function1 = function (param1) {
-    };
+    }
+    ;
 })(Validation || (Validation = {}));

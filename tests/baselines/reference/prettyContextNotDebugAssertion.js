@@ -3,5 +3,4 @@ if (true) {
 
 
 //// [index.js]
-if (true) {
-}
+if (true) {}

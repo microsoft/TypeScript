@@ -5,4 +5,5 @@ var b = a = [undefined, null];
 
 //// [wideningTuples3.js]
 var a;
+
 var b = a = [undefined, null];

@@ -58,19 +58,21 @@ var ResultIsNumber19 = +(undefined + undefined);
 
 //// [plusOperatorWithAnyOtherType.js]
 // + operator on any type
+
 var ANY;
 var ANY1;
 var ANY2 = ["", ""];
-var obj;
+var obj
+;
 var obj1 = { x: function (s) { }, y: function (s1) { } };
+
 function foo() {
     var a;
     return a;
 }
 var A = /** @class */ (function () {
     function A() {
-    }
-    A.foo = function () {
+    }A.foo = function () {
         var a;
         return a;
     };
@@ -80,6 +82,7 @@ var M;
 (function (M) {
 })(M || (M = {}));
 var objA = new A();
+
 // any other type var
 var ResultIsNumber1 = +ANY1;
 var ResultIsNumber2 = +ANY2;
@@ -87,9 +90,11 @@ var ResultIsNumber3 = +A;
 var ResultIsNumber4 = +M;
 var ResultIsNumber5 = +obj;
 var ResultIsNumber6 = +obj1;
+
 // any type literal
 var ResultIsNumber7 = +undefined;
 var ResultIsNumber8 = +null;
+
 // any type expressions
 var ResultIsNumber9 = +ANY2[0];
 var ResultIsNumber10 = +obj1.x;

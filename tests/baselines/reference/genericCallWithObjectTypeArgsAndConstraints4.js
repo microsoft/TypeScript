@@ -35,6 +35,7 @@ function other<T, U extends T>() {
 
 //// [genericCallWithObjectTypeArgsAndConstraints4.js]
 // Generic call with constraints infering type parameter from object member properties
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -48,6 +49,7 @@ var D = /** @class */ (function () {
 function foo(t, t2) {
     return function (x) { return t2; };
 }
+
 var c;
 var d;
 var r = foo(c, d);
@@ -59,7 +61,9 @@ var r6 = foo(null, {});
 var r7 = foo({}, {});
 var r8 = foo(function () { }, function () { });
 var r9 = foo(function () { }, function () { return 1; });
+
 function other() {
     var r4 = foo(c, d);
     var r5 = foo(c, d); // error
 }
+

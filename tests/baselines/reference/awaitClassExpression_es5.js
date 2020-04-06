@@ -8,6 +8,7 @@ async function func(): Promise<void> {
 }
 
 //// [awaitClassExpression_es5.js]
+
 function func() {
     return __awaiter(this, void 0, void 0, function () {
         var D, _a;
@@ -15,8 +16,7 @@ function func() {
             switch (_b.label) {
                 case 0:
                     _a = function (_super) {
-                        __extends(D, _super);
-                        function D() {
+                        __extends(D, _super);function D() {
                             return _super !== null && _super.apply(this, arguments) || this;
                         }
                         return D;

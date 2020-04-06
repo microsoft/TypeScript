@@ -20,6 +20,10 @@ var Foo = /** @class */ (function () {
         };
         this.bar++;
     }
+
+
+
+
     class_1.prototype.m = function () { return this.bar; };
     return class_1;
 }());

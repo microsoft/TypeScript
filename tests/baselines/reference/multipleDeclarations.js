@@ -61,8 +61,7 @@ var Y = /** @class */ (function () {
     function Y() {
         this.m = this.m.bind(this);
         this.mistake = 'even more nonsense';
-    }
-    Y.prototype.mistake = function () {
+    }Y.prototype.mistake = function () {
     };
     Y.prototype.m = function () {
     };

@@ -63,6 +63,7 @@ var NonGeneric;
     var r3 = r.y;
     r.y = 4;
     var r6 = c.y(); // error
+
 })(NonGeneric || (NonGeneric = {}));
 var Generic;
 (function (Generic) {

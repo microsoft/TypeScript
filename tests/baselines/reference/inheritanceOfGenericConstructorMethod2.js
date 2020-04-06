@@ -31,14 +31,12 @@ var __extends = (this && this.__extends) || (function () {
 var M;
 (function (M) {
     var C1 = /** @class */ (function () {
-        function C1() {
-        }
+        function C1() {}
         return C1;
     }());
     M.C1 = C1;
     var C2 = /** @class */ (function () {
-        function C2() {
-        }
+        function C2() {}
         return C2;
     }());
     M.C2 = C2;
@@ -46,16 +44,14 @@ var M;
 var N;
 (function (N) {
     var D1 = /** @class */ (function (_super) {
-        __extends(D1, _super);
-        function D1() {
+        __extends(D1, _super);function D1() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return D1;
     }(M.C1));
     N.D1 = D1;
     var D2 = /** @class */ (function (_super) {
-        __extends(D2, _super);
-        function D2() {
+        __extends(D2, _super);function D2() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return D2;

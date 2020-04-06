@@ -106,6 +106,7 @@ var c5 = /** @class */ (function () {
 }());
 var i5 = new c5();
 var i5_c = c5;
+
 /// class with statics and constructor
 var c6 = /** @class */ (function () {
     /// constructor comment
@@ -115,6 +116,7 @@ var c6 = /** @class */ (function () {
 }());
 var i6 = new c6();
 var i6_c = c6;
+
 // class with statics and constructor
 var c7 = /** @class */ (function () {
     // constructor comment
@@ -124,6 +126,7 @@ var c7 = /** @class */ (function () {
 }());
 var i7 = new c7();
 var i7_c = c7;
+
 /** class with statics and constructor
  */
 var c8 = /** @class */ (function () {
@@ -137,6 +140,7 @@ var c8 = /** @class */ (function () {
 }());
 var i8 = new c8();
 var i8_c = c8;
+
 var c9 = /** @class */ (function () {
     function c9() {
         /// This is some detached comment

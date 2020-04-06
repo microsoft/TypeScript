@@ -55,6 +55,7 @@ var resultIsAny2 = (BOOLEAN, ANY);
 var resultIsAny3 = (NUMBER, ANY);
 var resultIsAny4 = (STRING, ANY);
 var resultIsAny5 = (OBJECT, ANY);
+
 //Literal and expression
 var x;
 1, ANY;

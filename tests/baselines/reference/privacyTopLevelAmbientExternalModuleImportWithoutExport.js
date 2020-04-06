@@ -59,8 +59,7 @@ define(["require", "exports"], function (require, exports) {
         function c_public() {
         }
         return c_public;
-    }());
-    exports.c_public = c_public;
+    }());exports.c_public = c_public;
 });
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require1.js]
 define(["require", "exports"], function (require, exports) {
@@ -71,8 +70,7 @@ define(["require", "exports"], function (require, exports) {
         function c_public() {
         }
         return c_public;
-    }());
-    exports.c_public = c_public;
+    }());exports.c_public = c_public;
 });
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_core.js]
 define(["require", "exports", "m", "m2", "privacyTopLevelAmbientExternalModuleImportWithoutExport_require"], function (require, exports, im_private_mi_private, im_private_mu_private, im_private_mi_public) {

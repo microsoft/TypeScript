@@ -14,6 +14,7 @@ function a() {
 //// [controlFlowForOfStatement.js]
 var obj;
 var x;
+
 function a() {
     x = true;
     for (var _i = 0, obj_1 = obj; _i < obj_1.length; _i++) {

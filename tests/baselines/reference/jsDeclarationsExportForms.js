@@ -63,17 +63,14 @@ import "./bar2";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
-}());
-exports.Foo = Foo;
+}());exports.Foo = Foo;
 //// [func.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.func = void 0;
-function func() { }
-exports.func = func;
+function func() { }exports.func = func;
 //// [bar.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {

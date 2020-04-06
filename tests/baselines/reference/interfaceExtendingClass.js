@@ -22,8 +22,7 @@ i = f;
 //// [interfaceExtendingClass.js]
 var Foo = /** @class */ (function () {
     function Foo() {
-    }
-    Foo.prototype.y = function () { };
+    }Foo.prototype.y = function () { };
     Object.defineProperty(Foo.prototype, "Z", {
         get: function () {
             return 1;
@@ -33,9 +32,11 @@ var Foo = /** @class */ (function () {
     });
     return Foo;
 }());
+
 var i;
 var r1 = i.x;
 var r2 = i.y();
 var r3 = i.Z;
+
 var f = i;
 i = f;

@@ -194,6 +194,7 @@ if (C1 === var1["constructor"]) {
 else {
     var1; // number | C1
 }
+
 if (var1.constructor != C1) {
     var1; // C1 | number
     var1.property1; // error

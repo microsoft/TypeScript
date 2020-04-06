@@ -32,6 +32,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var somelib_1 = require("./somelib");
+
 var MyFoo = /** @class */ (function (_super) {
     __extends(MyFoo, _super);
     function MyFoo() {

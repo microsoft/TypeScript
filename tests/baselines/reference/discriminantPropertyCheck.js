@@ -180,41 +180,51 @@ function func3(value: Partial<UnionOfBar>) {
 "use strict";
 exports.__esModule = true;
 exports.foo = void 0;
+
+
+
 function goo1(x) {
     if (x.kind === "A" && x.foo !== undefined) {
         x.foo.length;
     }
 }
+
 function goo2(x) {
     if (x.foo !== undefined && x.kind === "A") {
         x.foo.length; // Error, intervening discriminant guard
     }
 }
+
 function foo1(x) {
     if (x.bar && x.foo !== undefined) {
         x.foo.length;
     }
 }
+
 function foo2(x) {
     if (x.foo !== undefined && x.bar) {
         x.foo.length;
     }
 }
+
 function foo3(x) {
     if (x.baz && x.foo !== undefined) {
         x.foo.length;
     }
 }
+
 function foo4(x) {
     if (x.foo !== undefined && x.baz) {
         x.foo.length;
     }
 }
+
 function foo5(x) {
     if (x.qux && x.foo !== undefined) {
         x.foo.length;
     }
 }
+
 function foo6(x) {
     if (x.foo !== undefined && x.qux) {
         x.foo.length; // Error, intervening discriminant guard
@@ -223,9 +233,10 @@ function foo6(x) {
 // Repro from #27493
 var Types;
 (function (Types) {
-    Types[Types["Str"] = 1] = "Str";
-    Types[Types["Num"] = 2] = "Num";
+    Types[Types["Str"] = 1] = "Str";Types[Types["Num"] = 2] = "Num";
 })(Types || (Types = {}));
+
+
 function func2(inst) {
     while (true) {
         switch (inst.type) {
@@ -240,11 +251,22 @@ function func2(inst) {
         }
     }
 }
+
 // Repro from #29106
 var f = function (_a, _b) { };
+
+
+
+
+
 var u = {};
 u.a && u.b && f(u.a, u.b);
+
 u.b && u.a && f(u.a, u.b);
+
+
+
+
 function foo(obj) {
     switch (obj.key) {
         case '+': {
@@ -252,11 +274,18 @@ function foo(obj) {
             return;
         }
     }
-}
-exports.foo = foo;
+}exports.foo = foo;
+
 function onlyPlus(arg) {
     return arg;
 }
+
+
+
+
+
+
+
 function func3(value) {
     if (value.type !== undefined) {
         switch (value.type) {

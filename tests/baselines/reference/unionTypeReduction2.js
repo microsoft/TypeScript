@@ -72,37 +72,57 @@ function f1(x, y) {
     z.f();
     z.f('hello');
 }
+
 function f2(x, y) {
     var z = !!true ? x : y; // { f(x?: string): void }
     z.f();
     z.f('hello');
 }
+
 function f3(x, y) {
     var f = !!true ? x : y; // (x?: string) => void
     f();
     f('hello');
 }
+
 function f4(x, y) {
     var f = !!true ? x : y; // (x?: string) => void
     f();
     f('hello');
 }
+
 function f5(x, y) {
     var f = !!true ? x : y; // (x?: 'hello') => void
     f();
     f('hello');
 }
+
 function f6(x, y) {
     var f = !!true ? x : y; // (x: 'hello' | undefined) => void
     f(); // Error
     f('hello');
 }
+
+
+
+
+
+
+
+
+
+
 function f11(a, b) {
     var z = !!true ? a : b; // A | B
     z.f();
     z.f('hello');
 }
-var k = { something: function () { } };
+
+
+var k = { something: function () { } }
+
+;
+
 function run(options) {
     var _a;
     var something = (_a = options.something) !== null && _a !== void 0 ? _a : val.something;

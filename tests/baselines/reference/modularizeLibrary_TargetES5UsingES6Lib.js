@@ -100,9 +100,11 @@ var m = new Map();
 m.clear();
 // Using ES6 iterable
 m.keys();
+
 // Using ES6 function
 function Baz() { }
 Baz.name;
+
 // Using ES6 generator
 function* gen() {
     let i = 0;
@@ -111,6 +113,7 @@ function* gen() {
         i++;
     }
 }
+
 function* gen2() {
     let i = 0;
     while (i < 10) {
@@ -118,6 +121,7 @@ function* gen2() {
         i++;
     }
 }
+
 // Using ES6 math
 Math.sign(1);
 // Using ES6 object
@@ -134,20 +138,27 @@ function out() {
         return new Promise(function (resolve, reject) { });
     });
 }
+
 out().then(() => {
     console.log("Yea!");
 });
+
 // Using Es6 proxy
-var t = {};
+var t = {}
+;
 var p = new Proxy(t, {});
+
 // Using ES6 reflect
 Reflect.isExtensible({});
+
 // Using Es6 regexp
 var reg = new RegExp("/s");
 reg.flags;
+
 // Using ES6 string
 var str = "Hello world";
 str.includes("hello", 0);
+
 // Using ES6 symbol
 var s = Symbol();
 // Using ES6 wellknown-symbol

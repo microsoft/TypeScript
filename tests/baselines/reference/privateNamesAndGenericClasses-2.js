@@ -48,12 +48,16 @@ class C {
         _foo.set(this, void 0);
         __classPrivateFieldSet(this, _foo, t);
         t = this..call(this);
-    }
-    () {
+    }() {
         return __classPrivateFieldGet(this, _foo);
     }
+
+
+
+
     set baz(t) {
         __classPrivateFieldSet(this, _foo, t);
+
     }
     get baz() {
         return __classPrivateFieldGet(this, _foo);
@@ -62,8 +66,10 @@ class C {
 _foo = new WeakMap();
 let a = new C(3);
 let b = new C("hello");
+
 a.baz = 5; // OK
-const x = a.baz; // OK
+const x = a.baz
+; // OK
 a.; // Error
 a = b; // Error
 b = a; // Error

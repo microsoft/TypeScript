@@ -4,12 +4,10 @@ class C implements A { }
 
 //// [classImplementsClass1.js]
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());

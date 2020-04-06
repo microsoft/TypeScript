@@ -37,6 +37,7 @@ define(["require", "exports", "react", "react-router"], function (require, expor
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var Route = ReactRouter.Route;
+
     var routes1 = <Route />;
     var M;
     (function (M) {

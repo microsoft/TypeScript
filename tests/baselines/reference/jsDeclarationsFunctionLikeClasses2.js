@@ -88,8 +88,10 @@ function Vec(len) {
      * @type {number[]}
      */
     this.storage = new Array(len);
-}
-exports.Vec = Vec;
+}/**
+ * @param {number} len
+ */ exports.Vec = Vec;
+
 Vec.prototype = {
     /**
      * @param {Vec} other
@@ -112,6 +114,7 @@ Vec.prototype = {
         return Math.sqrt(sum);
     }
 };
+
 /**
  * @param {number} x
  * @param {number} y
@@ -123,8 +126,7 @@ function Point2D(x, y) {
     Vec.call(this, 2);
     this.x = x;
     this.y = y;
-}
-exports.Point2D = Point2D;
+}exports.Point2D = Point2D;
 Point2D.prototype = {
     __proto__: Vec,
     get x() {
@@ -151,6 +153,7 @@ Point2D.prototype = {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.origin = void 0;
 var source_1 = require("./source");
+
 exports.origin = new source_1.Point2D(0, 0);
 // export const res = Point2D(2, 3).dot(origin); // TODO: when __proto__ works, validate this
 

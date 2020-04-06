@@ -176,6 +176,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 };
 f1 = f2;
 f2 = f1;
+
 f1(42, "hello", true);
 f1(t3[0], t3[1], t3[2]);
 f1.apply(void 0, t3);
@@ -192,6 +193,8 @@ f2.apply(void 0, __spreadArrays([42, "hello"], t1));
 f2.apply(void 0, __spreadArrays([42, "hello", true], t0));
 f2(ns[0], ns[1], true);
 f2.apply(void 0, __spreadArrays(ns, [true])); // Error, tuple spread only expanded when last
+
+
 var x10 = f10(42, "hello", true); // [number, string, boolean]
 var x11 = f10(42, "hello"); // [number, string]
 var x12 = f10(42); // [number]
@@ -201,12 +204,15 @@ var x15 = f10.apply(void 0, __spreadArrays([42], t2)); // [number, string, boole
 var x16 = f10.apply(void 0, __spreadArrays([42, "hello"], t1)); // [number, string, boolean]
 var x17 = f10.apply(void 0, __spreadArrays([42, "hello", true], t0)); // [number, string, boolean]
 var x18 = f10.apply(void 0, __spreadArrays(ns, [true])); // (string | number | boolean)[]
+
 function g10(u, v) {
     var x1 = f10.apply(void 0, u); // U
     var x2 = f10.apply(void 0, v); // V
     var x3 = f10.apply(void 0, __spreadArrays([1], u)); // [number, ...string[]]
     var x4 = f10.apply(void 0, __spreadArrays(u, v)); // (string | number)[]
 }
+
+
 var z10 = f11(42, "hello", true); // [42, "hello", true]
 var z11 = f11(42, "hello"); // [42, "hello"]
 var z12 = f11(42); // [42]
@@ -216,39 +222,45 @@ var z15 = f11.apply(void 0, __spreadArrays([42], t2)); // [42, string, boolean]
 var z16 = f11.apply(void 0, __spreadArrays([42, "hello"], t1)); // [42, "hello", boolean]
 var z17 = f11.apply(void 0, __spreadArrays([42, "hello", true], t0)); // [42, "hello", true]
 var z18 = f11.apply(void 0, __spreadArrays(ns, [true])); // (string | number | true)[]
+
 function g11(u, v) {
     var x1 = f11.apply(void 0, u); // U
     var x2 = f11.apply(void 0, v); // V
     var x3 = f11.apply(void 0, __spreadArrays([1], u)); // [1, ...string[]]
     var x4 = f11.apply(void 0, __spreadArrays(u, v)); // (string | number)[]
 }
-function call(f) {
-    var args = [];
+
+function call(f) {var args = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         args[_i - 1] = arguments[_i];
     }
     return f.apply(void 0, args);
 }
+
 function callr(args, f) {
     return f.apply(void 0, args);
 }
+
+
 var x20 = call(function (x, y) { return x + y; }, 10, 20); // number
 var x21 = call(function (x, y) { return x + y; }, 10, "hello"); // string
 var x22 = call(f15, "hello", 42); // string | number
 var x23 = call(f16, "hello", 42); // unknown
 var x24 = call(f16, "hello", 42); // string | number
+
 var x30 = callr(sn, function (x, y) { return x + y; }); // string
 var x31 = callr(sn, f15); // string | number
 var x32 = callr(sn, f16); // string | number
+
 function bind(f, x) {
-    return function () {
-        var rest = [];
+    return function () {var rest = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             rest[_i] = arguments[_i];
         }
-        return f.apply(void 0, __spreadArrays([x], rest));
-    };
+        return f.apply(void 0, __spreadArrays([x], rest));};
 }
+
+
 var f21 = bind(f20, 42); // (y: string, z: boolean) => string[]
 var f22 = bind(f21, "hello"); // (z: boolean) => string[]
 var f23 = bind(f22, true); // () => string[]
@@ -256,6 +268,7 @@ f20(42, "hello", true);
 f21("hello", true);
 f22(true);
 f23();
+
 var g21 = bind(g20, 42); // (y: string, z: boolean) => string[]
 var g22 = bind(g21, "hello"); // (z: boolean) => string[]
 var g23 = bind(g22, true); // () => string[]
@@ -268,11 +281,35 @@ g21();
 g22(true);
 g22();
 g23();
+
 var c30 = f30(42, function (x) { return "" + x; }, function (x) { return x + 1; }); // [(x: number) => string, (x: number) => number]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 events.emit('move', 10, 'left');
 events.emit('jump', 20, 'up');
 events.emit('stop', 'Bye!');
 events.emit('done');
+
 ff1 = ff2;
 ff1 = ff3;
 ff1 = ff4; // Error

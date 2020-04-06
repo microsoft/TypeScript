@@ -26,21 +26,19 @@ exports.__esModule = true;
 exports.test2 = exports.test = exports.Calculator = void 0;
 var Calculator = /** @class */ (function () {
     function Calculator() {
-    }
-    Calculator.prototype.handleChar = function () { };
+    }Calculator.prototype.handleChar = function () { };
     return Calculator;
-}());
-exports.Calculator = Calculator;
+}());exports.Calculator = Calculator;
 function test() {
-}
-exports.test = test;
+}exports.test = test;
+
 function test2() {
-}
-exports.test2 = test2;
+}exports.test2 = test2;
 //// [file2.js]
 "use strict";
 exports.__esModule = true;
 var file1_1 = require("./file1");
+
 var x = new file1_1.Calculator();
 x.handleChar();
 file1_1.test();

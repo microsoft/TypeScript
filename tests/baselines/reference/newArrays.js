@@ -16,16 +16,14 @@ module M {
 var M;
 (function (M) {
     var Foo = /** @class */ (function () {
-        function Foo() {
-        }
+        function Foo() {}
         return Foo;
     }());
     var Gar = /** @class */ (function () {
         function Gar() {
             this.x = 10;
             this.y = 10;
-        }
-        Gar.prototype.m = function () {
+        }Gar.prototype.m = function () {
             this.fa = new Array(this.x * this.y);
         };
         return Gar;

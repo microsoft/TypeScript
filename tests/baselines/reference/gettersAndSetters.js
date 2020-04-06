@@ -69,6 +69,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 var c = new C();
+
 var foo = c.Foo;
 c.Foo = "foov";
 var bar = C.Bar;
@@ -77,6 +78,9 @@ var baz = c.Baz;
 c.Baz = "bazv";
 // The Foo accessors' return and param types should be contextually typed to the Foo field
 var o = { get Foo() { return 0; }, set Foo(val) { val; } }; // o
+
 var ofg = o.Foo;
 o.Foo = 0;
-var i = function (n) { return n; };
+
+var i = function (n) { return n; }
+;

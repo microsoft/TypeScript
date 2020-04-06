@@ -19,11 +19,16 @@ var validPlain: string = 'nope';
 //// [ts-expect-error.js]
 // @ts-expect-error additional commenting
 var invalidCommentedFancy = 'nope';
+
 // @ts-expect-error additional commenting
 var validCommentedFancy = 'nope';
+
 // @ts-expect-error
 var invalidCommentedPlain = 'nope';
+
 // @ts-expect-error
 var validCommentedPlain = 'nope';
+
 var invalidPlain = 'nope';
+
 var validPlain = 'nope';

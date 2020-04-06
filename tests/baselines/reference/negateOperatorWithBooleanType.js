@@ -38,22 +38,26 @@ var ResultIsNumber7 = -A.foo();
 //// [negateOperatorWithBooleanType.js]
 // - operator on boolean type
 var BOOLEAN;
+
 function foo() { return true; }
+
 var A = /** @class */ (function () {
     function A() {
-    }
-    A.foo = function () { return false; };
+    }A.foo = function () { return false; };
     return A;
 }());
 var M;
 (function (M) {
 })(M || (M = {}));
 var objA = new A();
+
 // boolean type var
 var ResultIsNumber1 = -BOOLEAN;
+
 // boolean type literal
 var ResultIsNumber2 = -true;
 var ResultIsNumber3 = -{ x: true, y: false };
+
 // boolean type expressions
 var ResultIsNumber4 = -objA.a;
 var ResultIsNumber5 = -M.n;

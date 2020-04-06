@@ -53,8 +53,8 @@ function foo(_a) {
             return [2 /*return*/];
         });
     });
-}
-exports.foo = foo;
+}exports.foo = foo;
+
 function foo2(_a) {
     var _b, foo, _c;
     return __generator(this, function (_d) {
@@ -74,5 +74,4 @@ function foo2(_a) {
                 return [2 /*return*/];
         }
     });
-}
-exports.foo2 = foo2;
+}exports.foo2 = foo2;

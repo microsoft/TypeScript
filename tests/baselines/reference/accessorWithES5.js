@@ -45,6 +45,7 @@ var D = /** @class */ (function () {
 var x = {
     get a() { return 1; }
 };
+
 var y = {
     set b(v) { }
 };

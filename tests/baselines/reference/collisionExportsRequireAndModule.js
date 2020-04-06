@@ -107,8 +107,7 @@ define(["require", "exports"], function (require, exports) {
     })(require = exports.require || (exports.require = {}));
     function foo() {
         return null;
-    }
-    exports.foo = foo;
+    }exports.foo = foo;
     var exports;
     (function (exports) {
         var C = /** @class */ (function () {
@@ -120,8 +119,7 @@ define(["require", "exports"], function (require, exports) {
     })(exports = exports.exports || (exports.exports = {}));
     function foo2() {
         return null;
-    }
-    exports.foo2 = foo2;
+    }exports.foo2 = foo2;
     var m1;
     (function (m1) {
         var require;

@@ -26,11 +26,9 @@ import "./globalNs";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
-}());
-exports.Foo = Foo;
+}());exports.Foo = Foo;
 //// [bar.js]
 "use strict";
 var ns = require("./cls");

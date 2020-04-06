@@ -15,6 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 var index_json_1 = __importDefault(require("./index.json"));
+
 exports["default"] = index_json_1["default"].hello;
 
 

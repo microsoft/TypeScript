@@ -11,6 +11,7 @@ export default {
 "use strict";
 exports.__esModule = true;
 var QSpinner_1 = require("./QSpinner");
+
 exports["default"] = {
     mixins: [QSpinner_1["default"]],
     name: 'QSpinner'

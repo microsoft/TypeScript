@@ -40,6 +40,7 @@ extentMixed = extent([new NumCoercible(10), 13, '12', true]);
 "use strict";
 exports.__esModule = true;
 exports.extent = void 0;
+
 // Not very useful, but meets Numeric
 var NumCoercible = /** @class */ (function () {
     function NumCoercible(a) {
@@ -55,7 +56,8 @@ var NumCoercible = /** @class */ (function () {
  */
 function extent(array) {
     return [undefined, undefined];
-}
-exports.extent = extent;
+}exports.extent = extent;
+
+
 var extentMixed;
 extentMixed = extent([new NumCoercible(10), 13, '12', true]);

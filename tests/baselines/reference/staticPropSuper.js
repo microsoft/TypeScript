@@ -48,14 +48,15 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var A = /** @class */ (function () {
+})();var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
 var B = /** @class */ (function (_super) {
     __extends(B, _super);
+
+
     function B() {
         var _this = this;
         var x = 1; // should not error
@@ -67,6 +68,8 @@ var B = /** @class */ (function (_super) {
 }(A));
 var C = /** @class */ (function (_super) {
     __extends(C, _super);
+
+
     function C() {
         var _this = this;
         _this.p = 10;
@@ -77,6 +80,8 @@ var C = /** @class */ (function (_super) {
 }(A));
 var D = /** @class */ (function (_super) {
     __extends(D, _super);
+
+
     function D() {
         var _this = this;
         _this.p = 11;
@@ -87,6 +92,8 @@ var D = /** @class */ (function (_super) {
 }(A));
 var E = /** @class */ (function (_super) {
     __extends(E, _super);
+
+
     function E() {
         var _this = this;
         _this.p = 12;

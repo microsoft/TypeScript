@@ -27,8 +27,7 @@ System.register([], function (exports_1, context_1) {
         setters: [],
         execute: function () {
             Foo = /** @class */ (() => {
-                let Foo = class Foo {
-                };
+                let Foo = class Foo {};
                 Foo = __decorate([
                     decorator
                 ], Foo);
@@ -53,8 +52,7 @@ System.register([], function (exports_1, context_1) {
         setters: [],
         execute: function () {
             default_1 = /** @class */ (() => {
-                let default_1 = class {
-                };
+                let default_1 = class {};
                 default_1 = __decorate([
                     decorator
                 ], default_1);

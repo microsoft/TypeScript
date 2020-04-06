@@ -29,8 +29,7 @@ var Events;
 (function (Events) {
     var EventEmitter = /** @class */ (function () {
         function EventEmitter() {
-        }
-        EventEmitter.prototype.addListener = function (type, listener) {
+        }EventEmitter.prototype.addListener = function (type, listener) {
         };
         return EventEmitter;
     }());
@@ -42,12 +41,14 @@ var Consumer;
         function EventEmitterConsummer(emitter) {
             this.emitter = emitter;
         }
+
         EventEmitterConsummer.prototype.register = function () {
             var _this = this;
             this.emitter.addListener('change', function (e) {
                 _this.changed();
             });
         };
+
         EventEmitterConsummer.prototype.changed = function () {
         };
         return EventEmitterConsummer;

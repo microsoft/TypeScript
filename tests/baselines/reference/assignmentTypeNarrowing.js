@@ -53,9 +53,14 @@ x; // string | boolean
 (_c = { y: 1 }.y, x = _c === void 0 ? /a/ : _c);
 x; // number | RegExp
 var a;
+
 for (var _i = 0, a_1 = a; _i < a_1.length; _i++) {
     x = a_1[_i];
     x; // string
 }
+
+
+
+
 var arr = [{ x: "ok" }]; // weak type
 arr.push({ x: "ok" });

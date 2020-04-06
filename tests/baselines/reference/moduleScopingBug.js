@@ -32,10 +32,15 @@ module M
 //// [moduleScopingBug.js]
 var M;
 (function (M) {
+
     var outer;
+
     function f() {
+
         var inner = outer; // Ok
+
     }
+
     var C = /** @class */ (function () {
         function C() {
             var inner = outer; // Ok
@@ -44,6 +49,8 @@ var M;
     }());
     var X;
     (function (X) {
+
         var inner = outer; // Error: outer not visible
+
     })(X || (X = {}));
 })(M || (M = {}));

@@ -34,6 +34,7 @@ if (typeof a === "string") {
 if (typeof a === "boolean") {
     var c = a;
 }
+
 if (typeof b === "number") {
     var c = b;
 }

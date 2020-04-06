@@ -13,12 +13,12 @@ class D extends C {
 }
 
 //// [computedPropertyNames43_ES6.js]
-class Foo {
-}
-class Foo2 {
-}
+class Foo {}
+class Foo2 {}
+
 class C {
 }
+
 class D extends C {
     // Computed properties
     get ["get1"]() { return new Foo; }

@@ -7,8 +7,7 @@ class List<T extends {}> {
 //// [noConstraintInReturnType1.js]
 var List = /** @class */ (function () {
     function List() {
-    }
-    List.empty = function () { return null; };
+    }List.empty = function () { return null; };
     return List;
 }());
 

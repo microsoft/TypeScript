@@ -7,6 +7,7 @@ var x = function f() {
 }
 
 //// [functionExpressionWithResolutionOfTypeNamedArguments01.js]
+
 var x = function f() {
     arguments;
 };

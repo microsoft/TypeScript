@@ -8,8 +8,7 @@ class C {
 //// [stripInternal1.js]
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.foo = function () { };
+    }C.prototype.foo = function () { };
     // @internal
     C.prototype.bar = function () { };
     return C;

@@ -28,14 +28,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var A = /** @class */ (function () {
-    function A() {
-        var args = [];
+    function A() {var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
     }
-    A.prototype.method = function () {
-        var args = [];
+    A.prototype.method = function () {var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
@@ -53,14 +51,12 @@ var A = /** @class */ (function () {
     return A;
 }());
 var B = /** @class */ (function () {
-    function B() {
-        var args = [];
+    function B() {var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
     }
-    B.prototype.method = function () {
-        var args = [];
+    B.prototype.method = function () {var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }

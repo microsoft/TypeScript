@@ -32,15 +32,15 @@ exports.z = void 0;
 var module_1 = require("module");
 var module_2 = require("module");
 var ns = require("module");
+
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);
-    function C() {
+    __extends(C, _super);function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(module_2.c2.C));
 var x = new module_1.c();
 var y = ns.value;
-var module_3 = require("module");
-Object.defineProperty(exports, "c1", { enumerable: true, get: function () { return module_3.c1; } });
+
+var module_3 = require("module");Object.defineProperty(exports, "c1", { enumerable: true, get: function () { return module_3.c1; } });
 exports.z = x;

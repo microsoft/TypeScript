@@ -28,5 +28,4 @@ do {
 //CHECK#1
 do {
     ;
-} while (false);
-true;
+} while (false);true;

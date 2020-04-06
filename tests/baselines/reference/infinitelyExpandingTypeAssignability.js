@@ -12,5 +12,10 @@ var y : C<string> = x
 
 
 //// [infinitelyExpandingTypeAssignability.js]
-var x;
-var y = x;
+
+
+
+var x
+;
+var y = x
+;

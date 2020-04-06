@@ -10,3 +10,5 @@ declare module 'module' {
 
 //// [exportDefaultVariable.js]
 // Regression test for #3018
+
+

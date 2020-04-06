@@ -32,6 +32,7 @@ class C6 implements I1 {
 
 
 //// [interfaceImplementation5.js]
+
 var C1 = /** @class */ (function () {
     function C1() {
     }

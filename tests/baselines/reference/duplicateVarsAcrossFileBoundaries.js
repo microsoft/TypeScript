@@ -43,6 +43,8 @@ var x = 0;
 var y = "";
 var z = 0;
 //// [duplicateVarsAcrossFileBoundaries_4.js]
+
 var q;
 //// [duplicateVarsAcrossFileBoundaries_5.js]
+
 var p;

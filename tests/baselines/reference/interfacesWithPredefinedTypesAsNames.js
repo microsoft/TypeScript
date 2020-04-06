@@ -6,5 +6,4 @@ interface boolean { }
 interface void {}
 
 //// [interfacesWithPredefinedTypesAsNames.js]
-interface;
-void {};
+interface;void {};

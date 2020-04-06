@@ -14,6 +14,7 @@ class TestController {
 
 
 //// [invalidThisEmitInContextualObjectLiteral.js]
+
 var TestController = /** @class */ (function () {
     function TestController() {
         var _this = this;
@@ -21,7 +22,6 @@ var TestController = /** @class */ (function () {
             p1: function (e) { },
             p2: function () { return function (vvvvvvvvv) { return _this; }; }
         });
-    }
-    TestController.prototype.m = function (def) { };
+    }TestController.prototype.m = function (def) { };
     return TestController;
 }());

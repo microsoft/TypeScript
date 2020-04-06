@@ -56,36 +56,49 @@ f(_ => 1 +
 
 //// [arrowFunctionErrorSpan.js]
 function f(a) { }
+
 // oneliner
 f(function () { });
+
 // multiline, body
 f(function () {
 });
+
 // multiline 2, body
 f(function () {
 });
+
 // multiline 3, arrow on a new line
 f(function () { });
+
 // multiline 4, arguments
-f(function (a, b, c, d) { });
+f(function (a,
+    b,
+    c,
+    d) { });
+
 // single line with a comment
 f(/*
     */ function () { });
+
 // multi line with a comment
 f(/*
     */ function () { });
+
 // multi line with a comment 2
 f(/*
     */ function () {
 });
+
 // multi line with a comment 3
-f(// comment 1
+f(
 // comment 2
 function () {
     // comment 4
 }
 // comment 5
 );
+
 // body is not a block
 f(function (_) { return 1 +
     2; });

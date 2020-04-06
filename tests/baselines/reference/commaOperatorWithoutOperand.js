@@ -36,11 +36,13 @@ var OBJECT;
 (NUMBER, );
 (STRING, );
 (OBJECT, );
+
 // Missing the first operand
 (, ANY);
 (, BOOLEAN);
 (, NUMBER);
 (, STRING);
 (, OBJECT);
+
 // Missing all operands
 (, );

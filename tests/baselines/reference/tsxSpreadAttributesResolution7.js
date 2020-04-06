@@ -41,12 +41,14 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var React = require("react");
+
+
+
+
 var TextComponent = /** @class */ (function (_super) {
-    __extends(TextComponent, _super);
-    function TextComponent() {
+    __extends(TextComponent, _super);function TextComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    TextComponent.prototype.render = function () {
+    }TextComponent.prototype.render = function () {
         return <span>Some Text..</span>;
     };
     return TextComponent;
@@ -55,9 +57,12 @@ var TextComponent = /** @class */ (function (_super) {
 var textPropsFalse = {
     editable: false
 };
+
 var y1 = <TextComponent {...textPropsFalse}/>;
+
 var textPropsTrue = {
     editable: true,
     onEdit: function () { }
 };
+
 var y2 = <TextComponent {...textPropsTrue}/>;

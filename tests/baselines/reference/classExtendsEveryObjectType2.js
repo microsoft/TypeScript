@@ -16,16 +16,14 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);
-    function C2() {
+})();var C2 = /** @class */ (function (_super) {
+    __extends(C2, _super);function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C2;
 }({ foo: string })); // error
 var C6 = /** @class */ (function (_super) {
-    __extends(C6, _super);
+    __extends(C6, _super);// error
     function C6() {
         return _super !== null && _super.apply(this, arguments) || this;
     }

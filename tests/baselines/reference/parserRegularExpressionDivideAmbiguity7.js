@@ -4,5 +4,5 @@
 
 
 //// [parserRegularExpressionDivideAmbiguity7.js]
-(a / 8);
-{ }
+(a / 8
+);{ }

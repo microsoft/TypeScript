@@ -14,12 +14,13 @@ class Component {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./jsx");
+
 var skate;
 var React = { createElement: skate.h };
+
 var Component = /** @class */ (function () {
     function Component() {
-    }
-    Component.prototype.renderCallback = function () {
+    }Component.prototype.renderCallback = function () {
         return skate.h("div", null, "test");
     };
     return Component;

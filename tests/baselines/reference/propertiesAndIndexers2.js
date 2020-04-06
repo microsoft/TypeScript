@@ -17,3 +17,4 @@ interface B extends A {
 
 
 //// [propertiesAndIndexers2.js]
+

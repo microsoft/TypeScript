@@ -9,8 +9,7 @@ import { Foo } from './a';
 
 //// [a.js]
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 //// [b.js]

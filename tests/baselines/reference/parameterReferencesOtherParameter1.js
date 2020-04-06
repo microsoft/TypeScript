@@ -16,8 +16,6 @@ var Model = /** @class */ (function () {
     return Model;
 }());
 var UI = /** @class */ (function () {
-    function UI(model, foo) {
-        if (foo === void 0) { foo = model.name; }
-    }
+    function UI(model, foo) {if (foo === void 0) { foo = model.name; }}
     return UI;
 }());

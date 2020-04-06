@@ -11,5 +11,7 @@ a.zPos2Pos1.xPos1 = 1
 
 
 //// [reversedRecusiveTypeInstantiation.js]
-var a;
+
+var a
+;
 a.zPos2Pos1.xPos1 = 1;

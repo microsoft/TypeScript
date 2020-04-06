@@ -12,17 +12,14 @@ module M {
 var M;
 (function (M) {
     var C1 = /** @class */ (function () {
-        function C1() {
-        }
+        function C1() {}
         return C1;
     }());
     M.C1 = C1;
 })(M || (M = {}));
 (function (M) {
     var C2 = /** @class */ (function () {
-        function C2() {
-        }
-        C2.prototype.f = function () { return null; };
+        function C2() {}C2.prototype.f = function () { return null; };
         return C2;
     }());
     M.C2 = C2;

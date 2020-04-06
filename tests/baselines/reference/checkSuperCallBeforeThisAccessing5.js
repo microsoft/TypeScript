@@ -20,10 +20,8 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Based = /** @class */ (function () {
-    function Based() {
-        var arg = [];
+})();var Based = /** @class */ (function () {
+    function Based() {var arg = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             arg[_i] = arguments[_i];
         }
@@ -32,6 +30,7 @@ var Based = /** @class */ (function () {
 }());
 var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
+
     function Derived() {
         var _this = _super.call(this, _this.x) || this;
         return _this;

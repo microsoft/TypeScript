@@ -41,14 +41,19 @@ class C {
 //// [privateInstanceVisibility.js]
 var Test;
 (function (Test) {
+
     var Example = /** @class */ (function () {
         function Example() {
-        }
-        Example.prototype.doSomething = function () {
+        }Example.prototype.doSomething = function () {
+
             var that = this;
+
             function innerFunction() {
+
                 var num = that.someNumber;
+
             }
+
         };
         return Example;
     }());
@@ -56,10 +61,11 @@ var Test;
 })(Test || (Test = {}));
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.getX = function () { return this.x; };
+    }C.prototype.getX = function () { return this.x; };
+
     C.prototype.clone = function (other) {
         this.x = other.x;
+
     };
     return C;
 }());

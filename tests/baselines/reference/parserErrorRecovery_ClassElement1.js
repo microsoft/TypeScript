@@ -8,8 +8,7 @@ class D {
 
 //// [parserErrorRecovery_ClassElement1.js]
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 // Classes can't be nested.  So we should bail out of parsing here and recover

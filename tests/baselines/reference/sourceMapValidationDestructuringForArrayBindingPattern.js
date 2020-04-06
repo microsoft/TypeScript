@@ -93,6 +93,9 @@ for (let [...multiRobotAInfo] = ["trimmer", ["trimming", "edging"]], i = 0; i < 
 }
 
 //// [sourceMapValidationDestructuringForArrayBindingPattern.js]
+
+
+
 var robotA = [1, "mower", "mowing"];
 function getRobot() {
     return robotA;
@@ -120,6 +123,7 @@ for (var _d = getMultiRobot(), _e = _d[1], primarySkillA = _e[0], secondarySkill
 for (var _f = ["trimmer", ["trimming", "edging"]], _g = _f[1], primarySkillA = _g[0], secondarySkillA = _g[1], i = 0; i < 1; i++) {
     console.log(primarySkillA);
 }
+
 for (var numberB = robotA[0], i = 0; i < 1; i++) {
     console.log(numberB);
 }
@@ -138,6 +142,7 @@ for (var nameB = getMultiRobot()[0], i = 0; i < 1; i++) {
 for (var nameB = ["trimmer", ["trimming", "edging"]][0], i = 0; i < 1; i++) {
     console.log(nameB);
 }
+
 for (var numberA2 = robotA[0], nameA2 = robotA[1], skillA2 = robotA[2], i = 0; i < 1; i++) {
     console.log(nameA2);
 }
@@ -156,6 +161,7 @@ for (var _l = getMultiRobot(), nameMA = _l[0], _m = _l[1], primarySkillA = _m[0]
 for (var _o = ["trimmer", ["trimming", "edging"]], nameMA = _o[0], _p = _o[1], primarySkillA = _p[0], secondarySkillA = _p[1], i = 0; i < 1; i++) {
     console.log(nameMA);
 }
+
 for (var numberA3 = robotA[0], robotAInfo = robotA.slice(1), i = 0; i < 1; i++) {
     console.log(numberA3);
 }

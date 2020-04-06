@@ -26,10 +26,14 @@ class A {
 
 
 //// [inlinedAliasAssignableToConstraintSameAsAlias.js]
+
+
+
+
+
 var A = /** @class */ (function () {
     function A() {
-    }
-    A.prototype.whereRelated = function () {
+    }A.prototype.whereRelated = function () {
         return 1;
     };
     return A;

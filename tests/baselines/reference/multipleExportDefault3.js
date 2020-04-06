@@ -13,9 +13,9 @@ exports.__esModule = true;
 exports["default"] = {
     uhoh: "another default"
 };
+
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 exports["default"] = C;

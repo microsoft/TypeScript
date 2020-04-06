@@ -47,21 +47,20 @@ define(["require", "exports"], function (require, exports) {
             this.errorMessageRegEx = errorMessageRegEx;
         }
         return TestCase;
-    }());
-    exports.TestCase = TestCase;
+    }());exports.TestCase = TestCase;
     var TestRunner = /** @class */ (function () {
         function TestRunner() {
-        }
-        TestRunner.arrayCompare = function (arg1, arg2) {
+        }TestRunner.arrayCompare = function (arg1, arg2) {
             return false;
         };
+
         TestRunner.prototype.addTest = function (test) {
         };
         return TestRunner;
-    }());
-    exports.TestRunner = TestRunner;
+    }());exports.TestRunner = TestRunner;
     exports.tests = (function () {
         var testRunner = new TestRunner();
+
         testRunner.addTest(new TestCase("Check UTF8 encoding", function () {
             var fb;
             fb.writeUtf8Bom();

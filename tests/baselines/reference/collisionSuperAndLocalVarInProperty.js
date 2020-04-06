@@ -30,8 +30,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var _super = 10; // No Error
+})();var _super = 10; // No Error
 var Foo = /** @class */ (function () {
     function Foo() {
         this.prop1 = {
@@ -44,8 +43,7 @@ var Foo = /** @class */ (function () {
     return Foo;
 }());
 var b = /** @class */ (function (_super_1) {
-    __extends(b, _super_1);
-    function b() {
+    __extends(b, _super_1);function b() {
         var _this = _super_1 !== null && _super_1.apply(this, arguments) || this;
         _this.prop2 = {
             doStuff: function () {

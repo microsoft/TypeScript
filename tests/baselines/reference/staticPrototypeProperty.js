@@ -10,8 +10,7 @@ class C2 {
 //// [staticPrototypeProperty.js]
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype = function () { };
+    }C.prototype = function () { };
     return C;
 }());
 var C2 = /** @class */ (function () {

@@ -13,16 +13,17 @@ class C2<T extends C2<any> = any> {}
 
 
 //// [typeArgumentDefaultUsesConstraintOnCircularDefault.js]
+
 var zz = { foo: "abc" }; // should error on comparison with Test<string>
+
 var zzy = { value: {} };
+
 // Simplified repro from #28873
 var C1 = /** @class */ (function () {
-    function C1() {
-    }
+    function C1() {}
     return C1;
 }());
 var C2 = /** @class */ (function () {
-    function C2() {
-    }
+    function C2() {}
     return C2;
 }());

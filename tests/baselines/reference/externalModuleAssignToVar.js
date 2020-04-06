@@ -32,18 +32,15 @@ define(["require", "exports"], function (require, exports) {
     exports.__esModule = true;
     exports.C = void 0;
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         return C;
-    }());
-    exports.C = C;
+    }());exports.C = C;
 });
 //// [externalModuleAssignToVar_core_require2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         return C;
     }());
     return C;
@@ -52,8 +49,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var D = /** @class */ (function () {
-        function D() {
-        }
+        function D() {}
         return D;
     }());
     return D;

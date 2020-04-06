@@ -104,6 +104,7 @@ function CheckAssignability() {
     let arr_Float32Array = new Float32Array(1);
     let arr_Float64Array = new Float64Array(1);
     let arr_Uint8ClampedArray = new Uint8ClampedArray(1);
+
     arr_Int8Array = arr_Int8Array;
     arr_Int8Array = arr_Uint8Array;
     arr_Int8Array = arr_Int16Array;
@@ -113,6 +114,7 @@ function CheckAssignability() {
     arr_Int8Array = arr_Float32Array;
     arr_Int8Array = arr_Float64Array;
     arr_Int8Array = arr_Uint8ClampedArray;
+
     arr_Uint8Array = arr_Int8Array;
     arr_Uint8Array = arr_Uint8Array;
     arr_Uint8Array = arr_Int16Array;
@@ -122,6 +124,7 @@ function CheckAssignability() {
     arr_Uint8Array = arr_Float32Array;
     arr_Uint8Array = arr_Float64Array;
     arr_Uint8Array = arr_Uint8ClampedArray;
+
     arr_Int16Array = arr_Int8Array;
     arr_Int16Array = arr_Uint8Array;
     arr_Int16Array = arr_Int16Array;
@@ -131,6 +134,7 @@ function CheckAssignability() {
     arr_Int16Array = arr_Float32Array;
     arr_Int16Array = arr_Float64Array;
     arr_Int16Array = arr_Uint8ClampedArray;
+
     arr_Uint16Array = arr_Int8Array;
     arr_Uint16Array = arr_Uint8Array;
     arr_Uint16Array = arr_Int16Array;
@@ -140,6 +144,7 @@ function CheckAssignability() {
     arr_Uint16Array = arr_Float32Array;
     arr_Uint16Array = arr_Float64Array;
     arr_Uint16Array = arr_Uint8ClampedArray;
+
     arr_Int32Array = arr_Int8Array;
     arr_Int32Array = arr_Uint8Array;
     arr_Int32Array = arr_Int16Array;
@@ -149,6 +154,7 @@ function CheckAssignability() {
     arr_Int32Array = arr_Float32Array;
     arr_Int32Array = arr_Float64Array;
     arr_Int32Array = arr_Uint8ClampedArray;
+
     arr_Float32Array = arr_Int8Array;
     arr_Float32Array = arr_Uint8Array;
     arr_Float32Array = arr_Int16Array;
@@ -158,6 +164,7 @@ function CheckAssignability() {
     arr_Float32Array = arr_Float32Array;
     arr_Float32Array = arr_Float64Array;
     arr_Float32Array = arr_Uint8ClampedArray;
+
     arr_Float64Array = arr_Int8Array;
     arr_Float64Array = arr_Uint8Array;
     arr_Float64Array = arr_Int16Array;
@@ -167,6 +174,7 @@ function CheckAssignability() {
     arr_Float64Array = arr_Float32Array;
     arr_Float64Array = arr_Float64Array;
     arr_Float64Array = arr_Uint8ClampedArray;
+
     arr_Uint8ClampedArray = arr_Int8Array;
     arr_Uint8ClampedArray = arr_Uint8Array;
     arr_Uint8ClampedArray = arr_Int16Array;
@@ -176,4 +184,5 @@ function CheckAssignability() {
     arr_Uint8ClampedArray = arr_Float32Array;
     arr_Uint8ClampedArray = arr_Float64Array;
     arr_Uint8ClampedArray = arr_Uint8ClampedArray;
+
 }

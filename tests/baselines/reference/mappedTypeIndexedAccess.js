@@ -36,6 +36,7 @@ var pair1 = {
     key: "foo",
     value: 3
 };
+
 // Error expected here
 var pair2 = {
     key: "foo",

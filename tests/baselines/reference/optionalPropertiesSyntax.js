@@ -36,3 +36,7 @@ interface indexSig {
 }
 
 //// [optionalPropertiesSyntax.js]
+
+
+
+

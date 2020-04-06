@@ -15,6 +15,7 @@ function foo(a) {
     if (a === "hello") {
         return a.length;
     }
+
     return a;
 }
 

@@ -27,19 +27,20 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
 };
-function foo() {
-    var stuff = [];
+function foo() {var stuff = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         stuff[_i] = arguments[_i];
     }
     return undefined;
 }
+
 var a = foo([]); // number
 var b = foo([], 1); // string
 var c = foo([], 1, 2); // boolean
 var d = foo([], 1, true); // boolean (with error)
 var e = foo([], 1, "2"); // {}
 var f = foo([], 1, 2, 3); // any (with error)
+
 var u = foo(__makeTemplateObject([""], [""])); // number
 var v = foo(__makeTemplateObject(["", ""], ["", ""]), 1); // string
 var w = foo(__makeTemplateObject(["", "", ""], ["", "", ""]), 1, 2); // boolean

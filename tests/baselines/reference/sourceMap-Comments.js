@@ -27,8 +27,7 @@ var sas;
     (function (tools) {
         var Test = /** @class */ (function () {
             function Test() {
-            }
-            Test.prototype.doX = function () {
+            }Test.prototype.doX = function () {
                 var f = 2;
                 switch (f) {
                     case 1:

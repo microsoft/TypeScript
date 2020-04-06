@@ -16,8 +16,7 @@ exports.__esModule = true;
 "use strict";
 exports.__esModule = true;
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 

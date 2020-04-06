@@ -13,11 +13,9 @@ let AConstructor: typeof A;
 exports.__esModule = true;
 exports.A = void 0;
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
-}());
-exports.A = A;
+}());exports.A = A;
 //// [b.js]
 "use strict";
 exports.__esModule = true;

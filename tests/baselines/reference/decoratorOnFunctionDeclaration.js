@@ -6,5 +6,6 @@ function F() {
 }
 
 //// [decoratorOnFunctionDeclaration.js]
+
 function F() {
 }

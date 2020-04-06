@@ -101,12 +101,10 @@ define(["require", "exports"], function (require, exports) {
     exports.foo2 = exports.foo = void 0;
     function foo() {
         return null;
-    }
-    exports.foo = foo;
+    }exports.foo = foo;
     function foo2() {
         return null;
-    }
-    exports.foo2 = foo2;
+    }exports.foo2 = foo2;
     var m2;
     (function (m2) {
         var a = 10;
@@ -115,5 +113,6 @@ define(["require", "exports"], function (require, exports) {
 //// [collisionExportsRequireAndAmbientModule_globalFile.js]
 var m4;
 (function (m4) {
+
     var a = 10;
 })(m4 || (m4 = {}));

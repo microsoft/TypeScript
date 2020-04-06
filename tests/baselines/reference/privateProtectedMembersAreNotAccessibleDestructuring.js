@@ -37,11 +37,9 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var K = /** @class */ (function () {
+})();var K = /** @class */ (function () {
     function K() {
-    }
-    K.prototype.privateMethod = function () { };
+    }K.prototype.privateMethod = function () { };
     K.prototype.m = function () {
         var _a = this, a = _a.priv, b = _a.prot; // ok
         var _b = new K(), priv = _b.priv, prot = _b.prot; // ok
@@ -49,11 +47,9 @@ var K = /** @class */ (function () {
     return K;
 }());
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);
-    function C() {
+    __extends(C, _super);function C() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    C.prototype.m2 = function () {
+    }C.prototype.m2 = function () {
         var a = this.priv; // error
         var b = this.prot; // ok
     };

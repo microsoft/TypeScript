@@ -5,6 +5,6 @@ var F = @dec function () {
 }
 
 //// [decoratorOnFunctionExpression.js]
-var F = ;
-function () {
+
+var F = ;function () {
 }

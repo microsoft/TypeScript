@@ -25,8 +25,7 @@ interface IFace {
 
 //// [overloadReturnTypes.js]
 var Accessor = /** @class */ (function () {
-    function Accessor() {
-    }
+    function Accessor() {}
     return Accessor;
 }());
 function attr(nameOrMap, value) {
@@ -39,3 +38,5 @@ function attr(nameOrMap, value) {
         return "s";
     }
 }
+
+

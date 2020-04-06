@@ -7,12 +7,12 @@ const utilityFunctions = {
 
 
 //// [declarationEmitIndexTypeArray.js]
-function doSomethingWithKeys() {
-    var keys = [];
+function doSomethingWithKeys() {var keys = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         keys[_i] = arguments[_i];
     }
 }
+
 var utilityFunctions = {
     doSomethingWithKeys: doSomethingWithKeys
 };

@@ -72,8 +72,7 @@ export function bar() { }
 "use strict";
 exports.__esModule = true;
 exports.bar = void 0;
-function bar() { }
-exports.bar = bar;
+function bar() { }exports.bar = bar;
 
 
 

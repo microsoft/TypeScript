@@ -10,6 +10,7 @@ class C implements I {
 }
 
 //// [symbolProperty23.js]
+
 class C {
     [Symbol.toPrimitive]() {
         return true;

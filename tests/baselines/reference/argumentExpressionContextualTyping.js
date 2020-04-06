@@ -34,6 +34,7 @@ function bar(_a) {
     var _b = _a.x, a = _b[0], _c = _b[1], b = _c === void 0 ? 10 : _c, _d = _a.y, c = _d.c, d = _d.d, _e = _d.e, e = _e === void 0 ? { f: 1 } : _e;
 }
 function baz(x) { }
+
 var o = { x: ["string", 1], y: { c: true, d: "world", e: 3 } };
 var o1 = { x: ["string", 1], y: { c: true, d: "world", e: 3 } };
 foo(o1); // Not error since x has contextual type of tuple namely [string, number]
@@ -42,6 +43,7 @@ var array = ["string", 1, true];
 var tuple = ["string", 1, true];
 baz(tuple);
 baz(["string", 1, true]);
+
 baz(array); // Error
 baz(__spreadArrays(["string", 1, true], array)); // Error
 foo(o); // Error because x has an array type namely (string|number)[]

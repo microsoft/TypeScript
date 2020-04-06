@@ -8,11 +8,9 @@ class C {
 //// [nestedGlobalNamespaceInClass.js]
 // should not crash - from #35717
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var global;
-(function (global) {
-})(global || (global = {}));
+(function (global) {})(global || (global = {}));
 x;

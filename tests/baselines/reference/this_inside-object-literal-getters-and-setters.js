@@ -30,5 +30,6 @@ var ObjectLiteral;
         test: function () {
             return this._foo;
         }
-    };
+    }
+    ;
 })(ObjectLiteral || (ObjectLiteral = {}));

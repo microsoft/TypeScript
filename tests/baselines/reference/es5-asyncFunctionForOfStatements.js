@@ -78,6 +78,7 @@ async function forOfStatement18() {
 }
 
 //// [es5-asyncFunctionForOfStatements.js]
+
 function forOfStatement0() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_1;
@@ -90,6 +91,7 @@ function forOfStatement0() {
         });
     });
 }
+
 function forOfStatement1() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, _a;
@@ -114,6 +116,7 @@ function forOfStatement1() {
         });
     });
 }
+
 function forOfStatement2() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_2;
@@ -137,6 +140,7 @@ function forOfStatement2() {
         });
     });
 }
+
 function forOfStatement3() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_3;
@@ -160,6 +164,7 @@ function forOfStatement3() {
         });
     });
 }
+
 function forOfStatement4() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, _a;
@@ -184,6 +189,7 @@ function forOfStatement4() {
         });
     });
 }
+
 function forOfStatement5() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_4;
@@ -207,6 +213,7 @@ function forOfStatement5() {
         });
     });
 }
+
 function forOfStatement6() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_5, b;
@@ -219,6 +226,7 @@ function forOfStatement6() {
         });
     });
 }
+
 function forOfStatement7() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, _a, c;
@@ -243,6 +251,7 @@ function forOfStatement7() {
         });
     });
 }
+
 function forOfStatement8() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_6, d;
@@ -266,6 +275,7 @@ function forOfStatement8() {
         });
     });
 }
+
 function forOfStatement9() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, _a;
@@ -290,6 +300,7 @@ function forOfStatement9() {
         });
     });
 }
+
 function forOfStatement10() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_7;
@@ -313,6 +324,7 @@ function forOfStatement10() {
         });
     });
 }
+
 function forOfStatement11() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_8, _a;
@@ -345,6 +357,7 @@ function forOfStatement11() {
         });
     });
 }
+
 function forOfStatement12() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, _a;
@@ -370,6 +383,7 @@ function forOfStatement12() {
         });
     });
 }
+
 function forOfStatement13() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_9;
@@ -394,6 +408,7 @@ function forOfStatement13() {
         });
     });
 }
+
 function forOfStatement14() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, _a;
@@ -418,6 +433,7 @@ function forOfStatement14() {
         });
     });
 }
+
 function forOfStatement15() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_10;
@@ -441,6 +457,7 @@ function forOfStatement15() {
         });
     });
 }
+
 function forOfStatement16() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_11, _a;
@@ -473,6 +490,7 @@ function forOfStatement16() {
         });
     });
 }
+
 function forOfStatement17() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, _a;
@@ -498,6 +516,7 @@ function forOfStatement17() {
         });
     });
 }
+
 function forOfStatement18() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_12;

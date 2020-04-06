@@ -12,6 +12,7 @@ function greeter(person, person2) {
     var unused = 20;
     var maker = function (child) {
         var unused2 = 22;
-    };
+    }
+    ;
     person2 = "dummy value";
 }

@@ -8,8 +8,10 @@ function x() {
 }
 
 //// [noCollisionThisExpressionAndLocalVarInFunction.js]
-var console;
+var console
+;
 function x() {
     var _this = 5;
-    (function (x) { console.log(_this); });
+    (
+        function (x) { console.log(_this); });
 }

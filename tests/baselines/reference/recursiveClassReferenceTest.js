@@ -118,6 +118,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
+
+
 var Sample;
 (function (Sample) {
     var Actions;
@@ -128,9 +131,10 @@ var Sample;
             (function (Find) {
                 var StartFindAction = /** @class */ (function () {
                     function StartFindAction() {
-                    }
-                    StartFindAction.prototype.getId = function () { return "yo"; };
+                    }StartFindAction.prototype.getId = function () { return "yo"; };
+
                     StartFindAction.prototype.run = function (Thing) {
+
                         return true;
                     };
                     return StartFindAction;
@@ -151,13 +155,18 @@ var Sample;
                     this.domNode = null;
                     // scenario 1
                     codeThing.addWidget("addWidget", this);
-                }
-                FindWidget.prototype.gar = function (runner) { if (true) {
-                    return runner(this);
-                } };
+                }FindWidget.prototype.gar = function (runner) { if (true) {return runner(this);} };
+
+
+
+
+
+
+
                 FindWidget.prototype.getDomNode = function () {
                     return domNode;
                 };
+
                 FindWidget.prototype.destroy = function () {
                 };
                 return FindWidget;
@@ -167,11 +176,10 @@ var Sample;
     })(Thing = Sample.Thing || (Sample.Thing = {}));
 })(Sample || (Sample = {}));
 var AbstractMode = /** @class */ (function () {
-    function AbstractMode() {
-    }
-    AbstractMode.prototype.getInitialState = function () { return null; };
+    function AbstractMode() {}AbstractMode.prototype.getInitialState = function () { return null; };
     return AbstractMode;
 }());
+
 (function (Sample) {
     var Thing;
     (function (Thing) {
@@ -179,6 +187,7 @@ var AbstractMode = /** @class */ (function () {
         (function (Languages) {
             var PlainText;
             (function (PlainText) {
+
                 var State = /** @class */ (function () {
                     function State(mode) {
                         this.mode = mode;
@@ -186,16 +195,17 @@ var AbstractMode = /** @class */ (function () {
                     State.prototype.clone = function () {
                         return this;
                     };
+
                     State.prototype.equals = function (other) {
                         return this === other;
                     };
+
                     State.prototype.getMode = function () { return mode; };
                     return State;
                 }());
                 PlainText.State = State;
                 var Mode = /** @class */ (function (_super) {
-                    __extends(Mode, _super);
-                    function Mode() {
+                    __extends(Mode, _super);function Mode() {
                         return _super !== null && _super.apply(this, arguments) || this;
                     }
                     // scenario 2

@@ -28,9 +28,10 @@ var Foo = /** @class */ (function () {
         this.defaults = {
             done: false
         };
-    }
-    Foo.prototype.bar = function () {
+    }Foo.prototype.bar = function () {
+
         return 3;
+
     };
     return Foo;
 }());

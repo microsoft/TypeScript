@@ -47,6 +47,22 @@ test({
 })
 
 //// [vueLikeDataAndPropsInference2.js]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 test({
     props: {
         foo: ''
@@ -56,6 +72,7 @@ test({
             bar: true
         };
     },
+
     watch: {
         foo: function (newVal, oldVal) {
             this.bar = false;

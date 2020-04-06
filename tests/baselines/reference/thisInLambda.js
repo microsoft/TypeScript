@@ -22,8 +22,7 @@ class myCls {
 var Foo = /** @class */ (function () {
     function Foo() {
         this.x = "hello";
-    }
-    Foo.prototype.bar = function () {
+    }Foo.prototype.bar = function () {
         var _this = this;
         this.x; // 'this' is type 'Foo'
         var f = function () { return _this.x; }; // 'this' should be type 'Foo' as well

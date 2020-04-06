@@ -12,10 +12,10 @@ class Bar implements Foo<Bar, string> {
 
 
 //// [instantiatedBaseTypeConstraints.js]
+
 var Bar = /** @class */ (function () {
     function Bar() {
-    }
-    Bar.prototype.foo = function (bar) {
+    }Bar.prototype.foo = function (bar) {
     };
     return Bar;
 }());

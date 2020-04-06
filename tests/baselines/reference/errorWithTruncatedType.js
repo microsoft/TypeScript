@@ -13,5 +13,6 @@ var s: string = x;
 
 //// [errorWithTruncatedType.js]
 var x;
+
 // String representation of type of 'x' should be truncated in error message
 var s = x;

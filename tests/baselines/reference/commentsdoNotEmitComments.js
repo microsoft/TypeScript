@@ -94,8 +94,10 @@ var shade: color = color.green;
 
 //// [commentsdoNotEmitComments.js]
 var myVariable = 10;
+
 function foo(p) {
 }
+
 var fooVar;
 foo(50);
 fooVar();
@@ -103,6 +105,10 @@ var c = (function () {
     function c() {
         this.b = 10;
     }
+
+
+
+
     c.prototype.myFoo = function () {
         return this.b;
     };
@@ -122,6 +128,8 @@ var c = (function () {
     return c;
 }());
 var i = new c();
+
+
 var i1_i;
 var m1;
 (function (m1) {
@@ -133,6 +141,8 @@ var m1;
     }());
     m1.b = b;
 })(m1 || (m1 = {}));
+
+
 var shade = 1;
 
 

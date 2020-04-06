@@ -13,8 +13,7 @@ var r: string = c.x;
 
 //// [genericGetter3.js]
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 var C = /** @class */ (function () {

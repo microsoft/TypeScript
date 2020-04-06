@@ -34,17 +34,17 @@ var r16 = '' + null;
 // If one operand is the null or undefined value, it is treated as having the type of the other operand.
 var E;
 (function (E) {
-    E[E["a"] = 0] = "a";
-    E[E["b"] = 1] = "b";
-    E[E["c"] = 2] = "c";
+    E[E["a"] = 0] = "a";E[E["b"] = 1] = "b";E[E["c"] = 2] = "c";
 })(E || (E = {}));
 var a;
 var b;
 var c;
 var d;
+
 // null + any
 var r1 = null + a;
 var r2 = a + null;
+
 // null + number/enum
 var r3 = null + b;
 var r4 = null + 1;
@@ -56,6 +56,7 @@ var r9 = 1 + null;
 var r10 = c + null;
 var r11 = E.a + null;
 var r12 = E['a'] + null;
+
 // null + string
 var r13 = null + d;
 var r14 = null + '';

@@ -32,23 +32,20 @@ var __rest = (this && this.__rest) || function (s, e) {
                 t[p[i]] = s[p[i]];
         }
     return t;
-};
-function cloneAgain(_a) {
+};function cloneAgain(_a) {
     var a = _a.a, clone = __rest(_a, ["a"]);
 }
+
 suddenly(function (_a) {
     var a = _a.x, rest = __rest(_a, ["x"]);
-    return rest.y;
-});
-suddenly(function (_a) {
-    if (_a === void 0) { _a = { x: { z: 1, ka: 1 }, y: 'noo' }; }
+    return rest.y;});
+suddenly(function (_a) {if (_a === void 0) { _a = { x: { z: 1, ka: 1 }, y: 'noo' }; }
     var _b = _a.x, _c = _b.z, z = _c === void 0 ? 12 : _c, nested = __rest(_b, ["z"]), rest = __rest(_a, ["x"]);
-    return rest.y + nested.ka;
-});
+    return rest.y + nested.ka;});
+
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.m = function (_a) {
+    }C.prototype.m = function (_a) {
         var a = _a.a, clone = __rest(_a, ["a"]);
         // actually, never mind, don't clone
     };
@@ -62,8 +59,7 @@ var C = /** @class */ (function () {
     });
     return C;
 }());
-function foobar(_a) {
-    if (_a === void 0) { _a = {}; }
+function foobar(_a) {if (_a === void 0) { _a = {}; }
     var _b = _a.bar, bar = _b === void 0 ? {} : _b, opts = __rest(_a, ["bar"]);
 }
 foobar();

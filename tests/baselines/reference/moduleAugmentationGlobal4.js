@@ -29,6 +29,7 @@ require("./f1");
 require("./f2");
 
 
+
 //// [f1.d.ts]
 declare global {
     interface Something {

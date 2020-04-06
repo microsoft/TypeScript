@@ -16,11 +16,9 @@ var x1: any; var y1 = new x1;
 // this should be an error
 var x; // no error, control flow typed
 var y; // error because captured
-function func(k) { y; }
-; // error at "k"
+function func(k) { y; }; // error at "k"
 func(x);
 // this shouldn't be an error
 var bar = 3;
 var bar1;
-var x1;
-var y1 = new x1;
+var x1;var y1 = new x1;

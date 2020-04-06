@@ -3,4 +3,5 @@ let
 x
 
 //// [VariableDeclaration12_es6.js]
-let x;
+let 
+x;

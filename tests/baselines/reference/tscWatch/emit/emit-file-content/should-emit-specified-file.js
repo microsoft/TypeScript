@@ -28,23 +28,20 @@ interface Array<T> { length: number; [n: number]: T; }
 "use strict";
 exports.__esModule = true;
 exports.Foo = void 0;
-function Foo() { return 10; }
-exports.Foo = Foo;
+function Foo() { return 10; }exports.Foo = Foo;
 
 
 //// [/a/b/f2.js]
 "use strict";
 exports.__esModule = true;
 exports.y = void 0;
-var f1_1 = require("./f1");
-exports.y = f1_1.Foo();
+var f1_1 = require("./f1");exports.y = f1_1.Foo();
 
 
 //// [/a/b/f3.js]
 "use strict";
 exports.__esModule = true;
-var f2_1 = require("./f2");
-var x = f2_1.y;
+var f2_1 = require("./f2");var x = f2_1.y;
 
 
 
@@ -102,10 +99,7 @@ export function Foo() { return 10; }export function foo2() { return 2; }
 "use strict";
 exports.__esModule = true;
 exports.foo2 = exports.Foo = void 0;
-function Foo() { return 10; }
-exports.Foo = Foo;
-function foo2() { return 2; }
-exports.foo2 = foo2;
+function Foo() { return 10; }exports.Foo = Foo;function foo2() { return 2; }exports.foo2 = foo2;
 
 
 //// [/a/b/f2.js] file written with same contents

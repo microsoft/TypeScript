@@ -21,7 +21,8 @@ var _a;
 var s;
 var n;
 var a;
-var v = (_a = {},
+var v = (
+_a = {},
     _a[s] = function () { },
     _a[n] = function () { },
     _a[s + s] = function () { },
@@ -33,4 +34,5 @@ var v = (_a = {},
     _a[true] = function () { },
     _a["hello bye"] = function () { },
     _a["hello " + a + " bye"] = function () { },
-    _a);
+    _a
+);

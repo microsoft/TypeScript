@@ -31,10 +31,8 @@ var foo;
     var bar;
     (function (bar) {
         var baz;
-        (function (baz) {
-            var boo = /** @class */ (function () {
-                function boo() {
-                }
+        (function (baz) {var boo = /** @class */ (function () {
+                function boo() {}
                 return boo;
             }());
             baz.boo = boo;
@@ -43,7 +41,9 @@ var foo;
 })(foo || (foo = {}));
 var provide = foo;
 var booz = foo.bar.baz;
+
 var p = new provide.Provide();
+
 function use() {
     var p1; // error here, but should be okay
     var p2;

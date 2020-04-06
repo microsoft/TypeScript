@@ -47,8 +47,7 @@ var D = /** @class */ (function () {
 }());
 var E = /** @class */ (function () {
     function E() {
-    }
-    E.prototype['constructor'] = function () {
+    }E.prototype['constructor'] = function () {
         console.log(this);
     };
     return E;
@@ -59,7 +58,9 @@ new /** @class */ (function () {
     }
     return class_1;
 }());
+
 var o = { "constructor": function () { } };
+
 var F = /** @class */ (function () {
     function F() {
         console.log(this);

@@ -25,9 +25,14 @@ class B<T> {
 //// [emitClassDeclarationWithTypeArgumentAndOverloadInES6.js]
 class B {
     constructor(a) { this.B = a; }
+
+
+
+
     foo() {
         return this.x;
     }
+
     get BB() {
         return this.B;
     }

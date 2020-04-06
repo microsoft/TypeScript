@@ -363,20 +363,20 @@ sourceFile:file4.ts
         },
         {
           "pos": 62,
-          "end": 573,
+          "end": 571,
           "kind": "prepend",
           "data": "../lib/module.js",
           "texts": [
             {
               "pos": 62,
-              "end": 573,
+              "end": 571,
               "kind": "text"
             }
           ]
         },
         {
           "pos": 573,
-          "end": 818,
+          "end": 816,
           "kind": "text"
         }
       ],
@@ -451,9 +451,9 @@ prologue: (30-44):: myPrologue3
 prologue: (46-60):: myPrologue2
 "myPrologue2";
 ----------------------------------------------------------------------
-prepend: (62-573):: ../lib/module.js texts:: 1
+prepend: (62-571):: ../lib/module.js texts:: 1
 >>--------------------------------------------------------------------
-text: (62-573)
+text: (62-571)
 var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -470,9 +470,8 @@ define("file2", ["require", "exports"], function (require, exports) {
     exports.y = 20;
 });
 var globalConst = 10;
-
 ----------------------------------------------------------------------
-text: (573-818)
+text: (573-816)
 define("file3", ["require", "exports"], function (require, exports) {
     "use strict";
     "myPrologue";
@@ -481,7 +480,6 @@ define("file3", ["require", "exports"], function (require, exports) {
     exports.z = 30;
 });
 var myVar = 30;
-
 ======================================================================
 ======================================================================
 File:: /src/app/module.d.ts
@@ -762,7 +760,7 @@ sourceFile:global.ts
         },
         {
           "pos": 46,
-          "end": 557,
+          "end": 555,
           "kind": "text"
         }
       ],
@@ -836,7 +834,7 @@ prologue: (15-28):: myPrologue
 prologue: (30-44):: myPrologue3
 "myPrologue3";
 ----------------------------------------------------------------------
-text: (46-557)
+text: (46-555)
 var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -853,7 +851,6 @@ define("file2", ["require", "exports"], function (require, exports) {
     exports.y = 20;
 });
 var globalConst = 10;
-
 ======================================================================
 ======================================================================
 File:: /src/lib/module.d.ts

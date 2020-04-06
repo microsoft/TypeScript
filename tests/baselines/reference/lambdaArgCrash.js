@@ -47,27 +47,29 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Event = /** @class */ (function () {
+})();var Event = /** @class */ (function () {
     function Event() {
         // TODO: remove
         this._listeners = [];
         this._listeners = [];
     }
+
     Event.prototype.add = function (listener) {
         /// <summary>Registers a new listener for the event.</summary>
+
         /// <param name="listener">The callback function to register.</param>
         this._listeners.push(listener);
+
     };
     return Event;
 }());
 var ItemSetEvent = /** @class */ (function (_super) {
-    __extends(ItemSetEvent, _super);
-    function ItemSetEvent() {
+    __extends(ItemSetEvent, _super);function ItemSetEvent() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    ItemSetEvent.prototype.add = function (listener) {
+    }ItemSetEvent.prototype.add = function (listener) {
+
         _super.prototype.add.call(this, listener);
+
     };
     return ItemSetEvent;
 }(Event));

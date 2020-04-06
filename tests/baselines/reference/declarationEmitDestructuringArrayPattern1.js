@@ -13,6 +13,7 @@ var _a = [1, "hello"]; // Dont emit anything
 var x = [1, "hello"][0]; // emit x: number
 var _b = [1, "hello"], x1 = _b[0], y1 = _b[1]; // emit x1: number, y1: string
 var _c = [0, 1, 2], z1 = _c[2]; // emit z1: number
+
 var a = [1, "hello"];
 var x2 = a[0]; // emit x2: number | string
 var x3 = a[0], y3 = a[1], z3 = a[2]; // emit x3, y3, z3 

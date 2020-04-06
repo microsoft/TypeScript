@@ -48,23 +48,18 @@ exports.B = exports.A = void 0;
 var tslib_1 = require("tslib");
 tslib_1.__exportStar(require("./other"), exports);
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
-}());
-exports.A = A;
+}());exports.A = A;
 var B = /** @class */ (function (_super) {
-    tslib_1.__extends(B, _super);
-    function B() {
+    tslib_1.__extends(B, _super);function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
-}(A));
-exports.B = B;
+}(A));exports.B = B;
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.method = function (x) {
+    }C.prototype.method = function (x) {
     };
     tslib_1.__decorate([
         tslib_1.__param(0, dec),
@@ -105,23 +100,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
-};
-var A = /** @class */ (function () {
-    function A() {
-    }
+};var A = /** @class */ (function () {
+    function A() {}
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
+    __extends(B, _super);function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.method = function (x) {
+    }C.prototype.method = function (x) {
     };
     __decorate([
         __param(0, dec),

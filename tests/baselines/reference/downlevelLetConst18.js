@@ -33,15 +33,13 @@ for (let x; ;) {
 //// [downlevelLetConst18.js]
 'use strict';
 var _loop_1 = function (x) {
-    function foo() { x; }
-    ;
+    function foo() { x; };
 };
 for (var x = void 0;;) {
     _loop_1(x);
 }
 var _loop_2 = function (x) {
-    function foo1() { x; }
-    ;
+    function foo1() { x; };
 };
 for (var x = void 0;;) {
     _loop_2(x);

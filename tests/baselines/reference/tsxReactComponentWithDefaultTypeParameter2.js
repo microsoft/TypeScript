@@ -17,5 +17,8 @@ let x1 = <MyComp a="hi"/>
 "use strict";
 exports.__esModule = true;
 var React = require("react");
+
+
+
 var x = <MyComp />;
 var x1 = <MyComp a="hi"/>;

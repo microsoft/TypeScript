@@ -26,6 +26,7 @@ function callN<T extends A | B>(p: T) {
 function call0(p) {
     p.a("s"); // Error
 }
+
 function callN(p) {
     p.a("s"); // Error
     var a = p.a;

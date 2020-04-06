@@ -37,11 +37,13 @@ var React = require("react");
 <div>
     // Not Comment
 </div>;
+
 <div>
     // Not Comment
     
     // Another not Comment
 </div>;
+
 <div>
     // Not Comment
     {
@@ -49,6 +51,7 @@ var React = require("react");
 "Hi"}
     // Another not Comment
 </div>;
+
 <div>
     /* Not Comment */
     {

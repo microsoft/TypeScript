@@ -41,6 +41,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var arr1 = [1, 2]; // number[]
 var arr2 = ["hello", true]; // (string | number)[]
 var arr3Tuple = [3, "three"]; // [number, string]
@@ -48,31 +49,23 @@ var arr4Tuple = [3, "three", "hello"]; // [number, string, string]
 var arrEmpty = [];
 var arr5Tuple = ["hello", true, false, " hello", true, 10, "any"]; // Tuple
 var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function () { };
+    function C() {}C.prototype.foo = function () { };
     return C;
 }());
 var D = /** @class */ (function () {
-    function D() {
-    }
-    D.prototype.foo2 = function () { };
+    function D() {}D.prototype.foo2 = function () { };
     return D;
 }());
 var E = /** @class */ (function (_super) {
-    __extends(E, _super);
-    function E() {
+    __extends(E, _super);function E() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    E.prototype.foo3 = function () { };
+    }E.prototype.foo3 = function () { };
     return E;
 }(C));
 var F = /** @class */ (function (_super) {
-    __extends(F, _super);
-    function F() {
+    __extends(F, _super);function F() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    F.prototype.foo4 = function () { };
+    }F.prototype.foo4 = function () { };
     return F;
 }(C));
 var c, d, e, f;

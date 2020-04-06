@@ -89,10 +89,8 @@ var d = /** @class */ (function () {
     function d() {
     }
     return d;
-}());
-exports.d = d;
-function foo() { return null; }
-exports.foo = foo;
+}());exports.d = d;
+function foo() { return null; }exports.foo = foo;
 //// [importDecl_require1.js]
 "use strict";
 exports.__esModule = true;
@@ -101,11 +99,9 @@ var d = /** @class */ (function () {
     function d() {
     }
     return d;
-}());
-exports.d = d;
+}());exports.d = d;
 var x;
-function foo() { return null; }
-exports.foo = foo;
+function foo() { return null; }exports.foo = foo;
 //// [importDecl_require2.js]
 "use strict";
 exports.__esModule = true;
@@ -114,10 +110,8 @@ var d = /** @class */ (function () {
     function d() {
     }
     return d;
-}());
-exports.d = d;
-function foo() { return null; }
-exports.foo = foo;
+}());exports.d = d;
+function foo() { return null; }exports.foo = foo;
 //// [importDecl_require3.js]
 "use strict";
 exports.__esModule = true;
@@ -126,16 +120,13 @@ var d = /** @class */ (function () {
     function d() {
     }
     return d;
-}());
-exports.d = d;
-function foo() { return null; }
-exports.foo = foo;
+}());exports.d = d;
+function foo() { return null; }exports.foo = foo;
 //// [importDecl_require4.js]
 "use strict";
 exports.__esModule = true;
 exports.foo2 = void 0;
-function foo2() { return null; }
-exports.foo2 = foo2;
+function foo2() { return null; }exports.foo2 = foo2;
 //// [importDecl_1.js]
 "use strict";
 exports.__esModule = true;
@@ -154,6 +145,7 @@ var m1;
     m1.x2 = m4.x;
     m1.d2 = m4.d;
     m1.f2 = m4.foo();
+
     var x3 = m4.x;
     var d3 = m4.d;
     var f3 = m4.foo();
@@ -162,9 +154,11 @@ var m1;
 var glo_m4 = require("./importDecl_require1");
 exports.useGlo_m4_d4 = glo_m4.d;
 exports.useGlo_m4_f4 = glo_m4.foo();
+
 //Emit even when used just in function type
 var fncOnly_m4 = require("./importDecl_require2");
 exports.useFncOnly_m4_f4 = fncOnly_m4.foo();
+
 // only used privately no need to emit
 var private_m4 = require("./importDecl_require3");
 var usePrivate_m4_m1;
@@ -176,6 +170,7 @@ var usePrivate_m4_m1;
 // Do not emit unused import
 var m5 = require("./importDecl_require4");
 exports.d = m5.foo2();
+
 // Do not emit multiple used import statements
 var multiImport_m4 = require("./importDecl_require"); // Emit used
 exports.useMultiImport_m4_x4 = multiImport_m4.x;

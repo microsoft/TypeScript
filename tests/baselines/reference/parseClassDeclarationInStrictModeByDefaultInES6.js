@@ -9,11 +9,9 @@ class C {
 }
 
 //// [parseClassDeclarationInStrictModeByDefaultInES6.js]
-class C {
-    constructor() {
+class C {constructor() {
         this.interface = 10;
-    }
-    implements() { }
+    }implements() { }
     foo(arguments) { }
     bar(eval) {
         arguments = "hello";

@@ -32,15 +32,17 @@ fn(a => { });
 
 //// [assignmentCompatability_checking-call-member-off-of-function-interface.js]
 // 3.8.4 Assignment Compatibility 
+
+
 var x;
 // Should fail
 x = '';
 x = [''];
 x = 4;
 x = {};
+
 // Should work
-function f() { }
-;
+function f() { };
 x = f;
 function fn(c) { }
 // Should Fail

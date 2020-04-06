@@ -72,6 +72,7 @@ bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8, 3);
 var len = bigIntArray.length;
 bigIntArray.length = 10;
 var arrayBufferLike = bigIntArray;
+
 // Test BigUint64Array
 var bigUintArray = new BigUint64Array();
 bigUintArray = new BigUint64Array(10);

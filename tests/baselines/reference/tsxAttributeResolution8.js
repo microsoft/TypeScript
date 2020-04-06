@@ -11,6 +11,7 @@ var x: any;
 <test1 {...x} />
 
 //// [file.jsx]
+
 var x;
 // Should be OK
 <test1 {...x}/>;

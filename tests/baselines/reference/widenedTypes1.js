@@ -12,6 +12,7 @@ var h = [{x: undefined}];
 //// [widenedTypes1.js]
 var a = null;
 var b = undefined;
+
 var c = { x: null };
 var d = [{ x: null }];
 var f = [null, null];

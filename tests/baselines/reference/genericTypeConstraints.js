@@ -26,21 +26,17 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Foo = /** @class */ (function () {
+})();var Foo = /** @class */ (function () {
     function Foo() {
-    }
-    Foo.prototype.fooMethod = function () { };
+    }Foo.prototype.fooMethod = function () { };
     return Foo;
 }());
 var FooExtended = /** @class */ (function () {
-    function FooExtended() {
-    }
+    function FooExtended() {}
     return FooExtended;
 }());
 var Bar = /** @class */ (function () {
-    function Bar() {
-    }
+    function Bar() {}
     return Bar;
 }());
 var BarExtended = /** @class */ (function (_super) {

@@ -145,12 +145,10 @@ var Widget1 = /** @class */ (function () {
         this.name = 'one';
     }
     return Widget1;
-}());
-exports.Widget1 = Widget1;
+}());exports.Widget1 = Widget1;
 function createWidget1() {
     return new Widget1();
-}
-exports.createWidget1 = createWidget1;
+}exports.createWidget1 = createWidget1;
 var SpecializedWidget;
 (function (SpecializedWidget) {
     var Widget2 = /** @class */ (function () {
@@ -174,20 +172,16 @@ var Widgets = require("./privacyCannotNameAccessorDeclFile_Widgets");
 var Widgets1 = require("GlobalWidgets");
 function createExportedWidget1() {
     return Widgets.createWidget1();
-}
-exports.createExportedWidget1 = createExportedWidget1;
+}exports.createExportedWidget1 = createExportedWidget1;
 function createExportedWidget2() {
     return Widgets.SpecializedWidget.createWidget2();
-}
-exports.createExportedWidget2 = createExportedWidget2;
+}exports.createExportedWidget2 = createExportedWidget2;
 function createExportedWidget3() {
     return Widgets1.createWidget3();
-}
-exports.createExportedWidget3 = createExportedWidget3;
+}exports.createExportedWidget3 = createExportedWidget3;
 function createExportedWidget4() {
     return Widgets1.SpecializedGlobalWidget.createWidget4();
-}
-exports.createExportedWidget4 = createExportedWidget4;
+}exports.createExportedWidget4 = createExportedWidget4;
 //// [privacyCannotNameAccessorDeclFile_consumer.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -253,8 +247,7 @@ var publicClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
         configurable: true
     });
     return publicClassWithWithPrivateGetAccessorTypes;
-}());
-exports.publicClassWithWithPrivateGetAccessorTypes = publicClassWithWithPrivateGetAccessorTypes;
+}());exports.publicClassWithWithPrivateGetAccessorTypes = publicClassWithWithPrivateGetAccessorTypes;
 var privateClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
     function privateClassWithWithPrivateGetAccessorTypes() {
     }
@@ -348,8 +341,7 @@ var publicClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
         configurable: true
     });
     return publicClassWithPrivateModuleGetAccessorTypes;
-}());
-exports.publicClassWithPrivateModuleGetAccessorTypes = publicClassWithPrivateModuleGetAccessorTypes;
+}());exports.publicClassWithPrivateModuleGetAccessorTypes = publicClassWithPrivateModuleGetAccessorTypes;
 var privateClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
     function privateClassWithPrivateModuleGetAccessorTypes() {
     }

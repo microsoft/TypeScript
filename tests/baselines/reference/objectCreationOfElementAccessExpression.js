@@ -68,8 +68,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Food = /** @class */ (function () {
+})();var Food = /** @class */ (function () {
     function Food(name) {
         this.name = name;
         this.amount = 100;
@@ -97,6 +96,7 @@ var MonsterFood = /** @class */ (function (_super) {
 }(Food));
 var IceCream = /** @class */ (function (_super) {
     __extends(IceCream, _super);
+
     function IceCream(flavor) {
         var _this = _super.call(this, "Ice Cream", flavor) || this;
         _this.flavor = flavor;

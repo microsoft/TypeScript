@@ -17,4 +17,5 @@ var v = {
     get bar() {
         return 12;
     }
-};
+}
+;

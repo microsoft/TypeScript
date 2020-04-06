@@ -7,4 +7,5 @@ x!++;
 
 //// [constWithNonNull.js]
 // Fixes #21848
+
 x++;

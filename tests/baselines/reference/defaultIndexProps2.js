@@ -23,6 +23,7 @@ var Foo = /** @class */ (function () {
     return Foo;
 }());
 var f = new Foo();
+
 // WScript.Echo(f[0]);
 var o = { v: "Yo2" };
 // WScript.Echo(o[0]);

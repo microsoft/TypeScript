@@ -26,13 +26,23 @@ const mismatched = <ElemLit prop="x">{() => 12}</ElemLit>
 "use strict";
 var Elem = function (p) { return <div></div>; };
 Elem({ prop: { a: "x" }, children: function (i) { return ({ a: "z" }); } });
-var q = <Elem prop={{ a: "x" }} children={function (i) { return ({ a: "z" }); }}/>;
-var qq = <Elem prop={{ a: "x" }}>{function (i) { return ({ a: "z" }); }}</Elem>;
+var q = <Elem prop={{ a: "x" }} children={function (i) { return ({ a: "z" }); }}/>
+;
+var qq = <Elem prop={{ a: "x" }}>{function (i) { return ({ a: "z" }); }}</Elem>
+
+;
+
 var ElemLit = function (p) { return <div></div>; };
 ElemLit({ prop: "x", children: function () { return "x"; } });
-var j = <ElemLit prop="x" children={function () { return "x"; }}/>;
-var jj = <ElemLit prop="x">{function () { return "x"; }}</ElemLit>;
+var j = <ElemLit prop="x" children={function () { return "x"; }}/>
+;
+var jj = <ElemLit prop="x">{function () { return "x"; }}</ElemLit>
+
+;
+
 // Should error
-var arg = <ElemLit prop="x" children={function (p) { return "y"; }}/>;
-var argchild = <ElemLit prop="x">{function (p) { return "y"; }}</ElemLit>;
+var arg = <ElemLit prop="x" children={function (p) { return "y"; }}/>
+;
+var argchild = <ElemLit prop="x">{function (p) { return "y"; }}</ElemLit>
+;
 var mismatched = <ElemLit prop="x">{function () { return 12; }}</ElemLit>;

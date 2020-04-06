@@ -27,6 +27,7 @@ var Obj3: Obj3;
 
 
 //// [file.jsx]
+
 var Obj1;
 <Obj1 />; // Error, return type is not an object type
 var Obj2;

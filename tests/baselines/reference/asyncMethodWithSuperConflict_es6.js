@@ -90,14 +90,18 @@ class B extends A {
             _super_1.x.call(this);
             // call additional property.
             _super_1.y.call(this);
+
             // call with element access
             _superIndex_1("x").call(this);
+
             // property access (read)
             const a = _super_1.x;
+
             // element access (read)
             const b = _superIndex_1("x");
         });
     }
+
     // async method with assignment/destructuring on 'super' requires a binding
     advanced() {
         const _superIndex_1 = (function (geti, seti) {
@@ -111,20 +115,28 @@ class B extends A {
             const _super = null;
             const _superIndex = null;
             const f = () => { };
+
             // call with property access
             _super_1.x.call(this);
+
             // call with element access
             _superIndex_1("x").value.call(this);
+
             // property access (read)
             const a = _super_1.x;
+
             // element access (read)
             const b = _superIndex_1("x").value;
+
             // property access (assign)
             _super_1.x = f;
+
             // element access (assign)
             _superIndex_1("x").value = f;
+
             // destructuring assign with property access
             ({ f: _super_1.x } = { f });
+
             // destructuring assign with element access
             ({ f: _superIndex_1("x").value } = { f });
         });

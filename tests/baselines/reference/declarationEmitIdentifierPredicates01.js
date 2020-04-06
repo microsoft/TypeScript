@@ -9,8 +9,7 @@ exports.__esModule = true;
 exports.f = void 0;
 function f(x) {
     return typeof x === "number";
-}
-exports.f = f;
+}exports.f = f;
 
 
 //// [declarationEmitIdentifierPredicates01.d.ts]

@@ -38,7 +38,8 @@ else {
 var strOrNum;
 var strOrBool;
 var strOrFunc;
-var numOrBool;
+var numOrBool
+;
 var str;
 var num;
 var bool;

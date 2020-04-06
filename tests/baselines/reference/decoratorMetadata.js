@@ -40,10 +40,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var service_1 = require("./service");
+
 var MyComponent = /** @class */ (function () {
     function MyComponent(Service) {
         this.Service = Service;
     }
+
     MyComponent.prototype.method = function (x) {
     };
     __decorate([

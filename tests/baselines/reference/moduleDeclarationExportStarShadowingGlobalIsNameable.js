@@ -46,6 +46,7 @@ __exportStar(require("./account"), exports);
 "use strict";
 exports.__esModule = true;
 exports.func = void 0;
+
 exports.func = function (account, acc2) { };
 
 

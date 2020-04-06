@@ -72,6 +72,7 @@ var p: M.D.Point;
 // expect no errors here
 var A;
 (function (A) {
+
     A.x = 'hello world';
     var Point = /** @class */ (function () {
         function Point(x, y) {
@@ -109,6 +110,7 @@ var X;
 })(X || (X = {}));
 var Z;
 (function (Z) {
+
     // 'y' should be a fundule here
     Z.y = X.Y;
 })(Z || (Z = {}));
@@ -133,5 +135,7 @@ var M;
 })(M || (M = {}));
 var o;
 var o = new M.D('Hello');
-var p;
+
+var p
+;
 var p;

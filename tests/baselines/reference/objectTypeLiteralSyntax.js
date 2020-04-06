@@ -10,5 +10,8 @@ var y: {
 }
 
 //// [objectTypeLiteralSyntax.js]
-var x;
+var x
+
+;
+
 var y;

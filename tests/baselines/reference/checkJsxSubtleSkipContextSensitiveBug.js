@@ -78,12 +78,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 /// <reference path="react16.d.ts" />
 var React = require("react");
+
+
+
 var AsyncLoader = /** @class */ (function (_super) {
-    __extends(AsyncLoader, _super);
-    function AsyncLoader() {
+    __extends(AsyncLoader, _super);function AsyncLoader() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    AsyncLoader.prototype.render = function () { return null; };
+    }AsyncLoader.prototype.render = function () { return null; };
     return AsyncLoader;
 }(React.Component));
 function load() {
@@ -93,4 +94,5 @@ function load() {
         });
     });
 }
+
 var loader = React.createElement(AsyncLoader, { prop1: load, prop2: function (result) { return result; } });

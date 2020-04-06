@@ -6,5 +6,4 @@ async function foo(a = await => await): Promise<void> {
 function foo(a = yield ) {
     return __awaiter(this, void 0, void 0, function* () { });
 }
-await;
-Promise < void  > {};
+await;Promise < void  > {};

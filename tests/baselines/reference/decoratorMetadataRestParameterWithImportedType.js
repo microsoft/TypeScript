@@ -47,8 +47,7 @@ var SomeClass = /** @class */ (function () {
     function SomeClass() {
     }
     return SomeClass;
-}());
-exports.SomeClass = SomeClass;
+}());exports.SomeClass = SomeClass;
 //// [aux1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -57,8 +56,7 @@ var SomeClass1 = /** @class */ (function () {
     function SomeClass1() {
     }
     return SomeClass1;
-}());
-exports.SomeClass1 = SomeClass1;
+}());exports.SomeClass1 = SomeClass1;
 //// [aux2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -67,8 +65,7 @@ var SomeClass2 = /** @class */ (function () {
     function SomeClass2() {
     }
     return SomeClass2;
-}());
-exports.SomeClass2 = SomeClass2;
+}());exports.SomeClass2 = SomeClass2;
 //// [main.js]
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -84,22 +81,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClassA = void 0;
 var aux_1 = require("./aux");
 var aux1_1 = require("./aux1");
+
 function annotation() {
     return function (target) { };
 }
+
 function annotation1() {
     return function (target) { };
 }
 var ClassA = /** @class */ (function () {
-    function ClassA() {
-        var init = [];
+    function ClassA() {var init = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             init[_i] = arguments[_i];
         }
         this.array = init;
     }
-    ClassA.prototype.foo = function () {
-        var args = [];
+
+    ClassA.prototype.foo = function () {var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }

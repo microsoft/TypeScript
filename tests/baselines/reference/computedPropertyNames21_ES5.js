@@ -9,8 +9,7 @@ class C {
 //// [computedPropertyNames21_ES5.js]
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.bar = function () {
+    }C.prototype.bar = function () {
         return 0;
     };
     C.prototype[this.bar()] = function () { };

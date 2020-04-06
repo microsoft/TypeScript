@@ -19,3 +19,4 @@ declare module "baz" {
 
 
 //// [incompatibleExports1.js]
+

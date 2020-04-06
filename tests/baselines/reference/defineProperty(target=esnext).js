@@ -25,14 +25,14 @@ class C extends B {
 
 
 //// [defineProperty.js]
-var x = "p";
+var x = "p"
+;
 class A {
     y;
     a = this.y;
     b;
     c;
-    ["computed"] = 13;
-    [x] = 14;
+    ["computed"] = 13;[x] = 14;
     m() { }
     constructor(y) {
         this.y = y;

@@ -79,8 +79,15 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
         for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
             r[k] = a[j];
     return r;
-};
-function fn(a, b, c, d, e, f, g) {
+};function fn(
+a,
+    b,
+    c,
+    d,
+    e,
+    f,
+    g
+) {
     var c_1, c_1_1;
     var e_1, _a;
     return __awaiter(this, void 0, void 0, function () {

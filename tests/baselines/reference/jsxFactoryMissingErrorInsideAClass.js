@@ -14,5 +14,4 @@ class C {
     factory() {
         return factory.createElement("div", null);
     }
-}
-exports.C = C;
+}exports.C = C;

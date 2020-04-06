@@ -81,6 +81,7 @@ module m1 {
 
 //// [typeGuardsInFunctionAndModuleBlock.js]
 // typeguards are scoped in function/module block
+
 function foo(x) {
     return typeof x === "string"
         ? x

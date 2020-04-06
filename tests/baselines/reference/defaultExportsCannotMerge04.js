@@ -16,7 +16,7 @@ export interface Foo {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function Foo() {
-}
-exports.default = Foo;
+}exports.default = Foo;
 (function (Foo) {
 })(Foo || (Foo = {}));
+

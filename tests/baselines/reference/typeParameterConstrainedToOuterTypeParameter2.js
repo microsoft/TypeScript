@@ -11,5 +11,8 @@ var a: A<string>
 var b: B<string> = a;
 
 //// [typeParameterConstrainedToOuterTypeParameter2.js]
-var a;
+
+
+var a
+;
 var b = a;

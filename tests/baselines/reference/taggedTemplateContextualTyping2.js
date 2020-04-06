@@ -17,9 +17,11 @@ tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ y => { y<strin
 tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ undefined }${ "hello" }`;
 
 //// [taggedTemplateContextualTyping2.js]
+
 function tempTag2(...rest) {
     return undefined;
 }
+
 // If contextual typing takes place, these functions should work.
 // Otherwise, the arrow functions' parameters will be typed as 'any',
 // and it is an error to invoke an any-typed value with type arguments,

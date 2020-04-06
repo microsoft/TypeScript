@@ -20,8 +20,7 @@ System.register([], function (exports_1, context_1) {
         execute: function () {
             Testing123 = /** @class */ (() => {
                 var Testing123_1;
-                let Testing123 = Testing123_1 = class Testing123 {
-                };
+                let Testing123 = Testing123_1 = class Testing123 {};
                 Testing123 = Testing123_1 = __decorate([
                     Something({ v: () => Testing123_1 })
                 ], Testing123);

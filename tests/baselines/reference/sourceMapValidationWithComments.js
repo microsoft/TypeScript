@@ -24,8 +24,8 @@ class DebugClass {
 //// [sourceMapValidationWithComments.js]
 var DebugClass = /** @class */ (function () {
     function DebugClass() {
-    }
-    DebugClass.debugFunc = function () {
+    }DebugClass.debugFunc = function () {
+
         // Start Debugger Test Code
         var i = 0;
         i++;

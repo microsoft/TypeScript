@@ -2,5 +2,4 @@
 retValue = bfs.VARIABLES >> );
 
 //// [parserErrorRecovery_LeftShift1.js]
-retValue = bfs.VARIABLES >> ;
-;
+retValue = bfs.VARIABLES >> ;;

@@ -25,11 +25,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var React = require("react");
+
 var MyComponent = /** @class */ (function (_super) {
-    __extends(MyComponent, _super);
-    function MyComponent() {
+    __extends(MyComponent, _super);function MyComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return MyComponent;
 }(React.Component));
-var m = React.createElement(MyComponent, { x: "a" });
+var m = React.createElement(MyComponent, { x: "a" })
+;

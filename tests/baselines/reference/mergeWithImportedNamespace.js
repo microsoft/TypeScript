@@ -14,9 +14,7 @@ export namespace N {
 exports.__esModule = true;
 exports.N = void 0;
 var N;
-(function (N) {
-    N.x = 1;
-})(N = exports.N || (exports.N = {}));
+(function (N) {N.x = 1;})(N = exports.N || (exports.N = {}));
 //// [f2.js]
 "use strict";
 exports.__esModule = true;

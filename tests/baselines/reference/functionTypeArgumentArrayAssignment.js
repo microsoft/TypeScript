@@ -14,6 +14,7 @@ module test {
 //// [functionTypeArgumentArrayAssignment.js]
 var test;
 (function (test) {
+
     function map() {
         var ys = [];
     }

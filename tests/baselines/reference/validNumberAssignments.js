@@ -11,6 +11,7 @@ e = x;
 
 //// [validNumberAssignments.js]
 var x = 1;
+
 var a = x;
 var b = x;
 var c = x;

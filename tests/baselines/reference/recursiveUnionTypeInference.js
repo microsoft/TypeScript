@@ -9,6 +9,7 @@ function bar<T>(x: Foo<T> | string): T {
 
 
 //// [recursiveUnionTypeInference.js]
+
 function bar(x) {
     return bar(x);
 }

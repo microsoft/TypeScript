@@ -36,6 +36,7 @@ var Obj3: Obj3;
 
 
 //// [file.jsx]
+
 // Error
 var Div = 3;
 <Div />;

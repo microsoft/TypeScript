@@ -127,15 +127,12 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Base = /** @class */ (function () {
+})();var Base = /** @class */ (function () {
     function Base() {
-    }
-    Base.prototype.method = function () {
+    }Base.prototype.method = function () {
         var A = /** @class */ (function () {
             function A() {
-            }
-            A.prototype.methoda = function () {
+            }A.prototype.methoda = function () {
                 var b;
                 var d1;
                 var d2;
@@ -153,15 +150,12 @@ var Base = /** @class */ (function () {
     return Base;
 }());
 var Derived1 = /** @class */ (function (_super) {
-    __extends(Derived1, _super);
-    function Derived1() {
+    __extends(Derived1, _super);function Derived1() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Derived1.prototype.method1 = function () {
+    }Derived1.prototype.method1 = function () {
         var B = /** @class */ (function () {
             function B() {
-            }
-            B.prototype.method1b = function () {
+            }B.prototype.method1b = function () {
                 var b;
                 var d1;
                 var d2;
@@ -179,15 +173,12 @@ var Derived1 = /** @class */ (function (_super) {
     return Derived1;
 }(Base));
 var Derived2 = /** @class */ (function (_super) {
-    __extends(Derived2, _super);
-    function Derived2() {
+    __extends(Derived2, _super);function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Derived2.prototype.method2 = function () {
+    }Derived2.prototype.method2 = function () {
         var C = /** @class */ (function () {
             function C() {
-            }
-            C.prototype.method2c = function () {
+            }C.prototype.method2c = function () {
                 var b;
                 var d1;
                 var d2;
@@ -205,15 +196,12 @@ var Derived2 = /** @class */ (function (_super) {
     return Derived2;
 }(Base));
 var Derived3 = /** @class */ (function (_super) {
-    __extends(Derived3, _super);
-    function Derived3() {
+    __extends(Derived3, _super);function Derived3() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Derived3.prototype.method3 = function () {
+    }Derived3.prototype.method3 = function () {
         var D = /** @class */ (function () {
             function D() {
-            }
-            D.prototype.method3d = function () {
+            }D.prototype.method3d = function () {
                 var b;
                 var d1;
                 var d2;
@@ -231,15 +219,12 @@ var Derived3 = /** @class */ (function (_super) {
     return Derived3;
 }(Derived1));
 var Derived4 = /** @class */ (function (_super) {
-    __extends(Derived4, _super);
-    function Derived4() {
+    __extends(Derived4, _super);function Derived4() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Derived4.prototype.method4 = function () {
+    }Derived4.prototype.method4 = function () {
         var E = /** @class */ (function () {
             function E() {
-            }
-            E.prototype.method4e = function () {
+            }E.prototype.method4e = function () {
                 var b;
                 var d1;
                 var d2;

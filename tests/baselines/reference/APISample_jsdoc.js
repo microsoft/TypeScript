@@ -129,19 +129,26 @@ function getSomeOtherTags(node: ts.Node) {
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 exports.__esModule = true;
+
 var ts = require("typescript");
+
 // excerpted from https://github.com/YousefED/typescript-json-schema
 // (converted from a method and modified; for example, `this: any` to compensate, among other changes)
-function parseCommentsIntoDefinition(symbol, definition, otherAnnotations) {
+function parseCommentsIntoDefinition(
+symbol,
+    definition,
+    otherAnnotations) {
     var _this = this;
     if (!symbol) {
         return;
     }
     // the comments for a symbol
     var comments = symbol.getDocumentationComment(undefined);
+
     if (comments.length) {
         definition.description = comments.map(function (comment) { return comment.kind === "lineBreak" ? comment.text : comment.text.trim().replace(/\r\n/g, "\n"); }).join("");
     }
+
     // jsdocs are separate from comments
     var jsdocs = symbol.getJsDocTags();
     jsdocs.forEach(function (doc) {
@@ -156,6 +163,8 @@ function parseCommentsIntoDefinition(symbol, definition, otherAnnotations) {
         }
     });
 }
+
+
 function getAnnotations(node) {
     var _this = this;
     var symbol = node.symbol;
@@ -171,10 +180,12 @@ function getAnnotations(node) {
         if (value !== undefined) {
             result[jsDocTag.name] = value;
         }
+
         return result;
     }, {});
     return Object.keys(annotations).length ? annotations : undefined;
 }
+
 // these examples are artificial and mostly nonsensical
 function parseSpecificTags(node) {
     if (node.kind === ts.SyntaxKind.Parameter) {
@@ -193,6 +204,7 @@ function parseSpecificTags(node) {
         }
     }
 }
+
 function getReturnTypeFromJSDoc(node) {
     if (node.kind === ts.SyntaxKind.FunctionDeclaration) {
         return ts.getJSDocReturnType(node);
@@ -202,9 +214,11 @@ function getReturnTypeFromJSDoc(node) {
         return type.type;
     }
 }
+
 function getAllTags(node) {
     ts.getJSDocTags(node);
 }
+
 function getSomeOtherTags(node) {
     var tags = [];
     tags.push(ts.getJSDocAugmentsTag(node));

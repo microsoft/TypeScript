@@ -45,26 +45,32 @@ let gResult2 = g(world);
 let gResult3 = g(helloOrWorld);
 
 //// [stringLiteralTypesOverloads03.js]
+
+
+
+
 var hello;
 var world;
 var helloOrWorld;
-function f() {
-    var args = [];
+
+function f() {var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
     }
     return undefined;
 }
+
 var fResult1 = f(hello);
 var fResult2 = f(world);
 var fResult3 = f(helloOrWorld);
-function g() {
-    var args = [];
+
+function g() {var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
     }
     return undefined;
 }
+
 var gResult1 = g(hello);
 var gResult2 = g(world);
 var gResult3 = g(helloOrWorld);

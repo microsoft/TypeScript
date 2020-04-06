@@ -9,4 +9,5 @@ var v = { * foo() {
 var v = { *foo() {
         yield (foo);
     }
-};
+}
+;

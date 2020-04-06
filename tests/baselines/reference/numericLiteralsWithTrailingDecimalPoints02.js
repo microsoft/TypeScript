@@ -38,8 +38,7 @@ var test17 = 3. // comment time again
 //// [numericLiteralsWithTrailingDecimalPoints02.js]
 1..toString();
 1.0.toString();
-1.;
-toString();
+1.;toString();
 1. + 2.0 + 3.;
 var i = 1;
 var test1 = i.toString();
@@ -67,3 +66,4 @@ var test16 = 3
     .toString();
 var test17 = 3.
     .toString();
+

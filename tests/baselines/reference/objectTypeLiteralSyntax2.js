@@ -13,7 +13,13 @@ var y: {
 var z: { foo: string bar: string }
 
 //// [objectTypeLiteralSyntax2.js]
-var x;
+var x
+
+;
+
 // ASI makes this work
-var y;
+var y
+
+;
+
 var z;

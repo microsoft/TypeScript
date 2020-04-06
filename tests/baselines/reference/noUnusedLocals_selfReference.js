@@ -39,32 +39,28 @@ function f() {
 }
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.m = function () { C; };
+    }C.prototype.m = function () { C; };
     return C;
 }());
 var E;
 (function (E) {
-    E[E["A"] = 0] = "A";
-    E[E["B"] = 0] = "B";
+    E[E["A"] = 0] = "A";E[E["B"] = 0] = "B";
 })(E || (E = {}));
 ;
 var N;
 (function (N) {
     N;
 })(N || (N = {}));
+
 var P = /** @class */ (function () {
-    function P() {
-    }
-    P.prototype.m = function () { this.m; };
+    function P() {}P.prototype.m = function () { this.m; };
     return P;
 }());
 P;
+
 // Does not detect mutual recursion.
 function g() { D; }
 var D = /** @class */ (function () {
-    function D() {
-    }
-    D.prototype.m = function () { g; };
+    function D() {}D.prototype.m = function () { g; };
     return D;
 }());

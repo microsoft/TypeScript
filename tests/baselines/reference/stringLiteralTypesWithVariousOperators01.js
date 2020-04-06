@@ -32,6 +32,7 @@ var abc = "ABC";
 var xyz = "XYZ";
 var abcOrXyz = abc || xyz;
 var abcOrXyzOrNumber = abcOrXyz || 100;
+
 var a = "" + abc;
 var b = abc + "";
 var c = 10 + abc;

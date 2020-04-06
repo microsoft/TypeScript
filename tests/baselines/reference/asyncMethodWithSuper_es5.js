@@ -58,16 +58,14 @@ class B extends A {
 //// [asyncMethodWithSuper_es5.js]
 var A = /** @class */ (function () {
     function A() {
-    }
-    A.prototype.x = function () {
+    }A.prototype.x = function () {
     };
     A.prototype.y = function () {
     };
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
+    __extends(B, _super);function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     // async method with only call/get on 'super' does not require a binding
@@ -79,6 +77,7 @@ var B = /** @class */ (function (_super) {
                 _super.prototype.x.call(this);
                 // call additional property.
                 _super.prototype.y.call(this);
+
                 // call with element access
                 _super.prototype["x"].call(this);
                 a = _super.prototype.x;
@@ -87,6 +86,7 @@ var B = /** @class */ (function (_super) {
             });
         });
     };
+
     // async method with assignment/destructuring on 'super' requires a binding
     B.prototype.advanced = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -95,16 +95,20 @@ var B = /** @class */ (function (_super) {
                 f = function () { };
                 // call with property access
                 _super.prototype.x.call(this);
+
                 // call with element access
                 _super.prototype["x"].call(this);
                 a = _super.prototype.x;
                 b = _super.prototype["x"];
                 // property access (assign)
                 _super.prototype.x = f;
+
                 // element access (assign)
                 _super.prototype["x"] = f;
+
                 // destructuring assign with property access
                 (_super.prototype.x = { f: f }.f);
+
                 // destructuring assign with element access
                 (_super.prototype["x"] = { f: f }.f);
                 return [2 /*return*/];

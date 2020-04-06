@@ -32,12 +32,16 @@ module G {
 }
 
 //// [twoMergedInterfacesWithDifferingOverloads2.js]
+
+
 var a;
 var r = a();
 var r2 = a(1);
 var r3 = a(1, 2);
 var G;
 (function (G) {
+
+
     var a;
     var r = a();
     var r2 = a(true);

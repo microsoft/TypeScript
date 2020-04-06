@@ -45,14 +45,12 @@ define(["require", "exports"], function (require, exports) {
         function require() {
         }
         return require;
-    }());
-    exports.require = require;
+    }());exports.require = require;
     var exports = /** @class */ (function () {
         function exports() {
         }
         return exports;
-    }());
-    exports.exports = exports;
+    }());exports.exports = exports;
     var m1;
     (function (m1) {
         var require = /** @class */ (function () {

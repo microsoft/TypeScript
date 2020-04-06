@@ -25,13 +25,14 @@ var _a;
 exports.__esModule = true;
 exports.withContext = exports.context = void 0;
 var context_1 = require("./context");
+
 exports.context = (_a = {},
     _a[context_1.Key] = 'bar',
     _a);
+
 exports.withContext = function (_a) {
     var _b = context_1.Key, value = _a[_b];
-    return value;
-};
+    return value;};
 
 
 //// [context.d.ts]

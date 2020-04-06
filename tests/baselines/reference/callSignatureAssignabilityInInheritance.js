@@ -68,3 +68,4 @@ module MemberWithCallSignature {
 }
 
 //// [callSignatureAssignabilityInInheritance.js]
+

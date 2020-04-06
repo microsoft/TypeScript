@@ -31,6 +31,7 @@ var A;
 (function (A) {
     var M;
     (function (M_1) {
+
         function bar() {
         }
         M_1.bar = bar;

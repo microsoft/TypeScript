@@ -24,93 +24,75 @@ class I { }
 
 //// [file1.js]
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var D = /** @class */ (function () {
-    function D() {
-    }
+    function D() {}
     return D;
 }());
 var E = /** @class */ (function () {
-    function E() {
-    }
+    function E() {}
     return E;
 }());
 var F = /** @class */ (function () {
-    function F() {
-    }
+    function F() {}
     return F;
 }());
 var G = /** @class */ (function () {
-    function G() {
-    }
+    function G() {}
     return G;
 }());
 var H = /** @class */ (function () {
-    function H() {
-    }
+    function H() {}
     return H;
 }());
 var I = /** @class */ (function () {
-    function I() {
-    }
+    function I() {}
     return I;
 }());
 //// [file2.js]
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var D = /** @class */ (function () {
-    function D() {
-    }
+    function D() {}
     return D;
 }());
 var E = /** @class */ (function () {
-    function E() {
-    }
+    function E() {}
     return E;
 }());
 var F = /** @class */ (function () {
-    function F() {
-    }
+    function F() {}
     return F;
 }());
 var G = /** @class */ (function () {
-    function G() {
-    }
+    function G() {}
     return G;
 }());
 var H = /** @class */ (function () {
-    function H() {
-    }
+    function H() {}
     return H;
 }());
 var I = /** @class */ (function () {
-    function I() {
-    }
+    function I() {}
     return I;
 }());

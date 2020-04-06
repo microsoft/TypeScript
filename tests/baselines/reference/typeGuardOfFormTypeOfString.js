@@ -87,8 +87,7 @@ else {
 
 //// [typeGuardOfFormTypeOfString.js]
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 ;
@@ -97,7 +96,8 @@ var bool;
 var num;
 var strOrNum;
 var strOrBool;
-var numOrBool;
+var numOrBool
+;
 var strOrNumOrBool;
 var strOrC;
 var numOrC;

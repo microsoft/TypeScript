@@ -16,8 +16,11 @@ foo()
 
 
 //// [betterErrorForAccidentalCall.js]
+
 foo()(1).toString();
+
 foo()(1).toString();
+
 foo()(1).toString();
 foo()(1 + 2).toString();
 foo()(1).toString();

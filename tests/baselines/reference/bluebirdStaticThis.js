@@ -141,10 +141,13 @@ fooProm = Promise.try(Promise, () => {
 //// [bluebirdStaticThis.js]
 "use strict";
 exports.__esModule = true;
+
+
 var x;
 var arr;
 var foo;
 var fooProm;
+
 fooProm = Promise["try"](Promise, function () {
     return foo;
 });

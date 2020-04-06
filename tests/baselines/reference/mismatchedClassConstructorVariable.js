@@ -6,12 +6,10 @@ class foo { }
 //// [mismatchedClassConstructorVariable.js]
 var baz;
 var baz = /** @class */ (function () {
-    function baz() {
-    }
+    function baz() {}
     return baz;
 }());
 var foo = /** @class */ (function () {
-    function foo() {
-    }
+    function foo() {}
     return foo;
 }());

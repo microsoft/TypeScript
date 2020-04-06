@@ -33,6 +33,7 @@ var n;
     function id(x) {
         return x;
     }
+
     function templateObjectFactory() {
         return id(__makeTemplateObject(["hello world"], ["hello world"]));
     }
@@ -48,6 +49,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function id(x) {
     return x;
 }
+
 function templateObjectFactory() {
     return id(templateObject_1 || (templateObject_1 = __makeTemplateObject(["hello world"], ["hello world"])));
 }

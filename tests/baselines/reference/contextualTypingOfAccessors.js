@@ -15,10 +15,15 @@ x = {
 
 //// [contextualTypingOfAccessors.js]
 // not contextually typing accessors
-var x;
+
+var x
+
+;
+
 x = {
     get foo() {
-        return function (n) { return n; };
+        return function (n) { return n;
+        };
     },
     set foo(x) { }
 };

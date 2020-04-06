@@ -42,6 +42,7 @@ while (true) {
 // All errors
 // naked break not allowed
 break;
+
 // non-existent label
 ONE: while (true)
     break TWO;
@@ -49,8 +50,10 @@ ONE: while (true)
 TWO: while (true) {
     var x = function () {
         break TWO;
-    };
+    }
+    ;
 }
+
 THREE: while (true) {
     var fn = function () {
         break THREE;

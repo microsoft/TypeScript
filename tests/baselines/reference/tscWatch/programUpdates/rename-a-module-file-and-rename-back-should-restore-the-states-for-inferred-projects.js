@@ -22,8 +22,7 @@ interface Array<T> { length: number; [n: number]: T; }
 "use strict";
 exports.__esModule = true;
 exports.bar = void 0;
-function bar() { }
-exports.bar = bar;
+function bar() { }exports.bar = bar;
 ;
 
 
@@ -127,8 +126,7 @@ export function bar() { };
 "use strict";
 exports.__esModule = true;
 exports.bar = void 0;
-function bar() { }
-exports.bar = bar;
+function bar() { }exports.bar = bar;
 ;
 
 

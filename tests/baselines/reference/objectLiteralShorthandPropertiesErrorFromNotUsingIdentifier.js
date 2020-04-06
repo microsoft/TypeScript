@@ -34,6 +34,7 @@ var y = {
     "class": ,
     "typeof": 
 };
+
 var x = (_a = {
         a: a,
         : .b,
@@ -43,4 +44,5 @@ var x = (_a = {
     _a.a = a,
     _a[1] = ,
     _a);
+
 var v = { "class":  }; // error

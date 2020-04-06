@@ -7,10 +7,8 @@ class C {
 
 //// [parserComputedPropertyName29.js]
 var _a;
-class C {
-    constructor() {
+class C {constructor() {
         // yes ASI
         this[_a] = id++;
-    }
-}
+    }}
 _a = e;

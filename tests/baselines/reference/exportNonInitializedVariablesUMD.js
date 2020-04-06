@@ -49,9 +49,13 @@ export let h1: D = new D;
     var ;
     let;
     var ;
+
+
+
+
+
     var A = /** @class */ (function () {
-        function A() {
-        }
+        function A() {}
         return A;
     }());
     var B;
@@ -68,8 +72,7 @@ export let h1: D = new D;
     exports.c1 = 'a';
     exports.d1 = 1;
     var D = /** @class */ (function () {
-        function D() {
-        }
+        function D() {}
         return D;
     }());
     exports.e1 = new D;

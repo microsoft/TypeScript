@@ -39,28 +39,29 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var C1 = /** @class */ (function () {
     function C1() {
     }
     return C1;
 }());
 var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);
-    function C2() {
+    __extends(C2, _super);function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C2;
 }(C1));
 var c1;
 c1; // Should succeed (private x originates in the same declaration)
+
+
 var C3 = /** @class */ (function () {
     function C3() {
     }
     return C3;
 }());
 var C4 = /** @class */ (function (_super) {
-    __extends(C4, _super);
-    function C4() {
+    __extends(C4, _super);function C4() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C4;

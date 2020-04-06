@@ -11,14 +11,11 @@ import * from Zero from "./0"
 exports.__esModule = true;
 exports.C = void 0;
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
-}());
-exports.C = C;
+}());exports.C = C;
 //// [1.js]
 "use strict";
 exports.__esModule = true;
 var from = require();
-from;
-"./0";
+from;"./0";

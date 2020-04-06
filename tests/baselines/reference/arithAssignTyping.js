@@ -16,8 +16,7 @@ f ^= 1; // error
 
 //// [arithAssignTyping.js]
 var f = /** @class */ (function () {
-    function f() {
-    }
+    function f() {}
     return f;
 }());
 f += ''; // error

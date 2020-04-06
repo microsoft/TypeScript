@@ -2,5 +2,4 @@
 1 >>/**/= 2;
 
 //// [parserGreaterThanTokenAmbiguity13.js]
-1 >> ; /**/
-2;
+1 >> ; /**/2;

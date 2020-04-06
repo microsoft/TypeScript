@@ -9,6 +9,5 @@ function test() {
 function test() {
     return function () {
         // some comments here;
-        return 123;
-    };
+        return 123;};
 }

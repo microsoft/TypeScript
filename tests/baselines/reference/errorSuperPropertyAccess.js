@@ -152,10 +152,15 @@ var NoBase = /** @class */ (function () {
         var a = _super.prototype.prototype;
         var b = _super.prototype.hasOwnProperty.call(this, '');
     }
+
     NoBase.prototype.fn = function () {
         var a = _super.prototype.prototype;
         var b = _super.prototype.hasOwnProperty.call(this, '');
     };
+
+
+
+
     //super static property access in static member function of class with no base type
     //super static property access in static member accessor(get and set) of class with no base type
     NoBase.static1 = function () {
@@ -178,10 +183,15 @@ var SomeBase = /** @class */ (function () {
     function SomeBase() {
         this.privateMember = 0;
         this.publicMember = 0;
-    }
-    SomeBase.prototype.privateFunc = function () { };
+    }SomeBase.prototype.privateFunc = function () { };
+
+
     SomeBase.prototype.publicFunc = function () { };
+
+
     SomeBase.privateStaticFunc = function () { };
+
+
     SomeBase.publicStaticFunc = function () { };
     SomeBase.privateStaticMember = 0;
     SomeBase.publicStaticMember = 0;
@@ -198,6 +208,7 @@ var SomeDerived1 = /** @class */ (function (_super) {
         _super.prototype.publicMember = 1;
         return _this;
     }
+
     SomeDerived1.prototype.fn = function () {
         var x = _super.prototype.publicMember;
     };
@@ -218,7 +229,8 @@ var SomeDerived1 = /** @class */ (function (_super) {
         }
         var x = {
             test: function () { return _super.publicFunc.call(this); }
-        };
+        }
+        ;
     };
     return SomeDerived1;
 }(SomeBase));
@@ -232,6 +244,7 @@ var SomeDerived2 = /** @class */ (function (_super) {
         _super.prototype.privateMember = 1;
         return _this;
     }
+
     SomeDerived2.prototype.fn = function () {
         var x = _super.prototype.privateMember;
     };
@@ -253,11 +266,9 @@ var SomeDerived2 = /** @class */ (function (_super) {
 //super.privateStaticProperty in static member function of derived class
 //super.privateStaticProperty in static member accessor(get and set) of derived class
 var SomeDerived3 = /** @class */ (function (_super) {
-    __extends(SomeDerived3, _super);
-    function SomeDerived3() {
+    __extends(SomeDerived3, _super);function SomeDerived3() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    SomeDerived3.fn = function () {
+    }SomeDerived3.fn = function () {
         _super.publicStaticMember = 3;
         _super.privateStaticMember = 3;
         _super.privateStaticFunc.call(this);

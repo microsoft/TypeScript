@@ -31,10 +31,12 @@ myCars = myCars2;
 myCars = myCars3;
 myCars = myCars4;
 myCars = myCars5;
+
 myCars2 = myCars;
 myCars2 = myCars3;
 myCars2 = myCars4;
 myCars2 = myCars5;
+
 myCars3 = myCars;
 myCars3 = myCars2;
 myCars3 = myCars4;

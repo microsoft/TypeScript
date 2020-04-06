@@ -29,6 +29,8 @@ var x = {
         "c": 56,
     }
 };
+
+
 var y = {
     get a() { return 0; },
     set a(v) { },

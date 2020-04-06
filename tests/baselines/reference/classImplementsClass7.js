@@ -13,7 +13,6 @@ var A = /** @class */ (function () {
     return A;
 }());
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());

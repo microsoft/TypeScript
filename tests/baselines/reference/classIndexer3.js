@@ -23,15 +23,13 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var C123 = /** @class */ (function () {
+})();var C123 = /** @class */ (function () {
     function C123() {
     }
     return C123;
 }());
 var D123 = /** @class */ (function (_super) {
-    __extends(D123, _super);
-    function D123() {
+    __extends(D123, _super);function D123() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D123;

@@ -79,6 +79,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var missing_1 = require("missing");
+
+
 function f0() {
     return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
         return [2 /*return*/];
@@ -94,21 +96,27 @@ function f3() {
         return [2 /*return*/];
     }); });
 }
+
 var f4 = function () {
     return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
         return [2 /*return*/];
     }); });
-};
+}
+;
 var f5 = function () {
     return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
         return [2 /*return*/];
     }); });
-};
+}
+;
 var f6 = function () {
     return __awaiter(this, void 0, missing_1.MyPromise, function () { return __generator(this, function (_a) {
         return [2 /*return*/];
     }); });
-};
+}
+
+;
+
 var f7 = function () { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
     return [2 /*return*/];
 }); }); };
@@ -130,6 +138,7 @@ var f12 = function () { return __awaiter(void 0, void 0, void 0, function () { r
 var f13 = function () { return __awaiter(void 0, void 0, missing_1.MyPromise, function () { return __generator(this, function (_a) {
     return [2 /*return*/, p];
 }); }); };
+
 var o = {
     m1: function () {
         return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
@@ -147,10 +156,10 @@ var o = {
         }); });
     }
 };
+
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.m1 = function () {
+    }C.prototype.m1 = function () {
         return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
             return [2 /*return*/];
         }); });

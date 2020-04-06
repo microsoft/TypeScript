@@ -8,8 +8,7 @@ class C {
 //// [computedPropertyNamesDeclarationEmit2_ES5.js]
 var C = /** @class */ (function () {
     function C() {
-    }
-    C["" + ""] = function () { };
+    }C["" + ""] = function () { };
     Object.defineProperty(C, "" + "", {
         get: function () { return 0; },
         enumerable: false,

@@ -40,13 +40,11 @@ var a_1 = require("./a");
 exports.b = {
     f: function () {
         var A = /** @class */ (function () {
-            function A() {
-            }
+            function A() {}
             return A;
         }());
         var B = /** @class */ (function (_super) {
-            __extends(B, _super);
-            function B() {
+            __extends(B, _super);function B() {
                 return _super !== null && _super.apply(this, arguments) || this;
             }
             return B;
@@ -75,13 +73,11 @@ var b_1 = require("./b");
 exports.a = {
     f: function () {
         var A = /** @class */ (function () {
-            function A() {
-            }
+            function A() {}
             return A;
         }());
         var B = /** @class */ (function (_super) {
-            __extends(B, _super);
-            function B() {
+            __extends(B, _super);function B() {
                 return _super !== null && _super.apply(this, arguments) || this;
             }
             return B;

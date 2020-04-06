@@ -48,14 +48,14 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var Base = /** @class */ (function () {
     function Base() {
     }
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);
-    function Derived() {
+    __extends(Derived, _super);function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived;
@@ -66,8 +66,7 @@ var A = /** @class */ (function () {
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
+    __extends(B, _super);function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
@@ -78,8 +77,7 @@ var A2 = /** @class */ (function () {
     return A2;
 }());
 var B2 = /** @class */ (function (_super) {
-    __extends(B2, _super);
-    function B2() {
+    __extends(B2, _super);function B2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B2;
@@ -90,8 +88,7 @@ var A3 = /** @class */ (function () {
     return A3;
 }());
 var B3 = /** @class */ (function (_super) {
-    __extends(B3, _super);
-    function B3() {
+    __extends(B3, _super);function B3() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B3;

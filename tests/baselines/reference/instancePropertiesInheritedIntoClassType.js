@@ -75,8 +75,7 @@ var NonGeneric;
         return C;
     }());
     var D = /** @class */ (function (_super) {
-        __extends(D, _super);
-        function D() {
+        __extends(D, _super);function D() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return D;
@@ -87,6 +86,7 @@ var NonGeneric;
     var r3 = r.y;
     r.y = 4;
     var r6 = d.y(); // error
+
 })(NonGeneric || (NonGeneric = {}));
 var Generic;
 (function (Generic) {
@@ -107,8 +107,7 @@ var Generic;
         return C;
     }());
     var D = /** @class */ (function (_super) {
-        __extends(D, _super);
-        function D() {
+        __extends(D, _super);function D() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return D;

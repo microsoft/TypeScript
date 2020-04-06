@@ -38,6 +38,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 // Original test intent:
 // When arrow functions capture 'this', the lexical 'this' owner
 // currently captures 'this' using a variable named '_this'.

@@ -8,8 +8,7 @@ f += '';
 //// [concatClassAndString.js]
 // Shouldn't compile (the long form f = f + ""; doesn't):
 var f = /** @class */ (function () {
-    function f() {
-    }
+    function f() {}
     return f;
 }());
 f += '';

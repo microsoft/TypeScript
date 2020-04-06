@@ -493,6 +493,8 @@ const t03c04 = (<t03<number, 1>>x).a;
 interface SelfReference<T = SelfReference<string>> {}
 
 //// [genericDefaults.js]
+
+
 // no inference
 f00();
 f00(a);
@@ -502,6 +504,7 @@ f01(a);
 // no inference, fully supplied
 f01();
 f01(a);
+
 // inference
 f02();
 f02(a);
@@ -511,6 +514,7 @@ f02();
 f02(a);
 f02();
 f02(b);
+
 // inference
 f03();
 f03(a);
@@ -520,6 +524,7 @@ f03();
 f03(a);
 f03();
 f03(b);
+
 // inference
 f04();
 f04(a);
@@ -536,6 +541,7 @@ f04(a, b);
 f04();
 f04(a);
 f04(a, c);
+
 // inference
 f05();
 f05(a);
@@ -549,6 +555,7 @@ f05(a, a);
 f05();
 f05(a);
 f05(a, b);
+
 // inference
 f06();
 f06(a);
@@ -570,6 +577,7 @@ f06(a, b);
 f06();
 f06(b);
 f06(b, c);
+
 // inference
 f07();
 f07(a, b);
@@ -600,6 +608,7 @@ f07();
 f07(a);
 f07(a, c);
 f07(a, c, d);
+
 // inference
 f08();
 f08(a);
@@ -613,6 +622,7 @@ f08(a, a);
 f08();
 f08(a);
 f08(a, b);
+
 // inference
 f09();
 f09(a);
@@ -627,6 +637,7 @@ f09(a, ab);
 f09();
 f09(a);
 f09(a, ab);
+
 // inference
 f10();
 f10(a);
@@ -645,6 +656,7 @@ f10(a, ab);
 f10();
 f10(a);
 f10(a, ab);
+
 // inference
 f11();
 f11(a);
@@ -660,6 +672,7 @@ f11(a, b);
 f11();
 f11(a);
 f11(a, c);
+
 // inference
 f12();
 f12(a);
@@ -674,6 +687,7 @@ f12(a, ab);
 f12();
 f12(a);
 f12(a, c);
+
 // inference
 f13();
 f13(a);
@@ -688,6 +702,7 @@ f13();
 f13(a);
 f13(a, c);
 f13(a, c);
+
 // inference
 f14();
 f14(a);
@@ -708,6 +723,7 @@ f14();
 f14(a);
 f14(a, b);
 f14(a, b, d);
+
 // inference
 f15();
 f15(a);
@@ -720,6 +736,7 @@ f15(a, a);
 f15();
 f15(a);
 f15(a, b);
+
 // no inference
 f16();
 f16(a);
@@ -739,6 +756,7 @@ f16();
 f16(a);
 f16(a, b);
 f16(a, b, d);
+
 // inference
 f17();
 f17(a);
@@ -754,6 +772,7 @@ f17(a, b);
 f17();
 f17(a);
 f17(a, c);
+
 // inference
 f18();
 f18(a);
@@ -776,6 +795,7 @@ f18();
 f18(a);
 f18(a, b);
 f18(a, b, d);
+
 // inference
 f19();
 f19(a);
@@ -791,6 +811,7 @@ f19(a, ab);
 f19();
 f19(a);
 f19(a, c);
+
 // inference
 f20();
 f20(a);
@@ -810,57 +831,80 @@ f20();
 f20(a);
 f20(a, b);
 f20(a, b, d);
+
 var i00c00 = x.a;
 var i00c01 = x.a;
+
 var i01c00 = x.a;
 var i01c01 = x.a;
+
 var i02c00 = x.a;
 var i02c01 = x.a;
 var i02c02 = x.a;
 var i02c03 = x.a;
 var i02c04 = x.a;
+
 var i03c00 = x.a;
 var i03c01 = x.a;
 var i03c02 = x.a;
 var i03c03 = x.a;
 var i03c04 = x.a;
+
+
 var i05c00 = x.a;
 var i05c01 = x.a;
+
 var i06c00 = x.a;
 var i06c01 = x.a;
 var i06c02 = x.a;
+
 var i07c00 = x.a;
 var i07c01 = x.b;
 var i07c02 = x.a;
 var i07c03 = x.b;
+
+
 var Base01c00 = new Base01();
 var Base01c01 = new Base01(1);
 var Base01c02 = new Base01();
 var Base01c03 = new Base01(1);
+
 var Derived01c00 = new Derived01();
 var Derived01c01 = new Derived01(1);
 var Derived01c02 = new Derived01();
 var Derived01c03 = new Derived01(1);
+
 var Derived02c00 = new Derived02();
 var Derived02c01 = new Derived02(1);
 var Derived02c02 = new Derived02();
 var Derived02c03 = new Derived02(1);
+
 var Derived03c00 = new Derived03(ab);
 var Derived03c01 = Derived03c00.a;
+
+
+
 var t00c00 = x.a;
 var t00c01 = x.a;
+
+
 var t01c00 = x.a;
 var t01c01 = x.a;
+
+
 var t02c00 = x.a;
 var t02c01 = x.a;
 var t02c02 = x.a;
 var t02c03 = x.a;
 var t02c04 = x.a;
+
+
 var t03c00 = x.a;
 var t03c01 = x.a;
 var t03c02 = x.a;
 var t03c03 = x.a;
 var t03c04 = x.a;
+
 
 
 //// [genericDefaults.d.ts]

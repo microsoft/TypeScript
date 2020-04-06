@@ -10,8 +10,7 @@ class C<T> {
 
 //// [genericGetter2.js]
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 var C = /** @class */ (function () {

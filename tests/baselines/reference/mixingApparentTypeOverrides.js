@@ -45,8 +45,8 @@ var __extends = (this && this.__extends) || (function () {
 function Tagged(Base) {
     return /** @class */ (function (_super) {
         __extends(class_1, _super);
-        function class_1() {
-            var args = [];
+
+        function class_1() {var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
@@ -57,30 +57,26 @@ function Tagged(Base) {
         return class_1;
     }(Base));
 }
+
 var A = /** @class */ (function () {
     function A() {
-    }
-    A.prototype.toString = function () {
+    }A.prototype.toString = function () {
         return "class A";
     };
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
+    __extends(B, _super);function B() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    B.prototype.toString = function () {
+    }B.prototype.toString = function () {
         return "class B";
     };
     return B;
 }(Tagged(A)));
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);
-    function C() {
+    __extends(C, _super);function C() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    C.prototype.toString = function () {
+    }C.prototype.toString = function () {
         return "class C";
     };
     return C;

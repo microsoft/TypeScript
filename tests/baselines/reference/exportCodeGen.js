@@ -96,8 +96,7 @@ var E;
     function fn() { }
     E.fn = fn;
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         return C;
     }());
     E.C = C;
@@ -116,8 +115,7 @@ var F;
     })(Color || (Color = {}));
     function fn() { }
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         return C;
     }());
     var M;

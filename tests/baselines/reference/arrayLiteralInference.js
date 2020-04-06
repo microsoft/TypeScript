@@ -61,5 +61,6 @@ const appTypeStylesWithError = new Map([
     [AppType.Relationship, [AppStyle.Standard, AppStyle.Tree, AppStyle.TreeEntity]],
     [AppType.AdvancedList, [AppStyle.Standard, AppStyle.MiniApp]]
 ]);
+
 let b1 = foo({ x: true }, { x: false });
 let b2 = foo([true], [false]);

@@ -52,10 +52,8 @@ export module M.Q {
 //// [declarationEmit_nameConflicts_1.js]
 "use strict";
 var f;
-(function (f) {
-    var c = /** @class */ (function () {
-        function c() {
-        }
+(function (f) {var c = /** @class */ (function () {
+        function c() {}
         return c;
     }());
     f.c = c;
@@ -71,8 +69,7 @@ var M;
     function f() { }
     M.f = f;
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         return C;
     }());
     M.C = C;
@@ -93,8 +90,7 @@ var M;
         function f() { }
         P.f = f;
         var C = /** @class */ (function () {
-            function C() {
-            }
+            function C() {}
             return C;
         }());
         P.C = C;
@@ -118,8 +114,7 @@ var M;
         function f() { }
         Q.f = f;
         var C = /** @class */ (function () {
-            function C() {
-            }
+            function C() {}
             return C;
         }());
         Q.C = C;

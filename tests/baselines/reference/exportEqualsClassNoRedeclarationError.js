@@ -14,6 +14,7 @@ class SomeClass {
     static get someProp() {
         return 0;
     }
+
     static set someProp(value) { }
 }
 module.exports = SomeClass;

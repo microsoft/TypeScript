@@ -88,6 +88,7 @@ const fz2: Function = (debug = true) => false;
 "use strict";
 exports.__esModule = true;
 exports.executeSomething = void 0;
+
 var f10 = function (_a) {
     var _b = _a.foo, foo = _b === void 0 ? 42 : _b;
     return foo;
@@ -108,128 +109,85 @@ var f14 = id4(function (_a) {
     var _b = _a.foo, foo = _b === void 0 ? 42 : _b;
     return foo;
 });
-var f20 = function (foo) {
-    if (foo === void 0) { foo = 42; }
+
+var f20 = function (foo) {if (foo === void 0) { foo = 42; }
     return foo;
 };
-var f21 = id1(function (foo) {
-    if (foo === void 0) { foo = 42; }
+var f21 = id1(function (foo) {if (foo === void 0) { foo = 42; }
     return foo;
 });
-var f22 = id2(function (foo) {
-    if (foo === void 0) { foo = 42; }
+var f22 = id2(function (foo) {if (foo === void 0) { foo = 42; }
     return foo;
 });
-var f25 = id5(function (foo) {
-    if (foo === void 0) { foo = 42; }
+var f25 = id5(function (foo) {if (foo === void 0) { foo = 42; }
     return foo;
 });
-var f1 = function (x) {
-    if (x === void 0) { x = 1; }
-    return 0;
-}; // number
-var f2 = function (x) {
-    if (x === void 0) { x = 1; }
-    return 0;
-}; // number
-var f3 = function (x) {
-    if (x === void 0) { x = 1; }
-    return 0;
-}; // number
-var f4 = function (x) {
-    if (x === void 0) { x = 1; }
-    return 0;
-}; // number
-var f5 = function (x) {
-    if (x === void 0) { x = 1; }
-    return 0;
-}; // any
-var f6 = function (x) {
-    if (x === void 0) { x = 1; }
-    return 0;
-}; // number
+
+var f1 = function (x) {if (x === void 0) { x = 1; }return 0;}; // number
+var f2 = function (x) {if (x === void 0) { x = 1; }return 0;}; // number
+var f3 = function (x) {if (x === void 0) { x = 1; }return 0;}; // number
+var f4 = function (x) {if (x === void 0) { x = 1; }return 0;}; // number
+var f5 = function (x) {if (x === void 0) { x = 1; }return 0;}; // any
+var f6 = function (x) {if (x === void 0) { x = 1; }return 0;}; // number
 var f7 = function (x) { return 0; }; // Implicit any error
-var f8 = function () {
-    var x = [];
+var f8 = function () {var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
     }
-    return 0;
-}; // []
-g1(function (x) {
-    if (x === void 0) { x = 1; }
-    return 0;
-}); // number
-g2(function (x) {
-    if (x === void 0) { x = 1; }
-    return 0;
-}); // number
-g3(function (x) {
-    if (x === void 0) { x = 1; }
-    return 0;
-}); // number
-g4(function (x) {
-    if (x === void 0) { x = 1; }
-    return 0;
-}); // number
-g5(function (x) {
-    if (x === void 0) { x = 1; }
-    return 0;
-}); // any
-g6(function (x) {
-    if (x === void 0) { x = 1; }
-    return 0;
-}); // number
+    return 0;}; // []
+
+
+g1(function (x) {if (x === void 0) { x = 1; }return 0;}); // number
+g2(function (x) {if (x === void 0) { x = 1; }return 0;}); // number
+g3(function (x) {if (x === void 0) { x = 1; }return 0;}); // number
+g4(function (x) {if (x === void 0) { x = 1; }return 0;}); // number
+g5(function (x) {if (x === void 0) { x = 1; }return 0;}); // any
+g6(function (x) {if (x === void 0) { x = 1; }return 0;}); // number
 g6(function (x) { return 0; }); // Implicit any error
-g6(function () {
-    var x = [];
+g6(function () {var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
     }
-    return 0;
-}); // []
+    return 0;}); // []
+
+
+
 // Repro from #28816
 function id(input) { return input; }
+
 function getFoo(_a) {
     var _b = _a.foo, foo = _b === void 0 ? 42 : _b;
     return foo;
 }
+
 var newGetFoo = id(getFoo);
 var newGetFoo2 = id(function getFoo(_a) {
     var _b = _a.foo, foo = _b === void 0 ? 42 : _b;
     return foo;
 });
-function add(x, y) {
-    if (y === void 0) { y = 0; }
+
+
+function add(x, y) {if (y === void 0) { y = 0; }
     return x + y;
 }
 var memoizedAdd = memoize(add);
-var add2 = function (x, y) {
-    if (y === void 0) { y = 0; }
-    return x + y;
-};
+
+var add2 = function (x, y) {if (y === void 0) { y = 0; }return x + y;};
 var memoizedAdd2 = memoize(add2);
-var memoizedAdd3 = memoize(function (x, y) {
-    if (y === void 0) { y = 0; }
-    return x + y;
-});
+
+var memoizedAdd3 = memoize(function (x, y) {if (y === void 0) { y = 0; }return x + y;});
+
+
 function executeSomething() {
-    return execute(function (root, debug) {
-        if (debug === void 0) { debug = true; }
+    return execute(function (root, debug) {if (debug === void 0) { debug = true; }
         if (debug) {
             root.innerHTML = '';
         }
     });
-}
-exports.executeSomething = executeSomething;
-var fz1 = function (debug) {
-    if (debug === void 0) { debug = true; }
-    return false;
-};
-var fz2 = function (debug) {
-    if (debug === void 0) { debug = true; }
-    return false;
-};
+}exports.executeSomething = executeSomething;
+
+var fz1 = function (debug) {if (debug === void 0) { debug = true; }return false;};
+var fz2 = function (debug) {if (debug === void 0) { debug = true; }return false;};
 
 
 //// [contextuallyTypedParametersWithInitializers.d.ts]

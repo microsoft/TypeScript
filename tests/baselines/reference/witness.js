@@ -140,15 +140,13 @@ var qq: any;
 // Initializers
 var varInit = varInit; // any
 var pInit;
-function fn(pInit) {
-    if (pInit === void 0) { pInit = pInit; }
+function fn(pInit) {if (pInit === void 0) { pInit = pInit; }
     var pInit;
 }
 var InitClass = /** @class */ (function () {
     function InitClass() {
         this.x = this.x;
-    }
-    InitClass.prototype.fn = function () {
+    }InitClass.prototype.fn = function () {
         var y = this.x;
         var y;
     };
@@ -164,6 +162,7 @@ function fnReturn2() {
     return fnReturn2;
 }
 var fnr2 = fnReturn2();
+
 // Comma
 var co1 = (co1, 3);
 var co1;
@@ -171,16 +170,19 @@ var co2 = (3, 4, co2);
 var co2;
 var co3 = (co1, co2, co3, co1);
 var co3;
+
 // Assignment
 var as1 = (as1 = 2);
 var as1;
 var as2 = (as2 = as2 = 2);
 var as2;
+
 // Conditional
 var cnd1 = cnd1 ? 0 : 1;
 var cnd1;
 var cnd2 = cnd1 ? cnd1 ? '' : "" : '';
 var cnd2;
+
 // ||
 var or1 = or1 || '';
 var or1;
@@ -188,6 +190,7 @@ var or2 = '' || or2;
 var or2;
 var or3 = or3 || or3;
 var or3;
+
 // &&
 var and1 = and1 && '';
 var and1;
@@ -201,22 +204,25 @@ function fnCall() {
 }
 var fnCallResult = fnCall();
 var fnCallResult;
+
 // Call argument
 function fnArg1(x, y) {
     var x;
     fnArg1(fnArg1, 0);
 }
-function overload1() { return undefined; }
-;
+
+function overload1() { return undefined; };
+
 function fnArg2() {
     return overload1(fnArg2);
 }
 var t = fnArg2(); // t: should be 'any', but is 'string'
+
+
 // New operator
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.fn1 = function () {
+    }C.prototype.fn1 = function () {
         return new (this.fn1())();
     };
     C.prototype.fn2 = function () {
@@ -233,11 +239,15 @@ function fn5() {
     return new a(fn5);
 }
 var fn5r = fn5(); // fn5r: should be 'any', but is 'number'
+
+
 // Property access
 var propAcc1 = {
     m: propAcc1.m
 };
-var propAcc1;
+var propAcc1
+
+;
 // Property access of module member
 var M2;
 (function (M2) {
@@ -263,4 +273,5 @@ var C3 = /** @class */ (function () {
 }());
 var qq = C3.q;
 var qq;
+
 // Parentheses - tested a bunch above

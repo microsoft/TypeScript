@@ -19,8 +19,7 @@ export class MyComponent {
 //// [deps.js]
 export function Input() { }
 var TemplateRef = /** @class */ (function () {
-    function TemplateRef() {
-    }
+    function TemplateRef() {}
     return TemplateRef;
 }());
 export { TemplateRef };

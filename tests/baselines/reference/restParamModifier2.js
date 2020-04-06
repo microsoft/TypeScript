@@ -5,8 +5,7 @@ class C {
 
 //// [restParamModifier2.js]
 var C = /** @class */ (function () {
-    function C() {
-        var rest = [];
+    function C() {var rest = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             rest[_i] = arguments[_i];
         }

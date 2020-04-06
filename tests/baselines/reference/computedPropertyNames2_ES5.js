@@ -15,8 +15,7 @@ var methodName = "method";
 var accessorName = "accessor";
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype[methodName] = function () { };
+    }C.prototype[methodName] = function () { };
     C[methodName] = function () { };
     Object.defineProperty(C.prototype, accessorName, {
         get: function () { },

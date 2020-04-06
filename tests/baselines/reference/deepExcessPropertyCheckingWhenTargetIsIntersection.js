@@ -29,11 +29,19 @@ TestComponent2({icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test la
 
 
 //// [deepExcessPropertyCheckingWhenTargetIsIntersection.js]
+
 var TestComponent = function (props) {
     return null;
-};
+}
+
+;
+
+
+
 TestComponent({ icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } } });
 var TestComponent2 = function (props) {
     return null;
-};
+}
+
+;
 TestComponent2({ icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } } });

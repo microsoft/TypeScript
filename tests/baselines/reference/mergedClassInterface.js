@@ -51,16 +51,24 @@ interface C6 { }
 declare class C7 { }
 
 //// [file1.js]
+
+
+
+
 var C3 = /** @class */ (function () {
-    function C3() {
-    }
+    function C3() {}
     return C3;
 }());
+
+
 var C4 = /** @class */ (function () {
-    function C4() {
-    }
+    function C4() {}
     return C4;
 }());
+
+
+
+
 // checks if properties actually were merged
 var c5;
 c5.x1;
@@ -68,7 +76,9 @@ c5.x2;
 c5.x3;
 c5.x4;
 //// [file2.js]
+
 //// [file3.js]
+
 
 
 //// [file1.d.ts]

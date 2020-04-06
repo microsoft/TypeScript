@@ -8,10 +8,10 @@ switch (0) {
 
 //// [switchAssignmentCompat.js]
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 switch (0) {
-    case Foo: break; // Error expected
+    case Foo: break;
+    // Error expected
 }

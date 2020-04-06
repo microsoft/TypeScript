@@ -16,10 +16,14 @@ class C {
 //// [conflictMarkerTrivia2.js]
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.foo = function () {
+    }C.prototype.foo = function () {
         a();
     };
+
+
+
+
+
     C.prototype.bar = function () { };
     return C;
 }());

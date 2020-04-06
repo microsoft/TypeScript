@@ -31,6 +31,12 @@ function f1(s: Source, t: Target) {
 }
 
 //// [varianceCallbacksAndIndexedAccesses.js]
+
+
+
+
+
+
 function f1(s, t) {
     t = s;
 }

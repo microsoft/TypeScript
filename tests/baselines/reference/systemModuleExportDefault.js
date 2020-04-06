@@ -22,8 +22,7 @@ System.register([], function (exports_1, context_1) {
     exports_1("default", default_1);
     return {
         setters: [],
-        execute: function () {
-        }
+        execute: function () {}
     };
 });
 //// [file2.js]
@@ -34,8 +33,7 @@ System.register([], function (exports_1, context_1) {
     exports_1("default", foo);
     return {
         setters: [],
-        execute: function () {
-        }
+        execute: function () {}
     };
 });
 //// [file3.js]
@@ -47,8 +45,7 @@ System.register([], function (exports_1, context_1) {
         setters: [],
         execute: function () {
             default_1 = /** @class */ (function () {
-                function default_1() {
-                }
+                function default_1() {}
                 return default_1;
             }());
             exports_1("default", default_1);
@@ -64,8 +61,7 @@ System.register([], function (exports_1, context_1) {
         setters: [],
         execute: function () {
             C = /** @class */ (function () {
-                function C() {
-                }
+                function C() {}
                 return C;
             }());
             exports_1("default", C);

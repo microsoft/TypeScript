@@ -24,14 +24,18 @@ define(["require", "exports", "react"], function (require, exports, React) {
     var Foo = function (props) { return <div />; };
     // Should be OK
     var foo = <Foo />;
+
+
     // Should be OK
     var MainMenu = function (props) { return (<div>
     <h3>Main Menu</h3>
     </div>); };
+
     var App = function (_a) {
         var children = _a.children;
-        return (<div>
+        return (
+            <div>
         <MainMenu />
-	</div>);
-    };
+	</div>
+        );};
 });

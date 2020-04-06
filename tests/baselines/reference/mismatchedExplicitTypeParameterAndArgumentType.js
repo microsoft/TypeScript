@@ -18,6 +18,7 @@ function map(xs, f) {
     xs.forEach(function (x) { return ys.push(f(x)); });
     return ys;
 }
+
 var r0 = map([1, ""], function (x) { return x.toString(); });
 var r5 = map([1, ""], function (x) { return x.toString(); });
 var r6 = map([1, ""], function (x) { return x.toString(); });

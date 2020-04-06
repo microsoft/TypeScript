@@ -56,13 +56,21 @@ export var r13: typeof foo;
 exports.__esModule = true;
 exports.r13 = exports.r12 = exports.r11 = exports.r10 = exports.r9 = exports.r8 = exports.r7 = exports.r6 = exports.r5 = exports.i = exports.r4b = exports.r4 = exports.r3 = exports.c = exports.r2 = exports.r1 = void 0;
 var x = 1;
+
 var y = { foo: '' };
+
 var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
 var c2;
+
+
+
+
+
+
 var i2;
 var M;
 (function (M) {

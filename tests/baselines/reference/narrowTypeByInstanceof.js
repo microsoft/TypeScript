@@ -28,21 +28,20 @@ if (elementA instanceof FileMatch && elementB instanceof FileMatch) {
 //// [narrowTypeByInstanceof.js]
 var Match = /** @class */ (function () {
     function Match() {
-    }
-    Match.prototype.range = function () {
+    }Match.prototype.range = function () {
         return undefined;
     };
     return Match;
 }());
 var FileMatch = /** @class */ (function () {
     function FileMatch() {
-    }
-    FileMatch.prototype.resource = function () {
+    }FileMatch.prototype.resource = function () {
         return undefined;
     };
     return FileMatch;
 }());
 var elementA, elementB;
+
 if (elementA instanceof FileMatch && elementB instanceof FileMatch) {
     var a = elementA.resource().path;
     var b = elementB.resource().path;

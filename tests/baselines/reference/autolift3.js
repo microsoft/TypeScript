@@ -34,11 +34,13 @@ b.foo();
 var B = /** @class */ (function () {
     function B() {
         function foo() { }
+
         foo();
         var a = 0;
         var inner = (function () {
             var CScriptIO = (function () {
                 var fso = 0;
+
                 return {
                     readFile: function (path) {
                         return fso.toString();

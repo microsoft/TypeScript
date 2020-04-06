@@ -30,13 +30,14 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var Base = /** @class */ (function () {
-    function Base(c) {
-    }
+    function Base(c) {}
     return Base;
 }());
 var D = /** @class */ (function (_super) {
     __extends(D, _super);
+
     function D() {
         var _this = _super.call(this, i) || this;
         var s = {

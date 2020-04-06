@@ -15,6 +15,7 @@ module m {
 
 //// [declarationEmitDestructuringObjectLiteralPattern2.js]
 var _a = { a: 1, b: { a: "hello", b: { a: true } } }, x11 = _a.a, _b = _a.b, y11 = _b.a, z11 = _b.b.a;
+
 function f15() {
     var a4 = "hello";
     var b4 = 1;

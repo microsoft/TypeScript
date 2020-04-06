@@ -35,17 +35,16 @@ declare module N {
 
 //// [file1.js]
 var C1 = /** @class */ (function () {
-    function C1() {
-    }
+    function C1() {}
     return C1;
 }());
 var C2 = /** @class */ (function () {
-    function C2() {
-    }
+    function C2() {}
     return C2;
 }());
 function f() { }
 var v = 3;
+
 var Foo = /** @class */ (function () {
     function Foo() {
     }
@@ -60,14 +59,12 @@ var N;
 })(N || (N = {}));
 //// [file2.js]
 var I = /** @class */ (function () {
-    function I() {
-    }
+    function I() {}
     return I;
 }()); // error -- cannot merge interface with non-ambient class
 function C2() { } // error -- cannot merge function with non-ambient class
 var f = /** @class */ (function () {
-    function f() {
-    }
+    function f() {}
     return f;
 }()); // error -- cannot merge function with non-ambient class
 var v = 3;

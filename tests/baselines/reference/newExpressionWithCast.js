@@ -23,3 +23,4 @@ var test2 = new  < any > Test2();
 function Test3() { }
 // valid with noImplicitAny
 var test3 = new Test3();
+

@@ -25,14 +25,22 @@ var component2 = <AnimalComponent {...props2} />
 //// [index.jsx]
 "use strict";
 exports.__esModule = true;
+
+
+
+
+
 function AnimalComponent(info) {
     return undefined;
 }
+
 function getProps() {
     // this may be from server or whatever ...
     return { type: 'Cat', subType: 'Large' };
 }
+
 var props = getProps();
 var component = <AnimalComponent {...props}/>;
+
 var props2 = { type: 'Cat', subType: 'Large' };
 var component2 = <AnimalComponent {...props2}/>;

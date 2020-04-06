@@ -9,12 +9,11 @@ class A {
 
 //// [privateNameAndStaticInitializer.js]
 let A = /** @class */ (() => {
-    class A {
-        constructor() {
+    class A {constructor() {
             this.#foo = 1;
             this.#prop = 2;
-        }
-        #foo;
+        }#foo;
+
         #prop;
     }
     A.inst = new A();

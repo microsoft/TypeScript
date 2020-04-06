@@ -19,6 +19,7 @@ connect();
 //// [localAliasExportAssignment_0.js]
 "use strict";
 var server;
+
 module.exports = server;
 //// [localAliasExportAssignment_1.js]
 "use strict";

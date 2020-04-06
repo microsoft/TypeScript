@@ -7,13 +7,11 @@ export = D;
 "use strict";
 exports.C = void 0;
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var D = /** @class */ (function () {
-    function D() {
-    }
+    function D() {}
     return D;
 }());
 module.exports = D;

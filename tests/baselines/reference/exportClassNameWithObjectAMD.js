@@ -8,9 +8,7 @@ define(["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Object = void 0;
     var Object = /** @class */ (function () {
-        function Object() {
-        }
+        function Object() {}
         return Object;
-    }());
-    exports.Object = Object;
+    }());exports.Object = Object;
 });

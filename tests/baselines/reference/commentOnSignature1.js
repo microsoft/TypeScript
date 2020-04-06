@@ -44,9 +44,15 @@ function foo2(a: any): void {
 */
 function foo(a) {
 }
+
 var c = /** @class */ (function () {
     function c(a) {
     }
+
+
+
+
+
     c.prototype.foo = function (a) {
     };
     return c;

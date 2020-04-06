@@ -167,7 +167,10 @@ define(["require", "exports"], function (require, exports) {
     exports.im_public_e_private = m_private.e_private;
     exports.im_public_f_private = m_private.f_private;
     exports.im_public_v_private = m_private.v_private;
+
     exports.im_public_mi_private = m_private.mi_private;
+
+
     // Usage of privacy error imports
     var privateUse_im_public_c_private = new exports.im_public_c_private();
     exports.publicUse_im_public_c_private = new exports.im_public_c_private();
@@ -178,15 +181,22 @@ define(["require", "exports"], function (require, exports) {
     var privateUse_im_public_v_private = exports.im_public_v_private;
     exports.publicUse_im_public_v_private = exports.im_public_v_private;
     var privateUse_im_public_i_private;
+
     var privateUse_im_public_mi_private = new exports.im_public_mi_private.c();
     exports.publicUse_im_public_mi_private = new exports.im_public_mi_private.c();
     var privateUse_im_public_mu_private;
+
+
+
     // No Privacy errors - importing public elements
     exports.im_public_c_public = m_public.c_public;
     exports.im_public_e_public = m_public.e_public;
     exports.im_public_f_public = m_public.f_public;
     exports.im_public_v_public = m_public.v_public;
+
     exports.im_public_mi_public = m_public.mi_public;
+
+
     // Usage of above decls
     var privateUse_im_public_c_public = new exports.im_public_c_public();
     exports.publicUse_im_public_c_public = new exports.im_public_c_public();
@@ -197,6 +207,7 @@ define(["require", "exports"], function (require, exports) {
     var privateUse_im_public_v_public = exports.im_public_v_public;
     exports.publicUse_im_public_v_public = exports.im_public_v_public;
     var privateUse_im_public_i_public;
+
     var privateUse_im_public_mi_public = new exports.im_public_mi_public.c();
     exports.publicUse_im_public_mi_public = new exports.im_public_mi_public.c();
     var privateUse_im_public_mu_public;

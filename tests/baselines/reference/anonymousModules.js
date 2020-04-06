@@ -21,6 +21,7 @@ module;
     {
         export var bar = 1;
     }
+
     var bar = 2;
     module;
     {

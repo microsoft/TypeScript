@@ -4,8 +4,7 @@ export default new A();
 
 
 //// [declarationEmitDefaultExport6.js]
-export class A {
-}
+export class A {}
 export default new A();
 
 

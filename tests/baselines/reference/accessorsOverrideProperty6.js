@@ -16,8 +16,7 @@ class D extends C {
 
 
 //// [accessorsOverrideProperty6.js]
-class A {
-    constructor() {
+class A {constructor() {
         this.p = 'yep';
     }
 }

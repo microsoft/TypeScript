@@ -56,27 +56,44 @@ baz
 
 //// [jsxEsprimaFbTestSuite.jsx]
 <a />;
+
 //<n:a n:v />; Namespace unsuported
 //<a n:foo="bar"> {value} <b><c /></b></a>;  Namespace unsuported
 <a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;"/>;
+
 <a b="&notanentity;"/>;
 <a />;
+
 <日本語></日本語>;
-<AbC_def test="&#x0026;&#38;">
+
+<AbC_def 
+test="&#x0026;&#38;">
 bar
 baz
 </AbC_def>;
+
 <a b={x ? <c /> : <d />}/>;
+
 <a></a>;
+
 <a></a>;
+
 <div>@test content</div>;
+
 <div><br />7x invalid-js-identifier</div>;
-<LeftRight left/>, <a />;
-right = <b>monkeys /> gorillas</b> /  > ;
+
+<LeftRight left/>, <a />;right = <b>monkeys /> gorillas</b> /  > ;
+
 <a.b></a.b>;
+
 <a.b.c></a.b.c>;
+
 (<div />) < x;
+
 <div {...props}/>;
+
 <div {...props} post="attribute"/>;
+
 <div pre="leading" pre2="attribute" {...props}></div>;
+
 <a>    </a>;

@@ -11,7 +11,8 @@ class MyClass1<T> {
 var MyClass1 = /** @class */ (function () {
     function MyClass1() {
         var _this = this;
-        (function () { return _this; });
+        (
+            function () { return _this; });
     }
     return MyClass1;
 }());

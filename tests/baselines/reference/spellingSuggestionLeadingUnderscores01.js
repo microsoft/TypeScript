@@ -22,6 +22,12 @@ b = {
 exports.__esModule = true;
 exports.b = void 0;
 exports.a.___foo;
+
+
+
+
+
+
 exports.b = {
     ___foo: 100
 };

@@ -13,7 +13,9 @@ function SFC<T>(props: Record<string, T>) {
 
 
 //// [file.jsx]
+
 function SFC(props) {
     return '';
 }
+
 <SFC prop={1}></SFC>; // should error

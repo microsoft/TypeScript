@@ -6,5 +6,6 @@ b = ["", ""];
 
 //// [wideningTuples4.js]
 var a;
+
 var b = a = [undefined, null];
 b = ["", ""];

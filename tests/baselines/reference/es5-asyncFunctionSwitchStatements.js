@@ -68,21 +68,19 @@ async function switchStatement8() {
 }
 
 //// [es5-asyncFunctionSwitchStatements.js]
+
 function switchStatement0() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (x) {
-                case y:
-                    a;
-                    break;
-                default:
-                    b;
-                    break;
+                case y:a;break;
+                default:b;break;
             }
             return [2 /*return*/];
         });
     });
 }
+
 function switchStatement1() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -90,18 +88,15 @@ function switchStatement1() {
                 case 0: return [4 /*yield*/, x];
                 case 1:
                     switch (_a.sent()) {
-                        case y:
-                            a;
-                            break;
-                        default:
-                            b;
-                            break;
+                        case y:a;break;
+                        default:b;break;
                     }
                     return [2 /*return*/];
             }
         });
     });
 }
+
 function switchStatement2() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -126,6 +121,7 @@ function switchStatement2() {
         });
     });
 }
+
 function switchStatement3() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -139,8 +135,7 @@ function switchStatement3() {
                     return [3 /*break*/, 3];
                 case 1: return [4 /*yield*/, a];
                 case 2:
-                    _b.sent();
-                    return [3 /*break*/, 4];
+                    _b.sent();return [3 /*break*/, 4];
                 case 3:
                     b;
                     return [3 /*break*/, 4];
@@ -149,6 +144,7 @@ function switchStatement3() {
         });
     });
 }
+
 function switchStatement4() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -165,13 +161,13 @@ function switchStatement4() {
                     return [3 /*break*/, 4];
                 case 2: return [4 /*yield*/, b];
                 case 3:
-                    _b.sent();
-                    return [3 /*break*/, 4];
+                    _b.sent();return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
         });
     });
 }
+
 function switchStatement5() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -199,6 +195,7 @@ function switchStatement5() {
         });
     });
 }
+
 function switchStatement6() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -206,6 +203,7 @@ function switchStatement6() {
             switch (_b.label) {
                 case 0:
                     _a = x;
+
                     return [4 /*yield*/, y];
                 case 1:
                     switch (_a) {
@@ -227,6 +225,7 @@ function switchStatement6() {
         });
     });
 }
+
 function switchStatement7() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -257,6 +256,7 @@ function switchStatement7() {
         });
     });
 }
+
 function switchStatement8() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;

@@ -12,5 +12,4 @@ var Logger = /** @class */ (function () {
     function Logger() {
     }
     return Logger;
-}());
-exports.Logger = Logger;
+}());exports.Logger = Logger;

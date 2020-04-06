@@ -41,25 +41,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.C4 = exports.C3 = exports.C2 = exports.C1 = void 0;
 var C1 = /** @class */ (function () {
     function C1() {
-    }
-    C1.prototype.C1 = function () { }; // has to be the same as the class name
+    }C1.prototype.C1 = function () { }; // has to be the same as the class name
+
     C1.prototype.bar = function () {
         return function (t) {
         };
     };
     return C1;
-}());
-exports.C1 = C1;
+}());exports.C1 = C1;
 var C2 = /** @class */ (function () {
     function C2() {
-    }
+    }// has to be the same as the class name
     C2.prototype.bar = function () {
         return function (t) {
         };
     };
     return C2;
-}());
-exports.C2 = C2;
+}());exports.C2 = C2;
 var C3 = /** @class */ (function () {
     function C3() {
     }
@@ -74,8 +72,7 @@ var C3 = /** @class */ (function () {
         };
     };
     return C3;
-}());
-exports.C3 = C3;
+}());exports.C3 = C3;
 var C4 = /** @class */ (function () {
     function C4() {
     }
@@ -90,8 +87,7 @@ var C4 = /** @class */ (function () {
         };
     };
     return C4;
-}());
-exports.C4 = C4;
+}());exports.C4 = C4;
 
 
 //// [declarationEmitClassMemberNameConflict.d.ts]

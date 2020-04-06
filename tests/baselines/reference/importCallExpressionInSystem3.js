@@ -32,8 +32,7 @@ System.register([], function (exports_1, context_1) {
 System.register([], function (exports_1, context_1) {
     var __moduleName = context_1 && context_1.id;
     async function foo() {
-        class C extends (await context_1.import("./0")).B {
-        }
+        class C extends (await context_1.import("./0")).B {}
         var c = new C();
         c.print();
     }

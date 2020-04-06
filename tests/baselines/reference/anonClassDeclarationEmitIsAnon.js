@@ -54,26 +54,25 @@ exports.Timestamped = exports.wrapClass = void 0;
 function wrapClass(param) {
     return /** @class */ (function () {
         function Wrapped() {
-        }
-        Wrapped.prototype.foo = function () {
+        }Wrapped.prototype.foo = function () {
             return param;
         };
         return Wrapped;
     }());
-}
-exports.wrapClass = wrapClass;
+}exports.wrapClass = wrapClass;
+
+
+
 function Timestamped(Base) {
     return /** @class */ (function (_super) {
-        __extends(class_1, _super);
-        function class_1() {
+        __extends(class_1, _super);function class_1() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.timestamp = Date.now();
             return _this;
         }
         return class_1;
     }(Base));
-}
-exports.Timestamped = Timestamped;
+}exports.Timestamped = Timestamped;
 //// [index.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -92,15 +91,16 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.TimestampedUser = exports.User = void 0;
 var wrapClass_1 = require("./wrapClass");
+
 exports["default"] = wrapClass_1.wrapClass(0);
+
 // Simple class
 var User = /** @class */ (function () {
     function User() {
         this.name = '';
     }
     return User;
-}());
-exports.User = User;
+}());exports.User = User;
 // User that is Timestamped
 var TimestampedUser = /** @class */ (function (_super) {
     __extends(TimestampedUser, _super);
@@ -108,8 +108,7 @@ var TimestampedUser = /** @class */ (function (_super) {
         return _super.call(this) || this;
     }
     return TimestampedUser;
-}(wrapClass_1.Timestamped(User)));
-exports.TimestampedUser = TimestampedUser;
+}(wrapClass_1.Timestamped(User)));exports.TimestampedUser = TimestampedUser;
 
 
 //// [wrapClass.d.ts]

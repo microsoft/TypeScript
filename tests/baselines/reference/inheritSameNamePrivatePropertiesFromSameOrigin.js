@@ -23,22 +23,19 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var B = /** @class */ (function () {
+})();var B = /** @class */ (function () {
     function B() {
     }
     return B;
 }());
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);
-    function C() {
+    __extends(C, _super);function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(B));
 var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);
-    function C2() {
+    __extends(C2, _super);function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C2;

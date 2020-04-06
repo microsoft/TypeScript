@@ -145,6 +145,7 @@ function foo() {
                 if (y == 1) {
                     continue l0;
                 }
+
                 if (x == 2) {
                     continue;
                 }
@@ -185,6 +186,7 @@ function foo() {
         }
     }
 }
+
 function foo_c() {
     l0: for (const z = 0; z < 1;) {
         l1: for (const x = 0; x < 1;) {
@@ -203,6 +205,7 @@ function foo_c() {
                 if (y == 1) {
                     continue l0;
                 }
+
                 if (x == 2) {
                     continue;
                 }

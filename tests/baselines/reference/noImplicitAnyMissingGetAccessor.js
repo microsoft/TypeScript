@@ -24,15 +24,13 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Parent = /** @class */ (function () {
+})();var Parent = /** @class */ (function () {
     function Parent() {
     }
     return Parent;
 }());
 var Child = /** @class */ (function (_super) {
-    __extends(Child, _super);
-    function Child() {
+    __extends(Child, _super);function Child() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(Child.prototype, "message", {

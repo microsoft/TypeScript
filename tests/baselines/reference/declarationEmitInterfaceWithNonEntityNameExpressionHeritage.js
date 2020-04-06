@@ -4,8 +4,7 @@ interface Class extends (typeof A) { }
 
 //// [declarationEmitInterfaceWithNonEntityNameExpressionHeritage.js]
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 

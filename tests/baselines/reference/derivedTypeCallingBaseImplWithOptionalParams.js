@@ -16,8 +16,7 @@ y.myMethod(); // error
 //// [derivedTypeCallingBaseImplWithOptionalParams.js]
 var MyClass = /** @class */ (function () {
     function MyClass() {
-    }
-    MyClass.prototype.myMethod = function (myList) {
+    }MyClass.prototype.myMethod = function (myList) {
     };
     return MyClass;
 }());

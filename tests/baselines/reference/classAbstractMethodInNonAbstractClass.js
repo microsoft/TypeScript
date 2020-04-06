@@ -15,7 +15,6 @@ var A = /** @class */ (function () {
 }());
 var B = /** @class */ (function () {
     function B() {
-    }
-    B.prototype.foo = function () { };
+    }B.prototype.foo = function () { };
     return B;
 }());

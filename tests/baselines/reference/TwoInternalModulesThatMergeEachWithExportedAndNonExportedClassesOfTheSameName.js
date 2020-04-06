@@ -53,8 +53,7 @@ var A;
 (function (A) {
     var Point = /** @class */ (function () {
         function Point() {
-        }
-        Point.prototype.fromCarthesian = function (p) {
+        }Point.prototype.fromCarthesian = function (p) {
             return { x: p.x, y: p.y };
         };
         return Point;
@@ -92,5 +91,7 @@ var X;
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
 // ensure merges as expected
+var l
+;
 var l;
-var l;
+

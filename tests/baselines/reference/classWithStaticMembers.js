@@ -32,13 +32,11 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var C = /** @class */ (function () {
+})();var C = /** @class */ (function () {
     function C(a, b) {
         this.a = a;
         this.b = b;
-    }
-    C.fn = function () { return this; };
+    }C.fn = function () { return this; };
     Object.defineProperty(C, "x", {
         get: function () { return 1; },
         set: function (v) { },
@@ -50,9 +48,9 @@ var C = /** @class */ (function () {
 var r = C.fn();
 var r2 = r.x;
 var r3 = r.foo;
+
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);
-    function D() {
+    __extends(D, _super);function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;

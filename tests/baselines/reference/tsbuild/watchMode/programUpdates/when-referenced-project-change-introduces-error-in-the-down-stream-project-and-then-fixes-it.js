@@ -40,12 +40,12 @@ createSomeObject().message;
 "use strict";
 exports.__esModule = true;
 exports.createSomeObject = void 0;
+
 function createSomeObject() {
     return {
         message: "new Object"
     };
-}
-exports.createSomeObject = createSomeObject;
+}exports.createSomeObject = createSomeObject;
 
 
 //// [/user/username/projects/sample1/Library/library.d.ts]
@@ -165,12 +165,12 @@ export function createSomeObject(): SomeObject
 "use strict";
 exports.__esModule = true;
 exports.createSomeObject = void 0;
+
 function createSomeObject() {
     return {
         message2: "new Object"
     };
-}
-exports.createSomeObject = createSomeObject;
+}exports.createSomeObject = createSomeObject;
 
 
 //// [/user/username/projects/sample1/Library/library.d.ts]
@@ -292,12 +292,12 @@ export function createSomeObject(): SomeObject
 "use strict";
 exports.__esModule = true;
 exports.createSomeObject = void 0;
+
 function createSomeObject() {
     return {
         message: "new Object"
     };
-}
-exports.createSomeObject = createSomeObject;
+}exports.createSomeObject = createSomeObject;
 
 
 //// [/user/username/projects/sample1/Library/library.d.ts]

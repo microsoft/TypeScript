@@ -5,4 +5,5 @@ declare function f<T extends String>(x: T): T
 var v = f<string>("");
 
 //// [overloadsWithConstraints.js]
+
 var v = f("");

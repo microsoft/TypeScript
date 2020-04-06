@@ -70,8 +70,10 @@ exports.Second = {
 exports.Fs = {
     ADD1: function (n) { return n + 1; },
     ID: function (n) { return n; },
-    SUB1: function (n) { return n - 1; }
+    SUB1: function (n) { return n - 1;
+    }
 };
+
 /**
  * @param {Target} t
  * @param {Second} s
@@ -87,8 +89,7 @@ function consume(t, s, f) {
     /** @type {Target} */
     var v = exports.Target.START;
     v = 'something else'; // allowed, like Typescript's classic enums and unlike its string enums
-}
-exports.consume = consume;
+}exports.consume = consume;
 /** @param {string} s */
 function ff(s) {
     // element access with arbitrary string is an error only with noImplicitAny
@@ -98,8 +99,7 @@ function ff(s) {
     else {
         return exports.Target[s];
     }
-}
-exports.ff = ff;
+}exports.ff = ff;
 
 
 //// [index.d.ts]

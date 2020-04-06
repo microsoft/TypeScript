@@ -13,6 +13,7 @@ var x: Promise<string, boolean>;
 //// [promiseIdentityWithConstraints.js]
 "use strict";
 exports.__esModule = true;
+
 // Error because constraint V doesn't match
 var x;
 var x;

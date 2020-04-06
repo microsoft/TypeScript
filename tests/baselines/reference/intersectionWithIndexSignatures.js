@@ -46,4 +46,7 @@ tb1 = sb1; // Error
 q["asd"].a.substr(1);
 q["asd"].b; // Error
 var d = q; // Error
+
+
+
 tt = ss; // Error

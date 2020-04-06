@@ -14,6 +14,7 @@ declare;
 module(__makeTemplateObject(["M1"], ["M1"]));
 {
 }
+
 declare;
 module(__makeTemplateObject(["M", ""], ["M", ""]), 2);
 {

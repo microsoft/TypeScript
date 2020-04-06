@@ -2,5 +2,4 @@
 var v: typeof A<B>
 
 //// [parserTypeQuery8.js]
-var v;
-;
+var v;;

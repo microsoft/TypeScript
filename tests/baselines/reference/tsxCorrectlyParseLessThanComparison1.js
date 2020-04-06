@@ -36,16 +36,14 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 exports.ShortDetails = void 0;
+
 var ShortDetails = /** @class */ (function (_super) {
-    __extends(ShortDetails, _super);
-    function ShortDetails() {
+    __extends(ShortDetails, _super);function ShortDetails() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    ShortDetails.prototype.render = function () {
+    }ShortDetails.prototype.render = function () {
         if (this.props.id < 1) {
             return (React.createElement("div", null));
         }
     };
     return ShortDetails;
-}(React.Component));
-exports.ShortDetails = ShortDetails;
+}(React.Component));exports.ShortDetails = ShortDetails;

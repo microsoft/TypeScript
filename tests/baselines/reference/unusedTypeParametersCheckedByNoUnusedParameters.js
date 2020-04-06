@@ -14,11 +14,13 @@ let l = <T>() => { };
 
 //// [unusedTypeParametersCheckedByNoUnusedParameters.js]
 function f() { }
+
+
+
 ;
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.m = function () { };
+    }C.prototype.m = function () { };
     return C;
 }());
 ;

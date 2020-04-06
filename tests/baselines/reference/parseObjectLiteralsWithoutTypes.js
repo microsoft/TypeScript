@@ -5,6 +5,9 @@ let z: { foo, bar: number }
 
 
 //// [parseObjectLiteralsWithoutTypes.js]
-var x;
-var y;
-var z;
+var x
+;
+var y
+;
+var z
+;

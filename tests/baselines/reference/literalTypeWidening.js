@@ -181,6 +181,7 @@ function f1() {
     var c4 = c1; // Type "hello"
     var v4 = c4; // Type "hello"
 }
+
 function f2(cond) {
     var c1 = cond ? "foo" : "bar"; // widening "foo" | widening "bar"
     var c2 = c1; // "foo" | "bar"
@@ -193,6 +194,7 @@ function f2(cond) {
     var v4 = c4; // string
     var v5 = c5; // "foo" | "bar" | "baz"
 }
+
 function f3() {
     var c1 = 123; // Widening type 123
     var v1 = c1; // Type number
@@ -203,6 +205,7 @@ function f3() {
     var c4 = c1; // Type 123
     var v4 = c4; // Type 123
 }
+
 function f4(cond) {
     var c1 = cond ? 123 : 456; // widening 123 | widening 456
     var c2 = c1; // 123 | 456
@@ -215,6 +218,7 @@ function f4(cond) {
     var v4 = c4; // number
     var v5 = c5; // 123 | 456 | 789
 }
+
 function f5() {
     var c1 = "foo";
     var v1 = c1;
@@ -225,6 +229,8 @@ function f5() {
     var c4 = "foo";
     var v4 = c4;
 }
+
+
 function f6(cond) {
     var x1 = widening('a');
     var x2 = widening(10);
@@ -233,52 +239,72 @@ function f6(cond) {
     var y2 = nonWidening(10);
     var y3 = nonWidening(cond ? 'a' : 10);
 }
+
+
+
+
 var FAILURE = "FAILURE";
+
+
+
 function doWork() {
     return FAILURE;
 }
+
 function isSuccess(result) {
     return !isFailure(result);
 }
+
 function isFailure(result) {
     return result === FAILURE;
 }
+
 function increment(x) {
     return x + 1;
 }
+
 var result = doWork();
 if (isSuccess(result)) {
     increment(result);
 }
 function onMouseOver() { return "onmouseover"; }
+
 var x = onMouseOver();
+
 // Repro from #23649
-function Set() {
-    var keys = [];
+function Set() {var keys = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         keys[_i] = arguments[_i];
     }
-    var result = {};
+    var result = {}
+    ;
     keys.forEach(function (key) { return result[key] = true; });
     return result;
-}
-exports.Set = Set;
+}exports.Set = Set;
+
 function keys(obj) {
     return Object.keys(obj);
-}
-exports.keys = keys;
+}exports.keys = keys;
+
+
+
 var langCodeSet = Set('fr', 'en', 'es', 'it', 'nl');
+
 exports.langCodes = keys(langCodeSet);
-var arr = exports.langCodes.map(function (code) { return ({ code: code }); });
+
+var arr = exports.langCodes.map(function (code) { return ({ code: code }); })
+
+;
+
 // Repro from #29081
 function test(obj) {
     var a = obj.a, rest = __rest(obj, ["a"]);
     return __assign({ a: 'hello' }, rest);
 }
+
 var E;
 (function (E) {
-    E[E["A"] = 0] = "A";
-    E[E["B"] = 1] = "B";
+    E[E["A"] = 0] = "A";E[E["B"] = 1] = "B";
 })(E || (E = {}));
 var a = f(E.A);
 var b = a;

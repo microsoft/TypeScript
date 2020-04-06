@@ -50,42 +50,36 @@ exports.Test = exports.WithTags = exports.FooItem = exports.noPrivates = void 0;
 exports.noPrivates = (_a = /** @class */ (function () {
         function class_1() {
             this.p = 12;
-        }
-        class_1.getTags = function () { };
+        }class_1.getTags = function () { };
         class_1.prototype.tags = function () { };
         return class_1;
     }()),
     _a.ps = -1,
     _a);
+
 // altered repro from #15066 to add private property
 var FooItem = /** @class */ (function () {
     function FooItem() {
         this.property = "capitalism";
-    }
-    FooItem.prototype.foo = function () { };
+    }FooItem.prototype.foo = function () { };
     return FooItem;
-}());
-exports.FooItem = FooItem;
+}());exports.FooItem = FooItem;
 function WithTags(Base) {
     return /** @class */ (function (_super) {
-        __extends(class_2, _super);
-        function class_2() {
+        __extends(class_2, _super);function class_2() {
             return _super !== null && _super.apply(this, arguments) || this;
-        }
-        class_2.getTags = function () { };
+        }class_2.getTags = function () { };
         class_2.prototype.tags = function () { };
         return class_2;
     }(Base));
-}
-exports.WithTags = WithTags;
+}exports.WithTags = WithTags;
+
 var Test = /** @class */ (function (_super) {
-    __extends(Test, _super);
-    function Test() {
+    __extends(Test, _super);function Test() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Test;
-}(WithTags(FooItem)));
-exports.Test = Test;
+}(WithTags(FooItem)));exports.Test = Test;
 var test = new Test();
 Test.getTags();
 test.tags();

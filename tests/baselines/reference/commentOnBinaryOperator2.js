@@ -15,8 +15,10 @@ var c = 'some'
 //// [commentOnBinaryOperator2.js]
 var a = 'some'
     + 'text';
+
 var b = 'some'
     + 'text';
+
 var c = 'some'
     +
         'text';

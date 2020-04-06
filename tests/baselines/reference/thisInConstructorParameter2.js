@@ -15,25 +15,16 @@ class P {
 var P = /** @class */ (function () {
     function P(z, zz, zzz) {
         var _this = this;
-        if (z === void 0) { z = this; }
-        if (zz === void 0) { zz = this; }
-        if (zzz === void 0) { zzz = function (p) {
-            if (p === void 0) { p = _this; }
-            return _this;
-        }; }
+        if (z === void 0) { z = this; }if (zz === void 0) { zz = this; }if (zzz === void 0) { zzz = function (p) {if (p === void 0) { p = _this; }return _this;}; }
         this.z = z;
         this.x = this;
-        zzz = function (p) {
-            if (p === void 0) { p = _this; }
-            return _this;
-        };
+        zzz = function (p) {if (p === void 0) { p = _this; }return _this;};
     }
-    P.prototype.foo = function (zz) {
-        if (zz === void 0) { zz = this; }
+
+    P.prototype.foo = function (zz) {if (zz === void 0) { zz = this; }
         zz.x;
     };
-    P.bar = function (zz) {
-        if (zz === void 0) { zz = this; }
+    P.bar = function (zz) {if (zz === void 0) { zz = this; }
         zz.y;
     };
     P.y = this;

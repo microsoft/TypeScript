@@ -3,8 +3,7 @@ class y<T extends {}>{ }
 
 //// [objectLiteralDeclarationGeneration1.js]
 var y = /** @class */ (function () {
-    function y() {
-    }
+    function y() {}
     return y;
 }());
 

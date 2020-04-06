@@ -25,8 +25,7 @@ var Test;
     }());
     var Tester = /** @class */ (function () {
         function Tester() {
-        }
-        Tester.prototype.willThrowError = function () {
+        }Tester.prototype.willThrowError = function () {
             Mocked = Mocked || function () {
                 return { myProp: "test" };
             };

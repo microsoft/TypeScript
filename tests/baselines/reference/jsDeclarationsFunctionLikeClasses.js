@@ -38,8 +38,10 @@ function Point(x, y) {
     }
     this.x = x;
     this.y = y;
-}
-exports.Point = Point;
+}/**
+ * @param {number} x
+ * @param {number} y
+ */ exports.Point = Point;
 //// [referencer.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -49,8 +51,7 @@ exports.magnitude = void 0;
  */
 function magnitude(p) {
     return Math.sqrt(Math.pow(p.x, 2) + Math.pow(p.y, 2));
-}
-exports.magnitude = magnitude;
+}exports.magnitude = magnitude;
 
 
 //// [source.d.ts]

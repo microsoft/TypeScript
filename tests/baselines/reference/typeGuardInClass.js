@@ -19,13 +19,15 @@ else {
 
 //// [typeGuardInClass.js]
 var x;
+
 if (typeof x === "string") {
     var n = /** @class */ (function () {
         function class_1() {
             var y = x;
         }
         return class_1;
-    }());
+    }())
+    ;
 }
 else {
     var m = /** @class */ (function () {
@@ -33,5 +35,6 @@ else {
             var y = x;
         }
         return class_2;
-    }());
+    }())
+    ;
 }

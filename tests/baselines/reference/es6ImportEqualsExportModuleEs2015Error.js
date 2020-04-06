@@ -13,8 +13,7 @@ a;
 
 //// [a.js]
 var a = /** @class */ (function () {
-    function a() {
-    }
+    function a() {}
     return a;
 }());
 //// [main.js]

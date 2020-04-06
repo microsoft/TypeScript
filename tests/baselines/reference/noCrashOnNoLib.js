@@ -22,5 +22,4 @@ function f() {
     while (true) {
         e = __spreadArrays((e || []));
     }
-}
-exports.f = f;
+}exports.f = f;

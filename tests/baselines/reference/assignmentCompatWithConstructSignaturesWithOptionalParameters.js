@@ -54,7 +54,9 @@ var a5: new (x?: number, y?: number) => number;
 
 //// [assignmentCompatWithConstructSignaturesWithOptionalParameters.js]
 // call signatures in derived types must have the same or fewer optional parameters as the base type
+
 var b;
+
 var a;
 a = b.a; // ok
 a = b.a2; // ok

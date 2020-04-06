@@ -7,3 +7,4 @@ module M {
 }
 
 //// [decoratorOnInternalModule.js]
+

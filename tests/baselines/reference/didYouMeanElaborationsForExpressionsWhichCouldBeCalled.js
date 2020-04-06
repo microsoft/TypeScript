@@ -34,14 +34,18 @@ var Bar = /** @class */ (function () {
     }
     return Bar;
 }());
+
 foo({
     x: Bar,
     y: Date
 }, getNum());
+
 foo({
     x: new Bar(),
     y: new Date()
 }, getNum);
+
+
 foo({
     x: new Bar(),
     y: new Date()

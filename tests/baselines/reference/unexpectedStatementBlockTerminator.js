@@ -9,13 +9,11 @@ function Goo() {return {a:1,b:2};}
 
 //// [unexpectedStatementBlockTerminator.js]
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 var Bar = /** @class */ (function () {
-    function Bar() {
-    }
+    function Bar() {}
     return Bar;
 }());
 function Goo() { return { a: 1, b: 2 }; }

@@ -67,6 +67,8 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } =
 }
 
 //// [sourceMapValidationDestructuringForObjectBindingPattern.js]
+
+
 var robot = { name: "mower", skill: "mowing" };
 var multiRobot = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
 function getRobot() {
@@ -93,6 +95,7 @@ for (var _b = getMultiRobot().skills, primaryA = _b.primary, secondaryA = _b.sec
 for (var _c = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }.skills, primaryA = _c.primary, secondaryA = _c.secondary, i = 0; i < 1; i++) {
     console.log(primaryA);
 }
+
 for (var nameA = robot.name, skillA = robot.skill, i = 0; i < 1; i++) {
     console.log(nameA);
 }

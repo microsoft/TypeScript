@@ -8,3 +8,4 @@ declare module ".\\relativeModule" {
 }
 
 //// [ambientExternalModuleWithRelativeModuleName.js]
+

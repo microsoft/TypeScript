@@ -14,8 +14,7 @@ c.P(1,2,3);
 //// [argsInScope.js]
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.P = function (ii, j, k) {
+    }C.prototype.P = function (ii, j, k) {
         for (var i = 0; i < arguments.length; i++) {
             // WScript.Echo("param: " + arguments[i]);
         }

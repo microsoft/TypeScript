@@ -41,6 +41,7 @@ for(;;) {
 // All errors
 // naked continue not allowed
 continue;
+
 // non-existent label
 ONE: for (;;)
     continue TWO;
@@ -48,8 +49,10 @@ ONE: for (;;)
 TWO: for (;;) {
     var x = function () {
         continue TWO;
-    };
+    }
+    ;
 }
+
 THREE: for (;;) {
     var fn = function () {
         continue THREE;

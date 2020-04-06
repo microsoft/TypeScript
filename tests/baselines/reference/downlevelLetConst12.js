@@ -15,7 +15,9 @@ const {a: baz4} = { a: 1 };
 // top level let\const should not be renamed
 var foo;
 var bar = 1;
+
 var baz = [][0];
 var baz2 = { a: 1 }.a;
+
 var baz3 = [][0];
 var baz4 = { a: 1 }.a;

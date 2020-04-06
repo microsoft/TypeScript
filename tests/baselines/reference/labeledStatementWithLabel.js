@@ -62,20 +62,19 @@ label: function gen1() {
 }
 label: {
     var E;
-    (function (E) {
-    })(E || (E = {}));
+    (function (E) {})(E || (E = {}));
 }
 label: ;
 label: {
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         return C;
     }());
 }
 label: var a = 1;
 label: var b = 1;
 label: var c = 1;
+
 label: ;
 label: ;
 label: 

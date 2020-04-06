@@ -68,6 +68,7 @@ let weak: Weak & Spoiler = propertiesWrong
 function getDefaultSettings() {
     return { timeout: 1000 };
 }
+
 function doSomething(settings) { }
 // forgot to call `getDefaultSettings`
 doSomething(getDefaultSettings);
@@ -76,17 +77,32 @@ doSomething(null);
 doSomething(12);
 doSomething('completely wrong');
 doSomething(false);
-function del(options, error) {
-    if (options === void 0) { options = {}; }
+
+
+function del(options,
+    error) {if (options === void 0) { options = {}; }
     if (error === void 0) { error = {}; }
     var changes;
     changes.push(options);
     changes.push(error);
 }
+
 var K = /** @class */ (function () {
-    function K(s) {
-    }
+    function K(s) {}
     return K;
 }());
-var ctor = K;
-var weak = propertiesWrong;
+var ctor = K
+
+;
+
+
+
+
+
+
+
+
+var weak = propertiesWrong
+
+;
+

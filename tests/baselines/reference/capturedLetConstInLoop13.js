@@ -27,6 +27,7 @@ var Main = /** @class */ (function () {
     function Main() {
         this.register("a", "b", "c");
     }
+
     Main.prototype.register = function () {
         var _this = this;
         var names = [];
@@ -45,7 +46,9 @@ var Main = /** @class */ (function () {
             _loop_1(name_1);
         }
     };
+
     Main.prototype.bar = function (a) { };
+
     Main.prototype.foo = function (name) { };
     return Main;
 }());

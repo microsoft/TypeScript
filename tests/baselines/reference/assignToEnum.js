@@ -10,8 +10,7 @@ A.foo = A.bar;  // invalid LHS
 //// [assignToEnum.js]
 var A;
 (function (A) {
-    A[A["foo"] = 0] = "foo";
-    A[A["bar"] = 1] = "bar";
+    A[A["foo"] = 0] = "foo";A[A["bar"] = 1] = "bar";
 })(A || (A = {}));
 A = undefined; // invalid LHS
 A = A.bar; // invalid LHS

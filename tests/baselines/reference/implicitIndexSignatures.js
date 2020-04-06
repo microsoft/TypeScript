@@ -59,6 +59,7 @@ function f5() {
 
 
 //// [implicitIndexSignatures.js]
+
 var empty1 = {};
 var empty2;
 var names1 = { a: "foo", b: "bar" };
@@ -69,24 +70,28 @@ map = empty1;
 map = empty2;
 map = names1;
 map = names2;
+
 function f1() {
     var o1 = { a: 1, b: 2 };
     var o2;
     var v1 = getStringIndexValue(o1);
     var v2 = getStringIndexValue(o2);
 }
+
 function f2() {
     var o1 = { a: "1", b: "2" };
     var o2;
     var v1 = getStringIndexValue(o1);
     var v2 = getStringIndexValue(o2);
 }
+
 function f3() {
     var o1 = { a: 1, b: "2" };
     var o2;
     var v1 = getStringIndexValue(o1);
     var v2 = getStringIndexValue(o2);
 }
+
 function f4() {
     var o1 = { 0: "0", 1: "1", count: 2 };
     var o2;
@@ -95,21 +100,19 @@ function f4() {
     var v3 = getNumberIndexValue(o1);
     var v4 = getNumberIndexValue(o2);
 }
+
 function f5() {
     var E1;
     (function (E1) {
-        E1[E1["A"] = 0] = "A";
-        E1[E1["B"] = 1] = "B";
+        E1[E1["A"] = 0] = "A";E1[E1["B"] = 1] = "B";
     })(E1 || (E1 = {}));
     var E2;
     (function (E2) {
-        E2["A"] = "A";
-        E2["B"] = "B";
+        E2["A"] = "A";E2["B"] = "B";
     })(E2 || (E2 = {}));
     var E3;
     (function (E3) {
-        E3[E3["A"] = 0] = "A";
-        E3["B"] = "B";
+        E3[E3["A"] = 0] = "A";E3["B"] = "B";
     })(E3 || (E3 = {}));
     var v1 = getStringIndexValue(E1);
     var v2 = getStringIndexValue(E2);

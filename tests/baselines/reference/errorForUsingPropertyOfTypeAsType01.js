@@ -47,6 +47,7 @@ import lol = Test5.Foo.
 //// [errorForUsingPropertyOfTypeAsType01.js]
 var Test1;
 (function (Test1) {
+
     var x = "";
     var y = "";
 })(Test1 || (Test1 = {}));
@@ -63,16 +64,19 @@ var Test2;
 })(Test2 || (Test2 = {}));
 var Test3;
 (function (Test3) {
+
     var x = "";
     var y = "";
 })(Test3 || (Test3 = {}));
 var Test4;
 (function (Test4) {
+
     var x = "";
     var y = "";
 })(Test4 || (Test4 = {}));
 var Test5;
 (function (Test5) {
+
     var x = "";
     var y = "";
 })(Test5 || (Test5 = {}));

@@ -11,6 +11,7 @@ interface JSONSchema4 {
 // Repro from #21637
 
 
+
 //// [conditionalTypesASI.d.ts]
 interface JSONSchema4 {
     a?: number;

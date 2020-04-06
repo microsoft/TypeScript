@@ -30,16 +30,16 @@ async function forStatement6() {
 }
 
 //// [es5-asyncFunctionForStatements.js]
+
 function forStatement0() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            for (x; y; z) {
-                a;
-            }
+            for (x; y; z) {a;}
             return [2 /*return*/];
         });
     });
 }
+
 function forStatement1() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -60,6 +60,7 @@ function forStatement1() {
         });
     });
 }
+
 function forStatement2() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -80,6 +81,7 @@ function forStatement2() {
         });
     });
 }
+
 function forStatement3() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -100,6 +102,7 @@ function forStatement3() {
         });
     });
 }
+
 function forStatement4() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -121,24 +124,22 @@ function forStatement4() {
         });
     });
 }
+
 function forStatement5() {
     return __awaiter(this, void 0, void 0, function () {
         var b;
         return __generator(this, function (_a) {
-            for (; y; z) {
-                a;
-            }
+            for (; y; z) {a;}
             return [2 /*return*/];
         });
     });
 }
+
 function forStatement6() {
     return __awaiter(this, void 0, void 0, function () {
         var c;
         return __generator(this, function (_a) {
-            for (c = x; y; z) {
-                a;
-            }
+            for (c = x; y; z) {a;}
             return [2 /*return*/];
         });
     });

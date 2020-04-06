@@ -86,8 +86,7 @@ System.register(["bar"], function (exports_1, context_1) {
                 exportStar_1(bar_1_1);
             }
         ],
-        execute: function () {
-        }
+        execute: function () {}
     };
 });
 //// [file3.js]
@@ -119,8 +118,7 @@ System.register(["a", "bar"], function (exports_1, context_1) {
                 exportStar_1(bar_1_1);
             }
         ],
-        execute: function () {
-        }
+        execute: function () {}
     };
 });
 //// [file4.js]
@@ -141,8 +139,7 @@ System.register(["a"], function (exports_1, context_1) {
                 });
             }
         ],
-        execute: function () {
-        }
+        execute: function () {}
     };
 });
 //// [file5.js]
@@ -163,7 +160,6 @@ System.register(["a"], function (exports_1, context_1) {
                 exportStar_1(a_1_1);
             }
         ],
-        execute: function () {
-        }
+        execute: function () {}
     };
 });

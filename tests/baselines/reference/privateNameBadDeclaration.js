@@ -19,8 +19,7 @@ A.prototype = {
     : 1 // Error
 };
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());
 B.prototype = {

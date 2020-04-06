@@ -23,6 +23,7 @@ module A {
 //// [ExportModuleWithAccessibleTypesOnItsExportedMembers.js]
 var A;
 (function (A) {
+
     var Point = /** @class */ (function () {
         function Point(x, y) {
             this.x = x;
@@ -34,9 +35,11 @@ var A;
     var B;
     (function (B) {
         B.Origin = new Point(0, 0);
+
         var Line = /** @class */ (function () {
             function Line(start, end) {
             }
+
             Line.fromOrigin = function (p) {
                 return new Line({ x: 0, y: 0 }, p);
             };

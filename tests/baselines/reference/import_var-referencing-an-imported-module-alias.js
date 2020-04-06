@@ -15,11 +15,9 @@ define(["require", "exports"], function (require, exports) {
     exports.__esModule = true;
     exports.Host = void 0;
     var Host = /** @class */ (function () {
-        function Host() {
-        }
+        function Host() {}
         return Host;
-    }());
-    exports.Host = Host;
+    }());exports.Host = Host;
 });
 //// [consumer.js]
 define(["require", "exports", "host"], function (require, exports, host) {

@@ -13,5 +13,6 @@ function foo2(a: any, x: any) {
 //// [overloadOnConstDuplicateOverloads1.js]
 function foo(a, x) {
 }
+
 function foo2(a, x) {
 }

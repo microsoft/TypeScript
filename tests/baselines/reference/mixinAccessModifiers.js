@@ -146,9 +146,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var Private = /** @class */ (function () {
-    function Private() {
-        var args = [];
+    function Private() {var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
@@ -156,8 +156,7 @@ var Private = /** @class */ (function () {
     return Private;
 }());
 var Private2 = /** @class */ (function () {
-    function Private2() {
-        var args = [];
+    function Private2() {var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
@@ -165,8 +164,7 @@ var Private2 = /** @class */ (function () {
     return Private2;
 }());
 var Protected = /** @class */ (function () {
-    function Protected() {
-        var args = [];
+    function Protected() {var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
@@ -174,8 +172,7 @@ var Protected = /** @class */ (function () {
     return Protected;
 }());
 var Protected2 = /** @class */ (function () {
-    function Protected2() {
-        var args = [];
+    function Protected2() {var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
@@ -183,8 +180,7 @@ var Protected2 = /** @class */ (function () {
     return Protected2;
 }());
 var Public = /** @class */ (function () {
-    function Public() {
-        var args = [];
+    function Public() {var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
@@ -192,8 +188,7 @@ var Public = /** @class */ (function () {
     return Public;
 }());
 var Public2 = /** @class */ (function () {
-    function Public2() {
-        var args = [];
+    function Public2() {var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
@@ -203,49 +198,51 @@ var Public2 = /** @class */ (function () {
 function f1(x) {
     x.p; // Error, private constituent makes property inaccessible
 }
+
 function f2(x) {
     x.p; // Error, private constituent makes property inaccessible
 }
+
 function f3(x) {
     x.p; // Error, private constituent makes property inaccessible
 }
+
 function f4(x) {
     x.p; // Error, protected when all constituents are protected
 }
+
 function f5(x) {
     x.p; // Ok, public if any constituent is public
 }
+
 function f6(x) {
     x.p; // Ok, public if any constituent is public
 }
+
+
 // Can't derive from type with inaccessible properties
 var C1 = /** @class */ (function (_super) {
-    __extends(C1, _super);
-    function C1() {
+    __extends(C1, _super);function C1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C1;
 }(Mix(Private, Private2)));
 var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);
-    function C2() {
+    __extends(C2, _super);function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C2;
 }(Mix(Private, Protected)));
 var C3 = /** @class */ (function (_super) {
-    __extends(C3, _super);
-    function C3() {
+    __extends(C3, _super);function C3() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C3;
 }(Mix(Private, Public)));
 var C4 = /** @class */ (function (_super) {
-    __extends(C4, _super);
-    function C4() {
+    __extends(C4, _super);function C4() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    C4.prototype.f = function (c4, c5, c6) {
+    }C4.prototype.f = function (c4, c5, c6) {
         c4.p;
         c5.p;
         c6.p;
@@ -258,11 +255,9 @@ var C4 = /** @class */ (function (_super) {
     return C4;
 }(Mix(Protected, Protected2)));
 var C5 = /** @class */ (function (_super) {
-    __extends(C5, _super);
-    function C5() {
+    __extends(C5, _super);function C5() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    C5.prototype.f = function (c4, c5, c6) {
+    }C5.prototype.f = function (c4, c5, c6) {
         c4.p; // Error, not in class deriving from Protected2
         c5.p;
         c6.p;
@@ -275,11 +270,9 @@ var C5 = /** @class */ (function (_super) {
     return C5;
 }(Mix(Protected, Public)));
 var C6 = /** @class */ (function (_super) {
-    __extends(C6, _super);
-    function C6() {
+    __extends(C6, _super);function C6() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    C6.prototype.f = function (c4, c5, c6) {
+    }C6.prototype.f = function (c4, c5, c6) {
         c4.p; // Error, not in class deriving from Protected2
         c5.p;
         c6.p;
@@ -293,15 +286,13 @@ var C6 = /** @class */ (function (_super) {
 }(Mix(Public, Public2)));
 var ProtectedGeneric = /** @class */ (function () {
     function ProtectedGeneric() {
-    }
-    ProtectedGeneric.prototype.privateMethod = function () { };
+    }ProtectedGeneric.prototype.privateMethod = function () { };
     ProtectedGeneric.prototype.protectedMethod = function () { };
     return ProtectedGeneric;
 }());
 var ProtectedGeneric2 = /** @class */ (function () {
     function ProtectedGeneric2() {
-    }
-    ProtectedGeneric2.prototype.privateMethod = function () { };
+    }ProtectedGeneric2.prototype.privateMethod = function () { };
     ProtectedGeneric2.prototype.protectedMethod = function () { };
     return ProtectedGeneric2;
 }());
@@ -309,10 +300,12 @@ function f7(x) {
     x.privateMethod(); // Error, private constituent makes method inaccessible
     x.protectedMethod(); // Error, protected when all constituents are protected
 }
+
 function f8(x) {
     x.privateMethod(); // Error, private constituent makes method inaccessible
     x.protectedMethod(); // Error, protected when all constituents are protected
 }
+
 function f9(x) {
     x.privateMethod(); // Error, private constituent makes method inaccessible
     x.protectedMethod(); // Error, protected when all constituents are protected

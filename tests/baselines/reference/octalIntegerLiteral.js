@@ -45,20 +45,27 @@ var oct1 = 19230;
 var oct2 = 19230;
 var oct3 = Infinity;
 var oct4 = 5.462437423415177e+244;
+
 var obj1 = {
     19230: "Hello",
     a: 19230,
     b: oct1,
     oct1: oct1,
     Infinity: true
-};
+}
+
+;
+
 var obj2 = {
     19230: "hi",
     a: 19230,
     b: oct2,
     oct2: oct2,
     5.462437423415177e+244: false,
-};
+}
+
+;
+
 obj1[19230]; // string
 obj1["0o45436"]; // any
 obj1["19230"]; // string

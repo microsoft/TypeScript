@@ -78,6 +78,8 @@ var es6ImportNamedImportInEs5_0_9 = require("./es6ImportNamedImportInEs5_0");
 var z2 = es6ImportNamedImportInEs5_0_9.z2; // z2 shouldn't give redeclare error
 
 
+
+
 //// [es6ImportNamedImportInEs5_0.d.ts]
 export declare var a: number;
 export declare var x: number;

@@ -49,6 +49,11 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 var _a, _b, _c, _d;
 let obj = {};
 (Object.assign({}, obj));
-let _e = {}, { prop = Object.assign({}, obj), more = _a = Object.assign({}, obj), obj = __rest(_a, []), _a } = _e, _f = '' + 'other', _g = _e[_f], other = _g === void 0 ? Object.assign({}, obj) : _g, _h = _e.yetAnother, _j = (_h === void 0 ? Object.assign({}, obj) : _h).nested, _k = _j === void 0 ? Object.assign({}, obj) : _j, _l = 'nested' + 'prop', _m = _k[_l], nestedProp = _m === void 0 ? Object.assign({}, obj) : _m, nestedRest = __rest(_k, [typeof _l === "symbol" ? _l : _l + ""]), { fn = function () { return __asyncGenerator(this, arguments, function* () { }); } } = _e, props = __rest(_e, ["prop", "more", typeof _f === "symbol" ? _f : _f + "", "yetAnother", "fn"]);
+let _e = {}, { prop = Object.assign({}, obj),
+    more = _a = Object.assign({}, obj), obj = __rest(_a, []), _a } = _e, _f = '' + 'other', _g = _e[_f], other = _g === void 0 ? Object.assign({}, obj) : _g,
+    _h = _e.yetAnother, _j = (_h === void 0 ? Object.assign({}, obj) : _h).nested, _k = _j === void 0 ? Object.assign({}, obj) : _j, _l = 'nested' + 'prop', _m = _k[_l], nestedProp = _m === void 0 ? Object.assign({}, obj) : _m, nestedRest = __rest(_k, [typeof _l === "symbol" ? _l : _l + ""]), { fn = function () { return __asyncGenerator(this, arguments, function* () { }); } } = _e, props = __rest(_e, ["prop", "more", typeof _f === "symbol" ? _f : _f + "", "yetAnother", "fn"])
+;
+
 (_b = {}, { prop = Object.assign({}, obj) } = _b, _c = '' + 'other', _d = _b[_c], other = _d === void 0 ? Object.assign({}, obj) : _d, props = __rest(_b, ["prop", typeof _c === "symbol" ? _c : _c + ""]));
+
 function test(_a) { var { prop = Object.assign({}, obj) } = _a, props = __rest(_a, ["prop"]); }

@@ -31,8 +31,7 @@ var A;
         var C;
         (function (C) {
             var Class1 = /** @class */ (function () {
-                function Class1() {
-                }
+                function Class1() {}
                 return Class1;
             }());
             C.Class1 = Class1;
@@ -42,12 +41,12 @@ var A;
 var D;
 (function (D) {
     var inner = A.B.C;
+
     var c1 = new inner.Class1();
     var E;
     (function (E) {
         var Class2 = /** @class */ (function () {
-            function Class2() {
-            }
+            function Class2() {}
             return Class2;
         }());
         E.Class2 = Class2;

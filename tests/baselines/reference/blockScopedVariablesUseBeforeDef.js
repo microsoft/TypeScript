@@ -109,42 +109,47 @@ function foo0() {
     var a = x;
     var x;
 }
+
 function foo1() {
     var a = function () { return x; };
     var x;
 }
+
 function foo2() {
     var a = function () { return x; };
     var x;
 }
+
 function foo3() {
     var X = /** @class */ (function () {
         function X() {
-        }
-        X.prototype.m = function () { return x; };
+        }X.prototype.m = function () { return x; };
         return X;
     }());
     var x;
 }
+
 function foo4() {
     var y = /** @class */ (function () {
         function y() {
-        }
-        y.prototype.m = function () { return x; };
+        }y.prototype.m = function () { return x; };
         return y;
     }());
     var x;
 }
+
 function foo5() {
     var x = function () { return y; };
     var y = function () { return x; };
 }
+
 function foo6() {
     function f() {
         return x;
     }
     var x;
 }
+
 function foo7() {
     var A = /** @class */ (function () {
         function A() {
@@ -154,15 +159,18 @@ function foo7() {
     }());
     var x;
 }
+
 function foo8() {
     var y = /** @class */ (function () {
         function class_1() {
             this.a = x;
         }
         return class_1;
-    }());
+    }())
+    ;
     var x;
 }
+
 function foo9() {
     var _a;
     var y = (_a = /** @class */ (function () {
@@ -171,9 +179,11 @@ function foo9() {
             return class_2;
         }()),
         _a.a = x,
-        _a);
+        _a)
+    ;
     var x;
 }
+
 function foo10() {
     var A = /** @class */ (function () {
         function A() {
@@ -183,6 +193,7 @@ function foo10() {
     }());
     var x;
 }
+
 function foo11() {
     function f() {
         var _a;
@@ -192,10 +203,12 @@ function foo11() {
                 return class_3;
             }()),
             _a.a = x,
-            _a);
+            _a)
+        ;
     }
     var x;
 }
+
 function foo12() {
     function f() {
         var y = /** @class */ (function () {
@@ -203,16 +216,19 @@ function foo12() {
                 this.a = x;
             }
             return class_4;
-        }());
+        }())
+        ;
     }
     var x;
 }
+
 function foo13() {
     var a = {
         get a() { return x; }
     };
     var x;
 }
+
 function foo14() {
     var a = {
         a: x

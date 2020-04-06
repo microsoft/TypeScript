@@ -25,8 +25,7 @@ var Alpha;
     Alpha.x = 100;
 })(Alpha || (Alpha = {}));
 var Beta = /** @class */ (function (_super) {
-    __extends(Beta, _super);
-    function Beta() {
+    __extends(Beta, _super);function Beta() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Beta;

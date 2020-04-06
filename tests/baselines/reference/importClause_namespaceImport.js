@@ -21,17 +21,13 @@ const c: types.C<string> = "";
 exports.__esModule = true;
 exports.Value = exports.B = exports.A = void 0;
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
-}());
-exports.A = A;
+}());exports.A = A;
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
-}());
-exports.B = B;
+}());exports.B = B;
 exports.Value = {};
 //// [b.js]
 "use strict";

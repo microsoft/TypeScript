@@ -13,8 +13,8 @@ declare var OData: any;
 //// [file1.js]
 var C = (function () {
     function C() {
-    }
-    C.prototype.foo = function (x, y) { };
+    }C.prototype.foo = function (x, y) { };
     return C;
 }());
 var x = 10;
+

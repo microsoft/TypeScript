@@ -16,6 +16,5 @@ var M;
         return C;
     }());
     var E;
-    (function (E) {
-    })(E || (E = {}));
+    (function (E) {})(E || (E = {}));
 })(M || (M = {}));

@@ -43,9 +43,7 @@ var M;
 (function (M) {
     var C = /** @class */ (function () {
         function C() {
-        }
-        C.prototype.f = function (x) {
-            var rest = [];
+        }C.prototype.f = function (x) {var rest = [];
             for (var _i = 1; _i < arguments.length; _i++) {
                 rest[_i - 1] = arguments[_i];
             }
@@ -56,14 +54,14 @@ var M;
             result += (x + ": " + sum);
             return result;
         };
-        C.prototype.fnope = function (x) {
-            var rest = [];
+
+        C.prototype.fnope = function (x) {var rest = [];
             for (var _i = 1; _i < arguments.length; _i++) {
                 rest[_i - 1] = arguments[_i];
             }
         };
-        C.prototype.fonly = function () {
-            var rest = [];
+
+        C.prototype.fonly = function () {var rest = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 rest[_i] = arguments[_i];
             }

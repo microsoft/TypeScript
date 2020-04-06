@@ -331,20 +331,20 @@ sourceFile:file4.ts
       "sections": [
         {
           "pos": 0,
-          "end": 563,
+          "end": 561,
           "kind": "prepend",
           "data": "../lib/module.js",
           "texts": [
             {
               "pos": 0,
-              "end": 563,
+              "end": 561,
               "kind": "text"
             }
           ]
         },
         {
           "pos": 563,
-          "end": 864,
+          "end": 862,
           "kind": "text"
         }
       ]
@@ -391,9 +391,9 @@ sourceFile:file4.ts
 ======================================================================
 File:: /src/app/module.js
 ----------------------------------------------------------------------
-prepend: (0-563):: ../lib/module.js texts:: 1
+prepend: (0-561):: ../lib/module.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-563)
+text: (0-561)
 ///<reference path="./tripleRef.d.ts"/>
 var file0Const = new libfile0();
 var myGlob = 20;
@@ -411,9 +411,8 @@ define("file2", ["require", "exports"], function (require, exports) {
     exports.y = 20;
 });
 var globalConst = 10;
-
 ----------------------------------------------------------------------
-text: (563-864)
+text: (563-862)
 define("file3", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -423,7 +422,6 @@ define("file3", ["require", "exports"], function (require, exports) {
 ///<reference path="./tripleRef.d.ts"/>
 var file4Const = new appfile4();
 var myVar = 30;
-
 ======================================================================
 ======================================================================
 File:: /src/app/module.d.ts
@@ -680,7 +678,7 @@ sourceFile:global.ts
       "sections": [
         {
           "pos": 0,
-          "end": 563,
+          "end": 561,
           "kind": "text"
         }
       ]
@@ -708,7 +706,7 @@ sourceFile:global.ts
 ======================================================================
 File:: /src/lib/module.js
 ----------------------------------------------------------------------
-text: (0-563)
+text: (0-561)
 ///<reference path="./tripleRef.d.ts"/>
 var file0Const = new libfile0();
 var myGlob = 20;
@@ -726,7 +724,6 @@ define("file2", ["require", "exports"], function (require, exports) {
     exports.y = 20;
 });
 var globalConst = 10;
-
 ======================================================================
 ======================================================================
 File:: /src/lib/module.d.ts

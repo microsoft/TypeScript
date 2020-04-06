@@ -15,6 +15,7 @@ var r8 = b ** b;
 //// [exponentiationOperatorWithAnyAndNumber.js]
 var a;
 var b;
+
 // operator **
 var r1 = Math.pow(a, a);
 var r2 = Math.pow(a, b);

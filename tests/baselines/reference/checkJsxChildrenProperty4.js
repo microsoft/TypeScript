@@ -61,12 +61,13 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var React = require("react");
+
+
+
 var FetchUser = /** @class */ (function (_super) {
-    __extends(FetchUser, _super);
-    function FetchUser() {
+    __extends(FetchUser, _super);function FetchUser() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    FetchUser.prototype.render = function () {
+    }FetchUser.prototype.render = function () {
         return this.state
             ? this.props.children(this.state.result)
             : null;
@@ -75,16 +76,27 @@ var FetchUser = /** @class */ (function (_super) {
 }(React.Component));
 // Error
 function UserName() {
-    return (<FetchUser>
-            {function (user) { return (<h1>{user.NAme}</h1>); }}
-        </FetchUser>);
+    return (
+        <FetchUser>
+            {function (user) { return (
+            <h1>{user.NAme}</h1>
+        ); }}
+        </FetchUser>
+    );
 }
+
 function UserName1() {
-    return (<FetchUser>
+    return (
+        <FetchUser>
 
 
             
-            {function (user) { return (<h1>{user.Name}</h1>); }}
-            {function (user) { return (<h1>{user.Name}</h1>); }}
-        </FetchUser>);
+            {function (user) { return (
+            <h1>{user.Name}</h1>
+        ); }}
+            {function (user) { return (
+            <h1>{user.Name}</h1>
+        ); }}
+        </FetchUser>
+    );
 }

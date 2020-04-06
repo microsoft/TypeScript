@@ -72,10 +72,21 @@ var Greeter = /** @class */ (function () {
         }
         this.greeting = greeting;
     }
+
     Greeter.prototype.greet = function () {
         return "<h1>" + this.greeting + "</h1>";
     };
-    Greeter.prototype.fn = function (x) {
+
+
+
+
+
+
+
+
+
+    Greeter.prototype.fn = function (
+    x) {
         return this.greeting;
     };
     Object.defineProperty(Greeter.prototype, "greetings", {
@@ -116,6 +127,8 @@ var Greeter = /** @class */ (function () {
         ClassDecorator2(10),
         __param(0, ParameterDecorator1),
         __param(0, ParameterDecorator2(20)),
+
+
         __param(1, ParameterDecorator1),
         __param(1, ParameterDecorator2(30))
     ], Greeter);

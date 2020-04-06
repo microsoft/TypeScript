@@ -12,6 +12,9 @@ function unlift<U>(value: U | Foo<U>): U {
 
 //// [unionTypeParameterInference.js]
 // Regression test for #5861
+
+
+
 function unlift(value) {
     return lift(value).prop;
 }

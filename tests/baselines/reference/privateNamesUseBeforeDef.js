@@ -18,14 +18,15 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     return privateMap.get(receiver);
 };
 var _foo, _bar, _foo_1, _bar_1;
-class A {
-    constructor() {
+class A {constructor() {
         _foo.set(this, __classPrivateFieldGet(this, _bar)); // Error
         _bar.set(this, 3);
     }
+
 }
 _foo = new WeakMap(), _bar = new WeakMap();
 class B {
+
     constructor() {
         _foo_1.set(this, __classPrivateFieldGet(this, _bar_1)); // Error
         _bar_1.set(this, __classPrivateFieldGet(this, _foo_1));

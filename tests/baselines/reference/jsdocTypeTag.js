@@ -95,53 +95,75 @@ var ctor: new (s: string) => { s: string };
 //// [a.js]
 /** @type {String} */
 var S;
+
 /** @type {string} */
 var s;
+
 /** @type {Number} */
 var N;
+
 /** @type {number} */
 var n;
+
 /** @type {Boolean} */
 var B;
+
 /** @type {boolean} */
 var b;
+
 /** @type {Void} */
 var V;
+
 /** @type {void} */
 var v;
+
 /** @type {Undefined} */
 var U;
+
 /** @type {undefined} */
 var u;
+
 /** @type {Null} */
 var Nl;
+
 /** @type {null} */
 var nl;
+
 /** @type {Array} */
 var A;
+
 /** @type {array} */
 var a;
+
 /** @type {Promise} */
 var P;
+
 /** @type {promise} */
 var p;
+
 /** @type {?number} */
 var nullable;
+
 /** @type {Object} */
 var Obj;
+
 /** @type {object} */
 var obj;
+
 /** @type {Function} */
 var Func;
+
 /** @type {(s: string) => number} */
 var f;
+
 /** @type {new (s: string) => { s: string }} */
 var ctor;
 //// [b.js]
 var S;
 var s;
 var N;
-var n;
+var n
+;
 var B;
 var b;
 var V;

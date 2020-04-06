@@ -15,6 +15,7 @@ class E<T> {
 
 //// [privateIndexer.js]
 // private indexers not allowed
+
 var C = /** @class */ (function () {
     function C() {
     }

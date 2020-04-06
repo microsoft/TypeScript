@@ -7,7 +7,6 @@ class C {
 //// [ClassDeclaration21.js]
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype[1] = function () { };
+    }C.prototype[1] = function () { };
     return C;
 }());

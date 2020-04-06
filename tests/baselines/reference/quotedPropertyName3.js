@@ -10,8 +10,7 @@ class Test {
 //// [quotedPropertyName3.js]
 var Test = /** @class */ (function () {
     function Test() {
-    }
-    Test.prototype.foo = function () {
+    }Test.prototype.foo = function () {
         var _this = this;
         var x = function () { return _this["prop1"]; };
         var y = x();

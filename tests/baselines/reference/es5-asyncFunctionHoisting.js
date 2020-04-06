@@ -53,6 +53,7 @@ async function hoistingWithAwait() {
 
 
 //// [es5-asyncFunctionHoisting.js]
+
 function hoisting() {
     return __awaiter(this, void 0, void 0, function () {
         function z() {
@@ -64,10 +65,13 @@ function hoisting() {
             if (true) {
                 c1 = 1;
             }
+
             for (a = 0; y;) {
             }
+
             for (b in y) {
             }
+
             for (_i = 0, y_1 = y; _i < y_1.length; _i++) {
                 c = y_1[_i];
             }
@@ -75,8 +79,10 @@ function hoisting() {
         });
     });
 }
+
 function hoistingWithAwait() {
     return __awaiter(this, void 0, void 0, function () {
+
         function z() {
             var b0, b1 = 1;
         }
@@ -88,13 +94,17 @@ function hoistingWithAwait() {
                     return [4 /*yield*/, 0];
                 case 1:
                     _a.sent();
+
                     if (true) {
                         c1 = 1;
                     }
+
                     for (a = 0; y;) {
                     }
+
                     for (b in y) {
                     }
+
                     for (_i = 0, y_2 = y; _i < y_2.length; _i++) {
                         c = y_2[_i];
                     }
@@ -103,3 +113,4 @@ function hoistingWithAwait() {
         });
     });
 }
+

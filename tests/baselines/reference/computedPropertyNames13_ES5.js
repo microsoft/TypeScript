@@ -22,8 +22,7 @@ var n;
 var a;
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype[s] = function () { };
+    }C.prototype[s] = function () { };
     C.prototype[n] = function () { };
     C[s + s] = function () { };
     C.prototype[s + n] = function () { };

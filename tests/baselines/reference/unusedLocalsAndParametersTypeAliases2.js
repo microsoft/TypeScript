@@ -16,3 +16,4 @@ exports.__esModule = true;
 function foo() {
     foo();
 }
+

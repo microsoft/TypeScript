@@ -8,13 +8,11 @@ class B { }
 
 //// [c.js]
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());
 //# sourceMappingURL=c.js.map

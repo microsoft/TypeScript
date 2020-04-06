@@ -14,6 +14,7 @@ const myString = 'str';
 
 //// [0.js]
 // @ts-check
+
 var exports = {};
 /**
  * @typedef {string}

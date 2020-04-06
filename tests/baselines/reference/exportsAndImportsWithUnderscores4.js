@@ -39,32 +39,25 @@ exports.__esModule = true;
 exports.___hello = exports.__esmodule = exports.__proto = exports._hi = exports.___ = exports.__ = exports._ = void 0;
 function _() {
     console.log("_");
-}
-exports._ = _;
+}exports._ = _;
 function __() {
     console.log("__");
-}
-exports.__ = __;
+}exports.__ = __;
 function ___() {
     console.log("___");
-}
-exports.___ = ___;
+}exports.___ = ___;
 function _hi() {
     console.log("_hi");
-}
-exports._hi = _hi;
+}exports._hi = _hi;
 function __proto() {
     console.log("__proto");
-}
-exports.__proto = __proto;
+}exports.__proto = __proto;
 function __esmodule() {
     console.log("__esmodule");
-}
-exports.__esmodule = __esmodule;
+}exports.__esmodule = __esmodule;
 function ___hello() {
     console.log("___hello");
-}
-exports.___hello = ___hello;
+}exports.___hello = ___hello;
 //// [m2.js]
 "use strict";
 exports.__esModule = true;

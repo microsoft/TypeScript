@@ -39,12 +39,14 @@ function f5() {
 }
 
 //// [constLocalsInFunctionExpressions.js]
+
 function f1() {
     var x = getStringOrNumber();
     if (typeof x === "string") {
         var f = function () { return x.length; };
     }
 }
+
 function f2() {
     var x = getStringOrNumber();
     if (typeof x !== "string") {
@@ -52,12 +54,14 @@ function f2() {
     }
     var f = function () { return x.length; };
 }
+
 function f3() {
     var x = getStringOrNumber();
     if (typeof x === "string") {
         var f = function () { return x.length; };
     }
 }
+
 function f4() {
     var x = getStringOrNumber();
     if (typeof x !== "string") {
@@ -65,6 +69,7 @@ function f4() {
     }
     var f = function () { return x.length; };
 }
+
 function f5() {
     var x = getStringOrNumber();
     if (typeof x === "string") {

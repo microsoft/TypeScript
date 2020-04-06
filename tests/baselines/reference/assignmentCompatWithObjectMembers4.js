@@ -109,56 +109,60 @@ var __extends = (this && this.__extends) || (function () {
 var OnlyDerived;
 (function (OnlyDerived) {
     var Base = /** @class */ (function () {
-        function Base() {
-        }
+        function Base() {}
         return Base;
     }());
     var Derived = /** @class */ (function (_super) {
-        __extends(Derived, _super);
-        function Derived() {
+        __extends(Derived, _super);function Derived() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Derived;
     }(Base));
     var Derived2 = /** @class */ (function (_super) {
-        __extends(Derived2, _super);
-        function Derived2() {
+        __extends(Derived2, _super);function Derived2() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Derived2;
     }(Base));
     var S = /** @class */ (function () {
-        function S() {
-        }
+        function S() {}
         return S;
     }());
     var T = /** @class */ (function () {
-        function T() {
-        }
+        function T() {}
         return T;
     }());
     var s;
     var t;
+
     var s2;
     var t2;
-    var a;
-    var b;
+
+    var a
+    ;
+    var b
+
+    ;
+
     var a2 = { foo: new Derived() };
     var b2 = { foo: new Derived2() };
     s = t; // error
     t = s; // error
     s = s2; // ok
     s = a2; // ok
+
     s2 = t2; // error
     t2 = s2; // error
     s2 = t; // error
     s2 = b; // error
     s2 = a2; // ok
+
     a = b; // error
     b = a; // error
     a = s; // ok
     a = s2; // ok
     a = a2; // ok
+
     a2 = b2; // error
     b2 = a2; // error
     a2 = b; // error
@@ -168,56 +172,60 @@ var OnlyDerived;
 var WithBase;
 (function (WithBase) {
     var Base = /** @class */ (function () {
-        function Base() {
-        }
+        function Base() {}
         return Base;
     }());
     var Derived = /** @class */ (function (_super) {
-        __extends(Derived, _super);
-        function Derived() {
+        __extends(Derived, _super);function Derived() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Derived;
     }(Base));
     var Derived2 = /** @class */ (function (_super) {
-        __extends(Derived2, _super);
-        function Derived2() {
+        __extends(Derived2, _super);function Derived2() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Derived2;
     }(Base));
     var S = /** @class */ (function () {
-        function S() {
-        }
+        function S() {}
         return S;
     }());
     var T = /** @class */ (function () {
-        function T() {
-        }
+        function T() {}
         return T;
     }());
     var s;
     var t;
+
     var s2;
     var t2;
-    var a;
-    var b;
+
+    var a
+    ;
+    var b
+
+    ;
+
     var a2 = { foo: new Base() };
     var b2 = { foo: new Derived2() };
     s = t; // ok
     t = s; // error
     s = s2; // ok
     s = a2; // ok
+
     s2 = t2; // ok
     t2 = s2; // error
     s2 = t; // ok
     s2 = b; // ok
     s2 = a2; // ok
+
     a = b; // ok
     b = a; // error
     a = s; // ok
     a = s2; // ok
     a = a2; // ok
+
     a2 = b2; // ok
     b2 = a2; // error
     a2 = b; // ok

@@ -82,17 +82,22 @@ var onlyT;
         var r;
         return r;
     }
+
     var r1 = foo(function (x) { return 1; }, function (x) { return ''; });
+
     function other2(x) {
         var r7 = foo(function (a) { return a; }, function (b) { return b; }); // T => T
+
         // BUG 835518
         var r9 = r7(new Date()); // should be ok
         var r10 = r7(1); // error
     }
+
     function foo2(a, b) {
         var r;
         return r;
     }
+
     function other3(x) {
         var r7 = foo2(function (a) { return a; }, function (b) { return b; }); // error
         var r7b = foo2(function (a) { return a; }, function (b) { return b; }); // valid, T is inferred to be Date
@@ -109,6 +114,7 @@ var onlyT;
         var r;
         return r;
     }
+
     var r7 = foo3(E.A, function (x) { return E.A; }, function (x) { return F.A; }); // error
 })(onlyT || (onlyT = {}));
 var TU;
@@ -117,16 +123,20 @@ var TU;
         var r;
         return r;
     }
+
     var r1 = foo(function (x) { return 1; }, function (x) { return ''; });
+
     function other2(x) {
         var r7 = foo(function (a) { return a; }, function (b) { return b; });
         var r9 = r7(new Date());
         var r10 = r7(1);
     }
+
     function foo2(a, b) {
         var r;
         return r;
     }
+
     function other3(x) {
         var r7 = foo2(function (a) { return a; }, function (b) { return b; });
         var r7b = foo2(function (a) { return a; }, function (b) { return b; });
@@ -143,5 +153,6 @@ var TU;
         var r;
         return r;
     }
+
     var r7 = foo3(E.A, function (x) { return E.A; }, function (x) { return F.A; });
 })(TU || (TU = {}));

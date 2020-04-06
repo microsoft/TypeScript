@@ -27,18 +27,20 @@ class A {
 function f0(a) {
     a.b;
 }
+
 function f1(_a) {
     var a = _a.a;
     a.b;
 }
+
 function f2(_a) {
     var a = _a[0];
     a.b;
 }
+
 var A = /** @class */ (function () {
     function A() {
-    }
-    A.prototype.m0 = function (a) {
+    }A.prototype.m0 = function (a) {
         a.b;
     };
     A.prototype.m1 = function (_a) {

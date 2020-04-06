@@ -20,6 +20,7 @@ function fn() {
     catch (x) {
         var x; // ensure x is 'Any'
     }
+
     // no type annotation allowed
     try { }
     catch (z) { }
@@ -28,3 +29,4 @@ function fn() {
     try { }
     catch (y) { }
 }
+

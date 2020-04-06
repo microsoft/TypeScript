@@ -15,10 +15,10 @@ var Validation;
 (function (Validation) {
     var lettersRegexp = /^[A-Za-z]+$/;
     var numberRegexp = /^[0-9]+$/;
+
     var LettersOnlyValidator = /** @class */ (function () {
         function LettersOnlyValidator() {
-        }
-        LettersOnlyValidator.prototype.isAcceptable = function (s2) {
+        }LettersOnlyValidator.prototype.isAcceptable = function (s2) {
             return lettersRegexp.test(s2);
         };
         return LettersOnlyValidator;

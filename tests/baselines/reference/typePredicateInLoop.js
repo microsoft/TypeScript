@@ -26,8 +26,11 @@ export function y(arg: Type): void {
 // Repro from #12101
 exports.__esModule = true;
 exports.y = void 0;
+
+
 var guard = function (arg) { return arg.type === 1; };
 var otherFunc = function (arg1, arg2) { };
+
 function y(arg) {
     if (guard(arg)) {
         for (var _i = 0, _a = arg.arr; _i < _a.length; _i++) {
@@ -36,5 +39,4 @@ function y(arg) {
             }
         }
     }
-}
-exports.y = y;
+}exports.y = y;

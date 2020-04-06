@@ -44,13 +44,11 @@ exports.__esModule = true;
 exports.MyFoo = void 0;
 var library_1 = require("./library");
 var MyFoo = /** @class */ (function (_super) {
-    __extends(MyFoo, _super);
-    function MyFoo() {
+    __extends(MyFoo, _super);function MyFoo() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return MyFoo;
-}(library_1.Foo));
-exports.MyFoo = MyFoo;
+}(library_1.Foo));exports.MyFoo = MyFoo;
 //// [typed_component.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -80,5 +78,4 @@ var TypedFoo = /** @class */ (function (_super) {
         return _this;
     }
     return TypedFoo;
-}(component_1.MyFoo));
-exports.TypedFoo = TypedFoo;
+}(component_1.MyFoo));exports.TypedFoo = TypedFoo;

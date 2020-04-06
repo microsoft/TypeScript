@@ -8,5 +8,7 @@ var t: { (f: any) : any; };
 
 //// [idInProp.js]
 function f() {
+
     var t;
+
 }

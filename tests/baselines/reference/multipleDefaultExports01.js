@@ -27,8 +27,8 @@ var foo = /** @class */ (function () {
 }());
 exports.default = foo;
 function bar() {
-}
-exports.default = bar;
+}exports.default = bar;
+
 var x = 10;
 exports.default = x;
 //// [m2.js]

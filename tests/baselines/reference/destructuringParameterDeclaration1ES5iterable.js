@@ -134,17 +134,14 @@ a1([1, 2, [["world"]], 3]);
 // If the declaration includes an initializer expression (which is permitted only
 // when the parameter list occurs in conjunction with a function body),
 // the parameter type is the widened form (section 3.11) of the type of the initializer expression.
-function b1(z) {
-    if (z === void 0) { z = [undefined, null]; }
-}
+function b1(z) {if (z === void 0) { z = [undefined, null]; }}
 ;
-function b2(z, o) {
-    if (z === void 0) { z = null; }
-    if (o === void 0) { o = { x: 0, y: undefined }; }
-}
+function b2(z, o) {if (z === void 0) { z = null; }if (o === void 0) { o = { x: 0, y: undefined }; }}
 function b3(_a) {
     var _b = (_a === void 0 ? { z: { x: "hi", y: { j: 1 } } } : _a).z, x = _b.x, j = _b.y.j;
 }
+
+
 function b6(_a) {
     var _b = __read(_a === void 0 ? [undefined, null, undefined] : _a, 3), a = _b[0], z = _b[1], y = _b[2];
 }
@@ -181,22 +178,25 @@ function c6(_a) {
 }
 c0({ z: { x: 1, y: { j: "world" } } }); // Implied type is { z: {x: any, y: {j: any}} }
 c0({ z: { x: "string", y: { j: true } } }); // Implied type is { z: {x: any, y: {j: any}} }
+
 c1(); // Implied type is {z:number}?
 c1({ z: 1 }); // Implied type is {z:number}?
+
 c2({}); // Implied type is {z?: number}
 c2({ z: 1 }); // Implied type is {z?: number}
+
 c3({ b: 1 }); // Implied type is { b: number|string }.
+
 c5([1, 2, [["string"]]]); // Implied type is is [any, any, [[any]]]
 c5([1, 2, [["string"]], false, true]); // Implied type is is [any, any, [[any]]]
 // A parameter can be marked optional by following its name or binding pattern with a question mark (?)
 // or by including an initializer.
 function d0(x) { }
-function d0(x) {
-    if (x === void 0) { x = 10; }
-}
+function d0(x) {if (x === void 0) { x = 10; }}
+
+
 var C2 = /** @class */ (function () {
-    function C2() {
-    }
+    function C2() {}
     C2.prototype.d3 = function () { };
     C2.prototype.d4 = function () { };
     C2.prototype.e0 = function (_a) {
@@ -206,8 +206,7 @@ var C2 = /** @class */ (function () {
 }());
 var C3 = /** @class */ (function () {
     function C3() {
-    }
-    C3.prototype.d3 = function (_a) {
+    }C3.prototype.d3 = function (_a) {
         var _b = __read(_a, 3), a = _b[0], b = _b[1], c = _b[2];
     };
     C3.prototype.d4 = function (_a) {

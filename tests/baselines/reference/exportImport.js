@@ -38,8 +38,7 @@ define(["require", "exports", "./exporter"], function (require, exports, e) {
     exports.w = void 0;
     function w() {
         return new e.w();
-    }
-    exports.w = w;
+    }exports.w = w;
 });
 
 

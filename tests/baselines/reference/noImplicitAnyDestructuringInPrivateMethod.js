@@ -17,14 +17,12 @@ exports.__esModule = true;
 exports.Bar = void 0;
 var Bar = /** @class */ (function () {
     function Bar() {
-    }
-    Bar.prototype.bar = function (_a) {
+    }Bar.prototype.bar = function (_a) {
         var a = _a.a;
         return a;
     };
     return Bar;
-}());
-exports.Bar = Bar;
+}());exports.Bar = Bar;
 
 
 //// [noImplicitAnyDestructuringInPrivateMethod.d.ts]

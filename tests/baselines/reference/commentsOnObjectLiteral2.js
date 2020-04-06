@@ -13,7 +13,8 @@ var Person = makeClass(
 );
 
 //// [commentsOnObjectLiteral2.js]
-var Person = makeClass({
+var Person = makeClass(
+{
     /**
      This is just another way to define a constructor.
      @constructs
@@ -22,4 +23,5 @@ var Person = makeClass({
     initialize: function (name) {
         this.name = name;
     } /* trailing comment 1*/
-});
+}
+);

@@ -14,11 +14,9 @@ var M;
     var C = /** @class */ (function () {
         function C() {
             this.n = 42;
-        }
-        C.prototype.foo = function () {
+        }C.prototype.foo = function () {
             var _this = this;
-            [1, 2, 3].map(function (x) { return _this.n * x; });
-        };
+            [1, 2, 3].map(function (x) { return _this.n * x; });};
         return C;
     }());
     M.C = C;

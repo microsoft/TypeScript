@@ -24,6 +24,7 @@ System.register([], function (exports_1, context_1) {
             A = /** @class */ (function () {
                 function A() {
                 }
+
                 A.prototype.B = function () {
                     return 42;
                 };

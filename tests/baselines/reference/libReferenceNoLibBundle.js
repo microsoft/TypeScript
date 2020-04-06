@@ -21,6 +21,8 @@ export const elem: HTMLElement = { field: 'a' };
 
 //// [bundle.js]
 // Test that passing noLib disables <reference lib> resolution.
+
+
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });

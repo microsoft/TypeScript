@@ -60,9 +60,9 @@ function foo() {
 } /* trailing comment of function */
 foo();
 /** This is comment for function signature*/
-function fooWithParameters(/** this is comment about a*/ a, 
-/** this is comment for b*/
-b) {
+function fooWithParameters(/** this is comment about a*/ a,
+    /** this is comment for b*/
+    b) {
     var d = a;
 } // trailing comment of function
 fooWithParameters("a", 10);
@@ -71,28 +71,38 @@ fooWithParameters("a", 10);
  */
 var fooFunc = function FooFunctionValue(/** fooFunctionValue param */ b) {
     return b;
-};
+}
+
+;
+
 /// lamdaFoo var comment
 var lambdaFoo = /** this is lambda comment*/ function (/**param a*/ a, /**param b*/ b) { return a + b; };
 var lambddaNoVarComment = /** this is lambda multiplication*/ function (/**param a*/ a, /**param b*/ b) { return a * b; };
 lambdaFoo(10, 20);
 lambddaNoVarComment(10, 20);
 function blah(a /* multiline trailing comment
-multiline */) {
+multiline */
+) {
 }
+
 function blah2(a /* single line multiple trailing comments */ /* second */) {
 }
+
 function blah3(a // trailing commen single line
 ) {
 }
+
 lambdaFoo = function (a, b) { return a * b; }; // This is trailing comment
+
 /*leading comment*/ (function () { return 0; }); // Needs to be wrapped in parens to be a valid expression (not declaration)
 /*leading comment*/ (function () { return 0; }); //trailing comment
+
 function blah4(/*1*/ a /*2*/, /*3*/ b /*4*/) {
 }
 function foo1() {
     // should emit this
 }
+
 function foo2() {
     /// This is some detached comment
     // should emit this leading comment of } too

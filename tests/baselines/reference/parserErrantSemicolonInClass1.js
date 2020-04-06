@@ -39,8 +39,8 @@ class a {
 var a = /** @class */ (function () {
     function a(ns) {
     }
-    a.prototype.pgF = function () { };
-    ;
+
+    a.prototype.pgF = function () { };;
     Object.defineProperty(a.prototype, "d", {
         get: function () {
             return 30;

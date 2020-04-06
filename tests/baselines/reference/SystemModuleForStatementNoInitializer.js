@@ -30,9 +30,11 @@ System.register([], function (exports_1, context_1) {
             for (; i < limit; ++i) {
                 break;
             }
+
             for (;; ++i) {
                 break;
             }
+
             for (;;) {
                 break;
             }

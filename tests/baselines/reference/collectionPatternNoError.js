@@ -40,20 +40,23 @@ function f<
 //// [collectionPatternNoError.js]
 var Message = /** @class */ (function () {
     function Message() {
-    }
-    Message.prototype.clone = function () {
+    }Message.prototype.clone = function () {
         return this;
     };
     return Message;
 }());
+
 function fetchMsg(protoCtor) {
     return null;
 }
+
 var DataProvider = /** @class */ (function () {
-    function DataProvider(message, messageList) {
+    function DataProvider(message,
+        messageList) {
         this.message = message;
         this.messageList = messageList;
     }
+
     DataProvider.prototype.fetch = function () {
         var messageList = fetchMsg(this.messageList);
         messageList.methodOnMessageList();

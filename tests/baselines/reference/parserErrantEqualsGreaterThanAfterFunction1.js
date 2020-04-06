@@ -2,5 +2,4 @@
 function f() => 4;
 
 //// [parserErrantEqualsGreaterThanAfterFunction1.js]
-function f() { }
-4;
+function f() { }4;

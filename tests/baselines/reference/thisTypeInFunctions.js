@@ -217,8 +217,7 @@ var B = /** @class */ (function () {
 }());
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.explicitThis = function (m) {
+    }C.prototype.explicitThis = function (m) {
         return this.n + m;
     };
     C.prototype.explicitC = function (m) {
@@ -233,8 +232,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);
-    function D() {
+    __extends(D, _super);function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
@@ -261,7 +259,8 @@ var impl = {
     explicitThis: function () {
         return this.a;
     }
-};
+}
+;
 impl.explicitVoid1 = function () { return 12; };
 impl.explicitVoid2 = function () { return 12; };
 impl.explicitStructural = function () { return this.a; };
@@ -299,10 +298,13 @@ explicitVoid(12);
 var unboundToSpecified = function (x) { return x + _this.y; }; // ok, this:any
 var specifiedToSpecified = explicitStructural;
 var anyToSpecified = function (x) { return x + 12; };
+
 var unspecifiedLambda = function (x) { return x + 12; };
 var specifiedLambda = function (x) { return x + 12; };
 var unspecifiedLambdaToSpecified = unspecifiedLambda;
 var specifiedLambdaToSpecified = specifiedLambda;
+
+
 var explicitCFunction;
 var explicitPropertyFunction;
 c.explicitC = explicitCFunction;
@@ -314,6 +316,7 @@ c.explicitProperty = reconstructed.explicitProperty;
 c.explicitC = function (m) { return m; };
 c.explicitThis = function (m) { return m; };
 c.explicitProperty = function (m) { return m; };
+
 // this inside lambdas refer to outer scope
 // the outer-scoped lambda at top-level is still just `any`
 c.explicitC = function (m) { return m + _this.n; };
@@ -328,36 +331,35 @@ c.explicitProperty = function (m) { return this.n + m; };
 c.explicitThis = function (m) { return this.n + m; };
 // this: contextual typing
 c.explicitThis = function (m) { return this.n + m; };
+
 // this: superclass compatibility
 c.explicitC = function (m) { return this.n + m; };
+
 // this:void compatibility
 c.explicitVoid = function (n) { return n; };
+
 // class-based assignability
 var Base1 = /** @class */ (function () {
     function Base1() {
-    }
-    Base1.prototype.polymorphic = function () { return this.x; };
+    }Base1.prototype.polymorphic = function () { return this.x; };
     Base1.prototype.explicit = function () { return this.x; };
     Base1.explicitStatic = function () { return this.y; };
     return Base1;
 }());
 var Derived1 = /** @class */ (function (_super) {
-    __extends(Derived1, _super);
-    function Derived1() {
+    __extends(Derived1, _super);function Derived1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived1;
 }(Base1));
 var Base2 = /** @class */ (function () {
     function Base2() {
-    }
-    Base2.prototype.polymorphic = function () { return this.y; };
+    }Base2.prototype.polymorphic = function () { return this.y; };
     Base2.prototype.explicit = function () { return this.x; };
     return Base2;
 }());
 var Derived2 = /** @class */ (function (_super) {
-    __extends(Derived2, _super);
-    function Derived2() {
+    __extends(Derived2, _super);function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived2;
@@ -368,6 +370,8 @@ var d1 = new Derived1();
 var d2 = new Derived2();
 d2.polymorphic = d1.polymorphic; // ok, 'x' and 'y' in { x, y }
 d1.polymorphic = d2.polymorphic; // ok, 'x' and 'y' in { x, y }
+
+
 // bivariance-allowed cases
 d1.polymorphic = b2.polymorphic; // ok, 'y' in D: { x, y }
 d2.polymorphic = d1.explicit; // ok, 'y' in { x, y }
@@ -386,5 +390,7 @@ function AnyThis() {
 var interfaceThis = new InterfaceThis();
 var literalTypeThis = new LiteralTypeThis();
 var anyThis = new AnyThis();
+
 var n = f.call(12);
+
 function missingTypeIsImplicitAny(a) { return this.anything + a; }

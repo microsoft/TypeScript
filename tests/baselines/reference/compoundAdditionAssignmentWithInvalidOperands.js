@@ -43,10 +43,10 @@ x5 += {};
 //// [compoundAdditionAssignmentWithInvalidOperands.js]
 var E;
 (function (E) {
-    E[E["a"] = 0] = "a";
-    E[E["b"] = 1] = "b";
+    E[E["a"] = 0] = "a";E[E["b"] = 1] = "b";
 })(E || (E = {}));
 var a;
+
 var x1;
 x1 += a;
 x1 += true;

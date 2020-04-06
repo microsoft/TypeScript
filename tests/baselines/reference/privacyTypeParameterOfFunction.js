@@ -145,8 +145,11 @@ var publicClass = /** @class */ (function () {
     function publicClass() {
     }
     return publicClass;
-}());
-exports.publicClass = publicClass;
+}());exports.publicClass = publicClass;
+
+
+
+
 var publicClassWithWithPrivateTypeParameters = /** @class */ (function () {
     function publicClassWithWithPrivateTypeParameters() {
     }
@@ -161,12 +164,10 @@ var publicClassWithWithPrivateTypeParameters = /** @class */ (function () {
     publicClassWithWithPrivateTypeParameters.prototype.myPrivateMethod = function () {
     };
     return publicClassWithWithPrivateTypeParameters;
-}());
-exports.publicClassWithWithPrivateTypeParameters = publicClassWithWithPrivateTypeParameters;
+}());exports.publicClassWithWithPrivateTypeParameters = publicClassWithWithPrivateTypeParameters;
 var publicClassWithWithPublicTypeParameters = /** @class */ (function () {
     function publicClassWithWithPublicTypeParameters() {
-    }
-    publicClassWithWithPublicTypeParameters.myPublicStaticMethod = function () {
+    }publicClassWithWithPublicTypeParameters.myPublicStaticMethod = function () {
     };
     publicClassWithWithPublicTypeParameters.myPrivateStaticMethod = function () {
     };
@@ -175,12 +176,10 @@ var publicClassWithWithPublicTypeParameters = /** @class */ (function () {
     publicClassWithWithPublicTypeParameters.prototype.myPrivateMethod = function () {
     };
     return publicClassWithWithPublicTypeParameters;
-}());
-exports.publicClassWithWithPublicTypeParameters = publicClassWithWithPublicTypeParameters;
+}());exports.publicClassWithWithPublicTypeParameters = publicClassWithWithPublicTypeParameters;
 var privateClassWithWithPrivateTypeParameters = /** @class */ (function () {
     function privateClassWithWithPrivateTypeParameters() {
-    }
-    privateClassWithWithPrivateTypeParameters.myPublicStaticMethod = function () {
+    }privateClassWithWithPrivateTypeParameters.myPublicStaticMethod = function () {
     };
     privateClassWithWithPrivateTypeParameters.myPrivateStaticMethod = function () {
     };
@@ -192,8 +191,7 @@ var privateClassWithWithPrivateTypeParameters = /** @class */ (function () {
 }());
 var privateClassWithWithPublicTypeParameters = /** @class */ (function () {
     function privateClassWithWithPublicTypeParameters() {
-    }
-    privateClassWithWithPublicTypeParameters.myPublicStaticMethod = function () {
+    }privateClassWithWithPublicTypeParameters.myPublicStaticMethod = function () {
     };
     privateClassWithWithPublicTypeParameters.myPrivateStaticMethod = function () {
     };
@@ -205,19 +203,22 @@ var privateClassWithWithPublicTypeParameters = /** @class */ (function () {
 }());
 // TypeParameter_0_of_exported_function_has_or_is_using_private_type_1
 function publicFunctionWithPrivateTypeParameters() {
-}
-exports.publicFunctionWithPrivateTypeParameters = publicFunctionWithPrivateTypeParameters;
+}exports.publicFunctionWithPrivateTypeParameters = publicFunctionWithPrivateTypeParameters;
+
 function publicFunctionWithPublicTypeParameters() {
-}
-exports.publicFunctionWithPublicTypeParameters = publicFunctionWithPublicTypeParameters;
+}exports.publicFunctionWithPublicTypeParameters = publicFunctionWithPublicTypeParameters;
+
 function privateFunctionWithPrivateTypeParameters() {
 }
+
 function privateFunctionWithPublicTypeParameters() {
 }
+
+
+
 var publicClassWithWithPublicTypeParametersWithoutExtends = /** @class */ (function () {
     function publicClassWithWithPublicTypeParametersWithoutExtends() {
-    }
-    publicClassWithWithPublicTypeParametersWithoutExtends.myPublicStaticMethod = function () {
+    }publicClassWithWithPublicTypeParametersWithoutExtends.myPublicStaticMethod = function () {
     };
     publicClassWithWithPublicTypeParametersWithoutExtends.myPrivateStaticMethod = function () {
     };
@@ -226,12 +227,10 @@ var publicClassWithWithPublicTypeParametersWithoutExtends = /** @class */ (funct
     publicClassWithWithPublicTypeParametersWithoutExtends.prototype.myPrivateMethod = function () {
     };
     return publicClassWithWithPublicTypeParametersWithoutExtends;
-}());
-exports.publicClassWithWithPublicTypeParametersWithoutExtends = publicClassWithWithPublicTypeParametersWithoutExtends;
+}());exports.publicClassWithWithPublicTypeParametersWithoutExtends = publicClassWithWithPublicTypeParametersWithoutExtends;
 var privateClassWithWithPublicTypeParametersWithoutExtends = /** @class */ (function () {
     function privateClassWithWithPublicTypeParametersWithoutExtends() {
-    }
-    privateClassWithWithPublicTypeParametersWithoutExtends.myPublicStaticMethod = function () {
+    }privateClassWithWithPublicTypeParametersWithoutExtends.myPublicStaticMethod = function () {
     };
     privateClassWithWithPublicTypeParametersWithoutExtends.myPrivateStaticMethod = function () {
     };
@@ -242,7 +241,7 @@ var privateClassWithWithPublicTypeParametersWithoutExtends = /** @class */ (func
     return privateClassWithWithPublicTypeParametersWithoutExtends;
 }());
 function publicFunctionWithPublicTypeParametersWithoutExtends() {
-}
-exports.publicFunctionWithPublicTypeParametersWithoutExtends = publicFunctionWithPublicTypeParametersWithoutExtends;
+}exports.publicFunctionWithPublicTypeParametersWithoutExtends = publicFunctionWithPublicTypeParametersWithoutExtends;
+
 function privateFunctionWithPublicTypeParametersWithoutExtends() {
 }

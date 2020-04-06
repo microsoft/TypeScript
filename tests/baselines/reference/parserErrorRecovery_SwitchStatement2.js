@@ -9,8 +9,7 @@ class D {
 //// [parserErrorRecovery_SwitchStatement2.js]
 var C = /** @class */ (function () {
     function C() {
-        switch (e) {
-        }
+        switch (e) {}
         var D = /** @class */ (function () {
             function D() {
             }

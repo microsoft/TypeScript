@@ -20,8 +20,10 @@ x = y;
 y = x;
 
 //// [stringLiteralTypesInUnionTypes01.js]
+
 var x = undefined;
 var y = undefined;
+
 if (x === "foo") {
     var a = x;
 }

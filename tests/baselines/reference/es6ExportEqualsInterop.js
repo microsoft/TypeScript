@@ -280,26 +280,17 @@ function_module_1.a;
 class_1.a;
 class_module_1.a;
 // named export
-var interface_2 = require("interface");
-__createBinding(exports, interface_2, "a", "a1");
-var variable_2 = require("variable");
-__createBinding(exports, variable_2, "a", "a2");
-var interface_variable_2 = require("interface-variable");
-__createBinding(exports, interface_variable_2, "a", "a3");
-var module_2 = require("module");
-__createBinding(exports, module_2, "a", "a4");
-var interface_module_2 = require("interface-module");
-__createBinding(exports, interface_module_2, "a", "a5");
-var variable_module_2 = require("variable-module");
-__createBinding(exports, variable_module_2, "a", "a6");
-var function_2 = require("function");
-__createBinding(exports, function_2, "a", "a7");
-var function_module_2 = require("function-module");
-__createBinding(exports, function_module_2, "a", "a8");
-var class_2 = require("class");
-__createBinding(exports, class_2, "a", "a9");
-var class_module_2 = require("class-module");
-__createBinding(exports, class_module_2, "a", "a0");
+var interface_2 = require("interface");__createBinding(exports, interface_2, "a", "a1");
+var variable_2 = require("variable");__createBinding(exports, variable_2, "a", "a2");
+var interface_variable_2 = require("interface-variable");__createBinding(exports, interface_variable_2, "a", "a3");
+var module_2 = require("module");__createBinding(exports, module_2, "a", "a4");
+var interface_module_2 = require("interface-module");__createBinding(exports, interface_module_2, "a", "a5");
+var variable_module_2 = require("variable-module");__createBinding(exports, variable_module_2, "a", "a6");
+var function_2 = require("function");__createBinding(exports, function_2, "a", "a7");
+var function_module_2 = require("function-module");__createBinding(exports, function_module_2, "a", "a8");
+var class_2 = require("class");__createBinding(exports, class_2, "a", "a9");
+var class_module_2 = require("class-module");__createBinding(exports, class_module_2, "a", "a0");
+
 // export-star
 __exportStar(require("interface"), exports);
 __exportStar(require("variable"), exports);

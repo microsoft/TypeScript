@@ -276,6 +276,7 @@ function f1() {
         }
     }
 }
+
 function f2() {
     var x = 0;
     try {
@@ -290,6 +291,7 @@ function f2() {
     }
     x; // 1
 }
+
 function f3() {
     var x = 0;
     try {
@@ -304,6 +306,7 @@ function f3() {
     }
     x; // 1
 }
+
 function f4() {
     var x = 0;
     try {
@@ -317,6 +320,7 @@ function f4() {
     }
     x; // 1 | 2
 }
+
 function f5() {
     var x = 0;
     try {
@@ -331,6 +335,7 @@ function f5() {
     }
     x; // 2
 }
+
 function f6() {
     var x = 0;
     try {
@@ -345,6 +350,7 @@ function f6() {
     }
     x; // 1
 }
+
 function f7() {
     var x = 0;
     try {
@@ -360,6 +366,7 @@ function f7() {
     }
     x; // Unreachable
 }
+
 function f8() {
     var x = 0;
     (function () {
@@ -374,6 +381,7 @@ function f8() {
     })();
     x; // 1
 }
+
 function f9() {
     var x = 0;
     (function () {
@@ -391,6 +399,7 @@ function f9() {
     })();
     x; // 1 | 2
 }
+
 function f10() {
     var x = 0;
     (function () {
@@ -409,6 +418,7 @@ function f10() {
     })();
     x; // 1 | 3
 }
+
 function f11() {
     var x = 0;
     (function () {
@@ -437,6 +447,7 @@ function f11() {
     })();
     x; // 1 | 4 | 5
 }
+
 function f12() {
     var x = 0;
     (function () {
@@ -473,6 +484,7 @@ function f12() {
     })();
     x; // 4 | 5 | 6
 }
+
 // Repro from #35644
 var main = function () {
     var hoge = undefined;
@@ -489,7 +501,10 @@ var main = function () {
         }
         return;
     }
-};
+}
+
+;
+
 // Repro from #36828
 function t1() {
     var x = (function () {

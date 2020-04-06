@@ -18,10 +18,10 @@ test(example, "default");
 exports.__esModule = true;
 function add(a, b) {
     return a + b;
-}
-exports["default"] = add;
+}exports["default"] = add;
 //// [test.js]
 "use strict";
 exports.__esModule = true;
 var example = require("./example");
+
 test(example, "default");

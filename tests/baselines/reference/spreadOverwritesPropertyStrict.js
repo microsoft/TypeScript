@@ -47,11 +47,16 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var unused1 = __assign({ b: 1 }, ab); // error
-var unused2 = __assign(__assign({}, ab), ab); // ok, overwritten error doesn't apply to spreads
-var unused3 = __assign({ b: 1 }, abq); // ok, abq might have b: undefined
-var unused4 = __assign(__assign({}, ab), { b: 1 }); // ok, we don't care that b in ab is overwritten
-var unused5 = __assign(__assign({}, abq), { b: 1 }); // ok
+var unused1 = __assign({ b: 1 }, ab)
+; // error
+var unused2 = __assign(__assign({}, ab), ab)
+; // ok, overwritten error doesn't apply to spreads
+var unused3 = __assign({ b: 1 }, abq)
+; // ok, abq might have b: undefined
+var unused4 = __assign(__assign({}, ab), { b: 1 })
+; // ok, we don't care that b in ab is overwritten
+var unused5 = __assign(__assign({}, abq), { b: 1 })
+; // ok
 function g(obj) {
     return __assign({ x: 1 }, obj); // ok, obj might have x: undefined
 }
@@ -70,9 +75,11 @@ function j() {
 function k(t) {
     return __assign(__assign(__assign({ command: "hi" }, { spoiler: true }), { spoiler2: true }), t); // error
 }
+
 function l(anyrequired) {
     return __assign({ a: 'zzz' }, anyrequired); // error
 }
 function m(anyoptional) {
     return __assign({ a: 'zzz' }, anyoptional); // ok
 }
+

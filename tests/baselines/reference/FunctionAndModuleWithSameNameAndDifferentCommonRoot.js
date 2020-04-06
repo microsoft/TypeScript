@@ -41,5 +41,7 @@ var B;
 //// [test.js]
 var fn;
 var fn = A.Point;
-var cl;
+
+var cl
+;
 var cl = B.Point.Origin;

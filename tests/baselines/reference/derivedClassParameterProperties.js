@@ -109,6 +109,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var Base = /** @class */ (function () {
     function Base() {
     }
@@ -147,6 +148,7 @@ var Derived3 = /** @class */ (function (_super) {
 }(Base));
 var Derived4 = /** @class */ (function (_super) {
     __extends(Derived4, _super);
+
     function Derived4(y) {
         var _this = this;
         var b = 2;
@@ -158,6 +160,7 @@ var Derived4 = /** @class */ (function (_super) {
 }(Base));
 var Derived5 = /** @class */ (function (_super) {
     __extends(Derived5, _super);
+
     function Derived5(y) {
         var _this = _super.call(this) || this;
         _this.a = 1;
@@ -168,6 +171,7 @@ var Derived5 = /** @class */ (function (_super) {
 }(Base));
 var Derived6 = /** @class */ (function (_super) {
     __extends(Derived6, _super);
+
     function Derived6(y) {
         var _this = this;
         _this.a = 1;
@@ -179,6 +183,8 @@ var Derived6 = /** @class */ (function (_super) {
 }(Base));
 var Derived7 = /** @class */ (function (_super) {
     __extends(Derived7, _super);
+
+
     function Derived7(y) {
         var _this = this;
         _this.a = 3;
@@ -191,6 +197,8 @@ var Derived7 = /** @class */ (function (_super) {
 }(Base));
 var Derived8 = /** @class */ (function (_super) {
     __extends(Derived8, _super);
+
+
     function Derived8(y) {
         var _this = _super.call(this) || this;
         _this.a = 1;
@@ -202,12 +210,13 @@ var Derived8 = /** @class */ (function (_super) {
 }(Base));
 // generic cases of Derived7 and Derived8
 var Base2 = /** @class */ (function () {
-    function Base2() {
-    }
+    function Base2() {}
     return Base2;
 }());
 var Derived9 = /** @class */ (function (_super) {
     __extends(Derived9, _super);
+
+
     function Derived9(y) {
         var _this = this;
         _this.a = 3;
@@ -220,6 +229,8 @@ var Derived9 = /** @class */ (function (_super) {
 }(Base2));
 var Derived10 = /** @class */ (function (_super) {
     __extends(Derived10, _super);
+
+
     function Derived10(y) {
         var _this = _super.call(this) || this;
         _this.a = 1;

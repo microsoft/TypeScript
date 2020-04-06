@@ -19,4 +19,5 @@ class SymbolIterator {
         };
     }
 }
+
 var array = [...new SymbolIterator];

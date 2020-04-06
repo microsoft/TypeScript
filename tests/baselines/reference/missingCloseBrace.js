@@ -13,6 +13,7 @@ function base_init() {
 function base_init() {
     {
     }
+
     function me() {
     }
 }

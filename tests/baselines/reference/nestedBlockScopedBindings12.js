@@ -19,6 +19,7 @@ var x;
     var x_1;
     x_1 = 1;
 }
+
 var y;
 switch (1) {
     case 1:

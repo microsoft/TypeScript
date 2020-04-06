@@ -18,12 +18,12 @@ file1.bar();
 
 
 //// [externalModuleRefernceResolutionOrderInImportDeclaration_file2.js]
+
 //// [externalModuleRefernceResolutionOrderInImportDeclaration_file1.js]
 "use strict";
 exports.__esModule = true;
 exports.foo = void 0;
-function foo() { }
-exports.foo = foo;
+function foo() { }exports.foo = foo;
 ;
 //// [externalModuleRefernceResolutionOrderInImportDeclaration_file3.js]
 "use strict";

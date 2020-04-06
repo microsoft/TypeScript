@@ -76,26 +76,27 @@ testSet.transform(
 // This is a contrived class. We could do the same thing with Observables, etc.
 var SetOf = /** @class */ (function () {
     function SetOf() {
-    }
-    SetOf.prototype.add = function (a) {
+    }SetOf.prototype.add = function (a) {
         this._store.push(a);
     };
+
     SetOf.prototype.transform = function (transformer) {
         return transformer(this);
     };
+
     SetOf.prototype.forEach = function (fn) {
         this._store.forEach(function (a, i) { return fn(a, i); });
     };
     return SetOf;
 }());
 /* ... etc ... */
-function compose() {
-    var fns = [];
+function compose() {var fns = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         fns[_i] = arguments[_i];
     }
     return function (x) { return fns.reduce(function (prev, fn) { return fn(prev); }, x); };
 }
+
 function map(fn) {
     return function (a) {
         var b = new SetOf();
@@ -103,6 +104,7 @@ function map(fn) {
         return b;
     };
 }
+
 function filter(predicate) {
     return function (a) {
         var result = new SetOf();
@@ -113,11 +115,25 @@ function filter(predicate) {
         return result;
     };
 }
+
 var testSet = new SetOf();
 testSet.add(1);
 testSet.add(2);
 testSet.add(3);
-testSet.transform(compose(filter(function (x) { return x % 1 === 0; }), map(function (x) { return x + x; }), map(function (x) { return x + '!!!'; }), map(function (x) { return x.toUpperCase(); })));
-testSet.transform(compose(filter(function (x) { return x % 1 === 0; }), map(function (x) { return x + x; }), map(function (x) { return 123; }), // Whoops a bug
-map(function (x) { return x.toUpperCase(); }) // causes an error!
-));
+testSet.transform(
+compose(
+filter(function (x) { return x % 1 === 0; }),
+    map(function (x) { return x + x; }),
+    map(function (x) { return x + '!!!'; }),
+    map(function (x) { return x.toUpperCase(); })
+)
+);
+
+testSet.transform(
+compose(
+filter(function (x) { return x % 1 === 0; }),
+    map(function (x) { return x + x; }),
+    map(function (x) { return 123; }),
+    map(function (x) { return x.toUpperCase(); }) // causes an error!
+)
+);

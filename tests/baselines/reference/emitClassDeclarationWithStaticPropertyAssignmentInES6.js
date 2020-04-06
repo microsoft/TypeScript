@@ -18,6 +18,7 @@ let C = /** @class */ (() => {
 })();
 let D = /** @class */ (() => {
     class D {
+
         constructor() {
             this.x = 20000;
         }

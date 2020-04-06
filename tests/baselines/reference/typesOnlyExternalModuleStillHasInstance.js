@@ -23,6 +23,7 @@ var y: {M2: Object} = foo0;
 //// [foo_0.js]
 "use strict";
 exports.__esModule = true;
+
 //// [foo_1.js]
 "use strict";
 exports.__esModule = true;

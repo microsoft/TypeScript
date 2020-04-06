@@ -41,10 +41,10 @@ Function.prototype.now = function () {
 };
 var X = /** @class */ (function () {
     function X() {
-    }
-    X.now = function () {
+    }X.now = function () {
         return {};
     };
+
     X.prototype.why = function () {
     };
     return X;

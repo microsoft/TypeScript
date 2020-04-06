@@ -13,8 +13,7 @@ class C {
 "use strict";
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.m = function () {
+    }C.prototype.m = function () {
         this.m();
         function f() {
             this.m();

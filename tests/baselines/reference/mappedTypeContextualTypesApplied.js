@@ -25,6 +25,7 @@ mapped9({foo: s => 42});
 
 //// [mappedTypeContextualTypesApplied.js]
 "use strict";
+
 mapped1({ foo: function (s) { return 42; } });
 mapped2({ foo: function (s) { return 42; } });
 mapped3({ foo: function (s) { return 42; } });

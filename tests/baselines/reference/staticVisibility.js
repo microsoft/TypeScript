@@ -42,9 +42,11 @@ var C1 = /** @class */ (function () {
         var v = 0;
         s = 1; // should be error
         C1.s = 1; // should be ok
+
         b(); // should be error
         C1.b(); // should be ok
     }
+
     C1.b = function () {
         v = 1; // should be error
         this.p = 0; // should be error

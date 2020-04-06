@@ -9,5 +9,6 @@ function foo() {
 function foo() {
     var obj = {
         [this.bar]: 0
-    };
+    }
+    ;
 }

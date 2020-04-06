@@ -72,8 +72,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var C = /** @class */ (function () {
+})();var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "X", {
@@ -97,8 +96,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);
-    function D() {
+    __extends(D, _super);function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(D.prototype, "X", {
@@ -125,8 +123,7 @@ var D = /** @class */ (function (_super) {
 }(C));
 // if D is a valid class definition than E is now not safe tranisitively through C
 var E = /** @class */ (function (_super) {
-    __extends(E, _super);
-    function E() {
+    __extends(E, _super);function E() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(E.prototype, "X", {

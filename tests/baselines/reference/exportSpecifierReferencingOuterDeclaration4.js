@@ -13,3 +13,4 @@ export declare function bar(): X.bar; // error
 //// [exportSpecifierReferencingOuterDeclaration2_B.js]
 "use strict";
 exports.__esModule = true;
+

@@ -42,6 +42,7 @@ for (s in a) {
 //// [for-inStatementsArray.js]
 var a;
 var b;
+
 for (var x in a) {
     var a1 = a[x];
     var a2 = a[(x)];
@@ -50,6 +51,7 @@ for (var x in a) {
     var b2 = b[(x)];
     var b3 = b[+x];
 }
+
 for (var x in a) {
     for (var y in a) {
         for (var z in a) {
@@ -59,6 +61,7 @@ for (var x in a) {
         }
     }
 }
+
 var i;
 var j;
 for (i in a) {
@@ -67,6 +70,7 @@ for (i in a) {
         var a2 = a[j];
     }
 }
+
 var s;
 for (var s in a) {
     var a1 = a[s];

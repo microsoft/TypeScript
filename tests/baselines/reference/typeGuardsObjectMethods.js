@@ -64,8 +64,11 @@ var obj1 = {
         // variables in function declaration
         var var2;
         num = typeof var2 === "string" && var2.length; // string
+
+
         // parameters in function declaration
         num = typeof param === "string" && param.length; // string
+
         return strOrNum;
     },
     get prop() {
@@ -74,6 +77,7 @@ var obj1 = {
         // variables in function declaration
         var var2;
         num = typeof var2 === "string" && var2.length; // string
+
         return strOrNum;
     },
     set prop(param) {
@@ -82,11 +86,14 @@ var obj1 = {
         // variables in function declaration
         var var2;
         num = typeof var2 === "string" && var2.length; // string
+
+
         // parameters in function declaration
         num = typeof param === "string" && param.length; // string
     }
 };
 // return expression of the method
 strOrNum = typeof obj1.method(strOrNum) === "string" && obj1.method(strOrNum);
+
 // accessing getter property
 strOrNum = typeof obj1.prop === "string" && obj1.prop;

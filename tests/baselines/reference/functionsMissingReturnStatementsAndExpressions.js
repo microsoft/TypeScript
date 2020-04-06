@@ -132,58 +132,72 @@ class C {
 function f1() {
     // errors because there are no return statements
 }
+
 function f2() {
     // Permissible; returns undefined.
     return;
 }
+
 function f3() {
     return "Okay, because this is a return expression.";
 }
+
 function f4() {
     // Fine since we are typed void.
 }
+
 function f5() {
     // Fine since we are typed void.
     return;
 }
+
 function f6() {
     // Fine since we are typed void and return undefined
     return undefined;
 }
+
 function f7() {
     // Fine since we are typed void and return null
     return null;
 }
+
 function f8() {
     // Fine since are typed any.
     return;
 }
+
 function f9() {
     // Fine since we are typed any and return undefined
     return undefined;
 }
+
 function f10() {
     // Fine since we are typed any and return null
     return null;
 }
+
 function f11() {
     // Fine since we consist of a single throw statement.
     throw undefined;
 }
+
 function f12() {
     // Fine since we consist of a single throw statement.
     throw undefined;
 }
+
 function f13() {
     // Fine since we consist of a single throw statement.
     throw undefined;
 }
+
 function f14() {
     // Not fine, since we can *only* consist of a single throw statement
     // if no return statements are present but we are annotated.
     throw undefined;
     throw null;
 }
+
 function f15() {
     // Fine, since we have a return statement somewhere.
     throw undefined;
@@ -193,22 +207,27 @@ function f15() {
 function f16() {
     // Okay; not type annotated.
 }
+
 function f17() {
     // Okay; not type annotated.
     return;
 }
+
 function f18() {
     return "Okay, not type annotated.";
 }
 function f19() {
     // Okay; function return type is union containing void
 }
+
 function f20() {
     // Okay; function return type is union containing any
 }
+
 function f21() {
     // Not okay; union does not contain void or any
 }
+
 var C = /** @class */ (function () {
     function C() {
     }

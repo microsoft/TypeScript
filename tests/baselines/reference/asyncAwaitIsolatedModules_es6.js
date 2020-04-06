@@ -49,6 +49,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+
+
 function f0() {
     return __awaiter(this, void 0, void 0, function* () { });
 }
@@ -58,15 +60,21 @@ function f1() {
 function f3() {
     return __awaiter(this, void 0, void 0, function* () { });
 }
+
 let f4 = function () {
     return __awaiter(this, void 0, void 0, function* () { });
-};
+}
+;
 let f5 = function () {
     return __awaiter(this, void 0, void 0, function* () { });
-};
+}
+;
 let f6 = function () {
     return __awaiter(this, void 0, void 0, function* () { });
-};
+}
+
+;
+
 let f7 = () => __awaiter(void 0, void 0, void 0, function* () { });
 let f8 = () => __awaiter(void 0, void 0, void 0, function* () { });
 let f9 = () => __awaiter(void 0, void 0, void 0, function* () { });
@@ -74,6 +82,7 @@ let f10 = () => __awaiter(void 0, void 0, void 0, function* () { return p; });
 let f11 = () => __awaiter(void 0, void 0, void 0, function* () { return mp; });
 let f12 = () => __awaiter(void 0, void 0, void 0, function* () { return mp; });
 let f13 = () => __awaiter(void 0, void 0, void 0, function* () { return p; });
+
 let o = {
     m1() {
         return __awaiter(this, void 0, void 0, function* () { });
@@ -85,6 +94,7 @@ let o = {
         return __awaiter(this, void 0, void 0, function* () { });
     }
 };
+
 class C {
     m1() {
         return __awaiter(this, void 0, void 0, function* () { });

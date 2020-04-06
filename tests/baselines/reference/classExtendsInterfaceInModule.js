@@ -30,22 +30,20 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var C1 = /** @class */ (function (_super) {
-    __extends(C1, _super);
-    function C1() {
+    __extends(C1, _super);function C1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C1;
 }(M.I1));
 var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);
-    function C2() {
+    __extends(C2, _super);function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C2;
 }(M.I2));
+
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);
-    function D() {
+    __extends(D, _super);function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;

@@ -31,8 +31,7 @@ exports.__esModule = true;
 exports.useCsvParser = exports.useRef = void 0;
 function useRef(current) {
     return { current: current };
-}
-exports.useRef = useRef;
+}exports.useRef = useRef;
 exports.useCsvParser = function () {
     var parserRef = useRef(null);
     return parserRef;

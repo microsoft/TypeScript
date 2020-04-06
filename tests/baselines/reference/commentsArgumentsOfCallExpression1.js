@@ -26,7 +26,8 @@ foo(
 /*c5*/
 /*c6*/
 function () { });
-foo(/*c7*/ function () { });
+foo(
+function () { });
 foo(
 /*c7*/
 /*c8*/ function () { });

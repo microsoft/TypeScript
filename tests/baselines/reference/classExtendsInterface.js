@@ -23,26 +23,22 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var A = /** @class */ (function (_super) {
-    __extends(A, _super);
-    function A() {
+    __extends(A, _super);function A() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return A;
 }(Comparable));
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());
 var A2 = /** @class */ (function (_super) {
-    __extends(A2, _super);
-    function A2() {
+    __extends(A2, _super);function A2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return A2;
 }(Comparable2));
 var B2 = /** @class */ (function () {
-    function B2() {
-    }
+    function B2() {}
     return B2;
 }());

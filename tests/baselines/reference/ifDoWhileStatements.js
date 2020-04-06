@@ -176,14 +176,14 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
 var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);
-    function C2() {
+    __extends(C2, _super);function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C2;
@@ -221,33 +221,43 @@ var N;
 if (true) { }
 while (true) { }
 do { } while (true);
+
 if (null) { }
 while (null) { }
 do { } while (null);
+
 if (undefined) { }
 while (undefined) { }
 do { } while (undefined);
+
 if (0.0) { }
 while (0.0) { }
 do { } while (0.0);
+
 if ('a string') { }
 while ('a string') { }
 do { } while ('a string');
+
 if ('') { }
 while ('') { }
 do { } while ('');
+
 if (/[a-z]/) { }
 while (/[a-z]/) { }
 do { } while (/[a-z]/);
+
 if ([]) { }
 while ([]) { }
 do { } while ([]);
+
 if ([1, 2]) { }
 while ([1, 2]) { }
 do { } while ([1, 2]);
+
 if ({}) { }
 while ({}) { }
 do { } while ({});
+
 if ({ x: 1, y: 'a' }) { }
 while ({ x: 1, y: 'a' }) { }
 do { } while ({ x: 1, y: 'a' });
@@ -260,6 +270,7 @@ do { } while (new C());
 if (new D()) { }
 while (new D()) { }
 do { } while (new D());
+
 // references
 var a = true;
 if (a) { }
@@ -309,6 +320,7 @@ function fn(x) { return null; }
 if (fn()) { }
 while (fn()) { }
 do { } while (fn());
+
 if (fn) { }
 while (fn) { }
 do { } while (fn);

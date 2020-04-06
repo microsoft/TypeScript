@@ -25,8 +25,7 @@ var A = /** @class */ (function () {
     }
     return A;
 }());
-function Choice() {
-    var v_args = [];
+function Choice() {var v_args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         v_args[_i] = arguments[_i];
     }

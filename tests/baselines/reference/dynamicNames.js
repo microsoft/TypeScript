@@ -171,10 +171,15 @@ var N;
     N.c2 = "a";
     N.c3 = 1;
     N.s1 = module_1.s0;
+
 })(N || (N = {}));
 exports.c4 = "a";
 exports.c5 = 1;
 exports.s2 = module_1.s0;
+
+
+
+
 let t0;
 let t1;
 let t2;
@@ -206,12 +211,16 @@ exports.o1 = {
     [exports.c5]: "a",
     [exports.s2]: true
 };
+
 // check element access types
 exports.o1_c4 = exports.o1[exports.c4];
 exports.o1_c5 = exports.o1[exports.c5];
 exports.o1_s2 = exports.o1[exports.s2];
+
 exports.o2 = exports.o1;
+
 rI.x;
+
 rC.x;
 
 

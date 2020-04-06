@@ -80,12 +80,13 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 var _a, _b, _c, _d, _e, _f, _g;
-function foo(x, y) {
-    var z = [];
+
+function foo(x, y) {var z = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         z[_i - 2] = arguments[_i];
     }
 }
+
 var a;
 var z;
 var obj;
@@ -96,30 +97,36 @@ foo.apply(void 0, __spreadArrays([1, 2], a, ["abc"]));
 obj.foo(1, 2, "abc");
 obj.foo.apply(obj, __spreadArrays([1, 2], a));
 obj.foo.apply(obj, __spreadArrays([1, 2], a, ["abc"]));
+
 obj.foo.apply(obj, __spreadArrays([1, 2], a)).foo(1, 2, "abc");
-(_a = obj.foo.apply(obj, __spreadArrays([1, 2], a))).foo.apply(_a, __spreadArrays([1, 2], a));
-(_b = obj.foo.apply(obj, __spreadArrays([1, 2], a))).foo.apply(_b, __spreadArrays([1, 2], a, ["abc"]));
+(
+    _a = obj.foo.apply(obj, __spreadArrays([1, 2], a))).foo.apply(_a, __spreadArrays([1, 2], a));
+(
+    _b = obj.foo.apply(obj, __spreadArrays([1, 2], a))).foo.apply(_b, __spreadArrays([1, 2], a, ["abc"]));
 (obj.foo)(1, 2, "abc");
 obj.foo.apply(obj, __spreadArrays([1, 2], a));
 obj.foo.apply(obj, __spreadArrays([1, 2], a, ["abc"]));
+
 (obj.foo.apply(obj, __spreadArrays([1, 2], a)).foo)(1, 2, "abc");
 (_c = obj.foo.apply(obj, __spreadArrays([1, 2], a))).foo.apply(_c, __spreadArrays([1, 2], a));
 (_d = obj.foo.apply(obj, __spreadArrays([1, 2], a))).foo.apply(_d, __spreadArrays([1, 2], a, ["abc"]));
 xa[1].foo(1, 2, "abc");
-(_e = xa[1]).foo.apply(_e, __spreadArrays([1, 2], a));
-(_f = xa[1]).foo.apply(_f, __spreadArrays([1, 2], a, ["abc"]));
+(
+    _e = xa[1]).foo.apply(_e, __spreadArrays([1, 2], a));
+(
+    _f = xa[1]).foo.apply(_f, __spreadArrays([1, 2], a, ["abc"]));
+
 (_g = xa[1]).foo.apply(_g, [1, 2, "abc"]);
+
 var C = /** @class */ (function () {
-    function C(x, y) {
-        var z = [];
+    function C(x, y) {var z = [];
         for (var _i = 2; _i < arguments.length; _i++) {
             z[_i - 2] = arguments[_i];
         }
         this.foo(x, y);
         this.foo.apply(this, __spreadArrays([x, y], z));
     }
-    C.prototype.foo = function (x, y) {
-        var z = [];
+    C.prototype.foo = function (x, y) {var z = [];
         for (var _i = 2; _i < arguments.length; _i++) {
             z[_i - 2] = arguments[_i];
         }

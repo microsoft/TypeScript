@@ -13,6 +13,8 @@ module T.U { // This needs to be emitted
 //// [declareDottedModuleName.js]
 
 
+
+
 //// [declareDottedModuleName.d.ts]
 declare module M {
 }

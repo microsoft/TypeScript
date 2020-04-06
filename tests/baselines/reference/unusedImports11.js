@@ -22,12 +22,11 @@ new r.Member();
 exports.__esModule = true;
 exports.Member = void 0;
 var Member = /** @class */ (function () {
-    function Member() {
-    }
+    function Member() {}
     return Member;
-}());
-exports.Member = Member;
+}());exports.Member = Member;
 exports["default"] = Member;
+
 //// [a.js]
 "use strict";
 exports.__esModule = true;

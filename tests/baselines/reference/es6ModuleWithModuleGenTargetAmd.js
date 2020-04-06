@@ -22,6 +22,5 @@ define(["require", "exports"], function (require, exports) {
         B() {
             return 42;
         }
-    }
-    exports.A = A;
+    }exports.A = A;
 });

@@ -17,6 +17,7 @@ var Animal = /** @class */ (function () {
     function Animal(species) {
         this.species = species;
     }
+
     Animal.prototype.printSpecies = function () {
         var species = this.species;
         console.log(species);

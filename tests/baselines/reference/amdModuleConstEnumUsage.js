@@ -32,11 +32,9 @@ define(["require", "exports"], function (require, exports) {
     exports.User = void 0;
     var User = /** @class */ (function () {
         function User() {
-        }
-        User.prototype.method = function (input) {
+        }User.prototype.method = function (input) {
             if (0 /* A */ === input) { }
         };
         return User;
-    }());
-    exports.User = User;
+    }());exports.User = User;
 });

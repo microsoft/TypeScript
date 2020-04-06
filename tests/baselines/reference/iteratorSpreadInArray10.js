@@ -13,4 +13,5 @@ class SymbolIterator {
         return this;
     }
 }
+
 var array = [...new SymbolIterator];

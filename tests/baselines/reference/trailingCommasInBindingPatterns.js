@@ -24,12 +24,12 @@ var __rest = (this && this.__rest) || function (s, e) {
                 t[p[i]] = s[p[i]];
         }
     return t;
-};
-var a = [].slice(0);
+};var a = [].slice(0);
 var b = __rest({}, []);
 var c, d;
 (c = [].slice(0));
 (d = __rest({}, []));
+
 // Allowed for non-rest elements
 var e = [][0];
 var f = {}.f;

@@ -23,8 +23,7 @@ System.register("b", ["a"], function (exports_1, context_1) {
                 a_1 = a_1_1;
             }
         ],
-        execute: function () {
-        }
+        execute: function () {}
     };
 });
 System.register("a", ["b"], function (exports_2, context_2) {
@@ -38,8 +37,7 @@ System.register("a", ["b"], function (exports_2, context_2) {
             }
         ],
         execute: function () {
-            Foo = class Foo {
-            };
+            Foo = class Foo {};
             exports_2("default", Foo);
             b_1.default();
         }

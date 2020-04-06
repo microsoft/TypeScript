@@ -19,10 +19,13 @@ define(["require", "exports"], function (require, exports) {
     exports.compileServer = void 0;
     var nake;
     function doCompile(fileset, moduleType) {
+
         return undefined;
     }
     exports.compileServer = task(function () {
-        var folder = path.join(), fileset = nake.fileSetSync(folder);
+
+        var folder = path.join(), fileset = nake.fileSetSync(folder)
+        ;
         return doCompile(fileset, moduleType);
     });
 });

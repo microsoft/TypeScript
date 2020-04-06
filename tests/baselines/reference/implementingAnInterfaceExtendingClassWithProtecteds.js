@@ -54,12 +54,12 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Foo = /** @class */ (function () {
+})();var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;
 }());
+
 var Bar = /** @class */ (function () {
     function Bar() {
     }
@@ -81,29 +81,25 @@ var Bar4 = /** @class */ (function () {
     return Bar4;
 }());
 var Bar5 = /** @class */ (function (_super) {
-    __extends(Bar5, _super);
-    function Bar5() {
+    __extends(Bar5, _super);function Bar5() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Bar5;
 }(Foo));
 var Bar6 = /** @class */ (function (_super) {
-    __extends(Bar6, _super);
-    function Bar6() {
+    __extends(Bar6, _super);function Bar6() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Bar6;
 }(Foo));
 var Bar7 = /** @class */ (function (_super) {
-    __extends(Bar7, _super);
-    function Bar7() {
+    __extends(Bar7, _super);function Bar7() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Bar7;
 }(Foo));
 var Bar8 = /** @class */ (function (_super) {
-    __extends(Bar8, _super);
-    function Bar8() {
+    __extends(Bar8, _super);function Bar8() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Bar8;

@@ -23,8 +23,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var Lion = /** @class */ (function (_super) {
-    __extends(Lion, _super);
-    function Lion() {
+    __extends(Lion, _super);function Lion() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         Object.defineProperty(_this, "sound", {
             enumerable: true,

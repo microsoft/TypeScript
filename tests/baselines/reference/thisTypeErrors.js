@@ -60,10 +60,13 @@ class C3 {
 var x1;
 var x2;
 var x3;
+
 function f1(x) {
     var y;
     return this;
 }
+
+
 var C1 = /** @class */ (function () {
     function C1() {
     }
@@ -71,8 +74,7 @@ var C1 = /** @class */ (function () {
 }());
 var C2 = /** @class */ (function () {
     function C2() {
-    }
-    C2.foo = function (x) {
+    }C2.foo = function (x) {
         return undefined;
     };
     C2.y = undefined;
@@ -89,8 +91,7 @@ var C3 = /** @class */ (function () {
                 return undefined;
             }
         };
-    }
-    C3.prototype.f = function () {
+    }C3.prototype.f = function () {
         function g(x) {
             return undefined;
         }
@@ -98,7 +99,8 @@ var C3 = /** @class */ (function () {
             h: function (x) {
                 return undefined;
             }
-        };
+        }
+        ;
     };
     return C3;
 }());

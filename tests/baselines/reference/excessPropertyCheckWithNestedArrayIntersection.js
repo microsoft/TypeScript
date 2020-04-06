@@ -31,4 +31,5 @@ var repro = {
                 value: null
             }]
     }
-};
+}
+;

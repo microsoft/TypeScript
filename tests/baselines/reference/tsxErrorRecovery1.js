@@ -9,6 +9,7 @@ var y = { a: 1 };
 
 
 //// [file.jsx]
+
 function foo() {
     var x = <div>  {} </div>;
 }

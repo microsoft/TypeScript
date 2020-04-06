@@ -28,10 +28,13 @@ export class ObservableValue<T> {
 "use strict";
 exports.__esModule = true;
 exports.ObservableValue = void 0;
+
 function notifyListeners(listenable, change) {
 }
+
 var ObservableValue = /** @class */ (function () {
-    function ObservableValue(value) {
+    function ObservableValue(value
+    ) {
         this.value = value;
         this.changeListeners = [];
         var newValue = value;
@@ -43,7 +46,7 @@ var ObservableValue = /** @class */ (function () {
             oldValue: oldValue
         });
     }
+
     ObservableValue.prototype.observe = function (handler, fireImmediately) { };
     return ObservableValue;
-}());
-exports.ObservableValue = ObservableValue;
+}());exports.ObservableValue = ObservableValue;

@@ -41,17 +41,27 @@ function g(p1: I, p2: Partial<I>): I {
 "use strict";
 exports.__esModule = true;
 exports.Elem = void 0;
+
+
+
 var Elem = /** @class */ (function () {
     function Elem(children_) {
         this.children_ = children_;
     }
     return Elem;
-}());
-exports.Elem = Elem;
+}());exports.Elem = Elem;
 new Elem(undefined);
 new Elem('');
 new Elem(''); // error
 new Elem(''); // error
+
+
+
+
+
+
+
+
 function g(p1, p2) {
     return f(p1, p2);
 }

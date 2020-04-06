@@ -21,6 +21,8 @@ g({ p: "" });
 
 //// [computedPropertyNamesContextualType7_ES5.js]
 var _a;
+
+
 foo((_a = {
         0: function () { }
     },

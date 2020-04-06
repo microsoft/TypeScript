@@ -70,6 +70,7 @@ var X;
 //var cl: { x: number; y: number; }
 var cl = new X.Y.Point(1, 1);
 var cl = X.Y.Point.Origin; // error not expected here same as bug 83996 ?
+
 //// [simple.js]
 var A = /** @class */ (function () {
     function A() {

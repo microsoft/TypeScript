@@ -29,10 +29,14 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
+
 var obj = {
     foo: 'bar',
     baz: 'qux',
     quux: 'quuz'
-};
+}
+
+;
+
 var foo = obj.foo, rest = __rest(obj, ["foo"]);
 delete rest.baz;

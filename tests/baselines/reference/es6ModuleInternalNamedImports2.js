@@ -39,8 +39,7 @@ export var M;
     // variable
     M.M_V = 0;
     //calss
-    class M_C {
-    }
+    class M_C {}
     M.M_C = M_C;
     // instantiated module
     let M_M;
@@ -52,8 +51,7 @@ export var M;
     M.M_F = M_F;
     // enum
     let M_E;
-    (function (M_E) {
-    })(M_E = M.M_E || (M.M_E = {}));
+    (function (M_E) {})(M_E = M.M_E || (M.M_E = {}));
     // alias
     M.M_A = M_M;
 })(M || (M = {}));

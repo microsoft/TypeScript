@@ -30,6 +30,7 @@ tslib_1.__exportStar(require("./username"), exports);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const sayHello = (name) => void (`Hello, ${name}!`);
+
 exports.default = sayHello;
 //// [index.js]
 "use strict";

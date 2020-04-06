@@ -10,6 +10,7 @@ function f(x: {a: "A", b} | {a: "C", e}) {
 
 //// [switchCaseCircularRefeference.js]
 // Repro from #9507
+
 function f(x) {
     switch (x.a) {
         case x:

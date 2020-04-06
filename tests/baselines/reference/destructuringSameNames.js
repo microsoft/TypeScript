@@ -42,11 +42,13 @@ var _p = { foo: 1 }, foo = _p.foo, bar = _p.foo;
 (_f = { foo: 5 }, bar = _f.foo, bar = _f.foo);
 (_g = { foo: 6, bar: 66 }, bar = _g.foo, foo = _g.bar);
 (_h = { foo: 7 }, bar = _h.foo, bar = _h.foo);
+
 _j = [111, 1111], foo = _j[0], foo = _j[1];
 _k = [222, 2222], foo = _k[0], foo = _k[1];
 _l = [333, 3333, 33333], bar = _l[0], foo = _l[1], foo = _l[2];
 _m = [333, 3333, 33333], foo = _m[0], bar = _m[1], foo = _m[2];
 _o = [444, 4444, 44444], foo = _o[0], foo = _o[1], bar = _o[2];
+
 // Error cases
 var _q = { foo1: 10 }, foo1 = _q.foo1, foo1 = _q.foo1;
 var _r = { foo2: 20, bar2: 220 }, foo2 = _r.foo2, foo2 = _r.bar2;
@@ -54,5 +56,6 @@ var _s = { foo3: 30, bar3: 330 }, foo3 = _s.bar3, foo3 = _s.foo3;
 var _t = { foo4: 40 }, foo4 = _t.foo4, foo4 = _t.foo4;
 var _u = { foo5: 50, bar5: 550 }, foo5 = _u.foo5, foo5 = _u.bar5;
 var _v = { foo6: 60, bar6: 660 }, foo6 = _v.bar6, foo6 = _v.foo6;
+
 var _w = [111, 222], blah1 = _w[0], blah1 = _w[1];
 var _x = [333, 444], blah2 = _x[0], blah2 = _x[1];

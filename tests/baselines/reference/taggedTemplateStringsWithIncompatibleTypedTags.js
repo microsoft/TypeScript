@@ -38,15 +38,27 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
 };
+
 var f;
+
 f(__makeTemplateObject(["abc"], ["abc"]));
+
 f(__makeTemplateObject(["abc", "def", "ghi"], ["abc", "def", "ghi"]), 1, 2);
+
 f(__makeTemplateObject(["abc"], ["abc"])).member;
+
 f(__makeTemplateObject(["abc", "def", "ghi"], ["abc", "def", "ghi"]), 1, 2).member;
+
 f(__makeTemplateObject(["abc"], ["abc"]))["member"];
+
 f(__makeTemplateObject(["abc", "def", "ghi"], ["abc", "def", "ghi"]), 1, 2)["member"];
+
 f(__makeTemplateObject(["abc"], ["abc"]))[0].member(__makeTemplateObject(["abc", "def", "ghi"], ["abc", "def", "ghi"]), 1, 2);
+
 f(__makeTemplateObject(["abc", "def", "ghi"], ["abc", "def", "ghi"]), 1, 2)["member"].member(__makeTemplateObject(["abc", "def", "ghi"], ["abc", "def", "ghi"]), 1, 2);
+
 f(__makeTemplateObject(["abc", "def", "ghi"], ["abc", "def", "ghi"]), true, true)["member"].member(__makeTemplateObject(["abc", "def", "ghi"], ["abc", "def", "ghi"]), 1, 2);
+
 f.thisIsNotATag("abc");
+
 f.thisIsNotATag("abc" + 1 + "def" + 2 + "ghi");

@@ -18,16 +18,16 @@ var r2: (x: number) => void = c2.constructor;
 
 //// [typesWithPublicConstructor.js]
 // public is allowed on a constructor but is not meaningful
+
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var c = new C();
 var r = c.constructor;
+
 var C2 = /** @class */ (function () {
-    function C2(x) {
-    }
+    function C2(x) {}
     return C2;
 }());
 var c2 = new C2();

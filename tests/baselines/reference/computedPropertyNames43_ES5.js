@@ -25,15 +25,12 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+})();var Foo = /** @class */ (function () {
+    function Foo() {}
     return Foo;
 }());
 var Foo2 = /** @class */ (function () {
-    function Foo2() {
-    }
+    function Foo2() {}
     return Foo2;
 }());
 var C = /** @class */ (function () {
@@ -42,8 +39,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);
-    function D() {
+    __extends(D, _super);function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(D.prototype, "get1", {

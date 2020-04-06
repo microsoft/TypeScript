@@ -7,5 +7,6 @@ simple((a, b: number) => {})
 
 
 //// [partiallyAnnotatedFunctionWitoutTypeParameter.js]
+
 simple(function (a, b) { });
 simple(function (a, b) { });

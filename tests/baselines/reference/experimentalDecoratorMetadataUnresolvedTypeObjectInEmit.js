@@ -30,8 +30,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 var Foo = /** @class */ (function () {
     function Foo() {
-    }
-    Foo.prototype.f = function (user) { };
+    }Foo.prototype.f = function (user) { };
     var _a, _b, _c, _d;
     __decorate([
         __param(0, decorate),

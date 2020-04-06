@@ -7,6 +7,7 @@ var c = "foo" == (<number>"bar");
 var d = "foo" === ("bar" as EnhancedString);
 
 //// [stringLiteralsAssertionsInEqualityComparisons02.js]
+
 var a = "foo" === "bar";
 var b = "foo" !== "bar";
 var c = "foo" == "bar";

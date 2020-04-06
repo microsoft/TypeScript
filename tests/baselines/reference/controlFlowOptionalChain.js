@@ -593,6 +593,7 @@ while (arr[i]?.tag === "left") {
 //// [controlFlowOptionalChain.js]
 "use strict";
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
+
 var a;
 o === null || o === void 0 ? void 0 : o[a = 1];
 a.toString();
@@ -683,6 +684,8 @@ o5.x;
 (_t = (_s = o5.x) === null || _s === void 0 ? void 0 : _s.y.z) === null || _t === void 0 ? void 0 : _t.w;
 o5.x.y;
 o5.x.y.z.w;
+
+
 if (o6 === null || o6 === void 0 ? void 0 : o6.f()) {
     o6; // Derived
     o6.f;
@@ -695,6 +698,7 @@ else {
 o6;
 o6 === null || o6 === void 0 ? void 0 : o6.f;
 o6.f;
+
 function f01(x) {
     if (!!true) {
         isString === null || isString === void 0 ? void 0 : isString(x);
@@ -714,6 +718,9 @@ function f01(x) {
         x;
     }
 }
+
+
+
 function f10(o, value) {
     if ((o === null || o === void 0 ? void 0 : o.foo) === value) {
         o.foo;
@@ -734,6 +741,7 @@ function f10(o, value) {
         o.bar;
     }
 }
+
 function f11(o, value) {
     if ((o === null || o === void 0 ? void 0 : o.foo) === value) {
         o.foo;
@@ -754,6 +762,7 @@ function f11(o, value) {
         o.bar;
     }
 }
+
 function f12(o, value) {
     if ((o === null || o === void 0 ? void 0 : o.foo) === value) {
         o.foo; // Error
@@ -774,6 +783,7 @@ function f12(o, value) {
         o.bar; // Error
     }
 }
+
 function f12a(o, value) {
     if ((o === null || o === void 0 ? void 0 : o.foo) === value) {
         o.foo;
@@ -794,6 +804,7 @@ function f12a(o, value) {
         o.bar; // Error
     }
 }
+
 function f13(o) {
     if ((o === null || o === void 0 ? void 0 : o.foo) !== undefined) {
         o.foo;
@@ -814,6 +825,7 @@ function f13(o) {
         o.bar;
     }
 }
+
 function f13a(o) {
     if ((o === null || o === void 0 ? void 0 : o.foo) !== null) {
         o.foo; // Error
@@ -834,6 +846,7 @@ function f13a(o) {
         o.bar;
     }
 }
+
 function f14(o) {
     if ((o === null || o === void 0 ? void 0 : o.foo) !== undefined) {
         o.foo;
@@ -845,6 +858,7 @@ function f14(o) {
         o.bar;
     }
 }
+
 function f15(o, value) {
     if ((o === null || o === void 0 ? void 0 : o.foo) === value) {
         o.foo;
@@ -871,6 +885,7 @@ function f15(o, value) {
         o.foo;
     }
 }
+
 function f15a(o, value) {
     if ((o === null || o === void 0 ? void 0 : o.foo) === value) {
         o.foo; // Error
@@ -897,6 +912,7 @@ function f15a(o, value) {
         o.foo; // Error
     }
 }
+
 function f16(o) {
     if ((o === null || o === void 0 ? void 0 : o.foo) === undefined) {
         o.foo; // Error
@@ -923,6 +939,7 @@ function f16(o) {
         o.foo; // Error
     }
 }
+
 function f20(o) {
     if (typeof (o === null || o === void 0 ? void 0 : o.foo) === "number") {
         o.foo;
@@ -937,6 +954,7 @@ function f20(o) {
         o.baz;
     }
 }
+
 function f21(o) {
     if (typeof (o === null || o === void 0 ? void 0 : o.foo) === "number") {
         o.foo;
@@ -951,6 +969,7 @@ function f21(o) {
         o.baz;
     }
 }
+
 function f22(o) {
     if (typeof (o === null || o === void 0 ? void 0 : o.foo) === "number") {
         o.foo;
@@ -977,6 +996,7 @@ function f22(o) {
         o.foo;
     }
 }
+
 function f23(o) {
     if (typeof (o === null || o === void 0 ? void 0 : o.foo) === "undefined") {
         o.foo; // Error
@@ -1003,6 +1023,8 @@ function f23(o) {
         o.foo; // Error
     }
 }
+
+
 function f30(o) {
     if (!!true) {
         assert(o === null || o === void 0 ? void 0 : o.foo);
@@ -1021,6 +1043,7 @@ function f30(o) {
         o.foo;
     }
 }
+
 function f40(o) {
     switch (o === null || o === void 0 ? void 0 : o.foo) {
         case "abc":
@@ -1037,6 +1060,7 @@ function f40(o) {
             break;
     }
 }
+
 function f41(o) {
     switch (typeof (o === null || o === void 0 ? void 0 : o.foo)) {
         case "string":
@@ -1053,6 +1077,13 @@ function f41(o) {
             break;
     }
 }
+
+
+
+
+
+
+
 function getArea(shape) {
     switch (shape === null || shape === void 0 ? void 0 : shape.type) {
         case 'circle':
@@ -1063,6 +1094,16 @@ function getArea(shape) {
             return 0;
     }
 }
+
+
+
+
+
+
+
+
+
+
 function extractCoordinates(f) {
     var _a;
     if (((_a = f.geometry) === null || _a === void 0 ? void 0 : _a.type) !== 'test') {
@@ -1070,7 +1111,10 @@ function extractCoordinates(f) {
     }
     return f.geometry.coordinates;
 }
+
+
 var lastSomeProperty;
+
 function someFunction(someOptionalObject) {
     if ((someOptionalObject === null || someOptionalObject === void 0 ? void 0 : someOptionalObject.someProperty) !== lastSomeProperty) {
         console.log(someOptionalObject);
@@ -1078,6 +1122,7 @@ function someFunction(someOptionalObject) {
         lastSomeProperty = someOptionalObject === null || someOptionalObject === void 0 ? void 0 : someOptionalObject.someProperty;
     }
 }
+
 var someObject = {
     someProperty: 42
 };
@@ -1085,6 +1130,7 @@ someFunction(someObject);
 someFunction(undefined);
 // Repro from #35970
 var i = 0;
+
 while (((_u = arr[i]) === null || _u === void 0 ? void 0 : _u.tag) === "left") {
     i += 1;
     if (((_v = arr[i]) === null || _v === void 0 ? void 0 : _v.tag) === "right") {

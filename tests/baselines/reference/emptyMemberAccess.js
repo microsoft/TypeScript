@@ -8,5 +8,7 @@ function getObj() {
 
 //// [emptyMemberAccess.js]
 function getObj() {
+
     ().toString();
+
 }

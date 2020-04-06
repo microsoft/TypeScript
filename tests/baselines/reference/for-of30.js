@@ -17,8 +17,7 @@ class StringIterator {
 for (var v of new StringIterator) { }
 
 //// [for-of30.js]
-class StringIterator {
-    constructor() {
+class StringIterator {constructor() {
         this.return = 0;
     }
     next() {
@@ -27,6 +26,9 @@ class StringIterator {
             value: ""
         };
     }
+
+
+
     [Symbol.iterator]() {
         return this;
     }

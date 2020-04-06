@@ -60,6 +60,7 @@ class BrokenClass {
     constructor() { }
     brokenMethod(field, value) {
         return new Promise((resolve, reject) => {
+
             let result = [];
             let populateItems = (order) => {
                 return new Promise((resolve, reject) => {
@@ -76,10 +77,10 @@ class BrokenClass {
             });
         });
     }
+
     doStuff(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return;
         });
     }
-}
-exports.BrokenClass = BrokenClass;
+}exports.BrokenClass = BrokenClass;

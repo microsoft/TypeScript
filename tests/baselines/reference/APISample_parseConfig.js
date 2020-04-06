@@ -51,13 +51,16 @@ export function createProgram(rootFiles: string[], compilerOptionsJson: string):
  */
 exports.__esModule = true;
 exports.createProgram = void 0;
+
 var ts = require("typescript");
+
 function printError(error) {
     if (!error) {
         return;
     }
     console.log((error.file && error.file.fileName) + ": " + error.messageText);
 }
+
 function createProgram(rootFiles, compilerOptionsJson) {
     var _a = ts.parseConfigFileTextToJson("tsconfig.json", compilerOptionsJson), config = _a.config, error = _a.error;
     if (error) {
@@ -74,5 +77,4 @@ function createProgram(rootFiles, compilerOptionsJson) {
         return undefined;
     }
     return ts.createProgram(rootFiles, settings.options);
-}
-exports.createProgram = createProgram;
+}exports.createProgram = createProgram;

@@ -16,15 +16,14 @@ var r2: (x: number) => void = c2.constructor;
 
 //// [typesWithPrivateConstructor.js]
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var c = new C(); // error C is private
 var r = c.constructor;
+
 var C2 = /** @class */ (function () {
-    function C2(x) {
-    }
+    function C2(x) {}
     return C2;
 }());
 var c2 = new C2(); // error C2 is private

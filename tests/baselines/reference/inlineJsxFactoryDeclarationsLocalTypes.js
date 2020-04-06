@@ -94,32 +94,28 @@ exports.__esModule = true;
 exports.tree = exports.MyClass = exports.MySFC = void 0;
 /** @jsx predom */
 var renderer2_1 = require("./renderer2");
-exports.MySFC = function (props) { return renderer2_1.predom("p", null,
-    props.x,
+
+exports.MySFC = function (props) { return renderer2_1.predom("p", null, props.x,
     " + ",
     props.y,
     " = ",
-    props.x + props.y,
-    _this.props.children); };
+    props.x + props.y, _this.props.children); };
+
 var MyClass = /** @class */ (function () {
     function MyClass(props) {
         this.props = props;
     }
     MyClass.prototype.render = function () {
-        return renderer2_1.predom("p", null,
-            this.props.x,
+        return renderer2_1.predom("p", null, this.props.x,
             " + ",
             this.props.y,
             " = ",
-            this.props.x + this.props.y,
-            this.props.children);
+            this.props.x + this.props.y, this.props.children);
     };
     return MyClass;
-}());
-exports.MyClass = MyClass;
-exports.tree = renderer2_1.predom(exports.MySFC, { x: 1, y: 2 },
-    renderer2_1.predom(MyClass, { x: 3, y: 4 }),
-    renderer2_1.predom(MyClass, { x: 5, y: 6 }));
+}());exports.MyClass = MyClass;
+exports.tree = renderer2_1.predom(exports.MySFC, { x: 1, y: 2 }, renderer2_1.predom(MyClass, { x: 3, y: 4 }), renderer2_1.predom(MyClass, { x: 5, y: 6 }));
+
 exports["default"] = renderer2_1.predom("h", null);
 //// [index.js]
 "use strict";
@@ -129,37 +125,36 @@ var renderer_1 = require("./renderer");
 var component_1 = require("./component");
 var elem = component_1["default"];
 elem = renderer_1.dom("h", null); // Expect assignability error here
-var DOMSFC = function (props) { return renderer_1.dom("p", null,
-    props.x,
+
+var DOMSFC = function (props) { return renderer_1.dom("p", null, props.x,
     " + ",
     props.y,
     " = ",
-    props.x + props.y,
-    props.children); };
+    props.x + props.y, props.children); };
+
 var DOMClass = /** @class */ (function () {
     function DOMClass(props) {
         this.props = props;
     }
     DOMClass.prototype.render = function () {
-        return renderer_1.dom("p", null,
-            this.props.x,
+        return renderer_1.dom("p", null, this.props.x,
             " + ",
             this.props.y,
             " = ",
-            this.props.x + this.props.y,
-            this.props.children);
+            this.props.x + this.props.y, this.props.children);
     };
     return DOMClass;
 }());
 // Should work, everything is a DOM element
-var _tree = renderer_1.dom(DOMSFC, { x: 1, y: 2 },
-    renderer_1.dom(DOMClass, { x: 3, y: 4 }),
-    renderer_1.dom(DOMClass, { x: 5, y: 6 }));
+var _tree = renderer_1.dom(DOMSFC, { x: 1, y: 2 }, renderer_1.dom(DOMClass, { x: 3, y: 4 }), renderer_1.dom(DOMClass, { x: 5, y: 6 }))
+
+;
+
 // Should fail, no dom elements
-var _brokenTree = renderer_1.dom(component_1.MySFC, { x: 1, y: 2 },
-    renderer_1.dom(component_1.MyClass, { x: 3, y: 4 }),
-    renderer_1.dom(component_1.MyClass, { x: 5, y: 6 }));
+var _brokenTree = renderer_1.dom(component_1.MySFC, { x: 1, y: 2 }, renderer_1.dom(component_1.MyClass, { x: 3, y: 4 }), renderer_1.dom(component_1.MyClass, { x: 5, y: 6 }))
+
+;
+
 // Should fail, nondom isn't allowed as children of dom
-var _brokenTree2 = renderer_1.dom(DOMSFC, { x: 1, y: 2 },
-    component_1.tree,
-    component_1.tree);
+var _brokenTree2 = renderer_1.dom(DOMSFC, { x: 1, y: 2 }, component_1.tree, component_1.tree)
+;

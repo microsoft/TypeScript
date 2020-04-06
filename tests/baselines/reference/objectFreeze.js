@@ -17,8 +17,7 @@ o.b = o.a.toString();
 var f = Object.freeze(function foo(a, b) { return false; });
 f(1, "") === false;
 var C = /** @class */ (function () {
-    function C(a) {
-    }
+    function C(a) {}
     return C;
 }());
 var c = Object.freeze(C);

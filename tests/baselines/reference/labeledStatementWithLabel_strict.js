@@ -33,12 +33,10 @@ label: function gen1() {
 }
 label: {
     var E;
-    (function (E) {
-    })(E || (E = {}));
+    (function (E) {})(E || (E = {}));
 }
 label: ;
-label: class C {
-}
+label: class C {}
 label: var a = 1;
 label: let b = 1;
 label: const c = 1;

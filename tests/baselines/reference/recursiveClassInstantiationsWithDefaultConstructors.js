@@ -33,8 +33,7 @@ var TypeScript2;
     }());
     TypeScript2.MemberName = MemberName;
     var MemberNameArray = /** @class */ (function (_super) {
-        __extends(MemberNameArray, _super);
-        function MemberNameArray() {
+        __extends(MemberNameArray, _super);function MemberNameArray() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return MemberNameArray;

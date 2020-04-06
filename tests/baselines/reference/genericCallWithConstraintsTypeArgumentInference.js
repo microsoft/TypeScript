@@ -122,21 +122,19 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var Base = /** @class */ (function () {
-    function Base() {
-    }
+    function Base() {}
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);
-    function Derived() {
+    __extends(Derived, _super);function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived;
 }(Base));
 var Derived2 = /** @class */ (function (_super) {
-    __extends(Derived2, _super);
-    function Derived2() {
+    __extends(Derived2, _super);function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived2;
@@ -144,52 +142,67 @@ var Derived2 = /** @class */ (function (_super) {
 var b;
 var d1;
 var d2;
+
 function foo(t) {
     return t;
 }
+
 var r = foo(b); // Base
 var r2 = foo(d1); // Derived
+
 function foo2(t, u) {
     return u;
 }
+
 function foo2b(u) {
     var x;
     return x;
 }
+
 function foo2c() {
     var x;
     return x;
 }
+
 var r3 = foo2b(d1); // Base
 var r3b = foo2c(); // Base
+
 var C = /** @class */ (function () {
     function C(t, u) {
         this.t = t;
         this.u = u;
     }
+
     C.prototype.foo = function (t, u) {
         return t;
     };
+
     C.prototype.foo2 = function (t, u) {
         return u;
     };
+
     C.prototype.foo3 = function (t, u) {
         return t;
     };
+
     C.prototype.foo4 = function (t, u) {
         return t;
     };
+
     C.prototype.foo5 = function (t, u) {
         return t;
     };
+
     C.prototype.foo6 = function () {
         var x;
         return x;
     };
+
     C.prototype.foo7 = function (u) {
         var x;
         return x;
     };
+
     C.prototype.foo8 = function () {
         var x;
         return x;
@@ -206,6 +219,8 @@ var r8b = c.foo5(d2, d2); // Derived2
 var r9 = c.foo6(); // Derived
 var r10 = c.foo7(d1); // Base
 var r11 = c.foo8(); // Base
+
+
 var i;
 var r4 = i.foo(d1, d2); // Base
 var r5 = i.foo2(b, d2); // Derived

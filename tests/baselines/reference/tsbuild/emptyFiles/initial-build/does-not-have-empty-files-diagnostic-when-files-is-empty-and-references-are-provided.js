@@ -14,8 +14,7 @@ export declare function multiply(a: number, b: number): number;
 "use strict";
 exports.__esModule = true;
 exports.multiply = void 0;
-function multiply(a, b) { return a * b; }
-exports.multiply = multiply;
+function multiply(a, b) { return a * b; }exports.multiply = multiply;
 
 
 //// [/src/core/tsconfig.tsbuildinfo]

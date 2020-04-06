@@ -52,9 +52,10 @@ exports.__esModule = true;
 "use strict";
 exports.__esModule = true;
 exports.Bar = void 0;
+
+
 var Bar = /** @class */ (function () {
-    function Bar(input) {
-    }
+    function Bar(input) {}
     return Bar;
 }());
 exports.Bar = Bar;
@@ -64,12 +65,11 @@ exports.__esModule = true;
 exports.shim = exports.Bar2 = exports.y = exports.x = void 0;
 exports.x = { x: 0, y: 0, data: { x: 12 } };
 exports.y = { a: "", b: 0, data: { x: 12 } };
+
 var Bar2 = /** @class */ (function () {
-    function Bar2(input) {
-    }
+    function Bar2(input) {}
     return Bar2;
-}());
-exports.Bar2 = Bar2;
+}());exports.Bar2 = Bar2;
 exports.shim = {
     Bar: Bar2
 };

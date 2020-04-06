@@ -27,21 +27,18 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var EventBase = /** @class */ (function () {
+})();var EventBase = /** @class */ (function () {
     function EventBase() {
         this._listeners = [];
-    }
-    EventBase.prototype.add = function (listener) {
+    }EventBase.prototype.add = function (listener) {
         this._listeners.push(listener);
     };
     return EventBase;
 }());
 var StringEvent = /** @class */ (function (_super) {
-    __extends(StringEvent, _super);
-    function StringEvent() {
+    __extends(StringEvent, _super);function StringEvent() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
+    }// should work
     StringEvent.prototype.add = function (listener) {
         _super.prototype.add.call(this, listener);
     };

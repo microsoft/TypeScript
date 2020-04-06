@@ -67,14 +67,14 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
 var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);
-    function C2() {
+    __extends(C2, _super);function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C2;
@@ -103,15 +103,20 @@ for (var a = 'a string';;) { }
 for (var a = new C();;) { }
 for (var a = new D();;) { }
 for (var a = M;;) { }
+
 for (var b;;) { }
 for (var b = new C();;) { }
 for (var b = new C2();;) { }
+
 for (var f = F;;) { }
 for (var f = function (x) { return ''; };;) { }
+
 for (var arr;;) { }
 for (var arr = [1, 2, 3, 4];;) { }
 for (var arr = [new C(), new C2(), new D()];;) { }
+
 for (var arr2 = [new D()];;) { }
 for (var arr2 = new Array();;) { }
+
 for (var m;;) { }
 for (var m = M.A;;) { }

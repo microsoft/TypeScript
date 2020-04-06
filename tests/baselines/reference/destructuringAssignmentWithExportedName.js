@@ -30,8 +30,28 @@ export { exportedFoo as foo, nonexportedFoo as nfoo };
 var _a, _b, _c, _d, _e;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.nfoo = exports.foo = exports.nonexportedFoo = exports.exportedFoo = void 0;
-exports.foo = exports.exportedFoo;
-let nonexportedFoo;
+exports.foo = exports.exportedFoo;let nonexportedFoo;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 exports.nonexportedFoo = nonexportedFoo;
 exports.nfoo = nonexportedFoo;
 // sanity checks
@@ -52,3 +72,4 @@ else if (null) {
 else {
     (_e = null[0], exports.foo = exports.exportedFoo = _e[0], exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _e[1]);
 }
+

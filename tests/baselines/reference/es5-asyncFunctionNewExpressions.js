@@ -86,6 +86,7 @@ async function newExpression20() {
 }
 
 //// [es5-asyncFunctionNewExpressions.js]
+
 function newExpression0() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -98,6 +99,7 @@ function newExpression0() {
         });
     });
 }
+
 function newExpression1() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -110,6 +112,7 @@ function newExpression1() {
         });
     });
 }
+
 function newExpression2() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -125,6 +128,7 @@ function newExpression2() {
         });
     });
 }
+
 function newExpression3() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b;
@@ -141,6 +145,7 @@ function newExpression3() {
         });
     });
 }
+
 function newExpression4() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -153,6 +158,7 @@ function newExpression4() {
         });
     });
 }
+
 function newExpression5() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -166,6 +172,7 @@ function newExpression5() {
         });
     });
 }
+
 function newExpression6() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _c, _d;
@@ -183,6 +190,7 @@ function newExpression6() {
         });
     });
 }
+
 function newExpression7() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _c, _d;
@@ -200,6 +208,7 @@ function newExpression7() {
         });
     });
 }
+
 function newExpression8() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _c, _d;
@@ -217,6 +226,7 @@ function newExpression8() {
         });
     });
 }
+
 function newExpression9() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _c, _d;
@@ -234,6 +244,7 @@ function newExpression9() {
         });
     });
 }
+
 function newExpression10() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -246,6 +257,7 @@ function newExpression10() {
         });
     });
 }
+
 function newExpression11() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -258,6 +270,7 @@ function newExpression11() {
         });
     });
 }
+
 function newExpression12() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -270,6 +283,7 @@ function newExpression12() {
         });
     });
 }
+
 function newExpression13() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b;
@@ -285,6 +299,7 @@ function newExpression13() {
         });
     });
 }
+
 function newExpression14() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _c;
@@ -301,6 +316,7 @@ function newExpression14() {
         });
     });
 }
+
 function newExpression15() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -313,6 +329,7 @@ function newExpression15() {
         });
     });
 }
+
 function newExpression16() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -325,6 +342,7 @@ function newExpression16() {
         });
     });
 }
+
 function newExpression17() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -337,14 +355,14 @@ function newExpression17() {
         });
     });
 }
+
 function newExpression18() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _a = x;
-                    return [4 /*yield*/, a];
+                    _a = x;return [4 /*yield*/, a];
                 case 1:
                     new _a[_b.sent()](y, z);
                     return [2 /*return*/];
@@ -352,6 +370,7 @@ function newExpression18() {
         });
     });
 }
+
 function newExpression19() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b;
@@ -367,6 +386,7 @@ function newExpression19() {
         });
     });
 }
+
 function newExpression20() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _c;

@@ -9,9 +9,7 @@ baz.concat("y");
 
 //// [errorSupression1.js]
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    Foo.bar = function () { return "x"; };
+    function Foo() {}Foo.bar = function () { return "x"; };
     return Foo;
 }());
 var baz = Foo.b;

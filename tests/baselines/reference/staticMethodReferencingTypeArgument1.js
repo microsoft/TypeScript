@@ -24,6 +24,7 @@ var Editor;
             this.isHead = isHead;
             this.data = data;
         }
+
         List.MakeHead = function () {
             var entry = new List(true, null); // can't access T here
             entry.prev = entry;

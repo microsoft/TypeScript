@@ -12,8 +12,7 @@ class C implements I {
 //// [overloadOnConstInheritance4.js]
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.x1 = function (a, callback) {
+    }C.prototype.x1 = function (a, callback) {
     };
     return C;
 }());

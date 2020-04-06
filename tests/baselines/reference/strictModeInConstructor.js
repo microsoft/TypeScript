@@ -73,14 +73,15 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var A = /** @class */ (function () {
+})();var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
 var B = /** @class */ (function (_super) {
     __extends(B, _super);
+
+
     function B() {
         "use strict"; // No error
         var _this = _super.call(this) || this;
@@ -91,6 +92,8 @@ var B = /** @class */ (function (_super) {
 }(A));
 var C = /** @class */ (function (_super) {
     __extends(C, _super);
+
+
     function C() {
         var _this = _super.call(this) || this;
         _this.s = 9;
@@ -101,6 +104,8 @@ var C = /** @class */ (function (_super) {
 }(A));
 var D = /** @class */ (function (_super) {
     __extends(D, _super);
+
+
     function D() {
         var _this = this;
         var x = 1; // Error
@@ -113,6 +118,8 @@ var D = /** @class */ (function (_super) {
 }(A));
 var Bs = /** @class */ (function (_super) {
     __extends(Bs, _super);
+
+
     function Bs() {
         "use strict"; // No error
         return _super.call(this) || this;
@@ -122,6 +129,8 @@ var Bs = /** @class */ (function (_super) {
 }(A));
 var Cs = /** @class */ (function (_super) {
     __extends(Cs, _super);
+
+
     function Cs() {
         "use strict";
         var _this = _super.call(this) || this;
@@ -132,6 +141,8 @@ var Cs = /** @class */ (function (_super) {
 }(A));
 var Ds = /** @class */ (function (_super) {
     __extends(Ds, _super);
+
+
     function Ds() {
         var _this = this;
         var x = 1; // no Error

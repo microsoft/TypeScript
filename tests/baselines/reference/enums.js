@@ -39,6 +39,7 @@ var SyntaxKind;
     SyntaxKind[SyntaxKind["ImportClause"] = 0] = "ImportClause";
     SyntaxKind[SyntaxKind["ExportDeclaration"] = 1] = "ExportDeclaration";
 })(SyntaxKind || (SyntaxKind = {}));
+
 //// [b.js]
 "use strict";
 exports.__esModule = true;
@@ -46,6 +47,7 @@ SyntaxKind.ImportClause;
 "Type" /* Type */;
 var kind;
 var flags;
+
 //// [c.js]
 "use strict";
 exports.__esModule = true;

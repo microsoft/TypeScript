@@ -30,17 +30,19 @@ var Outer;
     var instantiated;
     (function (instantiated) {
         var C = /** @class */ (function () {
-            function C() {
-            }
+            function C() {}
             return C;
         }());
         instantiated.C = C;
     })(instantiated = Outer.instantiated || (Outer.instantiated = {}));
 })(Outer || (Outer = {}));
 var importInst = Outer.instantiated;
+
+
 var x1 = importInst.C;
 var x2 = new x1();
 var x3; // Error again
+
 var x4 = Outer;
 var x5;
 x5 = Outer;

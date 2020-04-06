@@ -44,21 +44,23 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var c = /** @class */ (function () {
     function c() {
-    }
-    c.prototype.foo = function () {
+    }c.prototype.foo = function () {
+
         return null;
+
     };
     return c;
 }());
 var d = /** @class */ (function (_super) {
-    __extends(d, _super);
-    function d() {
+    __extends(d, _super);function d() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    d.prototype.foo = function () {
+    }d.prototype.foo = function () {
+
         return null;
+
     };
     return d;
 }(c));

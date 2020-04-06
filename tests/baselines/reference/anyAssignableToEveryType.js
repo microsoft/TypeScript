@@ -47,6 +47,7 @@ function foo<T, U /*extends T*/, V extends Date>(x: T, y: U, z: V) {
 
 //// [anyAssignableToEveryType.js]
 var a;
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -59,6 +60,7 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 var ae;
+
 var b = a;
 var c = a;
 var d = a;
@@ -78,11 +80,13 @@ var n = a;
 var o = a;
 var p = a;
 var q = a;
+
 function foo(x, y, z) {
     x = a;
     y = a;
     z = a;
 }
+
 //function foo<T, U extends T, V extends Date>(x: T, y: U, z: V) {
 //    x = a;
 //    y = a;

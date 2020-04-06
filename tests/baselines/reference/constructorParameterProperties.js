@@ -33,6 +33,7 @@ var c;
 var r = c.y;
 var r2 = c.x; // error
 var r3 = c.z; // error
+
 var D = /** @class */ (function () {
     function D(a, x, z) {
         this.x = x;

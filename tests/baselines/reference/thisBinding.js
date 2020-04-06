@@ -24,12 +24,12 @@ class C {
 //// [thisBinding.js]
 var M;
 (function (M) {
+
     var C = /** @class */ (function () {
         function C() {
             this.x = 0;
             ({ z: 10, f: this.f }).f(({}));
-        }
-        C.prototype.f = function (x) {
+        }C.prototype.f = function (x) {
             x.e; // e not found
             x.z; // ok 
         };
@@ -39,8 +39,7 @@ var M;
 })(M || (M = {}));
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.f = function (x) {
+    }C.prototype.f = function (x) {
     };
     return C;
 }());

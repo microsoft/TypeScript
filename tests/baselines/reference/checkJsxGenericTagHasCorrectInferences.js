@@ -17,6 +17,7 @@ let d = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a.x} />; /
 "use strict";
 exports.__esModule = true;
 var React = require("react");
+
 var a = <GenericComponent initialValues={{ x: "y" }} nextValues={function (a) { return a; }}/>; // No error
 var b = <GenericComponent initialValues={12} nextValues={function (a) { return a; }}/>; // No error - Values should be reinstantiated with `number` (since `object` is a default, not a constraint)
 var c = <GenericComponent initialValues={{ x: "y" }} nextValues={function (a) { return ({ x: a.x }); }}/>; // No Error

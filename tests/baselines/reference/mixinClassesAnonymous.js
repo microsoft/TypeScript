@@ -79,6 +79,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var Base = /** @class */ (function () {
     function Base(x, y) {
         this.x = x;
@@ -96,22 +97,23 @@ var Derived = /** @class */ (function (_super) {
     return Derived;
 }(Base));
 var Printable = function (superClass) { var _a; return _a = /** @class */ (function (_super) {
-        __extends(class_1, _super);
-        function class_1() {
+        __extends(class_1, _super);function class_1() {
             return _super !== null && _super.apply(this, arguments) || this;
-        }
-        class_1.prototype.print = function () {
+        }class_1.prototype.print = function () {
             var output = this.x + "," + this.y;
         };
         return class_1;
     }(superClass)),
     _a.message = "hello",
-    _a; };
+    _a; }
+
+;
+
 function Tagged(superClass) {
     var C = /** @class */ (function (_super) {
         __extends(C, _super);
-        function C() {
-            var args = [];
+
+        function C() {var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
@@ -123,6 +125,7 @@ function Tagged(superClass) {
     }(superClass));
     return C;
 }
+
 var Thing1 = Tagged(Derived);
 var Thing2 = Tagged(Printable(Derived));
 Thing2.message;
@@ -131,12 +134,14 @@ function f1() {
     thing.x;
     thing._tag;
 }
+
 function f2() {
     var thing = new Thing2(1, 2, 3);
     thing.x;
     thing._tag;
     thing.print();
 }
+
 var Thing3 = /** @class */ (function (_super) {
     __extends(Thing3, _super);
     function Thing3(tag) {
@@ -152,12 +157,12 @@ var Thing3 = /** @class */ (function (_super) {
 // Repro from #13805
 var Timestamped = function (Base) {
     return /** @class */ (function (_super) {
-        __extends(class_2, _super);
-        function class_2() {
+        __extends(class_2, _super);function class_2() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.timestamp = new Date();
             return _this;
         }
         return class_2;
     }(Base));
-};
+}
+;

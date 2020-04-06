@@ -44,8 +44,7 @@ var C = /** @class */ (function () {
         t.y;
         t.z;
         var r = t.foo();
-    }
-    C.prototype.foo = function () {
+    }C.prototype.foo = function () {
         return this;
     };
     Object.defineProperty(C.prototype, "y", {
@@ -65,6 +64,7 @@ var r2 = c.y;
 var r3 = c.foo();
 var r4 = c.z;
 var rs = [r, r2, r3];
+
 rs.forEach(function (x) {
     x.foo;
     x.x;

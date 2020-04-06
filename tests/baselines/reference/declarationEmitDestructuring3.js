@@ -13,6 +13,7 @@ function foo(_a) {
 }
 
 
+
 //// [declarationEmitDestructuring3.d.ts]
 declare function bar([x, z, ...w]: [any, any, ...any[]]): void;
 declare function foo([x, ...y]?: [number, string, boolean]): void;

@@ -72,10 +72,13 @@ var A;
 })(A || (A = {}));
 //// [part3.js]
 // test the merging actually worked
+
 var o;
 var o;
 var o = A.Origin;
 var o = A.Utils.mirror(o);
+
 var p;
 var p;
 var p = new A.Utils.Plane(o, { x: 1, y: 1 });
+

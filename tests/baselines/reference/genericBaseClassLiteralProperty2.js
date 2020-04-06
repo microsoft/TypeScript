@@ -28,10 +28,8 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var CollectionItem2 = /** @class */ (function () {
-    function CollectionItem2() {
-    }
+})();var CollectionItem2 = /** @class */ (function () {
+    function CollectionItem2() {}
     return CollectionItem2;
 }());
 var BaseCollection2 = /** @class */ (function () {
@@ -41,11 +39,9 @@ var BaseCollection2 = /** @class */ (function () {
     return BaseCollection2;
 }());
 var DataView2 = /** @class */ (function (_super) {
-    __extends(DataView2, _super);
-    function DataView2() {
+    __extends(DataView2, _super);function DataView2() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    DataView2.prototype.fillItems = function (item) {
+    }DataView2.prototype.fillItems = function (item) {
         this._itemsByKey['dummy'] = item;
     };
     return DataView2;

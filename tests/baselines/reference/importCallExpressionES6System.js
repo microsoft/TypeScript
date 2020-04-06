@@ -36,8 +36,7 @@ System.register([], function (exports_1, context_1) {
     exports_1("foo", foo);
     return {
         setters: [],
-        execute: function () {
-        }
+        execute: function () {}
     };
 });
 //// [1.js]
@@ -57,11 +56,17 @@ System.register([], function (exports_1, context_1) {
                 return zero.foo();
             });
             exports_1("p2", p2 = context_1.import("./0"));
+
+
+
+
+
             C = class C {
                 method() {
                     const loadAsync = context_1.import("./0");
                 }
             };
+
             D = class D {
                 method() {
                     const loadAsync = context_1.import("./0");

@@ -69,11 +69,13 @@ function Meet(_a) {
 function MeetAndGreet(k) {
     return <div>Hi Hi</div>;
 }
+
 // OK
 var a = <Greet name='world'/>;
 var a1 = <Greet name='world' extra-prop/>;
 // Error
 var b = <Greet naaame='world'/>;
+
 // OK
 var c = <Meet />;
 var c1 = <Meet extra-prop/>;
@@ -83,18 +85,25 @@ var d = <Meet name='me'/>;
 var e = <Meet name={42}/>;
 // Error
 var f = <Meet naaaaaaame='no'/>;
+
 // OK
 var g = <MeetAndGreet prop-name="Bob"/>;
 // Error
 var h = <MeetAndGreet extra-prop-name="World"/>;
+
 // Error
 var i = <EmptyPropSFC prop1/>;
-var i1 = <EmptyPropSFC ref={function (x) { return x.greeting.substr(10); }}/>;
+var i1 = <EmptyPropSFC ref={function (x) { return x.greeting.substr(10); }}/>
+
+;
+
 var o = {
     prop1: true
 };
+
 // OK as access properties are allow when spread
 var i2 = <EmptyPropSFC {...o}/>;
+
 var o1;
 // OK
 var j = <EmptyPropSFC {...o1}/>;
@@ -102,3 +111,4 @@ var j1 = <EmptyPropSFC />;
 var j2 = <EmptyPropSFC data-prop/>;
 var j3 = <EmptyPropSFC {...{}}/>;
 var j4 = <EmptyPropSFC {...{ "data-info": "hi" }}/>;
+

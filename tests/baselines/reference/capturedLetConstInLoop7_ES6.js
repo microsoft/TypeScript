@@ -393,6 +393,7 @@ l0: for (let x of []) {
         continue l0;
     }
 }
+
 l00: for (let x in []) {
     (function () { return x; });
     (() => x);
@@ -409,6 +410,7 @@ l00: for (let x in []) {
         continue l00;
     }
 }
+
 l1: for (let x = 0; x < 1; ++x) {
     (function () { return x; });
     (() => x);
@@ -425,6 +427,7 @@ l1: for (let x = 0; x < 1; ++x) {
         continue l1;
     }
 }
+
 l2: while (1 === 1) {
     let x;
     (function () { return x; });
@@ -442,6 +445,7 @@ l2: while (1 === 1) {
         continue l2;
     }
 }
+
 l3: do {
     let x;
     (function () { return x; });
@@ -459,6 +463,7 @@ l3: do {
         continue l3;
     }
 } while (1 === 1);
+
 l4: for (let y = 0; y < 1; ++y) {
     let x = 1;
     (function () { return x; });
@@ -476,6 +481,7 @@ l4: for (let y = 0; y < 1; ++y) {
         continue l4;
     }
 }
+
 l5: for (let x = 0, y = 1; x < 1; ++x) {
     (function () { return x + y; });
     (() => x + y);
@@ -492,6 +498,7 @@ l5: for (let x = 0, y = 1; x < 1; ++x) {
         continue l5;
     }
 }
+
 l6: while (1 === 1) {
     let x, y;
     (function () { return x + y; });
@@ -508,7 +515,9 @@ l6: while (1 === 1) {
     if (x == 2) {
         continue l6;
     }
+
 }
+
 l7: do {
     let x, y;
     (function () { return x + y; });
@@ -526,6 +535,7 @@ l7: do {
         continue l7;
     }
 } while (1 === 1);
+
 l8: for (let y = 0; y < 1; ++y) {
     let x = 1;
     (function () { return x + y; });
@@ -543,6 +553,7 @@ l8: for (let y = 0; y < 1; ++y) {
         continue l8;
     }
 }
+
 //===const
 l0_c: for (const x of []) {
     (function () { return x; });
@@ -560,6 +571,7 @@ l0_c: for (const x of []) {
         continue l0_c;
     }
 }
+
 l00_c: for (const x in []) {
     (function () { return x; });
     (() => x);
@@ -576,6 +588,7 @@ l00_c: for (const x in []) {
         continue l00_c;
     }
 }
+
 l1_c: for (const x = 0; x < 1;) {
     (function () { return x; });
     (() => x);
@@ -592,6 +605,7 @@ l1_c: for (const x = 0; x < 1;) {
         continue l1_c;
     }
 }
+
 l2_c: while (1 === 1) {
     const x = 1;
     (function () { return x; });
@@ -609,6 +623,7 @@ l2_c: while (1 === 1) {
         continue l2_c;
     }
 }
+
 l3_c: do {
     const x = 1;
     (function () { return x; });
@@ -626,6 +641,7 @@ l3_c: do {
         continue l3_c;
     }
 } while (1 === 1);
+
 l4_c: for (const y = 0; y < 1;) {
     const x = 1;
     (function () { return x; });
@@ -643,6 +659,7 @@ l4_c: for (const y = 0; y < 1;) {
         continue l4_c;
     }
 }
+
 l5_c: for (const x = 0, y = 1; x < 1;) {
     (function () { return x + y; });
     (() => x + y);
@@ -659,6 +676,7 @@ l5_c: for (const x = 0, y = 1; x < 1;) {
         continue l5_c;
     }
 }
+
 l6_c: while (1 === 1) {
     const x = 1, y = 1;
     (function () { return x + y; });
@@ -675,7 +693,9 @@ l6_c: while (1 === 1) {
     if (x == 2) {
         continue l6_c;
     }
+
 }
+
 l7_c: do {
     const x = 1, y = 1;
     (function () { return x + y; });
@@ -693,6 +713,7 @@ l7_c: do {
         continue l7_c;
     }
 } while (1 === 1);
+
 l8_c: for (const y = 0; y < 1;) {
     const x = 1;
     (function () { return x + y; });

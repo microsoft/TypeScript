@@ -180,8 +180,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var A = /** @class */ (function () {
+})();var A = /** @class */ (function () {
     function A() {
     }
     return A;
@@ -192,8 +191,7 @@ var B = /** @class */ (function () {
     return B;
 }());
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);
-    function C() {
+    __extends(C, _super);function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
@@ -201,40 +199,48 @@ var C = /** @class */ (function (_super) {
 function hasANonBooleanReturnStatement(x) {
     return '';
 }
-is;
-A;
-{
+
+is;A;{
     return true;
 }
 function hasMissingIsKeyword() {
     return true;
 }
+
 function hasMissingParameter() {
     return true;
 }
+
 return true;
 function hasNonMatchingParameter(y) {
     return true;
 }
+
 function hasNonMatchingParameterType1(x) {
     return true;
 }
+
 function hasNonMatchingParameterType2(x) {
     return true;
 }
+
 function hasNonMathcingGenericType(a) {
     return true;
 }
+
 var a;
 var b;
+
 // Passed argument is not the same as the one being guarded.
 if (isB(b)) {
     a.propB;
 }
+
 // Parameter index and argument index for the type guard target is not matching.
 if (funA(0, a)) {
     a.propB; // Error
 }
+
 // No type guard in if statement
 if (hasNoTypeGuard(a)) {
     a.propB;
@@ -245,26 +251,26 @@ var assign1;
 assign1 = function (p1, p2) {
     return true;
 };
+
 // Must have matching parameter index
 var assign2;
 assign2 = function (p1, p2) {
     return true;
 };
+
 // No matching signature
 var assign3;
 assign3 = function (p1, p2, p3) {
     return true;
 };
+
 // Type predicates in non-return type positions
 var b1, is, A;
 function b2(a, is, A) { }
 ;
-is;
-A;
-{
+is;A;{
     return true;
-}
-;
+};
 // Non-compatiable type predicate positions for signature declarations
 var D = /** @class */ (function () {
     function D(p1) {
@@ -286,32 +292,39 @@ var D = /** @class */ (function () {
     });
     return D;
 }());
-is;
-C;
+
+is;C;
 // Reference to rest parameter
-function b4() {
-    var a = [];
+function b4() {var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         a[_i] = arguments[_i];
     }
     return true;
 }
+
 // Reference to binding pattern
 function b5(_a, p2, p3) {
     var a = _a.a, b = _a.b, p1 = _a.p1;
     return true;
 }
+
 function b6(_a, p2, p3) {
     var a = _a[0], b = _a[1], p1 = _a[2];
     return true;
 }
+
 function b7(_a, p2, p3) {
     var a = _a.a, b = _a.b, p1 = _a.c.p1;
     return true;
 }
+
 // Should not crash the compiler
 var x;
 if (hasMissingParameter()) {
     x.propA;
 }
+
+
+
+
 ;

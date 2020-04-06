@@ -18,9 +18,7 @@ function f1(_a, _b, c, d) {
 function f2(_a, _b, c, d) {
     var _c = _a[0], a = _c === void 0 ? undefined : _c;
     var _d = _b.b, b = _d === void 0 ? null : _d;
-    if (c === void 0) { c = undefined; }
-    if (d === void 0) { d = null; }
-}
+    if (c === void 0) { c = undefined; }if (d === void 0) { d = null; }}
 function f3(_a, _b, c, d) {
     var a = _a[0];
     var b = _b.b;
@@ -31,6 +29,4 @@ function f4(_a, x) {
 function f5(_a, _b, c1, d1) {
     var a1 = (_a === void 0 ? [undefined] : _a)[0];
     var b1 = (_b === void 0 ? { b1: null } : _b).b1;
-    if (c1 === void 0) { c1 = undefined; }
-    if (d1 === void 0) { d1 = null; }
-}
+    if (c1 === void 0) { c1 = undefined; }if (d1 === void 0) { d1 = null; }}

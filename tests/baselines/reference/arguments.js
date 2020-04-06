@@ -19,4 +19,5 @@ function f() {
     var x = arguments[12];
     (() => arguments)();
 }
+
 (() => arguments)();

@@ -5,6 +5,5 @@ function* g() {
 
 //// [generatorTypeCheck40.js]
 function* g() {
-    class C extends (yield 0) {
-    }
+    class C extends (yield 0) {}
 }

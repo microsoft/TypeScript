@@ -18,8 +18,7 @@ exports.f = exports.X = void 0;
 function f() {
     var x;
     return x;
-}
-exports.f = f;
+}exports.f = f;
 
 
 //// [b.d.ts]

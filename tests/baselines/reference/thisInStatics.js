@@ -13,8 +13,7 @@ class C {
 //// [thisInStatics.js]
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.f = function () {
+    }C.f = function () {
         var y /*1*/ = this;
     };
     Object.defineProperty(C, "x", {

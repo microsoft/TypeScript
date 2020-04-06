@@ -4,4 +4,5 @@ const numbers = filter<number>((x): x is number => 'number' == typeof x)
 
 
 //// [thisTypeInTypePredicate.js]
-var numbers = filter(function (x) { return 'number' == typeof x; });
+var numbers = filter(function (x) { return 'number' == typeof x; })
+;

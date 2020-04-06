@@ -12,8 +12,7 @@ class X {
 // `readonly` won't work outside of property parameters
 var X = /** @class */ (function () {
     function X() {
-    }
-    X.prototype.method = function (x) { };
+    }X.prototype.method = function (x) { };
     Object.defineProperty(X.prototype, "x", {
         set: function (value) { },
         enumerable: false,
@@ -21,6 +20,8 @@ var X = /** @class */ (function () {
     });
     return X;
 }());
-(function (x) { return 0; });
+(
+    function (x) { return 0; });
 // OK to use `readonly` as a name
-(function (readonly) { return 0; });
+(
+    function (readonly) { return 0; });

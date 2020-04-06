@@ -33,6 +33,11 @@ const state: State = {
 const newState: State = set(state, ["a", 'b'], 'why'); // shouldn't be an error
 
 //// [twiceNestedKeyofIndexInference.js]
+
+
+
+
+
 var state = {
     a: {
         b: "",
@@ -40,4 +45,5 @@ var state = {
     },
     d: false
 };
+
 var newState = set(state, ["a", 'b'], 'why'); // shouldn't be an error

@@ -14,14 +14,11 @@ export default function foo() { new Foo(); }
 define("b", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    function foo() { new a_1.default(); }
-    exports.default = foo;
+    function foo() { new a_1.default(); }exports.default = foo;
 });
 define("a", ["require", "exports", "b"], function (require, exports, b_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    class Foo {
-    }
-    exports.default = Foo;
+    class Foo {}exports.default = Foo;
     b_1.default();
 });

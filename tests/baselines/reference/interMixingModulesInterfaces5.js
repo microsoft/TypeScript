@@ -18,6 +18,7 @@ var x: number = A.B.createB();
 //// [interMixingModulesInterfaces5.js]
 var A;
 (function (A) {
+
     var B;
     (function (B) {
         function createB() {

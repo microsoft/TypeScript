@@ -15,6 +15,7 @@ var r4 = new f('A');
 
 
 //// [interfaceWithSpecializedCallAndConstructSignatures.js]
+
 var f;
 var r = f('a');
 var r2 = f('A');

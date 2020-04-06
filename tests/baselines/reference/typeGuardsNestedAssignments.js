@@ -51,12 +51,14 @@ var Foo = /** @class */ (function () {
     }
     return Foo;
 }());
+
 function f1() {
     var foo;
     if ((foo = getFooOrNull()) !== null) {
         foo; // Foo
     }
 }
+
 function f2() {
     var foo1;
     var foo2;
@@ -65,21 +67,27 @@ function f2() {
         foo2; // Foo
     }
 }
+
 function f3() {
     var obj;
     if ((obj = getFooOrNull()) instanceof Foo) {
         obj;
     }
 }
+
 function f4() {
     var x;
     if (typeof (x = getStringOrNumberOrNull()) === "number") {
         x;
     }
 }
+
 // Repro from #8851
 var re = /./g;
-var match;
+var match
+
+;
+
 while ((match = re.exec("xxx")) != null) {
     var length_1 = match[1].length + match[2].length;
 }

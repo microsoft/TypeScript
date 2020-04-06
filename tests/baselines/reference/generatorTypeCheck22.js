@@ -11,12 +11,9 @@ function* g3() {
 }
 
 //// [generatorTypeCheck22.js]
-class Foo {
-}
-class Bar extends Foo {
-}
-class Baz {
-}
+class Foo {}
+class Bar extends Foo {}
+class Baz {}
 function* g3() {
     yield;
     yield new Bar;

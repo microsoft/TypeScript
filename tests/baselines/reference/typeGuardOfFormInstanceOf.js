@@ -86,6 +86,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var C1 = /** @class */ (function () {
     function C1() {
     }
@@ -97,8 +98,7 @@ var C2 = /** @class */ (function () {
     return C2;
 }());
 var D1 = /** @class */ (function (_super) {
-    __extends(D1, _super);
-    function D1() {
+    __extends(D1, _super);function D1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D1;
@@ -111,6 +111,7 @@ var C3 = /** @class */ (function () {
 var str;
 var num;
 var strOrNum;
+
 var ctor1;
 str = ctor1 instanceof C1 && ctor1.p1; // C1
 num = ctor1 instanceof C2 && ctor1.p2; // C2
@@ -121,6 +122,7 @@ num = ctor2 instanceof C2 && ctor2.p2; // C2
 num = ctor2 instanceof D1 && ctor2.p3; // D1
 str = ctor2 instanceof D1 && ctor2.p1; // D1
 var r2 = ctor2 instanceof C1 && ctor2; // C2 | D1
+
 var ctor3;
 if (ctor3 instanceof C1) {
     ctor3.p1; // C1

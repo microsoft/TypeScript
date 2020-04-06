@@ -20,6 +20,7 @@ var x = {
 
 //// [nestedClassDeclaration.js]
 // nested classes are not allowed
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -37,6 +38,8 @@ function foo() {
         return C3;
     }());
 }
+
 var x = {
     "class": C4
-}, _a = void 0;
+}, _a = void 0
+;

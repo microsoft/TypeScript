@@ -8,9 +8,9 @@ let cls = class implements Foo {
 }
 
 //// [implementsInClassExpression.js]
+
 var cls = /** @class */ (function () {
     function class_1() {
-    }
-    class_1.prototype.doThing = function () { };
+    }class_1.prototype.doThing = function () { };
     return class_1;
 }());

@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass1 = void 0;
 var ng = require("angular2/core");
+
 var MyClass1 = /** @class */ (function () {
     function MyClass1(_elementRef) {
         this._elementRef = _elementRef;

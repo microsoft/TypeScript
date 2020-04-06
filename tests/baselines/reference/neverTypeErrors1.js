@@ -36,14 +36,18 @@ function f1() {
     x = {};
     x();
 }
+
 function f2() {
     return;
 }
+
 function f3() {
     return 1;
 }
+
 function f4() {
 }
+
 for (var _i = 0, _a = f4(); _i < _a.length; _i++) {
     var n = _a[_i];
 }

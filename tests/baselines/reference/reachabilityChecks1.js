@@ -123,6 +123,7 @@ function f1(x) {
     }
     var x;
 }
+
 function f2() {
     return;
     var A = /** @class */ (function () {
@@ -144,6 +145,7 @@ function f3() {
         E[E["X"] = 1] = "X";
     })(E || (E = {}));
 }
+
 function f4() {
     if (true) {
         throw new Error();
@@ -153,3 +155,4 @@ function f4() {
         E[E["X"] = 1] = "X";
     })(E || (E = {}));
 }
+

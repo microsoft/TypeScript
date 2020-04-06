@@ -6,8 +6,7 @@ define("declarationEmitAmdModuleDefault", ["require", "exports"], function (requ
     "use strict";
     exports.__esModule = true;
     var DefaultClass = /** @class */ (function () {
-        function DefaultClass() {
-        }
+        function DefaultClass() {}
         return DefaultClass;
     }());
     exports["default"] = DefaultClass;

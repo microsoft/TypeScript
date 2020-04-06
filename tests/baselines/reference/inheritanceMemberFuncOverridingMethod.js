@@ -24,21 +24,17 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var a = /** @class */ (function () {
+})();var a = /** @class */ (function () {
     function a() {
-    }
-    a.prototype.x = function () {
+    }a.prototype.x = function () {
         return "10";
     };
     return a;
 }());
 var b = /** @class */ (function (_super) {
-    __extends(b, _super);
-    function b() {
+    __extends(b, _super);function b() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    b.prototype.x = function () {
+    }b.prototype.x = function () {
         return "20";
     };
     return b;

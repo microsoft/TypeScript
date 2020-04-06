@@ -108,228 +108,219 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
+
 (function (a, b, c) { }).apply(void 0, t1);
-(function () {
-    var x = [];
+(function () {var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
     }
 }).apply(void 0, t1);
-(function (a) {
-    var x = [];
+(function (a) {var x = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         x[_i - 1] = arguments[_i];
     }
 }).apply(void 0, t1);
-(function (a, b) {
-    var x = [];
+(function (a, b) {var x = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         x[_i - 2] = arguments[_i];
     }
 }).apply(void 0, t1);
-(function (a, b, c) {
-    var x = [];
+(function (a, b, c) {var x = [];
     for (var _i = 3; _i < arguments.length; _i++) {
         x[_i - 3] = arguments[_i];
     }
 }).apply(void 0, t1);
+
+
 f1(function (a, b, c) { });
-f1(function () {
-    var x = [];
+f1(function () {var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
     }
 });
-f1(function (a) {
-    var x = [];
+f1(function (a) {var x = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         x[_i - 1] = arguments[_i];
     }
 });
-f1(function (a, b) {
-    var x = [];
+f1(function (a, b) {var x = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         x[_i - 2] = arguments[_i];
     }
 });
-f1(function (a, b, c) {
-    var x = [];
+f1(function (a, b, c) {var x = [];
     for (var _i = 3; _i < arguments.length; _i++) {
         x[_i - 3] = arguments[_i];
     }
 });
+
+
 (function (a, b, c) { }).apply(void 0, t2);
-(function () {
-    var x = [];
+(function () {var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
     }
 }).apply(void 0, t2);
-(function (a) {
-    var x = [];
+(function (a) {var x = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         x[_i - 1] = arguments[_i];
     }
 }).apply(void 0, t2);
-(function (a, b) {
-    var x = [];
+(function (a, b) {var x = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         x[_i - 2] = arguments[_i];
     }
 }).apply(void 0, t2);
-(function (a, b, c) {
-    var x = [];
+(function (a, b, c) {var x = [];
     for (var _i = 3; _i < arguments.length; _i++) {
         x[_i - 3] = arguments[_i];
     }
 }).apply(void 0, t2);
+
+
 f2(function (a, b, c) { });
-f2(function () {
-    var x = [];
+f2(function () {var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
     }
 });
-f2(function (a) {
-    var x = [];
+f2(function (a) {var x = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         x[_i - 1] = arguments[_i];
     }
 });
-f2(function (a, b) {
-    var x = [];
+f2(function (a, b) {var x = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         x[_i - 2] = arguments[_i];
     }
 });
-f2(function (a, b, c) {
-    var x = [];
+f2(function (a, b, c) {var x = [];
     for (var _i = 3; _i < arguments.length; _i++) {
         x[_i - 3] = arguments[_i];
     }
 });
+
+
 (function (a, b, c) { }).apply(void 0, __spreadArrays([1], t3));
-(function () {
-    var x = [];
+(function () {var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
     }
 }).apply(void 0, __spreadArrays([1], t3));
-(function (a) {
-    var x = [];
+(function (a) {var x = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         x[_i - 1] = arguments[_i];
     }
 }).apply(void 0, __spreadArrays([1], t3));
-(function (a, b) {
-    var x = [];
+(function (a, b) {var x = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         x[_i - 2] = arguments[_i];
     }
 }).apply(void 0, __spreadArrays([1], t3));
-(function (a, b, c) {
-    var x = [];
+(function (a, b, c) {var x = [];
     for (var _i = 3; _i < arguments.length; _i++) {
         x[_i - 3] = arguments[_i];
     }
 }).apply(void 0, __spreadArrays([1], t3));
+
+
 f3(function (a, b, c) { });
-f3(function () {
-    var x = [];
+f3(function () {var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
     }
 });
-f3(function (a) {
-    var x = [];
+f3(function (a) {var x = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         x[_i - 1] = arguments[_i];
     }
 });
-f3(function (a, b) {
-    var x = [];
+f3(function (a, b) {var x = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         x[_i - 2] = arguments[_i];
     }
 });
-f3(function (a, b, c) {
-    var x = [];
+f3(function (a, b, c) {var x = [];
     for (var _i = 3; _i < arguments.length; _i++) {
         x[_i - 3] = arguments[_i];
     }
 });
+
 function f4(t) {
-    (function () {
-        var x = [];
+    (function () {var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             x[_i] = arguments[_i];
         }
     }).apply(void 0, t);
-    (function (a) {
-        var x = [];
+    (function (a) {var x = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             x[_i - 1] = arguments[_i];
         }
     }).apply(void 0, __spreadArrays([1], t));
-    (function (a) {
-        var x = [];
+    (function (a) {var x = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             x[_i - 1] = arguments[_i];
         }
     }).apply(void 0, __spreadArrays([1, 2], t));
     function f(cb) { }
-    f(function () {
-        var x = [];
+    f(function () {var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             x[_i] = arguments[_i];
         }
     });
-    f(function (a) {
-        var x = [];
+    f(function (a) {var x = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             x[_i - 1] = arguments[_i];
         }
     });
-    f(function (a, b) {
-        var x = [];
+    f(function (a, b) {var x = [];
         for (var _i = 2; _i < arguments.length; _i++) {
             x[_i - 2] = arguments[_i];
         }
     });
 }
+
+
 var g0 = f5(function () { return "hello"; });
 var g1 = f5(function (x, y) { return 42; });
 var g2 = f5(function (x, y) { return 42; });
 var g3 = f5(function (x, y) { return x + y; });
-var g4 = f5(function () {
-    var args = [];
+var g4 = f5(function () {var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
     }
-    return true;
-});
+    return true;});
+
+
 var g5 = pipe(function () { return true; }, function (b) { return 42; });
 var g6 = pipe(function (x) { return "hello"; }, function (s) { return s.length; });
 var g7 = pipe(function (x, y) { return 42; }, function (x) { return "" + x; });
 var g8 = pipe(function (x, y) { return 42; }, function (x) { return "" + x; });
+
 (function foo(a, b) { }.apply(void 0, tuple));
-(function foo() {
-    var rest = [];
+
+
+(function foo() {var rest = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         rest[_i] = arguments[_i];
     }
 }(1, ''));
-take(function () {
-    var rest = [];
+take(function () {var rest = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         rest[_i] = arguments[_i];
     }
 });
+
+
+
+
+
+
 var funcUnionTupleNoRest = function (num, strOrErr) {
     return num;
 };
-var funcUnionTupleRest = function () {
-    var params = [];
+
+var funcUnionTupleRest = function () {var params = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         params[_i] = arguments[_i];
     }

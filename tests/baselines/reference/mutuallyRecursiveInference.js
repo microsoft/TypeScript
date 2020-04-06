@@ -28,26 +28,21 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var T = /** @class */ (function () {
+})();var T = /** @class */ (function () {
     function T() {
     }
     return T;
 }());
 var L = /** @class */ (function (_super) {
-    __extends(L, _super);
-    function L() {
+    __extends(L, _super);function L() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    L.prototype.m = function () { this.a; };
+    }L.prototype.m = function () { this.a; };
     return L;
 }(T));
 var X = /** @class */ (function (_super) {
-    __extends(X, _super);
-    function X() {
+    __extends(X, _super);function X() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    X.prototype.m2 = function () {
+    }X.prototype.m2 = function () {
         this.a;
     };
     return X;

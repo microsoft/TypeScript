@@ -17,12 +17,10 @@ interface I {
 
 //// [constructorOverloads8.js]
 var C = /** @class */ (function () {
-    function C(x) {
-    }
+    function C(x) {}
     return C;
 }());
 var D = /** @class */ (function () {
-    function D(x) {
-    }
+    function D(x) {}
     return D;
 }());

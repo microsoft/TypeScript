@@ -29,14 +29,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 exports["default"] = A;
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
+    __extends(B, _super);function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
@@ -59,9 +57,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var a_1 = require("./a");
+
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);
-    function C() {
+    __extends(C, _super);function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;

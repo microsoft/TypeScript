@@ -39,22 +39,19 @@ var __extends = (this && this.__extends) || (function () {
 })();
 //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have no identical best common type
 var X = /** @class */ (function () {
-    function X() {
-    }
+    function X() {}
     return X;
 }());
 ;
 var A = /** @class */ (function (_super) {
-    __extends(A, _super);
-    function A() {
+    __extends(A, _super);function A() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return A;
 }(X));
 ;
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
+    __extends(B, _super);function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
@@ -66,10 +63,12 @@ var b;
 // No errors anymore, uses union types
 true ? a : b;
 var result1 = true ? a : b;
+
 //Be contextually typed and and bct is not identical, results in errors that union type is not assignable to target
 var result2 = true ? a : b;
 var result3 = true ? a : b;
 var result31 = true ? a : b;
+
 var result4 = true ? function (m) { return m.propertyX1; } : function (n) { return n.propertyX2; };
 var result5 = true ? function (m) { return m.propertyX1; } : function (n) { return n.propertyX2; };
 var result6 = true ? function (m) { return m.propertyX1; } : function (n) { return n.propertyX2; };

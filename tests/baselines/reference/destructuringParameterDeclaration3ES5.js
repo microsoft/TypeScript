@@ -48,6 +48,7 @@ foo1(1, 2, 3, E1.a, E.b);
 //// [destructuringParameterDeclaration3ES5.js]
 // If the parameter is a rest parameter, the parameter type is any[]
 // A type annotation for a rest parameter must denote an array type.
+
 function a1(...x) { }
 function a2(...a) { }
 function a3(...a) { }
@@ -60,7 +61,9 @@ var array = [1, 2, 3];
 var array2 = [true, false, "hello"];
 a2([...array]);
 a1(...array);
+
 a9([1, 2, [["string"]], false, true]); // Parameter type is [any, any, [[any]]]
+
 a10([1, 2, [["string"]], false, true]); // Parameter type is any[]
 a10([1, 2, 3, false, true]); // Parameter type is any[]
 a10([1, 2]); // Parameter type is any[]
@@ -71,8 +74,7 @@ foo("hello", 1, 2);
 foo("hello", "world");
 var E;
 (function (E) {
-    E[E["a"] = 0] = "a";
-    E[E["b"] = 1] = "b";
+    E[E["a"] = 0] = "a";E[E["b"] = 1] = "b";
 })(E || (E = {}));
 function foo1(...a) { }
 foo1(1, 2, 3, E.a);

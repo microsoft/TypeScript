@@ -19,8 +19,7 @@ var Promise = /** @class */ (function () {
     function Promise() {
     }
     return Promise;
-}());
-exports.Promise = Promise;
+}());exports.Promise = Promise;
 //// [moduleInTypePosition1_1.js]
 "use strict";
 exports.__esModule = true;

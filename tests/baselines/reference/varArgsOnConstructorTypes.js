@@ -43,13 +43,14 @@ define(["require", "exports"], function (require, exports) {
     exports.__esModule = true;
     exports.B = exports.A = void 0;
     var A = /** @class */ (function () {
-        function A(ctor) {
-        }
+        function A(ctor) {}
         return A;
-    }());
-    exports.A = A;
+    }());exports.A = A;
     var B = /** @class */ (function (_super) {
         __extends(B, _super);
+
+
+
         function B(element, url) {
             var _this = _super.call(this, element) || this;
             _this.p1 = element;
@@ -57,8 +58,9 @@ define(["require", "exports"], function (require, exports) {
             return _this;
         }
         return B;
-    }(A));
-    exports.B = B;
+    }(A));exports.B = B;
+
+
     var reg;
     reg.register(B);
 });

@@ -17,8 +17,7 @@ for (const v of new FooIterator) {
 }
 
 //// [for-of21.js]
-class Foo {
-}
+class Foo {}
 class FooIterator {
     next() {
         return {
@@ -30,6 +29,7 @@ class FooIterator {
         return this;
     }
 }
+
 for (const v of new FooIterator) {
     v;
 }

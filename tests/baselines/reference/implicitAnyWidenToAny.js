@@ -33,6 +33,7 @@ var x = null; // error at "x"
 var x1 = undefined; // error at "x1"
 var widenArray = [null, undefined]; // error at "widenArray"
 var emptyArray = [];
+
 // these should not be error
 var AnimalObj = /** @class */ (function () {
     function AnimalObj() {
@@ -50,6 +51,7 @@ var array2 = [];
 var array3 = [null, undefined];
 var array4 = [null, undefined];
 var array5 = [null, undefined];
+
 var objLit;
 function anyReturnFunc() { }
 var obj0 = new objLit(1);

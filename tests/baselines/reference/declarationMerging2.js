@@ -21,11 +21,9 @@ define(["require", "exports"], function (require, exports) {
     exports.A = void 0;
     var A = /** @class */ (function () {
         function A() {
-        }
-        A.prototype.getF = function () { return this._f; };
+        }A.prototype.getF = function () { return this._f; };
         return A;
-    }());
-    exports.A = A;
+    }());exports.A = A;
 });
 //// [b.js]
 define(["require", "exports"], function (require, exports) {

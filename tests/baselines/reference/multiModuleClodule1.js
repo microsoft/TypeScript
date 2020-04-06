@@ -20,8 +20,7 @@ c.foo = C.foo;
 
 //// [multiModuleClodule1.js]
 var C = /** @class */ (function () {
-    function C(x) {
-    }
+    function C(x) {}
     C.prototype.foo = function () { };
     C.prototype.bar = function () { };
     C.boo = function () { };

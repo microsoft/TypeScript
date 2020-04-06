@@ -119,6 +119,10 @@ let c = /** @class */ (() => {
             this.x = 10;
             this.y = 30;
         }
+
+
+
+
         method1() {
         }
         method2() {
@@ -139,6 +143,10 @@ let c2 = /** @class */ (() => {
             this.x = 10;
             this.y = 30;
         }
+
+
+
+
         method1() {
         }
         method2() {
@@ -162,6 +170,10 @@ export var m1;
                 this.x = 10;
                 this.y = 30;
             }
+
+
+
+
             method1() {
             }
             method2() {
@@ -182,6 +194,10 @@ export var m1;
                 this.x = 10;
                 this.y = 30;
             }
+
+
+
+
             method1() {
             }
             method2() {
@@ -208,6 +224,10 @@ var m2;
                 this.x = 10;
                 this.y = 30;
             }
+
+
+
+
             method1() {
             }
             method2() {
@@ -228,6 +248,10 @@ var m2;
                 this.x = 10;
                 this.y = 30;
             }
+
+
+
+
             method1() {
             }
             method2() {

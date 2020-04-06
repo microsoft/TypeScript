@@ -34,12 +34,14 @@ interface NoJsForHereEither {
 {"version":3,"file":"first_PART1.d.ts","sourceRoot":"","sources":["first_PART1.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb"}
 
 //// [/src/first/first_PART1.js]
+
 var s = "Hello, world";
+
 console.log(s);
 //# sourceMappingURL=first_PART1.js.map
 
 //// [/src/first/first_PART1.js.map]
-{"version":3,"file":"first_PART1.js","sourceRoot":"","sources":["first_PART1.ts"],"names":[],"mappings":"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC"}
+{"version":3,"file":"first_PART1.js","sourceRoot":"","sources":["first_PART1.ts"],"names":[],"mappings":";AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC"}
 
 //// [/src/first/first_part2.d.ts]
 //# sourceMappingURL=first_part2.d.ts.map
@@ -154,12 +156,13 @@ var N;
     function f() {
         console.log('testing');
     }
+
     f();
 })(N || (N = {}));
 //# sourceMappingURL=second_part1.js.map
 
 //// [/src/second/second_part1.js.map]
-{"version":3,"file":"second_part1.js","sourceRoot":"","sources":["second_part1.ts"],"names":[],"mappings":"AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV"}
+{"version":3,"file":"second_part1.js","sourceRoot":"","sources":["second_part1.ts"],"names":[],"mappings":"AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV"}
 
 //// [/src/second/second_part2.d.ts]
 declare class C {
@@ -173,8 +176,7 @@ declare class C {
 //// [/src/second/second_part2.js]
 var C = (function () {
     function C() {
-    }
-    C.prototype.doSomething = function () {
+    }C.prototype.doSomething = function () {
         console.log("something got done");
     };
     return C;
@@ -182,7 +184,7 @@ var C = (function () {
 //# sourceMappingURL=second_part2.js.map
 
 //// [/src/second/second_part2.js.map]
-{"version":3,"file":"second_part2.js","sourceRoot":"","sources":["second_part2.ts"],"names":[],"mappings":"AAAA;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC"}
+{"version":3,"file":"second_part2.js","sourceRoot":"","sources":["second_part2.ts"],"names":[],"mappings":"AAAA;IAAA;IAIA,CAAC,AAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC"}
 
 //// [/src/second/tsconfig.json]
 {

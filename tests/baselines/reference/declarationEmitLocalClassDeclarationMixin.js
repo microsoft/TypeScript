@@ -47,10 +47,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 exports.FilteredThing = exports.Mixed = exports.Unmixed = void 0;
+
 function mixin(Base) {
     var PrivateMixed = /** @class */ (function (_super) {
-        __extends(PrivateMixed, _super);
-        function PrivateMixed() {
+        __extends(PrivateMixed, _super);function PrivateMixed() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.bar = 2;
             return _this;
@@ -59,18 +59,18 @@ function mixin(Base) {
     }(Base));
     return PrivateMixed;
 }
+
 var Unmixed = /** @class */ (function () {
     function Unmixed() {
         this.foo = 1;
     }
     return Unmixed;
-}());
-exports.Unmixed = Unmixed;
+}());exports.Unmixed = Unmixed;
 exports.Mixed = mixin(Unmixed);
+
 function Filter(ctor) {
     var FilterMixin = /** @class */ (function (_super) {
-        __extends(FilterMixin, _super);
-        function FilterMixin() {
+        __extends(FilterMixin, _super);function FilterMixin() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             // other concrete methods, fields, constructor
             _this.thing = 12;
@@ -80,17 +80,15 @@ function Filter(ctor) {
     }(ctor));
     return FilterMixin;
 }
+
 var FilteredThing = /** @class */ (function (_super) {
-    __extends(FilteredThing, _super);
-    function FilteredThing() {
+    __extends(FilteredThing, _super);function FilteredThing() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    FilteredThing.prototype.match = function (path) {
+    }FilteredThing.prototype.match = function (path) {
         return false;
     };
     return FilteredThing;
-}(Filter(Unmixed)));
-exports.FilteredThing = FilteredThing;
+}(Filter(Unmixed)));exports.FilteredThing = FilteredThing;
 
 
 //// [declarationEmitLocalClassDeclarationMixin.d.ts]

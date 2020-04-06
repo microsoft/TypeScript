@@ -9,13 +9,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());
 var C = /** @class */ (function () {
-    function C(b) {
-    }
+    function C(b) {}
     C = __decorate([
         dec,
         __metadata("design:paramtypes", [B])

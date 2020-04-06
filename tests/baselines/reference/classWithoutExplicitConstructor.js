@@ -25,6 +25,7 @@ var C = /** @class */ (function () {
 }());
 var c = new C();
 var c2 = new C(null); // error
+
 var D = /** @class */ (function () {
     function D() {
         this.x = 2;

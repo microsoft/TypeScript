@@ -12,8 +12,7 @@ class C {
 //// [asyncFunctionDeclarationCapturesArguments_es5.js]
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.method = function () {
+    }C.prototype.method = function () {
         function other() { }
         function fn() {
             return __awaiter(this, arguments, void 0, function () {

@@ -64,22 +64,19 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Action = /** @class */ (function () {
+})();var Action = /** @class */ (function () {
     function Action() {
     }
     return Action;
 }());
 var ActionA = /** @class */ (function (_super) {
-    __extends(ActionA, _super);
-    function ActionA() {
+    __extends(ActionA, _super);function ActionA() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return ActionA;
 }(Action));
 var ActionB = /** @class */ (function (_super) {
-    __extends(ActionB, _super);
-    function ActionB() {
+    __extends(ActionB, _super);function ActionB() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return ActionB;
@@ -87,26 +84,50 @@ var ActionB = /** @class */ (function (_super) {
 var x1 = [
     { id: 2, trueness: false },
     { id: 3, name: "three" }
-];
+]
+
+;
+
 var x2 = [
     new ActionA(),
     new ActionB()
-];
+]
+
+;
+
 var x3 = [
     new Action(),
     new ActionA(),
     new ActionB()
-];
+]
+
+;
+
 var z1 = [
     { id: 2, trueness: false },
     { id: 3, name: "three" }
-];
+]
+
+;
+
 var z2 = [
     new ActionA(),
     new ActionB()
-];
+]
+
+;
+
 var z3 = [
     new Action(),
     new ActionA(),
     new ActionB()
-];
+]
+
+
+
+
+;
+
+
+
+

@@ -48,6 +48,7 @@ class C {
     }
     set ["computedname4"](y) {
     }
+
     set foo(a) { }
     static set bar(b) { }
     static set ["computedname"](b) { }

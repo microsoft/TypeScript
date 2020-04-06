@@ -14,6 +14,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 var v1 = new C();
+
 var y = v1.x; // should be 'string'
 
 

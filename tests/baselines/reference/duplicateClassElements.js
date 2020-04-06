@@ -47,8 +47,7 @@ class a {
 //// [duplicateClassElements.js]
 var a = /** @class */ (function () {
     function a() {
-    }
-    a.prototype.b = function () {
+    }a.prototype.b = function () {
     };
     a.prototype.b = function () {
     };

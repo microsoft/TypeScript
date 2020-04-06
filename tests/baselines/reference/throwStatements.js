@@ -87,6 +87,8 @@ throw new D<number>();
 
 //// [throwStatements.js]
 // all legal
+
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -145,6 +147,7 @@ throw aFunctionInModule;
 // no initializer or annotation, so this is an 'any'
 var x;
 throw x;
+
 // literals
 throw 0.0;
 throw false;

@@ -13,10 +13,8 @@ export = foo;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = exports.foo = void 0;
-function foo() { }
-exports.foo = foo;
-function bar() { }
-exports.bar = bar;
+function foo() { }exports.foo = foo;
+function bar() { }exports.bar = bar;
 //// [index.js]
 "use strict";
 var utils_1 = require("./utils");

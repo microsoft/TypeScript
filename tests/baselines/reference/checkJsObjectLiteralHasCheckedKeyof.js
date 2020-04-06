@@ -18,6 +18,7 @@ var obj = {
     x: 1,
     y: 2
 };
+
 /**
  * @type {keyof typeof obj}
  */

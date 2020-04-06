@@ -21,14 +21,14 @@ class a {
 //// [collisionThisExpressionAndLocalVarInMethod.js]
 var a = /** @class */ (function () {
     function a() {
-    }
-    a.prototype.method1 = function () {
+    }a.prototype.method1 = function () {
         var _this_1 = this;
         return {
             doStuff: function (callback) { return function () {
                 var _this = 2;
                 return callback(_this_1);
-            }; }
+            };
+            }
         };
     };
     a.prototype.method2 = function () {
@@ -37,7 +37,8 @@ var a = /** @class */ (function () {
         return {
             doStuff: function (callback) { return function () {
                 return callback(_this_1);
-            }; }
+            };
+            }
         };
     };
     return a;

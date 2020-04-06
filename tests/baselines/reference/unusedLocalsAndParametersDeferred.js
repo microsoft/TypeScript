@@ -165,6 +165,7 @@ exports.__esModule = true;
 function defered(a) {
     return a();
 }
+
 // function declaration paramter
 function f(a) {
     defered(function () {
@@ -187,6 +188,7 @@ var farrow = function (a) {
 };
 farrow(2);
 var prop1;
+
 var C = /** @class */ (function () {
     function C() {
         // in a property initalizer
@@ -214,6 +216,7 @@ var C = /** @class */ (function () {
 }());
 new C();
 var prop2;
+
 var E = /** @class */ (function () {
     function class_1() {
         // in a property initalizer
@@ -238,7 +241,9 @@ var E = /** @class */ (function () {
         configurable: true
     });
     return class_1;
-}());
+}())
+
+;
 new E();
 var o = {
     // Object literal method declaration paramter
@@ -287,6 +292,7 @@ var _loop_3 = function (i) {
 for (var i = 0; i < 10; i++) {
     _loop_3(i);
 }
+
 // in a block
 var condition = false;
 if (condition) {
@@ -295,6 +301,7 @@ if (condition) {
         c_1;
     });
 }
+
 // in try/catch/finally
 try {
     var a_1 = 0;

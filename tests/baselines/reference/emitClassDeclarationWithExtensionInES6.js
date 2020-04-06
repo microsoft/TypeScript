@@ -37,9 +37,11 @@ class D extends C {
     constructor() {
         super();
     }
+
     foo() {
         super.foo();
     }
+
     baz() {
         super.baz("hello", 10);
     }

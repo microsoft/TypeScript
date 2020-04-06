@@ -61,9 +61,11 @@ var GetSetEnumerableClassGetSet = /** @class */ (function () {
 var GetSetEnumerableObjectGet = {
     get prop() { return true; }
 };
+
 var GetSetEnumerableObjectSet = {
     set prop(value) { }
 };
+
 var GetSetEnumerableObjectGetSet = {
     get prop() { return true; },
     set prop(value) { }

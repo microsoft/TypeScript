@@ -12,7 +12,6 @@ var methodName = "method";
 var accessorName = "accessor";
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype[methodName] = function (v) { };
+    }C.prototype[methodName] = function (v) { };
     return C;
 }());

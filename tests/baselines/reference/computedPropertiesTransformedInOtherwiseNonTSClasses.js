@@ -12,6 +12,7 @@ namespace NS {
 var NS;
 (function (NS) {
     NS.x = Symbol();
+
     var NotTransformed = /** @class */ (function () {
         function NotTransformed() {
         }

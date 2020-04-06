@@ -19,8 +19,7 @@ var xx = new a(null, 7, new B());
 // Michal saw no error if he used number instead of B, 
 // but I do...
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());
 var a = /** @class */ (function () {
@@ -31,3 +30,4 @@ var a = /** @class */ (function () {
     return a;
 }());
 var xx = new a(null, 7, new B());
+

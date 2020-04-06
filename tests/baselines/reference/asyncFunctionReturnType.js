@@ -84,89 +84,105 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-};
-function fAsync() {
+};function fAsync() {
     return __awaiter(this, void 0, void 0, function* () {
         // Without explicit type annotation, this is just an array.
         return [1, true];
     });
 }
+
 function fAsyncExplicit() {
     return __awaiter(this, void 0, void 0, function* () {
         // This is contextually typed as a tuple.
         return [1, true];
     });
 }
+
+
 function fIndexedTypeForStringProp(obj) {
     return __awaiter(this, void 0, void 0, function* () {
         return obj.stringProp;
     });
 }
+
 function fIndexedTypeForPromiseOfStringProp(obj) {
     return __awaiter(this, void 0, void 0, function* () {
         return Promise.resolve(obj.stringProp);
     });
 }
+
 function fIndexedTypeForExplicitPromiseOfStringProp(obj) {
     return __awaiter(this, void 0, void 0, function* () {
         return Promise.resolve(obj.stringProp);
     });
 }
+
 function fIndexedTypeForAnyProp(obj) {
     return __awaiter(this, void 0, void 0, function* () {
         return obj.anyProp;
     });
 }
+
 function fIndexedTypeForPromiseOfAnyProp(obj) {
     return __awaiter(this, void 0, void 0, function* () {
         return Promise.resolve(obj.anyProp);
     });
 }
+
 function fIndexedTypeForExplicitPromiseOfAnyProp(obj) {
     return __awaiter(this, void 0, void 0, function* () {
         return Promise.resolve(obj.anyProp);
     });
 }
+
 function fGenericIndexedTypeForStringProp(obj) {
     return __awaiter(this, void 0, void 0, function* () {
         return obj.stringProp;
     });
 }
+
 function fGenericIndexedTypeForPromiseOfStringProp(obj) {
     return __awaiter(this, void 0, void 0, function* () {
         return Promise.resolve(obj.stringProp);
     });
 }
+
 function fGenericIndexedTypeForExplicitPromiseOfStringProp(obj) {
     return __awaiter(this, void 0, void 0, function* () {
         return Promise.resolve(obj.stringProp);
     });
 }
+
 function fGenericIndexedTypeForAnyProp(obj) {
     return __awaiter(this, void 0, void 0, function* () {
         return obj.anyProp;
     });
 }
+
 function fGenericIndexedTypeForPromiseOfAnyProp(obj) {
     return __awaiter(this, void 0, void 0, function* () {
         return Promise.resolve(obj.anyProp);
     });
 }
+
 function fGenericIndexedTypeForExplicitPromiseOfAnyProp(obj) {
     return __awaiter(this, void 0, void 0, function* () {
         return Promise.resolve(obj.anyProp);
     });
 }
+
 function fGenericIndexedTypeForKProp(obj, key) {
     return __awaiter(this, void 0, void 0, function* () {
         return obj[key];
     });
 }
+
 function fGenericIndexedTypeForPromiseOfKProp(obj, key) {
     return __awaiter(this, void 0, void 0, function* () {
         return Promise.resolve(obj[key]);
     });
 }
+
 function fGenericIndexedTypeForExplicitPromiseOfKProp(obj, key) {
     return __awaiter(this, void 0, void 0, function* () {
         return Promise.resolve(obj[key]);

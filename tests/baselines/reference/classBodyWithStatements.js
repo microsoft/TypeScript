@@ -15,14 +15,14 @@ class C3 {
 
 //// [classBodyWithStatements.js]
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var x = 1;
+
+
 var C2 = /** @class */ (function () {
-    function C2() {
-    }
+    function C2() {}
     return C2;
 }());
 function foo() { }

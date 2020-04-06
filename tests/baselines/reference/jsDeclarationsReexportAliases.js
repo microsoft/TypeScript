@@ -15,8 +15,7 @@ export {default as Foob} from "./cls";
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 exports.default = Foo;
@@ -25,9 +24,10 @@ exports.default = Foo;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 var cls_1 = require("./cls");
+
 exports.x = new cls_1.default();
-var cls_2 = require("./cls");
-Object.defineProperty(exports, "Foob", { enumerable: true, get: function () { return cls_2.default; } });
+
+var cls_2 = require("./cls");Object.defineProperty(exports, "Foob", { enumerable: true, get: function () { return cls_2.default; } });
 
 
 //// [cls.d.ts]

@@ -25,23 +25,18 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Animal = /** @class */ (function () {
-    function Animal() {
-    }
-    Animal.prototype.run = function () { };
+})();var Animal = /** @class */ (function () {
+    function Animal() {}Animal.prototype.run = function () { };
     return Animal;
 }());
 var Cat = /** @class */ (function (_super) {
-    __extends(Cat, _super);
-    function Cat() {
+    __extends(Cat, _super);function Cat() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Cat;
 }(Animal));
 var Dog = /** @class */ (function (_super) {
-    __extends(Dog, _super);
-    function Dog() {
+    __extends(Dog, _super);function Dog() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Dog;
@@ -49,6 +44,7 @@ var Dog = /** @class */ (function (_super) {
 function run(a) {
     a.run();
 }
+
 function f(a) {
     a.run();
     run(a);

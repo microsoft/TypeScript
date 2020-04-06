@@ -10,6 +10,7 @@ function fn<T extends string | undefined, U extends string>(one: T, two: U) {
 
 //// [nonNullParameterExtendingStringAssignableToString.js]
 "use strict";
+
 function fn(one, two) {
     var three = Boolean() ? one : two;
     foo(one);

@@ -26,17 +26,19 @@ class CharacterInfo {
 
 //// [scannertest1.js]
 ///<reference path='References.ts' />
+
 var CharacterInfo = /** @class */ (function () {
     function CharacterInfo() {
-    }
-    CharacterInfo.isDecimalDigit = function (c) {
+    }CharacterInfo.isDecimalDigit = function (c) {
         return c >= CharacterCodes._0 && c <= CharacterCodes._9;
     };
+
     CharacterInfo.isHexDigit = function (c) {
         return isDecimalDigit(c) ||
             (c >= CharacterCodes.A && c <= CharacterCodes.F) ||
             (c >= CharacterCodes.a && c <= CharacterCodes.f);
     };
+
     CharacterInfo.hexValue = function (c) {
         Debug.assert(isHexDigit(c));
         return isDecimalDigit(c)

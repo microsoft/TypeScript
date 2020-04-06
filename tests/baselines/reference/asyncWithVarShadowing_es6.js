@@ -223,115 +223,135 @@ async function fn40(x) {
 
 
 //// [asyncWithVarShadowing_es6.js]
+
 function fn1(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
     });
 }
+
 function fn2(x) {
     var x, z;
     return __awaiter(this, void 0, void 0, function* () {
     });
 }
+
 function fn3(x) {
     return __awaiter(this, void 0, void 0, function* () {
         var z;
     });
 }
+
 function fn4(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
         x = y;
     });
 }
+
 function fn5(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
         ({ x } = y);
     });
 }
+
 function fn6(x) {
     var x, z;
     return __awaiter(this, void 0, void 0, function* () {
         ({ x, z } = y);
     });
 }
+
 function fn7(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
         ({ x = y } = y);
     });
 }
+
 function fn8(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
         ({ z: x } = y);
     });
 }
+
 function fn9(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
         ({ z: { x } } = y);
     });
 }
+
 function fn10(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
         ({ z: { x } = y } = y);
     });
 }
+
 function fn11(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
         x = __rest(y, []);
     });
 }
+
 function fn12(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
         [x] = y;
     });
 }
+
 function fn13(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
         [x = y] = y;
     });
 }
+
 function fn14(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
         [, x] = y;
     });
 }
+
 function fn15(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
         [...x] = y;
     });
 }
+
 function fn16(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
         [[x]] = y;
     });
 }
+
 function fn17(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
         [[x] = y] = y;
     });
 }
+
 function fn18({ x }) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
     });
 }
+
 function fn19([x]) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
     });
 }
+
 function fn20(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
@@ -339,6 +359,7 @@ function fn20(x) {
         }
     });
 }
+
 function fn21(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
@@ -346,6 +367,7 @@ function fn21(x) {
         }
     });
 }
+
 function fn22(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
@@ -355,6 +377,7 @@ function fn22(x) {
         }
     });
 }
+
 function fn23(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
@@ -364,6 +387,7 @@ function fn23(x) {
         }
     });
 }
+
 function fn24(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
@@ -373,6 +397,7 @@ function fn24(x) {
         }
     });
 }
+
 function fn25(x) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -382,6 +407,7 @@ function fn25(x) {
         }
     });
 }
+
 function fn26(x) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -391,6 +417,7 @@ function fn26(x) {
         }
     });
 }
+
 function fn27(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
@@ -400,6 +427,7 @@ function fn27(x) {
         }
     });
 }
+
 function fn28(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
@@ -407,6 +435,7 @@ function fn28(x) {
         }
     });
 }
+
 function fn29(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
@@ -414,6 +443,7 @@ function fn29(x) {
         } while (y);
     });
 }
+
 function fn30(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
@@ -421,6 +451,7 @@ function fn30(x) {
         }
     });
 }
+
 function fn31(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
@@ -428,6 +459,7 @@ function fn31(x) {
         }
     });
 }
+
 function fn32(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
@@ -435,6 +467,7 @@ function fn32(x) {
         }
     });
 }
+
 function fn33(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
@@ -442,6 +475,7 @@ function fn33(x) {
         }
     });
 }
+
 function fn34(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
@@ -449,6 +483,7 @@ function fn34(x) {
         }
     });
 }
+
 function fn35(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
@@ -456,6 +491,7 @@ function fn35(x) {
         }
     });
 }
+
 function fn36(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
@@ -463,6 +499,7 @@ function fn36(x) {
         }
     });
 }
+
 function fn37(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
@@ -470,6 +507,7 @@ function fn37(x) {
         }
     });
 }
+
 function fn38(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
@@ -478,6 +516,7 @@ function fn38(x) {
         }
     });
 }
+
 function fn39(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {
@@ -486,6 +525,7 @@ function fn39(x) {
         }
     });
 }
+
 function fn40(x) {
     var x;
     return __awaiter(this, void 0, void 0, function* () {

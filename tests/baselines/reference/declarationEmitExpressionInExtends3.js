@@ -63,51 +63,48 @@ var ExportedClass = /** @class */ (function () {
     function ExportedClass() {
     }
     return ExportedClass;
-}());
-exports.ExportedClass = ExportedClass;
+}());exports.ExportedClass = ExportedClass;
 var LocalClass = /** @class */ (function () {
     function LocalClass() {
     }
     return LocalClass;
 }());
+
+
 function getLocalClass(c) {
     return LocalClass;
 }
+
 function getExportedClass(c) {
     return ExportedClass;
 }
+
+
+
 var MyClass = /** @class */ (function (_super) {
-    __extends(MyClass, _super);
-    function MyClass() {
+    __extends(MyClass, _super);function MyClass() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return MyClass;
-}(getLocalClass(undefined)));
-exports.MyClass = MyClass;
+}(getLocalClass(undefined)));exports.MyClass = MyClass;
 var MyClass2 = /** @class */ (function (_super) {
-    __extends(MyClass2, _super);
-    function MyClass2() {
+    __extends(MyClass2, _super);function MyClass2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return MyClass2;
-}(getExportedClass(undefined)));
-exports.MyClass2 = MyClass2;
+}(getExportedClass(undefined)));exports.MyClass2 = MyClass2;
 var MyClass3 = /** @class */ (function (_super) {
-    __extends(MyClass3, _super);
-    function MyClass3() {
+    __extends(MyClass3, _super);function MyClass3() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return MyClass3;
-}(getExportedClass(undefined)));
-exports.MyClass3 = MyClass3;
+}(getExportedClass(undefined)));exports.MyClass3 = MyClass3;
 var MyClass4 = /** @class */ (function (_super) {
-    __extends(MyClass4, _super);
-    function MyClass4() {
+    __extends(MyClass4, _super);function MyClass4() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return MyClass4;
-}(getExportedClass(undefined)));
-exports.MyClass4 = MyClass4;
+}(getExportedClass(undefined)));exports.MyClass4 = MyClass4;
 
 
 //// [declarationEmitExpressionInExtends3.d.ts]

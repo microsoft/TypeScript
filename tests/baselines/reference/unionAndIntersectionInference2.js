@@ -25,6 +25,7 @@ f2(d2); // never
 
 
 //// [unionAndIntersectionInference2.js]
+
 var a1;
 var b1;
 var c1;
@@ -35,6 +36,7 @@ f1(b1); // string[]
 f1(c1); // string[]
 f1(d1); // { name: string }
 f1(e1); // number | boolean
+
 var a2;
 var b2;
 var c2;

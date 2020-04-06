@@ -84,8 +84,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var AbstractClass = /** @class */ (function () {
+})();var AbstractClass = /** @class */ (function () {
     function AbstractClass(str, other) {
         var _this = this;
         this.other = this.prop;
@@ -99,10 +98,21 @@ var AbstractClass = /** @class */ (function () {
         // OK, reference is inside function
         var innerFunction = function () {
             return _this.prop;
-        };
+        }
+
+        ;
         // OK, references are to another instance
         other.cb(other.prop);
     }
+
+
+
+
+
+
+
+
+
     AbstractClass.prototype.method2 = function () {
         this.prop = this.prop + "!";
     };
@@ -110,12 +120,16 @@ var AbstractClass = /** @class */ (function () {
 }());
 var DerivedAbstractClass = /** @class */ (function (_super) {
     __extends(DerivedAbstractClass, _super);
+
+
     function DerivedAbstractClass(str, other, yetAnother) {
         var _this = _super.call(this, str, other) || this;
         _this.cb = function (s) { };
         // there is no implementation of 'prop' in any base class
         _this.cb(_this.prop.toLowerCase());
+
         _this.method(1);
+
         // OK, references are to another instance
         other.cb(other.prop);
         yetAnother.cb(yetAnother.prop);
@@ -125,6 +139,9 @@ var DerivedAbstractClass = /** @class */ (function (_super) {
 }(AbstractClass));
 var Implementation = /** @class */ (function (_super) {
     __extends(Implementation, _super);
+
+
+
     function Implementation(str, other, yetAnother) {
         var _this = _super.call(this, str, other, yetAnother) || this;
         _this.prop = "";
@@ -132,6 +149,7 @@ var Implementation = /** @class */ (function (_super) {
         _this.cb(_this.prop);
         return _this;
     }
+
     Implementation.prototype.method = function (n) {
         this.cb(this.prop + n);
     };

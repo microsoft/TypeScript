@@ -68,16 +68,21 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
+
 var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
 var a;
-var b;
+
+var b
+;
 a = b; // ok
 b = a; // error
-var b2;
+var b2
+;
 a = b2; // ok
 b2 = a; // error
 var Generics;
@@ -88,8 +93,7 @@ var Generics;
         return A;
     }());
     var B = /** @class */ (function (_super) {
-        __extends(B, _super);
-        function B() {
+        __extends(B, _super);function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
@@ -99,7 +103,7 @@ var Generics;
     a1 = b1; // ok
     b1 = a1; // error
     var B2 = /** @class */ (function (_super) {
-        __extends(B2, _super);
+        __extends(B2, _super);// error
         function B2() {
             return _super !== null && _super.apply(this, arguments) || this;
         }

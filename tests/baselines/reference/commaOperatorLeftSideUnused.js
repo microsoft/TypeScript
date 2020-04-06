@@ -56,6 +56,7 @@ xx = (xx as any, 100);
 //// [commaOperatorLeftSideUnused.js]
 var xx;
 var yy;
+
 function fn() {
     var arr = [];
     switch (arr.length) {
@@ -66,8 +67,10 @@ function fn() {
             return 'more than one';
     }
 }
+
 // Should error
 var x = Math.pow((3, 5), 2);
+
 // Should error
 var a = [(3 + 4), ((1 + 1, 8) * 4)];
 // Error cases
@@ -91,6 +94,7 @@ xx = (!xx, 10);
 xx = (~xx, 10);
 xx = (-xx, 10);
 xx = (+xx, 10);
+
 // OK cases
 xx = (xx ? x++ : 4, 10);
 xx = (--xx, 3);

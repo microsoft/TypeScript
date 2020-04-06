@@ -34,6 +34,7 @@ async function arrayLiteral7() {
 }
 
 //// [es5-asyncFunctionArrayLiterals.js]
+
 function arrayLiteral0() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -46,6 +47,7 @@ function arrayLiteral0() {
         });
     });
 }
+
 function arrayLiteral1() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -61,6 +63,7 @@ function arrayLiteral1() {
         });
     });
 }
+
 function arrayLiteral2() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -73,6 +76,7 @@ function arrayLiteral2() {
         });
     });
 }
+
 function arrayLiteral3() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -88,6 +92,7 @@ function arrayLiteral3() {
         });
     });
 }
+
 function arrayLiteral4() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -100,6 +105,7 @@ function arrayLiteral4() {
         });
     });
 }
+
 function arrayLiteral5() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -115,6 +121,7 @@ function arrayLiteral5() {
         });
     });
 }
+
 function arrayLiteral6() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -130,6 +137,7 @@ function arrayLiteral6() {
         });
     });
 }
+
 function arrayLiteral7() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;

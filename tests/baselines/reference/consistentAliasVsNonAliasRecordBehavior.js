@@ -44,27 +44,35 @@ function mixed4<T>(x: Record<'a', T>, y: Record2<string, T>) {
 // TODO: FIXME: All the below cases labeled `no error` _should be an error_, and are only prevented from so being
 // by incorrect variance-based relationships
 // Ref: https://github.com/Microsoft/TypeScript/issues/29698
+
 function defaultRecord(x, y) {
     x = y; // no error, but error expected.
 }
+
 function customRecord(x, y) {
     x = y; // no error, but error expected.
 }
+
 function mixed1(x, y) {
     x = y; // error
 }
+
 function mixed2(x, y) {
     x = y; // error
 }
+
 function defaultRecord2(x, y) {
     x = y; // no error, but error expected.
 }
+
 function customRecord2(x, y) {
     x = y; // no error, but error expected.
 }
+
 function mixed3(x, y) {
     x = y; // error
 }
+
 function mixed4(x, y) {
     x = y; // error
 }

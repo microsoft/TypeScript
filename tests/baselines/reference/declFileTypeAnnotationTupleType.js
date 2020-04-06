@@ -46,6 +46,7 @@ var g = /** @class */ (function () {
 // Just the name
 var k = [new c(), new m.c()];
 var l = k;
+
 var x = [new g(), new m.g(), function () { return new c(); }];
 var y = x;
 

@@ -10,9 +10,9 @@ export = foo
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var foo = /** @class */ (function () {
-        function foo() {
-        }
+        function foo() {}
         return foo;
     }());
+
     return foo;
 });

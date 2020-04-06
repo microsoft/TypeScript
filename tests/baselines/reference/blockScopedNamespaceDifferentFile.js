@@ -25,8 +25,7 @@ declare namespace A {
 var C;
 (function (C) {
     var Name = /** @class */ (function () {
-        function Name(parameters) {
-        }
+        function Name(parameters) {}
         Name.funcData = A.AA.func();
         Name.someConst = A.AA.foo;
         return Name;

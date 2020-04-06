@@ -61,27 +61,21 @@ var m;
     // Directly using names from this module
     function foo1(param) {
     }
-    function foo2(param) {
-        if (param === void 0) { param = new private1(); }
-    }
+    function foo2(param) {if (param === void 0) { param = new private1(); }}
+
     function foo3(param) {
     }
     m.foo3 = foo3;
-    function foo4(param) {
-        if (param === void 0) { param = new private1(); }
-    }
+    function foo4(param) {if (param === void 0) { param = new private1(); }}
     m.foo4 = foo4;
     function foo11(param) {
     }
-    function foo12(param) {
-        if (param === void 0) { param = new public1(); }
-    }
+    function foo12(param) {if (param === void 0) { param = new public1(); }}
+
     function foo13(param) {
     }
     m.foo13 = foo13;
-    function foo14(param) {
-        if (param === void 0) { param = new public1(); }
-    }
+    function foo14(param) {if (param === void 0) { param = new public1(); }}
     m.foo14 = foo14;
     var m2;
     (function (m2) {
@@ -94,15 +88,12 @@ var m;
     })(m2 || (m2 = {}));
     function foo111(param) {
     }
-    function foo112(param) {
-        if (param === void 0) { param = new m2.public2(); }
-    }
+    function foo112(param) {if (param === void 0) { param = new m2.public2(); }}
+
     function foo113(param) {
     }
     m.foo113 = foo113;
-    function foo114(param) {
-        if (param === void 0) { param = new m2.public2(); }
-    }
+    function foo114(param) {if (param === void 0) { param = new m2.public2(); }}
     m.foo114 = foo114;
 })(m || (m = {}));
 

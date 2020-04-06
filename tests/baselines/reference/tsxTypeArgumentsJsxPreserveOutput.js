@@ -39,9 +39,13 @@ function Foo<T>() {
 "use strict";
 exports.__esModule = true;
 var React = require("react");
+
+
+
 function Foo() {
     return null;
 }
+
 <>
     
     <Foo />

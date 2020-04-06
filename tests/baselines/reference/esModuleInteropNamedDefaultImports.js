@@ -17,17 +17,14 @@ new Foo3();
 exports.__esModule = true;
 exports.Bar = void 0;
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 exports["default"] = Foo;
 var Bar = /** @class */ (function () {
-    function Bar() {
-    }
+    function Bar() {}
     return Bar;
-}());
-exports.Bar = Bar;
+}());exports.Bar = Bar;
 //// [idx.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {

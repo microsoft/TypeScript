@@ -8,5 +8,7 @@ var s: string = b;
 
 //// [unionTypeWithRecursiveSubtypeReduction3.js]
 var a27;
+
+
 var b;
 var s = b;

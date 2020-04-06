@@ -16,7 +16,6 @@ let x: E[] = enumValues(E);
 fn(a);
 var E;
 (function (E) {
-    E["A"] = "foo";
-    E["B"] = "bar";
+    E["A"] = "foo";E["B"] = "bar";
 })(E || (E = {}));
 var x = enumValues(E);

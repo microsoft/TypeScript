@@ -16,8 +16,7 @@ var x = Symbol("x");
 var y = Symbol("y");
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.m = function () {
+    }C.prototype.m = function () {
         this[x] = 0; // write-only
         this[y];
     };

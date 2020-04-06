@@ -10,5 +10,7 @@ var v1: I1<boolean>;
 var v2: I1<number> = v1;
 
 //// [incompatibleGenericTypes.js]
+
 var v1;
+
 var v2 = v1;

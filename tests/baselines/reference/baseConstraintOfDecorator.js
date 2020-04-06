@@ -39,8 +39,7 @@ exports.classExtender2 = exports.classExtender = void 0;
 function classExtender(superClass, _instanceModifier) {
     return /** @class */ (function (_super) {
         __extends(decoratorFunc, _super);
-        function decoratorFunc() {
-            var args = [];
+        function decoratorFunc() {var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
@@ -50,18 +49,16 @@ function classExtender(superClass, _instanceModifier) {
         }
         return decoratorFunc;
     }(superClass));
-}
-exports.classExtender = classExtender;
+}exports.classExtender = classExtender;
+
 var MyClass = /** @class */ (function () {
-    function MyClass() {
-    }
+    function MyClass() {}
     return MyClass;
 }());
 function classExtender2(superClass, _instanceModifier) {
     return /** @class */ (function (_super) {
         __extends(decoratorFunc, _super);
-        function decoratorFunc() {
-            var args = [];
+        function decoratorFunc() {var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
@@ -71,5 +68,4 @@ function classExtender2(superClass, _instanceModifier) {
         }
         return decoratorFunc;
     }(superClass));
-}
-exports.classExtender2 = classExtender2;
+}exports.classExtender2 = classExtender2;

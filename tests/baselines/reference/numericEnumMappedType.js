@@ -42,27 +42,29 @@ const x: E.ONE = e;
 // Repro from #31771
 var E1;
 (function (E1) {
-    E1[E1["ONE"] = 0] = "ONE";
-    E1[E1["TWO"] = 1] = "TWO";
-    E1[E1["THREE"] = 2] = "THREE";
+    E1[E1["ONE"] = 0] = "ONE";E1[E1["TWO"] = 1] = "TWO";E1[E1["THREE"] = 2] = "THREE";
 })(E1 || (E1 = {}));
+
+
+
+
 var b1 = {};
 var b2 = {};
+
 var e1 = E1.ONE;
 var e2 = E2.ONE;
 b1[1] = "a";
 b1[e1] = "b";
+
 b2[1] = "a";
 b2[e2] = "b";
 var N1;
 (function (N1) {
-    N1[N1["A"] = val()] = "A";
-    N1[N1["B"] = val()] = "B";
+    N1[N1["A"] = val()] = "A";N1[N1["B"] = val()] = "B";
 })(N1 || (N1 = {}));
 var N2;
 (function (N2) {
-    N2[N2["C"] = val()] = "C";
-    N2[N2["D"] = val()] = "D";
+    N2[N2["C"] = val()] = "C";N2[N2["D"] = val()] = "D";
 })(N2 || (N2 = {}));
 var e = E.ONE;
 var x = e;

@@ -57,11 +57,11 @@ sourceFile:../first_PART1.ts
 >>>//# sourceMappingURL=first-output.d.ts.map
 
 //// [/src/first/bin/first-output.js]
-/* @internal */ var A = 1;
+/* @internal */ /* @internal */ var A = 1;
 //# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.js.map]
-{"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts"],"names":[],"mappings":"AAAA,eAAe,CAAC,IAAM,CAAC,GAAG,CAAC,CAAC"}
+{"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts"],"names":[],"mappings":"AAAA,eAAe,CAAf,eAAe,CAAC,IAAM,CAAC,GAAG,CAAC,CAAC"}
 
 //// [/src/first/bin/first-output.js.map.baseline.txt]
 ===================================================================
@@ -74,32 +74,37 @@ sources: ../first_PART1.ts
 emittedFile:/src/first/bin/first-output.js
 sourceFile:../first_PART1.ts
 -------------------------------------------------------------------
->>>/* @internal */ var A = 1;
+>>>/* @internal */ /* @internal */ var A = 1;
 1 >
 2 >^^^^^^^^^^^^^^^
 3 >               ^
-4 >                ^^^^
-5 >                    ^
-6 >                     ^^^
-7 >                        ^
-8 >                         ^
-9 >                          ^^^^^^^^^^^^^->
+4 >                ^^^^^^^^^^^^^^^
+5 >                               ^
+6 >                                ^^^^
+7 >                                    ^
+8 >                                     ^^^
+9 >                                        ^
+10>                                         ^
 1 >
 2 >/* @internal */
-3 >                
-4 >                const 
-5 >                    A
-6 >                      = 
-7 >                        1
-8 >                         ;
+3 >               
+4 >                /* @internal */
+5 >                                
+6 >                                const 
+7 >                                    A
+8 >                                      = 
+9 >                                        1
+10>                                         ;
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
-3 >Emitted(1, 17) Source(1, 17) + SourceIndex(0)
-4 >Emitted(1, 21) Source(1, 23) + SourceIndex(0)
-5 >Emitted(1, 22) Source(1, 24) + SourceIndex(0)
-6 >Emitted(1, 25) Source(1, 27) + SourceIndex(0)
-7 >Emitted(1, 26) Source(1, 28) + SourceIndex(0)
-8 >Emitted(1, 27) Source(1, 29) + SourceIndex(0)
+3 >Emitted(1, 17) Source(1, 1) + SourceIndex(0)
+4 >Emitted(1, 32) Source(1, 16) + SourceIndex(0)
+5 >Emitted(1, 33) Source(1, 17) + SourceIndex(0)
+6 >Emitted(1, 37) Source(1, 23) + SourceIndex(0)
+7 >Emitted(1, 38) Source(1, 24) + SourceIndex(0)
+8 >Emitted(1, 41) Source(1, 27) + SourceIndex(0)
+9 >Emitted(1, 42) Source(1, 28) + SourceIndex(0)
+10>Emitted(1, 43) Source(1, 29) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
@@ -114,7 +119,7 @@ sourceFile:../first_PART1.ts
       "sections": [
         {
           "pos": 0,
-          "end": 28,
+          "end": 42,
           "kind": "text"
         }
       ]
@@ -136,9 +141,8 @@ sourceFile:../first_PART1.ts
 ======================================================================
 File:: /src/first/bin/first-output.js
 ----------------------------------------------------------------------
-text: (0-28)
-/* @internal */ var A = 1;
-
+text: (0-42)
+/* @internal */ /* @internal */ var A = 1;
 ======================================================================
 ======================================================================
 File:: /src/first/bin/first-output.d.ts
@@ -158,12 +162,12 @@ declare const B = 2;
 
 
 //// [/src/third/thirdjs/output/third-output.js]
-/* @internal */ var A = 1;
+/* @internal */ /* @internal */ var A = 1;
 var B = 2;
 //# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.js.map]
-{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,eAAe,CAAC,IAAM,CAAC,GAAG,CAAC,CAAC;ACA5B,IAAM,CAAC,GAAG,CAAC,CAAC"}
+{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,eAAe,CAAf,eAAe,CAAC,IAAM,CAAC,GAAG,CAAC,CAAC;ACA5B,IAAM,CAAC,GAAG,CAAC,CAAC"}
 
 //// [/src/third/thirdjs/output/third-output.js.map.baseline.txt]
 ===================================================================
@@ -176,31 +180,37 @@ sources: ../../../first/first_PART1.ts,../../third_part1.ts
 emittedFile:/src/third/thirdjs/output/third-output.js
 sourceFile:../../../first/first_PART1.ts
 -------------------------------------------------------------------
->>>/* @internal */ var A = 1;
+>>>/* @internal */ /* @internal */ var A = 1;
 1 >
 2 >^^^^^^^^^^^^^^^
 3 >               ^
-4 >                ^^^^
-5 >                    ^
-6 >                     ^^^
-7 >                        ^
-8 >                         ^
+4 >                ^^^^^^^^^^^^^^^
+5 >                               ^
+6 >                                ^^^^
+7 >                                    ^
+8 >                                     ^^^
+9 >                                        ^
+10>                                         ^
 1 >
 2 >/* @internal */
-3 >                
-4 >                const 
-5 >                    A
-6 >                      = 
-7 >                        1
-8 >                         ;
+3 >               
+4 >                /* @internal */
+5 >                                
+6 >                                const 
+7 >                                    A
+8 >                                      = 
+9 >                                        1
+10>                                         ;
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
-3 >Emitted(1, 17) Source(1, 17) + SourceIndex(0)
-4 >Emitted(1, 21) Source(1, 23) + SourceIndex(0)
-5 >Emitted(1, 22) Source(1, 24) + SourceIndex(0)
-6 >Emitted(1, 25) Source(1, 27) + SourceIndex(0)
-7 >Emitted(1, 26) Source(1, 28) + SourceIndex(0)
-8 >Emitted(1, 27) Source(1, 29) + SourceIndex(0)
+3 >Emitted(1, 17) Source(1, 1) + SourceIndex(0)
+4 >Emitted(1, 32) Source(1, 16) + SourceIndex(0)
+5 >Emitted(1, 33) Source(1, 17) + SourceIndex(0)
+6 >Emitted(1, 37) Source(1, 23) + SourceIndex(0)
+7 >Emitted(1, 38) Source(1, 24) + SourceIndex(0)
+8 >Emitted(1, 41) Source(1, 27) + SourceIndex(0)
+9 >Emitted(1, 42) Source(1, 28) + SourceIndex(0)
+10>Emitted(1, 43) Source(1, 29) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.js
@@ -240,20 +250,20 @@ sourceFile:../../third_part1.ts
       "sections": [
         {
           "pos": 0,
-          "end": 28,
+          "end": 42,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.js",
           "texts": [
             {
               "pos": 0,
-              "end": 28,
+              "end": 42,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 28,
-          "end": 40,
+          "pos": 44,
+          "end": 54,
           "kind": "text"
         }
       ]
@@ -282,15 +292,13 @@ sourceFile:../../third_part1.ts
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-28):: ../../../first/bin/first-output.js texts:: 1
+prepend: (0-42):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-28)
-/* @internal */ var A = 1;
-
+text: (0-42)
+/* @internal */ /* @internal */ var A = 1;
 ----------------------------------------------------------------------
-text: (28-40)
+text: (44-54)
 var B = 2;
-
 ======================================================================
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts

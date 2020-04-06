@@ -22,13 +22,15 @@ function a() {
 }
 function b() {
     var global = /** @class */ (function () {
-        function global() {
-        }
+        function global() {}
         return global;
     }());
 }
+
+
 function foo(global) {
 }
+
 var obj = {
     global: "123"
 };

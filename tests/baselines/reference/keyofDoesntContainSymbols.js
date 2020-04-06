@@ -29,9 +29,11 @@ var _a;
 var sym = Symbol();
 var num = 0;
 var obj = (_a = { num: 0, str: 's' }, _a[num] = num, _a[sym] = sym, _a);
+
 function set(obj, key, value) {
     return obj[key] = value;
 }
+
 var val = set(obj, 'str', '');
 // string
 var valB = set(obj, 'num', '');

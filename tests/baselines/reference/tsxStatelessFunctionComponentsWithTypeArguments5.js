@@ -26,6 +26,8 @@ define(["require", "exports", "react"], function (require, exports, React) {
         var a1 = <Component {...arg}/>;
         var a2 = <Component {...arg} prop1/>;
     }
+
+
     function Bar(arg) {
         var a1 = <ComponentSpecific {...arg} ignore-prop="hi"/>; // U is number
         var a2 = <ComponentSpecific1 {...arg} ignore-prop={10}/>; // U is number

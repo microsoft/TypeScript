@@ -97,15 +97,14 @@ switch (x) {
     case (function (x) { return ''; })(2):
     default:
 }
+
 // basic assignable check, rest covered in tests for 'assignement compatibility'
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);
-    function D() {
+    __extends(D, _super);function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
@@ -115,31 +114,20 @@ switch (new C()) {
     case { id: 12, name: '' }:
     case new C():
 }
-switch ('') {
-}
-switch (12) {
-}
-switch (true) {
-}
-switch (null) {
-}
-switch (undefined) {
-}
-switch (new Date(12)) {
-}
-switch (new Object()) {
-}
-switch (/[a-z]/) {
-}
-switch ([]) {
-}
-switch ({}) {
-}
-switch ({ id: 12 }) {
-}
-switch (['a']) {
-}
-switch (function (x) { return ''; }) {
-}
-switch ((function (x) { return ''; })(1)) {
-}
+
+switch ('') {}
+switch (12) {}
+switch (true) {}
+switch (null) {}
+switch (undefined) {}
+switch (new Date(12)) {}
+switch (new Object()) {}
+switch (/[a-z]/) {}
+switch ([]) {}
+switch ({}) {}
+switch ({ id: 12 }) {}
+switch (['a']) {}
+switch (function (x) { return ''; }) {}
+switch ((function (x) { return ''; })(1)) {}
+
+

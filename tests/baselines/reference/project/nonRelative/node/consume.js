@@ -6,6 +6,8 @@ var y = require("lib/bar/a");
 x.hello();
 y.hello();
 var str = mod.call();
+
+
 if (str !== "success") {
     fail();
 }

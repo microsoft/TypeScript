@@ -29,12 +29,14 @@ function f2() {
 function f() {
     return "hello";
 }
+
 /**
  * @returns {string=} This comment is not currently exposed
  */
 function f1() {
     return "hello world";
 }
+
 /**
  * @returns {string|number} This comment is not currently exposed
  */

@@ -58,6 +58,7 @@ function f1() {
     var x = v.x;
     var y = v.y;
 }
+
 function f2() {
     function f(x) {
         var C = /** @class */ (function () {
@@ -74,6 +75,7 @@ function f2() {
     var x = v.x;
     var y = v.y;
 }
+
 function f3() {
     function f(x, y) {
         var C = /** @class */ (function () {

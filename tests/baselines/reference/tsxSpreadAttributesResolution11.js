@@ -48,20 +48,24 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var React = require("react");
+
 var obj = {};
 var obj1 = {
     x: 2
-};
+}
+;
 var obj3 = {
     y: true,
     overwrite: "hi"
-};
+}
+
+;
+
+
 var OverWriteAttr = /** @class */ (function (_super) {
-    __extends(OverWriteAttr, _super);
-    function OverWriteAttr() {
+    __extends(OverWriteAttr, _super);function OverWriteAttr() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    OverWriteAttr.prototype.render = function () {
+    }OverWriteAttr.prototype.render = function () {
         return <div>Hello</div>;
     };
     return OverWriteAttr;

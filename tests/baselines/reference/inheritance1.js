@@ -74,56 +74,49 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Control = /** @class */ (function () {
+})();var Control = /** @class */ (function () {
     function Control() {
     }
     return Control;
 }());
+
 var Button = /** @class */ (function (_super) {
-    __extends(Button, _super);
-    function Button() {
+    __extends(Button, _super);function Button() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Button.prototype.select = function () { };
+    }Button.prototype.select = function () { };
     return Button;
 }(Control));
 var TextBox = /** @class */ (function (_super) {
-    __extends(TextBox, _super);
-    function TextBox() {
+    __extends(TextBox, _super);function TextBox() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    TextBox.prototype.select = function () { };
+    }TextBox.prototype.select = function () { };
     return TextBox;
 }(Control));
 var ImageBase = /** @class */ (function (_super) {
-    __extends(ImageBase, _super);
-    function ImageBase() {
+    __extends(ImageBase, _super);function ImageBase() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return ImageBase;
 }(Control));
 var Image1 = /** @class */ (function (_super) {
-    __extends(Image1, _super);
-    function Image1() {
+    __extends(Image1, _super);function Image1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Image1;
 }(Control));
 var Locations = /** @class */ (function () {
     function Locations() {
-    }
-    Locations.prototype.select = function () { };
+    }Locations.prototype.select = function () { };
     return Locations;
 }());
 var Locations1 = /** @class */ (function () {
     function Locations1() {
-    }
-    Locations1.prototype.select = function () { };
+    }Locations1.prototype.select = function () { };
     return Locations1;
 }());
 var sc;
 var c;
+
 var b;
 sc = b;
 c = b;

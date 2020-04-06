@@ -24,8 +24,8 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var console;
+})();var console
+;
 var _super = 10; // No error
 var base = /** @class */ (function () {
     function base() {
@@ -33,11 +33,9 @@ var base = /** @class */ (function () {
     return base;
 }());
 var Foo = /** @class */ (function (_super_1) {
-    __extends(Foo, _super_1);
-    function Foo() {
+    __extends(Foo, _super_1);function Foo() {
         return _super_1 !== null && _super_1.apply(this, arguments) || this;
-    }
-    Foo.prototype.x = function () {
+    }Foo.prototype.x = function () {
         console.log(_super); // Error as this doesnt not resolve to user defined _super
     };
     return Foo;

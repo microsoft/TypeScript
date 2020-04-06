@@ -38,8 +38,7 @@ var E;
 x = E;
 x = E.A;
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var a;
@@ -48,9 +47,7 @@ var b;
 x = b;
 x = { f: function () { } };
 var M;
-(function (M) {
-    M.x = 1;
-})(M || (M = {}));
+(function (M) {M.x = 1;})(M || (M = {}));
 x = M;
 function f(a) {
     x = a;

@@ -120,9 +120,11 @@ var B = /** @class */ (function () {
 function isA(x) {
     return x instanceof A;
 }
+
 function isB(x) {
     return x instanceof B;
 }
+
 function f1(x) {
     while (true) {
         if (x instanceof A) {
@@ -133,6 +135,7 @@ function f1(x) {
         }
     }
 }
+
 function f2(x) {
     while (true) {
         if (isA(x)) {
@@ -143,6 +146,7 @@ function f2(x) {
         }
     }
 }
+
 // Repro from #28100
 var Foo1 = /** @class */ (function () {
     function Foo1() {
@@ -176,20 +180,19 @@ var Base = /** @class */ (function () {
     return Base;
 }());
 var A2 = /** @class */ (function (_super) {
-    __extends(A2, _super);
-    function A2() {
+    __extends(A2, _super);function A2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return A2;
 }(Base));
 var B2 = /** @class */ (function (_super) {
-    __extends(B2, _super);
-    function B2() {
+    __extends(B2, _super);function B2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B2;
 }(Base));
 var target = null;
+
 while (target) {
     if (target instanceof A2) {
         target.info.a_count = 3;

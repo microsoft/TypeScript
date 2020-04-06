@@ -30,8 +30,7 @@ exports.__esModule = true;
 exports.myClassWithError = void 0;
 exports.myClassWithError = /** @class */ (function () {
     function myClassWithError() {
-    }
-    myClassWithError.prototype.tags = function () { };
+    }myClassWithError.prototype.tags = function () { };
     return myClassWithError;
 }());
 
@@ -49,11 +48,9 @@ export declare var myClassWithError: {
 exports.__esModule = true;
 exports.myClass = void 0;
 var myClass = /** @class */ (function () {
-    function myClass() {
-    }
+    function myClass() {}
     return myClass;
-}());
-exports.myClass = myClass;
+}());exports.myClass = myClass;
 
 
 //// [/user/username/projects/solution/app/fileWithoutError.d.ts]

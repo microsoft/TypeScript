@@ -6,9 +6,7 @@ function boo {
 }
 
 //// [overloadingStaticFunctionsInFunctions.js]
-function boo() {
-    test();
+function boo() {test();
     test(name, string);
-    test(name ?  : any);
-    { }
+    test(name ?  : any);{ }
 }

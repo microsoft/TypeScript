@@ -28,21 +28,18 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var bar = /** @class */ (function () {
+})();var bar = /** @class */ (function () {
     function bar() {
         this.baz = new foo();
     }
     return bar;
 }());
 var baz = /** @class */ (function () {
-    function baz() {
-    }
+    function baz() {}
     return baz;
 }());
 var foo = /** @class */ (function (_super) {
-    __extends(foo, _super);
-    function foo() {
+    __extends(foo, _super);function foo() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return foo;

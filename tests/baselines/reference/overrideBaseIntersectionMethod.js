@@ -47,16 +47,19 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var WithLocation = function (Base) { return /** @class */ (function (_super) {
-    __extends(class_1, _super);
-    function class_1() {
+    __extends(class_1, _super);function class_1() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    class_1.prototype.getLocation = function () {
+    }class_1.prototype.getLocation = function () {
         var _a = _super.prototype.getLocation.call(this), x = _a[0], y = _a[1];
         return [this.x | x, this.y | y];
     };
     return class_1;
-}(Base)); };
+}(Base));
+
+}
+
+;
+
 var Point = /** @class */ (function () {
     function Point(x, y) {
         this.x = x;
@@ -68,11 +71,9 @@ var Point = /** @class */ (function () {
     return Point;
 }());
 var Foo = /** @class */ (function (_super) {
-    __extends(Foo, _super);
-    function Foo() {
+    __extends(Foo, _super);function Foo() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Foo.prototype.calculate = function () {
+    }Foo.prototype.calculate = function () {
         return this.x + this.y;
     };
     Foo.prototype.getLocation = function () {

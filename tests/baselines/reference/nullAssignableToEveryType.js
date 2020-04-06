@@ -56,6 +56,7 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 var ae;
+
 var b = null;
 var c = null;
 var d = null;
@@ -75,11 +76,13 @@ var n = null;
 var o = null;
 var p = null;
 var q = null;
+
 function foo(x, y, z) {
     x = null;
     y = null;
     z = null;
 }
+
 //function foo<T, U extends T, V extends Date>(x: T, y: U, z: V) {
 //    x = null;
 //    y = null;

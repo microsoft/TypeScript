@@ -29,7 +29,13 @@ define(["require", "exports", "aliasedModule5", "aliasedModule6", "aliasedModule
     "use strict";
     exports.__esModule = true;
     r1;
+
+
     aliasedModule2_1.p1;
+
+
     aliasedModule3_1["default"];
+
+
     ns;
 });

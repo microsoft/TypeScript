@@ -252,18 +252,16 @@ function f1(x) {
         throw 0;
     }
 }
+
 function f2(x) {
     var z;
     switch (x) {
-        case 1:
-            z = 10;
-            break;
-        case 2:
-            z = 20;
-            break;
+        case 1:z = 10;break;
+        case 2:z = 20;break;
     }
     z; // Definitely assigned
 }
+
 function f3(x) {
     switch (x) {
         case 1: return 10;
@@ -275,8 +273,7 @@ function f3(x) {
 // Repro from #11572
 var E;
 (function (E) {
-    E[E["A"] = 0] = "A";
-    E[E["B"] = 1] = "B";
+    E[E["A"] = 0] = "A";E[E["B"] = 1] = "B";
 })(E || (E = {}));
 function f(e) {
     switch (e) {
@@ -284,6 +281,7 @@ function f(e) {
         case E.B: return 1;
     }
 }
+
 function g(e) {
     if (!true)
         return -1;
@@ -293,24 +291,24 @@ function g(e) {
             case E.B: return 1;
         }
 }
+
+
+
+
+
+
+
 function area(s) {
     var area;
     switch (s.kind) {
-        case "square":
-            area = s.size * s.size;
-            break;
-        case "rectangle":
-            area = s.width * s.height;
-            break;
-        case "circle":
-            area = Math.PI * s.radius * s.radius;
-            break;
-        case "triangle":
-            area = Math.sqrt(3) / 4 * s.side * s.side;
-            break;
+        case "square":area = s.size * s.size;break;
+        case "rectangle":area = s.width * s.height;break;
+        case "circle":area = Math.PI * s.radius * s.radius;break;
+        case "triangle":area = Math.sqrt(3) / 4 * s.side * s.side;break;
     }
     return area;
 }
+
 function areaWrapped(s) {
     var area;
     area = (function () {
@@ -332,30 +330,22 @@ var MyEnum;
 function thisGivesError(e) {
     var s;
     switch (e) {
-        case MyEnum.A:
-            s = "it was A";
-            break;
-        case MyEnum.B:
-            s = "it was B";
-            break;
+        case MyEnum.A:s = "it was A";break;
+        case MyEnum.B:s = "it was B";break;
     }
     return s;
 }
+
 function good1(e) {
     var s;
     switch (e) {
-        case MyEnum.A:
-            s = "it was A";
-            break;
-        case MyEnum.B:
-            s = "it was B";
-            break;
-        default:
-            s = "it was something else";
-            break;
+        case MyEnum.A:s = "it was A";break;
+        case MyEnum.B:s = "it was B";break;
+        default:s = "it was something else";break;
     }
     return s;
 }
+
 function good2(e) {
     switch (e) {
         case MyEnum.A: return "it was A";
@@ -380,6 +370,11 @@ var doSomethingWithLevel = function (level) {
     }
     return next;
 };
+
+
+
+
+
 function withDefault(s1, s2) {
     switch (s1.kind) {
         case "square":
@@ -395,6 +390,7 @@ function withDefault(s1, s2) {
             }
     }
 }
+
 function withoutDefault(s1, s2) {
     switch (s1.kind) {
         case "square":
@@ -408,25 +404,22 @@ function withoutDefault(s1, s2) {
             }
     }
 }
+
 // Repro from #20823
 function test4(value) {
     var x;
     switch (value) {
-        case 1:
-            x = "one";
-            break;
-        case 2:
-            x = "two";
-            break;
+        case 1:x = "one";break;
+        case 2:x = "two";break;
     }
     return x;
 }
 // Repro from #34661
 var Animal;
 (function (Animal) {
-    Animal[Animal["DOG"] = 0] = "DOG";
-    Animal[Animal["CAT"] = 1] = "CAT";
+    Animal[Animal["DOG"] = 0] = "DOG";Animal[Animal["CAT"] = 1] = "CAT";
 })(Animal || (Animal = {}));
+
 function expression() {
     var _a;
     switch ((_a = zoo === null || zoo === void 0 ? void 0 : zoo.animal) !== null && _a !== void 0 ? _a : Animal.DOG) {
@@ -434,6 +427,7 @@ function expression() {
         case Animal.CAT: return Animal.CAT;
     }
 }
+
 // Repro from #34840
 function foo() {
     var foo = 0;
@@ -445,6 +439,14 @@ function foo() {
         }
     }
 }
+
+
+
+
+
+
+
+
 function ff(o, k) {
     switch (k) {
         case 'c':

@@ -16,8 +16,7 @@ module M1.M2 {
 //// [parserSuperExpression1.js]
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.foo = function () {
+    }C.prototype.foo = function () {
         _super.prototype.foo.call(this);
     };
     return C;
@@ -28,8 +27,7 @@ var M1;
     (function (M2) {
         var C = /** @class */ (function () {
             function C() {
-            }
-            C.prototype.foo = function () {
+            }C.prototype.foo = function () {
                 _super.prototype.foo.call(this);
             };
             return C;

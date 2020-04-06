@@ -30,6 +30,7 @@ foo(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
 bar(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
 
 //// [arrayLiteralContextualType.js]
+
 var Giraffe = /** @class */ (function () {
     function Giraffe() {
         this.name = "Giraffe";

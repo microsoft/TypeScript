@@ -14,8 +14,7 @@ var Foo = /** @class */ (function () {
         this.bar = bar;
     }
     return Foo;
-}());
-exports.Foo = Foo;
+}());exports.Foo = Foo;
 
 
 //// [declarationEmitParameterProperty.d.ts]

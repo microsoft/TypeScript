@@ -41,16 +41,22 @@ System.register([], function (exports_1, context_1) {
             exports_1("y", y = 1);
             if (!x) {
             }
+
             if (+x) {
             }
+
             if (-x) {
             }
+
             if (~x) {
             }
+
             if (void x) {
             }
+
             if (typeof x) {
             }
+
             if (exports_1("y", ++y)) {
             }
         }

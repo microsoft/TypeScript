@@ -45,11 +45,14 @@ var r = /\\\\/;
 //typeof numeric literal is Number
 //typeof string literal is String
 //typeof regex literal is Regex
+
 var nu = null / null;
 var u = undefined / undefined;
+
 var b;
 var b = true;
 var b = false;
+
 var n;
 var n = 1;
 var n = 1.0;
@@ -61,6 +64,7 @@ var n = -1.0;
 var n = -1e-4;
 var n = -003; // Error in ES5
 var n = -0x1;
+
 var s;
 var s = '';
 var s = "";
@@ -68,6 +72,7 @@ var s = 'foo\
     bar';
 var s = "foo\
     bar";
+
 var r;
 var r = /what/;
 var r = /\\\\/;

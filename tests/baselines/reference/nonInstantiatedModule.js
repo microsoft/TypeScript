@@ -53,8 +53,10 @@ var M;
 // primary expression
 var m;
 var m = M;
+
 var a1;
 var a1 = M.a;
+
 var a2;
 var a2 = m.a;
 var M2;
@@ -69,10 +71,12 @@ var M2;
 })(M2 || (M2 = {}));
 var p;
 var p;
+
 var p2;
 var p2;
 var M3;
 (function (M3) {
+
     var Utils = /** @class */ (function () {
         function Utils() {
         }

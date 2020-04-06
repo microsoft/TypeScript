@@ -53,8 +53,7 @@ class C5 {
 //// [thisTypeInClasses.js]
 var C1 = /** @class */ (function () {
     function C1() {
-    }
-    C1.prototype.f = function (x) { return undefined; };
+    }C1.prototype.f = function (x) { return undefined; };
     return C1;
 }());
 var C2 = /** @class */ (function () {
@@ -62,15 +61,16 @@ var C2 = /** @class */ (function () {
     }
     return C2;
 }());
+
 var C3 = /** @class */ (function () {
     function C3() {
     }
     return C3;
 }());
+
 var C5 = /** @class */ (function () {
     function C5() {
-    }
-    C5.prototype.foo = function () {
+    }C5.prototype.foo = function () {
         var _this = this;
         var f1 = function (x) { return _this; };
         var f2 = function (x) { return _this; };
@@ -78,9 +78,11 @@ var C5 = /** @class */ (function () {
         var f4 = function (x) {
             var g = function (y) {
                 return function () { return _this; };
-            };
+            }
+            ;
             return g(_this);
-        };
+        }
+        ;
     };
     C5.prototype.bar = function () {
         var x1 = undefined;

@@ -78,10 +78,8 @@ function a0(_a) {
 }
 a0([1, "string", [["world"]]]); // Error
 a0([1, 2, [["world"]], "string"]); // Error
-function b1(z, o) {
-    if (z === void 0) { z = null; }
-    if (o === void 0) { o = { x: 0, y: undefined }; }
-}
+
+function b1(z, o) {if (z === void 0) { z = null; }if (o === void 0) { o = { x: 0, y: undefined }; }}
 function b2(_a) {
     var _b = _a === void 0 ? [undefined, null, undefined] : _a, a = _b[0], z = _b[1], y = _b[2];
 }
@@ -127,10 +125,11 @@ function d1(_a) {
 function d2(_a) {
     var x = _a.x, y = _a.y, z = _a.z;
 } // Error, binding pattern can't be optional in implementation signature
+
+
 var C4 = /** @class */ (function () {
     function C4() {
-    }
-    C4.prototype.d3 = function (_a) {
+    }C4.prototype.d3 = function (_a) {
         var a = _a[0], b = _a[1], c = _a[2];
     }; // Error, binding pattern can't be optional in implementation signature
     C4.prototype.d4 = function (_a) {
@@ -147,3 +146,5 @@ var C4 = /** @class */ (function () {
 function e0(_a) {
     var _b = _a.x, number = _b[0], number = _b[1], number = _b[2];
 } // error, duplicate identifier;
+
+

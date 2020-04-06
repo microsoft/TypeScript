@@ -3,10 +3,8 @@
 
 
 //// [fatarrowfunctionsOptionalArgsErrors3.js]
-(function () {
-    var  = [];
+(function () {var  = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         [_i] = arguments[_i];
     }
-    return 105;
-});
+    return 105;});

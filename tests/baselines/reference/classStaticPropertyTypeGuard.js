@@ -14,6 +14,7 @@ class A {
 
 //// [classStaticPropertyTypeGuard.js]
 // Repro from #8923
+
 var A = /** @class */ (function () {
     function A() {
     }

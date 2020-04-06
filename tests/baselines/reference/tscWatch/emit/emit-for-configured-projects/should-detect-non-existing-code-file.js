@@ -90,8 +90,7 @@ export var x = Foo();export var yy = Foo();
 exports.__esModule = true;
 exports.yy = exports.x = void 0;
 /// <reference path="./moduleFile2.ts" />
-exports.x = Foo();
-exports.yy = Foo();
+exports.x = Foo();exports.yy = Foo();
 
 
 

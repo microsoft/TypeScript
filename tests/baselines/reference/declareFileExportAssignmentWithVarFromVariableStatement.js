@@ -20,7 +20,9 @@ export = m2;
 
 //// [declareFileExportAssignmentWithVarFromVariableStatement.js]
 "use strict";
+
 var x = 10, m2;
+
 module.exports = m2;
 
 

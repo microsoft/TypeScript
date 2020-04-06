@@ -48,6 +48,9 @@ var x2: typeof viInstance.x; // x2: string
 
 
 //// [typeofProperty.js]
+
+
+
 var C1 = /** @class */ (function () {
     function C1() {
     }
@@ -63,6 +66,7 @@ var C3 = /** @class */ (function () {
     }
     return C3;
 }());
+
 var ValidClass = /** @class */ (function () {
     function ValidClass() {
     }
@@ -70,5 +74,8 @@ var ValidClass = /** @class */ (function () {
 }());
 var vcInstance = new ValidClass();
 var viInstance = vcInstance;
+
 var x1; // x1: string
 var x2; // x2: string
+
+

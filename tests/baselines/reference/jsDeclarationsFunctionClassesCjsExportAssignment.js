@@ -119,8 +119,7 @@ Context.prototype = {
      * @param {HookHandler=} handle
      * @returns {State}
      */
-    construct: function (input, handle) {
-        if (handle === void 0) { handle = function () { return void 0; }; }
+    construct: function (input, handle) {if (handle === void 0) { handle = function () { return void 0; }; }
         return input;
     }
 };

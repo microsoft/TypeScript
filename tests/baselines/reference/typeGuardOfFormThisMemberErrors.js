@@ -84,13 +84,13 @@ var Test;
     }(FileSystemObject));
     Test.File = File;
     var Directory = /** @class */ (function (_super) {
-        __extends(Directory, _super);
-        function Directory() {
+        __extends(Directory, _super);function Directory() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Directory;
     }(FileSystemObject));
     Test.Directory = Directory;
+
     var file = new File("foo/bar.txt", "foo");
     file.isNetworked = file.isFile;
     file.isFSO = file.isNetworked;

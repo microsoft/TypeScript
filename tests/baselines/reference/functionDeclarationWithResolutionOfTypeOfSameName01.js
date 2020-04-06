@@ -7,6 +7,7 @@ function f() {
 }
 
 //// [functionDeclarationWithResolutionOfTypeOfSameName01.js]
+
 function f() {
     f;
 }

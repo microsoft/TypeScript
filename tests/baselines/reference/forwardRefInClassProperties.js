@@ -20,8 +20,7 @@ var Test = /** @class */ (function () {
     function Test() {
         this._b = this._a; // undefined, no error/warning
         this._a = 3;
-    }
-    Test.prototype.method = function () {
+    }Test.prototype.method = function () {
         var a = b; // Property 'b' is used before its initialization.
         var b = 3;
     };

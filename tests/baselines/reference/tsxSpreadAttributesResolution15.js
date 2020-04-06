@@ -28,11 +28,18 @@ function AnotherComponent({ property1 }: AnotherComponentProps) {
 "use strict";
 exports.__esModule = true;
 var React = require("react");
+
+
 function Component(props) {
-    return (<AnotherComponent {...props} property2 AnotherProperty1="hi"/>);
-}
-exports["default"] = Component;
+    return (
+        <AnotherComponent {...props} property2 AnotherProperty1="hi"/>
+    );
+}exports["default"] = Component;
+
+
 function AnotherComponent(_a) {
     var property1 = _a.property1;
-    return (<span>{property1}</span>);
+    return (
+        <span>{property1}</span>
+    );
 }

@@ -22,8 +22,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 function dec(c) { }
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.m = function () { };
+    }C.m = function () { };
     C = __decorate([
         dec
     ], C);

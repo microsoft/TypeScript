@@ -21,6 +21,7 @@ var C1T5 = /** @class */ (function () {
     }
     return C1T5;
 }());
+
 var bigClass = /** @class */ (function () {
     function bigClass() {
         this["break"] = 1;

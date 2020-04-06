@@ -22,10 +22,10 @@ c.x1(1, (x) => { return 1; } );
 c.x1(1, (x: number) => { return 1; } );
 
 //// [overloadOnConstNoAnyImplementation2.js]
+
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.x1 = function (a, callback) {
+    }C.prototype.x1 = function (a, callback) {
         callback('hi');
         callback('bye');
         var hm = "hm";
@@ -38,4 +38,5 @@ var c;
 c.x1(1, function (x) { return 1; });
 c.x1(1, function (x) { return 1; });
 c.x1(1, function (x) { return 1; });
+
 c.x1(1, function (x) { return 1; });

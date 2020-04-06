@@ -10,6 +10,7 @@ define(["require", "exports", "m4"], function (require, exports, m4) {
         m1.x2 = m4.x;
         m1.d2 = m4.d;
         m1.f2 = m4.foo();
+
         var x3 = m4.x;
         var d3 = m4.d;
         var f3 = m4.foo();

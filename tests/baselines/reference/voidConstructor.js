@@ -3,4 +3,5 @@ var foo:{ new ( ): void; }
 
 
 //// [voidConstructor.js]
-var foo;
+var foo
+;

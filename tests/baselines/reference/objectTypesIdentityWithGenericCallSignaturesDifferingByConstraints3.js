@@ -127,60 +127,80 @@ function foo15(x: any) { }
 // Two call or construct signatures are considered identical when they have the same number of type parameters and, considering those 
 // parameters pairwise identical, have identical type parameter constraints, identical number of parameters with identical kind(required, 
 // optional or rest) and types, and identical return types.
+
 var One = /** @class */ (function () {
-    function One() {
-    }
+    function One() {}
     return One;
 }());
 var Two = /** @class */ (function () {
-    function Two() {
-    }
+    function Two() {}
     return Two;
 }());
+
 var A = /** @class */ (function () {
     function A() {
-    }
-    A.prototype.foo = function (x, y) { return null; };
+    }A.prototype.foo = function (x, y) { return null; };
     return A;
 }());
 var B = /** @class */ (function () {
     function B() {
-    }
-    B.prototype.foo = function (x, y) { return null; };
+    }B.prototype.foo = function (x, y) { return null; };
     return B;
 }());
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.foo = function (x, y) { return null; };
+    }C.prototype.foo = function (x, y) { return null; };
     return C;
 }());
 var D = /** @class */ (function () {
     function D() {
-    }
-    D.prototype.foo = function (x, y) { return null; };
+    }D.prototype.foo = function (x, y) { return null; };
     return D;
 }());
-var a;
+
+
+var a
+;
 var b = { foo: function (x, y) { return ''; } };
+
 function foo1(x) { }
+
 function foo1b(x) { }
+
 function foo1c(x) { }
+
 function foo2(x) { }
+
 function foo3(x) { }
+
 function foo4(x) { }
+
 function foo5(x) { }
+
 function foo5b(x) { }
+
 function foo5c(x) { }
+
 function foo6c(x) { }
+
 function foo6(x) { }
+
 function foo7(x) { }
+
 function foo8(x) { }
+
 function foo9(x) { }
+
 function foo10(x) { }
+
 function foo11(x) { }
+
 function foo12(x) { }
+
 function foo12b(x) { }
+
 function foo13(x) { }
+
 function foo14(x) { }
+
 function foo15(x) { }

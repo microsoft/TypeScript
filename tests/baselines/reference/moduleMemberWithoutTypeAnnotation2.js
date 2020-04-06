@@ -22,7 +22,10 @@ var TypeScript;
 (function (TypeScript) {
     var CompilerDiagnostics;
     (function (CompilerDiagnostics) {
+
+
         CompilerDiagnostics.diagnosticWriter = null;
+
         function Alert(output) {
             if (CompilerDiagnostics.diagnosticWriter) {
                 CompilerDiagnostics.diagnosticWriter.Alert(output);

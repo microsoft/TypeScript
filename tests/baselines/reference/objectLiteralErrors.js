@@ -65,6 +65,7 @@ var e14 = { 0: 0, 000: 0 };
 var e15 = { "100": 0, 1e2: 0 };
 var e16 = { 0x20: 0, 3.2e1: 0 };
 var e17 = { a: 0, b: 1, a: 0 };
+
 // Accessor and property with the same name
 var f1 = { a: 0, get a() { return 0; } };
 var f2 = { a: '', get a() { return ''; } };
@@ -84,6 +85,7 @@ var f14 = { 0: 0, get 000() { return 0; } };
 var f15 = { "100": 0, get 1e2() { return 0; } };
 var f16 = { 0x20: 0, get 3.2e1() { return 0; } };
 var f17 = { a: 0, get b() { return 1; }, get a() { return 0; } };
+
 // Get and set accessor with mismatched type annotations
 var g1 = { get a() { return 4; }, set a(n) { } };
 var g2 = { get a() { return 4; }, set a(n) { } };

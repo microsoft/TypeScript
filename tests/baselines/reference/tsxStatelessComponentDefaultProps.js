@@ -23,10 +23,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 var react_1 = __importDefault(require("react"));
+
 function BackButton(_props) {
     return react_1["default"].createElement("div", null);
 }
 BackButton.defaultProps = {
     text: 'Go Back'
 };
-var a = react_1["default"].createElement(BackButton, null);
+var a = react_1["default"].createElement(BackButton, null)
+;

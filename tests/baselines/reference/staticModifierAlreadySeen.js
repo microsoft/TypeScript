@@ -7,8 +7,7 @@ class C {
 //// [staticModifierAlreadySeen.js]
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.bar = function () { };
+    }C.bar = function () { };
     C.foo = 1;
     return C;
 }());

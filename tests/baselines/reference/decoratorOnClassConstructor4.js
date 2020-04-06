@@ -46,8 +46,7 @@ var A = /** @class */ (function () {
     return A;
 }());
 var B = /** @class */ (function () {
-    function B(x) {
-    }
+    function B(x) {}
     B = __decorate([
         dec,
         __metadata("design:paramtypes", [Number])
@@ -55,8 +54,7 @@ var B = /** @class */ (function () {
     return B;
 }());
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);
-    function C() {
+    __extends(C, _super);function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     C = __decorate([

@@ -20,6 +20,7 @@ var Foo = /** @class */ (function () {
     return Foo;
 }());
 (function (Foo) {
+
     var Baz = /** @class */ (function () {
         function Baz() {
         }

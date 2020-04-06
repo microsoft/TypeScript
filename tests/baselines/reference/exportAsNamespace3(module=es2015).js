@@ -31,6 +31,7 @@ ns.a;
 ns.b;
 //// [2.js]
 import * as foo from './1';
+
 foo.ns.a;
 foo.ns.b;
 

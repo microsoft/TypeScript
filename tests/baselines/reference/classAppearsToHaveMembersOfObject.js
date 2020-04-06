@@ -10,8 +10,7 @@ var o2: {} = c;
 
 //// [classAppearsToHaveMembersOfObject.js]
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var c;

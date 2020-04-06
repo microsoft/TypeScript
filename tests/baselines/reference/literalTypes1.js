@@ -93,6 +93,7 @@ var zero = 0;
 var one = 1;
 var two = 2;
 var oneOrTwo = 1;
+
 function f1(x) {
     switch (x) {
         case zero:
@@ -108,6 +109,7 @@ function f1(x) {
             x;
     }
 }
+
 function f2(x) {
     switch (x) {
         case zero:
@@ -120,6 +122,9 @@ function f2(x) {
             x;
     }
 }
+
+
+
 function f3(x) {
     if (x) {
         x;
@@ -128,6 +133,7 @@ function f3(x) {
         x;
     }
 }
+
 function f4(x) {
     switch (x) {
         case 0:
@@ -150,6 +156,7 @@ function f4(x) {
             x;
     }
 }
+
 function f5(x) {
     switch (x) {
         case "abc":

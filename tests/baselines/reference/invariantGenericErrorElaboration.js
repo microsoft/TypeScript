@@ -28,3 +28,7 @@ interface Constraint<A extends Runtype<any>> extends Runtype<A['witness']> {
 // Repro from #19746
 var wat = Num;
 var Foo = Obj({ foo: Num });
+
+
+
+

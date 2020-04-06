@@ -32,6 +32,7 @@ async function withStatement3() {
 }
 
 //// [es5-asyncFunctionWithStatements.js]
+
 function withStatement0() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -42,6 +43,7 @@ function withStatement0() {
         });
     });
 }
+
 function withStatement1() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -61,6 +63,7 @@ function withStatement1() {
         });
     });
 }
+
 function withStatement2() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -84,6 +87,7 @@ function withStatement2() {
         });
     });
 }
+
 function withStatement3() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b;

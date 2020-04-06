@@ -92,6 +92,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
                 image = new Image();
                 image.src = URL.createObjectURL(blob);
                 image.width = image.height = size;
+
                 document.body.appendChild(image);
                 return [2 /*return*/];
         }
@@ -116,4 +117,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = void 0;
 exports.foo = import.meta.blah = import.meta.blue = import.meta;
 import.meta = exports.foo;
+
 var _a = import.meta.wellKnownProperty, a = _a.a, b = _a.b, c = _a.c;

@@ -207,7 +207,12 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var assert = function (value) { };
+
+var assert = function (value) { }
+
+;
+
+
 function f01(x) {
     if (!!true) {
         assert(typeof x === "string");
@@ -244,6 +249,7 @@ function f01(x) {
         x; // Unreachable
     }
 }
+
 function f02(x) {
     if (!!true) {
         assert(x);
@@ -258,6 +264,7 @@ function f02(x) {
         x.length;
     }
 }
+
 function f03(x, assert) {
     assert(x);
     x.length;
@@ -283,10 +290,10 @@ function f10(x) {
         x; // Unreachable
     }
 }
+
 var Test = /** @class */ (function () {
     function Test() {
-    }
-    Test.prototype.assert = function (value) {
+    }Test.prototype.assert = function (value) {
         if (value)
             return;
         throw new Error();
@@ -324,8 +331,7 @@ var Test = /** @class */ (function () {
     return Test;
 }());
 var Test2 = /** @class */ (function (_super) {
-    __extends(Test2, _super);
-    function Test2() {
+    __extends(Test2, _super);function Test2() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.z = 0;
         return _this;
@@ -333,11 +339,9 @@ var Test2 = /** @class */ (function (_super) {
     return Test2;
 }(Test));
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);
-    function Derived() {
+    __extends(Derived, _super);function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Derived.prototype.foo = function (x) {
+    }Derived.prototype.foo = function (x) {
         _super.prototype.assert.call(this, typeof x === "string");
         x.length;
     };
@@ -357,8 +361,12 @@ function f11(items) {
         item.z;
     }
 }
+
+
+
 function f20(x) {
-    var assert = function (value) { };
+    var assert = function (value) { }
+    ;
     assert(typeof x === "string"); // Error
     var a = [assert];
     a[0](typeof x === "string"); // Error
@@ -367,6 +375,9 @@ function f20(x) {
     var t2 = new Test();
     t2.assert(typeof x === "string");
 }
+
+
+
 function example1(things) {
     for (var _i = 0, things_1 = things; _i < things_1.length; _i++) {
         var thing = things_1[_i];

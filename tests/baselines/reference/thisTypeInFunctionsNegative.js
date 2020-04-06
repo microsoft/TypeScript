@@ -188,8 +188,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-};
-class C {
+};class C {
     explicitThis(m) {
         return this.n + m;
     }
@@ -225,7 +224,8 @@ let impl = {
     explicitThis() {
         return this.a;
     },
-};
+}
+;
 let implExplicitStructural = impl.explicitStructural;
 implExplicitStructural(); // error, no 'a' in 'void'
 let implExplicitInterface = impl.explicitInterface;
@@ -247,6 +247,7 @@ ok.f('wrong type');
 ok.f(13, 'too many arguments');
 wrongPropertyType.f(13);
 wrongPropertyName.f(13);
+
 let c = new C();
 c.explicitC(); // not enough arguments
 c.explicitC('wrong type');
@@ -262,6 +263,7 @@ c.explicitProperty('wrong type 3');
 c.explicitProperty(15, 'too many arguments 3');
 // oops, this triggers contextual typing, which needs to be updated to understand that =>'s `this` is void.
 let specifiedToVoid = explicitStructural;
+
 let reconstructed = {
     n: 12,
     explicitThis: c.explicitThis,
@@ -270,12 +272,15 @@ let reconstructed = {
     explicitVoid: c.explicitVoid
 };
 ;
+
 // lambdas have this: void for assignability purposes (and this unbound (free) for body checking)
 let d = new D();
 let explicitXProperty;
+
 // from differing object types
 c.explicitC = function (m) { return this.x + m; };
 c.explicitProperty = explicitXProperty;
+
 c.explicitC = d.explicitD;
 c.explicitC = d.explicitThis;
 c.explicitThis = d.explicitD;
@@ -302,8 +307,10 @@ let b1 = new Base1();
 let d1 = new Derived1();
 let b2 = new Base2();
 let d2 = new Derived2();
+
 b1.polymorphic = b2.polymorphic; // error, 'this.y' not in Base1: { x }
 b1.explicit = b2.polymorphic; // error, 'y' not in Base1: { x }
+
 d1.explicit = b2.polymorphic; // error, 'y' not in Base1: { x }
 ////// use this-type for construction with new ////
 function VoidThis() {
@@ -317,16 +324,13 @@ class ThisConstructor {
 }
 var thisConstructorType;
 function notFirst(a) { return this.n; }
+
 ///// parse errors /////
 function modifiers() { return this.n; }
 function restParam(...) { return this.n; }
 function optional() { return this.n; }
 function decorated() { return this.n; }
-();
-number;
-{
-    return this.n;
-}
+();number;{return this.n;}
 // can't name parameters 'this' in a lambda.
 c.explicitProperty = (m) => m + this.n;
 const f2 = (m) => m + this.n;

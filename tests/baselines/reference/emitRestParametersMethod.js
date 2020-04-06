@@ -15,20 +15,18 @@ class D {
 
 //// [emitRestParametersMethod.js]
 var C = /** @class */ (function () {
-    function C(name) {
-        var rest = [];
+    function C(name) {var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rest[_i - 1] = arguments[_i];
         }
     }
-    C.prototype.bar = function () {
-        var rest = [];
+
+    C.prototype.bar = function () {var rest = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             rest[_i] = arguments[_i];
         }
     };
-    C.prototype.foo = function (x) {
-        var rest = [];
+    C.prototype.foo = function (x) {var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rest[_i - 1] = arguments[_i];
         }
@@ -36,20 +34,18 @@ var C = /** @class */ (function () {
     return C;
 }());
 var D = /** @class */ (function () {
-    function D() {
-        var rest = [];
+    function D() {var rest = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             rest[_i] = arguments[_i];
         }
     }
-    D.prototype.bar = function () {
-        var rest = [];
+
+    D.prototype.bar = function () {var rest = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             rest[_i] = arguments[_i];
         }
     };
-    D.prototype.foo = function (x) {
-        var rest = [];
+    D.prototype.foo = function (x) {var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rest[_i - 1] = arguments[_i];
         }

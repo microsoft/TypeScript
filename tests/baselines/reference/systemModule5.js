@@ -10,7 +10,6 @@ System.register([], function (exports_1, context_1) {
     exports_1("foo", foo);
     return {
         setters: [],
-        execute: function () {
-        }
+        execute: function () {}
     };
 });

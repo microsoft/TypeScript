@@ -12,8 +12,7 @@ x.bar2<string>(2, ""); // should error
 //// [primitiveConstraints2.js]
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.bar2 = function (x, y) {
+    }C.prototype.bar2 = function (x, y) {
         return null;
     };
     return C;

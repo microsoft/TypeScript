@@ -53,6 +53,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 exports.Bar = exports.Foo = void 0;
+
+
+
+
+
 var Parent = /** @class */ (function () {
     function Parent(data) {
         this.data = data;
@@ -63,27 +68,21 @@ var Parent = /** @class */ (function () {
     return Parent;
 }());
 var Foo = /** @class */ (function (_super) {
-    __extends(Foo, _super);
-    function Foo() {
+    __extends(Foo, _super);function Foo() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Foo.prototype.getContent = function () {
+    }Foo.prototype.getContent = function () {
         return this.getData().get('content');
     };
     return Foo;
-}(Parent));
-exports.Foo = Foo;
+}(Parent));exports.Foo = Foo;
 var Bar = /** @class */ (function (_super) {
-    __extends(Bar, _super);
-    function Bar() {
+    __extends(Bar, _super);function Bar() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Bar.prototype.getContent = function () {
+    }Bar.prototype.getContent = function () {
         return this.getData().get('content');
     };
     return Bar;
-}(Parent));
-exports.Bar = Bar;
+}(Parent));exports.Bar = Bar;
 // Repro from #14557
 function foo(x, y) {
     x = y;

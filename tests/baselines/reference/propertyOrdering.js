@@ -37,9 +37,10 @@ var Foo = /** @class */ (function () {
 var Bar = /** @class */ (function () {
     function Bar(store) {
         this._store = store;
-    }
-    Bar.prototype.foo = function () {
+    }Bar.prototype.foo = function () {
+
         return this._store.length; // shouldn't be an error
+
     };
     return Bar;
 }());

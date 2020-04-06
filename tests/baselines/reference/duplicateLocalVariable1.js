@@ -348,9 +348,10 @@ export var tests: TestRunner = (function () {
 "use strict";
 exports.__esModule = true;
 exports.tests = exports.TestRunner = exports.TestCase = void 0;
-/ /;
-commonjs;
+/ /;commonjs;
+
 var TestFileDir = ".\\TempTestFiles";
+
 var TestCase = /** @class */ (function () {
     function TestCase(name, test, errorMessageRegEx) {
         this.name = name;
@@ -358,15 +359,14 @@ var TestCase = /** @class */ (function () {
         this.errorMessageRegEx = errorMessageRegEx;
     }
     return TestCase;
-}());
-exports.TestCase = TestCase;
+}());exports.TestCase = TestCase;
 var TestRunner = /** @class */ (function () {
     function TestRunner() {
         this.tests = [];
-    }
-    TestRunner.arrayCompare = function (arg1, arg2) {
+    }TestRunner.arrayCompare = function (arg1, arg2) {
         return (arg1.every(function (val, index) { return val === arg2[index]; }));
     };
+
     TestRunner.prototype.addTest = function (test) {
         this.tests.push(test);
     };
@@ -374,7 +374,8 @@ var TestRunner = /** @class */ (function () {
         var success = true;
         for (var test in this.tests) {
             var exception = false;
-            var testcase = this.tests[test];
+            var testcase = this.tests[test]
+            ;
             var testResult = false;
             try {
                 testResult = testcase.test();
@@ -408,8 +409,7 @@ var TestRunner = /** @class */ (function () {
         }
     };
     return TestRunner;
-}());
-exports.TestRunner = TestRunner;
+}());exports.TestRunner = TestRunner;
 exports.tests = (function () {
     var testRunner = new TestRunner();
     // First 3 are for simple harness validation
@@ -418,26 +418,33 @@ exports.tests = (function () {
     testRunner.addTest(new TestCase("Test RegEx error message match", function () { throw new Error("Should also pass"); return false; }, "Should [also]+ pass"));
     testRunner.addTest(new TestCase("Test array compare true", function () { return TestRunner.arrayCompare([1, 2, 3], [1, 2, 3]); }));
     testRunner.addTest(new TestCase("Test array compare false", function () { return !TestRunner.arrayCompare([3, 2, 3], [1, 2, 3]); }));
+
     // File detection tests
-    testRunner.addTest(new TestCase("Check file exists", function () {
-        return FileManager.DirectoryManager.fileExists(TestFileDir + "\\Test.txt");
-    }));
-    testRunner.addTest(new TestCase("Check file doesn't exist", function () {
-        return !FileManager.DirectoryManager.fileExists(TestFileDir + "\\Test2.txt");
-    }));
+    testRunner.addTest(new TestCase("Check file exists",
+        function () {
+            return FileManager.DirectoryManager.fileExists(TestFileDir + "\\Test.txt");
+        }));
+    testRunner.addTest(new TestCase("Check file doesn't exist",
+        function () {
+            return !FileManager.DirectoryManager.fileExists(TestFileDir + "\\Test2.txt");
+        }));
+
     // File pattern matching tests
-    testRunner.addTest(new TestCase("Check text file match", function () {
-        return (FileManager.FileBuffer.isTextFile("C:\\somedir\\readme.txt") &&
-            FileManager.FileBuffer.isTextFile("C:\\spaces path\\myapp.str") &&
-            FileManager.FileBuffer.isTextFile("C:\\somedir\\code.js"));
-    }));
-    testRunner.addTest(new TestCase("Check makefile match", function () {
-        return FileManager.FileBuffer.isTextFile("C:\\some dir\\makefile");
-    }));
-    testRunner.addTest(new TestCase("Check binary file doesn't match", function () {
-        return (!FileManager.FileBuffer.isTextFile("C:\\somedir\\app.exe") &&
-            !FileManager.FileBuffer.isTextFile("C:\\somedir\\my lib.dll"));
-    }));
+    testRunner.addTest(new TestCase("Check text file match",
+        function () {
+            return (FileManager.FileBuffer.isTextFile("C:\\somedir\\readme.txt") &&
+                FileManager.FileBuffer.isTextFile("C:\\spaces path\\myapp.str") &&
+                FileManager.FileBuffer.isTextFile("C:\\somedir\\code.js"));
+        }));
+    testRunner.addTest(new TestCase("Check makefile match",
+        function () {
+            return FileManager.FileBuffer.isTextFile("C:\\some dir\\makefile");
+        }));
+    testRunner.addTest(new TestCase("Check binary file doesn't match",
+        function () {
+            return (!FileManager.FileBuffer.isTextFile("C:\\somedir\\app.exe") &&
+                !FileManager.FileBuffer.isTextFile("C:\\somedir\\my lib.dll"));
+        }));
     // Command-line parameter tests
     testRunner.addTest(new TestCase("Check App defaults", function () {
         var app = new App.App([]);
@@ -460,6 +467,7 @@ exports.tests = (function () {
             app.encodings[1] === "ascii" &&
             app.encodings.length === 2);
     }));
+
     // File BOM detection tests
     testRunner.addTest(new TestCase("Check encoding detection no BOM", function () {
         var fb = new FileManager.FileBuffer(TestFileDir + "\\noBOM.txt");
@@ -485,6 +493,7 @@ exports.tests = (function () {
         var fb = new FileManager.FileBuffer(TestFileDir + "\\0bytefile.txt");
         return fb.bom === 'none' && fb.encoding === 'utf8';
     }));
+
     // UTF8 encoding tests
     testRunner.addTest(new TestCase("Check byte reader", function () {
         var fb = new FileManager.FileBuffer(TestFileDir + "\\UTF8BOM.txt");
@@ -494,6 +503,8 @@ exports.tests = (function () {
         }
         return TestRunner.arrayCompare(chars, [0x54, 0xC3, 0xA8, 0xE1, 0xB4, 0xA3, 0xE2, 0x80, 0xA0, 0x0D, 0x0A]);
     }));
+
+
     testRunner.addTest(new TestCase("Check UTF8 decoding", function () {
         var fb = new FileManager.FileBuffer(TestFileDir + "\\UTF8BOM.txt");
         var chars = [];
@@ -502,6 +513,7 @@ exports.tests = (function () {
         }
         return TestRunner.arrayCompare(chars, [0x0054, 0x00E8, 0x1D23, 0x2020, 0x000D, 0x000A]);
     }));
+
     testRunner.addTest(new TestCase("Check UTF8 encoding", function () {
         var fb = new FileManager.FileBuffer(20);
         fb.writeUtf8Bom();
@@ -517,6 +529,7 @@ exports.tests = (function () {
         var expected = [0xEF, 0xBB, 0xBF, 0x54, 0xC3, 0xA8, 0xE1, 0xB4, 0xA3, 0xE2, 0x80, 0xA0, 0x0D, 0x0A];
         return TestRunner.arrayCompare(bytes, expected);
     }));
+
     // Test reading and writing files
     testRunner.addTest(new TestCase("Check saving a file", function () {
         var filename = TestFileDir + "\\tmpUTF16LE.txt";
@@ -539,6 +552,7 @@ exports.tests = (function () {
         });
         return true;
     }));
+
     testRunner.addTest(new TestCase("Check reading past buffer asserts", function () {
         var fb = new FileManager.FileBuffer(TestFileDir + "\\UTF8BOM.txt");
         var result = fb.readByte(200);
@@ -549,6 +563,7 @@ exports.tests = (function () {
         fb.writeByte(5, 200);
         return true;
     }, "write beyond buffer length"));
+
     // Non-BMP unicode char tests
     testRunner.addTest(new TestCase("Read non-BMP utf16 chars", function () {
         var savedFile = new FileManager.FileBuffer(TestFileDir + "\\utf16leNonBmp.txt");
@@ -562,6 +577,7 @@ exports.tests = (function () {
         var expectedCodePoints = [0x10480, 0x10481, 0x10482, 0x54, 0x68, 0x69];
         return TestRunner.arrayCompare(codePoints, expectedCodePoints);
     }));
+
     testRunner.addTest(new TestCase("Read non-BMP utf8 chars", function () {
         var savedFile = new FileManager.FileBuffer(TestFileDir + "\\utf8NonBmp.txt");
         if (savedFile.encoding !== 'utf8') {
@@ -574,6 +590,7 @@ exports.tests = (function () {
         var expectedCodePoints = [0x10480, 0x10481, 0x10482, 0x54, 0x68, 0x69];
         return TestRunner.arrayCompare(codePoints, expectedCodePoints);
     }));
+
     testRunner.addTest(new TestCase("Write non-BMP utf8 chars", function () {
         var filename = TestFileDir + "\\tmpUTF8nonBmp.txt";
         var fb = new FileManager.FileBuffer(15);
@@ -593,36 +610,43 @@ exports.tests = (function () {
         });
         return true;
     }));
+
     testRunner.addTest(new TestCase("Test invalid lead UTF8 byte", function () {
         var filename = TestFileDir + "\\utf8BadLeadByte.txt";
         var fb = new FileManager.FileBuffer(filename);
         return true;
     }, "Invalid UTF8 byte sequence at index: 4"));
+
     testRunner.addTest(new TestCase("Test invalid tail UTF8 byte", function () {
         var filename = TestFileDir + "\\utf8InvalidTail.txt";
         var fb = new FileManager.FileBuffer(filename);
         return true;
     }, "Trailing byte invalid at index: 8"));
+
     testRunner.addTest(new TestCase("Test ANSI fails validation", function () {
         var filename = TestFileDir + "\\ansi.txt";
         var fb = new FileManager.FileBuffer(filename);
         return true;
     }, "Trailing byte invalid at index: 6"));
+
     testRunner.addTest(new TestCase("Test UTF-16LE with invalid surrogate trail fails", function () {
         var filename = TestFileDir + "\\utf16leInvalidSurrogate.txt";
         var fb = new FileManager.FileBuffer(filename);
         return true;
     }, "Trail surrogate has an invalid value"));
+
     testRunner.addTest(new TestCase("Test UTF-16BE with invalid surrogate head fails", function () {
         var filename = TestFileDir + "\\UTF16BEInvalidSurrogate.txt";
         var fb = new FileManager.FileBuffer(filename);
         return true;
     }, "Byte sequence starts with a trail surrogate"));
+
     testRunner.addTest(new TestCase("Test UTF-16LE with missing trail surrogate fails", function () {
         var filename = TestFileDir + "\\utf16leMissingTrailSurrogate.txt";
         var fb = new FileManager.FileBuffer(filename);
         return true;
     }, "Trail surrogate has an invalid value"));
+
     // Count of CRs & LFs
     testRunner.addTest(new TestCase("Count character occurrences", function () {
         var filename = TestFileDir + "\\charCountASCII.txt";
@@ -630,6 +654,7 @@ exports.tests = (function () {
         var result = (fb.countCR === 5 && fb.countLF === 4 && fb.countCRLF === 5 && fb.countHT === 3);
         return result;
     }));
+
     // Control characters in text
     testRunner.addTest(new TestCase("Test file with control character", function () {
         var filename = TestFileDir + "\\controlChar.txt";

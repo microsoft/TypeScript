@@ -29,10 +29,21 @@ function f(): R2 { return 0; }
 
 //// [circularTypeofWithVarOrFunc.js]
 var varOfAliasedType1;
+
 var varOfAliasedType2;
+
+
 function func() { return null; }
 var varOfAliasedType3 = func();
+
+
+
+
 function mul(input) {
     return input.a * input.b;
 }
+
+
+
+
 function f() { return 0; }

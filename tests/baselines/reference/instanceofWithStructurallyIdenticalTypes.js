@@ -85,19 +85,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var C1 = /** @class */ (function () {
-    function C1() {
-    }
+    function C1() {}
     return C1;
 }());
 var C2 = /** @class */ (function () {
-    function C2() {
-    }
+    function C2() {}
     return C2;
 }());
 var C3 = /** @class */ (function () {
-    function C3() {
-    }
+    function C3() {}
     return C3;
 }());
 function foo1(x) {
@@ -112,9 +110,11 @@ function foo1(x) {
     }
     return "error";
 }
+
 function isC1(c) { return c instanceof C1; }
 function isC2(c) { return c instanceof C2; }
 function isC3(c) { return c instanceof C3; }
+
 function foo2(x) {
     if (isC1(x)) {
         return x.item;
@@ -127,27 +127,24 @@ function foo2(x) {
     }
     return "error";
 }
+
 // More tests
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 var A1 = /** @class */ (function (_super) {
-    __extends(A1, _super);
-    function A1() {
+    __extends(A1, _super);function A1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return A1;
 }(A));
 var A2 = /** @class */ (function () {
-    function A2() {
-    }
+    function A2() {}
     return A2;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
+    __extends(B, _super);function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;

@@ -11,6 +11,7 @@ var c: string = x['doStuff']();
 var d: string = x['doOtherStuff']('hm');
 
 //// [extendStringInterface.js]
+
 var x = '';
 var a = x.doStuff();
 var b = x.doOtherStuff('hm');

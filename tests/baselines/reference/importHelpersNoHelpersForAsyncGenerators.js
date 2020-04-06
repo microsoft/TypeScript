@@ -35,5 +35,4 @@ function f() {
             }
         });
     });
-}
-exports.f = f;
+}exports.f = f;

@@ -68,12 +68,15 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of
 }
 
 //// [sourceMapValidationDestructuringForOfObjectBindingPattern.js]
+
+
 var robots = [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }];
 var multiRobots = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
     { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }];
 function getRobots() {
     return robots;
 }
+
 function getMultiRobots() {
     return multiRobots;
 }
@@ -102,6 +105,7 @@ for (var _k = 0, _l = [{ name: "mower", skills: { primary: "mowing", secondary: 
     var _m = _l[_k].skills, primaryA = _m.primary, secondaryA = _m.secondary;
     console.log(primaryA);
 }
+
 for (var _o = 0, robots_2 = robots; _o < robots_2.length; _o++) {
     var _p = robots_2[_o], nameA = _p.name, skillA = _p.skill;
     console.log(nameA);

@@ -38,15 +38,13 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var List = /** @class */ (function () {
+})();var List = /** @class */ (function () {
     function List() {
     }
     return List;
 }());
 var DerivedList = /** @class */ (function (_super) {
-    __extends(DerivedList, _super);
-    function DerivedList() {
+    __extends(DerivedList, _super);function DerivedList() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return DerivedList;
@@ -59,8 +57,10 @@ var MyList = /** @class */ (function () {
 var list;
 var list2;
 var myList;
+
 var xs = [list, myList]; // {}[]
 var ys = [list, list2]; // {}[]
 var zs = [list, null]; // List<number>[]
+
 var myDerivedList;
 var as = [list, myDerivedList]; // List<number>[]

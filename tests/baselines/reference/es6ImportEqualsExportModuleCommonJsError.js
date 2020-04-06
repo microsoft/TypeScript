@@ -14,8 +14,7 @@ a;
 //// [a.js]
 "use strict";
 var a = /** @class */ (function () {
-    function a() {
-    }
+    function a() {}
     return a;
 }());
 module.exports = a;

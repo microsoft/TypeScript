@@ -23,6 +23,7 @@ class SymbolIterator {
             done: false
         };
     }
+
     [Symbol.iterator]() {
         return this;
     }

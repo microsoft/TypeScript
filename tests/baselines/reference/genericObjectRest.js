@@ -55,9 +55,13 @@ const sb = Symbol();
 function f2(obj) {
     let _a = obj, _b = sa, a1 = _a[_b], _c = sb, b1 = _a[_c], r1 = __rest(_a, [typeof _b === "symbol" ? _b : _b + "", typeof _c === "symbol" ? _c : _c + ""]);
 }
+
 function f3(obj, k1, k2) {
     let _a = obj, _b = k1, a1 = _a[_b], _c = k2, a2 = _a[_c], r1 = __rest(_a, [typeof _b === "symbol" ? _b : _b + "", typeof _c === "symbol" ? _c : _c + ""]);
 }
+
+
+
 function f4(obj, k1, k2) {
     let _a = obj, _b = k1, a1 = _a[_b], _c = k2, a2 = _a[_c], r1 = __rest(_a, [typeof _b === "symbol" ? _b : _b + "", typeof _c === "symbol" ? _c : _c + ""]);
 }

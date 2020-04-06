@@ -123,6 +123,7 @@ async function tryCatchFinally3() {
 }
 
 //// [es5-asyncFunctionTryStatements.js]
+
 function tryCatch0() {
     return __awaiter(this, void 0, void 0, function () {
         var x, y;
@@ -137,6 +138,7 @@ function tryCatch0() {
         });
     });
 }
+
 function tryCatch1() {
     return __awaiter(this, void 0, void 0, function () {
         var x, y, e_1;
@@ -157,6 +159,7 @@ function tryCatch1() {
         });
     });
 }
+
 function tryCatch2() {
     return __awaiter(this, void 0, void 0, function () {
         var x, y, e_2;
@@ -177,6 +180,7 @@ function tryCatch2() {
         });
     });
 }
+
 function tryCatch3() {
     return __awaiter(this, void 0, void 0, function () {
         var x, y, e_3;
@@ -210,6 +214,7 @@ function tryFinally0() {
         });
     });
 }
+
 function tryFinally1() {
     return __awaiter(this, void 0, void 0, function () {
         var x, y;
@@ -229,6 +234,7 @@ function tryFinally1() {
         });
     });
 }
+
 function tryFinally2() {
     return __awaiter(this, void 0, void 0, function () {
         var x, y;
@@ -247,6 +253,7 @@ function tryFinally2() {
         });
     });
 }
+
 function tryCatchFinally0() {
     return __awaiter(this, void 0, void 0, function () {
         var x, y, z;
@@ -264,6 +271,7 @@ function tryCatchFinally0() {
         });
     });
 }
+
 function tryCatchFinally1() {
     return __awaiter(this, void 0, void 0, function () {
         var x, y, z, e_4;
@@ -287,6 +295,7 @@ function tryCatchFinally1() {
         });
     });
 }
+
 function tryCatchFinally2() {
     return __awaiter(this, void 0, void 0, function () {
         var x, y, z, e_5;
@@ -310,6 +319,7 @@ function tryCatchFinally2() {
         });
     });
 }
+
 function tryCatchFinally3() {
     return __awaiter(this, void 0, void 0, function () {
         var x, y, z, e_6;

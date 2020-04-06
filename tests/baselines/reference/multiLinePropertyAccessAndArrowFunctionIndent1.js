@@ -10,5 +10,4 @@ var _this = this;
 return this.edit(role)
     .then(function (role) {
     return _this.roleService.add(role)
-        .then(function (data) { return data.data; });
-});
+        .then(function (data) { return data.data; });});

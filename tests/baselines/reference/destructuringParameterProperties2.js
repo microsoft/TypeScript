@@ -38,12 +38,15 @@ var C1 = /** @class */ (function () {
             this.a = a || k;
         }
     }
+
     C1.prototype.getA = function () {
         return this.a;
     };
+
     C1.prototype.getB = function () {
         return this.b;
     };
+
     C1.prototype.getC = function () {
         return this.c;
     };
@@ -51,7 +54,9 @@ var C1 = /** @class */ (function () {
 }());
 var x = new C1(undefined, [0, undefined, ""]);
 var _a = [x.getA(), x.getB(), x.getC()], x_a = _a[0], x_b = _a[1], x_c = _a[2];
+
 var y = new C1(10, [0, "", true]);
 var _b = [y.getA(), y.getB(), y.getC()], y_a = _b[0], y_b = _b[1], y_c = _b[2];
+
 var z = new C1(10, [undefined, "", null]);
 var _c = [z.getA(), z.getB(), z.getC()], z_a = _c[0], z_b = _c[1], z_c = _c[2];

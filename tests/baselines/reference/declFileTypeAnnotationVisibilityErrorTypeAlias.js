@@ -46,8 +46,7 @@ var M;
     var N;
     (function (N) {
         var Window = /** @class */ (function () {
-            function Window() {
-            }
+            function Window() {}
             return Window;
         }());
         N.Window = Window;
@@ -58,8 +57,7 @@ var M1;
     var N;
     (function (N) {
         var Window = /** @class */ (function () {
-            function Window() {
-            }
+            function Window() {}
             return Window;
         }());
         N.Window = Window;

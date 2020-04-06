@@ -23,11 +23,13 @@ try { }
 catch (e) {
     function v() { }
 }
+
 function w() { }
 try { }
 catch (e) {
     var w;
 }
+
 try { }
 catch (e) {
     var x;

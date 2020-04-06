@@ -50,89 +50,61 @@ import { aaaa1 as bbbb } from "./server";
 exports.__esModule = true;
 exports.aaaa1 = exports.aaaa = exports.z2 = exports.z1 = exports.x111 = exports.a111 = exports.x1 = exports.a1 = exports.m = exports.x11 = exports.x = exports.a12 = exports.a11 = exports.a = void 0;
 var a = /** @class */ (function () {
-    function a() {
-    }
+    function a() {}
     return a;
-}());
-exports.a = a;
+}());exports.a = a;
 var a11 = /** @class */ (function () {
-    function a11() {
-    }
+    function a11() {}
     return a11;
-}());
-exports.a11 = a11;
+}());exports.a11 = a11;
 var a12 = /** @class */ (function () {
-    function a12() {
-    }
+    function a12() {}
     return a12;
-}());
-exports.a12 = a12;
+}());exports.a12 = a12;
 var x = /** @class */ (function () {
-    function x() {
-    }
+    function x() {}
     return x;
-}());
-exports.x = x;
+}());exports.x = x;
 var x11 = /** @class */ (function () {
-    function x11() {
-    }
+    function x11() {}
     return x11;
-}());
-exports.x11 = x11;
+}());exports.x11 = x11;
 var m = /** @class */ (function () {
-    function m() {
-    }
+    function m() {}
     return m;
-}());
-exports.m = m;
+}());exports.m = m;
 var a1 = /** @class */ (function () {
-    function a1() {
-    }
+    function a1() {}
     return a1;
-}());
-exports.a1 = a1;
+}());exports.a1 = a1;
 var x1 = /** @class */ (function () {
-    function x1() {
-    }
+    function x1() {}
     return x1;
-}());
-exports.x1 = x1;
+}());exports.x1 = x1;
 var a111 = /** @class */ (function () {
-    function a111() {
-    }
+    function a111() {}
     return a111;
-}());
-exports.a111 = a111;
+}());exports.a111 = a111;
 var x111 = /** @class */ (function () {
-    function x111() {
-    }
+    function x111() {}
     return x111;
-}());
-exports.x111 = x111;
+}());exports.x111 = x111;
 var z1 = /** @class */ (function () {
-    function z1() {
-    }
+    function z1() {}
     return z1;
-}());
-exports.z1 = z1;
+}());exports.z1 = z1;
 var z2 = /** @class */ (function () {
-    function z2() {
-    }
+    function z2() {}
     return z2;
-}());
-exports.z2 = z2;
+}());exports.z2 = z2;
 var aaaa = /** @class */ (function () {
-    function aaaa() {
-    }
+    function aaaa() {}
     return aaaa;
-}());
-exports.aaaa = aaaa;
+}());exports.aaaa = aaaa;
 var aaaa1 = /** @class */ (function () {
-    function aaaa1() {
-    }
+    function aaaa1() {}
     return aaaa1;
-}());
-exports.aaaa1 = aaaa1;
+}());exports.aaaa1 = aaaa1;
 //// [client.js]
 "use strict";
 exports.__esModule = true;
@@ -158,6 +130,8 @@ var server_8 = require("./server");
 exports.z111 = new server_8.z1();
 var server_9 = require("./server");
 exports.z2 = new server_9.z2(); // z2 shouldn't give redeclare error
+
+
 
 
 //// [server.d.ts]

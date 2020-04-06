@@ -9,8 +9,7 @@ var logger = Tools.NullLogger();
 var Tools;
 (function (Tools) {
     var NullLogger = /** @class */ (function () {
-        function NullLogger() {
-        }
+        function NullLogger() {}
         return NullLogger;
     }());
     Tools.NullLogger = NullLogger;

@@ -11,7 +11,6 @@ declare var OData: any;
 //// [doNotEmitPinnedCommentOnNotEmittedNodets.js]
 var C = (function () {
     function C() {
-    }
-    C.prototype.foo = function (x, y) { };
+    }C.prototype.foo = function (x, y) { };
     return C;
 }());

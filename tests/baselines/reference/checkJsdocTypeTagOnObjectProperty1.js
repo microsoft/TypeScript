@@ -43,8 +43,10 @@ var obj = (_a = {
     /** @type {number} */
     _a['b' + 'ar1'] = 42,
     /** @type {function(number): number} */
-    _a.arrowFunc = function (num) { return num + 42; },
-    _a);
+    _a.arrowFunc = function (num) { return num + 42;
+    },
+    _a)
+;
 obj.foo = 'string';
 obj.lol;
 obj.bar = undefined;

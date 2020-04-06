@@ -28,17 +28,21 @@ var b = {
 
 //// [objectTypesWithOptionalProperties2.js]
 // Illegal attempts to define optional methods
-var a;
+
+var a
+
+;
+
+
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.x = function () { };
+    }C.prototype.x = function () { };
     return C;
 }());
+
 var C2 = /** @class */ (function () {
     function C2() {
-    }
-    C2.prototype.x = function () { };
+    }C2.prototype.x = function () { };
     return C2;
 }());
 var b = {

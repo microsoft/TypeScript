@@ -40,32 +40,28 @@ foo1(1, 2, "string", E1.a, E.b);  // Error
 //// [destructuringParameterDeclaration4.js]
 // If the parameter is a rest parameter, the parameter type is any[]
 // A type annotation for a rest parameter must denote an array type.
-function a0() {
-    var x = [];
+
+function a0() {var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
     }
 } // Error, rest parameter must be array type
-function a1() {
-    var x = [];
+function a1() {var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
     }
 }
-function a2() {
-    var a = [];
+function a2() {var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         a[_i] = arguments[_i];
     }
 } // Error, rest parameter must be array type
-function a3() {
-    var b = [];
+function a3() {var b = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         b[_i] = arguments[_i];
     }
 } // Error, can't be optional
-function a4() {
-    var b = [];
+function a4() {var b = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         b[_i] = arguments[_i];
     }
@@ -83,8 +79,7 @@ a5([1, 2]); // Error, parameter type is [any, any, [[any]]]
 a6([1, 2, "string"]); // Error, parameter type is number[]
 var temp = [1, 2, 3];
 var C = /** @class */ (function () {
-    function C() {
-        var temp = [];
+    function C() {var temp = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             temp[_i] = arguments[_i];
         }
@@ -93,8 +88,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 // Rest parameter with generic
-function foo1() {
-    var a = [];
+function foo1() {var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         a[_i] = arguments[_i];
     }

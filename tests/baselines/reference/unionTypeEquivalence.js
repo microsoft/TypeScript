@@ -35,23 +35,22 @@ var __extends = (this && this.__extends) || (function () {
 })();
 // A | B is equivalent to A if B is a subtype of A
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);
-    function D() {
+    __extends(D, _super);function D() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    D.prototype.foo = function () { };
+    }D.prototype.foo = function () { };
     return D;
 }(C));
 var x;
 var x;
+
 // A | B is equivalent to B | A.
 var y;
 var y;
+
 // AB | C is equivalent to A | BC, where AB is A | B and BC is B | C.
 var z;
 var z;

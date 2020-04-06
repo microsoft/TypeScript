@@ -37,6 +37,7 @@ System.register(["./x.js"], function (exports_1, context_1) {
         execute: function () {
             x2 = { x: x_js_1.x };
             a = { x2 };
+
             x3 = x_js_1.x;
             b = { x3 };
         }

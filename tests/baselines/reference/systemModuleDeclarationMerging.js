@@ -18,26 +18,18 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            (function (F) {
-                var x;
-            })(F || (F = {}));
+            (function (F) {var x;})(F || (F = {}));
             exports_1("F", F);
             C = /** @class */ (function () {
-                function C() {
-                }
+                function C() {}
                 return C;
             }());
             exports_1("C", C);
-            (function (C) {
-                var x;
-            })(C || (C = {}));
+            (function (C) {var x;})(C || (C = {}));
             exports_1("C", C);
-            (function (E) {
-            })(E || (E = {}));
+            (function (E) {})(E || (E = {}));
             exports_1("E", E);
-            (function (E) {
-                var x;
-            })(E || (E = {}));
+            (function (E) {var x;})(E || (E = {}));
             exports_1("E", E);
         }
     };

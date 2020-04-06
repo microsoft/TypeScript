@@ -7,4 +7,6 @@ const elem = <div></div>;
 
 //// [es3-jsx-preserve.jsx]
 var React = null;
+
 var elem = <div></div>;
+

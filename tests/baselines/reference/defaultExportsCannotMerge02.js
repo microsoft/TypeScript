@@ -33,6 +33,7 @@ var Decl = /** @class */ (function () {
     return Decl;
 }());
 exports.default = Decl;
+
 //// [m2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

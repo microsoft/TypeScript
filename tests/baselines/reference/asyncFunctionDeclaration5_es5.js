@@ -8,5 +8,4 @@ function foo() {
         return [2 /*return*/];
     }); });
 }
-await;
-Promise < void  > {};
+await;Promise < void  > {};

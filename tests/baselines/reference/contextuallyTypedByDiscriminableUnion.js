@@ -26,6 +26,8 @@ invoke({
 
 
 //// [contextuallyTypedByDiscriminableUnion.js]
+
+
 function invoke(item) {
     if (item.kind === "a") {
         item.method("");
@@ -34,6 +36,7 @@ function invoke(item) {
         item.method(42);
     }
 }
+
 invoke({
     kind: "a",
     method: function (a) {

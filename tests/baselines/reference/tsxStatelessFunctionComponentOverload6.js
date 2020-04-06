@@ -62,6 +62,10 @@ define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
     exports.__esModule = true;
     exports.MainButton = void 0;
+
+
+
+
     var obj = {
         children: "hi",
         to: "boo"
@@ -69,15 +73,19 @@ define(["require", "exports", "react"], function (require, exports, React) {
     var obj1;
     var obj2 = {
         onClick: function () { }
-    };
+    }
+
+    ;
+
     function MainButton(props) {
         var linkProps = props;
         if (linkProps.to) {
             return this._buildMainLink(props);
         }
+
         return this._buildMainButton(props);
-    }
-    exports.MainButton = MainButton;
+    }exports.MainButton = MainButton;
+
     // OK
     var b0 = <MainButton to='/some/path'>GO</MainButton>;
     var b1 = <MainButton onClick={function (e) { }}>Hello world</MainButton>;

@@ -46,16 +46,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = exports.B = void 0;
 class B {
     print() { return "I am B"; }
-}
-exports.B = B;
-function foo() { return "foo"; }
-exports.foo = foo;
+}exports.B = B;
+
+function foo() { return "foo"; }exports.foo = foo;
 //// [1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.backup = void 0;
-function backup() { return "backup"; }
-exports.backup = backup;
+function backup() { return "backup"; }exports.backup = backup;
 //// [2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -63,8 +61,7 @@ exports.D = void 0;
 class C {
     constructor() {
         this.myModule = Promise.resolve().then(() => require("./0"));
-    }
-    method() {
+    }method() {
         const loadAsync = Promise.resolve().then(() => require("./0"));
         this.myModule.then(Zero => {
             console.log(Zero.foo());
@@ -75,11 +72,12 @@ class C {
         });
     }
 }
+
 class D {
+
     constructor() {
         this.myModule = Promise.resolve().then(() => require("./0"));
-    }
-    method() {
+    }method() {
         const loadAsync = Promise.resolve().then(() => require("./0"));
         this.myModule.then(Zero => {
             console.log(Zero.foo());
@@ -89,5 +87,4 @@ class D {
             console.log(one.backup());
         });
     }
-}
-exports.D = D;
+}exports.D = D;

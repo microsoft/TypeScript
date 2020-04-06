@@ -12,6 +12,7 @@ var person2: { name: string, id: number } = bar("hello", 5);
 //// [objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.js]
 var id = 10000;
 var name = "my name";
+
 var person = { name: name, id: id }; // error
 function bar(name, id) { return { name: name, id: id }; } // error
 function foo(name, id) { return { name: name, id: id }; } // error

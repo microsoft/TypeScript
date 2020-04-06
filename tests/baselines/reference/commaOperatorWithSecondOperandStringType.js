@@ -43,6 +43,7 @@ var BOOLEAN;
 var NUMBER;
 var STRING;
 var OBJECT;
+
 var resultIsString;
 //The second operand is string
 ANY, STRING;

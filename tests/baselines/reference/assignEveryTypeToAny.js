@@ -57,13 +57,16 @@ function j<T>(a: T) {
 
 //// [assignEveryTypeToAny.js]
 // all of these are valid
+
 var x;
 x = 1;
 var a = 2;
 x = a;
+
 x = true;
 var b = true;
 x = b;
+
 x = "";
 var c = "";
 x = c;
@@ -80,6 +83,7 @@ var E;
 x = E.A;
 var f = E.A;
 x = f;
+
 var g;
 x = g;
 var C = /** @class */ (function () {
@@ -93,6 +97,7 @@ var i;
 x = i;
 x = { f: function () { return 1; } };
 x = { f: function (x) { return x; } };
+
 function j(a) {
     x = a;
 }

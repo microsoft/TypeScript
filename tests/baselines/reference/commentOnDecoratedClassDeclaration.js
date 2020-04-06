@@ -27,8 +27,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
  * Leading trivia
  */
 var Remote = /** @class */ (function () {
-    function Remote() {
-    }
+    function Remote() {}
     Remote = __decorate([
         decorator("hello")
     ], Remote);
@@ -38,8 +37,7 @@ var Remote = /** @class */ (function () {
  * Floating Comment
  */
 var AnotherRomote = /** @class */ (function () {
-    function AnotherRomote() {
-    }
+    function AnotherRomote() {}
     AnotherRomote = __decorate([
         decorator("hi")
     ], AnotherRomote);

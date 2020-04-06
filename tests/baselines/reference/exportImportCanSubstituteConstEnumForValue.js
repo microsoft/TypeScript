@@ -65,6 +65,9 @@ var MsPortalFx;
     (function (ViewModels) {
         var Dialogs;
         (function (Dialogs) {
+
+
+
             function someExportedFunction() {
             }
             Dialogs.someExportedFunction = someExportedFunction;
@@ -74,6 +77,7 @@ var MsPortalFx;
 (function (MsPortalFx) {
     var ViewModels;
     (function (ViewModels) {
+
         var SomeUsagesOfTheseConsts = /** @class */ (function () {
             function SomeUsagesOfTheseConsts() {
                 // these do get replaced by the const value

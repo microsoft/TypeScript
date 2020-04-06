@@ -26,9 +26,12 @@ let k2 =
 "use strict";
 exports.__esModule = true;
 var React = require("react");
+
+
 function Comp(p) {
     return <div>{p.b}</div>;
 }
+
 // OK
 var k = <Comp a={10} b="hi" children="lol"/>;
 var k1 = <Comp a={10} b="hi">

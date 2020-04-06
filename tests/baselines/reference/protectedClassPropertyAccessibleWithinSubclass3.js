@@ -26,21 +26,17 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Base = /** @class */ (function () {
+})();var Base = /** @class */ (function () {
     function Base() {
-    }
-    Base.prototype.method = function () {
+    }Base.prototype.method = function () {
         this.x; // OK, accessed within their declaring class
     };
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);
-    function Derived() {
+    __extends(Derived, _super);function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Derived.prototype.method1 = function () {
+    }Derived.prototype.method1 = function () {
         this.x; // OK, accessed within a subclass of the declaring class
         _super.prototype.x; // Error, x is not public
     };

@@ -96,30 +96,28 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var A = /** @class */ (function () {
     function A() {
-    }
-    A.prototype.foo = function () { return ''; };
+    }A.prototype.foo = function () { return ''; };
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
+    __extends(B, _super);function B() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    B.prototype.bar = function () {
+    }B.prototype.bar = function () {
         return '';
     };
     return B;
 }(A));
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.f = function () {
+    }C.prototype.f = function () {
         var x;
         var a = x['foo'](); // should be string
         return a + x.foo();
     };
+
     C.prototype.g = function (x) {
         var a = x['foo'](); // should be string
         return a + x.foo();
@@ -139,13 +137,16 @@ var C = /** @class */ (function () {
 //}
 var r1 = (new C()).f();
 var r1b = (new C()).g(new B());
+
 //interface I<U extends T, T extends A> {
 //    foo: U;
 //}
 var i;
 var r2 = i.foo.foo();
 var r2b = i.foo['foo']();
-var a;
+
+var a
+;
 //var a: {
 //    <U extends T, T extends A>(): U;
 //    <U extends T, T extends A>(x: U): U;
@@ -157,12 +158,14 @@ var r3b = a()['foo']();
 var aB = new B();
 var r3c = a(aB, aB).foo();
 var r3d = a(aB, aB)['foo']();
+
 var b = {
     foo: function (x, y) {
         var a = x['foo'](); // should be string
         return a + x.foo();
     }
-};
+}
+;
 //var b = {
 //    foo: <U extends T, T extends A>(x: U, y: T) => {
 //        var a = x['foo'](); // should be string

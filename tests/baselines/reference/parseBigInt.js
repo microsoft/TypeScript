@@ -76,17 +76,23 @@ const bin = 0b101, binBig = 5n; // 5, 5n
 const oct = 0o567, octBig = 375n; // 375, 375n
 const hex = 0xC0B, hexBig = 0xc0bn; // 3083, 3083n
 const dec = 123, decBig = 123n;
+
 // Test literals whose values overflow a 53-bit integer
 // These should be represented exactly in the emitted JS
 const largeBin = 384307168202282325n; // 384307168202282325n
 const largeOct = 1505852261029722487n; // 1505852261029722487n
 const largeDec = 12345678091234567890n;
 const largeHex = 0x1234567890abcdefn; // 1311768467294899695n
+
+
 // Test literals with separators
 const separatedBin = 21n; // 21n
 const separatedOct = 342391n; // 342391n
 const separatedDec = 123456789n;
 const separatedHex = 0x0abcdefn; // 11259375n
+
+
+
 // Test parsing literals of different bit sizes
 // to ensure that parsePseudoBigInt() allocates enough space
 const zero = 0n;
@@ -107,9 +113,12 @@ const fourteenBit = 16383n; // 16383n
 const fifteenBit = 32767n; // 32767n
 const sixteenBit = 65535n; // 65535n
 const seventeenBit = 131071n; // 131071n
+
+
 // Test negative literals
 const neg = -123n;
 const negHex = -0x10n;
+
 // Test normalization of bigints -- all of these should succeed
 const negZero = -0n;
 const baseChange = 0xffn;
@@ -117,20 +126,13 @@ const leadingZeros = 0x000000ffn;
 // Plus not allowed on literals
 const unaryPlus = +123n;
 const unaryPlusHex = +0x123n;
+
 // Parsing errors
 // In separate blocks because they each declare an "n" variable
-{
-    const legacyOct = 0123, n;
-}
-{
-    const scientific = 1e2n;
-}
-{
-    const decimal = 4.1n;
-}
-{
-    const leadingDecimal = .1n;
-}
+{const legacyOct = 0123, n;}
+{const scientific = 1e2n;}
+{const decimal = 4.1n;}
+{const leadingDecimal = .1n;}
 const emptyBinary = 0n; // should error but infer 0n
 const emptyOct = 0n; // should error but infer 0n
 const emptyHex = 0x0n; // should error but infer 0n
@@ -139,11 +141,5 @@ const trailingSeparator = 123n;
 const doubleSeparator = 123456789n;
 // Using literals as types
 const oneTwoOrThree = (x) => x ** 2n;
-oneTwoOrThree(0n);
-oneTwoOrThree(1n);
-oneTwoOrThree(2n);
-oneTwoOrThree(3n);
-oneTwoOrThree(0);
-oneTwoOrThree(1);
-oneTwoOrThree(2);
-oneTwoOrThree(3);
+oneTwoOrThree(0n);oneTwoOrThree(1n);oneTwoOrThree(2n);oneTwoOrThree(3n);
+oneTwoOrThree(0);oneTwoOrThree(1);oneTwoOrThree(2);oneTwoOrThree(3);

@@ -12,6 +12,7 @@ var r8 = a !== a;
 
 //// [comparisonOperatorWithTwoOperandsAreAny.js]
 var a;
+
 var r1 = a < a;
 var r2 = a > a;
 var r3 = a <= a;

@@ -13,6 +13,7 @@ class Baz implements Wrapper {
 
 
 //// [implementsIncorrectlyNoAssertion.js]
+
 var Baz = /** @class */ (function () {
     function Baz() {
     }

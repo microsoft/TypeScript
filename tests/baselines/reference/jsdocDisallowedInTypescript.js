@@ -28,6 +28,7 @@ var anys: Array<*>;
 "use strict";
 // grammar error from checker
 var ara = [1, 2, 3];
+
 function f(x, y) {
     return x ? x + y[1] : y[0];
 }
@@ -43,6 +44,8 @@ var g = function (n, m) { return n + m; };
 var most = 'definite';
 var postfixdef = 101;
 var postfixopt = undefined;
+
 var nns;
 var dns;
 var anys;
+

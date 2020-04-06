@@ -11,13 +11,11 @@ exports.__esModule = true;
 exports.Enhancement = void 0;
 var Enhancement = /** @class */ (function () {
     function Enhancement() {
-    }
-    Enhancement.getType = function () {
+    }Enhancement.getType = function () {
         return this;
     };
     return Enhancement;
-}());
-exports.Enhancement = Enhancement;
+}());exports.Enhancement = Enhancement;
 
 
 //// [declFileClassWithStaticMethodReturningConstructor.d.ts]

@@ -25,7 +25,6 @@ sourceFile:es3-sourcemap-amd.ts
 >>>    }
 1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->constructor ()
   >    {
   >
@@ -34,18 +33,19 @@ sourceFile:es3-sourcemap-amd.ts
 1->Emitted(3, 5) Source(6, 5) + SourceIndex(0)
 2 >Emitted(3, 6) Source(6, 6) + SourceIndex(0)
 ---
+>>>
 >>>    A.prototype.B = function () {
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^^^^^^^
 3 >                 ^^^
-1->
+1 >
   >
   >    public 
 2 >    B
 3 >                 
-1->Emitted(4, 5) Source(8, 12) + SourceIndex(0)
-2 >Emitted(4, 18) Source(8, 13) + SourceIndex(0)
-3 >Emitted(4, 21) Source(8, 5) + SourceIndex(0)
+1 >Emitted(5, 5) Source(8, 12) + SourceIndex(0)
+2 >Emitted(5, 18) Source(8, 13) + SourceIndex(0)
+3 >Emitted(5, 21) Source(8, 5) + SourceIndex(0)
 ---
 >>>        return 42;
 1 >^^^^^^^^
@@ -58,10 +58,10 @@ sourceFile:es3-sourcemap-amd.ts
 2 >        return 
 3 >               42
 4 >                 ;
-1 >Emitted(5, 9) Source(10, 9) + SourceIndex(0)
-2 >Emitted(5, 16) Source(10, 16) + SourceIndex(0)
-3 >Emitted(5, 18) Source(10, 18) + SourceIndex(0)
-4 >Emitted(5, 19) Source(10, 19) + SourceIndex(0)
+1 >Emitted(6, 9) Source(10, 9) + SourceIndex(0)
+2 >Emitted(6, 16) Source(10, 16) + SourceIndex(0)
+3 >Emitted(6, 18) Source(10, 18) + SourceIndex(0)
+4 >Emitted(6, 19) Source(10, 19) + SourceIndex(0)
 ---
 >>>    };
 1 >^^^^
@@ -70,8 +70,8 @@ sourceFile:es3-sourcemap-amd.ts
 1 >
   >    
 2 >    }
-1 >Emitted(6, 5) Source(11, 5) + SourceIndex(0)
-2 >Emitted(6, 6) Source(11, 6) + SourceIndex(0)
+1 >Emitted(7, 5) Source(11, 5) + SourceIndex(0)
+2 >Emitted(7, 6) Source(11, 6) + SourceIndex(0)
 ---
 >>>    return A;
 1->^^^^
@@ -79,8 +79,8 @@ sourceFile:es3-sourcemap-amd.ts
 1->
   >
 2 >    }
-1->Emitted(7, 5) Source(12, 1) + SourceIndex(0)
-2 >Emitted(7, 13) Source(12, 2) + SourceIndex(0)
+1->Emitted(8, 5) Source(12, 1) + SourceIndex(0)
+2 >Emitted(8, 13) Source(12, 2) + SourceIndex(0)
 ---
 >>>}());
 1 >
@@ -103,9 +103,9 @@ sourceFile:es3-sourcemap-amd.ts
   >         return 42;
   >     }
   > }
-1 >Emitted(8, 1) Source(12, 1) + SourceIndex(0)
-2 >Emitted(8, 2) Source(12, 2) + SourceIndex(0)
-3 >Emitted(8, 2) Source(1, 1) + SourceIndex(0)
-4 >Emitted(8, 6) Source(12, 2) + SourceIndex(0)
+1 >Emitted(9, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(9, 2) Source(12, 2) + SourceIndex(0)
+3 >Emitted(9, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(9, 6) Source(12, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=es3-sourcemap-amd.js.map

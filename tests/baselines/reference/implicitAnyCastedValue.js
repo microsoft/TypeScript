@@ -81,10 +81,14 @@ var array = <any>[null, undefined];
 //// [implicitAnyCastedValue.js]
 var x = function () {
     return 0; // this should not be an error
-};
+}
+
+;
+
 function foo() {
     return "hello world"; // this should not be an error
 }
+
 var C = /** @class */ (function () {
     function C() {
         this.bar = null; // this should be an error
@@ -100,6 +104,7 @@ var C = /** @class */ (function () {
     C.prototype.returnBarWithCase = function () {
         return this.bar;
     };
+
     C.prototype.returnFooWithCase = function () {
         return this.foo; // this should not be an error
     };
@@ -134,9 +139,11 @@ function notCastedNull() {
 function returnTypeBar() {
     return null; // this should not be an error
 }
+
 function undefinedBar() {
     return undefined; // this should not be an error
 }
+
 function multipleRets1(x) {
     if (x) {
         return 0;
@@ -145,6 +152,7 @@ function multipleRets1(x) {
         return null;
     }
 }
+
 function multipleRets2(x) {
     if (x) {
         return null;
@@ -156,6 +164,7 @@ function multipleRets2(x) {
         return undefined;
     }
 }
+
 // this should not be an error
 var bar1 = null;
 var bar2 = undefined;

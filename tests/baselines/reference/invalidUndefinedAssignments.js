@@ -30,8 +30,7 @@ var E;
 E = x;
 E.A = x;
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var f;
@@ -40,9 +39,7 @@ var g;
 g = x;
 I = x;
 var M;
-(function (M) {
-    M.x = 1;
-})(M || (M = {}));
+(function (M) {M.x = 1;})(M || (M = {}));
 M = x;
 function i(a) { }
 // BUG 767030

@@ -2,7 +2,4 @@
 do{;}while(false)false
 
 //// [parserDoStatement2.js]
-do {
-    ;
-} while (false);
-false;
+do {;} while (false);false;

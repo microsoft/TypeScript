@@ -104,12 +104,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
 var react_1 = __importDefault(require("react"));
 var prop_types_1 = __importDefault(require("prop-types"));
+
 var TabbedShowLayout = function (_a) {
-    return (react_1.default.createElement("div", null));
+    return (
+        react_1.default.createElement("div", null)
+    );
 };
 TabbedShowLayout.propTypes = {
     version: prop_types_1.default.number,
 };
+
 TabbedShowLayout.defaultProps = {
     tabs: undefined
 };
@@ -125,7 +129,9 @@ var react_1 = __importDefault(require("react"));
  * @type {React.SFC}
  */
 var TabbedShowLayout = function () {
-    return (react_1.default.createElement("div", { className: "", key: "" }, "ok"));
+    return (
+        react_1.default.createElement("div", { className: "", key: "" }, "ok")
+    );
 };
 TabbedShowLayout.defaultProps = {
     tabs: "default value"
@@ -142,7 +148,9 @@ var react_1 = __importDefault(require("react"));
  * @type {{defaultProps: {tabs: string}} & ((props?: {elem: string}) => JSX.Element)}
  */
 var TabbedShowLayout = function () {
-    return (react_1.default.createElement("div", { className: "", key: "" }, "ok"));
+    return (
+        react_1.default.createElement("div", { className: "", key: "" }, "ok")
+    );
 };
 TabbedShowLayout.defaultProps = {
     tabs: "default value"
@@ -156,7 +164,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importDefault(require("react"));
 var TabbedShowLayout = function (/** @type {{className: string}}*/ prop) {
-    return (react_1.default.createElement("div", { className: prop.className, key: "" }, "ok"));
+    return (
+        react_1.default.createElement("div", { className: prop.className, key: "" }, "ok")
+    );
 };
 TabbedShowLayout.defaultProps = {
     tabs: "default value"
@@ -170,6 +180,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importDefault(require("react"));
 var prop_types_1 = __importDefault(require("prop-types"));
+
 function Tree(_a) {
     var allowDropOnRoot = _a.allowDropOnRoot;
     return react_1.default.createElement("div", null);
@@ -177,6 +188,7 @@ function Tree(_a) {
 Tree.propTypes = {
     classes: prop_types_1.default.object,
 };
+
 Tree.defaultProps = {
     classes: {},
     parentSource: 'parent_id',

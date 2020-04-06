@@ -53,6 +53,7 @@ namespace Consts2 {
 
 
 //// [stringLiteralTypesOverloads01.js]
+
 function getFalsyPrimitive(x) {
     if (x === "string") {
         return "";
@@ -63,6 +64,7 @@ function getFalsyPrimitive(x) {
     if (x === "boolean") {
         return false;
     }
+
     // Should be unreachable.
     throw "Invalid value";
 }
@@ -72,9 +74,14 @@ var Consts1;
     var ZERO = getFalsyPrimitive('number');
     var FALSE = getFalsyPrimitive("boolean");
 })(Consts1 || (Consts1 = {}));
-var string = "string";
-var number = "number";
-var boolean = "boolean";
+var string = "string"
+;
+var number = "number"
+;
+var boolean = "boolean"
+
+;
+
 var stringOrNumber = string || number;
 var stringOrBoolean = string || boolean;
 var booleanOrNumber = number || boolean;
@@ -84,6 +91,7 @@ var Consts2;
     var EMPTY_STRING = getFalsyPrimitive(string);
     var ZERO = getFalsyPrimitive(number);
     var FALSE = getFalsyPrimitive(boolean);
+
     var a = getFalsyPrimitive(stringOrNumber);
     var b = getFalsyPrimitive(stringOrBoolean);
     var c = getFalsyPrimitive(booleanOrNumber);

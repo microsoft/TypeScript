@@ -14,6 +14,7 @@ async function conditional2() {
 }
 
 //// [es5-asyncFunctionConditionals.js]
+
 function conditional0() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -26,6 +27,7 @@ function conditional0() {
         });
     });
 }
+
 function conditional1() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
@@ -47,6 +49,7 @@ function conditional1() {
         });
     });
 }
+
 function conditional2() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;

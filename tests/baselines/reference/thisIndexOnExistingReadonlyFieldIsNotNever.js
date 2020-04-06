@@ -37,13 +37,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
+
 var CoachMarkAnchorDecorator = /** @class */ (function () {
     function CoachMarkAnchorDecorator() {
-    }
-    CoachMarkAnchorDecorator.prototype.decorateComponent = function (anchor) {
+    }CoachMarkAnchorDecorator.prototype.decorateComponent = function (anchor) {
         return /** @class */ (function (_super) {
-            __extends(CoachMarkAnchor, _super);
-            function CoachMarkAnchor() {
+            __extends(CoachMarkAnchor, _super);function CoachMarkAnchor() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
                 _this._onAnchorRef = function (anchor) {
                     var anchorRef = _this.props.anchorRef;

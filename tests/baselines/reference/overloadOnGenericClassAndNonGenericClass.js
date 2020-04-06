@@ -18,37 +18,33 @@ var t3: A; // should not error
 
 //// [overloadOnGenericClassAndNonGenericClass.js]
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var X = /** @class */ (function () {
-    function X() {
-    }
+    function X() {}
     return X;
 }());
 var X1 = /** @class */ (function () {
-    function X1() {
-    }
+    function X1() {}
     return X1;
 }());
 var X2 = /** @class */ (function () {
-    function X2() {
-    }
+    function X2() {}
     return X2;
 }());
 function f(a) {
 }
+
 var xs;
+
 var t3 = f(xs);
 var t3; // should not error

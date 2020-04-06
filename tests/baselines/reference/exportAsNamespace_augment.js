@@ -28,5 +28,7 @@ a2.x + a2.y + a2.z + a2.conflict;
 "use strict";
 exports.__esModule = true;
 var a2 = require("./a");
+
+
 a.x + a.y + a.z + a.conflict;
 a2.x + a2.y + a2.z + a2.conflict;

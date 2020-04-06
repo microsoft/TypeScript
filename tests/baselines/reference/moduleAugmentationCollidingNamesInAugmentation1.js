@@ -42,12 +42,14 @@ define(["require", "exports", "./observable"], function (require, exports, obser
     "use strict";
     exports.__esModule = true;
     observable_1.Observable.prototype.map = function () { };
+
 });
 //// [map2.js]
 define(["require", "exports", "./observable"], function (require, exports, observable_1) {
     "use strict";
     exports.__esModule = true;
     observable_1.Observable.prototype.map = function () { };
+
 });
 //// [main.js]
 define(["require", "exports", "./map1", "./map2"], function (require, exports) {

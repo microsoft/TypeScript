@@ -7,6 +7,4 @@ let C = /** @class */ (() => {
     C.bar = 20;
     return C;
 })();
-(function (C) {
-    C.x = 10;
-})(C || (C = {}));
+(function (C) {C.x = 10;})(C || (C = {}));

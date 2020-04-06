@@ -30,13 +30,13 @@ var _a;
 exports.__esModule = true;
 exports.C = void 0;
 var a_1 = require("./a");
+
 var C = /** @class */ (function () {
     function C() {
         this[_a] = 1;
     }
     return C;
-}());
-exports.C = C;
+}());exports.C = C;
 _a = a_1.x;
 //// [c.js]
 "use strict";
@@ -58,16 +58,15 @@ exports.__esModule = true;
 exports.D = void 0;
 var a_1 = require("./a");
 var b_1 = require("./b");
+
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);
-    function D() {
+    __extends(D, _super);function D() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this[_a] = 12;
         return _this;
     }
     return D;
-}(b_1.C));
-exports.D = D;
+}(b_1.C));exports.D = D;
 _a = a_1.x;
 
 

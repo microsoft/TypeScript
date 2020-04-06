@@ -29,3 +29,8 @@ interface D2 {
 interface E2 extends A2, D2 { } // error
 
 //// [inheritedStringIndexersFromDifferentBaseTypes.js]
+
+
+
+
+

@@ -6,5 +6,7 @@ var v = {
 
 //// [commentsBeforeFunctionExpression1.js]
 var v = {
-    f: /**own f*/ function (a) { return 0; }
-};
+    f: /**own f*/ function (a) { return 0;
+    }
+}
+;

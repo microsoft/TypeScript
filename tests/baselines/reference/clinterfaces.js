@@ -30,16 +30,15 @@ export = Foo;
 var M;
 (function (M) {
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         return C;
     }());
     var D = /** @class */ (function () {
-        function D() {
-        }
+        function D() {}
         return D;
     }());
 })(M || (M = {}));
+
 var Foo = /** @class */ (function () {
     function Foo() {
     }
@@ -50,4 +49,5 @@ var Bar = /** @class */ (function () {
     }
     return Bar;
 }());
+
 module.exports = Foo;

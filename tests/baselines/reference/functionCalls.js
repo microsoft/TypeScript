@@ -45,6 +45,8 @@ anyVar('');
 anyVar('hello');
 anyVar();
 anyVar(undefined);
+
+
 var subFunc;
 subFunc(0);
 subFunc('');
@@ -54,6 +56,7 @@ subFunc();
 subFunc(0);
 subFunc('');
 subFunc();
+
 // Invoke function call on value of type Function with no call signatures with type arguments
 // These should be errors
 var func;

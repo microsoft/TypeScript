@@ -55,28 +55,24 @@ var A = /** @class */ (function () {
     return A;
 }());
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 ;
 var D = /** @class */ (function () {
-    function D() {
-    }
+    function D() {}
     return D;
 }());
 ;
 var E = /** @class */ (function (_super) {
-    __extends(E, _super);
-    function E() {
+    __extends(E, _super);function E() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return E;
 }(A));
 ;
 var F = /** @class */ (function (_super) {
-    __extends(F, _super);
-    function F() {
+    __extends(F, _super);function F() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return F;
@@ -94,8 +90,10 @@ var E2;
 var numStrTuple = [5, "foo"];
 var emptyObjTuple = numStrTuple;
 var numStrBoolTuple = numStrTuple;
-var shorter = numStrBoolTuple;
-var longer = numStrTuple;
+var shorter = numStrBoolTuple
+;
+var longer = numStrTuple
+;
 var classCDTuple = [new C(), new D()];
 var interfaceIITuple = classCDTuple;
 var classCDATuple = classCDTuple;
@@ -108,6 +106,7 @@ var unionTuple = [new C(), "foo"];
 var unionTuple2 = [new C(), "foo", new D()];
 var unionTuple3 = [10, "foo"];
 var unionTuple4 = unionTuple3;
+
 // error
 var t3 = numStrTuple;
 var t9 = classCDTuple;

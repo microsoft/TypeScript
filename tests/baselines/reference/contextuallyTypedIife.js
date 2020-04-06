@@ -44,64 +44,47 @@ let eleven = (o => o.a(11))({ a: function(n) { return n; } });
 // multiple arguments
 (function (a, b, c) { })("foo", 101, false);
 // default parameters
-(function (m) {
-    if (m === void 0) { m = 10; }
-    return m + 1;
-})(12);
-(function (n) {
-    if (n === void 0) { n = 10; }
-    return n + 1;
-})();
+(function (m) {if (m === void 0) { m = 10; }return m + 1;})(12);
+(function (n) {if (n === void 0) { n = 10; }return n + 1;})();
 // optional parameters
 (function (j) { return j + 1; })(12);
 (function (k) { return k + 1; })();
 (function (l, o) { return l + o; })(12); // o should be any
+
 // rest parameters
-(function () {
-    var numbers = [];
+(function () {var numbers = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         numbers[_i] = arguments[_i];
     }
-    return numbers.every(function (n) { return n > 0; });
-})(5, 6, 7);
-(function () {
-    var mixed = [];
+    return numbers.every(function (n) { return n > 0; });})(5, 6, 7);
+(function () {var mixed = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         mixed[_i] = arguments[_i];
     }
-    return mixed.every(function (n) { return !!n; });
-})(5, 'oops', 'oh no');
-(function () {
-    var noNumbers = [];
+    return mixed.every(function (n) { return !!n; });})(5, 'oops', 'oh no');
+(function () {var noNumbers = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         noNumbers[_i] = arguments[_i];
     }
-    return noNumbers.some(function (n) { return n > 0; });
-})();
-(function (first) {
-    var rest = [];
+    return noNumbers.some(function (n) { return n > 0; });})();
+(function (first) {var rest = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         rest[_i - 1] = arguments[_i];
     }
-    return first ? [] : rest.map(function (n) { return n > 0; });
-})(8, 9, 10);
+    return first ? [] : rest.map(function (n) { return n > 0; });})(8, 9, 10);
 // destructuring parameters (with defaults too!)
 (function (_a) {
     var q = _a.q;
-    return q;
-})({ q: 13 });
+    return q;})({ q: 13 });
 (function (_a) {
     var _b = _a.p, p = _b === void 0 ? 14 : _b;
-    return p;
-})({ p: 15 });
+    return p;})({ p: 15 });
 (function (_a) {
     var _b = (_a === void 0 ? { r: 18 } : _a).r, r = _b === void 0 ? 17 : _b;
-    return r;
-})({ r: 19 });
+    return r;})({ r: 19 });
 (function (_a) {
     var _b = (_a === void 0 ? { u: 23 } : _a).u, u = _b === void 0 ? 22 : _b;
-    return u;
-})();
+    return u;})();
 // contextually typed parameters.
 var twelve = (function (f) { return f(12); })(function (i) { return i; });
 var eleven = (function (o) { return o.a(11); })({ a: function (n) { return n; } });

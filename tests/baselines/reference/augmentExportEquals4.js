@@ -27,8 +27,7 @@ let b = x.b;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var foo = /** @class */ (function () {
-        function foo() {
-        }
+        function foo() {}
         return foo;
     }());
     (function (foo) {

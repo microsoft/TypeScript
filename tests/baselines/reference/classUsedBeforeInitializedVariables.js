@@ -52,8 +52,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Test = /** @class */ (function () {
+})();var Test = /** @class */ (function () {
     function Test() {
         var _a, _b, _c;
         var _this = this;
@@ -86,8 +85,7 @@ var Test = /** @class */ (function () {
             }),
             _c);
         this.withinClassDeclarationExtension = (/** @class */ (function (_super) {
-            __extends(class_1, _super);
-            function class_1() {
+            __extends(class_1, _super);function class_1() {
                 return _super !== null && _super.apply(this, arguments) || this;
             }
             return class_1;

@@ -45,18 +45,21 @@ function f1() {
         return undefined;
     }
 }
+
 function f2() {
     // Local types are not in scope in parameters and return types
     function f(x) {
         return undefined;
     }
 }
+
 function f3() {
     // Type parameters and top-level local types are in same declaration space
     function f() {
         return undefined;
     }
 }
+
 function f4() {
     var v;
     v.x = 10;

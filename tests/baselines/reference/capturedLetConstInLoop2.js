@@ -188,6 +188,7 @@ function foo0(x) {
         _loop_1(x_1);
     }
 }
+
 function foo0_1(x) {
     var _loop_2 = function (x_2) {
         var a = arguments_2.length;
@@ -199,6 +200,7 @@ function foo0_1(x) {
         _loop_2(x_2);
     }
 }
+
 function foo1(x) {
     var _loop_3 = function (x_3) {
         var a = arguments_3.length;
@@ -210,6 +212,7 @@ function foo1(x) {
         _loop_3(x_3);
     }
 }
+
 function foo2(x) {
     var _loop_4 = function () {
         var a = arguments_4.length;
@@ -221,6 +224,7 @@ function foo2(x) {
         _loop_4();
     }
 }
+
 function foo3(x) {
     var _loop_5 = function () {
         var x_4;
@@ -233,6 +237,7 @@ function foo3(x) {
         _loop_5();
     } while (1 === 1);
 }
+
 function foo4(x) {
     var _loop_6 = function (y) {
         var a = arguments_6.length;
@@ -245,6 +250,7 @@ function foo4(x) {
         _loop_6(y);
     }
 }
+
 function foo5(x) {
     var _loop_7 = function (x_6, y) {
         var a = arguments_7.length;
@@ -256,6 +262,8 @@ function foo5(x) {
         _loop_7(x_6, y);
     }
 }
+
+
 function foo6(x) {
     var _loop_8 = function () {
         var x_7, y;
@@ -268,6 +276,7 @@ function foo6(x) {
         _loop_8();
     }
 }
+
 function foo7(x) {
     var _loop_9 = function () {
         var x_8, y;
@@ -280,6 +289,8 @@ function foo7(x) {
         _loop_9();
     } while (1 === 1);
 }
+
+
 function foo8(x) {
     var _loop_10 = function (y) {
         var x_9 = 1;
@@ -305,6 +316,7 @@ function foo0_c(x) {
         _loop_11(x_10);
     }
 }
+
 function foo0_1_c(x) {
     var _loop_12 = function (x_11) {
         var a = arguments_12.length;
@@ -316,6 +328,7 @@ function foo0_1_c(x) {
         _loop_12(x_11);
     }
 }
+
 function foo1_c(x) {
     var _loop_13 = function (x_12) {
         var a = arguments_13.length;
@@ -327,6 +340,7 @@ function foo1_c(x) {
         _loop_13(x_12);
     }
 }
+
 function foo2_c(x) {
     var _loop_14 = function () {
         var a = arguments_14.length;
@@ -338,6 +352,7 @@ function foo2_c(x) {
         _loop_14();
     }
 }
+
 function foo3_c(x) {
     var _loop_15 = function () {
         var x_13 = 1;
@@ -350,6 +365,7 @@ function foo3_c(x) {
         _loop_15();
     } while (1 === 1);
 }
+
 function foo4_c(x) {
     var _loop_16 = function (y) {
         var a = arguments_16.length;
@@ -362,6 +378,7 @@ function foo4_c(x) {
         _loop_16(y);
     }
 }
+
 function foo5_c(x) {
     var _loop_17 = function (x_15, y) {
         var a = arguments_17.length;
@@ -373,6 +390,8 @@ function foo5_c(x) {
         _loop_17(x_15, y);
     }
 }
+
+
 function foo6_c(x) {
     var _loop_18 = function () {
         var x_16 = 1, y = 1;
@@ -385,6 +404,7 @@ function foo6_c(x) {
         _loop_18();
     }
 }
+
 function foo7_c(x) {
     var _loop_19 = function () {
         var x_17 = 1, y = 1;
@@ -397,6 +417,8 @@ function foo7_c(x) {
         _loop_19();
     } while (1 === 1);
 }
+
+
 function foo8_c(x) {
     var _loop_20 = function (y) {
         var x_18 = 1;

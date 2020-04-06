@@ -9,16 +9,12 @@ var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "X", {
-        set: function (v) {
-            if (v === void 0) { v = 0; }
-        },
+        set: function (v) {if (v === void 0) { v = 0; }},
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "X", {
-        set: function (v2) {
-            if (v2 === void 0) { v2 = 0; }
-        },
+        set: function (v2) {if (v2 === void 0) { v2 = 0; }},
         enumerable: false,
         configurable: true
     });

@@ -48,6 +48,7 @@ class Protected {
     /** @protected */
     set p(value) { this.c = value; }
 }
+
 class Private {
     /** @private */
     constructor(c) {

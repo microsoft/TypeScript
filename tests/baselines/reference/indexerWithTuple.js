@@ -37,6 +37,7 @@ var strNumTuple = ["foo", 10];
 var numTupleTuple = [10, ["bar", 20]];
 var unionTuple1 = [10, "foo"];
 var unionTuple2 = [true, "foo"];
+
 // no error
 var idx0 = 0;
 var idx1 = 1;
@@ -56,6 +57,7 @@ var eleUnion13 = unionTuple1[idx0]; // string | number
 var eleUnion14 = unionTuple1[idx1]; // string | number
 var eleUnion15 = unionTuple1["0"]; // number
 var eleUnion16 = unionTuple1["1"]; // string | number
+
 var eleUnion20 = unionTuple2[0]; // boolean
 var eleUnion21 = unionTuple2[1]; // string | number
 var eleUnion22 = unionTuple2[2]; // string | number | boolean

@@ -36,6 +36,7 @@ var goodObj = {
         return "";
     }
 }; // Ok, because toString is a subtype of Object's toString
+
 var errFun = {}; // Error for no call signature
 function foo() { }
 (function (foo) {

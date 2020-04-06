@@ -20,6 +20,10 @@ values = values2;
 //// [checkInfiniteExpansionTermination.js]
 // Regression test for #1002
 // Before fix this code would cause infinite loop
+
+
+
+
 var values;
 var values2;
 values = values2;

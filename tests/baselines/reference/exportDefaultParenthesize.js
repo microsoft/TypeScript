@@ -38,7 +38,8 @@ export default () => 42;
 
 //// [commalist.js]
 var _a;
-export default (_a = {},
+export default (
+_a = {},
     _a['foo' + ''] = 42,
     _a['foo' + ''] = 42,
     _a['foo' + ''] = 42,
@@ -62,7 +63,8 @@ export default (_a = {},
     _a['foo' + ''] = 42,
     _a['foo' + ''] = 42,
     _a['foo' + ''] = 42,
-    _a);
+    _a
+);
 //// [comma.js]
 var _a;
 export default (_a = {},

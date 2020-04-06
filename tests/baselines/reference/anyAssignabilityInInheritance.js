@@ -90,28 +90,40 @@ var r3 = foo3(a); // any
 
 //// [anyAssignabilityInInheritance.js]
 // any is not a subtype of any other types, errors expected on all the below derived classes unless otherwise noted
+
+
 var a;
+
 var r3 = foo2(a); // any, not a subtype of number so it skips that overload, is a subtype of itself so it picks second (if truly ambiguous it would pick first overload)
+
 var r3 = foo3(a); // any
+
 var r3 = foo3(a); // any
+
 var r3 = foo3(a); // any
+
 var r3 = foo3(a); // any
+
 var r3 = foo3(a); // any
+
 var r3 = foo3(a); // any
+
 var r3 = foo3(a); // any
+
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 var r3 = foo3(a); // any
+
 var A2 = /** @class */ (function () {
-    function A2() {
-    }
+    function A2() {}
     return A2;
 }());
 var r3 = foo3(a); // any
+
 var r3 = foo3(a); // any
+
 var r3 = foo3(a); // any
 var E;
 (function (E) {
@@ -123,14 +135,16 @@ function f() { }
     f.bar = 1;
 })(f || (f = {}));
 var r3 = foo3(a); // any
+
 var CC = /** @class */ (function () {
-    function CC() {
-    }
+    function CC() {}
     return CC;
 }());
 (function (CC) {
     CC.bar = 1;
 })(CC || (CC = {}));
 var r3 = foo3(a); // any
+
 var r3 = foo3(a); // any
+
 var r3 = foo3(a); // any

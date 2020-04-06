@@ -23,8 +23,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 };
 let A = /** @class */ (() => {
     var _foo, _foo_1;
-    class A {
-        constructor() {
+    class A {constructor() {
             _foo_1.set(this, 1);
             // because static and instance private names
             // share the same lexical scope

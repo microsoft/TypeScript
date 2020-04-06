@@ -11,10 +11,9 @@ class C {
 }
 
 //// [computedPropertyNames36_ES6.js]
-class Foo {
-}
-class Foo2 {
-}
+class Foo {}
+class Foo2 {}
+
 class C {
     // Computed properties
     get ["get1"]() { return new Foo; }

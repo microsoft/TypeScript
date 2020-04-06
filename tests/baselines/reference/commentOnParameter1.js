@@ -15,6 +15,10 @@ function commentedParameters(
 a
 /* End of parameter a */
 /* Parameter b */
-, b
+,
+
+
+
+    b
 /* End of parameter b */
 ) { }

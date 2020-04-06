@@ -68,32 +68,28 @@ var __spread = (this && this.__spread) || function () {
     for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
     return ar;
 };
-function a1() {
-    var x = [];
+
+function a1() {var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
     }
 }
-function a2() {
-    var a = [];
+function a2() {var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         a[_i] = arguments[_i];
     }
 }
-function a3() {
-    var a = [];
+function a3() {var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         a[_i] = arguments[_i];
     }
 }
-function a4() {
-    var a = [];
+function a4() {var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         a[_i] = arguments[_i];
     }
 }
-function a5() {
-    var a = [];
+function a5() {var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         a[_i] = arguments[_i];
     }
@@ -107,18 +103,20 @@ function a10(_a) {
 function a11(_a) {
     var _b = __read(_a), a = _b[0], b = _b[1], c = _b[2], x = _b.slice(3);
 }
+
+
 var array = [1, 2, 3];
 var array2 = [true, false, "hello"];
 a2(__spread(array));
 a1.apply(void 0, __spread(array));
 a9([1, 2, [["string"]], false, true]); // Parameter type is [any, any, [[any]]]
+
 a10([1, 2, [["string"]], false, true]); // Parameter type is any[]
 a10([1, 2, 3, false, true]); // Parameter type is any[]
 a10([1, 2]); // Parameter type is any[]
 a11([1, 2]); // Parameter type is number[]
 // Rest parameter with generic
-function foo() {
-    var a = [];
+function foo() {var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         a[_i] = arguments[_i];
     }
@@ -127,11 +125,9 @@ foo("hello", 1, 2);
 foo("hello", "world");
 var E;
 (function (E) {
-    E[E["a"] = 0] = "a";
-    E[E["b"] = 1] = "b";
+    E[E["a"] = 0] = "a";E[E["b"] = 1] = "b";
 })(E || (E = {}));
-function foo1() {
-    var a = [];
+function foo1() {var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         a[_i] = arguments[_i];
     }

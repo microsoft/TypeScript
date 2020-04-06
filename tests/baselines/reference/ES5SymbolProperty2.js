@@ -14,10 +14,10 @@ module M {
 var M;
 (function (M) {
     var Symbol;
+
     var C = /** @class */ (function () {
         function C() {
-        }
-        C.prototype[Symbol.iterator] = function () { };
+        }C.prototype[Symbol.iterator] = function () { };
         return C;
     }());
     M.C = C;

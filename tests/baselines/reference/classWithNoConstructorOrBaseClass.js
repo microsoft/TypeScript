@@ -24,6 +24,7 @@ var C = /** @class */ (function () {
 }());
 var c = new C();
 var r = C;
+
 var D = /** @class */ (function () {
     function D() {
     }

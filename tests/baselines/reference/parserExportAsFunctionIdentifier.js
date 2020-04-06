@@ -8,5 +8,6 @@ var x = f.export();
 
 
 //// [parserExportAsFunctionIdentifier.js]
+
 var f;
 var x = f["export"]();

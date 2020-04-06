@@ -65,27 +65,35 @@ var a3: {
 
 //// [specializedSignatureIsNotSubtypeOfNonSpecializedSignature.js]
 function foo(x) { }
+
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.foo = function (x) { };
+    }C.prototype.foo = function (x) { };
     return C;
 }());
 var C2 = /** @class */ (function () {
     function C2() {
-    }
-    C2.prototype.foo = function (x) { };
+    }C2.prototype.foo = function (x) { };
     return C2;
 }());
 var C3 = /** @class */ (function () {
     function C3() {
-    }
-    C3.prototype.foo = function (x) { };
+    }C3.prototype.foo = function (x) { };
     return C3;
 }());
-var a;
-var a2;
-var a3;
+
+
+
+var a
+
+;
+
+var a2
+
+;
+
+var a3
+;
 
 
 //// [specializedSignatureIsNotSubtypeOfNonSpecializedSignature.d.ts]

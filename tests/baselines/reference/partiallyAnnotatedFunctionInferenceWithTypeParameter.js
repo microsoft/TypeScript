@@ -47,46 +47,48 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var C = /** @class */ (function () {
+})();var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);
-    function D() {
+    __extends(D, _super);function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
 }(C));
+
+
+
 // exactly
 test(function (t1, t2) { t2.test2; });
 test(function (t1, t2) { t2.test2; });
+
 // zero arg
 test(function () { });
+
 // fewer args
 test(function (t1) { });
+
 // rest arg
-test(function () {
-    var ts = [];
+test(function () {var ts = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         ts[_i] = arguments[_i];
     }
 });
+
 // source function has rest arg
 testRest(function (t1) { });
 testRest(function (t1, t2, t3) { });
 testRest(function (t1, t2, t3) { });
 testRest(function (t1, t2, t3) { });
-testRest(function (t2) {
-    var t3 = [];
+testRest(function (t2) {var t3 = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         t3[_i - 1] = arguments[_i];
     }
 });
-testRest(function (t2) {
-    var t3 = [];
+testRest(function (t2) {var t3 = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         t3[_i - 1] = arguments[_i];
     }

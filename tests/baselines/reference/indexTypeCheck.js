@@ -64,6 +64,14 @@ class Benchmark {
 }
 
 //// [indexTypeCheck.js]
+
+
+
+
+
+
+
+
 var yellow;
 var blue;
 var s = "some string";
@@ -79,8 +87,7 @@ x[0];
 var Benchmark = /** @class */ (function () {
     function Benchmark() {
         this.results = {};
-    }
-    Benchmark.prototype.addTimingFor = function (name, timing) {
+    }Benchmark.prototype.addTimingFor = function (name, timing) {
         this.results[name] = this.results[name];
     };
     return Benchmark;

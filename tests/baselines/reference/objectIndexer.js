@@ -19,6 +19,8 @@ class Emitter {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+
+
     var Emitter = /** @class */ (function () {
         function Emitter() {
             this.listeners = {};

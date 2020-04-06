@@ -18,11 +18,10 @@ Entity();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function foo() {
-}
-exports.default = foo;
+}exports.default = foo;
+
 function bar() {
-}
-exports.default = bar;
+}exports.default = bar;
 //// [m2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

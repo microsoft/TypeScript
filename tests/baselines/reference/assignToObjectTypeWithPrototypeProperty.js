@@ -5,8 +5,7 @@ var x: {prototype: XEvent} = XEvent;
 
 //// [assignToObjectTypeWithPrototypeProperty.js]
 var XEvent = /** @class */ (function () {
-    function XEvent() {
-    }
+    function XEvent() {}
     return XEvent;
 }());
 var p = XEvent.prototype;

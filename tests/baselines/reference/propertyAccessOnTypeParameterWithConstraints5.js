@@ -57,27 +57,22 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var A = /** @class */ (function () {
+})();var A = /** @class */ (function () {
     function A() {
-    }
-    A.prototype.foo = function () { return ''; };
+    }A.prototype.foo = function () { return ''; };
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
+    __extends(B, _super);function B() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }
-    B.prototype.bar = function () {
+    }B.prototype.bar = function () {
         return '';
     };
     return B;
 }(A));
 var C = /** @class */ (function () {
     function C() {
-    }
-    C.prototype.f = function () {
+    }C.prototype.f = function () {
         var x;
         var a = x['foo'](); // should be string
         return a + x.foo() + x.notHere();
@@ -85,13 +80,17 @@ var C = /** @class */ (function () {
     return C;
 }());
 var r = (new C()).f();
+
 var i;
 var r2 = i.foo.notHere();
 var r2b = i.foo['foo']();
-var a;
+
+var a
+;
 // BUG 794164
 var r3 = a().notHere();
 var r3b = a()['foo']();
+
 var b = {
     foo: function (x) {
         var a = x['foo'](); // should be string
@@ -99,5 +98,8 @@ var b = {
     },
     // BUG 794164
     bar: b.foo(1).notHere()
-};
+}
+
+;
+
 var r4 = b.foo(new B()); // error after constraints above made illegal, doesn't matter

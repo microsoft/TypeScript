@@ -21,13 +21,18 @@ var p10 = ([{ value, done }]) => { };
 
 
 //// [emitArrowFunctionES6.js]
-var f1 = () => { };
-var f2 = (x, y) => { };
-var f3 = (x, y, ...rest) => { };
-var f4 = (x, y, z = 10) => { };
+var f1 = () => { }
+;
+var f2 = (x, y) => { }
+;
+var f3 = (x, y, ...rest) => { }
+;
+var f4 = (x, y, z = 10) => { }
+;
 function foo(func) { }
 foo(() => true);
 foo(() => { return false; });
+
 // Binding patterns in arrow functions
 var p1 = ([a]) => { };
 var p2 = ([...a]) => { };

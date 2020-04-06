@@ -23,7 +23,11 @@ var v7: G;                     // Error, no type arguments
 
 
 //// [generics2.js]
+
+
 var v1; // Ok
+
+
 var v2; // Ok, equivalent to G<A, C>
 var v3; // Error, A not valid argument for U
 var v4; // Ok

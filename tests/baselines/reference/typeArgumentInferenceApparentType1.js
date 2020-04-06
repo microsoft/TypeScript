@@ -9,4 +9,5 @@ var res: string = method("test");
 function method(iterable) {
     return;
 }
+
 var res = method("test");

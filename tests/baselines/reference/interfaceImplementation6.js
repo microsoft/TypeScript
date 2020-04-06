@@ -29,6 +29,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     exports.Test = void 0;
+
     var C1 = /** @class */ (function () {
         function C1() {
         }
@@ -50,6 +51,5 @@ define(["require", "exports"], function (require, exports) {
             this.pt = { item: 1 };
         }
         return Test;
-    }());
-    exports.Test = Test;
+    }());exports.Test = Test;
 });

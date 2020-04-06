@@ -10,4 +10,5 @@ let Bar: {
 
 //// [errorOnInitializerInObjectTypeLiteralProperty.js]
 var Foo;
+
 var Bar;

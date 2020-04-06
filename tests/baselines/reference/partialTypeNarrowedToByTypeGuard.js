@@ -34,9 +34,11 @@ function getUserName(obj: Obj) {
 function isUser(obj) {
     return true;
 }
+
 function getUserName(obj) {
     if (isUser(obj)) {
         return obj.name;
     }
+
     return '';
 }

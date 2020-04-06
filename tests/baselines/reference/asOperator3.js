@@ -15,6 +15,7 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
 };
+
 var a = "" + (123 + 456);
 var b = "leading " + (123 + 456);
 var c = 123 + 456 + " trailing";

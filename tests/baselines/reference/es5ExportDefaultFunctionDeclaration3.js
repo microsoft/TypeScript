@@ -11,10 +11,11 @@ var after: typeof func = func();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var before = func();
+
 function func() {
     return func;
-}
-exports.default = func;
+}exports.default = func;
+
 var after = func();
 
 

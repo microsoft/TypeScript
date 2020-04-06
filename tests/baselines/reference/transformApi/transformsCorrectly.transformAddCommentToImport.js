@@ -13,12 +13,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Value = void 0;
 /*comment*/
 var somewhere_1 = require("somewhere");
-Object.defineProperty(exports, "Value", { enumerable: true, get: function () { return somewhere_1.Value; } });
-/*comment*/
-var somewhere_2 = require("somewhere");
-/*comment*/
-Object.defineProperty(exports, "X", { enumerable: true, get: function () { return somewhere_2.X; } });
-/*comment*/
+
+
+
+
+Object.defineProperty(exports, "Value", { enumerable: true, get: function () { return somewhere_1.Value; } });/*comment*/
+var somewhere_2 = require("somewhere");/* specifier comment */ /*comment*/
+Object.defineProperty(exports, "X", { enumerable: true, get: function () { return somewhere_2.X; } });/*comment*/
 Object.defineProperty(exports, "Y", { enumerable: true, get: function () { return somewhere_2.Y; } });
 /*comment*/
 __exportStar(require("somewhere"), exports);

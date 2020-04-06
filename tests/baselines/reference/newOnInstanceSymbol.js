@@ -5,8 +5,7 @@ new x(); // should error
 
 //// [newOnInstanceSymbol.js]
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var x = new C(); // should be ok

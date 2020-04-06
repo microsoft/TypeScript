@@ -8,5 +8,5 @@ s.map(// do something
 //// [commentInMethodCall.js]
 //commment here
 var s;
-s.map(// do something
+s.map(
 function () { });
