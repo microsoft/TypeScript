@@ -484,9 +484,9 @@ function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): stri
         case 'number': return x.toString(2);
 >'number' : "number"
 >x.toString(2) : string
->x.toString : ((radix?: number | undefined) => string) | ((() => string) & ((radix?: number | undefined) => string)) | ((() => string) & ((radix?: number | undefined) => string)) | ((() => string) & ((radix?: number | undefined) => string))
+>x.toString : (radix?: number | undefined) => string
 >x : T & number
->toString : ((radix?: number | undefined) => string) | ((() => string) & ((radix?: number | undefined) => string)) | ((() => string) & ((radix?: number | undefined) => string)) | ((() => string) & ((radix?: number | undefined) => string))
+>toString : (radix?: number | undefined) => string
 >2 : 2
 
         case 'string': return x;

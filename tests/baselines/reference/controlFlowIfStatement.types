@@ -104,7 +104,7 @@ function c<T>(data: string | T): T {
 >JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
 >JSON : JSON
 >parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
->data : string | (T & string)
+>data : string
     }
     else {
         return data;
