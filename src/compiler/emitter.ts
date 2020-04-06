@@ -664,6 +664,7 @@ namespace ts {
         getSymbolOfExternalModuleSpecifier: notImplemented,
         isBindingCapturedByNode: notImplemented,
         getDeclarationStatementsForSourceFile: notImplemented,
+        isImportRequierdByAugmentation: notImplemented,
     };
 
     /*@internal*/
