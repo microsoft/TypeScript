@@ -1,0 +1,37 @@
+=== tests/cases/conformance/salsa/thisPropertyAssignmentCircular.js ===
+export class Foo {
+>Foo : Foo
+
+    constructor() {
+        this.foo = "Hello";
+>this.foo = "Hello" : "Hello"
+>this.foo : string
+>this : this
+>foo : string
+>"Hello" : "Hello"
+    }
+    slicey() {
+>slicey : () => void
+
+        this.foo = this.foo.slice();
+>this.foo = this.foo.slice() : string
+>this.foo : string
+>this : this
+>foo : string
+>this.foo.slice() : string
+>this.foo.slice : (start?: number, end?: number) => string
+>this.foo : string
+>this : this
+>foo : string
+>slice : (start?: number, end?: number) => string
+    }
+    m() {
+>m : () => void
+
+        this.foo
+>this.foo : string
+>this : this
+>foo : string
+    }
+}
+
