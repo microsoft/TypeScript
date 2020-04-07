@@ -107,18 +107,18 @@ const
 >A : typeof A
 
     ab = new AB(),
->ab : mixB<typeof A>.(Anonymous class) & A
->new AB() : mixB<typeof A>.(Anonymous class) & A
+>ab : never
+>new AB() : never
 >AB : { new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A
 
     abc = new ABC(),
->abc : mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB<typeof A>.(Anonymous class) & A
->new ABC() : mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB<typeof A>.(Anonymous class) & A
+>abc : never
+>new ABC() : never
 >ABC : { new (...args: any[]): mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class); prototype: mixC<any>.(Anonymous class); } & { new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A
 
     ab2c = new AB2C();
->ab2c : mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB2<typeof A>.(Anonymous class) & A
->new AB2C() : mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB2<typeof A>.(Anonymous class) & A
+>ab2c : never
+>new AB2C() : never
 >AB2C : { new (...args: any[]): mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class); prototype: mixC<any>.(Anonymous class); } & { new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A
 
 a.pb.toFixed();
@@ -146,76 +146,76 @@ a.pvt.toFixed();    // Error
 >toFixed : (fractionDigits?: number) => string
 
 ab.pb.toFixed();
->ab.pb.toFixed() : string
->ab.pb.toFixed : (fractionDigits?: number) => string
->ab.pb : number
->ab : mixB<typeof A>.(Anonymous class) & A
->pb : number
->toFixed : (fractionDigits?: number) => string
+>ab.pb.toFixed() : any
+>ab.pb.toFixed : any
+>ab.pb : any
+>ab : never
+>pb : any
+>toFixed : any
 
 ab.ptd.toFixed();   // Error
->ab.ptd.toFixed() : string
->ab.ptd.toFixed : (fractionDigits?: number) => string
->ab.ptd : number
->ab : mixB<typeof A>.(Anonymous class) & A
->ptd : number
->toFixed : (fractionDigits?: number) => string
+>ab.ptd.toFixed() : any
+>ab.ptd.toFixed : any
+>ab.ptd : any
+>ab : never
+>ptd : any
+>toFixed : any
 
 ab.pvt.toFixed();   // Error
->ab.pvt.toFixed() : string
->ab.pvt.toFixed : (fractionDigits?: number) => string
->ab.pvt : number
->ab : mixB<typeof A>.(Anonymous class) & A
->pvt : number
->toFixed : (fractionDigits?: number) => string
+>ab.pvt.toFixed() : any
+>ab.pvt.toFixed : any
+>ab.pvt : any
+>ab : never
+>pvt : any
+>toFixed : any
 
 abc.pb.toFixed();
->abc.pb.toFixed() : string
->abc.pb.toFixed : (fractionDigits?: number) => string
->abc.pb : number
->abc : mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB<typeof A>.(Anonymous class) & A
->pb : number
->toFixed : (fractionDigits?: number) => string
+>abc.pb.toFixed() : any
+>abc.pb.toFixed : any
+>abc.pb : any
+>abc : never
+>pb : any
+>toFixed : any
 
 abc.ptd.toFixed();  // Error
->abc.ptd.toFixed() : string
->abc.ptd.toFixed : (fractionDigits?: number) => string
->abc.ptd : number
->abc : mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB<typeof A>.(Anonymous class) & A
->ptd : number
->toFixed : (fractionDigits?: number) => string
+>abc.ptd.toFixed() : any
+>abc.ptd.toFixed : any
+>abc.ptd : any
+>abc : never
+>ptd : any
+>toFixed : any
 
 abc.pvt.toFixed();  // Error
->abc.pvt.toFixed() : string
->abc.pvt.toFixed : (fractionDigits?: number) => string
->abc.pvt : number
->abc : mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB<typeof A>.(Anonymous class) & A
->pvt : number
->toFixed : (fractionDigits?: number) => string
+>abc.pvt.toFixed() : any
+>abc.pvt.toFixed : any
+>abc.pvt : any
+>abc : never
+>pvt : any
+>toFixed : any
 
 ab2c.pb.toFixed();
->ab2c.pb.toFixed() : string
->ab2c.pb.toFixed : (fractionDigits?: number) => string
->ab2c.pb : number
->ab2c : mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB2<typeof A>.(Anonymous class) & A
->pb : number
->toFixed : (fractionDigits?: number) => string
+>ab2c.pb.toFixed() : any
+>ab2c.pb.toFixed : any
+>ab2c.pb : any
+>ab2c : never
+>pb : any
+>toFixed : any
 
 ab2c.ptd.toFixed(); // Error
->ab2c.ptd.toFixed() : string
->ab2c.ptd.toFixed : (fractionDigits?: number) => string
->ab2c.ptd : number
->ab2c : mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB2<typeof A>.(Anonymous class) & A
->ptd : number
->toFixed : (fractionDigits?: number) => string
+>ab2c.ptd.toFixed() : any
+>ab2c.ptd.toFixed : any
+>ab2c.ptd : any
+>ab2c : never
+>ptd : any
+>toFixed : any
 
 ab2c.pvt.toFixed(); // Error
->ab2c.pvt.toFixed() : string
->ab2c.pvt.toFixed : (fractionDigits?: number) => string
->ab2c.pvt : number
->ab2c : mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB2<typeof A>.(Anonymous class) & A
->pvt : number
->toFixed : (fractionDigits?: number) => string
+>ab2c.pvt.toFixed() : any
+>ab2c.pvt.toFixed : any
+>ab2c.pvt : any
+>ab2c : never
+>pvt : any
+>toFixed : any
 
 // Repro from #13924
 

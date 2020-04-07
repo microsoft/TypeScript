@@ -28,12 +28,12 @@ interface B extends Entity {
 // That way, we can avoid the need to look for a compatible overload
 // signature and simply check compatibility with the implementation.
 function hasKind(entity: Entity, kind: "A" | "A"): entity is A;
->hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; }
+>hasKind : { (entity: Entity, kind: "A" | "A"): entity is A; (entity: Entity, kind: "B"): entity is B; }
 >entity : Entity
 >kind : "A"
 
 function hasKind(entity: Entity, kind: "B" | "B"): entity is B;
->hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; }
+>hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B" | "B"): entity is B; }
 >entity : Entity
 >kind : "B"
 

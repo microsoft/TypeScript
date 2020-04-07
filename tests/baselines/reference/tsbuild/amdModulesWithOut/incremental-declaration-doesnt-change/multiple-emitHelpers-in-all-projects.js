@@ -94,7 +94,7 @@ appfile4Spread.apply(void 0, __spread([10, 20, 30]));
 //# sourceMappingURL=module.js.map
 
 //// [/src/app/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;;;;;ICFnB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,6BAAyC,EAAvC,QAAC,EAAE,wBAAoC,CAAC;IAChD,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICFH,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,6BAAyC,EAAvC,QAAC,EAAE,wBAAoC,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;;;;;ICFnB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICFH,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE"}
 
 //// [/src/app/module.js.map.baseline.txt]
 ===================================================================
@@ -299,29 +299,80 @@ sourceFile:../lib/file1.ts
 >>>        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
 1->^^^^^^^^
 2 >        ^^^^
-3 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                         ^^
-5 >                                           ^^^^^^^^
-6 >                                                   ^^
-7 >                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
-8 >                                                                             ^
+3 >            ^^^^^
+4 >                 ^^
+5 >                   ^
+6 >                    ^^
+7 >                      ^^
+8 >                        ^^
+9 >                          ^
+10>                           ^^
+11>                             ^^
+12>                               ^^
+13>                                 ^^
+14>                                   ^^
+15>                                     ^^
+16>                                       ^^
+17>                                         ^^
+18>                                           ^
+19>                                            ^^^^^^^
+20>                                                   ^^
+21>                                                     ^^^^
+22>                                                         ^^^^^^^^^^^^^^
+23>                                                                       ^^^^^
+24>                                                                            ^
+25>                                                                             ^
 1->() {
   >
 2 >        const 
-3 >            { b, ...rest } = { a: 10, b: 30, yy: 30 }
-4 >                                         
-5 >                                           b
-6 >                                                   , 
-7 >                                                     ...rest } = { a: 10, b: 30, yy: 30 }
-8 >                                                                             ;
+3 >            { b, ...rest } = 
+4 >                 { 
+5 >                   a
+6 >                    : 
+7 >                      10
+8 >                        , 
+9 >                          b
+10>                           : 
+11>                             30
+12>                               , 
+13>                                 yy
+14>                                   : 
+15>                                     30
+16>                                        }
+17>                                         
+18>                                           b
+19>                                            
+20>                                                   , ...
+21>                                                     rest
+22>                                                         
+23>                                                                       { b, ...rest }
+24>                                                                             = { a: 10, b: 30, yy: 30 }
+25>                                                                             ;
 1->Emitted(46, 9) Source(2, 1) + SourceIndex(1)
 2 >Emitted(46, 13) Source(2, 7) + SourceIndex(1)
-3 >Emitted(46, 42) Source(2, 48) + SourceIndex(1)
-4 >Emitted(46, 44) Source(2, 9) + SourceIndex(1)
-5 >Emitted(46, 52) Source(2, 10) + SourceIndex(1)
-6 >Emitted(46, 54) Source(2, 12) + SourceIndex(1)
-7 >Emitted(46, 78) Source(2, 48) + SourceIndex(1)
-8 >Emitted(46, 79) Source(2, 49) + SourceIndex(1)
+3 >Emitted(46, 18) Source(2, 24) + SourceIndex(1)
+4 >Emitted(46, 20) Source(2, 26) + SourceIndex(1)
+5 >Emitted(46, 21) Source(2, 27) + SourceIndex(1)
+6 >Emitted(46, 23) Source(2, 29) + SourceIndex(1)
+7 >Emitted(46, 25) Source(2, 31) + SourceIndex(1)
+8 >Emitted(46, 27) Source(2, 33) + SourceIndex(1)
+9 >Emitted(46, 28) Source(2, 34) + SourceIndex(1)
+10>Emitted(46, 30) Source(2, 36) + SourceIndex(1)
+11>Emitted(46, 32) Source(2, 38) + SourceIndex(1)
+12>Emitted(46, 34) Source(2, 40) + SourceIndex(1)
+13>Emitted(46, 36) Source(2, 42) + SourceIndex(1)
+14>Emitted(46, 38) Source(2, 44) + SourceIndex(1)
+15>Emitted(46, 40) Source(2, 46) + SourceIndex(1)
+16>Emitted(46, 42) Source(2, 48) + SourceIndex(1)
+17>Emitted(46, 44) Source(2, 9) + SourceIndex(1)
+18>Emitted(46, 45) Source(2, 10) + SourceIndex(1)
+19>Emitted(46, 52) Source(2, 10) + SourceIndex(1)
+20>Emitted(46, 54) Source(2, 15) + SourceIndex(1)
+21>Emitted(46, 58) Source(2, 19) + SourceIndex(1)
+22>Emitted(46, 72) Source(2, 7) + SourceIndex(1)
+23>Emitted(46, 77) Source(2, 21) + SourceIndex(1)
+24>Emitted(46, 78) Source(2, 48) + SourceIndex(1)
+25>Emitted(46, 79) Source(2, 49) + SourceIndex(1)
 ---
 >>>    }
 1 >^^^^
@@ -459,29 +510,80 @@ sourceFile:file3.ts
 >>>        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
 1->^^^^^^^^
 2 >        ^^^^
-3 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                         ^^
-5 >                                           ^^^^^^^^
-6 >                                                   ^^
-7 >                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
-8 >                                                                             ^
+3 >            ^^^^^
+4 >                 ^^
+5 >                   ^
+6 >                    ^^
+7 >                      ^^
+8 >                        ^^
+9 >                          ^
+10>                           ^^
+11>                             ^^
+12>                               ^^
+13>                                 ^^
+14>                                   ^^
+15>                                     ^^
+16>                                       ^^
+17>                                         ^^
+18>                                           ^
+19>                                            ^^^^^^^
+20>                                                   ^^
+21>                                                     ^^^^
+22>                                                         ^^^^^^^^^^^^^^
+23>                                                                       ^^^^^
+24>                                                                            ^
+25>                                                                             ^
 1->() {
   >
 2 >        const 
-3 >            { b, ...rest } = { a: 10, b: 30, yy: 30 }
-4 >                                         
-5 >                                           b
-6 >                                                   , 
-7 >                                                     ...rest } = { a: 10, b: 30, yy: 30 }
-8 >                                                                             ;
+3 >            { b, ...rest } = 
+4 >                 { 
+5 >                   a
+6 >                    : 
+7 >                      10
+8 >                        , 
+9 >                          b
+10>                           : 
+11>                             30
+12>                               , 
+13>                                 yy
+14>                                   : 
+15>                                     30
+16>                                        }
+17>                                         
+18>                                           b
+19>                                            
+20>                                                   , ...
+21>                                                     rest
+22>                                                         
+23>                                                                       { b, ...rest }
+24>                                                                             = { a: 10, b: 30, yy: 30 }
+25>                                                                             ;
 1->Emitted(63, 9) Source(3, 1) + SourceIndex(4)
 2 >Emitted(63, 13) Source(3, 7) + SourceIndex(4)
-3 >Emitted(63, 42) Source(3, 48) + SourceIndex(4)
-4 >Emitted(63, 44) Source(3, 9) + SourceIndex(4)
-5 >Emitted(63, 52) Source(3, 10) + SourceIndex(4)
-6 >Emitted(63, 54) Source(3, 12) + SourceIndex(4)
-7 >Emitted(63, 78) Source(3, 48) + SourceIndex(4)
-8 >Emitted(63, 79) Source(3, 49) + SourceIndex(4)
+3 >Emitted(63, 18) Source(3, 24) + SourceIndex(4)
+4 >Emitted(63, 20) Source(3, 26) + SourceIndex(4)
+5 >Emitted(63, 21) Source(3, 27) + SourceIndex(4)
+6 >Emitted(63, 23) Source(3, 29) + SourceIndex(4)
+7 >Emitted(63, 25) Source(3, 31) + SourceIndex(4)
+8 >Emitted(63, 27) Source(3, 33) + SourceIndex(4)
+9 >Emitted(63, 28) Source(3, 34) + SourceIndex(4)
+10>Emitted(63, 30) Source(3, 36) + SourceIndex(4)
+11>Emitted(63, 32) Source(3, 38) + SourceIndex(4)
+12>Emitted(63, 34) Source(3, 40) + SourceIndex(4)
+13>Emitted(63, 36) Source(3, 42) + SourceIndex(4)
+14>Emitted(63, 38) Source(3, 44) + SourceIndex(4)
+15>Emitted(63, 40) Source(3, 46) + SourceIndex(4)
+16>Emitted(63, 42) Source(3, 48) + SourceIndex(4)
+17>Emitted(63, 44) Source(3, 9) + SourceIndex(4)
+18>Emitted(63, 45) Source(3, 10) + SourceIndex(4)
+19>Emitted(63, 52) Source(3, 10) + SourceIndex(4)
+20>Emitted(63, 54) Source(3, 15) + SourceIndex(4)
+21>Emitted(63, 58) Source(3, 19) + SourceIndex(4)
+22>Emitted(63, 72) Source(3, 7) + SourceIndex(4)
+23>Emitted(63, 77) Source(3, 21) + SourceIndex(4)
+24>Emitted(63, 78) Source(3, 48) + SourceIndex(4)
+25>Emitted(63, 79) Source(3, 49) + SourceIndex(4)
 ---
 >>>    }
 1 >^^^^
@@ -881,7 +983,7 @@ var globalConst = 10;
 //# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;;;;;ICFnB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,6BAAyC,EAAvC,QAAC,EAAE,wBAAoC,CAAC;IAChD,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICFH,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;;;;;ICFnB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICFH,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
 
 //// [/src/lib/module.js.map.baseline.txt]
 ===================================================================
@@ -1086,29 +1188,80 @@ sourceFile:file1.ts
 >>>        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
 1->^^^^^^^^
 2 >        ^^^^
-3 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                         ^^
-5 >                                           ^^^^^^^^
-6 >                                                   ^^
-7 >                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
-8 >                                                                             ^
+3 >            ^^^^^
+4 >                 ^^
+5 >                   ^
+6 >                    ^^
+7 >                      ^^
+8 >                        ^^
+9 >                          ^
+10>                           ^^
+11>                             ^^
+12>                               ^^
+13>                                 ^^
+14>                                   ^^
+15>                                     ^^
+16>                                       ^^
+17>                                         ^^
+18>                                           ^
+19>                                            ^^^^^^^
+20>                                                   ^^
+21>                                                     ^^^^
+22>                                                         ^^^^^^^^^^^^^^
+23>                                                                       ^^^^^
+24>                                                                            ^
+25>                                                                             ^
 1->() {
   >
 2 >        const 
-3 >            { b, ...rest } = { a: 10, b: 30, yy: 30 }
-4 >                                         
-5 >                                           b
-6 >                                                   , 
-7 >                                                     ...rest } = { a: 10, b: 30, yy: 30 }
-8 >                                                                             ;
+3 >            { b, ...rest } = 
+4 >                 { 
+5 >                   a
+6 >                    : 
+7 >                      10
+8 >                        , 
+9 >                          b
+10>                           : 
+11>                             30
+12>                               , 
+13>                                 yy
+14>                                   : 
+15>                                     30
+16>                                        }
+17>                                         
+18>                                           b
+19>                                            
+20>                                                   , ...
+21>                                                     rest
+22>                                                         
+23>                                                                       { b, ...rest }
+24>                                                                             = { a: 10, b: 30, yy: 30 }
+25>                                                                             ;
 1->Emitted(46, 9) Source(2, 1) + SourceIndex(1)
 2 >Emitted(46, 13) Source(2, 7) + SourceIndex(1)
-3 >Emitted(46, 42) Source(2, 48) + SourceIndex(1)
-4 >Emitted(46, 44) Source(2, 9) + SourceIndex(1)
-5 >Emitted(46, 52) Source(2, 10) + SourceIndex(1)
-6 >Emitted(46, 54) Source(2, 12) + SourceIndex(1)
-7 >Emitted(46, 78) Source(2, 48) + SourceIndex(1)
-8 >Emitted(46, 79) Source(2, 49) + SourceIndex(1)
+3 >Emitted(46, 18) Source(2, 24) + SourceIndex(1)
+4 >Emitted(46, 20) Source(2, 26) + SourceIndex(1)
+5 >Emitted(46, 21) Source(2, 27) + SourceIndex(1)
+6 >Emitted(46, 23) Source(2, 29) + SourceIndex(1)
+7 >Emitted(46, 25) Source(2, 31) + SourceIndex(1)
+8 >Emitted(46, 27) Source(2, 33) + SourceIndex(1)
+9 >Emitted(46, 28) Source(2, 34) + SourceIndex(1)
+10>Emitted(46, 30) Source(2, 36) + SourceIndex(1)
+11>Emitted(46, 32) Source(2, 38) + SourceIndex(1)
+12>Emitted(46, 34) Source(2, 40) + SourceIndex(1)
+13>Emitted(46, 36) Source(2, 42) + SourceIndex(1)
+14>Emitted(46, 38) Source(2, 44) + SourceIndex(1)
+15>Emitted(46, 40) Source(2, 46) + SourceIndex(1)
+16>Emitted(46, 42) Source(2, 48) + SourceIndex(1)
+17>Emitted(46, 44) Source(2, 9) + SourceIndex(1)
+18>Emitted(46, 45) Source(2, 10) + SourceIndex(1)
+19>Emitted(46, 52) Source(2, 10) + SourceIndex(1)
+20>Emitted(46, 54) Source(2, 15) + SourceIndex(1)
+21>Emitted(46, 58) Source(2, 19) + SourceIndex(1)
+22>Emitted(46, 72) Source(2, 7) + SourceIndex(1)
+23>Emitted(46, 77) Source(2, 21) + SourceIndex(1)
+24>Emitted(46, 78) Source(2, 48) + SourceIndex(1)
+25>Emitted(46, 79) Source(2, 49) + SourceIndex(1)
 ---
 >>>    }
 1 >^^^^

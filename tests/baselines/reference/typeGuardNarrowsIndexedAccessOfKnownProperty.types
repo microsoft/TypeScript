@@ -32,10 +32,10 @@ interface Square {
 
 interface Subshape {
     "0": {
->"0" : { sub: { under: { shape: Shape; }; }; }
+>"0" : { sub: {    under: {        shape: Shape;    };}; }
 
         sub: {
->sub : { under: { shape: Shape; }; }
+>sub : { under: {    shape: Shape;}; }
 
             under: {
 >under : { shape: Shape; }
@@ -289,7 +289,7 @@ function check(z: Z, c: C) {
 }
 
 export function g(pair: [number, string?]): string {
->g : (pair: [number, (string | undefined)?]) => string
+>g : (pair: [number, string?]) => string
 >pair : [number, (string | undefined)?]
 
     return pair[1] ? pair[1] : 'nope';

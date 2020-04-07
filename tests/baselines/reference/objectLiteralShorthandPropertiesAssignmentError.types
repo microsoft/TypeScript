@@ -21,7 +21,7 @@ var person1: { name, id };  // ok
 >id : any
 
 function foo(name: string, id: number): { id: string, name: number } { return { name, id }; }  // error
->foo : (name: string, id: number) => { id: string; name: number; }
+>foo : (name: string, id: number) => {    id: string;    name: number;}
 >name : string
 >id : number
 >id : string
@@ -31,7 +31,7 @@ function foo(name: string, id: number): { id: string, name: number } { return { 
 >id : number
 
 function bar(obj: { name: string; id: boolean }) { }
->bar : (obj: { name: string; id: boolean; }) => void
+>bar : (obj: {    name: string;    id: boolean;}) => void
 >obj : { name: string; id: boolean; }
 >name : string
 >id : boolean

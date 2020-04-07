@@ -152,7 +152,7 @@ class X<T>
 }
 
 declare var a: {
->a : { p1: () => any; p2: { [idx: number]: any; }; p3: any[]; p4: I<any>; p5: any; p6: () => any; p7: { [idx: number]: any; }; p8: any[]; p9: I<any>; pa: any; }
+>a : { p1: () => X; p2: { [idx: number]: any; }; p3: X[]; p4: I<X>; p5: any; p6: () => Y; p7: { [idx: number]: any; }; p8: Y[]; p9: I<Y>; pa: any; }
 
     p1: () => X;
 >p1 : () => any

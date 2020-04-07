@@ -328,7 +328,7 @@ function f30(x: string | number | undefined) {
 }
 
 function f31(x: { a: string | number }) {
->f31 : (x: { a: string | number; }) => void
+>f31 : (x: {    a: string | number;}) => void
 >x : { a: string | number; }
 >a : string | number
 

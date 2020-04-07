@@ -2,7 +2,7 @@
 interface A {}
 
 function factory(a: any): {new(): Object} {
->factory : (a: any) => new () => Object
+>factory : (a: any) => {    new (): Object;}
 >a : any
 
   return null;
