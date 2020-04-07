@@ -56,7 +56,7 @@
         "@types/xml2js": "^0.4.0",
         "@typescript-eslint/eslint-plugin": "2.26.0",
         "@typescript-eslint/experimental-utils": "2.18.0",
-        "@typescript-eslint/parser": "2.18.0",
+        "@typescript-eslint/parser": "2.27.0",
         "async": "latest",
         "azure-devops-node-api": "^10.1.0",
         "browser-resolve": "^1.11.2",
