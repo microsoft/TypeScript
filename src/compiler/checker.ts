@@ -14544,6 +14544,16 @@ namespace ts {
             }
         }
 
+        function checkExpressionForMutableLocationWithContextualType(next: Expression, sourcePropType: Type) {
+            next.contextualType = sourcePropType;
+            try {
+                return checkExpressionForMutableLocation(next, CheckMode.Contextual, sourcePropType);
+            }
+            finally {
+                next.contextualType = undefined;
+            }
+        }
+
         type ElaborationIterator = IterableIterator<{ errorNode: Node, innerExpression: Expression | undefined, nameType: Type, errorMessage?: DiagnosticMessage | undefined }>;
         /**
          * For every element returned from the iterator, checks that element to issue an error on a property of that element's type
@@ -14574,7 +14584,7 @@ namespace ts {
                         // Issue error on the prop itself, since the prop couldn't elaborate the error
                         const resultObj: { errors?: Diagnostic[] } = errorOutputContainer || {};
                         // Use the expression type, if available
-                        const specificSource = next ? checkExpressionForMutableLocation(next, CheckMode.Normal, sourcePropType) : sourcePropType;
+                        const specificSource = next ? checkExpressionForMutableLocationWithContextualType(next, sourcePropType) : sourcePropType;
                         const result = checkTypeRelatedTo(specificSource, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
                         if (result && specificSource !== sourcePropType) {
                             // If for whatever reason the expression type doesn't yield an error, make sure we still issue an error on the sourcePropType
