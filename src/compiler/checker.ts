@@ -7640,9 +7640,7 @@ namespace ts {
         function containsSameNamedThisProperty(thisProperty: Expression, expression: Expression) {
             return isPropertyAccessExpression(thisProperty)
                 && thisProperty.expression.kind === SyntaxKind.ThisKeyword
-                && forEachChildRecursively(
-                    expression,
-                    n => isPropertyAccessExpression(n) && n.expression.kind === SyntaxKind.ThisKeyword && n.name.escapedText === thisProperty.name.escapedText);
+                && forEachChildRecursively(expression, n => isMatchingReference(thisProperty, n));
         }
 
         function isDeclarationInConstructor(expression: Expression) {
