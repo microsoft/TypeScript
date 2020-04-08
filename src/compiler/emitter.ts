@@ -4321,12 +4321,12 @@ namespace ts {
                     // JsxText will be written with its leading whitespace, so don't add more manually.
                     return 0;
                 }
-                else if (!nodeIsSynthesized(previousNode) && !nodeIsSynthesized(nextNode) && previousNode.parent === nextNode.parent) {
+                else if (siblingNodePositionsAreComparable(previousNode, nextNode)) {
                     if (preserveSourceNewlines) {
                         return getEffectiveLines(
                             includeComments => getLinesBetweenRangeEndAndRangeStart(
-                                previousNode,
-                                nextNode,
+                                getOriginalNode(previousNode),
+                                getOriginalNode(nextNode),
                                 currentSourceFile!,
                                 includeComments));
                     }
@@ -4340,6 +4340,22 @@ namespace ts {
                 return 1;
             }
             return format & ListFormat.MultiLine ? 1 : 0;
+        }
+
+        function siblingNodePositionsAreComparable(previousNode: Node, nextNode: Node) {
+            if (previousNode.kind === SyntaxKind.NotEmittedStatement && nextNode.kind === SyntaxKind.NotEmittedStatement) {
+                return false;
+            }
+            if (nodeIsSynthesized(previousNode) || nodeIsSynthesized(nextNode)) {
+                return false;
+            }
+
+            if (!previousNode.parent || !nextNode.parent) {
+                const previousParent = getOriginalNode(previousNode).parent;
+                return previousParent && previousParent === getOriginalNode(nextNode).parent;
+            }
+
+            return nextNode.pos >= previousNode.end;
         }
 
         function getClosingLineTerminatorCount(parentNode: TextRange, children: readonly Node[], format: ListFormat): number {
