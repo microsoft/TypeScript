@@ -3684,7 +3684,9 @@ namespace ts {
             const statements = node.statements;
             pushNameGenerationScope(node);
             forEach(node.statements, generateNames);
-            emitHelpers(node);
+            if (emitHelpers(node)) {
+                writeLine();
+            }
             const index = findIndex(statements, statement => !isPrologueDirective(statement));
             emitTripleSlashDirectivesIfNeeded(node);
             emitList(node, statements, ListFormat.MultiLine, index === -1 ? statements.length : index);
