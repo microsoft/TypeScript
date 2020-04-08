@@ -509,6 +509,8 @@ declare var String: StringConstructor;
 interface Boolean {
     /** Returns the primitive value of the specified object. */
     valueOf(): boolean;
+    /** Returns a string representation of a boolean. */
+    toString(): string;
 }
 
 interface BooleanConstructor {
@@ -925,6 +927,9 @@ interface RegExp {
 
     // Non-standard extensions
     compile(): this;
+
+    /** Returns a string representation of a regular expression. */
+    toString(): string;
 }
 
 interface RegExpConstructor {
@@ -953,6 +958,8 @@ interface Error {
     name: string;
     message: string;
     stack?: string;
+    /** Returns a string representation of an Error object. */
+    toString(): string;
 }
 
 interface ErrorConstructor {
