@@ -870,7 +870,7 @@ namespace ts {
                 transformConstructorBody(constructor, node, extendsClauseElement, hasSynthesizedSuper)
             );
 
-            setTextRange(constructorFunction, constructor || node);
+            setTextRange(setOriginalNode(constructorFunction, constructor), constructor || node);
             if (extendsClauseElement) {
                 setEmitFlags(constructorFunction, EmitFlags.CapturesThis);
             }

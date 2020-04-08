@@ -2178,13 +2178,16 @@ namespace ts {
                     return undefined;
                 }
 
-                return setTextRange(
-                    createExpressionStatement(
-                        inlineExpressions(
-                            map(variables, transformInitializedVariable)
-                        )
+                return setOriginalNode(
+                    setTextRange(
+                        createExpressionStatement(
+                            inlineExpressions(
+                                map(variables, transformInitializedVariable)
+                            )
+                        ),
+                        node
                     ),
-                    node
+                    node,
                 );
             }
             else {
