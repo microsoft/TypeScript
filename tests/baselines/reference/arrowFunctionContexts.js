@@ -139,7 +139,7 @@ var arr; // Incorrect error here (bug 829597)
 var E;
 (function (E) {
     var _this = this;
-    E[E["x"] = 0] = "x";
+    E[E["x"] = function () { return 4; }] = "x";
     E[E["y"] = (function () { return _this; }).length] = "y"; // error, can't use this in enum
 })(E || (E = {}));
 // Arrow function as module variable initializer
@@ -181,7 +181,7 @@ var M2;
     var E;
     (function (E) {
         var _this = this;
-        E[E["x"] = 0] = "x";
+        E[E["x"] = function () { return 4; }] = "x";
         E[E["y"] = (function () { return _this; }).length] = "y";
     })(E || (E = {}));
     // Arrow function as module variable initializer
