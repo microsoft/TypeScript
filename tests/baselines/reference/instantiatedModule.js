@@ -74,8 +74,7 @@ var a1;
 var a1 = M.Point;
 var a1 = m.Point;
 
-var p1
-;
+var p1;
 var p1;
 // making the point a class instead of an interface 
 // makes this an instantiated mmodule
@@ -99,8 +98,7 @@ var a2 = m2.Point;
 var a2 = M2.Point;
 var o = a2.Origin();
 
-var p2
-;
+var p2;
 var p2;
 var p2 = new m2.Point();
 var p2 = new M2.Point();

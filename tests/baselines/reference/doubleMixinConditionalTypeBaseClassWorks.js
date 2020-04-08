@@ -28,11 +28,7 @@ var Mixin1 = function (Base) { return /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return class_1;
-}(Base));
-
-}
-
-;
+}(Base)); };
 
 
 var Mixin2 = function (Base) { return /** @class */ (function (_super) {

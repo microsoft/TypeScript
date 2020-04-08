@@ -56,9 +56,7 @@ async function asyncFunc() {
 }
 const asyncArrowFunc = async () => {
     await 0;
-}
-
-;
+};
 
 async function asyncIIFE() {
     await 0;

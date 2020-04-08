@@ -14,6 +14,5 @@
 [{ x: 1 }].map(
 function (_a) {
     var x = _a.x;
-    return x;
-}
+    return x;}
 );

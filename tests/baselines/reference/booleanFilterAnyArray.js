@@ -34,11 +34,7 @@ var ys;
 var ys = realanys.filter(Boolean);
 
 var foo = [{ name: 'x' }];
-var foor
-;
-var foor = foo.filter(function (x) { return x.name; })
-;
-var foos
-;
-var foos = [true, true, false, null].filter(function (thing) { return thing !== null; })
-;
+var foor;
+var foor = foo.filter(function (x) { return x.name; });
+var foos;
+var foos = [true, true, false, null].filter(function (thing) { return thing !== null; });

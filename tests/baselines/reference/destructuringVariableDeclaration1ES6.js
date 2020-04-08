@@ -44,8 +44,7 @@ var {h: {h1 = [undefined, null]}}: { h: { h1: number[] } } = { h: { h1: [1, 2] }
 //// [destructuringVariableDeclaration1ES6.js]
 // The type T associated with a destructuring variable declaration is determined as follows:
 //      If the declaration includes a type annotation, T is that type.
-var { a1, a2 } = { a1: 10, a2: "world" }
-;
+var { a1, a2 } = { a1: 10, a2: "world" };
 var [a3, [[a4]], a5] = [1, [["hello"]], true];
 // The type T associated with a destructuring variable declaration is determined as follows:
 //      Otherwise, if the declaration includes an initializer expression, T is the type of that initializer expression.
@@ -64,15 +63,12 @@ var [...c2] = [1, 2, 3, "string"];
 //      Otherwise, if S is a tuple- like type (section 3.3.3):
 //          	Let N be the zero-based index of the binding element in the array binding pattern.
 // 	            If S has a property with the numerical name N, T is the type of that property.
-var [d1, d2] = [1, "string"]
-
-;
+var [d1, d2] = [1, "string"];
 
 // The type T associated with a binding element is determined as follows:
 //      Otherwise, if S is a tuple- like type (section 3.3.3):
 //              Otherwise, if S has a numeric index signature, T is the type of the numeric index signature.
-var temp1 = [true, false, true]
-;
+var temp1 = [true, false, true];
 var [d3, d4] = [1, "string", ...temp1];
 
 //  Combining both forms of destructuring,

@@ -138,11 +138,8 @@ var OnlyDerived;
     var s2;
     var t2;
 
-    var a
-    ;
-    var b
-
-    ;
+    var a;
+    var b;
 
     var a2 = { foo: new Derived() };
     var b2 = { foo: new Derived2() };
@@ -201,11 +198,8 @@ var WithBase;
     var s2;
     var t2;
 
-    var a
-    ;
-    var b
-
-    ;
+    var a;
+    var b;
 
     var a2 = { foo: new Base() };
     var b2 = { foo: new Derived2() };

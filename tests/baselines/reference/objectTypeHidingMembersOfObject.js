@@ -44,14 +44,10 @@ var r2 = i.valueOf();
 
 var a = {
     valueOf: function () { }
-}
-
-;
+};
 
 var r3 = a.valueOf();
 
-var b
-
-;
+var b;
 
 var r4 = b.valueOf();

@@ -76,9 +76,7 @@ define(["require", "exports", "react"], function (require, exports, React) {
 
     var obj2 = {
         onClick: function () { }
-    }
-
-    ;
+    };
 
     var obj3;
 

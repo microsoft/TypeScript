@@ -204,8 +204,7 @@ switch (0) {
 {
     let l15 = 0;
     {
-        let l16 = 0
-        ;
+        let l16 = 0;
         label17: let l17 = 0;
     }
 }
@@ -262,9 +261,7 @@ var o = {
     f2: () => {
         let l29 = 0;
     }
-}
-
-;
+};
 
 // labels
 label: let l30 = 0;

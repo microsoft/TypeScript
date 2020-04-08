@@ -40,6 +40,5 @@ var M;
 })(M || (M = {}));
 var N;
 (function (N) {
-    var g2 = new G()
-    ;
+    var g2 = new G();
 })(N || (N = {}));

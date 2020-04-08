@@ -52,7 +52,5 @@ var p_cast = ({
         return new Point(this.x + dx, this.y + dy);
     },
     mult: function (p) { return p; }
-})
-
-;
+});
 

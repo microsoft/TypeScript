@@ -59,11 +59,8 @@ b.b(1);
 // Optional parameters should be valid in all the below casts
 
 function foo(x) { }
-var f = function foo(x) { }
-;
-var f2 = function (x, y) { }
-
-;
+var f = function foo(x) { };
+var f2 = function (x, y) { };
 foo(1);
 foo();
 f(1);
@@ -84,9 +81,7 @@ i();
 i(1);
 i.foo(1);
 i.foo(1, 2);
-var a
-
-;
+var a;
 a();
 a(1);
 a.foo();
@@ -95,9 +90,7 @@ var b = {
     foo: function (x) { },
     a: function foo(x, y) { },
     b: function (x) { }
-}
-
-;
+};
 b.foo();
 b.foo(1);
 b.a(1);

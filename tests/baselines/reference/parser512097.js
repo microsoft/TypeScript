@@ -5,8 +5,6 @@ if (true) {
 }
 
 //// [parser512097.js]
-var tt = { aa: aa }
-
-;
+var tt = { aa: aa };
 if (true) {
 }

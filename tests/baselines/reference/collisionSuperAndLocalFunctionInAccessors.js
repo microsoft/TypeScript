@@ -101,16 +101,14 @@ var c = /** @class */ (function (_super_1) {
             var x = function () {
                 function _super() {
                 }
-            }
-            ;
+            };
             return 10;
         },
         set: function (val) {
             var x = function () {
                 function _super() {
                 }
-            }
-            ;
+            };
         },
         enumerable: false,
         configurable: true

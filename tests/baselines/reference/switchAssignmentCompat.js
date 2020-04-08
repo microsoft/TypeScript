@@ -12,6 +12,5 @@ var Foo = /** @class */ (function () {
     return Foo;
 }());
 switch (0) {
-    case Foo: break;
-    // Error expected
+    case Foo: break; // Error expected
 }

@@ -32,5 +32,4 @@ var MyComponent = /** @class */ (function (_super) {
     }
     return MyComponent;
 }(React.Component));
-var m = React.createElement(MyComponent, { x: "a" })
-;
+var m = React.createElement(MyComponent, { x: "a" });

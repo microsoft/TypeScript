@@ -41,6 +41,5 @@ class Child extends Parent {
         super(...arguments);
         _foo.set(this, "foo"); // OK (Child's #foo does not conflict, as `Parent`'s `#foo` is not accessible)
         _bar.set(this, "bar"); // OK
-    }
-}
+    }}
 _foo = new WeakMap(), _bar = new WeakMap();

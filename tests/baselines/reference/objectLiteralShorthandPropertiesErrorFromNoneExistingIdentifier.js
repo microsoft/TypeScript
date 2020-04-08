@@ -9,5 +9,4 @@ var x = {
 var x = {
     x: x,
     undefinedVariable: undefinedVariable // Error
-}
-;
+};

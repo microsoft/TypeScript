@@ -225,9 +225,7 @@ var m3 = new BasicMonster("1", 100);
 var m4 = new BasicMonster("2", 100);
 m3.attack(m4);
 m3.health = 0;
-var x = m5.isAlive.toString()
-
-;
+var x = m5.isAlive.toString();
 
 var OverloadedMonster = /** @class */ (function () {
     function OverloadedMonster(name, health) {
@@ -247,9 +245,7 @@ var m5 = new OverloadedMonster("1");
 var m6 = new OverloadedMonster("2");
 m5.attack(m6);
 m5.health = 0;
-var y = m5.isAlive.toString()
-
-;
+var y = m5.isAlive.toString();
 
 var SplatMonster = /** @class */ (function () {
     function SplatMonster() {var args = [];

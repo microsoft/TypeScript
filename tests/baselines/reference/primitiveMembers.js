@@ -54,8 +54,7 @@ var n = 0;
 var N;
 n = N; // should not work, as 'number' has a different brand
 N = n; // should work
-var o = {}
-;
+var o = {};
 var f = function (x) { return x.length; };
 var r2 = /./g;
 var n2 = 34;

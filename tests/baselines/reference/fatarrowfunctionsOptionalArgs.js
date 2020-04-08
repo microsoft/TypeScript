@@ -344,6 +344,5 @@ function (a) { return 110; },
         }
         return 120;},
     function (a) { return function (b) { return function (c) { return 121; }; }; },
-    false ? function (a) { return 0; } : function (b) { return 122;
-    }
+    false ? function (a) { return 0; } : function (b) { return 122; }
 );

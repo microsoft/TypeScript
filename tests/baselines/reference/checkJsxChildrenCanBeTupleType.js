@@ -52,9 +52,7 @@ var ResizablePanel = /** @class */ (function (_super) {
 }(react_1["default"].Component));
 var test = react_1["default"].createElement(ResizablePanel, null, react_1["default"].createElement("div", null),
     react_1["default"].createElement("div", null)
-)
-
-;
+);
 
 var testErr = react_1["default"].createElement(ResizablePanel, null, react_1["default"].createElement("div", null),
     react_1["default"].createElement("div", null),

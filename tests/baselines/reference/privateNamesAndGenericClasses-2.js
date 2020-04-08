@@ -68,8 +68,7 @@ let a = new C(3);
 let b = new C("hello");
 
 a.baz = 5; // OK
-const x = a.baz
-; // OK
+const x = a.baz; // OK
 a.; // Error
 a = b; // Error
 b = a; // Error

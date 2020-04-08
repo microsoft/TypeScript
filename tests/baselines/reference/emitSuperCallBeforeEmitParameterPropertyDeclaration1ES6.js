@@ -16,10 +16,7 @@ class B extends A {
 //// [emitSuperCallBeforeEmitParameterPropertyDeclaration1ES6.js]
 class A {constructor() {
         this.blub = 6;
-    }
-
-
-}
+    }}
 
 
 class B extends A {

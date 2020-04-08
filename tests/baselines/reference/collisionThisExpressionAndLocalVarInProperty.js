@@ -27,8 +27,7 @@ var class1 = /** @class */ (function () {
             doStuff: function (callback) { return function () {
                 var _this = 2;
                 return callback(_this_1);
-            };
-            }
+            }; }
         };
     }
     return class1;
@@ -39,8 +38,7 @@ var class2 = /** @class */ (function () {
         this.prop1 = {
             doStuff: function (callback) { return function () {
                 return callback(_this_1);
-            };
-            }
+            }; }
         };
         var _this = 2;
     }

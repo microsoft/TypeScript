@@ -6,8 +6,7 @@ var c = /** @class */ (function () {
     function c() {}
     return c;
 }());
-(function () { }
-);
+(function () { });
 //@after
 var e;
 (function (e) {})(e || (e = {}));

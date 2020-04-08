@@ -94,9 +94,7 @@ var de = {
         different: { e: 12 },
         other: { g: 101 }
     }
-}
-
-;
+};
 
 
 
@@ -111,5 +109,4 @@ var defg = {
         different: { e: 12 },
         other: { g: 101 }
     }
-}
-;
+};

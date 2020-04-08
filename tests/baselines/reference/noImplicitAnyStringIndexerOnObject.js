@@ -99,23 +99,20 @@ var a = {}["hello"];
 var b = { '': 'foo' }[''];
 
 var c = {
-    get: function (key) { return 'foobar';
-    }
+    get: function (key) { return 'foobar'; }
 };
 c['hello'];
 var foo = c['hello'];
 
 var d = {
-    set: function (key) { return 'foobar';
-    }
+    set: function (key) { return 'foobar'; }
 };
 var bar = d['hello'];
 
 {
     var e = {
         get: function (key) { return 'foobar'; },
-        set: function (key) { return 'foobar';
-        }
+        set: function (key) { return 'foobar'; }
     };
     e['hello'];
     e['hello'] = 'modified';
@@ -126,8 +123,7 @@ var bar = d['hello'];
 {
     var e = {
         get: function (key) { return 'foobar'; },
-        set: function (key, value) { return 'foobar';
-        }
+        set: function (key, value) { return 'foobar'; }
     };
     e['hello'];
     e['hello'] = 'modified';
@@ -138,8 +134,7 @@ var bar = d['hello'];
 {
     var e = {
         get: function (key) { return 'foobar'; },
-        set: function (key, value) { return 'foobar';
-        }
+        set: function (key, value) { return 'foobar'; }
     };
     e['hello'];
     e['hello'] = 'modified';

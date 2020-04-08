@@ -60,9 +60,7 @@ function f1() {
 const f2 = function () {
     const i = new.target;
     const j = () => new.target;
-}
-
-;
+};
 
 const O = {
     k: function () { return new.target; }

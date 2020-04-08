@@ -40,26 +40,15 @@ let y6 = c && (a ?? b) as any;
 
 //// [nullishCoalescingOperator_es2020.js]
 "use strict";
-const aa1 = a1 ?? 'whatever'
-;
-const aa2 = a2 ?? 'whatever'
-;
-const aa3 = a3 ?? 'whatever'
-;
-const aa4 = a4 ?? 'whatever'
-;
-const aa5 = a5 ?? 'whatever'
-;
-const aa6 = a6 ?? 'whatever'
-;
-const aa7 = a7 ?? 'whatever'
-;
-const aa8 = a8 ?? 'whatever'
-;
-const aa9 = a9 ?? 'whatever'
-
-
-;
+const aa1 = a1 ?? 'whatever';
+const aa2 = a2 ?? 'whatever';
+const aa3 = a3 ?? 'whatever';
+const aa4 = a4 ?? 'whatever';
+const aa5 = a5 ?? 'whatever';
+const aa6 = a6 ?? 'whatever';
+const aa7 = a7 ?? 'whatever';
+const aa8 = a8 ?? 'whatever';
+const aa9 = a9 ?? 'whatever';
 
 let x1 = (a ?? b) || c;
 let x2 = c || (a ?? b);

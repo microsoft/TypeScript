@@ -22,9 +22,7 @@ export class C {constructor() {
         this.a = Object.assign(Object.assign({ b: this.b }, this.c), { [this.b]: `${this.c}` });
         this.b = 0;
         this.c = { c: this.b };
-    }
-
-}
+    }}
 let D = /** @class */ (() => {
     class D {
     }

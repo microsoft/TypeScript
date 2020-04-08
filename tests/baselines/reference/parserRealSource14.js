@@ -1048,9 +1048,7 @@ var TypeScript;
                     }
                 }
             }
-        }
-
-        ;
+        };
 
         var pre = function (cur, parent, walker) {
             if (isValidAstNode(cur)) {
@@ -1094,9 +1092,7 @@ var TypeScript;
                 }
             }
             return cur;
-        }
-
-        ;
+        };
 
         var ctx = new AstPathContext();
         TypeScript.getAstWalkerFactory().walk(script, pre, null, null, ctx);
@@ -1123,9 +1119,7 @@ var TypeScript;
             }
 
             return cur;
-        }
-
-        ;
+        };
         TypeScript.getAstWalkerFactory().walk(script, pre);
         return bestOffset;
     }
@@ -1139,15 +1133,12 @@ var TypeScript;
             path.push(cur);
             callback(path, walker);
             return cur;
-        }
-        ;
+        };
         var post = function (cur, parent, walker) {
             var path = walker.state;
             path.pop();
             return cur;
-        }
-
-        ;
+        };
 
         var path = new AstPath();
         TypeScript.getAstWalkerFactory().walk(ast, pre, post, null, path);

@@ -39,8 +39,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var _a;
-var x = "p"
-;
+var x = "p";
 var A = /** @class */ (function () {
     function A(y) {
         Object.defineProperty(this, "y", {

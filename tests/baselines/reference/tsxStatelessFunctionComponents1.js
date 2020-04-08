@@ -93,9 +93,7 @@ var h = <MeetAndGreet extra-prop-name="World"/>;
 
 // Error
 var i = <EmptyPropSFC prop1/>;
-var i1 = <EmptyPropSFC ref={function (x) { return x.greeting.substr(10); }}/>
-
-;
+var i1 = <EmptyPropSFC ref={function (x) { return x.greeting.substr(10); }}/>;
 
 var o = {
     prop1: true

@@ -33,10 +33,7 @@ var C2 = /** @class */ (function () {
 function f() { }
 function f2() { }
 
-var a
+var a;
 
-;
-
-var b = function () { }
-;
+var b = function () { };
 var b2 = function () { };

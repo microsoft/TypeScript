@@ -68,9 +68,7 @@ var E;
 var a0 = function (num, str) {
     num.toExponential();
     return 0;
-}
-
-;
+};
 
 var Class = /** @class */ (function () {
     function Class() {
@@ -80,9 +78,7 @@ var Class = /** @class */ (function () {
 var a1 = function (a1) {
     a1.foo();
     return 1;
-}
-
-;
+};
 
 // A contextual signature S is extracted from a function type T as follows:
 //      If T is a union type, let U be the set of element types in T that have call signatures.
@@ -119,8 +115,7 @@ var C = /** @class */ (function () {
     function C() {
         var k = function (j, k) {
             return [j, k];
-        }
-        ; // Per spec, no contextual signature can be extracted in this case.
+        }; // Per spec, no contextual signature can be extracted in this case.
     }
     return C;
 }());

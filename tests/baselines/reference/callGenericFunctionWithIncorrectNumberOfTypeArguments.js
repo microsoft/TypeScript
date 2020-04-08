@@ -52,13 +52,11 @@ function f(x, y) { return null; }
 var r1 = f(1, '');
 var r1b = f(1, '');
 
-var f2 = function (x, y) { return null; }
-;
+var f2 = function (x, y) { return null; };
 var r2 = f2(1, '');
 var r2b = f2(1, '');
 
-var f3
-;
+var f3;
 var r3 = f3(1, '');
 var r3b = f3(1, '');
 

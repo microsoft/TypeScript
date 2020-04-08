@@ -38,13 +38,10 @@ exports.__esModule = true;
 var itemId = 'some-id';
 
 // --- test on first level ---
-var items = {}
-;
+var items = {};
 var _a = items, _b = itemId, itemOk1 = _a[_b];
 typeof itemOk1; // pass
-var objWithItems = { items: {} }
-
-;
+var objWithItems = { items: {} };
 
 var itemOk2 = objWithItems.items[itemId];
 typeof itemOk2; // pass

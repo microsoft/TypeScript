@@ -50,6 +50,5 @@ var m = M2.X;
 var point;
 var point = m.Point;
 
-var p
-;
+var p;
 var p;

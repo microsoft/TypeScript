@@ -88,12 +88,10 @@ var [b6, b7] = foo();
 var [...b8] = foo();
 
 //      S is not a tuple- like type and the numeric index signature type of S is assignable to the target given in E.
-var temp = [1, 2, 3]
-;
+var temp = [1, 2, 3];
 var [c0, c1] = [...temp];
 var [c2] = [];
-var [[[c3]], [[[[c4]]]]] = [[[]], [[[[]]]]]
-;
+var [[[c3]], [[[[c4]]]]] = [[[]], [[[[]]]]];
 var [[c5], c6] = [[1], true];
 var [, c7] = [1, 2, 3];
 var [, , , c8] = [1, 2, 3, 4];

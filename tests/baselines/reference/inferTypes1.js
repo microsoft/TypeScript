@@ -233,11 +233,8 @@ function invoker(key) {var args = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         args[_i - 1] = arguments[_i];
     }
-    return function (obj) { return obj[key].apply(obj, args);
-    };
+    return function (obj) { return obj[key].apply(obj, args); };
 }
 
-var result = invoker('test', true)({ test: function (a) { return 123; } })
-
-;
+var result = invoker('test', true)({ test: function (a) { return 123; } });
 

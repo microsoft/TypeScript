@@ -46,6 +46,5 @@ var BigGreeter = /** @class */ (function (_super) {
 var a = <BigGreeter prop1="hello"/>;
 
 // OK
-var b = <BigGreeter ref={function (input) { _this.textInput = input; }}/>
-;
+var b = <BigGreeter ref={function (input) { _this.textInput = input; }}/>;
 var c = <BigGreeter data-extra="hi"/>;

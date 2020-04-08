@@ -99,8 +99,7 @@ var C3 = /** @class */ (function () {
             h: function (x) {
                 return undefined;
             }
-        }
-        ;
+        };
     };
     return C3;
 }());

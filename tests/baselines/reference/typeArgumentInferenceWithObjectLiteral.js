@@ -45,13 +45,11 @@ var s;
 // Calls below should infer string for T and then assign that type to the value parameter
 foo({
     read: function () { return s; },
-    write: function (value) { return s = value;
-    }
+    write: function (value) { return s = value; }
 });
 foo({
     write: function (value) { return s = value; },
-    read: function () { return s;
-    }
+    read: function () { return s; }
 });
 var E1;
 (function (E1) {

@@ -28,8 +28,7 @@ var a = /** @class */ (function () {
             doStuff: function (callback) { return function () {
                 var _this = 2;
                 return callback(_this);
-            };
-            }
+            }; }
         };
     };
     a.prototype.method2 = function () {
@@ -37,8 +36,7 @@ var a = /** @class */ (function () {
         return {
             doStuff: function (callback) { return function () {
                 return callback(_this);
-            };
-            }
+            }; }
         };
     };
     return a;

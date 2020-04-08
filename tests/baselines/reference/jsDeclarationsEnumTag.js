@@ -70,8 +70,7 @@ exports.Second = {
 exports.Fs = {
     ADD1: function (n) { return n + 1; },
     ID: function (n) { return n; },
-    SUB1: function (n) { return n - 1;
-    }
+    SUB1: function (n) { return n - 1; }
 };
 
 /**

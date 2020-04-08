@@ -104,11 +104,8 @@ var JustStrings;
     var s2;
     var t2;
 
-    var a
-    ;
-    var b
-
-    ;
+    var a;
+    var b;
 
     var a2 = { '1.0': '' };
     var b2 = { '1': '' };
@@ -151,11 +148,8 @@ var NumbersAndStrings;
     var s2;
     var t2;
 
-    var a
-    ;
-    var b
-
-    ;
+    var a;
+    var b;
 
     var a2 = { '1.0': '' };
     var b2 = { 1.: '' };

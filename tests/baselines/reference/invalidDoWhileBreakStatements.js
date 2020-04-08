@@ -51,8 +51,7 @@ while (true);
 TWO: do {
     var x = function () {
         break TWO;
-    }
-    ;
+    };
 } while (true);
 
 THREE: do {

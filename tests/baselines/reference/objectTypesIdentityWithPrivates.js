@@ -164,8 +164,7 @@ var PB = /** @class */ (function (_super) {
     }
     return PB;
 }(B));
-var a
-;
+var a;
 var b = { foo: '' };
 
 function foo1(x) { }

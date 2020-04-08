@@ -28,10 +28,8 @@ var class1 = /** @class */ (function () {
             doStuff: function (callback) { return function () {
                 var _this = 2;
                 return callback(_this);
-            };
-            }
-        }
-        ;
+            }; }
+        };
     }
     return class1;
 }());
@@ -41,10 +39,8 @@ var class2 = /** @class */ (function () {
         var x2 = {
             doStuff: function (callback) { return function () {
                 return callback(_this);
-            };
-            }
-        }
-        ;
+            }; }
+        };
     }
     return class2;
 }());

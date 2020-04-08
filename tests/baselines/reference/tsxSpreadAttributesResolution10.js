@@ -53,9 +53,7 @@ var Opt = /** @class */ (function (_super) {
 var obj = {};
 var obj1 = {
     x: 2
-}
-
-;
+};
 
 // Error
 var y = <Opt {...obj} x={3}/>;

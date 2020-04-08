@@ -19,16 +19,13 @@ exports.__esModule = true;
 var React = require("react");
 
 var decorator = function (Component) {
-    return function (props) { return <Component {...props}></Component>;
-    };
+    return function (props) { return <Component {...props}></Component>; };
 };
 
 var decorator2 = function (Component) {
-    return function (props) { return <Component {...props} x={2}></Component>;
-    };
+    return function (props) { return <Component {...props} x={2}></Component>; };
 };
 
 var decorator3 = function (Component) {
-    return function (props) { return <Component x={2} {...props}></Component>;
-    };
+    return function (props) { return <Component x={2} {...props}></Component>; };
 };

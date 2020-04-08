@@ -11,6 +11,5 @@ exports.__esModule = true;
 var React = require("react");
 
 var decorator4 = function (Component) {
-    return function (props) { return <Component {...props} y={"blah"}></Component>;
-    };
+    return function (props) { return <Component {...props} y={"blah"}></Component>; };
 };

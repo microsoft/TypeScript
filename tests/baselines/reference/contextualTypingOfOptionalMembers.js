@@ -81,8 +81,7 @@ const a = <App4 state={100} foo={s => s} />; // TODO: should be number => number
 app({
     state: 100,
     actions: {
-        foo: function (s) { return s;
-        } // Should be typed number => number
+        foo: function (s) { return s; } // Should be typed number => number
     },
     view: function (s, a) { return undefined; }
 });
@@ -100,8 +99,7 @@ var y = foo({
 app2({
     state: 100,
     actions: {
-        foo: function (s) { return s;
-        } // Should be typed number => number
+        foo: function (s) { return s; } // Should be typed number => number
     },
     view: function (s, a) { return undefined; }
 });
@@ -113,8 +111,7 @@ app2({
 app3({
     state: 100,
     actions: [
-        function (s) { return s;
-        } // Should be typed number => number
+        function (s) { return s; } // Should be typed number => number
     ],
     view: function (s, a) { return undefined; }
 });

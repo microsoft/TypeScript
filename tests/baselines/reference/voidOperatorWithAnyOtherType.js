@@ -66,8 +66,7 @@ void M.n;
 var ANY;
 var ANY1;
 var ANY2 = ["", ""];
-var obj
-;
+var obj;
 var obj1 = { x: "", y: 1 };
 
 function foo() {

@@ -17,9 +17,7 @@ var x = /** @class */ (function () {
     function C() {
     }
     return C;
-}())
-
-;
+}());
 
 var y = {
     foo: /** @class */ (function () {
@@ -27,15 +25,12 @@ var y = {
         }
         return C2;
     }())
-}
-
-;
+};
 var M;
 (function (M) {
     var z = /** @class */ (function () {
         function C4() {
         }
         return C4;
-    }())
-    ;
+    }());
 })(M || (M = {}));

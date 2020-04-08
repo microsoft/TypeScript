@@ -30,39 +30,29 @@ export const l = async () => {
 
 //// [test.js]
 export async function fn() {
-    const req = await import('./test')
-    ; // ONE
+    const req = await import('./test'); // ONE
 }
 export class cl1 {
     async m() {
-        const req = await import('./test')
-        ; // TWO
+        const req = await import('./test'); // TWO
     }
 }
 
 export const obj = {
     m: async () => {
-        const req = await import('./test')
-        ; // THREE
+        const req = await import('./test'); // THREE
     }
-}
-
-;
+};
 export class cl2 {
 
     constructor() {
         this.p = {
             m: async () => {
-                const req = await import('./test')
-                ; // FOUR
+                const req = await import('./test'); // FOUR
             }
         };
-    }
-
-}
+    }}
 
 export const l = async () => {
-    const req = await import('./test')
-    ; // FIVE
-}
-;
+    const req = await import('./test'); // FIVE
+};

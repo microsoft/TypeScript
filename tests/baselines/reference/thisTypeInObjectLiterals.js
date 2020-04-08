@@ -43,9 +43,7 @@ var o = {
     f: function () {
         return this.d.length;
     }
-}
-
-;
+};
 
 var mutuallyRecursive = {
     a: 100,
@@ -61,7 +59,6 @@ var mutuallyRecursive = {
         }
         return n;
     }
-}
-;
+};
 var i = mutuallyRecursive.start();
 var impl = mutuallyRecursive;

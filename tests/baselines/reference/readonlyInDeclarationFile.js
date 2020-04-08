@@ -126,9 +126,7 @@ var C = /** @class */ (function () {
     });
     return C;
 }());
-var z
-
-;
+var z;
 function f() {
     return {
         get x() { return 1; },
@@ -137,8 +135,7 @@ function f() {
     };
 }
 function g() {
-    var x
-    ;
+    var x;
     return x;
 }
 

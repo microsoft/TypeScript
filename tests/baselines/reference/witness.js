@@ -245,9 +245,7 @@ var fn5r = fn5(); // fn5r: should be 'any', but is 'number'
 var propAcc1 = {
     m: propAcc1.m
 };
-var propAcc1
-
-;
+var propAcc1;
 // Property access of module member
 var M2;
 (function (M2) {

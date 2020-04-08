@@ -6,5 +6,4 @@ var v = {
 //// [objectLiteralWithSemicolons4.js]
 var v = {
     a: a
-}
-;
+};

@@ -114,15 +114,13 @@ var v01;
 var v02;
 var v02;
 var v02;
-var v02
-;
+var v02;
 var v02;
 
 var v03;
 var v03;
 var v03;
-var v03
-;
+var v03;
 var v03;
 
 var v04;
@@ -131,8 +129,7 @@ var v04;
 var v04;
 var v04;
 var v04;
-var v04
-;
+var v04;
 var v04;
 
 
@@ -156,15 +153,13 @@ var b01;
 var b02;
 var b02;
 var b02;
-var b02
-;
+var b02;
 var b02;
 
 var b03;
 var b03;
 var b03;
-var b03
-;
+var b03;
 var b03;
 
 var b04;
@@ -173,8 +168,7 @@ var b04;
 var b04;
 var b04;
 var b04;
-var b04
-;
+var b04;
 var b04;
 
 

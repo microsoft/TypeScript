@@ -199,16 +199,12 @@ f15({ error: new Error("boom") });
 
 function f20(carrier) {
     if (carrier.error === null) {
-        var error = carrier.error
-        ;
-        var data = carrier.data
-        ;
+        var error = carrier.error;
+        var data = carrier.data;
     }
     else {
-        var error = carrier.error
-        ;
-        var data = carrier.data
-        ;
+        var error = carrier.error;
+        var data = carrier.data;
     }
 }
 

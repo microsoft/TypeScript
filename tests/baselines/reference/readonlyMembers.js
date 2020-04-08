@@ -80,8 +80,7 @@ var C = /** @class */ (function () {
             _this.a = 1; // Error
             _this.b = 1; // Error
             _this.c = 1; // Error
-        }
-        ;
+        };
     }
     Object.defineProperty(C.prototype, "c", {
         get: function () { return 1; },

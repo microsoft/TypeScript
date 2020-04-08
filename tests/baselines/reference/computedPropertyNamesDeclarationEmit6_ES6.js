@@ -13,8 +13,7 @@ var v = {
     [+1]: {},
     [~1]: {},
     [!1]: {}
-}
-;
+};
 
 
 //// [computedPropertyNamesDeclarationEmit6_ES6.d.ts]

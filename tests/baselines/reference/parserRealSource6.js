@@ -394,7 +394,6 @@ var TypeScript;
                     };
                     context.scopeStartAST = ast;
                     break;
-
                 case NodeType.FuncDecl:{
                         var funcDecl = ast;
                         if (context.skipNextFuncDeclForClass) {

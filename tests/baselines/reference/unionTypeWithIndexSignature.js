@@ -37,8 +37,7 @@ m.bar;
 ro.foo = 'not allowed';
 num[0] = 1;
 num['0'] = 'ok';
-const sym = Symbol()
-;
+const sym = Symbol();
 both['s'] = 'ok';
 both[0] = 1;
 both[1] = 0; // not ok

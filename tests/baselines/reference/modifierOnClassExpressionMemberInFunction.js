@@ -17,8 +17,7 @@ function g() {
             return C;
         }()),
         _a.prop2 = 43,
-        _a)
-    ;
+        _a);
 }
 
 

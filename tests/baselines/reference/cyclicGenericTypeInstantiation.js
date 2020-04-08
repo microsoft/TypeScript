@@ -31,8 +31,7 @@ function foo() {
 
 function bar() {
     var z = bar();
-    var y
-    ;
+    var y;
     return y;
 }
 

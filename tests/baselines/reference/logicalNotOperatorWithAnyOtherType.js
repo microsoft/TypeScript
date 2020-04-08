@@ -65,8 +65,7 @@ var ResultIsBoolean21 = !!!(ANY + ANY1);
 var ANY;
 var ANY1;
 var ANY2 = ["", ""];
-var obj
-;
+var obj;
 var obj1 = { x: "", y: function () { } };
 function foo() {
     var a;

@@ -129,8 +129,7 @@ function f3() {
     var x;
     var g = function () {
         x = 1;
-    }
-    ;
+    };
     g();
     var y = x;
 }

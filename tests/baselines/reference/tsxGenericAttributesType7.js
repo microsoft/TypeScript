@@ -17,9 +17,7 @@ var React = require("react");
 
 var decorator = function (props) {
     return <Component {...props}/>;
-}
-
-;
+};
 
 var decorator1 = function (props) {
     return <Component {...props} x="hi"/>;

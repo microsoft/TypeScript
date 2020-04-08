@@ -107,9 +107,7 @@ var Printable = function (superClass) { var _a; return _a = /** @class */ (funct
         return class_1;
     }(superClass)),
     _a.message = "hello",
-    _a; }
-
-;
+    _a; };
 
 
 function Tagged(superClass) {

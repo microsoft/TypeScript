@@ -39,6 +39,5 @@ var M;
 })(M || (M = {}));
 var o;
 var o = new M.D('Hello');
-var p
-;
+var p;
 var p;

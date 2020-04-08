@@ -40,12 +40,9 @@ var C = /** @class */ (function () {
     return C;
 }());
 
-var a
-
-;
+var a;
 
 var b = {
     foo: function (x) { },
     foo: function (x) { }
-}
-;
+};

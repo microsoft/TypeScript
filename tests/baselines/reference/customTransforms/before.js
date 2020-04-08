@@ -5,8 +5,7 @@ var c = /** @class */ (function () {
     function c() {}
     return c;
 }());
-(function () { }
-);
+(function () { });
 var e;
 (function (e) {})(e || (e = {}));
 // leading

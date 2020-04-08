@@ -60,11 +60,8 @@ var t;
 var s2;
 var t2;
 
-var a
-;
-var b
-
-;
+var a;
+var b;
 
 var a2 = { foo: '' };
 var b2 = { foo: '' };

@@ -63,8 +63,7 @@ var RegisteredUser = /** @class */ (function (_super) {
             (
                 function () {
                     _super.sayHello.call(_this);
-                }
-            );
+                });
         }
     };
     RegisteredUser.prototype.h = function () {

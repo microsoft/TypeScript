@@ -276,13 +276,10 @@ sourceFile:sourceMap-Comments.ts
 2 >Emitted(18, 31) Source(14, 27) + SourceIndex(0)
 ---
 >>>                }
-1 >^^^^^^^^^^^^^^^^^^^^
-2 >                    
+1 >^^^^^^^^^^^^^^^^^
 1 >
-2 >                    
-  >                                }
-1 >Emitted(19, 21) Source(14, 27) + SourceIndex(0)
-2 >Emitted(19, 18) Source(15, 14) + SourceIndex(0)
+  >            }
+1 >Emitted(19, 18) Source(15, 14) + SourceIndex(0)
 ---
 >>>            };
 1 >^^^^^^^^^^^^

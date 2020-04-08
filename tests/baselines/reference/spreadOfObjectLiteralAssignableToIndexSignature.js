@@ -26,18 +26,14 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var foo = {}
+var foo = {}; // OK
 
-; // OK
-
-var recordOfRecords = {}
-;
+var recordOfRecords = {};
 recordOfRecords.propA = __assign({}, (foo !== undefined ? { foo: foo } : {})); // OK
 recordOfRecords.propB = __assign({}, (foo && { foo: foo })); // OK
 recordOfRecords.propC = __assign({}, (foo !== undefined && { foo: foo })); // error'd in 3.7 beta, should be OK
 
-var recordsOfRecordsOrEmpty = {}
-;
+var recordsOfRecordsOrEmpty = {};
 recordsOfRecordsOrEmpty.propA = __assign({}, (foo !== undefined ? { foo: foo } : {})); // OK
 recordsOfRecordsOrEmpty.propB = __assign({}, (foo && { foo: foo })); // OK
 recordsOfRecordsOrEmpty.propC = __assign({}, (foo !== undefined && { foo: foo })); // OK

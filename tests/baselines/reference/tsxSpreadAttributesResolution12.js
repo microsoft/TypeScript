@@ -53,14 +53,11 @@ var React = require("react");
 var obj = {};
 var obj1 = {
     x: 2
-}
-;
+};
 var obj3 = {
     y: false,
     overwrite: "hi"
-}
-
-;
+};
 
 
 var OverWriteAttr = /** @class */ (function (_super) {

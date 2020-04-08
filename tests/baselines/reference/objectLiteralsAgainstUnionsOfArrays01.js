@@ -17,5 +17,4 @@ let x: Foo[] = [
 
 var x = [
     { bar: { prop: 100 } }
-]
-;
+];

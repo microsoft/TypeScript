@@ -20,9 +20,7 @@ Promise.resolve().then(() => require(getSpecifier()));
 
 var p0 = Promise.resolve().then(() => require(`${directory}\${moduleFile}`));
 var p1 = Promise.resolve().then(() => require(getSpecifier()));
-const p2 = Promise.resolve().then(() => require(whatToLoad ? getSpecifier() : "defaulPath"))
-
-;
+const p2 = Promise.resolve().then(() => require(whatToLoad ? getSpecifier() : "defaulPath"));
 
 function returnDynamicLoad(path) {
     return Promise.resolve().then(() => require(path));

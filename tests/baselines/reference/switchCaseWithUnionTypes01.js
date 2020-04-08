@@ -35,17 +35,14 @@ switch (strOrNum) {
     case strOrNum:
         break;
 
-
     // Constituents
     case str:
     case num:
         break;
 
-
     // Overlap in constituents
     case numOrBool:
         break;
-
 
     // No relation
     case bool:

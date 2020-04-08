@@ -66,8 +66,7 @@ var test5 = { M: function () { } };
 var test6 = { M: 5 };
 var test7 = { M: function () { } };
 test7 = {};
-var test8 = { M: 5 }
-;
+var test8 = { M: 5 };
 test8 = {};
 var test9_1;
 var test9_2;

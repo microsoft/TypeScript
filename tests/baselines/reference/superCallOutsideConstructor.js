@@ -49,14 +49,11 @@ var D = /** @class */ (function (_super) {
         _this.x = _this = _super.call(this) || this;
         var y = function () {
             _this = _super.call(this) || this;
-        }
-
-        ;
+        };
 
         var y2 = function () {
             _this = _super.call(this) || this;
-        }
-        ;
+        };
         return _this;
     }
     return D;

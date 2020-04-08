@@ -9,9 +9,7 @@ const bar = {
 //// [definiteAssignmentAssertionsWithObjectShortHand.js]
 "use strict";
 var a = 'ff';
-var foo = { a: a }
-
-;
+var foo = { a: a };
 
 var bar = {
     a: function () { }

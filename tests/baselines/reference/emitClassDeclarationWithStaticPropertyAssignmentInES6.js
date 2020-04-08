@@ -21,8 +21,7 @@ let D = /** @class */ (() => {
 
         constructor() {
             this.x = 20000;
-        }
-    }
+        }}
     D.b = true;
     return D;
 })();

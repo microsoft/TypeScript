@@ -98,8 +98,7 @@ var s = fn3 `${''}${3}${''}`;
 var n = fn3 `${5}${5}${5}`;
 var n;
 // Generic overloads with differing arity tagging with arguments matching each overload type parameter count
-var s = fn3 `${4}`
-;
+var s = fn3 `${4}`;
 var s = fn3 `${''}${''}${''}`;
 var n = fn3 `${''}${''}${3}`;
 

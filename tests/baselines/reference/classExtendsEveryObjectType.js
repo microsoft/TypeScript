@@ -43,8 +43,7 @@ var C2 = /** @class */ (function (_super) {
     }
     return C2;
 }({ foo: string })); // error
-var x
-;
+var x;
 var C3 = /** @class */ (function (_super) {
     __extends(C3, _super);function C3() {
         return _super !== null && _super.apply(this, arguments) || this;

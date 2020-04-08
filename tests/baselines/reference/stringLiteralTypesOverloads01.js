@@ -74,13 +74,9 @@ var Consts1;
     var ZERO = getFalsyPrimitive('number');
     var FALSE = getFalsyPrimitive("boolean");
 })(Consts1 || (Consts1 = {}));
-var string = "string"
-;
-var number = "number"
-;
-var boolean = "boolean"
-
-;
+var string = "string";
+var number = "number";
+var boolean = "boolean";
 
 var stringOrNumber = string || number;
 var stringOrBoolean = string || boolean;

@@ -44,9 +44,7 @@ function foo15(x: any) { }
 
 
 
-var a
-
-;
+var a;
 
 function foo2(x) { }
 

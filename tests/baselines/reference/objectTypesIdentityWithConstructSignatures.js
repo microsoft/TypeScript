@@ -104,9 +104,7 @@ var C = /** @class */ (function () {
 }());
 
 
-var a
-
-;
+var a;
 
 function foo1(x) { }
 

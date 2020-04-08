@@ -63,14 +63,11 @@ var C = /** @class */ (function () {
     return C;
 }());
 
-var a
-
-;
+var a;
 
 var b = {
     foo: '',
     foo: '',
     bar: function () { },
     bar: function () { }
-}
-;
+};

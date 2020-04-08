@@ -77,8 +77,7 @@ var o2 = {
     explicitThis: function (m) {
         return m + this.n.length; // error, this.n: number, no member 'length'
     }
-}
-;
+};
 var x = i.explicitThis;
 var n = x(12); // callee:void doesn't match this:I
 var u;

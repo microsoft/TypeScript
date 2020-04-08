@@ -279,9 +279,7 @@ var TypeScript;
                 default:
                     result += value.charAt(index);
             }
-        }
-
-        ;
+        };
 
         var tooLong = (value.length > length);
         if (tooLong) {

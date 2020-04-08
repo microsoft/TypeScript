@@ -54,8 +54,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 // A type query directly depends on the type of the referenced entity.
-var x = []
-;
+var x = [];
 
 
 var C1 = /** @class */ (function () {
@@ -71,7 +70,5 @@ var yy;
 
 
 
-var zz
-
-;
+var zz;
 

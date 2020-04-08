@@ -9,5 +9,4 @@ var foo = async (): Promise<void> => {
 var foo = async () => {
     // Legal to use 'await' in a type context.
     var v;
-}
-;
+};

@@ -52,13 +52,8 @@ var render = function (ctrl, model) {
                     vdom.createElement("div", { "class": "iconBorder" }, vdom.createElement("div", { "class": "icon" })
                     )
                 )
-                );
-            }
+                );}
             ))
         )
-    );
-
-}
-
-;
+    );};
 

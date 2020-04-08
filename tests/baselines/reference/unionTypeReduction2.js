@@ -119,9 +119,7 @@ function f11(a, b) {
 }
 
 
-var k = { something: function () { } }
-
-;
+var k = { something: function () { } };
 
 function run(options) {
     var _a;

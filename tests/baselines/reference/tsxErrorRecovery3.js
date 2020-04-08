@@ -16,6 +16,4 @@ React.createElement("div", null)
     ,
         React.createElement("div", null);
 //// [file2.js]
-var x = (React.createElement("div", null), React.createElement("div", null)
-)
-;
+var x = (React.createElement("div", null), React.createElement("div", null));

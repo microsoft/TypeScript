@@ -25,8 +25,7 @@ C==C;
 
 //// [typeMatch1.js]
 
-var x1
-;
+var x1;
 var x2 = x1;
 var i;
 var i2;

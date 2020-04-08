@@ -42,26 +42,16 @@ var b = {
 // Call signature parameters do not allow accessibility modifiers
 
 function foo(x, y) { }
-var f = function foo(x, y) { }
-;
-var f2 = function (x, y) { }
-;
-var f3 = function (x, y) { }
-;
-var f4 = function (x, y) { }
-
-;
+var f = function foo(x, y) { };
+var f2 = function (x, y) { };
+var f3 = function (x, y) { };
+var f4 = function (x, y) { };
 
 function foo2(x, y) { }
-var f5 = function foo(x, y) { }
-;
-var f6 = function (x, y) { }
-;
-var f7 = function (x, y) { }
-;
-var f8 = function (x, y) { }
-
-;
+var f5 = function foo(x, y) { };
+var f6 = function (x, y) { };
+var f7 = function (x, y) { };
+var f8 = function (x, y) { };
 
 var C = /** @class */ (function () {
     function C() {

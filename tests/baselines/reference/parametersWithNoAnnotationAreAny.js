@@ -43,9 +43,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 
-var a
-
-;
+var a;
 
 var b = {
     foo: function (x) {
@@ -54,6 +52,5 @@ var b = {
     a: function foo(x) {
         return x;
     },
-    b: function (x) { return x;
-    }
+    b: function (x) { return x; }
 };

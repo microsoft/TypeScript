@@ -422,7 +422,6 @@ function testExtendsExplicitDefault(x) {
         case 'symbol':assertSymbol(x);return;
         default:assertAll(x);return;
 
-
     }
 }
 
@@ -452,10 +451,8 @@ function exhaustiveChecksGenerics(x) {
     switch (typeof x) {
         case 'number': return x.toString(2);
         case 'string': return x;
-        case 'function': return x(42);
-        // Can't narrow generic
-        case 'object': return x.x;
-        // Can't narrow generic
+        case 'function': return x(42); // Can't narrow generic
+        case 'object': return x.x; // Can't narrow generic
     }
 }
 

@@ -18,5 +18,4 @@ var shape = {
     kind: "sq",
     x: 12,
     y: 13
-}
-;
+};

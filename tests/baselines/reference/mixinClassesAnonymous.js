@@ -105,9 +105,7 @@ var Printable = function (superClass) { var _a; return _a = /** @class */ (funct
         return class_1;
     }(superClass)),
     _a.message = "hello",
-    _a; }
-
-;
+    _a; };
 
 function Tagged(superClass) {
     var C = /** @class */ (function (_super) {
@@ -164,5 +162,4 @@ var Timestamped = function (Base) {
         }
         return class_2;
     }(Base));
-}
-;
+};

@@ -15,6 +15,5 @@ function bar() {
             var occluded = 0;
             return occluded;
         }
-    }
-    ;
+    };
 }

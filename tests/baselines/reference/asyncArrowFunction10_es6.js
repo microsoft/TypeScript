@@ -9,5 +9,4 @@ var foo = async (): Promise<void> => {
 var foo = () => __awaiter(this, void 0, void 0, function* () {
     // Legal to use 'await' in a type context.
     var v;
-})
-;
+});

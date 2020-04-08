@@ -26,13 +26,9 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var unused1 = __assign({ b: 1 }, ab)
-;
-var unused2 = __assign(__assign({}, ab), ab)
-;
-var unused3 = __assign({ b: 1 }, abq)
-
-;
+var unused1 = __assign({ b: 1 }, ab);
+var unused2 = __assign(__assign({}, ab), ab);
+var unused3 = __assign({ b: 1 }, abq);
 
 function g(obj) {
     return __assign({ x: 1 }, obj);

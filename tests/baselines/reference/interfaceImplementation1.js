@@ -64,8 +64,7 @@ var C2 = /** @class */ (function () {
 }());
 var a = function () {
     return new C2();
-}
-;
+};
 new a();
 /*var b:I4 = C2;
 new b();

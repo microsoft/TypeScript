@@ -52,10 +52,7 @@ var e3;
 (function (e3) {
     e3[e3["One"] = 0] = "One";
 })(e3 || (e3 = {})); // error
-var e3 = function () { }
-
-
-; // error
+var e3 = function () { }; // error
 // enum then class
 var e4;
 (function (e4) {

@@ -105,21 +105,17 @@ var f4 = function () {
     return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
         return [2 /*return*/];
     }); });
-}
-;
+};
 var f5 = function () {
     return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
         return [2 /*return*/];
     }); });
-}
-;
+};
 var f6 = function () {
     return __awaiter(this, void 0, MyPromise, function () { return __generator(this, function (_a) {
         return [2 /*return*/];
     }); });
-}
-
-;
+};
 
 var f7 = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
     return [2 /*return*/];

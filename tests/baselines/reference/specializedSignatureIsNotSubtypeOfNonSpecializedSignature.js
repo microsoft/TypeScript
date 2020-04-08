@@ -84,16 +84,11 @@ var C3 = /** @class */ (function () {
 
 
 
-var a
+var a;
 
-;
+var a2;
 
-var a2
-
-;
-
-var a3
-;
+var a3;
 
 
 //// [specializedSignatureIsNotSubtypeOfNonSpecializedSignature.d.ts]

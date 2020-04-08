@@ -72,9 +72,7 @@ var t1;
 var t2;
 var t3;
 var t4;
-var t5
-
-;
+var t5;
 
 var e11 = t1[4]; // base
 var e21 = t2[4]; // {}

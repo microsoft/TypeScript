@@ -42,9 +42,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 
-var a
-
-;
+var a;
 
 var b = {
     1: 1,

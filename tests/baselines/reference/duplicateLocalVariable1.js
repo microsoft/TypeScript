@@ -374,8 +374,7 @@ var TestRunner = /** @class */ (function () {
         var success = true;
         for (var test in this.tests) {
             var exception = false;
-            var testcase = this.tests[test]
-            ;
+            var testcase = this.tests[test];
             var testResult = false;
             try {
                 testResult = testcase.test();

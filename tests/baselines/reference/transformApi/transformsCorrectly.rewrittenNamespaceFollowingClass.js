@@ -2,8 +2,7 @@ let C = /** @class */ (() => {
     class C {
         constructor() {
             this.foo = 10;
-        }
-    }
+        }}
     C.bar = 20;
     return C;
 })();

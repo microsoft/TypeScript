@@ -111,27 +111,18 @@ spread = { s: "foo" }; // error, missing 'b'
 var b = { b: false };
 spread = b; // error, missing 's'
 // literal repeats are not allowed, but spread repeats are fine
-var duplicated = __assign(__assign(__assign(__assign({ b: 'bad' }, o), { b: 'bad' }), o2), { b: 'bad' })
-;
-var duplicatedSpread = __assign(__assign({}, o), o)
-;
+var duplicated = __assign(__assign(__assign(__assign({ b: 'bad' }, o), { b: 'bad' }), o2), { b: 'bad' });
+var duplicatedSpread = __assign(__assign({}, o), o);
 // Note: ignore changes the order that properties are printed
-var ignore = __assign({ b: 'ignored' }, o)
-
-;
+var ignore = __assign({ b: 'ignored' }, o);
 
 var o3 = { a: 1, b: 'no' };
 var o4 = { b: 'yes', c: true };
-var combinedBefore = __assign(__assign({ b: 'ok' }, o3), o4)
-;
-var combinedMid = __assign(__assign(__assign({}, o3), { b: 'ok' }), o4)
-;
-var combinedNested = __assign(__assign(__assign({}, __assign({ a: 4 }, { b: false, c: 'overriden' })), { d: 'actually new' }), { a: 5, d: 'maybe new' })
-;
+var combinedBefore = __assign(__assign({ b: 'ok' }, o3), o4);
+var combinedMid = __assign(__assign(__assign({}, o3), { b: 'ok' }), o4);
+var combinedNested = __assign(__assign(__assign({}, __assign({ a: 4 }, { b: false, c: 'overriden' })), { d: 'actually new' }), { a: 5, d: 'maybe new' });
 var changeTypeBefore = __assign({ a: 'wrong type?' }, o3);
-var computedMiddle = __assign(__assign(__assign({}, o3), (_a = {}, _a['in the middle'] = 13, _a.b = 'maybe?', _a)), o4)
-
-;
+var computedMiddle = __assign(__assign(__assign({}, o3), (_a = {}, _a['in the middle'] = 13, _a.b = 'maybe?', _a)), o4);
 
 // primitives are not allowed, except for falsy ones
 var spreadNum = __assign({}, 12);
@@ -144,8 +135,7 @@ var spreadStr = __assign({}, 'foo');
 spreadStr.length; // error, no 'length'
 spreadStr.charAt(1); // error, no methods either
 // functions are skipped
-var spreadFunc = __assign({}, function () { })
-;
+var spreadFunc = __assign({}, function () { });
 spreadFunc(); // error, no call signature
 // write-only properties get skipped
 var setterOnly = __assign({ set b(bad) { } });
@@ -157,10 +147,8 @@ var C = /** @class */ (function () {
     }C.prototype.m = function () { };
     return C;
 }());
-var c = new C()
-;
-var spreadC = __assign({}, c)
-;
+var c = new C();
+var spreadC = __assign({}, c);
 spreadC.m(); // error 'm' is not in '{ ... c }'
 // non primitive
 var obj = { a: 123 };

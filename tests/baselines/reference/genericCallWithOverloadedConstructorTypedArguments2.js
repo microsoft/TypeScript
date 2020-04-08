@@ -45,16 +45,13 @@ module GenericParameter {
 // Inferences are made quadratic-pairwise to and from these overload sets
 var NonGenericParameter;
 (function (NonGenericParameter) {
-    var a
-
-    ;
+    var a;
 
     function foo4(cb) {
         return cb;
     }
 
-    var b
-    ;
+    var b;
     var r3 = foo4(b); // ok
 })(NonGenericParameter || (NonGenericParameter = {}));
 var GenericParameter;
@@ -78,7 +75,6 @@ var GenericParameter;
     }
 
     var r13 = foo7(1, a); // ok
-    var c
-    ;
+    var c;
     var r14 = foo7(1, c); // ok
 })(GenericParameter || (GenericParameter = {}));

@@ -84,9 +84,7 @@ function f4() {
 
 // Repro from #8851
 var re = /./g;
-var match
-
-;
+var match;
 
 while ((match = re.exec("xxx")) != null) {
     var length_1 = match[1].length + match[2].length;

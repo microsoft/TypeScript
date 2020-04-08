@@ -49,8 +49,7 @@ ONE: for (;;)
 TWO: for (;;) {
     var x = function () {
         break TWO;
-    }
-    ;
+    };
 }
 
 THREE: for (;;) {

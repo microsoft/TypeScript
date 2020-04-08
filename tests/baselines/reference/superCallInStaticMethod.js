@@ -80,8 +80,7 @@ var Other = /** @class */ (function (_super) {
         (
             function () {
                 _super.staticMethod.call(_this);
-            }
-        );
+            });
     };
 
     // in an object literal inside a static method

@@ -61,11 +61,8 @@ b.b(1);
 // Optional parameters allow initializers only in implementation signatures
 
 function foo(x) {if (x === void 0) { x = 1; }}
-var f = function foo(x) {if (x === void 0) { x = 1; }}
-;
-var f2 = function (x, y) {if (y === void 0) { y = 1; }}
-
-;
+var f = function foo(x) {if (x === void 0) { x = 1; }};
+var f2 = function (x, y) {if (y === void 0) { y = 1; }};
 foo(1);
 foo();
 f(1);
@@ -87,9 +84,7 @@ i(1);
 i.foo(1);
 i.foo(1, 2);
 // these are errors
-var a
-
-;
+var a;
 a();
 a(1);
 a.foo();
@@ -98,9 +93,7 @@ var b = {
     foo: function (x) {if (x === void 0) { x = 1; }},
     a: function foo(x, y) {if (y === void 0) { y = 1; }},
     b: function (x) {if (x === void 0) { x = 1; }}
-}
-
-;
+};
 b.foo();
 b.foo(1);
 b.a(1);

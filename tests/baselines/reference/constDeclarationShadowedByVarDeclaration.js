@@ -43,6 +43,5 @@ var y = 0;
 
 {
     const z = 0;
-    var z = 0
-    ;
+    var z = 0;
 }

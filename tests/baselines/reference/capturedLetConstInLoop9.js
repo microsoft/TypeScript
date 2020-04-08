@@ -218,9 +218,7 @@ function foo() {
 
             (
 
-                function () { return b;
-                }
-            );
+                function () { return b; });
             return { value: 100 };
         };
         for (var _c = 0, _d = []; _c < _d.length; _c++) {

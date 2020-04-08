@@ -159,8 +159,7 @@ var D = /** @class */ (function () {
 }());
 
 
-var a
-;
+var a;
 var b = { foo: function (x, y) { return ''; } };
 
 function foo1(x) { }

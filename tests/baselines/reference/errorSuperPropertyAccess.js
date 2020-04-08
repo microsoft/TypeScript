@@ -229,8 +229,7 @@ var SomeDerived1 = /** @class */ (function (_super) {
         }
         var x = {
             test: function () { return _super.publicFunc.call(this); }
-        }
-        ;
+        };
     };
     return SomeDerived1;
 }(SomeBase));

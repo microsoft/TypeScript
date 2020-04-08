@@ -71,9 +71,7 @@ fooWithParameters("a", 10);
  */
 var fooFunc = function FooFunctionValue(/** fooFunctionValue param */ b) {
     return b;
-}
-
-;
+};
 
 /// lamdaFoo var comment
 var lambdaFoo = /** this is lambda comment*/ function (/**param a*/ a, /**param b*/ b) { return a + b; };

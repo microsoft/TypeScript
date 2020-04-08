@@ -102,15 +102,11 @@ var callSig3;
 
 // Get accessor only, type of the property is the annotated return type of the get accessor
 var getter1 = { get x() { return undefined; } };
-var getter1
-
-;
+var getter1;
 
 // Get accessor only, type of the property is the inferred return type of the get accessor
 var getter2 = { get x() { return ''; } };
-var getter2
-
-;
+var getter2;
 
 // Set accessor only, type of the property is the param type of the set accessor
 var setter1 = { set x(n) { } };

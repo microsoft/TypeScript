@@ -20,7 +20,6 @@ var __rest = (this && this.__rest) || function (s, e) {
 };function a() {
     var _a;
     var x;
-    var y
-    ;
+    var y;
     (_a = {}, (x = _a.x, _a), y = __rest(_a, ["x"]));
 }

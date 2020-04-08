@@ -45,10 +45,7 @@ var x1 = 2;
 var x2 = 1; // error
 function x2() { } // error
 var x3 = 1;
-var x3 = function () { }
-
-
-; // error
+var x3 = function () { }; // error
 
 
 // var then class

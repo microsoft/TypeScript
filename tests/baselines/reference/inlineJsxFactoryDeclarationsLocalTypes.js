@@ -146,15 +146,10 @@ var DOMClass = /** @class */ (function () {
     return DOMClass;
 }());
 // Should work, everything is a DOM element
-var _tree = renderer_1.dom(DOMSFC, { x: 1, y: 2 }, renderer_1.dom(DOMClass, { x: 3, y: 4 }), renderer_1.dom(DOMClass, { x: 5, y: 6 }))
-
-;
+var _tree = renderer_1.dom(DOMSFC, { x: 1, y: 2 }, renderer_1.dom(DOMClass, { x: 3, y: 4 }), renderer_1.dom(DOMClass, { x: 5, y: 6 }));
 
 // Should fail, no dom elements
-var _brokenTree = renderer_1.dom(component_1.MySFC, { x: 1, y: 2 }, renderer_1.dom(component_1.MyClass, { x: 3, y: 4 }), renderer_1.dom(component_1.MyClass, { x: 5, y: 6 }))
-
-;
+var _brokenTree = renderer_1.dom(component_1.MySFC, { x: 1, y: 2 }, renderer_1.dom(component_1.MyClass, { x: 3, y: 4 }), renderer_1.dom(component_1.MyClass, { x: 5, y: 6 }));
 
 // Should fail, nondom isn't allowed as children of dom
-var _brokenTree2 = renderer_1.dom(DOMSFC, { x: 1, y: 2 }, component_1.tree, component_1.tree)
-;
+var _brokenTree2 = renderer_1.dom(DOMSFC, { x: 1, y: 2 }, component_1.tree, component_1.tree);

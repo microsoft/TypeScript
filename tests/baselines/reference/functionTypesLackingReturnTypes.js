@@ -21,9 +21,7 @@ function f(x) {
 var g;
 
 // Okay
-var h
-
-;
+var h;
 
 // Okay
 var i;

@@ -15,7 +15,5 @@ var y : C<string> = x
 
 
 
-var x
-;
-var y = x
-;
+var x;
+var y = x;

@@ -200,14 +200,10 @@ useStringOrNumber("", foo => { });
 
 const defaultState = {
     dummy: ''
-}
-
-;
+};
 
 const NON_VOID_ACTION = 'NON_VOID_ACTION',
-    VOID_ACTION = 'VOID_ACTION'
-
-;
+    VOID_ACTION = 'VOID_ACTION';
 createReducer(
 defaultState,
     handler(NON_VOID_ACTION, (state, _payload) => state),
@@ -260,9 +256,7 @@ class Interesting {
                 return 'SOMETHING';
             });
         };
-    }
-
-}
+    }}
 
 
 let xx = invoke(() => 1);
@@ -270,7 +264,5 @@ let xx = invoke(() => 1);
 
 let obj = {
     foo(bar) { }
-}
-
-;
+};
 assignPartial(obj, { foo(...args) { } }); // args has type [string]

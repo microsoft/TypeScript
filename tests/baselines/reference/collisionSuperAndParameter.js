@@ -81,15 +81,13 @@ var __extends = (this && this.__extends) || (function () {
         var _this = this;
         var lamda = function (_super) {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
-        }
-        ;
+        };
     };
     Foo.prototype.b = function (_super) {
         var _this = this;
         var lambda = function () {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
-        }
-        ;
+        };
     };
     Object.defineProperty(Foo.prototype, "c", {
         set: function (_super) {
@@ -131,15 +129,13 @@ var Foo2 = /** @class */ (function (_super_1) {
         var _this = this;
         var lamda = function (_super) {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
-        }
-        ;
+        };
     };
     Foo2.prototype.y = function (_super) {
         var _this = this;
         var lambda = function () {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
-        }
-        ;
+        };
     };
     Object.defineProperty(Foo2.prototype, "z", {
         set: function (_super) {
@@ -161,8 +157,7 @@ var Foo4 = /** @class */ (function (_super_1) {
         var _this = this;
         var lambda = function () {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
-        }
-        ;
+        };
     };
     return Foo4;
 }(Foo));

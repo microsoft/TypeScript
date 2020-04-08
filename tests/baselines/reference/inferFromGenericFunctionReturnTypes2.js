@@ -169,9 +169,7 @@ filter(function (x) { return x % 1 === 0; }),
     map(function (x) { return x + '!!!'; }),
     map(function (x) { return x.toUpperCase(); })
 )
-)
-
-;
+);
 
 
 var t2 = testSet.transform(
@@ -179,5 +177,4 @@ compose(
 filter(function (x) { return x % 1 === 0; }), identity, map(function (x) { return x + '!!!'; }),
     map(function (x) { return x.toUpperCase(); })
 )
-)
-;
+);

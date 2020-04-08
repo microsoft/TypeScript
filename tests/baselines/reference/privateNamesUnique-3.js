@@ -28,8 +28,7 @@ let A = /** @class */ (() => {
             // because static and instance private names
             // share the same lexical scope
             // https://tc39.es/proposal-class-fields/#prod-ClassBody
-        }
-    }
+        }}
     _foo = new WeakMap(), _foo_1 = new WeakMap();
     _foo_1.set(A, true); // error (duplicate)
     return A;

@@ -15,9 +15,7 @@ test.fail2(arg => foo.reject(arg)); // Error: Supplied parameters do not match a
 
 
 //// [genericInterfaceTypeCall.js]
-var foo
-
-;
+var foo;
 
 var test;
 

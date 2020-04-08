@@ -90,10 +90,8 @@ var E2;
 var numStrTuple = [5, "foo"];
 var emptyObjTuple = numStrTuple;
 var numStrBoolTuple = numStrTuple;
-var shorter = numStrBoolTuple
-;
-var longer = numStrTuple
-;
+var shorter = numStrBoolTuple;
+var longer = numStrTuple;
 var classCDTuple = [new C(), new D()];
 var interfaceIITuple = classCDTuple;
 var classCDATuple = classCDTuple;

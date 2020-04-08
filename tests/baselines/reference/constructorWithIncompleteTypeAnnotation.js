@@ -315,9 +315,7 @@ var TypeScriptAllInOne;
                     };
             }
             finally {
-            }
-
-        };
+            }};
 
 
         Program.prototype["if"] = function (retValue) { };

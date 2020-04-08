@@ -45,6 +45,5 @@ function generic(t) {
     return rest;
 }
 
-var rest
-;
+var rest;
 (a = o.a, o, rest.b + rest.b = __rest(o, ["a"]));

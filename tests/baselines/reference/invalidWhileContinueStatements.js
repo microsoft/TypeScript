@@ -50,8 +50,7 @@ ONE: while (true)
 TWO: while (true) {
     var x = function () {
         continue TWO;
-    }
-    ;
+    };
 }
 
 THREE: while (true) {

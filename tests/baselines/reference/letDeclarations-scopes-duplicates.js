@@ -128,8 +128,7 @@ function F1() {
 // OK
 var var20 = 0;
 
-var var20 = 0
-;
+var var20 = 0;
 {
     let var20 = 0;
     {

@@ -18,8 +18,7 @@ o.test!!!();
 function f() {
 }
 
-var o = { n: 1 }
-;
+var o = { n: 1 };
 o.test = f;
 
 o.test();

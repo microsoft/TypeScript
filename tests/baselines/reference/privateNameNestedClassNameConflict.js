@@ -18,8 +18,7 @@ class A {
         class A {
             constructor() {
                 _foo_1.set(this, void 0);
-            }
-        }
+            }}
         _foo_1 = new WeakMap();
     }
 }

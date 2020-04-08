@@ -20,9 +20,7 @@ var f1 = () => {
 };
 var f2 = (x) => {
     this.name = x;
-}
-
-;
+};
 
 function foo(func) { }
 foo(() => {

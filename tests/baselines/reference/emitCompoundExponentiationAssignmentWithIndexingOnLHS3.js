@@ -22,8 +22,7 @@ var object = {
     set 0(x) {
         this._0 = x;
     },
-}
-;
+};
 (
     _a = object)[_b = 0] = Math.pow(
 _a[_b], object[0]);

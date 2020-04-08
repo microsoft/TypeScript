@@ -18,9 +18,7 @@ function run(options: { something?(b?: string): void }) {
 "use strict";
 // Repro from #35414
 
-var k = { something: function () { } }
-
-;
+var k = { something: function () { } };
 
 function run(options) {
     var _a;

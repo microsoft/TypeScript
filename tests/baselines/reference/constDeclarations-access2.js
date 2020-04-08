@@ -40,9 +40,7 @@ x.toString();
 
 
 //// [constDeclarations-access2.js]
-const x = 0
-
-;
+const x = 0;
 
 // Errors
 x = 1;

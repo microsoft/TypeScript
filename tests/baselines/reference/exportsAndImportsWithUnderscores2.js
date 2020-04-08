@@ -15,8 +15,7 @@ const { __esmodule, __proto__ } = R;
 //// [m1.js]
 "use strict";
 exports.__esModule = true;
-var R
-;
+var R;
 exports["default"] = R = {
     "__esmodule": true,
     "__proto__": {}

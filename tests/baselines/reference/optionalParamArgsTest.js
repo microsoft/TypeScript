@@ -185,15 +185,11 @@ function F3(F3A1, F3A2) {if (F3A1 === void 0) { F3A1 = 0; }if (F3A2 === void 0) 
 function F4(F4A1, F4A2) { return F4A1 + F4A2; }
 
 var L1 = function () { return 0; };
-var L2 = function (L2A1) { return L2A1; }
-;
+var L2 = function (L2A1) { return L2A1; };
 var L3 = function (L3A1, L3A2) {if (L3A1 === void 0) { L3A1 = 0; }if (L3A2 === void 0) { L3A2 = L3A1; }
     return L3A1 + L3A2;
-}
-;
-var L4 = function (L4A1, L4A2) { return L4A1 + L4A2; }
-
-;
+};
+var L4 = function (L4A1, L4A2) { return L4A1 + L4A2; };
 
 var c1o1 = new C1(5);
 var i1o1 = new C1(5);

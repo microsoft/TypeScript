@@ -18,7 +18,6 @@ var C = /** @class */ (function () {
 }());
 // x should be an optional property
 var v = {}; // Should succeed
-var v2
-;
+var v2;
 v = v2; // Should succeed
 var v3 = new C; // Should fail

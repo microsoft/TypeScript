@@ -25,8 +25,7 @@ class C extends B {
 
 
 //// [defineProperty.js]
-var x = "p"
-;
+var x = "p";
 class A {
     y;
     a = this.y;

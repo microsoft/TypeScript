@@ -123,8 +123,7 @@ var D = /** @class */ (function (_super) {
         (
             function () {
                 return;
-            }
-        );
+            });
         function foo() {
             return;
         }

@@ -43,7 +43,6 @@ function foo() {
         h: function () { return "hello"; },
         i: function () { return "hello"; },
         j: function () { return "hello"; },
-        k: function () { return 123;
-        }
+        k: function () { return 123; }
     };
 }

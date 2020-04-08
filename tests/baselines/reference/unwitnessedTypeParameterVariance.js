@@ -32,8 +32,7 @@ exports.__esModule = true;
 
 
 function foo() {
-    var unk = { read: function (origin) { return unk; } }
-    ;
+    var unk = { read: function (origin) { return unk; } };
     var x = unk;
 }
 

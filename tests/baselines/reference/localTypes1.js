@@ -231,8 +231,7 @@ function f5() {
             return C;
         }());
         return new C();
-    }
-    ;
+    };
     var z2 = function () {
         var E;
         (function (E) {
@@ -244,8 +243,7 @@ function f5() {
             return C;
         }());
         return new C();
-    }
-    ;
+    };
 }
 
 var A = /** @class */ (function () {

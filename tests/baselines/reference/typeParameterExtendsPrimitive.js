@@ -33,8 +33,7 @@ function f() {
     var t;
     var v = (_a = {},
         _a[t] = 0,
-        _a)
-    ;
+        _a);
     return t + t;
 }
 

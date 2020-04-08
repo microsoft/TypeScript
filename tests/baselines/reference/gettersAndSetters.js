@@ -82,5 +82,4 @@ var o = { get Foo() { return 0; }, set Foo(val) { val; } }; // o
 var ofg = o.Foo;
 o.Foo = 0;
 
-var i = function (n) { return n; }
-;
+var i = function (n) { return n; };

@@ -43,6 +43,5 @@ fold([1, 2, 3], [],
     function (result, value) { return append(
     result,
         ["", ""]
-    );
-    }
+    ); }
 );

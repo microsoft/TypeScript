@@ -62,17 +62,12 @@ var d9 = [[...temp1], ...["hello"]];
 //      ElementList, Elisionopt   SpreadElement
 // SpreadElement:
 //      ...   AssignmentExpression
-var a0 = [, , 2, 3, 4]
-;
-var a1 = ["hello", "world"]
-;
+var a0 = [, , 2, 3, 4];
+var a1 = ["hello", "world"];
 var a2 = [, , , ...a0, "hello"];
-var a3 = [, , ...a0]
-;
+var a3 = [, , ...a0];
 var a4 = [() => 1,];
-var a5 = [...a0, ,]
-
-;
+var a5 = [...a0, ,];
 // Each element expression in a non-empty array literal is processed as follows:
 //    - If the array literal contains no spread elements, and if the array literal is contextually typed (section 4.19)
 //      by a type T and T has a property with the numeric name N, where N is the index of the element expression in the array literal,
@@ -106,6 +101,5 @@ var d4 = [...temp, ...temp1];
 var d5 = [...a2];
 var d6 = [...a3];
 var d7 = [...a4];
-var d8 = [[...temp1]]
-;
+var d8 = [[...temp1]];
 var d9 = [[...temp1], ...["hello"]];

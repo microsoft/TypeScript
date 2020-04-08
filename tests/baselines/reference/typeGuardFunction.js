@@ -134,8 +134,7 @@ if (isC_multipleParams(a, 0)) {
     a.propC;
 }
 // Methods
-var obj
-;
+var obj;
 var D = /** @class */ (function () {
     function D() {
     }D.prototype.method1 = function (p1) {

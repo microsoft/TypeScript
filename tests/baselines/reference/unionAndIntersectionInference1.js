@@ -154,15 +154,11 @@ get(foo).toUpperCase(); // Ok
 pigify(mbp).oinks; // OK, mbp is treated as Pig
 pigify(mbp).walks; // Ok, mbp is treated as Man
 
-const createTestAsync = () => Promise.resolve().then(() => ({ name: 'test' }))
-
-;
+const createTestAsync = () => Promise.resolve().then(() => ({ name: 'test' }));
 
 const createTest = () => {
     return { name: 'test' };
-}
-
-;
+};
 
 
 let x1 = f1('a');

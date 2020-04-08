@@ -234,8 +234,7 @@ function cons(hs) {
         .reduce(function (node, hs) {
         return hs.length === 0
             ? node
-            : concat(node, [[hs.shift(), cons(hs)]]);
-    }, []);
+            : concat(node, [[hs.shift(), cons(hs)]]);}, []);
 }
 
 function level(h) {

@@ -166,14 +166,11 @@ sourceFile:sourceMapValidationSwitch.ts
 7 >Emitted(12, 20) Source(12, 19) + SourceIndex(0)
 ---
 >>>}
-1 >^^^^
-2 >    
-3 > ^^^^^^^^^^^^->
+1 >^
+2 > ^^^^^^^^^^^^->
 1 >
-2 >    
-  >    }
-1 >Emitted(13, 5) Source(12, 19) + SourceIndex(0)
-2 >Emitted(13, 2) Source(13, 2) + SourceIndex(0)
+  >}
+1 >Emitted(13, 2) Source(13, 2) + SourceIndex(0)
 ---
 >>>switch (x) {
 1->
@@ -326,13 +323,10 @@ sourceFile:sourceMapValidationSwitch.ts
 1 >Emitted(26, 10) Source(27, 10) + SourceIndex(0)
 ---
 >>>}
-1 >^^^^
-2 >    
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >    
-  >    }
-1 >Emitted(27, 5) Source(27, 10) + SourceIndex(0)
-2 >Emitted(27, 2) Source(28, 2) + SourceIndex(0)
+  >}
+1 >Emitted(27, 2) Source(28, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationSwitch.js.map

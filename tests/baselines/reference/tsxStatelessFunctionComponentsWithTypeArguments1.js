@@ -38,8 +38,7 @@ define(["require", "exports", "react"], function (require, exports, React) {
     // OK
     function Baz(key1, value) {
         var a0 = <ComponentWithTwoAttributes key1={key1} value={value}/>;
-        var a1 = <ComponentWithTwoAttributes {...{ key1: key1, value: value }} key="Component"/>
-        ;
+        var a1 = <ComponentWithTwoAttributes {...{ key1: key1, value: value }} key="Component"/>;
     }
 
 

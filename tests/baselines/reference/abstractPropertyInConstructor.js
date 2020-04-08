@@ -98,9 +98,7 @@ var __extends = (this && this.__extends) || (function () {
         // OK, reference is inside function
         var innerFunction = function () {
             return _this.prop;
-        }
-
-        ;
+        };
         // OK, references are to another instance
         other.cb(other.prop);
     }

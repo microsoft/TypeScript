@@ -349,13 +349,11 @@ if (u === NumberEnum || u === StringEnum) {
 }
 
 if (u === NumberEnum.A) {
-    var a = u
-    ;
+    var a = u;
 }
 
 if (u === StringEnum.B) {
-    var b = u
-    ;
+    var b = u;
 }
 
 function switchTestEnum(x) {
@@ -451,8 +449,7 @@ function switchResponseWrong(x) {
         case 'yes':
         case 'no':
         case 'maybe':
-            return x;
-        // error
+            return x; // error
         default:
             throw new Error('Can you repeat the question?');
     }

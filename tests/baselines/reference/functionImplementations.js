@@ -317,29 +317,24 @@ var AnotherClass = /** @class */ (function () {
 var f7 = function (x) {
     if (x < 0) {return x;}
     return x.toString();
-}
-;
+};
 var f8 = function (x) {
     return new Base();
     return new Derived2();
-}
-;
+};
 var f9 = function (x) {
     return new Base();
     return new Derived();
     return new Derived2();
-}
-;
+};
 var f10 = function (x) {
     return new Derived();
     return new Derived2();
-}
-;
+};
 var f11 = function (x) {
     return new Base();
     return new AnotherClass();
-}
-;
+};
 var f12 = function (x) {
     return new Base();
     return; // should be ignored

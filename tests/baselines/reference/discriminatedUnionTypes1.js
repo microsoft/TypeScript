@@ -238,22 +238,19 @@ function f5(m) {
             m; // { kind: "D" }
             break;
         default:
-            m;
-        // { kind: "B" | "C", y: number }
+            m; // { kind: "B" | "C", y: number }
     }
 }
 
 function f6(m) {
     switch (m.kind) {
         case "A":
-            m;
-        // { kind: "A", x: string }
+            m; // { kind: "A", x: string }
         case "D":
             m; // { kind: "A", x: string } | { kind: "D" }
             break;
         default:
-            m;
-        // { kind: "B" | "C", y: number }
+            m; // { kind: "B" | "C", y: number }
     }
 }
 

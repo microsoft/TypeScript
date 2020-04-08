@@ -59,11 +59,8 @@ b.b(1);
 // Optional parameters cannot also have initializer expressions, these are all errors
 
 function foo(x) {if (x === void 0) { x = 1; }}
-var f = function foo(x) {if (x === void 0) { x = 1; }}
-;
-var f2 = function (x, y) {if (y === void 0) { y = 1; }}
-
-;
+var f = function foo(x) {if (x === void 0) { x = 1; }};
+var f2 = function (x, y) {if (y === void 0) { y = 1; }};
 foo(1);
 foo();
 f(1);
@@ -84,9 +81,7 @@ i();
 i(1);
 i.foo(1);
 i.foo(1, 2);
-var a
-
-;
+var a;
 a();
 a(1);
 a.foo();
@@ -95,9 +90,7 @@ var b = {
     foo: function (x) {if (x === void 0) { x = 1; }},
     a: function foo(x, y) {if (y === void 0) { y = ''; }},
     b: function (x) {if (x === void 0) { x = ''; }}
-}
-
-;
+};
 b.foo();
 b.foo(1);
 b.a(1);

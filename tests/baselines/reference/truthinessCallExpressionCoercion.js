@@ -144,9 +144,7 @@ function checksPropertyAccess() {
         foo: {
             bar: function () { return true; }
         }
-    }
-
-    ;
+    };
     if (x.foo.bar) { // error
     }
 

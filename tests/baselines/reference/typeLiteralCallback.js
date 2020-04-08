@@ -15,9 +15,7 @@ test.fail2(arg => foo.reject(arg));  // Should be OK.  Was: Error: Supplied para
 
 
 //// [typeLiteralCallback.js]
-var foo
-
-;
+var foo;
 
 var test;
 

@@ -73,9 +73,7 @@ define(["require", "exports", "react"], function (require, exports, React) {
     var obj1;
     var obj2 = {
         onClick: function () { }
-    }
-
-    ;
+    };
 
     function MainButton(props) {
         var linkProps = props;

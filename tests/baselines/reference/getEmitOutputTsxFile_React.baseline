@@ -21,11 +21,10 @@ declare class Bar {
 EmitSkipped: false
 
 FileName : /tests/cases/fourslash/inputFile2.js.map
-{"version":3,"file":"inputFile2.js","sourceRoot":"","sources":["inputFile2.tsx"],"names":[],"mappings":"AACA,IAAI,CAAC,GAAG,QAAQ,CAAC;AACjB,IAAI,CAAC,GAAG,6BAAK,IAAI,EAAG,CAAC,GAAI;AAAA,CAAA"}
+{"version":3,"file":"inputFile2.js","sourceRoot":"","sources":["inputFile2.tsx"],"names":[],"mappings":"AACA,IAAI,CAAC,GAAG,QAAQ,CAAC;AACjB,IAAI,CAAC,GAAG,6BAAK,IAAI,EAAG,CAAC,GAAI,CAAA"}
 FileName : /tests/cases/fourslash/inputFile2.js
 var y = "my div";
-var x = React.createElement("div", { name: y })
-;
+var x = React.createElement("div", { name: y });
 //# sourceMappingURL=inputFile2.js.map
 FileName : /tests/cases/fourslash/inputFile2.d.ts
 declare var React: any;

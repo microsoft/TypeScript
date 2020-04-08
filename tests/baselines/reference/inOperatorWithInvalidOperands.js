@@ -55,9 +55,7 @@ var x;
 var a1;
 var a2;
 var a3;
-var a4
-
-;
+var a4;
 
 var ra1 = a1 in x;
 var ra2 = a2 in x;

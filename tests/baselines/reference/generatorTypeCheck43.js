@@ -12,6 +12,5 @@ function* g() {
     let x = {
         *[yield 0]() {
         }
-    }
-    ;
+    };
 }

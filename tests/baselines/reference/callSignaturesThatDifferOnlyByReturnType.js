@@ -32,8 +32,6 @@ var a2: {
 
 
 
-var a
-
-;
+var a;
 
 var a2;

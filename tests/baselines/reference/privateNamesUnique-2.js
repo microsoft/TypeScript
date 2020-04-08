@@ -26,8 +26,7 @@ a.copy(b); // error
 var _x;
 export class Foo {constructor() {
         _x.set(this, void 0);
-    }
-}
+    }}
 _x = new WeakMap();
 //// [a.js]
 var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {

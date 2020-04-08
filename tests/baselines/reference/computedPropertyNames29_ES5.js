@@ -22,8 +22,7 @@ var C = /** @class */ (function () {
                     _a[_this.bar()] = function () { } // needs capture
                 ,
                     _a);
-            }
-        );
+            });
         return 0;
     };
     return C;

@@ -47,6 +47,5 @@ var p;
 
 
 // ensure merges as expected
-var l
-;
+var l;
 var l;

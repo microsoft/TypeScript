@@ -165,8 +165,7 @@ function positiveTestClassesWithOptionalProperties(x) {
     else {
         var y = x instanceof AWithOptionalProp
             ? x.a
-            : x.b
-        ;
+            : x.b;
     }
 }
 

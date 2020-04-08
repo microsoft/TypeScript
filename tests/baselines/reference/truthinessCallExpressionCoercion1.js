@@ -109,9 +109,7 @@ function checksPropertyAccess() {
         foo: {
             bar: function () { return true; }
         }
-    }
-
-    ;
+    };
     // error
     x.foo.bar ? console.log('x.foo.bar') : undefined;
 

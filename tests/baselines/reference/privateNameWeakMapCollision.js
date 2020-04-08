@@ -14,7 +14,6 @@ function test() {
     class C {
         constructor() {
             _x.set(this, void 0);
-        }
-    }
+        }}
     _x = new WeakMap();
 }

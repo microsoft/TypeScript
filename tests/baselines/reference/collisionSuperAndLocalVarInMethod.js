@@ -53,8 +53,7 @@ var c = /** @class */ (function (_super_1) {
     }c.prototype.foo = function () {
         var x = function () {
             var _super = 10; // Should be error
-        }
-        ;
+        };
     };
     return c;
 }(Foo));

@@ -65,6 +65,5 @@ function HereIsTheError() {
 ComponentWithUnion({
     multi: false,
     value: 's',
-    onChange: function (val) { return console.log(val);
-    } // <- this works fine
+    onChange: function (val) { return console.log(val); } // <- this works fine
 });

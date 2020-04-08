@@ -63,17 +63,13 @@ function f3() {
 
 let f4 = function () {
     return __awaiter(this, void 0, void 0, function* () { });
-}
-;
+};
 let f5 = function () {
     return __awaiter(this, void 0, void 0, function* () { });
-}
-;
+};
 let f6 = function () {
     return __awaiter(this, void 0, void 0, function* () { });
-}
-
-;
+};
 
 let f7 = () => __awaiter(void 0, void 0, void 0, function* () { });
 let f8 = () => __awaiter(void 0, void 0, void 0, function* () { });

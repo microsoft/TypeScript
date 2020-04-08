@@ -34,18 +34,13 @@ function bar() {
 //// [emitArrowFunctionWhenUsingArguments01_ES6.js]
 var a = () => {
     var arg = arguments[0]; // error
-}
-
-;
+};
 
 var b = function () {
     var a = () => {
         var arg = arguments[0]; // error
-    }
-    ;
-}
-
-;
+    };
+};
 
 function baz() {
     () => {

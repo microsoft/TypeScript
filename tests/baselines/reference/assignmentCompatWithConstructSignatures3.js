@@ -151,14 +151,10 @@ var a11;
 var a12;
 var a13;
 var a14;
-var a15
-;
-var a16
-;
+var a15;
+var a16;
 var a17;
-var a18
-
-;
+var a18;
 
 var b;
 a = b; // ok

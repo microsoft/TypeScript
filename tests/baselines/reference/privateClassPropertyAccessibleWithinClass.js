@@ -82,8 +82,7 @@ var C2 = /** @class */ (function () {
         set: function (x) {
             var _this = this;
             (
-                function () { _this.y = _this.x; }
-            );
+                function () { _this.y = _this.x; });
         },
         enumerable: false,
         configurable: true

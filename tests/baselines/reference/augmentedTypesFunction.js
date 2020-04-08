@@ -47,10 +47,7 @@ function y2() { } // error
 function y2() { } // error
 
 function y2a() { } // error
-var y2a = function () { }
-
-
-; // error
+var y2a = function () { }; // error
 // function then class
 function y3() { } // error
 var y3 = /** @class */ (function () {

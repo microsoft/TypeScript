@@ -78,11 +78,9 @@ var C5 = /** @class */ (function () {
         var f4 = function (x) {
             var g = function (y) {
                 return function () { return _this; };
-            }
-            ;
+            };
             return g(_this);
-        }
-        ;
+        };
     };
     C5.prototype.bar = function () {
         var x1 = undefined;

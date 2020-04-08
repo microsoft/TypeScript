@@ -22,9 +22,7 @@ var f1 = function () {
 
 var f2 = function (x) {
     _this.name = x;
-}
-
-;
+};
 
 function foo(func) { }
 foo(function () {

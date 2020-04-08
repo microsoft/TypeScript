@@ -78,14 +78,12 @@ function f2(s) {
     switch (s) {
         case "foo":
         case "bar":
-            s;
-        // "foo" | "bar"
+            s; // "foo" | "bar"
         case "baz":
             s; // "foo" | "bar" | "baz"
             break;
         default:
-            s;
-        // string
+            s; // string
     }
 }
 
@@ -128,7 +126,6 @@ function f8(x) {
             x; // "foo"
             break;
         default:
-            x;
-        // number | "bar"
+            x; // number | "bar"
     }
 }

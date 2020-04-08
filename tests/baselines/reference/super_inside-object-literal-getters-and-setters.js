@@ -54,8 +54,7 @@ var ObjectLiteral;
         test: function () {
             return _super._foo;
         }
-    }
-    ;
+    };
 })(ObjectLiteral || (ObjectLiteral = {}));
 var F = /** @class */ (function () {
     function F() {}F.prototype.test = function () { return ""; };

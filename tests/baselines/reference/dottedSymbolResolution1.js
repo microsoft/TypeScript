@@ -37,8 +37,7 @@ function each(collection, callback) {
 }
 
 function _setBarAndText() {
-    var x, $
-    ;
+    var x, $;
     each(x.find(" "), function () {
         var $this = $(''), thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here
     });

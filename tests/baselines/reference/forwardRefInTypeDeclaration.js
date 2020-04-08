@@ -14,5 +14,9 @@ const s3 = "x";
 
 //// [forwardRefInTypeDeclaration.js]
 var s1 = "x";
+
 var s2 = "x";
+
+
+
 var s3 = "x";

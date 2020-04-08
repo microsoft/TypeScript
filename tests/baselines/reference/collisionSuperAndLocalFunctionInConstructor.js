@@ -64,8 +64,7 @@ var c = /** @class */ (function (_super_1) {
         var x = function () {
             function _super() {
             }
-        }
-        ;
+        };
         return _this;
     }
     return c;

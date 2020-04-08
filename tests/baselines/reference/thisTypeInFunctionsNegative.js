@@ -224,8 +224,7 @@ let impl = {
     explicitThis() {
         return this.a;
     },
-}
-;
+};
 let implExplicitStructural = impl.explicitStructural;
 implExplicitStructural(); // error, no 'a' in 'void'
 let implExplicitInterface = impl.explicitInterface;

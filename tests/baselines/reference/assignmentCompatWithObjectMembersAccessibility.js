@@ -120,8 +120,7 @@ var TargetIsPublic;
         return Base;
     }());
 
-    var a
-    ;
+    var a;
     var b;
     var i;
 
@@ -172,8 +171,7 @@ var TargetIsPublic;
         return Base;
     }());
 
-    var a
-    ;
+    var a;
     var b;
     var i;
 

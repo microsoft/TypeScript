@@ -184,8 +184,7 @@ switch (0) {
 {
     const c15 = 0;
     {
-        const c16 = 0
-        ;
+        const c16 = 0;
         label17: const c17 = 0;
     }
 }

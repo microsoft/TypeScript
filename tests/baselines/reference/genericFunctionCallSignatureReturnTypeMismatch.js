@@ -13,9 +13,7 @@ console.log(s);
 
 //// [genericFunctionCallSignatureReturnTypeMismatch.js]
 
-var f
-
-;
+var f;
 
 var g;
 f = g;

@@ -49,9 +49,7 @@ module GenericParameter {
 // Inferences are made quadratic-pairwise to and from these overload sets
 var NonGenericParameter;
 (function (NonGenericParameter) {
-    var a
-
-    ;
+    var a;
 
     function foo4(cb) {
         return cb;
@@ -68,8 +66,7 @@ var GenericParameter;
     }
 
     var r5 = foo5(function (x) { return x; }); // any => string (+1 overload) [inferences are made for T, but lambda not contextually typed]. T is any
-    var a
-    ;
+    var a;
     var r7 = foo5(a); // any => string (+1 overload)
 
     function foo6(cb) {
@@ -86,7 +83,6 @@ var GenericParameter;
 
     var r12 = foo7(1, function (x) { return x; }); // any => string (+1 overload) [inferences are made for T, but lambda not contextually typed]
     var r13 = foo7(1, function (x) { return ''; }); // any => string (+1 overload) [inferences are made for T, but lambda not contextually typed]
-    var a
-    ;
+    var a;
     var r14 = foo7(1, a); // any => string (+1 overload) [inferences are made for T, but lambda not contextually typed]
 })(GenericParameter || (GenericParameter = {}));

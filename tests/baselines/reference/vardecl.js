@@ -129,29 +129,18 @@ var complicatedArrayVar;
 complicatedArrayVar.push({ x: 30, y: 'hello world' });
 var n1;
 
-var c
+var c;
 
-;
+var d;
 
-var d
+var d3;
 
-;
+var d2;
 
-var d3
-
-;
-
-var d2
-
-;
-
-var n2
-;
+var n2;
 var n4;
 
-var d4
-
-;
+var d4;
 var m2;
 (function (m2) {
 

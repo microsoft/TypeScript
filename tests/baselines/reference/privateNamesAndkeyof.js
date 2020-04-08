@@ -15,7 +15,5 @@ class A {constructor() {
         _foo.set(this, 3);
         this.bar = 3;
         this.baz = 3;
-    }
-
-}
+    }}
 _foo = new WeakMap();

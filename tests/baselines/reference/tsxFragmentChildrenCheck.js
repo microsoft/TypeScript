@@ -55,11 +55,8 @@ exports.__esModule = true;
 var React = require("react");
 var my_component_1 = require("./my-component");
 
-var MY_STRING = 'Ceci n\'est pas une string.'
-;
-var MY_CLASSNAME = 'jeclass'
-
-;
+var MY_STRING = 'Ceci n\'est pas une string.';
+var MY_CLASSNAME = 'jeclass';
 
 var RenderString = /** @class */ (function (_super) {
     __extends(RenderString, _super);function RenderString() {

@@ -2492,7 +2492,6 @@ var TypeScript;
                 case NodeType.EmptyExpr:
                     break;
 
-
                 case NodeType.Empty:
                     emitter.recordSourceMappingStart(this);
                     emitter.writeToOutput("; ");
@@ -2798,15 +2797,12 @@ var TypeScript;
                 case NodeType.Not:
                     return typeFlow.typeCheckBitNot(this);
 
-
                 case NodeType.LogNot:
                     return typeFlow.typeCheckLogNot(this);
-
 
                 case NodeType.Pos:
                 case NodeType.Neg:
                     return typeFlow.typeCheckUnaryNumberOperator(this);
-
 
                 case NodeType.IncPost:
                 case NodeType.IncPre:
@@ -2814,34 +2810,28 @@ var TypeScript;
                 case NodeType.DecPre:
                     return typeFlow.typeCheckIncOrDec(this);
 
-
                 case NodeType.ArrayLit:
                     typeFlow.typeCheckArrayLit(this);
                     return this;
 
-
                 case NodeType.ObjectLit:
                     typeFlow.typeCheckObjectLit(this);
                     return this;
-
 
                 case NodeType.Throw:
                     this.operand = typeFlow.typeCheck(this.operand);
                     this.type = typeFlow.voidType;
                     return this;
 
-
                 case NodeType.Typeof:
                     this.operand = typeFlow.typeCheck(this.operand);
                     this.type = typeFlow.stringType;
                     return this;
 
-
                 case NodeType.Delete:
                     this.operand = typeFlow.typeCheck(this.operand);
                     this.type = typeFlow.booleanType;
                     break;
-
                 case NodeType.TypeAssertion:
                     this.castTerm = typeFlow.typeCheck(this.castTerm);
                     var applyTargetType = !this.operand.isParenthesized;
@@ -2858,7 +2848,6 @@ var TypeScript;
                     this.operand = typeFlow.typeCheck(this.operand);
                     this.type = typeFlow.checker.undefinedType;
                     break;
-
 
                 default:
                     throw new Error("please implement in derived class");
@@ -3103,7 +3092,6 @@ var TypeScript;
                     case NodeType.Index:
                         emitter.emitIndex(this.operand1, this.operand2);
                         break;
-
                     case NodeType.Member:
                         if (this.operand2.nodeType == NodeType.FuncDecl && this.operand2.isAccessor()) {
                             var funcDecl = this.operand2;
@@ -3558,9 +3546,7 @@ var TypeScript;
             var controlFlowPrefix = function (ast, parent, walker) {
                 ast.addToControlFlow(walker.state);
                 return ast;
-            }
-
-            ;
+            };
 
             var walker = getAstWalkerFactory().getWalker(controlFlowPrefix, null, null, context);
             context.walker = walker;

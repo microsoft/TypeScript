@@ -247,8 +247,7 @@ var C2T5;
 var c3t1 = (function (s) { return s; });
 var c3t2 = ({
     n: 1
-})
-;
+});
 var c3t3 = [];
 var c3t4 = function () { return ({}); };
 var c3t5 = function (n) { return ({}); };
@@ -261,17 +260,13 @@ var c3t10 = [({}), ({})];
 var c3t11 = [function (n, s) { return s; }];
 var c3t12 = {
     foo: ({})
-}
-;
+};
 var c3t13 = ({
     f: function (i, s) { return s; }
-})
-;
+});
 var c3t14 = ({
     a: []
-})
-
-;
+});
 
 // CONTEXT: Class property assignment
 var C4T5 = /** @class */ (function () {
@@ -356,17 +351,13 @@ var c12t10 = [({}), ({})];
 var c12t11 = [function (n, s) { return s; }];
 var c12t12 = {
     foo: ({})
-}
-;
+};
 var c12t13 = ({
     f: function (i, s) { return s; }
-})
-;
+});
 var c12t14 = ({
     a: []
-})
-
-;
+});
 
 function EF1(a, b) { return a + b; }
 var efv = EF1(1, 2);

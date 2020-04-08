@@ -36,5 +36,4 @@ var B = /** @class */ (function (_super) {
     }
     return B;
 }(A));
-var x = { 0: new B() }
-;
+var x = { 0: new B() };

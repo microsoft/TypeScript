@@ -20,14 +20,11 @@ class A {constructor() {
         _bar.set(this, 3); // Error
         _baz.set(this, 3); // Error
         _qux.set(this, 3); // OK
-    }
-
-}
+    }}
 _foo = new WeakMap(), _bar = new WeakMap(), _baz = new WeakMap(), _qux = new WeakMap();
 class B {
 
     constructor() {
         _quux.set(this, 3); // Error
-    }
-}
+    }}
 _quux = new WeakMap();

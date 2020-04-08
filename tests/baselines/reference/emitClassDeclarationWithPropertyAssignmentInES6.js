@@ -27,9 +27,7 @@ class F extends D{
 //// [emitClassDeclarationWithPropertyAssignmentInES6.js]
 class C {constructor() {
         this.x = "Hello world";
-    }
-
-}
+    }}
 
 class D {
     constructor() {
@@ -43,9 +41,7 @@ class E extends D {
     constructor() {
         super(...arguments);
         this.z = true;
-    }
-
-}
+    }}
 
 class F extends D {
     constructor() {

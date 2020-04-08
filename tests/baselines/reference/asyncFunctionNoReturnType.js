@@ -49,5 +49,4 @@ var _this = this;
             return [2 /*return*/];
         return [2 /*return*/];
     });
-}); }
-);
+}); });

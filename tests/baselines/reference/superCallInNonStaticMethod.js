@@ -123,8 +123,7 @@ var Other = /** @class */ (function (_super) {
         (
             function () {
                 _super.prototype.instanceMethod.call(_this);
-            }
-        );
+            });
     };
 
     // in an object literal inside a instance method

@@ -60,8 +60,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 var _a, _b, _c, _d, _e;
-var o = { a: 1, b: 'no' }
-;
+var o = { a: 1, b: 'no' };
 var clone = __rest(o, []);
 var { a } = o, justB = __rest(o, ["a"]);
 var { a, b: renamed } = o, empty = __rest(o, ["a", "b"]);

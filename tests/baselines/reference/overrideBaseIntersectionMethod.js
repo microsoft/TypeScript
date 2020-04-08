@@ -54,11 +54,7 @@ var WithLocation = function (Base) { return /** @class */ (function (_super) {
         return [this.x | x, this.y | y];
     };
     return class_1;
-}(Base));
-
-}
-
-;
+}(Base)); };
 
 var Point = /** @class */ (function () {
     function Point(x, y) {

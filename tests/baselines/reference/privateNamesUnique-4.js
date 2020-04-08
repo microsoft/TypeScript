@@ -15,7 +15,6 @@ class C {
 
     constructor() {
         _something.set(this, void 0);
-    }
-}
+    }}
 _something = new WeakMap();
 const c = a;

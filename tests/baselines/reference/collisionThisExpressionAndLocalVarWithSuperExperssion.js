@@ -55,8 +55,7 @@ var b2 = /** @class */ (function (_super) {
         var f = function () {
             var _this = 10;
             return _super.prototype.foo.call(_this_1);
-        }
-        ;
+        };
     };
     return b2;
 }(a));

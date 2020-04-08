@@ -19,8 +19,7 @@ function foo(
 y,
     x,
     z
-) {
-    if (y === void 0) { y = (_a = /** @class */ (function () {
+) {if (y === void 0) { y = (_a = /** @class */ (function () {
             function class_1() {
                 x;
             }

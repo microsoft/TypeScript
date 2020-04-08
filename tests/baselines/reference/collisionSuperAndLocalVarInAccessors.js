@@ -87,15 +87,13 @@ var c = /** @class */ (function (_super_1) {
         get: function () {
             var x = function () {
                 var _super = 10; // Should be error
-            }
-            ;
+            };
             return 10;
         },
         set: function (val) {
             var x = function () {
                 var _super = 10; // Should be error
-            }
-            ;
+            };
         },
         enumerable: false,
         configurable: true

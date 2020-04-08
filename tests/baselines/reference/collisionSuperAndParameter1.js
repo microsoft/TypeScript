@@ -32,8 +32,7 @@ var Foo2 = /** @class */ (function (_super_1) {
         return _super_1 !== null && _super_1.apply(this, arguments) || this;
     }Foo2.prototype.x = function () {
         var lambda = function (_super) {
-        }
-        ;
+        };
     };
     return Foo2;
 }(Foo));

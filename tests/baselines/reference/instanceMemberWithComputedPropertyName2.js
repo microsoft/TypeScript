@@ -20,6 +20,5 @@ class C {
             writable: true,
             value: void 0
         });
-    }
-}
+    }}
 _a = x;

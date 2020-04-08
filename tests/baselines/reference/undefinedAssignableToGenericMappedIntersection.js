@@ -10,8 +10,7 @@ function foo<T>() {
 //// [undefinedAssignableToGenericMappedIntersection.js]
 "use strict";
 function foo() {
-    var obj
-    ;
+    var obj;
     var x;
     obj[x] = undefined;
 }

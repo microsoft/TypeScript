@@ -6,7 +6,6 @@ function foo() {
 
 //// [parserErrorRecovery_ArgumentList4.js]
 function foo() {
-    bar(a, b
-    );
+    bar(a, b);
     return;
 }

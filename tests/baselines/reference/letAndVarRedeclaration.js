@@ -52,8 +52,7 @@ module M2 {
 }
 
 //// [letAndVarRedeclaration.js]
-let e0
-;
+let e0;
 var e0;
 function e0() { }
 

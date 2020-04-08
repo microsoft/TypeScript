@@ -83,8 +83,7 @@ var o = {
 o.hasOwnProperty(Symbol.hasInstance);
 
 // Using Es6 proxy
-var t = {}
-;
+var t = {};
 var p = new Proxy(t, {});
 
 // Using ES6 reflect

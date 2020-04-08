@@ -60,8 +60,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.lazyBar = void 0;
 var bundling_1 = require("./bundling");
 var lazyModule = new bundling_1.LazyModule(function () {
-    return Promise.resolve().then(function () { return require('./lazyIndex'); });
-}
+    return Promise.resolve().then(function () { return require('./lazyIndex'); });}
 );
 exports.lazyBar = new bundling_1.LazyAction(lazyModule, function (m) { return m.bar; });
 

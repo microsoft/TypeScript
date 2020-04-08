@@ -30,9 +30,6 @@ function bar(_a) {
     return 0;
 }
 
-var _c = 1
+var _c = 1;
 
-;
-
-var _d = {}
-;
+var _d = {};

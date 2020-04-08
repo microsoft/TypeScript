@@ -91,9 +91,7 @@ var K = /** @class */ (function () {
     function K(s) {}
     return K;
 }());
-var ctor = K
-
-;
+var ctor = K;
 
 
 
@@ -102,7 +100,5 @@ var ctor = K
 
 
 
-var weak = propertiesWrong
-
-;
+var weak = propertiesWrong;
 

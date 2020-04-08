@@ -43,10 +43,8 @@ var Derived = /** @class */ (function (_super) {
     function Derived() {
         var _this = this;
         var r2 = function () { return _this = _super.call(this) || this; };
-        var r3 = function () { _this = _super.call(this) || this; }
-        ;
-        var r4 = function () { _this = _super.call(this) || this; }
-        ;
+        var r3 = function () { _this = _super.call(this) || this; };
+        var r4 = function () { _this = _super.call(this) || this; };
         var r5 = {
             get foo() {
                 _this = _super.call(this) || this;
@@ -55,8 +53,7 @@ var Derived = /** @class */ (function (_super) {
             set foo(v) {
                 _this = _super.call(this) || this;
             }
-        }
-        ;
+        };
         return _this;
     }
     return Derived;

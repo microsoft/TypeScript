@@ -30,5 +30,4 @@ var style = {
             { 'ry': null }
         ];
     }
-}
-;
+};

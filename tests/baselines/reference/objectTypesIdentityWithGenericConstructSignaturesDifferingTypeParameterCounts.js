@@ -89,8 +89,7 @@ var C = /** @class */ (function () {
 }());
 
 
-var a
-;
+var a;
 var b = { "new": function (x) { return x; } };
 
 function foo1b(x) { }

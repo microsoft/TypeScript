@@ -127,9 +127,7 @@ function f4(x) {
 
 
 
-var n
-
-;
+var n;
 if (n.type === "Disjunction") {
     n.alternatives.slice();
 }

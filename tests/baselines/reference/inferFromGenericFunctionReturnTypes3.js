@@ -238,15 +238,11 @@ function wrappedBaz() {
 let a = [];
 a = [1, 2, 3, 4, 5].map(v => ({ type: 'folder' }));
 // Repro from #11312
-let arr = [[1, 2]]
-
-;
+let arr = [[1, 2]];
 
 let mappedArr = arr.map(([x, y]) => {
     return [x, y];
-})
-
-;
+});
 // Repro from #13594
 export var DiagnosticSeverity;
 (function (DiagnosticSeverity) {

@@ -111,8 +111,7 @@ var Data = /** @class */ (function () {
     }Data.prototype.test = function () {
         var result = {
             title: "title"
-        }
-        ;
+        };
         return result;
     };
     return Data;

@@ -25,14 +25,10 @@ var Foo = /** @class */ (function () {
     return Foo;
 }());
 switch (0) {
-    case Foo: break;
-    // Error
-    case "sss": break;
-    // Error
-    case 123: break;
-    // Error
-    case true: break;
-    // Error
+    case Foo: break; // Error
+    case "sss": break; // Error
+    case 123: break; // Error
+    case true: break; // Error
 }
 var s = 0;
 // No error for all

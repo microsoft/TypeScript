@@ -179,8 +179,7 @@ var PB = /** @class */ (function (_super) {
     }
     return PB;
 }(B));
-var a
-;
+var a;
 var b = { foo: null };
 
 function foo1(x) { }

@@ -241,9 +241,7 @@ var E = /** @class */ (function () {
         configurable: true
     });
     return class_1;
-}())
-
-;
+}());
 new E();
 var o = {
     // Object literal method declaration paramter

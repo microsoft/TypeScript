@@ -103,8 +103,7 @@ var n = fn3(__makeTemplateObject(["", "", "", ""], ["", "", "", ""]), 5, 5, 5);
 var n;
 
 // Generic overloads with differing arity tagging with arguments matching each overload type parameter count
-var s = fn3(__makeTemplateObject(["", ""], ["", ""]), 4)
-;
+var s = fn3(__makeTemplateObject(["", ""], ["", ""]), 4);
 var s = fn3(__makeTemplateObject(["", "", "", ""], ["", "", "", ""]), '', '', '');
 var n = fn3(__makeTemplateObject(["", "", "", ""], ["", "", "", ""]), '', '', 3);
 

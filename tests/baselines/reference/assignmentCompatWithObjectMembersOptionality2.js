@@ -127,11 +127,8 @@ var TargetHasOptional;
 (function (TargetHasOptional) {
     var c;
 
-    var a
-    ;
-    var b = { opt: new Base() }
-
-    ;
+    var a;
+    var b = { opt: new Base() };
 
     var d;
     var e;
@@ -157,8 +154,7 @@ var SourceHasOptional;
 (function (SourceHasOptional) {
     var c;
 
-    var a
-    ;
+    var a;
     var b = { opt: new Base() };
 
     var d;

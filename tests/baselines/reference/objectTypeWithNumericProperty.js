@@ -64,9 +64,7 @@ var r2 = i[1.1];
 var r3 = i['1'];
 var r4 = i['1.1'];
 
-var a
-
-;
+var a;
 
 var r1 = a[1];
 var r2 = a[1.1];

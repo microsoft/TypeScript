@@ -939,12 +939,10 @@ var Formatting;
                     indentationInfo = this.GetSpecialCaseIndentationForLCurly(node);
                     return indentationInfo;
 
-
                 case AuthorTokenKind.atkElse: // else is not part of the tree
                 case AuthorTokenKind.atkRBrack: // ] is not part of the tree
                     indentationInfo = node.GetNodeStartLineIndentation(this);
                     return indentationInfo;
-
 
                 case AuthorTokenKind.atkRCurly: // } is not part of the tree
                     // if '}' is for a body-block, get indentation based on its parent.
@@ -952,7 +950,6 @@ var Formatting;
                         node = node.Parent;
                     indentationInfo = node.GetNodeStartLineIndentation(this);
                     return indentationInfo;
-
 
                 case AuthorTokenKind.atkWhile: // while (in do-while) is not part of the tree
                     if (node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkDoWhile) {
@@ -962,14 +959,11 @@ var Formatting;
 
                     return null;
 
-
                 case AuthorTokenKind.atkSColon:
                     return this.GetSpecialCaseIndentationForSemicolon(token, node);
 
-
                 case AuthorTokenKind.atkComment:
                     return this.GetSpecialCaseIndentationForComment(token, node);
-
 
                 default:
                     return indentationInfo;
@@ -1051,7 +1045,6 @@ var Formatting;
                 case AuthorParseNodeKind.apnkDoWhile:
                 case AuthorParseNodeKind.apnkObject:
                     return true;
-
                 case AuthorParseNodeKind.apnkFncDecl:
                     // Comments before arguments are not indented.
                     // This code doesn't cover the cases of comment after the last argument or 
@@ -1407,11 +1400,9 @@ var Formatting;
                     updateStartOffset = node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkFncDecl;
                     break;
 
-
                 case AuthorTokenKind.atkLCurly:
                     updateStartOffset = node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkObject;
                     break;
-
 
                 case AuthorTokenKind.atkLBrack:
                     updateStartOffset = node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkArray;

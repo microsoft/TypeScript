@@ -8,9 +8,7 @@ var obj2 = {
 }
 
 //// [emitRestParametersFunctionPropertyES6.js]
-var obj
-
-;
+var obj;
 var obj2 = {
     func(...rest) { }
 };

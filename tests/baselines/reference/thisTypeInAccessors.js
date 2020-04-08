@@ -42,27 +42,22 @@ var explicit = {
     n: 12,
     get x() { return this.n; },
     set x(n) { this.n = n; }
-}
-;
+};
 var copiedFromGetter = {
     n: 14,
     get x() { return this.n; },
     set x(n) { this.n = n; }
-}
-;
+};
 var copiedFromSetter = {
     n: 15,
     get x() { return this.n; },
     set x(n) { this.n = n; }
-}
-;
+};
 var copiedFromGetterUnannotated = {
     n: 16,
     get x() { return this.n; },
     set x(n) { this.n = n; }
-}
-
-;
+};
 
 var Explicit = /** @class */ (function () {
     function Explicit() {

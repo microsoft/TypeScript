@@ -38,9 +38,7 @@ x.toString();
 
 
 //// [letDeclarations-access.js]
-let x = 0
-
-;
+let x = 0;
 
 // No errors
 x = 1;

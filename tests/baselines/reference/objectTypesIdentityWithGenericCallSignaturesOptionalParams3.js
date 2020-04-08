@@ -124,8 +124,7 @@ var C = /** @class */ (function () {
 }());
 
 
-var a
-;
+var a;
 var b = { foo: function (x, y) { return x; } };
 
 function foo1(x) { }

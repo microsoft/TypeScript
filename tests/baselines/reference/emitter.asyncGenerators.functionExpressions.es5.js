@@ -441,5 +441,4 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
             }
         });
     });
-}
-;
+};

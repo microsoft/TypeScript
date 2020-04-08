@@ -90,9 +90,7 @@ function test() {
     // Excess property checks only on non-generic parts of unions
     var obj4 = { name: "test", prop: true };
     // No excess property checks when union includes 'object' type
-    var obj5 = { z: 'abc' }
-    ;
+    var obj5 = { z: 'abc' };
     // The 'object' type has no effect on intersections
-    var obj6 = { z: 'abc' }
-    ;
+    var obj6 = { z: 'abc' };
 }

@@ -128,9 +128,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 
-var a
-
-;
+var a;
 
 // error
 var b = {

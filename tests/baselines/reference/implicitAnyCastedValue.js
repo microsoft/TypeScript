@@ -81,9 +81,7 @@ var array = <any>[null, undefined];
 //// [implicitAnyCastedValue.js]
 var x = function () {
     return 0; // this should not be an error
-}
-
-;
+};
 
 function foo() {
     return "hello world"; // this should not be an error

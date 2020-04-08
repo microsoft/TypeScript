@@ -136,8 +136,7 @@ var E;
 })(E || (E = {}));
 var a1;
 var a2;
-var a3
-;
+var a3;
 var a4;
 var a5;
 var a6;

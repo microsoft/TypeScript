@@ -50,9 +50,7 @@ var foo3 = function () {
 };
 var x = function () {
     return x;
-}
-
-;
+};
 
 function foo5(x) {
     function bar(x) {

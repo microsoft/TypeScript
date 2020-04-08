@@ -338,9 +338,7 @@ var q1 = function (s = this) {
     var t;
     var t = this;
     this.spaaaaace = 4;
-}
-
-;
+};
 
 //type of 'this' in a fat arrow expression param list is typeof globalThis
 var q2 = (s = this) => {
@@ -350,9 +348,7 @@ var q2 = (s = this) => {
     var t;
     var t = this;
     this.spaaaaace = 4;
-}
-
-;
+};
 
 //type of 'this' in global module is GlobalThis
 var t;

@@ -51,9 +51,7 @@ function foo(x) {
 
 var i;
 var i2;
-var a
-
-;
+var a;
 
 var r = foo(i); // any
 var r2 = foo(i); // string 

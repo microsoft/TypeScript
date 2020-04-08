@@ -125,8 +125,7 @@ first,
     ... /* comment g */rest
 ) {
     const [ga, gb] = [... /* comment gab */rest
-    ]
-    ;
+    ];
     return rest.length;
 }
 

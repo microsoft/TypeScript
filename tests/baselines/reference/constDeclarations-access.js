@@ -7,7 +7,6 @@ const x = 0
 x++;
 
 //// [file1.js]
-const x = 0
-;
+const x = 0;
 //// [file2.js]
 x++;

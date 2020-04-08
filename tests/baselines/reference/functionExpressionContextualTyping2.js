@@ -20,7 +20,6 @@ a1 = (foo, bar) => { return true; }  // Error
 //          with the same parameters and a union of the return types.
 //      Otherwise, no contextual signature can be extracted from T and S is undefined.
 
-var a0
-;
+var a0;
 var a1;
 a1 = function (foo, bar) { return true; }; // Error

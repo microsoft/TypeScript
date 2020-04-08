@@ -47,6 +47,5 @@ var test;
         return C;
     }());
 
-    var a
-    ;
+    var a;
 })(test || (test = {}));

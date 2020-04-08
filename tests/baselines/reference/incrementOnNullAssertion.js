@@ -17,8 +17,7 @@ else {
 //// [incrementOnNullAssertion.js]
 "use strict";
 var x = 'bar';
-var foo = {}
-;
+var foo = {};
 if (foo[x] === undefined) {
     foo[x] = 1;
 }

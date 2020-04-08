@@ -83,43 +83,33 @@ var f = function (x, y) {
         var g = function (a, b) {
             x = y;
             return y;
-        }
-        ;
+        };
     }
-}
-
-;
+};
 
 var f2 = function (x, y) {
     function bar() {
         var g = function baz(a, b) {
             x = y;
             return y;
-        }
-        ;
+        };
     }
-}
-
-;
+};
 
 var f3 = function (x, y) {
     function bar() {
         var g = function (a, b) {
             x = y;
             return y;
-        }
-        ;
+        };
     }
-}
-
-;
+};
 
 var f4 = function (x, y) {
     function bar() {
         var g = function (a, b) {
             x = y;
             return y;
-        }
-        ;
+        };
     }
 };

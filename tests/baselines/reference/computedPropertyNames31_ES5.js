@@ -47,8 +47,7 @@ var C = /** @class */ (function (_super) {
                     _a[_super.prototype.bar.call(_this)] = function () { } // needs capture
                 ,
                     _a);
-            }
-        );
+            });
         return 0;
     };
     return C;

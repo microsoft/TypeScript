@@ -961,14 +961,11 @@ sourceFile:sourceMapValidationStatements.ts
 1 >Emitted(68, 10) Source(63, 10) + SourceIndex(0)
 ---
 >>>    }
-1 >^^^^^^^^
-2 >        
-3 >     ^^^^^^^^^^^^^^^^->
+1 >^^^^^
+2 >     ^^^^^^^^^^^^^^^^->
 1 >
-2 >        
-  >            }
-1 >Emitted(69, 9) Source(63, 10) + SourceIndex(0)
-2 >Emitted(69, 6) Source(64, 6) + SourceIndex(0)
+  >    }
+1 >Emitted(69, 6) Source(64, 6) + SourceIndex(0)
 ---
 >>>    while (x < 10) {
 1->^^^^

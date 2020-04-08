@@ -98,8 +98,7 @@ var FieldFeedback = /** @class */ (function (_super) {
         return react_1["default"].createElement("div", null, "Hello");
     };
     FieldFeedback.defaultProps = {
-        when: function () { return true;
-        }
+        when: function () { return true; }
     };
     return FieldFeedback;
 }(react_1["default"].Component));
@@ -115,8 +114,7 @@ var FieldFeedbackBeta = /** @class */ (function (_super) {
         return react_1["default"].createElement("div", null, "Hello");
     };
     FieldFeedbackBeta.defaultProps = {
-        when: function () { return true;
-        }
+        when: function () { return true; }
     };
     return FieldFeedbackBeta;
 }(react_1["default"].Component));
@@ -134,8 +132,7 @@ var FieldFeedback2 = /** @class */ (function (_super) {
         return react_1["default"].createElement("div", null, "Hello");
     };
     FieldFeedback2.defaultProps = {
-        when: function () { return true;
-        }
+        when: function () { return true; }
     };
     return FieldFeedback2;
 }(FieldFeedback));

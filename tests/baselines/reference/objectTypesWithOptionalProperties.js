@@ -28,9 +28,7 @@ var b = {
 //// [objectTypesWithOptionalProperties.js]
 // Basic uses of optional properties
 
-var a
-
-;
+var a;
 
 
 var C = /** @class */ (function () {

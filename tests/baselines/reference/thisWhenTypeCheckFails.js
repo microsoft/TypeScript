@@ -15,8 +15,7 @@ var c = /** @class */ (function () {
         var _this = this;
         var k = function () {
             var s = _this.n();
-        }
-        ;
+        };
     };
     return c;
 }());

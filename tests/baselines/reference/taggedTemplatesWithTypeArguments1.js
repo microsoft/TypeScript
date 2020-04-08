@@ -68,13 +68,11 @@ export const b = g `
 `;
 
 
-export let c = obj["prop"] `${(input) => ({ ...input })}`
-;
+export let c = obj["prop"] `${(input) => ({ ...input })}`;
 c.returnedObjProp.x;
 c.returnedObjProp.y;
 c.returnedObjProp.z;
-c = obj.prop `${(input) => ({ ...input })}`
-;
+c = obj.prop `${(input) => ({ ...input })}`;
 c.returnedObjProp.x;
 c.returnedObjProp.y;
 c.returnedObjProp.z;

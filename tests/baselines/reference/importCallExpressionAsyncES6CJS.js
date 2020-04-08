@@ -43,24 +43,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.l = exports.cl2 = exports.obj = exports.cl1 = exports.fn = void 0;
 function fn() {
     return __awaiter(this, void 0, void 0, function* () {
-        const req = yield Promise.resolve().then(() => require('./test'))
-        ; // ONE
+        const req = yield Promise.resolve().then(() => require('./test')); // ONE
     });
 }exports.fn = fn;
 
 class cl1 {
     m() {
         return __awaiter(this, void 0, void 0, function* () {
-            const req = yield Promise.resolve().then(() => require('./test'))
-            ; // TWO
+            const req = yield Promise.resolve().then(() => require('./test')); // TWO
         });
     }
 }exports.cl1 = cl1;
 
 exports.obj = {
     m: () => __awaiter(void 0, void 0, void 0, function* () {
-        const req = yield Promise.resolve().then(() => require('./test'))
-        ; // THREE
+        const req = yield Promise.resolve().then(() => require('./test')); // THREE
     })
 };
 
@@ -69,15 +66,11 @@ class cl2 {
     constructor() {
         this.p = {
             m: () => __awaiter(this, void 0, void 0, function* () {
-                const req = yield Promise.resolve().then(() => require('./test'))
-                ; // FOUR
+                const req = yield Promise.resolve().then(() => require('./test')); // FOUR
             })
         };
-    }
-
-}exports.cl2 = cl2;
+    }}exports.cl2 = cl2;
 
 exports.l = () => __awaiter(void 0, void 0, void 0, function* () {
-    const req = yield Promise.resolve().then(() => require('./test'))
-    ; // FIVE
+    const req = yield Promise.resolve().then(() => require('./test')); // FIVE
 });

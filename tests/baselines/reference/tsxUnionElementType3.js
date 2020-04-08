@@ -94,6 +94,5 @@ var RCComp = RC1 || RC2;
 var a = React.createElement(RCComp, { x: "Hi" });
 var a1 = React.createElement(EmptyRCComp, null);
 var a2 = React.createElement(EmptyRCComp, { "data-prop": "hello" });
-var b = React.createElement(PartRCComp, null)
-;
+var b = React.createElement(PartRCComp, null);
 var c = React.createElement(PartRCComp, { "data-extra": "hello" });

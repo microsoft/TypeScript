@@ -937,9 +937,7 @@ var TypeScript;
                     else {
                         return findTypeSymbolInScopeChain(name, context.topLevelScope);
                     }
-                }
-
-                ;
+                };
                 if (isDynamic) {
                     symbol = context.tcContext.checker.findSymbolForDynamicModule(name, context.tcContext.script.locationInfo.filename, findSym);
                 }

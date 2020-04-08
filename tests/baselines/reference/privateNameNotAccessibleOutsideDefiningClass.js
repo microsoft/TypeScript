@@ -11,8 +11,6 @@ new A().#foo = 4;               // Error
 var _foo;
 class A {constructor() {
         _foo.set(this, 3);
-    }
-
-}
+    }}
 _foo = new WeakMap();
 new A(). = 4; // Error

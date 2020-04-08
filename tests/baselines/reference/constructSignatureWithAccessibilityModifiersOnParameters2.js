@@ -60,8 +60,6 @@ var C3 = /** @class */ (function () {
 }());
 
 
-var a
-
-;
+var a;
 
 var b;

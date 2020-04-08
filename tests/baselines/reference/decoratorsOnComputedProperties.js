@@ -216,9 +216,7 @@ let A = /** @class */ (() => {
             this[Symbol.match] = null;
             this[_b] = null;
             this[_d] = null;
-        }
-
-    }
+        }}
     foo(), _a = foo(), _b = foo(), _c = fieldNameB, _d = fieldNameC;
     __decorate([
         x

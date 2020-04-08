@@ -61,10 +61,8 @@ var u: Proxy<Blah>; // ok
 
 
 //// [nonPrimitiveStrictNull.js]
-var a
-;
-var e
-;
+var a;
+var e;
 a.toString; // error
 a = undefined; // error
 a = null; // error

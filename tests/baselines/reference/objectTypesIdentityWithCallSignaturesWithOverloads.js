@@ -136,9 +136,7 @@ var C = /** @class */ (function () {
 }());
 
 
-var a
-
-;
+var a;
 
 var b = {
     foo: function (x) { return ''; }

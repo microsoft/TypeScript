@@ -208,9 +208,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 
-var assert = function (value) { }
-
-;
+var assert = function (value) { };
 
 
 function f01(x) {
@@ -365,8 +363,7 @@ function f11(items) {
 
 
 function f20(x) {
-    var assert = function (value) { }
-    ;
+    var assert = function (value) { };
     assert(typeof x === "string"); // Error
     var a = [assert];
     a[0](typeof x === "string"); // Error

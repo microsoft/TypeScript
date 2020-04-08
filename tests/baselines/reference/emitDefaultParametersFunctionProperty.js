@@ -21,5 +21,4 @@ var obj2 = {
             rest[_i - 3] = arguments[_i];
         }
     },
-}
-;
+};

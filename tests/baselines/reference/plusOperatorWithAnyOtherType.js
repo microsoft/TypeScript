@@ -62,8 +62,7 @@ var ResultIsNumber19 = +(undefined + undefined);
 var ANY;
 var ANY1;
 var ANY2 = ["", ""];
-var obj
-;
+var obj;
 var obj1 = { x: function (s) { }, y: function (s1) { } };
 
 function foo() {

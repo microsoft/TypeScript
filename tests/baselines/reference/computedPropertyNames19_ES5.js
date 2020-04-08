@@ -11,6 +11,5 @@ var M;
     var _a;
     var obj = (_a = {},
         _a[this.bar] = 0,
-        _a)
-    ;
+        _a);
 })(M || (M = {}));

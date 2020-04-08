@@ -43,8 +43,6 @@ c.foo(1);
 var b = {
     foo: function (x) {if (x === void 0) { x = 1; }},
     foo: function (x) {if (x === void 0) { x = 1; }}
-}
-
-;
+};
 b.foo();
 b.foo(1);

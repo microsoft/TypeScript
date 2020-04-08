@@ -43,8 +43,7 @@ var C = /** @class */ (function () {
 ;
 var strOrNum;
 var strOrBool;
-var numOrBool
-;
+var numOrBool;
 var strOrC;
 
 // typeof x != s has not effect on typeguard

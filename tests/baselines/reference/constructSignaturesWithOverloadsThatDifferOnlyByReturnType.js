@@ -45,8 +45,6 @@ var C2 = /** @class */ (function () {
 }());
 
 
-var a
-
-;
+var a;
 
 var b;

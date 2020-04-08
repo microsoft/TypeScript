@@ -22,8 +22,7 @@ var results;
     let x = {
         a,
         b
-    }
-    ;
+    };
 }
 
 

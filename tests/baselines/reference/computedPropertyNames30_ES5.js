@@ -46,8 +46,7 @@ var C = /** @class */ (function (_super) {
                     //treatment of other similar violations.
                     _a[(_this = _super.call(this) || this, "prop")] = function () { },
                     _a);
-            }
-        );
+            });
         return _this;
     }
     return C;

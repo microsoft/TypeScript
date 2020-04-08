@@ -11,8 +11,7 @@ if (y[0] === 0) {
 
 
 //// [controlFlowElementAccess.js]
-var x = { o: false }
-;
+var x = { o: false };
 if (x['o'] === false) {
     x['o'] = true;
 }

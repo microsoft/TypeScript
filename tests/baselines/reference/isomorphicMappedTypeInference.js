@@ -302,8 +302,7 @@ function f10(foo) {
 var g1 = applySpec({
     sum: function (a) { return 3; },
     nested: {
-        mul: function (b) { return "n";
-        }
+        mul: function (b) { return "n"; }
     }
 });
 

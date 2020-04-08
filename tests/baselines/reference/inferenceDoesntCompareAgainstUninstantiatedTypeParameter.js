@@ -53,20 +53,16 @@ var thisGetsTheFalseError = new ClassA(new ConcreteClass(), {
     values: function (o) { return [
         {
             value: o.theName,
-            func: function (x) { return 'asdfkjhgfdfghjkjhgfdfghjklkjhgfdfghjklkjhgfghj';
-            }
+            func: function (x) { return 'asdfkjhgfdfghjkjhgfdfghjklkjhgfdfghjklkjhgfghj'; }
         }
-    ];
-    }
+    ]; }
 });
 
 var thisIsOk = new ClassA(new ConcreteClass(), {
     values: function (o) { return [
         {
             value: o.theName,
-            func: function (x) { return 'asdfkjhgfdfghjkjhgfdfghjklkjhgfdfghjklkjhgfghj';
-            }
+            func: function (x) { return 'asdfkjhgfdfghjkjhgfdfghjklkjhgfdfghjklkjhgfghj'; }
         }
-    ];
-    }
+    ]; }
 });

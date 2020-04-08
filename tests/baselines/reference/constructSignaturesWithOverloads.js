@@ -73,14 +73,10 @@ var r3 = new i(1, '');
 var i2;
 var r4 = new i2(1, '');
 
-var a
-
-;
+var a;
 
 var r5 = new a(1, '');
 
-var b
-
-;
+var b;
 
 var r6 = new b(1, '');

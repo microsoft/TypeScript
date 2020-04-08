@@ -63,9 +63,7 @@ var A;
 var a;
 var a = new A.A();
 
-var AG = new A.AG()
-
-;
+var AG = new A.AG();
 
 // errors expected, these are not exported
 var a2 = new A.A2();

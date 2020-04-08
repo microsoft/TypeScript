@@ -39,11 +39,8 @@ var o3: [string, number] = y;
 //// [arityAndOrderCompatibility01.js]
 
 var x;
-var y
-;
-var z
-
-;
+var y;
+var z;
 
 var a = x[0], b = x[1], c = x[2];
 var d = y[0], e = y[1], f = y[2];

@@ -501,9 +501,7 @@ var main = function () {
         }
         return;
     }
-}
-
-;
+};
 
 // Repro from #36828
 function t1() {

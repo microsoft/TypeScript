@@ -42,12 +42,10 @@ var r7 = i2.f(1);
 function f(x) { return null; }
 var r = f(1);
 
-var f2 = function (x) { return null; }
-;
+var f2 = function (x) { return null; };
 var r2 = f2(1);
 
-var f3
-;
+var f3;
 var r3 = f3(1);
 
 var C = /** @class */ (function () {

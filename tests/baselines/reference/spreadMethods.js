@@ -48,8 +48,7 @@ class K {constructor() {
     m() { }
     get g() { return 0; }
 }
-let k = new K()
-;
+let k = new K();
 let sk = { ...k };
 let ssk = { ...k, ...k };
 sk.p;

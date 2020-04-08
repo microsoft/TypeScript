@@ -55,5 +55,4 @@ const f6 = async function* () {
 //// [F7.js]
 const f7 = async function* () {
     return 1;
-}
-;
+};

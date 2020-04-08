@@ -13,6 +13,5 @@ function* g() {
         get [yield 0]() {
             return 0;
         }
-    }
-    ;
+    };
 }

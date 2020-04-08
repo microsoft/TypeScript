@@ -16,8 +16,7 @@ const { ___, ___hello, _hi } = R;
 //// [m1.js]
 "use strict";
 exports.__esModule = true;
-var R
-;
+var R;
 exports["default"] = R = {
     "___": 30,
     "___hello": 21,

@@ -77,12 +77,10 @@ var A = /** @class */ (function () {
 }());
 var a;
 
-var b
-;
+var b;
 a = b; // ok
 b = a; // error
-var b2
-;
+var b2;
 a = b2; // ok
 b2 = a; // error
 var Generics;

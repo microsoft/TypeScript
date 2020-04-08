@@ -97,9 +97,7 @@ var formatHost = {
     getCanonicalFileName: function (path) { return path; },
     getCurrentDirectory: ts.sys.getCurrentDirectory,
     getNewLine: function () { return ts.sys.newLine; }
-}
-
-;
+};
 
 function watchMain() {
     var configPath = ts.findConfigFile(/*searchPath*/ "./", ts.sys.fileExists, "tsconfig.json");

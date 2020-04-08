@@ -50,8 +50,7 @@ ONE: for (var x in {})
 TWO: for (var x in {}) {
     var fn = function () {
         break TWO;
-    }
-    ;
+    };
 }
 
 THREE: for (var x in {}) {

@@ -15,8 +15,7 @@ result // should not error here
 
 //// [flowAfterFinally1.js]
 
-var result
-;
+var result;
 openFile();
 try {
     result = someOperation();

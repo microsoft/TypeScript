@@ -52,9 +52,7 @@ var obj1 = {
     b: oct1,
     oct1: oct1,
     Infinity: true
-}
-
-;
+};
 
 var obj2 = {
     19230: "hi",
@@ -62,9 +60,7 @@ var obj2 = {
     b: oct2,
     oct2: oct2,
     5.462437423415177e+244: false,
-}
-
-;
+};
 
 obj1[19230]; // string
 obj1["0o45436"]; // any

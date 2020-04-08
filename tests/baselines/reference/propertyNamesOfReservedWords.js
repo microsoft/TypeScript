@@ -291,9 +291,7 @@ var i;
 var r3 = i.abstract;
 var r4 = i.as;
 
-var a
-
-;
+var a;
 
 var r5 = a.abstract;
 var r6 = a.as;

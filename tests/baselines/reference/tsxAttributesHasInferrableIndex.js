@@ -28,5 +28,4 @@ function createElement(name, attributes) {var contents = [];
 function Button(attributes, contents) {
     return '';
 }
-var b = createElement(Button, null)
-;
+var b = createElement(Button, null);

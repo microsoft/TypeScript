@@ -33,11 +33,8 @@ exports.__esModule = true;
 //// [c.js]
 "use strict";
 exports.__esModule = true;
-var a
-;
-var b
-
-;
+var a;
+var b;
 if (a === b) {
 }
 

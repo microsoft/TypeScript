@@ -18,16 +18,14 @@ class D extends C {
 //// [accessorsOverrideProperty6.js]
 class A {constructor() {
         this.p = 'yep';
-    }
-}
+    }}
 class B extends A {
     get p() { return 'oh no'; } // error
 }
 class C {
     constructor() {
         this.p = 101;
-    }
-}
+    }}
 class D extends C {
     constructor() {
         super(...arguments);

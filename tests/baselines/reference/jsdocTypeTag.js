@@ -162,8 +162,7 @@ var ctor;
 var S;
 var s;
 var N;
-var n
-;
+var n;
 var B;
 var b;
 var V;

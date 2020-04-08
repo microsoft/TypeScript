@@ -7,12 +7,8 @@ foo = bar; // error
 bar = foo; // error
 
 //// [callConstructAssignment.js]
-var foo
+var foo;
 
-;
-
-var bar
-
-;
+var bar;
 foo = bar; // error
 bar = foo; // error

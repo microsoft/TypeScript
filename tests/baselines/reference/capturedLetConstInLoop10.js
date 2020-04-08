@@ -115,8 +115,7 @@ var B = /** @class */ (function () {
                 var x = _a[_i];
                 _loop_6(x);
             }
-        }
-        ;
+        };
     };
     B.prototype.bar = function (a) {
     };

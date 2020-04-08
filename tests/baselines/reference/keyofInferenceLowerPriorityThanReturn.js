@@ -60,9 +60,7 @@ function f() {
 
 
 
-var bookTable = null
-
-;
+var bookTable = null;
 
 
 

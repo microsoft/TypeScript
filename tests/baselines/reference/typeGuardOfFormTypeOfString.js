@@ -96,8 +96,7 @@ var bool;
 var num;
 var strOrNum;
 var strOrBool;
-var numOrBool
-;
+var numOrBool;
 var strOrNumOrBool;
 var strOrC;
 var numOrC;

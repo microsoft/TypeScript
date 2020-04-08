@@ -82,7 +82,6 @@ var EmptyProp = /** @class */ (function (_super) {
 var j;
 var e1 = <EmptyProp {...{}}/>;
 var e2 = <EmptyProp {...j}/>;
-var e3 = <EmptyProp {...{ ref: function (input) { _this.textInput = input; } }}/>
-;
+var e3 = <EmptyProp {...{ ref: function (input) { _this.textInput = input; } }}/>;
 var e4 = <EmptyProp data-prop/>;
 var e5 = <EmptyProp {...{ "data-prop": true }}/>;

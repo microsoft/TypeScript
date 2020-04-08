@@ -67,8 +67,6 @@ function test(wrappedProps) {
     var x = react_1["default"].createElement(MySFC, null); // should error
     var y = react_1["default"].createElement(MyComponent, null); // should error
 
-    var z = react_1["default"].createElement(MySFC, __assign({}, wrappedProps))
-    ; // should work
-    var q = react_1["default"].createElement(MyComponent, __assign({}, wrappedProps))
-    ; // should work
+    var z = react_1["default"].createElement(MySFC, __assign({}, wrappedProps)); // should work
+    var q = react_1["default"].createElement(MyComponent, __assign({}, wrappedProps)); // should work
 }

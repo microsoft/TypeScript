@@ -179,9 +179,7 @@ var r11 = i[-0x1];
 var r12 = i[01];
 var r13 = i[-01];
 
-var a
-
-;
+var a;
 
 var r1 = a['0.1'];
 var r2 = a['.1'];

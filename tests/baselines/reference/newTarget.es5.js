@@ -81,9 +81,7 @@ var f2 = function f2() {
     var _newTarget = this && this instanceof f2 ? this.constructor : void 0;
     var i = _newTarget;
     var j = function () { return _newTarget; };
-}
-
-;
+};
 
 var O = {
     k: function k() {

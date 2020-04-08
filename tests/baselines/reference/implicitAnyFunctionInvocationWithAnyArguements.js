@@ -39,8 +39,7 @@ var newC2 = new C(<any>[], null)
 // this should be errors
 var arg0 = null; // error at "arg0"
 var anyArray = [null, undefined]; // error at array literal
-var objL
-; // error at "y,z"
+var objL; // error at "y,z"
 var funcL;
 function temp1(arg1) { } // error at "temp1"
 function testFunctionExprC(subReplace) { }
@@ -70,5 +69,4 @@ var C = /** @class */ (function () {
 }());
 var newC = new C([], undefined);
 var newC1 = new C([], arg0);
-var newC2 = new C([], null)
-;
+var newC2 = new C([], null);

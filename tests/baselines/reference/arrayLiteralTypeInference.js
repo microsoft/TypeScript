@@ -84,49 +84,34 @@ var ActionB = /** @class */ (function (_super) {
 var x1 = [
     { id: 2, trueness: false },
     { id: 3, name: "three" }
-]
-
-;
+];
 
 var x2 = [
     new ActionA(),
     new ActionB()
-]
-
-;
+];
 
 var x3 = [
     new Action(),
     new ActionA(),
     new ActionB()
-]
-
-;
+];
 
 var z1 = [
     { id: 2, trueness: false },
     { id: 3, name: "three" }
-]
-
-;
+];
 
 var z2 = [
     new ActionA(),
     new ActionB()
-]
-
-;
+];
 
 var z3 = [
     new Action(),
     new ActionA(),
     new ActionB()
-]
-
-
-
-
-;
+];
 
 
 

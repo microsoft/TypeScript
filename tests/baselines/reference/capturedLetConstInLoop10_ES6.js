@@ -84,8 +84,7 @@ class B {
                 let f = () => x;
                 this.bar(f());
             }
-        }
-        ;
+        };
     }
     bar(a) {
     }

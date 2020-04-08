@@ -26,11 +26,7 @@ fn<MyObjA>({
 
 
 
-var fn = function (opts) { return 'Z';
-
-}
-
-;
+var fn = function (opts) { return 'Z'; };
 
 
 fn({

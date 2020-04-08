@@ -34,25 +34,19 @@ function bar() {
 //// [emitArrowFunctionWhenUsingArguments01.js]
 var a = function () {
     var arg = arguments[0]; // error
-}
-
-;
+};
 
 var b = function () {
     var a = function () {
         var arg = arguments[0]; // error
-    }
-    ;
-}
-
-;
+    };
+};
 
 function baz() {
     (
         function () {
             var arg = arguments[0];
-        }
-    );
+        });
 }
 
 function foo(inputFunc) { }

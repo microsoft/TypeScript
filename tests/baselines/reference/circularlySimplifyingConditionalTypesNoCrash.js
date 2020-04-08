@@ -61,8 +61,7 @@ var myStoreConnect = function (
 mapStateToProps,
     mapDispatchToProps,
     mergeProps,
-    options) {
-    if (options === void 0) { options = {}; }
+    options) {if (options === void 0) { options = {}; }
     return connect(
     mapStateToProps,
         mapDispatchToProps,

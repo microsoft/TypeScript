@@ -145,8 +145,7 @@ var i;
 var r2 = i.foo.foo();
 var r2b = i.foo['foo']();
 
-var a
-;
+var a;
 //var a: {
 //    <U extends T, T extends A>(): U;
 //    <U extends T, T extends A>(x: U): U;
@@ -164,8 +163,7 @@ var b = {
         var a = x['foo'](); // should be string
         return a + x.foo();
     }
-}
-;
+};
 //var b = {
 //    foo: <U extends T, T extends A>(x: U, y: T) => {
 //        var a = x['foo'](); // should be string

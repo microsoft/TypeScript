@@ -49,8 +49,7 @@ var B = /** @class */ (function (_super) {
                 return _super.call(this) || this;
             }
             return D;
-        }(C))
-        ;
+        }(C));
         return _this;
     }
     return B;

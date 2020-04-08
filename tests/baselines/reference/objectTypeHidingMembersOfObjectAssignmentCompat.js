@@ -37,7 +37,6 @@ o = c; // error
 c = o; // ok
 var a = {
     toString: function () { }
-}
-;
+};
 o = a; // error
 a = o; // ok

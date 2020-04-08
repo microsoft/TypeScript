@@ -90,19 +90,15 @@ var f3 = function (x, y) {
         var g = function (a, b) {
             x = y;
             return y;
-        }
-        ;
+        };
     }
-}
-
-;
+};
 
 var f4 = function (x, y) {
     function bar() {
         var g = function (a, b) {
             x = y;
             return y;
-        }
-        ;
+        };
     }
 };

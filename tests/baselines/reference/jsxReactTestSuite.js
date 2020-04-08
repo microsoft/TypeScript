@@ -167,8 +167,7 @@ attr1={"foo" + "bar"}
     attr1="foo">
     <span // a double-slash comment
      
-    attr2="bar"
-    />
+    attr2="bar"/>
   </div>
 );
 

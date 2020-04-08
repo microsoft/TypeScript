@@ -1052,9 +1052,7 @@ function f1(thing) {
 var assignTo2 = function (object, key1, key2) {
     return function (value) { return object[key1][key2] = value; };};
 
-var empty = one(function () { })
-
-; // inferred as {}, expected
+var empty = one(function () { }); // inferred as {}, expected
 
 
 var hashOfEmpty1 = on({ test: function () { } }); // {}

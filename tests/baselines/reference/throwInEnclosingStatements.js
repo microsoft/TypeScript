@@ -52,9 +52,7 @@ function fn(x) {
 }
 (
 
-    function (x) { throw x; }
-
-);
+    function (x) { throw x; });
 
 var y;
 switch (y) {
@@ -86,5 +84,4 @@ var aa = {
     biz: function () {
         throw this;
     }
-}
-;
+};

@@ -56,16 +56,12 @@ function fn() {
 var t = function () {
     var p = this;
     var p;
-}
-
-;
+};
 
 var t2 = function f() {
     var x = this;
     var x;
-}
-
-;
+};
 
 var C = /** @class */ (function () {
     function C() {
@@ -90,15 +86,11 @@ var M;
     var t = function () {
         var p = this;
         var p;
-    }
-
-    ;
+    };
 
     var t2 = function f() {
         var x = this;
         var x;
-    }
-
-    ;
+    };
 
 })(M || (M = {}));

@@ -2684,8 +2684,7 @@ var Harness;
             description,
             name,
             f
-        ) {
-            if (description === void 0) { description = benchmark.description; }
+        ) {if (description === void 0) { description = benchmark.description; }
             if (name === void 0) { name = ''; }
             if (f === void 0) { f = benchmark.bench; }
 
@@ -2694,9 +2693,7 @@ var Harness;
             t.start();
             var subBenchmark = function (name, f) {
                 timeFunction(benchmark, description, name, f);
-            }
-
-            ;
+            };
             f.call(benchmark, subBenchmark);
 
             t.end();
@@ -3173,8 +3170,7 @@ var Harness;
                     },
                     directoryExists: function (path) { return true; },
                     fileExists: function (path) { return true; },
-                    resolvePath: function (path) { return path;
-                    }
+                    resolvePath: function (path) { return path; }
                 });
                 compiler.emitDeclarations();
                 var results = null;
@@ -4046,8 +4042,7 @@ var Harness;
             relativeFilename,
             generateContent,
             runImmediately,
-            opts) {
-            if (runImmediately === void 0) { runImmediately = false; }
+            opts) {if (runImmediately === void 0) { runImmediately = false; }
 
 
             var actual = undefined;

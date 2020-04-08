@@ -53,8 +53,7 @@ var i;
 var r2 = i.foo.getDate();
 var r2b = i.foo['getDate']();
 
-var a
-;
+var a;
 var r3 = a().getDate();
 var r3b = a()['getDate']();
 
@@ -63,8 +62,6 @@ var b = {
         var a = x['getDate'](); // number
         return a + x.getDate();
     }
-}
-
-;
+};
 
 var r4 = b.foo(new Date());

@@ -54,9 +54,7 @@ var Opt = /** @class */ (function (_super) {
 var obj = {};
 var obj1 = {
     x: 2
-}
-
-;
+};
 
 // OK
 var p = <Opt />;

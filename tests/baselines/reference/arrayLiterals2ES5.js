@@ -75,12 +75,9 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 var a0 = [, , 2, 3, 4];
 var a1 = ["hello", "world"];
 var a2 = __spreadArrays([, , ], a0, ["hello"]);
-var a3 = __spreadArrays([, ], a0)
-;
+var a3 = __spreadArrays([, ], a0);
 var a4 = [function () { return 1; },];
-var a5 = __spreadArrays(a0, [,])
-
-;
+var a5 = __spreadArrays(a0, [,]);
 
 // Each element expression in a non-empty array literal is processed as follows:
 //    - If the array literal contains no spread elements, and if the array literal is contextually typed (section 4.19)
@@ -118,6 +115,5 @@ var d4 = __spreadArrays(temp, temp1);
 var d5 = __spreadArrays(temp3);
 var d6 = __spreadArrays(temp4);
 var d7 = __spreadArrays(temp1);
-var d8 = [__spreadArrays(temp1)]
-;
+var d8 = [__spreadArrays(temp1)];
 var d9 = __spreadArrays([__spreadArrays(temp1)], ["hello"]);

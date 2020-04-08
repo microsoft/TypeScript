@@ -166,8 +166,7 @@ function foo8() {
             this.a = x;
         }
         return class_1;
-    }())
-    ;
+    }());
     var x;
 }
 
@@ -179,8 +178,7 @@ function foo9() {
             return class_2;
         }()),
         _a.a = x,
-        _a)
-    ;
+        _a);
     var x;
 }
 
@@ -203,8 +201,7 @@ function foo11() {
                 return class_3;
             }()),
             _a.a = x,
-            _a)
-        ;
+            _a);
     }
     var x;
 }
@@ -216,8 +213,7 @@ function foo12() {
                 this.a = x;
             }
             return class_4;
-        }())
-        ;
+        }());
     }
     var x;
 }

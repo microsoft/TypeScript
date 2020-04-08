@@ -38,8 +38,7 @@ var obj = {
     arrowFunc: function (num) {if (num === void 0) { num = "0"; }return num + 42;},
     /** @type {string} */
     lol: lol
-}
-;
+};
 lol = "string";
 /** @type {string} */
 var s = obj.method1(0);

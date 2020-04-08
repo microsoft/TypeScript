@@ -116,9 +116,7 @@ var r = extend({
             }
         }
     }
-})
-
-;
+});
 r.explicit;
 r.notResolved;
 r.explicit.required;

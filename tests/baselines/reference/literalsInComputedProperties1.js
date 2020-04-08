@@ -58,8 +58,7 @@ var x = (_a = {
     _a[2] = 1,
     _a["3"] = 1,
     _a["4"] = 1,
-    _a)
-;
+    _a);
 x[1].toExponential();
 x[2].toExponential();
 x[3].toExponential();

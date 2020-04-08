@@ -30,11 +30,8 @@ var b = {
 // String literal types are only valid in overload signatures
 
 function foo(x) { }
-var f = function foo(x) { }
-;
-var f2 = function (x, y) { }
-
-;
+var f = function foo(x) { };
+var f2 = function (x, y) { };
 
 var C = /** @class */ (function () {
     function C() {
@@ -42,13 +39,10 @@ var C = /** @class */ (function () {
     return C;
 }());
 
-var a
-
-;
+var a;
 
 var b = {
     foo: function (x) { },
     a: function foo(x, y) { },
     b: function (x) { }
-}
-;
+};

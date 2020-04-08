@@ -257,8 +257,7 @@ const f01 = pipe(list, box);
 const f02 = pipe(box, list);
 const f03 = pipe(x => list(x), box);
 const f04 = pipe(list, x => box(x));
-const f05 = pipe(x => list(x), x => box(x))
-;
+const f05 = pipe(x => list(x), x => box(x));
 const f06 = pipe(list, pipe(box));
 const f07 = pipe(x => list(x), pipe(box));
 const f08 = pipe(x => list(x), pipe(x => box(x)));
@@ -270,8 +269,7 @@ const g01 = pipe(list, box);
 const g02 = pipe(box, list);
 const g03 = pipe(x => list(x), box);
 const g04 = pipe(list, x => box(x));
-const g05 = pipe(x => list(x), x => box(x))
-;
+const g05 = pipe(x => list(x), x => box(x));
 const g06 = pipe(list, pipe(box));
 const g07 = pipe(x => list(x), pipe(box));
 const g08 = pipe(x => list(x), pipe(x => box(x)));
@@ -339,9 +337,7 @@ function zip(x, y) {
 var expected = flip(zip);
 var actual = flip(zip);
 // #9366
-const map = (transform) => (arr) => arr.map(transform)
-
-;
+const map = (transform) => (arr) => arr.map(transform);
 
 const identityStr = (t) => t;
 

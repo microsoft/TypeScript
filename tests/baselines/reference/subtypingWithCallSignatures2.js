@@ -320,9 +320,7 @@ var r14 = foo14(r14arg1); // any
 var r14a = [r14arg1, r14arg2];
 var r14b = [r14arg2, r14arg1];
 
-var r15arg1 = function (x) { return null;
-}
-;
+var r15arg1 = function (x) { return null; };
 var r15 = foo15(r15arg1); // any
 var r16arg1 = function (x) { return [1]; };
 var r16 = foo16(r16arg1);

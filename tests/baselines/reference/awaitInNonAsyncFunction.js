@@ -59,9 +59,7 @@ const functionExpression = function (p) {
     for await (const _ of [])
         ;
     await p;
-}
-
-;
+};
 
 const arrowFunc = (p) => {
     for await (const _ of [])

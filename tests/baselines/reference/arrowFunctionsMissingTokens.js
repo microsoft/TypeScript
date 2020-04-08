@@ -70,9 +70,7 @@ var missingArrowsWithCurly;
 (function (missingArrowsWithCurly) {
     var a = function () { };
 
-    var b = function () { }
-
-    ;
+    var b = function () { };
 
     var c = function (x) { };
 
@@ -86,9 +84,7 @@ var missingCurliesWithArrow;
     (function (withStatement) {
         var a = function () { var k = 10; };
 
-        var b = function () { var k = 10; }
-
-        ;
+        var b = function () { var k = 10; };
 
         var c = function (x) { var k = 10; };
 
@@ -96,8 +92,7 @@ var missingCurliesWithArrow;
 
         var e = function (x, y) { var k = 10; };
 
-        var f = function () { var k = 10; }
-        ;
+        var f = function () { var k = 10; };
     })(withStatement || (withStatement = {}));
     var withoutStatement;
     (function (withoutStatement) {
@@ -127,9 +122,7 @@ var okay;
 (function (okay) {
     var a = function () { };
 
-    var b = function () { }
-
-    ;
+    var b = function () { };
 
     var c = function (x) { };
 

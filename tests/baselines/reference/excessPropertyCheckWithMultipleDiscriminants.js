@@ -75,10 +75,7 @@ var foo = {
     value: 10,
     multipleOf: 5,
     format: "what?"
-}
-
-
-;
+};
 
 
 

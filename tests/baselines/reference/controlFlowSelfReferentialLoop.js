@@ -226,11 +226,9 @@ function getObject(id) {
 }
 ;
 (function () {
-    var id = 'a'
-    ;
+    var id = 'a';
     while (1) {
-        var data = getObject(id)
-        ;
+        var data = getObject(id);
         var message = data.message;
         id = message.id;
     }

@@ -59,11 +59,7 @@ var o = {
         };
 
     }
-}
-
-
-
-;
+};
 
 
 
@@ -76,9 +72,7 @@ var X = /** @class */ (function () {
             var x = _this.value;
             var inner = function () {
                 var y = _this.value;
-            }
-
-            ;
+            };
             inner();
         };
         outer();

@@ -44,8 +44,7 @@ System.register([], function (exports_1, context_1) {
     var __moduleName = context_1 && context_1.id;
     function fn() {
         return __awaiter(this, void 0, void 0, function* () {
-            const req = yield context_1.import('./test')
-            ; // ONE
+            const req = yield context_1.import('./test'); // ONE
         });
     }
     exports_1("fn", fn);
@@ -55,16 +54,14 @@ System.register([], function (exports_1, context_1) {
             cl1 = class cl1 {
                 m() {
                     return __awaiter(this, void 0, void 0, function* () {
-                        const req = yield context_1.import('./test')
-                        ; // TWO
+                        const req = yield context_1.import('./test'); // TWO
                     });
                 }
             };
             exports_1("cl1", cl1);
             exports_1("obj", obj = {
                 m: () => __awaiter(void 0, void 0, void 0, function* () {
-                    const req = yield context_1.import('./test')
-                    ; // THREE
+                    const req = yield context_1.import('./test'); // THREE
                 })
             });
 
@@ -73,17 +70,13 @@ System.register([], function (exports_1, context_1) {
                 constructor() {
                     this.p = {
                         m: () => __awaiter(this, void 0, void 0, function* () {
-                            const req = yield context_1.import('./test')
-                            ; // FOUR
+                            const req = yield context_1.import('./test'); // FOUR
                         })
                     };
-                }
-
-            };
+                }};
             exports_1("cl2", cl2);
             exports_1("l", l = () => __awaiter(void 0, void 0, void 0, function* () {
-                const req = yield context_1.import('./test')
-                ; // FIVE
+                const req = yield context_1.import('./test'); // FIVE
             }));
         }
     };

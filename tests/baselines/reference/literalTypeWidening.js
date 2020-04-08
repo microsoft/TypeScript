@@ -276,8 +276,7 @@ function Set() {var keys = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         keys[_i] = arguments[_i];
     }
-    var result = {}
-    ;
+    var result = {};
     keys.forEach(function (key) { return result[key] = true; });
     return result;
 }exports.Set = Set;
@@ -292,9 +291,7 @@ var langCodeSet = Set('fr', 'en', 'es', 'it', 'nl');
 
 exports.langCodes = keys(langCodeSet);
 
-var arr = exports.langCodes.map(function (code) { return ({ code: code }); })
-
-;
+var arr = exports.langCodes.map(function (code) { return ({ code: code }); });
 
 // Repro from #29081
 function test(obj) {

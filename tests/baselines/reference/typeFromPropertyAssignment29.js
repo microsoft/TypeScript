@@ -98,8 +98,7 @@ var n = ExpandoDecl.prop + ExpandoDecl.m(12) + ExpandoDecl(101).length;
 
 var ExpandoExpr = function (n) {
     return n.toString();
-}
-;
+};
 ExpandoExpr.prop = { x: 2 };
 ExpandoExpr.prop = { y: "" };
 ExpandoExpr.m = function (n) {
@@ -145,8 +144,7 @@ var Ns;
 // Should not work in Typescript -- must be const
 var ExpandoExpr2 = function (n) {
     return n.toString();
-}
-;
+};
 ExpandoExpr2.prop = 2;
 ExpandoExpr2.m = function (n) {
     return n + 1;
@@ -172,8 +170,7 @@ var ExpandoExpr3 = /** @class */ (function () {
         this.n = 10001;
     }
     return class_1;
-}())
-;
+}());
 ExpandoExpr3.prop = 3;
 ExpandoExpr3.m = function (n) {
     return n + 1;

@@ -40,13 +40,9 @@ var C = /** @class */ (function () {
     return C;
 }());
 
-var a
+var a;
 
-;
-
-var b = { y: '' }
-
-;
+var b = { y: '' };
 
 var C2 = /** @class */ (function () {
     function C2() {

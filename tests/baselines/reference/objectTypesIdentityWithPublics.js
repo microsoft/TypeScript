@@ -107,8 +107,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 
-var a
-;
+var a;
 var b = { foo: '' };
 
 function foo1(x) { }
