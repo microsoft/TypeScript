@@ -2366,16 +2366,10 @@ namespace ts {
 
         function emitParenthesizedExpression(node: ParenthesizedExpression) {
             const openParenPos = emitTokenWithComment(SyntaxKind.OpenParenToken, node.pos, writePunctuation, node);
-            const leadingNewlines = preserveSourceNewlines && getLeadingLineTerminatorCount(node, [node.expression], ListFormat.None);
-            if (leadingNewlines) {
-                writeLinesAndIndent(leadingNewlines, /*writeLinesIfNotIndenting*/ false);
-            }
+            const indented = writeLineSeparatorsAndIndentBefore(node.expression, node);
             emitExpression(node.expression);
-            const trailingNewlines = preserveSourceNewlines && getClosingLineTerminatorCount(node, [node.expression], ListFormat.None);
-            if (trailingNewlines) {
-                writeLine(trailingNewlines);
-            }
-            decreaseIndentIf(leadingNewlines);
+            writeLineSeparatorsAfter(node.expression, node);
+            decreaseIndentIf(indented);
             emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression ? node.expression.end : openParenPos, writePunctuation, node);
         }
 
@@ -3293,12 +3287,15 @@ namespace ts {
             writePunctuation("<");
 
             if (isJsxOpeningElement(node)) {
+                const indented = writeLineSeparatorsAndIndentBefore(node.tagName, node);
                 emitJsxTagName(node.tagName);
                 emitTypeArguments(node, node.typeArguments);
                 if (node.attributes.properties && node.attributes.properties.length > 0) {
                     writeSpace();
                 }
                 emit(node.attributes);
+                writeLineSeparatorsAfter(node.attributes, node);
+                decreaseIndentIf(indented);
             }
 
             writePunctuation(">");
@@ -4302,6 +4299,7 @@ namespace ts {
                         return getEffectiveLines(
                             includeComments => getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(
                                 firstChild.pos,
+                                parentNode.pos,
                                 currentSourceFile!,
                                 includeComments));
                     }
@@ -4359,6 +4357,7 @@ namespace ts {
                         return getEffectiveLines(
                             includeComments => getLinesBetweenPositionAndNextNonWhitespaceCharacter(
                                 lastChild.end,
+                                parentNode.end,
                                 currentSourceFile!,
                                 includeComments));
                     }
@@ -4396,6 +4395,21 @@ namespace ts {
                 return getLineDifference(/*includeComments*/ false);
             }
             return lines;
+        }
+
+        function writeLineSeparatorsAndIndentBefore(node: Node, parent: Node): boolean {
+            const leadingNewlines = preserveSourceNewlines && getLeadingLineTerminatorCount(parent, [node], ListFormat.None);
+            if (leadingNewlines) {
+                writeLinesAndIndent(leadingNewlines, /*writeLinesIfNotIndenting*/ false);
+            }
+            return !!leadingNewlines;
+        }
+
+        function writeLineSeparatorsAfter(node: Node, parent: Node) {
+            const trailingNewlines = preserveSourceNewlines && getClosingLineTerminatorCount(parent, [node], ListFormat.None);
+            if (trailingNewlines) {
+                writeLine(trailingNewlines);
+            }
         }
 
         function synthesizedNodeStartsOnNewLine(node: Node, format: ListFormat) {
