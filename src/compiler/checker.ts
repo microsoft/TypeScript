@@ -27244,7 +27244,7 @@ namespace ts {
             }
 
             const functionFlags = getFunctionFlags(func);
-            const type = returnType && getReturnOrPromisedType(returnType, functionFlags);
+            const type = returnType && unwrapReturnType(returnType, functionFlags);
 
             // Functions with with an explicitly specified 'void' or 'any' return type don't need any return expressions.
             if (type && maybeTypeOfKind(type, TypeFlags.Any | TypeFlags.Void)) {
@@ -27364,14 +27364,6 @@ namespace ts {
             }
         }
 
-        function getReturnOrPromisedType(type: Type | undefined, functionFlags: FunctionFlags) {
-            const isGenerator = !!(functionFlags & FunctionFlags.Generator);
-            const isAsync = !!(functionFlags & FunctionFlags.Async);
-            return type && isGenerator ? getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, type, isAsync) || errorType :
-                type && isAsync ? getAwaitedType(type) || errorType :
-                type;
-        }
-
         function checkFunctionExpressionOrObjectLiteralMethodDeferred(node: ArrowFunction | FunctionExpression | MethodDeclaration) {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
 
@@ -27399,7 +27391,7 @@ namespace ts {
                     // check assignability of the awaited type of the expression body against the promised type of
                     // its return type annotation.
                     const exprType = checkExpression(node.body);
-                    const returnOrPromisedType = getReturnOrPromisedType(returnType, functionFlags);
+                    const returnOrPromisedType = returnType && unwrapReturnType(returnType, functionFlags);
                     if (returnOrPromisedType) {
                         if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async) { // Async function
                             const awaitedType = checkAwaitedType(exprType, node.body, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
@@ -32687,8 +32679,8 @@ namespace ts {
         function unwrapReturnType(returnType: Type, functionFlags: FunctionFlags) {
             const isGenerator = !!(functionFlags & FunctionFlags.Generator);
             const isAsync = !!(functionFlags & FunctionFlags.Async);
-            return isGenerator ? getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, isAsync) || errorType :
-                isAsync ? getPromisedTypeOfPromise(returnType) || errorType :
+            return isGenerator ? getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, isAsync) ?? errorType :
+                isAsync ? getAwaitedType(returnType) ?? errorType :
                 returnType;
         }
 
@@ -32725,7 +32717,7 @@ namespace ts {
                     }
                 }
                 else if (getReturnTypeFromAnnotation(func)) {
-                    const unwrappedReturnType = unwrapReturnType(returnType, functionFlags);
+                    const unwrappedReturnType = unwrapReturnType(returnType, functionFlags) ?? returnType;
                     const unwrappedExprType = functionFlags & FunctionFlags.Async
                         ? checkAwaitedType(exprType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
                         : exprType;
