@@ -4301,6 +4301,7 @@ namespace ts {
                         return getEffectiveLines(
                             includeComments => getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(
                                 firstChild.pos,
+                                parentNode.pos,
                                 currentSourceFile!,
                                 includeComments));
                     }
@@ -4358,6 +4359,7 @@ namespace ts {
                         return getEffectiveLines(
                             includeComments => getLinesBetweenPositionAndNextNonWhitespaceCharacter(
                                 lastChild.end,
+                                parentNode.end,
                                 currentSourceFile!,
                                 includeComments));
                     }
