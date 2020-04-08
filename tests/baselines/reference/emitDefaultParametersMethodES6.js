@@ -25,6 +25,7 @@ class C {
     bar(t = false) { }
     boo(t = false, ...rest) { }
 }
+
 class D {
     constructor(y = "hello") { }
 }

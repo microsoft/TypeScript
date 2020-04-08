@@ -170,6 +170,8 @@ for (let x = 0; x < 1; ++x) {
         }
     }
 }
+
+
 function foo() {
     l0: for (let a of []) {
 
@@ -253,6 +255,7 @@ function foo2() {
         }
     }
 }
+
 class C {
     constructor(N) {
         this.N = N;
@@ -263,6 +266,7 @@ class C {
         }
     }
 }
+
 function foo3() {
     let x = arguments.length;
     for (let y of []) {

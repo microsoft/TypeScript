@@ -77,15 +77,6 @@ declare module 'external1' {
 
 
 //// [ambientDeclarations.js]
-
-
-
-
-
-
-
-
-
 var x = E3.B;
 
 

@@ -9,4 +9,3 @@ interface I2 {
 interface I3 extends I1, I2 { }
 
 //// [symbolProperty35.js]
-

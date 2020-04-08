@@ -42,8 +42,10 @@ exports.__esModule = true;
 exports.m = void 0;
 var c = __importStar(require("../core/index"));
 var logic = __importStar(require("../logic/index"));
+
 c.leftPad("", 10);
 logic.getSecondsInDay();
+
 var mod = __importStar(require("../core/anotherModule"));
 exports.m = mod;
 

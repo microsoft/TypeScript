@@ -35,6 +35,7 @@ fn(a => { });
 
 
 var x;
+
 // Should fail
 x = '';
 x = [''];
@@ -44,11 +45,15 @@ x = {};
 // Should work
 function f() { };
 x = f;
+
 function fn(c) { }
+
 // Should Fail
 fn('');
 fn(['']);
 fn(4);
 fn({});
+
+
 // Should work
 fn(function (a) { });

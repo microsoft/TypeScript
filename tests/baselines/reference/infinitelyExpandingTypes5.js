@@ -15,8 +15,6 @@ function from(arg: any): any {
 
 
 //// [infinitelyExpandingTypes5.js]
-
-
 function from(arg) {
     return undefined;
 }

@@ -43,7 +43,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var MyBase = /** @class */ (function () {
     function MyBase() {
-    }MyBase.prototype.getValue = function () { return 1; };
+    }
+    MyBase.prototype.getValue = function () { return 1; };
     Object.defineProperty(MyBase.prototype, "value", {
         get: function () { return 1; },
         enumerable: false,
@@ -76,7 +77,8 @@ var A = /** @class */ (function () {
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(B.prototype, "property", {

@@ -60,7 +60,8 @@ var C2 = /** @class */ (function () {
     return C2;
 }());
 var D1 = /** @class */ (function (_super) {
-    __extends(D1, _super);function D1() {
+    __extends(D1, _super);
+    function D1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D1;
@@ -86,6 +87,7 @@ str = isC1(c1Orc2) && c1Orc2.p1; // C1
 num = isC2(c1Orc2) && c1Orc2.p2; // C2
 str = isD1(c1Orc2) && c1Orc2.p1; // D1
 num = isD1(c1Orc2) && c1Orc2.p3; // D1
+
 var c2Ord1;
 num = isC2(c2Ord1) && c2Ord1.p2; // C2
 num = isD1(c2Ord1) && c2Ord1.p3; // D1

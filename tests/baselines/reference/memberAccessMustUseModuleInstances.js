@@ -21,11 +21,13 @@ define(["require", "exports"], function (require, exports) {
     exports.Promise = void 0;
     var Promise = /** @class */ (function () {
         function Promise() {
-        }Promise.timeout = function (delay) {
+        }
+        Promise.timeout = function (delay) {
             return null;
         };
         return Promise;
-    }());exports.Promise = Promise;
+    }());
+    exports.Promise = Promise;
 });
 //// [memberAccessMustUseModuleInstances_1.js]
 define(["require", "exports", "memberAccessMustUseModuleInstances_0"], function (require, exports, WinJS) {

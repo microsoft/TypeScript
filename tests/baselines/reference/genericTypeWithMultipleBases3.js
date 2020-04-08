@@ -22,8 +22,6 @@ var y = c.bar;
 
 //// [genericTypeWithMultipleBases3.js]
 
-
-
 var c;
 
 var x = c.foo;

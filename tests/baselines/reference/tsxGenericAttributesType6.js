@@ -32,17 +32,21 @@ exports.__esModule = true;
 var React = require("react");
 
 var B1 = /** @class */ (function (_super) {
-    __extends(B1, _super);function B1() {
+    __extends(B1, _super);
+    function B1() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }B1.prototype.render = function () {
+    }
+    B1.prototype.render = function () {
         return <div>hi</div>;
     };
     return B1;
 }(React.Component));
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }B.prototype.render = function () {
+    }
+    B.prototype.render = function () {
         return <B1 {...this.props} x="hi"/>;
     };
     return B;

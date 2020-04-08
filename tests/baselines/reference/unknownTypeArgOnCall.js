@@ -11,7 +11,8 @@ var r = f.clone<Uhhhh>()
 //// [unknownTypeArgOnCall.js]
 var Foo = /** @class */ (function () {
     function Foo() {
-    }Foo.prototype.clone = function () {
+    }
+    Foo.prototype.clone = function () {
         return null;
     };
     return Foo;

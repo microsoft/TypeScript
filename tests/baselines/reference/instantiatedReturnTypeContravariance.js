@@ -47,7 +47,8 @@ var __extends = (this && this.__extends) || (function () {
 
 var c = /** @class */ (function () {
     function c() {
-    }c.prototype.foo = function () {
+    }
+    c.prototype.foo = function () {
 
         return null;
 
@@ -55,9 +56,11 @@ var c = /** @class */ (function () {
     return c;
 }());
 var d = /** @class */ (function (_super) {
-    __extends(d, _super);function d() {
+    __extends(d, _super);
+    function d() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }d.prototype.foo = function () {
+    }
+    d.prototype.foo = function () {
 
         return null;
 

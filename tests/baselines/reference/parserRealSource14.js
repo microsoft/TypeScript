@@ -601,7 +601,8 @@ var TypeScript;
         function AstPath() {
             this.asts = [];
             this.top = -1;
-        }AstPath.reverseIndexOf = function (items, index) {
+        }
+        AstPath.reverseIndexOf = function (items, index) {
             return (items === null || items.length <= index) ? null : items[items.length - index - 1];
         };
 
@@ -667,6 +668,7 @@ var TypeScript;
         AstPath.prototype.isNameOfClass = function () {
             if (this.ast() === null || this.parent() === null)
                 return false;
+
             return (this.ast().nodeType === TypeScript.NodeType.Name) &&
                 (this.parent().nodeType === TypeScript.NodeType.ClassDeclaration) &&
                 (this.parent().name === this.ast());
@@ -675,6 +677,7 @@ var TypeScript;
         AstPath.prototype.isNameOfInterface = function () {
             if (this.ast() === null || this.parent() === null)
                 return false;
+
             return (this.ast().nodeType === TypeScript.NodeType.Name) &&
                 (this.parent().nodeType === TypeScript.NodeType.InterfaceDeclaration) &&
                 (this.parent().name === this.ast());
@@ -683,6 +686,7 @@ var TypeScript;
         AstPath.prototype.isNameOfArgument = function () {
             if (this.ast() === null || this.parent() === null)
                 return false;
+
             return (this.ast().nodeType === TypeScript.NodeType.Name) &&
                 (this.parent().nodeType === TypeScript.NodeType.ArgDecl) &&
                 (this.parent().id === this.ast());
@@ -691,6 +695,7 @@ var TypeScript;
         AstPath.prototype.isNameOfVariable = function () {
             if (this.ast() === null || this.parent() === null)
                 return false;
+
             return (this.ast().nodeType === TypeScript.NodeType.Name) &&
                 (this.parent().nodeType === TypeScript.NodeType.VarDecl) &&
                 (this.parent().id === this.ast());
@@ -699,6 +704,7 @@ var TypeScript;
         AstPath.prototype.isNameOfModule = function () {
             if (this.ast() === null || this.parent() === null)
                 return false;
+
             return (this.ast().nodeType === TypeScript.NodeType.Name) &&
                 (this.parent().nodeType === TypeScript.NodeType.ModuleDeclaration) &&
                 (this.parent().name === this.ast());
@@ -707,6 +713,7 @@ var TypeScript;
         AstPath.prototype.isNameOfFunction = function () {
             if (this.ast() === null || this.parent() === null)
                 return false;
+
             return (this.ast().nodeType === TypeScript.NodeType.Name) &&
                 (this.parent().nodeType === TypeScript.NodeType.FuncDecl) &&
                 (this.parent().name === this.ast());
@@ -1078,6 +1085,7 @@ var TypeScript;
                         //logger.log("TODO: Ignoring node because minChar, limChar not better than previous node in stack");
                     }
                 }
+
                 // The AST walker skips comments, but we might be in one, so check the pre/post comments for this node manually
                 if (pos < limChar) {
                     lookInComments(cur.preComments);
@@ -1120,6 +1128,7 @@ var TypeScript;
 
             return cur;
         };
+
         TypeScript.getAstWalkerFactory().walk(script, pre);
         return bestOffset;
     }

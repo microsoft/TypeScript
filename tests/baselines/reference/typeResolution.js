@@ -123,61 +123,50 @@ define(["require", "exports"], function (require, exports) {
             (function (SubSubModule1) {
                 var ClassA = /** @class */ (function () {
                     function ClassA() {
-                    }ClassA.prototype.AisIn1_1_1 = function () {
+                    }
+                    ClassA.prototype.AisIn1_1_1 = function () {
                         // Try all qualified names of this type
-                        var a1;
-                        a1.AisIn1_1_1();
-                        var a2;
-                        a2.AisIn1_1_1();
-                        var a3;
-                        a3.AisIn1_1_1();
-                        var a4;
-                        a4.AisIn1_1_1();
+                        var a1;a1.AisIn1_1_1();
+                        var a2;a2.AisIn1_1_1();
+                        var a3;a3.AisIn1_1_1();
+                        var a4;a4.AisIn1_1_1();
+
                         // Two variants of qualifying a peer type
-                        var b1;
-                        b1.BisIn1_1_1();
-                        var b2;
-                        b2.BisIn1_1_1();
+                        var b1;b1.BisIn1_1_1();
+                        var b2;b2.BisIn1_1_1();
+
                         // Type only accessible from the root
-                        var c1;
-                        c1.AisIn1_2_2();
+                        var c1;c1.AisIn1_2_2();
+
                         // Interface reference
-                        var d1;
-                        d1.XisIn1_1_1();
-                        var d2;
-                        d2.XisIn1_1_1();
+                        var d1;d1.XisIn1_1_1();
+                        var d2;d2.XisIn1_1_1();
                     };
                     return ClassA;
                 }());
                 SubSubModule1.ClassA = ClassA;
                 var ClassB = /** @class */ (function () {
                     function ClassB() {
-                    }ClassB.prototype.BisIn1_1_1 = function () {
+                    }
+                    ClassB.prototype.BisIn1_1_1 = function () {
                         /** Exactly the same as above in AisIn1_1_1 **/
                         // Try all qualified names of this type
-                        var a1;
-                        a1.AisIn1_1_1();
-                        var a2;
-                        a2.AisIn1_1_1();
-                        var a3;
-                        a3.AisIn1_1_1();
-                        var a4;
-                        a4.AisIn1_1_1();
+                        var a1;a1.AisIn1_1_1();
+                        var a2;a2.AisIn1_1_1();
+                        var a3;a3.AisIn1_1_1();
+                        var a4;a4.AisIn1_1_1();
+
                         // Two variants of qualifying a peer type
-                        var b1;
-                        b1.BisIn1_1_1();
-                        var b2;
-                        b2.BisIn1_1_1();
+                        var b1;b1.BisIn1_1_1();
+                        var b2;b2.BisIn1_1_1();
+
                         // Type only accessible from the root
-                        var c1;
-                        c1.AisIn1_2_2();
-                        var c2;
-                        c2.AisIn2_3();
+                        var c1;c1.AisIn1_2_2();
+                        var c2;c2.AisIn2_3();
+
                         // Interface reference
-                        var d1;
-                        d1.XisIn1_1_1();
-                        var d2;
-                        d2.XisIn1_1_1();
+                        var d1;d1.XisIn1_1_1();
+                        var d2;d2.XisIn1_1_1();
                     };
                     return ClassB;
                 }());
@@ -186,14 +175,10 @@ define(["require", "exports"], function (require, exports) {
                     function NonExportedClassQ() {
                         function QQ() {
                             /* Sampling of stuff from AisIn1_1_1 */
-                            var a4;
-                            a4.AisIn1_1_1();
-                            var c1;
-                            c1.AisIn1_2_2();
-                            var d1;
-                            d1.XisIn1_1_1();
-                            var c2;
-                            c2.AisIn2_3();
+                            var a4;a4.AisIn1_1_1();
+                            var c1;c1.AisIn1_2_2();
+                            var d1;d1.XisIn1_1_1();
+                            var c2;c2.AisIn2_3();
                         }
                     }
                     return NonExportedClassQ;
@@ -203,15 +188,12 @@ define(["require", "exports"], function (require, exports) {
             var ClassA = /** @class */ (function () {
                 function ClassA() {
                     function AA() {
-                        var a2;
-                        a2.AisIn1_1_1();
-                        var a3;
-                        a3.AisIn1_1_1();
-                        var a4;
-                        a4.AisIn1_1_1();
+                        var a2;a2.AisIn1_1_1();
+                        var a3;a3.AisIn1_1_1();
+                        var a4;a4.AisIn1_1_1();
+
                         // Interface reference
-                        var d2;
-                        d2.XisIn1_1_1();
+                        var d2;d2.XisIn1_1_1();
                     }
                 }
                 return ClassA;
@@ -223,17 +205,20 @@ define(["require", "exports"], function (require, exports) {
             (function (SubSubModule2) {
                 // No code here since these are the mirror of the above calls
                 var ClassA = /** @class */ (function () {
-                    function ClassA() {}ClassA.prototype.AisIn1_2_2 = function () { };
+                    function ClassA() {}
+                    ClassA.prototype.AisIn1_2_2 = function () { };
                     return ClassA;
                 }());
                 SubSubModule2.ClassA = ClassA;
                 var ClassB = /** @class */ (function () {
-                    function ClassB() {}ClassB.prototype.BisIn1_2_2 = function () { };
+                    function ClassB() {}
+                    ClassB.prototype.BisIn1_2_2 = function () { };
                     return ClassB;
                 }());
                 SubSubModule2.ClassB = ClassB;
                 var ClassC = /** @class */ (function () {
-                    function ClassC() {}ClassC.prototype.CisIn1_2_2 = function () { };
+                    function ClassC() {}
+                    ClassC.prototype.CisIn1_2_2 = function () { };
                     return ClassC;
                 }());
                 SubSubModule2.ClassC = ClassC;
@@ -241,7 +226,8 @@ define(["require", "exports"], function (require, exports) {
         })(SubModule2 = TopLevelModule1.SubModule2 || (TopLevelModule1.SubModule2 = {}));
         var ClassA = /** @class */ (function () {
             function ClassA() {
-            }ClassA.prototype.AisIn1 = function () { };
+            }
+            ClassA.prototype.AisIn1 = function () { };
             return ClassA;
         }());
         var NotExportedModule;
@@ -259,7 +245,8 @@ define(["require", "exports"], function (require, exports) {
         (function (SubModule3) {
             var ClassA = /** @class */ (function () {
                 function ClassA() {
-                }ClassA.prototype.AisIn2_3 = function () { };
+                }
+                ClassA.prototype.AisIn2_3 = function () { };
                 return ClassA;
             }());
             SubModule3.ClassA = ClassA;

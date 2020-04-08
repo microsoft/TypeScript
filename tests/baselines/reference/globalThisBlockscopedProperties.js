@@ -29,3 +29,4 @@ globalThis['y']; // should error, no property 'y'
 globalThis['z']; // should error, no property 'z'
 globalThis.Float64Array; // ok
 globalThis.Infinity; // ok
+

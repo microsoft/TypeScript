@@ -17,8 +17,6 @@ module m2 {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-
-
     var m2;
     (function (m2) {
         var a = 10;

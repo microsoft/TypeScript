@@ -109,6 +109,7 @@ var SimpleTypes;
 
     var a2 = { foo: '' };
     var b2 = { foo: '' };
+
     s = t;
     t = s;
     s = s2;
@@ -153,6 +154,7 @@ var ObjectTypes;
 
     var a2 = { foo: a2 };
     var b2 = { foo: b2 };
+
     s = t;
     t = s;
     s = s2;

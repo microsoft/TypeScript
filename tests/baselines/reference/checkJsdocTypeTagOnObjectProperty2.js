@@ -35,7 +35,8 @@ var obj = {
     /** @type {function(number): number} */
     method2: function (n1) { return "lol"; },
     /** @type {function(number): number} */
-    arrowFunc: function (num) {if (num === void 0) { num = "0"; }return num + 42;},
+    arrowFunc: function (num) {if (num === void 0) { num = "0"; }
+        return num + 42;},
     /** @type {string} */
     lol: lol
 };

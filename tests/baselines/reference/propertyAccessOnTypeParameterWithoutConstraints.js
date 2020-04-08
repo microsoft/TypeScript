@@ -34,7 +34,8 @@ var r4 = b.foo(1);
 //// [propertyAccessOnTypeParameterWithoutConstraints.js]
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.f = function () {
+    }
+    C.prototype.f = function () {
         var x;
         var a = x['toString'](); // should be string
         return a + x.toString();

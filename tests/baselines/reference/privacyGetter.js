@@ -216,7 +216,8 @@ define(["require", "exports"], function (require, exports) {
     (function (m1) {
         var C1_public = /** @class */ (function () {
             function C1_public() {
-            }C1_public.prototype.f1 = function () {
+            }
+            C1_public.prototype.f1 = function () {
             };
             return C1_public;
         }());
@@ -314,7 +315,8 @@ define(["require", "exports"], function (require, exports) {
     (function (m2) {
         var m2_C1_public = /** @class */ (function () {
             function m2_C1_public() {
-            }m2_C1_public.prototype.f1 = function () {
+            }
+            m2_C1_public.prototype.f1 = function () {
             };
             return m2_C1_public;
         }());
@@ -410,7 +412,8 @@ define(["require", "exports"], function (require, exports) {
     })(m2 || (m2 = {}));
     var C5_private = /** @class */ (function () {
         function C5_private() {
-        }C5_private.prototype.f = function () {
+        }
+        C5_private.prototype.f = function () {
         };
         return C5_private;
     }());
@@ -418,7 +421,8 @@ define(["require", "exports"], function (require, exports) {
         function C6_public() {
         }
         return C6_public;
-    }());exports.C6_public = C6_public;
+    }());
+    exports.C6_public = C6_public;
     var C7_public = /** @class */ (function () {
         function C7_public() {
         }
@@ -459,7 +463,8 @@ define(["require", "exports"], function (require, exports) {
             configurable: true
         });
         return C7_public;
-    }());exports.C7_public = C7_public;
+    }());
+    exports.C7_public = C7_public;
     var C8_private = /** @class */ (function () {
         function C8_private() {
         }

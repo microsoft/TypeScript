@@ -23,7 +23,6 @@ var x2 = foo2([{a: "str"}]);
 var y2 = foo2([{a: 100}]);
 
 //// [functionOverloads45.js]
-
 function foo1(_a) {
     var x = _a[0];
     return undefined;

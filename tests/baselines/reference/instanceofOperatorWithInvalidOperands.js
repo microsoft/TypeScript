@@ -49,7 +49,8 @@ var rc1 = '' instanceof {};
 //// [instanceofOperatorWithInvalidOperands.js]
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.foo = function () { };
+    }
+    C.prototype.foo = function () { };
     return C;
 }());
 var x;

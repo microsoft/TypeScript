@@ -20,8 +20,10 @@ exports.__esModule = true;
 exports.ignoreJsdoc = exports.inlined = exports.interfaced = void 0;
 exports.interfaced = function () { return true; };
 exports.interfaced.num = 123;
+
 exports.inlined = function () { return true; };
 exports.inlined.nun = 456;
+
 exports.ignoreJsdoc = function () { return true; };
 /** @type {string} make sure to ignore jsdoc! */
 exports.ignoreJsdoc.extra = 111;

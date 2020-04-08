@@ -11,4 +11,3 @@ interface Bar {
 
 
 //// [specializationError.js]
-

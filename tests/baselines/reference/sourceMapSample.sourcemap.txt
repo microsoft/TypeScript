@@ -620,26 +620,26 @@ sourceFile:sourceMapSample.ts
 ---
 >>>            }
 1 >^^^^^^^^^^^^^
-2 >             ^^^^^^^^^^^^^^^^->
 1 >
   >        }
 1 >Emitted(31, 14) Source(26, 10) + SourceIndex(0)
 ---
+>>>
 >>>            return greeters;
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^^^^^^^
 3 >                   ^^^^^^^^
 4 >                           ^
-1->
+1 >
   >
   >        
 2 >            return 
 3 >                   greeters
 4 >                           ;
-1->Emitted(32, 13) Source(28, 9) + SourceIndex(0)
-2 >Emitted(32, 20) Source(28, 16) + SourceIndex(0)
-3 >Emitted(32, 28) Source(28, 24) + SourceIndex(0)
-4 >Emitted(32, 29) Source(28, 25) + SourceIndex(0)
+1 >Emitted(33, 13) Source(28, 9) + SourceIndex(0)
+2 >Emitted(33, 20) Source(28, 16) + SourceIndex(0)
+3 >Emitted(33, 28) Source(28, 24) + SourceIndex(0)
+4 >Emitted(33, 29) Source(28, 25) + SourceIndex(0)
 ---
 >>>        }
 1 >^^^^^^^^
@@ -647,8 +647,8 @@ sourceFile:sourceMapSample.ts
 1 >
   >    
 2 >        }
-1 >Emitted(33, 9) Source(29, 5) + SourceIndex(0)
-2 >Emitted(33, 10) Source(29, 6) + SourceIndex(0)
+1 >Emitted(34, 9) Source(29, 5) + SourceIndex(0)
+2 >Emitted(34, 10) Source(29, 6) + SourceIndex(0)
 ---
 >>>
 >>>        var b = foo2("Hello", "World", "!");
@@ -681,19 +681,19 @@ sourceFile:sourceMapSample.ts
 11>                                       "!"
 12>                                          )
 13>                                           ;
-1 >Emitted(35, 9) Source(31, 5) + SourceIndex(0)
-2 >Emitted(35, 13) Source(31, 9) + SourceIndex(0)
-3 >Emitted(35, 14) Source(31, 10) + SourceIndex(0)
-4 >Emitted(35, 17) Source(31, 13) + SourceIndex(0)
-5 >Emitted(35, 21) Source(31, 17) + SourceIndex(0)
-6 >Emitted(35, 22) Source(31, 18) + SourceIndex(0)
-7 >Emitted(35, 29) Source(31, 25) + SourceIndex(0)
-8 >Emitted(35, 31) Source(31, 27) + SourceIndex(0)
-9 >Emitted(35, 38) Source(31, 34) + SourceIndex(0)
-10>Emitted(35, 40) Source(31, 36) + SourceIndex(0)
-11>Emitted(35, 43) Source(31, 39) + SourceIndex(0)
-12>Emitted(35, 44) Source(31, 40) + SourceIndex(0)
-13>Emitted(35, 45) Source(31, 41) + SourceIndex(0)
+1 >Emitted(36, 9) Source(31, 5) + SourceIndex(0)
+2 >Emitted(36, 13) Source(31, 9) + SourceIndex(0)
+3 >Emitted(36, 14) Source(31, 10) + SourceIndex(0)
+4 >Emitted(36, 17) Source(31, 13) + SourceIndex(0)
+5 >Emitted(36, 21) Source(31, 17) + SourceIndex(0)
+6 >Emitted(36, 22) Source(31, 18) + SourceIndex(0)
+7 >Emitted(36, 29) Source(31, 25) + SourceIndex(0)
+8 >Emitted(36, 31) Source(31, 27) + SourceIndex(0)
+9 >Emitted(36, 38) Source(31, 34) + SourceIndex(0)
+10>Emitted(36, 40) Source(31, 36) + SourceIndex(0)
+11>Emitted(36, 43) Source(31, 39) + SourceIndex(0)
+12>Emitted(36, 44) Source(31, 40) + SourceIndex(0)
+13>Emitted(36, 45) Source(31, 41) + SourceIndex(0)
 ---
 >>>        for (var j = 0; j < b.length; j++) {
 1->^^^^^^^^
@@ -729,22 +729,22 @@ sourceFile:sourceMapSample.ts
 14>                                      j
 15>                                       ++
 16>                                         ) 
-1->Emitted(36, 9) Source(32, 5) + SourceIndex(0)
-2 >Emitted(36, 14) Source(32, 10) + SourceIndex(0)
-3 >Emitted(36, 18) Source(32, 14) + SourceIndex(0)
-4 >Emitted(36, 19) Source(32, 15) + SourceIndex(0)
-5 >Emitted(36, 22) Source(32, 18) + SourceIndex(0)
-6 >Emitted(36, 23) Source(32, 19) + SourceIndex(0)
-7 >Emitted(36, 25) Source(32, 21) + SourceIndex(0)
-8 >Emitted(36, 26) Source(32, 22) + SourceIndex(0)
-9 >Emitted(36, 29) Source(32, 25) + SourceIndex(0)
-10>Emitted(36, 30) Source(32, 26) + SourceIndex(0)
-11>Emitted(36, 31) Source(32, 27) + SourceIndex(0)
-12>Emitted(36, 37) Source(32, 33) + SourceIndex(0)
-13>Emitted(36, 39) Source(32, 35) + SourceIndex(0)
-14>Emitted(36, 40) Source(32, 36) + SourceIndex(0)
-15>Emitted(36, 42) Source(32, 38) + SourceIndex(0)
-16>Emitted(36, 44) Source(32, 40) + SourceIndex(0)
+1->Emitted(37, 9) Source(32, 5) + SourceIndex(0)
+2 >Emitted(37, 14) Source(32, 10) + SourceIndex(0)
+3 >Emitted(37, 18) Source(32, 14) + SourceIndex(0)
+4 >Emitted(37, 19) Source(32, 15) + SourceIndex(0)
+5 >Emitted(37, 22) Source(32, 18) + SourceIndex(0)
+6 >Emitted(37, 23) Source(32, 19) + SourceIndex(0)
+7 >Emitted(37, 25) Source(32, 21) + SourceIndex(0)
+8 >Emitted(37, 26) Source(32, 22) + SourceIndex(0)
+9 >Emitted(37, 29) Source(32, 25) + SourceIndex(0)
+10>Emitted(37, 30) Source(32, 26) + SourceIndex(0)
+11>Emitted(37, 31) Source(32, 27) + SourceIndex(0)
+12>Emitted(37, 37) Source(32, 33) + SourceIndex(0)
+13>Emitted(37, 39) Source(32, 35) + SourceIndex(0)
+14>Emitted(37, 40) Source(32, 36) + SourceIndex(0)
+15>Emitted(37, 42) Source(32, 38) + SourceIndex(0)
+16>Emitted(37, 44) Source(32, 40) + SourceIndex(0)
 ---
 >>>            b[j].greet();
 1 >^^^^^^^^^^^^
@@ -766,22 +766,22 @@ sourceFile:sourceMapSample.ts
 7 >                 greet
 8 >                      ()
 9 >                        ;
-1 >Emitted(37, 13) Source(33, 9) + SourceIndex(0)
-2 >Emitted(37, 14) Source(33, 10) + SourceIndex(0)
-3 >Emitted(37, 15) Source(33, 11) + SourceIndex(0)
-4 >Emitted(37, 16) Source(33, 12) + SourceIndex(0)
-5 >Emitted(37, 17) Source(33, 13) + SourceIndex(0)
-6 >Emitted(37, 18) Source(33, 14) + SourceIndex(0)
-7 >Emitted(37, 23) Source(33, 19) + SourceIndex(0)
-8 >Emitted(37, 25) Source(33, 21) + SourceIndex(0)
-9 >Emitted(37, 26) Source(33, 22) + SourceIndex(0)
+1 >Emitted(38, 13) Source(33, 9) + SourceIndex(0)
+2 >Emitted(38, 14) Source(33, 10) + SourceIndex(0)
+3 >Emitted(38, 15) Source(33, 11) + SourceIndex(0)
+4 >Emitted(38, 16) Source(33, 12) + SourceIndex(0)
+5 >Emitted(38, 17) Source(33, 13) + SourceIndex(0)
+6 >Emitted(38, 18) Source(33, 14) + SourceIndex(0)
+7 >Emitted(38, 23) Source(33, 19) + SourceIndex(0)
+8 >Emitted(38, 25) Source(33, 21) + SourceIndex(0)
+9 >Emitted(38, 26) Source(33, 22) + SourceIndex(0)
 ---
 >>>        }
 1 >^^^^^^^^^
 2 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >    }
-1 >Emitted(38, 10) Source(34, 6) + SourceIndex(0)
+1 >Emitted(39, 10) Source(34, 6) + SourceIndex(0)
 ---
 >>>    })(Bar = Foo.Bar || (Foo.Bar = {}));
 1->^^^^
@@ -837,15 +837,15 @@ sourceFile:sourceMapSample.ts
   >                                        b[j].greet();
   >                                    }
   >                                }
-1->Emitted(39, 5) Source(35, 1) + SourceIndex(0)
-2 >Emitted(39, 6) Source(35, 2) + SourceIndex(0)
-3 >Emitted(39, 8) Source(1, 12) + SourceIndex(0)
-4 >Emitted(39, 11) Source(1, 15) + SourceIndex(0)
-5 >Emitted(39, 14) Source(1, 12) + SourceIndex(0)
-6 >Emitted(39, 21) Source(1, 15) + SourceIndex(0)
-7 >Emitted(39, 26) Source(1, 12) + SourceIndex(0)
-8 >Emitted(39, 33) Source(1, 15) + SourceIndex(0)
-9 >Emitted(39, 41) Source(35, 2) + SourceIndex(0)
+1->Emitted(40, 5) Source(35, 1) + SourceIndex(0)
+2 >Emitted(40, 6) Source(35, 2) + SourceIndex(0)
+3 >Emitted(40, 8) Source(1, 12) + SourceIndex(0)
+4 >Emitted(40, 11) Source(1, 15) + SourceIndex(0)
+5 >Emitted(40, 14) Source(1, 12) + SourceIndex(0)
+6 >Emitted(40, 21) Source(1, 15) + SourceIndex(0)
+7 >Emitted(40, 26) Source(1, 12) + SourceIndex(0)
+8 >Emitted(40, 33) Source(1, 15) + SourceIndex(0)
+9 >Emitted(40, 41) Source(35, 2) + SourceIndex(0)
 ---
 >>>})(Foo || (Foo = {}));
 1 >
@@ -897,12 +897,12 @@ sourceFile:sourceMapSample.ts
   >                      b[j].greet();
   >                  }
   >              }
-1 >Emitted(40, 1) Source(35, 1) + SourceIndex(0)
-2 >Emitted(40, 2) Source(35, 2) + SourceIndex(0)
-3 >Emitted(40, 4) Source(1, 8) + SourceIndex(0)
-4 >Emitted(40, 7) Source(1, 11) + SourceIndex(0)
-5 >Emitted(40, 12) Source(1, 8) + SourceIndex(0)
-6 >Emitted(40, 15) Source(1, 11) + SourceIndex(0)
-7 >Emitted(40, 23) Source(35, 2) + SourceIndex(0)
+1 >Emitted(41, 1) Source(35, 1) + SourceIndex(0)
+2 >Emitted(41, 2) Source(35, 2) + SourceIndex(0)
+3 >Emitted(41, 4) Source(1, 8) + SourceIndex(0)
+4 >Emitted(41, 7) Source(1, 11) + SourceIndex(0)
+5 >Emitted(41, 12) Source(1, 8) + SourceIndex(0)
+6 >Emitted(41, 15) Source(1, 11) + SourceIndex(0)
+7 >Emitted(41, 23) Source(35, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapSample.js.map

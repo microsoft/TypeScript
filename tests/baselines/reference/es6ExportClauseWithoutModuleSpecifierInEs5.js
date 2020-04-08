@@ -27,7 +27,8 @@ var c = /** @class */ (function () {
     function c() {
     }
     return c;
-}());exports.c = c;
+}());
+exports.c = c;
 var m;
 (function (m) {
     m.x = 10;
@@ -36,11 +37,14 @@ exports.x = 10;
 //// [client.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var server_1 = require("./server");Object.defineProperty(exports, "c", { enumerable: true, get: function () { return server_1.c; } });
-var server_2 = require("./server");Object.defineProperty(exports, "c2", { enumerable: true, get: function () { return server_2.c; } });
-var server_3 = require("./server");Object.defineProperty(exports, "instantiatedModule", { enumerable: true, get: function () { return server_3.m; } });
-
-var server_4 = require("./server");Object.defineProperty(exports, "x", { enumerable: true, get: function () { return server_4.x; } });
+var server_1 = require("./server");
+Object.defineProperty(exports, "c", { enumerable: true, get: function () { return server_1.c; } });
+var server_2 = require("./server");
+Object.defineProperty(exports, "c2", { enumerable: true, get: function () { return server_2.c; } });
+var server_3 = require("./server");
+Object.defineProperty(exports, "instantiatedModule", { enumerable: true, get: function () { return server_3.m; } });
+var server_4 = require("./server");
+Object.defineProperty(exports, "x", { enumerable: true, get: function () { return server_4.x; } });
 
 
 //// [server.d.ts]

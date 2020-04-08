@@ -20,7 +20,8 @@ exports.C = exports.A = void 0;
 var A = /** @class */ (function () {
     function A() {}
     return A;
-}());exports.A = A;
+}());
+exports.A = A;
 exports.C = "";
 //// [d.js]
 "use strict";

@@ -26,15 +26,18 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var a = /** @class */ (function () {
     function a() {
-    }a.x = function () {
+    }
+    a.x = function () {
         return "10";
     };
     return a;
 }());
 var b = /** @class */ (function (_super) {
-    __extends(b, _super);function b() {
+    __extends(b, _super);
+    function b() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }b.x = function () {
+    }
+    b.x = function () {
         return "20";
     };
     return b;

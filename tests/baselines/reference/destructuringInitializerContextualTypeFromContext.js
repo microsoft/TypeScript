@@ -50,16 +50,13 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 
-
 var Parent = function (_a) {
-    var children = _a.children,
-        _b = _a.name, name = _b === void 0 ? "Artemis" : _b,
+    var children = _a.children, _b = _a.name, name = _b === void 0 ? "Artemis" : _b,
         props = __rest(_a, ["children", "name"]);
     return Child(__assign({ name: name }, props));};
 
 var Child = function (_a) {
-    var children = _a.children,
-        _b = _a.name, name = _b === void 0 ? "Artemis" : _b,
+    var children = _a.children, _b = _a.name, name = _b === void 0 ? "Artemis" : _b,
         props = __rest(_a, ["children", "name"]);
     return "name: " + name + " props: " + JSON.stringify(props);};
 

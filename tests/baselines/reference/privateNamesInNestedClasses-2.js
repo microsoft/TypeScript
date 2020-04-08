@@ -43,6 +43,7 @@ let A = /** @class */ (() => {
         }
     }
     _x = new WeakMap();
-    _x.set(A, 5);
+    _x.set(A,
+        5);
     return A;
 })();

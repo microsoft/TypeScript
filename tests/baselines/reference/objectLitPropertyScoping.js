@@ -30,5 +30,4 @@ function makePoint(x, y) {
             return Math.sqrt(x * x + y * y);
         }
     };
-}
-;
+};

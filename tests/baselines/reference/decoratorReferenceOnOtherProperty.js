@@ -32,7 +32,8 @@ exports.Yoha = void 0;
 var Yoha = /** @class */ (function () {
     function Yoha() {}
     return Yoha;
-}());exports.Yoha = Yoha;
+}());
+exports.Yoha = Yoha;
 //// [index.js]
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -57,7 +58,8 @@ function foo() {var args = [];
 }
 var Bar = /** @class */ (function () {
     function Bar() {
-    }Bar.prototype.yoha = function (yoha, bar) { };
+    }
+    Bar.prototype.yoha = function (yoha, bar) { };
     __decorate([
         __param(0, foo),
         __metadata("design:type", Function),
@@ -90,7 +92,8 @@ function foo() {var args = [];
 }
 var Bar = /** @class */ (function () {
     function Bar() {
-    }Bar.prototype.yoha = function (yoha) {var bar = [];
+    }
+    Bar.prototype.yoha = function (yoha) {var bar = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             bar[_i - 1] = arguments[_i];
         }

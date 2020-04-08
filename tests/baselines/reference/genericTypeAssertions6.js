@@ -50,9 +50,11 @@ var __extends = (this && this.__extends) || (function () {
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }B.prototype.g = function (x) {
+    }
+    B.prototype.g = function (x) {
         var a = x;
         var b = x;
         var c = new Date();

@@ -15,5 +15,4 @@ let x = a.equalsShallow(b);
 "use strict";
 // Repro from #27337
 
-
 var x = a.equalsShallow(b);

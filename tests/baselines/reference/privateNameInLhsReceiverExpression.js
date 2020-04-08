@@ -26,7 +26,8 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _y;
 class Test {constructor() {
         _y.set(this, 123);
-    }static something(obj) {
+    }
+    static something(obj) {
         var _x, _a, _x_1, _b, _c;
         __classPrivateFieldSet(obj[(new (_a = class {constructor() {
                     _x.set(this, 1);

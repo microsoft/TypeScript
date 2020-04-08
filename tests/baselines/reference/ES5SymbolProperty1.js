@@ -17,4 +17,5 @@ var Symbol;
 var obj = (_a = {},
     _a[Symbol.foo] = 0,
     _a);
+
 obj[Symbol.foo];

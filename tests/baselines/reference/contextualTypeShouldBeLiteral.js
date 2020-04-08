@@ -125,7 +125,6 @@ const test: TestGeneric = {
 //// [contextualTypeShouldBeLiteral.js]
 "use strict";
 
-
 function foo(bar) { }
 
 foo({
@@ -137,7 +136,6 @@ foo({
         this.value;
     }
 });
-
 
 
 function foo2(bar) { }
@@ -152,13 +150,14 @@ foo2({
 });
 
 
-
 var xy = {
     type: 'y',
     value: 11,
     ytra: 12
 };
+
 xy;
+
 
 
 var xyz = {
@@ -172,6 +171,7 @@ var xyz = {
         this.value;
     }
 };
+
 xyz;
 
 

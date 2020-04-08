@@ -169,7 +169,8 @@ var _loop_1 = function (x) {
 
     var A = /** @class */ (function () {
         function A() {
-        }A.prototype.m = function () {
+        }
+        A.prototype.m = function () {
             return x_1 + 1;
         };
         return A;
@@ -190,16 +191,18 @@ function foo() {
         if (a === 2) {
             return "break-l0";
         }
-
         for (var _i = 0, _b = []; _i < _b.length; _i++) {
             var b = _b[_i];
             _a = [{ x: 1, y: 2 }][0], x = _a.x, z = _a.y;
             if (b === 1) {
                 break;
             }
+
+
             if (b === 2) {
                 return "break-l0";
             }
+
             l1: if (b === 3) {
                 break l1;
             }
@@ -232,8 +235,6 @@ function foo() {
                 case "break-l0": return state_2;
             }
         }
-
-
         (
 
 
@@ -251,6 +252,7 @@ function foo() {
             case "break-l0": break l0;
         }
     }
+
     use(x);
     use(z);
     use(x1);

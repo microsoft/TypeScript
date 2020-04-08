@@ -48,7 +48,8 @@ class B {
 //// [capturedLetConstInLoop10.js]
 var A = /** @class */ (function () {
     function A() {
-    }A.prototype.foo = function () {
+    }
+    A.prototype.foo = function () {
         var _loop_1 = function (x) {
             var f = function () { return x; };
             this_1.bar(f());
@@ -104,7 +105,8 @@ var A = /** @class */ (function () {
 }());
 var B = /** @class */ (function () {
     function B() {
-    }B.prototype.foo = function () {
+    }
+    B.prototype.foo = function () {
         var _this = this;
         var a = function () {
             var _loop_6 = function (x) {

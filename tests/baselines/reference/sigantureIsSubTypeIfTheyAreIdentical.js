@@ -11,7 +11,7 @@ class CacheService implements ICache { // Should not error that property type of
 //// [sigantureIsSubTypeIfTheyAreIdentical.js]
 var CacheService = /** @class */ (function () {
     function CacheService() {
-    }// Should not error that property type of get are incomaptible
+    }
     CacheService.prototype.get = function (key) {
         return undefined;
     };

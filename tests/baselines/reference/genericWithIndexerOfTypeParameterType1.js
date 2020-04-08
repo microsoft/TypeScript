@@ -12,7 +12,8 @@ var value: string = lazyArray.array()["test"]; // used to be an error
 var LazyArray = /** @class */ (function () {
     function LazyArray() {
         this.objects = {};
-    }LazyArray.prototype.array = function () {
+    }
+    LazyArray.prototype.array = function () {
         return this.objects;
     };
     return LazyArray;

@@ -19,7 +19,8 @@ define(["require", "exports"], function (require, exports) {
     var Foo = /** @class */ (function () {
         function Foo() {}
         return Foo;
-    }());exports.Foo = Foo;
+    }());
+    exports.Foo = Foo;
 });
 //// [instanceOfInExternalModules_1.js]
 define(["require", "exports", "instanceOfInExternalModules_require"], function (require, exports, Bar) {

@@ -78,6 +78,8 @@ var C1 = /** @class */ (function () {
     function C1(param) {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
+
+
         // variables in function declaration
         var var2;
         num = typeof var2 === "string" && var2.length; // string
@@ -90,6 +92,8 @@ var C1 = /** @class */ (function () {
     C1.prototype.p1 = function (param) {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
+
+
         // variables in function declaration
         var var2;
         num = typeof var2 === "string" && var2.length; // string
@@ -102,6 +106,8 @@ var C1 = /** @class */ (function () {
     C1.prototype.p2 = function (param) {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
+
+
         // variables in function declaration
         var var2;
         num = typeof var2 === "string" && var2.length; // string
@@ -114,6 +120,8 @@ var C1 = /** @class */ (function () {
     C1.s1 = function (param) {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
+
+
         // variables in function declaration
         var var2;
         num = typeof var2 === "string" && var2.length; // string
@@ -126,6 +134,8 @@ var C1 = /** @class */ (function () {
     C1.s2 = function (param) {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
+
+
         // variables in function declaration
         var var2;
         num = typeof var2 === "string" && var2.length; // string

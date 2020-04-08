@@ -65,46 +65,13 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var Doing = /** @class */ (function () {
     function Doing() {
-    }Doing.prototype.instanceMethod = function () {
+    }
+    Doing.prototype.instanceMethod = function () {
     };
     return Doing;
 }());
 var Other = /** @class */ (function (_super) {
     __extends(Other, _super);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     function Other() {
         var _this = _super.call(this) || this;
         _this.propertyInitializer = _super.prototype.instanceMethod.call(_this);
@@ -140,6 +107,7 @@ var Other = /** @class */ (function (_super) {
         // in a getter
         get: function () {
             _super.prototype.instanceMethod.call(this);
+
             return 0;
         },
         // in a setter

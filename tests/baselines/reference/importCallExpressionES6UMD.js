@@ -41,7 +41,8 @@ export class D {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.foo = void 0;
-    function foo() { return "foo"; }exports.foo = foo;
+    function foo() { return "foo"; }
+    exports.foo = foo;
 });
 //// [1.js]
 (function (factory) {
@@ -62,6 +63,7 @@ export class D {
     p1.then(zero => {
         return zero.foo();
     });
+
     exports.p2 = __syncRequire ? Promise.resolve().then(() => require("./0")) : new Promise((resolve_3, reject_3) => { require(["./0"], resolve_3, reject_3); });
 
     function foo() {
@@ -78,5 +80,6 @@ export class D {
         method() {
             const loadAsync = __syncRequire ? Promise.resolve().then(() => require("./0")) : new Promise((resolve_6, reject_6) => { require(["./0"], resolve_6, reject_6); });
         }
-    }exports.D = D;
+    }
+    exports.D = D;
 });

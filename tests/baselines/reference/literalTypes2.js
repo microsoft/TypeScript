@@ -182,11 +182,16 @@ aa = append(aa, 1);
 //// [literalTypes2.js]
 var E;
 (function (E) {
-    E[E["A"] = 0] = "A";E[E["B"] = 1] = "B";E[E["C"] = 2] = "C";
+    E[E["A"] = 0] = "A";
+    E[E["B"] = 1] = "B";
+    E[E["C"] = 2] = "C";
 })(E || (E = {}));
 var cond;
 
-function f1(p1, p2, p3, p4) {if (p1 === void 0) { p1 = 1; }if (p2 === void 0) { p2 = "abc"; }if (p3 === void 0) { p3 = true; }if (p4 === void 0) { p4 = E.A; }
+function f1(p1, p2, p3, p4) {if (p1 === void 0) { p1 = 1; }
+    if (p2 === void 0) { p2 = "abc"; }
+    if (p3 === void 0) { p3 = true; }
+    if (p4 === void 0) { p4 = E.A; }
     var v1 = 1;
     var v2 = -123;
     var v3 = 3 + 4;
@@ -213,7 +218,10 @@ function f1(p1, p2, p3, p4) {if (p1 === void 0) { p1 = 1; }if (p2 === void 0) { 
     var c8 = E.A;
 }
 
-function f2(p1, p2, p3, p4) {if (p1 === void 0) { p1 = 1; }if (p2 === void 0) { p2 = "abc"; }if (p3 === void 0) { p3 = true; }if (p4 === void 0) { p4 = E.A; }
+function f2(p1, p2, p3, p4) {if (p1 === void 0) { p1 = 1; }
+    if (p2 === void 0) { p2 = "abc"; }
+    if (p3 === void 0) { p3 = true; }
+    if (p4 === void 0) { p4 = E.A; }
     var v1 = 1;
     var v2 = -123;
     var v3 = "abc";
@@ -286,6 +294,7 @@ function f6() {
     var _a = { c1: false, c2: 1, c3: "bar" }, _b = _a.c1, c1 = _b === void 0 ? true : _b, _c = _a.c2, c2 = _c === void 0 ? 0 : _c, _d = _a.c3, c3 = _d === void 0 ? "foo" : _d;
     var _e = { x1: false, x2: 1, x3: "bar" }, _f = _e.x1, x1 = _f === void 0 ? true : _f, _g = _e.x2, x2 = _g === void 0 ? 0 : _g, _h = _e.x3, x3 = _h === void 0 ? "foo" : _h;
 }
+
 function f10() {
     return "hello";
 }
@@ -302,9 +311,11 @@ function f12() {
         return "two";
     }
 }
+
 var C2 = /** @class */ (function () {
     function C2() {
-    }C2.prototype.foo = function () {
+    }
+    C2.prototype.foo = function () {
         return 0;
     };
     C2.prototype.bar = function () {

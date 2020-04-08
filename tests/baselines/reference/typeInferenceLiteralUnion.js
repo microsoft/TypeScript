@@ -56,8 +56,7 @@ var NumCoercible = /** @class */ (function () {
  */
 function extent(array) {
     return [undefined, undefined];
-}exports.extent = extent;
-
-
+}
+exports.extent = extent;
 var extentMixed;
 extentMixed = extent([new NumCoercible(10), 13, '12', true]);

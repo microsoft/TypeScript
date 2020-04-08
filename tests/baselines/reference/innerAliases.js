@@ -53,4 +53,5 @@ var D;
     })(E = D.E || (D.E = {}));
 })(D || (D = {}));
 var c;
+
 c = new D.inner.Class1();

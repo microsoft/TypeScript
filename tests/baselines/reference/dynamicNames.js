@@ -178,8 +178,6 @@ exports.c5 = 1;
 exports.s2 = module_1.s0;
 
 
-
-
 let t0;
 let t1;
 let t2;
@@ -200,11 +198,14 @@ let t12;
 let t13;
 let t14;
 let t15;
+
 // assignability
 t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3, t3 = t0, t3 = t1, t3 = t2;
 t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6;
 t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
 t0 = C; // static side
+
+
 // object literals
 exports.o1 = {
     [exports.c4]: 1,
@@ -220,7 +221,6 @@ exports.o1_s2 = exports.o1[exports.s2];
 exports.o2 = exports.o1;
 
 rI.x;
-
 rC.x;
 
 

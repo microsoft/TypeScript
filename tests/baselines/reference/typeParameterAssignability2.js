@@ -108,6 +108,7 @@ function foo4(t, u, v) {
     v = t;
     v = u;
     v = new Date(); // ok
+
     var d;
     d = t; // ok
     d = u; // ok
@@ -127,6 +128,7 @@ function foo5(t, u, v) {
     v = t;
     v = u;
     v = new Date(); // ok
+
     var d;
     d = t; // ok
     d = u; // ok

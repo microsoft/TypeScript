@@ -13,7 +13,8 @@ class C {
 var b;
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype[b] = function () { };
+    }
+    C.prototype[b] = function () { };
     C[true] = function () { };
     C.prototype[[]] = function () { };
     C[{}] = function () { };

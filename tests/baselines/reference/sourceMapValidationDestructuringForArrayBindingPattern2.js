@@ -107,11 +107,13 @@ var robotA = [1, "mower", "mowing"];
 function getRobot() {
     return robotA;
 }
+
 var multiRobotA = ["mower", ["mowing", ""]];
 var multiRobotB = ["trimmer", ["trimming", "edging"]];
 function getMultiRobot() {
     return multiRobotA;
 }
+
 var nameA, primarySkillA, secondarySkillA;
 var numberB, nameB;
 var numberA2, nameA2, skillA2, nameMA;

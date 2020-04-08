@@ -18,6 +18,7 @@ let k = <button {...buttonProps}>
 ///<reference path="declaration.d.ts" />
 import * as cx from 'classnames';
 import * as React from "react";
+
 let buttonProps;
 let k = React.createElement("button", Object.assign({}, buttonProps), React.createElement("span", { className: cx('class1', { class2: true }) })
 );

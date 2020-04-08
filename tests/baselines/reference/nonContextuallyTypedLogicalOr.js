@@ -16,7 +16,7 @@ var e: Ellement;
 
 //// [nonContextuallyTypedLogicalOr.js]
 
-
 var c;
 var e;
+
 (c || e).dummy;

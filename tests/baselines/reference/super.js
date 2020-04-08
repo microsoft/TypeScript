@@ -64,24 +64,29 @@ var __extends = (this && this.__extends) || (function () {
     return Base;
 }());
 var Sub1 = /** @class */ (function (_super) {
-    __extends(Sub1, _super);function Sub1() {
+    __extends(Sub1, _super);
+    function Sub1() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Sub1.prototype.foo = function () {
+    }
+    Sub1.prototype.foo = function () {
         return "sub1" + _super.prototype.foo.call(this) + _super.prototype.bar.call(this);
     };
     return Sub1;
 }(Base));
 var SubSub1 = /** @class */ (function (_super) {
-    __extends(SubSub1, _super);function SubSub1() {
+    __extends(SubSub1, _super);
+    function SubSub1() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }SubSub1.prototype.foo = function () {
+    }
+    SubSub1.prototype.foo = function () {
         return "subsub1" + _super.prototype.foo.call(this);
     };
     return SubSub1;
 }(Sub1));
 var Base2 = /** @class */ (function () {
     function Base2() {
-    }Base2.prototype.foo = function () {
+    }
+    Base2.prototype.foo = function () {
         _super.prototype.foo.call(this);
     };
     return Base2;

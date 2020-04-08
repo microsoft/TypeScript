@@ -403,9 +403,9 @@ var x2 = makeObject2({
 
 
 
-
 var p10 = defineProp(p1, "foo", { value: 42 });
 p10.foo = p10.foo + 1;
+
 var p11 = defineProp(p1, "bar", {
     get: function () {
         return this.x;
@@ -415,6 +415,7 @@ var p11 = defineProp(p1, "bar", {
     }
 });
 p11.bar = p11.bar + 1;
+
 var p12 = defineProps(p1, {
     foo: {
         value: 42
@@ -430,6 +431,24 @@ var p12 = defineProps(p1, {
 });
 p12.foo = p12.foo + 1;
 p12.bar = p12.bar + 1;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 var vue = new Vue({
     data: function () { return ({ x: 1, y: 2 }); },
@@ -451,6 +470,7 @@ var vue = new Vue({
         }
     }
 });
+
 vue;
 vue.x;
 vue.f("abc");

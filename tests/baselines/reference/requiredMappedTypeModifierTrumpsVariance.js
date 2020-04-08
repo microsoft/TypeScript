@@ -35,6 +35,7 @@ exports.B = a; // Should Error
 
 a.b; // Property 'b' does not exist on type 'Required<{ a?: 1; x: 1; }>'.
 b.a; // Property 'a' does not exist on type 'Required<{ b?: 1; x: 1; }>'.
+
 var aa = { a: { a: 1, x: 1 } };
 var bb = { a: { b: 1, x: 1 } };
 exports.AA = aa;

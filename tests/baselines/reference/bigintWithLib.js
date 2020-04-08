@@ -65,6 +65,7 @@ bigintVal = bigintVal.valueOf();
 let stringVal = bigintVal.toString();
 stringVal = bigintVal.toString(2);
 stringVal = bigintVal.toLocaleString();
+
 // Test BigInt64Array
 let bigIntArray = new BigInt64Array();
 bigIntArray = new BigInt64Array(10);

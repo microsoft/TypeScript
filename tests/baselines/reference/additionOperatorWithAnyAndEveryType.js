@@ -43,12 +43,15 @@ var r20 = a + ((a: string) => { return a });
 function foo() { }
 var C = /** @class */ (function () {
     function C() {
-    }C.foo = function () { };
+    }
+    C.foo = function () { };
     return C;
 }());
 var E;
 (function (E) {
-    E[E["a"] = 0] = "a";E[E["b"] = 1] = "b";E[E["c"] = 2] = "c";
+    E[E["a"] = 0] = "a";
+    E[E["b"] = 1] = "b";
+    E[E["c"] = 2] = "c";
 })(E || (E = {}));
 var M;
 (function (M) {})(M || (M = {}));

@@ -39,6 +39,7 @@ function isFoo2(object) {
     return 'foo' in object;
 }
 
+
 if (isFoo1(test)) {
     test.foo = 'hi';
 }

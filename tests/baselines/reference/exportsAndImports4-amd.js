@@ -58,10 +58,12 @@ define(["require", "exports", "./t1", "./t1", "./t1", "./t1", "./t1", "./t1"], f
     Object.defineProperty(exports, "d", { enumerable: true, get: function () { return t1_2.default; } });
     t1_2.default;
     var e2 = t1_3;
-    exports.e1 = t1_3.default;exports.e2 = e2;
+    exports.e1 = t1_3.default;
+    exports.e2 = e2;
     t1_3.default;
     e2.default;
-    exports.f1 = t1_4.default;Object.defineProperty(exports, "f2", { enumerable: true, get: function () { return t1_4.default; } });
+    exports.f1 = t1_4.default;
+    Object.defineProperty(exports, "f2", { enumerable: true, get: function () { return t1_4.default; } });
     t1_4.default;
     t1_4.default;
 });

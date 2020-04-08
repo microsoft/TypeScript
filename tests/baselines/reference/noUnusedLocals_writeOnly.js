@@ -26,7 +26,8 @@ function f2(_: ReadonlyArray<number>): void {}
 "use strict";
 function f(x, b) {
     var _a, _b;
-    if (x === void 0) { x = 0; }if (b === void 0) { b = false; }
+    if (x === void 0) { x = 0; }
+    if (b === void 0) { b = false; }
     // None of these statements read from 'x', so it will be marked unused.
     x = 1;
     x++;
@@ -42,6 +43,7 @@ function f(x, b) {
     var y = 0;
     // This is a write access to y, but not a write-*only* access.
     f(y++);
+
     var z = 0;
     f(z = 1); // This effectively doesn't use `z`, values just pass through it.
 }

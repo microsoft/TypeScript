@@ -15,7 +15,6 @@ tree2 = tree1;
 
 //// [recursiveTupleTypes2.js]
 
-
 var tree1;
 var tree2;
 tree1 = tree2;

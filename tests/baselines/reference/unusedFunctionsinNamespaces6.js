@@ -33,5 +33,6 @@ var Validation;
 
     function function4() {
     }
+
     Validation.a = function3;
 })(Validation || (Validation = {}));

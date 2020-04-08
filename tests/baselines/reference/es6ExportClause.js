@@ -26,6 +26,7 @@ var x = 10;
 export { c };
 export { c as c2 };
 export { m as instantiatedModule };
+
 export { x };
 
 

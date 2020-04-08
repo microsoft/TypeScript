@@ -13,7 +13,8 @@ function g() {
     var x = (_a = /** @class */ (function () {
             function C() {
                 this.prop1 = 1;
-            }C.prototype.foo = function () { };
+            }
+            C.prototype.foo = function () { };
             return C;
         }()),
         _a.prop2 = 43,

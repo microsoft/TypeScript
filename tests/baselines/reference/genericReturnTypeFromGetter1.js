@@ -23,5 +23,6 @@ define(["require", "exports"], function (require, exports) {
             configurable: true
         });
         return DbSet;
-    }());exports.DbSet = DbSet;
+    }());
+    exports.DbSet = DbSet;
 });

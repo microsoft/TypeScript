@@ -15,8 +15,5 @@ var p2: MyPromise<boolean, any>;
 
 
 //// [jqueryInference.js]
-
-
-
 var p2 = shouldBeIdentity(p1);
 var p2;

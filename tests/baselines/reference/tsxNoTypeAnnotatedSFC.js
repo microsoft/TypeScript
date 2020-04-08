@@ -15,6 +15,7 @@ exports.__esModule = true;
 var React = require("react");
 
 var Test123 = function () { return <div />; };
+
 function testComponent(props) {
     return <Test123 {...props}/>;
 }

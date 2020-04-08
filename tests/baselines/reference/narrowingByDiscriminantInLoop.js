@@ -89,9 +89,6 @@ function f2(x: A | B) {
 // Repro from #9977
 
 
-
-
-
 function insertInterface(callbackType) {
     for (var _i = 0, _a = callbackType.members; _i < _a.length; _i++) {
         var memberType = _a[_i];
@@ -122,7 +119,6 @@ function foo(memberType) {
         memberType.idlType.origin; // string
     }
 }
-
 
 
 function f1(x) {

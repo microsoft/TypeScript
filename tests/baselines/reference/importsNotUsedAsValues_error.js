@@ -53,7 +53,8 @@ exports["default"] = default_1;
 var A = /** @class */ (function () {
     function A() {}
     return A;
-}());exports.A = A;
+}());
+exports.A = A;
 //// [b.js]
 "use strict";
 exports.__esModule = true;
@@ -83,6 +84,7 @@ require("./a"); // noUnusedLocals error only
 "use strict";
 exports.__esModule = true;
 require("./a");
+
 0 /* One */;
 var c = 1 /* Two */;
 var d = 1 /* Two */;

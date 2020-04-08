@@ -24,7 +24,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 
 var Mixin1 = function (Base) { return /** @class */ (function (_super) {
-    __extends(class_1, _super);function class_1() {
+    __extends(class_1, _super);
+    function class_1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return class_1;
@@ -32,14 +33,16 @@ var Mixin1 = function (Base) { return /** @class */ (function (_super) {
 
 
 var Mixin2 = function (Base) { return /** @class */ (function (_super) {
-    __extends(class_2, _super);function class_2() {
+    __extends(class_2, _super);
+    function class_2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return class_2;
 }(Base)); };
 
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);function C() {
+    __extends(C, _super);
+    function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;

@@ -91,6 +91,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 ;
+
 var str;
 var bool;
 var num;
@@ -102,6 +103,7 @@ var strOrC;
 var numOrC;
 var boolOrC;
 var c;
+
 //	A type guard of the form typeof x === s, 
 //  where s is a string literal with the value 'string', 'number', or 'boolean',
 //  - when true, narrows the type of x to the given primitive type, or
@@ -130,12 +132,14 @@ if (typeof numOrC === "number") {
 else {
     c = numOrC; // C
 }
+
 if (typeof strOrBool === "number") {
     var y1 = strOrBool; // {}
 }
 else {
     var y2 = strOrBool; // string | boolean
 }
+
 // A type guard of the form typeof x !== s, where s is a string literal,
 //  - when true, narrows the type of x by typeof x === s when false, or
 //  - when false, narrows the type of x by typeof x === s when true.
@@ -163,6 +167,7 @@ if (typeof numOrC !== "number") {
 else {
     num = numOrC; // number
 }
+
 if (typeof strOrBool !== "number") {
     var y1 = strOrBool; // string | boolean
 }

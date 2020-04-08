@@ -29,9 +29,12 @@ var ENUM;
 ;
 var ENUM1;
 (function (ENUM1) {
-    ENUM1[ENUM1["A"] = 0] = "A";ENUM1[ENUM1["B"] = 1] = "B";ENUM1[ENUM1[""] = 2] = "";
+    ENUM1[ENUM1["A"] = 0] = "A";
+    ENUM1[ENUM1["B"] = 1] = "B";
+    ENUM1[ENUM1[""] = 2] = "";
 })(ENUM1 || (ENUM1 = {}));
 ;
+
 // enum type var
 var ResultIsAny1 = void ENUM;
 var ResultIsAny2 = void ENUM1;
@@ -43,6 +46,7 @@ var ResultIsAny4 = void (ENUM[0] + ENUM1["B"]);
 // multiple void  operators
 var ResultIsAny5 = void void ENUM;
 var ResultIsAny6 = void void void (ENUM[0] + ENUM1.B);
+
 // miss assignment operators
 void ENUM;
 void ENUM1;

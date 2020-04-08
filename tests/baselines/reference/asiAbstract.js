@@ -24,7 +24,8 @@ var NonAbstractClass = /** @class */ (function () {
 }());
 var C2 = /** @class */ (function () {
     function C2() {
-    }C2.prototype.nonAbstractFunction = function () {
+    }
+    C2.prototype.nonAbstractFunction = function () {
     };
     return C2;
 }());

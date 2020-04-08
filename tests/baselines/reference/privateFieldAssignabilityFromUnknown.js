@@ -16,6 +16,7 @@ var Class = /** @class */ (function () {
         _field.set(this, void 0);
     }
     return Class;
-}());exports.Class = Class;
+}());
+exports.Class = Class;
 _field = new WeakMap();
 var task = {};

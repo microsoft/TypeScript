@@ -63,10 +63,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 // There should be no errors in this file
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);// There should be no errors in this file
+    __extends(Derived, _super);
     function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Derived.createEmpty = function () {
+    }
+    Derived.createEmpty = function () {
         var item = new Derived();
         return item;
     };
@@ -96,7 +97,8 @@ var Thing = /** @class */ (function () {
 }());
 var ComponentCollection = /** @class */ (function () {
     function ComponentCollection() {
-    }ComponentCollection.sortComponents = function (p) {
+    }
+    ComponentCollection.sortComponents = function (p) {
         return p.prop1;
     };
     return ComponentCollection;
@@ -129,7 +131,8 @@ var GenericType = /** @class */ (function () {
 }());
 var FooBase = /** @class */ (function () {
     function FooBase() {
-    }FooBase.prototype.populate = function () {
+    }
+    FooBase.prototype.populate = function () {
     };
     return FooBase;
 }());

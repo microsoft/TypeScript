@@ -54,34 +54,42 @@ exports.__esModule = true;
 var React = require("react");
 
 var RC1 = /** @class */ (function (_super) {
-    __extends(RC1, _super);function RC1() {
+    __extends(RC1, _super);
+    function RC1() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }RC1.prototype.render = function () {
+    }
+    RC1.prototype.render = function () {
         return null;
     };
     return RC1;
 }(React.Component));
 var RC2 = /** @class */ (function (_super) {
-    __extends(RC2, _super);function RC2() {
+    __extends(RC2, _super);
+    function RC2() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }RC2.prototype.render = function () {
+    }
+    RC2.prototype.render = function () {
         return null;
     };
     RC2.prototype.method = function () { };
     return RC2;
 }(React.Component));
 var RC3 = /** @class */ (function (_super) {
-    __extends(RC3, _super);function RC3() {
+    __extends(RC3, _super);
+    function RC3() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }RC3.prototype.render = function () {
+    }
+    RC3.prototype.render = function () {
         return null;
     };
     return RC3;
 }(React.Component));
 var RC4 = /** @class */ (function (_super) {
-    __extends(RC4, _super);function RC4() {
+    __extends(RC4, _super);
+    function RC4() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }RC4.prototype.render = function () {
+    }
+    RC4.prototype.render = function () {
         return null;
     };
     return RC4;

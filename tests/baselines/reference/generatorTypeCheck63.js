@@ -53,9 +53,8 @@ function strategy(stratName, gen) {
             yield next;
         }
     };
-}exports.strategy = strategy;
-
-
+}
+exports.strategy = strategy;
 
 exports.Nothing = strategy("Nothing", function* (state) {
     yield 1;

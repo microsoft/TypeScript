@@ -30,7 +30,8 @@ var __extends = (this && this.__extends) || (function () {
     return ServiceBase;
 }());
 var Service = /** @class */ (function (_super) {
-    __extends(Service, _super);function Service() {
+    __extends(Service, _super);
+    function Service() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Service;

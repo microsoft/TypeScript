@@ -38,7 +38,8 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _x;
 export class Foo {constructor() {
         _x.set(this, void 0);
-    }copy(other) {
+    }
+    copy(other) {
         __classPrivateFieldGet(other, _x); // error
     }
 }

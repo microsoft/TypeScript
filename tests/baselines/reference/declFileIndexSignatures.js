@@ -37,11 +37,7 @@ interface IGlobalIndexSignatureWithTypeParameter<T> {
 //// [declFileIndexSignatures_0.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-
-
 //// [declFileIndexSignatures_1.js]
-
-
 
 
 //// [declFileIndexSignatures_0.d.ts]

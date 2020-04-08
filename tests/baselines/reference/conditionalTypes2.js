@@ -242,8 +242,6 @@ gg(ff);
 //// [conditionalTypes2.js]
 "use strict";
 
-
-
 function f1(a, b) {
     a = b;
     b = a; // Error
@@ -310,7 +308,8 @@ function f21(x, y, z) {
 // Repros from #22860
 var Opt = /** @class */ (function () {
     function Opt() {
-    }Opt.prototype.toVector = function () {
+    }
+    Opt.prototype.toVector = function () {
         return undefined;
     };
     return Opt;
@@ -318,7 +317,8 @@ var Opt = /** @class */ (function () {
 
 var Vector = /** @class */ (function () {
     function Vector() {
-    }Vector.prototype.tail = function () {
+    }
+    Vector.prototype.tail = function () {
         return undefined;
     };
 
@@ -328,8 +328,6 @@ var Vector = /** @class */ (function () {
     };
     return Vector;
 }());
-
-
 
 function foo(value) {
     if (isFunction(value)) {
@@ -413,15 +411,8 @@ function foo(value) {
 
 var w = { a: 4 };
 
+
 exportCommand(save);
-
-
-
-
-
-
-
-
 
 
 gg(ff);

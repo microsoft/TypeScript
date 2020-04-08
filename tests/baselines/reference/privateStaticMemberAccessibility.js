@@ -27,7 +27,8 @@ var __extends = (this && this.__extends) || (function () {
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);function Derived() {
+    __extends(Derived, _super);
+    function Derived() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.bing = function () { return Base.foo; }; // error
         return _this;

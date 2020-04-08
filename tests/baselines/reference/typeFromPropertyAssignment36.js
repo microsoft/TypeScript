@@ -107,6 +107,7 @@ function f(b) {
 }
 // OK to access possibly-unassigned properties outside the initialising scope
 var test = f(true).s;
+
 function d() {
 }
 d.e = 12;
@@ -130,6 +131,7 @@ else {
     d.r = 2;
 }
 d.r;
+
 // test function expressions too
 var g = function () {
 };

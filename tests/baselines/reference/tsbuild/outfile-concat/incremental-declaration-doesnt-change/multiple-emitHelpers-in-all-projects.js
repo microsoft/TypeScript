@@ -58,11 +58,11 @@ var __spread = (this && this.__spread) || function () {
 
 var s = "Hello, world";
 
+
 console.log(s);
 function forfirstfirst_PART1Rest() {
     var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
-}
-console.log(s);
+}console.log(s);
 console.log(f());
 function f() {
     return "JS does hoists";
@@ -76,7 +76,7 @@ firstfirst_part3Spread.apply(void 0, __spread([10, 20, 30]));
 //# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.js.map]
-{"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB,IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,sBAAsB,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE"}
+{"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;;;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB,IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,sBAAsB,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE"}
 
 //// [/src/first/bin/first-output.js.map.baseline.txt]
 ===================================================================
@@ -146,6 +146,7 @@ sourceFile:../first_PART1.ts
 6 >Emitted(33, 24) Source(5, 26) + SourceIndex(0)
 ---
 >>>
+>>>
 >>>console.log(s);
 1 >
 2 >^^^^^^^
@@ -170,14 +171,14 @@ sourceFile:../first_PART1.ts
 6 >            s
 7 >             )
 8 >              ;
-1 >Emitted(35, 1) Source(11, 1) + SourceIndex(0)
-2 >Emitted(35, 8) Source(11, 8) + SourceIndex(0)
-3 >Emitted(35, 9) Source(11, 9) + SourceIndex(0)
-4 >Emitted(35, 12) Source(11, 12) + SourceIndex(0)
-5 >Emitted(35, 13) Source(11, 13) + SourceIndex(0)
-6 >Emitted(35, 14) Source(11, 14) + SourceIndex(0)
-7 >Emitted(35, 15) Source(11, 15) + SourceIndex(0)
-8 >Emitted(35, 16) Source(11, 16) + SourceIndex(0)
+1 >Emitted(36, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(36, 8) Source(11, 8) + SourceIndex(0)
+3 >Emitted(36, 9) Source(11, 9) + SourceIndex(0)
+4 >Emitted(36, 12) Source(11, 12) + SourceIndex(0)
+5 >Emitted(36, 13) Source(11, 13) + SourceIndex(0)
+6 >Emitted(36, 14) Source(11, 14) + SourceIndex(0)
+7 >Emitted(36, 15) Source(11, 15) + SourceIndex(0)
+8 >Emitted(36, 16) Source(11, 16) + SourceIndex(0)
 ---
 >>>function forfirstfirst_PART1Rest() {
 1->
@@ -188,9 +189,9 @@ sourceFile:../first_PART1.ts
   >
 2 >function 
 3 >         forfirstfirst_PART1Rest
-1->Emitted(36, 1) Source(12, 1) + SourceIndex(0)
-2 >Emitted(36, 10) Source(12, 10) + SourceIndex(0)
-3 >Emitted(36, 33) Source(12, 33) + SourceIndex(0)
+1->Emitted(37, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(37, 10) Source(12, 10) + SourceIndex(0)
+3 >Emitted(37, 33) Source(12, 33) + SourceIndex(0)
 ---
 >>>    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
 1->^^^^
@@ -244,68 +245,62 @@ sourceFile:../first_PART1.ts
 23>                                                                   { b, ...rest }
 24>                                                                         = { a: 10, b: 30, yy: 30 }
 25>                                                                         ;
-1->Emitted(37, 5) Source(13, 1) + SourceIndex(0)
-2 >Emitted(37, 9) Source(13, 7) + SourceIndex(0)
-3 >Emitted(37, 14) Source(13, 24) + SourceIndex(0)
-4 >Emitted(37, 16) Source(13, 26) + SourceIndex(0)
-5 >Emitted(37, 17) Source(13, 27) + SourceIndex(0)
-6 >Emitted(37, 19) Source(13, 29) + SourceIndex(0)
-7 >Emitted(37, 21) Source(13, 31) + SourceIndex(0)
-8 >Emitted(37, 23) Source(13, 33) + SourceIndex(0)
-9 >Emitted(37, 24) Source(13, 34) + SourceIndex(0)
-10>Emitted(37, 26) Source(13, 36) + SourceIndex(0)
-11>Emitted(37, 28) Source(13, 38) + SourceIndex(0)
-12>Emitted(37, 30) Source(13, 40) + SourceIndex(0)
-13>Emitted(37, 32) Source(13, 42) + SourceIndex(0)
-14>Emitted(37, 34) Source(13, 44) + SourceIndex(0)
-15>Emitted(37, 36) Source(13, 46) + SourceIndex(0)
-16>Emitted(37, 38) Source(13, 48) + SourceIndex(0)
-17>Emitted(37, 40) Source(13, 9) + SourceIndex(0)
-18>Emitted(37, 41) Source(13, 10) + SourceIndex(0)
-19>Emitted(37, 48) Source(13, 10) + SourceIndex(0)
-20>Emitted(37, 50) Source(13, 15) + SourceIndex(0)
-21>Emitted(37, 54) Source(13, 19) + SourceIndex(0)
-22>Emitted(37, 68) Source(13, 7) + SourceIndex(0)
-23>Emitted(37, 73) Source(13, 21) + SourceIndex(0)
-24>Emitted(37, 74) Source(13, 48) + SourceIndex(0)
-25>Emitted(37, 75) Source(13, 49) + SourceIndex(0)
+1->Emitted(38, 5) Source(13, 1) + SourceIndex(0)
+2 >Emitted(38, 9) Source(13, 7) + SourceIndex(0)
+3 >Emitted(38, 14) Source(13, 24) + SourceIndex(0)
+4 >Emitted(38, 16) Source(13, 26) + SourceIndex(0)
+5 >Emitted(38, 17) Source(13, 27) + SourceIndex(0)
+6 >Emitted(38, 19) Source(13, 29) + SourceIndex(0)
+7 >Emitted(38, 21) Source(13, 31) + SourceIndex(0)
+8 >Emitted(38, 23) Source(13, 33) + SourceIndex(0)
+9 >Emitted(38, 24) Source(13, 34) + SourceIndex(0)
+10>Emitted(38, 26) Source(13, 36) + SourceIndex(0)
+11>Emitted(38, 28) Source(13, 38) + SourceIndex(0)
+12>Emitted(38, 30) Source(13, 40) + SourceIndex(0)
+13>Emitted(38, 32) Source(13, 42) + SourceIndex(0)
+14>Emitted(38, 34) Source(13, 44) + SourceIndex(0)
+15>Emitted(38, 36) Source(13, 46) + SourceIndex(0)
+16>Emitted(38, 38) Source(13, 48) + SourceIndex(0)
+17>Emitted(38, 40) Source(13, 9) + SourceIndex(0)
+18>Emitted(38, 41) Source(13, 10) + SourceIndex(0)
+19>Emitted(38, 48) Source(13, 10) + SourceIndex(0)
+20>Emitted(38, 50) Source(13, 15) + SourceIndex(0)
+21>Emitted(38, 54) Source(13, 19) + SourceIndex(0)
+22>Emitted(38, 68) Source(13, 7) + SourceIndex(0)
+23>Emitted(38, 73) Source(13, 21) + SourceIndex(0)
+24>Emitted(38, 74) Source(13, 48) + SourceIndex(0)
+25>Emitted(38, 75) Source(13, 49) + SourceIndex(0)
 ---
->>>}
+>>>}console.log(s);
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^->
-1 >
-  >
-2 >}
-1 >Emitted(38, 1) Source(14, 1) + SourceIndex(0)
-2 >Emitted(38, 2) Source(14, 2) + SourceIndex(0)
----
->>>console.log(s);
-1->
-2 >^^^^^^^
-3 >       ^
-4 >        ^^^
-5 >           ^
+3 > ^^^^^^^
+4 >        ^
+5 >         ^^^
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^->
-1->
-2 >console
-3 >       .
-4 >        log
-5 >           (
-6 >            s
-7 >             )
-8 >              ;
-1->Emitted(39, 1) Source(14, 2) + SourceIndex(0)
-2 >Emitted(39, 8) Source(14, 9) + SourceIndex(0)
-3 >Emitted(39, 9) Source(14, 10) + SourceIndex(0)
-4 >Emitted(39, 12) Source(14, 13) + SourceIndex(0)
-5 >Emitted(39, 13) Source(14, 14) + SourceIndex(0)
-6 >Emitted(39, 14) Source(14, 15) + SourceIndex(0)
-7 >Emitted(39, 15) Source(14, 16) + SourceIndex(0)
-8 >Emitted(39, 16) Source(14, 17) + SourceIndex(0)
+9 >               ^
+10>                ^^->
+1 >
+  >
+2 >}
+3 > console
+4 >        .
+5 >         log
+6 >            (
+7 >             s
+8 >              )
+9 >               ;
+1 >Emitted(39, 1) Source(14, 1) + SourceIndex(0)
+2 >Emitted(39, 2) Source(14, 2) + SourceIndex(0)
+3 >Emitted(39, 9) Source(14, 9) + SourceIndex(0)
+4 >Emitted(39, 10) Source(14, 10) + SourceIndex(0)
+5 >Emitted(39, 13) Source(14, 13) + SourceIndex(0)
+6 >Emitted(39, 14) Source(14, 14) + SourceIndex(0)
+7 >Emitted(39, 15) Source(14, 15) + SourceIndex(0)
+8 >Emitted(39, 16) Source(14, 16) + SourceIndex(0)
+9 >Emitted(39, 17) Source(14, 17) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/first/bin/first-output.js
@@ -577,11 +572,11 @@ text: (1180-1632)
 
 var s = "Hello, world";
 
+
 console.log(s);
 function forfirstfirst_PART1Rest() {
     var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
-}
-console.log(s);
+}console.log(s);
 console.log(f());
 function f() {
     return "JS does hoists";
@@ -661,11 +656,11 @@ var __spread = (this && this.__spread) || function () {
 
 var s = "Hello, world";
 
+
 console.log(s);
 function forfirstfirst_PART1Rest() {
     var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
-}
-console.log(s);
+}console.log(s);
 console.log(f());
 function f() {
     return "JS does hoists";
@@ -689,7 +684,8 @@ function forsecondsecond_part1Rest() {
 }
 var C = (function () {
     function C() {
-    }C.prototype.doSomething = function () {
+    }
+    C.prototype.doSomething = function () {
         console.log("something got done");
     };
     return C;
@@ -714,7 +710,7 @@ thirdthird_part1Spread.apply(void 0, __spread([10, 20, 30]));
 //# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.js.map]
-{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB,IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,sBAAsB,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;ACAxC,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC,AAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB,IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,wBAAwB,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;ACP1C,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB,IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,sBAAsB,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE"}
+{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;;;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB,IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,sBAAsB,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;ACAxC,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB,IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,wBAAwB,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;ACP1C,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB,IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,sBAAsB,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE"}
 
 //// [/src/third/thirdjs/output/third-output.js.map.baseline.txt]
 ===================================================================
@@ -784,6 +780,7 @@ sourceFile:../../../first/first_PART1.ts
 6 >Emitted(33, 24) Source(5, 26) + SourceIndex(0)
 ---
 >>>
+>>>
 >>>console.log(s);
 1 >
 2 >^^^^^^^
@@ -808,14 +805,14 @@ sourceFile:../../../first/first_PART1.ts
 6 >            s
 7 >             )
 8 >              ;
-1 >Emitted(35, 1) Source(11, 1) + SourceIndex(0)
-2 >Emitted(35, 8) Source(11, 8) + SourceIndex(0)
-3 >Emitted(35, 9) Source(11, 9) + SourceIndex(0)
-4 >Emitted(35, 12) Source(11, 12) + SourceIndex(0)
-5 >Emitted(35, 13) Source(11, 13) + SourceIndex(0)
-6 >Emitted(35, 14) Source(11, 14) + SourceIndex(0)
-7 >Emitted(35, 15) Source(11, 15) + SourceIndex(0)
-8 >Emitted(35, 16) Source(11, 16) + SourceIndex(0)
+1 >Emitted(36, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(36, 8) Source(11, 8) + SourceIndex(0)
+3 >Emitted(36, 9) Source(11, 9) + SourceIndex(0)
+4 >Emitted(36, 12) Source(11, 12) + SourceIndex(0)
+5 >Emitted(36, 13) Source(11, 13) + SourceIndex(0)
+6 >Emitted(36, 14) Source(11, 14) + SourceIndex(0)
+7 >Emitted(36, 15) Source(11, 15) + SourceIndex(0)
+8 >Emitted(36, 16) Source(11, 16) + SourceIndex(0)
 ---
 >>>function forfirstfirst_PART1Rest() {
 1->
@@ -826,9 +823,9 @@ sourceFile:../../../first/first_PART1.ts
   >
 2 >function 
 3 >         forfirstfirst_PART1Rest
-1->Emitted(36, 1) Source(12, 1) + SourceIndex(0)
-2 >Emitted(36, 10) Source(12, 10) + SourceIndex(0)
-3 >Emitted(36, 33) Source(12, 33) + SourceIndex(0)
+1->Emitted(37, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(37, 10) Source(12, 10) + SourceIndex(0)
+3 >Emitted(37, 33) Source(12, 33) + SourceIndex(0)
 ---
 >>>    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
 1->^^^^
@@ -882,68 +879,62 @@ sourceFile:../../../first/first_PART1.ts
 23>                                                                   { b, ...rest }
 24>                                                                         = { a: 10, b: 30, yy: 30 }
 25>                                                                         ;
-1->Emitted(37, 5) Source(13, 1) + SourceIndex(0)
-2 >Emitted(37, 9) Source(13, 7) + SourceIndex(0)
-3 >Emitted(37, 14) Source(13, 24) + SourceIndex(0)
-4 >Emitted(37, 16) Source(13, 26) + SourceIndex(0)
-5 >Emitted(37, 17) Source(13, 27) + SourceIndex(0)
-6 >Emitted(37, 19) Source(13, 29) + SourceIndex(0)
-7 >Emitted(37, 21) Source(13, 31) + SourceIndex(0)
-8 >Emitted(37, 23) Source(13, 33) + SourceIndex(0)
-9 >Emitted(37, 24) Source(13, 34) + SourceIndex(0)
-10>Emitted(37, 26) Source(13, 36) + SourceIndex(0)
-11>Emitted(37, 28) Source(13, 38) + SourceIndex(0)
-12>Emitted(37, 30) Source(13, 40) + SourceIndex(0)
-13>Emitted(37, 32) Source(13, 42) + SourceIndex(0)
-14>Emitted(37, 34) Source(13, 44) + SourceIndex(0)
-15>Emitted(37, 36) Source(13, 46) + SourceIndex(0)
-16>Emitted(37, 38) Source(13, 48) + SourceIndex(0)
-17>Emitted(37, 40) Source(13, 9) + SourceIndex(0)
-18>Emitted(37, 41) Source(13, 10) + SourceIndex(0)
-19>Emitted(37, 48) Source(13, 10) + SourceIndex(0)
-20>Emitted(37, 50) Source(13, 15) + SourceIndex(0)
-21>Emitted(37, 54) Source(13, 19) + SourceIndex(0)
-22>Emitted(37, 68) Source(13, 7) + SourceIndex(0)
-23>Emitted(37, 73) Source(13, 21) + SourceIndex(0)
-24>Emitted(37, 74) Source(13, 48) + SourceIndex(0)
-25>Emitted(37, 75) Source(13, 49) + SourceIndex(0)
+1->Emitted(38, 5) Source(13, 1) + SourceIndex(0)
+2 >Emitted(38, 9) Source(13, 7) + SourceIndex(0)
+3 >Emitted(38, 14) Source(13, 24) + SourceIndex(0)
+4 >Emitted(38, 16) Source(13, 26) + SourceIndex(0)
+5 >Emitted(38, 17) Source(13, 27) + SourceIndex(0)
+6 >Emitted(38, 19) Source(13, 29) + SourceIndex(0)
+7 >Emitted(38, 21) Source(13, 31) + SourceIndex(0)
+8 >Emitted(38, 23) Source(13, 33) + SourceIndex(0)
+9 >Emitted(38, 24) Source(13, 34) + SourceIndex(0)
+10>Emitted(38, 26) Source(13, 36) + SourceIndex(0)
+11>Emitted(38, 28) Source(13, 38) + SourceIndex(0)
+12>Emitted(38, 30) Source(13, 40) + SourceIndex(0)
+13>Emitted(38, 32) Source(13, 42) + SourceIndex(0)
+14>Emitted(38, 34) Source(13, 44) + SourceIndex(0)
+15>Emitted(38, 36) Source(13, 46) + SourceIndex(0)
+16>Emitted(38, 38) Source(13, 48) + SourceIndex(0)
+17>Emitted(38, 40) Source(13, 9) + SourceIndex(0)
+18>Emitted(38, 41) Source(13, 10) + SourceIndex(0)
+19>Emitted(38, 48) Source(13, 10) + SourceIndex(0)
+20>Emitted(38, 50) Source(13, 15) + SourceIndex(0)
+21>Emitted(38, 54) Source(13, 19) + SourceIndex(0)
+22>Emitted(38, 68) Source(13, 7) + SourceIndex(0)
+23>Emitted(38, 73) Source(13, 21) + SourceIndex(0)
+24>Emitted(38, 74) Source(13, 48) + SourceIndex(0)
+25>Emitted(38, 75) Source(13, 49) + SourceIndex(0)
 ---
->>>}
+>>>}console.log(s);
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^->
-1 >
-  >
-2 >}
-1 >Emitted(38, 1) Source(14, 1) + SourceIndex(0)
-2 >Emitted(38, 2) Source(14, 2) + SourceIndex(0)
----
->>>console.log(s);
-1->
-2 >^^^^^^^
-3 >       ^
-4 >        ^^^
-5 >           ^
+3 > ^^^^^^^
+4 >        ^
+5 >         ^^^
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^->
-1->
-2 >console
-3 >       .
-4 >        log
-5 >           (
-6 >            s
-7 >             )
-8 >              ;
-1->Emitted(39, 1) Source(14, 2) + SourceIndex(0)
-2 >Emitted(39, 8) Source(14, 9) + SourceIndex(0)
-3 >Emitted(39, 9) Source(14, 10) + SourceIndex(0)
-4 >Emitted(39, 12) Source(14, 13) + SourceIndex(0)
-5 >Emitted(39, 13) Source(14, 14) + SourceIndex(0)
-6 >Emitted(39, 14) Source(14, 15) + SourceIndex(0)
-7 >Emitted(39, 15) Source(14, 16) + SourceIndex(0)
-8 >Emitted(39, 16) Source(14, 17) + SourceIndex(0)
+9 >               ^
+10>                ^^->
+1 >
+  >
+2 >}
+3 > console
+4 >        .
+5 >         log
+6 >            (
+7 >             s
+8 >              )
+9 >               ;
+1 >Emitted(39, 1) Source(14, 1) + SourceIndex(0)
+2 >Emitted(39, 2) Source(14, 2) + SourceIndex(0)
+3 >Emitted(39, 9) Source(14, 9) + SourceIndex(0)
+4 >Emitted(39, 10) Source(14, 10) + SourceIndex(0)
+5 >Emitted(39, 13) Source(14, 13) + SourceIndex(0)
+6 >Emitted(39, 14) Source(14, 14) + SourceIndex(0)
+7 >Emitted(39, 15) Source(14, 15) + SourceIndex(0)
+8 >Emitted(39, 16) Source(14, 16) + SourceIndex(0)
+9 >Emitted(39, 17) Source(14, 17) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.js
@@ -1364,31 +1355,34 @@ sourceFile:../../../second/second_part2.ts
 ---
 >>>    function C() {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^->
 1->
 1->Emitted(62, 5) Source(1, 1) + SourceIndex(4)
 ---
->>>    }C.prototype.doSomething = function () {
+>>>    }
 1->^^^^
 2 >    ^
-3 >     
-4 >     ^^^^^^^^^^^^^^^^^^^^^^^
-5 >                            ^^^
-6 >                               ^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->class C {
   >    doSomething() {
   >        console.log("something got done");
   >    }
   >
 2 >    }
-3 >     
-4 >     doSomething
-5 >                            
 1->Emitted(63, 5) Source(5, 1) + SourceIndex(4)
 2 >Emitted(63, 6) Source(5, 2) + SourceIndex(4)
-3 >Emitted(63, 6) Source(2, 5) + SourceIndex(4)
-4 >Emitted(63, 29) Source(2, 16) + SourceIndex(4)
-5 >Emitted(63, 32) Source(2, 5) + SourceIndex(4)
+---
+>>>    C.prototype.doSomething = function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                           ^^^
+4 >                              ^^^^^^^^^^^^^->
+1->
+2 >    doSomething
+3 >                           
+1->Emitted(64, 5) Source(2, 5) + SourceIndex(4)
+2 >Emitted(64, 28) Source(2, 16) + SourceIndex(4)
+3 >Emitted(64, 31) Source(2, 5) + SourceIndex(4)
 ---
 >>>        console.log("something got done");
 1->^^^^^^^^
@@ -1408,14 +1402,14 @@ sourceFile:../../../second/second_part2.ts
 6 >                    "something got done"
 7 >                                        )
 8 >                                         ;
-1->Emitted(64, 9) Source(3, 9) + SourceIndex(4)
-2 >Emitted(64, 16) Source(3, 16) + SourceIndex(4)
-3 >Emitted(64, 17) Source(3, 17) + SourceIndex(4)
-4 >Emitted(64, 20) Source(3, 20) + SourceIndex(4)
-5 >Emitted(64, 21) Source(3, 21) + SourceIndex(4)
-6 >Emitted(64, 41) Source(3, 41) + SourceIndex(4)
-7 >Emitted(64, 42) Source(3, 42) + SourceIndex(4)
-8 >Emitted(64, 43) Source(3, 43) + SourceIndex(4)
+1->Emitted(65, 9) Source(3, 9) + SourceIndex(4)
+2 >Emitted(65, 16) Source(3, 16) + SourceIndex(4)
+3 >Emitted(65, 17) Source(3, 17) + SourceIndex(4)
+4 >Emitted(65, 20) Source(3, 20) + SourceIndex(4)
+5 >Emitted(65, 21) Source(3, 21) + SourceIndex(4)
+6 >Emitted(65, 41) Source(3, 41) + SourceIndex(4)
+7 >Emitted(65, 42) Source(3, 42) + SourceIndex(4)
+8 >Emitted(65, 43) Source(3, 43) + SourceIndex(4)
 ---
 >>>    };
 1 >^^^^
@@ -1424,8 +1418,8 @@ sourceFile:../../../second/second_part2.ts
 1 >
   >    
 2 >    }
-1 >Emitted(65, 5) Source(4, 5) + SourceIndex(4)
-2 >Emitted(65, 6) Source(4, 6) + SourceIndex(4)
+1 >Emitted(66, 5) Source(4, 5) + SourceIndex(4)
+2 >Emitted(66, 6) Source(4, 6) + SourceIndex(4)
 ---
 >>>    return C;
 1->^^^^
@@ -1433,8 +1427,8 @@ sourceFile:../../../second/second_part2.ts
 1->
   >
 2 >    }
-1->Emitted(66, 5) Source(5, 1) + SourceIndex(4)
-2 >Emitted(66, 13) Source(5, 2) + SourceIndex(4)
+1->Emitted(67, 5) Source(5, 1) + SourceIndex(4)
+2 >Emitted(67, 13) Source(5, 2) + SourceIndex(4)
 ---
 >>>}());
 1 >
@@ -1450,10 +1444,10 @@ sourceFile:../../../second/second_part2.ts
   >         console.log("something got done");
   >     }
   > }
-1 >Emitted(67, 1) Source(5, 1) + SourceIndex(4)
-2 >Emitted(67, 2) Source(5, 2) + SourceIndex(4)
-3 >Emitted(67, 2) Source(1, 1) + SourceIndex(4)
-4 >Emitted(67, 6) Source(5, 2) + SourceIndex(4)
+1 >Emitted(68, 1) Source(5, 1) + SourceIndex(4)
+2 >Emitted(68, 2) Source(5, 2) + SourceIndex(4)
+3 >Emitted(68, 2) Source(1, 1) + SourceIndex(4)
+4 >Emitted(68, 6) Source(5, 2) + SourceIndex(4)
 ---
 >>>function secondsecond_part2Spread() {var b = [];
 1->
@@ -1469,11 +1463,11 @@ sourceFile:../../../second/second_part2.ts
 3 >         secondsecond_part2Spread
 4 >                                 (
 5 >                                     ...b: number[]
-1->Emitted(68, 1) Source(7, 1) + SourceIndex(4)
-2 >Emitted(68, 10) Source(7, 10) + SourceIndex(4)
-3 >Emitted(68, 34) Source(7, 34) + SourceIndex(4)
-4 >Emitted(68, 38) Source(7, 35) + SourceIndex(4)
-5 >Emitted(68, 49) Source(7, 49) + SourceIndex(4)
+1->Emitted(69, 1) Source(7, 1) + SourceIndex(4)
+2 >Emitted(69, 10) Source(7, 10) + SourceIndex(4)
+3 >Emitted(69, 34) Source(7, 34) + SourceIndex(4)
+4 >Emitted(69, 38) Source(7, 35) + SourceIndex(4)
+5 >Emitted(69, 49) Source(7, 49) + SourceIndex(4)
 ---
 >>>    for (var _i = 0; _i < arguments.length; _i++) {
 1->^^^^^^^^^
@@ -1488,20 +1482,20 @@ sourceFile:../../../second/second_part2.ts
 4 >                     ...b: number[]
 5 >                                          
 6 >                                            ...b: number[]
-1->Emitted(69, 10) Source(7, 35) + SourceIndex(4)
-2 >Emitted(69, 20) Source(7, 49) + SourceIndex(4)
-3 >Emitted(69, 22) Source(7, 35) + SourceIndex(4)
-4 >Emitted(69, 43) Source(7, 49) + SourceIndex(4)
-5 >Emitted(69, 45) Source(7, 35) + SourceIndex(4)
-6 >Emitted(69, 49) Source(7, 49) + SourceIndex(4)
+1->Emitted(70, 10) Source(7, 35) + SourceIndex(4)
+2 >Emitted(70, 20) Source(7, 49) + SourceIndex(4)
+3 >Emitted(70, 22) Source(7, 35) + SourceIndex(4)
+4 >Emitted(70, 43) Source(7, 49) + SourceIndex(4)
+5 >Emitted(70, 45) Source(7, 35) + SourceIndex(4)
+6 >Emitted(70, 49) Source(7, 49) + SourceIndex(4)
 ---
 >>>        b[_i] = arguments[_i];
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^
 1 >
 2 >        ...b: number[]
-1 >Emitted(70, 9) Source(7, 35) + SourceIndex(4)
-2 >Emitted(70, 31) Source(7, 49) + SourceIndex(4)
+1 >Emitted(71, 9) Source(7, 35) + SourceIndex(4)
+2 >Emitted(71, 31) Source(7, 49) + SourceIndex(4)
 ---
 >>>    }
 >>>}
@@ -1510,8 +1504,8 @@ sourceFile:../../../second/second_part2.ts
 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
-1 >Emitted(72, 1) Source(7, 53) + SourceIndex(4)
-2 >Emitted(72, 2) Source(7, 54) + SourceIndex(4)
+1 >Emitted(73, 1) Source(7, 53) + SourceIndex(4)
+2 >Emitted(73, 2) Source(7, 54) + SourceIndex(4)
 ---
 >>>secondsecond_part2Spread.apply(void 0, __spread([10, 20, 30]));
 1->
@@ -1537,17 +1531,17 @@ sourceFile:../../../second/second_part2.ts
 9 >                                                         30
 10>                                                           ]
 11>                                                            );
-1->Emitted(73, 1) Source(8, 1) + SourceIndex(4)
-2 >Emitted(73, 25) Source(8, 25) + SourceIndex(4)
-3 >Emitted(73, 49) Source(8, 29) + SourceIndex(4)
-4 >Emitted(73, 50) Source(8, 30) + SourceIndex(4)
-5 >Emitted(73, 52) Source(8, 32) + SourceIndex(4)
-6 >Emitted(73, 54) Source(8, 34) + SourceIndex(4)
-7 >Emitted(73, 56) Source(8, 36) + SourceIndex(4)
-8 >Emitted(73, 58) Source(8, 38) + SourceIndex(4)
-9 >Emitted(73, 60) Source(8, 40) + SourceIndex(4)
-10>Emitted(73, 61) Source(8, 41) + SourceIndex(4)
-11>Emitted(73, 64) Source(8, 43) + SourceIndex(4)
+1->Emitted(74, 1) Source(8, 1) + SourceIndex(4)
+2 >Emitted(74, 25) Source(8, 25) + SourceIndex(4)
+3 >Emitted(74, 49) Source(8, 29) + SourceIndex(4)
+4 >Emitted(74, 50) Source(8, 30) + SourceIndex(4)
+5 >Emitted(74, 52) Source(8, 32) + SourceIndex(4)
+6 >Emitted(74, 54) Source(8, 34) + SourceIndex(4)
+7 >Emitted(74, 56) Source(8, 36) + SourceIndex(4)
+8 >Emitted(74, 58) Source(8, 38) + SourceIndex(4)
+9 >Emitted(74, 60) Source(8, 40) + SourceIndex(4)
+10>Emitted(74, 61) Source(8, 41) + SourceIndex(4)
+11>Emitted(74, 64) Source(8, 43) + SourceIndex(4)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.js
@@ -1571,14 +1565,14 @@ sourceFile:../../third_part1.ts
 6 >            C
 7 >             ()
 8 >               ;
-1 >Emitted(74, 1) Source(1, 1) + SourceIndex(5)
-2 >Emitted(74, 5) Source(1, 5) + SourceIndex(5)
-3 >Emitted(74, 6) Source(1, 6) + SourceIndex(5)
-4 >Emitted(74, 9) Source(1, 9) + SourceIndex(5)
-5 >Emitted(74, 13) Source(1, 13) + SourceIndex(5)
-6 >Emitted(74, 14) Source(1, 14) + SourceIndex(5)
-7 >Emitted(74, 16) Source(1, 16) + SourceIndex(5)
-8 >Emitted(74, 17) Source(1, 17) + SourceIndex(5)
+1 >Emitted(75, 1) Source(1, 1) + SourceIndex(5)
+2 >Emitted(75, 5) Source(1, 5) + SourceIndex(5)
+3 >Emitted(75, 6) Source(1, 6) + SourceIndex(5)
+4 >Emitted(75, 9) Source(1, 9) + SourceIndex(5)
+5 >Emitted(75, 13) Source(1, 13) + SourceIndex(5)
+6 >Emitted(75, 14) Source(1, 14) + SourceIndex(5)
+7 >Emitted(75, 16) Source(1, 16) + SourceIndex(5)
+8 >Emitted(75, 17) Source(1, 17) + SourceIndex(5)
 ---
 >>>c.doSomething();
 1->
@@ -1595,12 +1589,12 @@ sourceFile:../../third_part1.ts
 4 >  doSomething
 5 >             ()
 6 >               ;
-1->Emitted(75, 1) Source(2, 1) + SourceIndex(5)
-2 >Emitted(75, 2) Source(2, 2) + SourceIndex(5)
-3 >Emitted(75, 3) Source(2, 3) + SourceIndex(5)
-4 >Emitted(75, 14) Source(2, 14) + SourceIndex(5)
-5 >Emitted(75, 16) Source(2, 16) + SourceIndex(5)
-6 >Emitted(75, 17) Source(2, 17) + SourceIndex(5)
+1->Emitted(76, 1) Source(2, 1) + SourceIndex(5)
+2 >Emitted(76, 2) Source(2, 2) + SourceIndex(5)
+3 >Emitted(76, 3) Source(2, 3) + SourceIndex(5)
+4 >Emitted(76, 14) Source(2, 14) + SourceIndex(5)
+5 >Emitted(76, 16) Source(2, 16) + SourceIndex(5)
+6 >Emitted(76, 17) Source(2, 17) + SourceIndex(5)
 ---
 >>>function forthirdthird_part1Rest() {
 1->
@@ -1611,9 +1605,9 @@ sourceFile:../../third_part1.ts
   >
 2 >function 
 3 >         forthirdthird_part1Rest
-1->Emitted(76, 1) Source(3, 1) + SourceIndex(5)
-2 >Emitted(76, 10) Source(3, 10) + SourceIndex(5)
-3 >Emitted(76, 33) Source(3, 33) + SourceIndex(5)
+1->Emitted(77, 1) Source(3, 1) + SourceIndex(5)
+2 >Emitted(77, 10) Source(3, 10) + SourceIndex(5)
+3 >Emitted(77, 33) Source(3, 33) + SourceIndex(5)
 ---
 >>>    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
 1->^^^^
@@ -1667,31 +1661,31 @@ sourceFile:../../third_part1.ts
 23>                                                                   { b, ...rest }
 24>                                                                         = { a: 10, b: 30, yy: 30 }
 25>                                                                         ;
-1->Emitted(77, 5) Source(4, 1) + SourceIndex(5)
-2 >Emitted(77, 9) Source(4, 7) + SourceIndex(5)
-3 >Emitted(77, 14) Source(4, 24) + SourceIndex(5)
-4 >Emitted(77, 16) Source(4, 26) + SourceIndex(5)
-5 >Emitted(77, 17) Source(4, 27) + SourceIndex(5)
-6 >Emitted(77, 19) Source(4, 29) + SourceIndex(5)
-7 >Emitted(77, 21) Source(4, 31) + SourceIndex(5)
-8 >Emitted(77, 23) Source(4, 33) + SourceIndex(5)
-9 >Emitted(77, 24) Source(4, 34) + SourceIndex(5)
-10>Emitted(77, 26) Source(4, 36) + SourceIndex(5)
-11>Emitted(77, 28) Source(4, 38) + SourceIndex(5)
-12>Emitted(77, 30) Source(4, 40) + SourceIndex(5)
-13>Emitted(77, 32) Source(4, 42) + SourceIndex(5)
-14>Emitted(77, 34) Source(4, 44) + SourceIndex(5)
-15>Emitted(77, 36) Source(4, 46) + SourceIndex(5)
-16>Emitted(77, 38) Source(4, 48) + SourceIndex(5)
-17>Emitted(77, 40) Source(4, 9) + SourceIndex(5)
-18>Emitted(77, 41) Source(4, 10) + SourceIndex(5)
-19>Emitted(77, 48) Source(4, 10) + SourceIndex(5)
-20>Emitted(77, 50) Source(4, 15) + SourceIndex(5)
-21>Emitted(77, 54) Source(4, 19) + SourceIndex(5)
-22>Emitted(77, 68) Source(4, 7) + SourceIndex(5)
-23>Emitted(77, 73) Source(4, 21) + SourceIndex(5)
-24>Emitted(77, 74) Source(4, 48) + SourceIndex(5)
-25>Emitted(77, 75) Source(4, 49) + SourceIndex(5)
+1->Emitted(78, 5) Source(4, 1) + SourceIndex(5)
+2 >Emitted(78, 9) Source(4, 7) + SourceIndex(5)
+3 >Emitted(78, 14) Source(4, 24) + SourceIndex(5)
+4 >Emitted(78, 16) Source(4, 26) + SourceIndex(5)
+5 >Emitted(78, 17) Source(4, 27) + SourceIndex(5)
+6 >Emitted(78, 19) Source(4, 29) + SourceIndex(5)
+7 >Emitted(78, 21) Source(4, 31) + SourceIndex(5)
+8 >Emitted(78, 23) Source(4, 33) + SourceIndex(5)
+9 >Emitted(78, 24) Source(4, 34) + SourceIndex(5)
+10>Emitted(78, 26) Source(4, 36) + SourceIndex(5)
+11>Emitted(78, 28) Source(4, 38) + SourceIndex(5)
+12>Emitted(78, 30) Source(4, 40) + SourceIndex(5)
+13>Emitted(78, 32) Source(4, 42) + SourceIndex(5)
+14>Emitted(78, 34) Source(4, 44) + SourceIndex(5)
+15>Emitted(78, 36) Source(4, 46) + SourceIndex(5)
+16>Emitted(78, 38) Source(4, 48) + SourceIndex(5)
+17>Emitted(78, 40) Source(4, 9) + SourceIndex(5)
+18>Emitted(78, 41) Source(4, 10) + SourceIndex(5)
+19>Emitted(78, 48) Source(4, 10) + SourceIndex(5)
+20>Emitted(78, 50) Source(4, 15) + SourceIndex(5)
+21>Emitted(78, 54) Source(4, 19) + SourceIndex(5)
+22>Emitted(78, 68) Source(4, 7) + SourceIndex(5)
+23>Emitted(78, 73) Source(4, 21) + SourceIndex(5)
+24>Emitted(78, 74) Source(4, 48) + SourceIndex(5)
+25>Emitted(78, 75) Source(4, 49) + SourceIndex(5)
 ---
 >>>}
 1 >
@@ -1700,8 +1694,8 @@ sourceFile:../../third_part1.ts
 1 >
   >
 2 >}
-1 >Emitted(78, 1) Source(5, 1) + SourceIndex(5)
-2 >Emitted(78, 2) Source(5, 2) + SourceIndex(5)
+1 >Emitted(79, 1) Source(5, 1) + SourceIndex(5)
+2 >Emitted(79, 2) Source(5, 2) + SourceIndex(5)
 ---
 >>>function thirdthird_part1Spread() {var b = [];
 1->
@@ -1716,11 +1710,11 @@ sourceFile:../../third_part1.ts
 3 >         thirdthird_part1Spread
 4 >                               (
 5 >                                   ...b: number[]
-1->Emitted(79, 1) Source(6, 1) + SourceIndex(5)
-2 >Emitted(79, 10) Source(6, 10) + SourceIndex(5)
-3 >Emitted(79, 32) Source(6, 32) + SourceIndex(5)
-4 >Emitted(79, 36) Source(6, 33) + SourceIndex(5)
-5 >Emitted(79, 47) Source(6, 47) + SourceIndex(5)
+1->Emitted(80, 1) Source(6, 1) + SourceIndex(5)
+2 >Emitted(80, 10) Source(6, 10) + SourceIndex(5)
+3 >Emitted(80, 32) Source(6, 32) + SourceIndex(5)
+4 >Emitted(80, 36) Source(6, 33) + SourceIndex(5)
+5 >Emitted(80, 47) Source(6, 47) + SourceIndex(5)
 ---
 >>>    for (var _i = 0; _i < arguments.length; _i++) {
 1->^^^^^^^^^
@@ -1735,20 +1729,20 @@ sourceFile:../../third_part1.ts
 4 >                     ...b: number[]
 5 >                                          
 6 >                                            ...b: number[]
-1->Emitted(80, 10) Source(6, 33) + SourceIndex(5)
-2 >Emitted(80, 20) Source(6, 47) + SourceIndex(5)
-3 >Emitted(80, 22) Source(6, 33) + SourceIndex(5)
-4 >Emitted(80, 43) Source(6, 47) + SourceIndex(5)
-5 >Emitted(80, 45) Source(6, 33) + SourceIndex(5)
-6 >Emitted(80, 49) Source(6, 47) + SourceIndex(5)
+1->Emitted(81, 10) Source(6, 33) + SourceIndex(5)
+2 >Emitted(81, 20) Source(6, 47) + SourceIndex(5)
+3 >Emitted(81, 22) Source(6, 33) + SourceIndex(5)
+4 >Emitted(81, 43) Source(6, 47) + SourceIndex(5)
+5 >Emitted(81, 45) Source(6, 33) + SourceIndex(5)
+6 >Emitted(81, 49) Source(6, 47) + SourceIndex(5)
 ---
 >>>        b[_i] = arguments[_i];
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^
 1 >
 2 >        ...b: number[]
-1 >Emitted(81, 9) Source(6, 33) + SourceIndex(5)
-2 >Emitted(81, 31) Source(6, 47) + SourceIndex(5)
+1 >Emitted(82, 9) Source(6, 33) + SourceIndex(5)
+2 >Emitted(82, 31) Source(6, 47) + SourceIndex(5)
 ---
 >>>    }
 >>>}
@@ -1757,8 +1751,8 @@ sourceFile:../../third_part1.ts
 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
-1 >Emitted(83, 1) Source(6, 51) + SourceIndex(5)
-2 >Emitted(83, 2) Source(6, 52) + SourceIndex(5)
+1 >Emitted(84, 1) Source(6, 51) + SourceIndex(5)
+2 >Emitted(84, 2) Source(6, 52) + SourceIndex(5)
 ---
 >>>thirdthird_part1Spread.apply(void 0, __spread([10, 20, 30]));
 1->
@@ -1784,17 +1778,17 @@ sourceFile:../../third_part1.ts
 9 >                                                       30
 10>                                                         ]
 11>                                                          );
-1->Emitted(84, 1) Source(7, 1) + SourceIndex(5)
-2 >Emitted(84, 23) Source(7, 23) + SourceIndex(5)
-3 >Emitted(84, 47) Source(7, 27) + SourceIndex(5)
-4 >Emitted(84, 48) Source(7, 28) + SourceIndex(5)
-5 >Emitted(84, 50) Source(7, 30) + SourceIndex(5)
-6 >Emitted(84, 52) Source(7, 32) + SourceIndex(5)
-7 >Emitted(84, 54) Source(7, 34) + SourceIndex(5)
-8 >Emitted(84, 56) Source(7, 36) + SourceIndex(5)
-9 >Emitted(84, 58) Source(7, 38) + SourceIndex(5)
-10>Emitted(84, 59) Source(7, 39) + SourceIndex(5)
-11>Emitted(84, 62) Source(7, 41) + SourceIndex(5)
+1->Emitted(85, 1) Source(7, 1) + SourceIndex(5)
+2 >Emitted(85, 23) Source(7, 23) + SourceIndex(5)
+3 >Emitted(85, 47) Source(7, 27) + SourceIndex(5)
+4 >Emitted(85, 48) Source(7, 28) + SourceIndex(5)
+5 >Emitted(85, 50) Source(7, 30) + SourceIndex(5)
+6 >Emitted(85, 52) Source(7, 32) + SourceIndex(5)
+7 >Emitted(85, 54) Source(7, 34) + SourceIndex(5)
+8 >Emitted(85, 56) Source(7, 36) + SourceIndex(5)
+9 >Emitted(85, 58) Source(7, 38) + SourceIndex(5)
+10>Emitted(85, 59) Source(7, 39) + SourceIndex(5)
+11>Emitted(85, 62) Source(7, 41) + SourceIndex(5)
 ---
 >>>//# sourceMappingURL=third-output.js.map
 
@@ -1840,20 +1834,20 @@ sourceFile:../../third_part1.ts
         },
         {
           "pos": 1634,
-          "end": 2242,
+          "end": 2248,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
               "pos": 1634,
-              "end": 2242,
+              "end": 2248,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 2244,
-          "end": 2601,
+          "pos": 2250,
+          "end": 2607,
           "kind": "text"
         }
       ],
@@ -1951,11 +1945,11 @@ text: (1180-1632)
 
 var s = "Hello, world";
 
+
 console.log(s);
 function forfirstfirst_PART1Rest() {
     var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
-}
-console.log(s);
+}console.log(s);
 console.log(f());
 function f() {
     return "JS does hoists";
@@ -1967,9 +1961,9 @@ function firstfirst_part3Spread() {var b = [];
 }
 firstfirst_part3Spread.apply(void 0, __spread([10, 20, 30]));
 ----------------------------------------------------------------------
-prepend: (1634-2242):: ../../../2/second-output.js texts:: 1
+prepend: (1634-2248):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1634-2242)
+text: (1634-2248)
 var N;
 (function (N) {
     function f() {
@@ -1983,7 +1977,8 @@ function forsecondsecond_part1Rest() {
 }
 var C = (function () {
     function C() {
-    }C.prototype.doSomething = function () {
+    }
+    C.prototype.doSomething = function () {
         console.log("something got done");
     };
     return C;
@@ -1995,7 +1990,7 @@ function secondsecond_part2Spread() {var b = [];
 }
 secondsecond_part2Spread.apply(void 0, __spread([10, 20, 30]));
 ----------------------------------------------------------------------
-text: (2244-2601)
+text: (2250-2607)
 var c = new C();
 c.doSomething();
 function forthirdthird_part1Rest() {

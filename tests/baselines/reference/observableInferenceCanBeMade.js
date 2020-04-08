@@ -25,12 +25,6 @@ function asObservable(input: string | ObservableInput<string>): Observable<strin
 "use strict";
 // Repro from #33131
 
-
-
-
-
-
-
 function asObservable(input) {
     return typeof input === 'string' ? of(input) : from(input);
 }

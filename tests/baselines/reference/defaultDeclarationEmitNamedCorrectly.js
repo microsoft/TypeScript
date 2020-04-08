@@ -21,8 +21,8 @@ exports.__esModule = true;
 exports.make = void 0;
 function make(x) {
     return null;
-}exports.make = make;
-
+}
+exports.make = make;
 var MyComponent = /** @class */ (function () {
     function MyComponent() {
     }

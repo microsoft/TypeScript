@@ -44,7 +44,8 @@ var M;
 (function (M) {
     var Color;
     (function (Color) {
-        Color[Color["Red"] = 0] = "Red";Color[Color["Green"] = 1] = "Green";
+        Color[Color["Red"] = 0] = "Red";
+        Color[Color["Green"] = 1] = "Green";
     })(Color = M.Color || (M.Color = {}));
 })(M || (M = {}));
 (function (M) {

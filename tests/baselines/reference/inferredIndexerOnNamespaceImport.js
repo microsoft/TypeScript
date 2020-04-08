@@ -27,4 +27,5 @@ var foo = require("./foo");
 function f(map) {
     // ...
 }
+
 f(foo);

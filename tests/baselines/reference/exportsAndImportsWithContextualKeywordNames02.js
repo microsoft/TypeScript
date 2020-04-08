@@ -21,8 +21,8 @@ import { as } from "./t1";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.as = exports.return = void 0;
 var as = 100;
-
-exports.return = as;exports.as = as;
+exports.return = as;
+exports.as = as;
 //// [t2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

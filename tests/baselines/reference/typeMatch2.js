@@ -70,7 +70,8 @@ var Animal = /** @class */ (function () {
     return Animal;
 }());
 var Giraffe = /** @class */ (function (_super) {
-    __extends(Giraffe, _super);function Giraffe() {
+    __extends(Giraffe, _super);
+    function Giraffe() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Giraffe;

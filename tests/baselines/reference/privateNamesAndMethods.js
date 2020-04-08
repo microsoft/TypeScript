@@ -38,8 +38,7 @@ class A {
         this.#baz(30);
         this.#quux = this.#quux + 1;
         this.#quux++;
-    }
-    #foo(a) { }
+    }#foo(a) { }
     async #bar(a) { }
     async *#baz(a) {
         return 3;

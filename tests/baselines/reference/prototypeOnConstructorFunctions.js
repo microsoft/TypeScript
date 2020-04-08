@@ -14,4 +14,6 @@ i.const.prototype.prop = "yo";
 
 
 var i;
+
+
 i["const"].prototype.prop = "yo";

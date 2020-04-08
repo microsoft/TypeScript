@@ -17,5 +17,3 @@ module A {
 }
 
 //// [mixedExports.js]
-
-

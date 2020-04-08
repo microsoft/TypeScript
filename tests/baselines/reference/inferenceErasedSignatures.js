@@ -84,5 +84,3 @@ class SomeClass extends SomeAbstractClass {
 
 
 
-
-

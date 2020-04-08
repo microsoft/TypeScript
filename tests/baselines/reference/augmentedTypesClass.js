@@ -10,7 +10,8 @@ enum c4 { One } // error
 //// [augmentedTypesClass.js]
 //// class then var
 var c1 = /** @class */ (function () {
-    function c1() {}c1.prototype.foo = function () { };
+    function c1() {}
+    c1.prototype.foo = function () { };
     return c1;
 }());
 var c1 = 1; // error
@@ -18,7 +19,8 @@ var c1 = 1; // error
 
 //// class then enum
 var c4 = /** @class */ (function () {
-    function c4() {}c4.prototype.foo = function () { };
+    function c4() {}
+    c4.prototype.foo = function () { };
     return c4;
 }());
 (function (c4) {

@@ -62,7 +62,8 @@ function foo() { return true; }
 
 var A = /** @class */ (function () {
     function A() {
-    }A.foo = function () { return true; };
+    }
+    A.foo = function () { return true; };
     return A;
 }());
 var M;
@@ -94,6 +95,7 @@ var ResultIsNumber13 = foo()--;
 var ResultIsNumber14 = A.foo()--;
 var ResultIsNumber15 = objA.a--;
 var ResultIsNumber16 = M.n--;
+
 // miss assignment operators
 --true;
 --BOOLEAN;

@@ -106,19 +106,6 @@ var __extends = (this && this.__extends) || (function () {
 // new-style class
 var Foo = /** @class */ (function (_super) {
     __extends(Foo, _super);
-
-
-
-
-
-
-
-
-
-
-
-
-
     function Foo(x, y, z) {if (z === void 0) { z = 0; }
         var _this = _super.call(this, x) || this;
         _this.y = y;

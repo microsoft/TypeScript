@@ -12,4 +12,5 @@ exports.foo = void 0;
 function foo() {
     export function bar() {
     }
-}exports.foo = foo;
+}
+exports.foo = foo;

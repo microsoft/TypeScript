@@ -13,6 +13,6 @@
 
 goTo.marker("1");
 verify.verifyGetEmitOutputForCurrentFile(
-"/// <reference path=\"a.ts\" />\r\n\
+"/// <reference path=\"a.ts\" />\r\n\r\n\
 var testInOtherFile = 1 /* Bar */;\r\n"
     )

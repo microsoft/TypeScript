@@ -12,6 +12,7 @@ function ifelse() {
 }
 
 //// [commentLeadingCloseBrace.js]
+
 function ifelse() {
     if (commentedParameters(1, 2)) {
         /*comment1*/

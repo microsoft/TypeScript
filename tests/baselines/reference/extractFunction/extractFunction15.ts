@@ -31,6 +31,7 @@ function F<T>(t1: T) {
     }
 }
 
-function newFunction<T, U extends T[]>(t2: U) {
+function newFunction<T,
+    U extends T[]>(t2: U) {
     t2.toString();
 }

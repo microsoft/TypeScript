@@ -15,6 +15,7 @@ I           // This should be the identifier 'I'
 //// [asiPreventsParsingAsInterface05.js]
 "use strict";
 var interface;
+
 // 'interface' is a strict mode reserved word, and so it would be permissible
 // to allow 'interface' and the name of the interface to be on separate lines;
 // however, this complicates things, and so it is preferable to restrict interface 

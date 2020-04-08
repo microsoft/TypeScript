@@ -15,7 +15,8 @@ exports.__esModule = true;
 exports.NullLogger = void 0;
 var NullLogger = /** @class */ (function () {
     function NullLogger() {
-    }NullLogger.prototype.information = function () { return false; };
+    }
+    NullLogger.prototype.information = function () { return false; };
     NullLogger.prototype.debug = function () { return false; };
     NullLogger.prototype.warning = function () { return false; };
     NullLogger.prototype.error = function () { return false; };
@@ -23,4 +24,5 @@ var NullLogger = /** @class */ (function () {
     NullLogger.prototype.log = function (s) {
     };
     return NullLogger;
-}());exports.NullLogger = NullLogger;
+}());
+exports.NullLogger = NullLogger;

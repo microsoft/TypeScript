@@ -6,7 +6,6 @@ for (let a1 of [])
         doSomething(() => a2);
 
 //// [nestedLoopWithOnlyInnerLetCaptured.js]
-
 for (var _i = 0, _a = []; _i < _a.length; _i++) {
     var a1 = _a[_i];
     var _loop_1 = function (a2) {

@@ -47,6 +47,7 @@ break;
 ONE: do
     break TWO;
 while (true);
+
 // break from inside function
 TWO: do {
     var x = function () {
@@ -59,13 +60,16 @@ THREE: do {
         break THREE;
     };
 } while (true);
+
 // break forward
 do {
     break FIVE;
     FIVE: do { } while (true);
 } while (true);
+
 // label on non-loop statement
 NINE: var y = 12;
+
 do {
     break NINE;
 } while (true);

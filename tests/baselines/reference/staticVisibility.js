@@ -40,6 +40,7 @@ static set Bar(bar:string) {barback = bar;} // not ok
 var C1 = /** @class */ (function () {
     function C1() {
         var v = 0;
+
         s = 1; // should be error
         C1.s = 1; // should be ok
 

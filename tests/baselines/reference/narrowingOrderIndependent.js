@@ -48,6 +48,7 @@ var B = /** @class */ (function () {
     return B;
 }());
 var a = new A("123");
+
 if (a instanceof A && a.stringOrUndefined) {
     new B(a.stringOrUndefined);
 }

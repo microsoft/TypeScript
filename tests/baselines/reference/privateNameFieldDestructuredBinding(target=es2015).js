@@ -46,13 +46,22 @@ class A {
         (_h = this, _j = this, { a: ({ set value(_m) { __classPrivateFieldSet(_h, _field, _m); } }).value = 1, b: [({ set value(_m) { __classPrivateFieldSet(_j, _field, _m); } }).value = 1] } = { b: [] });
         _k = this, [({ set value(_m) { __classPrivateFieldSet(_k, _field, _m); } }).value = 2] = [];
         _l = this.otherObject, [({ set value(_m) { __classPrivateFieldSet(_l, _field, _m); } }).value = 2] = [];
-    }
-    testObject() {
+    }testObject() {
         return { x: 10, y: 6 };
     }
     testArray() {
         return [10, 11];
     }
+
+
+
+
+
+
+
+
+
+
     static test(_a) {
         [({ set value(_b) { __classPrivateFieldSet(_a, _field, _b); } }).value] = [2];
     }

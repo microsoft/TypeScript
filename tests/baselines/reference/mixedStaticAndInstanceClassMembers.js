@@ -18,7 +18,8 @@ class B {
 //// [mixedStaticAndInstanceClassMembers.js]
 var A = /** @class */ (function () {
     function A() {
-    }A.prototype.f = function () { };
+    }
+    A.prototype.f = function () { };
 
 
     A.prototype.m1 = function (a) {
@@ -27,7 +28,8 @@ var A = /** @class */ (function () {
 }());
 var B = /** @class */ (function () {
     function B() {
-    }B.prototype.f = function () { };
+    }
+    B.prototype.f = function () { };
 
 
     B.prototype.m1 = function (a) {

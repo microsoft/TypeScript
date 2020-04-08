@@ -38,13 +38,15 @@ var BaseType = /** @class */ (function () {
     return BaseType;
 }());
 var NextType = /** @class */ (function (_super) {
-    __extends(NextType, _super);function NextType() {
+    __extends(NextType, _super);
+    function NextType() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return NextType;
 }(BaseType));
 var Foo = /** @class */ (function (_super) {
-    __extends(Foo, _super);function Foo() {
+    __extends(Foo, _super);
+    function Foo() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Foo;

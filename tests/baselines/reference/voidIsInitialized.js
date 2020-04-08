@@ -15,6 +15,7 @@ if(typeof y !== "undefined") {
 "use strict";
 var x = undefined;
 var y = undefined;
+
 if (typeof x === "undefined") {
     x; // no error: assume x2 is initialised
 }

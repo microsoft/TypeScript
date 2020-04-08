@@ -226,7 +226,6 @@ var x: B = { };
 
 //// [contextualTyping.js]
 
-
 // CONTEXT: Class property declaration
 var C1T5 = /** @class */ (function () {
     function C1T5() {
@@ -294,6 +293,7 @@ c7t2[0] = ({ n: 1 });
 
 
 var objc8 = ({});
+
 objc8.t1 = (function (s) { return s; });
 objc8.t2 = ({
     n: 1
@@ -303,6 +303,7 @@ objc8.t4 = function () { return ({}); };
 objc8.t5 = function (n) { return ({}); };
 objc8.t6 = function (n, s) { return ({}); };
 objc8.t7 = function (n) { return n; };
+
 objc8.t8 = function (n) { return n; };
 objc8.t9 = [[], []];
 objc8.t10 = [({}), ({})];
@@ -317,8 +318,7 @@ objc8.t14 = ({
     a: []
 });
 // CONTEXT: Function call
-function c9t5(f) { }
-;
+function c9t5(f) { };
 c9t5(function (n) {
     return ({});
 });
@@ -359,8 +359,11 @@ var c12t14 = ({
     a: []
 });
 
+
 function EF1(a, b) { return a + b; }
+
 var efv = EF1(1, 2);
+
 
 
 Point.origin = new Point(0, 0);
@@ -376,5 +379,6 @@ Point.prototype = {
         return new Point(this.x + dx, this.y + dy);
     }
 };
+
 var x = {};
 //# sourceMappingURL=contextualTyping.js.map

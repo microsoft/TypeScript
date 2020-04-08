@@ -19,7 +19,8 @@ var y = new enumdule.Point(0, 0);
 //// [EnumAndModuleWithSameNameAndCommonRoot.js]
 var enumdule;
 (function (enumdule) {
-    enumdule[enumdule["Red"] = 0] = "Red";enumdule[enumdule["Blue"] = 1] = "Blue";
+    enumdule[enumdule["Red"] = 0] = "Red";
+    enumdule[enumdule["Blue"] = 1] = "Blue";
 })(enumdule || (enumdule = {}));
 (function (enumdule) {
 

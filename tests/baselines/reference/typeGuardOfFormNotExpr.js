@@ -60,6 +60,7 @@ var num;
 var strOrNum;
 var strOrNumOrBool;
 var numOrBool;
+
 // A type guard of the form !expr
 // - when true, narrows the type of x by expr when false, or
 // - when false, narrows the type of x by expr when true.

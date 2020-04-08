@@ -83,23 +83,28 @@ var __extends = (this && this.__extends) || (function () {
 // Case 1
 var Base1 = /** @class */ (function () {
     function Base1() {
-    }Base1.prototype.foo = function () {
+    }
+    Base1.prototype.foo = function () {
         return "base";
     };
     return Base1;
 }());
 var Sub1 = /** @class */ (function (_super) {
-    __extends(Sub1, _super);function Sub1() {
+    __extends(Sub1, _super);
+    function Sub1() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Sub1.prototype.bar = function () {
+    }
+    Sub1.prototype.bar = function () {
         return "base";
     };
     return Sub1;
 }(Base1));
 var SubSub1 = /** @class */ (function (_super) {
-    __extends(SubSub1, _super);function SubSub1() {
+    __extends(SubSub1, _super);
+    function SubSub1() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }SubSub1.prototype.bar = function () {
+    }
+    SubSub1.prototype.bar = function () {
         return _super.prototype["super"].foo;
     };
     return SubSub1;
@@ -107,15 +112,18 @@ var SubSub1 = /** @class */ (function (_super) {
 // Case 2
 var Base2 = /** @class */ (function () {
     function Base2() {
-    }Base2.prototype.foo = function () {
+    }
+    Base2.prototype.foo = function () {
         return "base";
     };
     return Base2;
 }());
 var SubE2 = /** @class */ (function (_super) {
-    __extends(SubE2, _super);function SubE2() {
+    __extends(SubE2, _super);
+    function SubE2() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }SubE2.prototype.bar = function () {
+    }
+    SubE2.prototype.bar = function () {
         return _super.prototype.prototype.foo = null;
     };
     return SubE2;
@@ -123,15 +131,18 @@ var SubE2 = /** @class */ (function (_super) {
 // Case 3
 var Base3 = /** @class */ (function () {
     function Base3() {
-    }Base3.prototype.foo = function () {
+    }
+    Base3.prototype.foo = function () {
         return "base";
     };
     return Base3;
 }());
 var SubE3 = /** @class */ (function (_super) {
-    __extends(SubE3, _super);function SubE3() {
+    __extends(SubE3, _super);
+    function SubE3() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }SubE3.prototype.bar = function () {
+    }
+    SubE3.prototype.bar = function () {
         return _super.prototype.bar.call(this);
     };
     return SubE3;
@@ -141,15 +152,18 @@ var Base4;
 (function (Base4) {
     var Sub4 = /** @class */ (function () {
         function Sub4() {
-        }Sub4.prototype.x = function () {
+        }
+        Sub4.prototype.x = function () {
             return "hello";
         };
         return Sub4;
     }());
     var SubSub4 = /** @class */ (function (_super) {
-        __extends(SubSub4, _super);function SubSub4() {
+        __extends(SubSub4, _super);
+        function SubSub4() {
             return _super !== null && _super.apply(this, arguments) || this;
-        }SubSub4.prototype.x = function () {
+        }
+        SubSub4.prototype.x = function () {
             return _super.prototype.x.call(this);
         };
         return SubSub4;
@@ -157,7 +171,8 @@ var Base4;
     Base4.SubSub4 = SubSub4;
     var Sub4E = /** @class */ (function () {
         function Sub4E() {
-        }Sub4E.prototype.x = function () {
+        }
+        Sub4E.prototype.x = function () {
             return _super.prototype.x.call(this);
         };
         return Sub4E;

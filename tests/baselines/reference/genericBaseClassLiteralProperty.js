@@ -31,9 +31,11 @@ var __extends = (this && this.__extends) || (function () {
     return BaseClass;
 }());
 var SubClass = /** @class */ (function (_super) {
-    __extends(SubClass, _super);function SubClass() {
+    __extends(SubClass, _super);
+    function SubClass() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }SubClass.prototype.Error = function () {
+    }
+    SubClass.prototype.Error = function () {
 
         var x = this._getValue1();
         var y = this._getValue2();

@@ -49,8 +49,8 @@ function classExtender(superClass, _instanceModifier) {
         }
         return decoratorFunc;
     }(superClass));
-}exports.classExtender = classExtender;
-
+}
+exports.classExtender = classExtender;
 var MyClass = /** @class */ (function () {
     function MyClass() {}
     return MyClass;
@@ -68,4 +68,5 @@ function classExtender2(superClass, _instanceModifier) {
         }
         return decoratorFunc;
     }(superClass));
-}exports.classExtender2 = classExtender2;
+}
+exports.classExtender2 = classExtender2;

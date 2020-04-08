@@ -44,14 +44,16 @@ var M;
 var N;
 (function (N) {
     var D1 = /** @class */ (function (_super) {
-        __extends(D1, _super);function D1() {
+        __extends(D1, _super);
+        function D1() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return D1;
     }(M.C1));
     N.D1 = D1;
     var D2 = /** @class */ (function (_super) {
-        __extends(D2, _super);function D2() {
+        __extends(D2, _super);
+        function D2() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return D2;

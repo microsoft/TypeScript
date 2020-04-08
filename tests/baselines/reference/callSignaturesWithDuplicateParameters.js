@@ -54,7 +54,8 @@ var f8 = function (x, y) { };
 
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.foo = function (x, x) { };
+    }
+    C.prototype.foo = function (x, x) { };
     C.prototype.foo2 = function (x, x) { };
     C.prototype.foo3 = function (x, x) { };
     return C;

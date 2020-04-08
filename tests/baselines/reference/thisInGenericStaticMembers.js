@@ -31,7 +31,8 @@ class B {
 
 var A = /** @class */ (function () {
     function A() {
-    }A.one = function (source, value) {
+    }
+    A.one = function (source, value) {
         return source;
     };
 
@@ -42,7 +43,8 @@ var A = /** @class */ (function () {
 }());
 var B = /** @class */ (function () {
     function B() {
-    }B.one = function (source, value) {
+    }
+    B.one = function (source, value) {
         return source;
     };
 

@@ -28,14 +28,14 @@ exports.logger = void 0;
 var logger = /** @class */ (function () {
     function logger() {}
     return logger;
-}());exports.logger = logger;
+}());
+exports.logger = logger;
 
 
 //// [/user/username/projects/myproject/another.js]
 "use strict";
 exports.__esModule = true;
-var logger_1 = require("./logger");
-new logger_1.logger();
+var logger_1 = require("./logger");new logger_1.logger();
 
 
 

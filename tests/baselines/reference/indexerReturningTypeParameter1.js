@@ -19,7 +19,8 @@ var r = a.groupBy();
 
 var c = /** @class */ (function () {
     function c() {
-    }c.prototype.groupBy = function () {
+    }
+    c.prototype.groupBy = function () {
         return null;
     };
     return c;

@@ -113,9 +113,6 @@ function beastFoo(beast: Object) {
 
 //// [typeGuardIntersectionTypes.js]
 
-
-
-
 function f1(obj) {
     if (isX(obj) || isY(obj) || isZ(obj)) {
         obj;
@@ -124,7 +121,6 @@ function f1(obj) {
         obj;
     }
 }
-
 
 
 // a type guard for B
@@ -141,7 +137,6 @@ function union(a) {
         return null;
     }
 }
-
 
 
 // Beast feature detection via user-defined type guards

@@ -31,7 +31,6 @@ interface D {
 }
 
 //// [genericOverloadSignatures.js]
-
 function f(a) { }
 
 

@@ -64,7 +64,8 @@ var TypeScript2;
     }());
     TypeScript2.PullSymbol = PullSymbol;
     var PullTypeSymbol = /** @class */ (function (_super) {
-        __extends(PullTypeSymbol, _super);function PullTypeSymbol() {
+        __extends(PullTypeSymbol, _super);
+        function PullTypeSymbol() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return PullTypeSymbol;

@@ -10,6 +10,10 @@ declare module "mod" {
 
 declare module "mod" {
     export * from "lib";
-    export { F1, F2 } from "lib";
+    export {
+        F1,
+
+        F2
+    } from "lib";
 }
     

@@ -28,8 +28,6 @@ var Lib;
 (function (Lib) {
     Lib.foo = "";
 })(Lib || (Lib = {}));
-
-
 exports.Lib = Lib;
 Lib.foo; // should work
 var x; // should be an error

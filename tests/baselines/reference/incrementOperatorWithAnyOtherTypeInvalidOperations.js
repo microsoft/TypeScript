@@ -82,7 +82,8 @@ function foo() {
 }
 var A = /** @class */ (function () {
     function A() {
-    }A.foo = function () {
+    }
+    A.foo = function () {
         var a;
         return a;
     };
@@ -131,6 +132,7 @@ var ResultIsNumber27 = (null + null)++;
 var ResultIsNumber28 = (undefined + undefined)++;
 var ResultIsNumber29 = obj1.x++;
 var ResultIsNumber30 = obj1.y++;
+
 // miss assignment operators
 ++ANY2;
 

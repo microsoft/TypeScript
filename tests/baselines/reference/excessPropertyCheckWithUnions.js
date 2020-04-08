@@ -170,6 +170,19 @@ var __assign = (this && this.__assign) || function () {
 var wrong = { tag: "T", a1: "extra" };
 wrong = { tag: "A", d20: 12 };
 wrong = { tag: "D" };
+
+
+
+
+
+
+
+
+
+
+
+
+
 var amb;
 // no error for ambiguous tag, even when it could satisfy both constituents at once
 amb = { tag: "A", x: "hi" };
@@ -185,12 +198,24 @@ amb = { tag: "A", y: 12, extra: 12 };
 // the last constituent since assignability error reporting can't find a single best discriminant either.
 amb = { tag: "A" };
 amb = { tag: "A", z: true };
+
+
+
+
+
 var over;
+
 // these two are still errors despite their doubled up discriminants
 over = { a: 1, b: 1, first: "ok", second: "error" };
 over = { a: 1, b: 1, first: "ok", third: "error" };
+
 var t2 = __assign({}, t1);
 t0 = t2;
+
+
+
+
+
 var abab = {
     kind: "A",
     n: {
@@ -219,8 +244,8 @@ var obj = {
     href: 'foo'
 };
 
-
 ;
+
 
 
 
@@ -232,17 +257,6 @@ var dataSpecification = {
 // Repro from #34611
 var obj1 = { a: 'abc' }; // Error
 var obj2 = { a: 5, c: 'abc' }; // Error
-
-
-
-
-
-
-
-
-
-
-
 
 
 

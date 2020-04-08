@@ -57,6 +57,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "folder2/file1", "folder3/file2", "components/file3", "file4"], function (require, exports, file1_1, file2_1, file3_1, file4_1) {
     "use strict";
     exports.__esModule = true;
+
     use(file1_1.x.toExponential());
     use(file2_1.y.toExponential());
     use(file3_1.z.toExponential());

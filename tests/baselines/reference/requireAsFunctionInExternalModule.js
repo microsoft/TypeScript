@@ -20,14 +20,17 @@ hello();
 "use strict";
 exports.__esModule = true;
 exports.has = void 0;
-function require(a) { }exports["default"] = require;
-function has(a) { return true; }exports.has = has;
+function require(a) { }
+exports["default"] = require;
+function has(a) { return true; }
+exports.has = has;
 //// [m.js]
 "use strict";
 exports.__esModule = true;
 exports.hello = void 0;
 var c_1 = require("./c");
-function hello() { }exports.hello = hello;
+function hello() { }
+exports.hello = hello;
 if (c_1.has('ember-debug')) {
     c_1["default"]('ember-debug');
 }

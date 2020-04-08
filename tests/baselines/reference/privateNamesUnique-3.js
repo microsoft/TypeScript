@@ -30,7 +30,9 @@ let A = /** @class */ (() => {
             // https://tc39.es/proposal-class-fields/#prod-ClassBody
         }}
     _foo = new WeakMap(), _foo_1 = new WeakMap();
-    _foo_1.set(A, true); // error (duplicate)
+    _foo_1.set(A,
+
+        true); // error (duplicate)
     return A;
 })();
 let B = /** @class */ (() => {
@@ -41,6 +43,7 @@ let B = /** @class */ (() => {
         }
     }
     _foo = new WeakMap();
-    _foo.set(B, true);
+    _foo.set(B,
+        true);
     return B;
 })();

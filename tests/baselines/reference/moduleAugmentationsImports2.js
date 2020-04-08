@@ -54,7 +54,8 @@ define("a", ["require", "exports"], function (require, exports) {
     var A = /** @class */ (function () {
         function A() {}
         return A;
-    }());exports.A = A;
+    }());
+    exports.A = A;
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -63,18 +64,21 @@ define("b", ["require", "exports"], function (require, exports) {
     var B = /** @class */ (function () {
         function B() {}
         return B;
-    }());exports.B = B;
+    }());
+    exports.B = B;
 });
 /// <reference path="c.d.ts"/>
 define("d", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
     exports.__esModule = true;
     a_1.A.prototype.getB = function () { return undefined; };
+
 });
 define("e", ["require", "exports", "a"], function (require, exports, a_2) {
     "use strict";
     exports.__esModule = true;
     a_2.A.prototype.getCls = function () { return undefined; };
+
 });
 define("main", ["require", "exports", "d", "e"], function (require, exports) {
     "use strict";

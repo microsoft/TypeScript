@@ -10,7 +10,8 @@ export default class C {
 var C = /** @class */ (function () {
     function C() {
         this.p = 1;
-    }C.prototype.method = function () { };
+    }
+    C.prototype.method = function () { };
     C.s = 0;
     return C;
 }());

@@ -52,14 +52,14 @@ function fail(s: Shapes) {
 
 
 
-
-
 var ab = {};
+
 if (ab.type === 'a') {
     if (ab.subtype === 2) {
         ab.foo;
     }
 }
+
 // Repro from #11185
 var Square = /** @class */ (function () {
     function Square() {}

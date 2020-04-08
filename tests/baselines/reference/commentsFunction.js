@@ -78,6 +78,7 @@ var lambdaFoo = /** this is lambda comment*/ function (/**param a*/ a, /**param 
 var lambddaNoVarComment = /** this is lambda multiplication*/ function (/**param a*/ a, /**param b*/ b) { return a * b; };
 lambdaFoo(10, 20);
 lambddaNoVarComment(10, 20);
+
 function blah(a /* multiline trailing comment
 multiline */
 ) {
@@ -97,6 +98,7 @@ lambdaFoo = function (a, b) { return a * b; }; // This is trailing comment
 
 function blah4(/*1*/ a /*2*/, /*3*/ b /*4*/) {
 }
+
 function foo1() {
     // should emit this
 }

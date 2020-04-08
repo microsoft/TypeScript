@@ -34,19 +34,19 @@ exports.assertNodeProperty = exports.assertNodeTagName = exports.assertIsElement
 function assertIsElement(node) {
     var nodeType = node === null ? null : node.nodeType;
     return nodeType === 1;
-}// Repro from #23977
+}
 exports.assertIsElement = assertIsElement;
-
 function assertNodeTagName(node, tagName) {
     if (assertIsElement(node)) {
         var nodeTagName = node.tagName.toLowerCase();
         return nodeTagName === tagName;
     }
     return false;
-}exports.assertNodeTagName = assertNodeTagName;
-
+}
+exports.assertNodeTagName = assertNodeTagName;
 function assertNodeProperty(node, tagName, prop, value) {
     if (assertNodeTagName(node, tagName)) {
         node[prop];
     }
-}exports.assertNodeProperty = assertNodeProperty;
+}
+exports.assertNodeProperty = assertNodeProperty;

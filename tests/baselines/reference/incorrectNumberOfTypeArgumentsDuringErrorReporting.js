@@ -24,8 +24,6 @@ fn<MyObjA>({
 
 //// [incorrectNumberOfTypeArgumentsDuringErrorReporting.js]
 
-
-
 var fn = function (opts) { return 'Z'; };
 
 

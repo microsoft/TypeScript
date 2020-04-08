@@ -199,6 +199,7 @@ namespace GH20889 {
 var Example1;
 (function (Example1) {
 
+
     // S is assignable to T0 when S["done"] is true
     // S is assignable to T1 when S["done"] is false
     t = s;
@@ -206,6 +207,7 @@ var Example1;
 // Dropping constituents of T
 var Example2;
 (function (Example2) {
+
     // S is assignable to T0 when S["a"] is 0
     // S is assignable to T2 when S["a"] is 2
     t = s;
@@ -213,6 +215,7 @@ var Example2;
 // Unmatched discriminants
 var Example3;
 (function (Example3) {
+
     // S is assignable to T0 when S["a"] is 0
     // S is *not* assignable to T1 when S["b"] is 4
     // S is *not* assignable to T2 when S["a"] is 2
@@ -221,6 +224,7 @@ var Example3;
 // Unmatched non-discriminants
 var Example4;
 (function (Example4) {
+
     // S is assignable to T0 when S["a"] is 0
     // S is *not* assignable to T2 when S["a"] is 2 as S is missing "c"
     t = s;
@@ -228,6 +232,7 @@ var Example4;
 // Maximum discriminant combinations
 var Example5;
 (function (Example5) {
+
     // S *should* be assignable but the number of
     // combinations is too complex.
     t = s;
@@ -258,7 +263,6 @@ var GH12052;
 
 
 
-
     function getAxisType() {
         if (1 == 1) {
             return "categorical";
@@ -280,7 +284,6 @@ var GH18421;
 
 
 
-
     function makeNewThing(thingType) {
         return {
             type: thingType
@@ -295,6 +298,7 @@ var GH15907;
     }
 
     var active = true;
+
     dispatchAction({ type: (active ? 'disactivate' : 'activate') });
 })(GH15907 || (GH15907 = {}));
 // https://github.com/Microsoft/TypeScript/issues/20889

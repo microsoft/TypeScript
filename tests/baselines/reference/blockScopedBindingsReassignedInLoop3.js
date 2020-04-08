@@ -116,6 +116,7 @@ var _loop_1 = function (x, y) {
             if (state_4 === "break")
                 break;
         }
+
         y = 5;
     }
     out_x_1 = x;
@@ -151,6 +152,7 @@ var _loop_2 = function (x, y) {
             _loop_6(a_2);
             a_2 = out_a_2;
         }
+
         y = 5;
     }
     out_x_2 = x;
@@ -189,6 +191,7 @@ var _loop_3 = function (x, y) {
                 case "break-loop2": return state_5;
             }
         }
+
         y = 5;
     }
     out_x_3 = x;
@@ -230,6 +233,7 @@ var _loop_4 = function (x, y) {
                 case "continue-loop2": return state_6;
             }
         }
+
         y = 5;
     }
     out_x_4 = x;

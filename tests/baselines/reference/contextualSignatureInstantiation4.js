@@ -22,7 +22,6 @@ const banana5 = fruitFactory5(Banana) // Banana<"foo">
 //// [contextualSignatureInstantiation4.js]
 "use strict";
 // Repros from #32976
-
 var banana1 = fruitFactory1(Banana); // Banana<any>
 
 var banana2 = fruitFactory2(Banana); // Banana<any>

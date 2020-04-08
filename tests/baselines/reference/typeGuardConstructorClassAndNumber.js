@@ -251,6 +251,7 @@ if (C1 !== var1["constructor"]) {
 else {
     var1; // C1
 }
+
 // Repro from #37660
 function foo(instance) {
     if (typeof instance === 'function') {

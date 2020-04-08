@@ -110,12 +110,13 @@ var MyClass = /** @class */ (function () {
             " + ",
             this.props.y,
             " = ",
-            this.props.x + this.props.y, this.props.children);
+            this.props.x + this.props.y,
+            this.props.children);
     };
     return MyClass;
-}());exports.MyClass = MyClass;
+}());
+exports.MyClass = MyClass;
 exports.tree = renderer2_1.predom(exports.MySFC, { x: 1, y: 2 }, renderer2_1.predom(MyClass, { x: 3, y: 4 }), renderer2_1.predom(MyClass, { x: 5, y: 6 }));
-
 exports["default"] = renderer2_1.predom("h", null);
 //// [index.js]
 "use strict";

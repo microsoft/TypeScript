@@ -51,7 +51,8 @@ class c3 {
 //// [collisionArgumentsClassMethod.js]
 var c1 = /** @class */ (function () {
     function c1() {
-    }c1.prototype.foo = function (i) {var arguments = [];
+    }
+    c1.prototype.foo = function (i) {var arguments = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             arguments[_i - 1] = arguments[_i];
         }
@@ -89,7 +90,8 @@ var c1 = /** @class */ (function () {
 
 var c3 = /** @class */ (function () {
     function c3() {
-    }c3.prototype.foo = function () {var restParameters = [];
+    }
+    c3.prototype.foo = function () {var restParameters = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             restParameters[_i] = arguments[_i];
         }

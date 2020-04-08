@@ -92,6 +92,7 @@ var n;
 var o;
 var p;
 var q;
+
 a = b;
 a = c;
 a = d;
@@ -110,6 +111,7 @@ a = q;
 a = ac;
 a = ai;
 a = ae;
+
 function foo(x, y, z) {
     a = x;
     a = y;

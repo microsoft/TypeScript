@@ -8,4 +8,5 @@ for (var v of new StringIterator) { }
 //// [for-of27.js]
 class StringIterator {
 }
+
 for (var v of new StringIterator) { }

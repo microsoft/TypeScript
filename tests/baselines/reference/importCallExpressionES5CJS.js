@@ -32,7 +32,8 @@ export class D {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = void 0;
-function foo() { return "foo"; }exports.foo = foo;
+function foo() { return "foo"; }
+exports.foo = foo;
 //// [1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -51,15 +52,18 @@ function foo() {
 
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.method = function () {
+    }
+    C.prototype.method = function () {
         var loadAsync = Promise.resolve().then(function () { return require("./0"); });
     };
     return C;
 }());
 var D = /** @class */ (function () {
     function D() {
-    }D.prototype.method = function () {
+    }
+    D.prototype.method = function () {
         var loadAsync = Promise.resolve().then(function () { return require("./0"); });
     };
     return D;
-}());exports.D = D;
+}());
+exports.D = D;

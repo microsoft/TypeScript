@@ -184,7 +184,6 @@ var m1;
         m1_M2_private.v1 = c1;
     })(m1_M2_private || (m1_M2_private = {}));
 
-
     var m1_im1_private = m1_M1_public;
     m1.m1_im1_private_v1_public = m1_im1_private.c1;
     m1.m1_im1_private_v2_public = new m1_im1_private.c1();
@@ -243,8 +242,6 @@ var glo_M1_public;
     glo_M1_public.f1 = f1;
     glo_M1_public.v1 = c1;
 })(glo_M1_public || (glo_M1_public = {}));
-
-
 var m2;
 (function (m2_1) {
     var m4;

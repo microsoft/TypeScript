@@ -41,14 +41,17 @@ a = function (x: string) { return ''; }
 
 var t;
 var a;
+
 t = a;
 a = t;
+
 var s;
 var a2;
 t = s;
 t = a2;
 a = s;
 a = a2;
+
 var s2;
 var a3;
 // these are errors

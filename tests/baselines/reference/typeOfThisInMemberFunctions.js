@@ -34,7 +34,8 @@ class E<T extends Date> {
 //// [typeOfThisInMemberFunctions.js]
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.foo = function () {
+    }
+    C.prototype.foo = function () {
         var r = this;
     };
 
@@ -45,7 +46,8 @@ var C = /** @class */ (function () {
 }());
 var D = /** @class */ (function () {
     function D() {
-    }D.prototype.foo = function () {
+    }
+    D.prototype.foo = function () {
         var r = this;
     };
 
@@ -56,7 +58,8 @@ var D = /** @class */ (function () {
 }());
 var E = /** @class */ (function () {
     function E() {
-    }E.prototype.foo = function () {
+    }
+    E.prototype.foo = function () {
         var r = this;
     };
 

@@ -61,10 +61,6 @@ var x = foo()[0]; // [number]
 
 
 
-
-
-
-
 var person = selectJohn()[0];
 var _a = selectJohn(), any = _a[0], whatever = _a[1];
 var john = selectJohn();

@@ -58,14 +58,16 @@ class B extends A {
 //// [asyncMethodWithSuper_es5.js]
 var A = /** @class */ (function () {
     function A() {
-    }A.prototype.x = function () {
+    }
+    A.prototype.x = function () {
     };
     A.prototype.y = function () {
     };
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     // async method with only call/get on 'super' does not require a binding

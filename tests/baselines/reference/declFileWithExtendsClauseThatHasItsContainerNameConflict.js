@@ -49,7 +49,8 @@ var A;
         var C;
         (function (C) {
             var ContextMenu = /** @class */ (function (_super) {
-                __extends(ContextMenu, _super);function ContextMenu() {
+                __extends(ContextMenu, _super);
+                function ContextMenu() {
                     return _super !== null && _super.apply(this, arguments) || this;
                 }
                 return ContextMenu;

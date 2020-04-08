@@ -44,11 +44,13 @@ var Component = /** @class */ (function () {
             typeof (_this.props.thumbYProps.elementRef) === 'function' && _this.props.thumbYProps.elementRef(ref);
 
             typeof ((_this.props).thumbYProps.elementRef) === 'function' && _this.props.thumbYProps.elementRef(ref);
+
             typeof _this.props.thumbXProps.elementRef === 'function' && _this.props.thumbXProps.elementRef(ref);
 
             typeof _this.props.thumbXProps.elementRef === 'function' && (_this.props).thumbXProps.elementRef(ref);
 
             typeof _this.props.thumbXProps.elementRef === 'function' && (_this.props.thumbXProps).elementRef(ref);
+
             typeof _this.props.thumbXProps.elementRef === 'function' && ((_this.props).thumbXProps).elementRef(ref);
 
             typeof (_this.props.thumbXProps).elementRef === 'function' && ((_this.props).thumbXProps).elementRef(ref);

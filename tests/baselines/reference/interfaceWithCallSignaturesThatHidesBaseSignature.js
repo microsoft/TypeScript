@@ -12,6 +12,5 @@ var r = d();
 
 //// [interfaceWithCallSignaturesThatHidesBaseSignature.js]
 
-
 var d;
 var r = d();

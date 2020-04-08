@@ -60,7 +60,6 @@ function f3(x, y) {
 
 
 
-
 //// [indexSignatureAndMappedType.d.ts]
 declare function f1<T, K extends string>(x: {
     [key: string]: T;

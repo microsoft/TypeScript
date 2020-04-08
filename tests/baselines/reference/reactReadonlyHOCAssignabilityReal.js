@@ -42,9 +42,11 @@ var React = require("react");
 
 function myHigherOrderComponent(Inner) {
     return /** @class */ (function (_super) {
-        __extends(OuterComponent, _super);function OuterComponent() {
+        __extends(OuterComponent, _super);
+        function OuterComponent() {
             return _super !== null && _super.apply(this, arguments) || this;
-        }OuterComponent.prototype.render = function () {
+        }
+        OuterComponent.prototype.render = function () {
             return React.createElement(Inner, __assign({}, this.props, { name: "Matt" }));
         };
         return OuterComponent;

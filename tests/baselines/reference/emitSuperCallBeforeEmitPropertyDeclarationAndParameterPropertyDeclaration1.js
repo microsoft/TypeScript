@@ -34,7 +34,6 @@ var __extends = (this && this.__extends) || (function () {
 }());
 var B = /** @class */ (function (_super) {
     __extends(B, _super);
-
     function B(x) {
         "use strict";
         'someStringForEgngInject';

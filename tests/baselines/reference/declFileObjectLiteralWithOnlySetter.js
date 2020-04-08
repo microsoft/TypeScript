@@ -14,8 +14,7 @@ function makePoint(x) {
         b: 10,
         set x(a) { this.b = a; }
     };
-}
-;
+};
 var /*3*/ point = makePoint(2);
 point. /*2*/x = 30;
 

@@ -60,7 +60,8 @@ System.register(["tslib", "./a"], function (exports_1, context_1) {
         ],
         execute: function () {
             B = /** @class */ (function (_super) {
-                tslib_1.__extends(B, _super);function B() {
+                tslib_1.__extends(B, _super);
+                function B() {
                     return _super !== null && _super.apply(this, arguments) || this;
                 }
                 return B;

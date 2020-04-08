@@ -36,4 +36,5 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
-var ConstEnum_1 = require("./ConstEnum");__createBinding(exports, ConstEnum_1, "MyConstEnum", "default");
+var ConstEnum_1 = require("./ConstEnum");
+__createBinding(exports, ConstEnum_1, "MyConstEnum", "default");

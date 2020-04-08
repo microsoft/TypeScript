@@ -26,6 +26,7 @@ var z = foo `${1}${2}${3}`;  // any (with error)
 function foo(...stuff) {
     return undefined;
 }
+
 var a = foo([]); // number
 var b = foo([], 1); // string
 var c = foo([], 1, 2); // boolean

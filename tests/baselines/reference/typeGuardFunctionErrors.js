@@ -191,7 +191,8 @@ var B = /** @class */ (function () {
     return B;
 }());
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);function C() {
+    __extends(C, _super);
+    function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
@@ -203,6 +204,7 @@ function hasANonBooleanReturnStatement(x) {
 is;A;{
     return true;
 }
+
 function hasMissingIsKeyword() {
     return true;
 }
@@ -212,6 +214,8 @@ function hasMissingParameter() {
 }
 
 return true;
+
+
 function hasNonMatchingParameter(y) {
     return true;
 }
@@ -231,6 +235,7 @@ function hasNonMathcingGenericType(a) {
 var a;
 var b;
 
+
 // Passed argument is not the same as the one being guarded.
 if (isB(b)) {
     a.propB;
@@ -245,7 +250,9 @@ if (funA(0, a)) {
 if (hasNoTypeGuard(a)) {
     a.propB;
 }
+
 acceptingDifferentSignatureTypeGuardFunction(isC);
+
 // Boolean not assignable to type guard
 var assign1;
 assign1 = function (p1, p2) {
@@ -266,11 +273,11 @@ assign3 = function (p1, p2, p3) {
 
 // Type predicates in non-return type positions
 var b1, is, A;
-function b2(a, is, A) { }
-;
+function b2(a, is, A) { };
 is;A;{
     return true;
 };
+
 // Non-compatiable type predicate positions for signature declarations
 var D = /** @class */ (function () {
     function D(p1) {
@@ -292,8 +299,9 @@ var D = /** @class */ (function () {
     });
     return D;
 }());
-
 is;C;
+
+
 // Reference to rest parameter
 function b4() {var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -327,4 +335,7 @@ if (hasMissingParameter()) {
 
 
 
+
+
 ;
+

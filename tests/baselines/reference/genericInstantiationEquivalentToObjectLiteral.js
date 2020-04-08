@@ -17,8 +17,11 @@ f2(y);
 //// [genericInstantiationEquivalentToObjectLiteral.js]
 var x;
 var y;
+
 x = y;
 y = x;
+
+
 f(x);
 f(y);
 f2(x);

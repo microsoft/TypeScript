@@ -55,11 +55,6 @@ var Base = /** @class */ (function () {
 }());
 var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
-
-
-
-
-
     function Derived(x) {
         return _super.call(this, x) || this;
     }
@@ -67,10 +62,6 @@ var Derived = /** @class */ (function (_super) {
 }(Base));
 var Derived2 = /** @class */ (function (_super) {
     __extends(Derived2, _super);
-
-
-
-
     // ok, not enforcing assignability relation on this
     function Derived2(x) {
         var _this = _super.call(this, x) || this;

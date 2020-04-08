@@ -88,10 +88,8 @@ function Vec(len) {
      * @type {number[]}
      */
     this.storage = new Array(len);
-}/**
- * @param {number} len
- */ exports.Vec = Vec;
-
+}
+exports.Vec = Vec;
 Vec.prototype = {
     /**
      * @param {Vec} other
@@ -126,7 +124,8 @@ function Point2D(x, y) {
     Vec.call(this, 2);
     this.x = x;
     this.y = y;
-}exports.Point2D = Point2D;
+}
+exports.Point2D = Point2D;
 Point2D.prototype = {
     __proto__: Vec,
     get x() {

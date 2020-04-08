@@ -18,7 +18,8 @@ var mod1;
 (function (mod1) {
 
     var C = /** @class */ (function () {
-        function C() {}C.prototype.moo = function () { };
+        function C() {}
+        C.prototype.moo = function () { };
         return C;
     }());
 })(mod1 || (mod1 = {}));

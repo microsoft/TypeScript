@@ -38,36 +38,43 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var A = /** @class */ (function () {
     function A() {
-    }A.prototype.foo = function () { };
+    }
+    A.prototype.foo = function () { };
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 var AA = /** @class */ (function () {
     function AA() {
-    }AA.prototype.foo = function () { };
+    }
+    AA.prototype.foo = function () { };
     return AA;
 }());
 var BB = /** @class */ (function (_super) {
-    __extends(BB, _super);function BB() {
+    __extends(BB, _super);
+    function BB() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }BB.prototype.bar = function () { };
+    }
+    BB.prototype.bar = function () { };
     return BB;
 }(AA));
 var CC = /** @class */ (function (_super) {
-    __extends(CC, _super);function CC() {
+    __extends(CC, _super);
+    function CC() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return CC;
 }(BB)); // error
 var DD = /** @class */ (function (_super) {
-    __extends(DD, _super);// error
+    __extends(DD, _super);
     function DD() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }DD.prototype.foo = function () { };
+    }
+    DD.prototype.foo = function () { };
     return DD;
 }(BB));

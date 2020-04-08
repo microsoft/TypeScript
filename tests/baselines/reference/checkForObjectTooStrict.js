@@ -57,7 +57,6 @@ var Foo;
 })(Foo || (Foo = {}));
 var Bar = /** @class */ (function (_super) {
     __extends(Bar, _super);
-
     function Bar() {
         return _super.call(this) || this;
     }
@@ -65,7 +64,6 @@ var Bar = /** @class */ (function (_super) {
 }(Foo.Object));
 var Baz = /** @class */ (function (_super) {
     __extends(Baz, _super);
-
     function Baz() {
         return _super.call(this) || this;
     }

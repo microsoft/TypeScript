@@ -31,13 +31,14 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);function C() {
+    __extends(C, _super);
+    function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(I)); // error
 var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);// error
+    __extends(C2, _super);
     function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
@@ -45,7 +46,8 @@ var C2 = /** @class */ (function (_super) {
 }({ foo: string })); // error
 var x;
 var C3 = /** @class */ (function (_super) {
-    __extends(C3, _super);function C3() {
+    __extends(C3, _super);
+    function C3() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C3;
@@ -53,20 +55,22 @@ var C3 = /** @class */ (function (_super) {
 var M;
 (function (M) {M.x = 1;})(M || (M = {}));
 var C4 = /** @class */ (function (_super) {
-    __extends(C4, _super);function C4() {
+    __extends(C4, _super);
+    function C4() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C4;
 }(M)); // error
 function foo() { }
 var C5 = /** @class */ (function (_super) {
-    __extends(C5, _super);function C5() {
+    __extends(C5, _super);
+    function C5() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C5;
 }(foo)); // error
 var C6 = /** @class */ (function (_super) {
-    __extends(C6, _super);// error
+    __extends(C6, _super);
     function C6() {
         return _super !== null && _super.apply(this, arguments) || this;
     }

@@ -40,7 +40,9 @@ var p: W.D;
 //// [enumAssignmentCompat2.js]
 var W;
 (function (W) {
-    W[W["a"] = 0] = "a";W[W["b"] = 1] = "b";W[W["c"] = 2] = "c";
+    W[W["a"] = 0] = "a";
+    W[W["b"] = 1] = "b";
+    W[W["c"] = 2] = "c";
 })(W || (W = {}));
 (function (W) {
     var D = /** @class */ (function () {

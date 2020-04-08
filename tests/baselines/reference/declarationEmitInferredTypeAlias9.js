@@ -14,7 +14,8 @@ var x;
 
 function returnSomeGlobalValue() {
     return x;
-}exports.returnSomeGlobalValue = returnSomeGlobalValue;
+}
+exports.returnSomeGlobalValue = returnSomeGlobalValue;
 
 
 //// [declarationEmitInferredTypeAlias9.d.ts]

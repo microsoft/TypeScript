@@ -84,6 +84,7 @@ var ts = require("typescript");
 
 function delint(sourceFile) {
     delintNode(sourceFile);
+
     function delintNode(node) {
         switch (node.kind) {
             case ts.SyntaxKind.ForStatement:
@@ -114,6 +115,7 @@ function delint(sourceFile) {
                 }
                 break;
         }
+
         ts.forEachChild(node, delintNode);
     }
 
@@ -121,12 +123,13 @@ function delint(sourceFile) {
         var _a = sourceFile.getLineAndCharacterOfPosition(node.getStart()), line = _a.line, character = _a.character;
         console.log(sourceFile.fileName + " (" + (line + 1) + "," + (character + 1) + "): " + message);
     }
-}exports.delint = delint;
-
+}
+exports.delint = delint;
 var fileNames = process.argv.slice(2);
 fileNames.forEach(function (fileName) {
     // Parse a file
     var sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES2015, /*setParentNodes */ true);
+
     // delint it
     delint(sourceFile);
 });

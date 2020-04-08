@@ -23,7 +23,8 @@ class a {
 var _this = 2;
 var a = /** @class */ (function () {
     function a() {
-    }a.prototype.method1 = function () {
+    }
+    a.prototype.method1 = function () {
         return {
             doStuff: function (callback) { return function () {
                 var _this = 2;

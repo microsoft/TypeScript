@@ -74,6 +74,3 @@ module Optional {
 }
 
 //// [subtypingWithObjectMembers3.js]
-
-
-

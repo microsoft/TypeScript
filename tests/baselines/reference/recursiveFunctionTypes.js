@@ -64,18 +64,24 @@ var a = f3; // error
 
 var C = /** @class */ (function () {
     function C() {
-    }C.g = function (t) { };
+    }
+    C.g = function (t) { };
     return C;
 }());
 C.g(3); // error
+
 var f4;
 f4 = 3; // error
 
 function f5() { return f5; }
+
 function f6(a) { return f6; }
+
 f6("", 3); // error (arity mismatch)
 f6(""); // ok (function takes an any param)
 f6(); // ok
+
+
 f7("", 3); // error (arity mismatch)
 f7(""); // ok (function takes an any param)
 f7(); // ok

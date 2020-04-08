@@ -26,7 +26,8 @@ function getNumber() {
 }
 var Example = /** @class */ (function () {
     function Example() {
-    }Example.prototype.getNumber = function () {
+    }
+    Example.prototype.getNumber = function () {
         return 1;
     };
     Example.prototype.doSomething = function (a) {if (a === void 0) { a = this.getNumber(); }
@@ -39,7 +40,8 @@ function weird(a) {if (a === void 0) { a = this.getNumber(); }
 }
 var Weird = /** @class */ (function () {
     function Weird() {
-    }Weird.prototype.doSomething = function (a) {if (a === void 0) { a = this.getNumber(); }
+    }
+    Weird.prototype.doSomething = function (a) {if (a === void 0) { a = this.getNumber(); }
         return a;
     };
     return Weird;

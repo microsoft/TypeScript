@@ -131,9 +131,11 @@ var C1 = /** @class */ (function () {
 function castedNull() {
     return null; // this should not be an error
 }
+
 function notCastedNull() {
     return null; // this should be an error
 }
+
 function returnTypeBar() {
     return null; // this should not be an error
 }

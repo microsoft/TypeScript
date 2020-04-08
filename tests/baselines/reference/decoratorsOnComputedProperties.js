@@ -269,7 +269,8 @@ let C = /** @class */ (() => {
             this[Symbol.match] = null;
             this[_b] = null;
             this[_d] = null;
-        }[(foo(), _a = foo(), _b = foo(), _c = fieldNameB, _d = fieldNameC, "some" + "method")]() { }
+        }
+        [(foo(), _a = foo(), _b = foo(), _c = fieldNameB, _d = fieldNameC, "some" + "method")]() { }
     }
     __decorate([
         x
@@ -304,7 +305,8 @@ void class D {constructor() {
         this[Symbol.match] = null;
         this[_k] = null;
         this[_m] = null;
-    }[(foo(), _j = foo(), _k = foo(), _l = fieldNameB, _m = fieldNameC, "some" + "method")]() { }
+    }
+    [(foo(), _j = foo(), _k = foo(), _l = fieldNameB, _m = fieldNameC, "some" + "method")]() { }
 };
 let E = /** @class */ (() => {
     var _a, _b, _c, _d;
@@ -317,7 +319,8 @@ let E = /** @class */ (() => {
             this[Symbol.match] = null;
             this[_b] = null;
             this[_d] = null;
-        }[(foo(), _a = foo(), _b = foo(), "some" + "method")]() { }
+        }
+        [(foo(), _a = foo(), _b = foo(), "some" + "method")]() { }
     }
     _c = fieldNameB, _d = fieldNameC;
     __decorate([
@@ -353,7 +356,8 @@ void (_b = class F {constructor() {
             this[Symbol.match] = null;
             this[_p] = null;
             this[_r] = null;
-        }[(foo(), _o = foo(), _p = foo(), "some" + "method")]() { }
+        }
+        [(foo(), _o = foo(), _p = foo(), "some" + "method")]() { }
     },
     _q = fieldNameB,
     _r = fieldNameC,
@@ -369,7 +373,8 @@ let G = /** @class */ (() => {
             this[Symbol.match] = null;
             this[_b] = null;
             this[_d] = null;
-        }[(foo(), _a = foo(), _b = foo(), "some" + "method")]() { }
+        }
+        [(foo(), _a = foo(), _b = foo(), "some" + "method")]() { }
 
 
         [(_c = fieldNameB, "some" + "method2")]() { }
@@ -408,7 +413,8 @@ void (_c = class H {constructor() {
             this[Symbol.match] = null;
             this[_t] = null;
             this[_v] = null;
-        }[(foo(), _s = foo(), _t = foo(), "some" + "method")]() { }
+        }
+        [(foo(), _s = foo(), _t = foo(), "some" + "method")]() { }
 
 
         [(_u = fieldNameB, "some" + "method2")]() { }
@@ -426,7 +432,8 @@ let I = /** @class */ (() => {
             this[Symbol.match] = null;
             this[_b] = null;
             this[_e] = null;
-        }[(foo(), _a = foo(), _b = foo(), _c = "some" + "method")]() { }
+        }
+        [(foo(), _a = foo(), _b = foo(), _c = "some" + "method")]() { }
 
 
         [(_d = fieldNameB, "some" + "method2")]() { }
@@ -468,7 +475,8 @@ void (_d = class J {constructor() {
             this[Symbol.match] = null;
             this[_x] = null;
             this[_0] = null;
-        }[(foo(), _w = foo(), _x = foo(), _y = "some" + "method")]() { }
+        }
+        [(foo(), _w = foo(), _x = foo(), _y = "some" + "method")]() { }
 
 
         [(_z = fieldNameB, "some" + "method2")]() { }

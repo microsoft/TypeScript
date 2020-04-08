@@ -131,7 +131,8 @@ var Sample;
             (function (Find) {
                 var StartFindAction = /** @class */ (function () {
                     function StartFindAction() {
-                    }StartFindAction.prototype.getId = function () { return "yo"; };
+                    }
+                    StartFindAction.prototype.getId = function () { return "yo"; };
 
                     StartFindAction.prototype.run = function (Thing) {
 
@@ -176,10 +177,10 @@ var Sample;
     })(Thing = Sample.Thing || (Sample.Thing = {}));
 })(Sample || (Sample = {}));
 var AbstractMode = /** @class */ (function () {
-    function AbstractMode() {}AbstractMode.prototype.getInitialState = function () { return null; };
+    function AbstractMode() {}
+    AbstractMode.prototype.getInitialState = function () { return null; };
     return AbstractMode;
 }());
-
 (function (Sample) {
     var Thing;
     (function (Thing) {
@@ -205,7 +206,8 @@ var AbstractMode = /** @class */ (function () {
                 }());
                 PlainText.State = State;
                 var Mode = /** @class */ (function (_super) {
-                    __extends(Mode, _super);function Mode() {
+                    __extends(Mode, _super);
+                    function Mode() {
                         return _super !== null && _super.apply(this, arguments) || this;
                     }
                     // scenario 2

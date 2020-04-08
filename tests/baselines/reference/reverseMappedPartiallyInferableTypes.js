@@ -100,7 +100,6 @@ const obj3 = id({
 // Repro from #30505
 exports.__esModule = true;
 
-
 var r = extend({
     props: {
         notResolved: {
@@ -117,10 +116,23 @@ var r = extend({
         }
     }
 });
+
 r.explicit;
 r.notResolved;
 r.explicit.required;
 r.notResolved.required;
+
+
+
+
+
+
+
+
+
+
+
+
 
 // All properties have inferable types
 var obj1 = id({

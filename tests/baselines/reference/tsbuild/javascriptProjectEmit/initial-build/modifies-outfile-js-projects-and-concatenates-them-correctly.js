@@ -219,6 +219,7 @@ var c = /** @type {*} */ (null);
 var variable = {
     key: /** @type {MyNominal} */ ('value')
 };
+
 /**
  * @return {keyof typeof variable}
  */
@@ -251,7 +252,7 @@ function getVar() {
         },
         {
           "pos": 182,
-          "end": 338,
+          "end": 340,
           "kind": "text"
         }
       ]
@@ -299,10 +300,11 @@ text: (0-182)
 var c = /** @type {*} */ (null);
 
 ----------------------------------------------------------------------
-text: (182-338)
+text: (182-340)
 var variable = {
     key: /** @type {MyNominal} */ ('value')
 };
+
 /**
  * @return {keyof typeof variable}
  */

@@ -25,6 +25,7 @@ if (var1.constructor === BigInt) {
 //// [typeGuardConstructorNarrowAny.js]
 // Narrowing any to primitives
 let var1;
+
 if (var1.constructor === String) {
     var1; // String
 }

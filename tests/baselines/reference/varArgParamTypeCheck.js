@@ -32,12 +32,13 @@ function callback(clb) {
 }
 
 sequence(function bar() {
-}, function foo() {
-    var _this = this;
-    callback(function () {
-        _this();
-    });
 },
+    function foo() {
+        var _this = this;
+        callback(function () {
+            _this();
+        });
+    },
     function baz() {
         var _this = this;
         callback(function () {

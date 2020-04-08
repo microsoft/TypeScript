@@ -23,8 +23,6 @@ var v2: {
 
 //// [augmentedTypeAssignmentCompatIndexSignature.js]
 
-
-
 var o = {};
 var f = function () { };
 

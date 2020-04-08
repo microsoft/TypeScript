@@ -84,7 +84,6 @@ else {
 // Repro from #10257 plus other tests
 
 
-
 function f1(x) {
     if (typeof x !== 'string') {
         switch (x.kind) {
@@ -122,12 +121,8 @@ function f4(x) {
 }
 
 
-
-
-
-
-
 var n;
+
 if (n.type === "Disjunction") {
     n.alternatives.slice();
 }

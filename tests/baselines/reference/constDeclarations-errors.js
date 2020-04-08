@@ -20,6 +20,7 @@ for(const c10 = 0, c11; c10 < 1;) { }
 const c1;
 const c2;
 const c3, c4, c5, c6; // error, missing initialicer
+
 for (const c in {}) { }
 
 // error, assigning to a const

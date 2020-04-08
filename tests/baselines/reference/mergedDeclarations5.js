@@ -14,7 +14,8 @@ class B extends A {
 //// [a.js]
 var A = /** @class */ (function () {
     function A() {
-    }A.prototype.foo = function () { };
+    }
+    A.prototype.foo = function () { };
     return A;
 }());
 //// [b.js]
@@ -33,8 +34,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }B.prototype.foo = function () { };
+    }
+    B.prototype.foo = function () { };
     return B;
 }(A));

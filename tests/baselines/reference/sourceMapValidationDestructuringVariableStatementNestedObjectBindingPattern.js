@@ -30,6 +30,7 @@ var robotB = { name: "trimmer", skills: { primary: "trimming", secondary: "edgin
 var _a = robotA.skills, primaryA = _a.primary, secondaryA = _a.secondary;
 var nameB = robotB.name, _b = robotB.skills, primaryB = _b.primary, secondaryB = _b.secondary;
 var _c = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }, nameC = _c.name, _d = _c.skills, primaryB = _d.primary, secondaryB = _d.secondary;
+
 if (nameB == nameB) {
     console.log(nameC);
 }

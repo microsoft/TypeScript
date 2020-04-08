@@ -23,8 +23,6 @@ x.m2();
 "use strict";
 exports.__esModule = true;
 
-
-
 var x;
 x.p1;
 x.m1();

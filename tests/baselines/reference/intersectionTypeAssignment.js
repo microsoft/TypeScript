@@ -23,6 +23,7 @@ var a;
 var b;
 var x;
 var y;
+
 a = x;
 a = y;
 x = a; // Error

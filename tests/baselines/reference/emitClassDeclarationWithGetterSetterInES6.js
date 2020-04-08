@@ -44,6 +44,7 @@ class C {
     get ["computedname2"]() {
         return "";
     }
+
     set ["computedname3"](x) {
     }
     set ["computedname4"](y) {

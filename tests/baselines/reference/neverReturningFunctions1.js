@@ -336,7 +336,8 @@ function f24(x) {
 
 var Test = /** @class */ (function () {
     function Test() {
-    }Test.prototype.fail = function (message) {
+    }
+    Test.prototype.fail = function (message) {
         throw new Error(message);
     };
     Test.prototype.f1 = function (x) {
@@ -438,8 +439,6 @@ function f43() {
 
 
 
-
-
 var Component = registerComponent('test-component', {
     schema: {
         myProperty: {
@@ -460,7 +459,6 @@ var Component = registerComponent('test-component', {
     remove: function () { },
     pause: function () { },
     play: function () { },
-
     multiply: function (f) {
         // Reference to system because both were registered with the same name.
         return f * this.data.num * this.system.data.counter;
@@ -470,15 +468,18 @@ var Component = registerComponent('test-component', {
 // Repro from #36147
 var MyThrowable = /** @class */ (function () {
     function MyThrowable() {
-    }MyThrowable.prototype["throw"] = function () {
+    }
+    MyThrowable.prototype["throw"] = function () {
         throw new Error();
     };
     return MyThrowable;
 }());
 var SuperThrowable = /** @class */ (function (_super) {
-    __extends(SuperThrowable, _super);function SuperThrowable() {
+    __extends(SuperThrowable, _super);
+    function SuperThrowable() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }SuperThrowable.prototype.err = function (msg) {
+    }
+    SuperThrowable.prototype.err = function (msg) {
         _super.prototype["throw"].call(this);
     };
     SuperThrowable.prototype.ok = function () {

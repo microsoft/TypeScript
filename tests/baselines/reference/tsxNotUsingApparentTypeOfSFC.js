@@ -57,9 +57,11 @@ function test(wrappedProps) {
         return react_1["default"].createElement(react_1["default"].Fragment, null, "hello");
     };
     var MyComponent = /** @class */ (function (_super) {
-        __extends(MyComponent, _super);function MyComponent() {
+        __extends(MyComponent, _super);
+        function MyComponent() {
             return _super !== null && _super.apply(this, arguments) || this;
-        }MyComponent.prototype.render = function () {
+        }
+        MyComponent.prototype.render = function () {
             return react_1["default"].createElement(react_1["default"].Fragment, null, "hello");
         };
         return MyComponent;

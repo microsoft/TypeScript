@@ -191,6 +191,7 @@ function f10(x, y, z) {
 
 
 
+
 x1.a; // number
 x1.b; // number | undefined
 x1.c; // number | undefined
@@ -200,6 +201,8 @@ x1 = { a: 1 }; // Error
 x1 = { a: 1, b: 1 };
 x1 = { a: 1, b: 1, c: 1 };
 x1 = { a: 1, b: 1, c: 1, d: 1 };
+
+
 x1.a; // number
 x1.b; // number | undefined
 x1.c; // number
@@ -209,10 +212,18 @@ x2 = { a: 1 }; // Error
 x2 = { a: 1, b: 1 }; // Error
 x2 = { a: 1, b: 1, c: 1 }; // Error
 x2 = { a: 1, b: 1, c: 1, d: 1 };
+
+
+
+
+
+
 x3.a = 1;
 x3.b = 1; // Error
+
 x4.a = 1; // Error
 x4.b = 1; // Error
+
 x5.a = 1;
 x5.b = 1;
 

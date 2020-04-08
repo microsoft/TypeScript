@@ -117,6 +117,8 @@ var ClassWithAccessors = /** @class */ (function () {
         get: function () {
             // global vars in function declaration
             num = typeof var1 === "string" && var1.length; // string
+
+
             // variables in function declaration
             var var2;
             num = typeof var2 === "string" && var2.length; // string
@@ -131,6 +133,8 @@ var ClassWithAccessors = /** @class */ (function () {
 
             // parameter of function declaration
             num = typeof param === "string" && param.length; // string
+
+
             // variables in function declaration
             var var2;
             num = typeof var2 === "string" && var2.length; // string
@@ -143,6 +147,8 @@ var ClassWithAccessors = /** @class */ (function () {
         get: function () {
             // global vars in function declaration
             num = typeof var1 === "string" && var1.length; // string
+
+
             // variables in function declaration
             var var2;
             num = typeof var2 === "string" && var2.length; // string
@@ -157,6 +163,8 @@ var ClassWithAccessors = /** @class */ (function () {
 
             // parameter of function declaration
             num = typeof param === "string" && param.length; // string
+
+
             // variables in function declaration
             var var2;
             num = typeof var2 === "string" && var2.length; // string
@@ -169,6 +177,8 @@ var ClassWithAccessors = /** @class */ (function () {
         get: function () {
             // global vars in function declaration
             num = typeof var1 === "string" && var1.length; // string
+
+
             // variables in function declaration
             var var2;
             num = typeof var2 === "string" && var2.length; // string
@@ -183,6 +193,8 @@ var ClassWithAccessors = /** @class */ (function () {
 
             // parameter of function declaration
             num = typeof param === "string" && param.length; // string
+
+
             // variables in function declaration
             var var2;
             num = typeof var2 === "string" && var2.length; // string
@@ -195,6 +207,8 @@ var ClassWithAccessors = /** @class */ (function () {
         get: function () {
             // global vars in function declaration
             num = typeof var1 === "string" && var1.length; // string
+
+
             // variables in function declaration
             var var2;
             num = typeof var2 === "string" && var2.length; // string
@@ -209,6 +223,8 @@ var ClassWithAccessors = /** @class */ (function () {
 
             // parameter of function declaration
             num = typeof param === "string" && param.length; // string
+
+
             // variables in function declaration
             var var2;
             num = typeof var2 === "string" && var2.length; // string

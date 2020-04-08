@@ -24,7 +24,8 @@ var Class1 = /** @class */ (function () {
     function Class1() {
     }
     return Class1;
-}());exports.Class1 = Class1;
+}());
+exports.Class1 = Class1;
 //// [Class2.js]
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {

@@ -8,4 +8,3 @@ interface C extends A<string>, A<number> { }
 
 
 //// [multipleBaseInterfaesWithIncompatibleProperties.js]
-

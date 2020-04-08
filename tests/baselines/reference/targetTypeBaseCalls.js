@@ -44,8 +44,12 @@ foo(function (s) { s = 5; }); // Error, can’t assign number to string
 
 
 new Foo(function (s) { s = 5; }); // error, if types are applied correctly
+
+
+
 var Bar = /** @class */ (function (_super) {
-    __extends(Bar, _super);function Bar() {
+    __extends(Bar, _super);
+    function Bar() {
         return _super.call(this, function (s) { s = 5; }) || this;
     }
     return Bar;

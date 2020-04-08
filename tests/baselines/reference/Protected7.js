@@ -6,6 +6,7 @@ class C {
 //// [Protected7.js]
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.m = function () { };
+    }
+    C.prototype.m = function () { };
     return C;
 }());

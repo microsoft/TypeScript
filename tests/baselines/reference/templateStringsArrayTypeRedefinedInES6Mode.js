@@ -12,8 +12,10 @@ f `abcdef${ 1234 }${ 5678 }ghijkl`;
 //// [templateStringsArrayTypeRedefinedInES6Mode.js]
 class TemplateStringsArray {
 }
+
 function f(x, y, z) {
 }
+
 f({}, 10, 10);
 
 f `abcdef${1234}${5678}ghijkl`;

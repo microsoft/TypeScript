@@ -34,7 +34,8 @@ function getClass(c) {
 }
 
 var MyClass = /** @class */ (function (_super) {
-    __extends(MyClass, _super);function MyClass() {
+    __extends(MyClass, _super);
+    function MyClass() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return MyClass;

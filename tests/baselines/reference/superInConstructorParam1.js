@@ -25,7 +25,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var B = /** @class */ (function () {
     function B() {
-    }B.prototype.foo = function () {
+    }
+    B.prototype.foo = function () {
         return 0;
     };
     return B;

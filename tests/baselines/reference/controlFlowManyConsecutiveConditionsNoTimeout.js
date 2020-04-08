@@ -143,6 +143,7 @@ var Choice;
 })(Choice = exports.Choice || (exports.Choice = {}));
 var choice = Choice.One;
 var choiceOne = Choice.One;
+
 if (choice === choiceOne) { }
 if (choice === choiceOne) { }
 if (choice === choiceOne) { }

@@ -43,10 +43,13 @@ var m2cc;
 (function (m2cc) {m2cc.y = 2;})(m2cc || (m2cc = {}));
 function m2cc() { }; // error to have module first
 
+
 function m2f() { };
+
 function m2g() { };
 (function (m2g) {var C = /** @class */ (function () {
-        function C() {}C.prototype.foo = function () { };
+        function C() {}
+        C.prototype.foo = function () { };
         return C;
     }());
     m2g.C = C;

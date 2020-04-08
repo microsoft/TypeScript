@@ -79,14 +79,24 @@ function a0(_a) {
 a0([1, "string", [["world"]]]); // Error
 a0([1, 2, [["world"]], "string"]); // Error
 
-function b1(z, o) {if (z === void 0) { z = null; }if (o === void 0) { o = { x: 0, y: undefined }; }}
+
+
+
+
+
+
+function b1(z, o) {if (z === void 0) { z = null; }
+    if (o === void 0) { o = { x: 0, y: undefined }; }}
 function b2(_a) {
     var _b = _a === void 0 ? [undefined, null, undefined] : _a, a = _b[0], z = _b[1], y = _b[2];
 }
 function b3(_a) {
     var _b = _a === void 0 ? [[undefined], undefined, [[undefined, undefined]]] : _a, a = _b[0][0], b = _b[1], _c = _b[2][0], c = _c[0], d = _c[1];
 }
+
 b1("string", { x: "string", y: true }); // Error
+
+
 // If the declaration specifies a binding pattern, the parameter type is the implied type of that binding pattern (section 5.1.3)
 function c0(_a) {
     var _b = _a.z, x = _b.x, j = _b.y.j;
@@ -109,6 +119,7 @@ function c5(_a) {
 function c6(_a) {
     var a = _a[0], b = _a[1], _b = _a[2][0][0], c = _b === void 0 ? 1 : _b;
 }
+
 c0({ z: 1 }); // Error, implied type is { z: {x: any, y: {j: any}} }
 c1({}); // Error, implied type is {z:number}?
 c1({ z: true }); // Error, implied type is {z:number}?
@@ -116,6 +127,11 @@ c2({ z: false }); // Error, implied type is {z?: number}
 c3({ b: true }); // Error, implied type is { b: number|string }. 
 c5([1, 2, false, true]); // Error, implied type is [any, any, [[any]]]
 c6([1, 2, [["string"]]]); // Error, implied type is [any, any, [[number]]]  // Use initializer
+
+
+
+
+
 // A parameter can be marked optional by following its name or binding pattern with a question mark (?)
 // or by including an initializer.  Initializers (including binding property or element initializers) are
 // permitted only when the parameter list occurs in conjunction with a function body
@@ -129,7 +145,8 @@ function d2(_a) {
 
 var C4 = /** @class */ (function () {
     function C4() {
-    }C4.prototype.d3 = function (_a) {
+    }
+    C4.prototype.d3 = function (_a) {
         var a = _a[0], b = _a[1], c = _a[2];
     }; // Error, binding pattern can't be optional in implementation signature
     C4.prototype.d4 = function (_a) {

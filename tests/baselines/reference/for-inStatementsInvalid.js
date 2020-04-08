@@ -78,10 +78,13 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var aNumber;
 for (aNumber in {}) { }
+
 var aBoolean;
 for (aBoolean in {}) { }
+
 var aRegExp;
 for (aRegExp in {}) { }
+
 for (var idx in {}) { }
 
 function fn() { }
@@ -101,7 +104,8 @@ for (var x in function (x, y) { return x + y; }) { }
 
 var A = /** @class */ (function () {
     function A() {
-    }A.prototype.biz = function () {
+    }
+    A.prototype.biz = function () {
         for (var x in this.biz()) { }
         for (var x in this.biz) { }
         for (var x in this) { }
@@ -112,14 +116,17 @@ var A = /** @class */ (function () {
         for (var x in this) { }
         for (var x in this.baz) { }
         for (var x in this.baz()) { }
+
         return null;
     };
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }B.prototype.boz = function () {
+    }
+    B.prototype.boz = function () {
         for (var x in this.biz()) { }
         for (var x in this.biz) { }
         for (var x in this) { }

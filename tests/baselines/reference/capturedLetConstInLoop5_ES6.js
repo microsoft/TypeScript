@@ -280,6 +280,7 @@ function foo8_c(x) {
 }
 
 //// [capturedLetConstInLoop5_ES6.js]
+
 //====let
 function foo0(x) {
     for (let x of []) {

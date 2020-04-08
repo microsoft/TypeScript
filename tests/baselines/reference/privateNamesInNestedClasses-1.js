@@ -38,12 +38,14 @@ var _foo, _bar;
 class A {constructor() {
         _foo.set(this, "A's #foo");
         _bar.set(this, "A's #bar");
-    }method() {
+    }
+    method() {
         var _foo_1;
         class B {
             constructor() {
                 _foo_1.set(this, "B's #foo");
-            }bar(a) {
+            }
+            bar(a) {
                 __classPrivateFieldGet(a, _foo_1); // OK, no compile-time error, don't know what `a` is
             }
             baz(a) {

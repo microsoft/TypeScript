@@ -30,7 +30,6 @@ exports.q = void 0;
 exports["default"] = {
     foob: "a"
 };
-
 exports.q = {
     foob: "b"
 };
@@ -41,6 +40,8 @@ var items_1 = require("./items");
 
 
 function nFoo(x) { }
+
+
 nFoo(items_1.q); // for comparison
 
 nFoo(items_1["default"]);

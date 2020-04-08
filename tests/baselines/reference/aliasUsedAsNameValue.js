@@ -26,7 +26,8 @@ exports.id = void 0;
 "use strict";
 exports.__esModule = true;
 exports.b = void 0;
-function b(a) { return null; }exports.b = b;
+function b(a) { return null; }
+exports.b = b;
 //// [aliasUsedAsNameValue_2.js]
 "use strict";
 exports.__esModule = true;

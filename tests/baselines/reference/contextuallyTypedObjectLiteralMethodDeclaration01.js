@@ -47,8 +47,6 @@ function getFoo3(): Foo {
 
 //// [contextuallyTypedObjectLiteralMethodDeclaration01.js]
 
-
-
 function getFoo1() {
     return {
         method1: function (arg) {

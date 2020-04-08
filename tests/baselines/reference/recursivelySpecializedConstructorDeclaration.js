@@ -60,7 +60,8 @@ var MsPortal;
                 }());
                 ItemList.ItemValue = ItemValue;
                 var ViewModel = /** @class */ (function (_super) {
-                    __extends(ViewModel, _super);function ViewModel() {
+                    __extends(ViewModel, _super);
+                    function ViewModel() {
                         return _super !== null && _super.apply(this, arguments) || this;
                     }
                     return ViewModel;

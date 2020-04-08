@@ -29,7 +29,8 @@ path_1["default"].resolve("", "../");
 var Foo = /** @class */ (function () {
     function Foo() {}
     return Foo;
-}());exports.Foo = Foo;
+}());
+exports.Foo = Foo;
 //// [file2.js]
 "use strict";
 exports.__esModule = true;
@@ -40,7 +41,8 @@ path.resolve("", "../");
 var Foo2 = /** @class */ (function () {
     function Foo2() {}
     return Foo2;
-}());exports.Foo2 = Foo2;
+}());
+exports.Foo2 = Foo2;
 //// [file3.js]
 "use strict";
 exports.__esModule = true;
@@ -51,13 +53,13 @@ path_1["default"]("", "../");
 var Foo3 = /** @class */ (function () {
     function Foo3() {}
     return Foo3;
-}());exports.Foo3 = Foo3;
+}());
+exports.Foo3 = Foo3;
 //// [file4.js]
 "use strict";
 exports.__esModule = true;
 exports.Bar = void 0;
 var tslib_1 = require("tslib");
 var path_1 = tslib_1.__importStar(require("path"));
-
 exports.Bar = path_1.Bar;
 path_1["default"]("", "../");

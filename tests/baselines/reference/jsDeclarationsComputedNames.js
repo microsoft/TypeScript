@@ -37,7 +37,8 @@ module.exports = (_a = {},
         return x;
     },
     _a.items = (_b = {},
-        _b[InnerSym] = function (arg) {if (arg === void 0) { arg = { x: 12 }; }return arg.x;},
+        _b[InnerSym] = function (arg) {if (arg === void 0) { arg = { x: 12 }; }
+            return arg.x;},
         _b),
     _a);
 //// [index2.js]

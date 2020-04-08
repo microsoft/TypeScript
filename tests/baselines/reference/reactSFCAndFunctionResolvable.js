@@ -32,7 +32,6 @@ exports.__esModule = true;
 var React = require("react");
 
 
-
 var RandomComponent = function () {
     var Component = condition1
         ? Radio

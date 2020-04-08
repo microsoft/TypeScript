@@ -56,7 +56,6 @@ var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a };
 
 //// [contextualTypeWithUnionTypeIndexSignatures.js]
 
-
 // When an object literal is contextually typed by a type that includes a string index signature, 
 // the resulting type of the object literal includes a string index signature with the union type of 
 // the types of the properties declared in the object literal, or the Undefined type if the object literal 

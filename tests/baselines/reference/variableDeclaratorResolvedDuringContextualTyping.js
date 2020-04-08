@@ -128,12 +128,6 @@ class FileService {
 //// [variableDeclaratorResolvedDuringContextualTyping.js]
 var WinJS;
 (function (WinJS) {
-
-
-
-
-
-
 })(WinJS || (WinJS = {}));
 var Errors;
 (function (Errors) {
@@ -145,10 +139,10 @@ var Errors;
     Errors.ConnectionError = ConnectionError;
 })(Errors || (Errors = {}));
 
-
 var FileService = /** @class */ (function () {
     function FileService() {
-    }FileService.prototype.uploadData = function () {
+    }
+    FileService.prototype.uploadData = function () {
         var _this = this;
         var path = "";
         return this.requestService.makeRequest({

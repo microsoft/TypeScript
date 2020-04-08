@@ -16,6 +16,7 @@ declare var React: any;
 <>#</>; // # would cause scanning error if not in jsxtext
 
 //// [file.jsx]
+
 <></>; // no whitespace
 <></>; // lots of whitespace
 <></>; // comments in the tags

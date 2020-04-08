@@ -39,9 +39,8 @@ func,
     else {
         return undefined;
     }
-}// repro from https://github.com/Microsoft/TypeScript/issues/25274
+}
 exports.safeInvoke = safeInvoke;
-
 
 function bad(props) {
     safeInvoke(props.onFoo, "blah");

@@ -150,7 +150,8 @@ function whileStatement5() {
                     if (!x) return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
                 case 1:
-                    _a.sent();return [3 /*break*/, 0];
+                    _a.sent();
+                    return [3 /*break*/, 0];
                 case 2: return [2 /*return*/];
             }
         });
@@ -164,7 +165,8 @@ function whileStatement6() {
                 case 0:
                     if (!x) return [3 /*break*/, 2];
                     if (1)
-                        return [3 /*break*/, 0];return [4 /*yield*/, y];
+                        return [3 /*break*/, 0];
+                    return [4 /*yield*/, y];
                 case 1:
                     _a.sent();
                     return [3 /*break*/, 0];
@@ -205,7 +207,8 @@ function whileStatement9() {
                     if (!x) return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
                 case 1:
-                    _a.sent();return [3 /*break*/, 0];
+                    _a.sent();
+                    return [3 /*break*/, 0];
                 case 2: return [2 /*return*/];
             }
         });
@@ -219,7 +222,8 @@ function whileStatement10() {
                 case 0:
                     if (!x) return [3 /*break*/, 2];
                     if (1)
-                        return [3 /*break*/, 0];return [4 /*yield*/, y];
+                        return [3 /*break*/, 0];
+                    return [4 /*yield*/, y];
                 case 1:
                     _a.sent();
                     return [3 /*break*/, 0];
@@ -260,7 +264,8 @@ function whileStatement13() {
                     if (!x) return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
                 case 1:
-                    _a.sent();return [3 /*break*/, 2];
+                    _a.sent();
+                    return [3 /*break*/, 2];
                 case 2: return [2 /*return*/];
             }
         });
@@ -274,7 +279,8 @@ function whileStatement14() {
                 case 0:
                     if (!x) return [3 /*break*/, 2];
                     if (1)
-                        return [3 /*break*/, 2];return [4 /*yield*/, y];
+                        return [3 /*break*/, 2];
+                    return [4 /*yield*/, y];
                 case 1:
                     _a.sent();
                     return [3 /*break*/, 0];
@@ -315,7 +321,8 @@ function whileStatement17() {
                     if (!x) return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
                 case 1:
-                    _a.sent();return [3 /*break*/, 2];
+                    _a.sent();
+                    return [3 /*break*/, 2];
                 case 2: return [2 /*return*/];
             }
         });
@@ -329,7 +336,8 @@ function whileStatement18() {
                 case 0:
                     if (!x) return [3 /*break*/, 2];
                     if (1)
-                        return [3 /*break*/, 2];return [4 /*yield*/, y];
+                        return [3 /*break*/, 2];
+                    return [4 /*yield*/, y];
                 case 1:
                     _a.sent();
                     return [3 /*break*/, 0];

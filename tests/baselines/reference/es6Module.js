@@ -15,6 +15,7 @@ export class A
 export class A {
     constructor() {
     }
+
     B() {
         return 42;
     }

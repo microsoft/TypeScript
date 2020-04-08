@@ -110,6 +110,7 @@ else {
     d.toString(); // error, object | null
 }
 
+
 var x; // error
 var y; // error
 var z; // error

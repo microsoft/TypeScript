@@ -36,7 +36,8 @@ function f<T>(x: T): A {
 //// [genericsWithoutTypeParameters1.js]
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.foo = function () { return null; };
+    }
+    C.prototype.foo = function () { return null; };
     return C;
 }());
 

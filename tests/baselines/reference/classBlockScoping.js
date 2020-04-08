@@ -40,7 +40,8 @@ function f(b) {
     if (b) {
         Foo = (_a = /** @class */ (function () {
                 function Foo() {
-                }Foo.x = function () {
+                }
+                Foo.x = function () {
                     new Foo();
                 };
 
@@ -51,12 +52,14 @@ function f(b) {
             }()),
             _a.y = new _a(),
             _a);
+
         new Foo();
     }
     else {
         var Foo_1 = /** @class */ (function () {
             function Foo() {
-            }Foo.x = function () {
+            }
+            Foo.x = function () {
                 new Foo();
             };
 

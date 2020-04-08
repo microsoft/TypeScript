@@ -45,6 +45,7 @@ break;
 // non-existent label
 ONE: for (;;)
     break TWO;
+
 // break from inside function
 TWO: for (;;) {
     var x = function () {
@@ -57,6 +58,7 @@ THREE: for (;;) {
         break THREE;
     };
 }
+
 // break forward
 for (;;) {
     break FIVE;
@@ -64,6 +66,7 @@ for (;;) {
 }
 // label on non-loop statement
 NINE: var y = 12;
+
 for (;;) {
     break NINE;
 }

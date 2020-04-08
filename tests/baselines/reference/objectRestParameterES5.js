@@ -45,7 +45,8 @@ suddenly(function (_a) {if (_a === void 0) { _a = { x: { z: 1, ka: 1 }, y: 'noo'
 
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.m = function (_a) {
+    }
+    C.prototype.m = function (_a) {
         var a = _a.a, clone = __rest(_a, ["a"]);
         // actually, never mind, don't clone
     };

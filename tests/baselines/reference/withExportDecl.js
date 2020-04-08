@@ -77,8 +77,9 @@ define(["require", "exports"], function (require, exports) {
     exports.exportedWithComplicatedValue = { x: 30, y: 70, desc: "position" };
 
 
-
     var arrayVar = ['a', 'b'];
+
+
     exports.exportedArrayVar.push({ x: 30, y: 'hello world' });
 
     function simpleFunction() {
@@ -88,9 +89,11 @@ define(["require", "exports"], function (require, exports) {
             n: 2
         };
     }
+
     function exportedFunction() {
         return simpleFunction();
-    }exports.exportedFunction = exportedFunction;
+    }
+    exports.exportedFunction = exportedFunction;
     var m1;
     (function (m1) {
         function foo() {

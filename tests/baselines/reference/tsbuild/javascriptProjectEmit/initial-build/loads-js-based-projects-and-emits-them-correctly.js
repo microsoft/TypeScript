@@ -136,7 +136,8 @@ var variable = {
  */
 function getVar() {
     return 'key';
-}exports.getVar = getVar;
+}
+exports.getVar = getVar;
 
 
 //// [/lib/sub-project-2/tsconfig.tsbuildinfo]

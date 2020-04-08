@@ -32,6 +32,7 @@ var x;
 var y;
 var z;
 
+
 switch (x) {
     case randBool() ? "foo" : "baz":
         break;

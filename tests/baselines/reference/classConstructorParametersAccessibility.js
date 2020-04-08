@@ -47,6 +47,8 @@ var __extends = (this && this.__extends) || (function () {
 }());
 var c1;
 c1.x; // OK
+
+
 var C2 = /** @class */ (function () {
     function C2(p) {
         this.p = p;
@@ -55,6 +57,8 @@ var C2 = /** @class */ (function () {
 }());
 var c2;
 c2.p; // private, error
+
+
 var C3 = /** @class */ (function () {
     function C3(p) {
         this.p = p;

@@ -120,7 +120,8 @@ function test() {
 var Foo = /** @class */ (function () {
     function Foo() {
         this.abortController = undefined;
-    }Foo.prototype.operation = function () {
+    }
+    Foo.prototype.operation = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 if (this.abortController !== undefined) {

@@ -25,11 +25,14 @@ delete ((((b['test']))));
 var a = {
     b: 123
 };
+
 delete a.b;
+
 
 var b = {
     'test': 'test'
 };
+
 delete b['test'];
 
 delete ((((b['test']))));

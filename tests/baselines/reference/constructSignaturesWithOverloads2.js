@@ -61,7 +61,6 @@ var C2 = /** @class */ (function () {
 var r2 = new C2(1, '');
 
 
-
 var i2;
 var r4 = new i2(1, '');
 var r5 = new i2(1, 1);

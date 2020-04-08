@@ -92,7 +92,6 @@ var C = /** @class */ (function () {
     return C;
 }());
 
-
 var a;
 var b = { "new": function (x) { return ''; } }; // not a construct signature, function called new
 

@@ -83,12 +83,18 @@ function distanceFromOrigin(_a) {
     var x = _a[0], y = _a[1];
     return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 }
+
 distanceFromOrigin(point);
+
 arryFn(point);
+
 arryFn2(point);
+
+
 arryFn2(a);
 arryFn2(b);
 arryFn2(c);
+
 var t1 = [1];
 var t2 = t1;
 

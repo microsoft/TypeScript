@@ -94,6 +94,7 @@ _14 = ["trimmer", ["trimming", "edging"]], _15 = _14[0], nameMB = _15 === void 0
 _20 = robotB[0], numberB = _20 === void 0 ? -1 : _20, robotAInfo = robotB.slice(1);
 _21 = getRobotB(), _22 = _21[0], numberB = _22 === void 0 ? -1 : _22, robotAInfo = _21.slice(1);
 _23 = [2, "trimmer", "trimming"], _24 = _23[0], numberB = _24 === void 0 ? -1 : _24, robotAInfo = _23.slice(1);
+
 if (nameA == nameB) {
     console.log(skillB);
 }

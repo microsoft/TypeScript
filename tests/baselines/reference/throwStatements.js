@@ -119,24 +119,28 @@ var aDate = new Date(12);
 throw aDate;
 var anObject = new Object();
 throw anObject;
+
 var anAny = null;
 throw anAny;
 var anOtherAny = new C();
 throw anOtherAny;
 var anUndefined = undefined;
 throw anUndefined;
+
 var aClass = new C();
 throw aClass;
 var aGenericClass = new D();
 throw aGenericClass;
 var anObjectLiteral = { id: 12 };
 throw anObjectLiteral;
+
 var aFunction = F;
 throw aFunction;
 throw aFunction('');
 var aLambda = function (x) { return 2; };
 throw aLambda;
 throw aLambda(1);
+
 var aModule = M;
 throw aModule;
 throw typeof M;
@@ -144,6 +148,7 @@ var aClassInModule = new M.A();
 throw aClassInModule;
 var aFunctionInModule = M.F2;
 throw aFunctionInModule;
+
 // no initializer or annotation, so this is an 'any'
 var x;
 throw x;

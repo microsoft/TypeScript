@@ -24,9 +24,6 @@ function f<T extends Foo<number>>(x: T) {
 "use strict";
 exports.__esModule = true;
 
-
-
-
 function f(x) {
     var abc = x[fooProp]; // expected: 'T[typeof fooProp]'
 

@@ -67,8 +67,6 @@ const c0 = "1";
 const c1 = 1;
 
 
-
-
 let t1;
 let t2;
 t1 = t2;
@@ -79,6 +77,7 @@ const y = Symbol();
 const z = Symbol();
 const w = Symbol();
 
+
 class ClassMemberVisibility {
     static [y]() { return 0; }
     static get [z]() { return 0; }
@@ -88,13 +87,8 @@ class ClassMemberVisibility {
     [y]() { return 0; }
     get [z]() { return 0; }
     set [w](value) { }
-}exports.ClassMemberVisibility = ClassMemberVisibility;
-
-
-
-
-
-
+}
+exports.ClassMemberVisibility = ClassMemberVisibility;
 exports.ObjectLiteralVisibility = {
     [x]: 0,
     [y]() { return 0; },

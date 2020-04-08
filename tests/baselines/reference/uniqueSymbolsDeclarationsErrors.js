@@ -85,9 +85,8 @@ exports.classExpression = class {
 
 function funcInferredReturnType(obj) {
     return obj;
-}exports.funcInferredReturnType = funcInferredReturnType;
-
-
+}
+exports.funcInferredReturnType = funcInferredReturnType;
 
 
 
@@ -98,19 +97,20 @@ function funcInferredReturnType(obj) {
 
 
 class ClassWithPrivateNamedProperties {
-}exports.ClassWithPrivateNamedProperties = ClassWithPrivateNamedProperties;
-
+}
+exports.ClassWithPrivateNamedProperties = ClassWithPrivateNamedProperties;
 class ClassWithPrivateNamedMethods {
     [s]() { }
     static [s]() { }
-}exports.ClassWithPrivateNamedMethods = ClassWithPrivateNamedMethods;
-
+}
+exports.ClassWithPrivateNamedMethods = ClassWithPrivateNamedMethods;
 class ClassWithPrivateNamedAccessors {
     get [s]() { return undefined; }
     set [s](v) { }
     static get [s]() { return undefined; }
     static set [s](v) { }
-}exports.ClassWithPrivateNamedAccessors = ClassWithPrivateNamedAccessors;
+}
+exports.ClassWithPrivateNamedAccessors = ClassWithPrivateNamedAccessors;
 
 
 //// [uniqueSymbolsDeclarationsErrors.d.ts]

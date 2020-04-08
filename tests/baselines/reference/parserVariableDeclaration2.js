@@ -16,5 +16,6 @@
 
     var checkNot = function () {
     };
+
     MUnit.test(a);
 })();

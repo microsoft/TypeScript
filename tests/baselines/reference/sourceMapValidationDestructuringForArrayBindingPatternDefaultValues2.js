@@ -123,11 +123,13 @@ var robotA = [1, "mower", "mowing"];
 function getRobot() {
     return robotA;
 }
+
 var multiRobotA = ["mower", ["mowing", ""]];
 var multiRobotB = ["trimmer", ["trimming", "edging"]];
 function getMultiRobot() {
     return multiRobotA;
 }
+
 var nameA, primarySkillA, secondarySkillA;
 var numberB, nameB;
 var numberA2, nameA2, skillA2, nameMA;
@@ -181,9 +183,7 @@ for (_8 = getRobot(), _9 = _8[0], numberA2 = _9 === void 0 ? -1 : _9, _10 = _8[1
 for (_12 = [2, "trimmer", "trimming"], _13 = _12[0], numberA2 = _13 === void 0 ? -1 : _13, _14 = _12[1], nameA2 = _14 === void 0 ? "name" : _14, _15 = _12[2], skillA2 = _15 === void 0 ? "skill" : _15, _12, i = 0; i < 1; i++) {
     console.log(nameA2);
 }
-for (var _33 = multiRobotA[0], nameMA_1 = _33 === void 0 ? "noName" : _33,
-    _34 = multiRobotA[1], _35 = _34 === void 0 ? ["none", "none"] : _34, _36 = _35[0], primarySkillA_1 = _36 === void 0 ? "primary" : _36,
-    _37 = _35[1], secondarySkillA_1 = _37 === void 0 ? "secondary" : _37, i_1 = 0; i_1 < 1; i_1++) {
+for (var _33 = multiRobotA[0], nameMA_1 = _33 === void 0 ? "noName" : _33, _34 = multiRobotA[1], _35 = _34 === void 0 ? ["none", "none"] : _34, _36 = _35[0], primarySkillA_1 = _36 === void 0 ? "primary" : _36, _37 = _35[1], secondarySkillA_1 = _37 === void 0 ? "secondary" : _37, i_1 = 0; i_1 < 1; i_1++) {
     console.log(nameMA_1);
 }
 for (_16 = getMultiRobot(), _17 = _16[0], nameMA = _17 === void 0 ? "noName" : _17, _18 = _16[1], _19 = _18 === void 0 ? ["none", "none"] : _18, _20 = _19[0], primarySkillA = _20 === void 0 ? "primary" : _20, _21 = _19[1], secondarySkillA = _21 === void 0 ? "secondary" : _21, _16, i = 0; i < 1; i++) {

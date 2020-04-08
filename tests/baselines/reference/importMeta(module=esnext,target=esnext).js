@@ -63,4 +63,6 @@ let globalC = import.import.import.malkovich;
 //// [assignmentTargets.js]
 export const foo = import.meta.blah = import.meta.blue = import.meta;
 import.meta = foo;
+
+
 const { a, b, c } = import.meta.wellKnownProperty;

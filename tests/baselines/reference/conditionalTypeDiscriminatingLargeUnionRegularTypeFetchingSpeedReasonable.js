@@ -8018,4 +8018,5 @@ exports.__esModule = true;
 exports.makeThing = void 0;
 function makeThing(
 name,
-    children) {if (children === void 0) { children = []; }}exports.makeThing = makeThing;
+    children) {if (children === void 0) { children = []; }}
+exports.makeThing = makeThing;

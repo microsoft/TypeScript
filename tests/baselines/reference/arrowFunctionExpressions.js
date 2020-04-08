@@ -153,7 +153,8 @@ var MyClass = /** @class */ (function () {
         var _this = this;
         this.m = function (n) { return n + 1; };
         this.p = function (n) { return n && _this; };
-    }MyClass.prototype.fn = function () {
+    }
+    MyClass.prototype.fn = function () {
         var _this = this;
         var m = function (n) { return n + 1; };
         var p = function (n) { return n && _this; };
@@ -209,6 +210,7 @@ function someOuterFn() {
 }
 var h = someOuterFn()('')()();
 h.toExponential();
+
 // Arrow function used in try/catch/finally in function
 function tryCatchFn() {
     var _this = this;

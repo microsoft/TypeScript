@@ -78,16 +78,21 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     return cooked;
 };
 function fn1() { return null; }
+
 var s = fn1(__makeTemplateObject(["", ""], ["", ""]), undefined);
 
 // No candidate overloads found
 fn1(__makeTemplateObject(["", ""], ["", ""]), {}); // Error
 
 function fn2() { return undefined; }
+
 var d1 = fn2(__makeTemplateObject(["", "", ""], ["", "", ""]), 0, undefined); // contextually typed
 var d2 = fn2(__makeTemplateObject(["", "", ""], ["", "", ""]), 0, undefined); // any
+
 d1.foo(); // error
 d2(); // no error (typed as any)
+
+
 // Generic and non-generic overload where generic overload is the only candidate
 fn2(__makeTemplateObject(["", "", ""], ["", "", ""]), 0, ''); // OK
 
@@ -97,6 +102,7 @@ fn2(__makeTemplateObject(["", "", ""], ["", "", ""]), '', 0); // OK
 
 
 function fn3() { return null; }
+
 var s = fn3(__makeTemplateObject(["", ""], ["", ""]), 3);
 var s = fn3(__makeTemplateObject(["", "", "", ""], ["", "", "", ""]), '', 3, '');
 var n = fn3(__makeTemplateObject(["", "", "", ""], ["", "", "", ""]), 5, 5, 5);
@@ -112,6 +118,7 @@ fn3(__makeTemplateObject([""], [""])); // Error
 
 
 function fn4() { }
+
 // Generic overloads with constraints tagged with types that satisfy the constraints
 fn4(__makeTemplateObject(["", "", ""], ["", "", ""]), '', 3);
 fn4(__makeTemplateObject(["", "", ""], ["", "", ""]), 3, '');

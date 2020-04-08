@@ -31,5 +31,4 @@ function foo(set) {
         var _b = _a[_i], value = _b[0], i = _b[1];
         _loop_1(value, i);
     }
-}
-;
+};

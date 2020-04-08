@@ -132,11 +132,13 @@ function SomeFakeClass() {
     /** @type {string|number} */
     this.p = "bar";
 }
+
 // Type assertion should check for assignability in either direction
 var someBase = new SomeBase();
 var someDerived = new SomeDerived();
 var someOther = new SomeOther();
 var someFakeClass = new SomeFakeClass();
+
 someBase = /** @type {SomeBase} */ (someDerived);
 someBase = /** @type {SomeBase} */ (someBase);
 someBase = /** @type {SomeBase} */ (someOther); // Error
@@ -154,6 +156,7 @@ someFakeClass = someDerived;
 
 someBase = someFakeClass; // Error
 someBase = /** @type {SomeBase} */ (someFakeClass);
+
 // Type assertion cannot be a type-predicate type
 /** @type {number | string} */
 var numOrStr;

@@ -158,6 +158,11 @@ var data = {
 };
 
 ;
+
+
+
+
+
 function f1(t1, t2, t3) {
     t1 = t2;
     t1 = t3;
@@ -181,6 +186,7 @@ var b22 = { value: { value: { value: 42 } } };
 
 
 
+
 flat([1, [2, [3]]]); // number[]
 flat([[[0]]]); // number[]
 flat([[[[[[[[[[[4]]]]]]]]]]]); // number[]
@@ -199,6 +205,17 @@ flat2([[[0]]]); // number[]
 flat2([1, 'a', [2]]); // (string | number)[]
 flat2([1, [2, 'a']]); // (string | number)[]
 flat2([1, ['a']]); // Error
+
+
+
+
+
+
+
+
+
+
+
 
 var x1 = foo1(ra1); // Boom!
 
@@ -234,7 +251,8 @@ function cons(hs) {
         .reduce(function (node, hs) {
         return hs.length === 0
             ? node
-            : concat(node, [[hs.shift(), cons(hs)]]);}, []);
+            : concat(node, [[hs.shift(), cons(hs)]]);},
+        []);
 }
 
 function level(h) {

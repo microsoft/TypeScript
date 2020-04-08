@@ -28,7 +28,8 @@ var C = /** @class */ (function () {
             var y;
             return y;
         };
-    }C.prototype.foo = function () {
+    }
+    C.prototype.foo = function () {
         function temp(a) {
             var y;
             return y;

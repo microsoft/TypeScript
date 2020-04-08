@@ -120,8 +120,10 @@ export declare const World = "hello";
 exports.__esModule = true;
 exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
-function leftPad(s, n) { return s + n; }exports.leftPad = leftPad;
-function multiply(a, b) { return a * b; }exports.multiply = multiply;
+function leftPad(s, n) { return s + n; }
+exports.leftPad = leftPad;
+function multiply(a, b) { return a * b; }
+exports.multiply = multiply;
 
 
 //// [/user/username/projects/sample1/core/index.d.ts.map]
@@ -173,7 +175,7 @@ export declare function multiply(a: number, b: number): number;
 }
 
 //// [/user/username/projects/sample1/logic/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC,AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
 
 //// [/user/username/projects/sample1/logic/index.js]
 "use strict";
@@ -182,7 +184,8 @@ exports.m = exports.getSecondsInDay = void 0;
 var c = require("../core/index");
 function getSecondsInDay() {
     return c.multiply(10, 15);
-}exports.getSecondsInDay = getSecondsInDay;
+}
+exports.getSecondsInDay = getSecondsInDay;
 var mod = require("../core/anotherModule");
 exports.m = mod;
 //# sourceMappingURL=index.js.map
@@ -254,8 +257,10 @@ exports.__esModule = true;
 exports.m = void 0;
 var c = require("../core/index");
 var logic = require("../logic/index");
+
 c.leftPad("", 10);
 logic.getSecondsInDay();
+
 var mod = require("../core/anotherModule");
 exports.m = mod;
 
@@ -427,13 +432,15 @@ export class someClass { }
 exports.__esModule = true;
 exports.someClass = exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
-function leftPad(s, n) { return s + n; }exports.leftPad = leftPad;
-function multiply(a, b) { return a * b; }exports.multiply = multiply;
-
+function leftPad(s, n) { return s + n; }
+exports.leftPad = leftPad;
+function multiply(a, b) { return a * b; }
+exports.multiply = multiply;
 var someClass = /** @class */ (function () {
     function someClass() {}
     return someClass;
-}());exports.someClass = someClass;
+}());
+exports.someClass = someClass;
 
 
 //// [/user/username/projects/sample1/core/index.d.ts.map]
@@ -762,8 +769,10 @@ export function multiply(a: number, b: number) { return a * b; }
 exports.__esModule = true;
 exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
-function leftPad(s, n) { return s + n; }exports.leftPad = leftPad;
-function multiply(a, b) { return a * b; }exports.multiply = multiply;
+function leftPad(s, n) { return s + n; }
+exports.leftPad = leftPad;
+function multiply(a, b) { return a * b; }
+exports.multiply = multiply;
 
 
 //// [/user/username/projects/sample1/core/index.d.ts.map]
@@ -1092,17 +1101,20 @@ export class someClass2 { }
 exports.__esModule = true;
 exports.someClass2 = exports.someClass = exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
-function leftPad(s, n) { return s + n; }exports.leftPad = leftPad;
-function multiply(a, b) { return a * b; }exports.multiply = multiply;
-
+function leftPad(s, n) { return s + n; }
+exports.leftPad = leftPad;
+function multiply(a, b) { return a * b; }
+exports.multiply = multiply;
 var someClass = /** @class */ (function () {
     function someClass() {}
     return someClass;
-}());exports.someClass = someClass;
+}());
+exports.someClass = someClass;
 var someClass2 = /** @class */ (function () {
     function someClass2() {}
     return someClass2;
-}());exports.someClass2 = someClass2;
+}());
+exports.someClass2 = someClass2;
 
 
 //// [/user/username/projects/sample1/core/index.d.ts.map]

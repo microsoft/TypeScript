@@ -107,7 +107,6 @@ var Base = /** @class */ (function () {
 // decrease visibility of all public members to protected
 var Derived1 = /** @class */ (function (_super) {
     __extends(Derived1, _super);
-
     function Derived1(a) {
         return _super.call(this, a) || this;
     }
@@ -115,7 +114,6 @@ var Derived1 = /** @class */ (function (_super) {
 }(Base));
 var Derived2 = /** @class */ (function (_super) {
     __extends(Derived2, _super);
-
     function Derived2(a) {
         return _super.call(this, a) || this;
     }Derived2.prototype.b = function (a) { };
@@ -123,7 +121,6 @@ var Derived2 = /** @class */ (function (_super) {
 }(Base));
 var Derived3 = /** @class */ (function (_super) {
     __extends(Derived3, _super);
-
     function Derived3(a) {
         return _super.call(this, a) || this;
     }
@@ -136,7 +133,6 @@ var Derived3 = /** @class */ (function (_super) {
 }(Base));
 var Derived4 = /** @class */ (function (_super) {
     __extends(Derived4, _super);
-
     function Derived4(a) {
         return _super.call(this, a) || this;
     }
@@ -149,7 +145,6 @@ var Derived4 = /** @class */ (function (_super) {
 }(Base));
 var Derived5 = /** @class */ (function (_super) {
     __extends(Derived5, _super);
-
     function Derived5(a) {
         return _super.call(this, a) || this;
     }
@@ -157,7 +152,6 @@ var Derived5 = /** @class */ (function (_super) {
 }(Base));
 var Derived6 = /** @class */ (function (_super) {
     __extends(Derived6, _super);
-
     function Derived6(a) {
         return _super.call(this, a) || this;
     }
@@ -165,7 +159,6 @@ var Derived6 = /** @class */ (function (_super) {
 }(Base));
 var Derived7 = /** @class */ (function (_super) {
     __extends(Derived7, _super);
-
     function Derived7(a) {
         return _super.call(this, a) || this;
     }Derived7.s = function (a) { };
@@ -173,7 +166,6 @@ var Derived7 = /** @class */ (function (_super) {
 }(Base));
 var Derived8 = /** @class */ (function (_super) {
     __extends(Derived8, _super);
-
     function Derived8(a) {
         return _super.call(this, a) || this;
     }
@@ -186,7 +178,6 @@ var Derived8 = /** @class */ (function (_super) {
 }(Base));
 var Derived9 = /** @class */ (function (_super) {
     __extends(Derived9, _super);
-
     function Derived9(a) {
         return _super.call(this, a) || this;
     }
@@ -199,7 +190,6 @@ var Derived9 = /** @class */ (function (_super) {
 }(Base));
 var Derived10 = /** @class */ (function (_super) {
     __extends(Derived10, _super);
-
     function Derived10(a) {
         return _super.call(this, a) || this;
     }

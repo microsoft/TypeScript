@@ -57,7 +57,6 @@ var N1;
 (function (N1) {
     N1.x = 1;
 })(N1 || (N1 = {}));
-
 //// [observable.js]
 "use strict";
 exports.__esModule = true;

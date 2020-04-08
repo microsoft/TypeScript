@@ -16,4 +16,5 @@ var data = {
     baz: 'oh my',
     noWay: 'yes'
 };
+
 data.foo + data.bar + data.baz + data.noWay;

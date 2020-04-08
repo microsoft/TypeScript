@@ -137,6 +137,7 @@ var n1;
     n1.c = fun2("Hello", "World");
     n1.d = fun2("Hello", "Hello");
     n1.e = fun3("Hello", "Hello", "World", "Foo");
+
     // Should be valid
     n1.a = takeReturnString(n1.a);
     n1.b = takeReturnString(n1.b);
@@ -167,6 +168,7 @@ var n2;
     n2.c = fun2("Hello", "Hello");
     n2.d = fun2("Hello", "World");
     n2.e = fun3("Hello", "World");
+
     // Assignment from the returned value should cause an error.
     n2.a = takeReturnString(n2.a);
     n2.b = takeReturnString(n2.b);
@@ -197,6 +199,7 @@ var n3;
     n3.c = fun2("Hello", "Hello");
     n3.d = fun2("World", "World");
     n3.e = fun3("Hello", "World");
+
     // Assignment from the returned value should cause an error.
     n3.a = takeReturnString(n3.a);
     n3.b = takeReturnString(n3.b);

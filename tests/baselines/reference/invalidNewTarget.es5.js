@@ -32,7 +32,8 @@ var C = /** @class */ (function () {
     function C() {
         var _newTarget = this.constructor;
         this.f = function () { return _newTarget; };
-    }C.prototype[_newTarget] = function () { };
+    }
+    C.prototype[_newTarget] = function () { };
     C.prototype.c = function () {
         var _newTarget = void 0;
         return _newTarget;};

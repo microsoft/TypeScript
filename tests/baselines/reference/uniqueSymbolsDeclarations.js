@@ -244,8 +244,10 @@ const constCall = Symbol();
 let letCall = Symbol();
 var varCall = Symbol();
 
+
 // declaration with type and call initializer
 const constTypeAndCall = Symbol();
+
 // declaration from initializer
 const constInitToConstCall = constCall;
 const constInitToLetCall = letCall;
@@ -259,21 +261,27 @@ var varInitToConstCall = constCall;
 var varInitToLetCall = letCall;
 var varInitToVarCall = varCall;
 var varInitToConstDeclAmbient = constType;
+
 // declaration from initializer with type query
 const constInitToConstCallWithTypeQuery = constCall;
 const constInitToConstDeclAmbientWithTypeQuery = constType;
+
 // function return inference
 function funcReturnConstCall() { return constCall; }
 function funcReturnLetCall() { return letCall; }
 function funcReturnVarCall() { return varCall; }
+
 // function return value with type query
 function funcReturnConstCallWithTypeQuery() { return constCall; }
+
 // generator function yield inference
 function* genFuncYieldConstCall() { yield constCall; }
 function* genFuncYieldLetCall() { yield letCall; }
 function* genFuncYieldVarCall() { yield varCall; }
+
 // generator function yield with return type query
 function* genFuncYieldConstCallWithTypeQuery() { yield constCall; }
+
 // async function return inference
 
 async function asyncFuncReturnConstCall() { return constCall; }
@@ -298,14 +306,17 @@ let C = /** @class */ (() => {
     C.readwriteStaticCall = Symbol();
     return C;
 })();
+
 const constInitToCReadonlyStaticCall = C.readonlyStaticCall;
 const constInitToCReadonlyStaticType = C.readonlyStaticType;
 const constInitToCReadonlyStaticTypeAndCall = C.readonlyStaticTypeAndCall;
 const constInitToCReadwriteStaticCall = C.readwriteStaticCall;
+
 const constInitToCReadonlyStaticCallWithTypeQuery = C.readonlyStaticCall;
 const constInitToCReadonlyStaticTypeWithTypeQuery = C.readonlyStaticType;
 const constInitToCReadonlyStaticTypeAndCallWithTypeQuery = C.readonlyStaticTypeAndCall;
 const constInitToCReadwriteStaticCallWithTypeQuery = C.readwriteStaticCall;
+
 const constInitToCReadonlyCall = c.readonlyCall;
 const constInitToCReadwriteCall = c.readwriteCall;
 const constInitToCReadonlyCallWithTypeQuery = c.readonlyCall;
@@ -313,9 +324,11 @@ const constInitToCReadwriteCallWithTypeQuery = c.readwriteCall;
 const constInitToCReadonlyCallWithIndexedAccess = c.readonlyCall;
 const constInitToCReadwriteCallWithIndexedAccess = c.readwriteCall;
 
+
 const constInitToIReadonlyType = i.readonlyType;
 const constInitToIReadonlyTypeWithTypeQuery = i.readonlyType;
 const constInitToIReadonlyTypeWithIndexedAccess = i.readonlyType;
+
 
 
 
@@ -330,9 +343,12 @@ const constInitToLReadonlyTypeWithTypeQuery = l.readonlyType;
 const constInitToLReadonlyNestedTypeWithTypeQuery = l.nested.readonlyNestedType;
 const constInitToLReadonlyTypeWithIndexedAccess = l.readonlyType;
 const constInitToLReadonlyNestedTypeWithIndexedAccess = l.nested.readonlyNestedType;
+
 // type argument inference
 const promiseForConstCall = Promise.resolve(constCall);
 const arrayOfConstCall = [constCall];
+
+
 // widening positions
 // argument inference
 f(s);
@@ -387,6 +403,7 @@ let C0 = /** @class */ (() => {
 o[s];
 o[N.s];
 o[N["s"]];
+
 // arguments (no-inference)
 f(s);
 f(N.s);
@@ -410,6 +427,7 @@ Math.random() * 2 ? N["s"] : "a";
     [s]: "a",
     [N.s]: "b",
 });
+
 class C1 {
 }
 N.s, N.s;

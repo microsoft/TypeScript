@@ -313,10 +313,12 @@ function f16() {
 function f17(_a) {
     var _b = _a.a, a = _b === void 0 ? "" : _b, _c = _a.b, b = _c === void 0 ? 0 : _c, _d = _a.c, c = _d === void 0 ? false : _d;
 }
+
 f17({});
 f17({ a: "hello" });
 f17({ c: true });
 f17(f15());
+
 function f18() {
     var _a, _b, _c, _d, _e, _f, _g;
     var a;

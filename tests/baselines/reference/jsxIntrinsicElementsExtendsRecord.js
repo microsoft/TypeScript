@@ -7,4 +7,5 @@ declare namespace JSX {
 
 
 //// [index.jsx]
+
 <a />;

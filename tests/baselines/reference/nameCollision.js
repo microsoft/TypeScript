@@ -87,7 +87,8 @@ var Y;
     (function (Y_3) {
         var Y;
         (function (Y) {
-            Y[Y["Red"] = 0] = "Red";Y[Y["Blue"] = 1] = "Blue";
+            Y[Y["Red"] = 0] = "Red";
+            Y[Y["Blue"] = 1] = "Blue";
         })(Y = Y_3.Y || (Y_3.Y = {}));
     })(Y = Y_2.Y || (Y_2.Y = {}));
 })(Y || (Y = {}));

@@ -111,6 +111,7 @@ function f5() {
     return 1;
     return '';
 }
+
 function f6(x, y) {
     if (true) {
         return x;

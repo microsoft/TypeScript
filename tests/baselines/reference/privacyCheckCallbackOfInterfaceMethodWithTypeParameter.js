@@ -11,7 +11,6 @@ export interface B<T> extends A<T> {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-
 });
 
 

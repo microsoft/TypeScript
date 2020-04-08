@@ -81,7 +81,7 @@ var NonGeneric;
     var c5 = new C2(1); // ok
 
     var D = /** @class */ (function (_super) {
-        __extends(D, _super);// ok
+        __extends(D, _super);
         function D() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
@@ -109,7 +109,7 @@ var Generics;
     var c5 = new C2(1, 2); // ok
 
     var D = /** @class */ (function (_super) {
-        __extends(D, _super);// ok
+        __extends(D, _super);
         function D() {
             return _super !== null && _super.apply(this, arguments) || this;
         }

@@ -18,8 +18,7 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/a/b/file1.js]
 "use strict";
 exports.__esModule = true;
-var T = require("./moduleFile");
-T.bar();
+var T = require("./moduleFile");T.bar();
 
 
 
@@ -72,7 +71,8 @@ export function bar() { }
 "use strict";
 exports.__esModule = true;
 exports.bar = void 0;
-function bar() { }exports.bar = bar;
+function bar() { }
+exports.bar = bar;
 
 
 

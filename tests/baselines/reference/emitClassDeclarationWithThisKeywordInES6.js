@@ -32,6 +32,7 @@ class B {
     get X() {
         return this.x;
     }
+
     set bX(y) {
         this.x = y;
     }

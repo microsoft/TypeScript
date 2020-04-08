@@ -136,37 +136,3 @@ interface I17 extends Base {
 //// [subtypingWithCallSignaturesWithRestParameters.js]
 // call signatures in derived types must have the same or fewer optional parameters as the base type
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

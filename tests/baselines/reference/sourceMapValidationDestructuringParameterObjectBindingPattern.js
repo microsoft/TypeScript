@@ -45,6 +45,7 @@ function foo3(_a) {
     var name = _a.name;
     console.log(name);
 }
+
 foo1(robotA);
 foo1({ name: "Edger", skill: "cutting edges" });
 

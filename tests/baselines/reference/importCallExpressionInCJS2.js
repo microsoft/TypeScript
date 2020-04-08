@@ -22,12 +22,14 @@ compute(import("./0"));
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = void 0;
-function foo() { return "foo"; }exports.foo = foo;
+function foo() { return "foo"; }
+exports.foo = foo;
 //// [1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.backup = void 0;
-function backup() { return "backup"; }exports.backup = backup;
+function backup() { return "backup"; }
+exports.backup = backup;
 //// [2.js]
 async function compute(promise) {
     let j = await promise;

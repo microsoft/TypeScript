@@ -74,7 +74,8 @@ var Foo = /** @class */ (function () {
     return Foo;
 }());
 var b = /** @class */ (function (_super_1) {
-    __extends(b, _super_1);function b() {
+    __extends(b, _super_1);
+    function b() {
         return _super_1 !== null && _super_1.apply(this, arguments) || this;
     }
     Object.defineProperty(b.prototype, "prop2", {
@@ -93,7 +94,8 @@ var b = /** @class */ (function (_super_1) {
     return b;
 }(Foo));
 var c = /** @class */ (function (_super_1) {
-    __extends(c, _super_1);function c() {
+    __extends(c, _super_1);
+    function c() {
         return _super_1 !== null && _super_1.apply(this, arguments) || this;
     }
     Object.defineProperty(c.prototype, "prop2", {

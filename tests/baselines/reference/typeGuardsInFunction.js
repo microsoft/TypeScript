@@ -97,6 +97,8 @@ var var1;
 function f(param) {
     // global vars in function declaration
     num = typeof var1 === "string" && var1.length; // string
+
+
     // variables in function declaration
     var var2;
     num = typeof var2 === "string" && var2.length; // string
@@ -119,6 +121,8 @@ function f1(param) {
 
         // parameters in outer declaration
         num = typeof param === "string" && param.length; // string
+
+
         // local
         var var3;
         num = typeof var3 === "string" && var3.length; // string
@@ -141,6 +145,8 @@ function f2(param) {
 
         // parameters in outer declaration
         num = typeof param === "string" && param.length; // string
+
+
         // local
         var var3;
         num = typeof var3 === "string" && var3.length; // string
@@ -163,6 +169,8 @@ function f3(param) {
 
         // parameters in outer declaration
         num = typeof param === "string" && param.length; // string
+
+
         // local
         var var3;
         num = typeof var3 === "string" && var3.length; // string

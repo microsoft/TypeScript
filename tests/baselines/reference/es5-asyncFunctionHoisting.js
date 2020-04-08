@@ -71,7 +71,6 @@ function hoisting() {
 
             for (b in y) {
             }
-
             for (_i = 0, y_1 = y; _i < y_1.length; _i++) {
                 c = y_1[_i];
             }
@@ -104,7 +103,6 @@ function hoistingWithAwait() {
 
                     for (b in y) {
                     }
-
                     for (_i = 0, y_2 = y; _i < y_2.length; _i++) {
                         c = y_2[_i];
                     }

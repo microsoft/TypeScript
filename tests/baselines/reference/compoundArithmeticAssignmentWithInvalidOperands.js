@@ -63,7 +63,8 @@ x6 *= {};
 //// [compoundArithmeticAssignmentWithInvalidOperands.js]
 var E;
 (function (E) {
-    E[E["a"] = 0] = "a";E[E["b"] = 1] = "b";
+    E[E["a"] = 0] = "a";
+    E[E["b"] = 1] = "b";
 })(E || (E = {}));
 var a;
 var b;
@@ -78,6 +79,7 @@ x1 *= E.a;
 x1 *= {};
 x1 *= null;
 x1 *= undefined;
+
 var x2;
 x2 *= a;
 x2 *= b;
@@ -88,6 +90,7 @@ x2 *= E.a;
 x2 *= {};
 x2 *= null;
 x2 *= undefined;
+
 var x3;
 x3 *= a;
 x3 *= b;
@@ -98,6 +101,7 @@ x3 *= E.a;
 x3 *= {};
 x3 *= null;
 x3 *= undefined;
+
 var x4;
 x4 *= a;
 x4 *= b;
@@ -108,11 +112,13 @@ x4 *= E.a;
 x4 *= {};
 x4 *= null;
 x4 *= undefined;
+
 var x5;
 x5 *= b;
 x5 *= true;
 x5 *= '';
 x5 *= {};
+
 var x6;
 x6 *= b;
 x6 *= true;

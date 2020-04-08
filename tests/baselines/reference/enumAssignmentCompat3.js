@@ -94,39 +94,50 @@ var First;
 (function (First) {
     var E;
     (function (E) {
-        E[E["a"] = 0] = "a";E[E["b"] = 1] = "b";E[E["c"] = 2] = "c";
+        E[E["a"] = 0] = "a";
+        E[E["b"] = 1] = "b";
+        E[E["c"] = 2] = "c";
     })(E = First.E || (First.E = {}));
 })(First || (First = {}));
 var Abc;
 (function (Abc) {
     var E;
     (function (E) {
-        E[E["a"] = 0] = "a";E[E["b"] = 1] = "b";E[E["c"] = 2] = "c";
+        E[E["a"] = 0] = "a";
+        E[E["b"] = 1] = "b";
+        E[E["c"] = 2] = "c";
     })(E = Abc.E || (Abc.E = {}));
     var Nope;
     (function (Nope) {
-        Nope[Nope["a"] = 0] = "a";Nope[Nope["b"] = 1] = "b";Nope[Nope["c"] = 2] = "c";
+        Nope[Nope["a"] = 0] = "a";
+        Nope[Nope["b"] = 1] = "b";
+        Nope[Nope["c"] = 2] = "c";
     })(Nope = Abc.Nope || (Abc.Nope = {}));
 })(Abc || (Abc = {}));
 var Abcd;
 (function (Abcd) {
     var E;
     (function (E) {
-        E[E["a"] = 0] = "a";E[E["b"] = 1] = "b";E[E["c"] = 2] = "c";E[E["d"] = 3] = "d";
+        E[E["a"] = 0] = "a";
+        E[E["b"] = 1] = "b";
+        E[E["c"] = 2] = "c";
+        E[E["d"] = 3] = "d";
     })(E = Abcd.E || (Abcd.E = {}));
 })(Abcd || (Abcd = {}));
 var Ab;
 (function (Ab) {
     var E;
     (function (E) {
-        E[E["a"] = 0] = "a";E[E["b"] = 1] = "b";
+        E[E["a"] = 0] = "a";
+        E[E["b"] = 1] = "b";
     })(E = Ab.E || (Ab.E = {}));
 })(Ab || (Ab = {}));
 var Cd;
 (function (Cd) {
     var E;
     (function (E) {
-        E[E["c"] = 0] = "c";E[E["d"] = 1] = "d";
+        E[E["c"] = 0] = "c";
+        E[E["d"] = 1] = "d";
     })(E = Cd.E || (Cd.E = {}));
 })(Cd || (Cd = {}));
 var Decl;
@@ -136,17 +147,21 @@ var Merged;
 (function (Merged) {
     var E;
     (function (E) {
-        E[E["a"] = 0] = "a";E[E["b"] = 1] = "b";
+        E[E["a"] = 0] = "a";
+        E[E["b"] = 1] = "b";
     })(E = Merged.E || (Merged.E = {}));
     (function (E) {
-        E[E["c"] = 3] = "c";E[E["d"] = 4] = "d";
+        E[E["c"] = 3] = "c";
+        E[E["d"] = 4] = "d";
     })(E = Merged.E || (Merged.E = {}));
 })(Merged || (Merged = {}));
 var Merged2;
 (function (Merged2) {
     var E;
     (function (E) {
-        E[E["a"] = 0] = "a";E[E["b"] = 1] = "b";E[E["c"] = 2] = "c";
+        E[E["a"] = 0] = "a";
+        E[E["b"] = 1] = "b";
+        E[E["c"] = 2] = "c";
     })(E = Merged2.E || (Merged2.E = {}));
     (function (E) {
         E.d = 5;

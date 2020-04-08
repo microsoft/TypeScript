@@ -54,9 +54,6 @@ export {};
 "use strict";
 exports.__esModule = true;
 
-
-
-
 var myStoreConnect = function (
 mapStateToProps,
     mapDispatchToProps,

@@ -75,6 +75,7 @@ class A {
     y() {
     }
 }
+
 class B extends A {
     // async method with only call/get on 'super' does not require a binding
     simple() {

@@ -11,6 +11,8 @@ exports.Game = void 0;
 var Game = /** @class */ (function () {
     function Game() {
         this.position = new DisplayPosition([]);
-    };
+    }
+    ;
     return Game;
-}());exports.Game = Game;
+}());
+exports.Game = Game;

@@ -22,6 +22,7 @@ x; // RegExp | string | number | boolean
 var x;
 var obj;
 var cond;
+
 x = /a/;
 for (var y in obj) {
     x = y;

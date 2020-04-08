@@ -26,7 +26,8 @@ let k4 = <Button> <h2> Hello </h2> </Button>;
 
 var Button = /** @class */ (function () {
     function Button() {
-    }Button.prototype.render = function () {
+    }
+    Button.prototype.render = function () {
         return (<div>My Button</div>);
     };
     return Button;

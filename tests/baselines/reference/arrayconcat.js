@@ -32,10 +32,12 @@ class parser {
 
 var parser = /** @class */ (function () {
     function parser() {
-    }parser.prototype.m = function () {
+    }
+    parser.prototype.m = function () {
         this.options = this.options.sort(function (a, b) {
             var aName = a.name.toLowerCase();
             var bName = b.name.toLowerCase();
+
             if (aName > bName) {
                 return 1;
             }

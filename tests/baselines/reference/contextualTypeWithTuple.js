@@ -44,6 +44,7 @@ var unionTuple = [new C(), "foo"];
 var unionTuple1 = [new C(), "foo"];
 var unionTuple2 = [new C(), "foo", new D()];
 var unionTuple3 = [10, "foo"];
+
 numStrTuple = numStrTuple2;
 numStrTuple = numStrBoolTuple;
 
@@ -51,6 +52,7 @@ numStrTuple = numStrBoolTuple;
 objNumTuple = [{}, 5];
 numStrBoolTuple = numStrTuple;
 var strStrTuple = ["foo", "bar", 5];
+
 unionTuple = unionTuple1;
 unionTuple = unionTuple2;
 unionTuple2 = unionTuple;

@@ -16,6 +16,7 @@ function foo(a, b, _a) {
 function bar(a, b, _a) {
     var c = _a[0];
 }
+
 foo("", 0);
 
 bar("", 0);

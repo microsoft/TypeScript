@@ -23,14 +23,16 @@ var A = /** @class */ (function () {
     var _a;
     A.B = (_a = /** @class */ (function () {
             function B() {
-            }B.func2 = function () {
+            }
+            B.func2 = function () {
                 return new Promise(function (resolve) { resolve(null); });
             };
             return B;
         }()),
         _a.C = /** @class */ (function () {
             function C() {
-            }C.func = function () {
+            }
+            C.func = function () {
                 return __awaiter(this, void 0, void 0, function () {
                     return __generator(this, function (_b) {
                         switch (_b.label) {

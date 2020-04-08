@@ -7,4 +7,5 @@ export default function() {}
 "use strict";
 exports.__esModule = true;
 exports["default"] = 0;
-function default_1() { }exports["default"] = default_1;
+function default_1() { }
+exports["default"] = default_1;

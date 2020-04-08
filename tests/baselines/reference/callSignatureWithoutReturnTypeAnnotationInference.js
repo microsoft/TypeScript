@@ -127,10 +127,12 @@ function foo(x) {
     return 1;
 }
 var r = foo(1);
+
 function foo2(x) {
     return foo(x);
 }
 var r2 = foo2(1);
+
 function foo3() {
     return foo3();
 }
@@ -140,6 +142,7 @@ function foo4(x) {
     return x;
 }
 var r4 = foo4(1);
+
 function foo5(x) {
     if (true) {
         return 1;
@@ -149,6 +152,7 @@ function foo5(x) {
     }
 }
 var r5 = foo5(1);
+
 function foo6(x) {
     try {
     }
@@ -160,6 +164,7 @@ function foo6(x) {
     }
 }
 var r6 = foo6(1);
+
 function foo7(x) {
     return typeof x;
 }
@@ -206,6 +211,7 @@ function foo12() {
     return i2;
 }
 var r12 = foo12();
+
 function m1() { return 1; }
 (function (m1) {m1.y = 2;})(m1 || (m1 = {}));
 function foo13() {

@@ -28,9 +28,11 @@ var __extends = (this && this.__extends) || (function () {
     return Foo;
 }());
 var Foo2 = /** @class */ (function (_super_1) {
-    __extends(Foo2, _super_1);function Foo2() {
+    __extends(Foo2, _super_1);
+    function Foo2() {
         return _super_1 !== null && _super_1.apply(this, arguments) || this;
-    }Foo2.prototype.x = function () {
+    }
+    Foo2.prototype.x = function () {
         var lambda = function (_super) {
         };
     };

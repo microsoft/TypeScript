@@ -12,7 +12,8 @@ class TestFile {
 //// [detachedCommentAtStartOfFunctionBody2.js]
 var TestFile = /** @class */ (function () {
     function TestFile() {
-    }TestFile.prototype.foo = function (message) {
+    }
+    TestFile.prototype.foo = function (message) {
         /// <summary>Test summary</summary>
         /// <param name="message" type="String" />
         /// <returns type="Function" />

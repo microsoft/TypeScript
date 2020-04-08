@@ -812,4 +812,5 @@ var _View_AppComponent0 = /** @class */ (function () {
 }());
 function viewFactory_AppComponent0(viewUtils, parentInjector, declarationEl) {
     return new _View_AppComponent0(viewUtils, parentInjector, declarationEl);
-}exports.viewFactory_AppComponent0 = viewFactory_AppComponent0;
+}
+exports.viewFactory_AppComponent0 = viewFactory_AppComponent0;

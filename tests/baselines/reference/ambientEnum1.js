@@ -9,4 +9,3 @@
     }
 
 //// [ambientEnum1.js]
-

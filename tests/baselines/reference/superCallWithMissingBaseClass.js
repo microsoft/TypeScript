@@ -23,9 +23,11 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();var Foo = /** @class */ (function (_super) {
-    __extends(Foo, _super);function Foo() {
+    __extends(Foo, _super);
+    function Foo() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Foo.prototype.m1 = function () {
+    }
+    Foo.prototype.m1 = function () {
         return _super.prototype.m1.call(this);
     };
 

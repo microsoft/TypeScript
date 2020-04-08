@@ -71,7 +71,8 @@ var __extends = (this && this.__extends) || (function () {
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);function Derived() {
+    __extends(Derived, _super);
+    function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived;
@@ -85,13 +86,15 @@ var r4 = Derived.r;
 var r5 = Derived.s();
 var r6 = Derived.t;
 Derived.t = '';
+
 var Base2 = /** @class */ (function () {
     function Base2() {
     }
     return Base2;
 }());
 var Derived2 = /** @class */ (function (_super) {
-    __extends(Derived2, _super);function Derived2() {
+    __extends(Derived2, _super);
+    function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived2;

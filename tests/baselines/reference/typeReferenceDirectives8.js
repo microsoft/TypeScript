@@ -14,7 +14,8 @@ export const bar = foo();
 "use strict";
 exports.__esModule = true;
 exports.foo = void 0;
-function foo() { return { x: 1 }; }exports.foo = foo;
+function foo() { return { x: 1 }; }
+exports.foo = foo;
 //// [mod2.js]
 "use strict";
 exports.__esModule = true;

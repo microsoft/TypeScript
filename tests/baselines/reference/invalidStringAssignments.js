@@ -47,6 +47,7 @@ var g2 = 1;
 var M;
 (function (M) {M.x = 1;})(M || (M = {}));
 M = x;
+
 function i(a) {
     a = x;
 }

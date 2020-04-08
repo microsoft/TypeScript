@@ -29,6 +29,7 @@ const x = ({ [foo.bar]: c }) => undefined;
 
 var a;
 foo(a);
+
 // Repro for #25498
 function test() {
     return { foo: "bar" };

@@ -122,7 +122,8 @@ function f9(x) { }
 
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.toString = function () { return null; };
+    }
+    C.prototype.toString = function () { return null; };
     C.prototype.charAt = function (pos) { return null; };
     C.prototype.charCodeAt = function (index) { return null; };
     C.prototype.concat = function () {var strings = [];
@@ -151,7 +152,6 @@ var C = /** @class */ (function () {
     return C;
 }());
 function f10(x) { }
-
 
 function f11(x) { }
 

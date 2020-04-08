@@ -11,6 +11,7 @@ class C {
 
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.method = function () { };
+    }
+    C.prototype.method = function () { };
     return C;
 }());

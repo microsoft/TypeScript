@@ -11,6 +11,7 @@ exports.__esModule = true;
 exports.b = exports.x = void 0;
 function foo() {
 }
+
 exports.b = foo;
 
 

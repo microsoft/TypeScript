@@ -35,7 +35,7 @@ var M;
     M.E = E;
     var D = /** @class */ (function () {
         function D() {
-        }// don't generate
+        }
         D.prototype.m232 = function () { return null; };
         D.prototype.m242 = function () { return null; };
         D.prototype.m252 = function () { return null; }; // don't generate

@@ -50,13 +50,16 @@ exports.Button = void 0;
 var React = require("react");
 
 var Button = /** @class */ (function (_super) {
-    __extends(Button, _super);function Button() {
+    __extends(Button, _super);
+    function Button() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Button.prototype.render = function () {
+    }
+    Button.prototype.render = function () {
         return <button>Some button</button>;
     };
     return Button;
-}(React.Component));exports.Button = Button;
+}(React.Component));
+exports.Button = Button;
 //// [app.jsx]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -80,10 +83,13 @@ var React = require("react");
 var button_1 = require("./button");
 
 var App = /** @class */ (function (_super) {
-    __extends(App, _super);function App() {
+    __extends(App, _super);
+    function App() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }App.prototype.render = function () {
+    }
+    App.prototype.render = function () {
         return <button_1.Button />;
     };
     return App;
-}(React.Component));exports.App = App;
+}(React.Component));
+exports.App = App;

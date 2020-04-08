@@ -36,7 +36,8 @@ var __extends = (this && this.__extends) || (function () {
     return Base;
 }());
 var Subclass = /** @class */ (function (_super) {
-    __extends(Subclass, _super);function Subclass() {
+    __extends(Subclass, _super);
+    function Subclass() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.instance1_1 = new Base(); // allowed
         _this.instance1_2 = new Subclass(); // allowed
@@ -45,7 +46,8 @@ var Subclass = /** @class */ (function (_super) {
     return Subclass;
 }(Base));
 var SubclassOfSubclass = /** @class */ (function (_super) {
-    __extends(SubclassOfSubclass, _super);function SubclassOfSubclass() {
+    __extends(SubclassOfSubclass, _super);
+    function SubclassOfSubclass() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.instance2_1 = new Base(); // allowed
         _this.instance2_2 = new Subclass(); // allowed

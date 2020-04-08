@@ -11,6 +11,7 @@ if (!(result instanceof RegExp)) {
 //// [typeGuardsWithInstanceOf.js]
 var result;
 var result2;
+
 if (!(result instanceof RegExp)) {
     result = result2;
 }

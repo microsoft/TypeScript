@@ -93,10 +93,13 @@ exports.__esModule = true;
 function f(a) {
 }
 f(0);
+
 // function expression paramter
 var fexp = function (a) {
 };
+
 fexp(0);
+
 // arrow function paramter
 var farrow = function (a) {
 };
@@ -140,16 +143,16 @@ var o = {
     set x(v) {
     }
 };
+
 o;
+
 // in a for..in statment
 for (var i in o) {
 }
-
 // in a for..of statment
 for (var _i = 0, _a = [1, 2, 3]; _i < _a.length; _i++) {
     var i = _a[_i];
 }
-
 // in a for. statment
 for (var i = 0, n = void 0; i < 10; i++) {
 }
@@ -175,6 +178,5 @@ var N;
 (function (N) {
     var x;
 })(N || (N = {}));
-for (var x = void 0,
-    z = (void 0).z; (x); )
+for (var x = void 0, z = (void 0).z; (x); )
     ;

@@ -63,11 +63,15 @@ var a = Foo;
 a = Bar;
 a = Baz; // error Baz is protected
 a = Qux; // error Qux is private
+
+
 // b is protected
 var b = Baz;
 b = Foo;
 b = Bar;
 b = Qux; // error Qux is private
+
+
 // c is private
 var c = Qux;
 c = Foo;

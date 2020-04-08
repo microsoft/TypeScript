@@ -39,15 +39,17 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var P = /** @class */ (function () {
     function P() {
-    }P.prototype.x = function () { };
+    }
+    P.prototype.x = function () { };
     P.y = function () { };
     return P;
 }());
 var Q = /** @class */ (function (_super) {
     __extends(Q, _super);
-
     // Super is not allowed in constructor args
-    function Q(z, zz, zzz) {if (z === void 0) { z = _super.prototype.; }if (zz === void 0) { zz = _super.prototype.; }if (zzz === void 0) { zzz = function () { return _super.prototype.; }; }
+    function Q(z, zz, zzz) {if (z === void 0) { z = _super.prototype.; }
+        if (zz === void 0) { zz = _super.prototype.; }
+        if (zzz === void 0) { zzz = function () { return _super.prototype.; }; }
         var _this = _super.call(this) || this;
         _this.z = z;
         _this.xx = _super.prototype.;

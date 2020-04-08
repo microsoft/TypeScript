@@ -29,7 +29,6 @@ var __extends = (this && this.__extends) || (function () {
 }());
 var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
-
     function Derived() {
         var _this = this;
         _this.x = 100;

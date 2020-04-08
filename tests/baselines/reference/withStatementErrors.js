@@ -27,10 +27,10 @@ with (ooo.eee.oo.ah_ah.ting.tang.walla.walla) { // error
     function bar() { } // no error
 
     bar(); // no error
+
     var C = /** @class */ (function () {
         function C() {}
         return C;
     }()); // error   
-
 
 }

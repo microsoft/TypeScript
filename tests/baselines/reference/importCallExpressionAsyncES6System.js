@@ -64,7 +64,6 @@ System.register([], function (exports_1, context_1) {
                     const req = yield context_1.import('./test'); // THREE
                 })
             });
-
             cl2 = class cl2 {
 
                 constructor() {

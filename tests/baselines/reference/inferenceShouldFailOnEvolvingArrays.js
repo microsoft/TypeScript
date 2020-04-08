@@ -29,6 +29,7 @@ function logLength(arg) {
 logLength(42); // error
 var z;
 z = logLength(42); // no error; T is inferred as `any`
+
 function logFirstLength(arg) {
     console.log(arg[0].length);
     return arg;

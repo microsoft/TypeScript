@@ -72,6 +72,7 @@ obj1["a"]; // number
 obj1["b"]; // number
 obj1["bin1"]; // number
 obj1["Infinity"]; // boolean
+
 obj2[26]; // string
 obj2[26]; // string
 obj2["26"]; // string

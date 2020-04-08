@@ -90,9 +90,11 @@ var _a = undefined[0], a2 = _a === void 0 ? false : _a, _b = undefined[1], a3 = 
 //        where N is the numeric index of E in the array assignment pattern, or
 var _c = [2, 3, 4], b0 = _c[0], b1 = _c[1], b2 = _c[2];
 var _d = [1, 2, "string"], b3 = _d[0], b4 = _d[1], b5 = _d[2];
+
 function foo() {
     return [1, 2, 3];
 }
+
 var _e = foo(), b6 = _e[0], b7 = _e[1];
 var b8 = foo().slice(0);
 

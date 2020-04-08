@@ -39,7 +39,8 @@ var baz = /** @class */ (function () {
     return baz;
 }());
 var foo = /** @class */ (function (_super) {
-    __extends(foo, _super);function foo() {
+    __extends(foo, _super);
+    function foo() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return foo;

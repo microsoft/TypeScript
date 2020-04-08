@@ -27,4 +27,5 @@ loop: while (true) {
 {
     x: 100;
 }
+
 var y = function () { f: 1; };

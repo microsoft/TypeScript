@@ -22,8 +22,6 @@ var v1 = stringMapToArray(stringMap);  // Ok
 
 //// [indexSignatureTypeInference.js]
 
-
-
 var numberMap;
 var stringMap;
 

@@ -274,7 +274,8 @@ var c3_i = new c3();
 // assign
 c2_i = c3_i;
 var c4 = /** @class */ (function (_super) {
-    __extends(c4, _super);function c4() {
+    __extends(c4, _super);
+    function c4() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return c4;

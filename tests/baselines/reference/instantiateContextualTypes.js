@@ -192,8 +192,17 @@ function fn(values, value) {
 }
 
 fn(handlers, value => alert(value));
+
+
 new GenericComponent({ initialValues: 12, nextValues: val => 12 });
+
 useStringOrNumber("", foo => { });
+
+
+
+
+
+
 
 
 
@@ -204,34 +213,43 @@ const defaultState = {
 
 const NON_VOID_ACTION = 'NON_VOID_ACTION',
     VOID_ACTION = 'VOID_ACTION';
+
 createReducer(
 defaultState,
     handler(NON_VOID_ACTION, (state, _payload) => state),
     handler(VOID_ACTION, state => state)
 );
+
+
+
+
+
+
+
+
+
+
+
+
 x.on('a', a => { });
 // #29775
 var N1;
 (function (N1) {
 
 
-
-
-
-
-
-
-
-
-
-
     class InferFunctionTypes extends Component {}
+
     createElement(InferFunctionTypes, (foo) => "" + foo);
 
     createElement2(InferFunctionTypes, [(foo) => "" + foo]);
 })(N1 || (N1 = {}));
 
 passContentsToFunc(outerBoxOfString, box => box.value);
+
+
+
+
+
 class Interesting {
 
     constructor() {
@@ -265,4 +283,5 @@ let xx = invoke(() => 1);
 let obj = {
     foo(bar) { }
 };
+
 assignPartial(obj, { foo(...args) { } }); // args has type [string]

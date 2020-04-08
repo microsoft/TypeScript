@@ -169,8 +169,6 @@ function test2<T, K extends keyof T>(obj: Record<K, number>) {
 
 
 
-
-
 function f1(x) {
     var y; // Error
 }
@@ -234,9 +232,11 @@ setState(foo, {});
 setState(foo, foo);
 setState(foo, { a: undefined }); // Error
 setState(foo, { c: true }); // Error
+
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.setState = function (props) {
+    }
+    C.prototype.setState = function (props) {
         for (var k in props) {
             this.state[k] = props[k];
         }
@@ -251,6 +251,9 @@ c.setState({});
 c.setState(foo);
 c.setState({ a: undefined }); // Error
 c.setState({ c: true }); // Error
+
+
+
 var x1 = { a: 'no' }; // Error
 var x2 = { a: 'no' }; // Error
 var x3 = { a: 'no' }; // Error

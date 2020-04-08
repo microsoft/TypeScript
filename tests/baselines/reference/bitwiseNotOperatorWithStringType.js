@@ -52,7 +52,8 @@ function foo() { return "abc"; }
 
 var A = /** @class */ (function () {
     function A() {
-    }A.foo = function () { return ""; };
+    }
+    A.foo = function () { return ""; };
     return A;
 }());
 var M;
@@ -81,6 +82,7 @@ var ResultIsNumber12 = ~STRING.charAt(0);
 // multiple ~ operators
 var ResultIsNumber13 = ~~STRING;
 var ResultIsNumber14 = ~~~(STRING + STRING);
+
 //miss assignment operators
 ~STRING;
 ~STRING1;

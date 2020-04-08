@@ -93,7 +93,8 @@ var m1;
 (function (m1) {
     var C1_public = /** @class */ (function () {
         function C1_public() {
-        }C1_public.prototype.f1 = function () {
+        }
+        C1_public.prototype.f1 = function () {
         };
         return C1_public;
     }());

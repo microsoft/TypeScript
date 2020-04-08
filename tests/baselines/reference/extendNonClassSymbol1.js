@@ -17,12 +17,14 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();var A = /** @class */ (function () {
-    function A() {}A.prototype.foo = function () { };
+    function A() {}
+    A.prototype.foo = function () { };
     return A;
 }());
 var x = A;
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);function C() {
+    __extends(C, _super);
+    function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;

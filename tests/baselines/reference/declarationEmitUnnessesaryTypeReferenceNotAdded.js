@@ -38,7 +38,8 @@ var process = require("process");
 
 function parseArgs() {
     return minimist(process.argv.slice(2));
-}exports.default = parseArgs;
+}
+exports.default = parseArgs;
 
 
 //// [index.d.ts]

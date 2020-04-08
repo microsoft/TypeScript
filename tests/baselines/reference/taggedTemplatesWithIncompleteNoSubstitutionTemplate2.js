@@ -8,5 +8,6 @@ f `
 //// [taggedTemplatesWithIncompleteNoSubstitutionTemplate2.js]
 function f(x, y, z) {
 }
+
 // Incomplete call, not enough parameters, at EOF.
 f `;

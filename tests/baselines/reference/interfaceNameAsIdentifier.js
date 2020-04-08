@@ -15,4 +15,6 @@ m2.C();
 
 //// [interfaceNameAsIdentifier.js]
 C();
+
+
 m2.C();

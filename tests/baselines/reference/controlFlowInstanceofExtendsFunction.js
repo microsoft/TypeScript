@@ -36,12 +36,15 @@ if (x instanceof X) {
 "use strict";
 exports.__esModule = true;
 exports.x = void 0;
+
 Function.prototype.now = function () {
     return "now";
 };
+
 var X = /** @class */ (function () {
     function X() {
-    }X.now = function () {
+    }
+    X.now = function () {
         return {};
     };
 
@@ -56,7 +59,9 @@ var Y = /** @class */ (function () {
 }());
 console.log(X.now()); // works as expected
 console.log(Y.now()); // works as expected
+
 exports.x = Math.random() > 0.5 ? new X() : 1;
+
 if (exports.x instanceof X) {
     exports.x.why(); // should compile
 }

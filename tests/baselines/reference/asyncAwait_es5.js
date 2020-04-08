@@ -159,7 +159,8 @@ var o = {
 
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.m1 = function () {
+    }
+    C.prototype.m1 = function () {
         return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
             return [2 /*return*/];
         }); });

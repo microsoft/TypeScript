@@ -73,6 +73,7 @@ C.prototype =
 
 
 //// [targetTypeTest1.js]
+
 // Type provided by extern declaration
 // Because Point is a constructor function, this is inferred
 // to be Point and return type is inferred to be void
@@ -80,8 +81,12 @@ function Point(x, y) {
     this.x = x;
     this.y = y;
 }
+
+
 function EF1(a, b) { return a + b; }
+
 var x = EF1(1, 2);
+
 // Point.origin declared as type Point
 Point.origin = new Point(0, 0);
 
@@ -91,7 +96,9 @@ Point.origin = new Point(0, 0);
 Point.prototype.add = function (dx, dy) {
     return new Point(this.x + dx, this.y + dy);
 };
+
 var f = 5;
+
 // Object literal type inferred using target typing
 // this in function add inferred to be type of object literal (i.e. Point)
 // dx, dy, and return type of add inferred using target typing
@@ -102,9 +109,11 @@ Point.prototype = {
         return new Point(this.x + dx, this.y + dy);
     }
 };
+
 z = function (a) {
     a;
 };
+
 
 function C(a, b) {
     this.a = a;

@@ -21,8 +21,8 @@ class C {
         _bar.set(this, 3);
         const ok = 3;
         // not supported yet, could support in future:
-        const badForNow, #bar;
-        3; // Error
+        const badForNow, #bar;3; // Error
+
         // will never use this syntax, already taken:
         const badAlways = 3; // Error
     }

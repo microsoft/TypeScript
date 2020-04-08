@@ -26,7 +26,7 @@ class C2<T> implements IFoo2<T> { // error
 
 var C = /** @class */ (function () {
     function C() {
-    }// error
+    }
     C.prototype.foo = function (x) {
         return null;
     };
@@ -34,7 +34,7 @@ var C = /** @class */ (function () {
 }());
 var C2 = /** @class */ (function () {
     function C2() {
-    }// error
+    }
     C2.prototype.foo = function (x) {
         return null;
     };

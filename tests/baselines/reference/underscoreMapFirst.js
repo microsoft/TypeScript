@@ -63,15 +63,15 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 
-
-
-
 var MyView = /** @class */ (function (_super) {
-    __extends(MyView, _super);function MyView() {
+    __extends(MyView, _super);
+    function MyView() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }MyView.prototype.getDataSeries = function () {
+    }
+    MyView.prototype.getDataSeries = function () {
         var data = this.model.get("data");
         var allSeries = _.pluck(data, "series");
+
         return _.map(allSeries, _.first);
     };
     return MyView;

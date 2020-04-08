@@ -31,4 +31,5 @@ function speak(pet, voice) {
         throw new Error("Expected \"pet\" to be a Pet");
     }
     return voice(pet);
-}exports.speak = speak;
+}
+exports.speak = speak;

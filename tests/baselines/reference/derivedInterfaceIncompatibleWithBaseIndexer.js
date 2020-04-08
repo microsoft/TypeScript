@@ -30,9 +30,3 @@ interface Derived5 extends Base {
 }
 
 //// [derivedInterfaceIncompatibleWithBaseIndexer.js]
-
-
-
-
-
-

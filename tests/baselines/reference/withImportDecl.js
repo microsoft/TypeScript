@@ -51,7 +51,8 @@ define(["require", "exports"], function (require, exports) {
     var A = /** @class */ (function () {
         function A() {}
         return A;
-    }());exports.A = A;
+    }());
+    exports.A = A;
 });
 //// [withImportDecl_1.js]
 define(["require", "exports", "withImportDecl_0"], function (require, exports, m3) {
@@ -69,8 +70,9 @@ define(["require", "exports", "withImportDecl_0"], function (require, exports, m
     var withComplicatedValue = { x: 30, y: 70, desc: "position" };
 
 
-
     var arrayVar = ['a', 'b'];
+
+
     function simpleFunction() {
         return {
             x: "Hello",

@@ -16,13 +16,13 @@ export = A
 "use strict";
 var A = /** @class */ (function () {
     function A() {
-    }A.prototype.foo = function () {
+    }
+    A.prototype.foo = function () {
         var aVal;
         return aVal;
     };
     return A;
 }());
-
 module.exports = A;
 
 

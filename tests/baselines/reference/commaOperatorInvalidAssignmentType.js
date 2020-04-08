@@ -26,6 +26,7 @@ var STRING;
 var resultIsBoolean;
 var resultIsNumber;
 var resultIsString;
+
 //Expect errors when the results type is different form the second operand
 resultIsBoolean = (BOOLEAN, STRING);
 resultIsBoolean = (BOOLEAN, NUMBER);

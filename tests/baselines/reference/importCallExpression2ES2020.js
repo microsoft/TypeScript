@@ -27,4 +27,5 @@ function foo(x) {
         b.print();
     });
 }
+
 foo(import("./0"));

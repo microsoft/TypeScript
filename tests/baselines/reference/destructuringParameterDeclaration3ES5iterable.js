@@ -109,12 +109,15 @@ var array = [1, 2, 3];
 var array2 = [true, false, "hello"];
 a2(__spread(array));
 a1.apply(void 0, __spread(array));
+
 a9([1, 2, [["string"]], false, true]); // Parameter type is [any, any, [[any]]]
 
 a10([1, 2, [["string"]], false, true]); // Parameter type is any[]
 a10([1, 2, 3, false, true]); // Parameter type is any[]
 a10([1, 2]); // Parameter type is any[]
 a11([1, 2]); // Parameter type is number[]
+
+
 // Rest parameter with generic
 function foo() {var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -125,7 +128,8 @@ foo("hello", 1, 2);
 foo("hello", "world");
 var E;
 (function (E) {
-    E[E["a"] = 0] = "a";E[E["b"] = 1] = "b";
+    E[E["a"] = 0] = "a";
+    E[E["b"] = 1] = "b";
 })(E || (E = {}));
 function foo1() {var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {

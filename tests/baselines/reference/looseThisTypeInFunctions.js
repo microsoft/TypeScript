@@ -51,7 +51,8 @@ i.explicitThis = function(m) {
 //// [looseThisTypeInFunctions.js]
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.explicitThis = function (m) {
+    }
+    C.prototype.explicitThis = function (m) {
         return this.n + m;
     };
     C.prototype.implicitThis = function (m) {

@@ -54,7 +54,8 @@ function foo() { return 1; }
 
 var A = /** @class */ (function () {
     function A() {
-    }A.foo = function () { return 1; };
+    }
+    A.foo = function () { return 1; };
     return A;
 }());
 var M;
@@ -82,6 +83,7 @@ var ResultIsBoolean11 = delete (NUMBER + NUMBER);
 // multiple delete  operator
 var ResultIsBoolean12 = delete delete NUMBER;
 var ResultIsBoolean13 = delete delete delete (NUMBER + NUMBER);
+
 // miss assignment operators
 delete 1;
 delete NUMBER;

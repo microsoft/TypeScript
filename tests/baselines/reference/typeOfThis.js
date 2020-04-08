@@ -195,6 +195,7 @@ class MyTestClass {
     //type of 'this' in member function param list is the class instance type
     memberFunc(t = this) {
         var t;
+
         //type of 'this' in member function body is the class instance type
         var p = this;
         var p;
@@ -266,6 +267,7 @@ class MyGenericTestClass {
     //type of 'this' in member function param list is the class instance type
     memberFunc(t = this) {
         var t;
+
         //type of 'this' in member function body is the class instance type
         var p = this;
         var p;
@@ -324,6 +326,7 @@ class MyGenericTestClass {
 function fn(s = this) {
     var s;
     s.spaaaaaaace = 4;
+
     //type of 'this' in a function declaration body is Any
     var t;
     var t = this;
@@ -334,6 +337,7 @@ function fn(s = this) {
 var q1 = function (s = this) {
     var s;
     s.spaaaaaaace = 4;
+
     //type of 'this' in a function expression body is Any
     var t;
     var t = this;
@@ -344,6 +348,7 @@ var q1 = function (s = this) {
 var q2 = (s = this) => {
     var s;
     s.spaaaaaaace = 4;
+
     //type of 'this' in a fat arrow expression body is typeof globalThis
     var t;
     var t = this;

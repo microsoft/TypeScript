@@ -48,13 +48,6 @@ var instance2 = new c1();
 
 //// [interfacedecl.js]
 
-
-
-
-
-
-
-
 var c1 = /** @class */ (function () {
     function c1() {
     }

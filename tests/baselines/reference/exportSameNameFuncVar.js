@@ -10,5 +10,6 @@ define(["require", "exports"], function (require, exports) {
     exports.a = void 0;
     exports.a = 10;
     function a() {
-    }exports.a = a;
+    }
+    exports.a = a;
 });

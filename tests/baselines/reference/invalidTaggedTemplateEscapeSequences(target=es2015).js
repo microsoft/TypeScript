@@ -32,11 +32,13 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
 };function tag(str, ...args) {
     return str;
 }
+
 const a = tag `123`;
 const b = tag `123 ${100}`;
 const x = tag(__makeTemplateObject([undefined, undefined, " wonderful ", undefined], ["\\u{hello} ", " \\xtraordinary ", " wonderful ", " \\uworld"]), 100, 200, 300);
 const y = `\u{hello} ${100} \xtraordinary ${200} wonderful ${300} \uworld`; // should error with NoSubstitutionTemplate
 const z = tag(__makeTemplateObject([undefined], ["\\u{hello} \\xtraordinary wonderful \\uworld"])); // should work with Tagged NoSubstitutionTemplate
+
 const a1 = tag `${100}\0`; // \0
 const a2 = tag(__makeTemplateObject(["", undefined], ["", "\\00"]), 100); // \\00
 const a3 = tag(__makeTemplateObject(["", undefined], ["", "\\u"]), 100); // \\u

@@ -10,5 +10,6 @@ const text = fs.readFileSync("/a/b/c");
 function require(a) {
     return a;
 }
+
 var fs = require("fs");
 var text = fs.readFileSync("/a/b/c");

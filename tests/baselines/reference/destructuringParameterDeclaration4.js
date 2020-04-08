@@ -72,11 +72,15 @@ function a5(_a) {
 function a6(_a) {
     var a = _a[0], b = _a[1], c = _a[2], x = _a.slice(3);
 }
+
+
 a1(1, 2, "hello", true); // Error, parameter type is (number|string)[]
 a1.apply(void 0, array2); // Error parameter type is (number|string)[]
 a5([1, 2, "string", false, true]); // Error, parameter type is [any, any, [[any]]]
 a5([1, 2]); // Error, parameter type is [any, any, [[any]]]
 a6([1, 2, "string"]); // Error, parameter type is number[]
+
+
 var temp = [1, 2, 3];
 var C = /** @class */ (function () {
     function C() {var temp = [];

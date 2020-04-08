@@ -33,7 +33,8 @@ var __extends = (this && this.__extends) || (function () {
     return BaseEvent;
 }());
 var MyEvent = /** @class */ (function (_super) {
-    __extends(MyEvent, _super);function MyEvent() {
+    __extends(MyEvent, _super);
+    function MyEvent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return MyEvent;
@@ -44,7 +45,8 @@ var BaseEventWrapper = /** @class */ (function () {
     return BaseEventWrapper;
 }());
 var MyEventWrapper = /** @class */ (function (_super) {
-    __extends(MyEventWrapper, _super);function MyEventWrapper() {
+    __extends(MyEventWrapper, _super);
+    function MyEventWrapper() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return MyEventWrapper;

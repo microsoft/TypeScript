@@ -59,10 +59,12 @@ generic(b); // expect error
 function bound(t) {
     var o = t; // ok
 }
+
 bound({});
 bound(a);
 bound(123); // expect error
 bound(b); // expect error
+
 function bound2() { }
 
 bound2();

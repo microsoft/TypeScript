@@ -146,7 +146,8 @@ var Base = /** @class */ (function () {
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);function Derived() {
+    __extends(Derived, _super);
+    function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived;
@@ -168,13 +169,15 @@ var C = /** @class */ (function () {
 }());
 
 var PA = /** @class */ (function (_super) {
-    __extends(PA, _super);function PA() {
+    __extends(PA, _super);
+    function PA() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return PA;
 }(A));
 var PB = /** @class */ (function (_super) {
-    __extends(PB, _super);function PB() {
+    __extends(PB, _super);
+    function PB() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return PB;

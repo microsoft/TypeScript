@@ -14,7 +14,8 @@ exports.f = void 0;
 
 function f(x) {
     return typeof x.a === "number";
-}exports.f = f;
+}
+exports.f = f;
 
 
 //// [declarationEmitIdentifierPredicatesWithPrivateName01.d.ts]

@@ -438,9 +438,6 @@ var x0 = f5("a"); // { k: "a", a: number }
 
 
 
-
-
-
 function f7(x, y, z) {
     x = y; // Error
     x = z; // Error
@@ -625,28 +622,6 @@ var f45 = function (value) { return value; }; // Error
 // Repro from #21863
 function f50() {
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

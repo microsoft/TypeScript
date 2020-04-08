@@ -16,6 +16,7 @@ declare module JSX {
 
 
 //// [file.jsx]
+
 // Error
 <test1 data-foo={32}/>;
 

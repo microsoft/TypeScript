@@ -322,7 +322,8 @@ var TypeScript;
         function StringHashTable() {
             this.itemCount = 0;
             this.table = new BlockIntrinsics();
-        }StringHashTable.prototype.getAllKeys = function () {
+        }
+        StringHashTable.prototype.getAllKeys = function () {
             var result = [];
             for (var k in this.table) {
                 if (this.table[k] != undefined) {
@@ -518,6 +519,7 @@ var TypeScript;
             val = val % this.size;
             var result = null;
             var prevEntry = null;
+
             for (current = this.table[val]; current != null; current = current.next) {
                 if (this.equalsFn(key, current.key)) {
                     result = current.data;
@@ -556,11 +558,13 @@ var TypeScript;
         function SimpleHashTable() {
             this.keys = [];
             this.values = [];
-        }SimpleHashTable.prototype.lookup = function (key, findValue) {
+        }
+        SimpleHashTable.prototype.lookup = function (key, findValue) {
             var searchArray = this.keys;
             if (findValue) {
                 searchArray = this.values;
             }
+
             for (var i = 0; i < searchArray.length; i++) {
                 if (searchArray[i] == key) {
                     return {

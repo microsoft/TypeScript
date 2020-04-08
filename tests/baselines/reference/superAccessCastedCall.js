@@ -35,13 +35,12 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var Foo = /** @class */ (function () {
     function Foo() {
-    }Foo.prototype.bar = function () { };
+    }
+    Foo.prototype.bar = function () { };
     return Foo;
 }());
 var Bar = /** @class */ (function (_super) {
     __extends(Bar, _super);
-
-
     function Bar() {
         var _this = _super.call(this) || this;
         _this.x = 2;

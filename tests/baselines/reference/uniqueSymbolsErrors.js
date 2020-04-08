@@ -89,7 +89,6 @@ const shouldNotBeAssignable: string = Symbol();
 
 //// [uniqueSymbolsErrors.js]
 
-
 // classes
 class InvalidClass {
     constructor(invalidConstructorArgType) { }
@@ -117,26 +116,6 @@ class InvalidClass {
     static get invalidStaticGetter() { return; }
     static set invalidStaticSetter(arg) { return; }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // initializer assignability

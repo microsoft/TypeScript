@@ -85,6 +85,7 @@ class clazz {
         await p;
     }
 }
+
 for await (const _ of [])
     ;
 await null;

@@ -6,4 +6,5 @@ p.finally();
 
 //// [es2018ObjectAssign.js]
 const test = Object.assign({}, { test: true });
+
 p.finally();

@@ -65,6 +65,7 @@ SEVEN: for (;;)
     for (;;)
         for (;;)
             continue SEVEN;
+
 EIGHT: for (;;) {
     var fn = function () { };
     continue EIGHT;

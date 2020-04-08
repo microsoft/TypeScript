@@ -5,7 +5,8 @@ function right(a = b, b = a) {
 }
 
 //// [optionalParamReferencingOtherParams3.js]
-function right(a, b) {if (a === void 0) { a = b; }if (b === void 0) { b = a; }
+function right(a, b) {if (a === void 0) { a = b; }
+    if (b === void 0) { b = a; }
     a;
     b;
 }

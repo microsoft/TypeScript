@@ -25,8 +25,6 @@ module Bugs {
 var Bugs;
 (function (Bugs) {
 
-
-
     function bug3() {
         var tokens = [];
         tokens.push({ startIndex: 1, type: '', bracket: 3 });

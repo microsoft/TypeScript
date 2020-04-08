@@ -35,7 +35,8 @@ var Microsoft;
         (function (Model) {
             var _Person = /** @class */ (function () {
                 function _Person() {
-                }_Person.prototype.populate = function (raw) {
+                }
+                _Person.prototype.populate = function (raw) {
                     var res = Model.KnockoutExtentions;
                 };
                 return _Person;

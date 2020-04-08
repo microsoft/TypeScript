@@ -29,7 +29,8 @@ function tag(parts) {var values = [];
         values[_i - 1] = arguments[_i];
     }
     return parts[0];
-}exports.tag = tag;
+}
+exports.tag = tag;
 function foo() {
     tag(templateObject_1 || (templateObject_1 = __makeTemplateObject(["foo"], ["foo"])));
     tag(templateObject_2 || (templateObject_2 = __makeTemplateObject(["foo2"], ["foo2"])));
@@ -39,6 +40,7 @@ function bar() {
     tag(templateObject_3 || (templateObject_3 = __makeTemplateObject(["bar"], ["bar"])));
     tag(templateObject_4 || (templateObject_4 = __makeTemplateObject(["bar2"], ["bar2"])));
 }
+
 foo();
 bar();
 var templateObject_1, templateObject_2, templateObject_3, templateObject_4;

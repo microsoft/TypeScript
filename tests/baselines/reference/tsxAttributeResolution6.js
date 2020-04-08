@@ -19,6 +19,7 @@ declare module JSX {
 
 
 //// [file.jsx]
+
 // Error
 <test1 s/>;
 <test1 n='true'/>;

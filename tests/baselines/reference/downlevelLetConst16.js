@@ -259,7 +259,8 @@ function foo2() {
 
 var A = /** @class */ (function () {
     function A() {
-    }A.prototype.m1 = function () {
+    }
+    A.prototype.m1 = function () {
         var x = 1;
         use(x);
         var y = [1][0];
@@ -282,7 +283,8 @@ var A = /** @class */ (function () {
 }());
 var B = /** @class */ (function () {
     function B() {
-    }B.prototype.m1 = function () {
+    }
+    B.prototype.m1 = function () {
         var x = 1;
         use(x);
         var y = [1][0];

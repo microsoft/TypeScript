@@ -110,7 +110,11 @@ something,
 }
 
 var value = Math.random() > 0.5 ? 'hey!' : undefined;
+
 var result = destructure(value, text => 'string', y => 'other one'); // text: string, y: Y
+
+
+
 // Repro from #4212
 function isVoid(value) {
     return undefined;
@@ -151,8 +155,12 @@ get(foo).toUpperCase(); // Ok
 
 
 
+
 pigify(mbp).oinks; // OK, mbp is treated as Pig
 pigify(mbp).walks; // Ok, mbp is treated as Man
+
+
+
 
 const createTestAsync = () => Promise.resolve().then(() => ({ name: 'test' }));
 

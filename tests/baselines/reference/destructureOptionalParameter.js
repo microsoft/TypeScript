@@ -33,7 +33,6 @@ function f2(_a) {
 
 
 
-
 //// [destructureOptionalParameter.d.ts]
 declare function f1({ a, b }?: {
     a: number;

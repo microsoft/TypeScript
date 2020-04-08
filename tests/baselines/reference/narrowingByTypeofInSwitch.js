@@ -544,13 +544,11 @@ function narrowingNarrows(x) {
         case 'boolean':assertBoolean(x);return;
         case 'function':assertFunction(x);return;
         case 'symbol':assertSymbol(x);return;
-        case 'object':var _ = x;
-            return;
+        case 'object':var _ = x;return;
         case 'string':assertString(x);return;
         case 'undefined':assertUndefined(x);return;
         case 'number':assertNever(x);return;
-        default:var _y = x;
-            return;
+        default:var _y = x;return;
     }
 }
 

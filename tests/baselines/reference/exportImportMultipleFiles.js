@@ -17,7 +17,8 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     exports.add = void 0;
-    function add(a, b) { return a + b; }exports.add = add;
+    function add(a, b) { return a + b; }
+    exports.add = add;
 });
 //// [exportImportMultipleFiles_library.js]
 define(["require", "exports", "exportImportMultipleFiles_math"], function (require, exports, math) {

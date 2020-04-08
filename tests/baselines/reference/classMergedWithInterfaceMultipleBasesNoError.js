@@ -31,7 +31,8 @@ var Foo = /** @class */ (function () {
     return Foo;
 }());
 var default_1 = /** @class */ (function (_super) {
-    __extends(default_1, _super);function default_1() {
+    __extends(default_1, _super);
+    function default_1() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.observer = _this.handleIntersection;
         _this.handleIntersection = function () { };

@@ -25,7 +25,8 @@ declare class c2 {
 //// [declFilePrivateMethodOverloads.js]
 var c1 = /** @class */ (function () {
     function c1() {
-    }c1.prototype._forEachBindingContext = function (context, fn) {
+    }
+    c1.prototype._forEachBindingContext = function (context, fn) {
         // Function here
     };
 

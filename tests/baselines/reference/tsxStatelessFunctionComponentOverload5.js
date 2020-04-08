@@ -62,9 +62,6 @@ define(["require", "exports", "react"], function (require, exports, React) {
     exports.__esModule = true;
     exports.MainButton = void 0;
 
-
-
-
     var obj0 = {
         to: "world"
     };
@@ -87,8 +84,8 @@ define(["require", "exports", "react"], function (require, exports, React) {
         }
 
         return this._buildMainButton(props);
-    }exports.MainButton = MainButton;
-
+    }
+    exports.MainButton = MainButton;
     // Error
     var b0 = <MainButton to='/some/path' onClick={function (e) { }}>GO</MainButton>; // extra property;
     var b1 = <MainButton onClick={function (e) { }} {...obj0}>Hello world</MainButton>; // extra property;

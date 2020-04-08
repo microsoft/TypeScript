@@ -26,6 +26,8 @@ var C2 = /** @class */ (function () {
     return C2;
 }());
 function foo() { }
+
+
 var x = 1;
 var y = 2;
 var C3 = /** @class */ (function () {

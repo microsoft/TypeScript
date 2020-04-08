@@ -14,5 +14,6 @@ define(["require", "exports"], function (require, exports) {
     exports.foo = void 0;
     function foo(fn) {
         foo(fn); // Invocation is necessary to repro (!)
-    }exports.foo = foo;
+    }
+    exports.foo = foo;
 });

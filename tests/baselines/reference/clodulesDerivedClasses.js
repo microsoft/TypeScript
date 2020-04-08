@@ -48,7 +48,8 @@ var __extends = (this && this.__extends) || (function () {
     })(Utils = Shape.Utils || (Shape.Utils = {}));
 })(Shape || (Shape = {}));
 var Path = /** @class */ (function (_super) {
-    __extends(Path, _super);function Path() {
+    __extends(Path, _super);
+    function Path() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Path;

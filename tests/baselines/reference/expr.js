@@ -248,7 +248,9 @@ function f() {
 //// [expr.js]
 var E;
 (function (E) {
-    E[E["Red"] = 0] = "Red";E[E["Green"] = 1] = "Green";E[E["Blue"] = 2] = "Blue";
+    E[E["Red"] = 0] = "Red";
+    E[E["Green"] = 1] = "Green";
+    E[E["Blue"] = 2] = "Blue";
 })(E || (E = {}));
 function f() {
     var a;
@@ -257,6 +259,7 @@ function f() {
     var b = false;
     var i;
     var e;
+
     n && a;
     n && s;
     n && b;

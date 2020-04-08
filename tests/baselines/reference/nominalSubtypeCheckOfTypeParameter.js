@@ -19,5 +19,3 @@ interface List<T> extends Sequence<T> {
 
 
 //// [nominalSubtypeCheckOfTypeParameter.js]
-
-

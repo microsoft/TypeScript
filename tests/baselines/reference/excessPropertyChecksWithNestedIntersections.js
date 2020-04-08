@@ -79,8 +79,6 @@ exports.myInstance = exports.photo = exports.obj = void 0;
 
 
 
-
-
 var a = { a: { x: 'hello' } }; // ok
 var b = { a: { x: 2 } }; // error - types of property x are incompatible
 var c = { a: { x: 'hello', y: 2 } }; // error - y does not exist in type A
@@ -116,9 +114,8 @@ exports.myInstance = {
 
 
 
-
-
 var test;
+
 test = { foo: true, bar: true, boo: true };
 
 test = { foo: true, bar: { foo: true, bar: true, boo: true } };

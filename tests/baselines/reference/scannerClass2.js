@@ -15,4 +15,5 @@ var LoggerAdapter = /** @class */ (function () {
         this._information = this.logger.information();
     }
     return LoggerAdapter;
-}());exports.LoggerAdapter = LoggerAdapter;
+}());
+exports.LoggerAdapter = LoggerAdapter;

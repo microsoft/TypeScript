@@ -45,16 +45,14 @@ var react_1 = __importDefault(require("react"));
 
 
 var ResizablePanel = /** @class */ (function (_super) {
-    __extends(ResizablePanel, _super);function ResizablePanel() {
+    __extends(ResizablePanel, _super);
+    function ResizablePanel() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return ResizablePanel;
 }(react_1["default"].Component));
-var test = react_1["default"].createElement(ResizablePanel, null, react_1["default"].createElement("div", null),
-    react_1["default"].createElement("div", null)
+var test = react_1["default"].createElement(ResizablePanel, null, react_1["default"].createElement("div", null), react_1["default"].createElement("div", null)
 );
 
-var testErr = react_1["default"].createElement(ResizablePanel, null, react_1["default"].createElement("div", null),
-    react_1["default"].createElement("div", null),
-    react_1["default"].createElement("div", null)
+var testErr = react_1["default"].createElement(ResizablePanel, null, react_1["default"].createElement("div", null), react_1["default"].createElement("div", null), react_1["default"].createElement("div", null)
 );

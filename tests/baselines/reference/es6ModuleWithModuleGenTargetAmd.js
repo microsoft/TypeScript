@@ -19,8 +19,10 @@ define(["require", "exports"], function (require, exports) {
     class A {
         constructor() {
         }
+
         B() {
             return 42;
         }
-    }exports.A = A;
+    }
+    exports.A = A;
 });

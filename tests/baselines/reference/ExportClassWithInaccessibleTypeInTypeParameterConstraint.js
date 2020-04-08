@@ -49,7 +49,8 @@ var A;
     A.Origin = { x: 0, y: 0 };
 
     var Point3d = /** @class */ (function (_super) {
-        __extends(Point3d, _super);function Point3d() {
+        __extends(Point3d, _super);
+        function Point3d() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Point3d;

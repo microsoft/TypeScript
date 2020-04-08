@@ -79,7 +79,8 @@ System.register([], function (exports_1, context_1) {
             C = class C {
                 constructor() {
                     this.myModule = context_1.import("./0");
-                }method() {
+                }
+                method() {
                     const loadAsync = context_1.import("./0");
                     this.myModule.then(Zero => {
                         console.log(Zero.foo());
@@ -90,12 +91,12 @@ System.register([], function (exports_1, context_1) {
                     });
                 }
             };
-
             D = class D {
 
                 constructor() {
                     this.myModule = context_1.import("./0");
-                }method() {
+                }
+                method() {
                     const loadAsync = context_1.import("./0");
                     this.myModule.then(Zero => {
                         console.log(Zero.foo());

@@ -95,16 +95,18 @@ exports.e = C.F4;
 
 exports.x = (new C.D(new C.A())).val;
 
-function f() { }exports.f = f;
-
+function f() { }
+exports.f = f;
 exports.g = C.F5();
 
 var h = /** @class */ (function (_super) {
-    __extends(h, _super);function h() {
+    __extends(h, _super);
+    function h() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return h;
-}(C.A));exports.h = h;
+}(C.A));
+exports.h = h;
 
 exports.j = C.F6;
 

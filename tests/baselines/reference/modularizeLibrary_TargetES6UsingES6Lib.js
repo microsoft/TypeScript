@@ -58,7 +58,10 @@ const o1 = {
 function f(x, y, z) {
     return Array.from(arguments);
 }
+
 f(1, 2, 3); // no error
+
+
 // Using ES6 collection
 var m = new Map();
 m.clear();
@@ -71,6 +74,7 @@ Baz.name;
 
 // Using ES6 math
 Math.sign(1);
+
 // Using ES6 object
 var o = {
     a: 2,
@@ -97,6 +101,7 @@ str.includes("hello", 0);
 
 // Using ES6 symbol
 var s = Symbol();
+
 // Using ES6 wellknown-symbol
 const o1 = {
     [Symbol.hasInstance](value) {

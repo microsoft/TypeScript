@@ -40,7 +40,8 @@ function f<
 //// [collectionPatternNoError.js]
 var Message = /** @class */ (function () {
     function Message() {
-    }Message.prototype.clone = function () {
+    }
+    Message.prototype.clone = function () {
         return this;
     };
     return Message;

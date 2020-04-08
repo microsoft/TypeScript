@@ -215,6 +215,7 @@ sourceFile:../first_PART1.ts
 6 >Emitted(2, 24) Source(5, 26) + SourceIndex(0)
 ---
 >>>
+>>>
 >>>console.log(s);
 1 >
 2 >^^^^^^^
@@ -239,14 +240,14 @@ sourceFile:../first_PART1.ts
 6 >            s
 7 >             )
 8 >              ;
-1 >Emitted(4, 1) Source(11, 1) + SourceIndex(0)
-2 >Emitted(4, 8) Source(11, 8) + SourceIndex(0)
-3 >Emitted(4, 9) Source(11, 9) + SourceIndex(0)
-4 >Emitted(4, 12) Source(11, 12) + SourceIndex(0)
-5 >Emitted(4, 13) Source(11, 13) + SourceIndex(0)
-6 >Emitted(4, 14) Source(11, 14) + SourceIndex(0)
-7 >Emitted(4, 15) Source(11, 15) + SourceIndex(0)
-8 >Emitted(4, 16) Source(11, 16) + SourceIndex(0)
+1 >Emitted(5, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(5, 8) Source(11, 8) + SourceIndex(0)
+3 >Emitted(5, 9) Source(11, 9) + SourceIndex(0)
+4 >Emitted(5, 12) Source(11, 12) + SourceIndex(0)
+5 >Emitted(5, 13) Source(11, 13) + SourceIndex(0)
+6 >Emitted(5, 14) Source(11, 14) + SourceIndex(0)
+7 >Emitted(5, 15) Source(11, 15) + SourceIndex(0)
+8 >Emitted(5, 16) Source(11, 16) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/first/bin/first-output.js
@@ -271,15 +272,15 @@ sourceFile:../first_part2.ts
 7 >             ()
 8 >               )
 9 >                ;
-1->Emitted(5, 1) Source(1, 1) + SourceIndex(1)
-2 >Emitted(5, 8) Source(1, 8) + SourceIndex(1)
-3 >Emitted(5, 9) Source(1, 9) + SourceIndex(1)
-4 >Emitted(5, 12) Source(1, 12) + SourceIndex(1)
-5 >Emitted(5, 13) Source(1, 13) + SourceIndex(1)
-6 >Emitted(5, 14) Source(1, 14) + SourceIndex(1)
-7 >Emitted(5, 16) Source(1, 16) + SourceIndex(1)
-8 >Emitted(5, 17) Source(1, 17) + SourceIndex(1)
-9 >Emitted(5, 18) Source(1, 18) + SourceIndex(1)
+1->Emitted(6, 1) Source(1, 1) + SourceIndex(1)
+2 >Emitted(6, 8) Source(1, 8) + SourceIndex(1)
+3 >Emitted(6, 9) Source(1, 9) + SourceIndex(1)
+4 >Emitted(6, 12) Source(1, 12) + SourceIndex(1)
+5 >Emitted(6, 13) Source(1, 13) + SourceIndex(1)
+6 >Emitted(6, 14) Source(1, 14) + SourceIndex(1)
+7 >Emitted(6, 16) Source(1, 16) + SourceIndex(1)
+8 >Emitted(6, 17) Source(1, 17) + SourceIndex(1)
+9 >Emitted(6, 18) Source(1, 18) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/first/bin/first-output.js
@@ -293,9 +294,9 @@ sourceFile:../first_part3.ts
 1 >
 2 >function 
 3 >         f
-1 >Emitted(6, 1) Source(1, 1) + SourceIndex(2)
-2 >Emitted(6, 10) Source(1, 10) + SourceIndex(2)
-3 >Emitted(6, 11) Source(1, 11) + SourceIndex(2)
+1 >Emitted(7, 1) Source(1, 1) + SourceIndex(2)
+2 >Emitted(7, 10) Source(1, 10) + SourceIndex(2)
+3 >Emitted(7, 11) Source(1, 11) + SourceIndex(2)
 ---
 >>>    return "JS does hoists";
 1->^^^^
@@ -307,10 +308,10 @@ sourceFile:../first_part3.ts
 2 >    return 
 3 >           "JS does hoists"
 4 >                           ;
-1->Emitted(7, 5) Source(2, 5) + SourceIndex(2)
-2 >Emitted(7, 12) Source(2, 12) + SourceIndex(2)
-3 >Emitted(7, 28) Source(2, 28) + SourceIndex(2)
-4 >Emitted(7, 29) Source(2, 29) + SourceIndex(2)
+1->Emitted(8, 5) Source(2, 5) + SourceIndex(2)
+2 >Emitted(8, 12) Source(2, 12) + SourceIndex(2)
+3 >Emitted(8, 28) Source(2, 28) + SourceIndex(2)
+4 >Emitted(8, 29) Source(2, 29) + SourceIndex(2)
 ---
 >>>}
 1 >
@@ -319,8 +320,8 @@ sourceFile:../first_part3.ts
 1 >
   >
 2 >}
-1 >Emitted(8, 1) Source(3, 1) + SourceIndex(2)
-2 >Emitted(8, 2) Source(3, 2) + SourceIndex(2)
+1 >Emitted(9, 1) Source(3, 1) + SourceIndex(2)
+2 >Emitted(9, 2) Source(3, 2) + SourceIndex(2)
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
@@ -337,7 +338,7 @@ sourceFile:../first_part3.ts
       "sections": [
         {
           "pos": 0,
-          "end": 114,
+          "end": 116,
           "kind": "text"
         }
       ]
@@ -359,9 +360,10 @@ sourceFile:../first_part3.ts
 ======================================================================
 File:: /src/first/bin/first-output.js
 ----------------------------------------------------------------------
-text: (0-114)
+text: (0-116)
 
 var s = "Hello, world";
+
 
 console.log(s);
 console.log(f());
@@ -733,33 +735,33 @@ sourceFile:../../third_part1.ts
       "sections": [
         {
           "pos": 0,
-          "end": 114,
+          "end": 116,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.js",
           "texts": [
             {
               "pos": 0,
-              "end": 114,
+              "end": 116,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 114,
-          "end": 3019,
+          "pos": 116,
+          "end": 3059,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
-              "pos": 114,
-              "end": 3019,
+              "pos": 116,
+              "end": 3059,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 3019,
-          "end": 3055,
+          "pos": 3059,
+          "end": 3095,
           "kind": "text"
         }
       ]
@@ -807,11 +809,12 @@ sourceFile:../../third_part1.ts
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-114):: ../../../first/bin/first-output.js texts:: 1
+prepend: (0-116):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-114)
+text: (0-116)
 
 var s = "Hello, world";
+
 
 console.log(s);
 console.log(f());
@@ -820,9 +823,9 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (114-3019):: ../../../2/second-output.js texts:: 1
+prepend: (116-3059):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (114-3019)
+text: (116-3059)
 var N;
 (function (N) {
     function f() {
@@ -874,7 +877,9 @@ var normalN;
     normalN.internalConst = 10;
     var internalEnum;
     (function (internalEnum) {
-        internalEnum[internalEnum["a"] = 0] = "a";internalEnum[internalEnum["b"] = 1] = "b";internalEnum[internalEnum["c"] = 2] = "c";
+        internalEnum[internalEnum["a"] = 0] = "a";
+        internalEnum[internalEnum["b"] = 1] = "b";
+        internalEnum[internalEnum["c"] = 2] = "c";
     })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));
 })(normalN || (normalN = {}));
 var internalC = (function () {
@@ -904,18 +909,21 @@ var internalImport = internalNamespace.someClass;
 var internalConst = 10;
 var internalEnum;
 (function (internalEnum) {
-    internalEnum[internalEnum["a"] = 0] = "a";internalEnum[internalEnum["b"] = 1] = "b";internalEnum[internalEnum["c"] = 2] = "c";
+    internalEnum[internalEnum["a"] = 0] = "a";
+    internalEnum[internalEnum["b"] = 1] = "b";
+    internalEnum[internalEnum["c"] = 2] = "c";
 })(internalEnum || (internalEnum = {}));
 var C = (function () {
     function C() {
-    }C.prototype.doSomething = function () {
+    }
+    C.prototype.doSomething = function () {
         console.log("something got done");
     };
     return C;
 }());
 
 ----------------------------------------------------------------------
-text: (3019-3055)
+text: (3059-3095)
 var c = new C();
 c.doSomething();
 

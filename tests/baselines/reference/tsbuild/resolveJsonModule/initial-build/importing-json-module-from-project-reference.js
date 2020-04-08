@@ -24,6 +24,7 @@ export {};
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var foo_json_1 = require("../strings/foo.json");
+
 console.log(foo_json_1.foo);
 
 

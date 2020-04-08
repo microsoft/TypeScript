@@ -46,9 +46,11 @@ var React = require("react");
 
 
 var TextComponent = /** @class */ (function (_super) {
-    __extends(TextComponent, _super);function TextComponent() {
+    __extends(TextComponent, _super);
+    function TextComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }TextComponent.prototype.render = function () {
+    }
+    TextComponent.prototype.render = function () {
         return <span>Some Text..</span>;
     };
     return TextComponent;

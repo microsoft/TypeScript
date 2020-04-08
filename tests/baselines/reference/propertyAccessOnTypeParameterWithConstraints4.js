@@ -35,7 +35,8 @@ var r4 = b.foo(new Date());
 //// [propertyAccessOnTypeParameterWithConstraints4.js]
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.f = function () {
+    }
+    C.prototype.f = function () {
         var x;
         var a = x['notHere'](); // should be string
         return a + x.notHere();

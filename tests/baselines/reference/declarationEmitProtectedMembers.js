@@ -66,7 +66,8 @@ var __extends = (this && this.__extends) || (function () {
 // Class with protected members
 var C1 = /** @class */ (function () {
     function C1() {
-    }C1.prototype.f = function () {
+    }
+    C1.prototype.f = function () {
         return this.x;
     };
     Object.defineProperty(C1.prototype, "accessor", {
@@ -92,9 +93,11 @@ var C1 = /** @class */ (function () {
 }());
 // Derived class overriding protected members
 var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);function C2() {
+    __extends(C2, _super);
+    function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }C2.prototype.f = function () {
+    }
+    C2.prototype.f = function () {
         return _super.prototype.f.call(this) + this.x;
     };
     C2.sf = function () {
@@ -104,9 +107,11 @@ var C2 = /** @class */ (function (_super) {
 }(C1));
 // Derived class making protected members public
 var C3 = /** @class */ (function (_super) {
-    __extends(C3, _super);function C3() {
+    __extends(C3, _super);
+    function C3() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }C3.prototype.f = function () {
+    }
+    C3.prototype.f = function () {
         return _super.prototype.f.call(this);
     };
     C3.sf = function () {

@@ -13,7 +13,8 @@ var _prop;
 var Test = /** @class */ (function () {
     function Test() {
         _prop.set(this, function () { return <div />; });
-    }Test.prototype.render = function () {
+    }
+    Test.prototype.render = function () {
         return <this. />;
     };
     return Test;

@@ -20,7 +20,8 @@ define(["require", "exports"], function (require, exports) {
     exports.B = void 0;
     class B {
         print() { return "I am B"; }
-    }exports.B = B;
+    }
+    exports.B = B;
 });
 //// [2.js]
 define(["require", "exports"], function (require, exports) {

@@ -31,8 +31,6 @@ var __extends = (this && this.__extends) || (function () {
 }());
 var Foo = /** @class */ (function (_super) {
     __extends(Foo, _super);
-
-
     function Foo() {
         var _this = _super.call(this, _this) || this;
         _this.x = 0;

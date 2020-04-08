@@ -34,4 +34,5 @@ function f7(s) {var sRest = [];
 }
 
 var fUnion;
+
 fUnion(""); // All constituents can be called by passing a single string.

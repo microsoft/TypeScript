@@ -35,8 +35,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.runSampleBreaks = exports.runSampleWorks = exports.bluebird = void 0;
 class bluebird {
-}exports.bluebird = bluebird;
-
+}
+exports.bluebird = bluebird;
 function runSampleWorks(
 a, b, c, d, e) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -45,8 +45,8 @@ a, b, c, d, e) {
         let rfunc = func; // <- This is the only difference
         return rfunc;
     });
-}exports.runSampleWorks = runSampleWorks;
-
+}
+exports.runSampleWorks = runSampleWorks;
 function runSampleBreaks(
 a, b, c, d, e) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -55,7 +55,8 @@ a, b, c, d, e) {
         let rfunc = func; // <- This is the only difference
         return rfunc;
     });
-}exports.runSampleBreaks = runSampleBreaks;
+}
+exports.runSampleBreaks = runSampleBreaks;
 
 
 //// [declarationEmitPromise.d.ts]

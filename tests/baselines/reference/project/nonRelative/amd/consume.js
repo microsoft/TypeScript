@@ -3,6 +3,7 @@ define(["require", "exports", "decl", "lib/foo/a", "lib/bar/a"], function (requi
     exports.__esModule = true;
     x.hello();
     y.hello();
+
     var str = mod.call();
 
 

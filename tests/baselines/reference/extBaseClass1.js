@@ -43,7 +43,8 @@ var M;
     }());
     M.B = B;
     var C = /** @class */ (function (_super) {
-        __extends(C, _super);function C() {
+        __extends(C, _super);
+        function C() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return C;
@@ -52,7 +53,8 @@ var M;
 })(M || (M = {}));
 (function (M) {
     var C2 = /** @class */ (function (_super) {
-        __extends(C2, _super);function C2() {
+        __extends(C2, _super);
+        function C2() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return C2;
@@ -62,7 +64,8 @@ var M;
 var N;
 (function (N) {
     var C3 = /** @class */ (function (_super) {
-        __extends(C3, _super);function C3() {
+        __extends(C3, _super);
+        function C3() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return C3;

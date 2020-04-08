@@ -71,7 +71,8 @@ function getPoint() {
             y: 2
         }
     };
-}exports.getPoint = getPoint;
+}
+exports.getPoint = getPoint;
 ;
 
 

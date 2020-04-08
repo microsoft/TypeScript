@@ -53,7 +53,8 @@ function foo() { return "abc"; }
 
 var A = /** @class */ (function () {
     function A() {
-    }A.foo = function () { return ""; };
+    }
+    A.foo = function () { return ""; };
     return A;
 }());
 var M;
@@ -82,6 +83,7 @@ var ResultIsBoolean12 = !STRING.charAt(0);
 // multiple ! operator
 var ResultIsBoolean13 = !!STRING;
 var ResultIsBoolean14 = !!!(STRING + STRING);
+
 // miss assignment operators
 !"";
 !STRING;

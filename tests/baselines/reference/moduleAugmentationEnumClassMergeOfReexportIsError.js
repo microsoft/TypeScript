@@ -26,7 +26,8 @@ var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;
-}());exports.Foo = Foo;
+}());
+exports.Foo = Foo;
 //// [reexport.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -44,4 +45,3 @@ __exportStar(require("./file"), exports);
 //// [augment.js]
 "use strict";
 exports.__esModule = true;
-

@@ -14,5 +14,6 @@ class StringIterator {
         return this;
     }
 }
+
 var v;
 for (v of new StringIterator) { } // Should fail

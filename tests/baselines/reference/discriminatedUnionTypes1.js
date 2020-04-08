@@ -146,8 +146,6 @@ function f8(m: Message) {
 
 
 
-
-
 function area1(s) {
     if (s.kind === "square") {
         return s.size * s.size;

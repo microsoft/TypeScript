@@ -47,12 +47,14 @@ var LazyModule = /** @class */ (function () {
         this.importCallback = importCallback;
     }
     return LazyModule;
-}());exports.LazyModule = LazyModule;
+}());
+exports.LazyModule = LazyModule;
 var LazyAction = /** @class */ (function () {
     function LazyAction(_lazyModule, _getter) {
     }
     return LazyAction;
-}());exports.LazyAction = LazyAction;
+}());
+exports.LazyAction = LazyAction;
 
 
 //// [/src/obj/index.d.ts]
@@ -78,8 +80,8 @@ export { default as bar } from './bar';
 //// [/src/obj/lazyIndex.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var bar_1 = require("./bar");Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return bar_1.default; } });
-
+var bar_1 = require("./bar");
+Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return bar_1.default; } });
 var bar_2 = require("./bar");
 bar_2.default("hello");
 

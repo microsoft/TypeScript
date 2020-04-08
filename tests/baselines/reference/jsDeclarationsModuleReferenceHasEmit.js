@@ -29,7 +29,6 @@ var A = /** @class */ (function () {
  * @type {module:A}
  */
 exports.el = null;
-
 exports.default = A;
 
 

@@ -33,14 +33,17 @@ var d = x;
 
 var e = x;
 e = x; // should work
+
 var C = /** @class */ (function () {
     function C() {}
     return C;
 }());
 var f;
 f = x;
+
 var g;
 g = x;
+
 var h = x;
 
 function i(a) {

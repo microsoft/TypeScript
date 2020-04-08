@@ -67,11 +67,13 @@ var t1 = t[1]; // string
 var t1;
 var t2 = t[2]; // number|string
 var t2;
+
 t = []; // Error
 t = [1]; // Error
 t = [1, "hello"]; // Ok
 t = ["hello", 1]; // Error
 t = [1, "hello", 2]; // Error
+
 var tf = ["hello", function (x) { return x.length; }];
 
 var ff1 = ff("hello", ["foo", function (x) { return x.length; }]);
@@ -88,10 +90,12 @@ var tt1 = tt[1];
 var tt1;
 var tt2 = tt[2];
 var tt2;
+
 tt = tuple2(1, undefined);
 tt = [1, undefined];
 tt = [undefined, undefined];
 tt = []; // Error
+
 var a;
 var a1;
 var a2;

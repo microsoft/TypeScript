@@ -45,7 +45,8 @@ var Base = /** @class */ (function () {
 }());
 // is String (S) a subtype of U extends String (T)? Would only be true if we used the apparent type of U (T)
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);function Derived() {
+    __extends(Derived, _super);
+    function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived;
@@ -57,7 +58,8 @@ var Base2 = /** @class */ (function () {
 }());
 // is U extends String (S) a subtype of String (T)? Apparent type of U is String so it succeeds
 var Derived2 = /** @class */ (function (_super) {
-    __extends(Derived2, _super);function Derived2() {
+    __extends(Derived2, _super);
+    function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived2;

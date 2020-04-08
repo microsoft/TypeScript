@@ -42,6 +42,7 @@ for (var x in {}) {
 // All errors
 // naked continue not allowed
 continue;
+
 // non-existent label
 ONE: for (var x in {})
     continue TWO;

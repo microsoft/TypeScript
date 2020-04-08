@@ -391,7 +391,6 @@ var m1;
         m1_M2_private.v1 = c1;
     })(m1_M2_private || (m1_M2_private = {}));
 
-
     var m1_im1_private = m1_M1_public;
     m1.m1_im1_private_v1_public = m1_im1_private.c1;
     m1.m1_im1_private_v2_public = new m1_im1_private.c1();
@@ -466,7 +465,6 @@ var m2;
         m2_M2_private.f1 = f1;
         m2_M2_private.v1 = c1;
     })(m2_M2_private || (m2_M2_private = {}));
-
 
     var m1_im1_private = m2_M1_public;
     m2.m1_im1_private_v1_public = m1_im1_private.c1;
@@ -589,10 +587,6 @@ exports.glo_im1_public = glo_M1_public;
 exports.glo_im2_public = glo_M3_private;
 exports.glo_im3_public = require("glo_M2_public");
 exports.glo_im4_public = require("glo_M4_private");
-
-
-
-
 
 
 (function (m2_1) {

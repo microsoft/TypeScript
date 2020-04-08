@@ -20,7 +20,8 @@ function f3() { }
 
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.m1 = function () { };
+    }
+    C.prototype.m1 = function () { };
     C.prototype.m2 = function () { };C.prototype.m2 = function () { };
     C.prototype.m3 = function () { };
     return C;

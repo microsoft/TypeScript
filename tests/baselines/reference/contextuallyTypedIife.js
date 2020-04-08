@@ -44,8 +44,10 @@ let eleven = (o => o.a(11))({ a: function(n) { return n; } });
 // multiple arguments
 (function (a, b, c) { })("foo", 101, false);
 // default parameters
-(function (m) {if (m === void 0) { m = 10; }return m + 1;})(12);
-(function (n) {if (n === void 0) { n = 10; }return n + 1;})();
+(function (m) {if (m === void 0) { m = 10; }
+    return m + 1;})(12);
+(function (n) {if (n === void 0) { n = 10; }
+    return n + 1;})();
 // optional parameters
 (function (j) { return j + 1; })(12);
 (function (k) { return k + 1; })();

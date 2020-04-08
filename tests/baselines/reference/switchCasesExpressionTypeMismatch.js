@@ -30,7 +30,9 @@ switch (0) {
     case 123: break; // Error
     case true: break; // Error
 }
+
 var s = 0;
+
 // No error for all
 switch (s) {
     case Foo: break;

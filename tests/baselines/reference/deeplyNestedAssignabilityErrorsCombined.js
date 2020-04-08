@@ -19,6 +19,7 @@ x2 = y2;
 var x = { a: { b: { c: { d: { e: { f: function () { return { g: "hello" }; } } } } } } };
 var y = { a: { b: { c: { d: { e: { f: function () { return { g: 12345 }; } } } } } } };
 x = y;
+
 var Ctor1 = /** @class */ (function () {
     function Ctor1() {
         this.g = "ok";

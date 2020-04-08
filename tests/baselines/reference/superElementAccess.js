@@ -53,7 +53,8 @@ var __extends = (this && this.__extends) || (function () {
         this.m2 = function () { };
         this.d1 = 42;
         this.d2 = 42;
-    }MyBase.prototype.m1 = function (a) { return a; };
+    }
+    MyBase.prototype.m1 = function (a) { return a; };
     MyBase.prototype.p1 = function () { };
     Object.defineProperty(MyBase.prototype, "value", {
         get: function () { return 0; },
@@ -64,9 +65,11 @@ var __extends = (this && this.__extends) || (function () {
     return MyBase;
 }());
 var MyDerived = /** @class */ (function (_super) {
-    __extends(MyDerived, _super);function MyDerived() {
+    __extends(MyDerived, _super);
+    function MyDerived() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }MyDerived.prototype.foo = function () {
+    }
+    MyDerived.prototype.foo = function () {
         _super.prototype["m1"].call(this, "hi"); // Should be allowed, method on base prototype
 
         var l2 = _super.prototype["m1"].bind(this); // Should be allowed, can access properties as well as invoke

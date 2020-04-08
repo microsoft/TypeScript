@@ -33,7 +33,10 @@ var C = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(C, s + s, {
+    Object.defineProperty(C,
+
+
+        s + s, {
         get: function () { return 0; },
         enumerable: false,
         configurable: true
@@ -48,7 +51,13 @@ var C = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(C, "", {
+    Object.defineProperty(C,
+
+
+
+
+
+        "", {
         set: function (v) { },
         enumerable: false,
         configurable: true

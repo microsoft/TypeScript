@@ -793,6 +793,7 @@ var Formatting;
                     "t2=[" + (nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition())) + "]" +
                     ")");
             }
+
             var result = this.GetIndentationEditsWorker(token, nextToken, node, sameLineIndent);
 
             if (this.logger.information()) {
@@ -801,12 +802,14 @@ var Formatting;
                     this.logger.log("edit: minChar=" + edit.position + ", limChar=" + (edit.position + edit.length) + ", text=\"" + TypeScript.stringToLiteral(edit.replaceWith, 30) + "\"");
                 }
             }
+
             return result;
         };
 
         Indenter.prototype.GetIndentationEditsWorker = function (token, nextToken, node, sameLineIndent) {
             var result = new List_TextEditInfo();
             var indentationInfo = null;
+
             // This handles the case:
             //      return (
             //              function() {
@@ -864,6 +867,7 @@ var Formatting;
                     }
                 }
             }
+
             // Get the indent edit from the indentation info
             if (indentationInfo != null) {
                 var edit = this.GetIndentEdit(indentationInfo, token.Span.startPosition(), sameLineIndent);
@@ -871,6 +875,7 @@ var Formatting;
                     this.RegisterIndentation(edit, sameLineIndent);
 
                     result.add(edit);
+
                     // multi-line comments, apply delta indentation to all the other lines
                     if (token.Token == AuthorTokenKind.atkComment) {
                         var commentEdits = this.GetCommentIndentationEdits(token);
@@ -880,16 +885,20 @@ var Formatting;
                     }
                 }
             }
+
             return result;
         };
 
         Indenter.prototype.GetCommentIndentationEdits = function (token) {
             var result = new List_TextEditInfo();
+
             if (token.Token != AuthorTokenKind.atkComment)
                 return result;
+
             var commentLastLineNumber = this.snapshot.GetLineNumberFromPosition(token.Span.endPosition());
             if (token.lineNumber() == commentLastLineNumber)
                 return result;
+
             var commentFirstLineIndentationDelta = this.GetIndentationDelta(token.Span.startPosition(), null);
             if (commentFirstLineIndentationDelta != undefined) {
                 for (var line = token.lineNumber() + 1; line <= commentLastLineNumber; line++) {
@@ -906,6 +915,7 @@ var Formatting;
                     }
                 }
             }
+
             return result;
         };
 
@@ -918,6 +928,7 @@ var Formatting;
 
             for (var i = 0; i < text.length; i++) {
                 var c = text.charAt(i);
+
                 if (c == '\t')
                     indentSize = (indentSize + editorOptions.TabSize) - (indentSize % editorOptions.TabSize);
                 else if (c == ' ')
@@ -929,11 +940,13 @@ var Formatting;
                         break;
                 }
             }
+
             return indentSize;
         };
 
         Indenter.prototype.GetSpecialCaseIndentation = function (token, node) {
             var indentationInfo = null;
+
             switch (token.Token) {
                 case AuthorTokenKind.atkLCurly: // { is not part of the tree
                     indentationInfo = this.GetSpecialCaseIndentationForLCurly(node);
@@ -972,6 +985,7 @@ var Formatting;
 
         Indenter.prototype.GetSpecialCaseIndentationForLCurly = function (node) {
             var indentationInfo = null;
+
             if (node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkFncDecl ||
                 node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneThen || node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneElse) {
                 // flushed with the node (function & if)
@@ -1007,6 +1021,7 @@ var Formatting;
                     return indentationInfo;
                 }
             }
+
             return null;
         };
 
@@ -1045,6 +1060,7 @@ var Formatting;
                 case AuthorParseNodeKind.apnkDoWhile:
                 case AuthorParseNodeKind.apnkObject:
                     return true;
+
                 case AuthorParseNodeKind.apnkFncDecl:
                     // Comments before arguments are not indented.
                     // This code doesn't cover the cases of comment after the last argument or 
@@ -1057,15 +1073,19 @@ var Formatting;
                         if (token.Span.startPosition() < argumentNode.AuthorNode.Details.StartOffset)
                             result = false;
                     });
+
                     return result;
             }
+
             return false;
         };
 
         Indenter.prototype.ApplyScriptBlockIndentation = function (languageHostIndentation, tree) {
             if (languageHostIndentation == null || tree.StartNodeSelf == null)
                 return;
+
             var scriptBlockIndentation = this.ApplyIndentationLevel(languageHostIndentation, 1);
+
             //TypeScript: Projection snapshots not supported
             // Disconnect the sibling node if it belongs to a different script block
             //IProjectionSnapshot projectionSnapshot = this.snapshot as IProjectionSnapshot;
@@ -1129,6 +1149,7 @@ var Formatting;
                     return new TextEditInfo(currentIndentSpan.start(), currentIndentSpan.length(), indentText);
                 }
             }
+
             return null;
         };
 
@@ -1140,6 +1161,7 @@ var Formatting;
             if (level < 0) {
                 if (StringUtils.IsNullOrEmpty(existingIndentation))
                     return "";
+
                 var totalIndent = 0;
                 StringUtils.foreach(existingIndentation, function (c) {
                     if (c == '\t')
@@ -1147,6 +1169,7 @@ var Formatting;
                     else
                         totalIndent++;
                 });
+
                 totalIndent += level * indentSize;
                 if (totalIndent < 0)
                     return "";
@@ -1164,7 +1187,9 @@ var Formatting;
             var text = "";
             if (!StringUtils.IsNullOrEmpty(prefix))
                 text += prefix;
+
             var pos = 0;
+
             // fill first with tabs
             while (pos <= totalIndentSize - tabSize) {
                 text += tabString;
@@ -1186,12 +1211,14 @@ var Formatting;
             var indentableParent = node;
             while (indentableParent != null && !indentableParent.CanIndent())
                 indentableParent = indentableParent.Parent;
+
             if (indentableParent != null && indentableParent.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkProg) {
                 var parentIndentationDeltaSize = this.GetIndentationDelta(indentableParent.AuthorNode.Details.StartOffset, token.Span.startPosition());
                 if (parentIndentationDeltaSize !== undefined) {
                     indentationInfo = this.ApplyIndentationDelta1(token.Span.startPosition(), parentIndentationDeltaSize);
                 }
             }
+
             return indentationInfo;
         };
 
@@ -1200,6 +1227,7 @@ var Formatting;
             var snapshotLine = this.snapshot.GetLineFromPosition(tokenStartPosition);
             var currentIndentSpan = new Span(snapshotLine.startPosition(), tokenStartPosition - snapshotLine.startPosition());
             var currentIndent = this.snapshot.GetText(currentIndentSpan);
+
             // Calculate new indentation from current-indentation and delta
             return this.ApplyIndentationDelta2(currentIndent, delta);
         };
@@ -1207,12 +1235,14 @@ var Formatting;
         Indenter.prototype.ApplyIndentationDelta2 = function (currentIndent, delta) {
             if (delta == 0)
                 return null;
+
             var currentIndentSize = Indenter.GetIndentSizeFromIndentText(currentIndent, this.editorOptions);
 
             var newIndentSize = currentIndentSize + delta;
             if (newIndentSize < 0) {
                 newIndentSize = 0;
             }
+
             var newIndent = this.GetIndentString(null, newIndentSize, this.editorOptions.TabSize, this.editorOptions.ConvertTabsToSpaces);
             if (newIndent != null) {
                 return new IndentationInfo(newIndent, 0);
@@ -1223,12 +1253,15 @@ var Formatting;
 
         Indenter.prototype.GetIndentationDelta = function (tokenStartPosition, childTokenStartPosition /*?*/) {
             Debug.Assert(childTokenStartPosition !== undefined, "Error: caller must pass 'null' for undefined position");
+
             var indentationDeltaSize = this.offsetIndentationDeltas.GetValue(tokenStartPosition);
             if (indentationDeltaSize === null) {
                 var indentEditInfo = this.indentationBag.FindIndent(tokenStartPosition);
+
                 // No recorded indentation, return null
                 if (indentEditInfo == null)
                     return null;
+
                 var origIndentText = this.snapshot.GetText(new Span(indentEditInfo.OrigIndentPosition, indentEditInfo.OrigIndentLength()));
                 var newIndentText = indentEditInfo.Indentation();
 
@@ -1254,12 +1287,15 @@ var Formatting;
                     var childIndentText = this.snapshot.GetText(new Span(childTokenLineStartPosition, childTokenStartPosition - childTokenLineStartPosition));
 
                     var childIndentSize = Indenter.GetIndentSizeFromIndentText(childIndentText, this.editorOptions);
+
                     if (childIndentSize < origIndentSize)
                         origIndentSize = Indenter.GetIndentSizeFromIndentText(origIndentText, this.editorOptions);
                 }
+
                 indentationDeltaSize = newIndentSize - origIndentSize;
                 this.offsetIndentationDeltas.Add(tokenStartPosition, indentationDeltaSize);
             }
+
             return indentationDeltaSize;
         };
 
@@ -1271,6 +1307,7 @@ var Formatting;
                 if (!this.smartIndent && tree.StartNodePreviousSibling !== null && tree.StartNodeSelf.AuthorNode.Label == 0 && tree.StartNodePreviousSibling.Label == 0) {
                     indentNode = tree.StartNodeSelf;
                     offset = tree.StartNodePreviousSibling.Details.StartOffset;
+
                     // In case the sibling node is on the same line of a parent node, ex:
                     //      case 1: a++;
                     //          break;
@@ -1305,6 +1342,7 @@ var Formatting;
                             parent = parent.Parent;
                         }
                     }
+
                     // The parent node to take its indentation is the first parent that has indentation.
                     while (parent != null && !parent.CanIndent()) {
                         parent = parent.Parent;
@@ -1354,6 +1392,7 @@ var Formatting;
 
         Indenter.prototype.GetLineIndentationForOffset = function (offset) {
             var indentationEdit;
+
             // First check if we already have indentation info in our indentation bag
             indentationEdit = this.indentationBag.FindIndent(offset);
             if (indentationEdit != null) {
@@ -1364,6 +1403,7 @@ var Formatting;
                 var line = this.snapshot.GetLineFromPosition(offset);
                 var lineText = line.getText();
                 var index = 0;
+
                 while (index < lineText.length && (lineText.charAt(index) == ' ' || lineText.charAt(index) == '\t')) {
                     ++index;
                 }
@@ -1379,11 +1419,13 @@ var Formatting;
                 // Consider the original indentation from the beginning of the line up to the indent position (or really the token position)
                 var lineStartPosition = this.snapshot.GetLineFromPosition(indent.Position).startPosition();
                 var lineIndentLength = indent.Position - lineStartPosition;
+
                 indentationInfo = IndentationEditInfo.create2(indent.Position, indent.ReplaceWith, lineStartPosition, lineIndentLength);
             }
             else {
                 indentationInfo = new IndentationEditInfo(indent);
             }
+
             this.indentationBag.AddIndent(indentationInfo);
         };
 
@@ -1394,7 +1436,9 @@ var Formatting;
         Indenter.prototype.AdjustStartOffsetIfNeeded = function (token, node) {
             if (token == null)
                 return;
+
             var updateStartOffset = false;
+
             switch (token.Token) {
                 case AuthorTokenKind.atkFunction:
                     updateStartOffset = node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkFncDecl;

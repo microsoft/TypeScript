@@ -46,12 +46,14 @@ function f1(bar) {if (bar === void 0) { bar = foo; }
     return bar; // returns 1
 }
 
-function f2(bar) {if (bar === void 0) { bar = function (baz) {if (baz === void 0) { baz = foo; }return baz;}; }
+function f2(bar) {if (bar === void 0) { bar = function (baz) {if (baz === void 0) { baz = foo; }
+        return baz;}; }
     var foo = 2;
     return bar(); // returns 1
 }
 
-function f3(bar, foo) {if (bar === void 0) { bar = foo; }if (foo === void 0) { foo = 2; }
+function f3(bar, foo) {if (bar === void 0) { bar = foo; }
+    if (foo === void 0) { foo = 2; }
     return bar;
 }
 
@@ -73,7 +75,8 @@ function f7(_a) {
 }
 
 var Foo = /** @class */ (function () {
-    function Foo(x, y) {if (x === void 0) { x = 12; }if (y === void 0) { y = x; }
+    function Foo(x, y) {if (x === void 0) { x = 12; }
+        if (y === void 0) { y = x; }
         this.x = x;
         this.y = y;
     }

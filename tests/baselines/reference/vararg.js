@@ -43,7 +43,8 @@ var M;
 (function (M) {
     var C = /** @class */ (function () {
         function C() {
-        }C.prototype.f = function (x) {var rest = [];
+        }
+        C.prototype.f = function (x) {var rest = [];
             for (var _i = 1; _i < arguments.length; _i++) {
                 rest[_i - 1] = arguments[_i];
             }

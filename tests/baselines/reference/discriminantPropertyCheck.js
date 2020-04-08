@@ -181,8 +181,6 @@ function func3(value: Partial<UnionOfBar>) {
 exports.__esModule = true;
 exports.foo = void 0;
 
-
-
 function goo1(x) {
     if (x.kind === "A" && x.foo !== undefined) {
         x.foo.length;
@@ -233,9 +231,9 @@ function foo6(x) {
 // Repro from #27493
 var Types;
 (function (Types) {
-    Types[Types["Str"] = 1] = "Str";Types[Types["Num"] = 2] = "Num";
+    Types[Types["Str"] = 1] = "Str";
+    Types[Types["Num"] = 2] = "Num";
 })(Types || (Types = {}));
-
 
 function func2(inst) {
     while (true) {
@@ -258,11 +256,16 @@ var f = function (_a, _b) { };
 
 
 
-
 var u = {};
+
 u.a && u.b && f(u.a, u.b);
 
 u.b && u.a && f(u.a, u.b);
+
+
+
+
+
 
 
 
@@ -274,12 +277,11 @@ function foo(obj) {
             return;
         }
     }
-}exports.foo = foo;
-
+}
+exports.foo = foo;
 function onlyPlus(arg) {
     return arg;
 }
-
 
 
 

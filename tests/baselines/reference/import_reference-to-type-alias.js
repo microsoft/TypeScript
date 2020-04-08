@@ -28,7 +28,8 @@ define(["require", "exports"], function (require, exports) {
         (function (Services) {
             var UserServices = /** @class */ (function () {
                 function UserServices() {
-                }UserServices.prototype.getUserName = function () {
+                }
+                UserServices.prototype.getUserName = function () {
                     return "Bill Gates";
                 };
                 return UserServices;

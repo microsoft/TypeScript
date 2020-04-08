@@ -116,11 +116,13 @@ var Base = /** @class */ (function () {
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);function Derived() {
+    __extends(Derived, _super);
+    function Derived() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.a = 1;
         return _this;
-    }Derived.prototype.f = function () { return 1; };
+    }
+    Derived.prototype.f = function () { return 1; };
     return Derived;
 }(Base));
 

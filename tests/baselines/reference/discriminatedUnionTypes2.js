@@ -191,6 +191,7 @@ function f15(x) {
         x.error.message;
     }
 }
+
 f15({ value: 10 });
 f15({ error: new Error("boom") });
 

@@ -150,7 +150,8 @@ foo(
 // one param, no type with default value
 (
 
-    function (arg) {if (arg === void 0) { arg = 1; }return 3;});
+    function (arg) {if (arg === void 0) { arg = 1; }
+        return 3;});
 
 // one param, no type, optional
 (
@@ -165,7 +166,8 @@ foo(
 // typed param with default value
 (
 
-    function (arg) {if (arg === void 0) { arg = 0; }return 6;});
+    function (arg) {if (arg === void 0) { arg = 0; }
+        return 6;});
 
 // optional param
 (
@@ -186,13 +188,17 @@ foo(
 
     function (arg1, arg2) { return 12; });
 (
-    function (arg1, arg2) {if (arg1 === void 0) { arg1 = 1; }if (arg2 === void 0) { arg2 = 3; }return 13;});
+    function (arg1, arg2) {if (arg1 === void 0) { arg1 = 1; }
+        if (arg2 === void 0) { arg2 = 3; }
+        return 13;});
 (
     function (arg1, arg2) { return 14; });
 (
     function (arg1, arg2) { return 15; });
 (
-    function (arg1, arg2) {if (arg1 === void 0) { arg1 = 0; }if (arg2 === void 0) { arg2 = 1; }return 16;});
+    function (arg1, arg2) {if (arg1 === void 0) { arg1 = 0; }
+        if (arg2 === void 0) { arg2 = 1; }
+        return 16;});
 (
     function (arg1, arg2) { return 17; });
 (
@@ -207,10 +213,12 @@ foo(
 // in paren
 (function () { return 21; });
 (function (arg) { return 22; });
-(function (arg) {if (arg === void 0) { arg = 1; }return 23;});
+(function (arg) {if (arg === void 0) { arg = 1; }
+    return 23;});
 (function (arg) { return 24; });
 (function (arg) { return 25; });
-(function (arg) {if (arg === void 0) { arg = 0; }return 26;});
+(function (arg) {if (arg === void 0) { arg = 0; }
+    return 26;});
 (function (arg) { return 27; });
 (function () {var arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -224,11 +232,13 @@ foo(
 // in ternary exression
 false ? function () { return 41; } : null;
 false ? function (arg) { return 42; } : null;
-false ? function (arg) {if (arg === void 0) { arg = 1; }return 43;} : null;
+false ? function (arg) {if (arg === void 0) { arg = 1; }
+    return 43;} : null;
 false ? function (arg) { return 44; } : null;
 false ? function (arg) { return 45; } : null;
 false ? function (arg) { return 46; } : null;
-false ? function (arg) {if (arg === void 0) { arg = 0; }return 47;} : null;
+false ? function (arg) {if (arg === void 0) { arg = 0; }
+    return 47;} : null;
 false ? function () {var arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         arg[_i] = arguments[_i];
@@ -238,11 +248,13 @@ false ? function () {var arg = [];
 // in ternary exression within paren
 false ? (function () { return 51; }) : null;
 false ? (function (arg) { return 52; }) : null;
-false ? (function (arg) {if (arg === void 0) { arg = 1; }return 53;}) : null;
+false ? (function (arg) {if (arg === void 0) { arg = 1; }
+    return 53;}) : null;
 false ? (function (arg) { return 54; }) : null;
 false ? (function (arg) { return 55; }) : null;
 false ? (function (arg) { return 56; }) : null;
-false ? (function (arg) {if (arg === void 0) { arg = 0; }return 57;}) : null;
+false ? (function (arg) {if (arg === void 0) { arg = 0; }
+    return 57;}) : null;
 false ? (function () {var arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         arg[_i] = arguments[_i];
@@ -252,11 +264,13 @@ false ? (function () {var arg = [];
 // ternary exression's else clause
 false ? null : function () { return 61; };
 false ? null : function (arg) { return 62; };
-false ? null : function (arg) {if (arg === void 0) { arg = 1; }return 63;};
+false ? null : function (arg) {if (arg === void 0) { arg = 1; }
+    return 63;};
 false ? null : function (arg) { return 64; };
 false ? null : function (arg) { return 65; };
 false ? null : function (arg) { return 66; };
-false ? null : function (arg) {if (arg === void 0) { arg = 0; }return 67;};
+false ? null : function (arg) {if (arg === void 0) { arg = 0; }
+    return 67;};
 false ? null : function () {var arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         arg[_i] = arguments[_i];
@@ -275,10 +289,12 @@ false ? null : function () {var arg = [];
 
 // In Expressions
 (function (arg) { return 90; }) instanceof Function;
-(function (arg) {if (arg === void 0) { arg = 1; }return 91;}) instanceof Function;
+(function (arg) {if (arg === void 0) { arg = 1; }
+    return 91;}) instanceof Function;
 (function (arg) { return 92; }) instanceof Function;
 (function (arg) { return 93; }) instanceof Function;
-(function (arg) {if (arg === void 0) { arg = 1; }return 94;}) instanceof Function;
+(function (arg) {if (arg === void 0) { arg = 1; }
+    return 94;}) instanceof Function;
 (function (arg) { return 95; }) instanceof Function;
 (function () {var arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -288,11 +304,17 @@ false ? null : function () {var arg = [];
 
 '' + (function (arg) { return 100; });
 (function (arg) { return 0; }) + '' + (function (arg) { return 101; });
-(function (arg) {if (arg === void 0) { arg = 1; }return 0;}) + '' + (function (arg) {if (arg === void 0) { arg = 2; }return 102;});
+(function (arg) {if (arg === void 0) { arg = 1; }
+    return 0;}) + '' + (function (arg) {if (arg === void 0) { arg = 2; }
+    return 102;});
 (function (arg) { return 0; }) + '' + (function (arg) { return 103; });
 (function (arg) { return 0; }) + '' + (function (arg) { return 104; });
-(function (arg) {if (arg === void 0) { arg = 1; }return 0;}) + '' + (function (arg) {if (arg === void 0) { arg = 2; }return 105;});
-(function (arg) {if (arg === void 0) { arg = 1; }return 0;}) + '' + (function (arg) {if (arg === void 0) { arg = 2; }return 106;});
+(function (arg) {if (arg === void 0) { arg = 1; }
+    return 0;}) + '' + (function (arg) {if (arg === void 0) { arg = 2; }
+    return 105;});
+(function (arg) {if (arg === void 0) { arg = 1; }
+    return 0;}) + '' + (function (arg) {if (arg === void 0) { arg = 2; }
+    return 106;});
 (function () {var arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         arg[_i] = arguments[_i];
@@ -330,15 +352,19 @@ function (a) { return 110; },
     function (a) { return 113; },
     function (a, b) { return 114; },
     function (a) { return 115; },
-    function (a) {if (a === void 0) { a = 0; }return 116;},
-    function (a) {if (a === void 0) { a = 0; }return 117;},
-    function (a) {if (a === void 0) { a = 0; }return 118;},
+    function (a) {if (a === void 0) { a = 0; }
+        return 116;},
+    function (a) {if (a === void 0) { a = 0; }
+        return 117;},
+    function (a) {if (a === void 0) { a = 0; }
+        return 118;},
     function () {var a = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             a[_i] = arguments[_i];
         }
         return 119;},
-    function (a, b) {if (b === void 0) { b = 0; }var c = [];
+    function (a, b) {if (b === void 0) { b = 0; }
+        var c = [];
         for (var _i = 2; _i < arguments.length; _i++) {
             c[_i - 2] = arguments[_i];
         }

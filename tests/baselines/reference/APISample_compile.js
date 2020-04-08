@@ -76,7 +76,8 @@ function compile(fileNames, options) {
     var exitCode = emitResult.emitSkipped ? 1 : 0;
     console.log("Process exiting with code '" + exitCode + "'.");
     process.exit(exitCode);
-}exports.compile = compile;
+}
+exports.compile = compile;
 compile(process.argv.slice(2), {
     noEmitOnError: true, noImplicitAny: true,
     target: ts.ScriptTarget.ES5, module: ts.ModuleKind.CommonJS

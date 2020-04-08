@@ -14,17 +14,16 @@ module {
 }
 
 //// [anonymousModules.js]
-module;
-{
+module;{
     export var foo = 1;
-    module;
-    {
+
+    module;{
         export var bar = 1;
     }
 
     var bar = 2;
-    module;
-    {
+
+    module;{
         var x = bar;
     }
 }

@@ -121,6 +121,7 @@ false = value;
 
 // object literals
 {a: 0;}value;
+
 // array literals
 '' = value[0], '' = value[1];
 
@@ -141,8 +142,7 @@ var Derived = /** @class */ (function (_super) {
 // function expression
 function bar() { }value;
 (
-    function () { });
-value;
+    function () { });value;
 
 // function calls
 foo() = value;

@@ -13,6 +13,7 @@ fn2({ headers: { foo: 1 } });
 
 var fn1 = function (options) { };
 fn1({ headers: { foo: 1 } });
+
 var fn2 = function (_a) {
     var _b = _a.headers, headers = _b === void 0 ? {} : _b;
 };

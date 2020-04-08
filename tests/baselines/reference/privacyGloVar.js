@@ -85,7 +85,8 @@ var m1;
 (function (m1) {
     var C1_public = /** @class */ (function () {
         function C1_public() {
-        }C1_public.prototype.f1 = function () {
+        }
+        C1_public.prototype.f1 = function () {
         };
         return C1_public;
     }());
@@ -137,7 +138,8 @@ var m1;
 })(m1 || (m1 = {}));
 var glo_C1_public = /** @class */ (function () {
     function glo_C1_public() {
-    }glo_C1_public.prototype.f1 = function () {
+    }
+    glo_C1_public.prototype.f1 = function () {
     };
     return glo_C1_public;
 }());

@@ -18,6 +18,7 @@ async function foo() {
 async function bar() {
     return 2;
 }
+
 async function foo() {
     return new class {constructor() {
             this.baz = await bar();

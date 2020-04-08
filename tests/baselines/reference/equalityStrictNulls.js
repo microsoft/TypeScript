@@ -113,6 +113,7 @@ function f1(x) {
     if (null !== x) {
     }
 }
+
 function f2() {
     if (undefined == undefined) {
     }
@@ -123,6 +124,7 @@ function f2() {
     if (null == null) {
     }
 }
+
 function f3(a, b, c, d) {
     if (a == null) {
     }

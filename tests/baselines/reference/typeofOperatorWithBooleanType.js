@@ -58,7 +58,8 @@ function foo() { return true; }
 
 var A = /** @class */ (function () {
     function A() {
-    }A.foo = function () { return false; };
+    }
+    A.foo = function () { return false; };
     return A;
 }());
 var M;
@@ -81,6 +82,7 @@ var ResultIsString7 = typeof A.foo();
 
 // multiple typeof  operator
 var ResultIsString8 = typeof typeof BOOLEAN;
+
 // miss assignment operators
 typeof true;
 typeof BOOLEAN;
@@ -88,6 +90,7 @@ typeof foo();
 typeof true, false;
 typeof objA.a;
 typeof M.n;
+
 // use typeof in type query
 var z;
 var x;

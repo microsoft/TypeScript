@@ -41,4 +41,5 @@ var Identity = /** @class */ (function () {
 var test1;
 
 ;
+
 var test2;

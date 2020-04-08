@@ -10,6 +10,7 @@ const p2 = import();
 const p4 = import("pathToModule", "secondModule");
 
 //// [importCallExpressionGrammarError.js]
+
 var a = ["./0"];
 Promise.resolve().then(() => require(...["PathModule"]));
 

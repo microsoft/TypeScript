@@ -37,7 +37,6 @@ var d = baz(d, d, g);      // Should be number[] | string[]
 // to a function type with e's call signature instantiated in the context of T's call signature (section 3.8.5).
 
 
-
 var a;
 var a = bar(1, 1, g); // Should be number
 var a = baz(1, 1, g); // Should be number

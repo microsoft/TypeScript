@@ -13,7 +13,6 @@ export {A, B}
 exports.__esModule = true;
 
 
-
 //// [mutuallyRecursiveInterfaceDeclaration.d.ts]
 interface A {
     b: B;

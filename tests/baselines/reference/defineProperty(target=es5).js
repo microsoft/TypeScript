@@ -106,8 +106,6 @@ var B = /** @class */ (function () {
 }());
 var C = /** @class */ (function (_super) {
     __extends(C, _super);
-
-
     function C(ka) {
         var _this = _super.call(this) || this;
         Object.defineProperty(_this, "ka", {

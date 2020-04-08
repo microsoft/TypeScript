@@ -19,12 +19,12 @@ define(["require", "exports"], function (require, exports) {
         function A() {
         }
         return A;
-    }());exports.A = A;
+    }());
+    exports.A = A;
 });
 //// [B.js]
 define(["require", "exports", "A"], function (require, exports, a) {
     "use strict";
     var A = a.A;
-
     return A;
 });

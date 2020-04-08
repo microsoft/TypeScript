@@ -53,7 +53,8 @@ x7 += a;
 //// [compoundAdditionAssignmentLHSCanBeAssigned.js]
 var E;
 (function (E) {
-    E[E["a"] = 0] = "a";E[E["b"] = 1] = "b";
+    E[E["a"] = 0] = "a";
+    E[E["b"] = 1] = "b";
 })(E || (E = {}));
 var a;
 var b;
@@ -68,6 +69,7 @@ x1 += E.a;
 x1 += {};
 x1 += null;
 x1 += undefined;
+
 var x2;
 x2 += a;
 x2 += b;
@@ -78,22 +80,27 @@ x2 += E.a;
 x2 += {};
 x2 += null;
 x2 += undefined;
+
 var x3;
 x3 += a;
 x3 += 0;
 x3 += E.a;
 x3 += null;
 x3 += undefined;
+
 var x4;
 x4 += a;
 x4 += 0;
 x4 += E.a;
 x4 += null;
 x4 += undefined;
+
 var x5;
 x5 += a;
+
 var x6;
 x6 += a;
 x6 += '';
+
 var x7;
 x7 += a;

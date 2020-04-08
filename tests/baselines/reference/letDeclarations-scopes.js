@@ -159,7 +159,9 @@ var o = {
 //// [letDeclarations-scopes.js]
 // global
 let l = "string";
+
 var n;
+
 // Control flow statements with blocks
 if (true) {
     let l = 0;
@@ -205,10 +207,12 @@ while (false) {
     label2: label3: label4: let l = 0;
     n = l;
 }
+
 for (let l = 0; n = l; l++) {
     let l = true;
     var b3 = l;
 }
+
 for (let l in {}) {
 }
 
@@ -233,6 +237,7 @@ switch (0) {
         n = l;
         break;
 }
+
 // blocks
 {
     let l = 0;
@@ -242,6 +247,7 @@ switch (0) {
         var b = l;
     }
 }
+
 // functions
 function F() {
     let l = 0;
@@ -262,10 +268,12 @@ var m;
 (function (m) {
     let l = 0;
     n = l;
+
     {
         let l = false;
         var b2 = l;
     }
+
     lable: let l2 = 0;
 })(m || (m = {}));
 // methods

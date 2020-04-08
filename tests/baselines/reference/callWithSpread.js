@@ -91,9 +91,11 @@ var a;
 var z;
 var obj;
 var xa;
+
 foo(1, 2, "abc");
 foo.apply(void 0, __spreadArrays([1, 2], a));
 foo.apply(void 0, __spreadArrays([1, 2], a, ["abc"]));
+
 obj.foo(1, 2, "abc");
 obj.foo.apply(obj, __spreadArrays([1, 2], a));
 obj.foo.apply(obj, __spreadArrays([1, 2], a, ["abc"]));
@@ -103,6 +105,7 @@ obj.foo.apply(obj, __spreadArrays([1, 2], a)).foo(1, 2, "abc");
     _a = obj.foo.apply(obj, __spreadArrays([1, 2], a))).foo.apply(_a, __spreadArrays([1, 2], a));
 (
     _b = obj.foo.apply(obj, __spreadArrays([1, 2], a))).foo.apply(_b, __spreadArrays([1, 2], a, ["abc"]));
+
 (obj.foo)(1, 2, "abc");
 obj.foo.apply(obj, __spreadArrays([1, 2], a));
 obj.foo.apply(obj, __spreadArrays([1, 2], a, ["abc"]));
@@ -110,6 +113,7 @@ obj.foo.apply(obj, __spreadArrays([1, 2], a, ["abc"]));
 (obj.foo.apply(obj, __spreadArrays([1, 2], a)).foo)(1, 2, "abc");
 (_c = obj.foo.apply(obj, __spreadArrays([1, 2], a))).foo.apply(_c, __spreadArrays([1, 2], a));
 (_d = obj.foo.apply(obj, __spreadArrays([1, 2], a))).foo.apply(_d, __spreadArrays([1, 2], a, ["abc"]));
+
 xa[1].foo(1, 2, "abc");
 (
     _e = xa[1]).foo.apply(_e, __spreadArrays([1, 2], a));

@@ -24,7 +24,9 @@ var _a = ["Hello", "Brave", "New", "World"], hello = _a[0], brave = _a[1], newis
 
 
 var _b = ['I\'m', 'a', 't-rex'], im = _b[0], a = _b[1], dinosaur = _b[2];
+
 rawr(dinosaur);
+
 function rawr(dino) {
     if (dino === "t-rex") {
         return "ROAAAAR!";

@@ -39,13 +39,15 @@ var Cls = /** @class */ (function () {
     function Cls() {
     }
     return Cls;
-}());exports.Cls = Cls;
+}());
+exports.Cls = Cls;
 //// [mod1.js]
 "use strict";
 /// <reference types="lib" />
 exports.__esModule = true;
 var main_1 = require("./main");
 main_1.Cls.prototype.foo = function () { return undefined; };
+
 //// [mod2.js]
 "use strict";
 exports.__esModule = true;

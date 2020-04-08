@@ -37,7 +37,8 @@ var Foo;
 (function (Foo) {
     var A = 1;
     var B = /** @class */ (function (_super) {
-        __extends(B, _super);function B() {
+        __extends(B, _super);
+        function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;

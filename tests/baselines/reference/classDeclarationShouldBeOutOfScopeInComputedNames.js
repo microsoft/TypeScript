@@ -14,7 +14,9 @@ class A {
 var A = /** @class */ (function () {
     function A() {
         this[_b] = 0;
-    }A[(_a = A.p1, A.p2)] = function () { return 0; };;
+    }
+    A[(_a = A.p1, A.p2)] = function () { return 0; };
+    ;
     A.prototype[A.p1] = function () { };
     var _a, _b;
     _b = A.p2;

@@ -8,7 +8,8 @@ new class {
 //// [classExpression5.js]
 new /** @class */ (function () {
     function class_1() {
-    }class_1.prototype.hi = function () {
+    }
+    class_1.prototype.hi = function () {
         return "Hi!";
     };
     return class_1;

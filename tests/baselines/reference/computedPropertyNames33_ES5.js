@@ -13,7 +13,8 @@ class C<T> {
 function foo() { return ''; }
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.bar = function () {
+    }
+    C.prototype.bar = function () {
         var _a;
         var obj = (_a = {},
             _a[foo()] = function () { },

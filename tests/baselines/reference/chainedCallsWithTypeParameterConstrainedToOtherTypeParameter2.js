@@ -58,6 +58,7 @@ var Chain = /** @class */ (function () {
         // Staying at T or S should be fine
         (new Chain(t)).then(function (tt) { return t; }).then(function (tt) { return t; }).then(function (tt) { return t; });
         (new Chain(s)).then(function (ss) { return s; }).then(function (ss) { return s; }).then(function (ss) { return s; });
+
         return null;
     };
     return Chain;
@@ -78,6 +79,7 @@ var Chain2 = /** @class */ (function () {
         // Get an error when we assign a string to a number in both cases
         (new Chain2(i)).then(function (ii) { return t; }).then(function (tt) { return t; }).then(function (tt) { return t; }).then(function (tt) { return t; }).value.x = "";
         (new Chain2(i)).then(function (ii) { return s; }).then(function (ss) { return s; }).then(function (ss) { return s; }).then(function (ss) { return s; }).value.x = "";
+
         return null;
     };
     return Chain2;

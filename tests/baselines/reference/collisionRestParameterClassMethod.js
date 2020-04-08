@@ -41,7 +41,8 @@ class c3 {
 //// [collisionRestParameterClassMethod.js]
 var c1 = /** @class */ (function () {
     function c1() {
-    }c1.prototype.foo = function (_i) {var restParameters = [];
+    }
+    c1.prototype.foo = function (_i) {var restParameters = [];
         for (var _a = 1; _a < arguments.length; _a++) {
             restParameters[_a - 1] = arguments[_a];
         }
@@ -67,7 +68,8 @@ var c1 = /** @class */ (function () {
 
 var c3 = /** @class */ (function () {
     function c3() {
-    }c3.prototype.foo = function () {var restParameters = [];
+    }
+    c3.prototype.foo = function () {var restParameters = [];
         for (var _a = 0; _a < arguments.length; _a++) {
             restParameters[_a] = arguments[_a];
         }

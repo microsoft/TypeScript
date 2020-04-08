@@ -21,6 +21,7 @@ var A = /** @class */ (function () {
     return A;
 }());
 var a = null;
+
 try {
     a = new A();
 }

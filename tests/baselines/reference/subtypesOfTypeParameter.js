@@ -127,7 +127,8 @@ var C3 = /** @class */ (function () {
     return C3;
 }());
 var D1 = /** @class */ (function (_super) {
-    __extends(D1, _super);function D1() {
+    __extends(D1, _super);
+    function D1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D1;

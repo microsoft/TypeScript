@@ -6,6 +6,7 @@ class C {
 //// [recursiveFunctionTypes1.js]
 var C = /** @class */ (function () {
     function C() {
-    }C.g = function (t) { };
+    }
+    C.g = function (t) { };
     return C;
 }());

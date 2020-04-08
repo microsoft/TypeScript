@@ -352,6 +352,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 31>Emitted(6, 171) Source(16, 155) + SourceIndex(0)
 32>Emitted(6, 172) Source(16, 156) + SourceIndex(0)
 ---
+>>>
 >>>if (nameB == nameB) {
 1 >
 2 >^^^^
@@ -368,12 +369,12 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 4 >          == 
 5 >             nameB
 6 >                  ) 
-1 >Emitted(7, 1) Source(18, 1) + SourceIndex(0)
-2 >Emitted(7, 5) Source(18, 5) + SourceIndex(0)
-3 >Emitted(7, 10) Source(18, 10) + SourceIndex(0)
-4 >Emitted(7, 14) Source(18, 14) + SourceIndex(0)
-5 >Emitted(7, 19) Source(18, 19) + SourceIndex(0)
-6 >Emitted(7, 21) Source(18, 21) + SourceIndex(0)
+1 >Emitted(8, 1) Source(18, 1) + SourceIndex(0)
+2 >Emitted(8, 5) Source(18, 5) + SourceIndex(0)
+3 >Emitted(8, 10) Source(18, 10) + SourceIndex(0)
+4 >Emitted(8, 14) Source(18, 14) + SourceIndex(0)
+5 >Emitted(8, 19) Source(18, 19) + SourceIndex(0)
+6 >Emitted(8, 21) Source(18, 21) + SourceIndex(0)
 ---
 >>>    console.log(nameC);
 1->^^^^
@@ -393,28 +394,28 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 6 >                nameC
 7 >                     )
 8 >                      ;
-1->Emitted(8, 5) Source(19, 5) + SourceIndex(0)
-2 >Emitted(8, 12) Source(19, 12) + SourceIndex(0)
-3 >Emitted(8, 13) Source(19, 13) + SourceIndex(0)
-4 >Emitted(8, 16) Source(19, 16) + SourceIndex(0)
-5 >Emitted(8, 17) Source(19, 17) + SourceIndex(0)
-6 >Emitted(8, 22) Source(19, 22) + SourceIndex(0)
-7 >Emitted(8, 23) Source(19, 23) + SourceIndex(0)
-8 >Emitted(8, 24) Source(19, 24) + SourceIndex(0)
+1->Emitted(9, 5) Source(19, 5) + SourceIndex(0)
+2 >Emitted(9, 12) Source(19, 12) + SourceIndex(0)
+3 >Emitted(9, 13) Source(19, 13) + SourceIndex(0)
+4 >Emitted(9, 16) Source(19, 16) + SourceIndex(0)
+5 >Emitted(9, 17) Source(19, 17) + SourceIndex(0)
+6 >Emitted(9, 22) Source(19, 22) + SourceIndex(0)
+7 >Emitted(9, 23) Source(19, 23) + SourceIndex(0)
+8 >Emitted(9, 24) Source(19, 24) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^->
 1 >
   >}
-1 >Emitted(9, 2) Source(20, 2) + SourceIndex(0)
+1 >Emitted(10, 2) Source(20, 2) + SourceIndex(0)
 ---
 >>>else {
 1->^^^^^
 2 >     ^^^^^^^^^^^^^^^^^^^->
 1->
   >else 
-1->Emitted(10, 6) Source(21, 6) + SourceIndex(0)
+1->Emitted(11, 6) Source(21, 6) + SourceIndex(0)
 ---
 >>>    console.log(nameC);
 1->^^^^
@@ -434,20 +435,20 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 6 >                nameC
 7 >                     )
 8 >                      ;
-1->Emitted(11, 5) Source(22, 5) + SourceIndex(0)
-2 >Emitted(11, 12) Source(22, 12) + SourceIndex(0)
-3 >Emitted(11, 13) Source(22, 13) + SourceIndex(0)
-4 >Emitted(11, 16) Source(22, 16) + SourceIndex(0)
-5 >Emitted(11, 17) Source(22, 17) + SourceIndex(0)
-6 >Emitted(11, 22) Source(22, 22) + SourceIndex(0)
-7 >Emitted(11, 23) Source(22, 23) + SourceIndex(0)
-8 >Emitted(11, 24) Source(22, 24) + SourceIndex(0)
+1->Emitted(12, 5) Source(22, 5) + SourceIndex(0)
+2 >Emitted(12, 12) Source(22, 12) + SourceIndex(0)
+3 >Emitted(12, 13) Source(22, 13) + SourceIndex(0)
+4 >Emitted(12, 16) Source(22, 16) + SourceIndex(0)
+5 >Emitted(12, 17) Source(22, 17) + SourceIndex(0)
+6 >Emitted(12, 22) Source(22, 22) + SourceIndex(0)
+7 >Emitted(12, 23) Source(22, 23) + SourceIndex(0)
+8 >Emitted(12, 24) Source(22, 24) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(12, 2) Source(23, 2) + SourceIndex(0)
+1 >Emitted(13, 2) Source(23, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.js.map

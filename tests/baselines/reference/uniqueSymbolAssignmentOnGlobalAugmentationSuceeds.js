@@ -14,6 +14,7 @@ export function foo<T>(p: Promise<T>) {
 //// [uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.js]
 const FOO_SYMBOL = Symbol('Foo');
 
+
 export function foo(p) {
     p[FOO_SYMBOL] = 3;
 }

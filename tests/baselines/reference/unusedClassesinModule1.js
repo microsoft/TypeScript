@@ -11,7 +11,8 @@ var A;
 (function (A) {
     var Calculator = /** @class */ (function () {
         function Calculator() {
-        }Calculator.prototype.handelChar = function () {
+        }
+        Calculator.prototype.handelChar = function () {
         };
         return Calculator;
     }());

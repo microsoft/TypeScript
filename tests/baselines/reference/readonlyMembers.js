@@ -69,6 +69,7 @@ yy["foo"] = "abc";
 var x = { a: 0 };
 x.a = 1; // Error
 x.b = 1; // Error
+
 var C = /** @class */ (function () {
     function C() {
         var _this = this;
@@ -101,6 +102,7 @@ var o = {
 };
 o.a = 1; // Error
 o.b = 1;
+
 var p = { a: 1, b: 1 };
 p.a = 1; // Error
 p.b = 1;
@@ -109,7 +111,9 @@ q.a = 1;
 q.b = 1;
 var E;
 (function (E) {
-    E[E["A"] = 0] = "A";E[E["B"] = 1] = "B";E[E["C"] = 2] = "C";
+    E[E["A"] = 0] = "A";
+    E[E["B"] = 1] = "B";
+    E[E["C"] = 2] = "C";
 })(E || (E = {}));
 E.A = 1; // Error
 var N;
@@ -121,9 +125,11 @@ var N;
 N.a = 1; // Error
 N.b = 1;
 N.c = 1;
+
 var xx;
 var s = xx["foo"];
 xx["foo"] = "abc"; // Error
+
 var yy;
 yy[1] = "abc"; // Error
 yy["foo"] = "abc";

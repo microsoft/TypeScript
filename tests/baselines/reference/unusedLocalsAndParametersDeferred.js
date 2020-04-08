@@ -173,6 +173,7 @@ function f(a) {
     });
 }
 f(0);
+
 // function expression paramter
 var fexp = function (a) {
     defered(function () {
@@ -180,6 +181,7 @@ var fexp = function (a) {
     });
 };
 fexp(1);
+
 // arrow function paramter
 var farrow = function (a) {
     defered(function () {
@@ -187,6 +189,7 @@ var farrow = function (a) {
     });
 };
 farrow(2);
+
 var prop1;
 
 var C = /** @class */ (function () {
@@ -215,6 +218,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 new C();
+
 var prop2;
 
 var E = /** @class */ (function () {
@@ -242,7 +246,10 @@ var E = /** @class */ (function () {
     });
     return class_1;
 }());
+
 new E();
+
+
 var o = {
     // Object literal method declaration paramter
     method: function (a) {
@@ -261,6 +268,7 @@ var o = {
         prop1;
     })
 };
+
 o;
 var _loop_1 = function (i) {
     defered(function () {

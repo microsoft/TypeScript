@@ -57,27 +57,29 @@ sourceFile:test.tsx
 >>>    }
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >    
 2 >    }
 1 >Emitted(8, 5) Source(10, 5) + SourceIndex(0)
 2 >Emitted(8, 6) Source(10, 6) + SourceIndex(0)
 ---
->>>}exports.AppComponent = AppComponent;
-1->^
-2 > 
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-1->
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
   >}
-2 > 
-3 > export class AppComponent {
-  >     render() {
-  >         return <div />;
-  >     }
-  > }
-1->Emitted(9, 2) Source(11, 2) + SourceIndex(0)
-2 >Emitted(9, 2) Source(7, 1) + SourceIndex(0)
-3 >Emitted(9, 38) Source(11, 2) + SourceIndex(0)
+1 >Emitted(9, 2) Source(11, 2) + SourceIndex(0)
+---
+>>>exports.AppComponent = AppComponent;
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+2 >export class AppComponent {
+  >    render() {
+  >        return <div />;
+  >    }
+  >}
+1->Emitted(10, 1) Source(7, 1) + SourceIndex(0)
+2 >Emitted(10, 37) Source(11, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=test.js.map

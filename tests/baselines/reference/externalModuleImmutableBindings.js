@@ -62,6 +62,7 @@ exports.__esModule = true;
 var stuff = require("./f1");
 
 var n = 'baz';
+
 stuff.x = 0;
 stuff['x'] = 1;
 stuff.blah = 2;

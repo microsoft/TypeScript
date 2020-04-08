@@ -58,7 +58,6 @@ var out = myBug({ obj1: { a: "test" } });
 
 
 
-
 var noError = ensureNoDuplicates({ main: value("test"), alternate: value("test2") });
 
 var shouldBeNoError = ensureNoDuplicates({ main: value("test") });

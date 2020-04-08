@@ -68,6 +68,7 @@ function foo2(bar) {
         case "a":
             return 1;
     }
+
     var unusedVariable;
 }
 

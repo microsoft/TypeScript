@@ -27,7 +27,8 @@ define(["require", "exports"], function (require, exports) {
     var MyClass = /** @class */ (function () {
         function MyClass() {}
         return MyClass;
-    }());exports.MyClass = MyClass;
+    }());
+    exports.MyClass = MyClass;
 });
 //// [file2.js]
 define(["require", "exports", "react", "./file1"], function (require, exports, React, file1_1) {

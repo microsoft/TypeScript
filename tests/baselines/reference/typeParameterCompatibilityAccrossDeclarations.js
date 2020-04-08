@@ -35,6 +35,7 @@ define(["require", "exports"], function (require, exports) {
 
     var i;
     var i2;
+
     a = i; // error
     i = a; // error
 

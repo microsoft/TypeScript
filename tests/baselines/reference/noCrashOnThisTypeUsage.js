@@ -49,4 +49,5 @@ var ObservableValue = /** @class */ (function () {
 
     ObservableValue.prototype.observe = function (handler, fireImmediately) { };
     return ObservableValue;
-}());exports.ObservableValue = ObservableValue;
+}());
+exports.ObservableValue = ObservableValue;

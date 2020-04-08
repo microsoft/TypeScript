@@ -74,6 +74,7 @@ new string;
 
 // Use in LHS of expression?
 (new Date()).toString();
+
 // Various spacing
 var t3 = new string[]();
 var t4 = new string[]();
@@ -83,10 +84,14 @@ var f = new q();
 
 // not legal
 var t5 = new new Date;
+
 // Can be an expression
 new String;
+
 new union;
+
 new ctorUnion("");
+
 new ctorUnion2("");
 var M;
 (function (M) {

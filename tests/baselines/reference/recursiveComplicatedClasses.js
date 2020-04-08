@@ -49,26 +49,30 @@ function aEnclosesB(a) {
 
 var Symbol = /** @class */ (function () {
     function Symbol() {
-    }Symbol.prototype.visible = function () {
+    }
+    Symbol.prototype.visible = function () {
         var b;
         return aEnclosesB(b);
     };
     return Symbol;
 }());
 var InferenceSymbol = /** @class */ (function (_super) {
-    __extends(InferenceSymbol, _super);function InferenceSymbol() {
+    __extends(InferenceSymbol, _super);
+    function InferenceSymbol() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return InferenceSymbol;
 }(Symbol));
 var ParameterSymbol = /** @class */ (function (_super) {
-    __extends(ParameterSymbol, _super);function ParameterSymbol() {
+    __extends(ParameterSymbol, _super);
+    function ParameterSymbol() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return ParameterSymbol;
 }(InferenceSymbol));
 var TypeSymbol = /** @class */ (function (_super) {
-    __extends(TypeSymbol, _super);function TypeSymbol() {
+    __extends(TypeSymbol, _super);
+    function TypeSymbol() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return TypeSymbol;

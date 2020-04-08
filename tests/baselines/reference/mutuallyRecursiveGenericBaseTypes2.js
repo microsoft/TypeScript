@@ -25,11 +25,13 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var foo = /** @class */ (function () {
     function foo() {
-    }foo.prototype.bar = function () { return null; };
+    }
+    foo.prototype.bar = function () { return null; };
     return foo;
 }());
 var foo2 = /** @class */ (function (_super) {
-    __extends(foo2, _super);function foo2() {
+    __extends(foo2, _super);
+    function foo2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return foo2;

@@ -34,4 +34,5 @@ var gK = { b: ["number", "null"] };
 function foo(g) {
     return {};
 }
+
 foo(gK);

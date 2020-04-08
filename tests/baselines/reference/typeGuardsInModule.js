@@ -99,6 +99,8 @@ var m1;
 (function (m1) {
     // global vars in function declaration
     num = typeof var1 === "string" && var1.length; // string
+
+
     // variables in module declaration
     var var2;
     if (typeof var2 === "string") {
@@ -133,6 +135,8 @@ var m2;
 
         // exported variable from outer the module
         strOrNum = typeof m2.var3 === "string" && m2.var3; // string | number
+
+
         // variables in module declaration
         var var4;
         if (typeof var4 === "string") {
@@ -159,6 +163,8 @@ var m3;
     (function (m4) {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
+
+
         // variables in module declaration
         var var2;
         if (typeof var2 === "string") {

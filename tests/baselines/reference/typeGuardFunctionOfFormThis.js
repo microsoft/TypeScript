@@ -156,7 +156,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var RoyalGuard = /** @class */ (function () {
     function RoyalGuard() {
-    }RoyalGuard.prototype.isLeader = function () {
+    }
+    RoyalGuard.prototype.isLeader = function () {
         return this instanceof LeadGuard;
     };
     RoyalGuard.prototype.isFollower = function () {
@@ -165,15 +166,21 @@ var __extends = (this && this.__extends) || (function () {
     return RoyalGuard;
 }());
 var LeadGuard = /** @class */ (function (_super) {
-    __extends(LeadGuard, _super);function LeadGuard() {
+    __extends(LeadGuard, _super);
+    function LeadGuard() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }LeadGuard.prototype.lead = function () { };;
+    }
+    LeadGuard.prototype.lead = function () { };
+    ;
     return LeadGuard;
 }(RoyalGuard));
 var FollowerGuard = /** @class */ (function (_super) {
-    __extends(FollowerGuard, _super);function FollowerGuard() {
+    __extends(FollowerGuard, _super);
+    function FollowerGuard() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }FollowerGuard.prototype.follow = function () { };;
+    }
+    FollowerGuard.prototype.follow = function () { };
+    ;
     return FollowerGuard;
 }(RoyalGuard));
 var a = new FollowerGuard();
@@ -184,6 +191,7 @@ else if (a.isFollower()) {
     a.follow();
 }
 
+
 var b;
 if (b.isLeader()) {
     b.lead();
@@ -191,6 +199,7 @@ if (b.isLeader()) {
 else if (b.isFollower()) {
     b.follow();
 }
+
 // if (((a.isLeader)())) {
 //     a.lead();
 // }
@@ -204,12 +213,14 @@ else if (b.isFollower()) {
 //     a.follow();
 // }
 var holder2 = { a: a };
+
 if (holder2.a.isLeader()) {
     holder2.a;
 }
 else {
     holder2.a;
 }
+
 var ArrowGuard = /** @class */ (function () {
     function ArrowGuard() {
         var _this = this;
@@ -223,15 +234,19 @@ var ArrowGuard = /** @class */ (function () {
     return ArrowGuard;
 }());
 var ArrowElite = /** @class */ (function (_super) {
-    __extends(ArrowElite, _super);function ArrowElite() {
+    __extends(ArrowElite, _super);
+    function ArrowElite() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }ArrowElite.prototype.defend = function () { };
+    }
+    ArrowElite.prototype.defend = function () { };
     return ArrowElite;
 }(ArrowGuard));
 var ArrowMedic = /** @class */ (function (_super) {
-    __extends(ArrowMedic, _super);function ArrowMedic() {
+    __extends(ArrowMedic, _super);
+    function ArrowMedic() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }ArrowMedic.prototype.heal = function () { };
+    }
+    ArrowMedic.prototype.heal = function () { };
     return ArrowMedic;
 }(ArrowGuard));
 var guard = new ArrowGuard();
@@ -243,8 +258,8 @@ else if (guard.isMedic()) {
 }
 
 
-
 var crate;
+
 if (crate.isSundries()) {
     crate.contents.broken = true;
 }
@@ -255,25 +270,34 @@ else if (crate.isSupplies()) {
 // Matching guards should be assignable
 a.isFollower = b.isFollower;
 a.isLeader = b.isLeader;
+
 var MimicGuard = /** @class */ (function () {
     function MimicGuard() {
-    }MimicGuard.prototype.isLeader = function () { return this instanceof MimicLeader; };;
-    MimicGuard.prototype.isFollower = function () { return this instanceof MimicFollower; };;
+    }
+    MimicGuard.prototype.isLeader = function () { return this instanceof MimicLeader; };
+    ;
+    MimicGuard.prototype.isFollower = function () { return this instanceof MimicFollower; };
+    ;
     return MimicGuard;
 }());
 var MimicLeader = /** @class */ (function (_super) {
-    __extends(MimicLeader, _super);function MimicLeader() {
+    __extends(MimicLeader, _super);
+    function MimicLeader() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }MimicLeader.prototype.lead = function () { };
+    }
+    MimicLeader.prototype.lead = function () { };
     return MimicLeader;
 }(MimicGuard));
 var MimicFollower = /** @class */ (function (_super) {
-    __extends(MimicFollower, _super);function MimicFollower() {
+    __extends(MimicFollower, _super);
+    function MimicFollower() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }MimicFollower.prototype.follow = function () { };
+    }
+    MimicFollower.prototype.follow = function () { };
     return MimicFollower;
 }(MimicGuard));
 var mimic = new MimicGuard();
+
 a.isLeader = mimic.isLeader;
 a.isFollower = mimic.isFollower;
 
@@ -281,6 +305,8 @@ if (mimic.isFollower()) {
     mimic.follow();
     mimic.isFollower = a.isFollower;
 }
+
+
 
 
 //// [typeGuardFunctionOfFormThis.d.ts]

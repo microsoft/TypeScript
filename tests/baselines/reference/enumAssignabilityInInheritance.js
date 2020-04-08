@@ -115,8 +115,6 @@ var E;
 (function (E) {
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
-
-
 var r = foo(E.A); // E
 var r2 = foo(1); // number
 var r3 = foo(null); // any
@@ -167,6 +165,7 @@ var E2;
 })(E2 || (E2 = {}));
 
 var r4 = foo13(E.A);
+
 function f() { }
 (function (f) {
     f.bar = 1;

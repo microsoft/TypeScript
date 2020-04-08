@@ -24,8 +24,6 @@ export let ctor: IDirectiveLinkFn<number> | ConstructableA | IDirectivePrePost<n
 exports.__esModule = true;
 exports.ctor = exports.blah = void 0;
 
-
-
 exports.blah = function (x) { };
 
 exports.ctor = /** @class */ (function () {

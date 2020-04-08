@@ -28,5 +28,7 @@ var Foo = /** @class */ (function () {
 function F1(a) { return a; }
 
 var f1 = new Foo("hey");
+
+
 f1.bar1();
 Foo();

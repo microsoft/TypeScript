@@ -94,7 +94,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 function f(x, y, z) {
     return Array.from(arguments);
 }
+
 f(1, 2, 3); // no error
+
+
 // Using ES6 collection
 var m = new Map();
 m.clear();
@@ -124,6 +127,7 @@ function* gen2() {
 
 // Using ES6 math
 Math.sign(1);
+
 // Using ES6 object
 var o = {
     a: 2,
@@ -132,6 +136,7 @@ var o = {
     }
 };
 o.hasOwnProperty(Symbol.hasInstance);
+
 // Using ES6 promise
 function out() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -160,6 +165,7 @@ str.includes("hello", 0);
 
 // Using ES6 symbol
 var s = Symbol();
+
 // Using ES6 wellknown-symbol
 const o1 = {
     [Symbol.hasInstance](value) {

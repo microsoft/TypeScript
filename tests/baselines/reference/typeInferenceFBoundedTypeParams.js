@@ -39,7 +39,8 @@ function append(values, value) {
     return values;
 }
 
-fold([1, 2, 3], [],
+fold([1, 2, 3],
+    [],
     function (result, value) { return append(
     result,
         ["", ""]

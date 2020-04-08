@@ -43,6 +43,7 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 E.A = null; // error
+
 var C = /** @class */ (function () {
     function C() {}
     return C;
@@ -50,12 +51,14 @@ var C = /** @class */ (function () {
 var f;
 f = null; // ok
 C = null; // error
+
 var g;
 g = null; // ok
 I = null; // error
 var M;
 (function (M) {M.x = 1;})(M || (M = {}));
 M = null; // error
+
 var h = null;
 
 function i(a) {

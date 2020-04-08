@@ -93,6 +93,7 @@ function onlyErrorsWhenUnusedInBody() {
 
     // ok
     test ? test() : undefined;
+
     // ok
     test
         ? [function () { return null; }].forEach(function () { test(); })
@@ -110,6 +111,7 @@ function checksPropertyAccess() {
             bar: function () { return true; }
         }
     };
+
     // error
     x.foo.bar ? console.log('x.foo.bar') : undefined;
 
@@ -119,7 +121,8 @@ function checksPropertyAccess() {
 
 var Foo = /** @class */ (function () {
     function Foo() {
-    }Foo.prototype.isUser = function () {
+    }
+    Foo.prototype.isUser = function () {
         return true;
     };
 

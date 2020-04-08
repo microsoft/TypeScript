@@ -50,13 +50,16 @@ function TabLayout(props) {
 }
 
 var App = /** @class */ (function (_super) {
-    __extends(App, _super);function App() {
+    __extends(App, _super);
+    function App() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }App.prototype.render = function () {
+    }
+    App.prototype.render = function () {
         return React.createElement(TabLayout, null, [
             ['Users', React.createElement("div", null)],
             ['Products', React.createElement("div", null)]
         ]);
     };
     return App;
-}(React.Component));exports.App = App;
+}(React.Component));
+exports.App = App;

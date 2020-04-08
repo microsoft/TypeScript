@@ -47,12 +47,11 @@ function getFoo3(): Foo {
 
 //// [contextuallyTypedClassExpressionMethodDeclaration01.js]
 
-
-
 function getFoo1() {
     return /** @class */ (function () {
         function class_1() {
-        }class_1.method1 = function (arg) {
+        }
+        class_1.method1 = function (arg) {
             arg.numProp = 10;
         };
         class_1.method2 = function (arg) {

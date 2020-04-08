@@ -362,7 +362,8 @@ function newExpression18() {
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _a = x;return [4 /*yield*/, a];
+                    _a = x;
+                    return [4 /*yield*/, a];
                 case 1:
                     new _a[_b.sent()](y, z);
                     return [2 /*return*/];

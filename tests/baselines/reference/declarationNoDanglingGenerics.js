@@ -61,6 +61,7 @@ function register(kind) {
 function ClassFactory(kind) {
     var _a;
     register(kind);
+
     return _a = /** @class */ (function () {
             function class_1() {
                 this.kind = kind;
@@ -79,23 +80,29 @@ var Kinds = /** @class */ (function () {
     return Kinds;
 }());
 var AKind = /** @class */ (function (_super) {
-    __extends(AKind, _super);function AKind() {
+    __extends(AKind, _super);
+    function AKind() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return AKind;
-}(ClassFactory(Kinds.A)));exports.AKind = AKind;
+}(ClassFactory(Kinds.A)));
+exports.AKind = AKind;
 var BKind = /** @class */ (function (_super) {
-    __extends(BKind, _super);function BKind() {
+    __extends(BKind, _super);
+    function BKind() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return BKind;
-}(ClassFactory(Kinds.B)));exports.BKind = BKind;
+}(ClassFactory(Kinds.B)));
+exports.BKind = BKind;
 var CKind = /** @class */ (function (_super) {
-    __extends(CKind, _super);function CKind() {
+    __extends(CKind, _super);
+    function CKind() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return CKind;
-}(ClassFactory(Kinds.C)));exports.CKind = CKind;
+}(ClassFactory(Kinds.C)));
+exports.CKind = CKind;
 
 
 //// [declarationNoDanglingGenerics.d.ts]

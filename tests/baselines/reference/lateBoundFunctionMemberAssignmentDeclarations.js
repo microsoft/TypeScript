@@ -12,6 +12,7 @@ export function foo() { }
 foo.bar = 12;
 const _private = Symbol();
 foo[_private] = "ok";
+
 const x = foo[_private];
 
 

@@ -37,7 +37,6 @@ var b: {};
 //      the string index type of the contextual type, if any.
 
 
-
 var x = foo({ name: "Sprocket" });
 var x;
 

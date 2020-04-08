@@ -26,7 +26,6 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
-
 exports["default"] = C.B;
 //// [b.js]
 "use strict";

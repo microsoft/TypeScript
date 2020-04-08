@@ -28,6 +28,7 @@ class B {
 class A {
     constructor(x) {
     }
+
     foo() { }
 }
 

@@ -158,20 +158,22 @@ function watch(rootFileNames, options) {
     rootFileNames.forEach(function (fileName) {
         // First time around, emit all files
         emitFile(fileName);
+
         // Add a watch on the file to handle next change
         fs.watchFile(fileName,
-            { persistent: true, interval: 250 }, function (curr, prev) {
-            // Check timestamp
-            if (+curr.mtime <= +prev.mtime) {
-                return;
-            }
+            { persistent: true, interval: 250 },
+            function (curr, prev) {
+                // Check timestamp
+                if (+curr.mtime <= +prev.mtime) {
+                    return;
+                }
 
-            // Update the version to signal a change in the file
-            files[fileName].version++;
+                // Update the version to signal a change in the file
+                files[fileName].version++;
 
-            // write the changes to disk
-            emitFile(fileName);
-        });
+                // write the changes to disk
+                emitFile(fileName);
+            });
     });
 
     function emitFile(fileName) {
@@ -211,5 +213,6 @@ function watch(rootFileNames, options) {
 // Initialize files constituting the program as all .ts files in the current directory
 var currentDirectoryFiles = fs.readdirSync(process.cwd()).
     filter(function (fileName) { return fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts"; });
+
 // Start the watcher
 watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });

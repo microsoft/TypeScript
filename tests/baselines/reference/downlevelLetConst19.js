@@ -26,6 +26,7 @@ function a() {
     {
         var x_1;
         use(x_1);
+
         function b() {
             {
                 var x_2;

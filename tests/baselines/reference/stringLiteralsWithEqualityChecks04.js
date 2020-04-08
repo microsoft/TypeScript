@@ -32,7 +32,6 @@ b = "bar" != y;
 
 //// [stringLiteralsWithEqualityChecks04.js]
 
-
 var x;
 var y;
 

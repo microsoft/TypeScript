@@ -39,5 +39,6 @@ var C3 = /** @class */ (function () {
 var x;
 var a;
 var b;
+
 x = a;
 x = b;

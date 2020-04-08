@@ -68,7 +68,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 
-
 function countEverything() {
     return __awaiter(this, void 0, void 0, function () {
         var providerA, providerB, _a, resultA, resultB, dataA, dataB;

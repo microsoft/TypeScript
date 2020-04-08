@@ -49,6 +49,5 @@ define("_apply", ["require", "exports"], function (require, exports) {
         }
         return func.apply(thisArg, args);
     }
-
     exports["default"] = apply;
 });

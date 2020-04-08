@@ -35,9 +35,11 @@ exports.__esModule = true;
 var React = require("react");
 
 var BigGreeter = /** @class */ (function (_super) {
-    __extends(BigGreeter, _super);function BigGreeter() {
+    __extends(BigGreeter, _super);
+    function BigGreeter() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }BigGreeter.prototype.render = function () {
+    }
+    BigGreeter.prototype.render = function () {
         return <div>Default hi</div>;
     };
     return BigGreeter;

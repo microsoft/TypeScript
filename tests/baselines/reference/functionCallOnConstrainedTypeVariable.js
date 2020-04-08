@@ -29,6 +29,7 @@ function call0(p) {
 
 function callN(p) {
     p.a("s"); // Error
+
     var a = p.a;
     a(""); // Error
     a("", "", "", ""); // Error

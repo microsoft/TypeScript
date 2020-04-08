@@ -101,6 +101,7 @@ function foo(p) {
 var fooVar;
 foo(50);
 fooVar();
+
 var c = (function () {
     function c() {
         this.b = 10;
@@ -141,8 +142,6 @@ var m1;
     }());
     m1.b = b;
 })(m1 || (m1 = {}));
-
-
 var shade = 1;
 
 

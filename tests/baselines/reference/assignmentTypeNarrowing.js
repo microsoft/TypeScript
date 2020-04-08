@@ -38,29 +38,32 @@ arr.push({ x: "ok" });
 //// [assignmentTypeNarrowing.js]
 var _a, _b, _c;
 var x;
+
 x = "";
 x; // string
+
 x = [true][0];
 x; // boolean
+
 _a = [1][0], x = _a === void 0 ? "" : _a;
 x; // string | number
+
 (x = { x: true }.x);
 x; // boolean
+
 (x = { y: 1 }.y);
 x; // number
+
 (_b = { x: true }.x, x = _b === void 0 ? "" : _b);
 x; // string | boolean
+
 (_c = { y: 1 }.y, x = _c === void 0 ? /a/ : _c);
 x; // number | RegExp
-var a;
 
+var a;
 for (var _i = 0, a_1 = a; _i < a_1.length; _i++) {
     x = a_1[_i];
     x; // string
 }
-
-
-
-
 var arr = [{ x: "ok" }]; // weak type
 arr.push({ x: "ok" });

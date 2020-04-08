@@ -11,11 +11,13 @@ exports.__esModule = true;
 exports.MyClass = void 0;
 var MyClass = /** @class */ (function () {
     function MyClass() {
-    }MyClass.prototype.myMethod = function (val) {
+    }
+    MyClass.prototype.myMethod = function (val) {
         return val;
     };
     return MyClass;
-}());exports.MyClass = MyClass;
+}());
+exports.MyClass = MyClass;
 
 
 //// [visibilityOfTypeParameters.d.ts]

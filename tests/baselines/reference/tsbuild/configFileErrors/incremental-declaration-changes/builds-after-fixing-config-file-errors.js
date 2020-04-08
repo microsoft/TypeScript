@@ -11,7 +11,8 @@ export declare function foo(): void;
 "use strict";
 exports.__esModule = true;
 exports.foo = void 0;
-function foo() { }exports.foo = foo;
+function foo() { }
+exports.foo = foo;
 
 
 //// [/src/b.d.ts]
@@ -22,7 +23,8 @@ export declare function bar(): void;
 "use strict";
 exports.__esModule = true;
 exports.bar = void 0;
-function bar() { }exports.bar = bar;
+function bar() { }
+exports.bar = bar;
 
 
 //// [/src/tsconfig.json]

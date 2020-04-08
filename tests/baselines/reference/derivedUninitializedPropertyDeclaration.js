@@ -100,31 +100,37 @@ var __extends = (this && this.__extends) || (function () {
 var A = /** @class */ (function () {
     function A() {
         this.property = 'x';
-    }A.prototype.m = function () { return 1; };
+    }
+    A.prototype.m = function () { return 1; };
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 var BD = /** @class */ (function (_super) {
-    __extends(BD, _super);function BD() {
+    __extends(BD, _super);
+    function BD() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return BD;
 }(A));
 var BDBang = /** @class */ (function (_super) {
-    __extends(BDBang, _super);function BDBang() {
+    __extends(BDBang, _super);
+    function BDBang() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return BDBang;
 }(A));
 var BOther = /** @class */ (function (_super) {
-    __extends(BOther, _super);function BOther() {
+    __extends(BOther, _super);
+    function BOther() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }BOther.prototype.m = function () { return 2; }; // not allowed on methods
+    }
+    BOther.prototype.m = function () { return 2; }; // not allowed on methods
     return BOther;
 }(A));
 var U = /** @class */ (function () {
@@ -138,26 +144,28 @@ var C = /** @class */ (function () {
     return C;
 }());
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);function D() {
+    __extends(D, _super);
+    function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
 }(C));
 var DD = /** @class */ (function (_super) {
-    __extends(DD, _super);function DD() {
+    __extends(DD, _super);
+    function DD() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return DD;
 }(C));
 var F = /** @class */ (function (_super) {
-    __extends(F, _super);function F() {
+    __extends(F, _super);
+    function F() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return F;
 }(E));
 var G = /** @class */ (function (_super) {
     __extends(G, _super);
-
     function G() {
         var _this = _super.call(this) || this;
         _this.p1 = 'z';
@@ -166,7 +174,8 @@ var G = /** @class */ (function (_super) {
     return G;
 }(E));
 var H = /** @class */ (function (_super) {
-    __extends(H, _super);function H() {
+    __extends(H, _super);
+    function H() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return H;
@@ -178,7 +187,8 @@ var J = /** @class */ (function () {
     return J;
 }());
 var K = /** @class */ (function (_super) {
-    __extends(K, _super);function K() {
+    __extends(K, _super);
+    function K() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return K;
@@ -192,7 +202,6 @@ var L = /** @class */ (function () {
 }());
 var M = /** @class */ (function (_super) {
     __extends(M, _super);
-
     function M(arg) {
         var _this = _super.call(this, arg) || this;
         console.log(_this.a); // should be OK, M.a is ambient

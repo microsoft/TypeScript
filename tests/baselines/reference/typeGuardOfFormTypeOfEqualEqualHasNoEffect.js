@@ -41,6 +41,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 ;
+
 var strOrNum;
 var strOrBool;
 var numOrBool;

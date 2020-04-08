@@ -27,9 +27,9 @@ function _setBarAndText(): void {
 
 //// [dottedSymbolResolution1.js]
 
-
 var Base = /** @class */ (function () {
-    function Base() {}Base.prototype.foo = function () { };
+    function Base() {}
+    Base.prototype.foo = function () { };
     return Base;
 }());
 function each(collection, callback) {
@@ -39,6 +39,7 @@ function each(collection, callback) {
 function _setBarAndText() {
     var x, $;
     each(x.find(" "), function () {
-        var $this = $(''), thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here
+        var $this = $(''),
+            thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here
     });
 }

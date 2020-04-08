@@ -24,13 +24,15 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var SomeBase = /** @class */ (function () {
     function SomeBase() {
-    }SomeBase.GetNumber = function () {
+    }
+    SomeBase.GetNumber = function () {
         return 2;
     };
     return SomeBase;
 }());
 var P = /** @class */ (function (_super) {
-    __extends(P, _super);function P() {
+    __extends(P, _super);
+    function P() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     P.SomeNumber = P.GetNumber();

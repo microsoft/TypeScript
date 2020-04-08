@@ -32,5 +32,6 @@ class FooIterator {
         return this;
     }
 }
+
 var a, b;
 [a, ...b] = new FooIterator;

@@ -12,4 +12,3 @@ interface foo {
 }
 
 //// [interfaceMemberValidation.js]
-

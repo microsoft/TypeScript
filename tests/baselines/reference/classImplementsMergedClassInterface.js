@@ -25,7 +25,6 @@ class C5 implements C1 { // okay
 
 //// [classImplementsMergedClassInterface.js]
 
-
 var C2 = /** @class */ (function () {
     function C2() {
     }

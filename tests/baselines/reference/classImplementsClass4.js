@@ -32,18 +32,21 @@ var __extends = (this && this.__extends) || (function () {
 })();var A = /** @class */ (function () {
     function A() {
         this.x = 1;
-    }A.prototype.foo = function () { return 1; };
+    }
+    A.prototype.foo = function () { return 1; };
     return A;
 }());
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.foo = function () {
+    }
+    C.prototype.foo = function () {
         return 1;
     };
     return C;
 }());
 var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);function C2() {
+    __extends(C2, _super);
+    function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C2;

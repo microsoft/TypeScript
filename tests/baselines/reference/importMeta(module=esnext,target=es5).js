@@ -108,4 +108,5 @@ var globalC = import.import.import.malkovich;
 export var foo = import.meta.blah = import.meta.blue = import.meta;
 import.meta = foo;
 
+
 var _a = import.meta.wellKnownProperty, a = _a.a, b = _a.b, c = _a.c;

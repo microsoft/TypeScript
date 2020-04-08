@@ -46,27 +46,33 @@ var __extends = (this && this.__extends) || (function () {
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);function C() {
+    __extends(C, _super);
+    function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(A));
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);function D() {
+    __extends(D, _super);
+    function D() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }D.prototype.foo = function () { };
+    }
+    D.prototype.foo = function () { };
     return D;
 }(A));
 var E = /** @class */ (function (_super) {
-    __extends(E, _super);function E() {
+    __extends(E, _super);
+    function E() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }E.prototype.foo = function () { };
+    }
+    E.prototype.foo = function () { };
     return E;
 }(A));
 var AA = /** @class */ (function () {
@@ -75,20 +81,24 @@ var AA = /** @class */ (function () {
     return AA;
 }());
 var BB = /** @class */ (function (_super) {
-    __extends(BB, _super);function BB() {
+    __extends(BB, _super);
+    function BB() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return BB;
 }(AA));
 var CC = /** @class */ (function (_super) {
-    __extends(CC, _super);function CC() {
+    __extends(CC, _super);
+    function CC() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return CC;
 }(AA));
 var DD = /** @class */ (function (_super) {
-    __extends(DD, _super);function DD() {
+    __extends(DD, _super);
+    function DD() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }DD.prototype.foo = function () { };
+    }
+    DD.prototype.foo = function () { };
     return DD;
 }(AA));

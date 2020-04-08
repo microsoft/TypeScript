@@ -70,6 +70,7 @@ module.exports.c.Cls = /** @class */ (function () {
     function Cls() {}
     return Cls;
 }());
+
 /**
  * @param {number} a
  * @param {number} b

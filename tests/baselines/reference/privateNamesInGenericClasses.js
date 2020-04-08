@@ -24,7 +24,8 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _foo;
 class C {constructor() {
         _foo.set(this, void 0);
-    }bar(x) { return __classPrivateFieldGet(x, _foo); } // OK
+    }
+    bar(x) { return __classPrivateFieldGet(x, _foo); } // OK
     baz(x) { return __classPrivateFieldGet(x, _foo); } // OK
     quux(x) { return __classPrivateFieldGet(x, _foo); } // OK
 }

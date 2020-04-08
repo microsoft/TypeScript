@@ -20,8 +20,9 @@ class testADelx {
 var ANY;
 
 // operand before delete operator
-var BOOLEAN1 = ANY;
-delete ; //expect error
+var BOOLEAN1 = ANY;delete ; //expect error
+
+
 // miss an operand
 var BOOLEAN2 = delete ;
 

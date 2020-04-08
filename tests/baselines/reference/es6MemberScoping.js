@@ -28,6 +28,7 @@ var Foo = /** @class */ (function () {
 }());
 var Foo2 = /** @class */ (function () {
     function Foo2() {
-    }Foo2.Foo2 = function () { return 0; }; // should not be an error
+    }
+    Foo2.Foo2 = function () { return 0; }; // should not be an error
     return Foo2;
 }());

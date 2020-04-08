@@ -102,13 +102,16 @@ var obj = {
 
 var A = /** @class */ (function () {
     function A() {
-    }A.prototype.method = function () { };
+    }
+    A.prototype.method = function () { };
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }B.prototype.f = function () {
+    }
+    B.prototype.f = function () {
         var _this = this;
         var obj = {
             __proto__: {

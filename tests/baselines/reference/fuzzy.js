@@ -34,7 +34,6 @@ module M {
 var M;
 (function (M) {
 
-
     var C = /** @class */ (function () {
         function C(x) {
             this.x = x;

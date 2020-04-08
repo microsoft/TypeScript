@@ -192,8 +192,6 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
-
-
 var z1 = ex.customClass;
 var z2 = ex.obj.nested.attr;
 

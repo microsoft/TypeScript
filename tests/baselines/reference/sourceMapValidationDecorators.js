@@ -126,8 +126,6 @@ var Greeter = /** @class */ (function () {
         ClassDecorator2(10),
         __param(0, ParameterDecorator1),
         __param(0, ParameterDecorator2(20)),
-
-
         __param(1, ParameterDecorator1),
         __param(1, ParameterDecorator2(30))
     ], Greeter);

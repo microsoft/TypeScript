@@ -29,6 +29,7 @@ function foo() {
     var seriesExtent = function (series) { return null; };
 
     var series2;
+
     series2.map(seriesExtent);
     return null;
 }

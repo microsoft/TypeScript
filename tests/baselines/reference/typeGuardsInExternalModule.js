@@ -38,8 +38,10 @@ if (typeof var1 === "string") {
 else {
     num = var1; // number
 }
+
 // exported variable in external module
 var strOrNum;
+
 if (typeof exports.var2 === "string") {
     // export makes the var property and not variable
     strOrNum = exports.var2; // string | number

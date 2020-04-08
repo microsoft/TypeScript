@@ -16,6 +16,7 @@ export default class A
 export default class A {
     constructor() {
     }
+
     B() {
         return 42;
     }

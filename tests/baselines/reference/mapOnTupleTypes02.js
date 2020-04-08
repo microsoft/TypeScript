@@ -11,7 +11,8 @@ exports.__esModule = true;
 exports.increment = void 0;
 function increment(point) {
     return point.map(function (d) { return d + 1; });
-}exports.increment = increment;
+}
+exports.increment = increment;
 
 
 //// [mapOnTupleTypes02.d.ts]

@@ -41,7 +41,8 @@ var X;
         (function (base) {
 
             var W = /** @class */ (function (_super) {
-                __extends(W, _super);function W() {
+                __extends(W, _super);
+                function W() {
                     return _super !== null && _super.apply(this, arguments) || this;
                 }
                 return W;
@@ -59,7 +60,8 @@ var X;
             (function (Z) {
 
                 var W = /** @class */ (function (_super) {
-                    __extends(W, _super);function W() {
+                    __extends(W, _super);
+                    function W() {
                         return _super !== null && _super.apply(this, arguments) || this;
                     }
                     return W;

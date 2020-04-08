@@ -25,7 +25,8 @@ var Test;
 (function (Test) {
     var Bug = /** @class */ (function () {
         function Bug() {
-        }Bug.prototype.getName = function () {
+        }
+        Bug.prototype.getName = function () {
             return "name";
         };
         Bug.prototype.bug = function () {

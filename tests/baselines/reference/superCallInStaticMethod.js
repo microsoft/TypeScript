@@ -61,12 +61,14 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var Doing = /** @class */ (function () {
     function Doing() {
-    }Doing.staticMethod = function () {
+    }
+    Doing.staticMethod = function () {
     };
     return Doing;
 }());
 var Other = /** @class */ (function (_super) {
-    __extends(Other, _super);function Other() {
+    __extends(Other, _super);
+    function Other() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     // in static method
@@ -97,6 +99,7 @@ var Other = /** @class */ (function (_super) {
         // in a getter
         get: function () {
             _super.staticMethod.call(this);
+
             return 0;
         },
         // in a setter

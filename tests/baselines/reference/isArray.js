@@ -11,6 +11,8 @@ else {
 
 //// [isArray.js]
 var maybeArray;
+
+
 if (Array.isArray(maybeArray)) {
     maybeArray.length; // OK
 }

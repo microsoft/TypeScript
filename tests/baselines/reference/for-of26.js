@@ -20,5 +20,6 @@ class StringIterator {
         return this;
     }
 }
+
 var x;
 for (var v of new StringIterator) { }

@@ -6,4 +6,3 @@ interface I {
 }
 
 //// [decoratorOnInterface.js]
-

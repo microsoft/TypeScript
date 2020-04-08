@@ -30,30 +30,36 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var A = /** @class */ (function () {
     function A() {
-    }A.prototype.foo = function () { };
+    }
+    A.prototype.foo = function () { };
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);function C() {
+    __extends(C, _super);
+    function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(B));
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);function D() {
+    __extends(D, _super);
+    function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
 }(B));
 var E = /** @class */ (function (_super) {
-    __extends(E, _super);function E() {
+    __extends(E, _super);
+    function E() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }E.prototype.bar = function () { };
+    }
+    E.prototype.bar = function () { };
     return E;
 }(B));

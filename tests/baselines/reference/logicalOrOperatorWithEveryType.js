@@ -132,7 +132,9 @@ var rf10 = undefined || undefined; // undefined || undefined is any
 // operand types.
 var E;
 (function (E) {
-    E[E["a"] = 0] = "a";E[E["b"] = 1] = "b";E[E["c"] = 2] = "c";
+    E[E["a"] = 0] = "a";
+    E[E["b"] = 1] = "b";
+    E[E["c"] = 2] = "c";
 })(E || (E = {}));
 var a1;
 var a2;

@@ -146,7 +146,8 @@ function fn(pInit) {if (pInit === void 0) { pInit = pInit; }
 var InitClass = /** @class */ (function () {
     function InitClass() {
         this.x = this.x;
-    }InitClass.prototype.fn = function () {
+    }
+    InitClass.prototype.fn = function () {
         var y = this.x;
         var y;
     };
@@ -158,6 +159,7 @@ function fnReturn1() {
 }
 var a;
 var a = fnReturn1();
+
 function fnReturn2() {
     return fnReturn2;
 }
@@ -198,6 +200,7 @@ var and2 = '' && and2;
 var and2;
 var and3 = and3 && and3;
 var and3;
+
 // function call return type
 function fnCall() {
     return fnCall();
@@ -222,7 +225,8 @@ var t = fnArg2(); // t: should be 'any', but is 'string'
 // New operator
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.fn1 = function () {
+    }
+    C.prototype.fn1 = function () {
         return new (this.fn1())();
     };
     C.prototype.fn2 = function () {

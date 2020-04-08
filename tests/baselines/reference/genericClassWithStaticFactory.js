@@ -155,6 +155,7 @@ var Editor;
 
         List.prototype.add = function (data) {
             var entry = this.listFactory.MakeEntry(data);
+
             this.prev.next = entry;
             entry.next = this;
             entry.prev = this.prev;
@@ -165,6 +166,7 @@ var Editor;
         List.prototype.count = function () {
             var entry;
             var i;
+
             entry = this.next;
             for (i = 0; !(entry.isHead); i++) {
                 entry = entry.next;
@@ -249,7 +251,8 @@ var Editor;
     Editor.List = List;
     var ListFactory = /** @class */ (function () {
         function ListFactory() {
-        }ListFactory.prototype.MakeHead = function () {
+        }
+        ListFactory.prototype.MakeHead = function () {
             var entry = new List(true, null);
             entry.prev = entry;
             entry.next = entry;

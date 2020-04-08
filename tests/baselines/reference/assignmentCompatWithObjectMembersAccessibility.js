@@ -137,6 +137,7 @@ var TargetIsPublic;
     }());
     var d;
     var e;
+
     a = b;
     a = i;
     a = d;
@@ -188,6 +189,7 @@ var TargetIsPublic;
     }());
     var d;
     var e;
+
     a = b; // error
     a = i; // error
     a = d;

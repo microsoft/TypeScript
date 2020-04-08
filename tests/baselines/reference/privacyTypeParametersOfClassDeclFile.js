@@ -167,61 +167,72 @@ var publicClass = /** @class */ (function () {
     function publicClass() {
     }
     return publicClass;
-}());exports.publicClass = publicClass;
+}());
+exports.publicClass = publicClass;
 var publicClassWithPrivateTypeParameters = /** @class */ (function () {
     function publicClassWithPrivateTypeParameters() {
-    }// Error
+    }
     publicClassWithPrivateTypeParameters.prototype.myMethod = function (val) {
         return val;
     };
     return publicClassWithPrivateTypeParameters;
-}());exports.publicClassWithPrivateTypeParameters = publicClassWithPrivateTypeParameters;
+}());
+exports.publicClassWithPrivateTypeParameters = publicClassWithPrivateTypeParameters;
 var publicClassWithPublicTypeParameters = /** @class */ (function () {
     function publicClassWithPublicTypeParameters() {
-    }publicClassWithPublicTypeParameters.prototype.myMethod = function (val) {
+    }
+    publicClassWithPublicTypeParameters.prototype.myMethod = function (val) {
         return val;
     };
     return publicClassWithPublicTypeParameters;
-}());exports.publicClassWithPublicTypeParameters = publicClassWithPublicTypeParameters;
+}());
+exports.publicClassWithPublicTypeParameters = publicClassWithPublicTypeParameters;
 var privateClassWithPrivateTypeParameters = /** @class */ (function () {
     function privateClassWithPrivateTypeParameters() {
-    }privateClassWithPrivateTypeParameters.prototype.myMethod = function (val) {
+    }
+    privateClassWithPrivateTypeParameters.prototype.myMethod = function (val) {
         return val;
     };
     return privateClassWithPrivateTypeParameters;
 }());
 var privateClassWithPublicTypeParameters = /** @class */ (function () {
     function privateClassWithPublicTypeParameters() {
-    }privateClassWithPublicTypeParameters.prototype.myMethod = function (val) {
+    }
+    privateClassWithPublicTypeParameters.prototype.myMethod = function (val) {
         return val;
     };
     return privateClassWithPublicTypeParameters;
 }());
 var publicClassWithPublicTypeParametersWithoutExtends = /** @class */ (function () {
     function publicClassWithPublicTypeParametersWithoutExtends() {
-    }publicClassWithPublicTypeParametersWithoutExtends.prototype.myMethod = function (val) {
+    }
+    publicClassWithPublicTypeParametersWithoutExtends.prototype.myMethod = function (val) {
         return val;
     };
     return publicClassWithPublicTypeParametersWithoutExtends;
-}());exports.publicClassWithPublicTypeParametersWithoutExtends = publicClassWithPublicTypeParametersWithoutExtends;
+}());
+exports.publicClassWithPublicTypeParametersWithoutExtends = publicClassWithPublicTypeParametersWithoutExtends;
 var privateClassWithPublicTypeParametersWithoutExtends = /** @class */ (function () {
     function privateClassWithPublicTypeParametersWithoutExtends() {
-    }privateClassWithPublicTypeParametersWithoutExtends.prototype.myMethod = function (val) {
+    }
+    privateClassWithPublicTypeParametersWithoutExtends.prototype.myMethod = function (val) {
         return val;
     };
     return privateClassWithPublicTypeParametersWithoutExtends;
 }());
 var publicClassWithTypeParametersFromPrivateModule = /** @class */ (function () {
     function publicClassWithTypeParametersFromPrivateModule() {
-    }// Error
+    }
     publicClassWithTypeParametersFromPrivateModule.prototype.myMethod = function (val) {
         return val;
     };
     return publicClassWithTypeParametersFromPrivateModule;
-}());exports.publicClassWithTypeParametersFromPrivateModule = publicClassWithTypeParametersFromPrivateModule;
+}());
+exports.publicClassWithTypeParametersFromPrivateModule = publicClassWithTypeParametersFromPrivateModule;
 var privateClassWithTypeParametersFromPrivateModule = /** @class */ (function () {
     function privateClassWithTypeParametersFromPrivateModule() {
-    }privateClassWithTypeParametersFromPrivateModule.prototype.myMethod = function (val) {
+    }
+    privateClassWithTypeParametersFromPrivateModule.prototype.myMethod = function (val) {
         return val;
     };
     return privateClassWithTypeParametersFromPrivateModule;
@@ -241,7 +252,7 @@ var publicModule;
     publicModule.publicClassInPublicModule = publicClassInPublicModule;
     var publicClassWithPrivateTypeParameters = /** @class */ (function () {
         function publicClassWithPrivateTypeParameters() {
-        }// Error
+        }
         publicClassWithPrivateTypeParameters.prototype.myMethod = function (val) {
             return val;
         };
@@ -250,7 +261,8 @@ var publicModule;
     publicModule.publicClassWithPrivateTypeParameters = publicClassWithPrivateTypeParameters;
     var publicClassWithPublicTypeParameters = /** @class */ (function () {
         function publicClassWithPublicTypeParameters() {
-        }publicClassWithPublicTypeParameters.prototype.myMethod = function (val) {
+        }
+        publicClassWithPublicTypeParameters.prototype.myMethod = function (val) {
             return val;
         };
         return publicClassWithPublicTypeParameters;
@@ -258,21 +270,24 @@ var publicModule;
     publicModule.publicClassWithPublicTypeParameters = publicClassWithPublicTypeParameters;
     var privateClassWithPrivateTypeParameters = /** @class */ (function () {
         function privateClassWithPrivateTypeParameters() {
-        }privateClassWithPrivateTypeParameters.prototype.myMethod = function (val) {
+        }
+        privateClassWithPrivateTypeParameters.prototype.myMethod = function (val) {
             return val;
         };
         return privateClassWithPrivateTypeParameters;
     }());
     var privateClassWithPublicTypeParameters = /** @class */ (function () {
         function privateClassWithPublicTypeParameters() {
-        }privateClassWithPublicTypeParameters.prototype.myMethod = function (val) {
+        }
+        privateClassWithPublicTypeParameters.prototype.myMethod = function (val) {
             return val;
         };
         return privateClassWithPublicTypeParameters;
     }());
     var publicClassWithPublicTypeParametersWithoutExtends = /** @class */ (function () {
         function publicClassWithPublicTypeParametersWithoutExtends() {
-        }publicClassWithPublicTypeParametersWithoutExtends.prototype.myMethod = function (val) {
+        }
+        publicClassWithPublicTypeParametersWithoutExtends.prototype.myMethod = function (val) {
             return val;
         };
         return publicClassWithPublicTypeParametersWithoutExtends;
@@ -280,14 +295,15 @@ var publicModule;
     publicModule.publicClassWithPublicTypeParametersWithoutExtends = publicClassWithPublicTypeParametersWithoutExtends;
     var privateClassWithPublicTypeParametersWithoutExtends = /** @class */ (function () {
         function privateClassWithPublicTypeParametersWithoutExtends() {
-        }privateClassWithPublicTypeParametersWithoutExtends.prototype.myMethod = function (val) {
+        }
+        privateClassWithPublicTypeParametersWithoutExtends.prototype.myMethod = function (val) {
             return val;
         };
         return privateClassWithPublicTypeParametersWithoutExtends;
     }());
     var publicClassWithTypeParametersFromPrivateModule = /** @class */ (function () {
         function publicClassWithTypeParametersFromPrivateModule() {
-        }// Error
+        }
         publicClassWithTypeParametersFromPrivateModule.prototype.myMethod = function (val) {
             return val;
         };
@@ -296,7 +312,8 @@ var publicModule;
     publicModule.publicClassWithTypeParametersFromPrivateModule = publicClassWithTypeParametersFromPrivateModule;
     var privateClassWithTypeParametersFromPrivateModule = /** @class */ (function () {
         function privateClassWithTypeParametersFromPrivateModule() {
-        }privateClassWithTypeParametersFromPrivateModule.prototype.myMethod = function (val) {
+        }
+        privateClassWithTypeParametersFromPrivateModule.prototype.myMethod = function (val) {
             return val;
         };
         return privateClassWithTypeParametersFromPrivateModule;
@@ -317,7 +334,8 @@ var privateModule;
     privateModule.publicClassInPrivateModule = publicClassInPrivateModule;
     var publicClassWithPrivateTypeParameters = /** @class */ (function () {
         function publicClassWithPrivateTypeParameters() {
-        }publicClassWithPrivateTypeParameters.prototype.myMethod = function (val) {
+        }
+        publicClassWithPrivateTypeParameters.prototype.myMethod = function (val) {
             return val;
         };
         return publicClassWithPrivateTypeParameters;
@@ -325,7 +343,8 @@ var privateModule;
     privateModule.publicClassWithPrivateTypeParameters = publicClassWithPrivateTypeParameters;
     var publicClassWithPublicTypeParameters = /** @class */ (function () {
         function publicClassWithPublicTypeParameters() {
-        }publicClassWithPublicTypeParameters.prototype.myMethod = function (val) {
+        }
+        publicClassWithPublicTypeParameters.prototype.myMethod = function (val) {
             return val;
         };
         return publicClassWithPublicTypeParameters;
@@ -333,21 +352,24 @@ var privateModule;
     privateModule.publicClassWithPublicTypeParameters = publicClassWithPublicTypeParameters;
     var privateClassWithPrivateTypeParameters = /** @class */ (function () {
         function privateClassWithPrivateTypeParameters() {
-        }privateClassWithPrivateTypeParameters.prototype.myMethod = function (val) {
+        }
+        privateClassWithPrivateTypeParameters.prototype.myMethod = function (val) {
             return val;
         };
         return privateClassWithPrivateTypeParameters;
     }());
     var privateClassWithPublicTypeParameters = /** @class */ (function () {
         function privateClassWithPublicTypeParameters() {
-        }privateClassWithPublicTypeParameters.prototype.myMethod = function (val) {
+        }
+        privateClassWithPublicTypeParameters.prototype.myMethod = function (val) {
             return val;
         };
         return privateClassWithPublicTypeParameters;
     }());
     var publicClassWithPublicTypeParametersWithoutExtends = /** @class */ (function () {
         function publicClassWithPublicTypeParametersWithoutExtends() {
-        }publicClassWithPublicTypeParametersWithoutExtends.prototype.myMethod = function (val) {
+        }
+        publicClassWithPublicTypeParametersWithoutExtends.prototype.myMethod = function (val) {
             return val;
         };
         return publicClassWithPublicTypeParametersWithoutExtends;
@@ -355,7 +377,8 @@ var privateModule;
     privateModule.publicClassWithPublicTypeParametersWithoutExtends = publicClassWithPublicTypeParametersWithoutExtends;
     var privateClassWithPublicTypeParametersWithoutExtends = /** @class */ (function () {
         function privateClassWithPublicTypeParametersWithoutExtends() {
-        }privateClassWithPublicTypeParametersWithoutExtends.prototype.myMethod = function (val) {
+        }
+        privateClassWithPublicTypeParametersWithoutExtends.prototype.myMethod = function (val) {
             return val;
         };
         return privateClassWithPublicTypeParametersWithoutExtends;

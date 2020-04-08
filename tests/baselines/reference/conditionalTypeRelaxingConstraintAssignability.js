@@ -49,15 +49,12 @@ var Elem = /** @class */ (function () {
         this.children_ = children_;
     }
     return Elem;
-}());exports.Elem = Elem;
+}());
+exports.Elem = Elem;
 new Elem(undefined);
 new Elem('');
 new Elem(''); // error
 new Elem(''); // error
-
-
-
-
 
 
 

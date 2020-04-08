@@ -79,7 +79,6 @@ var M2;
 })(M2 || (M2 = {}));
 (function (M2) {
 
-
     var a;
     var r1 = a.foo;
     var r2 = a.bar;

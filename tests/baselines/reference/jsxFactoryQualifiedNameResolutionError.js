@@ -20,5 +20,6 @@ class AppComponent {
     render(createElement) {
         return MyElement.createElement("div", null);
     }
-}exports.AppComponent = AppComponent;
+}
+exports.AppComponent = AppComponent;
 //# sourceMappingURL=test.js.map

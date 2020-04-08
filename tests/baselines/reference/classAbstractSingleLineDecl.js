@@ -23,6 +23,7 @@ var B = /** @class */ (function () {
     return B;
 }());
 abstract;
+
 var C = /** @class */ (function () {
     function C() {}
     return C;

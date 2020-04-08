@@ -76,6 +76,7 @@ function f14(a: AList4, b: BList4) {
 // Test that callback parameters are related covariantly
 ;
 
+
 function f1(a, b) {
     a = b;
     b = a; // Error
@@ -87,12 +88,10 @@ function f2(a, b) {
 }
 
 
-
 function f11(a, b) {
     a = b;
     b = a; // Error
 }
-
 
 
 function f12(a, b) {
@@ -101,12 +100,10 @@ function f12(a, b) {
 }
 
 
-
 function f13(a, b) {
     a = b;
     b = a; // Error
 }
-
 
 
 function f14(a, b) {

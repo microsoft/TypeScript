@@ -28,9 +28,11 @@ undefinedWidenFunction();
 // this should be an error
 function nullWidenFunction() { return null; } // error at "nullWidenFunction"
 function undefinedWidenFunction() { return undefined; } // error at "undefinedWidenFunction"
+
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.nullWidenFuncOfC = function () {
+    }
+    C.prototype.nullWidenFuncOfC = function () {
         return null;
     };
 

@@ -73,7 +73,8 @@ var __extends = (this && this.__extends) || (function () {
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
@@ -81,7 +82,8 @@ var B = /** @class */ (function (_super) {
 
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.valueOf = function () { };
+    }
+    C.prototype.valueOf = function () { };
     return C;
 }());
 var c;

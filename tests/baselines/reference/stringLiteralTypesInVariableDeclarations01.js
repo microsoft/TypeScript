@@ -22,13 +22,16 @@ var a;
 var b;
 var c;
 var d;
+
 a = "";
 b = "foo";
 c = "bar";
+
 var e = "";
 var f = "foo";
 var g = "bar";
 var h = "baz";
+
 e = "";
 f = "foo";
 g = "bar";

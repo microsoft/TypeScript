@@ -11,5 +11,7 @@ faroo;
 
 //// [spellingSuggestionModule.js]
 foobar;
+
 barfoo;
+
 faroo;

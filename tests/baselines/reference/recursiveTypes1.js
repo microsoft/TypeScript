@@ -14,5 +14,3 @@ interface Customer extends Person<Customer> {
 
 
 //// [recursiveTypes1.js]
-
-

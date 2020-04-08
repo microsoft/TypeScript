@@ -23,7 +23,8 @@ var m;
     }());
     m.base = base;
     var child = /** @class */ (function (_super) {
-        __extends(child, _super);function child() {
+        __extends(child, _super);
+        function child() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return child;

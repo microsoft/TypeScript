@@ -20,7 +20,6 @@ var r6 = _.forEach<number>(c2, (x) => { return x.toFixed() });
 
 //// [contextualTypingOfGenericFunctionTypedArguments1.js]
 
-
 var c2;
 var _;
 

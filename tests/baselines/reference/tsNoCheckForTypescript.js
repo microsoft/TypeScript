@@ -25,7 +25,8 @@ var Bet = /** @class */ (function () {
         this.q = "lol"; // And so will this implements error
     }
     return Bet;
-}());exports.Bet = Bet;
+}());
+exports.Bet = Bet;
 
 
 //// [file.d.ts]

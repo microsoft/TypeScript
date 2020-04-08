@@ -39,9 +39,11 @@ var C = /** @class */ (function () {
     return C;
 }());
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);function D() {
+    __extends(D, _super);
+    function D() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }D.prototype.foo = function () { };
+    }
+    D.prototype.foo = function () { };
     return D;
 }(C));
 var x;

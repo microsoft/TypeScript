@@ -82,43 +82,49 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.fooWithTypeTypePredicateAndRestParam = exports.fooWithTypeTypePredicateAndGeneric = exports.fooWithTypePredicateAndMulitpleParams = exports.fooWithTypePredicate = exports.fooWithSingleOverload = exports.fooWithOverloads = exports.fooWithRestParameters = exports.fooWithParameters = exports.foo = void 0;
 /** This comment should appear for foo*/
 function foo() {
-}/** This comment should appear for foo*/ exports.foo = foo;
+}
+exports.foo = foo;
 /** This is comment for function signature*/
 function fooWithParameters(/** this is comment about a*/ a,
     /** this is comment for b*/
     b) {
     var d = a;
-}exports.fooWithParameters = fooWithParameters;
+}
+exports.fooWithParameters = fooWithParameters;
 function fooWithRestParameters(a) {var rests = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         rests[_i - 1] = arguments[_i];
     }
     return a + rests.join("");
-}exports.fooWithRestParameters = fooWithRestParameters;
-
+}
+exports.fooWithRestParameters = fooWithRestParameters;
 function fooWithOverloads(a) {
     return a;
-}exports.fooWithOverloads = fooWithOverloads;
-
+}
+exports.fooWithOverloads = fooWithOverloads;
 function fooWithSingleOverload(a) {
     return a;
-}exports.fooWithSingleOverload = fooWithSingleOverload;
-
+}
+exports.fooWithSingleOverload = fooWithSingleOverload;
 function fooWithTypePredicate(a) {
     return true;
-}exports.fooWithTypePredicate = fooWithTypePredicate;
+}
+exports.fooWithTypePredicate = fooWithTypePredicate;
 function fooWithTypePredicateAndMulitpleParams(a, b, c) {
     return true;
-}exports.fooWithTypePredicateAndMulitpleParams = fooWithTypePredicateAndMulitpleParams;
+}
+exports.fooWithTypePredicateAndMulitpleParams = fooWithTypePredicateAndMulitpleParams;
 function fooWithTypeTypePredicateAndGeneric(a) {
     return true;
-}exports.fooWithTypeTypePredicateAndGeneric = fooWithTypeTypePredicateAndGeneric;
+}
+exports.fooWithTypeTypePredicateAndGeneric = fooWithTypeTypePredicateAndGeneric;
 function fooWithTypeTypePredicateAndRestParam(a) {var rest = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         rest[_i - 1] = arguments[_i];
     }
     return true;
-}exports.fooWithTypeTypePredicateAndRestParam = fooWithTypeTypePredicateAndRestParam;
+}
+exports.fooWithTypeTypePredicateAndRestParam = fooWithTypeTypePredicateAndRestParam;
 /** This comment should appear for nonExportedFoo*/
 function nonExportedFoo() {
 }

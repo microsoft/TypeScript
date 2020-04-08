@@ -241,6 +241,7 @@ function voidThisSpecified(x) {
 let ok = { y: 12, explicitStructural };
 let wrongPropertyType = { y: 'foo', explicitStructural };
 let wrongPropertyName = { wrongName: 12, explicitStructural };
+
 ok.f(); // not enough arguments
 ok.f('wrong type');
 ok.f(13, 'too many arguments');
@@ -260,6 +261,7 @@ c.implicitThis(14, 'too many arguments 2');
 c.explicitProperty(); // not enough arguments
 c.explicitProperty('wrong type 3');
 c.explicitProperty(15, 'too many arguments 3');
+
 // oops, this triggers contextual typing, which needs to be updated to understand that =>'s `this` is void.
 let specifiedToVoid = explicitStructural;
 
@@ -269,8 +271,7 @@ let reconstructed = {
     explicitC: c.explicitC,
     explicitProperty: c.explicitProperty,
     explicitVoid: c.explicitVoid
-};
-;
+};;
 
 // lambdas have this: void for assignability purposes (and this unbound (free) for body checking)
 let d = new D();
@@ -288,6 +289,7 @@ c.explicitProperty = d.explicitD;
 c.explicitThis = d.explicitThis;
 c.explicitVoid = d.explicitD;
 c.explicitVoid = d.explicitThis;
+
 /// class-based polymorphic assignability (with inheritance!) ///
 class Base1 {
     polymorphic() { return this.x; }
@@ -302,6 +304,8 @@ class Base2 {
 }
 class Derived2 extends Base2 {
 }
+
+
 let b1 = new Base1();
 let d1 = new Derived1();
 let b2 = new Base2();
@@ -311,10 +315,13 @@ b1.polymorphic = b2.polymorphic; // error, 'this.y' not in Base1: { x }
 b1.explicit = b2.polymorphic; // error, 'y' not in Base1: { x }
 
 d1.explicit = b2.polymorphic; // error, 'y' not in Base1: { x }
+
+
 ////// use this-type for construction with new ////
 function VoidThis() {
 }
 let voidThis = new VoidThis();
+
 ///// syntax-ish errors /////
 class ThisConstructor {
     constructor(n) {
@@ -330,6 +337,7 @@ function restParam(...) { return this.n; }
 function optional() { return this.n; }
 function decorated() { return this.n; }
 ();number;{return this.n;}
+
 // can't name parameters 'this' in a lambda.
 c.explicitProperty = (m) => m + this.n;
 const f2 = (m) => m + this.n;

@@ -32,15 +32,18 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var Base = /** @class */ (function () {
     function Base() {
-    }Base.prototype.foo = function (x) {
+    }
+    Base.prototype.foo = function (x) {
         return null;
     };
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);function Derived() {
+    __extends(Derived, _super);
+    function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Derived.prototype.foo = function (x) {
+    }
+    Derived.prototype.foo = function (x) {
         return null;
     };
 

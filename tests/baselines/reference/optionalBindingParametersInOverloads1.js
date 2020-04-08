@@ -14,6 +14,7 @@ function foo() {var rest = [];
         rest[_i] = arguments[_i];
     }
 }
+
 foo(["", 0, false]);
 
 foo([false, 0, ""]);

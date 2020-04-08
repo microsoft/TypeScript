@@ -34,7 +34,8 @@ function F<T>(t1: T) {
     }
 }
 
-function newFunction<T, T>(t1: T, t2: T) {
+function newFunction<T,
+    T>(t1: T, t2: T) {
     t1.toString();
     t2.toString();
 }

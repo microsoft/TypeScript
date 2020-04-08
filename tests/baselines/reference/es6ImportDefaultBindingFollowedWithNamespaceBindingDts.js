@@ -14,7 +14,8 @@ exports.a = void 0;
 var a = /** @class */ (function () {
     function a() {}
     return a;
-}());exports.a = a;
+}());
+exports.a = a;
 //// [client.js]
 "use strict";
 exports.__esModule = true;

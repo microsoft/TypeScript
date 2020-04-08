@@ -40,7 +40,8 @@ var A = /** @class */ (function () {
 }());
 // https://github.com/Microsoft/TypeScript/issues/16417
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     B_1 = B;

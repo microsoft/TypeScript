@@ -74,7 +74,8 @@ var C = /** @class */ (function () {
     return C;
 }());
 var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);function C2() {
+    __extends(C2, _super);
+    function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C2;

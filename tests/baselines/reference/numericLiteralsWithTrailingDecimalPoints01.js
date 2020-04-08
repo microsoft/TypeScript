@@ -40,11 +40,11 @@ var test17 = 3. // comment time again
 1.0.toString();
 1.;toString();
 1. + 2.0 + 3.;
+
 // Preserve whitespace and comments where important for JS compatibility
 var i = 1;
 var test1 = i.toString();
-var test2 = 2., toString;
-();
+var test2 = 2., toString;();
 var test3 = 3..toString();
 var test4 = 3..toString();
 var test5 = 3..toString();

@@ -35,7 +35,8 @@ var C2 = /** @class */ (function () {
 }());
 var C3 = /** @class */ (function () {
     function C3() {
-    }C3.prototype.set = function (x) {
+    }
+    C3.prototype.set = function (x) {
         return x + 1;
     };
     return C3;
@@ -49,7 +50,8 @@ var C4 = /** @class */ (function () {
 var C5 = /** @class */ (function () {
     function C5() {
         this.set = function () { return true; };
-    }C5.prototype.get = function () { return true; };
+    }
+    C5.prototype.get = function () { return true; };
     Object.defineProperty(C5.prototype, "t", {
         set: function (x) { },
         enumerable: false,

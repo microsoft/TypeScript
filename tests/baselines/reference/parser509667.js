@@ -14,7 +14,8 @@ class Foo {
 //// [parser509667.js]
 var Foo = /** @class */ (function () {
     function Foo() {
-    }Foo.prototype.f1 = function () {
+    }
+    Foo.prototype.f1 = function () {
         if (this.
         )
             ;

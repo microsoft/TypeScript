@@ -114,13 +114,10 @@ var Type = /** @class */ (function () {
     function Type(
     /** a unique name for this codec */
     name,
-
         /** a custom type guard */
         is,
-
         /** succeeds if a value of type I can be decoded to a value of type A */
         validate,
-
         /** converts a value of type A to a value of type O */
         encode
     ) {
@@ -148,13 +145,16 @@ var Type = /** @class */ (function () {
 var tmp1 = null;
 function tmp2(n) { }
 tmp2(tmp1); // uncommenting this line removes a type error from a completely unrelated line ??
+
 var Server = /** @class */ (function () {
     function Server() {}
     return Server;
 }());
 var MyServer = /** @class */ (function (_super) {
-    __extends(MyServer, _super);function MyServer() {
+    __extends(MyServer, _super);
+    function MyServer() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return MyServer;
-}(Server)); // not assignable error at `MyInfo`exports.MyServer = MyServer;
+}(Server)); // not assignable error at `MyInfo`
+exports.MyServer = MyServer;

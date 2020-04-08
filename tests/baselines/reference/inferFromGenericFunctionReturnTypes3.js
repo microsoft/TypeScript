@@ -237,6 +237,7 @@ function wrappedBaz() {
 
 let a = [];
 a = [1, 2, 3, 4, 5].map(v => ({ type: 'folder' }));
+
 // Repro from #11312
 let arr = [[1, 2]];
 
@@ -265,8 +266,8 @@ function bug() {
 // Repro from #22870
 function objectToMap(obj) {
     return new Map(Object.keys(obj).map(key => [key, obj[key]]));
-}
-;
+};
+
 
 function createPerson() {
     return {
@@ -334,13 +335,15 @@ const f1 = () => {
 let res = foldLeft(true, (acc, t) => acc && t); // Error
 var State;
 (function (State) {
-    State[State["A"] = 0] = "A";State[State["B"] = 1] = "B";
+    State[State["A"] = 0] = "A";
+    State[State["B"] = 1] = "B";
 })(State || (State = {}));
 let x = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]); // Error
 // Repros from #31443
 var Enum;
 (function (Enum) {
-    Enum[Enum["A"] = 0] = "A";Enum[Enum["B"] = 1] = "B";
+    Enum[Enum["A"] = 0] = "A";
+    Enum[Enum["B"] = 1] = "B";
 })(Enum || (Enum = {}));
 class ClassWithConvert {
     constructor(val) { }
@@ -349,6 +352,10 @@ class ClassWithConvert {
 
 function fn(arg, f) { }
 fn(new ClassWithConvert(Enum.A), () => new ClassWithConvert(Enum.A));
+
+
+
+
 baz(makeFoo(Enum.A), makeFoo(Enum.A));
 
 

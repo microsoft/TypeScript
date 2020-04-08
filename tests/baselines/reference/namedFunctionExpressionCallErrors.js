@@ -19,6 +19,7 @@ bar();
 //// [namedFunctionExpressionCallErrors.js]
 var recurser = function foo() {
 };
+
 // Error: foo should not be visible here
 foo();
 

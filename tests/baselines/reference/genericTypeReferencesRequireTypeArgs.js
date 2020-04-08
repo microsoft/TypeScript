@@ -14,7 +14,8 @@ var i2: I<C>; // should be an error
 //// [genericTypeReferencesRequireTypeArgs.js]
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.foo = function () { return null; };
+    }
+    C.prototype.foo = function () { return null; };
     return C;
 }());
 var c1; // error

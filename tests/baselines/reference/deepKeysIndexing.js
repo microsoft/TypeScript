@@ -58,25 +58,10 @@ bar.workaround("a", "1", true); // ok - true is not allowed
 
 //// [deepKeysIndexing.js]
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 var Bar = /** @class */ (function () {
     function Bar() {
-    }Bar.prototype.broken = function (k1, k2, value) { };
+    }
+    Bar.prototype.broken = function (k1, k2, value) { };
 
     Bar.prototype.working = function (k1, k2, value) { };
 

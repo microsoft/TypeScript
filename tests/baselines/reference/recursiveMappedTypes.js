@@ -104,10 +104,18 @@ function foo(arg) {
 
 
 
-
-
-
 product.users; // (Transform<User> | Transform<Guest>)[]
+
+
+
+
+
+
+
+
+
+
+
 
 
 

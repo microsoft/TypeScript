@@ -99,9 +99,11 @@ var Derived = /** @class */ (function (_super) {
 }(Base));
 
 var Printable = function (superClass) { var _a; return _a = /** @class */ (function (_super) {
-        __extends(class_1, _super);function class_1() {
+        __extends(class_1, _super);
+        function class_1() {
             return _super !== null && _super.apply(this, arguments) || this;
-        }class_1.prototype.print = function () {
+        }
+        class_1.prototype.print = function () {
             var output = this.x + "," + this.y;
         };
         return class_1;
@@ -113,7 +115,6 @@ var Printable = function (superClass) { var _a; return _a = /** @class */ (funct
 function Tagged(superClass) {
     var C = /** @class */ (function (_super) {
         __extends(C, _super);
-
         function C() {var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
@@ -130,6 +131,7 @@ function Tagged(superClass) {
 var Thing1 = Tagged(Derived);
 var Thing2 = Tagged(Printable(Derived));
 Thing2.message;
+
 function f1() {
     var thing = new Thing1(1, 2, 3);
     thing.x;

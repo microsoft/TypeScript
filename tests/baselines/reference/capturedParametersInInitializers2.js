@@ -45,6 +45,7 @@ function foo2(y, x) {if (y === void 0) { y = (_b = /** @class */ (function () {
             return class_2;
         }()),
         _a = x,
-        _b); }if (x === void 0) { x = 1; }
+        _b); }
+    if (x === void 0) { x = 1; }
     var _a, _b;
 }

@@ -203,7 +203,8 @@ var publicClass = /** @class */ (function () {
     function publicClass() {
     }
     return publicClass;
-}());exports.publicClass = publicClass;
+}());
+exports.publicClass = publicClass;
 var privateClassT = /** @class */ (function () {
     function privateClassT() {
     }
@@ -213,15 +214,8 @@ var publicClassT = /** @class */ (function () {
     function publicClassT() {
     }
     return publicClassT;
-}());exports.publicClassT = publicClassT;
-
-
-
-
-
-
-
-
+}());
+exports.publicClassT = publicClassT;
 var publicModule;
 (function (publicModule) {
     var privateClassInPublicModule = /** @class */ (function () {
@@ -246,13 +240,6 @@ var publicModule;
         return publicClassInPublicModuleT;
     }());
     publicModule.publicClassInPublicModuleT = publicClassInPublicModuleT;
-
-
-
-
-
-
-
 })(publicModule = exports.publicModule || (exports.publicModule = {}));
 var privateModule;
 (function (privateModule) {
@@ -278,11 +265,6 @@ var privateModule;
         return publicClassInPrivateModuleT;
     }());
     privateModule.publicClassInPrivateModuleT = publicClassInPrivateModuleT;
-
-
-
-
-
 })(privateModule || (privateModule = {}));
 
 

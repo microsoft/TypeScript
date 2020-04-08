@@ -28,9 +28,11 @@ define("test", ["require", "exports"], function (require, exports) {
     var Doo = /** @class */ (function () {
         function Doo() {}
         return Doo;
-    }());exports.Doo = Doo;
+    }());
+    exports.Doo = Doo;
     var Scooby = /** @class */ (function (_super) {
-        __extends(Scooby, _super);function Scooby() {
+        __extends(Scooby, _super);
+        function Scooby() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Scooby;

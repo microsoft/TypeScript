@@ -28,11 +28,12 @@ exports.getBazB = exports.getBarC = void 0;
 
 function getBarC(bar) {
     return bar.c;
-}exports.getBarC = getBarC;
-
+}
+exports.getBarC = getBarC;
 function getBazB(baz) {
     return baz.b;
-}exports.getBazB = getBazB;
+}
+exports.getBazB = getBazB;
 
 
 

@@ -71,6 +71,7 @@ map = empty2;
 map = names1;
 map = names2;
 
+
 function f1() {
     var o1 = { a: 1, b: 2 };
     var o2;
@@ -104,15 +105,18 @@ function f4() {
 function f5() {
     var E1;
     (function (E1) {
-        E1[E1["A"] = 0] = "A";E1[E1["B"] = 1] = "B";
+        E1[E1["A"] = 0] = "A";
+        E1[E1["B"] = 1] = "B";
     })(E1 || (E1 = {}));
     var E2;
     (function (E2) {
-        E2["A"] = "A";E2["B"] = "B";
+        E2["A"] = "A";
+        E2["B"] = "B";
     })(E2 || (E2 = {}));
     var E3;
     (function (E3) {
-        E3[E3["A"] = 0] = "A";E3["B"] = "B";
+        E3[E3["A"] = 0] = "A";
+        E3["B"] = "B";
     })(E3 || (E3 = {}));
     var v1 = getStringIndexValue(E1);
     var v2 = getStringIndexValue(E2);

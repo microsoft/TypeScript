@@ -19,7 +19,6 @@ var x = {
     "greeting": "hello, world",
     "default": 42
 };
-
 module.exports = x;
 //// [imp.js]
 "use strict";

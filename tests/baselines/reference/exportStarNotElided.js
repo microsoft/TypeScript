@@ -20,7 +20,8 @@ exports.register = void 0;
 var r = [];
 function register(data) {
     r.push(data);
-}exports.register = register;
+}
+exports.register = register;
 //// [index.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {

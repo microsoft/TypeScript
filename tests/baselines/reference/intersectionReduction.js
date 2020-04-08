@@ -110,43 +110,9 @@ const f4 = (t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)):
 
 
 //// [intersectionReduction.js]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ab.kind; // Error
-var a = x;
 
+var a = x;
 
 
 
@@ -185,12 +151,12 @@ x1[k] = 'bar'; // Error
 x2[k] = 'bar'; // Error
 
 
-
 s1 = s2;
 s2 = s1;
 
 t1 = t2;
 t2 = t1;
+
 // Repro from #36736
 var f1 = function (t) { return t; };
 

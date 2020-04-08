@@ -44,7 +44,6 @@ var rh2 = b !== a;
 
 //// [comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.js]
 
-
 var a;
 var b;
 

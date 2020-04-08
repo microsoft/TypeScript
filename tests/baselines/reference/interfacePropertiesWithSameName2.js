@@ -31,7 +31,3 @@ interface MoverShaker3 extends MoversAndShakers.Mover, MoversAndShakers.Shaker {
 }
 
 //// [interfacePropertiesWithSameName2.js]
-
-
-
-

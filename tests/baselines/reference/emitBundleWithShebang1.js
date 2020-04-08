@@ -23,7 +23,8 @@ var Doo = /** @class */ (function () {
     return Doo;
 }());
 var Scooby = /** @class */ (function (_super) {
-    __extends(Scooby, _super);function Scooby() {
+    __extends(Scooby, _super);
+    function Scooby() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Scooby;

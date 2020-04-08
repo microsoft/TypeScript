@@ -34,7 +34,8 @@ interface Array<T> { length: number; [n: number]: T; }
 "use strict";
 exports.__esModule = true;
 exports.Foo = void 0;
-function Foo() { }exports.Foo = Foo;
+function Foo() { }
+exports.Foo = Foo;
 ;
 
 
@@ -94,7 +95,8 @@ export var T: number;export function Foo() { };
 "use strict";
 exports.__esModule = true;
 exports.Foo = exports.T = void 0;
-function Foo() { }exports.Foo = Foo;
+function Foo() { }
+exports.Foo = Foo;
 ;
 
 
@@ -147,9 +149,9 @@ export var T: number;export function Foo() { };var T1: number;
 "use strict";
 exports.__esModule = true;
 exports.Foo = exports.T = void 0;
-function Foo() { }exports.Foo = Foo;
-;
-var T1;
+function Foo() { }
+exports.Foo = Foo;
+;var T1;
 
 
 

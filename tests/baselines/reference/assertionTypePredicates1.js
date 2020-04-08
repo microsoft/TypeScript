@@ -291,7 +291,8 @@ function f10(x) {
 
 var Test = /** @class */ (function () {
     function Test() {
-    }Test.prototype.assert = function (value) {
+    }
+    Test.prototype.assert = function (value) {
         if (value)
             return;
         throw new Error();
@@ -329,7 +330,8 @@ var Test = /** @class */ (function () {
     return Test;
 }());
 var Test2 = /** @class */ (function (_super) {
-    __extends(Test2, _super);function Test2() {
+    __extends(Test2, _super);
+    function Test2() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.z = 0;
         return _this;
@@ -337,9 +339,11 @@ var Test2 = /** @class */ (function (_super) {
     return Test2;
 }(Test));
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);function Derived() {
+    __extends(Derived, _super);
+    function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Derived.prototype.foo = function (x) {
+    }
+    Derived.prototype.foo = function (x) {
         _super.prototype.assert.call(this, typeof x === "string");
         x.length;
     };
@@ -361,7 +365,6 @@ function f11(items) {
 }
 
 
-
 function f20(x) {
     var assert = function (value) { };
     assert(typeof x === "string"); // Error
@@ -372,7 +375,6 @@ function f20(x) {
     var t2 = new Test();
     t2.assert(typeof x === "string");
 }
-
 
 
 function example1(things) {

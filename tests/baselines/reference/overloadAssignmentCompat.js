@@ -65,5 +65,4 @@ function attr2(nameOrMap, value) {
     }
 }
 
-function foo() { return "a"; }
-;
+function foo() { return "a"; };

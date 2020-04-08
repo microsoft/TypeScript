@@ -13,5 +13,3 @@ interface C {
 }
 
 //// [recursiveTypeIdentity.js]
-
-

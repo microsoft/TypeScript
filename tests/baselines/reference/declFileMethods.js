@@ -284,7 +284,8 @@ var c1 = /** @class */ (function () {
         return a;
     };
     return c1;
-}());exports.c1 = c1;
+}());
+exports.c1 = c1;
 //// [declFileMethods_1.js]
 var c2 = /** @class */ (function () {
     function c2() {

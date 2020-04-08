@@ -38,7 +38,8 @@ var Strings = {
     b: "B"
 };
 var Foo = /** @class */ (function (_super) {
-    __extends(Foo, _super);function Foo() {
+    __extends(Foo, _super);
+    function Foo() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Foo;

@@ -53,7 +53,8 @@ var A;
 (function (A) {
     var Point = /** @class */ (function () {
         function Point() {
-        }Point.prototype.fromCarthesian = function (p) {
+        }
+        Point.prototype.fromCarthesian = function (p) {
             return { x: p.x, y: p.y };
         };
         return Point;

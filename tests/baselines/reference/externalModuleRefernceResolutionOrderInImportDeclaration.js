@@ -23,7 +23,8 @@ file1.bar();
 "use strict";
 exports.__esModule = true;
 exports.foo = void 0;
-function foo() { }exports.foo = foo;
+function foo() { }
+exports.foo = foo;
 ;
 //// [externalModuleRefernceResolutionOrderInImportDeclaration_file3.js]
 "use strict";

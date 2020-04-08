@@ -159,20 +159,26 @@ var bar = d['hello'];
 var o = { a: 0 };
 
 o[k];
+
+
 o[k2];
+
 o[sym];
 var NumEnum;
 (function (NumEnum) {
-    NumEnum[NumEnum["a"] = 0] = "a";NumEnum[NumEnum["b"] = 1] = "b";
+    NumEnum[NumEnum["a"] = 0] = "a";
+    NumEnum[NumEnum["b"] = 1] = "b";
 })(NumEnum || (NumEnum = {}));
 var numEnumKey;
 o[numEnumKey];
 var StrEnum;
 (function (StrEnum) {
-    StrEnum["a"] = "a";StrEnum["b"] = "b";
+    StrEnum["a"] = "a";
+    StrEnum["b"] = "b";
 })(StrEnum || (StrEnum = {}));
 var strEnumKey;
 o[strEnumKey];
+
 
 var rover = { bark: function () { } };
 

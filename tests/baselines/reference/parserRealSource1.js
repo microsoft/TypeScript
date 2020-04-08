@@ -192,7 +192,8 @@ var TypeScript;
 
     var NullLogger = /** @class */ (function () {
         function NullLogger() {
-        }NullLogger.prototype.information = function () { return false; };
+        }
+        NullLogger.prototype.information = function () { return false; };
         NullLogger.prototype.debug = function () { return false; };
         NullLogger.prototype.warning = function () { return false; };
         NullLogger.prototype.error = function () { return false; };
@@ -227,7 +228,8 @@ var TypeScript;
     var BufferedLogger = /** @class */ (function () {
         function BufferedLogger() {
             this.logContents = [];
-        }BufferedLogger.prototype.information = function () { return false; };
+        }
+        BufferedLogger.prototype.information = function () { return false; };
         BufferedLogger.prototype.debug = function () { return false; };
         BufferedLogger.prototype.warning = function () { return false; };
         BufferedLogger.prototype.error = function () { return false; };

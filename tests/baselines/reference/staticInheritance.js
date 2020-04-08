@@ -32,7 +32,8 @@ var A = /** @class */ (function () {
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.p1 = doThing(A); // OK
         _this.p2 = doThing(B); // OK

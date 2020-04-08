@@ -26,8 +26,8 @@ exports.Something = exports.make = void 0;
 var me = require("./this");
 function make(x) {
     return null;
-}exports.make = make;
-
+}
+exports.make = make;
 
 var MyComponent = /** @class */ (function () {
     function MyComponent() {

@@ -19,7 +19,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
 class B {
     print() { return "I am B"; }
-}exports.B = B;
+}
+exports.B = B;
 //// [2.js]
 async function foo() {
     class C extends (await Promise.resolve().then(() => require("./0"))).B {}

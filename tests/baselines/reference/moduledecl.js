@@ -233,13 +233,11 @@ var m3eVar: mAmbient.m3.e;
 
 
 //// [moduledecl.js]
-
-
-
 var m0;
 (function (m0) {
     function f1() {
     }
+
     function f2(ns) {
     }
 
@@ -306,15 +304,12 @@ var m13;
         m4.f = f;
     })(m4 = m13.m4 || (m13.m4 = {}));
 })(m13 || (m13 = {}));
-
-
-
-
 var exportTests;
 (function (exportTests) {
     var C1_public = /** @class */ (function () {
         function C1_public() {
-        }C1_public.prototype.f2 = function () {
+        }
+        C1_public.prototype.f2 = function () {
             return 30;
         };
 
@@ -326,7 +321,8 @@ var exportTests;
     exportTests.C1_public = C1_public;
     var C2_private = /** @class */ (function () {
         function C2_private() {
-        }C2_private.prototype.f2 = function () {
+        }
+        C2_private.prototype.f2 = function () {
             return 30;
         };
 
@@ -337,7 +333,8 @@ var exportTests;
     }());
     var C3_public = /** @class */ (function () {
         function C3_public() {
-        }C3_public.prototype.getC2_private = function () {
+        }
+        C3_public.prototype.getC2_private = function () {
             return new C2_private();
         };
         C3_public.prototype.setC2_private = function (arg) {
@@ -365,16 +362,20 @@ var exportTests;
     }());
     exportTests.C3_public = C3_public;
 })(exportTests || (exportTests = {}));
+
 function foo() {
     return mAmbient.foo();
 }
+
 var cVar = new mAmbient.C();
 var aVar = mAmbient.aVar;
 var bB;
 var eVar;
+
 function m3foo() {
     return mAmbient.m3.foo();
 }
+
 var m3cVar = new mAmbient.m3.C();
 var m3aVar = mAmbient.m3.aVar;
 var m3bB;

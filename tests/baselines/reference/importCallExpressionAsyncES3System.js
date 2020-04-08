@@ -89,7 +89,8 @@ System.register([], function (exports_1, context_1) {
         execute: function () {
             cl1 = /** @class */ (function () {
                 function cl1() {
-                }cl1.prototype.m = function () {
+                }
+                cl1.prototype.m = function () {
                     return __awaiter(this, void 0, void 0, function () {
                         var req;
                         return __generator(this, function (_a) {
@@ -120,7 +121,6 @@ System.register([], function (exports_1, context_1) {
                     });
                 }); }
             });
-
             cl2 = /** @class */ (function () {
                 function cl2() {
                     var _this = this;

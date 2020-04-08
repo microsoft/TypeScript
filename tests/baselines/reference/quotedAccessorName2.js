@@ -7,7 +7,8 @@ class C {
 var C = /** @class */ (function () {
     function C() {
     }
-    Object.defineProperty(C, "foo", {
+    Object.defineProperty(C,
+        "foo", {
         get: function () { return 0; },
         enumerable: false,
         configurable: true

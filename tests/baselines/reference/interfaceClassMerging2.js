@@ -53,21 +53,27 @@ var __extends = (this && this.__extends) || (function () {
 
 var Foo = /** @class */ (function () {
     function Foo() {
-    }Foo.prototype.classFooMethod = function () {
+    }
+    Foo.prototype.classFooMethod = function () {
         return this;
     };
     return Foo;
 }());
 
 var Bar = /** @class */ (function (_super) {
-    __extends(Bar, _super);function Bar() {
+    __extends(Bar, _super);
+    function Bar() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Bar.prototype.classBarMethod = function () {
+    }
+    Bar.prototype.classBarMethod = function () {
         return this;
     };
     return Bar;
 }(Foo));
 var bar = new Bar();
 bar.interfaceBarMethod().interfaceFooMethod().classBarMethod().classFooMethod();
+
+
 var foo = new Foo();
+
 foo = bar;

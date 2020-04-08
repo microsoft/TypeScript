@@ -70,7 +70,8 @@ class B {
 //// [thisInPropertyBoundDeclarations.js]
 var Bug = /** @class */ (function () {
     function Bug() {
-    }Bug.prototype.foo = function (name) {
+    }
+    Bug.prototype.foo = function (name) {
         this.name = name;
     };
     Bug.func = [

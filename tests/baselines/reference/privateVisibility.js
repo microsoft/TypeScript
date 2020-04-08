@@ -31,7 +31,8 @@ var Foo = /** @class */ (function () {
     function Foo() {
         this.pubProp = 0;
         this.privProp = 0;
-    }Foo.prototype.pubMeth = function () { this.privMeth(); };
+    }
+    Foo.prototype.pubMeth = function () { this.privMeth(); };
     Foo.prototype.privMeth = function () { };
     return Foo;
 }());
@@ -54,5 +55,6 @@ var M;
     M.V = 0;
 })(M || (M = {}));
 var c = new M.C();
+
 c.pub; // should work
 c.priv; // should not work

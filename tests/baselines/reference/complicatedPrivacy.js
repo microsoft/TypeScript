@@ -180,7 +180,8 @@ var m2;
 
         var c_pr = /** @class */ (function () {
             function c_pr() {
-            }c_pr.prototype.f1 = function () {
+            }
+            c_pr.prototype.f1 = function () {
                 return "Hello";
             };
             return c_pr;

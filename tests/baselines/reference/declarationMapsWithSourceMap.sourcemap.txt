@@ -16,18 +16,14 @@ sourceFile:tests/cases/compiler/a.ts
 ---
 >>>    function Foo() {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^->
 1->
 1->Emitted(2, 5) Source(1, 1) + SourceIndex(0)
 ---
->>>    }Foo.prototype.doThing = function (x) {
+>>>    }
 1->^^^^
 2 >    ^
-3 >     
-4 >     ^^^^^^^^^^^^^^^^^^^^^
-5 >                          ^^^
-6 >                             ^^^^^^^^^^
-7 >                                       ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->class Foo {
   >    doThing(x: {a: number}) {
   >        return {b: x.a};
@@ -37,18 +33,25 @@ sourceFile:tests/cases/compiler/a.ts
   >    }
   >
 2 >    }
-3 >     
-4 >     doThing
-5 >                          
-6 >                             doThing(
-7 >                                       x: {a: number}
 1->Emitted(3, 5) Source(8, 1) + SourceIndex(0)
 2 >Emitted(3, 6) Source(8, 2) + SourceIndex(0)
-3 >Emitted(3, 6) Source(2, 5) + SourceIndex(0)
-4 >Emitted(3, 27) Source(2, 12) + SourceIndex(0)
-5 >Emitted(3, 30) Source(2, 5) + SourceIndex(0)
-6 >Emitted(3, 40) Source(2, 13) + SourceIndex(0)
-7 >Emitted(3, 41) Source(2, 27) + SourceIndex(0)
+---
+>>>    Foo.prototype.doThing = function (x) {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^
+3 >                         ^^^
+4 >                            ^^^^^^^^^^
+5 >                                      ^
+1->
+2 >    doThing
+3 >                         
+4 >                            doThing(
+5 >                                      x: {a: number}
+1->Emitted(4, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(4, 26) Source(2, 12) + SourceIndex(0)
+3 >Emitted(4, 29) Source(2, 5) + SourceIndex(0)
+4 >Emitted(4, 39) Source(2, 13) + SourceIndex(0)
+5 >Emitted(4, 40) Source(2, 27) + SourceIndex(0)
 ---
 >>>        return { b: x.a };
 1 >^^^^^^^^
@@ -72,16 +75,16 @@ sourceFile:tests/cases/compiler/a.ts
 8 >                      a
 9 >                       }
 10>                         ;
-1 >Emitted(4, 9) Source(3, 9) + SourceIndex(0)
-2 >Emitted(4, 16) Source(3, 16) + SourceIndex(0)
-3 >Emitted(4, 18) Source(3, 17) + SourceIndex(0)
-4 >Emitted(4, 19) Source(3, 18) + SourceIndex(0)
-5 >Emitted(4, 21) Source(3, 20) + SourceIndex(0)
-6 >Emitted(4, 22) Source(3, 21) + SourceIndex(0)
-7 >Emitted(4, 23) Source(3, 22) + SourceIndex(0)
-8 >Emitted(4, 24) Source(3, 23) + SourceIndex(0)
-9 >Emitted(4, 26) Source(3, 24) + SourceIndex(0)
-10>Emitted(4, 27) Source(3, 25) + SourceIndex(0)
+1 >Emitted(5, 9) Source(3, 9) + SourceIndex(0)
+2 >Emitted(5, 16) Source(3, 16) + SourceIndex(0)
+3 >Emitted(5, 18) Source(3, 17) + SourceIndex(0)
+4 >Emitted(5, 19) Source(3, 18) + SourceIndex(0)
+5 >Emitted(5, 21) Source(3, 20) + SourceIndex(0)
+6 >Emitted(5, 22) Source(3, 21) + SourceIndex(0)
+7 >Emitted(5, 23) Source(3, 22) + SourceIndex(0)
+8 >Emitted(5, 24) Source(3, 23) + SourceIndex(0)
+9 >Emitted(5, 26) Source(3, 24) + SourceIndex(0)
+10>Emitted(5, 27) Source(3, 25) + SourceIndex(0)
 ---
 >>>    };
 1 >^^^^
@@ -90,8 +93,8 @@ sourceFile:tests/cases/compiler/a.ts
 1 >
   >    
 2 >    }
-1 >Emitted(5, 5) Source(4, 5) + SourceIndex(0)
-2 >Emitted(5, 6) Source(4, 6) + SourceIndex(0)
+1 >Emitted(6, 5) Source(4, 5) + SourceIndex(0)
+2 >Emitted(6, 6) Source(4, 6) + SourceIndex(0)
 ---
 >>>    Foo.make = function () {
 1->^^^^
@@ -102,9 +105,9 @@ sourceFile:tests/cases/compiler/a.ts
   >    static 
 2 >    make
 3 >            
-1->Emitted(6, 5) Source(5, 12) + SourceIndex(0)
-2 >Emitted(6, 13) Source(5, 16) + SourceIndex(0)
-3 >Emitted(6, 16) Source(5, 5) + SourceIndex(0)
+1->Emitted(7, 5) Source(5, 12) + SourceIndex(0)
+2 >Emitted(7, 13) Source(5, 16) + SourceIndex(0)
+3 >Emitted(7, 16) Source(5, 5) + SourceIndex(0)
 ---
 >>>        return new Foo();
 1->^^^^^^^^
@@ -120,12 +123,12 @@ sourceFile:tests/cases/compiler/a.ts
 4 >                   Foo
 5 >                      ()
 6 >                        ;
-1->Emitted(7, 9) Source(6, 9) + SourceIndex(0)
-2 >Emitted(7, 16) Source(6, 16) + SourceIndex(0)
-3 >Emitted(7, 20) Source(6, 20) + SourceIndex(0)
-4 >Emitted(7, 23) Source(6, 23) + SourceIndex(0)
-5 >Emitted(7, 25) Source(6, 25) + SourceIndex(0)
-6 >Emitted(7, 26) Source(6, 26) + SourceIndex(0)
+1->Emitted(8, 9) Source(6, 9) + SourceIndex(0)
+2 >Emitted(8, 16) Source(6, 16) + SourceIndex(0)
+3 >Emitted(8, 20) Source(6, 20) + SourceIndex(0)
+4 >Emitted(8, 23) Source(6, 23) + SourceIndex(0)
+5 >Emitted(8, 25) Source(6, 25) + SourceIndex(0)
+6 >Emitted(8, 26) Source(6, 26) + SourceIndex(0)
 ---
 >>>    };
 1 >^^^^
@@ -134,8 +137,8 @@ sourceFile:tests/cases/compiler/a.ts
 1 >
   >    
 2 >    }
-1 >Emitted(8, 5) Source(7, 5) + SourceIndex(0)
-2 >Emitted(8, 6) Source(7, 6) + SourceIndex(0)
+1 >Emitted(9, 5) Source(7, 5) + SourceIndex(0)
+2 >Emitted(9, 6) Source(7, 6) + SourceIndex(0)
 ---
 >>>    return Foo;
 1->^^^^
@@ -143,8 +146,8 @@ sourceFile:tests/cases/compiler/a.ts
 1->
   >
 2 >    }
-1->Emitted(9, 5) Source(8, 1) + SourceIndex(0)
-2 >Emitted(9, 15) Source(8, 2) + SourceIndex(0)
+1->Emitted(10, 5) Source(8, 1) + SourceIndex(0)
+2 >Emitted(10, 15) Source(8, 2) + SourceIndex(0)
 ---
 >>>}());
 1 >
@@ -163,10 +166,10 @@ sourceFile:tests/cases/compiler/a.ts
   >         return new Foo();
   >     }
   > }
-1 >Emitted(10, 1) Source(8, 1) + SourceIndex(0)
-2 >Emitted(10, 2) Source(8, 2) + SourceIndex(0)
-3 >Emitted(10, 2) Source(1, 1) + SourceIndex(0)
-4 >Emitted(10, 6) Source(8, 2) + SourceIndex(0)
+1 >Emitted(11, 1) Source(8, 1) + SourceIndex(0)
+2 >Emitted(11, 2) Source(8, 2) + SourceIndex(0)
+3 >Emitted(11, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(11, 6) Source(8, 2) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:bundle.js
@@ -190,14 +193,14 @@ sourceFile:tests/cases/compiler/index.ts
 6 >            Foo
 7 >               ()
 8 >                 ;
-1->Emitted(11, 1) Source(1, 1) + SourceIndex(1)
-2 >Emitted(11, 5) Source(1, 7) + SourceIndex(1)
-3 >Emitted(11, 6) Source(1, 8) + SourceIndex(1)
-4 >Emitted(11, 9) Source(1, 11) + SourceIndex(1)
-5 >Emitted(11, 13) Source(1, 15) + SourceIndex(1)
-6 >Emitted(11, 16) Source(1, 18) + SourceIndex(1)
-7 >Emitted(11, 18) Source(1, 20) + SourceIndex(1)
-8 >Emitted(11, 19) Source(1, 21) + SourceIndex(1)
+1->Emitted(12, 1) Source(1, 1) + SourceIndex(1)
+2 >Emitted(12, 5) Source(1, 7) + SourceIndex(1)
+3 >Emitted(12, 6) Source(1, 8) + SourceIndex(1)
+4 >Emitted(12, 9) Source(1, 11) + SourceIndex(1)
+5 >Emitted(12, 13) Source(1, 15) + SourceIndex(1)
+6 >Emitted(12, 16) Source(1, 18) + SourceIndex(1)
+7 >Emitted(12, 18) Source(1, 20) + SourceIndex(1)
+8 >Emitted(12, 19) Source(1, 21) + SourceIndex(1)
 ---
 >>>c.doThing({ a: 42 });
 1->
@@ -212,7 +215,6 @@ sourceFile:tests/cases/compiler/index.ts
 10>                 ^^
 11>                   ^
 12>                    ^
-13>                     ^^^^^^^^^->
 1->
   >
 2 >c
@@ -226,21 +228,22 @@ sourceFile:tests/cases/compiler/index.ts
 10>                 }
 11>                   )
 12>                    ;
-1->Emitted(12, 1) Source(2, 1) + SourceIndex(1)
-2 >Emitted(12, 2) Source(2, 2) + SourceIndex(1)
-3 >Emitted(12, 3) Source(2, 3) + SourceIndex(1)
-4 >Emitted(12, 10) Source(2, 10) + SourceIndex(1)
-5 >Emitted(12, 11) Source(2, 11) + SourceIndex(1)
-6 >Emitted(12, 13) Source(2, 12) + SourceIndex(1)
-7 >Emitted(12, 14) Source(2, 13) + SourceIndex(1)
-8 >Emitted(12, 16) Source(2, 15) + SourceIndex(1)
-9 >Emitted(12, 18) Source(2, 17) + SourceIndex(1)
-10>Emitted(12, 20) Source(2, 18) + SourceIndex(1)
-11>Emitted(12, 21) Source(2, 19) + SourceIndex(1)
-12>Emitted(12, 22) Source(2, 20) + SourceIndex(1)
+1->Emitted(13, 1) Source(2, 1) + SourceIndex(1)
+2 >Emitted(13, 2) Source(2, 2) + SourceIndex(1)
+3 >Emitted(13, 3) Source(2, 3) + SourceIndex(1)
+4 >Emitted(13, 10) Source(2, 10) + SourceIndex(1)
+5 >Emitted(13, 11) Source(2, 11) + SourceIndex(1)
+6 >Emitted(13, 13) Source(2, 12) + SourceIndex(1)
+7 >Emitted(13, 14) Source(2, 13) + SourceIndex(1)
+8 >Emitted(13, 16) Source(2, 15) + SourceIndex(1)
+9 >Emitted(13, 18) Source(2, 17) + SourceIndex(1)
+10>Emitted(13, 20) Source(2, 18) + SourceIndex(1)
+11>Emitted(13, 21) Source(2, 19) + SourceIndex(1)
+12>Emitted(13, 22) Source(2, 20) + SourceIndex(1)
 ---
+>>>
 >>>var x = c.doThing({ a: 12 });
-1->
+1 >
 2 >^^^^
 3 >    ^
 4 >     ^^^
@@ -256,7 +259,7 @@ sourceFile:tests/cases/compiler/index.ts
 14>                           ^
 15>                            ^
 16>                             ^^^^->
-1->
+1 >
   >
   >
 2 >let 
@@ -273,21 +276,21 @@ sourceFile:tests/cases/compiler/index.ts
 13>                         }
 14>                           )
 15>                            ;
-1->Emitted(13, 1) Source(4, 1) + SourceIndex(1)
-2 >Emitted(13, 5) Source(4, 5) + SourceIndex(1)
-3 >Emitted(13, 6) Source(4, 6) + SourceIndex(1)
-4 >Emitted(13, 9) Source(4, 9) + SourceIndex(1)
-5 >Emitted(13, 10) Source(4, 10) + SourceIndex(1)
-6 >Emitted(13, 11) Source(4, 11) + SourceIndex(1)
-7 >Emitted(13, 18) Source(4, 18) + SourceIndex(1)
-8 >Emitted(13, 19) Source(4, 19) + SourceIndex(1)
-9 >Emitted(13, 21) Source(4, 20) + SourceIndex(1)
-10>Emitted(13, 22) Source(4, 21) + SourceIndex(1)
-11>Emitted(13, 24) Source(4, 23) + SourceIndex(1)
-12>Emitted(13, 26) Source(4, 25) + SourceIndex(1)
-13>Emitted(13, 28) Source(4, 26) + SourceIndex(1)
-14>Emitted(13, 29) Source(4, 27) + SourceIndex(1)
-15>Emitted(13, 30) Source(4, 28) + SourceIndex(1)
+1 >Emitted(15, 1) Source(4, 1) + SourceIndex(1)
+2 >Emitted(15, 5) Source(4, 5) + SourceIndex(1)
+3 >Emitted(15, 6) Source(4, 6) + SourceIndex(1)
+4 >Emitted(15, 9) Source(4, 9) + SourceIndex(1)
+5 >Emitted(15, 10) Source(4, 10) + SourceIndex(1)
+6 >Emitted(15, 11) Source(4, 11) + SourceIndex(1)
+7 >Emitted(15, 18) Source(4, 18) + SourceIndex(1)
+8 >Emitted(15, 19) Source(4, 19) + SourceIndex(1)
+9 >Emitted(15, 21) Source(4, 20) + SourceIndex(1)
+10>Emitted(15, 22) Source(4, 21) + SourceIndex(1)
+11>Emitted(15, 24) Source(4, 23) + SourceIndex(1)
+12>Emitted(15, 26) Source(4, 25) + SourceIndex(1)
+13>Emitted(15, 28) Source(4, 26) + SourceIndex(1)
+14>Emitted(15, 29) Source(4, 27) + SourceIndex(1)
+15>Emitted(15, 30) Source(4, 28) + SourceIndex(1)
 ---
 >>>//# sourceMappingURL=bundle.js.map===================================================================
 JsFile: bundle.d.ts

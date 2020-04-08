@@ -14,5 +14,6 @@ var _this = this;
 (function () { return _this.window; });
 
 var parts = [];
+
 // Ensure that the generated code is correct
 parts[0];

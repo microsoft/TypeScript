@@ -59,10 +59,12 @@ var c;
 
 // Error expected
 var d;
+
 function f() { return f; }
 
 // Error expected
 function g() { return g(); }
+
 // Error expected
 var f1 = function () {
     return f1();
@@ -70,6 +72,7 @@ var f1 = function () {
 
 // Error expected
 var f2 = function () { return f2(); };
+
 // Error expected
 function h() {
     return foo();
@@ -77,6 +80,7 @@ function h() {
         return h() || "hello";
     }
 }
+
 
 function foo(x) { return "abc"; }
 

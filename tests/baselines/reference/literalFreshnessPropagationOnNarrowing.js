@@ -102,6 +102,7 @@ function f3() {
     // 3.0: Error
     // 3.1 as-is: OK
     x2 = 'y';
+
     // Desired/actual: All OK
     var x3 = x;
     x3 = 'y';

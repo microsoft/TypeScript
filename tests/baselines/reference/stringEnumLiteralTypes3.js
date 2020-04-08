@@ -121,6 +121,12 @@ function f13(x: Choice): Choice {
 
 //// [stringEnumLiteralTypes3.js]
 ;
+
+
+
+
+
+
 function f1(a, b, c, d) {
     a = a;
     a = b;

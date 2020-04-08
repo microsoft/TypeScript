@@ -551,22 +551,22 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^->
 1 >
   >
 2 >}
 1 >Emitted(22, 1) Source(21, 1) + SourceIndex(0)
 2 >Emitted(22, 2) Source(21, 2) + SourceIndex(0)
 ---
+>>>
 >>>foo1(robotA);
-1->
+1 >
 2 >^^^^
 3 >    ^
 4 >     ^^^^^^
 5 >           ^
 6 >            ^
 7 >             ^^^^^^^^^^^^^^^^^^^^^->
-1->
+1 >
   >
   >
 2 >foo1
@@ -574,12 +574,12 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 4 >     robotA
 5 >           )
 6 >            ;
-1->Emitted(23, 1) Source(23, 1) + SourceIndex(0)
-2 >Emitted(23, 5) Source(23, 5) + SourceIndex(0)
-3 >Emitted(23, 6) Source(23, 6) + SourceIndex(0)
-4 >Emitted(23, 12) Source(23, 12) + SourceIndex(0)
-5 >Emitted(23, 13) Source(23, 13) + SourceIndex(0)
-6 >Emitted(23, 14) Source(23, 14) + SourceIndex(0)
+1 >Emitted(24, 1) Source(23, 1) + SourceIndex(0)
+2 >Emitted(24, 5) Source(23, 5) + SourceIndex(0)
+3 >Emitted(24, 6) Source(23, 6) + SourceIndex(0)
+4 >Emitted(24, 12) Source(23, 12) + SourceIndex(0)
+5 >Emitted(24, 13) Source(23, 13) + SourceIndex(0)
+6 >Emitted(24, 14) Source(23, 14) + SourceIndex(0)
 ---
 >>>foo1([2, "trimmer", "trimming"]);
 1->
@@ -607,18 +607,18 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 10>                              ]
 11>                               )
 12>                                ;
-1->Emitted(24, 1) Source(24, 1) + SourceIndex(0)
-2 >Emitted(24, 5) Source(24, 5) + SourceIndex(0)
-3 >Emitted(24, 6) Source(24, 6) + SourceIndex(0)
-4 >Emitted(24, 7) Source(24, 7) + SourceIndex(0)
-5 >Emitted(24, 8) Source(24, 8) + SourceIndex(0)
-6 >Emitted(24, 10) Source(24, 10) + SourceIndex(0)
-7 >Emitted(24, 19) Source(24, 19) + SourceIndex(0)
-8 >Emitted(24, 21) Source(24, 21) + SourceIndex(0)
-9 >Emitted(24, 31) Source(24, 31) + SourceIndex(0)
-10>Emitted(24, 32) Source(24, 32) + SourceIndex(0)
-11>Emitted(24, 33) Source(24, 33) + SourceIndex(0)
-12>Emitted(24, 34) Source(24, 34) + SourceIndex(0)
+1->Emitted(25, 1) Source(24, 1) + SourceIndex(0)
+2 >Emitted(25, 5) Source(24, 5) + SourceIndex(0)
+3 >Emitted(25, 6) Source(24, 6) + SourceIndex(0)
+4 >Emitted(25, 7) Source(24, 7) + SourceIndex(0)
+5 >Emitted(25, 8) Source(24, 8) + SourceIndex(0)
+6 >Emitted(25, 10) Source(24, 10) + SourceIndex(0)
+7 >Emitted(25, 19) Source(24, 19) + SourceIndex(0)
+8 >Emitted(25, 21) Source(24, 21) + SourceIndex(0)
+9 >Emitted(25, 31) Source(24, 31) + SourceIndex(0)
+10>Emitted(25, 32) Source(24, 32) + SourceIndex(0)
+11>Emitted(25, 33) Source(24, 33) + SourceIndex(0)
+12>Emitted(25, 34) Source(24, 34) + SourceIndex(0)
 ---
 >>>
 >>>foo2(robotA);
@@ -637,12 +637,12 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 4 >     robotA
 5 >           )
 6 >            ;
-1 >Emitted(26, 1) Source(26, 1) + SourceIndex(0)
-2 >Emitted(26, 5) Source(26, 5) + SourceIndex(0)
-3 >Emitted(26, 6) Source(26, 6) + SourceIndex(0)
-4 >Emitted(26, 12) Source(26, 12) + SourceIndex(0)
-5 >Emitted(26, 13) Source(26, 13) + SourceIndex(0)
-6 >Emitted(26, 14) Source(26, 14) + SourceIndex(0)
+1 >Emitted(27, 1) Source(26, 1) + SourceIndex(0)
+2 >Emitted(27, 5) Source(26, 5) + SourceIndex(0)
+3 >Emitted(27, 6) Source(26, 6) + SourceIndex(0)
+4 >Emitted(27, 12) Source(26, 12) + SourceIndex(0)
+5 >Emitted(27, 13) Source(26, 13) + SourceIndex(0)
+6 >Emitted(27, 14) Source(26, 14) + SourceIndex(0)
 ---
 >>>foo2([2, "trimmer", "trimming"]);
 1->
@@ -670,18 +670,18 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 10>                              ]
 11>                               )
 12>                                ;
-1->Emitted(27, 1) Source(27, 1) + SourceIndex(0)
-2 >Emitted(27, 5) Source(27, 5) + SourceIndex(0)
-3 >Emitted(27, 6) Source(27, 6) + SourceIndex(0)
-4 >Emitted(27, 7) Source(27, 7) + SourceIndex(0)
-5 >Emitted(27, 8) Source(27, 8) + SourceIndex(0)
-6 >Emitted(27, 10) Source(27, 10) + SourceIndex(0)
-7 >Emitted(27, 19) Source(27, 19) + SourceIndex(0)
-8 >Emitted(27, 21) Source(27, 21) + SourceIndex(0)
-9 >Emitted(27, 31) Source(27, 31) + SourceIndex(0)
-10>Emitted(27, 32) Source(27, 32) + SourceIndex(0)
-11>Emitted(27, 33) Source(27, 33) + SourceIndex(0)
-12>Emitted(27, 34) Source(27, 34) + SourceIndex(0)
+1->Emitted(28, 1) Source(27, 1) + SourceIndex(0)
+2 >Emitted(28, 5) Source(27, 5) + SourceIndex(0)
+3 >Emitted(28, 6) Source(27, 6) + SourceIndex(0)
+4 >Emitted(28, 7) Source(27, 7) + SourceIndex(0)
+5 >Emitted(28, 8) Source(27, 8) + SourceIndex(0)
+6 >Emitted(28, 10) Source(27, 10) + SourceIndex(0)
+7 >Emitted(28, 19) Source(27, 19) + SourceIndex(0)
+8 >Emitted(28, 21) Source(27, 21) + SourceIndex(0)
+9 >Emitted(28, 31) Source(27, 31) + SourceIndex(0)
+10>Emitted(28, 32) Source(27, 32) + SourceIndex(0)
+11>Emitted(28, 33) Source(27, 33) + SourceIndex(0)
+12>Emitted(28, 34) Source(27, 34) + SourceIndex(0)
 ---
 >>>
 >>>foo3(robotA);
@@ -700,12 +700,12 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 4 >     robotA
 5 >           )
 6 >            ;
-1 >Emitted(29, 1) Source(29, 1) + SourceIndex(0)
-2 >Emitted(29, 5) Source(29, 5) + SourceIndex(0)
-3 >Emitted(29, 6) Source(29, 6) + SourceIndex(0)
-4 >Emitted(29, 12) Source(29, 12) + SourceIndex(0)
-5 >Emitted(29, 13) Source(29, 13) + SourceIndex(0)
-6 >Emitted(29, 14) Source(29, 14) + SourceIndex(0)
+1 >Emitted(30, 1) Source(29, 1) + SourceIndex(0)
+2 >Emitted(30, 5) Source(29, 5) + SourceIndex(0)
+3 >Emitted(30, 6) Source(29, 6) + SourceIndex(0)
+4 >Emitted(30, 12) Source(29, 12) + SourceIndex(0)
+5 >Emitted(30, 13) Source(29, 13) + SourceIndex(0)
+6 >Emitted(30, 14) Source(29, 14) + SourceIndex(0)
 ---
 >>>foo3([2, "trimmer", "trimming"]);
 1->
@@ -733,18 +733,18 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 10>                              ]
 11>                               )
 12>                                ;
-1->Emitted(30, 1) Source(30, 1) + SourceIndex(0)
-2 >Emitted(30, 5) Source(30, 5) + SourceIndex(0)
-3 >Emitted(30, 6) Source(30, 6) + SourceIndex(0)
-4 >Emitted(30, 7) Source(30, 7) + SourceIndex(0)
-5 >Emitted(30, 8) Source(30, 8) + SourceIndex(0)
-6 >Emitted(30, 10) Source(30, 10) + SourceIndex(0)
-7 >Emitted(30, 19) Source(30, 19) + SourceIndex(0)
-8 >Emitted(30, 21) Source(30, 21) + SourceIndex(0)
-9 >Emitted(30, 31) Source(30, 31) + SourceIndex(0)
-10>Emitted(30, 32) Source(30, 32) + SourceIndex(0)
-11>Emitted(30, 33) Source(30, 33) + SourceIndex(0)
-12>Emitted(30, 34) Source(30, 34) + SourceIndex(0)
+1->Emitted(31, 1) Source(30, 1) + SourceIndex(0)
+2 >Emitted(31, 5) Source(30, 5) + SourceIndex(0)
+3 >Emitted(31, 6) Source(30, 6) + SourceIndex(0)
+4 >Emitted(31, 7) Source(30, 7) + SourceIndex(0)
+5 >Emitted(31, 8) Source(30, 8) + SourceIndex(0)
+6 >Emitted(31, 10) Source(30, 10) + SourceIndex(0)
+7 >Emitted(31, 19) Source(30, 19) + SourceIndex(0)
+8 >Emitted(31, 21) Source(30, 21) + SourceIndex(0)
+9 >Emitted(31, 31) Source(30, 31) + SourceIndex(0)
+10>Emitted(31, 32) Source(30, 32) + SourceIndex(0)
+11>Emitted(31, 33) Source(30, 33) + SourceIndex(0)
+12>Emitted(31, 34) Source(30, 34) + SourceIndex(0)
 ---
 >>>
 >>>foo4(robotA);
@@ -763,12 +763,12 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 4 >     robotA
 5 >           )
 6 >            ;
-1 >Emitted(32, 1) Source(32, 1) + SourceIndex(0)
-2 >Emitted(32, 5) Source(32, 5) + SourceIndex(0)
-3 >Emitted(32, 6) Source(32, 6) + SourceIndex(0)
-4 >Emitted(32, 12) Source(32, 12) + SourceIndex(0)
-5 >Emitted(32, 13) Source(32, 13) + SourceIndex(0)
-6 >Emitted(32, 14) Source(32, 14) + SourceIndex(0)
+1 >Emitted(33, 1) Source(32, 1) + SourceIndex(0)
+2 >Emitted(33, 5) Source(32, 5) + SourceIndex(0)
+3 >Emitted(33, 6) Source(32, 6) + SourceIndex(0)
+4 >Emitted(33, 12) Source(32, 12) + SourceIndex(0)
+5 >Emitted(33, 13) Source(32, 13) + SourceIndex(0)
+6 >Emitted(33, 14) Source(32, 14) + SourceIndex(0)
 ---
 >>>foo4([2, "trimmer", "trimming"]);
 1->
@@ -797,17 +797,17 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 10>                              ]
 11>                               )
 12>                                ;
-1->Emitted(33, 1) Source(33, 1) + SourceIndex(0)
-2 >Emitted(33, 5) Source(33, 5) + SourceIndex(0)
-3 >Emitted(33, 6) Source(33, 6) + SourceIndex(0)
-4 >Emitted(33, 7) Source(33, 7) + SourceIndex(0)
-5 >Emitted(33, 8) Source(33, 8) + SourceIndex(0)
-6 >Emitted(33, 10) Source(33, 10) + SourceIndex(0)
-7 >Emitted(33, 19) Source(33, 19) + SourceIndex(0)
-8 >Emitted(33, 21) Source(33, 21) + SourceIndex(0)
-9 >Emitted(33, 31) Source(33, 31) + SourceIndex(0)
-10>Emitted(33, 32) Source(33, 32) + SourceIndex(0)
-11>Emitted(33, 33) Source(33, 33) + SourceIndex(0)
-12>Emitted(33, 34) Source(33, 34) + SourceIndex(0)
+1->Emitted(34, 1) Source(33, 1) + SourceIndex(0)
+2 >Emitted(34, 5) Source(33, 5) + SourceIndex(0)
+3 >Emitted(34, 6) Source(33, 6) + SourceIndex(0)
+4 >Emitted(34, 7) Source(33, 7) + SourceIndex(0)
+5 >Emitted(34, 8) Source(33, 8) + SourceIndex(0)
+6 >Emitted(34, 10) Source(33, 10) + SourceIndex(0)
+7 >Emitted(34, 19) Source(33, 19) + SourceIndex(0)
+8 >Emitted(34, 21) Source(33, 21) + SourceIndex(0)
+9 >Emitted(34, 31) Source(33, 31) + SourceIndex(0)
+10>Emitted(34, 32) Source(33, 32) + SourceIndex(0)
+11>Emitted(34, 33) Source(33, 33) + SourceIndex(0)
+12>Emitted(34, 34) Source(33, 34) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.js.map

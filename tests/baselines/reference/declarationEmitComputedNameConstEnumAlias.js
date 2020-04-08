@@ -27,7 +27,6 @@ exports["default"] = EnumExample;
 var _a;
 exports.__esModule = true;
 var EnumExample_1 = require("./EnumExample");
-
 exports["default"] = (_a = {},
     _a[EnumExample_1["default"].TEST] = {},
     _a);

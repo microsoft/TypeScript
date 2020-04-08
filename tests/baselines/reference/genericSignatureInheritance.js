@@ -7,4 +7,3 @@ interface I2 extends I { }
 
 
 //// [genericSignatureInheritance.js]
-

@@ -10,7 +10,8 @@ class A {
 //// [unusedTypeParameterInLambda1.js]
 var A = /** @class */ (function () {
     function A() {
-    }A.prototype.f1 = function () {
+    }
+    A.prototype.f1 = function () {
         return function () {
         };
     };

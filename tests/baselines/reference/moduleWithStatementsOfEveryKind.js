@@ -84,13 +84,15 @@ var A;
     }());
 
     var B = /** @class */ (function (_super) {
-        __extends(B, _super);function B() {
+        __extends(B, _super);
+        function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
     }(AA));
     var BB = /** @class */ (function (_super) {
-        __extends(BB, _super);function BB() {
+        __extends(BB, _super);
+        function BB() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return BB;
@@ -104,7 +106,8 @@ var A;
     })(Module || (Module = {}));
     var Color;
     (function (Color) {
-        Color[Color["Blue"] = 0] = "Blue";Color[Color["Red"] = 1] = "Red";
+        Color[Color["Blue"] = 0] = "Blue";
+        Color[Color["Red"] = 1] = "Red";
     })(Color || (Color = {}));
     var x = 12;
     function F(s) {
@@ -131,14 +134,16 @@ var Y;
     Y.AA = AA;
 
     var B = /** @class */ (function (_super) {
-        __extends(B, _super);function B() {
+        __extends(B, _super);
+        function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
     }(AA));
     Y.B = B;
     var BB = /** @class */ (function (_super) {
-        __extends(BB, _super);function BB() {
+        __extends(BB, _super);
+        function BB() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return BB;
@@ -153,7 +158,8 @@ var Y;
     })(Module = Y.Module || (Y.Module = {}));
     var Color;
     (function (Color) {
-        Color[Color["Blue"] = 0] = "Blue";Color[Color["Red"] = 1] = "Red";
+        Color[Color["Blue"] = 0] = "Blue";
+        Color[Color["Red"] = 1] = "Red";
     })(Color = Y.Color || (Y.Color = {}));
     Y.x = 12;
     function F(s) {

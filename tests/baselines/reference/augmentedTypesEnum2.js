@@ -34,7 +34,7 @@ var e2;
 ; // error
 var e2 = /** @class */ (function () {
     function e2() {
-    }// error
+    }
     e2.prototype.foo = function () {
         return 1;
     };

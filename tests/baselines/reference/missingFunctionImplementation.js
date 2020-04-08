@@ -87,13 +87,15 @@ var C1 = /** @class */ (function () {
     function C1() {
     }
     return C1;
-}());exports.C1 = C1;
+}());
+exports.C1 = C1;
 // merged with a namespace
 var C2 = /** @class */ (function () {
     function C2() {
     }
     return C2;
-}());exports.C2 = C2;
+}());
+exports.C2 = C2;
 
 
 // merged with a namespace, multiple overloads
@@ -142,7 +144,8 @@ var C8 = /** @class */ (function () {
 // merged with namespace, static methods, duplicate declarations
 var C9 = /** @class */ (function () {
     function C9() {
-    }C9.m = function (a) { };
+    }
+    C9.m = function (a) { };
     return C9;
 }());
 (function (C9) {

@@ -31,7 +31,8 @@ define(["require", "exports"], function (require, exports) {
     exports.w = void 0;
     function w() {
         return { name: 'value' };
-    }exports.w = w;
+    }
+    exports.w = w;
 });
 
 

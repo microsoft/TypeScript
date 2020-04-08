@@ -49,7 +49,8 @@ var E = /** @class */ (function () {
     return E;
 }());
 var F = /** @class */ (function (_super) {
-    __extends(F, _super);function F() {
+    __extends(F, _super);
+    function F() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return F;
@@ -61,7 +62,8 @@ var C1 = /** @class */ (function () {
     return C1;
 }());
 var D1 = /** @class */ (function (_super) {
-    __extends(D1, _super);function D1() {
+    __extends(D1, _super);
+    function D1() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.i = "bar";
         return _this;

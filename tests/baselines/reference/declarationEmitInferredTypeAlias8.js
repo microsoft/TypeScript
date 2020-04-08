@@ -8,6 +8,7 @@ function returnSomeGlobalValue() {
 
 //// [declarationEmitInferredTypeAlias8.js]
 var x;
+
 function returnSomeGlobalValue() {
     return x;
 }

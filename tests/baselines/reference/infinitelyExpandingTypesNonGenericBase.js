@@ -48,14 +48,15 @@ var Base = /** @class */ (function () {
     return Base;
 }());
 var A = /** @class */ (function (_super) {
-    __extends(A, _super);function A() {
+    __extends(A, _super);
+    function A() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return A;
 }(Base));
 
 
-
 function o(type) {
 }
+
 o(A);

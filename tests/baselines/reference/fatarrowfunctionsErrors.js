@@ -24,8 +24,7 @@ foo(function (x) { return x; });
 foo(function (x) {if (x === void 0) { x = 0; }
     return x;
 });
-var y = x, number;
-x * x;
+var y = x, number;x * x;
 false ? (function () { return null; }) : null;
 
 // missing fatarrow

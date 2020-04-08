@@ -9,4 +9,3 @@ interface B extends A {
 }
 
 //// [specializedSignatureInInterface.js]
-

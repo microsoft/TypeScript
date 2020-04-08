@@ -29,7 +29,8 @@ var A;
 (function (A) {
     var B = /** @class */ (function () {
         function B() {
-        }B.prototype.Hello = function () {
+        }
+        B.prototype.Hello = function () {
             return "from private B";
         };
         return B;
@@ -38,7 +39,8 @@ var A;
 (function (A) {
     var B = /** @class */ (function () {
         function B() {
-        }B.prototype.Hello = function () {
+        }
+        B.prototype.Hello = function () {
             return "from export B";
         };
         return B;

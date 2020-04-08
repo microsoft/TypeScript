@@ -32,6 +32,7 @@ var nameMC = ["roomba", ["vacuum", "mopping"]][0];
 var _b = ["roomba", ["vacuum", "mopping"]], nameMC2 = _b[0], _c = _b[1], primarySkillC = _c[0], secondarySkillC = _c[1];
 
 var multiRobotAInfo = multiRobotA.slice(0);
+
 if (nameMB == nameMA) {
     console.log(skillA[0] + skillA[1]);
 }

@@ -32,13 +32,15 @@ export declare class someClass {
 exports.__esModule = true;
 exports.someClass = exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
-function leftPad(s, n) { return s + n; }exports.leftPad = leftPad;
-function multiply(a, b) { return a * b; }exports.multiply = multiply;
-
+function leftPad(s, n) { return s + n; }
+exports.leftPad = leftPad;
+function multiply(a, b) { return a * b; }
+exports.multiply = multiply;
 var someClass = /** @class */ (function () {
     function someClass() {}
     return someClass;
-}());exports.someClass = someClass;
+}());
+exports.someClass = someClass;
 
 
 //// [/src/core/index.ts]

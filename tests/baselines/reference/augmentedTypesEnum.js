@@ -59,7 +59,8 @@ var e4;
     e4[e4["One"] = 0] = "One";
 })(e4 || (e4 = {})); // error
 var e4 = /** @class */ (function () {
-    function e4() {}e4.prototype.foo = function () { };
+    function e4() {}
+    e4.prototype.foo = function () { };
     return e4;
 }()); // error
 // enum then enum

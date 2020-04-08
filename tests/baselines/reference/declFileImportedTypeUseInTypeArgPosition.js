@@ -22,7 +22,6 @@ var List = /** @class */ (function () {
 
 
 
-
 //// [declFileImportedTypeUseInTypeArgPosition.d.ts]
 declare class List<T> {
 }

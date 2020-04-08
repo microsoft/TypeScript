@@ -26,7 +26,8 @@ function func(s) {
 }
 var A = /** @class */ (function () {
     function A() {
-    }A.prototype.m = function () {
+    }
+    A.prototype.m = function () {
     };
     __decorate([
         (function (x, p) {

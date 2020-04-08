@@ -8,7 +8,8 @@ class C {
 //// [ES5SymbolProperty6.js]
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype[Symbol.iterator] = function () { };
+    }
+    C.prototype[Symbol.iterator] = function () { };
     return C;
 }());
 (new C)[Symbol.iterator];

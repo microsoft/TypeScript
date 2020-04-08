@@ -15,7 +15,8 @@ class C {
 //// [staticMemberAssignsToConstructorFunctionMembers.js]
 var C = /** @class */ (function () {
     function C() {
-    }C.foo = function () {
+    }
+    C.foo = function () {
         C.foo = function () { };
     };
 

@@ -8,7 +8,6 @@ declare var Foo, Bar, baz;
 
 //// [test.js]
 
-
 React.createElement(Foo, null,
     " ",
     React.createElement(Bar, null, " q "),

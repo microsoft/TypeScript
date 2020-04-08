@@ -29,7 +29,8 @@ var _x;
 class C {
     constructor() {
         _x.set(this, void 0);
-    }static test() {
+    }
+    static test() {
         __classPrivateFieldSet(new C(), _x, 10);
         const y = new C();
         const z = new y();

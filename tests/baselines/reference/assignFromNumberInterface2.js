@@ -29,10 +29,10 @@ x = b; // expected error
 
 //// [assignFromNumberInterface2.js]
 
-
 var x = 1;
 var a;
 var b;
+
 a = x;
 a = b;
 

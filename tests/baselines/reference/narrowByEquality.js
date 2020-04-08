@@ -60,6 +60,7 @@ function test(level: number | string):number {
 
 //// [narrowByEquality.js]
 "use strict";
+
 if (x == n) {
     x;
 }
@@ -91,6 +92,8 @@ if (x == true) {
 if (x == false) {
     x;
 }
+
+
 if (xAndObj == {}) {
     xAndObj;
 }
@@ -99,6 +102,7 @@ if (x == xAndObj) {
     x;
     xAndObj;
 }
+
 // Repro from #24991
 function test(level) {
     if (level == +level) {

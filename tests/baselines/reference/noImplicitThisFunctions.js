@@ -28,6 +28,7 @@ function f1(x) {
     // implicit any is still allowed
     return x + 1;
 }
+
 function f2(y) {
     // ok: no reference to this
     return y + 1;

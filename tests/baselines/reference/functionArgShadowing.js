@@ -16,11 +16,13 @@ class C {
 
 //// [functionArgShadowing.js]
 var A = /** @class */ (function () {
-    function A() {}A.prototype.foo = function () { };
+    function A() {}
+    A.prototype.foo = function () { };
     return A;
 }());
 var B = /** @class */ (function () {
-    function B() {}B.prototype.bar = function () { };
+    function B() {}
+    B.prototype.bar = function () { };
     return B;
 }());
 function foo(x) {

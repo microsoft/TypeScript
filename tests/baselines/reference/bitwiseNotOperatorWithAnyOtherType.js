@@ -77,7 +77,8 @@ function foo() {
 }
 var A = /** @class */ (function () {
     function A() {
-    }A.foo = function () {
+    }
+    A.foo = function () {
         var a;
         return a;
     };
@@ -116,6 +117,7 @@ var ResultIsNumber18 = ~(undefined + undefined);
 // multiple ~ operators
 var ResultIsNumber19 = ~~ANY;
 var ResultIsNumber20 = ~~~(ANY + ANY1);
+
 //miss assignment operators
 ~ANY;
 ~ANY1;

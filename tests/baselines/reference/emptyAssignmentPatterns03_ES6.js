@@ -6,6 +6,7 @@ var a: any;
 
 //// [emptyAssignmentPatterns03_ES6.js]
 var a;
+
 ({} = {} = a);
 ([] = [] = a);
 

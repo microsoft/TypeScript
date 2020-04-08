@@ -41,9 +41,11 @@ exports.__esModule = true;
 var React = require("react");
 function f(App) {
     var C = /** @class */ (function (_super) {
-        __extends(C, _super);function C() {
+        __extends(C, _super);
+        function C() {
             return _super !== null && _super.apply(this, arguments) || this;
-        }C.prototype.render = function () {
+        }
+        C.prototype.render = function () {
             return React.createElement(App, __assign({}, this.props));
         };
         return C;

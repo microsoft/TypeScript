@@ -200,77 +200,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 var simpleAction = function (payload) { return ({
     type: "SIMPLE_ACTION",
     payload: payload
@@ -287,7 +216,8 @@ dispatch,
     });
 }; };
 var TestComponent = /** @class */ (function (_super) {
-    __extends(TestComponent, _super);function TestComponent() {
+    __extends(TestComponent, _super);
+    function TestComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return TestComponent;

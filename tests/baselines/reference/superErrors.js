@@ -74,14 +74,14 @@ var __extends = (this && this.__extends) || (function () {
 var User = /** @class */ (function () {
     function User() {
         this.name = "Bob";
-    }User.prototype.sayHello = function () {
+    }
+    User.prototype.sayHello = function () {
         //console.log("Hello, " + this.name);
     };
     return User;
 }());
 var RegisteredUser = /** @class */ (function (_super) {
     __extends(RegisteredUser, _super);
-
     function RegisteredUser() {
         var _this = _super.call(this) || this;
         _this.name = "Frank";

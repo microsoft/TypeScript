@@ -115,7 +115,8 @@ function objectLiteral3() {
             switch (_c.label) {
                 case 0:
                     _b = {};
-                    _a = a;return [4 /*yield*/, y];
+                    _a = a;
+                    return [4 /*yield*/, y];
                 case 1:
                     x = (_b[_a] = _c.sent(),
                         _b.b = z,
@@ -173,7 +174,8 @@ function objectLiteral6() {
                     _b = {
                             a: y
                         };
-                    _a = b;return [4 /*yield*/, z];
+                    _a = b;
+                    return [4 /*yield*/, z];
                 case 1:
                     x = (_b[_a] = _c.sent(),
                         _b);

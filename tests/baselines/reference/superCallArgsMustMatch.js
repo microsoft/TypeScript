@@ -46,7 +46,6 @@ var __extends = (this && this.__extends) || (function () {
 }());
 var T6 = /** @class */ (function (_super) {
     __extends(T6, _super);
-
     function T6() {
         var _this = 
         // Should error; base constructor has type T for first arg,

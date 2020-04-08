@@ -5,4 +5,5 @@ parseInt("2");
 
 
 //// [externFunc.js]
+
 parseInt("2");

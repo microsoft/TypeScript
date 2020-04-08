@@ -206,7 +206,8 @@ function innestedProperty(x) {
 
 var InMemberOfClass = /** @class */ (function () {
     function InMemberOfClass() {
-    }InMemberOfClass.prototype.inThis = function () {
+    }
+    InMemberOfClass.prototype.inThis = function () {
         if ("a" in this.prop) {
             var y = this.prop.a;
         }
@@ -219,7 +220,8 @@ var InMemberOfClass = /** @class */ (function () {
 // added for completeness
 var SelfAssert = /** @class */ (function () {
     function SelfAssert() {
-    }SelfAssert.prototype.inThis = function () {
+    }
+    SelfAssert.prototype.inThis = function () {
         if ("a" in this) {
             var y = this.a;
         }

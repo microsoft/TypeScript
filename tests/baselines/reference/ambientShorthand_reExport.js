@@ -26,7 +26,8 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
-var jquery_1 = require("jquery");__createBinding(exports, jquery_1, "x");
+var jquery_1 = require("jquery");
+__createBinding(exports, jquery_1, "x");
 //// [reExportAll.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {

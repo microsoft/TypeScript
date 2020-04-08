@@ -98,9 +98,6 @@ const t2 = testSet.transform(
 //// [inferFromGenericFunctionReturnTypes2.js]
 
 
-
-
-
 var f1 = function (s) { return s.length; };
 var f2 = wrap(function (s) { return s.length; });
 var f3 = arrayize(wrap(function (s) { return s.length; }));
@@ -118,7 +115,8 @@ var a6 = ["a", "b"].map(combine(wrap(function (s) { return s.length; }), identit
 // This is a contrived class. We could do the same thing with Observables, etc.
 var SetOf = /** @class */ (function () {
     function SetOf() {
-    }SetOf.prototype.add = function (a) {
+    }
+    SetOf.prototype.add = function (a) {
         this._store.push(a);
     };
 
@@ -162,6 +160,7 @@ var testSet = new SetOf();
 testSet.add(1);
 testSet.add(2);
 testSet.add(3);
+
 var t1 = testSet.transform(
 compose(
 filter(function (x) { return x % 1 === 0; }),
@@ -174,7 +173,9 @@ filter(function (x) { return x % 1 === 0; }),
 
 var t2 = testSet.transform(
 compose(
-filter(function (x) { return x % 1 === 0; }), identity, map(function (x) { return x + '!!!'; }),
+filter(function (x) { return x % 1 === 0; }),
+    identity,
+    map(function (x) { return x + '!!!'; }),
     map(function (x) { return x.toUpperCase(); })
 )
 );

@@ -36,7 +36,8 @@ var Person = /** @class */ (function () {
 }());
 var T = /** @class */ (function () {
     function T() {
-    }T.prototype.fo = function () {
+    }
+    T.prototype.fo = function () {
         var x = this;
     };
     return T;

@@ -72,6 +72,7 @@ a1 = { a: 1 };
 a1 = { a: 0, b: 0 }; // Error
 a1 = { b: "y" }; // Error
 a1 = { c: true }; // Error
+
 var a2 = [{ a: 1, b: 2 }, { a: "abc" }, {}][0];
 a2.a; // string | number | undefined
 a2.b; // number | undefined
@@ -80,6 +81,8 @@ a2 = { a: "def" };
 a2 = {};
 a2 = { a: "def", b: 20 }; // Error
 a2 = { a: 1 }; // Error
+
+
 var b2 = __assign(__assign({}, b1), { z: 55 });
 var b3 = __assign({}, b2);
 
@@ -96,6 +99,7 @@ d1.pos.x;
 d1.pos.y;
 d1.pos.a;
 d1.pos.b;
+
 
 // Object literals are inferred as a single normalized union type
 var e1 = f({ a: 1, b: 2 }, { a: "abc" }, {});

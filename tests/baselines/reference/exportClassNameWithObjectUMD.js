@@ -18,5 +18,6 @@ export class Object {}
     var Object = /** @class */ (function () {
         function Object() {}
         return Object;
-    }());exports.Object = Object;
+    }());
+    exports.Object = Object;
 });

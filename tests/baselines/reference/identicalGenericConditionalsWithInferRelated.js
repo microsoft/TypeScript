@@ -52,7 +52,8 @@ function f(arg) {
 
 var Y = /** @class */ (function () {
     function Y() {
-    }Y.prototype.decode = function (ctor) {
+    }
+    Y.prototype.decode = function (ctor) {
         throw new Error();
     };
     return Y;

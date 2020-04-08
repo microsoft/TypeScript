@@ -20,14 +20,16 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();var C = /** @class */ (function (_super) {
-    __extends(class_1, _super);function class_1() {
+    __extends(class_1, _super);
+    function class_1() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.c = 3;
         return _this;
     }
     return class_1;
 }(/** @class */ (function (_super) {
-    __extends(class_2, _super);function class_2() {
+    __extends(class_2, _super);
+    function class_2() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.b = 2;
         return _this;

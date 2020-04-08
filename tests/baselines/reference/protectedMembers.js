@@ -132,7 +132,8 @@ var __extends = (this && this.__extends) || (function () {
 // Class with protected members
 var C1 = /** @class */ (function () {
     function C1() {
-    }C1.prototype.f = function () {
+    }
+    C1.prototype.f = function () {
         return this.x;
     };
     C1.sf = function () {
@@ -142,9 +143,11 @@ var C1 = /** @class */ (function () {
 }());
 // Derived class accessing protected members
 var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);function C2() {
+    __extends(C2, _super);
+    function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }C2.prototype.f = function () {
+    }
+    C2.prototype.f = function () {
         return _super.prototype.f.call(this) + this.x;
     };
     C2.sf = function () {
@@ -154,9 +157,11 @@ var C2 = /** @class */ (function (_super) {
 }(C1));
 // Derived class making protected members public
 var C3 = /** @class */ (function (_super) {
-    __extends(C3, _super);function C3() {
+    __extends(C3, _super);
+    function C3() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }C3.prototype.f = function () {
+    }
+    C3.prototype.f = function () {
         return _super.prototype.f.call(this);
     };
     C3.sf = function () {
@@ -167,6 +172,7 @@ var C3 = /** @class */ (function (_super) {
 var c1;
 var c2;
 var c3;
+
 // All of these should be errors
 c1.x;
 c1.f();
@@ -184,21 +190,25 @@ c3.x;
 c3.f();
 C3.sx;
 C3.sf();
+
 var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);function C() {
+    __extends(C, _super);
+    function C() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }C.foo = function (a, b, c, d, e) {
+    }
+    C.foo = function (a, b, c, d, e) {
         a.x = 1; // Error, access must be through C or type derived from C
         b.x = 1; // Error, access must be through C or type derived from C
         c.x = 1;
@@ -208,7 +218,8 @@ var C = /** @class */ (function (_super) {
     return C;
 }(A));
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);function D() {
+    __extends(D, _super);
+    function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
@@ -233,13 +244,15 @@ var a1;
 var b1;
 a1 = b1; // Error, B1 doesn't derive from A1
 b1 = a1; // Error, x is protected in A1 but public in B1
+
 var A2 = /** @class */ (function () {
     function A2() {
     }
     return A2;
 }());
 var B2 = /** @class */ (function (_super) {
-    __extends(B2, _super);function B2() {
+    __extends(B2, _super);
+    function B2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B2;
@@ -251,7 +264,8 @@ var A3 = /** @class */ (function () {
 }());
 // Error x is protected in B3 but public in A3
 var B3 = /** @class */ (function (_super) {
-    __extends(B3, _super);function B3() {
+    __extends(B3, _super);
+    function B3() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B3;

@@ -48,6 +48,7 @@ class K {constructor() {
     m() { }
     get g() { return 0; }
 }
+
 let k = new K();
 let sk = { ...k };
 let ssk = { ...k, ...k };
@@ -57,6 +58,7 @@ sk.g; // error
 ssk.p;
 ssk.m(); // error
 ssk.g; // error
+
 let i = { p: 12, m() { }, get g() { return 0; } };
 let si = { ...i };
 let ssi = { ...i, ...i };

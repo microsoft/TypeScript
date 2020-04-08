@@ -109,7 +109,6 @@ class B {
 }
 
 
-
 var a;
 var b;
 var c;
@@ -118,6 +117,7 @@ var e;
 var g;
 var h;
 var i;
+
 // Basic expression
 new f(1, 2, "string");
 new f(1, 2, ...a);

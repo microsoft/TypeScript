@@ -8,7 +8,8 @@ class C {
 //// [parserSuperExpression3.js]
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.M = function () {
+    }
+    C.prototype.M = function () {
         this["super"](0);
     };
     return C;

@@ -158,7 +158,8 @@ var y = outer(5).y;
 
 var ListWrapper2 = /** @class */ (function () {
     function ListWrapper2() {
-    }ListWrapper2.clone = function (dit, array) { return array.slice(0); };
+    }
+    ListWrapper2.clone = function (dit, array) { return array.slice(0); };
     ListWrapper2.reversed = function (dit, array) {
         var a = ListWrapper2.clone(dit, array);
         return a;
@@ -241,7 +242,8 @@ var ListWrapper = /** @class */ (function () {
     };
     ListWrapper.clear = function (dit, list) { list.length = 0; };
     ListWrapper.isEmpty = function (dit, list) { return list.length == 0; };
-    ListWrapper.fill = function (dit, list, value, start, end) {if (start === void 0) { start = 0; }if (end === void 0) { end = null; }
+    ListWrapper.fill = function (dit, list, value, start, end) {if (start === void 0) { start = 0; }
+        if (end === void 0) { end = null; }
         list.fill(value, start, end === null ? list.length : end);
     };
     ListWrapper.equals = function (dit, a, b) {
@@ -253,7 +255,8 @@ var ListWrapper = /** @class */ (function () {
         }
         return true;
     };
-    ListWrapper.slice = function (dit, l, from, to) {if (from === void 0) { from = 0; }if (to === void 0) { to = null; }
+    ListWrapper.slice = function (dit, l, from, to) {if (from === void 0) { from = 0; }
+        if (to === void 0) { to = null; }
         return l.slice(from, to === null ? undefined : to);
     };
     ListWrapper.splice = function (dit, l, from, length) { return l.splice(from, length); };

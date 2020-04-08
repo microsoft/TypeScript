@@ -28,5 +28,6 @@ class SymbolIterator {
         return this;
     }
 }
+
 var array;
 array.concat([...new SymbolIterator]);

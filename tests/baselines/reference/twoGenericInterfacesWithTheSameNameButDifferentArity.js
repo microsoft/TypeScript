@@ -42,9 +42,3 @@ module M3 {
 }
 
 //// [twoGenericInterfacesWithTheSameNameButDifferentArity.js]
-
-
-
-
-
-

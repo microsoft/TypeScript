@@ -264,6 +264,7 @@ const f08 = pipe(x => list(x), pipe(x => box(x)));
 const f09 = pipe(list, x => x.length);
 const f10 = pipe(foo);
 const f11 = pipe(foo, foo);
+
 const g00 = pipe(list);
 const g01 = pipe(list, box);
 const g02 = pipe(box, list);
@@ -277,6 +278,7 @@ const g09 = pipe(list, x => x.length);
 const g10 = pipe(foo);
 const g12 = pipe(foo, foo);
 
+
 const f20 = pipe2(list, box);
 const f21 = pipe2(box, list);
 const f22 = pipe2(list, list);
@@ -284,13 +286,23 @@ const f23 = pipe2(box, box);
 const f24 = pipe2(f20, f20);
 const f25 = pipe2(foo, foo);
 const f26 = pipe2(f25, f25);
+
+
 const f30 = pipe3(list, box);
 const f31 = pipe3(box, list);
 const f32 = pipe3(list, list);
+
+
 const f40 = pipe4([list, box]);
 const f41 = pipe4([box, list]);
+
+
 const f50 = pipe5(list); // No higher order inference
+
+
 let f60 = wrap3(baz);
+
+
 let f70 = pipe(list2, box);
 let f71 = pipe(box, list2);
 
@@ -298,6 +310,7 @@ let f71 = pipe(box, list2);
 function asFunction(cf) {
     return (...args) => new cf(...args);
 }
+
 const newPoint = asFunction(Point);
 const newBag = asFunction(Bag);
 const p1 = new Point(10, 20);
@@ -306,11 +319,8 @@ const bag1 = new Bag(1, 2, 3);
 const bag2 = newBag('a', 'b', 'c');
 
 
-
-
-
-
 const GenericComp2 = myHoc(GenericComp);
+
 // #417
 function mirror(f) { return f; }
 var identityM = mirror(identity);
@@ -318,6 +328,7 @@ var identityM = mirror(identity);
 var x = 1;
 var y = identity(x);
 var z = identityM(x);
+
 // #3038
 export function keyOf(value) {
     return value.key;
@@ -325,7 +336,11 @@ export function keyOf(value) {
 
 var data = [];
 
+
 toKeys(data, keyOf); // Error
+
+
+
 // #9366
 function flip(f) {
     return (b, a) => f(a, b);
@@ -336,6 +351,7 @@ function zip(x, y) {
 
 var expected = flip(zip);
 var actual = flip(zip);
+
 // #9366
 const map = (transform) => (arr) => arr.map(transform);
 
@@ -348,13 +364,20 @@ const arr1 = map(identity)(['a']);
 function of2(one, two) {
     return [one, two];
 }
+
 const flipped = flip(of2);
+
+
+
+
+
 
 const enhance = pipe(
 myHoc1,
     myHoc2);
 
 const MyComponent2 = enhance(MyComponent1);
+
 // #29904.2
 const fn20 = pipe((_a) => 1);
 
@@ -364,15 +387,20 @@ const fn20 = pipe((_a) => 1);
 const fn30 = pipe(
 x => x + 1,
     x => x * 2);
+
 const promise = Promise.resolve(1);
 promise.then(
 pipe(
 x => x + 1,
     x => x * 2));
+
+
 const fn40 = pipe(
 getString,
     string => orUndefined(string),
     identity);
+
+
 const fn60 = pipe(
 getArray,
     x => x,
@@ -387,7 +415,10 @@ const fn62 = pipe(
 getArray,
     x => x,
     x => first(x));
+
+
 foo2(() => { });
 foo2(identity);
 foo2(identity, 1);
+
 const a2 = times(identity)(5); // => [0, 1, 2, 3, 4]

@@ -44,7 +44,8 @@ function filter(handler) {
 }
 var Wat = /** @class */ (function () {
     function Wat() {
-    }Wat.whatever = function () {
+    }
+    Wat.whatever = function () {
         // ...
     };
     __decorate([

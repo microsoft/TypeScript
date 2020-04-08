@@ -490,7 +490,6 @@ var bigEnum;
     bigEnum[bigEnum["class"] = 20] = "class";
     bigEnum[bigEnum["continue"] = 21] = "continue";
     bigEnum[bigEnum["const"] = 22] = "const";
-
     bigEnum[bigEnum["debugger"] = 23] = "debugger";
     bigEnum[bigEnum["declare"] = 24] = "declare";
     bigEnum[bigEnum["default"] = 25] = "default";
@@ -505,7 +504,6 @@ var bigEnum;
     bigEnum[bigEnum["for"] = 34] = "for";
     bigEnum[bigEnum["function"] = 35] = "function";
     bigEnum[bigEnum["if"] = 36] = "if";
-
     bigEnum[bigEnum["import"] = 37] = "import";
     bigEnum[bigEnum["in"] = 38] = "in";
     bigEnum[bigEnum["instanceof"] = 39] = "instanceof";

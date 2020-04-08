@@ -24,6 +24,7 @@ function f6(x: string, y) {
 
 function f3(x) {
 }
+
 function f4(x) {
     return x;
 }

@@ -24,6 +24,7 @@ var h = tempFun `${ (x => x) } ${ (((x => x))) } ${ undefined }`
 function tempFun(tempStrs, g, x) {
     return g(x);
 }
+
 var a = tempFun `${x => x}  ${10}`;
 var b = tempFun `${(x => x)}  ${10}`;
 var c = tempFun `${((x => x))} ${10}`;

@@ -30,15 +30,18 @@ var __extends = (this && this.__extends) || (function () {
 })();var EventBase = /** @class */ (function () {
     function EventBase() {
         this._listeners = [];
-    }EventBase.prototype.add = function (listener) {
+    }
+    EventBase.prototype.add = function (listener) {
         this._listeners.push(listener);
     };
     return EventBase;
 }());
 var StringEvent = /** @class */ (function (_super) {
-    __extends(StringEvent, _super);function StringEvent() {
+    __extends(StringEvent, _super);
+    function StringEvent() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }StringEvent.prototype.add = function (listener) {
+    }
+    StringEvent.prototype.add = function (listener) {
         _super.prototype.add.call(this, listener);
     };
     return StringEvent;

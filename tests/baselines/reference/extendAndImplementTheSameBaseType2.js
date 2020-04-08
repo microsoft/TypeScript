@@ -31,15 +31,18 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var C = /** @class */ (function () {
     function C() {
-    }C.prototype.bar = function () {
+    }
+    C.prototype.bar = function () {
         return null;
     };
     return C;
 }());
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);function D() {
+    __extends(D, _super);
+    function D() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }D.prototype.baz = function () { };
+    }
+    D.prototype.baz = function () { };
     return D;
 }(C));
 var d = new D();

@@ -43,7 +43,6 @@ function foo15(x: any) { }
 // object types are identical structurally
 
 
-
 var a;
 
 function foo2(x) { }

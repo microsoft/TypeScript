@@ -105,20 +105,22 @@ function foo15(x: any) { }
 
 var A = /** @class */ (function () {
     function A() {
-    }A.prototype.foo = function (x) { return null; };
+    }
+    A.prototype.foo = function (x) { return null; };
     return A;
 }());
 var B = /** @class */ (function () {
     function B() {
-    }B.prototype.foo = function (x, y) { return null; };
+    }
+    B.prototype.foo = function (x, y) { return null; };
     return B;
 }());
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.foo = function (x, y) { return null; };
+    }
+    C.prototype.foo = function (x, y) { return null; };
     return C;
 }());
-
 
 var a;
 var b = { foo: function (x) { return ''; } };

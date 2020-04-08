@@ -25,6 +25,7 @@ function tryCatch() {
 
 
 //// [narrowExceptionVariableInCatchClause.js]
+
 function tryCatch() {
     try {
         // do stuff...

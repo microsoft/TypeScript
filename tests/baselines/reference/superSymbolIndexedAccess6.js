@@ -30,15 +30,18 @@ var __extends = (this && this.__extends) || (function () {
 
 var Foo = /** @class */ (function () {
     function Foo() {
-    }Foo[symbol] = function () {
+    }
+    Foo[symbol] = function () {
         return 0;
     };
     return Foo;
 }());
 var Bar = /** @class */ (function (_super) {
-    __extends(Bar, _super);function Bar() {
+    __extends(Bar, _super);
+    function Bar() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Bar[symbol] = function () {
+    }
+    Bar[symbol] = function () {
         return _super[symbol].call(this);
     };
     return Bar;

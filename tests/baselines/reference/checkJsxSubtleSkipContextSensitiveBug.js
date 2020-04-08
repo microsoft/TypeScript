@@ -80,11 +80,12 @@ exports.__esModule = true;
 var React = require("react");
 
 
-
 var AsyncLoader = /** @class */ (function (_super) {
-    __extends(AsyncLoader, _super);function AsyncLoader() {
+    __extends(AsyncLoader, _super);
+    function AsyncLoader() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }AsyncLoader.prototype.render = function () { return null; };
+    }
+    AsyncLoader.prototype.render = function () { return null; };
     return AsyncLoader;
 }(React.Component));
 function load() {

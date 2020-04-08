@@ -61,7 +61,8 @@ var _this = this;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
-                    _b = bar;return [4 /*yield*/, foo];
+                    _b = bar;
+                    return [4 /*yield*/, foo];
                 case 1: return [2 /*return*/, _b.apply(void 0, [_c.sent()])];
             }
         });

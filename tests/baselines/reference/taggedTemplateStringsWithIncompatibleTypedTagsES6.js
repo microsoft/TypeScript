@@ -35,6 +35,7 @@ f.thisIsNotATag(`abc${1}def${2}ghi`);
 //// [taggedTemplateStringsWithIncompatibleTypedTagsES6.js]
 
 var f;
+
 f `abc`;
 
 f `abc${1}def${2}ghi`;

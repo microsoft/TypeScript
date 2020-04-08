@@ -102,19 +102,23 @@ var __extends = (this && this.__extends) || (function () {
 
 var C1 = /** @class */ (function () {
     function C1() {
-    }C1.prototype.IM1 = function () { return null; };
+    }
+    C1.prototype.IM1 = function () { return null; };
     C1.prototype.C1M1 = function () { return null; };
     return C1;
 }());
 var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);function C2() {
+    __extends(C2, _super);
+    function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }C2.prototype.C2M1 = function () { return null; };
+    }
+    C2.prototype.C2M1 = function () { return null; };
     return C2;
 }(C1));
 var C3 = /** @class */ (function () {
     function C3() {
-    }C3.prototype.CM3M1 = function () { return 3; };
+    }
+    C3.prototype.CM3M1 = function () { return 3; };
     return C3;
 }());
 /*
@@ -149,6 +153,8 @@ var i1_error = []; // should be an error - is
 var c1_error = []; // should be an error - is
 var c2_error = []; // should be an error - is
 var c3_error = []; // should be an error - is
+
+
 arr_any = arr_i1; // should be ok - is
 arr_any = arr_c1; // should be ok - is
 arr_any = arr_c2; // should be ok - is

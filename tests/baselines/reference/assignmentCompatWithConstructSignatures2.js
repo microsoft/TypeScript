@@ -47,14 +47,17 @@ a = function (x: string) { return ''; }
 
 var t;
 var a;
+
 t = a;
 a = t;
+
 var s;
 var a2;
 t = s;
 t = a2;
 a = s;
 a = a2;
+
 // errors
 t = function () { return 1; };
 t = function (x) { return ''; };

@@ -80,6 +80,7 @@ var a;
 var b;
 a = b; // ok
 b = a; // error
+
 var b2;
 a = b2; // ok
 b2 = a; // error
@@ -91,7 +92,8 @@ var Generics;
         return A;
     }());
     var B = /** @class */ (function (_super) {
-        __extends(B, _super);function B() {
+        __extends(B, _super);
+        function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
@@ -100,8 +102,9 @@ var Generics;
     var a1;
     a1 = b1; // ok
     b1 = a1; // error
+
     var B2 = /** @class */ (function (_super) {
-        __extends(B2, _super);// error
+        __extends(B2, _super);
         function B2() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
@@ -110,11 +113,13 @@ var Generics;
     var b2;
     a1 = b2; // ok
     b2 = a1; // error
+
     function foo() {
         var b3;
         var a3;
         a3 = b3; // error
         b3 = a3; // error
+
         var b4;
         a3 = b4; // error
         b4 = a3; // error

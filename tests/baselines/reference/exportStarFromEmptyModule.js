@@ -30,7 +30,8 @@ var A = /** @class */ (function () {
     function A() {
     }
     return A;
-}());exports.A = A;
+}());
+exports.A = A;
 //// [exportStarFromEmptyModule_module2.js]
 // empty
 //// [exportStarFromEmptyModule_module3.js]
@@ -54,7 +55,8 @@ var A = /** @class */ (function () {
     function A() {
     }
     return A;
-}());exports.A = A;
+}());
+exports.A = A;
 //// [exportStarFromEmptyModule_module4.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

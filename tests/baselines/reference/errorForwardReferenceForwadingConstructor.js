@@ -38,7 +38,8 @@ var base = /** @class */ (function () {
     return base;
 }());
 var derived = /** @class */ (function (_super) {
-    __extends(derived, _super);function derived() {
+    __extends(derived, _super);
+    function derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return derived;

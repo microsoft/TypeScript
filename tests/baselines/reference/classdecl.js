@@ -142,7 +142,8 @@ var __extends = (this && this.__extends) || (function () {
     return a;
 }());
 var b = /** @class */ (function (_super) {
-    __extends(b, _super);function b() {
+    __extends(b, _super);
+    function b() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return b;
@@ -166,7 +167,8 @@ var m2;
     var m3;
     (function (m3) {
         var c = /** @class */ (function (_super) {
-            __extends(c, _super);function c() {
+            __extends(c, _super);
+            function c() {
                 return _super !== null && _super.apply(this, arguments) || this;
             }
             return c;
@@ -181,7 +183,8 @@ var m2;
     })(m3 = m2.m3 || (m2.m3 = {}));
 })(m2 || (m2 = {}));
 var c = /** @class */ (function (_super) {
-    __extends(c, _super);function c() {
+    __extends(c, _super);
+    function c() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return c;
@@ -194,14 +197,16 @@ var ib2 = /** @class */ (function () {
 
 var d = /** @class */ (function () {
     function d() {
-    }d.prototype.foo = function (ns) {
+    }
+    d.prototype.foo = function (ns) {
         return ns.toString();
     };
     return d;
 }());
 var e = /** @class */ (function () {
     function e() {
-    }e.prototype.foo = function (ns) {
+    }
+    e.prototype.foo = function (ns) {
         return ns.toString();
     };
     return e;

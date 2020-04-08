@@ -73,4 +73,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = void 0;
 exports.foo = import.meta.blah = import.meta.blue = import.meta;
 import.meta = exports.foo;
+
+
 const { a, b, c } = import.meta.wellKnownProperty;

@@ -63,7 +63,8 @@ var B = /** @class */ (function () {
     return B;
 }());
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);function C() {
+    __extends(C, _super);
+    function C() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.ro = "readonly please";
         return _this;
@@ -77,13 +78,15 @@ var C = /** @class */ (function (_super) {
 }(B));
 var c = new C();
 c.ro = "error: lhs of assignment can't be readonly";
+
 var WrongTypeProperty = /** @class */ (function () {
     function WrongTypeProperty() {
     }
     return WrongTypeProperty;
 }());
 var WrongTypePropertyImpl = /** @class */ (function (_super) {
-    __extends(WrongTypePropertyImpl, _super);function WrongTypePropertyImpl() {
+    __extends(WrongTypePropertyImpl, _super);
+    function WrongTypePropertyImpl() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.num = "nope, wrong";
         return _this;
@@ -96,7 +99,8 @@ var WrongTypeAccessor = /** @class */ (function () {
     return WrongTypeAccessor;
 }());
 var WrongTypeAccessorImpl = /** @class */ (function (_super) {
-    __extends(WrongTypeAccessorImpl, _super);function WrongTypeAccessorImpl() {
+    __extends(WrongTypeAccessorImpl, _super);
+    function WrongTypeAccessorImpl() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(WrongTypeAccessorImpl.prototype, "num", {
@@ -107,7 +111,8 @@ var WrongTypeAccessorImpl = /** @class */ (function (_super) {
     return WrongTypeAccessorImpl;
 }(WrongTypeAccessor));
 var WrongTypeAccessorImpl2 = /** @class */ (function (_super) {
-    __extends(WrongTypeAccessorImpl2, _super);function WrongTypeAccessorImpl2() {
+    __extends(WrongTypeAccessorImpl2, _super);
+    function WrongTypeAccessorImpl2() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.num = "nope, wrong";
         return _this;

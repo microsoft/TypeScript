@@ -182,6 +182,7 @@ var GenericSignaturesInvalid;
     function foo() {
         var b;
         var t;
+
         // all errors
         b.a = t.a;
         b.a = t.a2;

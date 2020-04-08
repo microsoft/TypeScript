@@ -29,5 +29,3 @@ interface i3 {
 }
 
 //// [collisionArgumentsInterfaceMembers.js]
-
-

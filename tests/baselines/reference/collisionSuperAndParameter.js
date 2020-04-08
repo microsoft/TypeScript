@@ -77,7 +77,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var Foo = /** @class */ (function () {
     function Foo() {
-    }Foo.prototype.a = function () {
+    }
+    Foo.prototype.a = function () {
         var _this = this;
         var lamda = function (_super) {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
@@ -99,25 +100,6 @@ var __extends = (this && this.__extends) || (function () {
 }());
 var Foo2 = /** @class */ (function (_super_1) {
     __extends(Foo2, _super_1);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     function Foo2(_super) {
         var _this = _super_1.call(this) || this;
         _this.prop4 = {
@@ -148,7 +130,6 @@ var Foo2 = /** @class */ (function (_super_1) {
 
 var Foo4 = /** @class */ (function (_super_1) {
     __extends(Foo4, _super_1);
-
     function Foo4(_super) {
         return _super_1.call(this) || this;
     }

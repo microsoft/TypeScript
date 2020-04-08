@@ -302,7 +302,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 3 >         ^^^^
 4 >             ^
 5 >              ^^
-6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >
@@ -319,7 +319,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 4 >Emitted(14, 15) Source(15, 15) + SourceIndex(0)
 5 >Emitted(14, 17) Source(18, 35) + SourceIndex(0)
 ---
->>>    var _b = _a[0], nameMA = _b === void 0 ? "noName" : _b, _c = _a[1], _d = _c === void 0 ? ["noSkill", "noSkill"] : _c, _e = _d[0], primarySkillA = _e === void 0 ? "primary" : _e,
+>>>    var _b = _a[0], nameMA = _b === void 0 ? "noName" : _b, _c = _a[1], _d = _c === void 0 ? ["noSkill", "noSkill"] : _c, _e = _d[0], primarySkillA = _e === void 0 ? "primary" : _e, _f = _d[1], secondarySkillA = _f === void 0 ? "secondary" : _f;
 1->^^^^^^^^
 2 >        ^^^^^^^^^^
 3 >                  ^^
@@ -344,6 +344,13 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 22>                                                                                                                                                   ^^^^^^^^^^^^^^^^^^^
 23>                                                                                                                                                                      ^^^^^^^^^
 24>                                                                                                                                                                               ^^^^^
+25>                                                                                                                                                                                    ^^
+26>                                                                                                                                                                                      ^^^^^^^^^^
+27>                                                                                                                                                                                                ^^
+28>                                                                                                                                                                                                  ^^^^^^^^^^^^^^^
+29>                                                                                                                                                                                                                 ^^^^^^^^^^^^^^^^^^^
+30>                                                                                                                                                                                                                                    ^^^^^^^^^^^
+31>                                                                                                                                                                                                                                               ^^^^^
 1->
 2 >        nameMA = "noName"
 3 >                  
@@ -374,6 +381,14 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 22>                                                                                                                                                    = 
 23>                                                                                                                                                                      "primary"
 24>                                                                                                                                                                               
+25>                                                                                                                                                                                    ,
+  >                                                                                                                                                                                        
+26>                                                                                                                                                                                      secondarySkillA = "secondary"
+27>                                                                                                                                                                                                
+28>                                                                                                                                                                                                  secondarySkillA
+29>                                                                                                                                                                                                                  = 
+30>                                                                                                                                                                                                                                    "secondary"
+31>                                                                                                                                                                                                                                               
 1->Emitted(15, 9) Source(15, 16) + SourceIndex(0)
 2 >Emitted(15, 19) Source(15, 33) + SourceIndex(0)
 3 >Emitted(15, 21) Source(15, 16) + SourceIndex(0)
@@ -398,30 +413,13 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 22>Emitted(15, 167) Source(16, 21) + SourceIndex(0)
 23>Emitted(15, 176) Source(16, 30) + SourceIndex(0)
 24>Emitted(15, 181) Source(16, 30) + SourceIndex(0)
----
->>>        _f = _d[1], secondarySkillA = _f === void 0 ? "secondary" : _f;
-1 >^^^^^^^^
-2 >        ^^^^^^^^^^
-3 >                  ^^
-4 >                    ^^^^^^^^^^^^^^^
-5 >                                   ^^^^^^^^^^^^^^^^^^^
-6 >                                                      ^^^^^^^^^^^
-7 >                                                                 ^^^^^
-1 >,
-  >    
-2 >        secondarySkillA = "secondary"
-3 >                  
-4 >                    secondarySkillA
-5 >                                    = 
-6 >                                                      "secondary"
-7 >                                                                 
-1 >Emitted(16, 9) Source(17, 5) + SourceIndex(0)
-2 >Emitted(16, 19) Source(17, 34) + SourceIndex(0)
-3 >Emitted(16, 21) Source(17, 5) + SourceIndex(0)
-4 >Emitted(16, 36) Source(17, 20) + SourceIndex(0)
-5 >Emitted(16, 55) Source(17, 23) + SourceIndex(0)
-6 >Emitted(16, 66) Source(17, 34) + SourceIndex(0)
-7 >Emitted(16, 71) Source(17, 34) + SourceIndex(0)
+25>Emitted(15, 183) Source(17, 5) + SourceIndex(0)
+26>Emitted(15, 193) Source(17, 34) + SourceIndex(0)
+27>Emitted(15, 195) Source(17, 5) + SourceIndex(0)
+28>Emitted(15, 210) Source(17, 20) + SourceIndex(0)
+29>Emitted(15, 229) Source(17, 23) + SourceIndex(0)
+30>Emitted(15, 240) Source(17, 34) + SourceIndex(0)
+31>Emitted(15, 245) Source(17, 34) + SourceIndex(0)
 ---
 >>>    console.log(nameMA);
 1 >^^^^
@@ -442,34 +440,34 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 6 >                nameMA
 7 >                      )
 8 >                       ;
-1 >Emitted(17, 5) Source(19, 5) + SourceIndex(0)
-2 >Emitted(17, 12) Source(19, 12) + SourceIndex(0)
-3 >Emitted(17, 13) Source(19, 13) + SourceIndex(0)
-4 >Emitted(17, 16) Source(19, 16) + SourceIndex(0)
-5 >Emitted(17, 17) Source(19, 17) + SourceIndex(0)
-6 >Emitted(17, 23) Source(19, 23) + SourceIndex(0)
-7 >Emitted(17, 24) Source(19, 24) + SourceIndex(0)
-8 >Emitted(17, 25) Source(19, 25) + SourceIndex(0)
+1 >Emitted(16, 5) Source(19, 5) + SourceIndex(0)
+2 >Emitted(16, 12) Source(19, 12) + SourceIndex(0)
+3 >Emitted(16, 13) Source(19, 13) + SourceIndex(0)
+4 >Emitted(16, 16) Source(19, 16) + SourceIndex(0)
+5 >Emitted(16, 17) Source(19, 17) + SourceIndex(0)
+6 >Emitted(16, 23) Source(19, 23) + SourceIndex(0)
+7 >Emitted(16, 24) Source(19, 24) + SourceIndex(0)
+8 >Emitted(16, 25) Source(19, 25) + SourceIndex(0)
 ---
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^->
 1 >
   >
 2 >}
-1 >Emitted(18, 1) Source(20, 1) + SourceIndex(0)
-2 >Emitted(18, 2) Source(20, 2) + SourceIndex(0)
+1 >Emitted(17, 1) Source(20, 1) + SourceIndex(0)
+2 >Emitted(17, 2) Source(20, 2) + SourceIndex(0)
 ---
+>>>
 >>>foo1(robotA);
-1->
+1 >
 2 >^^^^
 3 >    ^
 4 >     ^^^^^^
 5 >           ^
 6 >            ^
 7 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
+1 >
   >
   >
 2 >foo1
@@ -477,7 +475,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 4 >     robotA
 5 >           )
 6 >            ;
-1->Emitted(19, 1) Source(22, 1) + SourceIndex(0)
+1 >Emitted(19, 1) Source(22, 1) + SourceIndex(0)
 2 >Emitted(19, 5) Source(22, 5) + SourceIndex(0)
 3 >Emitted(19, 6) Source(22, 6) + SourceIndex(0)
 4 >Emitted(19, 12) Source(22, 12) + SourceIndex(0)

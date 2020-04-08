@@ -32,10 +32,10 @@ exports.MyComponent = void 0;
 var React = require("react");
 
 
-
 function MyComponent(_props) {
     return React.createElement("span", null, "my component");
-}exports.MyComponent = MyComponent;
+}
+exports.MyComponent = MyComponent;
 //// [file1.js]
 "use strict";
 exports.__esModule = true;

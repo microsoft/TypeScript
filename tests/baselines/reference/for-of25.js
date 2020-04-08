@@ -14,5 +14,6 @@ class StringIterator {
         return x;
     }
 }
+
 var x;
 for (var v of new StringIterator) { }

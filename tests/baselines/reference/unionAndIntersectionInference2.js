@@ -37,6 +37,7 @@ f1(c1); // string[]
 f1(d1); // { name: string }
 f1(e1); // number | boolean
 
+
 var a2;
 var b2;
 var c2;

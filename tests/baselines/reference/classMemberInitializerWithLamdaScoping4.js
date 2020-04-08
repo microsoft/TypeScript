@@ -31,4 +31,5 @@ var Test1 = /** @class */ (function () {
         };
     }
     return Test1;
-}());exports.Test1 = Test1;
+}());
+exports.Test1 = Test1;

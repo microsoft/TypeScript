@@ -38,11 +38,13 @@ exports.__esModule = true;
 exports.Broken = void 0;
 var Broken = /** @class */ (function () {
     function Broken() {
-    }Broken.prototype.method = function () {
+    }
+    Broken.prototype.method = function () {
         return {};
     };
     return Broken;
-}());exports.Broken = Broken;
+}());
+exports.Broken = Broken;
 
 
 //// [types.d.ts]

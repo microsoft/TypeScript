@@ -14,7 +14,8 @@ define(["require", "exports"], function (require, exports) {
     var C = /** @class */ (function () {
         function C() {}
         return C;
-    }());exports.C = C;
+    }());
+    exports.C = C;
 });
 //// [1.js]
 define(["require", "exports"], function (require, exports) {

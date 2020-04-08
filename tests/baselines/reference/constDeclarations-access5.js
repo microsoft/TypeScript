@@ -82,6 +82,7 @@ define(["require", "exports", "constDeclarations_access_1"], function (require, 
 
     // OK
     var a = m.x + 1;
+
     function f(v) { }
     f(m.x);
 

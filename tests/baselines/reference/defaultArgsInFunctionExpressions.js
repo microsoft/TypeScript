@@ -39,6 +39,7 @@ var n = f(4);
 n = f();
 var s = f('');
 s = f();
+
 // Type check the default argument with the type annotation
 var f2 = function (a) {if (a === void 0) { a = 3; }
     return a;
@@ -46,6 +47,7 @@ var f2 = function (a) {if (a === void 0) { a = 3; }
 s = f2('');
 s = f2();
 n = f2();
+
 // Contextually type the default arg with the type annotation
 var f3 = function (a) {if (a === void 0) { a = function (s) { return s; }; }};
 
@@ -62,4 +64,5 @@ var f6 = function (t) {if (t === void 0) { t = T; }};
 var f7 = function (t) {if (t === void 0) { t = U; }
     return t;
 };
+
 f7().x;

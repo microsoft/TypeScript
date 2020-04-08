@@ -40,5 +40,6 @@ var B;
 })(B || (B = {}));
 var a;
 var b;
+
 a = b;
 b = a; // error

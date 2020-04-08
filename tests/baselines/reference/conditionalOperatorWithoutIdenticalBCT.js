@@ -44,22 +44,26 @@ var X = /** @class */ (function () {
 }());
 ;
 var A = /** @class */ (function (_super) {
-    __extends(A, _super);function A() {
+    __extends(A, _super);
+    function A() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return A;
 }(X));
 ;
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(X));
 ;
+
 var x;
 var a;
 var b;
+
 // No errors anymore, uses union types
 true ? a : b;
 var result1 = true ? a : b;

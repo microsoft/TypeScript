@@ -213,8 +213,10 @@ sourceFile:index.ts
 exports.__esModule = true;
 exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
-function leftPad(s, n) { return s + n; }exports.leftPad = leftPad;
-function multiply(a, b) { return a * b; }exports.multiply = multiply;
+function leftPad(s, n) { return s + n; }
+exports.leftPad = leftPad;
+function multiply(a, b) { return a * b; }
+exports.multiply = multiply;
 
 
 //// [/src/core/tsconfig.tsbuildinfo]
@@ -274,13 +276,14 @@ exports.m = exports.getSecondsInDay = void 0;
 var c = require("../core/index");
 function getSecondsInDay() {
     return c.multiply(10, 15);
-}exports.getSecondsInDay = getSecondsInDay;
+}
+exports.getSecondsInDay = getSecondsInDay;
 var mod = require("../core/anotherModule");
 exports.m = mod;
 //# sourceMappingURL=index.js.map
 
 //// [/src/logic/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC,AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
 
 //// [/src/logic/index.js.map.baseline.txt]
 ===================================================================
@@ -329,7 +332,6 @@ sourceFile:index.ts
 9 >                          ^^
 10>                            ^
 11>                             ^
-12>                              ^^^^^^^^^^^^^^->
 1->() {
   >    
 2 >    return 
@@ -354,23 +356,26 @@ sourceFile:index.ts
 10>Emitted(6, 30) Source(3, 30) + SourceIndex(0)
 11>Emitted(6, 31) Source(3, 31) + SourceIndex(0)
 ---
->>>}exports.getSecondsInDay = getSecondsInDay;
-1->
+>>>}
+1 >
 2 >^
-3 > 
-4 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                           ^->
-1->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
   >
 2 >}
-3 > 
-4 > export function getSecondsInDay() {
-  >     return c.multiply(10, 15);
-  > }
-1->Emitted(7, 1) Source(4, 1) + SourceIndex(0)
+1 >Emitted(7, 1) Source(4, 1) + SourceIndex(0)
 2 >Emitted(7, 2) Source(4, 2) + SourceIndex(0)
-3 >Emitted(7, 2) Source(2, 1) + SourceIndex(0)
-4 >Emitted(7, 44) Source(4, 2) + SourceIndex(0)
+---
+>>>exports.getSecondsInDay = getSecondsInDay;
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                          ^^->
+1->
+2 >export function getSecondsInDay() {
+  >    return c.multiply(10, 15);
+  >}
+1->Emitted(8, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(8, 43) Source(4, 2) + SourceIndex(0)
 ---
 >>>var mod = require("../core/anotherModule");
 1->
@@ -378,8 +383,8 @@ sourceFile:index.ts
 1->
   >
 2 >import * as mod from '../core/anotherModule';
-1->Emitted(8, 1) Source(5, 1) + SourceIndex(0)
-2 >Emitted(8, 44) Source(5, 46) + SourceIndex(0)
+1->Emitted(9, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(9, 44) Source(5, 46) + SourceIndex(0)
 ---
 >>>exports.m = mod;
 1 >
@@ -396,12 +401,12 @@ sourceFile:index.ts
 4 >          = 
 5 >            mod
 6 >               ;
-1 >Emitted(9, 1) Source(6, 14) + SourceIndex(0)
-2 >Emitted(9, 9) Source(6, 14) + SourceIndex(0)
-3 >Emitted(9, 10) Source(6, 15) + SourceIndex(0)
-4 >Emitted(9, 13) Source(6, 18) + SourceIndex(0)
-5 >Emitted(9, 16) Source(6, 21) + SourceIndex(0)
-6 >Emitted(9, 17) Source(6, 22) + SourceIndex(0)
+1 >Emitted(10, 1) Source(6, 14) + SourceIndex(0)
+2 >Emitted(10, 9) Source(6, 14) + SourceIndex(0)
+3 >Emitted(10, 10) Source(6, 15) + SourceIndex(0)
+4 >Emitted(10, 13) Source(6, 18) + SourceIndex(0)
+5 >Emitted(10, 16) Source(6, 21) + SourceIndex(0)
+6 >Emitted(10, 17) Source(6, 22) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=index.js.map
 
@@ -487,8 +492,10 @@ exports.__esModule = true;
 exports.m = void 0;
 var c = require("../core/index");
 var logic = require("../logic/index");
+
 c.leftPad("", 10);
 logic.getSecondsInDay();
+
 var mod = require("../core/anotherModule");
 exports.m = mod;
 

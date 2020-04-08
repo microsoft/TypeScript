@@ -30,6 +30,7 @@ var s;
 var t1 = 10;
 var t2 = 10;
 var s;
+
 // TempateHead & TemplateTail are empty
 `${Math.pow(t1, t2)}`;
 `${Math.pow(t1, Math.pow(t2, t1))}`;

@@ -23,5 +23,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         yield 10;
         throw new Error();
     }))();
+
     var x = 1;
 }

@@ -75,11 +75,13 @@ var [c14, c15, c16] = [1, 2, "string"];
 //      S is the type Any, or
 var [a0, a1] = undefined;
 var [a2 = false, a3 = 1] = undefined;
+
 // V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
 //      S is a tuple- like type (section 3.3.3) with a property named N of a type that is assignable to the target given in E,
 //        where N is the numeric index of E in the array assignment pattern, or
 var [b0, b1, b2] = [2, 3, 4];
 var [b3, b4, b5] = [1, 2, "string"];
+
 function foo() {
     return [1, 2, 3];
 }

@@ -27,6 +27,7 @@ var myCars2 = new [];
 var myCars3 = new Array({});
 var myCars4; // error
 var myCars5;
+
 myCars = myCars2;
 myCars = myCars3;
 myCars = myCars4;

@@ -28,7 +28,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var Foo = /** @class */ (function () {
     function Foo() {
-    }Foo.prototype.fooMethod = function () { };
+    }
+    Foo.prototype.fooMethod = function () { };
     return Foo;
 }());
 var FooExtended = /** @class */ (function () {

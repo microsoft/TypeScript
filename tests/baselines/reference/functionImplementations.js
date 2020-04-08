@@ -186,6 +186,7 @@ var a = function f() {
     var x = f;
     return x;
 };
+
 // Two mutually recursive function implementations with no return type annotations
 function rec1() {
     return rec2();
@@ -250,7 +251,8 @@ var Base = /** @class */ (function () {
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);function Derived() {
+    __extends(Derived, _super);
+    function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived;
@@ -302,7 +304,8 @@ function f6() {
 }
 
 var Derived2 = /** @class */ (function (_super) {
-    __extends(Derived2, _super);function Derived2() {
+    __extends(Derived2, _super);
+    function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived2;

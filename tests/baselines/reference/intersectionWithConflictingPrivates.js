@@ -64,6 +64,7 @@ class B {}
 
 ab.y = 'hello';
 ab = {};
+
 function f1(node) {
     if (node instanceof A || node instanceof A) {
         node; // A

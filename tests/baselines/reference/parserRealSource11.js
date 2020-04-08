@@ -2393,17 +2393,6 @@ var TypeScript;
     TypeScript.ASTSpan = ASTSpan;
     var AST = /** @class */ (function (_super) {
         __extends(AST, _super);
-
-
-
-
-
-
-
-
-
-
-
         function AST(nodeType) {
             var _this = _super.call(this) || this;
             _this.nodeType = nodeType;
@@ -2550,6 +2539,7 @@ var TypeScript;
         AST.getResolvedIdentifierName = function (name) {
             if (!name)
                 return "";
+
             var resolved = "";
             var start = 0;
             var i = 0;
@@ -2585,9 +2575,6 @@ var TypeScript;
     TypeScript.IncompleteAST = IncompleteAST;
     var ASTList = /** @class */ (function (_super) {
         __extends(ASTList, _super);
-
-
-
         function ASTList() {
             var _this = _super.call(this, NodeType.List) || this;
             _this.enclosingScope = null;
@@ -2649,10 +2636,6 @@ var TypeScript;
     TypeScript.ASTList = ASTList;
     var Identifier = /** @class */ (function (_super) {
         __extends(Identifier, _super);
-
-
-
-
         // 'actualText' is the text that the user has entered for the identifier. the text might 
         // include any Unicode escape sequences (e.g.: \u0041 for 'A'). 'text', however, contains 
         // the resolved value of any escape sequences in the actual text; so in the previous 
@@ -2773,9 +2756,6 @@ var TypeScript;
     TypeScript.Expression = Expression;
     var UnaryExpression = /** @class */ (function (_super) {
         __extends(UnaryExpression, _super);
-
-
-
         function UnaryExpression(nodeType, operand) {
             var _this = _super.call(this, nodeType) || this;
             _this.operand = operand;
@@ -2832,15 +2812,18 @@ var TypeScript;
                     this.operand = typeFlow.typeCheck(this.operand);
                     this.type = typeFlow.booleanType;
                     break;
+
                 case NodeType.TypeAssertion:
                     this.castTerm = typeFlow.typeCheck(this.castTerm);
                     var applyTargetType = !this.operand.isParenthesized;
 
                     var targetType = applyTargetType ? this.castTerm.type : null;
+
                     typeFlow.checker.typeCheckWithContextualType(targetType, typeFlow.checker.inProvisionalTypecheckMode(), true, this.operand);
                     typeFlow.castWithCoercion(this.operand, this.castTerm.type, false, true);
                     this.type = this.castTerm.type;
                     return this;
+
                 case NodeType.Void:
                     // REVIEW - Although this is good to do for completeness's sake,
                     // this shouldn't be strictly necessary from the void operator's
@@ -3062,6 +3045,7 @@ var TypeScript;
 
         BinaryExpression.prototype.emit = function (emitter, tokenId, startLine) {
             var binTokenId = nodeTypeToTokTable[this.nodeType];
+
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
             if (binTokenId != undefined) {
@@ -3092,6 +3076,7 @@ var TypeScript;
                     case NodeType.Index:
                         emitter.emitIndex(this.operand1, this.operand2);
                         break;
+
                     case NodeType.Member:
                         if (this.operand2.nodeType == NodeType.FuncDecl && this.operand2.isAccessor()) {
                             var funcDecl = this.operand2;
@@ -3276,10 +3261,6 @@ var TypeScript;
     TypeScript.ModuleElement = ModuleElement;
     var ImportDeclaration = /** @class */ (function (_super) {
         __extends(ImportDeclaration, _super);
-
-
-
-
         function ImportDeclaration(id, alias) {
             var _this = _super.call(this, NodeType.ImportDeclaration) || this;
             _this.id = id;
@@ -3302,6 +3283,7 @@ var TypeScript;
             if (!this.isDynamicImport || (this.id.sym && !this.id.sym.onlyReferencedAsTypeRef)) {
                 var prevModAliasId = emitter.modAliasId;
                 var prevFirstModAlias = emitter.firstModAlias;
+
                 emitter.recordSourceMappingStart(this);
                 emitter.emitParensAndCommentsInPlace(this, true);
                 emitter.writeToOutput("var " + this.id.actualText + " = ");
@@ -3349,11 +3331,6 @@ var TypeScript;
     TypeScript.ImportDeclaration = ImportDeclaration;
     var BoundDecl = /** @class */ (function (_super) {
         __extends(BoundDecl, _super);
-
-
-
-
-
         function BoundDecl(id, nodeType, nestingLevel) {
             var _this = _super.call(this, nodeType) || this;
             _this.id = id;
@@ -3434,32 +3411,6 @@ var TypeScript;
 
     var FuncDecl = /** @class */ (function (_super) {
         __extends(FuncDecl, _super);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         function FuncDecl(name, bod, isConstructor,
             arguments, vars, scopes, statics,
             nodeType) {
@@ -3622,22 +3573,6 @@ var TypeScript;
 
     var Script = /** @class */ (function (_super) {
         __extends(Script, _super);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         function Script(vars, scopes) {
             var _this = _super.call(this, new Identifier("script"), null, false, null, vars, scopes, null, NodeType.Script) || this;
             _this.locationInfo = null;
@@ -3712,9 +3647,6 @@ var TypeScript;
     TypeScript.Script = Script;
     var NamedDeclaration = /** @class */ (function (_super) {
         __extends(NamedDeclaration, _super);
-
-
-
         function NamedDeclaration(nodeType,
             name,
             members) {
@@ -3730,16 +3662,6 @@ var TypeScript;
     TypeScript.NamedDeclaration = NamedDeclaration;
     var ModuleDeclaration = /** @class */ (function (_super) {
         __extends(ModuleDeclaration, _super);
-
-
-
-
-
-
-
-
-
-
         function ModuleDeclaration(name, members, vars, scopes, endingToken) {
             var _this = _super.call(this, NodeType.ModuleDeclaration, name, members) || this;
             _this.endingToken = endingToken;
@@ -3780,8 +3702,6 @@ var TypeScript;
     TypeScript.ModuleDeclaration = ModuleDeclaration;
     var TypeDeclaration = /** @class */ (function (_super) {
         __extends(TypeDeclaration, _super);
-
-
         function TypeDeclaration(nodeType,
             name,
             extendsList,
@@ -3806,11 +3726,6 @@ var TypeScript;
     TypeScript.TypeDeclaration = TypeDeclaration;
     var ClassDeclaration = /** @class */ (function (_super) {
         __extends(ClassDeclaration, _super);
-
-
-
-
-
         function ClassDeclaration(name,
             members,
             extendsList,
@@ -3973,10 +3888,6 @@ var TypeScript;
     TypeScript.Block = Block;
     var Jump = /** @class */ (function (_super) {
         __extends(Jump, _super);
-
-
-
-
         function Jump(nodeType) {
             var _this = _super.call(this, nodeType) || this;
             _this.target = null;
@@ -4036,8 +3947,6 @@ var TypeScript;
     TypeScript.Jump = Jump;
     var WhileStatement = /** @class */ (function (_super) {
         __extends(WhileStatement, _super);
-
-
         function WhileStatement(cond) {
             var _this = _super.call(this, NodeType.While) || this;
             _this.cond = cond;
@@ -4068,6 +3977,7 @@ var TypeScript;
             var loopHeader = context.current;
             var loopStart = new BasicBlock();
             var afterLoop = new BasicBlock();
+
             loopHeader.addSuccessor(loopStart);
             context.current = loopStart;
             context.addContent(this.cond);
@@ -4095,11 +4005,6 @@ var TypeScript;
     TypeScript.WhileStatement = WhileStatement;
     var DoWhileStatement = /** @class */ (function (_super) {
         __extends(DoWhileStatement, _super);
-
-
-
-
-
         function DoWhileStatement() {
             var _this = _super.call(this, NodeType.DoWhile) || this;
             _this.body = null;
@@ -4163,10 +4068,6 @@ var TypeScript;
     TypeScript.DoWhileStatement = DoWhileStatement;
     var IfStatement = /** @class */ (function (_super) {
         __extends(IfStatement, _super);
-
-
-
-
         function IfStatement(cond) {
             var _this = _super.call(this, NodeType.If) || this;
             _this.cond = cond;
@@ -4250,8 +4151,6 @@ var TypeScript;
     TypeScript.IfStatement = IfStatement;
     var ReturnStatement = /** @class */ (function (_super) {
         __extends(ReturnStatement, _super);
-
-
         function ReturnStatement() {
             var _this = _super.call(this, NodeType.Return) || this;
             _this.returnExpression = null;
@@ -4394,9 +4293,11 @@ var TypeScript;
             if (this.obj) {
                 context.addContent(this.obj);
             }
+
             var loopHeader = context.current;
             var loopStart = new BasicBlock();
             var afterLoop = new BasicBlock();
+
             loopHeader.addSuccessor(loopStart);
             context.current = loopStart;
             if (this.body) {
@@ -4418,10 +4319,6 @@ var TypeScript;
     TypeScript.ForInStatement = ForInStatement;
     var ForStatement = /** @class */ (function (_super) {
         __extends(ForStatement, _super);
-
-
-
-
         function ForStatement(init) {
             var _this = _super.call(this, NodeType.For) || this;
             _this.init = init;
@@ -4466,6 +4363,7 @@ var TypeScript;
             var loopHeader = context.current;
             var loopStart = new BasicBlock();
             var afterLoop = new BasicBlock();
+
             loopHeader.addSuccessor(loopStart);
             context.current = loopStart;
             var condBlock = null;
@@ -4519,12 +4417,6 @@ var TypeScript;
     TypeScript.ForStatement = ForStatement;
     var WithStatement = /** @class */ (function (_super) {
         __extends(WithStatement, _super);
-
-
-
-
-
-
         function WithStatement(expr) {
             var _this = _super.call(this, NodeType.With) || this;
             _this.expr = expr;
@@ -4560,10 +4452,6 @@ var TypeScript;
     TypeScript.WithStatement = WithStatement;
     var SwitchStatement = /** @class */ (function (_super) {
         __extends(SwitchStatement, _super);
-
-
-
-
         function SwitchStatement(val) {
             var _this = _super.call(this, NodeType.Switch) || this;
             _this.val = val;
@@ -4616,6 +4504,7 @@ var TypeScript;
             context.addContent(this.val);
             var execBlock = new BasicBlock();
             var afterSwitch = new BasicBlock();
+
             condBlock.addSuccessor(execBlock);
             context.pushSwitch(execBlock);
             context.current = execBlock;
@@ -4641,9 +4530,6 @@ var TypeScript;
     TypeScript.SwitchStatement = SwitchStatement;
     var CaseStatement = /** @class */ (function (_super) {
         __extends(CaseStatement, _super);
-
-
-
         function CaseStatement() {
             var _this = _super.call(this, NodeType.Case) || this;
             _this.expr = null;
@@ -4923,7 +4809,8 @@ var TypeScript;
             typeFlow.scope = this.containedScope;
             this.param = typeFlow.typeCheck(this.param);
             var exceptVar = new ValueLocation();
-            var varSym = new VariableSymbol(this.param.id.text, this.param.minChar,
+            var varSym = new VariableSymbol(this.param.id.text,
+                this.param.minChar,
                 typeFlow.checker.locationInfo.unitIndex,
                 exceptVar);
             exceptVar.symbol = varSym;
@@ -4941,6 +4828,7 @@ var TypeScript;
             typeFlow.scope.enter(exceptVar.symbol.container, this.param, exceptVar.symbol,
                 typeFlow.checker.errorReporter, false, false, false);
             this.body = typeFlow.typeCheck(this.body);
+
             // if we're in provisional typecheck mode, clean up the symbol entry
             // REVIEW: This is obviously bad form, since we're counting on the internal
             // layout of the symbol table, but this is also the only place where we insert
@@ -4990,9 +4878,6 @@ var TypeScript;
     TypeScript.Finally = Finally;
     var Comment = /** @class */ (function (_super) {
         __extends(Comment, _super);
-
-
-
         function Comment(content, isBlockComment, endsLine) {
             var _this = _super.call(this, NodeType.Comment) || this;
             _this.content = content;
@@ -5014,6 +4899,7 @@ var TypeScript;
                     this.text = [(this.content.replace(/^\s+|\s+$/g, ''))];
                 }
             }
+
             return this.text;
         };
         return Comment;

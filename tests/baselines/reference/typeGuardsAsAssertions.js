@@ -140,8 +140,8 @@ exports.none = { none: '' };
 
 function isSome(value) {
     return 'some' in value;
-}exports.isSome = isSome;
-
+}
+exports.isSome = isSome;
 function someFrom(some) {
     return { some: some };
 }
@@ -154,8 +154,8 @@ function fn(makeSome) {
         result = someFrom(isSome(result) ? result.some : makeSome());
         result; // Some<r>
     }
-}exports.fn = fn;
-
+}
+exports.fn = fn;
 function foo1() {
     var x = 0;
     x; // number

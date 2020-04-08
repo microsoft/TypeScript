@@ -48,12 +48,15 @@ async function f14() {
 
 //// [asyncAwait_es2017.js]
 
+
 async function f0() { }
 async function f1() { }
 async function f3() { }
+
 let f4 = async function () { };
 let f5 = async function () { };
 let f6 = async function () { };
+
 let f7 = async () => { };
 let f8 = async () => { };
 let f9 = async () => { };

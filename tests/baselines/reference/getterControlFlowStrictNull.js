@@ -33,7 +33,8 @@ class C {
 //// [getterControlFlowStrictNull.js]
 var A = /** @class */ (function () {
     function A() {
-    }A.prototype.a = function () {
+    }
+    A.prototype.a = function () {
         if (Math.random() > 0.5) {
             return '';
         }

@@ -43,6 +43,7 @@ var Strings = {
     a: "A",
     b: "B"
 };
+
 module.exports = Handler;
 module.exports.Strings = Strings;
 /**

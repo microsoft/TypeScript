@@ -65,6 +65,7 @@ var E;
 var g = x;
 var g2 = E.A;
 g2 = x;
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -82,6 +83,7 @@ var M;
     M.foo = 1;
 })(M || (M = {}));
 M = x;
+
 function k(a) {
     a = x;
 }

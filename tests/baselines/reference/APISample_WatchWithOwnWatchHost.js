@@ -80,17 +80,18 @@ function watchMain() {
     var host = {
         rootFiles: files,
         options: options,
-
         useCaseSensitiveFileNames: function () { return ts.sys.useCaseSensitiveFileNames; },
         getNewLine: function () { return ts.sys.newLine; },
         getCurrentDirectory: ts.sys.getCurrentDirectory,
         getDefaultLibFileName: function (options) { return ts.getDefaultLibFilePath(options); },
+
         fileExists: ts.sys.fileExists,
         readFile: ts.sys.readFile,
         directoryExists: ts.sys.directoryExists,
         getDirectories: ts.sys.getDirectories,
         readDirectory: ts.sys.readDirectory,
         realpath: ts.sys.realpath,
+
         watchFile: ts.sys.watchFile,
         watchDirectory: ts.sys.watchDirectory,
         createProgram: ts.createAbstractBuilder
@@ -109,7 +110,9 @@ function watchMain() {
         console.log("** We finished making the program! **");
         origPostProgramCreate(program);
     };
+
     // `createWatchProgram` creates an initial program, watches files, and updates the program over time.
     ts.createWatchProgram(host);
 }
+
 watchMain();

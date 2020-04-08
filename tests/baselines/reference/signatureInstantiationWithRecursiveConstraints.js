@@ -17,12 +17,14 @@ const myVar: Foo = new Bar();
 // Repro from #17148
 var Foo = /** @class */ (function () {
     function Foo() {
-    }Foo.prototype.myFunc = function (arg) { };
+    }
+    Foo.prototype.myFunc = function (arg) { };
     return Foo;
 }());
 var Bar = /** @class */ (function () {
     function Bar() {
-    }Bar.prototype.myFunc = function (arg) { };
+    }
+    Bar.prototype.myFunc = function (arg) { };
     return Bar;
 }());
 var myVar = new Bar();

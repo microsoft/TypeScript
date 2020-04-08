@@ -40,7 +40,8 @@ define(["require", "exports", "exportAssignmentOfGenericType1_0"], function (req
     "use strict";
     exports.__esModule = true;
     var M = /** @class */ (function (_super) {
-        __extends(M, _super);function M() {
+        __extends(M, _super);
+        function M() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return M;

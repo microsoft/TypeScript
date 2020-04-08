@@ -48,7 +48,8 @@ function elementAccess2() {
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _a = x;return [4 /*yield*/, y];
+                    _a = x;
+                    return [4 /*yield*/, y];
                 case 1:
                     z = _a[_b.sent()];
                     return [2 /*return*/];

@@ -10,7 +10,8 @@ class C {
 //// [errorRecoveryInClassDeclaration.js]
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.bar = function () {
+    }
+    C.prototype.bar = function () {
         var v = foo(
         public, blaz(), {}
         );

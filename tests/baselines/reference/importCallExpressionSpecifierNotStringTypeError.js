@@ -22,5 +22,6 @@ const p2 = Promise.resolve().then(() => require(whatToLoad ? getSpecifier() : "d
 p1.then(zero => {
     return zero.foo(); // ok, zero is any
 });
+
 var p3 = Promise.resolve().then(() => require(["path1", "path2"]));
 var p4 = Promise.resolve().then(() => require(() => "PathToModule"));

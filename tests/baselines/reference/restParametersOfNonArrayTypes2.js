@@ -79,7 +79,8 @@ var f2 = function () {var y = [];
 
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.foo = function () {var x = [];
+    }
+    C.prototype.foo = function () {var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             x[_i] = arguments[_i];
         }
@@ -128,7 +129,8 @@ var f4 = function () {var y = [];
 
 var C2 = /** @class */ (function () {
     function C2() {
-    }C2.prototype.foo = function () {var x = [];
+    }
+    C2.prototype.foo = function () {var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             x[_i] = arguments[_i];
         }

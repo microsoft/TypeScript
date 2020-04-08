@@ -76,7 +76,8 @@ testSet.transform(
 // This is a contrived class. We could do the same thing with Observables, etc.
 var SetOf = /** @class */ (function () {
     function SetOf() {
-    }SetOf.prototype.add = function (a) {
+    }
+    SetOf.prototype.add = function (a) {
         this._store.push(a);
     };
 
@@ -120,6 +121,7 @@ var testSet = new SetOf();
 testSet.add(1);
 testSet.add(2);
 testSet.add(3);
+
 testSet.transform(
 compose(
 filter(function (x) { return x % 1 === 0; }),

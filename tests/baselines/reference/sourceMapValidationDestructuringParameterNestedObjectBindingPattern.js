@@ -46,6 +46,7 @@ function foo3(_a) {
     var skills = _a.skills;
     console.log(skills.primary);
 }
+
 foo1(robotA);
 foo1({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } });
 

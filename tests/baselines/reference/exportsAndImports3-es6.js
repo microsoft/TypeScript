@@ -38,109 +38,41 @@ export { v, f, C, I, E, D, M, N, T, a };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a1 = exports.M1 = exports.E1 = exports.C1 = exports.f1 = exports.v1 = exports.a = exports.M = exports.E = exports.C = exports.f = exports.v = void 0;
 exports.v = 1;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-exports.v1 = exports.v;function f() { }exports.f = f;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-exports.f1 = f;class C {
-}exports.C = C;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+exports.v1 = exports.v;
+function f() { }
+exports.f = f;
+exports.f1 = f;
+class C {
+}
+exports.C = C;
 exports.C1 = C;
 var E;
 (function (E) {
-    E[E["A"] = 0] = "A";E[E["B"] = 1] = "B";E[E["C"] = 2] = "C";
+    E[E["A"] = 0] = "A";
+    E[E["B"] = 1] = "B";
+    E[E["C"] = 2] = "C";
 })(E = exports.E || (exports.E = {}));
-
-
-
-
-
-
-
-
-
-
-
-
-
 exports.E1 = E;
 var M;
 (function (M) {
 })(M = exports.M || (exports.M = {}));
-
-
-
-
-
-
-
 exports.M1 = M;
 
 exports.a = M.x;
-
 exports.a1 = exports.a;
 //// [t2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var t1_1 = require("./t1");Object.defineProperty(exports, "v", { enumerable: true, get: function () { return t1_1.v1; } });Object.defineProperty(exports, "f", { enumerable: true, get: function () { return t1_1.f1; } });Object.defineProperty(exports, "C", { enumerable: true, get: function () { return t1_1.C1; } });Object.defineProperty(exports, "E", { enumerable: true, get: function () { return t1_1.E1; } });Object.defineProperty(exports, "M", { enumerable: true, get: function () { return t1_1.M1; } });Object.defineProperty(exports, "a", { enumerable: true, get: function () { return t1_1.a1; } });
+var t1_1 = require("./t1");
+Object.defineProperty(exports, "v", { enumerable: true, get: function () { return t1_1.v1; } });Object.defineProperty(exports, "f", { enumerable: true, get: function () { return t1_1.f1; } });Object.defineProperty(exports, "C", { enumerable: true, get: function () { return t1_1.C1; } });Object.defineProperty(exports, "E", { enumerable: true, get: function () { return t1_1.E1; } });Object.defineProperty(exports, "M", { enumerable: true, get: function () { return t1_1.M1; } });Object.defineProperty(exports, "a", { enumerable: true, get: function () { return t1_1.a1; } });
 //// [t3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = exports.M = exports.E = exports.C = exports.f = exports.v = void 0;
 const t1_1 = require("./t1");
-Object.defineProperty(exports, "v", { enumerable: true, get: function () { return t1_1.v1; } });Object.defineProperty(exports, "f", { enumerable: true, get: function () { return t1_1.f1; } });Object.defineProperty(exports, "C", { enumerable: true, get: function () { return t1_1.C1; } });Object.defineProperty(exports, "E", { enumerable: true, get: function () { return t1_1.E1; } });Object.defineProperty(exports, "M", { enumerable: true, get: function () { return t1_1.M1; } });Object.defineProperty(exports, "a", { enumerable: true, get: function () { return t1_1.a1; } });
+Object.defineProperty(exports, "v", { enumerable: true, get: function () { return t1_1.v1; } });
+Object.defineProperty(exports, "f", { enumerable: true, get: function () { return t1_1.f1; } });
+Object.defineProperty(exports, "C", { enumerable: true, get: function () { return t1_1.C1; } });
+Object.defineProperty(exports, "E", { enumerable: true, get: function () { return t1_1.E1; } });
+Object.defineProperty(exports, "M", { enumerable: true, get: function () { return t1_1.M1; } });
+Object.defineProperty(exports, "a", { enumerable: true, get: function () { return t1_1.a1; } });

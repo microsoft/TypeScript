@@ -21,3 +21,4 @@ function f() {
 }
 
 (() => arguments)();
+

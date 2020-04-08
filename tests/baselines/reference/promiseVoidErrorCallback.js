@@ -29,8 +29,6 @@ var x3 = f1()
 
 //// [promiseVoidErrorCallback.js]
 
-
-
 function f1() {
     return Promise.resolve({ __t1: "foo_t1" });
 }

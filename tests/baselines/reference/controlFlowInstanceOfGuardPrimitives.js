@@ -25,6 +25,7 @@ function distinguish(thing) {
         console.log("Aha!! It's the number " + thing.toPrecision(3));
     }
 }
+
 distinguish(new Date());
 distinguish("beef");
 distinguish(3.14159265);

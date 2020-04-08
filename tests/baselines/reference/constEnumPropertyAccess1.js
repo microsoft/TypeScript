@@ -39,9 +39,11 @@ class C {
 var o = {
     1: true
 };
+
 var a = 1 /* A */;
 var a1 = 1 /* "A" */;
 var g = o[1 /* A */];
+
 class C {
     [1 /* A */]() { }
     get [2 /* B */]() {

@@ -117,7 +117,6 @@ var react_1 = __importDefault(require("react"));
 function test1() {
 
 
-
     function test(t) {
         var z = t.getValue("bar"); // Should be fine
     }

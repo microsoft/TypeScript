@@ -1301,6 +1301,7 @@ const foo = function (this: any) {
 // Repro from #29926 (expanded 10x for good measure)
 var foo = function () {
     var a, b, c, d, ab, bc, cd, da, blocks = this.blocks;
+
     if (this.first) {
         a = blocks[0] - 1;
         a = (a << 3) | (a >>> 29);

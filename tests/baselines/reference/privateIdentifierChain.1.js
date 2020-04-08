@@ -20,8 +20,7 @@ class A {
         this?.#b; // Error
         this?.a.#b; // Error
         this?.getA().#b; // Error
-    }
-    #b;
+    }#b;
     getA() {
         return new A();
     }

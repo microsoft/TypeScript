@@ -46,7 +46,8 @@ function foo() { return true; }
 
 var A = /** @class */ (function () {
     function A() {
-    }A.foo = function () { return false; };
+    }
+    A.foo = function () { return false; };
     return A;
 }());
 var M;
@@ -69,6 +70,7 @@ var ResultIsBoolean7 = !A.foo();
 
 // multiple ! operators
 var ResultIsBoolean = !!BOOLEAN;
+
 // miss assignment operators
 !true;
 !BOOLEAN;

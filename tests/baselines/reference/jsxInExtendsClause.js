@@ -26,14 +26,17 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var Foo = /** @class */ (function (_super) {
-    __extends(Foo, _super);function Foo() {
+    __extends(Foo, _super);
+    function Foo() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Foo;
 }(createComponentClass(function () { return /** @class */ (function (_super) {
-    __extends(class_1, _super);function class_1() {
+    __extends(class_1, _super);
+    function class_1() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }class_1.prototype.render = function () {
+    }
+    class_1.prototype.render = function () {
         return React.createElement("span", null, "Hello, world!");
     };
     return class_1;

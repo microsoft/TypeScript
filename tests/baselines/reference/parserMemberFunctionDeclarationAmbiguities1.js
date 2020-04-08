@@ -16,7 +16,8 @@ class C {
 //// [parserMemberFunctionDeclarationAmbiguities1.js]
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.public = function () { };
+    }
+    C.prototype.public = function () { };
     C.prototype.static = function () { };
 
     C.prototype.public = function () { };

@@ -68,6 +68,7 @@ function g(addUndefined, addDefined) {if (addUndefined === void 0) { addUndefine
 }
 var total = f() + f('a', 1) + f('b') + f(undefined, 2);
 total = g('c', 3) + g(undefined, 4);
+
 function foo1(x, b) {if (x === void 0) { x = "string"; }
     x.length;
 }
@@ -101,6 +102,8 @@ foo1(undefined, 1);
 foo2(undefined, 1);
 foo3(undefined, 1);
 foo4(undefined, 1);
+
+
 function removeUndefinedButNotFalse(x) {if (x === void 0) { x = true; }
     if (x === false) {
         return x;

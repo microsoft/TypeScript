@@ -9,7 +9,8 @@ class List {
 //// [staticOffOfInstance1.js]
 var List = /** @class */ (function () {
     function List() {
-    }List.prototype.Blah = function () {
+    }
+    List.prototype.Blah = function () {
         this.Foo();
     };
     List.Foo = function () { };

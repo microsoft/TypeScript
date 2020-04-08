@@ -12,7 +12,8 @@ class arrTest {
 //// [trailingCommaInHeterogenousArrayLiteral1.js]
 var arrTest = /** @class */ (function () {
     function arrTest() {
-    }arrTest.prototype.test = function (arg1) { };
+    }
+    arrTest.prototype.test = function (arg1) { };
     arrTest.prototype.callTest = function () {
         // these two should give the same error
         this.test([1, 2, "hi", 5,]);

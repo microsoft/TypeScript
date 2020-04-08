@@ -27,7 +27,8 @@ define("lib/operators/scalar", ["require", "exports"], function (require, export
 
     function scalar(value) {
         return null;
-    }exports.scalar = scalar;
+    }
+    exports.scalar = scalar;
 });
 define("settings/spacing", ["require", "exports", "lib/operators/scalar"], function (require, exports, scalar_1) {
     "use strict";

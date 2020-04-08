@@ -10,5 +10,6 @@ define(["require", "exports"], function (require, exports) {
     var Object = /** @class */ (function () {
         function Object() {}
         return Object;
-    }());exports.Object = Object;
+    }());
+    exports.Object = Object;
 });

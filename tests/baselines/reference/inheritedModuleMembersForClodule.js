@@ -36,13 +36,15 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var C = /** @class */ (function () {
     function C() {
-    }C.foo = function () {
+    }
+    C.foo = function () {
         return "123";
     };
     return C;
 }());
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);function D() {
+    __extends(D, _super);
+    function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
@@ -55,9 +57,11 @@ var D = /** @class */ (function (_super) {
     ;
 })(D || (D = {}));
 var E = /** @class */ (function (_super) {
-    __extends(E, _super);function E() {
+    __extends(E, _super);
+    function E() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }E.bar = function () {
+    }
+    E.bar = function () {
         return this.foo();
     };
     return E;

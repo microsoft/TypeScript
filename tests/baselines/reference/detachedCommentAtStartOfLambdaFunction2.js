@@ -14,7 +14,8 @@ class TestFile {
 //// [detachedCommentAtStartOfLambdaFunction2.js]
 var TestFile = /** @class */ (function () {
     function TestFile() {
-    }TestFile.prototype.foo = function (message) {
+    }
+    TestFile.prototype.foo = function (message) {
         var _this = this;
         return function () {
             /// <summary>Test summary</summary>

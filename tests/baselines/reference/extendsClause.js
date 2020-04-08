@@ -28,7 +28,8 @@ exports.C = void 0;
 var C = /** @class */ (function () {
     function C() {}
     return C;
-}());exports.C = C;
+}());
+exports.C = C;
 //// [ns.js]
 "use strict";
 exports.__esModule = true;
@@ -50,13 +51,14 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 
 var U = /** @class */ (function (_super) {
-    __extends(U, _super);function U() {
+    __extends(U, _super);
+    function U() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return U;
 }(C)); // Error
 var V = /** @class */ (function (_super) {
-    __extends(V, _super);// Error
+    __extends(V, _super);
     function V() {
         return _super !== null && _super.apply(this, arguments) || this;
     }

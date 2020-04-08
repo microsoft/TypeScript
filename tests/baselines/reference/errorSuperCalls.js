@@ -152,12 +152,14 @@ var OtherBase = /** @class */ (function () {
     return OtherBase;
 }());
 var OtherDerived = /** @class */ (function (_super) {
-    __extends(OtherDerived, _super);function OtherDerived() {
+    __extends(OtherDerived, _super);
+    function OtherDerived() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         //super call in class member initializer of derived type
         _this.t = _this = _super.call(this) || this;
         return _this;
-    }OtherDerived.prototype.fn = function () {
+    }
+    OtherDerived.prototype.fn = function () {
         //super call in class member function of derived type
         _this = _super.call(this) || this;
     };

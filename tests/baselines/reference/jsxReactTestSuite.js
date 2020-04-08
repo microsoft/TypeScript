@@ -117,6 +117,7 @@ var x =
 
 
 //// [jsxReactTestSuite.jsx]
+
 <div>text</div>;
 
 <div>
@@ -137,6 +138,7 @@ var x =
 <Composite>
     <Composite2 />
 </Composite>;
+
 var x = <div 
 attr1={"foo" + "bar"}
     attr2={"foo" + "bar" +
@@ -146,6 +148,7 @@ attr1={"foo" + "bar"}
         "baz" + "bug"}
     attr4="baz">
   </div>;
+
 (
     <div>
     

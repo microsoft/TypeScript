@@ -10,4 +10,5 @@ function panic(val) {var opt = [];
         opt[_i - 1] = arguments[_i];
     }
 }
+
 panic([], 'one', 'two');

@@ -170,16 +170,17 @@ var __extends = (this && this.__extends) || (function () {
 var ts;
 (function (ts) {
 
-
     var Symbol = /** @class */ (function () {
         function Symbol() {
         }
         return Symbol;
     }());
     var Type = /** @class */ (function (_super) {
-        __extends(Type, _super);function Type() {
+        __extends(Type, _super);
+        function Type() {
             return _super !== null && _super.apply(this, arguments) || this;
-        }Type.prototype.equals = function (that) {
+        }
+        Type.prototype.equals = function (that) {
             if (this === that)
                 return true;
             if (!(this.isObjectType() && that.isObjectType()))

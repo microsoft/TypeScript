@@ -42,6 +42,7 @@ var fC = function () {
 
 
 
+
 // These should all be OK, every type is identical
 accA(fA);accA(fB);accA(fC);
 //             ~~ previously an error

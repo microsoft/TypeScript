@@ -146,7 +146,8 @@ var Validation;
 
     var LettersOnlyValidator = /** @class */ (function () {
         function LettersOnlyValidator() {
-        }LettersOnlyValidator.prototype.isAcceptable = function (s2) {
+        }
+        LettersOnlyValidator.prototype.isAcceptable = function (s2) {
             return lettersRegexp.test(s2);
         };
 
@@ -157,14 +158,13 @@ var Validation;
     Validation.LettersOnlyValidator = LettersOnlyValidator;
     var ZipCodeValidator = /** @class */ (function () {
         function ZipCodeValidator() {
-        }ZipCodeValidator.prototype.isAcceptable = function (s3) {
+        }
+        ZipCodeValidator.prototype.isAcceptable = function (s3) {
             return s3.length === 5;
         };
         return ZipCodeValidator;
     }());
     Validation.ZipCodeValidator = ZipCodeValidator;
-
-
 
     var dummy = /** @class */ (function () {
         function dummy() {
@@ -180,7 +180,8 @@ var Greeter;
         return class1;
     }());
     var class2 = /** @class */ (function (_super) {
-        __extends(class2, _super);function class2() {
+        __extends(class2, _super);
+        function class2() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return class2;
@@ -197,10 +198,4 @@ var Greeter;
         return class4;
     }());
     Greeter.class4 = class4;
-
-
-
-
-
-
 })(Greeter || (Greeter = {}));

@@ -169,19 +169,25 @@ var __extends = (this && this.__extends) || (function () {
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 var Compass;
 (function (Compass) {
-    Compass[Compass["North"] = 0] = "North";Compass[Compass["South"] = 1] = "South";Compass[Compass["East"] = 2] = "East";Compass[Compass["West"] = 3] = "West";
+    Compass[Compass["North"] = 0] = "North";
+    Compass[Compass["South"] = 1] = "South";
+    Compass[Compass["East"] = 2] = "East";
+    Compass[Compass["West"] = 3] = "West";
 })(Compass || (Compass = {}));
 var numIndex = { 3: 'three', 'three': 'three' };
 var strIndex = { 'N': Compass.North, 'E': Compass.East };
 var bothIndex;
+
 function noIndex() { }
+
 var obj = {
     10: 'ten',
     x: 'hello',
@@ -192,11 +198,13 @@ var obj = {
 var anyVar = {};
 var stringOrNumber;
 var someObject;
+
 // Assign to a property access
 obj.y = 4;
 
 // Property access on value of type 'any'
 anyVar.x = anyVar.y = obj.x = anyVar.z;
+
 // Dotted property access of property that exists
 var aa = obj.x;
 

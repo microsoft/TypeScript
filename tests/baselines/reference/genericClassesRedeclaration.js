@@ -78,4 +78,3 @@ declare module TypeScript {
 }
 
 //// [genericClassesRedeclaration.js]
-

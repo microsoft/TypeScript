@@ -100,11 +100,13 @@ var robotA = [1, "mower", "mowing"];
 function getRobot() {
     return robotA;
 }
+
 var multiRobotA = ["mower", ["mowing", ""]];
 var multiRobotB = ["trimmer", ["trimming", "edging"]];
 function getMultiRobot() {
     return multiRobotA;
 }
+
 for (var nameA = robotA[1], i = 0; i < 1; i++) {
     console.log(nameA);
 }

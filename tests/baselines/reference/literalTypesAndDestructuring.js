@@ -38,4 +38,5 @@ var b4 = (_c = x.a) !== null && _c !== void 0 ? _c : 2;
 
 
 var _g = {}.bar, bar = _g === void 0 ? 'yo' : _g;
+
 bar; // "yo" | "ha"

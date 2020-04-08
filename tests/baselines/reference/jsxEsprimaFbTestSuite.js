@@ -55,6 +55,7 @@ baz
 
 
 //// [jsxEsprimaFbTestSuite.jsx]
+
 <a />;
 
 //<n:a n:v />; Namespace unsuported

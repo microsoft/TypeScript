@@ -37,7 +37,6 @@ var r2e = x['hm']; // should be Object
 // no errors expected below 
 
 
-
 var i;
 var r1 = i.apply;
 var r1b = i.call;

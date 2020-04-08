@@ -50,7 +50,8 @@ var r3 = f3(1);
 
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.f = function (x) {
+    }
+    C.prototype.f = function (x) {
         return null;
     };
     return C;
@@ -62,7 +63,8 @@ var r5 = i.f(1);
 
 var C2 = /** @class */ (function () {
     function C2() {
-    }C2.prototype.f = function (x) {
+    }
+    C2.prototype.f = function (x) {
         return null;
     };
     return C2;

@@ -22,7 +22,8 @@ var A = /** @class */ (function () {
 var B = /** @class */ (function () {
     function B() {}
     return B;
-}());exports.B = B;
+}());
+exports.B = B;
 ;
 //// [b.js]
 "use strict";

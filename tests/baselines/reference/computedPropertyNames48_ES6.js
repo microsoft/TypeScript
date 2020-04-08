@@ -23,6 +23,7 @@ var E;
     E[E["x"] = 0] = "x";
 })(E || (E = {}));
 var a;
+
 extractIndexer({
     [a]: ""
 }); // Should return string

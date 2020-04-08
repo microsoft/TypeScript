@@ -12,6 +12,7 @@ a(
 
 
 //// [emptyArgumentsListComment.js]
+
 a( /*1*/);
 a(
 /*first*/

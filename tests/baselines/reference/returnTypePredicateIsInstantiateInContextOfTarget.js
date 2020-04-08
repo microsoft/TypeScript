@@ -33,7 +33,8 @@ exports.__esModule = true;
 /// <reference path="react16.d.ts" />
 var React = require("react");
 var TestComponent = /** @class */ (function (_super) {
-    __extends(TestComponent, _super);function TestComponent() {
+    __extends(TestComponent, _super);
+    function TestComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     // Type guard is defined as a static class property

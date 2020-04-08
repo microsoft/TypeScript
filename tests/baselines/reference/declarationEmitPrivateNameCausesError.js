@@ -32,7 +32,8 @@ var IGNORE_EXTRA_VARIABLES = Symbol(); //Notice how this is unexported
 function ignoreExtraVariables(ctor) {
     var _a, _b;
     return _b = /** @class */ (function (_super) {
-            __extends(class_1, _super);function class_1() {
+            __extends(class_1, _super);
+            function class_1() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
                 _this[_a] = true; //An unexported constant is used
                 return _this;
@@ -41,7 +42,7 @@ function ignoreExtraVariables(ctor) {
         }(ctor)),
         _a = IGNORE_EXTRA_VARIABLES,
         _b;
-}//Notice how this is unexported
+}
 exports.ignoreExtraVariables = ignoreExtraVariables;
 
 

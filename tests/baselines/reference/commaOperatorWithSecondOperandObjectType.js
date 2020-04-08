@@ -57,12 +57,14 @@ BOOLEAN, OBJECT;
 NUMBER, OBJECT;
 STRING, OBJECT;
 OBJECT, OBJECT;
+
 //Return type is Object
 var resultIsObject1 = (ANY, OBJECT);
 var resultIsObject2 = (BOOLEAN, OBJECT);
 var resultIsObject3 = (NUMBER, OBJECT);
 var resultIsObject4 = (STRING, OBJECT);
 var resultIsObject5 = (OBJECT, OBJECT);
+
 //Literal and expression
 null, OBJECT;
 ANY = null, OBJECT;
@@ -70,6 +72,7 @@ true, {};
 !BOOLEAN, [];
 "string", new Date();
 STRING.toLowerCase(), new CLASS();
+
 var resultIsObject6 = (null, OBJECT);
 var resultIsObject7 = (ANY = null, OBJECT);
 var resultIsObject8 = (true, {});

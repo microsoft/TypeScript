@@ -14,8 +14,8 @@ var before = func();
 
 function func() {
     return func;
-}exports.default = func;
-
+}
+exports.default = func;
 var after = func();
 
 

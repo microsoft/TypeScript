@@ -31,6 +31,5 @@ var E: I;
 
 
 //// [tsxIntrinsicAttributeErrors.jsx]
-
 var E;
 <E x={10}/>;

@@ -64,13 +64,16 @@ w--; // Error
 //// [incrementAndDecrement.js]
 var E;
 (function (E) {
-    E[E["A"] = 0] = "A";E[E["B"] = 1] = "B";E[E["C"] = 2] = "C";
+    E[E["A"] = 0] = "A";
+    E[E["B"] = 1] = "B";
+    E[E["C"] = 2] = "C";
 })(E || (E = {}));
 ;
 var x = 4;
 var e = E.B;
 var a;
 var w = window;
+
 // Assign to expression++
 x++;4; // Error
 

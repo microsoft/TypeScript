@@ -10,7 +10,6 @@ function from<T>(arg: any): Query<T> {
 
 
 //// [genericFunctions3.js]
-
 function from(arg) {
     return undefined;
 }

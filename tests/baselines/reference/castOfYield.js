@@ -40,7 +40,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             case 1:
                 (_a.sent());
                 // Unlike await, yield is not allowed to appear in a simple unary expression.
-                ;return [4 /*yield*/, 0];
+                ;
+                return [4 /*yield*/, 0];
             case 2:
                 _a.sent();
                 return [2 /*return*/];

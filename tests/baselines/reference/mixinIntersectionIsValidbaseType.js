@@ -53,7 +53,8 @@ SuperClass
 ) {
     var LocalMixin = function (InnerSuperClass) {
         return /** @class */ (function (_super) {
-            __extends(SerializableLocal, _super);function SerializableLocal() {
+            __extends(SerializableLocal, _super);
+            function SerializableLocal() {
                 return _super !== null && _super.apply(this, arguments) || this;
             }
             return SerializableLocal;
@@ -65,14 +66,16 @@ SuperClass
 
 var AMixin = function (SuperClass) {
     var SomeHowOkay = /** @class */ (function (_super) {
-        __extends(A, _super);function A() {
+        __extends(A, _super);
+        function A() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return A;
     }(SuperClass));
 
     var SomeHowNotOkay = /** @class */ (function (_super) {
-        __extends(A, _super);function A() {
+        __extends(A, _super);
+        function A() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return A;

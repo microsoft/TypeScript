@@ -55,20 +55,12 @@ interface i12 extends i10, i11 { }
 
 //// [interfaceDeclaration1.js]
 
-
-
-
-
-
-
 var v1;
 v1();
+
 var C1 = /** @class */ (function () {
     function C1() {
         var prototype = 3;
     }
     return C1;
 }());
-
-
-

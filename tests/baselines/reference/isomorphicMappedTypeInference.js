@@ -315,6 +315,7 @@ var o = { a: 5, b: 7 };
 foo(o, { b: 9 });
 o = foo(o, { b: 9 });
 
+
 var x0 = f20({ foo: 42, bar: "hello" });
 var x1 = f21({ foo: 42, bar: "hello" });
 var x2 = f22({ foo: { value: 42 }, bar: { value: "hello" } });

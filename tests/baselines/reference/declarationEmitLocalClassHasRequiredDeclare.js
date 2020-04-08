@@ -35,7 +35,8 @@ exports.A = A;
 var Y = /** @class */ (function () {
     function Y() {}
     return Y;
-}());exports.Y = Y;
+}());
+exports.Y = Y;
 
 
 //// [declarationEmitLocalClassHasRequiredDeclare.d.ts]

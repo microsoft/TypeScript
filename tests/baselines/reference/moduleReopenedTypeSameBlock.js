@@ -16,7 +16,8 @@ var M;
 })(M || (M = {}));
 (function (M) {
     var C2 = /** @class */ (function () {
-        function C2() {}C2.prototype.f = function () { return null; };
+        function C2() {}
+        C2.prototype.f = function () { return null; };
         return C2;
     }());
     M.C2 = C2;

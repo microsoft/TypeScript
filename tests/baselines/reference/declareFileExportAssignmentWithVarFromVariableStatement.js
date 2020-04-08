@@ -22,7 +22,6 @@ export = m2;
 "use strict";
 
 var x = 10, m2;
-
 module.exports = m2;
 
 

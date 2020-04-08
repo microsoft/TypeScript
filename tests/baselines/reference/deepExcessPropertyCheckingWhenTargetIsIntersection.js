@@ -35,9 +35,10 @@ var TestComponent = function (props) {
 };
 
 
-
 TestComponent({ icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } } });
+
 var TestComponent2 = function (props) {
     return null;
 };
+
 TestComponent2({ icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } } });

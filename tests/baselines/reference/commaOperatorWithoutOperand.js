@@ -29,6 +29,7 @@ var BOOLEAN;
 var NUMBER;
 var STRING;
 var OBJECT;
+
 // Expect to have compiler errors
 // Missing the second operand
 (ANY, );

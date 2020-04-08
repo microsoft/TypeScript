@@ -53,15 +53,6 @@ const fn: fn = a => a;
 //// [genericContextualTypes1.js]
 "use strict";
 
-
-
-
-
-
-
-
-
-
 var f00 = list;
 var f01 = function (x) { return [x]; };
 var f02 = wrap(list);

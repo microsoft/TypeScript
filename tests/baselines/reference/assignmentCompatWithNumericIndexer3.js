@@ -64,10 +64,12 @@ var A = /** @class */ (function () {
 }());
 var a;
 var b;
+
 a = b; // error
 b = a; // ok
+
 var B2 = /** @class */ (function (_super) {
-    __extends(B2, _super);// ok
+    __extends(B2, _super);
     function B2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
@@ -88,6 +90,7 @@ var Generics;
         var b;
         a = b; // error
         b = a; // ok
+
         var b2;
         a = b2; // ok
         b2 = a; // ok

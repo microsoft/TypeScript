@@ -26,7 +26,8 @@ exports.ThingA = void 0;
 var ThingA = /** @class */ (function () {
     function ThingA() {}
     return ThingA;
-}());exports.ThingA = ThingA;
+}());
+exports.ThingA = ThingA;
 //// [ThingB.js]
 "use strict";
 exports.__esModule = true;
@@ -34,7 +35,8 @@ exports.ThingB = void 0;
 var ThingB = /** @class */ (function () {
     function ThingB() {}
     return ThingB;
-}());exports.ThingB = ThingB;
+}());
+exports.ThingB = ThingB;
 //// [Things.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -45,8 +47,10 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
-var ThingA_1 = require("./ThingA");__createBinding(exports, ThingA_1, "ThingA");
-var ThingB_1 = require("./ThingB");__createBinding(exports, ThingB_1, "ThingB");
+var ThingA_1 = require("./ThingA");
+__createBinding(exports, ThingA_1, "ThingA");
+var ThingB_1 = require("./ThingB");
+__createBinding(exports, ThingB_1, "ThingB");
 //// [Test.js]
 "use strict";
 exports.__esModule = true;
@@ -56,7 +60,8 @@ var Test = /** @class */ (function () {
         this.method = function (input) { };
     }
     return Test;
-}());exports.Test = Test;
+}());
+exports.Test = Test;
 
 
 //// [ThingA.d.ts]

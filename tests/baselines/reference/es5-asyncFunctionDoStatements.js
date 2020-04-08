@@ -137,7 +137,8 @@ function doStatement4() {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
-                    _a.sent();return [3 /*break*/, 2];
+                    _a.sent();
+                    return [3 /*break*/, 2];
                 case 2:
                     if (y) return [3 /*break*/, 0];
                     _a.label = 3;
@@ -153,7 +154,8 @@ function doStatement5() {
             switch (_a.label) {
                 case 0:
                     if (1)
-                        return [3 /*break*/, 2];return [4 /*yield*/, x];
+                        return [3 /*break*/, 2];
+                    return [4 /*yield*/, x];
                 case 1:
                     _a.sent();
                     _a.label = 2;
@@ -196,7 +198,8 @@ function doStatement8() {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
-                    _a.sent();return [3 /*break*/, 2];
+                    _a.sent();
+                    return [3 /*break*/, 2];
                 case 2:
                     if (y) return [3 /*break*/, 0];
                     _a.label = 3;
@@ -212,7 +215,8 @@ function doStatement9() {
             switch (_a.label) {
                 case 0:
                     if (1)
-                        return [3 /*break*/, 2];return [4 /*yield*/, x];
+                        return [3 /*break*/, 2];
+                    return [4 /*yield*/, x];
                 case 1:
                     _a.sent();
                     _a.label = 2;
@@ -255,7 +259,8 @@ function doStatement12() {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
-                    _a.sent();return [3 /*break*/, 3];
+                    _a.sent();
+                    return [3 /*break*/, 3];
                 case 2:
                     if (y) return [3 /*break*/, 0];
                     _a.label = 3;
@@ -271,7 +276,8 @@ function doStatement13() {
             switch (_a.label) {
                 case 0:
                     if (1)
-                        return [3 /*break*/, 3];return [4 /*yield*/, x];
+                        return [3 /*break*/, 3];
+                    return [4 /*yield*/, x];
                 case 1:
                     _a.sent();
                     _a.label = 2;
@@ -314,7 +320,8 @@ function doStatement16() {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
-                    _a.sent();return [3 /*break*/, 3];
+                    _a.sent();
+                    return [3 /*break*/, 3];
                 case 2:
                     if (y) return [3 /*break*/, 0];
                     _a.label = 3;
@@ -330,7 +337,8 @@ function doStatement17() {
             switch (_a.label) {
                 case 0:
                     if (1)
-                        return [3 /*break*/, 3];return [4 /*yield*/, x];
+                        return [3 /*break*/, 3];
+                    return [4 /*yield*/, x];
                 case 1:
                     _a.sent();
                     _a.label = 2;

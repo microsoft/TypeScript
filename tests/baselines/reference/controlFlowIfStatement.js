@@ -56,6 +56,7 @@ function d<T extends string>(data: string | T): never {
 //// [controlFlowIfStatement.js]
 var x;
 var cond;
+
 x = /a/;
 if (x /* RegExp */, (x = true)) {
     x; // boolean
@@ -66,6 +67,7 @@ else {
     x = 42;
 }
 x; // string | number
+
 function a() {
     var x;
     if (cond) {

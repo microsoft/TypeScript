@@ -316,6 +316,7 @@ function foo00(x) {
         if (typeof state_2 === "object")
             return state_2.value;
     }
+
     use(v);
 }
 
@@ -334,6 +335,7 @@ function foo1(x) {
         if (typeof state_3 === "object")
             return state_3.value;
     }
+
     use(v);
 }
 
@@ -353,12 +355,14 @@ function foo2(x) {
         if (typeof state_4 === "object")
             return state_4.value;
     }
+
     use(v);
 }
 
 function foo3(x) {
     var _loop_5 = function () {
         var x_5;
+
         (function () { return x_5 + v; });
         (function () { return x_5 + v; });
         if (x_5 == 1) {
@@ -371,6 +375,7 @@ function foo3(x) {
         if (typeof state_5 === "object")
             return state_5.value;
     } while (1 === 1);
+
     use(v);
 }
 
@@ -390,6 +395,7 @@ function foo4(x) {
         if (typeof state_6 === "object")
             return state_6.value;
     }
+
     use(v);
 }
 
@@ -408,6 +414,7 @@ function foo5(x) {
         if (typeof state_7 === "object")
             return state_7.value;
     }
+
     use(v);
 }
 
@@ -427,8 +434,7 @@ function foo6(x) {
         var state_8 = _loop_8();
         if (typeof state_8 === "object")
             return state_8.value;
-    }
-    ;
+    };
 
     use(v);
 }
@@ -449,6 +455,7 @@ function foo7(x) {
         if (typeof state_9 === "object")
             return state_9.value;
     } while (1 === 1);
+
     use(v);
 }
 
@@ -469,6 +476,7 @@ function foo8(x) {
         if (typeof state_10 === "object")
             return state_10.value;
     }
+
     use(v);
 }
 
@@ -507,6 +515,7 @@ function foo00_c(x) {
         if (typeof state_12 === "object")
             return state_12.value;
     }
+
     use(v);
 }
 
@@ -525,6 +534,7 @@ function foo1_c(x) {
         if (typeof state_13 === "object")
             return state_13.value;
     }
+
     use(v);
 }
 
@@ -544,12 +554,14 @@ function foo2_c(x) {
         if (typeof state_14 === "object")
             return state_14.value;
     }
+
     use(v);
 }
 
 function foo3_c(x) {
     var _loop_15 = function () {
         var x_15 = 1;
+
         (function () { return x_15 + v; });
         (function () { return x_15 + v; });
         if (x_15 == 1) {
@@ -562,6 +574,7 @@ function foo3_c(x) {
         if (typeof state_15 === "object")
             return state_15.value;
     } while (1 === 1);
+
     use(v);
 }
 
@@ -581,6 +594,7 @@ function foo4_c(x) {
         if (typeof state_16 === "object")
             return state_16.value;
     }
+
     use(v);
 }
 
@@ -599,6 +613,7 @@ function foo5_c(x) {
         if (typeof state_17 === "object")
             return state_17.value;
     }
+
     use(v);
 }
 
@@ -619,6 +634,7 @@ function foo6_c(x) {
         if (typeof state_18 === "object")
             return state_18.value;
     }
+
     use(v);
 }
 
@@ -638,6 +654,7 @@ function foo7_c(x) {
         if (typeof state_19 === "object")
             return state_19.value;
     } while (1 === 1);
+
     use(v);
 }
 
@@ -658,5 +675,6 @@ function foo8_c(x) {
         if (typeof state_20 === "object")
             return state_20.value;
     }
+
     use(v);
 }

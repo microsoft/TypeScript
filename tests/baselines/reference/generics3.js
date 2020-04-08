@@ -14,6 +14,7 @@ var C = /** @class */ (function () {
 }());
 var a;
 var b;
+
 a = b; // Ok - should be identical
 
 

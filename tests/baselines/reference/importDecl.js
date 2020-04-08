@@ -89,8 +89,10 @@ var d = /** @class */ (function () {
     function d() {
     }
     return d;
-}());exports.d = d;
-function foo() { return null; }exports.foo = foo;
+}());
+exports.d = d;
+function foo() { return null; }
+exports.foo = foo;
 //// [importDecl_require1.js]
 "use strict";
 exports.__esModule = true;
@@ -99,9 +101,11 @@ var d = /** @class */ (function () {
     function d() {
     }
     return d;
-}());exports.d = d;
+}());
+exports.d = d;
 var x;
-function foo() { return null; }exports.foo = foo;
+function foo() { return null; }
+exports.foo = foo;
 //// [importDecl_require2.js]
 "use strict";
 exports.__esModule = true;
@@ -110,8 +114,10 @@ var d = /** @class */ (function () {
     function d() {
     }
     return d;
-}());exports.d = d;
-function foo() { return null; }exports.foo = foo;
+}());
+exports.d = d;
+function foo() { return null; }
+exports.foo = foo;
 //// [importDecl_require3.js]
 "use strict";
 exports.__esModule = true;
@@ -120,13 +126,16 @@ var d = /** @class */ (function () {
     function d() {
     }
     return d;
-}());exports.d = d;
-function foo() { return null; }exports.foo = foo;
+}());
+exports.d = d;
+function foo() { return null; }
+exports.foo = foo;
 //// [importDecl_require4.js]
 "use strict";
 exports.__esModule = true;
 exports.foo2 = void 0;
-function foo2() { return null; }exports.foo2 = foo2;
+function foo2() { return null; }
+exports.foo2 = foo2;
 //// [importDecl_1.js]
 "use strict";
 exports.__esModule = true;

@@ -27,6 +27,7 @@ var emptyObjTuple;
 
 var numArray;
 var emptyObjArray;
+
 // no error
 numArray = numNumTuple;
 emptyObjArray = emptyObjTuple;

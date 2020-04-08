@@ -25,7 +25,8 @@ var Test;
 (function (Test) {
     var Bug = /** @class */ (function () {
         function Bug() {
-        }Bug.prototype.tokenize = function (line, tokens, includeStates) {
+        }
+        Bug.prototype.tokenize = function (line, tokens, includeStates) {
             return null;
         };
         return Bug;

@@ -29,6 +29,5 @@ declare module E {
     Keep this pinned comment
    =========
 */
-
 //// [b.js]
 ///<reference path="a.ts"/>

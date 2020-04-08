@@ -14,6 +14,7 @@ x; // number
 //// [controlFlowAssignmentExpression.js]
 var x;
 var obj;
+
 x = "";
 x = x.length;
 x; // number

@@ -100,7 +100,8 @@ var variable = {
 
 function getVar() {
     return variable;
-}exports.getVar = getVar;
+}
+exports.getVar = getVar;
 
 
 //// [/out/sub-project-2/tsconfig.tsbuildinfo]

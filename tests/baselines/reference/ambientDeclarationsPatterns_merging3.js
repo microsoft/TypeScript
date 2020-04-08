@@ -18,5 +18,4 @@ ohno.a // oh no
 //// [test.js]
 "use strict";
 exports.__esModule = true;
-
 ohno.a; // oh no

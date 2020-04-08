@@ -39,6 +39,7 @@ var o = { x: ["string", 1], y: { c: true, d: "world", e: 3 } };
 var o1 = { x: ["string", 1], y: { c: true, d: "world", e: 3 } };
 foo(o1); // Not error since x has contextual type of tuple namely [string, number]
 foo({ x: ["string", 1], y: { c: true, d: "world", e: 3 } }); // Not error
+
 var array = ["string", 1, true];
 var tuple = ["string", 1, true];
 baz(tuple);

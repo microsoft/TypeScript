@@ -90,11 +90,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 var react_1 = __importDefault(require("react"));
 
-
 var FieldFeedback = /** @class */ (function (_super) {
-    __extends(FieldFeedback, _super);function FieldFeedback() {
+    __extends(FieldFeedback, _super);
+    function FieldFeedback() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }FieldFeedback.prototype.render = function () {
+    }
+    FieldFeedback.prototype.render = function () {
         return react_1["default"].createElement("div", null, "Hello");
     };
     FieldFeedback.defaultProps = {
@@ -108,9 +109,11 @@ var Test1 = function () { return react_1["default"].createElement(FieldFeedback,
 // Error: Void not assignable to boolean
 var Test2 = function () { return react_1["default"].createElement(FieldFeedback, { when: function (value) { return console.log(value); } }); };
 var FieldFeedbackBeta = /** @class */ (function (_super) {
-    __extends(FieldFeedbackBeta, _super);function FieldFeedbackBeta() {
+    __extends(FieldFeedbackBeta, _super);
+    function FieldFeedbackBeta() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }FieldFeedbackBeta.prototype.render = function () {
+    }
+    FieldFeedbackBeta.prototype.render = function () {
         return react_1["default"].createElement("div", null, "Hello");
     };
     FieldFeedbackBeta.defaultProps = {
@@ -125,9 +128,11 @@ var Test1a = function () { return react_1["default"].createElement(FieldFeedback
 var Test2a = function () { return react_1["default"].createElement(FieldFeedbackBeta, { when: function (value) { return console.log(value); }, error: true }, "Hah"); };
 
 var FieldFeedback2 = /** @class */ (function (_super) {
-    __extends(FieldFeedback2, _super);function FieldFeedback2() {
+    __extends(FieldFeedback2, _super);
+    function FieldFeedback2() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }FieldFeedback2.prototype.render = function () {
+    }
+    FieldFeedback2.prototype.render = function () {
         this.props.when("now"); // OK, always defined
         return react_1["default"].createElement("div", null, "Hello");
     };

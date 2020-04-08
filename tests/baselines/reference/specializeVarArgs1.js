@@ -26,12 +26,10 @@ a.push('Some Value');
 
 
 
-
-
-
 function observableArray() { return null; }
 
 
 
 var a = observableArray();
+
 a.push('Some Value');

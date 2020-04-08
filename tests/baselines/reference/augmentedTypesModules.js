@@ -110,7 +110,8 @@ var m1c = 1; // Should be allowed
 var m1d;
 (function (m1d) {
     var I = /** @class */ (function () {
-        function I() {}I.prototype.foo = function () { };
+        function I() {}
+        I.prototype.foo = function () { };
         return I;
     }());
     m1d.I = I;
@@ -132,9 +133,11 @@ function m2c() { };
 (function (m2c) {m2c.y = 2;})(m2c || (m2c = {}));
 
 function m2f() { };
+
 function m2g() { };
 (function (m2g) {var C = /** @class */ (function () {
-        function C() {}C.prototype.foo = function () { };
+        function C() {}
+        C.prototype.foo = function () { };
         return C;
     }());
     m2g.C = C;
@@ -146,16 +149,19 @@ var m3 = /** @class */ (function () {
 var m3a;
 (function (m3a) {var y = 2;})(m3a || (m3a = {}));
 var m3a = /** @class */ (function () {
-    function m3a() {}m3a.prototype.foo = function () { };
+    function m3a() {}
+    m3a.prototype.foo = function () { };
     return m3a;
 }()); // error, class isn't ambient or declared before the module
 var m3b = /** @class */ (function () {
-    function m3b() {}m3b.prototype.foo = function () { };
+    function m3b() {}
+    m3b.prototype.foo = function () { };
     return m3b;
 }());
 (function (m3b) {var y = 2;})(m3b || (m3b = {}));
 var m3c = /** @class */ (function () {
-    function m3c() {}m3c.prototype.foo = function () { };
+    function m3c() {}
+    m3c.prototype.foo = function () { };
     return m3c;
 }());
 (function (m3c) {m3c.y = 2;})(m3c || (m3c = {}));
@@ -163,11 +169,10 @@ var m3d;
 (function (m3d) {m3d.y = 2;})(m3d || (m3d = {}));
 var m3e;
 (function (m3e) {m3e.y = 2;})(m3e || (m3e = {}));
-
-
 var m3g;
 (function (m3g) {var C = /** @class */ (function () {
-        function C() {}C.prototype.foo = function () { };
+        function C() {}
+        C.prototype.foo = function () { };
         return C;
     }());
     m3g.C = C;
@@ -190,7 +195,8 @@ var m4c;
 })(m4c || (m4c = {}));
 var m4d;
 (function (m4d) {var C = /** @class */ (function () {
-        function C() {}C.prototype.foo = function () { };
+        function C() {}
+        C.prototype.foo = function () { };
         return C;
     }());
 })(m4d || (m4d = {}));

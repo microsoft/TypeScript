@@ -45,14 +45,16 @@ var __extends = (this && this.__extends) || (function () {
     return CBaseBase;
 }());
 var CBase = /** @class */ (function (_super) {
-    __extends(CBase, _super);function CBase() {
+    __extends(CBase, _super);
+    function CBase() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return CBase;
 }(CBaseBase));
 var Parameter = /** @class */ (function () {
     function Parameter() {
-    }Parameter.prototype.method = function (t) { };
+    }
+    Parameter.prototype.method = function (t) { };
     return Parameter;
 }());
 var Wrapper = /** @class */ (function () {
@@ -61,9 +63,11 @@ var Wrapper = /** @class */ (function () {
     return Wrapper;
 }());
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);function C() {
+    __extends(C, _super);
+    function C() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }C.prototype.works = function () {
+    }
+    C.prototype.works = function () {
         new CBaseBase(this);
     };
     C.prototype.alsoWorks = function () {

@@ -94,7 +94,8 @@ var __extends = (this && this.__extends) || (function () {
 
 var SomeBaseClass = /** @class */ (function () {
     function SomeBaseClass() {
-    }SomeBaseClass.prototype.func = function () {
+    }
+    SomeBaseClass.prototype.func = function () {
         return '';
     };
 

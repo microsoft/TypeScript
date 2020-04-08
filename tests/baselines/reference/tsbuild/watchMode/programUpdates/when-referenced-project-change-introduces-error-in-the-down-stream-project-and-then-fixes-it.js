@@ -45,7 +45,8 @@ function createSomeObject() {
     return {
         message: "new Object"
     };
-}exports.createSomeObject = createSomeObject;
+}
+exports.createSomeObject = createSomeObject;
 
 
 //// [/user/username/projects/sample1/Library/library.d.ts]
@@ -170,7 +171,8 @@ function createSomeObject() {
     return {
         message2: "new Object"
     };
-}exports.createSomeObject = createSomeObject;
+}
+exports.createSomeObject = createSomeObject;
 
 
 //// [/user/username/projects/sample1/Library/library.d.ts]
@@ -297,7 +299,8 @@ function createSomeObject() {
     return {
         message: "new Object"
     };
-}exports.createSomeObject = createSomeObject;
+}
+exports.createSomeObject = createSomeObject;
 
 
 //// [/user/username/projects/sample1/Library/library.d.ts]

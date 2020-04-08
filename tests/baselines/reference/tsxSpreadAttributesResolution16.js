@@ -36,8 +36,8 @@ function Component(props) {
         // Error: missing property
         <AnotherComponent {...props}/>
     );
-}exports["default"] = Component;
-
+}
+exports["default"] = Component;
 
 function AnotherComponent(_a) {
     var property1 = _a.property1;

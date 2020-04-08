@@ -80,6 +80,7 @@ function foo(x, y) {
     }
 }
 
+
 function f1(x) {
     switch (x) {
         case 0:

@@ -13,7 +13,8 @@ class TestFile {
 //// [detachedCommentAtStartOfLambdaFunction1.js]
 var TestFile = /** @class */ (function () {
     function TestFile() {
-    }TestFile.prototype.foo = function (message) {
+    }
+    TestFile.prototype.foo = function (message) {
         var _this = this;
         return function () {var x = [];
             for (var _i = 0; _i < arguments.length; _i++) {

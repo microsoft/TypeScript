@@ -34,8 +34,8 @@ Entity.y;
 Object.defineProperty(exports, "__esModule", { value: true });
 function Decl() {
     return 0;
-}exports.default = Decl;
-
+}
+exports.default = Decl;
 (function (Decl) {
     Decl.x = 10;
     Decl.y = 20;
@@ -45,8 +45,11 @@ function Decl() {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var m1_1 = require("m1");
+
 m1_1.default();
+
 var x;
 var y;
+
 m1_1.default.x;
 m1_1.default.y;

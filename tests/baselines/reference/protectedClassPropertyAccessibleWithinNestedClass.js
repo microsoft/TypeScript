@@ -62,7 +62,8 @@ var C = /** @class */ (function () {
     C.prototype.bar = function () {
         var C2 = /** @class */ (function () {
             function C2() {
-            }C2.prototype.foo = function () {
+            }
+            C2.prototype.foo = function () {
                 var x;
                 var x1 = x.foo;
                 var x2 = x.bar;

@@ -30,7 +30,8 @@ class Base {
         class Derived {
             constructor() {
                 _x_1.set(this, void 0);
-            }testBase(x) {
+            }
+            testBase(x) {
                 console.log(__classPrivateFieldGet(x, _x_1));
             }
             testDerived(x) {

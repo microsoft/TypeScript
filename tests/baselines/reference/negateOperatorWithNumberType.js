@@ -50,7 +50,8 @@ function foo() { return 1; }
 
 var A = /** @class */ (function () {
     function A() {
-    }A.foo = function () { return 1; };
+    }
+    A.foo = function () { return 1; };
     return A;
 }());
 var M;
@@ -74,6 +75,7 @@ var ResultIsNumber8 = -NUMBER1[0];
 var ResultIsNumber9 = -foo();
 var ResultIsNumber10 = -A.foo();
 var ResultIsNumber11 = -(NUMBER - NUMBER);
+
 // miss assignment operators
 -1;
 -NUMBER;

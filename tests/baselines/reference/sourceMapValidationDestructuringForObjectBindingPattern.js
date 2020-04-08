@@ -68,7 +68,6 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } =
 
 //// [sourceMapValidationDestructuringForObjectBindingPattern.js]
 
-
 var robot = { name: "mower", skill: "mowing" };
 var multiRobot = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
 function getRobot() {
@@ -77,6 +76,7 @@ function getRobot() {
 function getMultiRobot() {
     return multiRobot;
 }
+
 for (var nameA = robot.name, i = 0; i < 1; i++) {
     console.log(nameA);
 }

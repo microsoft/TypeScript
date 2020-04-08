@@ -15,7 +15,8 @@ var methodName = "method";
 var accessorName = "accessor";
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype[methodName] = function () { };
+    }
+    C.prototype[methodName] = function () { };
     C[methodName] = function () { };
     Object.defineProperty(C.prototype, accessorName, {
         get: function () { },
@@ -27,12 +28,23 @@ var C = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(C, accessorName, {
+    Object.defineProperty(C,
+
+
+
+
+        accessorName, {
         get: function () { },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(C, accessorName, {
+    Object.defineProperty(C,
+
+
+
+
+
+        accessorName, {
         set: function (v) { },
         enumerable: false,
         configurable: true

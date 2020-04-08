@@ -132,14 +132,16 @@ var EmptyTypes;
         return base2;
     }());
     var derived = /** @class */ (function (_super) {
-        __extends(derived, _super);function derived() {
+        __extends(derived, _super);
+        function derived() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return derived;
     }(base));
     var f = /** @class */ (function () {
         function f() {
-        }f.prototype.voidIfAny = function (x, y) {if (y === void 0) { y = false; }
+        }
+        f.prototype.voidIfAny = function (x, y) {if (y === void 0) { y = false; }
             return null;
         };
 
@@ -194,14 +196,16 @@ var NonEmptyTypes;
         return base2;
     }());
     var derived = /** @class */ (function (_super) {
-        __extends(derived, _super);function derived() {
+        __extends(derived, _super);
+        function derived() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return derived;
     }(base));
     var f = /** @class */ (function () {
         function f() {
-        }f.prototype.voidIfAny = function (x, y) {if (y === void 0) { y = false; }
+        }
+        f.prototype.voidIfAny = function (x, y) {if (y === void 0) { y = false; }
             return null;
         };
 

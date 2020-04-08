@@ -92,15 +92,19 @@ var C = /** @class */ (function () {
     return C;
 }());
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);function D() {
+    __extends(D, _super);
+    function D() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }D.prototype.foo1 = function () { };
+    }
+    D.prototype.foo1 = function () { };
     return D;
 }(C));
 var E = /** @class */ (function (_super) {
-    __extends(E, _super);function E() {
+    __extends(E, _super);
+    function E() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }E.prototype.foo2 = function () { };
+    }
+    E.prototype.foo2 = function () { };
     return E;
 }(C));
 var unionDE;
@@ -110,6 +114,7 @@ var str;
 var c;
 var d;
 var e;
+
 // A union type U is assignable to a type T if each type in U is assignable to T
 c = d;
 c = e;
@@ -144,6 +149,8 @@ unionNumberString = num; // ok
 num = str;
 str = str;
 unionNumberString = str; // ok
+
+
 // Any
 var anyVar;
 anyVar = unionDE;
@@ -158,6 +165,7 @@ unionNumberString = null;
 // undefined
 unionDE = undefined;
 unionNumberString = undefined;
+
 // type parameters
 function foo(t, u) {
     t = u; // error

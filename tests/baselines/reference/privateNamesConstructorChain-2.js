@@ -28,13 +28,16 @@ let Parent = /** @class */ (() => {
     var _foo_1, _bar;
     class Parent {constructor() {
             _foo_1.set(this, 3);
-        }accessChildProps() {
+        }
+        accessChildProps() {
             __classPrivateFieldGet(new Child(), _foo_1); // OK (`#foo` was added when `Parent`'s constructor was called on `child`)
             __classPrivateFieldGet(Child, _bar); // Error: not found
         }
     }
     _foo_1 = new WeakMap(), _bar = new WeakMap();
-    _bar.set(Parent, 5);
+    _bar.set(Parent,
+
+        5);
     return Parent;
 })();
 class Child extends Parent {

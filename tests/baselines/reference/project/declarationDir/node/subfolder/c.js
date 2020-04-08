@@ -5,4 +5,5 @@ var C = /** @class */ (function () {
     function C() {
     }
     return C;
-}());exports.C = C;
+}());
+exports.C = C;

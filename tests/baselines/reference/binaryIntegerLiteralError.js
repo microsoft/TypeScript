@@ -12,10 +12,9 @@ var obj1 = {
 
 //// [binaryIntegerLiteralError.js]
 // error
-var bin1 = 6;
-2110;
-var bin1 = 6;
-23410;
+var bin1 = 6;2110;
+var bin1 = 6;23410;
+
 var obj1 = {
     26: "hi",
     26: "Hello",

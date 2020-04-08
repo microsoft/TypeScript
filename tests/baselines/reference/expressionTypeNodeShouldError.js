@@ -51,9 +51,9 @@ type ItemType3 = true.typeof(nodes.item(0));
 
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.foo = function () {
-        var x;
-        typeof (this.foo);
+    }
+    C.prototype.foo = function () {
+        var x;typeof (this.foo);
     };
     return C;
 }());
@@ -63,9 +63,9 @@ typeof (nodes.item(0));
 
 var C2 = /** @class */ (function () {
     function C2() {
-    }C2.prototype.foo = function () {
-        var x;
-        typeof (this.foo);
+    }
+    C2.prototype.foo = function () {
+        var x;typeof (this.foo);
     };
     return C2;
 }());
@@ -75,9 +75,9 @@ typeof (nodes.item(0));
 
 var C3 = /** @class */ (function () {
     function C3() {
-    }C3.prototype.foo = function () {
-        var x;
-        typeof (this.foo);
+    }
+    C3.prototype.foo = function () {
+        var x;typeof (this.foo);
     };
     return C3;
 }());

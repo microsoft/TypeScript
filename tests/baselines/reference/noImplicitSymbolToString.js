@@ -23,6 +23,7 @@ var str = "hello ";
 var templateStr = "hello " + symbol;
 var appendStr = "hello " + symbol;
 str += symbol;
+
 var symbolUnionNumber;
 var symbolUnionString;
 

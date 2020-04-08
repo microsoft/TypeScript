@@ -123,6 +123,7 @@ const negHex = -0x10n;
 const negZero = -0n;
 const baseChange = 0xffn;
 const leadingZeros = 0x000000ffn;
+
 // Plus not allowed on literals
 const unaryPlus = +123n;
 const unaryPlusHex = +0x123n;
@@ -139,6 +140,7 @@ const emptyHex = 0x0n; // should error but infer 0n
 const leadingSeparator = _123n;
 const trailingSeparator = 123n;
 const doubleSeparator = 123456789n;
+
 // Using literals as types
 const oneTwoOrThree = (x) => x ** 2n;
 oneTwoOrThree(0n);oneTwoOrThree(1n);oneTwoOrThree(2n);oneTwoOrThree(3n);

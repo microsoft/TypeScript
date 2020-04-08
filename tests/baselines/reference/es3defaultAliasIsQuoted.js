@@ -27,7 +27,8 @@ exports.Foo = Foo;
 function assert(value) {
     if (!value)
         throw new Error("Assertion failed!");
-}exports["default"] = assert;
+}
+exports["default"] = assert;
 //// [es3defaultAliasQuoted_file1.js]
 "use strict";
 exports.__esModule = true;

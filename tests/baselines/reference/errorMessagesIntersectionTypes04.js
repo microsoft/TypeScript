@@ -24,7 +24,6 @@ function f<T, U extends A, V extends U>(): void {
 
 //// [errorMessagesIntersectionTypes04.js]
 
-
 function f() {
     var num;
     var bool;
@@ -32,6 +31,7 @@ function f() {
 
     var a_and_b;
     var num_and_bool;
+
     num = a_and_b;
     bool = a_and_b;
     str = a_and_b;

@@ -26,10 +26,10 @@ var Outer;
 
     // inner mod 1
     var non_export_var;
-    module;
-    {
+    module;{
         var non_export_var = 0;
         export var export_var = 1;
+
         function NonExportFunc() { return 0; }
 
 

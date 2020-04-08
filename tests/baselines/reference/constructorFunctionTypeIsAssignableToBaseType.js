@@ -38,13 +38,15 @@ var __extends = (this && this.__extends) || (function () {
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);function Derived() {
+    __extends(Derived, _super);
+    function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived;
 }(Base));
 var Derived2 = /** @class */ (function (_super) {
-    __extends(Derived2, _super);function Derived2() {
+    __extends(Derived2, _super);
+    function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived2;

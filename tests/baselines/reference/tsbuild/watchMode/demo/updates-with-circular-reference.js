@@ -218,13 +218,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.lastElementOf = exports.makeRandomName = void 0;
 function makeRandomName() {
     return "Bob!?! ";
-}exports.makeRandomName = makeRandomName;
-
+}
+exports.makeRandomName = makeRandomName;
 function lastElementOf(arr) {
     if (arr.length === 0)
         return undefined;
     return arr[arr.length - 1];
-}exports.lastElementOf = lastElementOf;
+}
+exports.lastElementOf = lastElementOf;
 
 
 
@@ -318,7 +319,8 @@ function createDog() {
         },
         name: utilities_1.makeRandomName()
     });
-}exports.createDog = createDog;
+}
+exports.createDog = createDog;
 
 
 
@@ -416,7 +418,8 @@ function createZoo() {
     return [
         index_1.createDog()
     ];
-}exports.createZoo = createZoo;
+}
+exports.createZoo = createZoo;
 
 
 

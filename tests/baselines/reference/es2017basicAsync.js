@@ -51,15 +51,18 @@ async () => {
     await 0;
 };
 
+
 async function asyncFunc() {
     await 0;
 }
+
 const asyncArrowFunc = async () => {
     await 0;
 };
 
 async function asyncIIFE() {
     await 0;
+
     await (async function () {
         await 1;
     })();
@@ -85,7 +88,8 @@ class AsyncClass {
         this.asyncPropArrowFunc = async () => {
             await 2;
         };
-    }async asyncMethod() {
+    }
+    async asyncMethod() {
         await 2;
     }
 }

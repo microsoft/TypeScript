@@ -73,7 +73,8 @@ function foo() {
 }
 var A = /** @class */ (function () {
     function A() {
-    }A.foo = function () {
+    }
+    A.foo = function () {
         var a;
         return a;
     };
@@ -112,6 +113,7 @@ var ResultIsBoolean19 = !(undefined + undefined);
 // multiple ! operators
 var ResultIsBoolean20 = !!ANY;
 var ResultIsBoolean21 = !!!(ANY + ANY1);
+
 // miss assignment operators
 !ANY;
 !ANY1;

@@ -493,11 +493,10 @@ const t03c04 = (<t03<number, 1>>x).a;
 interface SelfReference<T = SelfReference<string>> {}
 
 //// [genericDefaults.js]
-
-
 // no inference
 f00();
 f00(a);
+
 // inference
 f01();
 f01(a);
@@ -850,7 +849,6 @@ var i03c02 = x.a;
 var i03c03 = x.a;
 var i03c04 = x.a;
 
-
 var i05c00 = x.a;
 var i05c01 = x.a;
 
@@ -862,7 +860,6 @@ var i07c00 = x.a;
 var i07c01 = x.b;
 var i07c02 = x.a;
 var i07c03 = x.b;
-
 
 var Base01c00 = new Base01();
 var Base01c01 = new Base01(1);

@@ -19,7 +19,8 @@ exports.createNamed = void 0;
 
 function createNamed() {
     return {};
-}exports.createNamed = createNamed;
+}
+exports.createNamed = createNamed;
 //// [a.js]
 "use strict";
 exports.__esModule = true;

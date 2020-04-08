@@ -32,6 +32,7 @@ void prop9;
 var named = "foo";
 var _a = { prop: "foo" }, _b = named, prop = _a[_b];
 void prop;
+
 var numIndexed = null;
 var strIndexed = null;
 

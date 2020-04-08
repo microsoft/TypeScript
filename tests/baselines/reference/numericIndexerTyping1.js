@@ -14,7 +14,6 @@ var r2: string = i2[1]; // error: numeric indexer returns the type of the string
 
 //// [numericIndexerTyping1.js]
 
-
 var i;
 var r = i[1]; // error: numeric indexer returns the type of the string indexer
 

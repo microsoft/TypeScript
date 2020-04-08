@@ -18,7 +18,8 @@ var Validation;
 
     var LettersOnlyValidator = /** @class */ (function () {
         function LettersOnlyValidator() {
-        }LettersOnlyValidator.prototype.isAcceptable = function (s2) {
+        }
+        LettersOnlyValidator.prototype.isAcceptable = function (s2) {
             return lettersRegexp.test(s2);
         };
         return LettersOnlyValidator;

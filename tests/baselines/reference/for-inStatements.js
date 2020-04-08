@@ -95,8 +95,10 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var aString;
 for (aString in {}) { }
+
 var anAny;
 for (anAny in {}) { }
+
 for (var x in {}) { }
 for (var x in []) { }
 for (var x in [1, 2, 3, 4, 5]) { }
@@ -121,7 +123,8 @@ for (var x in function (x, y) { return x + y; }) { }
 
 var A = /** @class */ (function () {
     function A() {
-    }A.prototype.biz = function () {
+    }
+    A.prototype.biz = function () {
         for (var x in this.biz()) { }
         for (var x in this.biz) { }
         for (var x in this) { }
@@ -132,14 +135,17 @@ var A = /** @class */ (function () {
         for (var x in this) { }
         for (var x in this.baz) { }
         for (var x in this.baz()) { }
+
         return null;
     };
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }B.prototype.boz = function () {
+    }
+    B.prototype.boz = function () {
         for (var x in this.biz()) { }
         for (var x in this.biz) { }
         for (var x in this) { }
@@ -166,7 +172,8 @@ for (var x in M) { }
 for (var x in M.X) { }
 var Color;
 (function (Color) {
-    Color[Color["Red"] = 0] = "Red";Color[Color["Blue"] = 1] = "Blue";
+    Color[Color["Red"] = 0] = "Red";
+    Color[Color["Blue"] = 1] = "Blue";
 })(Color || (Color = {}));
 for (var x in Color) { }
 for (var x in Color.Blue) { }

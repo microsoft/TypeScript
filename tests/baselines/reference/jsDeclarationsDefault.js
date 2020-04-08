@@ -49,9 +49,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = exports.x = void 0;
 function foo() {
     return foo;
-}exports.default = foo;
-
-exports.bar = foo;exports.x = foo;
+}
+exports.default = foo;
+exports.bar = foo;
+exports.x = foo;
 //// [index3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -62,7 +63,6 @@ var Foo = /** @class */ (function () {
     }
     return Foo;
 }());
-
 exports.Bar = Foo;
 exports.default = Foo;
 ;
@@ -85,7 +85,8 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var index3_1 = require("./index3");
 var Bar = /** @class */ (function (_super) {
-    __extends(Bar, _super);function Bar() {
+    __extends(Bar, _super);
+    function Bar() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.x = (null);
         return _this;
@@ -105,7 +106,7 @@ exports.default = 12;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // merge type alias and function (OK)
-function func() { }// merge type alias and function (OK)
+function func() { }
 exports.default = func;
 ;
 /**

@@ -62,7 +62,8 @@ function f(x) {
 
 var MyClass = /** @class */ (function () {
     function MyClass() {
-    }MyClass.displayTree1 = function (tree) {
+    }
+    MyClass.displayTree1 = function (tree) {
         // error "Property 'children' does not exist on type 'T'"
         tree.children;
     };

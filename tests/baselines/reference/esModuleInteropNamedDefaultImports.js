@@ -24,7 +24,8 @@ exports["default"] = Foo;
 var Bar = /** @class */ (function () {
     function Bar() {}
     return Bar;
-}());exports.Bar = Bar;
+}());
+exports.Bar = Bar;
 //// [idx.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {

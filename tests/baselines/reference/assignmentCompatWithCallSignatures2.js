@@ -55,14 +55,17 @@ a = function (x: string) { return ''; }
 
 var t;
 var a;
+
 t = a;
 a = t;
+
 var s;
 var a2;
 t = s;
 t = a2;
 a = s;
 a = a2;
+
 t = { f: function () { return 1; } };
 t = { f: function (x) { return 1; } };
 t = { f: function f() { return 1; } };

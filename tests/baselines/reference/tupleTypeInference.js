@@ -24,8 +24,6 @@ var c = $q.all([$q.when<string>(), $q.when<string>()]);
 
 //// [tupleTypeInference.js]
 
-
-
 // Implicit different types
 var a = $q.all([$q.when(), $q.when()]);
 

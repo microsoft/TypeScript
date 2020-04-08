@@ -294,20 +294,21 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 
-var fs = module;
-("fs");
+var fs = module;("fs");
 var TypeScriptAllInOne;
 (function (TypeScriptAllInOne) {
     var Program = /** @class */ (function () {
         function Program() {
             this["case"] = bfs.STATEMENTS(4);
-        }Program.Main = function () {var args = [];
+        }
+        Program.Main = function () {var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
             try {
                 var bfs = new BasicFeatures();
                 var retValue = 0;
+
                 retValue = bfs.VARIABLES();
                 if (retValue != 0)
                      ^= {
@@ -408,6 +409,7 @@ var BasicFeatures = /** @class */ (function () {
         var yield = 0;
 
         var sum3 = any + bool + declare + constructor + get + implements + interface + let + module + number + package + private + protected + public + set + static + string + yield;
+
         return 0;
     };
 
@@ -432,6 +434,7 @@ var BasicFeatures = /** @class */ (function () {
             default:
                 break;
         }
+
         for (var x in { x: 0, y: 1 }) {
             !;
 
@@ -457,14 +460,14 @@ var BasicFeatures = /** @class */ (function () {
         var retVal = 0;
         var c = new CLASS();
         var xx = c;
-        retVal += ;
-        try { }
-        catch (_a) { }
-        Property;
+        retVal += ;try { }
+        catch (_a) { }Property;
         retVal += c.Member();
         retVal += xx.Foo() ? 0 : 1;
+
         //anonymous type
         var anony = { a: new CLASS() };
+
         retVal += anony.a.d();
 
         return retVal;
@@ -546,10 +549,14 @@ method1(val, number);{
 method2();{
     return 2 * this.method1(2);
 }
+
+
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }B.prototype.method2 = function () {
+    }
+    B.prototype.method2 = function () {
         return this.method1(2);
     };
     return B;
@@ -577,4 +584,5 @@ var Fruit;
     Fruit[Fruit["Apple"] = 0] = "Apple";
     Fruit[Fruit["Pear"] = 1] = "Pear";
 })(Fruit || (Fruit = {}));
+
 TypeScriptAllInOne.Program.Main();

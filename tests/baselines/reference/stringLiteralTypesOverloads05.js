@@ -13,7 +13,6 @@ function doThing(x: string, y?: string): Moose {
 
 //// [stringLiteralTypesOverloads05.js]
 ;
-
 function doThing(x, y) {
     return undefined;
 }

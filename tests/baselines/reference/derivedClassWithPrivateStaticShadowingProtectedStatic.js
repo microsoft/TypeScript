@@ -35,7 +35,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var Base = /** @class */ (function () {
     function Base() {
-    }Base.fn = function () {
+    }
+    Base.fn = function () {
         return '';
     };
     Object.defineProperty(Base, "a", {
@@ -48,9 +49,11 @@ var __extends = (this && this.__extends) || (function () {
 }());
 // should be error
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);function Derived() {
+    __extends(Derived, _super);
+    function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Derived.fn = function () {
+    }
+    Derived.fn = function () {
         return '';
     };
     Object.defineProperty(Derived, "a", {

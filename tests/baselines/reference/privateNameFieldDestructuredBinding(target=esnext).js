@@ -38,12 +38,23 @@ class A {
         [this.#field = 2] = [];
         [this.otherObject.#field = 2] = [];
     }#field;
+
     testObject() {
         return { x: 10, y: 6 };
     }
     testArray() {
         return [10, 11];
     }
+
+
+
+
+
+
+
+
+
+
     static test(_a) {
         [_a.#field] = [2];
     }

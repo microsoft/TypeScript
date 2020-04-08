@@ -49,9 +49,11 @@ var React = require("react");
 
 
 var Button = /** @class */ (function (_super) {
-    __extends(Button, _super);function Button() {
+    __extends(Button, _super);
+    function Button() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Button.prototype.render = function () {
+    }
+    Button.prototype.render = function () {
         return (<div>My Button</div>);
     };
     return Button;

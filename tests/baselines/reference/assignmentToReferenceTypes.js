@@ -27,6 +27,7 @@ function g(x) {
 // Should all be allowed
 
 M = null;
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -39,6 +40,7 @@ E = null;
 
 function f() { }
 f = null;
+
 var x = 1;
 x = null;
 

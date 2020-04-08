@@ -59,7 +59,7 @@ var f4 = <U extends T, T>(x: V, y: X) => { // error
 
 var C = /** @class */ (function () {
     function C() {
-    }// error
+    }
     C.prototype.foo = function (x) {
         var r;
         return x;

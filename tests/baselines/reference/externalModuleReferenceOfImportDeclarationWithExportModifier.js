@@ -13,7 +13,8 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     exports.foo = void 0;
-    function foo() { }exports.foo = foo;
+    function foo() { }
+    exports.foo = foo;
     ;
 });
 //// [externalModuleReferenceOfImportDeclarationWithExportModifier_1.js]

@@ -10,6 +10,7 @@ f `
 //// [taggedTemplateStringsWithMultilineTemplateES6.js]
 function f(...args) {
 }
+
 f `
 \
 

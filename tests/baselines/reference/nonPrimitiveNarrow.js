@@ -30,6 +30,7 @@ var Narrow = /** @class */ (function () {
     return Narrow;
 }());
 var a;
+
 if (a instanceof Narrow) {
     a.narrowed; // ok
     a = 123; // error
@@ -38,7 +39,9 @@ if (a instanceof Narrow) {
 if (typeof a === 'number') {
     a.toFixed(); // error, never
 }
+
 var b;
+
 if (typeof b === 'object') {
     b.toString(); // ok, object | null
 }

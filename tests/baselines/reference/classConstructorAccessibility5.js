@@ -29,13 +29,16 @@ var __extends = (this && this.__extends) || (function () {
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);function Derived() {
+    __extends(Derived, _super);
+    function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Derived.make = function () { new Base(); }; // ok
+    }
+    Derived.make = function () { new Base(); }; // ok
     return Derived;
 }(Base));
 var Unrelated = /** @class */ (function () {
     function Unrelated() {
-    }Unrelated.fake = function () { new Base(); }; // error
+    }
+    Unrelated.fake = function () { new Base(); }; // error
     return Unrelated;
 }());

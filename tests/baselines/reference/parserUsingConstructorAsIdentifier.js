@@ -51,6 +51,7 @@ function define(constructor, instanceMembers, staticMembers) {
     }
     return constructor;
 }
+
 function derive(baseClass, constructor, instanceMembers, staticMembers) {
     if (baseClass) {
         constructor = constructor || function () { };

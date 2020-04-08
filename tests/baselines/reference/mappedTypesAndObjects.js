@@ -60,10 +60,7 @@ function f3(x) {
     x = {};
 }
 
-
-
 ;
-
 
 // Repro from #13747
 var Form = /** @class */ (function () {

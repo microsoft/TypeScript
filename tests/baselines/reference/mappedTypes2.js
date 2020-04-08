@@ -119,10 +119,6 @@ function verifyLibTypes() {
 
 
 
-
-
-
-
 function f0(s1, s2) {
     assign(s1, { name: "circle" });
     assign(s2, { width: 10, height: 20 });

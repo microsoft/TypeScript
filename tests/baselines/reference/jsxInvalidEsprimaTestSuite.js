@@ -75,6 +75,7 @@ var x = <div>one</div> /* intervening comment */ <div>two</div>;;
 <a .../*hai*/asdf/>;
 
 //// [1.jsx]
+
  > ;
 //// [2.jsx]
 <a />;
@@ -109,11 +110,9 @@ var x = <div>one</div> /* intervening comment */ <div>two</div>;;
 //// [17.jsx]
 <a b=>;</>;
 //// [18.jsx]
-var x = <div>one</div>, <div>two</div>;
-;
+var x = <div>one</div>, <div>two</div>;;
 //// [19.jsx]
-var x = <div>one</div> /* intervening comment */, /* intervening comment */ <div>two</div>;
-;
+var x = <div>one</div> /* intervening comment */, /* intervening comment */ <div>two</div>;;
 //// [20.jsx]
 <a>{"str"};}</a>;
 //// [21.jsx]

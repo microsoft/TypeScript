@@ -24,7 +24,6 @@ var f: E = new F();
 
 
 //// [ambientClassDeclarationExtends_singleFile.js]
-
 var D;
 (function (D) {var x;})(D || (D = {}));
 

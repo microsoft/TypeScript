@@ -11,7 +11,8 @@ class C {
 //// [computedPropertyNamesSourceMap1_ES5.js]
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype["hello"] = function () {
+    }
+    C.prototype["hello"] = function () {
         debugger;
     };
     Object.defineProperty(C.prototype, "goodbye", {

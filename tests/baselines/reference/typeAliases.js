@@ -129,20 +129,25 @@ var x11;
 var x11;
 
 ;
+
 var x13_1;
 var x13_2;
 
 foo13(x13_1, x13_2);
 foo13(x13_2, x13_1);
-var x14;
 
+
+var x14;
 
 var E;
 (function (E) {
     E[E["x"] = 10] = "x";
 })(E || (E = {}));
 f15(E.x).toLowerCase();
+
+
 var x;
 f16(x);
+
 var y = ["1", false];
 y[0].toLowerCase();

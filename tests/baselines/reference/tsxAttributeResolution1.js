@@ -35,6 +35,7 @@ interface Attribs1 {
 
 
 //// [file.jsx]
+
 // OK
 <test1 x={0}/>; // OK
 <test1 />; // OK

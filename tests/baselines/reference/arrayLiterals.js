@@ -86,14 +86,16 @@ var Base = /** @class */ (function () {
     return Base;
 }());
 var Derived1 = /** @class */ (function (_super) {
-    __extends(Derived1, _super);function Derived1() {
+    __extends(Derived1, _super);
+    function Derived1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived1;
 }(Base));
 ;
 var Derived2 = /** @class */ (function (_super) {
-    __extends(Derived2, _super);function Derived2() {
+    __extends(Derived2, _super);
+    function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived2;

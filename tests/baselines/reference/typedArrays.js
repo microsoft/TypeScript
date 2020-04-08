@@ -179,6 +179,7 @@ function CreateTypedArrayTypes() {
 
     return typedArrays;
 }
+
 function CreateTypedArrayInstancesFromLength(obj) {
     var typedArrays = [];
     typedArrays[0] = new Int8Array(obj);
@@ -238,6 +239,7 @@ function CreateIntegerTypedArraysFromArrayLike(obj) {
 
     return typedArrays;
 }
+
 function CreateTypedArraysOf(obj) {
     var typedArrays = [];
     typedArrays[0] = Int8Array.of(...obj);
@@ -267,6 +269,7 @@ function CreateTypedArraysOf2() {
 
     return typedArrays;
 }
+
 function CreateTypedArraysFromMapFn2(obj, mapFn) {
     var typedArrays = [];
     typedArrays[0] = Int8Array.from(obj, mapFn);

@@ -84,7 +84,8 @@ var SomeBase = /** @class */ (function () {
     return SomeBase;
 }());
 var SomeDerived = /** @class */ (function (_super) {
-    __extends(SomeDerived, _super);function SomeDerived() {
+    __extends(SomeDerived, _super);
+    function SomeDerived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return SomeDerived;
@@ -115,11 +116,10 @@ someOther = someOther;
 var numOrStr;
 var str;
 if (is)
-    string > (numOrStr === undefined);
-{ // Error
+    string > (numOrStr === undefined);{ // Error
     str = numOrStr; // Error, no narrowing occurred
 }
+
 if ((numOrStr === undefined))
-    is;
-string;{ // Error
+    is;string;{ // Error
 }

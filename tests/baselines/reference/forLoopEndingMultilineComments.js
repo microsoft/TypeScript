@@ -38,4 +38,5 @@ function consoleTestResultHandler(testResult) {
         /* eslint-enable no-console */
     }
     return true;
-}exports.consoleTestResultHandler = consoleTestResultHandler;
+}
+exports.consoleTestResultHandler = consoleTestResultHandler;

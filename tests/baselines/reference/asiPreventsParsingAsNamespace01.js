@@ -9,6 +9,7 @@ n            // this is the identifier 'n'
 //// [asiPreventsParsingAsNamespace01.js]
 var namespace;
 var n;
+
 namespace; // this is the identifier 'namespace'
 n; // this is the identifier 'n'
 { } // this is a block body

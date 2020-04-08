@@ -136,6 +136,7 @@ function* g311() { // Generator<any (implicit), void, string>
 
 
 //// [generatorReturnTypeInferenceNonStrict.js]
+
 function* g000() {
 }
 
@@ -185,6 +186,7 @@ function* g103() {
 function* g104() {
     return never;
 }
+
 // 'next' iteration type inference
 function* g201() {
     let a = yield 1;
@@ -195,9 +197,12 @@ function* g202() {
     let b = yield 2;
 }
 
+
 function* g203() {
     const x = f1(yield 1);
 }
+
+
 function* g204() {
     const x = f2(yield 1);
 }
@@ -231,6 +236,7 @@ function* g305() {
         return "a";
     return "b";
 }
+
 function* g306() {
     const a = yield 1;
     return true;
@@ -250,9 +256,11 @@ function* g309(x, y) {
     const a = yield x;
     return y;
 }
+
 function* g310() {
     const [a = 1, b = 2] = yield;
 }
+
 function* g311() {
     yield* (function* () {
         const y = yield;

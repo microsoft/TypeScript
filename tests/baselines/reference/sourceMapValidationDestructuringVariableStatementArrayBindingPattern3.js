@@ -99,6 +99,7 @@ _o = [2, "trimmer", "trimming"], numberB = _o[0], robotAInfo = _o.slice(1);
 multiRobotAInfo = multiRobotA.slice(0);
 multiRobotAInfo = getMultiRobotB().slice(0);
 multiRobotAInfo = ["trimmer", ["trimming", "edging"]].slice(0);
+
 if (nameA == nameB) {
     console.log(skillB);
 }

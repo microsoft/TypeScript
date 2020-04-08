@@ -70,8 +70,10 @@ function f4() {
 
 function voidFunc() {
 }
+
 function calltoVoidFunc(x) {
     if (x)
         return voidFunc();
 }
+
 let x1 = () => { use("Test"); };

@@ -17,13 +17,15 @@ module N {
 
 //// [genericOfACloduleType2.js]
 var G = /** @class */ (function () {
-    function G() {}G.prototype.bar = function (x) { return x; };
+    function G() {}
+    G.prototype.bar = function (x) { return x; };
     return G;
 }());
 var M;
 (function (M) {
     var C = /** @class */ (function () {
-        function C() {}C.prototype.foo = function () { };
+        function C() {}
+        C.prototype.foo = function () { };
         return C;
     }());
     M.C = C;

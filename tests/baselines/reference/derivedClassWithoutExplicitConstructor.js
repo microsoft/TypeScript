@@ -46,7 +46,8 @@ var __extends = (this && this.__extends) || (function () {
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);function Derived() {
+    __extends(Derived, _super);
+    function Derived() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.x = 1;
         _this.y = 'hello';
@@ -64,7 +65,8 @@ var Base2 = /** @class */ (function () {
     return Base2;
 }());
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);function D() {
+    __extends(D, _super);
+    function D() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.x = 2;
         _this.y = null;

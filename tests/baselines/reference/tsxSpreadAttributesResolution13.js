@@ -44,8 +44,8 @@ function Component(props) {
     else {
         return (<ChildComponent {...props} property1="NewString"/>);
     }
-}exports["default"] = Component;
-
+}
+exports["default"] = Component;
 
 function ChildComponent(_a) {
     var property1 = _a.property1;

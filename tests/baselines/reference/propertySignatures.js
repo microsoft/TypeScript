@@ -28,6 +28,7 @@ var foo1;
 var foo2;
 foo2.a = 2;
 foo2.a = "0";
+
 // Should be error
 var foo3;
 

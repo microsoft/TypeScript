@@ -10,4 +10,3 @@ interface Derived extends Base {
 }
 
 //// [interfaceThatHidesBaseProperty.js]
-

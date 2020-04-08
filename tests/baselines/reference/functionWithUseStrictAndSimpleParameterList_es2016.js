@@ -64,9 +64,11 @@ function container() {
     function f(a = 10) {
     }
 }
+
 function rest(...args) {
     'use strict';
 }
+
 function rest1(a = 1, ...args) {
     'use strict';
 }
@@ -74,6 +76,7 @@ function rest1(a = 1, ...args) {
 function paramDefault(param = 1) {
     'use strict';
 }
+
 function objectBindingPattern({ foo }) {
     'use strict';
 }
@@ -81,6 +84,7 @@ function objectBindingPattern({ foo }) {
 function arrayBindingPattern([foo]) {
     'use strict';
 }
+
 function manyParameter(a = 10, b = 20) {
     "use strict";
 }

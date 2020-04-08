@@ -65,6 +65,7 @@ var b;
 
 var a2 = { foo: '' };
 var b2 = { foo: '' };
+
 s = t;
 t = s;
 s = s2;

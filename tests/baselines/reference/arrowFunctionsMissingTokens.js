@@ -98,13 +98,14 @@ var missingCurliesWithArrow;
     (function (withoutStatement) {
         var a = function () { return ; };})(withoutStatement || (withoutStatement = {}));
     ;
+
     var b = function () { return ; };})(missingCurliesWithArrow || (missingCurliesWithArrow = {}));
-var c = function (x) { return ; };
-;
-var d = function (x, y) { return ; };
-;
-var e = function (x, y) { return ; };
-;
+var c = function (x) { return ; };;
+
+var d = function (x, y) { return ; };;
+
+var e = function (x, y) { return ; };;
+
 var f = function () { return ; };
 var ce_nEst_pas_une_arrow_function;
 (function (ce_nEst_pas_une_arrow_function) {

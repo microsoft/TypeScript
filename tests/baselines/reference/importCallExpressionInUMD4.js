@@ -55,9 +55,10 @@ export class D {
     exports.foo = exports.B = void 0;
     class B {
         print() { return "I am B"; }
-    }exports.B = B;
-
-    function foo() { return "foo"; }exports.foo = foo;
+    }
+    exports.B = B;
+    function foo() { return "foo"; }
+    exports.foo = foo;
 });
 //// [1.js]
 (function (factory) {
@@ -72,7 +73,8 @@ export class D {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.backup = void 0;
-    function backup() { return "backup"; }exports.backup = backup;
+    function backup() { return "backup"; }
+    exports.backup = backup;
 });
 //// [2.js]
 (function (factory) {
@@ -91,7 +93,8 @@ export class D {
     class C {
         constructor() {
             this.myModule = __syncRequire ? Promise.resolve().then(() => require("./0")) : new Promise((resolve_1, reject_1) => { require(["./0"], resolve_1, reject_1); });
-        }method() {
+        }
+        method() {
             const loadAsync = __syncRequire ? Promise.resolve().then(() => require("./0")) : new Promise((resolve_2, reject_2) => { require(["./0"], resolve_2, reject_2); });
             this.myModule.then(Zero => {
                 console.log(Zero.foo());
@@ -107,7 +110,8 @@ export class D {
 
         constructor() {
             this.myModule = __syncRequire ? Promise.resolve().then(() => require("./0")) : new Promise((resolve_4, reject_4) => { require(["./0"], resolve_4, reject_4); });
-        }method() {
+        }
+        method() {
             const loadAsync = __syncRequire ? Promise.resolve().then(() => require("./0")) : new Promise((resolve_5, reject_5) => { require(["./0"], resolve_5, reject_5); });
             this.myModule.then(Zero => {
                 console.log(Zero.foo());
@@ -117,5 +121,6 @@ export class D {
                 console.log(one.backup());
             });
         }
-    }exports.D = D;
+    }
+    exports.D = D;
 });

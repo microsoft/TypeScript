@@ -44,8 +44,8 @@ object,
     else {
         object[key] = [value];
     }
-}exports.appendToOptionalArray = appendToOptionalArray;
-
+}
+exports.appendToOptionalArray = appendToOptionalArray;
 // e.g.
 var foo = {};
 appendToOptionalArray(foo, 'x', 123); // ok

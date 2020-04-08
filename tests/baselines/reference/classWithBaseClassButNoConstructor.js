@@ -58,7 +58,8 @@ var __extends = (this && this.__extends) || (function () {
     return Base;
 }());
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);function C() {
+    __extends(C, _super);
+    function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
@@ -72,7 +73,8 @@ var Base2 = /** @class */ (function () {
     return Base2;
 }());
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);function D() {
+    __extends(D, _super);
+    function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
@@ -84,7 +86,7 @@ var d2 = new D(1); // ok
 
 // specialized base class
 var D2 = /** @class */ (function (_super) {
-    __extends(D2, _super);// ok
+    __extends(D2, _super);
     function D2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
@@ -95,7 +97,7 @@ var d3 = new D(); // error
 var d4 = new D(1); // ok
 
 var D3 = /** @class */ (function (_super) {
-    __extends(D3, _super);// ok
+    __extends(D3, _super);
     function D3() {
         return _super !== null && _super.apply(this, arguments) || this;
     }

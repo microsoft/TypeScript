@@ -115,7 +115,8 @@ var A = /** @class */ (function () {
 }());
 function mixB(Cls) {
     return /** @class */ (function (_super) {
-        __extends(class_1, _super);function class_1() {
+        __extends(class_1, _super);
+        function class_1() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.ptd = 10;
             _this.pvt = 0;
@@ -127,7 +128,8 @@ function mixB(Cls) {
 
 function mixB2(Cls) {
     return /** @class */ (function (_super) {
-        __extends(class_2, _super);function class_2() {
+        __extends(class_2, _super);
+        function class_2() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.ptd = 10;
             return _this;
@@ -141,7 +143,8 @@ var AB = mixB(A),
 
 function mixC(Cls) {
     return /** @class */ (function (_super) {
-        __extends(class_3, _super);function class_3() {
+        __extends(class_3, _super);
+        function class_3() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.ptd = 100;
             _this.pvt = 0;
@@ -158,6 +161,7 @@ var a = new A(),
     ab = new AB(),
     abc = new ABC(),
     ab2c = new AB2C();
+
 a.pb.toFixed();
 a.ptd.toFixed(); // Error
 a.pvt.toFixed(); // Error
@@ -173,6 +177,9 @@ abc.pvt.toFixed(); // Error
 ab2c.pb.toFixed();
 ab2c.ptd.toFixed(); // Error
 ab2c.pvt.toFixed(); // Error
+
+
+
 // Repro from #13924
 var Person = /** @class */ (function () {
     function Person(name) {
@@ -203,9 +210,11 @@ function PersonMixin(Base) {
 }
 
 var Customer = /** @class */ (function (_super) {
-    __extends(Customer, _super);function Customer() {
+    __extends(Customer, _super);
+    function Customer() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Customer.prototype.f = function () {
+    }
+    Customer.prototype.f = function () {
     };
     return Customer;
 }(PersonMixin(Person)));

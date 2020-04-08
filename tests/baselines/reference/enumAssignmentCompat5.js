@@ -27,7 +27,9 @@ let ca: Computed.A = 1; // error, Computed.A isn't a literal type because Comput
 //// [enumAssignmentCompat5.js]
 var E;
 (function (E) {
-    E[E["A"] = 0] = "A";E[E["B"] = 1] = "B";E[E["C"] = 2] = "C";
+    E[E["A"] = 0] = "A";
+    E[E["B"] = 1] = "B";
+    E[E["C"] = 2] = "C";
 })(E || (E = {}));
 var Computed;
 (function (Computed) {
@@ -42,6 +44,7 @@ e = 4; // ok, out of range, but allowed computed enums don't have all members
 var a = 0; // ok, A === 0
 a = 2; // error, 2 !== 0
 a = n; // ok
+
 var c = n; // ok
 c = n; // ok
 c = 4; // ok

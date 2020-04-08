@@ -18,7 +18,8 @@ module clodule {
 //// [ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.js]
 var clodule = /** @class */ (function () {
     function clodule() {
-    }clodule.fn = function (id) { };
+    }
+    clodule.fn = function (id) { };
     return clodule;
 }());
 (function (clodule) {

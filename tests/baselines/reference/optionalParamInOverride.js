@@ -22,12 +22,15 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var Z = /** @class */ (function () {
     function Z() {
-    }Z.prototype.func = function () { };
+    }
+    Z.prototype.func = function () { };
     return Z;
 }());
 var Y = /** @class */ (function (_super) {
-    __extends(Y, _super);function Y() {
+    __extends(Y, _super);
+    function Y() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Y.prototype.func = function (value) { };
+    }
+    Y.prototype.func = function (value) { };
     return Y;
 }(Z));

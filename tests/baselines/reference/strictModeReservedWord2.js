@@ -34,4 +34,3 @@ var foo;
     foo[foo["private"] = 1] = "private";
     foo[foo["pacakge"] = 2] = "pacakge";
 })(foo || (foo = {}));
-

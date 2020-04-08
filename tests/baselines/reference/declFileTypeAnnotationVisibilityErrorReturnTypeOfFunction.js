@@ -77,6 +77,7 @@ var m;
     function foo2() {
         return new private1();
     }
+
     function foo3() {
         return;
     }
@@ -91,6 +92,7 @@ var m;
     function foo12() {
         return new public1();
     }
+
     function foo13() {
         return;
     }
@@ -114,6 +116,7 @@ var m;
     function foo112() {
         return new m2.public2();
     }
+
     function foo113() {
         return;
     }

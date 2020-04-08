@@ -43,6 +43,7 @@ var D = /** @class */ (function () {
 }());
 var x6 = new C();
 var x7 = new D();
+
 x6 = x7;
 x6 = C;
 C == D;

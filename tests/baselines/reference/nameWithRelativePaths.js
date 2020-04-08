@@ -34,7 +34,8 @@ exports.__esModule = true;
 exports.f = void 0;
 function f() {
     return 42;
-}exports.f = f;
+}
+exports.f = f;
 //// [foo_2.js]
 "use strict";
 exports.__esModule = true;

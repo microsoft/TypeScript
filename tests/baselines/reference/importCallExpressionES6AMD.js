@@ -33,7 +33,8 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.foo = void 0;
-    function foo() { return "foo"; }exports.foo = foo;
+    function foo() { return "foo"; }
+    exports.foo = foo;
 });
 //// [1.js]
 define(["require", "exports"], function (require, exports) {
@@ -45,6 +46,7 @@ define(["require", "exports"], function (require, exports) {
     p1.then(zero => {
         return zero.foo();
     });
+
     exports.p2 = new Promise((resolve_3, reject_3) => { require(["./0"], resolve_3, reject_3); });
 
     function foo() {
@@ -61,5 +63,6 @@ define(["require", "exports"], function (require, exports) {
         method() {
             const loadAsync = new Promise((resolve_6, reject_6) => { require(["./0"], resolve_6, reject_6); });
         }
-    }exports.D = D;
+    }
+    exports.D = D;
 });

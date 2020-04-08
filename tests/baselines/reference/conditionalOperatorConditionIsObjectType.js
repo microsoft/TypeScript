@@ -79,6 +79,7 @@ var exprBoolean2;
 var exprNumber2;
 var exprString2;
 var exprIsObject2;
+
 function foo() { };
 var C = /** @class */ (function () {
     function C() {}
@@ -93,6 +94,8 @@ condObject ? exprNumber1 : exprNumber2;
 condObject ? exprString1 : exprString2;
 condObject ? exprIsObject1 : exprIsObject2;
 condObject ? exprString1 : exprBoolean1; // union
+
+
 //Cond is an object type literal
 (function (a) { return a.length; }) ? exprAny1 : exprAny2;
 (function (a) { return a.length; }) ? exprBoolean1 : exprBoolean2;
@@ -109,6 +112,8 @@ new C() ? exprNumber1 : exprNumber2;
 C.doIt() ? exprString1 : exprString2;
 condObject.valueOf() ? exprIsObject1 : exprIsObject2;
 new Date() ? exprString1 : exprBoolean1; // union
+
+
 //Results shoud be same as Expr1 and Expr2
 var resultIsAny1 = condObject ? exprAny1 : exprAny2;
 var resultIsBoolean1 = condObject ? exprBoolean1 : exprBoolean2;

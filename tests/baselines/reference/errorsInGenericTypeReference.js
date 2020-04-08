@@ -93,7 +93,8 @@ var Foo = /** @class */ (function () {
 // in call type arguments
 var testClass1 = /** @class */ (function () {
     function testClass1() {
-    }testClass1.prototype.method = function () { };
+    }
+    testClass1.prototype.method = function () { };
     return testClass1;
 }());
 var tc1 = new testClass1();
@@ -114,7 +115,8 @@ var tc2 = new testClass2(); // error: could not find symbol V
 // in method return type annotation
 var testClass3 = /** @class */ (function () {
     function testClass3() {
-    }testClass3.prototype.testMethod1 = function () { return null; }; // error: could not find symbol V
+    }
+    testClass3.prototype.testMethod1 = function () { return null; }; // error: could not find symbol V
     testClass3.testMethod2 = function () { return null; }; // error: could not find symbol V
     Object.defineProperty(testClass3.prototype, "a", {
         set: function (value) { } // error: could not find symbol V
@@ -147,14 +149,16 @@ var testClass4 = /** @class */ (function () {
 
 var testClass6 = /** @class */ (function () {
     function testClass6() {
-    }testClass6.prototype.method = function () { }; // error: could not find symbol V
+    }
+    testClass6.prototype.method = function () { }; // error: could not find symbol V
     return testClass6;
 }());
 
 
 // in extends clause
 var testClass7 = /** @class */ (function (_super) {
-    __extends(testClass7, _super);function testClass7() {
+    __extends(testClass7, _super);
+    function testClass7() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return testClass7;

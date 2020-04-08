@@ -69,6 +69,7 @@ var a;
 var b;
 a = b;
 b = a; // error
+
 var b2;
 a = b2;
 b2 = a; // error
@@ -80,7 +81,8 @@ var Generics;
         return A;
     }());
     var B = /** @class */ (function (_super) {
-        __extends(B, _super);function B() {
+        __extends(B, _super);
+        function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
@@ -90,9 +92,11 @@ var Generics;
         var b;
         a = b; // error
         b = a; // error
+
         var b2;
         a = b2; // error
         b2 = a; // error
+
         var b3;
         a = b3; // ok
         b3 = a; // ok

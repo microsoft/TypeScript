@@ -194,6 +194,7 @@ class A {
     y() {
     }
 }
+
 class B extends A {
     // async method with only call/get on 'super' does not require a binding
     simple() {
@@ -260,6 +261,7 @@ class B extends A {
 
             // element access in arrow
             (() => _superIndex("x").value.call(this));
+
             // property access in async arrow
             (() => __awaiter(this, void 0, void 0, function* () { return _super.x.call(this); }));
 
@@ -281,6 +283,7 @@ class B extends A {
 
             // property access in arrow
             (() => _super.x.call(this));
+
             // property access in async arrow
             (() => __awaiter(this, void 0, void 0, function* () { return _super.x.call(this); }));
         });
@@ -301,6 +304,7 @@ class B extends A {
 
             // property access (assign) in arrow
             (() => _super.x = f);
+
             // property access (assign) in async arrow
             (() => __awaiter(this, void 0, void 0, function* () { return _super.x = f; }));
         });
@@ -317,6 +321,7 @@ class B extends A {
 
             // element access in arrow
             (() => _superIndex("x").call(this));
+
             // element access in async arrow
             (() => __awaiter(this, void 0, void 0, function* () { return _superIndex("x").call(this); }));
         });
@@ -338,6 +343,7 @@ class B extends A {
 
             // element access (assign) in arrow
             (() => _superIndex("x").value = f);
+
             // element access (assign) in async arrow
             (() => __awaiter(this, void 0, void 0, function* () { return _superIndex("x").value = f; }));
         });
@@ -356,6 +362,7 @@ class B extends A {
 
             // property access in arrow
             (() => _super.x.call(this));
+
             // property access in async arrow
             (() => __awaiter(this, void 0, void 0, function* () { return _super.x.call(this); }));
         });
@@ -376,6 +383,7 @@ class B extends A {
 
             // property access (assign) in arrow
             (() => _super.x = f);
+
             // property access (assign) in async arrow
             (() => __awaiter(this, void 0, void 0, function* () { return _super.x = f; }));
         });
@@ -393,6 +401,7 @@ class B extends A {
 
             // element access in arrow
             (() => _superIndex("x").call(this));
+
             // element access in async arrow
             (() => __awaiter(this, void 0, void 0, function* () { return _superIndex("x").call(this); }));
         });
@@ -415,6 +424,7 @@ class B extends A {
 
             // element access (assign) in arrow
             (() => _superIndex("x").value = f);
+
             // element access (assign) in async arrow
             (() => __awaiter(this, void 0, void 0, function* () { return _superIndex("x").value = f; }));
         });

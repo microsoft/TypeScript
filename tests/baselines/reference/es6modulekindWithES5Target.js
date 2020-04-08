@@ -29,16 +29,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var C = /** @class */ (function () {
     function C() {
         this.p = 1;
-    }C.prototype.method = function () { };
+    }
+    C.prototype.method = function () { };
     C.s = 0;
     return C;
 }());
 export { C };
 export { C as C2 };
+
 var D = /** @class */ (function () {
     function D() {
         this.p = 1;
-    }D.prototype.method = function () { };
+    }
+    D.prototype.method = function () { };
     D.s = 0;
     D = __decorate([
         foo
@@ -47,6 +50,7 @@ var D = /** @class */ (function () {
 }());
 export { D };
 export { D as D2 };
+
 var E = /** @class */ (function () {
     function E() {}
     return E;

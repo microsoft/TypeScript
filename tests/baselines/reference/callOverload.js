@@ -20,6 +20,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 var n;
+
 fn(1); // no error
 fn(1, 2, 3, 4);
 takeTwo(1, 2, 3, 4);

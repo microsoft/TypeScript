@@ -546,10 +546,13 @@ var TypeScript;
         var moduleDecl = ast;
         var memberScope = null;
         var aggScope = null;
+
         if (moduleDecl.name && moduleDecl.mod) {
             moduleDecl.name.sym = moduleDecl.mod.symbol;
         }
+
         var mod = moduleDecl.mod;
+
         // We're likely here because of error recovery
         if (!mod) {
             return;
@@ -573,20 +576,24 @@ var TypeScript;
         var classDecl = ast;
         var memberScope = null;
         var aggScope = null;
+
         if (classDecl.name && classDecl.type) {
             classDecl.name.sym = classDecl.type.symbol;
         }
+
         var classType = ast.type;
 
         if (classType) {
             var classSym = classType.symbol;
             memberScope = context.typeFlow.checker.scopeOf(classType);
+
             aggScope = new SymbolAggregateScope(classType.symbol);
             aggScope.addParentScope(memberScope);
             aggScope.addParentScope(context.scopeChain.scope);
 
             classType.containedScope = aggScope;
             classType.memberScope = memberScope;
+
             var instanceType = classType.instanceType;
             memberScope = context.typeFlow.checker.scopeOf(instanceType);
             instanceType.memberScope = memberScope;
@@ -606,9 +613,11 @@ var TypeScript;
         var interfaceDecl = ast;
         var memberScope = null;
         var aggScope = null;
+
         if (interfaceDecl.name && interfaceDecl.type) {
             interfaceDecl.name.sym = interfaceDecl.type.symbol;
         }
+
         var interfaceType = ast.type;
         memberScope = context.typeFlow.checker.scopeOf(interfaceType);
         interfaceType.memberScope = memberScope;
@@ -633,7 +642,9 @@ var TypeScript;
         withType.symbol = withSymbol;
         withType.setHasImplementation();
         withStmt.type = withType;
+
         var withScope = new TypeScript.SymbolScopeBuilder(withType.members, withType.ambientMembers, null, null, context.scopeChain.scope, withType.symbol);
+
         pushAssignScope(withScope, context, null, null, null);
         withType.containedScope = withScope;
     }
@@ -646,6 +657,7 @@ var TypeScript;
         if (funcDecl.type) {
             localContainer = ast.type.symbol;
         }
+
         var isStatic = hasFlag(funcDecl.fncFlags, FncFlags.Static);
         var isInnerStatic = isStatic && context.scopeChain.fnc != null;
         // for inner static functions, use the parent's member scope, so local vars cannot be captured
@@ -696,6 +708,7 @@ var TypeScript;
             if (context.scopeChain.fnc && context.scopeChain.fnc.type) {
                 container = context.scopeChain.fnc.type.symbol;
             }
+
             var funcScope = null;
             var outerFnc = context.scopeChain.fnc;
             var nameText = funcDecl.name ? funcDecl.name.actualText : null;
@@ -725,6 +738,7 @@ var TypeScript;
                     funcScope = context.scopeChain.scope;
                 }
             }
+
             // REVIEW: We don't search for another sym for accessors to prevent us from
             // accidentally coalescing function signatures with the same name (E.g., a function
             // 'f' the outer scope and a setter 'f' in an object literal within that scope)
@@ -752,6 +766,7 @@ var TypeScript;
 
             funcDecl.type.symbol.flags |= SymbolFlags.TypeSetDuringScopeAssignment;
         }
+
         // Set the symbol for functions and their overloads
         if (funcDecl.name && funcDecl.type) {
             funcDecl.name.sym = funcDecl.type.symbol;
@@ -765,6 +780,7 @@ var TypeScript;
         if (funcDecl.isOverload) {
             return;
         }
+
         var funcTable = new StringHashTable();
         var funcMembers = new ScopedMembers(new DualStringHashTable(funcTable, new StringHashTable()));
         var ambientFuncTable = new StringHashTable();
@@ -773,10 +789,13 @@ var TypeScript;
         var funcStaticMembers = new ScopedMembers(new DualStringHashTable(funcStaticTable, new StringHashTable()));
         var ambientFuncStaticTable = new StringHashTable();
         var ambientFuncStaticMembers = new ScopedMembers(new DualStringHashTable(ambientFuncStaticTable, new StringHashTable()));
+
         // REVIEW: Is it a problem that this is being set twice for properties and constructors?
         funcDecl.unitIndex = context.typeFlow.checker.locationInfo.unitIndex;
+
         var locals = new SymbolScopeBuilder(funcMembers, ambientFuncMembers, null, null, parentScope, localContainer);
         var statics = new SymbolScopeBuilder(funcStaticMembers, ambientFuncStaticMembers, null, null, parentScope, null);
+
         if (funcDecl.isConstructor && context.scopeChain.thisType) {
             context.scopeChain.thisType.constructorScope = locals;
         }
@@ -790,9 +809,11 @@ var TypeScript;
         // A good first approach to solving this would be to change addLocalsFromScope to take a scope instead of a table, and add to the
         // constructor scope as appropriate
         funcDecl.symbols = funcTable;
+
         if (!funcDecl.isSpecialFn()) {
             var group = funcDecl.type;
             var signature = funcDecl.signature;
+
             if (!funcDecl.isConstructor) {
                 group.containedScope = locals;
                 locals.container = group.symbol;
@@ -880,6 +901,7 @@ var TypeScript;
         if (ast) {
             if (ast.nodeType == NodeType.ModuleDeclaration) {
                 var prevModDecl = ast;
+
                 popAssignScope(context);
 
                 context.modDeclChain.pop();

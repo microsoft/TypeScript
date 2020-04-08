@@ -43,7 +43,8 @@ class D<T> {
 //// [memberFunctionsWithPublicOverloads.js]
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.foo = function (x, y) { };
+    }
+    C.prototype.foo = function (x, y) { };
 
 
 
@@ -62,7 +63,8 @@ var C = /** @class */ (function () {
 }());
 var D = /** @class */ (function () {
     function D() {
-    }D.prototype.foo = function (x, y) { };
+    }
+    D.prototype.foo = function (x, y) { };
 
 
 

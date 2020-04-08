@@ -44,8 +44,6 @@ var Kind;
 })(Kind || (Kind = {}));
 
 
-
-
 function isBoth(x) {
     return true;
 }

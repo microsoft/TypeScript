@@ -40,7 +40,8 @@ var r4 = b.foo(new Date());
 
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.f = function () {
+    }
+    C.prototype.f = function () {
         var x;
         var a = x['getDate'](); // number
         return a + x.getDate();

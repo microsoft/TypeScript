@@ -3,7 +3,5 @@ var foo = async (await): Promise<void> => {
 }
 
 //// [asyncArrowFunction5_es6.js]
-var foo = async(await), Promise;
-;
-{
+var foo = async(await), Promise;;{
 }

@@ -77,10 +77,15 @@ abc.a = "hello";
 abc.b = "hello";
 abc.c = "hello";
 
+
 var xyz;
 xyz.x.a = "hello";
 xyz.x.b = "hello";
 xyz.x.c = "hello";
+
+
+
+
 var f;
 var s = f("hello");
 var n = f(42);
@@ -95,7 +100,6 @@ var de = {
         other: { g: 101 }
     }
 };
-
 
 
 var defg = {

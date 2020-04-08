@@ -16,7 +16,9 @@ var v = a;
 
 var v = function (a) { return 1; };
 var v = function (a, b) { return 1; };
-var v = function (a, b) {if (a === void 0) { a = 1; }if (b === void 0) { b = 2; }return 1;};
+var v = function (a, b) {if (a === void 0) { a = 1; }
+    if (b === void 0) { b = 2; }
+    return 1;};
 
 var v = (a);
 var v = (a, b);

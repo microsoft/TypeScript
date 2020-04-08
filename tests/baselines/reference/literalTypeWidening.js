@@ -264,9 +264,15 @@ function increment(x) {
 }
 
 var result = doWork();
+
 if (isSuccess(result)) {
     increment(result);
 }
+
+
+
+
+
 function onMouseOver() { return "onmouseover"; }
 
 var x = onMouseOver();
@@ -279,14 +285,12 @@ function Set() {var keys = [];
     var result = {};
     keys.forEach(function (key) { return result[key] = true; });
     return result;
-}exports.Set = Set;
-
+}
+exports.Set = Set;
 function keys(obj) {
     return Object.keys(obj);
-}exports.keys = keys;
-
-
-
+}
+exports.keys = keys;
 var langCodeSet = Set('fr', 'en', 'es', 'it', 'nl');
 
 exports.langCodes = keys(langCodeSet);
@@ -301,7 +305,8 @@ function test(obj) {
 
 var E;
 (function (E) {
-    E[E["A"] = 0] = "A";E[E["B"] = 1] = "B";
+    E[E["A"] = 0] = "A";
+    E[E["B"] = 1] = "B";
 })(E || (E = {}));
 var a = f(E.A);
 var b = a;

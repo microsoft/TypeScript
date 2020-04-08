@@ -25,6 +25,8 @@ var f8 = function (_) { };
 //// [unusedParametersWithUnderscore.js]
 function f(a, _b, c, ___, d, e___, _f) {
 }
+
+
 function f2(_c) {
     var _a = _c._a, __b = _c.__b;
 }

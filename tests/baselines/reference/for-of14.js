@@ -14,5 +14,6 @@ class StringIterator {
         return "";
     }
 }
+
 var v;
 for (v of new StringIterator) { } // Should fail because the iterator is not iterable

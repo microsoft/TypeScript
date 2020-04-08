@@ -24,10 +24,10 @@ x = b; // expected error
 
 //// [assignFromBooleanInterface2.js]
 
-
 var x = true;
 var a;
 var b;
+
 a = x;
 a = b;
 

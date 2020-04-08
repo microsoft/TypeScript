@@ -29,7 +29,8 @@ var Events;
 (function (Events) {
     var EventEmitter = /** @class */ (function () {
         function EventEmitter() {
-        }EventEmitter.prototype.addListener = function (type, listener) {
+        }
+        EventEmitter.prototype.addListener = function (type, listener) {
         };
         return EventEmitter;
     }());

@@ -42,14 +42,17 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var User = /** @class */ (function () {
     function User() {
-    }User.prototype.sayHello = function () {
+    }
+    User.prototype.sayHello = function () {
     };
     return User;
 }());
 var RegisteredUser = /** @class */ (function (_super) {
-    __extends(RegisteredUser, _super);function RegisteredUser() {
+    __extends(RegisteredUser, _super);
+    function RegisteredUser() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }RegisteredUser.prototype.f = function () {
+    }
+    RegisteredUser.prototype.f = function () {
         (
             function () {
                 function inner() {

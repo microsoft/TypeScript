@@ -18,6 +18,7 @@ var x; // no error, control flow typed
 var y; // error because captured
 function func(k) { y; }; // error at "k"
 func(x);
+
 // this shouldn't be an error
 var bar = 3;
 var bar1;

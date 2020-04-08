@@ -96,7 +96,6 @@ var MonsterFood = /** @class */ (function (_super) {
 }(Food));
 var IceCream = /** @class */ (function (_super) {
     __extends(IceCream, _super);
-
     function IceCream(flavor) {
         var _this = _super.call(this, "Ice Cream", flavor) || this;
         _this.flavor = flavor;

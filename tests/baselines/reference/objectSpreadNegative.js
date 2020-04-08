@@ -110,6 +110,8 @@ var spread = __assign({ b: true }, { s: "foo" });
 spread = { s: "foo" }; // error, missing 'b'
 var b = { b: false };
 spread = b; // error, missing 's'
+
+
 // literal repeats are not allowed, but spread repeats are fine
 var duplicated = __assign(__assign(__assign(__assign({ b: 'bad' }, o), { b: 'bad' }), o2), { b: 'bad' });
 var duplicatedSpread = __assign(__assign({}, o), o);
@@ -134,22 +136,30 @@ spreadBool.valueOf();
 var spreadStr = __assign({}, 'foo');
 spreadStr.length; // error, no 'length'
 spreadStr.charAt(1); // error, no methods either
+
 // functions are skipped
 var spreadFunc = __assign({}, function () { });
 spreadFunc(); // error, no call signature
+
+
 // write-only properties get skipped
 var setterOnly = __assign({ set b(bad) { } });
 setterOnly.b = 12; // error, 'b' does not exist
+
+
 // methods are skipped because they aren't enumerable
 var C = /** @class */ (function () {
     function C() {
         this.p = 1;
-    }C.prototype.m = function () { };
+    }
+    C.prototype.m = function () { };
     return C;
 }());
 var c = new C();
 var spreadC = __assign({}, c);
 spreadC.m(); // error 'm' is not in '{ ... c }'
+
+
 // non primitive
 var obj = { a: 123 };
 var spreadObj = __assign({}, obj);

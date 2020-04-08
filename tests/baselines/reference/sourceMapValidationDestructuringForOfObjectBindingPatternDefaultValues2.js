@@ -169,10 +169,10 @@ for ({
 //// [sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.js]
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, _31, _32, _33, _34, _35, _36, _37, _38, _39, _40, _41, _42, _43, _44, _45, _46, _47, _48, _49, _50, _51, _52, _53, _54, _55, _56, _57, _58, _59;
 
-
 var robots = [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }];
 var multiRobots = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
     { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }];
+
 function getRobots() {
     return robots;
 }
@@ -180,9 +180,9 @@ function getRobots() {
 function getMultiRobots() {
     return multiRobots;
 }
+
 var nameA, primaryA, secondaryA, i, skillA;
 var name, primary, secondary, skill;
-
 for (var _i = 0, robots_1 = robots; _i < robots_1.length; _i++) {
     _a = robots_1[_i].name, nameA = _a === void 0 ? "noName" : _a;
     console.log(nameA);
@@ -208,7 +208,6 @@ for (var _67 = 0, _68 = [{ name: "mower", skills: { primary: "mowing", secondary
     _m = _68[_67].skills, _o = _m === void 0 ? { primary: "nosKill", secondary: "noSkill" } : _m, _p = _o.primary, primaryA = _p === void 0 ? "primary" : _p, _q = _o.secondary, secondaryA = _q === void 0 ? "secondary" : _q;
     console.log(primaryA);
 }
-
 for (var _69 = 0, robots_2 = robots; _69 < robots_2.length; _69++) {
     _r = robots_2[_69].name, name = _r === void 0 ? "noName" : _r;
     console.log(nameA);
@@ -234,8 +233,6 @@ for (var _77 = 0, _78 = [{ name: "mower", skills: { primary: "mowing", secondary
     _2 = _78[_77].skills, _3 = _2 === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _2, _4 = _3.primary, primary = _4 === void 0 ? "primary" : _4, _5 = _3.secondary, secondary = _5 === void 0 ? "secondary" : _5;
     console.log(primaryA);
 }
-
-
 for (var _79 = 0, robots_3 = robots; _79 < robots_3.length; _79++) {
     _6 = robots_3[_79], _7 = _6.name, nameA = _7 === void 0 ? "noName" : _7, _8 = _6.skill, skillA = _8 === void 0 ? "noSkill" : _8;
     console.log(nameA);
@@ -261,7 +258,6 @@ for (var _87 = 0, _88 = [{ name: "mower", skills: { primary: "mowing", secondary
     _27 = _88[_87], _28 = _27.name, nameA = _28 === void 0 ? "noName" : _28, _29 = _27.skills, _30 = _29 === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _29, _31 = _30.primary, primaryA = _31 === void 0 ? "primary" : _31, _32 = _30.secondary, secondaryA = _32 === void 0 ? "secondary" : _32;
     console.log(nameA);
 }
-
 for (var _89 = 0, robots_4 = robots; _89 < robots_4.length; _89++) {
     _33 = robots_4[_89], _34 = _33.name, name = _34 === void 0 ? "noName" : _34, _35 = _33.skill, skill = _35 === void 0 ? "noSkill" : _35;
     console.log(nameA);

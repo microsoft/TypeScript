@@ -83,14 +83,14 @@ var __extends = (this && this.__extends) || (function () {
 })();var User = /** @class */ (function () {
     function User() {
         this.name = "Bob";
-    }User.prototype.sayHello = function () {
+    }
+    User.prototype.sayHello = function () {
         //console.log("Hello, " + this.name);
     };
     return User;
 }());
 var RegisteredUser = /** @class */ (function (_super) {
     __extends(RegisteredUser, _super);
-
     function RegisteredUser() {
         var _this = _super.call(this) || this;
         _this.name = "Frank";
@@ -113,7 +113,6 @@ var RegisteredUser = /** @class */ (function (_super) {
 }(User));
 var RegisteredUser2 = /** @class */ (function (_super) {
     __extends(RegisteredUser2, _super);
-
     function RegisteredUser2() {
         var _this = _super.call(this) || this;
         _this.name = "Joe";
@@ -130,7 +129,6 @@ var RegisteredUser2 = /** @class */ (function (_super) {
 }(User));
 var RegisteredUser3 = /** @class */ (function (_super) {
     __extends(RegisteredUser3, _super);
-
     function RegisteredUser3() {
         var _this = _super.call(this) || this;
         _this.name = "Sam";
@@ -146,7 +144,6 @@ var RegisteredUser3 = /** @class */ (function (_super) {
 }(User));
 var RegisteredUser4 = /** @class */ (function (_super) {
     __extends(RegisteredUser4, _super);
-
     function RegisteredUser4() {
         var _this = _super.call(this) || this;
         _this.name = "Mark";

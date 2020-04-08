@@ -22,7 +22,6 @@ export class Example<Z extends CustomDocument> {
 exports.__esModule = true;
 exports.Example = void 0;
 
-
 var Example = /** @class */ (function () {
     function Example() {
         // types of increment not compatible??
@@ -31,4 +30,5 @@ var Example = /** @class */ (function () {
 
     Example.prototype.test = function () { };
     return Example;
-}());exports.Example = Example;
+}());
+exports.Example = Example;

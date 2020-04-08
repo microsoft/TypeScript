@@ -27,7 +27,9 @@ let C = /** @class */ (() => {
             this.#a = 10;
             this.c = "hello";
             this.#something = () => 1234;
-        }#a;
+        }
+        #a;
+
         #b;
         method() {
             console.log(this.#a);

@@ -153,6 +153,7 @@ var r13 = true ? null : E;
 
 var r14 = true ? E.A : null;
 var r14 = true ? null : E.A;
+
 function f() { }
 (function (f) {
     f.bar = 1;

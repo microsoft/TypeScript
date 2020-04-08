@@ -43,6 +43,7 @@ var str;
 var num;
 var bool;
 var func;
+
 if ("string" === typeof strOrNum) {
     str = strOrNum;
 }

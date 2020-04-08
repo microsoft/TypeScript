@@ -19,4 +19,3 @@ var x = 10;
 /// <reference path="file0.ts" />
 
 
-

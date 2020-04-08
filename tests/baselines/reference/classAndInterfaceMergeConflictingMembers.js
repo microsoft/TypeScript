@@ -24,8 +24,3 @@ interface C3 {
 }
 
 //// [classAndInterfaceMergeConflictingMembers.js]
-
-
-
-
-

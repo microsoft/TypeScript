@@ -134,7 +134,8 @@ var A = /** @class */ (function () {
     return A;
 }());
 var A1 = /** @class */ (function (_super) {
-    __extends(A1, _super);function A1() {
+    __extends(A1, _super);
+    function A1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return A1;
@@ -144,7 +145,8 @@ var A2 = /** @class */ (function () {
     return A2;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;

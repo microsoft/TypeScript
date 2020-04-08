@@ -60,6 +60,7 @@ if (var1.constructor === Symbol) {
 if (var1.constructor === BigInt) {
     var1; // bigint
 }
+
 // Narrow a union of primitive object types
 let var2;
 if (var2.constructor === String) {

@@ -46,13 +46,15 @@ var A = /** @class */ (function () {
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);function C() {
+    __extends(C, _super);
+    function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
@@ -61,9 +63,11 @@ new A;
 new A(1); // should report 1 error
 new B;
 new C;
+
 var a;
 var b;
 var c;
+
 a = new B;
 b = new B;
 c = new B;

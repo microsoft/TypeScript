@@ -149,7 +149,9 @@ var o = {
 //// [constDeclarations-scopes.js]
 // global
 const c = "string";
+
 var n;
+
 // Control flow statements with blocks
 if (true) {
     const c = 0;
@@ -217,6 +219,7 @@ switch (0) {
         n = c;
         break;
 }
+
 // blocks
 {
     const c = 0;
@@ -226,6 +229,7 @@ switch (0) {
         var b = c;
     }
 }
+
 // functions
 function F() {
     const c = 0;
@@ -246,6 +250,7 @@ var m;
 (function (m) {
     const c = 0;
     n = c;
+
     {
         const c = false;
         var b2 = c;

@@ -19,7 +19,8 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _foo;
 class A {constructor() {
         _foo.set(this, true);
-    }method(thing) {
+    }
+    method(thing) {
         __classPrivateFieldGet(thing, _foo); // OK
         thing.; // Error
     }

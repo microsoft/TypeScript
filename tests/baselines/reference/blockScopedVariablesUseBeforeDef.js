@@ -123,7 +123,8 @@ function foo2() {
 function foo3() {
     var X = /** @class */ (function () {
         function X() {
-        }X.prototype.m = function () { return x; };
+        }
+        X.prototype.m = function () { return x; };
         return X;
     }());
     var x;
@@ -132,7 +133,8 @@ function foo3() {
 function foo4() {
     var y = /** @class */ (function () {
         function y() {
-        }y.prototype.m = function () { return x; };
+        }
+        y.prototype.m = function () { return x; };
         return y;
     }());
     var x;

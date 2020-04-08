@@ -34,7 +34,8 @@ define(["require", "exports"], function (require, exports) {
     var C = /** @class */ (function () {
         function C() {}
         return C;
-    }());exports.C = C;
+    }());
+    exports.C = C;
 });
 //// [externalModuleAssignToVar_core_require2.js]
 define(["require", "exports"], function (require, exports) {
@@ -60,8 +61,12 @@ define(["require", "exports", "externalModuleAssignToVar_core_require", "externa
     exports.__esModule = true;
     var y1 = ext;
     y1 = ext; // ok
+
+
     var y2 = ext2;
     y2 = ext2; // ok
+
+
     var y3 = ext3;
     y3 = ext3; // ok
 });

@@ -21,6 +21,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 new C(1).x = 2;
+
 var E = /** @class */ (function () {
     function E(x) {
         this.x = x;

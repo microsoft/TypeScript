@@ -34,6 +34,7 @@ function VerticalNav() {
 function VerticalNavMenuItem(prop) {
     return <div>props.primaryText</div>;
 }
+
 function VerticalNav() {
     return (
         <div>

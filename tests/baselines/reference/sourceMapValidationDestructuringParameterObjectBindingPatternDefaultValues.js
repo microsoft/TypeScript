@@ -45,6 +45,7 @@ function foo3(_a) {
     var _b = (_a === void 0 ? {} : _a).name, name = _b === void 0 ? "<NoName>" : _b;
     console.log(name);
 }
+
 foo1(robotA);
 foo1({ name: "Edger", skill: "cutting edges" });
 

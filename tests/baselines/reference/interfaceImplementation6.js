@@ -51,5 +51,6 @@ define(["require", "exports"], function (require, exports) {
             this.pt = { item: 1 };
         }
         return Test;
-    }());exports.Test = Test;
+    }());
+    exports.Test = Test;
 });

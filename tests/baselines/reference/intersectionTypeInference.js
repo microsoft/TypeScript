@@ -43,7 +43,6 @@ var s = x.a;
 var n = x.b;
 
 
-
 function foo(obj) {
     return undefined;
 }

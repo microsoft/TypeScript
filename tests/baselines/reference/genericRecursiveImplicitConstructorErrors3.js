@@ -48,7 +48,8 @@ var TypeScript;
 (function (TypeScript) {
     var MemberName = /** @class */ (function () {
         function MemberName() {
-        }MemberName.create = function (arg1, arg2, arg3) {
+        }
+        MemberName.create = function (arg1, arg2, arg3) {
         };
         return MemberName;
     }());
@@ -63,11 +64,13 @@ var TypeScript;
     }());
     TypeScript.PullSymbol = PullSymbol;
     var PullTypeSymbol = /** @class */ (function (_super) {
-        __extends(PullTypeSymbol, _super);function PullTypeSymbol() {
+        __extends(PullTypeSymbol, _super);
+        function PullTypeSymbol() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this._elementType = null;
             return _this;
-        }PullTypeSymbol.prototype.toString = function (scopeSymbol, useConstraintInName) {
+        }
+        PullTypeSymbol.prototype.toString = function (scopeSymbol, useConstraintInName) {
             var s = this.getScopedNameEx(scopeSymbol, useConstraintInName).toString();
             return s;
         };

@@ -39,8 +39,6 @@ module test {
 var test;
 (function (test) {
 
-
-
     var C = /** @class */ (function () {
         function C() {
         }

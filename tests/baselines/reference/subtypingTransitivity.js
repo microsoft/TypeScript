@@ -38,13 +38,15 @@ var __extends = (this && this.__extends) || (function () {
     return B;
 }());
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);function D() {
+    __extends(D, _super);
+    function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
 }(B));
 var D2 = /** @class */ (function (_super) {
-    __extends(D2, _super);function D2() {
+    __extends(D2, _super);
+    function D2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D2;
@@ -52,6 +54,7 @@ var D2 = /** @class */ (function (_super) {
 var b;
 var d;
 var d2;
+
 d.x = '';
 b = d;
 b.x = 1; // assigned number to string

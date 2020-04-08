@@ -139,25 +139,28 @@ var Two = /** @class */ (function () {
 
 var A = /** @class */ (function () {
     function A() {
-    }A.prototype.foo = function (x, y) { return null; };
+    }
+    A.prototype.foo = function (x, y) { return null; };
     return A;
 }());
 var B = /** @class */ (function () {
     function B() {
-    }B.prototype.foo = function (x, y) { return null; };
+    }
+    B.prototype.foo = function (x, y) { return null; };
     return B;
 }());
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.foo = function (x, y) { return null; };
+    }
+    C.prototype.foo = function (x, y) { return null; };
     return C;
 }());
 var D = /** @class */ (function () {
     function D() {
-    }D.prototype.foo = function (x, y) { return null; };
+    }
+    D.prototype.foo = function (x, y) { return null; };
     return D;
 }());
-
 
 var a;
 var b = { foo: function (x, y) { return ''; } };

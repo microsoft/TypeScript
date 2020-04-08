@@ -124,7 +124,8 @@ var m1;
 (function (m1) {
     var C1_public = /** @class */ (function () {
         function C1_public() {
-        }C1_public.prototype.f1 = function () {
+        }
+        C1_public.prototype.f1 = function () {
         };
         return C1_public;
     }());
@@ -134,14 +135,11 @@ var m1;
         }
         return C2_private;
     }());
-
 })(m1 || (m1 = {}));
 var C5_public = /** @class */ (function () {
     function C5_public() {
-    }C5_public.prototype.f1 = function () {
+    }
+    C5_public.prototype.f1 = function () {
     };
     return C5_public;
 }());
-
-
-

@@ -21,7 +21,8 @@ class Foo<T> {
 // Should be error to use 'T' in all declarations within Foo.
 var Foo = /** @class */ (function () {
     function Foo() {
-    }Foo.f = function (xs) {
+    }
+    Foo.f = function (xs) {
         return xs.reverse();
     };
     Foo.a = function (n) { };

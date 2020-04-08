@@ -60,6 +60,7 @@ foo.ns.b;
     "use strict";
     exports.__esModule = true;
     var foo = require("./1");
+
     foo.ns.a;
     foo.ns.b;
 });

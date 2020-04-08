@@ -51,6 +51,7 @@ function FunctionComponent(_a) {
 FunctionComponent.useThis = function () {
     return <this type="foo"/>;
 };
+
 var ClassComponent = /** @class */ (function () {
     function ClassComponent() {
         this.type = 'string';

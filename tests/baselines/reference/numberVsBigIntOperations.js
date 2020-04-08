@@ -120,6 +120,7 @@ bigInt = 1n | 2n;num = 1 | 2;1 | 2n;1n | 2;
 bigInt = 1n ^ 2n;num = 1 ^ 2;1 ^ 2n;1n ^ 2;
 bigInt = 1n << 2n;num = 1 << 2;1 << 2n;1n << 2;
 bigInt = 1n >> 2n;num = 1 >> 2;1 >> 2n;1n >> 2;
+
 // Plus should still coerce to strings
 let str;
 str = "abc" + 123;str = "abc" + 123n;str = 123 + "abc";str = 123n + "abc";
@@ -134,6 +135,7 @@ bigInt = ~bigInt;num = ~num;
 bigInt >>>= 1n;num >>>= 2;
 bigInt = bigInt >>> 1n;num = num >>> 2;
 num = +bigInt;num = +num;num = +"3";
+
 // Comparisons can be mixed
 let result;
 result = bigInt > num;
@@ -174,6 +176,8 @@ anyValue ^ anyValue; // should infer number
 -anyValue; // should infer number
 anyValue--; // should infer number
 --anyValue; // should infer number
+
+
 // Distinguishing numbers from bigints with typeof
 const isBigInt = (x) => x;
 const isNumber = (x) => x;
@@ -182,6 +186,7 @@ if (typeof zeroOrBigOne === "bigint")
     isBigInt(zeroOrBigOne);
 else
     isNumber(zeroOrBigOne);
+
 // Distinguishing truthy from falsy
 const isOne = (x) => x;
 if (zeroOrBigOne)

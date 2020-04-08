@@ -16,7 +16,8 @@ function M() {
 function M() {
     var m = /** @class */ (function () {
         function C() {
-        }C.prototype.f = function () {
+        }
+        C.prototype.f = function () {
             var t;
             var x;
             return { t: t, x: x };

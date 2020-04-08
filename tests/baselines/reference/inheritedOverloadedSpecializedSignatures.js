@@ -55,15 +55,9 @@ var x9: void = c('generic');
 
 //// [inheritedOverloadedSpecializedSignatures.js]
 
-
 var b;
 // Should not error
 b('foo').charAt(0);
-
-
-
-
-
 
 
 var c;

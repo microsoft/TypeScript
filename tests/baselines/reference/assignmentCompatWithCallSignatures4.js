@@ -120,19 +120,22 @@ var Errors;
         return Base;
     }());
     var Derived = /** @class */ (function (_super) {
-        __extends(Derived, _super);function Derived() {
+        __extends(Derived, _super);
+        function Derived() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Derived;
     }(Base));
     var Derived2 = /** @class */ (function (_super) {
-        __extends(Derived2, _super);function Derived2() {
+        __extends(Derived2, _super);
+        function Derived2() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Derived2;
     }(Derived));
     var OtherDerived = /** @class */ (function (_super) {
-        __extends(OtherDerived, _super);function OtherDerived() {
+        __extends(OtherDerived, _super);
+        function OtherDerived() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return OtherDerived;
@@ -154,30 +157,40 @@ var Errors;
         var b2;
         a2 = b2;
         b2 = a2;
+
         var b7;
         a7 = b7;
         b7 = a7;
+
         var b8;
         a8 = b8; // error, { foo: number } and Base are incompatible
         b8 = a8; // error, { foo: number } and Base are incompatible
+
+
         var b10;
         a10 = b10;
         b10 = a10;
+
         var b11;
         a11 = b11;
         b11 = a11;
+
         var b12;
         a12 = b12;
         b12 = a12;
+
         var b15;
         a15 = b15;
         b15 = a15;
+
         var b15a;
         a15 = b15a;
         b15a = a15;
+
         var b16;
         a16 = b16;
         b16 = a16;
+
         var b17;
         a17 = b17;
         b17 = a17;
@@ -189,6 +202,7 @@ var Errors;
         var b2;
         a2 = b2;
         b2 = a2;
+
         // target type has generic call signature
         var a3;
         var b3;

@@ -199,6 +199,7 @@ false += value;
 // array literals
 ['', ''] *= value;
 ['', ''] += value;
+
 // super
 var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
@@ -224,11 +225,9 @@ var Derived = /** @class */ (function (_super) {
 function bar1() { }value;
 function bar2() { }value;
 (
-    function () { });
-value;
+    function () { });value;
 (
-    function () { });
-value;
+    function () { });value;
 
 // function calls
 foo() *= value;

@@ -10,6 +10,7 @@ foo("", function* () {
 }, p => undefined); // T is fixed, should be string
 
 //// [generatorTypeCheck46.js]
+
 foo("", function* () {
     yield* {
         *[Symbol.iterator]() {

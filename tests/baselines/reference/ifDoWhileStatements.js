@@ -183,7 +183,8 @@ var C = /** @class */ (function () {
     return C;
 }());
 var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);function C2() {
+    __extends(C2, _super);
+    function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C2;
@@ -261,12 +262,15 @@ do { } while ({});
 if ({ x: 1, y: 'a' }) { }
 while ({ x: 1, y: 'a' }) { }
 do { } while ({ x: 1, y: 'a' });
+
 if (function () { return 43; }) { }
 while (function () { return 43; }) { }
 do { } while (function () { return 43; });
+
 if (new C()) { }
 while (new C()) { }
 do { } while (new C());
+
 if (new D()) { }
 while (new D()) { }
 do { } while (new D());
@@ -276,46 +280,57 @@ var a = true;
 if (a) { }
 while (a) { }
 do { } while (a);
+
 var b = null;
 if (b) { }
 while (b) { }
 do { } while (b);
+
 var c = undefined;
 if (c) { }
 while (c) { }
 do { } while (c);
+
 var d = 0.0;
 if (d) { }
 while (d) { }
 do { } while (d);
+
 var e = 'a string';
 if (e) { }
 while (e) { }
 do { } while (e);
+
 var f = '';
 if (f) { }
 while (f) { }
 do { } while (f);
+
 var g = /[a-z]/;
 if (g) { }
 while (g) { }
 do { } while (g);
+
 var h = [];
 if (h) { }
 while (h) { }
 do { } while (h);
+
 var i = [1, 2];
 if (i) { }
 while (i) { }
 do { } while (i);
+
 var j = {};
 if (j) { }
 while (j) { }
 do { } while (j);
+
 var k = { x: 1, y: 'a' };
 if (k) { }
 while (k) { }
 do { } while (k);
+
 function fn(x) { return null; }
 if (fn()) { }
 while (fn()) { }

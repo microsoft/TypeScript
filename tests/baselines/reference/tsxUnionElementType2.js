@@ -19,8 +19,8 @@ var React = require("react");
 
 function SFC1(prop) {
     return React.createElement("div", null, "hello");
-}
-;
+};
+
 function SFC2(prop) {
     return React.createElement("h1", null, "World ");
 }

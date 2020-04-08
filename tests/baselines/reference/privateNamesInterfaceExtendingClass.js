@@ -24,7 +24,8 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
 var _prop;
 class C {constructor() {
         _prop.set(this, void 0);
-    }func(x) {
+    }
+    func(x) {
         __classPrivateFieldSet(x, _prop, 123);
     }
 }

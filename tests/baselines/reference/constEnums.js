@@ -156,11 +156,6 @@ function bar(e: A.B.C.E): number {
 }
 
 //// [constEnums.js]
-
-
-
-
-
 var A2;
 (function (A2) {
     var B;

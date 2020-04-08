@@ -71,18 +71,24 @@ x.prop;
 
 
 
+
 // @param type has no effect.
 /**
  * @param {number} x
  * @returns string
  */
 function f(x) { return x * 2; } // Should error
+
 // Should fail, because it takes a boolean and returns a number
 f(1);f(true).length;
+
 // @type has no effect either.
 /** @type {{ x?: number }} */
 var z = {};
 z.x = 1; // Error
+
+
+
 
 /** @template T */
 function tem(t) { return {}; }
@@ -106,6 +112,7 @@ var obj = { foo: function (a, b) { return a + b; } };
 /** @enum {string} */
 var E = {};
 E[""];
+
 // make sure import types in JSDoc are not resolved
 /** @type {import("should-not-be-resolved").Type} */
 var v = Promise.resolve().then(function () { return require(String()); });

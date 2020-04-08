@@ -42,7 +42,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var C = /** @class */ (function () {
     function C() {
-    }C.prototype.foo = function () { };
+    }
+    C.prototype.foo = function () { };
     Object.defineProperty(C.prototype, "x", {
         get: function () {
             return 1;
@@ -55,11 +56,6 @@ var __extends = (this && this.__extends) || (function () {
 }());
 var D = /** @class */ (function (_super) {
     __extends(D, _super);
-
-
-
-
-
     function D() {
         var _this = _super.call(this) || this;
         _super.prototype.bar.call(_this);

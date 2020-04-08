@@ -31,7 +31,6 @@ let n3 = test[numbersNotConst.one];
 
 //// [constIndexedAccess.js]
 
-
 var test;
 
 var s = test[0];

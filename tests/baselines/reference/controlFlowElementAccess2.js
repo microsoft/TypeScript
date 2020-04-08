@@ -15,6 +15,7 @@ if (typeof config.works !== 'boolean') {
 
 //// [controlFlowElementAccess2.js]
 "use strict";
+
 if (typeof config['works'] !== 'boolean') {
     config.works.prop = 'test'; // ok
     config['works'].prop = 'test'; // error, config['works']: boolean | { 'prop': string }

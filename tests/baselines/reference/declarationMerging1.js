@@ -14,7 +14,8 @@ interface A {
 //// [file1.js]
 var A = /** @class */ (function () {
     function A() {
-    }A.prototype.getF = function () { return this._f; };
+    }
+    A.prototype.getF = function () { return this._f; };
     return A;
 }());
 //// [file2.js]

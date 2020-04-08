@@ -43,14 +43,14 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 exports.MyComponent = void 0;
-
-
 var MyComponent = /** @class */ (function (_super) {
-    __extends(MyComponent, _super);function MyComponent() {
+    __extends(MyComponent, _super);
+    function MyComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return MyComponent;
-}(Component));exports.MyComponent = MyComponent;
+}(Component));
+exports.MyComponent = MyComponent;
 <MyComponent children={function (_a) {
     var x = _a.x;
 }}/>;

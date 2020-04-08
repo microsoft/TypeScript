@@ -106,7 +106,9 @@ function extension3(p) {
     MyClass.spp = p;
     MyClass.sppp = p;
 }
+
 MyClass.prototype.extension3 = extension3;
+
 function extension4(p) {
     this.p = p;
     this.pp = p;

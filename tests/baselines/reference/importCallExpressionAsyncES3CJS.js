@@ -81,11 +81,12 @@ function fn() {
             }
         });
     });
-}exports.fn = fn;
-
+}
+exports.fn = fn;
 var cl1 = /** @class */ (function () {
     function cl1() {
-    }cl1.prototype.m = function () {
+    }
+    cl1.prototype.m = function () {
         return __awaiter(this, void 0, void 0, function () {
             var req;
             return __generator(this, function (_a) {
@@ -100,7 +101,8 @@ var cl1 = /** @class */ (function () {
         });
     };
     return cl1;
-}());exports.cl1 = cl1;
+}());
+exports.cl1 = cl1;
 exports.obj = {
     m: function () { return __awaiter(void 0, void 0, void 0, function () {
         var req;
@@ -135,7 +137,8 @@ var cl2 = /** @class */ (function () {
         };
     }
     return cl2;
-}());exports.cl2 = cl2;
+}());
+exports.cl2 = cl2;
 exports.l = function () { return __awaiter(void 0, void 0, void 0, function () {
     var req;
     return __generator(this, function (_a) {

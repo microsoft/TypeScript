@@ -16,7 +16,8 @@ exports["default"] = A;
 var B = /** @class */ (function () {
     function B() {}
     return B;
-}());exports.B = B;
+}());
+exports.B = B;
 var C = /** @class */ (function () {
     function C() {}
     return C;

@@ -35,10 +35,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 
-
 var SubText = /** @class */ (function (_super) {
     __extends(SubText, _super);
-
     function SubText(text, span) {
         return _super.call(this) || this;
     }
@@ -46,7 +44,8 @@ var SubText = /** @class */ (function (_super) {
 }(TextBase));
 var TextBase = /** @class */ (function () {
     function TextBase() {
-    }TextBase.prototype.subText = function (span) {
+    }
+    TextBase.prototype.subText = function (span) {
 
         return new SubText(this, span);
     };

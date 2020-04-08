@@ -209,40 +209,42 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var A1 = /** @class */ (function () {
     function A1() {
-    }A1.prototype.fn = function (a) {
+    }
+    A1.prototype.fn = function (a) {
         return null;
     };
     return A1;
 }());
 var B1 = /** @class */ (function () {
     function B1() {
-    }B1.prototype.fn = function (b) {
+    }
+    B1.prototype.fn = function (b) {
         return null;
     };
     return B1;
 }());
 var Base = /** @class */ (function () {
     function Base() {
-    }Base.prototype.fn = function (b) {
+    }
+    Base.prototype.fn = function (b) {
         return null;
     };
     return Base;
 }());
 var A2 = /** @class */ (function (_super) {
-    __extends(A2, _super);function A2() {
+    __extends(A2, _super);
+    function A2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return A2;
 }(Base));
 var B2 = /** @class */ (function (_super) {
-    __extends(B2, _super);function B2() {
+    __extends(B2, _super);
+    function B2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B2;
 }(Base));
-
-
-
 
 var a1;
 var a2;

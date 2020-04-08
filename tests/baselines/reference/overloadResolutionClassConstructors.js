@@ -120,19 +120,22 @@ var __extends = (this && this.__extends) || (function () {
     return SomeBase;
 }());
 var SomeDerived1 = /** @class */ (function (_super) {
-    __extends(SomeDerived1, _super);function SomeDerived1() {
+    __extends(SomeDerived1, _super);
+    function SomeDerived1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return SomeDerived1;
 }(SomeBase));
 var SomeDerived2 = /** @class */ (function (_super) {
-    __extends(SomeDerived2, _super);function SomeDerived2() {
+    __extends(SomeDerived2, _super);
+    function SomeDerived2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return SomeDerived2;
 }(SomeBase));
 var SomeDerived3 = /** @class */ (function (_super) {
-    __extends(SomeDerived3, _super);function SomeDerived3() {
+    __extends(SomeDerived3, _super);
+    function SomeDerived3() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return SomeDerived3;
@@ -146,6 +149,8 @@ new fn1(undefined);
 
 // No candidate overloads found
 new fn1({}); // Error
+
+
 // Generic and non - generic overload where generic overload is the only candidate when called with type arguments
 var fn2 = /** @class */ (function () {
     function fn2() {}
@@ -158,8 +163,12 @@ var s = new fn2(0, '');
 
 // Generic and non - generic overload where non - generic overload is the only candidate when called with type arguments
 new fn2('', 0); // OK
+
+
 // Generic and non - generic overload where non - generic overload is the only candidate when called without type arguments
 new fn2('', 0); // OK
+
+
 // Generic overloads with differing arity called without type arguments
 var fn3 = /** @class */ (function () {
     function fn3() {}
@@ -168,6 +177,7 @@ var fn3 = /** @class */ (function () {
 new fn3(3);
 new fn3('', 3, '');
 new fn3(5, 5, 5);
+
 // Generic overloads with differing arity called with type arguments matching each overload type parameter count
 new fn3(4); // Error
 new fn3('', '', ''); // Error
@@ -186,16 +196,23 @@ new fn4('', 3);
 new fn4(3, ''); // Error
 new fn4('', 3); // Error
 new fn4(3, ''); // Error
+
+
 // Generic overloads with constraints called without type arguments but with types that satisfy the constraints
 new fn4('', 3);
 new fn4(3, ''); // Error
 new fn4(3, undefined); // Error
 new fn4('', null);
+
 // Generic overloads with constraints called with type arguments that do not satisfy the constraints
 new fn4(null, null); // Error
+
+
 // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
 new fn4(true, null); // Error
 new fn4(null, true); // Error
+
+
 // Non - generic overloads where contextual typing of function arguments has errors
 var fn5 = /** @class */ (function () {
     function fn5() {

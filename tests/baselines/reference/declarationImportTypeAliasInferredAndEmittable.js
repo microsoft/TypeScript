@@ -41,7 +41,8 @@ var Wrap = /** @class */ (function () {
         this.connItem = c.item;
     }
     return Wrap;
-}());exports.Wrap = Wrap;
+}());
+exports.Wrap = Wrap;
 
 
 //// [foo.d.ts]

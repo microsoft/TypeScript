@@ -18,7 +18,6 @@ var r5b = _.map<number, string, Date>(c2, rf1);
 
 //// [genericCombinators2.js]
 
-
 var _;
 var c2;
 var rf1 = function (x, y) { return x.toFixed(); };

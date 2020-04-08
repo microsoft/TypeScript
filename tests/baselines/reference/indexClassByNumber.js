@@ -15,4 +15,5 @@ var foo = /** @class */ (function () {
     return foo;
 }());
 var f = new foo();
+
 f[0] = 4; // Shouldn't be allowed

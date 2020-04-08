@@ -13,7 +13,8 @@ class X {
 var X = /** @class */ (function () {
     function X() {
         this.y = 0;
-    }X.prototype.getSettings = function (keys) {
+    }
+    X.prototype.getSettings = function (keys) {
         var _this = this;
         var ret;
         return ret.always(function () {

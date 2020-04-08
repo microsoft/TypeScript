@@ -632,26 +632,26 @@ sourceFile:sourceMapValidationClasses.ts
 ---
 >>>            }
 1 >^^^^^^^^^^^^^
-2 >             ^^^^^^^^^^^^^^^^->
 1 >
   >        }
 1 >Emitted(31, 14) Source(26, 10) + SourceIndex(0)
 ---
+>>>
 >>>            return greeters;
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^^^^^^^
 3 >                   ^^^^^^^^
 4 >                           ^
-1->
+1 >
   >
   >        
 2 >            return 
 3 >                   greeters
 4 >                           ;
-1->Emitted(32, 13) Source(28, 9) + SourceIndex(0)
-2 >Emitted(32, 20) Source(28, 16) + SourceIndex(0)
-3 >Emitted(32, 28) Source(28, 24) + SourceIndex(0)
-4 >Emitted(32, 29) Source(28, 25) + SourceIndex(0)
+1 >Emitted(33, 13) Source(28, 9) + SourceIndex(0)
+2 >Emitted(33, 20) Source(28, 16) + SourceIndex(0)
+3 >Emitted(33, 28) Source(28, 24) + SourceIndex(0)
+4 >Emitted(33, 29) Source(28, 25) + SourceIndex(0)
 ---
 >>>        }
 1 >^^^^^^^^
@@ -659,8 +659,8 @@ sourceFile:sourceMapValidationClasses.ts
 1 >
   >    
 2 >        }
-1 >Emitted(33, 9) Source(29, 5) + SourceIndex(0)
-2 >Emitted(33, 10) Source(29, 6) + SourceIndex(0)
+1 >Emitted(34, 9) Source(29, 5) + SourceIndex(0)
+2 >Emitted(34, 10) Source(29, 6) + SourceIndex(0)
 ---
 >>>
 >>>        var b = foo2("Hello", "World", "!");
@@ -693,19 +693,19 @@ sourceFile:sourceMapValidationClasses.ts
 11>                                       "!"
 12>                                          )
 13>                                           ;
-1 >Emitted(35, 9) Source(31, 5) + SourceIndex(0)
-2 >Emitted(35, 13) Source(31, 9) + SourceIndex(0)
-3 >Emitted(35, 14) Source(31, 10) + SourceIndex(0)
-4 >Emitted(35, 17) Source(31, 13) + SourceIndex(0)
-5 >Emitted(35, 21) Source(31, 17) + SourceIndex(0)
-6 >Emitted(35, 22) Source(31, 18) + SourceIndex(0)
-7 >Emitted(35, 29) Source(31, 25) + SourceIndex(0)
-8 >Emitted(35, 31) Source(31, 27) + SourceIndex(0)
-9 >Emitted(35, 38) Source(31, 34) + SourceIndex(0)
-10>Emitted(35, 40) Source(31, 36) + SourceIndex(0)
-11>Emitted(35, 43) Source(31, 39) + SourceIndex(0)
-12>Emitted(35, 44) Source(31, 40) + SourceIndex(0)
-13>Emitted(35, 45) Source(31, 41) + SourceIndex(0)
+1 >Emitted(36, 9) Source(31, 5) + SourceIndex(0)
+2 >Emitted(36, 13) Source(31, 9) + SourceIndex(0)
+3 >Emitted(36, 14) Source(31, 10) + SourceIndex(0)
+4 >Emitted(36, 17) Source(31, 13) + SourceIndex(0)
+5 >Emitted(36, 21) Source(31, 17) + SourceIndex(0)
+6 >Emitted(36, 22) Source(31, 18) + SourceIndex(0)
+7 >Emitted(36, 29) Source(31, 25) + SourceIndex(0)
+8 >Emitted(36, 31) Source(31, 27) + SourceIndex(0)
+9 >Emitted(36, 38) Source(31, 34) + SourceIndex(0)
+10>Emitted(36, 40) Source(31, 36) + SourceIndex(0)
+11>Emitted(36, 43) Source(31, 39) + SourceIndex(0)
+12>Emitted(36, 44) Source(31, 40) + SourceIndex(0)
+13>Emitted(36, 45) Source(31, 41) + SourceIndex(0)
 ---
 >>>        // This is simple signle line comment
 1->^^^^^^^^
@@ -713,8 +713,8 @@ sourceFile:sourceMapValidationClasses.ts
 1->
   >    
 2 >        // This is simple signle line comment
-1->Emitted(36, 9) Source(32, 5) + SourceIndex(0)
-2 >Emitted(36, 46) Source(32, 42) + SourceIndex(0)
+1->Emitted(37, 9) Source(32, 5) + SourceIndex(0)
+2 >Emitted(37, 46) Source(32, 42) + SourceIndex(0)
 ---
 >>>        for (var j = 0; j < b.length; j++) {
 1 >^^^^^^^^
@@ -750,22 +750,22 @@ sourceFile:sourceMapValidationClasses.ts
 14>                                      j
 15>                                       ++
 16>                                         ) 
-1 >Emitted(37, 9) Source(33, 5) + SourceIndex(0)
-2 >Emitted(37, 14) Source(33, 10) + SourceIndex(0)
-3 >Emitted(37, 18) Source(33, 14) + SourceIndex(0)
-4 >Emitted(37, 19) Source(33, 15) + SourceIndex(0)
-5 >Emitted(37, 22) Source(33, 18) + SourceIndex(0)
-6 >Emitted(37, 23) Source(33, 19) + SourceIndex(0)
-7 >Emitted(37, 25) Source(33, 21) + SourceIndex(0)
-8 >Emitted(37, 26) Source(33, 22) + SourceIndex(0)
-9 >Emitted(37, 29) Source(33, 25) + SourceIndex(0)
-10>Emitted(37, 30) Source(33, 26) + SourceIndex(0)
-11>Emitted(37, 31) Source(33, 27) + SourceIndex(0)
-12>Emitted(37, 37) Source(33, 33) + SourceIndex(0)
-13>Emitted(37, 39) Source(33, 35) + SourceIndex(0)
-14>Emitted(37, 40) Source(33, 36) + SourceIndex(0)
-15>Emitted(37, 42) Source(33, 38) + SourceIndex(0)
-16>Emitted(37, 44) Source(33, 40) + SourceIndex(0)
+1 >Emitted(38, 9) Source(33, 5) + SourceIndex(0)
+2 >Emitted(38, 14) Source(33, 10) + SourceIndex(0)
+3 >Emitted(38, 18) Source(33, 14) + SourceIndex(0)
+4 >Emitted(38, 19) Source(33, 15) + SourceIndex(0)
+5 >Emitted(38, 22) Source(33, 18) + SourceIndex(0)
+6 >Emitted(38, 23) Source(33, 19) + SourceIndex(0)
+7 >Emitted(38, 25) Source(33, 21) + SourceIndex(0)
+8 >Emitted(38, 26) Source(33, 22) + SourceIndex(0)
+9 >Emitted(38, 29) Source(33, 25) + SourceIndex(0)
+10>Emitted(38, 30) Source(33, 26) + SourceIndex(0)
+11>Emitted(38, 31) Source(33, 27) + SourceIndex(0)
+12>Emitted(38, 37) Source(33, 33) + SourceIndex(0)
+13>Emitted(38, 39) Source(33, 35) + SourceIndex(0)
+14>Emitted(38, 40) Source(33, 36) + SourceIndex(0)
+15>Emitted(38, 42) Source(33, 38) + SourceIndex(0)
+16>Emitted(38, 44) Source(33, 40) + SourceIndex(0)
 ---
 >>>            b[j].greet();
 1 >^^^^^^^^^^^^
@@ -787,22 +787,22 @@ sourceFile:sourceMapValidationClasses.ts
 7 >                 greet
 8 >                      ()
 9 >                        ;
-1 >Emitted(38, 13) Source(34, 9) + SourceIndex(0)
-2 >Emitted(38, 14) Source(34, 10) + SourceIndex(0)
-3 >Emitted(38, 15) Source(34, 11) + SourceIndex(0)
-4 >Emitted(38, 16) Source(34, 12) + SourceIndex(0)
-5 >Emitted(38, 17) Source(34, 13) + SourceIndex(0)
-6 >Emitted(38, 18) Source(34, 14) + SourceIndex(0)
-7 >Emitted(38, 23) Source(34, 19) + SourceIndex(0)
-8 >Emitted(38, 25) Source(34, 21) + SourceIndex(0)
-9 >Emitted(38, 26) Source(34, 22) + SourceIndex(0)
+1 >Emitted(39, 13) Source(34, 9) + SourceIndex(0)
+2 >Emitted(39, 14) Source(34, 10) + SourceIndex(0)
+3 >Emitted(39, 15) Source(34, 11) + SourceIndex(0)
+4 >Emitted(39, 16) Source(34, 12) + SourceIndex(0)
+5 >Emitted(39, 17) Source(34, 13) + SourceIndex(0)
+6 >Emitted(39, 18) Source(34, 14) + SourceIndex(0)
+7 >Emitted(39, 23) Source(34, 19) + SourceIndex(0)
+8 >Emitted(39, 25) Source(34, 21) + SourceIndex(0)
+9 >Emitted(39, 26) Source(34, 22) + SourceIndex(0)
 ---
 >>>        }
 1 >^^^^^^^^^
 2 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >    }
-1 >Emitted(39, 10) Source(35, 6) + SourceIndex(0)
+1 >Emitted(40, 10) Source(35, 6) + SourceIndex(0)
 ---
 >>>    })(Bar = Foo.Bar || (Foo.Bar = {}));
 1->^^^^
@@ -859,15 +859,15 @@ sourceFile:sourceMapValidationClasses.ts
   >                                        b[j].greet();
   >                                    }
   >                                }
-1->Emitted(40, 5) Source(36, 1) + SourceIndex(0)
-2 >Emitted(40, 6) Source(36, 2) + SourceIndex(0)
-3 >Emitted(40, 8) Source(1, 12) + SourceIndex(0)
-4 >Emitted(40, 11) Source(1, 15) + SourceIndex(0)
-5 >Emitted(40, 14) Source(1, 12) + SourceIndex(0)
-6 >Emitted(40, 21) Source(1, 15) + SourceIndex(0)
-7 >Emitted(40, 26) Source(1, 12) + SourceIndex(0)
-8 >Emitted(40, 33) Source(1, 15) + SourceIndex(0)
-9 >Emitted(40, 41) Source(36, 2) + SourceIndex(0)
+1->Emitted(41, 5) Source(36, 1) + SourceIndex(0)
+2 >Emitted(41, 6) Source(36, 2) + SourceIndex(0)
+3 >Emitted(41, 8) Source(1, 12) + SourceIndex(0)
+4 >Emitted(41, 11) Source(1, 15) + SourceIndex(0)
+5 >Emitted(41, 14) Source(1, 12) + SourceIndex(0)
+6 >Emitted(41, 21) Source(1, 15) + SourceIndex(0)
+7 >Emitted(41, 26) Source(1, 12) + SourceIndex(0)
+8 >Emitted(41, 33) Source(1, 15) + SourceIndex(0)
+9 >Emitted(41, 41) Source(36, 2) + SourceIndex(0)
 ---
 >>>})(Foo || (Foo = {}));
 1 >
@@ -920,12 +920,12 @@ sourceFile:sourceMapValidationClasses.ts
   >                      b[j].greet();
   >                  }
   >              }
-1 >Emitted(41, 1) Source(36, 1) + SourceIndex(0)
-2 >Emitted(41, 2) Source(36, 2) + SourceIndex(0)
-3 >Emitted(41, 4) Source(1, 8) + SourceIndex(0)
-4 >Emitted(41, 7) Source(1, 11) + SourceIndex(0)
-5 >Emitted(41, 12) Source(1, 8) + SourceIndex(0)
-6 >Emitted(41, 15) Source(1, 11) + SourceIndex(0)
-7 >Emitted(41, 23) Source(36, 2) + SourceIndex(0)
+1 >Emitted(42, 1) Source(36, 1) + SourceIndex(0)
+2 >Emitted(42, 2) Source(36, 2) + SourceIndex(0)
+3 >Emitted(42, 4) Source(1, 8) + SourceIndex(0)
+4 >Emitted(42, 7) Source(1, 11) + SourceIndex(0)
+5 >Emitted(42, 12) Source(1, 8) + SourceIndex(0)
+6 >Emitted(42, 15) Source(1, 11) + SourceIndex(0)
+7 >Emitted(42, 23) Source(36, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationClasses.js.map

@@ -17,6 +17,4 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     return cooked;
 };
 
-
-
 expect(fooFn(__makeTemplateObject([""], [""])));

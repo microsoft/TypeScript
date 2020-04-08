@@ -9,6 +9,7 @@ if (true === true); {
 //// [emptyThenWarning.js]
 if (1)
     ;
+
 var x = 0;
 if (true === true)
     ;{

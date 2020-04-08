@@ -120,7 +120,8 @@ function callExpression2() {
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _a = x;return [4 /*yield*/, y];
+                    _a = x;
+                    return [4 /*yield*/, y];
                 case 1:
                     _a.apply(void 0, [_b.sent(), z]);
                     return [2 /*return*/];
@@ -292,7 +293,8 @@ function callExpression13() {
             switch (_c.label) {
                 case 0:
                     _b = (
-                        _a = x).a;return [4 /*yield*/, y];
+                        _a = x).a;
+                    return [4 /*yield*/, y];
                 case 1:
                     _b.apply(_a, [_c.sent(), z]);
                     return [2 /*return*/];
@@ -364,7 +366,8 @@ function callExpression18() {
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _a = x;return [4 /*yield*/, a];
+                    _a = x;
+                    return [4 /*yield*/, a];
                 case 1:
                     _a[_b.sent()](y, z);
                     return [2 /*return*/];
@@ -380,7 +383,8 @@ function callExpression19() {
             switch (_c.label) {
                 case 0:
                     _b = (
-                        _a = x)[a];return [4 /*yield*/, y];
+                        _a = x)[a];
+                    return [4 /*yield*/, y];
                 case 1:
                     _b.apply(_a, [_c.sent(), z]);
                     return [2 /*return*/];

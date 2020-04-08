@@ -46,6 +46,7 @@ break;
 // non-existent label
 ONE: while (true)
     break TWO;
+
 // break from inside function
 TWO: while (true) {
     var x = function () {
@@ -58,13 +59,16 @@ THREE: while (true) {
         break THREE;
     };
 }
+
 // break forward
 while (true) {
     break FIVE;
     FIVE: while (true) { }
 }
+
 // label on non-loop statement
 NINE: var y = 12;
+
 while (true) {
     break NINE;
 }

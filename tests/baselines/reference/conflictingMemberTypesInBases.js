@@ -15,4 +15,3 @@ interface E extends D { } // No duplicate error here
 
 
 //// [conflictingMemberTypesInBases.js]
-

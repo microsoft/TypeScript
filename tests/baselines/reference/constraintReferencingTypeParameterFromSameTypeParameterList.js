@@ -31,8 +31,6 @@ function f() {
 }
 
 
-
-
 function foo() {
 }
 

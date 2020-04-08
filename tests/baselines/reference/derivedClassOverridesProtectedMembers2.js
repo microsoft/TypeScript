@@ -99,18 +99,6 @@ var Base = /** @class */ (function () {
 // Increase visibility of all protected members to public
 var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
-
-
-
-
-
-
-
-
-
-
-
-
     function Derived(a) {
         return _super.call(this, a) || this;
     }Derived.prototype.b = function (a) { };
@@ -140,13 +128,15 @@ var r5 = Derived.s(y);
 var r6 = Derived.t;
 var r6a = Derived.u;
 Derived.t = y;
+
 var Base2 = /** @class */ (function () {
     function Base2() {
     }
     return Base2;
 }());
 var Derived2 = /** @class */ (function (_super) {
-    __extends(Derived2, _super);function Derived2() {
+    __extends(Derived2, _super);
+    function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived2;

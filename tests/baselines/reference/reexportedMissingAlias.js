@@ -29,7 +29,8 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 var first_1 = require("./first");
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);function C() {
+    __extends(C, _super);
+    function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;

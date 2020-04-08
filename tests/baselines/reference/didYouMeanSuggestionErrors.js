@@ -39,6 +39,7 @@ suite("another suite", function () {
     test("everything else", function () {
         console.log(process.env);
         document.createElement("div");
+
         var x = require("fs");
         var y = Buffer.from([]);
         var z = module.exports;

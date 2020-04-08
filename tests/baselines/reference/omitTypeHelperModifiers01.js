@@ -27,8 +27,10 @@ function f(x) {
     var b = x.b;
     x.b = "hello";
     x.b = undefined;
+
     var c = x.c;
     x.c = true;
+
     var d = x.d;
     x.d = d;
 }

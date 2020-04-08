@@ -22,4 +22,5 @@ Clone.clone("ok");
 "use strict";
 exports.__esModule = true;
 var enum_1 = require("./enum");
+
 enum_1.Clone.clone("ok");

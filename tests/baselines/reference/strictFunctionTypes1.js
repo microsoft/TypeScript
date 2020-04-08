@@ -53,9 +53,6 @@ const t6: A[] = coAndContraArray([], acceptA);
 //// [strictFunctionTypes1.js]
 "use strict";
 
-
-
-
 var x1 = f1(fo, fs); // (x: string) => void
 var x2 = f2("abc", fo, fs); // "abc"
 var x3 = f3("abc", fo, fx); // "abc" | "def"
@@ -68,9 +65,6 @@ var x11 = f3(never, fo, fx); // "def"
 
 
 var x = foo([]); // never
-
-
-
 
 
 

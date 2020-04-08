@@ -19,7 +19,8 @@ class C<T extends Options> {
 
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.method = function () {
+    }
+    C.prototype.method = function () {
         var _a = this.foo, a = _a.a, b = _a.b;
         !(a && b);
         a;

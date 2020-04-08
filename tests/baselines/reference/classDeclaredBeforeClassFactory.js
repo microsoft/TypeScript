@@ -23,7 +23,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 // Should be OK due to hoisting
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);// Should be OK due to hoisting
+    __extends(Derived, _super);
     function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }

@@ -73,6 +73,7 @@ var x = Math.pow((3, 5), 2);
 
 // Should error
 var a = [(3 + 4), ((1 + 1, 8) * 4)];
+
 // Error cases
 xx = (1, 2);
 xx = ('', xx);

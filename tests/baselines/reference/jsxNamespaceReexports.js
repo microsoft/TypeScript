@@ -24,13 +24,6 @@ function createElement(element, props) {var children = [];
         children[_i - 2] = arguments[_i];
     }
 }
-
-
-
-
-
-
-
 exports.createElement = createElement;
 
 //// [index.js]

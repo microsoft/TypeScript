@@ -63,14 +63,19 @@ a.foo(1, 2, 3);
 // Optional parameters should be valid in all the below casts
 
 function foo(x) { }
+
 foo(1);
 foo();
+
 function foo2(x, y) { }
+
 foo2(1);
 foo2(1, 2);
+
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.foo = function (x) { };
+    }
+    C.prototype.foo = function (x) { };
 
 
 
@@ -84,6 +89,7 @@ c.foo(1);
 c.foo2(1);
 c.foo2(1, 2);
 
+
 var i;
 i();
 i(1);
@@ -91,7 +97,9 @@ i(1, 2);
 i.foo(1);
 i.foo(1, 2);
 i.foo(1, 2, 3);
+
 var a;
+
 a();
 a(1);
 a(1, 2);

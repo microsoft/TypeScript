@@ -77,7 +77,8 @@ var Foo = /** @class */ (function () {
     Foo.prototype.bar = function (s) {
     };
     return Foo;
-}());exports.Foo = Foo;
+}());
+exports.Foo = Foo;
 /**
 * comment5
 */

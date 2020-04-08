@@ -54,7 +54,8 @@ define("a", ["require", "exports"], function (require, exports) {
     var A = /** @class */ (function () {
         function A() {}
         return A;
-    }());exports.A = A;
+    }());
+    exports.A = A;
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -63,7 +64,8 @@ define("b", ["require", "exports"], function (require, exports) {
     var B = /** @class */ (function () {
         function B() {}
         return B;
-    }());exports.B = B;
+    }());
+    exports.B = B;
 });
 define("main", ["require", "exports", "D", "E"], function (require, exports) {
     "use strict";

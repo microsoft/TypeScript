@@ -30,7 +30,8 @@ var enumdule;
     enumdule.Point = Point;
 })(enumdule || (enumdule = {}));
 (function (enumdule) {
-    enumdule[enumdule["Red"] = 0] = "Red";enumdule[enumdule["Blue"] = 1] = "Blue";
+    enumdule[enumdule["Red"] = 0] = "Red";
+    enumdule[enumdule["Blue"] = 1] = "Blue";
 })(enumdule || (enumdule = {}));
 var x;
 var x = enumdule.Red;

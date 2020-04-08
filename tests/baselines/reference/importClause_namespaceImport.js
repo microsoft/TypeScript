@@ -23,11 +23,13 @@ exports.Value = exports.B = exports.A = void 0;
 var A = /** @class */ (function () {
     function A() {}
     return A;
-}());exports.A = A;
+}());
+exports.A = A;
 var B = /** @class */ (function () {
     function B() {}
     return B;
-}());exports.B = B;
+}());
+exports.B = B;
 exports.Value = {};
 //// [b.js]
 "use strict";

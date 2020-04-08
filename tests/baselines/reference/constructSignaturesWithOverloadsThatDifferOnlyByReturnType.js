@@ -44,7 +44,6 @@ var C2 = /** @class */ (function () {
     return C2;
 }());
 
-
 var a;
 
 var b;

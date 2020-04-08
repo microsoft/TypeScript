@@ -216,7 +216,8 @@ Change:: builds after fixing config file errors
 "use strict";
 exports.__esModule = true;
 exports.fooBar = void 0;
-function fooBar() { }exports.fooBar = fooBar;
+function fooBar() { }
+exports.fooBar = fooBar;
 
 
 //// [/user/username/projects/myproject/a.d.ts]
@@ -227,7 +228,8 @@ export declare function fooBar(): void;
 "use strict";
 exports.__esModule = true;
 exports.bar = void 0;
-function bar() { }exports.bar = bar;
+function bar() { }
+exports.bar = bar;
 
 
 //// [/user/username/projects/myproject/b.d.ts]

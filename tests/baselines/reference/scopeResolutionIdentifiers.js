@@ -62,7 +62,8 @@ function fn() {
 var C = /** @class */ (function () {
     function C() {
         this.n = this.s;
-    }C.prototype.x = function () {
+    }
+    C.prototype.x = function () {
         var p = this.n;
         var p;
     };

@@ -91,7 +91,7 @@ function foo3(x, y) {
 
 var C = /** @class */ (function () {
     function C() {
-    }// error, same T
+    }
     C.prototype.foo1 = function (x) { };
 
 
@@ -106,7 +106,7 @@ var C = /** @class */ (function () {
 }());
 var C2 = /** @class */ (function () {
     function C2() {
-    }// error, same T
+    }
     C2.prototype.foo1 = function (x) { };
 
 
@@ -116,4 +116,3 @@ var C2 = /** @class */ (function () {
     C2.prototype.foo3 = function (x) { };
     return C2;
 }());
-

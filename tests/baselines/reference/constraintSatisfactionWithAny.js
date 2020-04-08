@@ -64,6 +64,7 @@ foo(a);
 foo2(a);
 //foo3(a);
 foo4(a);
+
 var b;
 foo(b);
 foo2(b);

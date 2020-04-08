@@ -58,13 +58,15 @@ var BaseBase2 = /** @class */ (function () {
 }());
 
 var Base = /** @class */ (function (_super) {
-    __extends(Base, _super);function Base() {
+    __extends(Base, _super);
+    function Base() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Base;
 }(BaseBase));
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);function Derived() {
+    __extends(Derived, _super);
+    function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived;

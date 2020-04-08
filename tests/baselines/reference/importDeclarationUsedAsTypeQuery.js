@@ -19,7 +19,8 @@ var B = /** @class */ (function () {
     function B() {
     }
     return B;
-}());exports.B = B;
+}());
+exports.B = B;
 //// [importDeclarationUsedAsTypeQuery_1.js]
 "use strict";
 exports.__esModule = true;

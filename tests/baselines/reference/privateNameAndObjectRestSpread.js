@@ -32,7 +32,8 @@ var __rest = (this && this.__rest) || function (s, e) {
 var _prop;
 class C {constructor() {
         _prop.set(this, 1);
-    }method(other) {
+    }
+    method(other) {
         const obj = Object.assign({}, other);
         __classPrivateFieldGet(obj, _prop);
         const rest = __rest(other, []);

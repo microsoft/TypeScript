@@ -70,6 +70,7 @@ obj1["a"]; // number
 obj1["b"]; // number
 obj1["oct1"]; // number
 obj1["Infinity"]; // boolean
+
 obj2[19230]; // string
 obj2["0O45436"]; // any
 obj2["19230"]; // string

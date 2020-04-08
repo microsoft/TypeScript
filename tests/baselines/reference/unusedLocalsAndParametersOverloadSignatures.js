@@ -28,8 +28,8 @@ exports.__esModule = true;
 exports.genericFunc = exports.C = exports.func = void 0;
 function func(details, message) {
     return details + message;
-}exports.func = func;
-
+}
+exports.func = func;
 var C = /** @class */ (function () {
     function C(details, message) {
         details + message;
@@ -40,7 +40,9 @@ var C = /** @class */ (function () {
         return details + message;
     };
     return C;
-}());exports.C = C;
+}());
+exports.C = C;
 function genericFunc(details, message) {
     return details + message;
-}exports.genericFunc = genericFunc;
+}
+exports.genericFunc = genericFunc;

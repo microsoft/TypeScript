@@ -54,7 +54,8 @@ function foo() {
 
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.foo = function () {
+    }
+    C.prototype.foo = function () {
         try {
             var x = 1;
         }

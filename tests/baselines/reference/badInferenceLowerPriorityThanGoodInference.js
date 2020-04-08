@@ -27,12 +27,13 @@ goofus((a: string) => ({ dog: function() { return a; } }));
 // Repro from #13118
 
 
-
 var result = canYouInferThis(function () { return ({
     a: { BLAH: 33 },
     b: function (x) { }
 }); });
+
 result.BLAH;
+
 // Repro from #26629
 function goofus(f) { }
 

@@ -48,7 +48,8 @@ var __extends = (this && this.__extends) || (function () {
     return C;
 }());
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);function D() {
+    __extends(D, _super);
+    function D() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         // Not an error -- this will access the parent's initialized value for `x`, not the one on the child.
         _this.old_x = _this.x;
@@ -65,13 +66,15 @@ var X = /** @class */ (function () {
     return X;
 }());
 var Y = /** @class */ (function (_super) {
-    __extends(Y, _super);function Y() {
+    __extends(Y, _super);
+    function Y() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Y;
 }(X));
 var Z = /** @class */ (function (_super) {
-    __extends(Z, _super);function Z() {
+    __extends(Z, _super);
+    function Z() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.old_x = _this.x;
         _this.x = 1;

@@ -96,7 +96,8 @@ declare function f4(_this: string); // no code gen - no error
 //// [collisionThisExpressionAndParameter.js]
 var Foo = /** @class */ (function () {
     function Foo() {
-    }Foo.prototype.x = function () {
+    }
+    Foo.prototype.x = function () {
         var _this = 10; // Local var. No this capture in x(), so no conflict.
         function inner(_this) {
             var _this_1 = this;
@@ -169,11 +170,9 @@ var Foo3 = /** @class */ (function () {
     };
     return Foo3;
 }());
-
 function f3(_this) {
     var _this_1 = this;
     (
         function (x) { console.log(_this_1.x); });
 }
-
 

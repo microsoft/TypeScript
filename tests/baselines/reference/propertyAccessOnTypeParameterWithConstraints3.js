@@ -74,20 +74,24 @@ var __extends = (this && this.__extends) || (function () {
 
 var A = /** @class */ (function () {
     function A() {
-    }A.prototype.foo = function () { return ''; };
+    }
+    A.prototype.foo = function () { return ''; };
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }B.prototype.bar = function () {
+    }
+    B.prototype.bar = function () {
         return '';
     };
     return B;
 }(A));
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.f = function () {
+    }
+    C.prototype.f = function () {
         var x;
         // BUG 823818
         var a = x['foo'](); // should be string

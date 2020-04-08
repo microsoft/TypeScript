@@ -4,6 +4,5 @@ var v = (a): => {
 };
 
 //// [parserX_ArrowFunction3.js]
-var v = (a);
-{
+var v = (a);{
 };

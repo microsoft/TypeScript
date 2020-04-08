@@ -103,9 +103,11 @@ var _b = __read(undefined, 2), _c = _b[0], a2 = _c === void 0 ? false : _c, _d =
 //        where N is the numeric index of E in the array assignment pattern, or
 var _e = __read([2, 3, 4], 3), b0 = _e[0], b1 = _e[1], b2 = _e[2];
 var _f = __read([1, 2, "string"], 3), b3 = _f[0], b4 = _f[1], b5 = _f[2];
+
 function foo() {
     return [1, 2, 3];
 }
+
 var _g = __read(foo(), 2), b6 = _g[0], b7 = _g[1];
 var _h = __read(foo()), b8 = _h.slice(0);
 

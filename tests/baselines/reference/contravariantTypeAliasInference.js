@@ -23,5 +23,6 @@ bar(g1, g2);
 
 foo(f1, f2);
 
+
 bar(f1, f2);
 bar(g1, g2);

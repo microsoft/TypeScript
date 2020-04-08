@@ -41,9 +41,11 @@ var React = require("react");
 
 
 var Poisoned = /** @class */ (function (_super) {
-    __extends(Poisoned, _super);function Poisoned() {
+    __extends(Poisoned, _super);
+    function Poisoned() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Poisoned.prototype.render = function () {
+    }
+    Poisoned.prototype.render = function () {
         return <div>Hello</div>;
     };
     return Poisoned;

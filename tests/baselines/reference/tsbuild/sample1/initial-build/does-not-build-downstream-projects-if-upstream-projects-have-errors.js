@@ -56,8 +56,10 @@ export declare function multiply(a: number, b: number): number;
 exports.__esModule = true;
 exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
-function leftPad(s, n) { return s + n; }exports.leftPad = leftPad;
-function multiply(a, b) { return a * b; }exports.multiply = multiply;
+function leftPad(s, n) { return s + n; }
+exports.leftPad = leftPad;
+function multiply(a, b) { return a * b; }
+exports.multiply = multiply;
 
 
 //// [/src/core/tsconfig.tsbuildinfo]

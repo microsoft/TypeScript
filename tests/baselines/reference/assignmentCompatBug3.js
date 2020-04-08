@@ -56,5 +56,6 @@ function foo(test) { }
 
 var x;
 var y;
+
 foo(x);
 foo(x + y);

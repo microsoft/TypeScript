@@ -33,13 +33,16 @@ var M;
 (function (M) {
     var S = /** @class */ (function () {
         function S() {
-        }S.prototype.decorator = function (target, key) { };
+        }
+        S.prototype.decorator = function (target, key) { };
         return S;
     }());
     var C = /** @class */ (function (_super) {
-        __extends(C, _super);function C() {
+        __extends(C, _super);
+        function C() {
             return _super !== null && _super.apply(this, arguments) || this;
-        }C.prototype.method = function () { };
+        }
+        C.prototype.method = function () { };
         __decorate([
             _super.decorator
         ], C.prototype, "method", null);

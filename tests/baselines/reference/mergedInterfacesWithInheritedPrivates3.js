@@ -62,9 +62,9 @@ var C2 = /** @class */ (function () {
     return C2;
 }());
 
-
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);function D() {
+    __extends(D, _super);
+    function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
@@ -81,5 +81,4 @@ var M;
         }
         return C2;
     }());
-
 })(M || (M = {}));

@@ -8,6 +8,7 @@ var obj = {
 }
 
 //// [symbolProperty58.js]
+
 var obj = {
     [Symbol.foo]: 0
 };

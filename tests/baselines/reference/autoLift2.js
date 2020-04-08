@@ -44,6 +44,7 @@ var A = /** @class */ (function () {
         this.foo = "foo";
 
         this.bar = "bar";
+
         [1, 2].forEach(function (p) { return _this.foo; });
 
         [1, 2].forEach(function (p) { return _this.bar; });
@@ -52,4 +53,5 @@ var A = /** @class */ (function () {
     return A;
 }());
 var a = new A();
+
 a.baz();

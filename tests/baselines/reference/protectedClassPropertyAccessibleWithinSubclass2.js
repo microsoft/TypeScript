@@ -109,12 +109,14 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var Base = /** @class */ (function () {
     function Base() {
-    }Base.prototype.method = function () {
+    }
+    Base.prototype.method = function () {
         var b;
         var d1;
         var d2;
         var d3;
         var d4;
+
         b.x; // OK, accessed within their declaring class
         d1.x; // OK, accessed within their declaring class
         d2.x; // OK, accessed within their declaring class
@@ -124,14 +126,17 @@ var __extends = (this && this.__extends) || (function () {
     return Base;
 }());
 var Derived1 = /** @class */ (function (_super) {
-    __extends(Derived1, _super);function Derived1() {
+    __extends(Derived1, _super);
+    function Derived1() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Derived1.prototype.method1 = function () {
+    }
+    Derived1.prototype.method1 = function () {
         var b;
         var d1;
         var d2;
         var d3;
         var d4;
+
         b.x; // Error, isn't accessed through an instance of the enclosing class
         d1.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
         d2.x; // Error, isn't accessed through an instance of the enclosing class
@@ -141,14 +146,17 @@ var Derived1 = /** @class */ (function (_super) {
     return Derived1;
 }(Base));
 var Derived2 = /** @class */ (function (_super) {
-    __extends(Derived2, _super);function Derived2() {
+    __extends(Derived2, _super);
+    function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Derived2.prototype.method2 = function () {
+    }
+    Derived2.prototype.method2 = function () {
         var b;
         var d1;
         var d2;
         var d3;
         var d4;
+
         b.x; // Error, isn't accessed through an instance of the enclosing class
         d1.x; // Error, isn't accessed through an instance of the enclosing class
         d2.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
@@ -158,14 +166,17 @@ var Derived2 = /** @class */ (function (_super) {
     return Derived2;
 }(Base));
 var Derived3 = /** @class */ (function (_super) {
-    __extends(Derived3, _super);function Derived3() {
+    __extends(Derived3, _super);
+    function Derived3() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Derived3.prototype.method3 = function () {
+    }
+    Derived3.prototype.method3 = function () {
         var b;
         var d1;
         var d2;
         var d3;
         var d4;
+
         b.x; // Error, isn't accessed through an instance of the enclosing class
         d1.x; // Error, isn't accessed through an instance of the enclosing class
         d2.x; // Error, isn't accessed through an instance of the enclosing class
@@ -175,14 +186,17 @@ var Derived3 = /** @class */ (function (_super) {
     return Derived3;
 }(Derived1));
 var Derived4 = /** @class */ (function (_super) {
-    __extends(Derived4, _super);function Derived4() {
+    __extends(Derived4, _super);
+    function Derived4() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Derived4.prototype.method4 = function () {
+    }
+    Derived4.prototype.method4 = function () {
         var b;
         var d1;
         var d2;
         var d3;
         var d4;
+
         b.x; // Error, isn't accessed through an instance of the enclosing class
         d1.x; // Error, isn't accessed through an instance of the enclosing class
         d2.x; // Error, isn't accessed through an instance of the enclosing class
@@ -196,6 +210,7 @@ var d1;
 var d2;
 var d3;
 var d4;
+
 b.x; // Error, neither within their declaring class nor classes derived from their declaring class
 d1.x; // Error, neither within their declaring class nor classes derived from their declaring class
 d2.x; // Error, neither within their declaring class nor classes derived from their declaring class

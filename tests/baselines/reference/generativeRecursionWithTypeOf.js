@@ -13,7 +13,8 @@ module M {
 //// [generativeRecursionWithTypeOf.js]
 var C = /** @class */ (function () {
     function C() {
-    }C.foo = function (x) { };
+    }
+    C.foo = function (x) { };
     return C;
 }());
 var M;

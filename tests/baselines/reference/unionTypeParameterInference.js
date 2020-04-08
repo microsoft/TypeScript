@@ -14,7 +14,6 @@ function unlift<U>(value: U | Foo<U>): U {
 // Regression test for #5861
 
 
-
 function unlift(value) {
     return lift(value).prop;
 }

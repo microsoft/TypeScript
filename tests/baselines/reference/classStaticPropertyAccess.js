@@ -24,6 +24,7 @@ var A = /** @class */ (function () {
     return A;
 }());
 var a = new A();
+
 a['y']; // Error
 a.y; // Error
 A._b; // Error

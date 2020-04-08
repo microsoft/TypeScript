@@ -45,16 +45,16 @@ function fn() {
     return __awaiter(this, void 0, void 0, function* () {
         const req = yield Promise.resolve().then(() => require('./test')); // ONE
     });
-}exports.fn = fn;
-
+}
+exports.fn = fn;
 class cl1 {
     m() {
         return __awaiter(this, void 0, void 0, function* () {
             const req = yield Promise.resolve().then(() => require('./test')); // TWO
         });
     }
-}exports.cl1 = cl1;
-
+}
+exports.cl1 = cl1;
 exports.obj = {
     m: () => __awaiter(void 0, void 0, void 0, function* () {
         const req = yield Promise.resolve().then(() => require('./test')); // THREE
@@ -69,8 +69,8 @@ class cl2 {
                 const req = yield Promise.resolve().then(() => require('./test')); // FOUR
             })
         };
-    }}exports.cl2 = cl2;
-
+    }}
+exports.cl2 = cl2;
 exports.l = () => __awaiter(void 0, void 0, void 0, function* () {
     const req = yield Promise.resolve().then(() => require('./test')); // FIVE
 });

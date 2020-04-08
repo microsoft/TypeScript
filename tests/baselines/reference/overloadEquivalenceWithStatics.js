@@ -11,7 +11,7 @@ return null;
 //// [overloadEquivalenceWithStatics.js]
 var A1 = /** @class */ (function () {
     function A1() {
-    }// 2 : Error Duplicate signature
+    }
     A1.B = function (v) {
         return null;
     };

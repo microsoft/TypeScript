@@ -24,6 +24,7 @@ class C {
 
 class D {
     constructor(...rest) { }
+
     bar(...rest) { }
     foo(x, ...rest) { }
 }

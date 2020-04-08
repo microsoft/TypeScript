@@ -42,12 +42,10 @@ for (; 0;)
 
 for (var _ in [])
     ;
-
 for (var _i = 0, _a = []; _i < _a.length; _i++) {
     var _ = _a[_i];
     ;
 }
-
 // @ts-ignore suppress `with` statement error
 with (window)
     ;

@@ -17,7 +17,6 @@ o1 = { x: c, 0: b }; // string indexer is any, number indexer is B
 
 //// [objectLiteralIndexers.js]
 
-
 var a;
 var b;
 var c;

@@ -183,7 +183,8 @@ var SomeBase = /** @class */ (function () {
     function SomeBase() {
         this.privateMember = 0;
         this.publicMember = 0;
-    }SomeBase.prototype.privateFunc = function () { };
+    }
+    SomeBase.prototype.privateFunc = function () { };
 
 
     SomeBase.prototype.publicFunc = function () { };
@@ -265,9 +266,11 @@ var SomeDerived2 = /** @class */ (function (_super) {
 //super.privateStaticProperty in static member function of derived class
 //super.privateStaticProperty in static member accessor(get and set) of derived class
 var SomeDerived3 = /** @class */ (function (_super) {
-    __extends(SomeDerived3, _super);function SomeDerived3() {
+    __extends(SomeDerived3, _super);
+    function SomeDerived3() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }SomeDerived3.fn = function () {
+    }
+    SomeDerived3.fn = function () {
         _super.publicStaticMember = 3;
         _super.privateStaticMember = 3;
         _super.privateStaticFunc.call(this);

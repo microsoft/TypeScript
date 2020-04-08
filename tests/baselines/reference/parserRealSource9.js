@@ -241,6 +241,7 @@ var TypeScript;
 
         Binder.prototype.resolveBases = function (scope, type) {
             type.extendsList = this.resolveBaseTypeLinks(type.extendsTypeLinks, scope);
+
             var i = 0, len = type.extendsList.length;
             var derivedIsClass = type.isClassInstance();
             for (; i < len; i++) {
@@ -260,7 +261,9 @@ var TypeScript;
                     }
                 }
             }
+
             type.implementsList = this.resolveBaseTypeLinks(type.implementsTypeLinks, scope);
+
             if (type.implementsList) {
                 for (i = 0, len = type.implementsList.length; i < len; i++) {
                     var iface = type.implementsList[i];
@@ -363,8 +366,10 @@ var TypeScript;
                         if (symbol.flags & SymbolFlags.Bound) {
                             break;
                         }
+
                         var typeSymbol = symbol;
                         typeSymbol.flags |= SymbolFlags.Bound;
+
                         // Since type collection happens out of order, a dynamic module referenced by an import statement
                         // may not yet be in scope when the import symbol is created.  In that case, we need to search
                         // out the module symbol now
@@ -380,6 +385,7 @@ var TypeScript;
 
                         if (typeSymbol.type && typeSymbol.type != this.checker.gloModType) {
                             this.bindType(scope, typeSymbol.type, typeSymbol.instanceType);
+
                             // bind expansions on the parent type symbol
                             if (typeSymbol.type.isModuleType()) {
                                 for (var i = 0; i < typeSymbol.expansions.length; i++) {
@@ -389,10 +395,13 @@ var TypeScript;
                         }
                         break;
                     case SymbolKind.Field:
-                        this.checker.resolveTypeLink(scope, symbol.field.typeLink, false);
+                        this.checker.resolveTypeLink(scope, symbol.field.typeLink,
+                            false);
                         break;
                     case SymbolKind.Parameter:
-                        this.checker.resolveTypeLink(scope, symbol.parameter.typeLink, true);
+                        this.checker.resolveTypeLink(scope,
+                            symbol.parameter.typeLink,
+                            true);
                         break;
                 }
                 this.checker.locationInfo = prevLocationInfo;
@@ -404,7 +413,8 @@ var TypeScript;
             table.map(
             function (key, sym, binder) {
                 binder.bindSymbol(scope, sym);
-            }, this);
+            },
+                this);
         };
         return Binder;
     }());

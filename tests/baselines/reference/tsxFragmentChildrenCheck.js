@@ -35,7 +35,8 @@ exports.MyComponent = void 0;
 
 function MyComponent(props) {
     return React.createElement("span", null, "my component");
-}exports.MyComponent = MyComponent;
+}
+exports.MyComponent = MyComponent;
 //// [file1.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -59,13 +60,13 @@ var MY_STRING = 'Ceci n\'est pas une string.';
 var MY_CLASSNAME = 'jeclass';
 
 var RenderString = /** @class */ (function (_super) {
-    __extends(RenderString, _super);function RenderString() {
+    __extends(RenderString, _super);
+    function RenderString() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }RenderString.prototype.render = function () {
+    }
+    RenderString.prototype.render = function () {
         return (
-            React.createElement(React.Fragment, null, React.createElement(my_component_1.MyComponent, null),
-                React.createElement("span", null, MY_STRING),
-                React.createElement("span", { className: MY_CLASSNAME })
+            React.createElement(React.Fragment, null, React.createElement(my_component_1.MyComponent, null), React.createElement("span", null, MY_STRING), React.createElement("span", { className: MY_CLASSNAME })
             )
         );
     };

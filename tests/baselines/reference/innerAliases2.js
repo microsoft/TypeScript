@@ -24,7 +24,8 @@ var _provider;
 (function (_provider) {
     var UsefulClass = /** @class */ (function () {
         function UsefulClass() {
-        }UsefulClass.prototype.foo = function () {
+        }
+        UsefulClass.prototype.foo = function () {
         };
         return UsefulClass;
     }());

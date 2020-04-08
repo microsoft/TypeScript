@@ -77,6 +77,7 @@ var exprBoolean2;
 var exprNumber2;
 var exprString2;
 var exprIsObject2;
+
 //Cond is a boolean type variable
 condBoolean ? exprAny1 : exprAny2;
 condBoolean ? exprBoolean1 : exprBoolean2;
@@ -102,6 +103,8 @@ typeof "123" == "string" ? exprBoolean1 : exprBoolean2;
 null === undefined ? exprString1 : exprString2;
 true || false ? exprIsObject1 : exprIsObject2;
 null === undefined ? exprString1 : exprBoolean1; // union
+
+
 //Results shoud be same as Expr1 and Expr2
 var resultIsAny1 = condBoolean ? exprAny1 : exprAny2;
 var resultIsBoolean1 = condBoolean ? exprBoolean1 : exprBoolean2;

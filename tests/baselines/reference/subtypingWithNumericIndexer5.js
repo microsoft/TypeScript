@@ -47,7 +47,6 @@ module Generics {
 // Derived type indexer must be subtype of base type indexer
 
 
-
 var B = /** @class */ (function () {
     function B() {
     }

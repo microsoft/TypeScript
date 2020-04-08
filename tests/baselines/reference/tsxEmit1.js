@@ -66,7 +66,8 @@ var openClosed5 = <div n='m'>{p > p}</div>;
 
 var SomeClass = /** @class */ (function () {
     function SomeClass() {
-    }SomeClass.prototype.f = function () {
+    }
+    SomeClass.prototype.f = function () {
         var _this = this;
         var rewrites1 = <div>{function () { return _this; }}</div>;
         var rewrites2 = <div>{__spreadArrays([p], p, [p])}</div>;

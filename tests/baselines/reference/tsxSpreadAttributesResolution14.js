@@ -34,8 +34,8 @@ function Component(props) {
         // Error extra property
         <AnotherComponent {...props} Property1/>
     );
-}exports["default"] = Component;
-
+}
+exports["default"] = Component;
 
 function AnotherComponent(_a) {
     var property1 = _a.property1;

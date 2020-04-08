@@ -13,7 +13,8 @@ class Bug implements I {
 
 var Bug = /** @class */ (function () {
     function Bug() {
-    }Bug.prototype.foo = function (value) {
+    }
+    Bug.prototype.foo = function (value) {
     };
     return Bug;
 }());

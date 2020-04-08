@@ -39,9 +39,11 @@ var BaseCollection2 = /** @class */ (function () {
     return BaseCollection2;
 }());
 var DataView2 = /** @class */ (function (_super) {
-    __extends(DataView2, _super);function DataView2() {
+    __extends(DataView2, _super);
+    function DataView2() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }DataView2.prototype.fillItems = function (item) {
+    }
+    DataView2.prototype.fillItems = function (item) {
         this._itemsByKey['dummy'] = item;
     };
     return DataView2;

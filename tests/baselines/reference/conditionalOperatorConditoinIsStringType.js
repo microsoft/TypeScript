@@ -79,6 +79,7 @@ var exprBoolean2;
 var exprNumber2;
 var exprString2;
 var exprIsObject2;
+
 //Cond is a string type variable
 condString ? exprAny1 : exprAny2;
 condString ? exprBoolean1 : exprBoolean2;
@@ -100,12 +101,15 @@ condString ? exprString1 : exprBoolean1; // union
 //Cond is a string type expression
 function foo() { return "string"; };
 var array = ["1", "2", "3"];
+
 typeof condString ? exprAny1 : exprAny2;
 condString.toUpperCase ? exprBoolean1 : exprBoolean2;
 condString + "string" ? exprNumber1 : exprNumber2;
 foo() ? exprString1 : exprString2;
 array[1] ? exprIsObject1 : exprIsObject2;
 foo() ? exprString1 : exprBoolean1; // union
+
+
 //Results shoud be same as Expr1 and Expr2
 var resultIsAny1 = condString ? exprAny1 : exprAny2;
 var resultIsBoolean1 = condString ? exprBoolean1 : exprBoolean2;

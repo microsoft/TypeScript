@@ -41,7 +41,8 @@ var m4c;
 })(m4c || (m4c = {}));
 var m4d;
 (function (m4d) {var C = /** @class */ (function () {
-        function C() {}C.prototype.foo = function () { };
+        function C() {}
+        C.prototype.foo = function () { };
         return C;
     }());
 })(m4d || (m4d = {}));

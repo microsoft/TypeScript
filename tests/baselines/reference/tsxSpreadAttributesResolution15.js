@@ -34,8 +34,8 @@ function Component(props) {
     return (
         <AnotherComponent {...props} property2 AnotherProperty1="hi"/>
     );
-}exports["default"] = Component;
-
+}
+exports["default"] = Component;
 
 function AnotherComponent(_a) {
     var property1 = _a.property1;

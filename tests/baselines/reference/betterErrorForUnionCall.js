@@ -11,5 +11,7 @@ fnUnion2("");
 
 //// [betterErrorForUnionCall.js]
 union("");
+
 fnUnion("");
+
 fnUnion2("");

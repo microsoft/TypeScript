@@ -126,38 +126,6 @@ export interface CC extends Y {
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //// [index.d.ts]
 export interface A {
 }

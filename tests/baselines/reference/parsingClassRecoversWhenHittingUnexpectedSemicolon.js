@@ -8,6 +8,8 @@ class C {
 //// [parsingClassRecoversWhenHittingUnexpectedSemicolon.js]
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.f = function () { };;
+    }
+    C.prototype.f = function () { };
+    ;
     return C;
 }());

@@ -16,6 +16,3 @@ declare class C4 {} // error -- class declaration must precede module declaratio
 interface C4 {}
 
 //// [mergeClassInterfaceAndModule.js]
-
-
-

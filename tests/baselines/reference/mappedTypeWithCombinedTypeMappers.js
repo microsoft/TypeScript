@@ -23,5 +23,4 @@ const shouldFail: { important: boolean } = output.x.children;
 // Repro from #13351
 
 
-
 var shouldFail = output.x.children;

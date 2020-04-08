@@ -12,5 +12,7 @@ var Foo = /** @class */ (function () {
     return Foo;
 }());
 ;
+
 function bar(x) { }
+
 bar(Foo); // Error, but should be allowed

@@ -49,5 +49,4 @@ var Bar = /** @class */ (function () {
     }
     return Bar;
 }());
-
 module.exports = Foo;

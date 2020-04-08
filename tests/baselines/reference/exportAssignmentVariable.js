@@ -13,7 +13,6 @@ var n: number = y;
 //// [exportAssignmentVariable_A.js]
 "use strict";
 var x = 0;
-
 module.exports = x;
 //// [exportAssignmentVariable_B.js]
 "use strict";

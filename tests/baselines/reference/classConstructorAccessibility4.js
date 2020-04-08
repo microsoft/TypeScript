@@ -48,13 +48,15 @@ var __extends = (this && this.__extends) || (function () {
     A.prototype.method = function () {
         var B = /** @class */ (function () {
             function B() {
-            }B.prototype.method = function () {
+            }
+            B.prototype.method = function () {
                 new A(); // OK
             };
             return B;
         }());
         var C = /** @class */ (function (_super) {
-            __extends(C, _super);function C() {
+            __extends(C, _super);
+            function C() {
                 return _super !== null && _super.apply(this, arguments) || this;
             }
             return C;
@@ -68,13 +70,15 @@ var D = /** @class */ (function () {
     D.prototype.method = function () {
         var E = /** @class */ (function () {
             function E() {
-            }E.prototype.method = function () {
+            }
+            E.prototype.method = function () {
                 new D(); // OK
             };
             return E;
         }());
         var F = /** @class */ (function (_super) {
-            __extends(F, _super);function F() {
+            __extends(F, _super);
+            function F() {
                 return _super !== null && _super.apply(this, arguments) || this;
             }
             return F;

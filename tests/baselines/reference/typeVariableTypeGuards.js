@@ -122,9 +122,11 @@ var Monkey = /** @class */ (function () {
 }());
 
 var BigMonkey = /** @class */ (function (_super) {
-    __extends(BigMonkey, _super);function BigMonkey() {
+    __extends(BigMonkey, _super);
+    function BigMonkey() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }BigMonkey.prototype.render = function () {
+    }
+    BigMonkey.prototype.render = function () {
         if (this.a) {
             this.a.color;
         }

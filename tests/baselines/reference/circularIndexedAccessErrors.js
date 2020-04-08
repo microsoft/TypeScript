@@ -44,7 +44,6 @@ function foo<T extends Foo | T["hello"]>() {
 var x2x = x2.x;
 
 
-
 var C1 = /** @class */ (function () {
     function C1() {
     }

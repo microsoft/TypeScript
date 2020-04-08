@@ -120,17 +120,18 @@ var robots = [robotA, robotB];
 function getRobots() {
     return robots;
 }
+
 var multiRobotA = ["mower", ["mowing", ""]];
 var multiRobotB = ["trimmer", ["trimming", "edging"]];
 var multiRobots = [multiRobotA, multiRobotB];
 function getMultiRobots() {
     return multiRobots;
 }
+
 var nameA, primarySkillA, secondarySkillA;
 var numberB, nameB;
 var numberA2, nameA2, skillA2, nameMA;
 var numberA3, robotAInfo, multiRobotAInfo;
-
 for (var _i = 0, robots_1 = robots; _i < robots_1.length; _i++) {
     _a = robots_1[_i], _b = _a[1], nameA = _b === void 0 ? "noName" : _b;
     console.log(nameA);
@@ -155,7 +156,6 @@ for (var _46 = 0, _47 = [multiRobotA, multiRobotB]; _46 < _47.length; _46++) {
     _s = _47[_46], _t = _s[1], _u = _t === void 0 ? ["skill1", "skill2"] : _t, _v = _u[0], primarySkillA = _v === void 0 ? "primary" : _v, _w = _u[1], secondarySkillA = _w === void 0 ? "secondary" : _w;
     console.log(primarySkillA);
 }
-
 for (var _48 = 0, robots_2 = robots; _48 < robots_2.length; _48++) {
     _x = robots_2[_48][0], numberB = _x === void 0 ? -1 : _x;
     console.log(numberB);
@@ -180,7 +180,6 @@ for (var _56 = 0, _57 = [multiRobotA, multiRobotB]; _56 < _57.length; _56++) {
     _2 = _57[_56][0], nameB = _2 === void 0 ? "noName" : _2;
     console.log(nameB);
 }
-
 for (var _58 = 0, robots_3 = robots; _58 < robots_3.length; _58++) {
     _3 = robots_3[_58], _4 = _3[0], numberA2 = _4 === void 0 ? -1 : _4, _5 = _3[1], nameA2 = _5 === void 0 ? "noName" : _5, _6 = _3[2], skillA2 = _6 === void 0 ? "skill" : _6;
     console.log(nameA2);
@@ -205,7 +204,6 @@ for (var _66 = 0, _67 = [multiRobotA, multiRobotB]; _66 < _67.length; _66++) {
     _27 = _67[_66], _28 = _27[0], nameMA = _28 === void 0 ? "noName" : _28, _29 = _27[1], _30 = _29 === void 0 ? ["skill1", "skill2"] : _29, _31 = _30[0], primarySkillA = _31 === void 0 ? "primary" : _31, _32 = _30[1], secondarySkillA = _32 === void 0 ? "secondary" : _32;
     console.log(nameMA);
 }
-
 for (var _68 = 0, robots_4 = robots; _68 < robots_4.length; _68++) {
     _33 = robots_4[_68], _34 = _33[0], numberA3 = _34 === void 0 ? -1 : _34, robotAInfo = _33.slice(1);
     console.log(numberA3);

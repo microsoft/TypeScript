@@ -53,7 +53,6 @@ function test<T extends IFoo>() {
 
 //// [objectLiteralExcessProperties.js]
 
-
 var b1 = { forword: "oops" };
 
 var b2 = { foreward: "nope" };

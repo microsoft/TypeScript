@@ -74,6 +74,7 @@ function f6() {
 }
 
 //// [controlFlowIIFE.js]
+
 function f1() {
     let x = getStringOrNumber();
     if (typeof x === "string") {
@@ -91,6 +92,7 @@ function f2() {
         })();
     }
 }
+
 function f3() {
     let x = getStringOrNumber();
     let y;
@@ -108,6 +110,7 @@ maybeNumber++;
 if (maybeNumber !== undefined) {
     maybeNumber++;
 }
+
 let test;
 if (!test) {
     throw new Error('Test is not defined');
@@ -115,6 +118,7 @@ if (!test) {
 (() => {
     test.slice(1); // No error
 })();
+
 // Repro from #23565
 function f4() {
     let v;

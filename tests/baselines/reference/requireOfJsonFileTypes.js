@@ -75,6 +75,7 @@ var g = require("./g.json");
 var booleanLiteral, nullLiteral;
 var stringLiteral;
 var numberLiteral;
+
 booleanLiteral = b.a;
 stringLiteral = b.b;
 nullLiteral = b.c;

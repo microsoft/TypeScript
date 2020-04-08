@@ -34,6 +34,7 @@ var numberC2 = [3, "edging", "Trimming edges"][0];
 var _a = [3, "edging", "Trimming edges"], numberC = _a[0], nameC = _a[1], skillC = _a[2];
 
 var numberA3 = robotA[0], robotAInfo = robotA.slice(1);
+
 if (nameA == nameA2) {
     console.log(skillA2);
 }

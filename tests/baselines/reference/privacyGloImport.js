@@ -255,8 +255,6 @@ var glo_M1_public;
     glo_M1_public.f1 = f1;
     glo_M1_public.v1 = c1;
 })(glo_M1_public || (glo_M1_public = {}));
-
-
 var m2;
 (function (m2) {
     //import m3 = require("use_glo_M1_public");

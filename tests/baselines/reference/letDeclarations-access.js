@@ -60,6 +60,7 @@ x--;
 --x;
 
 var a = x + 1;
+
 function f(v) { }
 f(x);
 

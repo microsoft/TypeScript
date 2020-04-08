@@ -57,13 +57,16 @@ var __extends = (this && this.__extends) || (function () {
 
 var A = /** @class */ (function () {
     function A() {
-    }A.prototype.foo = function () { return ''; };
+    }
+    A.prototype.foo = function () { return ''; };
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }B.prototype.bar = function () { return ''; };
+    }
+    B.prototype.bar = function () { return ''; };
     return B;
 }(A));
 var Foo = /** @class */ (function () {

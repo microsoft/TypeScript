@@ -344,10 +344,12 @@ var TypeScript;
         var context = walker.state;
         var minChar = ast.minChar;
         var limChar = ast.limChar;
+
         // Account for the fact completion list may be called at the end of a file which
         // is has not been fully re-parsed yet.
         if (ast.nodeType == NodeType.Script && context.pos > limChar)
             limChar = context.pos;
+
         if ((minChar <= context.pos) &&
             (limChar >= context.pos)) {
             switch (ast.nodeType) {
@@ -388,12 +390,14 @@ var TypeScript;
                     };
                     context.scopeStartAST = ast;
                     break;
+
                 case NodeType.InterfaceDeclaration:
                     context.scopeGetter = function () {
                         return (ast.type === null) ? null : ast.type.containedScope;
                     };
                     context.scopeStartAST = ast;
                     break;
+
                 case NodeType.FuncDecl:{
                         var funcDecl = ast;
                         if (context.skipNextFuncDeclForClass) {
@@ -437,6 +441,7 @@ var TypeScript;
     //
     function findEnclosingScopeAt(logger, script, text, pos, isMemberCompletion) {
         var context = new EnclosingScopeContext(logger, script, text, pos, isMemberCompletion);
+
         TypeScript.getAstWalkerFactory().walk(script, preFindEnclosingScope, null, null, context);
 
         if (context.scopeStartAST === null)

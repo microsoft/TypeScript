@@ -65,7 +65,8 @@ var ELocVar = /** @class */ (function (_super) {
     return ELocVar;
 }(C));
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);function D(z) {
+    __extends(D, _super);
+    function D(z) {
         var _this = _super.call(this, _this.z) || this;
         _this.z = z;
         return _this;
@@ -73,7 +74,8 @@ var D = /** @class */ (function (_super) {
     return D;
 }(C)); // too few params
 var E = /** @class */ (function (_super) {
-    __extends(E, _super);function E(z) {
+    __extends(E, _super);
+    function E(z) {
         var _this = _super.call(this, 0, _this.z) || this;
         _this.z = z;
         return _this;
@@ -81,7 +83,8 @@ var E = /** @class */ (function (_super) {
     return E;
 }(C));
 var F = /** @class */ (function (_super) {
-    __extends(F, _super);function F(z) {
+    __extends(F, _super);
+    function F(z) {
         var _this = _super.call(this, "hello", _this.z) || this;
         _this.z = z;
         return _this;

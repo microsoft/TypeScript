@@ -684,7 +684,8 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return Shape;
 }());
 var TaggedShape = /** @class */ (function (_super) {
-    __extends(TaggedShape, _super);function TaggedShape() {
+    __extends(TaggedShape, _super);
+    function TaggedShape() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return TaggedShape;
@@ -699,56 +700,6 @@ var Options = /** @class */ (function () {
     }
     return Options;
 }());
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function getProperty(obj, key) {
     return obj[key];
@@ -786,7 +737,8 @@ function f13(foo, bar) {
 
 var Component = /** @class */ (function () {
     function Component() {
-    }Component.prototype.getProperty = function (key) {
+    }
+    Component.prototype.getProperty = function (key) {
         return this.props[key];
     };
     Component.prototype.setProperty = function (key, value) {
@@ -946,7 +898,8 @@ function f84() {
 
 var C1 = /** @class */ (function () {
     function C1() {
-    }C1.prototype.get = function (key) {
+    }
+    C1.prototype.get = function (key) {
         return this[key];
     };
     C1.prototype.set = function (key, value) {
@@ -993,7 +946,8 @@ function f92(x, y, z) {
 // Repros from #12011
 var Base = /** @class */ (function () {
     function Base() {
-    }Base.prototype.get = function (prop) {
+    }
+    Base.prototype.get = function (prop) {
         return this[prop];
     };
     Base.prototype.set = function (prop, value) {
@@ -1003,7 +957,6 @@ var Base = /** @class */ (function () {
 }());
 var Person = /** @class */ (function (_super) {
     __extends(Person, _super);
-
     function Person(parts) {
         var _this = _super.call(this) || this;
         _this.set("parts", parts);
@@ -1061,14 +1014,13 @@ var hashOfEmpty2 = on({ test: function (x) { } }); // { test: boolean }
 
 
 
-
 var c1 = new Component1({
     data: {
         hello: ""
     }
 });
-c1.get("hello");
 
+c1.get("hello");
 
 
 function f(p) {
@@ -1146,9 +1098,11 @@ var A = /** @class */ (function () {
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }B.prototype.f = function (p) {
+    }
+    B.prototype.f = function (p) {
         p.x;
     };
     return B;
@@ -1156,7 +1110,8 @@ var B = /** @class */ (function (_super) {
 // Repro from #13749
 var Form = /** @class */ (function () {
     function Form() {
-    }Form.prototype.set = function (prop, value) {
+    }
+    Form.prototype.set = function (prop, value) {
         this.childFormFactories[prop](value);
     };
     return Form;
@@ -1168,7 +1123,6 @@ var SampleClass = /** @class */ (function () {
     }
     return SampleClass;
 }());
-
 
 var AnotherSampleClass = /** @class */ (function (_super) {
     __extends(AnotherSampleClass, _super);
@@ -1185,6 +1139,7 @@ var AnotherSampleClass = /** @class */ (function (_super) {
     return AnotherSampleClass;
 }(SampleClass));
 new AnotherSampleClass({});
+
 // Positive repro from #17166
 function f3(t, k, tk) {
     for (var key in t) {
@@ -1207,7 +1162,6 @@ function getFlagsFromDynamicRecord(record, flags) {
 }
 
 
-
 function fn(o, k) {
     take(o[k]);
     take(o[k]);
@@ -1216,12 +1170,12 @@ function fn(o, k) {
 // Repro from #23133
 var Unbounded = /** @class */ (function () {
     function Unbounded() {
-    }Unbounded.prototype.foo = function (x) {
+    }
+    Unbounded.prototype.foo = function (x) {
         var y = x;
     };
     return Unbounded;
 }());
-
 
 
 

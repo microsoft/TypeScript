@@ -21,7 +21,8 @@ class A {
 //// [genericStaticAnyTypeFunction.js]
 var A = /** @class */ (function () {
     function A() {
-    }A.one = function (source, value) {
+    }
+    A.one = function (source, value) {
 
         return source;
 

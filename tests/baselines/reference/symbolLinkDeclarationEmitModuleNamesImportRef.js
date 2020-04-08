@@ -28,7 +28,8 @@ var package_a_1 = require("package-a");
 
 function getStyles() {
     return package_a_1.styles;
-}exports.getStyles = getStyles;
+}
+exports.getStyles = getStyles;
 
 
 //// [index.d.ts]

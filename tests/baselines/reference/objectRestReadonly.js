@@ -37,4 +37,5 @@ var obj = {
 };
 
 var foo = obj.foo, rest = __rest(obj, ["foo"]);
+
 delete rest.baz;

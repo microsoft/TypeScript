@@ -38,7 +38,11 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 }
 exports.__esModule = true;
 var fs = __importStar(require("./fs"));
+
 fs;
+
 __exportStar(require("./fs"), exports);
-var fs_1 = require("./fs");__createBinding(exports, fs_1, "x");
-var fs_2 = require("./fs");__createBinding(exports, fs_2, "x", "y");
+var fs_1 = require("./fs");
+__createBinding(exports, fs_1, "x");
+var fs_2 = require("./fs");
+__createBinding(exports, fs_2, "x", "y");

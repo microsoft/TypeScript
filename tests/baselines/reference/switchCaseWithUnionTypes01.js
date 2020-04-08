@@ -30,6 +30,7 @@ var numOrBool;
 var str;
 var num;
 var bool;
+
 switch (strOrNum) {
     // Identical
     case strOrNum:

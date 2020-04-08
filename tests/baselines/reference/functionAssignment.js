@@ -56,8 +56,12 @@ f2(function () {
 });
 
 function f3(a) { }
+
 f3({ a: 0, b: 0 });
+
+
 function callb(a) { }
+
 callb(function (a) { a.length; });
 
 

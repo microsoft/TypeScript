@@ -74,7 +74,8 @@ var C1 = /** @class */ (function () {
 }());
 var C2 = /** @class */ (function () {
     function C2() {
-    }C2.foo = function (x) {
+    }
+    C2.foo = function (x) {
         return undefined;
     };
     C2.y = undefined;
@@ -91,7 +92,8 @@ var C3 = /** @class */ (function () {
                 return undefined;
             }
         };
-    }C3.prototype.f = function () {
+    }
+    C3.prototype.f = function () {
         function g(x) {
             return undefined;
         }

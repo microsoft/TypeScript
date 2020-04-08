@@ -222,27 +222,32 @@ function f6(x) {
 
 // Can't derive from type with inaccessible properties
 var C1 = /** @class */ (function (_super) {
-    __extends(C1, _super);function C1() {
+    __extends(C1, _super);
+    function C1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C1;
 }(Mix(Private, Private2)));
 var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);function C2() {
+    __extends(C2, _super);
+    function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C2;
 }(Mix(Private, Protected)));
 var C3 = /** @class */ (function (_super) {
-    __extends(C3, _super);function C3() {
+    __extends(C3, _super);
+    function C3() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C3;
 }(Mix(Private, Public)));
 var C4 = /** @class */ (function (_super) {
-    __extends(C4, _super);function C4() {
+    __extends(C4, _super);
+    function C4() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }C4.prototype.f = function (c4, c5, c6) {
+    }
+    C4.prototype.f = function (c4, c5, c6) {
         c4.p;
         c5.p;
         c6.p;
@@ -255,9 +260,11 @@ var C4 = /** @class */ (function (_super) {
     return C4;
 }(Mix(Protected, Protected2)));
 var C5 = /** @class */ (function (_super) {
-    __extends(C5, _super);function C5() {
+    __extends(C5, _super);
+    function C5() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }C5.prototype.f = function (c4, c5, c6) {
+    }
+    C5.prototype.f = function (c4, c5, c6) {
         c4.p; // Error, not in class deriving from Protected2
         c5.p;
         c6.p;
@@ -270,9 +277,11 @@ var C5 = /** @class */ (function (_super) {
     return C5;
 }(Mix(Protected, Public)));
 var C6 = /** @class */ (function (_super) {
-    __extends(C6, _super);function C6() {
+    __extends(C6, _super);
+    function C6() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }C6.prototype.f = function (c4, c5, c6) {
+    }
+    C6.prototype.f = function (c4, c5, c6) {
         c4.p; // Error, not in class deriving from Protected2
         c5.p;
         c6.p;
@@ -286,13 +295,15 @@ var C6 = /** @class */ (function (_super) {
 }(Mix(Public, Public2)));
 var ProtectedGeneric = /** @class */ (function () {
     function ProtectedGeneric() {
-    }ProtectedGeneric.prototype.privateMethod = function () { };
+    }
+    ProtectedGeneric.prototype.privateMethod = function () { };
     ProtectedGeneric.prototype.protectedMethod = function () { };
     return ProtectedGeneric;
 }());
 var ProtectedGeneric2 = /** @class */ (function () {
     function ProtectedGeneric2() {
-    }ProtectedGeneric2.prototype.privateMethod = function () { };
+    }
+    ProtectedGeneric2.prototype.privateMethod = function () { };
     ProtectedGeneric2.prototype.protectedMethod = function () { };
     return ProtectedGeneric2;
 }());

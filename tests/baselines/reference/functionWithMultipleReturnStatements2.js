@@ -131,6 +131,7 @@ function f5() {
     return 1;
     return new Object();
 }
+
 function f6(x) {
     if (true) {
         return x;
@@ -168,6 +169,7 @@ function f10() {
         return a;
     }
 }
+
 // returns number => void
 function f11() {
     if (true) {

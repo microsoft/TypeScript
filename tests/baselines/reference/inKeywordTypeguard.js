@@ -152,12 +152,14 @@ function positiveTestClassesWithOptionalProperties(x) {
 
 var AWithMethod = /** @class */ (function () {
     function AWithMethod() {
-    }AWithMethod.prototype.a = function () { return ""; };
+    }
+    AWithMethod.prototype.a = function () { return ""; };
     return AWithMethod;
 }());
 var BWithMethod = /** @class */ (function () {
     function BWithMethod() {
-    }BWithMethod.prototype.b = function () { return ""; };
+    }
+    BWithMethod.prototype.b = function () { return ""; };
     return BWithMethod;
 }());
 function negativeTestClassesWithMembers(x) {
@@ -212,7 +214,8 @@ function negativePropTest(x) {
 
 var NegativeClassTest = /** @class */ (function () {
     function NegativeClassTest() {
-    }NegativeClassTest.prototype.inThis = function () {
+    }
+    NegativeClassTest.prototype.inThis = function () {
         if ("a" in this.prop) {
             var z = this.prop.b;
         }
@@ -224,7 +227,8 @@ var NegativeClassTest = /** @class */ (function () {
 }());
 var UnreachableCodeDetection = /** @class */ (function () {
     function UnreachableCodeDetection() {
-    }UnreachableCodeDetection.prototype.inThis = function () {
+    }
+    UnreachableCodeDetection.prototype.inThis = function () {
         if ("a" in this) {
         }
         else {

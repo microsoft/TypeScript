@@ -17,7 +17,6 @@ var r2: I1<number> = v1.func(num => num.toString()) // Correctly returns an I1<s
 //// [overEagerReturnTypeSpecialization.js]
 //Note: Below simpler repro
 
-
 var r1 = v1.func(function (num) { return num.toString(); }) // Correctly returns an I1<string>
     .func(function (str) { return str.length; }); // should error
 

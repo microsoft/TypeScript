@@ -214,7 +214,8 @@ exports.ExtendsStatics = exports.HasStatics = exports.VariableBase = exports.O =
 var A = /** @class */ (function () {
     function A() {}
     return A;
-}());exports.A = A;
+}());
+exports.A = A;
 var B = /** @class */ (function () {
     function B() {
     }
@@ -239,7 +240,8 @@ var D = /** @class */ (function () {
      */
     function D(a, b) {}
     return D;
-}());exports.D = D;
+}());
+exports.D = D;
 /**
  * @template T,U
  */
@@ -328,28 +330,29 @@ var F = /** @class */ (function () {
      */
     F.create = function (a, b) { return new F(a, b); };
     return F;
-}());exports.F = F;
+}());
+exports.F = F;
 var G = /** @class */ (function () {
     function G() {}
     return G;
 }());
-
 exports.G = G;
 var HH = /** @class */ (function () {
     function HH() {}
     return HH;
 }());
-
 exports.H = HH;
 var I = /** @class */ (function () {
     function I() {}
     return I;
-}());exports.I = I;
+}());
+exports.I = I;
 exports.II = I;
 var J = /** @class */ (function () {
     function J() {}
     return J;
-}());exports.JJ = J;
+}());
+exports.JJ = J;
 exports.J = J;
 var K = /** @class */ (function () {
     function K() {
@@ -361,20 +364,24 @@ var K = /** @class */ (function () {
         return this.p1;
     };
     return K;
-}());exports.K = K;
+}());
+exports.K = K;
 var L = /** @class */ (function (_super) {
-    __extends(L, _super);function L() {
+    __extends(L, _super);
+    function L() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return L;
-}(K));exports.L = L;
+}(K));
+exports.L = L;
 var M = /** @class */ (function (_super) {
     __extends(M, _super);
     function M() {
         _this.prop = 12;
     }
     return M;
-}(null));exports.M = M;
+}(null));
+exports.M = M;
 /**
  * @template T
  */
@@ -389,7 +396,8 @@ var N = /** @class */ (function (_super) {
         return _this;
     }
     return N;
-}(L));exports.N = N;
+}(L));
+exports.N = N;
 /**
  * @template U
  * @extends {N<U>}
@@ -405,26 +413,34 @@ var O = /** @class */ (function (_super) {
         return _this;
     }
     return O;
-}(N));exports.O = O;
+}(N));
+exports.O = O;
 var x = /** @type {*} */ (null);
 
 var VariableBase = /** @class */ (function (_super) {
-    __extends(VariableBase, _super);function VariableBase() {
+    __extends(VariableBase, _super);
+    function VariableBase() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return VariableBase;
-}(x));exports.VariableBase = VariableBase;
+}(x));
+exports.VariableBase = VariableBase;
 var HasStatics = /** @class */ (function () {
     function HasStatics() {
-    }HasStatics.staticMethod = function () { };
+    }
+    HasStatics.staticMethod = function () { };
     return HasStatics;
-}());exports.HasStatics = HasStatics;
+}());
+exports.HasStatics = HasStatics;
 var ExtendsStatics = /** @class */ (function (_super) {
-    __extends(ExtendsStatics, _super);function ExtendsStatics() {
+    __extends(ExtendsStatics, _super);
+    function ExtendsStatics() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }ExtendsStatics.also = function () { };
+    }
+    ExtendsStatics.also = function () { };
     return ExtendsStatics;
-}(HasStatics));exports.ExtendsStatics = ExtendsStatics;
+}(HasStatics));
+exports.ExtendsStatics = ExtendsStatics;
 
 
 //// [index.d.ts]

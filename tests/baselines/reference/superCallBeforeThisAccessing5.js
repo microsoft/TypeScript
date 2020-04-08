@@ -22,7 +22,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var D = /** @class */ (function (_super) {
     __extends(D, _super);
-
     function D() {
         this._t; // No error
     }

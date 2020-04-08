@@ -69,9 +69,6 @@ export interface D { }
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-
-
-
     // Should report error only once for instantiated module
     var M;
     (function (M) {

@@ -38,7 +38,8 @@ define(["require", "exports"], function (require, exports) {
         return C1;
     }());
     var Test1 = /** @class */ (function (_super) {
-        __extends(Test1, _super);function Test1() {
+        __extends(Test1, _super);
+        function Test1() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Test1;

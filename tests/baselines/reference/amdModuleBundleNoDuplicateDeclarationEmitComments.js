@@ -16,7 +16,8 @@ define("mynamespace::SomeModuleA", ["require", "exports"], function (require, ex
     var Foo = /** @class */ (function () {
         function Foo() {}
         return Foo;
-    }());exports.Foo = Foo;
+    }());
+    exports.Foo = Foo;
 });
 define("mynamespace::SomeModuleB", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -26,7 +27,8 @@ define("mynamespace::SomeModuleB", ["require", "exports"], function (require, ex
     var Bar = /** @class */ (function () {
         function Bar() {}
         return Bar;
-    }());exports.Bar = Bar;
+    }());
+    exports.Bar = Bar;
 });
 
 

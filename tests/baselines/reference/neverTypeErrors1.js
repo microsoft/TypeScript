@@ -47,7 +47,6 @@ function f3() {
 
 function f4() {
 }
-
 for (var _i = 0, _a = f4(); _i < _a.length; _i++) {
     var n = _a[_i];
 }

@@ -84,7 +84,8 @@ var Test;
     }(FileSystemObject));
     Test.File = File;
     var Directory = /** @class */ (function (_super) {
-        __extends(Directory, _super);function Directory() {
+        __extends(Directory, _super);
+        function Directory() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Directory;

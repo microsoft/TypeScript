@@ -24,11 +24,13 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 };
 var _x;
 class D {};
+
 class C {
 
     constructor() {
         _x.set(this, void 0);
-    }foo() {
+    }
+    foo() {
         const c = new C();
         __classPrivateFieldGet(c, _x); // OK
         const d = new C();

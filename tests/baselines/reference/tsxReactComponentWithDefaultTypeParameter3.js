@@ -25,7 +25,6 @@ exports.__esModule = true;
 var React = require("react");
 
 
-
 // Error
 var x1 = <MyComp />;
 

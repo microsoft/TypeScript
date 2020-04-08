@@ -273,7 +273,8 @@ function f3(x) {
 // Repro from #11572
 var E;
 (function (E) {
-    E[E["A"] = 0] = "A";E[E["B"] = 1] = "B";
+    E[E["A"] = 0] = "A";
+    E[E["B"] = 1] = "B";
 })(E || (E = {}));
 function f(e) {
     switch (e) {
@@ -291,9 +292,6 @@ function g(e) {
             case E.B: return 1;
         }
 }
-
-
-
 
 
 
@@ -374,7 +372,6 @@ var doSomethingWithLevel = function (level) {
 
 
 
-
 function withDefault(s1, s2) {
     switch (s1.kind) {
         case "square":
@@ -417,7 +414,8 @@ function test4(value) {
 // Repro from #34661
 var Animal;
 (function (Animal) {
-    Animal[Animal["DOG"] = 0] = "DOG";Animal[Animal["CAT"] = 1] = "CAT";
+    Animal[Animal["DOG"] = 0] = "DOG";
+    Animal[Animal["CAT"] = 1] = "CAT";
 })(Animal || (Animal = {}));
 
 function expression() {

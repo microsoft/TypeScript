@@ -22,6 +22,7 @@ function f() {
             foo(_arguments); // Error as this does not resolve to the user defined '_arguments'
         }
     }
+
     function foo(x) {
         return 100;
     }

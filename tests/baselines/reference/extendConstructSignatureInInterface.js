@@ -27,7 +27,8 @@ var __extends = (this && this.__extends) || (function () {
 
 var CStatic;
 var E = /** @class */ (function (_super) {
-    __extends(E, _super);function E() {
+    __extends(E, _super);
+    function E() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return E;

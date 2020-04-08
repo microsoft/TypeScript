@@ -17,4 +17,5 @@ exports.default = Obj;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const a_1 = require("./a");
+
 a_1.default.fn = function () { };

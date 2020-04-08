@@ -61,7 +61,8 @@ class C<T, U> {
 // is contextually typed (section 4.19) by a type T and a contextual signature S can be extracted from T
 var E;
 (function (E) {
-    E[E["red"] = 0] = "red";E[E["blue"] = 1] = "blue";
+    E[E["red"] = 0] = "red";
+    E[E["blue"] = 1] = "blue";
 })(E || (E = {}));
 // A contextual signature S is extracted from a function type T as follows:
 //      If T is a function type with exactly one call signature, and if that call signature is non- generic, S is that signature.
@@ -72,7 +73,8 @@ var a0 = function (num, str) {
 
 var Class = /** @class */ (function () {
     function Class() {
-    }Class.prototype.foo = function () { };
+    }
+    Class.prototype.foo = function () { };
     return Class;
 }());
 var a1 = function (a1) {

@@ -98,19 +98,23 @@ function error(message) {
 function errorVoid(message) {
     throw new Error(message);
 }
+
 function fail() {
     return error("Something failed");
 }
+
 function failOrThrow(shouldFail) {
     if (shouldFail) {
         return fail();
     }
     throw new Error();
 }
+
 function infiniteLoop1() {
     while (true) {
     }
 }
+
 function infiniteLoop2() {
     while (true) {
     }
@@ -138,7 +142,8 @@ function check(x) {
 
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.void1 = function () {
+    }
+    C.prototype.void1 = function () {
         throw new Error();
     };
     C.prototype.void2 = function () {

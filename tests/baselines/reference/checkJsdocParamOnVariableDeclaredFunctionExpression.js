@@ -29,6 +29,7 @@ var y;
  * @param {boolean!} b
  */
 y = function bar(b) { };
+
 /**
  * @param {string} s
  */

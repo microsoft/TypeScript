@@ -113,13 +113,15 @@ var OnlyDerived;
         return Base;
     }());
     var Derived = /** @class */ (function (_super) {
-        __extends(Derived, _super);function Derived() {
+        __extends(Derived, _super);
+        function Derived() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Derived;
     }(Base));
     var Derived2 = /** @class */ (function (_super) {
-        __extends(Derived2, _super);function Derived2() {
+        __extends(Derived2, _super);
+        function Derived2() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Derived2;
@@ -143,6 +145,7 @@ var OnlyDerived;
 
     var a2 = { foo: new Derived() };
     var b2 = { foo: new Derived2() };
+
     s = t; // error
     t = s; // error
     s = s2; // ok
@@ -173,13 +176,15 @@ var WithBase;
         return Base;
     }());
     var Derived = /** @class */ (function (_super) {
-        __extends(Derived, _super);function Derived() {
+        __extends(Derived, _super);
+        function Derived() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Derived;
     }(Base));
     var Derived2 = /** @class */ (function (_super) {
-        __extends(Derived2, _super);function Derived2() {
+        __extends(Derived2, _super);
+        function Derived2() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Derived2;
@@ -203,6 +208,7 @@ var WithBase;
 
     var a2 = { foo: new Base() };
     var b2 = { foo: new Derived2() };
+
     s = t; // ok
     t = s; // error
     s = s2; // ok

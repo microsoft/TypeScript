@@ -36,6 +36,9 @@ var test;
         return Object;
     }());
     var obj;
+
+
+
     4 instanceof null;
 
     // Error and should be error

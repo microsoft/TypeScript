@@ -37,7 +37,6 @@ interface Entry {
 
 
 
-
 function makeEntityStore(config) {
     return {};
 }

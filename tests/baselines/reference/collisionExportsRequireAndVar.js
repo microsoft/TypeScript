@@ -32,7 +32,8 @@ define(["require", "exports"], function (require, exports) {
     exports.__esModule = true;
     exports.foo = void 0;
     function foo() {
-    }exports.foo = foo;
+    }
+    exports.foo = foo;
     var exports = 1;
     var require = "require";
     var m1;

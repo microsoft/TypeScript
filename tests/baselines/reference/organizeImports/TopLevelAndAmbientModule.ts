@@ -21,7 +21,11 @@ import "lib";
 import D from "lib";
 
 declare module "mod" {
-    import { F1, F2 } from "lib";
+    import {
+        F1,
+
+        F2
+    } from "lib";
 
     function F(f1: {} = F1, f2: {} = F2) {}
 }

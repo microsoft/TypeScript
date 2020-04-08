@@ -110,6 +110,7 @@ var TabbedShowLayout = function (_a) {
         react_1.default.createElement("div", null)
     );
 };
+
 TabbedShowLayout.propTypes = {
     version: prop_types_1.default.number,
 };
@@ -133,6 +134,7 @@ var TabbedShowLayout = function () {
         react_1.default.createElement("div", { className: "", key: "" }, "ok")
     );
 };
+
 TabbedShowLayout.defaultProps = {
     tabs: "default value"
 };
@@ -152,6 +154,7 @@ var TabbedShowLayout = function () {
         react_1.default.createElement("div", { className: "", key: "" }, "ok")
     );
 };
+
 TabbedShowLayout.defaultProps = {
     tabs: "default value"
 };
@@ -168,6 +171,7 @@ var TabbedShowLayout = function (/** @type {{className: string}}*/ prop) {
         react_1.default.createElement("div", { className: prop.className, key: "" }, "ok")
     );
 };
+
 TabbedShowLayout.defaultProps = {
     tabs: "default value"
 };
@@ -185,6 +189,7 @@ function Tree(_a) {
     var allowDropOnRoot = _a.allowDropOnRoot;
     return react_1.default.createElement("div", null);
 }
+
 Tree.propTypes = {
     classes: prop_types_1.default.object,
 };

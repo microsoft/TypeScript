@@ -31,13 +31,15 @@ var __extends = (this && this.__extends) || (function () {
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);function C() {
+    __extends(C, _super);
+    function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
@@ -45,6 +47,7 @@ var C = /** @class */ (function (_super) {
 var AA = B;
 var BB = A;
 var CC = B;
+
 new AA;
 new BB;
 new CC;

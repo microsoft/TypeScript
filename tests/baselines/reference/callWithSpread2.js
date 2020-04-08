@@ -46,7 +46,6 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 
-
 // good
 all.apply(void 0, ns);
 weird.apply(void 0, ns);

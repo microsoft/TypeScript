@@ -8,7 +8,8 @@ A.foo();
 //// [staticInstanceResolution4.js]
 var A = /** @class */ (function () {
     function A() {
-    }A.prototype.foo = function () { };
+    }
+    A.prototype.foo = function () { };
     return A;
 }());
 A.foo();

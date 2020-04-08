@@ -67,10 +67,8 @@ const fn4: Fn<string, 0> = fn;  // Error
 "use strict";
 // The type below should be invariant in T but is measured as covariant because
 // we don't analyze recursive references.
-
 var f11 = f10;
 var f12 = f10;
-
 
 var f21 = f20;
 var f22 = f20;
@@ -95,7 +93,6 @@ var f32 = f30;
 
 var f41 = f40;
 var f42 = f40;
-
 
 
 // Contravariant in A

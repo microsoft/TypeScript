@@ -75,6 +75,7 @@ for (var x_1 = 10;;) {
     use(x_1);
 }
 use(x);
+
 for (var x_2 = 10;;) {
     use(x_2);
 }
@@ -128,7 +129,6 @@ for (var x_11 in []) {
 for (var x_12 in []) {
     use(x_12);
 }
-
 for (var _i = 0, _a = []; _i < _a.length; _i++) {
     var x_13 = _a[_i];
     use(x_13);

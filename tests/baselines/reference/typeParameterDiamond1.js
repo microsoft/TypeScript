@@ -20,6 +20,7 @@ function diamondTop() {
             var top;
             var middle;
             var bottom;
+
             top = middle;
             middle = bottom;
             top = bottom;

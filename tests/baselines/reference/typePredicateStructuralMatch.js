@@ -33,6 +33,10 @@ getResults1({ data: [] });
 
 getResults2([]);
 getResults2({ data: [] });
+
+
+
+
 function isResponseInData(value) {
     return value.hasOwnProperty('data');
 }

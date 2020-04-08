@@ -10,6 +10,7 @@ y = x;
 //// [elaboratedErrorsOnNullableTargets01.js]
 "use strict";
 exports.__esModule = true;
+
 exports.x = exports.y;
 
 exports.y = exports.x;

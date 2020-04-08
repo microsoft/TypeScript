@@ -47,6 +47,7 @@ function foo() {
 function foo2() {
     return "";
 }
+
 // number
 function foo3() {
     return 10;
@@ -54,6 +55,7 @@ function foo3() {
 function foo4() {
     return 10;
 }
+
 // boolean
 function foo5() {
     return true;
@@ -61,6 +63,7 @@ function foo5() {
 function foo6() {
     return false;
 }
+
 // void
 function foo7() {
     return;
@@ -68,6 +71,7 @@ function foo7() {
 function foo8() {
     return;
 }
+
 // any
 function foo9() {
     return undefined;

@@ -70,6 +70,7 @@ function watchMain() {
     if (!configPath) {
         throw new Error("Could not find a valid 'tsconfig.json'.");
     }
+
     // TypeScript can use several different program creation "strategies":
     //  * ts.createEmitAndSemanticDiagnosticsBuilderProgram,
     //  * ts.createSemanticDiagnosticsBuilderProgram
@@ -95,7 +96,9 @@ function watchMain() {
         console.log("** We finished making the program! **");
         origPostProgramCreate(program);
     };
+
     // `createWatchProgram` creates an initial program, watches files, and updates the program over time.
     ts.createWatchProgram(host);
 }
+
 watchMain();

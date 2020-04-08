@@ -74,11 +74,13 @@ var C = /** @class */ (function () {
 }());
 // This uses getTypeFromClassOrInterfaceReference instead of getTypeFromTypeAliasReference.
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);function D() {
+    __extends(D, _super);
+    function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
-}(C));exports.D = D;
+}(C));
+exports.D = D;
 //// [interface.js]
 "use strict";
 exports.__esModule = true;
@@ -120,11 +122,14 @@ var unknown_1 = require("unknown");
 
 
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);function C() {
+    __extends(C, _super);
+    function C() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }C.prototype.m = function () {
+    }
+    C.prototype.m = function () {
         _super.prototype.m.call(this, 1);
         _super.prototype.m.call(this); // Should get error for type argument
     };
     return C;
-}(unknown_1.A));exports.C = C;
+}(unknown_1.A));
+exports.C = C;

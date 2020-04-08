@@ -65,6 +65,7 @@ let weak: Weak & Spoiler = propertiesWrong
 
 
 //// [weakType.js]
+
 function getDefaultSettings() {
     return { timeout: 1000 };
 }
@@ -77,6 +78,12 @@ doSomething(null);
 doSomething(12);
 doSomething('completely wrong');
 doSomething(false);
+
+
+
+
+
+
 
 
 function del(options,

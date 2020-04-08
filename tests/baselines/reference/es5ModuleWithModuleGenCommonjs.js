@@ -23,4 +23,5 @@ var A = /** @class */ (function () {
         return 42;
     };
     return A;
-}());exports.A = A;
+}());
+exports.A = A;

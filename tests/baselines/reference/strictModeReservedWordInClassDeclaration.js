@@ -79,13 +79,15 @@ var F1 = /** @class */ (function () {
     return F1;
 }());
 var G = /** @class */ (function (_super) {
-    __extends(G, _super);function G() {
+    __extends(G, _super);
+    function G() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return G;
 }(package));
 var H = /** @class */ (function (_super) {
-    __extends(H, _super);function H() {
+    __extends(H, _super);
+    function H() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return H;

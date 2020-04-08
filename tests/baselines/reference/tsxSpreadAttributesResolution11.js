@@ -60,9 +60,11 @@ var obj3 = {
 
 
 var OverWriteAttr = /** @class */ (function (_super) {
-    __extends(OverWriteAttr, _super);function OverWriteAttr() {
+    __extends(OverWriteAttr, _super);
+    function OverWriteAttr() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }OverWriteAttr.prototype.render = function () {
+    }
+    OverWriteAttr.prototype.render = function () {
         return <div>Hello</div>;
     };
     return OverWriteAttr;

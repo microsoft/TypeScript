@@ -66,6 +66,7 @@ var F;
 })(F || (F = {}));
 var e = E.A;
 var f = F.B;
+
 e = f;
 f = e;
 e = 1; // ok

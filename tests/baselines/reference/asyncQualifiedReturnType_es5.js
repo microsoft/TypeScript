@@ -11,7 +11,8 @@ async function f(): X.MyPromise<void> {
 var X;
 (function (X) {
     var MyPromise = /** @class */ (function (_super) {
-        __extends(MyPromise, _super);function MyPromise() {
+        __extends(MyPromise, _super);
+        function MyPromise() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return MyPromise;

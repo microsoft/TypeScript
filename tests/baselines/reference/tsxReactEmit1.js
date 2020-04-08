@@ -67,7 +67,8 @@ var openClosed5 = React.createElement("div", { n: 'm', b: true }, p > p);
 
 var SomeClass = /** @class */ (function () {
     function SomeClass() {
-    }SomeClass.prototype.f = function () {
+    }
+    SomeClass.prototype.f = function () {
         var _this = this;
         var rewrites1 = React.createElement("div", null, function () { return _this; });
         var rewrites2 = React.createElement("div", null, __spreadArrays([p], p, [p]));

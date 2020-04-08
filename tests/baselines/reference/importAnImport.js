@@ -8,4 +8,3 @@ module m0 {
 }
 
 //// [importAnImport.js]
-

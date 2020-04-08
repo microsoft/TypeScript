@@ -89,7 +89,8 @@ function foo() {
 }
 var A = /** @class */ (function () {
     function A() {
-    }A.foo = function () {
+    }
+    A.foo = function () {
         var a;
         return a;
     };
@@ -128,6 +129,7 @@ var ResultIsString19 = typeof (undefined + undefined);
 // multiple typeof  operators
 var ResultIsString20 = typeof typeof ANY;
 var ResultIsString21 = typeof typeof typeof (ANY + ANY1);
+
 // miss assignment operators
 typeof ANY;
 typeof ANY1;
@@ -137,6 +139,7 @@ typeof obj1;
 typeof obj1.x;
 typeof objA.a;
 typeof M.n;
+
 // use typeof in type query
 var z;
 var x;

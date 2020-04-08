@@ -26,5 +26,6 @@ class NumberIterator {
         return this;
     }
 }
+
 var v;
 for (v of new NumberIterator) { } // Should succeed

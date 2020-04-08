@@ -35,7 +35,8 @@ function f2() {
     if (x !== null) {
         return /** @class */ (function () {
             function class_1() {
-            }class_1.prototype.bar = function () { return x.length; }; // ok
+            }
+            class_1.prototype.bar = function () { return x.length; }; // ok
             return class_1;
         }());
     }

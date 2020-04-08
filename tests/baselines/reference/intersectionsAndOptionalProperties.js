@@ -24,8 +24,12 @@ function foo(v: From) {
 
 //// [intersectionsAndOptionalProperties.js]
 "use strict";
+
 x = y; // Error
 x = z; // Error
+
+
+
 
 
 

@@ -49,7 +49,6 @@ var Foo = /** @class */ (function (_super) {
 }(Base));
 var Foo2 = /** @class */ (function (_super) {
     __extends(Foo2, _super);
-
     function Foo2() {
         var _this = _super.call(this, _this) || this;
         _this.p = 0;

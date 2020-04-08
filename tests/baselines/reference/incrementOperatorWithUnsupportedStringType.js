@@ -74,7 +74,8 @@ function foo() { return ""; }
 
 var A = /** @class */ (function () {
     function A() {
-    }A.foo = function () { return ""; };
+    }
+    A.foo = function () { return ""; };
     return A;
 }());
 var M;
@@ -112,6 +113,7 @@ var ResultIsNumber19 = STRING1[0]++;
 var ResultIsNumber20 = foo()++;
 var ResultIsNumber21 = A.foo()++;
 var ResultIsNumber22 = (STRING + STRING)++;
+
 // miss assignment operators
 ++"";
 ++STRING;

@@ -30,9 +30,6 @@ i.y;
 
 //// [extension.js]
 
-
-
-
 var c = new M.C();
 c.pe;
 c.p;

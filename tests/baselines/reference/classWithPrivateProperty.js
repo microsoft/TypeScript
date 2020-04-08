@@ -29,7 +29,8 @@ var C = /** @class */ (function () {
         this.a = '';
         this.b = '';
         this.d = function () { return ''; };
-    }C.prototype.c = function () { return ''; };
+    }
+    C.prototype.c = function () { return ''; };
 
 
     C.f = function () { return ''; };

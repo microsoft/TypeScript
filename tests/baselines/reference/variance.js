@@ -39,7 +39,8 @@ var z = x;
 // Repro from #30118
 var Bar = /** @class */ (function () {
     function Bar() {
-    }Bar.prototype.cast = function (_name) { };
+    }
+    Bar.prototype.cast = function (_name) { };
 
     Bar.prototype.pushThis = function () {
         Bar.instance.push(this);

@@ -103,7 +103,6 @@ var C = /** @class */ (function () {
     return C;
 }());
 
-
 var a;
 
 function foo1(x) { }

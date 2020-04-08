@@ -47,4 +47,5 @@ var Test = /** @class */ (function () {
     Test.prototype.aFunction = function (func) {
     };
     return Test;
-}());exports.Test = Test;
+}());
+exports.Test = Test;

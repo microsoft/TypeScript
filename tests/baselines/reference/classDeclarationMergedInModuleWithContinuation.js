@@ -38,7 +38,8 @@ var M;
 })(M || (M = {}));
 (function (M) {
     var O = /** @class */ (function (_super) {
-        __extends(O, _super);function O() {
+        __extends(O, _super);
+        function O() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return O;

@@ -142,6 +142,7 @@ symbol,
     if (!symbol) {
         return;
     }
+
     // the comments for a symbol
     var comments = symbol.getDocumentationComment(undefined);
 
@@ -171,10 +172,12 @@ function getAnnotations(node) {
     if (!symbol) {
         return undefined;
     }
+
     var jsDocTags = symbol.getJsDocTags();
     if (!jsDocTags || !jsDocTags.length) {
         return undefined;
     }
+
     var annotations = jsDocTags.reduce(function (result, jsDocTag) {
         var value = _this.parseJsDocTag(jsDocTag);
         if (value !== undefined) {

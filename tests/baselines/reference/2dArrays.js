@@ -28,7 +28,8 @@ var Ship = /** @class */ (function () {
 }());
 var Board = /** @class */ (function () {
     function Board() {
-    }Board.prototype.allShipsSunk = function () {
+    }
+    Board.prototype.allShipsSunk = function () {
         return this.ships.every(function (val) { return val.isSunk; });
     };
     return Board;

@@ -50,6 +50,7 @@ readFiles:: {
 
 var s = "Hello, world";
 
+
 console.log(s);
 console.log(s);
 var first_part2Const = new firstfirst_part2();
@@ -60,7 +61,7 @@ function f() {
 //# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.js.map]
-{"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":";AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,IAAM,gBAAgB,GAAG,IAAI,gBAAgB,EAAE,CAAC;AAChD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACFjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC"}
+{"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":";AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;;;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,IAAM,gBAAgB,GAAG,IAAI,gBAAgB,EAAE,CAAC;AAChD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACFjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC"}
 
 //// [/src/first/bin/first-output.js.map.baseline.txt]
 ===================================================================
@@ -99,6 +100,7 @@ sourceFile:../first_PART1.ts
 6 >Emitted(2, 24) Source(5, 26) + SourceIndex(0)
 ---
 >>>
+>>>
 >>>console.log(s);
 1 >
 2 >^^^^^^^
@@ -123,14 +125,14 @@ sourceFile:../first_PART1.ts
 6 >            s
 7 >             )
 8 >              ;
-1 >Emitted(4, 1) Source(11, 1) + SourceIndex(0)
-2 >Emitted(4, 8) Source(11, 8) + SourceIndex(0)
-3 >Emitted(4, 9) Source(11, 9) + SourceIndex(0)
-4 >Emitted(4, 12) Source(11, 12) + SourceIndex(0)
-5 >Emitted(4, 13) Source(11, 13) + SourceIndex(0)
-6 >Emitted(4, 14) Source(11, 14) + SourceIndex(0)
-7 >Emitted(4, 15) Source(11, 15) + SourceIndex(0)
-8 >Emitted(4, 16) Source(11, 16) + SourceIndex(0)
+1 >Emitted(5, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(5, 8) Source(11, 8) + SourceIndex(0)
+3 >Emitted(5, 9) Source(11, 9) + SourceIndex(0)
+4 >Emitted(5, 12) Source(11, 12) + SourceIndex(0)
+5 >Emitted(5, 13) Source(11, 13) + SourceIndex(0)
+6 >Emitted(5, 14) Source(11, 14) + SourceIndex(0)
+7 >Emitted(5, 15) Source(11, 15) + SourceIndex(0)
+8 >Emitted(5, 16) Source(11, 16) + SourceIndex(0)
 ---
 >>>console.log(s);
 1->
@@ -151,14 +153,14 @@ sourceFile:../first_PART1.ts
 6 >            s
 7 >             )
 8 >              ;
-1->Emitted(5, 1) Source(12, 1) + SourceIndex(0)
-2 >Emitted(5, 8) Source(12, 8) + SourceIndex(0)
-3 >Emitted(5, 9) Source(12, 9) + SourceIndex(0)
-4 >Emitted(5, 12) Source(12, 12) + SourceIndex(0)
-5 >Emitted(5, 13) Source(12, 13) + SourceIndex(0)
-6 >Emitted(5, 14) Source(12, 14) + SourceIndex(0)
-7 >Emitted(5, 15) Source(12, 15) + SourceIndex(0)
-8 >Emitted(5, 16) Source(12, 16) + SourceIndex(0)
+1->Emitted(6, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(6, 8) Source(12, 8) + SourceIndex(0)
+3 >Emitted(6, 9) Source(12, 9) + SourceIndex(0)
+4 >Emitted(6, 12) Source(12, 12) + SourceIndex(0)
+5 >Emitted(6, 13) Source(12, 13) + SourceIndex(0)
+6 >Emitted(6, 14) Source(12, 14) + SourceIndex(0)
+7 >Emitted(6, 15) Source(12, 15) + SourceIndex(0)
+8 >Emitted(6, 16) Source(12, 16) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/first/bin/first-output.js
@@ -182,14 +184,14 @@ sourceFile:../first_part2.ts
 6 >                           firstfirst_part2
 7 >                                           ()
 8 >                                             ;
-1->Emitted(6, 1) Source(2, 1) + SourceIndex(1)
-2 >Emitted(6, 5) Source(2, 7) + SourceIndex(1)
-3 >Emitted(6, 21) Source(2, 23) + SourceIndex(1)
-4 >Emitted(6, 24) Source(2, 26) + SourceIndex(1)
-5 >Emitted(6, 28) Source(2, 30) + SourceIndex(1)
-6 >Emitted(6, 44) Source(2, 46) + SourceIndex(1)
-7 >Emitted(6, 46) Source(2, 48) + SourceIndex(1)
-8 >Emitted(6, 47) Source(2, 49) + SourceIndex(1)
+1->Emitted(7, 1) Source(2, 1) + SourceIndex(1)
+2 >Emitted(7, 5) Source(2, 7) + SourceIndex(1)
+3 >Emitted(7, 21) Source(2, 23) + SourceIndex(1)
+4 >Emitted(7, 24) Source(2, 26) + SourceIndex(1)
+5 >Emitted(7, 28) Source(2, 30) + SourceIndex(1)
+6 >Emitted(7, 44) Source(2, 46) + SourceIndex(1)
+7 >Emitted(7, 46) Source(2, 48) + SourceIndex(1)
+8 >Emitted(7, 47) Source(2, 49) + SourceIndex(1)
 ---
 >>>console.log(f());
 1 >
@@ -211,15 +213,15 @@ sourceFile:../first_part2.ts
 7 >             ()
 8 >               )
 9 >                ;
-1 >Emitted(7, 1) Source(3, 1) + SourceIndex(1)
-2 >Emitted(7, 8) Source(3, 8) + SourceIndex(1)
-3 >Emitted(7, 9) Source(3, 9) + SourceIndex(1)
-4 >Emitted(7, 12) Source(3, 12) + SourceIndex(1)
-5 >Emitted(7, 13) Source(3, 13) + SourceIndex(1)
-6 >Emitted(7, 14) Source(3, 14) + SourceIndex(1)
-7 >Emitted(7, 16) Source(3, 16) + SourceIndex(1)
-8 >Emitted(7, 17) Source(3, 17) + SourceIndex(1)
-9 >Emitted(7, 18) Source(3, 18) + SourceIndex(1)
+1 >Emitted(8, 1) Source(3, 1) + SourceIndex(1)
+2 >Emitted(8, 8) Source(3, 8) + SourceIndex(1)
+3 >Emitted(8, 9) Source(3, 9) + SourceIndex(1)
+4 >Emitted(8, 12) Source(3, 12) + SourceIndex(1)
+5 >Emitted(8, 13) Source(3, 13) + SourceIndex(1)
+6 >Emitted(8, 14) Source(3, 14) + SourceIndex(1)
+7 >Emitted(8, 16) Source(3, 16) + SourceIndex(1)
+8 >Emitted(8, 17) Source(3, 17) + SourceIndex(1)
+9 >Emitted(8, 18) Source(3, 18) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/first/bin/first-output.js
@@ -233,9 +235,9 @@ sourceFile:../first_part3.ts
 1 >
 2 >function 
 3 >         f
-1 >Emitted(8, 1) Source(1, 1) + SourceIndex(2)
-2 >Emitted(8, 10) Source(1, 10) + SourceIndex(2)
-3 >Emitted(8, 11) Source(1, 11) + SourceIndex(2)
+1 >Emitted(9, 1) Source(1, 1) + SourceIndex(2)
+2 >Emitted(9, 10) Source(1, 10) + SourceIndex(2)
+3 >Emitted(9, 11) Source(1, 11) + SourceIndex(2)
 ---
 >>>    return "JS does hoists";
 1->^^^^
@@ -247,10 +249,10 @@ sourceFile:../first_part3.ts
 2 >    return 
 3 >           "JS does hoists"
 4 >                           ;
-1->Emitted(9, 5) Source(2, 5) + SourceIndex(2)
-2 >Emitted(9, 12) Source(2, 12) + SourceIndex(2)
-3 >Emitted(9, 28) Source(2, 28) + SourceIndex(2)
-4 >Emitted(9, 29) Source(2, 29) + SourceIndex(2)
+1->Emitted(10, 5) Source(2, 5) + SourceIndex(2)
+2 >Emitted(10, 12) Source(2, 12) + SourceIndex(2)
+3 >Emitted(10, 28) Source(2, 28) + SourceIndex(2)
+4 >Emitted(10, 29) Source(2, 29) + SourceIndex(2)
 ---
 >>>}
 1 >
@@ -259,8 +261,8 @@ sourceFile:../first_part3.ts
 1 >
   >
 2 >}
-1 >Emitted(10, 1) Source(3, 1) + SourceIndex(2)
-2 >Emitted(10, 2) Source(3, 2) + SourceIndex(2)
+1 >Emitted(11, 1) Source(3, 1) + SourceIndex(2)
+2 >Emitted(11, 2) Source(3, 2) + SourceIndex(2)
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
@@ -277,7 +279,7 @@ sourceFile:../first_part3.ts
       "sections": [
         {
           "pos": 0,
-          "end": 179,
+          "end": 181,
           "kind": "text"
         }
       ]
@@ -305,9 +307,10 @@ sourceFile:../first_part3.ts
 ======================================================================
 File:: /src/first/bin/first-output.js
 ----------------------------------------------------------------------
-text: (0-179)
+text: (0-181)
 
 var s = "Hello, world";
+
 
 console.log(s);
 console.log(s);
@@ -355,6 +358,7 @@ console.log(s);
 
 var s = "Hello, world";
 
+
 console.log(s);
 console.log(s);
 var first_part2Const = new firstfirst_part2();
@@ -373,7 +377,8 @@ var N;
 })(N || (N = {}));
 var C = (function () {
     function C() {
-    }C.prototype.doSomething = function () {
+    }
+    C.prototype.doSomething = function () {
         console.log("something got done");
     };
     return C;
@@ -384,7 +389,7 @@ c.doSomething();
 //# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.js.map]
-{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":";AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,IAAM,gBAAgB,GAAG,IAAI,gBAAgB,EAAE,CAAC;AAChD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACFjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACDD,IAAM,iBAAiB,GAAG,IAAI,kBAAkB,EAAE,CAAC;AAKnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACZD;IAAA;IAIA,CAAC,AAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACHD,IAAM,gBAAgB,GAAG,IAAI,gBAAgB,EAAE,CAAC;AAChD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC"}
+{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":";AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;;;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,IAAM,gBAAgB,GAAG,IAAI,gBAAgB,EAAE,CAAC;AAChD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACFjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACDD,IAAM,iBAAiB,GAAG,IAAI,kBAAkB,EAAE,CAAC;AAKnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACZD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACHD,IAAM,gBAAgB,GAAG,IAAI,gBAAgB,EAAE,CAAC;AAChD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC"}
 
 //// [/src/third/thirdjs/output/third-output.js.map.baseline.txt]
 ===================================================================
@@ -423,6 +428,7 @@ sourceFile:../../../first/first_PART1.ts
 6 >Emitted(2, 24) Source(5, 26) + SourceIndex(0)
 ---
 >>>
+>>>
 >>>console.log(s);
 1 >
 2 >^^^^^^^
@@ -447,14 +453,14 @@ sourceFile:../../../first/first_PART1.ts
 6 >            s
 7 >             )
 8 >              ;
-1 >Emitted(4, 1) Source(11, 1) + SourceIndex(0)
-2 >Emitted(4, 8) Source(11, 8) + SourceIndex(0)
-3 >Emitted(4, 9) Source(11, 9) + SourceIndex(0)
-4 >Emitted(4, 12) Source(11, 12) + SourceIndex(0)
-5 >Emitted(4, 13) Source(11, 13) + SourceIndex(0)
-6 >Emitted(4, 14) Source(11, 14) + SourceIndex(0)
-7 >Emitted(4, 15) Source(11, 15) + SourceIndex(0)
-8 >Emitted(4, 16) Source(11, 16) + SourceIndex(0)
+1 >Emitted(5, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(5, 8) Source(11, 8) + SourceIndex(0)
+3 >Emitted(5, 9) Source(11, 9) + SourceIndex(0)
+4 >Emitted(5, 12) Source(11, 12) + SourceIndex(0)
+5 >Emitted(5, 13) Source(11, 13) + SourceIndex(0)
+6 >Emitted(5, 14) Source(11, 14) + SourceIndex(0)
+7 >Emitted(5, 15) Source(11, 15) + SourceIndex(0)
+8 >Emitted(5, 16) Source(11, 16) + SourceIndex(0)
 ---
 >>>console.log(s);
 1->
@@ -475,14 +481,14 @@ sourceFile:../../../first/first_PART1.ts
 6 >            s
 7 >             )
 8 >              ;
-1->Emitted(5, 1) Source(12, 1) + SourceIndex(0)
-2 >Emitted(5, 8) Source(12, 8) + SourceIndex(0)
-3 >Emitted(5, 9) Source(12, 9) + SourceIndex(0)
-4 >Emitted(5, 12) Source(12, 12) + SourceIndex(0)
-5 >Emitted(5, 13) Source(12, 13) + SourceIndex(0)
-6 >Emitted(5, 14) Source(12, 14) + SourceIndex(0)
-7 >Emitted(5, 15) Source(12, 15) + SourceIndex(0)
-8 >Emitted(5, 16) Source(12, 16) + SourceIndex(0)
+1->Emitted(6, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(6, 8) Source(12, 8) + SourceIndex(0)
+3 >Emitted(6, 9) Source(12, 9) + SourceIndex(0)
+4 >Emitted(6, 12) Source(12, 12) + SourceIndex(0)
+5 >Emitted(6, 13) Source(12, 13) + SourceIndex(0)
+6 >Emitted(6, 14) Source(12, 14) + SourceIndex(0)
+7 >Emitted(6, 15) Source(12, 15) + SourceIndex(0)
+8 >Emitted(6, 16) Source(12, 16) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.js
@@ -506,14 +512,14 @@ sourceFile:../../../first/first_part2.ts
 6 >                           firstfirst_part2
 7 >                                           ()
 8 >                                             ;
-1->Emitted(6, 1) Source(2, 1) + SourceIndex(1)
-2 >Emitted(6, 5) Source(2, 7) + SourceIndex(1)
-3 >Emitted(6, 21) Source(2, 23) + SourceIndex(1)
-4 >Emitted(6, 24) Source(2, 26) + SourceIndex(1)
-5 >Emitted(6, 28) Source(2, 30) + SourceIndex(1)
-6 >Emitted(6, 44) Source(2, 46) + SourceIndex(1)
-7 >Emitted(6, 46) Source(2, 48) + SourceIndex(1)
-8 >Emitted(6, 47) Source(2, 49) + SourceIndex(1)
+1->Emitted(7, 1) Source(2, 1) + SourceIndex(1)
+2 >Emitted(7, 5) Source(2, 7) + SourceIndex(1)
+3 >Emitted(7, 21) Source(2, 23) + SourceIndex(1)
+4 >Emitted(7, 24) Source(2, 26) + SourceIndex(1)
+5 >Emitted(7, 28) Source(2, 30) + SourceIndex(1)
+6 >Emitted(7, 44) Source(2, 46) + SourceIndex(1)
+7 >Emitted(7, 46) Source(2, 48) + SourceIndex(1)
+8 >Emitted(7, 47) Source(2, 49) + SourceIndex(1)
 ---
 >>>console.log(f());
 1 >
@@ -535,15 +541,15 @@ sourceFile:../../../first/first_part2.ts
 7 >             ()
 8 >               )
 9 >                ;
-1 >Emitted(7, 1) Source(3, 1) + SourceIndex(1)
-2 >Emitted(7, 8) Source(3, 8) + SourceIndex(1)
-3 >Emitted(7, 9) Source(3, 9) + SourceIndex(1)
-4 >Emitted(7, 12) Source(3, 12) + SourceIndex(1)
-5 >Emitted(7, 13) Source(3, 13) + SourceIndex(1)
-6 >Emitted(7, 14) Source(3, 14) + SourceIndex(1)
-7 >Emitted(7, 16) Source(3, 16) + SourceIndex(1)
-8 >Emitted(7, 17) Source(3, 17) + SourceIndex(1)
-9 >Emitted(7, 18) Source(3, 18) + SourceIndex(1)
+1 >Emitted(8, 1) Source(3, 1) + SourceIndex(1)
+2 >Emitted(8, 8) Source(3, 8) + SourceIndex(1)
+3 >Emitted(8, 9) Source(3, 9) + SourceIndex(1)
+4 >Emitted(8, 12) Source(3, 12) + SourceIndex(1)
+5 >Emitted(8, 13) Source(3, 13) + SourceIndex(1)
+6 >Emitted(8, 14) Source(3, 14) + SourceIndex(1)
+7 >Emitted(8, 16) Source(3, 16) + SourceIndex(1)
+8 >Emitted(8, 17) Source(3, 17) + SourceIndex(1)
+9 >Emitted(8, 18) Source(3, 18) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.js
@@ -557,9 +563,9 @@ sourceFile:../../../first/first_part3.ts
 1 >
 2 >function 
 3 >         f
-1 >Emitted(8, 1) Source(1, 1) + SourceIndex(2)
-2 >Emitted(8, 10) Source(1, 10) + SourceIndex(2)
-3 >Emitted(8, 11) Source(1, 11) + SourceIndex(2)
+1 >Emitted(9, 1) Source(1, 1) + SourceIndex(2)
+2 >Emitted(9, 10) Source(1, 10) + SourceIndex(2)
+3 >Emitted(9, 11) Source(1, 11) + SourceIndex(2)
 ---
 >>>    return "JS does hoists";
 1->^^^^
@@ -571,10 +577,10 @@ sourceFile:../../../first/first_part3.ts
 2 >    return 
 3 >           "JS does hoists"
 4 >                           ;
-1->Emitted(9, 5) Source(2, 5) + SourceIndex(2)
-2 >Emitted(9, 12) Source(2, 12) + SourceIndex(2)
-3 >Emitted(9, 28) Source(2, 28) + SourceIndex(2)
-4 >Emitted(9, 29) Source(2, 29) + SourceIndex(2)
+1->Emitted(10, 5) Source(2, 5) + SourceIndex(2)
+2 >Emitted(10, 12) Source(2, 12) + SourceIndex(2)
+3 >Emitted(10, 28) Source(2, 28) + SourceIndex(2)
+4 >Emitted(10, 29) Source(2, 29) + SourceIndex(2)
 ---
 >>>}
 1 >
@@ -583,8 +589,8 @@ sourceFile:../../../first/first_part3.ts
 1 >
   >
 2 >}
-1 >Emitted(10, 1) Source(3, 1) + SourceIndex(2)
-2 >Emitted(10, 2) Source(3, 2) + SourceIndex(2)
+1 >Emitted(11, 1) Source(3, 1) + SourceIndex(2)
+2 >Emitted(11, 2) Source(3, 2) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.js
@@ -608,14 +614,14 @@ sourceFile:../../../second/second_part1.ts
 6 >                            secondsecond_part1
 7 >                                              ()
 8 >                                                ;
-1->Emitted(11, 1) Source(2, 1) + SourceIndex(3)
-2 >Emitted(11, 5) Source(2, 7) + SourceIndex(3)
-3 >Emitted(11, 22) Source(2, 24) + SourceIndex(3)
-4 >Emitted(11, 25) Source(2, 27) + SourceIndex(3)
-5 >Emitted(11, 29) Source(2, 31) + SourceIndex(3)
-6 >Emitted(11, 47) Source(2, 49) + SourceIndex(3)
-7 >Emitted(11, 49) Source(2, 51) + SourceIndex(3)
-8 >Emitted(11, 50) Source(2, 52) + SourceIndex(3)
+1->Emitted(12, 1) Source(2, 1) + SourceIndex(3)
+2 >Emitted(12, 5) Source(2, 7) + SourceIndex(3)
+3 >Emitted(12, 22) Source(2, 24) + SourceIndex(3)
+4 >Emitted(12, 25) Source(2, 27) + SourceIndex(3)
+5 >Emitted(12, 29) Source(2, 31) + SourceIndex(3)
+6 >Emitted(12, 47) Source(2, 49) + SourceIndex(3)
+7 >Emitted(12, 49) Source(2, 51) + SourceIndex(3)
+8 >Emitted(12, 50) Source(2, 52) + SourceIndex(3)
 ---
 >>>var N;
 1 >
@@ -638,10 +644,10 @@ sourceFile:../../../second/second_part1.ts
   >     
   >         f();
   >     }
-1 >Emitted(12, 1) Source(7, 1) + SourceIndex(3)
-2 >Emitted(12, 5) Source(7, 11) + SourceIndex(3)
-3 >Emitted(12, 6) Source(7, 12) + SourceIndex(3)
-4 >Emitted(12, 7) Source(13, 2) + SourceIndex(3)
+1 >Emitted(13, 1) Source(7, 1) + SourceIndex(3)
+2 >Emitted(13, 5) Source(7, 11) + SourceIndex(3)
+3 >Emitted(13, 6) Source(7, 12) + SourceIndex(3)
+4 >Emitted(13, 7) Source(13, 2) + SourceIndex(3)
 ---
 >>>(function (N) {
 1->
@@ -651,9 +657,9 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >namespace 
 3 >           N
-1->Emitted(13, 1) Source(7, 1) + SourceIndex(3)
-2 >Emitted(13, 12) Source(7, 11) + SourceIndex(3)
-3 >Emitted(13, 13) Source(7, 12) + SourceIndex(3)
+1->Emitted(14, 1) Source(7, 1) + SourceIndex(3)
+2 >Emitted(14, 12) Source(7, 11) + SourceIndex(3)
+3 >Emitted(14, 13) Source(7, 12) + SourceIndex(3)
 ---
 >>>    function f() {
 1->^^^^
@@ -664,9 +670,9 @@ sourceFile:../../../second/second_part1.ts
   >    
 2 >    function 
 3 >             f
-1->Emitted(14, 5) Source(8, 5) + SourceIndex(3)
-2 >Emitted(14, 14) Source(8, 14) + SourceIndex(3)
-3 >Emitted(14, 15) Source(8, 15) + SourceIndex(3)
+1->Emitted(15, 5) Source(8, 5) + SourceIndex(3)
+2 >Emitted(15, 14) Source(8, 14) + SourceIndex(3)
+3 >Emitted(15, 15) Source(8, 15) + SourceIndex(3)
 ---
 >>>        console.log('testing');
 1->^^^^^^^^
@@ -686,14 +692,14 @@ sourceFile:../../../second/second_part1.ts
 6 >                    'testing'
 7 >                             )
 8 >                              ;
-1->Emitted(15, 9) Source(9, 9) + SourceIndex(3)
-2 >Emitted(15, 16) Source(9, 16) + SourceIndex(3)
-3 >Emitted(15, 17) Source(9, 17) + SourceIndex(3)
-4 >Emitted(15, 20) Source(9, 20) + SourceIndex(3)
-5 >Emitted(15, 21) Source(9, 21) + SourceIndex(3)
-6 >Emitted(15, 30) Source(9, 30) + SourceIndex(3)
-7 >Emitted(15, 31) Source(9, 31) + SourceIndex(3)
-8 >Emitted(15, 32) Source(9, 32) + SourceIndex(3)
+1->Emitted(16, 9) Source(9, 9) + SourceIndex(3)
+2 >Emitted(16, 16) Source(9, 16) + SourceIndex(3)
+3 >Emitted(16, 17) Source(9, 17) + SourceIndex(3)
+4 >Emitted(16, 20) Source(9, 20) + SourceIndex(3)
+5 >Emitted(16, 21) Source(9, 21) + SourceIndex(3)
+6 >Emitted(16, 30) Source(9, 30) + SourceIndex(3)
+7 >Emitted(16, 31) Source(9, 31) + SourceIndex(3)
+8 >Emitted(16, 32) Source(9, 32) + SourceIndex(3)
 ---
 >>>    }
 1 >^^^^
@@ -701,8 +707,8 @@ sourceFile:../../../second/second_part1.ts
 1 >
   >    
 2 >    }
-1 >Emitted(16, 5) Source(10, 5) + SourceIndex(3)
-2 >Emitted(16, 6) Source(10, 6) + SourceIndex(3)
+1 >Emitted(17, 5) Source(10, 5) + SourceIndex(3)
+2 >Emitted(17, 6) Source(10, 6) + SourceIndex(3)
 ---
 >>>
 >>>    f();
@@ -717,10 +723,10 @@ sourceFile:../../../second/second_part1.ts
 2 >    f
 3 >     ()
 4 >       ;
-1 >Emitted(18, 5) Source(12, 5) + SourceIndex(3)
-2 >Emitted(18, 6) Source(12, 6) + SourceIndex(3)
-3 >Emitted(18, 8) Source(12, 8) + SourceIndex(3)
-4 >Emitted(18, 9) Source(12, 9) + SourceIndex(3)
+1 >Emitted(19, 5) Source(12, 5) + SourceIndex(3)
+2 >Emitted(19, 6) Source(12, 6) + SourceIndex(3)
+3 >Emitted(19, 8) Source(12, 8) + SourceIndex(3)
+4 >Emitted(19, 9) Source(12, 9) + SourceIndex(3)
 ---
 >>>})(N || (N = {}));
 1->
@@ -745,13 +751,13 @@ sourceFile:../../../second/second_part1.ts
   >          
   >              f();
   >          }
-1->Emitted(19, 1) Source(13, 1) + SourceIndex(3)
-2 >Emitted(19, 2) Source(13, 2) + SourceIndex(3)
-3 >Emitted(19, 4) Source(7, 11) + SourceIndex(3)
-4 >Emitted(19, 5) Source(7, 12) + SourceIndex(3)
-5 >Emitted(19, 10) Source(7, 11) + SourceIndex(3)
-6 >Emitted(19, 11) Source(7, 12) + SourceIndex(3)
-7 >Emitted(19, 19) Source(13, 2) + SourceIndex(3)
+1->Emitted(20, 1) Source(13, 1) + SourceIndex(3)
+2 >Emitted(20, 2) Source(13, 2) + SourceIndex(3)
+3 >Emitted(20, 4) Source(7, 11) + SourceIndex(3)
+4 >Emitted(20, 5) Source(7, 12) + SourceIndex(3)
+5 >Emitted(20, 10) Source(7, 11) + SourceIndex(3)
+6 >Emitted(20, 11) Source(7, 12) + SourceIndex(3)
+7 >Emitted(20, 19) Source(13, 2) + SourceIndex(3)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.js
@@ -761,35 +767,38 @@ sourceFile:../../../second/second_part2.ts
 1->
 2 >^^^^^^^^^^^^^^^^^^^->
 1->
-1->Emitted(20, 1) Source(1, 1) + SourceIndex(4)
+1->Emitted(21, 1) Source(1, 1) + SourceIndex(4)
 ---
 >>>    function C() {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^->
 1->
-1->Emitted(21, 5) Source(1, 1) + SourceIndex(4)
+1->Emitted(22, 5) Source(1, 1) + SourceIndex(4)
 ---
->>>    }C.prototype.doSomething = function () {
+>>>    }
 1->^^^^
 2 >    ^
-3 >     
-4 >     ^^^^^^^^^^^^^^^^^^^^^^^
-5 >                            ^^^
-6 >                               ^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->class C {
   >    doSomething() {
   >        console.log("something got done");
   >    }
   >
 2 >    }
-3 >     
-4 >     doSomething
-5 >                            
-1->Emitted(22, 5) Source(5, 1) + SourceIndex(4)
-2 >Emitted(22, 6) Source(5, 2) + SourceIndex(4)
-3 >Emitted(22, 6) Source(2, 5) + SourceIndex(4)
-4 >Emitted(22, 29) Source(2, 16) + SourceIndex(4)
-5 >Emitted(22, 32) Source(2, 5) + SourceIndex(4)
+1->Emitted(23, 5) Source(5, 1) + SourceIndex(4)
+2 >Emitted(23, 6) Source(5, 2) + SourceIndex(4)
+---
+>>>    C.prototype.doSomething = function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                           ^^^
+4 >                              ^^^^^^^^^^^^^->
+1->
+2 >    doSomething
+3 >                           
+1->Emitted(24, 5) Source(2, 5) + SourceIndex(4)
+2 >Emitted(24, 28) Source(2, 16) + SourceIndex(4)
+3 >Emitted(24, 31) Source(2, 5) + SourceIndex(4)
 ---
 >>>        console.log("something got done");
 1->^^^^^^^^
@@ -809,14 +818,14 @@ sourceFile:../../../second/second_part2.ts
 6 >                    "something got done"
 7 >                                        )
 8 >                                         ;
-1->Emitted(23, 9) Source(3, 9) + SourceIndex(4)
-2 >Emitted(23, 16) Source(3, 16) + SourceIndex(4)
-3 >Emitted(23, 17) Source(3, 17) + SourceIndex(4)
-4 >Emitted(23, 20) Source(3, 20) + SourceIndex(4)
-5 >Emitted(23, 21) Source(3, 21) + SourceIndex(4)
-6 >Emitted(23, 41) Source(3, 41) + SourceIndex(4)
-7 >Emitted(23, 42) Source(3, 42) + SourceIndex(4)
-8 >Emitted(23, 43) Source(3, 43) + SourceIndex(4)
+1->Emitted(25, 9) Source(3, 9) + SourceIndex(4)
+2 >Emitted(25, 16) Source(3, 16) + SourceIndex(4)
+3 >Emitted(25, 17) Source(3, 17) + SourceIndex(4)
+4 >Emitted(25, 20) Source(3, 20) + SourceIndex(4)
+5 >Emitted(25, 21) Source(3, 21) + SourceIndex(4)
+6 >Emitted(25, 41) Source(3, 41) + SourceIndex(4)
+7 >Emitted(25, 42) Source(3, 42) + SourceIndex(4)
+8 >Emitted(25, 43) Source(3, 43) + SourceIndex(4)
 ---
 >>>    };
 1 >^^^^
@@ -825,8 +834,8 @@ sourceFile:../../../second/second_part2.ts
 1 >
   >    
 2 >    }
-1 >Emitted(24, 5) Source(4, 5) + SourceIndex(4)
-2 >Emitted(24, 6) Source(4, 6) + SourceIndex(4)
+1 >Emitted(26, 5) Source(4, 5) + SourceIndex(4)
+2 >Emitted(26, 6) Source(4, 6) + SourceIndex(4)
 ---
 >>>    return C;
 1->^^^^
@@ -834,8 +843,8 @@ sourceFile:../../../second/second_part2.ts
 1->
   >
 2 >    }
-1->Emitted(25, 5) Source(5, 1) + SourceIndex(4)
-2 >Emitted(25, 13) Source(5, 2) + SourceIndex(4)
+1->Emitted(27, 5) Source(5, 1) + SourceIndex(4)
+2 >Emitted(27, 13) Source(5, 2) + SourceIndex(4)
 ---
 >>>}());
 1 >
@@ -851,10 +860,10 @@ sourceFile:../../../second/second_part2.ts
   >         console.log("something got done");
   >     }
   > }
-1 >Emitted(26, 1) Source(5, 1) + SourceIndex(4)
-2 >Emitted(26, 2) Source(5, 2) + SourceIndex(4)
-3 >Emitted(26, 2) Source(1, 1) + SourceIndex(4)
-4 >Emitted(26, 6) Source(5, 2) + SourceIndex(4)
+1 >Emitted(28, 1) Source(5, 1) + SourceIndex(4)
+2 >Emitted(28, 2) Source(5, 2) + SourceIndex(4)
+3 >Emitted(28, 2) Source(1, 1) + SourceIndex(4)
+4 >Emitted(28, 6) Source(5, 2) + SourceIndex(4)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.js
@@ -878,14 +887,14 @@ sourceFile:../../third_part1.ts
 6 >                           thirdthird_part1
 7 >                                           ()
 8 >                                             ;
-1->Emitted(27, 1) Source(2, 1) + SourceIndex(5)
-2 >Emitted(27, 5) Source(2, 7) + SourceIndex(5)
-3 >Emitted(27, 21) Source(2, 23) + SourceIndex(5)
-4 >Emitted(27, 24) Source(2, 26) + SourceIndex(5)
-5 >Emitted(27, 28) Source(2, 30) + SourceIndex(5)
-6 >Emitted(27, 44) Source(2, 46) + SourceIndex(5)
-7 >Emitted(27, 46) Source(2, 48) + SourceIndex(5)
-8 >Emitted(27, 47) Source(2, 49) + SourceIndex(5)
+1->Emitted(29, 1) Source(2, 1) + SourceIndex(5)
+2 >Emitted(29, 5) Source(2, 7) + SourceIndex(5)
+3 >Emitted(29, 21) Source(2, 23) + SourceIndex(5)
+4 >Emitted(29, 24) Source(2, 26) + SourceIndex(5)
+5 >Emitted(29, 28) Source(2, 30) + SourceIndex(5)
+6 >Emitted(29, 44) Source(2, 46) + SourceIndex(5)
+7 >Emitted(29, 46) Source(2, 48) + SourceIndex(5)
+8 >Emitted(29, 47) Source(2, 49) + SourceIndex(5)
 ---
 >>>var c = new C();
 1 >
@@ -906,14 +915,14 @@ sourceFile:../../third_part1.ts
 6 >            C
 7 >             ()
 8 >               ;
-1 >Emitted(28, 1) Source(3, 1) + SourceIndex(5)
-2 >Emitted(28, 5) Source(3, 5) + SourceIndex(5)
-3 >Emitted(28, 6) Source(3, 6) + SourceIndex(5)
-4 >Emitted(28, 9) Source(3, 9) + SourceIndex(5)
-5 >Emitted(28, 13) Source(3, 13) + SourceIndex(5)
-6 >Emitted(28, 14) Source(3, 14) + SourceIndex(5)
-7 >Emitted(28, 16) Source(3, 16) + SourceIndex(5)
-8 >Emitted(28, 17) Source(3, 17) + SourceIndex(5)
+1 >Emitted(30, 1) Source(3, 1) + SourceIndex(5)
+2 >Emitted(30, 5) Source(3, 5) + SourceIndex(5)
+3 >Emitted(30, 6) Source(3, 6) + SourceIndex(5)
+4 >Emitted(30, 9) Source(3, 9) + SourceIndex(5)
+5 >Emitted(30, 13) Source(3, 13) + SourceIndex(5)
+6 >Emitted(30, 14) Source(3, 14) + SourceIndex(5)
+7 >Emitted(30, 16) Source(3, 16) + SourceIndex(5)
+8 >Emitted(30, 17) Source(3, 17) + SourceIndex(5)
 ---
 >>>c.doSomething();
 1->
@@ -930,12 +939,12 @@ sourceFile:../../third_part1.ts
 4 >  doSomething
 5 >             ()
 6 >               ;
-1->Emitted(29, 1) Source(4, 1) + SourceIndex(5)
-2 >Emitted(29, 2) Source(4, 2) + SourceIndex(5)
-3 >Emitted(29, 3) Source(4, 3) + SourceIndex(5)
-4 >Emitted(29, 14) Source(4, 14) + SourceIndex(5)
-5 >Emitted(29, 16) Source(4, 16) + SourceIndex(5)
-6 >Emitted(29, 17) Source(4, 17) + SourceIndex(5)
+1->Emitted(31, 1) Source(4, 1) + SourceIndex(5)
+2 >Emitted(31, 2) Source(4, 2) + SourceIndex(5)
+3 >Emitted(31, 3) Source(4, 3) + SourceIndex(5)
+4 >Emitted(31, 14) Source(4, 14) + SourceIndex(5)
+5 >Emitted(31, 16) Source(4, 16) + SourceIndex(5)
+6 >Emitted(31, 17) Source(4, 17) + SourceIndex(5)
 ---
 >>>//# sourceMappingURL=third-output.js.map
 
@@ -950,33 +959,33 @@ sourceFile:../../third_part1.ts
       "sections": [
         {
           "pos": 0,
-          "end": 179,
+          "end": 181,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.js",
           "texts": [
             {
               "pos": 0,
-              "end": 179,
+              "end": 181,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 179,
-          "end": 511,
+          "pos": 181,
+          "end": 519,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
-              "pos": 179,
-              "end": 511,
+              "pos": 181,
+              "end": 519,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 511,
-          "end": 595,
+          "pos": 519,
+          "end": 603,
           "kind": "text"
         }
       ]
@@ -1042,11 +1051,12 @@ sourceFile:../../third_part1.ts
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-179):: ../../../first/bin/first-output.js texts:: 1
+prepend: (0-181):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-179)
+text: (0-181)
 
 var s = "Hello, world";
+
 
 console.log(s);
 console.log(s);
@@ -1057,9 +1067,9 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (179-511):: ../../../2/second-output.js texts:: 1
+prepend: (181-519):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (179-511)
+text: (181-519)
 var second_part1Const = new secondsecond_part1();
 var N;
 (function (N) {
@@ -1071,14 +1081,15 @@ var N;
 })(N || (N = {}));
 var C = (function () {
     function C() {
-    }C.prototype.doSomething = function () {
+    }
+    C.prototype.doSomething = function () {
         console.log("something got done");
     };
     return C;
 }());
 
 ----------------------------------------------------------------------
-text: (511-595)
+text: (519-603)
 var third_part1Const = new thirdthird_part1();
 var c = new C();
 c.doSomething();

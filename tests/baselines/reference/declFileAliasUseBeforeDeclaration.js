@@ -14,12 +14,14 @@ exports.Foo = void 0;
 var Foo = /** @class */ (function () {
     function Foo() {}
     return Foo;
-}());exports.Foo = Foo;
+}());
+exports.Foo = Foo;
 //// [declFileAliasUseBeforeDeclaration_test.js]
 "use strict";
 exports.__esModule = true;
 exports.bar = void 0;
-function bar(a) { }exports.bar = bar;
+function bar(a) { }
+exports.bar = bar;
 
 
 //// [declFileAliasUseBeforeDeclaration_foo.d.ts]

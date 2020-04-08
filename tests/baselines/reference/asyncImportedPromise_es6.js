@@ -13,7 +13,8 @@ class Test {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Task = void 0;
-class Task extends Promise {}exports.Task = Task;
+class Task extends Promise {}
+exports.Task = Task;
 //// [test.js]
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

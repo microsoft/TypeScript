@@ -272,7 +272,8 @@ var m1;
 (function (m1) {
     var C1_public = /** @class */ (function () {
         function C1_public() {
-        }C1_public.prototype.f1 = function () {
+        }
+        C1_public.prototype.f1 = function () {
         };
         return C1_public;
     }());
@@ -282,13 +283,13 @@ var m1;
         }
         return C2_private;
     }());
-
 })(m1 = exports.m1 || (exports.m1 = {}));
 var m2;
 (function (m2) {
     var C1_public = /** @class */ (function () {
         function C1_public() {
-        }C1_public.prototype.f1 = function () {
+        }
+        C1_public.prototype.f1 = function () {
         };
         return C1_public;
     }());
@@ -298,24 +299,17 @@ var m2;
         }
         return C2_private;
     }());
-
 })(m2 || (m2 = {}));
 var C5_public = /** @class */ (function () {
     function C5_public() {
-    }C5_public.prototype.f1 = function () {
+    }
+    C5_public.prototype.f1 = function () {
     };
     return C5_public;
-}());exports.C5_public = C5_public;
+}());
+exports.C5_public = C5_public;
 var C6_private = /** @class */ (function () {
     function C6_private() {
     }
     return C6_private;
 }());
-
-
-
-
-
-
-
-

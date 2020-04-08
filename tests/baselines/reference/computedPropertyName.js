@@ -47,9 +47,15 @@ declare class H {
 export const onInit = Symbol("onInit");
 //// [component.js]
 var _a;
+
+
+
+
+
 const o = {
     [onInit]: 0 // Error
 };
+
 class C {
 }
 
@@ -62,6 +68,7 @@ _a = onInit;
 class E {
     [onInit]() { } // Error
 }
+
 class F {
 }
 

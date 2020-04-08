@@ -23,7 +23,6 @@ productList = entityList;  // Error
 //// [recursiveIntersectionTypes.js]
 
 
-
 var entityList;
 var s = entityList.name;
 var s = entityList.next.name;

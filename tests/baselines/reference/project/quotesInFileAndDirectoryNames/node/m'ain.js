@@ -14,7 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 
 var ClassC = /** @class */ (function (_super) {
-    __extends(ClassC, _super);/// <reference path="li'b/class'A.ts" />
+    __extends(ClassC, _super);
     function ClassC() {
         return _super !== null && _super.apply(this, arguments) || this;
     }

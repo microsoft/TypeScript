@@ -36,7 +36,8 @@ var f2 = function f2(this: A): number {
 //// [unusedParametersThis.js]
 var A = /** @class */ (function () {
     function A() {
-    }A.prototype.method = function () {
+    }
+    A.prototype.method = function () {
         return this.a;
     };
 

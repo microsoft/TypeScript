@@ -28,9 +28,11 @@ var y = f(); // error void fn
 var why = f(); // error void fn
 var w;
 w = f(); // error void fn
+
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.g = function () {
+    }
+    C.prototype.g = function () {
     };
     return C;
 }());

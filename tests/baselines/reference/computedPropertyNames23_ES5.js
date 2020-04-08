@@ -12,7 +12,8 @@ class C {
 var C = /** @class */ (function () {
     var _a;
     function C() {
-    }C.prototype.bar = function () {
+    }
+    C.prototype.bar = function () {
         return 0;
     };
     C.prototype[(_a = {}, _a[this.bar()] = 1, _a)[0]] = function () { };

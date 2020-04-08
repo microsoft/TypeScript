@@ -23,7 +23,8 @@ var c = /** @class */ (function () {
     function c() {
     }
     return c;
-}());exports.c = c;
+}());
+exports.c = c;
 var m;
 (function (m) {
     m.x = 10;

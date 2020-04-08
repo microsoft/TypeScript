@@ -27,4 +27,5 @@ class SymbolIterator {
         return this;
     }
 }
+
 var array = [0, 1, ...new SymbolIterator];

@@ -48,13 +48,12 @@ c["foo"];
 
 //// [interfaceImplementation1.js]
 
-
 var C1 = /** @class */ (function () {
     function C1() {
-    }C1.prototype.iFn = function (n, s) { };
+    }
+    C1.prototype.iFn = function (n, s) { };
     return C1;
 }());
-
 
 var C2 = /** @class */ (function () {
     function C2() {
@@ -66,6 +65,7 @@ var a = function () {
     return new C2();
 };
 new a();
+
 /*var b:I4 = C2;
 new b();
 */

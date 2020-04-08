@@ -24,9 +24,6 @@ var i2 = i.i2;
 
 //// [multiExtendsSplitInterfaces2.js]
 
-
-
-
 var i;
 
 var a = i.a;

@@ -8,6 +8,7 @@ I           // This should be the identifier 'I'
 
 //// [asiPreventsParsingAsInterface04.js]
 var declare, interface, I;
+
 declare; // This should be the identifier 'declare'
 interface; // This should be the identifier 'interface'
 I; // This should be the identifier 'I'

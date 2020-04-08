@@ -24,7 +24,7 @@ function Foo() {
 }
 var x = new Foo(); // legal, considered a constructor function
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);// legal, considered a constructor function
+    __extends(C, _super);
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }

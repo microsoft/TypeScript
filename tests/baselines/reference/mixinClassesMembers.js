@@ -113,9 +113,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 
-
-
-
 function f1() {
     var x1 = new Mixed1("hello");
     var x2 = new Mixed1(42);

@@ -66,10 +66,6 @@ const c: DisjointDiscriminants = {
 
 
 
-
-
-
-
 var foo = {
     type: "number",
     value: 10,

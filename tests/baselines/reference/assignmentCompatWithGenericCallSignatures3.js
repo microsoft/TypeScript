@@ -16,4 +16,5 @@ g = h // ok
 
 var g;
 var h;
+
 g = h; // ok

@@ -84,6 +84,7 @@ a = b.a3; // error
 a = b.a4; // error
 a = b.a5; // ok
 a = b.a6; // error
+
 var a2;
 a2 = function () { return 1; }; // ok, same number of required params
 a2 = function (x) { return 1; }; // ok, same number of required params
@@ -94,6 +95,7 @@ a2 = b.a3; // ok, same number of params
 a2 = b.a4; // ok, excess params are optional in b.a3
 a2 = b.a5; // ok
 a2 = b.a6; // error
+
 var a3;
 a3 = function () { return 1; }; // ok, fewer required params
 a3 = function (x) { return 1; }; // ok, fewer required params
@@ -105,6 +107,7 @@ a3 = b.a3; // ok
 a3 = b.a4; // ok
 a3 = b.a5; // ok
 a3 = b.a6; // error
+
 var a4;
 a4 = function () { return 1; }; // ok, fewer required params
 a4 = function (x, y) { return 1; }; // ok, fewer required params
@@ -116,6 +119,7 @@ a4 = b.a3; // ok
 a4 = b.a4; // ok
 a4 = b.a5; // ok
 a4 = b.a6; // ok, same number of params
+
 var a5;
 a5 = function () { return 1; }; // ok, fewer required params
 a5 = function (x, y) { return 1; }; // ok, fewer required params

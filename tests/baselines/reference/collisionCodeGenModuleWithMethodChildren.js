@@ -38,14 +38,16 @@ var M;
     M_1.x = 3;
     var c = /** @class */ (function () {
         function c() {
-        }c.prototype.fn = function (M, p) {if (p === void 0) { p = M_1.x; }};
+        }
+        c.prototype.fn = function (M, p) {if (p === void 0) { p = M_1.x; }};
         return c;
     }());
 })(M || (M = {}));
 (function (M_2) {
     var d = /** @class */ (function () {
         function d() {
-        }d.prototype.fn2 = function () {
+        }
+        d.prototype.fn2 = function () {
             var M;
             var p = M_2.x;
         };
@@ -55,7 +57,8 @@ var M;
 (function (M_3) {
     var e = /** @class */ (function () {
         function e() {
-        }e.prototype.fn3 = function () {
+        }
+        e.prototype.fn3 = function () {
             function M() {
                 var p = M_3.x;
             }
@@ -66,7 +69,8 @@ var M;
 (function (M) {
     var f = /** @class */ (function () {
         function f() {
-        }f.prototype.M = function () {
+        }
+        f.prototype.M = function () {
         };
         return f;
     }());

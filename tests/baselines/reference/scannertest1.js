@@ -29,7 +29,8 @@ class CharacterInfo {
 
 var CharacterInfo = /** @class */ (function () {
     function CharacterInfo() {
-    }CharacterInfo.isDecimalDigit = function (c) {
+    }
+    CharacterInfo.isDecimalDigit = function (c) {
         return c >= CharacterCodes._0 && c <= CharacterCodes._9;
     };
 

@@ -46,16 +46,16 @@ define(["require", "exports"], function (require, exports) {
         return __awaiter(this, void 0, void 0, function* () {
             const req = yield new Promise((resolve_1, reject_1) => { require(['./test'], resolve_1, reject_1); }); // ONE
         });
-    }exports.fn = fn;
-
+    }
+    exports.fn = fn;
     class cl1 {
         m() {
             return __awaiter(this, void 0, void 0, function* () {
                 const req = yield new Promise((resolve_2, reject_2) => { require(['./test'], resolve_2, reject_2); }); // TWO
             });
         }
-    }exports.cl1 = cl1;
-
+    }
+    exports.cl1 = cl1;
     exports.obj = {
         m: () => __awaiter(void 0, void 0, void 0, function* () {
             const req = yield new Promise((resolve_3, reject_3) => { require(['./test'], resolve_3, reject_3); }); // THREE
@@ -70,8 +70,8 @@ define(["require", "exports"], function (require, exports) {
                     const req = yield new Promise((resolve_4, reject_4) => { require(['./test'], resolve_4, reject_4); }); // FOUR
                 })
             };
-        }}exports.cl2 = cl2;
-
+        }}
+    exports.cl2 = cl2;
     exports.l = () => __awaiter(void 0, void 0, void 0, function* () {
         const req = yield new Promise((resolve_5, reject_5) => { require(['./test'], resolve_5, reject_5); }); // FIVE
     });

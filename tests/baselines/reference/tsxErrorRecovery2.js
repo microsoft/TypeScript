@@ -11,6 +11,7 @@ var x = <div></div><div></div>
 
 
 //// [file1.jsx]
+
 <div></div>
     ,
         <div></div>;

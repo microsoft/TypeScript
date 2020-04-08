@@ -598,6 +598,7 @@ var TypeScript;
     TypeScript.nodeTypeTable = new string[];
     TypeScript.nodeTypeToTokTable = new number[];
     TypeScript.noRegexTable = new boolean[];
+
     TypeScript.noRegexTable[TokenID.Identifier] = true;
     TypeScript.noRegexTable[TokenID.StringLiteral] = true;
     TypeScript.noRegexTable[TokenID.NumberLiteral] = true;
@@ -672,6 +673,7 @@ var TypeScript;
             }
         }
     }
+
     setTokenInfo(TokenID.Any, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "any", ErrorRecoverySet.PrimType);
     setTokenInfo(TokenID.Bool, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "boolean", ErrorRecoverySet.PrimType);
     setTokenInfo(TokenID.Break, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "break", ErrorRecoverySet.Stmt);
@@ -788,6 +790,7 @@ var TypeScript;
     setTokenInfo(TokenID.Dot, Reservation.None, OperatorPrecedence.Unary, NodeType.None, OperatorPrecedence.None, NodeType.None, ".", ErrorRecoverySet.Dot); // .
     setTokenInfo(TokenID.EndOfFile, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "<EOF>", ErrorRecoverySet.EOF); // EOF
     setTokenInfo(TokenID.EqualsGreaterThan, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "=>", ErrorRecoverySet.None); // =>
+
     function lookupToken(tokenId) {
         return TypeScript.tokenTable[tokenId];
     }
@@ -841,6 +844,7 @@ var TypeScript;
                     }
                 }
             }
+
             return TokenClass.Punctuation;
         };
         return Token;

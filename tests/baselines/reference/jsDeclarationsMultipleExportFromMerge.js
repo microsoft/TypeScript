@@ -30,20 +30,28 @@ exports.c = 3;
 //// [justone.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var items_1 = require("./items");Object.defineProperty(exports, "a", { enumerable: true, get: function () { return items_1.a; } });Object.defineProperty(exports, "b", { enumerable: true, get: function () { return items_1.b; } });Object.defineProperty(exports, "c", { enumerable: true, get: function () { return items_1.c; } });
+var items_1 = require("./items");
+Object.defineProperty(exports, "a", { enumerable: true, get: function () { return items_1.a; } });Object.defineProperty(exports, "b", { enumerable: true, get: function () { return items_1.b; } });Object.defineProperty(exports, "c", { enumerable: true, get: function () { return items_1.c; } });
 //// [two.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var items_1 = require("./items");Object.defineProperty(exports, "a", { enumerable: true, get: function () { return items_1.a; } });
-var items_2 = require("./items");Object.defineProperty(exports, "b", { enumerable: true, get: function () { return items_2.b; } });Object.defineProperty(exports, "c", { enumerable: true, get: function () { return items_2.c; } });
+var items_1 = require("./items");
+Object.defineProperty(exports, "a", { enumerable: true, get: function () { return items_1.a; } });
+var items_2 = require("./items");
+Object.defineProperty(exports, "b", { enumerable: true, get: function () { return items_2.b; } });Object.defineProperty(exports, "c", { enumerable: true, get: function () { return items_2.c; } });
 //// [multiple.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var items_1 = require("./items");Object.defineProperty(exports, "a", { enumerable: true, get: function () { return items_1.a; } });Object.defineProperty(exports, "b", { enumerable: true, get: function () { return items_1.b; } });
-var two_1 = require("./two");Object.defineProperty(exports, "aa", { enumerable: true, get: function () { return two_1.a; } });
-var two_2 = require("./two");Object.defineProperty(exports, "bb", { enumerable: true, get: function () { return two_2.b; } });
-var two_3 = require("./two");Object.defineProperty(exports, "c", { enumerable: true, get: function () { return two_3.c; } });
-var items_2 = require("./items");Object.defineProperty(exports, "cc", { enumerable: true, get: function () { return items_2.c; } });
+var items_1 = require("./items");
+Object.defineProperty(exports, "a", { enumerable: true, get: function () { return items_1.a; } });Object.defineProperty(exports, "b", { enumerable: true, get: function () { return items_1.b; } });
+var two_1 = require("./two");
+Object.defineProperty(exports, "aa", { enumerable: true, get: function () { return two_1.a; } });
+var two_2 = require("./two");
+Object.defineProperty(exports, "bb", { enumerable: true, get: function () { return two_2.b; } });
+var two_3 = require("./two");
+Object.defineProperty(exports, "c", { enumerable: true, get: function () { return two_3.c; } });
+var items_2 = require("./items");
+Object.defineProperty(exports, "cc", { enumerable: true, get: function () { return items_2.c; } });
 
 
 //// [items.d.ts]

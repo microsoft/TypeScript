@@ -35,6 +35,7 @@ exports.__esModule = true;
 exports.__esModule = true;
 var a;
 var b;
+
 if (a === b) {
 }
 

@@ -36,6 +36,7 @@ function never(_) {
 function useA(_) { }
 function useB(_) { }
 
+
 if (c !== undefined) {
     switch (c.kind) {
         case 'A':useA(c);break;

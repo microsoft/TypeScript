@@ -7,7 +7,8 @@
 
 
 //// [parserArrowFunctionExpression5.js]
-(bar(x, function () { },
+(bar(x,
+    function () { },
     function () { }
 )
 );

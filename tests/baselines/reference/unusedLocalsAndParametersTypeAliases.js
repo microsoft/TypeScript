@@ -33,13 +33,10 @@ exports.__esModule = true;
 
 
 
-
-
-
-
-
-
 var x;
 x();
+
+
+
 var y;
 y[0]();

@@ -62,14 +62,16 @@ var O;
     }());
     O.A = A;
     var B = /** @class */ (function (_super) {
-        __extends(B, _super);function B() {
+        __extends(B, _super);
+        function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
     }(A));
     O.B = B;
     var C = /** @class */ (function (_super) {
-        __extends(C, _super);function C() {
+        __extends(C, _super);
+        function C() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return C;
@@ -86,5 +88,6 @@ z = x.g(); // no match
 z = x.g(new O.B()); // ambiguous (up and down conversion)
 z = x.h(2, 2); // no match
 z = x.h("hello", 0); // good
+
 var v = x.g;
 

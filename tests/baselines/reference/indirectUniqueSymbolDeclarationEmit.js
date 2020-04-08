@@ -14,7 +14,8 @@ exports.x = Symbol();
 exports.y = Symbol();
 function f() {
     return rand() ? exports.x : exports.y;
-}exports.f = f;
+}
+exports.f = f;
 
 
 //// [indirectUniqueSymbolDeclarationEmit.d.ts]

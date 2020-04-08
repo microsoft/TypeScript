@@ -67,6 +67,7 @@ var { a, b: renamed } = o, empty = __rest(o, ["a", "b"]);
 var { ['b']: renamed } = o, justA = __rest(o, ['b']);
 var { 'b': renamed } = o, justA = __rest(o, ['b']);
 var { b: { '0': n, '1': oooo } } = o, justA = __rest(o, ["b"]);
+
 let o2 = { c: 'terrible idea?', d: 'yes' };
 var { d: renamed } = o2, d = __rest(o2, ["d"]);
 
@@ -89,6 +90,7 @@ var removable = new Removable();
 var { removed } = removable, removableRest = __rest(removable, ["removed"]);
 var i = removable;
 var { removed } = i, removableRest2 = __rest(i, ["removed"]);
+
 let computed = 'b';
 let computed2 = 'a';
 var _k = o, _l = computed, stillNotGreat = _k[_l], _m = computed2, soSo = _k[_m], o = __rest(_k, [typeof _l === "symbol" ? _l : _l + "", typeof _m === "symbol" ? _m : _m + ""]);

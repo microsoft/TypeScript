@@ -27,7 +27,3 @@ interface Derived3 extends Base, Base2 {
 
 //// [interfaceWithMultipleBaseTypes2.js]
 
-
-
-
-

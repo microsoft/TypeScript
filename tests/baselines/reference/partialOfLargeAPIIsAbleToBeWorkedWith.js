@@ -76,16 +76,11 @@ for (const k of keys) {
 
 var obj = {};
 
-
 for (var _i = 0, keys_1 = keys; _i < keys_1.length; _i++) {
     var k = keys_1[_i];
     obj[k] = function () { return "12"; }; // shouldn't cause a complexity error
 }
-
-
-
 var obj2 = {};
-
 for (var _a = 0, keys_2 = keys; _a < keys_2.length; _a++) {
     var k = keys_2[_a];
     obj2[k] = function () { return "12"; }; // shouldn't cause a complexity error

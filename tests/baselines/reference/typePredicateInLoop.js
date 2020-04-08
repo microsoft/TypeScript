@@ -27,7 +27,6 @@ export function y(arg: Type): void {
 exports.__esModule = true;
 exports.y = void 0;
 
-
 var guard = function (arg) { return arg.type === 1; };
 var otherFunc = function (arg1, arg2) { };
 
@@ -39,4 +38,5 @@ function y(arg) {
             }
         }
     }
-}exports.y = y;
+}
+exports.y = y;

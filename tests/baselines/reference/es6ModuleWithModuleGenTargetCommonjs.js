@@ -18,7 +18,9 @@ exports.A = void 0;
 class A {
     constructor() {
     }
+
     B() {
         return 42;
     }
-}exports.A = A;
+}
+exports.A = A;

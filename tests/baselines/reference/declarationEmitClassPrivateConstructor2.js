@@ -21,11 +21,13 @@ var ExportedClass1 = /** @class */ (function () {
         this.data = data;
     }
     return ExportedClass1;
-}());exports.ExportedClass1 = ExportedClass1;
+}());
+exports.ExportedClass1 = ExportedClass1;
 var ExportedClass2 = /** @class */ (function () {
     function ExportedClass2(data) {}
     return ExportedClass2;
-}());exports.ExportedClass2 = ExportedClass2;
+}());
+exports.ExportedClass2 = ExportedClass2;
 
 
 //// [declarationEmitClassPrivateConstructor2.d.ts]

@@ -10,6 +10,7 @@ class D {
 var C = /** @class */ (function () {
     function C() {
         switch (e) {}
+
         var D = /** @class */ (function () {
             function D() {
             }

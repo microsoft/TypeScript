@@ -17,7 +17,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.method = function () { };
+    }
+    C.prototype.method = function () { };
     __decorate([
         __param(0, dec)
     ], C.prototype, "method", null);

@@ -37,5 +37,6 @@ var t2 = t1; // error
 
 var b;
 var c = b;
+
 t1 = arr; // error with or without strict
 arr = t1; // ok with or without strict

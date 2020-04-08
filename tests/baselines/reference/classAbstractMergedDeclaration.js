@@ -45,7 +45,6 @@ var CM = /** @class */ (function () {
     function CM() {}
     return CM;
 }());
-
 var MC = /** @class */ (function () {
     function MC() {}
     return MC;
@@ -54,7 +53,6 @@ var CI = /** @class */ (function () {
     function CI() {}
     return CI;
 }());
-
 var IC = /** @class */ (function () {
     function IC() {}
     return IC;
@@ -75,8 +73,6 @@ var CC2 = /** @class */ (function () {
     function CC2() {}
     return CC2;
 }());
-
-
 
 new CM;
 new MC;

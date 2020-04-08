@@ -19,7 +19,6 @@ var r2 = e2();
 
 //// [unionTypeReduction.js]
 
-
 var i2, i3;
 
 var e1;

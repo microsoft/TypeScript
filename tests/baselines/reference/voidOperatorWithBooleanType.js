@@ -46,7 +46,8 @@ function foo() { return true; }
 
 var A = /** @class */ (function () {
     function A() {
-    }A.foo = function () { return false; };
+    }
+    A.foo = function () { return false; };
     return A;
 }());
 var M;
@@ -69,6 +70,7 @@ var ResultIsAny7 = void A.foo();
 
 // multiple void  operator
 var ResultIsAny8 = void void BOOLEAN;
+
 // miss assignment operators
 void true;
 void BOOLEAN;

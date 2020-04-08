@@ -48,10 +48,12 @@ var Editor;
     var Buffer = /** @class */ (function () {
         function Buffer() {
             this.lines = ListMakeHead();
-        }Buffer.prototype.addLine = function (lineText) {
+        }
+        Buffer.prototype.addLine = function (lineText) {
 
             var line = new Line();
             var lineEntry = this.lines.add(line);
+
             return lineEntry;
         };
         return Buffer;
@@ -71,7 +73,8 @@ var Editor;
     Editor.ListMakeEntry = ListMakeEntry;
     var List = /** @class */ (function () {
         function List() {
-        }List.prototype.add = function (data) {
+        }
+        List.prototype.add = function (data) {
             this.next = ListMakeEntry(data);
             return this.next;
         };

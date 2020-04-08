@@ -20,10 +20,11 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 function foo() { }
+
 var x = new foo(); // can be used as a constructor function
 
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);// can be used as a constructor function
+    __extends(C, _super);
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }

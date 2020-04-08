@@ -26,6 +26,7 @@ var __extends = (this && this.__extends) || (function () {
     }
     return George;
 }(/** @class */ (function () {
-    function class_1() {}class_1.prototype.reset = function () { return this.y; };
+    function class_1() {}
+    class_1.prototype.reset = function () { return this.y; };
     return class_1;
 }())));

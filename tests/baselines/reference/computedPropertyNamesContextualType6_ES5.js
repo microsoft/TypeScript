@@ -16,7 +16,6 @@ foo({
 //// [computedPropertyNamesContextualType6_ES5.js]
 var _a;
 
-
 foo((_a = {
         p: "",
         0: function () { }

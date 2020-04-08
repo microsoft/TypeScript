@@ -20,7 +20,8 @@ var React = { createElement: skate.h };
 
 var Component = /** @class */ (function () {
     function Component() {
-    }Component.prototype.renderCallback = function () {
+    }
+    Component.prototype.renderCallback = function () {
         return skate.h("div", null, "test");
     };
     return Component;

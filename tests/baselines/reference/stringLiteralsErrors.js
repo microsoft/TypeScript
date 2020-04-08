@@ -34,11 +34,13 @@ var es1 = "line 1;
 ";;
 var es2 = 'line 1;
 ';;
+
 // Space after backslash
 var es3 = 'line 1\ ;
 ';;
 var es4 = 'line 1\ ;
 ';;
+
 // Unterminated strings
 var es5 = "unterminated;
 var es6 = 'unterminated;

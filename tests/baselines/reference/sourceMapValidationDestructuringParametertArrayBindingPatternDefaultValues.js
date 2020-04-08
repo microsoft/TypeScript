@@ -56,6 +56,7 @@ function foo4(_a) {
     var _b = _a === void 0 ? [-1, "name", "skill"] : _a, _c = _b[0], numberA3 = _c === void 0 ? -1 : _c, robotAInfo = _b.slice(1);
     console.log(robotAInfo);
 }
+
 foo1(robotA);
 foo1([2, "trimmer", "trimming"]);
 

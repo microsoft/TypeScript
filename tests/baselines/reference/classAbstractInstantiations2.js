@@ -71,47 +71,54 @@ var __extends = (this && this.__extends) || (function () {
 }());
 var B = /** @class */ (function () {
     function B() {
-    }B.prototype.foo = function () { return this.bar(); };
+    }
+    B.prototype.foo = function () { return this.bar(); };
     return B;
 }());
 new B; // error
+
 var BB = B;
 var AA = BB; // error, AA is not of abstract type.
 new AA;
+
 function constructB(Factory) {
     new Factory; // error -- Factory is of type typeof B.
 }
 
 var BB = B;
 new BB; // error -- BB is of type typeof B.
+
 var x = C;
 new x; // okay -- undefined behavior at runtime
+
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);// okay -- undefined behavior at runtime
+    __extends(C, _super);
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(B)); // error -- not declared abstract
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);// error -- not declared abstract
+    __extends(D, _super);
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
 }(B)); // okay
 var E = /** @class */ (function (_super) {
-    __extends(E, _super);// okay
+    __extends(E, _super);
     function E() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }// okay -- implements abstract method
+    }
     E.prototype.bar = function () { return 1; };
     return E;
 }(B));
 var F = /** @class */ (function (_super) {
-    __extends(F, _super);function F() {
+    __extends(F, _super);
+    function F() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }F.prototype.bar = function () { return 2; };
+    }
+    F.prototype.bar = function () { return 2; };
     return F;
 }(B));
 var G = /** @class */ (function () {

@@ -50,7 +50,6 @@ var Point = /** @class */ (function () {
 }());
 var Point3D = /** @class */ (function (_super) {
     __extends(Point3D, _super);
-
     function Point3D(x, y, z, m) {
         var _this = _super.call(this, x, y) || this;
         _this.z = z;

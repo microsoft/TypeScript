@@ -36,21 +36,28 @@ define(["require", "exports"], function (require, exports) {
         function Collection() {
         }
         return Collection;
-    }());exports.Collection = Collection;
+    }());
+    exports.Collection = Collection;
     var List = /** @class */ (function (_super) {
-        __extends(List, _super);function List() {
+        __extends(List, _super);
+        function List() {
             return _super !== null && _super.apply(this, arguments) || this;
-        }List.prototype.Bar = function () { };
+        }
+        List.prototype.Bar = function () { };
         return List;
-    }(Collection));exports.List = List;
+    }(Collection));
+    exports.List = List;
     var CollectionItem = /** @class */ (function () {
         function CollectionItem() {}
         return CollectionItem;
-    }());exports.CollectionItem = CollectionItem;
+    }());
+    exports.CollectionItem = CollectionItem;
     var ListItem = /** @class */ (function (_super) {
-        __extends(ListItem, _super);function ListItem() {
+        __extends(ListItem, _super);
+        function ListItem() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return ListItem;
-    }(CollectionItem));exports.ListItem = ListItem;
+    }(CollectionItem));
+    exports.ListItem = ListItem;
 });

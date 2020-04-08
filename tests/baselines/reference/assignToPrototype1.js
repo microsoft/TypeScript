@@ -7,5 +7,6 @@ Point.prototype.add = function(dx, dy) {
 };
 
 //// [assignToPrototype1.js]
+
 Point.prototype.add = function (dx, dy) {
 };

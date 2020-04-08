@@ -48,6 +48,7 @@ class C {
     constructor(x) {
     }
 }
+
 var y = 1;
 class D {
     b = y; // ok

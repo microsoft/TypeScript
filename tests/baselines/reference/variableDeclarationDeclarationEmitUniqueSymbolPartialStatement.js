@@ -17,7 +17,8 @@ var Foo = /** @class */ (function () {
         this[_a] = value;
     }
     return Foo;
-}());exports.Foo = Foo;
+}());
+exports.Foo = Foo;
 _a = key;
 
 

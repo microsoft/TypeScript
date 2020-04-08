@@ -20,5 +20,6 @@ var s = "" + n;
 
 var numericIndex = (_a = {}, _a[n] = 1, _a);
 numericIndex[n].toFixed();
+
 var stringIndex = (_b = {}, _b[s] = 1, _b);
 stringIndex[s].toFixed();

@@ -12,6 +12,7 @@ else {
 
 //// [symbolType17.js]
 var x;
+
 x;
 if (typeof x === "symbol") {
     x;

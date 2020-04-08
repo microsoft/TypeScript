@@ -56,6 +56,7 @@ function foo4(_a) {
     var numberA3 = _a[0], robotAInfo = _a.slice(1);
     console.log(robotAInfo);
 }
+
 foo1(robotA);
 foo1([2, "trimmer", "trimming"]);
 

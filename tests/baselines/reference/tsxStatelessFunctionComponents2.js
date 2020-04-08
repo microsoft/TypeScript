@@ -60,9 +60,11 @@ function Greet(x) {
 }
 
 var BigGreeter = /** @class */ (function (_super) {
-    __extends(BigGreeter, _super);function BigGreeter() {
+    __extends(BigGreeter, _super);
+    function BigGreeter() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }BigGreeter.prototype.render = function () {
+    }
+    BigGreeter.prototype.render = function () {
         return <div></div>;
     };
     return BigGreeter;

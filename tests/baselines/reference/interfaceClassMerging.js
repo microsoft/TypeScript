@@ -57,15 +57,18 @@ var __extends = (this && this.__extends) || (function () {
 
 var Foo = /** @class */ (function () {
     function Foo() {
-    }Foo.prototype.additionalMethod = function (a) {
+    }
+    Foo.prototype.additionalMethod = function (a) {
         return this.method(0);
     };
     return Foo;
 }());
 var Bar = /** @class */ (function (_super) {
-    __extends(Bar, _super);function Bar() {
+    __extends(Bar, _super);
+    function Bar() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Bar.prototype.method = function (a) {
+    }
+    Bar.prototype.method = function (a) {
         return this.optionalProperty;
     };
     return Bar;
@@ -77,6 +80,8 @@ bar.property;
 bar.optionalProperty;
 bar.additionalProperty;
 bar.additionalMethod(2);
+
 var obj;
+
 bar = obj;
 obj = bar;

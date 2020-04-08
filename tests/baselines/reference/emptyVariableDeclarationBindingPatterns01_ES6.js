@@ -51,6 +51,7 @@
 //// [emptyVariableDeclarationBindingPatterns01_ES6.js]
 (function () {
     var a;
+
     var {} = a;
     let {} = a;
     const {} = a;
@@ -77,6 +78,7 @@
 
 (function () {
     const ns = [];
+
     for (var {} of ns) {
     }
 

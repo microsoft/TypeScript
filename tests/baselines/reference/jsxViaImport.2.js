@@ -41,9 +41,11 @@ exports.__esModule = true;
 /// <reference path="component.d.ts" />
 var BaseComponent_1 = require("BaseComponent");
 var TestComponent = /** @class */ (function (_super) {
-    __extends(TestComponent, _super);function TestComponent() {
+    __extends(TestComponent, _super);
+    function TestComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }TestComponent.prototype.render = function () {
+    }
+    TestComponent.prototype.render = function () {
         return <BaseComponent_1.default />;
     };
     return TestComponent;

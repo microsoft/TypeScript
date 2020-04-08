@@ -59,7 +59,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 }
             });
         }); };
-    }Foo.prototype.a = function () {
+    }
+    Foo.prototype.a = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {

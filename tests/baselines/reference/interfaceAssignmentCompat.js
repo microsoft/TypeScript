@@ -62,7 +62,6 @@ var M;
         Color[Color["Brown"] = 2] = "Brown";
     })(Color = M.Color || (M.Color = {}));
 
-
     function CompareEyes(a, b) {
         return a.color - b.color;
     }
@@ -74,11 +73,13 @@ var M;
     function test() {
         var x = [];
         var result = "";
+
         x[0] = { color: Color.Brown };
         x[1] = { color: Color.Blue };
         x[2] = { color: Color.Green };
 
         x = x.sort(CompareYeux); // parameter mismatch
+
         // type of z inferred from specialized array type
         var z = x.sort(CompareEyes); // ok
 

@@ -21,6 +21,7 @@ Foo.d;
 Foo.e;
 
 //// [ambientModuleWithTemplateLiterals.js]
+
 Foo.a;
 Foo.b;
 Foo.c;

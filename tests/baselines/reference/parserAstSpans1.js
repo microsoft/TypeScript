@@ -235,7 +235,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var c1 = /** @class */ (function () {
     function c1() {
-    }c1.prototype.i1_f1 = function () {
+    }
+    c1.prototype.i1_f1 = function () {
     };
 
 
@@ -284,6 +285,7 @@ i1_i.i1_l1();
 i1_i.i1_nc_l1();
 i1_i.l1();
 i1_i.nc_l1();
+
 var c2 = /** @class */ (function () {
     /** c2 constructor*/
     function c2(a) {
@@ -379,7 +381,8 @@ c2_i.c2_nc_f1();
 c2_i.f1();
 c2_i.nc_f1();
 var c4 = /** @class */ (function (_super) {
-    __extends(c4, _super);function c4() {
+    __extends(c4, _super);
+    function c4() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return c4;
@@ -414,6 +417,7 @@ i2_i.i2_l1();
 i2_i.i2_nc_l1();
 i2_i.l1();
 i2_i.nc_l1();
+
 /**c5 class*/
 var c5 = /** @class */ (function () {
     function c5() {
@@ -422,7 +426,6 @@ var c5 = /** @class */ (function () {
 }());
 var c6 = /** @class */ (function (_super) {
     __extends(c6, _super);
-
     function c6() {
         var _this = _super.call(this) || this;
         _this.d = _super.prototype.b;

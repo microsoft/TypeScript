@@ -32,12 +32,10 @@ c = d; // Should not be allowed
 // Check that we only cache results of type comparisons that are free of assumptions
 
 
-
-
-
 var a;
 var b;
 var c;
 var d;
+
 a = b;
 c = d; // Should not be allowed

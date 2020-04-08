@@ -24,14 +24,20 @@ function fn2(x: D): List<D> { return asList(x); }
 // repro from #22093
 var A;
 (function (A) {
-    A["one"] = "one";A["two"] = "two";
+    A["one"] = "one";
+    A["two"] = "two";
 })(A || (A = {}));
 ;
 var B;
 (function (B) {
-    B["foo"] = "foo";B["bar"] = "bar";
+    B["foo"] = "foo";
+    B["bar"] = "bar";
 })(B || (B = {}));
 ;
+
+
+
+
 var List = /** @class */ (function () {
     function List() {
         this.items = [];

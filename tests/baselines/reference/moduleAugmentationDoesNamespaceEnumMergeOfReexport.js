@@ -49,6 +49,6 @@ __exportStar(require("./file"), exports);
 exports.__esModule = true;
 var ns = require("./reexport");
 
-
 var g = ns.Root.A;
+
 f.x;

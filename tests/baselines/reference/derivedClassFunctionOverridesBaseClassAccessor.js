@@ -43,9 +43,11 @@ var __extends = (this && this.__extends) || (function () {
 }());
 // error
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);function Derived() {
+    __extends(Derived, _super);
+    function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Derived.prototype.x = function () {
+    }
+    Derived.prototype.x = function () {
         return 1;
     };
     return Derived;

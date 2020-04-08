@@ -66,18 +66,14 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 
-
-
-
-
-
 var P = /** @class */ (function () {
     function P() {
     }
     return P;
 }());
 var Q = /** @class */ (function (_super) {
-    __extends(Q, _super);function Q() {
+    __extends(Q, _super);
+    function Q() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Q;

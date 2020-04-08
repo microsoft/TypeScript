@@ -108,10 +108,12 @@ var e2 = t[2]; // boolean
 var e3 = t[3]; // boolean
 var ex = t[x]; // number | string | boolean
 
+
 f0([]); // Error
 f0([1]);
 f0([1, 2, 3]);
 f0([1, "hello", true]);
+
 
 f1([function (x) { return x * 2; }, function (x) { return x.length; }, function (x) { return x.charCodeAt(0); }]);
 f2(function (x) { return x * 2; }, function (x) { return x.length; }, function (x) { return x.charCodeAt(0); });

@@ -25,7 +25,8 @@ exports.C = void 0;
 var C = /** @class */ (function () {
     function C() {}
     return C;
-}());exports.C = C;
+}());
+exports.C = C;
 //// [typeofAmbientExternalModules_1.js]
 "use strict";
 var D = /** @class */ (function () {

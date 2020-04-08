@@ -4,5 +4,6 @@ define(["require", "exports"], function (require, exports) {
     exports.call = void 0;
     function call() {
         return "success";
-    }exports.call = call;
+    }
+    exports.call = call;
 });

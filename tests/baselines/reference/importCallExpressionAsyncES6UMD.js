@@ -55,16 +55,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         return __awaiter(this, void 0, void 0, function* () {
             const req = yield __syncRequire ? Promise.resolve().then(() => require('./test')) : new Promise((resolve_1, reject_1) => { require(['./test'], resolve_1, reject_1); }); // ONE
         });
-    }exports.fn = fn;
-
+    }
+    exports.fn = fn;
     class cl1 {
         m() {
             return __awaiter(this, void 0, void 0, function* () {
                 const req = yield __syncRequire ? Promise.resolve().then(() => require('./test')) : new Promise((resolve_2, reject_2) => { require(['./test'], resolve_2, reject_2); }); // TWO
             });
         }
-    }exports.cl1 = cl1;
-
+    }
+    exports.cl1 = cl1;
     exports.obj = {
         m: () => __awaiter(void 0, void 0, void 0, function* () {
             const req = yield __syncRequire ? Promise.resolve().then(() => require('./test')) : new Promise((resolve_3, reject_3) => { require(['./test'], resolve_3, reject_3); }); // THREE
@@ -79,8 +79,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     const req = yield __syncRequire ? Promise.resolve().then(() => require('./test')) : new Promise((resolve_4, reject_4) => { require(['./test'], resolve_4, reject_4); }); // FOUR
                 })
             };
-        }}exports.cl2 = cl2;
-
+        }}
+    exports.cl2 = cl2;
     exports.l = () => __awaiter(void 0, void 0, void 0, function* () {
         const req = yield __syncRequire ? Promise.resolve().then(() => require('./test')) : new Promise((resolve_5, reject_5) => { require(['./test'], resolve_5, reject_5); }); // FIVE
     });

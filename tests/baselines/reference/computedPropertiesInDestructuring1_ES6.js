@@ -49,11 +49,13 @@ let { [foo2()]: bar3 } = { bar: "bar" };
 
 let [{ [foo]: bar4 }] = [{ bar: "bar" }];
 let [{ [foo2()]: bar5 }] = [{ bar: "bar" }];
+
 function f1({ ["bar"]: x }) { }
 function f2({ [foo]: x }) { }
 function f3({ [foo2()]: x }) { }
 function f4([{ [foo]: x }]) { }
 function f5([{ [foo2()]: x }]) { }
+
 // report errors on type errors in computed properties used in destructuring
 let [{ [foo()]: bar6 }] = [{ bar: "bar" }];
 let [{ [foo.toExponential()]: bar7 }] = [{ bar: "bar" }];

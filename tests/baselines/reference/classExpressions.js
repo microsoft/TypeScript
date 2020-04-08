@@ -13,7 +13,8 @@ var x = /** @class */ (function () {
     function B() {
         this.func = function () {
         };
-    }B.prototype.onStart = function () {
+    }
+    B.prototype.onStart = function () {
     };
     return B;
 }());

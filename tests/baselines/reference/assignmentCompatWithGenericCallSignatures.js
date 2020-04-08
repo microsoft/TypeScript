@@ -12,5 +12,6 @@ g = f; // ok
 
 var f;
 var g;
+
 f = g; // ok
 g = f; // ok

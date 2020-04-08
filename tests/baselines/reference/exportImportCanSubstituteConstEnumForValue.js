@@ -67,7 +67,6 @@ var MsPortalFx;
         (function (Dialogs) {
 
 
-
             function someExportedFunction() {
             }
             Dialogs.someExportedFunction = someExportedFunction;

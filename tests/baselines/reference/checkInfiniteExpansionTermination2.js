@@ -22,7 +22,6 @@ function fn<T>() {
 // Before fix this code would cause infinite loop
 
 
-
 function fn() {
     var values = [];
     // Hang when using <T>, but not <any>

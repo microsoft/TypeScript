@@ -25,7 +25,8 @@ exports.__esModule = true;
 exports.f = void 0;
 function f() {
     return {};
-}exports.f = f;
+}
+exports.f = f;
 
 
 //// [main.d.ts]

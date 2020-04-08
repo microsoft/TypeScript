@@ -38,7 +38,8 @@ var Test;
 (function (Test) {
     var Bug = /** @class */ (function () {
         function Bug() {
-        }Bug.prototype.onEnter = function (line, state, offset) {
+        }
+        Bug.prototype.onEnter = function (line, state, offset) {
             var lineTokens = this.tokenize(line, state, true);
             var tokens = lineTokens.tokens;
             if (tokens.length === 0) {

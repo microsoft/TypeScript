@@ -51,6 +51,7 @@ var cnd;
 var cod;
 var x;
 var y;
+
 a = anb; // Ok
 b = anb; // Ok
 anb = a;

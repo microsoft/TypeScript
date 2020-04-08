@@ -23,7 +23,8 @@ Sammy.bar();
 //// [staticMemberExportAccess.js]
 var Sammy = /** @class */ (function () {
     function Sammy() {
-    }Sammy.prototype.foo = function () { return "hi"; };
+    }
+    Sammy.prototype.foo = function () { return "hi"; };
     Sammy.bar = function () {
         return -1;
     };
@@ -38,4 +39,5 @@ var r1 = instanceOfClassSammy.foo(); // r1 is string
 var r2 = $.sammy.foo();
 var r3 = $.sammy.bar(); // error
 var r4 = $.sammy.x; // error
+
 Sammy.bar();

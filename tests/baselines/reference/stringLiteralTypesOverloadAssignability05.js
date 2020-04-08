@@ -27,6 +27,7 @@ function g(x) {
 
 var a = f;
 var b = g;
+
 a = b;
 b = a;
 

@@ -76,19 +76,23 @@ var __extends = (this && this.__extends) || (function () {
 
 var C1 = /** @class */ (function () {
     function C1() {
-    }C1.prototype.IM1 = function () { return null; };
+    }
+    C1.prototype.IM1 = function () { return null; };
     C1.prototype.C1M1 = function () { return null; };
     return C1;
 }());
 var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);function C2() {
+    __extends(C2, _super);
+    function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }C2.prototype.C2M1 = function () { return null; };
+    }
+    C2.prototype.C2M1 = function () { return null; };
     return C2;
 }(C1));
 var C3 = /** @class */ (function () {
     function C3() {
-    }C3.prototype.CM3M1 = function () { return 3; };
+    }
+    C3.prototype.CM3M1 = function () { return 3; };
     return C3;
 }());
 /*
@@ -118,6 +122,7 @@ var arr_i1_2 = [];
 var arr_c1_2 = [];
 var arr_c2_2 = [];
 var arr_c3 = [];
+
 // "clean up error" occurs at this point
 arr_c3 = arr_c2_2; // should be an error - is
 arr_c3 = arr_c1_2; // should be an error - is

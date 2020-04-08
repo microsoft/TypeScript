@@ -26,6 +26,7 @@ switch (y) {
 var x;
 var y;
 
+
 switch (y) {
     case "foo", x:
         break;

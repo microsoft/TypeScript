@@ -40,10 +40,10 @@ var foo;
     }());
     var C2 = /** @class */ (function () {
         function C2() {
-        }C2.prototype.test = function () { return true; };
+        }
+        C2.prototype.test = function () { return true; };
         return C2;
     }());
-
 
 })(foo || (foo = {}));
 var y = foo.g; // Exported variable 'y' has or is using private type 'foo.C2'.

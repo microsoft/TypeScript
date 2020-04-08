@@ -102,17 +102,23 @@ var s;
 // Enum with only constant members
 var E2;
 (function (E2) {
-    E2[E2["A"] = 1] = "A";E2[E2["B"] = 2] = "B";E2[E2["C"] = 3] = "C";
+    E2[E2["A"] = 1] = "A";
+    E2[E2["B"] = 2] = "B";
+    E2[E2["C"] = 3] = "C";
 })(E2 || (E2 = {}));
 // Enum with only computed members
 var E3;
 (function (E3) {
-    E3[E3["X"] = 'foo'.length] = "X";E3[E3["Y"] = 7] = "Y";E3[E3["Z"] = +'foo'] = "Z";
+    E3[E3["X"] = 'foo'.length] = "X";
+    E3[E3["Y"] = 7] = "Y";
+    E3[E3["Z"] = +'foo'] = "Z";
 })(E3 || (E3 = {}));
 // Enum with constant members followed by computed members
 var E4;
 (function (E4) {
-    E4[E4["X"] = 0] = "X";E4[E4["Y"] = 1] = "Y";E4[E4["Z"] = 'foo'.length] = "Z";
+    E4[E4["X"] = 0] = "X";
+    E4[E4["Y"] = 1] = "Y";
+    E4[E4["Z"] = 'foo'.length] = "Z";
 })(E4 || (E4 = {}));
 // Enum with > 2 constant members with no initializer for first member, non zero initializer for second element
 var E5;

@@ -171,6 +171,7 @@ var propertyNested = { a: __assign({}, o) };
 var op = { get a() { return 6; } };
 var getter = __assign(__assign({}, op), { c: 7 });
 getter.a = 12;
+
 // functions result in { }
 var spreadFunc = __assign({}, (function () { }));
 
@@ -206,7 +207,8 @@ var spreadAny = __assign({}, anything);
 var C = /** @class */ (function () {
     function C() {
         this.p = 1;
-    }C.prototype.m = function () { };
+    }
+    C.prototype.m = function () { };
     return C;
 }());
 var c = new C();
@@ -215,6 +217,7 @@ var spreadC = __assign({}, c);
 // own methods are enumerable
 var cplus = __assign(__assign({}, c), { plus: function () { return this.p + 1; } });
 cplus.plus();
+
 // new field's type conflicting with existing field is OK
 var changeTypeAfter = __assign(__assign({}, o), { a: 'wrong type?' });
 var changeTypeBoth = __assign(__assign({}, o), swap);

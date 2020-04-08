@@ -52,7 +52,6 @@ define(["require", "exports", "react"], function (require, exports, React) {
     }
 
 
-
     // OK
     var i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={function (val) { }}/>;
 });

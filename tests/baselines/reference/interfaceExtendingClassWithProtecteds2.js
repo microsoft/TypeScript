@@ -39,7 +39,6 @@ var Bar = /** @class */ (function () {
     return Bar;
 }());
 
-
 var Baz = /** @class */ (function () {
     function Baz() {
     }

@@ -85,6 +85,7 @@ System.register(["./file2"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
+
             use(moduleB.value);
             use(moduleB.moduleC);
             use(moduleB.moduleCStar);

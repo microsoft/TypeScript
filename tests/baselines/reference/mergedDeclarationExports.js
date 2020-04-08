@@ -33,8 +33,8 @@ exports.b = 1;
 
 exports.t = 0;
 
-
 var d = /** @class */ (function () {
     function d() {}
     return d;
-}());exports.d = d;
+}());
+exports.d = d;

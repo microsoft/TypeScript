@@ -68,6 +68,7 @@ var Foo;
             for (var i = 0; i < restGreetings.length; i++) {
                 greeters.push(new Greeter(restGreetings[i]));
             }
+
             return greeters;
         }
 

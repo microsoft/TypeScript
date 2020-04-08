@@ -23,7 +23,3 @@ interface I4 {
 }
 
 //// [symbolProperty60.js]
-
-
-
-

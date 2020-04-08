@@ -26,6 +26,7 @@ var C4a = /** @class */ (function () {
 }());
 void {};
 var C5a = /** @class */ (function (_super) {
-    __extends(C5a, _super);function C5a() {}
+    __extends(C5a, _super);
+    function C5a() {}
     return C5a;
 }(null));

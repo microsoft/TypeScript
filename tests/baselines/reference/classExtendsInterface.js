@@ -23,7 +23,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var A = /** @class */ (function (_super) {
-    __extends(A, _super);function A() {
+    __extends(A, _super);
+    function A() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return A;
@@ -33,7 +34,8 @@ var B = /** @class */ (function () {
     return B;
 }());
 var A2 = /** @class */ (function (_super) {
-    __extends(A2, _super);function A2() {
+    __extends(A2, _super);
+    function A2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return A2;

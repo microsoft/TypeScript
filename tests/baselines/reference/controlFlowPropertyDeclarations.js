@@ -162,6 +162,7 @@ for (var propname in HTMLDOMPropertyConfig.Properties) {
     if (!HTMLDOMPropertyConfig.Properties.hasOwnProperty(propname)) {
         continue;
     }
+
     var mapFrom = HTMLDOMPropertyConfig.DOMAttributeNames[propname] || propname.toLowerCase();
 }
 
@@ -190,6 +191,7 @@ function repeatString(string, times) {
     }
     return repeated;
 }
+
 /**
  * Determine if the string ends with the specified substring.
  *
@@ -241,6 +243,7 @@ function isEmpty(string) {
 function isConvertiblePixelValue(value) {
     return /^\d+px$/.test(value);
 }
+
 var HTMLtoJSX = /** @class */ (function () {
     function HTMLtoJSX() {
         var _this = this;
@@ -256,7 +259,9 @@ var HTMLtoJSX = /** @class */ (function () {
                 // to a "defaultValue" attribute and "dangerouslySetInnerHTML" attribute respectively.
                 return;
             }
+
             var text = '';
+
             if (_this._inPreTag) {
                 // If this text is contained within a <pre>, we need to ensure the JSX
                 // whitespace coalescing rules don't eat the whitespace. This means
@@ -276,8 +281,10 @@ var HTMLtoJSX = /** @class */ (function () {
         };
     }
     return HTMLtoJSX;
-}());exports.HTMLtoJSX = HTMLtoJSX;
+}());
+exports.HTMLtoJSX = HTMLtoJSX;
 ;
+
 /**
  * Handles parsing of inline styles
  */
@@ -293,4 +300,5 @@ var StyleParser = /** @class */ (function () {
         };
     }
     return StyleParser;
-}());exports.StyleParser = StyleParser;
+}());
+exports.StyleParser = StyleParser;

@@ -85,8 +85,10 @@ let c6 = 10n;
 let c7 = -10n;
 let c8 = true;
 let c9 = false;
+
 let vv1 = v1;
 let vc1 = c1;
+
 let a1 = [];
 let a2 = [1, 2, 3];
 let a3 = [10, 'hello', true];
@@ -96,6 +98,7 @@ let a6 = [...a5];
 let a7 = [...a6];
 let a8 = ['abc', ...a7];
 let a9 = [...a8];
+
 
 let o1 = { x: 10, y: 20 };
 let o2 = { a: 1, 'b': 2, ['c']: 3, d() { }, ['e' + '']: 4 };

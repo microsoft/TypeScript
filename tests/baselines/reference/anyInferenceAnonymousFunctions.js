@@ -19,11 +19,13 @@ paired.map(function (c2) { return c2.count; });
 
 //// [anyInferenceAnonymousFunctions.js]
 var paired;
+
 paired.reduce(function (a1, a2) {
 
     return a1.concat({});
 
 }, []);
+
 paired.reduce(function (b1, b2) {
 
     return b1.concat({});

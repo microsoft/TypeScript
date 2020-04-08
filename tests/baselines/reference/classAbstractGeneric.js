@@ -44,43 +44,48 @@ var __extends = (this && this.__extends) || (function () {
     return A;
 }());
 var B = /** @class */ (function (_super) {
-    __extends(B, _super);function B() {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 var C = /** @class */ (function (_super) {
-    __extends(C, _super);function C() {
+    __extends(C, _super);
+    function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(A)); // error -- inherits abstract methods
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);// error -- inherits abstract methods
+    __extends(D, _super);
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
 }(A)); // error -- inherits abstract methods
 var E = /** @class */ (function (_super) {
-    __extends(E, _super);// error -- inherits abstract methods
+    __extends(E, _super);
     function E() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }// error -- doesn't implement bar
+    }
     E.prototype.foo = function () { return this.t; };
     return E;
 }(A));
 var F = /** @class */ (function (_super) {
-    __extends(F, _super);function F() {
+    __extends(F, _super);
+    function F() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }// error -- doesn't implement foo
+    }
     F.prototype.bar = function (t) { };
     return F;
 }(A));
 var G = /** @class */ (function (_super) {
-    __extends(G, _super);function G() {
+    __extends(G, _super);
+    function G() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }G.prototype.foo = function () { return this.t; };
+    }
+    G.prototype.foo = function () { return this.t; };
     G.prototype.bar = function (t) { };
     return G;
 }(A));

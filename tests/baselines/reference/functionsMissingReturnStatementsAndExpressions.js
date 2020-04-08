@@ -204,6 +204,8 @@ function f15() {
     throw null;
     return;
 }
+
+
 function f16() {
     // Okay; not type annotated.
 }
@@ -216,6 +218,7 @@ function f17() {
 function f18() {
     return "Okay, not type annotated.";
 }
+
 function f19() {
     // Okay; function return type is union containing void
 }

@@ -18,5 +18,4 @@ exports.__esModule = true;
 var React = require("react");
 
 
-
 var x = <MyComp a={10} b="hi"/>;

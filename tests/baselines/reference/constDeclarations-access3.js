@@ -73,6 +73,7 @@ M["x"] = 0;
 
 // OK
 var a = M.x + 1;
+
 function f(v) { }
 f(M.x);
 

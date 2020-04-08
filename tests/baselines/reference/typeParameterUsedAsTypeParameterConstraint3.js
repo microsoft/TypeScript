@@ -55,7 +55,6 @@ interface I2<V, T, U> {
 // Object types
 
 
-
 //interface I < T, U extends T, V extends U > {
 //    x: T;
 //    y: U;

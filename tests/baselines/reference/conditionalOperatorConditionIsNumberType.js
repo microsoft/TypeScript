@@ -78,6 +78,7 @@ var exprBoolean2;
 var exprNumber2;
 var exprString2;
 var exprIsObject2;
+
 //Cond is a number type variable
 condNumber ? exprAny1 : exprAny2;
 condNumber ? exprBoolean1 : exprBoolean2;
@@ -99,12 +100,15 @@ condNumber ? exprString1 : exprBoolean1; // Union
 //Cond is a number type expression
 function foo() { return 1; };
 var array = [1, 2, 3];
+
 1 * 0 ? exprAny1 : exprAny2;
 1 + 1 ? exprBoolean1 : exprBoolean2;
 "string".length ? exprNumber1 : exprNumber2;
 foo() ? exprString1 : exprString2;
 foo() / array[1] ? exprIsObject1 : exprIsObject2;
 foo() ? exprString1 : exprBoolean1; // Union
+
+
 //Results shoud be same as Expr1 and Expr2
 var resultIsAny1 = condNumber ? exprAny1 : exprAny2;
 var resultIsBoolean1 = condNumber ? exprBoolean1 : exprBoolean2;

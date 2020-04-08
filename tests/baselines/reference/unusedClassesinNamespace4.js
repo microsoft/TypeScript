@@ -41,7 +41,8 @@ var Validation;
     }());
     Validation.c2 = c2;
     var c3 = /** @class */ (function (_super) {
-        __extends(c3, _super);function c3() {
+        __extends(c3, _super);
+        function c3() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return c3;

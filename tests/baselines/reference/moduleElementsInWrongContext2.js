@@ -33,8 +33,8 @@ function blah () {
 //// [moduleElementsInWrongContext2.js]
 function blah() {
 
-
     export = M;
+
     var v;
     function foo() { }
     export * from "ambient";

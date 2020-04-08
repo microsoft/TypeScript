@@ -6,6 +6,7 @@ class Foo {
 //// [parserErrorRecovery_ParameterList6.js]
 var Foo = /** @class */ (function () {
     function Foo() {
-    }Foo.prototype.banana = function (x) { };
+    }
+    Foo.prototype.banana = function (x) { };
     return Foo;
 }());

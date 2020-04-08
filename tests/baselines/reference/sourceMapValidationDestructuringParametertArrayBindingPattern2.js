@@ -56,6 +56,7 @@ function foo4(_a) {
     var multiRobotAInfo = _a.slice(0);
     console.log(multiRobotAInfo);
 }
+
 foo1(robotA);
 foo1(["roomba", ["vacuum", "mopping"]]);
 

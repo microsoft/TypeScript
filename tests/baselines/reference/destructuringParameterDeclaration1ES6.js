@@ -107,9 +107,9 @@ function e6({x: [number, number, number]}) { }  // error, duplicate identifier;
 // If the declaration includes a type annotation, the parameter is of that type
 function a1([a, b, [[c]]]) { }
 function a2(o) { }
-function a3({ j, k, l: { m, n }, q: [a, b, c] }) { }
-;
+function a3({ j, k, l: { m, n }, q: [a, b, c] }) { };
 function a4({ x, a }) { }
+
 a1([1, 2, [["world"]]]);
 a1([1, 2, [["world"]], 3]);
 
@@ -120,6 +120,8 @@ a1([1, 2, [["world"]], 3]);
 function b1(z = [undefined, null]) { };
 function b2(z = null, o = { x: 0, y: undefined }) { }
 function b3({ z: { x, y: { j } } } = { z: { x: "hi", y: { j: 1 } } }) { }
+
+
 function b6([a, z, y] = [undefined, null, undefined]) { }
 function b7([[a], b, [[c, d]]] = [[undefined], undefined, [[undefined, undefined]]]) { }
 
@@ -152,6 +154,11 @@ c3({ b: 1 }); // Implied type is { b: number|string }.
 c5([1, 2, [["string"]]]); // Implied type is is [any, any, [[any]]]
 c5([1, 2, [["string"]], false, true]); // Implied type is is [any, any, [[any]]]
 
+
+
+
+
+
 class C2 {
     constructor() { }
     d3() { }
@@ -164,6 +171,7 @@ class C3 {
     d4({ x, y, z }) { }
     e0([a, b, c]) { }
 }
+
 function d5({ x, y } = { x: 1, y: 2 }) { }
 d5(); // Parameter is optional as its declaration included an initializer
 
@@ -179,4 +187,5 @@ function e2({ x }) { } // x is type number
 function e3({ x }) { } // x is an optional with type number
 function e4({ x: [number, string, any] }) { } // x has type [any, any, any]
 function e5({ x: [a, b, c] }) { } // x has type [any, any, any]
+
 function e6({ x: [number, number, number] }) { } // error, duplicate identifier;

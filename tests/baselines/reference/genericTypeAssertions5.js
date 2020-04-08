@@ -27,8 +27,6 @@ function foo2<T extends A>(x: T) {
 
 //// [genericTypeAssertions5.js]
 
-
-
 var a;
 var b;
 var c;

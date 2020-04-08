@@ -17,6 +17,7 @@ var A = /** @class */ (function () {
     return A;
 }());
 A.hasOwnProperty('foo');
+
 var B = /** @class */ (function () {
     function B() {}
     return B;

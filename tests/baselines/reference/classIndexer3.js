@@ -29,7 +29,8 @@ var __extends = (this && this.__extends) || (function () {
     return C123;
 }());
 var D123 = /** @class */ (function (_super) {
-    __extends(D123, _super);function D123() {
+    __extends(D123, _super);
+    function D123() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D123;

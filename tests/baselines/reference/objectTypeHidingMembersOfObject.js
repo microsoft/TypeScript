@@ -32,7 +32,8 @@ var r4: void = b.valueOf();
 
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.valueOf = function () { };
+    }
+    C.prototype.valueOf = function () { };
     return C;
 }());
 var c;

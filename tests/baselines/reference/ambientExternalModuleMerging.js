@@ -25,4 +25,3 @@ define(["require", "exports", "M"], function (require, exports, M) {
     var y = M.y;
 });
 //// [ambientExternalModuleMerging_declare.js]
-

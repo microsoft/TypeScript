@@ -76,8 +76,6 @@ C.apply(c, [10, "hello", 30]);  // Error
 //// [strictBindCallApply1.js]
 "use strict";
 
-
-
 var f00 = foo.bind(undefined);
 var f01 = foo.bind(undefined, 10);
 var f02 = foo.bind(undefined, 10, "hello");
@@ -131,6 +129,7 @@ var f20 = C.bind(undefined);
 var f21 = C.bind(undefined, 10);
 var f22 = C.bind(undefined, 10, "hello");
 var f23 = C.bind(undefined, 10, 20); // Error
+
 C.call(c, 10, "hello");
 C.call(c, 10); // Error
 C.call(c, 10, 20); // Error

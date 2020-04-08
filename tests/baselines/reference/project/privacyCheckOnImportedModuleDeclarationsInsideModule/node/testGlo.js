@@ -21,7 +21,8 @@ var m2;
     m2.x1 = m2.mExported.me.x;
 
     var class1 = /** @class */ (function (_super) {
-        __extends(class1, _super);function class1() {
+        __extends(class1, _super);
+        function class1() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return class1;
@@ -34,7 +35,8 @@ var m2;
     var x2 = m2.mExported.me.x;
 
     var class2 = /** @class */ (function (_super) {
-        __extends(class2, _super);function class2() {
+        __extends(class2, _super);
+        function class2() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return class2;
@@ -47,7 +49,8 @@ var m2;
     m2.x3 = mNonExported.mne.x;
 
     var class3 = /** @class */ (function (_super) {
-        __extends(class3, _super);function class3() {
+        __extends(class3, _super);
+        function class3() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return class3;
@@ -60,7 +63,8 @@ var m2;
     var x4 = mNonExported.mne.x;
 
     var class4 = /** @class */ (function (_super) {
-        __extends(class4, _super);function class4() {
+        __extends(class4, _super);
+        function class4() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return class4;

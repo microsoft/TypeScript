@@ -31,7 +31,8 @@ foo(import("./0"));
     exports.B = void 0;
     class B {
         print() { return "I am B"; }
-    }exports.B = B;
+    }
+    exports.B = B;
 });
 //// [2.js]
 (function (factory) {

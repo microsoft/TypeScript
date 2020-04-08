@@ -159,6 +159,7 @@ namespace n2 {
 //// [strictFunctionTypesErrors.js]
 "use strict";
 exports.__esModule = true;
+
 f1 = f2; // Ok
 f1 = f3; // Error
 f1 = f4; // Error
@@ -174,6 +175,10 @@ f3 = f4; // Ok
 f4 = f1; // Error
 f4 = f2; // Ok
 f4 = f3; // Error
+
+
+
+
 g1 = g2; // Ok
 g1 = g3; // Error
 g1 = g4; // Error
@@ -189,6 +194,8 @@ g3 = g4; // Ok
 g4 = g1; // Error
 g4 = g2; // Ok
 g4 = g3; // Error
+
+
 h1 = h2; // Ok
 h1 = h3; // Ok
 h1 = h4; // Ok
@@ -204,6 +211,8 @@ h3 = h4; // Ok
 h4 = h1; // Error
 h4 = h2; // Error
 h4 = h3; // Error
+
+
 i1 = i2; // Error
 i1 = i3; // Error
 i1 = i4; // Error
@@ -224,12 +233,19 @@ i4 = i3; // Ok
 animalComparer1 = dogComparer1; // Ok
 dogComparer1 = animalComparer1; // Ok
 
+
 animalComparer2 = dogComparer2; // Error
 dogComparer2 = animalComparer2; // Ok
+
+
+
 
 // Errors below should elaborate the reason for invariance
 animalCrate = dogCrate; // Error
 dogCrate = animalCrate; // Error
+
+
+
 fc1 = fc2; // Error
 fc2 = fc1; // Error
 // Verify that callback parameters aren't loosely checked when types
@@ -238,8 +254,10 @@ var n1;
 (function (n1) {
     var Foo = /** @class */ (function () {
         function Foo() {
-        }Foo.f1 = function (x) { throw "wat"; };
-        Foo.f2 = function (x) { throw "wat"; };;
+        }
+        Foo.f1 = function (x) { throw "wat"; };
+        Foo.f2 = function (x) { throw "wat"; };
+        ;
         return Foo;
     }());
     f1 = f2;

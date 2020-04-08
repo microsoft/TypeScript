@@ -122,11 +122,11 @@ var varWithInitialValue = 30;
 var withComplicatedValue = { x: 30, y: 70, desc: "position" };
 
 
-
 var arrayVar = ['a', 'b'];
 
 var complicatedArrayVar;
 complicatedArrayVar.push({ x: 30, y: 'hello world' });
+
 var n1;
 
 var c;
@@ -164,8 +164,6 @@ var m2;
     m2.C2 = C2;
     var m;
     var b23;
-
-
 })(m2 || (m2 = {}));
 var a22, b22 = 10, c22 = 30;
 var nn;

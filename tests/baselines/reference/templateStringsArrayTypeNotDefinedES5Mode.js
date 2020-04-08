@@ -12,5 +12,7 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     return cooked;
 };function f(x, y, z) {
 }
+
 f({}, 10, 10);
+
 f(__makeTemplateObject(["abcdef", "", "ghijkl"], ["abcdef", "", "ghijkl"]), 1234, 5678);

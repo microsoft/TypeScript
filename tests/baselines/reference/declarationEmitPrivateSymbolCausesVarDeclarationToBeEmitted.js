@@ -16,7 +16,8 @@ var User = /** @class */ (function () {
     function User() {
     }
     return User;
-}());exports.User = User;
+}());
+exports.User = User;
 ;
 
 

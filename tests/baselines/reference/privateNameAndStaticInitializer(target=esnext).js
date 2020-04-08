@@ -12,7 +12,8 @@ let A = /** @class */ (() => {
     class A {constructor() {
             this.#foo = 1;
             this.#prop = 2;
-        }#foo;
+        }
+        #foo;
 
         #prop;
     }

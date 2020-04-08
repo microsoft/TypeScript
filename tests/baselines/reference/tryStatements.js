@@ -36,11 +36,14 @@ function fn() {
 
     try { }
     catch (x) {var x;}
+
     try { }
     finally { }
+
     try { }
     catch (_f) { }
     finally { }
+
     try { }
     catch (z) { }
     finally { }

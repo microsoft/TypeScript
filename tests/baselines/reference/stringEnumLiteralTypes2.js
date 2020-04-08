@@ -101,6 +101,11 @@ function f21(x: Item) {
 
 //// [stringEnumLiteralTypes2.js]
 ;
+
+
+
+
+
 function f1() {
     var a;
     var a;

@@ -140,8 +140,10 @@ false = Math.pow(false, value);
 0 = Math.pow(0, value);
 '' = Math.pow('', value);
 /d+/ = Math.pow(/d+/, value);
+
 // object literals
 {a: 0;}value;
+
 // array literals
 _a = Math.pow(['', ''], value), '' = _a[0], '' = _a[1];
 
@@ -175,8 +177,8 @@ var Derived = /** @class */ (function (_super) {
 // function expression
 function bar1() { }value;
 (
-    function () { });
-value;
+    function () { });value;
+
 // function calls
 foo() = Math.pow(foo(), value);
 

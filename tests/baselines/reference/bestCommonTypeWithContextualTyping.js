@@ -22,7 +22,6 @@ var contextualOr: Contextual = e || e; // Ellement
 
 //// [bestCommonTypeWithContextualTyping.js]
 
-
 var e;
 
 // All of these should pass. Neither type is a supertype of the other, but the RHS should

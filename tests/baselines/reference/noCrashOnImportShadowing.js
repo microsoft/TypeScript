@@ -44,6 +44,8 @@ B.zzz;
 exports.__esModule = true;
 var x = { x: "" };
 B.zzz;
+
 var OriginalB = require("./b");
 OriginalB.zzz;
+
 var y = x;

@@ -15,6 +15,7 @@ function* a() {
     yield;
     yield 0;
 }
+
 function* b() {
     yield;
     yield 0;

@@ -47,7 +47,8 @@ exports.__esModule = true;
 exports.Foo = void 0;
 var Foo = /** @class */ (function () {
     function Foo() {
-    }Foo.prototype.baz = function () {
+    }
+    Foo.prototype.baz = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/];
@@ -55,7 +56,8 @@ var Foo = /** @class */ (function () {
         });
     };
     return Foo;
-}());exports.Foo = Foo;
+}());
+exports.Foo = Foo;
 
 
 //// [declarationEmitPrivateAsync.d.ts]

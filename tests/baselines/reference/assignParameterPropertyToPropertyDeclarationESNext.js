@@ -58,9 +58,11 @@ class C {
         this.foo; // ok
     }
 }
+
 class D extends C {
     quill = this.foo; // ok
 }
+
 class E {
     foo2;
     bar = () => this.foo1 + this.foo2; // both ok
@@ -69,6 +71,7 @@ class E {
         this.foo2 = foo2;
     }
 }
+
 class F {
     Inner = class extends F {
         p2 = this.p1;

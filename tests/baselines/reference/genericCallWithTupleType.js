@@ -29,6 +29,7 @@ i2.tuple1 = [{}];
 
 var i1;
 var i2;
+
 // no error
 i1.tuple1 = ["foo", 5];
 var e1 = i1.tuple1[0]; // string

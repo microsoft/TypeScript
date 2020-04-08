@@ -49,13 +49,15 @@ exports.__esModule = true;
 exports.Test = exports.WithTags = exports.FooItem = exports.circularReference = exports.simpleExample = void 0;
 exports.simpleExample = /** @class */ (function () {
     function simpleExample() {
-    }simpleExample.getTags = function () { };
+    }
+    simpleExample.getTags = function () { };
     simpleExample.prototype.tags = function () { };
     return simpleExample;
 }());
 exports.circularReference = /** @class */ (function () {
     function C() {
-    }C.getTags = function (c) { return c; };
+    }
+    C.getTags = function (c) { return c; };
     C.prototype.tags = function (c) { return c; };
     return C;
 }());
@@ -63,26 +65,33 @@ exports.circularReference = /** @class */ (function () {
 // repro from #15066
 var FooItem = /** @class */ (function () {
     function FooItem() {
-    }FooItem.prototype.foo = function () { };
+    }
+    FooItem.prototype.foo = function () { };
     return FooItem;
-}());exports.FooItem = FooItem;
+}());
+exports.FooItem = FooItem;
 function WithTags(Base) {
     return /** @class */ (function (_super) {
-        __extends(class_1, _super);function class_1() {
+        __extends(class_1, _super);
+        function class_1() {
             return _super !== null && _super.apply(this, arguments) || this;
-        }class_1.getTags = function () { };
+        }
+        class_1.getTags = function () { };
         class_1.prototype.tags = function () { };
         return class_1;
     }(Base));
-}exports.WithTags = WithTags;
-
+}
+exports.WithTags = WithTags;
 var Test = /** @class */ (function (_super) {
-    __extends(Test, _super);function Test() {
+    __extends(Test, _super);
+    function Test() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Test;
-}(WithTags(FooItem)));exports.Test = Test;
+}(WithTags(FooItem)));
+exports.Test = Test;
 var test = new Test();
+
 Test.getTags();
 test.tags();
 

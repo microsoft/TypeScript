@@ -16,7 +16,8 @@ class C {
 //// [declFilePrivateStatic.js]
 var C = /** @class */ (function () {
     function C() {
-    }C.a = function () { };
+    }
+    C.a = function () { };
     C.b = function () { };
     Object.defineProperty(C, "c", {
         get: function () { return 1; },

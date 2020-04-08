@@ -116,6 +116,7 @@ var M;
     }());
     M.C = C;
     var someModuleVar = 4;
+
     function someModuleFunction() { return 5; }
 })(M || (M = {}));
 (function (M) {

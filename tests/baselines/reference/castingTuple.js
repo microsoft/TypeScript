@@ -65,14 +65,16 @@ var D = /** @class */ (function () {
 }());
 ;
 var E = /** @class */ (function (_super) {
-    __extends(E, _super);function E() {
+    __extends(E, _super);
+    function E() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return E;
 }(A));
 ;
 var F = /** @class */ (function (_super) {
-    __extends(F, _super);function F() {
+    __extends(F, _super);
+    function F() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return F;

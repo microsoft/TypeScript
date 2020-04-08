@@ -27,7 +27,8 @@ exports.__esModule = true;
 
 var Bug = /** @class */ (function () {
     function Bug() {
-    }Bug.prototype.ok = function () {
+    }
+    Bug.prototype.ok = function () {
         this.values = {};
         this.values['comments'] = { italic: true };
     };

@@ -29,7 +29,8 @@ var C = /** @class */ (function () {
     return C;
 }());
 var D = /** @class */ (function () {
-    function D(x, y) {if (x === void 0) { x = 1; }if (y === void 0) { y = x; }
+    function D(x, y) {if (x === void 0) { x = 1; }
+        if (y === void 0) { y = x; }
         this.y = y;
         var z = x;
     }

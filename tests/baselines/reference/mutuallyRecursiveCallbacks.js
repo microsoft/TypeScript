@@ -12,4 +12,5 @@ bar = foo;
 // Repro from #18277
 
 ;
+
 bar = foo;

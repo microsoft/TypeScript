@@ -82,7 +82,8 @@ exports.__esModule = true;
 exports.myClassWithError = void 0;
 exports.myClassWithError = /** @class */ (function () {
     function myClassWithError() {
-    }myClassWithError.prototype.tags = function () { };
+    }
+    myClassWithError.prototype.tags = function () { };
     return myClassWithError;
 }());
 
@@ -102,7 +103,8 @@ exports.myClass = void 0;
 var myClass = /** @class */ (function () {
     function myClass() {}
     return myClass;
-}());exports.myClass = myClass;
+}());
+exports.myClass = myClass;
 
 
 //// [/user/username/projects/solution/app/fileWithoutError.d.ts]

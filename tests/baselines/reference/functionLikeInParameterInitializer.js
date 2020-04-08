@@ -26,18 +26,18 @@ exports.baz3 = exports.baz2 = exports.baz1 = exports.bar = void 0;
 // error
 function bar(func) {if (func === void 0) { func = function () { return foo; }; }
     var foo = "in";
-}// error
+}
 exports.bar = bar;
 // error
 function baz1(func) {if (func === void 0) { func = { f: function () { return foo; } }; }
     var foo = "in";
-}exports.baz1 = baz1;
-
+}
+exports.baz1 = baz1;
 // error
 function baz2(func) {if (func === void 0) { func = function () { return foo; }; }
     var foo = "in";
-}exports.baz2 = baz2;
-
+}
+exports.baz2 = baz2;
 // error
 function baz3(func) {if (func === void 0) { func = /** @class */ (function () {
         function class_1() {
@@ -46,4 +46,5 @@ function baz3(func) {if (func === void 0) { func = /** @class */ (function () {
         return class_1;
     }()); }
     var foo = "in";
-}exports.baz3 = baz3;
+}
+exports.baz3 = baz3;

@@ -76,8 +76,6 @@ const a = <App4 state={100} foo={s => s} />; // TODO: should be number => number
 
 //// [index.jsx]
 
-
-
 app({
     state: 100,
     actions: {
@@ -88,12 +86,10 @@ app({
 
 
 
-
 var y = foo({
     bar: function (x) {
     }
 });
-
 
 
 app2({
@@ -115,8 +111,6 @@ app3({
     ],
     view: function (s, a) { return undefined; }
 });
-
-
 
 
 var a = <App4 state={100} foo={function (s) { return s; }}/>; // TODO: should be number => number, but JSX resolution is missing an inferential pass

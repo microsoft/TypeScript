@@ -41,6 +41,7 @@ function isMissingReturnExpression3() {
 function isMissingReturnExpression4() {
     return;
 }
+
 function isMissingReturnExpression5(x) {
     if (x) {
         return 0;

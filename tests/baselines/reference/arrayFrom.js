@@ -41,7 +41,6 @@ function getEither<T> (in1: Iterable<T>, in2: ArrayLike<T>) {
 // Also tests for #19682
 
 
-
 var inputA = [];
 var inputB = [];
 var inputALike = { length: 0 };

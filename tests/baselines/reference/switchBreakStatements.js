@@ -86,6 +86,7 @@ switch ('') {
                 break SIX;
         }
 }
+
 SEVEN: switch ('') {
     case 'a':
         switch ('') {

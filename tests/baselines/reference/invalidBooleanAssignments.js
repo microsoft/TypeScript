@@ -52,6 +52,7 @@ var h2 = x; // no error
 var M;
 (function (M) {M.a = 1;})(M || (M = {}));
 M = x;
+
 function i(a) {
     a = x;
 }

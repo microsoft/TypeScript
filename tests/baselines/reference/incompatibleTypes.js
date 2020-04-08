@@ -79,7 +79,7 @@ var fp1: () =>any = a => 0;
 
 var C1 = /** @class */ (function () {
     function C1() {
-    }// incompatible on the return type
+    }
     C1.prototype.p1 = function () {
         return "s";
     };
@@ -88,7 +88,7 @@ var C1 = /** @class */ (function () {
 
 var C2 = /** @class */ (function () {
     function C2() {
-    }// incompatible on the param type
+    }
     C2.prototype.p1 = function (n) {
         return 0;
     };
@@ -110,8 +110,12 @@ function if1(a) { }
 var c1;
 var c2;
 if1(c1);
+
+
 function of1(a) { return null; }
+
 of1({ e: 0, f: 0 });
+
 
 function foo(fn) {
 }

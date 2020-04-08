@@ -33,6 +33,7 @@ class MyBase {
     getValue() { return 1; }
     get value() { return 1; }
 }
+
 class MyDerived extends MyBase {
     constructor() {
         super();
@@ -44,6 +45,7 @@ class MyDerived extends MyBase {
 
 var d = new MyDerived();
 var f3 = d.value;
+
 class A {
     get property() { return this._property; }
     set property(value) { this._property = value; }

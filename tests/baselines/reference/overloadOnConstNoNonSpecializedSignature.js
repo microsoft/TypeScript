@@ -8,7 +8,7 @@ class C {
 //// [overloadOnConstNoNonSpecializedSignature.js]
 var C = /** @class */ (function () {
     function C() {
-    }// error, no non-specialized signature in overload list
+    }
     C.prototype.x1 = function (a) { };
     return C;
 }());

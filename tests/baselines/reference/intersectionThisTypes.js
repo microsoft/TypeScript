@@ -46,7 +46,6 @@ function test(label: Label) {
 
 
 
-
 function f1(t) {
     t = t.self();
     t = t.me().self().me();
@@ -57,7 +56,6 @@ function f2(t) {
     t = t.self();
     t = t.me().self().me();
 }
-
 
 
 function test(label) {

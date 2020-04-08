@@ -29,6 +29,7 @@ function h(nonarray) {var args = [];
 }
 function i(array, opt) { }
 var a = [1, 2, 3, 4, 5];
+
 f(a); // OK
 g(a); // OK
 h(a); // OK

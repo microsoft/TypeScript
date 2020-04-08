@@ -240,9 +240,6 @@ function f12(obj, k1, k2, k3) {
 
 
 
-
-
-
 export function getAllEntities(state) {
     const { ids, entities } = state;
     return ids.map(id => entities[id]);

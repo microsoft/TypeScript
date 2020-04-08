@@ -44,7 +44,8 @@ var __extends = (this && this.__extends) || (function () {
     return List;
 }());
 var DerivedList = /** @class */ (function (_super) {
-    __extends(DerivedList, _super);function DerivedList() {
+    __extends(DerivedList, _super);
+    function DerivedList() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return DerivedList;

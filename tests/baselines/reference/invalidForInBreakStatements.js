@@ -42,6 +42,7 @@ for (var x in {}) {
 // All errors
 // naked break not allowed
 break;
+
 // non-existent label
 ONE: for (var x in {})
     break TWO;

@@ -18,8 +18,6 @@ var y = v1.x.a; // 'a' should be of type 'number'
 
 //// [constraints0.js]
 
-
-
 var v1; // should work
 var v2; // should not work
 

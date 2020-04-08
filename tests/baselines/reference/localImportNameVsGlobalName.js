@@ -18,7 +18,10 @@ var Keyboard;
 (function (Keyboard) {
     var Key;
     (function (Key) {
-        Key[Key["UP"] = 0] = "UP";Key[Key["DOWN"] = 1] = "DOWN";Key[Key["LEFT"] = 2] = "LEFT";Key[Key["RIGHT"] = 3] = "RIGHT";
+        Key[Key["UP"] = 0] = "UP";
+        Key[Key["DOWN"] = 1] = "DOWN";
+        Key[Key["LEFT"] = 2] = "LEFT";
+        Key[Key["RIGHT"] = 3] = "RIGHT";
     })(Key = Keyboard.Key || (Keyboard.Key = {}));
 })(Keyboard || (Keyboard = {}));
 var App;

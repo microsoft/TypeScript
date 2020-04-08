@@ -43,16 +43,15 @@ var objL; // error at "y,z"
 var funcL;
 function temp1(arg1) { } // error at "temp1"
 function testFunctionExprC(subReplace) { }
-function testFunctionExprC2(eq) { }
-;
-function testObjLiteral(objLit) { }
-;
-function testFuncLiteral(funcLit) { }
-;
+function testFunctionExprC2(eq) { };
+function testObjLiteral(objLit) { };
+function testFuncLiteral(funcLit) { };
+
 // this should not be an error
 testFunctionExprC2(function (v1, v2) { return 1; });
 testObjLiteral(objL);
 testFuncLiteral(funcL);
+
 var k = temp1(null);
 var result = temp1(arg0);
 var result1 = temp1(anyArray);
@@ -62,6 +61,7 @@ noError(null, []);
 noError(undefined, []);
 noError(null, [null, undefined]);
 noError(undefined, anyArray);
+
 var C = /** @class */ (function () {
     function C(emtpyArray, variable) {
     }

@@ -71,7 +71,6 @@ var Base = /** @class */ (function () {
 }());
 var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
-
     function Derived(y, z) {
         var _this = _super.call(this, 2) || this;
         _this.b = '';
@@ -81,7 +80,8 @@ var Derived = /** @class */ (function (_super) {
     return Derived;
 }(Base));
 var Derived2 = /** @class */ (function (_super) {
-    __extends(Derived2, _super);function Derived2() {
+    __extends(Derived2, _super);
+    function Derived2() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.x = 1;
         _this.y = 'hello';
@@ -101,7 +101,6 @@ var Base2 = /** @class */ (function () {
 }());
 var D = /** @class */ (function (_super) {
     __extends(D, _super);
-
     function D(y, z) {
         var _this = _super.call(this, 2) || this;
         _this.b = null;
@@ -111,7 +110,8 @@ var D = /** @class */ (function (_super) {
     return D;
 }(Base));
 var D2 = /** @class */ (function (_super) {
-    __extends(D2, _super);function D2() {
+    __extends(D2, _super);
+    function D2() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.x = 2;
         _this.y = null;

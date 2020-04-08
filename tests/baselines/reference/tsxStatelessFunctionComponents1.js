@@ -59,6 +59,7 @@ let j4 = <EmptyPropSFC {...{ "data-info": "hi"}} />
 function EmptyPropSFC() {
     return <div> Default Greeting </div>;
 }
+
 function Greet(x) {
     return <div>Hello, {x}</div>;
 }

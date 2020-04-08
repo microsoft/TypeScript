@@ -16,7 +16,8 @@ var Calculator = /** @class */ (function () {
     function Calculator() {
     }
     return Calculator;
-}());exports.Calculator = Calculator;
+}());
+exports.Calculator = Calculator;
 //// [file2.js]
 "use strict";
 exports.__esModule = true;

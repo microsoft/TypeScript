@@ -36,7 +36,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var Base = /** @class */ (function () {
     function Base() {
-    }Base.prototype.fn = function () {
+    }
+    Base.prototype.fn = function () {
         return '';
     };
     Object.defineProperty(Base.prototype, "a", {
@@ -49,9 +50,11 @@ var __extends = (this && this.__extends) || (function () {
 }());
 // error, not a subtype
 var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);function Derived() {
+    __extends(Derived, _super);
+    function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Derived.prototype.fn = function () {
+    }
+    Derived.prototype.fn = function () {
         return '';
     };
     Object.defineProperty(Derived.prototype, "a", {

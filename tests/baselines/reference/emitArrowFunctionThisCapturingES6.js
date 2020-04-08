@@ -18,6 +18,7 @@ foo(() => {
 var f1 = () => {
     this.age = 10;
 };
+
 var f2 = (x) => {
     this.name = x;
 };

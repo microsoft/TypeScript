@@ -83,7 +83,8 @@ var Class;
 (function (Class) {
     var G = /** @class */ (function () {
         function G() {
-        }G.prototype.foo = function (t, t2) {
+        }
+        G.prototype.foo = function (t, t2) {
             var x;
             return x;
         };
@@ -97,7 +98,8 @@ var Class;
 
     var G2 = /** @class */ (function () {
         function G2() {
-        }G2.prototype.foo2 = function (t, t2) {
+        }
+        G2.prototype.foo2 = function (t, t2) {
             var x;
             return x;
         };

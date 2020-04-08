@@ -13,7 +13,8 @@ class Model<D> {
 exports.__esModule = true;
 var Model = /** @class */ (function () {
     function Model() {
-    }Model.prototype.getErrors = function () {
+    }
+    Model.prototype.getErrors = function () {
         return { base: ["some base error"] };
     };
     return Model;

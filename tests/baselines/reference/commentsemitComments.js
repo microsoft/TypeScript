@@ -99,6 +99,7 @@ function foo(/** parameter comment*/ p) {
 var fooVar;
 foo(50);
 fooVar();
+
 /**class comment*/
 var c = /** @class */ (function () {
     /** constructor comment*/

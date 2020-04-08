@@ -53,7 +53,6 @@ exports.__esModule = true;
 exports.__esModule = true;
 exports.Bar = void 0;
 
-
 var Bar = /** @class */ (function () {
     function Bar(input) {}
     return Bar;
@@ -69,7 +68,8 @@ exports.y = { a: "", b: 0, data: { x: 12 } };
 var Bar2 = /** @class */ (function () {
     function Bar2(input) {}
     return Bar2;
-}());exports.Bar2 = Bar2;
+}());
+exports.Bar2 = Bar2;
 exports.shim = {
     Bar: Bar2
 };

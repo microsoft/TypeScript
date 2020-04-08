@@ -79,7 +79,7 @@ var c2;
 var r4 = c2(); // should be an error
 
 var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);// should be an error
+    __extends(C2, _super);
     function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }

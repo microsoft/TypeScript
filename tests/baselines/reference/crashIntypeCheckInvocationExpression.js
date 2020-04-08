@@ -24,7 +24,8 @@ define(["require", "exports"], function (require, exports) {
     }
     exports.compileServer = task(function () {
 
-        var folder = path.join(), fileset = nake.fileSetSync(folder);
+        var folder = path.join(),
+            fileset = nake.fileSetSync(folder);
         return doCompile(fileset, moduleType);
     });
 });

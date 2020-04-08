@@ -38,11 +38,14 @@ const arr = [1, 2, 3];
 let num = arr[1];
 num = arr["1"];
 num = arr[1n]; // should error
+
 let key; // should be type "string | number | symbol"
 key = 123;
 key = "abc";
 key = Symbol();
 key = 123n; // should error
+
+
 // Show correct usage of bigint index: explicitly convert to string
 const bigNum = 0n;
 const typedArray = new Uint8Array(3);

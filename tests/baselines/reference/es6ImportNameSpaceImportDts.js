@@ -15,7 +15,8 @@ exports.c = void 0;
 var c = /** @class */ (function () {
     function c() {}
     return c;
-}());exports.c = c;
+}());
+exports.c = c;
 ;
 //// [client.js]
 "use strict";

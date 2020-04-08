@@ -34,12 +34,14 @@ define(["require", "exports"], function (require, exports) {
             var child = new B(this);
         };
         return A;
-    }());exports.A = A;
+    }());
+    exports.A = A;
 
     var B = /** @class */ (function () {
         function B(parent) {
             this.parent = parent;
         }
         return B;
-    }());exports.B = B;
+    }());
+    exports.B = B;
 });

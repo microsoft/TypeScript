@@ -77,4 +77,5 @@ function createProgram(rootFiles, compilerOptionsJson) {
         return undefined;
     }
     return ts.createProgram(rootFiles, settings.options);
-}exports.createProgram = createProgram;
+}
+exports.createProgram = createProgram;

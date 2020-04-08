@@ -296,7 +296,8 @@ var SuperChild = /** @class */ (function (_super) {
 }(SuperParent));
 var Statics = /** @class */ (function () {
     function Statics() {
-    }Statics.baz = function () {
+    }
+    Statics.baz = function () {
         return "";
     };
     Statics.foo = 1;
@@ -329,7 +330,8 @@ var BaseClassWithConstructor = /** @class */ (function () {
 }());
 // used to test codegen
 var ChildClassWithoutConstructor = /** @class */ (function (_super) {
-    __extends(ChildClassWithoutConstructor, _super);function ChildClassWithoutConstructor() {
+    __extends(ChildClassWithoutConstructor, _super);
+    function ChildClassWithoutConstructor() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return ChildClassWithoutConstructor;

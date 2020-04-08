@@ -18,7 +18,8 @@ for (var v of new StringIterator) { }
 // In ES3/5, you cannot for...of over an arbitrary iterable.
 var StringIterator = /** @class */ (function () {
     function StringIterator() {
-    }StringIterator.prototype.next = function () {
+    }
+    StringIterator.prototype.next = function () {
         return {
             done: true,
             value: ""

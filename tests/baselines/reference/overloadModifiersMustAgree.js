@@ -20,7 +20,8 @@ interface I {
 exports.__esModule = true;
 var baz = /** @class */ (function () {
     function baz() {
-    }baz.prototype.foo = function (bar) { }; // error - access modifiers do not agree
+    }
+    baz.prototype.foo = function (bar) { }; // error - access modifiers do not agree
     return baz;
 }());
 function bar(s) { }

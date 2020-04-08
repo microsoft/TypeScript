@@ -39,7 +39,8 @@ var M;
 })(M || (M = {}));
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.f = function (x) {
+    }
+    C.prototype.f = function (x) {
     };
     return C;
 }());

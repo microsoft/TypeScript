@@ -13,4 +13,5 @@ var C = /** @class */ (function () {
     return C;
 }());
 var declare;
+
 declare instanceof C;

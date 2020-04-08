@@ -34,6 +34,7 @@ import React = require('react');
 "use strict";
 exports.__esModule = true;
 var React = require("react");
+
 <div>
     // Not Comment
 </div>;

@@ -35,6 +35,7 @@ new Foo(...new SymbolIterator, ...new _StringIterator);
 class Foo {
     constructor(...s) { }
 }
+
 class SymbolIterator {
     next() {
         return {

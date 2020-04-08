@@ -63,7 +63,8 @@ var C = /** @class */ (function () {
     function C() {
     }
     return C;
-}());exports.C = C;
+}());
+exports.C = C;
 var c2;
 
 
@@ -87,7 +88,8 @@ var E;
 (function (E) {
     E[E["A"] = 0] = "A";
 })(E = exports.E || (exports.E = {}));
-function foo() { }exports.foo = foo;
+function foo() { }
+exports.foo = foo;
 (function (foo) {
     foo.y = 1;
     var C = /** @class */ (function () {

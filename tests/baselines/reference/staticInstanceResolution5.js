@@ -23,11 +23,13 @@ define(["require", "exports"], function (require, exports) {
     exports.Promise = void 0;
     var Promise = /** @class */ (function () {
         function Promise() {
-        }Promise.timeout = function (delay) {
+        }
+        Promise.timeout = function (delay) {
             return null;
         };
         return Promise;
-    }());exports.Promise = Promise;
+    }());
+    exports.Promise = Promise;
 });
 //// [staticInstanceResolution5_1.js]
 define(["require", "exports"], function (require, exports) {

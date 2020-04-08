@@ -70,13 +70,15 @@ var __extends = (this && this.__extends) || (function () {
     return Action;
 }());
 var ActionA = /** @class */ (function (_super) {
-    __extends(ActionA, _super);function ActionA() {
+    __extends(ActionA, _super);
+    function ActionA() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return ActionA;
 }(Action));
 var ActionB = /** @class */ (function (_super) {
-    __extends(ActionB, _super);function ActionB() {
+    __extends(ActionB, _super);
+    function ActionB() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return ActionB;

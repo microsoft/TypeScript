@@ -33,10 +33,12 @@ define(["require", "exports"], function (require, exports) {
     exports.MyComponent = void 0;
     var MyComponent = /** @class */ (function () {
         function MyComponent() {
-        }MyComponent.prototype.render = function () {
+        }
+        MyComponent.prototype.render = function () {
         };
         return MyComponent;
-    }());exports.MyComponent = MyComponent;
+    }());
+    exports.MyComponent = MyComponent;
     <MyComponent foo="bar"/>; // ok  
     <MyComponent foo={0}/>; // should be an error
 });

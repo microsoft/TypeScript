@@ -52,10 +52,10 @@ x = b; // expected error
 
 //// [assignFromStringInterface2.js]
 
-
 var x = '';
 var a;
 var b;
+
 a = x;
 a = b;
 

@@ -233,7 +233,8 @@ var m1;
 (function (m1) {
     var C1_public = /** @class */ (function () {
         function C1_public() {
-        }C1_public.prototype.f1 = function () {
+        }
+        C1_public.prototype.f1 = function () {
         };
         return C1_public;
     }());
@@ -380,6 +381,7 @@ var m1;
     function f5_public() {
         return new C1_public();
     }
+
     function f6_public() {
         return new C1_public();
     }
@@ -387,6 +389,7 @@ var m1;
     function f7_public() {
         return new C2_private();
     }
+
     function f8_public() {
         return new C2_private(); // error
     }
@@ -446,9 +449,14 @@ var C9_public = /** @class */ (function () {
 }());
 function f4_public(f4_arg) {
 }
+
+
+
 function f6_public() {
     return new C6_public();
 }
+
+
 function f10_public() {
     return new C6_public();
 }

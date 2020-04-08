@@ -26,6 +26,7 @@ var m1;
 })(m1 || (m1 = {}));
 __proto__ = 0; // Error, __proto__ not defined
 m1.__proto__ = 0;
+
 var Foo = /** @class */ (function () {
     function Foo() {}
     return Foo;

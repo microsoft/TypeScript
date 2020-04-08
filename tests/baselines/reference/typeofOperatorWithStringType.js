@@ -66,7 +66,8 @@ function foo() { return "abc"; }
 
 var A = /** @class */ (function () {
     function A() {
-    }A.foo = function () { return ""; };
+    }
+    A.foo = function () { return ""; };
     return A;
 }());
 var M;
@@ -95,12 +96,14 @@ var ResultIsString12 = typeof STRING.charAt(0);
 // multiple typeof  operators
 var ResultIsString13 = typeof typeof STRING;
 var ResultIsString14 = typeof typeof typeof (STRING + STRING);
+
 // miss assignment operators
 typeof "";
 typeof STRING;
 typeof STRING1;
 typeof foo();
 typeof objA.a, M.n;
+
 // use typeof in type query
 var z;
 var x;

@@ -126,6 +126,7 @@ function onlyErrorsWhenUnusedInBody() {
     if (test) { // ok
         test();
     }
+
     if (test) { // ok
         [function () { return null; }].forEach(function () {
             test();
@@ -145,6 +146,7 @@ function checksPropertyAccess() {
             bar: function () { return true; }
         }
     };
+
     if (x.foo.bar) { // error
     }
 
@@ -155,7 +157,8 @@ function checksPropertyAccess() {
 
 var Foo = /** @class */ (function () {
     function Foo() {
-    }Foo.prototype.isUser = function () {
+    }
+    Foo.prototype.isUser = function () {
         return true;
     };
 
@@ -183,5 +186,4 @@ function B(a, b) {
         a.stats.isDirectory();
     }
 }
-
 

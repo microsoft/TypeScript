@@ -12,10 +12,9 @@ var obj1 = {
 
 //// [octalIntegerLiteralError.js]
 // error
-var oct1 = 5852;
-823;
-var oct2 = 1817;
-8592;
+var oct1 = 5852;823;
+var oct2 = 1817;8592;
+
 var obj1 = {
     19230: "hi",
     19230: "Hello",

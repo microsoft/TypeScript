@@ -38,6 +38,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 var data_json_1 = __importDefault(require("./data.json"));
 
+
 fn(data_json_1["default"].foo);
 fn(data_json_1["default"].foo); // <-- shouldn't error!
+
 function fn(arg) { }

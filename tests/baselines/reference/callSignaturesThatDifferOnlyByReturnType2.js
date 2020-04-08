@@ -19,7 +19,6 @@ var r2 = x.foo(''); // error
 // Here the multiple overloads come from multiple bases.
 
 
-
 var x;
 // BUG 822524
 var r = x.foo(1); // no error

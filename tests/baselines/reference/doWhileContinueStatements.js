@@ -70,6 +70,7 @@ SEVEN: do
         while (true);
     while (true);
 while (true);
+
 EIGHT: do {
     var fn = function () { };
     continue EIGHT;

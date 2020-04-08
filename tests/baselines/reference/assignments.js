@@ -42,6 +42,7 @@ I = null; // Error
 //  Assign to an interface
 
 M = null; // Error
+
 var C = /** @class */ (function () {
     function C() {}
     return C;
@@ -56,10 +57,12 @@ E.A = null; // OK per spec, Error per implementation (509581)
 
 function fn() { }
 fn = null; // Should be error
+
 var v;
 v = null; // OK
 
 function fn2(p) {
     p = null; // OK
 }
+
 I = null; // Error

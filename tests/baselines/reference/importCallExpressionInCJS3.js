@@ -22,7 +22,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
 class B {
     print() { return "I am B"; }
-}exports.B = B;
+}
+exports.B = B;
 //// [2.js]
 // We use Promise<any> for now as there is no way to specify shape of module object
 function foo(x) {

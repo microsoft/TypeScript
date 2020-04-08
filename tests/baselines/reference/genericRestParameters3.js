@@ -93,6 +93,8 @@ f1 = f3; // Error
 f1 = f4; // Error, misaligned complex rest types
 
 
+
+
 foo(); // Error
 foo(100); // Error
 foo(foo); // Error
@@ -107,6 +109,7 @@ function bar() {var args = [];
 var a = bar(10, 20);
 var b = bar(10, 20); // Error
 
+
 baz(); // Error
 baz(1); // Error
 baz(1, 2); // Error
@@ -117,6 +120,9 @@ baz.apply(void 0, ca); // Error
 hmm(); // okay, A = []
 hmm(1, "s"); // okay, A = [1, "s"]
 hmm("what"); // no error?  A = [] | [number, string] ?
+
+
+
 var x2 = ["hello"];
 foo2.apply(void 0, x2);
 

@@ -40,7 +40,8 @@ function f2(_a) {
 
 var A = /** @class */ (function () {
     function A() {
-    }A.prototype.m0 = function (a) {
+    }
+    A.prototype.m0 = function (a) {
         a.b;
     };
     A.prototype.m1 = function (_a) {

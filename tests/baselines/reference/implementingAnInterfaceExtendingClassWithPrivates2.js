@@ -105,19 +105,22 @@ var __extends = (this && this.__extends) || (function () {
 }());
 
 var Bar = /** @class */ (function (_super) {
-    __extends(Bar, _super);function Bar() {
+    __extends(Bar, _super);
+    function Bar() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Bar;
 }(Foo));
 var Bar2 = /** @class */ (function (_super) {
-    __extends(Bar2, _super);function Bar2() {
+    __extends(Bar2, _super);
+    function Bar2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Bar2;
 }(Foo));
 var Bar3 = /** @class */ (function (_super) {
-    __extends(Bar3, _super);function Bar3() {
+    __extends(Bar3, _super);
+    function Bar3() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Bar3;
@@ -131,26 +134,30 @@ var M;
         return Foo;
     }());
     var Baz = /** @class */ (function (_super) {
-        __extends(Baz, _super);function Baz() {
+        __extends(Baz, _super);
+        function Baz() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Baz;
     }(Foo));
 
     var Bar = /** @class */ (function (_super) {
-        __extends(Bar, _super);function Bar() {
+        __extends(Bar, _super);
+        function Bar() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Bar;
     }(Foo));
     var Bar2 = /** @class */ (function (_super) {
-        __extends(Bar2, _super);function Bar2() {
+        __extends(Bar2, _super);
+        function Bar2() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Bar2;
     }(Foo));
     var Bar3 = /** @class */ (function (_super) {
-        __extends(Bar3, _super);function Bar3() {
+        __extends(Bar3, _super);
+        function Bar3() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Bar3;
@@ -165,14 +172,16 @@ var M2;
         return Foo;
     }());
     var Baz = /** @class */ (function (_super) {
-        __extends(Baz, _super);function Baz() {
+        __extends(Baz, _super);
+        function Baz() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Baz;
     }(Foo));
 
     var Bar = /** @class */ (function (_super) {
-        __extends(Bar, _super);function Bar() {
+        __extends(Bar, _super);
+        function Bar() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Bar;
@@ -183,14 +192,15 @@ var M2;
     var r3 = b.y; // error
 
     var Bar2 = /** @class */ (function (_super) {
-        __extends(Bar2, _super);// error
+        __extends(Bar2, _super);
         function Bar2() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Bar2;
     }(Foo));
     var Bar3 = /** @class */ (function (_super) {
-        __extends(Bar3, _super);function Bar3() {
+        __extends(Bar3, _super);
+        function Bar3() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Bar3;

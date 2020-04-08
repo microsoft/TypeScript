@@ -20,6 +20,8 @@ var recurser = function foo() {
     // using the globally visible name
     recurser();
 };
+
+
 (function bar() {
     bar();
 });

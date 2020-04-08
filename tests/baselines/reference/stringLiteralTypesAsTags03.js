@@ -46,9 +46,6 @@ else {
 
 //// [stringLiteralTypesAsTags03.js]
 
-
-
-
 function hasKind(entity, kind) {
     return entity.kind === kind;
 }

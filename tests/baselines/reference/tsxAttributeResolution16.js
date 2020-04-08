@@ -46,14 +46,15 @@ var React = require("react");
 
 
 
-
-
 var AddressComp = /** @class */ (function (_super) {
-    __extends(AddressComp, _super);function AddressComp() {
+    __extends(AddressComp, _super);
+    function AddressComp() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }AddressComp.prototype.render = function () {
+    }
+    AddressComp.prototype.render = function () {
         return null;
     };
     return AddressComp;
-}(React.Component));exports.AddressComp = AddressComp;
+}(React.Component));
+exports.AddressComp = AddressComp;
 var a = <AddressComp postalCode='T1B 0L3' street="vancouver" country="CA"/>;

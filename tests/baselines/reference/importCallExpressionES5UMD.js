@@ -41,7 +41,8 @@ export class D {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.foo = void 0;
-    function foo() { return "foo"; }exports.foo = foo;
+    function foo() { return "foo"; }
+    exports.foo = foo;
 });
 //// [1.js]
 (function (factory) {
@@ -71,16 +72,19 @@ export class D {
 
     var C = /** @class */ (function () {
         function C() {
-        }C.prototype.method = function () {
+        }
+        C.prototype.method = function () {
             var loadAsync = __syncRequire ? Promise.resolve().then(function () { return require("./0"); }) : new Promise(function (resolve_5, reject_5) { require(["./0"], resolve_5, reject_5); });
         };
         return C;
     }());
     var D = /** @class */ (function () {
         function D() {
-        }D.prototype.method = function () {
+        }
+        D.prototype.method = function () {
             var loadAsync = __syncRequire ? Promise.resolve().then(function () { return require("./0"); }) : new Promise(function (resolve_6, reject_6) { require(["./0"], resolve_6, reject_6); });
         };
         return D;
-    }());exports.D = D;
+    }());
+    exports.D = D;
 });

@@ -140,12 +140,14 @@ function md5(string) {
     function II(a, b, c, d, x, s, ac) {
         return 0;
     };
+
     var x = Array();
     var k, AA, BB, CC, DD, a, b, c, d;
     var S11 = 7, S12 = 12, S13 = 17, S14 = 22;
     var S21 = 5, S22 = 9, S23 = 14, S24 = 20;
     var S31 = 4, S32 = 11, S33 = 16, S34 = 23;
     var S41 = 6, S42 = 10, S43 = 15, S44 = 21;
+
     x = [1];
 
     a = 0x67452301;b = 0xEFCDAB89;c = 0x98BADCFE;d = 0x10325476;
@@ -220,12 +222,11 @@ function md5(string) {
 }
 exports["default"] = md5;
 
-
 function getObject(id) {
     return {};
 }
-;
-(function () {
+
+;(function () {
     var id = 'a';
     while (1) {
         var data = getObject(id);

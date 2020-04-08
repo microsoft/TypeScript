@@ -18,21 +18,25 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();var C1 = /** @class */ (function (_super) {
-    __extends(C1, _super);function C1() {}
+    __extends(C1, _super);
+    function C1() {}
     return C1;
 }(null));
 var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);function C2() {}
+    __extends(C2, _super);
+    function C2() {}
     return C2;
 }((null)));
 var C3 = /** @class */ (function (_super) {
-    __extends(C3, _super);function C3() {
+    __extends(C3, _super);
+    function C3() {
         this.x = 1;
     }
     return C3;
 }(null));
 var C4 = /** @class */ (function (_super) {
-    __extends(C4, _super);function C4() {
+    __extends(C4, _super);
+    function C4() {
         this.x = 1;
     }
     return C4;

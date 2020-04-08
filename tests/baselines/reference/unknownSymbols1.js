@@ -52,6 +52,7 @@ function foo(x, y) { }
 function foo2() {
     return asdf;
 }
+
 var z = x; // should be an error
 
 var C = /** @class */ (function () {

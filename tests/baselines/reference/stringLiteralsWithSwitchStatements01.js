@@ -16,6 +16,7 @@ switch (x) {
 //// [stringLiteralsWithSwitchStatements01.js]
 var x;
 var y;
+
 switch (x) {
     case "foo":
         break;

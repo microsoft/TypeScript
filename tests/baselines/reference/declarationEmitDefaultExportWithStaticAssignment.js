@@ -39,12 +39,14 @@ exports.Foo = void 0;
 var Foo = /** @class */ (function () {
     function Foo() {}
     return Foo;
-}());exports.Foo = Foo;
+}());
+exports.Foo = Foo;
 //// [index1.js]
 "use strict";
 exports.__esModule = true;
 var foo_1 = require("./foo");
-function Example() { }exports["default"] = Example;
+function Example() { }
+exports["default"] = Example;
 Example.Foo = foo_1.Foo;
 //// [index2.js]
 "use strict";
@@ -52,7 +54,8 @@ exports.__esModule = true;
 exports.Foo = void 0;
 var foo_1 = require("./foo");
 exports.Foo = foo_1.Foo;
-function Example() { }exports["default"] = Example;
+function Example() { }
+exports["default"] = Example;
 Example.Foo = foo_1.Foo;
 //// [index3.js]
 "use strict";
@@ -61,8 +64,10 @@ exports.Bar = void 0;
 var Bar = /** @class */ (function () {
     function Bar() {}
     return Bar;
-}());exports.Bar = Bar;
-function Example() { }exports["default"] = Example;
+}());
+exports.Bar = Bar;
+function Example() { }
+exports["default"] = Example;
 Example.Bar = Bar;
 //// [index4.js]
 "use strict";
@@ -71,9 +76,11 @@ exports.C = void 0;
 function A() { }
 
 function B() { }
+
 function C() {
     return null;
-}exports.C = C;
+}
+exports.C = C;
 C.A = A;
 C.B = B;
 

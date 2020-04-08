@@ -10,4 +10,5 @@ exports.Foo = void 0;
 var Foo = /** @class */ (function () {
     function Foo() {}
     return Foo;
-}());exports.Foo = Foo;
+}());
+exports.Foo = Foo;

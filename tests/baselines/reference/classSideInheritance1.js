@@ -30,14 +30,16 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();var A = /** @class */ (function () {
     function A() {
-    }A.bar = function () {
+    }
+    A.bar = function () {
         return "";
     };
     A.prototype.foo = function () { return 1; };
     return A;
 }());
 var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);function C2() {
+    __extends(C2, _super);
+    function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C2;

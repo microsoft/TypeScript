@@ -19,8 +19,6 @@ const x2 = f2({}, {}, {}, {});  // Z<{}, string[]>
 // Repros from #12066
 
 
-
-
 var x1 = f1(); // Z<string, number>
 var x2 = f2({}, {}, {}, {}); // Z<{}, string[]>
 

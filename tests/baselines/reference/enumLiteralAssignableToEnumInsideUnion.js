@@ -34,14 +34,16 @@ var X;
 (function (X) {
     var Foo;
     (function (Foo) {
-        Foo[Foo["A"] = 0] = "A";Foo[Foo["B"] = 1] = "B";
+        Foo[Foo["A"] = 0] = "A";
+        Foo[Foo["B"] = 1] = "B";
     })(Foo = X.Foo || (X.Foo = {}));
 })(X || (X = {}));
 var Y;
 (function (Y) {
     var Foo;
     (function (Foo) {
-        Foo[Foo["A"] = 0] = "A";Foo[Foo["B"] = 1] = "B";
+        Foo[Foo["A"] = 0] = "A";
+        Foo[Foo["B"] = 1] = "B";
     })(Foo = Y.Foo || (Y.Foo = {}));
 })(Y || (Y = {}));
 var Z;

@@ -12,6 +12,7 @@ B(
 
 //// [parserNotRegex2.js]
 var x = (A / 2);
-B(C(), function () { },
+B(C(),
+    function () { },
     function () { }
 );

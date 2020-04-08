@@ -12,7 +12,8 @@ class C implements I {
 
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.x1 = function (a, callback) {
+    }
+    C.prototype.x1 = function (a, callback) {
     };
     return C;
 }());

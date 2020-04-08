@@ -98,6 +98,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     "use strict";
     exports.__esModule = true;
     var foo = __importStar(require("./1"));
+
     foo.ns.a;
     foo.ns.b;
 });

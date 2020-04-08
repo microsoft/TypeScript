@@ -29,11 +29,9 @@ System.register(["foo"], function (exports_1, context_1) {
         execute: function () {
             cls = alias.Class;
             exports_1("cls2", cls2 = alias.Class);
-
             x = new alias.Class();
             y = new cls();
             z = new cls2();
-
             (function (M) {
                 M.cls = alias.Class;
                 var x = new alias.Class();

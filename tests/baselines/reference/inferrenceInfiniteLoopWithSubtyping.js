@@ -40,6 +40,7 @@ User.addResolver({
 //// [app.js]
 "use strict";
 exports.__esModule = true;
+
 User.addResolver({
     type: User
 });

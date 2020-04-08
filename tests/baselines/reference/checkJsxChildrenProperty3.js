@@ -58,11 +58,12 @@ exports.__esModule = true;
 var React = require("react");
 
 
-
 var FetchUser = /** @class */ (function (_super) {
-    __extends(FetchUser, _super);function FetchUser() {
+    __extends(FetchUser, _super);
+    function FetchUser() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }FetchUser.prototype.render = function () {
+    }
+    FetchUser.prototype.render = function () {
         return this.state
             ? this.props.children(this.state.result)
             : null;

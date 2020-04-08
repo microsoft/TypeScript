@@ -111,10 +111,13 @@ function performFoo(_a) {
     useBar(bar);
 }
 
+
 performFoo();
+
 function performFoo2(_a) {
     var _b = (_a === void 0 ? {} : _a).bar, bar = _b === void 0 ? null : _b;
     useBar2(bar);
 }
+
 
 performFoo2();

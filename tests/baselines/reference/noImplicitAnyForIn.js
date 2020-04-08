@@ -59,5 +59,6 @@ var idx = 0;
 var m = [1, 2, 3, 4, 5];
 // Should yield an implicit 'any' error.
 var n = [[]] || [];
+
 for (n[idx++] in m)
     ;

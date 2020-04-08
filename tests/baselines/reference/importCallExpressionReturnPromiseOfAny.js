@@ -37,7 +37,8 @@ function * loadModule(directories: string[]) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-class C {}exports.C = C;
+class C {}
+exports.C = C;
 //// [1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -52,6 +53,7 @@ const p2 = Promise.resolve().then(() => require(whatToLoad ? getSpecifier() : "d
 p1.then(zero => {
     return zero.foo(); // ok, zero is any
 });
+
 let j;
 var p3 = Promise.resolve().then(() => require(j = getSpecifier()));
 

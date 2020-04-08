@@ -41,9 +41,11 @@ exports.__esModule = true;
 exports.mixin = void 0;
 exports.mixin = function (Base) {
     return /** @class */ (function (_super) {
-        __extends(class_1, _super);function class_1() {
+        __extends(class_1, _super);
+        function class_1() {
             return _super !== null && _super.apply(this, arguments) || this;
-        }class_1.prototype.get = function (domNode) { };
+        }
+        class_1.prototype.get = function (domNode) { };
         return class_1;
     }(Base));
 };

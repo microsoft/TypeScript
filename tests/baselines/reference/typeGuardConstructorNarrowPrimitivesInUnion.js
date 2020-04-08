@@ -22,6 +22,7 @@ if (var1.constructor === Array) {
 //// [typeGuardConstructorNarrowPrimitivesInUnion.js]
 // Union of primitives, number, arrays, and C1
 var var1;
+
 if (var1.constructor === Number) {
     var1; // number
 }

@@ -38,13 +38,16 @@ exports.__esModule = true;
 exports.Empty = void 0;
 
 var Empty = /** @class */ (function (_super) {
-    __extends(Empty, _super);function Empty() {
+    __extends(Empty, _super);
+    function Empty() {
         return _super !== null && _super.apply(this, arguments) || this;
-    }Empty.prototype.render = function () {
+    }
+    Empty.prototype.render = function () {
         return <div>Hello</div>;
     };
     return Empty;
-}(React.Component));exports.Empty = Empty;
+}(React.Component));
+exports.Empty = Empty;
 
 // OK
 var unionedSpread = <Empty {...obj}/>;

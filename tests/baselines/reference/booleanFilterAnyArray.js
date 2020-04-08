@@ -26,7 +26,6 @@ var foos = [true, true, false, null].filter((thing): thing is boolean => thing !
 
 
 //// [booleanFilterAnyArray.js]
-
 var xs;
 var xs = anys.filter(Bullean);
 

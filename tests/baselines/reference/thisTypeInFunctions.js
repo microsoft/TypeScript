@@ -217,7 +217,8 @@ var B = /** @class */ (function () {
 }());
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.explicitThis = function (m) {
+    }
+    C.prototype.explicitThis = function (m) {
         return this.n + m;
     };
     C.prototype.explicitC = function (m) {
@@ -232,7 +233,8 @@ var C = /** @class */ (function () {
     return C;
 }());
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);function D() {
+    __extends(D, _super);
+    function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
@@ -273,6 +275,7 @@ var implicitAnyOk = { notSpecified: 12, f: implicitThis };
 ok.f(13);
 implicitThis(12);
 implicitAnyOk.f(12);
+
 var c = new C();
 var d = new D();
 var ripped = c.explicitC;
@@ -311,6 +314,7 @@ c.explicitC = function (m) { return this.n + m; };
 c.explicitProperty = explicitPropertyFunction;
 c.explicitProperty = function (m) { return this.n + m; };
 c.explicitProperty = reconstructed.explicitProperty;
+
 // lambdas are assignable to anything
 c.explicitC = function (m) { return m; };
 c.explicitThis = function (m) { return m; };
@@ -321,13 +325,16 @@ c.explicitProperty = function (m) { return m; };
 c.explicitC = function (m) { return m + _this.n; };
 c.explicitThis = function (m) { return m + _this.n; };
 c.explicitProperty = function (m) { return m + _this.n; };
+
 //NOTE: this=C here, I guess?
 c.explicitThis = explicitCFunction;
 c.explicitThis = function (m) { return this.n + m; };
+
 // this:any compatibility
 c.explicitC = function (m) { return this.n + m; };
 c.explicitProperty = function (m) { return this.n + m; };
 c.explicitThis = function (m) { return this.n + m; };
+
 // this: contextual typing
 c.explicitThis = function (m) { return this.n + m; };
 
@@ -340,25 +347,29 @@ c.explicitVoid = function (n) { return n; };
 // class-based assignability
 var Base1 = /** @class */ (function () {
     function Base1() {
-    }Base1.prototype.polymorphic = function () { return this.x; };
+    }
+    Base1.prototype.polymorphic = function () { return this.x; };
     Base1.prototype.explicit = function () { return this.x; };
     Base1.explicitStatic = function () { return this.y; };
     return Base1;
 }());
 var Derived1 = /** @class */ (function (_super) {
-    __extends(Derived1, _super);function Derived1() {
+    __extends(Derived1, _super);
+    function Derived1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived1;
 }(Base1));
 var Base2 = /** @class */ (function () {
     function Base2() {
-    }Base2.prototype.polymorphic = function () { return this.y; };
+    }
+    Base2.prototype.polymorphic = function () { return this.y; };
     Base2.prototype.explicit = function () { return this.x; };
     return Base2;
 }());
 var Derived2 = /** @class */ (function (_super) {
-    __extends(Derived2, _super);function Derived2() {
+    __extends(Derived2, _super);
+    function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived2;
@@ -376,6 +387,8 @@ d1.polymorphic = b2.polymorphic; // ok, 'y' in D: { x, y }
 d2.polymorphic = d1.explicit; // ok, 'y' in { x, y }
 b1.polymorphic = d2.polymorphic; // ok, 'x' and 'y' not in Base1: { x }
 b1.explicit = d2.polymorphic; // ok, 'x' and 'y' not in Base1: { x }
+
+
 ////// use this-type for construction with new ////
 function InterfaceThis() {
     this.a = 12;

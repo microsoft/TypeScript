@@ -18,5 +18,6 @@ define(["require", "exports"], function (require, exports) {
             configurable: true
         });
         return C;
-    }());exports.C = C;
+    }());
+    exports.C = C;
 });

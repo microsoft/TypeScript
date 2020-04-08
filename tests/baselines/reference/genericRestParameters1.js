@@ -174,8 +174,10 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
+
 f1 = f2;
 f2 = f1;
+
 
 f1(42, "hello", true);
 f1(t3[0], t3[1], t3[2]);
@@ -185,6 +187,7 @@ f1.apply(void 0, __spreadArrays([42, "hello"], t1));
 f1.apply(void 0, __spreadArrays([42, "hello", true], t0));
 f1(ns[0], ns[1], true);
 f1.apply(void 0, __spreadArrays(ns, [true])); // Error, tuple spread only expanded when last
+
 f2(42, "hello", true);
 f2(t3[0], t3[1], t3[2]);
 f2.apply(void 0, t3);
@@ -264,14 +267,17 @@ function bind(f, x) {
 var f21 = bind(f20, 42); // (y: string, z: boolean) => string[]
 var f22 = bind(f21, "hello"); // (z: boolean) => string[]
 var f23 = bind(f22, true); // () => string[]
+
 f20(42, "hello", true);
 f21("hello", true);
 f22(true);
 f23();
 
+
 var g21 = bind(g20, 42); // (y: string, z: boolean) => string[]
 var g22 = bind(g21, "hello"); // (z: boolean) => string[]
 var g23 = bind(g22, true); // () => string[]
+
 g20(42, "hello", true);
 g20(42, "hello");
 g20(42);
@@ -281,6 +287,7 @@ g21();
 g22(true);
 g22();
 g23();
+
 
 var c30 = f30(42, function (x) { return "" + x; }, function (x) { return x + 1; }); // [(x: number) => string, (x: number) => number]
 
@@ -309,6 +316,7 @@ events.emit('move', 10, 'left');
 events.emit('jump', 20, 'up');
 events.emit('stop', 'Bye!');
 events.emit('done');
+
 
 ff1 = ff2;
 ff1 = ff3;

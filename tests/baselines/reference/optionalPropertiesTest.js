@@ -54,10 +54,12 @@ foo = { id: 1234, print: function () { } }; // Ok
 var s = foo.name || "default";
 if (foo.print !== undefined)
     foo.print();
+
 ;
 ;
 ;
 ;
+
 var test1 = {};
 var test2 = {};
 var test3 = {};

@@ -45,7 +45,6 @@ var rh2 = b !== a;
 
 //// [comparisonOperatorWithSubtypeObjectOnOptionalProperty.js]
 
-
 var a;
 var b;
 

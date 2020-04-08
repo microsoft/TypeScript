@@ -16,12 +16,13 @@ class D {
 //// [classWithDuplicateIdentifier.js]
 var C = /** @class */ (function () {
     function C() {
-    }C.prototype.a = function () { return 0; }; // error: duplicate identifier
+    }
+    C.prototype.a = function () { return 0; }; // error: duplicate identifier
     return C;
 }());
 var K = /** @class */ (function () {
     function K() {
-    }// error: duplicate identifier
+    }
     K.prototype.b = function () { return 0; };
     return K;
 }());

@@ -91,14 +91,17 @@ var __extends = (this && this.__extends) || (function () {
         this.fn = function () { return _this.prop; };
         this.method(parseInt(str));
         var val = this.prop.toLowerCase();
+
         if (!str) {
             this.prop = "Hello World";
         }
         this.cb(str);
+
         // OK, reference is inside function
         var innerFunction = function () {
             return _this.prop;
         };
+
         // OK, references are to another instance
         other.cb(other.prop);
     }
@@ -118,8 +121,6 @@ var __extends = (this && this.__extends) || (function () {
 }());
 var DerivedAbstractClass = /** @class */ (function (_super) {
     __extends(DerivedAbstractClass, _super);
-
-
     function DerivedAbstractClass(str, other, yetAnother) {
         var _this = _super.call(this, str, other) || this;
         _this.cb = function (s) { };
@@ -137,9 +138,6 @@ var DerivedAbstractClass = /** @class */ (function (_super) {
 }(AbstractClass));
 var Implementation = /** @class */ (function (_super) {
     __extends(Implementation, _super);
-
-
-
     function Implementation(str, other, yetAnother) {
         var _this = _super.call(this, str, other, yetAnother) || this;
         _this.prop = "";

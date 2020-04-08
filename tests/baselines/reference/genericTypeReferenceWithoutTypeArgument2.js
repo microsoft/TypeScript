@@ -68,15 +68,16 @@ function f(x) { var y; return y; }
 var g = function f(x) { var y; return y; };
 
 var D = /** @class */ (function (_super) {
-    __extends(D, _super);function D() {
+    __extends(D, _super);
+    function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
 }(I));
 
-
 var D2 = /** @class */ (function (_super) {
-    __extends(D2, _super);function D2() {
+    __extends(D2, _super);
+    function D2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D2;

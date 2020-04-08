@@ -16,6 +16,7 @@ class A
 class A {
     constructor() {
     }
+
     B() {
         return 42;
     }

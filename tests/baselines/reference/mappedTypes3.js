@@ -45,8 +45,6 @@ var Box = /** @class */ (function () {
     return Box;
 }());
 
-
-
 function f1(b) {
     var bb = boxify(b);
     var isPerfect = bb.isPerfect.value;

@@ -62,6 +62,7 @@ var z0, z1, z2, z3;
 {
     var x_1 = 20;
     use(x_1);
+
     var z0_1 = [1][0];
     use(z0_1);
     var z1_1 = [1][0];
@@ -92,6 +93,7 @@ var y = true;
 }
 use(y);
 use(z6);
+
 var z = false;
 var z5 = 1;
 {

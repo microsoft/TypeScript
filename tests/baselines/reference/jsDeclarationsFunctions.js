@@ -62,11 +62,14 @@ export function j() {}
 "use strict";
 exports.__esModule = true;
 exports.j = exports.jj = exports.ii = exports.i = exports.h = exports.g = exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = void 0;
-function a() { }exports.a = a;
-
-function b() { }exports.b = b;
+function a() { }
+exports.a = a;
+function b() { }
+exports.b = b;
 b.cat = "cat";
-function c() { }exports.c = c;
+
+function c() { }
+exports.c = c;
 c.Cls = /** @class */ (function () {
     function Cls() {}
     return Cls;
@@ -77,23 +80,24 @@ c.Cls = /** @class */ (function () {
  * @param {number} b
  * @return {string}
  */
-function d(a, b) { return /** @type {*} */ (null); }exports.d = d;
-
+function d(a, b) { return /** @type {*} */ (null); }
+exports.d = d;
 /**
  * @template T,U
  * @param {T} a
  * @param {U} b
  * @return {T & U}
  */
-function e(a, b) { return /** @type {*} */ (null); }exports.e = e;
-
+function e(a, b) { return /** @type {*} */ (null); }
+exports.e = e;
 /**
  * @template T
  * @param {T} a
  */
 function f(a) {
     return a;
-}exports.f = f;
+}
+exports.f = f;
 f.self = f;
 
 /**
@@ -112,12 +116,12 @@ function hh(a, b) {
     return a.x && b.y();
 }
 exports.h = hh;
-
-function i() { }exports.i = i;
+function i() { }
+exports.i = i;
 exports.ii = i;
-
-
-function j() { }exports.j = j;exports.jj = j;
+function j() { }
+exports.j = j;
+exports.jj = j;
 
 
 //// [index.d.ts]

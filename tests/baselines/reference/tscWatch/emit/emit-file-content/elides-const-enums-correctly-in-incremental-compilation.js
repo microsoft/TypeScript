@@ -85,8 +85,7 @@ import { E2 } from "./file2"; const v: E2 = E2.V;function foo2() { return 2; }
 //// [/user/someone/projects/myproject/file3.js]
 "use strict";
 exports.__esModule = true;
-var v = 1 /* V */;
-function foo2() { return 2; }
+var v = 1 /* V */;function foo2() { return 2; }
 
 
 
