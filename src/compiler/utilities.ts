@@ -4779,7 +4779,7 @@ namespace ts {
     export function getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(pos: number, stopPos: number, sourceFile: SourceFile, includeComments?: boolean) {
         const startPos = skipTrivia(sourceFile.text, pos, /*stopAfterLineBreak*/ false, includeComments);
         const prevPos = getPreviousNonWhitespacePosition(startPos, stopPos, sourceFile);
-        return getLinesBetweenPositions(sourceFile, prevPos || 0, startPos);
+        return getLinesBetweenPositions(sourceFile, prevPos ?? stopPos, startPos);
     }
 
     export function getLinesBetweenPositionAndNextNonWhitespaceCharacter(pos: number, stopPos: number, sourceFile: SourceFile, includeComments?: boolean) {
