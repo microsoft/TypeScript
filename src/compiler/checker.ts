@@ -195,7 +195,7 @@ namespace ts {
         None = 0,
         Source = 1 << 0,
         Target = 1 << 1,
-        ExcessCheck = 1 << 2,
+        PropertyCheck = 1 << 2,
     }
 
     const enum MappedTypeModifiers {
@@ -1347,6 +1347,7 @@ namespace ts {
         function isBlockScopedNameDeclaredBeforeUse(declaration: Declaration, usage: Node): boolean {
             const declarationFile = getSourceFileOfNode(declaration);
             const useFile = getSourceFileOfNode(usage);
+            const declContainer = getEnclosingBlockScopeContainer(declaration);
             if (declarationFile !== useFile) {
                 if ((moduleKind && (declarationFile.externalModuleIndicator || useFile.externalModuleIndicator)) ||
                     (!compilerOptions.outFile && !compilerOptions.out) ||
@@ -1389,11 +1390,10 @@ namespace ts {
                     return !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage, /*stopAtAnyPropertyDeclaration*/ false);
                 }
                 else if (isParameterPropertyDeclaration(declaration, declaration.parent)) {
-                    const container = getEnclosingBlockScopeContainer(declaration.parent);
                     // foo = this.bar is illegal in esnext+useDefineForClassFields when bar is a parameter property
                     return !(compilerOptions.target === ScriptTarget.ESNext && !!compilerOptions.useDefineForClassFields
                              && getContainingClass(declaration) === getContainingClass(usage)
-                             && isUsedInFunctionOrInstanceProperty(usage, declaration, container));
+                             && isUsedInFunctionOrInstanceProperty(usage, declaration));
                 }
                 return true;
             }
@@ -1418,11 +1418,10 @@ namespace ts {
                 return true;
             }
 
-            const container = getEnclosingBlockScopeContainer(declaration);
-            if (!!(usage.flags & NodeFlags.JSDoc) || isInTypeQuery(usage)) {
+            if (!!(usage.flags & NodeFlags.JSDoc) || isInTypeQuery(usage) || usageInTypeDeclaration()) {
                 return true;
             }
-            if (isUsedInFunctionOrInstanceProperty(usage, declaration, container)) {
+            if (isUsedInFunctionOrInstanceProperty(usage, declaration)) {
                 if (compilerOptions.target === ScriptTarget.ESNext && !!compilerOptions.useDefineForClassFields && getContainingClass(declaration)) {
                     return (isPropertyDeclaration(declaration) || isParameterPropertyDeclaration(declaration, declaration.parent)) &&
                         !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage, /*stopAtAnyPropertyDeclaration*/ true);
@@ -1433,16 +1432,18 @@ namespace ts {
             }
             return false;
 
-            function isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration: VariableDeclaration, usage: Node): boolean {
-                const container = getEnclosingBlockScopeContainer(declaration);
+            function usageInTypeDeclaration() {
+                return !!findAncestor(usage, node => isInterfaceDeclaration(node) || isTypeAliasDeclaration(node));
+            }
 
+            function isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration: VariableDeclaration, usage: Node): boolean {
                 switch (declaration.parent.parent.kind) {
                     case SyntaxKind.VariableStatement:
                     case SyntaxKind.ForStatement:
                     case SyntaxKind.ForOfStatement:
                         // variable statement/for/for-of statement case,
                         // use site should not be inside variable declaration (initializer of declaration or binding element)
-                        if (isSameScopeDescendentOf(usage, declaration, container)) {
+                        if (isSameScopeDescendentOf(usage, declaration, declContainer)) {
                             return true;
                         }
                         break;
@@ -1450,12 +1451,12 @@ namespace ts {
 
                 // ForIn/ForOf case - use site should not be used in expression part
                 const grandparent = declaration.parent.parent;
-                return isForInOrOfStatement(grandparent) && isSameScopeDescendentOf(usage, grandparent.expression, container);
+                return isForInOrOfStatement(grandparent) && isSameScopeDescendentOf(usage, grandparent.expression, declContainer);
             }
 
-            function isUsedInFunctionOrInstanceProperty(usage: Node, declaration: Node, container?: Node): boolean {
+            function isUsedInFunctionOrInstanceProperty(usage: Node, declaration: Node): boolean {
                 return !!findAncestor(usage, current => {
-                    if (current === container) {
+                    if (current === declContainer) {
                         return "quit";
                     }
                     if (isFunctionLike(current)) {
@@ -4742,7 +4743,10 @@ namespace ts {
                             ];
                         }
                     }
-                    const result = [];
+                    const mayHaveNameCollisions = !(context.flags & NodeBuilderFlags.UseFullyQualifiedType);
+                    /** Map from type reference identifier text to [type, index in `result` where the type node is] */
+                    const seenNames = mayHaveNameCollisions ? createUnderscoreEscapedMultiMap<[Type, number]>() : undefined;
+                    const result: TypeNode[] = [];
                     let i = 0;
                     for (const type of types) {
                         i++;
@@ -4758,11 +4762,40 @@ namespace ts {
                         const typeNode = typeToTypeNodeHelper(type, context);
                         if (typeNode) {
                             result.push(typeNode);
+                            if (seenNames && isIdentifierTypeReference(typeNode)) {
+                                seenNames.add(typeNode.typeName.escapedText, [type, result.length - 1]);
+                            }
                         }
+                    }
+
+                    if (seenNames) {
+                        // To avoid printing types like `[Foo, Foo]` or `Bar & Bar` where
+                        // occurrences of the same name actually come from different
+                        // namespaces, go through the single-identifier type reference nodes
+                        // we just generated, and see if any names were generated more than
+                        // once while referring to different types. If so, regenerate the
+                        // type node for each entry by that name with the
+                        // `UseFullyQualifiedType` flag enabled.
+                        const saveContextFlags = context.flags;
+                        context.flags |= NodeBuilderFlags.UseFullyQualifiedType;
+                        seenNames.forEach(types => {
+                            if (!arrayIsHomogeneous(types, ([a], [b]) => typesAreSameReference(a, b))) {
+                                for (const [type, resultIndex] of types) {
+                                    result[resultIndex] = typeToTypeNodeHelper(type, context);
+                                }
+                            }
+                        });
+                        context.flags = saveContextFlags;
                     }
 
                     return result;
                 }
+            }
+
+            function typesAreSameReference(a: Type, b: Type): boolean {
+                return a === b
+                    || !!a.symbol && a.symbol === b.symbol
+                    || !!a.aliasSymbol && a.aliasSymbol === b.aliasSymbol;
             }
 
             function indexInfoToIndexSignatureDeclarationHelper(indexInfo: IndexInfo, kind: IndexKind, context: NodeBuilderContext): IndexSignatureDeclaration {
@@ -8238,6 +8271,7 @@ namespace ts {
                     return undefined;
                 }
                 switch (node.kind) {
+                    case SyntaxKind.VariableStatement:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.ClassExpression:
                     case SyntaxKind.InterfaceDeclaration:
@@ -8264,6 +8298,9 @@ namespace ts {
                         }
                         else if (node.kind === SyntaxKind.ConditionalType) {
                             return concatenate(outerTypeParameters, getInferTypeParameters(<ConditionalTypeNode>node));
+                        }
+                        else if (node.kind === SyntaxKind.VariableStatement && !isInJSFile(node)) {
+                            break;
                         }
                         const outerAndOwnTypeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>node));
                         const thisType = includeThisTypes &&
@@ -15561,7 +15598,7 @@ namespace ts {
                 if (source.flags & TypeFlags.Union) {
                     result = relation === comparableRelation ?
                         someTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState) :
-                        eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState & IntersectionState.ExcessCheck);
+                        eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState);
                 }
                 else {
                     if (target.flags & TypeFlags.Union) {
@@ -15569,12 +15606,6 @@ namespace ts {
                     }
                     else if (target.flags & TypeFlags.Intersection) {
                         result = typeRelatedToEachType(getRegularTypeOfObjectLiteral(source), target as IntersectionType, reportErrors, IntersectionState.Target);
-                        if (result && (isPerformingExcessPropertyChecks || isPerformingCommonPropertyChecks) && !(intersectionState & IntersectionState.ExcessCheck)) {
-                            // Validate against excess props using the original `source`
-                            if (!propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, IntersectionState.ExcessCheck)) {
-                                return Ternary.False;
-                            }
-                        }
                     }
                     else if (source.flags & TypeFlags.Intersection) {
                         // Check to see if any constituents of the intersection are immediately related to the target.
@@ -15590,9 +15621,7 @@ namespace ts {
                         //
                         //    - For a primitive type or type parameter (such as 'number = A & B') there is no point in
                         //          breaking the intersection apart.
-                        if (!isNonGenericObjectType(target) || !every((<IntersectionType>source).types, t => isNonGenericObjectType(t) && !(getObjectFlags(t) & ObjectFlags.NonInferrableType))) {
-                            result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false, IntersectionState.Source);
-                        }
+                        result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false, IntersectionState.Source);
                     }
                     if (!result && (source.flags & TypeFlags.StructuredOrInstantiable || target.flags & TypeFlags.StructuredOrInstantiable)) {
                         if (result = recursiveTypeRelatedTo(source, target, reportErrors, intersectionState)) {
@@ -15623,6 +15652,23 @@ namespace ts {
                             }
                         }
                     }
+                }
+                // For certain combinations involving intersections and optional, excess, or mismatched properties we need
+                // an extra property check where the intersection is viewed as a single object. The following are motivating
+                // examples that all should be errors, but aren't without this extra property check:
+                //
+                //   let obj: { a: { x: string } } & { c: number } = { a: { x: 'hello', y: 2 }, c: 5 };  // Nested excess property
+                //
+                //   declare let wrong: { a: { y: string } };
+                //   let weak: { a?: { x?: number } } & { c?: string } = wrong;  // Nested weak object type
+                //
+                //   function foo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
+                //     x = y;  // Mismatched property in source intersection
+                //   }
+                if (result && (
+                    target.flags & TypeFlags.Intersection && (isPerformingExcessPropertyChecks || isPerformingCommonPropertyChecks) ||
+                    isNonGenericObjectType(target) && source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType && !some((<IntersectionType>source).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType)))) {
+                    result &= recursiveTypeRelatedTo(source, target, reportErrors, IntersectionState.PropertyCheck);
                 }
 
                 if (!result && reportErrors) {
@@ -16000,6 +16046,9 @@ namespace ts {
             }
 
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
+                if (intersectionState & IntersectionState.PropertyCheck) {
+                    return propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, IntersectionState.None);
+                }
                 const flags = source.flags & target.flags;
                 if (relation === identityRelation && !(flags & TypeFlags.Object)) {
                     if (flags & TypeFlags.Index) {
