@@ -16,7 +16,8 @@ var __rest = (this && this.__rest) || function (s, e) {
                 t[p[i]] = s[p[i]];
         }
     return t;
-};var intersection;
+};
+var intersection;
 
 var rest1;
 var x = intersection.x, rest1 = __rest(intersection, ["x"]);

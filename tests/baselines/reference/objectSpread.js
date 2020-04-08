@@ -154,7 +154,8 @@ var __assign = (this && this.__assign) || function () {
         return t;
     };
     return __assign.apply(this, arguments);
-};var o = { a: 1, b: 'no' };
+};
+var o = { a: 1, b: 'no' };
 var o2 = { b: 'yes', c: true };
 var swap = { a: 'yes', b: -1 };
 

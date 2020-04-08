@@ -20,11 +20,12 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 >>>        function __() { this.constructor = d; }
 >>>        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 >>>    };
->>>})();var C = /** @class */ (function () {
-1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^->
+>>>})();
+>>>var C = /** @class */ (function () {
 1 >
-1 >Emitted(13, 6) Source(1, 1) + SourceIndex(0)
+2 >^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(14, 1) Source(1, 1) + SourceIndex(0)
 ---
 >>>    function C(value) {
 1->^^^^
@@ -39,9 +40,9 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
   >    
 2 >    constructor(
 3 >               value: number
-1->Emitted(14, 5) Source(6, 5) + SourceIndex(0)
-2 >Emitted(14, 16) Source(6, 17) + SourceIndex(0)
-3 >Emitted(14, 21) Source(6, 30) + SourceIndex(0)
+1->Emitted(15, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(15, 16) Source(6, 17) + SourceIndex(0)
+3 >Emitted(15, 21) Source(6, 30) + SourceIndex(0)
 ---
 >>>        this.cProp = 10;
 1->^^^^^^^^
@@ -54,11 +55,11 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 3 >                   = 
 4 >                     10
 5 >                       ;
-1->Emitted(15, 9) Source(2, 5) + SourceIndex(0)
-2 >Emitted(15, 19) Source(2, 10) + SourceIndex(0)
-3 >Emitted(15, 22) Source(2, 13) + SourceIndex(0)
-4 >Emitted(15, 24) Source(2, 15) + SourceIndex(0)
-5 >Emitted(15, 25) Source(2, 16) + SourceIndex(0)
+1->Emitted(16, 9) Source(2, 5) + SourceIndex(0)
+2 >Emitted(16, 19) Source(2, 10) + SourceIndex(0)
+3 >Emitted(16, 22) Source(2, 13) + SourceIndex(0)
+4 >Emitted(16, 24) Source(2, 15) + SourceIndex(0)
+5 >Emitted(16, 25) Source(2, 16) + SourceIndex(0)
 ---
 >>>        return {
 1 >^^^^^^^^
@@ -71,8 +72,8 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
   >    constructor(value: number) {
   >        
 2 >        return 
-1 >Emitted(16, 9) Source(7, 9) + SourceIndex(0)
-2 >Emitted(16, 16) Source(7, 16) + SourceIndex(0)
+1 >Emitted(17, 9) Source(7, 9) + SourceIndex(0)
+2 >Emitted(17, 16) Source(7, 16) + SourceIndex(0)
 ---
 >>>            cProp: value,
 1->^^^^^^^^^^^^
@@ -85,10 +86,10 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 2 >            cProp
 3 >                 : 
 4 >                   value
-1->Emitted(17, 13) Source(8, 13) + SourceIndex(0)
-2 >Emitted(17, 18) Source(8, 18) + SourceIndex(0)
-3 >Emitted(17, 20) Source(8, 20) + SourceIndex(0)
-4 >Emitted(17, 25) Source(8, 25) + SourceIndex(0)
+1->Emitted(18, 13) Source(8, 13) + SourceIndex(0)
+2 >Emitted(18, 18) Source(8, 18) + SourceIndex(0)
+3 >Emitted(18, 20) Source(8, 20) + SourceIndex(0)
+4 >Emitted(18, 25) Source(8, 25) + SourceIndex(0)
 ---
 >>>            foo: function () {
 1->^^^^^^^^^^^^
@@ -97,8 +98,8 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 1->,
   >            
 2 >            foo
-1->Emitted(18, 13) Source(9, 13) + SourceIndex(0)
-2 >Emitted(18, 16) Source(9, 16) + SourceIndex(0)
+1->Emitted(19, 13) Source(9, 13) + SourceIndex(0)
+2 >Emitted(19, 16) Source(9, 16) + SourceIndex(0)
 ---
 >>>                return "well this looks kinda C-ish.";
 1->^^^^^^^^^^^^^^^^
@@ -110,10 +111,10 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 2 >                return 
 3 >                       "well this looks kinda C-ish."
 4 >                                                     ;
-1->Emitted(19, 17) Source(10, 17) + SourceIndex(0)
-2 >Emitted(19, 24) Source(10, 24) + SourceIndex(0)
-3 >Emitted(19, 54) Source(10, 54) + SourceIndex(0)
-4 >Emitted(19, 55) Source(10, 55) + SourceIndex(0)
+1->Emitted(20, 17) Source(10, 17) + SourceIndex(0)
+2 >Emitted(20, 24) Source(10, 24) + SourceIndex(0)
+3 >Emitted(20, 54) Source(10, 54) + SourceIndex(0)
+4 >Emitted(20, 55) Source(10, 55) + SourceIndex(0)
 ---
 >>>            }
 1 >^^^^^^^^^^^^
@@ -121,8 +122,8 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 1 >
   >            
 2 >            }
-1 >Emitted(20, 13) Source(11, 13) + SourceIndex(0)
-2 >Emitted(20, 14) Source(11, 14) + SourceIndex(0)
+1 >Emitted(21, 13) Source(11, 13) + SourceIndex(0)
+2 >Emitted(21, 14) Source(11, 14) + SourceIndex(0)
 ---
 >>>        };
 1 >^^^^^^^^^
@@ -131,8 +132,8 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 1 >
   >        }
 2 >         
-1 >Emitted(21, 10) Source(12, 10) + SourceIndex(0)
-2 >Emitted(21, 11) Source(12, 10) + SourceIndex(0)
+1 >Emitted(22, 10) Source(12, 10) + SourceIndex(0)
+2 >Emitted(22, 11) Source(12, 10) + SourceIndex(0)
 ---
 >>>    }C.prototype.foo = function () { return "this never gets used."; };
 1->^^^^
@@ -158,17 +159,17 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 9 >                                                                   ;
 10>                                                                     
 11>                                                                     }
-1->Emitted(22, 5) Source(13, 5) + SourceIndex(0)
-2 >Emitted(22, 6) Source(13, 6) + SourceIndex(0)
-3 >Emitted(22, 6) Source(4, 5) + SourceIndex(0)
-4 >Emitted(22, 21) Source(4, 8) + SourceIndex(0)
-5 >Emitted(22, 24) Source(4, 5) + SourceIndex(0)
-6 >Emitted(22, 38) Source(4, 13) + SourceIndex(0)
-7 >Emitted(22, 45) Source(4, 20) + SourceIndex(0)
-8 >Emitted(22, 68) Source(4, 43) + SourceIndex(0)
-9 >Emitted(22, 69) Source(4, 44) + SourceIndex(0)
-10>Emitted(22, 70) Source(4, 45) + SourceIndex(0)
-11>Emitted(22, 71) Source(4, 46) + SourceIndex(0)
+1->Emitted(23, 5) Source(13, 5) + SourceIndex(0)
+2 >Emitted(23, 6) Source(13, 6) + SourceIndex(0)
+3 >Emitted(23, 6) Source(4, 5) + SourceIndex(0)
+4 >Emitted(23, 21) Source(4, 8) + SourceIndex(0)
+5 >Emitted(23, 24) Source(4, 5) + SourceIndex(0)
+6 >Emitted(23, 38) Source(4, 13) + SourceIndex(0)
+7 >Emitted(23, 45) Source(4, 20) + SourceIndex(0)
+8 >Emitted(23, 68) Source(4, 43) + SourceIndex(0)
+9 >Emitted(23, 69) Source(4, 44) + SourceIndex(0)
+10>Emitted(23, 70) Source(4, 45) + SourceIndex(0)
+11>Emitted(23, 71) Source(4, 46) + SourceIndex(0)
 ---
 >>>    return C;
 1 >^^^^
@@ -185,8 +186,8 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
   >    }
   >
 2 >    }
-1 >Emitted(23, 5) Source(14, 1) + SourceIndex(0)
-2 >Emitted(23, 13) Source(14, 2) + SourceIndex(0)
+1 >Emitted(24, 5) Source(14, 1) + SourceIndex(0)
+2 >Emitted(24, 13) Source(14, 2) + SourceIndex(0)
 ---
 >>>}());
 1 >
@@ -211,10 +212,10 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
   >         }
   >     }
   > }
-1 >Emitted(24, 1) Source(14, 1) + SourceIndex(0)
-2 >Emitted(24, 2) Source(14, 2) + SourceIndex(0)
-3 >Emitted(24, 2) Source(1, 1) + SourceIndex(0)
-4 >Emitted(24, 6) Source(14, 2) + SourceIndex(0)
+1 >Emitted(25, 1) Source(14, 1) + SourceIndex(0)
+2 >Emitted(25, 2) Source(14, 2) + SourceIndex(0)
+3 >Emitted(25, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(25, 6) Source(14, 2) + SourceIndex(0)
 ---
 >>>var D = /** @class */ (function (_super) {
 1->
@@ -222,7 +223,7 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 1->
   >
   >
-1->Emitted(25, 1) Source(16, 1) + SourceIndex(0)
+1->Emitted(26, 1) Source(16, 1) + SourceIndex(0)
 ---
 >>>    __extends(D, _super);
 1->^^^^
@@ -230,8 +231,8 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 3 >                         ^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->class D extends 
 2 >    C
-1->Emitted(26, 5) Source(16, 17) + SourceIndex(0)
-2 >Emitted(26, 26) Source(16, 18) + SourceIndex(0)
+1->Emitted(27, 5) Source(16, 17) + SourceIndex(0)
+2 >Emitted(27, 26) Source(16, 18) + SourceIndex(0)
 ---
 >>>    function D(a) {if (a === void 0) { a = 100; }
 1->^^^^
@@ -252,13 +253,13 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 5 >                   
 6 >                                     
 7 >                                       a = 100
-1->Emitted(27, 5) Source(19, 5) + SourceIndex(0)
-2 >Emitted(27, 16) Source(19, 17) + SourceIndex(0)
-3 >Emitted(27, 17) Source(19, 24) + SourceIndex(0)
-4 >Emitted(27, 20) Source(19, 17) + SourceIndex(0)
-5 >Emitted(27, 38) Source(19, 17) + SourceIndex(0)
-6 >Emitted(27, 40) Source(19, 17) + SourceIndex(0)
-7 >Emitted(27, 47) Source(19, 24) + SourceIndex(0)
+1->Emitted(28, 5) Source(19, 5) + SourceIndex(0)
+2 >Emitted(28, 16) Source(19, 17) + SourceIndex(0)
+3 >Emitted(28, 17) Source(19, 24) + SourceIndex(0)
+4 >Emitted(28, 20) Source(19, 17) + SourceIndex(0)
+5 >Emitted(28, 38) Source(19, 17) + SourceIndex(0)
+6 >Emitted(28, 40) Source(19, 17) + SourceIndex(0)
+7 >Emitted(28, 47) Source(19, 24) + SourceIndex(0)
 ---
 >>>        var _this = _super.call(this, a) || this;
 1->^^^^^^^^
@@ -287,12 +288,12 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
   >                                                else
   >                                                    return null;
   >                                            }
-1->Emitted(28, 9) Source(19, 5) + SourceIndex(0)
-2 >Emitted(28, 21) Source(20, 9) + SourceIndex(0)
-3 >Emitted(28, 39) Source(20, 15) + SourceIndex(0)
-4 >Emitted(28, 40) Source(20, 16) + SourceIndex(0)
-5 >Emitted(28, 41) Source(20, 17) + SourceIndex(0)
-6 >Emitted(28, 50) Source(32, 6) + SourceIndex(0)
+1->Emitted(29, 9) Source(19, 5) + SourceIndex(0)
+2 >Emitted(29, 21) Source(20, 9) + SourceIndex(0)
+3 >Emitted(29, 39) Source(20, 15) + SourceIndex(0)
+4 >Emitted(29, 40) Source(20, 16) + SourceIndex(0)
+5 >Emitted(29, 41) Source(20, 17) + SourceIndex(0)
+6 >Emitted(29, 50) Source(32, 6) + SourceIndex(0)
 ---
 >>>        _this.dProp = function () { return _this; };
 1->^^^^^^^^
@@ -313,15 +314,15 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 7 >                                                
 8 >                                                  this
 9 >                                                   ;
-1->Emitted(29, 9) Source(17, 5) + SourceIndex(0)
-2 >Emitted(29, 20) Source(17, 10) + SourceIndex(0)
-3 >Emitted(29, 23) Source(17, 13) + SourceIndex(0)
-4 >Emitted(29, 37) Source(17, 19) + SourceIndex(0)
-5 >Emitted(29, 44) Source(17, 19) + SourceIndex(0)
-6 >Emitted(29, 49) Source(17, 23) + SourceIndex(0)
-7 >Emitted(29, 51) Source(17, 19) + SourceIndex(0)
-8 >Emitted(29, 52) Source(17, 23) + SourceIndex(0)
-9 >Emitted(29, 53) Source(17, 24) + SourceIndex(0)
+1->Emitted(30, 9) Source(17, 5) + SourceIndex(0)
+2 >Emitted(30, 20) Source(17, 10) + SourceIndex(0)
+3 >Emitted(30, 23) Source(17, 13) + SourceIndex(0)
+4 >Emitted(30, 37) Source(17, 19) + SourceIndex(0)
+5 >Emitted(30, 44) Source(17, 19) + SourceIndex(0)
+6 >Emitted(30, 49) Source(17, 23) + SourceIndex(0)
+7 >Emitted(30, 51) Source(17, 19) + SourceIndex(0)
+8 >Emitted(30, 52) Source(17, 23) + SourceIndex(0)
+9 >Emitted(30, 53) Source(17, 24) + SourceIndex(0)
 ---
 >>>        if (Math.random() < 0.5) {
 1 >^^^^^^^^
@@ -347,15 +348,15 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 7 >                          < 
 8 >                            0.5
 9 >                               ) 
-1 >Emitted(30, 9) Source(22, 9) + SourceIndex(0)
-2 >Emitted(30, 13) Source(22, 13) + SourceIndex(0)
-3 >Emitted(30, 17) Source(22, 17) + SourceIndex(0)
-4 >Emitted(30, 18) Source(22, 18) + SourceIndex(0)
-5 >Emitted(30, 24) Source(22, 24) + SourceIndex(0)
-6 >Emitted(30, 26) Source(22, 26) + SourceIndex(0)
-7 >Emitted(30, 29) Source(22, 29) + SourceIndex(0)
-8 >Emitted(30, 32) Source(22, 32) + SourceIndex(0)
-9 >Emitted(30, 34) Source(22, 34) + SourceIndex(0)
+1 >Emitted(31, 9) Source(22, 9) + SourceIndex(0)
+2 >Emitted(31, 13) Source(22, 13) + SourceIndex(0)
+3 >Emitted(31, 17) Source(22, 17) + SourceIndex(0)
+4 >Emitted(31, 18) Source(22, 18) + SourceIndex(0)
+5 >Emitted(31, 24) Source(22, 24) + SourceIndex(0)
+6 >Emitted(31, 26) Source(22, 26) + SourceIndex(0)
+7 >Emitted(31, 29) Source(22, 29) + SourceIndex(0)
+8 >Emitted(31, 32) Source(22, 32) + SourceIndex(0)
+9 >Emitted(31, 34) Source(22, 34) + SourceIndex(0)
 ---
 >>>            "You win!";
 1 >^^^^^^^^^^^^
@@ -365,9 +366,9 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
   >            
 2 >            "You win!"
 3 >                      
-1 >Emitted(31, 13) Source(23, 13) + SourceIndex(0)
-2 >Emitted(31, 23) Source(23, 23) + SourceIndex(0)
-3 >Emitted(31, 24) Source(23, 23) + SourceIndex(0)
+1 >Emitted(32, 13) Source(23, 13) + SourceIndex(0)
+2 >Emitted(32, 23) Source(23, 23) + SourceIndex(0)
+3 >Emitted(32, 24) Source(23, 23) + SourceIndex(0)
 ---
 >>>            return {
 1 >^^^^^^^^^^^^
@@ -376,8 +377,8 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 1 >
   >            
 2 >            return 
-1 >Emitted(32, 13) Source(24, 13) + SourceIndex(0)
-2 >Emitted(32, 20) Source(24, 20) + SourceIndex(0)
+1 >Emitted(33, 13) Source(24, 13) + SourceIndex(0)
+2 >Emitted(33, 20) Source(24, 20) + SourceIndex(0)
 ---
 >>>                cProp: 1,
 1->^^^^^^^^^^^^^^^^
@@ -390,10 +391,10 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 2 >                cProp
 3 >                     : 
 4 >                       1
-1->Emitted(33, 17) Source(25, 17) + SourceIndex(0)
-2 >Emitted(33, 22) Source(25, 22) + SourceIndex(0)
-3 >Emitted(33, 24) Source(25, 24) + SourceIndex(0)
-4 >Emitted(33, 25) Source(25, 25) + SourceIndex(0)
+1->Emitted(34, 17) Source(25, 17) + SourceIndex(0)
+2 >Emitted(34, 22) Source(25, 22) + SourceIndex(0)
+3 >Emitted(34, 24) Source(25, 24) + SourceIndex(0)
+4 >Emitted(34, 25) Source(25, 25) + SourceIndex(0)
 ---
 >>>                dProp: function () { return _this; },
 1->^^^^^^^^^^^^^^^^
@@ -414,14 +415,14 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 6 >                                            this
 7 >                                                 
 8 >                                                   this
-1->Emitted(34, 17) Source(26, 17) + SourceIndex(0)
-2 >Emitted(34, 22) Source(26, 22) + SourceIndex(0)
-3 >Emitted(34, 24) Source(26, 24) + SourceIndex(0)
-4 >Emitted(34, 38) Source(26, 30) + SourceIndex(0)
-5 >Emitted(34, 45) Source(26, 30) + SourceIndex(0)
-6 >Emitted(34, 50) Source(26, 34) + SourceIndex(0)
-7 >Emitted(34, 52) Source(26, 30) + SourceIndex(0)
-8 >Emitted(34, 53) Source(26, 34) + SourceIndex(0)
+1->Emitted(35, 17) Source(26, 17) + SourceIndex(0)
+2 >Emitted(35, 22) Source(26, 22) + SourceIndex(0)
+3 >Emitted(35, 24) Source(26, 24) + SourceIndex(0)
+4 >Emitted(35, 38) Source(26, 30) + SourceIndex(0)
+5 >Emitted(35, 45) Source(26, 30) + SourceIndex(0)
+6 >Emitted(35, 50) Source(26, 34) + SourceIndex(0)
+7 >Emitted(35, 52) Source(26, 30) + SourceIndex(0)
+8 >Emitted(35, 53) Source(26, 34) + SourceIndex(0)
 ---
 >>>                foo: function () { return "You win!!!!!"; }
 1->^^^^^^^^^^^^^^^^
@@ -441,14 +442,14 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 6 >                                                        
 7 >                                                          
 8 >                                                          }
-1->Emitted(35, 17) Source(27, 17) + SourceIndex(0)
-2 >Emitted(35, 20) Source(27, 20) + SourceIndex(0)
-3 >Emitted(35, 36) Source(27, 25) + SourceIndex(0)
-4 >Emitted(35, 43) Source(27, 32) + SourceIndex(0)
-5 >Emitted(35, 57) Source(27, 46) + SourceIndex(0)
-6 >Emitted(35, 58) Source(27, 46) + SourceIndex(0)
-7 >Emitted(35, 59) Source(27, 47) + SourceIndex(0)
-8 >Emitted(35, 60) Source(27, 48) + SourceIndex(0)
+1->Emitted(36, 17) Source(27, 17) + SourceIndex(0)
+2 >Emitted(36, 20) Source(27, 20) + SourceIndex(0)
+3 >Emitted(36, 36) Source(27, 25) + SourceIndex(0)
+4 >Emitted(36, 43) Source(27, 32) + SourceIndex(0)
+5 >Emitted(36, 57) Source(27, 46) + SourceIndex(0)
+6 >Emitted(36, 58) Source(27, 46) + SourceIndex(0)
+7 >Emitted(36, 59) Source(27, 47) + SourceIndex(0)
+8 >Emitted(36, 60) Source(27, 48) + SourceIndex(0)
 ---
 >>>            };
 1 >^^^^^^^^^^^^^
@@ -456,15 +457,15 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 1 >
   >            }
 2 >             ;
-1 >Emitted(36, 14) Source(28, 14) + SourceIndex(0)
-2 >Emitted(36, 15) Source(28, 15) + SourceIndex(0)
+1 >Emitted(37, 14) Source(28, 14) + SourceIndex(0)
+2 >Emitted(37, 15) Source(28, 15) + SourceIndex(0)
 ---
 >>>        }
 1 >^^^^^^^^^
 2 >         ^^^^->
 1 >
   >        }
-1 >Emitted(37, 10) Source(29, 10) + SourceIndex(0)
+1 >Emitted(38, 10) Source(29, 10) + SourceIndex(0)
 ---
 >>>        else
 >>>            return null;
@@ -478,10 +479,10 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 2 >            return 
 3 >                   null
 4 >                       ;
-1->Emitted(39, 13) Source(31, 13) + SourceIndex(0)
-2 >Emitted(39, 20) Source(31, 20) + SourceIndex(0)
-3 >Emitted(39, 24) Source(31, 24) + SourceIndex(0)
-4 >Emitted(39, 25) Source(31, 25) + SourceIndex(0)
+1->Emitted(40, 13) Source(31, 13) + SourceIndex(0)
+2 >Emitted(40, 20) Source(31, 20) + SourceIndex(0)
+3 >Emitted(40, 24) Source(31, 24) + SourceIndex(0)
+4 >Emitted(40, 25) Source(31, 25) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -490,8 +491,8 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 1 >
   >    
 2 >    }
-1 >Emitted(40, 5) Source(32, 5) + SourceIndex(0)
-2 >Emitted(40, 6) Source(32, 6) + SourceIndex(0)
+1 >Emitted(41, 5) Source(32, 5) + SourceIndex(0)
+2 >Emitted(41, 6) Source(32, 6) + SourceIndex(0)
 ---
 >>>    return D;
 1->^^^^
@@ -499,8 +500,8 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 1->
   >
 2 >    }
-1->Emitted(41, 5) Source(33, 1) + SourceIndex(0)
-2 >Emitted(41, 13) Source(33, 2) + SourceIndex(0)
+1->Emitted(42, 5) Source(33, 1) + SourceIndex(0)
+2 >Emitted(42, 13) Source(33, 2) + SourceIndex(0)
 ---
 >>>}(C));
 1 >
@@ -533,11 +534,11 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
   >               return null;
   >       }
   >   }
-1 >Emitted(42, 1) Source(33, 1) + SourceIndex(0)
-2 >Emitted(42, 2) Source(33, 2) + SourceIndex(0)
-3 >Emitted(42, 2) Source(16, 1) + SourceIndex(0)
-4 >Emitted(42, 3) Source(16, 17) + SourceIndex(0)
-5 >Emitted(42, 4) Source(16, 18) + SourceIndex(0)
-6 >Emitted(42, 7) Source(33, 2) + SourceIndex(0)
+1 >Emitted(43, 1) Source(33, 1) + SourceIndex(0)
+2 >Emitted(43, 2) Source(33, 2) + SourceIndex(0)
+3 >Emitted(43, 2) Source(16, 1) + SourceIndex(0)
+4 >Emitted(43, 3) Source(16, 17) + SourceIndex(0)
+5 >Emitted(43, 4) Source(16, 18) + SourceIndex(0)
+6 >Emitted(43, 7) Source(33, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=derivedClassConstructorWithExplicitReturns01.js.map

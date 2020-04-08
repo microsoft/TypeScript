@@ -46,7 +46,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
-};var Foo = /** @class */ (function () {
+};
+var Foo = /** @class */ (function () {
     function Foo() {
         var _this = this;
         this.b = function () { return __awaiter(_this, void 0, void 0, function () {

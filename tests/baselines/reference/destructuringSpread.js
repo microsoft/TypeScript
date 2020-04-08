@@ -39,7 +39,8 @@ var __assign = (this && this.__assign) || function () {
         return t;
     };
     return __assign.apply(this, arguments);
-};var x = __assign({}, { x: 0 }).x;
+};
+var x = __assign({}, { x: 0 }).x;
 
 var y = __assign({ y: 0 }, {}).y;
 

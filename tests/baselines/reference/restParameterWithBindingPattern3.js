@@ -20,7 +20,8 @@ var __rest = (this && this.__rest) || function (s, e) {
                 t[p[i]] = s[p[i]];
         }
     return t;
-};function a() {var _a = [];
+};
+function a() {var _a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         _a[_i] = arguments[_i];
     }

@@ -8,7 +8,8 @@ f `'\u{1f4a9}'${ " should be converted to " }'\uD83D\uDCA9'`;
 var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
-};function f() {var args = [];
+};
+function f() {var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
     }

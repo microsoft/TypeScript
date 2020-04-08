@@ -153,7 +153,8 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();function f1() {
+})();
+function f1() {
     var E;
     (function (E) {
         E[E["A"] = 0] = "A";

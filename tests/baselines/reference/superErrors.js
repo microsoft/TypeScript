@@ -64,7 +64,8 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();function foo() {
+})();
+function foo() {
     // super in a non class context
     var x = _super.;
     var y = function () { return _super.; };

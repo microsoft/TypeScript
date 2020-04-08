@@ -25,7 +25,8 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();var C = /** @class */ (function (_super) {
+})();
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C() {
         _this = _super.call(this) || this;

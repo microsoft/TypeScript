@@ -207,7 +207,8 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();var A1 = /** @class */ (function () {
+})();
+var A1 = /** @class */ (function () {
     function A1() {
     }
     A1.prototype.fn = function (a) {

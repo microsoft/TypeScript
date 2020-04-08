@@ -25,7 +25,8 @@ var __rest = (this && this.__rest) || function (s, e) {
                 t[p[i]] = s[p[i]];
         }
     return t;
-};let array;
+};
+let array;
 for (let _a of array) {let { x } = _a, restOf = __rest(_a, ["x"]);
     [x, restOf];
 }

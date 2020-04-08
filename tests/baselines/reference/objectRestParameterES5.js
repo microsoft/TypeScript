@@ -32,7 +32,8 @@ var __rest = (this && this.__rest) || function (s, e) {
                 t[p[i]] = s[p[i]];
         }
     return t;
-};function cloneAgain(_a) {
+};
+function cloneAgain(_a) {
     var a = _a.a, clone = __rest(_a, ["a"]);
 }
 

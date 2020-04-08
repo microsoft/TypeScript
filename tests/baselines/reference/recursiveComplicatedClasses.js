@@ -37,7 +37,8 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();var Signature = /** @class */ (function () {
+})();
+var Signature = /** @class */ (function () {
     function Signature() {
         this.parameters = null;
     }

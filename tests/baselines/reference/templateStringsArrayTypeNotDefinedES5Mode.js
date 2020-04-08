@@ -10,7 +10,8 @@ f `abcdef${ 1234 }${ 5678 }ghijkl`;
 var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
-};function f(x, y, z) {
+};
+function f(x, y, z) {
 }
 
 f({}, 10, 10);

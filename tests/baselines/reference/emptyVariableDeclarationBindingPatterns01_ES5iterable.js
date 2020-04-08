@@ -75,7 +75,8 @@ var __values = (this && this.__values) || function(o) {
         }
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-};(function () {
+};
+(function () {
     var a;
 
     var _a = a;

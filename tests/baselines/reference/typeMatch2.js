@@ -57,7 +57,8 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();function f1() {
+})();
+function f1() {
     var a = { x: 1, y: 2 };
     a = {}; // error
     a = { x: 1 }; // error

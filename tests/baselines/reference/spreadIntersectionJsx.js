@@ -17,7 +17,8 @@ var __assign = (this && this.__assign) || function () {
         return t;
     };
     return __assign.apply(this, arguments);
-};var React = null;
+};
+var React = null;
 var A = /** @class */ (function () {
     function A() {}
     return A;

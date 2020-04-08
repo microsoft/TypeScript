@@ -24,7 +24,8 @@ var __rest = (this && this.__rest) || function (s, e) {
                 t[p[i]] = s[p[i]];
         }
     return t;
-};var a = [].slice(0);
+};
+var a = [].slice(0);
 var b = __rest({}, []);
 var c, d;
 (c = [].slice(0));

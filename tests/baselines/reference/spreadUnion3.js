@@ -30,7 +30,8 @@ var __assign = (this && this.__assign) || function () {
         return t;
     };
     return __assign.apply(this, arguments);
-};function f(x) {
+};
+function f(x) {
     return __assign({ y: 123 }, x); // y: string | number
 }
 f(undefined);

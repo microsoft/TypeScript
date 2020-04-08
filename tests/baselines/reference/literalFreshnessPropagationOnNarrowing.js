@@ -68,7 +68,8 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
         for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
             r[k] = a[j];
     return r;
-};function f1() {
+};
+function f1() {
     var b = true;
     var obj = { b: b };
     // Desired: OK

@@ -43,7 +43,8 @@ var __read = (this && this.__read) || function (o, n) {
 var __spread = (this && this.__spread) || function () {
     for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
     return ar;
-};function f0() {
+};
+function f0() {
     var a = [1, 2, 3];
     var a1 = __spread(a);
     var a2 = __spread([1], a);

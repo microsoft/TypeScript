@@ -18,7 +18,8 @@ var __assign = (this && this.__assign) || function () {
         return t;
     };
     return __assign.apply(this, arguments);
-};var intersection;
+};
+var intersection;
 
 var o1;
 var o1 = __assign({}, intersection);

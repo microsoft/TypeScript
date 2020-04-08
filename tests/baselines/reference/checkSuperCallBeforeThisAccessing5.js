@@ -20,7 +20,8 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();var Based = /** @class */ (function () {
+})();
+var Based = /** @class */ (function () {
     function Based() {var arg = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             arg[_i] = arguments[_i];

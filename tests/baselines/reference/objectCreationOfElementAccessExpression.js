@@ -68,7 +68,8 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();var Food = /** @class */ (function () {
+})();
+var Food = /** @class */ (function () {
     function Food(name) {
         this.name = name;
         this.amount = 100;

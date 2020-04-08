@@ -84,7 +84,8 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();var AbstractClass = /** @class */ (function () {
+})();
+var AbstractClass = /** @class */ (function () {
     function AbstractClass(str, other) {
         var _this = this;
         this.other = this.prop;

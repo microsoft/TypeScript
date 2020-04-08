@@ -16,7 +16,8 @@ var __assign = (this && this.__assign) || function () {
         return t;
     };
     return __assign.apply(this, arguments);
-};var o7 = __assign({}, o ?  : );
+};
+var o7 = __assign({}, o ?  : );
 var o8 = __assign({},  * o);
 var o9 = __assign({}, matchMedia()), _a = void 0;;
 var o10 = __assign(__assign({}, get), { x: function () { return 12; } });
