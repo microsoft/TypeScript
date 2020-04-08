@@ -11,6 +11,12 @@ export class Foo {
     }
 }
 
+/** @class */
+function C() {
+    this.x = 0;
+    this.x = function() { this.x.toString(); }
+}
+
 
 
 

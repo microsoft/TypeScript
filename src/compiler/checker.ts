@@ -7596,7 +7596,7 @@ namespace ts {
                 }
                 return anyType;
             }
-            if (containsThisProperty(expression.left, expression.right)) {
+            if (containsSameNamedThisProperty(expression.left, expression.right)) {
                 return anyType;
             }
             const type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : getWidenedLiteralType(checkExpressionCached(expression.right));
@@ -7637,7 +7637,7 @@ namespace ts {
             return type;
         }
 
-        function containsThisProperty(thisProperty: Expression, expression: Expression) {
+        function containsSameNamedThisProperty(thisProperty: Expression, expression: Expression) {
             return isPropertyAccessExpression(thisProperty)
                 && thisProperty.expression.kind === SyntaxKind.ThisKeyword
                 && forEachChildRecursively(

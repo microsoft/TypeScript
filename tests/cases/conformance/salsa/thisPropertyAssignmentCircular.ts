@@ -14,3 +14,9 @@ export class Foo {
         this.foo
     }
 }
+
+/** @class */
+function C() {
+    this.x = 0;
+    this.x = function() { this.x.toString(); }
+}
