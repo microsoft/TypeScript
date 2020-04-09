@@ -35,7 +35,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         }];
     }
 
-    function getEditsForAction(context: RefactorContext, _actionName: string): RefactorEditInfo | undefined {
+    export function getEditsForAction(context: RefactorContext, _actionName: string): RefactorEditInfo | undefined {
         const { file } = context;
 
         const fieldInfo = getConvertibleFieldAtPosition(context);
