@@ -5,8 +5,10 @@ tests/cases/compiler/inKeywordTypeguard.ts(16,11): error TS2339: Property 'a' do
 tests/cases/compiler/inKeywordTypeguard.ts(27,11): error TS2339: Property 'b' does not exist on type 'AWithOptionalProp | BWithOptionalProp'.
   Property 'b' does not exist on type 'AWithOptionalProp'.
 tests/cases/compiler/inKeywordTypeguard.ts(42,11): error TS2339: Property 'b' does not exist on type 'AWithMethod'.
-tests/cases/compiler/inKeywordTypeguard.ts(49,11): error TS2339: Property 'a' does not exist on type 'never'.
-tests/cases/compiler/inKeywordTypeguard.ts(50,11): error TS2339: Property 'b' does not exist on type 'never'.
+tests/cases/compiler/inKeywordTypeguard.ts(49,11): error TS2339: Property 'a' does not exist on type '(AWithMethod & { c: unknown; }) | (BWithMethod & { c: unknown; })'.
+  Property 'a' does not exist on type 'BWithMethod & { c: unknown; }'.
+tests/cases/compiler/inKeywordTypeguard.ts(50,11): error TS2339: Property 'b' does not exist on type '(AWithMethod & { c: unknown; }) | (BWithMethod & { c: unknown; })'.
+  Property 'b' does not exist on type 'AWithMethod & { c: unknown; }'.
 tests/cases/compiler/inKeywordTypeguard.ts(52,11): error TS2339: Property 'a' does not exist on type 'AWithMethod | BWithMethod'.
   Property 'a' does not exist on type 'BWithMethod'.
 tests/cases/compiler/inKeywordTypeguard.ts(53,11): error TS2339: Property 'b' does not exist on type 'AWithMethod | BWithMethod'.
@@ -85,10 +87,12 @@ tests/cases/compiler/inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' do
         if ("c" in x) {
             x.a();
               ~
-!!! error TS2339: Property 'a' does not exist on type 'never'.
+!!! error TS2339: Property 'a' does not exist on type '(AWithMethod & { c: unknown; }) | (BWithMethod & { c: unknown; })'.
+!!! error TS2339:   Property 'a' does not exist on type 'BWithMethod & { c: unknown; }'.
             x.b();
               ~
-!!! error TS2339: Property 'b' does not exist on type 'never'.
+!!! error TS2339: Property 'b' does not exist on type '(AWithMethod & { c: unknown; }) | (BWithMethod & { c: unknown; })'.
+!!! error TS2339:   Property 'b' does not exist on type 'AWithMethod & { c: unknown; }'.
         } else {
             x.a();
               ~

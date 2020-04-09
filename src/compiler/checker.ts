@@ -20315,7 +20315,7 @@ namespace ts {
                         return resultType;
                     }
                     return narrowTypeByInKeywordWithExistedPropName(type, propName);
-                }                
+                }
                 return type;
             }
 

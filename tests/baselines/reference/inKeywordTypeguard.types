@@ -146,13 +146,13 @@ function negativeTestClassesWithMemberMissingInBothClasses(x: AWithMethod | BWit
         x.a();
 >x.a() : any
 >x.a : any
->x : never
+>x : (AWithMethod & { c: unknown; }) | (BWithMethod & { c: unknown; })
 >a : any
 
         x.b();
 >x.b() : any
 >x.b : any
->x : never
+>x : (AWithMethod & { c: unknown; }) | (BWithMethod & { c: unknown; })
 >b : any
 
     } else {
