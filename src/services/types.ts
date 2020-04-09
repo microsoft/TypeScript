@@ -623,6 +623,8 @@ namespace ts {
          * so this description should make sense by itself if the parent is inlineable=true
          */
         description: string;
+
+        error?: string;
     }
 
     /**

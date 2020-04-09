@@ -23,24 +23,37 @@ namespace ts.refactor.extractSymbol {
 
         const functionActions: RefactorActionInfo[] = [];
         const usedFunctionNames: Map<boolean> = createMap();
+        let innermostErrorFunctionAction: ts.RefactorActionInfo | undefined;
 
         const constantActions: RefactorActionInfo[] = [];
         const usedConstantNames: Map<boolean> = createMap();
+        let innermostErrorConstantAction: ts.RefactorActionInfo | undefined;
+        
 
         let i = 0;
         for (const {functionExtraction, constantExtraction} of extractions) {
-            // Skip these since we don't have a way to report errors yet
+            const description = functionExtraction.description;
             if (functionExtraction.errors.length === 0) {
                 // Don't issue refactorings with duplicated names.
                 // Scopes come back in "innermost first" order, so extractions will
                 // preferentially go into nearer scopes
-                const description = functionExtraction.description;
                 if (!usedFunctionNames.has(description)) {
                     usedFunctionNames.set(description, true);
                     functionActions.push({
                         description,
                         name: `function_scope_${i}`
                     });
+                }
+            } else if (!innermostErrorFunctionAction) {
+                let error = functionExtraction.errors[0].messageText;
+                if (typeof error !== 'string') {
+                    error = error.messageText;
+                }
+
+                innermostErrorFunctionAction = {
+                    description,
+                    name: `function_scope_${i}`,
+                    error: error
                 }
             }
 
@@ -57,6 +70,17 @@ namespace ts.refactor.extractSymbol {
                         name: `constant_scope_${i}`
                     });
                 }
+            } else if (!innermostErrorConstantAction) {
+                let error = constantExtraction.errors[0].messageText;
+                if (typeof error !== 'string') {
+                    error = error.messageText;
+                }
+
+                innermostErrorConstantAction = {
+                    description,
+                    name: `constant_scope_${i}`,
+                    error: error
+                }
             }
 
             // *do* increment i anyway because we'll look for the i-th scope
@@ -66,19 +90,19 @@ namespace ts.refactor.extractSymbol {
 
         const infos: ApplicableRefactorInfo[] = [];
 
-        if (functionActions.length) {
+        if (functionActions.length || innermostErrorFunctionAction) {
             infos.push({
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_function),
-                actions: functionActions
+                actions: functionActions.length ? functionActions : [ innermostErrorFunctionAction! ]
             });
         }
 
-        if (constantActions.length) {
+        if (constantActions.length || innermostErrorConstantAction) {
             infos.push({
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
-                actions: constantActions
+                actions: constantActions.length ? constantActions : [ innermostErrorConstantAction! ]
             });
         }
 
