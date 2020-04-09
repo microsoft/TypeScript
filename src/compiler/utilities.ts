@@ -3465,9 +3465,8 @@ namespace ts {
     }
 
     function getReplacement(c: string, offset: number, input: string) {
-        const charCode = c.charCodeAt(0);
-        if (charCode === CharacterCodes.nullCharacter) {
-            const lookAhead = input.charCodeAt(offset + 1);
+        if (c.charCodeAt(0) === CharacterCodes.nullCharacter) {
+            const lookAhead = input.charCodeAt(offset + c.length);
             if (lookAhead >= CharacterCodes._0 && lookAhead <= CharacterCodes._9) {
                 // If the null character is followed by digits, print as a hex escape to prevent the result from parsing as an octal (which is forbidden in strict mode)
                 return "\\x00";
