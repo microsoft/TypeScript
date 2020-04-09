@@ -36058,11 +36058,13 @@ namespace ts {
                 if (importTarget === file) return false;
                 const exports = getExportsOfModule(file.symbol);
                 for (const s of arrayFrom(exports.values())) {
-                    const merged = getMergedSymbol(s);
-                    for (const d of merged.declarations) {
-                        const declFile = getSourceFileOfNode(d);
-                        if (declFile === importTarget) {
-                            return true;
+                    if (s.mergeId) {
+                        const merged = getMergedSymbol(s);
+                        for (const d of merged.declarations) {
+                            const declFile = getSourceFileOfNode(d);
+                            if (declFile === importTarget) {
+                                return true;
+                            }
                         }
                     }
                 }
