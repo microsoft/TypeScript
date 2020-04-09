@@ -17,7 +17,7 @@
 
 verify.codeFixAll({
     fixId: "fixPropertyOverrideAccessor",
-    fixAllDescription: "Generate 'get' and 'set' accessors",
+    fixAllDescription: "Generate 'get' and 'set' accessors for all overriding properties",
     newFileContent: `class A {
     get x() { return 1 }
 }

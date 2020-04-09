@@ -5641,7 +5641,11 @@
         "category": "Message",
         "code": 95116
     },
-    
+    "Generate 'get' and 'set' accessors for all overriding properties": {
+        "category": "Message",
+        "code": 95117
+    },
+   
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
         "code": 18004
