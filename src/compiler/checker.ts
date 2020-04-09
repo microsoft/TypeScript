@@ -6211,14 +6211,18 @@ namespace ts {
                     ];
                     const symbolProps = getPropertiesOfType(classType);
                     const publicSymbolProps = filter(symbolProps, s => {
+                        // `valueDeclaration` could be undefined if inherited from
+                        // a union/intersection base type, but inherited properties
+                        // don't matter here.
                         const valueDecl = s.valueDeclaration;
-                        Debug.assertIsDefined(valueDecl);
-                        return !(isNamedDeclaration(valueDecl) && isPrivateIdentifier(valueDecl.name));
+                        return valueDecl && !(isNamedDeclaration(valueDecl) && isPrivateIdentifier(valueDecl.name));
                     });
                     const hasPrivateIdentifier = some(symbolProps, s => {
+                        // `valueDeclaration` could be undefined if inherited from
+                        // a union/intersection base type, but inherited properties
+                        // don't matter here.
                         const valueDecl = s.valueDeclaration;
-                        Debug.assertIsDefined(valueDecl);
-                        return isNamedDeclaration(valueDecl) && isPrivateIdentifier(valueDecl.name);
+                        return valueDecl && isNamedDeclaration(valueDecl) && isPrivateIdentifier(valueDecl.name);
                     });
                     // Boil down all private properties into a single one.
                     const privateProperties = hasPrivateIdentifier ?
@@ -10420,7 +10424,7 @@ namespace ts {
                 if (!firstValueDeclaration) {
                     firstValueDeclaration = prop.valueDeclaration;
                 }
-                else if (prop.valueDeclaration !== firstValueDeclaration) {
+                else if (prop.valueDeclaration && prop.valueDeclaration !== firstValueDeclaration) {
                     hasNonUniformValueDeclaration = true;
                 }
                 declarations = addRange(declarations, prop.declarations);
