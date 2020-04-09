@@ -36047,10 +36047,10 @@ namespace ts {
                     }
                     return !sym.exports ? [] : nodeBuilder.symbolTableToDeclarationStatements(sym.exports, node, flags, tracker, bundled);
                 },
-                isImportRequierdByAugmentation,
+                isImportRequiredByAugmentation,
             };
 
-            function isImportRequierdByAugmentation(node: ImportDeclaration) {
+            function isImportRequiredByAugmentation(node: ImportDeclaration) {
                 const file = getSourceFileOfNode(node);
                 if (!file.symbol) return false;
                 const importTarget = getExternalModuleFileFromDeclaration(node);

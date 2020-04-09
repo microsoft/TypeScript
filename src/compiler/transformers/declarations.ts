@@ -718,7 +718,7 @@ namespace ts {
                 );
             }
             // Augmentation of export depends on import
-            if (resolver.isImportRequierdByAugmentation(decl)) {
+            if (resolver.isImportRequiredByAugmentation(decl)) {
                 return updateImportDeclaration(
                     decl,
                     /*decorators*/ undefined,
