@@ -197,9 +197,9 @@ module TypeScriptAllInOne {
 >float2.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >float2 : Symbol(float2, Decl(constructorWithIncompleteTypeAnnotation.ts, 78, 32))
 >toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
->reg.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>reg.toString : Symbol(RegExp.toString, Decl(lib.es5.d.ts, --, --))
 >reg : Symbol(reg, Decl(constructorWithIncompleteTypeAnnotation.ts, 81, 15))
->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(RegExp.toString, Decl(lib.es5.d.ts, --, --))
 >objLit : Symbol(objLit, Decl(constructorWithIncompleteTypeAnnotation.ts, 82, 15))
 >weekday : Symbol(weekday, Decl(constructorWithIncompleteTypeAnnotation.ts, 83, 15))
 
