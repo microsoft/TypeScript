@@ -20308,11 +20308,18 @@ namespace ts {
             }
 
             function narrowByInKeyword(type: Type, literal: LiteralExpression, assumeTrue: boolean) {
-                const propName = escapeLeadingUnderscores(literal.text);
                 if (type.flags & (TypeFlags.Union | TypeFlags.Object | TypeFlags.Intersection) || isThisTypeParameter(type)) {
-                    return filterType(type, t => isTypePresencePossible(t, propName, assumeTrue));
-                }
+                    const propName = escapeLeadingUnderscores(literal.text);
+                    const resultType = filterType(type, t => isTypePresencePossible(t, propName, assumeTrue));
+                    if (!assumeTrue || resultType !== neverType) {
+                        return resultType;
+                    }
+                    return narrowTypeByInKeywordWithExistedPropName(type, propName);
+                }                
+                return type;
+            }
 
+            function narrowTypeByInKeywordWithExistedPropName(type: Type, propName: __String) {
                 const symbolTable = createSymbolTable();
                 const symbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, propName);
                 symbol.type = unknownType;
@@ -20326,7 +20333,7 @@ namespace ts {
                     undefined
                 );
 
-                return getIntersectionType([type, anonymousType]);
+                return mapType(type, t => getIntersectionType([t, anonymousType]));
             }
 
             function narrowTypeByBinaryExpression(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {

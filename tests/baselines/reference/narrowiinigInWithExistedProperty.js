@@ -12,7 +12,7 @@ interface C {
 }
 
 declare const foo: A | B | C;
-declare const bar: unknown;
+declare const bar: {};
 
 if ('a' in foo) {
     foo.a

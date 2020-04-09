@@ -26,7 +26,7 @@ declare const foo: A | B | C;
 >B : Symbol(B, Decl(narrowiinigInWithExistedProperty.ts, 2, 1))
 >C : Symbol(C, Decl(narrowiinigInWithExistedProperty.ts, 6, 1))
 
-declare const bar: unknown;
+declare const bar: {};
 >bar : Symbol(bar, Decl(narrowiinigInWithExistedProperty.ts, 13, 13))
 
 if ('a' in foo) {

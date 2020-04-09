@@ -17,8 +17,8 @@ interface C {
 declare const foo: A | B | C;
 >foo : A | B | C
 
-declare const bar: unknown;
->bar : unknown
+declare const bar: {};
+>bar : {}
 
 if ('a' in foo) {
 >'a' in foo : boolean
@@ -64,7 +64,7 @@ if ('a' in foo) {
 if ('a' in bar) {
 >'a' in bar : boolean
 >'a' : "a"
->bar : unknown
+>bar : {}
 
     bar.a
 >bar.a : unknown
