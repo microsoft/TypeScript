@@ -1,0 +1,73 @@
+=== tests/cases/compiler/narrowiinigInWithExistedProperty.ts ===
+interface A {
+    a: number
+>a : number
+}
+
+interface B {
+    b: number
+>b : number
+}
+
+interface C {
+    c: number
+>c : number
+}
+
+declare const foo: A | B | C;
+>foo : A | B | C
+
+declare const bar: unknown;
+>bar : unknown
+
+if ('a' in foo) {
+>'a' in foo : boolean
+>'a' : "a"
+>foo : A | B | C
+
+    foo.a
+>foo.a : number
+>foo : A
+>a : number
+
+} else if ('b' in foo) {
+>'b' in foo : boolean
+>'b' : "b"
+>foo : B | C
+
+    foo.b
+>foo.b : number
+>foo : B
+>b : number
+
+} else if ('c' in foo) {
+>'c' in foo : boolean
+>'c' : "c"
+>foo : C
+
+    foo.c
+>foo.c : number
+>foo : C
+>c : number
+
+} else if ('d' in foo) {
+>'d' in foo : boolean
+>'d' : "d"
+>foo : never
+
+    foo.d
+>foo.d : any
+>foo : never
+>d : any
+}
+
+if ('a' in bar) {
+>'a' in bar : boolean
+>'a' : "a"
+>bar : unknown
+
+    bar.a
+>bar.a : unknown
+>bar : { a: unknown; }
+>a : unknown
+}

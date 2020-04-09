@@ -1,0 +1,70 @@
+=== tests/cases/compiler/narrowiinigInWithExistedProperty.ts ===
+interface A {
+>A : Symbol(A, Decl(narrowiinigInWithExistedProperty.ts, 0, 0))
+
+    a: number
+>a : Symbol(A.a, Decl(narrowiinigInWithExistedProperty.ts, 0, 13))
+}
+
+interface B {
+>B : Symbol(B, Decl(narrowiinigInWithExistedProperty.ts, 2, 1))
+
+    b: number
+>b : Symbol(B.b, Decl(narrowiinigInWithExistedProperty.ts, 4, 13))
+}
+
+interface C {
+>C : Symbol(C, Decl(narrowiinigInWithExistedProperty.ts, 6, 1))
+
+    c: number
+>c : Symbol(C.c, Decl(narrowiinigInWithExistedProperty.ts, 8, 13))
+}
+
+declare const foo: A | B | C;
+>foo : Symbol(foo, Decl(narrowiinigInWithExistedProperty.ts, 12, 13))
+>A : Symbol(A, Decl(narrowiinigInWithExistedProperty.ts, 0, 0))
+>B : Symbol(B, Decl(narrowiinigInWithExistedProperty.ts, 2, 1))
+>C : Symbol(C, Decl(narrowiinigInWithExistedProperty.ts, 6, 1))
+
+declare const bar: unknown;
+>bar : Symbol(bar, Decl(narrowiinigInWithExistedProperty.ts, 13, 13))
+
+if ('a' in foo) {
+>foo : Symbol(foo, Decl(narrowiinigInWithExistedProperty.ts, 12, 13))
+
+    foo.a
+>foo.a : Symbol(A.a, Decl(narrowiinigInWithExistedProperty.ts, 0, 13))
+>foo : Symbol(foo, Decl(narrowiinigInWithExistedProperty.ts, 12, 13))
+>a : Symbol(A.a, Decl(narrowiinigInWithExistedProperty.ts, 0, 13))
+
+} else if ('b' in foo) {
+>foo : Symbol(foo, Decl(narrowiinigInWithExistedProperty.ts, 12, 13))
+
+    foo.b
+>foo.b : Symbol(B.b, Decl(narrowiinigInWithExistedProperty.ts, 4, 13))
+>foo : Symbol(foo, Decl(narrowiinigInWithExistedProperty.ts, 12, 13))
+>b : Symbol(B.b, Decl(narrowiinigInWithExistedProperty.ts, 4, 13))
+
+} else if ('c' in foo) {
+>foo : Symbol(foo, Decl(narrowiinigInWithExistedProperty.ts, 12, 13))
+
+    foo.c
+>foo.c : Symbol(C.c, Decl(narrowiinigInWithExistedProperty.ts, 8, 13))
+>foo : Symbol(foo, Decl(narrowiinigInWithExistedProperty.ts, 12, 13))
+>c : Symbol(C.c, Decl(narrowiinigInWithExistedProperty.ts, 8, 13))
+
+} else if ('d' in foo) {
+>foo : Symbol(foo, Decl(narrowiinigInWithExistedProperty.ts, 12, 13))
+
+    foo.d
+>foo : Symbol(foo, Decl(narrowiinigInWithExistedProperty.ts, 12, 13))
+}
+
+if ('a' in bar) {
+>bar : Symbol(bar, Decl(narrowiinigInWithExistedProperty.ts, 13, 13))
+
+    bar.a
+>bar.a : Symbol(a)
+>bar : Symbol(bar, Decl(narrowiinigInWithExistedProperty.ts, 13, 13))
+>a : Symbol(a)
+}

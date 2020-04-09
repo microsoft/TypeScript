@@ -1,0 +1,37 @@
+tests/cases/compiler/narrowiinigInWithExistedProperty.ts(23,9): error TS2339: Property 'd' does not exist on type 'never'.
+tests/cases/compiler/narrowiinigInWithExistedProperty.ts(26,12): error TS2571: Object is of type 'unknown'.
+
+
+==== tests/cases/compiler/narrowiinigInWithExistedProperty.ts (2 errors) ====
+    interface A {
+        a: number
+    }
+    
+    interface B {
+        b: number
+    }
+    
+    interface C {
+        c: number
+    }
+    
+    declare const foo: A | B | C;
+    declare const bar: unknown;
+    
+    if ('a' in foo) {
+        foo.a
+    } else if ('b' in foo) {
+        foo.b
+    } else if ('c' in foo) {
+        foo.c
+    } else if ('d' in foo) {
+        foo.d
+            ~
+!!! error TS2339: Property 'd' does not exist on type 'never'.
+    }
+    
+    if ('a' in bar) {
+               ~~~
+!!! error TS2571: Object is of type 'unknown'.
+        bar.a
+    }

@@ -20308,11 +20308,25 @@ namespace ts {
             }
 
             function narrowByInKeyword(type: Type, literal: LiteralExpression, assumeTrue: boolean) {
+                const propName = escapeLeadingUnderscores(literal.text);
                 if (type.flags & (TypeFlags.Union | TypeFlags.Object | TypeFlags.Intersection) || isThisTypeParameter(type)) {
-                    const propName = escapeLeadingUnderscores(literal.text);
                     return filterType(type, t => isTypePresencePossible(t, propName, assumeTrue));
                 }
-                return type;
+
+                const symbolTable = createSymbolTable();
+                const symbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, propName);
+                symbol.type = unknownType;
+                symbolTable.set(symbol.escapedName, symbol);
+                const anonymousType = createAnonymousType(
+                    undefined,
+                    symbolTable,
+                    emptyArray,
+                    emptyArray,
+                    undefined,
+                    undefined
+                );
+
+                return getIntersectionType([type, anonymousType]);
             }
 
             function narrowTypeByBinaryExpression(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
