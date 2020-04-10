@@ -25,6 +25,7 @@ interface Array<T> {
      * @param fromIndex The position in this array at which to begin searching for searchElement.
      */
     includes(searchElement: T, fromIndex?: number): boolean;
+    includes(searchElement: T, fromIndex?: number): searchElement is T;
 }
 
 interface ReadonlyArray<T> {
@@ -34,6 +35,7 @@ interface ReadonlyArray<T> {
      * @param fromIndex The position in this array at which to begin searching for searchElement.
      */
     includes(searchElement: T, fromIndex?: number): boolean;
+    includes(searchElement: T, fromIndex?: number): searchElement is T;
 }
 
 interface Int8Array {
