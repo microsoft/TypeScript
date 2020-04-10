@@ -1115,7 +1115,8 @@ namespace ts {
         target: ScriptTarget.ES5,
         strict: true,
         esModuleInterop: true,
-        forceConsistentCasingInFileNames: true
+        forceConsistentCasingInFileNames: true,
+        skipLibCheck: true
     };
 
     /* @internal */

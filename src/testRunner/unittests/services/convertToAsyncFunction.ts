@@ -1113,7 +1113,16 @@ function rej(reject): a{
 `
         );
 
+        _testConvertToAsyncFunction("convertToAsyncFunction_ParameterNameCollision", `
+async function foo<T>(x: T): Promise<T> {
+    return x;
+}
 
+function [#|bar|]<T>(x: T): Promise<T> {
+    return foo(x).then(foo)
+}
+`
+        );
 
 
         _testConvertToAsyncFunction("convertToAsyncFunction_LocalReturn", `

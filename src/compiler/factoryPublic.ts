@@ -1555,9 +1555,11 @@ namespace ts {
     export function createYield(expression?: Expression): YieldExpression;
     export function createYield(asteriskToken: AsteriskToken | undefined, expression: Expression): YieldExpression;
     export function createYield(asteriskTokenOrExpression?: AsteriskToken | undefined | Expression, expression?: Expression) {
+        const asteriskToken = asteriskTokenOrExpression && asteriskTokenOrExpression.kind === SyntaxKind.AsteriskToken ? <AsteriskToken>asteriskTokenOrExpression : undefined;
+        expression = asteriskTokenOrExpression && asteriskTokenOrExpression.kind !== SyntaxKind.AsteriskToken ? asteriskTokenOrExpression : expression;
         const node = <YieldExpression>createSynthesizedNode(SyntaxKind.YieldExpression);
-        node.asteriskToken = asteriskTokenOrExpression && asteriskTokenOrExpression.kind === SyntaxKind.AsteriskToken ? <AsteriskToken>asteriskTokenOrExpression : undefined;
-        node.expression = asteriskTokenOrExpression && asteriskTokenOrExpression.kind !== SyntaxKind.AsteriskToken ? asteriskTokenOrExpression : expression;
+        node.asteriskToken = asteriskToken;
+        node.expression = expression && parenthesizeExpressionForList(expression);
         return node;
     }
 
@@ -2055,6 +2057,26 @@ namespace ts {
             || node.body !== body
             ? updateNode(createFunctionDeclaration(decorators, modifiers, asteriskToken, name, typeParameters, parameters, type, body), node)
             : node;
+    }
+
+    /* @internal */
+    export function updateFunctionLikeBody(declaration: FunctionLikeDeclaration, body: Block): FunctionLikeDeclaration {
+        switch (declaration.kind) {
+            case SyntaxKind.FunctionDeclaration:
+                return createFunctionDeclaration(declaration.decorators, declaration.modifiers, declaration.asteriskToken, declaration.name, declaration.typeParameters, declaration.parameters, declaration.type, body);
+            case SyntaxKind.MethodDeclaration:
+                return createMethod(declaration.decorators, declaration.modifiers, declaration.asteriskToken, declaration.name, declaration.questionToken, declaration.typeParameters, declaration.parameters, declaration.type, body);
+            case SyntaxKind.GetAccessor:
+                return createGetAccessor(declaration.decorators, declaration.modifiers, declaration.name, declaration.parameters, declaration.type, body);
+            case SyntaxKind.SetAccessor:
+                return createSetAccessor(declaration.decorators, declaration.modifiers, declaration.name, declaration.parameters, body);
+            case SyntaxKind.Constructor:
+                return createConstructor(declaration.decorators, declaration.modifiers, declaration.parameters, body);
+            case SyntaxKind.FunctionExpression:
+                return createFunctionExpression(declaration.modifiers, declaration.asteriskToken, declaration.name, declaration.typeParameters, declaration.parameters, declaration.type, body);
+            case SyntaxKind.ArrowFunction:
+                return createArrowFunction(declaration.modifiers, declaration.typeParameters, declaration.parameters, declaration.type, declaration.equalsGreaterThanToken, body);
+        }
     }
 
     export function createClassDeclaration(
