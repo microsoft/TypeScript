@@ -19772,6 +19772,9 @@ namespace ts {
                 case SyntaxKind.BinaryExpression:
                     switch ((<BinaryExpression>node).operatorToken.kind) {
                         case SyntaxKind.EqualsToken:
+                        case SyntaxKind.BarBarEqualsToken:
+                        case SyntaxKind.AmpersandAmpersandEqualsToken:
+                        case SyntaxKind.QuestionQuestionEqualsToken:
                             return getReferenceCandidate((<BinaryExpression>node).left);
                         case SyntaxKind.CommaToken:
                             return getReferenceCandidate((<BinaryExpression>node).right);
@@ -28590,7 +28593,7 @@ namespace ts {
                         getUnionType([extractDefinitelyFalsyTypes(strictNullChecks ? leftType : getBaseTypeOfLiteralType(rightType)), rightType]) :
                         leftType;
                     if (operator === SyntaxKind.AmpersandAmpersandEqualsToken) {
-                        checkAssignmentOperator(resultType);
+                        checkAssignmentOperator(rightType);
                     }
                     return resultType;
                 }
