@@ -2282,7 +2282,7 @@ declare namespace ts {
         flags: SymbolFlags;
         escapedName: __String;
         declarations: Declaration[];
-        valueDeclaration: Declaration;
+        /** @optional */ valueDeclaration: Declaration;
         members?: SymbolTable;
         exports?: SymbolTable;
         globalExports?: SymbolTable;
