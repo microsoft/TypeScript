@@ -17,7 +17,7 @@ namespace ts.codefix {
     }
 
     // TODO: Use a general type instead of Refactor* types
-    // TODO: Rename this to show that it generates accessor
+    // TODO: Rename this to show that it generates accessors
     export function getEditsForAction(context: RefactorContext, _actionName: string): RefactorEditInfo | undefined {
         const { file } = context;
 
@@ -217,4 +217,18 @@ namespace ts.codefix {
             }
         });
     }
+
+    export function getAllSupers(decl: ClassOrInterface | undefined, checker: TypeChecker): readonly ClassOrInterface[] {
+        const res: ClassLikeDeclaration[] = [];
+        while (decl) {
+            const superElement = getClassExtendsHeritageElement(decl);
+            const superSymbol = superElement && checker.getSymbolAtLocation(superElement.expression);
+            const superDecl = superSymbol && find(superSymbol.declarations, isClassLike);
+            if (superDecl) { res.push(superDecl); }
+            decl = superDecl;
+        }
+        return res;
+    }
+
+    export type ClassOrInterface = ClassLikeDeclaration | InterfaceDeclaration;
 }

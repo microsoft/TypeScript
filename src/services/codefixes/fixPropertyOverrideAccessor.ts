@@ -34,6 +34,7 @@ namespace ts.codefix {
             endPosition = context.span.start + context.span.length
         }
         else if (context.errorCode === Diagnostics._0_is_defined_as_a_property_in_class_1_but_is_overridden_here_in_2_as_an_accessor.code) {
+            // TODO: A lot of these should be bails instead of asserts
             const checker = context.program.getTypeChecker()
             const node = getTokenAtPosition(context.sourceFile, context.span.start).parent;
             Debug.assert(isAccessor(node), "it wasn't an accessor");
@@ -55,19 +56,4 @@ namespace ts.codefix {
         const refactorContext = { ...context, file: context.sourceFile, startPosition, endPosition }
         return getEditsForAction(refactorContext, Diagnostics.Generate_get_and_set_accessors.message);
     }
-
-    // TODO: Stolen from a different codefix, should dedupe it somewhere.
-    function getAllSupers(decl: ClassOrInterface | undefined, checker: TypeChecker): readonly ClassOrInterface[] {
-        const res: ClassLikeDeclaration[] = [];
-        while (decl) {
-            const superElement = getClassExtendsHeritageElement(decl);
-            const superSymbol = superElement && checker.getSymbolAtLocation(superElement.expression);
-            const superDecl = superSymbol && find(superSymbol.declarations, isClassLike);
-            if (superDecl) { res.push(superDecl); }
-            decl = superDecl;
-        }
-        return res;
-    }
-
-    type ClassOrInterface = ClassLikeDeclaration | InterfaceDeclaration;
 }
