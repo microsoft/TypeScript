@@ -48,6 +48,7 @@ scripts/configurePrerelease.js
 scripts/configureLanguageServiceBuild.js
 scripts/open-user-pr.js
 scripts/open-cherry-pick-pr.js
+scripts/overwrite.js
 scripts/processDiagnosticMessages.d.ts
 scripts/processDiagnosticMessages.js
 scripts/produceLKG.js

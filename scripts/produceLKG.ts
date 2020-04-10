@@ -3,8 +3,8 @@
 import childProcess = require("child_process");
 import fs = require("fs-extra");
 import path = require("path");
-import removeInternal = require("remove-internal");
 import glob = require("glob");
+import overwrite = require("./overwrite");
 
 const root = path.join(__dirname, "..");
 const source = path.join(root, "built/local");
@@ -75,13 +75,18 @@ async function writeGitAttributes() {
     await fs.writeFile(path.join(dest, ".gitattributes"), `* text eol=lf`, "utf-8");
 }
 
+async function readSourceWithOverwrites(fileName: string) {
+    return fs.readFile(path.join(source, fileName), "utf-8").then(overwrite.overwriteOptional);
+}
+
 async function copyWithCopyright(fileName: string, destName = fileName) {
-    const content = await fs.readFile(path.join(source, fileName), "utf-8");
+    const content = await readSourceWithOverwrites(fileName);
     await fs.writeFile(path.join(dest, destName), copyright + "\n" + content);
 }
 
 async function copyFromBuiltLocal(fileName: string) {
-    await fs.copy(path.join(source, fileName), path.join(dest, fileName));
+    const content = await readSourceWithOverwrites(fileName);
+    await fs.writeFile(path.join(dest, fileName), content);
 }
 
 async function copyFilesWithGlob(pattern: string) {
