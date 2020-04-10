@@ -16,17 +16,13 @@ namespace ts.codefix {
         readonly renameAccessor: boolean;
     }
 
-    // TODO: Use a general type instead of Refactor* types
-    // TODO: Rename this to show that it generates accessors
-    export function getEditsForAction(context: RefactorContext, _actionName: string): RefactorEditInfo | undefined {
-        const { file } = context;
-
-        const fieldInfo = getConvertibleFieldAtPosition(context);
+    export function generateAccessorFromProperty(file: SourceFile, start: number, end: number, context: textChanges.TextChangesContext, _actionName: string): FileTextChanges[] | undefined {
+        const fieldInfo = getAccessorConvertiblePropertyAtPosition(file, start, end);
         if (!fieldInfo) return undefined;
 
         const isJS = isSourceFileJS(file);
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        const { isStatic, isReadonly, fieldName, accessorName, originalName, type, container, declaration, renameAccessor } = fieldInfo;
+        const { isStatic, isReadonly, fieldName, accessorName, originalName, type, container, declaration } = fieldInfo;
 
         suppressLeadingAndTrailingTrivia(fieldName);
         suppressLeadingAndTrailingTrivia(accessorName);
@@ -62,13 +58,7 @@ namespace ts.codefix {
             insertAccessor(changeTracker, file, setAccessor, declaration, container);
         }
 
-        const edits = changeTracker.getChanges();
-        const renameFilename = file.fileName;
-
-        const nameNeedRename = renameAccessor ? accessorName : fieldName;
-        const renameLocationOffset = isIdentifier(nameNeedRename) ? 0 : -1;
-        const renameLocation = renameLocationOffset + getRenameLocation(edits, renameFilename, nameNeedRename.text, /*preferLastLocation*/ isParameter(declaration));
-        return { renameFilename, renameLocation, edits };
+        return changeTracker.getChanges();
     }
 
     function isConvertibleName(name: DeclarationName): name is AcceptedNameType {
@@ -96,14 +86,12 @@ namespace ts.codefix {
         return modifiers && createNodeArray(modifiers);
     }
 
-    export function getConvertibleFieldAtPosition(context: RefactorContext): Info | undefined {
-        const { file, startPosition, endPosition } = context;
-
-        const node = getTokenAtPosition(file, startPosition);
+    export function getAccessorConvertiblePropertyAtPosition(file: SourceFile, start: number, end: number): Info | undefined {
+        const node = getTokenAtPosition(file, start);
         const declaration = findAncestor(node.parent, isAcceptedDeclaration);
         // make sure declaration have AccessibilityModifier or Static Modifier or Readonly Modifier
         const meaning = ModifierFlags.AccessibilityModifier | ModifierFlags.Static | ModifierFlags.Readonly;
-        if (!declaration || !nodeOverlapsWithStartEnd(declaration.name, file, startPosition, endPosition!) // TODO: GH#18217
+        if (!declaration || !nodeOverlapsWithStartEnd(declaration.name, file, start, end)
             || !isConvertibleName(declaration.name) || (getModifierFlags(declaration) | meaning) !== meaning) return undefined;
 
         const name = declaration.name.text;
