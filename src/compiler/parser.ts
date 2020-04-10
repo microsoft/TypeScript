@@ -6884,7 +6884,8 @@ namespace ts {
                     let state = JSDocState.SawAsterisk;
                     let margin: number | undefined;
                     // + 4 for leading '/** '
-                    let indent = start - Math.max(content.lastIndexOf("\n", start), 0) + 4;
+                    // + 1 because the last index of \n is always one index before the first character in the line and coincidentally, if there is no \n before start, it is -1, which is also one index before the first character
+                    let indent = start - (content.lastIndexOf("\n", start) + 1) + 4;
                     function pushComment(text: string) {
                         if (!margin) {
                             margin = indent;
@@ -6940,7 +6941,7 @@ namespace ts {
                                     comments.push(whitespace);
                                 }
                                 else if (margin !== undefined && indent + whitespace.length > margin) {
-                                    comments.push(whitespace.slice(margin - indent - 1));
+                                    comments.push(whitespace.slice(margin - indent));
                                 }
                                 indent += whitespace.length;
                                 break;
