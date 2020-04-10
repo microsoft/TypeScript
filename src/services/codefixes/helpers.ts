@@ -212,15 +212,7 @@ namespace ts.codefix {
         return signatureDeclaration;
     }
 
-    export function createMethodFromCallExpression(
-        context: CodeFixContextBase,
-        call: CallExpression,
-        methodName: string,
-        inJs: boolean,
-        makeStatic: boolean,
-        preferences: UserPreferences,
-        contextNode: Node,
-    ): MethodDeclaration {
+    export function createMethodFromCallExpression(context: CodeFixContextBase, call: CallExpression, methodName: string, modifierFlags: ModifierFlags, contextNode: Node, inJs: boolean): MethodDeclaration {
         const body = !isInterfaceDeclaration(contextNode);
         const { typeArguments, arguments: args, parent } = call;
         const checker = context.program.getTypeChecker();
@@ -234,7 +226,7 @@ namespace ts.codefix {
         const returnType = (inJs || !contextualType) ? undefined : checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, tracker);
         return createMethod(
             /*decorators*/ undefined,
-            /*modifiers*/ makeStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
+            /*modifiers*/ modifierFlags ? createNodeArray(createModifiersFromModifierFlags(modifierFlags)) : undefined,
             /*asteriskToken*/ isYieldExpression(parent) ? createToken(SyntaxKind.AsteriskToken) : undefined,
             methodName,
             /*questionToken*/ undefined,
@@ -242,7 +234,7 @@ namespace ts.codefix {
                 createTypeParameterDeclaration(CharacterCodes.T + typeArguments!.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`)),
             /*parameters*/ createDummyParameters(args.length, names, types, /*minArgumentCount*/ undefined, inJs),
             /*type*/ returnType,
-            body ? createStubbedMethodBody(preferences) : undefined);
+            body ? createStubbedMethodBody(context.preferences) : undefined);
     }
 
     function createDummyParameters(argCount: number, names: (string | undefined)[] | undefined, types: (TypeNode | undefined)[] | undefined, minArgumentCount: number | undefined, inJs: boolean): ParameterDeclaration[] {
