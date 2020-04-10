@@ -32950,6 +32950,10 @@ namespace ts {
                 const propDeclaration = prop.valueDeclaration;
                 const name = propDeclaration && getNameOfDeclaration(propDeclaration);
 
+                if (name && isPrivateIdentifier(name)) {
+                    return;
+                }
+
                 // index is numeric and property name is not valid numeric literal
                 if (indexKind === IndexKind.Number && !(name ? isNumericName(name) : isNumericLiteralName(prop.escapedName))) {
                     return;
