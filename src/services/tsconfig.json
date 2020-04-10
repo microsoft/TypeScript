@@ -88,6 +88,7 @@
         "codefixes/inferFromUsage.ts",
         "codefixes/disableJsDiagnostics.ts",
         "codefixes/helpers.ts",
+        "codefixes/generateAccessors.ts",
         "codefixes/fixInvalidImportSyntax.ts",
         "codefixes/fixStrictClassInitialization.ts",
         "codefixes/requireInTs.ts",

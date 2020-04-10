@@ -53,8 +53,7 @@ namespace ts.codefix {
             Debug.fail("fixPropertyOverrideAccessor codefix got unexpected error code " + context.errorCode);
         }
         const refactorContext = { ...context, file: context.sourceFile, startPosition, endPosition }
-        // TODO: Maybe just move most of this into a neutral area.
-        return ts.refactor.generateGetAccessorAndSetAccessor.getEditsForAction(refactorContext, Diagnostics.Generate_get_and_set_accessors.message);
+        return getEditsForAction(refactorContext, Diagnostics.Generate_get_and_set_accessors.message);
     }
 
     // TODO: Stolen from a different codefix, should dedupe it somewhere.
