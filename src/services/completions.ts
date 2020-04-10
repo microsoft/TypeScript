@@ -884,7 +884,7 @@ namespace ts.Completions {
                 /*/
                 const lineStart = getLineStartPositionForPosition(position, sourceFile);
                 // jsdoc tag will be listed if there is more than one whitespace after "*"
-                const match = /^(?:\s*\/\*\*|[*\s]+(?=\s))?\s+(@)?$/.exec(
+                const match = /^(?:\s*\/\*\*|\s+\*)?\s+(@)?$/.exec(
                     sourceFile.text.substring(lineStart, position)
                 );
                 if (match) {
