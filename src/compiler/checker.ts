@@ -196,6 +196,7 @@ namespace ts {
         Source = 1 << 0,
         Target = 1 << 1,
         PropertyCheck = 1 << 2,
+        InPropertyCheck = 1 << 3,
     }
 
     const enum MappedTypeModifiers {
@@ -15245,6 +15246,7 @@ namespace ts {
             let overrideNextErrorInfo = 0; // How many `reportRelationError` calls should be skipped in the elaboration pyramid
             let lastSkippedInfo: [Type, Type] | undefined;
             let incompatibleStack: [DiagnosticMessage, (string | number)?, (string | number)?, (string | number)?, (string | number)?][] = [];
+            let inPropertyCheck = false;
 
             Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
@@ -15680,10 +15682,15 @@ namespace ts {
                 //   function foo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
                 //     x = y;  // Mismatched property in source intersection
                 //   }
-                if (result && (
+                //
+                // We suppress recursive intersection property checks because they can generate lots of work when relating
+                // recursive intersections that are structurally similar but not exactly identical. See #37854.
+                if (result && !inPropertyCheck && (
                     target.flags & TypeFlags.Intersection && (isPerformingExcessPropertyChecks || isPerformingCommonPropertyChecks) ||
                     isNonGenericObjectType(target) && source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType && !some((<IntersectionType>source).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType)))) {
+                    inPropertyCheck = true;
                     result &= recursiveTypeRelatedTo(source, target, reportErrors, IntersectionState.PropertyCheck);
+                    inPropertyCheck = false;
                 }
 
                 if (!result && reportErrors) {
@@ -15980,7 +15987,7 @@ namespace ts {
                 if (overflow) {
                     return Ternary.False;
                 }
-                const id = getRelationKey(source, target, intersectionState, relation);
+                const id = getRelationKey(source, target, intersectionState | (inPropertyCheck ? IntersectionState.InPropertyCheck : 0), relation);
                 const entry = relation.get(id);
                 if (entry !== undefined) {
                     if (reportErrors && entry & RelationComparisonResult.Failed && !(entry & RelationComparisonResult.Reported)) {
