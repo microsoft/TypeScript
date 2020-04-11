@@ -5,7 +5,6 @@ tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(14,9): error TS23
 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(15,9): error TS2322: Type '{ sn: number | undefined; }' is not assignable to type '{ sn: string | number; }'.
   Types of property 'sn' are incompatible.
     Type 'number | undefined' is not assignable to type 'string | number'.
-      Type 'undefined' is not assignable to type 'string | number'.
 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(18,9): error TS2322: Type '{ sn: string | number | undefined; }' is not assignable to type '{ sn: string | number | boolean; }'.
   Types of property 'sn' are incompatible.
     Type 'string | number | undefined' is not assignable to type 'string | number | boolean'.
@@ -42,7 +41,6 @@ tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(42,5): error TS23
 !!! error TS2322: Type '{ sn: number | undefined; }' is not assignable to type '{ sn: string | number; }'.
 !!! error TS2322:   Types of property 'sn' are incompatible.
 !!! error TS2322:     Type 'number | undefined' is not assignable to type 'string | number'.
-!!! error TS2322:       Type 'undefined' is not assignable to type 'string | number'.
         let allUndefined: { sn: string | number | undefined } = { ...undefinedString, ...undefinedNumber };
     
         let undefinedWithOptionalContinues: { sn: string | number | boolean } = { ...definiteBoolean, ...undefinedString, ...optionalNumber };
