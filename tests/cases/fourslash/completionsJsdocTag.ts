@@ -16,17 +16,13 @@
 //// */
 ////
 
-// 2x - also, if there is more than one whitespace at the beginning of the line.
+// 2x - Also, if there are two or more blanks at the beginning of the line
 /////**
-//// /*20*/
+////  /*20*/
 //// */
 ////
 /////**
-////  /*21*/
-//// */
-////
-/////**
-////      /*22*/
+////      /*21*/
 //// */
 ////
 
@@ -77,10 +73,22 @@
 //// * ### jsdoc @/*45*/
 //// */
 ////
+/////**
+////@/*46*/
+//// */
+////
 
 // 5x - jsdoc tag completions should not occur
 /////**
 //// */*50*/
+//// */
+////
+/////**
+//// /*51*/
+//// */
+////
+/////**
+/////*52*/
 //// */
 ////
 
@@ -113,14 +121,14 @@ test.markerNames().forEach(marker => {
 
             // jsdoc tags will be listed when there is more than one whitespace after "*"
             case 10: case 11:
-            // also, if there is more than one whitespace at the beginning of the line.
-            case 20: case 21: case 22:
+            // Also, if there are two or more blanks at the beginning of the line
+            case 20: case 21:
 
             // 5x - jsdoc tag completions should not occur
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             //  jsdoc tags will be listed but this does not the expected behavior
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            case 50:
+            case 50: case 51: case 52:
                 completionOpt = { marker, includes: ["@abstract", "@access"] };
                 break;
 
@@ -131,7 +139,7 @@ test.markerNames().forEach(marker => {
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             //  jsdoc tag names will be listed but this does not the expected behavior
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            case 40: case 41: case 42: case 43: case 44: case 45:
+            case 40: case 41: case 42: case 43: case 44: case 45: case 46:
 
             // does not the expected behavior... because ts.JsDoc@jsDocTagNames is missing inline jsdoc tag name
             // In other words, inline jsdoc tag is interpreted as not intending to support
@@ -150,8 +158,8 @@ test.markerNames().forEach(marker => {
 
             // jsdoc tags will be listed when there is more than one whitespace after "*"
             case 10: case 11:
-            // also, if there is more than one whitespace at the beginning of the line.
-            case 20: case 21: case 22:
+            // Also, if there are two or more blanks at the beginning of the line
+            case 20: case 21:
 
             // // also, can support the inline jsdoc tags
             // case 70:
@@ -163,11 +171,11 @@ test.markerNames().forEach(marker => {
             // 3x - jsdoc tag names will be listed
             case 30: case 31: case 32: case 33: case 34: case 35: case 36:
 
-            // 4x - jsdoc tag name completions should not occur
-            // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            //  this behavior does not by getCompletionData.insideComment.hasDocComment clause
-            // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            case 40: case 41: case 42:
+            // // 4x - jsdoc tag name completions should not occur
+            // // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+            // //  this behavior does not by getCompletionData.insideComment.hasDocComment clause
+            // // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+            // case 40: case 41: case 42:
 
             // // also, can support the inline jsdoc tags
             // case 71:
@@ -182,7 +190,7 @@ test.markerNames().forEach(marker => {
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             //  before the fix, jsdoc tag names was listed but no longer appears
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            case 43: case 44: case 45:
+            case 40: case 41: case 42: case 43: case 44: case 45: case 46:
                 completionOpt = {
                     marker,
                     triggerCharacter: "@",
@@ -194,7 +202,7 @@ test.markerNames().forEach(marker => {
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             //  before the fix, jsdoc tags was listed but no longer appears
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            case 50:
+            case 50: case 51: case 52:
                 completionOpt = { marker, exact: [] };
                 break;
             //*/

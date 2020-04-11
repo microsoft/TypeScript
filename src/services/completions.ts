@@ -883,14 +883,11 @@ namespace ts.Completions {
                 }
                 /*/
                 const lineStart = getLineStartPositionForPosition(position, sourceFile);
-                // jsdoc tag will be listed if there is more than one whitespace after "*"
-                const match = /^(?:\s{0,400}\/\*\*|\s{1,401}\*)?\s+(@)?$/.exec(
-                    sourceFile.text.substring(lineStart, position)
-                );
-                if (match) {
+                const jsdocFragment = sourceFile.text.substring(lineStart, position);
+                const reJSDocFragment = /^(?:\s*\/\*\*\s+|\s+\*?\s+)(@(?:\w+)?)?/g;
+                const match = reJSDocFragment.exec(jsdocFragment);
+                if (match && reJSDocFragment.lastIndex === jsdocFragment.length) {
                     return {
-                        // The current position is next to the '@' sign, when no tag name being provided yet.
-                        // Provide a full list of tag names
                         kind: match[1] ? CompletionDataKind.JsDocTagName: CompletionDataKind.JsDocTag
                     };
                 }
@@ -902,9 +899,12 @@ namespace ts.Completions {
             // Completion should work in the brackets
             const tag = getJsDocTagAtPosition(currentToken, position);
             if (tag) {
+                /* https://coderwall.com/p/zbc2zw/the-comment-toggle-trick
                 if (tag.tagName.pos <= position && position <= tag.tagName.end) {
                     return { kind: CompletionDataKind.JsDocTagName };
                 }
+                /*/
+                //*/
                 if (isTagWithTypeExpression(tag) && tag.typeExpression && tag.typeExpression.kind === SyntaxKind.JSDocTypeExpression) {
                     currentToken = getTokenAtPosition(sourceFile, position);
                     if (!currentToken ||
