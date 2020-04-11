@@ -868,30 +868,19 @@ namespace ts.Completions {
                 //   /**
                 //    *         |c|
                 //    */
-                /* https://coderwall.com/p/zbc2zw/the-comment-toggle-trick
-                if (sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
-                    // The current position is next to the '@' sign, when no tag name being provided yet.
-                    // Provide a full list of tag names
-                    return { kind: CompletionDataKind.JsDocTagName };
-                }
-                else {
-                    const lineStart = getLineStartPositionForPosition(position, sourceFile);
-                    // or !/[^/\s\*]/.test(sourceFile.text.substring(lineStart, position))
-                    if (!(sourceFile.text.substring(lineStart, position).match(/[^\*|\s|(/\*\*)]/))) {
-                        return { kind: CompletionDataKind.JsDocTag };
-                    }
-                }
-                /*/
                 const lineStart = getLineStartPositionForPosition(position, sourceFile);
                 const jsdocFragment = sourceFile.text.substring(lineStart, position);
                 const reJSDocFragment = /^(?:\s*\/\*\*\s+|\s+\*?\s+)(@(?:\w+)?)?/g;
                 const match = reJSDocFragment.exec(jsdocFragment);
                 if (match && reJSDocFragment.lastIndex === jsdocFragment.length) {
                     return {
-                        kind: match[1] ? CompletionDataKind.JsDocTagName: CompletionDataKind.JsDocTag
+                        kind: match[1]
+                        // The current position is next to the '@' sign, when no tag name being provided yet.
+                        // Provide a full list of tag names
+                        ? CompletionDataKind.JsDocTagName:
+                          CompletionDataKind.JsDocTag
                     };
                 }
-                //*/
             }
 
             // Completion should work inside certain JsDoc tags. For example:
@@ -899,12 +888,6 @@ namespace ts.Completions {
             // Completion should work in the brackets
             const tag = getJsDocTagAtPosition(currentToken, position);
             if (tag) {
-                /* https://coderwall.com/p/zbc2zw/the-comment-toggle-trick
-                if (tag.tagName.pos <= position && position <= tag.tagName.end) {
-                    return { kind: CompletionDataKind.JsDocTagName };
-                }
-                /*/
-                //*/
                 if (isTagWithTypeExpression(tag) && tag.typeExpression && tag.typeExpression.kind === SyntaxKind.JSDocTypeExpression) {
                     currentToken = getTokenAtPosition(sourceFile, position);
                     if (!currentToken ||
