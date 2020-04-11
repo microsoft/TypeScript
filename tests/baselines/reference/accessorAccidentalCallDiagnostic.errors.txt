@@ -13,5 +13,6 @@ tests/cases/compiler/accessorAccidentalCallDiagnostic.ts(6,14): error TS2349: Th
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'Number' has no call signatures.
 !!! related TS6232 tests/cases/compiler/accessorAccidentalCallDiagnostic.ts:6:12: 'x.property' is a 'get' accessor; did you mean to use it without '()'?
+!!! related TS2728 tests/cases/compiler/accessorAccidentalCallDiagnostic.ts:3:9: 'property' is declared here.
     }
     

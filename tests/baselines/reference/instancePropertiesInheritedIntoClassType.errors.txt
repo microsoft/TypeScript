@@ -36,6 +36,7 @@ tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIn
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'Number' has no call signatures.
 !!! related TS6232 tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts:19:14: 'd.y' is a 'get' accessor; did you mean to use it without '()'?
+!!! related TS2728 tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts:4:13: 'y' is declared here.
     
     }
     
@@ -66,4 +67,5 @@ tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIn
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'String' has no call signatures.
 !!! related TS6232 tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts:41:14: 'd.y' is a 'get' accessor; did you mean to use it without '()'?
+!!! related TS2728 tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts:26:13: 'y' is declared here.
     }

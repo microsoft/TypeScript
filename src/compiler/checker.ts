@@ -25856,7 +25856,10 @@ namespace ts {
                         // Diagnose get accessors incorrectly called as functions
                         const { resolvedSymbol } = getNodeLinks(node.expression);
                         if (resolvedSymbol && resolvedSymbol.flags & SymbolFlags.GetAccessor) {
-                            relatedInformation.push(createDiagnosticForNode(node.expression, Diagnostics._0_is_a_get_accessor_did_you_mean_to_use_it_without, getTextOfNode(node.expression)));
+                            relatedInformation.push(
+                                createDiagnosticForNode(node.expression, Diagnostics._0_is_a_get_accessor_did_you_mean_to_use_it_without, getTextOfNode(node.expression)),
+                                createDiagnosticForNode(resolvedSymbol.valueDeclaration, Diagnostics._0_is_declared_here, symbolToString(resolvedSymbol))
+                            );
                         }
                     }
                     else if (node.arguments.length === 1) {
