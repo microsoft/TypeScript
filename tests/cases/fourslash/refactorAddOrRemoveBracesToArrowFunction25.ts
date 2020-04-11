@@ -7,5 +7,5 @@ edit.applyRefactor({
     refactorName: "Add or remove braces in an arrow function",
     actionName: "Remove braces from arrow function",
     actionDescription: "Remove braces from arrow function",
-    newContent: `const a = (a: number) => a; /* trailing */`,
+    newContent: `const a = (a: number) => a /* trailing */;`,
 });

@@ -36,24 +36,6 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         }];
     }
 
-    /**
-     * used to check if the last character in the returnStatement is a semicolon
-     */
-    function hasSemiColon(returnStatement: ReturnStatement) {
-        // Grab the last character from the return statement
-        const lastChar = returnStatement.getFullText().substr(-1);
-        // Check if it is semi-colon
-        // I feel like there has to be a way using SyntaxKind.SemicolonToken
-        return lastChar === ";";
-    }
-
-    // Taken from emitter.ts L4798
-    function formatSynthesizedComment(comment: SynthesizedComment) {
-        return comment.kind === SyntaxKind.MultiLineCommentTrivia
-            ? `/*${comment.text}*/`
-            : `//${comment.text}`;
-    }
-
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const { file, startPosition } = context;
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
@@ -62,10 +44,6 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         const { expression, returnStatement, func } = info;
 
         let body: ConciseBody;
-
-        // These two variables are used if there is a trailing comment after the returnStatement
-        let newEdit: TextChange;
-        const trailingCommentsHolder = createStringLiteral("");
 
         if (actionName === addBracesActionName) {
             const returnStatement = createReturn(expression);
@@ -79,36 +57,9 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             suppressLeadingAndTrailingTrivia(body);
             copyLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
             copyTrailingAsLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
-            // Copy the trailing comments after the return statement
-            // Add them to our trailingCommentsHolder to use later
-            copyTrailingComments(returnStatement, trailingCommentsHolder, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
+            copyLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
+            copyTrailingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
 
-
-            // If there are trailing comments
-            if (trailingCommentsHolder && trailingCommentsHolder.emitNode && trailingCommentsHolder.emitNode.trailingComments) {
-
-                // Used to keep track of all the comments
-                let comments = "";
-                // Loop through all the comments
-                trailingCommentsHolder.emitNode.trailingComments.forEach(comment => {
-                    // First we format our comment
-                    // ex. " trailing comment " -> "/* trailing comment */"
-                    const formattedComment = formatSynthesizedComment(comment);
-
-                    // Add one space of padding to the comment
-                    const paddedComment = ` ${formattedComment}`;
-
-                    // Add comment to our comments string
-                    comments = comments + paddedComment;
-                });
-
-                // If it has a semi colon, we need to account for the extra character (i.e. 1)
-                // otherwise, we use 0
-                const semiColonPositionModifier = hasSemiColon(returnStatement) ? 1 : 0;
-
-                // Creates a text change from end of function body, with length of comment, for the comment.
-                newEdit = createTextChangeFromStartLength(func.body.end + semiColonPositionModifier, comments.length, comments);
-            }
         }
         else {
             Debug.fail("invalid action");
@@ -116,11 +67,6 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
 
         const edits = textChanges.ChangeTracker.with(context, t => {
             t.replaceNode(file, func.body, body);
-            // Check if we have a newEdit
-            if (newEdit) {
-                // Push the raw change into our array of textChanges
-                t.pushRaw(file, { fileName: file.fileName, textChanges: [newEdit] });
-            }
         });
 
         return { renameFilename: undefined, renameLocation: undefined, edits };
