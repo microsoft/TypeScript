@@ -4156,6 +4156,7 @@ namespace ts {
         deferralParent?: Type;              // Source union/intersection of a deferred type
         cjsExportMerged?: Symbol;           // Version of the symbol with all non export= exports merged with the export= target
         typeOnlyDeclaration?: TypeOnlyCompatibleAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
+        isPropertyDeclaredInConstructor?: boolean;  // Property declared through 'this.x = ...' assignment in constructor
     }
 
     /* @internal */
