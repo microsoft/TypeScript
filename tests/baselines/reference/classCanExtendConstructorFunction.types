@@ -91,9 +91,9 @@ class Sql extends Wagon {
 
         this.foonly = 12
 >this.foonly = 12 : 12
->this.foonly : number
+>this.foonly : any
 >this : this
->foonly : number
+>foonly : any
 >12 : 12
     }
     /**
