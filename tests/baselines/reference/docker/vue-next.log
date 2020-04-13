@@ -1,7 +1,7 @@
 Exit Code: 0
 Standard output:
 
-> @X.X.X-alpha.10 build /vue-next
+> @X.X.X-alpha.12 build /vue-next
 > node scripts/build.js "--types"
 Rolling up type definitions for compiler-core...
 Writing: /vue-next/temp/compiler-core.api.json
@@ -75,22 +75,22 @@ created packages/reactivity/dist/reactivity.global.prod.js in ?s
 /vue-next/packages/reactivity/src/index.ts → packages/reactivity/dist/reactivity.esm.prod.js...
 created packages/reactivity/dist/reactivity.esm.prod.js in ?s
 /vue-next/packages/runtime-core/src/index.ts → packages/runtime-core/dist/runtime-core.esm-bundler.js...
-[!] (plugin rpt2) Error: /vue-next/packages/runtime-core/src/apiOptions.ts(143,18): semantic error TS2344: Type 'Function & T[key]["get"]' does not satisfy the constraint '(...args: any) => any'.
+[!] (plugin rpt2) Error: /vue-next/packages/runtime-core/src/componentOptions.ts(160,18): semantic error TS2344: Type 'Function & T[key]["get"]' does not satisfy the constraint '(...args: any) => any'.
   Type 'Function' provides no match for the signature '(...args: any): any'.
-packages/runtime-core/src/apiOptions.ts
-Error: /vue-next/packages/runtime-core/src/apiOptions.ts(143,18): semantic error TS2344: Type 'Function & T[key]["get"]' does not satisfy the constraint '(...args: any) => any'.
+packages/runtime-core/src/componentOptions.ts
+Error: /vue-next/packages/runtime-core/src/componentOptions.ts(160,18): semantic error TS2344: Type 'Function & T[key]["get"]' does not satisfy the constraint '(...args: any) => any'.
   Type 'Function' provides no match for the signature '(...args: any): any'.
-    at error (/vue-next/node_modules/rollup/dist/shared/rollup.js:10120:30)
-    at throwPluginError (/vue-next/node_modules/rollup/dist/shared/rollup.js:16247:12)
-    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:17255:24)
-    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:16420:38)
+    at error (/vue-next/node_modules/rollup/dist/shared/rollup.js:10399:30)
+    at throwPluginError (/vue-next/node_modules/rollup/dist/shared/rollup.js:16617:12)
+    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:17634:24)
+    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:16790:38)
     at RollupContext.error (/vue-next/node_modules/rollup-plugin-typescript2/src/rollupcontext.ts:37:18)
     at /vue-next/node_modules/rollup-plugin-typescript2/src/print-diagnostics.ts:41:11
     at arrayEach (/vue-next/node_modules/rollup-plugin-typescript2/node_modules/lodash/lodash.js:516:11)
     at forEach (/vue-next/node_modules/rollup-plugin-typescript2/node_modules/lodash/lodash.js:9342:14)
     at _.each (/vue-next/node_modules/rollup-plugin-typescript2/src/print-diagnostics.ts:9:2)
     at Object.transform (/vue-next/node_modules/rollup-plugin-typescript2/src/index.ts:242:5)
-(node:17) UnhandledPromiseRejectionWarning: Error: Command failed with exit code 1 (EPERM): rollup -c --environment COMMIT:94562da,NODE_ENV:production,TARGET:runtime-core,TYPES:true
+(node:17) UnhandledPromiseRejectionWarning: Error: Command failed with exit code 1 (EPERM): rollup -c --environment COMMIT:a35e297,NODE_ENV:production,TARGET:runtime-core,TYPES:true
     at makeError (/vue-next/node_modules/execa/lib/error.js:59:11)
     at handlePromise (/vue-next/node_modules/execa/index.js:112:26)
     at processTicksAndRejections (internal/process/task_queues.js:97:5)
