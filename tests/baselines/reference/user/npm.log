@@ -1781,6 +1781,7 @@ node_modules/npm/test/tap/unsupported.js(2,20): error TS2307: Cannot find module
 node_modules/npm/test/tap/update-examples.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/update-examples.js(6,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/tap/update-examples.js(10,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
+node_modules/npm/test/tap/update-examples.js(127,15): error TS2565: Property 'prototype' is used before being assigned.
 node_modules/npm/test/tap/update-path.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/update-path.js(3,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
 node_modules/npm/test/tap/upgrade-lifecycles.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.

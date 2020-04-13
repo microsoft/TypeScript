@@ -1,0 +1,8 @@
+Exit Code: 1
+Standard output:
+index.ts(37,5): error TS2322: Type '0' is not assignable to type '1 | undefined'.
+index.ts(37,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
+
+
+
+Standard error:
