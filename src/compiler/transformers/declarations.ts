@@ -717,6 +717,16 @@ namespace ts {
                     rewriteModuleSpecifier(decl, decl.moduleSpecifier)
                 );
             }
+            // Augmentation of export depends on import
+            if (resolver.isImportRequiredByAugmentation(decl)) {
+                return updateImportDeclaration(
+                    decl,
+                    /*decorators*/ undefined,
+                    decl.modifiers,
+                    /*importClause*/ undefined,
+                    rewriteModuleSpecifier(decl, decl.moduleSpecifier)
+                );
+            }
             // Nothing visible
         }
 
