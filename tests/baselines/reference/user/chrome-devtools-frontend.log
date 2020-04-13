@@ -3086,6 +3086,11 @@ node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(341,
 node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(351,31): error TS2694: Namespace 'Protocol' has no exported member 'Debugger'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(362,31): error TS2694: Namespace 'Protocol' has no exported member 'Debugger'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(375,9): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
+node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(54,5): error TS2322: Type 'Multimap<string | K, V | Breakpoint>.Multimap<string | K, V | Breakpoint>' is not assignable to type 'Multimap<string, Breakpoint>'.
+  Type 'string | K' is not assignable to type 'K'.
+    'K' could be instantiated with an arbitrary type which could be unrelated to 'string | K'.
+      Type 'string' is not assignable to type 'K'.
+        'K' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(60,52): error TS2345: Argument of type 'this' is not assignable to parameter of type 'SDKModelObserver<DebuggerModel>'.
   Type 'BreakpointManager' is not assignable to type 'SDKModelObserver<DebuggerModel>'.
     Types of property 'modelAdded' are incompatible.
@@ -3170,6 +3175,16 @@ node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(
 node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(106,20): error TS2339: Property 'pushAll' does not exist on type 'CSSLocation[]'.
 node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(126,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(132,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(153,5): error TS2322: Type 'Multimap<K | CSSStyleSheetHeader, V | LiveLocation>.Multimap<K | CSSStyleSheetHeader, V | LiveLocation>' is not assignable to type 'Multimap<CSSStyleSheetHeader, LiveLocation>'.
+  Type 'K | CSSStyleSheetHeader' is not assignable to type 'K'.
+    'K' could be instantiated with an arbitrary type which could be unrelated to 'K | CSSStyleSheetHeader'.
+      Type 'CSSStyleSheetHeader' is not assignable to type 'K'.
+        'K' could be instantiated with an arbitrary type which could be unrelated to 'CSSStyleSheetHeader'.
+node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(155,5): error TS2322: Type 'Multimap<string | K, V | LiveLocation>.Multimap<string | K, V | LiveLocation>' is not assignable to type 'Multimap<string, LiveLocation>'.
+  Type 'string | K' is not assignable to type 'K'.
+    'K' could be instantiated with an arbitrary type which could be unrelated to 'string | K'.
+      Type 'string' is not assignable to type 'K'.
+        'K' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(160,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(169,27): error TS2345: Argument of type 'CSSStyleSheetHeader' is not assignable to parameter of type 'K'.
   'K' could be instantiated with an arbitrary type which could be unrelated to 'CSSStyleSheetHeader'.
@@ -3220,6 +3235,11 @@ node_modules/chrome-devtools-frontend/front_end/bindings/DebuggerWorkspaceBindin
 node_modules/chrome-devtools-frontend/front_end/bindings/DebuggerWorkspaceBinding.js(76,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/bindings/DebuggerWorkspaceBinding.js(90,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/bindings/DebuggerWorkspaceBinding.js(207,34): error TS2339: Property 'valuesArray' does not exist on type 'Set<Location>'.
+node_modules/chrome-devtools-frontend/front_end/bindings/DebuggerWorkspaceBinding.js(260,5): error TS2322: Type 'Multimap<K | Script, V | Location>.Multimap<K | Script, V | Location>' is not assignable to type 'Multimap<Script, Location>'.
+  Type 'K | Script' is not assignable to type 'K'.
+    'K' could be instantiated with an arbitrary type which could be unrelated to 'K | Script'.
+      Type 'Script' is not assignable to type 'K'.
+        'K' could be instantiated with an arbitrary type which could be unrelated to 'Script'.
 node_modules/chrome-devtools-frontend/front_end/bindings/DebuggerWorkspaceBinding.js(267,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/bindings/DebuggerWorkspaceBinding.js(276,25): error TS2345: Argument of type 'Script' is not assignable to parameter of type 'K'.
   'K' could be instantiated with an arbitrary type which could be unrelated to 'Script'.
@@ -4284,6 +4304,11 @@ node_modules/chrome-devtools-frontend/front_end/cookie_table/CookiesTable.js(416
 node_modules/chrome-devtools-frontend/front_end/cookie_table/CookiesTable.js(461,42): error TS2339: Property 'asParsedURL' does not exist on type 'string'.
 node_modules/chrome-devtools-frontend/front_end/cookie_table/CookiesTable.js(470,51): error TS2339: Property 'asParsedURL' does not exist on type 'string'.
 node_modules/chrome-devtools-frontend/front_end/cookie_table/CookiesTable.js(489,56): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(24,5): error TS2322: Type 'Multimap<K | ContentProvider, UISourceCode | V>.Multimap<K | ContentProvider, UISourceCode | V>' is not assignable to type 'Multimap<ContentProvider, UISourceCode>'.
+  Type 'K | ContentProvider' is not assignable to type 'K'.
+    'K' could be instantiated with an arbitrary type which could be unrelated to 'K | ContentProvider'.
+      Type 'ContentProvider' is not assignable to type 'K'.
+        'K' could be instantiated with an arbitrary type which could be unrelated to 'ContentProvider'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(50,72): error TS2345: Argument of type 'ContentProvider' is not assignable to parameter of type 'K'.
   'K' could be instantiated with an arbitrary type which could be unrelated to 'ContentProvider'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(51,22): error TS2339: Property 'removeDecorationsForType' does not exist on type 'V'.
@@ -4332,6 +4357,7 @@ node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(230,25
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(267,37): error TS2339: Property 'peekLast' does not exist on type '{ end: number; count: number; }[]'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(268,21): error TS2345: Argument of type '{ end: number; }' is not assignable to parameter of type '{ end: number; count: number; }'.
   Property 'count' is missing in type '{ end: number; }' but required in type '{ end: number; count: number; }'.
+node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(418,32): error TS2339: Property 'upperBound' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(441,25): error TS2339: Property 'peekLast' does not exist on type '{ end: number; count: number; }[]'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageView.js(20,48): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageView.js(32,53): error TS2555: Expected at least 2 arguments, but got 1.
@@ -7188,7 +7214,7 @@ node_modules/chrome-devtools-frontend/front_end/network/NetworkLogViewColumns.js
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogViewColumns.js(531,31): error TS2339: Property 'enclosingNodeOrSelfWithClass' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogViewColumns.js(645,19): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogViewColumns.js(646,22): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/network/NetworkLogViewColumns.js(651,5): error TS2322: Type '{ id: string; title: string; subtitle: string; visible: true; weight: number; hideable: false; nonSelectable: false; alwaysVisible: boolean; sortingFunction: (a: NetworkNode, b: NetworkNode) => number; }' is not assignable to type '{ id: string; title: string; titleDOMFragment: DocumentFragment; subtitle: string; visible: boolean; weight: number; hideable: boolean; nonSelectable: boolean; sortable: boolean; align: string; isResponseHeader: boolean; sortingFunction: (arg0: NetworkNode, arg1: NetworkNode) => number; isCustomHeader: boolean; }'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkLogViewColumns.js(651,5): error TS2322: Type '{ id: string; title: string; subtitle: string; visible: true; weight: number; hideable: false; nonSelectable: false; alwaysVisible: true; sortingFunction: (a: NetworkNode, b: NetworkNode) => number; }' is not assignable to type '{ id: string; title: string; titleDOMFragment: DocumentFragment; subtitle: string; visible: boolean; weight: number; hideable: boolean; nonSelectable: boolean; sortable: boolean; align: string; isResponseHeader: boolean; sortingFunction: (arg0: NetworkNode, arg1: NetworkNode) => number; isCustomHeader: boolean; }'.
   Object literal may only specify known properties, and 'alwaysVisible' does not exist in type '{ id: string; title: string; titleDOMFragment: DocumentFragment; subtitle: string; visible: boolean; weight: number; hideable: boolean; nonSelectable: boolean; sortable: boolean; align: string; isResponseHeader: boolean; sortingFunction: (arg0: NetworkNode, arg1: NetworkNode) => number; isCustomHeader: boolean; }'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogViewColumns.js(654,3): error TS2740: Type '{ id: string; title: string; sortingFunction: any; }' is missing the following properties from type '{ id: string; title: string; titleDOMFragment: DocumentFragment; subtitle: string; visible: boolean; weight: number; hideable: boolean; nonSelectable: boolean; sortable: boolean; align: string; isResponseHeader: boolean; sortingFunction: (arg0: NetworkNode, arg1: NetworkNode) => number; isCustomHeader: boolean; }': titleDOMFragment, subtitle, visible, weight, and 6 more.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkLogViewColumns.js(656,19): error TS2555: Expected at least 2 arguments, but got 1.
@@ -7912,14 +7938,19 @@ node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemMa
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(62,17): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(73,27): error TS2339: Property 'events' does not exist on type 'InspectorFrontendHostAPI'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(162,7): error TS2739: Type 'IsolatedFileSystem' is missing the following properties from type '{ type: string; fileSystemName: string; rootURL: string; fileSystemPath: string; }': fileSystemName, rootURL, fileSystemPath
-node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(211,21): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
-  'K' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(211,37): error TS2345: Argument of type 'string' is not assignable to parameter of type 'V'.
+  'V' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(222,30): error TS2339: Property 'valuesArray' does not exist on type 'Map<string, IsolatedFileSystem>'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystemManager.js(264,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/persistence/NetworkPersistenceManager.js(140,55): error TS2339: Property 'hashCode' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/persistence/NetworkPersistenceManager.js(299,56): error TS2339: Property 'fileSystemPath' does not exist on type 'Project'.
 node_modules/chrome-devtools-frontend/front_end/persistence/NetworkPersistenceManager.js(424,30): error TS2339: Property 'fileSystemPath' does not exist on type 'Project'.
 node_modules/chrome-devtools-frontend/front_end/persistence/Persistence.js(21,51): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+node_modules/chrome-devtools-frontend/front_end/persistence/Persistence.js(22,5): error TS2322: Type 'Multimap<UISourceCode | K, V | (() => any)>.Multimap<UISourceCode | K, V | (() => any)>' is not assignable to type 'Multimap<UISourceCode, () => any>'.
+  Type 'UISourceCode | K' is not assignable to type 'K'.
+    'K' could be instantiated with an arbitrary type which could be unrelated to 'UISourceCode | K'.
+      Type 'UISourceCode' is not assignable to type 'K'.
+        'K' could be instantiated with an arbitrary type which could be unrelated to 'UISourceCode'.
 node_modules/chrome-devtools-frontend/front_end/persistence/Persistence.js(58,23): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/persistence/Persistence.js(58,66): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/persistence/Persistence.js(62,5): error TS2322: Type 'MappingSystem' is not assignable to type 'Automapping | DefaultMapping'.
@@ -9691,6 +9722,11 @@ node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(777,24): e
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(779,24): error TS2694: Namespace 'Protocol' has no exported member 'Network'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(782,24): error TS2694: Namespace 'Protocol' has no exported member 'Network'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(799,31): error TS2694: Namespace 'Protocol' has no exported member 'NetworkAgent'.
+node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(813,5): error TS2322: Type 'Multimap<K | ((arg0: InterceptedRequest) => Promise<any>), V | { urlPattern: string; interceptionStage: any; }>.Multimap<K | ((arg0: InterceptedRequest) => Promise<...>), V | { ...; }>' is not assignable to type 'Multimap<(arg0: InterceptedRequest) => Promise<any>, { urlPattern: string; interceptionStage: any; }>'.
+  Type 'K | ((arg0: InterceptedRequest) => Promise<any>)' is not assignable to type 'K'.
+    'K' could be instantiated with an arbitrary type which could be unrelated to 'K | ((arg0: InterceptedRequest) => Promise<any>)'.
+      Type '(arg0: InterceptedRequest) => Promise<any>' is not assignable to type 'K'.
+        'K' could be instantiated with an arbitrary type which could be unrelated to '(arg0: InterceptedRequest) => Promise<any>'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(827,21): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(836,31): error TS2339: Property 'networkAgent' does not exist on type 'Target'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(855,32): error TS2339: Property 'networkAgent' does not exist on type 'Target'.
@@ -10078,6 +10114,12 @@ node_modules/chrome-devtools-frontend/front_end/sdk/SourceMap.js(507,20): error 
 node_modules/chrome-devtools-frontend/front_end/sdk/SourceMap.js(527,37): error TS2339: Property '_base64Map' does not exist on type 'typeof TextSourceMap'.
 node_modules/chrome-devtools-frontend/front_end/sdk/SourceMap.js(558,18): error TS2339: Property 'lowerBound' does not exist on type 'SourceMapEntry[]'.
 node_modules/chrome-devtools-frontend/front_end/sdk/SourceMap.js(559,29): error TS2339: Property 'upperBound' does not exist on type 'SourceMapEntry[]'.
+node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(28,5): error TS2322: Type 'Multimap<string | K, T | V>.Multimap<string | K, T | V>' is not assignable to type 'Multimap<string, T>'.
+  Type 'string | K' is not assignable to type 'K'.
+    'K' could be instantiated with an arbitrary type which could be unrelated to 'string | K'.
+      Type 'string' is not assignable to type 'K'.
+        'K' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(30,5): error TS2322: Type 'Multimap<string | K, T | V>.Multimap<string | K, T | V>' is not assignable to type 'Multimap<string, T>'.
 node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(85,41): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
   'K' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(86,46): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
@@ -10648,6 +10690,11 @@ node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSid
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(34,41): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(41,27): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(42,47): error TS2339: Property 'createChild' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(49,9): error TS2322: Type 'Multimap<string | K, V | { breakpoint: Breakpoint; uiLocation: UILocation; }>.Multimap<string | K, V | { breakpoint: Breakpoint; uiLocation: UILocation; }>' is not assignable to type 'Multimap<string, { breakpoint: Breakpoint; uiLocation: UILocation; }>'.
+  Type 'string | K' is not assignable to type 'K'.
+    'K' could be instantiated with an arbitrary type which could be unrelated to 'string | K'.
+      Type 'string' is not assignable to type 'K'.
+        'K' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(53,28): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
   'K' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(66,35): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -10738,6 +10785,11 @@ node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1473,94): error TS2339: Property 'metaKey' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1476,52): error TS2339: Property 'shiftKey' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1477,17): error TS2339: Property 'consume' does not exist on type 'Event'.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(44,5): error TS2322: Type 'Multimap<UISourceCode | K, V | NavigatorUISourceCodeTreeNode>.Multimap<UISourceCode | K, V | NavigatorUISourceCodeTreeNode>' is not assignable to type 'Multimap<UISourceCode, NavigatorUISourceCodeTreeNode>'.
+  Type 'UISourceCode | K' is not assignable to type 'K'.
+    'K' could be instantiated with an arbitrary type which could be unrelated to 'UISourceCode | K'.
+      Type 'UISourceCode' is not assignable to type 'K'.
+        'K' could be instantiated with an arbitrary type which could be unrelated to 'UISourceCode'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(87,21): error TS2339: Property '_boostOrder' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(90,32): error TS2339: Property '_typeOrders' does not exist on type 'typeof NavigatorView'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(102,29): error TS2339: Property '_typeOrders' does not exist on type 'typeof NavigatorView'.
@@ -11301,6 +11353,11 @@ node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1426,2
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1427,48): error TS2339: Property '_instanceForTest' does not exist on type 'typeof Main'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(47,35): error TS2339: Property 'CodeMirror' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(165,18): error TS2339: Property 'style' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(170,5): error TS2322: Type 'Multimap<number | K, V | { element: Element; widget: LineWidget; update: () => any; }>.Multimap<number | K, V | { element: Element; widget: LineWidget; update: () => any; }>' is not assignable to type 'Multimap<number, { element: Element; widget: LineWidget; update: () => any; }>'.
+  Type 'number | K' is not assignable to type 'K'.
+    'K' could be instantiated with an arbitrary type which could be unrelated to 'number | K'.
+      Type 'number' is not assignable to type 'K'.
+        'K' could be instantiated with an arbitrary type which could be unrelated to 'number'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(198,45): error TS2339: Property '_codeMirrorTextEditor' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(207,16): error TS2339: Property '_codeMirrorTextEditor' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(214,16): error TS2339: Property '_codeMirrorTextEditor' does not exist on type 'CodeMirror'.
@@ -12479,7 +12536,6 @@ node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(523,39): error
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(529,35): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(557,33): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(592,18): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(637,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'index' must be of type 'number', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListWidget.js(16,38): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListWidget.js(17,18): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListWidget.js(127,14): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -12577,6 +12633,16 @@ node_modules/chrome-devtools-frontend/front_end/ui/SettingsUI.js(107,25): error 
 node_modules/chrome-devtools-frontend/front_end/ui/SettingsUI.js(119,27): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/SettingsUI.js(133,24): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/ui/SettingsUI.js(155,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+node_modules/chrome-devtools-frontend/front_end/ui/ShortcutRegistry.js(15,5): error TS2322: Type 'Multimap<string | K, string | V>.Multimap<string | K, string | V>' is not assignable to type 'Multimap<string, string>'.
+  Type 'string | K' is not assignable to type 'K'.
+    'K' could be instantiated with an arbitrary type which could be unrelated to 'string | K'.
+      Type 'string' is not assignable to type 'K'.
+        'K' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+node_modules/chrome-devtools-frontend/front_end/ui/ShortcutRegistry.js(17,5): error TS2322: Type 'Multimap<string | K, V | { key: number; name: string; }>.Multimap<string | K, V | { key: number; name: string; }>' is not assignable to type 'Multimap<string, { key: number; name: string; }>'.
+  Type 'string | K' is not assignable to type 'K'.
+    'K' could be instantiated with an arbitrary type which could be unrelated to 'string | K'.
+      Type 'string' is not assignable to type 'K'.
+        'K' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 node_modules/chrome-devtools-frontend/front_end/ui/ShortcutRegistry.js(26,83): error TS2339: Property 'valuesArray' does not exist on type 'Set<string>'.
 node_modules/chrome-devtools-frontend/front_end/ui/ShortcutRegistry.js(34,5): error TS2322: Type 'Set<V>' is not assignable to type 'Set<string>'.
   Type 'V' is not assignable to type 'string'.
@@ -13228,6 +13294,11 @@ node_modules/chrome-devtools-frontend/front_end/workspace/SearchConfig.js(164,20
 node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(45,25): error TS2339: Property 'asParsedURL' does not exist on type 'string'.
 node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(136,21): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(298,33): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(545,7): error TS2322: Type 'Multimap<string | K, V | LineMarker>.Multimap<string | K, V | LineMarker>' is not assignable to type 'Multimap<string, LineMarker>'.
+  Type 'string | K' is not assignable to type 'K'.
+    'K' could be instantiated with an arbitrary type which could be unrelated to 'string | K'.
+      Type 'string' is not assignable to type 'K'.
+        'K' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(546,27): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
   'K' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(556,41): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
