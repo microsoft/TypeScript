@@ -328,7 +328,8 @@ namespace ts.codefix {
         sourceFile: SourceFile,
         isJSFile: boolean
     ): void {
-        const methodDeclaration = createMethodFromCallExpression(context, callExpression, methodName, modifierFlags, parentDeclaration, isJSFile);
+        const importAdder = createImportAdder(sourceFile, context.program, context.preferences, context.host);
+        const methodDeclaration = createMethodFromCallExpression(context, importAdder, callExpression, methodName, modifierFlags, parentDeclaration, isJSFile);
         const containingMethodDeclaration = findAncestor(callExpression, n => isMethodDeclaration(n) || isConstructorDeclaration(n));
         if (containingMethodDeclaration && containingMethodDeclaration.parent === parentDeclaration) {
             changes.insertNodeAfter(sourceFile, containingMethodDeclaration, methodDeclaration);
@@ -336,6 +337,7 @@ namespace ts.codefix {
         else {
             changes.insertNodeAtClassStart(sourceFile, parentDeclaration, methodDeclaration);
         }
+        importAdder.writeFixes(changes);
     }
 
     function addEnumMemberDeclaration(changes: textChanges.ChangeTracker, checker: TypeChecker, token: Identifier, enumDeclaration: EnumDeclaration) {
