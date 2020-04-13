@@ -5393,7 +5393,7 @@ namespace ts {
             }
 
             function createPropertyNameNodeForIdentifierOrLiteral(name: string, singleQuote?: boolean) {
-                return isIdentifierText(name, compilerOptions.target) ? createIdentifier(name) : createLiteral(isNumericLiteralName(name) ? +name : name, !!singleQuote);
+                return isIdentifierText(name, compilerOptions.target) ? createIdentifier(name) : createLiteral(isNumericLiteralName(name) && +name >= 0 ? +name : name, !!singleQuote);
             }
 
             function cloneNodeBuilderContext(context: NodeBuilderContext): NodeBuilderContext {
