@@ -31,8 +31,25 @@ interface Foo {
 >i : never
 }
 
+interface AA {
+    [s: string]: number
+>s : string
+}
+
+type BB = {
+>BB : BB
+
+    [P in keyof any]: number
+}
+
 declare const f: Foo
 >f : Foo
+
+declare const a: AA
+>a : AA
+
+declare const b: BB
+>b : BB
 
 delete f.a
 >delete f.a : boolean
@@ -93,4 +110,28 @@ delete f.j
 >f.j : any
 >f : Foo
 >j : any
+
+delete a.a
+>delete a.a : boolean
+>a.a : number
+>a : AA
+>a : number
+
+delete a.b
+>delete a.b : boolean
+>a.b : number
+>a : AA
+>b : number
+
+delete b.a
+>delete b.a : boolean
+>b.a : number
+>b : BB
+>a : number
+
+delete b.b
+>delete b.b : boolean
+>b.b : number
+>b : BB
+>b : number
 
