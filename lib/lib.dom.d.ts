@@ -15069,7 +15069,7 @@ interface SpeechRecognitionEventMap {
     "audioend": Event;
     "audiostart": Event;
     "end": Event;
-    "error": Event;
+    "error": ErrorEvent;
     "nomatch": SpeechRecognitionEvent;
     "result": SpeechRecognitionEvent;
     "soundend": Event;
