@@ -21,7 +21,7 @@ namespace ts.codefix {
                 return [createCodeFixAction(fixName, changes, [Diagnostics.Add_missing_enum_member_0, token.text], fixId, Diagnostics.Add_all_missing_members)];
             }
             const { parentDeclaration, declSourceFile, inJs, makeStatic, token, call } = info;
-            const methodCodeAction = call && getActionForMethodDeclaration(context, declSourceFile, parentDeclaration, token, call, makeStatic, inJs, context.preferences);
+            const methodCodeAction = call && getActionForMethodDeclaration(context, declSourceFile, parentDeclaration, token, call, makeStatic, inJs);
             const addMember = inJs && !isInterfaceDeclaration(parentDeclaration) ?
                 singleElementArray(getActionsForAddMissingMemberInJavascriptFile(context, declSourceFile, parentDeclaration, token, makeStatic)) :
                 getActionsForAddMissingMemberInTypeScriptFile(context, declSourceFile, parentDeclaration, token, makeStatic);
@@ -29,7 +29,7 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => {
-            const { program, preferences } = context;
+            const { program } = context;
             const checker = program.getTypeChecker();
             const seen = createMap<true>();
 
@@ -66,7 +66,7 @@ namespace ts.codefix {
 
                         // Always prefer to add a method declaration if possible.
                         if (call && !isPrivateIdentifier(token)) {
-                            addMethodDeclaration(context, changes, declSourceFile, parentDeclaration, token, call, makeStatic, inJs, preferences);
+                            addMethodDeclaration(context, changes, declSourceFile, parentDeclaration, token, call, makeStatic, inJs);
                         }
                         else {
                             if (inJs && !isInterfaceDeclaration(parentDeclaration)) {
@@ -304,12 +304,11 @@ namespace ts.codefix {
         token: Identifier | PrivateIdentifier,
         callExpression: CallExpression,
         makeStatic: boolean,
-        inJs: boolean,
-        preferences: UserPreferences,
+        inJs: boolean
     ): CodeFixAction | undefined {
         // Private methods are not implemented yet.
         if (isPrivateIdentifier(token)) { return undefined; }
-        const changes = textChanges.ChangeTracker.with(context, t => addMethodDeclaration(context, t, declSourceFile, classDeclaration, token, callExpression, makeStatic, inJs, preferences));
+        const changes = textChanges.ChangeTracker.with(context, t => addMethodDeclaration(context, t, declSourceFile, classDeclaration, token, callExpression, makeStatic, inJs));
         return createCodeFixAction(fixName, changes, [makeStatic ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0, token.text], fixId, Diagnostics.Add_all_missing_members);
     }
 
@@ -321,18 +320,18 @@ namespace ts.codefix {
         token: Identifier,
         callExpression: CallExpression,
         makeStatic: boolean,
-        inJs: boolean,
-        preferences: UserPreferences,
+        inJs: boolean
     ): void {
-        const methodDeclaration = createMethodFromCallExpression(context, callExpression, token.text, inJs, makeStatic, preferences, typeDecl);
+        const importAdder = createImportAdder(declSourceFile, context.program, context.preferences, context.host);
+        const methodDeclaration = createMethodFromCallExpression(context, callExpression, token.text, inJs, makeStatic, typeDecl, importAdder);
         const containingMethodDeclaration = getAncestor(callExpression, SyntaxKind.MethodDeclaration);
-
         if (containingMethodDeclaration && containingMethodDeclaration.parent === typeDecl) {
             changeTracker.insertNodeAfter(declSourceFile, containingMethodDeclaration, methodDeclaration);
         }
         else {
             changeTracker.insertNodeAtClassStart(declSourceFile, typeDecl, methodDeclaration);
         }
+        importAdder.writeFixes(changeTracker);
     }
 
     function addEnumMemberDeclaration(changes: textChanges.ChangeTracker, checker: TypeChecker, token: Identifier, enumDeclaration: EnumDeclaration) {

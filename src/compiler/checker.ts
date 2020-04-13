@@ -198,6 +198,7 @@ namespace ts {
         Source = 1 << 0,
         Target = 1 << 1,
         PropertyCheck = 1 << 2,
+        InPropertyCheck = 1 << 3,
     }
 
     const enum MappedTypeModifiers {
@@ -6213,14 +6214,18 @@ namespace ts {
                     ];
                     const symbolProps = getPropertiesOfType(classType);
                     const publicSymbolProps = filter(symbolProps, s => {
+                        // `valueDeclaration` could be undefined if inherited from
+                        // a union/intersection base type, but inherited properties
+                        // don't matter here.
                         const valueDecl = s.valueDeclaration;
-                        Debug.assertIsDefined(valueDecl);
-                        return !(isNamedDeclaration(valueDecl) && isPrivateIdentifier(valueDecl.name));
+                        return valueDecl && !(isNamedDeclaration(valueDecl) && isPrivateIdentifier(valueDecl.name));
                     });
                     const hasPrivateIdentifier = some(symbolProps, s => {
+                        // `valueDeclaration` could be undefined if inherited from
+                        // a union/intersection base type, but inherited properties
+                        // don't matter here.
                         const valueDecl = s.valueDeclaration;
-                        Debug.assertIsDefined(valueDecl);
-                        return isNamedDeclaration(valueDecl) && isPrivateIdentifier(valueDecl.name);
+                        return valueDecl && isNamedDeclaration(valueDecl) && isPrivateIdentifier(valueDecl.name);
                     });
                     // Boil down all private properties into a single one.
                     const privateProperties = hasPrivateIdentifier ?
@@ -7632,6 +7637,9 @@ namespace ts {
                 }
                 return anyType;
             }
+            if (containsSameNamedThisProperty(expression.left, expression.right)) {
+                return anyType;
+            }
             const type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : getWidenedLiteralType(checkExpressionCached(expression.right));
             if (type.flags & TypeFlags.Object &&
                 kind === AssignmentDeclarationKind.ModuleExports &&
@@ -7668,6 +7676,12 @@ namespace ts {
                 return anyArrayType;
             }
             return type;
+        }
+
+        function containsSameNamedThisProperty(thisProperty: Expression, expression: Expression) {
+            return isPropertyAccessExpression(thisProperty)
+                && thisProperty.expression.kind === SyntaxKind.ThisKeyword
+                && forEachChildRecursively(expression, n => isMatchingReference(thisProperty, n));
         }
 
         function isDeclarationInConstructor(expression: Expression) {
@@ -10346,7 +10360,7 @@ namespace ts {
                 t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(<IntersectionType>t) :
                 t.flags & TypeFlags.StringLike ? globalStringType :
                 t.flags & TypeFlags.NumberLike ? globalNumberType :
-                t.flags & TypeFlags.BigIntLike ? getGlobalBigIntType(/*reportErrors*/ languageVersion >= ScriptTarget.ESNext) :
+                t.flags & TypeFlags.BigIntLike ? getGlobalBigIntType(/*reportErrors*/ languageVersion >= ScriptTarget.ES2020) :
                 t.flags & TypeFlags.BooleanLike ? globalBooleanType :
                 t.flags & TypeFlags.ESSymbolLike ? getGlobalESSymbolType(/*reportErrors*/ languageVersion >= ScriptTarget.ES2015) :
                 t.flags & TypeFlags.NonPrimitive ? emptyObjectType :
@@ -10422,7 +10436,7 @@ namespace ts {
                 if (!firstValueDeclaration) {
                     firstValueDeclaration = prop.valueDeclaration;
                 }
-                else if (prop.valueDeclaration !== firstValueDeclaration) {
+                else if (prop.valueDeclaration && prop.valueDeclaration !== firstValueDeclaration) {
                     hasNonUniformValueDeclaration = true;
                 }
                 declarations = addRange(declarations, prop.declarations);
@@ -14548,6 +14562,16 @@ namespace ts {
             }
         }
 
+        function checkExpressionForMutableLocationWithContextualType(next: Expression, sourcePropType: Type) {
+            next.contextualType = sourcePropType;
+            try {
+                return checkExpressionForMutableLocation(next, CheckMode.Contextual, sourcePropType);
+            }
+            finally {
+                next.contextualType = undefined;
+            }
+        }
+
         type ElaborationIterator = IterableIterator<{ errorNode: Node, innerExpression: Expression | undefined, nameType: Type, errorMessage?: DiagnosticMessage | undefined }>;
         /**
          * For every element returned from the iterator, checks that element to issue an error on a property of that element's type
@@ -14578,7 +14602,7 @@ namespace ts {
                         // Issue error on the prop itself, since the prop couldn't elaborate the error
                         const resultObj: { errors?: Diagnostic[] } = errorOutputContainer || {};
                         // Use the expression type, if available
-                        const specificSource = next ? checkExpressionForMutableLocation(next, CheckMode.Normal, sourcePropType) : sourcePropType;
+                        const specificSource = next ? checkExpressionForMutableLocationWithContextualType(next, sourcePropType) : sourcePropType;
                         const result = checkTypeRelatedTo(specificSource, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
                         if (result && specificSource !== sourcePropType) {
                             // If for whatever reason the expression type doesn't yield an error, make sure we still issue an error on the sourcePropType
@@ -15233,6 +15257,7 @@ namespace ts {
             let overrideNextErrorInfo = 0; // How many `reportRelationError` calls should be skipped in the elaboration pyramid
             let lastSkippedInfo: [Type, Type] | undefined;
             let incompatibleStack: [DiagnosticMessage, (string | number)?, (string | number)?, (string | number)?, (string | number)?][] = [];
+            let inPropertyCheck = false;
 
             Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
@@ -15241,7 +15266,7 @@ namespace ts {
                 reportIncompatibleStack();
             }
             if (overflow) {
-                const diag = error(errorNode, Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
+                const diag = error(errorNode || currentNode, Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
                 if (errorOutputContainer) {
                     (errorOutputContainer.errors || (errorOutputContainer.errors = [])).push(diag);
                 }
@@ -15668,10 +15693,15 @@ namespace ts {
                 //   function foo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
                 //     x = y;  // Mismatched property in source intersection
                 //   }
-                if (result && (
+                //
+                // We suppress recursive intersection property checks because they can generate lots of work when relating
+                // recursive intersections that are structurally similar but not exactly identical. See #37854.
+                if (result && !inPropertyCheck && (
                     target.flags & TypeFlags.Intersection && (isPerformingExcessPropertyChecks || isPerformingCommonPropertyChecks) ||
                     isNonGenericObjectType(target) && source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType && !some((<IntersectionType>source).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType)))) {
+                    inPropertyCheck = true;
                     result &= recursiveTypeRelatedTo(source, target, reportErrors, IntersectionState.PropertyCheck);
+                    inPropertyCheck = false;
                 }
 
                 if (!result && reportErrors) {
@@ -15968,7 +15998,7 @@ namespace ts {
                 if (overflow) {
                     return Ternary.False;
                 }
-                const id = getRelationKey(source, target, intersectionState, relation);
+                const id = getRelationKey(source, target, intersectionState | (inPropertyCheck ? IntersectionState.InPropertyCheck : 0), relation);
                 const entry = relation.get(id);
                 if (entry !== undefined) {
                     if (reportErrors && entry & RelationComparisonResult.Failed && !(entry & RelationComparisonResult.Reported)) {
@@ -32929,6 +32959,10 @@ namespace ts {
                 const propDeclaration = prop.valueDeclaration;
                 const name = propDeclaration && getNameOfDeclaration(propDeclaration);
 
+                if (name && isPrivateIdentifier(name)) {
+                    return;
+                }
+
                 // index is numeric and property name is not valid numeric literal
                 if (indexKind === IndexKind.Number && !(name ? isNumericName(name) : isNumericLiteralName(prop.escapedName))) {
                     return;
@@ -34008,7 +34042,7 @@ namespace ts {
                 return false;
             }
             if (inAmbientExternalModule && isExternalModuleNameRelative(moduleName.text)) {
-                // we have already reported errors on top level imports\exports in external module augmentations in checkModuleDeclaration
+                // we have already reported errors on top level imports/exports in external module augmentations in checkModuleDeclaration
                 // no need to do this again.
                 if (!isTopLevelInExternalModuleAugmentation(node)) {
                     // TypeScript 1.0 spec (April 2013): 12.1.6
@@ -34144,16 +34178,10 @@ namespace ts {
 
             checkGrammarExportDeclaration(node);
             if (!node.moduleSpecifier || checkExternalImportOrExportDeclaration(node)) {
-                if (node.exportClause) {
+                if (node.exportClause && !isNamespaceExport(node.exportClause)) {
                     // export { x, y }
                     // export { x, y } from "foo"
-                    if (isNamedExports(node.exportClause)) {
-                        forEach(node.exportClause.elements, checkExportSpecifier);
-                    }
-                    else if(!isNamespaceExport(node.exportClause)) {
-                        checkImportBinding(node.exportClause);
-                    }
-
+                    forEach(node.exportClause.elements, checkExportSpecifier);
                     const inAmbientExternalModule = node.parent.kind === SyntaxKind.ModuleBlock && isAmbientModule(node.parent.parent);
                     const inAmbientNamespaceDeclaration = !inAmbientExternalModule && node.parent.kind === SyntaxKind.ModuleBlock &&
                         !node.moduleSpecifier && node.flags & NodeFlags.Ambient;
@@ -34167,7 +34195,9 @@ namespace ts {
                     if (moduleSymbol && hasExportAssignmentSymbol(moduleSymbol)) {
                         error(node.moduleSpecifier, Diagnostics.Module_0_uses_export_and_cannot_be_used_with_export_Asterisk, symbolToString(moduleSymbol));
                     }
-
+                    else if (node.exportClause) {
+                        checkAliasSymbol(node.exportClause);
+                    }
                     if (moduleKind !== ModuleKind.System && moduleKind < ModuleKind.ES2015) {
                         checkExternalEmitHelpers(node, ExternalEmitHelpers.ExportStar);
                     }
@@ -36088,8 +36118,30 @@ namespace ts {
                         return !node.locals ? [] : nodeBuilder.symbolTableToDeclarationStatements(node.locals, node, flags, tracker, bundled);
                     }
                     return !sym.exports ? [] : nodeBuilder.symbolTableToDeclarationStatements(sym.exports, node, flags, tracker, bundled);
-                }
+                },
+                isImportRequiredByAugmentation,
             };
+
+            function isImportRequiredByAugmentation(node: ImportDeclaration) {
+                const file = getSourceFileOfNode(node);
+                if (!file.symbol) return false;
+                const importTarget = getExternalModuleFileFromDeclaration(node);
+                if (!importTarget) return false;
+                if (importTarget === file) return false;
+                const exports = getExportsOfModule(file.symbol);
+                for (const s of arrayFrom(exports.values())) {
+                    if (s.mergeId) {
+                        const merged = getMergedSymbol(s);
+                        for (const d of merged.declarations) {
+                            const declFile = getSourceFileOfNode(d);
+                            if (declFile === importTarget) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                return false;
+            }
 
             function isInHeritageClause(node: PropertyAccessEntityNameExpression) {
                 return node.parent && node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && node.parent.parent && node.parent.parent.kind === SyntaxKind.HeritageClause;
