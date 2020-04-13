@@ -55,8 +55,9 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             const actualExpression = expression || createVoidZero();
             body = needsParentheses(actualExpression) ? createParen(actualExpression) : actualExpression;
             suppressLeadingAndTrailingTrivia(body);
-            copyLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
             copyTrailingAsLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
+            copyLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
+
             copyTrailingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
         }
         else {
