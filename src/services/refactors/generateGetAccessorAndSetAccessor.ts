@@ -46,6 +46,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         const { isStatic, isReadonly, fieldName, accessorName, originalName, type, container, declaration, renameAccessor } = fieldInfo;
 
         suppressLeadingAndTrailingTrivia(fieldName);
+        suppressLeadingAndTrailingTrivia(accessorName);
         suppressLeadingAndTrailingTrivia(declaration);
         suppressLeadingAndTrailingTrivia(container);
 

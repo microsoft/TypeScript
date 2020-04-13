@@ -218,16 +218,26 @@ namespace ts.codefix {
         methodName: string,
         inJs: boolean,
         makeStatic: boolean,
-        preferences: UserPreferences,
         contextNode: Node,
+        importAdder: ImportAdder
     ): MethodDeclaration {
         const body = !isInterfaceDeclaration(contextNode);
         const { typeArguments, arguments: args, parent } = call;
+        const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
         const checker = context.program.getTypeChecker();
         const tracker = getNoopSymbolTrackerWithResolver(context);
-        const types = map(args, arg =>
-            // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
-            checker.typeToTypeNode(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg)), contextNode, /*flags*/ undefined, tracker));
+        const types = map(args, arg => {
+            const type = checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg));
+            const typeNode = checker.typeToTypeNode(type, contextNode, /*flags*/ undefined, tracker);
+            if (typeNode?.kind === SyntaxKind.ImportType) {
+                const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeNode, type, scriptTarget);
+                if (importableReference) {
+                    importSymbols(importAdder, importableReference.symbols);
+                    return importableReference.typeReference;
+                }
+            }
+            return typeNode;
+        });
         const names = map(args, arg =>
             isIdentifier(arg) ? arg.text : isPropertyAccessExpression(arg) && isIdentifier(arg.name) ? arg.name.text : undefined);
         const contextualType = checker.getContextualType(call);
@@ -242,7 +252,7 @@ namespace ts.codefix {
                 createTypeParameterDeclaration(CharacterCodes.T + typeArguments!.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`)),
             /*parameters*/ createDummyParameters(args.length, names, types, /*minArgumentCount*/ undefined, inJs),
             /*type*/ returnType,
-            body ? createStubbedMethodBody(preferences) : undefined);
+            body ? createStubbedMethodBody(context.preferences) : undefined);
     }
 
     function createDummyParameters(argCount: number, names: (string | undefined)[] | undefined, types: (TypeNode | undefined)[] | undefined, minArgumentCount: number | undefined, inJs: boolean): ParameterDeclaration[] {
