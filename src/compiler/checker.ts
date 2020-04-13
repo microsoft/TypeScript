@@ -15547,10 +15547,8 @@ namespace ts {
                     if (isSimpleTypeRelatedTo(originalSource, originalTarget, relation, reportErrors ? reportError : undefined)) {
                         return Ternary.True;
                     }
-                    else {
-                        reportErrorResults(originalSource, originalTarget, Ternary.False, !!(getObjectFlags(originalSource) & ObjectFlags.JsxAttributes));
-                        return Ternary.False;
-                    }
+                    reportErrorResults(originalSource, originalTarget, Ternary.False, !!(getObjectFlags(originalSource) & ObjectFlags.JsxAttributes));
+                    return Ternary.False;
                 }
 
                 // Normalize the source and target types: Turn fresh literal types into regular literal types,
