@@ -376,16 +376,21 @@ namespace ts.tscWatch {
         if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
         sys.diff(baseline, oldSnap);
         sys.serializeOutput(baseline);
-        const programs = getPrograms();
-        for (const program of programs) {
-            baselineProgram(baseline, program);
-        }
+        const programs = baselinePrograms(baseline, getPrograms);
         sys.serializeWatches(baseline);
         baseline.push(`exitCode:: ExitStatus.${ExitStatus[sys.exitCode as ExitStatus]}`, "");
         sys.writtenFiles.forEach((value, key) => {
             assert.equal(value, 1, `Expected to write file ${key} only once`);
         });
         sys.writtenFiles.clear();
+        return programs;
+    }
+
+    export function baselinePrograms(baseline: string[], getPrograms: () => readonly CommandLineProgram[]) {
+        const programs = getPrograms();
+        for (const program of programs) {
+            baselineProgram(baseline, program);
+        }
         return programs;
     }
 

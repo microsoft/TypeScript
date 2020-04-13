@@ -273,7 +273,7 @@ interface Symbol {
 
     export function verifyTscIncrementalEdits({
         subScenario, fs, scenario, commandLineArgs,
-        baselineSourceMap, modifyFs, baselineReadFileCalls,
+        baselineSourceMap, modifyFs, baselineReadFileCalls, baselinePrograms,
         incrementalScenarios
     }: VerifyTsBuildInput) {
         describe(`tsc ${commandLineArgs.join(" ")} ${scenario}:: ${subScenario}`, () => {
@@ -292,7 +292,8 @@ interface Symbol {
                         tick();
                     },
                     baselineSourceMap,
-                    baselineReadFileCalls
+                    baselineReadFileCalls,
+                    baselinePrograms
                 });
                 Debug.assert(!!incrementalScenarios.length, `${scenario}/${subScenario}:: No incremental scenarios, you probably want to use verifyTsc instead.`);
             });
@@ -327,7 +328,8 @@ interface Symbol {
                                 tick();
                             },
                             baselineSourceMap,
-                            baselineReadFileCalls
+                            baselineReadFileCalls,
+                            baselinePrograms
                         });
                     });
                     after(() => {

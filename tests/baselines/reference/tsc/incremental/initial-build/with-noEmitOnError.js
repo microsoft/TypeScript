@@ -14,5 +14,18 @@
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
+Program options: {"outDir":"/src/dev-build","noEmitOnError":true,"incremental":true,"project":"/src","configFilePath":"/src/tsconfig.json"}
+Program files::
+/lib/lib.d.ts
+/src/shared/types/db.ts
+/src/src/main.ts
+/src/src/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/shared/types/db.ts
+/src/src/main.ts
+/src/src/other.ts
 
 

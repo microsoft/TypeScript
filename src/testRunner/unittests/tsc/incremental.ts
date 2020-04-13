@@ -86,7 +86,8 @@ const a = {
     lastName: 'sdsd'
 };`, "utf-8")
                 }
-            ]
+            ],
+            baselinePrograms: true
         });
     });
 }

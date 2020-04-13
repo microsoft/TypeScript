@@ -27,6 +27,7 @@ namespace ts {
         modifyFs?: (fs: vfs.FileSystem) => void;
         baselineSourceMap?: boolean;
         baselineReadFileCalls?: boolean;
+        baselinePrograms?: boolean;
     }
 
     export type CommandLineProgram = [Program, EmitAndSemanticDiagnosticsBuilderProgram?];
@@ -74,7 +75,7 @@ namespace ts {
         const {
             scenario, subScenario, buildKind,
             commandLineArgs, modifyFs,
-            baselineSourceMap, baselineReadFileCalls
+            baselineSourceMap, baselineReadFileCalls, baselinePrograms
         } = input;
         if (modifyFs) modifyFs(fs);
 
@@ -100,12 +101,18 @@ namespace ts {
 
         sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
         sys.exit = exitCode => sys.exitCode = exitCode;
+        const { cb, getPrograms } = commandLineCallbacks(sys, originalReadFile);
         executeCommandLine(
             sys,
-            commandLineCallbacks(sys, originalReadFile).cb,
+            cb,
             commandLineArgs,
         );
         sys.write(`exitCode:: ExitStatus.${ExitStatus[sys.exitCode as ExitStatus]}\n`);
+        if (baselinePrograms) {
+            const baseline: string[] = [];
+            tscWatch.baselinePrograms(baseline, getPrograms);
+            sys.write(baseline.join("\n"));
+        }
         if (baselineReadFileCalls) {
             sys.write(`readFiles:: ${JSON.stringify(actualReadFileMap, /*replacer*/ undefined, " ")} `);
         }
