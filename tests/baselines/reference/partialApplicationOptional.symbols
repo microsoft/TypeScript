@@ -1,0 +1,23 @@
+=== tests/cases/conformance/expressions/partialApplication/partialApplicationOptional.ts ===
+const repeatAndPad = (times: number, text: string, padToLength: number = 0) =>
+>repeatAndPad : Symbol(repeatAndPad, Decl(partialApplicationOptional.ts, 0, 5))
+>times : Symbol(times, Decl(partialApplicationOptional.ts, 0, 22))
+>text : Symbol(text, Decl(partialApplicationOptional.ts, 0, 36))
+>padToLength : Symbol(padToLength, Decl(partialApplicationOptional.ts, 0, 50))
+
+Array(times).fill(text).join('').padStart(padToLength, ' ');
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>times : Symbol(times, Decl(partialApplicationOptional.ts, 0, 22))
+>text : Symbol(text, Decl(partialApplicationOptional.ts, 0, 36))
+>padToLength : Symbol(padToLength, Decl(partialApplicationOptional.ts, 0, 50))
+
+const twice = repeatAndPad(2, ?);
+>twice : Symbol(twice, Decl(partialApplicationOptional.ts, 3, 5))
+>repeatAndPad : Symbol(repeatAndPad, Decl(partialApplicationOptional.ts, 0, 5))
+
+twice('Double');
+>twice : Symbol(twice, Decl(partialApplicationOptional.ts, 3, 5))
+
+twice('DoublePadded', 40);
+>twice : Symbol(twice, Decl(partialApplicationOptional.ts, 3, 5))
+

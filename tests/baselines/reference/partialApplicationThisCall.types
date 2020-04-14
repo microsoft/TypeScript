@@ -1,0 +1,58 @@
+=== tests/cases/conformance/expressions/partialApplication/partialApplicationThisCall.ts ===
+const a = {
+>a : { b: { c: { d: { e: { hmm: number; foo(x: number, y: number): number; }; }; }; }; }
+>{    b: {        c: {            d: {                e: {                    hmm: 10,                    foo(x: number, y: number) { return this.hmm * x * y },                }            }        }    }} : { b: { c: { d: { e: { hmm: number; foo(x: number, y: number): number; }; }; }; }; }
+
+    b: {
+>b : { c: { d: { e: { hmm: number; foo(x: number, y: number): number; }; }; }; }
+>{        c: {            d: {                e: {                    hmm: 10,                    foo(x: number, y: number) { return this.hmm * x * y },                }            }        }    } : { c: { d: { e: { hmm: number; foo(x: number, y: number): number; }; }; }; }
+
+        c: {
+>c : { d: { e: { hmm: number; foo(x: number, y: number): number; }; }; }
+>{            d: {                e: {                    hmm: 10,                    foo(x: number, y: number) { return this.hmm * x * y },                }            }        } : { d: { e: { hmm: number; foo(x: number, y: number): number; }; }; }
+
+            d: {
+>d : { e: { hmm: number; foo(x: number, y: number): number; }; }
+>{                e: {                    hmm: 10,                    foo(x: number, y: number) { return this.hmm * x * y },                }            } : { e: { hmm: number; foo(x: number, y: number): number; }; }
+
+                e: {
+>e : { hmm: number; foo(x: number, y: number): number; }
+>{                    hmm: 10,                    foo(x: number, y: number) { return this.hmm * x * y },                } : { hmm: number; foo(x: number, y: number): number; }
+
+                    hmm: 10,
+>hmm : number
+>10 : 10
+
+                    foo(x: number, y: number) { return this.hmm * x * y },
+>foo : (x: number, y: number) => number
+>x : number
+>y : number
+>this.hmm * x * y : number
+>this.hmm * x : number
+>this.hmm : any
+>this : any
+>hmm : any
+>x : number
+>y : number
+                }
+            }
+        }
+    }
+}
+
+const j = a.b.c.d.e.foo(?, 1);
+>j : (x: number) => number
+>a.b.c.d.e.foo(?, 1) : (x: number) => number
+>a.b.c.d.e.foo : (x: number, y: number) => number
+>a.b.c.d.e : { hmm: number; foo(x: number, y: number): number; }
+>a.b.c.d : { e: { hmm: number; foo(x: number, y: number): number; }; }
+>a.b.c : { d: { e: { hmm: number; foo(x: number, y: number): number; }; }; }
+>a.b : { c: { d: { e: { hmm: number; foo(x: number, y: number): number; }; }; }; }
+>a : { b: { c: { d: { e: { hmm: number; foo(x: number, y: number): number; }; }; }; }; }
+>b : { c: { d: { e: { hmm: number; foo(x: number, y: number): number; }; }; }; }
+>c : { d: { e: { hmm: number; foo(x: number, y: number): number; }; }; }
+>d : { e: { hmm: number; foo(x: number, y: number): number; }; }
+>e : { hmm: number; foo(x: number, y: number): number; }
+>foo : (x: number, y: number) => number
+>1 : 1
+

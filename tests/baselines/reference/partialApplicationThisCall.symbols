@@ -1,0 +1,45 @@
+=== tests/cases/conformance/expressions/partialApplication/partialApplicationThisCall.ts ===
+const a = {
+>a : Symbol(a, Decl(partialApplicationThisCall.ts, 0, 5))
+
+    b: {
+>b : Symbol(b, Decl(partialApplicationThisCall.ts, 0, 11))
+
+        c: {
+>c : Symbol(c, Decl(partialApplicationThisCall.ts, 1, 8))
+
+            d: {
+>d : Symbol(d, Decl(partialApplicationThisCall.ts, 2, 12))
+
+                e: {
+>e : Symbol(e, Decl(partialApplicationThisCall.ts, 3, 16))
+
+                    hmm: 10,
+>hmm : Symbol(hmm, Decl(partialApplicationThisCall.ts, 4, 20))
+
+                    foo(x: number, y: number) { return this.hmm * x * y },
+>foo : Symbol(foo, Decl(partialApplicationThisCall.ts, 5, 28))
+>x : Symbol(x, Decl(partialApplicationThisCall.ts, 6, 24))
+>y : Symbol(y, Decl(partialApplicationThisCall.ts, 6, 34))
+>x : Symbol(x, Decl(partialApplicationThisCall.ts, 6, 24))
+>y : Symbol(y, Decl(partialApplicationThisCall.ts, 6, 34))
+                }
+            }
+        }
+    }
+}
+
+const j = a.b.c.d.e.foo(?, 1);
+>j : Symbol(j, Decl(partialApplicationThisCall.ts, 13, 5))
+>a.b.c.d.e.foo : Symbol(foo, Decl(partialApplicationThisCall.ts, 5, 28))
+>a.b.c.d.e : Symbol(e, Decl(partialApplicationThisCall.ts, 3, 16))
+>a.b.c.d : Symbol(d, Decl(partialApplicationThisCall.ts, 2, 12))
+>a.b.c : Symbol(c, Decl(partialApplicationThisCall.ts, 1, 8))
+>a.b : Symbol(b, Decl(partialApplicationThisCall.ts, 0, 11))
+>a : Symbol(a, Decl(partialApplicationThisCall.ts, 0, 5))
+>b : Symbol(b, Decl(partialApplicationThisCall.ts, 0, 11))
+>c : Symbol(c, Decl(partialApplicationThisCall.ts, 1, 8))
+>d : Symbol(d, Decl(partialApplicationThisCall.ts, 2, 12))
+>e : Symbol(e, Decl(partialApplicationThisCall.ts, 3, 16))
+>foo : Symbol(foo, Decl(partialApplicationThisCall.ts, 5, 28))
+

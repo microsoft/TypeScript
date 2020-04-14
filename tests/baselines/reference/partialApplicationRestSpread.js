@@ -1,0 +1,4 @@
+//// [partialApplicationRestSpread.ts]
+
+
+//// [partialApplicationRestSpread.js]

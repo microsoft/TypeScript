@@ -29781,18 +29781,16 @@ namespace ts {
                         .filter(({ isPartial }) => isPartial)
                         .map(({ originalParam }) => originalParam);
 
-                    const pAType = {
+                    const partiallyAppliedType = {
                         ...createObjectType(ObjectFlags.Anonymous),
-                        // ...createObjectType(ObjectFlags.Anonymous, node.symbol),
                         members: emptySymbols,
                         properties: [],
                         callSignatures: [createSignature(
-                        undefined,
-                        undefined,
-                        undefined,
+                        /*declaration*/ undefined,
+                        /*typeParameters*/ undefined,
+                        /*thisParameter*/ undefined,
                         typeParams,
                             callSignature.resolvedReturnType,
-                            // getReturnTypeOfSingleNonGenericCallSignature(funcType),
                             callSignature.resolvedTypePredicate,
                         args.filter(isPartialApplicationElement).length,
                         (typeParams.length - args.filter(isPartialApplicationElement).length > 0)
@@ -29800,27 +29798,11 @@ namespace ts {
                             : SignatureFlags.None
                         )],
                         constructSignatures: [],
-                        // stringIndexInfo: ,
-                        // numberIndexInfo: ,
                     };
 
-                    const newSig = cloneSignature(callSignature);
-                    newSig.resolvedReturnType = pAType;
-                    return newSig;
-                    // return createSignature(
-                    //     undefined,
-                    //     undefined,
-                    //     undefined,
-                    //     typeParams,
-                    //         callSignature.resolvedReturnType,
-                    //         // getReturnTypeOfSingleNonGenericCallSignature(funcType),
-                    //         callSignature.resolvedTypePredicate,
-                    //     args.filter(isPartialApplicationElement).length,
-                    //     (typeParams.length - args.filter(isPartialApplicationElement).length > 0)
-                    //         ? SignatureFlags.HasLiteralTypes
-                    //         : SignatureFlags.None
-                    //     );
-                    // return result;
+                    const partiallyAppliedSignature = cloneSignature(callSignature);
+                    partiallyAppliedSignature.resolvedReturnType = partiallyAppliedType;
+                    return partiallyAppliedSignature;
                 }
                 return result;
             }
@@ -33409,6 +33391,7 @@ namespace ts {
             try {
                 context.contextualType = contextualType;
                 context.inferenceContext = inferenceContext;
+                // TODO: Check if this is correct place or should it be moved up.
                 if (node.kind === SyntaxKind.PartialApplicationElement) {
                     return contextualType;
                 }
@@ -33760,7 +33743,7 @@ namespace ts {
                         return undefined;
                     }
 
-                    // Fix when partially applying function that has rest params.
+                    // Fix when partially applying a function that has rest params.
                     const extraParams = expr.arguments.slice(callSignature.parameters.length);
                     // const extraParams = callSignature.hasRestParam
                     //     ? []
@@ -33768,8 +33751,7 @@ namespace ts {
 
                     extraParams
                         .forEach(_extraParam =>
-                            console.log("Partial application extra parameter: ")
-                            // console.log('Partial application extra parameter: ', extraParam.symbol);
+                            console.log("Partial application extra parameter: "/*, extraParam.symbol*/)
                         );
 
                     const omittedParams = callSignature.parameters
@@ -33789,14 +33771,14 @@ namespace ts {
                         .filter(({ isPartial }) => isPartial)
                         .map(({ originalParam }) => originalParam);
 
-                    const pAType = {
+                    return {
                         ...createObjectType(ObjectFlags.Anonymous, funcType.symbol),
                         members: emptySymbols,
                         properties: [],
                         callSignatures: [createSignature(
-                            undefined,
-                            undefined,
-                            undefined,
+                            /*declaration*/ undefined,
+                            /*typeParameters*/ undefined,
+                            /*thisParameter*/ undefined,
                             typeParams,
                             getReturnTypeOfSingleNonGenericCallSignature(funcType),
                             callSignature.resolvedTypePredicate,
@@ -33806,49 +33788,7 @@ namespace ts {
                                 : SignatureFlags.None
                         )],
                         constructSignatures: [],
-                        // stringIndexInfo: ,
-                        // numberIndexInfo: ,
                     };
-
-                    /* THIS IS WRONG: it says type is (y: number) => (2, y) => number.
-
-                    let returnedFunctionTypeParams: Symbol[] = callSignature.parameters
-                        .map((param, i) => ({
-                            originalParam: param,
-                            isPartial: isPartialApplicationElement(expr.arguments[i]),
-                        }))
-                        .filter(({ isPartial }) => isPartial === false)
-                        .map(({ originalParam }) => originalParam);
-
-                    const returnedFunctionType = createObjectType(ObjectFlags.Anonymous, funcType.symbol);
-                    returnedFunctionType.callSignatures = [createSignature(
-                        undefined,
-                        undefined,
-                        undefined,
-                        returnedFunctionTypeParams,
-                        callSignature.resolvedReturnType,
-                        callSignature.resolvedTypePredicate,
-                        expr.arguments.filter(isPartialApplicationElement).length,
-                        (returnedFunctionTypeParams.length - expr.arguments.filter(isPartialApplicationElement).length > 0)
-                            ? SignatureFlags.HasLiteralTypes
-                            : SignatureFlags.None
-                    )];
-
-                    pAType.callSignatures = [createSignature(
-                        undefined,
-                        undefined,
-                        undefined,
-                        callSignature.parameters,
-                        returnedFunctionType,
-                        callSignature.resolvedTypePredicate,
-                        expr.arguments.length,
-                        // ((typeParams.length - expr.arguments.filter(isPartialApplicationElement).length) > 0)
-                        //     ? SignatureFlags.HasLiteralTypes
-                        //     : SignatureFlags.None
-                        SignatureFlags.None
-                    )];
-*/
-                    return pAType;
                 }
                 const type = isCallChain(expr) ? getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr) :
                     getReturnTypeOfSingleNonGenericCallSignature(checkNonNullExpression(expr.expression));
@@ -34010,6 +33950,7 @@ namespace ts {
                 case SyntaxKind.ArrowFunction:
                     return checkFunctionExpressionOrObjectLiteralMethod(node as FunctionExpression | ArrowFunction, checkMode);
                 case SyntaxKind.PartialApplicationElement:
+                    // TODO: Explain why we error out here...
                     return errorType;
                     // return PartialApplicationExpression;
                 case SyntaxKind.TypeOfExpression:
@@ -36851,14 +36792,6 @@ namespace ts {
             }
 
             const type = convertAutoToAny(getTypeOfSymbol(symbol));
-            const rType = (<ResolvedType>type);
-            if (type && rType.callSignatures && rType.callSignatures.length > 0) {
-                const callSignature = rType.callSignatures[0];
-                if (callSignature.resolvedReturnType && callSignature.resolvedReturnType.id === 13) {
-                    // console.log('2 callSignature.resolvedReturnType.id: ', callSignature.resolvedReturnType.id, ' .intrinsicName: ', (callSignature.resolvedReturnType as any).intrinsicName);
-                    // console.log('params: ', callSignature.parameters);
-                }
-            }
             if (node === symbol.valueDeclaration) {
                 // Node is the primary declaration of the symbol, just validate the initializer
                 // Don't validate for-in initializer as it is already an error

@@ -1,0 +1,17 @@
+tests/cases/conformance/expressions/partialApplication/partialApplicationOptional.ts(2,14): error TS2339: Property 'fill' does not exist on type 'any[]'.
+tests/cases/conformance/expressions/partialApplication/partialApplicationOptional.ts(7,23): error TS2554: Expected 1 arguments, but got 2.
+
+
+==== tests/cases/conformance/expressions/partialApplication/partialApplicationOptional.ts (2 errors) ====
+    const repeatAndPad = (times: number, text: string, padToLength: number = 0) =>
+    Array(times).fill(text).join('').padStart(padToLength, ' ');
+                 ~~~~
+!!! error TS2339: Property 'fill' does not exist on type 'any[]'.
+    
+    const twice = repeatAndPad(2, ?);
+    
+    twice('Double');
+    twice('DoublePadded', 40);
+                          ~~
+!!! error TS2554: Expected 1 arguments, but got 2.
+    

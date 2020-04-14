@@ -1,0 +1,44 @@
+=== tests/cases/conformance/expressions/partialApplication/partialApplicationOptional.ts ===
+const repeatAndPad = (times: number, text: string, padToLength: number = 0) =>
+>repeatAndPad : (times: number, text: string, padToLength?: number) => any
+>(times: number, text: string, padToLength: number = 0) =>Array(times).fill(text).join('').padStart(padToLength, ' ') : (times: number, text: string, padToLength?: number) => any
+>times : number
+>text : string
+>padToLength : number
+>0 : 0
+
+Array(times).fill(text).join('').padStart(padToLength, ' ');
+>Array(times).fill(text).join('').padStart(padToLength, ' ') : any
+>Array(times).fill(text).join('').padStart : any
+>Array(times).fill(text).join('') : any
+>Array(times).fill(text).join : any
+>Array(times).fill(text) : any
+>Array(times).fill : any
+>Array(times) : any[]
+>Array : ArrayConstructor
+>times : number
+>fill : any
+>text : string
+>join : any
+>'' : ""
+>padStart : any
+>padToLength : number
+>' ' : " "
+
+const twice = repeatAndPad(2, ?);
+>twice : (text: string) => any
+>repeatAndPad(2, ?) : (text: string) => any
+>repeatAndPad : (times: number, text: string, padToLength?: number) => any
+>2 : 2
+
+twice('Double');
+>twice('Double') : any
+>twice : (text: string) => any
+>'Double' : "Double"
+
+twice('DoublePadded', 40);
+>twice('DoublePadded', 40) : any
+>twice : (text: string) => any
+>'DoublePadded' : "DoublePadded"
+>40 : 40
+
