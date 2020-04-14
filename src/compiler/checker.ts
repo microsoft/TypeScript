@@ -7500,17 +7500,21 @@ namespace ts {
             return undefined;
         }
 
-        function isPropertyDeclaredInConstructor(symbol: Symbol) {
+        function isConstructorDeclaredProperty(symbol: Symbol) {
+            // A propery is considered a constructor declared property when all declaration sites are this.xxx assignments,
+            // when no declaration sites have JSDoc type annotations, and when at least one declaration site is in the body of
+            // a class constructor.
             if (symbol.valueDeclaration && isBinaryExpression(symbol.valueDeclaration)) {
                 const links = getSymbolLinks(symbol);
-                if (links.isPropertyDeclaredInConstructor === undefined) {
-                    links.isPropertyDeclaredInConstructor = !!getDeclaringConstructor(symbol) && every(symbol.declarations, declaration =>
+                if (links.isConstructorDeclaredProperty === undefined) {
+                    links.isConstructorDeclaredProperty = !!getDeclaringConstructor(symbol) && every(symbol.declarations, declaration =>
                         isBinaryExpression(declaration) &&
                         getAssignmentDeclarationKind(declaration) === AssignmentDeclarationKind.ThisProperty &&
                         (declaration.left.kind !== SyntaxKind.ElementAccessExpression || isStringOrNumericLiteralLike((<ElementAccessExpression>declaration.left).argumentExpression)) &&
                         !getAnnotatedTypeForAssignmentDeclaration(/*declaredType*/ undefined, declaration, symbol, declaration));
+                    links.typeOfPropertyInBaseClass = getTypeOfAssignmentDeclarationPropertyOfBaseType(symbol);
                 }
-                return links.isPropertyDeclaredInConstructor;
+                return links.isConstructorDeclaredProperty;
             }
             return false;
         }
@@ -7518,19 +7522,23 @@ namespace ts {
         function getDeclaringConstructor(symbol: Symbol) {
             for (const declaration of symbol.declarations) {
                 const container = getThisContainer(declaration, /*includeArrowFunctions*/ false);
-                if (container && container.kind === SyntaxKind.Constructor) {
+                if (container && (container.kind === SyntaxKind.Constructor || isJSConstructor(container))) {
                     return <ConstructorDeclaration>container;
                 }
             }
         }
 
-        function getTypeOfPropertyDeclaredInConstructor(symbol: Symbol) {
+        function getTypeOfConstructorDeclaredProperty(symbol: Symbol) {
             const constructor = getDeclaringConstructor(symbol)!;
             const reference = createPropertyAccess(createThis(), unescapeLeadingUnderscores(symbol.escapedName));
             reference.expression.parent = reference;
             reference.parent = constructor;
             reference.flowNode = constructor.returnFlowNode;
-            return getFlowTypeOfReference(reference, autoType, undefinedType);
+            const flowType = getFlowTypeOfReference(reference, autoType, getSymbolLinks(symbol).typeOfPropertyInBaseClass || undefinedType);
+            if (noImplicitAny && (flowType === autoType || flowType === autoArrayType)) {
+                error(symbol.valueDeclaration, Diagnostics.Member_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(flowType));
+            }
+            return convertAutoToAny(flowType);
         }
 
         function getWidenedTypeForAssignmentDeclaration(symbol: Symbol, resolvedSymbol?: Symbol) {
@@ -7544,13 +7552,18 @@ namespace ts {
                 const containerObjectType = getJSContainerObjectType(symbol.valueDeclaration, symbol, container);
                 return containerObjectType || getWidenedLiteralType(checkExpressionCached(container));
             }
-            let type;
+            let type = undefined;
             let definedInConstructor = false;
             let definedInMethod = false;
-            if (isPropertyDeclaredInConstructor(symbol)) {
-                type = getTypeOfPropertyDeclaredInConstructor(symbol);
+            // We use control flow analysis to determine the type of the property if the property qualifies as a constructor
+            // declared property and the resulting control flow type isn't just undefined or null.
+            if (isConstructorDeclaredProperty(symbol)) {
+                const controlFlowType = getTypeOfConstructorDeclaredProperty(symbol);
+                if (!everyType(controlFlowType, isNullableType)) {
+                    type = controlFlowType;
+                }
             }
-            else {
+            if (!type) {
                 let jsdocType: Type | undefined;
                 let types: Type[] | undefined;
                 for (const declaration of symbol.declarations) {
@@ -24074,7 +24087,7 @@ namespace ts {
         }
 
         function isThisPropertyAccessInConstructor(node: ElementAccessExpression | PropertyAccessExpression | QualifiedName, prop: Symbol) {
-            return isThisProperty(node) && isPropertyDeclaredInConstructor(prop) && getThisContainer(node, /*includeArrowFunctions*/ true) === getDeclaringConstructor(prop);
+            return isThisProperty(node) && isConstructorDeclaredProperty(prop) && getThisContainer(node, /*includeArrowFunctions*/ true) === getDeclaringConstructor(prop);
         }
 
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, leftType: Type, right: Identifier | PrivateIdentifier) {
@@ -24167,7 +24180,7 @@ namespace ts {
                 return propType;
             }
             if (propType === autoType) {
-                return getFlowTypeOfReference(node, autoType, undefinedType);
+                return getFlowTypeOfReference(node, autoType, prop && getSymbolLinks(prop).typeOfPropertyInBaseClass || undefinedType);
             }
             // If strict null checks and strict property initialization checks are enabled, if we have
             // a this.xxx property access, if the property is an instance property without an initializer,
