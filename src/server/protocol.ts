@@ -546,7 +546,15 @@ namespace ts.server.protocol {
         command: CommandTypes.GetApplicableRefactors;
         arguments: GetApplicableRefactorsRequestArgs;
     }
-    export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs;
+    export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
+        triggerReason?: RefactorTriggerReason;
+    };
+
+    export type RefactorTriggerReason = RefactorInvokedReason;
+
+    export interface RefactorInvokedReason {
+        kind: 'invoked';
+    }
 
     /**
      * Response is a list of available refactorings.

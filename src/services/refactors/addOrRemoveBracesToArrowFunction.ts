@@ -16,8 +16,8 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     }
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
-        const { file, startPosition } = context;
-        const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
+        const { file, startPosition, triggerReason } = context;
+        const info = getConvertibleArrowFunctionAtPosition(file, startPosition, triggerReason);
         if (!info) return emptyArray;
 
         return [{
@@ -70,7 +70,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
-    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number): Info | undefined {
+    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number, triggerReason?: RefactorTriggerReason): Info | undefined {
         const node = getTokenAtPosition(file, startPosition);
         const func = getContainingFunction(node);
         if (!func || !isArrowFunction(func) || (!rangeContainsRange(func, node) || rangeContainsRange(func.body, node))) return undefined;
