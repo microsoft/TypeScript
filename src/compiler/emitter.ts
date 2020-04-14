@@ -4132,7 +4132,7 @@ namespace ts {
                 if (closingLineTerminatorCount) {
                     writeLine(closingLineTerminatorCount);
                 }
-                else if (format & ListFormat.SpaceBetweenBraces) {
+                else if (format & (ListFormat.SpaceAfterList | ListFormat.SpaceBetweenBraces)) {
                     writeSpace();
                 }
             }
