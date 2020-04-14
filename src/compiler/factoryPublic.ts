@@ -2611,7 +2611,6 @@ namespace ts {
         node.jsDoc = append(node.jsDoc, jsdoc);
         return node;
     }
-    
 
     // JSX
 
