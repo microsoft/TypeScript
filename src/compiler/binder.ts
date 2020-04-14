@@ -49,14 +49,15 @@ namespace ts {
                 break;
             // 3. non-exported import declarations
             case SyntaxKind.ImportEqualsDeclaration:
-                if (isExportedInBlock(node as ImportEqualsDeclaration)) {
+                const container = findAncestor(node, (n): n is ModuleDeclaration | SourceFile => isModuleDeclaration(n) || isSourceFile(n));
+                if (container && isExportedInBlock(idText((node as ImportEqualsDeclaration).name), container)) {
                     return ModuleInstanceState.Instantiated;
                 }
                 // FALLTHROUGH
             case SyntaxKind.ImportDeclaration:
-                return hasModifier(node, ModifierFlags.Export) ?
-                    ModuleInstanceState.Instantiated :
-                    ModuleInstanceState.NonInstantiated;
+                return hasModifier(node, ModifierFlags.Export)
+                    ? ModuleInstanceState.Instantiated
+                    : ModuleInstanceState.NonInstantiated;
             // 4. Export alias declarations pointing at only uninstantiated modules or things uninstantiated modules contain
             case SyntaxKind.ExportDeclaration:
                 const exportDeclaration = node as ExportDeclaration;
@@ -109,39 +110,23 @@ namespace ts {
         return ModuleInstanceState.Instantiated;
     }
 
-    function isExportedInBlock(node: ImportEqualsDeclaration) {
-        const root = findAncestor(node, (n): n is ModuleDeclaration | SourceFile => isModuleDeclaration(n) || isSourceFile(n));
-        if (!root) {
-            return false;
-        }
-        else if (isSourceFile(root)) {
-            return isExportedInBlockWorker(node, root.statements);
-        }
-        else {
-            return root.body && isModuleBlock(root.body) && isExportedInBlockWorker(node, root.body.statements);
-        }
-    }
-
-    function isExportedInBlockWorker(node: ImportEqualsDeclaration, statements: readonly Statement[]): boolean {
-        for (const statement of statements) {
-            switch (statement.kind) {
-                case SyntaxKind.ModuleDeclaration:
-                    const decl = statement as ModuleDeclaration;
-                    return !!decl.body && isModuleBlock(decl.body) && isExportedInBlockWorker(node, decl.body.statements);
-                case SyntaxKind.Block:
-                    // recur on statements
-                    return isExportedInBlockWorker(node, (statement as Block).statements);
-                case SyntaxKind.ExportDeclaration:
-                    // check exportClause.elements
-                    if (isExportDeclaration(statement) && !statement.moduleSpecifier && statement.exportClause && isNamedExports(statement.exportClause)) {
-                        for (const spec of statement.exportClause.elements) {
-                            if (idText(node.name) === idText(spec.propertyName || spec.name)) {
-                                return true;
-                            }
+    function isExportedInBlock(name: string, statement: Node): boolean {
+        switch (statement.kind) {
+            case SyntaxKind.ModuleDeclaration:
+                const decl = statement as ModuleDeclaration;
+                return !!decl.body && isModuleBlock(decl.body) && some(decl.body.statements, s => isExportedInBlock(name, s));
+            case SyntaxKind.SourceFile:
+            case SyntaxKind.Block:
+                return some((statement as Block | SourceFile).statements, s => isExportedInBlock(name, s));
+            case SyntaxKind.ExportDeclaration:
+                if (isExportDeclaration(statement) && !statement.moduleSpecifier && statement.exportClause && isNamedExports(statement.exportClause)) {
+                    for (const spec of statement.exportClause.elements) {
+                        if (name === idText(spec.propertyName || spec.name)) {
+                            return true;
                         }
                     }
-                    break;
-            }
+                }
+                break;
         }
         return false;
     }
