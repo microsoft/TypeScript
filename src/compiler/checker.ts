@@ -7552,7 +7552,7 @@ namespace ts {
                 const containerObjectType = getJSContainerObjectType(symbol.valueDeclaration, symbol, container);
                 return containerObjectType || getWidenedLiteralType(checkExpressionCached(container));
             }
-            let type = undefined;
+            let type;
             let definedInConstructor = false;
             let definedInMethod = false;
             // We use control flow analysis to determine the type of the property if the property qualifies as a constructor
