@@ -4,4 +4,4 @@
 ////}
 ////foo(/*1*/
 
-verify.signatureHelp({ marker: "1", text: "foo(x: number, callback: (x: {}) => number): void" });
+verify.signatureHelp({ marker: "1", text: "foo(x: number, callback: (x: unknown) => number): void" });

@@ -7,6 +7,11 @@ namespace ts {
         AsyncMethodsWithSuper = 1 << 0
     }
 
+    const enum ContextFlags {
+        NonTopLevel = 1 << 0,
+        HasLexicalThis = 1 << 1
+    }
+
     export function transformES2017(context: TransformationContext) {
         const {
             resumeLexicalEnvironment,
@@ -41,6 +46,8 @@ namespace ts {
         /** A set of node IDs for generated super accessors (variable statements). */
         const substitutedSuperAccessors: boolean[] = [];
 
+        let contextFlags: ContextFlags = 0;
+
         // Save the previous transformation hooks.
         const previousOnEmitNode = context.onEmitNode;
         const previousOnSubstituteNode = context.onSubstituteNode;
@@ -56,9 +63,42 @@ namespace ts {
                 return node;
             }
 
+            setContextFlag(ContextFlags.NonTopLevel, false);
+            setContextFlag(ContextFlags.HasLexicalThis, !isEffectiveStrictModeSourceFile(node, compilerOptions));
             const visited = visitEachChild(node, visitor, context);
             addEmitHelpers(visited, context.readEmitHelpers());
             return visited;
+        }
+
+        function setContextFlag(flag: ContextFlags, val: boolean) {
+            contextFlags = val ? contextFlags | flag : contextFlags & ~flag;
+        }
+
+        function inContext(flags: ContextFlags) {
+            return (contextFlags & flags) !== 0;
+        }
+
+        function inTopLevelContext() {
+            return !inContext(ContextFlags.NonTopLevel);
+        }
+
+        function inHasLexicalThisContext() {
+            return inContext(ContextFlags.HasLexicalThis);
+        }
+
+        function doWithContext<T, U>(flags: ContextFlags, cb: (value: T) => U, value: T) {
+            const contextFlagsToSet = flags & ~contextFlags;
+            if (contextFlagsToSet) {
+                setContextFlag(contextFlagsToSet, /*val*/ true);
+                const result = cb(value);
+                setContextFlag(contextFlagsToSet, /*val*/ false);
+                return result;
+            }
+            return cb(value);
+        }
+
+        function visitDefault(node: Node): VisitResult<Node> {
+            return visitEachChild(node, visitor, context);
         }
 
         function visitor(node: Node): VisitResult<Node> {
@@ -74,16 +114,16 @@ namespace ts {
                     return visitAwaitExpression(<AwaitExpression>node);
 
                 case SyntaxKind.MethodDeclaration:
-                    return visitMethodDeclaration(<MethodDeclaration>node);
+                    return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitMethodDeclaration, <MethodDeclaration>node);
 
                 case SyntaxKind.FunctionDeclaration:
-                    return visitFunctionDeclaration(<FunctionDeclaration>node);
+                    return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitFunctionDeclaration, <FunctionDeclaration>node);
 
                 case SyntaxKind.FunctionExpression:
-                    return visitFunctionExpression(<FunctionExpression>node);
+                    return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitFunctionExpression, <FunctionExpression>node);
 
                 case SyntaxKind.ArrowFunction:
-                    return visitArrowFunction(<ArrowFunction>node);
+                    return doWithContext(ContextFlags.NonTopLevel, visitArrowFunction, <ArrowFunction>node);
 
                 case SyntaxKind.PropertyAccessExpression:
                     if (capturedSuperProperties && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.SuperKeyword) {
@@ -96,6 +136,13 @@ namespace ts {
                         hasSuperElementAccess = true;
                     }
                     return visitEachChild(node, visitor, context);
+
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
+                    return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitDefault, node);
 
                 default:
                     return visitEachChild(node, visitor, context);
@@ -213,6 +260,10 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitAwaitExpression(node: AwaitExpression): Expression {
+            // do not downlevel a top-level await as it is module syntax...
+            if (inTopLevelContext()) {
+                return visitEachChild(node, visitor, context);
+            }
             return setOriginalNode(
                 setTextRange(
                     createYield(
@@ -420,8 +471,10 @@ namespace ts {
 
             const savedCapturedSuperProperties = capturedSuperProperties;
             const savedHasSuperElementAccess = hasSuperElementAccess;
-            capturedSuperProperties = createUnderscoreEscapedMap<true>();
-            hasSuperElementAccess = false;
+            if (!isArrowFunction) {
+                capturedSuperProperties = createUnderscoreEscapedMap<true>();
+                hasSuperElementAccess = false;
+            }
 
             let result: ConciseBody;
             if (!isArrowFunction) {
@@ -431,6 +484,7 @@ namespace ts {
                     createReturn(
                         createAwaiterHelper(
                             context,
+                            inHasLexicalThisContext(),
                             hasLexicalArguments,
                             promiseConstructor,
                             transformAsyncFunctionBodyWorker(<Block>node.body, statementOffset)
@@ -438,7 +492,7 @@ namespace ts {
                     )
                 );
 
-                addStatementsAfterPrologue(statements, endLexicalEnvironment());
+                insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
                 // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
                 // This step isn't needed if we eventually transform this to ES5.
@@ -446,9 +500,11 @@ namespace ts {
 
                 if (emitSuperHelpers) {
                     enableSubstitutionForAsyncMethodsWithSuper();
-                    const variableStatement = createSuperAccessVariableStatement(resolver, node, capturedSuperProperties);
-                    substitutedSuperAccessors[getNodeId(variableStatement)] = true;
-                    addStatementsAfterPrologue(statements, [variableStatement]);
+                    if (hasEntries(capturedSuperProperties)) {
+                        const variableStatement = createSuperAccessVariableStatement(resolver, node, capturedSuperProperties);
+                        substitutedSuperAccessors[getNodeId(variableStatement)] = true;
+                        insertStatementsAfterStandardPrologue(statements, [variableStatement]);
+                    }
                 }
 
                 const block = createBlock(statements, /*multiLine*/ true);
@@ -469,6 +525,7 @@ namespace ts {
             else {
                 const expression = createAwaiterHelper(
                     context,
+                    inHasLexicalThisContext(),
                     hasLexicalArguments,
                     promiseConstructor,
                     transformAsyncFunctionBodyWorker(node.body!)
@@ -485,8 +542,10 @@ namespace ts {
             }
 
             enclosingFunctionParameterNames = savedEnclosingFunctionParameterNames;
-            capturedSuperProperties = savedCapturedSuperProperties;
-            hasSuperElementAccess = savedHasSuperElementAccess;
+            if (!isArrowFunction) {
+                capturedSuperProperties = savedCapturedSuperProperties;
+                hasSuperElementAccess = savedHasSuperElementAccess;
+            }
             return result;
         }
 
@@ -684,9 +743,15 @@ namespace ts {
                     /* parameters */ [],
                     /* type */ undefined,
                     /* equalsGreaterThanToken */ undefined,
-                    createPropertyAccess(
-                        createSuper(),
-                        name
+                    setEmitFlags(
+                        createPropertyAccess(
+                            setEmitFlags(
+                                createSuper(),
+                                EmitFlags.NoSubstitution
+                            ),
+                            name
+                        ),
+                        EmitFlags.NoSubstitution
                     )
                 )
             ));
@@ -711,9 +776,16 @@ namespace ts {
                             /* type */ undefined,
                             /* equalsGreaterThanToken */ undefined,
                             createAssignment(
-                                createPropertyAccess(
-                                    createSuper(),
-                                    name),
+                                setEmitFlags(
+                                    createPropertyAccess(
+                                        setEmitFlags(
+                                            createSuper(),
+                                            EmitFlags.NoSubstitution
+                                        ),
+                                        name
+                                    ),
+                                    EmitFlags.NoSubstitution
+                                ),
                                 createIdentifier("v")
                             )
                         )
@@ -750,22 +822,24 @@ namespace ts {
                 NodeFlags.Const));
     }
 
-    const awaiterHelper: EmitHelper = {
+    export const awaiterHelper: UnscopedEmitHelper = {
         name: "typescript:awaiter",
+        importName: "__awaiter",
         scoped: false,
         priority: 5,
         text: `
             var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+                function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
                 return new (P || (P = Promise))(function (resolve, reject) {
                     function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
                     function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-                    function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+                    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
                     step((generator = generator.apply(thisArg, _arguments || [])).next());
                 });
             };`
     };
 
-    function createAwaiterHelper(context: TransformationContext, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression | undefined, body: Block) {
+    function createAwaiterHelper(context: TransformationContext, hasLexicalThis: boolean, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression | undefined, body: Block) {
         context.requestEmitHelper(awaiterHelper);
 
         const generatorFunc = createFunctionExpression(
@@ -782,10 +856,10 @@ namespace ts {
         (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
 
         return createCall(
-            getHelperName("__awaiter"),
+            getUnscopedHelperName("__awaiter"),
             /*typeArguments*/ undefined,
             [
-                createThis(),
+                hasLexicalThis ? createThis() : createVoidZero(),
                 hasLexicalArguments ? createIdentifier("arguments") : createVoidZero(),
                 promiseConstructor ? createExpressionFromEntityName(promiseConstructor) : createVoidZero(),
                 generatorFunc

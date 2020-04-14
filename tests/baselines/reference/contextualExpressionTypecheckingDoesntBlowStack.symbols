@@ -21,9 +21,9 @@ export default class Operation {
 
         for(const parameterLocation of Object.keys(parameterValues)) {
 >parameterLocation : Symbol(parameterLocation, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 8, 17))
->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >parameterValues : Symbol(parameterValues, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 6, 23))
 
             const parameter: any = (this as any).getParameter();;

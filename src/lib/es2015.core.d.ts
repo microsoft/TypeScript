@@ -9,7 +9,7 @@ interface Array<T> {
      * predicate. If it is not provided, undefined is used instead.
      */
     find<S extends T>(predicate: (this: void, value: T, index: number, obj: T[]) => value is S, thisArg?: any): S | undefined;
-    find(predicate: (value: T, index: number, obj: T[]) => boolean, thisArg?: any): T | undefined;
+    find(predicate: (value: T, index: number, obj: T[]) => unknown, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -20,7 +20,7 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: T, index: number, obj: T[]) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: T, index: number, obj: T[]) => unknown, thisArg?: any): number;
 
     /**
      * Returns the this object after filling the section identified by start and end with value
@@ -42,6 +42,15 @@ interface Array<T> {
      * @param end If not specified, length of the this object is used as its default value.
      */
     copyWithin(target: number, start: number, end?: number): this;
+
+    /**
+     * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
+     * @param start The zero-based location in the array from which to start removing elements.
+     * @param deleteCount The number of elements to remove. If deleteCount is omitted, or if its value is equal to or larger
+     * than array.length - start (that is, if it is equal to or greater than the number of elements left in the array,
+     * starting at start), then all the elements from start to the end of the array will be deleted.
+     */
+    splice(start: number, deleteCount?: number): T[];
 }
 
 interface ArrayConstructor {
@@ -204,13 +213,13 @@ interface NumberConstructor {
      * number. Only finite values of the type number, result in true.
      * @param number A numeric value.
      */
-    isFinite(number: number): boolean;
+    isFinite(number: unknown): boolean;
 
     /**
      * Returns true if the value passed is an integer, false otherwise.
      * @param number A numeric value.
      */
-    isInteger(number: number): boolean;
+    isInteger(number: unknown): boolean;
 
     /**
      * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a
@@ -218,13 +227,13 @@ interface NumberConstructor {
      * to a number. Only values of the type number, that are also NaN, result in true.
      * @param number A numeric value.
      */
-    isNaN(number: number): boolean;
+    isNaN(number: unknown): boolean;
 
     /**
      * Returns true if the value passed is a safe integer.
      * @param number A numeric value.
      */
-    isSafeInteger(number: number): boolean;
+    isSafeInteger(number: unknown): boolean;
 
     /**
      * The value of the largest integer n such that n and n + 1 are both exactly representable as
@@ -299,6 +308,12 @@ interface ObjectConstructor {
     getOwnPropertySymbols(o: any): symbol[];
 
     /**
+     * Returns the names of the enumerable string properties and methods of an object.
+     * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+     */
+    keys(o: {}): string[];
+
+    /**
      * Returns true if the values are the same value, false otherwise.
      * @param value1 The first value.
      * @param value2 The second value.
@@ -306,7 +321,7 @@ interface ObjectConstructor {
     is(value1: any, value2: any): boolean;
 
     /**
-     * Sets the prototype of a specified object o to  object proto or null. Returns the object o.
+     * Sets the prototype of a specified object o to object proto or null. Returns the object o.
      * @param o The object to change its prototype.
      * @param proto The value of the new prototype or null.
      */
@@ -323,8 +338,8 @@ interface ReadonlyArray<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find<S extends T>(predicate: (this: void, value: T, index: number, obj: ReadonlyArray<T>) => value is S, thisArg?: any): S | undefined;
-    find(predicate: (value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg?: any): T | undefined;
+    find<S extends T>(predicate: (this: void, value: T, index: number, obj: readonly T[]) => value is S, thisArg?: any): S | undefined;
+    find(predicate: (value: T, index: number, obj: readonly T[]) => unknown, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -335,7 +350,7 @@ interface ReadonlyArray<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: T, index: number, obj: readonly T[]) => unknown, thisArg?: any): number;
 }
 
 interface RegExp {
@@ -367,8 +382,8 @@ interface RegExp {
 }
 
 interface RegExpConstructor {
-    new (pattern: RegExp, flags?: string): RegExp;
-    (pattern: RegExp, flags?: string): RegExp;
+    new (pattern: RegExp | string, flags?: string): RegExp;
+    (pattern: RegExp | string, flags?: string): RegExp;
 }
 
 interface String {

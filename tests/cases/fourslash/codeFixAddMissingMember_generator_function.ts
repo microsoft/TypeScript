@@ -6,15 +6,15 @@
 ////    }
 ////}
 
-verify.codeFixAll({
-    fixId: "addMissingMember",
-    fixAllDescription: "Add all missing members",
+verify.codeFix({
+    index: 0,
+    description: ignoreInterpolations(ts.Diagnostics.Declare_method_0),
     newFileContent:
         `class C {
     *method() {
         yield* this.y();
     }
-    *y(): any {
+    *y() {
         throw new Error("Method not implemented.");
     }
 }`,

@@ -2,27 +2,23 @@
 
 // Global variable reference.
 
-////var [|{| "isWriteAccess": true, "isDefinition": true |}topLevelVar|] = 2;
+////[|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}topLevelVar|] = 2;|]
 ////var topLevelVar2 = [|topLevelVar|];
 ////
-////class [|{| "isWriteAccess": true, "isDefinition": true |}topLevelClass|] { }
+////[|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 3 |}topLevelClass|] { }|]
 ////var c = new [|topLevelClass|]();
 ////
-////interface [|{| "isWriteAccess": true, "isDefinition": true |}topLevelInterface|] { }
+////[|interface [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}topLevelInterface|] { }|]
 ////var i: [|topLevelInterface|];
 ////
-////module [|{| "isWriteAccess": true, "isDefinition": true |}topLevelModule|] {
+////[|module [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 9 |}topLevelModule|] {
 ////    export var x;
-////}
+////}|]
 ////var x = [|topLevelModule|].x;
 ////
 ////export = x;
 
-const ranges = test.rangesByText();
-verify.singleReferenceGroup("var topLevelVar: number", ranges.get("topLevelVar"));
-
-const topLevelClass = ranges.get("topLevelClass");
-verify.singleReferenceGroup("class topLevelClass", topLevelClass);
-
-verify.singleReferenceGroup("interface topLevelInterface", ranges.get("topLevelInterface"));
-verify.singleReferenceGroup("namespace topLevelModule", ranges.get("topLevelModule"));
+verify.singleReferenceGroup("var topLevelVar: number", "topLevelVar");
+verify.singleReferenceGroup("class topLevelClass", "topLevelClass");
+verify.singleReferenceGroup("interface topLevelInterface", "topLevelInterface");
+verify.singleReferenceGroup("namespace topLevelModule", "topLevelModule");

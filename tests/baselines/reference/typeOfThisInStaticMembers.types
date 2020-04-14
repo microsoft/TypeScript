@@ -99,8 +99,8 @@ var r6 = t2.bar();
 >bar : () => typeof C2
 
 var r7 = new t2('');
->r7 : C2<{}>
->new t2('') : C2<{}>
+>r7 : C2<unknown>
+>new t2('') : C2<unknown>
 >t2 : typeof C2
 >'' : ""
 

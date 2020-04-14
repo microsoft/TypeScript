@@ -83,3 +83,7 @@ stringLiteral = d;
 numberLiteral = e;
 numberLiteral = f[0];
 booleanLiteral = g[0];
+
+
+//// [out/file1.d.ts]
+export {};

@@ -1,0 +1,41 @@
+=== tests/cases/compiler/thisConditionalOnMethodReturnOfGenericInstance.ts ===
+class A<T> {
+>A : A<T>
+
+    unmeasurableUsage!: {[K in keyof T]-?: T[K]};
+>unmeasurableUsage : { [K in keyof T]-?: T[K]; }
+}
+
+class B<T> extends A<T> {
+>B : B<T>
+>A : A<T>
+
+    method(): string | (this extends C ? undefined : null) {
+>method : () => string | (this extends C ? undefined : null)
+>null : null
+
+        return "";
+>"" : ""
+    }
+}
+
+class C<T = any> extends B<T> {
+>C : C<T>
+>B : B<T>
+
+    marker!: string;
+>marker : string
+}
+
+const x = new C<{}>();
+>x : C<{}>
+>new C<{}>() : C<{}>
+>C : typeof C
+
+const y = x.method(); // usage flags `method` in `B` as circular and marks `y` as the error-any type
+>y : string | undefined
+>x.method() : string | undefined
+>x.method : () => string | undefined
+>x : C<{}>
+>method : () => string | undefined
+

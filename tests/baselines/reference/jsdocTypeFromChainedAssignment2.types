@@ -58,13 +58,13 @@ module.exports.h = module.exports.i = function hi(mom) {
 >module.exports.h = module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
 >module.exports.h : (mom: string) => string
 >module.exports : typeof import("tests/cases/conformance/jsdoc/mod")
->module : { "tests/cases/conformance/jsdoc/mod": typeof import("tests/cases/conformance/jsdoc/mod"); }
+>module : { "\"tests/cases/conformance/jsdoc/mod\"": typeof import("tests/cases/conformance/jsdoc/mod"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/mod")
 >h : (mom: string) => string
 >module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
 >module.exports.i : (mom: string) => string
 >module.exports : typeof import("tests/cases/conformance/jsdoc/mod")
->module : { "tests/cases/conformance/jsdoc/mod": typeof import("tests/cases/conformance/jsdoc/mod"); }
+>module : { "\"tests/cases/conformance/jsdoc/mod\"": typeof import("tests/cases/conformance/jsdoc/mod"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/mod")
 >i : (mom: string) => string
 >function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string

@@ -31,9 +31,9 @@ var id: <T>(x:T) => T;
 >x : T
 
 var r23 = dot(id)(id);
->r23 : (_: {}) => {}
->dot(id)(id) : (_: {}) => {}
->dot(id) : <U>(g: (_: U) => {}) => (_: U) => {}
+>r23 : <T>(_: T) => unknown
+>dot(id)(id) : <T>(_: T) => unknown
+>dot(id) : <U>(g: (_: U) => unknown) => (_: U) => unknown
 >dot : <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T) => (_: U) => S
 >id : <T>(x: T) => T
 >id : <T>(x: T) => T

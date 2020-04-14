@@ -43,7 +43,7 @@ declare function from<T>(): T[];
 >from : <T>() => T[]
 
 const c2: ReadonlyArray<A> = from();
->c2 : ReadonlyArray<Nominal<"A", string>>
+>c2 : readonly Nominal<"A", string>[]
 >from() : Nominal<"A", string>[]
 >from : <T>() => T[]
 

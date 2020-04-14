@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList16.ts(2,4): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList16.ts(2,4): error TS2394: This overload signature is not compatible with its implementation signature.
 tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList16.ts(2,8): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 
 
@@ -6,7 +6,8 @@ tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList16.
     class C {
        foo(a = 4);
        ~~~
-!!! error TS2394: Overload signature is not compatible with function implementation.
+!!! error TS2394: This overload signature is not compatible with its implementation signature.
+!!! related TS2750 tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList16.ts:3:4: The implementation signature is declared here.
            ~~~~~
 !!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
        foo(a, b) { }

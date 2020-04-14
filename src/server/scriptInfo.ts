@@ -46,7 +46,7 @@ namespace ts.server {
          */
         private pendingReloadFromDisk = false;
 
-        constructor(private readonly host: ServerHost, private readonly fileName: NormalizedPath, initialVersion: ScriptInfoVersion | undefined, private readonly info: ScriptInfo) {
+        constructor(private readonly host: ServerHost, private readonly info: ScriptInfo, initialVersion?: ScriptInfoVersion) {
             this.version = initialVersion || { svc: 0, text: 0 };
         }
 
@@ -125,7 +125,7 @@ namespace ts.server {
             const { text: newText, fileSize } = this.getFileTextAndSize(tempFileName);
             const reloaded = this.reload(newText);
             this.fileSize = fileSize; // NB: after reload since reload clears it
-            this.ownFileText = !tempFileName || tempFileName === this.fileName;
+            this.ownFileText = !tempFileName || tempFileName === this.info.fileName;
             return reloaded;
         }
 
@@ -206,10 +206,10 @@ namespace ts.server {
 
         private getFileTextAndSize(tempFileName?: string): { text: string, fileSize?: number } {
             let text: string;
-            const fileName = tempFileName || this.fileName;
+            const fileName = tempFileName || this.info.fileName;
             const getText = () => text === undefined ? (text = this.host.readFile(fileName) || "") : text;
             // Only non typescript files have size limitation
-            if (!hasTSFileExtension(this.fileName)) {
+            if (!hasTSFileExtension(this.info.fileName)) {
                 const fileSize = this.host.getFileSize ? this.host.getFileSize(fileName) : getText().length;
                 if (fileSize > maxFileSize) {
                     Debug.assert(!!this.info.containingProjects.length);
@@ -272,7 +272,10 @@ namespace ts.server {
 
     /*@internal*/
     export function isDynamicFileName(fileName: NormalizedPath) {
-        return fileName[0] === "^" || getBaseFileName(fileName)[0] === "^";
+        return fileName[0] === "^" ||
+            ((stringContains(fileName, "walkThroughSnippet:/") || stringContains(fileName, "untitled:/")) &&
+                getBaseFileName(fileName)[0] === "^") ||
+            (stringContains(fileName, ":^") && !stringContains(fileName, directorySeparator));
     }
 
     /*@internal*/
@@ -335,7 +338,7 @@ namespace ts.server {
             initialVersion?: ScriptInfoVersion) {
             this.isDynamic = isDynamicFileName(fileName);
 
-            this.textStorage = new TextStorage(host, fileName, initialVersion, this);
+            this.textStorage = new TextStorage(host, this, initialVersion);
             if (hasMixedContent || this.isDynamic) {
                 this.textStorage.reload("");
                 this.realpath = this.path;
@@ -469,16 +472,16 @@ namespace ts.server {
 
         detachAllProjects() {
             for (const p of this.containingProjects) {
-                if (p.projectKind === ProjectKind.Configured) {
+                if (isConfiguredProject(p)) {
                     p.getCachedDirectoryStructureHost().addOrDeleteFile(this.fileName, this.path, FileWatcherEventKind.Deleted);
                 }
-                const isInfoRoot = p.isRoot(this);
+                const existingRoot = p.getRootFilesMap().get(this.path);
                 // detach is unnecessary since we'll clean the list of containing projects anyways
                 p.removeFile(this, /*fileExists*/ false, /*detachFromProjects*/ false);
                 // If the info was for the external or configured project's root,
                 // add missing file as the root
-                if (isInfoRoot && p.projectKind !== ProjectKind.Inferred) {
-                    p.addMissingFileRoot(this.fileName);
+                if (existingRoot && !isInferredProject(p)) {
+                    p.addMissingFileRoot(existingRoot.fileName);
                 }
             }
             clear(this.containingProjects);
@@ -491,19 +494,40 @@ namespace ts.server {
                 case 1:
                     return this.containingProjects[0];
                 default:
-                    // if this file belongs to multiple projects, the first configured project should be
-                    // the default project; if no configured projects, the first external project should
-                    // be the default project; otherwise the first inferred project should be the default.
-                    let firstExternalProject;
-                    for (const project of this.containingProjects) {
-                        if (project.projectKind === ProjectKind.Configured) {
-                            return project;
+                    // If this file belongs to multiple projects, below is the order in which default project is used
+                    // - for open script info, its default configured project during opening is default if info is part of it
+                    // - first configured project of which script info is not a source of project reference redirect
+                    // - first configured project
+                    // - first external project
+                    // - first inferred project
+                    let firstExternalProject: ExternalProject | undefined;
+                    let firstConfiguredProject: ConfiguredProject | undefined;
+                    let firstNonSourceOfProjectReferenceRedirect: ConfiguredProject | undefined;
+                    let defaultConfiguredProject: ConfiguredProject | false | undefined;
+                    for (let index = 0; index < this.containingProjects.length; index++) {
+                        const project = this.containingProjects[index];
+                        if (isConfiguredProject(project)) {
+                            if (!project.isSourceOfProjectReferenceRedirect(this.fileName)) {
+                                // If we havent found default configuredProject and
+                                // its not the last one, find it and use that one if there
+                                if (defaultConfiguredProject === undefined &&
+                                    index !== this.containingProjects.length - 1) {
+                                    defaultConfiguredProject = project.projectService.findDefaultConfiguredProject(this) || false;
+                                }
+                                if (defaultConfiguredProject === project) return project;
+                                if (!firstNonSourceOfProjectReferenceRedirect) firstNonSourceOfProjectReferenceRedirect = project;
+                            }
+                            if (!firstConfiguredProject) firstConfiguredProject = project;
                         }
-                        else if (project.projectKind === ProjectKind.External && !firstExternalProject) {
+                        else if (!firstExternalProject && isExternalProject(project)) {
                             firstExternalProject = project;
                         }
                     }
-                    return firstExternalProject || this.containingProjects[0];
+                    return defaultConfiguredProject ||
+                        firstNonSourceOfProjectReferenceRedirect ||
+                        firstConfiguredProject ||
+                        firstExternalProject ||
+                        this.containingProjects[0];
             }
         }
 
@@ -533,6 +557,8 @@ namespace ts.server {
         }
 
         getLatestVersion() {
+            // Ensure we have updated snapshot to give back latest version
+            this.textStorage.getSnapshot();
             return this.textStorage.getVersion();
         }
 
@@ -574,7 +600,7 @@ namespace ts.server {
 
         markContainingProjectsAsDirty() {
             for (const p of this.containingProjects) {
-                p.markAsDirty();
+                p.markFileAsDirty(this.path);
             }
         }
 
@@ -595,14 +621,16 @@ namespace ts.server {
          */
         lineOffsetToPosition(line: number, offset: number): number;
         /*@internal*/
-        // tslint:disable-next-line:unified-signatures
-        lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number;
+        lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number; // eslint-disable-line @typescript-eslint/unified-signatures
         lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number {
             return this.textStorage.lineOffsetToPosition(line, offset, allowEdits);
         }
 
         positionToLineOffset(position: number): protocol.Location {
-            return this.textStorage.positionToLineOffset(position);
+            failIfInvalidPosition(position);
+            const location = this.textStorage.positionToLineOffset(position);
+            failIfInvalidLocation(location);
+            return location;
         }
 
         public isJavaScript() {
@@ -621,5 +649,18 @@ namespace ts.server {
                 this.sourceMapFilePath = undefined;
             }
         }
+    }
+
+    function failIfInvalidPosition(position: number) {
+        Debug.assert(typeof position === "number", `Expected position ${position} to be a number.`);
+        Debug.assert(position >= 0, `Expected position to be non-negative.`);
+    }
+
+    function failIfInvalidLocation(location: protocol.Location) {
+        Debug.assert(typeof location.line === "number", `Expected line ${location.line} to be a number.`);
+        Debug.assert(typeof location.offset === "number", `Expected offset ${location.offset} to be a number.`);
+
+        Debug.assert(location.line > 0, `Expected line to be non-${location.line === 0 ? "zero" : "negative"}`);
+        Debug.assert(location.offset > 0, `Expected offset to be non-${location.offset === 0 ? "zero" : "negative"}`);
     }
 }

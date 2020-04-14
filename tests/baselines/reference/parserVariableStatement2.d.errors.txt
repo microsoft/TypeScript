@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/Statements/parserVariableStatement2.d.ts(1,1): error TS1046: A 'declare' modifier is required for a top level declaration in a .d.ts file.
+tests/cases/conformance/parser/ecmascript5/Statements/parserVariableStatement2.d.ts(1,1): error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/Statements/parserVariableStatement2.d.ts (1 errors) ====
     var v;
     ~~~
-!!! error TS1046: A 'declare' modifier is required for a top level declaration in a .d.ts file.
+!!! error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.

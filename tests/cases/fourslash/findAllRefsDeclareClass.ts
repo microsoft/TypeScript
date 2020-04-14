@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
-////declare class [|{| "isWriteAccess": true, "isDefinition": true |}C|] {
+////[|declare class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}C|] {
 ////    static m(): void;
-////}
+////}|]
 
-verify.singleReferenceGroup("class C");
+verify.singleReferenceGroup("class C", "C");

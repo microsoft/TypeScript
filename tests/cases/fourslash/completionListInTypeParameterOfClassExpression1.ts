@@ -7,4 +7,4 @@
 ////var C4 = class D<T extends /*4*/>{}
 
 verify.completions({ marker: ["0", "1", "2", "3"], exact: undefined });
-verify.completions({ marker: "4", exact: ["D", ...completion.globalsPlus(["C0", "C1", "C2", "C3", "C4"])] });
+verify.completions({ marker: "4", exact: ["D", "T", ...completion.globalTypes] });

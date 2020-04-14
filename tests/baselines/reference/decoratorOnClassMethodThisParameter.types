@@ -1,0 +1,16 @@
+=== tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodThisParameter.ts ===
+declare function dec(target: Object, propertyKey: string | symbol, parameterIndex: number): void;
+>dec : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
+>target : Object
+>propertyKey : string | symbol
+>parameterIndex : number
+
+class C {
+>C : C
+
+    method(@dec this: C) {}
+>method : (: any, this: C) => void
+>dec : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
+> : any
+>this : C
+}

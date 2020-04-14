@@ -3,8 +3,9 @@ namespace ts {
     function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
         switch (moduleKind) {
             case ModuleKind.ESNext:
+            case ModuleKind.ES2020:
             case ModuleKind.ES2015:
-                return transformES2015Module;
+                return transformECMAScriptModule;
             case ModuleKind.System:
                 return transformSystemModule;
             default:
@@ -24,15 +25,27 @@ namespace ts {
         EmitNotifications = 1 << 1,
     }
 
-    export function getTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers) {
+    export const noTransformers: EmitTransformers = { scriptTransformers: emptyArray, declarationTransformers: emptyArray };
+
+    export function getTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers, emitOnlyDtsFiles?: boolean): EmitTransformers {
+        return {
+            scriptTransformers: getScriptTransformers(compilerOptions, customTransformers, emitOnlyDtsFiles),
+            declarationTransformers: getDeclarationTransformers(customTransformers),
+        };
+    }
+
+    function getScriptTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers, emitOnlyDtsFiles?: boolean) {
+        if (emitOnlyDtsFiles) return emptyArray;
+
         const jsx = compilerOptions.jsx;
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
         const transformers: TransformerFactory<SourceFile | Bundle>[] = [];
 
-        addRange(transformers, customTransformers && customTransformers.before);
+        addRange(transformers, customTransformers && map(customTransformers.before, wrapScriptTransformerFactory));
 
         transformers.push(transformTypeScript);
+        transformers.push(transformClassFields);
 
         if (jsx === JsxEmit.React) {
             transformers.push(transformJsx);
@@ -40,6 +53,18 @@ namespace ts {
 
         if (languageVersion < ScriptTarget.ESNext) {
             transformers.push(transformESNext);
+        }
+
+        if (languageVersion < ScriptTarget.ES2020) {
+            transformers.push(transformES2020);
+        }
+
+        if (languageVersion < ScriptTarget.ES2019) {
+            transformers.push(transformES2019);
+        }
+
+        if (languageVersion < ScriptTarget.ES2018) {
+            transformers.push(transformES2018);
         }
 
         if (languageVersion < ScriptTarget.ES2017) {
@@ -63,9 +88,42 @@ namespace ts {
             transformers.push(transformES5);
         }
 
-        addRange(transformers, customTransformers && customTransformers.after);
-
+        addRange(transformers, customTransformers && map(customTransformers.after, wrapScriptTransformerFactory));
         return transformers;
+    }
+
+    function getDeclarationTransformers(customTransformers?: CustomTransformers) {
+        const transformers: TransformerFactory<SourceFile | Bundle>[] = [];
+        transformers.push(transformDeclarations);
+        addRange(transformers, customTransformers && map(customTransformers.afterDeclarations, wrapDeclarationTransformerFactory));
+        return transformers;
+    }
+
+    /**
+     * Wrap a custom script or declaration transformer object in a `Transformer` callback with fallback support for transforming bundles.
+     */
+    function wrapCustomTransformer(transformer: CustomTransformer): Transformer<Bundle | SourceFile> {
+        return node => isBundle(node) ? transformer.transformBundle(node) : transformer.transformSourceFile(node);
+    }
+
+    /**
+     * Wrap a transformer factory that may return a custom script or declaration transformer object.
+     */
+    function wrapCustomTransformerFactory<T extends SourceFile | Bundle>(transformer: TransformerFactory<T> | CustomTransformerFactory, handleDefault: (node: Transformer<T>) => Transformer<Bundle | SourceFile>): TransformerFactory<Bundle | SourceFile> {
+        return context => {
+            const customTransformer = transformer(context);
+            return typeof customTransformer === "function"
+                ? handleDefault(customTransformer)
+                : wrapCustomTransformer(customTransformer);
+        };
+    }
+
+    function wrapScriptTransformerFactory(transformer: TransformerFactory<SourceFile> | CustomTransformerFactory): TransformerFactory<Bundle | SourceFile> {
+        return wrapCustomTransformerFactory(transformer, chainBundle);
+    }
+
+    function wrapDeclarationTransformerFactory(transformer: TransformerFactory<Bundle | SourceFile> | CustomTransformerFactory): TransformerFactory<Bundle | SourceFile> {
+        return wrapCustomTransformerFactory(transformer, identity);
     }
 
     export function noEmitSubstitution(_hint: EmitHint, node: Node) {
@@ -86,7 +144,7 @@ namespace ts {
      * @param transforms An array of `TransformerFactory` callbacks.
      * @param allowDtsFiles A value indicating whether to allow the transformation of .d.ts files.
      */
-    export function transformNodes<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, options: CompilerOptions, nodes: ReadonlyArray<T>, transformers: ReadonlyArray<TransformerFactory<T>>, allowDtsFiles: boolean): TransformationResult<T> {
+    export function transformNodes<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, options: CompilerOptions, nodes: readonly T[], transformers: readonly TransformerFactory<T>[], allowDtsFiles: boolean): TransformationResult<T> {
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
         let lexicalEnvironmentVariableDeclarations: VariableDeclaration[];
         let lexicalEnvironmentFunctionDeclarations: FunctionDeclaration[];
@@ -143,7 +201,13 @@ namespace ts {
         performance.mark("beforeTransform");
 
         // Chain together and initialize each transformer.
-        const transformation = chain(...transformers)(context);
+        const transformersWithContext = transformers.map(t => t(context));
+        const transformation = (node: T): T => {
+            for (const transform of transformersWithContext) {
+                node = transform(node);
+            }
+            return node;
+        };
 
         // prevent modification of transformation hooks.
         state = TransformationState.Initialized;
@@ -161,6 +225,7 @@ namespace ts {
             transformed,
             substituteNode,
             emitNodeWithNotification,
+            isEmitNotificationEnabled,
             dispose,
             diagnostics
         };
@@ -224,6 +289,8 @@ namespace ts {
         function emitNodeWithNotification(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
             Debug.assert(state < TransformationState.Disposed, "Cannot invoke TransformationResult callbacks after the result is disposed.");
             if (node) {
+                // TODO: Remove check and unconditionally use onEmitNode when API is breakingly changed
+                // (see https://github.com/microsoft/TypeScript/pull/36248/files/5062623f39120171b98870c71344b3242eb03d23#r369766739)
                 if (isEmitNotificationEnabled(node)) {
                     onEmitNode(hint, node, emitCallback);
                 }
@@ -319,6 +386,8 @@ namespace ts {
                         createVariableDeclarationList(lexicalEnvironmentVariableDeclarations)
                     );
 
+                    setEmitFlags(statement, EmitFlags.CustomPrologue);
+
                     if (!statements) {
                         statements = [statement];
                     }
@@ -343,6 +412,11 @@ namespace ts {
             Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the transformation context during initialization.");
             Debug.assert(state < TransformationState.Completed, "Cannot modify the transformation context after transformation has completed.");
             Debug.assert(!helper.scoped, "Cannot request a scoped emit helper.");
+            if (helper.dependencies) {
+                for (const h of helper.dependencies) {
+                    requestEmitHelper(h);
+                }
+            }
             emitHelpers = append(emitHelpers, helper);
         }
 

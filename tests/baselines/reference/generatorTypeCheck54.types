@@ -8,7 +8,7 @@ class Baz { z: number }
 >z : number
 
 function* g() {
->g : () => IterableIterator<Foo | Baz>
+>g : () => Generator<Foo | Baz, void, undefined>
 
     yield* [new Foo];
 >yield* [new Foo] : any

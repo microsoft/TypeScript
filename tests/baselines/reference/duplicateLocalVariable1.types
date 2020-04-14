@@ -41,9 +41,9 @@ export class TestRunner {
         return (arg1.every(function (val, index) { return val === arg2[index] }));
 >(arg1.every(function (val, index) { return val === arg2[index] })) : boolean
 >arg1.every(function (val, index) { return val === arg2[index] }) : boolean
->arg1.every : (callbackfn: (value: any, index: number, array: any[]) => boolean, thisArg?: any) => boolean
+>arg1.every : (callbackfn: (value: any, index: number, array: any[]) => unknown, thisArg?: any) => boolean
 >arg1 : any[]
->every : (callbackfn: (value: any, index: number, array: any[]) => boolean, thisArg?: any) => boolean
+>every : (callbackfn: (value: any, index: number, array: any[]) => unknown, thisArg?: any) => boolean
 >function (val, index) { return val === arg2[index] } : (val: any, index: number) => boolean
 >val : any
 >index : number

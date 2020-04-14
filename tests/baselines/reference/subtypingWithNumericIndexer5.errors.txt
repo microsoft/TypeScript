@@ -5,12 +5,15 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts(32,11): error TS2420: Class 'B3<T>' incorrectly implements interface 'A<T>'.
   Index signatures are incompatible.
     Type 'Base' is not assignable to type 'T'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'Base'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts(36,11): error TS2420: Class 'B4<T>' incorrectly implements interface 'A<T>'.
   Index signatures are incompatible.
     Type 'Derived' is not assignable to type 'T'.
+      'Derived' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts(40,11): error TS2420: Class 'B5<T>' incorrectly implements interface 'A<T>'.
   Index signatures are incompatible.
     Type 'Derived2' is not assignable to type 'T'.
+      'Derived2' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived2'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts (4 errors) ====
@@ -56,6 +59,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2420: Class 'B3<T>' incorrectly implements interface 'A<T>'.
 !!! error TS2420:   Index signatures are incompatible.
 !!! error TS2420:     Type 'Base' is not assignable to type 'T'.
+!!! error TS2420:       'T' could be instantiated with an arbitrary type which could be unrelated to 'Base'.
             [x: string]: Base; // error
         }
     
@@ -64,6 +68,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2420: Class 'B4<T>' incorrectly implements interface 'A<T>'.
 !!! error TS2420:   Index signatures are incompatible.
 !!! error TS2420:     Type 'Derived' is not assignable to type 'T'.
+!!! error TS2420:       'Derived' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived'.
             [x: string]: Derived; // error
         }
     
@@ -72,6 +77,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2420: Class 'B5<T>' incorrectly implements interface 'A<T>'.
 !!! error TS2420:   Index signatures are incompatible.
 !!! error TS2420:     Type 'Derived2' is not assignable to type 'T'.
+!!! error TS2420:       'Derived2' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived2'.
             [x: string]: Derived2; // error
         }
     }

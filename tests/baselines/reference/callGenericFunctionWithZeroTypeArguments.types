@@ -83,13 +83,13 @@ class C2<T> {
     }
 }
 var r6 = (new C2()).f(1);
->r6 : {}
->(new C2()).f(1) : {}
->(new C2()).f : (x: {}) => {}
->(new C2()) : C2<{}>
->new C2() : C2<{}>
+>r6 : unknown
+>(new C2()).f(1) : unknown
+>(new C2()).f : (x: unknown) => unknown
+>(new C2()) : C2<unknown>
+>new C2() : C2<unknown>
 >C2 : typeof C2
->f : (x: {}) => {}
+>f : (x: unknown) => unknown
 >1 : 1
 
 interface I2<T> {

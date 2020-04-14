@@ -38,7 +38,7 @@ class Q extends P {
 >zzz : () => any
 >() => super : () => any
 >super : any
->super : any
+>super : P
 > : any
 
         super();

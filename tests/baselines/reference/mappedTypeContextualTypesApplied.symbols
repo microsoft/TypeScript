@@ -1,0 +1,129 @@
+=== tests/cases/compiler/mappedTypeContextualTypesApplied.ts ===
+type TakeString = (s: string) => any;
+>TakeString : Symbol(TakeString, Decl(mappedTypeContextualTypesApplied.ts, 0, 0))
+>s : Symbol(s, Decl(mappedTypeContextualTypesApplied.ts, 0, 19))
+
+// Various functions accepting an object whose properties are TakeString functions.
+// Note these all use mapped types.
+declare function mapped1<T extends {[P in string]: TakeString}>(obj: T): void;
+>mapped1 : Symbol(mapped1, Decl(mappedTypeContextualTypesApplied.ts, 0, 37))
+>T : Symbol(T, Decl(mappedTypeContextualTypesApplied.ts, 4, 25))
+>P : Symbol(P, Decl(mappedTypeContextualTypesApplied.ts, 4, 37))
+>TakeString : Symbol(TakeString, Decl(mappedTypeContextualTypesApplied.ts, 0, 0))
+>obj : Symbol(obj, Decl(mappedTypeContextualTypesApplied.ts, 4, 64))
+>T : Symbol(T, Decl(mappedTypeContextualTypesApplied.ts, 4, 25))
+
+declare function mapped2<T extends {[P in keyof T]: TakeString}>(obj: T): void;
+>mapped2 : Symbol(mapped2, Decl(mappedTypeContextualTypesApplied.ts, 4, 78))
+>T : Symbol(T, Decl(mappedTypeContextualTypesApplied.ts, 5, 25))
+>P : Symbol(P, Decl(mappedTypeContextualTypesApplied.ts, 5, 37))
+>T : Symbol(T, Decl(mappedTypeContextualTypesApplied.ts, 5, 25))
+>TakeString : Symbol(TakeString, Decl(mappedTypeContextualTypesApplied.ts, 0, 0))
+>obj : Symbol(obj, Decl(mappedTypeContextualTypesApplied.ts, 5, 65))
+>T : Symbol(T, Decl(mappedTypeContextualTypesApplied.ts, 5, 25))
+
+declare function mapped3<T extends {[P in keyof any]: TakeString}>(obj: T): void;
+>mapped3 : Symbol(mapped3, Decl(mappedTypeContextualTypesApplied.ts, 5, 79))
+>T : Symbol(T, Decl(mappedTypeContextualTypesApplied.ts, 6, 25))
+>P : Symbol(P, Decl(mappedTypeContextualTypesApplied.ts, 6, 37))
+>TakeString : Symbol(TakeString, Decl(mappedTypeContextualTypesApplied.ts, 0, 0))
+>obj : Symbol(obj, Decl(mappedTypeContextualTypesApplied.ts, 6, 67))
+>T : Symbol(T, Decl(mappedTypeContextualTypesApplied.ts, 6, 25))
+
+declare function mapped4<T>(obj: T & {[P in keyof T]: TakeString}): void;
+>mapped4 : Symbol(mapped4, Decl(mappedTypeContextualTypesApplied.ts, 6, 81))
+>T : Symbol(T, Decl(mappedTypeContextualTypesApplied.ts, 7, 25))
+>obj : Symbol(obj, Decl(mappedTypeContextualTypesApplied.ts, 7, 28))
+>T : Symbol(T, Decl(mappedTypeContextualTypesApplied.ts, 7, 25))
+>P : Symbol(P, Decl(mappedTypeContextualTypesApplied.ts, 7, 39))
+>T : Symbol(T, Decl(mappedTypeContextualTypesApplied.ts, 7, 25))
+>TakeString : Symbol(TakeString, Decl(mappedTypeContextualTypesApplied.ts, 0, 0))
+
+declare function mapped5<T, K extends keyof T>(obj: T & {[P in K]: TakeString}): void;
+>mapped5 : Symbol(mapped5, Decl(mappedTypeContextualTypesApplied.ts, 7, 73))
+>T : Symbol(T, Decl(mappedTypeContextualTypesApplied.ts, 8, 25))
+>K : Symbol(K, Decl(mappedTypeContextualTypesApplied.ts, 8, 27))
+>T : Symbol(T, Decl(mappedTypeContextualTypesApplied.ts, 8, 25))
+>obj : Symbol(obj, Decl(mappedTypeContextualTypesApplied.ts, 8, 47))
+>T : Symbol(T, Decl(mappedTypeContextualTypesApplied.ts, 8, 25))
+>P : Symbol(P, Decl(mappedTypeContextualTypesApplied.ts, 8, 58))
+>K : Symbol(K, Decl(mappedTypeContextualTypesApplied.ts, 8, 27))
+>TakeString : Symbol(TakeString, Decl(mappedTypeContextualTypesApplied.ts, 0, 0))
+
+declare function mapped6<K extends string>(obj: {[P in K]: TakeString}): void;
+>mapped6 : Symbol(mapped6, Decl(mappedTypeContextualTypesApplied.ts, 8, 86))
+>K : Symbol(K, Decl(mappedTypeContextualTypesApplied.ts, 9, 25))
+>obj : Symbol(obj, Decl(mappedTypeContextualTypesApplied.ts, 9, 43))
+>P : Symbol(P, Decl(mappedTypeContextualTypesApplied.ts, 9, 50))
+>K : Symbol(K, Decl(mappedTypeContextualTypesApplied.ts, 9, 25))
+>TakeString : Symbol(TakeString, Decl(mappedTypeContextualTypesApplied.ts, 0, 0))
+
+declare function mapped7<K extends keyof any>(obj: {[P in K]: TakeString}): void;
+>mapped7 : Symbol(mapped7, Decl(mappedTypeContextualTypesApplied.ts, 9, 78))
+>K : Symbol(K, Decl(mappedTypeContextualTypesApplied.ts, 10, 25))
+>obj : Symbol(obj, Decl(mappedTypeContextualTypesApplied.ts, 10, 46))
+>P : Symbol(P, Decl(mappedTypeContextualTypesApplied.ts, 10, 53))
+>K : Symbol(K, Decl(mappedTypeContextualTypesApplied.ts, 10, 25))
+>TakeString : Symbol(TakeString, Decl(mappedTypeContextualTypesApplied.ts, 0, 0))
+
+declare function mapped8<K extends 'foo'>(obj: {[P in K]: TakeString}): void;
+>mapped8 : Symbol(mapped8, Decl(mappedTypeContextualTypesApplied.ts, 10, 81))
+>K : Symbol(K, Decl(mappedTypeContextualTypesApplied.ts, 11, 25))
+>obj : Symbol(obj, Decl(mappedTypeContextualTypesApplied.ts, 11, 42))
+>P : Symbol(P, Decl(mappedTypeContextualTypesApplied.ts, 11, 49))
+>K : Symbol(K, Decl(mappedTypeContextualTypesApplied.ts, 11, 25))
+>TakeString : Symbol(TakeString, Decl(mappedTypeContextualTypesApplied.ts, 0, 0))
+
+declare function mapped9<K extends 'foo'|'bar'>(obj: {[P in K]: TakeString}): void;
+>mapped9 : Symbol(mapped9, Decl(mappedTypeContextualTypesApplied.ts, 11, 77))
+>K : Symbol(K, Decl(mappedTypeContextualTypesApplied.ts, 12, 25))
+>obj : Symbol(obj, Decl(mappedTypeContextualTypesApplied.ts, 12, 48))
+>P : Symbol(P, Decl(mappedTypeContextualTypesApplied.ts, 12, 55))
+>K : Symbol(K, Decl(mappedTypeContextualTypesApplied.ts, 12, 25))
+>TakeString : Symbol(TakeString, Decl(mappedTypeContextualTypesApplied.ts, 0, 0))
+
+mapped1({foo: s => 42});
+>mapped1 : Symbol(mapped1, Decl(mappedTypeContextualTypesApplied.ts, 0, 37))
+>foo : Symbol(foo, Decl(mappedTypeContextualTypesApplied.ts, 14, 9))
+>s : Symbol(s, Decl(mappedTypeContextualTypesApplied.ts, 14, 13))
+
+mapped2({foo: s => 42});
+>mapped2 : Symbol(mapped2, Decl(mappedTypeContextualTypesApplied.ts, 4, 78))
+>foo : Symbol(foo, Decl(mappedTypeContextualTypesApplied.ts, 15, 9))
+>s : Symbol(s, Decl(mappedTypeContextualTypesApplied.ts, 15, 13))
+
+mapped3({foo: s => 42});
+>mapped3 : Symbol(mapped3, Decl(mappedTypeContextualTypesApplied.ts, 5, 79))
+>foo : Symbol(foo, Decl(mappedTypeContextualTypesApplied.ts, 16, 9))
+>s : Symbol(s, Decl(mappedTypeContextualTypesApplied.ts, 16, 13))
+
+mapped4({foo: s => 42});
+>mapped4 : Symbol(mapped4, Decl(mappedTypeContextualTypesApplied.ts, 6, 81))
+>foo : Symbol(foo, Decl(mappedTypeContextualTypesApplied.ts, 17, 9))
+>s : Symbol(s, Decl(mappedTypeContextualTypesApplied.ts, 17, 13))
+
+mapped5({foo: s => 42});
+>mapped5 : Symbol(mapped5, Decl(mappedTypeContextualTypesApplied.ts, 7, 73))
+>foo : Symbol(foo, Decl(mappedTypeContextualTypesApplied.ts, 18, 9))
+>s : Symbol(s, Decl(mappedTypeContextualTypesApplied.ts, 18, 13))
+
+mapped6({foo: s => 42});
+>mapped6 : Symbol(mapped6, Decl(mappedTypeContextualTypesApplied.ts, 8, 86))
+>foo : Symbol(foo, Decl(mappedTypeContextualTypesApplied.ts, 19, 9))
+>s : Symbol(s, Decl(mappedTypeContextualTypesApplied.ts, 19, 13))
+
+mapped7({foo: s => 42});
+>mapped7 : Symbol(mapped7, Decl(mappedTypeContextualTypesApplied.ts, 9, 78))
+>foo : Symbol(foo, Decl(mappedTypeContextualTypesApplied.ts, 20, 9))
+>s : Symbol(s, Decl(mappedTypeContextualTypesApplied.ts, 20, 13))
+
+mapped8({foo: s => 42});
+>mapped8 : Symbol(mapped8, Decl(mappedTypeContextualTypesApplied.ts, 10, 81))
+>foo : Symbol(foo, Decl(mappedTypeContextualTypesApplied.ts, 21, 9))
+>s : Symbol(s, Decl(mappedTypeContextualTypesApplied.ts, 21, 13))
+
+mapped9({foo: s => 42});
+>mapped9 : Symbol(mapped9, Decl(mappedTypeContextualTypesApplied.ts, 11, 77))
+>foo : Symbol(foo, Decl(mappedTypeContextualTypesApplied.ts, 22, 9))
+>s : Symbol(s, Decl(mappedTypeContextualTypesApplied.ts, 22, 13))
+

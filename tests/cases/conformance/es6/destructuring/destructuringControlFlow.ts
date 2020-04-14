@@ -34,3 +34,9 @@ function f4() {
     ({ ["x"]: x } = 0);  // Error
     ({ ["x" + ""]: x } = 0);  // Errpr
 }
+
+// Repro from #31770
+
+type KeyValue = [string, string?];
+let [key, value]: KeyValue = ["foo"];
+value.toUpperCase();  // Error

@@ -1,0 +1,9 @@
+{
+    "extends": "./tsconfig-base",
+    "compilerOptions": {
+        "declaration": false,
+        "declarationMap": false,
+        "composite": false,
+        "incremental": true
+    }
+}

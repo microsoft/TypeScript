@@ -1,0 +1,44 @@
+tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport5.js(12,12): error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'F'.
+  Property 'my-fake-sym' does not exist on type 'F'.
+tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport5.js(13,12): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'F'.
+  Property '[_sym]' does not exist on type 'F'.
+tests/cases/conformance/salsa/usage.js(3,11): error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'F'.
+  Property 'my-fake-sym' does not exist on type 'F'.
+tests/cases/conformance/salsa/usage.js(4,11): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'F'.
+  Property '[_sym]' does not exist on type 'F'.
+
+
+==== tests/cases/conformance/salsa/usage.js (2 errors) ====
+    const x = require("./lateBoundAssignmentDeclarationSupport5.js");
+    const inst =  new x.F();
+    const y = inst["my-fake-sym"];
+              ~~~~~~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'F'.
+!!! error TS7053:   Property 'my-fake-sym' does not exist on type 'F'.
+    const z = inst[x.S];
+              ~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'F'.
+!!! error TS7053:   Property '[_sym]' does not exist on type 'F'.
+    
+==== tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport5.js (2 errors) ====
+    // currently unsupported
+    const _sym = Symbol();
+    const _str = "my-fake-sym";
+    
+    function F() {
+    }
+    F.prototype = {
+        [_sym]: "ok",
+        [_str]: "ok"
+    }
+    const inst =  new F();
+    const _y = inst[_str];
+               ~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'F'.
+!!! error TS7053:   Property 'my-fake-sym' does not exist on type 'F'.
+    const _z = inst[_sym];
+               ~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'F'.
+!!! error TS7053:   Property '[_sym]' does not exist on type 'F'.
+    module.exports.F = F;
+    module.exports.S = _sym;

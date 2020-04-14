@@ -10,6 +10,7 @@ tests/cases/compiler/methodSignatureHandledDeclarationKindForSymbol.ts(6,5): err
         bold: string;
         ~~~~
 !!! error TS2717: Subsequent property declarations must have the same type.  Property 'bold' must be of type '() => string', but here has type 'string'.
+!!! related TS6203 tests/cases/compiler/methodSignatureHandledDeclarationKindForSymbol.ts:2:5: 'bold' was also declared here.
     }
     
     

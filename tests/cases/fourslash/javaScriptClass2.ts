@@ -6,12 +6,12 @@
 // @Filename: Foo.js
 //// class Foo {
 ////    constructor() {
-////        this.[|union|] = 'foo';
-////        this.[|union|] = 100;
+////        [|this.[|{| "contextRangeIndex": 0 |}union|] = 'foo';|]
+////        [|this.[|{| "contextRangeIndex": 2 |}union|] = 100;|]
 ////    }
 ////    method() { return this.[|union|]; }
 //// }
 //// var x = new Foo();
 //// x.[|union|];
 
-verify.rangesAreRenameLocations();
+verify.rangesWithSameTextAreRenameLocations("union");

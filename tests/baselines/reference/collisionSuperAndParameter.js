@@ -94,7 +94,7 @@ var Foo = /** @class */ (function () {
     Object.defineProperty(Foo.prototype, "c", {
         set: function (_super) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Foo;
@@ -124,7 +124,7 @@ var Foo2 = /** @class */ (function (_super_1) {
     Object.defineProperty(Foo2.prototype, "z", {
         set: function (_super) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Foo2;

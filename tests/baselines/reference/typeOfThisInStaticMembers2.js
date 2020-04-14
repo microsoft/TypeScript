@@ -8,7 +8,6 @@ class C2<T> {
 }
 
 //// [typeOfThisInStaticMembers2.js]
-var _this = this;
 var C = /** @class */ (function () {
     function C() {
     }

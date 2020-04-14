@@ -4,5 +4,8 @@
         "outFile": "../../built/local/compiler.release.js",
         "removeComments": true,
         "preserveConstEnums": false
-    }
+    },
+    "references": [
+        { "path": "../shims" }
+    ]
 }

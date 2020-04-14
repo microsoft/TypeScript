@@ -103,17 +103,32 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPatternDefaultV
 ---
 >>>    var _b = (_a === void 0 ? {} : _a).name, nameA = _b === void 0 ? "<NoName>" : _b;
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                           ^^
-4 >                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^
+3 >                              ^^
+4 >                                ^^^^^^^^^^^
+5 >                                           ^^
+6 >                                             ^^^^^
+7 >                                                  ^^^^^^^^^^^^^^^^^^^
+8 >                                                                     ^^^^^^^^^^
+9 >                                                                               ^^^^^
 1->
-2 >        name: nameA = "<NoName>"
-3 >                                           
-4 >                                             name: nameA = "<NoName>"
+2 >        name: nameA = "<NoName>" }: Robot = 
+3 >                              { }
+4 >                                
+5 >                                           
+6 >                                             nameA
+7 >                                                   = 
+8 >                                                                     "<NoName>"
+9 >                                                                               
 1->Emitted(4, 9) Source(11, 17) + SourceIndex(0)
-2 >Emitted(4, 44) Source(11, 41) + SourceIndex(0)
-3 >Emitted(4, 46) Source(11, 17) + SourceIndex(0)
-4 >Emitted(4, 85) Source(11, 41) + SourceIndex(0)
+2 >Emitted(4, 31) Source(11, 53) + SourceIndex(0)
+3 >Emitted(4, 33) Source(11, 56) + SourceIndex(0)
+4 >Emitted(4, 44) Source(11, 41) + SourceIndex(0)
+5 >Emitted(4, 46) Source(11, 23) + SourceIndex(0)
+6 >Emitted(4, 51) Source(11, 28) + SourceIndex(0)
+7 >Emitted(4, 70) Source(11, 31) + SourceIndex(0)
+8 >Emitted(4, 80) Source(11, 41) + SourceIndex(0)
+9 >Emitted(4, 85) Source(11, 41) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -173,35 +188,59 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPatternDefaultV
 ---
 >>>    var _b = _a === void 0 ? {} : _a, _c = _b.name, nameB = _c === void 0 ? "<NoName>" : _c, _d = _b.skill, skillB = _d === void 0 ? "noSkill" : _d;
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                    ^^
-4 >                                      ^^^^^^^^^^^^
-5 >                                                  ^^
-6 >                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-7 >                                                                                           ^^
-8 >                                                                                             ^^^^^^^^^^^^^
-9 >                                                                                                          ^^
-10>                                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^
+3 >                             ^^
+4 >                               ^^^^^
+5 >                                    ^^
+6 >                                      ^^^^^^^^^^^^
+7 >                                                  ^^
+8 >                                                    ^^^^^
+9 >                                                         ^^^^^^^^^^^^^^^^^^^
+10>                                                                            ^^^^^^^^^^
+11>                                                                                      ^^^^^
+12>                                                                                           ^^
+13>                                                                                             ^^^^^^^^^^^^^
+14>                                                                                                          ^^
+15>                                                                                                            ^^^^^^
+16>                                                                                                                  ^^^^^^^^^^^^^^^^^^^
+17>                                                                                                                                     ^^^^^^^^^
+18>                                                                                                                                              ^^^^^
 1->
-2 >        { name: nameB = "<NoName>", skill: skillB = "noSkill" }: Robot = {}
-3 >                                    
-4 >                                      name: nameB = "<NoName>"
-5 >                                                  
-6 >                                                    name: nameB = "<NoName>"
-7 >                                                                                           , 
-8 >                                                                                             skill: skillB = "noSkill"
-9 >                                                                                                          
-10>                                                                                                            skill: skillB = "noSkill"
+2 >        { name: nameB = "<NoName>", skill: skillB = "noSkill" }: Robot = 
+3 >                             {}
+4 >                               
+5 >                                    
+6 >                                      name: nameB = "<NoName>"
+7 >                                                  
+8 >                                                    nameB
+9 >                                                          = 
+10>                                                                            "<NoName>"
+11>                                                                                      
+12>                                                                                           , 
+13>                                                                                             skill: skillB = "noSkill"
+14>                                                                                                          
+15>                                                                                                            skillB
+16>                                                                                                                   = 
+17>                                                                                                                                     "noSkill"
+18>                                                                                                                                              
 1->Emitted(8, 9) Source(14, 15) + SourceIndex(0)
-2 >Emitted(8, 37) Source(14, 82) + SourceIndex(0)
-3 >Emitted(8, 39) Source(14, 17) + SourceIndex(0)
-4 >Emitted(8, 51) Source(14, 41) + SourceIndex(0)
-5 >Emitted(8, 53) Source(14, 17) + SourceIndex(0)
-6 >Emitted(8, 92) Source(14, 41) + SourceIndex(0)
-7 >Emitted(8, 94) Source(14, 43) + SourceIndex(0)
-8 >Emitted(8, 107) Source(14, 68) + SourceIndex(0)
-9 >Emitted(8, 109) Source(14, 43) + SourceIndex(0)
-10>Emitted(8, 148) Source(14, 68) + SourceIndex(0)
+2 >Emitted(8, 30) Source(14, 80) + SourceIndex(0)
+3 >Emitted(8, 32) Source(14, 82) + SourceIndex(0)
+4 >Emitted(8, 37) Source(14, 82) + SourceIndex(0)
+5 >Emitted(8, 39) Source(14, 17) + SourceIndex(0)
+6 >Emitted(8, 51) Source(14, 41) + SourceIndex(0)
+7 >Emitted(8, 53) Source(14, 23) + SourceIndex(0)
+8 >Emitted(8, 58) Source(14, 28) + SourceIndex(0)
+9 >Emitted(8, 77) Source(14, 31) + SourceIndex(0)
+10>Emitted(8, 87) Source(14, 41) + SourceIndex(0)
+11>Emitted(8, 92) Source(14, 41) + SourceIndex(0)
+12>Emitted(8, 94) Source(14, 43) + SourceIndex(0)
+13>Emitted(8, 107) Source(14, 68) + SourceIndex(0)
+14>Emitted(8, 109) Source(14, 50) + SourceIndex(0)
+15>Emitted(8, 115) Source(14, 56) + SourceIndex(0)
+16>Emitted(8, 134) Source(14, 59) + SourceIndex(0)
+17>Emitted(8, 143) Source(14, 68) + SourceIndex(0)
+18>Emitted(8, 148) Source(14, 68) + SourceIndex(0)
 ---
 >>>    console.log(nameB);
 1 >^^^^
@@ -261,17 +300,32 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPatternDefaultV
 ---
 >>>    var _b = (_a === void 0 ? {} : _a).name, name = _b === void 0 ? "<NoName>" : _b;
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                           ^^
-4 >                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^
+3 >                              ^^
+4 >                                ^^^^^^^^^^^
+5 >                                           ^^
+6 >                                             ^^^^
+7 >                                                 ^^^^^^^^^^^^^^^^^^^
+8 >                                                                    ^^^^^^^^^^
+9 >                                                                              ^^^^^
 1->
-2 >        name = "<NoName>"
-3 >                                           
-4 >                                             name = "<NoName>"
+2 >        name = "<NoName>" }: Robot = 
+3 >                              {}
+4 >                                
+5 >                                           
+6 >                                             name
+7 >                                                  = 
+8 >                                                                    "<NoName>"
+9 >                                                                              
 1->Emitted(12, 9) Source(17, 17) + SourceIndex(0)
-2 >Emitted(12, 44) Source(17, 34) + SourceIndex(0)
-3 >Emitted(12, 46) Source(17, 17) + SourceIndex(0)
-4 >Emitted(12, 84) Source(17, 34) + SourceIndex(0)
+2 >Emitted(12, 31) Source(17, 46) + SourceIndex(0)
+3 >Emitted(12, 33) Source(17, 48) + SourceIndex(0)
+4 >Emitted(12, 44) Source(17, 34) + SourceIndex(0)
+5 >Emitted(12, 46) Source(17, 17) + SourceIndex(0)
+6 >Emitted(12, 50) Source(17, 21) + SourceIndex(0)
+7 >Emitted(12, 69) Source(17, 24) + SourceIndex(0)
+8 >Emitted(12, 79) Source(17, 34) + SourceIndex(0)
+9 >Emitted(12, 84) Source(17, 34) + SourceIndex(0)
 ---
 >>>    console.log(name);
 1 >^^^^

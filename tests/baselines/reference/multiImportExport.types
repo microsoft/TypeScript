@@ -3,17 +3,17 @@ import Drawing = require('./Drawing');
 >Drawing : typeof Drawing
 
 var addr = new Drawing.Math.Adder();
->addr : Adder
->new Drawing.Math.Adder() : Adder
->Drawing.Math.Adder : typeof Adder
->Drawing.Math : { Adder: typeof Adder; }
+>addr : import("tests/cases/compiler/Math/Adder")
+>new Drawing.Math.Adder() : import("tests/cases/compiler/Math/Adder")
+>Drawing.Math.Adder : typeof import("tests/cases/compiler/Math/Adder")
+>Drawing.Math : { Adder: typeof import("tests/cases/compiler/Math/Adder"); }
 >Drawing : typeof Drawing
->Math : { Adder: typeof Adder; }
->Adder : typeof Adder
+>Math : { Adder: typeof import("tests/cases/compiler/Math/Adder"); }
+>Adder : typeof import("tests/cases/compiler/Math/Adder")
 
 === tests/cases/compiler/Drawing.ts ===
 export import Math = require('./Math/Math')
->Math : { Adder: typeof Adder; }
+>Math : { Adder: typeof import("tests/cases/compiler/Math/Adder"); }
 
 === tests/cases/compiler/Math/Math.ts ===
 import Adder = require('./Adder');

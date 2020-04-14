@@ -34,12 +34,17 @@ namespace ts.server {
         // We still want to check .js files in a JS-only inferred or external project (e.g. if the
         // file has '// @ts-check').
 
-        if ((project.projectKind === ProjectKind.Inferred || project.projectKind === ProjectKind.External) &&
+        if ((isInferredProject(project) || isExternalProject(project)) &&
             project.isJsOnlyProject()) {
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             return scriptInfo && !scriptInfo.isJavaScript();
         }
         return false;
+    }
+
+
+    function dtsChangeCanAffectEmit(compilationSettings: CompilerOptions) {
+        return getEmitDeclarations(compilationSettings) || !!compilationSettings.emitDecoratorMetadata;
     }
 
     function formatDiag(fileName: NormalizedPath, project: Project, diag: Diagnostic): protocol.Diagnostic {
@@ -80,9 +85,9 @@ namespace ts.server {
         return { line: lineAndCharacter.line + 1, offset: lineAndCharacter.character + 1 };
     }
 
-    function formatConfigFileDiag(diag: Diagnostic, includeFileName: true): protocol.DiagnosticWithFileName;
-    function formatConfigFileDiag(diag: Diagnostic, includeFileName: false): protocol.Diagnostic;
-    function formatConfigFileDiag(diag: Diagnostic, includeFileName: boolean): protocol.Diagnostic | protocol.DiagnosticWithFileName {
+    function formatDiagnosticToProtocol(diag: Diagnostic, includeFileName: true): protocol.DiagnosticWithFileName;
+    function formatDiagnosticToProtocol(diag: Diagnostic, includeFileName: false): protocol.Diagnostic;
+    function formatDiagnosticToProtocol(diag: Diagnostic, includeFileName: boolean): protocol.Diagnostic | protocol.DiagnosticWithFileName {
         const start = (diag.file && convertToLocation(getLineAndCharacterOfPosition(diag.file, diag.start!)))!; // TODO: GH#18217
         const end = (diag.file && convertToLocation(getLineAndCharacterOfPosition(diag.file, diag.start! + diag.length!)))!; // TODO: GH#18217
         const text = flattenDiagnosticMessageText(diag.messageText, "\n");
@@ -108,7 +113,7 @@ namespace ts.server {
         project: Project;
     }
 
-    function allEditsBeforePos(edits: ReadonlyArray<TextChange>, pos: number): boolean {
+    function allEditsBeforePos(edits: readonly TextChange[], pos: number): boolean {
         return edits.every(edit => textSpanEnd(edit.span) < pos);
     }
 
@@ -118,7 +123,7 @@ namespace ts.server {
     // we want to ensure the value is maintained in the out since the file is
     // built using --preseveConstEnum.
     export type CommandNames = protocol.CommandTypes;
-    export const CommandNames = (<any>protocol).CommandTypes; // tslint:disable-line variable-name
+    export const CommandNames = (<any>protocol).CommandTypes;
 
     export function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
         const verboseLogging = logger.hasLevel(LogLevel.verbose);
@@ -253,8 +258,8 @@ namespace ts.server {
         };
     }
 
-    type Projects = ReadonlyArray<Project> | {
-        readonly projects: ReadonlyArray<Project>;
+    type Projects = readonly Project[] | {
+        readonly projects: readonly Project[];
         readonly symLinkedProjects: MultiMap<Project>;
     };
 
@@ -265,7 +270,7 @@ namespace ts.server {
         defaultValue: T,
         getValue: (path: Path) => T,
         projects: Projects,
-        action: (project: Project, value: T) => ReadonlyArray<U> | U | undefined,
+        action: (project: Project, value: T) => readonly U[] | U | undefined,
     ): U[] {
         const outputs = flatMapToMutable(isArray(projects) ? projects : projects.projects, project => action(project, defaultValue));
         if (!isArray(projects) && projects.symLinkedProjects) {
@@ -277,8 +282,9 @@ namespace ts.server {
         return deduplicate(outputs, equateValues);
     }
 
-    function combineProjectOutputFromEveryProject<T>(projectService: ProjectService, action: (project: Project) => ReadonlyArray<T>, areEqual: (a: T, b: T) => boolean) {
+    function combineProjectOutputFromEveryProject<T>(projectService: ProjectService, action: (project: Project) => readonly T[], areEqual: (a: T, b: T) => boolean) {
         const outputs: T[] = [];
+        projectService.loadAncestorProjectTree();
         projectService.forEachEnabledProject(project => {
             const theseOutputs = action(project);
             outputs.push(...theseOutputs.filter(output => !outputs.some(o => areEqual(o, output))));
@@ -289,12 +295,12 @@ namespace ts.server {
     function combineProjectOutputWhileOpeningReferencedProjects<T>(
         projects: Projects,
         defaultProject: Project,
-        action: (project: Project) => ReadonlyArray<T>,
+        action: (project: Project) => readonly T[],
         getLocation: (t: T) => DocumentPosition,
         resultsEqual: (a: T, b: T) => boolean,
     ): T[] {
         const outputs: T[] = [];
-        combineProjectOutputWorker<undefined>(
+        combineProjectOutputWorker(
             projects,
             defaultProject,
             /*initialLocation*/ undefined,
@@ -305,7 +311,7 @@ namespace ts.server {
                     }
                 }
             },
-            /*getDefinition*/ undefined);
+        );
         return outputs;
     }
 
@@ -316,21 +322,20 @@ namespace ts.server {
         findInStrings: boolean,
         findInComments: boolean,
         hostPreferences: UserPreferences
-    ): ReadonlyArray<RenameLocation> {
+    ): readonly RenameLocation[] {
         const outputs: RenameLocation[] = [];
 
-        combineProjectOutputWorker<DocumentPosition>(
+        combineProjectOutputWorker(
             projects,
             defaultProject,
             initialLocation,
             ({ project, location }, tryAddToTodo) => {
-            for (const output of project.getLanguageService().findRenameLocations(location.fileName, location.pos, findInStrings, findInComments, hostPreferences.providePrefixAndSuffixTextForRename) || emptyArray) {
+                for (const output of project.getLanguageService().findRenameLocations(location.fileName, location.pos, findInStrings, findInComments, hostPreferences.providePrefixAndSuffixTextForRename) || emptyArray) {
                     if (!contains(outputs, output, documentSpansEqual) && !tryAddToTodo(project, documentSpanLocation(output))) {
                         outputs.push(output);
                     }
                 }
             },
-            () => getDefinitionLocation(defaultProject, initialLocation)
         );
 
         return outputs;
@@ -339,28 +344,32 @@ namespace ts.server {
     function getDefinitionLocation(defaultProject: Project, initialLocation: DocumentPosition): DocumentPosition | undefined {
         const infos = defaultProject.getLanguageService().getDefinitionAtPosition(initialLocation.fileName, initialLocation.pos);
         const info = infos && firstOrUndefined(infos);
-        return info && { fileName: info.fileName, pos: info.textSpan.start };
+        return info && !info.isLocal ? { fileName: info.fileName, pos: info.textSpan.start } : undefined;
     }
 
     function combineProjectOutputForReferences(
         projects: Projects,
         defaultProject: Project,
         initialLocation: DocumentPosition
-    ): ReadonlyArray<ReferencedSymbol> {
+    ): readonly ReferencedSymbol[] {
         const outputs: ReferencedSymbol[] = [];
 
-        combineProjectOutputWorker<DocumentPosition>(
+        combineProjectOutputWorker(
             projects,
             defaultProject,
             initialLocation,
             ({ project, location }, getMappedLocation) => {
-            for (const outputReferencedSymbol of project.getLanguageService().findReferences(location.fileName, location.pos) || emptyArray) {
+                for (const outputReferencedSymbol of project.getLanguageService().findReferences(location.fileName, location.pos) || emptyArray) {
                     const mappedDefinitionFile = getMappedLocation(project, documentSpanLocation(outputReferencedSymbol.definition));
-                    const definition: ReferencedSymbolDefinitionInfo = mappedDefinitionFile === undefined ? outputReferencedSymbol.definition : {
-                        ...outputReferencedSymbol.definition,
-                        textSpan: createTextSpan(mappedDefinitionFile.pos, outputReferencedSymbol.definition.textSpan.length),
-                        fileName: mappedDefinitionFile.fileName,
-                    };
+                    const definition: ReferencedSymbolDefinitionInfo = mappedDefinitionFile === undefined ?
+                        outputReferencedSymbol.definition :
+                        {
+                            ...outputReferencedSymbol.definition,
+                            textSpan: createTextSpan(mappedDefinitionFile.pos, outputReferencedSymbol.definition.textSpan.length),
+                            fileName: mappedDefinitionFile.fileName,
+                            contextSpan: getMappedContextSpan(outputReferencedSymbol.definition, project)
+                        };
+
                     let symbolToAddTo = find(outputs, o => documentSpansEqual(o.definition, definition));
                     if (!symbolToAddTo) {
                         symbolToAddTo = { definition, references: [] };
@@ -375,7 +384,6 @@ namespace ts.server {
                     }
                 }
             },
-            () => getDefinitionLocation(defaultProject, initialLocation)
         );
 
         return outputs.filter(o => o.references.length !== 0);
@@ -408,8 +416,7 @@ namespace ts.server {
         projects: Projects,
         defaultProject: Project,
         initialLocation: TLocation,
-        cb: CombineProjectOutputCallback<TLocation>,
-        getDefinition: (() => DocumentPosition | undefined) | undefined,
+        cb: CombineProjectOutputCallback<TLocation>
     ): void {
         const projectService = defaultProject.projectService;
         let toDo: ProjectAndLocation<TLocation>[] | undefined;
@@ -421,26 +428,62 @@ namespace ts.server {
         });
 
         // After initial references are collected, go over every other project and see if it has a reference for the symbol definition.
-        if (getDefinition) {
-            const memGetDefinition = memoize(getDefinition);
-            projectService.forEachEnabledProject(project => {
-                if (!addToSeen(seenProjects, project.projectName)) return;
-                const definition = getDefinitionInProject(memGetDefinition(), defaultProject, project);
-                if (definition) {
-                    toDo = callbackProjectAndLocation<TLocation>({ project, location: definition as TLocation }, projectService, toDo, seenProjects, cb);
-                }
-            });
+        if (initialLocation) {
+            const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation!);
+            if (defaultDefinition) {
+                const getGeneratedDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition.fileName) ?
+                    defaultDefinition :
+                    defaultProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(defaultDefinition));
+                const getSourceDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition.fileName) ?
+                    defaultDefinition :
+                    defaultProject.getLanguageService().getSourceMapper().tryGetSourcePosition(defaultDefinition));
+                projectService.loadAncestorProjectTree(seenProjects);
+                projectService.forEachEnabledProject(project => {
+                    if (!addToSeen(seenProjects, project)) return;
+                    const definition = mapDefinitionInProject(defaultDefinition, project, getGeneratedDefinition, getSourceDefinition);
+                    if (definition) {
+                        toDo = callbackProjectAndLocation<TLocation>({ project, location: definition as TLocation }, projectService, toDo, seenProjects, cb);
+                    }
+                });
+            }
         }
 
         while (toDo && toDo.length) {
-            toDo = callbackProjectAndLocation(Debug.assertDefined(toDo.pop()), projectService, toDo, seenProjects, cb);
+            toDo = callbackProjectAndLocation(Debug.checkDefined(toDo.pop()), projectService, toDo, seenProjects, cb);
         }
     }
 
-    function getDefinitionInProject(definition: DocumentPosition | undefined, definingProject: Project, project: Project): DocumentPosition | undefined {
-        if (!definition || project.containsFile(toNormalizedPath(definition.fileName))) return definition;
-        const mappedDefinition = definingProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(definition);
-        return mappedDefinition && project.containsFile(toNormalizedPath(mappedDefinition.fileName)) ? mappedDefinition : undefined;
+    function mapDefinitionInProject(
+        definition: DocumentPosition,
+        project: Project,
+        getGeneratedDefinition: () => DocumentPosition | undefined,
+        getSourceDefinition: () => DocumentPosition | undefined
+    ): DocumentPosition | undefined {
+        // If the definition is actually from the project, definition is correct as is
+        if (project.containsFile(toNormalizedPath(definition.fileName)) &&
+            !isLocationProjectReferenceRedirect(project, definition)) {
+            return definition;
+        }
+        const generatedDefinition = getGeneratedDefinition();
+        if (generatedDefinition && project.containsFile(toNormalizedPath(generatedDefinition.fileName))) return generatedDefinition;
+        const sourceDefinition = getSourceDefinition();
+        return sourceDefinition && project.containsFile(toNormalizedPath(sourceDefinition.fileName)) ? sourceDefinition : undefined;
+    }
+
+    function isLocationProjectReferenceRedirect(project: Project, location: DocumentPosition | undefined) {
+        if (!location) return false;
+        const program = project.getLanguageService().getProgram();
+        if (!program) return false;
+        const sourceFile = program.getSourceFile(location.fileName);
+
+        // It is possible that location is attached to project but
+        // the program actually includes its redirect instead.
+        // This happens when rootFile in project is one of the file from referenced project
+        // Thus root is attached but program doesnt have the actual .ts file but .d.ts
+        // If this is not the file we were actually looking, return rest of the toDo
+        return !!sourceFile &&
+            sourceFile.resolvedPath !== sourceFile.path &&
+            sourceFile.resolvedPath !== project.toPath(location.fileName);
     }
 
     function callbackProjectAndLocation<TLocation extends DocumentPosition | undefined>(
@@ -450,9 +493,12 @@ namespace ts.server {
         seenProjects: Map<true>,
         cb: CombineProjectOutputCallback<TLocation>,
     ): ProjectAndLocation<TLocation>[] | undefined {
-        if (projectAndLocation.project.getCancellationToken().isCancellationRequested()) return undefined; // Skip rest of toDo if cancelled
+        const { project, location } = projectAndLocation;
+        if (project.getCancellationToken().isCancellationRequested()) return undefined; // Skip rest of toDo if cancelled
+        // If this is not the file we were actually looking, return rest of the toDo
+        if (isLocationProjectReferenceRedirect(project, location)) return toDo;
         cb(projectAndLocation, (project, location) => {
-            seenProjects.set(projectAndLocation.project.projectName, true);
+            addToSeen(seenProjects, projectAndLocation.project);
             const originalLocation = projectService.getOriginalLocationEnsuringConfiguredProject(project, location);
             if (!originalLocation) return undefined;
 
@@ -464,26 +510,64 @@ namespace ts.server {
             }
             const symlinkedProjectsMap = projectService.getSymlinkedProjects(originalScriptInfo);
             if (symlinkedProjectsMap) {
-                symlinkedProjectsMap.forEach((symlinkedProjects) => {
-                    for (const symlinkedProject of symlinkedProjects) addToTodo({ project: symlinkedProject, location: originalLocation as TLocation }, toDo!, seenProjects);
+                symlinkedProjectsMap.forEach((symlinkedProjects, symlinkedPath) => {
+                    for (const symlinkedProject of symlinkedProjects) addToTodo({ project: symlinkedProject, location: { fileName: symlinkedPath, pos: originalLocation.pos } as TLocation }, toDo!, seenProjects);
                 });
             }
-            return originalLocation;
+            return originalLocation === location ? undefined : originalLocation;
         });
         return toDo;
     }
 
     function addToTodo<TLocation extends DocumentPosition | undefined>(projectAndLocation: ProjectAndLocation<TLocation>, toDo: Push<ProjectAndLocation<TLocation>>, seenProjects: Map<true>): void {
-        if (addToSeen(seenProjects, projectAndLocation.project.projectName)) toDo.push(projectAndLocation);
+        if (addToSeen(seenProjects, projectAndLocation.project)) toDo.push(projectAndLocation);
+    }
+
+    function addToSeen(seenProjects: Map<true>, project: Project) {
+        return ts.addToSeen(seenProjects, getProjectKey(project));
+    }
+
+    function getProjectKey(project: Project) {
+        return isConfiguredProject(project) ? project.canonicalConfigFilePath : project.getProjectName();
     }
 
     function documentSpanLocation({ fileName, textSpan }: DocumentSpan): DocumentPosition {
         return { fileName, pos: textSpan.start };
     }
 
-    function getMappedLocation(location: DocumentPosition, projectService: ProjectService, project: Project): DocumentPosition | undefined {
+    function getMappedLocation(location: DocumentPosition, project: Project): DocumentPosition | undefined {
         const mapsTo = project.getSourceMapper().tryGetSourcePosition(location);
-        return mapsTo && projectService.fileExists(toNormalizedPath(mapsTo.fileName)) ? mapsTo : undefined;
+        return mapsTo && project.projectService.fileExists(toNormalizedPath(mapsTo.fileName)) ? mapsTo : undefined;
+    }
+
+    function getMappedDocumentSpan(documentSpan: DocumentSpan, project: Project): DocumentSpan | undefined {
+        const newPosition = getMappedLocation(documentSpanLocation(documentSpan), project);
+        if (!newPosition) return undefined;
+        return {
+            fileName: newPosition.fileName,
+            textSpan: {
+                start: newPosition.pos,
+                length: documentSpan.textSpan.length
+            },
+            originalFileName: documentSpan.fileName,
+            originalTextSpan: documentSpan.textSpan,
+            contextSpan: getMappedContextSpan(documentSpan, project),
+            originalContextSpan: documentSpan.contextSpan
+        };
+    }
+
+    function getMappedContextSpan(documentSpan: DocumentSpan, project: Project): TextSpan | undefined {
+        const contextSpanStart = documentSpan.contextSpan && getMappedLocation(
+            { fileName: documentSpan.fileName, pos: documentSpan.contextSpan.start },
+            project
+        );
+        const contextSpanEnd = documentSpan.contextSpan && getMappedLocation(
+            { fileName: documentSpan.fileName, pos: documentSpan.contextSpan.start + documentSpan.contextSpan.length },
+            project
+        );
+        return contextSpanStart && contextSpanEnd ?
+            { start: contextSpanStart.pos, length: contextSpanEnd.pos - contextSpanStart.pos } :
+            undefined;
     }
 
     export interface SessionOptions {
@@ -506,8 +590,8 @@ namespace ts.server {
         throttleWaitMilliseconds?: number;
         noGetErrOnBackgroundUpdate?: boolean;
 
-        globalPlugins?: ReadonlyArray<string>;
-        pluginProbeLocations?: ReadonlyArray<string>;
+        globalPlugins?: readonly string[];
+        pluginProbeLocations?: readonly string[];
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
     }
@@ -516,6 +600,8 @@ namespace ts.server {
         private readonly gcTimer: GcTimer;
         protected projectService: ProjectService;
         private changeSeq = 0;
+
+        private updateGraphDurationMs: number | undefined;
 
         private currentRequestId!: number;
         private errorCheck: MultistepOperation;
@@ -574,11 +660,21 @@ namespace ts.server {
                 syntaxOnly: opts.syntaxOnly,
             };
             this.projectService = new ProjectService(settings);
+            this.projectService.setPerformanceEventHandler(this.performanceEventHandler.bind(this));
             this.gcTimer = new GcTimer(this.host, /*delay*/ 7000, this.logger);
         }
 
         private sendRequestCompletedEvent(requestId: number): void {
             this.event<protocol.RequestCompletedEventBody>({ request_seq: requestId }, "requestCompleted");
+        }
+
+        private performanceEventHandler(event: PerformanceEvent) {
+            switch (event.kind) {
+                case "UpdateGraph": {
+                    this.updateGraphDurationMs = (this.updateGraphDurationMs || 0) + event.durationMs;
+                    break;
+                }
+            }
         }
 
         private defaultEventHandler(event: ProjectServiceEvent) {
@@ -603,16 +699,12 @@ namespace ts.server {
                     break;
                 case ConfigFileDiagEvent:
                     const { triggerFile, configFileName: configFile, diagnostics } = event.data;
-                    const bakedDiags = map(diagnostics, diagnostic => formatConfigFileDiag(diagnostic, /*includeFileName*/ true));
+                    const bakedDiags = map(diagnostics, diagnostic => formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ true));
                     this.event<protocol.ConfigFileDiagnosticEventBody>({
                         triggerFile,
                         configFile,
                         diagnostics: bakedDiags
                     }, ConfigFileDiagEvent);
-                    break;
-                case SurveyReady:
-                    const { surveyId } = event.data;
-                    this.event<protocol.SurveyReadyEventBody>({ surveyId }, SurveyReady);
                     break;
                 case ProjectLanguageServiceStateEvent: {
                     const eventName: protocol.ProjectLanguageServiceStateEventName = ProjectLanguageServiceStateEvent;
@@ -637,10 +729,8 @@ namespace ts.server {
             this.projectService.logger.info(`got projects updated in background, updating diagnostics for ${openFiles}`);
             if (openFiles.length) {
                 if (!this.suppressDiagnosticEvents && !this.noGetErrOnBackgroundUpdate) {
-                    const checkList = this.createCheckList(openFiles);
-
                     // For now only queue error checking for open files. We can change this to include non open files as well
-                    this.errorCheck.startNew(next => this.updateErrorCheck(next, checkList, 100, /*requireOpen*/ true));
+                    this.errorCheck.startNew(next => this.updateErrorCheck(next, openFiles, 100, /*requireOpen*/ true));
                 }
 
                 // Send project changed event
@@ -654,7 +744,7 @@ namespace ts.server {
             this.logErrorWorker(err, cmd);
         }
 
-        private logErrorWorker(err: Error, cmd: string, fileRequest?: protocol.FileRequestArgs): void {
+        private logErrorWorker(err: Error & PossibleProgramFileInfo, cmd: string, fileRequest?: protocol.FileRequestArgs): void {
             let msg = "Exception on executing command " + cmd;
             if (err.message) {
                 msg += ":\n" + indent(err.message);
@@ -663,16 +753,34 @@ namespace ts.server {
                 }
             }
 
-            if (fileRequest && this.logger.hasLevel(LogLevel.verbose)) {
-                try {
-                    const { file, project } = this.getFileAndProject(fileRequest);
-                    const scriptInfo = project.getScriptInfoForNormalizedPath(file);
-                    if (scriptInfo) {
-                        const text = getSnapshotText(scriptInfo.getSnapshot());
-                        msg += `\n\nFile text of ${fileRequest.file}:${indent(text)}\n`;
+            if (this.logger.hasLevel(LogLevel.verbose)) {
+                if (fileRequest) {
+                    try {
+                        const { file, project } = this.getFileAndProject(fileRequest);
+                        const scriptInfo = project.getScriptInfoForNormalizedPath(file);
+                        if (scriptInfo) {
+                            const text = getSnapshotText(scriptInfo.getSnapshot());
+                            msg += `\n\nFile text of ${fileRequest.file}:${indent(text)}\n`;
+                        }
                     }
+                    catch { } // eslint-disable-line no-empty
                 }
-                catch {} // tslint:disable-line no-empty
+
+
+                if (err.ProgramFiles) {
+                    msg += `\n\nProgram files: ${JSON.stringify(err.ProgramFiles)}\n`;
+                    msg += `\n\nProjects::\n`;
+                    let counter = 0;
+                    const addProjectInfo = (project: Project) => {
+                        msg += `\nProject '${project.projectName}' (${ProjectKind[project.projectKind]}) ${counter}\n`;
+                        msg += project.filesToString(/*writeProjectFileNames*/ true);
+                        msg += "\n-----------------------------------------------\n";
+                        counter++;
+                    };
+                    this.projectService.externalProjects.forEach(addProjectInfo);
+                    this.projectService.configuredProjects.forEach(addProjectInfo);
+                    this.projectService.inferredProjects.forEach(addProjectInfo);
+                }
             }
 
             this.logger.msg(msg, Msg.Err);
@@ -685,7 +793,9 @@ namespace ts.server {
                 }
                 return;
             }
-            this.host.write(formatMessage(msg, this.logger, this.byteLength, this.host.newLine));
+            const msgText = formatMessage(msg, this.logger, this.byteLength, this.host.newLine);
+            perfLogger.logEvent(`Response message size: ${msgText.length}`);
+            this.host.write(msgText);
         }
 
         public event<T extends object>(body: T, eventName: string): void {
@@ -705,13 +815,19 @@ namespace ts.server {
                 command: cmdName,
                 request_seq: reqSeq,
                 success,
+                performanceData: !this.updateGraphDurationMs
+                    ? undefined
+                    : {
+                        updateGraphDurationMs: this.updateGraphDurationMs,
+                    },
             };
+
             if (success) {
                 let metadata: unknown;
                 if (isArray(info)) {
                     res.body = info;
-                    metadata = (info as WithMetadata<ReadonlyArray<any>>).metadata;
-                    delete (info as WithMetadata<ReadonlyArray<any>>).metadata;
+                    metadata = (info as WithMetadata<readonly any[]>).metadata;
+                    delete (info as WithMetadata<readonly any[]>).metadata;
                 }
                 else if (typeof info === "object") {
                     if ((info as WithMetadata<{}>).metadata) {
@@ -740,7 +856,7 @@ namespace ts.server {
         private semanticCheck(file: NormalizedPath, project: Project) {
             const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
                 ? emptyArray
-                : project.getLanguageService().getSemanticDiagnostics(file);
+                : project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file);
             this.sendDiagnosticsEvent(file, project, diags, "semanticDiag");
         }
 
@@ -752,7 +868,7 @@ namespace ts.server {
             this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag");
         }
 
-        private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: ReadonlyArray<Diagnostic>, kind: protocol.DiagnosticEventKind): void {
+        private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: readonly Diagnostic[], kind: protocol.DiagnosticEventKind): void {
             try {
                 this.event<protocol.DiagnosticEventBody>({ file, diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)) }, kind);
             }
@@ -762,20 +878,37 @@ namespace ts.server {
         }
 
         /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
-        private updateErrorCheck(next: NextStep, checkList: PendingErrorCheck[], ms: number, requireOpen = true) {
+        private updateErrorCheck(next: NextStep, checkList: readonly string[] | readonly PendingErrorCheck[], ms: number, requireOpen = true) {
             Debug.assert(!this.suppressDiagnosticEvents); // Caller's responsibility
 
             const seq = this.changeSeq;
             const followMs = Math.min(ms, 200);
 
             let index = 0;
+            const goNext = () => {
+                index++;
+                if (checkList.length > index) {
+                    next.delay(followMs, checkOne);
+                }
+            };
             const checkOne = () => {
                 if (this.changeSeq !== seq) {
                     return;
                 }
 
-                const { fileName, project } = checkList[index];
-                index++;
+                let item: string | PendingErrorCheck | undefined = checkList[index];
+                if (isString(item)) {
+                    // Find out project for the file name
+                    item = this.toPendingErrorCheck(item);
+                    if (!item) {
+                        // Ignore file if there is no project for the file
+                        goNext();
+                        return;
+                    }
+                }
+
+                const { fileName, project } = item;
+
                 // Ensure the project is upto date before checking if this file is present in the project
                 updateProjectIfDirty(project);
                 if (!project.containsFile(fileName, requireOpen)) {
@@ -793,11 +926,6 @@ namespace ts.server {
                         return;
                     }
 
-                    const goNext = () => {
-                        if (checkList.length > index) {
-                            next.delay(followMs, checkOne);
-                        }
-                    };
                     if (this.getPreferences(fileName).disableSuggestions) {
                         goNext();
                     }
@@ -835,6 +963,11 @@ namespace ts.server {
             }
         }
 
+        private getEncodedSyntacticClassifications(args: protocol.EncodedSyntacticClassificationsRequestArgs) {
+            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+            return languageService.getEncodedSyntacticClassifications(file, args);
+        }
+
         private getEncodedSemanticClassifications(args: protocol.EncodedSemanticClassificationsRequestArgs) {
             const { file, project } = this.getFileAndProject(args);
             return project.getLanguageService().getEncodedSemanticClassifications(file, args);
@@ -865,19 +998,21 @@ namespace ts.server {
                 this.convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnosticsForConfigFile) :
                 map(
                     diagnosticsForConfigFile,
-                    diagnostic => formatConfigFileDiag(diagnostic, /*includeFileName*/ false)
+                    diagnostic => formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ false)
                 );
         }
 
-        private convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnostics: ReadonlyArray<Diagnostic>): protocol.DiagnosticWithLinePosition[] {
+        private convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnostics: readonly Diagnostic[]): protocol.DiagnosticWithLinePosition[] {
             return diagnostics.map<protocol.DiagnosticWithLinePosition>(d => ({
                 message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
                 start: d.start!, // TODO: GH#18217
                 length: d.length!, // TODO: GH#18217
                 category: diagnosticCategoryName(d),
                 code: d.code,
+                source: d.source,
                 startLocation: (d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start!)))!, // TODO: GH#18217
                 endLocation: (d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start! + d.length!)))!, // TODO: GH#18217
+                reportsUnnecessary: d.reportsUnnecessary,
                 relatedInformation: map(d.relatedInformation, formatRelatedInformation)
             }));
         }
@@ -896,7 +1031,7 @@ namespace ts.server {
             );
         }
 
-        private convertToDiagnosticsWithLinePosition(diagnostics: ReadonlyArray<Diagnostic>, scriptInfo: ScriptInfo | undefined): protocol.DiagnosticWithLinePosition[] {
+        private convertToDiagnosticsWithLinePosition(diagnostics: readonly Diagnostic[], scriptInfo: ScriptInfo | undefined): protocol.DiagnosticWithLinePosition[] {
             return diagnostics.map(d => <protocol.DiagnosticWithLinePosition>{
                 message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
                 start: d.start,
@@ -912,8 +1047,8 @@ namespace ts.server {
         }
 
         private getDiagnosticsWorker(
-            args: protocol.FileRequestArgs, isSemantic: boolean, selector: (project: Project, file: string) => ReadonlyArray<Diagnostic>, includeLinePosition: boolean
-        ): ReadonlyArray<protocol.DiagnosticWithLinePosition> | ReadonlyArray<protocol.Diagnostic> {
+            args: protocol.FileRequestArgs, isSemantic: boolean, selector: (project: Project, file: string) => readonly Diagnostic[], includeLinePosition: boolean
+        ): readonly protocol.DiagnosticWithLinePosition[] | readonly protocol.Diagnostic[] {
             const { project, file } = this.getFileAndProject(args);
             if (isSemantic && isDeclarationFileInJSOnlyNonConfiguredProject(project, file)) {
                 return emptyArray;
@@ -925,28 +1060,22 @@ namespace ts.server {
                 : diagnostics.map(d => formatDiag(file, project, d));
         }
 
-        private getDefinition(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileSpan> | ReadonlyArray<DefinitionInfo> {
+        private getDefinition(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): readonly protocol.FileSpanWithContext[] | readonly DefinitionInfo[] {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
             const definitions = this.mapDefinitionInfoLocations(project.getLanguageService().getDefinitionAtPosition(file, position) || emptyArray, project);
             return simplifiedResult ? this.mapDefinitionInfo(definitions, project) : definitions.map(Session.mapToOriginalLocation);
         }
 
-        private mapDefinitionInfoLocations(definitions: ReadonlyArray<DefinitionInfo>, project: Project): ReadonlyArray<DefinitionInfo> {
+        private mapDefinitionInfoLocations(definitions: readonly DefinitionInfo[], project: Project): readonly DefinitionInfo[] {
             return definitions.map((info): DefinitionInfo => {
-                const newLoc = getMappedLocation(documentSpanLocation(info), this.projectService, project);
-                return !newLoc ? info : {
+                const newDocumentSpan = getMappedDocumentSpan(info, project);
+                return !newDocumentSpan ? info : {
+                    ...newDocumentSpan,
                     containerKind: info.containerKind,
                     containerName: info.containerName,
-                    fileName: newLoc.fileName,
                     kind: info.kind,
                     name: info.name,
-                    textSpan: {
-                        start: newLoc.pos,
-                        length: info.textSpan.length
-                    },
-                    originalFileName: info.fileName,
-                    originalTextSpan: info.textSpan,
                 };
             });
         }
@@ -954,7 +1083,7 @@ namespace ts.server {
         private getDefinitionAndBoundSpan(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
-            const scriptInfo = Debug.assertDefined(project.getScriptInfo(file));
+            const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
 
             const unmappedDefinitionAndBoundSpan = project.getLanguageService().getDefinitionAndBoundSpan(file, position);
 
@@ -971,7 +1100,7 @@ namespace ts.server {
             if (simplifiedResult) {
                 return {
                     definitions: this.mapDefinitionInfo(definitions, project),
-                    textSpan: this.toLocationTextSpan(textSpan, scriptInfo)
+                    textSpan: toProtocolTextSpan(textSpan, scriptInfo)
                 };
             }
 
@@ -981,13 +1110,24 @@ namespace ts.server {
             };
         }
 
-        private getEmitOutput(args: protocol.FileRequestArgs): EmitOutput {
+        private getEmitOutput(args: protocol.EmitOutputRequestArgs): EmitOutput | protocol.EmitOutput {
             const { file, project } = this.getFileAndProject(args);
-            return project.getLanguageService().getEmitOutput(file);
+            if (!project.shouldEmitFile(project.getScriptInfo(file))) {
+                return { emitSkipped: true, outputFiles: [], diagnostics: [] };
+            }
+            const result = project.getLanguageService().getEmitOutput(file);
+            return args.richResponse ?
+                {
+                    ...result,
+                    diagnostics: args.includeLinePosition ?
+                        this.convertToDiagnosticsWithLinePositionFromDiagnosticFile(result.diagnostics) :
+                        result.diagnostics.map(d => formatDiagnosticToProtocol(d, /*includeFileName*/ true))
+                } :
+                result;
         }
 
-        private mapDefinitionInfo(definitions: ReadonlyArray<DefinitionInfo>, project: Project): ReadonlyArray<protocol.FileSpan> {
-            return definitions.map(def => this.toFileSpan(def.fileName, def.textSpan, project));
+        private mapDefinitionInfo(definitions: readonly DefinitionInfo[], project: Project): readonly protocol.FileSpanWithContext[] {
+            return definitions.map(def => this.toFileSpanWithContext(def.fileName, def.textSpan, def.contextSpan, project));
         }
 
         /*
@@ -1005,7 +1145,9 @@ namespace ts.server {
                     fileName: def.originalFileName,
                     textSpan: def.originalTextSpan,
                     targetFileName: def.fileName,
-                    targetTextSpan: def.textSpan
+                    targetTextSpan: def.textSpan,
+                    contextSpan: def.originalContextSpan,
+                    targetContextSpan: def.contextSpan
                 };
             }
             return def;
@@ -1023,7 +1165,15 @@ namespace ts.server {
             };
         }
 
-        private getTypeDefinition(args: protocol.FileLocationRequestArgs): ReadonlyArray<protocol.FileSpan> {
+        private toFileSpanWithContext(fileName: string, textSpan: TextSpan, contextSpan: TextSpan | undefined, project: Project): protocol.FileSpanWithContext {
+            const fileSpan = this.toFileSpan(fileName, textSpan, project);
+            const context = contextSpan && this.toFileSpan(fileName, contextSpan, project);
+            return context ?
+                { ...fileSpan, contextStart: context.start, contextEnd: context.end } :
+                fileSpan;
+        }
+
+        private getTypeDefinition(args: protocol.FileLocationRequestArgs): readonly protocol.FileSpanWithContext[] {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
 
@@ -1031,63 +1181,45 @@ namespace ts.server {
             return this.mapDefinitionInfo(definitions, project);
         }
 
-        private mapImplementationLocations(implementations: ReadonlyArray<ImplementationLocation>, project: Project): ReadonlyArray<ImplementationLocation> {
+        private mapImplementationLocations(implementations: readonly ImplementationLocation[], project: Project): readonly ImplementationLocation[] {
             return implementations.map((info): ImplementationLocation => {
-                const newLoc = getMappedLocation(documentSpanLocation(info), this.projectService, project);
-                return !newLoc ? info : {
-                    fileName: newLoc.fileName,
+                const newDocumentSpan = getMappedDocumentSpan(info, project);
+                return !newDocumentSpan ? info : {
+                    ...newDocumentSpan,
                     kind: info.kind,
                     displayParts: info.displayParts,
-                    textSpan: {
-                        start: newLoc.pos,
-                        length: info.textSpan.length
-                    },
-                    originalFileName: info.fileName,
-                    originalTextSpan: info.textSpan,
                 };
             });
         }
 
-        private getImplementation(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileSpan> | ReadonlyArray<ImplementationLocation> {
+        private getImplementation(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): readonly protocol.FileSpanWithContext[] | readonly ImplementationLocation[] {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
             const implementations = this.mapImplementationLocations(project.getLanguageService().getImplementationAtPosition(file, position) || emptyArray, project);
-            if (simplifiedResult) {
-                return implementations.map(({ fileName, textSpan }) => this.toFileSpan(fileName, textSpan, project));
-            }
-
-            return implementations.map(Session.mapToOriginalLocation);
+            return simplifiedResult ?
+                implementations.map(({ fileName, textSpan, contextSpan }) => this.toFileSpanWithContext(fileName, textSpan, contextSpan, project)) :
+                implementations.map(Session.mapToOriginalLocation);
         }
 
-        private getOccurrences(args: protocol.FileLocationRequestArgs): ReadonlyArray<protocol.OccurrencesResponseItem> {
+        private getOccurrences(args: protocol.FileLocationRequestArgs): readonly protocol.OccurrencesResponseItem[] {
             const { file, project } = this.getFileAndProject(args);
-
             const position = this.getPositionInFile(args, file);
-
             const occurrences = project.getLanguageService().getOccurrencesAtPosition(file, position);
-
-            if (!occurrences) {
-                return emptyArray;
-            }
-
-            return occurrences.map(occurrence => {
-                const { fileName, isWriteAccess, textSpan, isInString } = occurrence;
-                const scriptInfo = project.getScriptInfo(fileName)!;
-                const result: protocol.OccurrencesResponseItem = {
-                    start: scriptInfo.positionToLineOffset(textSpan.start),
-                    end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan)),
-                    file: fileName,
-                    isWriteAccess,
-                };
-                // no need to serialize the property if it is not true
-                if (isInString) {
-                    result.isInString = isInString;
-                }
-                return result;
-            });
+            return occurrences ?
+                occurrences.map<protocol.OccurrencesResponseItem>(occurrence => {
+                    const { fileName, isWriteAccess, textSpan, isInString, contextSpan } = occurrence;
+                    const scriptInfo = project.getScriptInfo(fileName)!;
+                    return {
+                        ...toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo),
+                        file: fileName,
+                        isWriteAccess,
+                        ...(isInString ? { isInString } : undefined)
+                    };
+                }) :
+                emptyArray;
         }
 
-        private getSyntacticDiagnosticsSync(args: protocol.SyntacticDiagnosticsSyncRequestArgs): ReadonlyArray<protocol.Diagnostic> | ReadonlyArray<protocol.DiagnosticWithLinePosition> {
+        private getSyntacticDiagnosticsSync(args: protocol.SyntacticDiagnosticsSyncRequestArgs): readonly protocol.Diagnostic[] | readonly protocol.DiagnosticWithLinePosition[] {
             const { configFile } = this.getConfigFileAndProject(args);
             if (configFile) {
                 // all the config file errors are reported as part of semantic check so nothing to report here
@@ -1097,15 +1229,15 @@ namespace ts.server {
             return this.getDiagnosticsWorker(args, /*isSemantic*/ false, (project, file) => project.getLanguageService().getSyntacticDiagnostics(file), !!args.includeLinePosition);
         }
 
-        private getSemanticDiagnosticsSync(args: protocol.SemanticDiagnosticsSyncRequestArgs): ReadonlyArray<protocol.Diagnostic> | ReadonlyArray<protocol.DiagnosticWithLinePosition> {
+        private getSemanticDiagnosticsSync(args: protocol.SemanticDiagnosticsSyncRequestArgs): readonly protocol.Diagnostic[] | readonly protocol.DiagnosticWithLinePosition[] {
             const { configFile, project } = this.getConfigFileAndProject(args);
             if (configFile) {
                 return this.getConfigFileDiagnostics(configFile, project!, !!args.includeLinePosition); // TODO: GH#18217
             }
-            return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSemanticDiagnostics(file), !!args.includeLinePosition);
+            return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file), !!args.includeLinePosition);
         }
 
-        private getSuggestionDiagnosticsSync(args: protocol.SuggestionDiagnosticsSyncRequestArgs): ReadonlyArray<protocol.Diagnostic> | ReadonlyArray<protocol.DiagnosticWithLinePosition> {
+        private getSuggestionDiagnosticsSync(args: protocol.SuggestionDiagnosticsSyncRequestArgs): readonly protocol.Diagnostic[] | readonly protocol.DiagnosticWithLinePosition[] {
             const { configFile } = this.getConfigFileAndProject(args);
             if (configFile) {
                 // Currently there are no info diagnostics for config files.
@@ -1122,38 +1254,24 @@ namespace ts.server {
             return tag === undefined ? undefined : { newText: tag.newText, caretOffset: 0 };
         }
 
-        private getDocumentHighlights(args: protocol.DocumentHighlightsRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.DocumentHighlightsItem> | ReadonlyArray<DocumentHighlights> {
+        private getDocumentHighlights(args: protocol.DocumentHighlightsRequestArgs, simplifiedResult: boolean): readonly protocol.DocumentHighlightsItem[] | readonly DocumentHighlights[] {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
             const documentHighlights = project.getLanguageService().getDocumentHighlights(file, position, args.filesToSearch);
 
-            if (!documentHighlights) {
-                return emptyArray;
-            }
+            if (!documentHighlights) return emptyArray;
+            if (!simplifiedResult) return documentHighlights;
 
-            if (simplifiedResult) {
-                return documentHighlights.map(convertToDocumentHighlightsItem);
-            }
-            else {
-                return documentHighlights;
-            }
-
-            function convertToDocumentHighlightsItem(documentHighlights: DocumentHighlights): protocol.DocumentHighlightsItem {
-                const { fileName, highlightSpans } = documentHighlights;
-
+            return documentHighlights.map<protocol.DocumentHighlightsItem>(({ fileName, highlightSpans }) => {
                 const scriptInfo = project.getScriptInfo(fileName)!;
                 return {
                     file: fileName,
-                    highlightSpans: highlightSpans.map(convertHighlightSpan)
+                    highlightSpans: highlightSpans.map(({ textSpan, kind, contextSpan }) => ({
+                        ...toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo),
+                        kind
+                    }))
                 };
-
-                function convertHighlightSpan(highlightSpan: HighlightSpan): protocol.HighlightSpan {
-                    const { textSpan, kind } = highlightSpan;
-                    const start = scriptInfo.positionToLineOffset(textSpan.start);
-                    const end = scriptInfo.positionToLineOffset(textSpanEnd(textSpan));
-                    return { start, end, kind };
-                }
-            }
+            });
         }
 
         private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {
@@ -1178,12 +1296,11 @@ namespace ts.server {
         private getRenameInfo(args: protocol.FileLocationRequestArgs): RenameInfo {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
-            const preferences = this.getHostPreferences();
-            return project.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: preferences.allowRenameOfImportPath });
+            return project.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: this.getPreferences(file).allowRenameOfImportPath });
         }
 
         private getProjects(args: protocol.FileRequestArgs, getScriptInfoEnsuringProjectsUptoDate?: boolean, ignoreNoProjectError?: boolean): Projects {
-            let projects: ReadonlyArray<Project> | undefined;
+            let projects: readonly Project[] | undefined;
             let symLinkedProjects: MultiMap<Project> | undefined;
             if (args.projectFileName) {
                 const project = this.getProject(args.projectFileName);
@@ -1223,7 +1340,7 @@ namespace ts.server {
             return info.getDefaultProject();
         }
 
-        private getRenameLocations(args: protocol.RenameRequestArgs, simplifiedResult: boolean): protocol.RenameResponseBody | ReadonlyArray<RenameLocation> {
+        private getRenameLocations(args: protocol.RenameRequestArgs, simplifiedResult: boolean): protocol.RenameResponseBody | readonly RenameLocation[] {
             const file = toNormalizedPath(args.file);
             const position = this.getPositionInFile(args, file);
             const projects = this.getProjects(args);
@@ -1234,12 +1351,12 @@ namespace ts.server {
                 { fileName: args.file, pos: position },
                 !!args.findInStrings,
                 !!args.findInComments,
-                this.getHostPreferences()
+                this.getPreferences(file)
             );
             if (!simplifiedResult) return locations;
 
             const defaultProject = this.getDefaultProject(args);
-            const renameInfo: protocol.RenameInfo = this.mapRenameInfo(defaultProject.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: this.getHostPreferences().allowRenameOfImportPath }), Debug.assertDefined(this.projectService.getScriptInfo(file)));
+            const renameInfo: protocol.RenameInfo = this.mapRenameInfo(defaultProject.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: this.getPreferences(file).allowRenameOfImportPath }), Debug.checkDefined(this.projectService.getScriptInfo(file)));
             return { info: renameInfo, locs: this.toSpanGroups(locations) };
         }
 
@@ -1247,25 +1364,25 @@ namespace ts.server {
             if (info.canRename) {
                 const { canRename, fileToRename, displayName, fullDisplayName, kind, kindModifiers, triggerSpan } = info;
                 return identity<protocol.RenameInfoSuccess>(
-                    { canRename, fileToRename, displayName, fullDisplayName, kind, kindModifiers, triggerSpan: this.toLocationTextSpan(triggerSpan, scriptInfo) });
+                    { canRename, fileToRename, displayName, fullDisplayName, kind, kindModifiers, triggerSpan: toProtocolTextSpan(triggerSpan, scriptInfo) });
             }
             else {
                 return info;
             }
         }
 
-        private toSpanGroups(locations: ReadonlyArray<RenameLocation>): ReadonlyArray<protocol.SpanGroup> {
+        private toSpanGroups(locations: readonly RenameLocation[]): readonly protocol.SpanGroup[] {
             const map = createMap<protocol.SpanGroup>();
-            for (const { fileName, textSpan, originalTextSpan: _, originalFileName: _1, ...prefixSuffixText } of locations) {
+            for (const { fileName, textSpan, contextSpan, originalContextSpan: _2, originalTextSpan: _, originalFileName: _1, ...prefixSuffixText } of locations) {
                 let group = map.get(fileName);
                 if (!group) map.set(fileName, group = { file: fileName, locs: [] });
-                const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(fileName));
-                group.locs.push({ ...this.toLocationTextSpan(textSpan, scriptInfo), ...prefixSuffixText });
+                const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(fileName));
+                group.locs.push({ ...toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo), ...prefixSuffixText });
             }
             return arrayFrom(map.values());
         }
 
-        private getReferences(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.ReferencesResponseBody | undefined | ReadonlyArray<ReferencedSymbol> {
+        private getReferences(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.ReferencesResponseBody | undefined | readonly ReferencedSymbol[] {
             const file = toNormalizedPath(args.file);
             const projects = this.getProjects(args);
             const position = this.getPositionInFile(args, file);
@@ -1275,30 +1392,31 @@ namespace ts.server {
                 { fileName: args.file, pos: position },
             );
 
-            if (simplifiedResult) {
-                const defaultProject = this.getDefaultProject(args);
-                const scriptInfo = defaultProject.getScriptInfoForNormalizedPath(file)!;
-                const nameInfo = defaultProject.getLanguageService().getQuickInfoAtPosition(file, position);
-                const symbolDisplayString = nameInfo ? displayPartsToString(nameInfo.displayParts) : "";
-                const nameSpan = nameInfo && nameInfo.textSpan;
-                const symbolStartOffset = nameSpan ? scriptInfo.positionToLineOffset(nameSpan.start).offset : 0;
-                const symbolName = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
-                const refs: ReadonlyArray<protocol.ReferencesResponseItem> = flatMap(references, referencedSymbol =>
-                    referencedSymbol.references.map(({ fileName, textSpan, isWriteAccess, isDefinition }): protocol.ReferencesResponseItem => {
-                        const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(fileName));
-                        const start = scriptInfo.positionToLineOffset(textSpan.start);
-                        const lineSpan = scriptInfo.lineToTextSpan(start.line - 1);
-                        const lineText = scriptInfo.getSnapshot().getText(lineSpan.start, textSpanEnd(lineSpan)).replace(/\r|\n/g, "");
-                        return { ...toFileSpan(fileName, textSpan, scriptInfo), lineText, isWriteAccess, isDefinition };
-                    }));
-                const result: protocol.ReferencesResponseBody = { refs, symbolName, symbolStartOffset, symbolDisplayString };
-                return result;
-            }
-            else {
-                return references;
-            }
-        }
+            if (!simplifiedResult) return references;
 
+            const defaultProject = this.getDefaultProject(args);
+            const scriptInfo = defaultProject.getScriptInfoForNormalizedPath(file)!;
+            const nameInfo = defaultProject.getLanguageService().getQuickInfoAtPosition(file, position);
+            const symbolDisplayString = nameInfo ? displayPartsToString(nameInfo.displayParts) : "";
+            const nameSpan = nameInfo && nameInfo.textSpan;
+            const symbolStartOffset = nameSpan ? scriptInfo.positionToLineOffset(nameSpan.start).offset : 0;
+            const symbolName = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
+            const refs: readonly protocol.ReferencesResponseItem[] = flatMap(references, referencedSymbol =>
+                referencedSymbol.references.map(({ fileName, textSpan, contextSpan, isWriteAccess, isDefinition }): protocol.ReferencesResponseItem => {
+                    const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(fileName));
+                    const span = toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo);
+                    const lineSpan = scriptInfo.lineToTextSpan(span.start.line - 1);
+                    const lineText = scriptInfo.getSnapshot().getText(lineSpan.start, textSpanEnd(lineSpan)).replace(/\r|\n/g, "");
+                    return {
+                        file: fileName,
+                        ...span,
+                        lineText,
+                        isWriteAccess,
+                        isDefinition
+                    };
+                }));
+            return { refs, symbolName, symbolStartOffset, symbolDisplayString };
+        }
         /**
          * @param fileName is the name of the file to be opened
          * @param fileContent is a version of the file content that is known to be more up to date than the one on disk
@@ -1307,11 +1425,11 @@ namespace ts.server {
             this.projectService.openClientFileWithNormalizedPath(fileName, fileContent, scriptKind, /*hasMixedContent*/ false, projectRootPath);
         }
 
-        private getPosition(args: protocol.FileLocationRequestArgs, scriptInfo: ScriptInfo): number {
+        private getPosition(args: protocol.Location & { position?: number }, scriptInfo: ScriptInfo): number {
             return args.position !== undefined ? args.position : scriptInfo.lineOffsetToPosition(args.line, args.offset);
         }
 
-        private getPositionInFile(args: protocol.FileLocationRequestArgs, file: NormalizedPath): number {
+        private getPositionInFile(args: protocol.Location & { position?: number }, file: NormalizedPath): number {
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             return this.getPosition(args, scriptInfo);
         }
@@ -1346,8 +1464,8 @@ namespace ts.server {
             if (simplifiedResult) {
                 const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
                 return spans.map(s => ({
-                    textSpan: this.toLocationTextSpan(s.textSpan, scriptInfo),
-                    hintSpan: this.toLocationTextSpan(s.hintSpan, scriptInfo),
+                    textSpan: toProtocolTextSpan(s.textSpan, scriptInfo),
+                    hintSpan: toProtocolTextSpan(s.hintSpan, scriptInfo),
                     bannerText: s.bannerText,
                     autoCollapse: s.autoCollapse,
                     kind: s.kind
@@ -1517,7 +1635,7 @@ namespace ts.server {
             });
         }
 
-        private getCompletions(args: protocol.CompletionsRequestArgs, kind: protocol.CommandTypes.CompletionInfo | protocol.CommandTypes.Completions | protocol.CommandTypes.CompletionsFull): WithMetadata<ReadonlyArray<protocol.CompletionEntry>> | protocol.CompletionInfo | CompletionInfo | undefined {
+        private getCompletions(args: protocol.CompletionsRequestArgs, kind: protocol.CommandTypes.CompletionInfo | protocol.CommandTypes.Completions | protocol.CommandTypes.CompletionsFull): WithMetadata<readonly protocol.CompletionEntry[]> | protocol.CompletionInfo | CompletionInfo | undefined {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
@@ -1536,14 +1654,14 @@ namespace ts.server {
             const entries = mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
                 if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
                     const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, isRecommended } = entry;
-                    const convertedSpan = replacementSpan ? this.toLocationTextSpan(replacementSpan, scriptInfo) : undefined;
+                    const convertedSpan = replacementSpan ? toProtocolTextSpan(replacementSpan, scriptInfo) : undefined;
                     // Use `hasAction || undefined` to avoid serializing `false`.
                     return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source, isRecommended };
                 }
             }).sort((a, b) => compareStringsCaseSensitiveUI(a.name, b.name));
 
             if (kind === protocol.CommandTypes.Completions) {
-                if (completions.metadata) (entries as WithMetadata<ReadonlyArray<protocol.CompletionEntry>>).metadata = completions.metadata;
+                if (completions.metadata) (entries as WithMetadata<readonly protocol.CompletionEntry[]>).metadata = completions.metadata;
                 return entries;
             }
 
@@ -1554,7 +1672,7 @@ namespace ts.server {
             return res;
         }
 
-        private getCompletionEntryDetails(args: protocol.CompletionDetailsRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.CompletionEntryDetails> | ReadonlyArray<CompletionEntryDetails> {
+        private getCompletionEntryDetails(args: protocol.CompletionDetailsRequestArgs, simplifiedResult: boolean): readonly protocol.CompletionEntryDetails[] | readonly CompletionEntryDetails[] {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
@@ -1569,7 +1687,7 @@ namespace ts.server {
                 : result;
         }
 
-        private getCompileOnSaveAffectedFileList(args: protocol.FileRequestArgs): ReadonlyArray<protocol.CompileOnSaveAffectedFileListSingleProject> {
+        private getCompileOnSaveAffectedFileList(args: protocol.FileRequestArgs): readonly protocol.CompileOnSaveAffectedFileListSingleProject[] {
             const projects = this.getProjects(args, /*getScriptInfoEnsuringProjectsUptoDate*/ true, /*ignoreNoProjectError*/ true);
             const info = this.projectService.getScriptInfo(args.file);
             if (!info) {
@@ -1581,29 +1699,44 @@ namespace ts.server {
                 path => this.projectService.getScriptInfoForPath(path)!,
                 projects,
                 (project, info) => {
-                    let result: protocol.CompileOnSaveAffectedFileListSingleProject | undefined;
-                    if (project.compileOnSaveEnabled && project.languageServiceEnabled && !project.isOrphan() && !project.getCompilationSettings().noEmit) {
-                        result = {
-                            projectFileName: project.getProjectName(),
-                            fileNames: project.getCompileOnSaveAffectedFileList(info),
-                            projectUsesOutFile: !!project.getCompilationSettings().outFile || !!project.getCompilationSettings().out
-                        };
+                    if (!project.compileOnSaveEnabled || !project.languageServiceEnabled || project.isOrphan()) {
+                        return undefined;
                     }
-                    return result;
+
+                    const compilationSettings = project.getCompilationSettings();
+
+                    if (!!compilationSettings.noEmit || fileExtensionIs(info.fileName, Extension.Dts) && !dtsChangeCanAffectEmit(compilationSettings)) {
+                        // avoid triggering emit when a change is made in a .d.ts when declaration emit and decorator metadata emit are disabled
+                        return undefined;
+                    }
+
+                    return {
+                        projectFileName: project.getProjectName(),
+                        fileNames: project.getCompileOnSaveAffectedFileList(info),
+                        projectUsesOutFile: !!compilationSettings.outFile || !!compilationSettings.out
+                    };
                 }
             );
         }
 
-        private emitFile(args: protocol.CompileOnSaveEmitFileRequestArgs) {
+        private emitFile(args: protocol.CompileOnSaveEmitFileRequestArgs): boolean | protocol.EmitResult | EmitResult {
             const { file, project } = this.getFileAndProject(args);
             if (!project) {
                 Errors.ThrowNoProject();
             }
             if (!project.languageServiceEnabled) {
-                return false;
+                return args.richResponse ? { emitSkipped: true, diagnostics: [] } : false;
             }
             const scriptInfo = project.getScriptInfo(file)!;
-            return project.emitFile(scriptInfo, (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark));
+            const { emitSkipped, diagnostics } = project.emitFile(scriptInfo, (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark));
+            return args.richResponse ?
+                {
+                    emitSkipped,
+                    diagnostics: args.includeLinePosition ?
+                        this.convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnostics) :
+                        diagnostics.map(d => formatDiagnosticToProtocol(d, /*includeFileName*/ true))
+                } :
+                !emitSkipped;
         }
 
         private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean): protocol.SignatureHelpItems | SignatureHelpItems | undefined {
@@ -1633,12 +1766,10 @@ namespace ts.server {
             }
         }
 
-        private createCheckList(fileNames: string[], defaultProject?: Project): PendingErrorCheck[] {
-            return mapDefined<string, PendingErrorCheck>(fileNames, uncheckedFileName => {
-                const fileName = toNormalizedPath(uncheckedFileName);
-                const project = defaultProject || this.projectService.tryGetDefaultProjectForFile(fileName);
-                return project && { fileName, project };
-            });
+        private toPendingErrorCheck(uncheckedFileName: string): PendingErrorCheck | undefined {
+            const fileName = toNormalizedPath(uncheckedFileName);
+            const project = this.projectService.tryGetDefaultProjectForFile(fileName);
+            return project && { fileName, project };
         }
 
         private getDiagnostics(next: NextStep, delay: number, fileNames: string[]): void {
@@ -1646,9 +1777,8 @@ namespace ts.server {
                 return;
             }
 
-            const checkList = this.createCheckList(fileNames);
-            if (checkList.length > 0) {
-                this.updateErrorCheck(next, checkList, delay);
+            if (fileNames.length > 0) {
+                this.updateErrorCheck(next, fileNames, delay);
             }
         }
 
@@ -1659,10 +1789,10 @@ namespace ts.server {
             const end = scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
             if (start >= 0) {
                 this.changeSeq++;
-                this.projectService.applyChangesToFile(scriptInfo, [{
+                this.projectService.applyChangesToFile(scriptInfo, singleIterator({
                     span: { start, length: end - start },
                     newText: args.insertString! // TODO: GH#18217
-                }]);
+                }));
             }
         }
 
@@ -1699,7 +1829,7 @@ namespace ts.server {
                 text: item.text,
                 kind: item.kind,
                 kindModifiers: item.kindModifiers,
-                spans: item.spans.map(span => this.toLocationTextSpan(span, scriptInfo)),
+                spans: item.spans.map(span => toProtocolTextSpan(span, scriptInfo)),
                 childItems: this.mapLocationNavigationBarItems(item.childItems, scriptInfo),
                 indent: item.indent
             }));
@@ -1720,16 +1850,9 @@ namespace ts.server {
                 text: tree.text,
                 kind: tree.kind,
                 kindModifiers: tree.kindModifiers,
-                spans: tree.spans.map(span => this.toLocationTextSpan(span, scriptInfo)),
-                nameSpan: tree.nameSpan && this.toLocationTextSpan(tree.nameSpan, scriptInfo),
+                spans: tree.spans.map(span => toProtocolTextSpan(span, scriptInfo)),
+                nameSpan: tree.nameSpan && toProtocolTextSpan(tree.nameSpan, scriptInfo),
                 childItems: map(tree.childItems, item => this.toLocationNavigationTree(item, scriptInfo))
-            };
-        }
-
-        private toLocationTextSpan(span: TextSpan, scriptInfo: ScriptInfo): protocol.TextSpan {
-            return {
-                start: scriptInfo.positionToLineOffset(span.start),
-                end: scriptInfo.positionToLineOffset(textSpanEnd(span))
             };
         }
 
@@ -1743,7 +1866,7 @@ namespace ts.server {
                     : tree;
         }
 
-        private getNavigateToItems(args: protocol.NavtoRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.NavtoItem> | ReadonlyArray<NavigateToItem> {
+        private getNavigateToItems(args: protocol.NavtoRequestArgs, simplifiedResult: boolean): readonly protocol.NavtoItem[] | readonly NavigateToItem[] {
             const full = this.getFullNavigateToItems(args);
             return !simplifiedResult ? full : full.map((navItem) => {
                 const { file, project } = this.getFileAndProject({ file: navItem.fileName });
@@ -1770,7 +1893,7 @@ namespace ts.server {
             });
         }
 
-        private getFullNavigateToItems(args: protocol.NavtoRequestArgs): ReadonlyArray<NavigateToItem> {
+        private getFullNavigateToItems(args: protocol.NavtoRequestArgs): readonly NavigateToItem[] {
             const { currentFileOnly, searchValue, maxResultCount } = args;
             if (currentFileOnly) {
                 const { file, project } = this.getFileAndProject(args);
@@ -1798,7 +1921,7 @@ namespace ts.server {
                     a.fileName === b.fileName &&
                     a.isCaseSensitive === b.isCaseSensitive &&
                     a.kind === b.kind &&
-                    a.kindModifiers === b.containerName &&
+                    a.kindModifiers === b.kindModifiers &&
                     a.matchKind === b.matchKind &&
                     a.name === b.name &&
                     a.textSpan.start === b.textSpan.start &&
@@ -1824,7 +1947,7 @@ namespace ts.server {
                 const { startPosition, endPosition } = this.getStartAndEndPosition(args, scriptInfo);
                 textRange = { pos: startPosition, end: endPosition };
             }
-            return Debug.assertDefined(position === undefined ? textRange : position);
+            return Debug.checkDefined(position === undefined ? textRange : position);
 
             function getPosition(loc: protocol.FileLocationRequestArgs) {
                 return loc.position !== undefined ? loc.position : scriptInfo.lineOffsetToPosition(loc.line, loc.offset);
@@ -1869,7 +1992,7 @@ namespace ts.server {
             }
         }
 
-        private organizeImports({ scope }: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileCodeEdits> | ReadonlyArray<FileTextChanges> {
+        private organizeImports({ scope }: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
             Debug.assert(scope.type === "file");
             const { file, project } = this.getFileAndProject(scope.args);
             const changes = project.getLanguageService().organizeImports({ type: "file", fileName: file }, this.getFormatOptions(file), this.getPreferences(file));
@@ -1881,7 +2004,7 @@ namespace ts.server {
             }
         }
 
-        private getEditsForFileRename(args: protocol.GetEditsForFileRenameRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileCodeEdits> | ReadonlyArray<FileTextChanges> {
+        private getEditsForFileRename(args: protocol.GetEditsForFileRenameRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
             const oldPath = toNormalizedPath(args.oldFilePath);
             const newPath = toNormalizedPath(args.newFilePath);
             const formatOptions = this.getHostFormatOptions();
@@ -1893,7 +2016,7 @@ namespace ts.server {
             return simplifiedResult ? changes.map(c => this.mapTextChangeToCodeEdit(c)) : changes;
         }
 
-        private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.CodeFixAction> | ReadonlyArray<CodeFixAction> | undefined {
+        private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): readonly protocol.CodeFixAction[] | readonly CodeFixAction[] | undefined {
             const { file, project } = this.getFileAndProject(args);
 
             const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
@@ -1956,7 +2079,7 @@ namespace ts.server {
             return { fixName, description, changes: this.mapTextChangesToCodeEdits(changes), commands, fixId, fixAllDescription };
         }
 
-        private mapTextChangesToCodeEdits(textChanges: ReadonlyArray<FileTextChanges>): protocol.FileCodeEdits[] {
+        private mapTextChangesToCodeEdits(textChanges: readonly FileTextChanges[]): protocol.FileCodeEdits[] {
             return textChanges.map(change => this.mapTextChangeToCodeEdit(change));
         }
 
@@ -1990,7 +2113,7 @@ namespace ts.server {
             return !spans
                 ? undefined
                 : simplifiedResult
-                    ? spans.map(span => this.toLocationTextSpan(span, scriptInfo))
+                    ? spans.map(span => toProtocolTextSpan(span, scriptInfo))
                     : spans;
         }
 
@@ -2048,8 +2171,91 @@ namespace ts.server {
             this.projectService.configurePlugin(args);
         }
 
+        private getSmartSelectionRange(args: protocol.SelectionRangeRequestArgs, simplifiedResult: boolean) {
+            const { locations } = args;
+            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+            const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(file));
+
+            return map(locations, location => {
+                const pos = this.getPosition(location, scriptInfo);
+                const selectionRange = languageService.getSmartSelectionRange(file, pos);
+                return simplifiedResult ? this.mapSelectionRange(selectionRange, scriptInfo) : selectionRange;
+            });
+        }
+
+        private mapSelectionRange(selectionRange: SelectionRange, scriptInfo: ScriptInfo): protocol.SelectionRange {
+            const result: protocol.SelectionRange = {
+                textSpan: toProtocolTextSpan(selectionRange.textSpan, scriptInfo),
+            };
+            if (selectionRange.parent) {
+                result.parent = this.mapSelectionRange(selectionRange.parent, scriptInfo);
+            }
+            return result;
+        }
+
+        private getScriptInfoFromProjectService(file: string) {
+            const normalizedFile = toNormalizedPath(file);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(normalizedFile);
+            if (!scriptInfo) {
+                this.projectService.logErrorForScriptInfoNotFound(normalizedFile);
+                return Errors.ThrowNoProject();
+            }
+            return scriptInfo;
+        }
+
+        private toProtocolCallHierarchyItem(item: CallHierarchyItem): protocol.CallHierarchyItem {
+            const scriptInfo = this.getScriptInfoFromProjectService(item.file);
+            return {
+                name: item.name,
+                kind: item.kind,
+                file: item.file,
+                span: toProtocolTextSpan(item.span, scriptInfo),
+                selectionSpan: toProtocolTextSpan(item.selectionSpan, scriptInfo)
+            };
+        }
+
+        private toProtocolCallHierarchyIncomingCall(incomingCall: CallHierarchyIncomingCall): protocol.CallHierarchyIncomingCall {
+            const scriptInfo = this.getScriptInfoFromProjectService(incomingCall.from.file);
+            return {
+                from: this.toProtocolCallHierarchyItem(incomingCall.from),
+                fromSpans: incomingCall.fromSpans.map(fromSpan => toProtocolTextSpan(fromSpan, scriptInfo))
+            };
+        }
+
+        private toProtocolCallHierarchyOutgoingCall(outgoingCall: CallHierarchyOutgoingCall, scriptInfo: ScriptInfo): protocol.CallHierarchyOutgoingCall {
+            return {
+                to: this.toProtocolCallHierarchyItem(outgoingCall.to),
+                fromSpans: outgoingCall.fromSpans.map(fromSpan => toProtocolTextSpan(fromSpan, scriptInfo))
+            };
+        }
+
+        private prepareCallHierarchy(args: protocol.FileLocationRequestArgs): protocol.CallHierarchyItem | protocol.CallHierarchyItem[] | undefined {
+            const { file, project } = this.getFileAndProject(args);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
+            if (scriptInfo) {
+                const position = this.getPosition(args, scriptInfo);
+                const result = project.getLanguageService().prepareCallHierarchy(file, position);
+                return result && mapOneOrMany(result, item => this.toProtocolCallHierarchyItem(item));
+            }
+            return undefined;
+        }
+
+        private provideCallHierarchyIncomingCalls(args: protocol.FileLocationRequestArgs): protocol.CallHierarchyIncomingCall[] {
+            const { file, project } = this.getFileAndProject(args);
+            const scriptInfo = this.getScriptInfoFromProjectService(file);
+            const incomingCalls = project.getLanguageService().provideCallHierarchyIncomingCalls(file, this.getPosition(args, scriptInfo));
+            return incomingCalls.map(call => this.toProtocolCallHierarchyIncomingCall(call));
+        }
+
+        private provideCallHierarchyOutgoingCalls(args: protocol.FileLocationRequestArgs): protocol.CallHierarchyOutgoingCall[] {
+            const { file, project } = this.getFileAndProject(args);
+            const scriptInfo = this.getScriptInfoFromProjectService(file);
+            const outgoingCalls = project.getLanguageService().provideCallHierarchyOutgoingCalls(file, this.getPosition(args, scriptInfo));
+            return outgoingCalls.map(call => this.toProtocolCallHierarchyOutgoingCall(call, scriptInfo));
+        }
+
         getCanonicalFileName(fileName: string) {
-            const name = this.host.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
+            const name = this.host.useCaseSensitiveFileNames ? fileName : toFileNameLowerCase(fileName);
             return normalizePath(name);
         }
 
@@ -2065,7 +2271,7 @@ namespace ts.server {
 
         private handlers = createMapFromTemplate<(request: protocol.Request) => HandlerResponse>({
             [CommandNames.Status]: () => {
-                const response: protocol.StatusResponseBody = { version };
+                const response: protocol.StatusResponseBody = { version: ts.version }; // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                 return this.requiredResponse(response);
             },
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
@@ -2084,7 +2290,7 @@ namespace ts.server {
                 return this.requiredResponse(/*response*/ true);
             },
             [CommandNames.SynchronizeProjectList]: (request: protocol.SynchronizeProjectListRequest) => {
-                const result = this.projectService.synchronizeProjectList(request.arguments.knownProjects);
+                const result = this.projectService.synchronizeProjectList(request.arguments.knownProjects, request.arguments.includeProjectReferenceRedirectInfo);
                 if (!result.some(p => p.projectErrors && p.projectErrors.length !== 0)) {
                     return this.requiredResponse(result);
                 }
@@ -2101,9 +2307,39 @@ namespace ts.server {
                 });
                 return this.requiredResponse(converted);
             },
+            [CommandNames.UpdateOpen]: (request: protocol.UpdateOpenRequest) => {
+                this.changeSeq++;
+                this.projectService.applyChangesInOpenFiles(
+                    request.arguments.openFiles && mapIterator(arrayIterator(request.arguments.openFiles), file => ({
+                        fileName: file.file,
+                        content: file.fileContent,
+                        scriptKind: file.scriptKindName,
+                        projectRootPath: file.projectRootPath
+                    })),
+                    request.arguments.changedFiles && mapIterator(arrayIterator(request.arguments.changedFiles), file => ({
+                        fileName: file.fileName,
+                        changes: mapDefinedIterator(arrayReverseIterator(file.textChanges), change => {
+                            const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(file.fileName));
+                            const start = scriptInfo.lineOffsetToPosition(change.start.line, change.start.offset);
+                            const end = scriptInfo.lineOffsetToPosition(change.end.line, change.end.offset);
+                            return start >= 0 ? { span: { start, length: end - start }, newText: change.newText } : undefined;
+                        })
+                    })),
+                    request.arguments.closedFiles
+                );
+                return this.requiredResponse(/*response*/ true);
+            },
             [CommandNames.ApplyChangedToOpenFiles]: (request: protocol.ApplyChangedToOpenFilesRequest) => {
                 this.changeSeq++;
-                this.projectService.applyChangesInOpenFiles(request.arguments.openFiles, request.arguments.changedFiles!, request.arguments.closedFiles!); // TODO: GH#18217
+                this.projectService.applyChangesInOpenFiles(
+                    request.arguments.openFiles && arrayIterator(request.arguments.openFiles),
+                    request.arguments.changedFiles && mapIterator(arrayIterator(request.arguments.changedFiles), file => ({
+                        fileName: file.fileName,
+                        // apply changes in reverse order
+                        changes: arrayReverseIterator(file.changes)
+                    })),
+                    request.arguments.closedFiles
+                );
                 // TODO: report errors
                 return this.requiredResponse(/*response*/ true);
             },
@@ -2235,6 +2471,9 @@ namespace ts.server {
             },
             [CommandNames.CompilerOptionsDiagnosticsFull]: (request: protocol.CompilerOptionsDiagnosticsRequest) => {
                 return this.requiredResponse(this.getCompilerOptionsDiagnostics(request.arguments));
+            },
+            [CommandNames.EncodedSyntacticClassificationsFull]: (request: protocol.EncodedSyntacticClassificationsRequest) => {
+                return this.requiredResponse(this.getEncodedSyntacticClassifications(request.arguments));
             },
             [CommandNames.EncodedSemanticClassificationsFull]: (request: protocol.EncodedSemanticClassificationsRequest) => {
                 return this.requiredResponse(this.getEncodedSemanticClassifications(request.arguments));
@@ -2371,8 +2610,24 @@ namespace ts.server {
             },
             [CommandNames.ConfigurePlugin]: (request: protocol.ConfigurePluginRequest) => {
                 this.configurePlugin(request.arguments);
+                this.doOutput(/*info*/ undefined, CommandNames.ConfigurePlugin, request.seq, /*success*/ true);
                 return this.notRequired();
-            }
+            },
+            [CommandNames.SelectionRange]: (request: protocol.SelectionRangeRequest) => {
+                return this.requiredResponse(this.getSmartSelectionRange(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.SelectionRangeFull]: (request: protocol.SelectionRangeRequest) => {
+                return this.requiredResponse(this.getSmartSelectionRange(request.arguments, /*simplifiedResult*/ false));
+            },
+            [CommandNames.PrepareCallHierarchy]: (request: protocol.PrepareCallHierarchyRequest) => {
+                return this.requiredResponse(this.prepareCallHierarchy(request.arguments));
+            },
+            [CommandNames.ProvideCallHierarchyIncomingCalls]: (request: protocol.ProvideCallHierarchyIncomingCallsRequest) => {
+                return this.requiredResponse(this.provideCallHierarchyIncomingCalls(request.arguments));
+            },
+            [CommandNames.ProvideCallHierarchyOutgoingCalls]: (request: protocol.ProvideCallHierarchyOutgoingCallsRequest) => {
+                return this.requiredResponse(this.provideCallHierarchyOutgoingCalls(request.arguments));
+            },
         });
 
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse) {
@@ -2418,6 +2673,9 @@ namespace ts.server {
 
         public onMessage(message: string) {
             this.gcTimer.scheduleCollect();
+
+            this.updateGraphDurationMs = undefined;
+
             let start: number[] | undefined;
             if (this.logger.hasLevel(LogLevel.requestTime)) {
                 start = this.hrtime();
@@ -2431,6 +2689,8 @@ namespace ts.server {
             try {
                 request = <protocol.Request>JSON.parse(message);
                 relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
+
+                perfLogger.logStartCommand("" + request.command, message.substring(0, 100));
                 const { response, responseRequired } = this.executeCommand(request);
 
                 if (this.logger.hasLevel(LogLevel.requestTime)) {
@@ -2443,6 +2703,8 @@ namespace ts.server {
                     }
                 }
 
+                // Note: Log before writing the response, else the editor can complete its activity before the server does
+                perfLogger.logStopCommand("" + request.command, "Success");
                 if (response) {
                     this.doOutput(response, request.command, request.seq, /*success*/ true);
                 }
@@ -2453,10 +2715,14 @@ namespace ts.server {
             catch (err) {
                 if (err instanceof OperationCanceledException) {
                     // Handle cancellation exceptions
+                    perfLogger.logStopCommand("" + (request && request.command), "Canceled: " + err);
                     this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true);
                     return;
                 }
+
                 this.logErrorWorker(err, message, relevantFile);
+                perfLogger.logStopCommand("" + (request && request.command), "Error: " + err);
+
                 this.doOutput(
                     /*info*/ undefined,
                     request ? request.command : CommandNames.Unknown,
@@ -2488,8 +2754,19 @@ namespace ts.server {
         readonly project: Project;
     }
 
-    function toFileSpan(fileName: string, textSpan: TextSpan, scriptInfo: ScriptInfo): protocol.FileSpan {
-        return { file: fileName, start: scriptInfo.positionToLineOffset(textSpan.start), end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan)) };
+    function toProtocolTextSpan(textSpan: TextSpan, scriptInfo: ScriptInfo): protocol.TextSpan {
+        return {
+            start: scriptInfo.positionToLineOffset(textSpan.start),
+            end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan))
+        };
+    }
+
+    function toProtocolTextSpanWithContext(span: TextSpan, contextSpan: TextSpan | undefined, scriptInfo: ScriptInfo): protocol.TextSpanWithContext {
+        const textSpan = toProtocolTextSpan(span, scriptInfo);
+        const contextTextSpan = contextSpan && toProtocolTextSpan(contextSpan, scriptInfo);
+        return contextTextSpan ?
+            { ...textSpan, contextStart: contextTextSpan.start, contextEnd: contextTextSpan.end } :
+            textSpan;
     }
 
     function convertTextChangeToCodeEdit(change: TextChange, scriptInfo: ScriptInfoOrConfig): protocol.CodeEdit {
@@ -2517,13 +2794,13 @@ namespace ts.server {
     }
 
     /* @internal */ // Exported only for tests
-    export function getLocationInNewDocument(oldText: string, renameFilename: string, renameLocation: number, edits: ReadonlyArray<FileTextChanges>): protocol.Location {
+    export function getLocationInNewDocument(oldText: string, renameFilename: string, renameLocation: number, edits: readonly FileTextChanges[]): protocol.Location {
         const newText = applyEdits(oldText, renameFilename, edits);
         const { line, character } = computeLineAndCharacterOfPosition(computeLineStarts(newText), renameLocation);
         return { line: line + 1, offset: character + 1 };
     }
 
-    function applyEdits(text: string, textFilename: string, edits: ReadonlyArray<FileTextChanges>): string {
+    function applyEdits(text: string, textFilename: string, edits: readonly FileTextChanges[]): string {
         for (const { fileName, textChanges } of edits) {
             if (fileName !== textFilename) {
                 continue;

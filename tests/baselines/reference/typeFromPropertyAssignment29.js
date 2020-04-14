@@ -219,7 +219,8 @@ declare namespace Ns {
     namespace ExpandoNamespace {
         var p6: number;
     }
-    function foo(): typeof ExpandoNamespace;
+    export function foo(): typeof ExpandoNamespace;
+    export {};
 }
 declare var ExpandoExpr2: (n: number) => string;
 declare var n: number;

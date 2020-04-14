@@ -26,6 +26,7 @@ export class BuildResult<A, B, C>{
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.BuildResult = exports.FileWithErrors = exports.BuildError = void 0;
     var BuildError = /** @class */ (function () {
         function BuildError() {
         }

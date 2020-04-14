@@ -1,0 +1,71 @@
+=== tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts ===
+interface StatelessComponent<P = {}> {
+>StatelessComponent : Symbol(StatelessComponent, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 0, 0))
+>P : Symbol(P, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 0, 29))
+
+  (props: P & { children?: number }, context?: any): null;
+>props : Symbol(props, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 1, 3))
+>P : Symbol(P, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 0, 29))
+>children : Symbol(children, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 1, 15))
+>context : Symbol(context, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 1, 36))
+}
+ 
+const TestComponent: StatelessComponent<TestProps> = (props) => {
+>TestComponent : Symbol(TestComponent, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 4, 5))
+>StatelessComponent : Symbol(StatelessComponent, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 0, 0))
+>TestProps : Symbol(TestProps, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 14, 1))
+>props : Symbol(props, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 4, 54))
+
+  return null;
+}
+ 
+interface ITestProps {
+>ITestProps : Symbol(ITestProps, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 6, 1))
+
+  ariaLabel?: string;
+>ariaLabel : Symbol(ITestProps.ariaLabel, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 8, 22))
+}
+ 
+interface NestedProp<TProps> {
+>NestedProp : Symbol(NestedProp, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 10, 1))
+>TProps : Symbol(TProps, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 12, 21))
+
+  props: TProps;
+>props : Symbol(NestedProp.props, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 12, 30))
+>TProps : Symbol(TProps, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 12, 21))
+}
+ 
+interface TestProps {
+>TestProps : Symbol(TestProps, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 14, 1))
+
+  icon: NestedProp<ITestProps>;
+>icon : Symbol(TestProps.icon, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 16, 21))
+>NestedProp : Symbol(NestedProp, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 10, 1))
+>ITestProps : Symbol(ITestProps, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 6, 1))
+}
+ 
+TestComponent({icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } }});
+>TestComponent : Symbol(TestComponent, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 4, 5))
+>icon : Symbol(icon, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 20, 15))
+>props : Symbol(props, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 20, 22))
+>INVALID_PROP_NAME : Symbol(INVALID_PROP_NAME, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 20, 31))
+>ariaLabel : Symbol(ariaLabel, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 20, 59))
+
+const TestComponent2: StatelessComponent<TestProps | {props2: {x: number}}> = (props) => {
+>TestComponent2 : Symbol(TestComponent2, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 22, 5))
+>StatelessComponent : Symbol(StatelessComponent, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 0, 0))
+>TestProps : Symbol(TestProps, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 14, 1))
+>props2 : Symbol(props2, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 22, 54))
+>x : Symbol(x, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 22, 63))
+>props : Symbol(props, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 22, 79))
+
+  return null;
+}
+
+TestComponent2({icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } }});
+>TestComponent2 : Symbol(TestComponent2, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 22, 5))
+>icon : Symbol(icon, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 26, 16))
+>props : Symbol(props, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 26, 23))
+>INVALID_PROP_NAME : Symbol(INVALID_PROP_NAME, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 26, 32))
+>ariaLabel : Symbol(ariaLabel, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 26, 60))
+

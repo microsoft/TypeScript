@@ -1,6 +1,6 @@
 === tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts ===
 function* gen() {
->gen : () => IterableIterator<number>
+>gen : () => Generator<number, void, unknown>
 
     // Once this is supported, yield *must* be parenthesized.
     var x = `abc${ yield 10 }def`;

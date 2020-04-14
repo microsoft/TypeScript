@@ -15,7 +15,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         addBraces: boolean;
     }
 
-    function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
+    function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition } = context;
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
         if (!info) return emptyArray;
@@ -48,13 +48,13 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             const returnStatement = createReturn(expression);
             body = createBlock([returnStatement], /* multiLine */ true);
             suppressLeadingAndTrailingTrivia(body);
-            copyComments(expression!, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ true);
+            copyLeadingComments(expression!, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ true);
         }
         else if (actionName === removeBracesActionName && returnStatement) {
             const actualExpression = expression || createVoidZero();
             body = needsParentheses(actualExpression) ? createParen(actualExpression) : actualExpression;
             suppressLeadingAndTrailingTrivia(body);
-            copyComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
+            copyLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
         }
         else {
             Debug.fail("invalid action");
@@ -62,10 +62,6 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
 
         const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func.body, body));
         return { renameFilename: undefined, renameLocation: undefined, edits };
-    }
-
-    function needsParentheses(expression: Expression) {
-        return isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken || isObjectLiteralExpression(expression);
     }
 
     function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number): Info | undefined {

@@ -31,7 +31,7 @@ declare global {
 export default React.createClass({
 >React.createClass({  render() {    return (      null    );  }}) : import("tests/cases/compiler/react").ClassicComponentClass
 >React.createClass : (spec: any) => import("tests/cases/compiler/react").ClassicComponentClass
->React : typeof React
+>React : typeof import("tests/cases/compiler/react")
 >createClass : (spec: any) => import("tests/cases/compiler/react").ClassicComponentClass
 >{  render() {    return (      null    );  }} : { render(): any; }
 

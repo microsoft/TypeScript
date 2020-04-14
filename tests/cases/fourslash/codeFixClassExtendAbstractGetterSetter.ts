@@ -38,12 +38,29 @@ verify.codeFix({
 abstract class B extends A {}
 
 class C extends A {
-    a: string | number;
-    b: this;
-    c: A;
-    d: string | number;
-    e: this;
-    f: A;
-    g: string;
+    get a(): string | number {
+        throw new Error("Method not implemented.");
+    }
+    get b(): this {
+        throw new Error("Method not implemented.");
+    }
+    get c(): A {
+        throw new Error("Method not implemented.");
+    }
+    set d(arg: string | number) {
+        throw new Error("Method not implemented.");
+    }
+    set e(arg: this) {
+        throw new Error("Method not implemented.");
+    }
+    set f(arg: A) {
+        throw new Error("Method not implemented.");
+    }
+    get g(): string {
+        throw new Error("Method not implemented.");
+    }
+    set g(newName: string) {
+        throw new Error("Method not implemented.");
+    }
 }`
 });

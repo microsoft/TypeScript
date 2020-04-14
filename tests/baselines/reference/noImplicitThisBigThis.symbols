@@ -1,0 +1,99 @@
+=== tests/cases/compiler/noImplicitThisBigThis.ts ===
+// https://github.com/microsoft/TypeScript/issues/29902
+
+function createObj() {
+>createObj : Symbol(createObj, Decl(noImplicitThisBigThis.ts, 0, 0))
+
+    return {
+        func1() {
+>func1 : Symbol(func1, Decl(noImplicitThisBigThis.ts, 3, 12))
+
+            return this;
+>this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 3, 10))
+
+        },
+        func2() {
+>func2 : Symbol(func2, Decl(noImplicitThisBigThis.ts, 6, 10))
+
+            return this;
+>this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 3, 10))
+
+        },
+        func3() {
+>func3 : Symbol(func3, Decl(noImplicitThisBigThis.ts, 9, 10))
+
+            return this;
+>this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 3, 10))
+        }
+    };
+}
+
+function createObjNoCrash() {
+>createObjNoCrash : Symbol(createObjNoCrash, Decl(noImplicitThisBigThis.ts, 14, 1))
+
+    return {
+        func1() {
+>func1 : Symbol(func1, Decl(noImplicitThisBigThis.ts, 17, 12))
+
+            return this;
+>this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 17, 10))
+
+        },
+        func2() {
+>func2 : Symbol(func2, Decl(noImplicitThisBigThis.ts, 20, 10))
+
+            return this;
+>this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 17, 10))
+
+        },
+        func3() {
+>func3 : Symbol(func3, Decl(noImplicitThisBigThis.ts, 23, 10))
+
+            return this;
+>this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 17, 10))
+
+        },
+        func4() {
+>func4 : Symbol(func4, Decl(noImplicitThisBigThis.ts, 26, 10))
+
+            return this;
+>this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 17, 10))
+
+        },
+        func5() {
+>func5 : Symbol(func5, Decl(noImplicitThisBigThis.ts, 29, 10))
+
+            return this;
+>this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 17, 10))
+
+        },
+        func6() {
+>func6 : Symbol(func6, Decl(noImplicitThisBigThis.ts, 32, 10))
+
+            return this;
+>this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 17, 10))
+
+        },
+        func7() {
+>func7 : Symbol(func7, Decl(noImplicitThisBigThis.ts, 35, 10))
+
+            return this;
+>this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 17, 10))
+
+        },
+        func8() {
+>func8 : Symbol(func8, Decl(noImplicitThisBigThis.ts, 38, 10))
+
+            return this;
+>this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 17, 10))
+
+        },
+        func9() {
+>func9 : Symbol(func9, Decl(noImplicitThisBigThis.ts, 41, 10))
+
+            return this;
+>this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 17, 10))
+        }
+    };
+}
+

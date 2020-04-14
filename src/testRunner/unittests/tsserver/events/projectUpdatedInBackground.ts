@@ -1,6 +1,6 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
-        function verifyFiles(caption: string, actual: ReadonlyArray<string>, expected: ReadonlyArray<string>) {
+        function verifyFiles(caption: string, actual: readonly string[], expected: readonly string[]) {
             assert.equal(actual.length, expected.length, `Incorrect number of ${caption}. Actual: ${actual} Expected: ${expected}`);
             const seen = createMap<true>();
             forEach(actual, f => {
@@ -418,7 +418,7 @@ namespace ts.projectSystem {
             });
 
             describe("resolution when resolution cache size", () => {
-                function verifyWithMaxCacheLimit(limitHit: boolean, useSlashRootAsSomeNotRootFolderInUserDirectory: boolean) {
+                function verifyWithMaxCacheLimit(useSlashRootAsSomeNotRootFolderInUserDirectory: boolean) {
                     const rootFolder = useSlashRootAsSomeNotRootFolderInUserDirectory ? "/user/username/rootfolder/otherfolder/" : "/";
                     const file1: File = {
                         path: rootFolder + "a/b/project/file1.ts",
@@ -451,9 +451,6 @@ namespace ts.projectSystem {
                     checkNumberOfProjects(projectService, { configuredProjects: 1 });
                     const project = projectService.configuredProjects.get(configFile.path)!;
                     verifyProject();
-                    if (limitHit) {
-                        (project as ResolutionCacheHost).maxNumberOfFilesToIterateForInvalidation = 1;
-                    }
 
                     file3.content += "export class d {}";
                     host.reloadFS(projectFiles);
@@ -495,20 +492,12 @@ namespace ts.projectSystem {
                     }
                 }
 
-                it("limit not hit and project is not at root level", () => {
-                    verifyWithMaxCacheLimit(/*limitHit*/ false, /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ true);
+                it("project is not at root level", () => {
+                    verifyWithMaxCacheLimit(/*useSlashRootAsSomeNotRootFolderInUserDirectory*/ true);
                 });
 
-                it("limit hit and project is not at root level", () => {
-                    verifyWithMaxCacheLimit(/*limitHit*/ true, /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ true);
-                });
-
-                it("limit not hit and project is at root level", () => {
-                    verifyWithMaxCacheLimit(/*limitHit*/ false, /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ false);
-                });
-
-                it("limit hit and project is at root level", () => {
-                    verifyWithMaxCacheLimit(/*limitHit*/ true, /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ false);
+                it("project is at root level", () => {
+                    verifyWithMaxCacheLimit(/*useSlashRootAsSomeNotRootFolderInUserDirectory*/ false);
                 });
             });
         }
@@ -528,11 +517,11 @@ namespace ts.projectSystem {
                     return JSON.stringify(event && { eventName: event.eventName, data: event.data });
                 }
 
-                function eventsToString(events: ReadonlyArray<server.ProjectsUpdatedInBackgroundEvent>) {
+                function eventsToString(events: readonly server.ProjectsUpdatedInBackgroundEvent[]) {
                     return "[" + map(events, eventToString).join(",") + "]";
                 }
 
-                function verifyProjectsUpdatedInBackgroundEventHandler(expectedEvents: ReadonlyArray<server.ProjectsUpdatedInBackgroundEvent>) {
+                function verifyProjectsUpdatedInBackgroundEventHandler(expectedEvents: readonly server.ProjectsUpdatedInBackgroundEvent[]) {
                     assert.equal(projectChangedEvents.length, expectedEvents.length, `Incorrect number of events Actual: ${eventsToString(projectChangedEvents)} Expected: ${eventsToString(expectedEvents)}`);
                     forEach(projectChangedEvents, (actualEvent, i) => {
                         const expectedEvent = expectedEvents[i];
@@ -565,7 +554,7 @@ namespace ts.projectSystem {
                     verifyInitialOpen: createVerifyInitialOpen(session, verifyProjectsUpdatedInBackgroundEventHandler)
                 };
 
-                function verifyProjectsUpdatedInBackgroundEventHandler(expected: ReadonlyArray<server.ProjectsUpdatedInBackgroundEvent>) {
+                function verifyProjectsUpdatedInBackgroundEventHandler(expected: readonly server.ProjectsUpdatedInBackgroundEvent[]) {
                     const expectedEvents: protocol.ProjectsUpdatedInBackgroundEventBody[] = map(expected, e => {
                         return {
                             openFiles: e.data.openFiles

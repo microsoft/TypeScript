@@ -1,0 +1,101 @@
+=== tests/cases/compiler/usage.js ===
+const { Thing, useThing, cbThing } = require("./index");
+>Thing : Readonly<{ a: string; b: string; }>
+>useThing : (x: string) => void
+>cbThing : (x: (x: string) => void) => void
+>require("./index") : typeof import("tests/cases/compiler/index")
+>require : any
+>"./index" : "./index"
+
+useThing(Thing.a);
+>useThing(Thing.a) : void
+>useThing : (x: string) => void
+>Thing.a : string
+>Thing : Readonly<{ a: string; b: string; }>
+>a : string
+
+/**
+ * @typedef {Object} LogEntry
+ * @property {string} type
+ * @property {number} time
+ */
+
+cbThing(type => {
+>cbThing(type => {    /** @type {LogEntry} */    const logEntry = {        time: Date.now(),        type,    };}) : void
+>cbThing : (x: (x: string) => void) => void
+>type => {    /** @type {LogEntry} */    const logEntry = {        time: Date.now(),        type,    };} : (type: string) => void
+>type : string
+
+    /** @type {LogEntry} */
+    const logEntry = {
+>logEntry : LogEntry
+>{        time: Date.now(),        type,    } : { time: number; type: string; }
+
+        time: Date.now(),
+>time : number
+>Date.now() : number
+>Date.now : () => number
+>Date : DateConstructor
+>now : () => number
+
+        type,
+>type : string
+
+    };
+});
+
+=== tests/cases/compiler/index.js ===
+/** @enum {string} */
+const Thing = Object.freeze({
+>Thing : Readonly<{ a: string; b: string; }>
+>Object.freeze({    a: "thing",    b: "chill"}) : Readonly<{ a: string; b: string; }>
+>Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>Object : ObjectConstructor
+>freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>{    a: "thing",    b: "chill"} : { a: string; b: string; }
+
+    a: "thing",
+>a : string
+>"thing" : "thing"
+
+    b: "chill"
+>b : string
+>"chill" : "chill"
+
+});
+
+exports.Thing = Thing;
+>exports.Thing = Thing : Readonly<{ a: string; b: string; }>
+>exports.Thing : Readonly<{ a: string; b: string; }>
+>exports : typeof import("tests/cases/compiler/index")
+>Thing : Readonly<{ a: string; b: string; }>
+>Thing : Readonly<{ a: string; b: string; }>
+
+/**
+ * @param {Thing} x
+ */
+function useThing(x) {}
+>useThing : (x: Thing) => void
+>x : string
+
+exports.useThing = useThing;
+>exports.useThing = useThing : (x: string) => void
+>exports.useThing : (x: string) => void
+>exports : typeof import("tests/cases/compiler/index")
+>useThing : (x: string) => void
+>useThing : (x: string) => void
+
+/**
+ * @param {(x: Thing) => void} x
+ */
+function cbThing(x) {}
+>cbThing : (x: (x: Thing) => void) => void
+>x : (x: string) => void
+
+exports.cbThing = cbThing;
+>exports.cbThing = cbThing : (x: (x: string) => void) => void
+>exports.cbThing : (x: (x: string) => void) => void
+>exports : typeof import("tests/cases/compiler/index")
+>cbThing : (x: (x: string) => void) => void
+>cbThing : (x: (x: string) => void) => void
+

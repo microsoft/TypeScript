@@ -56,7 +56,7 @@ declare var connect: Connect;
 
 const myStoreConnect: Connect = function(
 >myStoreConnect : Connect
->function(    mapStateToProps?: any,    mapDispatchToProps?: any,    mergeProps?: any,    options: unknown = {},) {    return connect(        mapStateToProps,        mapDispatchToProps,        mergeProps,        options,    );} : (mapStateToProps?: any, mapDispatchToProps?: any, mergeProps?: any, options?: unknown) => InferableComponentEnhancerWithProps<{}, {}>
+>function(    mapStateToProps?: any,    mapDispatchToProps?: any,    mergeProps?: any,    options: unknown = {},) {    return connect(        mapStateToProps,        mapDispatchToProps,        mergeProps,        options,    );} : (mapStateToProps?: any, mapDispatchToProps?: any, mergeProps?: any, options?: unknown) => InferableComponentEnhancerWithProps<unknown, unknown>
 
     mapStateToProps?: any,
 >mapStateToProps : any
@@ -73,7 +73,7 @@ const myStoreConnect: Connect = function(
 
 ) {
     return connect(
->connect(        mapStateToProps,        mapDispatchToProps,        mergeProps,        options,    ) : InferableComponentEnhancerWithProps<{}, {}>
+>connect(        mapStateToProps,        mapDispatchToProps,        mergeProps,        options,    ) : InferableComponentEnhancerWithProps<unknown, unknown>
 >connect : Connect
 
         mapStateToProps,
@@ -90,3 +90,6 @@ const myStoreConnect: Connect = function(
 
     );
 };
+
+export {};
+

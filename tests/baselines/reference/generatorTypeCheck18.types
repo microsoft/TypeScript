@@ -11,10 +11,10 @@ function* g(): IterableIterator<Foo> {
 >g : () => IterableIterator<Foo>
 
     yield;
->yield : any
+>yield : undefined
 
     yield new Baz;
->yield new Baz : any
+>yield new Baz : undefined
 >new Baz : Baz
 >Baz : typeof Baz
 }

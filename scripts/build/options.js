@@ -4,18 +4,19 @@ const os = require("os");
 
 /** @type {CommandLineOptions} */
 module.exports = minimist(process.argv.slice(2), {
-    boolean: ["debug", "dirty", "inspect", "light", "colors", "lint", "lkg", "soft", "fix", "failed", "keepFailed"],
-    string: ["browser", "tests", "host", "reporter", "stackTraceLimit", "timeout"],
+    boolean: ["debug", "dirty", "light", "colors", "lint", "lkg", "soft", "fix", "failed", "keepFailed", "force", "built"],
+    string: ["browser", "tests", "inspect", "host", "reporter", "stackTraceLimit", "timeout", "shards", "shardId"],
     alias: {
         "b": "browser",
-        "d": "debug", "debug-brk": "debug",
-        "i": "inspect", "inspect-brk": "inspect",
-        "t": "tests", "test": "tests",
-        "ru": "runners", "runner": "runners",
+        "d": ["debug", "debug-brk"],
+        "i": ["inspect", "inspect-brk"],
+        "t": ["tests", "test"],
+        "ru": ["runners", "runner"],
         "r": "reporter",
-        "c": "colors", "color": "colors",
+        "c": ["colors", "color"],
+        "skippercent": "skipPercent",
         "w": "workers",
-        "f": "fix",
+        "f": "fix"
     },
     default: {
         soft: false,
@@ -35,23 +36,29 @@ module.exports = minimist(process.argv.slice(2), {
         failed: false,
         keepFailed: false,
         lkg: true,
-        dirty: false
+        dirty: false,
+        built: false
     }
 });
+
+if (module.exports.built) {
+    module.exports.lkg = false;
+}
 
 /**
  * @typedef TypedOptions
  * @property {boolean} debug
  * @property {boolean} dirty
- * @property {boolean} inspect
  * @property {boolean} light
  * @property {boolean} colors
  * @property {boolean} lint
  * @property {boolean} lkg
+ * @property {boolean} built
  * @property {boolean} soft
  * @property {boolean} fix
  * @property {string} browser
  * @property {string} tests
+ * @property {string} inspect
  * @property {string} runners
  * @property {string|number} workers
  * @property {string} host

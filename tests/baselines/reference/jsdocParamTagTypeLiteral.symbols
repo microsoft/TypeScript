@@ -7,7 +7,7 @@ function normal(notSpecial) {
 >normal : Symbol(normal, Decl(0.js, 0, 0))
 >notSpecial : Symbol(notSpecial, Decl(0.js, 4, 16))
 
-    notSpecial; // should just be 'any'
+    notSpecial; // should just be 'Object'
 >notSpecial : Symbol(notSpecial, Decl(0.js, 4, 16))
 }
 normal(12);

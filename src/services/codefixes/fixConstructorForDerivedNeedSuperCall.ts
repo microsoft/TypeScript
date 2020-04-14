@@ -17,8 +17,8 @@ namespace ts.codefix {
 
     function getNode(sourceFile: SourceFile, pos: number): ConstructorDeclaration {
         const token = getTokenAtPosition(sourceFile, pos);
-        Debug.assert(token.kind === SyntaxKind.ConstructorKeyword);
-        return token.parent as ConstructorDeclaration;
+        Debug.assert(isConstructorDeclaration(token.parent), "token should be at the constructor declaration");
+        return token.parent;
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, ctr: ConstructorDeclaration) {

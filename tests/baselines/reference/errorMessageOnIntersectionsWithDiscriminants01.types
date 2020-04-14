@@ -1,0 +1,27 @@
+=== tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts ===
+export type Common = { test: true } | { test: false };
+>Common : Common
+>test : true
+>true : true
+>test : false
+>false : false
+
+export type A = Common & { foo: 1 };
+>A : A
+>foo : 1
+
+export type B = Common & { bar: 1 };
+>B : B
+>bar : 1
+
+declare const a: A;
+>a : A
+
+declare let b: B;
+>b : B
+
+b = a;
+>b = a : A
+>b : B
+>a : A
+

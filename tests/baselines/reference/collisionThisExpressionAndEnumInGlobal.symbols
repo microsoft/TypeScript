@@ -10,4 +10,5 @@ enum _this { // Error
 }
 var f = () => this;
 >f : Symbol(f, Decl(collisionThisExpressionAndEnumInGlobal.ts, 4, 3))
+>this : Symbol(globalThis)
 

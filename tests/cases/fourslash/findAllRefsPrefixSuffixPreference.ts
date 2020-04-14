@@ -2,22 +2,22 @@
 
 // @Filename: /file1.ts
 ////declare function log(s: string | number): void;
-////const [|{| "isWriteAccess": true, "isDefinition": true |}q|] = 1;
-////export { [|{| "isWriteAccess": true, "isDefinition": true |}q|] };
+////[|const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}q|] = 1;|]
+////[|export { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}q|] };|]
 ////const x = {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}z|]: 'value'
+////    [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}z|]: 'value'|]
 ////}
-////const { [|{| "isWriteAccess": true, "isDefinition": true |}z|] } = x;
+////[|const { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}z|] } = x;|]
 ////log([|z|]);
 
 // @Filename: /file2.ts
 ////declare function log(s: string | number): void;
-////import { [|{| "isWriteAccess": true, "isDefinition": true |}q|] } from "./file1";
+////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 9 |}q|] } from "./file1";|]
 ////log([|q|] + 1);
 
 verify.noErrors();
 
-const [q0, q1, z0, z1, z2, q2, q3] = test.ranges();
+const [q0Def, q0, q1Def, q1, z0Def, z0, z1Def, z1, z2, q2Def, q2, q3] = test.ranges();
 const qFile1Ranges = [q0, q1];
 const qFile2Ranges = [q2, q3];
 const qFile1ReferenceGroup: FourSlashInterface.ReferenceGroup = {

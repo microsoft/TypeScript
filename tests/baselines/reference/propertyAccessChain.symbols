@@ -1,0 +1,102 @@
+=== tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.ts ===
+declare const o1: undefined | { b: string };
+>o1 : Symbol(o1, Decl(propertyAccessChain.ts, 0, 13))
+>b : Symbol(b, Decl(propertyAccessChain.ts, 0, 31))
+
+o1?.b;
+>o1?.b : Symbol(b, Decl(propertyAccessChain.ts, 0, 31))
+>o1 : Symbol(o1, Decl(propertyAccessChain.ts, 0, 13))
+>b : Symbol(b, Decl(propertyAccessChain.ts, 0, 31))
+
+declare const o2: undefined | { b: { c: string } };
+>o2 : Symbol(o2, Decl(propertyAccessChain.ts, 3, 13))
+>b : Symbol(b, Decl(propertyAccessChain.ts, 3, 31))
+>c : Symbol(c, Decl(propertyAccessChain.ts, 3, 36))
+
+o2?.b.c;
+>o2?.b.c : Symbol(c, Decl(propertyAccessChain.ts, 3, 36))
+>o2?.b : Symbol(b, Decl(propertyAccessChain.ts, 3, 31))
+>o2 : Symbol(o2, Decl(propertyAccessChain.ts, 3, 13))
+>b : Symbol(b, Decl(propertyAccessChain.ts, 3, 31))
+>c : Symbol(c, Decl(propertyAccessChain.ts, 3, 36))
+
+declare const o3: { b: undefined | { c: string } };
+>o3 : Symbol(o3, Decl(propertyAccessChain.ts, 6, 13))
+>b : Symbol(b, Decl(propertyAccessChain.ts, 6, 19))
+>c : Symbol(c, Decl(propertyAccessChain.ts, 6, 36))
+
+o3.b?.c;
+>o3.b?.c : Symbol(c, Decl(propertyAccessChain.ts, 6, 36))
+>o3.b : Symbol(b, Decl(propertyAccessChain.ts, 6, 19))
+>o3 : Symbol(o3, Decl(propertyAccessChain.ts, 6, 13))
+>b : Symbol(b, Decl(propertyAccessChain.ts, 6, 19))
+>c : Symbol(c, Decl(propertyAccessChain.ts, 6, 36))
+
+declare const o4: { b?: { c: { d?: { e: string } } } };
+>o4 : Symbol(o4, Decl(propertyAccessChain.ts, 9, 13))
+>b : Symbol(b, Decl(propertyAccessChain.ts, 9, 19))
+>c : Symbol(c, Decl(propertyAccessChain.ts, 9, 25))
+>d : Symbol(d, Decl(propertyAccessChain.ts, 9, 30))
+>e : Symbol(e, Decl(propertyAccessChain.ts, 9, 36))
+
+o4.b?.c.d?.e;
+>o4.b?.c.d?.e : Symbol(e, Decl(propertyAccessChain.ts, 9, 36))
+>o4.b?.c.d : Symbol(d, Decl(propertyAccessChain.ts, 9, 30))
+>o4.b?.c : Symbol(c, Decl(propertyAccessChain.ts, 9, 25))
+>o4.b : Symbol(b, Decl(propertyAccessChain.ts, 9, 19))
+>o4 : Symbol(o4, Decl(propertyAccessChain.ts, 9, 13))
+>b : Symbol(b, Decl(propertyAccessChain.ts, 9, 19))
+>c : Symbol(c, Decl(propertyAccessChain.ts, 9, 25))
+>d : Symbol(d, Decl(propertyAccessChain.ts, 9, 30))
+>e : Symbol(e, Decl(propertyAccessChain.ts, 9, 36))
+
+declare const o5: { b?(): { c: { d?: { e: string } } } };
+>o5 : Symbol(o5, Decl(propertyAccessChain.ts, 12, 13))
+>b : Symbol(b, Decl(propertyAccessChain.ts, 12, 19))
+>c : Symbol(c, Decl(propertyAccessChain.ts, 12, 27))
+>d : Symbol(d, Decl(propertyAccessChain.ts, 12, 32))
+>e : Symbol(e, Decl(propertyAccessChain.ts, 12, 38))
+
+o5.b?.().c.d?.e;
+>o5.b?.().c.d?.e : Symbol(e, Decl(propertyAccessChain.ts, 12, 38))
+>o5.b?.().c.d : Symbol(d, Decl(propertyAccessChain.ts, 12, 32))
+>o5.b?.().c : Symbol(c, Decl(propertyAccessChain.ts, 12, 27))
+>o5.b : Symbol(b, Decl(propertyAccessChain.ts, 12, 19))
+>o5 : Symbol(o5, Decl(propertyAccessChain.ts, 12, 13))
+>b : Symbol(b, Decl(propertyAccessChain.ts, 12, 19))
+>c : Symbol(c, Decl(propertyAccessChain.ts, 12, 27))
+>d : Symbol(d, Decl(propertyAccessChain.ts, 12, 32))
+>e : Symbol(e, Decl(propertyAccessChain.ts, 12, 38))
+
+// GH#33744
+declare const o6: <T>() => undefined | ({ x: number });
+>o6 : Symbol(o6, Decl(propertyAccessChain.ts, 16, 13))
+>T : Symbol(T, Decl(propertyAccessChain.ts, 16, 19))
+>x : Symbol(x, Decl(propertyAccessChain.ts, 16, 41))
+
+o6<number>()?.x;
+>o6<number>()?.x : Symbol(x, Decl(propertyAccessChain.ts, 16, 41))
+>o6 : Symbol(o6, Decl(propertyAccessChain.ts, 16, 13))
+>x : Symbol(x, Decl(propertyAccessChain.ts, 16, 41))
+
+// GH#34109
+o1?.b ? 1 : 0;
+>o1?.b : Symbol(b, Decl(propertyAccessChain.ts, 0, 31))
+>o1 : Symbol(o1, Decl(propertyAccessChain.ts, 0, 13))
+>b : Symbol(b, Decl(propertyAccessChain.ts, 0, 31))
+
+// GH#36031
+o2?.b!.c;
+>o2?.b!.c : Symbol(c, Decl(propertyAccessChain.ts, 3, 36))
+>o2?.b : Symbol(b, Decl(propertyAccessChain.ts, 3, 31))
+>o2 : Symbol(o2, Decl(propertyAccessChain.ts, 3, 13))
+>b : Symbol(b, Decl(propertyAccessChain.ts, 3, 31))
+>c : Symbol(c, Decl(propertyAccessChain.ts, 3, 36))
+
+o2?.b!.c!;
+>o2?.b!.c : Symbol(c, Decl(propertyAccessChain.ts, 3, 36))
+>o2?.b : Symbol(b, Decl(propertyAccessChain.ts, 3, 31))
+>o2 : Symbol(o2, Decl(propertyAccessChain.ts, 3, 13))
+>b : Symbol(b, Decl(propertyAccessChain.ts, 3, 31))
+>c : Symbol(c, Decl(propertyAccessChain.ts, 3, 36))
+

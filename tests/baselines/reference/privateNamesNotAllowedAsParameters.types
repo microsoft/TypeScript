@@ -1,0 +1,9 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesNotAllowedAsParameters.ts ===
+class A {
+>A : A
+
+    setFoo(#foo: string) {}
+>setFoo : (#foo: string) => void
+>#foo : string
+}
+

@@ -6,3 +6,10 @@ function foo<T>() { }
 foo<>();
 >foo : Symbol(foo, Decl(emptyTypeArgumentList.ts, 0, 0))
 
+// https://github.com/microsoft/TypeScript/issues/33041
+function noParams() {}
+>noParams : Symbol(noParams, Decl(emptyTypeArgumentList.ts, 1, 8))
+
+noParams<>();
+>noParams : Symbol(noParams, Decl(emptyTypeArgumentList.ts, 1, 8))
+

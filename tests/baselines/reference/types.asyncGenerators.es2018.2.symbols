@@ -1,0 +1,152 @@
+=== tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts ===
+async function * inferReturnType1() {
+>inferReturnType1 : Symbol(inferReturnType1, Decl(types.asyncGenerators.es2018.2.ts, 0, 0))
+
+    yield* {};
+}
+async function * inferReturnType2() {
+>inferReturnType2 : Symbol(inferReturnType2, Decl(types.asyncGenerators.es2018.2.ts, 2, 1))
+
+    yield* inferReturnType2();
+>inferReturnType2 : Symbol(inferReturnType2, Decl(types.asyncGenerators.es2018.2.ts, 2, 1))
+}
+async function * inferReturnType3() {
+>inferReturnType3 : Symbol(inferReturnType3, Decl(types.asyncGenerators.es2018.2.ts, 5, 1))
+
+    yield* Promise.resolve([1, 2]);
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+}
+const assignability1: () => AsyncIterableIterator<number> = async function * () {
+>assignability1 : Symbol(assignability1, Decl(types.asyncGenerators.es2018.2.ts, 9, 5))
+>AsyncIterableIterator : Symbol(AsyncIterableIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    yield "a";
+};
+const assignability2: () => AsyncIterableIterator<number> = async function * () {
+>assignability2 : Symbol(assignability2, Decl(types.asyncGenerators.es2018.2.ts, 12, 5))
+>AsyncIterableIterator : Symbol(AsyncIterableIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    yield* ["a", "b"];
+};
+const assignability3: () => AsyncIterableIterator<number> = async function * () {
+>assignability3 : Symbol(assignability3, Decl(types.asyncGenerators.es2018.2.ts, 15, 5))
+>AsyncIterableIterator : Symbol(AsyncIterableIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    yield* (async function * () { yield "a"; })();
+};
+const assignability4: () => AsyncIterable<number> = async function * () {
+>assignability4 : Symbol(assignability4, Decl(types.asyncGenerators.es2018.2.ts, 18, 5))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    yield "a";
+};
+const assignability5: () => AsyncIterable<number> = async function * () {
+>assignability5 : Symbol(assignability5, Decl(types.asyncGenerators.es2018.2.ts, 21, 5))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    yield* ["a", "b"];
+};
+const assignability6: () => AsyncIterable<number> = async function * () {
+>assignability6 : Symbol(assignability6, Decl(types.asyncGenerators.es2018.2.ts, 24, 5))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    yield* (async function * () { yield "a"; })();
+};
+const assignability7: () => AsyncIterator<number> = async function * () {
+>assignability7 : Symbol(assignability7, Decl(types.asyncGenerators.es2018.2.ts, 27, 5))
+>AsyncIterator : Symbol(AsyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    yield "a";
+};
+const assignability8: () => AsyncIterator<number> = async function * () {
+>assignability8 : Symbol(assignability8, Decl(types.asyncGenerators.es2018.2.ts, 30, 5))
+>AsyncIterator : Symbol(AsyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    yield* ["a", "b"];
+};
+const assignability9: () => AsyncIterator<number> = async function * () {
+>assignability9 : Symbol(assignability9, Decl(types.asyncGenerators.es2018.2.ts, 33, 5))
+>AsyncIterator : Symbol(AsyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    yield* (async function * () { yield "a"; })();
+};
+async function * explicitReturnType1(): AsyncIterableIterator<number> {
+>explicitReturnType1 : Symbol(explicitReturnType1, Decl(types.asyncGenerators.es2018.2.ts, 35, 2))
+>AsyncIterableIterator : Symbol(AsyncIterableIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    yield "a";
+}
+async function * explicitReturnType2(): AsyncIterableIterator<number> {
+>explicitReturnType2 : Symbol(explicitReturnType2, Decl(types.asyncGenerators.es2018.2.ts, 38, 1))
+>AsyncIterableIterator : Symbol(AsyncIterableIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    yield* ["a", "b"];
+}
+async function * explicitReturnType3(): AsyncIterableIterator<number> {
+>explicitReturnType3 : Symbol(explicitReturnType3, Decl(types.asyncGenerators.es2018.2.ts, 41, 1))
+>AsyncIterableIterator : Symbol(AsyncIterableIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    yield* (async function * () { yield "a"; })();
+}
+async function * explicitReturnType4(): AsyncIterable<number> {
+>explicitReturnType4 : Symbol(explicitReturnType4, Decl(types.asyncGenerators.es2018.2.ts, 44, 1))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    yield "a";
+}
+async function * explicitReturnType5(): AsyncIterable<number> {
+>explicitReturnType5 : Symbol(explicitReturnType5, Decl(types.asyncGenerators.es2018.2.ts, 47, 1))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    yield* ["a", "b"];
+}
+async function * explicitReturnType6(): AsyncIterable<number> {
+>explicitReturnType6 : Symbol(explicitReturnType6, Decl(types.asyncGenerators.es2018.2.ts, 50, 1))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    yield* (async function * () { yield "a"; })();
+}
+async function * explicitReturnType7(): AsyncIterator<number> {
+>explicitReturnType7 : Symbol(explicitReturnType7, Decl(types.asyncGenerators.es2018.2.ts, 53, 1))
+>AsyncIterator : Symbol(AsyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    yield "a";
+}
+async function * explicitReturnType8(): AsyncIterator<number> {
+>explicitReturnType8 : Symbol(explicitReturnType8, Decl(types.asyncGenerators.es2018.2.ts, 56, 1))
+>AsyncIterator : Symbol(AsyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    yield* ["a", "b"];
+}
+async function * explicitReturnType9(): AsyncIterator<number> {
+>explicitReturnType9 : Symbol(explicitReturnType9, Decl(types.asyncGenerators.es2018.2.ts, 59, 1))
+>AsyncIterator : Symbol(AsyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    yield* (async function * () { yield "a"; })();
+}
+async function * explicitReturnType10(): IterableIterator<number> {
+>explicitReturnType10 : Symbol(explicitReturnType10, Decl(types.asyncGenerators.es2018.2.ts, 62, 1))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    yield 1;
+}
+async function * explicitReturnType11(): Iterable<number> {
+>explicitReturnType11 : Symbol(explicitReturnType11, Decl(types.asyncGenerators.es2018.2.ts, 65, 1))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    yield 1;
+}
+async function * explicitReturnType12(): Iterator<number> {
+>explicitReturnType12 : Symbol(explicitReturnType12, Decl(types.asyncGenerators.es2018.2.ts, 68, 1))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    yield 1;
+}
+async function * yieldStar() {
+>yieldStar : Symbol(yieldStar, Decl(types.asyncGenerators.es2018.2.ts, 71, 1))
+
+    yield* {};
+}
+

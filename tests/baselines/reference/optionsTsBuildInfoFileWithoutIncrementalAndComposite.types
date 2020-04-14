@@ -1,0 +1,5 @@
+=== tests/cases/compiler/optionsTsBuildInfoFileWithoutIncrementalAndComposite.ts ===
+const x = "Hello World";
+>x : "Hello World"
+>"Hello World" : "Hello World"
+

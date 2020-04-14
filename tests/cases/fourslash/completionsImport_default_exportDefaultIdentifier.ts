@@ -14,9 +14,19 @@
 goTo.marker("");
 verify.completions({
     marker: "",
-    includes: { name: "foo", source: "/a", sourceDisplay: "./a", text: "(alias) const foo: 0\nexport default foo", kind: "alias", hasAction: true },
+    includes: {
+        name: "foo",
+        source: "/a",
+        sourceDisplay: "./a",
+        text: "(alias) const foo: 0\nexport default foo",
+        kind: "alias",
+        kindModifiers: "export",
+        hasAction: true,
+        sortText: completion.SortText.AutoImportSuggestions
+    },
     preferences: { includeCompletionsForModuleExports: true },
 });
+
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
     source: "/a",

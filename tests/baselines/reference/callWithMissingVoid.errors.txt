@@ -1,6 +1,6 @@
-tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(16,1): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(19,1): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(22,1): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(16,6): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(19,10): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(22,8): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(35,31): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(36,35): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(37,33): error TS2554: Expected 1 arguments, but got 0.
@@ -28,19 +28,19 @@ tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(75,1): 
     
     declare const xAny: X<any>;
     xAny.f() // error, any still expects an argument
-    ~~~~~~~~
+         ~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:3:7: An argument for 't' was not provided.
     
     declare const xUnknown: X<unknown>;
     xUnknown.f() // error, unknown still expects an argument
-    ~~~~~~~~~~~~
+             ~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:3:7: An argument for 't' was not provided.
     
     declare const xNever: X<never>;
     xNever.f() // error, never still expects an argument
-    ~~~~~~~~~~
+           ~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:3:7: An argument for 't' was not provided.
     

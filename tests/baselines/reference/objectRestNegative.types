@@ -29,7 +29,7 @@ let notAssignable: { a: string };
 
 
 function stillMustBeLast({ ...mustBeLast, a }: { a: number, b: string }): void {
->stillMustBeLast : ({ ...mustBeLast, a }: { a: number; b: string; }) => void
+>stillMustBeLast : ({ ...mustBeLast, a }: {    a: number;    b: string;}) => void
 >mustBeLast : { b: string; }
 >a : number
 >a : number

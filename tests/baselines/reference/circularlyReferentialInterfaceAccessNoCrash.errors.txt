@@ -1,0 +1,23 @@
+tests/cases/compiler/circularlyReferentialInterfaceAccessNoCrash.ts(1,12): error TS4109: Type arguments for 'Mx' circularly reference themselves.
+tests/cases/compiler/circularlyReferentialInterfaceAccessNoCrash.ts(8,16): error TS4110: Tuple type arguments circularly reference themselves.
+tests/cases/compiler/circularlyReferentialInterfaceAccessNoCrash.ts(10,19): error TS4110: Tuple type arguments circularly reference themselves.
+
+
+==== tests/cases/compiler/circularlyReferentialInterfaceAccessNoCrash.ts (3 errors) ====
+    type Mxs = Mx<'list', Mxs['p1']>;
+               ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4109: Type arguments for 'Mx' circularly reference themselves.
+    
+    interface Mx<T, K> {
+      p1: T;
+      p2: K;
+    }
+    
+    type ArrElem = ['list', ArrElem[number][0]][];
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4110: Tuple type arguments circularly reference themselves.
+    
+    type TupleElem = [['list', TupleElem[0][0]]];
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4110: Tuple type arguments circularly reference themselves.
+    

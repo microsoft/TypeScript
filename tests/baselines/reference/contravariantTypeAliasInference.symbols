@@ -1,0 +1,64 @@
+=== tests/cases/compiler/contravariantTypeAliasInference.ts ===
+type Func1<T> = (x: T) => void;
+>Func1 : Symbol(Func1, Decl(contravariantTypeAliasInference.ts, 0, 0))
+>T : Symbol(T, Decl(contravariantTypeAliasInference.ts, 0, 11))
+>x : Symbol(x, Decl(contravariantTypeAliasInference.ts, 0, 17))
+>T : Symbol(T, Decl(contravariantTypeAliasInference.ts, 0, 11))
+
+type Func2<T> = ((x: T) => void) | undefined;
+>Func2 : Symbol(Func2, Decl(contravariantTypeAliasInference.ts, 0, 31))
+>T : Symbol(T, Decl(contravariantTypeAliasInference.ts, 1, 11))
+>x : Symbol(x, Decl(contravariantTypeAliasInference.ts, 1, 18))
+>T : Symbol(T, Decl(contravariantTypeAliasInference.ts, 1, 11))
+
+declare let f1: Func1<string>;
+>f1 : Symbol(f1, Decl(contravariantTypeAliasInference.ts, 3, 11))
+>Func1 : Symbol(Func1, Decl(contravariantTypeAliasInference.ts, 0, 0))
+
+declare let f2: Func1<"a">;
+>f2 : Symbol(f2, Decl(contravariantTypeAliasInference.ts, 4, 11))
+>Func1 : Symbol(Func1, Decl(contravariantTypeAliasInference.ts, 0, 0))
+
+declare function foo<T>(f1: Func1<T>, f2: Func1<T>): void;
+>foo : Symbol(foo, Decl(contravariantTypeAliasInference.ts, 4, 27))
+>T : Symbol(T, Decl(contravariantTypeAliasInference.ts, 6, 21))
+>f1 : Symbol(f1, Decl(contravariantTypeAliasInference.ts, 6, 24))
+>Func1 : Symbol(Func1, Decl(contravariantTypeAliasInference.ts, 0, 0))
+>T : Symbol(T, Decl(contravariantTypeAliasInference.ts, 6, 21))
+>f2 : Symbol(f2, Decl(contravariantTypeAliasInference.ts, 6, 37))
+>Func1 : Symbol(Func1, Decl(contravariantTypeAliasInference.ts, 0, 0))
+>T : Symbol(T, Decl(contravariantTypeAliasInference.ts, 6, 21))
+
+foo(f1, f2);
+>foo : Symbol(foo, Decl(contravariantTypeAliasInference.ts, 4, 27))
+>f1 : Symbol(f1, Decl(contravariantTypeAliasInference.ts, 3, 11))
+>f2 : Symbol(f2, Decl(contravariantTypeAliasInference.ts, 4, 11))
+
+declare let g1: Func2<string>;
+>g1 : Symbol(g1, Decl(contravariantTypeAliasInference.ts, 10, 11))
+>Func2 : Symbol(Func2, Decl(contravariantTypeAliasInference.ts, 0, 31))
+
+declare let g2: Func2<"a">;
+>g2 : Symbol(g2, Decl(contravariantTypeAliasInference.ts, 11, 11))
+>Func2 : Symbol(Func2, Decl(contravariantTypeAliasInference.ts, 0, 31))
+
+declare function bar<T>(g1: Func2<T>, g2: Func2<T>): void;
+>bar : Symbol(bar, Decl(contravariantTypeAliasInference.ts, 11, 27))
+>T : Symbol(T, Decl(contravariantTypeAliasInference.ts, 13, 21))
+>g1 : Symbol(g1, Decl(contravariantTypeAliasInference.ts, 13, 24))
+>Func2 : Symbol(Func2, Decl(contravariantTypeAliasInference.ts, 0, 31))
+>T : Symbol(T, Decl(contravariantTypeAliasInference.ts, 13, 21))
+>g2 : Symbol(g2, Decl(contravariantTypeAliasInference.ts, 13, 37))
+>Func2 : Symbol(Func2, Decl(contravariantTypeAliasInference.ts, 0, 31))
+>T : Symbol(T, Decl(contravariantTypeAliasInference.ts, 13, 21))
+
+bar(f1, f2);
+>bar : Symbol(bar, Decl(contravariantTypeAliasInference.ts, 11, 27))
+>f1 : Symbol(f1, Decl(contravariantTypeAliasInference.ts, 3, 11))
+>f2 : Symbol(f2, Decl(contravariantTypeAliasInference.ts, 4, 11))
+
+bar(g1, g2);
+>bar : Symbol(bar, Decl(contravariantTypeAliasInference.ts, 11, 27))
+>g1 : Symbol(g1, Decl(contravariantTypeAliasInference.ts, 10, 11))
+>g2 : Symbol(g2, Decl(contravariantTypeAliasInference.ts, 11, 11))
+

@@ -14,11 +14,10 @@
 //
 
 /* @internal */
-let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { return this; })();
+let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { return this; })(); // eslint-disable-line prefer-const
 
 // We need to use 'null' to interface with the managed side.
-/* tslint:disable:no-null-keyword */
-/* tslint:disable:no-in-operator */
+/* eslint-disable no-in-operator */
 
 /* @internal */
 namespace ts {
@@ -29,7 +28,7 @@ namespace ts {
         packageNameToTypingLocation: Map<JsTyping.CachedTyping>;       // The map of package names to their cached typing locations and installed versions
         typeAcquisition: TypeAcquisition;               // Used to customize the type acquisition process
         compilerOptions: CompilerOptions;               // Used as a source for typing inference
-        unresolvedImports: ReadonlyArray<string>;       // List of unresolved module ids from imports
+        unresolvedImports: readonly string[];       // List of unresolved module ids from imports
         typesRegistry: ReadonlyMap<MapLike<string>>;    // The map of available typings in npm to maps of TS versions to their latest supported versions
     }
 
@@ -165,6 +164,7 @@ namespace ts {
          * { canRename: boolean, localizedErrorMessage: string, displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: { start; length } }
          */
         getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): string;
+        getSmartSelectionRange(fileName: string, position: number): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -271,6 +271,10 @@ namespace ts {
          */
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): string;
 
+        prepareCallHierarchy(fileName: string, position: number): string;
+        provideCallHierarchyIncomingCalls(fileName: string, position: number): string;
+        provideCallHierarchyOutgoingCalls(fileName: string, position: number): string;
+
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
     }
@@ -309,9 +313,11 @@ namespace ts {
         public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange | undefined {
             const oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
             const encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
+            /* eslint-disable no-null/no-null */
             if (encoded === null) {
                 return null!; // TODO: GH#18217
             }
+            /* eslint-enable no-null/no-null */
 
             const decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded!); // TODO: GH#18217
             return createTextChangeRange(
@@ -396,6 +402,7 @@ namespace ts {
 
         public getCompilationSettings(): CompilerOptions {
             const settingsJson = this.shimHost.getCompilationSettings();
+            // eslint-disable-next-line no-null/no-null
             if (settingsJson === null || settingsJson === "") {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
             }
@@ -429,6 +436,7 @@ namespace ts {
         }
 
         public getLocalizedDiagnosticMessages() {
+            /* eslint-disable no-null/no-null */
             const diagnosticMessagesJson = this.shimHost.getLocalizedDiagnosticMessages();
             if (diagnosticMessagesJson === null || diagnosticMessagesJson === "") {
                 return null;
@@ -441,6 +449,7 @@ namespace ts {
                 this.log(e.description || "diagnosticMessages.generated.json has invalid JSON format");
                 return null;
             }
+            /* eslint-enable no-null/no-null */
         }
 
         public getCancellationToken(): HostCancellationToken {
@@ -460,7 +469,7 @@ namespace ts {
             return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
         }
 
-        public readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: string[], include?: string[], depth?: number): string[] {
+        public readDirectory(path: string, extensions?: readonly string[], exclude?: string[], include?: string[], depth?: number): string[] {
             const pattern = getFileMatcherPatterns(path, exclude, include,
                 this.shimHost.useCaseSensitiveFileNames!(), this.shimHost.getCurrentDirectory()); // TODO: GH#18217
             return JSON.parse(this.shimHost.readDirectory(
@@ -505,7 +514,7 @@ namespace ts {
             }
         }
 
-        public readDirectory(rootDir: string, extensions: ReadonlyArray<string>, exclude: ReadonlyArray<string>, include: ReadonlyArray<string>, depth?: number): string[] {
+        public readDirectory(rootDir: string, extensions: readonly string[], exclude: readonly string[], include: readonly string[], depth?: number): string[] {
             const pattern = getFileMatcherPatterns(rootDir, exclude, include,
                 this.shimHost.useCaseSensitiveFileNames!(), this.shimHost.getCurrentDirectory()); // TODO: GH#18217
             return JSON.parse(this.shimHost.readDirectory(
@@ -543,7 +552,7 @@ namespace ts {
 
         if (logPerformance) {
             const end = timestamp();
-        logger.log(`${actionDescription} completed in ${end - start!} msec`);
+            logger.log(`${actionDescription} completed in ${end - start!} msec`);
             if (isString(result)) {
                 let str = result;
                 if (str.length > 128) {
@@ -593,7 +602,7 @@ namespace ts {
         code: number;
         reportsUnnecessary?: {};
     }
-    export function realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, newLine: string): RealizedDiagnostic[] {
+    export function realizeDiagnostics(diagnostics: readonly Diagnostic[], newLine: string): RealizedDiagnostic[] {
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
     }
 
@@ -632,7 +641,7 @@ namespace ts {
         public dispose(dummy: {}): void {
             this.logger.log("dispose()");
             this.languageService.dispose();
-            this.languageService = null!;
+            this.languageService = null!; // eslint-disable-line no-null/no-null
 
             // force a GC
             if (debugObjectHost && debugObjectHost.CollectGarbage) {
@@ -640,7 +649,7 @@ namespace ts {
                 this.logger.log("CollectGarbage()");
             }
 
-            this.logger = null!;
+            this.logger = null!; // eslint-disable-line no-null/no-null
 
             super.dispose(dummy);
         }
@@ -653,7 +662,7 @@ namespace ts {
         public refresh(throwOnError: boolean): void {
             this.forwardJSONCall(
                 `refresh(${throwOnError})`,
-                () => null
+                () => null // eslint-disable-line no-null/no-null
             );
         }
 
@@ -662,11 +671,11 @@ namespace ts {
                 "cleanupSemanticCache()",
                 () => {
                     this.languageService.cleanupSemanticCache();
-                    return null;
+                    return null; // eslint-disable-line no-null/no-null
                 });
         }
 
-        private realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): { message: string; start: number; length: number; category: string; }[] {
+        private realizeDiagnostics(diagnostics: readonly Diagnostic[]): { message: string; start: number; length: number; category: string; }[] {
             const newLine = getNewLineOrDefaultFromHost(this.host);
             return realizeDiagnostics(diagnostics, newLine);
         }
@@ -838,6 +847,13 @@ namespace ts {
             );
         }
 
+        public getSmartSelectionRange(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `getSmartSelectionRange('${fileName}', ${position})`,
+                () => this.languageService.getSmartSelectionRange(fileName, position)
+            );
+        }
+
         public findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): string {
             return this.forwardJSONCall(
                 `findRenameLocations('${fileName}', ${position}, ${findInStrings}, ${findInComments}, ${providePrefixAndSuffixTextForRename})`,
@@ -906,8 +922,8 @@ namespace ts {
                 () => {
                     const results = this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
                     // workaround for VS document highlighting issue - keep only items from the initial file
-                    const normalizedName = normalizeSlashes(fileName).toLowerCase();
-                    return filter(results, r => normalizeSlashes(r.fileName).toLowerCase() === normalizedName);
+                    const normalizedName = toFileNameLowerCase(normalizeSlashes(fileName));
+                    return filter(results, r => toFileNameLowerCase(normalizeSlashes(r.fileName)) === normalizedName);
                 });
         }
 
@@ -1008,11 +1024,37 @@ namespace ts {
             );
         }
 
+        /// CALL HIERARCHY
+
+        public prepareCallHierarchy(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `prepareCallHierarchy('${fileName}', ${position})`,
+                () => this.languageService.prepareCallHierarchy(fileName, position)
+            );
+        }
+
+        public provideCallHierarchyIncomingCalls(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `provideCallHierarchyIncomingCalls('${fileName}', ${position})`,
+                () => this.languageService.provideCallHierarchyIncomingCalls(fileName, position)
+            );
+        }
+
+        public provideCallHierarchyOutgoingCalls(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `provideCallHierarchyOutgoingCalls('${fileName}', ${position})`,
+                () => this.languageService.provideCallHierarchyOutgoingCalls(fileName, position)
+            );
+        }
+
         /// Emit
         public getEmitOutput(fileName: string): string {
             return this.forwardJSONCall(
                 `getEmitOutput('${fileName}')`,
-                () => this.languageService.getEmitOutput(fileName)
+                () => {
+                    const { diagnostics, ...rest } = this.languageService.getEmitOutput(fileName);
+                    return { ...rest, diagnostics: this.realizeDiagnostics(diagnostics) };
+                }
             );
         }
 
@@ -1254,27 +1296,6 @@ namespace ts {
             throw new Error("Invalid operation");
         }
     }
-
-    // Here we expose the TypeScript services as an external module
-    // so that it may be consumed easily like a node module.
-    declare const module: { exports: {} };
-    if (typeof module !== "undefined" && module.exports) {
-        module.exports = ts;
-    }
 }
 
-/* tslint:enable:no-in-operator */
-/* tslint:enable:no-null */
-
-
-/// TODO: this is used by VS, clean this up on both sides of the interface
-/* @internal */
-namespace TypeScript.Services {
-    export const TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
-}
-
-// 'toolsVersion' gets consumed by the managed side, so it's not unused.
-// TODO: it should be moved into a namespace though.
-
-/* @internal */
-const toolsVersion = ts.versionMajorMinor;
+/* eslint-enable no-in-operator */

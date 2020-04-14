@@ -15,8 +15,8 @@ var zipWith: <T, S, U>(a: T[], b: S[], f: (x: T) => (y: S) => U) => U[];
 >y : S
 
 var result = zipWith([1, 2], ['a', 'b'], pair);
->result : { x: number; y: {}; }[]
->zipWith([1, 2], ['a', 'b'], pair) : { x: number; y: {}; }[]
+>result : { x: number; y: unknown; }[]
+>zipWith([1, 2], ['a', 'b'], pair) : { x: number; y: unknown; }[]
 >zipWith : <T, S, U>(a: T[], b: S[], f: (x: T) => (y: S) => U) => U[]
 >[1, 2] : number[]
 >1 : 1
@@ -29,8 +29,8 @@ var result = zipWith([1, 2], ['a', 'b'], pair);
 var i = result[0].x; // number
 >i : number
 >result[0].x : number
->result[0] : { x: number; y: {}; }
->result : { x: number; y: {}; }[]
+>result[0] : { x: number; y: unknown; }
+>result : { x: number; y: unknown; }[]
 >0 : 0
 >x : number
 

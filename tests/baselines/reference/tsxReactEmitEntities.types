@@ -46,9 +46,15 @@ declare var React: any;
 >div : any
 
 // Preserves single quotes
-<div attr='"'></div>
+<div attr='"'></div>;
 ><div attr='"'></div> : JSX.Element
 >div : any
 >attr : string
+>div : any
+
+// https://github.com/microsoft/TypeScript/issues/35732
+<div>&#x1F408;&#x1F415;&#128007;&#128017;</div>;
+><div>&#x1F408;&#x1F415;&#128007;&#128017;</div> : JSX.Element
+>div : any
 >div : any
 

@@ -135,7 +135,7 @@ namespace ts {
 
     function createDiagnosticForConfigFile(json: any, start: number, length: number, diagnosticMessage: DiagnosticMessage, arg0: string) {
         const text = JSON.stringify(json);
-        const file = <SourceFile>{ // tslint:disable-line no-object-literal-type-assertion
+        const file = <SourceFile>{
             fileName: caseInsensitiveTsconfigPath,
             kind: SyntaxKind.SourceFile,
             text
@@ -1511,6 +1511,31 @@ namespace ts {
             const json = {};
             validateMatches(getExpected(caseSensitiveBasePath), json, caseSensitiveOrderingDiffersWithCaseHost, caseSensitiveBasePath);
             validateMatches(getExpected(caseInsensitiveBasePath), json, caseInsensitiveOrderingDiffersWithCaseHost, caseInsensitiveBasePath);
+        });
+
+        it("when recursive symlinked directories are present", () => {
+            const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
+                cwd: caseInsensitiveBasePath, files: {
+                    "c:/dev/index.ts": ""
+                }
+            });
+            fs.mkdirpSync("c:/dev/a/b/c");
+            fs.symlinkSync("c:/dev/A", "c:/dev/a/self");
+            fs.symlinkSync("c:/dev/a", "c:/dev/a/b/parent");
+            fs.symlinkSync("c:/dev/a", "c:/dev/a/b/c/grandparent");
+            const host = new fakes.ParseConfigHost(fs);
+            const json = {};
+            const expected: ParsedCommandLine = {
+                options: {},
+                errors: [],
+                fileNames: [
+                    "c:/dev/index.ts"
+                ],
+                wildcardDirectories: {
+                    "c:/dev": WatchDirectoryFlags.Recursive
+                },
+            };
+            validateMatches(expected, json, host, caseInsensitiveBasePath);
         });
     });
 }

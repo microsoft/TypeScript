@@ -72,12 +72,15 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern.ts
 ---
 >>>    var nameA = _a[1];
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^
-3 >                     ^^^->
+2 >        ^^^^^
+3 >             ^^^^^^^^
+4 >                     ^^^->
 1->
 2 >        nameA
+3 >             
 1->Emitted(3, 9) Source(7, 18) + SourceIndex(0)
-2 >Emitted(3, 22) Source(7, 23) + SourceIndex(0)
+2 >Emitted(3, 14) Source(7, 23) + SourceIndex(0)
+3 >Emitted(3, 22) Source(7, 23) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1->^^^^
@@ -138,12 +141,15 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern.ts
 ---
 >>>    var numberB = _a[0];
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^
-3 >                       ^^^->
+2 >        ^^^^^^^
+3 >               ^^^^^^^^
+4 >                       ^^^->
 1->
 2 >        numberB
+3 >               
 1->Emitted(7, 9) Source(11, 16) + SourceIndex(0)
-2 >Emitted(7, 24) Source(11, 23) + SourceIndex(0)
+2 >Emitted(7, 16) Source(11, 23) + SourceIndex(0)
+3 >Emitted(7, 24) Source(11, 23) + SourceIndex(0)
 ---
 >>>    console.log(numberB);
 1->^^^^
@@ -204,23 +210,32 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern.ts
 ---
 >>>    var numberA2 = _a[0], nameA2 = _a[1], skillA2 = _a[2];
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^
-3 >                        ^^
-4 >                          ^^^^^^^^^^^^^^
-5 >                                        ^^
-6 >                                          ^^^^^^^^^^^^^^^
+2 >        ^^^^^^^^
+3 >                ^^^^^^^^
+4 >                        ^^
+5 >                          ^^^^^^
+6 >                                ^^^^^^^^
+7 >                                        ^^
+8 >                                          ^^^^^^^
+9 >                                                 ^^^^^^^^
 1->
 2 >        numberA2
-3 >                        , 
-4 >                          nameA2
-5 >                                        , 
-6 >                                          skillA2
+3 >                
+4 >                        , 
+5 >                          nameA2
+6 >                                
+7 >                                        , 
+8 >                                          skillA2
+9 >                                                 
 1->Emitted(11, 9) Source(15, 16) + SourceIndex(0)
-2 >Emitted(11, 25) Source(15, 24) + SourceIndex(0)
-3 >Emitted(11, 27) Source(15, 26) + SourceIndex(0)
-4 >Emitted(11, 41) Source(15, 32) + SourceIndex(0)
-5 >Emitted(11, 43) Source(15, 34) + SourceIndex(0)
-6 >Emitted(11, 58) Source(15, 41) + SourceIndex(0)
+2 >Emitted(11, 17) Source(15, 24) + SourceIndex(0)
+3 >Emitted(11, 25) Source(15, 24) + SourceIndex(0)
+4 >Emitted(11, 27) Source(15, 26) + SourceIndex(0)
+5 >Emitted(11, 33) Source(15, 32) + SourceIndex(0)
+6 >Emitted(11, 41) Source(15, 32) + SourceIndex(0)
+7 >Emitted(11, 43) Source(15, 34) + SourceIndex(0)
+8 >Emitted(11, 50) Source(15, 41) + SourceIndex(0)
+9 >Emitted(11, 58) Source(15, 41) + SourceIndex(0)
 ---
 >>>    console.log(nameA2);
 1 >^^^^
@@ -281,17 +296,23 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern.ts
 ---
 >>>    var numberA3 = _a[0], robotAInfo = _a.slice(1);
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^
-3 >                        ^^
-4 >                          ^^^^^^^^^^^^^^^^^^^^^^^^
+2 >        ^^^^^^^^
+3 >                ^^^^^^^^
+4 >                        ^^
+5 >                          ^^^^^^^^^^
+6 >                                    ^^^^^^^^^^^^^^
 1->
 2 >        numberA3
-3 >                        , 
-4 >                          ...robotAInfo
+3 >                
+4 >                        , ...
+5 >                          robotAInfo
+6 >                                    
 1->Emitted(15, 9) Source(19, 16) + SourceIndex(0)
-2 >Emitted(15, 25) Source(19, 24) + SourceIndex(0)
-3 >Emitted(15, 27) Source(19, 26) + SourceIndex(0)
-4 >Emitted(15, 51) Source(19, 39) + SourceIndex(0)
+2 >Emitted(15, 17) Source(19, 24) + SourceIndex(0)
+3 >Emitted(15, 25) Source(19, 24) + SourceIndex(0)
+4 >Emitted(15, 27) Source(19, 29) + SourceIndex(0)
+5 >Emitted(15, 37) Source(19, 39) + SourceIndex(0)
+6 >Emitted(15, 51) Source(19, 39) + SourceIndex(0)
 ---
 >>>    console.log(robotAInfo);
 1 >^^^^

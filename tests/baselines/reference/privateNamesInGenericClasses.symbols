@@ -1,0 +1,51 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts ===
+class C<T> {
+>C : Symbol(C, Decl(privateNamesInGenericClasses.ts, 0, 0))
+>T : Symbol(T, Decl(privateNamesInGenericClasses.ts, 0, 8))
+
+    #foo: T;
+>#foo : Symbol(C.#foo, Decl(privateNamesInGenericClasses.ts, 0, 12))
+>T : Symbol(T, Decl(privateNamesInGenericClasses.ts, 0, 8))
+
+    bar(x: C<T>) { return x.#foo; }          // OK
+>bar : Symbol(C.bar, Decl(privateNamesInGenericClasses.ts, 1, 12))
+>x : Symbol(x, Decl(privateNamesInGenericClasses.ts, 2, 8))
+>C : Symbol(C, Decl(privateNamesInGenericClasses.ts, 0, 0))
+>T : Symbol(T, Decl(privateNamesInGenericClasses.ts, 0, 8))
+>x.#foo : Symbol(C.#foo, Decl(privateNamesInGenericClasses.ts, 0, 12))
+>x : Symbol(x, Decl(privateNamesInGenericClasses.ts, 2, 8))
+
+    baz(x: C<number>) { return x.#foo; }     // OK
+>baz : Symbol(C.baz, Decl(privateNamesInGenericClasses.ts, 2, 35))
+>x : Symbol(x, Decl(privateNamesInGenericClasses.ts, 3, 8))
+>C : Symbol(C, Decl(privateNamesInGenericClasses.ts, 0, 0))
+>x.#foo : Symbol(C.#foo, Decl(privateNamesInGenericClasses.ts, 0, 12))
+>x : Symbol(x, Decl(privateNamesInGenericClasses.ts, 3, 8))
+
+    quux(x: C<string>) { return x.#foo; }    // OK
+>quux : Symbol(C.quux, Decl(privateNamesInGenericClasses.ts, 3, 40))
+>x : Symbol(x, Decl(privateNamesInGenericClasses.ts, 4, 9))
+>C : Symbol(C, Decl(privateNamesInGenericClasses.ts, 0, 0))
+>x.#foo : Symbol(C.#foo, Decl(privateNamesInGenericClasses.ts, 0, 12))
+>x : Symbol(x, Decl(privateNamesInGenericClasses.ts, 4, 9))
+}
+
+declare let a: C<number>;
+>a : Symbol(a, Decl(privateNamesInGenericClasses.ts, 7, 11))
+>C : Symbol(C, Decl(privateNamesInGenericClasses.ts, 0, 0))
+
+declare let b: C<string>;
+>b : Symbol(b, Decl(privateNamesInGenericClasses.ts, 8, 11))
+>C : Symbol(C, Decl(privateNamesInGenericClasses.ts, 0, 0))
+
+a.#foo;                                   // Error
+>a : Symbol(a, Decl(privateNamesInGenericClasses.ts, 7, 11))
+
+a = b;                                    // Error
+>a : Symbol(a, Decl(privateNamesInGenericClasses.ts, 7, 11))
+>b : Symbol(b, Decl(privateNamesInGenericClasses.ts, 8, 11))
+
+b = a;                                    // Error
+>b : Symbol(b, Decl(privateNamesInGenericClasses.ts, 8, 11))
+>a : Symbol(a, Decl(privateNamesInGenericClasses.ts, 7, 11))
+

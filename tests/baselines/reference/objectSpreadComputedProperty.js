@@ -30,5 +30,5 @@ function f() {
     var a = null;
     var o1 = __assign({}, (_a = {}, _a[n] = n, _a));
     var o2 = __assign({}, (_b = {}, _b[a] = n, _b));
-    var o3 = __assign((_c = {}, _c[a] = n, _c), {}, (_d = {}, _d[n] = n, _d), {}, (_e = {}, _e[m] = m, _e));
+    var o3 = __assign(__assign(__assign(__assign((_c = {}, _c[a] = n, _c), {}), (_d = {}, _d[n] = n, _d)), {}), (_e = {}, _e[m] = m, _e));
 }

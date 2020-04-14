@@ -1,0 +1,33 @@
+tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(7,28): error TS1005: ']' expected.
+tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(7,28): error TS7005: Variable '#bar' implicitly has an 'any' type.
+tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(7,32): error TS1005: ',' expected.
+tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(7,34): error TS1134: Variable declaration expected.
+tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(7,36): error TS1134: Variable declaration expected.
+tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(9,28): error TS2339: Property '#bar' does not exist on type 'C'.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts (6 errors) ====
+    class C {
+        foo = 3;
+        #bar = 3;
+        constructor () {
+            const ok: C["foo"] = 3;
+            // not supported yet, could support in future:
+            const badForNow: C[#bar] = 3;   // Error
+                               ~~~~
+!!! error TS1005: ']' expected.
+                               ~~~~
+!!! error TS7005: Variable '#bar' implicitly has an 'any' type.
+                                   ~
+!!! error TS1005: ',' expected.
+                                     ~
+!!! error TS1134: Variable declaration expected.
+                                       ~
+!!! error TS1134: Variable declaration expected.
+            // will never use this syntax, already taken:
+            const badAlways: C["#bar"] = 3; // Error
+                               ~~~~~~
+!!! error TS2339: Property '#bar' does not exist on type 'C'.
+        }
+    }
+    

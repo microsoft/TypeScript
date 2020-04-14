@@ -123,7 +123,7 @@ var x = <div>one</div>, <div>two</div>;
 var x = <div>one</div> /* intervening comment */, /* intervening comment */ <div>two</div>;
 ;
 //// [20.jsx]
-<a>{"str"}}</a>;
+<a>{"str"};}</a>;
 //// [21.jsx]
 <span className="a" id="b"/>;
 //// [22.jsx]

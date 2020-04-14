@@ -1,0 +1,47 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty6.ts ===
+class A {
+>A : A
+
+    p = 'yep'
+>p : string
+>'yep' : "yep"
+}
+class B extends A {
+>B : B
+>A : A
+
+    get p() { return 'oh no' } // error
+>p : string
+>'oh no' : "oh no"
+}
+class C {
+>C : C
+
+   p = 101
+>p : number
+>101 : 101
+}
+class D extends C {
+>D : D
+>C : C
+
+     _secret = 11
+>_secret : number
+>11 : 11
+
+    get p() { return this._secret } // error
+>p : number
+>this._secret : number
+>this : this
+>_secret : number
+
+    set p(value) { this._secret = value } // error
+>p : number
+>value : number
+>this._secret = value : number
+>this._secret : number
+>this : this
+>_secret : number
+>value : number
+}
+

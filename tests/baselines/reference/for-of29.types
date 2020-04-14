@@ -11,6 +11,6 @@ var iterableWithOptionalIterator: {
 };
 
 for (var v of iterableWithOptionalIterator) { }
->v : string
->iterableWithOptionalIterator : { [Symbol.iterator]?(): Iterator<string>; }
+>v : any
+>iterableWithOptionalIterator : { [Symbol.iterator]?(): Iterator<string, any, undefined>; }
 

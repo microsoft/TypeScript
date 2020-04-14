@@ -66,7 +66,7 @@ var b5 = o5["_proto__"];
 //// [escapedReservedCompilerNamedIdentifier.d.ts]
 declare var __proto__: number;
 declare var o: {
-    "__proto__": number;
+    __proto__: number;
 };
 declare var b: number;
 declare var o1: {
@@ -75,7 +75,7 @@ declare var o1: {
 declare var b1: number;
 declare var ___proto__: number;
 declare var o2: {
-    "___proto__": number;
+    ___proto__: number;
 };
 declare var b2: number;
 declare var o3: {
@@ -84,7 +84,7 @@ declare var o3: {
 declare var b3: number;
 declare var _proto__: number;
 declare var o4: {
-    "_proto__": number;
+    _proto__: number;
 };
 declare var b4: number;
 declare var o5: {

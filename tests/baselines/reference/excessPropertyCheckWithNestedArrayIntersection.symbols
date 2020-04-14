@@ -1,0 +1,56 @@
+=== tests/cases/compiler/excessPropertyCheckWithNestedArrayIntersection.ts ===
+interface ValueOnlyFields {
+>ValueOnlyFields : Symbol(ValueOnlyFields, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 0, 0))
+
+    fields: Array<{
+>fields : Symbol(ValueOnlyFields.fields, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 0, 27))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        value: number | null;
+>value : Symbol(value, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 1, 19))
+
+    }>;
+}
+interface ValueAndKeyFields {
+>ValueAndKeyFields : Symbol(ValueAndKeyFields, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 4, 1))
+
+    fields: Array<{
+>fields : Symbol(ValueAndKeyFields.fields, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 5, 29))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        key: string | null;
+>key : Symbol(key, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 6, 19))
+
+        value: number | null;
+>value : Symbol(value, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 7, 27))
+
+    }>;
+}
+interface BugRepro {
+>BugRepro : Symbol(BugRepro, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 10, 1))
+
+  dataType: ValueAndKeyFields & ValueOnlyFields;
+>dataType : Symbol(BugRepro.dataType, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 11, 20))
+>ValueAndKeyFields : Symbol(ValueAndKeyFields, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 4, 1))
+>ValueOnlyFields : Symbol(ValueOnlyFields, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 0, 0))
+}
+const repro: BugRepro = {
+>repro : Symbol(repro, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 14, 5))
+>BugRepro : Symbol(BugRepro, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 10, 1))
+
+  dataType: {
+>dataType : Symbol(dataType, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 14, 25))
+
+    fields: [{
+>fields : Symbol(fields, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 15, 13))
+
+      key: 'bla', // should be OK: Not excess
+>key : Symbol(key, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 16, 14))
+
+      value: null,
+>value : Symbol(value, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 17, 17))
+
+    }],
+  }
+}
+

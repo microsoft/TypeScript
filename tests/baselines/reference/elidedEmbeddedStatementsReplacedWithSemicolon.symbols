@@ -1,0 +1,40 @@
+=== tests/cases/compiler/elidedEmbeddedStatementsReplacedWithSemicolon.ts ===
+if (1)
+    const enum A {}
+>A : Symbol(A, Decl(elidedEmbeddedStatementsReplacedWithSemicolon.ts, 0, 6))
+
+else
+    const enum B {}
+>B : Symbol(B, Decl(elidedEmbeddedStatementsReplacedWithSemicolon.ts, 2, 4))
+
+do
+    const enum C {}
+>C : Symbol(C, Decl(elidedEmbeddedStatementsReplacedWithSemicolon.ts, 5, 2))
+
+while (0);
+
+while (0)
+    const enum D {}
+>D : Symbol(D, Decl(elidedEmbeddedStatementsReplacedWithSemicolon.ts, 9, 9))
+
+for (;0;)
+    const enum E {}
+>E : Symbol(E, Decl(elidedEmbeddedStatementsReplacedWithSemicolon.ts, 12, 9))
+
+for (let _ in [])
+>_ : Symbol(_, Decl(elidedEmbeddedStatementsReplacedWithSemicolon.ts, 15, 8))
+
+    const enum F {}
+>F : Symbol(F, Decl(elidedEmbeddedStatementsReplacedWithSemicolon.ts, 15, 17))
+
+for (let _ of [])
+>_ : Symbol(_, Decl(elidedEmbeddedStatementsReplacedWithSemicolon.ts, 18, 8))
+
+    const enum G {}
+>G : Symbol(G, Decl(elidedEmbeddedStatementsReplacedWithSemicolon.ts, 18, 17))
+
+// @ts-ignore suppress `with` statement error
+with (window)
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+
+    const enum H {}

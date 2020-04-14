@@ -1,0 +1,71 @@
+=== tests/cases/compiler/crashInGetTextOfComputedPropertyName.ts ===
+// https://github.com/Microsoft/TypeScript/issues/29006
+export interface A { type: 'a' }
+>type : "a"
+
+export interface B { type: 'b' }
+>type : "b"
+
+export type AB = A | B
+>AB : AB
+
+const itemId = 'some-id'
+>itemId : "some-id"
+>'some-id' : "some-id"
+
+// --- test on first level ---
+const items: { [id: string]: AB } = {}
+>items : { [id: string]: AB; }
+>id : string
+>{} : {}
+
+const { [itemId]: itemOk1 } = items
+>itemId : "some-id"
+>itemOk1 : AB
+>items : { [id: string]: AB; }
+
+typeof itemOk1 // pass
+>typeof itemOk1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>itemOk1 : AB
+
+// --- test on second level ---
+interface ObjWithItems {
+    items: {[s: string]: AB}
+>items : { [s: string]: AB; }
+>s : string
+}
+const objWithItems: ObjWithItems = { items: {}}
+>objWithItems : ObjWithItems
+>{ items: {}} : { items: {}; }
+>items : {}
+>{} : {}
+
+const itemOk2 = objWithItems.items[itemId]
+>itemOk2 : AB
+>objWithItems.items[itemId] : AB
+>objWithItems.items : { [s: string]: AB; }
+>objWithItems : ObjWithItems
+>items : { [s: string]: AB; }
+>itemId : "some-id"
+
+typeof itemOk2 // pass
+>typeof itemOk2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>itemOk2 : AB
+
+const {
+    items: { [itemId]: itemWithTSError } = {} /*happens when default value is provided*/
+>items : any
+>itemId : "some-id"
+>itemWithTSError : AB
+>{} : {}
+
+} = objWithItems
+>objWithItems : ObjWithItems
+
+// in order to re-produce the error, uncomment next line:
+typeof itemWithTSError // :(
+>typeof itemWithTSError : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>itemWithTSError : AB
+
+// will result in:
+// Error from compilation: TypeError: Cannot read property 'charCodeAt' of undefined  TypeError: Cannot read property 'charCodeAt' of undefined
