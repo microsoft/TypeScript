@@ -1,22 +1,22 @@
 /*@internal*/
 namespace ts {
-    export const transformPartialApplication: ts.TransformerFactory<ts.SourceFile> =
-        (context: ts.TransformationContext) => {
+    export const transformPartialApplication: TransformerFactory<SourceFile> =
+        (context: TransformationContext) => {
             const getPropertyAccessString = (node: PropertyAccessExpression): string =>
-                `${ts.isPropertyAccessExpression(node.expression)
+                `${isPropertyAccessExpression(node.expression)
                     ? getPropertyAccessString(node.expression)
                     : node.name.escapedText
                 }.${node.name.escapedText}`;
             return sourceFile => {
-                const visitor = (node: ts.Node): ts.Node => {
-                    if (ts.isCallExpression(node)) {
+                const visitor = (node: Node): Node => {
+                    if (isCallExpression(node)) {
                         if (node.arguments.some(arg => arg.kind === SyntaxKind.PartialApplicationElement)) {
-                            const capturedFunctionIdentifier = ts.createUniqueName(`_${
-                                ts.isIdentifier(node.expression)
+                            const capturedFunctionIdentifier = createUniqueName(`_${
+                                isIdentifier(node.expression)
                                     ? node.expression.escapedText
-                                    : ts.isPropertyAccessExpression(node.expression)
+                                    : isPropertyAccessExpression(node.expression)
                                         ? node.expression.name.escapedText
-                                        : 'Wow, what do?'
+                                        : "Wow, what do?"
                             }`);
                             // TODO: Get the signature and use actual argument names of the original function.
                             // Unfortunately we don't seem to have access to them here.
@@ -26,8 +26,8 @@ namespace ts {
                             // Could try to get the checker from a Symbol.
                             const getOrigfuncArgName = (index: number): string => {
                                 const valDecl = context.getEmitResolver().getReferencedValueDeclaration(node.expression as any) as Node;
-                                return ((ts.isMethodSignature(valDecl) && valDecl.parameters[index]?.name as any).escapedText) ?? `_origFuncArg${index || ''}`;
-                            }
+                                return ((isMethodSignature(valDecl) && valDecl.parameters[index]?.name as any).escapedText) ?? `_origFuncArg${index || ""}`;
+                            };
                             const isCapturedArg = (arg: typeof args[0]): arg is { arg: Expression, identifier: Identifier } => arg.identifier !== undefined;
                             const args = node.arguments
                                 .map((arg, index) => ({
@@ -36,7 +36,7 @@ namespace ts {
                                     identifier: (
                                         isPartialApplicationElement(arg)
                                             ? createIdentifier(getOrigfuncArgName(index))
-                                            : !ts.isLiteralKind(arg.kind) && createUniqueName(getOrigfuncArgName(index))
+                                            : !isLiteralKind(arg.kind) && createUniqueName(getOrigfuncArgName(index))
                                         ) || undefined
                                 }));
                             args
@@ -45,9 +45,9 @@ namespace ts {
                                 .forEach(({ identifier }) => context.hoistVariableDeclaration(identifier));
 
                             context.hoistVariableDeclaration(capturedFunctionIdentifier);
-                            return ts.parenthesizeDefaultExpression(
+                            return parenthesizeDefaultExpression(
                                 createCommaList([ // For capturing vars
-                                    ts.createBinary( // Capture the function
+                                    createBinary( // Capture the function
                                         capturedFunctionIdentifier,
                                         SyntaxKind.EqualsToken,
                                         node.expression
@@ -55,27 +55,35 @@ namespace ts {
                                     ...args
                                         .filter(isCapturedArg)
                                         .filter(({ arg }) => !isPartialApplicationElement(arg))
-                                        .map(({ arg, identifier }) => ts.createBinary(
+                                        .map(({ arg, identifier }) => createBinary(
                                             identifier,
                                             SyntaxKind.EqualsToken,
                                             arg
                                         )
                                     ),
-                                    ts.createFunctionExpression(
-                                        undefined,
-                                        undefined,
-                                        undefined, // Anonymous
-                                        undefined,
+                                    createFunctionExpression(
+                                        /*modifiers*/ undefined,
+                                        /*asteriskToken*/ undefined,
+                                        /*name*/ undefined /* Anonymous */,
+                                        /*typeParameters*/ undefined,
                                         node.arguments
                                             .map<[Expression, number]>((arg, i) => [arg, i])
                                             .filter(([arg]) => isPartialApplicationElement(arg))
-                                            .map(([_arg, i]) => createParameter(undefined, undefined, undefined, getOrigfuncArgName(i), undefined, undefined, undefined)),
-                                        undefined,
-                                        ts.createBlock([
-                                            ts.createReturn(
-                                                ts.createCall(
+                                            .map(([_arg, i]) => createParameter(
+                                                /*decorators*/ undefined,
+                                                /*modifiers*/ undefined,
+                                                /*dotDotDotToken*/ undefined,
+                                                getOrigfuncArgName(i),
+                                                /*questionToken*/ undefined,
+                                                /*type*/ undefined,
+                                                /*initializer*/ undefined
+                                            )),
+                                        /*type*/ undefined,
+                                        createBlock([
+                                            createReturn(
+                                                createCall(
                                                     capturedFunctionIdentifier,
-                                                    undefined,
+                                                    /*typeArguments*/ undefined,
                                                     args.map(arg =>
                                                             isCapturedArg(arg)
                                                                 ? arg.identifier
@@ -89,10 +97,10 @@ namespace ts {
                             );
                         }
                     }
-                    return ts.visitEachChild(node, visitor, context);
+                    return visitEachChild(node, visitor, context);
                 };
 
-                return ts.visitNode(sourceFile, visitor);
+                return visitNode(sourceFile, visitor);
             };
         };
 }
