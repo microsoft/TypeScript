@@ -1,0 +1,94 @@
+=== tests/cases/conformance/expressions/partialApplication/partialApplication.ts ===
+const mul = (a: number, b: number) => a * b;
+>mul : (a: number, b: number) => number
+>(a: number, b: number) => a * b : (a: number, b: number) => number
+>a : number
+>b : number
+>a * b : number
+>a : number
+>b : number
+
+const left = mul(?, 2);
+>left : (a: number) => number
+>mul(?, 2) : (a: number) => number
+>mul : (a: number, b: number) => number
+>2 : 2
+
+const right = mul(2, ?);
+>right : (b: number) => number
+>mul(2, ?) : (b: number) => number
+>mul : (a: number, b: number) => number
+>2 : 2
+
+const both = mul(?, ?);
+>both : (a: number, b: number) => number
+>mul(?, ?) : (a: number, b: number) => number
+>mul : (a: number, b: number) => number
+
+left(3);
+>left(3) : number
+>left : (a: number) => number
+>3 : 3
+
+right(4);
+>right(4) : number
+>right : (b: number) => number
+>4 : 4
+
+both(5, 6);
+>both(5, 6) : number
+>both : (a: number, b: number) => number
+>5 : 5
+>6 : 6
+
+left.length === 1;
+>left.length === 1 : boolean
+>left.length : number
+>left : (a: number) => number
+>length : number
+>1 : 1
+
+left.name === 'left';
+>left.name === 'left' : boolean
+>left.name : string
+>left : (a: number) => number
+>name : string
+>'left' : "left"
+
+const mulSubtract = (a:number, b:number, c:number) => mul(a, b) - c;
+>mulSubtract : (a: number, b: number, c: number) => number
+>(a:number, b:number, c:number) => mul(a, b) - c : (a: number, b: number, c: number) => number
+>a : number
+>b : number
+>c : number
+>mul(a, b) - c : number
+>mul(a, b) : number
+>mul : (a: number, b: number) => number
+>a : number
+>b : number
+>c : number
+
+const middle = mulSubtract(5, ?, 1);
+>middle : (b: number) => number
+>mulSubtract(5, ?, 1) : (b: number) => number
+>mulSubtract : (a: number, b: number, c: number) => number
+>5 : 5
+>1 : 1
+
+const sides = mulSubtract(?, 10, ?);
+>sides : (a: number, c: number) => number
+>mulSubtract(?, 10, ?) : (a: number, c: number) => number
+>mulSubtract : (a: number, b: number, c: number) => number
+>10 : 10
+
+middle(2);
+>middle(2) : number
+>middle : (b: number) => number
+>2 : 2
+
+sides(4, 3);
+>sides(4, 3) : number
+>sides : (a: number, c: number) => number
+>4 : 4
+>3 : 3
+

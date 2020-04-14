@@ -1,0 +1,91 @@
+=== tests/cases/conformance/expressions/partialApplication/partialApplicationPropertyAccess.ts ===
+const square = Math.pow(?, 2);
+>square : (x: number) => number
+>Math.pow(?, 2) : (x: number) => number
+>Math.pow : (x: number, y: number) => number
+>Math : Math
+>pow : (x: number, y: number) => number
+>2 : 2
+
+square(4) === 16;
+>square(4) === 16 : boolean
+>square(4) : number
+>square : (x: number) => number
+>4 : 4
+>16 : 16
+
+const struct = {
+>struct : { a: { b: number; }; }
+>{    a: {        b: 10,    },} : { a: { b: number; }; }
+
+    a: {
+>a : { b: number; }
+>{        b: 10,    } : { b: number; }
+
+        b: 10,
+>b : number
+>10 : 10
+
+    },
+};
+
+const ultraCube = Math.pow(?, struct.a.b);
+>ultraCube : (x: number) => number
+>Math.pow(?, struct.a.b) : (x: number) => number
+>Math.pow : (x: number, y: number) => number
+>Math : Math
+>pow : (x: number, y: number) => number
+>struct.a.b : number
+>struct.a : { b: number; }
+>struct : { a: { b: number; }; }
+>a : { b: number; }
+>b : number
+
+ultraCube(2) == 1024;
+>ultraCube(2) == 1024 : boolean
+>ultraCube(2) : number
+>ultraCube : (x: number) => number
+>2 : 2
+>1024 : 1024
+
+let s: undefined | { c: number };
+>s : { c: number; }
+>c : number
+
+const useC = (s2: typeof s) =>
+>useC : (s2: typeof s) => (x: number) => number
+>(s2: typeof s) =>    Math.pow(?, s2?.c ?? 0) : (s2: typeof s) => (x: number) => number
+>s2 : { c: number; }
+>s : { c: number; }
+
+    Math.pow(?, s2?.c ?? 0);
+>Math.pow(?, s2?.c ?? 0) : (x: number) => number
+>Math.pow : (x: number, y: number) => number
+>Math : Math
+>pow : (x: number, y: number) => number
+>s2?.c ?? 0 : number
+>s2?.c : number
+>s2 : { c: number; }
+>c : number
+>0 : 0
+
+useC(undefined)(5) === 1;
+>useC(undefined)(5) === 1 : boolean
+>useC(undefined)(5) : number
+>useC(undefined) : (x: number) => number
+>useC : (s2: { c: number; }) => (x: number) => number
+>undefined : undefined
+>5 : 5
+>1 : 1
+
+useC({ c: 2 })(4) === 16;
+>useC({ c: 2 })(4) === 16 : boolean
+>useC({ c: 2 })(4) : number
+>useC({ c: 2 }) : (x: number) => number
+>useC : (s2: { c: number; }) => (x: number) => number
+>{ c: 2 } : { c: number; }
+>c : number
+>2 : 2
+>4 : 4
+>16 : 16
+

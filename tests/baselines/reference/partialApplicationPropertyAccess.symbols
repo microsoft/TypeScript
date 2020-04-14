@@ -1,0 +1,61 @@
+=== tests/cases/conformance/expressions/partialApplication/partialApplicationPropertyAccess.ts ===
+const square = Math.pow(?, 2);
+>square : Symbol(square, Decl(partialApplicationPropertyAccess.ts, 0, 5))
+>Math.pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
+
+square(4) === 16;
+>square : Symbol(square, Decl(partialApplicationPropertyAccess.ts, 0, 5))
+
+const struct = {
+>struct : Symbol(struct, Decl(partialApplicationPropertyAccess.ts, 4, 5))
+
+    a: {
+>a : Symbol(a, Decl(partialApplicationPropertyAccess.ts, 4, 16))
+
+        b: 10,
+>b : Symbol(b, Decl(partialApplicationPropertyAccess.ts, 5, 8))
+
+    },
+};
+
+const ultraCube = Math.pow(?, struct.a.b);
+>ultraCube : Symbol(ultraCube, Decl(partialApplicationPropertyAccess.ts, 10, 5))
+>Math.pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
+>struct.a.b : Symbol(b, Decl(partialApplicationPropertyAccess.ts, 5, 8))
+>struct.a : Symbol(a, Decl(partialApplicationPropertyAccess.ts, 4, 16))
+>struct : Symbol(struct, Decl(partialApplicationPropertyAccess.ts, 4, 5))
+>a : Symbol(a, Decl(partialApplicationPropertyAccess.ts, 4, 16))
+>b : Symbol(b, Decl(partialApplicationPropertyAccess.ts, 5, 8))
+
+ultraCube(2) == 1024;
+>ultraCube : Symbol(ultraCube, Decl(partialApplicationPropertyAccess.ts, 10, 5))
+
+let s: undefined | { c: number };
+>s : Symbol(s, Decl(partialApplicationPropertyAccess.ts, 13, 3))
+>c : Symbol(c, Decl(partialApplicationPropertyAccess.ts, 13, 20))
+
+const useC = (s2: typeof s) =>
+>useC : Symbol(useC, Decl(partialApplicationPropertyAccess.ts, 15, 5))
+>s2 : Symbol(s2, Decl(partialApplicationPropertyAccess.ts, 15, 14))
+>s : Symbol(s, Decl(partialApplicationPropertyAccess.ts, 13, 3))
+
+    Math.pow(?, s2?.c ?? 0);
+>Math.pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
+>s2?.c : Symbol(c, Decl(partialApplicationPropertyAccess.ts, 13, 20))
+>s2 : Symbol(s2, Decl(partialApplicationPropertyAccess.ts, 15, 14))
+>c : Symbol(c, Decl(partialApplicationPropertyAccess.ts, 13, 20))
+
+useC(undefined)(5) === 1;
+>useC : Symbol(useC, Decl(partialApplicationPropertyAccess.ts, 15, 5))
+>undefined : Symbol(undefined)
+
+useC({ c: 2 })(4) === 16;
+>useC : Symbol(useC, Decl(partialApplicationPropertyAccess.ts, 15, 5))
+>c : Symbol(c, Decl(partialApplicationPropertyAccess.ts, 19, 6))
+

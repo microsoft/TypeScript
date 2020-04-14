@@ -10,8 +10,8 @@ left(3);
 right(4);
 both(5, 6);
 
-left.length == 1;
-left.name == 'left';
+left.length === 1;
+left.name === 'left';
 
 const mulSubtract = (a:number, b:number, c:number) => mul(a, b) - c;
 

@@ -1,0 +1,80 @@
+=== tests/cases/conformance/expressions/partialApplication/partialApplicationCapture.ts ===
+let x = 1;
+>x : number
+>1 : 1
+
+const add = (a: number, b: number) => a + b;
+>add : (a: number, b: number) => number
+>(a: number, b: number) => a + b : (a: number, b: number) => number
+>a : number
+>b : number
+>a + b : number
+>a : number
+>b : number
+
+const add1 = add(x, ?);
+>add1 : (b: number) => number
+>add(x, ?) : (b: number) => number
+>add : (a: number, b: number) => number
+>x : number
+
+x = 2;
+>x = 2 : 2
+>x : number
+>2 : 2
+
+add1(2) === 3;
+>add1(2) === 3 : boolean
+>add1(2) : number
+>add1 : (b: number) => number
+>2 : 2
+>3 : 3
+
+let mutAdd = (a: number, b: number) => a + b;
+>mutAdd : (a: number, b: number) => number
+>(a: number, b: number) => a + b : (a: number, b: number) => number
+>a : number
+>b : number
+>a + b : number
+>a : number
+>b : number
+
+const mutAdd2 = mutAdd(2, ?);
+>mutAdd2 : (b: number) => number
+>mutAdd(2, ?) : (b: number) => number
+>mutAdd : (a: number, b: number) => number
+>2 : 2
+
+mutAdd2(5) === 7;
+>mutAdd2(5) === 7 : boolean
+>mutAdd2(5) : number
+>mutAdd2 : (b: number) => number
+>5 : 5
+>7 : 7
+
+mutAdd = (a: number, b: number) => a - b;
+>mutAdd = (a: number, b: number) => a - b : (a: number, b: number) => number
+>mutAdd : (a: number, b: number) => number
+>(a: number, b: number) => a - b : (a: number, b: number) => number
+>a : number
+>b : number
+>a - b : number
+>a : number
+>b : number
+
+mutAdd2(7) === 9;
+>mutAdd2(7) === 9 : boolean
+>mutAdd2(7) : number
+>mutAdd2 : (b: number) => number
+>7 : 7
+>9 : 9
+
+mutAdd(2, 7) === -5;
+>mutAdd(2, 7) === -5 : boolean
+>mutAdd(2, 7) : number
+>mutAdd : (a: number, b: number) => number
+>2 : 2
+>7 : 7
+>-5 : -5
+>5 : 5
+

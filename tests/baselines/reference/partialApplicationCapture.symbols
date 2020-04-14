@@ -1,0 +1,49 @@
+=== tests/cases/conformance/expressions/partialApplication/partialApplicationCapture.ts ===
+let x = 1;
+>x : Symbol(x, Decl(partialApplicationCapture.ts, 0, 3))
+
+const add = (a: number, b: number) => a + b;
+>add : Symbol(add, Decl(partialApplicationCapture.ts, 1, 5))
+>a : Symbol(a, Decl(partialApplicationCapture.ts, 1, 13))
+>b : Symbol(b, Decl(partialApplicationCapture.ts, 1, 23))
+>a : Symbol(a, Decl(partialApplicationCapture.ts, 1, 13))
+>b : Symbol(b, Decl(partialApplicationCapture.ts, 1, 23))
+
+const add1 = add(x, ?);
+>add1 : Symbol(add1, Decl(partialApplicationCapture.ts, 2, 5))
+>add : Symbol(add, Decl(partialApplicationCapture.ts, 1, 5))
+>x : Symbol(x, Decl(partialApplicationCapture.ts, 0, 3))
+
+x = 2;
+>x : Symbol(x, Decl(partialApplicationCapture.ts, 0, 3))
+
+add1(2) === 3;
+>add1 : Symbol(add1, Decl(partialApplicationCapture.ts, 2, 5))
+
+let mutAdd = (a: number, b: number) => a + b;
+>mutAdd : Symbol(mutAdd, Decl(partialApplicationCapture.ts, 8, 3))
+>a : Symbol(a, Decl(partialApplicationCapture.ts, 8, 14))
+>b : Symbol(b, Decl(partialApplicationCapture.ts, 8, 24))
+>a : Symbol(a, Decl(partialApplicationCapture.ts, 8, 14))
+>b : Symbol(b, Decl(partialApplicationCapture.ts, 8, 24))
+
+const mutAdd2 = mutAdd(2, ?);
+>mutAdd2 : Symbol(mutAdd2, Decl(partialApplicationCapture.ts, 9, 5))
+>mutAdd : Symbol(mutAdd, Decl(partialApplicationCapture.ts, 8, 3))
+
+mutAdd2(5) === 7;
+>mutAdd2 : Symbol(mutAdd2, Decl(partialApplicationCapture.ts, 9, 5))
+
+mutAdd = (a: number, b: number) => a - b;
+>mutAdd : Symbol(mutAdd, Decl(partialApplicationCapture.ts, 8, 3))
+>a : Symbol(a, Decl(partialApplicationCapture.ts, 13, 10))
+>b : Symbol(b, Decl(partialApplicationCapture.ts, 13, 20))
+>a : Symbol(a, Decl(partialApplicationCapture.ts, 13, 10))
+>b : Symbol(b, Decl(partialApplicationCapture.ts, 13, 20))
+
+mutAdd2(7) === 9;
+>mutAdd2 : Symbol(mutAdd2, Decl(partialApplicationCapture.ts, 9, 5))
+
+mutAdd(2, 7) === -5;
+>mutAdd : Symbol(mutAdd, Decl(partialApplicationCapture.ts, 8, 3))
+
