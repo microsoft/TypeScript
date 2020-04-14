@@ -4256,13 +4256,13 @@ declare namespace ts {
     function createJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: string, comment?: string): T;
     function createJSDocAugmentsTag(classExpression: JSDocAugmentsTag["class"], comment?: string): JSDocAugmentsTag;
     function createJSDocEnumTag(typeExpression?: JSDocTypeExpression, comment?: string): JSDocEnumTag;
-    function createJSDocTemplateTag(constraint: JSDocTypeExpression | undefined, typeParameters: ReadonlyArray<TypeParameterDeclaration>, comment?: string): JSDocTemplateTag;
+    function createJSDocTemplateTag(constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: string): JSDocTemplateTag;
     function createJSDocTypedefTag(fullName?: JSDocNamespaceDeclaration | Identifier, name?: Identifier, comment?: string, typeExpression?: JSDocTypeExpression | JSDocTypeLiteral): JSDocTypedefTag;
     function createJSDocCallbackTag(fullName: JSDocNamespaceDeclaration | Identifier | undefined, name: Identifier | undefined, comment: string | undefined, typeExpression: JSDocSignature): JSDocCallbackTag;
-    function createJSDocSignature(typeParameters: ReadonlyArray<JSDocTemplateTag> | undefined, parameters: ReadonlyArray<JSDocParameterTag>, type?: JSDocReturnTag): JSDocSignature;
+    function createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag): JSDocSignature;
     function createJSDocPropertyTag(typeExpression: JSDocTypeExpression | undefined, name: EntityName, isNameFirst: boolean, isBracketed: boolean, comment?: string): JSDocPropertyTag;
     function createJSDocParameterTag(typeExpression: JSDocTypeExpression | undefined, name: EntityName, isNameFirst: boolean, isBracketed: boolean, comment?: string): JSDocParameterTag;
-    function createJSDocTypeLiteral(jsDocPropertyTags?: ReadonlyArray<JSDocPropertyLikeTag>, isArrayType?: boolean): JSDocTypeLiteral;
+    function createJSDocTypeLiteral(jsDocPropertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean): JSDocTypeLiteral;
     function createJSDocImplementTag(classExpression: JSDocImplementsTag["class"], comment?: string): JSDocImplementsTag;
     function createJSDocAuthorTag(comment?: string): JSDocTag;
     function createJSDocPublicTag(): JSDocTag;

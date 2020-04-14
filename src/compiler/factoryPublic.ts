@@ -2526,7 +2526,7 @@ namespace ts {
         return tag;
     }
 
-    export function createJSDocTemplateTag(constraint: JSDocTypeExpression | undefined, typeParameters: ReadonlyArray<TypeParameterDeclaration>, comment?: string) {
+    export function createJSDocTemplateTag(constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: string) {
         const tag = createJSDocTag<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag, "template", comment);
         tag.constraint = constraint;
         tag.typeParameters = asNodeArray(typeParameters);
@@ -2549,7 +2549,7 @@ namespace ts {
         return tag;
     }
 
-    export function createJSDocSignature(typeParameters: ReadonlyArray<JSDocTemplateTag> | undefined, parameters: ReadonlyArray<JSDocParameterTag>, type?: JSDocReturnTag) {
+    export function createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag) {
         const tag = createSynthesizedNode(SyntaxKind.JSDocSignature) as JSDocSignature;
         tag.typeParameters = typeParameters;
         tag.parameters = parameters;
@@ -2574,7 +2574,7 @@ namespace ts {
         return createJSDocPropertyLikeTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, "param", typeExpression, name, isNameFirst, isBracketed, comment);
     }
 
-    export function createJSDocTypeLiteral(jsDocPropertyTags?: ReadonlyArray<JSDocPropertyLikeTag>, isArrayType?: boolean) {
+    export function createJSDocTypeLiteral(jsDocPropertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean) {
         const tag = createSynthesizedNode(SyntaxKind.JSDocTypeLiteral) as JSDocTypeLiteral;
         tag.jsDocPropertyTags = jsDocPropertyTags;
         tag.isArrayType = isArrayType;
