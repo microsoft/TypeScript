@@ -52,11 +52,11 @@ function C() {
 >this : this
 >x : any
 >function() { this.x.toString(); } : () => void
->this.x.toString() : any
->this.x.toString : any
->this.x : any
+>this.x.toString() : string
+>this.x.toString : () => string
+>this.x : () => void
 >this : this
->x : any
->toString : any
+>x : () => void
+>toString : () => string
 }
 

@@ -9,9 +9,9 @@ function Wagon(numberOxen) {
 
     this.numberOxen = numberOxen
 >this.numberOxen = numberOxen : number
->this.numberOxen : number
+>this.numberOxen : any
 >this : this
->numberOxen : number
+>numberOxen : any
 >numberOxen : number
 }
 /** @param {Wagon[]=} wagons */
