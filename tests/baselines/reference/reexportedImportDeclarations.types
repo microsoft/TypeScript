@@ -1,0 +1,58 @@
+=== tests/cases/conformance/internalModules/importDeclarations/reexportedImportDeclarations.ts ===
+declare class C {
+>C : C
+
+    method(): any;
+>method : () => any
+}
+
+declare namespace ns1 {
+>ns1 : typeof ns1
+
+    export { C as A1 };
+>C : typeof C
+>A1 : typeof C
+}
+declare namespace ns2 {
+>ns2 : typeof ns2
+
+    import A2 = ns1.A1;
+>A2 : typeof A2
+>ns1 : typeof ns1
+>A1 : A2
+
+    namespace ns21 {
+>ns21 : typeof ns21
+
+        export { A2 as A3 };
+>A2 : typeof A2
+>A3 : typeof A2
+    }
+}
+declare namespace ns3 {
+>ns3 : typeof ns3
+
+    import A4 = ns1.A1;
+>A4 : typeof A4
+>ns1 : typeof ns1
+>A1 : A4
+
+    export { A4 as A5 };
+>A4 : typeof A4
+>A5 : typeof A4
+}
+
+export class C2 extends ns2.ns21.A3 {}
+>C2 : C2
+>ns2.ns21.A3 : C
+>ns2.ns21 : typeof ns2.ns21
+>ns2 : typeof ns2
+>ns21 : typeof ns2.ns21
+>A3 : typeof C
+
+export class C3 extends ns3.A5 {}
+>C3 : C3
+>ns3.A5 : C
+>ns3 : typeof ns3
+>A5 : typeof C
+

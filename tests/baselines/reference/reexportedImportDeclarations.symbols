@@ -1,0 +1,58 @@
+=== tests/cases/conformance/internalModules/importDeclarations/reexportedImportDeclarations.ts ===
+declare class C {
+>C : Symbol(C, Decl(reexportedImportDeclarations.ts, 0, 0))
+
+    method(): any;
+>method : Symbol(C.method, Decl(reexportedImportDeclarations.ts, 0, 17))
+}
+
+declare namespace ns1 {
+>ns1 : Symbol(ns1, Decl(reexportedImportDeclarations.ts, 2, 1))
+
+    export { C as A1 };
+>C : Symbol(C, Decl(reexportedImportDeclarations.ts, 0, 0))
+>A1 : Symbol(A1, Decl(reexportedImportDeclarations.ts, 5, 12))
+}
+declare namespace ns2 {
+>ns2 : Symbol(ns2, Decl(reexportedImportDeclarations.ts, 6, 1))
+
+    import A2 = ns1.A1;
+>A2 : Symbol(A2, Decl(reexportedImportDeclarations.ts, 7, 23))
+>ns1 : Symbol(ns1, Decl(reexportedImportDeclarations.ts, 2, 1))
+>A1 : Symbol(ns1.A1, Decl(reexportedImportDeclarations.ts, 5, 12))
+
+    namespace ns21 {
+>ns21 : Symbol(ns21, Decl(reexportedImportDeclarations.ts, 8, 23))
+
+        export { A2 as A3 };
+>A2 : Symbol(A2, Decl(reexportedImportDeclarations.ts, 7, 23))
+>A3 : Symbol(A3, Decl(reexportedImportDeclarations.ts, 10, 16))
+    }
+}
+declare namespace ns3 {
+>ns3 : Symbol(ns3, Decl(reexportedImportDeclarations.ts, 12, 1))
+
+    import A4 = ns1.A1;
+>A4 : Symbol(A4, Decl(reexportedImportDeclarations.ts, 13, 23))
+>ns1 : Symbol(ns1, Decl(reexportedImportDeclarations.ts, 2, 1))
+>A1 : Symbol(ns1.A1, Decl(reexportedImportDeclarations.ts, 5, 12))
+
+    export { A4 as A5 };
+>A4 : Symbol(A4, Decl(reexportedImportDeclarations.ts, 13, 23))
+>A5 : Symbol(A5, Decl(reexportedImportDeclarations.ts, 15, 12))
+}
+
+export class C2 extends ns2.ns21.A3 {}
+>C2 : Symbol(C2, Decl(reexportedImportDeclarations.ts, 16, 1))
+>ns2.ns21.A3 : Symbol(ns2.ns21.A3, Decl(reexportedImportDeclarations.ts, 10, 16))
+>ns2.ns21 : Symbol(ns2.ns21, Decl(reexportedImportDeclarations.ts, 8, 23))
+>ns2 : Symbol(ns2, Decl(reexportedImportDeclarations.ts, 6, 1))
+>ns21 : Symbol(ns2.ns21, Decl(reexportedImportDeclarations.ts, 8, 23))
+>A3 : Symbol(ns2.ns21.A3, Decl(reexportedImportDeclarations.ts, 10, 16))
+
+export class C3 extends ns3.A5 {}
+>C3 : Symbol(C3, Decl(reexportedImportDeclarations.ts, 18, 38))
+>ns3.A5 : Symbol(ns3.A5, Decl(reexportedImportDeclarations.ts, 15, 12))
+>ns3 : Symbol(ns3, Decl(reexportedImportDeclarations.ts, 12, 1))
+>A5 : Symbol(ns3.A5, Decl(reexportedImportDeclarations.ts, 15, 12))
+
