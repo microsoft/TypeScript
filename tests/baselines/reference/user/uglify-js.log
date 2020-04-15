@@ -159,8 +159,8 @@ node_modules/uglify-js/lib/scope.js(441,49): error TS2339: Property 'has_directi
 node_modules/uglify-js/lib/scope.js(496,30): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/scope.js(521,30): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/sourcemap.js(82,11): error TS2339: Property 'index' does not exist on type 'any[]'.
-node_modules/uglify-js/lib/sourcemap.js(173,31): error TS2339: Property 'index' does not exist on type 'any[]'.
-node_modules/uglify-js/lib/sourcemap.js(181,34): error TS2339: Property 'index' does not exist on type 'any[]'.
+node_modules/uglify-js/lib/sourcemap.js(177,31): error TS2339: Property 'index' does not exist on type 'any[]'.
+node_modules/uglify-js/lib/sourcemap.js(185,34): error TS2339: Property 'index' does not exist on type 'any[]'.
 node_modules/uglify-js/tools/exit.js(10,37): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[(number | undefined)?]'.
   Types of property 'length' are incompatible.
     Type 'number' is not assignable to type '0 | 1'.
