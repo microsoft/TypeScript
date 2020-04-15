@@ -38,7 +38,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const { file, startPosition } = context;
-        const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
+        const info = getConvertibleArrowFunctionAtPosition(file, startPosition, /*triggerReason*/ { kind: "invoked" });
         if (!info) return undefined;
 
         const { expression, returnStatement, func } = info;
@@ -73,7 +73,9 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number, triggerReason?: RefactorTriggerReason): Info | undefined {
         const node = getTokenAtPosition(file, startPosition);
         const func = getContainingFunction(node);
-        if (!func || !isArrowFunction(func) || (!rangeContainsRange(func, node) || rangeContainsRange(func.body, node))) return undefined;
+        // Only offer a refactor in the function body on explicit refactor requests.
+        if (!func || !isArrowFunction(func) || (!rangeContainsRange(func, node)
+            || (rangeContainsRange(func.body, node) && triggerReason?.kind !== "invoked"))) return undefined;
 
         if (isExpression(func.body)) {
             return {
