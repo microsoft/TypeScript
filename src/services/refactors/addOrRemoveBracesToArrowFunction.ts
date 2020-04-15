@@ -57,7 +57,6 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             suppressLeadingAndTrailingTrivia(body);
             copyTrailingAsLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
             copyLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
-
             copyTrailingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
         }
         else {
