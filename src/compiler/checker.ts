@@ -29632,6 +29632,15 @@ namespace ts {
                 return;
             }
 
+            function isInstancePropertyWithInitializerOrPrivateIdentifierProperty(n: Node): boolean {
+                if (isPrivateIdentifierPropertyDeclaration(n)) {
+                    return true;
+                }
+                return n.kind === SyntaxKind.PropertyDeclaration &&
+                    !hasModifier(n, ModifierFlags.Static) &&
+                    !!(<PropertyDeclaration>n).initializer;
+            }
+
             // TS 1.0 spec (April 2014): 8.3.2
             // Constructors of classes with no extends clause may not contain super calls, whereas
             // constructors of derived classes must contain at least one super call somewhere in their function body.
@@ -29643,6 +29652,35 @@ namespace ts {
                 if (superCall) {
                     if (classExtendsNull) {
                         error(superCall, Diagnostics.A_constructor_cannot_contain_a_super_call_when_its_class_extends_null);
+                    }
+
+                    // The first statement in the body of a constructor (excluding prologue directives) must be a super call
+                    // if both of the following are true:
+                    // - The containing class is a derived class.
+                    // - The constructor declares parameter properties
+                    //   or the containing class declares instance member variables with initializers.
+                    const superCallShouldBeFirst =
+                        some((<ClassDeclaration>node.parent).members, isInstancePropertyWithInitializerOrPrivateIdentifierProperty) ||
+                        some(node.parameters, p => hasModifier(p, ModifierFlags.ParameterPropertyModifier));
+
+                    // Skip past any prologue directives to find the first statement
+                    // to ensure that it was a super call.
+                    if (superCallShouldBeFirst) {
+                        const statements = node.body!.statements;
+                        let superCallStatement: ExpressionStatement | undefined;
+
+                        for (const statement of statements) {
+                            if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCall((<ExpressionStatement>statement).expression)) {
+                                superCallStatement = <ExpressionStatement>statement;
+                                break;
+                            }
+                            if (!isPrologueDirective(statement)) {
+                                break;
+                            }
+                        }
+                        if (!superCallStatement) {
+                            error(node, Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_when_a_class_contains_initialized_properties_parameter_properties_or_private_identifiers);
+                        }
                     }
                 }
                 else if (!classExtendsNull) {

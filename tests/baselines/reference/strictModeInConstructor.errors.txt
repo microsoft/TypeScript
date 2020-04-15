@@ -1,0 +1,70 @@
+tests/cases/compiler/strictModeInConstructor.ts(27,5): error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.
+
+
+==== tests/cases/compiler/strictModeInConstructor.ts (1 errors) ====
+    class A {
+    }
+    
+     
+    
+    class B extends A {
+        public s: number = 9;
+    
+        constructor () {
+            "use strict";   // No error
+            super();
+        }
+    }
+    
+    class C extends A {
+        public s: number = 9;
+    
+        constructor () {
+            super();            // No error
+            "use strict";
+        }
+    }
+    
+    class D extends A {
+        public s: number = 9;
+    
+        constructor () {
+        ~~~~~~~~~~~~~~~~
+            var x = 1; // Error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            super();
+    ~~~~~~~~~~~~~~~~
+            "use strict";
+    ~~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.
+    }
+    
+    class Bs extends A {
+        public static s: number = 9;
+    
+        constructor () {
+            "use strict";   // No error
+            super();
+        }
+    }
+    
+    class Cs extends A {
+        public static s: number = 9;
+    
+        constructor () {
+            super();            // No error
+            "use strict";
+        }
+    }
+    
+    class Ds extends A {
+        public static s: number = 9;
+    
+        constructor () {
+            var x = 1; // no Error
+            super();
+            "use strict";
+        }
+    }
