@@ -77,6 +77,7 @@
         "codefixes/fixModuleAndTargetOptions.ts",
         "codefixes/fixExtendsInterfaceBecomesImplements.ts",
         "codefixes/fixForgottenThisPropertyAccess.ts",
+        "codefixes/fixImportNonExportedMember.ts",
         "codefixes/fixInvalidJsxCharacters.ts",
         "codefixes/fixUnusedIdentifier.ts",
         "codefixes/fixUnreachableCode.ts",

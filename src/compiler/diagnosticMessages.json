@@ -5185,6 +5185,14 @@
         "category": "Message",
         "code": 90053
     },
+    "Export '{0}' from module '{1}'": {
+        "category": "Message",
+        "code": 90054
+    },
+    "Export all non-exported member": {
+        "category": "Message",
+        "code": 90055
+    },
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001
