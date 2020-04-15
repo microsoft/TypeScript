@@ -60,7 +60,7 @@ namespace ts.codefix {
                 }
             }
 
-            const prefix = textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, errorCode, sourceFile, checker, token));
+            const prefix = textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, errorCode, sourceFile, token));
             if (prefix.length) {
                 result.push(createCodeFixAction(fixName, prefix, [Diagnostics.Prefix_0_with_an_underscore, token.getText(sourceFile)], fixIdPrefix, Diagnostics.Prefix_all_unused_declarations_with_where_possible));
             }
@@ -76,7 +76,7 @@ namespace ts.codefix {
                 const token = getTokenAtPosition(sourceFile, diag.start);
                 switch (context.fixId) {
                     case fixIdPrefix:
-                        tryPrefixDeclaration(changes, diag.code, sourceFile, checker, token);
+                        tryPrefixDeclaration(changes, diag.code, sourceFile, token);
                         break;
                     case fixIdDelete: {
                         if (token.kind === SyntaxKind.InferKeyword) break; // Can't delete
@@ -146,7 +146,7 @@ namespace ts.codefix {
         return false;
     }
 
-    function tryPrefixDeclaration(changes: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, checker: TypeChecker, token: Node): void {
+    function tryPrefixDeclaration(changes: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, token: Node): void {
         // Don't offer to prefix a property.
         if (errorCode === Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code) return;
         if (token.kind === SyntaxKind.InferKeyword) {
@@ -154,11 +154,14 @@ namespace ts.codefix {
         }
         if (isIdentifier(token) && canPrefix(token)) {
             changes.replaceNode(sourceFile, token, createIdentifier(`_${token.text}`));
-            FindAllReferences.Core.eachSymbolReferenceInFile(token, checker, sourceFile, (ref: Node) => {
-                if (isIdentifier(ref)) {
-                    changes.replaceNode(sourceFile, ref, createIdentifier(`_${ref.text}`));
-                }
-            });
+            if (isParameter(token.parent)) {
+                const tags = getJSDocParameterTags(token.parent);
+                tags.forEach((tag) => {
+                    if (isIdentifier(tag.name)) {
+                        changes.replaceNode(sourceFile, tag.name, createIdentifier(`_${tag.name.text}`));
+                    }
+                });
+            }
         }
     }
 
