@@ -19793,9 +19793,11 @@ namespace ts {
                         return getTypeOfSymbol(symbol);
                     }
                     if (isVariableDeclaration(declaration) && declaration.parent.parent.kind === SyntaxKind.ForOfStatement) {
-                        const expressionType = getTypeOfDottedName(declaration.parent.parent.expression, /*diagnostic*/ undefined);
+                        const statement = declaration.parent.parent;
+                        const expressionType = getTypeOfDottedName(statement.expression, /*diagnostic*/ undefined);
                         if (expressionType) {
-                            return getForOfIterationType(declaration.parent.parent, expressionType);
+                            const use = statement.awaitModifier ? IterationUse.ForAwaitOf : IterationUse.ForOf;
+                            return checkIteratedTypeOrElementType(use, expressionType, undefinedType, /*errorNode*/ undefined);
                         }
                     }
                     if (diagnostic) {
@@ -32025,19 +32027,14 @@ namespace ts {
         }
 
         function checkRightHandSideOfForOf(statement: ForOfStatement): Type {
-            return getForOfIterationType(statement, checkNonNullExpression(statement.expression));
-        }
-
-        function getForOfIterationType(statement: ForOfStatement, expressionType: Type) {
             const use = statement.awaitModifier ? IterationUse.ForAwaitOf : IterationUse.ForOf;
-            return checkIteratedTypeOrElementType(use, expressionType, undefinedType, statement.expression);
+            return checkIteratedTypeOrElementType(use, checkNonNullExpression(statement.expression), undefinedType, statement.expression);
         }
 
         function checkIteratedTypeOrElementType(use: IterationUse, inputType: Type, sentType: Type, errorNode: Node | undefined): Type {
             if (isTypeAny(inputType)) {
                 return inputType;
             }
-
             return getIteratedTypeOrElementType(use, inputType, sentType, errorNode, /*checkAssignability*/ true) || anyType;
         }
 
