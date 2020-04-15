@@ -6546,6 +6546,7 @@ namespace ts {
 
         NoSpaceIfEmpty = 1 << 19,       // If the literal is empty, do not add spaces between braces.
         SingleElement = 1 << 20,
+        SpaceAfterList = 1 << 21,       // Add space after list
 
         // Precomputed Formats
         Modifiers = SingleLine | SpaceBetweenSiblings | NoInterveningComments,
@@ -6580,7 +6581,7 @@ namespace ts {
         CaseOrDefaultClauseStatements = Indented | MultiLine | NoTrailingNewLine | OptionalIfEmpty,
         HeritageClauseTypes = CommaDelimited | SpaceBetweenSiblings | SingleLine,
         SourceFileStatements = MultiLine | NoTrailingNewLine,
-        Decorators = MultiLine | Optional,
+        Decorators = MultiLine | Optional | SpaceAfterList,
         TypeArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | AngleBrackets | Optional,
         TypeParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | AngleBrackets | Optional,
         Parameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis,
