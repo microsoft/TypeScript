@@ -5737,5 +5737,9 @@
     "The intersection '{0}' was reduced to 'never' because property '{1}' exists in multiple constituents and is private in some.": {
         "category": "Error",
         "code": 18032
+    },
+    "Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.": {
+        "category": "Error",
+        "code": 18033
     }
 }
