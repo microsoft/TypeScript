@@ -20150,7 +20150,7 @@ namespace ts {
                         if (isEmptyArrayAssignment(node)) {
                             return getEvolvingArrayType(neverType);
                         }
-                        const assignedType = getBaseTypeOfLiteralType(getInitialOrAssignedType(flow));
+                        const assignedType = getWidenedLiteralType(getInitialOrAssignedType(flow));
                         return isTypeAssignableTo(assignedType, declaredType) ? assignedType : anyArrayType;
                     }
                     if (declaredType.flags & TypeFlags.Union) {
