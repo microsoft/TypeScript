@@ -423,7 +423,7 @@ namespace ts.server {
         let toDo: ProjectAndLocation<TLocation>[] | undefined;
         const seenProjects = createMap<true>();
         forEachProjectInProjects(projects, initialLocation && initialLocation.fileName, (project, path) => {
-            // TLocation shoud be either `DocumentPosition` or `undefined`. Since `initialLocation` is `TLocation` this cast should be valid.
+            // TLocation should be either `DocumentPosition` or `undefined`. Since `initialLocation` is `TLocation` this cast should be valid.
             const location = (initialLocation ? { fileName: path, pos: initialLocation.pos } : undefined) as TLocation;
             toDo = callbackProjectAndLocation(project, location, projectService, toDo, seenProjects, cb);
         });
@@ -447,6 +447,13 @@ namespace ts.server {
                     }
                 });
             }
+        }
+        else {
+            projectService.forEachEnabledProject(project => {
+                if (!addToSeen(seenProjects, project)) return;
+                projectService.loadAncestorProjectTree(seenProjects);
+                toDo = callbackProjectAndLocation(project, undefined as TLocation, projectService, toDo, seenProjects, cb);
+            });
         }
 
         while (toDo && toDo.length) {
