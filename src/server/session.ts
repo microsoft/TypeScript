@@ -304,7 +304,7 @@ namespace ts.server {
             projects,
             defaultProject,
             /*initialLocation*/ undefined,
-            ({ project }, tryAddToTodo) => {
+            (project, _, tryAddToTodo) => {
                 for (const output of action(project)) {
                     if (!contains(outputs, output, resultsEqual) && !tryAddToTodo(project, getLocation(output))) {
                         outputs.push(output);
@@ -329,7 +329,7 @@ namespace ts.server {
             projects,
             defaultProject,
             initialLocation,
-            ({ project, location }, tryAddToTodo) => {
+            (project, location, tryAddToTodo) => {
                 for (const output of project.getLanguageService().findRenameLocations(location.fileName, location.pos, findInStrings, findInComments, hostPreferences.providePrefixAndSuffixTextForRename) || emptyArray) {
                     if (!contains(outputs, output, documentSpansEqual) && !tryAddToTodo(project, documentSpanLocation(output))) {
                         outputs.push(output);
@@ -358,7 +358,7 @@ namespace ts.server {
             projects,
             defaultProject,
             initialLocation,
-            ({ project, location }, getMappedLocation) => {
+            (project, location, getMappedLocation) => {
                 for (const outputReferencedSymbol of project.getLanguageService().findReferences(location.fileName, location.pos) || emptyArray) {
                     const mappedDefinitionFile = getMappedLocation(project, documentSpanLocation(outputReferencedSymbol.definition));
                     const definition: ReferencedSymbolDefinitionInfo = mappedDefinitionFile === undefined ?
@@ -408,7 +408,8 @@ namespace ts.server {
     }
 
     type CombineProjectOutputCallback<TLocation extends DocumentPosition | undefined> = (
-        where: ProjectAndLocation<TLocation>,
+        project: Project,
+        location: TLocation,
         getMappedLocation: (project: Project, location: DocumentPosition) => DocumentPosition | undefined,
     ) => void;
 
@@ -424,7 +425,7 @@ namespace ts.server {
         forEachProjectInProjects(projects, initialLocation && initialLocation.fileName, (project, path) => {
             // TLocation shoud be either `DocumentPosition` or `undefined`. Since `initialLocation` is `TLocation` this cast should be valid.
             const location = (initialLocation ? { fileName: path, pos: initialLocation.pos } : undefined) as TLocation;
-            toDo = callbackProjectAndLocation({ project, location }, projectService, toDo, seenProjects, cb);
+            toDo = callbackProjectAndLocation(project, location, projectService, toDo, seenProjects, cb);
         });
 
         // After initial references are collected, go over every other project and see if it has a reference for the symbol definition.
@@ -442,14 +443,16 @@ namespace ts.server {
                     if (!addToSeen(seenProjects, project)) return;
                     const definition = mapDefinitionInProject(defaultDefinition, project, getGeneratedDefinition, getSourceDefinition);
                     if (definition) {
-                        toDo = callbackProjectAndLocation<TLocation>({ project, location: definition as TLocation }, projectService, toDo, seenProjects, cb);
+                        toDo = callbackProjectAndLocation<TLocation>(project, definition as TLocation, projectService, toDo, seenProjects, cb);
                     }
                 });
             }
         }
 
         while (toDo && toDo.length) {
-            toDo = callbackProjectAndLocation(Debug.checkDefined(toDo.pop()), projectService, toDo, seenProjects, cb);
+            const next = toDo.pop()
+            Debug.assertIsDefined(next);
+            toDo = callbackProjectAndLocation(next.project, next.location, projectService, toDo, seenProjects, cb);
         }
     }
 
@@ -487,31 +490,33 @@ namespace ts.server {
     }
 
     function callbackProjectAndLocation<TLocation extends DocumentPosition | undefined>(
-        projectAndLocation: ProjectAndLocation<TLocation>,
+        project: Project,
+        location: TLocation,
         projectService: ProjectService,
         toDo: ProjectAndLocation<TLocation>[] | undefined,
         seenProjects: Map<true>,
         cb: CombineProjectOutputCallback<TLocation>,
     ): ProjectAndLocation<TLocation>[] | undefined {
-        const { project, location } = projectAndLocation;
         if (project.getCancellationToken().isCancellationRequested()) return undefined; // Skip rest of toDo if cancelled
         // If this is not the file we were actually looking, return rest of the toDo
         if (isLocationProjectReferenceRedirect(project, location)) return toDo;
-        cb(projectAndLocation, (project, location) => {
-            addToSeen(seenProjects, projectAndLocation.project);
-            const originalLocation = projectService.getOriginalLocationEnsuringConfiguredProject(project, location);
+        cb(project, location, (innerProject, location) => {
+            addToSeen(seenProjects, project);
+            const originalLocation = projectService.getOriginalLocationEnsuringConfiguredProject(innerProject, location);
             if (!originalLocation) return undefined;
 
             const originalScriptInfo = projectService.getScriptInfo(originalLocation.fileName)!;
             toDo = toDo || [];
 
             for (const project of originalScriptInfo.containingProjects) {
-                addToTodo({ project, location: originalLocation as TLocation }, toDo, seenProjects);
+                addToTodo(project, originalLocation as TLocation, toDo, seenProjects);
             }
             const symlinkedProjectsMap = projectService.getSymlinkedProjects(originalScriptInfo);
             if (symlinkedProjectsMap) {
                 symlinkedProjectsMap.forEach((symlinkedProjects, symlinkedPath) => {
-                    for (const symlinkedProject of symlinkedProjects) addToTodo({ project: symlinkedProject, location: { fileName: symlinkedPath, pos: originalLocation.pos } as TLocation }, toDo!, seenProjects);
+                    for (const symlinkedProject of symlinkedProjects) {
+                        addToTodo(symlinkedProject, { fileName: symlinkedPath, pos: originalLocation.pos } as TLocation, toDo!, seenProjects);
+                    }
                 });
             }
             return originalLocation === location ? undefined : originalLocation;
@@ -519,8 +524,8 @@ namespace ts.server {
         return toDo;
     }
 
-    function addToTodo<TLocation extends DocumentPosition | undefined>(projectAndLocation: ProjectAndLocation<TLocation>, toDo: Push<ProjectAndLocation<TLocation>>, seenProjects: Map<true>): void {
-        if (addToSeen(seenProjects, projectAndLocation.project)) toDo.push(projectAndLocation);
+    function addToTodo<TLocation extends DocumentPosition | undefined>(project: Project, location: TLocation, toDo: Push<ProjectAndLocation<TLocation>>, seenProjects: Map<true>): void {
+        if (addToSeen(seenProjects, project)) toDo.push({ project, location });
     }
 
     function addToSeen(seenProjects: Map<true>, project: Project) {
@@ -1302,8 +1307,8 @@ namespace ts.server {
         private getProjects(args: protocol.FileRequestArgs, getScriptInfoEnsuringProjectsUptoDate?: boolean, ignoreNoProjectError?: boolean): Projects {
             let projects: readonly Project[] | undefined;
             let symLinkedProjects: MultiMap<Project> | undefined;
-            if (args.projectFileName) {
-                const project = this.getProject(args.projectFileName);
+            if (args.projectFileName) { // manually specified tsconfig, not sure anybody does this (but be sure to note it in the fix)
+                const project = this.getProject(args.projectFileName); // and we only get here when currentFileOnly is off
                 if (project) {
                     projects = [project];
                 }
