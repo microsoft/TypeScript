@@ -1,0 +1,28 @@
+=== tests/cases/conformance/jsdoc/overrideTag1.ts ===
+class Foo {
+>Foo : Foo
+
+    /**
+     * @param {number} entity -
+     * @param {string} attribute -
+     */
+    something(entity, attribute) { }
+>something : (entity: any, attribute: any) => void
+>entity : any
+>attribute : any
+}
+
+class Bar extends Foo {
+>Bar : Bar
+>Foo : Foo
+
+    /**
+     * @override
+     */
+    something(entity, attribute) {
+>something : (entity: any, attribute: any) => void
+>entity : any
+>attribute : any
+   }
+}
+

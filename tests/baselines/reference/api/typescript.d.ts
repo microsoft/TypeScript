@@ -398,15 +398,17 @@ declare namespace ts {
         JSDocTypeTag = 320,
         JSDocTemplateTag = 321,
         JSDocTypedefTag = 322,
-        JSDocPropertyTag = 323,
-        SyntaxList = 324,
-        NotEmittedStatement = 325,
-        PartiallyEmittedExpression = 326,
-        CommaListExpression = 327,
-        MergeDeclarationMarker = 328,
-        EndOfDeclarationMarker = 329,
-        SyntheticReferenceExpression = 330,
-        Count = 331,
+        JSDocInheritDocTag = 323,
+        JSDocOverrideTag = 324,
+        JSDocPropertyTag = 325,
+        SyntaxList = 326,
+        NotEmittedStatement = 327,
+        PartiallyEmittedExpression = 328,
+        CommaListExpression = 329,
+        MergeDeclarationMarker = 330,
+        EndOfDeclarationMarker = 331,
+        SyntheticReferenceExpression = 332,
+        Count = 333,
         FirstAssignment = 62,
         LastAssignment = 74,
         FirstCompoundAssignment = 63,
@@ -435,9 +437,9 @@ declare namespace ts {
         LastStatement = 241,
         FirstNode = 153,
         FirstJSDocNode = 294,
-        LastJSDocNode = 323,
+        LastJSDocNode = 325,
         FirstJSDocTagNode = 306,
-        LastJSDocTagNode = 323,
+        LastJSDocTagNode = 325,
     }
     export enum NodeFlags {
         None = 0,
@@ -1704,6 +1706,12 @@ declare namespace ts {
         typeParameters?: readonly JSDocTemplateTag[];
         parameters: readonly JSDocParameterTag[];
         type: JSDocReturnTag | undefined;
+    }
+    export interface JSDocInheritDocTag extends JSDocTag {
+        kind: SyntaxKind.JSDocInheritDocTag;
+    }
+    export interface JSDocOverrideTag extends JSDocTag {
+        kind: SyntaxKind.JSDocOverrideTag;
     }
     export interface JSDocPropertyLikeTag extends JSDocTag, Declaration {
         parent: JSDoc;

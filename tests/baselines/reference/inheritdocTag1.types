@@ -1,0 +1,28 @@
+=== tests/cases/conformance/jsdoc/inheritdocTag1.ts ===
+class Foo {
+>Foo : Foo
+
+    /**
+     * @param {number} entity -
+     * @param {string} attribute -
+     */
+    something(entity, attribute) { }
+>something : (entity: any, attribute: any) => void
+>entity : any
+>attribute : any
+}
+
+class Bar extends Foo {
+>Bar : Bar
+>Foo : Foo
+
+    /**
+     * @inheritdoc
+     */
+    something(entity, attribute) {
+>something : (entity: any, attribute: any) => void
+>entity : any
+>attribute : any
+   }
+}
+

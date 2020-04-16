@@ -1,0 +1,28 @@
+=== tests/cases/conformance/jsdoc/inheritdocTag1.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(inheritdocTag1.ts, 0, 0))
+
+    /**
+     * @param {number} entity -
+     * @param {string} attribute -
+     */
+    something(entity, attribute) { }
+>something : Symbol(Foo.something, Decl(inheritdocTag1.ts, 0, 11))
+>entity : Symbol(entity, Decl(inheritdocTag1.ts, 5, 14))
+>attribute : Symbol(attribute, Decl(inheritdocTag1.ts, 5, 21))
+}
+
+class Bar extends Foo {
+>Bar : Symbol(Bar, Decl(inheritdocTag1.ts, 6, 1))
+>Foo : Symbol(Foo, Decl(inheritdocTag1.ts, 0, 0))
+
+    /**
+     * @inheritdoc
+     */
+    something(entity, attribute) {
+>something : Symbol(Bar.something, Decl(inheritdocTag1.ts, 8, 23))
+>entity : Symbol(entity, Decl(inheritdocTag1.ts, 12, 14))
+>attribute : Symbol(attribute, Decl(inheritdocTag1.ts, 12, 21))
+   }
+}
+

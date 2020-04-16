@@ -7065,6 +7065,12 @@ namespace ts {
                         case "readonly":
                             tag = parseSimpleTag(start, SyntaxKind.JSDocReadonlyTag, tagName);
                             break;
+                        case "inheritdoc":
+                            tag = parseSimpleTag(start, SyntaxKind.JSDocInheritDocTag, tagName);
+                            break;
+                        case "override":
+                            tag = parseSimpleTag(start, SyntaxKind.JSDocOverrideTag, tagName);
+                            break;
                         case "this":
                             tag = parseThisTag(start, tagName);
                             break;

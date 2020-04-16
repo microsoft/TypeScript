@@ -486,6 +486,8 @@ namespace ts {
         JSDocTypeTag,
         JSDocTemplateTag,
         JSDocTypedefTag,
+        JSDocInheritDocTag,
+        JSDocOverrideTag,
         JSDocPropertyTag,
 
         // Synthesized list
@@ -2743,6 +2745,14 @@ namespace ts {
         typeParameters?: readonly JSDocTemplateTag[];
         parameters: readonly JSDocParameterTag[];
         type: JSDocReturnTag | undefined;
+    }
+
+    export interface JSDocInheritDocTag extends JSDocTag {
+        kind: SyntaxKind.JSDocInheritDocTag;
+    }
+
+    export interface JSDocOverrideTag extends JSDocTag {
+        kind: SyntaxKind.JSDocOverrideTag;
     }
 
     export interface JSDocPropertyLikeTag extends JSDocTag, Declaration {
