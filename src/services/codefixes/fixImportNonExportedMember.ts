@@ -31,7 +31,8 @@ namespace ts.codefix {
     function getInfo(sourceFile: SourceFile, context: CodeFixContext | CodeFixAllContext, pos: number): Info | undefined {
         const node = getTokenAtPosition(sourceFile, pos);
         if (node && isIdentifier(node)) {
-            const importDecl = tryGetImportFrom(getTokenAtPosition(sourceFile, 0));
+            const importStart = getLineStartPositionForPosition(pos, sourceFile);
+            const importDecl = tryGetImportFrom(getTokenAtPosition(sourceFile, importStart));
             if (!importDecl || !isStringLiteralLike(importDecl.moduleSpecifier)) {
                 return undefined;
             }
