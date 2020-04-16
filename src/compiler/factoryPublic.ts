@@ -2487,6 +2487,9 @@ namespace ts {
         return tag;
     }
 
+    /**
+     * @deprecated Use `createJSDocParameterTag` to create jsDoc param tag.
+     */
     export function createJSDocParamTag(name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, comment?: string): JSDocParameterTag {
         const tag = createJSDocTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, "param", comment);
         tag.typeExpression = typeExpression;
@@ -2581,7 +2584,7 @@ namespace ts {
         return tag;
     }
 
-    export function createJSDocImplementTag(classExpression: JSDocImplementsTag["class"], comment?: string) {
+    export function createJSDocImplementsTag(classExpression: JSDocImplementsTag["class"], comment?: string) {
         const tag = createJSDocTag<JSDocImplementsTag>(SyntaxKind.JSDocImplementsTag, "implements", comment);
         tag.class = classExpression;
         return tag;

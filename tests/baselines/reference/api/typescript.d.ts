@@ -4250,6 +4250,9 @@ declare namespace ts {
     function createJSDocTypeTag(typeExpression: JSDocTypeExpression, comment?: string): JSDocTypeTag;
     function createJSDocReturnTag(typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag;
     function createJSDocThisTag(typeExpression?: JSDocTypeExpression): JSDocThisTag;
+    /**
+     * @deprecated Use `createJSDocParameterTag` to create jsDoc param tag.
+     */
     function createJSDocParamTag(name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, comment?: string): JSDocParameterTag;
     function createJSDocClassTag(comment?: string): JSDocClassTag;
     function createJSDocComment(comment?: string | undefined, tags?: NodeArray<JSDocTag> | undefined): JSDoc;
@@ -4263,7 +4266,7 @@ declare namespace ts {
     function createJSDocPropertyTag(typeExpression: JSDocTypeExpression | undefined, name: EntityName, isNameFirst: boolean, isBracketed: boolean, comment?: string): JSDocPropertyTag;
     function createJSDocParameterTag(typeExpression: JSDocTypeExpression | undefined, name: EntityName, isNameFirst: boolean, isBracketed: boolean, comment?: string): JSDocParameterTag;
     function createJSDocTypeLiteral(jsDocPropertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean): JSDocTypeLiteral;
-    function createJSDocImplementTag(classExpression: JSDocImplementsTag["class"], comment?: string): JSDocImplementsTag;
+    function createJSDocImplementsTag(classExpression: JSDocImplementsTag["class"], comment?: string): JSDocImplementsTag;
     function createJSDocAuthorTag(comment?: string): JSDocTag;
     function createJSDocPublicTag(): JSDocTag;
     function createJSDocPrivateTag(): JSDocTag;
