@@ -4245,6 +4245,8 @@ declare namespace Intl {
         style?: string;
         currency?: string;
         currencyDisplay?: string;
+        unit?: string;
+        unitDisplay?: string;
         useGrouping?: boolean;
         minimumIntegerDigits?: number;
         minimumFractionDigits?: number;
