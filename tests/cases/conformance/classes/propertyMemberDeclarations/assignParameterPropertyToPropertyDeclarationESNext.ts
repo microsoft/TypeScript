@@ -4,6 +4,7 @@ class C {
     qux = this.bar // should error
     bar = this.foo // should error
     quiz = this.bar // ok
+    quench = this.m1() // ok
     m1() {
         this.foo // ok
     }

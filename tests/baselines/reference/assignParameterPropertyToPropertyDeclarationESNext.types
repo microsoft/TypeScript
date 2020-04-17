@@ -20,6 +20,13 @@ class C {
 >this : this
 >bar : string
 
+    quench = this.m1() // ok
+>quench : void
+>this.m1() : void
+>this.m1 : () => void
+>this : this
+>m1 : () => void
+
     m1() {
 >m1 : () => void
 
