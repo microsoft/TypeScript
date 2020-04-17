@@ -1143,7 +1143,7 @@ obj[Symbol.toStringTag] = "test";   // Use of well-known symbol
 
 ### <a name="3.2.5"/>3.2.5 The Void Type
 
-The Void type, referenced by the `void` keyword, represents the absence of a value and is used as the return type of functions with no return value.
+The Void type, referenced by the `void` keyword, represents the absence of a value and is used as the return type of functions which doesn't have to return value.
 
 The only possible values for the Void type are `null` and `undefined`. The Void type is a subtype of the Any type and a supertype of the Null and Undefined types, but otherwise Void is unrelated to all other types.
 
