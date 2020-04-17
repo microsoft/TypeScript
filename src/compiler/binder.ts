@@ -2974,7 +2974,7 @@ namespace ts {
 
         function bindSpecialPropertyAssignment(node: BindablePropertyAssignmentExpression) {
             // Class declarations in Typescript do not allow property declarations
-            const parentSymbol = lookupSymbolForPropertyAccess(node.left.expression);
+            const parentSymbol = lookupSymbolForPropertyAccess(node.left.expression, container) || lookupSymbolForPropertyAccess(node.left.expression, blockScopeContainer) ;
             if (!isInJSFile(node) && !isFunctionSymbol(parentSymbol)) {
                 return;
             }
@@ -3083,7 +3083,7 @@ namespace ts {
         }
 
         function bindPropertyAssignment(name: BindableStaticNameExpression, propertyAccess: BindableStaticAccessExpression, isPrototypeProperty: boolean, containerIsClass: boolean) {
-            let namespaceSymbol = lookupSymbolForPropertyAccess(name);
+            let namespaceSymbol = lookupSymbolForPropertyAccess(name, container) || lookupSymbolForPropertyAccess(name, blockScopeContainer);
             const isToplevel = isTopLevelNamespaceAssignment(propertyAccess);
             namespaceSymbol = bindPotentiallyMissingNamespaces(namespaceSymbol, propertyAccess.expression, isToplevel, isPrototypeProperty, containerIsClass);
             bindPotentiallyNewExpandoMemberToNamespace(propertyAccess, namespaceSymbol, isPrototypeProperty);
