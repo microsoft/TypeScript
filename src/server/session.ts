@@ -1307,8 +1307,8 @@ namespace ts.server {
         private getProjects(args: protocol.FileRequestArgs, getScriptInfoEnsuringProjectsUptoDate?: boolean, ignoreNoProjectError?: boolean): Projects {
             let projects: readonly Project[] | undefined;
             let symLinkedProjects: MultiMap<Project> | undefined;
-            if (args.projectFileName) { // manually specified tsconfig, not sure anybody does this (but be sure to note it in the fix)
-                const project = this.getProject(args.projectFileName); // and we only get here when currentFileOnly is off
+            if (args.projectFileName) {
+                const project = this.getProject(args.projectFileName);
                 if (project) {
                     projects = [project];
                 }
