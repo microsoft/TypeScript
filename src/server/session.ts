@@ -448,16 +448,9 @@ namespace ts.server {
                 });
             }
         }
-        else {
-            projectService.forEachEnabledProject(project => {
-                if (!addToSeen(seenProjects, project)) return;
-                projectService.loadAncestorProjectTree(seenProjects);
-                toDo = callbackProjectAndLocation(project, undefined as TLocation, projectService, toDo, seenProjects, cb);
-            });
-        }
 
         while (toDo && toDo.length) {
-            const next = toDo.pop()
+            const next = toDo.pop();
             Debug.assertIsDefined(next);
             toDo = callbackProjectAndLocation(next.project, next.location, projectService, toDo, seenProjects, cb);
         }
@@ -1907,14 +1900,27 @@ namespace ts.server {
 
         private getFullNavigateToItems(args: protocol.NavtoRequestArgs): readonly NavigateToItem[] {
             const { currentFileOnly, searchValue, maxResultCount } = args;
+            if (!args.file) {
+                const items: NavigateToItem[] = [];
+                this.projectService.forEachEnabledProject(project => {
+                    this.projectService.loadAncestorProjectTree();
+                    for (const item of project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*filename*/ undefined, /*excludeDts*/ project.isNonTsProject())) {
+                        if (!contains(items, item, navigateToItemIsEqualTo)) {
+                            items.push(item);
+                        }
+                    }
+                });
+                return items;
+            }
+            const fileArgs = args as protocol.FileRequestArgs;
             if (currentFileOnly) {
-                const { file, project } = this.getFileAndProject(args);
+                const { file, project } = this.getFileAndProject(fileArgs);
                 return project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, file);
             }
             else {
                 return combineProjectOutputWhileOpeningReferencedProjects<NavigateToItem>(
-                    this.getProjects(args),
-                    this.getDefaultProject(args),
+                    this.getProjects(fileArgs),
+                    this.getDefaultProject(fileArgs),
                     project =>
                         project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*fileName*/ undefined, /*excludeDts*/ project.isNonTsProject()),
                     documentSpanLocation,
