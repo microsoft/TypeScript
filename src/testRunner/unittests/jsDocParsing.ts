@@ -321,6 +321,12 @@ namespace ts {
  * @author John Doe <john.doe@example.com>
  * @author John Doe <john.doe@example.com> unexpected comment
  */`);
+
+                parsesCorrectly("consecutive newline tokens",
+                    `/**
+ * @example
+ * Some\n\n * text\r\n * with newlines.
+ */`);
             });
         });
         describe("getFirstToken", () => {
