@@ -28332,15 +28332,18 @@ namespace ts {
                 case SyntaxKind.InKeyword:
                     return checkInExpression(left, right, leftType, rightType);
                 case SyntaxKind.AmpersandAmpersandToken:
-                    return getTypeFacts(leftType) & TypeFacts.Truthy ?
+                    return leftType === nonInferrableType || rightType === nonInferrableType ? nonInferrableType :
+                        getTypeFacts(leftType) & TypeFacts.Truthy ?
                         getUnionType([extractDefinitelyFalsyTypes(strictNullChecks ? leftType : getBaseTypeOfLiteralType(rightType)), rightType]) :
                         leftType;
                 case SyntaxKind.BarBarToken:
-                    return getTypeFacts(leftType) & TypeFacts.Falsy ?
+                    return leftType === nonInferrableType || rightType === nonInferrableType ? nonInferrableType :
+                        getTypeFacts(leftType) & TypeFacts.Falsy && leftType !== nonInferrableType ?
                         getUnionType([removeDefinitelyFalsyTypes(leftType), rightType], UnionReduction.Subtype) :
                         leftType;
                 case SyntaxKind.QuestionQuestionToken:
-                    return getTypeFacts(leftType) & TypeFacts.EQUndefinedOrNull ?
+                    return leftType === nonInferrableType || rightType === nonInferrableType ? nonInferrableType :
+                        getTypeFacts(leftType) & TypeFacts.EQUndefinedOrNull && leftType !== nonInferrableType ?
                         getUnionType([getNonNullableType(leftType), rightType], UnionReduction.Subtype) :
                         leftType;
                 case SyntaxKind.EqualsToken:
