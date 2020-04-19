@@ -227,9 +227,7 @@ namespace ts {
                 return visitNode(cbNode, (<CallExpression>node).expression) ||
                     visitNode(cbNode, (<CallExpression>node).questionDotToken) ||
                     visitNodes(cbNode, cbNodes, (<CallExpression>node).typeArguments) ||
-                    visitNode(cbNode, (<CallExpression>node).openParenToken) ||
-                    visitNodes(cbNode, cbNodes, (<CallExpression>node).arguments) ||
-                    visitNode(cbNode, (<CallExpression>node).closeParenToken);
+                    visitNodes(cbNode, cbNodes, (<CallExpression>node).arguments);
             case SyntaxKind.TaggedTemplateExpression:
                 return visitNode(cbNode, (<TaggedTemplateExpression>node).tag) ||
                     visitNode(cbNode, (<TaggedTemplateExpression>node).questionDotToken) ||

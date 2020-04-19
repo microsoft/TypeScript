@@ -1135,8 +1135,8 @@ declare namespace ts {
         questionDotToken?: QuestionDotToken;
         typeArguments?: NodeArray<TypeNode>;
         openParenToken: OpenParenToken;
-        closeParenToken: CloseParenToken;
         arguments: NodeArray<Expression>;
+        closeParenToken: CloseParenToken;
     }
     export interface CallChain extends CallExpression {
         _optionalChainBrand: any;
@@ -1157,8 +1157,8 @@ declare namespace ts {
         kind: SyntaxKind.NewExpression;
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
-        arguments?: NodeArray<Expression>;
         openParenToken?: OpenParenToken;
+        arguments?: NodeArray<Expression>;
         closeParenToken?: CloseParenToken;
     }
     export interface TaggedTemplateExpression extends MemberExpression {
