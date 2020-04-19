@@ -227,7 +227,9 @@ namespace ts {
                 return visitNode(cbNode, (<CallExpression>node).expression) ||
                     visitNode(cbNode, (<CallExpression>node).questionDotToken) ||
                     visitNodes(cbNode, cbNodes, (<CallExpression>node).typeArguments) ||
-                    visitNodes(cbNode, cbNodes, (<CallExpression>node).arguments);
+                    visitNode(cbNode, (<CallExpression>node).openParenToken) ||
+                    visitNodes(cbNode, cbNodes, (<CallExpression>node).arguments) ||
+                    visitNode(cbNode, (<CallExpression>node).closeParenToken);
             case SyntaxKind.TaggedTemplateExpression:
                 return visitNode(cbNode, (<TaggedTemplateExpression>node).tag) ||
                     visitNode(cbNode, (<TaggedTemplateExpression>node).questionDotToken) ||
@@ -4899,8 +4901,8 @@ namespace ts {
                         callExpr.typeArguments = typeArguments;
                         const { openParen, argumentList, closeParen } = parseArgumentList();
                         callExpr.openParenToken = openParen;
-                        callExpr.closeParenToken = closeParen;
                         callExpr.arguments = argumentList;
+                        callExpr.closeParenToken = closeParen;
                         if (questionDotToken || tryReparseOptionalChain(expression)) {
                             callExpr.flags |= NodeFlags.OptionalChain;
                         }
@@ -5229,8 +5231,8 @@ namespace ts {
             if (token() === SyntaxKind.OpenParenToken) {
                 const { openParen, argumentList, closeParen } = parseArgumentList();
                 node.openParenToken = openParen;
-                node.closeParenToken = closeParen;
                 node.arguments = argumentList;
+                node.closeParenToken = closeParen;
             }
             else if (node.typeArguments) {
                 parseErrorAt(fullStart, scanner.getStartPos(), Diagnostics.A_new_expression_with_type_arguments_must_always_be_followed_by_a_parenthesized_argument_list);

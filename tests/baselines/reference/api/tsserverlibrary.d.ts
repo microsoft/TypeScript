@@ -533,6 +533,8 @@ declare namespace ts {
     export type PlusToken = Token<SyntaxKind.PlusToken>;
     export type MinusToken = Token<SyntaxKind.MinusToken>;
     export type AssertsToken = Token<SyntaxKind.AssertsKeyword>;
+    export type OpenParenToken = Token<SyntaxKind.OpenParenToken>;
+    export type CloseParenToken = Token<SyntaxKind.CloseParenToken>;
     export type Modifier = Token<SyntaxKind.AbstractKeyword> | Token<SyntaxKind.AsyncKeyword> | Token<SyntaxKind.ConstKeyword> | Token<SyntaxKind.DeclareKeyword> | Token<SyntaxKind.DefaultKeyword> | Token<SyntaxKind.ExportKeyword> | Token<SyntaxKind.PublicKeyword> | Token<SyntaxKind.PrivateKeyword> | Token<SyntaxKind.ProtectedKeyword> | Token<SyntaxKind.ReadonlyKeyword> | Token<SyntaxKind.StaticKeyword>;
     export type ModifiersArray = NodeArray<Modifier>;
     export interface Identifier extends PrimaryExpression, Declaration {
@@ -1132,6 +1134,8 @@ declare namespace ts {
         expression: LeftHandSideExpression;
         questionDotToken?: QuestionDotToken;
         typeArguments?: NodeArray<TypeNode>;
+        openParenToken: OpenParenToken;
+        closeParenToken: CloseParenToken;
         arguments: NodeArray<Expression>;
     }
     export interface CallChain extends CallExpression {
@@ -1154,6 +1158,8 @@ declare namespace ts {
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
         arguments?: NodeArray<Expression>;
+        openParenToken?: OpenParenToken;
+        closeParenToken?: CloseParenToken;
     }
     export interface TaggedTemplateExpression extends MemberExpression {
         kind: SyntaxKind.TaggedTemplateExpression;
