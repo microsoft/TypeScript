@@ -1,5 +1,5 @@
 tests/cases/compiler/functionCall7.ts(5,10): error TS2554: Expected 1 arguments, but got 2.
-tests/cases/compiler/functionCall7.ts(6,5): error TS2345: Argument of type '4' is not assignable to parameter of type 'c1'.
+tests/cases/compiler/functionCall7.ts(6,5): error TS2345: Argument of type 'number' is not assignable to parameter of type 'c1'.
 tests/cases/compiler/functionCall7.ts(7,1): error TS2554: Expected 1 arguments, but got 0.
 
 
@@ -13,7 +13,7 @@ tests/cases/compiler/functionCall7.ts(7,1): error TS2554: Expected 1 arguments, 
 !!! error TS2554: Expected 1 arguments, but got 2.
     foo(4);
         ~
-!!! error TS2345: Argument of type '4' is not assignable to parameter of type 'c1'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'c1'.
     foo();
     ~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.

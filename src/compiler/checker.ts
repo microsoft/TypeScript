@@ -4070,10 +4070,17 @@ namespace ts {
             let leftStr = symbolValueDeclarationIsContextSensitive(left.symbol) ? typeToString(left, left.symbol.valueDeclaration) : typeToString(left);
             let rightStr = symbolValueDeclarationIsContextSensitive(right.symbol) ? typeToString(right, right.symbol.valueDeclaration) : typeToString(right);
             if (leftStr === rightStr) {
-                leftStr = typeToString(left, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
-                rightStr = typeToString(right, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
+                leftStr = getTypeNameForErrorDisplay(left);
+                rightStr = getTypeNameForErrorDisplay(right);
+            }
+            else if (isLiteralType(left) && !isLiteralType(right)) {
+                leftStr = getTypeNameForErrorDisplay(getBaseTypeOfLiteralType(left))
             }
             return [leftStr, rightStr];
+        }
+
+        function getTypeNameForErrorDisplay(type: Type) {
+            return typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
         }
 
         function symbolValueDeclarationIsContextSensitive(symbol: Symbol): boolean {

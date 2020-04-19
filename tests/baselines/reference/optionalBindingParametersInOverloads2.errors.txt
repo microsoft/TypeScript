@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/destructuring/optionalBindingParametersInOverloads2.ts(8,7): error TS2322: Type 'false' is not assignable to type 'string'.
+tests/cases/conformance/es6/destructuring/optionalBindingParametersInOverloads2.ts(8,7): error TS2322: Type 'boolean' is not assignable to type 'string'.
 tests/cases/conformance/es6/destructuring/optionalBindingParametersInOverloads2.ts(8,23): error TS2322: Type 'string' is not assignable to type 'boolean'.
 
 
@@ -12,7 +12,7 @@ tests/cases/conformance/es6/destructuring/optionalBindingParametersInOverloads2.
     
     foo({ x: false, y: 0, z: "" });
           ~
-!!! error TS2322: Type 'false' is not assignable to type 'string'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'string'.
 !!! related TS6500 tests/cases/conformance/es6/destructuring/optionalBindingParametersInOverloads2.ts:1:30: The expected type comes from property 'x' which is declared here on type '{ x: string; y: number; z: boolean; }'
                           ~
 !!! error TS2322: Type 'string' is not assignable to type 'boolean'.
