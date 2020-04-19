@@ -20,7 +20,7 @@ verify.codeFix({
     description: "Infer parameter types from usage",
     index: 0,
     newFileContent:
-        `/**
+`/**
  * @param {{ b: { c: any; }; }} a
  * @param {{ n: () => number; }} m
  * @param {{ y: { z: number[]; }; }} x
