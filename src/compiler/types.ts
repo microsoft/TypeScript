@@ -769,6 +769,8 @@ namespace ts {
     export type PlusToken = Token<SyntaxKind.PlusToken>;
     export type MinusToken = Token<SyntaxKind.MinusToken>;
     export type AssertsToken = Token<SyntaxKind.AssertsKeyword>;
+    export type OpenParenToken = Token<SyntaxKind.OpenParenToken>;
+    export type CloseParenToken = Token<SyntaxKind.CloseParenToken>;
 
     export type Modifier
         = Token<SyntaxKind.AbstractKeyword>
@@ -1917,6 +1919,8 @@ namespace ts {
         expression: LeftHandSideExpression;
         questionDotToken?: QuestionDotToken;
         typeArguments?: NodeArray<TypeNode>;
+        openParenToken: OpenParenToken;
+        closeParenToken: CloseParenToken;
         arguments: NodeArray<Expression>;
     }
 
@@ -1997,6 +2001,8 @@ namespace ts {
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
         arguments?: NodeArray<Expression>;
+        openParenToken?: OpenParenToken;
+        closeParenToken?: CloseParenToken;
     }
 
     export interface TaggedTemplateExpression extends MemberExpression {

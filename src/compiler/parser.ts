@@ -4897,7 +4897,10 @@ namespace ts {
                         callExpr.expression = expression;
                         callExpr.questionDotToken = questionDotToken;
                         callExpr.typeArguments = typeArguments;
-                        callExpr.arguments = parseArgumentList();
+                        const { openParen, argumentList, closeParen } = parseArgumentList();
+                        callExpr.openParenToken = openParen;
+                        callExpr.closeParenToken = closeParen;
+                        callExpr.arguments = argumentList;
                         if (questionDotToken || tryReparseOptionalChain(expression)) {
                             callExpr.flags |= NodeFlags.OptionalChain;
                         }
@@ -4909,7 +4912,10 @@ namespace ts {
                     const callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
                     callExpr.expression = expression;
                     callExpr.questionDotToken = questionDotToken;
-                    callExpr.arguments = parseArgumentList();
+                    const { openParen, argumentList, closeParen } = parseArgumentList();
+                    callExpr.openParenToken = openParen;
+                    callExpr.closeParenToken = closeParen;
+                    callExpr.arguments = argumentList;
                     if (questionDotToken || tryReparseOptionalChain(expression)) {
                         callExpr.flags |= NodeFlags.OptionalChain;
                     }
@@ -4931,10 +4937,10 @@ namespace ts {
         }
 
         function parseArgumentList() {
-            parseExpected(SyntaxKind.OpenParenToken);
-            const result = parseDelimitedList(ParsingContext.ArgumentExpressions, parseArgumentExpression);
-            parseExpected(SyntaxKind.CloseParenToken);
-            return result;
+            const openParen = parseExpectedToken(SyntaxKind.OpenParenToken);
+            const argumentList = parseDelimitedList(ParsingContext.ArgumentExpressions, parseArgumentExpression);
+            const closeParen = parseExpectedToken(SyntaxKind.CloseParenToken);
+            return { openParen, argumentList, closeParen };
         }
 
         function parseTypeArgumentsInExpression() {
@@ -5221,7 +5227,10 @@ namespace ts {
             node.expression = expression;
             node.typeArguments = typeArguments;
             if (token() === SyntaxKind.OpenParenToken) {
-                node.arguments = parseArgumentList();
+                const { openParen, argumentList, closeParen } = parseArgumentList();
+                node.openParenToken = openParen;
+                node.closeParenToken = closeParen;
+                node.arguments = argumentList;
             }
             else if (node.typeArguments) {
                 parseErrorAt(fullStart, scanner.getStartPos(), Diagnostics.A_new_expression_with_type_arguments_must_always_be_followed_by_a_parenthesized_argument_list);

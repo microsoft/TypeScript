@@ -1,0 +1,25 @@
+/* @internal */
+namespace ts.codefix {
+    const fixId = "removeAccidentalCallParentheses";
+    const errorCodes = [
+        Diagnostics.This_expression_is_not_callable_because_it_is_a_get_accessor_Did_you_mean_to_use_it_without.code,
+    ];
+    registerCodeFix({
+        errorCodes,
+        getCodeActions(context) {
+            let token = getTokenAtPosition(context.sourceFile, context.span.start);
+            while (token && !isCallExpression(token)) {
+                token = token.parent;
+            }
+            if (!token) {
+                return undefined;
+            }
+            const callExpression = token;
+            const changes = textChanges.ChangeTracker.with(context, t => {
+                t.deleteNodeRange(context.sourceFile, callExpression.openParenToken, callExpression.closeParenToken);
+            });
+            return [createCodeFixActionWithoutFixAll(fixId, changes, Diagnostics.Remove_parentheses)];
+        },
+        fixIds: [fixId],
+    });
+}
