@@ -544,7 +544,6 @@ namespace ts {
             createSymbol,
             createIndexInfo,
             getAnyType: () => anyType,
-            getUnknownType: () => unknownType,
             getStringType: () => stringType,
             getNumberType: () => numberType,
             createPromiseType,

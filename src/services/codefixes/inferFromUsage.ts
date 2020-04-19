@@ -899,8 +899,8 @@ namespace ts.codefix {
                     low: t => t === stringNumber
                 },
                 {
-                    high: t => !(t.flags & (TypeFlags.Any | TypeFlags.Unknown | TypeFlags.Void)),
-                    low: t => !!(t.flags & (TypeFlags.Any | TypeFlags.Unknown | TypeFlags.Void))
+                    high: t => !(t.flags & (TypeFlags.Any | TypeFlags.Void)),
+                    low: t => !!(t.flags & (TypeFlags.Any | TypeFlags.Void))
                 },
                 {
                     high: t => !(t.flags & (TypeFlags.Nullable | TypeFlags.Any | TypeFlags.Void)) && !(getObjectFlags(t) & ObjectFlags.Anonymous),

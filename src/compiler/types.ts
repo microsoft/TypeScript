@@ -3491,7 +3491,6 @@ namespace ts {
         getDefaultFromTypeParameter(type: Type): Type | undefined;
 
         /* @internal */ getAnyType(): Type;
-        /* @internal */ getUnknownType(): Type;
         /* @internal */ getStringType(): Type;
         /* @internal */ getNumberType(): Type;
         /* @internal */ getBooleanType(): Type;
