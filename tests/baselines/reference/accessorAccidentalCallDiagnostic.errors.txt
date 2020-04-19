@@ -1,5 +1,4 @@
-tests/cases/compiler/accessorAccidentalCallDiagnostic.ts(6,14): error TS2349: This expression is not callable.
-  Type 'Number' has no call signatures.
+tests/cases/compiler/accessorAccidentalCallDiagnostic.ts(6,14): message TS6232: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
 
 
 ==== tests/cases/compiler/accessorAccidentalCallDiagnostic.ts (1 errors) ====
@@ -10,9 +9,7 @@ tests/cases/compiler/accessorAccidentalCallDiagnostic.ts(6,14): error TS2349: Th
     function test24554(x: Test24554) {
         return x.property();
                  ~~~~~~~~
-!!! error TS2349: This expression is not callable.
-!!! error TS2349:   Type 'Number' has no call signatures.
-!!! related TS6232 tests/cases/compiler/accessorAccidentalCallDiagnostic.ts:6:12: 'x.property' is a 'get' accessor; did you mean to use it without '()'?
+!!! message TS6232: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
 !!! related TS2728 tests/cases/compiler/accessorAccidentalCallDiagnostic.ts:3:9: 'property' is declared here.
     }
     

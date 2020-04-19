@@ -25851,24 +25851,14 @@ namespace ts {
                     error(node, Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new, typeToString(funcType));
                 }
                 else {
-                    const relatedInformation: DiagnosticRelatedInformation[] = [];
-                    if (node.arguments.length === 0) {
-                        // Diagnose get accessors incorrectly called as functions
-                        const { resolvedSymbol } = getNodeLinks(node.expression);
-                        if (resolvedSymbol && resolvedSymbol.flags & SymbolFlags.GetAccessor) {
-                            relatedInformation.push(
-                                createDiagnosticForNode(node.expression, Diagnostics._0_is_a_get_accessor_did_you_mean_to_use_it_without, getTextOfNode(node.expression)),
-                                createDiagnosticForNode(resolvedSymbol.valueDeclaration, Diagnostics._0_is_declared_here, symbolToString(resolvedSymbol))
-                            );
-                        }
-                    }
-                    else if (node.arguments.length === 1) {
+                    let relatedInformation: DiagnosticRelatedInformation | undefined;
+                    if (node.arguments.length === 1) {
                         const text = getSourceFileOfNode(node).text;
                         if (isLineBreak(text.charCodeAt(skipTrivia(text, node.expression.end, /* stopAfterLineBreak */ true) - 1))) {
-                            relatedInformation.push(createDiagnosticForNode(node.expression, Diagnostics.Are_you_missing_a_semicolon));
+                            relatedInformation = createDiagnosticForNode(node.expression, Diagnostics.Are_you_missing_a_semicolon);
                         }
                     }
-                    invocationError(node.expression, apparentType, SignatureKind.Call, ...relatedInformation);
+                    invocationError(node.expression, apparentType, SignatureKind.Call, relatedInformation);
                 }
                 return resolveErrorCall(node);
             }
@@ -26136,11 +26126,22 @@ namespace ts {
                 relatedMessage: maybeMissingAwait ? Diagnostics.Did_you_forget_to_use_await : undefined,
             };
         }
-        function invocationError(errorTarget: Node, apparentType: Type, kind: SignatureKind, ...relatedInformation: DiagnosticRelatedInformation[]) {
-            const { messageChain, relatedMessage: relatedInfo } = invocationErrorDetails(apparentType, kind);
-            const diagnostic = createDiagnosticForNodeFromMessageChain(errorTarget, messageChain);
-            if (relatedInfo) {
-                addRelatedInfo(diagnostic, createDiagnosticForNode(errorTarget, relatedInfo));
+        function invocationError(errorTarget: Node, apparentType: Type, kind: SignatureKind, relatedInformation?: DiagnosticRelatedInformation) {
+            let diagnostic;
+            if (isCallExpression(errorTarget.parent) && errorTarget.parent.arguments.length === 0) {
+                // Diagnose get accessors incorrectly called as functions
+                const { resolvedSymbol } = getNodeLinks(errorTarget);
+                if (resolvedSymbol && resolvedSymbol.flags & SymbolFlags.GetAccessor) {
+                    diagnostic = createDiagnosticForNode(errorTarget, Diagnostics.This_expression_is_not_callable_because_it_is_a_get_accessor_Did_you_mean_to_use_it_without);
+                    addRelatedInfo(diagnostic, createDiagnosticForNode(resolvedSymbol.valueDeclaration, Diagnostics._0_is_declared_here, symbolToString(resolvedSymbol)));
+                }
+            }
+            if (!diagnostic) {
+                const { messageChain, relatedMessage: relatedInfo } = invocationErrorDetails(apparentType, kind);
+                diagnostic = createDiagnosticForNodeFromMessageChain(errorTarget, messageChain);
+                if (relatedInfo) {
+                    addRelatedInfo(diagnostic, createDiagnosticForNode(errorTarget, relatedInfo));
+                }
             }
             if (isCallExpression(errorTarget.parent)) {
                 const { start, length } = getDiagnosticSpanForCallNode(errorTarget.parent, /* doNotIncludeArguments */ true);
@@ -26148,7 +26149,7 @@ namespace ts {
                 diagnostic.length = length;
             }
             diagnostics.add(diagnostic);
-            invocationErrorRecovery(apparentType, kind, addRelatedInfo(diagnostic, ...relatedInformation));
+            invocationErrorRecovery(apparentType, kind, relatedInformation ? addRelatedInfo(diagnostic, relatedInformation) : diagnostic);
         }
 
         function invocationErrorRecovery(apparentType: Type, kind: SignatureKind, diagnostic: Diagnostic) {
