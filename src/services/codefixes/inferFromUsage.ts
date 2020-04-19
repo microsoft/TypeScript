@@ -457,12 +457,9 @@ namespace ts.codefix {
             Array: t => checker.createArrayType(t),
             Promise: t => checker.createPromiseType(t),
         };
-        const builtinPrimitives = [
+        const builtins = [
             checker.getStringType(),
             checker.getNumberType(),
-        ];
-        const builtins = [
-            ...builtinPrimitives,
             checker.createArrayType(checker.getAnyType()),
             checker.createPromiseType(checker.getAnyType()),
         ];
@@ -613,7 +610,7 @@ namespace ts.codefix {
 
             switch (node.parent.kind) {
                 case SyntaxKind.ExpressionStatement:
-                    addCandidateType(usage, checker.getVoidType());
+                    inferTypeFromExpressionStatement(node, usage);
                     break;
                 case SyntaxKind.PostfixUnaryExpression:
                     usage.isNumber = true;
@@ -669,6 +666,10 @@ namespace ts.codefix {
             if (isExpressionNode(node)) {
                 addCandidateType(usage, checker.getContextualType(node));
             }
+        }
+
+        function inferTypeFromExpressionStatement(node: Expression, usage: Usage): void {
+            addCandidateType(usage, isPropertyAccessExpression(node) ? checker.getAnyType() : checker.getVoidType());
         }
 
         function inferTypeFromPrefixUnaryExpression(node: PrefixUnaryExpression, usage: Usage): void {
@@ -898,8 +899,8 @@ namespace ts.codefix {
                     low: t => t === stringNumber
                 },
                 {
-                    high: t => !(t.flags & (TypeFlags.Any | TypeFlags.Void)),
-                    low: t => !!(t.flags & (TypeFlags.Any | TypeFlags.Void))
+                    high: t => !(t.flags & (TypeFlags.Any | TypeFlags.Unknown | TypeFlags.Void)),
+                    low: t => !!(t.flags & (TypeFlags.Any | TypeFlags.Unknown | TypeFlags.Void))
                 },
                 {
                     high: t => !(t.flags & (TypeFlags.Nullable | TypeFlags.Any | TypeFlags.Void)) && !(getObjectFlags(t) & ObjectFlags.Anonymous),
@@ -971,7 +972,7 @@ namespace ts.codefix {
                 types.push(checker.createArrayType(combineFromUsage(usage.numberIndex)));
             }
             if (usage.properties?.size || usage.calls?.length || usage.constructs?.length || usage.stringIndex) {
-                types.push(inferLiteralOrStructuralType(usage));
+                types.push(inferStructuralType(usage));
             }
 
             types.push(...(usage.candidateTypes || []).map(t => checker.getBaseTypeOfLiteralType(t)));
@@ -980,12 +981,7 @@ namespace ts.codefix {
             return types;
         }
 
-        function inferLiteralOrStructuralType(usage: Usage) {
-            const matchingBuiltins = builtinPrimitives.filter(builtin => allPropertiesAreAssignableToUsage(builtin, usage));
-            if (matchingBuiltins.length === 1) {
-                return matchingBuiltins[0];
-            }
-
+        function inferStructuralType(usage: Usage) {
             const members = createUnderscoreEscapedMap<Symbol>();
             if (usage.properties) {
                 usage.properties.forEach((u, name) => {
@@ -1021,11 +1017,7 @@ namespace ts.codefix {
                     return !sigs.length || !checker.isTypeAssignableTo(source, getFunctionFromCalls(propUsage.calls));
                 }
                 else {
-                    const combinedPropUsage = combineFromUsage(propUsage);
-                    if (combinedPropUsage.flags & TypeFlags.Void) {
-                        return false;
-                    }
-                    return !checker.isTypeAssignableTo(source, combinedPropUsage);
+                    return !checker.isTypeAssignableTo(source, combineFromUsage(propUsage));
                 }
             });
         }
