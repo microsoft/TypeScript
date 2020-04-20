@@ -217,6 +217,8 @@ namespace ts.OutliningElementsCollector {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
                 return spanForTemplateLiteral(<TemplateExpression | NoSubstitutionTemplateLiteral>n);
+            case SyntaxKind.ArrayBindingPattern:
+                return spanForNode(n, /*autoCollapse*/ false, /*useFullStart*/ !isBindingElement(n.parent), SyntaxKind.OpenBracketToken);
         }
 
         function spanForJSXElement(node: JsxElement): OutliningSpan | undefined {
