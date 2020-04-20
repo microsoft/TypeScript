@@ -15490,7 +15490,7 @@ namespace ts {
                 }
 
                 if (isLiteralType(source) && !isLiteralType(target)) {
-                    generalizedSourceType = getTypeNameForErrorDisplay(getBaseTypeOfLiteralType(source))
+                    generalizedSourceType = getTypeNameForErrorDisplay(getBaseTypeOfLiteralType(source));
                 }
 
                 reportError(message, generalizedSourceType, targetType);
