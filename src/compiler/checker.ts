@@ -4073,9 +4073,6 @@ namespace ts {
                 leftStr = getTypeNameForErrorDisplay(left);
                 rightStr = getTypeNameForErrorDisplay(right);
             }
-            else if (isLiteralType(left) && !isLiteralType(right)) {
-                leftStr = getTypeNameForErrorDisplay(getBaseTypeOfLiteralType(left))
-            }
             return [leftStr, rightStr];
         }
 
@@ -15458,6 +15455,7 @@ namespace ts {
             function reportRelationError(message: DiagnosticMessage | undefined, source: Type, target: Type) {
                 if (incompatibleStack.length) reportIncompatibleStack();
                 const [sourceType, targetType] = getTypeNamesForErrorDisplay(source, target);
+                let generalizedSourceType = sourceType;
 
                 if (target.flags & TypeFlags.TypeParameter) {
                     const constraint = getBaseConstraintOfType(target);
@@ -15491,7 +15489,11 @@ namespace ts {
                     }
                 }
 
-                reportError(message, sourceType, targetType);
+                if (isLiteralType(source) && !isLiteralType(target)) {
+                    generalizedSourceType = getTypeNameForErrorDisplay(getBaseTypeOfLiteralType(source))
+                }
+
+                reportError(message, generalizedSourceType, targetType);
             }
 
             function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {
