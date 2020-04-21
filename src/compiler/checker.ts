@@ -15489,7 +15489,7 @@ namespace ts {
                     }
                 }
 
-                if (isLiteralType(source) && !isLiteralType(target)) {
+                if (isLiteralType(source) && !(source.flags & TypeFlags.Union) && !isLiteralType(target) && !(target.flags & TypeFlags.Union)) {
                     generalizedSourceType = getTypeNameForErrorDisplay(getBaseTypeOfLiteralType(source));
                 }
 
