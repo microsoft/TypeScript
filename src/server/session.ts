@@ -1328,7 +1328,7 @@ namespace ts.server {
             // filter handles case when 'projects' is undefined
             projects = filter(projects, p => p.languageServiceEnabled && !p.isOrphan());
             if (!ignoreNoProjectError && (!projects || !projects.length) && !symLinkedProjects) {
-                this.projectService.logErrorForScriptInfoNotFound(args.file);
+                this.projectService.logErrorForScriptInfoNotFound(args.file ?? args.projectFileName);
                 return Errors.ThrowNoProject();
             }
             return symLinkedProjects ? { projects: projects!, symLinkedProjects } : projects!; // TODO: GH#18217
@@ -1339,6 +1339,9 @@ namespace ts.server {
                 const project = this.getProject(args.projectFileName);
                 if (project) {
                     return project;
+                }
+                if (!args.file) {
+                    return Errors.ThrowNoProject();
                 }
             }
             const info = this.projectService.getScriptInfo(args.file)!;
@@ -1899,32 +1902,25 @@ namespace ts.server {
         }
 
         private getFullNavigateToItems(args: protocol.NavtoRequestArgs): readonly NavigateToItem[] {
-            const { currentFileOnly, searchValue, maxResultCount } = args;
-            if (!args.file) {
-                if (args.projectFileName) {
-                    const project = this.projectService.findProject(args.projectFileName);
-                    if (project) {
-                        return project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*filename*/ undefined, /*excludeDts*/ project.isNonTsProject());
-                    }
-                }
+            const { currentFileOnly, searchValue, maxResultCount, projectFileName } = args;
+            if (currentFileOnly) {
+                Debug.assertDefined(args.file);
+                const { file, project } = this.getFileAndProject(args as protocol.FileRequestArgs);
+                return project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, file);
+            }
+            else if (!args.file && !projectFileName) {
                 return combineProjectOutputFromEveryProject(
                     this.projectService,
                     project => project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*filename*/ undefined, /*excludeDts*/ project.isNonTsProject()),
-                    (a, b) => a.fileName === b.fileName);
-            }
-            const fileArgs = args as protocol.FileRequestArgs;
-            if (currentFileOnly) {
-                const { file, project } = this.getFileAndProject(fileArgs);
-                return project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, file);
-            }
-            else {
-                return combineProjectOutputWhileOpeningReferencedProjects<NavigateToItem>(
-                    this.getProjects(fileArgs),
-                    this.getDefaultProject(fileArgs),
-                    project => project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*fileName*/ undefined, /*excludeDts*/ project.isNonTsProject()),
-                    documentSpanLocation,
                     navigateToItemIsEqualTo);
             }
+            const fileArgs = args as protocol.FileRequestArgs;
+            return combineProjectOutputWhileOpeningReferencedProjects<NavigateToItem>(
+                this.getProjects(fileArgs),
+                this.getDefaultProject(fileArgs),
+                project => project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*fileName*/ undefined, /*excludeDts*/ project.isNonTsProject()),
+                documentSpanLocation,
+                navigateToItemIsEqualTo);
 
             function navigateToItemIsEqualTo(a: NavigateToItem, b: NavigateToItem): boolean {
                 if (a === b) {
