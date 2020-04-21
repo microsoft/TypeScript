@@ -876,6 +876,10 @@ namespace ts {
         return info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : undefined;
     }
 
+    export function isComputedNonLiteralName(name: PropertyName): boolean {
+        return name.kind === SyntaxKind.ComputedPropertyName && !isStringOrNumericLiteralLike(name.expression);
+    }
+
     export function getTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral): __String {
         switch (name.kind) {
             case SyntaxKind.Identifier:
