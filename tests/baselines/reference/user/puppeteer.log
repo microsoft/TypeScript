@@ -1,9 +1,11 @@
 Exit Code: 1
 Standard output:
+src/JSHandle.ts(440,5): error TS2322: Type 'unknown' is not assignable to type 'T'.
+  'unknown' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'unknown'.
+src/JSHandle.ts(454,5): error TS2322: Type 'unknown' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'unknown'.
 src/Launcher.js(181,17): error TS1003: Identifier expected.
 src/Launcher.js(359,17): error TS1003: Identifier expected.
-src/PipeTransport.js(19,17): error TS1003: Identifier expected.
-src/WebSocketTransport.js(19,17): error TS1003: Identifier expected.
 
 
 
