@@ -1,0 +1,7 @@
+=== tests/cases/compiler/errorForBareSpecifierWithImplicitModuleResolution1.ts ===
+import { thing } from "non-existent-module";
+>thing : Symbol(thing, Decl(errorForBareSpecifierWithImplicitModuleResolution1.ts, 0, 8))
+
+thing()
+>thing : Symbol(thing, Decl(errorForBareSpecifierWithImplicitModuleResolution1.ts, 0, 8))
+

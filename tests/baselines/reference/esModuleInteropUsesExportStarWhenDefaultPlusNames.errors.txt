@@ -1,9 +1,12 @@
 tests/cases/compiler/esModuleInteropUsesExportStarWhenDefaultPlusNames.ts(1,28): error TS2307: Cannot find module './dep' or its corresponding type declarations.
+tests/cases/compiler/esModuleInteropUsesExportStarWhenDefaultPlusNames.ts(1,28): error TS5084: Cannot find module './dep'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 
 
-==== tests/cases/compiler/esModuleInteropUsesExportStarWhenDefaultPlusNames.ts (1 errors) ====
+==== tests/cases/compiler/esModuleInteropUsesExportStarWhenDefaultPlusNames.ts (2 errors) ====
     import Deps, { var2 } from './dep';
                                ~~~~~~~
 !!! error TS2307: Cannot find module './dep' or its corresponding type declarations.
+                               ~~~~~~~
+!!! error TS5084: Cannot find module './dep'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
     void Deps;
     void var2;
