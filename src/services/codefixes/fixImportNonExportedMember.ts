@@ -9,7 +9,7 @@ namespace ts.codefix {
         getCodeActions(context) {
             const { sourceFile } = context;
             const info = getInfo(sourceFile, context, context.span.start);
-            if (!info) {
+            if (!info || info.originSourceFile.isDeclarationFile) {
                 return undefined;
             }
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, info.originSourceFile, info.node));
@@ -31,8 +31,7 @@ namespace ts.codefix {
     function getInfo(sourceFile: SourceFile, context: CodeFixContext | CodeFixAllContext, pos: number): Info | undefined {
         const node = getTokenAtPosition(sourceFile, pos);
         if (node && isIdentifier(node)) {
-            const importStart = getLineStartPositionForPosition(pos, sourceFile);
-            const importDecl = tryGetImportFrom(getTokenAtPosition(sourceFile, importStart));
+            const importDecl = findAncestor(node, isImportDeclaration);
             if (!importDecl || !isStringLiteralLike(importDecl.moduleSpecifier)) {
                 return undefined;
             }
@@ -45,13 +44,55 @@ namespace ts.codefix {
         }
     }
 
-    function tryGetImportFrom(token: Node): ImportDeclaration | undefined {
-        return token.kind === SyntaxKind.ImportKeyword ? tryCast(token.parent, isImportDeclaration) : undefined;
+    function isImportDeclaration(node: Node): node is ImportDeclaration {
+        return node.kind === SyntaxKind.ImportDeclaration;
+    }
+
+    function getNamedExportDeclaration(moduleSymbol: Symbol): ExportDeclaration | undefined {
+        let namedExport;
+        moduleSymbol.exports?.forEach((symbol) => {
+            const specifier = symbol.declarations[0];
+            if(specifier && isExportSpecifier(specifier) && isNamedExports(specifier.parent)) {
+                namedExport = specifier.parent?.parent;
+            }
+        });
+        return namedExport;
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: Identifier): void {
+        const moduleSymbol = sourceFile.localSymbol || sourceFile.symbol;
+        const localSymbol = moduleSymbol.valueDeclaration.locals?.get(node.escapedText);
+        if(!localSymbol) {
+            return;
+        }
+        if(isFunctionSymbol(localSymbol)) {
+            const start = localSymbol.valueDeclaration.pos;
+            changes.insertExportModifierAtPos(sourceFile, start? start+1:0);
+            return;
+        }
+
+        const current: VariableDeclarationList | Node = localSymbol.valueDeclaration.parent;
+        if(isVariableDeclarationList(current) && current.declarations.length <= 1) {
+            const start = localSymbol.valueDeclaration.parent.pos;
+            changes.insertExportModifierAtPos(sourceFile, start? start+1:0);
+            return;
+        }
+
+        const namedExportDeclaration = getNamedExportDeclaration(moduleSymbol);
+        let exportDeclaration;
         const exportSpecifier = createExportSpecifier(/*propertyName*/ undefined, node);
-        const exportDeclaration = createExportDeclaration(
+        if(namedExportDeclaration?.exportClause && isNamedExports(namedExportDeclaration.exportClause)) {
+            exportDeclaration = updateExportDeclaration(
+                namedExportDeclaration,
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                updateNamedExports(namedExportDeclaration.exportClause, namedExportDeclaration.exportClause.elements.concat(exportSpecifier)),
+                /*moduleSpecifier*/ undefined,
+                /*isTypeOnly*/ false);
+            changes.replaceNode(sourceFile, namedExportDeclaration, exportDeclaration);
+            return;
+        }
+        exportDeclaration = createExportDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             createNamedExports([exportSpecifier]),

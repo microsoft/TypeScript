@@ -14,15 +14,9 @@ verify.codeFixAll({
     fixId: "importNonExportedMember",
     fixAllDescription: "Export all non-exported member",
     newFileContent: {
-        '/a.ts': `declare function foo(): any;
-declare function bar(): any;
+        '/a.ts': `export declare function foo(): any;
+export declare function bar(): any;
 declare function zoo(): any;
-export { zoo }
-
-export { foo };
-
-
-export { bar };
-`
+export { zoo }`
     }
 });

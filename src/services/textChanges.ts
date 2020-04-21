@@ -668,6 +668,10 @@ namespace ts.textChanges {
             this.insertText(sourceFile, node.getStart(sourceFile), "export ");
         }
 
+        public insertExportModifierAtPos(sourceFile: SourceFile, position: number): void {
+            this.insertText(sourceFile, position, "export ");
+        }
+
         /**
          * This function should be used to insert nodes in lists when nodes don't carry separators as the part of the node range,
          * i.e. arguments in arguments lists, parameters in parameter lists etc.

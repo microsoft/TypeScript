@@ -23,10 +23,7 @@ verify.codeFix({
     description: `Export 'bar' from module './b'`,
     newFileContent: {
         '/b.ts': `declare function foo(): any;
-declare function bar(): any;
-export { foo };
-
-export { bar };
-`
+export declare function bar(): any;
+export { foo };`
     }
 });
