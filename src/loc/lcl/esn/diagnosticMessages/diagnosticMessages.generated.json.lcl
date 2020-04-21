@@ -445,7 +445,7 @@
         <Str Cat="Text">
           <Val><![CDATA['A label is not allowed here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aquí no se permite una etiqueta.]]></Val>
+            <Val><![CDATA[No se permite una etiqueta aquí.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1189,7 +1189,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'export {}' to make this file into a module]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Agregar "export {}" para convertir este archivo en un módulo]]></Val>
+            <Val><![CDATA[Agregar "export {}" para transformar este archivo en un módulo]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3205,7 +3205,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Compiler reserves name '{0}' when emitting private identifier downlevel.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El compilador reserva el nombre "{0}" al emitir un identificador privado en el nivel inferior.]]></Val>
+            <Val><![CDATA[El compilador reserva el nombre "{0}" al emitir un identificador privado válido para versiones anteriores.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7200,6 +7200,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Only_numeric_enums_can_have_computed_members_but_this_expression_has_type_0_If_you_do_not_need_exhau_18033" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Solo las enumeraciones numéricas pueden tener miembros calculados, pero esta expresión tiene el tipo "{0}". Si no requiere comprobaciones de exhaustividad, considere la posibilidad de usar un literal de objeto en su lugar.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword_2340" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Only public and protected methods of the base class are accessible via the 'super' keyword.]]></Val>
@@ -10324,7 +10333,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The shadowing declaration of '{0}' is defined here]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La declaración de reemplazo de "{0}" se define aquí.]]></Val>
+            <Val><![CDATA[La declaración que ensombrece a "{0}" se define aquí.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11119,7 +11128,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo se origina en esta importación. No se puede construir ni llamar a una importación de estilo de espacio de nombres y provocará un error en tiempo de ejecución. Considere la posibilidad de usar una importación predeterminada o requerir la importación aquí.]]></Val>
+            <Val><![CDATA[El tipo se origina en esta importación. No se puede construir ni llamar a una importación de estilo de espacio de nombres y provocará un error en tiempo de ejecución. Considere la posibilidad de usar una importación predeterminada o require aquí en su lugar.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11680,7 +11689,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Using compiler options of project reference redirect '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El uso de las opciones del compilador de la referencia del proyecto redirige "{0}".]]></Val>
+            <Val><![CDATA[Uso de las opciones del compilador de redireccionamiento de la referencia del proyecto "{0}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

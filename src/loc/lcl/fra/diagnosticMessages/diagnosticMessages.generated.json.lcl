@@ -445,7 +445,7 @@
         <Str Cat="Text">
           <Val><![CDATA['A label is not allowed here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['Étiquette non autorisée ici.]]></Val>
+            <Val><![CDATA[Étiquette non autorisée ici.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3205,7 +3205,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Compiler reserves name '{0}' when emitting private identifier downlevel.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le compilateur réserve le nom '{0}' quand il émet un identificateur privé de niveau inférieur.]]></Val>
+            <Val><![CDATA[Le compilateur réserve le nom '{0}' quand il émet un identificateur privé pour une version antérieure.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7200,6 +7200,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Only_numeric_enums_can_have_computed_members_but_this_expression_has_type_0_If_you_do_not_need_exhau_18033" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Seules les enums numériques peuvent avoir des membres calculés, mais cette expression a le type '{0}'. Si vous n'avez pas besoin de contrôles d'exhaustivité, utilisez un littéral d'objet à la place.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword_2340" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Only public and protected methods of the base class are accessible via the 'super' keyword.]]></Val>
@@ -7411,7 +7420,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Overload {0} of {1}, '{2}', gave the following error.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La surcharge {0} de {1}, '{2}', a généré l'erreur suivante.]]></Val>
+            <Val><![CDATA[La surcharge {0} sur {1}, '{2}', a généré l'erreur suivante.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11119,7 +11128,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le type provient de cette importation. Impossible d'appeler ou de construire une importation de style d'espace de noms, ce qui va entraîner un échec au moment de l'exécution. À la place, utilisez une importation par défaut ou une obligation d'importation ici.]]></Val>
+            <Val><![CDATA[Le type provient de cette importation. Impossible d'appeler ou de construire une importation de style d'espace de noms, ce qui va entraîner un échec au moment de l'exécution. À la place, utilisez ici une importation par défaut ou une importation avec require.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
