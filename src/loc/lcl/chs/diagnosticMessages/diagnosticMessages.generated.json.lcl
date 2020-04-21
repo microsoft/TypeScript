@@ -1180,7 +1180,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'export {}' to make this file into a module]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[添加 "export {}" 以将此文件变为模块]]></Val>
+            <Val><![CDATA[添加 "export {}"，将此文件变为模块]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3193,7 +3193,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Compiler reserves name '{0}' when emitting private identifier downlevel.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[当发出专用标识符下层时，编译器预留名称 "{0}"。]]></Val>
+            <Val><![CDATA[当发出专用标识符下层时，编译器会预留名称“{0}”。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4996,7 +4996,7 @@
         <Str Cat="Text">
           <Val><![CDATA[File '{0}' has an unsupported extension. The only supported extensions are {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[文件 "{0}" 具有不受支持的扩展名。支持的扩展名只有 {1}。]]></Val>
+            <Val><![CDATA[文件“{0}”具有不受支持的扩展名。仅支持 {1} 扩展名。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5641,7 +5641,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Import default '{0}' from module "{1}"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[从模块 "{1}" 导入默认的 "{0}"]]></Val>
+            <Val><![CDATA[从模块“{1}”导入默认的“{0}”]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7188,6 +7188,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Only_numeric_enums_can_have_computed_members_but_this_expression_has_type_0_If_you_do_not_need_exhau_18033" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[只有数字枚举可具有计算成员，但此表达式的类型为“{0}”。如果不需要全面性检查，请考虑改用对象文本。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword_2340" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Only public and protected methods of the base class are accessible via the 'super' keyword.]]></Val>
@@ -7399,7 +7408,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Overload {0} of {1}, '{2}', gave the following error.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{1} 个重载 中的第 {0} 个("{2}")出现了以下错误。]]></Val>
+            <Val><![CDATA[第 {0} 个重载(共 {1} 个)，“{2}”，出现以下错误。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10312,7 +10321,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The shadowing declaration of '{0}' is defined here]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[在此处定义了 "{0}" 的隐藏声明]]></Val>
+            <Val><![CDATA[在此处定义了“{0}”的阴影声明]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10759,7 +10768,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is missing the following properties from type '{1}': {2}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[类型 "{0}" 缺少类型 "{1}" 中的以下属性: {2}]]></Val>
+            <Val><![CDATA[类型“{0}”缺少类型“{1}”中的以下属性: {2}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10768,7 +10777,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is missing the following properties from type '{1}': {2}, and {3} more.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[类型 "{0}" 缺少类型 "{1}" 的以下属性: {2} 及其他 {3} 项。]]></Val>
+            <Val><![CDATA[类型“{0}”缺少类型“{1}”的以下属性: {2} 及其他 {3} 项。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11107,7 +11116,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此导入产生的类型。无法调用或构造命名空间样式的导入，这类导入将在运行时导致失败。请考虑改为使用默认导入或这里需要的导入。]]></Val>
+            <Val><![CDATA[此导入产生的类型。无法调用或构造命名空间样式的导入，这类导入将在运行时导致失败。请考虑改为使用默认导入或此处需要的导入。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11668,7 +11677,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Using compiler options of project reference redirect '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[使用项目引用重定向 "{0}" 的编译器选项。]]></Val>
+            <Val><![CDATA[使用项目引用重定向“{0}”的编译器选项。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

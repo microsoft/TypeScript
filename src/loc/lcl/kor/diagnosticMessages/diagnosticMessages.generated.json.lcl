@@ -436,7 +436,7 @@
         <Str Cat="Text">
           <Val><![CDATA['A label is not allowed here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['여기서는 레이블을 사용할 수 없습니다.]]></Val>
+            <Val><![CDATA[여기서는 레이블을 사용할 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7184,6 +7184,15 @@
           <Val><![CDATA[Only named exports may use 'export type'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[명명된 내보내기에서만 '내보내기 형식'을 사용할 수 있습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Only_numeric_enums_can_have_computed_members_but_this_expression_has_type_0_If_you_do_not_need_exhau_18033" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[숫자 열거형에는 컴퓨팅된 구성원만 사용할 수 있는데 이 식에는 '{0}' 형식이 있습니다. 전체 검사가 필요하지 않은 경우에는 개체 리터럴을 대신 사용해 보세요.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
