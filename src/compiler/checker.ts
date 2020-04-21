@@ -20760,6 +20760,19 @@ namespace ts {
                     return type;
                 }
 
+
+
+                const leftType = getTypeOfExpression(left);
+                // console.log(left.__de)
+                console.log("name: ", leftType.symbol.escapedName);
+                // @ts-ignore
+                console.log("flags: ", leftType.__debugFlags);
+                console.log("not: ", !assumeTrue);
+
+                if ((leftType.flags & TypeFlags.Union) && !assumeTrue) {
+                    return type;
+                }
+
                 if (!targetType) {
                     const constructSignatures = getSignaturesOfType(rightType, SignatureKind.Construct);
                     targetType = constructSignatures.length ?
