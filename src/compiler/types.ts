@@ -4157,7 +4157,6 @@ namespace ts {
         cjsExportMerged?: Symbol;           // Version of the symbol with all non export= exports merged with the export= target
         typeOnlyDeclaration?: TypeOnlyCompatibleAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
         isConstructorDeclaredProperty?: boolean;  // Property declared through 'this.x = ...' assignment in constructor
-        typeOfPropertyInBaseClass?: Type;   // Type of constructor declared property in base class
     }
 
     /* @internal */

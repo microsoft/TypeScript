@@ -7484,6 +7484,15 @@ namespace ts {
                 return addOptionality(type, isOptional);
             }
 
+            if (noImplicitAny && isPropertyDeclaration(declaration)) {
+                // We are in noImplicitAny mode and have a property declaration with no type annotation or initializer. Use
+                // control flow analysis of this.xxx assignments the constructor to determine the type of the property.
+                const constructor = findConstructorDeclaration(declaration.parent);
+                return constructor ? getFlowTypeInConstructor(declaration.symbol, constructor) :
+                    getModifierFlags(declaration) & ModifierFlags.Ambient ? getTypeOfPropertyInBaseClass(declaration.symbol) :
+                    undefined;
+            }
+
             if (isJsxAttribute(declaration)) {
                 // if JSX attribute doesn't have initializer, by default the attribute will have boolean value of true.
                 // I.e <Elem attr /> is sugar for <Elem attr={true} />
@@ -7512,11 +7521,16 @@ namespace ts {
                         getAssignmentDeclarationKind(declaration) === AssignmentDeclarationKind.ThisProperty &&
                         (declaration.left.kind !== SyntaxKind.ElementAccessExpression || isStringOrNumericLiteralLike((<ElementAccessExpression>declaration.left).argumentExpression)) &&
                         !getAnnotatedTypeForAssignmentDeclaration(/*declaredType*/ undefined, declaration, symbol, declaration));
-                    links.typeOfPropertyInBaseClass = getTypeOfAssignmentDeclarationPropertyOfBaseType(symbol);
                 }
                 return links.isConstructorDeclaredProperty;
             }
             return false;
+        }
+
+        function isAutoTypedProperty(symbol: Symbol) {
+            // A property is auto-typed in noImplicitAny mode when its declaration has no type annotation or initializer.
+            const declaration = symbol.valueDeclaration;
+            return noImplicitAny && declaration && isPropertyDeclaration(declaration) && !declaration.type && !declaration.initializer;
         }
 
         function getDeclaringConstructor(symbol: Symbol) {
@@ -7528,17 +7542,22 @@ namespace ts {
             }
         }
 
-        function getTypeOfConstructorDeclaredProperty(symbol: Symbol) {
-            const constructor = getDeclaringConstructor(symbol)!;
+        function getFlowTypeInConstructor(symbol: Symbol, constructor: ConstructorDeclaration) {
             const reference = createPropertyAccess(createThis(), unescapeLeadingUnderscores(symbol.escapedName));
             reference.expression.parent = reference;
             reference.parent = constructor;
             reference.flowNode = constructor.returnFlowNode;
-            const flowType = getFlowTypeOfReference(reference, autoType, getSymbolLinks(symbol).typeOfPropertyInBaseClass || undefinedType);
+            const flowType = getFlowTypeOfProperty(reference, symbol);
             if (noImplicitAny && (flowType === autoType || flowType === autoArrayType)) {
                 error(symbol.valueDeclaration, Diagnostics.Member_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(flowType));
             }
-            return convertAutoToAny(flowType);
+            // We don't infer a type if assignments are only null or undefined.
+            return everyType(flowType, isNullableType) ? undefined : convertAutoToAny(flowType);
+        }
+
+        function getFlowTypeOfProperty(reference: Node, prop: Symbol | undefined) {
+            const initialType = prop && (!isAutoTypedProperty(prop) || getModifierFlags(prop.valueDeclaration) & ModifierFlags.Ambient) && getTypeOfPropertyInBaseClass(prop) || undefinedType;
+            return getFlowTypeOfReference(reference, autoType, initialType);
         }
 
         function getWidenedTypeForAssignmentDeclaration(symbol: Symbol, resolvedSymbol?: Symbol) {
@@ -7558,10 +7577,7 @@ namespace ts {
             // We use control flow analysis to determine the type of the property if the property qualifies as a constructor
             // declared property and the resulting control flow type isn't just undefined or null.
             if (isConstructorDeclaredProperty(symbol)) {
-                const controlFlowType = getTypeOfConstructorDeclaredProperty(symbol);
-                if (!everyType(controlFlowType, isNullableType)) {
-                    type = controlFlowType;
-                }
+                type = getFlowTypeInConstructor(symbol, getDeclaringConstructor(symbol)!);
             }
             if (!type) {
                 let jsdocType: Type | undefined;
@@ -7600,7 +7616,7 @@ namespace ts {
                     let constructorTypes = definedInConstructor ? getConstructorDefinedThisAssignmentTypes(types!, symbol.declarations) : undefined;
                     // use only the constructor types unless they were only assigned null | undefined (including widening variants)
                     if (definedInMethod) {
-                        const propType = getTypeOfAssignmentDeclarationPropertyOfBaseType(symbol);
+                        const propType = getTypeOfPropertyInBaseClass(symbol);
                         if (propType) {
                             (constructorTypes || (constructorTypes = [])).push(propType);
                             definedInConstructor = true;
@@ -7751,21 +7767,6 @@ namespace ts {
                     isBinaryExpression(declaration.parent) ? declaration.parent : undefined;
                 return expression && isDeclarationInConstructor(expression);
             });
-        }
-
-        /** check for definition in base class if any declaration is in a class */
-        function getTypeOfAssignmentDeclarationPropertyOfBaseType(property: Symbol) {
-            const parentDeclaration = forEach(property.declarations, d => {
-                const parent = getThisContainer(d, /*includeArrowFunctions*/ false).parent;
-                return isClassLike(parent) && parent;
-            });
-            if (parentDeclaration) {
-                const classType = getDeclaredTypeOfSymbol(getSymbolOfNode(parentDeclaration)) as InterfaceType;
-                const baseClassType = classType && getBaseTypes(classType)[0];
-                if (baseClassType) {
-                    return getTypeOfPropertyOfType(baseClassType, property.escapedName);
-                }
-            }
         }
 
         // Return the type implied by a binding pattern element. This is the type of the initializer of the element if
@@ -17339,7 +17340,14 @@ namespace ts {
 
         // Return the declaring class type of a property or undefined if property not declared in class
         function getDeclaringClass(prop: Symbol) {
-            return prop.parent && prop.parent.flags & SymbolFlags.Class ? getDeclaredTypeOfSymbol(getParentOfSymbol(prop)!) : undefined;
+            return prop.parent && prop.parent.flags & SymbolFlags.Class ? <InterfaceType>getDeclaredTypeOfSymbol(getParentOfSymbol(prop)!) : undefined;
+        }
+
+        // Return the inherited type of the given property or undefined if property doesn't exist in a base class.
+        function getTypeOfPropertyInBaseClass(property: Symbol) {
+            const classType = getDeclaringClass(property);
+            const baseClassType = classType && getBaseTypes(classType)[0];
+            return baseClassType && getTypeOfPropertyOfType(baseClassType, property.escapedName);
         }
 
         // Return true if some underlying source property is declared in a class that derives
@@ -24087,7 +24095,7 @@ namespace ts {
         }
 
         function isThisPropertyAccessInConstructor(node: ElementAccessExpression | PropertyAccessExpression | QualifiedName, prop: Symbol) {
-            return isThisProperty(node) && isConstructorDeclaredProperty(prop) && getThisContainer(node, /*includeArrowFunctions*/ true) === getDeclaringConstructor(prop);
+            return isThisProperty(node) && (isAutoTypedProperty(prop) || isConstructorDeclaredProperty(prop)) && getThisContainer(node, /*includeArrowFunctions*/ true) === getDeclaringConstructor(prop);
         }
 
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, leftType: Type, right: Identifier | PrivateIdentifier) {
@@ -24180,7 +24188,7 @@ namespace ts {
                 return propType;
             }
             if (propType === autoType) {
-                return getFlowTypeOfReference(node, autoType, prop && getSymbolLinks(prop).typeOfPropertyInBaseClass || undefinedType);
+                return getFlowTypeOfProperty(node, prop);
             }
             // If strict null checks and strict property initialization checks are enabled, if we have
             // a this.xxx property access, if the property is an instance property without an initializer,
