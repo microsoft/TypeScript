@@ -7529,9 +7529,11 @@ namespace ts {
         }
 
         function isAutoTypedProperty(symbol: Symbol) {
-            // A property is auto-typed in noImplicitAny mode when its declaration has no type annotation or initializer.
+            // A property is auto-typed when its declaration has no type annotation or initializer and we're in
+            // noImplicitAny mode or a .js file.
             const declaration = symbol.valueDeclaration;
-            return noImplicitAny && declaration && isPropertyDeclaration(declaration) && !declaration.type && !declaration.initializer;
+            return declaration && isPropertyDeclaration(declaration) && !getEffectiveTypeAnnotationNode(declaration) &&
+                !declaration.initializer && (noImplicitAny || isInJSFile(declaration));
         }
 
         function getDeclaringConstructor(symbol: Symbol) {
