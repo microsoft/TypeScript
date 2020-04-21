@@ -7488,9 +7488,10 @@ namespace ts {
                 // We are in noImplicitAny mode and have a property declaration with no type annotation or initializer. Use
                 // control flow analysis of this.xxx assignments the constructor to determine the type of the property.
                 const constructor = findConstructorDeclaration(declaration.parent);
-                return constructor ? getFlowTypeInConstructor(declaration.symbol, constructor) :
+                const type = constructor ? getFlowTypeInConstructor(declaration.symbol, constructor) :
                     getModifierFlags(declaration) & ModifierFlags.Ambient ? getTypeOfPropertyInBaseClass(declaration.symbol) :
                     undefined;
+                return type && addOptionality(type, isOptional);
             }
 
             if (isJsxAttribute(declaration)) {
