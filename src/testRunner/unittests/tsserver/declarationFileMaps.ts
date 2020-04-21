@@ -324,7 +324,7 @@ namespace ts.projectSystem {
             verifyATsConfigOriginalProject(session);
         });
 
-        it("navigateToAll", () => {
+        it("navigateToAll -- when neither file nor project is specified", () => {
             const session = makeSampleProjects(/*addUserTsConfig*/ true, /*keepAllFiles*/ true);
             const response = executeSessionRequest<protocol.NavtoRequest, protocol.NavtoResponse>(session, CommandNames.Navto, { file: undefined, searchValue: "fn" });
             assert.deepEqual<readonly protocol.NavtoItem[] | undefined>(response, [
@@ -356,6 +356,24 @@ namespace ts.projectSystem {
                         text: "export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"
                     }),
                     name: "fnUser",
+                    matchKind: "prefix",
+                    isCaseSensitive: true,
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: "export",
+                }
+            ]);
+        });
+
+        it("navigateToAll -- when file is not specified but project is", () => {
+            const session = makeSampleProjects(/*addUserTsConfig*/ true, /*keepAllFiles*/ true);
+            const response = executeSessionRequest<protocol.NavtoRequest, protocol.NavtoResponse>(session, CommandNames.Navto, { projectFileName: bTsconfig.path, file: undefined, searchValue: "fn" });
+            assert.deepEqual<readonly protocol.NavtoItem[] | undefined>(response, [
+                {
+                    ...protocolFileSpanFromSubstring({
+                        file: bTs,
+                        text: "export function fnB() {}"
+                    }),
+                    name: "fnB",
                     matchKind: "prefix",
                     isCaseSensitive: true,
                     kind: ScriptElementKind.functionElement,

@@ -1901,16 +1901,16 @@ namespace ts.server {
         private getFullNavigateToItems(args: protocol.NavtoRequestArgs): readonly NavigateToItem[] {
             const { currentFileOnly, searchValue, maxResultCount } = args;
             if (!args.file) {
-                const items: NavigateToItem[] = [];
-                this.projectService.forEachEnabledProject(project => {
-                    this.projectService.loadAncestorProjectTree();
-                    for (const item of project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*filename*/ undefined, /*excludeDts*/ project.isNonTsProject())) {
-                        if (!contains(items, item, navigateToItemIsEqualTo)) {
-                            items.push(item);
-                        }
+                if (args.projectFileName) {
+                    const project = this.projectService.findProject(args.projectFileName);
+                    if (project) {
+                        return project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*filename*/ undefined, /*excludeDts*/ project.isNonTsProject());
                     }
-                });
-                return items;
+                }
+                return combineProjectOutputFromEveryProject(
+                    this.projectService,
+                    project => project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*filename*/ undefined, /*excludeDts*/ project.isNonTsProject()),
+                    (a, b) => a.fileName === b.fileName);
             }
             const fileArgs = args as protocol.FileRequestArgs;
             if (currentFileOnly) {
@@ -1921,8 +1921,7 @@ namespace ts.server {
                 return combineProjectOutputWhileOpeningReferencedProjects<NavigateToItem>(
                     this.getProjects(fileArgs),
                     this.getDefaultProject(fileArgs),
-                    project =>
-                        project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*fileName*/ undefined, /*excludeDts*/ project.isNonTsProject()),
+                    project => project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*fileName*/ undefined, /*excludeDts*/ project.isNonTsProject()),
                     documentSpanLocation,
                     navigateToItemIsEqualTo);
             }
