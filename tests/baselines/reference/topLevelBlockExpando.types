@@ -1,4 +1,8 @@
-=== tests/cases/compiler/topLevelBlockExpando.ts ===
+=== tests/cases/compiler/check.ts ===
+// 
+
+
+
 // https://github.com/microsoft/TypeScript/issues/31972
 interface Person {
   first: string;
@@ -40,5 +44,89 @@ interface Person {
   const diceP: Person = dice;  
 >diceP : Person
 >dice : { (): number; first: string; last: string; }
+}
+
+=== tests/cases/compiler/check.js ===
+// Creates a type { first:string, last: string }
+/**
+ * @typedef {Object} Human - creates a new type named 'SpecialType'
+ * @property {string} first - a string property of SpecialType
+ * @property {string} last - a number property of SpecialType
+ */
+
+/**
+ * @param {Human} param used as a validation tool
+ */
+function doHumanThings(param) {}
+>doHumanThings : (param: Human) => void
+>param : Human
+
+const dice = () => Math.floor(Math.random() * 6);
+>dice : { (): number; first: string; last: string; }
+>() => Math.floor(Math.random() * 6) : { (): number; first: string; last: string; }
+>Math.floor(Math.random() * 6) : number
+>Math.floor : (x: number) => number
+>Math : Math
+>floor : (x: number) => number
+>Math.random() * 6 : number
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>6 : 6
+
+dice.first = 'Rando';
+>dice.first = 'Rando' : "Rando"
+>dice.first : string
+>dice : { (): number; first: string; last: string; }
+>first : string
+>'Rando' : "Rando"
+
+dice.last = 'Calrissian';
+>dice.last = 'Calrissian' : "Calrissian"
+>dice.last : string
+>dice : { (): number; first: string; last: string; }
+>last : string
+>'Calrissian' : "Calrissian"
+
+doHumanThings(dice)
+>doHumanThings(dice) : void
+>doHumanThings : (param: Human) => void
+>dice : { (): number; first: string; last: string; }
+
+// but inside a block... you can't call iut a human
+{
+  const dice = () => Math.floor(Math.random() * 6);
+>dice : () => number
+>() => Math.floor(Math.random() * 6) : () => number
+>Math.floor(Math.random() * 6) : number
+>Math.floor : (x: number) => number
+>Math : Math
+>floor : (x: number) => number
+>Math.random() * 6 : number
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>6 : 6
+
+  dice.first = 'Rando';
+>dice.first = 'Rando' : "Rando"
+>dice.first : any
+>dice : () => number
+>first : any
+>'Rando' : "Rando"
+
+  dice.last = 'Calrissian'; 
+>dice.last = 'Calrissian' : "Calrissian"
+>dice.last : any
+>dice : () => number
+>last : any
+>'Calrissian' : "Calrissian"
+  
+  doHumanThings(dice)
+>doHumanThings(dice) : void
+>doHumanThings : (param: Human) => void
+>dice : () => number
 }
 
