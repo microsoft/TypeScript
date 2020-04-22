@@ -160,7 +160,8 @@ namespace ts.refactor {
             selection
         );
         changes.insertNodeBefore(file, firstStatement, ignoreSourceNewlines(newTypeNode), /* blankLineBetween */ true);
-        changes.replaceNode(file, selection, createTypeReferenceNode(name, typeParameters.map(id => createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
+        changes.replaceNode(file, selection, createTypeReferenceNode(name, typeParameters.map(id => createTypeReferenceNode(id.name, /* typeArguments */ undefined))), { trailingTriviaOption: textChanges.TrailingTriviaOption.Include });
+
     }
 
     function doInterfaceChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: InterfaceInfo) {
