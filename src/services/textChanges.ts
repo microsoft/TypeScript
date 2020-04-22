@@ -348,12 +348,18 @@ namespace ts.textChanges {
             this.replaceRangeWithNodes(sourceFile, createRange(pos), newNodes, options);
         }
 
-        public insertNodeAtTopOfFile(sourceFile: SourceFile, newNode: Statement, blankLineBetween: boolean): void {
+        public insertNodesAtTopOfFile(sourceFile: SourceFile, newNodes: Statement | readonly Node[], blankLineBetween: boolean): void {
             const pos = getInsertionPositionAtSourceFileTop(sourceFile);
-            this.insertNodeAt(sourceFile, pos, newNode, {
+            const options = {
                 prefix: pos === 0 ? undefined : this.newLineCharacter,
                 suffix: (isLineBreak(sourceFile.text.charCodeAt(pos)) ? "" : this.newLineCharacter) + (blankLineBetween ? this.newLineCharacter : ""),
-            });
+            };
+            if (isArray(newNodes)) {
+                this.insertNodesAt(sourceFile, pos, newNodes, options);
+            }
+            else {
+                this.insertNodeAt(sourceFile, pos, newNodes, options);
+            }
         }
 
         public insertFirstParameter(sourceFile: SourceFile, parameters: NodeArray<ParameterDeclaration>, newParam: ParameterDeclaration): void {
