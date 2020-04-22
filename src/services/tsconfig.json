@@ -96,6 +96,7 @@
         "codefixes/convertToMappedObjectType.ts",
         "codefixes/removeUnnecessaryAwait.ts",
         "codefixes/splitTypeOnlyImport.ts",
+        "codefixes/wrapPromiseOnAsyncFunctionReturnType.ts",
         "codefixes/convertConstToLet.ts",
         "codefixes/fixExpectedComma.ts",
         "refactors/convertExport.ts",

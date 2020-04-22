@@ -2985,7 +2985,7 @@ namespace ts {
         return flags;
     }
 
-    export function isAsyncFunction(node: Node): boolean {
+    export function isAsyncFunction(node: Node): node is FunctionDeclaration | FunctionExpression | ArrowFunction | MethodDeclaration {
         switch (node.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
