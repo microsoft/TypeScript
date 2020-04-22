@@ -898,7 +898,7 @@ namespace ts {
                 }
             }
             if (expr.expression.kind === SyntaxKind.PropertyAccessExpression &&
-                containsNarrowableReference((<PropertyAccessExpression>expr.expression).expression)) {
+                isNarrowingExpression((<PropertyAccessExpression>expr.expression).expression)) {
                 return true;
             }
             return false;
