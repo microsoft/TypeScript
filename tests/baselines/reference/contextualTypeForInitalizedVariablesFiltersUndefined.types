@@ -18,3 +18,11 @@ const fAnnotated: typeof fInferred = ({ a = 0 } = {}) => a;
 >{} : {}
 >a : number
 
+declare var t: { s: string } | undefined;
+>t : { s: string; } | undefined
+>s : string
+
+const { s } = t;
+>s : any
+>t : { s: string; } | undefined
+
