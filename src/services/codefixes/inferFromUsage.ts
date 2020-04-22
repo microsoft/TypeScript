@@ -669,7 +669,7 @@ namespace ts.codefix {
         }
 
         function inferTypeFromExpressionStatement(node: Expression, usage: Usage): void {
-            addCandidateType(usage, isPropertyAccessExpression(node) ? checker.getAnyType() : checker.getVoidType());
+            addCandidateType(usage, isCallExpression(node) ? checker.getVoidType() : checker.getAnyType());
         }
 
         function inferTypeFromPrefixUnaryExpression(node: PrefixUnaryExpression, usage: Usage): void {
