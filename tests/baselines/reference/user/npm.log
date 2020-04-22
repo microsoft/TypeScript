@@ -208,6 +208,11 @@ node_modules/npm/lib/config/lifecycle.js(23,24): error TS2339: Property 'config'
 node_modules/npm/lib/config/lifecycle.js(24,35): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config/lifecycle.js(25,23): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config/lifecycle.js(26,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
+node_modules/npm/lib/config/nerf-dart.js(16,10): error TS2790: The operand of a 'delete' operator must be optional.
+node_modules/npm/lib/config/nerf-dart.js(17,10): error TS2790: The operand of a 'delete' operator must be optional.
+node_modules/npm/lib/config/nerf-dart.js(18,10): error TS2790: The operand of a 'delete' operator must be optional.
+node_modules/npm/lib/config/nerf-dart.js(19,10): error TS2790: The operand of a 'delete' operator must be optional.
+node_modules/npm/lib/config/nerf-dart.js(20,10): error TS2790: The operand of a 'delete' operator must be optional.
 node_modules/npm/lib/config/pacote.js(23,26): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config/pacote.js(24,13): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config/pacote.js(25,15): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -1227,6 +1232,8 @@ node_modules/npm/test/tap/correct-mkdir.js(114,16): error TS2532: Object is poss
 node_modules/npm/test/tap/correct-mkdir.js(115,16): error TS2532: Object is possibly 'undefined'.
 node_modules/npm/test/tap/correct-mkdir.js(131,3): error TS2322: Type '999' is not assignable to type 'string | undefined'.
 node_modules/npm/test/tap/correct-mkdir.js(132,3): error TS2322: Type '999' is not assignable to type 'string | undefined'.
+node_modules/npm/test/tap/correct-mkdir.js(133,10): error TS2790: The operand of a 'delete' operator must be optional.
+node_modules/npm/test/tap/correct-mkdir.js(134,10): error TS2790: The operand of a 'delete' operator must be optional.
 node_modules/npm/test/tap/cruft-test.js(6,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/debug-logs.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/debug-logs.js(4,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
