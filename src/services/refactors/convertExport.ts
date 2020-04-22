@@ -31,7 +31,8 @@ namespace ts.refactor {
         const { file } = context;
         const span = getRefactorContextSpan(context);
         const token = getTokenAtPosition(file, span.start);
-        const exportNode = getParentNodeInSpan(token, file, span);
+        // If the span is entirely contained in an export node, check that node.
+        const exportNode = !!(getModifierFlags(token.parent) & ModifierFlags.Export) ? token.parent : getParentNodeInSpan(token, file, span);
         if (!exportNode || (!isSourceFile(exportNode.parent) && !(isModuleBlock(exportNode.parent) && isAmbientModule(exportNode.parent.parent)))) {
             return undefined;
         }
