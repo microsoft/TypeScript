@@ -7305,7 +7305,7 @@ namespace ts {
             if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
                 parentType = getNonNullableType(parentType);
             }
-            // Filter `undefined` from the type we check against if the parent has an initializer without undefined in the type
+            // Filter `undefined` from the type we check against if the parent has an initializer and that initializer is not possibly `undefined`
             else if (strictNullChecks && pattern.parent.initializer && !(getTypeFacts(getTypeOfInitializer(pattern.parent.initializer)) & TypeFacts.EQUndefined)) {
                 parentType = getTypeWithFacts(parentType, TypeFacts.NEUndefined);
             }
