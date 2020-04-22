@@ -436,7 +436,7 @@
         <Str Cat="Text">
           <Val><![CDATA['A label is not allowed here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['A ラベルはここでは使用できません。]]></Val>
+            <Val><![CDATA[A ラベルはここでは使用できません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1180,7 +1180,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'export {}' to make this file into a module]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['export {}' を追加して、このファイルをモジュールに含める]]></Val>
+            <Val><![CDATA['export {}' を追加して、このファイルをモジュールにする]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3193,7 +3193,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Compiler reserves name '{0}' when emitting private identifier downlevel.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[private 識別子を下位レベルで出力するときに、コンパイラは名前 '{0}' を予約します。]]></Val>
+            <Val><![CDATA[private 識別子を下位レベルに生成するときに、コンパイラは名前 '{0}' を予約します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7408,7 +7408,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Overload {0} of {1}, '{2}', gave the following error.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{1}、'{2}' の {0} のオーバーロードにより、次のエラーが発生しました。]]></Val>
+            <Val><![CDATA[{1} 中 {0} のオーバーロード, '{2}' により、次のエラーが発生しました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11116,7 +11116,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型はこのインポートで生成されます。名前空間スタイルのインポートは、呼び出すこともコンストラクトすることもできず、実行時にエラーが発生します。代わりに、ここで既定のインポートまたはインポートの要求を使用することを検討してください。]]></Val>
+            <Val><![CDATA[型はこのインポートで生成されます。名前空間スタイルのインポートは、呼び出すこともコンストラクトすることもできず、実行時にエラーが発生します。代わりに、ここで既定のインポートまたはインポートの require を使用することを検討してください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11677,7 +11677,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Using compiler options of project reference redirect '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プロジェクト参照リダイレクト '{0}' のコンパイラ オプションを使用します。]]></Val>
+            <Val><![CDATA[Using compiler options of project reference redirect '{0}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
