@@ -434,7 +434,7 @@ namespace ts.textChanges {
                 }
             }
             else {
-                endNode = node.kind !== SyntaxKind.VariableDeclaration && node.questionToken ? node.questionToken : node.name;
+                endNode = (node.kind === SyntaxKind.VariableDeclaration ? node.exclamationToken : node.questionToken) ?? node.name;
             }
 
             this.insertNodeAt(sourceFile, endNode.end, type, { prefix: ": " });
