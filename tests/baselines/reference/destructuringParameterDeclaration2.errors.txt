@@ -13,7 +13,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
   Property 'z' is missing in type '{}' but required in type '{ z: number; }'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(36,6): error TS2322: Type 'boolean' is not assignable to type 'number'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(37,6): error TS2322: Type 'boolean' is not assignable to type 'number'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(38,6): error TS2322: Type 'true' is not assignable to type 'string | number'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(38,6): error TS2322: Type 'boolean' is not assignable to type 'string | number'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(39,11): error TS2322: Type 'boolean' is not assignable to type '[[any]]'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(40,13): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(46,13): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
@@ -98,7 +98,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
 !!! error TS2322: Type 'boolean' is not assignable to type 'number'.
     c3({ b: true });   // Error, implied type is { b: number|string }. 
          ~
-!!! error TS2322: Type 'true' is not assignable to type 'string | number'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'string | number'.
 !!! related TS6500 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts:29:20: The expected type comes from property 'b' which is declared here on type '{ b: string | number; }'
     c5([1, 2, false, true]);   // Error, implied type is [any, any, [[any]]]
               ~~~~~
