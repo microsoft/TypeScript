@@ -6,6 +6,7 @@ const fAnnotated: typeof fInferred = ({ a = 0 } = {}) => a;
 
 declare var t: { s: string } | undefined;
 const { s } = t;
+function fst({ s } = t) { }
 
 
 //// [contextualTypeForInitalizedVariablesFiltersUndefined.js]
@@ -20,3 +21,6 @@ var fAnnotated = function (_a) {
     return a;
 };
 var s = t.s;
+function fst(_a) {
+    var s = (_a === void 0 ? t : _a).s;
+}

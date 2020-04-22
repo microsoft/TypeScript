@@ -7305,9 +7305,12 @@ namespace ts {
             if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
                 parentType = getNonNullableType(parentType);
             }
-            // Filter `undefined` from the type we check against if the parent has an initializer (which handles the `undefined` case implicitly)
-            else if (strictNullChecks && pattern.parent.initializer && isParameter(pattern.parent)) {
-                parentType = getTypeWithFacts(parentType, TypeFacts.NEUndefined);
+            // Filter `undefined` from the type we check against if the parent has an initializer without undefined in the type
+            else if (strictNullChecks && pattern.parent.initializer) {
+                const symbol = getSymbolOfNode(pattern.parent.initializer);
+                if (symbol && getTypeFacts(getTypeOfSymbol(symbol)) & TypeFacts.EQUndefined) {
+                    parentType = getTypeWithFacts(parentType, TypeFacts.NEUndefined);
+                }
             }
 
             let type: Type | undefined;

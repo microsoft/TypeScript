@@ -20,3 +20,8 @@ const { s } = t;
 >s : Symbol(s, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 6, 7))
 >t : Symbol(t, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 5, 11))
 
+function fst({ s } = t) { }
+>fst : Symbol(fst, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 6, 16))
+>s : Symbol(s, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 7, 14))
+>t : Symbol(t, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 5, 11))
+
