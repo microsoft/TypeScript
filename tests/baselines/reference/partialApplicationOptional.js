@@ -14,6 +14,6 @@ var repeatAndPad = function (times, text, padToLength) {
     if (padToLength === void 0) { padToLength = 0; }
     return Array(times).fill(text).join('').padStart(padToLength, ' ');
 };
-var twice = (_repeatAndPad_1 = repeatAndPad, function (_origFuncArg1) { return _repeatAndPad_1(2, _origFuncArg1); });
+var twice = (_repeatAndPad_1 = repeatAndPad, function repeatAndPad(_origFuncArg1) { return _repeatAndPad_1(2, _origFuncArg1); });
 twice('Double');
 twice('DoublePadded', 40);

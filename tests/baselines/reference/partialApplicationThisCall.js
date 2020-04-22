@@ -29,4 +29,4 @@ var a = {
         }
     }
 };
-var j = (_foo_1 = a.b.c.d.e.foo, function (_origFuncArg) { return _foo_1(_origFuncArg, 1); });
+var j = (_foo_1 = a.b.c.d.e.foo, function foo(_origFuncArg) { return _foo_1(_origFuncArg, 1); });

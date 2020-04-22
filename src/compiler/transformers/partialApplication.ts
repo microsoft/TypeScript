@@ -6,13 +6,12 @@ namespace ts {
                 const visitor = (node: Node): Node => {
                     if (node.transformFlags & TransformFlags.ContainsPartialApplication) {
                         if (isCallExpression(node) && node.arguments.some(arg => arg.kind === SyntaxKind.PartialApplicationElement)) {
-                            const capturedFunctionIdentifier = createUniqueName(`_${
-                                isIdentifier(node.expression)
-                                    ? node.expression.escapedText
-                                    : isPropertyAccessExpression(node.expression)
-                                        ? node.expression.name.escapedText
-                                        : "Wow, what do?"
-                            }`);
+                            const funcName = isIdentifier(node.expression)
+                                ? node.expression.escapedText as string
+                                : isPropertyAccessExpression(node.expression)
+                                    ? node.expression.name.escapedText as string
+                                    : "Wow, what do?"
+                            const capturedFunctionIdentifier = createUniqueName(`_${funcName}`);
                             // TODO: Get the signature and use actual argument names of the original function.
                             // Unfortunately we don't seem to have access to them here.
                             // Some tranformers (not default typescript ones) seem to have access to checker. Need more investigation.
@@ -59,7 +58,7 @@ namespace ts {
                                     createFunctionExpression(
                                         /*modifiers*/ undefined,
                                         /*asteriskToken*/ undefined,
-                                        /*name*/ undefined /* Anonymous */,
+                                        /*name*/ funcName,
                                         /*typeParameters*/ undefined,
                                         node.arguments
                                             .map<[Expression, number]>((arg, i) => [arg, i])
