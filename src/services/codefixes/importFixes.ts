@@ -134,10 +134,10 @@ namespace ts.codefix {
                 doAddExistingFix(changeTracker, sourceFile, importClauseOrBindingPattern, defaultImport, namedImports, canUseTypeOnlyImport);
             });
 
-            let newDeclarations: Statement[] | undefined;
+            let newDeclarations: Statement | readonly Statement[] | undefined;
             newImports.forEach(({ useRequire, ...imports }, moduleSpecifier) => {
                 const getDeclarations = useRequire ? getNewRequires : getNewImports;
-                newDeclarations = concatenate(newDeclarations, getDeclarations(moduleSpecifier, quotePreference, imports));
+                newDeclarations = combine(newDeclarations, getDeclarations(moduleSpecifier, quotePreference, imports));
             });
             if (newDeclarations) {
                 insertImports(changeTracker, sourceFile, newDeclarations, /*blankLineBetween*/ true);
@@ -720,11 +720,11 @@ namespace ts.codefix {
             readonly name: string;
         };
     }
-    function getNewImports(moduleSpecifier: string, quotePreference: QuotePreference, imports: ImportsCollection): Statement[] {
+    function getNewImports(moduleSpecifier: string, quotePreference: QuotePreference, imports: ImportsCollection): Statement | readonly Statement[] {
         const quotedModuleSpecifier = makeStringLiteral(moduleSpecifier, quotePreference);
-        const statements = [];
+        let statements: Statement | readonly Statement[] | undefined;
         if (imports.defaultImport !== undefined || imports.namedImports?.length) {
-            statements.push(makeImport(
+            statements = combine(statements, makeImport(
                 imports.defaultImport === undefined ? undefined : createIdentifier(imports.defaultImport),
                 imports.namedImports?.map(n => createImportSpecifier(/*propertyName*/ undefined, createIdentifier(n))), moduleSpecifier, quotePreference, imports.typeOnly));
         }
@@ -744,14 +744,14 @@ namespace ts.codefix {
                         createNamespaceImport(createIdentifier(namespaceLikeImport.name)),
                         typeOnly),
                     quotedModuleSpecifier);
-            statements.push(declaration);
+            statements = combine(statements, declaration);
         }
-        return statements;
+        return Debug.checkDefined(statements);
     }
 
-    function getNewRequires(moduleSpecifier: string, quotePreference: QuotePreference, imports: ImportsCollection): Statement[] {
+    function getNewRequires(moduleSpecifier: string, quotePreference: QuotePreference, imports: ImportsCollection): Statement | readonly Statement[] {
         const quotedModuleSpecifier = makeStringLiteral(moduleSpecifier, quotePreference);
-        const statements = [];
+        let statements: Statement | readonly Statement[] | undefined;
         // const { default: foo, bar, etc } = require('./mod');
         if (imports.defaultImport || imports.namedImports?.length) {
             const bindingElements = imports.namedImports?.map(name => createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, name)) || [];
@@ -759,14 +759,14 @@ namespace ts.codefix {
                 bindingElements.unshift(createBindingElement(/*dotDotDotToken*/ undefined, "default", imports.defaultImport));
             }
             const declaration = createConstEqualsRequireDeclaration(createObjectBindingPattern(bindingElements), quotedModuleSpecifier);
-            statements.push(declaration);
+            statements = combine(statements, declaration);
         }
         // const foo = require('./mod');
         if (imports.namespaceLikeImport) {
             const declaration = createConstEqualsRequireDeclaration(imports.namespaceLikeImport.name, quotedModuleSpecifier);
-            statements.push(declaration);
+            statements = combine(statements, declaration);
         }
-        return statements;
+        return Debug.checkDefined(statements);
     }
 
     function createConstEqualsRequireDeclaration(name: string | ObjectBindingPattern, quotedModuleSpecifier: StringLiteral): VariableStatement {

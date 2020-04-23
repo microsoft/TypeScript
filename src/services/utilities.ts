@@ -1883,8 +1883,11 @@ namespace ts {
                 changes.insertNodeAfter(sourceFile, lastImportDeclaration, imports);
             }
         }
-        else {
+        else if (isArray(imports)) {
             changes.insertNodesAtTopOfFile(sourceFile, imports, blankLineBetween);
+        }
+        else {
+            changes.insertNodeAtTopOfFile(sourceFile, imports, blankLineBetween);
         }
     }
 

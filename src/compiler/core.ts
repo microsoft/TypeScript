@@ -845,6 +845,28 @@ namespace ts {
     }
 
     /**
+     * Combines two arrays, values, or undefineds into the smallest container that can accommodate the resulting set:
+     *
+     * ```
+     * undefined -> undefined -> undefined
+     * T -> undefined -> T
+     * T -> T -> T[]
+     * T[] -> undefined -> T[] (no-op)
+     * T[] -> T -> T[]         (append)
+     * T[] -> T[] -> T[]       (concatenate)
+     * ```
+     */
+    export function combine<T>(xs: T | readonly T[] | undefined, ys: T | readonly T[] | undefined): T | readonly T[] | undefined;
+    export function combine<T>(xs: T | T[] | undefined, ys: T | T[] | undefined): T | T[] | undefined;
+    export function combine<T>(xs: T | T[] | undefined, ys: T | T[] | undefined) {
+        if (xs === undefined) return ys;
+        if (ys === undefined) return xs;
+        if (isArray(xs)) return isArray(ys) ? concatenate(xs, ys) : append(xs, ys);
+        if (isArray(ys)) return append(ys, xs);
+        return [xs, ys];
+    }
+
+    /**
      * Gets the actual offset into an array for a relative offset. Negative offsets indicate a
      * position offset from the end of the array.
      */
