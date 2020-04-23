@@ -37,14 +37,7 @@ namespace ts.OrganizeImports {
             organizeImportsWorker(ambientModuleExportDecls, coalesceExports);
         }
 
-        const calculatedChanges = changeTracker.getChanges();
-        return calculatedChanges.filter(fileTextChanges => {
-            const file = Debug.checkDefined(program.getSourceFile(fileTextChanges.fileName));
-            return fileTextChanges.textChanges.every(textChange => {
-                const span = textChange.span;
-                return file.text.substr(span.start, span.length) !== textChange.newText;
-            });
-        });
+        return changeTracker.getChanges();
 
         function organizeImportsWorker<T extends ImportDeclaration | ExportDeclaration>(
             oldImportDecls: readonly T[],

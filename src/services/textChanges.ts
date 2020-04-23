@@ -873,7 +873,7 @@ namespace ts.textChanges {
 
     namespace changesToText {
         export function getTextChangesFromChanges(changes: readonly Change[], newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
-            return group(changes, c => c.sourceFile.path).map(changesInFile => {
+            return mapDefined(group(changes, c => c.sourceFile.path), changesInFile => {
                 const sourceFile = changesInFile[0].sourceFile;
                 // order changes by start position
                 // If the start position is the same, put the shorter range first, since an empty range (x, x) may precede (x, y) but not vice-versa.
@@ -883,9 +883,22 @@ namespace ts.textChanges {
                     Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos, "Changes overlap", () =>
                         `${JSON.stringify(normalized[i].range)} and ${JSON.stringify(normalized[i + 1].range)}`);
                 }
-                const textChanges = normalized.map(c =>
+                const naiveTextChanges = normalized.map(c =>
                     createTextChange(createTextSpanFromRange(c.range), computeNewText(c, sourceFile, newLineCharacter, formatContext, validate)));
-                return { fileName: sourceFile.fileName, textChanges };
+
+                // Only return changes that will actually have an impact on the file.
+                const textChanges = naiveTextChanges.filter(({ span, newText }) => {
+                    // The new text occupies a different amount of space from the old text.
+                    // It has to impact the file, so we'll keep it.
+                    if (span.length !== newText.length) {
+                        return true;
+                    }
+
+                    // The text differs, so keep it.
+                    return sourceFile.text.indexOf(newText, span.start) !== span.start;
+                });
+
+                return textChanges.length > 0 ? { fileName: sourceFile.fileName, textChanges } : undefined;
             });
         }
 
