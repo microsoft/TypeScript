@@ -544,27 +544,28 @@ namespace ts {
         // When we merge new lexical statements into an existing statement list, we merge them in the following manner:
         //
         // Given:
-        //  Left                              | Right
-        //  ----------------------------------|----------------------------------
-        //  [standard prologues (left)]       | [standard prologues (right)]
-        //  [hoisted functions (left)]        | [hoisted functions (right)]
-        //  [hoisted variables (left)]        | [hoisted variables (right)]
-        //  [lexical init statements (left)]  | [lexical init statements (right)]
-        //  [other statements (left)]         |
+        //
+        // | Left                               | Right                               |
+        // |------------------------------------|-------------------------------------|
+        // | [standard prologues (left)]        | [standard prologues (right)]        |
+        // | [hoisted functions (left)]         | [hoisted functions (right)]         |
+        // | [hoisted variables (left)]         | [hoisted variables (right)]         |
+        // | [lexical init statements (left)]   | [lexical init statements (right)]   |
+        // | [other statements (left)]          |                                     |
         //
         // The resulting statement list will be:
         //
-        //  Result
-        //  ---------------------------------
-        //  [standard prologues (right)]
-        //  [standard prologues (left)]
-        //  [hoisted functions (right)]
-        //  [hoisted functions (left)]
-        //  [hoisted variables (right)]
-        //  [hoisted variables (left)]
-        //  [lexical init statements (right)]
-        //  [lexical init statements (left)]
-        //  [other statements (left)]
+        // | Result                              |
+        // |-------------------------------------|
+        // | [standard prologues (right)]        |
+        // | [standard prologues (left)]         |
+        // | [hoisted functions (right)]         |
+        // | [hoisted functions (left)]          |
+        // | [hoisted variables (right)]         |
+        // | [hoisted variables (left)]          |
+        // | [lexical init statements (right)]   |
+        // | [lexical init statements (left)]    |
+        // | [other statements (left)]           |
         //
         // NOTE: It is expected that new lexical init statements must be evaluated before existing lexical init statements,
         // as the prior transformation may depend on the evaluation of the lexical init statements to be in the correct state.
@@ -604,7 +605,8 @@ namespace ts {
         if (rightStandardPrologueEnd > 0) {
             if (leftStandardPrologueEnd === 0) {
                 left.splice(0, 0, ...declarations.slice(0, rightStandardPrologueEnd));
-            } else {
+            }
+            else {
                 const leftPrologues = createMap<boolean>();
                 for (let i = 0; i < leftStandardPrologueEnd; i++) {
                     const leftPrologue = statements[i] as PrologueDirective;

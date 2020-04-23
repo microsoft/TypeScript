@@ -256,7 +256,7 @@ namespace ts {
                     EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps | EmitFlags.NoComments
                 )
             )
-        )
+        );
         return updateParameter(parameter,
             parameter.decorators,
             parameter.modifiers,

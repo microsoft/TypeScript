@@ -1477,11 +1477,11 @@
         "category": "Error",
         "code": 2371
     },
-    "Parameter '{0}' cannot be referenced in its initializer.": {
+    "Parameter '{0}' cannot reference itself.": {
         "category": "Error",
         "code": 2372
     },
-    "Initializer or binding pattern of parameter '{0}' cannot reference identifier '{1}' declared after it.": {
+    "Parameter '{0}' cannot reference identifier '{1}' declared after it.": {
         "category": "Error",
         "code": 2373
     },

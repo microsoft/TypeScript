@@ -431,7 +431,8 @@ namespace ts {
                 if (lexicalEnvironmentStatements) {
                     if (!statements) {
                         statements = [...lexicalEnvironmentStatements];
-                    } else {
+                    }
+                    else {
                         statements = [...statements, ...lexicalEnvironmentStatements];
                     }
                 }
