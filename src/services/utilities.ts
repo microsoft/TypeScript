@@ -2826,7 +2826,7 @@ namespace ts {
      *
      * ```ts
      * // Allocates
-     * haystack.substr(startIndex, startIndex + needle.length) === needle
+     * haystack.substr(startIndex, needle.length) === needle
      *
      * // Full traversal
      * haystack.indexOf(needle, startIndex) === startIndex
