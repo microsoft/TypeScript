@@ -1481,7 +1481,7 @@
         "category": "Error",
         "code": 2372
     },
-    "Initializer of parameter '{0}' cannot reference identifier '{1}' declared after it.": {
+    "Initializer or binding pattern of parameter '{0}' cannot reference identifier '{1}' declared after it.": {
         "category": "Error",
         "code": 2373
     },
