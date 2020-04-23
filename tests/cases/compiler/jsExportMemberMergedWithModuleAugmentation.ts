@@ -21,7 +21,6 @@ declare module "./test" {
 
 new Abcde().x;
 
-// Descriptive, not prescriptive: This is ok,
-// because the type meaning from /test.js does
-// not propagate through the object literal export.
+// Bug: the type meaning from /test.js does not
+// propagate through the object literal export.
 const x: Abcde = { b: "" };

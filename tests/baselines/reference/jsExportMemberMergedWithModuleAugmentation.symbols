@@ -34,11 +34,10 @@ new Abcde().x;
 >Abcde : Symbol(Abcde, Decl(index.ts, 0, 8))
 >x : Symbol(Abcde.x, Decl(test.js, 0, 13))
 
-// Descriptive, not prescriptive: This is ok,
-// because the type meaning from /test.js does
-// not propagate through the object literal export.
+// Bug: the type meaning from /test.js does not
+// propagate through the object literal export.
 const x: Abcde = { b: "" };
->x : Symbol(x, Decl(index.ts, 11, 5))
+>x : Symbol(x, Decl(index.ts, 10, 5))
 >Abcde : Symbol(Abcde, Decl(index.ts, 0, 8))
->b : Symbol(b, Decl(index.ts, 11, 18))
+>b : Symbol(b, Decl(index.ts, 10, 18))
 

@@ -39,7 +39,7 @@ namespace F { var y; }
 === tests/cases/compiler/ambientClassDeclarationExtends_file2.ts ===
 declare class F extends E { }
 >F : F
->E : E
+>E : typeof E
 
 var f: E = new F();
 >f : E
