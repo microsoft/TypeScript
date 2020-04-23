@@ -883,19 +883,17 @@ namespace ts.textChanges {
                     Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos, "Changes overlap", () =>
                         `${JSON.stringify(normalized[i].range)} and ${JSON.stringify(normalized[i + 1].range)}`);
                 }
-                const naiveTextChanges = normalized.map(c =>
-                    createTextChange(createTextSpanFromRange(c.range), computeNewText(c, sourceFile, newLineCharacter, formatContext, validate)));
 
-                // Only return changes that will actually have an impact on the file.
-                const textChanges = naiveTextChanges.filter(({ span, newText }) => {
-                    // The new text occupies a different amount of space from the old text.
-                    // It has to impact the file, so we'll keep it.
-                    if (span.length !== newText.length) {
-                        return true;
+                const textChanges = mapDefined(normalized, c => {
+                    const span = createTextSpanFromRange(c.range);
+                    const newText = computeNewText(c, sourceFile, newLineCharacter, formatContext, validate);
+
+                    // Filter out redundant changes.
+                    if (span.length === newText.length && stringContainsAt(sourceFile.text, newText, span.start)) {
+                        return undefined;
                     }
 
-                    // The text differs, so keep it.
-                    return !stringContainsAt(sourceFile.text, newText, span.start);
+                    return createTextChange(span, newText);
                 });
 
                 return textChanges.length > 0 ? { fileName: sourceFile.fileName, textChanges } : undefined;
