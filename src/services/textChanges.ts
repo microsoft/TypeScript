@@ -887,7 +887,7 @@ namespace ts.textChanges {
 
     namespace changesToText {
         export function getTextChangesFromChanges(changes: readonly Change[], newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
-            return group(changes, c => c.sourceFile.path).map(changesInFile => {
+            return mapDefined(group(changes, c => c.sourceFile.path), changesInFile => {
                 const sourceFile = changesInFile[0].sourceFile;
                 // order changes by start position
                 // If the start position is the same, put the shorter range first, since an empty range (x, x) may precede (x, y) but not vice-versa.
@@ -897,9 +897,20 @@ namespace ts.textChanges {
                     Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos, "Changes overlap", () =>
                         `${JSON.stringify(normalized[i].range)} and ${JSON.stringify(normalized[i + 1].range)}`);
                 }
-                const textChanges = normalized.map(c =>
-                    createTextChange(createTextSpanFromRange(c.range), computeNewText(c, sourceFile, newLineCharacter, formatContext, validate)));
-                return { fileName: sourceFile.fileName, textChanges };
+
+                const textChanges = mapDefined(normalized, c => {
+                    const span = createTextSpanFromRange(c.range);
+                    const newText = computeNewText(c, sourceFile, newLineCharacter, formatContext, validate);
+
+                    // Filter out redundant changes.
+                    if (span.length === newText.length && stringContainsAt(sourceFile.text, newText, span.start)) {
+                        return undefined;
+                    }
+
+                    return createTextChange(span, newText);
+                });
+
+                return textChanges.length > 0 ? { fileName: sourceFile.fileName, textChanges } : undefined;
             });
         }
 
