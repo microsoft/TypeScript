@@ -1412,9 +1412,11 @@ namespace ts {
     }
 
     export function updateBinary(node: BinaryExpression, left: Expression, right: Expression, operator?: BinaryOperator | BinaryOperatorToken) {
+        const nextOperator = operator ?? node.operatorToken;
         return node.left !== left
             || node.right !== right
-            ? updateNode(createBinary(left, operator || node.operatorToken, right), node)
+            || node.operatorToken !== nextOperator
+            ? updateNode(createBinary(left, nextOperator, right), node)
             : node;
     }
 
