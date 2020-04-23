@@ -895,7 +895,7 @@ namespace ts.textChanges {
                     }
 
                     // The text differs, so keep it.
-                    return sourceFile.text.indexOf(newText, span.start) !== span.start;
+                    return !stringContainsAt(sourceFile.text, newText, span.start);
                 });
 
                 return textChanges.length > 0 ? { fileName: sourceFile.fileName, textChanges } : undefined;

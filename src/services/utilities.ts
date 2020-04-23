@@ -2818,6 +2818,35 @@ namespace ts {
         return symbol.name;
     }
 
+    /**
+     * Useful to check whether a string contains another string at a specific index
+     * without allocating another string or traversing the entire contents of the outer string.
+     *
+     * This function is useful in place of either of the following:
+     *
+     * ```ts
+     * // Allocates
+     * haystack.substr(startIndex, startIndex + needle.length) === needle
+     *
+     * // Full traversal
+     * haystack.indexOf(needle, startIndex) === startIndex
+     * ```
+     *
+     * @param haystack The string that potentially contains `needle`.
+     * @param needle The string whose content might sit within `haystack`.
+     * @param startIndex The index within `haystack` to start searching for `needle`.
+     */
+    export function stringContainsAt(haystack: string, needle: string, startIndex: number) {
+        const needleLength = needle.length;
+        if (needleLength + startIndex > haystack.length) {
+            return false;
+        }
+        for (let i = 0; i < needleLength; i++) {
+            if (needle.charCodeAt(i) !== haystack.charCodeAt(i + startIndex)) return false;
+        }
+        return true;
+    }
+
     export function startsWithUnderscore(name: string): boolean {
         return name.charCodeAt(0) === CharacterCodes._;
     }
