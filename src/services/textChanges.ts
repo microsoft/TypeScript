@@ -349,11 +349,25 @@ namespace ts.textChanges {
         }
 
         public insertNodeAtTopOfFile(sourceFile: SourceFile, newNode: Statement, blankLineBetween: boolean): void {
+            this.insertAtTopOfFile(sourceFile, newNode, blankLineBetween);
+        }
+
+        public insertNodesAtTopOfFile(sourceFile: SourceFile, newNodes: readonly Statement[], blankLineBetween: boolean): void {
+            this.insertAtTopOfFile(sourceFile, newNodes, blankLineBetween);
+        }
+
+        private insertAtTopOfFile(sourceFile: SourceFile, insert: Statement | readonly Statement[], blankLineBetween: boolean): void {
             const pos = getInsertionPositionAtSourceFileTop(sourceFile);
-            this.insertNodeAt(sourceFile, pos, newNode, {
+            const options = {
                 prefix: pos === 0 ? undefined : this.newLineCharacter,
                 suffix: (isLineBreak(sourceFile.text.charCodeAt(pos)) ? "" : this.newLineCharacter) + (blankLineBetween ? this.newLineCharacter : ""),
-            });
+            };
+            if (isArray(insert)) {
+                this.insertNodesAt(sourceFile, pos, insert, options);
+            }
+            else {
+                this.insertNodeAt(sourceFile, pos, insert, options);
+            }
         }
 
         public insertFirstParameter(sourceFile: SourceFile, parameters: NodeArray<ParameterDeclaration>, newParam: ParameterDeclaration): void {

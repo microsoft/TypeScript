@@ -1871,14 +1871,23 @@ namespace ts {
         return node.modifiers && find(node.modifiers, m => m.kind === kind);
     }
 
-    export function insertImport(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDecl: Statement, blankLineBetween: boolean): void {
-        const importKindPredicate = importDecl.kind === SyntaxKind.VariableStatement ? isRequireVariableDeclarationStatement : isAnyImportSyntax;
+    export function insertImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile, imports: Statement | readonly Statement[], blankLineBetween: boolean): void {
+        const decl = isArray(imports) ? imports[0] : imports;
+        const importKindPredicate = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableDeclarationStatement : isAnyImportSyntax;
         const lastImportDeclaration = findLast(sourceFile.statements, statement => importKindPredicate(statement));
         if (lastImportDeclaration) {
-            changes.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl);
+            if (isArray(imports)) {
+                changes.insertNodesAfter(sourceFile, lastImportDeclaration, imports);
+            }
+            else {
+                changes.insertNodeAfter(sourceFile, lastImportDeclaration, imports);
+            }
+        }
+        else if (isArray(imports)) {
+            changes.insertNodesAtTopOfFile(sourceFile, imports, blankLineBetween);
         }
         else {
-            changes.insertNodeAtTopOfFile(sourceFile, importDecl, blankLineBetween);
+            changes.insertNodeAtTopOfFile(sourceFile, imports, blankLineBetween);
         }
     }
 
