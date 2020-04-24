@@ -35,7 +35,7 @@ class Foo<T> {
 >null : null
 
     static f(xs: T[]): T[] {
->f : (xs: any[]) => any[]
+>f : (xs: T[]) => T[]
 >xs : any[]
 
         return xs.reverse();

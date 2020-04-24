@@ -188,7 +188,7 @@ b(4); // not ok
 >4 : 4
 
 function c(x: number | void, y: void, z: void | string | number): void  {
->c : (x: number | void, y: void, z: string | number | void) => void
+>c : (x: number | void, y: void, z: void | string | number) => void
 >x : number | void
 >y : void
 >z : string | number | void

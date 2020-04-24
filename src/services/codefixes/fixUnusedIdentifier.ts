@@ -154,6 +154,13 @@ namespace ts.codefix {
         }
         if (isIdentifier(token) && canPrefix(token)) {
             changes.replaceNode(sourceFile, token, createIdentifier(`_${token.text}`));
+            if (isParameter(token.parent)) {
+                getJSDocParameterTags(token.parent).forEach((tag) => {
+                    if (isIdentifier(tag.name)) {
+                        changes.replaceNode(sourceFile, tag.name, createIdentifier(`_${tag.name.text}`));
+                    }
+                });
+            }
         }
     }
 

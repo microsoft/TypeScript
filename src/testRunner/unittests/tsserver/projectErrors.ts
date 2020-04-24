@@ -350,16 +350,7 @@ namespace ts.projectSystem {
             verifyErrorsInApp();
 
             function verifyErrorsInApp() {
-                verifyGetErrRequest({
-                    session,
-                    host,
-                    expected: [{
-                        file: app,
-                        syntax: [],
-                        semantic: [],
-                        suggestion: []
-                    }],
-                });
+                verifyGetErrRequestNoErrors({ session, host, files: [app] });
             }
         });
 
@@ -418,12 +409,7 @@ namespace ts.projectSystem {
             checkErrors([serverUtilities.path, app.path]);
 
             function checkErrors(openFiles: [string, string]) {
-                verifyGetErrRequest({
-                    session,
-                    host,
-                    expected: openFiles.map(file => ({ file, syntax: [], semantic: [], suggestion: [] })),
-                    existingTimeouts: 2
-                });
+                verifyGetErrRequestNoErrors({ session, host, files: openFiles, existingTimeouts: 2 });
             }
         });
 
@@ -492,6 +478,48 @@ declare module '@custom/plugin' {
                     }]
                 });
             }
+        });
+
+        describe("when semantic error returns includes global error", () => {
+            const file: File = {
+                path: `${tscWatch.projectRoot}/ui.ts`,
+                content: `const x = async (_action: string) => {
+};`
+            };
+            const config: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: "{}"
+            };
+            function expectedDiagnostics(): GetErrDiagnostics {
+                const span = protocolTextSpanFromSubstring(file.content, `async (_action: string) => {`);
+                return {
+                    file,
+                    syntax: [],
+                    semantic: [
+                        createDiagnostic(span.start, span.end, Diagnostics.An_async_function_or_method_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option, [], "error"),
+                    ],
+                    suggestion: []
+                };
+            }
+            verifyGetErrScenario({
+                allFiles: () => [libFile, file, config],
+                openFiles: () => [file],
+                expectedGetErr: () => [expectedDiagnostics()],
+                expectedGetErrForProject: () => [{
+                    project: file.path,
+                    errors: [
+                        expectedDiagnostics(),
+                    ]
+                }],
+                expectedSyncDiagnostics: () => [
+                    syncDiagnostics(expectedDiagnostics(), config.path),
+                ],
+                expectedConfigFileDiagEvents: () => [{
+                    triggerFile: file.path,
+                    configFileName: config.path,
+                    diagnostics: emptyArray
+                }]
+            });
         });
     });
 
@@ -919,18 +947,7 @@ console.log(blabla);`
             const { host, session, test } = createSessionForTest({
                 include: ["./src/*.ts", "./src/*.json"]
             });
-            verifyGetErrRequest({
-                session,
-                host,
-                expected: [
-                    {
-                        file: test,
-                        syntax: [],
-                        semantic: [],
-                        suggestion: []
-                    }
-                ]
-            });
+            verifyGetErrRequestNoErrors({ session, host, files: [test] });
         });
 
         it("should report error when json is not root file found by tsconfig", () => {

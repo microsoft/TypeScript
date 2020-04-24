@@ -119,6 +119,16 @@ else {
     var1; // C1
 }
 
+// Repro from #37660
+
+function foo(instance: Function | object) {
+    if (typeof instance === 'function') {
+        if (instance.prototype == null || instance.prototype.constructor == null) {
+            return instance.length;
+        }
+    }
+}
+
 
 //// [typeGuardConstructorClassAndNumber.js]
 // Typical case
@@ -239,4 +249,12 @@ if (C1 !== var1["constructor"]) {
 }
 else {
     var1; // C1
+}
+// Repro from #37660
+function foo(instance) {
+    if (typeof instance === 'function') {
+        if (instance.prototype == null || instance.prototype.constructor == null) {
+            return instance.length;
+        }
+    }
 }

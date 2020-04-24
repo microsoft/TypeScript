@@ -65,6 +65,7 @@
         "codefixes/importFixes.ts",
         "codefixes/fixImplicitThis.ts",
         "codefixes/fixSpelling.ts",
+        "codefixes/returnValueCorrect.ts",
         "codefixes/fixAddMissingMember.ts",
         "codefixes/fixAddMissingNewOperator.ts",
         "codefixes/fixCannotFindModule.ts",

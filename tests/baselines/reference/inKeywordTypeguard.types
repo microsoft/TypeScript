@@ -297,3 +297,28 @@ class UnreachableCodeDetection {
         }
     }
 }
+
+function positiveIntersectionTest(x: { a: string } & { b: string }) {
+>positiveIntersectionTest : (x: {    a: string;} & {    b: string;}) => void
+>x : { a: string; } & { b: string; }
+>a : string
+>b : string
+
+    if ("a" in x) {
+>"a" in x : boolean
+>"a" : "a"
+>x : { a: string; } & { b: string; }
+
+        let s: string = x.a;
+>s : string
+>x.a : string
+>x : { a: string; } & { b: string; }
+>a : string
+
+    } else {
+        let n: never = x;
+>n : never
+>x : { a: string; } & { b: string; }
+    }
+}
+

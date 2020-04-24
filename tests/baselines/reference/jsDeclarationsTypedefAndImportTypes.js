@@ -88,7 +88,7 @@ export class Wrap {
     /**
      * @param {Conn} c
      */
-    constructor(c: import("./conn"));
+    constructor(c: Conn);
     connItem: number;
     /** @type {import("./conn").Whatever} */
     another: import("./conn").Whatever;

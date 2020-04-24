@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts ===
 function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') {
->f1 : (obj: { a: number; b: 0 | 1; c: string; }, k0: "a", k1: "a" | "b", k2: "a" | "b" | "c") => void
+>f1 : (obj: {    a: number;    b: 0 | 1;    c: string;}, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') => void
 >obj : { a: number; b: 0 | 1; c: string; }
 >a : number
 >b : 0 | 1
@@ -74,7 +74,7 @@ function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2:
 }
 
 function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b: { [key: string]: number }, c: T, k: keyof T) {
->f2 : <T extends { [key: string]: number; }>(a: { x: number; y: number; }, b: { [key: string]: number; }, c: T, k: keyof T) => void
+>f2 : <T extends { [key: string]: number; }>(a: {    x: number;    y: number;}, b: { [key: string]: number; }, c: T, k: keyof T) => void
 >key : string
 >a : { x: number; y: number; }
 >x : number
@@ -233,7 +233,7 @@ type Item = { a: string, b: number };
 >b : number
 
 function f10<T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof Item, k3: keyof T, k4: K) {
->f10 : <T extends Item, K extends keyof T>(obj: T, k1: string, k2: "a" | "b", k3: keyof T, k4: K) => void
+>f10 : <T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof Item, k3: keyof T, k4: K) => void
 >obj : T
 >k1 : string
 >k2 : "a" | "b"
@@ -273,7 +273,7 @@ type Dict = Record<string, number>;
 >Dict : Record<string, number>
 
 function f11<K extends keyof Dict>(obj: Dict, k1: keyof Dict, k2: K) {
->f11 : <K extends string>(obj: Record<string, number>, k1: string, k2: K) => void
+>f11 : <K extends string>(obj: Dict, k1: keyof Dict, k2: K) => void
 >obj : Record<string, number>
 >k1 : string
 >k2 : K
@@ -301,7 +301,7 @@ function f11<K extends keyof Dict>(obj: Dict, k1: keyof Dict, k2: K) {
 }
 
 function f12<T extends Readonly<Dict>, K extends keyof T>(obj: T, k1: keyof Dict, k2: keyof T, k3: K) {
->f12 : <T extends Readonly<Record<string, number>>, K extends keyof T>(obj: T, k1: string, k2: keyof T, k3: K) => void
+>f12 : <T extends Readonly<Record<string, number>>, K extends keyof T>(obj: T, k1: keyof Dict, k2: keyof T, k3: K) => void
 >obj : T
 >k1 : string
 >k2 : keyof T
@@ -379,7 +379,7 @@ export function getAllEntities<E extends Entity>(state: EntityState<E>): E[] {
 }
 
 export function getEntity<E extends Entity>(id: IdOf<E>, state: EntityState<E>): E | undefined {
->getEntity : <E extends Entity>(id: E["id"], state: EntityState<E>) => E | undefined
+>getEntity : <E extends Entity>(id: IdOf<E>, state: EntityState<E>) => E | undefined
 >id : E["id"]
 >state : EntityState<E>
 
@@ -440,11 +440,11 @@ type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
 // Repros from #30938
 
 function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(param: T, cb: (element: T['elements'][number]) => void) {
->fn : <T extends { elements: string[]; } | { elements: number[]; }>(param: T, cb: (element: T["elements"][number]) => void) => void
+>fn : <T extends { elements: Array<string>; } | { elements: Array<number>; }>(param: T, cb: (element: T['elements'][number]) => void) => void
 >elements : string[]
 >elements : number[]
 >param : T
->cb : (element: T["elements"][number]) => void
+>cb : (element: T['elements'][number]) => void
 >element : T["elements"][number]
 
     cb(param.elements[0]);

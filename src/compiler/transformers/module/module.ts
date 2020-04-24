@@ -1886,7 +1886,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
         priority: 2,
         text: `
             var __exportStar = (this && this.__exportStar) || function(m, exports) {
-                for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+                for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
             }`
     };
 
