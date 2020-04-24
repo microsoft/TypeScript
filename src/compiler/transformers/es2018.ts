@@ -1115,7 +1115,7 @@ namespace ts {
         context.requestEmitHelper(asyncGeneratorHelper);
 
         // Mark this node as originally an async function
-        (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody;
+        (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
 
         return createCall(
             getUnscopedHelperName("__asyncGenerator"),
