@@ -156,7 +156,29 @@ namespace ts {
     }
 
     function isPromiseHandler(node: Node): node is CallExpression {
-        return isCallExpression(node) && (hasPropertyAccessExpressionWithName(node, "then") || hasPropertyAccessExpressionWithName(node, "catch"));
+        return isCallExpression(node) && (
+            hasPropertyAccessExpressionWithName(node, "then") && hasZeroOrOneNonNullArguments(node) ||
+            hasPropertyAccessExpressionWithName(node, "catch"));
+    }
+
+    function hasZeroOrOneNonNullArguments(node: CallExpression) {
+        if (node.arguments.length < 2) return true;
+        let seenArg = false;
+        for (const arg of node.arguments) {
+            switch (arg.kind) {
+                case SyntaxKind.NullKeyword:
+                    continue;
+                case SyntaxKind.Identifier:
+                    if ((arg as Identifier).escapedText === "undefined") {
+                        continue;
+                    }
+                    // falls through
+                default:
+                    if (seenArg) return false;
+                    seenArg = true;
+            }
+        }
+        return true;
     }
 
     // should be kept up to date with getTransformationBody in convertToAsyncFunction.ts
