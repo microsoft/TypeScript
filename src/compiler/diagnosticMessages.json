@@ -2963,10 +2963,6 @@
         "category": "Error",
         "code": 2789
     },
-    "The operand of a 'delete' operator must be optional.": {
-        "category": "Error",
-        "code": 2790
-    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

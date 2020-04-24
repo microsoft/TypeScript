@@ -27583,21 +27583,10 @@ namespace ts {
             }
             const links = getNodeLinks(expr);
             const symbol = getExportSymbolOfValueSymbolIfExported(links.resolvedSymbol);
-            if (symbol) {
-                if (isReadonlySymbol(symbol)) {
-                    error(expr, Diagnostics.The_operand_of_a_delete_operator_cannot_be_a_read_only_property);
-                }
-
-                checkDeleteExpressionMustBeOptional(expr, getTypeOfSymbol(symbol));
+            if (symbol && isReadonlySymbol(symbol)) {
+                error(expr, Diagnostics.The_operand_of_a_delete_operator_cannot_be_a_read_only_property);
             }
             return booleanType;
-        }
-
-        function checkDeleteExpressionMustBeOptional(expr: AccessExpression, type: Type) {
-            const AnyOrUnknownOrNeverFlags = TypeFlags.AnyOrUnknown | TypeFlags.Never;
-            if (strictNullChecks && !(type.flags & AnyOrUnknownOrNeverFlags) && !(getFalsyFlags(type) & TypeFlags.Undefined)) {
-                error(expr, Diagnostics.The_operand_of_a_delete_operator_must_be_optional);
-            }
         }
 
         function checkTypeOfExpression(node: TypeOfExpression): Type {
