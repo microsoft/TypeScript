@@ -6468,6 +6468,7 @@ namespace ts {
         moduleResolverHost?: ModuleSpecifierResolutionHost & { getCommonSourceDirectory(): string };
         trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
         trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
+        reportNonlocalAugmentation?(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): void;
     }
 
     export interface TextSpan {

@@ -4388,6 +4388,14 @@
         "category": "Error",
         "code": 6231
     },
+    "Declaration augments declaration in another file. This cannot be serialized.": {
+        "category": "Error",
+        "code": 6232
+    },
+    "This is the declaration being augmented. Consider moving the augmenting declaration into the same file.": {
+        "category": "Error",
+        "code": 6233
+    },
 
     "Projects to reference": {
         "category": "Message",

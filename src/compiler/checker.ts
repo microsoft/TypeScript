@@ -6029,14 +6029,19 @@ namespace ts {
                         serializeAsNamespaceDeclaration(realMembers, localName, modifierFlags, !!(symbol.flags & (SymbolFlags.Function | SymbolFlags.Assignment)));
                     }
                     if (length(mergedMembers)) {
+                        const containingFile = getSourceFileOfNode(context.enclosingDeclaration);
                         const localName = getInternalSymbolName(symbol, symbolName);
                         const nsBody = createModuleBlock([createExportDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
-                            createNamedExports(map(filter(mergedMembers, n => n.escapedName !== InternalSymbolName.ExportEquals), s => {
+                            createNamedExports(mapDefined(filter(mergedMembers, n => n.escapedName !== InternalSymbolName.ExportEquals), s => {
                                 const name = unescapeLeadingUnderscores(s.escapedName);
                                 const localName = getInternalSymbolName(s, name);
                                 const aliasDecl = s.declarations && getDeclarationOfAliasSymbol(s);
+                                if (containingFile && (aliasDecl ? containingFile !== getSourceFileOfNode(aliasDecl) : !some(s.declarations, d => getSourceFileOfNode(d) === containingFile))) {
+                                    context.tracker?.reportNonlocalAugmentation?.(containingFile, symbol, s);
+                                    return undefined;
+                                }
                                 const target = aliasDecl && getTargetOfAliasDeclaration(aliasDecl, /*dontRecursivelyResolve*/ true);
                                 includePrivateSymbol(target || s);
                                 const targetName = target ? getInternalSymbolName(target, unescapeLeadingUnderscores(target.escapedName)) : localName;
