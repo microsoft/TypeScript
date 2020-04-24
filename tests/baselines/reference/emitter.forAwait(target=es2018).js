@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/emitter/es2018/forAwait/emitter.forAwait.es2018.ts] ////
+//// [tests/cases/conformance/statements/for-await-ofStatements/emitter.forAwait.ts] ////
 
 //// [file1.ts]
 async function f1() {
@@ -40,7 +40,15 @@ async function* f6() {
         continue outer;
     }
 }
-
+//// [file7.ts]
+// https://github.com/microsoft/TypeScript/issues/36166
+async function* f7() {
+    let y: any;
+    for (;;) {
+        for await (const x of y) {
+        }
+    }
+}
 
 //// [file1.js]
 async function f1() {
@@ -80,5 +88,14 @@ async function* f6() {
     let y;
     outer: for await (const x of y) {
         continue outer;
+    }
+}
+//// [file7.js]
+// https://github.com/microsoft/TypeScript/issues/36166
+async function* f7() {
+    let y;
+    for (;;) {
+        for await (const x of y) {
+        }
     }
 }

@@ -1,4 +1,4 @@
-// @target: es2018
+// @target: es2018,es2017,es2015,es5
 // @lib: esnext
 // @filename: file1.ts
 async function f1() {
@@ -38,5 +38,14 @@ async function* f6() {
     let y: any;
     outer: for await (const x of y) {
         continue outer;
+    }
+}
+// @filename: file7.ts
+// https://github.com/microsoft/TypeScript/issues/36166
+async function* f7() {
+    let y: any;
+    for (;;) {
+        for await (const x of y) {
+        }
     }
 }
