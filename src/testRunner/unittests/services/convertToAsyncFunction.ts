@@ -1436,5 +1436,10 @@ function [#|get|]() {
         .catch<APIResponse<{ email: string }>>(() => ({ success: false }));
 }
 `);
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_threeArguments", `
+function [#|f|]() {
+    return Promise.resolve().then(undefined, undefined, () => 1);
+}`);
     });
 }
