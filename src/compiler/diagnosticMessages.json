@@ -1477,11 +1477,11 @@
         "category": "Error",
         "code": 2371
     },
-    "Parameter '{0}' cannot be referenced in its initializer.": {
+    "Parameter '{0}' cannot reference itself.": {
         "category": "Error",
         "code": 2372
     },
-    "Initializer of parameter '{0}' cannot reference identifier '{1}' declared after it.": {
+    "Parameter '{0}' cannot reference identifier '{1}' declared after it.": {
         "category": "Error",
         "code": 2373
     },
@@ -2963,6 +2963,10 @@
         "category": "Error",
         "code": 2789
     },
+    "The operand of a 'delete' operator must be optional.": {
+        "category": "Error",
+        "code": 2790
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -4384,6 +4388,14 @@
         "category": "Error",
         "code": 6231
     },
+    "Declaration augments declaration in another file. This cannot be serialized.": {
+        "category": "Error",
+        "code": 6232
+    },
+    "This is the declaration being augmented. Consider moving the augmenting declaration into the same file.": {
+        "category": "Error",
+        "code": 6233
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -5737,5 +5749,9 @@
     "The intersection '{0}' was reduced to 'never' because property '{1}' exists in multiple constituents and is private in some.": {
         "category": "Error",
         "code": 18032
+    },
+    "Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.": {
+        "category": "Error",
+        "code": 18033
     }
 }

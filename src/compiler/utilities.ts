@@ -876,6 +876,10 @@ namespace ts {
         return info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : undefined;
     }
 
+    export function isComputedNonLiteralName(name: PropertyName): boolean {
+        return name.kind === SyntaxKind.ComputedPropertyName && !isStringOrNumericLiteralLike(name.expression);
+    }
+
     export function getTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral): __String {
         switch (name.kind) {
             case SyntaxKind.Identifier:
@@ -1086,6 +1090,26 @@ namespace ts {
     export function isPrologueDirective(node: Node): node is PrologueDirective {
         return node.kind === SyntaxKind.ExpressionStatement
             && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
+    }
+
+    export function isCustomPrologue(node: Statement) {
+        return !!(getEmitFlags(node) & EmitFlags.CustomPrologue);
+    }
+
+    export function isHoistedFunction(node: Statement) {
+        return isCustomPrologue(node)
+            && isFunctionDeclaration(node);
+    }
+
+    function isHoistedVariable(node: VariableDeclaration) {
+        return isIdentifier(node.name)
+            && !node.initializer;
+    }
+
+    export function isHoistedVariableStatement(node: Statement) {
+        return isCustomPrologue(node)
+            && isVariableStatement(node)
+            && every(node.declarationList.declarations, isHoistedVariable);
     }
 
     export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile) {
@@ -4787,19 +4811,19 @@ namespace ts {
         return positionIsSynthesized(range.pos) ? -1 : skipTrivia(sourceFile.text, range.pos, /*stopAfterLineBreak*/ false, includeComments);
     }
 
-    export function getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(pos: number, sourceFile: SourceFile, includeComments?: boolean) {
+    export function getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(pos: number, stopPos: number, sourceFile: SourceFile, includeComments?: boolean) {
         const startPos = skipTrivia(sourceFile.text, pos, /*stopAfterLineBreak*/ false, includeComments);
-        const prevPos = getPreviousNonWhitespacePosition(startPos, sourceFile);
-        return getLinesBetweenPositions(sourceFile, prevPos || 0, startPos);
+        const prevPos = getPreviousNonWhitespacePosition(startPos, stopPos, sourceFile);
+        return getLinesBetweenPositions(sourceFile, prevPos ?? stopPos, startPos);
     }
 
-    export function getLinesBetweenPositionAndNextNonWhitespaceCharacter(pos: number, sourceFile: SourceFile, includeComments?: boolean) {
+    export function getLinesBetweenPositionAndNextNonWhitespaceCharacter(pos: number, stopPos: number, sourceFile: SourceFile, includeComments?: boolean) {
         const nextPos = skipTrivia(sourceFile.text, pos, /*stopAfterLineBreak*/ false, includeComments);
-        return getLinesBetweenPositions(sourceFile, pos, nextPos);
+        return getLinesBetweenPositions(sourceFile, pos, Math.min(stopPos, nextPos));
     }
 
-    function getPreviousNonWhitespacePosition(pos: number, sourceFile: SourceFile) {
-        while (pos-- > 0) {
+    function getPreviousNonWhitespacePosition(pos: number, stopPos = 0, sourceFile: SourceFile) {
+        while (pos-- > stopPos) {
             if (!isWhiteSpaceLike(sourceFile.text.charCodeAt(pos))) {
                 return pos;
             }
