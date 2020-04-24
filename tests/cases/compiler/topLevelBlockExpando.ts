@@ -33,17 +33,17 @@ interface Person {
  */
 function doHumanThings(param) {}
 
-const dice = () => Math.floor(Math.random() * 6);
-dice.first = 'Rando';
-dice.last = 'Calrissian';
+const dice1 = () => Math.floor(Math.random() * 6);
+// dice1.first = 'Rando';
+dice1.last = 'Calrissian';
 
-doHumanThings(dice)
+// doHumanThings(dice)
 
-// but inside a block... you can't call iut a human
+// but inside a block... you can't call  a human
 {
-  const dice = () => Math.floor(Math.random() * 6);
-  dice.first = 'Rando';
-  dice.last = 'Calrissian'; 
+  const dice2 = () => Math.floor(Math.random() * 6);
+  dice2.first = 'Rando';
+  dice2.last = 'Calrissian'; 
   
-  doHumanThings(dice)
+  doHumanThings(dice2)
 }

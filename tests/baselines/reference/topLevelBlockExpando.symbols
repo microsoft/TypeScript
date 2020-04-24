@@ -1,5 +1,5 @@
 === tests/cases/compiler/check.ts ===
-// 
+// https://github.com/microsoft/TypeScript/issues/31972
 
 
 
@@ -55,8 +55,8 @@ function doHumanThings(param) {}
 >doHumanThings : Symbol(doHumanThings, Decl(check.js, 0, 0))
 >param : Symbol(param, Decl(check.js, 10, 23))
 
-const dice = () => Math.floor(Math.random() * 6);
->dice : Symbol(dice, Decl(check.js, 12, 5), Decl(check.js, 12, 49), Decl(check.js, 13, 21))
+const dice1 = () => Math.floor(Math.random() * 6);
+>dice1 : Symbol(dice1, Decl(check.js, 12, 5), Decl(check.js, 12, 50))
 >Math.floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
 >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
@@ -64,24 +64,18 @@ const dice = () => Math.floor(Math.random() * 6);
 >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
-dice.first = 'Rando';
->dice.first : Symbol(dice.first, Decl(check.js, 12, 49), Decl(check.js, 20, 51))
->dice : Symbol(dice, Decl(check.js, 12, 5), Decl(check.js, 12, 49), Decl(check.js, 13, 21))
->first : Symbol(dice.first, Decl(check.js, 12, 49), Decl(check.js, 20, 51))
+// dice1.first = 'Rando';
+dice1.last = 'Calrissian';
+>dice1.last : Symbol(dice1.last, Decl(check.js, 12, 50))
+>dice1 : Symbol(dice1, Decl(check.js, 12, 5), Decl(check.js, 12, 50))
+>last : Symbol(dice1.last, Decl(check.js, 12, 50))
 
-dice.last = 'Calrissian';
->dice.last : Symbol(dice.last, Decl(check.js, 13, 21), Decl(check.js, 21, 23))
->dice : Symbol(dice, Decl(check.js, 12, 5), Decl(check.js, 12, 49), Decl(check.js, 13, 21))
->last : Symbol(dice.last, Decl(check.js, 13, 21), Decl(check.js, 21, 23))
+// doHumanThings(dice)
 
-doHumanThings(dice)
->doHumanThings : Symbol(doHumanThings, Decl(check.js, 0, 0))
->dice : Symbol(dice, Decl(check.js, 12, 5), Decl(check.js, 12, 49), Decl(check.js, 13, 21))
-
-// but inside a block... you can't call iut a human
+// but inside a block... you can't call  a human
 {
-  const dice = () => Math.floor(Math.random() * 6);
->dice : Symbol(dice, Decl(check.js, 20, 7))
+  const dice2 = () => Math.floor(Math.random() * 6);
+>dice2 : Symbol(dice2, Decl(check.js, 20, 7))
 >Math.floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
 >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
@@ -89,14 +83,18 @@ doHumanThings(dice)
 >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
-  dice.first = 'Rando';
->dice : Symbol(dice, Decl(check.js, 20, 7))
+  dice2.first = 'Rando';
+>dice2.first : Symbol(dice2.first, Decl(check.js, 20, 52))
+>dice2 : Symbol(dice2, Decl(check.js, 20, 7))
+>first : Symbol(dice2.first, Decl(check.js, 20, 52))
 
-  dice.last = 'Calrissian'; 
->dice : Symbol(dice, Decl(check.js, 20, 7))
+  dice2.last = 'Calrissian'; 
+>dice2.last : Symbol(dice2.last, Decl(check.js, 21, 24))
+>dice2 : Symbol(dice2, Decl(check.js, 20, 7))
+>last : Symbol(dice2.last, Decl(check.js, 21, 24))
   
-  doHumanThings(dice)
+  doHumanThings(dice2)
 >doHumanThings : Symbol(doHumanThings, Decl(check.js, 0, 0))
->dice : Symbol(dice, Decl(check.js, 20, 7))
+>dice2 : Symbol(dice2, Decl(check.js, 20, 7))
 }
 

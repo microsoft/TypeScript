@@ -1,5 +1,5 @@
 === tests/cases/compiler/check.ts ===
-// 
+// https://github.com/microsoft/TypeScript/issues/31972
 
 
 
@@ -61,8 +61,34 @@ function doHumanThings(param) {}
 >doHumanThings : (param: Human) => void
 >param : Human
 
-const dice = () => Math.floor(Math.random() * 6);
->dice : { (): number; first: string; last: string; }
+const dice1 = () => Math.floor(Math.random() * 6);
+>dice1 : { (): number; last: string; }
+>() => Math.floor(Math.random() * 6) : { (): number; last: string; }
+>Math.floor(Math.random() * 6) : number
+>Math.floor : (x: number) => number
+>Math : Math
+>floor : (x: number) => number
+>Math.random() * 6 : number
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>6 : 6
+
+// dice1.first = 'Rando';
+dice1.last = 'Calrissian';
+>dice1.last = 'Calrissian' : "Calrissian"
+>dice1.last : string
+>dice1 : { (): number; last: string; }
+>last : string
+>'Calrissian' : "Calrissian"
+
+// doHumanThings(dice)
+
+// but inside a block... you can't call  a human
+{
+  const dice2 = () => Math.floor(Math.random() * 6);
+>dice2 : { (): number; first: string; last: string; }
 >() => Math.floor(Math.random() * 6) : { (): number; first: string; last: string; }
 >Math.floor(Math.random() * 6) : number
 >Math.floor : (x: number) => number
@@ -75,58 +101,23 @@ const dice = () => Math.floor(Math.random() * 6);
 >random : () => number
 >6 : 6
 
-dice.first = 'Rando';
->dice.first = 'Rando' : "Rando"
->dice.first : string
->dice : { (): number; first: string; last: string; }
+  dice2.first = 'Rando';
+>dice2.first = 'Rando' : "Rando"
+>dice2.first : string
+>dice2 : { (): number; first: string; last: string; }
 >first : string
 >'Rando' : "Rando"
 
-dice.last = 'Calrissian';
->dice.last = 'Calrissian' : "Calrissian"
->dice.last : string
->dice : { (): number; first: string; last: string; }
+  dice2.last = 'Calrissian'; 
+>dice2.last = 'Calrissian' : "Calrissian"
+>dice2.last : string
+>dice2 : { (): number; first: string; last: string; }
 >last : string
 >'Calrissian' : "Calrissian"
-
-doHumanThings(dice)
->doHumanThings(dice) : void
->doHumanThings : (param: Human) => void
->dice : { (): number; first: string; last: string; }
-
-// but inside a block... you can't call iut a human
-{
-  const dice = () => Math.floor(Math.random() * 6);
->dice : () => number
->() => Math.floor(Math.random() * 6) : () => number
->Math.floor(Math.random() * 6) : number
->Math.floor : (x: number) => number
->Math : Math
->floor : (x: number) => number
->Math.random() * 6 : number
->Math.random() : number
->Math.random : () => number
->Math : Math
->random : () => number
->6 : 6
-
-  dice.first = 'Rando';
->dice.first = 'Rando' : "Rando"
->dice.first : any
->dice : () => number
->first : any
->'Rando' : "Rando"
-
-  dice.last = 'Calrissian'; 
->dice.last = 'Calrissian' : "Calrissian"
->dice.last : any
->dice : () => number
->last : any
->'Calrissian' : "Calrissian"
   
-  doHumanThings(dice)
->doHumanThings(dice) : void
+  doHumanThings(dice2)
+>doHumanThings(dice2) : void
 >doHumanThings : (param: Human) => void
->dice : () => number
+>dice2 : { (): number; first: string; last: string; }
 }
 
