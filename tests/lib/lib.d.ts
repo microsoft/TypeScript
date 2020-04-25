@@ -10968,6 +10968,11 @@ declare var IDBCursorWithValue: {
     new(): IDBCursorWithValue;
 }
 
+interface IDBDatabaseInfo {
+    name: String;
+    version: Number;
+}
+
 interface IDBDatabase extends EventTarget {
     name: string;
     objectStoreNames: DOMStringList;
@@ -10992,6 +10997,7 @@ interface IDBFactory {
     cmp(first: any, second: any): number;
     deleteDatabase(name: string): IDBOpenDBRequest;
     open(name: string, version?: number): IDBOpenDBRequest;
+    databases(): Promise<IDBDatabaseInfo[]>;
 }
 
 declare var IDBFactory: {

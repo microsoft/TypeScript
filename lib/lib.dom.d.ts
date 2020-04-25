@@ -9091,6 +9091,11 @@ interface IDBDatabaseEventMap {
     "versionchange": IDBVersionChangeEvent;
 }
 
+interface IDBDatabaseInfo {
+    name: String;
+    version: Number;
+}
+
 /** This IndexedDB API interface provides a connection to a database; you can use an IDBDatabase object to open a transaction on your database then create, manipulate, and delete objects (data) in that database. The interface provides the only way to get and manage versions of the database. */
 interface IDBDatabase extends EventTarget {
     /**
@@ -9156,6 +9161,10 @@ interface IDBFactory {
      * Attempts to open a connection to the named database with the current version, or 1 if it does not already exist. If the request is successful request's result will be the connection.
      */
     open(name: string, version?: number): IDBOpenDBRequest;
+    /**
+     * Returns a promise of a list of IDBDatabaseInfo for each IDBDatabase in the active origin.
+     */
+    databases(): Promise<IDBDatabaseInfo[]>;
 }
 
 declare var IDBFactory: {
