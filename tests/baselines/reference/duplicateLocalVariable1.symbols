@@ -35,9 +35,9 @@ export class TestRunner {
 >arg2 : Symbol(arg2, Decl(duplicateLocalVariable1.ts, 17, 36))
 
         return (arg1.every(function (val, index) { return val === arg2[index] }));
->arg1.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>arg1.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >arg1 : Symbol(arg1, Decl(duplicateLocalVariable1.ts, 17, 24))
->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(duplicateLocalVariable1.ts, 18, 37))
 >index : Symbol(index, Decl(duplicateLocalVariable1.ts, 18, 41))
 >val : Symbol(val, Decl(duplicateLocalVariable1.ts, 18, 37))
