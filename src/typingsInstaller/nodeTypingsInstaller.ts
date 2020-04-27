@@ -247,6 +247,8 @@ namespace ts.server.typingsInstaller {
     installer.listen();
 
     function indent(newline: string, str: string): string {
-        return `${newline}    ` + str.replace(/\r?\n/, `${newline}    `);
+        return str && str.length
+            ? `${newline}    ` + str.replace(/\r?\n/, `${newline}    `)
+            : "";
     }
 }
