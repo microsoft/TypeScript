@@ -15489,11 +15489,21 @@ namespace ts {
                     }
                 }
 
-                if (isLiteralType(source) && !forEachType(target, isUnitType)) {
+                if (isLiteralType(source) && !typeCouldHaveNoTopLevelSingletonTypes(target)) {
                     generalizedSourceType = getTypeNameForErrorDisplay(getBaseTypeOfLiteralType(source));
                 }
 
                 reportError(message, generalizedSourceType, targetType);
+            }
+
+            function typeCouldHaveNoTopLevelSingletonTypes(type: Type) {
+                return forEachType(type, typeCouldHaveNoTopLevelSingletonTypesWorker);
+            }
+
+            function typeCouldHaveNoTopLevelSingletonTypesWorker(type: Type): boolean {
+                return (type.flags & TypeFlags.Intersection)
+                    ? !!forEach((type as IntersectionType).types, typeCouldHaveNoTopLevelSingletonTypesWorker)
+                    : isUnitType(type) || !!(type.flags & TypeFlags.Instantiable);
             }
 
             function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {
