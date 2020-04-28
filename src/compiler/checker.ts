@@ -33771,24 +33771,23 @@ namespace ts {
                         .filter(({ isPartial }) => isPartial)
                         .map(({ originalParam }) => originalParam);
 
-                    return {
-                        ...createObjectType(ObjectFlags.Anonymous, funcType.symbol),
-                        members: emptySymbols,
-                        properties: [],
-                        callSignatures: [createSignature(
-                            /*declaration*/ undefined,
-                            /*typeParameters*/ undefined,
-                            /*thisParameter*/ undefined,
-                            typeParams,
-                            getReturnTypeOfSingleNonGenericCallSignature(funcType),
-                            callSignature.resolvedTypePredicate,
-                            expr.arguments.filter(isPartialApplicationElement).length,
-                            (typeParams.length - expr.arguments.filter(isPartialApplicationElement).length > 0)
-                                ? SignatureFlags.HasLiteralTypes
-                                : SignatureFlags.None
-                        )],
-                        constructSignatures: [],
-                    };
+                    const partialApplicationType = createObjectType(ObjectFlags.Anonymous, funcType.symbol);
+                    partialApplicationType.members = emptySymbols;
+                    partialApplicationType.properties = [];
+                    partialApplicationType.callSignatures = [createSignature(
+                        /*declaration*/ undefined,
+                        /*typeParameters*/ undefined,
+                        /*thisParameter*/ undefined,
+                        typeParams,
+                        getReturnTypeOfSingleNonGenericCallSignature(funcType),
+                        callSignature.resolvedTypePredicate,
+                        expr.arguments.filter(isPartialApplicationElement).length,
+                        (typeParams.length - expr.arguments.filter(isPartialApplicationElement).length > 0)
+                            ? SignatureFlags.HasLiteralTypes
+                            : SignatureFlags.None
+                    )];
+                    partialApplicationType.constructSignatures = [];
+                    return partialApplicationType;
                 }
                 const type = isCallChain(expr) ? getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr) :
                     getReturnTypeOfSingleNonGenericCallSignature(checkNonNullExpression(expr.expression));

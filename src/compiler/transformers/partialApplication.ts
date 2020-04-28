@@ -10,7 +10,7 @@ namespace ts {
                                 ? node.expression.escapedText as string
                                 : isPropertyAccessExpression(node.expression)
                                     ? node.expression.name.escapedText as string
-                                    : "Wow, what do?"
+                                    : "Wow, what do?";
                             const capturedFunctionIdentifier = createUniqueName(`_${funcName}`);
                             // TODO: Get the signature and use actual argument names of the original function.
                             // Unfortunately we don't seem to have access to them here.
