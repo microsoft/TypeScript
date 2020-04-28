@@ -1,22 +1,50 @@
 === tests/cases/conformance/directives/ts-expect-error.ts ===
 // @ts-expect-error additional commenting
-var invalidCommentedFancy: number = 'nope';
->invalidCommentedFancy : number
+var invalidCommentedFancySingle: number = 'nope';
+>invalidCommentedFancySingle : number
+>'nope' : "nope"
+
+/*
+ @ts-expect-error additional commenting */
+var invalidCommentedFancyMulti: number = 'nope';
+>invalidCommentedFancyMulti : number
 >'nope' : "nope"
 
 // @ts-expect-error additional commenting
-var validCommentedFancy: string = 'nope';
->validCommentedFancy : string
+var validCommentedFancySingle: string = 'nope';
+>validCommentedFancySingle : string
+>'nope' : "nope"
+
+/* @ts-expect-error additional commenting */
+var validCommentedFancyMulti: string = 'nope';
+>validCommentedFancyMulti : string
 >'nope' : "nope"
 
 // @ts-expect-error
-var invalidCommentedPlain: number = 'nope';
->invalidCommentedPlain : number
+var invalidCommentedPlainSingle: number = 'nope';
+>invalidCommentedPlainSingle : number
+>'nope' : "nope"
+
+/*
+ @ts-expect-error */
+var invalidCommentedPlainMulti: number = 'nope';
+>invalidCommentedPlainMulti : number
 >'nope' : "nope"
 
 // @ts-expect-error
-var validCommentedPlain: string = 'nope';
->validCommentedPlain : string
+var validCommentedPlainSingle: string = 'nope';
+>validCommentedPlainSingle : string
+>'nope' : "nope"
+
+/* @ts-expect-error */
+var validCommentedPlainMulti1: string = 'nope';
+>validCommentedPlainMulti1 : string
+>'nope' : "nope"
+
+/*
+@ts-expect-error */
+var validCommentedPlainMulti2: string = 'nope';
+>validCommentedPlainMulti2 : string
 >'nope' : "nope"
 
 var invalidPlain: number = 'nope';
