@@ -665,23 +665,23 @@ const c30 = f30(42, x => "" + x, x => x + 1);  // [(x: number) => string, (x: nu
 >1 : 1
 
 type T01 = Parameters<(x: number, y: string, z: boolean) => void>;
->T01 : [number, string, boolean]
+>T01 : [x: number, y: string, z: boolean]
 >x : number
 >y : string
 >z : boolean
 
 type T02 = Parameters<(...args: [number, string, boolean]) => void>;
->T02 : [number, string, boolean]
+>T02 : [args_0: number, args_1: string, args_2: boolean]
 >args : [number, string, boolean]
 
 type T03 = ConstructorParameters<new (x: number, y: string, z: boolean) => void>;
->T03 : [number, string, boolean]
+>T03 : [x: number, y: string, z: boolean]
 >x : number
 >y : string
 >z : boolean
 
 type T04 = ConstructorParameters<new (...args: [number, string, boolean]) => void>;
->T04 : [number, string, boolean]
+>T04 : [args_0: number, args_1: string, args_2: boolean]
 >args : [number, string, boolean]
 
 type T05<T> = Parameters<(...args: T[]) => void>;

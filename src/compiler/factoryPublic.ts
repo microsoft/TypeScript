@@ -810,15 +810,15 @@ namespace ts {
             : node;
     }
 
-    export function createTupleTypeNode(elementTypes: readonly TypeNode[]) {
+    export function createTupleTypeNode(elements: readonly (TypeNode | NamedTupleMember)[]) {
         const node = createSynthesizedNode(SyntaxKind.TupleType) as TupleTypeNode;
-        node.elementTypes = createNodeArray(elementTypes);
+        node.elements = createNodeArray(elements);
         return node;
     }
 
-    export function updateTupleTypeNode(node: TupleTypeNode, elementTypes: readonly TypeNode[]) {
-        return node.elementTypes !== elementTypes
-            ? updateNode(createTupleTypeNode(elementTypes), node)
+    export function updateTupleTypeNode(node: TupleTypeNode, elements: readonly (TypeNode | NamedTupleMember)[]) {
+        return node.elements !== elements
+            ? updateNode(createTupleTypeNode(elements), node)
             : node;
     }
 
@@ -931,6 +931,20 @@ namespace ts {
     export function updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode) {
         return node.type !== type
             ? updateNode(createParenthesizedType(type), node)
+            : node;
+    }
+
+    export function createNamedTupleMember(name: Identifier, type: TypeNode) {
+        const node = <NamedTupleMember>createSynthesizedNode(SyntaxKind.NamedTupleMember);
+        node.name = name;
+        node.type = type;
+        return node;
+    }
+
+    export function updateNamedTupleMember(node: NamedTupleMember, name: Identifier, type: TypeNode) {
+        return node.name !== name
+            || node.type !== type
+            ? updateNode(createNamedTupleMember(name, type), node)
             : node;
     }
 
@@ -2614,6 +2628,21 @@ namespace ts {
     export function appendJSDocToContainer(node: JSDocContainer, jsdoc: JSDoc) {
         node.jsDoc = append(node.jsDoc, jsdoc);
         return node;
+    }
+
+
+    /* @internal */
+    export function createJSDocVariadicType(type: TypeNode): JSDocVariadicType {
+        const node = createSynthesizedNode(SyntaxKind.JSDocVariadicType) as JSDocVariadicType;
+        node.type = type;
+        return node;
+    }
+
+    /* @internal */
+    export function updateJSDocVariadicType(node: JSDocVariadicType, type: TypeNode): JSDocVariadicType {
+        return node.type !== type
+            ? updateNode(createJSDocVariadicType(type), node)
+            : node;
     }
 
     // JSX

@@ -328,6 +328,7 @@ namespace ts {
         IndexedAccessType,
         MappedType,
         LiteralType,
+        NamedTupleMember,
         ImportType,
         // Binding patterns
         ObjectBindingPattern,
@@ -699,6 +700,7 @@ namespace ts {
         | ConstructorTypeNode
         | JSDocFunctionType
         | ExportDeclaration
+        | NamedTupleMember
         | EndOfFileToken;
 
     export type HasType =
@@ -1273,7 +1275,15 @@ namespace ts {
 
     export interface TupleTypeNode extends TypeNode {
         kind: SyntaxKind.TupleType;
-        elementTypes: NodeArray<TypeNode>;
+        elements: NodeArray<TypeNode | NamedTupleMember>;
+    }
+
+    export interface NamedTupleMember extends TypeNode, JSDocContainer {
+        kind: SyntaxKind.NamedTupleMember;
+        dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
+        name: Identifier;
+        questionToken?: Token<SyntaxKind.QuestionToken>;
+        type: TypeNode;
     }
 
     export interface OptionalTypeNode extends TypeNode {
@@ -6573,7 +6583,8 @@ namespace ts {
         SingleLineTypeLiteralMembers = SingleLine | SpaceBetweenBraces | SpaceBetweenSiblings,
         MultiLineTypeLiteralMembers = MultiLine | Indented | OptionalIfEmpty,
 
-        TupleTypeElements = CommaDelimited | SpaceBetweenSiblings | SingleLine,
+        SingleLineTupleTypeElements = CommaDelimited | SpaceBetweenSiblings | SingleLine,
+        MultiLineTupleTypeElements = CommaDelimited | Indented | SpaceBetweenSiblings | MultiLine,
         UnionTypeConstituents = BarDelimited | SpaceBetweenSiblings | SingleLine,
         IntersectionTypeConstituents = AmpersandDelimited | SpaceBetweenSiblings | SingleLine,
         ObjectBindingPatternElements = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings | NoSpaceIfEmpty,

@@ -417,23 +417,23 @@ f20(42, "hello", ...t2, true);
 >true : true
 
 type T01 = Parameters<(x: number, y: string, ...z: boolean[]) => void>;
->T01 : [number, string, ...boolean[]]
+>T01 : [x: number, y: string, z: ...boolean[]]
 >x : number
 >y : string
 >z : boolean[]
 
 type T02 = Parameters<(...args: [number, string, ...boolean[]]) => void>;
->T02 : [number, string, ...boolean[]]
+>T02 : [args_0: number, args_1: string, args_2: ...boolean[]]
 >args : [number, string, ...boolean[]]
 
 type T03 = ConstructorParameters<new (x: number, y: string, ...z: boolean[]) => void>;
->T03 : [number, string, ...boolean[]]
+>T03 : [x: number, y: string, z: ...boolean[]]
 >x : number
 >y : string
 >z : boolean[]
 
 type T04 = ConstructorParameters<new (...args: [number, string, ...boolean[]]) => void>;
->T04 : [number, string, ...boolean[]]
+>T04 : [args_0: number, args_1: string, args_2: ...boolean[]]
 >args : [number, string, ...boolean[]]
 
 type T05<T extends any[]> = Parameters<(x: string, ...args: T) => void>;
@@ -442,7 +442,7 @@ type T05<T extends any[]> = Parameters<(x: string, ...args: T) => void>;
 >args : T
 
 type T06 = T05<[number, ...boolean[]]>;
->T06 : [string, number, ...boolean[]]
+>T06 : [x: string, args_0: number, args_1: ...boolean[]]
 
 type P1<T extends Function> = T extends (head: infer A, ...tail: infer B) => any ? { head: A, tail: B } : any[];
 >P1 : P1<T>
@@ -452,7 +452,7 @@ type P1<T extends Function> = T extends (head: infer A, ...tail: infer B) => any
 >tail : B
 
 type T10 = P1<(x: number, y: string, ...z: boolean[]) => void>;
->T10 : { head: number; tail: [string, ...boolean[]]; }
+>T10 : { head: number; tail: [y: string, z: ...boolean[]]; }
 >x : number
 >y : string
 >z : boolean[]
@@ -462,7 +462,7 @@ type T11 = P1<(...z: number[]) => void>;
 >z : number[]
 
 type T12 = P1<(x: number, y: number) => void>;
->T12 : { head: number; tail: [number]; }
+>T12 : { head: number; tail: [y: number]; }
 >x : number
 >y : number
 

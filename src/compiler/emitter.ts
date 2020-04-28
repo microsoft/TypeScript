@@ -1370,6 +1370,8 @@ namespace ts {
                     case SyntaxKind.RestType:
                     case SyntaxKind.JSDocVariadicType:
                         return emitRestOrJSDocVariadicType(node as RestTypeNode | JSDocVariadicType);
+                    case SyntaxKind.NamedTupleMember:
+                        return emitNamedTupleMember(node as NamedTupleMember);
 
                     // Binding patterns
                     case SyntaxKind.ObjectBindingPattern:
@@ -2099,9 +2101,17 @@ namespace ts {
         }
 
         function emitTupleType(node: TupleTypeNode) {
-            writePunctuation("[");
-            emitList(node, node.elementTypes, ListFormat.TupleTypeElements);
-            writePunctuation("]");
+            emitTokenWithComment(SyntaxKind.OpenBracketToken, node.pos, writePunctuation, node);
+            const flags = getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineTupleTypeElements : ListFormat.MultiLineTupleTypeElements;
+            emitList(node, node.elements, flags | ListFormat.NoSpaceIfEmpty);
+            emitTokenWithComment(SyntaxKind.CloseBracketToken, node.elements.end, writePunctuation, node);
+        }
+
+        function emitNamedTupleMember(node: NamedTupleMember) {
+            emit(node.name);
+            emitTokenWithComment(SyntaxKind.ColonToken, node.name.end, writePunctuation, node);
+            writeSpace();
+            emit(node.type);
         }
 
         function emitOptionalType(node: OptionalTypeNode) {

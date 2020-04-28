@@ -1,0 +1,27 @@
+tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(1,41): error TS5084: Tuple members must all have names or not have names.
+tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(3,32): error TS5084: Tuple members must all have names or not have names.
+tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(5,32): error TS5084: Tuple members must all have names or not have names.
+tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(7,20): error TS5085: Tuple members express optionality with a trailing question mark on the type, a question mark on the member name is invalid.
+tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(9,41): error TS5086: Rest tuple members are declared with a `...` on the type. A `...` on the name is invalid.
+
+
+==== tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts (5 errors) ====
+    export type Segment1 = [length: number, number]; // partially named, disallowed
+                                            ~~~~~~
+!!! error TS5084: Tuple members must all have names or not have names.
+    
+    export type List = [item: any, ...any];  // partially named, disallowed
+                                   ~~~~~~
+!!! error TS5084: Tuple members must all have names or not have names.
+    
+    export type Pair = [item: any, any?];  // partially named, disallowed
+                                   ~~~~
+!!! error TS5084: Tuple members must all have names or not have names.
+    
+    export type Opt = [element?: string]; // question mark on name disallowed
+                       ~~~~~~~~~~~~~~~~
+!!! error TS5085: Tuple members express optionality with a trailing question mark on the type, a question mark on the member name is invalid.
+    
+    export type Trailing =  [first: string, ...rest: string[]] // dots on name disallowed
+                                            ~~~~~~~~~~~~~~~~~
+!!! error TS5086: Rest tuple members are declared with a `...` on the type. A `...` on the name is invalid.

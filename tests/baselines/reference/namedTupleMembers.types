@@ -1,0 +1,46 @@
+=== tests/cases/conformance/types/tuple/named/namedTupleMembers.ts ===
+export type Segment = [length: number, count: number];
+>Segment : Segment
+
+export type SegmentAnnotated = [
+>SegmentAnnotated : SegmentAnnotated
+
+    /** 
+     * Size of message buffer segment handles
+     */
+    length: number,
+    /**
+     * Number of segments handled at once
+     */
+    count: number
+];
+
+export type Func<T extends any[]> = (...x: T) => void;
+>Func : Func<T>
+>x : T
+
+export const c = null as any as Func<SegmentAnnotated>;
+>c : Func<SegmentAnnotated>
+>null as any as Func<SegmentAnnotated> : Func<SegmentAnnotated>
+>null as any : any
+>null : null
+
+export function useState<T>(initial: T): [value: T, setter: (T) => void] {
+>useState : <T>(initial: T) => [value: T, setter: (T: any) => void]
+>initial : T
+>T : any
+
+    return null as any;
+>null as any : any
+>null : null
+}
+
+
+export type Iter = Func<[step: number, iterations: number]>;
+>Iter : Func<[step: number, iterations: number]>
+
+export function readSegment([length, count]: [number, number]) {}
+>readSegment : ([length, count]: [number, number]) => void
+>length : number
+>count : number
+

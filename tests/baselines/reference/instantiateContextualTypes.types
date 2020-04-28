@@ -444,5 +444,5 @@ assignPartial(obj, { foo(...args) {} });  // args has type [string]
 >obj : { foo(bar: string): void; }
 >{ foo(...args) {} } : { foo(bar: string): void; }
 >foo : (bar: string) => void
->args : [string]
+>args : [bar: string]
 

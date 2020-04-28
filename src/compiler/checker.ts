@@ -4568,12 +4568,17 @@ namespace ts {
                                         createRestTypeNode(createArrayTypeNode(tupleConstituentNodes[i])) :
                                         createOptionalTypeNode(tupleConstituentNodes[i]);
                                 }
-                                const tupleTypeNode = createTupleTypeNode(tupleConstituentNodes);
+                                if ((type.target as TupleType).associatedNames) {
+                                    for (let i = 0; i < tupleConstituentNodes.length; i++) {
+                                        tupleConstituentNodes[i] = createNamedTupleMember(createIdentifier(unescapeLeadingUnderscores((type.target as TupleType).associatedNames![i])), tupleConstituentNodes[i]);
+                                    }
+                                }
+                                const tupleTypeNode = setEmitFlags(createTupleTypeNode(tupleConstituentNodes), EmitFlags.SingleLine);
                                 return (<TupleType>type.target).readonly ? createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleTypeNode) : tupleTypeNode;
                             }
                         }
                         if (context.encounteredError || (context.flags & NodeBuilderFlags.AllowEmptyTuple)) {
-                            const tupleTypeNode = createTupleTypeNode([]);
+                            const tupleTypeNode = setEmitFlags(createTupleTypeNode([]), EmitFlags.SingleLine);
                             return (<TupleType>type.target).readonly ? createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleTypeNode) : tupleTypeNode;
                         }
                         context.encounteredError = true;
@@ -5555,6 +5560,7 @@ namespace ts {
                     cancellationToken.throwIfCancellationRequested();
                 }
                 let hadError = false;
+                const file = getSourceFileOfNode(existing);
                 const transformed = visitNode(existing, visitExistingNodeTreeSymbols);
                 if (hadError) {
                     return undefined;
@@ -5681,6 +5687,10 @@ namespace ts {
                                 return setEmitFlags(setOriginalNode(name, node), EmitFlags.NoAsciiEscaping);
                             }
                         }
+                    }
+
+                    if (file && isTupleTypeNode(node) && (getLineAndCharacterOfPosition(file, node.pos).line === getLineAndCharacterOfPosition(file, node.end).line)) {
+                        setEmitFlags(node, EmitFlags.SingleLine);
                     }
 
                     return visitEachChild(node, visitExistingNodeTreeSymbols, nullTransformationContext);
@@ -6929,7 +6939,7 @@ namespace ts {
 
         function getTypeAliasForTypeLiteral(type: Type): Symbol | undefined {
             if (type.symbol && type.symbol.flags & SymbolFlags.TypeLiteral) {
-                const node = findAncestor(type.symbol.declarations[0].parent, n => n.kind !== SyntaxKind.ParenthesizedType)!;
+                const node = walkUpParenthesizedTypes(type.symbol.declarations[0].parent);
                 if (node.kind === SyntaxKind.TypeAliasDeclaration) {
                     return getSymbolOfNode(node);
                 }
@@ -7117,6 +7127,7 @@ namespace ts {
                     case SyntaxKind.UnionType:
                     case SyntaxKind.IntersectionType:
                     case SyntaxKind.ParenthesizedType:
+                    case SyntaxKind.NamedTupleMember:
                         return isDeclarationVisible(node.parent);
 
                     // Default binding, import specifier and namespace import is visible
@@ -11575,7 +11586,7 @@ namespace ts {
                 const typeArguments = !node ? emptyArray :
                     node.kind === SyntaxKind.TypeReference ? concatenate(type.target.outerTypeParameters, getEffectiveTypeArguments(node, type.target.localTypeParameters!)) :
                     node.kind === SyntaxKind.ArrayType ? [getTypeFromTypeNode(node.elementType)] :
-                    map(node.elementTypes, getTypeFromTypeNode);
+                    map(node.elements, getTypeFromTypeNode);
                 if (popTypeResolution()) {
                     type.resolvedTypeArguments = type.mapper ? instantiateTypes(typeArguments, type.mapper) : typeArguments;
                 }
@@ -11781,11 +11792,11 @@ namespace ts {
         }
 
         function isUnaryTupleTypeNode(node: TypeNode) {
-            return node.kind === SyntaxKind.TupleType && (<TupleTypeNode>node).elementTypes.length === 1;
+            return node.kind === SyntaxKind.TupleType && (<TupleTypeNode>node).elements.length === 1;
         }
 
         function getImpliedConstraint(type: Type, checkNode: TypeNode, extendsNode: TypeNode): Type | undefined {
-            return isUnaryTupleTypeNode(checkNode) && isUnaryTupleTypeNode(extendsNode) ? getImpliedConstraint(type, (<TupleTypeNode>checkNode).elementTypes[0], (<TupleTypeNode>extendsNode).elementTypes[0]) :
+            return isUnaryTupleTypeNode(checkNode) && isUnaryTupleTypeNode(extendsNode) ? getImpliedConstraint(type, (<TupleTypeNode>checkNode).elements[0], (<TupleTypeNode>extendsNode).elements[0]) :
                 getActualTypeVariable(getTypeFromTypeNode(checkNode)) === type ? getTypeFromTypeNode(extendsNode) :
                 undefined;
         }
@@ -12081,15 +12092,27 @@ namespace ts {
             return createTypeFromGenericGlobalType(readonly ? globalReadonlyArrayType : globalArrayType, [elementType]);
         }
 
+        function unwrapNamedTupleMember(node: TypeNode): TypeNode {
+            return node.kind === SyntaxKind.NamedTupleMember ? (node as NamedTupleMember).type : node;
+        }
+
         function getArrayOrTupleTargetType(node: ArrayTypeNode | TupleTypeNode): GenericType {
             const readonly = isReadonlyTypeOperator(node.parent);
-            if (node.kind === SyntaxKind.ArrayType || node.elementTypes.length === 1 && node.elementTypes[0].kind === SyntaxKind.RestType) {
+            if (node.kind === SyntaxKind.ArrayType || node.elements.length === 1 && node.elements[0].kind === SyntaxKind.RestType) {
                 return readonly ? globalReadonlyArrayType : globalArrayType;
             }
-            const lastElement = lastOrUndefined(node.elementTypes);
-            const restElement = lastElement && lastElement.kind === SyntaxKind.RestType ? lastElement : undefined;
-            const minLength = findLastIndex(node.elementTypes, n => n.kind !== SyntaxKind.OptionalType && n !== restElement) + 1;
-            return getTupleTypeOfArity(node.elementTypes.length, minLength, !!restElement, readonly, /*associatedNames*/ undefined);
+            const lastElement = lastOrUndefined(node.elements);
+            const restElement = lastElement && unwrapNamedTupleMember(lastElement).kind === SyntaxKind.RestType ? lastElement : undefined;
+            const minLength = findLastIndex(node.elements, n => unwrapNamedTupleMember(n).kind !== SyntaxKind.OptionalType && n !== restElement) + 1;
+            let missingName = false;
+            const names = map(node.elements, e => {
+                if (e.kind !== SyntaxKind.NamedTupleMember) {
+                    missingName = true;
+                    return escapeLeadingUnderscores("arg");
+                }
+                return (e as NamedTupleMember).name.escapedText;
+            });
+            return getTupleTypeOfArity(node.elements.length, minLength, !!restElement, readonly, /*associatedNames*/ missingName ? undefined : names);
         }
 
         // Return true if the given type reference node is directly aliased or if it needs to be deferred
@@ -12097,7 +12120,7 @@ namespace ts {
         function isDeferredTypeReferenceNode(node: TypeReferenceNode | ArrayTypeNode | TupleTypeNode, hasDefaultTypeArguments?: boolean) {
             return !!getAliasSymbolForTypeNode(node) || isResolvedByTypeAlias(node) && (
                 node.kind === SyntaxKind.ArrayType ? mayResolveTypeAlias(node.elementType) :
-                node.kind === SyntaxKind.TupleType ? some(node.elementTypes, mayResolveTypeAlias) :
+                node.kind === SyntaxKind.TupleType ? some(node.elements, mayResolveTypeAlias) :
                 hasDefaultTypeArguments || some(node.typeArguments, mayResolveTypeAlias));
         }
 
@@ -12108,6 +12131,7 @@ namespace ts {
             const parent = node.parent;
             switch (parent.kind) {
                 case SyntaxKind.ParenthesizedType:
+                case SyntaxKind.NamedTupleMember:
                 case SyntaxKind.TypeReference:
                 case SyntaxKind.UnionType:
                 case SyntaxKind.IntersectionType:
@@ -12135,11 +12159,12 @@ namespace ts {
                     return (<TypeOperatorNode>node).operator !== SyntaxKind.UniqueKeyword && mayResolveTypeAlias((<TypeOperatorNode>node).type);
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.OptionalType:
+                case SyntaxKind.NamedTupleMember:
                 case SyntaxKind.JSDocOptionalType:
                 case SyntaxKind.JSDocNullableType:
                 case SyntaxKind.JSDocNonNullableType:
                 case SyntaxKind.JSDocTypeExpression:
-                    return mayResolveTypeAlias((<ParenthesizedTypeNode | OptionalTypeNode | JSDocTypeReferencingNode>node).type);
+                    return mayResolveTypeAlias((<ParenthesizedTypeNode | OptionalTypeNode | JSDocTypeReferencingNode | NamedTupleMember>node).type);
                 case SyntaxKind.RestType:
                     return (<RestTypeNode>node).type.kind !== SyntaxKind.ArrayType || mayResolveTypeAlias((<ArrayTypeNode>(<RestTypeNode>node).type).elementType);
                 case SyntaxKind.UnionType:
@@ -12162,11 +12187,11 @@ namespace ts {
                     links.resolvedType = emptyObjectType;
                 }
                 else if (isDeferredTypeReferenceNode(node)) {
-                    links.resolvedType = node.kind === SyntaxKind.TupleType && node.elementTypes.length === 0 ? target :
+                    links.resolvedType = node.kind === SyntaxKind.TupleType && node.elements.length === 0 ? target :
                         createDeferredTypeReference(target, node, /*mapper*/ undefined);
                 }
                 else {
-                    const elementTypes = node.kind === SyntaxKind.ArrayType ? [getTypeFromTypeNode(node.elementType)] : map(node.elementTypes, getTypeFromTypeNode);
+                    const elementTypes = node.kind === SyntaxKind.ArrayType ? [getTypeFromTypeNode(node.elementType)] : map(node.elements, getTypeFromTypeNode);
                     links.resolvedType = createTypeReference(target, elementTypes);
                 }
             }
@@ -13523,7 +13548,7 @@ namespace ts {
 
         function getAliasSymbolForTypeNode(node: Node) {
             let host = node.parent;
-            while (isParenthesizedTypeNode(host) || isTypeOperatorNode(host) && host.operator === SyntaxKind.ReadonlyKeyword) {
+            while (isParenthesizedTypeNode(host) || host.kind === SyntaxKind.NamedTupleMember || isTypeOperatorNode(host) && host.operator === SyntaxKind.ReadonlyKeyword) {
                 host = host.parent;
             }
             return isTypeAlias(host) ? getSymbolOfNode(host) : undefined;
@@ -13895,9 +13920,10 @@ namespace ts {
                 case SyntaxKind.JSDocOptionalType:
                     return addOptionality(getTypeFromTypeNode((node as JSDocOptionalType).type));
                 case SyntaxKind.ParenthesizedType:
+                case SyntaxKind.NamedTupleMember:
                 case SyntaxKind.JSDocNonNullableType:
                 case SyntaxKind.JSDocTypeExpression:
-                    return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode | JSDocTypeExpression>node).type);
+                    return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode | JSDocTypeExpression | NamedTupleMember>node).type);
                 case SyntaxKind.RestType:
                     return getElementTypeOfArrayType(getTypeFromTypeNode((<RestTypeNode>node).type)) || errorType;
                 case SyntaxKind.JSDocVariadicType:
@@ -30081,10 +30107,19 @@ namespace ts {
         }
 
         function checkTupleType(node: TupleTypeNode) {
-            const elementTypes = node.elementTypes;
+            const elementTypes = node.elements;
             let seenOptionalElement = false;
+            let seenNamedElement = false;
             for (let i = 0; i < elementTypes.length; i++) {
-                const e = elementTypes[i];
+                let e = elementTypes[i];
+                if (e.kind === SyntaxKind.NamedTupleMember) {
+                    seenNamedElement = true;
+                    e = (e as NamedTupleMember).type;
+                }
+                else if (seenNamedElement) {
+                    grammarErrorOnNode(e, Diagnostics.Tuple_members_must_all_have_names_or_not_have_names);
+                    break;
+                }
                 if (e.kind === SyntaxKind.RestType) {
                     if (i !== elementTypes.length - 1) {
                         grammarErrorOnNode(e, Diagnostics.A_rest_element_must_be_last_in_a_tuple_type);
@@ -30102,7 +30137,7 @@ namespace ts {
                     break;
                 }
             }
-            forEach(node.elementTypes, checkSourceElement);
+            forEach(node.elements, checkSourceElement);
         }
 
         function checkUnionOrIntersectionType(node: UnionOrIntersectionTypeNode) {
@@ -30185,6 +30220,17 @@ namespace ts {
 
         function checkImportType(node: ImportTypeNode) {
             checkSourceElement(node.argument);
+            getTypeFromTypeNode(node);
+        }
+
+        function checkNamedTupleMember(node: NamedTupleMember) {
+            if (node.dotDotDotToken) {
+                grammarErrorOnNode(node, Diagnostics.Rest_tuple_members_are_declared_with_a_on_the_type_A_on_the_name_is_invalid);
+            }
+            if (node.questionToken) {
+                grammarErrorOnNode(node, Diagnostics.Tuple_members_express_optionality_with_a_trailing_question_mark_on_the_type_a_question_mark_on_the_member_name_is_invalid);
+            }
+            checkSourceElement(node.type);
             getTypeFromTypeNode(node);
         }
 
@@ -30967,6 +31013,7 @@ namespace ts {
                         return getEntityNameForDecoratorMetadataFromTypeList([(<ConditionalTypeNode>node).trueType, (<ConditionalTypeNode>node).falseType]);
 
                     case SyntaxKind.ParenthesizedType:
+                    case SyntaxKind.NamedTupleMember:
                         return getEntityNameForDecoratorMetadata((<ParenthesizedTypeNode>node).type);
 
                     case SyntaxKind.TypeReference:
@@ -30978,8 +31025,8 @@ namespace ts {
         function getEntityNameForDecoratorMetadataFromTypeList(types: readonly TypeNode[]): EntityName | undefined {
             let commonEntityName: EntityName | undefined;
             for (let typeNode of types) {
-                while (typeNode.kind === SyntaxKind.ParenthesizedType) {
-                    typeNode = (typeNode as ParenthesizedTypeNode).type; // Skip parens if need be
+                while (typeNode.kind === SyntaxKind.ParenthesizedType || typeNode.kind === SyntaxKind.NamedTupleMember) {
+                    typeNode = (typeNode as ParenthesizedTypeNode | NamedTupleMember).type; // Skip parens if need be
                 }
                 if (typeNode.kind === SyntaxKind.NeverKeyword) {
                     continue; // Always elide `never` from the union/intersection if possible
@@ -34732,6 +34779,8 @@ namespace ts {
                     return checkInferType(<InferTypeNode>node);
                 case SyntaxKind.ImportType:
                     return checkImportType(<ImportTypeNode>node);
+                case SyntaxKind.NamedTupleMember:
+                    return checkNamedTupleMember(<NamedTupleMember>node);
                 case SyntaxKind.JSDocAugmentsTag:
                     return checkJSDocAugmentsTag(node as JSDocAugmentsTag);
                 case SyntaxKind.JSDocImplementsTag:
