@@ -199,6 +199,7 @@ namespace ts.OutliningElementsCollector {
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.CaseBlock:
+            case SyntaxKind.TypeLiteral:
             case SyntaxKind.ObjectBindingPattern:
                 return spanForNode(n);
             case SyntaxKind.CaseClause:

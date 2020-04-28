@@ -436,7 +436,7 @@
         <Str Cat="Text">
           <Val><![CDATA['A label is not allowed here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['여기서는 레이블을 사용할 수 없습니다.]]></Val>
+            <Val><![CDATA[여기서는 레이블을 사용할 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7188,6 +7188,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Only_numeric_enums_can_have_computed_members_but_this_expression_has_type_0_If_you_do_not_need_exhau_18033" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[숫자 열거형에는 컴퓨팅된 구성원만 사용할 수 있는데 이 식에는 '{0}' 형식이 있습니다. 전체 검사가 필요하지 않은 경우에는 개체 리터럴을 대신 사용해 보세요.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword_2340" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Only public and protected methods of the base class are accessible via the 'super' keyword.]]></Val>
@@ -7399,7 +7408,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Overload {0} of {1}, '{2}', gave the following error.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{1}, '{2}'의 오버로드 {0}에서 다음 오류가 발생했습니다.]]></Val>
+            <Val><![CDATA[오버로드 {0}/{1}('{2}')에서 다음 오류가 발생했습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10768,7 +10777,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is missing the following properties from type '{1}': {2}, and {3} more.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 형식에 '{1}' 형식의 {2}, {3} 속성 등이 없습니다.]]></Val>
+            <Val><![CDATA['{0}' 형식에 '{1}' 형식의 {2} 외 {3}개 속성이 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11107,7 +11116,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[형식이 이 가져오기에서 시작됩니다. 네임스페이스 스타일 가져오기는 호출하거나 생성할 수 없으며, 런타임에 오류를 초래합니다. 여기서는 대신 기본 가져오기 또는 가져오기 필요를 사용하는 것이 좋습니다.]]></Val>
+            <Val><![CDATA[형식이 이 가져오기에서 시작됩니다. 네임스페이스 스타일 가져오기는 호출하거나 생성할 수 없으며, 런타임에 오류를 초래합니다. 여기서는 대신 기본 가져오기 또는 가져오기 require를 사용하는 것이 좋습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

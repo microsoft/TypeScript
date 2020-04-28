@@ -436,7 +436,7 @@
         <Str Cat="Text">
           <Val><![CDATA['A label is not allowed here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['A ラベルはここでは使用できません。]]></Val>
+            <Val><![CDATA[A ラベルはここでは使用できません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1180,7 +1180,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'export {}' to make this file into a module]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['export {}' を追加して、このファイルをモジュールに含める]]></Val>
+            <Val><![CDATA['export {}' を追加して、このファイルをモジュールにする]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3193,7 +3193,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Compiler reserves name '{0}' when emitting private identifier downlevel.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[private 識別子を下位レベルで出力するときに、コンパイラは名前 '{0}' を予約します。]]></Val>
+            <Val><![CDATA[private 識別子を下位レベルに生成するときに、コンパイラは名前 '{0}' を予約します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7188,6 +7188,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Only_numeric_enums_can_have_computed_members_but_this_expression_has_type_0_If_you_do_not_need_exhau_18033" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[計算されたメンバーを使用できるのは数値列挙型のみですが、この式には '{0}' 型があります。網羅性チェックが不要な場合は、代わりにオブジェクト リテラルを使用することをご検討ください。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword_2340" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Only public and protected methods of the base class are accessible via the 'super' keyword.]]></Val>
@@ -7399,7 +7408,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Overload {0} of {1}, '{2}', gave the following error.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{1}、'{2}' の {0} のオーバーロードにより、次のエラーが発生しました。]]></Val>
+            <Val><![CDATA[{1} 中 {0} のオーバーロード, '{2}' により、次のエラーが発生しました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11107,7 +11116,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型はこのインポートで生成されます。名前空間スタイルのインポートは、呼び出すこともコンストラクトすることもできず、実行時にエラーが発生します。代わりに、ここで既定のインポートまたはインポートの要求を使用することを検討してください。]]></Val>
+            <Val><![CDATA[型はこのインポートで生成されます。名前空間スタイルのインポートは、呼び出すこともコンストラクトすることもできず、実行時にエラーが発生します。代わりに、ここで既定のインポートまたはインポートの require を使用することを検討してください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11668,7 +11677,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Using compiler options of project reference redirect '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プロジェクト参照リダイレクト '{0}' のコンパイラ オプションを使用します。]]></Val>
+            <Val><![CDATA[Using compiler options of project reference redirect '{0}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

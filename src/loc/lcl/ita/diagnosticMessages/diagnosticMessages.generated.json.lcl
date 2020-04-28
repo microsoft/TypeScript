@@ -1180,7 +1180,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'export {}' to make this file into a module]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aggiungere 'export {}' per creare questo file in un modulo]]></Val>
+            <Val><![CDATA[Aggiungere 'export {}' per trasformare questo file in un modulo]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3193,7 +3193,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Compiler reserves name '{0}' when emitting private identifier downlevel.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Il compilatore riserva il nome '{0}' quando si crea l'identificatore provato di livello inferiore.]]></Val>
+            <Val><![CDATA[Il compilatore riserva il nome '{0}' quando si crea l'identificatore privato per browser meno recenti.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7831,7 +7831,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Prefix with 'declare']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aggiungere 'declare' come prefisso]]></Val>
+            <Val><![CDATA[Aggiungere il prefisso 'declare']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10321,7 +10321,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The shadowing declaration of '{0}' is defined here]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La dichiarazione di shadowing di '{0}' viene definita in questo punto]]></Val>
+            <Val><![CDATA[La dichiarazione di oscuramento di '{0}' viene definita in questo punto]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11116,7 +11116,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Il tipo è originato in corrispondenza di questa importazione. Non è possibile chiamare o costruire un'importazione di tipo spazio dei nomi e verrà restituito un errore in fase di esecuzione. Provare a usare un'importazione o un'importazione predefinita in questo punto.]]></Val>
+            <Val><![CDATA[Il tipo è originato in corrispondenza di questa importazione. Non è possibile chiamare o costruire un'importazione di tipo spazio dei nomi e verrà restituito un errore in fase di esecuzione. Provare a usare un'importazione predefinita o un'importazione di require in questo punto.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11677,7 +11677,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Using compiler options of project reference redirect '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Verranno usate le opzione del compilatore del progetto per fare riferimento al reindirizzamento '{0}'.]]></Val>
+            <Val><![CDATA[Using compiler options of project reference redirect '{0}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

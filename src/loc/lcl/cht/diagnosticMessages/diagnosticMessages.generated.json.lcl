@@ -1180,7 +1180,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'export {}' to make this file into a module]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[新增 'export {}' 以將此檔案設為模組]]></Val>
+            <Val><![CDATA[新增 'export {}' 以將此檔案轉為模組]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3193,7 +3193,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Compiler reserves name '{0}' when emitting private identifier downlevel.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[在下層發出私人識別碼時，編譯器會保留名稱 '{0}'。]]></Val>
+            <Val><![CDATA[降級發出私人識別碼時，編譯器會保留名稱 '{0}'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7188,6 +7188,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Only_numeric_enums_can_have_computed_members_but_this_expression_has_type_0_If_you_do_not_need_exhau_18033" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[只有數值列舉才可以有計算成員，但此運算式的類型為 '{0}'。若您不需要詳細檢查，請考慮改用物件常值。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword_2340" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Only public and protected methods of the base class are accessible via the 'super' keyword.]]></Val>
@@ -7399,7 +7408,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Overload {0} of {1}, '{2}', gave the following error.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{1} 的多載 {0}，'{2}'，發生下列錯誤。]]></Val>
+            <Val><![CDATA[多載 {0} (共 {1})，'{2}'，發生下列錯誤。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7822,7 +7831,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Prefix with 'declare']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[在開頭放置 'declare']]></Val>
+            <Val><![CDATA[以 'declare' 開頭]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10312,7 +10321,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The shadowing declaration of '{0}' is defined here]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 的陰影宣告定義於此處]]></Val>
+            <Val><![CDATA['{0}' 的隱蔽宣告定義於此處]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10759,7 +10768,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is missing the following properties from type '{1}': {2}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[類型 '{0}' 缺少類型 '{1}' 中的下列屬性: {2}]]></Val>
+            <Val><![CDATA[類型 '{0}' 在類型 '{1}' 中缺少下列屬性: {2}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10768,7 +10777,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is missing the following properties from type '{1}': {2}, and {3} more.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[類型 '{0}' 缺少類型 '{1}' 中的下列屬性: {2}，以及另外 {3} 個。]]></Val>
+            <Val><![CDATA[類型 '{0}' 在類型 '{1}' 中缺少下列屬性: {2}，以及另外 {3} 個。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11107,7 +11116,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[類型源自此匯入。無法呼叫或建構命名空間樣式的匯入，而且可能會在執行階段導致失敗。請考慮改用預設匯入或此處要求的匯入。]]></Val>
+            <Val><![CDATA[類型源自此匯入。無法呼叫或建構命名空間樣式的匯入，而且可能會在執行階段導致失敗。請考慮改用預設匯入或於此處匯入 require。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
