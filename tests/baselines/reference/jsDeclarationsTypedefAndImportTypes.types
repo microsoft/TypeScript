@@ -38,9 +38,9 @@ class Wrap {
 
         this.connItem = c.item;
 >this.connItem = c.item : number
->this.connItem : number
+>this.connItem : any
 >this : this
->connItem : number
+>connItem : any
 >c.item : number
 >c : import("tests/cases/conformance/jsdoc/declarations/conn")
 >item : number

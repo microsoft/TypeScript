@@ -44,9 +44,9 @@ class C {
 
         this.length = n;
 >this.length = n : number
->this.length : number
+>this.length : any
 >this : this
->length : number
+>length : any
 >n : number
     }
 }
@@ -92,9 +92,9 @@ function D(n) {
 
   this.length = n;
 >this.length = n : number
->this.length : number
+>this.length : any
 >this : this
->length : number
+>length : any
 >n : number
 }
 
@@ -151,9 +151,9 @@ var E = function(n) {
 
   this.not_length_on_purpose = n;
 >this.not_length_on_purpose = n : number
->this.not_length_on_purpose : number
+>this.not_length_on_purpose : any
 >this : this
->not_length_on_purpose : number
+>not_length_on_purpose : any
 >n : number
 
 };

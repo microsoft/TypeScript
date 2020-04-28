@@ -1107,6 +1107,7 @@ namespace ts {
         exclamationToken?: ExclamationToken;
         body?: Block | Expression;
         /* @internal */ endFlowNode?: FlowNode;
+        /* @internal */ returnFlowNode?: FlowNode;
     }
 
     export type FunctionLikeDeclaration =
@@ -1152,7 +1153,6 @@ namespace ts {
         kind: SyntaxKind.Constructor;
         parent: ClassLikeDeclaration;
         body?: FunctionBody;
-        /* @internal */ returnFlowNode?: FlowNode;
     }
 
     /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
@@ -4157,6 +4157,7 @@ namespace ts {
         deferralParent?: Type;              // Source union/intersection of a deferred type
         cjsExportMerged?: Symbol;           // Version of the symbol with all non export= exports merged with the export= target
         typeOnlyDeclaration?: TypeOnlyCompatibleAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
+        isConstructorDeclaredProperty?: boolean;  // Property declared through 'this.x = ...' assignment in constructor
     }
 
     /* @internal */
