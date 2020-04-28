@@ -23,8 +23,8 @@ namespace ts.refactor {
         const { file } = context;
         const span = getRefactorContextSpan(context);
         const token = getTokenAtPosition(file, span.start);
-        const importDecl = getParentNodeInSpan(token, file, span);
-        if (!importDecl || !isImportDeclaration(importDecl)) return undefined;
+        const importDecl = findAncestor(token, isImportDeclaration);
+        if (!importDecl || !isImportDeclaration(importDecl) || (importDecl.getEnd() < span.start + span.length)) return undefined;
         const { importClause } = importDecl;
         return importClause && importClause.namedBindings;
     }
