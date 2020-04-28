@@ -5633,7 +5633,7 @@
         "category": "Message",
         "code": 95111
     },
-    "Remove block body braces": {
+    "Remove braces from arrow function body": {
         "category": "Message",
         "code": 95112
     },
@@ -5645,7 +5645,7 @@
         "category": "Message",
         "code": 95114
     },
-    "Remove all incorrect body block braces": {
+    "Remove braces from all arrow function bodies with relevant issues": {
         "category": "Message",
         "code": 95115
     },
@@ -5653,7 +5653,7 @@
         "category": "Message",
         "code": 95116
     },
-    
+
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
         "code": 18004
