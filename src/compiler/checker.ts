@@ -21660,6 +21660,10 @@ namespace ts {
                     const fileSymbol = getSymbolOfNode(container);
                     return fileSymbol && getTypeOfSymbol(fileSymbol);
                 }
+                else if (container.externalModuleIndicator) {
+                    // TODO: Maybe issue a better error than 'object is possibly undefined'
+                    return undefinedType;
+                }
                 else if (includeGlobalThis) {
                     return getTypeOfSymbol(globalThisSymbol);
                 }
