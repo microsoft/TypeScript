@@ -363,6 +363,8 @@ namespace ts.JsDoc {
                 // want to give back a JSDoc template for the 'b' or 'c' in 'namespace a.b.c { }'.
                 return commentOwner.parent.kind === SyntaxKind.ModuleDeclaration ? undefined : { commentOwner };
 
+            case SyntaxKind.ExpressionStatement:
+                return getCommentOwnerInfoWorker((commentOwner as ExpressionStatement).expression);
             case SyntaxKind.BinaryExpression: {
                 const be = commentOwner as BinaryExpression;
                 if (getAssignmentDeclarationKind(be) === AssignmentDeclarationKind.None) {

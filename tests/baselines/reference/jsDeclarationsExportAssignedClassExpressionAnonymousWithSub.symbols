@@ -18,7 +18,7 @@ module.exports = class {
     }
 }
 module.exports.Sub = class {
->module.exports.Sub : Symbol(Sub)
+>module.exports.Sub : Symbol(Sub, Decl(index.js, 7, 1))
 >module.exports : Symbol(Sub, Decl(index.js, 7, 1))
 >module : Symbol(module, Decl(index.js, 0, 0), Decl(index.js, 10, 27))
 >exports : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))

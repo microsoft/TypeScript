@@ -318,7 +318,7 @@ function positiveIntersectionTest(x: { a: string } & { b: string }) {
     } else {
         let n: never = x;
 >n : never
->x : never
+>x : { a: string; } & { b: string; }
     }
 }
 

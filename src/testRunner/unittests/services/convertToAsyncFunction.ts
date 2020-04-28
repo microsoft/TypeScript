@@ -558,13 +558,13 @@ function [#|f|]():void{
 }
 `
         );
-        _testConvertToAsyncFunction("convertToAsyncFunction_Rej", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_Rej", `
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(result => { console.log(result); }, rejection => { console.log("rejected:", rejection); });
 }
 `
         );
-        _testConvertToAsyncFunction("convertToAsyncFunction_RejRef", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_RejRef", `
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(res, rej);
 }
@@ -576,7 +576,7 @@ function rej(err){
 }
 `
         );
-        _testConvertToAsyncFunction("convertToAsyncFunction_RejNoBrackets", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_RejNoBrackets", `
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(result => console.log(result), rejection => console.log("rejected:", rejection));
 }
@@ -1238,7 +1238,7 @@ function [#|f|]() {
 }
 `);
 
-        _testConvertToAsyncFunction("convertToAsyncFunction_ResRejNoArgsArrow", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_ResRejNoArgsArrow", `
     function [#|f|]() {
         return Promise.resolve().then(() => 1, () => "a");
     }
@@ -1436,5 +1436,10 @@ function [#|get|]() {
         .catch<APIResponse<{ email: string }>>(() => ({ success: false }));
 }
 `);
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_threeArguments", `
+function [#|f|]() {
+    return Promise.resolve().then(undefined, undefined, () => 1);
+}`);
     });
 }

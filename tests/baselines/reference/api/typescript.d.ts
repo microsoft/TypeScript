@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "3.9";
+    const versionMajorMinor = "4.0";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -3227,6 +3227,7 @@ declare namespace ts {
         NoInterveningComments = 262144,
         NoSpaceIfEmpty = 524288,
         SingleElement = 1048576,
+        SpaceAfterList = 2097152,
         Modifiers = 262656,
         HeritageClauses = 512,
         SingleLineTypeLiteralMembers = 768,
@@ -3258,7 +3259,7 @@ declare namespace ts {
         CaseOrDefaultClauseStatements = 163969,
         HeritageClauseTypes = 528,
         SourceFileStatements = 131073,
-        Decorators = 49153,
+        Decorators = 2146305,
         TypeArguments = 53776,
         TypeParameters = 53776,
         Parameters = 2576,
@@ -4459,7 +4460,8 @@ declare namespace ts {
      * Starts a new lexical environment and visits a parameter list, suspending the lexical
      * environment upon completion.
      */
-    function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes): NodeArray<ParameterDeclaration>;
+    function visitParameterList(nodes: NodeArray<ParameterDeclaration>, visitor: Visitor, context: TransformationContext, nodesVisitor?: <T extends Node>(nodes: NodeArray<T>, visitor: Visitor, test?: (node: Node) => boolean, start?: number, count?: number) => NodeArray<T>): NodeArray<ParameterDeclaration>;
+    function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: <T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor, test?: (node: Node) => boolean, start?: number, count?: number) => NodeArray<T> | undefined): NodeArray<ParameterDeclaration> | undefined;
     /**
      * Resumes a suspended lexical environment and visits a function body, ending the lexical
      * environment and merging hoisted declarations upon completion.

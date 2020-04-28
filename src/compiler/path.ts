@@ -527,6 +527,7 @@ namespace ts {
      *
      * ```ts
      * getNormalizedPathComponents("to/dir/../file.ext", "/path/") === ["/", "path", "to", "file.ext"]
+     * ```
      */
     export function getNormalizedPathComponents(path: string, currentDirectory: string | undefined) {
         return reducePathComponents(getPathComponents(path, currentDirectory));
