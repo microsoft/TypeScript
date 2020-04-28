@@ -1364,7 +1364,7 @@ namespace ts {
                 return sourceFiles.indexOf(declarationFile) <= sourceFiles.indexOf(useFile);
             }
 
-            if (declaration.pos <= usage.pos) {
+            if (declaration.pos <= usage.pos && !(isPropertyDeclaration(declaration) && isThisProperty(usage.parent) && !declaration.initializer && !declaration.exclamationToken)) {
                 // declaration is before usage
                 if (declaration.kind === SyntaxKind.BindingElement) {
                     // still might be illegal if declaration and usage are both binding elements (eg var [a = b, b = b] = [1, 2])
