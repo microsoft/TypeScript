@@ -5,7 +5,7 @@
 
 // @Filename: /b.ts
 ////declare function foo(): any;
-////declare function bar(): any;
+////function bar(): any;
 ////export { foo };
 
 // @Filename: /c.ts
@@ -23,7 +23,7 @@ verify.codeFix({
     description: `Export 'bar' from module './b'`,
     newFileContent: {
         '/b.ts': `declare function foo(): any;
-export declare function bar(): any;
+export function bar(): any;
 export { foo };`
     }
 });

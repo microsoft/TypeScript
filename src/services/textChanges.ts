@@ -665,7 +665,7 @@ namespace ts.textChanges {
         }
 
         public insertExportModifier(sourceFile: SourceFile, node: DeclarationStatement | VariableStatement): void {
-            this.insertText(sourceFile, node.getStart(sourceFile), "export ");
+            this.insertExportModifierAtPos(sourceFile, node.getStart(sourceFile));
         }
 
         public insertExportModifierAtPos(sourceFile: SourceFile, position: number): void {
