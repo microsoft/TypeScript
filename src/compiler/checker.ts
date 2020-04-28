@@ -827,6 +827,7 @@ namespace ts {
         /** Key is "/path/to/a.ts|/path/to/b.ts". */
         let amalgamatedDuplicates: Map<DuplicateInfoForFiles> | undefined;
         const reverseMappedCache = createMap<Type | undefined>();
+        let inInferTypeForHomomorphicMappedType = false;
         let ambientModulesCache: Symbol[] | undefined;
         /**
          * List of every ambient module with a "*" wildcard.
@@ -18366,12 +18367,16 @@ namespace ts {
          * variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
          */
         function inferTypeForHomomorphicMappedType(source: Type, target: MappedType, constraint: IndexType): Type | undefined {
+            if (inInferTypeForHomomorphicMappedType) {
+                return undefined;
+            }
             const key = source.id + "," + target.id + "," + constraint.id;
             if (reverseMappedCache.has(key)) {
                 return reverseMappedCache.get(key);
             }
-            reverseMappedCache.set(key, undefined);
+            inInferTypeForHomomorphicMappedType = true;
             const type = createReverseMappedType(source, target, constraint);
+            inInferTypeForHomomorphicMappedType = false;
             reverseMappedCache.set(key, type);
             return type;
         }
