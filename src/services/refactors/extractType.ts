@@ -64,7 +64,7 @@ namespace ts.refactor {
         const current = getTokenAtPosition(file, startPosition);
         const range = createTextRangeFromSpan(getRefactorContextSpan(context));
 
-        const selection = findAncestor(current, (node => node.parent && rangeContainsSkipTrivia(range, node, file) && !rangeContainsSkipTrivia(range, node.parent, file)));
+        const selection = findAncestor(current, (node => node.parent && isTypeNode(node) && nodeOverlapsWithStartEnd(current, file, range.pos, range.end) && !rangeContainsSkipTrivia(range, node.parent, file)));
         if (!selection || !isTypeNode(selection)) return undefined;
 
         const checker = context.program.getTypeChecker();
