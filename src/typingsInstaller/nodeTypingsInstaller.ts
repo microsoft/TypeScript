@@ -122,7 +122,8 @@ namespace ts.server.typingsInstaller {
                 // store error info to report it later when it is known that server is already listening to events from typings installer
                 this.delayedInitializationError = {
                     kind: "event::initializationFailed",
-                    message: (<Error>e).message
+                    message: (<Error>e).message,
+                    stack: (<Error>e).stack,
                 };
             }
 
