@@ -2016,7 +2016,7 @@ namespace ts {
 
     /**
      * Get the assignment 'initializer' -- the righthand side-- when the initializer is container-like (See getExpandoInitializer).
-     * We treat the right hand side of assignments with container-like initalizers as declarations.
+     * We treat the right hand side of assignments with container-like initializers as declarations.
      */
     export function getAssignedExpandoInitializer(node: Node | undefined): Expression | undefined {
         if (node && node.parent && isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
