@@ -1740,7 +1740,12 @@ namespace ts {
                                 pos++;
                             }
 
-                            commentDirectives = appendIfCommentDirective(commentDirectives, text.slice(tokenPos, pos), commentDirectiveRegExSingleLine);
+                            commentDirectives = appendIfCommentDirective(
+                                commentDirectives,
+                                text.slice(tokenPos, pos),
+                                commentDirectiveRegExSingleLine,
+                                tokenPos,
+                            );
 
                             if (skipTrivia) {
                                 continue;
@@ -2119,7 +2124,12 @@ namespace ts {
             return token;
         }
 
-        function appendIfCommentDirective(commentDirectives: CommentDirective[] | undefined, text: string, commentDirectiveRegEx: RegExp, lineStart = tokenPos) {
+        function appendIfCommentDirective(
+            commentDirectives: CommentDirective[] | undefined,
+            text: string,
+            commentDirectiveRegEx: RegExp,
+            lineStart: number,
+        ) {
             const type = getDirectiveFromComment(text, commentDirectiveRegEx);
             if (type === undefined) {
                 return commentDirectives;

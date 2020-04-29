@@ -833,7 +833,7 @@ module m3 { }\
         });
 
         describe("comment directives", () => {
-            const tsIgnoreComment = "// @ts-ignore";
+            const tsIgnoreComment = "@ts-ignore";
             const textWithIgnoreComment = `const x = 10;
 function foo() {
     // @ts-ignore
@@ -845,14 +845,27 @@ function bar() {
     let z : string = x;
     return z;
 }
-function bar3() {
+function bar2() {
     // @ts-ignore
+    let z : string = x;
+    return z;
+}
+function bar3() {
+    /* @ts-ignore */
+    let z : string = x;
+    return z;
+}
+function bar4() {
+    /*
+    @ts-ignore */
     let z : string = x;
     return z;
 }
 foo();
 bar();
-bar3();`;
+bar3();
+bar4();
+bar5()`;
             verifyScenario("when deleting ts-ignore comment", verifyDelete);
             verifyScenario("when inserting ts-ignore comment", verifyInsert);
             verifyScenario("when changing ts-ignore comment to blah", verifyChangeToBlah);
@@ -876,17 +889,23 @@ bar3();`;
                 it(`${scenario} - 2`, () => {
                     verifyChange(2);
                 });
+                it(`${scenario} - 3`, () => {
+                    verifyChange(3);
+                });
+                it(`${scenario} - 4`, () => {
+                    verifyChange(4);
+                });
                 it(`${scenario} - with single ts-ignore`, () => {
                     verifyChange(0, /*singleIgnore*/ true);
                 });
             }
 
             function getIndexOfTsIgnoreComment(atIndex: number) {
-                let index: number;
+                let index = 0;
                 for (let i = 0; i <= atIndex; i++) {
-                    index = textWithIgnoreComment.indexOf(tsIgnoreComment);
+                    index = textWithIgnoreComment.indexOf(tsIgnoreComment, index);
                 }
-                return index!;
+                return index;
             }
 
             function textWithIgnoreCommentFrom(text: string, singleIgnore: true | undefined) {
