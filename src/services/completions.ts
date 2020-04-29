@@ -875,10 +875,10 @@ namespace ts.Completions {
                 if (match && reJSDocFragment.lastIndex === jsdocFragment.length) {
                     return {
                         kind: match[1]
-                        // The current position is next to the '@' sign, when no tag name being provided yet.
-                        // Provide a full list of tag names
-                        ? CompletionDataKind.JsDocTagName:
-                          CompletionDataKind.JsDocTag
+                            // The current position is next to the '@' sign, when no tag name being provided yet.
+                            // Provide a full list of tag names
+                            ? CompletionDataKind.JsDocTagName
+                            : CompletionDataKind.JsDocTag
                     };
                 }
             }
@@ -888,6 +888,9 @@ namespace ts.Completions {
             // Completion should work in the brackets
             const tag = getJsDocTagAtPosition(currentToken, position);
             if (tag) {
+                if (tag.tagName.pos <= position && position <= tag.tagName.end) {
+                    return { kind: CompletionDataKind.JsDocTagName };
+                }
                 if (isTagWithTypeExpression(tag) && tag.typeExpression && tag.typeExpression.kind === SyntaxKind.JSDocTypeExpression) {
                     currentToken = getTokenAtPosition(sourceFile, position);
                     if (!currentToken ||

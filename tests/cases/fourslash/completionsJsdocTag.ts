@@ -52,32 +52,6 @@
 //// */
 ////
 
-// 4x - jsdoc tag name completions should not occur
-/////**@/*40*/ */
-////
-/////**
-//// *@/*41*/
-//// */
-////
-/////**
-//// * @type {@/*42*/
-//// */
-////
-/////**
-//// +@/*43*/
-//// */
-////
-/////** some description @/*44*/ */
-////
-/////**
-//// * ### jsdoc @/*45*/
-//// */
-////
-/////**
-////@/*46*/
-//// */
-////
-
 // 5x - jsdoc tag completions should not occur
 /////**
 //// */*50*/
@@ -118,18 +92,6 @@ test.markerNames().forEach(marker => {
                     marker,
                     triggerCharacter: "@",
                     includes: ["package", "param"]
-                };
-                break;
-
-            // 4x - jsdoc tag name completions should not occur
-            // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            //  before the fix, jsdoc tag names was listed but no longer appears
-            // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            case 40: case 41: case 42: case 43: case 44: case 45: case 46:
-                completionOpt = {
-                    marker,
-                    triggerCharacter: "@",
-                    exact: []
                 };
                 break;
 
