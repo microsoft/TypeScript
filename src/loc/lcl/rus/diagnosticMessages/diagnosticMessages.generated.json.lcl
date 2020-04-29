@@ -1179,7 +1179,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'export {}' to make this file into a module]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Добавить "export {}", чтобы сделать этот файл модулем]]></Val>
+            <Val><![CDATA[Добавить "export {}", чтобы превратить этот файл в модуль]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3641,6 +3641,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Declaration_augments_declaration_in_another_file_This_cannot_be_serialized_6232" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declaration augments declaration in another file. This cannot be serialized.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Объявление дополняет объявление в другом файле. Сериализация невозможна.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Declaration_emit_for_this_file_requires_using_private_name_0_An_explicit_type_annotation_may_unblock_9005" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.]]></Val>
@@ -5640,7 +5649,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Import default '{0}' from module "{1}"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Импорт "{0}" по умолчанию из модуля "{1}"]]></Val>
+            <Val><![CDATA[Импортировать "{0}" по умолчанию из модуля "{1}"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5827,15 +5836,6 @@
           <Val><![CDATA[Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Инициализатор переменной-элемента экземпляра "{0}" не может ссылаться на идентификатор "{1}", объявленный в конструкторе.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it_2373" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Initializer of parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Инициализатор параметра "{0}" не может ссылаться на идентификатор "{1}", объявленный после него.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7457,11 +7457,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Parameter_0_cannot_be_referenced_in_its_initializer_2372" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Parameter_0_cannot_reference_identifier_1_declared_after_it_2373" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' cannot be referenced in its initializer.]]></Val>
+          <Val><![CDATA[Parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[На параметр "{0}" невозможно ссылаться в его инициализаторе.]]></Val>
+            <Val><![CDATA[Параметр "{0}" не может ссылаться на идентификатор "{1}", объявленный после него.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_0_cannot_reference_itself_2372" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter '{0}' cannot reference itself.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Параметр "{0}" не может ссылаться сам на себя.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10196,6 +10205,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_operand_of_a_delete_operator_must_be_optional_2790" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The operand of a 'delete' operator must be optional.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Операнд оператора "delete" должен быть необязательным.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_operand_of_an_increment_or_decrement_operator_may_not_be_an_optional_property_access_2777" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The operand of an increment or decrement operator may not be an optional property access.]]></Val>
@@ -10544,6 +10562,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_fil_6233" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This is the declaration being augmented. Consider moving the augmenting declaration into the same file.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Это объявление дополняется другим объявлением. Попробуйте переместить дополняющее объявление в тот же файл.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_may_be_converted_to_an_async_function_80006" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This may be converted to an async function.]]></Val>
@@ -10767,7 +10794,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is missing the following properties from type '{1}': {2}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[В типе "{0}" отсутствуют следующие свойства из типа "{1}": {2}.]]></Val>
+            <Val><![CDATA[В типе "{0}" отсутствуют следующие свойства из типа "{1}": {2}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11115,7 +11142,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Тип происходит от этого импорта. Импорт стиля пространства имен не может быть вызван или создан и приведет к сбою во время выполнения. Вместо этого рекомендуется использовать импорт по умолчанию или импорт, указанный здесь.]]></Val>
+            <Val><![CDATA[Тип происходит от этого импорта. Импорт стиля пространства имен не может быть вызван или создан и приведет к сбою во время выполнения. Вместо этого рекомендуется использовать импорт по умолчанию или импортировать сюда "require".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11676,7 +11703,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Using compiler options of project reference redirect '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Использование параметров компилятора перенаправления ссылки на проект "{0}".]]></Val>
+            <Val><![CDATA[Использование параметров компилятора для перенаправления ссылки на проект "{0}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

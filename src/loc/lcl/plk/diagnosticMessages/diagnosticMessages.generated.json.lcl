@@ -429,7 +429,7 @@
         <Str Cat="Text">
           <Val><![CDATA['A label is not allowed here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[„Etykieta nie jest dozwolona w tym miejscu.]]></Val>
+            <Val><![CDATA[Etykieta nie jest dozwolona w tym miejscu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3183,7 +3183,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Compiler reserves name '{0}' when emitting private identifier downlevel.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Kompilator rezerwuje nazwę „{0}” podczas emitowania niższego poziomu identyfikatora prywatnego.]]></Val>
+            <Val><![CDATA[Kompilator rezerwuje nazwę „{0}” podczas emitowania identyfikatora prywatnego na niższy poziom.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3628,6 +3628,15 @@
           <Val><![CDATA[DIRECTORY]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[KATALOG]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Declaration_augments_declaration_in_another_file_This_cannot_be_serialized_6232" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declaration augments declaration in another file. This cannot be serialized.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Deklaracja rozszerza deklarację w innym pliku. Nie można przeprowadzić serializacji.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5822,15 +5831,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it_2373" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Initializer of parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Inicjator parametru „{0}” nie może przywoływać identyfikatora „{1}” zadeklarowanego po nim.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value_2525" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Initializer provides no value for this binding element and the binding element has no default value.]]></Val>
@@ -7398,7 +7398,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Overload {0} of {1}, '{2}', gave the following error.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Przeciążenie {0} {1}, „{2}”, dało następujący błąd.]]></Val>
+            <Val><![CDATA[Przeciążenie {0} z {1}, „{2}”, zwróciło następujący błąd.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7448,11 +7448,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Parameter_0_cannot_be_referenced_in_its_initializer_2372" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Parameter_0_cannot_reference_identifier_1_declared_after_it_2373" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' cannot be referenced in its initializer.]]></Val>
+          <Val><![CDATA[Parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” nie może być przywoływany w swoim inicjatorze.]]></Val>
+            <Val><![CDATA[Parametr „{0}” nie może przywoływać identyfikatora „{1}” zadeklarowanego po nim.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_0_cannot_reference_itself_2372" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter '{0}' cannot reference itself.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Parametr „{0}” nie może odwoływać się do siebie samego.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10184,6 +10193,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_operand_of_a_delete_operator_must_be_optional_2790" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The operand of a 'delete' operator must be optional.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Operand operatora „delete” musi być opcjonalny.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_operand_of_an_increment_or_decrement_operator_may_not_be_an_optional_property_access_2777" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The operand of an increment or decrement operator may not be an optional property access.]]></Val>
@@ -10532,6 +10550,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_fil_6233" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This is the declaration being augmented. Consider moving the augmenting declaration into the same file.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[To jest rozszerzana deklaracja. Rozważ przeniesienie deklaracji rozszerzenia do tego samego pliku.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_may_be_converted_to_an_async_function_80006" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This may be converted to an async function.]]></Val>
@@ -10764,7 +10791,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is missing the following properties from type '{1}': {2}, and {3} more.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[W typie „{0}” brakuje następujących właściwości typu „{1}”: {2} i {3} więcej.]]></Val>
+            <Val><![CDATA[W typie „{0}” brakuje następujących właściwości z typu „{1}”: {2} i jeszcze {3}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11664,7 +11691,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Using compiler options of project reference redirect '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Używanie opcji kompilatora przekierowania odwołania do projektu „{0}”.]]></Val>
+            <Val><![CDATA[Using compiler options of project reference redirect '{0}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

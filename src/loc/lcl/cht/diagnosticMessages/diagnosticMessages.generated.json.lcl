@@ -3642,6 +3642,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Declaration_augments_declaration_in_another_file_This_cannot_be_serialized_6232" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declaration augments declaration in another file. This cannot be serialized.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[宣告會增強另一個檔案中的宣告。無法將此情況序列化。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Declaration_emit_for_this_file_requires_using_private_name_0_An_explicit_type_annotation_may_unblock_9005" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.]]></Val>
@@ -5832,15 +5841,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it_2373" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Initializer of parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[參數 '{0}' 的初始設定式不得參考在其之後宣告的識別碼 '{1}'。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value_2525" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Initializer provides no value for this binding element and the binding element has no default value.]]></Val>
@@ -7458,11 +7458,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Parameter_0_cannot_be_referenced_in_its_initializer_2372" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Parameter_0_cannot_reference_identifier_1_declared_after_it_2373" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' cannot be referenced in its initializer.]]></Val>
+          <Val><![CDATA[Parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[無法在參數 '{0}' 的初始設定式中參考此參數。]]></Val>
+            <Val><![CDATA[參數 '{0}' 不得參考在其本身之後宣告的識別碼 '{1}'。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_0_cannot_reference_itself_2372" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter '{0}' cannot reference itself.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[參數 '{0}' 不得參考自己本身。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10197,6 +10206,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_operand_of_a_delete_operator_must_be_optional_2790" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The operand of a 'delete' operator must be optional.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['delete' 運算子的運算元必須具有選擇性。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_operand_of_an_increment_or_decrement_operator_may_not_be_an_optional_property_access_2777" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The operand of an increment or decrement operator may not be an optional property access.]]></Val>
@@ -10541,6 +10559,15 @@
           <Val><![CDATA[This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[因為 'importsNotUsedAsValues' 設定為 'error'，所以此匯入永遠不會作為值使用，而且必須使用 'import type'。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_fil_6233" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This is the declaration being augmented. Consider moving the augmenting declaration into the same file.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[此為正在增強中的宣告。請考慮將正在增強的宣告移至相同檔案中。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

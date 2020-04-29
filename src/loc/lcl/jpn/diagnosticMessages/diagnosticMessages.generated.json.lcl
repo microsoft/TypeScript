@@ -3642,6 +3642,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Declaration_augments_declaration_in_another_file_This_cannot_be_serialized_6232" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declaration augments declaration in another file. This cannot be serialized.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[宣言は別のファイル内の宣言を拡張します。これをシリアル化できません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Declaration_emit_for_this_file_requires_using_private_name_0_An_explicit_type_annotation_may_unblock_9005" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.]]></Val>
@@ -5832,15 +5841,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it_2373" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Initializer of parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[パラメーター '{0}' の初期化子はその後で宣言された識別子 '{1}' を参照できません。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value_2525" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Initializer provides no value for this binding element and the binding element has no default value.]]></Val>
@@ -7458,11 +7458,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Parameter_0_cannot_be_referenced_in_its_initializer_2372" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Parameter_0_cannot_reference_identifier_1_declared_after_it_2373" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' cannot be referenced in its initializer.]]></Val>
+          <Val><![CDATA[Parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[パラメーター '{0}' はその初期化子内では参照できません。]]></Val>
+            <Val><![CDATA[パラメーター '{0}' はその後で宣言された識別子 '{1}' を参照できません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_0_cannot_reference_itself_2372" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter '{0}' cannot reference itself.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[パラメーター '{0}' は、それ自体を参照できません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10197,6 +10206,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_operand_of_a_delete_operator_must_be_optional_2790" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The operand of a 'delete' operator must be optional.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_operand_of_an_increment_or_decrement_operator_may_not_be_an_optional_property_access_2777" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The operand of an increment or decrement operator may not be an optional property access.]]></Val>
@@ -10541,6 +10556,15 @@
           <Val><![CDATA[This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[このインポートは値として使用されることはありません。'importsNotUsedAsValues' が 'error' に設定されているため、'import type' を使用する必要があります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_fil_6233" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This is the declaration being augmented. Consider moving the augmenting declaration into the same file.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[これは拡張されている宣言です。拡張宣言を同じファイルに移動することを検討してください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
