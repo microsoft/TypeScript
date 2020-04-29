@@ -1177,7 +1177,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'export {}' to make this file into a module]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["export {}" hinzufügen, um diese Datei zu einem Modul zu machen]]></Val>
+            <Val><![CDATA["export {}" hinzufügen, um diese Datei in ein Modul umzuwandeln]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3190,7 +3190,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Compiler reserves name '{0}' when emitting private identifier downlevel.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Der Compiler reserviert den Namen "{0}", wenn er einen älteren privaten Bezeichner ausgibt.]]></Val>
+            <Val><![CDATA[Der Compiler reserviert den Namen "{0}", wenn er einen privaten Bezeichner für Vorgängerversionen ausgibt.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3636,6 +3636,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[VERZEICHNIS]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Declaration_augments_declaration_in_another_file_This_cannot_be_serialized_6232" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declaration augments declaration in another file. This cannot be serialized.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5638,7 +5644,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Import default '{0}' from module "{1}"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Importstandard "{0}" aus Modul "{1}"]]></Val>
+            <Val><![CDATA[Standard "{0}" aus Modul "{1}" importieren]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5825,15 +5831,6 @@
           <Val><![CDATA[Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Der Initialisierer der Instanzmembervariablen "{0}" darf nicht auf den im Konstruktor deklarierten Bezeichner "{1}" verweisen.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it_2373" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Initializer of parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Der Initialisierer des Parameters "{0}" darf nicht auf den anschließend deklarierten Bezeichner "{1}" verweisen.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7455,11 +7452,17 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Parameter_0_cannot_be_referenced_in_its_initializer_2372" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Parameter_0_cannot_reference_identifier_1_declared_after_it_2373" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' cannot be referenced in its initializer.]]></Val>
+          <Val><![CDATA[Parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_0_cannot_reference_itself_2372" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter '{0}' cannot reference itself.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Auf den Parameter "{0}" darf in diesem Initialisierer nicht verwiesen werden.]]></Val>
+            <Val><![CDATA[Der Parameter "{0}" kann nicht auf sich selbst verweisen.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10191,6 +10194,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_operand_of_a_delete_operator_must_be_optional_2790" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The operand of a 'delete' operator must be optional.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_operand_of_an_increment_or_decrement_operator_may_not_be_an_optional_property_access_2777" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The operand of an increment or decrement operator may not be an optional property access.]]></Val>
@@ -10315,7 +10324,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The shadowing declaration of '{0}' is defined here]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Die Shadowing-Deklaration von "{0}" ist hier definiert.]]></Val>
+            <Val><![CDATA[Die verbergende Deklaration von "{0}" ist hier definiert.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10536,6 +10545,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Dieser Import wird nie als Wert verwendet und muss "import type" verwenden, weil "importsNotUsedAsValues" auf "error" festgelegt ist.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_fil_6233" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This is the declaration being augmented. Consider moving the augmenting declaration into the same file.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10762,7 +10777,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is missing the following properties from type '{1}': {2}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Im Typ "{0}" fehlen die folgenden Eigenschaften von Typ "{1}": {2}]]></Val>
+            <Val><![CDATA[Im Typ "{0}" fehlen die folgenden Eigenschaften von Typ "{1}": "{2}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10771,7 +10786,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is missing the following properties from type '{1}': {2}, and {3} more.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Im Typ "{0}" fehlen die folgenden Eigenschaften von Typ "{1}": {2} und {3} weitere.]]></Val>
+            <Val><![CDATA[Im Typ "{0}" fehlen die folgenden Eigenschaften von Typ "{1}": "{2}" und {3} weitere.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11110,7 +11125,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Der Typ stammt aus diesem Import. Ein Import im Namespacestil kann nicht aufgerufen oder erstellt werden und verursacht zur Laufzeit einen Fehler. Erwägen Sie hier stattdessen die Verwendung eines Standardimports oder die Verwendung von "import require".]]></Val>
+            <Val><![CDATA[Der Typ stammt aus diesem Import. Ein Import im Namespacestil kann nicht aufgerufen oder erstellt werden und verursacht zur Laufzeit einen Fehler. Erwägen Sie hier stattdessen die Verwendung eines Standardimports oder die den Import über "require".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
