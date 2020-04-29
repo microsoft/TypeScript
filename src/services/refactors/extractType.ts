@@ -6,7 +6,7 @@ namespace ts.refactor {
     const extractToTypeDef = "Extract to typedef";
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
-            const info = getRangeToExtract(context);
+            const info = getRangeToExtract(context, context.triggerReason);
             if (!info) return emptyArray;
 
             return [{
@@ -22,8 +22,8 @@ namespace ts.refactor {
             }];
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
-            const { file } = context;
-            const info = Debug.checkDefined(getRangeToExtract(context), "Expected to find a range to extract");
+            const { file, } = context;
+            const info = Debug.checkDefined(getRangeToExtract(context, /*triggerReason*/ { kind: "invoked" }), "Expected to find a range to extract");
 
             const name = getUniqueName("NewType", file);
             const edits = textChanges.ChangeTracker.with(context, changes => {
@@ -58,13 +58,15 @@ namespace ts.refactor {
 
     type Info = TypeAliasInfo | InterfaceInfo;
 
-    function getRangeToExtract(context: RefactorContext): Info | undefined {
+    function getRangeToExtract(context: RefactorContext, triggerReason?: RefactorTriggerReason): Info | undefined {
         const { file, startPosition } = context;
         const isJS = isSourceFileJS(file);
         const current = getTokenAtPosition(file, startPosition);
         const range = createTextRangeFromSpan(getRefactorContextSpan(context));
+        const explicitCursorRequest = range.pos === range.end && triggerReason?.kind === "invoked";
 
-        const selection = findAncestor(current, (node => node.parent && isTypeNode(node) && nodeOverlapsWithStartEnd(current, file, range.pos, range.end) && !rangeContainsSkipTrivia(range, node.parent, file)));
+        const selection = findAncestor(current, (node => node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file) &&
+            (explicitCursorRequest || nodeOverlapsWithStartEnd(current, file, range.pos, range.end))));
         if (!selection || !isTypeNode(selection)) return undefined;
 
         const checker = context.program.getTypeChecker();
