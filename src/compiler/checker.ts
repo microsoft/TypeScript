@@ -10523,7 +10523,8 @@ namespace ts {
         }
 
         function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: __String): Symbol | undefined {
-            const propSet = createMap<Symbol>();
+            let singleProp: Symbol | undefined;
+            let propSet: Map<Symbol> | undefined;
             let indexTypes: Type[] | undefined;
             const isUnion = containingType.flags & TypeFlags.Union;
             const excludeModifiers = isUnion ? ModifierFlags.NonPublicAccessibilityModifier : 0;
@@ -10543,9 +10544,18 @@ namespace ts {
                         else {
                             optionalFlag &= prop.flags;
                         }
-                        const id = "" + getSymbolId(prop);
-                        if (!propSet.has(id)) {
-                            propSet.set(id, prop);
+                        if (!singleProp) {
+                            singleProp = prop;
+                        }
+                        else if (prop !== singleProp) {
+                            if (!propSet) {
+                                propSet = createMap<Symbol>();
+                                propSet.set("" + getSymbolId(singleProp), singleProp);
+                            }
+                            const id = "" + getSymbolId(prop);
+                            if (!propSet.has(id)) {
+                                propSet.set(id, prop);
+                            }
                         }
                         checkFlags |= (isReadonlySymbol(prop) ? CheckFlags.Readonly : 0) |
                             (!(modifiers & ModifierFlags.NonPublicAccessibilityModifier) ? CheckFlags.ContainsPublic : 0) |
@@ -10572,13 +10582,13 @@ namespace ts {
                     }
                 }
             }
-            if (!propSet.size) {
+            if (!singleProp) {
                 return undefined;
             }
-            const props = arrayFrom(propSet.values());
-            if (props.length === 1 && !(checkFlags & CheckFlags.ReadPartial) && !indexTypes) {
-                return props[0];
+            if (!propSet && !(checkFlags & CheckFlags.ReadPartial) && !indexTypes) {
+                return singleProp;
             }
+            const props = propSet ? arrayFrom(propSet.values()) : [singleProp];
             let declarations: Declaration[] | undefined;
             let firstType: Type | undefined;
             let nameType: Type | undefined;
@@ -14275,7 +14285,7 @@ namespace ts {
         function instantiateType(type: Type, mapper: TypeMapper | undefined): Type;
         function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined): Type | undefined;
         function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined): Type | undefined {
-            if (!type || !mapper) {
+            if (!(type && mapper && couldContainTypeVariables(type))) {
                 return type;
             }
             if (instantiationDepth === 50 || instantiationCount >= 5000000) {
@@ -14311,37 +14321,23 @@ namespace ts {
             }
             if (flags & TypeFlags.Object) {
                 const objectFlags = (<ObjectType>type).objectFlags;
-                if (objectFlags & ObjectFlags.Anonymous) {
-                    // If the anonymous type originates in a declaration of a function, method, class, or
-                    // interface, in an object type literal, or in an object literal expression, we may need
-                    // to instantiate the type because it might reference a type parameter.
-                    return couldContainTypeVariables(type) ?
-                        getObjectTypeInstantiation(<AnonymousType>type, mapper) : type;
-                }
-                if (objectFlags & ObjectFlags.Mapped) {
-                    return getObjectTypeInstantiation(<AnonymousType>type, mapper);
-                }
-                if (objectFlags & ObjectFlags.Reference) {
-                    if ((<TypeReference>type).node) {
-                        return getObjectTypeInstantiation(<TypeReference>type, mapper);
+                if (objectFlags & (ObjectFlags.Reference | ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
+                    if (objectFlags & ObjectFlags.Reference && !((<TypeReference>type).node)) {
+                        const resolvedTypeArguments = (<TypeReference>type).resolvedTypeArguments;
+                        const newTypeArguments = instantiateTypes(resolvedTypeArguments, mapper);
+                        return newTypeArguments !== resolvedTypeArguments ? createTypeReference((<TypeReference>type).target, newTypeArguments) : type;
                     }
-                    const resolvedTypeArguments = (<TypeReference>type).resolvedTypeArguments;
-                    const newTypeArguments = instantiateTypes(resolvedTypeArguments, mapper);
-                    return newTypeArguments !== resolvedTypeArguments ? createTypeReference((<TypeReference>type).target, newTypeArguments) : type;
+                    return getObjectTypeInstantiation(<TypeReference | AnonymousType | MappedType>type, mapper);
                 }
                 return type;
             }
-            if ((flags & TypeFlags.Intersection) || (flags & TypeFlags.Union && !(flags & TypeFlags.Primitive))) {
-                if (!couldContainTypeVariables(type)) {
-                    return type;
-                }
+            if (flags & TypeFlags.UnionOrIntersection) {
                 const types = (<UnionOrIntersectionType>type).types;
                 const newTypes = instantiateTypes(types, mapper);
-                return newTypes === types
-                    ? type
-                    : (flags & TypeFlags.Intersection)
-                        ? getIntersectionType(newTypes, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper))
-                        : getUnionType(newTypes, UnionReduction.Literal, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
+                return newTypes === types ? type :
+                    flags & TypeFlags.Intersection ?
+                        getIntersectionType(newTypes, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper)) :
+                        getUnionType(newTypes, UnionReduction.Literal, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
             }
             if (flags & TypeFlags.Index) {
                 return getIndexType(instantiateType((<IndexType>type).type, mapper));
@@ -18388,14 +18384,23 @@ namespace ts {
                 return !!(objectFlags & ObjectFlags.CouldContainTypeVariables);
             }
             const result = !!(type.flags & TypeFlags.Instantiable ||
-                objectFlags & ObjectFlags.Reference && ((<TypeReference>type).node || forEach(getTypeArguments(<TypeReference>type), couldContainTypeVariables)) ||
-                objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ||
-                objectFlags & (ObjectFlags.Mapped | ObjectFlags.ObjectRestType) ||
-                type.flags & TypeFlags.UnionOrIntersection && !(type.flags & TypeFlags.EnumLiteral) && some((<UnionOrIntersectionType>type).types, couldContainTypeVariables));
+                type.flags & TypeFlags.Object && !isNonGenericTopLevelType(type) && (
+                    objectFlags & ObjectFlags.Reference && ((<TypeReference>type).node || forEach(getTypeArguments(<TypeReference>type), couldContainTypeVariables)) ||
+                    objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ||
+                    objectFlags & (ObjectFlags.Mapped | ObjectFlags.ObjectRestType)) ||
+                type.flags & TypeFlags.UnionOrIntersection && !(type.flags & TypeFlags.EnumLiteral) && !isNonGenericTopLevelType(type) && some((<UnionOrIntersectionType>type).types, couldContainTypeVariables));
             if (type.flags & TypeFlags.ObjectFlagsType) {
                 (<ObjectFlagsType>type).objectFlags |= ObjectFlags.CouldContainTypeVariablesComputed | (result ? ObjectFlags.CouldContainTypeVariables : 0);
             }
             return result;
+        }
+
+        function isNonGenericTopLevelType(type: Type) {
+            if (type.aliasSymbol && !type.aliasTypeArguments) {
+                const declaration = getDeclarationOfKind(type.aliasSymbol, SyntaxKind.TypeAliasDeclaration);
+                return !!(declaration && findAncestor(declaration.parent, n => n.kind === SyntaxKind.SourceFile ? true : n.kind === SyntaxKind.ModuleDeclaration ? false : "quit"));
+            }
+            return false;
         }
 
         function isTypeParameterAtTopLevel(type: Type, typeParameter: TypeParameter): boolean {
