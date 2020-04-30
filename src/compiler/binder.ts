@@ -2983,8 +2983,9 @@ namespace ts {
                 addLateBoundAssignmentDeclarationToSymbol(node, sym);
             }
             else {
-                if (!isBindableStaticAccessExpression(node.left))
+                if (!isBindableStaticAccessExpression(node.left)) {
                     return Debug.fail(`Invalid cast. The supplied value ${getTextOfNode(node.left)} was not a BindableStaticAccessExpression.`);
+                }
                 bindStaticPropertyAssignment(node.left as BindableStaticAccessExpression);
             }
         }
