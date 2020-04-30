@@ -1139,6 +1139,15 @@ interface ReadonlyArray<T> {
      */
     every(callbackfn: (value: T, index: number, array: readonly T[]) => unknown, thisArg?: any): boolean;
     /**
+     * Determines whether all the members of an array satisfy the specified test.
+     * @param callbackfn A function that accepts up to three arguments. The every method calls
+     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * which is coercible to the Boolean value false, or until the end of the array.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * If thisArg is omitted, undefined is used as the this value.
+     */
+    every<TValue extends T>(callbackfn: (value: T, index: number, array: readonly T[]) => value is TValue, thisArg?: any): this is readonly TValue[];
+    /**
      * Determines whether the specified callback function returns true for any element of an array.
      * @param callbackfn A function that accepts up to three arguments. The some method calls
      * the callbackfn function for each element in the array until the callbackfn returns a value
@@ -1308,6 +1317,15 @@ interface Array<T> {
      * If thisArg is omitted, undefined is used as the this value.
      */
     every(callbackfn: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
+    /**
+     * Determines whether all the members of an array satisfy the specified test.
+     * @param callbackfn A function that accepts up to three arguments. The every method calls
+     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * which is coercible to the Boolean value false, or until the end of the array.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * If thisArg is omitted, undefined is used as the this value.
+     */
+    every<TValue extends T>(callbackfn: (value: T, index: number, array: T[]) => value is TValue, thisArg?: any): this is TValue[];
     /**
      * Determines whether the specified callback function returns true for any element of an array.
      * @param callbackfn A function that accepts up to three arguments. The some method calls
