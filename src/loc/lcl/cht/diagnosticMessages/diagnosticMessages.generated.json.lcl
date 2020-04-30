@@ -3646,7 +3646,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Declaration augments declaration in another file. This cannot be serialized.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[宣告會增強另一個檔案中的宣告。無法將此情況序列化。]]></Val>
+            <Val><![CDATA[宣告會讓另一個檔案中的宣告增加。這無法序列化。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7462,7 +7462,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[參數 '{0}' 不得參考在其本身之後宣告的識別碼 '{1}'。]]></Val>
+            <Val><![CDATA[參數 '{0}' 不得參考在其之後宣告的識別碼 '{1}'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7471,7 +7471,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' cannot reference itself.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[參數 '{0}' 不得參考自己本身。]]></Val>
+            <Val><![CDATA[參數 '{0}' 不得參考自身。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10210,7 +10210,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The operand of a 'delete' operator must be optional.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['delete' 運算子的運算元必須具有選擇性。]]></Val>
+            <Val><![CDATA['delete' 運算子的運算元必須是非必須。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10567,7 +10567,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This is the declaration being augmented. Consider moving the augmenting declaration into the same file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此為正在增強中的宣告。請考慮將正在增強的宣告移至相同檔案中。]]></Val>
+            <Val><![CDATA[此宣告正在增加中。請考慮將正在增加的宣告移至相同的檔案中。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
