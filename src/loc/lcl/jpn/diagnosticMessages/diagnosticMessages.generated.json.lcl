@@ -10209,6 +10209,9 @@
       <Item ItemId=";The_operand_of_a_delete_operator_must_be_optional_2790" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The operand of a 'delete' operator must be optional.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['delete' 演算子のオペランドはオプションである必要があります。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10564,7 +10567,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This is the declaration being augmented. Consider moving the augmenting declaration into the same file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[これは拡張されている宣言です。拡張宣言を同じファイルに移動することを検討してください。]]></Val>
+            <Val><![CDATA[これは拡張される宣言です。拡張する側の宣言を同じファイルに移動することを検討してください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
