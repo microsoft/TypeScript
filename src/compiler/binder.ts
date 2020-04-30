@@ -413,7 +413,7 @@ namespace ts {
         function declareSymbol(symbolTable: SymbolTable, parent: Symbol | undefined, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags, isReplaceableByMethod?: boolean): Symbol {
             Debug.assert(!hasDynamicName(node));
 
-            const isDefaultExport = hasModifier(node, ModifierFlags.Default);
+            const isDefaultExport = hasModifier(node, ModifierFlags.Default) || isExportSpecifier(node) && node.name.escapedText === "default";
 
             // The exported symbol for an export default function/class node is always named "default"
             const name = isDefaultExport && parent ? InternalSymbolName.Default : getDeclarationName(node);
