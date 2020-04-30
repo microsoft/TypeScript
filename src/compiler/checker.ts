@@ -26049,7 +26049,7 @@ namespace ts {
             return true;
         }
 
-        function invocationErrorDetails(apparentType: Type, kind: SignatureKind): { messageChain: DiagnosticMessageChain, relatedMessage: DiagnosticMessage | undefined } {
+        function invocationErrorDetails(errorTarget: Node, apparentType: Type, kind: SignatureKind): { messageChain: DiagnosticMessageChain, relatedMessage: DiagnosticMessage | undefined } {
             let errorInfo: DiagnosticMessageChain | undefined;
             const isCall = kind === SignatureKind.Call;
             const awaitedType = getAwaitedType(apparentType);
@@ -26118,6 +26118,15 @@ namespace ts {
                     typeToString(apparentType)
                 );
             }
+
+            // Diagnose get accessors incorrectly called as functions
+            if (isCallExpression(errorTarget.parent) && errorTarget.parent.arguments.length === 0) {
+                const { resolvedSymbol } = getNodeLinks(errorTarget);
+                if (resolvedSymbol && resolvedSymbol.flags & SymbolFlags.GetAccessor) {
+                    errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.This_expression_is_not_callable_because_it_is_a_get_accessor_Did_you_mean_to_use_it_without);
+                }
+            }
+
             return {
                 messageChain: chainDiagnosticMessages(
                     errorInfo,
@@ -26127,21 +26136,10 @@ namespace ts {
             };
         }
         function invocationError(errorTarget: Node, apparentType: Type, kind: SignatureKind, relatedInformation?: DiagnosticRelatedInformation) {
-            let diagnostic;
-            if (isCallExpression(errorTarget.parent) && errorTarget.parent.arguments.length === 0) {
-                // Diagnose get accessors incorrectly called as functions
-                const { resolvedSymbol } = getNodeLinks(errorTarget);
-                if (resolvedSymbol && resolvedSymbol.flags & SymbolFlags.GetAccessor) {
-                    diagnostic = createDiagnosticForNode(errorTarget, Diagnostics.This_expression_is_not_callable_because_it_is_a_get_accessor_Did_you_mean_to_use_it_without);
-                    addRelatedInfo(diagnostic, createDiagnosticForNode(resolvedSymbol.valueDeclaration, Diagnostics._0_is_declared_here, symbolToString(resolvedSymbol)));
-                }
-            }
-            if (!diagnostic) {
-                const { messageChain, relatedMessage: relatedInfo } = invocationErrorDetails(apparentType, kind);
-                diagnostic = createDiagnosticForNodeFromMessageChain(errorTarget, messageChain);
-                if (relatedInfo) {
-                    addRelatedInfo(diagnostic, createDiagnosticForNode(errorTarget, relatedInfo));
-                }
+            const { messageChain, relatedMessage: relatedInfo } = invocationErrorDetails(errorTarget, apparentType, kind);
+            const diagnostic = createDiagnosticForNodeFromMessageChain(errorTarget, messageChain);
+            if (relatedInfo) {
+                addRelatedInfo(diagnostic, createDiagnosticForNode(errorTarget, relatedInfo));
             }
             if (isCallExpression(errorTarget.parent)) {
                 const { start, length } = getDiagnosticSpanForCallNode(errorTarget.parent, /* doNotIncludeArguments */ true);
@@ -26242,7 +26240,7 @@ namespace ts {
 
             const headMessage = getDiagnosticHeadMessageForDecoratorResolution(node);
             if (!callSignatures.length) {
-                const errorDetails = invocationErrorDetails(apparentType, SignatureKind.Call);
+                const errorDetails = invocationErrorDetails(node.expression, apparentType, SignatureKind.Call);
                 const messageChain = chainDiagnosticMessages(errorDetails.messageChain, headMessage);
                 const diag = createDiagnosticForNodeFromMessageChain(node.expression, messageChain);
                 if (errorDetails.relatedMessage) {
