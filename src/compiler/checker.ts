@@ -26324,19 +26324,18 @@ namespace ts {
                 );
             }
 
+            let headMessage = isCall ? Diagnostics.This_expression_is_not_callable : Diagnostics.This_expression_is_not_constructable;
+
             // Diagnose get accessors incorrectly called as functions
             if (isCallExpression(errorTarget.parent) && errorTarget.parent.arguments.length === 0) {
                 const { resolvedSymbol } = getNodeLinks(errorTarget);
                 if (resolvedSymbol && resolvedSymbol.flags & SymbolFlags.GetAccessor) {
-                    errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.This_expression_is_not_callable_because_it_is_a_get_accessor_Did_you_mean_to_use_it_without);
+                    headMessage = Diagnostics.This_expression_is_not_callable_because_it_is_a_get_accessor_Did_you_mean_to_use_it_without;
                 }
             }
 
             return {
-                messageChain: chainDiagnosticMessages(
-                    errorInfo,
-                    isCall ? Diagnostics.This_expression_is_not_callable : Diagnostics.This_expression_is_not_constructable
-                ),
+                messageChain: chainDiagnosticMessages(errorInfo, headMessage),
                 relatedMessage: maybeMissingAwait ? Diagnostics.Did_you_forget_to_use_await : undefined,
             };
         }
