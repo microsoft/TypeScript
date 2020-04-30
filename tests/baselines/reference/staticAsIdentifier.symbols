@@ -6,3 +6,10 @@ class C {
     [x: string]: string;
 >x : Symbol(x, Decl(staticAsIdentifier.ts, 2, 5))
 }
+
+class CC {
+>CC : Symbol(CC, Decl(staticAsIdentifier.ts, 3, 1))
+
+    static static;
+>static : Symbol(CC.static, Decl(staticAsIdentifier.ts, 5, 10))
+}

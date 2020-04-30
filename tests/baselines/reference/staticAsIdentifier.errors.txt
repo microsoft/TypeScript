@@ -8,3 +8,7 @@ tests/cases/compiler/staticAsIdentifier.ts(2,12): error TS1030: 'static' modifie
 !!! error TS1030: 'static' modifier already seen.
         [x: string]: string;
     }
+    
+    class CC {
+        static static;
+    }

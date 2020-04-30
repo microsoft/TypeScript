@@ -6,3 +6,10 @@ class C {
     [x: string]: string;
 >x : string
 }
+
+class CC {
+>CC : CC
+
+    static static;
+>static : any
+}
