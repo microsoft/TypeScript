@@ -2977,15 +2977,15 @@ namespace ts {
                 //    util.property = function ...
                 bindExportsPropertyAssignment(node as BindableStaticPropertyAssignmentExpression);
             }
+            else if (hasDynamicName(node)) {
+                bindAnonymousDeclaration(node, SymbolFlags.Property | SymbolFlags.Assignment, InternalSymbolName.Computed);
+                const sym = bindPotentiallyMissingNamespaces(parentSymbol, node.left.expression, isTopLevelNamespaceAssignment(node.left), /*isPrototype*/ false, /*containerIsClass*/ false);
+                addLateBoundAssignmentDeclarationToSymbol(node, sym);
+            }
             else {
-                if (hasDynamicName(node)) {
-                    bindAnonymousDeclaration(node, SymbolFlags.Property | SymbolFlags.Assignment, InternalSymbolName.Computed);
-                    const sym = bindPotentiallyMissingNamespaces(parentSymbol, node.left.expression, isTopLevelNamespaceAssignment(node.left), /*isPrototype*/ false, /*containerIsClass*/ false);
-                    addLateBoundAssignmentDeclarationToSymbol(node, sym);
-                }
-                else {
-                    bindStaticPropertyAssignment(cast(node.left, isBindableStaticAccessExpression));
-                }
+                if (!isBindableStaticAccessExpression(node.left))
+                    return Debug.fail(`Invalid cast. The supplied value ${getTextOfNode(node.left)} was not a BindableStaticAccessExpression.`);
+                bindStaticPropertyAssignment(node.left as BindableStaticAccessExpression);
             }
         }
 
