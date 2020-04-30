@@ -4211,8 +4211,12 @@ namespace ts {
                 context.flags &= ~NodeBuilderFlags.InTypeAlias;
 
                 if (!type) {
-                    context.encounteredError = true;
-                    return undefined!; // TODO: GH#18217
+                    if (!(context.flags & NodeBuilderFlags.AllowEmptyUnionOrIntersection)) {
+                        context.encounteredError = true;
+                        return undefined!; // TODO: GH#18217
+                    }
+                    context.approximateLength += 3;
+                    return createKeywordTypeNode(SyntaxKind.AnyKeyword);
                 }
 
                 if (!(context.flags & NodeBuilderFlags.NoTypeReduction)) {
@@ -5925,7 +5929,7 @@ namespace ts {
                 function serializeSymbolWorker(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean) {
                     const symbolName = unescapeLeadingUnderscores(symbol.escapedName);
                     const isDefault = symbol.escapedName === InternalSymbolName.Default;
-                    if (isStringANonContextualKeyword(symbolName) && !isDefault) {
+                    if (!(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier) && isStringANonContextualKeyword(symbolName) && !isDefault) {
                         // Oh no. We cannot use this symbol's name as it's name... It's likely some jsdoc had an invalid name like `export` or `default` :(
                         context.encounteredError = true;
                         // TODO: Issue error via symbol tracker?
