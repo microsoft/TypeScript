@@ -1,0 +1,36 @@
+=== tests/cases/compiler/noIterationTypeErrorsInCFA.ts ===
+interface F {
+>F : Symbol(F, Decl(noIterationTypeErrorsInCFA.ts, 0, 0))
+
+    d(): void
+>d : Symbol(F.d, Decl(noIterationTypeErrorsInCFA.ts, 0, 13))
+}
+export function doRemove(dds: F | F[]) {
+>doRemove : Symbol(doRemove, Decl(noIterationTypeErrorsInCFA.ts, 2, 1))
+>dds : Symbol(dds, Decl(noIterationTypeErrorsInCFA.ts, 3, 25))
+>F : Symbol(F, Decl(noIterationTypeErrorsInCFA.ts, 0, 0))
+>F : Symbol(F, Decl(noIterationTypeErrorsInCFA.ts, 0, 0))
+
+    if (!Array.isArray(dds)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>dds : Symbol(dds, Decl(noIterationTypeErrorsInCFA.ts, 3, 25))
+
+        dds = [dds]
+>dds : Symbol(dds, Decl(noIterationTypeErrorsInCFA.ts, 3, 25))
+>dds : Symbol(dds, Decl(noIterationTypeErrorsInCFA.ts, 3, 25))
+    }
+    for (let n of dds) {
+>n : Symbol(n, Decl(noIterationTypeErrorsInCFA.ts, 7, 12))
+>dds : Symbol(dds, Decl(noIterationTypeErrorsInCFA.ts, 3, 25))
+
+        n.d()
+>n.d : Symbol(F.d, Decl(noIterationTypeErrorsInCFA.ts, 0, 13))
+>n : Symbol(n, Decl(noIterationTypeErrorsInCFA.ts, 7, 12))
+>d : Symbol(F.d, Decl(noIterationTypeErrorsInCFA.ts, 0, 13))
+    }
+    return dds
+>dds : Symbol(dds, Decl(noIterationTypeErrorsInCFA.ts, 3, 25))
+}
+

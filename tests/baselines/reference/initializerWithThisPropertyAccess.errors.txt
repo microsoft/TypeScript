@@ -1,0 +1,44 @@
+tests/cases/compiler/initializerWithThisPropertyAccess.ts(3,14): error TS2729: Property 'a' is used before its initialization.
+tests/cases/compiler/initializerWithThisPropertyAccess.ts(24,29): error TS2729: Property 'bar' is used before its initialization.
+
+
+==== tests/cases/compiler/initializerWithThisPropertyAccess.ts (2 errors) ====
+    class A {
+        a: number;
+        b = this.a;  // Error
+                 ~
+!!! error TS2729: Property 'a' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/initializerWithThisPropertyAccess.ts:2:5: 'a' is declared here.
+        c = () => this.a;
+        d = (new A()).a;
+        constructor() {
+            this.a = 1;
+        }
+    }
+    
+    class B extends A {
+        x = this.a;
+    }
+    
+    class C {
+        a!: number;
+        b = this.a;
+    }
+    
+    // Repro from #37979
+    
+    class Foo {
+        private bar: Bar;
+        readonly barProp = this.bar.prop;
+                                ~~~
+!!! error TS2729: Property 'bar' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/initializerWithThisPropertyAccess.ts:23:13: 'bar' is declared here.
+        constructor() {
+            this.bar = new Bar();
+        }
+    }
+    
+    class Bar {
+        readonly prop = false;
+    }
+    

@@ -69,7 +69,6 @@ genericFunc<this>(undefined);  // Should be an error
 
 class ErrClass3 extends this {
 >ErrClass3 : Symbol(ErrClass3, Decl(thisInInvalidContextsExternalModule.ts, 35, 29))
->this : Symbol(globalThis)
 
 }
 

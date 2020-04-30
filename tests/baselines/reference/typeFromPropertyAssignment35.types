@@ -34,9 +34,9 @@ Emu.D = class {
     constructor() {
         this._model = 1
 >this._model = 1 : 1
->this._model : number
+>this._model : any
 >this : this
->_model : number
+>_model : any
 >1 : 1
     }
 }

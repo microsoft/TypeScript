@@ -45,9 +45,9 @@ class Chunk {
     constructor() {
         this.chunk = 1;
 >this.chunk = 1 : 1
->this.chunk : number
+>this.chunk : any
 >this : this
->chunk : number
+>chunk : any
 >1 : 1
     }
 }

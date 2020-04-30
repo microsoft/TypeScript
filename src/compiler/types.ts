@@ -1107,6 +1107,7 @@ namespace ts {
         exclamationToken?: ExclamationToken;
         body?: Block | Expression;
         /* @internal */ endFlowNode?: FlowNode;
+        /* @internal */ returnFlowNode?: FlowNode;
     }
 
     export type FunctionLikeDeclaration =
@@ -1152,7 +1153,6 @@ namespace ts {
         kind: SyntaxKind.Constructor;
         parent: ClassLikeDeclaration;
         body?: FunctionBody;
-        /* @internal */ returnFlowNode?: FlowNode;
     }
 
     /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
@@ -4004,6 +4004,7 @@ namespace ts {
         getSymbolOfExternalModuleSpecifier(node: StringLiteralLike): Symbol | undefined;
         isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
         getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker, bundled?: boolean): Statement[] | undefined;
+        isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
     }
 
     export const enum SymbolFlags {
@@ -4156,6 +4157,7 @@ namespace ts {
         deferralParent?: Type;              // Source union/intersection of a deferred type
         cjsExportMerged?: Symbol;           // Version of the symbol with all non export= exports merged with the export= target
         typeOnlyDeclaration?: TypeOnlyCompatibleAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
+        isConstructorDeclaredProperty?: boolean;  // Property declared through 'this.x = ...' assignment in constructor
     }
 
     /* @internal */
@@ -4322,6 +4324,7 @@ namespace ts {
         instantiations?: Map<Type>;         // Instantiations of generic type alias (undefined if non-generic)
         isExhaustive?: boolean;           // Is node an exhaustive switch statement
         skipDirectInference?: true;         // Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type
+        declarationRequiresScopeChange?: boolean;   // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
     }
 
     export const enum TypeFlags {
@@ -5993,6 +5996,13 @@ namespace ts {
         set?: Expression;
     }
 
+    /* @internal */
+    export const enum LexicalEnvironmentFlags {
+        None = 0,
+        InParameters = 1 << 0, // currently visiting a parameter list
+        VariablesHoistedInParameters = 1 << 1 // a temp variable was hoisted while visiting a parameter list
+    }
+
     export interface TransformationContext {
         /*@internal*/ getEmitResolver(): EmitResolver;
         /*@internal*/ getEmitHost(): EmitHost;
@@ -6002,6 +6012,9 @@ namespace ts {
 
         /** Starts a new lexical environment. */
         startLexicalEnvironment(): void;
+
+        /* @internal */ setLexicalEnvironmentFlags(flags: LexicalEnvironmentFlags, value: boolean): void;
+        /* @internal */ getLexicalEnvironmentFlags(): LexicalEnvironmentFlags;
 
         /** Suspends the current lexical environment, usually after visiting a parameter list. */
         suspendLexicalEnvironment(): void;
@@ -6017,6 +6030,10 @@ namespace ts {
 
         /** Hoists a variable declaration to the containing scope. */
         hoistVariableDeclaration(node: Identifier): void;
+
+        /** Adds an initialization statement to the top of the lexical environment. */
+        /* @internal */
+        addInitializationStatement(node: Statement): void;
 
         /** Records a request for a non-scoped emit helper in the current context. */
         requestEmitHelper(helper: EmitHelper): void;
@@ -6467,6 +6484,7 @@ namespace ts {
         moduleResolverHost?: ModuleSpecifierResolutionHost & { getCommonSourceDirectory(): string };
         trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
         trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
+        reportNonlocalAugmentation?(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): void;
     }
 
     export interface TextSpan {
@@ -6545,6 +6563,7 @@ namespace ts {
 
         NoSpaceIfEmpty = 1 << 19,       // If the literal is empty, do not add spaces between braces.
         SingleElement = 1 << 20,
+        SpaceAfterList = 1 << 21,       // Add space after list
 
         // Precomputed Formats
         Modifiers = SingleLine | SpaceBetweenSiblings | NoInterveningComments,
@@ -6579,7 +6598,7 @@ namespace ts {
         CaseOrDefaultClauseStatements = Indented | MultiLine | NoTrailingNewLine | OptionalIfEmpty,
         HeritageClauseTypes = CommaDelimited | SpaceBetweenSiblings | SingleLine,
         SourceFileStatements = MultiLine | NoTrailingNewLine,
-        Decorators = MultiLine | Optional,
+        Decorators = MultiLine | Optional | SpaceAfterList,
         TypeArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | AngleBrackets | Optional,
         TypeParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | AngleBrackets | Optional,
         Parameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis,

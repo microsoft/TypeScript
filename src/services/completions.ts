@@ -2427,7 +2427,8 @@ namespace ts.Completions {
             return baseSymbols.filter(propertySymbol =>
                 !existingMemberNames.has(propertySymbol.escapedName) &&
                 !!propertySymbol.declarations &&
-                !(getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.Private));
+                !(getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.Private) &&
+                !isPrivateIdentifierPropertyDeclaration(propertySymbol.valueDeclaration));
         }
 
         /**
@@ -2684,10 +2685,16 @@ namespace ts.Completions {
                     return cls;
                 }
                 break;
-            case SyntaxKind.Identifier: // class c extends React.Component { a: () => 1\n compon| }
+           case SyntaxKind.Identifier: {
+                // class c { public prop = c| }
+                if (isPropertyDeclaration(location.parent) && location.parent.initializer === location) {
+                    return undefined;
+                }
+                // class c extends React.Component { a: () => 1\n compon| }
                 if (isFromObjectTypeDeclaration(location)) {
                     return findAncestor(location, isObjectTypeDeclaration);
                 }
+            }
         }
 
         if (!contextToken) return undefined;

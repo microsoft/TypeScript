@@ -1,4 +1,4 @@
-tests/cases/conformance/types/witness/witness.ts(4,21): error TS2372: Parameter 'pInit' cannot be referenced in its initializer.
+tests/cases/conformance/types/witness/witness.ts(4,21): error TS2372: Parameter 'pInit' cannot reference itself.
 tests/cases/conformance/types/witness/witness.ts(8,14): error TS2729: Property 'x' is used before its initialization.
 tests/cases/conformance/types/witness/witness.ts(28,12): error TS2695: Left side of comma operator is unused and has no side effects.
 tests/cases/conformance/types/witness/witness.ts(29,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'co1' must be of type 'any', but here has type 'number'.
@@ -23,7 +23,7 @@ tests/cases/conformance/types/witness/witness.ts(128,19): error TS2729: Property
     var pInit: any;
     function fn(pInit = pInit) {
                         ~~~~~
-!!! error TS2372: Parameter 'pInit' cannot be referenced in its initializer.
+!!! error TS2372: Parameter 'pInit' cannot reference itself.
         var pInit: any;
     }
     class InitClass {
