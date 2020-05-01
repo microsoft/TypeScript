@@ -1,17 +1,19 @@
 //// [tests/cases/conformance/directives/multiline.tsx] ////
 
 //// [a.ts]
+export const texts: string[] = [];
+
 /**
  @ts-ignore */
-export let x: string = 100;
+texts.push(100);
 
 /**
  @ts-expect-error */
-export let y: string = 100;
+texts.push(100);
 
 /**
  @ts-expect-error */
-export let ok = 100;
+texts.push("100");
 
 //// [b.tsx]
 import * as React from "react";
@@ -24,23 +26,29 @@ let x = (
   <div>
     {/*
    @ts-ignore */}
-    <MyComponent foo={100} />;
-  </div>
-);
+    <MyComponent foo={100} />
 
-let y = (
-  <div>
+    {/*@ts-ignore*/}
+    <MyComponent foo={100} />
+
     {/*
    @ts-expect-error */}
-    <MyComponent foo={100} />;
-  </div>
-);
+    <MyComponent foo={100} />
 
-let ok = (
-  <div>
+    {/*
+   // @ts-expect-error */}
+    <MyComponent foo={100} />
+
+    {/*
+   * @ts-expect-error */}
+    <MyComponent foo={100} />
+
+    {/*@ts-expect-error*/}
+    <MyComponent foo={100} />
+
     {/*
    @ts-expect-error */}
-    <MyComponent foo={"hooray"} />;
+    <MyComponent foo={"hooray"} />
   </div>
 );
 
@@ -48,16 +56,17 @@ let ok = (
 //// [a.js]
 "use strict";
 exports.__esModule = true;
-exports.ok = exports.y = exports.x = void 0;
+exports.texts = void 0;
+exports.texts = [];
 /**
  @ts-ignore */
-exports.x = 100;
+exports.texts.push(100);
 /**
  @ts-expect-error */
-exports.y = 100;
+exports.texts.push(100);
 /**
  @ts-expect-error */
-exports.ok = 100;
+exports.texts.push("100");
 //// [b.js]
 "use strict";
 exports.__esModule = true;
@@ -69,10 +78,9 @@ function MyComponent(props) {
 exports.MyComponent = MyComponent;
 var x = (React.createElement("div", null,
     React.createElement(MyComponent, { foo: 100 }),
-    ";"));
-var y = (React.createElement("div", null,
     React.createElement(MyComponent, { foo: 100 }),
-    ";"));
-var ok = (React.createElement("div", null,
-    React.createElement(MyComponent, { foo: "hooray" }),
-    ";"));
+    React.createElement(MyComponent, { foo: 100 }),
+    React.createElement(MyComponent, { foo: 100 }),
+    React.createElement(MyComponent, { foo: 100 }),
+    React.createElement(MyComponent, { foo: 100 }),
+    React.createElement(MyComponent, { foo: "hooray" })));

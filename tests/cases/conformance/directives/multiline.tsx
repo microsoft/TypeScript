@@ -1,15 +1,17 @@
 // @filename: a.ts
+export const texts: string[] = [];
+
 /**
  @ts-ignore */
-export let x: string = 100;
+texts.push(100);
 
 /**
  @ts-expect-error */
-export let y: string = 100;
+texts.push(100);
 
 /**
  @ts-expect-error */
-export let ok = 100;
+texts.push("100");
 
 // @filename: b.tsx
 // @jsx: react
@@ -24,22 +26,28 @@ let x = (
   <div>
     {/*
    @ts-ignore */}
-    <MyComponent foo={100} />;
-  </div>
-);
+    <MyComponent foo={100} />
 
-let y = (
-  <div>
+    {/*@ts-ignore*/}
+    <MyComponent foo={100} />
+
     {/*
    @ts-expect-error */}
-    <MyComponent foo={100} />;
-  </div>
-);
+    <MyComponent foo={100} />
 
-let ok = (
-  <div>
+    {/*
+   // @ts-expect-error */}
+    <MyComponent foo={100} />
+
+    {/*
+   * @ts-expect-error */}
+    <MyComponent foo={100} />
+
+    {/*@ts-expect-error*/}
+    <MyComponent foo={100} />
+
     {/*
    @ts-expect-error */}
-    <MyComponent foo={"hooray"} />;
+    <MyComponent foo={"hooray"} />
   </div>
 );
