@@ -12,7 +12,28 @@ namespace ts.refactor.extractSymbol {
 
         const targetRange = rangeToExtract.targetRange;
         if (targetRange === undefined) {
-            return emptyArray;
+            if (!rangeToExtract.errors || rangeToExtract.errors.length == 0) {
+                return emptyArray;
+            }
+
+            return [{
+                name: refactorName,
+                description: getLocaleSpecificMessage(Diagnostics.Extract_function),
+                actions: [{
+                    description: getLocaleSpecificMessage(Diagnostics.Extract_function),
+                    name: 'extract_function_error',
+                    error: getStringError(rangeToExtract.errors)
+                }]
+            },
+            {
+                name: refactorName,
+                description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
+                actions: [{
+                    description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
+                    name: 'extract_constant_error',
+                    error: getStringError(rangeToExtract.errors)
+                }]
+            }];
         }
 
         const extractions = getPossibleExtractions(targetRange, context);
@@ -29,7 +50,6 @@ namespace ts.refactor.extractSymbol {
         const usedConstantNames: Map<boolean> = createMap();
         let innermostErrorConstantAction: ts.RefactorActionInfo | undefined;
         
-
         let i = 0;
         for (const {functionExtraction, constantExtraction} of extractions) {
             const description = functionExtraction.description;
@@ -45,15 +65,10 @@ namespace ts.refactor.extractSymbol {
                     });
                 }
             } else if (!innermostErrorFunctionAction) {
-                let error = functionExtraction.errors[0].messageText;
-                if (typeof error !== 'string') {
-                    error = error.messageText;
-                }
-
                 innermostErrorFunctionAction = {
                     description,
                     name: `function_scope_${i}`,
-                    error: error
+                    error: getStringError(functionExtraction.errors)
                 }
             }
 
@@ -71,15 +86,10 @@ namespace ts.refactor.extractSymbol {
                     });
                 }
             } else if (!innermostErrorConstantAction) {
-                let error = constantExtraction.errors[0].messageText;
-                if (typeof error !== 'string') {
-                    error = error.messageText;
-                }
-
                 innermostErrorConstantAction = {
                     description,
                     name: `constant_scope_${i}`,
-                    error: error
+                    error: getStringError(constantExtraction.errors)
                 }
             }
 
@@ -107,6 +117,14 @@ namespace ts.refactor.extractSymbol {
         }
 
         return infos.length ? infos : emptyArray;
+
+        function getStringError(errors: readonly Diagnostic[]) {
+            let error = errors[0].messageText;
+            if (typeof error !== 'string') {
+                error = error.messageText;
+            }
+            return error;
+        }
     }
 
     /* Exported for tests */

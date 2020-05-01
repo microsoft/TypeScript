@@ -4,6 +4,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     const refactorDescription = Diagnostics.Add_or_remove_braces_in_an_arrow_function.message;
     const addBracesActionName = "Add braces to arrow function";
     const removeBracesActionName = "Remove braces from arrow function";
+    const errorBracesActionName = "Error adding or removing braces from arrow function";
     const addBracesActionDescription = Diagnostics.Add_braces_to_arrow_function.message;
     const removeBracesActionDescription = Diagnostics.Remove_braces_from_arrow_function.message;
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
@@ -15,16 +16,36 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         addBraces: boolean;
     }
 
+    type InfoOrError = {
+        info: Info,
+        error?: never
+    } | {
+        info?: never,
+        error: string
+    }
+
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition } = context;
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
         if (!info) return emptyArray;
 
+        if (info.error !== undefined) {
+            return [{
+                name: refactorName,
+                description: refactorDescription,
+                actions: [{
+                    name: errorBracesActionName,
+                    description: "Error adding or removing braces from arrow function",
+                    error: info.error
+                }]
+            }];
+        }
+
         return [{
             name: refactorName,
             description: refactorDescription,
             actions: [
-                info.addBraces ?
+                info.info.addBraces ?
                     {
                         name: addBracesActionName,
                         description: addBracesActionDescription
@@ -39,9 +60,9 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const { file, startPosition } = context;
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
-        if (!info) return undefined;
+        if (!info || !info.info) return undefined;
 
-        const { expression, returnStatement, func } = info;
+        const { expression, returnStatement, func } = info.info;
 
         let body: ConciseBody;
         if (actionName === addBracesActionName) {
@@ -68,26 +89,45 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         return isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken || isObjectLiteralExpression(expression);
     }
 
-    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number): Info | undefined {
+    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number): InfoOrError | undefined {
         const node = getTokenAtPosition(file, startPosition);
         const func = getContainingFunction(node);
-        if (!func || !isArrowFunction(func) || (!rangeContainsRange(func, node) || rangeContainsRange(func.body, node))) return undefined;
+
+        if (!func) {
+            return {
+                error: 'Could not find a containing arrow function.'
+            }
+        }
+
+        if (!isArrowFunction(func)) {
+            return {
+                error: 'Containing function is not an arrow function.'
+            }
+        }
+
+        if ((!rangeContainsRange(func, node) || rangeContainsRange(func.body, node))) {
+            return undefined;
+        }        
 
         if (isExpression(func.body)) {
             return {
-                func,
-                addBraces: true,
-                expression: func.body
+                info: {
+                    func,
+                    addBraces: true,
+                    expression: func.body
+                }
             };
         }
         else if (func.body.statements.length === 1) {
             const firstStatement = first(func.body.statements);
             if (isReturnStatement(firstStatement)) {
                 return {
-                    func,
-                    addBraces: false,
-                    expression: firstStatement.expression,
-                    returnStatement: firstStatement
+                    info: {
+                        func,
+                        addBraces: false,
+                        expression: firstStatement.expression,
+                        returnStatement: firstStatement
+                    }
                 };
             }
         }
