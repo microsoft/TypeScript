@@ -3421,6 +3421,7 @@ namespace ts {
         getWidenedType(type: Type): Type;
         /* @internal */
         getPromisedTypeOfPromise(promise: Type, errorNode?: Node): Type | undefined;
+        /* @internal */
         getAwaitedType(type: Type): Type | undefined;
         getReturnTypeOfSignature(signature: Signature): Type;
         /**
