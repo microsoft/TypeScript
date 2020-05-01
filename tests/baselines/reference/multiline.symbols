@@ -1,0 +1,80 @@
+=== tests/cases/conformance/directives/a.ts ===
+/**
+ @ts-ignore */
+export let x: string = 100;
+>x : Symbol(x, Decl(a.ts, 2, 10))
+
+/**
+ @ts-expect-error */
+export let y: string = 100;
+>y : Symbol(y, Decl(a.ts, 6, 10))
+
+/**
+ @ts-expect-error */
+export let ok = 100;
+>ok : Symbol(ok, Decl(a.ts, 10, 10))
+
+=== tests/cases/conformance/directives/b.tsx ===
+import * as React from "react";
+>React : Symbol(React, Decl(b.tsx, 0, 6))
+
+export function MyComponent(props: { foo: string }) {
+>MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
+>props : Symbol(props, Decl(b.tsx, 2, 28))
+>foo : Symbol(foo, Decl(b.tsx, 2, 36))
+
+  return <div />;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+}
+
+let x = (
+>x : Symbol(x, Decl(b.tsx, 6, 3))
+
+  <div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+
+    {/*
+   @ts-ignore */}
+    <MyComponent foo={100} />;
+>MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
+>foo : Symbol(foo, Decl(b.tsx, 10, 16))
+
+  </div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+
+);
+
+let y = (
+>y : Symbol(y, Decl(b.tsx, 14, 3))
+
+  <div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+
+    {/*
+   @ts-expect-error */}
+    <MyComponent foo={100} />;
+>MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
+>foo : Symbol(foo, Decl(b.tsx, 18, 16))
+
+  </div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+
+);
+
+let ok = (
+>ok : Symbol(ok, Decl(b.tsx, 22, 3))
+
+  <div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+
+    {/*
+   @ts-expect-error */}
+    <MyComponent foo={"hooray"} />;
+>MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
+>foo : Symbol(foo, Decl(b.tsx, 26, 16))
+
+  </div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+
+);
+

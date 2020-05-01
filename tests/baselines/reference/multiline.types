@@ -1,0 +1,96 @@
+=== tests/cases/conformance/directives/a.ts ===
+/**
+ @ts-ignore */
+export let x: string = 100;
+>x : string
+>100 : 100
+
+/**
+ @ts-expect-error */
+export let y: string = 100;
+>y : string
+>100 : 100
+
+/**
+ @ts-expect-error */
+export let ok = 100;
+>ok : number
+>100 : 100
+
+=== tests/cases/conformance/directives/b.tsx ===
+import * as React from "react";
+>React : typeof React
+
+export function MyComponent(props: { foo: string }) {
+>MyComponent : (props: {    foo: string;}) => JSX.Element
+>props : { foo: string; }
+>foo : string
+
+  return <div />;
+><div /> : JSX.Element
+>div : any
+}
+
+let x = (
+>x : JSX.Element
+>(  <div>    {/*   @ts-ignore */}    <MyComponent foo={100} />;  </div>) : JSX.Element
+
+  <div>
+><div>    {/*   @ts-ignore */}    <MyComponent foo={100} />;  </div> : JSX.Element
+>div : any
+
+    {/*
+   @ts-ignore */}
+    <MyComponent foo={100} />;
+><MyComponent foo={100} /> : JSX.Element
+>MyComponent : (props: { foo: string; }) => JSX.Element
+>foo : number
+>100 : 100
+
+  </div>
+>div : any
+
+);
+
+let y = (
+>y : JSX.Element
+>(  <div>    {/*   @ts-expect-error */}    <MyComponent foo={100} />;  </div>) : JSX.Element
+
+  <div>
+><div>    {/*   @ts-expect-error */}    <MyComponent foo={100} />;  </div> : JSX.Element
+>div : any
+
+    {/*
+   @ts-expect-error */}
+    <MyComponent foo={100} />;
+><MyComponent foo={100} /> : JSX.Element
+>MyComponent : (props: { foo: string; }) => JSX.Element
+>foo : number
+>100 : 100
+
+  </div>
+>div : any
+
+);
+
+let ok = (
+>ok : JSX.Element
+>(  <div>    {/*   @ts-expect-error */}    <MyComponent foo={"hooray"} />;  </div>) : JSX.Element
+
+  <div>
+><div>    {/*   @ts-expect-error */}    <MyComponent foo={"hooray"} />;  </div> : JSX.Element
+>div : any
+
+    {/*
+   @ts-expect-error */}
+    <MyComponent foo={"hooray"} />;
+><MyComponent foo={"hooray"} /> : JSX.Element
+>MyComponent : (props: { foo: string; }) => JSX.Element
+>foo : string
+>"hooray" : "hooray"
+
+  </div>
+>div : any
+
+);
+
