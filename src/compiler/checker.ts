@@ -5566,6 +5566,9 @@ namespace ts {
                     if (isJSDocNonNullableType(node)) {
                         return visitNode(node.type, visitExistingNodeTreeSymbols);
                     }
+                    if (isJSDocVariadicType(node)) {
+                        return createArrayTypeNode(visitNode((node as JSDocVariadicType).type, visitExistingNodeTreeSymbols));
+                    }
                     if (isTypeReferenceNode(node) && isIdentifier(node.typeName) && node.typeName.escapedText === "") {
                         return setOriginalNode(createKeywordTypeNode(SyntaxKind.AnyKeyword), node);
                     }
@@ -5592,8 +5595,8 @@ namespace ts {
                                 mapDefined(node.parameters, (p, i) => p.name && isIdentifier(p.name) && p.name.escapedText === "new" ? (newTypeNode = p.type, undefined) : createParameter(
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
-                                    p.dotDotDotToken,
-                                    p.name || p.dotDotDotToken ? `args` : `arg${i}`,
+                                    getEffectiveDotDotDotForParameter(p),
+                                    p.name || getEffectiveDotDotDotForParameter(p) ? `args` : `arg${i}`,
                                     p.questionToken,
                                     visitNode(p.type, visitExistingNodeTreeSymbols),
                                     /*initializer*/ undefined
@@ -5607,8 +5610,8 @@ namespace ts {
                                 map(node.parameters, (p, i) => createParameter(
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
-                                    p.dotDotDotToken,
-                                    p.name || p.dotDotDotToken ? `args` : `arg${i}`,
+                                    getEffectiveDotDotDotForParameter(p),
+                                    p.name || getEffectiveDotDotDotForParameter(p) ? `args` : `arg${i}`,
                                     p.questionToken,
                                     visitNode(p.type, visitExistingNodeTreeSymbols),
                                     /*initializer*/ undefined
@@ -5651,6 +5654,10 @@ namespace ts {
                     }
 
                     return visitEachChild(node, visitExistingNodeTreeSymbols, nullTransformationContext);
+
+                    function getEffectiveDotDotDotForParameter(p: ParameterDeclaration) {
+                        return p.dotDotDotToken || (p.type && isJSDocVariadicType(p.type) ? createToken(SyntaxKind.DotDotDotToken) : undefined);
+                    }
 
                     function rewriteModuleSpecifier(parent: ImportTypeNode, lit: StringLiteral) {
                         if (bundled) {
