@@ -20587,14 +20587,15 @@ namespace ts {
             }
 
             function isMatchingReferenceDiscriminant(expr: Expression, computedType: Type) {
-                if (!(computedType.flags & TypeFlags.Union) || !isAccessExpression(expr)) {
+                const type = declaredType.flags & TypeFlags.Union ? declaredType : computedType;
+                if (!(type.flags & TypeFlags.Union) || !isAccessExpression(expr)) {
                     return false;
                 }
                 const name = getAccessedPropertyName(expr);
                 if (name === undefined) {
                     return false;
                 }
-                return isMatchingReference(reference, expr.expression) && isDiscriminantProperty(computedType, name);
+                return isMatchingReference(reference, expr.expression) && isDiscriminantProperty(type, name);
             }
 
             function narrowTypeByDiscriminant(type: Type, access: AccessExpression, narrowType: (t: Type) => Type): Type {
@@ -20620,7 +20621,7 @@ namespace ts {
                 if (strictNullChecks && assumeTrue && optionalChainContainsReference(expr, reference)) {
                     type = getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
                 }
-                if (isMatchingReferenceDiscriminant(expr, declaredType)) {
+                if (isMatchingReferenceDiscriminant(expr, type)) {
                     return narrowTypeByDiscriminant(type, <AccessExpression>expr, t => getTypeWithFacts(t, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy));
                 }
                 return type;
@@ -20676,10 +20677,10 @@ namespace ts {
                                 type = narrowTypeByOptionalChainContainment(type, operator, left, assumeTrue);
                             }
                         }
-                        if (isMatchingReferenceDiscriminant(left, declaredType)) {
+                        if (isMatchingReferenceDiscriminant(left, type)) {
                             return narrowTypeByDiscriminant(type, <AccessExpression>left, t => narrowTypeByEquality(t, operator, right, assumeTrue));
                         }
-                        if (isMatchingReferenceDiscriminant(right, declaredType)) {
+                        if (isMatchingReferenceDiscriminant(right, type)) {
                             return narrowTypeByDiscriminant(type, <AccessExpression>right, t => narrowTypeByEquality(t, operator, left, assumeTrue));
                         }
                         if (isMatchingConstructorReference(left)) {
@@ -21101,7 +21102,7 @@ namespace ts {
                             !(getTypeFacts(predicate.type) & TypeFacts.EQUndefined)) {
                             type = getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
                         }
-                        if (isMatchingReferenceDiscriminant(predicateArgument, declaredType)) {
+                        if (isMatchingReferenceDiscriminant(predicateArgument, type)) {
                             return narrowTypeByDiscriminant(type, predicateArgument as AccessExpression, t => getNarrowedType(t, predicate.type!, assumeTrue, isTypeSubtypeOf));
                         }
                     }
@@ -21143,7 +21144,7 @@ namespace ts {
                 if (isMatchingReference(reference, expr)) {
                     return getTypeWithFacts(type, assumePresent ? TypeFacts.NEUndefinedOrNull : TypeFacts.EQUndefinedOrNull);
                 }
-                if (isMatchingReferenceDiscriminant(expr, declaredType)) {
+                if (isMatchingReferenceDiscriminant(expr, type)) {
                     return narrowTypeByDiscriminant(type, <AccessExpression>expr, t => getTypeWithFacts(t, assumePresent ? TypeFacts.NEUndefinedOrNull : TypeFacts.EQUndefinedOrNull));
                 }
                 return type;
