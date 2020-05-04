@@ -230,11 +230,11 @@ namespace ts.codefix {
             const binaryExpression = token.parent.parent as BinaryExpression;
             const otherExpression = token.parent === binaryExpression.left ? binaryExpression.right : binaryExpression.left;
             const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)));
-            typeNode = checker.typeToTypeNode(widenedType, classDeclaration);
+            typeNode = checker.typeToTypeNode(widenedType, classDeclaration, /*flags*/ undefined);
         }
         else {
             const contextualType = checker.getContextualType(token.parent as Expression);
-            typeNode = contextualType ? checker.typeToTypeNode(contextualType) : undefined;
+            typeNode = contextualType ? checker.typeToTypeNode(contextualType, /*enclosingDeclaration*/ undefined, /*flags*/ undefined) : undefined;
         }
         return typeNode || createKeywordTypeNode(SyntaxKind.AnyKeyword);
     }

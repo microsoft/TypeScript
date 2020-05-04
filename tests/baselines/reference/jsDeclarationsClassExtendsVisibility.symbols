@@ -25,7 +25,7 @@ module.exports = Foo;
 >Foo : Symbol(Foo, Decl(cls.js, 4, 2))
 
 module.exports.Strings = Strings;
->module.exports.Strings : Symbol(Strings)
+>module.exports.Strings : Symbol(Strings, Decl(cls.js, 6, 21))
 >module.exports : Symbol(Strings, Decl(cls.js, 6, 21))
 >module : Symbol(module, Decl(cls.js, 5, 24))
 >exports : Symbol("tests/cases/conformance/jsdoc/declarations/cls", Decl(cls.js, 0, 0))

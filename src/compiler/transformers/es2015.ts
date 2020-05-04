@@ -1853,6 +1853,8 @@ namespace ts {
                 // ensureUseStrict is false because no new prologue-directive should be added.
                 // addStandardPrologue will put already-existing directives at the beginning of the target statement-array
                 statementOffset = addStandardPrologue(prologue, body.statements, /*ensureUseStrict*/ false);
+                statementOffset = addCustomPrologue(statements, body.statements, statementOffset, visitor, isHoistedFunction);
+                statementOffset = addCustomPrologue(statements, body.statements, statementOffset, visitor, isHoistedVariableStatement);
             }
 
             multiLine = addDefaultValueAssignmentsIfNeeded(statements, node) || multiLine;

@@ -6383,11 +6383,11 @@ module Harness {
 
                 this.editRanges.splice(0, this.maxScriptVersions - this.editRanges.length);
 >this.editRanges.splice(0, this.maxScriptVersions - this.editRanges.length) : { length: number; editRange: any; }[]
->this.editRanges.splice : { (start: number, deleteCount: number): { length: number; editRange: any; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: any; }[]): { length: number; editRange: any; }[]; }
+>this.editRanges.splice : { (start: number, deleteCount?: number): { length: number; editRange: any; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: any; }[]): { length: number; editRange: any; }[]; }
 >this.editRanges : { length: number; editRange: any; }[]
 >this : this
 >editRanges : { length: number; editRange: any; }[]
->splice : { (start: number, deleteCount: number): { length: number; editRange: any; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: any; }[]): { length: number; editRange: any; }[]; }
+>splice : { (start: number, deleteCount?: number): { length: number; editRange: any; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: any; }[]): { length: number; editRange: any; }[]; }
 >0 : 0
 >this.maxScriptVersions - this.editRanges.length : number
 >this.maxScriptVersions : number

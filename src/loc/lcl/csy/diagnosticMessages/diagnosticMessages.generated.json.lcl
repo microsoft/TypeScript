@@ -3202,7 +3202,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Compiler reserves name '{0}' when emitting private identifier downlevel.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Kompilátor si rezervuje název {0} při generování nižší úrovně privátního identifikátoru.]]></Val>
+            <Val><![CDATA[Kompilátor si rezervuje název {0} při generování privátního identifikátoru pro nižší úroveň.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3647,6 +3647,15 @@
           <Val><![CDATA[DIRECTORY]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[ADRESÁŘ]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Declaration_augments_declaration_in_another_file_This_cannot_be_serialized_6232" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declaration augments declaration in another file. This cannot be serialized.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Deklarace rozšiřuje deklaraci v jiném souboru. Toto není možné serializovat.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5650,7 +5659,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Import default '{0}' from module "{1}"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Importovat výchozí {0} z modulu {1}]]></Val>
+            <Val><![CDATA[Importovat výchozí hodnotu {0} z modulu {1}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5837,15 +5846,6 @@
           <Val><![CDATA[Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Inicializátor instance členské proměnné {0} nemůže odkazovat na identifikátor {1} deklarovaný v konstruktoru.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it_2373" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Initializer of parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Inicializátor parametru {0} nemůže odkazovat na identifikátor {1} deklarovaný po něm.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7197,6 +7197,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Only_numeric_enums_can_have_computed_members_but_this_expression_has_type_0_If_you_do_not_need_exhau_18033" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Počítané členy můžou obsahovat jen číselné výčty, ale tento výraz je typu {0}. Pokud nepotřebujete kontroly úplnosti, zvažte místo něho použít objekt literálu.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword_2340" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Only public and protected methods of the base class are accessible via the 'super' keyword.]]></Val>
@@ -7458,11 +7467,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Parameter_0_cannot_be_referenced_in_its_initializer_2372" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Parameter_0_cannot_reference_identifier_1_declared_after_it_2373" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' cannot be referenced in its initializer.]]></Val>
+          <Val><![CDATA[Parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} se nedá odkazovat v jeho vlastním inicializátoru.]]></Val>
+            <Val><![CDATA[Parametr {0} nemůže odkazovat na identifikátor {1} deklarovaný za ním.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_0_cannot_reference_itself_2372" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter '{0}' cannot reference itself.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Parametr {0} nemůže odkazovat sám na sebe.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10197,6 +10215,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_operand_of_a_delete_operator_must_be_optional_2790" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The operand of a 'delete' operator must be optional.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Operand operátoru delete musí být nepovinný.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_operand_of_an_increment_or_decrement_operator_may_not_be_an_optional_property_access_2777" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The operand of an increment or decrement operator may not be an optional property access.]]></Val>
@@ -10321,7 +10348,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The shadowing declaration of '{0}' is defined here]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Překrývající se deklarace {0} je definovaná tady.]]></Val>
+            <Val><![CDATA[Překrývající deklarace {0} je definovaná tady.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10541,6 +10568,15 @@
           <Val><![CDATA[This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Tento import se nikdy nepoužívá jako hodnota a musí používat import type, protože importsNotUsedAsValues je nastavené na error.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_fil_6233" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This is the declaration being augmented. Consider moving the augmenting declaration into the same file.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Toto je deklarace, která se rozšiřuje. Zvažte možnost přesunout rozšiřující deklaraci do stejného souboru.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11116,7 +11152,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Typ pochází z tohoto importu. Import stylu oboru názvů není možné zavolat ani vytvořit a při běhu způsobí chybu. Zvažte možnost použít tady místo toho výchozí import nebo požadavek na import.]]></Val>
+            <Val><![CDATA[Typ pochází z tohoto importu. Import stylu oboru názvů není možné zavolat ani vytvořit a při běhu způsobí chybu. Zvažte možnost použít tady místo toho výchozí import nebo importovat require.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11677,7 +11713,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Using compiler options of project reference redirect '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Používají se možnosti kompilátoru přesměrování odkazu projektu {0}.]]></Val>
+            <Val><![CDATA[Using compiler options of project reference redirect '{0}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

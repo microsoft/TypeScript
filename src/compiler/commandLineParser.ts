@@ -1721,7 +1721,7 @@ namespace ts {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, Diagnostics.String_literal_with_double_quotes_expected));
                 }
 
-                const textOfKey = getTextOfPropertyName(element.name);
+                const textOfKey = isComputedNonLiteralName(element.name) ? undefined : getTextOfPropertyName(element.name);
                 const keyText = textOfKey && unescapeLeadingUnderscores(textOfKey);
                 const option = keyText && knownOptions ? knownOptions.get(keyText) : undefined;
                 if (keyText && extraKeyDiagnostics && !option) {

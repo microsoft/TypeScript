@@ -31,3 +31,10 @@ var validCommentedPlainMulti2: string = 'nope';
 var invalidPlain: number = 'nope';
 
 var validPlain: string = 'nope';
+
+// @ts-expect-error
+(({ a: true } as const).a === false); // <-- compiles (as expected via comment)
+(({ a: true } as const).a === false); // Should error
+
+(({ a: true } as const).a === false); // error
+(({ a: true } as const).a === false); // error
