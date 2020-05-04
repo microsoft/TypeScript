@@ -1,9 +1,12 @@
 tests/cases/conformance/directives/ts-expect-error.ts(4,1): error TS2578: Unused '@ts-expect-error' directive.
 tests/cases/conformance/directives/ts-expect-error.ts(10,1): error TS2578: Unused '@ts-expect-error' directive.
 tests/cases/conformance/directives/ts-expect-error.ts(13,5): error TS2322: Type '"nope"' is not assignable to type 'number'.
+tests/cases/conformance/directives/ts-expect-error.ts(19,2): error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
+tests/cases/conformance/directives/ts-expect-error.ts(21,2): error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
+tests/cases/conformance/directives/ts-expect-error.ts(22,2): error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
 
 
-==== tests/cases/conformance/directives/ts-expect-error.ts (3 errors) ====
+==== tests/cases/conformance/directives/ts-expect-error.ts (6 errors) ====
     // @ts-expect-error additional commenting
     var invalidCommentedFancy: number = 'nope';
     
@@ -26,3 +29,15 @@ tests/cases/conformance/directives/ts-expect-error.ts(13,5): error TS2322: Type 
     
     var validPlain: string = 'nope';
     
+    // @ts-expect-error
+    (({ a: true } as const).a === false); // <-- compiles (as expected via comment)
+    (({ a: true } as const).a === false); // Should error
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
+    
+    (({ a: true } as const).a === false); // error
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
+    (({ a: true } as const).a === false); // error
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
