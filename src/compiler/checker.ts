@@ -9701,7 +9701,7 @@ namespace ts {
             const indexTypes: Type[] = [];
             let isAnyReadonly = false;
             for (const type of types) {
-                const indexInfo = getIndexInfoOfType(type, kind);
+                const indexInfo = getIndexInfoOfType(getApparentType(type), kind);
                 if (!indexInfo) {
                     return undefined;
                 }
