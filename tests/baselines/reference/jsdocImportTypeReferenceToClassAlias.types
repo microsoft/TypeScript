@@ -19,11 +19,11 @@ module.exports.C = C
 /** @param {X} c */
 function demo(c) {
 >demo : (c: X) => void
->c : C
+>c : typeof C
 
     c.s
->c.s : () => void
->c : C
->s : () => void
+>c.s : any
+>c : typeof C
+>s : any
 }
 

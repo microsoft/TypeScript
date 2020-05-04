@@ -1,0 +1,15 @@
+=== tests/cases/compiler/lib/index.js ===
+// 36830
+//
+
+/** @type {import('../folder/index').zzz} */
+export function xxx() {
+>xxx : Symbol(xxx, Decl(index.js, 0, 0))
+
+  return null;
+}
+
+=== tests/cases/compiler/folder/index.d.ts ===
+export function zzz(): string;
+>zzz : Symbol(zzz, Decl(index.d.ts, 0, 0))
+

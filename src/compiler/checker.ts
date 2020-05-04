@@ -11616,9 +11616,16 @@ namespace ts {
                         }
                         isRequireAlias = isCallExpression(expr) && isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !!valueType.symbol;
                     }
-                    const isImportTypeWithQualifier = node.kind === SyntaxKind.ImportType && (node as ImportTypeNode).qualifier;
+
+                    // We need to do an extra hop to find the correct type when type being referred is a class, because
+                    // a class and its type are interwoven in the type, see jsdocImportTypeReferenceToClassAlias for
+                    // an example of it in action
+                    const isImportOfClassTypeWithQualifier = node.kind === SyntaxKind.ImportType
+                        && (node as ImportTypeNode).qualifier
+                        && valueType.symbol.flags & SymbolFlags.Class;
                     // valueType might not have a symbol, eg, {import('./b').STRING_LITERAL}
-                    if (valueType.symbol && (isRequireAlias || isImportTypeWithQualifier)) {
+                    if (valueType.symbol && (isRequireAlias || isImportOfClassTypeWithQualifier)) {
+                        // follow fake alias (commonjs or class value->type)
                         typeType = getTypeReferenceType(node, valueType.symbol);
                     }
                 }
@@ -13305,9 +13312,7 @@ namespace ts {
                     links.resolvedSymbol = unknownSymbol;
                     return links.resolvedType = errorType;
                 }
-                const targetMeaning = node.isTypeOf || isJSDocTypeExpression(node.parent) ? SymbolFlags.Value
-                                                       : node.flags & NodeFlags.JSDoc ? SymbolFlags.Value | SymbolFlags.Type
-                                                                                   : SymbolFlags.Type;
+                const targetMeaning = node.isTypeOf ? SymbolFlags.Value : node.flags & NodeFlags.JSDoc ? SymbolFlags.Value | SymbolFlags.Type : SymbolFlags.Type;
                 // TODO: Future work: support unions/generics/whatever via a deferred import-type
                 const innerModuleSymbol = resolveExternalModuleName(node, node.argument.literal);
                 if (!innerModuleSymbol) {
