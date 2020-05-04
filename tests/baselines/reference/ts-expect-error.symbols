@@ -21,3 +21,24 @@ var invalidPlain: number = 'nope';
 var validPlain: string = 'nope';
 >validPlain : Symbol(validPlain, Decl(ts-expect-error.ts, 14, 3))
 
+// @ts-expect-error
+(({ a: true } as const).a === false); // <-- compiles (as expected via comment)
+>({ a: true } as const).a : Symbol(a, Decl(ts-expect-error.ts, 17, 3))
+>a : Symbol(a, Decl(ts-expect-error.ts, 17, 3))
+>a : Symbol(a, Decl(ts-expect-error.ts, 17, 3))
+
+(({ a: true } as const).a === false); // Should error
+>({ a: true } as const).a : Symbol(a, Decl(ts-expect-error.ts, 18, 3))
+>a : Symbol(a, Decl(ts-expect-error.ts, 18, 3))
+>a : Symbol(a, Decl(ts-expect-error.ts, 18, 3))
+
+(({ a: true } as const).a === false); // error
+>({ a: true } as const).a : Symbol(a, Decl(ts-expect-error.ts, 20, 3))
+>a : Symbol(a, Decl(ts-expect-error.ts, 20, 3))
+>a : Symbol(a, Decl(ts-expect-error.ts, 20, 3))
+
+(({ a: true } as const).a === false); // error
+>({ a: true } as const).a : Symbol(a, Decl(ts-expect-error.ts, 21, 3))
+>a : Symbol(a, Decl(ts-expect-error.ts, 21, 3))
+>a : Symbol(a, Decl(ts-expect-error.ts, 21, 3))
+
