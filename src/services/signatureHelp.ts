@@ -580,7 +580,7 @@ namespace ts.SignatureHelp {
         const printer = createPrinter({ removeComments: true });
         const typeParameterParts = mapToDisplayParts(writer => {
             if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
-                const args = createNodeArray(candidateSignature.typeParameters.map(p => checker.typeParameterToDeclaration(p, enclosingDeclaration)!));
+                const args = createNodeArray(candidateSignature.typeParameters.map(p => checker.typeParameterToDeclaration(p, enclosingDeclaration, signatureHelpNodeBuilderFlags)!));
                 printer.writeList(ListFormat.TypeParameters, args, sourceFile, writer);
             }
         });
@@ -599,7 +599,7 @@ namespace ts.SignatureHelp {
 
     function createSignatureHelpParameterForTypeParameter(typeParameter: TypeParameter, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile, printer: Printer): SignatureHelpParameter {
         const displayParts = mapToDisplayParts(writer => {
-            const param = checker.typeParameterToDeclaration(typeParameter, enclosingDeclaration)!;
+            const param = checker.typeParameterToDeclaration(typeParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!;
             printer.writeNode(EmitHint.Unspecified, param, sourceFile, writer);
         });
         return { name: typeParameter.symbol.name, documentation: typeParameter.symbol.getDocumentationComment(checker), displayParts, isOptional: false };
