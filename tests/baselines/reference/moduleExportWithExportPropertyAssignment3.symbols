@@ -13,14 +13,14 @@ mod1.justExport.toFixed()
 >toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 mod1.bothBefore.toFixed() // error, 'toFixed' not on 'string | number'
->mod1.bothBefore : Symbol(bothBefore)
+>mod1.bothBefore : Symbol(bothBefore, Decl(mod1.js, 3, 18), Decl(mod1.js, 0, 0))
 >mod1 : Symbol(mod1, Decl(a.js, 1, 3))
->bothBefore : Symbol(bothBefore)
+>bothBefore : Symbol(bothBefore, Decl(mod1.js, 3, 18), Decl(mod1.js, 0, 0))
 
 mod1.bothAfter.toFixed() // error, 'toFixed' not on 'string | number'
->mod1.bothAfter : Symbol(bothAfter)
+>mod1.bothAfter : Symbol(bothAfter, Decl(mod1.js, 4, 18), Decl(mod1.js, 6, 1))
 >mod1 : Symbol(mod1, Decl(a.js, 1, 3))
->bothAfter : Symbol(bothAfter)
+>bothAfter : Symbol(bothAfter, Decl(mod1.js, 4, 18), Decl(mod1.js, 6, 1))
 
 mod1.justProperty.length
 >mod1.justProperty.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
@@ -41,7 +41,7 @@ declare function require(name: string): any;
 === tests/cases/conformance/salsa/mod1.js ===
 /// <reference path='./requires.d.ts' />
 module.exports.bothBefore = 'string'
->module.exports.bothBefore : Symbol(bothBefore)
+>module.exports.bothBefore : Symbol(bothBefore, Decl(mod1.js, 3, 18), Decl(mod1.js, 0, 0))
 >module.exports : Symbol(bothBefore, Decl(mod1.js, 0, 0))
 >module : Symbol(module, Decl(mod1.js, 0, 0))
 >exports : Symbol("tests/cases/conformance/salsa/mod1", Decl(mod1.js, 0, 0))
@@ -62,7 +62,7 @@ module.exports = {
 >bothAfter : Symbol(bothAfter, Decl(mod1.js, 4, 18))
 }
 module.exports.bothAfter = 'string'
->module.exports.bothAfter : Symbol(bothAfter)
+>module.exports.bothAfter : Symbol(bothAfter, Decl(mod1.js, 4, 18), Decl(mod1.js, 6, 1))
 >module.exports : Symbol(bothAfter, Decl(mod1.js, 6, 1))
 >module : Symbol(module, Decl(mod1.js, 0, 0))
 >exports : Symbol("tests/cases/conformance/salsa/mod1", Decl(mod1.js, 0, 0))

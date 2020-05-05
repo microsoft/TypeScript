@@ -226,18 +226,8 @@ namespace ts.codefix {
         const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
         const checker = context.program.getTypeChecker();
         const tracker = getNoopSymbolTrackerWithResolver(context);
-        const types = map(args, arg => {
-            const type = checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg));
-            const typeNode = checker.typeToTypeNode(type, contextNode, /*flags*/ undefined, tracker);
-            if (typeNode?.kind === SyntaxKind.ImportType) {
-                const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeNode, type, scriptTarget);
-                if (importableReference) {
-                    importSymbols(importAdder, importableReference.symbols);
-                    return importableReference.typeReference;
-                }
-            }
-            return typeNode;
-        });
+        const types = map(args, arg =>
+            typeToAutoImportableTypeNode(checker, importAdder, checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg)), contextNode, scriptTarget, /*flags*/ undefined, tracker));
         const names = map(args, arg =>
             isIdentifier(arg) ? arg.text : isPropertyAccessExpression(arg) && isIdentifier(arg.name) ? arg.name.text : undefined);
         const contextualType = checker.getContextualType(call);
@@ -253,6 +243,18 @@ namespace ts.codefix {
             /*parameters*/ createDummyParameters(args.length, names, types, /*minArgumentCount*/ undefined, inJs),
             /*type*/ returnType,
             body ? createStubbedMethodBody(context.preferences) : undefined);
+    }
+
+    export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
+        const typeNode = checker.typeToTypeNode(type, contextNode, flags, tracker);
+        if (typeNode && isImportTypeNode(typeNode)) {
+            const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeNode, type, scriptTarget);
+            if (importableReference) {
+                importSymbols(importAdder, importableReference.symbols);
+                return importableReference.typeReference;
+            }
+        }
+        return typeNode;
     }
 
     function createDummyParameters(argCount: number, names: (string | undefined)[] | undefined, types: (TypeNode | undefined)[] | undefined, minArgumentCount: number | undefined, inJs: boolean): ParameterDeclaration[] {
@@ -456,7 +458,7 @@ namespace ts.codefix {
         return createQualifiedName(replaceFirstIdentifierOfEntityName(name.left, newIdentifier), name.right);
     }
 
-    function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol[]) {
+    export function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol[]) {
         symbols.forEach(s => importAdder.addImportFromExportedSymbol(s, /*usageIsTypeOnly*/ true));
     }
 }

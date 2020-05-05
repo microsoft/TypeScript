@@ -15,6 +15,12 @@ var invalidPlain: number = 'nope';
 
 var validPlain: string = 'nope';
 
+// @ts-expect-error
+(({ a: true } as const).a === false); // <-- compiles (as expected via comment)
+(({ a: true } as const).a === false); // Should error
+
+(({ a: true } as const).a === false); // error
+(({ a: true } as const).a === false); // error
 
 //// [ts-expect-error.js]
 // @ts-expect-error additional commenting
@@ -27,3 +33,8 @@ var invalidCommentedPlain = 'nope';
 var validCommentedPlain = 'nope';
 var invalidPlain = 'nope';
 var validPlain = 'nope';
+// @ts-expect-error
+({ a: true }.a === false); // <-- compiles (as expected via comment)
+({ a: true }.a === false); // Should error
+({ a: true }.a === false); // error
+({ a: true }.a === false); // error

@@ -1,0 +1,47 @@
+=== tests/cases/compiler/recursiveReverseMappedType.ts ===
+// Repro from #38198
+
+type Recur<T> = (
+>Recur : Symbol(Recur, Decl(recursiveReverseMappedType.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveReverseMappedType.ts, 2, 11))
+
+    T extends (unknown[]) ? {} : { [K in keyof T]?: Recur<T[K]> }
+>T : Symbol(T, Decl(recursiveReverseMappedType.ts, 2, 11))
+>K : Symbol(K, Decl(recursiveReverseMappedType.ts, 3, 36))
+>T : Symbol(T, Decl(recursiveReverseMappedType.ts, 2, 11))
+>Recur : Symbol(Recur, Decl(recursiveReverseMappedType.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveReverseMappedType.ts, 2, 11))
+>K : Symbol(K, Decl(recursiveReverseMappedType.ts, 3, 36))
+
+) | ['marker', ...Recur<T>[]];
+>Recur : Symbol(Recur, Decl(recursiveReverseMappedType.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveReverseMappedType.ts, 2, 11))
+
+function join<T>(l: Recur<T>[]): Recur<T> {
+>join : Symbol(join, Decl(recursiveReverseMappedType.ts, 4, 30))
+>T : Symbol(T, Decl(recursiveReverseMappedType.ts, 6, 14))
+>l : Symbol(l, Decl(recursiveReverseMappedType.ts, 6, 17))
+>Recur : Symbol(Recur, Decl(recursiveReverseMappedType.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveReverseMappedType.ts, 6, 14))
+>Recur : Symbol(Recur, Decl(recursiveReverseMappedType.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveReverseMappedType.ts, 6, 14))
+
+    return ['marker', ...l];
+>l : Symbol(l, Decl(recursiveReverseMappedType.ts, 6, 17))
+}
+
+function a<T>(l: Recur<T>[]): void {
+>a : Symbol(a, Decl(recursiveReverseMappedType.ts, 8, 1))
+>T : Symbol(T, Decl(recursiveReverseMappedType.ts, 10, 11))
+>l : Symbol(l, Decl(recursiveReverseMappedType.ts, 10, 14))
+>Recur : Symbol(Recur, Decl(recursiveReverseMappedType.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveReverseMappedType.ts, 10, 11))
+
+    const x: Recur<T> | undefined = join(l);
+>x : Symbol(x, Decl(recursiveReverseMappedType.ts, 11, 9))
+>Recur : Symbol(Recur, Decl(recursiveReverseMappedType.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveReverseMappedType.ts, 10, 11))
+>join : Symbol(join, Decl(recursiveReverseMappedType.ts, 4, 30))
+>l : Symbol(l, Decl(recursiveReverseMappedType.ts, 10, 14))
+}
+

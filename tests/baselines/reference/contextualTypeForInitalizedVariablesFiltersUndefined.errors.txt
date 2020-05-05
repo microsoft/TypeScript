@@ -1,0 +1,18 @@
+tests/cases/compiler/contextualTypeForInitalizedVariablesFiltersUndefined.ts(7,9): error TS2339: Property 's' does not exist on type '{ s: string; } | undefined'.
+tests/cases/compiler/contextualTypeForInitalizedVariablesFiltersUndefined.ts(8,16): error TS2339: Property 's' does not exist on type '{ s: string; } | undefined'.
+
+
+==== tests/cases/compiler/contextualTypeForInitalizedVariablesFiltersUndefined.ts (2 errors) ====
+    const fInferred = ({ a = 0 } = {}) => a;
+    // const fInferred: ({ a }?: { a?: number; }) => number
+    
+    const fAnnotated: typeof fInferred = ({ a = 0 } = {}) => a;
+    
+    declare var t: { s: string } | undefined;
+    const { s } = t;
+            ~
+!!! error TS2339: Property 's' does not exist on type '{ s: string; } | undefined'.
+    function fst({ s } = t) { }
+                   ~
+!!! error TS2339: Property 's' does not exist on type '{ s: string; } | undefined'.
+    
