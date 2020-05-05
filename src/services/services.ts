@@ -2162,7 +2162,7 @@ namespace ts {
         function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions, triggerReason: RefactorTriggerReason): ApplicableRefactorInfo[] {
             synchronizeHostData();
             const file = getValidSourceFile(fileName);
-            return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences, undefined, triggerReason));
+            return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences, emptyOptions, triggerReason));
         }
 
         function getEditsForRefactor(

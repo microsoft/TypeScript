@@ -553,7 +553,7 @@ namespace ts.server.protocol {
     export type RefactorTriggerReason = RefactorInvokedReason;
 
     export interface RefactorInvokedReason {
-        kind: 'invoked';
+        kind: "invoked";
     }
 
     /**

@@ -744,7 +744,7 @@ namespace ts {
     export type RefactorTriggerReason = RefactorInvokedReason;
 
     export interface RefactorInvokedReason {
-        kind: 'invoked';
+        kind: "invoked";
     }
 
     export interface TextInsertion {
