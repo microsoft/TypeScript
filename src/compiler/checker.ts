@@ -1889,7 +1889,9 @@ namespace ts {
                             lastLocation === (location as BindingElement).name && isBindingPattern(lastLocation))) {
                             const root = getRootDeclaration(location);
                             if (root.kind === SyntaxKind.Parameter) {
-                                associatedDeclarationForContainingInitializerOrBindingName = location as BindingElement;
+                                if (!associatedDeclarationForContainingInitializerOrBindingName) {
+                                    associatedDeclarationForContainingInitializerOrBindingName = location as BindingElement;
+                                }
                             }
                         }
                         break;
