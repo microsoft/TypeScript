@@ -52,7 +52,7 @@ namespace ts.codefix {
 
         const returnType = checker.getTypeFromTypeNode(returnTypeNode);
         const promisedType = checker.getAwaitedType(returnType) || checker.getVoidType();
-        const promisedTypeNode = checker.typeToTypeNode(promisedType, /*enclosingDeclaration*/ func, /*flags*/ undefined);
+        const promisedTypeNode = checker.typeToTypeNode(promisedType, /*enclosingDeclaration*/ returnTypeNode, /*flags*/ undefined);
         if (promisedTypeNode) {
             return { returnTypeNode, returnType, promisedTypeNode, promisedType };
         }
