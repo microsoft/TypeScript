@@ -201,6 +201,8 @@ namespace ts.OutliningElementsCollector {
             case SyntaxKind.CaseBlock:
             case SyntaxKind.TypeLiteral:
                 return spanForNode(n);
+            case SyntaxKind.TupleType:
+                return spanForNode(n, /*autoCollapse*/ false, /*useFullStart*/ !isTupleTypeNode(n.parent), SyntaxKind.OpenBracketToken);
             case SyntaxKind.CaseClause:
             case SyntaxKind.DefaultClause:
                 return spanForNodeArray((n as CaseClause | DefaultClause).statements);
