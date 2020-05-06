@@ -18,17 +18,17 @@ function Cp(t) {
 
     this.y = t
 >this.y = t : T
->this.y : T
+>this.y : any
 >this : this
->y : T
+>y : any
 >t : T
 
     /** @return {this} */
     this.m3 = () => this
 >this.m3 = () => this : () => this
->this.m3 : () => this
+>this.m3 : any
 >this : this
->m3 : () => this
+>m3 : any
 >() => this : () => this
 >this : this
 }
@@ -67,9 +67,9 @@ function Cpp(t) {
 
     this.y = t
 >this.y = t : T
->this.y : T
+>this.y : any
 >this : this
->y : T
+>y : any
 >t : T
 }
 /** @return {this} */

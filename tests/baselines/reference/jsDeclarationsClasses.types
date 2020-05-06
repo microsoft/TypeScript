@@ -209,16 +209,16 @@ export class K {
     constructor() {
         this.p1 = 12;
 >this.p1 = 12 : 12
->this.p1 : number
+>this.p1 : any
 >this : this
->p1 : number
+>p1 : any
 >12 : 12
 
         this.p2 = "ok";
 >this.p2 = "ok" : "ok"
->this.p2 : string
+>this.p2 : any
 >this : this
->p2 : string
+>p2 : any
 >"ok" : "ok"
     }
 
@@ -243,9 +243,9 @@ export class M extends null {
     constructor() {
         this.prop = 12;
 >this.prop = 12 : 12
->this.prop : number
+>this.prop : any
 >this : this
->prop : number
+>prop : any
 >12 : 12
     }
 }
@@ -270,9 +270,9 @@ export class N extends L {
 
         this.another = param;
 >this.another = param : T
->this.another : T
+>this.another : any
 >this : this
->another : T
+>another : any
 >param : T
     }
 }
@@ -298,9 +298,9 @@ export class O extends N {
 
         this.another2 = param;
 >this.another2 = param : U
->this.another2 : U
+>this.another2 : any
 >this : this
->another2 : U
+>another2 : any
 >param : U
     }
 }

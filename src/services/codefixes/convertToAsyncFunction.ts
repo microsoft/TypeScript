@@ -282,7 +282,7 @@ namespace ts.codefix {
             varDeclIdentifier = getSynthesizedDeepClone(possibleNameForVarDecl.identifier);
             const typeArray: Type[] = possibleNameForVarDecl.types;
             const unionType = transformer.checker.getUnionType(typeArray, UnionReduction.Subtype);
-            const unionTypeNode = transformer.isInJSFile ? undefined : transformer.checker.typeToTypeNode(unionType);
+            const unionTypeNode = transformer.isInJSFile ? undefined : transformer.checker.typeToTypeNode(unionType, /*enclosingDeclaration*/ undefined, /*flags*/ undefined);
             const varDecl = [createVariableDeclaration(varDeclIdentifier, unionTypeNode)];
             varDeclList = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList(varDecl, NodeFlags.Let));
         }

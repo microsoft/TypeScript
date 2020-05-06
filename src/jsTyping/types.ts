@@ -51,6 +51,7 @@ declare namespace ts.server {
     export interface InitializationFailedResponse extends TypingInstallerResponse {
         readonly kind: EventInitializationFailed;
         readonly message: string;
+        readonly stack?: string;
     }
 
     export interface ProjectResponse extends TypingInstallerResponse {

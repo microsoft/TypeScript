@@ -44,6 +44,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         const { expression, returnStatement, func } = info;
 
         let body: ConciseBody;
+
         if (actionName === addBracesActionName) {
             const returnStatement = createReturn(expression);
             body = createBlock([returnStatement], /* multiLine */ true);
@@ -54,13 +55,18 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             const actualExpression = expression || createVoidZero();
             body = needsParentheses(actualExpression) ? createParen(actualExpression) : actualExpression;
             suppressLeadingAndTrailingTrivia(body);
+            copyTrailingAsLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
             copyLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
+            copyTrailingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
         }
         else {
             Debug.fail("invalid action");
         }
 
-        const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func.body, body));
+        const edits = textChanges.ChangeTracker.with(context, t => {
+            t.replaceNode(file, func.body, body);
+        });
+
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 

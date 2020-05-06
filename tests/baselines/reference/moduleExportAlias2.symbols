@@ -37,7 +37,7 @@ exports = module.exports = C
 >C : Symbol(C, Decl(semver.js, 2, 22))
 
 exports.f = n => n + 1
->exports.f : Symbol(f)
+>exports.f : Symbol(f, Decl(semver.js, 1, 28))
 >exports : Symbol(f, Decl(semver.js, 1, 28))
 >f : Symbol(f, Decl(semver.js, 1, 28))
 >n : Symbol(n, Decl(semver.js, 2, 11))

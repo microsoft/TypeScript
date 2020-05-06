@@ -2,7 +2,7 @@
 /** @param {...*=} args
     @return {*=} */
 function f(...args) {
->f : (...args: ...*=) => any | undefined
+>f : (...args: (any | undefined)[]) => any | undefined
 >args : any[]
 
     return null

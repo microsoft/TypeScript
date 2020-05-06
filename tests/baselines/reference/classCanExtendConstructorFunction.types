@@ -9,9 +9,9 @@ function Wagon(numberOxen) {
 
     this.numberOxen = numberOxen
 >this.numberOxen = numberOxen : number
->this.numberOxen : number
+>this.numberOxen : any
 >this : this
->numberOxen : number
+>numberOxen : any
 >numberOxen : number
 }
 /** @param {Wagon[]=} wagons */
@@ -91,9 +91,9 @@ class Sql extends Wagon {
 
         this.foonly = 12
 >this.foonly = 12 : 12
->this.foonly : number
+>this.foonly : any
 >this : this
->foonly : number
+>foonly : any
 >12 : 12
     }
     /**
