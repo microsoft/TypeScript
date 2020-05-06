@@ -346,7 +346,7 @@ namespace ts.codefix {
             const typeNode = inference.type && getTypeNodeIfAccessible(inference.type, param, program, host);
             const name = getSynthesizedClone(param.name);
             setEmitFlags(name, EmitFlags.NoComments | EmitFlags.NoNestedComments);
-            return typeNode && createJSDocParamTag(name, !!inference.isOptional, createJSDocTypeExpression(typeNode), "");
+            return typeNode && createJSDocParameterTag(createJSDocTypeExpression(typeNode), name, /* isNameFirst */ false, !!inference.isOptional, "");
         });
         addJSDocTags(changes, sourceFile, signature, paramTags);
     }
@@ -382,7 +382,7 @@ namespace ts.codefix {
                 const oldParam = oldTag as JSDocParameterTag;
                 const newParam = newTag as JSDocParameterTag;
                 return isIdentifier(oldParam.name) && isIdentifier(newParam.name) && oldParam.name.escapedText === newParam.name.escapedText
-                    ? createJSDocParamTag(newParam.name, newParam.isBracketed, newParam.typeExpression, oldParam.comment)
+                    ? createJSDocParameterTag(newParam.typeExpression, newParam.name, newParam.isNameFirst, newParam.isBracketed, oldParam.comment)
                     : undefined;
             }
             case SyntaxKind.JSDocReturnTag:

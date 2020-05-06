@@ -2464,53 +2464,46 @@ namespace ts {
 
     // JSDoc
 
-    /* @internal */
     export function createJSDocTypeExpression(type: TypeNode): JSDocTypeExpression {
         const node = createSynthesizedNode(SyntaxKind.JSDocTypeExpression) as JSDocTypeExpression;
         node.type = type;
         return node;
     }
 
-    /* @internal */
     export function createJSDocTypeTag(typeExpression: JSDocTypeExpression, comment?: string): JSDocTypeTag {
-        const tag = createJSDocTag<JSDocTypeTag>(SyntaxKind.JSDocTypeTag, "type");
+        const tag = createJSDocTag<JSDocTypeTag>(SyntaxKind.JSDocTypeTag, "type", comment);
         tag.typeExpression = typeExpression;
-        tag.comment = comment;
         return tag;
     }
 
-    /* @internal */
     export function createJSDocReturnTag(typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag {
-        const tag = createJSDocTag<JSDocReturnTag>(SyntaxKind.JSDocReturnTag, "returns");
+        const tag = createJSDocTag<JSDocReturnTag>(SyntaxKind.JSDocReturnTag, "returns", comment);
         tag.typeExpression = typeExpression;
-        tag.comment = comment;
         return tag;
     }
 
-    /** @internal */
     export function createJSDocThisTag(typeExpression?: JSDocTypeExpression): JSDocThisTag {
         const tag = createJSDocTag<JSDocThisTag>(SyntaxKind.JSDocThisTag, "this");
         tag.typeExpression = typeExpression;
         return tag;
     }
 
-    /* @internal */
+    /**
+     * @deprecated Use `createJSDocParameterTag` to create jsDoc param tag.
+     */
     export function createJSDocParamTag(name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, comment?: string): JSDocParameterTag {
-        const tag = createJSDocTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, "param");
+        const tag = createJSDocTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, "param", comment);
         tag.typeExpression = typeExpression;
         tag.name = name;
         tag.isBracketed = isBracketed;
-        tag.comment = comment;
         return tag;
     }
 
-    /* @internal */
-    export function createJSDocClassTag(): JSDocClassTag {
-        return createJSDocTag<JSDocClassTag>(SyntaxKind.JSDocClassTag, "class");
+    export function createJSDocClassTag(comment?: string): JSDocClassTag {
+        return createJSDocTag<JSDocClassTag>(SyntaxKind.JSDocClassTag, "class", comment);
     }
 
 
-    /* @internal */
     export function createJSDocComment(comment?: string | undefined, tags?: NodeArray<JSDocTag> | undefined) {
         const node = createSynthesizedNode(SyntaxKind.JSDocComment) as JSDoc;
         node.comment = comment;
@@ -2518,10 +2511,108 @@ namespace ts {
         return node;
     }
 
-    /* @internal */
-    function createJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: string): T {
+    export function createJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: string, comment?: string): T {
         const node = createSynthesizedNode(kind) as T;
         node.tagName = createIdentifier(tagName);
+        node.comment = comment;
+        return node;
+    }
+
+    export function createJSDocAugmentsTag(classExpression: JSDocAugmentsTag["class"], comment?: string) {
+        const tag = createJSDocTag<JSDocAugmentsTag>(SyntaxKind.JSDocAugmentsTag, "augments", comment);
+        tag.class = classExpression;
+        return tag;
+    }
+
+    export function createJSDocEnumTag(typeExpression?: JSDocTypeExpression, comment?: string) {
+        const tag = createJSDocTag<JSDocEnumTag>(SyntaxKind.JSDocEnumTag, "enum", comment);
+        tag.typeExpression = typeExpression;
+        return tag;
+    }
+
+    export function createJSDocTemplateTag(constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: string) {
+        const tag = createJSDocTag<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag, "template", comment);
+        tag.constraint = constraint;
+        tag.typeParameters = asNodeArray(typeParameters);
+        return tag;
+    }
+
+    export function createJSDocTypedefTag(fullName?: JSDocNamespaceDeclaration | Identifier, name?: Identifier, comment?: string, typeExpression?: JSDocTypeExpression | JSDocTypeLiteral) {
+        const tag = createJSDocTag<JSDocTypedefTag>(SyntaxKind.JSDocTypedefTag, "typedef", comment);
+        tag.fullName = fullName;
+        tag.name = name;
+        tag.typeExpression = typeExpression;
+        return tag;
+    }
+
+    export function createJSDocCallbackTag(fullName: JSDocNamespaceDeclaration | Identifier | undefined, name: Identifier | undefined, comment: string | undefined, typeExpression: JSDocSignature) {
+        const tag = createJSDocTag<JSDocCallbackTag>(SyntaxKind.JSDocCallbackTag, "callback", comment);
+        tag.fullName = fullName;
+        tag.name = name;
+        tag.typeExpression = typeExpression;
+        return tag;
+    }
+
+    export function createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag) {
+        const tag = createSynthesizedNode(SyntaxKind.JSDocSignature) as JSDocSignature;
+        tag.typeParameters = typeParameters;
+        tag.parameters = parameters;
+        tag.type = type;
+        return tag;
+    }
+
+    function createJSDocPropertyLikeTag<T extends JSDocPropertyLikeTag>(kind: T["kind"], tagName: "arg" | "argument" | "param", typeExpression: JSDocTypeExpression | undefined, name: EntityName, isNameFirst: boolean, isBracketed: boolean, comment?: string) {
+        const tag = createJSDocTag<T>(kind, tagName, comment);
+        tag.typeExpression = typeExpression;
+        tag.name = name;
+        tag.isNameFirst = isNameFirst;
+        tag.isBracketed = isBracketed;
+        return tag;
+    }
+
+    export function createJSDocPropertyTag(typeExpression: JSDocTypeExpression | undefined, name: EntityName, isNameFirst: boolean, isBracketed: boolean, comment?: string) {
+        return createJSDocPropertyLikeTag<JSDocPropertyTag>(SyntaxKind.JSDocPropertyTag, "param", typeExpression, name, isNameFirst, isBracketed, comment);
+    }
+
+    export function createJSDocParameterTag(typeExpression: JSDocTypeExpression | undefined, name: EntityName, isNameFirst: boolean, isBracketed: boolean, comment?: string) {
+        return createJSDocPropertyLikeTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, "param", typeExpression, name, isNameFirst, isBracketed, comment);
+    }
+
+    export function createJSDocTypeLiteral(jsDocPropertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean) {
+        const tag = createSynthesizedNode(SyntaxKind.JSDocTypeLiteral) as JSDocTypeLiteral;
+        tag.jsDocPropertyTags = jsDocPropertyTags;
+        tag.isArrayType = isArrayType;
+        return tag;
+    }
+
+    export function createJSDocImplementsTag(classExpression: JSDocImplementsTag["class"], comment?: string) {
+        const tag = createJSDocTag<JSDocImplementsTag>(SyntaxKind.JSDocImplementsTag, "implements", comment);
+        tag.class = classExpression;
+        return tag;
+    }
+
+    export function createJSDocAuthorTag(comment?: string) {
+        return createJSDocTag(SyntaxKind.JSDocAuthorTag, "author", comment);
+    }
+
+    export function createJSDocPublicTag() {
+        return createJSDocTag(SyntaxKind.JSDocPublicTag, "public");
+    }
+
+    export function createJSDocPrivateTag() {
+        return createJSDocTag(SyntaxKind.JSDocPrivateTag, "private");
+    }
+
+    export function createJSDocProtectedTag() {
+        return createJSDocTag(SyntaxKind.JSDocProtectedTag, "protected");
+    }
+
+    export function createJSDocReadonlyTag() {
+        return createJSDocTag(SyntaxKind.JSDocReadonlyTag, "readonly");
+    }
+
+    export function appendJSDocToContainer(node: JSDocContainer, jsdoc: JSDoc) {
+        node.jsDoc = append(node.jsDoc, jsdoc);
         return node;
     }
 
