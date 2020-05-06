@@ -28744,9 +28744,10 @@ namespace ts {
                     if (!compilerOptions.allowUnreachableCode && isSideEffectFree(left) && !isEvalNode(right)) {
                         const sf = getSourceFileOfNode(left);
                         const sourceText = sf.text;
+                        const start = skipTrivia(sourceText, left.pos);
                         const isInDiag2657 = sf.parseDiagnostics.some(diag => {
                             if (diag.code !== Diagnostics.JSX_expressions_must_have_one_parent_element.code) return false;
-                            return textSpanContainsPosition(diag, skipTrivia(sourceText, left.pos));
+                            return textSpanContainsPosition(diag, start);
                         });
                         if (!isInDiag2657) error(left, Diagnostics.Left_side_of_comma_operator_is_unused_and_has_no_side_effects);
                     }
