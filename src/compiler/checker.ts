@@ -16313,18 +16313,20 @@ namespace ts {
                                 if (isJsxAttributes(errorNode) || isJsxOpeningLikeElement(errorNode) || isJsxOpeningLikeElement(errorNode.parent)) {
                                     // JsxAttributes has an object-literal flag and undergo same type-assignablity check as normal object-literal.
                                     // However, using an object-literal error message will be very confusing to the users so we give different a message.
-                                    // TODO: Spelling suggestions for excess jsx attributes (needs new diagnostic messages)
                                     if (prop.valueDeclaration && isJsxAttribute(prop.valueDeclaration) && getSourceFileOfNode(errorNode) === getSourceFileOfNode(prop.valueDeclaration.name)) {
                                         // Note that extraneous children (as in `<NoChild>extra</NoChild>`) don't pass this check,
                                         // since `children` is a SyntaxKind.PropertySignature instead of a SyntaxKind.JsxAttribute.
                                         errorNode = prop.valueDeclaration.name;
                                     }
-                                    reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(prop), typeToString(errorTarget));
+                                    const propName = symbolToString(prop);
+                                    const suggestion = getSuggestionForNonexistentProperty(propName, errorTarget);
+                                    if (suggestion) reportError(Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, propName, typeToString(errorTarget), suggestion);
+                                    else reportError(Diagnostics.Property_0_does_not_exist_on_type_1, propName, typeToString(errorTarget));
                                 }
                                 else {
                                     // use the property's value declaration if the property is assigned inside the literal itself
                                     const objectLiteralDeclaration = source.symbol && firstOrUndefined(source.symbol.declarations);
-                                    let suggestion;
+                                    let suggestion: string | undefined;
                                     if (prop.valueDeclaration && findAncestor(prop.valueDeclaration, d => d === objectLiteralDeclaration) && getSourceFileOfNode(objectLiteralDeclaration) === getSourceFileOfNode(errorNode)) {
                                         const propDeclaration = prop.valueDeclaration as ObjectLiteralElementLike;
                                         Debug.assertNode(propDeclaration, isObjectLiteralElementLike);
