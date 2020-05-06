@@ -74,7 +74,7 @@ namespace ts.codefix {
         const current: VariableDeclarationList | Node = localSymbol.valueDeclaration.parent;
         if(isVariableDeclarationList(current) && current.declarations.length <= 1) {
             const start = localSymbol.valueDeclaration.parent.pos;
-            changes.insertExportModifierAtPos(sourceFile, start? start+1:0);
+            changes.insertExportModifierAtPos(sourceFile, start ? start + 1 : 0);
             return;
         }
 
