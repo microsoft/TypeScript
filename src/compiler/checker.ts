@@ -27780,7 +27780,7 @@ namespace ts {
                 error(expr, Diagnostics.The_operand_of_a_delete_operator_must_be_a_property_reference);
                 return booleanType;
             }
-            if (expr.kind === SyntaxKind.PropertyAccessExpression && isPrivateIdentifier((expr as PropertyAccessExpression).name)) {
+            if (expr.kind === SyntaxKind.PropertyAccessExpression && isPrivateIdentifier(expr.name)) {
                 error(expr, Diagnostics.The_operand_of_a_delete_operator_cannot_be_a_private_identifier);
             }
             const links = getNodeLinks(expr);
