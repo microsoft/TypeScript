@@ -20806,29 +20806,8 @@ namespace ts {
                 const facts = assumeTrue ?
                     typeofEQFacts.get(literal.text) || TypeFacts.TypeofEQHostObject :
                     typeofNEFacts.get(literal.text) || TypeFacts.TypeofNEHostObject;
-                return getTypeWithFacts(assumeTrue ? mapType(type, narrowTypeForTypeof) : type, facts);
-
-                function narrowTypeForTypeof(type: Type) {
-                    // We narrow a non-union type to an exact primitive type if the non-union type
-                    // is a supertype of that primitive type. For example, type 'any' can be narrowed
-                    // to one of the primitive types.
-                    const targetType = literal.text === "function" ? globalFunctionType : typeofTypesByName.get(literal.text);
-                    if (targetType) {
-                        if (isTypeSubtypeOf(type, targetType)) {
-                            return type;
-                        }
-                        if (isTypeSubtypeOf(targetType, type)) {
-                            return targetType;
-                        }
-                        if (type.flags & TypeFlags.Instantiable) {
-                            const constraint = getBaseConstraintOfType(type) || anyType;
-                            if (isTypeSubtypeOf(targetType, constraint)) {
-                                return getIntersectionType([type, targetType]);
-                            }
-                        }
-                    }
-                    return type;
-                }
+                const impliedType = getImpliedTypeFromTypeofGuard(type, literal.text);
+                return getTypeWithFacts(assumeTrue && impliedType ? mapType(type, narrowUnionMemberByTypeof(impliedType)) : type, facts);
             }
 
             function narrowTypeBySwitchOptionalChainContainment(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number, clauseCheck: (type: Type) => boolean) {
@@ -20879,19 +20858,28 @@ namespace ts {
                 return caseType.flags & TypeFlags.Never ? defaultType : getUnionType([caseType, defaultType]);
             }
 
-            function getImpliedTypeFromTypeofCase(type: Type, text: string) {
+            function getImpliedTypeFromTypeofGuard(type: Type, text: string) {
                 switch (text) {
                     case "function":
                         return type.flags & TypeFlags.Any ? type : globalFunctionType;
                     case "object":
                         return type.flags & TypeFlags.Unknown ? getUnionType([nonPrimitiveType, nullType]) : type;
                     default:
-                        return typeofTypesByName.get(text) || type;
+                        return typeofTypesByName.get(text);
                 }
             }
 
-            function narrowTypeForTypeofSwitch(candidate: Type) {
+            // When narrowing a union type by a `typeof` guard using type-facts alone, constituent types that are
+            // super-types of the implied guard will be retained in the final type: this is because type-facts only
+            // filter. Instead, we would like to replace those union constituents with the more precise type implied by
+            // the guard. For example: narrowing `{} | undefined` by `"boolean"` should produce the type `boolean`, not
+            // the filtered type `{}`. For this reason we narrow constituents of the union individually, in addition to
+            // filtering by type-facts.
+            function narrowUnionMemberByTypeof(candidate: Type) {
                 return (type: Type) => {
+                    if (isTypeSubtypeOf(type, candidate)) {
+                        return type;
+                    }
                     if (isTypeSubtypeOf(candidate, type)) {
                         return candidate;
                     }
@@ -20916,11 +20904,9 @@ namespace ts {
                 let clauseWitnesses: string[];
                 let switchFacts: TypeFacts;
                 if (defaultCaseLocation > -1) {
-                    // We no longer need the undefined denoting an
-                    // explicit default case. Remove the undefined and
-                    // fix-up clauseStart and clauseEnd.  This means
-                    // that we don't have to worry about undefined
-                    // in the witness array.
+                    // We no longer need the undefined denoting an explicit default case. Remove the undefined and
+                    // fix-up clauseStart and clauseEnd.  This means that we don't have to worry about undefined in the
+                    // witness array.
                     const witnesses = <string[]>switchWitnesses.filter(witness => witness !== undefined);
                     // The adjusted clause start and end after removing the `default` statement.
                     const fixedClauseStart = defaultCaseLocation < clauseStart ? clauseStart - 1 : clauseStart;
@@ -20963,11 +20949,8 @@ namespace ts {
                   boolean. We know that number cannot be selected
                   because it is caught in the first clause.
                 */
-                let impliedType = getTypeWithFacts(getUnionType(clauseWitnesses.map(text => getImpliedTypeFromTypeofCase(type, text))), switchFacts);
-                if (impliedType.flags & TypeFlags.Union) {
-                    impliedType = getAssignmentReducedType(impliedType as UnionType, getBaseConstraintOrType(type));
-                }
-                return getTypeWithFacts(mapType(type, narrowTypeForTypeofSwitch(impliedType)), switchFacts);
+                const impliedType = getTypeWithFacts(getUnionType(clauseWitnesses.map(text => getImpliedTypeFromTypeofGuard(type, text) || type)), switchFacts);
+                return getTypeWithFacts(mapType(type, narrowUnionMemberByTypeof(impliedType)), switchFacts);
             }
 
             function isMatchingConstructorReference(expr: Expression) {
