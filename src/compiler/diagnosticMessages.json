@@ -5197,15 +5197,15 @@
         "category": "Message",
         "code": 90035
     },
-    "Declare private method '{0}'": {
+    "Replace '{0}' with 'Promise<{1}>'": {
         "category": "Message",
         "code": 90036
     },
-    "Replace '{0}' with 'Promise<{1}>'": {
+    "Fix all incorrect return type of an async functions": {
         "category": "Message",
         "code": 90037
     },
-    "Fix all incorrect return type of an async functions": {
+    "Declare private method '{0}'": {
         "category": "Message",
         "code": 90038
     },
