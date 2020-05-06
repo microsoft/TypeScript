@@ -73,7 +73,7 @@ namespace ts {
 
             let thisArg: Expression | undefined;
             if (captureThisArg) {
-                if (shouldCaptureInTempVariable(expression)) {
+                if (!isSimpleCopiableExpression(expression)) {
                     thisArg = createTempVariable(hoistVariableDeclaration);
                     expression = createAssignment(thisArg, expression);
                     // if (inParameterInitializer) tempVariableInParameter = true;
@@ -113,7 +113,7 @@ namespace ts {
             const leftThisArg = isSyntheticReference(left) ? left.thisArg : undefined;
             let leftExpression = isSyntheticReference(left) ? left.expression : left;
             let capturedLeft: Expression = leftExpression;
-            if (shouldCaptureInTempVariable(leftExpression)) {
+            if (!isSimpleCopiableExpression(leftExpression)) {
                 capturedLeft = createTempVariable(hoistVariableDeclaration);
                 leftExpression = createAssignment(capturedLeft, leftExpression);
                 // if (inParameterInitializer) tempVariableInParameter = true;
@@ -126,7 +126,7 @@ namespace ts {
                     case SyntaxKind.PropertyAccessExpression:
                     case SyntaxKind.ElementAccessExpression:
                         if (i === chain.length - 1 && captureThisArg) {
-                            if (shouldCaptureInTempVariable(rightExpression)) {
+                            if (!isSimpleCopiableExpression(rightExpression)) {
                                 thisArg = createTempVariable(hoistVariableDeclaration);
                                 rightExpression = createAssignment(thisArg, rightExpression);
                                 // if (inParameterInitializer) tempVariableInParameter = true;
@@ -184,7 +184,7 @@ namespace ts {
         function transformNullishCoalescingExpression(node: BinaryExpression) {
             let left = visitNode(node.left, visitor, isExpression);
             let right = left;
-            if (shouldCaptureInTempVariable(left)) {
+            if (!isSimpleCopiableExpression(left)) {
                 right = createTempVariable(hoistVariableDeclaration);
                 left = createAssignment(right, left);
                 // if (inParameterInitializer) tempVariableInParameter = true;

@@ -280,14 +280,6 @@ namespace ts {
         }
     }
 
-    export function shouldCaptureInTempVariable(expression: Expression): boolean {
-        // don't capture identifiers and `this` in a temporary variable
-        // `super` cannot be captured as it's not a real variable
-        return !isIdentifier(expression) &&
-            expression.kind !== SyntaxKind.ThisKeyword &&
-            expression.kind !== SyntaxKind.SuperKeyword;
-    }
-
     /**
      * Adds super call and preceding prologue directives into the list of statements.
      *
