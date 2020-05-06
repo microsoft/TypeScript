@@ -56,7 +56,7 @@ namespace ts.codefix {
             Debug.assertNode(node, isIdentifier, "Expected an identifier for JSX attribute");
             const tag = findAncestor(node, isJsxOpeningLikeElement)!;
             const props = checker.getContextualTypeForArgumentAtIndex(tag, 0);
-            suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(node, props!);
+            suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(node, props!, true);
         }
         else {
             const meaning = getMeaningFromLocation(node);

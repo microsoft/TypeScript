@@ -16322,7 +16322,7 @@ namespace ts {
                                         errorNode = prop.valueDeclaration.name;
                                     }
                                     const propName = symbolToString(prop);
-                                    const suggestion = getSuggestionForNonexistentProperty(propName, errorTarget);
+                                    const suggestion = getSuggestionForNonexistentProperty(propName, errorTarget, true);
                                     if (suggestion) reportError(Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, propName, typeToString(errorTarget), suggestion);
                                     else reportError(Diagnostics.Property_0_does_not_exist_on_type_1, propName, typeToString(errorTarget));
                                 }
@@ -24878,12 +24878,12 @@ namespace ts {
             return prop !== undefined && prop.valueDeclaration && hasSyntacticModifier(prop.valueDeclaration, ModifierFlags.Static);
         }
 
-        function getSuggestedSymbolForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type): Symbol | undefined {
-            return getSpellingSuggestionForName(isString(name) ? name : idText(name), getPropertiesOfType(containingType), SymbolFlags.Value);
+        function getSuggestedSymbolForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type, isJSX = false): Symbol | undefined {
+            return getSpellingSuggestionForName(isString(name) ? name : idText(name), getPropertiesOfType(containingType), SymbolFlags.Value, isJSX);
         }
 
-        function getSuggestionForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type): string | undefined {
-            const suggestion = getSuggestedSymbolForNonexistentProperty(name, containingType);
+        function getSuggestionForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type, isJSX = false): string | undefined {
+            const suggestion = getSuggestedSymbolForNonexistentProperty(name, containingType, isJSX);
             return suggestion && symbolName(suggestion);
         }
 
@@ -24956,8 +24956,8 @@ namespace ts {
          *        (0.4 allows 1 substitution/transposition for every 5 characters,
          *         and 1 insertion/deletion at 3 characters)
          */
-        function getSpellingSuggestionForName(name: string, symbols: Symbol[], meaning: SymbolFlags): Symbol | undefined {
-            return getSpellingSuggestion(name, symbols, getCandidateName);
+        function getSpellingSuggestionForName(name: string, symbols: Symbol[], meaning: SymbolFlags, isJSX = false): Symbol | undefined {
+            return getSpellingSuggestion(name, symbols, getCandidateName, isJSX);
             function getCandidateName(candidate: Symbol) {
                 const candidateName = symbolName(candidate);
                 if (startsWith(candidateName, "\"")) {
