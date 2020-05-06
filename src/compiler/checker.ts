@@ -16098,10 +16098,7 @@ namespace ts {
                 const isPerformingExcessPropertyChecks = !(intersectionState & IntersectionState.Target) && (isObjectLiteralType(source) && getObjectFlags(source) & ObjectFlags.FreshLiteral);
                 if (isPerformingExcessPropertyChecks) {
                     if (hasExcessProperties(<FreshObjectLiteralType>source, target, reportErrors)) {
-                        // Skip report relation error if there is diag with suggestion emitted
-                        // So the fixSpelling can work with JSX attribute suggestion
-                        const skipReport = isComparingJsxAttributes && errorInfo?.code === Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code;
-                        if (reportErrors && !skipReport) {
+                        if (reportErrors) {
                             reportRelationError(headMessage, source, target);
                         }
                         return Ternary.False;
