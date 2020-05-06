@@ -52,6 +52,12 @@ namespace ts.codefix {
                 suggestedSymbol = checker.getSuggestedSymbolForNonexistentModule(node, resolvedSourceFile.symbol);
             }
         }
+        else if (isJsxAttribute(parent) && parent.name === node) {
+            Debug.assertNode(node, isIdentifier, "Expected an identifier for JSX attribute");
+            const tag = findAncestor(node, isJsxOpeningLikeElement)!;
+            const props = checker.getContextualTypeForArgumentAtIndex(tag, 0);
+            suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(node, props!);
+        }
         else {
             const meaning = getMeaningFromLocation(node);
             const name = getTextOfNode(node);
