@@ -5309,7 +5309,7 @@ declare namespace ts {
         applyCodeActionCommand(fileName: string, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
-        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined): ApplicableRefactorInfo[];
+        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
         organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
@@ -5530,6 +5530,10 @@ declare namespace ts {
         renameFilename?: string;
         renameLocation?: number;
         commands?: CodeActionCommand[];
+    }
+    type RefactorTriggerReason = RefactorInvokedReason;
+    interface RefactorInvokedReason {
+        kind: "invoked";
     }
     interface TextInsertion {
         newText: string;
@@ -6629,7 +6633,13 @@ declare namespace ts.server.protocol {
         command: CommandTypes.GetApplicableRefactors;
         arguments: GetApplicableRefactorsRequestArgs;
     }
-    type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs;
+    type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
+        triggerReason?: RefactorTriggerReason;
+    };
+    type RefactorTriggerReason = RefactorInvokedReason;
+    interface RefactorInvokedReason {
+        kind: "invoked";
+    }
     /**
      * Response is a list of available refactorings.
      * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
