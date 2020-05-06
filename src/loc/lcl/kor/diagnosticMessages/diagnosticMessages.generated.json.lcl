@@ -436,7 +436,7 @@
         <Str Cat="Text">
           <Val><![CDATA['A label is not allowed here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['여기서는 레이블을 사용할 수 없습니다.]]></Val>
+            <Val><![CDATA[여기서는 레이블을 사용할 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1017,6 +1017,9 @@
       <Item ItemId=";Add_a_return_statement_95111" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add a return statement]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[return 문 추가]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1059,6 +1062,9 @@
       <Item ItemId=";Add_all_missing_return_statement_95114" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add all missing return statement]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[누락된 모든 return 문 추가]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1845,6 +1851,9 @@
       <Item ItemId=";An_index_signature_cannot_have_a_trailing_comma_1025" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[An index signature cannot have a trailing comma.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[인덱스 시그니처에는 후행 쉼표를 사용할 수 없습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3629,6 +3638,15 @@
           <Val><![CDATA[DIRECTORY]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[디렉터리]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Declaration_augments_declaration_in_another_file_This_cannot_be_serialized_6232" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declaration augments declaration in another file. This cannot be serialized.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[선언이 다른 파일의 선언을 확대합니다. 직렬화할 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5823,15 +5841,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it_2373" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Initializer of parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[매개 변수 '{0}'의 이니셜라이저는 그 다음에 선언된 식별자 '{1}'을(를) 참조할 수 없습니다.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value_2525" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Initializer provides no value for this binding element and the binding element has no default value.]]></Val>
@@ -7179,6 +7188,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Only_numeric_enums_can_have_computed_members_but_this_expression_has_type_0_If_you_do_not_need_exhau_18033" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[숫자 열거형에는 컴퓨팅된 구성원만 사용할 수 있는데 이 식에는 '{0}' 형식이 있습니다. 전체 검사가 필요하지 않은 경우에는 개체 리터럴을 대신 사용해 보세요.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword_2340" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Only public and protected methods of the base class are accessible via the 'super' keyword.]]></Val>
@@ -7390,7 +7408,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Overload {0} of {1}, '{2}', gave the following error.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{1}, '{2}'의 오버로드 {0}에서 다음 오류가 발생했습니다.]]></Val>
+            <Val><![CDATA[오버로드 {0}/{1}('{2}')에서 다음 오류가 발생했습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7440,11 +7458,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Parameter_0_cannot_be_referenced_in_its_initializer_2372" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Parameter_0_cannot_reference_identifier_1_declared_after_it_2373" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' cannot be referenced in its initializer.]]></Val>
+          <Val><![CDATA[Parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[매개 변수 '{0}'은(는) 해당 이니셜라이저에서 참조할 수 없습니다.]]></Val>
+            <Val><![CDATA[매개 변수 '{0}'은(는) 이 매개 변수 뒤에 선언된 식별자 '{1}'을(를) 참조할 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_0_cannot_reference_itself_2372" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter '{0}' cannot reference itself.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[매개 변수 '{0}'은(는) 자신을 참조할 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8562,6 +8589,9 @@
       <Item ItemId=";Remove_all_incorrect_body_block_braces_95115" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove all incorrect body block braces]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[잘못된 본문 블록 중괄호 모두 제거]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8595,6 +8625,9 @@
       <Item ItemId=";Remove_block_body_braces_95112" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove block body braces]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[블록 본문 중괄호 제거]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -9969,12 +10002,18 @@
       <Item ItemId=";The_intersection_0_was_reduced_to_never_because_property_1_exists_in_multiple_constituents_and_is_pr_18032" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The intersection '{0}' was reduced to 'never' because property '{1}' exists in multiple constituents and is private in some.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[속성 '{1}'이(가) 여러 구성원에 있고 일부 구성원에서는 프라이빗 상태이므로 교집합 '{0}'이(가) 'never'로 감소했습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";The_intersection_0_was_reduced_to_never_because_property_1_has_conflicting_types_in_some_constituent_18031" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The intersection '{0}' was reduced to 'never' because property '{1}' has conflicting types in some constituents.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[일부 구성원에 속성 '{1}'에 충돌하는 형식이 있으므로 교집합 '{0}'이(가) 'never'로 감소했습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10164,6 +10203,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[The operand of a delete operator must be a property reference.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_operand_of_a_delete_operator_must_be_optional_2790" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The operand of a 'delete' operator must be optional.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['delete' 연산자의 피연산자는 선택 사항이어야 합니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10515,6 +10563,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_fil_6233" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This is the declaration being augmented. Consider moving the augmenting declaration into the same file.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[확대되는 선언입니다. 확대하는 선언을 같은 파일로 이동하는 것이 좋습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_may_be_converted_to_an_async_function_80006" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This may be converted to an async function.]]></Val>
@@ -10747,7 +10804,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is missing the following properties from type '{1}': {2}, and {3} more.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 형식에 '{1}' 형식의 {2}, {3} 속성 등이 없습니다.]]></Val>
+            <Val><![CDATA['{0}' 형식에 '{1}' 형식의 {2} 외 {3}개 속성이 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11086,7 +11143,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[형식이 이 가져오기에서 시작됩니다. 네임스페이스 스타일 가져오기는 호출하거나 생성할 수 없으며, 런타임에 오류를 초래합니다. 여기서는 대신 기본 가져오기 또는 가져오기 필요를 사용하는 것이 좋습니다.]]></Val>
+            <Val><![CDATA[형식이 이 가져오기에서 시작됩니다. 네임스페이스 스타일 가져오기는 호출하거나 생성할 수 없으며, 런타임에 오류를 초래합니다. 여기서는 대신 기본 가져오기 또는 가져오기 require를 사용하는 것이 좋습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11799,6 +11856,9 @@
       <Item ItemId=";Wrap_all_object_literal_with_parentheses_95116" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Wrap all object literal with parentheses]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[괄호를 사용하여 모든 개체 리터럴 래핑]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -11814,6 +11874,9 @@
       <Item ItemId=";Wrap_the_following_body_with_parentheses_which_should_be_an_object_literal_95113" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Wrap the following body with parentheses which should be an object literal]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[괄호를 사용하여 개체 리터럴이어야 하는 다음 본문 래핑]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>

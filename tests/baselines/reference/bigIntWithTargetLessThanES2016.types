@@ -1,0 +1,23 @@
+=== tests/cases/compiler/bigIntWithTargetLessThanES2016.ts ===
+BigInt(1) ** BigInt(1); // should error
+>BigInt(1) ** BigInt(1) : bigint
+>BigInt(1) : bigint
+>BigInt : BigIntConstructor
+>1 : 1
+>BigInt(1) : bigint
+>BigInt : BigIntConstructor
+>1 : 1
+
+let foo = BigInt(2);
+>foo : bigint
+>BigInt(2) : bigint
+>BigInt : BigIntConstructor
+>2 : 2
+
+foo **= BigInt(2); // should error
+>foo **= BigInt(2) : bigint
+>foo : bigint
+>BigInt(2) : bigint
+>BigInt : BigIntConstructor
+>2 : 2
+

@@ -41,7 +41,7 @@ declare function require(name: string): any;
 === tests/cases/conformance/salsa/mod1.js ===
 /// <reference path='./requires.d.ts' />
 module.exports.bothBefore = 'string'
->module.exports.bothBefore : Symbol(bothBefore)
+>module.exports.bothBefore : Symbol(bothBefore, Decl(mod1.js, 2, 16), Decl(mod1.js, 0, 0))
 >module.exports : Symbol(bothBefore, Decl(mod1.js, 2, 16), Decl(mod1.js, 0, 0))
 >module : Symbol(module, Decl(mod1.js, 0, 0))
 >exports : Symbol("tests/cases/conformance/salsa/mod1", Decl(mod1.js, 0, 0))
@@ -75,14 +75,14 @@ function A() {
 >p : Symbol(A.p, Decl(mod1.js, 6, 14))
 }
 module.exports.bothAfter = 'string'
->module.exports.bothAfter : Symbol(bothAfter)
+>module.exports.bothAfter : Symbol(bothAfter, Decl(mod1.js, 3, 16), Decl(mod1.js, 8, 1))
 >module.exports : Symbol(bothAfter, Decl(mod1.js, 3, 16), Decl(mod1.js, 8, 1))
 >module : Symbol(module, Decl(mod1.js, 0, 0))
 >exports : Symbol("tests/cases/conformance/salsa/mod1", Decl(mod1.js, 0, 0))
 >bothAfter : Symbol(bothAfter, Decl(mod1.js, 3, 16), Decl(mod1.js, 8, 1))
 
 module.exports.justProperty = 'string'
->module.exports.justProperty : Symbol(justProperty)
+>module.exports.justProperty : Symbol(justProperty, Decl(mod1.js, 9, 35))
 >module.exports : Symbol(justProperty, Decl(mod1.js, 9, 35))
 >module : Symbol(module, Decl(mod1.js, 0, 0))
 >exports : Symbol("tests/cases/conformance/salsa/mod1", Decl(mod1.js, 0, 0))

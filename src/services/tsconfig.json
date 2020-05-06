@@ -85,6 +85,7 @@
         "codefixes/fixMissingCallParentheses.ts",
         "codefixes/fixAwaitInSyncFunction.ts",
         "codefixes/inferFromUsage.ts",
+        "codefixes/fixReturnTypeInAsyncFunction.ts",
         "codefixes/disableJsDiagnostics.ts",
         "codefixes/helpers.ts",
         "codefixes/fixInvalidImportSyntax.ts",

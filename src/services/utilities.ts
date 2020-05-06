@@ -1871,14 +1871,23 @@ namespace ts {
         return node.modifiers && find(node.modifiers, m => m.kind === kind);
     }
 
-    export function insertImport(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDecl: Statement, blankLineBetween: boolean): void {
-        const importKindPredicate = importDecl.kind === SyntaxKind.VariableStatement ? isRequireVariableDeclarationStatement : isAnyImportSyntax;
+    export function insertImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile, imports: Statement | readonly Statement[], blankLineBetween: boolean): void {
+        const decl = isArray(imports) ? imports[0] : imports;
+        const importKindPredicate = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableDeclarationStatement : isAnyImportSyntax;
         const lastImportDeclaration = findLast(sourceFile.statements, statement => importKindPredicate(statement));
         if (lastImportDeclaration) {
-            changes.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl);
+            if (isArray(imports)) {
+                changes.insertNodesAfter(sourceFile, lastImportDeclaration, imports);
+            }
+            else {
+                changes.insertNodeAfter(sourceFile, lastImportDeclaration, imports);
+            }
+        }
+        else if (isArray(imports)) {
+            changes.insertNodesAtTopOfFile(sourceFile, imports, blankLineBetween);
         }
         else {
-            changes.insertNodeAtTopOfFile(sourceFile, importDecl, blankLineBetween);
+            changes.insertNodeAtTopOfFile(sourceFile, imports, blankLineBetween);
         }
     }
 
@@ -2816,6 +2825,35 @@ namespace ts {
                 || codefix.moduleSymbolToValidIdentifier(Debug.checkDefined(symbol.parent), scriptTarget);
         }
         return symbol.name;
+    }
+
+    /**
+     * Useful to check whether a string contains another string at a specific index
+     * without allocating another string or traversing the entire contents of the outer string.
+     *
+     * This function is useful in place of either of the following:
+     *
+     * ```ts
+     * // Allocates
+     * haystack.substr(startIndex, needle.length) === needle
+     *
+     * // Full traversal
+     * haystack.indexOf(needle, startIndex) === startIndex
+     * ```
+     *
+     * @param haystack The string that potentially contains `needle`.
+     * @param needle The string whose content might sit within `haystack`.
+     * @param startIndex The index within `haystack` to start searching for `needle`.
+     */
+    export function stringContainsAt(haystack: string, needle: string, startIndex: number) {
+        const needleLength = needle.length;
+        if (needleLength + startIndex > haystack.length) {
+            return false;
+        }
+        for (let i = 0; i < needleLength; i++) {
+            if (needle.charCodeAt(i) !== haystack.charCodeAt(i + startIndex)) return false;
+        }
+        return true;
     }
 
     export function startsWithUnderscore(name: string): boolean {

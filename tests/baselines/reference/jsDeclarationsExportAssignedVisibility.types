@@ -11,9 +11,9 @@ class Container {
     constructor() {
         this.usage = new Obj();
 >this.usage = new Obj() : import("tests/cases/conformance/jsdoc/declarations/obj")
->this.usage : import("tests/cases/conformance/jsdoc/declarations/obj")
+>this.usage : any
 >this : this
->usage : import("tests/cases/conformance/jsdoc/declarations/obj")
+>usage : any
 >new Obj() : import("tests/cases/conformance/jsdoc/declarations/obj")
 >Obj : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
     }
@@ -38,9 +38,9 @@ module.exports = class Obj {
     constructor() {
         this.x = 12;
 >this.x = 12 : 12
->this.x : number
+>this.x : any
 >this : this
->x : number
+>x : any
 >12 : 12
     }
 }

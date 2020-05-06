@@ -1,0 +1,90 @@
+=== tests/cases/compiler/initializerWithThisPropertyAccess.ts ===
+class A {
+>A : Symbol(A, Decl(initializerWithThisPropertyAccess.ts, 0, 0))
+
+    a: number;
+>a : Symbol(A.a, Decl(initializerWithThisPropertyAccess.ts, 0, 9))
+
+    b = this.a;  // Error
+>b : Symbol(A.b, Decl(initializerWithThisPropertyAccess.ts, 1, 14))
+>this.a : Symbol(A.a, Decl(initializerWithThisPropertyAccess.ts, 0, 9))
+>this : Symbol(A, Decl(initializerWithThisPropertyAccess.ts, 0, 0))
+>a : Symbol(A.a, Decl(initializerWithThisPropertyAccess.ts, 0, 9))
+
+    c = () => this.a;
+>c : Symbol(A.c, Decl(initializerWithThisPropertyAccess.ts, 2, 15))
+>this.a : Symbol(A.a, Decl(initializerWithThisPropertyAccess.ts, 0, 9))
+>this : Symbol(A, Decl(initializerWithThisPropertyAccess.ts, 0, 0))
+>a : Symbol(A.a, Decl(initializerWithThisPropertyAccess.ts, 0, 9))
+
+    d = (new A()).a;
+>d : Symbol(A.d, Decl(initializerWithThisPropertyAccess.ts, 3, 21))
+>(new A()).a : Symbol(A.a, Decl(initializerWithThisPropertyAccess.ts, 0, 9))
+>A : Symbol(A, Decl(initializerWithThisPropertyAccess.ts, 0, 0))
+>a : Symbol(A.a, Decl(initializerWithThisPropertyAccess.ts, 0, 9))
+
+    constructor() {
+        this.a = 1;
+>this.a : Symbol(A.a, Decl(initializerWithThisPropertyAccess.ts, 0, 9))
+>this : Symbol(A, Decl(initializerWithThisPropertyAccess.ts, 0, 0))
+>a : Symbol(A.a, Decl(initializerWithThisPropertyAccess.ts, 0, 9))
+    }
+}
+
+class B extends A {
+>B : Symbol(B, Decl(initializerWithThisPropertyAccess.ts, 8, 1))
+>A : Symbol(A, Decl(initializerWithThisPropertyAccess.ts, 0, 0))
+
+    x = this.a;
+>x : Symbol(B.x, Decl(initializerWithThisPropertyAccess.ts, 10, 19))
+>this.a : Symbol(A.a, Decl(initializerWithThisPropertyAccess.ts, 0, 9))
+>this : Symbol(B, Decl(initializerWithThisPropertyAccess.ts, 8, 1))
+>a : Symbol(A.a, Decl(initializerWithThisPropertyAccess.ts, 0, 9))
+}
+
+class C {
+>C : Symbol(C, Decl(initializerWithThisPropertyAccess.ts, 12, 1))
+
+    a!: number;
+>a : Symbol(C.a, Decl(initializerWithThisPropertyAccess.ts, 14, 9))
+
+    b = this.a;
+>b : Symbol(C.b, Decl(initializerWithThisPropertyAccess.ts, 15, 15))
+>this.a : Symbol(C.a, Decl(initializerWithThisPropertyAccess.ts, 14, 9))
+>this : Symbol(C, Decl(initializerWithThisPropertyAccess.ts, 12, 1))
+>a : Symbol(C.a, Decl(initializerWithThisPropertyAccess.ts, 14, 9))
+}
+
+// Repro from #37979
+
+class Foo {
+>Foo : Symbol(Foo, Decl(initializerWithThisPropertyAccess.ts, 17, 1))
+
+    private bar: Bar;
+>bar : Symbol(Foo.bar, Decl(initializerWithThisPropertyAccess.ts, 21, 11))
+>Bar : Symbol(Bar, Decl(initializerWithThisPropertyAccess.ts, 27, 1))
+
+    readonly barProp = this.bar.prop;
+>barProp : Symbol(Foo.barProp, Decl(initializerWithThisPropertyAccess.ts, 22, 21))
+>this.bar.prop : Symbol(Bar.prop, Decl(initializerWithThisPropertyAccess.ts, 29, 11))
+>this.bar : Symbol(Foo.bar, Decl(initializerWithThisPropertyAccess.ts, 21, 11))
+>this : Symbol(Foo, Decl(initializerWithThisPropertyAccess.ts, 17, 1))
+>bar : Symbol(Foo.bar, Decl(initializerWithThisPropertyAccess.ts, 21, 11))
+>prop : Symbol(Bar.prop, Decl(initializerWithThisPropertyAccess.ts, 29, 11))
+
+    constructor() {
+        this.bar = new Bar();
+>this.bar : Symbol(Foo.bar, Decl(initializerWithThisPropertyAccess.ts, 21, 11))
+>this : Symbol(Foo, Decl(initializerWithThisPropertyAccess.ts, 17, 1))
+>bar : Symbol(Foo.bar, Decl(initializerWithThisPropertyAccess.ts, 21, 11))
+>Bar : Symbol(Bar, Decl(initializerWithThisPropertyAccess.ts, 27, 1))
+    }
+}
+
+class Bar {
+>Bar : Symbol(Bar, Decl(initializerWithThisPropertyAccess.ts, 27, 1))
+
+    readonly prop = false;
+>prop : Symbol(Bar.prop, Decl(initializerWithThisPropertyAccess.ts, 29, 11))
+}
+

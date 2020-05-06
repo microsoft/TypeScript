@@ -769,7 +769,7 @@ namespace ts {
                 const sig = find(type.members, isCallSignatureDeclaration);
                 return sig && sig.type;
             }
-            if (isFunctionTypeNode(type)) {
+            if (isFunctionTypeNode(type) || isJSDocFunctionType(type)) {
                 return type.type;
             }
         }

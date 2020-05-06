@@ -80,6 +80,11 @@ tests/cases/compiler/truthinessCallExpressionCoercion1.ts(61,9): error TS2774: T
     
             // ok
             this.maybeIsUser ? console.log('this.maybeIsUser') : undefined;
+    
+            // ok
+            if (this.isUser) {
+                this.isUser();
+            }
         }
     }
     

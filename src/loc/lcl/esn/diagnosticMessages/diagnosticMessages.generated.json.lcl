@@ -445,7 +445,7 @@
         <Str Cat="Text">
           <Val><![CDATA['A label is not allowed here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aquí no se permite una etiqueta.]]></Val>
+            <Val><![CDATA[No se permite una etiqueta aquí.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1026,6 +1026,9 @@
       <Item ItemId=";Add_a_return_statement_95111" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add a return statement]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Agregar una instrucción "return"]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1068,6 +1071,9 @@
       <Item ItemId=";Add_all_missing_return_statement_95114" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add all missing return statement]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Agregar todas las instrucciones "return" que faltan]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1183,7 +1189,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'export {}' to make this file into a module]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Agregar "export {}" para convertir este archivo en un módulo]]></Val>
+            <Val><![CDATA[Agregar "export {}" para transformar este archivo en un módulo]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1857,6 +1863,9 @@
       <Item ItemId=";An_index_signature_cannot_have_a_trailing_comma_1025" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[An index signature cannot have a trailing comma.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Una signatura de índice no puede finalizar con una coma.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3196,7 +3205,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Compiler reserves name '{0}' when emitting private identifier downlevel.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El compilador reserva el nombre "{0}" al emitir un identificador privado en el nivel inferior.]]></Val>
+            <Val><![CDATA[El compilador reserva el nombre "{0}" al emitir un identificador privado válido para versiones anteriores.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3641,6 +3650,15 @@
           <Val><![CDATA[DIRECTORY]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[DIRECTORIO]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Declaration_augments_declaration_in_another_file_This_cannot_be_serialized_6232" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declaration augments declaration in another file. This cannot be serialized.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La declaración aumenta la declaración en otro archivo. Esto no se puede serializar.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5835,15 +5853,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it_2373" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Initializer of parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El inicializador del parámetro '{0}' no puede hacer referencia al identificador '{1}' declarado después.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value_2525" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Initializer provides no value for this binding element and the binding element has no default value.]]></Val>
@@ -7191,6 +7200,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Only_numeric_enums_can_have_computed_members_but_this_expression_has_type_0_If_you_do_not_need_exhau_18033" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Solo las enumeraciones numéricas pueden tener miembros calculados, pero esta expresión tiene el tipo "{0}". Si no requiere comprobaciones de exhaustividad, considere la posibilidad de usar un literal de objeto en su lugar.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword_2340" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Only public and protected methods of the base class are accessible via the 'super' keyword.]]></Val>
@@ -7452,11 +7470,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Parameter_0_cannot_be_referenced_in_its_initializer_2372" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Parameter_0_cannot_reference_identifier_1_declared_after_it_2373" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' cannot be referenced in its initializer.]]></Val>
+          <Val><![CDATA[Parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No se puede hacer referencia al parámetro '{0}' en su inicializador.]]></Val>
+            <Val><![CDATA[El parámetro "{0}" no puede hacer referencia al identificador "{1}" declarado después de este.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_0_cannot_reference_itself_2372" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter '{0}' cannot reference itself.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[El parámetro "{0}" no puede hacer referencia a sí mismo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8574,6 +8601,9 @@
       <Item ItemId=";Remove_all_incorrect_body_block_braces_95115" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove all incorrect body block braces]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Quitar todas las llaves de cuerpo de bloque incorrectas]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8607,6 +8637,9 @@
       <Item ItemId=";Remove_block_body_braces_95112" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove block body braces]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Quitar llaves de cuerpo del bloque]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -9981,12 +10014,18 @@
       <Item ItemId=";The_intersection_0_was_reduced_to_never_because_property_1_exists_in_multiple_constituents_and_is_pr_18032" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The intersection '{0}' was reduced to 'never' because property '{1}' exists in multiple constituents and is private in some.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La intersección "{0}" se redujo a "never" porque la propiedad "{1}" existe en varios constituyentes y es privada en algunos de ellos.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";The_intersection_0_was_reduced_to_never_because_property_1_has_conflicting_types_in_some_constituent_18031" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The intersection '{0}' was reduced to 'never' because property '{1}' has conflicting types in some constituents.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La intersección "{0}" se redujo a "never" porque la propiedad "{1}" tiene tipos en conflicto en algunos constituyentes.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10179,6 +10218,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_operand_of_a_delete_operator_must_be_optional_2790" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The operand of a 'delete' operator must be optional.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[El operando de un operador "delete" debe ser opcional.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_operand_of_an_increment_or_decrement_operator_may_not_be_an_optional_property_access_2777" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The operand of an increment or decrement operator may not be an optional property access.]]></Val>
@@ -10303,7 +10351,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The shadowing declaration of '{0}' is defined here]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La declaración de reemplazo de "{0}" se define aquí.]]></Val>
+            <Val><![CDATA[La declaración que ensombrece a "{0}" se define aquí.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10523,6 +10571,15 @@
           <Val><![CDATA[This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Esta importación nunca se usa como valor y debe utilizar "import type" porque el valor "importsNotUsedAsValues" está establecido en "error".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_fil_6233" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This is the declaration being augmented. Consider moving the augmenting declaration into the same file.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Esta es la declaración que se está aumentando. Considere la posibilidad de mover la declaración en aumento al mismo archivo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11098,7 +11155,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo se origina en esta importación. No se puede construir ni llamar a una importación de estilo de espacio de nombres y provocará un error en tiempo de ejecución. Considere la posibilidad de usar una importación predeterminada o requerir la importación aquí.]]></Val>
+            <Val><![CDATA[El tipo se origina en esta importación. No se puede construir ni llamar a una importación de estilo de espacio de nombres y provocará un error en tiempo de ejecución. Considere la posibilidad de usar una importación predeterminada o require aquí en su lugar.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11659,7 +11716,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Using compiler options of project reference redirect '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El uso de las opciones del compilador de la referencia del proyecto redirige "{0}".]]></Val>
+            <Val><![CDATA[Uso de las opciones del compilador de redireccionamiento de la referencia del proyecto "{0}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11811,6 +11868,9 @@
       <Item ItemId=";Wrap_all_object_literal_with_parentheses_95116" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Wrap all object literal with parentheses]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Encapsular todos los literales de objeto entre paréntesis]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -11826,6 +11886,9 @@
       <Item ItemId=";Wrap_the_following_body_with_parentheses_which_should_be_an_object_literal_95113" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Wrap the following body with parentheses which should be an object literal]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Encapsular el cuerpo siguiente entre paréntesis, lo cual debe ser un literal de objeto]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
