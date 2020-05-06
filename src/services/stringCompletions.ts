@@ -6,13 +6,13 @@ namespace ts.Completions.StringCompletions {
             return entries && convertPathCompletions(entries);
         }
         if (isInString(sourceFile, position, contextToken)) {
-            return !contextToken || !isStringLiteralLike(contextToken)
-                ? undefined
-                : convertStringLiteralCompletions(getStringLiteralCompletionEntries(sourceFile, contextToken, position, checker, options, host), sourceFile, checker, log, preferences);
+            if (!contextToken || !isStringLiteralLike(contextToken)) return undefined;
+            const entries = getStringLiteralCompletionEntries(sourceFile, contextToken, position, checker, options, host);
+            return convertStringLiteralCompletions(entries, contextToken, sourceFile, checker, log, preferences);
         }
     }
 
-    function convertStringLiteralCompletions(completion: StringLiteralCompletion | undefined, sourceFile: SourceFile, checker: TypeChecker, log: Log, preferences: UserPreferences): CompletionInfo | undefined {
+    function convertStringLiteralCompletions(completion: StringLiteralCompletion | undefined, contextToken: Node, sourceFile: SourceFile, checker: TypeChecker, log: Log, preferences: UserPreferences): CompletionInfo | undefined {
         if (completion === undefined) {
             return undefined;
         }
@@ -24,6 +24,7 @@ namespace ts.Completions.StringCompletions {
                 getCompletionEntriesFromSymbols(
                     completion.symbols,
                     entries,
+                    contextToken,
                     sourceFile,
                     sourceFile,
                     checker,
@@ -35,7 +36,13 @@ namespace ts.Completions.StringCompletions {
                 return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: completion.hasIndexSignature, entries };
             }
             case StringLiteralCompletionKind.Types: {
-                const entries = completion.types.map(type => ({ name: type.value, kindModifiers: ScriptElementKindModifier.none, kind: ScriptElementKind.string, sortText: "0" }));
+                const entries = completion.types.map(type => ({
+                    name: type.value,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    kind: ScriptElementKind.string,
+                    sortText: "0",
+                    replacementSpan: getReplacementSpanForContextToken(contextToken)
+                }));
                 return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, entries };
             }
             default:
@@ -204,7 +211,7 @@ namespace ts.Completions.StringCompletions {
         const candidates: Signature[] = [];
         checker.getResolvedSignature(argumentInfo.invocation, candidates, argumentInfo.argumentCount);
         const types = flatMap(candidates, candidate => {
-            if (!candidate.hasRestParameter && argumentInfo.argumentCount > candidate.parameters.length) return;
+            if (!signatureHasRestParameter(candidate) && argumentInfo.argumentCount > candidate.parameters.length) return;
             const type = checker.getParameterType(candidate, argumentInfo.argumentIndex);
             isNewIdentifier = isNewIdentifier || !!(type.flags & TypeFlags.String);
             return getStringLiteralTypes(type, uniques);
@@ -214,7 +221,13 @@ namespace ts.Completions.StringCompletions {
     }
 
     function stringLiteralCompletionsFromProperties(type: Type | undefined): StringLiteralCompletionsFromProperties | undefined {
-        return type && { kind: StringLiteralCompletionKind.Properties, symbols: type.getApparentProperties(), hasIndexSignature: hasIndexSignature(type) };
+        return type && {
+            kind: StringLiteralCompletionKind.Properties,
+            symbols: type.getApparentProperties().filter(prop =>
+                !isPrivateIdentifierPropertyDeclaration(
+                    isTransientSymbol(prop) && prop.syntheticOrigin ? prop.syntheticOrigin.valueDeclaration : prop.valueDeclaration)),
+            hasIndexSignature: hasIndexSignature(type)
+        };
     }
 
     function getStringLiteralTypes(type: Type | undefined, uniques = createMap<true>()): readonly StringLiteralType[] {
@@ -624,30 +637,6 @@ namespace ts.Completions.StringCompletions {
         }
     }
 
-    function findPackageJsons(directory: string, host: LanguageServiceHost): string[] {
-        const paths: string[] = [];
-        forEachAncestorDirectory(directory, ancestor => {
-            const currentConfigPath = findConfigFile(ancestor, (f) => tryFileExists(host, f), "package.json");
-            if (!currentConfigPath) {
-                return true; // break out
-            }
-            paths.push(currentConfigPath);
-        });
-        return paths;
-    }
-
-    function findPackageJson(directory: string, host: LanguageServiceHost): string | undefined {
-        let packageJson: string | undefined;
-        forEachAncestorDirectory(directory, ancestor => {
-            if (ancestor === "node_modules") return true;
-            packageJson = findConfigFile(ancestor, (f) => tryFileExists(host, f), "package.json");
-            if (packageJson) {
-                return true; // break out
-            }
-        });
-        return packageJson;
-    }
-
     function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string): readonly string[] {
         if (!host.readFile || !host.fileExists) return emptyArray;
 
@@ -702,31 +691,6 @@ namespace ts.Completions.StringCompletions {
     const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\3"]*)$/;
 
     const nodeModulesDependencyKeys: readonly string[] = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"];
-
-    function tryGetDirectories(host: LanguageServiceHost, directoryName: string): string[] {
-        return tryIOAndConsumeErrors(host, host.getDirectories, directoryName) || [];
-    }
-
-    function tryReadDirectory(host: LanguageServiceHost, path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[]): readonly string[] {
-        return tryIOAndConsumeErrors(host, host.readDirectory, path, extensions, exclude, include) || emptyArray;
-    }
-
-    function tryFileExists(host: LanguageServiceHost, path: string): boolean {
-        return tryIOAndConsumeErrors(host, host.fileExists, path);
-    }
-
-    function tryDirectoryExists(host: LanguageServiceHost, path: string): boolean {
-        return tryAndIgnoreErrors(() => directoryProbablyExists(path, host)) || false;
-    }
-
-    function tryIOAndConsumeErrors<T>(host: LanguageServiceHost, toApply: ((...a: any[]) => T) | undefined, ...args: any[]) {
-        return tryAndIgnoreErrors(() => toApply && toApply.apply(host, args));
-    }
-
-    function tryAndIgnoreErrors<T>(cb: () => T): T | undefined {
-        try { return cb(); }
-        catch { return undefined; }
-    }
 
     function containsSlash(fragment: string) {
         return stringContains(fragment, directorySeparator);

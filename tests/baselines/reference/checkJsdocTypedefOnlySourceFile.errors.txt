@@ -1,0 +1,18 @@
+tests/cases/conformance/jsdoc/0.js(10,20): error TS2694: Namespace 'exports' has no exported member 'SomeName'.
+
+
+==== tests/cases/conformance/jsdoc/0.js (1 errors) ====
+    // @ts-check
+    
+    var exports = {};
+    
+    /**
+     * @typedef {string}
+     */
+    exports.SomeName;
+    
+    /** @type {exports.SomeName} */
+                       ~~~~~~~~
+!!! error TS2694: Namespace 'exports' has no exported member 'SomeName'.
+    const myString = 'str';
+    

@@ -14,7 +14,7 @@ namespace ts.codefix {
                 doChange(changeTracker, configFile)
             );
             return [
-                createCodeFixActionNoFixId(fixID, changes, Diagnostics.Enable_the_jsx_flag_in_your_configuration_file)
+                createCodeFixActionWithoutFixAll(fixID, changes, Diagnostics.Enable_the_jsx_flag_in_your_configuration_file)
             ];
         },
         fixIds: [fixID],

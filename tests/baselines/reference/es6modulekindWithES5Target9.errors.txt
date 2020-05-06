@@ -1,22 +1,22 @@
-tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target9.ts(1,15): error TS2307: Cannot find module 'mod'.
-tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target9.ts(3,17): error TS2307: Cannot find module 'mod'.
-tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target9.ts(5,20): error TS2307: Cannot find module 'mod'.
-tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target9.ts(13,15): error TS2307: Cannot find module 'mod'.
-tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target9.ts(15,17): error TS2307: Cannot find module 'mod'.
+tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target9.ts(1,15): error TS2307: Cannot find module 'mod' or its corresponding type declarations.
+tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target9.ts(3,17): error TS2307: Cannot find module 'mod' or its corresponding type declarations.
+tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target9.ts(5,20): error TS2307: Cannot find module 'mod' or its corresponding type declarations.
+tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target9.ts(13,15): error TS2307: Cannot find module 'mod' or its corresponding type declarations.
+tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target9.ts(15,17): error TS2307: Cannot find module 'mod' or its corresponding type declarations.
 
 
 ==== tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target9.ts (5 errors) ====
     import d from "mod";
                   ~~~~~
-!!! error TS2307: Cannot find module 'mod'.
+!!! error TS2307: Cannot find module 'mod' or its corresponding type declarations.
     
     import {a} from "mod";
                     ~~~~~
-!!! error TS2307: Cannot find module 'mod'.
+!!! error TS2307: Cannot find module 'mod' or its corresponding type declarations.
     
     import * as M from "mod";
                        ~~~~~
-!!! error TS2307: Cannot find module 'mod'.
+!!! error TS2307: Cannot find module 'mod' or its corresponding type declarations.
     
     export {a};
     
@@ -26,11 +26,11 @@ tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target9.ts(15,17
     
     export * from "mod";
                   ~~~~~
-!!! error TS2307: Cannot find module 'mod'.
+!!! error TS2307: Cannot find module 'mod' or its corresponding type declarations.
     
     export {b} from "mod"
                     ~~~~~
-!!! error TS2307: Cannot find module 'mod'.
+!!! error TS2307: Cannot find module 'mod' or its corresponding type declarations.
     
     export default d;
     

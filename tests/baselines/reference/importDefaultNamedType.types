@@ -1,0 +1,8 @@
+=== /a.ts ===
+export default class A {}
+>A : A
+
+=== /b.ts ===
+import type from './a';
+>type : typeof type
+

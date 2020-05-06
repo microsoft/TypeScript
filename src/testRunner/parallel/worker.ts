@@ -137,14 +137,14 @@ namespace Harness.Parallel.Worker {
          */
         function runTests(task: Task, fn: (payload: TaskResult) => void) {
             if (task.runner === "unittest") {
-                return runUnitTests(task, fn);
+                return executeUnitTests(task, fn);
             }
             else {
                 return runFileTests(task, fn);
             }
         }
 
-        function runUnitTests(task: UnitTestTask, fn: (payload: TaskResult) => void) {
+        function executeUnitTests(task: UnitTestTask, fn: (payload: TaskResult) => void) {
             if (!unitTestSuiteMap && unitTestSuite.suites.length) {
                 unitTestSuiteMap = ts.createMap<Mocha.Suite>();
                 for (const suite of unitTestSuite.suites) {

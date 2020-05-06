@@ -19,7 +19,7 @@ verify.referenceGroups(r1, [{ definition: "namespace T", ranges: [r1, r2] }]);
 const t: FourSlashInterface.ReferenceGroup = { definition: "type T = number\nnamespace T", ranges: [r0, r1, r2, r3] };
 verify.referenceGroups(r2, [t]);
 verify.referenceGroups([r3, r4], [{ definition: 'module "/a"', ranges: [r4, rExport] }, t]);
-verify.referenceGroups(rExport, [{ definition: 'module "/a"', ranges: [r3, r4, rExport] }]);
+verify.referenceGroups(rExport, [t]);
 
 verify.renameLocations(r0, [r0, r2]);
 verify.renameLocations(r1, [r1, r2]);

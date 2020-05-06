@@ -3,7 +3,7 @@
 
 // ok
 function f1(x: 'a');
->f1 : { (x: "a"): any; (x: string): any; }
+>f1 : { (x: 'a'): any; (x: string): any; }
 >x : "a"
 
 function f1(x: string);
@@ -16,7 +16,7 @@ function f1(x: string) { }
 
 // ok
 function f2(x: 'a');
->f2 : { (x: "a"): any; (x: any): any; }
+>f2 : { (x: 'a'): any; (x: any): any; }
 >x : "a"
 
 function f2(x: any);
@@ -29,7 +29,7 @@ function f2(x: any) { }
 
 // errors
 function f3(x: 'a');
->f3 : { (x: "a"): any; (x: Object): any; }
+>f3 : { (x: 'a'): any; (x: Object): any; }
 >x : "a"
 
 function f3(x: Object);
@@ -41,7 +41,7 @@ function f3(x: any) { }
 >x : any
 
 function f4(x: 'a');
->f4 : { (x: "a"): any; (x: {}): any; }
+>f4 : { (x: 'a'): any; (x: {}): any; }
 >x : "a"
 
 function f4(x: {});
@@ -53,7 +53,7 @@ function f4(x: any) { }
 >x : any
 
 function f5(x: 'a');
->f5 : { (x: "a"): any; (x: number): any; }
+>f5 : { (x: 'a'): any; (x: number): any; }
 >x : "a"
 
 function f5(x: number);
@@ -65,7 +65,7 @@ function f5(x: any) { }
 >x : any
 
 function f6(x: 'a');
->f6 : { (x: "a"): any; (x: boolean): any; }
+>f6 : { (x: 'a'): any; (x: boolean): any; }
 >x : "a"
 
 function f6(x: boolean);
@@ -77,7 +77,7 @@ function f6(x: any) { }
 >x : any
 
 function f7(x: 'a');
->f7 : { (x: "a"): any; (x: Date): any; }
+>f7 : { (x: 'a'): any; (x: Date): any; }
 >x : "a"
 
 function f7(x: Date);
@@ -89,7 +89,7 @@ function f7(x: any) { }
 >x : any
 
 function f8(x: 'a');
->f8 : { (x: "a"): any; (x: RegExp): any; }
+>f8 : { (x: 'a'): any; (x: RegExp): any; }
 >x : "a"
 
 function f8(x: RegExp);
@@ -101,7 +101,7 @@ function f8(x: any) { }
 >x : any
 
 function f9(x: 'a');
->f9 : { (x: "a"): any; (x: () => {}): any; }
+>f9 : { (x: 'a'): any; (x: () => {}): any; }
 >x : "a"
 
 function f9(x: () => {});
@@ -224,7 +224,7 @@ class C implements String {
  
 // BUG 831846
 function f10(x: 'a');
->f10 : { (x: "a"): any; (x: C): any; }
+>f10 : { (x: 'a'): any; (x: C): any; }
 >x : "a"
 
 function f10(x: C);
@@ -242,7 +242,7 @@ interface I extends String {
 
 // BUG 831846
 function f11(x: 'a');
->f11 : { (x: "a"): any; (x: I): any; }
+>f11 : { (x: 'a'): any; (x: I): any; }
 >x : "a"
 
 function f11(x: I);
@@ -254,7 +254,7 @@ function f11(x: any) { }
 >x : any
 
 function f12<T>(x: 'a');
->f12 : { <T>(x: "a"): any; <T>(x: T): any; }
+>f12 : { <T>(x: 'a'): any; <T>(x: T): any; }
 >x : "a"
 
 function f12<T>(x: T);
@@ -266,7 +266,7 @@ function f12<T>(x: any) { }
 >x : any
 
 function f13<T extends String>(x: 'a');
->f13 : { <T extends String>(x: "a"): any; <T extends String>(x: T): any; }
+>f13 : { <T extends String>(x: 'a'): any; <T extends String>(x: T): any; }
 >x : "a"
 
 function f13<T extends String>(x: T);
@@ -282,7 +282,7 @@ enum E { A }
 >A : E.A
 
 function f14(x: 'a');
->f14 : { (x: "a"): any; (x: E): any; }
+>f14 : { (x: 'a'): any; (x: E): any; }
 >x : "a"
 
 function f14(x: E);
@@ -294,7 +294,7 @@ function f14(x: any) { }
 >x : any
 
 function f15<T, U extends T>(x: 'a');
->f15 : { <T, U extends T>(x: "a"): any; <T, U extends T>(x: U): any; }
+>f15 : { <T, U extends T>(x: 'a'): any; <T, U extends T>(x: U): any; }
 >x : "a"
 
 function f15<T, U extends T>(x: U);
@@ -306,7 +306,7 @@ function f15<T, U extends T>(x: any) { }
 >x : any
 
 function f16<T extends String, U extends T>(x: 'a');
->f16 : { <T extends String, U extends T>(x: "a"): any; <T extends String, U extends T>(x: U): any; }
+>f16 : { <T extends String, U extends T>(x: 'a'): any; <T extends String, U extends T>(x: U): any; }
 >x : "a"
 
 function f16<T extends String, U extends T>(x: U);

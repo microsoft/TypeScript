@@ -97,6 +97,17 @@ namespace ts {
             ]);
         });
 
+        testBaseline("transformDefiniteAssignmentAssertions", () => {
+            return transformSourceFile(`let a!: () => void`, [
+                context => file => visitNode(file, function visitor(node: Node): VisitResult<Node> {
+                    if (node.kind === SyntaxKind.VoidKeyword) {
+                        return createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
+                    }
+                    return visitEachChild(node, visitor, context);
+                })
+            ]);
+        });
+
         testBaseline("fromTranspileModule", () => {
             return transpileModule(`var oldName = undefined;`, {
                 transformers: {
@@ -220,7 +231,7 @@ namespace ts {
                             const exports = [{ name: "x" }];
                             const exportSpecifiers = exports.map(e => createExportSpecifier(e.name, e.name));
                             const exportClause = createNamedExports(exportSpecifiers);
-                            const newEd = updateExportDeclaration(ed, ed.decorators, ed.modifiers, exportClause, ed.moduleSpecifier);
+                            const newEd = updateExportDeclaration(ed, ed.decorators, ed.modifiers, exportClause, ed.moduleSpecifier, ed.isTypeOnly);
 
                             return newEd as Node as T;
                         }
@@ -298,6 +309,34 @@ namespace ts {
                     declaration: true
                 }
             });
+        });
+
+        // https://github.com/microsoft/TypeScript/issues/33295
+        testBaseline("transformParameterProperty", () => {
+            return transpileModule("", {
+                transformers: {
+                    before: [transformAddParameterProperty],
+                },
+                compilerOptions: {
+                    target: ScriptTarget.ES5,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
+
+            function transformAddParameterProperty(_context: TransformationContext) {
+                return (sourceFile: SourceFile): SourceFile => {
+                    return visitNode(sourceFile);
+                };
+                function visitNode(sf: SourceFile) {
+                    // produce `class Foo { constructor(@Dec private x) {} }`;
+                    // The decorator is required to trigger ts.ts transformations.
+                    const classDecl = createClassDeclaration([], [], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
+                        createConstructor(/*decorators*/ undefined, /*modifiers*/ undefined, [
+                            createParameter(/*decorators*/ [createDecorator(createIdentifier("Dec"))], /*modifiers*/ [createModifier(SyntaxKind.PrivateKeyword)], /*dotDotDotToken*/ undefined, "x")], createBlock([]))
+                    ]);
+                    return updateSourceFileNode(sf, [classDecl]);
+                }
+            }
         });
 
         function baselineDeclarationTransform(text: string, opts: TranspileOptions) {
@@ -389,7 +428,7 @@ class Clazz {
 }
 `, {
                 transformers: {
-                    before: [addSyntheticComment(n => isPropertyDeclaration(n) || isParameterPropertyDeclaration(n) || isClassDeclaration(n) || isConstructorDeclaration(n))],
+                    before: [addSyntheticComment(n => isPropertyDeclaration(n) || isParameterPropertyDeclaration(n, n.parent) || isClassDeclaration(n) || isConstructorDeclaration(n))],
                 },
                 compilerOptions: {
                     target: ScriptTarget.ES2015,
@@ -417,6 +456,35 @@ namespace Foo {
                     newLine: NewLineKind.CarriageReturnLineFeed,
                 }
             }).outputText;
+        });
+
+        testBaseline("transformUpdateModuleMember", () => {
+            return transpileModule(`
+module MyModule {
+    const myVariable = 1;
+    function foo(param: string) {}
+}
+`, {
+                transformers: {
+                    before: [renameVariable],
+                },
+                compilerOptions: {
+                    target: ScriptTarget.ES2015,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
+
+            function renameVariable(context: TransformationContext) {
+                    return (sourceFile: SourceFile): SourceFile => {
+                        return visitNode(sourceFile, rootTransform, isSourceFile);
+                    };
+                    function rootTransform<T extends Node>(node: T): Node {
+                        if (isVariableDeclaration(node)) {
+                            return updateVariableDeclaration(node, createIdentifier("newName"), /* type */ undefined, node.initializer);
+                        }
+                        return visitEachChild(node, rootTransform, context);
+                    }
+            }
         });
 
         // https://github.com/Microsoft/TypeScript/issues/24709

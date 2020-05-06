@@ -1,0 +1,26 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty5.ts ===
+interface I {
+>I : Symbol(I, Decl(accessorsOverrideProperty5.ts, 0, 0))
+
+    p: number
+>p : Symbol(I.p, Decl(accessorsOverrideProperty5.ts, 0, 13))
+}
+interface B extends I { }
+>B : Symbol(B, Decl(accessorsOverrideProperty5.ts, 2, 1), Decl(accessorsOverrideProperty5.ts, 3, 25))
+>I : Symbol(I, Decl(accessorsOverrideProperty5.ts, 0, 0))
+
+class B { }
+>B : Symbol(B, Decl(accessorsOverrideProperty5.ts, 2, 1), Decl(accessorsOverrideProperty5.ts, 3, 25))
+
+class C extends B {
+>C : Symbol(C, Decl(accessorsOverrideProperty5.ts, 4, 11))
+>B : Symbol(B, Decl(accessorsOverrideProperty5.ts, 2, 1), Decl(accessorsOverrideProperty5.ts, 3, 25))
+
+    get p() { return 1 }
+>p : Symbol(C.p, Decl(accessorsOverrideProperty5.ts, 5, 19), Decl(accessorsOverrideProperty5.ts, 6, 24))
+
+    set p(value) { }
+>p : Symbol(C.p, Decl(accessorsOverrideProperty5.ts, 5, 19), Decl(accessorsOverrideProperty5.ts, 6, 24))
+>value : Symbol(value, Decl(accessorsOverrideProperty5.ts, 7, 10))
+}
+

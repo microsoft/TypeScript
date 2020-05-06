@@ -4,7 +4,7 @@
  * @return {function(this: string, number): number}
  */
 function id1(c) {
->id1 : (c: (this: string, arg1: number) => number) => (this: string, arg1: number) => number
+>id1 : (c: (args: string, arg1: number) => number) => (args: string, arg1: number) => number
 >c : (this: string, arg1: number) => number
 
     return c
@@ -28,7 +28,7 @@ var x = id1(function (n) { return this.length + n });
  * @return {function(new: { length: number }, number): number}
  */
 function id2(c) {
->id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
+>id2 : (c: new (arg1: number) => {    length: number;}) => new (arg1: number) => {    length: number;}
 >c : new (arg1: number) => { length: number; }
 
     return c
@@ -44,9 +44,9 @@ class C {
 
         this.length = n;
 >this.length = n : number
->this.length : number
+>this.length : any
 >this : this
->length : number
+>length : any
 >n : number
     }
 }
@@ -92,9 +92,9 @@ function D(n) {
 
   this.length = n;
 >this.length = n : number
->this.length : number
+>this.length : any
 >this : this
->length : number
+>length : any
 >n : number
 }
 
@@ -151,9 +151,9 @@ var E = function(n) {
 
   this.not_length_on_purpose = n;
 >this.not_length_on_purpose = n : number
->this.not_length_on_purpose : number
+>this.not_length_on_purpose : any
 >this : this
->not_length_on_purpose : number
+>not_length_on_purpose : any
 >n : number
 
 };

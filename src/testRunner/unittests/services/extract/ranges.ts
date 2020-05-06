@@ -380,6 +380,10 @@ switch (x) {
             `[#|{ 1;|] }`,
             [refactor.extractSymbol.Messages.cannotExtractRange.message]);
 
+        testExtractRangeFailed("extractRangeFailed19",
+            `[#|/** @type {number} */|] const foo = 1;`,
+            [refactor.extractSymbol.Messages.cannotExtractJSDoc.message]);
+
         testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, [refactor.extractSymbol.Messages.cannotExtractIdentifier.message]);
     });
 }

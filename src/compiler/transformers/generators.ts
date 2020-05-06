@@ -667,28 +667,6 @@ namespace ts {
             }
         }
 
-        function isCompoundAssignment(kind: BinaryOperator): kind is CompoundAssignmentOperator {
-            return kind >= SyntaxKind.FirstCompoundAssignment
-                && kind <= SyntaxKind.LastCompoundAssignment;
-        }
-
-        function getOperatorForCompoundAssignment(kind: CompoundAssignmentOperator): BitwiseOperatorOrHigher {
-            switch (kind) {
-                case SyntaxKind.PlusEqualsToken: return SyntaxKind.PlusToken;
-                case SyntaxKind.MinusEqualsToken: return SyntaxKind.MinusToken;
-                case SyntaxKind.AsteriskEqualsToken: return SyntaxKind.AsteriskToken;
-                case SyntaxKind.AsteriskAsteriskEqualsToken: return SyntaxKind.AsteriskAsteriskToken;
-                case SyntaxKind.SlashEqualsToken: return SyntaxKind.SlashToken;
-                case SyntaxKind.PercentEqualsToken: return SyntaxKind.PercentToken;
-                case SyntaxKind.LessThanLessThanEqualsToken: return SyntaxKind.LessThanLessThanToken;
-                case SyntaxKind.GreaterThanGreaterThanEqualsToken: return SyntaxKind.GreaterThanGreaterThanToken;
-                case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken: return SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
-                case SyntaxKind.AmpersandEqualsToken: return SyntaxKind.AmpersandToken;
-                case SyntaxKind.BarEqualsToken: return SyntaxKind.BarToken;
-                case SyntaxKind.CaretEqualsToken: return SyntaxKind.CaretToken;
-            }
-        }
-
         /**
          * Visits a right-associative binary expression containing `yield`.
          *
@@ -748,7 +726,7 @@ namespace ts {
                             setTextRange(
                                 createBinary(
                                     cacheExpression(target),
-                                    getOperatorForCompoundAssignment(operator),
+                                    getNonAssignmentOperatorForCompoundAssignment(operator),
                                     visitNode(right, visitor, isExpression)
                                 ),
                                 node
@@ -2011,7 +1989,7 @@ namespace ts {
          */
         function markLabel(label: Label): void {
             Debug.assert(labelOffsets !== undefined, "No labels were defined.");
-            labelOffsets![label] = operations ? operations.length : 0;
+            labelOffsets[label] = operations ? operations.length : 0;
         }
 
         /**
@@ -2871,7 +2849,7 @@ namespace ts {
         function tryEnterOrLeaveBlock(operationIndex: number): void {
             if (blocks) {
                 for (; blockIndex < blockActions!.length && blockOffsets![blockIndex] <= operationIndex; blockIndex++) {
-                    const block = blocks[blockIndex];
+                    const block: CodeBlock = blocks[blockIndex];
                     const blockAction = blockActions![blockIndex];
                     switch (block.kind) {
                         case CodeBlockKind.Exception:

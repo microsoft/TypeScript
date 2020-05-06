@@ -26,13 +26,13 @@ function Zet(t) {
  * @param {T} o.nested
  */
 Zet.prototype.add = function(v, o) {
->Zet.prototype.add = function(v, o) {    this.u = v || o.nested    return this.u} : (v: T, o: { nested: T; }) => T
+>Zet.prototype.add = function(v, o) {    this.u = v || o.nested    return this.u} : (v: T, o:  * @param {T} o.nested) => T
 >Zet.prototype.add : any
 >Zet.prototype : any
 >Zet : typeof Zet
 >prototype : any
 >add : any
->function(v, o) {    this.u = v || o.nested    return this.u} : (v: T, o: { nested: T; }) => T
+>function(v, o) {    this.u = v || o.nested    return this.u} : (v: T, o:  * @param {T} o.nested) => T
 >v : T
 >o : { nested: T; }
 

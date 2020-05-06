@@ -16,7 +16,7 @@ interface Sequence<T> {
 >value : T
 
     groupBy<K>(keySelector: (value: T) => K): Sequence<{ key: K; items: Sequence<T>; }>;
->groupBy : <K>(keySelector: (value: T) => K) => Sequence<{ key: K; items: Sequence<T>; }>
+>groupBy : <K>(keySelector: (value: T) => K) => Sequence<{    key: K;    items: Sequence<T>;}>
 >keySelector : (value: T) => K
 >value : T
 >key : K

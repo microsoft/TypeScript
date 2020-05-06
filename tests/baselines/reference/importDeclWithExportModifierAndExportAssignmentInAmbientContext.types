@@ -8,9 +8,9 @@ declare module "m" {
     }
     export import a = x.c;
 >a : any
->x : any
+>x : typeof x
 >c : a
 
     export = x;
->x : any
+>x : typeof x
 }

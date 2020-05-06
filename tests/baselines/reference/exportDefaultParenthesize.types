@@ -167,7 +167,7 @@ export default {
 
 === tests/cases/compiler/comma.ts ===
 export default {
->{    ['foo']: 42} : { ['foo']: number; }
+>{    ['foo']: 42} : { foo: number; }
 
     ['foo']: 42
 >['foo'] : number

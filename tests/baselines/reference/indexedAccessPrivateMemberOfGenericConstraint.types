@@ -14,7 +14,7 @@ class B {
 }
 
 type X<T extends A> = [T["a"], (T | B)["a"]];
->X : [T["a"], (B | T)["a"]]
+>X : X<T>
 
 type Y<T extends A | B> = T["a"];
 >Y : T["a"]

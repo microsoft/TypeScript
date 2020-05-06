@@ -12,13 +12,14 @@ namespace ts.GoToDefinition {
         }
         const { parent } = node;
 
+        const typeChecker = program.getTypeChecker();
+
         // Labels
         if (isJumpStatementTarget(node)) {
             const label = getTargetLabel(node.parent, node.text);
-            return label ? [createDefinitionInfoFromName(label, ScriptElementKind.label, node.text, /*containerName*/ undefined!)] : undefined; // TODO: GH#18217
+            return label ? [createDefinitionInfoFromName(typeChecker, label, ScriptElementKind.label, node.text, /*containerName*/ undefined!)] : undefined; // TODO: GH#18217
         }
 
-        const typeChecker = program.getTypeChecker();
         const symbol = getSymbol(node, typeChecker);
 
         // Could not find a symbol e.g. node is string or number keyword,
@@ -206,6 +207,15 @@ namespace ts.GoToDefinition {
                 return aliased;
             }
         }
+        if (symbol && isInJSFile(node)) {
+            const requireCall = forEach(symbol.declarations, d => isVariableDeclaration(d) && !!d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ true) ? d.initializer : undefined);
+            if (requireCall) {
+                const moduleSymbol = checker.getSymbolAtLocation(requireCall.arguments[0]);
+                if (moduleSymbol) {
+                    return checker.resolveExternalModuleSymbol(moduleSymbol);
+                }
+            }
+        }
         return symbol;
     }
 
@@ -242,7 +252,7 @@ namespace ts.GoToDefinition {
         function getConstructSignatureDefinition(): DefinitionInfo[] | undefined {
             // Applicable only if we are in a new expression, or we are on a constructor declaration
             // and in either case the symbol has a construct signature definition, i.e. class
-            if (symbol.flags & SymbolFlags.Class && !(symbol.flags & SymbolFlags.Function) && (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword)) {
+            if (symbol.flags & SymbolFlags.Class && !(symbol.flags & (SymbolFlags.Function | SymbolFlags.Variable)) && (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword)) {
                 const cls = find(filteredDeclarations, isClassLike) || Debug.fail("Expected declaration to have at least one class-like declaration");
                 return getSignatureDefinition(cls.members, /*selectConstructors*/ true);
             }
@@ -275,11 +285,11 @@ namespace ts.GoToDefinition {
         const symbolName = checker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
         const symbolKind = SymbolDisplay.getSymbolKind(checker, symbol, node);
         const containerName = symbol.parent ? checker.symbolToString(symbol.parent, node) : "";
-        return createDefinitionInfoFromName(declaration, symbolKind, symbolName, containerName);
+        return createDefinitionInfoFromName(checker, declaration, symbolKind, symbolName, containerName);
     }
 
     /** Creates a DefinitionInfo directly from the name of a declaration. */
-    function createDefinitionInfoFromName(declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string): DefinitionInfo {
+    function createDefinitionInfoFromName(checker: TypeChecker, declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string): DefinitionInfo {
         const name = getNameOfDeclaration(declaration) || declaration;
         const sourceFile = name.getSourceFile();
         const textSpan = createTextSpanFromNode(name, sourceFile);
@@ -294,7 +304,8 @@ namespace ts.GoToDefinition {
                 textSpan,
                 sourceFile,
                 FindAllReferences.getContextNode(declaration)
-            )
+            ),
+            isLocal: !checker.isDeclarationVisible(declaration)
         };
     }
 

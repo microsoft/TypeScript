@@ -114,7 +114,7 @@ namespace ts.projectSystem {
 
             function verifyConfiguredProject(host: TestServerHost, projectService: TestProjectService, orphanInferredProject?: boolean) {
                 projectService.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: orphanInferredProject ? 1 : 0 });
-                const project = Debug.assertDefined(projectService.configuredProjects.get(tsconfig.path));
+                const project = Debug.checkDefined(projectService.configuredProjects.get(tsconfig.path));
 
                 if (orphanInferredProject) {
                     const inferredProject = projectService.inferredProjects[0];

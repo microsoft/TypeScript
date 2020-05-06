@@ -1,0 +1,34 @@
+tests/cases/conformance/jsdoc/declarations/index2.js(2,22): error TS2300: Duplicate identifier 'C'.
+tests/cases/conformance/jsdoc/declarations/index2.js(4,31): error TS2300: Duplicate identifier 'default'.
+
+
+==== tests/cases/conformance/jsdoc/declarations/index1.js (0 errors) ====
+    // merge type alias and alias (should error, see #32367)
+    class Cls {
+        x = 12;
+        static y = "ok"
+    }
+    export default Cls;
+    /**
+     * @typedef {string | number} default
+     */
+    
+==== tests/cases/conformance/jsdoc/declarations/index2.js (2 errors) ====
+    // merge type alias and class (error message improvement needed, see #32368)
+    export default class C {};
+                         ~
+!!! error TS2300: Duplicate identifier 'C'.
+    /**
+     * @typedef {string | number} default
+                                  ~~~~~~~
+!!! error TS2300: Duplicate identifier 'default'.
+     */
+    
+==== tests/cases/conformance/jsdoc/declarations/index3.js (0 errors) ====
+    // merge type alias and variable (behavior is borked, see #32366)
+    const x = 12;
+    export {x as default};
+    /**
+     * @typedef {string | number} default
+     */
+    

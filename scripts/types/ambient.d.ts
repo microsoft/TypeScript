@@ -76,10 +76,15 @@ declare module "undertaker" {
     interface TaskFunctionParams {
         flags?: Record<string, string>;
     }
+    interface TaskFunctionWrapped {
+        description: string
+        flags: { [name: string]: string }
+    }
 }
 
 declare module "gulp-sourcemaps" {
     interface WriteOptions {
         destPath?: string;
     }
+
 }

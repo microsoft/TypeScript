@@ -1,16 +1,15 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoadingFinish events", () => {
-        const projectRoot = "/user/username/projects";
         const aTs: File = {
-            path: `${projectRoot}/a/a.ts`,
+            path: `${tscWatch.projects}/a/a.ts`,
             content: "export class A { }"
         };
         const configA: File = {
-            path: `${projectRoot}/a/tsconfig.json`,
+            path: `${tscWatch.projects}/a/tsconfig.json`,
             content: "{}"
         };
-        const bTsPath = `${projectRoot}/b/b.ts`;
-        const configBPath = `${projectRoot}/b/tsconfig.json`;
+        const bTsPath = `${tscWatch.projects}/b/b.ts`;
+        const configBPath = `${tscWatch.projects}/b/tsconfig.json`;
         const files = [libFile, aTs, configA];
 
         function verifyProjectLoadingStartAndFinish(createSession: (host: TestServerHost) => {
@@ -73,48 +72,68 @@ namespace ts.projectSystem {
                 verifyEvent(project, `Change in config file detected`);
             });
 
-            it("when opening original location project", () => {
-                const aDTs: File = {
-                    path: `${projectRoot}/a/a.d.ts`,
-                    content: `export declare class A {
+            describe("when opening original location project", () => {
+                it("with project references", () => {
+                    verify();
+                });
+
+                it("when disableSourceOfProjectReferenceRedirect is true", () => {
+                    verify(/*disableSourceOfProjectReferenceRedirect*/ true);
+                });
+
+                function verify(disableSourceOfProjectReferenceRedirect?: true) {
+                    const aDTs: File = {
+                        path: `${tscWatch.projects}/a/a.d.ts`,
+                        content: `export declare class A {
 }
 //# sourceMappingURL=a.d.ts.map
 `
-                };
-                const aDTsMap: File = {
-                    path: `${projectRoot}/a/a.d.ts.map`,
-                    content: `{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["./a.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;CAAI"}`
-                };
-                const bTs: File = {
-                    path: bTsPath,
-                    content: `import {A} from "../a/a"; new A();`
-                };
-                const configB: File = {
-                    path: configBPath,
-                    content: JSON.stringify({
-                        references: [{ path: "../a" }]
-                    })
-                };
+                    };
+                    const aDTsMap: File = {
+                        path: `${tscWatch.projects}/a/a.d.ts.map`,
+                        content: `{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["./a.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;CAAI"}`
+                    };
+                    const bTs: File = {
+                        path: bTsPath,
+                        content: `import {A} from "../a/a"; new A();`
+                    };
+                    const configB: File = {
+                        path: configBPath,
+                        content: JSON.stringify({
+                            ...(disableSourceOfProjectReferenceRedirect && {
+                                compilerOptions: {
+                                    disableSourceOfProjectReferenceRedirect
+                                }
+                            }),
+                            references: [{ path: "../a" }]
+                        })
+                    };
 
-                const { service, session, verifyEventWithOpenTs, verifyEvent } = createSessionToVerifyEvent(files.concat(aDTs, aDTsMap, bTs, configB));
-                verifyEventWithOpenTs(bTs, configB.path, 1);
+                    const { service, session, verifyEventWithOpenTs, verifyEvent } = createSessionToVerifyEvent(files.concat(aDTs, aDTsMap, bTs, configB));
+                    verifyEventWithOpenTs(bTs, configB.path, 1);
 
-                session.executeCommandSeq<protocol.ReferencesRequest>({
-                    command: protocol.CommandTypes.References,
-                    arguments: {
-                        file: bTs.path,
-                        ...protocolLocationFromSubstring(bTs.content, "A()")
-                    }
-                });
+                    session.executeCommandSeq<protocol.ReferencesRequest>({
+                        command: protocol.CommandTypes.References,
+                        arguments: {
+                            file: bTs.path,
+                            ...protocolLocationFromSubstring(bTs.content, "A()")
+                        }
+                    });
 
-                checkNumberOfProjects(service, { configuredProjects: 2 });
-                const project = service.configuredProjects.get(configA.path)!;
-                assert.isDefined(project);
-                verifyEvent(project, `Creating project for original file: ${aTs.path} for location: ${aDTs.path}`);
+                    checkNumberOfProjects(service, { configuredProjects: 2 });
+                    const project = service.configuredProjects.get(configA.path)!;
+                    assert.isDefined(project);
+                    verifyEvent(
+                        project,
+                        disableSourceOfProjectReferenceRedirect ?
+                            `Creating project for original file: ${aTs.path} for location: ${aDTs.path}` :
+                            `Creating project for original file: ${aTs.path}`
+                    );
+                }
             });
 
             describe("with external projects and config files ", () => {
-                const projectFileName = `${projectRoot}/a/project.csproj`;
+                const projectFileName = `${tscWatch.projects}/a/project.csproj`;
 
                 function createSession(lazyConfiguredProjectsFromExternalProject: boolean) {
                     const { session, service, verifyEvent: verifyEventWorker, getNumberOfEvents } = createSessionToVerifyEvent(files);

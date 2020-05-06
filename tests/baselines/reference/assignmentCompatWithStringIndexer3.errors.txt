@@ -2,6 +2,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts(20,9): error TS2322: Type '{ [x: string]: string; }' is not assignable to type 'A<T>'.
   Index signatures are incompatible.
     Type 'string' is not assignable to type 'T'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts(21,9): error TS2322: Type 'A<T>' is not assignable to type '{ [x: string]: string; }'.
   Index signatures are incompatible.
     Type 'T' is not assignable to type 'string'.
@@ -35,6 +36,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type '{ [x: string]: string; }' is not assignable to type 'A<T>'.
 !!! error TS2322:   Index signatures are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'T'.
+!!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
             b = a; // error
             ~
 !!! error TS2322: Type 'A<T>' is not assignable to type '{ [x: string]: string; }'.

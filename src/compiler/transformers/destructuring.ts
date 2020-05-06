@@ -68,7 +68,8 @@ namespace ts {
         if (value) {
             value = visitNode(value, visitor, isExpression);
 
-            if (isIdentifier(value) && bindingOrAssignmentElementAssignsToName(node, value.escapedText)) {
+            if (isIdentifier(value) && bindingOrAssignmentElementAssignsToName(node, value.escapedText) ||
+                bindingOrAssignmentElementContainsNonLiteralComputedName(node)) {
                 // If the right-hand value of the assignment is also an assignment target then
                 // we need to cache the right-hand value.
                 value = ensureIdentifier(flattenContext, value, /*reuseIdentifierExpressions*/ false, location);
@@ -106,9 +107,6 @@ namespace ts {
         return aggregateTransformFlags(inlineExpressions(expressions!)) || createOmittedExpression();
 
         function emitExpression(expression: Expression) {
-            // NOTE: this completely disables source maps, but aligns with the behavior of
-            //       `emitAssignment` in the old emitter.
-            setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
             aggregateTransformFlags(expression);
             expressions = append(expressions, expression);
         }
@@ -145,6 +143,19 @@ namespace ts {
             }
         }
         return false;
+    }
+
+    function bindingOrAssignmentElementContainsNonLiteralComputedName(element: BindingOrAssignmentElement): boolean {
+        const propertyName = tryGetPropertyNameOfBindingOrAssignmentElement(element);
+        if (propertyName && isComputedPropertyName(propertyName) && !isLiteralExpression(propertyName.expression)) {
+            return true;
+        }
+        const target = getTargetOfBindingOrAssignmentElement(element);
+        return !!target && isBindingOrAssignmentPattern(target) && bindingOrAssignmentPatternContainsNonLiteralComputedName(target);
+    }
+
+    function bindingOrAssignmentPatternContainsNonLiteralComputedName(pattern: BindingOrAssignmentPattern): boolean {
+        return !!forEach(getElementsOfBindingOrAssignmentPattern(pattern), bindingOrAssignmentElementContainsNonLiteralComputedName);
     }
 
     /**
@@ -184,7 +195,8 @@ namespace ts {
 
         if (isVariableDeclaration(node)) {
             let initializer = getInitializerOfBindingOrAssignmentElement(node);
-            if (initializer && isIdentifier(initializer) && bindingOrAssignmentElementAssignsToName(node, initializer.escapedText)) {
+            if (initializer && (isIdentifier(initializer) && bindingOrAssignmentElementAssignsToName(node, initializer.escapedText) ||
+                bindingOrAssignmentElementContainsNonLiteralComputedName(node))) {
                 // If the right-hand value of the assignment is also an assignment target then
                 // we need to cache the right-hand value.
                 initializer = ensureIdentifier(flattenContext, initializer, /*reuseIdentifierExpressions*/ false, initializer);
@@ -219,9 +231,6 @@ namespace ts {
             );
             variable.original = original;
             setTextRange(variable, location);
-            if (isIdentifier(name)) {
-                setEmitFlags(variable, EmitFlags.NoNestedSourceMaps);
-            }
             aggregateTransformFlags(variable);
             declarations.push(variable);
         }
@@ -237,7 +246,7 @@ namespace ts {
                 value = inlineExpressions(append(pendingExpressions, value));
                 pendingExpressions = undefined;
             }
-            pendingDeclarations.push({ pendingExpressions, name: <BindingName>target, value, location, original });
+            pendingDeclarations.push({ pendingExpressions, name: target, value, location, original });
         }
     }
 
@@ -310,7 +319,7 @@ namespace ts {
                     && !(element.transformFlags & (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
                     && !(getTargetOfBindingOrAssignmentElement(element)!.transformFlags & (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
                     && !isComputedPropertyName(propertyName)) {
-                    bindingElements = append(bindingElements, element);
+                    bindingElements = append(bindingElements, visitNode(element, flattenContext.visitor));
                 }
                 else {
                     if (bindingElements) {

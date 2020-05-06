@@ -26,10 +26,10 @@ type ErrorMsg<INPUT> =
 >field : string
 
 export type Spec<INPUT, ROOTINPUT = any> = [Predicate<INPUT, ROOTINPUT>, ErrorMsg<INPUT>];
->Spec : [Predicate<INPUT, ROOTINPUT>, ErrorMsg<INPUT>]
+>Spec : Spec<INPUT, ROOTINPUT>
 
 export type SpecArray<INPUT, ROOTINPUT = any> = Array<Spec<INPUT, ROOTINPUT>>;
->SpecArray : [Predicate<INPUT, ROOTINPUT>, ErrorMsg<INPUT>][]
+>SpecArray : SpecArray<INPUT, ROOTINPUT>
 
 export type SpecFunction<INPUT, ROOTINPUT = any> = [INPUT] extends [ReadonlyArray<infer U>]
 >SpecFunction : SpecFunction<INPUT, ROOTINPUT>

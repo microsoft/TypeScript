@@ -9,7 +9,7 @@ namespace ts.refactor {
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === refactorName, "Wrong refactor invoked");
-            const statements = Debug.assertDefined(getStatementsToMove(context));
+            const statements = Debug.checkDefined(getStatementsToMove(context));
             const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, statements, t, context.host, context.preferences));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
@@ -121,7 +121,7 @@ namespace ts.refactor {
         const quotePreference = getQuotePreference(oldFile, preferences);
         const importsFromNewFile = createOldFileImportsFromNewFile(usage.oldFileImportsFromNewFile, newModuleName, useEs6ModuleSyntax, quotePreference);
         if (importsFromNewFile) {
-            insertImport(changes, oldFile, importsFromNewFile);
+            insertImports(changes, oldFile, importsFromNewFile, /*blankLineBetween*/ true);
         }
 
         deleteUnusedOldImports(oldFile, toMove.all, changes, usage.unusedImportsFromOldFile, checker);
@@ -310,7 +310,7 @@ namespace ts.refactor {
         return flatMap(toMove, statement => {
             if (isTopLevelDeclarationStatement(statement) &&
                 !isExported(sourceFile, statement, useEs6Exports) &&
-                forEachTopLevelDeclaration(statement, d => needExport.has(Debug.assertDefined(d.symbol)))) {
+                forEachTopLevelDeclaration(statement, d => needExport.has(Debug.checkDefined(d.symbol)))) {
                 const exports = addExport(statement, useEs6Exports);
                 if (exports) return exports;
             }
@@ -353,7 +353,7 @@ namespace ts.refactor {
                     changes.replaceNode(
                         sourceFile,
                         importDecl.importClause,
-                        updateImportClause(importDecl.importClause, name, /*namedBindings*/ undefined)
+                        updateImportClause(importDecl.importClause, name, /*namedBindings*/ undefined, importDecl.importClause.isTypeOnly)
                     );
                 }
                 else if (namedBindings.kind === SyntaxKind.NamedImports) {
@@ -472,7 +472,7 @@ namespace ts.refactor {
 
         for (const statement of toMove) {
             forEachTopLevelDeclaration(statement, decl => {
-                movedSymbols.add(Debug.assertDefined(isExpressionStatement(decl) ? checker.getSymbolAtLocation(decl.expression.left) : decl.symbol, "Need a symbol here"));
+                movedSymbols.add(Debug.checkDefined(isExpressionStatement(decl) ? checker.getSymbolAtLocation(decl.expression.left) : decl.symbol, "Need a symbol here"));
             });
         }
         for (const statement of toMove) {
@@ -708,7 +708,7 @@ namespace ts.refactor {
     }
 
     function nameOfTopLevelDeclaration(d: TopLevelDeclaration): Identifier | undefined {
-        return isExpressionStatement(d) ? d.expression.left.name : tryCast(d.name, isIdentifier);
+        return isExpressionStatement(d) ? tryCast(d.expression.left.name, isIdentifier) : tryCast(d.name, isIdentifier);
     }
 
     function getTopLevelDeclarationStatement(d: TopLevelDeclaration): TopLevelDeclarationStatement {

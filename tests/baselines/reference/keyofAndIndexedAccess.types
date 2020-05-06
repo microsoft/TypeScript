@@ -976,7 +976,7 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
 }
 
 function f80<T extends { a: { x: any } }>(obj: T) {
->f80 : <T extends { a: { x: any; }; }>(obj: T) => void
+>f80 : <T extends { a: {    x: any;}; }>(obj: T) => void
 >a : { x: any; }
 >x : any
 >obj : T
@@ -1027,7 +1027,7 @@ function f80<T extends { a: { x: any } }>(obj: T) {
 }
 
 function f81<T extends { a: { x: any } }>(obj: T) {
->f81 : <T extends { a: { x: any; }; }>(obj: T) => T["a"]["x"]
+>f81 : <T extends { a: {    x: any;}; }>(obj: T) => T["a"]["x"]
 >a : { x: any; }
 >x : any
 >obj : T
@@ -1207,7 +1207,7 @@ type S2 = {
 };
 
 function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]) {
->f90 : <T extends S2, K extends "a" | "b">(x1: string, x2: T["a" | "b"], x3: S2[K]) => void
+>f90 : <T extends S2, K extends "a" | "b">(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]) => void
 >x1 : string
 >x2 : T["a" | "b"]
 >x3 : S2[K]
@@ -1659,7 +1659,7 @@ type MethodDescriptor = {
 }
 
 declare function dispatchMethod<M extends MethodDescriptor>(name: M['name'], args: M['args']): M['returnValue'];
->dispatchMethod : <M extends MethodDescriptor>(name: M["name"], args: M["args"]) => M["returnValue"]
+>dispatchMethod : <M extends MethodDescriptor>(name: M['name'], args: M['args']) => M['returnValue']
 >name : M["name"]
 >args : M["args"]
 
@@ -1719,7 +1719,7 @@ type Handler<T> = {
 };
 
 function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
->onChangeGenericFunction : <T>(handler: Handler<T & { preset: number; }>) => void
+>onChangeGenericFunction : <T>(handler: Handler<T & {    preset: number;}>) => void
 >handler : Handler<T & { preset: number; }>
 >preset : number
 
@@ -1973,7 +1973,7 @@ type Example<T extends { [K in keyof T]: { prop: any } }> = { [K in keyof T]: T[
 >prop : any
 
 type Result = Example<{ a: { prop: string }; b: { prop: number } }>;
->Result : Example<{ a: { prop: string; }; b: { prop: number; }; }>
+>Result : Example<{ a: {    prop: string;}; b: {    prop: number;}; }>
 >a : { prop: string; }
 >prop : string
 >b : { prop: number; }
@@ -1987,7 +1987,7 @@ type Example2<T> = { [K in keyof Helper2<T>]: Helper2<T>[K]["prop"] };
 >Example2 : Example2<T>
 
 type Result2 = Example2<{ 1: { prop: string }; 2: { prop: number } }>;
->Result2 : Example2<{ 1: { prop: string; }; 2: { prop: number; }; }>
+>Result2 : Example2<{ 1: {    prop: string;}; 2: {    prop: number;}; }>
 >1 : { prop: string; }
 >prop : string
 >2 : { prop: number; }
@@ -2103,7 +2103,7 @@ type Foo7<T extends number> = T;
 >Foo7 : T
 
 declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;
->f7 : <K extends "x">(type: K) => I7[K]
+>f7 : <K extends "x">(type: K) => Foo7<I7[K]>
 >type : K
 
 // Repro from #21770

@@ -17,7 +17,7 @@ namespace ts.NavigationBar {
 
     /**
      * Maximum amount of characters to return
-     * The amount was choosen arbitrarily.
+     * The amount was chosen arbitrarily.
      */
     const maxLength = 150;
 
@@ -135,12 +135,13 @@ namespace ts.NavigationBar {
     function endNestedNodes(depth: number): void {
         for (let i = 0; i < depth; i++) endNode();
     }
-    function startNestedNodes(targetNode: Node, entityName: EntityNameExpression) {
-        const names: Identifier[] = [];
-        while (!isIdentifier(entityName)) {
-            const name = entityName.name;
+    function startNestedNodes(targetNode: Node, entityName: BindableStaticNameExpression) {
+        const names: (PropertyNameLiteral | WellKnownSymbolExpression)[] = [];
+        while (!isPropertyNameLiteral(entityName)) {
+            const name = getNameOrArgument(entityName);
+            const nameText = getElementOrPropertyAccessName(entityName);
             entityName = entityName.expression;
-            if (name.escapedText === "prototype") continue;
+            if (nameText === "prototype" || isPrivateIdentifier(name)) continue;
             names.push(name);
         }
         names.push(entityName);
@@ -197,7 +198,7 @@ namespace ts.NavigationBar {
 
                 // Parameter properties are children of the class, not the constructor.
                 for (const param of ctr.parameters) {
-                    if (isParameterPropertyDeclaration(param)) {
+                    if (isParameterPropertyDeclaration(param, ctr)) {
                         addLeafNode(param);
                     }
                 }
@@ -306,6 +307,7 @@ namespace ts.NavigationBar {
                 addNodeWithRecursiveChild(node, getInteriorModule(<ModuleDeclaration>node).body);
                 break;
 
+            case SyntaxKind.ExportAssignment:
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.IndexSignature:
@@ -333,7 +335,7 @@ namespace ts.NavigationBar {
                             assignmentTarget;
 
                         let depth = 0;
-                        let className: Identifier;
+                        let className: PropertyNameLiteral | WellKnownSymbolExpression;
                         // If we see a prototype assignment, start tracking the target as a class
                         // This is only done for simple classes not nested assignments.
                         if (isIdentifier(prototypeAccess.expression)) {
@@ -384,16 +386,16 @@ namespace ts.NavigationBar {
                     }
                     case AssignmentDeclarationKind.Property: {
                         const binaryExpression = (node as BinaryExpression);
-                        const assignmentTarget = binaryExpression.left as PropertyAccessExpression;
+                        const assignmentTarget = binaryExpression.left as PropertyAccessExpression | BindableElementAccessExpression;
                         const targetFunction = assignmentTarget.expression;
-                        if (isIdentifier(targetFunction) && assignmentTarget.name.escapedText !== "prototype" &&
+                        if (isIdentifier(targetFunction) && getElementOrPropertyAccessName(assignmentTarget) !== "prototype" &&
                             trackedEs5Classes && trackedEs5Classes.has(targetFunction.text)) {
                             if (isFunctionExpression(binaryExpression.right) || isArrowFunction(binaryExpression.right)) {
                                 addNodeWithRecursiveChild(node, binaryExpression.right, targetFunction);
                             }
-                            else {
+                            else if (isBindableStaticAccessExpression(assignmentTarget)) {
                                 startNode(binaryExpression, targetFunction);
-                                    addNodeWithRecursiveChild(binaryExpression.left, binaryExpression.right, assignmentTarget.name);
+                                    addNodeWithRecursiveChild(binaryExpression.left, binaryExpression.right, getNameOrArgument(assignmentTarget));
                                 endNode();
                             }
                             return;
@@ -647,7 +649,8 @@ namespace ts.NavigationBar {
 
         const declName = getNameOfDeclaration(<Declaration>node);
         if (declName && isPropertyName(declName)) {
-            return unescapeLeadingUnderscores(getPropertyNameForPropertyNameNode(declName)!); // TODO: GH#18217
+            const propertyName = getPropertyNameForPropertyNameNode(declName);
+            return propertyName && unescapeLeadingUnderscores(propertyName);
         }
         switch (node.kind) {
             case SyntaxKind.FunctionExpression:
@@ -665,7 +668,9 @@ namespace ts.NavigationBar {
         }
 
         if (name) {
-            const text = isIdentifier(name) ? name.text : nodeText(name);
+            const text = isIdentifier(name) ? name.text
+                : isElementAccessExpression(name) ? `[${nodeText(name.argumentExpression)}]`
+                : nodeText(name);
             if (text.length > 0) {
                 return cleanText(text);
             }
@@ -677,6 +682,9 @@ namespace ts.NavigationBar {
                 return isExternalModule(sourceFile)
                     ? `"${escapeString(getBaseFileName(removeFileExtension(normalizePath(sourceFile.fileName))))}"`
                     : "<global>";
+            case SyntaxKind.ExportAssignment:
+                return isExportAssignment(node) && node.isExportEquals ? InternalSymbolName.ExportEquals : InternalSymbolName.Default;
+
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
@@ -897,6 +905,7 @@ namespace ts.NavigationBar {
         return "<function>";
     }
 
+    // See also 'tryGetPropertyAccessOrIdentifierToString'
     function getCalledExpressionName(expr: Expression): string | undefined {
         if (isIdentifier(expr)) {
             return expr.text;

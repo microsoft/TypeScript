@@ -18,7 +18,7 @@ declare function f3<T, U>(t: [T, U]): [T, U];
 >t : [T, U]
 
 declare function f4<T>(x: { bar: T; baz: T }): T;
->f4 : <T>(x: { bar: T; baz: T; }) => T
+>f4 : <T>(x: {    bar: T;    baz: T;}) => T
 >x : { bar: T; baz: T; }
 >bar : T
 >baz : T
@@ -65,7 +65,7 @@ declare function f13<T, U>(x: T & U): [T, U];
 >x : T & U
 
 declare function f14<T, U>(x: { a: T | U, b: U & T }): [T, U];
->f14 : <T, U>(x: { a: T | U; b: U & T; }) => [T, U]
+>f14 : <T, U>(x: {    a: T | U;    b: U & T;}) => [T, U]
 >x : { a: T | U; b: U & T; }
 >a : T | U
 >b : U & T

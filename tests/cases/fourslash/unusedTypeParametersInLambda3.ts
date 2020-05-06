@@ -8,7 +8,7 @@
 //// }
 
 verify.codeFix({
-    description: "Remove declaration for: 'K'",
+    description: "Remove unused declaration for: 'K'",
     index: 0,
     newRangeContent: "new <T, U>(a: T): A<U>;",
 });

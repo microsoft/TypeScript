@@ -1,12 +1,4 @@
 declare namespace ts.server {
-    export type ActionSet = "action::set";
-    export type ActionInvalidate = "action::invalidate";
-    export type ActionPackageInstalled = "action::packageInstalled";
-    export type EventTypesRegistry = "event::typesRegistry";
-    export type EventBeginInstallTypes = "event::beginInstallTypes";
-    export type EventEndInstallTypes = "event::endInstallTypes";
-    export type EventInitializationFailed = "event::initializationFailed";
-
     export interface TypingInstallerResponse {
         readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
     }
@@ -22,6 +14,7 @@ declare namespace ts.server {
         readonly fileNames: string[];
         readonly projectRootPath: Path;
         readonly compilerOptions: CompilerOptions;
+        readonly watchOptions?: WatchOptions;
         readonly typeAcquisition: TypeAcquisition;
         readonly unresolvedImports: SortedReadonlyArray<string>;
         readonly cachePath?: string;
@@ -58,6 +51,7 @@ declare namespace ts.server {
     export interface InitializationFailedResponse extends TypingInstallerResponse {
         readonly kind: EventInitializationFailed;
         readonly message: string;
+        readonly stack?: string;
     }
 
     export interface ProjectResponse extends TypingInstallerResponse {
@@ -89,8 +83,8 @@ declare namespace ts.server {
         useCaseSensitiveFileNames: boolean;
         writeFile(path: string, content: string): void;
         createDirectory(path: string): void;
-        watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
-        watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
+        watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: CompilerOptions): FileWatcher;
+        watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: CompilerOptions): FileWatcher;
     }
 
     export interface SetTypings extends ProjectResponse {

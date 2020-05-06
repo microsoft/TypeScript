@@ -1,0 +1,28 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+const m = require("./exporter");
+>m : Symbol(m, Decl(index.js, 0, 5))
+>require : Symbol(require)
+>"./exporter" : Symbol("tests/cases/conformance/jsdoc/declarations/exporter", Decl(exporter.js, 0, 0))
+
+module.exports = m.default;
+>module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))
+>module : Symbol(export=, Decl(index.js, 0, 32))
+>exports : Symbol(export=, Decl(index.js, 0, 32))
+>m.default : Symbol(default, Decl(exporter.js, 0, 22))
+>m : Symbol(m, Decl(index.js, 0, 5))
+>default : Symbol(default, Decl(exporter.js, 0, 22))
+
+module.exports.memberName = "thing";
+>module.exports.memberName : Symbol(memberName, Decl(index.js, 2, 27))
+>module.exports : Symbol(memberName, Decl(index.js, 2, 27))
+>module : Symbol(module, Decl(index.js, 0, 32))
+>exports : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))
+>memberName : Symbol(memberName, Decl(index.js, 2, 27))
+
+=== tests/cases/conformance/jsdoc/declarations/exporter.js ===
+function validate() {}
+>validate : Symbol(validate, Decl(exporter.js, 0, 0))
+
+export default validate;
+>validate : Symbol(validate, Decl(exporter.js, 0, 0))
+

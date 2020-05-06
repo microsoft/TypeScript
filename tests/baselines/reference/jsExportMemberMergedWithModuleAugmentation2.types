@@ -1,0 +1,31 @@
+=== /test.js ===
+module.exports = {
+>module.exports = {  a: "ok"} : { a: string | number; }
+>module.exports : { a: string | number; }
+>module : { "\"/test\"": { a: string | number; }; }
+>exports : { a: string | number; }
+>{  a: "ok"} : { a: string; }
+
+  a: "ok"
+>a : string
+>"ok" : "ok"
+
+};
+
+=== /index.ts ===
+import { a } from "./test";
+>a : string
+
+declare module "./test" {
+>"./test" : { a: string | number; }
+
+  export const a: number;
+>a : number
+}
+
+a.toFixed();
+>a.toFixed() : any
+>a.toFixed : any
+>a : string
+>toFixed : any
+

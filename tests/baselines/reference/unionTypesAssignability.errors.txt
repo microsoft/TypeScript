@@ -19,17 +19,17 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(41,1): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(43,1): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(64,5): error TS2322: Type 'U' is not assignable to type 'T'.
-  'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(65,5): error TS2322: Type 'T' is not assignable to type 'U'.
-  'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+  'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(70,5): error TS2322: Type 'T | U' is not assignable to type 'T'.
-  'T | U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
     Type 'U' is not assignable to type 'T'.
-      'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(71,5): error TS2322: Type 'T | U' is not assignable to type 'U'.
-  'T | U' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+  'U' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
     Type 'T' is not assignable to type 'U'.
-      'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+      'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts (19 errors) ====
@@ -138,11 +138,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
         t = u; // error
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
         u = t; // error
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'U'.
-!!! error TS2322:   'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
         var x : T | U;
         x = t; // ok
         x = u; // ok
@@ -150,14 +150,14 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
         t = x; // error U not assignable to T
         ~
 !!! error TS2322: Type 'T | U' is not assignable to type 'T'.
-!!! error TS2322:   'T | U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
 !!! error TS2322:     Type 'U' is not assignable to type 'T'.
-!!! error TS2322:       'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
         u = x; // error T not assignable to U
         ~
 !!! error TS2322: Type 'T | U' is not assignable to type 'U'.
-!!! error TS2322:   'T | U' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
 !!! error TS2322:     Type 'T' is not assignable to type 'U'.
-!!! error TS2322:       'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:       'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
     }
     

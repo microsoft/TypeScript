@@ -1,0 +1,27 @@
+=== tests/cases/conformance/salsa/lateBoundClassMemberAssignmentJS.js ===
+const _sym = Symbol("_sym");
+>_sym : Symbol(_sym, Decl(lateBoundClassMemberAssignmentJS.js, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+export class MyClass {
+>MyClass : Symbol(MyClass, Decl(lateBoundClassMemberAssignmentJS.js, 0, 28))
+
+    constructor() {
+        this[_sym] = "ok";
+>this : Symbol(MyClass, Decl(lateBoundClassMemberAssignmentJS.js, 0, 28))
+>_sym : Symbol(_sym, Decl(lateBoundClassMemberAssignmentJS.js, 0, 5))
+    }
+
+    method() {
+>method : Symbol(MyClass.method, Decl(lateBoundClassMemberAssignmentJS.js, 4, 5))
+
+        this[_sym] = "yep";
+>this : Symbol(MyClass, Decl(lateBoundClassMemberAssignmentJS.js, 0, 28))
+>_sym : Symbol(_sym, Decl(lateBoundClassMemberAssignmentJS.js, 0, 5))
+
+        const x = this[_sym];
+>x : Symbol(x, Decl(lateBoundClassMemberAssignmentJS.js, 8, 13))
+>this : Symbol(MyClass, Decl(lateBoundClassMemberAssignmentJS.js, 0, 28))
+>_sym : Symbol(_sym, Decl(lateBoundClassMemberAssignmentJS.js, 0, 5))
+    }
+}

@@ -1,3 +1,25 @@
+//// [/lib/incremental-headers-change-without-dts-changesOutput.txt]
+/lib/tsc --b /src/third --verbose
+[[90m12:08:00 AM[0m] Projects in this build: 
+    * src/first/tsconfig.json
+    * src/second/tsconfig.json
+    * src/third/tsconfig.json
+
+[[90m12:08:00 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
+
+[[90m12:08:00 AM[0m] Building project '/src/first/tsconfig.json'...
+
+[[90m12:08:00 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.js'
+
+[[90m12:08:00 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+
+[[90m12:08:00 AM[0m] Updating output of project '/src/third/tsconfig.json'...
+
+[[90m12:08:00 AM[0m] Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
+
+exitCode:: ExitStatus.Success
+
+
 //// [/src/first/bin/first-output.d.ts] file written with same contents
 //// [/src/first/bin/first-output.d.ts.map]
 {"version":3,"file":"first-output.d.ts","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET"}
@@ -698,20 +720,20 @@ sourceFile:../../third_part1.ts
         },
         {
           "pos": 110,
-          "end": 3162,
+          "end": 3163,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
               "pos": 110,
-              "end": 3162,
+              "end": 3163,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 3162,
-          "end": 3198,
+          "pos": 3163,
+          "end": 3199,
           "kind": "text"
         }
       ]
@@ -770,9 +792,9 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (110-3162):: ../../../2/second-output.js texts:: 1
+prepend: (110-3163):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (110-3162)
+text: (110-3163)
 var N;
 (function (N) {
     function f() {
@@ -787,7 +809,7 @@ var normalC = (function () {
     Object.defineProperty(normalC.prototype, "c", {
         get: function () { return 10; },
         set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -877,7 +899,7 @@ var C = (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (3162-3198)
+text: (3163-3199)
 var c = new C();
 c.doSomething();
 

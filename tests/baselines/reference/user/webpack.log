@@ -1,9 +1,14 @@
 Exit Code: 1
 Standard output:
-lib/Compilation.js(575,5): error TS2322: Type 'number | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | ... 29 more ... | "trimRight"' is not assignable to type 'string'.
-  Type 'number' is not assignable to type 'string'.
-lib/Compiler.js(228,48): error TS2345: Argument of type 'number | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | ... 29 more ... | "trimRight"' is not assignable to parameter of type 'string'.
-  Type 'number' is not assignable to type 'string'.
+lib/ExternalModule.js(305,28): error TS2554: Expected 1 arguments, but got 0.
+lib/Stats.js(68,31): error TS2554: Expected 3 arguments, but got 2.
+lib/library/SystemLibraryPlugin.js(127,35): error TS2554: Expected 1 arguments, but got 0.
+lib/optimize/ConcatenatedModule.js(205,32): error TS2554: Expected 1 arguments, but got 0.
+lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(36,15): error TS2304: Cannot find name 'Chunk'.
+lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(37,15): error TS2304: Cannot find name 'DependencyTemplates'.
+lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(38,15): error TS2304: Cannot find name 'RuntimeTemplate'.
+lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(39,15): error TS2304: Cannot find name 'ModuleGraph'.
+lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(40,15): error TS2304: Cannot find name 'ChunkGraph'.
 
 
 

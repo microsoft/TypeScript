@@ -87,7 +87,7 @@ interface IEnumerable<T> {
 
 interface IDictionary<TKey, TValue> {
     toEnumerable(): IEnumerable<{ key: TKey; value: TValue }>;
->toEnumerable : () => IEnumerable<{ key: TKey; value: TValue; }>
+>toEnumerable : () => IEnumerable<{    key: TKey;    value: TValue;}>
 >key : TKey
 >value : TValue
 }
